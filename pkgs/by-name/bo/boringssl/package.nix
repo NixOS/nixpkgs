@@ -55,6 +55,8 @@ buildGoModule {
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $bin/bin $dev $out/lib
 
     mv tool/bssl $bin/bin
@@ -64,6 +66,8 @@ buildGoModule {
     mv decrepit/libdecrepit.a $out/lib
 
     mv ../include $dev
+
+    runHook postInstall
   '';
 
   outputs = [

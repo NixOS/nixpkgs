@@ -3,6 +3,7 @@
   stdenv,
   scx-common,
   scx,
+  nixosTests,
 }:
 scx.cscheds.overrideAttrs (oldAttrs: {
   pname = "scx_full";
@@ -11,6 +12,8 @@ scx.cscheds.overrideAttrs (oldAttrs: {
     + ''
       cp ${scx.rustscheds}/bin/* ${placeholder "bin"}/bin/
     '';
+
+  passthru.tests.basic = nixosTests.scx;
 
   passthru.updateScript.command = ./update.sh;
 

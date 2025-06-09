@@ -6,15 +6,15 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zsh-prezto";
-  version = "0-unstable-2024-12-12";
+  version = "0-unstable-2025-01-10";
 
   src = fetchFromGitHub {
     owner = "sorin-ionescu";
     repo = "prezto";
-    rev = "9626ce2beb8e20afb8f63020d974ff8a213bc773";
-    sha256 = "TkmzNyPKv/K9sW0CCiR8hnXXM0d6En49HcdPsa011Xw=";
+    rev = "6e564503f1c5e6ddba2bcf5d9065e5872ca207d2";
+    sha256 = "hYuYjSQtt00pU3eqrzN8Crk40NEtCCj1G6XUL89F4xU=";
     fetchSubmodules = true;
   };
 

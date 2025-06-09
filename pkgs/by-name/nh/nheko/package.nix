@@ -80,7 +80,12 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     # add gstreamer plugins path to the wrapper
-    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+    # unset QT_STYLE_OVERRIDE to avoid showing a blank window when started
+    # https://github.com/NixOS/nixpkgs/issues/333009
+    qtWrapperArgs+=(
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+      --unset QT_STYLE_OVERRIDE
+    )
   '';
 
   meta = with lib; {

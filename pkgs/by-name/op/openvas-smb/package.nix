@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "openvas-smb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wnlBOHYOTWNbwzoHCpsXbuhp0uH3wBH6+Oo4Y+zSsfg=";
   };
 

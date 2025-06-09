@@ -1,20 +1,32 @@
-{ lib, rustPlatform, fetchFromGitHub, nix-update-script }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
-  version = "0.9.87";
+  version = "0.9.97";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     rev = "cargo-nextest-${version}";
-    hash = "sha256-J+84FZfrbv6jp2T9cYgodLZ+TgIAht+uJSVi5ULDGBU=";
+    hash = "sha256-5UhmWewLj3bjtvqyb6FcC1qZQbAutRPXnBi7e/lyArM=";
   };
 
-  cargoHash = "sha256-eq+COE9UWDTHZK6dlNqGuoJMUKCNyP5UpAcpk0qAUJI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mTKcQ76A++LK+54ChmCUF/7dsubdz7GZpOZUp+afqfQ=";
 
-  cargoBuildFlags = [ "-p" "cargo-nextest" ];
-  cargoTestFlags = [ "-p" "cargo-nextest" ];
+  cargoBuildFlags = [
+    "-p"
+    "cargo-nextest"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "cargo-nextest"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -23,7 +35,14 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-nextest";
     homepage = "https://github.com/nextest-rs/nextest";
     changelog = "https://nexte.st/CHANGELOG.html";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ ekleog figsoda matthiasbeyer ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      ekleog
+      figsoda
+      matthiasbeyer
+    ];
   };
 }

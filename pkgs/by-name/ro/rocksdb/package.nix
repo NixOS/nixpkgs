@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "9.8.4";
+  version = "10.2.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-A6Gx4FqoGlxITUUz9k6tkDjUcLtMUBK9JS8vuAS96H0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-v8kZShgz0O3nHZwWjTvhcM56qAs/le1XgMVYyvVd4tg=";
   };
 
   patches = lib.optional (
@@ -55,12 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "tools"
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isClang [
-      "-faligned-allocation"
-    ]
-  );
 
   cmakeFlags = [
     "-DPORTABLE=1"

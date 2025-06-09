@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "django-hierarkey";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1LSH9GwoNF3NrDVNUIHDAVsktyKIprDgB5XlIHeM3fM=";
   };
 

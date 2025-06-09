@@ -2,24 +2,33 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  openai,
   pdfminer,
+
+  withOpenai ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pdftitle";
-  version = "0.16";
+  version = "0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "metebalci";
     repo = "pdftitle";
-    rev = "v${version}";
-    hash = "sha256-s5OrZQogFJEKbaGoPHti7UcpqXhxrtIAC2Hd+clDbD4=";
+    tag = "v${version}";
+    hash = "sha256-05SaAXYJ7l0ZldYufj0x9mYRwwGT7vlmq9a+ZF4pYiA=";
   };
 
   build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3Packages; [ pdfminer ];
+  dependencies =
+    with python3Packages;
+    [
+      pdfminer
+      python-dotenv
+    ]
+    ++ lib.optional withOpenai openai;
 
   pythonImportsCheck = [ "pdftitle" ];
 

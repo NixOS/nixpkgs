@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/granite";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "granite-7-demo";
   };
 }

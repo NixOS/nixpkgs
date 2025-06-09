@@ -43,7 +43,7 @@ let
       nativeBuildInputs = [ finalAttrs.passthru.lychee ];
       configFile = (formats.toml { }).generate "lychee.toml" finalAttrs.passthru.config;
 
-      # These can be overriden with overrideAttrs if needed.
+      # These can be overridden with overrideAttrs if needed.
       passthru = {
         inherit lychee remap;
         config =

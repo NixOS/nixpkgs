@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,16 +10,16 @@
 
 buildGoModule rec {
   pname = "pscale";
-  version = "0.218.0";
+  version = "0.243.0";
 
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-9aa/Ly/QGdtgpa+p3RuxdZ/EsV81FNLqLxSWMzY55dM=";
+    sha256 = "sha256-/ElqKIwaRT7y0i+nWgVKRm70CFOt2QVNdZiJotYObGY=";
   };
 
-  vendorHash = "sha256-/BYWAE2VpHy+HTmHOz4GhstcD+Y6R0tjeF9/8+LiZT0=";
+  vendorHash = "sha256-FqKAQxb6kEE5dm1V+RZBP1Jv5q4TC1MEfexTUjI+u6c=";
 
   ldflags = [
     "-s"
@@ -30,7 +31,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pscale \
       --bash <($out/bin/pscale completion bash) \
       --fish <($out/bin/pscale completion fish) \
@@ -43,13 +44,13 @@ buildGoModule rec {
     package = pscale;
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI for PlanetScale Database";
     mainProgram = "pscale";
     changelog = "https://github.com/planetscale/cli/releases/tag/v${version}";
     homepage = "https://www.planetscale.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       pimeys
       kashw2
     ];

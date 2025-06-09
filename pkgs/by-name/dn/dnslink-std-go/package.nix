@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dnslink-std";
     repo = "go";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aATnNDUogNS4jBoWxUAFYFMa2ZS0+th3XH+1KWqwfWQ=";
   };
   vendorHash = "sha256-RH55yfIO9jHLbjtEdUF5QpL5ILV5ctX2hBYBJWutmUA=";

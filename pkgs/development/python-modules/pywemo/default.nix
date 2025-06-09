@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pywemo";
     repo = "pywemo";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-XpCRrCJYHv1so5/aHoGrtkgp3RX1NUKPUawJqK/FaG0=";
   };
 

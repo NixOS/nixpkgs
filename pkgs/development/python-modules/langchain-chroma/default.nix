@@ -2,46 +2,51 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
   chromadb,
   langchain-core,
+  langchain-tests,
   numpy,
-  poetry-core,
+  pdm-backend,
   pytestCheckHook,
   pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-chroma";
-  version = "0.1.4";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-chroma==${version}";
-    hash = "sha256-pU7H8OYXa+JjdkSO36xESPI6r3xA+9cFXxeJnfpYuHc=";
+    tag = "langchain-chroma==${version}";
+    hash = "sha256-w4xvPPLYkPiQA34bimVHLe+vghMI9Pq36CHoE/EMnr8=";
   };
 
   sourceRoot = "${src.name}/libs/partners/chroma";
 
   patches = [ ./001-async-test.patch ];
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [
-    "chromadb"
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individual components.
+    "langchain-core"
     "numpy"
   ];
 
   dependencies = [
-    langchain-core
     chromadb
+    langchain-core
     numpy
   ];
 
   pythonImportsCheck = [ "langchain_chroma" ];
 
   nativeCheckInputs = [
+    langchain-tests
     pytest-asyncio
     pytestCheckHook
   ];
@@ -51,8 +56,11 @@ buildPythonPackage rec {
     "test_chroma_update_document"
   ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-chroma==([0-9.]+)"
+    ];
   };
 
   meta = {

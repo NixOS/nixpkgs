@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "2.2.2.240909";
+  version = "2.2.3.250308";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas-stubs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Dt2a4l5WAOizUeaDa80CRuvyPT9mWfFz+zGZMm3vQP4=";
+    tag = "v${version}";
+    hash = "sha256-93XVzdb3A2S+Exk33v3U8HDMg9vPKAEkWjLZnBaXMWQ=";
   };
 
   build-system = [ poetry-core ];

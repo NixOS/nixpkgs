@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ponyorm";
     repo = "pony";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fYzwdHRB9QrIJPEk8dqtPggSnJeugDyC9zQSM6u3rN0=";
   };
 

@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       TubeWarmth, TAP Vibrato.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

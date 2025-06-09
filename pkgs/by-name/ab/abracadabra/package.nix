@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abracadabra";
-  version = "2.9.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "KejPi";
     repo = "AbracaDABra";
     rev = "v${version}";
-    hash = "sha256-PPG71W5HeLr4R8je88K4VXPiSbJn5T7dP3M05C+bkv0=";
+    hash = "sha256-4M/LrM1Edu9isvpKPArir7UwPJ0u0Yjl4ttFtxcqYtM=";
   };
 
   nativeBuildInputs = [

@@ -16,6 +16,7 @@ in
   imports = [
     ../../../modules/virtualisation/openstack-config.nix
     ../../../modules/virtualisation/disk-size-option.nix
+    ../../../modules/image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -27,15 +28,21 @@ in
         "diskSize"
       ];
     })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "openstackImage"
+        "name"
+      ];
+      to = [
+        "image"
+        "baseName"
+      ];
+    })
+
   ] ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
 
   options.openstackImage = {
-    name = mkOption {
-      type = types.str;
-      description = "The name of the generated derivation";
-      default = "nixos-openstack-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
-    };
-
     ramMB = mkOption {
       type = types.int;
       default = (3 * 1024);
@@ -72,9 +79,16 @@ in
     virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
     virtualisation.diskSizeAutoSupported = false;
 
+    image.extension = cfg.format;
+    system.nixos.tags = [
+      "openstack"
+      "zfs"
+    ];
+    system.build.image = config.system.build.openstackImage;
     system.build.openstackImage = import ../../../lib/make-single-disk-zfs-image.nix {
       inherit lib config;
-      inherit (cfg) contents format name;
+      inherit (cfg) contents format;
+      name = config.image.baseName;
       pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
 
       configFile = pkgs.writeText "configuration.nix" ''
@@ -98,7 +112,7 @@ in
 
       postVM = ''
          extension=''${rootDiskImage##*.}
-         friendlyName=$out/${cfg.name}
+         friendlyName=$out/${config.image.baseName}
          rootDisk="$friendlyName.root.$extension"
          mv "$rootDiskImage" "$rootDisk"
 

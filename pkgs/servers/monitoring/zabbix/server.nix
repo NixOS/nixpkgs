@@ -24,7 +24,7 @@
   mysqlSupport ? false,
   libmysqlclient,
   postgresqlSupport ? false,
-  postgresql,
+  libpq,
   ipmiSupport ? false,
   openipmi,
 }:
@@ -50,7 +50,7 @@ import ./versions.nix (
     nativeBuildInputs = [
       autoreconfHook
       pkg-config
-    ];
+    ] ++ optional postgresqlSupport libpq.pg_config;
     buildInputs =
       [
         curl
@@ -67,7 +67,7 @@ import ./versions.nix (
       ++ optional snmpSupport net-snmp
       ++ optional sshSupport libssh2
       ++ optional mysqlSupport libmysqlclient
-      ++ optional postgresqlSupport postgresql
+      ++ optional postgresqlSupport libpq
       ++ optional ipmiSupport openipmi;
 
     configureFlags =
@@ -122,6 +122,7 @@ import ./versions.nix (
       license =
         if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [
+        bstanderline
         mmahut
         psyanticy
       ];

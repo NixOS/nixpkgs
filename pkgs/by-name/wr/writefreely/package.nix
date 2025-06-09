@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "writefreely";
-    repo = pname;
+    repo = "writefreely";
     rev = "v${version}";
     sha256 = "sha256-Qr31XSbAckLElD81yxD+K7tngWECQ+wyuESC+biAbyw=";
   };

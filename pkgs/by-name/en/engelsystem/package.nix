@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "engelsystem";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchzip {
     url = "https://github.com/engelsystem/engelsystem/releases/download/v${version}/engelsystem-v${version}.zip";
-    hash = "sha256-RbzAHBZN02u14WaLtq5EOh4XwIdHKvzX7NhDBhn/CaU=";
+    hash = "sha256-AZVW04bcSlESSRmtfvP2oz15xvZLlGEz/X9rX7PuRGg=";
   };
 
   buildInputs = [ php ];
@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.engelsystem;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/engelsystem/engelsystem/releases/tag/v${version}";
     description = "Coordinate your volunteers in teams, assign them to work shifts or let them decide for themselves when and where they want to help with what";
     homepage = "https://engelsystem.de";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "migrate";
-    maintainers = [ ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.all;
   };
 }

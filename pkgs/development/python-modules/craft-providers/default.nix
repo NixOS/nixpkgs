@@ -15,20 +15,21 @@
   responses,
   freezegun,
   pytest-subprocess,
-  pytest-logdog,
+  logassert,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "2.0.4";
+  version = "2.3.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-providers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-f+0AEoVUFL/+v4sRYirc6OD5dYH4dlLk8h7im+CLuhM=";
+    tag = version;
+    hash = "sha256-EJoFuESgjEKoI1BKO02jd4iI/DFBphLujR/vGST/JGk=";
   };
 
   patches = [
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==73.0.1" "setuptools"
+      --replace-fail "setuptools==75.2.0" "setuptools"
   '';
 
   pythonRelaxDeps = [ "requests" ];
@@ -69,18 +70,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    logassert
     pytest-check
     pytest-mock
     pytest-subprocess
-    pytest-logdog
     pytestCheckHook
     responses
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
 
   pytestFlagsArray = [ "tests/unit" ];
 
@@ -102,7 +99,7 @@ buildPythonPackage rec {
   meta = {
     description = "Interfaces for instantiating and controlling a variety of build environments";
     homepage = "https://github.com/canonical/craft-providers";
-    changelog = "https://github.com/canonical/craft-providers/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-providers/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

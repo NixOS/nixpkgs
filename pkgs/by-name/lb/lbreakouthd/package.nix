@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lbreakouthd";
-  version = "1.1.9";
+  version = "1.1.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/lbreakouthd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-HIzZcH/yGBRX/9UyFuRyusAkzgzhREkMRNaP+6vQC+E=";
+    hash = "sha256-QFqNGv2+XXe1Dt8HAoqXEHWXFNU/IQ2c9FYEqehrWdI=";
   };
 
   buildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Widescreen Breakout clone";
     license = lib.licenses.gpl2Plus;
     mainProgram = "lbreakouthd";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (SDL2.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };

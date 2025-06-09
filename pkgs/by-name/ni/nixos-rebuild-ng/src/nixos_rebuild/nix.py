@@ -1,13 +1,15 @@
+import json
 import logging
 import os
+import textwrap
+import uuid
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from importlib.resources import files
 from pathlib import Path
 from string import Template
 from subprocess import PIPE, CalledProcessError
-from typing import Final
-from uuid import uuid4
+from typing import Final, Literal
 
 from . import tmpdir
 from .constants import WITH_NIX_2_18
@@ -17,6 +19,7 @@ from .models import (
     Flake,
     Generation,
     GenerationJson,
+    ImageVariants,
     NRError,
     Profile,
     Remote,
@@ -26,7 +29,23 @@ from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 FLAKE_REPL_TEMPLATE: Final = "repl.nix.template"
-logger = logging.getLogger(__name__)
+SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
+    "systemd-run",
+    "-E",
+    # Will be set to new value early in switch-to-configuration script,
+    # but interpreter starts out with old value
+    "LOCALE_ARCHIVE",
+    "-E",
+    "NIXOS_INSTALL_BOOTLOADER",
+    "--collect",
+    "--no-ask-password",
+    "--pipe",
+    "--quiet",
+    "--same-dir",
+    "--service-type=exec",
+    "--unit=nixos-rebuild-switch-to-configuration",
+]
+logger: Final = logging.getLogger(__name__)
 
 
 def build(
@@ -74,7 +93,7 @@ def build_remote(
     attr: str,
     build_attr: BuildAttr,
     build_host: Remote | None,
-    build_flags: Args | None = None,
+    realise_flags: Args | None = None,
     instantiate_flags: Args | None = None,
     copy_flags: Args | None = None,
 ) -> Path:
@@ -88,7 +107,7 @@ def build_remote(
             "--attr",
             build_attr.to_attr(attr),
             "--add-root",
-            tmpdir.TMPDIR_PATH / uuid4().hex,
+            tmpdir.TMPDIR_PATH / uuid.uuid4().hex,
             *dict_to_flags(instantiate_flags),
         ],
         stdout=PIPE,
@@ -108,8 +127,8 @@ def build_remote(
                 "--realise",
                 drv,
                 "--add-root",
-                remote_tmpdir / uuid4().hex,
-                *dict_to_flags(build_flags),
+                remote_tmpdir / uuid.uuid4().hex,
+                *dict_to_flags(realise_flags),
             ],
             remote=build_host,
             stdout=PIPE,
@@ -263,6 +282,110 @@ def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
     return Path(r.stdout.strip())
 
 
+def get_build_image_name(
+    build_attr: BuildAttr,
+    image_variant: str,
+    instantiate_flags: Args | None = None,
+) -> str:
+    path = (
+        f'"{build_attr.path.resolve()}"'
+        if isinstance(build_attr.path, Path)
+        else build_attr.path
+    )
+    r = run_wrapper(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--json",
+            "--expr",
+            textwrap.dedent(f"""
+            let
+              value = import {path};
+              set = if builtins.isFunction value then value {{}} else value;
+            in
+              set.{build_attr.to_attr("config.system.build.images", image_variant, "passthru", "filePath")}
+            """),
+            *dict_to_flags(instantiate_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: str = json.loads(r.stdout.strip())
+    return j
+
+
+def get_build_image_name_flake(
+    flake: Flake,
+    image_variant: str,
+    eval_flags: Args | None = None,
+) -> str:
+    r = run_wrapper(
+        [
+            "nix",
+            "eval",
+            "--json",
+            flake.to_attr(
+                "config.system.build.images", image_variant, "passthru", "filePath"
+            ),
+            *dict_to_flags(eval_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: str = json.loads(r.stdout.strip())
+    return j
+
+
+def get_build_image_variants(
+    build_attr: BuildAttr,
+    instantiate_flags: Args | None = None,
+) -> ImageVariants:
+    path = (
+        f'"{build_attr.path.resolve()}"'
+        if isinstance(build_attr.path, Path)
+        else build_attr.path
+    )
+    r = run_wrapper(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--json",
+            "--expr",
+            textwrap.dedent(f"""
+            let
+              value = import {path};
+              set = if builtins.isFunction value then value {{}} else value;
+            in
+              builtins.attrNames set.{build_attr.to_attr("config.system.build.images")}
+            """),
+            *dict_to_flags(instantiate_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: ImageVariants = json.loads(r.stdout.strip())
+    return j
+
+
+def get_build_image_variants_flake(
+    flake: Flake,
+    eval_flags: Args | None = None,
+) -> ImageVariants:
+    r = run_wrapper(
+        [
+            "nix",
+            "eval",
+            "--json",
+            flake.to_attr("config.system.build.images"),
+            "--apply",
+            "builtins.attrNames",
+            *dict_to_flags(eval_flags),
+        ],
+        stdout=PIPE,
+    )
+    j: ImageVariants = json.loads(r.stdout.strip())
+    return j
+
+
 def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
     """Get Nixpkgs path as a Git revision.
 
@@ -379,14 +502,14 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         )
         try:
             nixos_version = (generation_path / "nixos-version").read_text().strip()
-        except IOError as ex:
+        except OSError as ex:
             logger.debug("could not get nixos-version: %s", ex)
             nixos_version = "Unknown"
         try:
             kernel_version = next(
                 (generation_path / "kernel-modules/lib/modules").iterdir()
             ).name
-        except IOError as ex:
+        except OSError as ex:
             logger.debug("could not get kernel version: %s", ex)
             kernel_version = "Unknown"
         specialisations = [
@@ -397,7 +520,7 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
                 [generation_path / "sw/bin/nixos-version", "--configuration-revision"],
                 capture_output=True,
             ).stdout.strip()
-        except (CalledProcessError, IOError) as ex:
+        except (OSError, CalledProcessError) as ex:
             logger.debug("could not get configuration revision: %s", ex)
             configuration_revision = "Unknown"
 
@@ -500,7 +623,7 @@ def set_profile(
 
 def switch_to_configuration(
     path_to_config: Path,
-    action: Action,
+    action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
     target_host: Remote | None,
     sudo: bool,
     install_bootloader: bool = False,
@@ -521,15 +644,28 @@ def switch_to_configuration(
         if not path_to_config.exists():
             raise NRError(f"specialisation not found: {specialisation}")
 
+    r = run_wrapper(
+        ["test", "-d", "/run/systemd/system"],
+        remote=target_host,
+        check=False,
+    )
+    cmd = SWITCH_TO_CONFIGURATION_CMD_PREFIX
+    if r.returncode:
+        logger.debug(
+            "skipping systemd-run to switch configuration since systemd is "
+            + "not working in target host"
+        )
+        cmd = []
+
     run_wrapper(
-        [path_to_config / "bin/switch-to-configuration", str(action)],
+        [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0"},
         remote=target_host,
         sudo=sudo,
     )
 
 
-def upgrade_channels(all: bool = False) -> None:
+def upgrade_channels(all_channels: bool = False) -> None:
     """Upgrade channels for classic Nix.
 
     It will either upgrade just the `nixos` channel (including any channel
@@ -537,7 +673,7 @@ def upgrade_channels(all: bool = False) -> None:
     """
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
         if channel_path.is_dir() and (
-            all
+            all_channels
             or channel_path.name == "nixos"
             or (channel_path / ".update-on-nixos-rebuild").exists()
         ):

@@ -44,12 +44,10 @@ stdenv.mkDerivation rec {
     homepage = "https://enlightenment.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers =
-      with maintainers;
-      [
-        matejc
-        ftrvxmtrx
-      ]
-      ++ teams.enlightenment.members;
+    maintainers = with maintainers; [
+      matejc
+      ftrvxmtrx
+    ];
+    teams = [ teams.enlightenment ];
   };
 }

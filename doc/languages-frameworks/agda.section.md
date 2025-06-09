@@ -48,7 +48,7 @@ You can also reference a GitHub repository
 agda.withPackages (p: [
   (p.standard-library.overrideAttrs (oldAttrs: {
     version = "1.5";
-    src =  fetchFromGitHub {
+    src = fetchFromGitHub {
       repo = "agda-stdlib";
       owner = "agda";
       rev = "v1.5";
@@ -114,10 +114,14 @@ This can be overridden by a different version of `ghc` as follows:
 
 ```nix
 agda.withPackages {
-  pkgs = [ /* ... */ ];
+  pkgs = [
+    # ...
+  ];
   ghc = haskell.compiler.ghcHEAD;
 }
 ```
+
+To install Agda without GHC, use `ghc = null;`.
 
 ## Writing Agda packages {#writing-agda-packages}
 
@@ -132,8 +136,10 @@ A derivation can then be written using `agdaPackages.mkDerivation`. This has sim
 Here is an example `default.nix`
 
 ```nix
-{ nixpkgs ?  <nixpkgs> }:
-with (import nixpkgs {});
+{
+  nixpkgs ? <nixpkgs>,
+}:
+with (import nixpkgs { });
 agdaPackages.mkDerivation {
   version = "1.0";
   pname = "my-agda-lib";
@@ -179,8 +185,12 @@ the Agda package set is small and can (still) be maintained by hand.
 To add an Agda package to `nixpkgs`, the derivation should be written to `pkgs/development/libraries/agda/${library-name}/` and an entry should be added to `pkgs/top-level/agda-packages.nix`. Here it is called in a scope with access to all other Agda libraries, so the top line of the `default.nix` can look like:
 
 ```nix
-{ mkDerivation, standard-library, fetchFromGitHub }:
-{}
+{
+  mkDerivation,
+  standard-library,
+  fetchFromGitHub,
+}:
+{ }
 ```
 
 Note that the derivation function is called with `mkDerivation` set to `agdaPackages.mkDerivation`, therefore you
@@ -200,8 +210,12 @@ mkDerivation {
   libraryName = "IAL-1.3";
 
   buildPhase = ''
+    runHook preBuild
+
     patchShebangs find-deps.sh
     make
+
+    runHook postBuild
   '';
 }
 ```

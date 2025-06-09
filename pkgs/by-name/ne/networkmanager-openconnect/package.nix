@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      glib
       libxml2
       openconnect
       networkmanager
@@ -55,6 +54,7 @@ stdenv.mkDerivation rec {
     ];
 
   nativeBuildInputs = [
+    glib
     intltool
     pkg-config
     file
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "NetworkManager’s OpenConnect plugin";
-    inherit (networkmanager.meta) maintainers platforms;
+    inherit (networkmanager.meta) maintainers teams platforms;
     license = licenses.gpl2Plus;
   };
 }

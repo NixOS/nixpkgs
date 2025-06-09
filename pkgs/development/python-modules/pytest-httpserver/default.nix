@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpserver";
-  version = "1.1.0";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "csernazs";
     repo = "pytest-httpserver";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BkdbCrpZKjHYikZk1mL4iSGe5gRjWUVN/w222QkmFLQ=";
+    tag = version;
+    hash = "sha256-41JrZ3ubaJHNzwGDWUSseJ3Z405k21SOpwW7jG5rNxg=";
   };
 
   nativeBuildInputs = [ poetry-core ];

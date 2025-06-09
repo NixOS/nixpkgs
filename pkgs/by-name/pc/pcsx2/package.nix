@@ -12,7 +12,7 @@
   libbacktrace,
   libpcap,
   libwebp,
-  llvmPackages_17,
+  llvmPackages,
   lz4,
   makeWrapper,
   pkg-config,
@@ -37,12 +37,14 @@ let
     wrapQtAppsHook
     ;
 in
-llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   inherit (sources.pcsx2) pname version src;
 
   patches = [
     # Remove PCSX2_GIT_REV
     ./0000-define-rev.patch
+
+    ./remove-cubeb-vendor.patch
   ];
 
   cmakeFlags = [
@@ -54,6 +56,7 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     strip-nondeterminism
     wrapQtAppsHook
@@ -62,7 +65,6 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
-    extra-cmake-modules
     ffmpeg
     libaio
     libbacktrace
@@ -80,7 +82,8 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     wayland
     zstd
-  ] ++ cubeb.passthru.backendLibs;
+    cubeb
+  ];
 
   strictDeps = true;
 
@@ -94,13 +97,10 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     let
-      libs = lib.makeLibraryPath (
-        [
-          vulkan-loader
-          shaderc
-        ]
-        ++ cubeb.passthru.backendLibs
-      );
+      libs = lib.makeLibraryPath ([
+        vulkan-loader
+        shaderc
+      ]);
     in
     [ "--prefix LD_LIBRARY_PATH : ${libs}" ];
 
@@ -130,7 +130,6 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       hrdinka
       govanify
       matteopacini

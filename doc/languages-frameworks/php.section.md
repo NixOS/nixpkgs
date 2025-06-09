@@ -45,24 +45,30 @@ extensions. For example, a PHP package with all default extensions and
 ImageMagick enabled:
 
 ```nix
-php.withExtensions ({ enabled, all }:
-  enabled ++ [ all.imagick ])
+php.withExtensions ({ enabled, all }: enabled ++ [ all.imagick ])
 ```
 
 To exclude some, but not all, of the default extensions, you can
 filter the `enabled` list like this:
 
 ```nix
-php.withExtensions ({ enabled, all }:
-  (lib.filter (e: e != php.extensions.opcache) enabled)
-  ++ [ all.imagick ])
+php.withExtensions (
+  { enabled, all }: (lib.filter (e: e != php.extensions.opcache) enabled) ++ [ all.imagick ]
+)
 ```
 
 To build your list of extensions from the ground up, you can
 ignore `enabled`:
 
 ```nix
-php.withExtensions ({ all, ... }: with all; [ imagick opcache ])
+php.withExtensions (
+  { all, ... }:
+  with all;
+  [
+    imagick
+    opcache
+  ]
+)
 ```
 
 `php.withExtensions` provides extensions by wrapping a minimal php
@@ -82,7 +88,13 @@ and ImageMagick extensions enabled, and `memory_limit` set to `256M`:
 
 ```nix
 php.buildEnv {
-  extensions = { all, ... }: with all; [ imagick opcache ];
+  extensions =
+    { all, ... }:
+    with all;
+    [
+      imagick
+      opcache
+    ];
   extraConfig = "memory_limit=256M";
 }
 ```
@@ -94,8 +106,16 @@ follows:
 
 ```nix
 let
-  myPhp = php.withExtensions ({ all, ... }: with all; [ imagick opcache ]);
-in {
+  myPhp = php.withExtensions (
+    { all, ... }:
+    with all;
+    [
+      imagick
+      opcache
+    ]
+  );
+in
+{
   services.phpfpm.pools."foo".phpPackage = myPhp;
 }
 ```
@@ -103,10 +123,17 @@ in {
 ```nix
 let
   myPhp = php.buildEnv {
-    extensions = { all, ... }: with all; [ imagick opcache ];
+    extensions =
+      { all, ... }:
+      with all;
+      [
+        imagick
+        opcache
+      ];
     extraConfig = "memory_limit=256M";
   };
-in {
+in
+{
   services.phpfpm.pools."foo".phpPackage = myPhp;
 }
 ```
@@ -132,9 +159,14 @@ won't work with that project unless those extensions are loaded.
 Example of building `composer` with additional extensions:
 
 ```nix
-(php.withExtensions ({ all, enabled }:
-  enabled ++ (with all; [ imagick redis ]))
-).packages.composer
+(php.withExtensions (
+  { all, enabled }:
+  enabled
+  ++ (with all; [
+    imagick
+    redis
+  ])
+)).packages.composer
 ```
 
 ### Overriding PHP packages {#ssec-php-user-guide-overriding-packages}
@@ -148,7 +180,7 @@ php.override {
   packageOverrides = final: prev: {
     extensions = prev.extensions // {
       mysqlnd = prev.extensions.mysqlnd.overrideAttrs (attrs: {
-        patches = attrs.patches or [] ++ [
+        patches = attrs.patches or [ ] ++ [
           # ...
         ];
       });
@@ -182,7 +214,7 @@ code, while others choose not to.
 
 In Nix, there are multiple approaches to building a Composer-based project.
 
-One such method is the `php.buildComposerProject` helper function, which serves
+One such method is the `php.buildComposerProject2` helper function, which serves
 as a wrapper around `mkDerivation`.
 
 Using this function, you can build a PHP project that includes both a
@@ -217,27 +249,31 @@ To customize the PHP version, you can specify the `php` attribute. Similarly, if
 you wish to modify the Composer version, use the `composer` attribute. It is
 important to note that both attributes should be of the `derivation` type.
 
-Here's an example of working code example using `php.buildComposerProject`:
+Here's an example of working code example using `php.buildComposerProject2`:
 
 ```nix
 { php, fetchFromGitHub }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "php-app";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "git-owner";
     repo = "git-repo";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-VcQRSss2dssfkJ+iUb5qT+FJ10GHiFDzySigcmuVI+8=";
   };
 
   # PHP version containing the `ast` extension enabled
   php = php.buildEnv {
-    extensions = ({ enabled, all }: enabled ++ (with all; [
-      ast
-    ]));
+    extensions = (
+      { enabled, all }:
+      enabled
+      ++ (with all; [
+        ast
+      ])
+    );
   };
 
   # The composer vendor hash
@@ -259,38 +295,45 @@ Here's a working code example to build a PHP library using `mkDerivation` and
 separate functions and hooks:
 
 ```nix
-{ stdenvNoCC, fetchFromGitHub, php }:
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+  php,
+}:
 
-stdenvNoCC.mkDerivation (finalAttrs:
-let
-  src = fetchFromGitHub {
-    owner = "git-owner";
-    repo = "git-repo";
-    rev = finalAttrs.version;
-    hash = "sha256-VcQRSss2dssfkJ+iUb5qT+FJ10GHiFDzySigcmuVI+8=";
-  };
-in {
-  inherit src;
-  pname = "php-app";
-  version = "1.0.0";
+stdenvNoCC.mkDerivation (
+  finalAttrs:
+  let
+    src = fetchFromGitHub {
+      owner = "git-owner";
+      repo = "git-repo";
+      rev = finalAttrs.version;
+      hash = "sha256-VcQRSss2dssfkJ+iUb5qT+FJ10GHiFDzySigcmuVI+8=";
+    };
+  in
+  {
+    inherit src;
+    pname = "php-app";
+    version = "1.0.0";
 
-  buildInputs = [ php ];
+    buildInputs = [ php ];
 
-  nativeBuildInputs = [
-    php.packages.composer
-    # This hook will use the attribute `composerRepository`
-    php.composerHooks.composerInstallHook
-  ];
+    nativeBuildInputs = [
+      php.packages.composer
+      # This hook will use the attribute `composerRepository`
+      php.composerHooks.composerInstallHook
+    ];
 
-  composerRepository = php.mkComposerRepository {
-    inherit (finalAttrs) pname version src;
-    composerNoDev = true;
-    composerNoPlugins = true;
-    composerNoScripts = true;
-    # Specifying a custom composer.lock since it is not present in the sources.
-    composerLock = ./composer.lock;
-    # The composer vendor hash
-    vendorHash = "sha256-86s/F+/5cBAwBqZ2yaGRM5rTGLmou5//aLRK5SA0WiQ=";
-  };
-})
+    composerRepository = php.mkComposerRepository {
+      inherit (finalAttrs) pname version src;
+      composerNoDev = true;
+      composerNoPlugins = true;
+      composerNoScripts = true;
+      # Specifying a custom composer.lock since it is not present in the sources.
+      composerLock = ./composer.lock;
+      # The composer vendor hash
+      vendorHash = "sha256-86s/F+/5cBAwBqZ2yaGRM5rTGLmou5//aLRK5SA0WiQ=";
+    };
+  }
+)
 ```

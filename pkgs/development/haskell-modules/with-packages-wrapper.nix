@@ -47,9 +47,9 @@ selectPackages:
 let
   inherit (haskellPackages) llvmPackages ghc;
 
-  packages =
-    selectPackages haskellPackages
-    ++ lib.optional withHoogle (hoogleWithPackages selectPackages);
+  hoogleWithPackages' = if withHoogle then hoogleWithPackages selectPackages else null;
+
+  packages = selectPackages haskellPackages ++ [ hoogleWithPackages' ];
 
   isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
@@ -156,11 +156,11 @@ else
 
           # Boot libraries are located differently than other libraries since GHC 9.6, so handle them separately.
           if [[ -x "${bootLibDir}" ]]; then
-            ln -s "${bootLibDir}"/*.dylib $dynamicLinksDir
+            find "${bootLibDir}" -name '*.dylib' -exec ln -s {} "$dynamicLinksDir" \;
           fi
 
           for d in $(grep -Poz "dynamic-library-dirs:\s*\K .+\n" $packageConfDir/*|awk '{print $2}'|sort -u); do
-            ln -s $d/*.dylib $dynamicLinksDir
+            find "$d" -name '*.dylib' -exec ln -s {} "$dynamicLinksDir" \;
           done
           for f in $packageConfDir/*.conf; do
             # Initially, $f is a symlink to a read-only file in one of the inputs
@@ -201,6 +201,8 @@ else
     preferLocalBuild = true;
     passthru = {
       inherit (ghc) version meta;
+
+      hoogle = hoogleWithPackages';
 
       # Inform users about backwards incompatibilities with <= 21.05
       override =

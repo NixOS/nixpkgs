@@ -7,7 +7,8 @@
   qtwebsockets,
   minizinc,
   makeWrapper,
-  Cocoa,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 let
@@ -19,24 +20,42 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "minizinc-ide";
-  version = "2.8.7";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    hash = "sha256-mlLW7RHwO+VHWJdKhDjIWYoRpdTrt7QpPKp0EiHGkEs=";
+    hash = "sha256-wYS46keOPPQLs0fFeSeb2wz+VX6A1UUGjiGzHZhPxVk=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     qmake
     makeWrapper
+    copyDesktopItems
   ];
   buildInputs = [
     qtbase
     qtwebsockets
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "minizinc";
+      desktopName = "MiniZincIDE";
+      icon = "minizinc";
+      comment = meta.description;
+      exec = "MiniZincIDE";
+      type = "Application";
+      terminal = false;
+      categories = [
+        "Science"
+        "Development"
+        "Education"
+      ];
+    })
+  ];
 
   sourceRoot = "${src.name}/MiniZincIDE";
 

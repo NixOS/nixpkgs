@@ -1,0 +1,21 @@
+--- a/src/gui/Main.cpp
++++ b/src/gui/Main.cpp
+@@ -28,7 +28,8 @@
+ 
+ 	std::unique_ptr<QSettings> options;
+ 	if (Options::isStandalone()) {
+-		auto configPath = QApplication::applicationDirPath() + "/config.ini";
++		QString defaultConfigPath = qEnvironmentVariable("HOME") + "/.config/vpkedit";
++		auto configPath = qEnvironmentVariable("XDG_CONFIG_HOME", defaultConfigPath) + "/vpkedit/config.ini";
+ 		options = std::make_unique<QSettings>(configPath, QSettings::Format::IniFormat);
+ 	} else {
+ 		options = std::make_unique<QSettings>();
+@@ -42,7 +43,7 @@
+ 		QCoreApplication::installTranslator(&translatorQtBase);
+ 	}
+ 	QTranslator translator;
+-	if (translator.load(locale, PROJECT_NAME.data(), "_", ":/i18n")) {
++	if (translator.load(locale, PROJECT_NAME.data(), "_", QApplication::applicationDirPath() + "/../lib/vpkedit/i18n")) {
+ 		QCoreApplication::installTranslator(&translator);
+ 	}
+ 

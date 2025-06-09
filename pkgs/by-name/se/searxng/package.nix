@@ -4,17 +4,46 @@
   fetchFromGitHub,
   nixosTests,
 }:
+let
+  python = python3.override {
+    packageOverrides = final: prev: {
+      httpx = prev.httpx.overridePythonAttrs (old: rec {
+        version = "0.27.2";
+        src = old.src.override {
+          tag = version;
+          hash = "sha256-N0ztVA/KMui9kKIovmOfNTwwrdvSimmNkSvvC+3gpck=";
+        };
+      });
 
-python3.pkgs.toPythonModule (
-  python3.pkgs.buildPythonApplication rec {
+      httpx-socks = prev.httpx-socks.overridePythonAttrs (old: rec {
+        version = "0.9.2";
+        src = old.src.override {
+          tag = "v${version}";
+          hash = "sha256-PUiciSuDCO4r49st6ye5xPLCyvYMKfZY+yHAkp5j3ZI=";
+        };
+      });
+
+      starlette = prev.starlette.overridePythonAttrs (old: {
+        disabledTests = old.disabledTests or [ ] ++ [
+          # fails in assertion with spacing issue
+          "test_request_body"
+          "test_request_stream"
+          "test_wsgi_post"
+        ];
+      });
+    };
+  };
+in
+python.pkgs.toPythonModule (
+  python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2024-11-25";
+    version = "0-unstable-2025-04-09";
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "bad070b4bc2c5afa73edea546c68d3e142a476fc";
-      hash = "sha256-pJl0pD+lx1L7CMKEZaK15ahd96gwWKsR53EVF7RRNtY=";
+      rev = "15384e8fc596da9c4a7e27393f8100018c3a61ed";
+      hash = "sha256-exkn/gQALJteUAsg3qeSnRGEbKANkhSBDziWUgJ1fF8=";
     };
 
     postPatch = ''
@@ -41,7 +70,7 @@ python3.pkgs.toPythonModule (
       '';
 
     dependencies =
-      with python3.pkgs;
+      with python.pkgs;
       [
         babel
         brotli
@@ -73,10 +102,10 @@ python3.pkgs.toPythonModule (
     postInstall = ''
       # Create a symlink for easier access to static data
       mkdir -p $out/share
-      ln -s ../${python3.sitePackages}/searx/static $out/share/
+      ln -s ../${python.sitePackages}/searx/static $out/share/
 
       # copy config schema for the limiter
-      cp searx/limiter.toml $out/${python3.sitePackages}/searx/limiter.toml
+      cp searx/limiter.toml $out/${python.sitePackages}/searx/limiter.toml
     '';
 
     passthru = {

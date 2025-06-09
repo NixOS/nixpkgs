@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "byrnereese";
     repo = "mkdocs-minify-plugin";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LDCAWKVbFsa6Y/tmY2Zne4nOtxe4KvNplZuWxg4e4L8=";
   };
 

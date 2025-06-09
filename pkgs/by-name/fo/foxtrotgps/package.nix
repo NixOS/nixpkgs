@@ -32,7 +32,7 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "foxtrotgps";
   version = "1.2.2+331";
 
@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
       ]
     ))
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   postUnpack = ''
     cp -R ${srcs.screenshots} $sourceRoot/doc/screenshots

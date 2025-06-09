@@ -1,17 +1,18 @@
-{ lib
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
-, pkg-config
-, blueprint-compiler
-, glib
-, gtk4
-, libadwaita
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
-, cava
-, libGL
+{
+  lib,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  pkg-config,
+  blueprint-compiler,
+  glib,
+  gtk4,
+  libadwaita,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
+  cava,
+  libGL,
 }:
 
 buildDotnetModule rec {
@@ -21,7 +22,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Cavalier";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-SFhEKtYrlnkbLMnxU4Uf4jnFsw0MJHstgZgLLnGC2d8=";
   };
 

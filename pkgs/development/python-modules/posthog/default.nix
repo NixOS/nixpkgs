@@ -1,11 +1,15 @@
 {
   lib,
+  anthropic,
   backoff,
   buildPythonPackage,
+  distro,
   fetchFromGitHub,
   freezegun,
   mock,
   monotonic,
+  openai,
+  parameterized,
   pytestCheckHook,
   python-dateutil,
   requests,
@@ -15,20 +19,21 @@
 
 buildPythonPackage rec {
   pname = "posthog";
-  version = "3.7.4";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-43ySHV2Idssd5YonzhyIpet98vinpQ4O2AKUiAlYahY=";
+    tag = "v${version}";
+    hash = "sha256-RpD4+NuClYmmXCn9eBa2oxMW3TwvVZcTkgaV+mNOkYU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     backoff
+    distro
     monotonic
     python-dateutil
     requests
@@ -36,8 +41,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    anthropic
     freezegun
     mock
+    openai
+    parameterized
     pytestCheckHook
   ];
 
@@ -54,11 +62,17 @@ buildPythonPackage rec {
     "test_flush_interval"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Revisit this at the next version bump, issue open upstream
+    # See https://github.com/PostHog/posthog-python/issues/234
+    "posthog/test/ai/openai/test_openai.py"
+  ];
+
+  meta = {
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/PostHog/posthog-python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "antimicrox";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "AntiMicroX";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9vpkhs3zEOZa3LnyIqdW0U+nS/9t4HzMLzFqrB2TqI8=";
+    sha256 = "sha256-ZIHhgyOpabWkdFZoha/Hj/1d8/b6qVolE6dn0xAFZVw=";
   };
 
   nativeBuildInputs = [

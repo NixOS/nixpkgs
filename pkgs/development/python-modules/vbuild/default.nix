@@ -5,6 +5,7 @@
   poetry-core,
   pscript,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
 }:
 
@@ -38,10 +39,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vbuild" ];
 
-  disabledTests = [
-    # Tests require network access
-    "test_min"
-    "test_pycomp_onlineClosurable"
+  disabledTests =
+    [
+      # Tests require network access
+      "test_min"
+      "test_pycomp_onlineClosurable"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      "test_ok"
+    ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/manatlan/vbuild/issues/13
+    "tests/test_py2js.py"
+    "tests/test_PyStdLibIncludeOrNot.py"
+    "test_py_comp.py"
   ];
 
   meta = {

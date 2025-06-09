@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "pytest-responses";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6QAiNWCJbo4rmaByrc8VNw39/eF3uqFOss3GJuCvpZg=";
   };
 

@@ -5,7 +5,7 @@
   ncurses,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "swaglyrics";
   version = "unstable-2021-06-17";
   format = "setuptools";

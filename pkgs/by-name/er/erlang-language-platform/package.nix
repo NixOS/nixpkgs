@@ -13,15 +13,15 @@ let
       "linux-${arch}-unknown-linux-gnu";
 
   hashes = {
-    linux-aarch64-unknown-linux-gnu = "sha256-Fte7oZD5+aFph5xGrKtbSimb3aHewkjsJRXB+64IW5A=";
-    linux-x86_64-unknown-linux-gnu = "sha256-GFf1YybZRyZ3D6ZnLf+op6KRPYbwBHSPh1groxdNZks=";
-    macos-aarch64-apple-darwin = "sha256-3K3sPizBR/+DJIX67GsYqm2X5k7kq3kBRg8P2WALTZs=";
-    macos-x86_64-apple-darwin = "sha256-j+AVmLfe/yCvKvYhL5ikhXA1g+zQ1CDlMl1FYO6q1yA=";
+    linux-aarch64-unknown-linux-gnu = "sha256-i6XsOK8csrJ/9TDzltA7mGjdutLZONFiYGV5tqSCy8o=";
+    linux-x86_64-unknown-linux-gnu = "sha256-XK3DPWIdPDoIL10EATa8p1bnlpZaOzOdU0LnuKbj++E=";
+    macos-aarch64-apple-darwin = "sha256-8e5duQYDVFyZejMjuZPuWhg1on3CBku9eBuilG5p1BY=";
+    macos-x86_64-apple-darwin = "sha256-dnouUBUUAkMr1h+IJWYamxmk8IC7JdeIUS9/YI0GzOU=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "erlang-language-platform";
-  version = "2024-12-09";
+  version = "2025-04-02";
 
   src = fetchurl {
     url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/elp-${release}-otp-26.2.tar.gz";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An IDE-first library for the semantic analysis of Erlang code, including LSP server, linting and refactoring tools.";
+    description = "IDE-first library for the semantic analysis of Erlang code, including LSP server, linting and refactoring tools";
     homepage = "https://github.com/WhatsApp/erlang-language-platform/";
     license = with lib.licenses; [
       mit

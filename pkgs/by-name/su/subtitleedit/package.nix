@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "subtitleedit";
-  version = "4.0.8";
+  version = "4.0.12";
 
   src = fetchzip {
     url = "https://github.com/SubtitleEdit/subtitleedit/releases/download/${version}/SE${
       lib.replaceStrings [ "." ] [ "" ] version
     }.zip";
-    hash = "sha256-pUCuAxCljRu1fXPQIBDWtkC17RBD+Bv6Nx5Tw/ACuXw=";
+    hash = "sha256-UlkFTsdssrjrPA0oOXJuSckEf1uMxh+POojfDX7NUu8=";
     stripRoot = false;
   };
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A subtitle editor";
+    description = "Subtitle editor";
     longDescription = ''
       With Subtitle Edit you can easily adjust a subtitle if it is out of sync with
       the video in several different ways. You can also use it for making

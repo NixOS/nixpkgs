@@ -7,7 +7,7 @@
   fetchpatch2,
   alsa-lib,
   aubio,
-  boost,
+  boost186,
   cairomm,
   cppunit,
   curl,
@@ -28,7 +28,6 @@
   liblo,
   libogg,
   libpulseaudio,
-  librdf_raptor,
   librdf_rasqal,
   libsamplerate,
   libsigcxx,
@@ -53,7 +52,7 @@
   soundtouch,
   sratom,
   suil,
-  taglib,
+  taglib_1,
   vamp-plugin-sdk,
   wafHook,
   xjadeo,
@@ -94,6 +93,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/Ardour/ardour/commit/338cd09a4aa1b36b8095dfc14ab534395f9a4a92.patch?full_index=1";
       hash = "sha256-AvV4aLdkfrxPkE4NX2ETSagq4GjEC+sHCEqdcYvL+CY=";
     })
+
+    # Fix build with boost >= 1.85
+    (fetchpatch {
+      url = "https://github.com/Ardour/ardour/commit/f94bde59d740d65e67c5cd13af4d7ea51453aeaa.patch";
+      hash = "sha256-dGRjkdF3REkANytDR17wIh8J2+AcLFmV4tKZied/OZg=";
+    })
   ];
 
   # Ardour's wscript requires git revision and date to be available.
@@ -122,7 +127,7 @@ stdenv.mkDerivation rec {
     [
       alsa-lib
       aubio
-      boost
+      boost186
       cairomm
       cppunit
       curl
@@ -139,7 +144,6 @@ stdenv.mkDerivation rec {
       liblo
       libogg
       libpulseaudio
-      librdf_raptor
       librdf_rasqal
       libsamplerate
       libsigcxx
@@ -162,7 +166,7 @@ stdenv.mkDerivation rec {
       soundtouch
       sratom
       suil
-      taglib
+      taglib_1
       vamp-plugin-sdk
     ]
     ++ lib.optionals videoSupport [

@@ -29,16 +29,16 @@ let
     ."${system}" or (throw "Unsupported system: ${system}");
   hash =
     {
-      arm64-linux-hash = "sha256-s0j3ZYqS0fp8yLxPXP25BvLzLt7Uisl2c+94saMWEMw=";
-      arm64-osx-hash = "sha256-vHUtrMHJ1g7ltGuf765/IVDAWfanSUGRQbVnzsuTgrQ=";
-      x64-linux-hash = "sha256-mYLDQxAS6WV8CWzG1gSjPl37SJaVoLV21Meh1cRk45w=";
-      x64-osx-hash = "sha256-YNUb5eOc0iMOjZ9vbYLodFp5jlqk1OcOyRi10REyVX4=";
+      arm64-linux-hash = "sha256-sMhZ2QPIkuomUdgKYMoPwyQH5k0ziqdJSoCvV51tVNQ=";
+      arm64-osx-hash = "sha256-uubRkA6ER/kQeUXys9Jcf4Aii7FFkrKPgh/niK/3jO0=";
+      x64-linux-hash = "sha256-S2Ow+5AdvFZ10lA0xnvT5egdi1QbFTy97XzvSI5FtRk=";
+      x64-osx-hash = "sha256-7PvYkhJ9Tlulk0t/s8qAJUAHguUeilAQsQ0qU+DBVQM=";
     }
     ."${arch}-${os}-hash";
 in
 stdenv.mkDerivation rec {
   pname = "whisparr";
-  version = "2.0.0.548";
+  version = "2.0.0.987";
 
   src = fetchurl {
     name = "${pname}-${arch}-${os}-${version}.tar.gz";

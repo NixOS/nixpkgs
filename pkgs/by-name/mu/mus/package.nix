@@ -10,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~nbsp";
-    repo = pname;
+    repo = "mus";
     rev = version;
     hash = "sha256-yvMV+lhU9Wtwrhw0RKRUNFNznvZP0zcnT6jqPaqzhUs=";
   };
 
-  cargoHash = "sha256-K9B8y9pOHcAOrUCmCB0zW2wy81DTF3K97gPYmAiKwAM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1ruRKqHW5/MH4THRAozofAROZT6zE3JFKGluuWWa1ms=";
 
   meta = with lib; {
     description = "Pretty good mpd client";

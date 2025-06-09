@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   libsndfile,
   libsamplerate,
   liblo,
@@ -11,44 +10,43 @@
 
 stdenv.mkDerivation {
   pname = "dirt";
-  version = "unstable-2018-01-01";
+  version = "0-unstable-2025-03-30";
+
   src = fetchFromGitHub {
     repo = "Dirt";
     owner = "tidalcycles";
-    rev = "b09604c7d8e581bc7799d7e2ad293e7cdd254bda";
-    sha256 = "13adglk2d31d7mswfvi02b0rjdhzmsv11cc8smhidmrns3f9s96n";
+    rev = "4edc6192da3508fecb9f2e26bb0370cdeb6c4166";
+    hash = "sha256-Zo1RzlfENnI2OmwPfO+O8u6Y1BToy911PYzdPQzK2sk=";
     fetchSubmodules = true;
   };
-  patches = [
-    # Pull patch pending upstream inclusion for upstream gcc-10 support:
-    #  https://github.com/tidalcycles/Dirt/pull/65
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/tidalcycles/Dirt/commit/43fd267745d486228c4185b4fcbd7d9fbc362cc2.patch";
-      sha256 = "08r34ylzs31wwf0la995pb149ccq0vr7qg4792pkhca57zi0bff8";
-    })
-  ];
+
   buildInputs = [
     libsndfile
     libsamplerate
     liblo
     libjack2
   ];
+
   postPatch = ''
     sed -i "s|./samples|$out/share/dirt/samples|" dirt.c
   '';
+
   makeFlags = [ "PREFIX=$(out)" ];
+
+  # error: passing argument 4 of 'lo_server_thread_add_method' from incompatible pointer type
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   postInstall = ''
     mkdir -p $out/share/dirt/
     cp -r samples $out/share/dirt/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unimpressive thingie for playing bits of samples with some level of accuracy";
     homepage = "https://github.com/tidalcycles/Dirt";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ anderspapitto ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ anderspapitto ];
+    platforms = lib.platforms.linux;
     mainProgram = "dirt";
   };
 }

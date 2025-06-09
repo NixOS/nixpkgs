@@ -35,6 +35,7 @@
   networkx,
   packaging,
   pandas,
+  panel,
   pydantic,
   pygments,
   pyjwt,
@@ -49,7 +50,7 @@
 
 buildPythonPackage rec {
   pname = "msticpy";
-  version = "2.15.0";
+  version = "2.16.2.post";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -57,8 +58,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "msticpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jYLAF+6yhZo74LYDaoA/+JTd05s6VCheYpHk6ilufBM=";
+    tag = "v${version}";
+    hash = "sha256-EUZAN56EXNnAFXiBhtjsu652+K3T/qMZoWt2N1C92mU=";
   };
 
   pythonRelaxDeps = [ "bokeh" ];
@@ -97,6 +98,7 @@ buildPythonPackage rec {
     networkx
     packaging
     pandas
+    panel
     pydantic
     pygments
     pyjwt
@@ -115,7 +117,7 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Threat Intelligence Security Tools";
     homepage = "https://github.com/microsoft/msticpy";
-    changelog = "https://github.com/microsoft/msticpy/releases/tag/v${version}";
+    changelog = "https://github.com/microsoft/msticpy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

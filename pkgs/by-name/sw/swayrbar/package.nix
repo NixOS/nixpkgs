@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-qfk4yqJkqTiFKFZXCVPPZM0g0/+A8d8fDeat9ZsfokI=";
   };
 
-  cargoHash = "sha256-+YhBwQWDxjS8yAS/+uX7I72qNad9N/xQCVr4QHp+kyw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rByw6l/4CATEIDS5h1owGCr1x8Qt4+lzabLwni7PYMc=";
 
   # don't build swayr
   buildAndTestSubdir = pname;

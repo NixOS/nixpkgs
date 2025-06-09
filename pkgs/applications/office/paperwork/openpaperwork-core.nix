@@ -1,7 +1,7 @@
 {
   buildPythonPackage,
   lib,
-  fetchFromGitLab,
+  callPackage,
 
   isPy3k,
   isPyPy,
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "openpaperwork-core";
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  inherit (callPackage ./src.nix { }) version src;
   format = "pyproject";
 
   sourceRoot = "${src.name}/openpaperwork-core";

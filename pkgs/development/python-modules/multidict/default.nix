@@ -2,8 +2,9 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pytest-cov-stub,
   pytestCheckHook,
+  pytest-codspeed,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
   typing-extensions,
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "6.1.0";
+  version = "6.2.0";
 
   disabled = pythonOlder "3.8";
 
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "multidict";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rvL1XzMNBVBlElE5wznecL3Ku9h4tG9VeqGRd04iPXw=";
+    tag = "v${version}";
+    hash = "sha256-eiTD6vMSLMLlDmVwht6ZdGTHlyC62W4ecdiuhfJNaMQ=";
   };
 
   postPatch = ''
@@ -37,8 +38,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-cov-stub
     pytestCheckHook
+    pytest-codspeed
+    pytest-cov-stub
   ];
 
   preCheck = ''

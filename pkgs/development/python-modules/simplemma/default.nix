@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adbar";
     repo = "simplemma";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aFN/cOSqsrTJ5GMw0/SM7uoC+T1RhDTQFf8AF00Tz/o=";
   };
 

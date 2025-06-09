@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   glib,
   flex,
   bison,
@@ -16,7 +17,8 @@
   cctools,
   cairo,
   gnome,
-  substituteAll,
+  replaceVars,
+  replaceVarsWith,
   buildPackages,
   gobject-introspection-unwrapped,
   nixStoreDir ? builtins.storeDir,
@@ -41,7 +43,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.82.0";
+  version = "1.84.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -55,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    hash = "sha256-D1pMGQhCS/JrxB6TYRaMNjaFCA+9uHoZbIkchAHKLwk=";
+    hash = "sha256-lFtX2n7CYuXCZrieCR0UvoAMxCQnfYKgKHK315SoR3k=";
   };
 
   patches =
@@ -63,17 +65,22 @@ stdenv.mkDerivation (finalAttrs: {
       # Make g-ir-scanner put absolute path to GIR files it generates
       # so that programs can just dlopen them without having to muck
       # with LD_LIBRARY_PATH environment variable.
-      (substituteAll {
-        src = ./absolute_shlib_path.patch;
+      (replaceVars ./absolute_shlib_path.patch {
         inherit nixStoreDir;
       })
+
+      # Fix getter heuristics regression
+      # https://gitlab.gnome.org/GNOME/gobject-introspection/-/merge_requests/529
+      ./0001-scanner-Prefer-some-getters-over-others.patch
     ]
     ++ lib.optionals x11Support [
       # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
       # https://github.com/NixOS/nixpkgs/issues/34080
-      (substituteAll {
-        src = ./absolute_gir_path.patch;
+      (replaceVars ./absolute_gir_path.patch {
         cairoLib = "${lib.getLib cairo}/lib";
+        # original source code in patch's context
+        CAIRO_GIR_PACKAGE = null;
+        CAIRO_SHARED_LIBRARY = null;
       })
     ];
 
@@ -117,12 +124,14 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       "-Dgi_cross_ldd_wrapper=${
-        substituteAll {
+        replaceVarsWith {
           name = "g-ir-scanner-lddwrapper";
           isExecutable = true;
           src = ./wrappers/g-ir-scanner-lddwrapper.sh;
-          inherit (buildPackages) bash;
-          buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
+          replacements = {
+            inherit (buildPackages) bash;
+            buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
+          };
         }
       }"
       "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
@@ -174,12 +183,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
-    maintainers =
-      teams.gnome.members
-      ++ (with maintainers; [
-        lovek323
-        artturin
-      ]);
+    maintainers = with maintainers; [
+      lovek323
+      artturin
+    ];
+    teams = [ teams.gnome ];
     pkgConfigModules = [ "gobject-introspection-1.0" ];
     platforms = platforms.unix;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];

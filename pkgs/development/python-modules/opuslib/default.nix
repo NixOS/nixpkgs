@@ -7,11 +7,11 @@
   pytestCheckHook,
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "opuslib";
   version = "3.0.3";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "orion-labs";
-    repo = pname;
+    repo = "opuslib";
     rev = "92109c528f9f6c550df5e5325ca0fcd4f86b0909";
     hash = "sha256-NxmC/4TTIEDVzrfMPN4PcT1JY4QCw8IBMy80XiM/o00=";
   };
@@ -38,8 +38,7 @@ buildPythonPackage rec {
       url = "https://github.com/orion-labs/opuslib/commit/87a214fc98c1dcae38035e99fe8e279a160c4a52.patch";
       hash = "sha256-UoOafyTFvWLY7ErtBhkXTZSgbMZFrg5DGxjbhqEI7wo=";
     })
-    (substituteAll {
-      src = ./opuslib-paths.patch;
+    (replaceVars ./opuslib-paths.patch {
       opusLibPath = "${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

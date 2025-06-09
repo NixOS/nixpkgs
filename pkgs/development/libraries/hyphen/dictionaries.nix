@@ -44,7 +44,7 @@ let
         install -m644 "hyph_${dictFileName}.dic" "$out/share/hyphen"
         # docs
         install -dm755 "$out/share/doc/"
-        install -m644 "README_hyph_${readmeFileName}.txt" "$out/share/doc/${pname}.txt"
+        install -m644 "README_${readmeFileName}.txt" "$out/share/doc/${pname}.txt"
         runHook postInstall
       '';
     };
@@ -55,7 +55,7 @@ rec {
   # ENGLISH
 
   en_US = en-us;
-  en-us = stdenv.mkDerivation rec {
+  en-us = stdenv.mkDerivation {
     nativeBuildInputs = hyphen.nativeBuildInputs;
     version = hyphen.version;
     pname = "hyphen-dict-en-us";
@@ -84,7 +84,7 @@ rec {
     shortName = "de-de";
     shortDescription = "German (Germany)";
     dictFileName = "de_DE";
-    readmeFileName = "de";
+    readmeFileName = "hyph_de";
   };
 
   de_AT = de-at;
@@ -93,7 +93,7 @@ rec {
     shortName = "de-at";
     shortDescription = "German (Austria)";
     dictFileName = "de_AT";
-    readmeFileName = "de";
+    readmeFileName = "hyph_de";
   };
 
   de_CH = de-ch;
@@ -102,6 +102,17 @@ rec {
     shortName = "de-ch";
     shortDescription = "German (Switzerland)";
     dictFileName = "de_CH";
-    readmeFileName = "de";
+    readmeFileName = "hyph_de";
+  };
+
+  # RUSSIAN
+
+  ru_RU = ru-ru;
+  ru-ru = mkDictFromLibreofficeGit {
+    subdir = "ru_RU";
+    shortName = "ru-ru";
+    shortDescription = "Russian (Russia)";
+    dictFileName = "ru_RU";
+    readmeFileName = "ru_RU";
   };
 }

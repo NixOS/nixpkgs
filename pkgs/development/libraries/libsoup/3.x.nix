@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.6.1";
+  version = "3.6.5";
 
   outputs = [
     "out"
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zrHxqivdc7LNgVnTmYyWxV7wl+8V5LTzYCkgn6GK+Dg=";
+    hash = "sha256-aJF2Wqw+lJAXlFw+rr2MyCFt93JFbcn0YJdvvbetojQ=";
   };
 
   depsBuildBuild = [
@@ -113,6 +113,6 @@ stdenv.mkDerivation rec {
     description = "HTTP client/server library for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libsoup";
     license = lib.licenses.lgpl2Plus;
-    inherit (glib.meta) maintainers platforms;
+    inherit (glib.meta) maintainers platforms teams;
   };
 }

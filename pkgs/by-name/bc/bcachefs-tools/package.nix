@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.13.0";
+  version = "1.25.2";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-w55Fs1RZ4c55vTvb3jArPcmBLij1nuLi2MUHMMXPhng=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4MscYFlUwGrFhjpQs1ifDMh5j+t9x7rokOtR2SmhCro=";
   };
 
   nativeBuildInputs = [
@@ -61,15 +61,19 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ] ++ lib.optional fuseSupport fuse3;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-rO4AjCnxmHQPk0hxgXK4yxUK5eag/+Q+fRG/BsRi0i0=";
+    hash = "sha256-juXRmI3tz2BXQsRaRRGyBaGqeLk2QHfJb2sKPmWur8s=";
   };
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
+
+    # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
+    "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
+    "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
   ] ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
 
   env = {
@@ -89,12 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     rm tests/test_fuse.py
   '';
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
-
-  # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
-  installFlags = [
-    "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
-    "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
-  ];
 
   postInstall =
     ''

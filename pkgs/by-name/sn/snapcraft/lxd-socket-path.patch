@@ -1,7 +1,7 @@
-diff --git a/snapcraft_legacy/internal/build_providers/_lxd/_lxd.py b/snapcraft_legacy/internal/build_providers/_lxd/_lxd.py
-index 5fa4f898..41264ebb 100644
---- a/snapcraft_legacy/internal/build_providers/_lxd/_lxd.py
-+++ b/snapcraft_legacy/internal/build_providers/_lxd/_lxd.py
+diff --git i/snapcraft_legacy/internal/build_providers/_lxd/_lxd.py w/snapcraft_legacy/internal/build_providers/_lxd/_lxd.py
+index 5fa4f898b..41264ebb0 100644
+--- i/snapcraft_legacy/internal/build_providers/_lxd/_lxd.py
++++ w/snapcraft_legacy/internal/build_providers/_lxd/_lxd.py
 @@ -142,7 +142,7 @@ class LXD(Provider):
              build_provider_flags=build_provider_flags,
          )

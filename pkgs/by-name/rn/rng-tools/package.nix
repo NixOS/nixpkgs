@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nhorman";
-    repo = pname;
+    repo = "rng-tools";
     rev = "v${version}";
     hash = "sha256-wqJvLvxmNG2nb5P525w25Y8byUUJi24QIHNJomCKeG8=";
   };
@@ -104,13 +104,13 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Random number generator daemon";
     homepage = "https://github.com/nhorman/rng-tools";
     changelog = "https://github.com/nhorman/rng-tools/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       johnazoidberg
       c0bw3b
     ];

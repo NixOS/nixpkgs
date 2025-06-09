@@ -7,7 +7,7 @@
   ninja,
   python3,
   nix-update-script,
-  abseil-cpp,
+  abseil-cpp_202401,
   curl,
   gtest,
   nlohmann_json,
@@ -16,19 +16,19 @@
   libwebm,
   mbedtls,
   mimalloc,
-  protobuf,
+  protobuf_29,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaka-packager";
-  version = "3.4.1";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "shaka-project";
     repo = "shaka-packager";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-xXKgL8sUP+meFXV9S/i7dao7BIkIx+e/ujjpew7xGL0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Syty10LHGIlP5Jw+UneQMN+wBz/ggvV0xV8+3ThU8SM=";
   };
 
   patches = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       # pssh_box.py.
       ps.protobuf
     ]))
-    abseil-cpp
+    abseil-cpp_202401
     curl
     gtest
     nlohmann_json
@@ -69,9 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     libwebm
     mbedtls
     mimalloc
-    (protobuf.override {
+    (protobuf_29.override {
       # must be the same version as for shaka-packager
-      inherit abseil-cpp;
+      abseil-cpp = abseil-cpp_202401;
     })
     zlib
   ];

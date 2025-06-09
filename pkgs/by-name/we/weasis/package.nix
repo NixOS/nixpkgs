@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  jre,
+  jdk23,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -18,12 +18,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "weasis";
-  version = "4.4.0";
+  version = "4.5.1";
 
   # Their build instructions indicate to use the packaging script
   src = fetchzip {
     url = "https://github.com/nroduit/Weasis/releases/download/v${version}/weasis-native.zip";
-    hash = "sha256-+Bi9rTuM9osKzbKVA4exqsFm8p9+1OHgJqRSNnCC6QQ=";
+    hash = "sha256-aGoTSOZ1W8JHQ0+FcJ9RZ47A1LfXJOoGNmVDiUd9zxE=";
     stripRoot = false;
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    ./build/script/package-weasis.sh --no-installer --jdk ${jre}
+    ./build/script/package-weasis.sh --no-installer --jdk ${jdk23}
 
     runHook postBuild
   '';
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/{applications,pixmaps}
 
-    mv weasis-${platform}-jdk${lib.versions.major jre.version}-${version}/Weasis/* $out/
+    mv weasis-${platform}-jdk${lib.versions.major jdk23.version}-${version}/Weasis/* $out/
     mv $out/lib/*.png $out/share/pixmaps/
 
     runHook postInstall

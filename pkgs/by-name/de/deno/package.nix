@@ -5,55 +5,62 @@
   fetchFromGitHub,
   rustPlatform,
   cmake,
+  yq,
   protobuf,
   installShellFiles,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
   libffi,
+  sqlite,
+  lld,
 }:
 
 let
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.1.4";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CUfUYiD1ZVrbH4RowJN0PUCafpIsEWu0sCPzxngz4Ak=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ASP+1EuGLU9BBY7iBer92AbnVEeQc4nwtOEyULlvc2w=";
   };
 
-  cargoHash = "sha256-bnX2tKX6nrUU/cUsavV7bWSOhjLyMdYc/y6GHqwx55Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-XJy7+cARYEX8tAPXLHJnEwXyZIwPaqhM7ZUzoem1Wo0=";
 
   postPatch = ''
-    # upstream uses lld on aarch64-darwin for faster builds
-    # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
-    substituteInPlace .cargo/config.toml --replace-fail "-fuse-ld=lld " ""
-
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
-    substituteInPlace ext/ffi/Cargo.toml --replace-fail "libffi = \"=3.2.0\"" "libffi = { version = \"3.2.0\", features = [\"system\"] }"
+    tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
   '';
 
   # uses zlib-ng but can't dynamically link yet
   # https://github.com/rust-lang/libz-sys/issues/158
   nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    # for tomlq to adjust Cargo.toml
+    yq
     # required by libz-ng-sys crate
     cmake
     # required by deno_kv crate
     protobuf
     installShellFiles
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
 
   configureFlags = lib.optionals stdenv.cc.isClang [
     # This never worked with clang, but became a hard error recently: https://github.com/llvm/llvm-project/commit/3d5b610c864c8f5980eaa16c22b71ff1cf462fae
     "--disable-multi-os-directory"
   ];
 
-  buildInputs = [ libffi ];
+  buildInputs = [
+    libffi
+    # required by libsqlite3-sys
+    sqlite.dev
+  ];
   buildAndTestSubdir = "cli";
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
@@ -81,7 +88,7 @@ rustPlatform.buildRustPackage rec {
   installCheckPhase = lib.optionalString canExecute ''
     runHook preInstallCheck
     $out/bin/deno --help
-    $out/bin/deno --version | grep "deno ${version}"
+    $out/bin/deno --version | grep "deno ${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
@@ -90,7 +97,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://deno.land/";
-    changelog = "https://github.com/denoland/deno/releases/tag/v${version}";
+    changelog = "https://github.com/denoland/deno/releases/tag/v${finalAttrs.version}";
     description = "Secure runtime for JavaScript and TypeScript";
     longDescription = ''
       Deno aims to be a productive and secure scripting environment for the modern programmer.
@@ -114,4 +121,4 @@ rustPlatform.buildRustPackage rec {
       "aarch64-darwin"
     ];
   };
-}
+})

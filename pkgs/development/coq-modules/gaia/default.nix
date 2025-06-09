@@ -3,6 +3,7 @@
   mkCoqDerivation,
   coq,
   mathcomp,
+  stdlib,
   version ? null,
 }:
 
@@ -16,6 +17,7 @@ mkCoqDerivation {
   release."1.15".sha256 = "sha256:04zchnkvaq2mzpcilpspn5l947689gj3m0w20m0nd7w4drvlahnw";
   release."1.17".sha256 = "sha256-2VzdopXgKS/wC5Rd1/Zlr12J5bSIGINFjG1nrMjDrGE=";
   release."2.2".sha256 = "sha256-y8LlQg9d9rfPFjzS9Xu3BW/H3tPiOC+Eb/zwXJGW9d4=";
+  release."2.3".sha256 = "sha256-inWJok0F3SZpVfoyMfpRXHVHn4z2aY8JjCKKhdVTnoc=";
   releaseRev = (v: "v${v}");
 
   inherit version;
@@ -26,8 +28,15 @@ mkCoqDerivation {
       [
         {
           cases = [
-            (range "8.16" "8.20")
-            (range "2.0" "2.2")
+            (range "8.16" "9.0")
+            (range "2.0" "2.4")
+          ];
+          out = "2.3";
+        }
+        {
+          cases = [
+            (range "8.16" "9.0")
+            (range "2.0" "2.3")
           ];
           out = "2.2";
         }
@@ -49,9 +58,10 @@ mkCoqDerivation {
       null;
 
   propagatedBuildInputs = [
-    mathcomp.ssreflect
-    mathcomp.algebra
+    mathcomp.boot
     mathcomp.fingroup
+    mathcomp.algebra
+    stdlib
   ];
 
   meta = with lib; {

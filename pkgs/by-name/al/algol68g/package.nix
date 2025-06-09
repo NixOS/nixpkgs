@@ -5,21 +5,21 @@
   curl,
   gmp,
   gsl,
+  libpq,
   mpfr,
   ncurses,
   plotutils,
-  postgresql,
   pkg-config,
   withPDFDoc ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "algol68g";
-  version = "3.4.2";
+  version = "3.5.14";
 
   src = fetchurl {
     url = "https://jmvdveer.home.xs4all.nl/algol68g-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hKiRMU98sZhGgHhjgtwUNSIv2iPgb4T+dgYw58IGK8Q=";
+    hash = "sha256-uIy8rIhUjohiQJ/K5EprsIISXMAx1w27I3cGo/9H9Wk=";
   };
 
   outputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     gsl
     plotutils
-    postgresql
+    libpq
   ];
 
   strictDeps = true;
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "a68g";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

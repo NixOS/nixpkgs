@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
       - customize navigation using DVD scripting
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
     mainProgram = "dvdstyler";
   };

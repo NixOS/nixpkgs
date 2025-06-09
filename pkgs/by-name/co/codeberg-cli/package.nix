@@ -1,5 +1,4 @@
 {
-  darwin,
   fetchFromGitea,
   installShellFiles,
   lib,
@@ -10,34 +9,24 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "codeberg-cli";
-  version = "0.4.6";
+  version = "0.4.11";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Aviac";
     repo = "codeberg-cli";
     rev = "v${version}";
-    hash = "sha256-BkWI4FbacgFrbSLNSqe7vdzdLvrrgX1528qFaKCd5tY=";
+    hash = "sha256-wf9Ve7focNBo6fGsjBQpTIx+DtxOo73AIQ9uoV8Q88Q=";
   };
 
-  cargoHash = "sha256-eFS16QzPMLhoVb+hqt/p3ka58rwP5WTgHas2PZT5c/U=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LmLMTnNwxih5HcrMUmQpVdIVz4KeHxcOFtOrNqgGPkA=";
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      let
-        d = darwin.apple_sdk.frameworks;
-      in
-      [
-        d.CoreServices
-        d.Security
-        d.SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd berg \

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-T4eYTr3+MUr1fPWE490v1m8THdZrBUP4wODftjpvnLQ=";
   };
 

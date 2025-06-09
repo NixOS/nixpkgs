@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pydeconz";
-  version = "119";
+  version = "120";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,13 +22,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "deconz";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5138YzxutjyFsYyLGLTzeyCISuY8kV4WA0FLML+VeZQ=";
+    tag = "v${version}";
+    hash = "sha256-L9v6j8CFc19TlcFBTm3YCQG1nS78uIUfERB6mfwzMNM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.6.0" "setuptools" \
+      --replace-fail "setuptools==77.0.3" "setuptools" \
       --replace-fail "wheel==" "wheel>="
   '';
 

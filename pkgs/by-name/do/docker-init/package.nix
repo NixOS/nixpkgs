@@ -6,12 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "docker-init";
-  version = "v1.4.0";
+  version = "1.4.0";
+
   tag = "175267";
 
   src = fetchurl {
     url = "https://desktop.docker.com/linux/main/amd64/${finalAttrs.tag}/docker-desktop-x86_64.pkg.tar.zst";
-    hash = "sha256-ysZorPBmoUvTJFFKDbZgQxPamONJKcXezmMrpZSVpwY=";
+    hash = "sha256-pxxlSN2sQqlPUzUPufcK8T+pvdr0cK+9hWTYzwMJv5I=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Creates Docker-related starter files for your project";
     homepage = "https://docs.docker.com/reference/cli/docker/init";
-    downloadPage = "https://docs.docker.com/desktop/release-notes/#4320";
+    downloadPage = "https://docs.docker.com/desktop/release-notes";
     mainProgram = "docker-init";
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];

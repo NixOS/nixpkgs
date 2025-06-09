@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zalesyc";
     repo = "budgie-media-player-applet";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wmtO4Djs1xXBjimAEV6pvPo7zxDM+XQIOi/WOPRieQ8=";
   };
 
@@ -54,6 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/zalesyc/budgie-media-player-applet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
   };
 })

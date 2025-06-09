@@ -39,7 +39,7 @@ Perl packages from CPAN are defined in [pkgs/top-level/perl-packages.nix](https:
     pname = "Class-C3";
     version = "0.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FL/FLORA/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/F/FL/FLORA/Class-C3-${version}.tar.gz";
       hash = "sha256-/5GE5xHT0uYGOQxroqj6LMU7CtKn2s6vMVoSXxL4iK4=";
     };
   };
@@ -51,7 +51,10 @@ Note the use of `mirror://cpan/`, and the `pname` and `version` in the URL defin
 ```nix
 {
   foo = import ../path/to/foo.nix {
-    inherit stdenv fetchurl /* ... */;
+    inherit
+      stdenv
+      fetchurl # ...
+      ;
     inherit (perlPackages) ClassC3;
   };
 }
@@ -74,14 +77,18 @@ So what does `buildPerlPackage` do? It does the following:
 `buildPerlPackage` is built on top of `stdenv`, so everything can be customised in the usual way. For instance, the `BerkeleyDB` module has a `preConfigure` hook to generate a configuration file used by `Makefile.PL`:
 
 ```nix
-{ buildPerlPackage, fetchurl, db }:
+{
+  buildPerlPackage,
+  fetchurl,
+  db,
+}:
 
 buildPerlPackage rec {
   pname = "BerkeleyDB";
   version = "0.36";
 
   src = fetchurl {
-    url = "mirror://cpan/authors/id/P/PM/PMQS/${pname}-${version}.tar.gz";
+    url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-${version}.tar.gz";
     hash = "sha256-4Y+HGgGQqcOfdiKcFIyMrWBEccVNVAMDBWZlFTMorh8=";
   };
 
@@ -100,11 +107,14 @@ Dependencies on other Perl packages can be specified in the `buildInputs` and `p
     pname = "Class-C3-Componentised";
     version = "1.0004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AS/ASH/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/A/AS/ASH/Class-C3-Componentised-${version}.tar.gz";
       hash = "sha256-ASO9rV/FzJYZ0BH572Fxm2ZrFLMZLFATJng1NuU4FHc=";
     };
     propagatedBuildInputs = [
-      ClassC3 ClassInspector TestException MROCompat
+      ClassC3
+      ClassInspector
+      TestException
+      MROCompat
     ];
   };
 }
@@ -113,7 +123,13 @@ Dependencies on other Perl packages can be specified in the `buildInputs` and `p
 On Darwin, if a script has too many `-Idir` flags in its first line (its “shebang line”), it will not run. This can be worked around by calling the `shortenPerlShebang` function from the `postInstall` phase:
 
 ```nix
-{ lib, stdenv, buildPerlPackage, fetchurl, shortenPerlShebang }:
+{
+  lib,
+  stdenv,
+  buildPerlPackage,
+  fetchurl,
+  shortenPerlShebang,
+}:
 
 {
   ImageExifTool = buildPerlPackage {
@@ -121,7 +137,7 @@ On Darwin, if a script has too many `-Idir` flags in its first line (its “sheb
     version = "12.50";
 
     src = fetchurl {
-      url = "https://exiftool.org/${pname}-${version}.tar.gz";
+      url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
       hash = "sha256-vOhB/FwQMC8PPvdnjDvxRpU6jAZcC6GMQfc0AH4uwKg=";
     };
 

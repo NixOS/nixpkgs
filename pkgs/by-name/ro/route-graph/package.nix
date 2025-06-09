@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "route-graph";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HmfmUeT5vt0yWVs7GhIPVt4NZtTfe7HYPLRqfQE/tZM=";
   };
 
@@ -43,12 +43,12 @@ python3.pkgs.buildPythonApplication rec {
     "route_graph"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for creating graphs of routes";
     homepage = "https://github.com/audiusGmbH/route-graph";
     changelog = "https://github.com/audiusGmbH/route-graph/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "route-graph";
   };
 }

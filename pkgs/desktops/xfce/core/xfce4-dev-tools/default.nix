@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.xfce.org/xfce/xfce4-dev-tools";
     description = "Autoconf macros and scripts to augment app build systems";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
     platforms = platforms.linux;
   };
 })

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "realitix";
     repo = "vulkan";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-b1jHNKdHF7pIC6H4O2yxy36Ppb60J0uN2P0WaCw51Gc=";
   };
 

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "3.7.0";
+  version = "3.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+duE7TmN9RCb1pwR1GYT0WzFcvua0yE/ENleK18SwY4=";
+    hash = "sha256-lNi83GWnFaACSm1bcBpfMeRb0VkmnmLHNzHeefBI2ys=";
   };
 
   postPatch = ''

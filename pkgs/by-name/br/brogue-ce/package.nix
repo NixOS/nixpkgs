@@ -65,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tmewett/BrogueCE";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [
-      AndersonTorres
       fgaz
     ];
     platforms = platforms.all;

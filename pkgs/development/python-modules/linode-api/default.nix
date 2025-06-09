@@ -14,22 +14,22 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.25.0";
+  version = "5.29.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   # Sources from Pypi exclude test fixtures
   src = fetchFromGitHub {
     owner = "linode";
     repo = "python-linode-api";
     tag = "v${version}";
-    hash = "sha256-rEBMZft4o7R2e0N7x1ZEaCisRmhKggMbZWdtDvraoD0=";
+    hash = "sha256-orMQr3FYyK4piazMsZmYkaZ/G/DvQOZObdtWt0wiEi4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     polling
     deprecated
@@ -48,10 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "linode_api4" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Linode API v4";
     homepage = "https://github.com/linode/python-linode-api";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ glenns ];
+    changelog = "https://github.com/linode/linode_api4-python/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ glenns ];
   };
 }

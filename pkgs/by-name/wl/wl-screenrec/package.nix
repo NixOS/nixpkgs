@@ -8,18 +8,19 @@
   wayland,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "wl-screenrec";
   version = "0.1.4-unstable-2024-07-28";
 
   src = fetchFromGitHub {
     owner = "russelltg";
-    repo = pname;
+    repo = "wl-screenrec";
     rev = "b817accf1d4f2373cb6f466f760de35e5b8626bd";
     hash = "sha256-07O2YM9dOHWzriM2+uiBWjEt2hKAuXtRtnKBuzb02Us=";
   };
 
-  cargoHash = "sha256-AYirjrnk8SGTXk5IjzCep2AQJYPbgHAOOf47MUDYj4k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nwABNqJNqgBVwD860lSu9mcEgty/GbSYmPys3xp535Q=";
 
   nativeBuildInputs = [
     pkg-config

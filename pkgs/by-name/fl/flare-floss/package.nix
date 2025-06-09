@@ -12,7 +12,7 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "flare-floss";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true; # for tests
     hash = "sha256-ciyF1Pt5KdUsmpTgvfgE81hhTHBM5zMBcZpom99R5GY=";
   };
@@ -61,12 +61,12 @@ python3.pkgs.buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatically extract obfuscated strings from malware";
     homepage = "https://github.com/mandiant/flare-floss";
     changelog = "https://github.com/mandiant/flare-floss/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "floss";
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

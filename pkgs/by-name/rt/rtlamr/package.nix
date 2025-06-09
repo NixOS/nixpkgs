@@ -4,7 +4,7 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "rtlamr";
   version = "0.9.3-unstable-2023-08-13";
 

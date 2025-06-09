@@ -101,6 +101,10 @@ let
       autodeint
       autoload
       ; # added 2024-11-28
+    inherit (self.eisa01)
+      smart-copy-paste-2
+      smartskip
+      ; # added 2025-03-09
     inherit (self.occivink)
       blacklistExtensions
       crop

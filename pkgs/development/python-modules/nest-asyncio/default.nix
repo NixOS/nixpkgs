@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "erdewit";
     repo = "nest_asyncio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5I5WItOl1QpyI4OXZgZf8GiQ7Jlo+SJbDicIbernaU4=";
   };
 

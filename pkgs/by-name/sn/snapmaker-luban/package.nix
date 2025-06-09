@@ -35,15 +35,16 @@
   pango,
   gcc-unwrapped,
   udev,
+  python311,
 }:
 
 stdenv.mkDerivation rec {
   pname = "snapmaker-luban";
-  version = "4.14.0";
+  version = "4.15.0";
 
   src = fetchurl {
     url = "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
-    hash = "sha256-/cJxVhY9zJdsg8l+BxJDr53/Lsz4JMBGMIS2HD6NXvM=";
+    hash = "sha256-X4XNzkl5ky3C8fj92J9OQxj12zmIQ+xS02wYLWo94oU=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +71,8 @@ stdenv.mkDerivation rec {
     libgbm
     nspr
     nss
+    (lib.getLib stdenv.cc.cc)
+    python311
   ];
 
   libPath = lib.makeLibraryPath [
@@ -102,9 +105,7 @@ stdenv.mkDerivation rec {
     udev
   ];
 
-  autoPatchelfIgnoreMissingDeps = [
-    "libc.musl-x86_64.so.1"
-  ];
+  autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
 
   dontWrapGApps = true;
   dontConfigure = true;
@@ -125,7 +126,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/snapmaker-luban
 
     ln -s $out/opt/snapmaker-luban $out/bin/snapmaker-luban
-    ln -s $out/opt/resources/app/app/resources/images/snap-luban-logo-64x64.png $out/share/pixmaps/snapmaker-luban.png
+    ln -s $out/opt/resources/app/src/app/resources/images/snapmaker-logo.png $out/share/pixmaps/snapmaker-luban.png
 
     runHook postInstall
   '';

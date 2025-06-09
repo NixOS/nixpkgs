@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonAtLeast,
 
   # buildInputs
@@ -21,25 +22,35 @@
   torch,
 
   # tests
+  addBinToPathHook,
   evaluate,
   parameterized,
-  pytest7CheckHook,
+  pytestCheckHook,
   transformers,
   config,
   cudatoolkit,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "1.2.1";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
     tag = "v${version}";
-    hash = "sha256-KnFf6ge0vUR/C7Rh/c6ZttCGKo9OUIWCUYxk5O+OW7c=";
+    hash = "sha256-J4eDm/PcyKK3256l6CAWUj4AWTB6neTKgxbBmul0BPE=";
   };
+
+  patches = [
+    # Fix tests on darwin: https://github.com/huggingface/accelerate/pull/3464
+    (fetchpatch {
+      url = "https://github.com/huggingface/accelerate/commit/8b31a2fe2c6d0246fff9885fb1f8456fb560abc7.patch";
+      hash = "sha256-Ek9Ou4Y/H1jt3qanf2g3HowBoTsN/bn4yV9O3ogcXMo=";
+    })
+  ];
 
   buildInputs = [ llvmPackages.openmp ];
 
@@ -56,19 +67,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     evaluate
     parameterized
-    pytest7CheckHook
+    pytestCheckHook
     transformers
+    writableTmpDirAsHomeHook
   ];
-  preCheck =
-    ''
-      export HOME=$(mktemp -d)
-      export PATH=$out/bin:$PATH
-    ''
-    + lib.optionalString config.cudaSupport ''
-      export TRITON_PTXAS_PATH="${cudatoolkit}/bin/ptxas"
-    '';
+
+  preCheck = lib.optionalString config.cudaSupport ''
+    export TRITON_PTXAS_PATH="${lib.getExe' cudatoolkit "ptxas"}"
+  '';
   pytestFlagsArray = [ "tests" ];
   disabledTests =
     [
@@ -92,10 +101,12 @@ buildPythonPackage rec {
       # set the environment variable, CC, which conflicts with standard environment
       "test_patch_environment_key_exists"
     ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # RuntimeError: Dynamo is not supported on Python 3.12+
+    ++ lib.optionals ((pythonAtLeast "3.13") || (torch.rocmSupport or false)) [
+      # RuntimeError: Dynamo is not supported on Python 3.13+
+      # OR torch.compile tests broken on torch 2.5 + rocm
+      "test_can_unwrap_distributed_compiled_model_keep_torch_compile"
+      "test_can_unwrap_distributed_compiled_model_remove_torch_compile"
       "test_convert_to_fp32"
-      "test_dynamo_extract_model"
       "test_send_to_device_compiles"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [

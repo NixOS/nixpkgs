@@ -9,7 +9,7 @@
 
 buildDunePackage rec {
   pname = "visitors";
-  version = "20210608";
+  version = "20250212";
 
   duneVersion = "3";
 
@@ -20,7 +20,7 @@ buildDunePackage rec {
     repo = pname;
     rev = version;
     domain = "gitlab.inria.fr";
-    sha256 = "1p75x5yqwbwv8yb2gz15rfl3znipy59r45d1f4vcjdghhjws6q2a";
+    sha256 = "sha256-AFD4+vriwVGt6lzDyIDuIMadakcgB4j235yty5qqFgQ=";
   };
 
   propagatedBuildInputs = [

@@ -22,12 +22,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FergusFettes";
     repo = "typer-shell";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fnqI+nKMaQocBWd9i/lqq8OzKwFdxJ8+7aYG5sNQ55E=";
   };
 
   pythonRelaxDeps = [
     "iterfzf"
+    "rich"
     "typer"
   ];
 

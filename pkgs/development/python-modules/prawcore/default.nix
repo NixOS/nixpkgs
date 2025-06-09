@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "prawcore";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tECZRx6VgyiJDKHvj4Rf1sknFqUhz3sDFEsAMOeB7/g=";
   };
 

@@ -9,6 +9,7 @@
   libffi,
   libsForQt5,
   libzip,
+  libX11,
   makeDesktopItem,
   makeWrapper,
   pkg-config,
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       SDL2
+      libX11
       glew
       libzip
       zlib
@@ -88,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
       wayland
       libffi
     ];
+
+  dontWrapQtApps = true;
 
   cmakeFlags = [
     (lib.cmakeBool "HEADLESS" (!enableQt))
@@ -147,9 +151,16 @@ stdenv.mkDerivation (finalAttrs: {
         lib.optionals enableVulkan [
           "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
         ]
-        ++ lib.optionals (!enableQt) [
-          "--set SDL_VIDEODRIVER ${if forceWayland then "wayland" else "x11"}"
-        ]
+        ++ (
+          if enableQt then
+            [
+              "\${qtWrapperArgs[@]}"
+            ]
+          else
+            [
+              "--set SDL_VIDEODRIVER ${if forceWayland then "wayland" else "x11"}"
+            ]
+        )
       );
       binToBeWrapped = if enableQt then "PPSSPPQt" else "PPSSPPSDL";
     in
@@ -172,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
       not run those.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     mainProgram = "ppsspp";
     platforms = lib.platforms.linux;
   };

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TheKevJames";
     repo = "coveralls-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1MjP99NykWNDyzWwZopLAzZ93vGX1mXEU+m+zvOBIZA=";
   };
 

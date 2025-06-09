@@ -26,7 +26,7 @@ in
       description = ''
         Whether to enable a user service for the Emacs daemon. Use `emacsclient` to connect to the
         daemon. If `true`, {var}`services.emacs.install` is
-        considered `true`, whatever its value.
+        considered `true`.
       '';
     };
 
@@ -73,7 +73,8 @@ in
         serviceConfig = {
           Type = "notify";
           ExecStart = "${pkgs.runtimeShell} -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --fg-daemon'";
-          ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
+          # Emacs exits with exit code 15 (SIGTERM), when stopped by systemd.
+          SuccessExitStatus = 15;
           Restart = "always";
         };
 

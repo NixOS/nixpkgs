@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-wyb/26EyNyBJeTDUvnMxlMiQjaCGBES8t4VteNY1I/A=";
   };
 
-  cargoHash = "sha256-U3mgbG9h2cDqr0aqxbI2CJUOweIoDXDxmsWg0zxolSo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FiM51ZV61aCFWHyNIudQl1B7X5ov0SXyWIVE4am1Vmw=";
 
   meta = {
     description = "Little satellite utility for LeftWM";

@@ -10,15 +10,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "py-flick";
-  version = "1.1.2";
+  pname = "pyflick";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ZephireNZ";
     repo = "PyFlick";
     tag = "v${version}";
-    hash = "sha256-Csm5gXMIGEhHgzN/7sO/1iM/wZklI2Jc0C69tgYWxnQ=";
+    hash = "sha256-JROtklRimr6I1/6+yYaDL6rNGSj7O15nI/C9ZSj6eFo=";
   };
 
   pythonRelaxDeps = [ "aiohttp" ];

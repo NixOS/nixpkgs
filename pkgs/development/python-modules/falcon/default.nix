@@ -17,7 +17,6 @@
   msgpack,
   mujson,
   orjson,
-  pytest-asyncio,
   pytest7CheckHook,
   pyyaml,
   rapidjson,
@@ -38,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "falconry";
     repo = "falcon";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-umNuHyZrdDGyrhQEG9+f08D4Wwrz6bVJ6ysw8pfbHv4=";
   };
 
@@ -65,7 +64,6 @@ buildPythonPackage rec {
     orjson
 
     # ASGI specific
-    pytest-asyncio
     aiofiles
     httpx
     uvicorn

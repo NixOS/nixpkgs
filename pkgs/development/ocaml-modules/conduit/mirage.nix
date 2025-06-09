@@ -7,9 +7,9 @@
   cstruct,
   mirage-flow,
   mirage-flow-combinators,
-  mirage-crypto-rng-mirage,
-  mirage-time,
-  mirage-clock,
+  mirage-crypto-rng,
+  mirage-ptime,
+  mirage-mtime,
   dns-client-mirage,
   vchan,
   xenstore,
@@ -32,11 +32,11 @@ buildDunePackage {
     sexplib0
     uri
     cstruct
-    mirage-clock
+    mirage-ptime
+    mirage-mtime
     mirage-flow
     mirage-flow-combinators
-    mirage-crypto-rng-mirage
-    mirage-time
+    mirage-crypto-rng
     dns-client-mirage
     conduit-lwt
     vchan

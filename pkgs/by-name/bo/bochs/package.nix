@@ -2,7 +2,6 @@
   lib,
   SDL2,
   curl,
-  darwin,
   docbook_xml_dtd_45,
   docbook_xsl,
   fetchurl,
@@ -27,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bochs";
-  version = "2.8";
+  version = "3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/bochs/bochs/${finalAttrs.version}/bochs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qFsTr/fYQR96nzVrpsM7X13B+7EH61AYzCOmJjnaAFk=";
+    hash = "sha256-y29UK1HzWizJIGsqmA21YCt80bfPLk7U8Ras1VB3gao=";
   };
 
   nativeBuildInputs = [
@@ -62,9 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
       libGLU
       libX11
       libXpm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libobjc
     ];
 
   configureFlags =
@@ -157,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
       Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -20,6 +20,7 @@
   platformdirs,
   propcache,
   pydantic,
+  pydantic-extra-types,
   pyjwt,
   rich,
   typer,
@@ -39,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "6.6.5";
+  version = "7.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -47,8 +48,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZohQTXOLc2E0vfD21IUh6ECTfbAd2SZOg/73lk/UMO0=";
+    tag = "v${version}";
+    hash = "sha256-jFRBupuP0T/6e07qdJmzcz7P/IAYbY1+QxF6ErsFox0=";
   };
 
   build-system = [ poetry-core ];
@@ -71,6 +72,7 @@ buildPythonPackage rec {
     platformdirs
     propcache
     pydantic
+    pydantic-extra-types
     pyjwt
     rich
     typer
@@ -107,7 +109,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for UniFi Protect (Unofficial)";
     homepage = "https://github.com/uilibs/uiprotect";
-    changelog = "https://github.com/uilibs/uiprotect/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/uilibs/uiprotect/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

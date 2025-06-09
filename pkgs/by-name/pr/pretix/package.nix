@@ -7,6 +7,7 @@
   python3,
   gettext,
   nixosTests,
+  pretix,
   plugins ? [ ],
 }:
 
@@ -35,20 +36,19 @@ let
         };
       };
 
+      pretix = self.toPythonModule pretix;
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
-
-      sentry-sdk = super.sentry-sdk_2;
     };
   };
 
   pname = "pretix";
-  version = "2024.11.0";
+  version = "2025.5.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vmk7oW9foXkZdt3XOLJDbPldX2TruJOgd8mmi5tGqNw=";
+    hash = "sha256-vu+7jKXIuNZ4BN2IamdDxGJkraj93eNYUT3sUU2LCAg=";
   };
 
   npmDeps = buildNpmPackage {
@@ -56,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-4PrOrI2cykkuzob+DMeAu/GF5OMCho40G3BjCwVW/tE=";
+    npmDepsHash = "sha256-NSBSL6+0ancoPHbvJu4fBxK8EVj06dbltjHqJi2yh5w=";
 
     dontBuild = true;
 
@@ -81,25 +81,34 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "beautifulsoup4"
+    "celery"
+    "django-bootstrap3"
+    "django-localflavor"
     "django-phonenumber-field"
     "dnspython"
+    "drf_ujson2"
     "importlib-metadata"
     "kombu"
     "markdown"
+    "phonenumberslite"
     "pillow"
     "protobuf"
     "pycryptodome"
     "pyjwt"
+    "pypdf"
     "python-bidi"
     "qrcode"
     "redis"
+    "reportlab"
     "requests"
     "sentry-sdk"
     "ua-parser"
+    "webauthn"
   ];
 
   pythonRemoveDeps = [
-    "vat-moss-forked" # we provide a patched vat-moss package
+    "vat_moss_forked" # we provide a patched vat-moss package
   ];
 
   postPatch = ''
@@ -192,7 +201,6 @@ python.pkgs.buildPythonApplication rec {
       requests
       sentry-sdk
       sepaxml
-      slimit
       stripe
       text-unidecode
       tlds
@@ -265,8 +273,9 @@ python.pkgs.buildPythonApplication rec {
       python
       ;
     plugins = lib.recurseIntoAttrs (
-      python.pkgs.callPackage ./plugins {
+      lib.packagesFromDirectoryRecursive {
         inherit (python.pkgs) callPackage;
+        directory = ./plugins;
       }
     );
     tests = {

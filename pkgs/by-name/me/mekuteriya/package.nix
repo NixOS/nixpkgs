@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-bWp2UNrhCHY2DQWusGS9L9/jI2r23F34yLpuE6nuOD0=";
   };
 
-  cargoHash = "sha256-WkrlQbNTP3lNEtlnAMrTd9lBo2Q4dECqtV29kmV8F7A=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YIsM2IVtV1jG/JzCR9gQPqnKhtxJYdCWdTw4FlK3Y9w=";
 
   meta = {
     description = "Ethiopian Calendar CLI";

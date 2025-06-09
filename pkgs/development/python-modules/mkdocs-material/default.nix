@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.5.45";
+  version = "9.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = "mkdocs-material";
-    rev = "refs/tags/${version}";
-    hash = "sha256-uhUatalHcObQbar1xbdR44FnQs/+qS4ad0sdB2jH/OU=";
+    tag = version;
+    hash = "sha256-Di+m06LuS5mXzvmz8Cvby49HguUPbXEJf9PnR8fQ5jw=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +83,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mkdocs" ];
 
   meta = with lib; {
-    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${src.tag}/CHANGELOG";
     description = "Material for mkdocs";
     downloadPage = "https://github.com/squidfunk/mkdocs-material";
     homepage = "https://squidfunk.github.io/mkdocs-material/";

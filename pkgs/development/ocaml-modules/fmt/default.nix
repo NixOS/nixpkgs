@@ -14,12 +14,12 @@ if lib.versionOlder ocaml.version "4.08" then
 else
 
   stdenv.mkDerivation rec {
-    version = "0.9.0";
+    version = "0.10.0";
     pname = "ocaml${ocaml.version}-fmt";
 
     src = fetchurl {
       url = "https://erratique.ch/software/fmt/releases/fmt-${version}.tbz";
-      sha256 = "sha256-8fsggFoi3XWhN9cnBKNw53ic9r32OUjmgX0cImwUEmE=";
+      sha256 = "sha256-eDgec+FW2F85LzfkKFqsmYd3MWWZsBIXMhlXT3xdKZc=";
     };
 
     nativeBuildInputs = [

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   glib,
   gettext,
   xorg,
@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       xprop = "${xorg.xprop}/bin/xprop";
       xwininfo = "${xorg.xwininfo}/bin/xwininfo";
     })

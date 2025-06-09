@@ -18,7 +18,7 @@ let
   # ROCm, if actively updated will always be at the latest version
   branch =
     if llvmMajor == "19" then
-      rec {
+      {
         version = "19.1.0";
         rev = "dad1f0eaab8047a4f73c50ed5f3d1694b78aae97";
         hash = "sha256-mUvDF5y+cBnqUaHjyiiE8cJGH5MfQMqGFy6bYv9vCVY=";
@@ -43,15 +43,15 @@ let
       }
     else if llvmMajor == "15" then
       rec {
-        version = "15.0.0";
+        version = "15.0.11";
         rev = "v${version}";
-        hash = "sha256-OsDohXRxovtEXaWiRGp8gJ0dXmoALyO+ZimeSO8aPVI=";
+        hash = "sha256-q4WhUaBDw0cnv1eqC6wSvrApHKvyg5/4QetybDLQkEw=";
       }
     else if llvmMajor == "14" then
       {
-        version = "14.0.0+unstable-2024-07-15";
-        rev = "2823e7052b7999c10fff63bc8089e5aa205716f4";
-        hash = "sha256-8/4B74hYge6WiH7PzRGEgE3W7f9IkQ4VMmfkWKYA/l4=";
+        version = "14.0.0+unstable-2025-01-28";
+        rev = "9df26b6af308cb834a4013deb8094f386f29accd";
+        hash = "sha256-8VRQwXFbLcYgHtWKs73yuTsy2kkCgYgPqD+W/GPy1BM=";
       }
     else if llvmMajor == "11" then
       {
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
         hash = "sha256-71sJuGqVjTcB549eIiCO0LoqAgxkdEHCoxh8Pd/Qzz8=";
       })
     ]
-    ++ lib.optionals (lib.versionAtLeast llvmMajor "15" && lib.versionOlder llvmMajor "18") [
+    ++ lib.optionals (lib.versionAtLeast llvmMajor "16" && lib.versionOlder llvmMajor "18") [
       # Fixes build after spirv-headers breaking change
       (fetchpatch {
         url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/0166a0fb86dc6c0e8903436bbc3a89bc3273ebc0.patch";

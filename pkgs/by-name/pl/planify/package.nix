@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.11.6";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     rev = version;
-    hash = "sha256-tHn3677bfJgAZnOfDjBJ87DUzr+e9I2lnCke/cN4olE=";
+    hash = "sha256-YgNM+fzss1+Q6Fv9mhedhCorWFnerx5oC3iISEhs6z8=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     description = "Task manager with Todoist support designed for GNU/Linux";
     homepage = "https://github.com/alainm23/planify";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    teams = [ teams.pantheon ];
     platforms = platforms.linux;
     mainProgram = "io.github.alainm23.planify";
   };

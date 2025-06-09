@@ -105,7 +105,7 @@ in
               add_header Set-Cookie $auth_cookie;
             '';
 
-            "/oauth2/auth" =
+            "= /oauth2/auth" =
               let
                 maybeQueryArg =
                   name: value:

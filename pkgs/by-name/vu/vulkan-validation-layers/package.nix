@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.296.0";
+  version = "1.4.313.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-H5AG+PXM3IdCfDqHMdaunRUWRm8QgdS6ZbZLMaOOALk=";
+    hash = "sha256-FavJ9QIv9J/QlY8bBSQ4C+8ZeNzge3Rov97GPOjltuA=";
   };
 
   strictDeps = true;
@@ -42,21 +42,24 @@ stdenv.mkDerivation rec {
     jq
   ];
 
-  buildInputs = [
-    glslang
-    libX11
-    libXau
-    libXdmcp
-    libXrandr
-    libffi
-    libxcb
-    robin-hood-hashing
-    spirv-headers
-    spirv-tools
-    vulkan-headers
-    vulkan-utility-libraries
-    wayland
-  ];
+  buildInputs =
+    [
+      glslang
+      robin-hood-hashing
+      spirv-headers
+      spirv-tools
+      vulkan-headers
+      vulkan-utility-libraries
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libX11
+      libXau
+      libXdmcp
+      libXrandr
+      libffi
+      libxcb
+      wayland
+    ];
 
   cmakeFlags = [
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
@@ -82,7 +85,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Official Khronos Vulkan validation layers";
     homepage = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };

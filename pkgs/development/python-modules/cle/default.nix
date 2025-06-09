@@ -12,18 +12,19 @@
   pyvex,
   setuptools,
   sortedcontainers,
+  nix-update-script,
 }:
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.134";
+  version = "9.2.154";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2C4vA8lRLLcfwqGoQ3dqV1kGGtlKx2sgSOKy1QqsEVY=";
+    hash = "sha256-XXJBySIT3ylK1nd3suP2bq4bVSVah/1XhOmkEONbCoY=";
   };
 in
 buildPythonPackage rec {
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "cle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0txid9qiNMEBemSphwok5Gkk3NJvzWSIlvrqFnre5TA=";
+    hash = "sha256-rWbZzm5hWi/C+te8zeQChxqYHO0S795tJ6Znocq9TTs=";
   };
 
   build-system = [ setuptools ];
@@ -76,10 +77,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cle" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Python loader for many binary formats";
     homepage = "https://github.com/angr/cle";
-    license = with licenses; [ bsd2 ];
+    license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };
 }

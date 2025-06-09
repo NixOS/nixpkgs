@@ -4,7 +4,6 @@
   fetchurl,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
 
   # nativeBuildInputs
   cargo,
@@ -25,6 +24,7 @@
   pytestCheckHook,
   requests,
   tiktoken,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -71,28 +71,35 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.21.0";
+  version = "0.21.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     tag = "v${version}";
-    hash = "sha256-G65XiVlvJXOC9zqcVr9vWamUnpC0aa4kyYkE2v1K2iY=";
+    hash = "sha256-3S7ZCaZnnwyNjoZ4Y/q3ngQE2MIm2iyCCjYAkdMVG2A=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  # TestUnigram.test_continuing_prefix_trainer_mismatch fails with:
+  # Exception: No such file or directory (os error 2)
+  # Fix submitted upstream: https://github.com/huggingface/tokenizers/pull/1747
+  postPatch = ''
+    substituteInPlace tests/bindings/test_trainers.py \
+      --replace-fail '"data/' '"tests/data/'
+  '';
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-5cw63ydyhpMup2tOe/hpG2W6YZ+cvT75MJBkE5Wap4s=";
+    hash = "sha256-I7LlBmeVY2rWI0ta6x311iAurQKuutsClrbUgkt9xWk=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
-  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs = [
     cargo
@@ -117,17 +124,15 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
     tiktoken
+    writableTmpDirAsHomeHook
   ];
 
-  postUnpack = ''
+  postUnpack =
     # Add data files for tests, otherwise tests attempt network access
-    mkdir $sourceRoot/tests/data
-    ln -s ${test-data}/* $sourceRoot/tests/data/
-  '';
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+    ''
+      mkdir $sourceRoot/tests/data
+      ln -s ${test-data}/* $sourceRoot/tests/data/
+    '';
 
   pythonImportsCheck = [ "tokenizers" ];
 

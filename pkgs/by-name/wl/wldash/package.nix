@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "kennylevinsen";
-    repo = pname;
+    repo = "wldash";
     rev = "v${version}";
     hash = "sha256-ZzsBD3KKTT+JGiFCpdumPyVAE2gEJvzCq+nRnK3RdxI=";
   };
@@ -56,7 +56,8 @@ rustPlatform.buildRustPackage {
     ./0002-Update-fontconfig.patch
   ];
 
-  cargoHash = "sha256-Y7nhj8VpO6sEzVkM3uPv8Tlk2jPn3c/uPJqFc/HjHI0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gvIsm6D6ZvRm0APw+xpayY+yt2IedMpWoa/hmvIpmV8=";
 
   dontPatchELF = true;
 

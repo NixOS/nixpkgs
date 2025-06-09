@@ -68,8 +68,7 @@ in
         description = ''
           Path to the secret used by the `phoenix`-framework. Instructions
           how to generate one are documented in the
-          [
-          framework docs](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Secret.html#content).
+          [framework docs](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Secret.html#content).
         '';
       };
       listenAddress = mkOption {
@@ -92,9 +91,7 @@ in
           Public URL where plausible is available.
 
           Note that `/path` components are currently ignored:
-          [
-            https://github.com/plausible/analytics/issues/1182
-          ](https://github.com/plausible/analytics/issues/1182).
+          <https://github.com/plausible/analytics/issues/1182>.
         '';
       };
     };
@@ -227,7 +224,7 @@ in
               # Thus, disable distribution for improved simplicity and security:
               #
               # When distribution is enabled,
-              # Elixir spwans the Erlang VM, which will listen by default on all
+              # Elixir spawns the Erlang VM, which will listen by default on all
               # interfaces for messages between Erlang nodes (capable of
               # remote code execution); it can be protected by a cookie; see
               # https://erlang.org/doc/reference_manual/distributed.html#security).

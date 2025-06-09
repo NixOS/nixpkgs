@@ -61,10 +61,6 @@
   # Whether to build only the library.
   libOnly ? false,
 
-  AudioUnit,
-  Cocoa,
-  CoreServices,
-  CoreAudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -95,6 +91,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # Fails in LXC containers where not all cores are enabled, where this setaffinity call will return EINVAL
+    sed -i "/fail_unless(pthread_setaffinity_np/d" src/tests/once-test.c
+  '';
+
   outputs = [
     "out"
     "dev"
@@ -110,7 +111,7 @@ stdenv.mkDerivation rec {
       perlPackages.XMLParser
       m4
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ glib ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ glib ]
     # gstreamer plugin discovery requires wrapping
     ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook3;
 
@@ -125,15 +126,11 @@ stdenv.mkDerivation rec {
       fftwFloat
       check
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       glib
       dbus
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-      Cocoa
-      CoreServices
-      CoreAudio
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
       libintl
     ]
     ++ lib.optionals (!libOnly) (
@@ -173,6 +170,13 @@ stdenv.mkDerivation rec {
       ++ lib.optional remoteControlSupport lirc
       ++ lib.optional zeroconfSupport avahi
     );
+
+  env =
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/3848
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
   mesonFlags =
     [
@@ -269,7 +273,9 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  passthru.tests = { inherit (nixosTests) pulseaudio; };
+  passthru.tests = {
+    inherit (nixosTests) pulseaudio;
+  };
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";

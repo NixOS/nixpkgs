@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools-scm,
   html5tagger,
+  setuptools,
   python,
   pythonOlder,
 }:
@@ -18,13 +19,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "tracerite";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rI1MNdYl/P64tUHyB3qV9gfLbGbCVOXnEFoqFTkaqgg=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ html5tagger ];
+  dependencies = [
+    html5tagger
+    setuptools
+  ];
 
   postInstall = ''
     cp tracerite/style.css $out/${python.sitePackages}/tracerite
@@ -40,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sanic-org/tracerite";
     changelog = "https://github.com/sanic-org/tracerite/releases/tag/v${version}";
     license = licenses.unlicense;
-    maintainers = [ ];
+    maintainers = with maintainers; [ p0lyw0lf ];
   };
 }

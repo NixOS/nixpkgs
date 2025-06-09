@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiostreammagic";
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "noahhusby";
     repo = "aiostreammagic";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CFd8/nyE3hLbmzO/MJEnllIe2MvfD/jkGIpNdYxI8N0=";
+    tag = version;
+    hash = "sha256-8ahLB5F2JKpA4F21WWDFzrDxoOpIq+d1iXuCjQngGtc=";
   };
 
   build-system = [ poetry-core ];

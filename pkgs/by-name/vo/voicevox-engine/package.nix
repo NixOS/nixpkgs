@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "voicevox-engine";
-  version = "0.22.2";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_engine";
     tag = version;
-    hash = "sha256-TZycd3xX5d4dNk4ze2JozyO7zDpGAuO+O7xHAx7QXUI=";
+    hash = "sha256-kuWpLnDKRYcfV9FxYLeR6FmQFO2K12KxJx/Y/4MwhbM=";
   };
 
   patches = [
@@ -91,16 +91,6 @@ python3Packages.buildPythonApplication rec {
     mv test_character_info resources/character_info
   '';
 
-  disabledTests = [
-    # this test checks the behaviour of openapi
-    # one of the functions returns a slightly different output due to openapi version differences
-    "test_OpenAPIの形が変わっていないことを確認"
-
-    # these tests fail due to some tiny floating point discrepancies
-    "test_upspeak_voiced_last_mora"
-    "test_upspeak_voiced_N_last_mora"
-  ];
-
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     syrupy
@@ -113,7 +103,7 @@ python3Packages.buildPythonApplication rec {
       owner = "VOICEVOX";
       repo = "voicevox_resource";
       tag = version;
-      hash = "sha256-oeWJESm1v0wicAXXFAyZT8z4QRVv9c+3vsWksmuY5wY=";
+      hash = "sha256-6pxx+ebNzXd3qbrFa4gfMDM2e5XANo3ZPzSAegKoJBE=";
     };
 
     pyopenjtalk = python3Packages.callPackage ./pyopenjtalk.nix { };

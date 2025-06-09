@@ -14,7 +14,7 @@
   libmpc,
   libucontext ? null,
   libxcrypt ? null,
-  darwin ? null,
+  isSnapshot ? false,
   isl ? null,
   zlib ? null,
   gnat-bootstrap ? null,
@@ -44,7 +44,7 @@ in
       gettext
     ]
     ++ optionals (perl != null) [ perl ]
-    ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox && flex != null) [ flex ]
+    ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox || isSnapshot && flex != null) [ flex ]
     ++ optionals langAda [ gnat-bootstrap ]
     ++ optionals langRust [ cargo ]
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
@@ -55,12 +55,12 @@ in
   # same for all gcc's
   depsBuildTarget =
     (
-      if hostPlatform == buildPlatform then
+      if lib.systems.equals hostPlatform buildPlatform then
         [
           targetPackages.stdenv.cc.bintools # newly-built gcc will be used
         ]
       else
-        assert targetPlatform == hostPlatform;
+        assert lib.systems.equals targetPlatform hostPlatform;
         [
           # build != host == target
           stdenv.cc
@@ -80,10 +80,7 @@ in
     ]
     ++ optionals (isl != null) [ isl ]
     ++ optionals (zlib != null) [ zlib ]
-    ++ optionals (langGo && stdenv.hostPlatform.isMusl) [ libucontext ]
-    ++ optionals (lib.versionAtLeast version "14" && stdenv.hostPlatform.isDarwin) [
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+    ++ optionals (langGo && stdenv.hostPlatform.isMusl) [ libucontext ];
 
   depsTargetTarget = optionals (
     !withoutTargetLibc && threadsCross != { } && threadsCross.package != null

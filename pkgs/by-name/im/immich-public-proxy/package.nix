@@ -8,17 +8,17 @@
 }:
 buildNpmPackage rec {
   pname = "immich-public-proxy";
-  version = "1.5.4";
+  version = "1.11.2";
   src = fetchFromGitHub {
     owner = "alangrainger";
     repo = "immich-public-proxy";
-    rev = "v${version}";
-    hash = "sha256-GoAUR8s2tRHpXD/yk42u6DDvkI97XAUlF9Zsq8pb/1M=";
+    tag = "v${version}";
+    hash = "sha256-4FZa2OZ0It2UF2VHpNFQvkNyuFkTBfjxxxMgKlEzo6I=";
   };
 
   sourceRoot = "${src.name}/app";
 
-  npmDepsHash = "sha256-BN7g+31ijH8r9rsv5zzjnE8PT7ozAswoyZNJ0XqXGyw=";
+  npmDepsHash = "sha256-3cL6bijTEg5m2KhHu6TcjaDF9BP+GYSn09pEtdr3oYI=";
 
   # patch in absolute nix store paths so the process doesn't need to cwd in $out
   postPatch = ''
@@ -40,6 +40,7 @@ buildNpmPackage rec {
   };
 
   meta = {
+    changelog = "https://github.com/alangrainger/immich-public-proxy/releases/tag/${src.tag}";
     description = "Share your Immich photos and albums in a safe way without exposing your Immich instance to the public";
     homepage = "https://github.com/alangrainger/immich-public-proxy";
     license = lib.licenses.agpl3Only;

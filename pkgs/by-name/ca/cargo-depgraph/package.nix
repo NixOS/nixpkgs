@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-yvcKRESX2W1oLmQvkl07iG8+I74qDKsaS3amM4pZU8s=";
   };
 
-  cargoHash = "sha256-OJOw0V4u/bK4vw3bU2wKVeOqP205ehfZMKJ6qIpYDLU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5GFYp1ZEkmag2GfzHRz3QDYaURzbDKY9yTSznkxddnE=";
 
   meta = with lib; {
     description = "Create dependency graphs for cargo projects using `cargo metadata` and graphviz";

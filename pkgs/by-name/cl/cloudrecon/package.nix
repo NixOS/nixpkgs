@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "g0ldencybersec";
     repo = "CloudRecon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SslHkwoMelvszrQZvNX28EokBgwnPDBbTUBA9jdJPro=";
   };
 
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to find assets from certificates";
     homepage = "https://github.com/g0ldencybersec/CloudRecon";
     changelog = "https://github.com/g0ldencybersec/CloudRecon/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cloudrecon";
   };
 }

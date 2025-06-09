@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "babelouest";
-    repo = pname;
+    repo = "orcania";
     rev = "v${version}";
     sha256 = "sha256-Cz3IE5UrfoWjMxQ/+iR1bLsYxf5DVN+7aJqLBcPjduA=";
   };

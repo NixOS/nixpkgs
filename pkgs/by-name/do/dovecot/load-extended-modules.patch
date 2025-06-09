@@ -1,0 +1,12 @@
+diff --git a/src/config/config-parser.h b/src/config/config-parser.h
+index e0a0a5b..a7fd725 100644
+--- a/src/config/config-parser.h
++++ b/src/config/config-parser.h
+@@ -1,7 +1,7 @@
+ #ifndef CONFIG_PARSER_H
+ #define CONFIG_PARSER_H
+ 
+-#define CONFIG_MODULE_DIR MODULEDIR"/settings"
++#define CONFIG_MODULE_DIR "/run/current-system/sw/lib/dovecot/modules/settings"
+ 
+ #define IS_WHITE(c) ((c) == ' ' || (c) == '\t')

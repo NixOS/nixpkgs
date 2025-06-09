@@ -13,7 +13,7 @@ let
   src = fetchFromGitHub {
     owner = "SamuelYvon";
     repo = "netifaces-2";
-    rev = "refs/tags/V${version}";
+    tag = "V${version}";
     hash = "sha256-XO3HWq8FOVzvpbK8mIBOup6hFMnhDpqOK/5bPziPZQ8=";
   };
 in
@@ -23,9 +23,9 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.7";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-dkqI0P61ciGqPtBc/6my7osaxxO9pEgovZhlpo1HdkU=";
+    hash = "sha256-n8IDl1msu2wn6YSsRJDy48M8qo96cXD8n+2HeU2WspE=";
   };
 
   nativeBuildInputs = with rustPlatform; [

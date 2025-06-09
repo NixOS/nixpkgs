@@ -4,7 +4,6 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  fetchPypi,
   gitpython,
   importlib-metadata,
   jinja2,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "sqlfmt";
-  version = "0.23.3";
+  version = "0.26.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "sqlfmt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kbluj29P1HwTaCYv1Myslak9s8FFm2e/eHdGgi3H4i0=";
+    tag = "v${version}";
+    hash = "sha256-q0pkwuQY0iLzK+Lef6k62UxMKJy592RsJnSZnVYdMa8=";
   };
 
   pythonRelaxDeps = [ "platformdirs" ];

@@ -22,10 +22,16 @@ $ nix-shell -p "hy.withPackages (ps: with ps; [ numpy matplotlib ])"
 
 Or if you want to extend your `configuration.nix`:
 ```nix
-{ # ...
+{
+  # ...
 
   environment.systemPackages = with pkgs; [
-    (hy.withPackages (py-packages: with py-packages; [ numpy matplotlib ]))
+    (hy.withPackages (
+      py-packages: with py-packages; [
+        numpy
+        matplotlib
+      ]
+    ))
   ];
 }
 ```

@@ -4,22 +4,22 @@
   buildPythonPackage,
   fastapi,
   fetchFromGitHub,
-  httpx,
   httpx-sse,
+  httpx,
   mashumaro,
-  poetry-core,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-httpx,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   typer,
   uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "aiohomeconnect";
-  version = "0.7.2";
+  version = "0.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,13 +27,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiohomeconnect";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-E+2IQy3O+ccvZfjlORo+eTd+l41FSXk1dIE2Adrn3Ok=";
+    tag = "v${version}";
+    hash = "sha256-UY1OFrydA42B/Tu4jwDwTe0kpnAhXfi75GUc4FlI9pE=";
   };
 
-  pythonRelaxDeps = [ "httpx" ];
-
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     httpx
@@ -62,7 +60,7 @@ buildPythonPackage rec {
   meta = {
     description = "An asyncio client for the Home Connect API";
     homepage = "https://github.com/MartinHjelmare/aiohomeconnect";
-    changelog = "https://github.com/MartinHjelmare/aiohomeconnect/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/MartinHjelmare/aiohomeconnect/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

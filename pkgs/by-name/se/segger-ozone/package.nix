@@ -16,7 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "segger-ozone";
-  version = "3.30b";
+  version =
+    {
+      x86_64-linux = "3.38c";
+      i686-linux = "3.36";
+    }
+    .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   src =
     {
@@ -24,20 +29,18 @@ stdenv.mkDerivation rec {
         url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
           builtins.replaceStrings [ "." ] [ "" ] version
         }_x86_64.tgz";
-        hash = "sha256-W8Fo0q58pAn1aB92CjYARcN3vMLEguvsyozsS7VRArQ=";
+        hash = "sha256-GYiFP3aK+dqpZuoJlTxJbTboYtWY9WACbxB11TctsQE=";
       };
       i686-linux = fetchurl {
         url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
           builtins.replaceStrings [ "." ] [ "" ] version
         }_i386.tgz";
-        hash = "sha256-Xq/69lwF2Ll5VdkYMDNRtc0YUUvWc+XR0FHJXxOLNQ4=";
+        hash = "sha256-u2HGOsv46BRlmqiusZD9iakLx5T530DqauNDY3YTiDY=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
     fontconfig
@@ -63,7 +66,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "J-Link Debugger and Performance Analyzer";
     longDescription = ''
       Ozone is a cross-platform debugger and performance analyzer for J-Link
@@ -86,9 +89,9 @@ stdenv.mkDerivation rec {
       not guaranteed to be.
     '';
     homepage = "https://www.segger.com/products/development-tools/ozone-j-link-debugger";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ maintainers.bmilanov ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.bmilanov ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

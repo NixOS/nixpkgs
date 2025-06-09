@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  AppKit,
   DarwinTools,
   alsa-utils,
   at-spi2-core,
@@ -12,7 +11,7 @@
   fetchFromGitHub,
   flac,
   gitMinimal,
-  gtk3,
+  wrapGAppsHook3,
   glew,
   gtest,
   jasper,
@@ -36,8 +35,6 @@
   lz4,
   libmpg123,
   makeWrapper,
-  pcre,
-  pcre2,
   pkg-config,
   portaudio,
   rapidjson,
@@ -68,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       cmake
       pkg-config
       gtest
+      wrapGAppsHook3
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       lsb-release
@@ -85,11 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       flac
       gitMinimal
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      AppKit
-    ]
     ++ [
-      gtk3
       glew
       jasper
       libGLU
@@ -107,8 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
       libxkbcommon
       lz4
       libmpg123
-      pcre
-      pcre2
       portaudio
       rapidjson
       sqlite

@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "inkbird-ble";
-  version = "0.5.8";
+  version = "0.16.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "inkbird-ble";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cUqU4XaY7CORhzy0AGjXI5c5ka+PnF4cHdyopyEBcLo=";
+    tag = "v${version}";
+    hash = "sha256-A/ho+tnGcFFL60r4aq1UOyP/e32Lqn+IbPOAZ75PeKk=";
   };
 
   build-system = [ poetry-core ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Inkbird BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/inkbird-ble";
-    changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

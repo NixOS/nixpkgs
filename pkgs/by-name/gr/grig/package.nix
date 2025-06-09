@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OgIgHW9NMW/xSSti3naIR8AQWUtNSv5bYdOcObStBlM=";
   };
 
+  patches = [
+    # https://github.com/fillods/grig/issues/22
+    ./0001-Fix-grig-for-hamlib-4.6.2.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -41,6 +46,9 @@ stdenv.mkDerivation rec {
     homepage = "https://groundstation.sourceforge.net/grig/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ melling ];
+    maintainers = with maintainers; [
+      melling
+      mafo
+    ];
   };
 }

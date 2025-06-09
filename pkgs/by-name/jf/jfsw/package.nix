@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, SDL2
-, perl
-, pkg-config
-, wrapGAppsHook3
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  SDL2,
+  perl,
+  pkg-config,
+  wrapGAppsHook3,
+  gtk3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jonof";
     repo = "jfsw";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-bOUgRa9zWufTFEj5huXAKeRerV8PqfqQVDoVUvRrj2I=";
   };

@@ -4,7 +4,6 @@
   coreutils,
   curl,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   ldc,
   libnotify,
@@ -19,23 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "onedrive";
-  version = "2.5.3";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = "onedrive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Lek1tW0alQQvlOHpz//M/y4iJY3PWRkcmXGLwjCLozk=";
+    hash = "sha256-SoTkphmxWVAeSfqO7Vqm8bdPAP1hK57zFNR6N5elEOM=";
   };
-
-  patches = [
-    # remove when updating to v2.5.4
-    (fetchpatch {
-      name = "fix-openssl-version-check-error.patch";
-      url = "https://github.com/abraunegg/onedrive/commit/d956318b184dc119d65d7a230154df4097171a6d.patch";
-      hash = "sha256-LGmKqYgFpG4MPFrHXqvlDp7Cxe3cEGYeXXH9pCXtGkU=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -86,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "onedrive";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       peterhoeg
       bertof
     ];

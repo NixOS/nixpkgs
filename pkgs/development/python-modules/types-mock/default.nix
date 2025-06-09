@@ -7,15 +7,16 @@
 
 buildPythonPackage rec {
   pname = "types-mock";
-  version = "5.1.0.20240425";
+  version = "5.2.0.20250516";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UoGmRdcugn1wBD48wUT+M7HAA9sIT3idwgOqkOgSpaQ=";
+    pname = "types_mock";
+    inherit version;
+    hash = "sha256-qrfT2a04FPL42hLMjkLZvn04IAxfIU48AnjDj6ASmdc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   # Module has no tests
   doCheck = false;

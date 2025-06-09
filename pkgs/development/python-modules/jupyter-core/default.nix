@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_core";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qu25ryZreRPHoubFJTFusGdkTPHbl/yl94g+XU5A5Mc=";
   };
 
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://jupyter.org/";
     changelog = "https://github.com/jupyter/jupyter_core/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = teams.jupyter.members;
+    teams = [ teams.jupyter ];
   };
 }

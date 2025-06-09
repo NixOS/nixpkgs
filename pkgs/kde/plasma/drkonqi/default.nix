@@ -4,7 +4,7 @@
   systemd,
   gdb,
   python3,
-  substituteAll,
+  replaceVars,
 }:
 let
   gdb' = gdb.override {
@@ -20,8 +20,7 @@ mkKdeDerivation {
   pname = "drkonqi";
 
   patches = [
-    (substituteAll {
-      src = ./gdb-path.patch;
+    (replaceVars ./gdb-path.patch {
       gdb = "${gdb'}/bin/gdb";
     })
   ];

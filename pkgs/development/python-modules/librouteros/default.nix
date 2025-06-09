@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "luqasz";
     repo = "librouteros";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vN12LYqFOU7flD6bTFtGw5VhPJ238pZ0MStM3ljwDU4=";
   };
 

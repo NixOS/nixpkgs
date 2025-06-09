@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yKQcQi0oSJ33gzsx1Q6ME3GbuSaHR091n7maU6F5QlU=";
   };
 

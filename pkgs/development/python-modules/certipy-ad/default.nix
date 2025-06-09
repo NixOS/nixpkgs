@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ly4k";
     repo = "Certipy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Era5iNLJkZIRvN/p3BiD/eDiDQme24G65VSG97tuEOQ=";
   };
 

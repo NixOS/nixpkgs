@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "2ship2harkinian";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-1iSFzroKxwFpsIGNMetSlQKTKRWCy7QtgCTepFdSeY8=";
     fetchSubmodules = true;
   };
@@ -199,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/HarbourMasters/2ship2harkinian";
-    description = "A PC port of Majora's Mask with modern controls, widescreen, high-resolution, and more";
+    description = "PC port of Majora's Mask with modern controls, widescreen, high-resolution, and more";
     mainProgram = "2s2h";
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ qubitnano ];

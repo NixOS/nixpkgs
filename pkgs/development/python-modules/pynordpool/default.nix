@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gjohansson-ST";
     repo = "pynordpool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OGCVNVFbJfhjNKKpLRUvZIj7ZIYz/IVlt9xEPJb5W8E=";
   };
 

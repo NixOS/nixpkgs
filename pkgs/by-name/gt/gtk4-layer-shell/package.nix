@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   meson,
+  mesonEmulatorHook,
   ninja,
   pkg-config,
   gtk-doc,
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4-layer-shell";
-  version = "1.0.4";
+  version = "1.1.1";
 
   outputs = [
     "out"
@@ -31,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wmww";
     repo = "gtk4-layer-shell";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0Ya3NVTSO/urU8H+h6SVZBkcvdnqwr06rNWyBtwhQ8E=";
+    hash = "sha256-5TBQKy58o/BdAwfaY2Ss/xcn5kkVFedgiNKfGj7x5gM=";
   };
 
   strictDeps = true;
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     vala
     wayland-scanner
-  ];
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
     gtk4

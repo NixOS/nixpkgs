@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   alsa-lib,
   freetype,
   ftgl,
@@ -13,27 +12,21 @@
   libGL,
   pkg-config,
   ttf_bitstream_vera,
+  nix-update-script,
 }:
-
-stdenv.mkDerivation rec {
+let
+  version = "0.8.13";
+in
+stdenv.mkDerivation {
   pname = "setbfree";
-  version = "0.8.12";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pantherb";
     repo = "setBfree";
     rev = "v${version}";
-    hash = "sha256-e/cvD/CtT8dY1lYcsZ21DC8pNqKXqKfC/eRXX8k01eI=";
+    hash = "sha256-jtiyJntaFnAVeC1Rvkzi3wNodyJpEQKgnOAP7++36wo=";
   };
-
-  patches = [
-    # link with -lGL can remove on next update
-    (fetchpatch {
-      name = "ui-add-lGL.patch";
-      url = "https://github.com/pantherb/setBfree/commit/756437db43fbf5481f101d8fc695f8b11192047f.patch";
-      hash = "sha256-49PYTayD4TchAApfFvj3DLc4EBTxH8LYx48TtdSRwwA=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace common.mak \
@@ -65,14 +58,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "DSP tonewheel organ emulator";
     homepage = "https://setbfree.org";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ]; # fails on ARM and Darwin
-    maintainers = [ ];
+    broken = stdenv.hostPlatform.isAarch64;
+    maintainers = [ lib.maintainers.l1npengtul ];
   };
 }

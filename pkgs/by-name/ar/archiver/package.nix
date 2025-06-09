@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "mholt";
-    repo = pname;
+    repo = "archiver";
     rev = "v${version}";
     hash = "sha256-l9exOq8QF3WSQ/+WQr0NfPeRQ/R6VQwfT+YS76BBwd8=";
   };
@@ -33,5 +33,9 @@ buildGoModule rec {
     mainProgram = "arc";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
+    knownVulnerabilities = [
+      "CVE-2024-0406"
+      "Package is unmaintained upstream"
+    ];
   };
 }

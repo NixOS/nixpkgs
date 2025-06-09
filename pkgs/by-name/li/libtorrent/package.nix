@@ -7,7 +7,6 @@
   autoconf-archive,
   autoreconfHook,
   cppunit,
-  libsigcxx,
   openssl,
   pkg-config,
   zlib,
@@ -16,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rakshasa-libtorrent";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
     rev = "v${version}";
-    hash = "sha256-FtuVDXH9vIdz+Wz7PLY2lRZkR+j9NYmgaHPDDx2SA98=";
+    hash = "sha256-ejDne7vaV+GYP6M0n3VAEva4UHuxRGwfc2rgxf7U/EM=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +32,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cppunit
-    libsigcxx
     openssl
     zlib
   ];

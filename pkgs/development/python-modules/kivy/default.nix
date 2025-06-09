@@ -4,41 +4,43 @@
   buildPythonPackage,
   fetchFromGitHub,
   pkg-config,
-  cython_0,
+  cython,
   docutils,
+  setuptools,
   kivy-garden,
+  libGL,
+  libX11,
   mtdev,
   SDL2,
   SDL2_image,
   SDL2_ttf,
   SDL2_mixer,
-  Accelerate,
-  ApplicationServices,
-  AVFoundation,
-  libcxx,
   withGstreamer ? true,
   gst_all_1,
-  packaging,
-  pillow,
   pygments,
   requests,
+  filetype,
 }:
 
 buildPythonPackage rec {
   pname = "kivy";
-  version = "2.3.0";
+  version = "2.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kivy";
     repo = "kivy";
-    rev = version;
-    hash = "sha256-QJ490vjpEj/JSE9OzSvDpkCruaTFdlThUHIEAMm0BZ4=";
+    tag = version;
+    hash = "sha256-q8BoF/pUTW2GMKBhNsqWDBto5+nASanWifS9AcNRc8Q=";
   };
+
+  build-system = [
+    setuptools
+    cython
+  ];
 
   nativeBuildInputs = [
     pkg-config
-    cython_0
-    docutils
   ];
 
   buildInputs =
@@ -49,13 +51,9 @@ buildPythonPackage rec {
       SDL2_mixer
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      libX11
       mtdev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      ApplicationServices
-      AVFoundation
-      libcxx
     ]
     ++ lib.optionals withGstreamer (
       with gst_all_1;
@@ -68,12 +66,12 @@ buildPythonPackage rec {
       ]
     );
 
-  propagatedBuildInputs = [
+  dependencies = [
     kivy-garden
-    packaging
-    pillow
+    docutils
     pygments
     requests
+    filetype
   ];
 
   KIVY_NO_CONFIG = 1;
@@ -87,14 +85,21 @@ buildPythonPackage rec {
       "-Wno-error=incompatible-pointer-types"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-I${lib.getDev libcxx}/include/c++/v1"
+      "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
     ]
   );
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace kivy/lib/mtdev.py \
-      --replace "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${mtdev}/lib/libmtdev.so.1')"
-  '';
+  postPatch =
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "setuptools~=69.2.0" "setuptools" \
+        --replace-fail "wheel~=0.44.0" "wheel" \
+        --replace-fail "cython>=0.29.1,<=3.0.11" "cython"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace kivy/lib/mtdev.py \
+        --replace-fail "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${mtdev}/lib/libmtdev.so.1')"
+    '';
 
   /*
     We cannot run tests as Kivy tries to import itself before being fully

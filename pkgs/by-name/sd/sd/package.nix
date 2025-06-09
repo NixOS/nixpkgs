@@ -11,12 +11,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "chmln";
-    repo = pname;
+    repo = "sd";
     rev = "v${version}";
     hash = "sha256-hC4VKEgrAVuqOX7b24XhtrxrnJW5kmlX4E6QbY9H8OA=";
   };
 
-  cargoHash = "sha256-IhCuWCaSU7c7Tot4uvxE7oabY69wDLstuBN35OzkQcU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KbEw09tTsUl9BLQsL7lW4VQq6D9E4lBiZf3Jrthst2Y=";
 
   nativeBuildInputs = [ installShellFiles ];
 

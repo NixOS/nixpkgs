@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "multiformats";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "py-multihash";
+    tag = "v${version}";
     hash = "sha256-z1lmSypGCMFWJNzNgV9hx/IStyXbpd5jvrptFpewuOA=";
   };
 

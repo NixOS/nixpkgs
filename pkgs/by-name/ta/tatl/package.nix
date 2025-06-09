@@ -13,7 +13,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "theoremprover-museum";
     repo = "TATL";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-leP02141kZSUmCDXOfV0TsEn+OQ6WoyM7+9NutLX1qk=";
   };
 

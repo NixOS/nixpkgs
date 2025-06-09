@@ -1,4 +1,4 @@
-# Functions to build elisp files to locally configure emcas buffers.
+# Functions to build elisp files to locally configure emacs buffers.
 # See https://github.com/shlevy/nix-buffer
 
 {

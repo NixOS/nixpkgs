@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "pwdsafety";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cKxTcfNjvwcDEw0Z1b50A4u0DUYXlGMMfGWJLPaSkcw=";
   };
 
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool checking password safety";
     homepage = "https://github.com/edoardottt/pwdsafety";
     changelog = "https://github.com/edoardottt/pwdsafety/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pwdsafety";
   };
 }

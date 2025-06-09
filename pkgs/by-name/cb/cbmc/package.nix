@@ -2,29 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  testers,
   bison,
   cadical,
-  cbmc,
   cmake,
   flex,
   makeWrapper,
   perl,
-  substituteAll,
+  replaceVars,
   cudd,
-  fetchurl,
   nix-update-script,
+  fetchpatch,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.4.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
-    rev = "refs/tags/cbmc-${finalAttrs.version}";
-    hash = "sha256-PZZnseOE3nodE0zwyG+82gm55BO4rsCcP4T+fZq7L6I=";
+    tag = "cbmc-${finalAttrs.version}";
+    hash = "sha256-ot0vVBgiSVru/RE7KeyTsXzDfs0CSa5vaFsON+PCZZo=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -47,14 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [ cadical ];
-
-  # do not download sources
-  # link existing cadical instead
   patches = [
-    (substituteAll {
-      src = ./0001-Do-not-download-sources-in-cmake.patch;
-      inherit cudd;
+    (replaceVars ./0001-Do-not-download-sources-in-cmake.patch {
+      cudd = cudd.src;
     })
     ./0002-Do-not-download-sources-in-cmake.patch
   ];
@@ -91,13 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isGNU [
-      # Needed with GCC 12 but breaks on darwin (with clang)
-      "-Wno-error=maybe-uninitialized"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
+    lib.optionals stdenv.cc.isClang [
       # fix "argument unused during compilation"
       "-Wno-unused-command-line-argument"
+      # fix "variable 'plus_overflow' set but not used"
+      "-Wno-error=unused-but-set-variable"
+      # fix "passing no argument for the '...' parameter of a variadic macro is a C++20 extension"
+      "-Wno-error=c++20-extensions"
     ]
   );
 
@@ -105,15 +99,21 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DWITH_JBMC=OFF"
     "-Dsat_impl=cadical"
-    "-Dcadical_INCLUDE_DIR=${cadical.dev}/include"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = cbmc;
-    command = "cbmc --version";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/cbmc";
+  versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "cbmc-(.*)"
+    ];
+  };
 
   meta = {
     description = "CBMC is a Bounded Model Checker for C and C++ programs";

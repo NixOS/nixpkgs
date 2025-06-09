@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "wemake-services";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "eradicate";
+    tag = version;
     hash = "sha256-ikiqNe1a+OeRraNBbtAx6v3LsTajWlgxm4wR2Tcbmjk=";
   };
 

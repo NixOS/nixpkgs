@@ -1,31 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   cliff,
+  fetchFromGitHub,
+  keystoneauth1,
+  openstacksdk,
   oslo-i18n,
   oslo-utils,
-  openstacksdk,
   pbr,
-  pythonOlder,
+  requests,
   requests-mock,
   setuptools,
-  requests,
   stestr,
+  stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
     rev = version;
-    hash = "sha256-DDjWM4hjHPXYDeAJ6FDZZPzi65DG1rJ3efs8MouX1WY=";
+    hash = "sha256-P1f0wwtOo0LKbc3ay0Vh8GGi/2nRXcTr9JOByc2nlZY=";
   };
 
   # fake version to make pbr.packaging happy and not reject it...
@@ -38,10 +37,12 @@ buildPythonPackage rec {
 
   dependencies = [
     cliff
+    keystoneauth1
     openstacksdk
     oslo-i18n
     oslo-utils
     requests
+    stevedore
   ];
 
   nativeCheckInputs = [
@@ -50,13 +51,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    # tests parse cli output which slightly changed
-    stestr run -e <(echo "
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_filtering_option_to_parser
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_create
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_set
-      osc_lib.tests.utils.test_tags.TestTagHelps.test_add_tag_option_to_parser_for_unset
-    ")
+    stestr run
   '';
 
   pythonImportsCheck = [ "osc_lib" ];
@@ -65,6 +60,6 @@ buildPythonPackage rec {
     description = "OpenStackClient Library";
     homepage = "https://github.com/openstack/osc-lib";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

@@ -3,8 +3,8 @@
   lib,
   fetchurl,
   fetchFromGitHub,
-  fetchpatch,
   fixDarwinDylibNames,
+  apache-orc,
   autoconf,
   aws-sdk-cpp,
   aws-sdk-cpp-arrow ? aws-sdk-cpp.override {
@@ -52,34 +52,33 @@
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
-  enableJemalloc ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64,
+  # Disable also on RiscV
+  # configure: error: cannot determine number of significant virtual address bits
+  enableJemalloc ?
+    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isRiscV64,
   enableS3 ? true,
-  enableGcs ? !stdenv.hostPlatform.isDarwin,
+  # google-cloud-cpp fails to build on RiscV
+  enableGcs ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isRiscV64,
 }:
-
-assert lib.asserts.assertMsg (
-  (enableS3 && stdenv.hostPlatform.isDarwin)
-  -> (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
-) "S3 on Darwin requires Boost != 1.69";
 
 let
   arrow-testing = fetchFromGitHub {
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "4d209492d514c2d3cb2d392681b9aa00e6d8da1c";
-    hash = "sha256-IkiCbuy0bWyClPZ4ZEdkEP7jFYLhM7RCuNLd6Lazd4o=";
+    rev = "d2a13712303498963395318a4eb42872e66aead7";
+    hash = "sha256-c8FL37kG0uo7o0Zp71WjCl7FD5BnVgqUCCXXX9gI0lg=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "a7f1d288e693dbb08e3199851c4eb2140ff8dff2";
-    hash = "sha256-zLWJOWcW7OYL32OwBm9VFtHbmG+ibhteRfHlKr9G3CQ=";
+    rev = "18d17540097fca7c40be3d42c167e6bfad90763c";
+    hash = "sha256-gKEQc2RKpVp39RmuZbIeIXAwiAXDHGnLXF6VQuJtnRA=";
   };
 
-  version = "18.0.0";
+  version = "20.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -89,21 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-V2lOYOUJwXSvPPk2G17uc1eZO88EATHKwwDnEroBrPw=";
+    hash = "sha256-JFPdKraCU+xRkBTAHyY4QGnBVlOjQ1P5+gq9uxyqJtk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
-
-  patches = [
-    # fixes build with libcxx-19 (llvm-19) remove on update
-    (fetchpatch {
-      name = "libcxx-19-fixes.patch";
-      url = "https://github.com/apache/arrow/commit/29e8ea011045ba4318a552567a26b2bb0a7d3f05.patch";
-      relative = "cpp";
-      includes = [ "src/arrow/buffer_test.cc" ];
-      hash = "sha256-ZHkznOilypi1J22d56PhLlw/hbz8RqwsOGDMqI1NsMs=";
-    })
-  ];
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
@@ -146,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
     [
+      apache-orc
       boost
       brotli
       bzip2
@@ -182,6 +171,12 @@ stdenv.mkDerivation (finalAttrs: {
       grpc
       nlohmann_json
     ];
+
+  # apache-orc looks for things in caps
+  env = {
+    LZ4_ROOT = lz4;
+    ZSTD_ROOT = zstd.dev;
+  };
 
   preConfigure = ''
     patchShebangs build-support/
@@ -227,6 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
       "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
       "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
+      "-DARROW_ORC=ON"
       # Parquet options:
       "-DARROW_PARQUET=ON"
       "-DPARQUET_BUILD_EXECUTABLES=ON"
@@ -291,6 +287,8 @@ stdenv.mkDerivation (finalAttrs: {
         # requires networking
         "arrow-gcsfs-test"
         "arrow-flight-integration-test"
+        # File already exists in database: orc_proto.proto
+        "arrow-orc-adapter-test"
       ];
     in
     ''

@@ -12,13 +12,13 @@
 }:
 mkLibretroCore {
   core = "same_cdi";
-  version = "0-unstable-2023-02-28";
+  version = "0-unstable-2025-01-31";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "same_cdi";
-    rev = "54cf493c2dee4c46666059c452f8aaaa0bd7c8e0";
-    hash = "sha256-/+4coMzj/o82Q04Z65DQiPaykK6N56W6PRQLtyJOd8E=";
+    rev = "7ee1d8e9cb4307b7cd44ee1dd757e9b3f48f41d5";
+    hash = "sha256-EGE3NuO0gpZ8MKPypH8rFwJiv4QsdKuIyLKVuKTcvws=";
   };
 
   extraNativeBuildInputs = [ python3 ];

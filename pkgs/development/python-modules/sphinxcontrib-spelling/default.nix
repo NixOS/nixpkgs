@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
   importlib-metadata,
   sphinx,
@@ -13,14 +13,16 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-spelling";
-  version = "8.0.0";
+  version = "8.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-GZ0KFpAq2Aw4fClm3J6xD1ZbH7FczOFyEEAtt8JEPlw=";
+  src = fetchFromGitHub {
+    owner = "sphinx-contrib";
+    repo = "spelling";
+    tag = version;
+    hash = "sha256-gN+FkgIzk7wG/ni+DzaeiePjCiK9k7Jrn2IUDgy8DOg=";
   };
 
   nativeBuildInputs = [

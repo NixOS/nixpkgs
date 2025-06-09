@@ -5,45 +5,81 @@
   fetchFromGitHub,
   rustPlatform,
 
-  # nativeBuildInputs
-  cargo,
-  rustc,
+  # optional-dependencies
+  numpy,
+  torch,
+  tensorflow,
+  flax,
+  jax,
+  mlx,
+  paddlepaddle,
+  h5py,
+  huggingface-hub,
   setuptools-rust,
+  pytest,
+  pytest-benchmark,
+  hypothesis,
 
   # tests
-  h5py,
-  numpy,
   pytestCheckHook,
-  torch,
 }:
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.5.0";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
     tag = "v${version}";
-    hash = "sha256-rs9mYl/2KNdV9e+L/kZr59kLw7ckW9UQPZwkaGyl1Iw=";
-  };
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sourceRoot = "${src.name}/bindings/python";
-    hash = "sha256-bQkLBiuhVm2dzrf6hq+S04+zoXUszA7be8iS0WJSoOU=";
+    hash = "sha256-dtHHLiTgrg/a/SQ/Z1w0BsuFDClgrMsGiSTCpbJasUs=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
 
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname src sourceRoot;
+    hash = "sha256-hjV2cfS/0WFyAnATt+A8X8sQLzQViDzkNI7zN0ltgpU=";
+  };
+
   nativeBuildInputs = [
-    cargo
-    rustc
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    setuptools-rust
   ];
+
+  optional-dependencies = lib.fix (self: {
+    numpy = [ numpy ];
+    torch = self.numpy ++ [
+      torch
+    ];
+    tensorflow = self.numpy ++ [
+      tensorflow
+    ];
+    pinned-tf = self.numpy ++ [
+      tensorflow
+    ];
+    jax = self.numpy ++ [
+      flax
+      jax
+    ];
+    mlx = [
+      mlx
+    ];
+    paddlepaddle = self.numpy ++ [
+      paddlepaddle
+    ];
+    testing = self.numpy ++ [
+      h5py
+      huggingface-hub
+      setuptools-rust
+      pytest
+      pytest-benchmark
+      hypothesis
+    ];
+    all = self.torch ++ self.numpy ++ self.pinned-tf ++ self.jax ++ self.paddlepaddle ++ self.testing;
+    dev = self.all;
+  });
 
   nativeCheckInputs = [
     h5py

@@ -1,0 +1,591 @@
+From 4ce40a0c3de0e8a7065caf1cf59a90493e084682 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 18 Jan 2025 22:22:21 +0000
+Subject: [PATCH 4/4] samples: fix instances of maybe-uninitialized
+
+---
+ samples/cpp/convolution/dgrads.cpp                 |  6 +++---
+ samples/cpp/convolution/fp8_fprop.cpp              |  2 +-
+ samples/cpp/convolution/fprop.cpp                  | 10 +++++-----
+ samples/cpp/convolution/int8_fprop.cpp             |  2 +-
+ samples/cpp/convolution/wgrads.cpp                 |  4 ++--
+ samples/cpp/matmul/fp8_matmul.cpp                  |  2 +-
+ samples/cpp/matmul/int8_matmul.cpp                 |  2 +-
+ samples/cpp/matmul/matmuls.cpp                     |  8 ++++----
+ samples/cpp/matmul/mixed_matmul.cpp                |  2 +-
+ samples/cpp/misc/pointwise.cpp                     |  6 +++---
+ samples/cpp/misc/resample.cpp                      |  6 +++---
+ samples/cpp/misc/serialization.cpp                 |  4 ++--
+ samples/cpp/misc/slice.cpp                         |  2 +-
+ samples/cpp/misc/sm_carveout.cpp                   |  2 +-
+ samples/cpp/norm/batchnorm.cpp                     |  8 ++++----
+ samples/cpp/norm/layernorm.cpp                     |  8 ++++----
+ samples/cpp/norm/rmsnorm.cpp                       |  6 +++---
+ samples/cpp/sdpa/fp16_bwd.cpp                      |  2 +-
+ samples/cpp/sdpa/fp16_bwd_with_flexible_graphs.cpp |  2 +-
+ samples/cpp/sdpa/fp16_cached.cpp                   |  2 +-
+ samples/cpp/sdpa/fp16_fwd.cpp                      |  2 +-
+ samples/cpp/sdpa/fp16_fwd_with_custom_dropout.cpp  |  2 +-
+ samples/cpp/sdpa/fp16_fwd_with_flexible_graphs.cpp |  2 +-
+ samples/cpp/sdpa/fp16_fwd_with_paged_caches.cpp    |  2 +-
+ samples/cpp/sdpa/fp8_bwd.cpp                       |  4 ++--
+ samples/cpp/sdpa/fp8_fwd.cpp                       |  2 +-
+ 26 files changed, 50 insertions(+), 50 deletions(-)
+
+diff --git a/samples/cpp/convolution/dgrads.cpp b/samples/cpp/convolution/dgrads.cpp
+index 589cb5f..f66abf4 100644
+--- a/samples/cpp/convolution/dgrads.cpp
++++ b/samples/cpp/convolution/dgrads.cpp
+@@ -65,7 +65,7 @@ TEST_CASE("Convolution Dgrad", "[dgrad][graph]") {
+     Surface<half> w_tensor(64 * 32 * 3 * 3, false);
+     Surface<half> dx_tensor(4 * 32 * 16 * 16, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+ 
+     Surface<int8_t> workspace(workspace_size, false);
+@@ -122,7 +122,7 @@ TEST_CASE("Dgrad Drelu Graph", "[dgrad][graph]") {
+     Surface<half> x_tensor(4 * 32 * 16 * 16, false);
+     Surface<half> dx_tensor(4 * 32 * 16 * 16, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -234,7 +234,7 @@ TEST_CASE("Dgrad Drelu DBNweight Graph", "[dgrad][graph]") {
+     Surface<float> eq_scale_x_tensor(1 * 32 * 1 * 1, false);
+     Surface<float> eq_bias_tensor(1 * 32 * 1 * 1, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/convolution/fp8_fprop.cpp b/samples/cpp/convolution/fp8_fprop.cpp
+index dfcb7e2..8246ce4 100644
+--- a/samples/cpp/convolution/fp8_fprop.cpp
++++ b/samples/cpp/convolution/fp8_fprop.cpp
+@@ -116,7 +116,7 @@ TEST_CASE("Convolution fp8 precision", "[conv][graph]") {
+     Surface<float> Y_scale_gpu(1, false);
+     Surface<float> amax_gpu(1, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/convolution/fprop.cpp b/samples/cpp/convolution/fprop.cpp
+index bc1aaf0..d61fa4e 100644
+--- a/samples/cpp/convolution/fprop.cpp
++++ b/samples/cpp/convolution/fprop.cpp
+@@ -80,7 +80,7 @@ TEST_CASE("Convolution fprop", "[conv][graph][caching]") {
+     std::unordered_map<int64_t, void *> variant_pack = {
+         {X->get_uid(), x_tensor.devPtr}, {W->get_uid(), w_tensor.devPtr}, {Y->get_uid(), y_tensor.devPtr}};
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -303,7 +303,7 @@ TEST_CASE("CSBR Graph", "[conv][graph][caching]") {
+     Surface<half> b_tensor(k, false);
+     Surface<half> y_tensor(n * k * h * w, false);  // Should be p, q.
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -550,7 +550,7 @@ TEST_CASE("SBRCS", "[conv][genstats][graph]") {
+         {SUM, sum_tensor.devPtr},
+         {SQ_SUM, sq_sum_tensor.devPtr}};
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -651,7 +651,7 @@ TEST_CASE("CBR Graph NCHW", "[conv][graph][caching]") {
+     Surface<half> y_tensor(n * k * h * w, false);  // Should be p, q.
+     Surface<half> z_tensor(n * k * h * w, false);  // Should be p, q.
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -734,7 +734,7 @@ TEST_CASE("Convolution fprop large", "[conv][graph][caching]") {
+     std::unordered_map<int64_t, void *> variant_pack = {
+         {X->get_uid(), x_tensor.devPtr}, {W->get_uid(), w_tensor.devPtr}, {Y->get_uid(), y_tensor.devPtr}};
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/convolution/int8_fprop.cpp b/samples/cpp/convolution/int8_fprop.cpp
+index 3d5ac2f..e9248f5 100644
+--- a/samples/cpp/convolution/int8_fprop.cpp
++++ b/samples/cpp/convolution/int8_fprop.cpp
+@@ -94,7 +94,7 @@ TEST_CASE("Conv with Int8 datatypes", "[conv][graph][caching]") {
+     std::unordered_map<std::shared_ptr<fe::graph::Tensor_attributes>, void*> variant_pack = {
+         {X, x_tensor.devPtr}, {W, w_tensor.devPtr}, {Y, y_tensor.devPtr}};
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/convolution/wgrads.cpp b/samples/cpp/convolution/wgrads.cpp
+index 2c58b26..26887dc 100644
+--- a/samples/cpp/convolution/wgrads.cpp
++++ b/samples/cpp/convolution/wgrads.cpp
+@@ -64,7 +64,7 @@ TEST_CASE("Convolution Wgrad", "[wgrad][graph][wgrad][Conv_wgrad]") {
+     Surface<half> dy_tensor(4 * 64 * 16 * 16, false);
+     Surface<half> dw_tensor(64 * 64 * 3 * 3, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -137,7 +137,7 @@ TEST_CASE("scale-bias-relu-wgrad Graph", "[wgrad][graph][scale-bias-relu-wgrad][
+     Surface<half> dy_tensor(4 * 64 * 16 * 16, false);
+     Surface<half> dw_tensor(64 * 64 * 3 * 3, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/matmul/fp8_matmul.cpp b/samples/cpp/matmul/fp8_matmul.cpp
+index c6470cd..f32c627 100644
+--- a/samples/cpp/matmul/fp8_matmul.cpp
++++ b/samples/cpp/matmul/fp8_matmul.cpp
+@@ -115,7 +115,7 @@ TEST_CASE("Matmul fp8 precision", "[matmul][graph]") {
+     REQUIRE(graph.build_plans(handle, fe::BuildPlanPolicy_t::HEURISTICS_CHOICE).is_good());
+ 
+     Surface<float> C_gpu(b * m * n, false);
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/matmul/int8_matmul.cpp b/samples/cpp/matmul/int8_matmul.cpp
+index cf4353a..cb3ce34 100644
+--- a/samples/cpp/matmul/int8_matmul.cpp
++++ b/samples/cpp/matmul/int8_matmul.cpp
+@@ -104,7 +104,7 @@ TEST_CASE("Int8 Matmul", "[matmul][graph]") {
+     // note this is a bf16 tensor, but half is used just for memory allocation
+     Surface<float> C_gpu(b * m * n, false);
+     Surface<float> Bias_gpu(b * m * n, false);
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/matmul/matmuls.cpp b/samples/cpp/matmul/matmuls.cpp
+index ed0f10b..5c95713 100644
+--- a/samples/cpp/matmul/matmuls.cpp
++++ b/samples/cpp/matmul/matmuls.cpp
+@@ -250,7 +250,7 @@ TEST_CASE("Matmul", "[matmul][graph]") {
+ 
+     // Run cudnn graph
+     Surface<float> C_gpu(b * m * n, false);
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -319,7 +319,7 @@ TEST_CASE("Abs + Matmul", "[matmul][graph]") {
+ 
+     // Run cudnn graph
+     Surface<float> C_gpu(b * m * n, false);
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -539,7 +539,7 @@ TEST_CASE("Matmul SBR Graph", "[matmul][graph]") {
+     auto [graph, A, B, bias, scale, O] = lookup_cache_or_build_graph(
+         handle, x_tensor.devPtr, w_tensor.devPtr, s_tensor.devPtr, b_tensor.devPtr, y_tensor.devPtr);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -606,7 +606,7 @@ TEST_CASE("Matmul with restricted shared memory", "[matmul][graph]") {
+ 
+     // Run cudnn graph
+     Surface<float> C_gpu(b * m * n, false);
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/matmul/mixed_matmul.cpp b/samples/cpp/matmul/mixed_matmul.cpp
+index ab3e195..a2b05bd 100644
+--- a/samples/cpp/matmul/mixed_matmul.cpp
++++ b/samples/cpp/matmul/mixed_matmul.cpp
+@@ -96,7 +96,7 @@ TEST_CASE("Mixed Precision Matmul", "[matmul][graph]") {
+     //// Run cudnn graph
+     // note this is a bf16 tensor, but half is used just for memory allocation
+     Surface<half> C_gpu(b * m * n, false);
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/misc/pointwise.cpp b/samples/cpp/misc/pointwise.cpp
+index 8f8d699..e8f4cb1 100644
+--- a/samples/cpp/misc/pointwise.cpp
++++ b/samples/cpp/misc/pointwise.cpp
+@@ -51,7 +51,7 @@ TEST_CASE("Reduction", "[reduction]") {
+     Surface<float> C_gpu(n * n * n * n, false);
+     std::unordered_map<std::shared_ptr<fe::graph::Tensor_attributes>, void*> variant_pack = {{A, A_gpu.devPtr},
+                                                                                              {C, C_gpu.devPtr}};
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -88,7 +88,7 @@ TEST_CASE("Fused scalar", "[scalar][graph]") {
+ 
+     std::unordered_map<std::shared_ptr<fe::graph::Tensor_attributes>, void*> variant_pack = {{A, A_gpu.devPtr},
+                                                                                              {C, C_gpu.devPtr}};
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -148,7 +148,7 @@ TEST_CASE("Fused Amax Reduction and type conversion", "[reduction]") {
+ 
+     std::unordered_map<std::shared_ptr<fe::graph::Tensor_attributes>, void*> variant_pack = {
+         {A, A_gpu.devPtr}, {scale, scale_gpu.devPtr}, {amax, amax_gpu.devPtr}, {C, C_gpu.devPtr}};
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/misc/resample.cpp b/samples/cpp/misc/resample.cpp
+index 3f782e7..21998c3 100644
+--- a/samples/cpp/misc/resample.cpp
++++ b/samples/cpp/misc/resample.cpp
+@@ -69,7 +69,7 @@ TEST_CASE("Resample Max Pooling NHWC Inference", "[resample][pooling][max][graph
+     Surface<half> Y_gpu(N * H * W * C, false);
+     std::unordered_map<std::shared_ptr<fe::graph::Tensor_attributes>, void*> variant_pack = {{X, X_gpu.devPtr},
+                                                                                              {Y, Y_gpu.devPtr}};
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -132,7 +132,7 @@ TEST_CASE("Resample Max Pooling NHWC Training", "[resample][pooling][max][graph]
+     Surface<int8_t> Index_gpu(N * H * W * C / 8, false);
+     std::unordered_map<std::shared_ptr<fe::graph::Tensor_attributes>, void*> variant_pack = {
+         {X, X_gpu.devPtr}, {Y, Y_gpu.devPtr}, {Index, Index_gpu.devPtr}};
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -186,7 +186,7 @@ TEST_CASE("Resample Avg Pooling", "[resample][pooling][average][graph]") {
+     Surface<half> Y_gpu(N * H * W * C, false);
+     std::unordered_map<std::shared_ptr<fe::graph::Tensor_attributes>, void*> variant_pack = {{X, X_gpu.devPtr},
+                                                                                              {Y, Y_gpu.devPtr}};
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/misc/serialization.cpp b/samples/cpp/misc/serialization.cpp
+index a130406..278bad8 100644
+--- a/samples/cpp/misc/serialization.cpp
++++ b/samples/cpp/misc/serialization.cpp
+@@ -178,7 +178,7 @@ TEST_CASE("CSBR Graph with serialization", "[conv][graph][serialization]") {
+     Surface<half> b_device_memory(k, false);
+     Surface<half> y_device_memory(n * k * h * w, false);  // Should be p, q.
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -401,7 +401,7 @@ TEST_CASE("SDPA Graph with serialization", "[sdpa][graph][serialization]") {
+     Surface<int32_t> dropoutSeed(scaleSize, false, seed_value);
+     Surface<int32_t> dropoutOffset(scaleSize, false, (int32_t)1);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/misc/slice.cpp b/samples/cpp/misc/slice.cpp
+index 087ba36..78962c6 100644
+--- a/samples/cpp/misc/slice.cpp
++++ b/samples/cpp/misc/slice.cpp
+@@ -80,7 +80,7 @@ TEST_CASE("Slice gemm", "[slice][gemm][graph][fusion]") {
+     Surface<half> C_gpu(B * M * N, false);
+     std::unordered_map<int64_t, void *> variant_pack = {
+         {a_uid, A_gpu.devPtr}, {b_uid, B_gpu.devPtr}, {c_uid, C_gpu.devPtr}};
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/misc/sm_carveout.cpp b/samples/cpp/misc/sm_carveout.cpp
+index d6818c0..b0e0651 100644
+--- a/samples/cpp/misc/sm_carveout.cpp
++++ b/samples/cpp/misc/sm_carveout.cpp
+@@ -121,7 +121,7 @@ TEST_CASE("SGBN with SM carveout", "[batchnorm][graph][sm_carveout]") {
+     Surface<float> Peer_stats_0_tensor(2 * 4 * c, false, true);
+     Surface<float> Peer_stats_1_tensor(2 * 4 * c, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/norm/batchnorm.cpp b/samples/cpp/norm/batchnorm.cpp
+index 5949365..a91a9bd 100644
+--- a/samples/cpp/norm/batchnorm.cpp
++++ b/samples/cpp/norm/batchnorm.cpp
+@@ -96,7 +96,7 @@ TEST_CASE("BN Finalize Graph", "[batchnorm][graph]") {
+     Surface<float> eq_scale_tensor(32, false);
+     Surface<float> eq_bias_tensor(32, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -226,7 +226,7 @@ TEST_CASE("SGBN Add Relu Graph", "[batchnorm][graph]") {
+     Surface<float> Peer_stats_0_tensor(2 * 4 * 32, false, true);
+     Surface<float> Peer_stats_1_tensor(2 * 4 * 32, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -346,7 +346,7 @@ TEST_CASE("DBN Add Relu Graph", "[BN][graph][backward]") {
+     Surface<float> Peer_stats_0_tensor(2 * 4 * 32, false, true);
+     Surface<float> Peer_stats_1_tensor(2 * 4 * 32, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -454,7 +454,7 @@ TEST_CASE("BN_inference DRelu DBN Graph", "[Batchnorm][graph][backward]") {
+     Surface<float> Dbias_tensor(32, false);
+     Surface<half> DX_tensor(4 * 32 * 16 * 16, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/norm/layernorm.cpp b/samples/cpp/norm/layernorm.cpp
+index bac996f..7f69f34 100644
+--- a/samples/cpp/norm/layernorm.cpp
++++ b/samples/cpp/norm/layernorm.cpp
+@@ -133,7 +133,7 @@ layernorm_fwd_dynamic_shapes(bool train = true) {
+         Surface<float> Mean_tensor(max_stats_volume, false);
+         Surface<float> Var_tensor(max_stats_volume, false);
+ 
+-        int64_t workspace_size;
++        int64_t workspace_size = 0;
+         REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+         Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -232,7 +232,7 @@ TEST_CASE("LayerNorm Training", "[layernorm][graph]") {
+     Surface<float> Bias_tensor(hidden_size, false);
+     Surface<half> Y_tensor(batch_size * seq_length * hidden_size, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -310,7 +310,7 @@ TEST_CASE("LayerNorm Inference", "[layernorm][graph]") {
+     Surface<float> Bias_tensor(hidden_size, false);
+     Surface<half> Y_tensor(batch_size * seq_length * hidden_size, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -392,7 +392,7 @@ TEST_CASE("LayerNorm Backward", "[layernorm][graph]") {
+     Surface<float> Dbias_tensor(hidden_size, false);
+     Surface<half> DX_tensor(batch_size * seq_length * hidden_size, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/norm/rmsnorm.cpp b/samples/cpp/norm/rmsnorm.cpp
+index 878086c..d5c919b 100644
+--- a/samples/cpp/norm/rmsnorm.cpp
++++ b/samples/cpp/norm/rmsnorm.cpp
+@@ -78,7 +78,7 @@ TEST_CASE("RmsNorm Training", "[rmsnorm][graph]") {
+     Surface<float> Scale_tensor(hidden_size, false);
+     Surface<float> Y_tensor(batch_size * seq_length * hidden_size, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -150,7 +150,7 @@ TEST_CASE("RmsNorm Inference", "[rmsnorm][graph]") {
+     Surface<float> Bias_tensor(hidden_size, false);
+     Surface<float> Y_tensor(batch_size * seq_length * hidden_size, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -227,7 +227,7 @@ TEST_CASE("RmsNorm Backward", "[rmsnorm][graph]") {
+     Surface<float> Dbias_tensor(hidden_size, false);
+     Surface<float> DX_tensor(batch_size * seq_length * hidden_size, false);
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/sdpa/fp16_bwd.cpp b/samples/cpp/sdpa/fp16_bwd.cpp
+index 749cbed..1145008 100644
+--- a/samples/cpp/sdpa/fp16_bwd.cpp
++++ b/samples/cpp/sdpa/fp16_bwd.cpp
+@@ -275,7 +275,7 @@ TEST_CASE("Toy sdpa backward", "[graph][sdpa][flash][backward]") {
+     }
+ 
+     // Allocate workspace
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/sdpa/fp16_bwd_with_flexible_graphs.cpp b/samples/cpp/sdpa/fp16_bwd_with_flexible_graphs.cpp
+index 62d6bb3..50205c3 100644
+--- a/samples/cpp/sdpa/fp16_bwd_with_flexible_graphs.cpp
++++ b/samples/cpp/sdpa/fp16_bwd_with_flexible_graphs.cpp
+@@ -195,7 +195,7 @@ TEST_CASE("Toy sdpa backward with flexible graph", "[graph][sdpa][flash][backwar
+                                                                                    {DV_UID, dV_tensor.devPtr}};
+ 
+     // Allocate workspace
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/sdpa/fp16_cached.cpp b/samples/cpp/sdpa/fp16_cached.cpp
+index d046271..4f0d3f8 100644
+--- a/samples/cpp/sdpa/fp16_cached.cpp
++++ b/samples/cpp/sdpa/fp16_cached.cpp
+@@ -146,7 +146,7 @@ TEST_CASE("Cached sdpa", "[graph][sdpa][flash]") {
+                     {O_UID, o_tensor.devPtr},
+                     {STATS_UID, stats_tensor.devPtr}};
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(fwd_graph2->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> fwd_workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/sdpa/fp16_fwd.cpp b/samples/cpp/sdpa/fp16_fwd.cpp
+index b3acf5e..63697a1 100644
+--- a/samples/cpp/sdpa/fp16_fwd.cpp
++++ b/samples/cpp/sdpa/fp16_fwd.cpp
+@@ -210,7 +210,7 @@ TEST_CASE("Toy sdpa forward", "[graph][sdpa][flash][forward]") {
+         variant_pack[STATS_UID] = statsTensor.devPtr;
+     }
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/sdpa/fp16_fwd_with_custom_dropout.cpp b/samples/cpp/sdpa/fp16_fwd_with_custom_dropout.cpp
+index 36cfba4..0cb9d2f 100644
+--- a/samples/cpp/sdpa/fp16_fwd_with_custom_dropout.cpp
++++ b/samples/cpp/sdpa/fp16_fwd_with_custom_dropout.cpp
+@@ -178,7 +178,7 @@ TEST_CASE("Toy sdpa forward with dropout", "[graph][sdpa][flash][forward]") {
+         variant_pack[STATS_UID] = statsTensor.devPtr;
+     }
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/sdpa/fp16_fwd_with_flexible_graphs.cpp b/samples/cpp/sdpa/fp16_fwd_with_flexible_graphs.cpp
+index 810de63..7d81afe 100644
+--- a/samples/cpp/sdpa/fp16_fwd_with_flexible_graphs.cpp
++++ b/samples/cpp/sdpa/fp16_fwd_with_flexible_graphs.cpp
+@@ -186,7 +186,7 @@ TEST_CASE("Toy sdpa forward with flexible graph", "[graph][sdpa][flash][forward]
+         variant_pack[STATS_UID] = statsTensor.devPtr;
+     }
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/sdpa/fp16_fwd_with_paged_caches.cpp b/samples/cpp/sdpa/fp16_fwd_with_paged_caches.cpp
+index 18dd937..d195f6b 100644
+--- a/samples/cpp/sdpa/fp16_fwd_with_paged_caches.cpp
++++ b/samples/cpp/sdpa/fp16_fwd_with_paged_caches.cpp
+@@ -268,7 +268,7 @@ TEST_CASE("Toy sdpa forward with paged caches", "[graph][sdpa][flash][paged][for
+         variant_pack[STATS_UID] = statsTensor.devPtr;
+     }
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(graph->get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/sdpa/fp8_bwd.cpp b/samples/cpp/sdpa/fp8_bwd.cpp
+index 82e542b..296f2f9 100644
+--- a/samples/cpp/sdpa/fp8_bwd.cpp
++++ b/samples/cpp/sdpa/fp8_bwd.cpp
+@@ -214,7 +214,7 @@ TEST_CASE("sdpa_fp8_bprop", "[graph][sdpa][fp8][backward]") {
+         {Amax_dV, AMax_dV_Tensor.devPtr},
+         {Amax_dP, AMax_dP_Tensor.devPtr}};
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(mha_graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+@@ -385,7 +385,7 @@ TEST_CASE("sdpa_fp8_gqa_bprop", "[graph][sdpa][fp8][backward]") {
+         {amax_dV, amax_dV_gpu.devPtr},
+         {amax_dP, amax_dP_gpu.devPtr}};
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(mha_graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+diff --git a/samples/cpp/sdpa/fp8_fwd.cpp b/samples/cpp/sdpa/fp8_fwd.cpp
+index 6ede98d..23abc3f 100644
+--- a/samples/cpp/sdpa/fp8_fwd.cpp
++++ b/samples/cpp/sdpa/fp8_fwd.cpp
+@@ -146,7 +146,7 @@ TEST_CASE("sdpa_fp8_fprop", "[graph][sdpa][fp8][forward]") {
+         variant_pack[Stats] = stats_tensor.devPtr;
+     }
+ 
+-    int64_t workspace_size;
++    int64_t workspace_size = 0;
+     REQUIRE(mha_graph.get_workspace_size(workspace_size).is_good());
+     Surface<int8_t> workspace(workspace_size, false);
+ 
+-- 
+2.47.0
+

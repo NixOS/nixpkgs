@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pyaftership";
+    tag = version;
     hash = "sha256-njlDScmxIYWxB4EL9lOSGCXqZDzP999gI9EkpcZyFlE=";
   };
 

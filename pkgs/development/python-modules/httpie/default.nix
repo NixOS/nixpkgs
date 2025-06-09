@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uZKkUUrPPnLHPHL8YrZgfsyCsSOR0oZ2eFytiV0PIUY=";
   };
 

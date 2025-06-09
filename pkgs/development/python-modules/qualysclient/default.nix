@@ -24,8 +24,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "woodtechie1428";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "qualysclient";
+    tag = "v${version}";
     hash = "sha256-+SZICysgSC4XeXC9CCl6Yxb47V9c1eMp7KcpH8J7kK0=";
   };
 

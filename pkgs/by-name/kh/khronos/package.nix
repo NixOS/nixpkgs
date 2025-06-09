@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lainsce";
-    repo = pname;
+    repo = "khronos";
     rev = version;
     sha256 = "sha256-2mO2ZMDxZ7sx2EVTN0tsAv8MisGxlK/1h61N+hOqyGI=";
   };
@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Track each task's time in a simple inobtrusive way";
     homepage = "https://github.com/lainsce/khronos";
-    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ xiorcale ];
+    teams = [ teams.pantheon ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     mainProgram = "io.github.lainsce.Khronos";

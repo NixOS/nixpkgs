@@ -19,6 +19,10 @@ buildNpmPackage rec {
 
   npmFlags = [ "--ignore-scripts" ];
 
+  postInstall = ''
+    find $out/lib/node_modules -xtype l -delete
+  '';
+
   dontNpmBuild = true;
 
   meta = {

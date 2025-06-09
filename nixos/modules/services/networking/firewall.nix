@@ -245,7 +245,7 @@ in
 
           Loading of helpers is recommended to be done through the
           CT target.  More info:
-          https://home.regit.org/netfilter-en/secure-use-of-helpers/
+          <https://home.regit.org/netfilter-en/secure-use-of-helpers/>
         '';
       };
 

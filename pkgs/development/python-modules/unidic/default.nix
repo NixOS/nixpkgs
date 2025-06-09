@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polm";
     repo = "unidic-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-srhQDXGgoIMhYuCbyQB3kF4LrODnoOqLbjBQMvhPieY=";
   };
 

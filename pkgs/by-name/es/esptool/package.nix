@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cNEg2a3j7Vql06GwVaE9y86UtMkNsUdJYM00OEUra2w=";
   };
 
@@ -75,13 +75,11 @@ python3Packages.buildPythonApplication rec {
     description = "ESP8266 and ESP32 serial bootloader utility";
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;
-    maintainers =
-      with maintainers;
-      [
-        dezgeg
-        dotlambda
-      ]
-      ++ teams.lumiguide.members;
+    maintainers = with maintainers; [
+      dezgeg
+      dotlambda
+    ];
+    teams = [ lib.teams.lumiguide ];
     platforms = with platforms; linux ++ darwin;
     mainProgram = "esptool.py";
   };

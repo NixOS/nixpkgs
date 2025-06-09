@@ -5,25 +5,25 @@
   cmake,
   libGLU,
   libGL,
-  qt5,
+  qt6,
   boost,
 }:
 
 stdenv.mkDerivation rec {
-  version = "202307";
+  version = "202407";
   build_nr = "1";
   pname = "mcrl2";
 
   src = fetchurl {
     url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
-    hash = "sha256-zCHCO8tGyOxqUc0x3t/N3dUh4eG7slemlgK/QZsA4JA=";
+    hash = "sha256-VhP9BFSujxYMcQVu6P6k6yiH2UUhCB3P+Pj+9Ir7x6s=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libGLU
     libGL
-    qt5.qtbase
+    qt6.qtbase
     boost
   ];
 

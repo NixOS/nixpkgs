@@ -16,7 +16,7 @@
   # Available plugins (can be overridden)
   availablePlugins,
   # Used in the withPlugins interface at passthru, can be overrided directly, or
-  # prefarably via e.g: `mailnag.withPlugins([mailnag.availablePlugins.goa])`
+  # preferably via e.g: `mailnag.withPlugins([mailnag.availablePlugins.goa])`
   mailnag,
   userPlugins ? [ ],
   pluginsDeps ? [ ],

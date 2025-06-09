@@ -1,32 +1,36 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, flex
-, bison
-, qtbase
-, qtcharts
-, qttools
-, qtsvg
-, qtwayland
-, wrapQtAppsHook
-, libX11
-, cmake
-, gperf
-, adms
-, ngspice
-, qucsator-rf
-, kernels ? [ ngspice qucsator-rf ]
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  flex,
+  bison,
+  qtbase,
+  qtcharts,
+  qttools,
+  qtsvg,
+  qtwayland,
+  wrapQtAppsHook,
+  libX11,
+  cmake,
+  gperf,
+  adms,
+  ngspice,
+  qucsator-rf,
+  kernels ? [
+    ngspice
+    qucsator-rf
+  ],
 }:
 
 stdenv.mkDerivation rec {
   pname = "qucs-s";
-  version = "24.4.1";
+  version = "25.1.2";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucs_s";
     rev = version;
-    hash = "sha256-ll5P8cqJBzoieExElggn5tRbDcmH7L3yvcbtAQ0BBww=";
+    hash = "sha256-+xPhHmuogNuolmMFcUAP2hMfJh1D+O4DrPkcuR6+mR8=";
   };
 
   postPatch = ''
@@ -48,17 +52,38 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];
-  buildInputs = [ qtbase qttools qtcharts qtsvg gperf adms ]
-    ++ lib.optionals stdenv.isLinux [ qtwayland libX11 ]
+  nativeBuildInputs = [
+    flex
+    bison
+    wrapQtAppsHook
+    cmake
+  ];
+  buildInputs =
+    [
+      qtbase
+      qttools
+      qtcharts
+      qtsvg
+      gperf
+      adms
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+      libX11
+    ]
     ++ kernels;
 
   cmakeFlags = [
     "-DWITH_QT6=ON"
   ];
 
-  # Make custom kernels avaible from qucs-s
-  qtWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath kernels) ];
+  # Make custom kernels available from qucs-s
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath kernels)
+  ];
 
   QTDIR = qtbase.dev;
 
@@ -76,7 +101,11 @@ stdenv.mkDerivation rec {
     homepage = "https://ra3xdh.github.io/";
     license = licenses.gpl2Plus;
     mainProgram = "qucs-s";
-    maintainers = with maintainers; [ mazurel kashw2 thomaslepoix ];
+    maintainers = with maintainers; [
+      mazurel
+      kashw2
+      thomaslepoix
+    ];
     platforms = with platforms; unix;
   };
 }

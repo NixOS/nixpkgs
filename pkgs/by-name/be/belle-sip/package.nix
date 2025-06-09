@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "belle-sip";
     rev = version;
     hash = "sha256-PZnAB+LOlwkiJO0ICqYqn0TgqQY2KdUbgGJRFSzGxdE=";
   };
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://linphone.org/technical-corner/belle-sip";
+    homepage = "https://gitlab.linphone.org/BC/public/belle-sip";
     description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers. Part of the Linphone project";
     mainProgram = "belle_sip_tester";
     license = licenses.gpl3Plus;

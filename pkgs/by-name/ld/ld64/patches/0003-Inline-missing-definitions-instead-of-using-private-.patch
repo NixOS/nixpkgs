@@ -1,0 +1,56 @@
+From ddcefc16f5db7fd36c885cf3bcd3713c8383e93b Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 13 Nov 2024 13:53:14 -0500
+Subject: [PATCH 03/18] Inline missing definitions instead of using private
+ mach-o/dyld_private.h header
+
+Based on: https://github.com/llvm/llvm-project/blob/38870fe124eb5e6e24136f9d3e4551a62370faee/libunwind/src/AddressSpace.hpp#L57-L67
+---
+ src/ld/Options.cpp                        |  1 -
+ src/ld/parsers/libunwind/AddressSpace.hpp | 10 +++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/src/ld/Options.cpp b/src/ld/Options.cpp
+index 991387f..cde3fad 100644
+--- a/src/ld/Options.cpp
++++ b/src/ld/Options.cpp
+@@ -35,7 +35,6 @@
+ #include <spawn.h>
+ #include <Availability.h>
+ #include <tapi/tapi.h>
+-#include <mach-o/dyld_priv.h>
+ 
+ #include <algorithm>
+ #include <vector>
+diff --git a/src/ld/parsers/libunwind/AddressSpace.hpp b/src/ld/parsers/libunwind/AddressSpace.hpp
+index eb47390..0788cc2 100644
+--- a/src/ld/parsers/libunwind/AddressSpace.hpp
++++ b/src/ld/parsers/libunwind/AddressSpace.hpp
+@@ -35,7 +35,6 @@
+ #include <dlfcn.h>
+ #include <mach-o/loader.h>
+ #include <mach-o/getsect.h>
+-#include <mach-o/dyld_priv.h>
+ #include <Availability.h>
+ 
+ #include "FileAbstraction.hpp"
+@@ -73,7 +72,16 @@ bool _dyld_find_unwind_sections(void* addr, dyld_unwind_sections* info)
+ }
+ #endif // 0
+ 
++struct dyld_unwind_sections
++{
++	const struct mach_header*		mh;
++	const void*						dwarf_section;
++	uintptr_t						dwarf_section_length;
++	const void*						compact_unwind_section;
++	uintptr_t						compact_unwind_section_length;
++};
+ 
++extern "C" bool _dyld_find_unwind_sections(void*, dyld_unwind_sections*);
+ 
+ namespace libunwind {
+ 
+-- 
+2.47.2
+

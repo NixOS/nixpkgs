@@ -1,0 +1,13 @@
+diff --git a/src-tauri/src/custom_protocol.rs b/src-tauri/src/custom_protocol.rs
+index b6ed6e7..5434337 100644
+--- a/src-tauri/src/custom_protocol.rs
++++ b/src-tauri/src/custom_protocol.rs
+@@ -162,7 +162,7 @@ impl CustomProtocol {
+     pub fn setup(&self, app: AppHandle) {
+         let app_handle = app.clone();
+ 
+-        let result = tauri_plugin_deep_link::register(APP_URL_SCHEME, move |url_scheme| {
++        let result = tauri_plugin_deep_link::listen(move |url_scheme| {
+             tauri::async_runtime::block_on(async {
+                 info!("App opened with URL: {:?}", url_scheme.to_string());
+ 

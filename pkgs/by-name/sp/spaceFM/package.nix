@@ -1,6 +1,7 @@
 {
   pkgs,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   stdenv,
   gtk3,
@@ -35,6 +36,14 @@ stdenv.mkDerivation rec {
 
     # restrict GDK backends to only X11
     ./x11-only.patch
+
+    # gcc-14 build fix from:
+    #   https://github.com/IgnorantGuru/spacefm/pull/816
+    (fetchpatch {
+      name = "gcc-14.patch";
+      url = "https://github.com/IgnorantGuru/spacefm/commit/98efb1f43e6339b3ceddb9f65ee85e26790fefdf.patch";
+      hash = "sha256-dau1AMnSBsp8iDrjoo0WTnFQ13vNZW2kM4qz0B/beDI=";
+    })
   ];
 
   # Workaround build failure on -fno-common toolchains:

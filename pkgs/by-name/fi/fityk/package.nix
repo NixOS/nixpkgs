@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   wxGTK32,
-  boost,
+  boost186,
   lua,
   zlib,
   bzip2,
@@ -25,17 +25,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-m2RaZMYT6JGwa3sOUVsBIzCdZetTbiygaInQWoJ4m1o=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    lua
+    swig
+  ];
   buildInputs = [
     wxGTK32
-    boost
+    boost186
     lua
     zlib
     bzip2
     xylib
     readline
     gnuplot
-    swig
+  ];
+
+  configureFlags = [
+    "--with-wx-config=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

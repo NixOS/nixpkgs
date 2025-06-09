@@ -1,43 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cargo
-, meson
-, ninja
-, pkg-config
-, gnome-desktop
-, glib
-, gtk3
-, wayland
-, wayland-protocols
-, wayland-scanner
-, libbsd
-, libxml2
-, libxkbcommon
-, rustPlatform
-, rustc
-, feedbackd
-, wrapGAppsHook3
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  gnome-desktop,
+  glib,
+  gtk3,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  libbsd,
+  libxml2,
+  libxkbcommon,
+  rustPlatform,
+  rustc,
+  feedbackd,
+  wrapGAppsHook3,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.41.0";
+  version = "1.43.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "Phosh";
-    repo = pname;
+    repo = "squeekboard";
     rev = "v${version}";
-    hash = "sha256-WHGdA0cEB1nu7vJ+pwjdl8aZzccJ232vsbSGmZohFVo=";
+    hash = "sha256-UsUr4UnYNo2ybEdNyOD/IiafEZ1YJFwRQ3CVy76X2H0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-CRKaH8cA/EhXQna3zCU0Z06zkB9qu6QxPJ4No3NFcs0=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-3K1heokPYxYbiAGha9TrrjQXguzGv/djIB4eWa8dVjg=";
   };
 
   nativeBuildInputs = [

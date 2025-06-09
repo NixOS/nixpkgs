@@ -7,7 +7,6 @@
   cssselect,
   lxml,
   numpy,
-  packaging,
   pillow,
   pygobject3,
   pyparsing,
@@ -17,37 +16,28 @@
   gobject-introspection,
   pytestCheckHook,
   gtk3,
-  fetchpatch2,
 }:
 
 buildPythonPackage {
   pname = "inkex";
   inherit (inkscape) version;
-
-  format = "pyproject";
+  pyproject = true;
 
   inherit (inkscape) src;
 
-  patches = [
-    (fetchpatch2 {
-      name = "add-numpy-2-support.patch";
-      url = "https://gitlab.com/inkscape/extensions/-/commit/13ebc1e957573fea2c3360f676b0f1680fad395d.patch";
-      hash = "sha256-0n8L8dUaYYPBsmHlAxd60c5zqfK6NmXJfWZVBXPbiek=";
-      stripLen = 1;
-      extraPrefix = "share/extensions/";
-    })
-  ];
-
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   pythonRelaxDeps = [ "numpy" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cssselect
     lxml
     numpy
+    pillow
     pygobject3
+    pyparsing
     pyserial
+    scour
     tinycss2
   ];
 
@@ -60,10 +50,6 @@ buildPythonPackage {
 
   checkInputs = [
     gtk3
-    packaging
-    pillow
-    pyparsing
-    scour
   ];
 
   disabledTests =

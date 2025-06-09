@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "Girsh";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MgzIBag0Exoh0TXW/AD0lbSOj7PVkMeVYQ8v5jdCgAs=";
   };
 
@@ -26,11 +26,11 @@ buildGoModule rec {
     mv $out/bin/src $out/bin/$pname
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatically spawn a reverse shell fully interactive for Linux or Windows victim";
     homepage = "https://github.com/nodauf/Girsh";
     changelog = "https://github.com/nodauf/Girsh/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

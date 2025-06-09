@@ -4,17 +4,18 @@
   fetchFromGitHub,
   ivsc-driver,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ipu6-drivers";
-  version = "unstable-2024-11-19";
+  version = "unstable-2025-02-19";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-drivers";
-    rev = "0ad4988248d7e9382498a0b47fc78bb990b29a58";
-    hash = "sha256-UFvwuoAzwk1k4YiUK+4EeMKeTx9nVvBgBN5JKAfqZkQ=";
+    rev = "7af071481f3d2d3cef1e70113c10f62ac6351723";
+    hash = "sha256-pe7lqK+CHpgNWpC8GEZ3FKfYcuVuRUaWlW18D9AsrSk=";
   };
 
   patches = [
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_SRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];

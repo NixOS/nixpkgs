@@ -57,11 +57,11 @@
 
 stdenv.mkDerivation rec {
   pname = "webex";
-  version = "44.8.0.30404";
+  version = "45.2.0.31846";
 
   src = fetchurl {
-    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20240806164911/Webex_ubuntu.7z";
-    sha256 = "770067b495fcc3b376d77de65371f4196d0f1a0d718b84928d24aa6ea752d29b";
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20250225153039/Webex_ubuntu.7z";
+    sha256 = "88b6031d3ea885b750a9e44e3f7b98634e3ecdfb5ca1672ea840ea16a97386ab";
   };
 
   nativeBuildInputs = [

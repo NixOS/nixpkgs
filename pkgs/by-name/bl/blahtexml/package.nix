@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://gva.noekeon.org/blahtexml/";
+    homepage = "https://gva.noekeon.org/blahtexml/";
     description = "TeX to MathML converter";
     longDescription = ''
       Blahtex is a program written in C++, which converts an equation given in

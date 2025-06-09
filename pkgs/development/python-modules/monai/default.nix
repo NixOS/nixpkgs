@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
   ninja,
   numpy,
@@ -22,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PovYyRLgoYwxqGeCBpWxX/kdClYtYK1bgy8yRa9eue8=";
     # note: upstream consistently seems to modify the tag shortly after release,
     # so best to wait a few days before updating
@@ -44,6 +43,8 @@ buildPythonPackage rec {
     packaging
     torch
   ];
+
+  pythonRelaxDeps = [ "numpy" ]; # supported; see https://github.com/Project-MONAI/MONAI/pull/7857
 
   env.BUILD_MONAI = 1;
 

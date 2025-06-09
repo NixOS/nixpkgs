@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "djangosaml2";
-  version = "1.9.3";
+  version = "1.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = "djangosaml2";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rbmEJuG2mgozpCFOXZUJFxv8v52IRQeaeAKfeUDACeU=";
+    tag = "v${version}";
+    hash = "sha256-AkyXxWcckBVWUZAhjuUru2b1/t4iwoCKxmTvvqSziV0=";
   };
 
   build-system = [ setuptools ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Django SAML2 Service Provider based on pySAML2";
     homepage = "https://github.com/IdentityPython/djangosaml2";
-    changelog = "https://github.com/IdentityPython/djangosaml2/blob/v${version}/CHANGES";
+    changelog = "https://github.com/IdentityPython/djangosaml2/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ melvyn2 ];
   };

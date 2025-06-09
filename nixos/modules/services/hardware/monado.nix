@@ -80,6 +80,8 @@ in
           XRT_COMPOSITOR_LOG = mkDefault "debug";
           XRT_PRINT_OPTIONS = mkDefault "on";
           IPC_EXIT_ON_DISCONNECT = mkDefault "off";
+          # Needed to avoid libbasalt.so: cannot open shared object file: No such file or directory
+          VIT_SYSTEM_LIBRARY_PATH = mkDefault "${pkgs.basalt-monado}/lib/libbasalt.so";
         };
 
         preStart = mkIf cfg.forceDefaultRuntime ''

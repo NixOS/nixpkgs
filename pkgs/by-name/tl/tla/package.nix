@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "01mfzj1i6p4s8191cgd5850hds1zls88hkf9rb6qx1vqjv585aj0";
   };
 
-  patches = [ ./configure-tmpdir.patch ];
+  patches = [
+    ./configure-tmpdir.patch
+    ./fix-gcc14.patch
+  ];
 
   buildInputs = [ which ];
 

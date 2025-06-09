@@ -2,26 +2,36 @@
   lib,
   fetchFromGitea,
   rustPlatform,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
-  version = "0.4.18";
+  version = "0.7.6";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "iff";
     repo = "pay-respects";
-    rev = "v${version}";
-    hash = "sha256-8YQgNOqZAMhn93rk0fw1SV02XhI/Wt9D5Rzo64cCs7s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+50MKpZgJqjuUvJeFFv8fMILkJ3cOAN7R7kmlR+98II=";
   };
 
-  cargoHash = "sha256-xLAJLwzX923E7Pzfwdw38moLOlY0Q4xK8himbKHQ7O8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TJP+GPkXwPvnBwiF0SCkn8NGz/xyrYjbUZKCbUUSqHQ=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
-    description = "Terminal command correction, alternative to `thefuck`, written in Rust";
+    description = "Terminal command correction, alternative to thefuck, written in Rust";
     homepage = "https://codeberg.org/iff/pay-respects";
+    changelog = "https://codeberg.org/iff/pay-respects/src/tag/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ sigmasquadron ];
+    maintainers = with lib.maintainers; [
+      sigmasquadron
+      bloxx12
+      ALameLlama
+    ];
     mainProgram = "pay-respects";
   };
-}
+})

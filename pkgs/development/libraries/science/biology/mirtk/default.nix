@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   python3,
-  boost,
+  boost186,
   eigen,
   libGLU,
   fltk,
@@ -14,7 +14,7 @@
   tbb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mirtk";
   version = "unstable-2022-07-22";
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    boost
+    boost186
     eigen
     fltk
     itk

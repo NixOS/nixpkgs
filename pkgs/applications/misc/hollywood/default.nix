@@ -60,7 +60,6 @@ stdenv.mkDerivation {
         pygments
         moreutils
         util-linux
-        jp2a
         man
         mplayer
         openssh

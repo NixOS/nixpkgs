@@ -26,7 +26,6 @@
   vulkan-loader,
   glslang,
   spirv-tools,
-  gtest,
   glew,
 }:
 let
@@ -34,18 +33,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "9.0.2";
+  version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "sjrc6";
     repo = "taterclient-ddnet";
-    rev = "refs/tags/V${finalAttrs.version}";
-    hash = "sha256-hGbeIhtAZcgaPCsDUmZqq8mLGi1yVvauha4wGMBbmBc=";
+    tag = "V${finalAttrs.version}";
+    hash = "sha256-OEoiUtD87xsXBgAZ65mmfmAJcEvrley3drRX+IJo20s=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-iykFbo1zSeG9r9cIr8CGjd9GtCGcQ6vH73xpEl8J3i8=";
+    hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
   };
 
   nativeBuildInputs = [
@@ -58,9 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     glslang # for glslangValidator
     python3
   ];
-
-  nativeCheckInputs = [ gtest ];
-  checkInputs = [ gtest ];
 
   buildInputs = [
     curl
@@ -84,6 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  patches = [
+    ./client_log_format_security.patch
+  ];
+
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
       --replace-fail /usr/ $out/
@@ -94,13 +94,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CLIENT" true)
     (lib.cmakeBool "SERVER" false)
     (lib.cmakeBool "TOOLS" false)
+    (lib.cmakeBool "DISCORD" false)
     (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
 
-  doCheck = true;
-  checkTarget = "run_tests";
-
-  __darwinAllowLocalNetworking = true; # for tests
+  # Since we are not building the server executable, the `run_tests` Makefile target
+  # will not be generated.
+  #
+  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.3.0/CMakeLists.txt#L3072
+  doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Upstream links against <prefix>/lib while it installs this library in <prefix>/lib/ddnet

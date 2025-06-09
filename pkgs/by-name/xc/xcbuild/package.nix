@@ -10,11 +10,6 @@
   stdenv,
   zlib,
 
-  # These arguments are obsolete but required to avoid evaluation errors (for now).
-  CoreGraphics ? null,
-  CoreServices ? null,
-  ImageIO ? null,
-
   # These are deprecated and do nothing. They’re needed for compatibility and will
   # warn eventually once in-tree uses are cleaned up.
   xcodePlatform ? null,
@@ -84,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/Use-system-toolchain-for-usr-bin.patch
     # Suppress warnings due to newer SDKs with unknown keys
     ./patches/Suppress-unknown-key-warnings.patch
+    # Don't pipe stdout / stderr of processes launched by xcrun
+    ./patches/fix-interactive-apps.patch
   ];
 
   prePatch = ''
@@ -93,7 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch =
-    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    ''
+      substituteInPlace Libraries/pbxbuild/Sources/Tool/TouchResolver.cpp \
+        --replace-fail "/usr/bin/touch" "touch"
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       # Fix build on gcc-13 due to missing includes
       sed -e '1i #include <cstdint>' -i \
         Libraries/libutil/Headers/libutil/Permissions.h \
@@ -157,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
       bsd3
     ];
-    maintainers = lib.teams.darwin.members;
+    teams = [ lib.teams.darwin ];
     platforms = lib.platforms.unix;
   };
 })

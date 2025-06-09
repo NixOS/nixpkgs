@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     # version was released that pointed to gplv2 however, so thats probably
     # the right license.
     license = licenses.gpl2;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.unix;
   };
 }

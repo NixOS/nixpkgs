@@ -14,7 +14,7 @@
   gifsicle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mtPaint";
   version = "3.50.01";
 

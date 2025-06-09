@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gdabah";
     repo = "distorm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Fhvxag2UN5wXEySP1n1pCahMQR/SfssywikeLmiASwQ=";
   };
 

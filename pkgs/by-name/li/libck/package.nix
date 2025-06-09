@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "concurrencykit";
-    repo = pname;
+    repo = "ck";
     rev = version;
     sha256 = "sha256-lxJ8WsZ3pBGf4sFYj5+tR37EYDZqpksaoohiIKA4pRI=";
   };
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       asl20
       bsd2
     ];
-    homepage = "http://concurrencykit.org/";
+    homepage = "https://concurrencykit.org/";
     platforms = platforms.unix;
     maintainers = with maintainers; [
       chessai

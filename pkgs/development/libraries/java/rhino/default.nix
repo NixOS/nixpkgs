@@ -14,7 +14,7 @@ let
     sha256 = "1pb08d9j81d0wz5wj31idz198iwhqb7mch872n08jh1354rjlqwk";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rhino";
   version = "1.7R2";
 

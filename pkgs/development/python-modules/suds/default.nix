@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "suds-community";
     repo = "suds";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YdL+zDelRspQ6VMqa45vK1DDS3HjFvKE1P02USVBrEo=";
   };
 

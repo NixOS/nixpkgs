@@ -12,8 +12,5 @@ qtModule {
     qtbase
     qtquick3d
   ];
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-  ) "-faligned-allocation";
   meta.mainProgram = "cooker";
 }

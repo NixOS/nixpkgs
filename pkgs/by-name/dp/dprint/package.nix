@@ -9,9 +9,9 @@
   dprint,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
-  version = "0.48.0";
+  version = "0.50.0";
 
   # Prefer repository rather than crate here
   #   - They have Cargo.lock in the repository
@@ -19,14 +19,25 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dprint";
     repo = "dprint";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Zem37oHku90c7PDV8ep/7FN128eGRUvfIvRsaXa7X9g=";
+    tag = finalAttrs.version;
+    hash = "sha256-6AgbKH5f7N/yYqq7KBVHOqYbyuZkjFSaYwZwIXsgd9o=";
   };
 
-  cargoHash = "sha256-vlG+0cQMUev8iEgut9l1bCDpS85bRWsNWZyJJXcgSlw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OnrsuVK1gEDweldq+P8lDkkrHjklsG8MRpM0wqWsdlM=";
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
+  ];
+
+  cargoBuildFlags = [
+    "--package=dprint"
+    # Required only for dprint package tests; the binary is removed in postInstall.
+    "--package=test-process-plugin"
+  ];
+
+  cargoTestFlags = [
+    "--package=dprint"
   ];
 
   checkFlags = [
@@ -35,19 +46,25 @@ rustPlatform.buildRustPackage rec {
     "--skip=utils::lax_single_process_fs_flag::test"
     # Require cargo is running
     "--skip=utils::process::test"
+    # Requires deno for the testing, and making unstable results on darwin
+    "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export DPRINT_CACHE_DIR="$(mktemp -d)"
-    installShellCompletion --cmd dprint \
-      --bash <($out/bin/dprint completions bash) \
-      --zsh <($out/bin/dprint completions zsh) \
-      --fish <($out/bin/dprint completions fish)
-  '';
+  postInstall =
+    ''
+      rm "$out/bin/test-process-plugin"
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      export DPRINT_CACHE_DIR="$(mktemp -d)"
+      installShellCompletion --cmd dprint \
+        --bash <($out/bin/dprint completions bash) \
+        --zsh <($out/bin/dprint completions zsh) \
+        --fish <($out/bin/dprint completions fish)
+    '';
 
   passthru = {
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
 
       package = dprint;
       command = ''
@@ -65,13 +82,14 @@ rustPlatform.buildRustPackage rec {
       It offers multiple WASM plugins to support various languages. It's written in
       Rust, so it’s small, fast, and portable.
     '';
-    changelog = "https://github.com/dprint/dprint/releases/tag/${version}";
+    changelog = "https://github.com/dprint/dprint/releases/tag/${finalAttrs.version}";
     homepage = "https://dprint.dev";
     license = licenses.mit;
     maintainers = with maintainers; [
       khushraj
       kachick
+      phanirithvij
     ];
     mainProgram = "dprint";
   };
-}
+})

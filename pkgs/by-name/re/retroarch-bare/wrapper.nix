@@ -65,6 +65,7 @@ symlinkJoin {
       license
       mainProgram
       maintainers
+      teams
       platforms
       ;
 

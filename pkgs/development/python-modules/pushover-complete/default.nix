@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
+  setuptools,
   requests,
   six,
   pytestCheckHook,
@@ -12,17 +12,18 @@
 
 buildPythonPackage rec {
   pname = "pushover-complete";
-  version = "1.1.1";
-  format = "setuptools";
-  disabled = isPy27;
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pushover_complete";
     inherit version;
-    sha256 = "8a8f867e1f27762a28a0832c33c6003ca54ee04c935678d124b4c071f7cf5a1f";
+    hash = "sha256-v0+JgShJMEdVXJ1xZD4UCKZzgV+uOuOstPn3nWtHDJw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     six
   ];

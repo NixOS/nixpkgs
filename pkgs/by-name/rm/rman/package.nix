@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rman";
@@ -15,7 +19,10 @@ stdenv.mkDerivation rec {
       --replace gcc '${stdenv.cc.targetPrefix}cc'
   '';
 
-  makeFlags = [ "BINDIR=$(out)/bin" "MANDIR=$(out)/share/man" ];
+  makeFlags = [
+    "BINDIR=$(out)/bin"
+    "MANDIR=$(out)/share/man"
+  ];
 
   preInstall = ''
     mkdir -p $out/bin

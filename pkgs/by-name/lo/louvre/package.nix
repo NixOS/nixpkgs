@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "louvre";
-  version = "2.13.0-1";
+  version = "2.16.3-1";
 
   src = fetchFromGitHub {
     owner = "CuarzoSoftware";
     repo = "Louvre";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZUGan5lcE44Lt6xEvVO9Nd1ONBEvvwj8QuLDnAaenpU=";
+    hash = "sha256-ZdV/KvYnPN4IKU6kbjDhCgcC3TdWqZbNJzDt39ZQ2x8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ library for building Wayland compositors";
     homepage = "https://github.com/CuarzoSoftware/Louvre";
     mainProgram = "louvre-views";
-    maintainers = [ lib.maintainers.dblsaiko ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

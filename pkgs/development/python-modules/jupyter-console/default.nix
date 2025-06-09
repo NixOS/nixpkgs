@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_console";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jdSeZCspcjEQVBpJyxVnwJ5SAq+SS1bW9kqp/F/zwCQ=";
   };
 
@@ -84,6 +84,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/jupyter_console";
     changelog = "https://github.com/jupyter/jupyter_console/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

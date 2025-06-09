@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqalculate";
-  version = "5.4.0.1";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cx0pl3OEA/dANcGW3obvEnAiR06IcZedyCACwibNThg=";
+    hash = "sha256-sjVvsgDQbKXU+N7JrA36zezDfAGcDbyQ0fn1zMThYXQ=";
   };
 
   outputs = [
@@ -83,9 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://qalculate.github.io";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      gebner
       doronbehar
-      alyaeanyx
+      pentane
     ];
     mainProgram = "qalc";
     platforms = platforms.all;

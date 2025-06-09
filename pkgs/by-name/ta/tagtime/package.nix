@@ -79,7 +79,7 @@ stdenv.mkDerivation {
 
       [maintainer’s note]: This is the original perl script implementation.
     '';
-    homepage = "http://messymatters.com/tagtime/";
+    homepage = "https://messymatters.com/tagtime/";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.Profpatsch ];
     mainProgram = "tagtimed";

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -21,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = "pyvlx";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JwgElt0FFSGs3v+04AKPwTTpxvn8YzihJeD/+llbSMI=";
   };
 
@@ -47,6 +46,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${version}";
     license = licenses.lgpl2Only;
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

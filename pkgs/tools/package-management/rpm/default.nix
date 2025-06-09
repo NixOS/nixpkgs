@@ -29,21 +29,31 @@
   bubblewrap,
   autoconf,
   gnupg,
+
+  # Disable the unshare RPM plugin, which can be useful if
+  # RPM is ran within the Nix sandbox.
+  disableUnshare ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rpm";
-  version = "4.20.0";
+  version = "4.20.1";
 
   src = fetchurl {
     url = "https://ftp.osuosl.org/pub/rpm/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
-    hash = "sha256-Vv92OM/5i1bUp1A/9ZvHnygabd/82g0jjAgr7ftfvns=";
+    hash = "sha256-UmR+EmODZFM6tnHLyOSFyW+fCIidk/4O0QSmYyZhEk8=";
   };
 
-  postPatch = ''
-    sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' python/CMakeLists.txt
-    sed -i 's#PATHS ENV MYPATH#PATHS ENV PATH#' CMakeLists.txt
-  '';
+  postPatch =
+    ''
+      sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' python/CMakeLists.txt
+      sed -i 's#PATHS ENV MYPATH#PATHS ENV PATH#' CMakeLists.txt
+    ''
+    # clang: error: unknown argument: '-fhardened'
+    + lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "-fhardened" ""
+    '';
 
   outputs =
     [
@@ -97,6 +107,8 @@ stdenv.mkDerivation rec {
       "-DWITH_DBUS=OFF"
       # libselinux is missing propagatedBuildInputs
       "-DWITH_SELINUX=OFF"
+
+      "-DCMAKE_INSTALL_LOCALSTATEDIR=/var"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "-DMKTREE_BACKEND=rootfs"
@@ -112,6 +124,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DWITH_LIBELF=OFF"
       "-DWITH_LIBDW=OFF"
+    ]
+    ++ lib.optionals disableUnshare [
+      "-DHAVE_UNSHARE=OFF"
     ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
@@ -128,7 +143,7 @@ stdenv.mkDerivation rec {
       lgpl21Plus
     ];
     description = "RPM Package Manager";
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

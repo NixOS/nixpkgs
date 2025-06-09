@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-L4JemOxpynGYsA8FgHnMv/hrogLSRaaiIzDjxzZDqjM=";
   };
 
-  cargoHash = "sha256-ShJ7dbd3oNo3qZJ5+ut+NfLF9j8kPPZy9yC2zl/s56k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bBkHqcPWE6jkqvUZ28ukUidET9XkRQ9t9bfTpHC5Jyo=";
 
   meta = with lib; {
     description = "Trusty terminal typing tester";

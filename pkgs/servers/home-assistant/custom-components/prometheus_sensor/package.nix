@@ -12,11 +12,9 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "mweinelt";
     repo = "ha-prometheus-sensor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+28mMvzNKVInknnDh++YolXR+/b1wsve1VEn4olR7Fs=";
   };
-
-  dontBuild = true;
 
   meta = with lib; {
     changelog = "https://github.com/mweinelt/ha-prometheus-sensor/blob/${version}/CHANGELOG.md";

@@ -10,21 +10,21 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "vsce";
-  version = "3.2.1";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
-    rev = "v${version}";
-    hash = "sha256-S49tX0e0XW7RasYeFALKexP8516+7Umtglh1h6f5wEQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-T3uboozO4YRA8qqu833pIFt4yzIYRBZQdm8nawEZo2s=";
   };
 
-  npmDepsHash = "sha256-k6LdGCpVoBNpHe4z7NrS0T/gcB1EQBvBxGAM3zo+AAo=";
+  npmDepsHash = "sha256-J7ES/a6RHeTY1grdzgYu9ex7BOzadqng2/h2LlTZLns=";
 
   postPatch = ''
-    substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${version}"'
+    substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [
@@ -56,4 +56,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     mainProgram = "vsce";
   };
-}
+})

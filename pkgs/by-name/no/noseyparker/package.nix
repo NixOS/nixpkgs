@@ -5,23 +5,24 @@
   boost,
   cmake,
   git,
-  hyperscan,
+  vectorscan,
   openssl,
   pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "noseyparker";
-  version = "0.22.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "noseyparker";
     rev = "v${version}";
-    hash = "sha256-HRuqeKV0Y8kf/KBSHIK25Xrpr7tJODQQa4BoqxiulzU=";
+    hash = "sha256-6GxkIxLEgbIgg4nSHvmRedm8PAPBwVxLQUnQzh3NonA=";
   };
 
-  cargoHash = "sha256-/EeKoR4IHNwQj8Ohs46U2BYJWkutJ1XWhW6xsR+k7Yg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hVBHIm/12WU6g45QMxxuGk41B0kwThk7A84fOxArvno=";
 
   nativeCheckInputs = [
     git
@@ -45,20 +46,18 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [
     boost
-    hyperscan
+    vectorscan
     openssl
   ];
 
   OPENSSL_NO_VENDOR = 1;
 
-  meta = with lib; {
+  meta = {
     description = "Find secrets and sensitive information in textual data";
     mainProgram = "noseyparker";
     homepage = "https://github.com/praetorian-inc/noseyparker";
     changelog = "https://github.com/praetorian-inc/noseyparker/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ _0x4A6F ];
-    # limited by hyperscan
-    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
   };
 }

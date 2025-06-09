@@ -17,7 +17,7 @@
   cublasSupport ? config.cudaSupport,
   # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
   # For example if you're on an RTX 3060 that means you're using "Ampere" and you need to pass "sm_86"
-  cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
+  cudaArches ? cudaPackages.flags.realArches or [ ],
 
   clblastSupport ? stdenv.hostPlatform.isLinux,
   clblast,
@@ -40,13 +40,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.80.3";
+  version = "1.86.2";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-uxqn4t2dDaVSkVilJOflNbG2Q3fH3Yid8qdEaDGfIcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zB/X4tfygpf3ZrQ9FtQCd3sxN11Ewlxz1+YCiw7iUZU=";
   };
 
   enableParallelBuilding = true;

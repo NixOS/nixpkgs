@@ -2,6 +2,7 @@
   mkDerivation,
   lib,
   fetchpatch,
+  bash,
   cmake,
   pkg-config,
 }:
@@ -19,10 +20,21 @@ mkDerivation {
 
   outputs = [ "out" ]; # this package has no runtime components
 
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    bash
+  ];
+
+  # note: these will be propagated into the same list extra-cmake-modules is in
   propagatedBuildInputs = [
     cmake
     pkg-config
   ];
+
+  strictDeps = true;
 
   setupHook = ./setup-hook.sh;
 

@@ -7,10 +7,7 @@
   libgpg-error,
   pkg-config,
   python3,
-  AppKit,
-  Foundation,
   libiconv,
-  libobjc,
   libresolv,
   x11Support ? true,
   libxcb,
@@ -19,16 +16,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gpg-tui";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "gpg-tui";
     rev = "v${version}";
-    hash = "sha256-aHmLcWiDy5GMbcKi285tfBggNmGkpVAoZMm4dt8LKak=";
+    hash = "sha256-qGm0eHpVFGn8tNdEnmQ4oIfjCxyixMFYdxih7pHvGH0=";
   };
 
-  cargoHash = "sha256-rtBvo2nX4A6K/TBl6xhW8huLXdR6xDUhzMB3KRXRYMs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-XdT/6N7CJJ8LY0KmkO6PuRdnq1FZvbZrGhky1hmyr2Y=";
 
   nativeBuildInputs = [
     gpgme # for gpgme-config
@@ -47,10 +45,7 @@ rustPlatform.buildRustPackage rec {
       libxkbcommon
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Foundation
       libiconv
-      libobjc
       libresolv
     ];
 

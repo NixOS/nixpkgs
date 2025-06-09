@@ -4,25 +4,37 @@
   dotnetCorePackages,
   fetchFromGitHub,
   glibcLocales,
-  gtk3,
+  gtk4,
   intltool,
-  wrapGAppsHook3,
+  libadwaita,
+  wrapGAppsHook4,
 }:
 
 buildDotnetModule rec {
   pname = "Pinta";
-  version = "2.1.2";
+  version = "3.0.1";
+
+  src = fetchFromGitHub {
+    owner = "PintaProject";
+    repo = "Pinta";
+    rev = version;
+    hash = "sha256-TU4WBrWnhTQQM+OrBq9hpvrihittKTSS0Zo5laL98mE=";
+  };
 
   nativeBuildInputs = [
     intltool
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
+
+  runtimeDeps = [
+    gtk4
+    libadwaita
+  ];
+
+  buildInputs = runtimeDeps;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
-
-  runtimeDeps = [ gtk3 ];
-  buildInputs = runtimeDeps;
 
   # How-to update deps:
   # $ nix-build -A pinta.fetch-deps
@@ -31,13 +43,6 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
 
   projectFile = "Pinta";
-
-  src = fetchFromGitHub {
-    owner = "PintaProject";
-    repo = "Pinta";
-    rev = version;
-    hash = "sha256-/GMYF7G469oX5W1zjv5A9a6tcLX+4g6Sf9cDqxSjgWg=";
-  };
 
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)

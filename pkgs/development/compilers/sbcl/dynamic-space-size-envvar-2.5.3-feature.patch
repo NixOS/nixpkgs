@@ -1,0 +1,64 @@
+From 9c899f7b8089eee7ce471f237d2046882298c4fc Mon Sep 17 00:00:00 2001
+From: Hraban Luyat <hraban@0brg.net>
+Date: Sat, 13 Apr 2024 14:04:57 -0400
+Subject: [PATCH 1/2] feat: NIX_SBCL_DYNAMIC_SPACE_SIZE envvar
+
+---
+ src/runtime/runtime.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/src/runtime/runtime.c b/src/runtime/runtime.c
+index 2b1f8b634..4f3f51139 100644
+--- a/src/runtime/runtime.c
++++ b/src/runtime/runtime.c
+@@ -416,6 +416,29 @@ static int is_memsize_arg(char *argv[], int argi, int argc, int *merge_core_page
+     return 0;
+ }
+ 
++/**
++ * Read memory options from the environment, if present.
++ *
++ * Memory settings are read in the following priority:
++ *
++ * 1. command line arguments
++ * 2. environment variable
++ * 3. embedded options in core
++ * 4. default
++ */
++static void
++read_memsize_from_env(void) {
++  const char *val = getenv("NIX_SBCL_DYNAMIC_SPACE_SIZE");
++  // The distinction is blurry between setting an envvar to the empty string and
++  // unsetting it entirely. Depending on the calling environment it can even be
++  // tricky to properly unset an envvar in the first place. An empty envvar is
++  // practically always intended to just mean “unset”, so let’s interpret it
++  // that way.
++  if (val != NULL && (strcmp(val, "") != 0)) {
++    dynamic_space_size = parse_size_arg(val, "NIX_SBCL_DYNAMIC_SPACE_SIZE");
++  }
++}
++
+ static struct cmdline_options
+ parse_argv(struct memsize_options memsize_options,
+            int argc, char *argv[], char *envp[], char *core)
+@@ -457,6 +480,9 @@ parse_argv(struct memsize_options memsize_options,
+         thread_control_stack_size = memsize_options.thread_control_stack_size;
+         dynamic_values_bytes = memsize_options.thread_tls_bytes;
+         if (memsize_options.present_in_core == 2) {
++            /* Only accept environment variable memory options where you would
++             * accept those options as command-line arguments. */
++            read_memsize_from_env();
+             int stop_parsing = 0; // have we seen '--'
+             int output_index = 1;
+ #ifndef LISP_FEATURE_WIN32
+@@ -490,6 +516,7 @@ parse_argv(struct memsize_options memsize_options,
+ #endif
+         }
+     } else {
++        read_memsize_from_env();
+         bool end_runtime_options = 0;
+         /* Parse our any of the command-line options that we handle from C,
+          * stopping at the first one that we don't, and leave the rest */
+-- 
+2.48.1
+

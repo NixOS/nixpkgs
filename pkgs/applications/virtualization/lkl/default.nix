@@ -13,7 +13,7 @@
   firewallSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lkl";
 
   # NOTE: pinned to the last known version that doesn't have a hang in cptofs.
@@ -116,7 +116,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux; # Darwin probably works too but I haven't tested it
     license = licenses.gpl2;
     maintainers = with maintainers; [
-      copumpkin
       raitobezarius
     ];
   };

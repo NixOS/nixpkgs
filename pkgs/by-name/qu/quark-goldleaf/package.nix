@@ -1,13 +1,14 @@
-{ lib
-, jdk
-, maven
-, fetchFromGitHub
-, fetchpatch
-, makeDesktopItem
-, copyDesktopItems
-, imagemagick
-, wrapGAppsHook3
-, gtk3
+{
+  lib,
+  jdk,
+  maven,
+  fetchFromGitHub,
+  fetchpatch,
+  makeDesktopItem,
+  copyDesktopItems,
+  imagemagick,
+  wrapGAppsHook3,
+  gtk3,
 }:
 
 let
@@ -83,14 +84,21 @@ maven.buildMavenPackage rec {
       desktopName = "Quark";
       comment = meta.description;
       terminal = false;
-      categories = [ "Utility" "FileTransfer" ];
-      keywords = [ "nintendo" "switch" "goldleaf" ];
+      categories = [
+        "Utility"
+        "FileTransfer"
+      ];
+      keywords = [
+        "nintendo"
+        "switch"
+        "goldleaf"
+      ];
     })
   ];
 
   meta = {
     changelog = "https://github.com/XorTroll/Goldleaf/releases/tag/${src.rev}";
-    description = "A GUI tool for transfering files between a computer and a Nintendo Switch running Goldleaf";
+    description = "GUI tool for transfering files between a computer and a Nintendo Switch running Goldleaf";
     homepage = "https://github.com/XorTroll/Goldleaf#quark-and-remote-browsing";
     longDescription = ''
       ${meta.description}
@@ -111,4 +119,3 @@ maven.buildMavenPackage rec {
     platforms = with lib.platforms; linux ++ darwin;
   };
 }
-

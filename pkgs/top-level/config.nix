@@ -17,19 +17,28 @@ let
     types
     ;
 
-  mkMassRebuild = args: mkOption (builtins.removeAttrs args [ "feature" ] // {
-    type = args.type or (types.uniq types.bool);
-    default = args.default or false;
-    description = ((args.description or ''
-      Whether to ${args.feature} while building nixpkgs packages.
-    '') + ''
-      Changing the default may cause a mass rebuild.
-    '');
-  });
+  mkMassRebuild =
+    args:
+    mkOption (
+      builtins.removeAttrs args [ "feature" ]
+      // {
+        type = args.type or (types.uniq types.bool);
+        default = args.default or false;
+        description = (
+          (args.description or ''
+            Whether to ${args.feature} while building nixpkgs packages.
+          ''
+          )
+          + ''
+            Changing the default may cause a mass rebuild.
+          ''
+        );
+      }
+    );
 
   options = {
 
-    /* Internal stuff */
+    # Internal stuff
 
     # Hide built-in module system options from docs.
     _module.args = mkOption {
@@ -38,11 +47,11 @@ let
 
     warnings = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       internal = true;
     };
 
-    /* Config options */
+    # Config options
 
     warnUndeclaredOptions = mkOption {
       description = "Whether to warn when `config` contains an unrecognized attribute.";
@@ -128,6 +137,18 @@ let
       '';
     };
 
+    allowVariants = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to expose the nixpkgs variants.
+
+        Variants are instances of the current nixpkgs instance with different stdenvs or other applied options.
+        This allows for using different toolchains, libcs, or global build changes across nixpkgs.
+        Disabling can ensure nixpkgs is only building for the platform which you specified.
+      '';
+    };
+
     cudaSupport = mkMassRebuild {
       type = types.bool;
       default = false;
@@ -170,7 +191,7 @@ let
 
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
-      default = [];
+      default = [ ];
       description = ''
         Which warnings to display for potentially dangerous
         or deprecated values passed into `stdenv.mkDerivation`.
@@ -190,23 +211,51 @@ let
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
       '';
     };
+
+    rewriteURL = mkOption {
+      type = types.functionTo (types.nullOr types.str);
+      description = ''
+        A hook to rewrite/filter URLs before they are fetched.
+
+        The function is passed the URL as a string, and is expected to return a new URL, or null if the given URL should not be attempted.
+
+        This function is applied _prior_ to resolving mirror:// URLs.
+
+        The intended use is to allow URL rewriting to insert company-internal mirrors, or work around company firewalls and similar network restrictions.
+      '';
+      default = lib.id;
+      defaultText = literalExpression "(url: url)";
+      example = literalExpression ''
+        {
+          # Use Nix like it's 2024! ;-)
+          rewriteURL = url: "https://web.archive.org/web/2024/''${url}";
+        }
+      '';
+    };
   };
 
-in {
+in
+{
 
   freeformType =
-    let t = types.lazyAttrsOf types.raw;
-    in t // {
-      merge = loc: defs:
-        let r = t.merge loc defs;
-        in r // { _undeclared = r; };
+    let
+      t = types.lazyAttrsOf types.raw;
+    in
+    t
+    // {
+      merge =
+        loc: defs:
+        let
+          r = t.merge loc defs;
+        in
+        r // { _undeclared = r; };
     };
 
   inherit options;
 
   config = {
     warnings = optionals config.warnUndeclaredOptions (
-      mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or {}
+      mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
     );
   };
 

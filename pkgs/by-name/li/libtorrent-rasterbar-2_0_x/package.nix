@@ -8,11 +8,10 @@
   openssl,
   python3,
   ncurses,
-  darwin,
 }:
 
 let
-  version = "2.0.10";
+  version = "2.0.11";
 
   # Make sure we override python, so the correct version is chosen
   boostPython = boost.override {
@@ -29,7 +28,7 @@ stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "v${version}";
-    hash = "sha256-JrAYtoS8wNmmhbgnprD7vNz1N64ekIryjK77rAKTyaQ=";
+    hash = "sha256-iph42iFEwP+lCWNPiOJJOejISFF6iwkGLY9Qg8J4tyo=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +40,7 @@ stdenv.mkDerivation {
     zlib
     python3
     ncurses
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  ];
 
   patches = [
     # provide distutils alternative for python 3.12

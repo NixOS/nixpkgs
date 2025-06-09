@@ -28,7 +28,6 @@
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/build.zig#L106
   withAdwaita ? true,
 }:
-
 let
   zig_hook = zig_0_13.hook.overrideAttrs {
     zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
@@ -41,10 +40,9 @@ let
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/renderer.zig#L51-L52
   renderer = if stdenv.hostPlatform.isDarwin then "metal" else "opengl";
 in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.0.1";
+  version = "1.1.3";
   outputs = [
     "out"
     "man"
@@ -57,11 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BiXFNeoL+BYpiqzCuDIrZGQ6JVI8cBOXerJH48CbnxU=";
+    hash = "sha256-YHoyW+OFKxzKq4Ta/XUA9Xu0ieTfCcJo3khKpBGSnD4=";
   };
 
   deps = callPackage ./deps.nix {
     name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
+    zig = zig_0_13;
   };
 
   strictDeps = true;
@@ -159,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -190,9 +189,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     outputsToInstall = [
       "out"
-      "man"
-      "shell_integration"
-      "terminfo"
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # Issues finding the SDK in the sandbox

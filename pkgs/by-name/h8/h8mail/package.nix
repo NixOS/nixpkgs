@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "khast3x";
     repo = "h8mail";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gKRght/12apPD1u3mRY/yCPT0XAyXwaYgaqyJHrDLgw=";
   };
 
@@ -27,12 +27,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "h8mail" ];
 
-  meta = with lib; {
+  meta = {
     description = "Email OSINT & Password breach hunting tool";
     homepage = "https://github.com/khast3x/h8mail";
     changelog = "https://github.com/khast3x/h8mail/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ octodi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ octodi ];
     mainProgram = "h8mail";
   };
 }

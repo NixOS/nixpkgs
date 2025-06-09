@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "imstevenxyz";
-    repo = pname;
+    repo = "pyversasense";
     rev = "v${version}";
     sha256 = "vTaDEwImWDMInwti0Jj+j+RFEtXOOKtiH5wOMD6ZmJk=";
   };

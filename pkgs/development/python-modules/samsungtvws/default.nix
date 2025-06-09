@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xchwarze";
     repo = "samsung-tv-ws-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CU59Kg8kSEE71x6wifCKCaVFdaMftodtkrAOpD+qvWY=";
   };
 

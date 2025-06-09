@@ -7,8 +7,6 @@
   pkg-config,
   asciidoctor,
   openssl,
-  Security,
-  SystemConfiguration,
   ansi2html,
   installShellFiles,
 }:
@@ -29,17 +27,13 @@ rustPlatform.buildRustPackage rec {
     asciidoctor
     installShellFiles
   ];
-  buildInputs =
-    [
-      curl
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [
+    curl
+    openssl
+  ];
 
-  cargoHash = "sha256-TvGGu9mSKT5y4b2JuoUUxsK8J7W/bMa9MOe1y0Idy7g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8A0RLbFkh3fruZAbjJzipQvuFLchqIRovPcc6MSKdOc=";
 
   nativeCheckInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.

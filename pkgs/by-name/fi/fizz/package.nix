@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fizz";
-  version = "2024.11.18.00";
+  version = "2025.04.21.00";
 
   outputs = [
     "bin"
@@ -37,9 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "fizz";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-mNe+CHEXhkwzek9qy2l6zvPXim9tJV44s+naSm6bQ4Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-khaUbxcD8+9zznH0DE/BpweZeDKafTnr4EqPbmOpckU=";
   };
+
+  patches = [
+    ./glog-0.7.patch
+  ];
 
   nativeBuildInputs = [
     cmake

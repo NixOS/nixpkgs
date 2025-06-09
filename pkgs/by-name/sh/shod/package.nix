@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/phillbush/shod";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

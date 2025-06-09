@@ -3,20 +3,21 @@
   stdenv,
   fetchurl,
   buildPackages,
+  postgresql,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2024b";
+  version = "2025b";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
-      hash = "sha256-cOdU2xJqjQ2z0W1rTLX37B4E1fJhJV5FWKZ/6S055VA=";
+      hash = "sha256-EYEEEzRfx4BQF+J+qfpIhf10zWGykRcRrQOPXSjXFHQ=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
-      hash = "sha256-XkOPxEliSQavFqGP9Fc3OfDNqYYuXsKNO8sZy67Q9nI=";
+      hash = "sha256-Bfj+2zUl7nDUnIfT+ueKig265P6HqlZcZc2plIrhNew=";
     })
   ];
 
@@ -56,6 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
       "CFLAGS+=-DHAVE_SETENV=0"
       "CFLAGS+=-DHAVE_SYMLINK=0"
       "CFLAGS+=-DRESERVE_STD_EXT_IDS"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      "CFLAGS+=-DNETBSD_INSPIRED=0"
+      "CFLAGS+=-DSTD_INSPIRED=0"
+      "CFLAGS+=-DUSE_TIMEX_T=1"
+      "CFLAGS+=-DMKTIME_FITS_IN\\(min,max\\)=0"
+      "CFLAGS+=-DEXTERN_TIMEOFF=1"
     ];
 
   enableParallelBuilding = true;
@@ -81,6 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   setupHook = ./tzdata-setup-hook.sh;
+
+  # PostgreSQL is sensitive to tzdata updates, because the test-suite often breaks.
+  # Upstream provides patches very quickly, we just need to apply them until the next
+  # minor releases.
+  passthru.tests = postgresql;
 
   meta = with lib; {
     homepage = "http://www.iana.org/time-zones";

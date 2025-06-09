@@ -20,8 +20,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "emontnemery";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "py-dormakaba-dkey";
+    tag = version;
     hash = "sha256-kS99du9EZwki6J2q+nI44rx/AWIPtq7wXR/61ZcyUSM=";
   };
 

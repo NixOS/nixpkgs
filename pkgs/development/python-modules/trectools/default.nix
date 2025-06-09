@@ -12,29 +12,32 @@
   lxml,
   matplotlib,
   sarge,
+  unittestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "trectools";
-  version = "0.0.49";
-  format = "setuptools";
+  version = "0.0.50";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "joaopalotti";
-    repo = pname;
+    repo = "trectools";
     # https://github.com/joaopalotti/trectools/issues/41
-    rev = "5c1d56e9cf955f45b5a1780ee6a82744d31e7a79";
-    hash = "sha256-Lh6sK2rxEdCsOUKHn1jgm+rsn8FK1f2po0UuZfZajBA=";
+    rev = "8a896def007e3d657eb29f820ee3de98e2f32691";
+    hash = "sha256-p8BvLO+rD/l+ATE4+u3I6k25R1RVKlk2dn+RLQZTLDs=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "bs4 >= 0.0.0.1" "beautifulsoup4 >= 4.11.1"
+      --replace-fail "bs4 >= 0.0.0.1" "beautifulsoup4 >= 4.11.1"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pandas
     numpy
     scikit-learn
@@ -45,17 +48,20 @@ buildPythonPackage rec {
     sarge
   ];
 
-  checkPhase = ''
-    cd unittests
-    ${python.interpreter} -m unittest runner
-  '';
+  unittestFlagsArray = [
+    "unittests/"
+  ];
+
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [ "trectools" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joaopalotti/trectools";
     description = "Library for assisting Information Retrieval (IR) practitioners with TREC-like campaigns";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ MoritzBoehme ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ MoritzBoehme ];
   };
 }

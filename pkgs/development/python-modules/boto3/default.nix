@@ -24,13 +24,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "boto";
     repo = "boto3";
-    rev = "refs/tags/${version}";
-    hash = "sha256-b08tC8EA6iW0O/7rseD9pTkKh/cJ2fe3xJZkEqxS6VI=";
+    tag = version;
+    hash = "sha256-89GUr0isFEKmBevWgPW5z4uU1zOTQ1kM8RX1mlsvdXw=";
   };
 
-  build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "s3transfer" ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     botocore
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    crt = [ botocore.optional-dependencies.crt ];
+    crt = botocore.optional-dependencies.crt;
   };
 
   meta = {

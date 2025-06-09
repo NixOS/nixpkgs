@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "jellyfin-apiclient-python";
-  version = "1.10.0";
+  version = "1.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-apiclient-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-H1FqypNuVIZ17cFdNDEmmKICswxJkUGq2LhlingbCVk=";
+    tag = "v${version}";
+    hash = "sha256-TFF0pENSXWbmIb7IM1bayDACd0VOCTKc1WzLRvTJYNA=";
   };
 
   build-system = [ setuptools ];

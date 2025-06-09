@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular";
-  version = "0.27.2";
+  version = "0.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular";
-    rev = "refs/tags/${version}";
-    hash = "sha256-lOgFDkAY+PqSeyLSvWFT7KPVicSJZxd6yl17GAGHbRs=";
+    tag = version;
+    hash = "sha256-+RXcCpsNAoGxK/taEf7+7QUDrHydvy5fIdBuEXi63DQ=";
   };
 
   patches = [
@@ -51,6 +51,11 @@ buildPythonPackage rec {
       hash = "sha256-Ue5y7IB4ie+9CEineMBgMMCLGiF4zqmn60TJvKsV1h0=";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace tests/conftest.py \
+      --replace-fail "'allauth.account'," "'allauth.account', 'allauth.socialaccount',"
+  '';
 
   build-system = [ setuptools ];
 
@@ -81,14 +86,22 @@ buildPythonPackage rec {
     psycopg2
     pytest-django
     pytestCheckHook
-  ];
+  ] ++ django-allauth.optional-dependencies.socialaccount;
 
   disabledTests = [
     # Test requires django with gdal
     "test_rest_framework_gis"
     # Outdated test artifact
-    "test_pydantic_decoration"
+    "test_callbacks"
+    # django-rest-knox is not packaged
     "test_knox_auth_token"
+    # slightly different error messages which get asserted
+    "test_model_choice_display_method_on_readonly"
+  ];
+
+  disabledTestPaths = [
+    # Outdated test artifact
+    "tests/contrib/test_pydantic.py"
   ];
 
   pythonImportsCheck = [ "drf_spectacular" ];

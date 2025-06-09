@@ -57,6 +57,8 @@
 
   # tests
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -67,7 +69,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyg-team";
     repo = "pytorch_geometric";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Zw9YqPQw2N0ZKn5i5Kl4Cjk9JDTmvZmyO/VvIVr6fTU=";
   };
 
@@ -148,20 +150,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [
-      # TODO: try to re-enable when triton will have been updated to 3.0
-      # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-      # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
-      "test_compile_hetero_conv_graph_breaks"
-      "test_compile_multi_aggr_sage_conv"
-
       # RuntimeError: addmm: computation on CPU is not implemented for SparseCsr + SparseCsr @ SparseCsr without MKL.
       # PyTorch built with MKL has better support for addmm with sparse CPU tensors.
       "test_asap"
@@ -174,6 +167,21 @@ buildPythonPackage rec {
       # This test uses `torch.jit` which might not be working on darwin:
       # RuntimeError: required keyword attribute 'value' has the wrong type
       "test_traceable_my_conv_with_self_loops"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeError: Dynamo is not supported on Python 3.13+
+      "test_compile"
+
+      # RuntimeError: Python 3.13+ not yet supported for torch.compile
+      "test_compile_graph_breaks"
+      "test_compile_multi_aggr_sage_conv"
+      "test_compile_hetero_conv_graph_breaks"
+
+      # AttributeError: module 'typing' has no attribute 'io'. Did you mean: 'IO'?
+      "test_packaging"
+
+      # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
+      "test_feature_store"
     ];
 
   meta = {

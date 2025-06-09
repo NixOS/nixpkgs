@@ -9,23 +9,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.5";
+  version = "2.1.0";
   pname = "lcalc";
 
   src = fetchFromGitLab {
     owner = "sagemath";
-    repo = pname;
-    rev = version;
-    hash = "sha256-RxWZ7T0I9zV7jUVnL6jV/PxEoU32KY7Q1UsOL5Lonuc=";
+    repo = "lcalc";
+    tag = version;
+    hash = "sha256-v+7Uh6tPOfb3E9dqxx//RqD22XM4S/8ejS2v+D5G5pE=";
   };
-
-  # workaround for vendored GCC 3.5 <complex>
-  # https://gitlab.com/sagemath/lcalc/-/issues/16
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-D_GLIBCXX_COMPLEX"
-    "-D_LIBCPP_COMPLEX"
-    "-D_LIBCPP___FWD_COMPLEX_H"
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -46,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Program for calculating with L-functions";
     mainProgram = "lcalc";
     license = with licenses; [ gpl2 ];
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.all;
   };
 }

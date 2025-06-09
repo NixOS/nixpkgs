@@ -2,13 +2,17 @@
   lib,
   stdenv,
   fetchurl,
+  autoconf,
+  automake,
   pkg-config,
   intltool,
+  libxml2,
   perlPackages,
   goffice,
   gnome,
   adwaita-icon-theme,
   wrapGAppsHook3,
+  glib,
   gtk3,
   bison,
   python3Packages,
@@ -18,26 +22,32 @@
 let
   inherit (python3Packages) python pygobject3;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnumeric";
-  version = "1.12.57";
+  version = "1.12.59";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "r/ULG2I0DCT8z0U9X60+f7c/S8SzT340tsPS2a9qHk8=";
+    url = "mirror://gnome/sources/gnumeric/${lib.versions.majorMinor finalAttrs.version}/gnumeric-${finalAttrs.version}.tar.xz";
+    sha256 = "yzdQsXbWQflCPfchuDFljIKVV1UviIf+34pT2Qfs61E=";
   };
 
   configureFlags = [ "--disable-component" ];
 
   nativeBuildInputs = [
+    autoconf
+    automake
     pkg-config
     intltool
     bison
     itstool
+    glib # glib-compile-resources
+    libxml2 # xmllint
+    python.pythonOnBuildForHost
     wrapGAppsHook3
   ];
 
   # ToDo: optional libgda, introspection?
+  # TODO: fix Perl plugin when cross-compiling
   buildInputs =
     [
       goffice
@@ -53,9 +63,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'GLIB_COMPILE_RESOURCES=' 'GLIB_COMPILE_RESOURCES="glib-compile-resources"#'
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnumeric";
       versionPolicy = "odd-unstable";
     };
   };
@@ -67,4 +82,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ];
   };
-}
+})

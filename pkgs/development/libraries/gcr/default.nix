@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     description = "GNOME crypto services (daemon and tools)";
     mainProgram = "gcr-viewer";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";

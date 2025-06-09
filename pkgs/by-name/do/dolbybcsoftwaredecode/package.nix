@@ -6,7 +6,7 @@
   fpc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dolbybcsoftwaredecode";
   version = "april-2018";
 

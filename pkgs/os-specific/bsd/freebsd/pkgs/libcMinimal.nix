@@ -6,6 +6,7 @@
   byacc,
   gencat,
   csu,
+  extraSrc ? [ ],
 }:
 
 mkDerivation {
@@ -31,7 +32,7 @@ mkDerivation {
     "etc/group"
     "etc/master.passwd"
     "etc/shells"
-  ];
+  ] ++ extraSrc;
 
   outputs = [
     "out"

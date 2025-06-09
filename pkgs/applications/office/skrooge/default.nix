@@ -26,15 +26,16 @@
   kwindowsystem,
   libofx,
   shared-mime-info,
+  qtquickcontrols2,
 }:
 
 mkDerivation rec {
   pname = "skrooge";
-  version = "2.31.0";
+  version = "25.4.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/skrooge/skrooge-${version}.tar.xz";
-    hash = "sha256-S90sUKJkUwgPAGlIuyN05a5DoehTFpFOnVLMF8Ac+HI=";
+    hash = "sha256-HNui/SjCN9LWxUxHDae59n5qPIwYWHX1uFSlVnwBlL8=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +66,7 @@ mkDerivation rec {
     krunner
     kwindowsystem
     libofx
+    qtquickcontrols2
   ];
 
   # SKG_DESIGNER must be used to generate the needed library for QtDesigner.

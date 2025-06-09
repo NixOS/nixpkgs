@@ -3,6 +3,7 @@
   fetchFromSourcehut,
   libexif,
   libraw,
+  libtiff,
   meson,
   ninja,
   opencv4,
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libexif
     libraw
+    libtiff
     opencv4
   ];
 

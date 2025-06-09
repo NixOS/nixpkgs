@@ -8,7 +8,6 @@
   openssl,
   autoconf,
   automake,
-  darwin,
   unstableGitUpdater,
   sqlite,
 }:
@@ -24,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-y+KpxiEzVAggFoPvTOy0IEmAo2V6mOpM0VzEScUOtsM=";
   };
 
-  cargoHash = "sha256-7AEWQIUHpeK4aNFzzU10YeJErD0fJ6yQSHwFe4utOFo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xRTl6Z6sn44yaEIFxG2vVKlbruDmOS2CdPZeVmWYOoA=";
 
   nativeBuildInputs =
     [
@@ -36,14 +36,9 @@ rustPlatform.buildRustPackage rec {
       automake
     ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = 1;

@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "karton-mwdb-reporter";
+    tag = "v${version}";
     hash = "sha256-KJh9uJzVGYEEk1ed56ynKA/+dK9ouDB7L06xERjfjdc=";
   };
 

@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "lima";
-  version = "1.0.2";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = "lima";
     rev = "v${version}";
-    hash = "sha256-LNsxMrbEgdosGDDUNvMZq/hpP5azNiIHjKTp0Iw/PC0=";
+    hash = "sha256-pwSLQlYPJNzvXuW6KLmQoaafQyf3o6fjVAfKe9RJ3UE=";
   };
 
-  vendorHash = "sha256-taozyQBJvkCsJAaOHg1gFK4qOnepRbzIn4jHzxfAn6A=";
+  vendorHash = "sha256-JxrUX22yNb5/tZIBWDiBaMLOpEnOk+2lZdpzCjjqO4E=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -71,7 +71,7 @@ buildGoModule rec {
     '';
 
   doInstallCheck = true;
-  # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/v1.0.2/pkg/limayaml/defaults.go#L52
+  # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/cb99e9f8d01ebb82d000c7912fcadcd87ec13ad5/pkg/limayaml/defaults.go#L53
   # Don't use versionCheckHook for this package. It cannot inject environment variables.
   installCheckPhase = ''
     if [[ "$(HOME="$(mktemp -d)" "$out/bin/limactl" --version | cut -d ' ' -f 3)" == "${version}" ]]; then
@@ -85,11 +85,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lima-vm/lima";
     description = "Linux virtual machines (on macOS, in most cases)";
     changelog = "https://github.com/lima-vm/lima/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ anhduy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ anhduy ];
   };
 }

@@ -4,11 +4,12 @@
   coq,
   version ? null,
   equations,
-  mathcomp-ssreflect,
+  mathcomp-boot,
   mathcomp-analysis,
   mathcomp-experimental-reals,
   extructures,
   deriving,
+  mathcomp-word,
 }:
 
 (mkCoqDerivation {
@@ -19,8 +20,22 @@
   defaultVersion =
     with lib.versions;
     lib.switch
-      [ coq.coq-version mathcomp-ssreflect.version ]
+      [ coq.coq-version mathcomp-boot.version ]
       [
+        {
+          cases = [
+            (range "8.18" "9.0")
+            (range "2.3.0" "2.4.0")
+          ];
+          out = "0.2.4";
+        }
+        {
+          cases = [
+            (range "8.18" "8.20")
+            (range "2.3.0" "2.3.0")
+          ];
+          out = "0.2.3";
+        }
         {
           cases = [
             (range "8.18" "8.20")
@@ -47,6 +62,8 @@
 
   releaseRev = v: "v${v}";
 
+  release."0.2.4".sha256 = "sha256-uglr47aDgSkKi2JyVyN+2BrokZISZUAE8OUylGjy7ds=";
+  release."0.2.3".sha256 = "sha256-Y3dmNIF36IuIgrVILteofOv8e5awKfq93S4YN7enswI=";
   release."0.2.2".sha256 = "sha256-tBF8equJd6hKZojpe+v9h6Tg9xEnMTVFgOYK7ZnMfxk=";
   release."0.2.1".sha256 = "sha256-X00q5QFxdcGWeNqOV/PLTOqQyyfqFEinbGUTO7q8bC4=";
   release."0.2.0".sha256 = "sha256-GDkWH0LUsW165vAUoYC5of9ndr0MbfBtmrPhsJVXi3o=";
@@ -54,11 +71,12 @@
 
   propagatedBuildInputs = [
     equations
-    mathcomp-ssreflect
+    mathcomp-boot
     mathcomp-analysis
     mathcomp-experimental-reals
     extructures
     deriving
+    mathcomp-word
   ];
 
   meta = with lib; {

@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     description = "Really small HTTP server";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = [ ];
     mainProgram = "micro_httpd";
   };
 }

@@ -2,19 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  postgresql,
+  libpq,
   python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpqxx";
-  version = "7.9.2";
+  version = "7.10.1";
 
   src = fetchFromGitHub {
     owner = "jtv";
     repo = "libpqxx";
     rev = finalAttrs.version;
-    hash = "sha256-I5e0iqXlZqDOMa1PlnrxpcKt1c2mbnSbVQrpi1Gh25o=";
+    hash = "sha256-BVmIyJA5gDibwtmDvw7b300D0KdWv7c3Ytye6fiLAXU=";
   };
 
   outputs = [
@@ -23,12 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    postgresql.dev
     python3
   ];
 
   buildInputs = [
-    postgresql.lib
+    libpq
   ];
 
   postPatch = ''

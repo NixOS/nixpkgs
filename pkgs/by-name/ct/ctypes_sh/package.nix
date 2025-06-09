@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "taviso";
-    repo = pname;
+    repo = "ctypes.sh";
     rev = "v${version}";
     sha256 = "1wafyfhwd7nf7xdici0djpwgykizaz7jlarn0r1b4spnpjx1zbx4";
   };
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     elfutils
     libdwarf
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
 
   meta = with lib; {
     description = "Foreign function interface for bash";

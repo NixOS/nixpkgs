@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NCAR";
     repo = "wrf-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4iIs/M9fzGJsnKCDSl09OTUoh7j6REBXuutE5uXFe3k=";
   };
 

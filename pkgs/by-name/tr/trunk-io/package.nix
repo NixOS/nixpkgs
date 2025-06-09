@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ aaronjheng ];
+    mainProgram = "trunk";
   };
 })

@@ -32,7 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Transifex command-line client";
-    homepage = "https://github.com/transifex/transifex-cli";
+    homepage = "https://github.com/transifex/cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ thornycrackers ];
     mainProgram = "tx";

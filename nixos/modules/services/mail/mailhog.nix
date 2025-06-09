@@ -103,5 +103,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [RTUnreal];
+  meta.maintainers = with lib.maintainers; [ RTUnreal ];
 }

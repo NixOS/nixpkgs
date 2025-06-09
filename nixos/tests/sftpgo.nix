@@ -6,7 +6,7 @@
 # - downloading the file over sftp
 # - assert that the ACLs are respected
 # - share a file between alice and bob (using sftp)
-# - assert that eve cannot acceess the shared folder between alice and bob.
+# - assert that eve cannot access the shared folder between alice and bob.
 #
 # Additional test coverage for the remaining protocols (i.e. ftp, http and webdav)
 # would be a nice to have for the future.
@@ -333,7 +333,7 @@ in
   testScript =
     { nodes, ... }:
     let
-      # A function to generate test cases for wheter
+      # A function to generate test cases for whether
       # a specified username is expected to access the shared folder.
       accessSharedFoldersSubtest =
         {

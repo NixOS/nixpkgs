@@ -14,7 +14,7 @@ in
 
     defaultEditor = lib.mkEnableOption "vim as the default editor";
 
-    package = lib.mkPackageOption pkgs "vim" { example = "vim-full"; };
+    package = lib.mkPackageOption pkgs "vim" { example = [ "vim-full" ]; };
   };
 
   # TODO: convert it into assert after 24.11 release

@@ -23,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     autoconf
     automake
     libtool
+  ];
+
+  buildInputs = [
     tre
   ];
 

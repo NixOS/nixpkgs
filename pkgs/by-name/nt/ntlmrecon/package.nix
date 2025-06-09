@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pwnfoo";
     repo = "NTLMRecon";
-    rev = "refs/tags/v-${version}";
+    tag = "v-${version}";
     sha256 = "0rrx49li2l9xlcax84qxjf60nbzp3fgq77c36yqmsp0pc9i89ah6";
   };
 
@@ -30,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
     "ntlmrecon"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Information enumerator for NTLM authentication enabled web endpoints";
     mainProgram = "ntlmrecon";
     homepage = "https://github.com/pwnfoo/NTLMRecon";
     changelog = "https://github.com/pwnfoo/NTLMRecon/releases/tag/v-${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

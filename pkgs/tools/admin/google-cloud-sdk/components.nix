@@ -10,7 +10,7 @@
 }:
 
 let
-  # Mapping from GCS component architecture names to Nix archictecture names
+  # Mapping from GCS component architecture names to Nix architecture names
   arches = {
     x86 = "i686";
     x86_64 = "x86_64";

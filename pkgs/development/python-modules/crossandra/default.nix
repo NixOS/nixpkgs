@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trag1c";
     repo = "crossandra";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/JhrjXRH7Rs2bUil9HRneBC9wlVYEyfwivjzb+eyRv8=";
   };
 

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "trufflehog";
-  version = "3.88.0";
+  version = "3.88.35";
 
   src = fetchFromGitHub {
     owner = "trufflesecurity";
     repo = "trufflehog";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IAvVdq59epg/zQ8lLHlewIDBxZD5FmAYCt1xrJlghzM=";
+    tag = "v${version}";
+    hash = "sha256-x83lA3VWrs3PfGjprqTqt12JtSs2wgqThNNVGviLddI=";
   };
 
-  vendorHash = "sha256-/wuv72PZGdEiTFuurBQJ+K4lunnkR51CrkyHaVb+/kY=";
+  vendorHash = "sha256-i7yS/+HQa8gOWhkWzyop3IObOwkjpzmzyqBlp9dSV3Y=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -42,7 +42,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Find credentials all over the place";

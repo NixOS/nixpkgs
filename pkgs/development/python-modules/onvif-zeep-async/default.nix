@@ -6,12 +6,13 @@
   httpx,
   pythonOlder,
   setuptools,
+  yarl,
   zeep,
 }:
 
 buildPythonPackage rec {
   pname = "onvif-zeep-async";
-  version = "3.1.13";
+  version = "3.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openvideolibs";
     repo = "python-onvif-zeep-async";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Z9LtKcgyebmdrChRz0QwiQdnrtcIVeCtKQAvL9gBMY4=";
+    tag = "v${version}";
+    hash = "sha256-tEJTVdFQXr2nz0DkuIUjNDSSZUdD457SMrNAUqqsiH8=";
   };
 
   build-system = [ setuptools ];
@@ -28,8 +29,9 @@ buildPythonPackage rec {
   dependencies = [
     ciso8601
     httpx
+    yarl
     zeep
-  ];
+  ] ++ zeep.optional-dependencies.async;
 
   pythonImportsCheck = [ "onvif" ];
 

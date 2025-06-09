@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "pyScss";
     owner = "Kronuz";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-z0y4z+/JE6rZWHAvps/taDZvutyVhxxs2gMujV5rNu4=";
   };
 

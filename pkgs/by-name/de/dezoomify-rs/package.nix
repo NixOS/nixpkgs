@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,11 +11,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "dezoomify-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uo0QTaAAbNYMidlWBauW+3hdd0snEWH+I5KQL6Vxgug=";
   };
 
-  cargoHash = "sha256-0T5zvd78l3ghop/KoIgXYoGssVV9F+ppJV2pWyLnwxo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-v5hlG/VnRyU4lR84IXal5GmrAyfxJTjmwzRKRcfaSIY=";
 
   checkFlags = [
     # Tests failing due to networking errors in Nix build environment

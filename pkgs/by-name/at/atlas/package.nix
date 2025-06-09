@@ -4,31 +4,30 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  atlas,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "atlas";
-  version = "0.29.1";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "ariga";
     repo = "atlas";
-    rev = "v${version}";
-    hash = "sha256-riXtXiMhViAca6Dw32MOquLYWZPuepTS/M0rgkXdap0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7s03YrZw7J2LRCHibMqzBBtVUBSPVEf+TMqtKoWSkkM=";
   };
 
   modRoot = "cmd/atlas";
 
   proxyVendor = true;
-  vendorHash = "sha256-U5QGX2M2STHZ5GDZ905yw6v5+ox57y5pqqfD3Bo/WpI=";
+  vendorHash = "sha256-K94zOisolCplE/cFrWmv4/MWl5DD27lRekPTl+o4Jwk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X ariga.io/atlas/cmd/atlas/internal/cmdapi.version=v${version}"
+    "-X ariga.io/atlas/cmd/atlas/internal/cmdapi.version=v${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
@@ -41,17 +40,17 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = atlas;
+    package = finalAttrs.finalPackage;
     command = "atlas version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     description = "Modern tool for managing database schemas";
     homepage = "https://atlasgo.io/";
-    changelog = "https://github.com/ariga/atlas/releases/tag/v${version}";
+    changelog = "https://github.com/ariga/atlas/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "atlas";
   };
-}
+})

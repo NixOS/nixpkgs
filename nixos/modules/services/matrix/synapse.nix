@@ -124,12 +124,13 @@ let
   genLogConfigFile =
     logName:
     format.generate "synapse-log-${logName}.yaml" (
-      cfg.log
-      // optionalAttrs (cfg.log ? handlers.journal) {
-        handlers.journal = cfg.log.handlers.journal // {
-          SYSLOG_IDENTIFIER = logName;
-        };
-      }
+      attrsets.recursiveUpdate cfg.log (
+        optionalAttrs (cfg.log ? handlers.journal) {
+          handlers.journal = cfg.log.handlers.journal // {
+            SYSLOG_IDENTIFIER = logName;
+          };
+        }
+      )
     );
 
   toIntBase8 =
@@ -1597,9 +1598,9 @@ in
   };
 
   meta = {
+    inherit (pkgs.matrix-synapse.meta) maintainers;
     buildDocsInSandbox = false;
     doc = ./synapse.md;
-    maintainers = teams.matrix.members;
   };
 
 }

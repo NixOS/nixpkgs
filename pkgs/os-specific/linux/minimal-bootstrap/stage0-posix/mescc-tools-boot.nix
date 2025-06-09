@@ -61,7 +61,7 @@ rec {
         description = "Collection of tools written for use in bootstrapping";
         homepage = "https://github.com/oriansj/stage0-posix";
         license = licenses.gpl3Plus;
-        maintainers = teams.minimal-bootstrap.members;
+        teams = [ teams.minimal-bootstrap ];
         inherit platforms;
       };
     };

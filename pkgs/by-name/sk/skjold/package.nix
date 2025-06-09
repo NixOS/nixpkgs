@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "twu";
     repo = "skjold";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/ltaRs2WZXbrG3cVez+QIwupJrsV550TjOALbHX9Z0I=";
   };
 
@@ -53,11 +53,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "skjold" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to Python dependencies against security advisory databases";
     homepage = "https://github.com/twu/skjold";
     changelog = "https://github.com/twu/skjold/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

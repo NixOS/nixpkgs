@@ -1,7 +1,7 @@
 {
   stdenv,
   fetchFromGitLab,
-  python,
+  python3,
   libxml2,
   sqlite,
 
@@ -48,7 +48,7 @@
 }:
 
 let
-  pythonEnv = python.withPackages (
+  pythonEnv = python3.withPackages (
     ps:
     lib.optional withManual ps.sphinx
     ++ lib.optionals pythonSupport (
@@ -63,13 +63,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ns-3";
-  version = "39";
+  version = "44";
 
   src = fetchFromGitLab {
     owner = "nsnam";
     repo = "ns-3-dev";
     rev = "ns-3.${version}";
-    hash = "sha256-2d8xCCfxRpcCZgt7ne17F7cUo/wIxLyvjQs3izNUnmY=";
+    hash = "sha256-rw/WAMk4ZitULqkdyEh9vAFp1UrD1tw2JqgxOT5JQ5I=";
   };
 
   nativeBuildInputs = [
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
 
   # Make generated python bindings discoverable in customized python environment
   passthru = {
-    pythonModule = python;
+    pythonModule = python3;
   };
 
   cmakeFlags = [

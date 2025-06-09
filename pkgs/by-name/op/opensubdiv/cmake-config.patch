@@ -1,0 +1,13 @@
+diff --git a/opensubdiv-config.cmake.in b/opensubdiv-config.cmake.in
+index 08a005aa..48fd2cdc 100644
+--- a/opensubdiv-config.cmake.in
++++ b/opensubdiv-config.cmake.in
+@@ -1,6 +1,6 @@
+ @PACKAGE_INIT@
+ 
+-set_and_check(OpenSubdiv_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
+-set_and_check(OpenSubdiv_LIB_DIR "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_LIBDIR@")
++set(OpenSubdiv_INCLUDE_DIR "@CMAKE_INSTALL_FULL_INCLUDEDIR@")
++set(OpenSubdiv_LIB_DIR "@CMAKE_INSTALL_FULL_LIBDIR@")
+ 
+ include("${CMAKE_CURRENT_LIST_DIR}/OpenSubdivTargets.cmake")

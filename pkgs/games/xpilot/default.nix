@@ -4,6 +4,7 @@
   fetchurl,
   libX11,
   libSM,
+  libXext,
   SDL,
   libGLU,
   libGL,
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libX11
     libSM
+    libXext
     SDL
     SDL_ttf
     SDL_image
@@ -33,7 +35,10 @@ stdenv.mkDerivation rec {
     libXxf86misc
   ];
 
-  patches = [ ./xpilot-ng-gcc-14-fix.patch ];
+  patches = [
+    ./xpilot-ng-gcc-14-fix.patch
+    ./xpilot-ng-sdl-window-fix.patch
+  ];
 
   meta = with lib; {
     description = "Multiplayer X11 space combat game";

@@ -22,15 +22,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.6.3";
+  version = "0.6.5";
   format = "other";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
+    repo = "eartag";
     rev = version;
-    hash = "sha256-eo6Vboo2Kn39M0r1OeqRFG3ug6frxzMKler5qT9KysY=";
+    hash = "sha256-sxVivQppX8KdkvHaW6xQ64Wi8Nfv5Rmwf4NADBDpOOo=";
   };
 
   postPatch = ''
@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication rec {
     # being incorrectly identified as unfree software.
     license = licenses.mit;
     mainProgram = "eartag";
-    maintainers = with maintainers; [ foo-dogsquared ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ foo-dogsquared ];
+    teams = [ teams.gnome-circle ];
   };
 }

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "neetly";
     repo = "figma-agent-linux";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-iXLQOc8gomOik+HIIoviw19II5MD6FM0W5DT3aqtIcM=";
   };
 
@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     ./0001-update-time.patch
   ];
 
-  cargoHash = "sha256-4X1sFgvrJuBeEPbcxrAt6tClOG63kwJ6eUzIRIv8tBs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4OAce76XCLlngC7BrX8eiQlHo+Mi2Tfrb9t1Rc/gSFA=";
 
   nativeBuildInputs = [
     pkg-config

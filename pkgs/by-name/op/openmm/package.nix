@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "openmm";
-    repo = pname;
+    repo = "openmm";
     rev = version;
     hash = "sha256-p0zjr8ONqGK4Vbnhljt16DeyeZ0bR1kE+YdiIlw/1L0=";
   };
 
-  # "This test is stochastic and may occassionally fail". It does.
+  # "This test is stochastic and may occasionally fail". It does.
   postPatch = ''
     rm \
       platforms/*/tests/Test*BrownianIntegrator.* \

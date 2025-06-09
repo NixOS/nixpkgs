@@ -34,6 +34,6 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://github.com/nathco/Office-Code-Pro";
     license = licenses.ofl;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }

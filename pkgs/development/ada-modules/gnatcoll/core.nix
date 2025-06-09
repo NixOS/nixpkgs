@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, gnat
-, gprbuild
-, fetchFromGitHub
-, fetchpatch2
-, which
-, python3
-, rsync
-, enableGnatcollCore ? true
+{
+  stdenv,
+  lib,
+  gnat,
+  gprbuild,
+  fetchFromGitHub,
+  fetchpatch2,
+  which,
+  python3,
+  rsync,
+  enableGnatcollCore ? true,
   # TODO(@sternenseemann): figure out a way to split this up into three packages
-, enableGnatcollProjects ? true
+  enableGnatcollProjects ? true,
   # for tests
-, gnatcoll-core
+  gnatcoll-core,
 }:
 
 # gnatcoll-projects depends on gnatcoll-core

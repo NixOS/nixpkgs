@@ -33,30 +33,31 @@
   wrapGAppsHook3,
   wxGTK32,
   zarchive,
+  bluez,
 }:
 
 let
-  # cemu doesn't build with imgui 1.90.2 or newer:
-  # error: 'struct ImGuiIO' has no member named 'ImeWindowHandle'
+  # cemu doesn't build with imgui 1.91.4 or newer:
+  # before v1.91.4 (2024/10/08) the default type for ImTextureID was void*.
   imgui' = imgui.overrideAttrs rec {
-    version = "1.90.1";
+    version = "1.91.3";
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
-      rev = "v${version}";
-      hash = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
+      tag = "v${version}";
+      hash = "sha256-J4gz4rnydu8JlzqNC/OIoVoRcgeFd6B1Qboxu5drOKY=";
     };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cemu";
-  version = "2.4";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-JBd5ntU1fFDvQpNbfP63AQANzuQTdfd4dfB29/BN5LM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YO3rMhlBZ5fGu0ceAFB0R3owFuSobx39faWL9EUFwAM=";
   };
 
   patches = [
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     # > The following imported targets are referenced, but are missing:
     # > SPIRV-Tools-opt
     ./0000-spirv-tools-opt-cmakelists.patch
-    ./0001-glslang-cmake-target.patch
+    ./0002-cemu-imgui.patch
   ];
 
   nativeBuildInputs = [
@@ -100,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wxGTK32
     zarchive
+    bluez
   ];
 
   cmakeFlags = [
@@ -148,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup =
     let
-      libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
+      libs = [ vulkan-loader ];
     in
     ''
       gappsWrapperArgs+=(
@@ -173,7 +175,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       zhaofengli
       baduhai
-      AndersonTorres
     ];
     platforms = [ "x86_64-linux" ];
   };

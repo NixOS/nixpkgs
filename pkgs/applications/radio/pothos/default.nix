@@ -41,7 +41,13 @@ mkDerivation rec {
       url = "https://github.com/pothosware/PothosCore/commit/092d1209b0fd0aa8a1733706c994fa95e66fd017.patch";
       hash = "sha256-bZXG8kD4+1LgDV8viZrJ/DMjg8UvW7b5keJQDXurfkA=";
     })
+    # various source files are missing imports of <cstring>
+    # https://github.com/pothosware/PothosBlocks/issues/80
+    ./cstring.patch
   ];
+
+  # poco 1.14 requires c++17
+  NIX_CFLAGS_COMPILE = [ "-std=gnu++17" ];
 
   nativeBuildInputs = [
     cmake

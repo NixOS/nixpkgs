@@ -1,4 +1,4 @@
-import ./make-test-python.nix {
+{
   name = "zram-generator";
 
   nodes = {
@@ -38,9 +38,9 @@ import ./make-test-python.nix {
     machine.wait_for_unit("systemd-zram-setup@zram0.service")
     machine.wait_for_unit("systemd-zram-setup@zram1.service")
     zram = machine.succeed("zramctl --noheadings --raw")
-    swap = machine.succeed("swapon --show --noheadings")
+    swap = machine.succeed("swapon --show --noheadings --raw")
     for i in range(2):
         assert f"/dev/zram{i} lz4 10M" in zram
-        assert f"/dev/zram{i} partition  10M" in swap
+        assert f"/dev/zram{i} partition 10M" in swap
   '';
 }

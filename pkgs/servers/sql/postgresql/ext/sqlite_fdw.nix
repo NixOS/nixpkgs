@@ -1,19 +1,19 @@
 {
-  lib,
   fetchFromGitHub,
-  sqlite,
+  lib,
   postgresql,
-  buildPostgresqlExtension,
+  postgresqlBuildExtension,
+  sqlite,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "sqlite_fdw";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "pgspider";
     repo = "sqlite_fdw";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zPVIFzUv6UFFHq0Zi5MeQOcvgsfZAKGkkNIGxkTJ+oo=";
   };
 
@@ -24,9 +24,9 @@ buildPostgresqlExtension rec {
   meta = {
     description = "SQLite Foreign Data Wrapper for PostgreSQL";
     homepage = "https://github.com/pgspider/sqlite_fdw";
-    changelog = "https://github.com/pgspider/sqlite_fdw/releases/tag/v${version}";
+    changelog = "https://github.com/pgspider/sqlite_fdw/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
     platforms = lib.platforms.unix;
     license = lib.licenses.postgresql;
   };
-}
+})

@@ -13,12 +13,12 @@ let
     {
       aarch64-darwin = {
         arch = "arm64";
-        sha256 = "sha256-V+JLXl12DnwZlPF0qNs2lQqRpWbSDiPXDTtl4FGcZcM=";
+        sha256 = "sha256-w1zu+sK8JqBMGBaKPYGJqddEWYWCv1aJRM+Q91l5dPw=";
       };
 
       x86_64-darwin = {
         arch = "64";
-        sha256 = "sha256-l7J4Rrq+kUyk+0Chq5qo50K1VXC/7E3FC/hQ1DQ0PGA=";
+        sha256 = "sha256-dlRK6NpDskuIW0nuf9mWx/xolOnGmH77ny+2ADaD7QU=";
       };
     }
     .${stdenvNoCC.hostPlatform.system}
@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation {
     cp -R . $out/Applications/${appName}
     cat > $out/bin/${pname} << EOF
     #!${stdenvNoCC.shell}
-    open -na $out/Applications/${appName} --args "$@"
+    open -na $out/Applications/${appName} --args "\$@"
     EOF
     chmod +x $out/bin/${pname}
     runHook postInstall

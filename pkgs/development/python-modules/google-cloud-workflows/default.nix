@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-workflows";
-  version = "1.16.0";
+  version = "1.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_workflows";
     inherit version;
-    hash = "sha256-R53c1m6VYhkLlWl1jTR++R5ahWUTvEvtsRUPQ1F3Das=";
+    hash = "sha256-wrwrvbZtWWyPYROv+f2wH6F+YlpyeDfRSh45ZUBk+9s=";
   };
 
   build-system = [ setuptools ];

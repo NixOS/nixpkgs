@@ -2,10 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   zlib,
   pcre2,
+  utf8proc,
   expat,
   sqlite,
   openssl,
@@ -16,12 +18,12 @@
 stdenv.mkDerivation rec {
   pname = "poco";
 
-  version = "1.13.3";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "pocoproject";
     repo = "poco";
-    sha256 = "sha256-ryBQjzg1DyYd/LBZzjHxq8m/7ZXRSKNNGRkIII0eHK0=";
+    hash = "sha256-acq2eja61sH/QHwMPmiDNns2jvXRTk0se/tHj9XRSiU=";
     rev = "poco-${version}-release";
   };
 
@@ -34,9 +36,11 @@ stdenv.mkDerivation rec {
     unixODBC
     libmysqlclient
   ];
+
   propagatedBuildInputs = [
     zlib
     pcre2
+    utf8proc
     expat
     sqlite
     openssl
@@ -50,8 +54,19 @@ stdenv.mkDerivation rec {
   MYSQL_DIR = libmysqlclient;
   MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
 
-  configureFlags = [
-    "--unbundled"
+  cmakeFlags = [
+    # use nix provided versions of sqlite, zlib, pcre, expat, ... instead of bundled versions
+    (lib.cmakeBool "POCO_UNBUNDLED" true)
+  ];
+
+  patches = [
+    # Remove on next release
+    (fetchpatch {
+      name = "disable-included-pcre-if-pcre-is-linked-staticly";
+      # this happens when building pkgsStatic.poco
+      url = "https://patch-diff.githubusercontent.com/raw/pocoproject/poco/pull/4879.patch";
+      hash = "sha256-VFWuRuf0GPYFp43WKI8utl+agP+7a5biLg7m64EMnVo=";
+    })
   ];
 
   postFixup = ''

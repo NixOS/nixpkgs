@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchFromGitHub, gitUpdater }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  gitUpdater,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";
@@ -7,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "C0D3D3V";
     repo = "Moodle-DL";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6arwc72gu7XyT6HokSEs2TkvE2FG7mIvy4F+/i/0eJg=";
   };
 

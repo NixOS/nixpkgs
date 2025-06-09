@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-qld-bushfire-alert-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/MyjYLu29PANe17KxJCkmHPjvjlPfswn7ZBAKFSwohc=";
   };
 

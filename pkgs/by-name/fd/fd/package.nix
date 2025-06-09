@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-B+lOohoPH7UkRxRNTzSVt0SDrqEwh4hIvBF3uWliDEI=";
   };
 
-  cargoHash = "sha256-H8xkm1cGJUaSgLUfN/vlxsWg5UMClvFhp9pjM0byQPs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0LzraGDujLMs60/Ytq2hcG/3RYbo8sJkurYVhRpa2D8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -49,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     package = fd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple, fast and user-friendly alternative to find";
     longDescription = ''
       `fd` is a simple, fast and user-friendly alternative to `find`.
@@ -59,11 +60,11 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/fd";
     changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dywedir
       figsoda
       globin

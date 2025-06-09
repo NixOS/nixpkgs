@@ -10,14 +10,15 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "wcc-unstable";
-  version = "2018-04-05";
+  pname = "wcc";
+  version = "0.0.7-unstable-2025-04-30";
 
   src = fetchFromGitHub {
     owner = "endrazine";
     repo = "wcc";
-    rev = "f141963ff193d7e1931d41acde36d20d7221e74f";
-    sha256 = "1f0w869x0176n5nsq7m70r344gv5qvfmk7b58syc0jls8ghmjvb4";
+    rev = "8cbb49345d9596dfd37bd1b681753aacaab96475";
+    hash = "sha256-TYYtnMlrp/wbrTmwd3n90Uni7WE54gK6zKSBg4X9ZfA=";
+    deepClone = true;
     fetchSubmodules = true;
   };
 
@@ -34,12 +35,16 @@ stdenv.mkDerivation {
       -e "s#/usr/share/wcc#$out/share/wcc#"
 
     sed -i -e '/stropts.h>/d' src/wsh/include/libwitch/wsh.h
+
+    sed -i '/wsh-`uname -m`.*-static/d' src/wsh/Makefile
   '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   installFlags = [ "DESTDIR=$(out)" ];
 
   preInstall = ''
-    mkdir -p $out/usr/bin
+    mkdir -p $out/usr/bin $out/lib/x86_64-linux-gnu
   '';
 
   postInstall = ''
@@ -49,9 +54,9 @@ stdenv.mkDerivation {
     cp doc/manpages/*.1 $out/share/man/man1/
   '';
 
-  preFixup = ''
-    # Let patchShebangs rewrite shebangs with wsh.
-    PATH+=:$out/bin
+  postFixup = ''
+    # not detected by patchShebangs
+    substituteInPlace $out/bin/wcch --replace-fail '#!/usr/bin/wsh' "#!$out/bin/wsh"
   '';
 
   enableParallelBuilding = true;
@@ -60,7 +65,13 @@ stdenv.mkDerivation {
     homepage = "https://github.com/endrazine/wcc";
     description = "Witchcraft compiler collection: tools to convert and script ELF files";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ orivej ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      orivej
+      DieracDelta
+    ];
   };
 }

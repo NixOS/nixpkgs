@@ -74,6 +74,8 @@ const RELOAD_LIST_FILE: &str = "/run/nixos/reload-list";
 // `stopIfChanged = true` is ignored, switch-to-configuration will handle `restartIfChanged =
 // false` and `reloadIfChanged = true`. This is the same as specifying a restart trigger in the
 // NixOS module.
+// In addition, switch-to-configuration will handle notSocketActivated=true to disable treatment
+// of units as "socket-activated" even though they might have any associated sockets.
 //
 // The reload file asks this program to reload a unit. This is the same as specifying a reload
 // trigger in the NixOS module and can be ignored if the unit is restarted in this activation.
@@ -137,7 +139,7 @@ fn parse_os_release() -> Result<HashMap<String, String>> {
         }))
 }
 
-fn do_pre_switch_check(command: &str, toplevel: &Path) -> Result<()> {
+fn do_pre_switch_check(command: &str, toplevel: &Path, action: &Action) -> Result<()> {
     let mut cmd_split = command.split_whitespace();
     let Some(argv0) = cmd_split.next() else {
         bail!("missing first argument in install bootloader commands");
@@ -146,13 +148,14 @@ fn do_pre_switch_check(command: &str, toplevel: &Path) -> Result<()> {
     match std::process::Command::new(argv0)
         .args(cmd_split.collect::<Vec<&str>>())
         .arg(toplevel)
+        .arg::<&str>(action.into())
         .spawn()
         .map(|mut child| child.wait())
     {
         Ok(Ok(status)) if status.success() => {}
         _ => {
             eprintln!("Pre-switch checks failed");
-            die()
+            std::process::exit(1);
         }
     }
 
@@ -174,7 +177,7 @@ fn do_install_bootloader(command: &str, toplevel: &Path) -> Result<()> {
         Ok(Ok(status)) if status.success() => {}
         _ => {
             eprintln!("Failed to install bootloader");
-            die();
+            std::process::exit(1);
         }
     }
 
@@ -613,6 +616,8 @@ fn handle_modified_unit(
             } else {
                 // If this unit is socket-activated, then stop the socket unit(s) as well, and
                 // restart the socket(s) instead of the service.
+                // We count as "socket-activated" any unit that doesn't declare itself not so
+                // via X-NotSocketActivated, that has any associated .socket units.
                 let mut socket_activated = false;
                 if unit.ends_with(".service") {
                     let mut sockets = if let Some(Some(Some(sockets))) = new_unit_info.map(|info| {
@@ -662,6 +667,12 @@ fn handle_modified_unit(
                             }
                         }
                     }
+                }
+                if parse_systemd_bool(new_unit_info, "Service", "X-NotSocketActivated", false) {
+                    // If the unit explicitly opts out of socket
+                    // activation, restart it as if it weren't (but do
+                    // restart its sockets, that's fine):
+                    socket_activated = false;
                 }
 
                 // If the unit is not socket-activated, record that this unit needs to be started
@@ -876,20 +887,17 @@ impl std::fmt::Display for Job {
 
 fn new_dbus_proxies(
     conn: &LocalConnection,
-) -> (
-    Proxy<'_, &LocalConnection>,
-    Proxy<'_, &LocalConnection>,
-) {
+) -> (Proxy<'_, &LocalConnection>, Proxy<'_, &LocalConnection>) {
     (
         conn.with_proxy(
             "org.freedesktop.systemd1",
             "/org/freedesktop/systemd1",
-            Duration::from_millis(5000),
+            Duration::from_millis(10000),
         ),
         conn.with_proxy(
             "org.freedesktop.login1",
             "/org/freedesktop/login1",
-            Duration::from_millis(5000),
+            Duration::from_millis(10000),
         ),
     )
 }
@@ -1029,7 +1037,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         die();
     };
 
-    let Ok(_lock) = Flock::lock(lock, FlockArg::LockExclusive) else {
+    let Ok(_lock) = Flock::lock(lock, FlockArg::LockExclusiveNonblock) else {
         eprintln!("Could not acquire lock");
         die();
     };
@@ -1043,7 +1051,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         .unwrap_or_default()
         != "1"
     {
-        do_pre_switch_check(&pre_switch_check, &toplevel)?;
+        do_pre_switch_check(&pre_switch_check, &toplevel, action)?;
     }
 
     if *action == Action::Check {
@@ -1210,16 +1218,16 @@ won't take effect until you reboot the system.
                     unit.as_str(),
                     "suspend.target" | "hibernate.target" | "hybrid-sleep.target"
                 ) || parse_systemd_bool(
-                        Some(&new_unit_info),
-                        "Unit",
-                        "RefuseManualStart",
-                        false,
-                    ) || parse_systemd_bool(
-                        Some(&new_unit_info),
-                        "Unit",
-                        "X-OnlyManualStart",
-                        false,
-                    )) {
+                    Some(&new_unit_info),
+                    "Unit",
+                    "RefuseManualStart",
+                    false,
+                ) || parse_systemd_bool(
+                    Some(&new_unit_info),
+                    "Unit",
+                    "X-OnlyManualStart",
+                    false,
+                )) {
                     units_to_start.insert(unit.to_string(), ());
                     record_unit(START_LIST_FILE, unit);
                     // Don't spam the user with target units that always get started.

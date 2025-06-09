@@ -39,6 +39,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "ipython" ];
+
   dependencies = [
     cmsis-svd
     future

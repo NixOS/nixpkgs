@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = "iptsd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3z3A9qywmsSW1tlJ6LePC5wudM/FITTAFyuPkbHlid0=";
   };
 
@@ -63,16 +63,16 @@ stdenv.mkDerivation rec {
     "-Db_lto=false" # plugin needed to handle lto object -> undefined reference to ...
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/linux-surface/iptsd/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+  meta = {
+    changelog = "https://github.com/linux-surface/iptsd/releases/tag/v${version}";
     description = "Userspace daemon for Intel Precise Touch & Stylus";
     homepage = "https://github.com/linux-surface/iptsd";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "iptsd";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tomberek
       dotlambda
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

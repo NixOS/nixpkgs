@@ -58,8 +58,6 @@
   libdvdnav,
   libdvdcss,
   libbluray,
-  # Darwin-specific
-  darwin,
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
@@ -87,20 +85,14 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks)
-    AudioToolbox
-    Foundation
-    VideoToolbox
-    ;
-  inherit (darwin) libobjc;
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
     # uses version commit for logic in version.txt
-    rev = "fa9154a20f3f64fdc183a097e6b63f7fd4bc6cab";
-    hash = "sha256-Asf8NgYk4xxIkevYA0B62T8CTSaB7SHq0lHXkawVxb8=";
+    rev = "e117cfe7fca37abeec59ea4201e5d93ed7477746";
+    hash = "sha256-cOEgFVvBgV0kYnTc7d1CdzoN7mMjd8rxSmc6i/dbRWI=";
   };
 
   # Handbrake maintains a set of ffmpeg patches. In particular, these
@@ -295,12 +287,6 @@ let
         udev
       ]
       ++ optional useFdk fdk_aac
-      ++ optionals stdenv.hostPlatform.isDarwin [
-        AudioToolbox
-        Foundation
-        libobjc
-        VideoToolbox
-      ]
       # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
       # look at ./make/configure.py search "enable_nvenc"
       ++ optional stdenv.hostPlatform.isLinux nv-codec-headers;

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "annotated-types";
     repo = "annotated-types";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-I1SPUKq2WIwEX5JmS3HrJvrpNrKDu30RWkBRDFE+k9A=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Reusable constraint types to use with typing.Annotated";
     homepage = "https://github.com/annotated-types/annotated-types";
-    changelog = "https://github.com/annotated-types/annotated-types/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/annotated-types/annotated-types/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -14,22 +14,6 @@ let
     packageOverrides = final: prev: {
       django = prev.django_5;
 
-      django-bootstrap4 = prev.django-bootstrap4.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.0";
-        src = oldAttrs.src.override {
-          rev = "v${version}";
-          hash = "sha256-a8BopUwZjmvxOzBVqs4fTo0SY8sEEloGUw90daYWfz8=";
-        };
-
-        propagatedBuildInputs = with final; [
-          beautifulsoup4
-          django
-        ];
-
-        # fails with some assertions
-        doCheck = false;
-      });
-
       django-extensions = prev.django-extensions.overridePythonAttrs {
         # Compat issues with Django 5.1
         # https://github.com/django-extensions/django-extensions/issues/1885
@@ -38,23 +22,24 @@ let
     };
   };
 
-  version = "2024.3.1";
+  version = "2025.1.0";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     rev = "v${version}";
-    hash = "sha256-y3BsNmLh9M5NgDPURCjCGWYci40hYcQtDVqsu2HqPRU=";
+    hash = "sha256-BlPmrfHbpsLI8DCldzoRudpf7T4SUpJXQA5h9o4Thek=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Conference planning tool: CfP, scheduling, speaker management";
     mainProgram = "pretalx-manage";
     homepage = "https://github.com/pretalx/pretalx";
     changelog = "https://docs.pretalx.org/changelog/#${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ] ++ teams.c3d2.members;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
+    teams = [ lib.teams.c3d2 ];
+    platforms = lib.platforms.linux;
   };
 
   frontend = buildNpmPackage {
@@ -63,7 +48,7 @@ let
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
 
-    npmDepsHash = "sha256-i7awRuR7NxhpxN2IZuI01PsN6FjXht7BxTbB1k039HA=";
+    npmDepsHash = "sha256-8difCdoG7j75wqwuWA/VBRk9oTjsM0QqLnR0iLkd/FY=";
 
     npmBuildScript = "build";
 
@@ -94,6 +79,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "beautifulsoup4"
     "bleach"
     "celery"
     "css-inline"
@@ -103,6 +89,7 @@ python.pkgs.buildPythonApplication rec {
     "django-csp"
     "django-filter"
     "django-hierarkey"
+    "django-i18nfield"
     "djangorestframework"
     "markdown"
     "pillow"
@@ -120,13 +107,12 @@ python.pkgs.buildPythonApplication rec {
       beautifulsoup4
       bleach
       celery
-      css-inline
       csscompressor
+      css-inline
       cssutils
       defusedcsv
       defusedxml
       django
-      django-bootstrap4
       django-compressor
       django-context-decorator
       django-countries
@@ -139,6 +125,8 @@ python.pkgs.buildPythonApplication rec {
       django-libsass
       django-scopes
       djangorestframework
+      drf-flex-fields
+      drf-spectacular
       libsass
       markdown
       pillow

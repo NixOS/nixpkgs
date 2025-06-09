@@ -5,6 +5,7 @@
   fetchPypi,
   buildPythonPackage,
   betterproto,
+  pydantic,
 }:
 
 buildPythonPackage rec {
@@ -22,12 +23,17 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [ betterproto ];
+  propagatedBuildInputs = [
+    betterproto
+    pydantic
+  ];
 
   # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "sigstore_protobuf_specs" ];
+
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Library for serializing and deserializing Sigstore messages";

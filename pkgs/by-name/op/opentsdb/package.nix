@@ -273,7 +273,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenTSDB";
     repo = "opentsdb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-899m1H0UCLsI/bnSrNFnnny4MxSw3XBzf7rgDuEajDs=";
   };
 

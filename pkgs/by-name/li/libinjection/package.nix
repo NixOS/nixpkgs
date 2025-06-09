@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "client9";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "libinjection";
+    tag = "v${version}";
     sha256 = "0chsgam5dqr9vjfhdcp8cgk7la6nf3lq44zs6z6si98cq743550g";
   };
 

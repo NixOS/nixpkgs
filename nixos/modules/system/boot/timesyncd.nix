@@ -28,7 +28,7 @@ in
           `timesyncd.conf` file as opposed to setting this option to null which
           will remove `NTP=` entirely.
 
-          See man:timesyncd.conf(5) for details.
+          See {manpage}`timesyncd.conf(5)` for details.
         '';
       };
       fallbackServers = mkOption {
@@ -42,7 +42,7 @@ in
           `timesyncd.conf` file as opposed to setting this option to null which
           will remove `FallbackNTP=` entirely.
 
-          See man:timesyncd.conf(5) for details.
+          See {manpage}`timesyncd.conf(5)` for details.
         '';
       };
       extraConfig = mkOption {
@@ -53,8 +53,7 @@ in
         '';
         description = ''
           Extra config options for systemd-timesyncd. See
-          [
-          timesyncd.conf(5)](https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html) for available options.
+          {manpage}`timesyncd.conf(5)` for available options.
         '';
       };
     };

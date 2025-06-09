@@ -2,7 +2,8 @@
   lib,
   mkCoqDerivation,
   coq,
-  mathcomp-ssreflect,
+  mathcomp-boot,
+  stdlib,
   version ? null,
 }:
 
@@ -20,7 +21,7 @@ mkCoqDerivation {
     with lib.versions;
     lib.switch coq.coq-version [
       {
-        case = range "8.14" "8.20";
+        case = range "8.14" "9.0";
         out = "1.9";
       }
       {
@@ -33,7 +34,10 @@ mkCoqDerivation {
       }
     ] null;
 
-  propagatedBuildInputs = [ mathcomp-ssreflect ];
+  propagatedBuildInputs = [
+    mathcomp-boot
+    stdlib
+  ];
 
   meta = with lib; {
     homepage = "https://www.ps.uni-saarland.de/autosubst/";

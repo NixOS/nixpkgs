@@ -16,11 +16,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "packetry";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eDVom0kAL1QwO8BtrJS76VTvxtKs7CP6Ob5BWlE6wOM=";
   };
 
-  cargoHash = "sha256-xz9PdVVB1u6s/anPBRonWS1kMN+4kfkK/gaOlF9Z3yk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-he+Y2vBCw5lmYe5x6myIxMKRIohBCLDQ/B1EV+4pKGs=";
 
   nativeBuildInputs = [
     pkg-config

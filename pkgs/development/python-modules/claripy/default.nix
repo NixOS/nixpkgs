@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.134";
+  version = "9.2.154";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "claripy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jz7eF01dYOsa/f6ssAwBK66LGxBXozG075yEllq8j9Y=";
+    tag = "v${version}";
+    hash = "sha256-90JX+VDWK/yKhuX6D8hbLxjIOS8vGKrN1PKR8iWjt2o=";
   };
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python abstraction layer for constraint solvers";
     homepage = "https://github.com/angr/claripy";
-    license = with licenses; [ bsd2 ];
+    license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };
 }

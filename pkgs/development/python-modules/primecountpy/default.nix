@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "primecountpy";
-  version = "0.1.0";
+  version = "0.1.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78fe7cc32115f0669a45d7c90faaf39f7ce3939e39e2e7e5f14c17fe4bff0676";
+    sha256 = "sha256-yFYYF8C+hu7/xBuXtu9hfXlfcs895Z2SNNHIPX5CQDA=";
   };
 
   buildInputs = [ primecount ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cython interface for C++ primecount library";
     homepage = "https://github.com/dimpase/primecountpy/";
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     license = licenses.gpl3Only;
   };
 }

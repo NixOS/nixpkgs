@@ -10,6 +10,7 @@
   pkg-config,
   stdenv,
   testers,
+  nixosTests,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -103,10 +104,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      # `dwl -v` emits its version string to stderr and returns 1
-      command = "dwl -v 2>&1; return 0";
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        # `dwl -v` emits its version string to stderr and returns 1
+        command = "dwl -v 2>&1; return 0";
+      };
+      basic = nixosTests.dwl;
     };
   };
 
@@ -125,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Tied to as few external dependencies as possible
     '';
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
     mainProgram = "dwl";
   };

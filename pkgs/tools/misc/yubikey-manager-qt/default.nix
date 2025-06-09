@@ -23,6 +23,8 @@ mkDerivation rec {
     hash = "sha256-6bKeR3UX2DhXGcKJ1bxvT1aLTgCfc+aNo6ckE89NV+I=";
   };
 
+  patches = [ ./remove-upload-import.diff ];
+
   nativeBuildInputs = [
     python3.pkgs.wrapPython
     qmake
@@ -85,6 +87,9 @@ mkDerivation rec {
   meta = with lib; {
     description = "Cross-platform application for configuring any YubiKey over all USB interfaces";
     homepage = "https://developers.yubico.com/yubikey-manager-qt/";
+    knownVulnerabilities = [
+      "Yubico has announced the End of Life of YubiKey Manager QT. Upstream recommends yubioath-flutter to configure a YubiKey. yubikey-manager-qt will be dropped after NixOS 25.05."
+    ];
     license = licenses.bsd2;
     maintainers = [ maintainers.cbley ];
     mainProgram = "ykman-gui";

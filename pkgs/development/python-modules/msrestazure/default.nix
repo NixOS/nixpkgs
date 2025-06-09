@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "msrestazure-for-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZZVZi0v1ucD2g5FpLaNhfNBf6Ab10fUEcEdkY4ELaEY=";
   };
 

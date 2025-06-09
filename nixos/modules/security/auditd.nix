@@ -15,6 +15,7 @@
 
     systemd.services.auditd = {
       description = "Linux Audit daemon";
+      documentation = [ "man:auditd(8)" ];
       wantedBy = [ "sysinit.target" ];
       after = [
         "local-fs.target"

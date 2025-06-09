@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdwilsh";
     repo = "siobrultech-protocols";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8tls2wlLA3wQ78gK4JvvhSWZS5oHRzzsKE73M4i1eyg=";
   };
 

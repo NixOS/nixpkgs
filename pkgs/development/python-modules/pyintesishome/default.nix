@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jnimmo";
     repo = "pyIntesisHome";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-QgIvIn8I5EtJSNj1FdOI+DPgG7/y2ToQ62dhk7flieo=";
   };
 

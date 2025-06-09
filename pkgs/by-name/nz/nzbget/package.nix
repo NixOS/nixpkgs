@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, pkg-config
-, gnutls
-, libgcrypt
-, libpar2
-, libcap
-, libsigcxx
-, libxml2
-, ncurses
-, openssl
-, zlib
-, deterministic-uname
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  pkg-config,
+  gnutls,
+  libgcrypt,
+  libpar2,
+  libcap,
+  libsigcxx,
+  libxml2,
+  ncurses,
+  openssl,
+  zlib,
+  deterministic-uname,
+  nixosTests,
 }:
 
 let
   par2TurboSrc = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "par2cmdline-turbo";
-    rev = "v1.1.1-nzbget-20241128"; # from cmake/par2-turbo.cmake
-    hash = "sha256-YBv61DAUWgf4jGQciTsGX7SAC2oZZ6h/lnJgJ40gMZE=";
+    rev = "v1.2.0-nzbget-20250213"; # from cmake/par2-turbo.cmake
+    hash = "sha256-IHoSvW9bKxMRXbxd41A5268rpi7/+LRxC3HANHtawkQ=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "24.5";
+  version = "25.0";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HftzgdG6AjCyJVMV2btjBRLJLQ0wc1f8FJzGDWrdxR4=";
+    hash = "sha256-PtmXirnaQH9viFWUdNEDwJ/pgQjm2N1Or13V4ozUUGI=";
   };
 
   patches = [
@@ -41,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-git-usage.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     boost
@@ -80,7 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nzbgetcom/nzbget/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     description = "Command line tool for downloading files from news servers";
-    maintainers = with maintainers; [ pSub devusb ];
+    maintainers = with maintainers; [
+      pSub
+      devusb
+    ];
     platforms = with platforms; unix;
     mainProgram = "nzbget";
   };

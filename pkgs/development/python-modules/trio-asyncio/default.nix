@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "trio-asyncio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6c+4sGEpCVC8wxBg+dYgkOwRAUOi/DTITrDx3M2koyE=";
   };
 

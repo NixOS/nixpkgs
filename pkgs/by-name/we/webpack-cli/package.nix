@@ -12,20 +12,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webpack-cli";
-  version = "5.1.4";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "webpack";
     repo = "webpack-cli";
-    rev = "refs/tags/webpack-cli@${finalAttrs.version}";
-    hash = "sha256-OjehyUw54n7/CKbDTVFCtcUp88tJCLUlBCJBQRXoyZM=";
+    tag = "webpack-cli@${finalAttrs.version}";
+    hash = "sha256-teQWaWWt3rKHEVbj3twt8WQXQO9HuzIBNuvFUfRmxqY=";
   };
 
   yarnKeepDevDeps = true;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-+SntrxvFoReQXqyFqnCRCx3nftzcNioQCw6IHe8GztI=";
+    hash = "sha256-iYyH1/ZyNKq4MqMcCl7y5WvDnuGnRY0sj8hHsQhe7z4=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r node_modules/* packages/webpack-cli/node_modules/
     cp yarn.lock packages/webpack-cli/yarn.lock
     cd packages/webpack-cli
+  '';
+
+  # Removes dangling symlinks that are created as part of the `yarn pack` process.
+  # They are not needed at runtime, so it's safe to remove them.
+  postInstall = ''
+    rm -rf $out/lib/node_modules/webpack-cli/node_modules/{.bin,webpack-cli,create-new-webpack-app,@webpack-cli}
   '';
 
   postFixup = ''

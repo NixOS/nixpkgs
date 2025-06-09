@@ -1,56 +1,36 @@
 {
-  autoPatchelfHook,
   lib,
+  flutter329,
   fetchFromGitHub,
-  flutter324,
+  autoPatchelfHook,
   mpv,
-  libass,
-  ffmpeg,
-  libplacebo,
-  libunwind,
-  shaderc,
-  vulkan-loader,
-  lcms,
-  libdovi,
-  libdvdnav,
-  libdvdread,
-  mujs,
-  libbluray,
-  lua,
-  rubberband,
-  libuchardet,
-  zimg,
-  alsa-lib,
-  openal,
-  pipewire,
-  libpulseaudio,
-  libcaca,
-  libdrm,
-  libgbm,
-  libXScrnSaver,
-  nv-codec-headers-11,
-  libXpresent,
-  libva,
-  libvdpau,
-  pkg-config,
   makeDesktopItem,
-  wrapGAppsHook3,
   copyDesktopItems,
 }:
-flutter324.buildFlutterApplication rec {
+
+flutter329.buildFlutterApplication rec {
   pname = "simple-live-app";
-  version = "1.7.5";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "xiaoyaocz";
     repo = "dart_simple_live";
     tag = "v${version}";
-    hash = "sha256-0tEvPKYJnPDLvHv873JaRSuhkeXTTK4whnCuYpUK0yo=";
+    hash = "sha256-8l+9NA9W7um61dbEf264OhrAdJLS6zyCTv78daOKfOw=";
   };
 
   sourceRoot = "${src.name}/simple_live_app";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  gitHashes.ns_danmaku = "sha256-Hzp5QsdgBStaPVSHdHul7ZqOhZHQS9dbO+RpC4wMYqo=";
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    copyDesktopItems
+  ];
+
+  buildInputs = [ mpv ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -59,67 +39,26 @@ flutter324.buildFlutterApplication rec {
       icon = "simple-live-app";
       genericName = "Simple-Live";
       desktopName = "Simple-Live";
-      keywords = [
-        "Simple Live"
-      ];
+      keywords = [ "Simple Live" ];
     })
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    autoPatchelfHook
-    wrapGAppsHook3
-    copyDesktopItems
-  ];
-
-  buildInputs = [
-    mpv
-    libass
-    ffmpeg
-    libplacebo
-    libunwind
-    shaderc
-    vulkan-loader
-    lcms
-    libdovi
-    libdvdnav
-    libdvdread
-    mujs
-    libbluray
-    lua
-    rubberband
-    libuchardet
-    zimg
-    alsa-lib
-    openal
-    pipewire
-    libpulseaudio
-    libcaca
-    libdrm
-    libgbm
-    libXScrnSaver
-    libXpresent
-    nv-codec-headers-11
-    libva
-    libvdpau
-  ];
-
-  gitHashes.ns_danmaku = "sha256-Hzp5QsdgBStaPVSHdHul7ZqOhZHQS9dbO+RpC4wMYqo=";
-
   postInstall = ''
-    install -Dm644 ./assets/logo.png $out/share/pixmaps/simple-live-app.png
+    install -Dm644 assets/logo.png $out/share/pixmaps/simple-live-app.png
   '';
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : "$out/app/simple-live-app/lib"
+    --prefix LD_LIBRARY_PATH : $out/app/simple-live-app/lib
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Simply Watch Live";
     homepage = "https://github.com/xiaoyaocz/dart_simple_live";
     mainProgram = "simple_live_app";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

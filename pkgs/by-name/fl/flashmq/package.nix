@@ -7,15 +7,15 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flashmq";
-  version = "1.18.2";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "halfgaar";
     repo = "FlashMQ";
-    rev = "v${version}";
-    hash = "sha256-sr3gKCovw5bhX9WsuiHQxwq/SaoLHOPCoNjtSop8ka8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ccTarrInS9Af9fT43dgRTuHVuHbWlYzDAEh31myHUvY=";
   };
 
   nativeBuildInputs = [
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast light-weight MQTT broker/server";
     mainProgram = "flashmq";
     homepage = "https://www.flashmq.org/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -4,10 +4,9 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  hatchling,
 
-  # non-propagates
+  # dependencies
   django,
 
   # tests
@@ -17,22 +16,19 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap3";
-  version = "24.3";
+  version = "25.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap3";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7aHGTa98NaHg6C+fxuQsrPk/8XjHB3awp+gAWysOhAw=";
+    tag = "v${version}";
+    hash = "sha256-gRDU2IDE6cOVBJzdOs8Ww9mItMy/2DPMYusC0TCTqkI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ hatchling ];
 
-  buildInputs = [ django ];
+  dependencies = [ django ];
 
   pythonImportsCheck = [ "bootstrap3" ];
 

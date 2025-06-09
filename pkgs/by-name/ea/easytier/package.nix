@@ -5,29 +5,27 @@
   rustPlatform,
   protobuf,
   nix-update-script,
-  darwin,
   withQuic ? false, # with QUIC protocol support
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "easytier";
-  version = "2.1.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     tag = "v${version}";
-    hash = "sha256-qWICiY2g/wXT0Bt7lrCg7GgL1futOhelViB59UCLPro=";
+    hash = "sha256-urcwzM5nup3+guvSngw+I2QBjmjSc/WV7BWFpISVDBg=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-SpGW/RAbQUFdxqEKRPrTp5MXng7BLiSnofoJG8NsjsU=";
+  cargoHash = "sha256-rqL8tnLPeXK2BLvSFrzMRvtJAqHgOqNh4fE0w8c0ThU=";
 
-  nativeBuildInputs = [ protobuf ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+  nativeBuildInputs = [
+    protobuf
+    rustPlatform.bindgenHook
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;

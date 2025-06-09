@@ -20,16 +20,16 @@
 
 buildPythonPackage rec {
   pname = "jsonschema-spec";
-  version = "0.3.3";
+  version = "0.3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-oBzB6Ke19QDcMQm4MpnaS132/prrtnCekAXuPMloZx4=";
+    repo = "jsonschema-spec";
+    tag = version;
+    hash = "sha256-rCepDnVAOEsokKjWCuqDYbGIq6/wn4rsQRx5dXTUsYo=";
   };
 
   postPatch = ''

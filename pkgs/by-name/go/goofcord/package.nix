@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  pnpm_9,
   nodejs_22,
   nix-update-script,
   electron,
@@ -14,7 +14,7 @@
 }:
 
 let
-  pnpm' = pnpm.override { nodejs = nodejs_22; };
+  pnpm' = pnpm_9.override { nodejs = nodejs_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "prettytable";
-  version = "3.12.0";
+  version = "3.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "prettytable";
     tag = version;
-    hash = "sha256-RoBPmnuAOtTET898Gdm1zzPIst26GdCY5nU1PyJ+Nro=";
+    hash = "sha256-2x7Q1HiCACJfbgWkczy3dS+dkE1fUqJK4LtqB9f3CzY=";
   };
 
   build-system = [

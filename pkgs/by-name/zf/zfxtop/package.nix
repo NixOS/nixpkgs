@@ -21,6 +21,7 @@ buildGoModule rec {
     description = "fetch top for gen Z with X written by bubbletea enjoyer";
     homepage = "https://github.com/ssleert/zfxtop";
     license = licenses.bsd2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wozeparrot ];
     mainProgram = "zfxtop";
   };

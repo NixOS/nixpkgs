@@ -28,13 +28,13 @@ assert builtins.elem gpuBackend [
 
 stdenv.mkDerivation rec {
   pname = "SpFFT";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
-    repo = pname;
+    repo = "SpFFT";
     rev = "v${version}";
-    hash = "sha256-hZdB/QcjL8rjvR1YZS+CHe5U5zxedpfDq6msMih4Elc=";
+    hash = "sha256-Qc/omdRv7dW9NJUOczMZJKhc+Z/sXeIxv3SbpegAGdU=";
   };
 
   nativeBuildInputs = [

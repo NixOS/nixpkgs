@@ -1,4 +1,5 @@
 {
+  autoreconfHook,
   buildPythonPackage,
   gpgme,
   lib,
@@ -11,13 +12,12 @@ buildPythonPackage {
   inherit (gpgme) version src;
   pyproject = true;
 
-  patches = gpgme.patches or [ ] ++ [
-    ./python313-support.patch
-  ];
+  patches = gpgme.patches or [ ];
 
   postPatch = ''
     substituteInPlace lang/python/setup.py.in \
-      --replace-fail "gpgme_h = '''" "gpgme_h = '${lib.getDev gpgme}/include/gpgme.h'"
+      --replace-fail "gpgme_h = '''" "gpgme_h = '${lib.getDev gpgme}/include/gpgme.h'" \
+      --replace-fail "@VERSION@" "${gpgme.version}"
   '';
 
   configureFlags = gpgme.configureFlags ++ [
@@ -35,6 +35,7 @@ buildPythonPackage {
   build-system = [ setuptools ];
 
   nativeBuildInputs = [
+    autoreconfHook
     swig
   ];
 

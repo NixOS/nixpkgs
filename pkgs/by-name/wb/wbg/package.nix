@@ -57,13 +57,17 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "webp" enableWebp)
   ];
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=maybe-uninitialized"
+  ];
+
+  meta = {
     description = "Wallpaper application for Wayland compositors";
     homepage = "https://codeberg.org/dnkl/wbg";
     changelog = "https://codeberg.org/dnkl/wbg/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; linux;
     mainProgram = "wbg";
   };
 }

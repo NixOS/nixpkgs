@@ -1,34 +1,37 @@
 diff --git a/windmill-worker/nsjail/run.go.config.proto b/windmill-worker/nsjail/run.go.config.proto
-index 3af548d1..39ff4da7 100644
+index 1ba6f52d5..21614fabb 100644
 --- a/windmill-worker/nsjail/run.go.config.proto
 +++ b/windmill-worker/nsjail/run.go.config.proto
-@@ -25,6 +25,13 @@ mount {
- }
+@@ -14,16 +14,24 @@ clone_newuser: {CLONE_NEWUSER}
+ keep_caps: false
+ keep_env: true
  
- mount {
-+	src: "/nix/store"
-+	dst: "/nix/store"
++mount {
++    src: "/nix/store"
++    dst: "/nix/store"
 +	is_bind: true
 +}
 +
-+mount {
+ mount {
+     src: "/bin"
+     dst: "/bin"
+ 	is_bind: true
 +    mandatory: false
+ }
+ 
+ mount {
      src: "/lib"
      dst: "/lib"
  	is_bind: true
-@@ -32,6 +39,7 @@ mount {
- 
- 
- mount {
 +    mandatory: false
-     src: "/lib64"
-     dst: "/lib64"
- 	is_bind: true
+ }
+ 
+ 
 @@ -39,6 +47,7 @@ mount {
- 
- 
- mount {
-+    mandatory: false
      src: "/usr"
      dst: "/usr"
  	is_bind: true
++    mandatory: false
+ }
+ 
+ mount {

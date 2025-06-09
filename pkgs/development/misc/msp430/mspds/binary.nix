@@ -11,7 +11,7 @@ let
     stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isDarwin
   ) "_64";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "msp-debug-stack-bin";
   version = "3.15.1.1";
   src = fetchurl {

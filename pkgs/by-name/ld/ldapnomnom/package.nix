@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "lkarlslund";
     repo = "ldapnomnom";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BKErfWJ6XKG4cKIjp5WU8SVZvyQlqtm/mvDwbUtDYIw=";
   };
 
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to anonymously bruteforce usernames from Domain controllers";
     homepage = "https://github.com/lkarlslund/ldapnomnom";
     changelog = "https://github.com/lkarlslund/ldapnomnom/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ldapnomnom";
   };
 }

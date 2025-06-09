@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2024.11.18.00";
+  version = "2025.04.21.00";
 
   outputs = [
     "bin"
@@ -32,9 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "mvfst";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-2Iqk6QshM8fVO65uIqrTbex7aj8ELNSzNseYEeNdzCY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/84smnZ2L1zDmkO1w9VQzVhXKt/S5azQr7Xpr8/dOA4=";
   };
+
+  patches = [
+    ./glog-0.7.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -54,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [
     gtest
+  ];
+
+  hardeningDisable = [
+    # causes test failures on aarch64
+    "pacret"
+    # causes empty cmake files to be generated
+    "trivialautovarinit"
   ];
 
   cmakeFlags =

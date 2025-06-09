@@ -1,6 +1,6 @@
 {
   buildPackages,
-  db,
+  gdbm,
   fetchurl,
   groff,
   gzip,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libpipeline
-    db
+    gdbm
     groff
     libiconv'
   ]; # (Yes, 'groff' is both native and build input)
@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
       "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
       "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
       "--with-pager=less"
+    ]
+    ++ lib.optionals util-linuxMinimal.hasCol [
       "--with-col=${util-linuxMinimal}/bin/col"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

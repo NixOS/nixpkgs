@@ -3,20 +3,21 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  flint,
+  flint3,
   gmp,
   mpfr,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "msolve";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "algebraic-solving";
     repo = "msolve";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-F4jEZ3+bA3FADiVZMDNE0T9kd1K1ZBInIaORqQtv+sY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0kqRnBJA5CwsLY/YWZXu2+y4aiZAQQYl30Qb3JX3zEo=";
   };
 
   postPatch = ''
@@ -27,11 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  buildInputs = [
-    flint
-    gmp
-    mpfr
-  ];
+  buildInputs =
+    [
+      flint3
+      gmp
+      mpfr
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      llvmPackages.openmp
+    ];
 
   doCheck = true;
 

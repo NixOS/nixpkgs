@@ -8,14 +8,16 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kas";
-  version = "4.5";
+  version = "4.7";
 
   src = fetchFromGitHub {
     owner = "siemens";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-J64yy2G8+5uT31Vpwhge5R7ZqId+NzE5ykXBHjc0qgQ=";
+    repo = "kas";
+    tag = version;
+    hash = "sha256-P2I3lLa8kuCORdlrwcswrWFwOA8lW2WL4Apv/2T7+f8=";
   };
+
+  patches = [ ./pass-terminfo-env.patch ];
 
   propagatedBuildInputs = with python3.pkgs; [
     setuptools
@@ -30,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
   passthru.tests.version = testers.testVersion {
     package = kas;
-    command = "${pname} --version";
+    command = "kas --version";
   };
 
   meta = with lib; {

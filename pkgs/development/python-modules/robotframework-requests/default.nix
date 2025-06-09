@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "MarketSquare";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "robotframework-requests";
+    tag = "v${version}";
     hash = "sha256-NRhf3delcqUw9vWRPL6pJzpcmRMDou2pHmUHMstF8hw=";
   };
 

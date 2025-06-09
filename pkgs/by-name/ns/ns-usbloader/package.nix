@@ -1,35 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, wrapGAppsHook3
-, gvfs
-, maven
-, jre
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  wrapGAppsHook3,
+  gvfs,
+  maven,
+  jre,
 }:
 let
   pkgDescription = "All-in-one tool for managing Nintendo Switch homebrew";
 
-  selectSystem = attrs:
-    attrs.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  selectSystem =
+    attrs:
+    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   jreWithJavaFX = jre.override { enableJavaFX = true; };
 in
 maven.buildMavenPackage rec {
   pname = "ns-usbloader";
-  version = "7.1";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "developersu";
     repo = "ns-usbloader";
     rev = "v${version}";
-    sha256 = "sha256-gSf5SCIhcUEYGsYssXVGjUweVU+guxOI+lzD3ANr96w=";
+    sha256 = "sha256-nZfAZ+IjoYXEWwH9oOhOQ5TOYUNiAGAqhHRhskyx/Vo=";
   };
 
-  patches = [ ./no-launch4j.patch ./make-deterministic.patch ];
+  patches = [
+    ./no-launch4j.patch
+    ./make-deterministic.patch
+  ];
 
   # JavaFX pulls in architecture dependent jar dependencies. :(
   # May be possible to unify these, but could lead to huge closure sizes.
@@ -91,7 +95,10 @@ maven.buildMavenPackage rec {
       icon = "ns-usbloader";
       categories = [ "Game" ];
       terminal = false;
-      keywords = [ "nintendo" "switch" ];
+      keywords = [
+        "nintendo"
+        "switch"
+      ];
     })
   ];
 
@@ -100,7 +107,10 @@ maven.buildMavenPackage rec {
     homepage = "https://github.com/developersu/ns-usbloader";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ soupglasses ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "ns-usbloader";
   };
 }

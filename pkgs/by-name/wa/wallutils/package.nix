@@ -70,7 +70,7 @@ buildGoModule rec {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";
     inherit (src.meta) homepage;
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
     badPlatforms = lib.platforms.darwin;
   };

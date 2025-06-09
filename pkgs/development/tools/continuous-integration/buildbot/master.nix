@@ -41,9 +41,7 @@
   importlib-resources,
   packaging,
   unidiff,
-  glibcLocales,
   nixosTests,
-  fetchpatch,
 }:
 
 let
@@ -77,7 +75,7 @@ let
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "4.1.0";
+  version = "4.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -86,7 +84,7 @@ buildPythonApplication rec {
     owner = "buildbot";
     repo = "buildbot";
     rev = "v${version}";
-    hash = "sha256-RPg4eXqpm/F1SSoB4MVo61DgZv/iE2R4VtCkUU69iA8=";
+    hash = "sha256-Kf8sxZE2cQDQSVSMpRTokJU4f3/M6OJq6bXzGonrRLU=";
   };
 
   build-system = [
@@ -137,15 +135,9 @@ buildPythonApplication rec {
     parameterized
     git
     openssh
-    glibcLocales
   ];
 
   patches = [
-    (fetchpatch {
-      name = "remove-uses-of-twisted-python-constants.patch";
-      url = "https://github.com/buildbot/buildbot/commit/ac46c0aa77be46eaa64e09bef03da6f8dbaacfa7.patch";
-      hash = "sha256-XoODSKY0GzFh2H5gWxiXm/QxngGN2MM0yId5D1RQflQ=";
-    })
     # This patch disables the test that tries to read /etc/os-release which
     # is not accessible in sandboxed builds.
     ./skip_test_linux_distro.patch
@@ -161,7 +153,6 @@ buildPythonApplication rec {
   doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
     export PATH="$out/bin:$PATH"
   '';
 
@@ -180,7 +171,7 @@ buildPythonApplication rec {
     description = "Open-source continuous integration framework for automating software build, test, and release processes";
     homepage = "https://buildbot.net/";
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
-    maintainers = teams.buildbot.members;
+    teams = [ teams.buildbot ];
     license = licenses.gpl2Only;
   };
 }

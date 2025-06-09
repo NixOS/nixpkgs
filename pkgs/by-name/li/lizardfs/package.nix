@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   version = "3.13.0-rc3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "lizardfs";
+    repo = "lizardfs";
     rev = version;
     sha256 = "sha256-rgaFhJvmA1RVDL4+vQLMC0GrdlgUlvJeZ5/JJ67C20Q=";
   };

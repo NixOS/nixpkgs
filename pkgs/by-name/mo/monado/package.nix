@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch2,
   writeText,
   bluez,
   cjson,
@@ -11,7 +12,6 @@
   doxygen,
   eigen,
   elfutils,
-  fetchpatch2,
   glslang,
   gst-plugins-base,
   gstreamer,
@@ -66,15 +66,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
-  version = "24.0.0";
+  version = "25.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-lFy0VvaLD4Oyu2TZJnaIWjuaJUZjGGDJS0VsRfIUpcc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VxTxvw+ftqlh3qF5qWxpK1OJsRowkRXu0xEH2bDckUA=";
   };
+
+  patches = [
+    # Remove with v26
+    (fetchpatch2 {
+      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/2a6932d46dad9aa957205e8a47ec2baa33041076.patch";
+      hash = "sha256-CZMbGgx7mEDcjcoRJHDZ5P6BecFW8CB4fpzxQ9bpAvE=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -137,16 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals tracingSupport [
       tracy
     ];
-
-  patches = [
-    # Remove this patch on the next update
-    # https://gitlab.freedesktop.org/monado/monado/-/merge_requests/2338
-    (fetchpatch2 {
-      name = "improve-reproducibility.patch";
-      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/9819fb6dd61d2af5b2d993ed37b976760002b055.patch";
-      hash = "sha256-qpTF1Q64jl8ZnJzMtflrpHLahCqfde2DXA9/Avlc18I=";
-    })
-  ];
 
   cmakeFlags = [
     (lib.cmakeBool "XRT_FEATURE_SERVICE" serviceSupport)

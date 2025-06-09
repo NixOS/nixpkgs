@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ zlib ];
 
   meta = with lib; {
-    description = "The goal of the program is to use standard values when creating zips to create identical files over multiple systems";
+    description = "Goal of the program is to use standard values when creating zips to create identical files over multiple systems";
     longDescription = ''
       Torrentzip converts zip archives to a standard format with some
       pre-defined values, sorting the files, and using particular compression

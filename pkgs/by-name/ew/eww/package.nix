@@ -15,21 +15,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eww";
-  version = "0.6.0-unstable-2024-07-05";
+  version = "0.6.0-unstable-2025-05-18";
 
   src = fetchFromGitHub {
     owner = "elkowar";
     repo = "eww";
-    # FIXME: change to a release tag once a new release is available
-    # https://github.com/elkowar/eww/pull/1084
-    # using the revision to fix string truncation issue in eww config
-    rev = "4d55e9ad63d1fae887726dffcd25a32def23d34f";
-    hash = "sha256-LTSFlW/46hl1u9SzqnvbtNxswCW05bhwOY6CzVEJC5o=";
+    rev = "98c220126d912b935987766f56650b55f3e226eb";
+    hash = "sha256-zi+5G05aakh8GBdfHL1qcNo/15VEm5mXtHGgKMAyp1U=";
   };
 
-  # needed to fix build errors with rust 1.80 due to outdated time crate
-  cargoPatches = [ ./lockfile.patch ];
-  cargoHash = "sha256-55lmQl5pJwrEj5RlSG8b0PqtZVrASxTmX4Qdk090DZo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SEdr9nW5nBm1g6fjC5fZhqPbHQ7H6Kk0RL1V6OEQRdA=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VkJOKKYnoXux3WjD1JwINGWwv1SMIXfidyV2ITE7dJc=";
   };
 
@@ -59,16 +59,16 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.maestral = nixosTests.maestral;
 
-  meta = with lib; {
+  meta = {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       peterhoeg
       sfrijters
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "maestral_qt";
   };
 }

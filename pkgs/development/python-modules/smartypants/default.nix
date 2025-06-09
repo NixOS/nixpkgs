@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "leohemsted";
     repo = "smartypants.py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-V1rV1B8jVADkS0NhnDkoVz8xxkqrsIHb1mP9m5Z94QI=";
   };
 

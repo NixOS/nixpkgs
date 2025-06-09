@@ -1,0 +1,11 @@
+plugins {
+    id('application')
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(@JAVA_VERSION@))
+}
+
+application {
+    mainClass = 'Main'
+}

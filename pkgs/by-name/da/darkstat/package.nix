@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "emikulic";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "darkstat";
+    tag = version;
     hash = "sha256-kKj4fCgphoe3lojJfARwpITxQh7E6ehUew9FVEW63uQ=";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Network statistics web interface";
     longDescription = ''
       Captures network traffic, calculates statistics about usage, and serves
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://unix4lyfe.org/darkstat";
     changelog = "https://github.com/emikulic/darkstat/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Only;
+    platforms = with lib.platforms; unix;
     mainProgram = "darkstat";
   };
 }

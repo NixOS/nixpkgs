@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SEKOIA-IO";
     repo = "py-radix";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HeXWHdPeW3m0FMtqyHhZGhgCc706Y2xiN8hn9MFt/RM=";
   };
 
@@ -43,6 +43,6 @@ buildPythonPackage rec {
       isc
       bsdOriginal
     ];
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
   };
 }

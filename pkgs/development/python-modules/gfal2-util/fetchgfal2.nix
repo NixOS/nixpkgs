@@ -4,7 +4,7 @@
   gfal2-util,
 }:
 
-# `url` and `urls` should only be overriden via `<pkg>.override`, but not `<pkg>.overrideAttrs`.
+# `url` and `urls` should only be overridden via `<pkg>.override`, but not `<pkg>.overrideAttrs`.
 {
   name ? "",
   pname ? "",

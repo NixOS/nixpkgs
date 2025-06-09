@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "dshearer";
-    repo = pname;
+    repo = "jobber";
     rev = "v${version}";
     hash = "sha256-mLYyrscvT/VK9ehwkPUq4RbwHb+6Wjvt7ZXk/fI0HT4=";
   };
@@ -35,12 +35,12 @@ buildGoModule rec {
     mv $out/bin/jobber{master,runner} $out/libexec/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dshearer.github.io/jobber";
     changelog = "https://github.com/dshearer/jobber/releases/tag/v${version}";
     description = "Alternative to cron, with sophisticated status-reporting and error-handling";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urandom ];
     mainProgram = "jobber";
   };
 }

@@ -21,10 +21,6 @@
   libmicrohttpd,
   cjson,
 
-  CoreFoundation,
-  Security,
-  SystemConfiguration,
-
   curl,
   jdk_headless,
   unzip,
@@ -81,11 +77,6 @@ stdenv.mkDerivation {
       db
       libedit
       pam
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      CoreFoundation
-      Security
-      SystemConfiguration
     ]
     ++ lib.optionals (withCJSON) [ cjson ]
     ++ lib.optionals (withCapNG) [ libcap_ng ]
@@ -202,6 +193,9 @@ stdenv.mkDerivation {
     description = "Implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ h7x4 ];
+    maintainers = with maintainers; [
+      h7x4
+      dblsaiko
+    ];
   };
 }

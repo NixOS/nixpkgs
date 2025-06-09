@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   poetry-core,
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-mongodb==${version}";
+    tag = "langchain-mongodb==${version}";
     hash = "sha256-Jd9toXkS9dGtSIrJQ/5W+swV1z2BJOJKBtkyGzj3oSc=";
   };
 
@@ -37,6 +38,9 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individual components.
+    "langchain-core"
     "numpy"
   ];
 
@@ -60,8 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_mongodb" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-mongodb==([0-9.]+)$"
+    ];
   };
 
   meta = {

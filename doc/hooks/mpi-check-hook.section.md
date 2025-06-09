@@ -11,15 +11,15 @@ the neceesary environment variables to use
 Example:
 
 ```nix
-  { mpiCheckPhaseHook, mpi, ... }:
-  {
-    # ...
+{ mpiCheckPhaseHook, mpi, ... }:
+{
+  # ...
 
-    nativeCheckInputs = [
-      openssh
-      mpiCheckPhaseHook
-    ];
-  }
+  nativeCheckInputs = [
+    openssh
+    mpiCheckPhaseHook
+  ];
+}
 ```
 
 

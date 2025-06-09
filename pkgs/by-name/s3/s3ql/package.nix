@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "s3ql";
     repo = "s3ql";
-    rev = "refs/tags/s3ql-${version}";
+    tag = "s3ql-${version}";
     hash = "sha256-hNqKLpJd0vj96Jx4YnqYsPLq/iTbvmtvjyLrYozaxpk=";
   };
 
@@ -27,7 +27,6 @@ python3.pkgs.buildPythonApplication rec {
     apsw
     cryptography
     defusedxml
-    dugong
     google-auth
     google-auth-oauthlib
     pyfuse3
@@ -60,12 +59,12 @@ python3.pkgs.buildPythonApplication rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured file system for online data storage";
     homepage = "https://github.com/s3ql/s3ql/";
     changelog = "https://github.com/s3ql/s3ql/releases/tag/s3ql-${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ rushmorem ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ rushmorem ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -69,7 +69,7 @@ in
     validateSettings = mkOption {
       type = types.bool;
       default = true;
-      description = "Weither to run renovate's config validator on the built configuration.";
+      description = "Whether to run renovate's config validator on the built configuration.";
     };
     settings = mkOption {
       type = json.type;
@@ -138,9 +138,10 @@ in
 
       script = ''
         ${lib.concatStringsSep "\n" (
-          builtins.map (name: "export ${name}=$(systemd-creds cat 'SECRET-${name}')") (
-            lib.attrNames cfg.credentials
-          )
+          builtins.map (name: ''
+            ${name}="$(systemd-creds cat 'SECRET-${name}')"
+            export ${name}
+          '') (lib.attrNames cfg.credentials)
         )}
         exec ${lib.escapeShellArg (lib.getExe cfg.package)}
       '';

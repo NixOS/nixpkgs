@@ -1,0 +1,25 @@
+From e8893fcae7e732c9e15ccd6d54a62b5b3862e445 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Thu, 16 Jan 2025 17:12:36 +0100
+Subject: [PATCH 1/5] doc/liblomiri-thumbnailer-qt: Honour CMAKE_INSTALL_DOCDIR
+
+---
+ doc/liblomiri-thumbnailer-qt/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/doc/liblomiri-thumbnailer-qt/CMakeLists.txt b/doc/liblomiri-thumbnailer-qt/CMakeLists.txt
+index 91e12a0..3e96f80 100644
+--- a/doc/liblomiri-thumbnailer-qt/CMakeLists.txt
++++ b/doc/liblomiri-thumbnailer-qt/CMakeLists.txt
+@@ -28,7 +28,7 @@ add_doxygen(
+ )
+ 
+ install(DIRECTORY ${PROJECT_BINARY_DIR}/doc/liblomiri-thumbnailer-qt/html
+-        DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/doc/liblomiri-thumbnailer-qt)
++        DESTINATION ${CMAKE_INSTALL_DOCDIR})
+ 
+ add_subdirectory(examples)
+ 
+-- 
+2.47.0
+

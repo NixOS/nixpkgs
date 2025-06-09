@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "android-udev-rules";
-  version = "20241109";
+  version = "20250525";
 
   src = fetchFromGitHub {
     owner = "M0Rf30";
     repo = "android-udev-rules";
     rev = version;
-    hash = "sha256-WHAm9hDpXsn+Isrc5nNgw7G5DKBJb7X0ILx6lG5Y7YQ=";
+    hash = "sha256-4ODU9EoVYV+iSu6+M9ePed45QkOZgWkDUlFTlWJ8ttQ=";
   };
 
   installPhase = ''
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar ];
+    teams = [ lib.teams.android ];
   };
 }

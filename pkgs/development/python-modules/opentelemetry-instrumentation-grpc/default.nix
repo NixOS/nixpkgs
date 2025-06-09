@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchpatch2,
   pythonOlder,
   hatchling,
   opentelemetry-api,

@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "certi";
   version = "0.1.0-unstable-2023-01-27";
   pyproject = true;

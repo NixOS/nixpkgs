@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   pkg-config,
   gnused,
   autoreconfHook,
@@ -55,20 +55,15 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      bash = "${bash}/bin/bash";
+    (replaceVars ./fix-paths.patch {
       false = "${coreutils}/bin/false";
       mdadm = "${mdadm}/bin/mdadm";
-      mkswap = "${util-linux}/bin/mkswap";
       sed = "${gnused}/bin/sed";
       sh = "${bash}/bin/sh";
       sleep = "${coreutils}/bin/sleep";
-      swapon = "${util-linux}/bin/swapon";
       true = "${coreutils}/bin/true";
     })
-    (substituteAll {
-      src = ./force-path.patch;
+    (replaceVars ./force-path.patch {
       path = lib.makeBinPath [
         btrfs-progs
         coreutils
@@ -154,7 +149,8 @@ stdenv.mkDerivation rec {
       lgpl2Plus
       gpl2Plus
     ]; # lgpl2Plus for the library, gpl2Plus for the tools & daemon
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ johnazoidberg ]);
+    maintainers = with maintainers; [ johnazoidberg ];
+    teams = [ teams.freedesktop ];
     platforms = platforms.linux;
   };
 }

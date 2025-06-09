@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-W5wNmZWjSsM6Xe50fCpa/aGsJ8PDyh2INs1Oj86et04=";
   };
 
-  cargoHash = "sha256-T57RqIzurpYLHyeFhvqxmC+DoB6zUf+iTu1YkMmwtp8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-IRWOY+FudPH2AEUTplwUWKK431x+CRkVF3VXxVWFKeI=";
 
   nativeBuildInputs = [
     gpgme
@@ -33,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--no-default-features"
-    "--features=alias,backend-gpgme,clipboard,notify,select-fzf-bin,select-skim-bin,tomb,totp"
+    "--features=alias,backend-gpgme,clipboard,notify,select-fzf-bin,select-skim,tomb,totp"
   ];
 
   buildInputs = [
@@ -48,15 +49,15 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Secure, fast & convenient password manager CLI using GPG and git to sync";
     homepage = "https://gitlab.com/timvisee/prs";
     changelog = "https://gitlab.com/timvisee/prs/-/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only # lib
       gpl3Only # everything else
     ];
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ colemickens ];
     mainProgram = "prs";
   };
 }

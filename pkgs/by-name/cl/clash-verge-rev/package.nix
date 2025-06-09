@@ -8,29 +8,29 @@
   wrapGAppsHook3,
   v2ray-geoip,
   v2ray-domain-list-community,
-  copyDesktopItems,
-  makeDesktopItem,
   libsoup,
 }:
 let
   pname = "clash-verge-rev";
-  version = "2.0.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QLvJO1JFHPFOsVxNi6SCu2QuJQ9hCsO1+WKOjZL944w=";
+    tag = "v${version}";
+    hash = "sha256-MJD1FWh/43pOffdWznCVPyGVXcIyqhXzmoEmyM8Tspg=";
   };
 
   src-service = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-service";
-    rev = "8b676086f2770e213cffea08ef31b54b886f8f11"; # no meaningful tags in this repo. The only way is updating manully every time.
-    hash = "sha256-vF26Bp52y2kNHwwtBjy3Of75qJpTriqvul29KmudHww=";
+    rev = "ffcccc6095e052534980230f9e0ca97db2675062"; # no meaningful tags in this repo. The only way is updating manully every time.
+    hash = "sha256-AbUflPcuSuUigRQB0i52mfVu5sIep1vMZGVMZyznwXY=";
   };
 
-  service-cargo-hash = "sha256-pMOCifffUyBkcXC8inZFZeZVHeaOt0LAu2jZUGQ7QdM=";
+  service-cargo-hash = "sha256-lMOQznPlkHIMSm5nOLuGP9qJXt3CXnd+q8nCu+Xbbt8=";
+  pnpm-hash = "sha256-v9+1NjXo/1ogmep+4IP+9qoUR1GJz87VGeOoMzQ1Rfw=";
+  vendor-hash = "sha256-y3XVHi00mnuVFxSd02YBgfWuXYRVIs+e0tITXNOFRsA=";
 
   service = callPackage ./service.nix {
     inherit
@@ -42,26 +42,13 @@ let
       ;
   };
 
-  webui = callPackage ./webui.nix {
-    inherit
-      version
-      src
-      pname
-      meta
-      npm-hash
-      ;
-  };
-
-  npm-hash = "sha256-zsgZhLC+XUzlCUKKGAJV5MlSpWsoLmAgMwKkmAkAX9Q=";
-  vendor-hash = "sha256-fk3OdJ1CKNHkeUjquJtJgM7PDyPpQ7tssDnFZHMbQHI=";
-
   unwrapped = callPackage ./unwrapped.nix {
     inherit
       pname
       version
       src
+      pnpm-hash
       vendor-hash
-      webui
       meta
       libsoup
       ;
@@ -93,20 +80,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     wrapGAppsHook3
-    copyDesktopItems
-  ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "clash-verge";
-      exec = "clash-verge";
-      comment = "Clash Verge Rev";
-      type = "Application";
-      icon = "clash-verge";
-      desktopName = "Clash Verge Rev";
-      terminal = false;
-      categories = [ "Network" ];
-    })
   ];
 
   installPhase = ''
@@ -116,12 +89,13 @@ stdenv.mkDerivation {
     cp -r ${unwrapped}/share/* $out/share
     cp -r ${unwrapped}/bin/clash-verge $out/bin/clash-verge
     # This can't be symbol linked. It will find mihomo in its runtime path
-    ln -s ${service}/bin/clash-verge-service $out/bin/clash-verge-service
+    cp ${service}/bin/clash-verge-service $out/bin/clash-verge-service
     ln -s ${mihomo}/bin/mihomo $out/bin/verge-mihomo
     # people who want to use alpha build show override mihomo themselves. The alpha core entry was removed in clash-verge.
     ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/Clash\ Verge/resources/geoip.dat
     ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/Clash\ Verge/resources/geosite.dat
     ln -s ${dbip-country-lite.mmdb} $out/lib/Clash\ Verge/resources/Country.mmdb
+
     runHook postInstall
   '';
 }

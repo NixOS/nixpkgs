@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   ilmbase,
-  openexr_3,
+  openexr,
   libtiff,
   aces-container,
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ilmbase
-    openexr_3
+    openexr
     libtiff
     aces-container
   ];

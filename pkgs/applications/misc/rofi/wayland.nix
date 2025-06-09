@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   rofi-unwrapped,
   wayland-scanner,
   pkg-config,
@@ -11,25 +10,15 @@
 
 rofi-unwrapped.overrideAttrs (oldAttrs: rec {
   pname = "rofi-wayland-unwrapped";
-  version = "1.7.5+wayland3";
+  version = "1.7.9+wayland1";
 
   src = fetchFromGitHub {
     owner = "lbonn";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-pKxraG3fhBh53m+bLPzCigRr6dBcH/A9vbdf67CO2d8=";
+    hash = "sha256-tLSU0Q221Pg3JYCT+w9ZT4ZbbB5+s8FwsZa/ehfn00s=";
   };
-
-  patches = [
-    # Fix use on niri window manager
-    # ref. https://github.com/davatorium/rofi/discussions/2008
-    # this was merged upstream, and can be removed on next release
-    (fetchpatch {
-      url = "https://github.com/lbonn/rofi/commit/55425f72ff913eb72f5ba5f5d422b905d87577d0.patch";
-      hash = "sha256-vTUxtJs4SuyPk0PgnGlDIe/GVm/w1qZirEhKdBp4bHI=";
-    })
-  ];
 
   depsBuildBuild = oldAttrs.depsBuildBuild ++ [ pkg-config ];
   nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [

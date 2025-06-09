@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "nexusformat";
-  version = "1.0.7";
+  version = "1.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SSS6LTOdqLTHNGpBRO7UELF9qJb/sG8EwrE/azxk7wM=";
+    hash = "sha256-zsIOnWgMbUaJl3tHnpQiF3+Qy48dwKDAvFlg6z8hW/M=";
   };
 
   build-system = [

@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "HDFGroup";
     repo = "hdf4";
-    rev = "refs/tags/hdf${finalAttrs.version}";
+    tag = "hdf${finalAttrs.version}";
     hash = "sha256-Q2VKwkp/iroStrOnwHI8d/dtMWkMoJesBVBVChwNa30=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "HDF4_ENABLE_SZIP_SUPPORT" szipSupport)
       (lib.cmakeBool "HDF4_ENABLE_SZIP_ENCODING" szipSupport)
       (lib.cmakeBool "HDF4_BUILD_JAVA" javaSupport)
-      (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+      (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     ]
     ++ lib.optionals javaSupport [
       (lib.cmakeFeature "JAVA_HOME" "${jdk}")

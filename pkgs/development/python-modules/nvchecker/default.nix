@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.15.1";
+  version = "2.17";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,12 +30,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "nvchecker";
-    rev = "v${version}";
-    hash = "sha256-dK3rZCoSukCzPOFVectQiF6qplUuDBh9qyN8JL0+j20=";
+    tag = "v${version}";
+    hash = "sha256-jA41WoD0WXdb8CM9dUchIAhYd4GoUA9zLYbkaPIScLg=";
   };
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [
-    setuptools
     docutils
     installShellFiles
   ];
@@ -76,11 +77,11 @@ buildPythonPackage rec {
     htmlparser = [ lxml ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "New version checker for software";
     homepage = "https://github.com/lilydjwg/nvchecker";
     changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

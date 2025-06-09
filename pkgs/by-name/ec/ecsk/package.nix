@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  fetchgit,
 }:
 
 buildGoModule rec {
@@ -12,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "yukiarrr";
     repo = "ecsk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1nrV7NslOIXQDHsc7c5YfaWhoJ8kfkEQseoVVeENrHM=";
     fetchSubmodules = true;
   };

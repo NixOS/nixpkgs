@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "MeerK40t";
-  version = "0.9.5300";
+  version = "0.9.7030";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meerk40t";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-dybmbmEvvTka0wMBIUDYemqDaCvG9odgCbIWYhROJLI=";
+    tag = version;
+    hash = "sha256-3UO2M4mDzRdzhS+H2gyzJo5W4JWGK+qt1Gg9LHGmdOY=";
   };
 
   nativeBuildInputs =
@@ -77,7 +77,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    changelog = "https://github.com/meerk40t/meerk40t/releases/tag/${version}";
+    changelog = "https://github.com/meerk40t/meerk40t/releases/tag/${src.tag}";
     description = "MeerK40t LaserCutter Software";
     mainProgram = "meerk40t";
     homepage = "https://github.com/meerk40t/meerk40t";

@@ -7,18 +7,18 @@
   okteto,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "okteto";
-  version = "3.2.2";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
-    rev = version;
-    hash = "sha256-NN6Y+QkER5Bs9vy09Y4Dl4LoK3HkCJ04vCe5ectFUok=";
+    rev = finalAttrs.version;
+    hash = "sha256-xJdG5BHlVkK+wGn4ZNFfRoPimnlZrQOLbtKvCnBewqw=";
   };
 
-  vendorHash = "sha256-/V95521PFvLACuXVjqsW3TEHHGQYKY8CSAOZ6FwuR0k=";
+  vendorHash = "sha256-zfY/AfSo8f9LALf0FRAdd26Q9xGcKvVAnK3rnACCW4s=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -36,7 +36,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/okteto/okteto/pkg/config.VersionString=${version}"
+    "-X github.com/okteto/okteto/pkg/config.VersionString=${finalAttrs.version}"
   ];
 
   tags = [
@@ -61,6 +61,7 @@ buildGoModule rec {
         "Test_translateJobWithoutVolumes"
         "Test_translateJobWithVolumes"
         "Test_translateService"
+        "TestProtobufTranslator_Translate_Success"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -84,4 +85,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "okteto";
   };
-}
+})

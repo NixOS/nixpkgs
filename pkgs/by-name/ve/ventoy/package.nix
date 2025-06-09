@@ -55,12 +55,15 @@ let
     .${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ventoy";
-  version = "1.0.99";
+  pname =
+    "ventoy"
+    + optionalString (defaultGuiType == "gtk3") "-gtk3"
+    + optionalString (defaultGuiType == "qt5") "-qt5";
+  version = "1.1.05";
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-RnzdGIp/c5vHBq28HWlfYf/e/JWRatsBWUfYCCnwCj0=";
+    hash = "sha256-M3nJmJA1nc/1Wqt/ezKG+HyYjR2i/WFuap4wX7Ch3p4=";
   };
 
   patches = [
@@ -194,7 +197,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.ventoy.net";
-    description = "New Bootable USB Solution";
+    description =
+      "New Bootable USB Solution" + optionalString (defaultGuiType != "") " with GUI support";
     longDescription = ''
       Ventoy is an open source tool to create bootable USB drive for
       ISO/WIM/IMG/VHD(x)/EFI files.  With ventoy, you don't need to format the
@@ -209,9 +213,20 @@ stdenv.mkDerivation (finalAttrs: {
       800+ image files are tested.  90%+ distros in DistroWatch supported.
     '';
     changelog = "https://www.ventoy.net/doc_news.html";
-    license = lib.licenses.gpl3Plus;
+    knownVulnerabilities = [
+      ''
+        Ventoy uses binary blobs which can't be trusted to be free of malware or compliant to their licenses.
+        https://github.com/NixOS/nixpkgs/issues/404663
+        See the following Issues for context:
+        https://github.com/ventoy/Ventoy/issues/2795
+        https://github.com/ventoy/Ventoy/issues/3224
+      ''
+    ];
+    license = lib.licenses.unfree;
     mainProgram = "ventoy";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+    ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

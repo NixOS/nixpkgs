@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "breezy-team";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "patiencediff";
+    tag = "v${version}";
     hash = "sha256-SFu1oN1yE9tKeBgWhgWjDpR31AptGrls0D5kKQed+HI=";
   };
 

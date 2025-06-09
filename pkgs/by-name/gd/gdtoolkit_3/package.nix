@@ -2,6 +2,8 @@
   lib,
   python3,
   fetchFromGitHub,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -31,7 +33,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
-    rev = version;
+    tag = version;
     hash = "sha256-cMGD5Xdf9ElS1NT7Q0NPB//EvUO0MI0VTtps5JRisZ4=";
   };
 
@@ -46,18 +48,16 @@ python.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    hypothesis
-  ];
-
-  preCheck = ''
-    # The tests want to run the installed executables
-    export PATH=$out/bin:$PATH
-
-    # gdtoolkit tries to write cache variables to $HOME/.cache
-    export HOME=$TMP
-  '';
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      pytestCheckHook
+      hypothesis
+    ]
+    ++ [
+      addBinToPathHook
+      writableTmpDirAsHomeHook
+    ];
 
   # The tests are not working on NixOS
   disabledTests = [

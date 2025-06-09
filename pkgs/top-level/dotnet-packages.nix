@@ -175,6 +175,7 @@ let
       version = "11.0.2";
       sha256 = "07na27n4mlw77f3hg5jpayzxll7f4gyna6x7k9cybmxpbs6l77k7";
       outputFiles = [ "*" ];
+      postInstall = "rm $target/env-vars"; # fetchNuGet already sets preInstall
     };
 
     Paket = fetchNuGet {
@@ -182,6 +183,7 @@ let
       version = "5.179.1";
       sha256 = "11rzna03i145qj08hwrynya548fwk8xzxmg65swyaf19jd7gzg82";
       outputFiles = [ "*" ];
+      postInstall = "rm $target/env-vars"; # fetchNuGet already sets preInstall
     };
 
   };

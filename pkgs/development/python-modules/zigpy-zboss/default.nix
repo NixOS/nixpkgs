@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kardia-as";
     repo = "zigpy-zboss";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-T2R291GeFIsnDRI1tAydTlLamA3LF5tKxKFhPtcEUus=";
   };
 

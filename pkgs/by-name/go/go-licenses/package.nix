@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "go-licenses";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GAlwTVoVA+n9+EfhybmpKm16FoY9kFzrxy1ZQxS6A8E=";
   };
 
@@ -51,12 +51,12 @@ buildGoModule rec {
   # Tests require internet connection
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/google/go-licenses/releases/tag/v${version}";
     description = "Reports on the licenses used by a Go package and its dependencies";
     mainProgram = "go-licenses";
     homepage = "https://github.com/google/go-licenses";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ Luflosi ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

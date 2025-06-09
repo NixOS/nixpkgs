@@ -1,21 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "re-flex";
-  version = "5.1.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = "RE-flex";
     rev = "v${version}";
-    hash = "sha256-GL2zg789R8SYB9e3BrMbrXZVg0EDB2LyvL6MO4n4kEk=";
+    hash = "sha256-BTzKR9C4J9DOszKGtcd+7Tiw+OkohPJuKKjbXZ8wX7k=";
   };
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake

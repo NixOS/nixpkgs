@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "nielsfaber";
   domain = "alarmo";
-  version = "1.10.7";
+  version = "1.10.8";
 
   src = fetchFromGitHub {
     owner = "nielsfaber";
     repo = "alarmo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-EFR8GveMNpwhrIA0nP+Ny3YUTHAOFw+IF72hH1+wMSM=";
+    tag = "v${version}";
+    hash = "sha256-XfeUjZ9icgWFfeJabib1KlrGuGJKuoOZuJH/OFMw/4M=";
   };
 
   postPatch = ''
@@ -25,6 +25,6 @@ buildHomeAssistantComponent rec {
     description = "Alarm System for Home Assistant";
     homepage = "https://github.com/nielsfaber/alarmo";
     maintainers = with maintainers; [ mindstorms6 ];
-    license = licenses.unfree;
+    license = licenses.asl20;
   };
 }

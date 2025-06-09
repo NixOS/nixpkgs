@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     mainProgram = "bijiben";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-notes";
     license = licenses.gpl3;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 }

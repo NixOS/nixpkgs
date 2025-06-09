@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "roadrunner";
-  version = "2024.3.1";
+  version = "2025.1.1";
 
   src = fetchFromGitHub {
     repo = "roadrunner";
     owner = "roadrunner-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-S5QDooao0PJkpu85xcHLhg/s3wyJUwhg/DSD4KITHyw=";
+    tag = "v${version}";
+    hash = "sha256-HNljEsrHTbNA5/+tnquh4yO5plAj1kKTAY3P927nAEU=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,9 @@ buildGoModule rec {
       --replace "127.0.0.1:0" "127.0.0.1:55554"
   '';
 
-  vendorHash = "sha256-xd2iJqONpjwHV0Zp8k6iXnDXdpaluMIE9o9E3MLFkrQ=";
+  __darwinAllowLocalNetworking = true;
+
+  vendorHash = "sha256-dnbctKxwQqfxZfKPa3ZlKjF5a/7eC5arK9RrPksSNVg=";
 
   meta = {
     changelog = "https://github.com/roadrunner-server/roadrunner/blob/v${version}/CHANGELOG.md";

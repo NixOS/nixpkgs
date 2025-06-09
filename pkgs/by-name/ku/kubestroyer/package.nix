@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Rolix44";
     repo = "Kubestroyer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-A4kx0Xx3p9rP8OKRLPe9AfX+rqGggtvPb7Hsg+lLkSI=";
   };
 
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes exploitation tool";
     homepage = "https://github.com/Rolix44/Kubestroyer";
     changelog = "https://github.com/Rolix44/Kubestroyer/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "kubestroyer";
   };
 }

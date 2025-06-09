@@ -10,8 +10,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "vt-cli";
+    tag = version;
     hash = "sha256-NB5eo+6IwIxhQX1lwJzPOZ0pSeFVo7LYIEEmDqE4A7Y=";
   };
 
@@ -23,12 +23,12 @@ buildGoModule rec {
 
   subPackages = [ "vt" ];
 
-  meta = with lib; {
+  meta = {
     description = "VirusTotal Command Line Interface";
     homepage = "https://github.com/VirusTotal/vt-cli";
     changelog = "https://github.com/VirusTotal/vt-cli/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "vt";
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

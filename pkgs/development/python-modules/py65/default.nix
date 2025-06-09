@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mnaberez";
     repo = "py65";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BMX+sMPx/YBFA4NFkaY0rl0EPicGHgb6xXVvLEIdllA=";
   };
 
@@ -35,7 +35,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     mainProgram = "py65mon";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       tomasajt
     ];
   };

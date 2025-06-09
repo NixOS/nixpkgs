@@ -4,14 +4,12 @@ let
   inherit (pkgs) lib;
   inherit (lib.strings) hasSuffix removeSuffix;
 
-  pathsByName =
-    lib.concatMapAttrs
-      (name: type:
-        lib.optionalAttrs (type == "regular" && hasSuffix ".nix" name) {
-          ${removeSuffix ".nix" name} = ./replacements-by-name + "/${name}";
-        }
-      )
-      (builtins.readDir ./replacements-by-name);
+  pathsByName = lib.concatMapAttrs (
+    name: type:
+    lib.optionalAttrs (type == "regular" && hasSuffix ".nix" name) {
+      ${removeSuffix ".nix" name} = ./replacements-by-name + "/${name}";
+    }
+  ) (builtins.readDir ./replacements-by-name);
 in
 
 # EXTRA HASKELL PACKAGES NOT ON HACKAGE
@@ -21,9 +19,10 @@ in
 # Overrides to these packages should go to either configuration-nix.nix,
 # configuration-common.nix or to one of the compiler specific configuration
 # files.
-self: super: {
+self: super:
+{
 
-  changelog-d = self.callPackage ../misc/haskell/changelog-d {};
+  changelog-d = self.callPackage ../misc/haskell/changelog-d { };
 
   dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
 
@@ -42,20 +41,11 @@ self: super: {
 
   nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
 
-  # hasura graphql-engine is not released to hackage.
-  # https://github.com/hasura/graphql-engine/issues/7391
-  ci-info = self.callPackage ../misc/haskell/hasura/ci-info.nix {};
-  pg-client = self.callPackage ../misc/haskell/hasura/pg-client.nix {};
-  graphql-parser = self.callPackage ../misc/haskell/hasura/graphql-parser.nix {};
-  graphql-engine = self.callPackage ../misc/haskell/hasura/graphql-engine.nix {};
-  kriti-lang = self.callPackage ../misc/haskell/hasura/kriti-lang.nix {};
-  hasura-resource-pool = self.callPackage ../misc/haskell/hasura/pool.nix {};
-  hasura-ekg-core = self.callPackage ../misc/haskell/hasura/ekg-core.nix {};
-  hasura-ekg-json = self.callPackage ../misc/haskell/hasura/ekg-json.nix {};
-
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
-  hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
+  hercules-ci-optparse-applicative =
+    self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix
+      { };
 
 }
-// lib.mapAttrs (_name: path: self.callPackage path {}) pathsByName
+// lib.mapAttrs (_name: path: self.callPackage path { }) pathsByName

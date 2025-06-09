@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "diffstat";
-  version = "1.67";
+  version = "1.68";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/diffstat/diffstat-${version}.tgz"
       "https://invisible-mirror.net/archives/diffstat/diffstat-${version}.tgz"
     ];
-    hash = "sha256-dg7QyZxtZDI41BuA5gJ4zxaD/7lKKDlUrH7xaMhSdmo=";
+    hash = "sha256-ifkpSorHT8728bmsQI9D6+340gjj7+C5m0rMFtxlgsc=";
   };
 
   buildInputs = [ zstd ];

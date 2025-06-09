@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "pynvim";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/frugwYPS4rS4L6BRsmNb5pJI8xfLJvbr+PyOLx25a4=";
   };
 

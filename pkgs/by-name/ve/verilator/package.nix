@@ -14,21 +14,22 @@
   git,
   numactl,
   coreutils,
+  gdb,
 }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "5.028";
+  version = "5.034";
 
   # Verilator gets the version from this environment variable
   # if it can't do git describe while building.
   VERILATOR_SRC_VERSION = "v${version}";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "verilator";
+    repo = "verilator";
     rev = "v${version}";
-    hash = "sha256-YgK60fAYG5575uiWmbCODqNZMbRfFdOVcJXz5h5TLuE=";
+    hash = "sha256-1o9Qf6avdiRgIYUgBS/S0W2GLSi/HdO9Xgs78oW6VJE=";
   };
 
   enableParallelBuilding = true;
@@ -38,35 +39,51 @@ stdenv.mkDerivation rec {
     systemc
     # ccache
   ];
-  nativeBuildInputs = [
-    makeWrapper
-    flex
-    bison
-    autoconf
-    help2man
-    git
-  ];
-  nativeCheckInputs = [
-    which
-    numactl
-    coreutils
-    # cmake
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      flex
+      bison
+      autoconf
+      help2man
+      git
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      gdb
+    ];
 
-  doCheck = stdenv.hostPlatform.isLinux; # darwin tests are broken for now...
+  nativeCheckInputs =
+    [
+      which
+      coreutils
+      # cmake
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      numactl
+    ];
+
+  doCheck = true;
   checkTarget = "test";
 
   preConfigure = "autoconf";
 
   postPatch = ''
     patchShebangs bin/* src/* nodist/* docs/bin/* examples/xml_py/* \
-    test_regress/{driver.pl,t/*.{pl,pf}} \
+    test_regress/{driver.py,t/*.{pl,pf}} \
+    test_regress/t/t_a1_first_cc.py \
+    test_regress/t/t_a2_first_sc.py \
     ci/* ci/docker/run/* ci/docker/run/hooks/* ci/docker/buildenv/build.sh
     # verilator --gdbbt uses /bin/echo to test if gdb works.
-    sed -i 's|/bin/echo|${coreutils}\/bin\/echo|' bin/verilator
+    substituteInPlace bin/verilator --replace-fail "/bin/echo" "${coreutils}/bin/echo"
   '';
   # grep '^#!/' -R . | grep -v /nix/store | less
   # (in nix-shell after patchPhase)
+
+  # This is needed to ensure that the check phase can find the verilator_bin_dbg.
+  preCheck = ''
+    export PATH=$PWD/bin:$PATH
+  '';
 
   env = {
     SYSTEMC_INCLUDE = "${lib.getDev systemc}/include";

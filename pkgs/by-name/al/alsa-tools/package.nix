@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-tools";
-  version = "1.2.11";
+  version = "1.2.14";
 
   src = fetchurl {
     url = "mirror://alsa/tools/alsa-tools-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-CRXJY0pQL9NlXKnFdNJZvJ55mD2R1Frqz/bzwA+K4+k=";
+    hash = "sha256-+u9v3TnsecmlRz3GOqG2Mxv3ZkqdRSoKgZjOxwFsvG8=";
   };
 
   nativeBuildInputs = [

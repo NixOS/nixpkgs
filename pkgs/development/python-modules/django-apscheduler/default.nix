@@ -10,6 +10,7 @@
   # tests
   pytestCheckHook,
   pytest-django,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
+    pytz
   ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";

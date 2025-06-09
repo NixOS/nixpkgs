@@ -1,43 +1,58 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
-, nix-update-script
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+  nix-update-script,
+  makeBinaryWrapper,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "net-news-wire";
-  version = "6.1.5";
+  version = "6.1.9";
 
   src = fetchurl {
     url = "https://github.com/Ranchero-Software/NetNewsWire/releases/download/mac-${version}/NetNewsWire${version}.zip";
-    hash = "sha256-92hsVSEpa661qhebeSd5lxt8MtIJRn7YZyKlMs0vle0=";
+    hash = "sha256-wG1/EpsK1CMXDTM/WlNFBBUVq6IUSj0GEkqY5Azf/ls=";
   };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    unzip
+    makeBinaryWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/Applications
     cp -R NetNewsWire.app $out/Applications/
+    mkdir -p $out/bin
+    makeWrapper $out/Applications/NetNewsWire.app/Contents/MacOS/NetNewsWire $out/bin/net-news-wire
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^mac-(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
-  meta = with lib; {
+  meta = {
     description = "RSS reader for macOS and iOS";
     longDescription = ''
       It's like podcasts — but for reading.
       NetNewsWire shows you articles from your favorite blogs and news sites and keeps track of what you've read.
     '';
     homepage = "https://github.com/Ranchero-Software/NetNewsWire";
-    changelog =
-      "https://github.com/Ranchero-Software/NetNewsWire/releases/tag/mac-${version}";
-    license = licenses.mit;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ jakuzure ];
+    changelog = "https://github.com/Ranchero-Software/NetNewsWire/releases/tag/mac-${version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
+      jakuzure
+      DimitarNestorov
+    ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

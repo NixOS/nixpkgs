@@ -6,7 +6,7 @@
 
 with ocamlPackages;
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "jackline";
   version = "unstable-2024-10-21";
 

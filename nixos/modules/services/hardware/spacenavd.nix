@@ -17,7 +17,10 @@ in
   config = lib.mkIf cfg.enable {
     systemd = {
       packages = [ pkgs.spacenavd ];
-      services.spacenavd.enable = true;
+      services.spacenavd = {
+        enable = true;
+        wantedBy = [ "graphical.target" ];
+      };
     };
   };
 }

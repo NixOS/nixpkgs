@@ -96,8 +96,8 @@ let
       "debian/python"
       "debian/PkKek-1-*.pem"
     ];
-    rev = "refs/tags/debian/2024.05-1";
-    hash = "sha256-uAjXJaHOVh944ZxcA2IgCsrsncxuhc0JKlsXs0E03s0=";
+    rev = "refs/tags/debian/2025.02-8";
+    hash = "sha256-kAwfS8TBdN1PTm5kxTvqFuA9edBfBuMt6XmRWnFnolQ=";
   };
 
   buildPrefix = "Build/*/*";
@@ -214,7 +214,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     '';
 
   # TODO: Usage of -bios OVMF.fd is discouraged: https://lists.katacontainers.io/pipermail/kata-dev/2021-January/001650.html
-  # We should remove the isx86-specifc block here once we're ready to update nixpkgs to stop using that and update the
+  # We should remove the isx86-specific block here once we're ready to update nixpkgs to stop using that and update the
   # release notes accordingly.
   postInstall =
     ''
@@ -253,6 +253,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
       prefix = "${finalAttrs.finalPackage.fd}/FV/${fwPrefix}";
     in
     {
+      mergedFirmware = "${prefix}.fd";
       firmware = "${prefix}_CODE.fd";
       variables = "${prefix}_VARS.fd";
       variablesMs =

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-PDpiLPMyBZzj2nBy76cSC4ab/kyaoZC/Gd2HSaRVHUM=";
   };
 
-  cargoHash = "sha256-Z9PCnFrUgvF9anfShfU9U7iYISDpzAuJudLq/wN4ONU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-V3ks6AWEpPHUkarbgRfCs1G26UKJC5EtEZGVDCHu5V0=";
 
   meta = with lib; {
     description = "Ninja-compatible build system for high-level programming languages written in Rust";

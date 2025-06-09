@@ -7,7 +7,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "professor";
   version = "2.4.2";
 

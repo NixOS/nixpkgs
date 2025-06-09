@@ -27,17 +27,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "1.0rc-unstable-2024-12-26";
+  version = "1.0rc-unstable-2025-05-15";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "0c5dd28b1c5c1d17a2ce87efbd858059a8f9376f";
-    hash = "sha256-hIpIt+krUpSW1T05Vq02IU5Lfaj4Sgg18qMoMH45NaE=";
+    rev = "0e64a06c84f9b9428f8647c2aafde110c9d917f3";
+    hash = "sha256-T+AcpAITNALtZbuwY+oh4RnMgjCAi7n2HPyDjFqpQPI=";
   };
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     wrapQtAppsHook
   ];
@@ -46,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       SDL2
       enet
-      extra-cmake-modules
       libarchive
       libslirp
       libGL
@@ -103,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "melonDS";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       artemist
       benley
       shamilton

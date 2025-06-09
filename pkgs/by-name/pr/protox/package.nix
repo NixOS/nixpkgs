@@ -13,22 +13,23 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-U9+7k7dQ6YFfsKMfFMg34g42qLvn+mcSRlAAys3eXNo=";
   };
 
-  cargoHash = "sha256-sNOw19gxj+cEctxhXNWI8u15VJYlN8nSNl6Ha9sB/eE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Hfo7Yj2ttO5Yj1YfksjgN5RVUocSsS23I+p+0whpzX4=";
 
   buildFeatures = [ "bin" ];
 
   # tests are not included in the crate source
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Rust implementation of the protobuf compiler";
     mainProgram = "protox";
     homepage = "https://github.com/andrewhickman/protox";
     changelog = "https://github.com/andrewhickman/protox/blob/${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

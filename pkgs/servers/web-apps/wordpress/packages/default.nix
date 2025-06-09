@@ -184,16 +184,18 @@ let
     }
     // lib.mapAttrs (
       type: pkgs:
-      lib.makeExtensible (
-        _:
-        lib.mapAttrs (
-          pname: data:
-          self.mkOfficialWordpressDerivation {
-            type = lib.removeSuffix "s" type;
-            inherit pname data;
-            license = sourceJson.${type}.${pname};
-          }
-        ) pkgs
+      lib.recurseIntoAttrs (
+        lib.makeExtensible (
+          _:
+          lib.mapAttrs (
+            pname: data:
+            self.mkOfficialWordpressDerivation {
+              type = lib.removeSuffix "s" type;
+              inherit pname data;
+              license = sourceJson.${type}.${pname};
+            }
+          ) pkgs
+        )
       )
     ) generatedJson;
 

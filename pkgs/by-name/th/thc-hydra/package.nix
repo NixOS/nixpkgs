@@ -6,10 +6,10 @@
   openssl,
   ncurses,
   libidn,
-  pcre,
+  pcre2,
   libssh,
   libmysqlclient,
-  postgresql,
+  libpq,
   samba,
   withGUI ? false,
   makeWrapper,
@@ -43,8 +43,6 @@ stdenv.mkDerivation rec {
         --replace-fail "-lcurses" "-lncurses"
     '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-undef-prefix";
-
   nativeBuildInputs = lib.optionals withGUI [
     pkg-config
     makeWrapper
@@ -55,10 +53,10 @@ stdenv.mkDerivation rec {
     openssl
     ncurses
     libidn
-    pcre
+    pcre2
     libssh
     libmysqlclient
-    postgresql
+    libpq
     samba
   ] ++ lib.optional withGUI gtk2;
 
@@ -71,12 +69,12 @@ stdenv.mkDerivation rec {
       --add-flags --hydra-path --add-flags "$out/bin/hydra"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Very fast network logon cracker which support many different services";
     homepage = "https://github.com/vanhauser-thc/thc-hydra"; # https://www.thc.org/
     changelog = "https://github.com/vanhauser-thc/thc-hydra/raw/v${version}/CHANGES";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = lib.platforms.unix;
   };
 }

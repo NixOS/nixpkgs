@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebsockets";
-  version = "4.3.3";
+  version = "4.3.5";
 
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
     rev = "v${version}";
-    hash = "sha256-IXA9NUh55GtZmn4BhCXntVdHcKZ34iZIJ/0wlySj0/M=";
+    hash = "sha256-KOAhIVn4G5u0A1TE75Xv7iYO3/i8foqWYecH0kJHdBM=";
   };
 
   outputs = [

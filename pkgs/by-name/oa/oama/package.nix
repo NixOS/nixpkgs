@@ -1,6 +1,5 @@
 {
   haskell,
-  haskellPackages,
   lib,
   stdenv,
 }:
@@ -15,7 +14,7 @@ let
     passthru.updateScript = ./update.sh;
   };
 
-  raw-pkg = haskellPackages.callPackage ./generated-package.nix { };
+  raw-pkg = haskell.packages.ghc912.callPackage ./generated-package.nix { };
 in
 lib.pipe raw-pkg [
   (overrideCabal overrides)

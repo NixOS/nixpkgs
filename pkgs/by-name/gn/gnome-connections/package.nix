@@ -20,13 +20,13 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-connections";
-  version = "47.0";
+  version = "48.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-connections/${lib.versions.major version}/gnome-connections-${version}.tar.xz";
-    hash = "sha256-lT4jQ8C9SRawLtE6Ce8Rhv6WmSSSct/tuKI9ibQ3Lm0=";
+    url = "mirror://gnome/sources/gnome-connections/${lib.versions.major finalAttrs.version}/gnome-connections-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Nw75QFBrVybG8rfLl5ayI9HW1Chfg8/DOFvWdMMon9A=";
   };
 
   nativeBuildInputs = [
@@ -52,16 +52,18 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-connections"; };
+    updateScript = gnome.updateScript {
+      packageName = "gnome-connections";
+    };
   };
 
   meta = with lib; {
-    homepage = "https://gitlab.gnome.org/GNOME/connections";
-    changelog = "https://gitlab.gnome.org/GNOME/connections/-/blob/${version}/NEWS?ref_type=tags";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-connections";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-connections/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Remote desktop client for the GNOME desktop environment";
     mainProgram = "gnome-connections";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})

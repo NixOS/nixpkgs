@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-xbee";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Ep7pP2vcH9YpSrGPVDi3nc+WkQgBVS+NLmoQU0o0aQQ=";
   };
 

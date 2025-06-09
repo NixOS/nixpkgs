@@ -5,18 +5,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "pkgsite";
-  version = "0-unstable-2024-12-26";
+  version = "0-unstable-2025-06-08";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "pkgsite";
-    rev = "8bad909da0cbaf239510644c5a91d1be27376d9f";
-    hash = "sha256-EsShGqT2Pk8VdxNRplliPb5+VoD05/sQzGNTsk0VZEI=";
+    rev = "82c52f1754cd0ea741a56981d4830176071531d3";
+    hash = "sha256-bI5jVmCM5pSdiT+OJGrg1pBQ6ozPbXdZzrdLxr9cMUU=";
   };
 
-  vendorHash = "sha256-Ijcj1Nq4WjXcUqmoDkpO9I4rl/4/TMXFMQVAlEK11R8=";
+  vendorHash = "sha256-dZKm3dMI969HKPBrC95vVmY1cZmjy+NWq7xOzXsTE14=";
 
   subPackages = [ "cmd/pkgsite" ];
 

@@ -4,8 +4,6 @@
   fetchCrate,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
   withLsp ? true,
 }:
 
@@ -19,20 +17,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-dNGQbaIfFmgXh2AOcaE74BTz7/jaiBgU7Y1pkg1rV7U=";
   };
 
-  cargoHash = "sha256-iucjewjRCunKxKCqeZwf7bdEo7+aN9hfWPwUAJhaSq0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7u7ZyS+5QIGfXKNVJZLzGXoMSI2DHSrD1AEtPttS22Q=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   buildFeatures = lib.optional withLsp "lsp";
 

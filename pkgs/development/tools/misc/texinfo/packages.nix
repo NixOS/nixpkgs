@@ -6,7 +6,7 @@
   fetchurl,
   perl,
   libintl,
-  bash,
+  bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
   gnulib,
   gawk,
@@ -14,7 +14,7 @@
   libiconv,
   xz,
 
-  # we are a dependency of gcc, this simplifies bootstraping
+  # we are a dependency of gcc, this simplifies bootstrapping
   interactive ? false,
   ncurses,
   procps,
@@ -57,7 +57,7 @@ let
       xz
       libintl
       libiconv
-      bash
+      bashNonInteractive
       gnulib
       gawk
       freebsd
@@ -69,25 +69,6 @@ let
   };
 in
 {
-  texinfo413 = stdenv.mkDerivation (finalAttrs: {
-    pname = "texinfo";
-    version = "4.13a";
-
-    src = fetchurl {
-      url = "mirror://gnu/texinfo/texinfo-${finalAttrs.version}.tar.lzma";
-      hash = "sha256-bSiwzq6GbjU2FC/FUuejvJ+EyDAxGcJXMbJHju9kyeU=";
-    };
-
-    buildInputs = [ ncurses ];
-    nativeBuildInputs = [ xz ];
-
-    # Disabled because we don't have zdiff in the stdenv bootstrap.
-    #doCheck = true;
-
-    meta = meta // {
-      branch = finalAttrs.version;
-    };
-  });
   texinfo6_5 = buildTexinfo {
     version = "6.5";
     hash = "sha256-d3dLP0oGwgcFzC7xyASGRCLjz5UjXpZbHwCkbffaX2I=";
@@ -102,7 +83,7 @@ in
     patches = [ ./fix-glibc-2.34.patch ];
   };
   texinfo7 = buildTexinfo {
-    version = "7.1.1";
-    hash = "sha256-Ma435GKDUpQythvuHOAe0AkNWZ5gb8aincofd8dqbII=";
+    version = "7.2";
+    hash = "sha256-AynXeI++8RP6gsuAiJyhl6NEzg33ZG/gAJdMXXFDY6Y=";
   };
 }

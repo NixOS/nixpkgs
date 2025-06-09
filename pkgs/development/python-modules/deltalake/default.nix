@@ -7,7 +7,6 @@
   pyarrow-hotfix,
   openssl,
   stdenv,
-  darwin,
   libiconv,
   pkg-config,
   pytestCheckHook,
@@ -28,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-serMb6Rirmw+QLpET3NT2djBoFBW/TGu1/5qYjiYpKE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-NkXovFsX+qbca+gYeBMQnacNzubloWNW/GrXNeWquE8=";
+    hash = "sha256-WGnjVYws8ZZMv0MvBrohozxQuyOImktaLxuvAIiH+U0=";
   };
 
   env.OPENSSL_NO_VENDOR = 1;
@@ -45,8 +44,6 @@ buildPythonPackage rec {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
       libiconv
     ];
 

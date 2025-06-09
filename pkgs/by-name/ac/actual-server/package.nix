@@ -7,20 +7,48 @@
   cacert,
   gitMinimal,
   nodejs_20,
+  python3,
   yarn,
   nixosTests,
   nix-update-script,
 }:
 let
-  version = "24.12.0";
+  version = "25.5.0";
   src = fetchFromGitHub {
+    name = "actualbudget-actual-source";
     owner = "actualbudget";
-    repo = "actual-server";
+    repo = "actual";
     tag = "v${version}";
-    hash = "sha256-qCATfpYjDlR2LaalkF0/b5tD4HDE4aNDrLvTC4g0ctY=";
+    hash = "sha256-NYAO1Yx3u0wm9F6zSwIolQkXBfFO1YkSKV5UMCBi8nw=";
+  };
+  translations = fetchFromGitHub {
+    name = "actualbudget-translations-source";
+    owner = "actualbudget";
+    repo = "translations";
+    # Note to updaters: this repo is not tagged, so just update this to the Git
+    # tip at the time the update is performed.
+    rev = "312fce7791e6722357e5d2f851407f4b7cf4ecb9";
+    hash = "sha256-kDArpSFiNJJF5ZGCtcn7Ci7wCpI1cTSknDZ4sQgy/Nc=";
   };
 
   yarn_20 = yarn.override { nodejs = nodejs_20; };
+
+  SUPPORTED_ARCHITECTURES = builtins.toJSON {
+    os = [
+      "darwin"
+      "linux"
+    ];
+    cpu = [
+      "arm"
+      "arm64"
+      "ia32"
+      "x64"
+    ];
+    libc = [
+      "glibc"
+      "musl"
+    ];
+  };
 
   # We cannot use fetchYarnDeps because that doesn't support yarn2/berry
   # lockfiles (see https://github.com/NixOS/nixpkgs/issues/254369)
@@ -34,22 +62,7 @@ let
       yarn_20
     ];
 
-    SUPPORTED_ARCHITECTURES = builtins.toJSON {
-      os = [
-        "darwin"
-        "linux"
-      ];
-      cpu = [
-        "arm"
-        "arm64"
-        "ia32"
-        "x64"
-      ];
-      libc = [
-        "glibc"
-        "musl"
-      ];
-    };
+    inherit SUPPORTED_ARCHITECTURES;
 
     buildPhase = ''
       runHook preBuild
@@ -57,8 +70,15 @@ let
       export HOME=$(mktemp -d)
       yarn config set enableTelemetry 0
       yarn config set cacheFolder $out
+      # At this stage we don't need binaries yet, so we can skip preinstall
+      # scripts here.
+      yarn config set enableScripts false
       yarn config set --json supportedArchitectures "$SUPPORTED_ARCHITECTURES"
-      yarn
+
+      # Install dependencies for all workspaces, and include devDependencies,
+      # to build web UI. Dependencies will be re-created in offline mode in the
+      # package's install phase.
+      yarn install --immutable
 
       runHook postBuild
     '';
@@ -75,14 +95,61 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash =
-      {
-        x86_64-linux = "sha256-Rz+iKw4JDWtZOrCjs9sbHVw/bErAEY4TfoG+QfGKY94=";
-        aarch64-linux = "sha256-JGpRoIQrEI6crczHD62ZQO08GshBbzJC0dONYD69K/I=";
-        aarch64-darwin = "sha256-v2qzKmtqBdU6igyHat+NyL/XTzWgq/CKlNpai/iFHyQ=";
-        x86_64-darwin = "sha256-0ksWLlF/a58KY/8NgOQ5aPOLoXzqDqO3lhkmFvT17Bk=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    outputHash = "sha256-NPyFzklzAUIrTADTF/JBOieWMXOhL+X3pF3qXrfdyCs=";
+  };
+
+  webUi = stdenvNoCC.mkDerivation {
+    pname = "actual-server-webui";
+    inherit version;
+    srcs = [
+      src
+      translations
+    ];
+    sourceRoot = "${src.name}/";
+
+    nativeBuildInputs = [
+      nodejs_20
+      yarn_20
+    ];
+
+    inherit SUPPORTED_ARCHITECTURES;
+
+    postPatch = ''
+      ln -sv ../../../${translations.name} ./packages/desktop-client/locale
+      cp -r ${offlineCache}/node_modules ./node_modules
+
+      patchShebangs --build ./bin ./packages/*/bin
+
+      # Patch all references to `git` to a no-op `true`. This neuter automatic
+      # translation update.
+      substituteInPlace bin/package-browser \
+        --replace-fail "git" "true"
+
+      # Allow `remove-untranslated-languages` to do its job.
+      chmod -R u+w ./packages/desktop-client/locale
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+
+      export HOME=$(mktemp -d)
+      yarn config set enableTelemetry 0
+      yarn config set cacheFolder ${offlineCache}
+      yarn config set --json supportedArchitectures "$SUPPORTED_ARCHITECTURES"
+
+      yarn build:server
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      cp -r packages/desktop-client/build $out
+
+      runHook postInstall
+    '';
+    dontFixup = true;
   };
 in
 stdenv.mkDerivation {
@@ -91,25 +158,45 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeWrapper
+    (python3.withPackages (ps: [ ps.setuptools ])) # Used by node-gyp
     yarn_20
   ];
+
+  inherit SUPPORTED_ARCHITECTURES;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib,lib/actual}
-    cp -r ${offlineCache}/node_modules/ $out/lib/actual
-    cp -r ./ $out/lib/actual
+    mkdir -p $out/{bin,lib,lib/actual/packages/sync-server,lib/actual/packages/desktop-client}
+    cp -r ./packages/sync-server/{app.js,src,migrations,package.json,bin} $out/lib/actual/packages/sync-server
+    # sync-server uses package.json to determine path to web ui.
+    cp ./packages/desktop-client/package.json $out/lib/actual/packages/desktop-client
+    cp -r ${webUi} $out/lib/actual/packages/desktop-client/build
+
+    # Re-create node_modules/ to contain just production packages required for
+    # sync-server itself, using existing offline cache. This will also now build
+    # binaries.
+    export HOME=$(mktemp -d)
+    yarn config set enableNetwork false
+    yarn config set enableOfflineMode true
+    yarn config set enableTelemetry 0
+    yarn config set cacheFolder ${offlineCache}
+    yarn config set --json supportedArchitectures "$SUPPORTED_ARCHITECTURES"
+
+    export npm_config_nodedir=${nodejs_20}
+
+    yarn workspaces focus @actual-app/sync-server --production
+    cp -r ./node_modules $out/lib/actual/
 
     makeWrapper ${lib.getExe nodejs_20} "$out/bin/actual-server" \
-      --add-flags "$out/lib/actual/app.js" \
-      --set NODE_PATH "$out/node_modules"
+      --add-flags "$out/lib/actual/packages/sync-server/bin/actual-server.js" \
+      --set NODE_PATH "$out/actual/lib/node_modules"
 
     runHook postInstall
   '';
 
   passthru = {
-    inherit offlineCache;
+    inherit offlineCache webUi;
     tests = nixosTests.actual;
     passthru.updateScript = nix-update-script { };
   };
@@ -120,6 +207,8 @@ stdenv.mkDerivation {
     homepage = "https://actualbudget.org/";
     mainProgram = "actual-server";
     license = lib.licenses.mit;
+    # https://github.com/NixOS/nixpkgs/issues/403846
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = [
       lib.maintainers.oddlama
       lib.maintainers.patrickdag

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ValiMail";
     repo = "authentication-headers";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BFMZpSJ4qCEL42xTiM/D5dkatxohiCrOWAkNZHFUhac=";
   };
 

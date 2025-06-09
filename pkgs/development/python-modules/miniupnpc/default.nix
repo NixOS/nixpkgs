@@ -3,19 +3,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   cctools,
   which,
 }:
 
 buildPythonPackage rec {
   pname = "miniupnpc";
-  version = "2.2.8";
-  format = "setuptools";
+  version = "2.3.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KwpNVl+tZTZHHZKW9p3a/S0nZJW6lZftjBK9ECkRUMo=";
+    hash = "sha256-XCHRKwUEm1Amoth0ekzYCwe5rmG4mLXcZiSXzHsbmTU=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools

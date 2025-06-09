@@ -17,21 +17,22 @@
   advancecomp,
   makeWrapper,
   nixosTests,
+  strip-nondeterminism,
 }:
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.5.220";
+  version = "1.6.241";
 
   src = fetchFromGitHub {
     owner = "divVerent";
-    repo = pname;
+    repo = "aaaaxy";
     rev = "v${version}";
-    hash = "sha256-XNLX5LDbL29Ko0zstgo+O5V0oe37dSChk8iJeVrYlLA=";
+    hash = "sha256-pfvz5qaGLhFw+UD4OL6R88Qw6Ml3Pn66ZMQI3f923JA=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-tDQKU/1fKDPCrUHfFi79u4d2XwOqjvTuIlsUAB74e4c=";
+  vendorHash = "sha256-ojgI4HgNp2pbFAWeucdU8n3qW7ittAvp+ptDndCQlEI=";
 
   buildInputs = [
     alsa-lib
@@ -51,6 +52,7 @@ buildGoModule rec {
     zip
     advancecomp
     makeWrapper
+    strip-nondeterminism
   ];
 
   outputs = [

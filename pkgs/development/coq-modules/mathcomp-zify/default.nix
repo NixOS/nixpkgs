@@ -2,13 +2,14 @@
   lib,
   mkCoqDerivation,
   coq,
-  mathcomp-algebra,
-  mathcomp-ssreflect,
+  mathcomp-boot,
   mathcomp-fingroup,
+  mathcomp-algebra,
+  stdlib,
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   namePrefix = [
     "coq"
     "mathcomp"
@@ -25,7 +26,7 @@ mkCoqDerivation rec {
       [
         {
           cases = [
-            (range "8.16" "8.20")
+            (range "8.16" "9.0")
             (isGe "2.0.0")
           ];
           out = "1.5.0+2.0+8.16";
@@ -53,9 +54,10 @@ mkCoqDerivation rec {
   release."1.5.0+2.0+8.16".sha256 = "sha256-boBYGvXdGFc6aPnjgSZYSoW4kmN5khtNrSV3DUv9DqM=";
 
   propagatedBuildInputs = [
+    mathcomp-boot
     mathcomp-algebra
-    mathcomp-ssreflect
     mathcomp-fingroup
+    stdlib
   ];
 
   meta = {

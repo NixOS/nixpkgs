@@ -7,6 +7,7 @@
   SDL2_ttf,
   copyDesktopItems,
   expat,
+  fetchurl,
   flac,
   fontconfig,
   glm,
@@ -18,7 +19,6 @@
   libpulseaudio,
   makeDesktopItem,
   makeWrapper,
-  papirus-icon-theme,
   pkg-config,
   portaudio,
   portmidi,
@@ -28,25 +28,23 @@
   rapidjson,
   sqlite,
   utf8proc,
+  versionCheckHook,
   which,
+  wrapQtAppsHook,
   writeScript,
   zlib,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
-in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.273";
+  version = "0.277";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-aOBYnkdcFKDkw/KFiv0IRgpOChn8NRKD2xmbfExYGKY=";
+    hash = "sha256-mGKTZ8/gvGQv9oXK4pgbJk580GAAXUS16hRQu4uHhdA=";
   };
 
   outputs = [
@@ -75,8 +73,6 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_LIB_ZLIB=1"
   ];
 
-  dontWrapQtApps = true;
-
   # https://docs.mamedev.org/initialsetup/compilingmame.html
   buildInputs =
     [
@@ -104,8 +100,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libpcap
-      CoreAudioKit
-      ForceFeedback
     ];
 
   nativeBuildInputs = [
@@ -115,6 +109,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     which
+    wrapQtAppsHook
   ];
 
   patches = [
@@ -126,10 +121,27 @@ stdenv.mkDerivation rec {
 
   # Since the bug described in https://github.com/NixOS/nixpkgs/issues/135438,
   # it is not possible to use substituteAll
-  postPatch = ''
-    substituteInPlace src/emu/emuopts.cpp \
-      --subst-var-by mamePath "$out/opt/mame"
-  '';
+  postPatch =
+    ''
+      substituteInPlace src/emu/emuopts.cpp \
+        --subst-var-by mamePath "$out/opt/mame"
+    ''
+    # MAME's build system uses `sw_vers` to test whether it needs to link with
+    # the Metal framework or not. However:
+    # a) that would return the build system's version, not the target's, and
+    # b) it can't actually find `sw_vers` in $PATH, so it thinks it's on macOS
+    #    version 0, and doesn't link with Metal - causing missing symbol errors
+    #    when it gets to the link step, because other parts of the build system
+    #    _do_ use the correct target version number.
+    # This replaces the `sw_vers` call with the macOS version actually being
+    # targeted, so everything gets linked correctly.
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      for file in scripts/src/osd/{mac,sdl}.lua; do
+        substituteInPlace "$file" --replace-fail \
+          'backtick("sw_vers -productVersion")' \
+          "os.getenv('MACOSX_DEPLOYMENT_TARGET') or '$darwinMinVersion'"
+        done
+    '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -156,7 +168,10 @@ stdenv.mkDerivation rec {
   # to the final package after we figure out how they work
   installPhase =
     let
-      icon = "${papirus-icon-theme}/share/icons/Papirus/32x32/apps/mame.svg";
+      icon = fetchurl {
+        url = "https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-icon-theme/refs/heads/master/Papirus/32x32/apps/mame.svg";
+        hash = "sha256-s44Xl9UGizmddd/ugwABovM8w35P0lW9ByB69MIpG+E=";
+      };
     in
     ''
       runHook preInstall
@@ -188,6 +203,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-h";
+
   passthru.updateScript = writeScript "mame-update-script" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl common-updater-scripts jq
@@ -198,7 +217,7 @@ stdenv.mkDerivation rec {
     update-source-version mame "''${latest_version/mame0/0.}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mamedev.org/";
     description = "Multi-purpose emulation framework";
     longDescription = ''
@@ -216,13 +235,15 @@ stdenv.mkDerivation rec {
       focus.
     '';
     changelog = "https://github.com/mamedev/mame/releases/download/mame${srcVersion}/whatsnew_${srcVersion}.txt";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl2Plus
     ];
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with lib.maintainers; [
+      thiagokokada
+      DimitarNestorov
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "mame";
   };
 }

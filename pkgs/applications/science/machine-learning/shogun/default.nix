@@ -184,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_TFLogger" true)
       (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_ViennaCL" true)
       (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'${excludeTestsRegex}'")
-      (lib.cmakeBool "ENABLE_TESTING" finalAttrs.doCheck)
+      (lib.cmakeBool "ENABLE_TESTING" finalAttrs.finalPackage.doCheck)
       (lib.cmakeBool "DISABLE_META_INTEGRATION_TESTS" true)
       (lib.cmakeBool "TRAVIS_DISABLE_META_CPP" true)
       (lib.cmakeBool "INTERFACE_PYTHON" pythonSupport)

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sairon";
     repo = "rapt-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ozZwVgTV/xYl1nXLiybcPs6DQKocNdbxTEYDfYyQuvY=";
   };
 

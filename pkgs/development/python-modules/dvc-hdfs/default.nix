@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-hdfs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Bo8+El5GC7iyT8SxaJquWFG29BOeilmEMDtTG+RkDGI=";
   };
 

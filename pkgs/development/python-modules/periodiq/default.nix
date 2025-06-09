@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytest-mock
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pytestFlagsArray = [ "tests/unit" ];
 

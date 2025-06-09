@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Cogmasters";
     repo = "concord";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yTFGRnhDzxU+dPeZbCWlm52gsmEgD2el+46c8XQBQng=";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cogmasters.github.io/concord/";
     changelog = "https://github.com/Cogmasters/concord/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emneo ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.unix;
   };
 })

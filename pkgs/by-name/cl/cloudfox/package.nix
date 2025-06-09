@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "BishopFox";
     repo = "cloudfox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YLZSrBAEf0SXECAdnF2CQAlEd15DJ1Iv+x+RebM5tw4=";
   };
 
@@ -25,12 +25,12 @@ buildGoModule rec {
   # Some tests are failing because of wrong filename/path
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for situational awareness of cloud penetration tests";
     homepage = "https://github.com/BishopFox/cloudfox";
     changelog = "https://github.com/BishopFox/cloudfox/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cloudfox";
   };
 }

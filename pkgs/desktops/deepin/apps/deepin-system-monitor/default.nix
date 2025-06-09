@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-system-monitor";
-  version = "6.5.0";
+  version = "6.5.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-UOF0/RBceuRX6AtI1p5qqHhbRDAhA7i0+seOrkAFFgI=";
+    hash = "sha256-xLlWQaoKC+/jgDD9sBikh5Z1QqDuCFcMulo0vqxJM7k=";
   };
 
   postPatch = ''
@@ -80,7 +80,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  # To build with icu4c need at least c++17
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=incompatible-pointer-types"
+    "--std=c++17"
+  ];
 
   strictDeps = true;
 
@@ -89,6 +93,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-system-monitor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

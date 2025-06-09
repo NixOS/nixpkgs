@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "simplotask";
-  version = "1.16.3";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "spot";
     rev = "v${version}";
-    hash = "sha256-Se2Gq3GnQsAKIzRslt2zEkqeE8lwda96EcglhqfC5NA=";
+    hash = "sha256-6SWWf1ZprCZPXLvUtIln1+TrOztn7WWkN8o/fQXau5I=";
   };
 
   vendorHash = null;

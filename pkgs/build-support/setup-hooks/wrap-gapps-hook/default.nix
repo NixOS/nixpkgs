@@ -8,6 +8,7 @@
   gtk3,
   librsvg,
   dconf,
+  withDconf ? !stdenv.targetPlatform.isDarwin && lib.meta.availableOn stdenv.targetPlatform dconf,
   callPackage,
   wrapGAppsHook3,
   targetPackages,
@@ -41,7 +42,7 @@ makeSetupHook {
       # TODO: remove this, packages should depend on GTK explicitly.
       gtk3
     ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    ++ lib.optionals withDconf [
       # It is highly probable that a program will use GSettings,
       # at minimum through GTK file chooser dialogue.
       # Let’s add a GIO module for “dconf” GSettings backend

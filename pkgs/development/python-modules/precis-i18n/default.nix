@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "byllyfish";
     repo = "precis_i18n";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rtg3u8lnnmQFPsNC52LNVoEVu6CeHzAWvOjWBlzLKC4=";
   };
 

@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildDunePackage,
   ocaml,
+  ounit,
   qtest,
   qcheck,
   num,
@@ -12,7 +13,7 @@
 
 buildDunePackage rec {
   pname = "batteries";
-  version = "3.8.0";
+  version = "3.9.0";
 
   minimalOCamlVersion = "4.05";
 
@@ -20,11 +21,14 @@ buildDunePackage rec {
     owner = "ocaml-batteries-team";
     repo = "batteries-included";
     rev = "v${version}";
-    hash = "sha256-Ixqfo2F4VftrIVF8oBOx/rSiJZppiwXOjVQ3Tcelxac=";
+    hash = "sha256-+PGfExdvp3WyX1s8dLTBYp1SoUOBkzrxyqMUuaW6Bto=";
   };
 
   nativeCheckInputs = [ qtest ];
-  checkInputs = [ qcheck ];
+  checkInputs = [
+    ounit
+    qcheck
+  ];
   propagatedBuildInputs = [
     camlp-streams
     num

@@ -12,7 +12,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "smolck";
-    repo = pname;
+    repo = "uivonim";
     rev = "v${version}";
     hash = "sha256-TcsKjRwiCTRQLxolRuJ7nRTGxFC0V2Q8LQC5p9iXaaY=";
   };
@@ -37,7 +37,7 @@ buildNpmPackage rec {
   meta = with lib; {
     homepage = "https://github.com/smolck/uivonim";
     description = "Cross-platform GUI for neovim based on electron";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     license = licenses.agpl3Only;
     mainProgram = "uivonim";

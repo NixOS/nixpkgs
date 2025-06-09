@@ -17,17 +17,25 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mesa-libgbm";
-  inherit (common) meta;
 
-  version = "24.3.2";
+  # We don't use the versions from common.nix, because libgbm is a world rebuild,
+  # so the updates need to happen separately on staging.
+  version = "25.0.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "mesa";
     rev = "mesa-${version}";
-    hash = "sha256-6EcSOE73wEz+aS4C+GUVfcbJtGB0MvIL4a6zA1ohVGA=";
+    hash = "sha256-9D4d7EEdZysvXDRcmpbyt85Lo64sldNRomp6/HUVORo=";
   };
+
+  # Install gbm_backend_abi.h header - this is to simplify future iteration
+  # on building Mesa and friends with system libgbm.
+  # See also:
+  # - https://github.com/NixOS/nixpkgs/pull/387292
+  # - https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/33890
+  patches = [ ./gbm-header.patch ];
 
   mesonAutoFeatures = "disabled";
 
@@ -62,4 +70,6 @@ stdenv.mkDerivation rec {
     python3Packages.mako
     python3Packages.pyyaml
   ];
+
+  inherit (common) meta;
 }

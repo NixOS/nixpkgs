@@ -42,4 +42,5 @@ mapAliases {
   nlua-nvim = throw "nlua-nvim was removed, use neodev-nvim instead"; # added 2023-12-16
   nvim-client = throw "nvim-client was removed because it is now part of neovim"; # added 2023-12-17
   toml = throw "toml was removed because broken. You can use toml-edit instead"; # added 2024-06-25
+  nvim-dbee = throw "nvim-dbee was removed because broken. You can use vimPlugins.nvim-dbee instead"; # added 2024-06-25
 }

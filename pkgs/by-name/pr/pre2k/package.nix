@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "garrettfoster13";
     repo = "pre2k";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-z1ttuRos7x/zdWiYYozxWzRarFExd4W5rUYAEiUMugU=";
   };
 
@@ -39,12 +39,12 @@ python3.pkgs.buildPythonApplication rec {
     "pre2k"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to query for the existence of pre-windows 2000 computer objects";
     homepage = "https://github.com/garrettfoster13/pre2k";
     changelog = "https://github.com/garrettfoster13/pre2k/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pre2k";
   };
 }

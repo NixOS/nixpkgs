@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   pkg-config,
-  SDL,
   SDL2,
 }:
 
@@ -18,7 +17,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    SDL
     SDL2
   ];
 

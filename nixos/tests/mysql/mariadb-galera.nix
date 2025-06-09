@@ -58,30 +58,6 @@ let
                 extraHosts = lib.concatMapStringsSep "\n" (i: "192.168.1.${toString i} galera_0${toString i}") (
                   lib.range 1 6
                 );
-                firewall.allowedTCPPorts = [
-                  3306
-                  4444
-                  4567
-                  4568
-                ];
-                firewall.allowedUDPPorts = [ 4567 ];
-              };
-              systemd.services.mysql = with pkgs; {
-                path = with pkgs; [
-                  bash
-                  gawk
-                  gnutar
-                  gzip
-                  inetutils
-                  iproute2
-                  netcat
-                  procps
-                  pv
-                  rsync
-                  socat
-                  stunnel
-                  which
-                ];
               };
               services.mysql = {
                 enable = true;
@@ -101,27 +77,24 @@ let
                     FLUSH PRIVILEGES;
                   ''
                 );
+
+                galeraCluster = {
+                  enable = true;
+                  package = galeraPackage;
+                  sstMethod = method;
+
+                  localAddress = address;
+                  localName = "galera_0${toString id}";
+
+                  clusterAddress =
+                    "gcomm://"
+                    + lib.optionalString (id == 2 || id == 3) "galera_01,galera_02,galera_03"
+                    + lib.optionalString (id == 5 || id == 6) "galera_04,galera_05,galera_06";
+                };
+
                 settings = {
-                  mysqld = {
-                    bind_address = "0.0.0.0";
-                  };
                   galera = {
-                    wsrep_on = "ON";
                     wsrep_debug = "NONE";
-                    wsrep_retry_autocommit = "3";
-                    wsrep_provider = "${galeraPackage}/lib/galera/libgalera_smm.so";
-                    wsrep_cluster_address =
-                      "gcomm://"
-                      + lib.optionalString (id == 2 || id == 3) "galera_01,galera_02,galera_03"
-                      + lib.optionalString (id == 5 || id == 6) "galera_04,galera_05,galera_06";
-                    wsrep_cluster_name = "galera";
-                    wsrep_node_address = address;
-                    wsrep_node_name = "galera_0${toString id}";
-                    wsrep_sst_method = method;
-                    wsrep_sst_auth = "check_repl:check_pass";
-                    binlog_format = "ROW";
-                    enforce_storage_engine = "InnoDB";
-                    innodb_autoinc_lock_mode = "2";
                   };
                 };
               };

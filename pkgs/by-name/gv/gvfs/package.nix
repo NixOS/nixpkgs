@@ -5,7 +5,7 @@
   meson,
   ninja,
   pkg-config,
-  substituteAll,
+  replaceVars,
   gettext,
   dbus,
   glib,
@@ -47,16 +47,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.56.1";
+  version = "1.57.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hnMczsZ5ZI+HNOI3sd4ZDr3ubkyMD1b0VMMViOUJqhA=";
+    hash = "sha256-8Wvvjsof1sEX6F2wEdIekVZpeQ1VhnNJxfGykSmelYU=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-ssh-path.patch;
+    (replaceVars ./hardcode-ssh-path.patch {
       ssh_program = "${lib.getBin openssh}/bin/ssh";
     })
   ];
@@ -161,6 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
       "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 })

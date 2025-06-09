@@ -3,8 +3,8 @@ self:
   lib,
   stdenv,
   makeSetupHook,
-  fetchurl,
   cmake,
+  ninja,
   qt6,
 }:
 let
@@ -98,7 +98,9 @@ let
     attrName: attrValue:
     let
       pretty = lib.generators.toPretty { };
-      duplicates = builtins.filter (dep: (builtins.elem (lib.getName dep) filteredDepNames)) attrValue;
+      duplicates = builtins.filter (
+        dep: dep != null && builtins.elem (lib.getName dep) filteredDepNames
+      ) attrValue;
     in
     if duplicates != [ ] then
       lib.warn "Duplicate dependencies in ${attrName} of package ${pname}: ${pretty duplicates}"
@@ -121,6 +123,7 @@ let
 
     nativeBuildInputs = [
       cmake
+      ninja
       qt6.wrapQtAppsHook
       moveDevHook
     ] ++ extraNativeBuildInputs;
@@ -151,7 +154,7 @@ let
     description = projectInfo.${pname}.description;
     homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
     license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
-    maintainers = lib.teams.qt-kde.members;
+    teams = [ lib.teams.qt-kde ];
     # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   } // (args.meta or { });

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sass";
-    repo = pname;
+    repo = "sassc";
     rev = version;
     sha256 = "sha256-jcs3+orRqKt9C3c2FTdeaj4H2rBP74lW3HF8CHSm7lQ=";
   };

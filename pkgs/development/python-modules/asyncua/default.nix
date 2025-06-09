@@ -11,6 +11,7 @@
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
+  pythonAtLeast,
   pythonOlder,
   pytz,
   setuptools,
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XXjzYDOEBdA4uk0VCzscHrPCY2Lgin0JBAVDdxmSOio=";
     fetchSubmodules = true;
   };
@@ -65,6 +66,11 @@ buildPythonPackage rec {
     [
       # Failed: DID NOT RAISE <class 'asyncio.exceptions.TimeoutError'>
       "test_publish"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # dbm.sqlite3.error: SQLite objects created in a thread can only be used in that same thread.
+      # The object was created in thread id 140737220687552 and this is thread id 140737343690560.
+      "test_runTest"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # OSError: [Errno 48] error while attempting to bind on address ('127.0.0.1',...

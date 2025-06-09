@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "templateflow";
     repo = "python-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-COS767n2aC65m6AJihZb4NhJ4ZK9YkTAZR7Hcnc/LMs=";
   };
 

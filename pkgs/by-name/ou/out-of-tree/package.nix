@@ -14,7 +14,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchgit {
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     url = "https://code.dumpstack.io/tools/${pname}.git";
     hash = "sha256-XzO8NU7A5m631PjAm0F/K7qLrD+ZDSdHXaNowGaZAPo=";
   };

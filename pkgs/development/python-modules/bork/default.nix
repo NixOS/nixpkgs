@@ -24,8 +24,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "duckinator";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "bork";
+    tag = "v${version}";
     hash = "sha256-YqvtOwd00TXD4I3fIQolvjHnjREvQgbdrEO9Z96v1Kk=";
   };
 
@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "packaging"
+    "urllib3"
   ];
 
   dependencies =

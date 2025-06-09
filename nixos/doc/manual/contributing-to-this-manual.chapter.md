@@ -17,6 +17,28 @@ There's also [a convenient development daemon](https://nixos.org/manual/nixpkgs/
 
 The above instructions don't deal with the appendix of available `configuration.nix` options, and the manual pages related to NixOS. These are built, and written in a different location and in a different format, as explained in the next sections.
 
+## Development environment {#sec-contributing-development-env}
+
+In order to reduce repetition, consider using tools from the provided development environment:
+
+Load it from the NixOS documentation directory with
+
+```ShellSession
+$ cd /path/to/nixpkgs/nixos/doc/manual
+$ nix-shell
+```
+
+To load the development utilities automatically when entering that directory, [set up `nix-direnv`](https://nix.dev/guides/recipes/direnv).
+
+Make sure that your local files aren't added to Git history by adding the following lines to `.git/info/exclude` at the root of the Nixpkgs repository:
+
+```
+/**/.envrc
+/**/.direnv
+```
+
+You might want to also use [`devmode`](https://github.com/NixOS/nixpkgs/blob/master/doc/README.md#devmode) while editing the manual.
+
 ## Testing redirects {#sec-contributing-redirects}
 
 Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.

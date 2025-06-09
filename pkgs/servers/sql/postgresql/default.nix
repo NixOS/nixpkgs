@@ -22,14 +22,19 @@ let
       version: path:
       let
         attrName = if jitSupport then "${version}_jit" else version;
+        postgresql = import path { inherit self; };
+        attrValue = if jitSupport then postgresql.withJIT else postgresql.withoutJIT;
       in
-      self.lib.nameValuePair attrName (
-        import path {
-          inherit jitSupport self;
-        }
-      )
+      self.lib.nameValuePair attrName attrValue
     ) versions;
 
+  libpq = self.callPackage ./libpq.nix { };
+
 in
-# variations without and with JIT
-(mkAttributes false) // (mkAttributes true)
+{
+  # variations without and with JIT
+  postgresqlVersions = mkAttributes false;
+  postgresqlJitVersions = mkAttributes true;
+
+  inherit libpq;
+}

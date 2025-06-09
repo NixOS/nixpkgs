@@ -70,6 +70,7 @@ mapAliases (
     echodoc = echodoc-vim;
     eighties = vim-eighties;
     extradite = vim-extradite;
+    feline-nvim = throw "feline.nvim has been removed: upstream deleted repository. Consider using lualine"; # Added 2025-02-09
     fugitive = vim-fugitive;
     floating-nvim = throw "floating.nvim has been removed: abandoned by upstream. Use popup-nvim or nui-nvim"; # Added 2024-11-26
     ghc-mod-vim = ghcmod-vim;
@@ -115,6 +116,7 @@ mapAliases (
     snipmate = vim-snipmate;
     sourcemap = sourcemap-vim;
     "sourcemap.vim" = sourcemap-vim;
+    Spacegray-vim = throw "Spacegray-vim has been removed: abandoned by upstream"; # Added 2025-03-24
     surround = vim-surround;
     sleuth = vim-sleuth;
     solidity = vim-solidity;

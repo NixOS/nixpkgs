@@ -8,7 +8,6 @@
   cpuinfo,
   cubeb,
   curl,
-  discord-rpc,
   extra-cmake-modules,
   libXrandr,
   libbacktrace,
@@ -40,10 +39,14 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ./001-fix-test-inclusion.diff
     # Patching yet another script that fills data based on git commands . . .
     ./002-hardcode-vars.diff
+    # Fix NEON intrinsics usage
+    ./003-fix-NEON-intrinsics.patch
+    ./remove-cubeb-vendor.patch
   ];
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     ninja
     pkg-config
     qttools
@@ -54,8 +57,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     cpuinfo
+    cubeb
     curl
-    extra-cmake-modules
     libXrandr
     libbacktrace
     libwebp
@@ -68,7 +71,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     sources.soundtouch-patched
     sources.spirv-cross-patched
     wayland
-  ] ++ cubeb.passthru.backendLibs;
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTS" true)
@@ -113,14 +116,11 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     let
-      libPath = lib.makeLibraryPath (
-        [
-          sources.shaderc-patched
-          sources.spirv-cross-patched
-          vulkan-loader
-        ]
-        ++ cubeb.passthru.backendLibs
-      );
+      libPath = lib.makeLibraryPath ([
+        sources.shaderc-patched
+        sources.spirv-cross-patched
+        vulkan-loader
+      ]);
     in
     [
       "--prefix LD_LIBRARY_PATH : ${libPath}"
@@ -141,7 +141,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     mainProgram = "duckstation-qt";
     maintainers = with lib.maintainers; [
       guibou
-      AndersonTorres
     ];
     platforms = lib.platforms.linux;
   };

@@ -1,5 +1,4 @@
 {
-  darwin,
   fetchFromGitHub,
   lib,
   libiconv,
@@ -11,36 +10,28 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
-  version = "1.4.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = "squawk";
     tag = "v${version}";
-    hash = "sha256-uvgzfMMW/7oiy/SON+Hp4NItiGeKAAM+bMpQ7FPtfqY=";
+    hash = "sha256-YNVxtfS2N6+ll8oxykVD3FCFJAdLksX5QJggMXi3G4s=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-oIVtlVkW46UeNw2MCwECQON09fRzTKot3pDgWoC35D0=";
+  cargoHash = "sha256-nuAsZmaPCYvmKnJZsQzCVy/QNpY9ZQSAORL2U6NjsNY=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libiconv
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        Security
-      ]
-    );
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libiconv
+    openssl
+  ];
 
   OPENSSL_NO_VENDOR = 1;
 

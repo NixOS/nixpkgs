@@ -15,17 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "1v1h6mhnckmvvn7345hzi9abn5z282g4lyyl4nnbqwnrr98v0vfx";
   };
 
-  hardeningDisable = [ "format" ];
+  patches = [
+    ./isatty.patch
+    ./fprintf.patch
+  ];
 
   buildInputs = [
     libogg
     libvorbis
   ];
-
-  patchPhase = ''
-    chmod -v +x configure
-    configureFlags="--mandir=$out/share/man"
-  '';
 
   meta = with lib; {
     homepage = "https://sjeng.org/vorbisgain.html";

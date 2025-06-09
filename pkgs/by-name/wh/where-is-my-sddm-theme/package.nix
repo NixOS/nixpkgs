@@ -39,7 +39,7 @@ lib.checkListOfEnum "where-is-my-sddm-theme: variant" validVariants variants
     src = fetchFromGitHub {
       owner = "stepanzubkov";
       repo = "where-is-my-sddm-theme";
-      rev = "refs/tags/v${finalAttrs.version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-+R0PX84SL2qH8rZMfk3tqkhGWPR6DpY1LgX9bifNYCg=";
     };
 

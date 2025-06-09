@@ -1,15 +1,26 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
 
-  generationsDirBuilder = pkgs.substituteAll {
+  generationsDirBuilder = pkgs.replaceVarsWith {
     src = ./generations-dir-builder.sh;
     isExecutable = true;
-    inherit (pkgs) bash;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
-    inherit (config.boot.loader.generationsDir) copyKernels;
+    replacements = {
+      inherit (pkgs) bash;
+      path = lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.gnused
+        pkgs.gnugrep
+      ];
+      inherit (config.boot.loader.generationsDir) copyKernels;
+    };
   };
 
 in
@@ -50,7 +61,6 @@ in
     };
 
   };
-
 
   config = mkIf config.boot.loader.generationsDir.enable {
 

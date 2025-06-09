@@ -17,9 +17,9 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
+    owner = "tensorly";
+    repo = "tensorly";
+    tag = version;
     hash = "sha256-A6Zlp8fa7XFgf4qpg7SEtNLlYSNtDGLuRUEfzD+crQc=";
   };
 

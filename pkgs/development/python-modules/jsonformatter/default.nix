@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MyColorfulDays";
     repo = "jsonformatter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-A+lsSBrm/64w7yMabmuAbRCLwUUdulGH3jB/DbYJ2QY=";
   };
 

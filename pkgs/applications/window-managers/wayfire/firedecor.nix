@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/mntmn/Firedecor";
     description = "Advanced window decoration plugin for the Wayfire window manager";
     license = licenses.mit;
-    inherit (mate.mate-wayland-session.meta) maintainers;
+    inherit (mate.mate-wayland-session.meta) teams;
     inherit (wayfire.meta) platforms;
   };
 })

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kirill888";
     repo = "jupyter-ui-poll";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mlgLd6uFDSxRBj4+Eidea2CE7FuG6NzJLWGec4KPd9k=";
   };
 

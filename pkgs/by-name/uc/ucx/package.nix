@@ -33,16 +33,18 @@ let
     paths = rocmList;
   };
 
+  # rocm build fails with gcc stdenv due to unrecognised arg parallel-jobs
+  stdenv' = if enableRocm then rocmPackages.stdenv else stdenv;
 in
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "ucx";
-  version = "1.17.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "sha256-Qd3c51LeF04haZA4wK6loNZwX2a3ju+ljwdPYPoUKCQ=";
+    sha256 = "sha256-LW57wbQFwW14Z86p9jo1ervkCafVy+pnIQQ9t0i8enY=";
   };
 
   outputs = [

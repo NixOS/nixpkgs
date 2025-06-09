@@ -15,19 +15,19 @@
   python-dateutil,
   tabulate,
 
-  # Sensitive downstream dependencies
-  localstack,
+  # use for testing promoted localstack
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "3.7.2";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "localstack_ext";
     inherit version;
-    hash = "sha256-gd+HyZnezgtKrSKJOYtxUZHTPMrrpKWQHGvaIs9FyVs=";
+    hash = "sha256-YlKGdIteeIjqqO9L4BAfEEurOa7vrYaAmreH8gIRcPU=";
   };
 
   build-system = [
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    inherit localstack;
+    inherit (pkgs) localstack;
   };
 
   meta = {

@@ -31,7 +31,7 @@ let
       throw "dypgen is not available for OCaml ${ocaml.version}";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-dypgen";
   inherit (params) src version;
 

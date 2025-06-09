@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DylanGore";
     repo = "PyMetEireann";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-b59I2h9A3QoXEBUYhbR0vsGGpQpOvFrqhHZnVCS8fLo=";
   };
 

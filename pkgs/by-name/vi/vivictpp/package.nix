@@ -10,6 +10,7 @@
   git,
   SDL2,
   SDL2_ttf,
+  libX11,
   freetype,
   harfbuzz,
   ffmpeg,
@@ -65,6 +66,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     SDL2
+    libX11
     SDL2_ttf
     freetype
     harfbuzz

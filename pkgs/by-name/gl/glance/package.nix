@@ -2,24 +2,35 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
   nix-update-script,
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "glance";
-  version = "0.6.4";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "glanceapp";
     repo = "glance";
-    rev = "v${version}";
-    hash = "sha256-L3IBCh4pDeaErxl89s/1yMHoU8dYtRcmqcIgFiyGq2U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-o2Yom40HbNKe3DMMxz0Mf2gG8zresgU52Odpj2H7ZPU=";
   };
 
-  vendorHash = "sha256-6PDcUb2Rv+Shqb+wtsit8Yt9RSgN5tz+MeXrujZXDCo=";
+  patches = [ ./update_purego.patch ];
 
-  excludedPackages = [ "scripts/build-and-ship" ];
+  vendorHash = "sha256-esPtCg63A40mX9hADOhEa+NjNk+9MI/0qZG3uE91qxg=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/glanceapp/glance/internal/glance.buildVersion=v${finalAttrs.version}"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
@@ -30,10 +41,13 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/glanceapp/glance";
-    changelog = "https://github.com/glanceapp/glance/releases/tag/v${version}";
+    changelog = "https://github.com/glanceapp/glance/releases/tag/v${finalAttrs.version}";
     description = "Self-hosted dashboard that puts all your feeds in one place";
     mainProgram = "glance";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ dvn0 ];
+    maintainers = with lib.maintainers; [
+      dvn0
+      defelo
+    ];
   };
-}
+})

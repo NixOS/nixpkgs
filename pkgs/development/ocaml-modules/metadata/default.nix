@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "metadata";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-metadata";
-    rev = "v${version}";
-    sha256 = "sha256-SQ8fNl62fvoCgbIt0axQyE3Eqwl8EOtYiz3xN96al+g=";
+    tag = "v${version}";
+    sha256 = "sha256-CsmKk14jk/PuTibEmlFr/QZbmDIkLJ5QJSIZQXLRmGw=";
   };
 
   minimalOCamlVersion = "4.14";

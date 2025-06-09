@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxsuite-nlp";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "proxsuite-nlp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JWMvPIxmZ5vSVS3nSlhFyNu8hLSVTc7Hdvd4YmE/pI8=";
+    hash = "sha256-ae8o0R+79qetAsc/KmvtBSVfH9695Cg4bcDBAEzKr6A=";
   };
 
   outputs = [

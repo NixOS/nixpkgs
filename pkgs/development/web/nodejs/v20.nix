@@ -18,8 +18,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "20.18.1";
-  sha256 = "91df43f8ab6c3f7be81522d73313dbdd5634bbca228ef0e6d9369fe0ab8cccd0";
+  version = "20.19.2";
+  sha256 = "4a7ff611d5180f4e420204fa6f22f9f9deb2ac5e98619dd9a4de87edf5b03b6e";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
@@ -34,16 +34,6 @@ buildNodejs {
       extraPrefix = "deps/v8/third_party/zlib/";
       stripLen = 1;
       hash = "sha256-WVxsoEcJu0WBTyelNrVQFTZxJhnekQb1GrueeRBRdnY=";
-    })
-    # Fix for https://github.com/NixOS/nixpkgs/issues/355919
-    # FIXME: remove after a minor point release
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/a094a8166cd772f89e92b5deef168e5e599fa815.patch?full_index=1";
-      hash = "sha256-5FZfozYWRa1ZI/f+e+xpdn974Jg2DbiHbua13XUQP5E=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/f270462c09ddfd770291a7c8a2cd204b2c63d730.patch?full_index=1";
-      hash = "sha256-Err0i5g7WtXcnhykKgrS3ocX7/3oV9UrT0SNeRtMZNU=";
     })
     # Backport V8 fixes for LLVM 19.
     (fetchpatch2 {
@@ -60,10 +50,10 @@ buildNodejs {
       stripLen = 1;
       hash = "sha256-6y3aEqxNC4iTQEv1oewodJrhOHxjp5xZMq1P1QL94Rg=";
     })
-    # fixes test failure, remove when included in release
+    # fix test failure on macos 15.4
     (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/b6fe731c55eb4cb9d14042a23e5002ed39b7c8b7.patch?full_index=1";
-      hash = "sha256-KoKsQBFKUji0GeEPTR8ixBflCiHBhPqd2cPVPuKyua8=";
+      url = "https://github.com/nodejs/node/commit/33f6e1ea296cd20366ab94e666b03899a081af94.patch?full_index=1";
+      hash = "sha256-aVBMcQlhQeviUQpMIfC988jjDB2BgYzlMYsq+w16mzU=";
     })
   ] ++ gypPatches;
 }

@@ -546,7 +546,7 @@ in
         type = lib.types.lines;
         default = "";
         description = ''
-          Additional entries to put verbatim into aliases file, cf. man-page aliases(8).
+          Additional entries to put verbatim into aliases file, cf. man-page {manpage}`aliases(8)`.
         '';
       };
 
@@ -591,10 +591,11 @@ in
 
       tlsTrustedAuthorities = lib.mkOption {
         type = lib.types.str;
-        default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        defaultText = lib.literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
+        default = config.security.pki.caBundle;
+        defaultText = lib.literalExpression "config.security.pki.caBundle";
+        example = lib.literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
         description = ''
-          File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This basically sets smtp_tls_CAfile and enables opportunistic tls. Defaults to NixOS trusted certification authorities.
+          File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This sets [smtp_tls_CAfile](https://www.postfix.org/postconf.5.html#smtp_tls_CAfile). Defaults to system trusted certificates (see `security.pki.*` options).
         '';
       };
 
@@ -631,7 +632,7 @@ in
         type = lib.types.lines;
         default = "";
         description = ''
-          Entries for the virtual alias map, cf. man-page virtual(5).
+          Entries for the virtual alias map, cf. man-page {manpage}`virtual(5)`.
         '';
       };
 
@@ -654,7 +655,7 @@ in
           List of accepted local users. Specify a bare username, an
           `"@domain.tld"` wild-card, or a complete
           `"user@domain.tld"` address. If set, these names end
-          up in the local recipient map -- see the local(8) man-page -- and
+          up in the local recipient map -- see the {manpage}`local(8)` man-page -- and
           effectively replace the system user database lookup that's otherwise
           used by default.
         '';
@@ -664,7 +665,7 @@ in
         default = "";
         type = lib.types.lines;
         description = ''
-          Entries for the transport map, cf. man-page transport(8).
+          Entries for the transport map, cf. man-page {manpage}`transport(8)`.
         '';
       };
 
@@ -870,6 +871,7 @@ in
         systemd.services.postfix = {
           description = "Postfix mail server";
 
+          documentation = [ "man:postfix(1)" ];
           wantedBy = [ "multi-user.target" ];
           after = [
             "network.target"

@@ -17,9 +17,9 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
+    owner = "geopy";
+    repo = "geopy";
+    tag = version;
     hash = "sha256-mlOXDEtYry1IUAZWrP2FuY/CGliUnCPYLULnLNN0n4Y=";
   };
 

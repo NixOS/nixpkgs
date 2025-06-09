@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://celestiaproject.space/";
     description = "Real-time 3D simulation of space";
     mainProgram = "celestia";
     changelog = "https://github.com/CelestiaProject/Celestia/releases/tag/${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ hjones2199 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ hjones2199 ];
+    platforms = lib.platforms.linux;
   };
 }

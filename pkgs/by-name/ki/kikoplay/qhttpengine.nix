@@ -5,7 +5,7 @@
   cmake,
   qt5,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qhttpengine";
   version = "0-unstable-2018-03-22";
   src = fetchFromGitHub {

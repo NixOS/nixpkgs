@@ -36,9 +36,10 @@ stdenv.mkDerivation {
 
   patches = [
     ./patches/get_protocol.patch
+    ./patches/add_missing_import.patch
   ];
 
-  # lgmon3's --enable-libdir flag is used soley for specifying in which
+  # lgmon3's --enable-libdir flag is used solely for specifying in which
   # directory the cnnnet.ini cache file should reside.
   # NixOS uses /var/cache/cups, and given the name, it seems like a reasonable
   # place to put the cnnet.ini file, and thus we do so.

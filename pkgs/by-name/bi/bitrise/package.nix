@@ -6,13 +6,13 @@
 }:
 buildGoModule rec {
   pname = "bitrise";
-  version = "2.25.0";
+  version = "2.31.2";
 
   src = fetchFromGitHub {
     owner = "bitrise-io";
     repo = "bitrise";
-    rev = version;
-    hash = "sha256-ejAwUHBx+HwYEQxT+lrXxoiD6hkIIRhBPTPBlqugOrM=";
+    rev = "v${version}";
+    hash = "sha256-WMvk5VEXc0cEWVdop50mSlAJKP8RhRijCia0fgBG79M=";
   };
 
   # many tests rely on writable $HOME/.bitrise and require network access

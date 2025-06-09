@@ -49,7 +49,7 @@ in
           '''
         '';
         description = ''
-          Contents of `/etc/auto.master` file. See {command}`auto.master(5)` and {command}`autofs(5)`.
+          Contents of `/etc/auto.master` file. See {manpage}`auto.master(5)` and {manpage}`autofs(5)`.
         '';
       };
 

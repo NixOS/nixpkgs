@@ -29,19 +29,23 @@ if [ ! "$oldVersion" = "$latestVersion" ]; then
   virtualboxNixFile=$(nixFile ${attr})
   extpackNixFile=$(nixFile ${attr}Extpack)
   guestAdditionsIsoNixFile="pkgs/applications/virtualization/virtualbox/guest-additions-iso/default.nix"
-  virtualboxGuestAdditionsNixFile="pkgs/applications/virtualization/virtualbox/guest-additions/builder.nix"
+  virtualboxGuestAdditionsNixFile="pkgs/applications/virtualization/virtualbox/guest-additions/default.nix"
 
   virtualBoxOldShaSum=$(oldHash ${attr}Extpack)
   extpackOldShaSum=$(oldHash ${attr}Extpack)
 
-  sed -e "s/virtualboxVersion =.*;/virtualboxVersion = \"$latestVersion\";/g" \
-      -e "s/virtualboxSha256 =.*;/virtualboxSha256 = \"$virtualBoxShaSum\";/g" \
+  sed -e "s/virtualboxVersion = \".*\";/virtualboxVersion = \"$latestVersion\";/g" \
+      -e "s/virtualboxSubVersion = \".*\";/virtualboxSubVersion = \"\";/g" \
+      -e "s/virtualboxSha256 = \".*\";/virtualboxSha256 = \"$virtualBoxShaSum\";/g" \
       -i "$virtualboxNixFile"
-  sed -i -e 's|value = "'$extpackOldShaSum'"|value = "'$extpackShaSum'"|' $extpackNixFile
-  sed -e "s/sha256 =.*;/sha256 = \"$guestAdditionsIsoShaSum\";/g" \
+  sed -e 's|value = "'$extpackOldShaSum'"|value = "'$extpackShaSum'"|' \
+      -e "s/virtualboxExtPackVersion = \".*\";/virtualboxExtPackVersion = \"$latestVersion\";/g" \
+      -i $extpackNixFile
+  sed -e "s/sha256 = \".*\";/sha256 = \"$guestAdditionsIsoShaSum\";/g" \
       -i "$guestAdditionsIsoNixFile"
-  sed -e "s/version =.*;/version = \"$latestVersion\";/g" \
-      -e "s/sha256 =.*;/sha256 = \"$virtualBoxShaSum\";/g" \
+  sed -e "s/virtualboxVersion = \".*\";/virtualboxVersion = \"$latestVersion\";/g" \
+      -e "s/virtualboxSubVersion = \".*\";/virtualboxSubVersion = \"\";/g" \
+      -e "s/virtualboxSha256 = \".*\";/virtualboxSha256 = \"$virtualBoxShaSum\";/g" \
       -i "$virtualboxGuestAdditionsNixFile"
 
   git add "$virtualboxNixFile" "$extpackNixFile" "$guestAdditionsIsoNixFile" "$virtualboxGuestAdditionsNixFile"

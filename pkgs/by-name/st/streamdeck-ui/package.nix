@@ -1,7 +1,6 @@
 {
   copyDesktopItems,
   fetchFromGitHub,
-  fetchPypi,
   lib,
   makeDesktopItem,
   python3Packages,

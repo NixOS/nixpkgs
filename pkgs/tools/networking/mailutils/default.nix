@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mailutils";
-  version = "3.17";
+  version = "3.18";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-+km6zsN1Zv5S+IIh04cWc6Yzru4M2SPMOo5lu+8rhOk=";
+    hash = "sha256-VZBJyNhRYEFSipBsE52bt6YvHQXX5WF/qP4PIxoTFXc=";
   };
 
   separateDebugInfo = true;

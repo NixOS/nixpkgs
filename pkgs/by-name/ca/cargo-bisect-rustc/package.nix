@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  darwin,
   rustPlatform,
   pkg-config,
   openssl,
@@ -17,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "rust-lang";
-    repo = pname;
+    repo = "cargo-bisect-rustc";
     rev = "v${version}";
     hash = "sha256-7HiM1oRuLSfRaum66duag/w8ncFdxRLF0yeSGlIey0Y=";
   };
@@ -43,14 +42,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
-  cargoHash = "sha256-CgEs0cejquFRY3VN6CgbE23Gipg+LEuWp/jSIkITrjw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SigRm2ZC7jH1iCEGRpka1G/e9kBEieFVU0YDBl2LfTM=";
 
   checkFlags = [
     "--skip test_github" # requires internet
@@ -64,6 +59,6 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
   };
 }

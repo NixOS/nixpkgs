@@ -61,13 +61,9 @@ stdenv.mkDerivation rec {
       zstd
     ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    postPatch = ''
-      cp ${./Cargo.lock} Cargo.lock
-    '';
-    sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-XMleyP2h1aBhtjXhuGHyU0BN+tuL12CGoj+kLY5uye0=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src cargoRoot postPatch;
+    hash = "sha256-qZMTZi7eqEp5kSmVx7qdS7eDKOzSv9fMjWT0h/MGyeY=";
   };
 
   cmakeFlags =

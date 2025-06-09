@@ -11,7 +11,6 @@
   libredirect,
   lxml,
   mock,
-  netifaces,
   pastedeploy,
   pbr,
   pyeclib,
@@ -25,18 +24,13 @@
 
 buildPythonPackage rec {
   pname = "swift";
-  version = "2.34.0";
+  version = "2.35.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZvdWWvPUdZIEadxV0nhqgTXhgJJu+hD1LnYCAP+9gpM=";
+    hash = "sha256-x8RPQAPOERJShgYPy4uiezkHHSaxhftslEWqD7ShO40=";
   };
-
-  postPatch = ''
-    # files requires boto which is incompatible with python 3.9
-    rm test/functional/s3api/{__init__.py,s3_test_client.py}
-  '';
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -45,22 +39,21 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     eventlet
     greenlet
     lxml
-    netifaces
     pastedeploy
     pyeclib
     requests
-    setuptools
     six
     xattr
   ];
 
-  dependencies = [
+  nativeCheckInputs = [
     boto3
+    libredirect.hook
     mock
     stestr
     swiftclient
@@ -76,7 +69,6 @@ buildPythonPackage rec {
   checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
 
     export SWIFT_TEST_CONFIG_FILE=test/sample.conf
 
@@ -89,6 +81,6 @@ buildPythonPackage rec {
     description = "OpenStack Object Storage";
     homepage = "https://github.com/openstack/swift";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

@@ -11,6 +11,7 @@
   docker,
   yarn,
   docker-compose,
+  nix-update-script,
 }:
 
 let
@@ -18,18 +19,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "devcontainer";
-  version = "0.72.0";
+  version = "0.76.0";
 
   src = fetchFromGitHub {
     owner = "devcontainers";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3rSWD6uxwcMQdHBSmmAQ0aevqevVXINigCj06jjEcRc=";
+    hash = "sha256-yTXAzyvkPO/7Xg+F4+hlLkyTpGHAqW3/3scJElfDfxA=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-KSVr6RlBEeDAo8D+7laTN+pSH8Ukl6WTpeAULuG2fq8=";
+    hash = "sha256-4NaZEA00dNPHAb7pcasufKf/4b8ufwS2lNS+a0rxbv8=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Dev container CLI, run and manage your dev environments via a devcontainer.json";

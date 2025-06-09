@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "vmware";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pyvmomi";
+    tag = "v${version}";
     hash = "sha256-wJe45r9fWNkg8oWJZ47bcqoWzOvxpO4soV2SU4N0tb0=";
   };
 

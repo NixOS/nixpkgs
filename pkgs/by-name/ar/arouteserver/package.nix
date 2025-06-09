@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "arouteserver";
-  version = "1.23.1";
+  version = "1.23.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pierky";
     repo = "arouteserver";
-    rev = "v${version}";
-    hash = "sha256-EZOBMDBsxbuVzzjQWU8V4n3gcLkRQxCq2eVK/Tyko4E=";
+    tag = "v${version}";
+    hash = "sha256-qPU1eBEAlF6wcI1KEBtSuf0a+pKsqoCN0mtAPjIr+0c=";
   };
 
   postPatch = ''
@@ -48,12 +48,18 @@ python3Packages.buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/static" ];
 
+  disabledTests = [
+    # disable copyright year check of files
+    "current_year"
+  ];
+
   meta = {
     description = "Automatically build (and test) feature-rich configurations for BGP route servers";
     mainProgram = "arouteserver";
     homepage = "https://github.com/pierky/arouteserver";
     changelog = "https://github.com/pierky/arouteserver/blob/v${version}/CHANGES.rst";
     license = with lib.licenses; [ gpl3Only ];
-    maintainers = lib.teams.wdz.members ++ (with lib.maintainers; [ marcel ]);
+    maintainers = with lib.maintainers; [ marcel ];
+    teams = [ lib.teams.wdz ];
   };
 }

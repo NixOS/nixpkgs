@@ -10,6 +10,7 @@
   # propagates
   distutils,
   pyyaml,
+  standard-pipes,
 
   # optionals
   boto3,
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "mrjob";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Yp4yUx6tkyGB622I9y+AWK2AkIDVGKQPMM+LtB/M3uo=";
   };
 
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   dependencies = [
     distutils
     pyyaml
+    standard-pipes
   ];
 
   optional-dependencies = {

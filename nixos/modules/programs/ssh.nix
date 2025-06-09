@@ -13,9 +13,7 @@ let
 
   askPasswordWrapper = pkgs.writeScript "ssh-askpass-wrapper" ''
     #! ${pkgs.runtimeShell} -e
-    export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
-    export XAUTHORITY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^XAUTHORITY=\(.*\)/\1/; t; d')"
-    export WAYLAND_DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^WAYLAND_DISPLAY=\(.*\)/\1/; t; d')"
+    eval export $(systemctl --user show-environment | ${lib.getExe pkgs.gnugrep} -E '^(DISPLAY|WAYLAND_DISPLAY|XAUTHORITY)=')
     exec ${cfg.askPassword} "$@"
   '';
 
@@ -49,6 +47,15 @@ in
         default = config.services.xserver.enable;
         defaultText = lib.literalExpression "config.services.xserver.enable";
         description = "Whether to configure SSH_ASKPASS in the environment.";
+      };
+
+      systemd-ssh-proxy.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable systemd's ssh proxy plugin.
+          See {manpage}`systemd-ssh-proxy(1)`.
+        '';
       };
 
       askPassword = lib.mkOption {
@@ -336,6 +343,11 @@ in
 
       # Generated options from other settings
       Host *
+      ${lib.optionalString cfg.systemd-ssh-proxy.enable ''
+        # See systemd-ssh-proxy(1)
+        Include ${config.systemd.package}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf
+      ''}
+
       GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}
 
       ${lib.optionalString (!config.networking.enableIPv6) "AddressFamily inet"}

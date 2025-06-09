@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
       patch = "security/0102-daemon-Sanitize-successful-build-outputs-prior-to-ex.patch";
       hash = "sha256-mOnlYtpIuYL+kDvSNuXuoDLJP03AA9aI2ALhap+0NOM=";
     })
+    (fetchpatch {
+      name = "fix-guile-ssh-detection.patch";
+      url = "https://git.savannah.gnu.org/cgit/guix.git/patch/?id=b8a45bd0473ab2ba9b96b7ef429a557ece9bf06c";
+      hash = "sha256-oYkgM694qPK8kqgxatkr4fj/GL73ozTNQADNyDeU6WY=";
+    })
   ];
 
   postPatch = ''
@@ -146,7 +151,8 @@ stdenv.mkDerivation rec {
     for f in $out/bin/*; do
       wrapProgram $f \
         --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
-        --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
+        --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH" \
+        --prefix GUILE_EXTENSIONS_PATH : "${guile-ssh}/lib/guile/3.0/extensions"
     done
   '';
 
@@ -154,7 +160,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) guix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Functional package manager with a Scheme interface";
     longDescription = ''
       GNU Guix is a purely functional package manager for the GNU system, and a distribution thereof.
@@ -170,12 +176,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.gnu.org/software/guix";
     changelog = "https://git.savannah.gnu.org/cgit/guix.git/plain/NEWS?h=v${version}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "guix";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cafkafk
       foo-dogsquared
+      hpfr
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "c7h";
     repo = "kiwiki_client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CIBed8HzbUqUIzNy1lHxIgjneA6R8uKtmd43LU92M0Q=";
   };
 

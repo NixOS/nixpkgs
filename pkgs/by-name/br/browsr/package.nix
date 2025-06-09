@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "browsr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-76OzJOunZRVSGalQiyX+TSukD8rRIFHxA713NqOn3PY=";
   };
 
@@ -85,12 +85,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_textual_app_context_path"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File explorer in your terminal";
     mainProgram = "browsr";
     homepage = "https://juftin.com/browsr";
-    changelog = "https://github.com/juftin/browsr/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/juftin/browsr/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

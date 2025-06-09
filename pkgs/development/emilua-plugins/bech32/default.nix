@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "emilua-bech32";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "bech32";
     rev = "v${version}";
-    hash = "sha256-f4KFL2RV+fAVJrgaAQWKuLwlN440j9vBbiyk5fHrwiE=";
+    hash = "sha256-DJUdwnX9jHKpVYRkP/UFYNefphbqCoUIjXLTNQ5umis=";
   };
 
   buildInputs = [

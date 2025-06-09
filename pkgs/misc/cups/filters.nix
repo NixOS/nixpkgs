@@ -24,11 +24,12 @@
   perl,
   pkg-config,
   poppler,
-  poppler_utils,
+  poppler-utils,
   qpdf,
   stdenv,
   which,
   withAvahi ? true,
+  glib,
 }:
 
 (
@@ -61,10 +62,14 @@
         hash = "sha256-bLOl64bdeZ10JLcQ7GbU+VffJu3Lzo0ves7O7GQIOWY=";
       };
 
+      strictDeps = true;
+
       nativeBuildInputs = [
-        pkg-config
-        makeWrapper
         autoreconfHook
+        cups
+        glib
+        makeWrapper
+        pkg-config
       ];
 
       buildInputs = [

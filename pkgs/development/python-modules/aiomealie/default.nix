@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-mealie";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hcHXX95d9T/jJMqHkikWN8ZdM5MRxJxhH575U3KDXxY=";
   };
 

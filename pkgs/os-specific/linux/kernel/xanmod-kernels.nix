@@ -14,12 +14,12 @@ let
   # kernel config in the xanmod version commit
   variants = {
     lts = {
-      version = "6.6.68";
-      hash = "sha256-fuPJgbDJ2PLB74fy/WFnhGdTEKJMeNwsbWm6RVM4Jes=";
+      version = "6.12.31";
+      hash = "sha256-qYbwHt6j2Sh7V1PDjp1oEIKo+k2T5PcRz5MzZgYwbqg=";
     };
     main = {
-      version = "6.12.7";
-      hash = "sha256-sM9XINKBGRcO29o3kEIKM03t/XojG9nYLirQSBii8Y4=";
+      version = "6.14.9";
+      hash = "sha256-kwMvXdqr1i3UZ3+N/qsQDjU1TvnymS54tCdOLNxL0nc=";
     };
   };
 
@@ -76,10 +76,10 @@ let
             moni
             lovesegfault
             atemu
-            shawn8901
             zzzsy
             eljamm
           ];
+          teams = [ ];
           description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
           broken = stdenv.hostPlatform.isAarch64;
         };

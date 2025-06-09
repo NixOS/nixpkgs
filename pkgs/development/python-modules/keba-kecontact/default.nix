@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "keba-kecontact";
-  version = "4.0.2";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dannerph";
     repo = "keba-kecontact";
-    rev = "refs/tags/${version}";
-    hash = "sha256-HzfoWijsrtDNElqyxWB7f07OTMIoS/fEjmdX59G+Hw0=";
+    tag = version;
+    hash = "sha256-gIqHo+J/I4vqJCs/r3ZHo3kChefTRqpVmdw3r3y3Hzk=";
   };
 
   build-system = [ hatchling ];

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Python-Markdown";
     repo = "markdown";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bIBen693MC56k4LZ+8vhbvP+E3myFXoaXpNHOlnIdG8=";
   };
 

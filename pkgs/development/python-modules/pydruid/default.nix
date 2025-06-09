@@ -23,9 +23,9 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "pydruid";
     owner = "druid-io";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9+xomjSwWDVHkret/mqAZKWOPFRMvVB3CWtFPzrT81k=";
   };
 

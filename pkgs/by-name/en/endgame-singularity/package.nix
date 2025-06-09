@@ -5,17 +5,18 @@
   unzip,
   python3,
   enableDefaultMusicPack ? true,
+  unstableGitUpdater,
 }:
 
 let
   pname = "endgame-singularity";
-  version = "1.00";
+  version = "1.00-unstable-2025-03-18";
 
   main_src = fetchFromGitHub {
     owner = "singularity";
     repo = "singularity";
-    rev = "v${version}";
-    sha256 = "0ndrnxwii8lag6vrjpwpf5n36hhv223bb46d431l9gsigbizv0hl";
+    rev = "8bbc2322ad1a0e83f78f5af731dfa97b6bd63f9c";
+    hash = "sha256-HiFE746JtGjZJbiKhB3ubfb376tJmz78jUfdu3/RQic=";
   };
 
   music_src = fetchurl {
@@ -24,7 +25,7 @@ let
   };
 in
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   inherit pname version;
 
   srcs = [ main_src ] ++ lib.optional enableDefaultMusicPack music_src;
@@ -43,6 +44,14 @@ python3.pkgs.buildPythonApplication rec {
           "$(echo $out/lib/python*/site-packages/singularity)/music"
           # ↑ we cannot glob on [...]/music, it doesn't exist yet
   '';
+
+  passthru = {
+    # for the updater
+    src = main_src;
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
+  };
 
   meta = {
     homepage = "http://www.emhsoft.com/singularity/";

@@ -9,7 +9,7 @@
 }:
 buildPythonPackage rec {
   pname = "gotenberg-client";
-  version = "0.8.2";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "stumpylog";
     repo = "gotenberg-client";
     tag = version;
-    hash = "sha256-EMukzSY8nfm1L1metGhiEc9VqnI/vaLz7ITgbZi0fBw=";
+    hash = "sha256-eDYgKbNeNCIdENo6DVmcABRwP5JUMCJW7NtbPOA5aqg=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for interfacing with the Gotenberg API";
     homepage = "https://github.com/stumpylog/gotenberg-client";
-    changelog = "https://github.com/stumpylog/gotenberg-client/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/stumpylog/gotenberg-client/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ leona ];
   };

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
+    repo = "libdmapsharing";
     rev = "${lib.toUpper pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "oR9lpOFxgGfrtzncFT6dbmhKQfcuH/NvhOR/USHAHQc=";
   };
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.flyn.org/projects/libdmapsharing/";
     description = "Library that implements the DMAP family of protocols";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

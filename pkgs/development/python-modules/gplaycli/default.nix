@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matlink";
     repo = "gplaycli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uZBrIxnDSaJDOPcD7J4SCPr9nvecDDR9h+WnIjIP7IE=";
   };
 

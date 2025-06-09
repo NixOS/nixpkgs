@@ -13,7 +13,7 @@
   extraNativeBuildInputs ? [ ],
   ## Location of resulting RetroArch core on $out
   libretroCore ? "/lib/retroarch/cores",
-  ## The core filename is derivated from the core name
+  ## The core filename is derived from the core name
   ## Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
   normalizeCore ? true,
   ...
@@ -33,11 +33,13 @@ let
     "zlib"
 
     "core"
-    "makefile"
     "extraBuildInputs"
     "extraNativeBuildInputs"
     "libretroCore"
+    "makefile"
     "normalizeCore"
+    "passthru"
+    "meta"
   ];
 in
 stdenv.mkDerivation (
@@ -88,15 +90,12 @@ stdenv.mkDerivation (
       updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     } // (args.passthru or { });
 
-    meta =
-      with lib;
-      {
-        inherit mainProgram;
-        inherit (retroarch-bare.meta) platforms;
-        homepage = "https://www.libretro.com/";
-        maintainers = with maintainers; teams.libretro.members;
-      }
-      // (args.meta or { });
+    meta = {
+      inherit mainProgram;
+      inherit (retroarch-bare.meta) platforms;
+      homepage = "https://www.libretro.com/";
+      teams = [ lib.teams.libretro ];
+    } // (args.meta or { });
   }
   // extraArgs
 )

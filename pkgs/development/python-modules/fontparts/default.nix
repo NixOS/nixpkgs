@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch2,
   pythonOlder,
 
   # build-system
@@ -21,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "fontparts";
-  version = "0.12.2";
+  version = "0.12.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d41ZVJOiCPITRjgGajBZh2JhnV345yPTCiTEGJzPoQ0=";
+    hash = "sha256-zg8QkiHh4UhhXdTRhDKulB+Q2E6GZyD0fnPIm6fWZGc=";
     extension = "zip";
   };
 

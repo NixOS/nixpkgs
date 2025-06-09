@@ -4,9 +4,10 @@
   fetchFromGitHub,
   fetchpatch2,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gasket";
   version = "1.0-18-unstable-2024-04-25";
 
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "-C"
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(PWD)"

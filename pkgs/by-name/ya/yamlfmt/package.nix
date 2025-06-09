@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "yamlfmt";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "yamlfmt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-l9PtVaAKjtP9apTrKCkC1KDR0IXqLqinpj1onzSrPnI=";
+    tag = "v${version}";
+    hash = "sha256-4PCwMLwFtCK55k7b6CgpPOKsxLdeU55DxYEDbYDWVYg=";
   };
 
-  vendorHash = "sha256-lsNldfacBoeTPyhkjyDZhI5YR+kDke0TarfG/KdjEOg=";
+  vendorHash = "sha256-eOuLgNCxrI2HIFBwLAYRl6PwW/1hihQ0QsTtG1sxCL8=";
 
   ldflags = [
     "-s"
@@ -30,12 +30,12 @@ buildGoModule rec {
     package = yamlfmt;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extensible command line tool or library to format yaml files";
     homepage = "https://github.com/google/yamlfmt";
     changelog = "https://github.com/google/yamlfmt/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sno2wman ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "yamlfmt";
   };
 }

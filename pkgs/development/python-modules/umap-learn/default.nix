@@ -1,37 +1,47 @@
 {
   lib,
-  bokeh,
   buildPythonPackage,
-  colorcet,
-  datashader,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  holoviews,
-  matplotlib,
+
+  # dependencies
   numba,
   numpy,
-  pandas,
   pynndescent,
-  pytestCheckHook,
-  scikit-image,
   scikit-learn,
   scipy,
+  tqdm,
+
+  # optional-dependencies
+  bokeh,
+  colorcet,
+  dask,
+  datashader,
+  holoviews,
+  matplotlib,
+  pandas,
+  scikit-image,
   seaborn,
   tensorflow,
   tensorflow-probability,
-  tqdm,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.7";
+  version = "0.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
-    rev = "refs/tags/release-${version}";
-    hash = "sha256-hPYmRDSeDa4JWGekUVq3CWf5NthHTpMpyuUQ1yIkVAE=";
+    tag = "release-${version}";
+    hash = "sha256-VR+qBZyFtpW/xuFXI8pxDkkwJKt9qajnUtvuZLFZtF0=";
   };
 
   build-system = [ setuptools ];
@@ -49,6 +59,7 @@ buildPythonPackage rec {
     plot = [
       bokeh
       colorcet
+      dask
       datashader
       holoviews
       matplotlib
@@ -67,11 +78,10 @@ buildPythonPackage rec {
     all = plot ++ parametric_umap ++ tbb;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   disabledTests = [
     # Plot functionality requires additional packages.
@@ -88,11 +98,11 @@ buildPythonPackage rec {
     "test_save_load"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
     changelog = "https://github.com/lmcinnes/umap/releases/tag/release-${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

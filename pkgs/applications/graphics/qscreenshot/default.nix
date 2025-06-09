@@ -1,15 +1,12 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchgit,
-  qtbase,
-  qttools,
-  qtx11extras,
-  wrapQtAppsHook,
   cmake,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qscreenshot";
   version = "unstable-2021-10-18";
 
@@ -23,12 +20,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
-    qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
   ];
   meta = with lib; {
     description = "Simple creation and editing of screenshots";

@@ -27,6 +27,7 @@
         and attempts to prove incorrectness rather than correctness.
       '';
       mainProgram = "phan";
-      maintainers = with lib.maintainers; [ apeschar ] ++ lib.teams.php.members;
+      maintainers = with lib.maintainers; [ apeschar ];
+      teams = [ lib.teams.php ];
     };
   })

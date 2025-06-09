@@ -3,7 +3,6 @@
   angr,
   buildPythonPackage,
   fetchFromGitHub,
-  progressbar,
   pythonOlder,
   setuptools,
   tqdm,
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angrop";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wL6H4UqBqOHMQU91q0uJrgeS/wVvIbinpF9IBtli3Ig=";
   };
 
@@ -27,7 +26,6 @@ buildPythonPackage rec {
 
   dependencies = [
     angr
-    progressbar
     tqdm
   ];
 

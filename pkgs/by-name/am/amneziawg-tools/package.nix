@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-tools";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y6xkOLT9KVD6ACCH60Myk2iA1S8/+tGXEQbOYnu+dPI=";
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace $out/lib/systemd/system/awg-quick@.service \
         --replace-fail /usr/bin $out/bin
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       for f in $out/bin/*; do
         # Which firewall and resolvconf implementations to use should be determined by the
         # environment, we provide the "default" ones as fallback.
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
           }
       done
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       for f in $out/bin/*; do
         wrapProgram $f \
           --prefix PATH : ${lib.makeBinPath [ amneziawg-go ]}

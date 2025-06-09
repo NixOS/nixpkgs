@@ -45,6 +45,6 @@ stdenvNoCC.mkDerivation rec {
       cc-by-40
     ];
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

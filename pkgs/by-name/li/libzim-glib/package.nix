@@ -8,7 +8,7 @@
   pkg-config,
   gobject-introspection,
   glib,
-  zimlib,
+  libzim,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    zimlib
+    libzim
   ];
 
   # requires downloading test sample of a specific zimlib version

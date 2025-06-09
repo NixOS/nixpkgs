@@ -11,13 +11,13 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "proxify";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vAI8LKdBmujH7zidXADc8bMLXaFMjT965hR+PVZVeNw=";
   };
 
   vendorHash = "sha256-eGcCc83napjt0VBhpDiHWn7+ew77XparDJ9uyjF353w=";
 
-  meta = with lib; {
+  meta = {
     description = "Proxy tool for HTTP/HTTPS traffic capture";
     longDescription = ''
       This tool supports multiple operations such as request/response dump, filtering
@@ -27,7 +27,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/proxify";
     changelog = "https://github.com/projectdiscovery/proxify/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

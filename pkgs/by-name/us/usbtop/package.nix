@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "aguinet";
-    repo = pname;
+    repo = "usbtop";
     rev = "release-${version}";
     sha256 = "0qbad0aq6j4jrh90l6a0akk71wdzhyzmy6q8wl138axyj2bp9kss";
   };

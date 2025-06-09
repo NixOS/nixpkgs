@@ -89,7 +89,7 @@ rec {
     in
     recurse [ ] set;
 
-  mapAttrs'' = f: set: foldl' (a: b: a // b) { } (map (attr: f attr set.${attr}) (attrNames set));
+  mapAttrs'' = f: set: foldl' (a: b: a // b) { } (mapAttrsToList f set);
 
   # Extract the options from the given set of parameters.
   paramsToOptions = ps: mapParamsRecursive (_path: name: param: { ${name} = param.option; }) ps;

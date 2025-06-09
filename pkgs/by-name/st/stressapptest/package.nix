@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
   version = "1.0.11";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    owner = "stressapptest";
+    repo = "stressapptest";
+    tag = "v${version}";
     hash = "sha256-lZpF7PdUwKnV0ha6xkLvi7XYFZQ4Avy0ltlXxukuWjM=";
   };
 
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
     libaio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Userspace memory and IO stress test tool";
     homepage = "https://github.com/stressapptest/stressapptest";
     changelog = "https://github.com/stressapptest/stressapptest/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.unix;
     mainProgram = "stressapptest";
   };
 }

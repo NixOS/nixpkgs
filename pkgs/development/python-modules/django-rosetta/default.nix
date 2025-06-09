@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "django-rosetta";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mbi";
     repo = "django-rosetta";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-b+iCUA3i3Ej6S5XcGQhBIEIJFx6vOL2sq3xkkA9wqek=";
+    tag = "v${version}";
+    hash = "sha256-NqDrCDvvyZsce7/VWXujAStAW8UtNSro8aelrDi4EEs=";
   };
 
   build-system = [ setuptools ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rosetta is a Django application that facilitates the translation process of your Django projects";
     homepage = "https://github.com/mbi/django-rosetta";
-    changelog = "https://github.com/mbi/django-rosetta/releases/tag/v${version}";
+    changelog = "https://github.com/mbi/django-rosetta/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ derdennisop ];
   };

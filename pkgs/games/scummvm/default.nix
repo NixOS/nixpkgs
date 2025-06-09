@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   nasm,
   alsa-lib,
   curl,
@@ -17,13 +16,9 @@
   libvorbis,
   libGLU,
   libGL,
+  libX11,
   SDL2,
   zlib,
-  Cocoa,
-  AudioToolbox,
-  Carbon,
-  CoreMIDI,
-  AudioUnit,
   cctools,
   nix-update-script,
 }:
@@ -47,13 +42,6 @@ stdenv.mkDerivation rec {
       libGLU
       libGL
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      AudioToolbox
-      Carbon
-      CoreMIDI
-      AudioUnit
-    ]
     ++ [
       curl
       freetype
@@ -66,6 +54,7 @@ stdenv.mkDerivation rec {
       libtheora
       libvorbis
       SDL2
+      libX11
       zlib
     ];
 
@@ -85,8 +74,7 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace config.mk \
-        --replace x86_64-apple-darwin-ranlib ${cctools}/bin/ranlib \
-        --replace aarch64-apple-darwin-ranlib ${cctools}/bin/ranlib
+        --replace-fail ${stdenv.hostPlatform.config}-ranlib ${cctools}/bin/ranlib
     '';
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];

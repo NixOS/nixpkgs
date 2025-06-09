@@ -38,14 +38,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.6.4";
+  version = "1.7.8";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xLgkBBh4OMHZYlIiRemJ1aYEwRp+b/Q3dPKm9zpxNjo=";
+    hash = "sha256-aUIZJ+nSLs1W0zycu6Mz2pknJw4e+jNxaFLUpSP6EKA=";
   };
 
   buildInputs =
@@ -120,5 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "syncthingtray";
   };
 })

@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Z-Wave-Me";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "zwave-me-ws";
+    tag = "v${version}";
     hash = "sha256-bTchtgr+UbHCpcXMaQA3bTrhasJ79TguvAqLNlpD/2c=";
   };
 

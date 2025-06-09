@@ -82,6 +82,7 @@ in
 
     systemd.services.atd = {
       description = "Job Execution Daemon (atd)";
+      documentation = [ "man:atd(8)" ];
       wantedBy = [ "multi-user.target" ];
 
       path = [ at ];

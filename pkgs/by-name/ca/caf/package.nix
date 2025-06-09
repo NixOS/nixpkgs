@@ -25,18 +25,16 @@ stdenv.mkDerivation rec {
     "-DCAF_ENABLE_EXAMPLES:BOOL=OFF"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
-
   doCheck = !stdenv.hostPlatform.isDarwin;
   checkTarget = "test";
 
-  meta = with lib; {
+  meta = {
     description = "Open source implementation of the actor model in C++";
     homepage = "http://actor-framework.org/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     changelog = "https://github.com/actor-framework/actor-framework/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bobakker
       tobim
     ];

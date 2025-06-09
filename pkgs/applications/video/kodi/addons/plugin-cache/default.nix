@@ -27,6 +27,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/anxdpanic/script.common.plugin.cache";
     description = "Common plugin cache";
     license = licenses.gpl3Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

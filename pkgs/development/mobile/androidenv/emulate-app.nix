@@ -3,6 +3,7 @@
   stdenv,
   lib,
   runtimeShell,
+  meta,
 }:
 {
   name,
@@ -194,4 +195,8 @@ stdenv.mkDerivation {
     EOF
     chmod +x $out/bin/run-test-emulator
   '';
+
+  meta = meta // {
+    mainProgram = "run-test-emulator";
+  };
 }

@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     changelog = "https://sourceforge.net/p/matio/news/";
     description = "C library for reading and writing Matlab MAT files";
-    homepage = "http://matio.sourceforge.net/";
+    homepage = "https://matio.sourceforge.net/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "matdump";

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "uncover";
-  version = "1.0.9";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "uncover";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-avGbawIeh7ZUtacRLo/tLz4D6U7JAlu9BXDYu/xvoa0=";
+    tag = "v${version}";
+    hash = "sha256-q8ecgTY2uDo4O+/CqK9aYnYb4oArDIvga9C/tG9IooE=";
   };
 
-  vendorHash = "sha256-93iXho+WCQyhw9DoLgo9ZKiPrd88D2ibgp1M9uP7bUU=";
+  vendorHash = "sha256-Pm3CFHdp0VHZ5tRrjnpXXaIwQFu7EXyVgo/K9OOqHBI=";
 
   subPackages = [ "cmd/uncover" ];
 
@@ -29,9 +29,9 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "-version" ];
+  versionCheckProgramArg = "-version";
 
-  meta = with lib; {
+  meta = {
     description = "API wrapper to search for exposed hosts";
     longDescription = ''
       uncover is a go wrapper using APIs of well known search engines to quickly
@@ -41,8 +41,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/uncover";
     changelog = "https://github.com/projectdiscovery/uncover/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "uncover";
   };
 }

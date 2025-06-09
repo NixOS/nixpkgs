@@ -5,19 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "taskchampion-sync-server";
-  version = "0.4.1-unstable-2024-08-20";
+  version = "0.6.1";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskchampion-sync-server";
-    rev = "af918bdf0dea7f7b6e920680c947fc37b37ffffb";
-    fetchSubmodules = false;
-    hash = "sha256-BTGD7hZysmOlsT2W+gqj8+Sj6iBN9Jwiyzq5D03PDzM=";
+    tag = "v${version}";
+    hash = "sha256-spuTCRsF1uHTTWfOjkMRokZnBhqP53CPAi3WMJB3yq4=";
   };
 
-  cargoHash = "sha256-/HfkE+R8JoNGkCCNQpE/JjGSqPHvjCPnTjOFPCFfJ7A=";
-
-  # cargo tests fail when checkType="release" (default)
-  checkType = "debug";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bsB/dPqPmzviHsGA8gtSew2PQdySNzifZ6dhu7XQ8IU=";
 
   meta = {
     description = "Sync server for Taskwarrior 3";

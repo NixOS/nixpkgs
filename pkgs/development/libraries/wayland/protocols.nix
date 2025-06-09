@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-protocols";
-  version = "1.38";
+  version = "1.44";
 
   doCheck =
     stdenv.hostPlatform == stdenv.buildPlatform
@@ -25,10 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/${finalAttrs.pname}/-/releases/${finalAttrs.version}/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/xcpLAUVnSsgzmys/kLX4xooGY+hQpp2mwOvfDhYHb4=";
+    hash = "sha256-PfEQfs+L/W7oeK7KXTt6/YEkikgDHhTK9q4B8U7rtQ4=";
   };
 
-  postPatch = lib.optionalString finalAttrs.doCheck ''
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
     patchShebangs tests/
   '';
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ wayland ];
   strictDeps = true;
 
-  mesonFlags = [ "-Dtests=${lib.boolToString finalAttrs.doCheck}" ];
+  mesonFlags = [ "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}" ];
 
   meta = {
     description = "Wayland protocol extensions";

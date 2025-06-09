@@ -21,6 +21,7 @@
   twisted,
   setuptools,
   distutils,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "python-driver";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-RX9GLk2admzRasmP7LCwIfsJIt8TC/9rWhIcoTqS0qc=";
   };
 
@@ -114,6 +115,8 @@ buildPythonPackage rec {
   };
 
   meta = {
+    # cassandra/io/libevwrapper.c:668:10: error: implicit declaration of function ‘PyEval_ThreadsInitialized’ []
+    broken = pythonAtLeast "3.13";
     description = "Python client driver for Apache Cassandra";
     homepage = "http://datastax.github.io/python-driver";
     changelog = "https://github.com/datastax/python-driver/blob/${version}/CHANGELOG.rst";

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   linuxHeaders,
+  buildPackages,
   libopcodes,
   libopcodes_2_38,
   libbfd,
@@ -21,11 +22,7 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  patches = [
-    # fix unknown type name '__vector128' on ppc64le
-    ./include-asm-types-for-ppc64le.patch
-  ];
-
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     python3
     bison
@@ -65,6 +62,9 @@ stdenv.mkDerivation rec {
     "bpf_asm"
     "bpf_dbg"
   ];
+
+  # needed for cross to riscv64
+  makeFlags = [ "ARCH=${stdenv.hostPlatform.linuxArch}" ];
 
   installPhase = ''
     make -C bpftool install

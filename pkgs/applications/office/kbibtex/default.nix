@@ -41,6 +41,11 @@ mkDerivation rec {
       hash = "sha256-sSeyQKfNd8U4YZ3IgqOZs8bM13oEQopJevkG8U0JuMQ=";
     };
 
+  patches = [
+    # TODO remove when kbibtex updates past 0.10.0
+    ./cpp-17-for-icu.patch
+  ];
+
   nativeBuildInputs = [
     extra-cmake-modules
     shared-mime-info
@@ -74,13 +79,13 @@ mkDerivation rec {
     "${lib.makeBinPath [ bibutils ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bibliography editor for KDE";
     mainProgram = "kbibtex";
     homepage = "https://userbase.kde.org/KBibTeX";
     changelog = "https://invent.kde.org/office/kbibtex/-/raw/v${version}/ChangeLog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.linux;
   };
 }

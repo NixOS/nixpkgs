@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmrivas86";
     repo = "django-json-widget";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GY6rYY//n8kkWCJZk6OY+EOBv62ocNovNmE/ai8VCn4=";
   };
 

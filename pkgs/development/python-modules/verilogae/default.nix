@@ -33,11 +33,9 @@ buildPythonPackage rec {
       --replace-fail "-fPIC" ""
   '';
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "salsa-0.17.0-pre.2" = "sha256-6GssvV76lFr5OzAUekz2h6f82Tn7usz5E8MSZ5DmgJw=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-/gSqaxqOZUkUmJJ5PGMkAG/5PSeAjwDjT2ce+tL7xmY";
   };
 
   nativeBuildInputs = [

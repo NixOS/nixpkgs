@@ -4,48 +4,20 @@
   fetchFromGitHub,
   flutter324,
   mpv,
-  libass,
-  ffmpeg,
-  libplacebo,
-  libunwind,
-  shaderc,
-  vulkan-loader,
-  lcms,
-  libdovi,
-  libdvdnav,
-  libdvdread,
-  mujs,
-  libbluray,
-  lua,
-  rubberband,
-  libuchardet,
-  zimg,
   alsa-lib,
-  openal,
-  pipewire,
-  libpulseaudio,
-  libcaca,
-  libdrm,
-  libgbm,
-  libXScrnSaver,
-  nv-codec-headers-11,
-  libXpresent,
-  libva,
-  libvdpau,
-  pkg-config,
   makeDesktopItem,
-  wrapGAppsHook3,
   copyDesktopItems,
 }:
+
 flutter324.buildFlutterApplication rec {
   pname = "pilipalax";
-  version = "1.0.22-beta.12+174";
+  version = "1.1.2-beta";
 
   src = fetchFromGitHub {
     owner = "orz12";
     repo = "PiliPalaX";
-    tag = version;
-    hash = "sha256-Qjqyg9y5R70hODGfVClS505dJwexL0BbUm6lXSHzhJs=";
+    tag = "${version}+187";
+    hash = "sha256-8GQtPYgeYM7yTw3i5H9REWfM5j3G0aQz3oHxz8i9p2Y=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -61,48 +33,20 @@ flutter324.buildFlutterApplication rec {
   ];
 
   nativeBuildInputs = [
-    pkg-config
     autoPatchelfHook
-    wrapGAppsHook3
     copyDesktopItems
   ];
 
   buildInputs = [
     mpv
-    libass
-    ffmpeg
-    libplacebo
-    libunwind
-    shaderc
-    vulkan-loader
-    lcms
-    libdovi
-    libdvdnav
-    libdvdread
-    mujs
-    libbluray
-    lua
-    rubberband
-    libuchardet
-    zimg
     alsa-lib
-    openal
-    pipewire
-    libpulseaudio
-    libcaca
-    libdrm
-    libgbm
-    libXScrnSaver
-    libXpresent
-    nv-codec-headers-11
-    libva
-    libvdpau
   ];
 
   gitHashes = {
-    ns_danmaku = "sha256-OHlKscybKSLS1Jd1S99rCjHMZfuJXjkQB8U2Tx5iWeA=";
     auto_orientation = "sha256-0QOEW8+0PpBIELmzilZ8+z7ozNRxKgI0BzuBS8c1Fng=";
-    mime = "sha256-tqFOH85YTyxtp0LbknScx66CvN4SwYKU6YxYQMNeVs4=";
+    canvas_danmaku = "sha256-HjTGFdbPeAGuGdgoTbW9q/soYey+DkPKdZrSKloQ6jA=";
+    fl_pip = "sha256-vBIxU/FjcGPBpnHP/wZMEI8VX71RWuUi9LQJ89dBnvg=";
+    flutter_floating = "sha256-V+RhmCD/Vb/G2Zr8FPgwSzzYlAcJcbqy0sYXyhXRwP8=";
   };
 
   postInstall = ''
@@ -110,15 +54,17 @@ flutter324.buildFlutterApplication rec {
   '';
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
+    --prefix LD_LIBRARY_PATH : $out/app/pilipalax/lib
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Third-party BiliBili client developed with Flutter";
     homepage = "https://github.com/orz12/PiliPalaX";
     mainProgram = "pilipala";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

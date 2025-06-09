@@ -21,8 +21,8 @@ let
   rpmFusionPatches = fetchFromGitHub {
     owner = "rpmfusion";
     repo = "wl-kmod";
-    rev = "a04330284bfc38fd91eade6f8b28fa63cfcdc95e";
-    hash = "sha256-c72Pr/v+nxZPLEeNKbWnSpbH3gqYZaTgzMO9PlYQkf0=";
+    rev = "9a5a0d7195e0f6b05ff97e948b97fb0b7427cbf2";
+    hash = "sha256-pOOkkOjc77KGqc9fWuRyRsymd90OpLEnbOvxBbeIdKQ=";
   };
   patchset = [
     "wl-kmod-001_wext_workaround.patch"
@@ -52,6 +52,9 @@ let
     "wl-kmod-025_kernel_6.5_adaptation.patch"
     "wl-kmod-026_kernel_6.10_fix_empty_body_in_if_warning.patch"
     "wl-kmod-027_wpa_supplicant-2.11_add_max_scan_ie_len.patch"
+    "wl-kmod-028_kernel_6.12_adaptation.patch"
+    "wl-kmod-029_kernel_6.13_adaptation.patch"
+    "wl-kmod-030_kernel_6.14_adaptation.patch"
   ];
 in
 stdenv.mkDerivation {
@@ -67,13 +70,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  patches = map (patch: "${rpmFusionPatches}/${patch}") patchset ++ [
-    # Fix for Kernel 6.12 and later (5f60d5f6bbc1)
-    (fetchpatch2 {
-      url = "https://gist.githubusercontent.com/joanbm/20db669eed4d8367a457780747be8cb9/raw/5536ba1354b6b97013530e7345d3bf29e92225b1/broadcom-wl-fix-linux-6.12.patch";
-      hash = "sha256-Y5VgWp0m5tNp8lxDhIg7IodbqyUsJVHHiVIFgP9ioHE=";
-    })
-  ];
+  patches = map (patch: "${rpmFusionPatches}/${patch}") patchset;
 
   makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
 
@@ -99,7 +96,7 @@ stdenv.mkDerivation {
     description = "Kernel module driver for some Broadcom's wireless cards";
     homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.j0hax ];
     platforms = lib.platforms.linux;
   };
 }

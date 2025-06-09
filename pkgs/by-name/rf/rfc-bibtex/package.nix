@@ -12,8 +12,8 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "iluxonchik";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "rfc-bibtex";
+    tag = version;
     hash = "sha256-bPCNQqiG50vWVFA6J2kyxftwsXunHTNBdSkoIRYkb0s=";
   };
 

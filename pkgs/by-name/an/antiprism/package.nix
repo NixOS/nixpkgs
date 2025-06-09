@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "antiprism";
     repo = "antiprism";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-0FkaIsZixYHP45H0gytnzlpRvNd8mMYjW22w15z3RH8=";
   };
 
@@ -33,6 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.antiprism.com";
     description = "Collection of programs for generating, manipulating, transforming and viewing polyhedra";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 })

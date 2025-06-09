@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -34,6 +35,15 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     sha256 = "GyFOwEYmipQdFLtTXn7+NvhDTzxBlOAghr3cZT4QpQw=";
   };
+
+  patches = [
+    # gcc-14 build failure fix
+    (fetchpatch {
+      name = "gcc-14.patch";
+      url = "https://gitlab.gnome.org/GNOME/recipes/-/commit/c0304675f63a33737b24fdf37e06c6b154a91a31.patch";
+      hash = "sha256-YTf4NDwUiU/q96RAXKTO499pW9sPrgh8IvdPBPEnV6Q=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -72,7 +82,7 @@ stdenv.mkDerivation rec {
     description = "Recipe management application for GNOME";
     mainProgram = "gnome-recipes";
     homepage = "https://gitlab.gnome.org/GNOME/recipes";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

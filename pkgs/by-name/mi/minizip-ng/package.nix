@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizip-ng";
-  version = "4.0.7";
+  version = "4.0.9";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "minizip-ng";
     rev = finalAttrs.version;
-    hash = "sha256-scoEqymRMBTZZVr1fxtKOyBj4VLCgI8jQpanUKrJhiQ=";
+    hash = "sha256-iAiw+ihVfcSNl6UdBad7FjT5Zwa+brndg60v7ceCzC8=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-DMZ_LIBCOMP=OFF"
     ];
 
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-register";
+
   postInstall = ''
     # make lib findable as libminizip-ng even if compat is enabled
     for ext in so dylib a ; do
@@ -69,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/zlib-ng/minizip-ng";
     license = licenses.zlib;
     maintainers = with maintainers; [
-      gebner
       ris
     ];
     platforms = platforms.unix;

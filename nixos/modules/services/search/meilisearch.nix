@@ -108,11 +108,42 @@ in
       type = lib.types.str;
     };
 
+    # TODO: turn on by default when it stops being experimental
+    dumplessUpgrade = lib.mkOption {
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable (experimental) dumpless upgrade.
+
+        Allows upgrading from Meilisearch >=v1.12 to Meilisearch >=v1.13 without manually
+        dumping and importing the database.
+
+        More information at https://www.meilisearch.com/docs/learn/update_and_migration/updating#dumpless-upgrade
+      '';
+      type = lib.types.bool;
+    };
+
   };
 
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+
+    warnings = lib.optional (lib.versionOlder cfg.package.version "1.12") ''
+      Meilisearch 1.11 will be removed in NixOS 25.11. As it was the last
+      version not to support dumpless upgrades, you will have to manually
+      migrate your data before that. Instructions can be found at
+      https://www.meilisearch.com/docs/learn/update_and_migration/updating#using-a-dump
+      and afterwards, you can set `services.meilisearch.package = pkgs.meilisearch;`
+      to use the latest version.
+    '';
+
+    services.meilisearch.package = lib.mkDefault (
+      if lib.versionAtLeast config.system.stateVersion "25.05" then
+        pkgs.meilisearch
+      else
+        pkgs.meilisearch_1_11
+    );
 
     # used to restore dumps
     environment.systemPackages = [ cfg.package ];
@@ -129,6 +160,7 @@ in
         MEILI_DUMP_DIR = "/var/lib/meilisearch/dumps";
         MEILI_LOG_LEVEL = cfg.logLevel;
         MEILI_MAX_INDEX_SIZE = cfg.maxIndexSize;
+        MEILI_EXPERIMENTAL_DUMPLESS_UPGRADE = lib.boolToString cfg.dumplessUpgrade;
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/meilisearch";

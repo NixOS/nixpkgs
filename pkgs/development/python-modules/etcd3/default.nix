@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kragniz";
     repo = "python-etcd3";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YM72+fkCDYXl6DORJa/O0sqXqHDWQcFLv2ifQ9kEHBo=";
   };
 

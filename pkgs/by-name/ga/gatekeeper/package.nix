@@ -7,19 +7,23 @@
 
 buildGoModule rec {
   pname = "gatekeeper";
-  version = "3.18.1";
+  version = "3.19.1";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "gatekeeper";
-    rev = "v${version}";
-    hash = "sha256-u/XOJjXk6gq+A6VFh/97VgI7eu33/lA91YqL9efUjTU=";
+    tag = "v${version}";
+    hash = "sha256-zU/OAiWc6H4YC5bnDFrqpfCT1HhDGCm+dkjriP2Wp3w=";
   };
 
   vendorHash = null;
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  ldflags = [
+    "-X github.com/open-policy-agent/gatekeeper/v3/pkg/version.Version=${version}"
   ];
 
   subPackages = [ "cmd/gator" ];

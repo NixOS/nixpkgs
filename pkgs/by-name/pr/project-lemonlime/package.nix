@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Project-LemonLime";
     repo = "Project_LemonLime";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-h/aE1+ED+RkXqFcsb23rboA+Dd7kiom3XiIRqb4oYkQ=";
     fetchSubmodules = true;
   };

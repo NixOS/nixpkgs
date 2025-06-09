@@ -8,14 +8,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcsync";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "librecast";
     repo = "lcsync";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x8KjvUtn00g+zxDfSWZq4WgALDKRgbCF9rtipdOMbpc=";
+    hash = "sha256-KirMifJ5Mc3WXuIZjFv6ZIzpz/bjGHMU2jnRGGQ2w/I=";
   };
   buildInputs = [
     lcrq

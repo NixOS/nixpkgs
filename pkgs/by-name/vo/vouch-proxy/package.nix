@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vouch";
     repo = "vouch-proxy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HQ1NaAHY1YRbNUThW983V8x3ptzTc/zNP6yIMyDiq1s=";
   };
 
@@ -27,16 +27,16 @@ buildGoModule rec {
     export VOUCH_ROOT=$PWD
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vouch/vouch-proxy";
     description = "SSO and OAuth / OIDC login solution for NGINX using the auth_request module";
     changelog = "https://github.com/vouch/vouch-proxy/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       leona
       erictapen
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "vouch-proxy";
   };
 }

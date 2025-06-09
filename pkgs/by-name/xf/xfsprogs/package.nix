@@ -3,6 +3,8 @@
   stdenv,
   buildPackages,
   fetchurl,
+  fetchpatch,
+  autoreconfHook,
   gettext,
   pkg-config,
   icu,
@@ -15,12 +17,26 @@
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "6.12.0";
+  version = "6.13.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-CDJAckfbeRzHDe+W5+JUvW7fBD3ISoCmLzzNbj3/0yk=";
+    hash = "sha256-BFmTP5PZTIK8J4nnvWN0InPZ10IHza5n3DAyA42ggzc=";
   };
+
+  patches = [
+    (fetchurl {
+      name = "icu76.patch";
+      url = "https://lore.kernel.org/linux-xfs/20250212081649.3502717-1-hi@alyssa.is/raw";
+      hash = "sha256-Z7BW0B+/5eHWXdHre++wRtdbU/P6XZqudYx6EK5msIU=";
+    })
+    # Backport which fixes pkgsCross.armv7l-hf-multiplatform.xfsprogs
+    (fetchpatch {
+      name = "32-bit.patch";
+      url = "https://web.git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/patch/mkfs/proto.c?id=a5466cee9874412cfdd187f07c5276e1d4ef0fea";
+      hash = "sha256-svC7pSbblWfO5Khots2kWWfDMBXUrU35fk5wsdYuPQI=";
+    })
+  ];
 
   outputs = [
     "bin"
@@ -31,6 +47,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
+    autoreconfHook
     gettext
     pkg-config
     libuuid # codegen tool uses libuuid
@@ -60,6 +77,12 @@ stdenv.mkDerivation rec {
     done
     patchShebangs ./install-sh
   '';
+
+  # The default --force would replace xfsprogs' custom install-sh.
+  autoreconfFlags = [
+    "--install"
+    "--verbose"
+  ];
 
   configureFlags = [
     "--disable-lib64"

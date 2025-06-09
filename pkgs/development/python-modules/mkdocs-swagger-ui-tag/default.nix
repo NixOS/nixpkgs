@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Blueswen";
     repo = "mkdocs-swagger-ui-tag";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hxf7onjH26QsdB19r71NSC/67u+pEYdJo3e4OvWGgtI=";
   };
 

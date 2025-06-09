@@ -7,20 +7,28 @@
 
 let
 
-  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib)
+    getExe'
+    literalExpression
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkPackageOption
+    ;
   inherit (lib.types)
+    attrsOf
     bool
     enum
     ints
     lines
-    attrsOf
     nonEmptyStr
     nullOr
     path
     str
     submodule
     ;
-  inherit (lib.modules) mkDefault mkIf mkMerge;
 
   commonDescr = ''
     Values can be either strings or integers
@@ -104,11 +112,11 @@ let
       # Otherwise, we use `false` to provoke
       # an error if hylafax tries to use it.
       c.sendmailPath = mkMerge [
-        (mkIfDefault noWrapper "${pkgs.coreutils}/bin/false")
+        (mkIfDefault noWrapper (getExe' pkgs.coreutils "false"))
         (mkIfDefault (!noWrapper) "${wrapperDir}/${program}")
       ];
       importDefaultConfig =
-        file: lib.attrsets.mapAttrs (lib.trivial.const mkDefault) (import file { inherit pkgs; });
+        file: lib.attrsets.mapAttrs (lib.trivial.const mkDefault) (import file { inherit lib pkgs; });
       c.commonModemConfig = importDefaultConfig ./modem-default.nix;
       c.faxqConfig = importDefaultConfig ./faxq-default.nix;
       c.hfaxdConfig = importDefaultConfig ./hfaxd-default.nix;
@@ -135,6 +143,8 @@ in
   options.services.hylafax = {
 
     enable = mkEnableOption "HylaFAX server";
+
+    package = mkPackageOption pkgs "HylaFAX" { default = "hylafaxplus"; };
 
     autostart = mkOption {
       type = bool;
@@ -194,7 +204,7 @@ in
         will be symlinked to the location given here.
         This file must exist and be
         readable only by the `uucp` user.
-        See hosts.hfaxd(5) for details.
+        See {manpage}`hosts.hfaxd(5)` for details.
         This configuration permits access for all users:
         ```
           environment.etc."hosts.hfaxd" = {
@@ -299,7 +309,7 @@ in
       description = ''
         purging old files from the spooling area with
         {file}`faxcron` with the given frequency
-        (see systemd.time(7))
+        (see {manpage}`systemd.time(7)`)
       '';
     };
     faxcron.infoDays = mkOption {
@@ -339,7 +349,7 @@ in
       description = ''
         Purge old files from the spooling area with
         {file}`faxcron` with the given frequency
-        (see systemd.time(7)).
+        (see {manpage}`systemd.time(7)`).
       '';
     };
     faxqclean.archiving = mkOption {
@@ -356,7 +366,7 @@ in
         `as-flagged` archives jobs that
         have been flagged for archiving by sendfax,
         `always` forces archiving of all jobs.
-        See also sendfax(1) and faxqclean(8).
+        See also {manpage}`sendfax(1)` and {manpage}`faxqclean(8)`.
       '';
     };
     faxqclean.doneqMinutes = mkOption {

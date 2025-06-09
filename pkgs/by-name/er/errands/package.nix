@@ -18,15 +18,15 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "errands";
-  version = "46.2.7";
+  version = "46.2.8";
 
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "mrvladus";
     repo = "Errands";
-    rev = "refs/tags/${version}";
-    hash = "sha256-kPF6BS7qDFstCGadSB8MSvBy+T4PkG/wRisYAaIU6rY=";
+    tag = version;
+    hash = "sha256-Gs3/DPMsoPTxH+fR7H3gPJr8ITrQDPlmw236vDnmBaA";
   };
 
   nativeBuildInputs = [
@@ -70,12 +70,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/mrvladus/Errands";
     license = lib.licenses.mit;
     mainProgram = "errands";
-    maintainers =
-      with lib.maintainers;
-      [
-        luftmensch-luftmensch
-        sund3RRR
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      luftmensch-luftmensch
+      sund3RRR
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

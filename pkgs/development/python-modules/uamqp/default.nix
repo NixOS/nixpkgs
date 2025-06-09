@@ -7,11 +7,8 @@
   setuptools,
   cython,
   certifi,
-  CFNetwork,
   cmake,
-  CoreFoundation,
   openssl,
-  Security,
   pytestCheckHook,
   pytest-asyncio,
 }:
@@ -24,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-uamqp-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HTIOHheCrvyI7DwA/UcUXk/fbesd29lvUvJ9TAeG3CE=";
   };
 
@@ -61,13 +58,7 @@ buildPythonPackage rec {
     cmake
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      CFNetwork
-      Security
-    ];
+  buildInputs = [ openssl ];
 
   dependencies = [ certifi ];
 

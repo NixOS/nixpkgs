@@ -7,7 +7,6 @@
   pkg-config,
 
   # for passthru.tests
-  deepin,
   freeimage,
   hdrmerge,
   imagemagick,
@@ -41,9 +40,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    substituteInPlace libraw*.pc.in --replace-fail -lstdc++ ""
+  '';
+
   passthru.tests = {
     inherit imagemagick hdrmerge freeimage;
-    inherit (deepin) deepin-image-viewer;
     inherit (python3.pkgs) rawkit;
   };
 

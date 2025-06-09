@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyzx";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zxcalc";
     repo = "pyzx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4yc4P2v2L/F/A1A9z41ow2KA0aUA+3SJyC+wyMWzhwM=";
+    tag = "v${version}";
+    hash = "sha256-MhsbJIDeSIeF0LaHhI6nNxPD3ZjBWh5yvLGuwBH41a4=";
   };
 
   build-system = [ setuptools ];
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for quantum circuit rewriting and optimisation using the ZX-calculus";
     homepage = "https://github.com/zxcalc/pyzx";
-    changelog = "https://github.com/zxcalc/pyzx/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/zxcalc/pyzx/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

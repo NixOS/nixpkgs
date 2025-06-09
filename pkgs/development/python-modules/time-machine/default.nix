@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "time-machine";
-  version = "2.15.0";
+  version = "2.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "time-machine";
-    rev = "refs/tags/${version}";
-    hash = "sha256-0WYmkrMMeCkBYxy2qGovdxftzrYW9x/3tdeBcYC47Z0=";
+    tag = version;
+    hash = "sha256-xNoLtgON1dfKAgK0XhSMLHLsUr/nST3lepy15YWDEcE=";
   };
 
   build-system = [ setuptools ];

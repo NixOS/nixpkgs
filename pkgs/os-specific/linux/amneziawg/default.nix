@@ -4,6 +4,7 @@
   fetchFromGitHub,
   srcOnly,
   kernel,
+  kernelModuleMakeFlags,
   nix-update-script,
 }:
 
@@ -14,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-linux-kernel-module";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WOcBTxetVz2Sr62c+2aGNyohG2ydi+R+az+4qHbKprI=";
   };
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags =
-    kernel.makeFlags
+    kernelModuleMakeFlags
     ++ [ "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ]
     ++ lib.optional (lib.versionAtLeast kernel.version "5.6") "KERNEL_SOURCE_DIR=${srcOnly kernel}";
 

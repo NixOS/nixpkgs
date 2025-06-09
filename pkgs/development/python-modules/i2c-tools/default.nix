@@ -4,7 +4,7 @@
   i2c-tools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (i2c-tools) pname version src;
 
   format = "setuptools";

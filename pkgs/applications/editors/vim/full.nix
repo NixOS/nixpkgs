@@ -30,13 +30,6 @@
   makeWrapper,
   wrapGAppsHook3,
 
-  # apple frameworks
-  CoreServices,
-  CoreData,
-  Cocoa,
-  Foundation,
-  libobjc,
-
   features ? "huge", # One of tiny, small, normal, big or huge
   wrapPythonDrv ? false,
   guiSupport ? config.vim.gui or (if stdenv.hostPlatform.isDarwin then "gtk2" else "gtk3"),
@@ -195,13 +188,6 @@ stdenv.mkDerivation {
     ]
     ++ lib.optional (guiSupport == "gtk2") gtk2-x11
     ++ lib.optional (guiSupport == "gtk3") gtk3-x11
-    ++ lib.optionals darwinSupport [
-      CoreServices
-      CoreData
-      Cocoa
-      Foundation
-      libobjc
-    ]
     ++ lib.optional luaSupport lua
     ++ lib.optional pythonSupport python3
     ++ lib.optional tclSupport tcl

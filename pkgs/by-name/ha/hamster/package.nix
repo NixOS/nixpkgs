@@ -22,8 +22,8 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "projecthamster";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "hamster";
+    tag = "v${version}";
     sha256 = "sha256-cUmUvJP9Y3de5OaNgIxvigDsX2ww7NNRY5son/gg+WI=";
   };
 

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   mdformat,
-  mdformat-admon,
   mdformat-gfm,
   mdit-py-plugins,
   more-itertools,
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat-mkdocs";
-  version = "3.1.1";
+  version = "4.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,14 +23,13 @@ buildPythonPackage rec {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
     tag = "v${version}";
-    hash = "sha256-9iU8tKPBpdse0TwIeYSe9slcgOGMcQ735RTLKA1n6Pc=";
+    hash = "sha256-+2w7UrOPSCUDc6jnLAW0/njq+aJ4y+H8n7gshxLj8/Q=";
   };
 
   nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     mdformat
-    mdformat-admon
     mdformat-gfm
     mdit-py-plugins
     more-itertools
@@ -52,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Mdformat plugin for MkDocs";
     homepage = "https://github.com/KyleKing/mdformat-mkdocs";
-    changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/v${version}";
+    changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ aldoborrero ];
   };

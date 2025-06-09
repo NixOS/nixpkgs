@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "check-manifest";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wZ0mx2b3QkwTOPMLQ03SFVwnbsVO5RezOSX50ZOYvw8=";
   };
 

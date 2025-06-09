@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "celluloid";
-  version = "0.27";
+  version = "0.29";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-zuYt7taIb4w3NIszUpnSYvLIdYQH492tBwhLa6IgWDw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-p4jMEM+ikcyVIi7cHm7u0wk9PKD8YJyhRXABgsh/SJc=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/celluloid-player/celluloid/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "celluloid";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ samlukeyes123 ];
     platforms = lib.platforms.linux;
   };
 })

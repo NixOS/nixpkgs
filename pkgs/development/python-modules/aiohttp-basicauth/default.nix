@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "aiohttp-basicauth";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DjwrMlkVVceA5kDzm0c/on0VMOxyMMA3Hu4Y2Tiu0lI=";
   };
 

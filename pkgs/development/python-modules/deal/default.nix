@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "deal";
-  version = "4.24.4";
+  version = "4.24.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "life4";
     repo = "deal";
-    rev = "refs/tags/${version}";
-    hash = "sha256-4orpoYfPGSvquhg9w63uUe8QbBa2RUpxaEJ9uy28+fU=";
+    tag = version;
+    hash = "sha256-oSvLi+9JYnwilJa63MuGb2iir2Mjr3UewzpPLCtOVzs=";
   };
 
   build-system = [ flit-core ];

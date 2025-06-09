@@ -102,7 +102,7 @@ stdenv.mkDerivation {
       "-DVTK_MODULE_ENABLE_VTK_RenderingExternal=YES"
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      "-DOPENGL_INCLUDE_DIR=${libGL}/include"
+      "-DOPENGL_INCLUDE_DIR=${lib.getInclude libGL}/include"
       (lib.cmakeBool "VTK_OPENGL_HAS_EGL" enableEgl)
     ]
     ++ [

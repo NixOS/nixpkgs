@@ -14,15 +14,15 @@
 
 buildPythonApplication rec {
   pname = "syncplay";
-  version = "1.7.3";
+  version = "1.7.4";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Syncplay";
     repo = "syncplay";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-ipo027XyN4BpMkxzXznbnaufsaG/YkHxFJYo+XWzbyE=";
+    tag = "v${version}";
+    sha256 = "sha256-23OTj+KUmYtrhzIS4A9Gq/tClOLwaeo50+Fcm1tn47M=";
   };
 
   patches = [

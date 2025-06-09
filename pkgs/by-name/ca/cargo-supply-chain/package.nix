@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,11 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KjeYB9TFbuJ2KPaObeM0ADs5F8uJJ6/czMPQjBUgIk8=";
   };
 
-  cargoHash = "sha256-Fx1C4X0dQqePqLa+X+4ZDrIMFKBQ6J50nBApYXcGbFM=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-fsW3qTyFMcj/OTouOah1ZFskw075V8jBwhs02AxY7kU=";
 
   meta = with lib; {
     description = "Gather author, contributor and publisher data on crates in your dependency graph";

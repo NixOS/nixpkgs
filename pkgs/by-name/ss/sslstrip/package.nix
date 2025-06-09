@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "L1ghtn1ng";
     repo = "sslstrip";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iPWpbRmAUf0Yf5MDlpln1JLBxMIdmr/Ggk2ZGeQzm8s=";
   };
 
@@ -40,12 +40,12 @@ python3.pkgs.buildPythonApplication rec {
     "sslstrip"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for exploiting SSL stripping attacks";
     homepage = "https://github.com/L1ghtn1ng/sslstrip";
     changelog = "https://github.com/L1ghtn1ng/sslstrip/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sslstrip";
   };
 }

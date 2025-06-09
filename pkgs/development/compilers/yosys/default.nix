@@ -41,7 +41,7 @@
 
 let
 
-  # Provides a wrapper for creating a yosys with the specifed plugins preloaded
+  # Provides a wrapper for creating a yosys with the specified plugins preloaded
   #
   # Example:
   #
@@ -81,13 +81,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.48";
+  version = "0.51";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-LzBx1bxpiPOiRTPgBcjNnuQemZG5xfvtA/NgqUib/6g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y2Gf3CXd1em+4dlIo2+dwfZbqahM3kqG0rZUTjkIZak=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''

@@ -1,0 +1,16 @@
+diff --git a/src/Etterna/Singletons/DownloadManager.cpp b/src/Etterna/Singletons/DownloadManager.cpp
+index b42ccd30..3606107d 100644
+--- a/src/Etterna/Singletons/DownloadManager.cpp
++++ b/src/Etterna/Singletons/DownloadManager.cpp
+@@ -6265,7 +6265,10 @@ Download::Install()
+ {
+ 	Core::Platform::requestUserAttention();
+ 	Message* msg;
+-	if (!SongManager::InstallSmzip(m_TempFileName))
++
++	auto path = FILEMAN->ResolvePath(m_TempFileName);
++
++	if (!SongManager::InstallSmzip(path))
+ 		msg = new Message("DownloadFailed");
+ 	else
+ 		msg = new Message("PackDownloaded");

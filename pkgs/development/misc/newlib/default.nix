@@ -13,21 +13,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newlib";
-  version = "4.4.0.20231231";
+  version = "4.5.0.20241231";
 
   src = fetchurl {
     url = "ftp://sourceware.org/pub/newlib/newlib-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-DBZqOeG/CVHfr81olJ/g5LbTZYCB1igvOa7vxjEPLxM=";
+    sha256 = "sha256-M/EmBeAFSWWZbCXBOCs+RjsK+ReZAB9buMBjDy7IyFI=";
   };
 
-  patches = lib.optionals nanoizeNewlib [
-    # https://bugs.gentoo.org/723756
-    (fetchpatch {
-      name = "newlib-3.3.0-no-nano-cxx.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/newlib/files/newlib-3.3.0-no-nano-cxx.patch?id=9ee5a1cd6f8da6d084b93b3dbd2e8022a147cfbf";
-      sha256 = "sha256-S3mf7vwrzSMWZIGE+d61UDH+/SK/ao1hTPee1sElgco=";
-    })
-  ];
+  patches =
+    [
+      (fetchpatch {
+        name = "0001-newlib-Fix-mips-libgloss-support.patch";
+        url = "https://sourceware.org/git/?p=newlib-cygwin.git;a=patch;h=8a8fb570d7c5310a03a34b3dd6f9f8bb35ee9f40";
+        hash = "sha256-hWS/X0jf/ZFXIR39NvNDVhkR8F81k9UWpsqDhZFxO5o=";
+      })
+    ]
+    ++ lib.optionals nanoizeNewlib [
+      # https://bugs.gentoo.org/723756
+      (fetchpatch {
+        name = "newlib-3.3.0-no-nano-cxx.patch";
+        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/newlib/files/newlib-3.3.0-no-nano-cxx.patch?id=9ee5a1cd6f8da6d084b93b3dbd2e8022a147cfbf";
+        sha256 = "sha256-S3mf7vwrzSMWZIGE+d61UDH+/SK/ao1hTPee1sElgco=";
+      })
+    ];
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
@@ -115,10 +123,14 @@ stdenv.mkDerivation (finalAttrs: {
       (
         cd $out${finalAttrs.passthru.libdir}
 
-        for f in librdimon.a libc.a libg.a; do
+        for f in librdimon.a libc.a libm.a libg.a libgloss.a; do
           # Some libraries are only available for specific architectures.
           # For example, librdimon.a is only available on ARM.
-          [ -f "$f" ] && cp "$f" "''${f%%\.a}_nano.a"
+          if [ -f "$f" ]; then
+            dst="''${f%%\.a}_nano.a"
+            >&2 echo "$f -> $dst"
+            cp "$f" "$dst"
+          fi
         done
       )
     ''

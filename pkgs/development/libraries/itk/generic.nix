@@ -1,6 +1,6 @@
 {
   version,
-  rev,
+  tag,
   sourceSha256,
 }:
 
@@ -30,7 +30,6 @@
   vtk,
   which,
   zlib,
-  Cocoa,
   enablePython ? false,
   enableRtk ? true,
 }:
@@ -75,7 +74,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
     repo = "ITK";
-    inherit rev;
+    inherit tag;
     sha256 = sourceSha256;
   };
 
@@ -103,8 +102,7 @@ stdenv.mkDerivation {
       "-DBUILD_SHARED_LIBS=ON"
       "-DITK_FORBID_DOWNLOADS=ON"
       "-DITK_USE_SYSTEM_LIBRARIES=ON" # finds common libraries e.g. hdf5, libpng, libtiff, zlib, but not GDCM, NIFTI, MINC, etc.
-      "-DITK_USE_SYSTEM_EIGEN=ON"
-      "-DITK_USE_SYSTEM_EIGEN=OFF"
+      (lib.cmakeBool "ITK_USE_SYSTEM_EIGEN" (lib.versionAtLeast version "5.4"))
       "-DITK_USE_SYSTEM_GOOGLETEST=OFF" # ANTs build failure due to https://github.com/ANTsX/ANTs/issues/1489
       "-DITK_USE_SYSTEM_GDCM=ON"
       "-DITK_USE_SYSTEM_MINC=ON"
@@ -142,11 +140,10 @@ stdenv.mkDerivation {
 
   buildInputs =
     [
-      eigen
       libX11
       libuuid
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
+    ++ lib.optionals (lib.versionAtLeast version "5.4") [ eigen ]
     ++ lib.optionals enablePython [ python ]
     ++ lib.optionals withVtk [ vtk ];
   # Due to ITKVtkGlue=ON and the additional dependencies needed to configure VTK 9

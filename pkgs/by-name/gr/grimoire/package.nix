@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "grimoire";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-V6j6PBoZqTvGfYSbpxd0vOyTb/i2EV8pDVSuZeq1s5o=";
   };
 

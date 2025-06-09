@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dingusdk";
     repo = "PythonIhcSdk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WI9RjVR2KdLaqklGtIUJErV4pBfffXx3odu3hdoyLWc=";
   };
 

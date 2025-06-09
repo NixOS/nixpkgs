@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  pnpm_9,
   nodejs,
   electron,
   makeDesktopItem,
@@ -14,34 +14,34 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
-  version = "5.17.0";
+  version = "6.4.1";
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-l89CXfARLBNS6MMq54gM63y5FqeHdMXDBt52znir+/A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uRf+tfTiIrKc13GPSOVoEt5dFHSmJmspNc+b4cMv6Q4=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
     copyDesktopItems
     imagemagick
     makeWrapper
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-I78AvOBdDd59eVJJ51xxNwVvMnNvLdJJpFEtE/I1H8U=";
+    hash = "sha256-4Ite75ZMMSbPnmNcpoYaggiH9r2xQYkOnl29CF/6swA=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postPatch = ''
-    substituteInPlace package.json \
-      --replace-fail '"Emmanouil Konstantinidis (3YP8SXP3BF)"' null \
-      --replace-fail '"scripts/notarize.js"' null
+    substituteInPlace config/electron-builder.js \
+      --replace-fail "'Adam Setch (5KD23H9729)'" "null" \
+      --replace-fail "'scripts/afterSign.js'" "null"
   '';
 
   buildPhase = ''
@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm build
     pnpm exec electron-builder \
+        --config config/electron-builder.js \
         --dir \
         -c.electronDist=electron-dist \
         -c.electronVersion="${electron.version}" \

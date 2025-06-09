@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-validators";
     repo = "validators";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1QKo6nidaHeKCbti/xALbgylHYbtBUJlWrjhNtdx8kU=";
   };
 

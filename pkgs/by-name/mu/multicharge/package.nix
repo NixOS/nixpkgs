@@ -17,13 +17,13 @@ assert !blas.isILP64 && !lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "multicharge";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
-    repo = pname;
+    repo = "multicharge";
     rev = "v${version}";
-    hash = "sha256-W6IqCz9k6kdPxnIIA+eMCrFjf0ELTeK78VvZoyFcZxU=";
+    hash = "sha256-8qwM3dpvFoL2WrMWNf14zYtRap0ijdfZ95XaTlkHhqQ=";
   };
 
   nativeBuildInputs = [

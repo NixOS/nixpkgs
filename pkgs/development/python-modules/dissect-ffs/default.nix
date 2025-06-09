@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-ffs";
-  version = "3.10";
+  version = "3.11";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ffs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-sOMakwJyKgeRXbc37D5j7GVldl3gO7yYMnNq217J7QM=";
+    tag = version;
+    hash = "sha256-rfoSUhTB++cei7X8jaSp9ek8+pAAyaNkYC0M5cCDBtk=";
   };
 
   build-system = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the FFS file system";
     homepage = "https://github.com/fox-it/dissect.ffs";
-    changelog = "https://github.com/fox-it/dissect.ffs/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.ffs/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

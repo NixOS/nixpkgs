@@ -23,8 +23,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Yelp";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "detect-secrets";
+    tag = "v${version}";
     hash = "sha256-pNLAZUJhjZ3b01XaltJUJ9O7Blv6/pHQrRvURe7MJ5A=";
     leaveDotGit = true;
   };

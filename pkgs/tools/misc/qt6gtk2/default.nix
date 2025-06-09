@@ -1,5 +1,5 @@
 {
-  fetchFromGitHub,
+  fetchFromGitLab,
   lib,
   stdenv,
   gtk2,
@@ -11,13 +11,14 @@
 
 stdenv.mkDerivation {
   pname = "qt6gtk2";
-  version = "0.2-unstable-2024-08-14";
+  version = "0.4-unstable-2025-05-11";
 
-  src = fetchFromGitHub {
-    owner = "trialuser02";
+  src = fetchFromGitLab {
+    domain = "opencode.net";
+    owner = "trialuser";
     repo = "qt6gtk2";
-    rev = "b574ba5b59edf5ce220ca304e1d07d75c94d03a2";
-    hash = "sha256-2NzUmcNJBDUJqcBUF4yRO/mDqDf1Up1k9cuMxVUqe60=";
+    rev = "a95d620193bfc3a2d5e17c3d1c883849182f77b8";
+    hash = "sha256-gcCujWImw7WOnz7QI4h4ye/v5EZWVIq5eFLYoOxYoog=";
   };
 
   buildInputs = [

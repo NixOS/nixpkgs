@@ -1,7 +1,7 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
   description = "CSS, SCSS, Sass and Less formatter.";
-  hash = "sha256-zt7F1tgPhPAn+gtps6+JB5RtvjIZw2n/G85Bv6kazgU=";
+  hash = "sha256-mFlhfqtglKtKNls96PO/2AWLL1fNC5msQCd9EgdKauE=";
   initConfig = {
     configExcludes = [ "**/node_modules" ];
     configKey = "malva";
@@ -14,6 +14,6 @@ mkDprintPlugin {
   };
   pname = "g-plane-malva";
   updateUrl = "https://plugins.dprint.dev/g-plane/malva/latest.json";
-  url = "https://plugins.dprint.dev/g-plane/malva-v0.11.1.wasm";
-  version = "0.11.1";
+  url = "https://plugins.dprint.dev/g-plane/malva-v0.11.2.wasm";
+  version = "0.11.2";
 }

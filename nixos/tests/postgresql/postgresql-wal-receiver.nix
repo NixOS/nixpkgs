@@ -1,6 +1,7 @@
 {
   pkgs,
   makeTest,
+  genTests,
 }:
 
 let
@@ -31,7 +32,6 @@ let
           services.postgresql = {
             inherit package;
             enable = true;
-            enableJIT = lib.hasInfix "-jit-" package.name;
             settings = {
               max_replication_slots = 10;
               max_wal_senders = 10;
@@ -108,9 +108,4 @@ let
       '';
     };
 in
-lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) pkgs.postgresqlVersions
-  // {
-    passthru.override = p: makeTestFor p;
-  }
-)
+genTests { inherit makeTestFor; }

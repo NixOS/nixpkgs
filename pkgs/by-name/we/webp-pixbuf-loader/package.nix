@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/aruiz/webp-pixbuf-loader";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.gnome.members ++ [ maintainers.cwyc ];
+    maintainers = [ maintainers.cwyc ];
+    teams = [ teams.gnome ];
   };
 }

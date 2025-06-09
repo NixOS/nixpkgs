@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pylint-django";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9b0Sbo6E036UmUmP/CVPrS9cxxKtkMMZtqJsI53g4sU=";
   };
 

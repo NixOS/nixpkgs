@@ -11,20 +11,20 @@
 
 buildNpmPackage rec {
   pname = "vieb";
-  version = "12.1.0";
+  version = "12.3.0";
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
-    repo = pname;
+    repo = "vieb";
     rev = version;
-    hash = "sha256-Gx2O5KJ0N/rSTwYcA10bRjXacIUdXETd18dkGBVv8wM=";
+    hash = "sha256-g3L+bzsDP3vfTaroqCWzRDymFTZE+6nLytRWzPMBoX8=";
   };
 
   postPatch = ''
     sed -i '/"electron"/d' package.json
   '';
 
-  npmDepsHash = "sha256-eajM2YysFhp3eiWeJwkfpZPpte31UHrtg9rfMexefsg=";
+  npmDepsHash = "sha256-0V2fKdfqO64DLqLGz1OK9BZEbwGDqPFUdxu9F6v6Ms4=";
   makeCacheWritable = true;
   dontNpmBuild = true;
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -65,16 +65,15 @@ buildNpmPackage rec {
 
   distPhase = ":"; # disable useless $out/tarballs directory
 
-  meta = with lib; {
+  meta = {
     homepage = "https://vieb.dev/";
     changelog = "https://github.com/Jelmerro/Vieb/releases/tag/${version}";
     description = "Vim Inspired Electron Browser";
     mainProgram = "vieb";
-    maintainers = with maintainers; [
-      gebner
+    maintainers = with lib.maintainers; [
       tejing
     ];
-    platforms = platforms.unix;
-    license = licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
   };
 }

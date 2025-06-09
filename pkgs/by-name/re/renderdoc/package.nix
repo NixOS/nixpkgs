@@ -13,7 +13,7 @@
   nix-update-script,
   pcre,
   pkg-config,
-  python311Packages,
+  python3Packages,
   qt5,
   stdenv,
   vulkan-loader,
@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.36";
+  version = "1.38";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-a7jUWjNrpy3FnLRccljV7obAlnQwyMJrAaGf9iZa0UY=";
+    hash = "sha256-6DvBV2amPfQff3LleXaqfoKzWvoHUJ0dh/bg/WcGIeA=";
   };
 
   outputs = [
@@ -51,9 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
     [
       libXdmcp
       libpthreadstubs
-      python311Packages.pyside2
-      python311Packages.pyside2-tools
-      python311Packages.shiboken2
+      python3Packages.pyside2
+      python3Packages.pyside2-tools
+      python3Packages.shiboken2
       qt5.qtbase
       qt5.qtsvg
       vulkan-loader
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pcre
     pkg-config
-    python311Packages.python
+    python3Packages.python
     qt5.qtx11extras
     qt5.wrapQtAppsHook
   ];
@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "renderdoccmd";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
   };
 })

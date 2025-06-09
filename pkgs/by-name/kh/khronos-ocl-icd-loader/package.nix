@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     mainProgram = "cllayerinfo";
     homepage = "https://github.com/KhronosGroup/OpenCL-ICD-Loader";
     license = licenses.asl20;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

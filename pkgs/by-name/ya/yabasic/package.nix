@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabasic";
-  version = "2.90.5";
+  version = "2.91.2";
 
   src = fetchurl {
     url = "http://www.yabasic.de/download/yabasic-${finalAttrs.version}.tar.gz";
-    hash = "sha256-w2a831Sm6sTWe7lfD6kirDzSvQX1Qpnw1aG+3ql8ww4=";
+    hash = "sha256-fcYJwHj+gbtudyioeHPXAQoh9SCk1RMxOqEWA3H3cdU=";
   };
 
   buildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://2484.de/yabasic/whatsnew.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

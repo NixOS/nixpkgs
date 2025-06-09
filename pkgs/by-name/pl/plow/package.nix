@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "six-ddc";
     repo = "plow";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-q9k5GzhYPOP8p8VKrqpoHc3B9Qak+4DtZAZZuFlkED0=";
   };
 
@@ -29,12 +29,12 @@ buildGoModule rec {
     package = plow;
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-performance HTTP benchmarking tool that includes a real-time web UI and terminal display";
     homepage = "https://github.com/six-ddc/plow";
     changelog = "https://github.com/six-ddc/plow/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ecklf ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ecklf ];
     mainProgram = "plow";
   };
 }

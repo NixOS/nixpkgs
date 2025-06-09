@@ -11,20 +11,20 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "wojtekka";
-    repo = pname;
+    repo = "6tunnel";
     rev = version;
     sha256 = "0zsx9d6xz5w8zvrqsm8r625gpbqqhjzvjdzc3z8yix668yg8ff8h";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Tunnelling for application that don't speak IPv6";
     mainProgram = "6tunnel";
     homepage = "https://github.com/wojtekka/6tunnel";
     changelog = "https://github.com/wojtekka/6tunnel/blob/${version}/ChangeLog";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ Br1ght0ne ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
+    platforms = lib.platforms.unix;
   };
 }

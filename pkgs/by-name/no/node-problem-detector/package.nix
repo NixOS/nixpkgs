@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "kubernetes";
-    repo = pname;
+    repo = "node-problem-detector";
     rev = "v${version}";
     sha256 = "sha256-Aw6TDyWczqWgUOCV7f4JSAI4eVcjWgwe2V5qSrx4TBI=";
   };
@@ -38,14 +38,14 @@ buildGoModule rec {
   tags = lib.optionals stdenv.hostPlatform.isLinux [ "journald" ];
 
   ldflags = [
-    "-X k8s.io/${pname}/pkg/version.version=v${version}"
+    "-X k8s.io/node-problem-detector/pkg/version.version=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Various problem detectors running on the Kubernetes nodes";
     homepage = "https://github.com/kubernetes/node-problem-detector";
     changelog = "https://github.com/kubernetes/node-problem-detector/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lbpdt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lbpdt ];
   };
 }

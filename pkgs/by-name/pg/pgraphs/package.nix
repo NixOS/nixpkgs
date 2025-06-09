@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "pg-format";
     repo = "pgraphs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0Zo8Vg2KHhEGvO+vrbcP0ZTnfLtNTE2fqxq5LwPsJGs=";
   };
 

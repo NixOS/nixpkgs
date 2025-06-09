@@ -172,7 +172,7 @@ in
             ruleset = mkOption {
               description = ''
                 The path to load specific local geoip/geosite db files.
-                If not set, they will be automatically downloaded from (Loyalsoldier/v2ray-rules-dat)[https://github.com/Loyalsoldier/v2ray-rules-dat].
+                If not set, they will be automatically downloaded from [Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat).
               '';
               default = { };
               type = types.submodule {

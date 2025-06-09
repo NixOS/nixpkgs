@@ -15,6 +15,7 @@
   versionCheckHook,
   gitUpdater,
   onionshare-gui,
+  writableTmpDirAsHomeHook,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "onionshare-cli";
@@ -24,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-J8Hdriy8eWpHuMCI87a9a/zCR6xafM3A/Tkyom0Ktko=";
   };
 
@@ -95,15 +96,11 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs =
     [
       versionCheckHook
+      writableTmpDirAsHomeHook
     ]
     ++ (with python3Packages; [
       pytestCheckHook
     ]);
-
-  preCheck = ''
-    # Tests use the home directory
-    export HOME="$(mktemp -d)"
-  '';
 
   disabledTests =
     lib.optionals stdenv.hostPlatform.isLinux [

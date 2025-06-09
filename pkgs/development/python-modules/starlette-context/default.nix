@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "starlette-context";
-  version = "0.3.6";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomwojcik";
     repo = "starlette-context";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZKwE2M86clYKdptd0o/j8VYUOj/Y/72uUnpxFbJ65vw=";
+    tag = "v${version}";
+    hash = "sha256-PzVZ458TdBLdbFJDN+X8hVU5zsRxcesihoDB+jRaKAg=";
   };
 
   build-system = [ poetry-core ];

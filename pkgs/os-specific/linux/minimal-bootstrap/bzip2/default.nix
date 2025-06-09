@@ -38,7 +38,7 @@ bash.runCommand "${pname}-${version}"
       description = "High-quality data compression program";
       homepage = "https://www.sourceware.org/bzip2";
       license = licenses.bsdOriginal;
-      maintainers = teams.minimal-bootstrap.members;
+      teams = [ teams.minimal-bootstrap ];
       platforms = platforms.unix;
     };
   }

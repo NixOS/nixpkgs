@@ -17,7 +17,7 @@
   net-snmp,
   openssl,
   pkg-config,
-  substituteAll,
+  replaceVars,
   systemd,
   udev,
   gnused,
@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nut";
-  version = "2.8.2";
+  version = "2.8.3";
 
   src = fetchurl {
     url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5LSwy+fdObqQl75/fXh7sv/74132Tf9Ttf45PWWcWX0=";
+    sha256 = "sha256-1soX8LOQA7rHZJ6xerSnE+TV/KqP0a7cooNX1Z3wle0=";
   };
 
   patches = [
@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
     # trying to install directly into /etc/nut which predictably fails
     ./nutshutdown-conf-default.patch
 
-    (substituteAll {
-      src = ./hardcode-paths.patch;
+    (replaceVars ./hardcode-paths.patch {
       avahi = "${avahi}/lib";
       freeipmi = "${freeipmi}/lib";
       libgpiod = "${libgpiod_1}/lib";
@@ -77,6 +76,7 @@ stdenv.mkDerivation rec {
     "--with-all"
     "--with-ssl"
     "--without-powerman" # Until we have it ...
+    "--with-systemdsystempresetdir=$(out)/lib/systemd/system-preset"
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
     "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
     "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"

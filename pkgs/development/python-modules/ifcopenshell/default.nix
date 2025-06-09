@@ -61,7 +61,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IfcOpenShell";
     repo = "IfcOpenShell";
-    rev = "refs/tags/ifcopenshell-python-${version}";
+    tag = "ifcopenshell-python-${version}";
     fetchSubmodules = true;
     hash = "sha256-tnj14lBEkUZNDM9J1sRhNA7OkWTWa5JPTSF8hui3q7k=";
   };
@@ -208,7 +208,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Open source IFC library and geometry engine";
-    homepage = "http://ifcopenshell.org/";
+    homepage = "https://ifcopenshell.org/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ autra ];
   };

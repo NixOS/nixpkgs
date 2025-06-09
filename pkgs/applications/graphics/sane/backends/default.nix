@@ -18,6 +18,7 @@
   net-snmp,
   curl,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   libxml2,
   poppler,
   gawk,
@@ -28,7 +29,7 @@
   libtool,
   autoconf-archive,
 
-  # List of { src name backend } attibute sets - see installFirmware below:
+  # List of { src name backend } attribute sets - see installFirmware below:
   extraFirmware ? [ ],
 
   # For backwards compatibility with older setups; use extraFirmware instead:
@@ -111,6 +112,8 @@ stdenv.mkDerivation rec {
       libieee1284
       libv4l
       net-snmp
+    ]
+    ++ lib.optionals withSystemd [
       systemd
     ];
 

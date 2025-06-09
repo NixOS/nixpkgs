@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdwarf-lite";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "jeremy-rifkin";
     repo = "libdwarf-lite";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qHikjAG5xuuHquqqKGuiDHXVZSlg/MbNp9JNSAKM/Hs=";
+    hash = "sha256-/E0aUVEhEy1v4wm2/t5wLck93Xb/RrKMIwqFYpi6BLA=";
   };
 
   outputs = [

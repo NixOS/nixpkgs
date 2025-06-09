@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   httpx,
   poetry-core,
   pytest-asyncio,
@@ -21,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-glances-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-VLsNMFFt+kMxNw/81OMX4Fg/xCbQloCURmV0OxvClq8=";
   };
 

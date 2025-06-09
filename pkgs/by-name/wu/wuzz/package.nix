@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "asciimoo";
-    repo = pname;
+    repo = "wuzz";
     rev = "v${version}";
     sha256 = "sha256-H0soiKOytchfcFx17az0pGoFbA+hhXLxGJVdaARvnDc=";
   };

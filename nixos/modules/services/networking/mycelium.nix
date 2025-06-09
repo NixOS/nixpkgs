@@ -73,7 +73,13 @@ in
 
     systemd.services.mycelium = {
       description = "Mycelium network";
-      after = [ "network.target" ];
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
+      wants = [
+        "network-online.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [
         cfg.keyFile

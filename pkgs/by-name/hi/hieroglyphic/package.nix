@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = "Hieroglyphic";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8UUFatJwtxqumhHd0aiPk6nKsaaF/jIIqMFxXye0X8U=";
   };
 
@@ -65,7 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/en/Hieroglyphic/";
     license = lib.licenses.gpl3Only;
     mainProgram = "hieroglyphic";
-    maintainers = with lib.maintainers; [ tomasajt ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ tomasajt ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

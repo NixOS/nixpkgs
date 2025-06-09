@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pyenphase";
-  version = "1.23.0";
+  version = "1.26.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyenphase";
     repo = "pyenphase";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nGOxGZxPTlU5/nI2m+MXzzcVA+twxfNL1Jf51xT0XLc=";
+    tag = "v${version}";
+    hash = "sha256-EKelQNHDaWSBrr19a8kYRI/wOYcRS9umJIo4oW9aU6k=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to control enphase envoy";
     homepage = "https://github.com/pyenphase/pyenphase";
-    changelog = "https://github.com/pyenphase/pyenphase/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pyenphase/pyenphase/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

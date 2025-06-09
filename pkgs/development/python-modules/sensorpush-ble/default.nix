@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "sensorpush-ble";
-  version = "1.7.1";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "sensorpush-ble";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-T2sjzQoWWRGAKiMDN29jZ7jZ5/i75qpNCiuVB7VEhJw=";
+    tag = "v${version}";
+    hash = "sha256-Jsf/NTVwEHoH989yQqWEdG43H74JHlKpUvMWuH4paOw=";
   };
 
   build-system = [ poetry-core ];

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "health-check";
-  version = "0.04.00";
+  version = "0.04.01";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = pname;
+    repo = "health-check";
     rev = "V${version}";
-    hash = "sha256-CPKXpPpdagq3UnTk8Z58WtSPek8L79totKX+Uh6foVg=";
+    hash = "sha256-sBhFH9BNRQ684ydqh8p4TtFwO+Aygu4Ke4+/nNMlZ/E=";
   };
 
   buildInputs = [

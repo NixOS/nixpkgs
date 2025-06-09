@@ -36,7 +36,10 @@
   withSecurityKey ? !stdenv.hostPlatform.isStatic,
   withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey,
   withPAM ? stdenv.hostPlatform.isLinux,
-  dsaKeysSupport ? false,
+  # Attempts to mlock the entire sshd process on startup to prevent swapping.
+  # Currently disabled when PAM support is enabled due to crashes
+  # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1103418
+  withLinuxMemlock ? (stdenv.hostPlatform.isLinux && !withPAM),
   linkOpenssl ? true,
   isNixos ? stdenv.hostPlatform.isLinux,
 }:
@@ -48,12 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   patches = [
+    # Making openssh pass the LOCALE_ARCHIVE variable to the forked session processes,
+    # so the session 'bash' will receive the proper locale archive, and thus process
+    # UTF-8 properly.
     ./locale_archive.patch
 
-    (fetchurl {
-      url = "https://git.alpinelinux.org/aports/plain/main/openssh/gss-serv.c.patch?id=a7509603971ce2f3282486a43bb773b1b522af83";
-      sha256 = "sha256-eFFOd4B2nccRZAQWwdBPBoKWjfEdKEVGJvKZAzLu3HU=";
-    })
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
   ] ++ extraPatches;
@@ -110,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-libedit=yes"
       "--disable-strip"
       (lib.withFeature withPAM "pam")
-      (lib.enableFeature dsaKeysSupport "dsa-keys")
     ]
     ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional (!withSecurityKey) "--disable-security-key"
@@ -122,6 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-libutil"
     ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ lib.optional withLdns "--with-ldns"
+    ++ lib.optional stdenv.hostPlatform.isOpenBSD "--with-bsd-auth"
+    ++ lib.optional withLinuxMemlock "--with-linux-memlock-onfault"
     ++ extraConfigureFlags;
 
   ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} =
@@ -204,6 +207,13 @@ stdenv.mkDerivation (finalAttrs: {
     "sysconfdir=\${out}/etc/ssh"
   ];
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    for binary in ssh sshd; do
+      $out/bin/$binary -V 2>&1 | grep -P "$(printf '^OpenSSH_\\Q%s\\E,' "$version")"
+    done
+  '';
+
   passthru = {
     inherit withKerberos;
     tests = {
@@ -217,16 +227,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta =
-    with lib;
-    {
-      description = "Implementation of the SSH protocol${extraDesc}";
-      homepage = "https://www.openssh.com/";
-      changelog = "https://www.openssh.com/releasenotes.html";
-      license = licenses.bsd2;
-      platforms = platforms.unix ++ platforms.windows;
-      maintainers = (extraMeta.maintainers or [ ]) ++ (with maintainers; [ aneeshusa ]);
-      mainProgram = "ssh";
-    }
-    // extraMeta;
+  meta = {
+    description = "Implementation of the SSH protocol${extraDesc}";
+    homepage = "https://www.openssh.com/";
+    changelog = "https://www.openssh.com/releasenotes.html";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    maintainers = extraMeta.maintainers or [ ];
+    mainProgram = "ssh";
+  } // extraMeta;
 })

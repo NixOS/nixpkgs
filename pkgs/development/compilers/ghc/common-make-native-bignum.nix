@@ -34,13 +34,8 @@
   # GHC can be built with system libffi or a bundled one.
   libffi ? null,
 
-  useLLVM ?
-    !(
-      stdenv.targetPlatform.isx86
-      || stdenv.targetPlatform.isPower
-      || stdenv.targetPlatform.isSparc
-      || (lib.versionAtLeast version "9.2" && stdenv.targetPlatform.isAarch64)
-    ),
+  useLLVM ? !(import ./common-have-ncg.nix { inherit lib stdenv version; }),
+
   # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -288,7 +283,22 @@ stdenv.mkDerivation (
     ];
 
     patches =
-      lib.optionals (lib.versionOlder version "9.4") [
+      [
+        # Determine size of time related types using hsc2hs instead of assuming CLong.
+        # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
+        # https://github.com/haskell/ghcup-hs/issues/1107
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
+        # Note that in normal situations this shouldn't be the case since nixpkgs
+        # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
+        (fetchpatch {
+          name = "unix-fix-ctimeval-size-32-bit.patch";
+          url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
+          sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
+          stripLen = 1;
+          extraPrefix = "libraries/unix/";
+        })
+      ]
+      ++ lib.optionals (lib.versionOlder version "9.4") [
         # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
         (fetchpatch {
           url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
@@ -569,16 +579,15 @@ stdenv.mkDerivation (
 
     checkTarget = "test";
 
-    hardeningDisable =
-      [ "format" ]
-      # In nixpkgs, musl based builds currently enable `pie` hardening by default
-      # (see `defaultHardeningFlags` in `make-derivation.nix`).
-      # But GHC cannot currently produce outputs that are ready for `-pie` linking.
-      # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-      # See:
-      # * https://github.com/NixOS/nixpkgs/issues/129247
-      # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-      ++ lib.optional stdenv.targetPlatform.isMusl "pie";
+    # GHC cannot currently produce outputs that are ready for `-pie` linking.
+    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+    # See:
+    # * https://github.com/NixOS/nixpkgs/issues/129247
+    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+    hardeningDisable = [
+      "format"
+      "pie"
+    ];
 
     # big-parallel allows us to build with more than 2 cores on
     # Hydra which already warrants a significant speedup
@@ -636,17 +645,17 @@ stdenv.mkDerivation (
 
       # Our Cabal compiler name
       haskellCompilerName = "ghc-${version}";
+
+      bootstrapAvailable = lib.meta.availableOn stdenv.buildPlatform bootPkgs.ghc;
     };
 
     meta = {
       homepage = "http://haskell.org/ghc";
       description = "Glasgow Haskell Compiler";
-      maintainers =
-        with lib.maintainers;
-        [
-          guibou
-        ]
-        ++ lib.teams.haskell.members;
+      maintainers = with lib.maintainers; [
+        guibou
+      ];
+      teams = [ lib.teams.haskell ];
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;

@@ -11,13 +11,13 @@
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.31.1";
+  version = "3.34.1";
 
   src = fetchFromGitHub {
     owner = "virtuslab";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-OirzHEAHDiImgQoniBNaTjUgNm0I2azaPhjEnAavbNg=";
+    hash = "sha256-CllaviW7pqLD9XD4oSHyW2nG4lObkPWFseXZbtkNUQI=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -48,12 +48,12 @@ buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/VirtusLab/git-machete";
     description = "Git repository organizer and rebase/merge workflow automation tool";
     changelog = "https://github.com/VirtusLab/git-machete/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ blitz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ blitz ];
     mainProgram = "git-machete";
   };
 }

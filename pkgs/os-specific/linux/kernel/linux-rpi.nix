@@ -54,6 +54,7 @@ lib.overrideDerivation
             platforms = with lib.platforms; arm ++ aarch64;
             hydraPlatforms = [ "aarch64-linux" ];
           };
+      ignoreConfigErrors = true;
     }
     // (args.argsOverride or { })
   ))

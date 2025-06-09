@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "ApacheTomcatScanner";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mzpJq0er13wcekTac3j4cnRokHh6Q0seM8vwZsM2tN8=";
   };
 
@@ -41,12 +41,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "apachetomcatscanner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scan for Apache Tomcat server vulnerabilities";
     homepage = "https://github.com/p0dalirius/ApacheTomcatScanner";
     changelog = "https://github.com/p0dalirius/ApacheTomcatScanner/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ApacheTomcatScanner";
   };
 }
