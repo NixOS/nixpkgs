@@ -1,12 +1,12 @@
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
-  version = "3.174.0";
+  version = "3.175.0";
   pulumiPkgs = {
     x86_64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.174.0-linux-x64.tar.gz";
-        sha256 = "08ancj87d25dpfbm0hidvv1if4jnr1b5186wwhs6pq7xkifk7j6z";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.175.0-linux-x64.tar.gz";
+        sha256 = "0c8aywfscrn8s00jmky2g87i9l96ndbirb7f4x0s1nr9q842f0y5";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.39.0-linux-amd64.tar.gz";
@@ -145,8 +145,8 @@
         sha256 = "15p2wc0dipgqwj9qdsl6420bxx61vmmfbz487yk74kw7vp3kpr36";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.11.0-linux-amd64.tar.gz";
-        sha256 = "0ypayx9gabrp4x08q9paqjysql5m9zhazkb2nsdzp5jkj2r3q9dx";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.11.1-linux-amd64.tar.gz";
+        sha256 = "10ghmaw7dlwg90q7qg8ji3hzhi5cfkpaz2sa0ailinc9pzjbx7in";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.14.0-linux-amd64.tar.gz";
@@ -163,8 +163,8 @@
     ];
     x86_64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.174.0-darwin-x64.tar.gz";
-        sha256 = "0lw460xwhxl2mvvn5j3wb1wk3g3a7k8n7s9qmgs2mnyrc6a7l039";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.175.0-darwin-x64.tar.gz";
+        sha256 = "127cmc4wc2xrb5nydjs2gds5aixbb3b18ngjbd39ycp8s00ln73c";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.39.0-darwin-amd64.tar.gz";
@@ -303,8 +303,8 @@
         sha256 = "0713smrbcanza4qw79bm5wzq8whc5rx5d8zkwzg38pb4nzh2nxzj";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.11.0-darwin-amd64.tar.gz";
-        sha256 = "1d86ljhylxswbhjzsd0678r0fsi4nzimviwdl0mafny2661801bg";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.11.1-darwin-amd64.tar.gz";
+        sha256 = "187khb9ydlm8151iyil3jiaapvg3swfhym7qppdxibr1adffaw92";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.14.0-darwin-amd64.tar.gz";
@@ -321,8 +321,8 @@
     ];
     aarch64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.174.0-linux-arm64.tar.gz";
-        sha256 = "0yarz9f8rvw5m97nsg4z2ar7hf5myz3wcf5prsj6v80w19igdmwz";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.175.0-linux-arm64.tar.gz";
+        sha256 = "06dk07p2rnw941wk37wric7fwkn381lpqd8qpvn4l2dhkryk67pz";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.39.0-linux-arm64.tar.gz";
@@ -461,8 +461,8 @@
         sha256 = "0mi3ic4pqdk7n69y1j18ysk73273c760x5gn62xgc86d09ra4agn";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.11.0-linux-arm64.tar.gz";
-        sha256 = "0x83njg9h1gy0vld2m6kacx3hzx9bwq7c80fx8vnaaqvra0803qp";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.11.1-linux-arm64.tar.gz";
+        sha256 = "1dl6awkmd318m962cdfxwx2q4417yj8l2fs5i7425aic1yv0vaqv";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.14.0-linux-arm64.tar.gz";
@@ -479,8 +479,8 @@
     ];
     aarch64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.174.0-darwin-arm64.tar.gz";
-        sha256 = "0pbc1gk453g12p0x79d4gl8f9bcirqs6my28fxdhn36b565l0q2r";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.175.0-darwin-arm64.tar.gz";
+        sha256 = "0iq90dr7am2i0qhqhdlwfbv9yl30b8sxa4vl0n4569y0izvjny8l";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.39.0-darwin-arm64.tar.gz";
@@ -619,8 +619,8 @@
         sha256 = "07xa21aiw8jgn4wwhwzgwrcn5qhd3j0pa515dh3x3xxhfcy1pl5j";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.11.0-darwin-arm64.tar.gz";
-        sha256 = "1m2fym3b2faqi21zbl2c48l6q1aysw1279qrjx0apaj1hvyw5l16";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-venafi-v1.11.1-darwin-arm64.tar.gz";
+        sha256 = "0876gwry80qgc5gkp1ygcx1lxmcj0yg3h6ic3v3x3d3l3f4c77hr";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-vsphere-v4.14.0-darwin-arm64.tar.gz";
