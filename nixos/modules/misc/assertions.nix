@@ -1,4 +1,20 @@
-{ lib, ... }:
+{
+  config,
+  lib,
+  options,
+  ...
+}:
+
+let
+
+  inherit (lib)
+    concatStringsSep
+    filter
+    map
+    showWarnings
+    ;
+
+in
 {
 
   options = {
@@ -31,6 +47,27 @@
       '';
     };
 
+    assertAndWarn = lib.mkOption {
+      description = ''
+        A function that prints the ${options.warnings} and returns its argument if the ${options.assertions} all pass.
+        Otherwise, it throws an error with the assertion messages.
+      '';
+    };
+
   };
-  # impl of assertions is in <nixpkgs/nixos/modules/system/activation/top-level.nix>
+
+  config = {
+
+    assertAndWarn =
+      val:
+      let
+        failedAssertions = map (x: x.message) (filter (x: !x.assertion) config.assertions);
+      in
+      if failedAssertions != [ ] then
+        throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
+      else
+        showWarnings config.warnings val;
+
+  };
+
 }
