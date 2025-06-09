@@ -230,6 +230,7 @@ let
       ];
     };
     iconv = linkBootstrap { paths = [ "bin/iconv" ]; };
+    libiconv = linkBootstrap { paths = [ "include/iconv.h" ]; };
     patch = linkBootstrap { paths = [ "bin/patch" ]; };
     gnutar = linkBootstrap { paths = [ "bin/tar" ]; };
     gawk = linkBootstrap {
@@ -486,6 +487,7 @@ in
           diffutils
           findutils
           iconv
+          libiconv
           patch
           gnutar
           gawk
