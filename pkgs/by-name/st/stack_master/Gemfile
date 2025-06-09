@@ -1,0 +1,4 @@
+source 'https://rubygems.org'
+
+gem 'stack_master'
+gem 'stack_master-gpg_parameter_resolver'
