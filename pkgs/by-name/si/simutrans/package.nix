@@ -230,9 +230,18 @@ let
           hash = "sha256-vQ8HZqwICB3CUGQW8NwEWGVA3anUbCOdj3BEV3lLLpk=";
         };
         "pak128.german" = {
-          url = "https://pak128-german.de/PAK128.german_2.3_beta.zip";
+          # note: unlike most packages, this is *not* the version included in the game's download script
+          #
+          # the game (124.3.1) includes version 2.3,
+          # but the pakset's readme recommends that version only for game 124.3
+          #
+          # https://pak128-german.de/inc/readme.html
+          #
+          # for game 124.3.1, it recommends version 2.4. so, we include that instead.
+
+          url = "https://pak128-german.de/PAK128.german_2.4_beta.zip";
           prefix = "/PAK128.german";
-          hash = "sha256-anWImSrS5ayjYzqVV7MY2VZ4dD/jLkhaavcZaufre+k=";
+          hash = "sha256-RunMn1kz1SvPDc2N6ffWPDV9A8U8DdzU5e+S0jm/0FY=";
         };
         "pak128.japan" = {
           fetcher = fetchcab;
