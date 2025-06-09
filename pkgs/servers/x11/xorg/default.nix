@@ -29,6 +29,7 @@
   xorg-sgml-doctools,
   xtrans,
   xwininfo,
+  xwud,
 }:
 
 self: with self; {
@@ -49,6 +50,7 @@ self: with self; {
     xorgproto
     xtrans
     xwininfo
+    xwud
     ;
   fontalias = font-alias;
   fontutil = font-util;
@@ -7729,42 +7731,6 @@ self: with self; {
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         libxkbfile
-        libX11
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xwud = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xwud";
-      version = "1.0.7";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xwud-1.0.7.tar.xz";
-        sha256 = "07n6q1z33sjkx8lx8lbd26m8ri5gi145k3mz39kmyykdngdbwp75";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
         libX11
         xorgproto
       ];
