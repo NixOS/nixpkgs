@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-mock
-    pytest-cov
+    pytest-cov-stub
   ];
 
   # the -cli symlink is just to maintain compabilility with older versions where
