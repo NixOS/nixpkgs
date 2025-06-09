@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "socklog";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "https://smarden.org/socklog/socklog-${version}.tar.gz";
-    sha256 = "0mdlmhiq2j2fip7c4l669ams85yc3c1s1d89am7dl170grw9m1ma";
+    hash = "sha256-6xk3JB1seyoEArSf/evwIrsvzaPgDBsaF66Lzx5KObo=";
   };
 
   sourceRoot = "admin/socklog-${version}";
@@ -20,16 +20,6 @@ stdenv.mkDerivation rec {
     "man"
     "doc"
   ];
-
-  postPatch = ''
-    # Fails to run as user without supplementary groups
-    echo "int main() { return 0; }" >src/chkshsgr.c
-
-    # Fixup implicit function declarations
-    sed -i src/pathexec_run.c -e '1i#include <unistd.h>'
-    sed -i src/prot.c -e '1i#include <unistd.h>' -e '2i#include <grp.h>'
-    sed -i src/seek_set.c -e '1i#include <unistd.h>'
-  '';
 
   configurePhase = ''
     echo "$NIX_CC/bin/cc $NIX_CFLAGS_COMPILE"   >src/conf-cc
