@@ -8,21 +8,23 @@
 let
   cfg = config.services.kutt;
 
-  settings = lib.mkMerge ([
-    cfg.settings
-    (lib.optionalAttrs cfg.configureRedis {
-      REDIS_ENABLED = "true";
-    })
-    (lib.optionalAttrs cfg.configureNginx {
-      TRUST_PROXY = "true";
-    })
-    (lib.optionalAttrs cfg.configurePostgres {
-      DB_CLIENT = "pg";
-      DB_HOST = "/run/postgresql";
-      DB_NAME = cfg.user;
-      DB_USER = cfg.user;
-    })
-  ]);
+  settings = lib.attrsets.mapAttrs (name: value: toString value) (
+    lib.mkMerge ([
+      cfg.settings
+      (lib.optionalAttrs cfg.configureRedis {
+        REDIS_ENABLED = "true";
+      })
+      (lib.optionalAttrs cfg.configureNginx {
+        TRUST_PROXY = "true";
+      })
+      (lib.optionalAttrs cfg.configurePostgres {
+        DB_CLIENT = "pg";
+        DB_HOST = "/run/postgresql";
+        DB_NAME = cfg.user;
+        DB_USER = cfg.user;
+      })
+    ])
+  );
 
 in
 {
@@ -71,19 +73,43 @@ in
         description = "Group account under which the Kutt service runs.";
       };
 
-      configureRedis = mkEnableOption "Whether to configure kutt to use a local Redis server";
-      configurePostgres = mkEnableOption "Whether to configure kutt to use the the local postgresql server";
-      configureNginx = mkEnableOption "Whether to configure kutt to use nginx as reverse proxy";
+      configureRedis = mkEnableOption "Whether to configure Kutt to use a local Redis server";
+      configurePostgres = mkEnableOption "Whether to configure Kutt to use the the local postgresql server";
+      configureNginx = mkEnableOption "Whether to configure Kutt to use nginx as reverse proxy";
 
       settings = mkOption {
-        type = with types; attrsOf str;
         default = { };
-        example = {
-          PORT = "3000";
-          SITE_NAME = "Kutt";
-          DEFAULT_DOMAIN = "kutt.example.org";
-          LINK_LENGTH = "6";
-        };
+        type =
+          with types;
+          (submodule {
+            freeformType = attrsOf (oneOf [
+              str
+              int
+              bool
+            ]);
+            options = {
+              PORT = mkOption {
+                type = port;
+                default = 3000;
+                description = "The port on which Kutt should listen";
+              };
+              SITE_NAME = mkOption {
+                type = str;
+                default = "Kutt";
+                description = "The site name for the Kutt instance";
+              };
+              DEFAULT_DOMAIN = mkOption {
+                type = str;
+                default = "localhost:3000";
+                description = "The domain that Kutt should use";
+              };
+              LINK_LENGTH = mkOption {
+                type = int;
+                default = 6;
+                description = "The length for shortened links";
+              };
+            };
+          });
         description = "Configuration for Kutt, see <https://github.com/thedevs-network/kutt?tab=readme-ov-file#configuration>";
       };
     };
@@ -95,13 +121,6 @@ in
     };
 
     users.groups.kutt = lib.mkIf (cfg.group == "kutt") { };
-
-    services.kutt.settings = with lib; {
-      PORT = mkDefault "3000";
-      SITE_NAME = mkDefault "Kutt";
-      DEFAULT_DOMAIN = mkDefault "kutt.example.org";
-      LINK_LENGTH = mkDefault "6";
-    };
 
     systemd.services.kutt = {
       description = "Kutt URL Shortener Service";
