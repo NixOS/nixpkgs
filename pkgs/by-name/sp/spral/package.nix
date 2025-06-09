@@ -35,6 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9QEcAOFB3CtGNqr8LoDaj2vP3KMONlUVooeXECtGsxc=";
   };
 
+  # Ignore a failing test on darwin
+  # ref. https://github.com/ralna/spral/issues/258
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace tests/ssids/meson.build --replace-fail \
+      "spral_tests += [['ssids', 'ssidst', files('ssids.f90')]]" ""
+  '';
+
   nativeBuildInputs =
     [
       gfortran
