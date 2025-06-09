@@ -259,12 +259,18 @@ originalAttrs:
           makeCompatibilitySymlink lib lib32
           makeCompatibilitySymlink lib lib64
         ''
+      + lib.optionalString stdenv.targetPlatform.isX32 ''
+        makeCompatibilitySymlink lib libx32
+      ''
       +
         # This will redirect $output/$targetConfig/lib{,32,64} to $output/$targetConfig/lib.
         lib.optionalString isCross ''
           makeCompatibilitySymlink lib $targetConfig/lib32
           makeCompatibilitySymlink lib $targetConfig/lib64
-        '';
+        ''
+      + lib.optionalString stdenv.targetPlatform.isX32 ''
+        makeCompatibilitySymlink lib $targetConfig/libx32
+      '';
 
     postInstall =
       ''
