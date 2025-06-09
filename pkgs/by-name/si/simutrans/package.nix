@@ -350,6 +350,22 @@ let
 
       meta = simutrans-bin.meta // {
         hydraPlatforms = [ ];
+
+        # re-setting this for clarity, because there is a semantic difference
+        sourceProvenance = [
+          # Here, we obviously have the source code of the game,
+          # BUT we also include the paksets, which can contain Squirrel scripts.
+          #
+          # This language allows compilation to bytecode, but Simutrans does not do that.
+          # The paksets all contain Squirrel source code, which is compiled at runtime.
+          # You can prove this to yourself by running this command:
+          #
+          #     fd '\.nut$' $(nix build --print-out-paths --no-link .#simutrans)
+          #
+          # And looking at any of these files will show you that they are source files.
+          # So, they also have a source provenance of `fromSource`.
+          lib.sourceTypes.fromSource
+        ];
       };
     };
 
@@ -452,6 +468,9 @@ let
         Makuru
       ];
       platforms = lib.platforms.linux; # TODO: ++ darwin;
+      sourceProvenance = [
+        lib.sourceTypes.fromSource
+      ];
     };
   };
 in
