@@ -15399,11 +15399,7 @@ with pkgs;
 
   p4est-sc-dbg = p4est-sc.override { debug = true; };
 
-  p4est = callPackage ../development/libraries/science/math/p4est { };
-
-  p4est-dbg = callPackage ../development/libraries/science/math/p4est {
-    p4est-sc = p4est-sc-dbg;
-  };
+  p4est-dbg = p4est.override { debug = true; };
 
   sageWithDoc = sage.override { withDoc = true; };
 
