@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pytest,
+  pytestCheckHook,
   pytest-cov-stub,
 }:
 
@@ -16,12 +16,8 @@ buildPythonPackage rec {
     hash = "sha256-+L78VL+MEUfBCrQCl+yEwmdvotTqXW9STZQ2qAB075g=";
   };
 
-  checkPhase = ''
-    py.test
-  '';
-
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     pytest-cov-stub
   ];
 
