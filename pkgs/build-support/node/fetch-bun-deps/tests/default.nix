@@ -30,4 +30,9 @@
     bunLock = ./complex.lock;
     sha256 = "sha256-BbqqdXnrebOurDhcz4pnPtRuSH1QAA6emRoJEpy4DlY=";
   };
+
+  bunInitDep = testers.invalidateFetcherByDrvHash fetchBunDeps {
+    bunLock = ./bun-init.lock;
+    sha256 = "sha256-4b/LOiAt+pQ6rKf7zNOyCB0/TDXfdw91LAqi985ZzjQ=";
+  };
 }
