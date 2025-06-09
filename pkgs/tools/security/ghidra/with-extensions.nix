@@ -30,6 +30,9 @@ let
       ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
       postBuild =
         ''
+          # Prevent attempted creation of plugin lock files in the Nix store.
+          touch $out/lib/ghidra/Ghidra/.dbDirLock
+
           makeWrapper '${ghidra}/bin/ghidra' "$out/bin/ghidra" \
             --set NIX_GHIDRAHOME "$out/lib/ghidra/Ghidra"
           makeWrapper '${ghidra}/bin/ghidra-analyzeHeadless' "$out/bin/ghidra-analyzeHeadless" \

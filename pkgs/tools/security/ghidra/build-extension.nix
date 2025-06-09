@@ -58,6 +58,11 @@ let
             mkdir -p $out/lib/ghidra/Ghidra/Extensions
             unzip -d $out/lib/ghidra/Ghidra/Extensions dist/*.zip
 
+            # Prevent attempted creation of plugin lock files in the Nix store.
+            for i in $out/lib/ghidra/Ghidra/Extensions/*; do
+              touch "$i/.dbDirLock"
+            done
+
             runHook postInstall
           '';
 
