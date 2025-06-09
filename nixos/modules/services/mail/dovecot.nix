@@ -152,10 +152,6 @@ let
       pop3_uidl_format = %08Xv%08Xu
 
       auth_mechanisms = plain login
-
-      service auth {
-        user = root
-      }
     ''
 
     (optionalString cfg.enablePAM ''
