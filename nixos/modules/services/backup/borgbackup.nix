@@ -206,16 +206,17 @@ let
       original,
       name,
       set ? { },
+      extraArgs ? null,
     }:
     pkgs.runCommand "${name}-wrapper"
       {
         nativeBuildInputs = [ pkgs.makeWrapper ];
       }
-
       ''
         makeWrapper "${original}" "$out/bin/${name}" \
           ${lib.concatStringsSep " \\\n " (
-            lib.mapAttrsToList (name: value: ''--set ${name} "${value}"'') set
+            (lib.mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)
+            ++ (lib.optional (extraArgs != null) ''--add-flags "${extraArgs}"'')
           )}
       '';
 
@@ -230,6 +231,7 @@ let
       }
       // (mkPassEnv cfg)
       // cfg.environment;
+      extraArgs = cfg.extraArgs or null;
     });
 
   # Paths listed in ReadWritePaths must exist before service is started
@@ -778,6 +780,9 @@ in
               description = ''
                 Additional arguments for all {command}`borg` calls the
                 service has. Handle with care.
+
+                These extra arguments also get included in the wrapper
+                script for this job.
               '';
               default = [ ];
               example = [ "--remote-path=/path/to/borg" ];
