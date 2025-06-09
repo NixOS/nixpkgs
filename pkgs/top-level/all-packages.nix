@@ -2062,7 +2062,7 @@ with pkgs;
   coreboot-configurator = libsForQt5.callPackage ../tools/misc/coreboot-configurator { };
 
   sway-unwrapped = callPackage ../by-name/sw/sway-unwrapped/package.nix {
-    wlroots = wlroots_0_18;
+    wlroots = wlroots_0_19;
   };
 
   cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
@@ -11512,6 +11512,7 @@ with pkgs;
     ubootSopine
     ubootTuringRK1
     ubootUtilite
+    ubootVisionFive2
     ubootWandboard
     ;
 
@@ -12975,8 +12976,6 @@ with pkgs;
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
   kbibtex = libsForQt5.callPackage ../applications/office/kbibtex { };
-
-  kaidan = kdePackages.callPackage ../applications/networking/instant-messengers/kaidan { };
 
   kexi = libsForQt5.callPackage ../applications/office/kexi { };
 
