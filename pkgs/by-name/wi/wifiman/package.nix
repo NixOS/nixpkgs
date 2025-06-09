@@ -3,10 +3,12 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  desktop-file-utils,
   dpkg,
   gtk3,
   iw,
   libayatana-appindicator,
+  makeWrapper,
   nettools,
   openresolv,
   webkitgtk_4_0,
@@ -24,21 +26,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
+    makeWrapper
     openresolv
   ];
 
-  # Depends: net-tools, iw, resolvconf, libayatana-appindicator3-1, libwebkit2gtk-4.0-37, libgtk-3-0
   buildInputs = [
-    libayatana-appindicator
-    webkitgtk_4_0
+    desktop-file-utils
     iw
+    libayatana-appindicator
     nettools
-    gtk3
+    webkitgtk_4_0
   ];
 
   installPhase = ''
     mv usr $out
     substituteInPlace $out/share/applications/wi-fiman-desktop.desktop --replace /usr/ $out/
+    wrapProgram $out/bin/wi-fiman-desktop \
+      --prefix PATH : ${desktop-file-utils}/bin \
+      --prefix LD_LIBRARY_PATH : ${libayatana-appindicator}/lib
   '';
 
   meta = with lib; {
