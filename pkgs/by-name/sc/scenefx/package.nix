@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scenefx";
-  version = "0.2.1";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "wlrfx";
     repo = "scenefx";
     tag = finalAttrs.version;
-    hash = "sha256-BLIADMQwPJUtl6hFBhh5/xyYwLFDnNQz0RtgWO/Ua8s=";
+    hash = "sha256-GMMmxM/z7KKEs5PXB0TJFMg7qcwqbQ3/nI2906sZbxM=";
   };
 
   strictDeps = true;
