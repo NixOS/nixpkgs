@@ -14,7 +14,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${wifimanPkg}/lib/wi-fiman-desktop/wifiman-desktopd";
+        ExecStart = "${wifimanPkg}/bin/wifiman-desktopd";
         Restart = "always";
         RestartSec = 10;
         User = "root";

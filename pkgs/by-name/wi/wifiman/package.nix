@@ -12,6 +12,7 @@
   nettools,
   openresolv,
   webkitgtk_4_0,
+  wirelesstools,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,11 +37,16 @@ stdenv.mkDerivation rec {
     libayatana-appindicator
     nettools
     webkitgtk_4_0
+    wirelesstools
   ];
 
   installPhase = ''
     mv usr $out
     substituteInPlace $out/share/applications/wi-fiman-desktop.desktop --replace /usr/ $out/
+    # Wrap the service binary
+    makeWrapper $out/lib/wi-fiman-desktop/wifiman-desktopd $out/bin/wifiman-desktopd \
+      --prefix PATH : ${wirelesstools}/bin:${iw}/bin:${nettools}/bin
+    # Wrap the desktop binary
     wrapProgram $out/bin/wi-fiman-desktop \
       --prefix PATH : ${desktop-file-utils}/bin \
       --prefix LD_LIBRARY_PATH : ${libayatana-appindicator}/lib
