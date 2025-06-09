@@ -1,6 +1,5 @@
 {
   lib,
-  python,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -9,6 +8,23 @@
   numpy,
   lxml,
   trimesh,
+
+  # optional deps
+  colorlog,
+  manifold3d,
+  charset-normalizer,
+  jsonschema,
+  networkx,
+  svg-path,
+  pycollada,
+  shapely,
+  xxhash,
+  rtree,
+  httpx,
+  scipy,
+  pillow,
+  mapbox-earcut,
+  embreex,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +45,7 @@ buildPythonPackage rec {
 
   dependencies = [ numpy ];
 
-  optional-dependencies = with python.pkgs; {
+  optional-dependencies = {
     easy =
       [
         colorlog
