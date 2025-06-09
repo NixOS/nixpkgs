@@ -16,16 +16,16 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "netron";
-  version = "8.3.5";
+  version = "8.3.8";
 
   src = fetchFromGitHub {
     owner = "lutzroeder";
     repo = "netron";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YxvUUn8VWv5M6FvIHJCaXQl7PRGcZ8qSgrZ7K0+8iME=";
+    hash = "sha256-BHV51d5X8uXnqjCkpVnZX40dAuF2HCNk/6A5cKr9nZE=";
   };
 
-  npmDepsHash = "sha256-fsF40qUKUNXeqvdM1m/IEgnxRZrnGW/aOYS3oZKQNpk=";
+  npmDepsHash = "sha256-E4jqaDJqgvOvV+67jtMzt/4YkhQ4GmKati0wuVMC8yI=";
 
   nativeBuildInputs = [ jq ];
 
