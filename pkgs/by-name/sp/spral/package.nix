@@ -1,4 +1,5 @@
 {
+  config,
   lib,
 
   fetchFromGitHub,
@@ -6,7 +7,10 @@
 
   nix-update-script,
 
+  enableCuda ? config.cudaSupport,
+
   # nativeBuildInputs
+  cudaPackages,
   gfortran,
   meson,
   ninja,
@@ -14,6 +18,7 @@
 
   # buildInputs
   blas,
+  hwloc,
   lapack,
   llvmPackages,
   metis,
@@ -30,15 +35,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9QEcAOFB3CtGNqr8LoDaj2vP3KMONlUVooeXECtGsxc=";
   };
 
-  nativeBuildInputs = [
-    gfortran
-    meson
-    ninja
-    pkg-config
+  nativeBuildInputs =
+    [
+      gfortran
+      meson
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals enableCuda [
+      cudaPackages.cuda_nvcc
+    ];
+
+  propagatedBuildInputs = lib.optionals enableCuda [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
   ];
 
   buildInputs = [
     blas
+    (hwloc.override { inherit enableCuda; })
     lapack
     metis
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
