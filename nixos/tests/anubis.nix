@@ -4,6 +4,7 @@
   meta.maintainers = with lib.maintainers; [
     soopyc
     nullcube
+    ryand56
   ];
 
   nodes.machine =
