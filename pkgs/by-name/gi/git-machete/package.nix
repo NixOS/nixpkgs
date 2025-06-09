@@ -1,15 +1,13 @@
 {
   lib,
-  buildPythonApplication,
-  pytest-mock,
-  pytestCheckHook,
+  python3,
   fetchFromGitHub,
   installShellFiles,
   git,
   nix-update-script,
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "git-machete";
   version = "3.34.1";
 
@@ -22,11 +20,14 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = [
-    git
-    pytest-mock
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    [
+      git
+    ]
+    ++ (with python3.pkgs; [
+      pytest-mock
+      pytestCheckHook
+    ]);
 
   disabledTests = [
     # Requires fully functioning shells including zsh modules and bash
