@@ -14,6 +14,7 @@
   gnused,
   mercurial,
   subversion,
+  fossil,
 }:
 
 let
@@ -73,6 +74,9 @@ rec {
   nix-prefetch-svn = mkPrefetchScript "svn" ../../../build-support/fetchsvn/nix-prefetch-svn [
     subversion
   ];
+  nix-prefetch-fossil = mkPrefetchScript "fossil" ../../../build-support/fetchfossil/nix-prefetch-fossil [
+    fossil
+  ];
 
   nix-prefetch-scripts = buildEnv {
     name = "nix-prefetch-scripts";
@@ -83,6 +87,7 @@ rec {
       nix-prefetch-git
       nix-prefetch-hg
       nix-prefetch-svn
+      nix-prefetch-fossil
     ];
 
     meta = with lib; {
