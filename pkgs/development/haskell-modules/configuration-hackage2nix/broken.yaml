@@ -64,7 +64,6 @@ broken-packages:
   - adaptive-containers # failure in job https://hydra.nixos.org/build/233243181 at 2023-09-02
   - adaptive-tuple # failure in job https://hydra.nixos.org/build/233244881 at 2023-09-02
   - adb # failure in job https://hydra.nixos.org/build/233193888 at 2023-09-02
-  - adblock2privoxy # failure in job https://hydra.nixos.org/build/295091236 at 2025-04-22
   - addy # failure in job https://hydra.nixos.org/build/233240594 at 2023-09-02
   - adhoc-fixtures-hspec # failure in job https://hydra.nixos.org/build/252725981 at 2024-03-16
   - adjunction # failure in job https://hydra.nixos.org/build/233237774 at 2023-09-02
