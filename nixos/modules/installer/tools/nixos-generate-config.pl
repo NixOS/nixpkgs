@@ -461,7 +461,11 @@ EOF
     if ($fsType eq "btrfs") {
         my ($status, @info) = runCommand("@btrfs@ subvol show $rootDir$mountPoint");
         if ($status != 0 || join("", @info) =~ /ERROR:/) {
-            die "Failed to retrieve subvolume info for $mountPoint\n";
+            my $error = "Failed to retrieve subvolume info for $mountPoint\n";
+            if (join("", @info) =~ /Operation not permitted/ && $> != 0) {
+                die "Not permitted: ", $error, "Help: consider retrying as root\n";
+            }
+            die $error;
         }
         my @ids = join("\n", @info) =~ m/^(?!\/\n).*Subvolume ID:[ \t\n]*([0-9]+)/s;
         if ($#ids > 0) {
