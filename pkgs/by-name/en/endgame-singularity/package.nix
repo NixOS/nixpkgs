@@ -10,13 +10,13 @@
 
 let
   pname = "endgame-singularity";
-  version = "1.00-unstable-2025-03-18";
+  version = "1.1-unstable-2025-06-04";
 
   main_src = fetchFromGitHub {
     owner = "singularity";
     repo = "singularity";
-    rev = "8bbc2322ad1a0e83f78f5af731dfa97b6bd63f9c";
-    hash = "sha256-HiFE746JtGjZJbiKhB3ubfb376tJmz78jUfdu3/RQic=";
+    rev = "0562c14119b4c88cb8bf81e636624abf5c7c4f83";
+    hash = "sha256-wYXuhlGp7gisgN2iRXKTpe0Om2AA8u0eBwKHHIYuqbk=";
   };
 
   music_src = fetchurl {
