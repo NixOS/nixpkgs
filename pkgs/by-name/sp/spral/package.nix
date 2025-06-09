@@ -10,6 +10,7 @@
   gfortran,
   meson,
   ninja,
+  pkg-config,
 
   # buildInputs
   blas,
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
     meson
     ninja
+    pkg-config
   ];
 
   buildInputs = [
