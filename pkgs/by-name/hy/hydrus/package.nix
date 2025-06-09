@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hydrus";
-  version = "624";
+  version = "625";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     tag = "v${version}";
-    hash = "sha256-fdg4ym3OT1OIG6gkYf1Y8PmKG2uxgnuEc7bCTJ11z/0=";
+    hash = "sha256-E33dJVk9i+ZB6Ri6afHJfH0SRfDqEGKvpdWhkA3o9AQ=";
   };
 
   nativeBuildInputs = [
