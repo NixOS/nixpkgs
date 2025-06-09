@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.17.7";
+  version = "1.18.1";
   pname = "bindfs";
 
   src = fetchurl {
     url = "https://bindfs.org/downloads/bindfs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wLBg6Uw6IxodSqC88mb/GJmBpO845C++IylqfYFxm3o=";
+    hash = "sha256-KnBk2ZOl8lXFLXI4XvFONJwTG8RBlXZuIXNCjgbSef0=";
   };
 
   nativeBuildInputs = [
