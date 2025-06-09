@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir $out/Applications
       cp -r $out/contour.app/Contents/Resources/terminfo $terminfo/share
       mv $out/contour.app $out/Applications
-      ln -s $out/bin $out/Applications/contour.app/Contents/MacOS
+      ln -s $out/Applications/contour.app/Contents/MacOS/contour $out/bin/contour
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       mv $out/share/terminfo $terminfo/share/
