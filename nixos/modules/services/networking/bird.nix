@@ -85,6 +85,7 @@ in
       derivationArgs.nativeBuildInputs = lib.optional cfg.checkConfig cfg.package;
       checkPhase = optionalString cfg.checkConfig ''
         ln -s $out bird.conf
+        cat -n $out
         ${cfg.preCheckConfig}
         bird -d -p -c bird.conf
       '';
