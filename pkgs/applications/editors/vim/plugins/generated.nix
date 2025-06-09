@@ -13148,6 +13148,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  schema-companion-nvim = buildVimPlugin {
+    pname = "schema-companion.nvim";
+    version = "2025-06-05";
+    src = fetchFromGitHub {
+      owner = "cenk1cenk2";
+      repo = "schema-companion.nvim";
+      rev = "a39cbf5a31ae7aec71e5aaec5e6d409f22b05099";
+      sha256 = "1s0lqxz1rh4f7jspl45pa9981zwz0i0h9c4ml0zy55y926454339";
+    };
+    meta.homepage = "https://github.com/cenk1cenk2/schema-companion.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   scnvim = buildVimPlugin {
     pname = "scnvim";
     version = "2025-01-29";
@@ -13497,6 +13510,19 @@ final: prev: {
       sha256 = "185drqdf6qcwbjvs2f5gnz660w45d4pwqal40mbf1p3gd32il6qa";
     };
     meta.homepage = "https://github.com/shaunsingh/solarized.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  solarized-osaka-nvim = buildVimPlugin {
+    pname = "solarized-osaka.nvim";
+    version = "2025-04-19";
+    src = fetchFromGitHub {
+      owner = "craftzdog";
+      repo = "solarized-osaka.nvim";
+      rev = "f796014c14b1910e08d42cc2077fef34f08e0295";
+      sha256 = "0jy2hk4fc210jih30ybvisr9pliya1s3nazw4d131vh5k4p1xqi6";
+    };
+    meta.homepage = "https://github.com/craftzdog/solarized-osaka.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
