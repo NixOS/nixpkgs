@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   coreutils,
+  chromaprint,
   openjdk17,
   makeWrapper,
   autoPatchelfHook,
@@ -14,6 +15,8 @@
   glib,
   genericUpdater,
   writeShellScript,
+  p7zip,
+  unrar,
 }:
 
 let
@@ -63,9 +66,22 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '$FILEBOT_HOME/data/.license' '$APP_DATA/.license' \
       --replace '-jar "$FILEBOT_HOME/jar/filebot.jar"' '-Dcom.googlecode.lanterna.terminal.UnixTerminal.sttyCommand=${coreutils}/bin/stty -jar "$FILEBOT_HOME/jar/filebot.jar"'
     wrapProgram $out/opt/filebot.sh \
-      --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          chromaprint
+          openjdk17
+          p7zip
+          unrar
+        ]
+      }
     # Expose the binary in bin to make runnable.
     ln -s $out/opt/filebot.sh $out/bin/filebot
+
+    # Delete the built-in libmediainfo so the program has to use the symlinked nixpkgs version
+    rm $out/opt/lib/**/libmediainfo.so
+    ln -s ${libmediainfo.outPath}/lib/libmediainfo.so $out/opt/lib/Linux-aarch64/libmediainfo.so
+    ln -s ${libmediainfo.outPath}/lib/libmediainfo.so $out/opt/lib/Linux-armv7l/libmediainfo.so
+    ln -s ${libmediainfo.outPath}/lib/libmediainfo.so $out/opt/lib/Linux-x86_64/libmediainfo.so
   '';
 
   passthru.updateScript = genericUpdater {
