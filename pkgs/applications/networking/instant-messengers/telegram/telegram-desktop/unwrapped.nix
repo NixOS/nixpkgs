@@ -10,9 +10,7 @@
   python3,
   tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
-  kimageformats,
   qtbase,
-  qtimageformats,
   qtsvg,
   qtwayland,
   kcoreaddons,
@@ -81,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qtbase
-    qtimageformats
     qtsvg
     lz4
     xxHash
@@ -97,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     ada
     (tdlib.override { tde2eOnly = true; })
-    kimageformats
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     protobuf

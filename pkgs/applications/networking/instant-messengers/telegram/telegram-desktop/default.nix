@@ -8,6 +8,7 @@
   qtimageformats,
   qtsvg,
   qtwayland,
+  kimageformats,
   wrapGAppsHook3,
   wrapQtAppsHook,
   glib-networking,
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtimageformats
     qtsvg
+    kimageformats
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
