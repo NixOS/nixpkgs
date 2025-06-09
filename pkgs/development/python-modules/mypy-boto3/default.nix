@@ -762,8 +762,8 @@ rec {
       "sha256-PKOF/jd1Wjz8lCwbCd4cfHeStkvcDhQu7a7bpHaizgU=";
 
   mypy-boto3-kms =
-    buildMypyBoto3Package "kms" "1.38.31"
-      "sha256-hCN7Docv7FRJrUW1JveU8v68OFl97PQ+xQRICQ8D9rY=";
+    buildMypyBoto3Package "kms" "1.38.32"
+      "sha256-FWEvy1T5zDynHjRYHDmjm/e2cJkddMTrZm43qCWrHkY=";
 
   mypy-boto3-lakeformation =
     buildMypyBoto3Package "lakeformation" "1.38.0"
@@ -1086,8 +1086,8 @@ rec {
       "sha256-ZgecmO3dz66i2COSXzBjyUCtTkGGi9gnvb/HNNEq1AE=";
 
   mypy-boto3-rds =
-    buildMypyBoto3Package "rds" "1.38.20"
-      "sha256-xqpwwMxbxZlZ/sQ0IG+/ggA4a1g/8ffjchVOqkHrUuk=";
+    buildMypyBoto3Package "rds" "1.38.32"
+      "sha256-zF8oy5W7hLTTXzQhL1ye8BEsj/oJn3dzfSNloC7BZOk=";
 
   mypy-boto3-rds-data =
     buildMypyBoto3Package "rds-data" "1.38.0"
@@ -1106,8 +1106,8 @@ rec {
       "sha256-Z4KREvXMPN874esEY9qY9dKfmscBtiON4EnU5fsuDxs=";
 
   mypy-boto3-rekognition =
-    buildMypyBoto3Package "rekognition" "1.38.0"
-      "sha256-AwopW1hKgKmC2ZXfEoUXg57FwWOkgSu2e2q20ukogc8=";
+    buildMypyBoto3Package "rekognition" "1.38.32"
+      "sha256-WOx5+O7MBfI5WahylTi9gQf8XO1FF7k6f7/zWwznHhE=";
 
   mypy-boto3-resiliencehub =
     buildMypyBoto3Package "resiliencehub" "1.38.0"
@@ -1134,8 +1134,8 @@ rec {
       "sha256-cIDEjQGl23GS6AY7A7+02z+XwMCrYoSYIWuYoBxKje8=";
 
   mypy-boto3-route53 =
-    buildMypyBoto3Package "route53" "1.38.0"
-      "sha256-10fMQviy733wJUI3O7E5m4WjJiThlSxiGPYd3o2kOl0=";
+    buildMypyBoto3Package "route53" "1.38.32"
+      "sha256-Eq1JXjifzJ1r4TGNd3lJaBrBSTUiuodbjKkQZZWx540=";
 
   mypy-boto3-route53-recovery-cluster =
     buildMypyBoto3Package "route53-recovery-cluster" "1.38.0"

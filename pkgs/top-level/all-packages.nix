@@ -2619,6 +2619,8 @@ with pkgs;
 
     cangjie = callPackage ../tools/inputmethods/ibus-engines/ibus-cangjie { };
 
+    chewing = callPackage ../tools/inputmethods/ibus-engines/ibus-chewing { };
+
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
 
     kkc = callPackage ../tools/inputmethods/ibus-engines/ibus-kkc { };
@@ -3012,9 +3014,7 @@ with pkgs;
 
   fstl = callPackage ../applications/graphics/fstl { };
 
-  fwknop = callPackage ../tools/security/fwknop {
-    texinfo = texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
-  };
+  fwknop = callPackage ../tools/security/fwknop { };
 
   uniscribe = callPackage ../tools/text/uniscribe { };
 
@@ -7687,8 +7687,6 @@ with pkgs;
 
   texinfoPackages = callPackages ../development/tools/misc/texinfo/packages.nix { };
   inherit (texinfoPackages)
-    texinfo6_5 # needed for allegro
-    texinfo6_7 # needed for gpm, iksemel and fwknop
     texinfo6
     texinfo7
     ;
@@ -11080,10 +11078,6 @@ with pkgs;
 
   gpm = callPackage ../servers/gpm {
     withNcurses = false; # Keep curses disabled for lack of value
-
-    # latest 6.8 mysteriously fails to parse '@headings single':
-    #   https://lists.gnu.org/archive/html/bug-texinfo/2021-09/msg00011.html
-    texinfo = buildPackages.texinfo6_7;
   };
 
   gpm-ncurses = gpm.override { withNcurses = true; };
@@ -12831,9 +12825,7 @@ with pkgs;
     subversionSupport = true;
   };
 
-  iksemel = callPackage ../development/libraries/iksemel {
-    texinfo = buildPackages.texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
-  };
+  iksemel = callPackage ../development/libraries/iksemel { };
 
   avalonia-ilspy = callPackage ../applications/misc/avalonia-ilspy {
     inherit (darwin) autoSignDarwinBinariesHook;
