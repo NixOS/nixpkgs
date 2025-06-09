@@ -9,7 +9,7 @@
 
 buildNpmPackage rec {
   pname = "jitsi-excalidraw-backend";
-  version = "21";
+  version = "22";
 
   src = fetchFromGitHub {
     owner = "jitsi";
