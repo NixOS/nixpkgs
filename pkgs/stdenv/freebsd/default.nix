@@ -501,6 +501,7 @@ in
           inherit lib;
           inherit (self) stdenvNoCC;
           inherit (prevStage) curl;
+          inherit (config) rewriteURL;
         };
         gettext = super.gettext.overrideAttrs {
           NIX_CFLAGS_COMPILE = "-DHAVE_ICONV=1"; # we clearly have iconv. what do you want?
