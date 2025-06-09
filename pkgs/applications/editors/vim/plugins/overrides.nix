@@ -3098,6 +3098,15 @@ in
     ];
   };
 
+  solarized-osaka-nvim = super.solarized-osaka-nvim.overrideAttrs {
+    checkInputs = [ self.fzf-lua ];
+
+    nvimSkipModules = [
+      # lua/solarized-osaka/extra/fzf.lua:55: color not found for header:FzfLuaTitle
+      "solarized-osaka.extra.fzf"
+    ];
+  };
+
   spaceman-nvim = super.spaceman-nvim.overrideAttrs {
     # Optional telescope integration
     nvimSkipModules = "spaceman.adapters.telescope";
