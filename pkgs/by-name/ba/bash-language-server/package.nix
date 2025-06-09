@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bash-language-server";
-  version = "5.4.3";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "bash-lsp";
     repo = "bash-language-server";
     rev = "server-${finalAttrs.version}";
-    hash = "sha256-F+GQmI8DviMYfx66VMqpF6UqYauWQdjuJZi8UR9KTdE=";
+    hash = "sha256-Pe32lQSlyWcyUbqwhfoulwNwhrnWdRcKFIl3Jj0Skac=";
   };
 
   pnpmWorkspaces = [ "bash-language-server" ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    hash = "sha256-lRfVM20c2OMbPk/dUiuEv07Fu6UujM42xJ5Uc9SpQa4=";
+    hash = "sha256-HB93H8KyVC9gdu2Cj3e95KPawsijrOH3a9A+ymYVx48=";
   };
 
   nativeBuildInputs = [
