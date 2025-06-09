@@ -76,8 +76,8 @@ in
 
     securePort = lib.mkOption {
       description = "Kubernetes controller manager secure listening port.";
-      default = 10252;
-      type = int;
+      default = 10257;
+      type = port;
     };
 
     serviceAccountKeyFile = lib.mkOption {
