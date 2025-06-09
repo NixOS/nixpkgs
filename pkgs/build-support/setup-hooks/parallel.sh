@@ -56,8 +56,7 @@ parallelRun() {
     # Wait for all workers to finish
     for pid in "${pids[@]}"; do
         if ! wait "$pid"; then
-            echo "A parallel job failed with exit code $? (check for errors above)" >&2
-            echo -e "Failing Command:\n  $@" >&2
+            echo "A parallel job failed. Check for errors above" >&2
             exit 1
         fi
     done
