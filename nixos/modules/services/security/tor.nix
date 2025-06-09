@@ -1058,7 +1058,11 @@ in
           options.MaxClientCircuitsPending = optionInt "MaxClientCircuitsPending";
           options.NATDPort = optionIsolablePorts "NATDPort";
           options.NewCircuitPeriod = optionInt "NewCircuitPeriod";
-          options.Nickname = optionString "Nickname";
+          options.Nickname = lib.mkOption {
+            type = with lib.types; nullOr (strMatching "^[a-zA-Z0-9]{1,19}$");
+            default = null;
+            description = (descriptionGeneric "Nickname");
+          };
           options.ORPort = optionORPort "ORPort";
           options.OfflineMasterKey = optionBool "OfflineMasterKey";
           options.OptimisticData = optionBool "OptimisticData"; # default is null and like "auto"
