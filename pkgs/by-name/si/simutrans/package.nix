@@ -344,11 +344,13 @@ let
         '';
 
       strip = false;
-      passthru.meta = simutrans-bin.meta // {
-        hydraPlatforms = [ ];
-      };
+
       passthru.bin = simutrans-bin;
       passthru.pakSpec = pakSpec;
+
+      meta = simutrans-bin.meta // {
+        hydraPlatforms = [ ];
+      };
     };
 
   simutrans-bin = stdenv.mkDerivation {
