@@ -29,7 +29,7 @@ let
       version = lib.getVersion pkgs.mailspring;
       executable = pkgs.writeShellScript "mailspring.sh" ''
         EXECUTABLE=${lib.getExe pkgs.mailspring}
-        FLAGS=${
+        FLAGS='${
           lib.concatStringsSep " " (
             [ ]
             ++ lib.optional (settings.password-store != null) "--password-store=${settings.password-store}"
@@ -41,7 +41,7 @@ let
             ++ lib.optional (settings.enable-features != null) "--enable-features=${settings.enable-features}"
             ++ lib.optional (settings.ozone-platform != null) "--ozone-platform=${settings.ozone-platform}"
           )
-        }
+        }'
 
         if [ "$#" -gt 0 ]; then
           $EXECUTABLE "$@"
