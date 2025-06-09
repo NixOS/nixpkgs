@@ -8,11 +8,9 @@
   libintl,
   bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
-  gnulib,
   gawk,
   freebsd,
   libiconv,
-  xz,
 
   # we are a dependency of gcc, this simplifies bootstrapping
   interactive ? false,
@@ -54,11 +52,9 @@ let
       updateAutotoolsGnuConfigScriptsHook
       fetchurl
       perl
-      xz
       libintl
       libiconv
       bashNonInteractive
-      gnulib
       gawk
       freebsd
       ncurses
@@ -72,10 +68,6 @@ in
   texinfo6_5 = buildTexinfo {
     version = "6.5";
     hash = "sha256-d3dLP0oGwgcFzC7xyASGRCLjz5UjXpZbHwCkbffaX2I=";
-  };
-  texinfo6_7 = buildTexinfo {
-    version = "6.7";
-    hash = "sha256-mIQDwVQtFa0ERgC5CZl7owebEOAyJMYRiBF/NnawLKo=";
   };
   texinfo6 = buildTexinfo {
     version = "6.8";

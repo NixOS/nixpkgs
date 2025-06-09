@@ -7688,7 +7688,6 @@ with pkgs;
   texinfoPackages = callPackages ../development/tools/misc/texinfo/packages.nix { };
   inherit (texinfoPackages)
     texinfo6_5 # needed for allegro
-    texinfo6_7 # needed for fwknop
     texinfo6
     texinfo7
     ;
