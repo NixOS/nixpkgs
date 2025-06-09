@@ -359,8 +359,7 @@ in
     systemd.services.pipewire.bindsTo = [ "dbus.service" ];
     systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
 
-    # Enable either system or user units.  Note that for pipewire-pulse there
-    # are only user units, which work in both cases.
+    # Enable either system or user units.
     systemd.sockets.pipewire.enable = cfg.systemWide;
     systemd.services.pipewire.enable = cfg.systemWide;
     systemd.user.sockets.pipewire.enable = !cfg.systemWide;
