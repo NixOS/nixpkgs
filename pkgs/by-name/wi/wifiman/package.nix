@@ -2,14 +2,14 @@
   lib,
   stdenv,
   fetchurl,
-  dpkg,
   autoPatchelfHook,
-  libayatana-appindicator,
-  webkitgtk_4_0,
+  dpkg,
+  gtk3,
   iw,
+  libayatana-appindicator,
   nettools,
   openresolv,
-  gtk3
+  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation rec {
