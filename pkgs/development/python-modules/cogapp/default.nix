@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "cogapp";
-  version = "3.4.1";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qAbV254xihotP86YgAgXkWjn2xPl5VsZt5dj+budKYI=";
+    hash = "sha256-8ZDEoPBLs4kyCmaLxxsTsLiGwKoc+o56lb1++RLg47E=";
   };
 
   nativeBuildInputs = [ setuptools ];
