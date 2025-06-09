@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
 
   # build-system
   hatchling,
@@ -47,6 +48,15 @@ buildPythonPackage rec {
     hash = "sha256-27PE4c6uau/r2vJCMkcmDNBiQwpBDjjGbyuqUKhDcZU=";
   };
 
+  patches = [
+    # backport test fix for behavior changes in libxml 2.14.3
+    (fetchpatch {
+      url = "https://git.launchpad.net/beautifulsoup/patch/?id=53d328406ec8c37c0edbd00ace3782be63e2e7e5";
+      excludes = ["CHANGELOG"];
+      hash = "sha256-RtavbpnfT6x0A8L3tAvCXwKUpty1ASPGJKdks7evBr8=";
+    })
+  ];
+
   build-system = [ hatchling ];
 
   nativeBuildInputs = [ sphinxHook ];
@@ -69,11 +79,9 @@ buildPythonPackage rec {
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
-    # these tests fail with libxml 2.14.3
-    # https://bugs.launchpad.net/beautifulsoup/+bug/2112242
-    "test_real_xhtml_document"
-    "test_processing_instruction"
-    "test_out_of_range_entity"
+    # fail with latest libxml, by not actually rejecting
+    "test_rejected_markup"
+    "test_rejected_input"
   ];
 
   pythonImportsCheck = [ "bs4" ];
