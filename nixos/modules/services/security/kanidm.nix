@@ -19,10 +19,8 @@ let
     flip
     foldl'
     getExe
-    hasInfix
     hasPrefix
     isStorePath
-    last
     mapAttrsToList
     mkEnableOption
     mkForce
@@ -33,7 +31,6 @@ let
     optional
     optionals
     optionalString
-    splitString
     subtractLists
     types
     unique
@@ -43,9 +40,9 @@ let
   settingsFormat = pkgs.formats.toml { };
   # Remove null values, so we can document optional values that don't end up in the generated TOML file.
   filterConfig = converge (filterAttrsRecursive (_: v: v != null));
-  serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.serverSettings);
-  clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.clientSettings);
-  unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unixSettings);
+  serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.server.settings);
+  clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.client.settings);
+  unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unix.settings);
   provisionSecretFiles = filter (x: x != null) (
     [
       cfg.provision.idmAdminPasswordFile
@@ -214,176 +211,258 @@ let
         --state ${finalJson}
   '';
 
-  serverPort =
-    let
-      address = cfg.serverSettings.bindaddress;
-    in
-    # ipv6:
-    if hasInfix "]:" address then
-      last (splitString "]:" address)
-    else
-    # ipv4:
-    if hasInfix "." address then
-      last (splitString ":" address)
-    # default is 8443
-    else
-      throw "Address not parseable as IPv4 nor IPv6.";
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "kanidm"
+        "enablePam"
+      ]
+      [
+        "services"
+        "kanidm"
+        "unix"
+        "enable"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "kanidm"
+        "unixSettings"
+      ]
+      [
+        "services"
+        "kanidm"
+        "unix"
+        "settings"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "kanidm"
+        "enableClient"
+      ]
+      [
+        "services"
+        "kanidm"
+        "client"
+        "enable"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "kanidm"
+        "clientSettings"
+      ]
+      [
+        "services"
+        "kanidm"
+        "client"
+        "settings"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "kanidm"
+        "enableServer"
+      ]
+      [
+        "services"
+        "kanidm"
+        "server"
+        "enable"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "kanidm"
+        "serverSettings"
+      ]
+      [
+        "services"
+        "kanidm"
+        "server"
+        "settings"
+      ]
+    )
+  ];
   options.services.kanidm = {
-    enableClient = mkEnableOption "the Kanidm client";
-    enableServer = mkEnableOption "the Kanidm server";
-    enablePam = mkEnableOption "the Kanidm PAM and NSS integration";
 
     package = mkPackageOption pkgs "kanidm" {
       example = "kanidm_1_4";
       extraDescription = "If not set will receive a specific version based on stateVersion. Set to `pkgs.kanidm` to always receive the latest version, with the understanding that this could introduce breaking changes.";
     };
 
-    serverSettings = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
+    server = {
+      enable = mkEnableOption "the Kanidm server";
+      port = mkOption {
+        description = "Port the webserver binds to.";
+        default = 8443;
+        type = types.port;
+      };
+      address = mkOption {
+        description = "Address the webserver binds to.";
+        example = "[::1]";
+        default = "127.0.0.1";
+        type = types.str;
+      };
+      settings = mkOption {
+        type = types.submodule {
+          freeformType = settingsFormat.type;
 
-        options = {
-          bindaddress = mkOption {
-            description = "Address/port combination the webserver binds to.";
-            example = "[::1]:8443";
-            default = "127.0.0.1:8443";
+          options = {
+            bindaddress = mkOption {
+              description = "Address/port combination the webserver binds to.";
+              type = types.str;
+            };
+            # Should be optional but toml does not accept null
+            ldapbindaddress = mkOption {
+              description = ''
+                Address and port the LDAP server is bound to. Setting this to `null` disables the LDAP interface.
+              '';
+              example = "[::1]:636";
+              default = null;
+              type = types.nullOr types.str;
+            };
+            origin = mkOption {
+              description = "The origin of your Kanidm instance. Must have https as protocol.";
+              example = "https://idm.example.org";
+              type = types.strMatching "^https://.*";
+            };
+            domain = mkOption {
+              description = ''
+                The `domain` that Kanidm manages. Must be below or equal to the domain
+                specified in `server.settings.origin`.
+                This can be left at `null`, only if your instance has the role `ReadOnlyReplica`.
+                While it is possible to change the domain later on, it requires extra steps!
+                Please consider the warnings and execute the steps described
+                [in the documentation](https://kanidm.github.io/kanidm/stable/administrivia.html#rename-the-domain).
+              '';
+              example = "example.org";
+              default = null;
+              type = types.nullOr types.str;
+            };
+            db_path = mkOption {
+              description = "Path to Kanidm database.";
+              default = "/var/lib/kanidm/kanidm.db";
+              readOnly = true;
+              type = types.path;
+            };
+            tls_chain = mkOption {
+              description = "TLS chain in pem format.";
+              type = types.path;
+            };
+            tls_key = mkOption {
+              description = "TLS key in pem format.";
+              type = types.path;
+            };
+            log_level = mkOption {
+              description = "Log level of the server.";
+              default = "info";
+              type = types.enum [
+                "info"
+                "debug"
+                "trace"
+              ];
+            };
+            role = mkOption {
+              description = "The role of this server. This affects the replication relationship and thereby available features.";
+              default = "WriteReplica";
+              type = types.enum [
+                "WriteReplica"
+                "WriteReplicaNoUI"
+                "ReadOnlyReplica"
+              ];
+            };
+            online_backup = {
+              path = mkOption {
+                description = "Path to the output directory for backups.";
+                type = types.path;
+                default = "/var/lib/kanidm/backups";
+              };
+              schedule = mkOption {
+                description = "The schedule for backups in cron format.";
+                type = types.str;
+                default = "00 22 * * *";
+              };
+              versions = mkOption {
+                description = ''
+                  Number of backups to keep.
+
+                  The default is set to `0`, in order to disable backups by default.
+                '';
+                type = types.ints.unsigned;
+                default = 0;
+                example = 7;
+              };
+            };
+          };
+          config.bindaddress = "${cfg.server.address}:${builtins.toString cfg.server.port}";
+        };
+        default = { };
+        description = ''
+          Settings for Kanidm, see
+          [the documentation](https://kanidm.github.io/kanidm/stable/server_configuration.html)
+          and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/server.toml)
+          for possible values.
+        '';
+      };
+    };
+
+    client = {
+      enable = mkEnableOption "the Kanidm client";
+      settings = mkOption {
+        type = types.submodule {
+          freeformType = settingsFormat.type;
+
+          options.uri = mkOption {
+            description = "Address of the Kanidm server.";
+            example = "http://127.0.0.1:8080";
             type = types.str;
           };
-          # Should be optional but toml does not accept null
-          ldapbindaddress = mkOption {
-            description = ''
-              Address and port the LDAP server is bound to. Setting this to `null` disables the LDAP interface.
-            '';
-            example = "[::1]:636";
-            default = null;
-            type = types.nullOr types.str;
-          };
-          origin = mkOption {
-            description = "The origin of your Kanidm instance. Must have https as protocol.";
-            example = "https://idm.example.org";
-            type = types.strMatching "^https://.*";
-          };
-          domain = mkOption {
-            description = ''
-              The `domain` that Kanidm manages. Must be below or equal to the domain
-              specified in `serverSettings.origin`.
-              This can be left at `null`, only if your instance has the role `ReadOnlyReplica`.
-              While it is possible to change the domain later on, it requires extra steps!
-              Please consider the warnings and execute the steps described
-              [in the documentation](https://kanidm.github.io/kanidm/stable/administrivia.html#rename-the-domain).
-            '';
-            example = "example.org";
-            default = null;
-            type = types.nullOr types.str;
-          };
-          db_path = mkOption {
-            description = "Path to Kanidm database.";
-            default = "/var/lib/kanidm/kanidm.db";
-            readOnly = true;
-            type = types.path;
-          };
-          tls_chain = mkOption {
-            description = "TLS chain in pem format.";
-            type = types.path;
-          };
-          tls_key = mkOption {
-            description = "TLS key in pem format.";
-            type = types.path;
-          };
-          log_level = mkOption {
-            description = "Log level of the server.";
-            default = "info";
-            type = types.enum [
-              "info"
-              "debug"
-              "trace"
-            ];
-          };
-          role = mkOption {
-            description = "The role of this server. This affects the replication relationship and thereby available features.";
-            default = "WriteReplica";
-            type = types.enum [
-              "WriteReplica"
-              "WriteReplicaNoUI"
-              "ReadOnlyReplica"
-            ];
-          };
-          online_backup = {
-            path = mkOption {
-              description = "Path to the output directory for backups.";
+        };
+        description = ''
+          Configure Kanidm clients, needed for the PAM daemon. See
+          [the documentation](https://kanidm.github.io/kanidm/stable/client_tools.html#kanidm-configuration)
+          and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/config)
+          for possible values.
+        '';
+      };
+    };
+
+    unix = {
+      enable = mkEnableOption "the Kanidm PAM and NSS integration";
+      settings = mkOption {
+        type = types.submodule {
+          freeformType = settingsFormat.type;
+
+          options = {
+            pam_allowed_login_groups = mkOption {
+              description = "Kanidm groups that are allowed to login using PAM.";
+              example = "my_pam_group";
+              type = types.listOf types.str;
+            };
+            hsm_pin_path = mkOption {
+              description = "Path to a HSM pin.";
+              default = "/var/cache/kanidm-unixd/hsm-pin";
               type = types.path;
-              default = "/var/lib/kanidm/backups";
-            };
-            schedule = mkOption {
-              description = "The schedule for backups in cron format.";
-              type = types.str;
-              default = "00 22 * * *";
-            };
-            versions = mkOption {
-              description = ''
-                Number of backups to keep.
-
-                The default is set to `0`, in order to disable backups by default.
-              '';
-              type = types.ints.unsigned;
-              default = 0;
-              example = 7;
             };
           };
         };
+        description = ''
+          Configure Kanidm unix daemon.
+          See [the documentation](https://kanidm.github.io/kanidm/stable/integrations/pam_and_nsswitch.html#the-unix-daemon)
+          and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/unixd)
+          for possible values.
+        '';
       };
-      default = { };
-      description = ''
-        Settings for Kanidm, see
-        [the documentation](https://kanidm.github.io/kanidm/stable/server_configuration.html)
-        and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/server.toml)
-        for possible values.
-      '';
-    };
-
-    clientSettings = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-
-        options.uri = mkOption {
-          description = "Address of the Kanidm server.";
-          example = "http://127.0.0.1:8080";
-          type = types.str;
-        };
-      };
-      description = ''
-        Configure Kanidm clients, needed for the PAM daemon. See
-        [the documentation](https://kanidm.github.io/kanidm/stable/client_tools.html#kanidm-configuration)
-        and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/config)
-        for possible values.
-      '';
-    };
-
-    unixSettings = mkOption {
-      type = types.submodule {
-        freeformType = settingsFormat.type;
-
-        options = {
-          pam_allowed_login_groups = mkOption {
-            description = "Kanidm groups that are allowed to login using PAM.";
-            example = "my_pam_group";
-            type = types.listOf types.str;
-          };
-          hsm_pin_path = mkOption {
-            description = "Path to a HSM pin.";
-            default = "/var/cache/kanidm-unixd/hsm-pin";
-            type = types.path;
-          };
-        };
-      };
-      description = ''
-        Configure Kanidm unix daemon.
-        See [the documentation](https://kanidm.github.io/kanidm/stable/integrations/pam_and_nsswitch.html#the-unix-daemon)
-        and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/unixd)
-        for possible values.
-      '';
     };
 
     provision = {
@@ -391,8 +470,8 @@ in
 
       instanceUrl = mkOption {
         description = "The instance url to which the provisioning tool should connect.";
-        default = "https://localhost:${serverPort}";
-        defaultText = ''"https://localhost:<port from serverSettings.bindaddress>"'';
+        default = "https://localhost:${cfg.serverSetting.port}";
+        defaultText = ''"https://localhost:<port from server.settings.port>"'';
         type = types.str;
       };
 
@@ -669,7 +748,7 @@ in
     };
   };
 
-  config = mkIf (cfg.enableClient || cfg.enableServer || cfg.enablePam) {
+  config = mkIf (cfg.client.enable || cfg.server.enable || cfg.unix.enable) {
     assertions =
       let
         entityList =
@@ -691,7 +770,7 @@ in
             unknownGroups = subtractLists knownGroups groups;
           in
           {
-            assertion = (cfg.enableServer && cfg.provision.enable) -> unknownGroups == [ ];
+            assertion = (cfg.server.enable && cfg.provision.enable) -> unknownGroups == [ ];
             message = "${opt} refers to unknown groups: ${toString unknownGroups}";
           };
 
@@ -701,63 +780,63 @@ in
             unknownEntities = subtractLists (attrNames entitiesByName) entities;
           in
           {
-            assertion = (cfg.enableServer && cfg.provision.enable) -> unknownEntities == [ ];
+            assertion = (cfg.server.enable && cfg.provision.enable) -> unknownEntities == [ ];
             message = "${opt} refers to unknown entities: ${toString unknownEntities}";
           };
       in
       [
         {
           assertion =
-            !cfg.enableServer
-            || ((cfg.serverSettings.tls_chain or null) == null)
-            || (!isStorePath cfg.serverSettings.tls_chain);
+            !cfg.server.enable
+            || ((cfg.server.settings.tls_chain or null) == null)
+            || (!isStorePath cfg.server.settings.tls_chain);
           message = ''
-            <option>services.kanidm.serverSettings.tls_chain</option> points to
+            <option>services.kanidm.server.settings.tls_chain</option> points to
             a file in the Nix store. You should use a quoted absolute path to
             prevent this.
           '';
         }
         {
           assertion =
-            !cfg.enableServer
-            || ((cfg.serverSettings.tls_key or null) == null)
-            || (!isStorePath cfg.serverSettings.tls_key);
+            !cfg.server.enable
+            || ((cfg.server.settings.tls_key or null) == null)
+            || (!isStorePath cfg.server.settings.tls_key);
           message = ''
-            <option>services.kanidm.serverSettings.tls_key</option> points to
+            <option>services.kanidm.server.settings.tls_key</option> points to
             a file in the Nix store. You should use a quoted absolute path to
             prevent this.
           '';
         }
         {
-          assertion = !cfg.enableClient || options.services.kanidm.clientSettings.isDefined;
+          assertion = !cfg.client.enable || options.services.kanidm.client.settings.isDefined;
           message = ''
-            <option>services.kanidm.clientSettings</option> needs to be configured
+            <option>services.kanidm.client.settings</option> needs to be configured
             if the client is enabled.
           '';
         }
         {
-          assertion = !cfg.enablePam || options.services.kanidm.clientSettings.isDefined;
+          assertion = !cfg.unix.enable || options.services.kanidm.client.settings.isDefined;
           message = ''
-            <option>services.kanidm.clientSettings</option> needs to be configured
+            <option>services.kanidm.client.settings</option> needs to be configured
             for the PAM daemon to connect to the Kanidm server.
           '';
         }
         {
           assertion =
-            !cfg.enableServer
+            !cfg.server.enable
             || (
-              cfg.serverSettings.domain == null
-              -> cfg.serverSettings.role == "WriteReplica" || cfg.serverSettings.role == "WriteReplicaNoUI"
+              cfg.server.settings.domain == null
+              -> cfg.server.settings.role == "WriteReplica" || cfg.server.settings.role == "WriteReplicaNoUI"
             );
           message = ''
-            <option>services.kanidm.serverSettings.domain</option> can only be set if this instance
+            <option>services.kanidm.server.settings.domain</option> can only be set if this instance
             is not a ReadOnlyReplica. Otherwise the db would inherit it from
             the instance it follows.
           '';
         }
         {
-          assertion = cfg.provision.enable -> cfg.enableServer;
-          message = "<option>services.kanidm.provision</option> requires <option>services.kanidm.enableServer</option> to be true";
+          assertion = cfg.provision.enable -> cfg.server.enable;
+          message = "<option>services.kanidm.provision</option> requires <option>services.kanidm.server.enable</option> to be true";
         }
         # If any secret is provisioned, the kanidm package must have some required patches applied to it
         {
@@ -828,27 +907,28 @@ in
                 # At least one group must map to a value in each claim map
                 (mkIf (cfg.provision.extraJsonFile == null) {
                   assertion =
-                    (cfg.provision.enable && cfg.enableServer)
+                    (cfg.provision.enable && cfg.server.enable)
                     -> any (xs: xs != [ ]) (attrValues claimCfg.valuesByGroup);
                   message = "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim} does not specify any values for any group";
                 })
                 # Public clients cannot define a basic secret
                 {
                   assertion =
-                    (cfg.provision.enable && cfg.enableServer && oauth2Cfg.public) -> oauth2Cfg.basicSecretFile == null;
+                    (cfg.provision.enable && cfg.server.enable && oauth2Cfg.public)
+                    -> oauth2Cfg.basicSecretFile == null;
                   message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot specify a basic secret";
                 }
                 # Public clients cannot disable PKCE
                 {
                   assertion =
-                    (cfg.provision.enable && cfg.enableServer && oauth2Cfg.public)
+                    (cfg.provision.enable && cfg.server.enable && oauth2Cfg.public)
                     -> !oauth2Cfg.allowInsecureClientDisablePkce;
                   message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot disable PKCE";
                 }
                 # Non-public clients cannot enable localhost redirects
                 {
                   assertion =
-                    (cfg.provision.enable && cfg.enableServer && !oauth2Cfg.public)
+                    (cfg.provision.enable && cfg.server.enable && !oauth2Cfg.public)
                     -> !oauth2Cfg.enableLocalhostRedirects;
                   message = "services.kanidm.provision.systems.oauth2.${oauth2} is a non-public client and thus cannot enable localhost redirects";
                 }
@@ -868,17 +948,17 @@ in
       in
       lib.mkDefault pkg;
 
-    environment.systemPackages = mkIf cfg.enableClient [ cfg.package ];
+    environment.systemPackages = mkIf cfg.client.enable [ cfg.package ];
 
     systemd.tmpfiles.settings."10-kanidm" = {
-      ${cfg.serverSettings.online_backup.path}.d = {
+      ${cfg.server.settings.online_backup.path}.d = {
         mode = "0700";
         user = "kanidm";
         group = "kanidm";
       };
     };
 
-    systemd.services.kanidm = mkIf cfg.enableServer {
+    systemd.services.kanidm = mkIf cfg.server.enable {
       description = "kanidm identity management daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -902,11 +982,11 @@ in
           BindPaths =
             [
               # To store backups
-              cfg.serverSettings.online_backup.path
+              cfg.server.settings.online_backup.path
             ]
             ++ optional (
-              cfg.enablePam && cfg.unixSettings ? home_mount_prefix
-            ) cfg.unixSettings.home_mount_prefix;
+              cfg.unix.enable && cfg.unix.settings ? home_mount_prefix
+            ) cfg.unix.settings.home_mount_prefix;
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
@@ -924,7 +1004,7 @@ in
       ];
     };
 
-    systemd.services.kanidm-unixd = mkIf cfg.enablePam {
+    systemd.services.kanidm-unixd = mkIf cfg.unix.enable {
       description = "Kanidm PAM daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -967,7 +1047,7 @@ in
       environment.RUST_LOG = "info";
     };
 
-    systemd.services.kanidm-unixd-tasks = mkIf cfg.enablePam {
+    systemd.services.kanidm-unixd-tasks = mkIf cfg.unix.enable {
       description = "Kanidm PAM home management daemon";
       wantedBy = [ "multi-user.target" ];
       after = [
@@ -1018,24 +1098,24 @@ in
 
     # These paths are hardcoded
     environment.etc = mkMerge [
-      (mkIf cfg.enableServer { "kanidm/server.toml".source = serverConfigFile; })
-      (mkIf options.services.kanidm.clientSettings.isDefined {
+      (mkIf cfg.server.enable { "kanidm/server.toml".source = serverConfigFile; })
+      (mkIf options.services.kanidm.client.settings.isDefined {
         "kanidm/config".source = clientConfigFile;
       })
-      (mkIf cfg.enablePam { "kanidm/unixd".source = unixConfigFile; })
+      (mkIf cfg.unix.enable { "kanidm/unixd".source = unixConfigFile; })
     ];
 
-    system.nssModules = mkIf cfg.enablePam [ cfg.package ];
+    system.nssModules = mkIf cfg.unix.enable [ cfg.package ];
 
-    system.nssDatabases.group = optional cfg.enablePam "kanidm";
-    system.nssDatabases.passwd = optional cfg.enablePam "kanidm";
+    system.nssDatabases.group = optional cfg.unix.enable "kanidm";
+    system.nssDatabases.passwd = optional cfg.unix.enable "kanidm";
 
     users.groups = mkMerge [
-      (mkIf cfg.enableServer { kanidm = { }; })
-      (mkIf cfg.enablePam { kanidm-unixd = { }; })
+      (mkIf cfg.server.enable { kanidm = { }; })
+      (mkIf cfg.unix.enable { kanidm-unixd = { }; })
     ];
     users.users = mkMerge [
-      (mkIf cfg.enableServer {
+      (mkIf cfg.server.enable {
         kanidm = {
           description = "Kanidm server";
           isSystemUser = true;
@@ -1043,7 +1123,7 @@ in
           packages = [ cfg.package ];
         };
       })
-      (mkIf cfg.enablePam {
+      (mkIf cfg.unix.enable {
         kanidm-unixd = {
           description = "Kanidm PAM daemon";
           isSystemUser = true;
