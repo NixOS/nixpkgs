@@ -60,6 +60,15 @@ buildPythonPackage rec {
     hash = "sha256-pwR+9QBCIMZXFK9n8GRESl9UFsh7zcgOxTngdgdyMuc=";
   };
 
+  # the version in the pyproject.toml file is always the version (+ "-dev")
+  # before the version in the git tag
+  # this is also fixed in the github publish workflow in the project itself
+  postPatch = ''
+    sed --in-place \
+      's#^version = "[0-9]*\.[0-9]*\.[0-9]*-dev"$#version = "${version}"#' \
+      pyproject.toml
+  '';
+
   build-system = [
     poetry-core
     setuptools
