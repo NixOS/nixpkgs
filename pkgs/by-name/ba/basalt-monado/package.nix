@@ -1,4 +1,5 @@
 {
+  config,
   autoPatchelfHook,
   boost,
   bzip2,
@@ -21,6 +22,8 @@
   stdenv,
   tbb,
   xorg,
+  cudaPackages,
+  enableCuda ? config.cudaSupport,
 }:
 stdenv.mkDerivation {
   pname = "basalt-monado";
@@ -63,6 +66,7 @@ stdenv.mkDerivation {
     (lib.cmakeBool "BASALT_INSTANTIATIONS_DOUBLE" false)
     (lib.cmakeBool "BUILD_TESTS" false)
     (lib.cmakeFeature "EIGEN_ROOT" "${eigen}/include/eigen3")
+    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
   ];
 
   passthru.updateScript = nix-update-script { };
