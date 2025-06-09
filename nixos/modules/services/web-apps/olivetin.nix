@@ -102,30 +102,16 @@ in
       inherit (cfg) path;
 
       preStart = ''
-        tmp="$(mktemp -d)"
-        trap 'rm -rf "$tmp"' EXIT
-        cd "$tmp"
+        shopt -s nullglob
 
-        cp ${settingsFormat.generate "olivetin-config.yaml" cfg.settings} config.yaml
-        chmod +w config.yaml
-        for ((i=0; i < ${toString (lib.length cfg.extraConfigFiles)}; i++)); do
-          ${lib.getExe pkgs.yq} -yi '
-            def merge($y):
-              . as $x |
-              if ($x | type == "object") and ($y | type == "object") then
-                $x + $y + with_entries(select(.key | in($y)) | .key as $key | .value |= merge($y[$key]))
-              elif ($x | type == "array") and ($y | type == "array") then
-                $x + $y
-              else
-                $y
-              end;
-            merge($f | fromjson)
-          ' config.yaml --rawfile f <(${lib.getExe pkgs.yq} -c . "$CREDENTIALS_DIRECTORY/config-$i.yaml")
-        done
-        chmod -w config.yaml
+        tmp="$(mktemp)"
+        ${lib.getExe pkgs.yq-go} eval-all '. as $item ireduce ({}; . *+ $item)' \
+          ${settingsFormat.generate "olivetin-config.yaml" cfg.settings} \
+          $CREDENTIALS_DIRECTORY/config-*.yaml > "$tmp"
+        chmod -w "$tmp"
 
         mkdir -p /run/olivetin/config
-        mv config.yaml /run/olivetin/config/config.yaml
+        mv "$tmp" /run/olivetin/config/config.yaml
       '';
 
       serviceConfig = {
