@@ -12,7 +12,15 @@
     in {
       packages.x86_64-linux.wifiman = pkgs.callPackage ./package.nix {};
       devShells.x86_64-linux.default = pkgs.mkShell {
-        packages = [ self.packages.x86_64-linux.wifiman ];
+        packages = [
+          self.packages.x86_64-linux.wifiman
+          pkgs.strace
+          pkgs.ltrace
+          pkgs.gdb
+          pkgs.binutils
+          pkgs.patchelf
+          pkgs.file
+        ];
       };
     };
 }
