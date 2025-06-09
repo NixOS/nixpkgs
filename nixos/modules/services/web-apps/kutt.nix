@@ -8,23 +8,24 @@
 let
   cfg = config.services.kutt;
 
-  settings = lib.attrsets.mapAttrs (name: value: toString value) (
-    lib.mkMerge ([
-      cfg.settings
-      (lib.optionalAttrs cfg.configureRedis {
-        REDIS_ENABLED = "true";
-      })
-      (lib.optionalAttrs cfg.configureNginx {
-        TRUST_PROXY = "true";
-      })
-      (lib.optionalAttrs cfg.configurePostgres {
-        DB_CLIENT = "pg";
-        DB_HOST = "/run/postgresql";
-        DB_NAME = cfg.user;
-        DB_USER = cfg.user;
-      })
-    ])
-  );
+  settings =
+    lib.attrsets.mapAttrs
+      (name: value: if (builtins.typeOf value == "bool") then lib.boolToString value else toString value)
+      (
+        cfg.settings
+        // lib.optionalAttrs cfg.configureRedis {
+          REDIS_ENABLED = "true";
+        }
+        // lib.optionalAttrs cfg.configureNginx {
+          TRUST_PROXY = "true";
+        }
+        // lib.optionalAttrs cfg.configurePostgres {
+          DB_CLIENT = "pg";
+          DB_HOST = "/run/postgresql";
+          DB_NAME = cfg.user;
+          DB_USER = cfg.user;
+        }
+      );
 
 in
 {
@@ -67,9 +68,9 @@ in
         description = "Group account under which the Kutt service runs.";
       };
 
-      configureRedis = mkEnableOption "Whether to configure Kutt to use a local Redis server";
-      configurePostgres = mkEnableOption "Whether to configure Kutt to use the the local postgresql server";
-      configureNginx = mkEnableOption "Whether to configure Kutt to use nginx as reverse proxy";
+      configureRedis = mkEnableOption "the use of a local Redis server with Kutt";
+      configurePostgres = mkEnableOption "the use of a local PostgreSQL database with Kutt";
+      configureNginx = mkEnableOption "the use of Nginx as a reverse proxy for Kutt";
 
       settings = mkOption {
         default = { };
@@ -125,8 +126,8 @@ in
       wants = [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = "${cfg.package}/bin/kutt-knex migrate:latest";
-      script = "${cfg.package}/bin/kutt --production";
+      preStart = "${lib.getExe' cfg.package "kutt-knex"} migrate:latest";
+      script = "${lib.getExe cfg.package} --production";
 
       environment = settings;
 

@@ -21,8 +21,12 @@ buildNpmPackage (finalAttrs: {
   npmPackFlags = [ "--ignore-scripts" ];
 
   postInstall = ''
-    makeWrapper ${pkgs.nodejs_22}/bin/node $out/bin/kutt --chdir $out/lib/node_modules/kutt --add-flag server/server.js
-    makeWrapper $out/lib/node_modules/kutt/node_modules/.bin/knex $out/bin/kutt-knex --chdir $out/lib/node_modules/kutt
+    makeWrapper ${lib.getExe pkgs.nodejs} $out/bin/kutt \
+      --chdir $out/lib/node_modules/kutt \
+      --add-flag server/server.js
+
+    makeWrapper $out/lib/node_modules/kutt/node_modules/.bin/knex $out/bin/kutt-knex \
+      --chdir $out/lib/node_modules/kutt
   '';
 
   meta = {
