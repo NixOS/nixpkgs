@@ -20,6 +20,9 @@
           pkgs.binutils
           pkgs.patchelf
           pkgs.file
+          # pkgs.wirelesstools
+          # pkgs.iw
+          # pkgs.nettools
         ];
       };
     };
