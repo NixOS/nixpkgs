@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyvips";
-  version = "2.2.3";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "libvips";
     repo = "pyvips";
     tag = "v${version}";
-    hash = "sha256-EGB1cOR1pVCXGjRj1NLj4Mk3kIy8luRqk3gGJqVNs7U=";
+    hash = "sha256-dyous0EahUR7pkr2siBBJwzcoC4TOsnsbRo+rVE8/QQ=";
   };
 
   nativeBuildInputs = [
