@@ -108,6 +108,18 @@ in
               jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
             done
 
+            # NOTE: For reasons not yet known, pnpm might create files with
+            # inconsistent permissions, for example inside the ubuntu-24.04
+            # github actions runner.
+            # To ensure stable derivations, we need to set permissions
+            # consistently, namely:
+            # * All files with `-exec` suffix have 555.
+            # * All other files have 444.
+            # * All folders have 555.
+            find $out -type f -name "*-exec" -print0 | xargs -0 chmod 555
+            find $out -type f -not -name "*-exec" -print0 | xargs -0 chmod 444
+            find $out -type d -print0 | xargs -0 chmod 555
+
             runHook postFixup
           '';
 
