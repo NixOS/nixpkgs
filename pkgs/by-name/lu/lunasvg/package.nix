@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lunasvg";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "sammycage";
     repo = "lunasvg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CBhz117Y8e7AdD1JJtNkR/EthsfyiQ05HW41beaY95I=";
+    hash = "sha256-1Cj6En0XedAeNPsLWCedxiiq8xPdJ4VpKmF4vYu4SC8=";
   };
 
   nativeBuildInputs = [
@@ -24,14 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
     plutovg
   ];
 
-  patches = [
-    # https://github.com/sammycage/lunasvg/pull/219
-    # can be removed when the PR 219 and a new release is created
-    ./use_system_plutovg.patch
-  ];
-
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_PLUTOVG" true)
+    # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
+    # (setting it to an absolute path causes include files to go to $out/$out/include,
+    #  because the absolute path is interpreted with root at $out).
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+
   ];
 
   meta = {
