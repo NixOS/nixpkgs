@@ -38,10 +38,16 @@ tcl.mkTclDerivation {
   '';
 
   postInstall =
+    let
+      # From version 9, the tcl version is included in the lib filename
+      libtclstring =
+        if (lib.versionAtLeast tcl.version "9.0") then "tcl${lib.versions.major tcl.version}" else "";
+      libfile = "$out/lib/lib${libtclstring}tk${tcl.release}${stdenv.hostPlatform.extensions.sharedLibrary}";
+    in
     ''
       ln -s $out/bin/wish* $out/bin/wish
       cp ../{unix,generic}/*.h $out/include
-      ln -s $out/lib/libtk${tcl.release}${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libtk${stdenv.hostPlatform.extensions.sharedLibrary}
+      ln -s ${libfile} $out/lib/libtk${stdenv.hostPlatform.extensions.sharedLibrary}
     ''
     + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
       cp ../macosx/*.h $out/include
