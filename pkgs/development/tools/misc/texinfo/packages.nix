@@ -65,10 +65,6 @@ let
   };
 in
 {
-  texinfo6_5 = buildTexinfo {
-    version = "6.5";
-    hash = "sha256-d3dLP0oGwgcFzC7xyASGRCLjz5UjXpZbHwCkbffaX2I=";
-  };
   texinfo6 = buildTexinfo {
     version = "6.8";
     hash = "sha256-jrdT7Si8oh+PVsGhgDYq7XiSKb1i//WL+DaOm+tZ/sQ=";
