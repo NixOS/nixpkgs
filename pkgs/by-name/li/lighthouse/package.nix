@@ -141,6 +141,8 @@ rustPlatform.buildRustPackage rec {
       pmw
     ];
     mainProgram = "lighthouse";
-    broken = stdenv.hostPlatform.isDarwin;
+    # can't compile build script with host libraries
+    broken =
+      stdenv.hostPlatform.isDarwin || !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
   };
 }
