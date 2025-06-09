@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  future,
-  six,
   numpy,
   scipy,
   matplotlib,
@@ -21,8 +19,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    future
-    six
     numpy
     scipy
     matplotlib
