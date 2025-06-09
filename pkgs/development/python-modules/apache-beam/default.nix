@@ -364,7 +364,7 @@ buildPythonPackage rec {
   meta = {
     description = "Unified model for defining both batch and streaming data-parallel processing pipelines";
     homepage = "https://beam.apache.org/";
-    changelog = "https://github.com/apache/beam/blob/release-${version}/CHANGES.md";
+    changelog = "https://github.com/apache/beam/blob/release-${src.tag}/CHANGES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
