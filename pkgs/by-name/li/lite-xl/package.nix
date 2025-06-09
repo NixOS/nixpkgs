@@ -5,27 +5,30 @@
   lua5_4,
   meson,
   ninja,
+  cmake,
   pcre2,
   pkg-config,
   SDL2,
+  sdl3,
   stdenv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lite-xl";
-  version = "2.1.7";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "lite-xl";
     repo = "lite-xl";
     rev = "v${version}";
-    hash = "sha256-Ig0XDxnll/zruAwWHwuXiqumBXgAPxuK0E1ELupvcXo=";
+    hash = "sha256-9JpD7f5vOGhLW8dBjjYUI5PSaz/XWW5sIOZCAbKhxtE=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    cmake
   ];
 
   buildInputs = [
@@ -33,6 +36,7 @@ stdenv.mkDerivation rec {
     lua5_4
     pcre2
     SDL2
+    sdl3
   ];
 
   mesonFlags = [
