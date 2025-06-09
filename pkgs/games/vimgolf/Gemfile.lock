@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    abbrev (0.1.2)
     highline (2.0.3)
     json_pure (2.6.1)
     thor (1.2.1)
@@ -13,6 +14,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  abbrev
   vimgolf
 
 BUNDLED WITH
