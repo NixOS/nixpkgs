@@ -14838,6 +14838,8 @@ with pkgs;
   amoeba-data = callPackage ../games/amoeba/data.nix { };
 
   anki = callPackage ../games/anki { };
+  anki-utils = callPackage ../games/anki/addons/anki-utils.nix { };
+  ankiAddons = recurseIntoAttrs (callPackage ../games/anki/addons { });
   anki-bin = callPackage ../games/anki/bin.nix { };
   anki-sync-server = callPackage ../games/anki/sync-server.nix { };
 
