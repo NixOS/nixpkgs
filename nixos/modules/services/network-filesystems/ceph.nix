@@ -101,6 +101,8 @@ let
   };
 in
 {
+  meta.doc = ./ceph.md;
+
   options.services.ceph = {
     # Ceph has a monolithic configuration file but different sections for
     # each daemon, a separate client section and a global section
