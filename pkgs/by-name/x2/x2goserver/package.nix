@@ -1,6 +1,6 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchurl,
   perlPackages,
   makeWrapper,
@@ -28,12 +28,11 @@
 }:
 
 let
-  pname = "x2goserver";
-  version = "4.1.0.3";
+  version = "4.1.0.6";
 
   src = fetchurl {
-    url = "https://code.x2go.org/releases/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "Z3aqo1T1pE40nws8F21JiMiKYYwu30bJijeuicBp3NA=";
+    url = "https://code.x2go.org/releases/source/x2goserver/x2goserver-${version}.tar.gz";
+    hash = "sha256-nFhfaDmW8GcKrTsRih2YeD7Il+8yrdm0yeTmPs97fCQ=";
   };
 
   x2go-perl = perlPackages.buildPerlPackage {
@@ -43,12 +42,14 @@ let
       "-f"
       "Makefile.perl"
     ];
-    patchPhase = ''
-      substituteInPlace X2Go/Config.pm --replace '/etc/x2go' '/var/lib/x2go/conf'
+    postPatch = ''
+      substituteInPlace X2Go/Config.pm \
+        --replace-fail "/etc/x2go" "/var/lib/x2go/conf"
       substituteInPlace X2Go/Server/DB.pm \
-        --replace '$x2go_lib_path/libx2go-server-db-sqlite3-wrapper' \
+        --replace-fail '$x2go_lib_path/libx2go-server-db-sqlite3-wrapper' \
                   '/run/wrappers/bin/x2gosqliteWrapper'
-      substituteInPlace X2Go/Server/DB/SQLite3.pm --replace "user='x2gouser'" "user='x2go'"
+      substituteInPlace X2Go/Server/DB/SQLite3.pm \
+        --replace-fail "user='x2gouser'" "user='x2go'"
     '';
   };
 
@@ -97,33 +98,43 @@ let
   ];
 in
 stdenv.mkDerivation {
-  inherit pname version src;
+  pname = "x2goserver";
+  inherit version src;
+
+  postPatch = ''
+    patchShebangs .
+    sed -i '/Makefile.PL\|Makefile.perl/d' Makefile
+    for i in */Makefile; do
+      substituteInPlace "$i" \
+        --replace-fail "-o root -g root " ""
+    done
+    substituteInPlace libx2go-server-db-perl/Makefile \
+      --replace-fail "chmod 2755" "chmod 755"
+    for i in x2goserver/sbin/x2godbadmin x2goserver/bin/x2go*
+    do
+      substituteInPlace $i \
+        --replace-warn '/etc/x2go' '/var/lib/x2go/conf'
+    done
+    substituteInPlace x2goserver/sbin/x2gocleansessions \
+      --replace-fail '/var/run/x2goserver.pid' '/var/run/x2go/x2goserver.pid'
+    substituteInPlace x2goserver/sbin/x2godbadmin \
+      --replace-fail 'user="x2gouser"' 'user="x2go"'
+    substituteInPlace x2goserver-xsession/etc/Xsession \
+      --replace-fail "SSH_AGENT /bin/bash -c" "SSH_AGENT ${bash}/bin/bash -c" \
+      --replace-fail "[ -f /etc/redhat-release ]" "[ -d /etc/nix ] || [ -f /etc/redhat-release ]"
+    # broken symlinks
+    substituteInPlace x2goserver-x2goagent/Makefile \
+      --replace-fail '$(INSTALL_SYMLINK) ../../nx/VERSION.nxagent $(DESTDIR)$(SHAREDIR)/versions/VERSION.x2goserver-x2goagent' "" \
+      --replace-fail '$(INSTALL_DIR) $(DESTDIR)$(NXLIBDIR)/bin/' "" \
+      --replace-fail '$(INSTALL_SYMLINK) nxagent $(DESTDIR)$(NXLIBDIR)/bin/x2goagent' ""
+  '';
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
     perlEnv
     bash
   ];
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  prePatch = ''
-    patchShebangs .
-    sed -i '/Makefile.PL\|Makefile.perl/d' Makefile
-    for i in */Makefile; do
-      substituteInPlace "$i" --replace "-o root -g root " ""
-    done
-    substituteInPlace libx2go-server-db-perl/Makefile --replace "chmod 2755" "chmod 755"
-    for i in x2goserver/sbin/x2godbadmin x2goserver/bin/x2go*
-    do
-      substituteInPlace $i --replace '/etc/x2go' '/var/lib/x2go/conf'
-    done
-    substituteInPlace x2goserver/sbin/x2gocleansessions \
-      --replace '/var/run/x2goserver.pid' '/var/run/x2go/x2goserver.pid'
-    substituteInPlace x2goserver/sbin/x2godbadmin --replace 'user="x2gouser"' 'user="x2go"'
-    substituteInPlace x2goserver-xsession/etc/Xsession \
-      --replace "SSH_AGENT /bin/bash -c" "SSH_AGENT ${bash}/bin/bash -c" \
-      --replace "[ -f /etc/redhat-release ]" "[ -d /etc/nix ] || [ -f /etc/redhat-release ]"
-  '';
 
   makeFlags = [
     "PREFIX=/"
@@ -149,11 +160,14 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Remote desktop application, server component";
     homepage = "http://x2go.org/";
     platforms = lib.platforms.linux;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ averelld ];
+    license = with lib.licenses; [
+      agpl3Plus
+      mit
+    ]; # Some X2Go components are licensed under some license (MIT X11, BSD, etc.)
+    maintainers = with lib.maintainers; [ averelld ];
   };
 }
