@@ -1103,6 +1103,7 @@ in
   postfix-raise-smtpd-tls-security-level =
     handleTest ./postfix-raise-smtpd-tls-security-level.nix
       { };
+  postfix-tlspol = runTest ./postfix-tlspol.nix;
   postfixadmin = runTest ./postfixadmin.nix;
   postgres-websockets = runTest ./postgres-websockets.nix;
   postgresql = handleTest ./postgresql { };
