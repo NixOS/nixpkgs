@@ -16,6 +16,10 @@ concurrency:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   nixpkgs:
     name: nixpkgs-manual-build

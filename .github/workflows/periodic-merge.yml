@@ -12,6 +12,10 @@ on:
         required: true
         type: string
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   merge:
     runs-on: ubuntu-24.04-arm
