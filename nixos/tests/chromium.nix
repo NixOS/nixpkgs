@@ -47,7 +47,6 @@ mapAttrs (
       {
         maintainers = with maintainers; [
           aszlig
-          primeos
         ];
       }
       // optionalAttrs (chromiumPkg.meta ? timeout) {

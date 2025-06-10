@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
     license = lib.licenses.mit; # Expat version
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = with lib.maintainers; [ ];
     pkgConfigModules = [ "wayland-protocols" ];
   };
 

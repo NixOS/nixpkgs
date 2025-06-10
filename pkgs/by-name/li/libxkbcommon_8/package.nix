@@ -96,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      primeos
       ttuegel
     ];
     mainProgram = "xkbcli";

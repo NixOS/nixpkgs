@@ -15,7 +15,6 @@ in
   meta = with pkgs.lib.maintainers; {
     maintainers = [
       flokli
-      primeos
     ];
   };
 
