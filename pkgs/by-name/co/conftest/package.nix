@@ -9,15 +9,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "conftest";
-  version = "0.59.0";
+  version = "0.61.2";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bmZp1cPNTm6m30YxjlWdnfv2437nDXH+taDNFZ0OKIY=";
+    hash = "sha256-TcEaYS69Mk11X7YYqzWOF8ZcNjx0IhKMlN9+Y8O/qx4=";
   };
-  vendorHash = "sha256-aPvGbtAucb9OdcydO4dMLJrrM3XretPI7zyJULlm1fg=";
+  vendorHash = "sha256-97Ph39IL+ZJQiRmSOZKTXw85qY68FiPjsvLd4M0hFxI=";
 
   ldflags = [
     "-s"
