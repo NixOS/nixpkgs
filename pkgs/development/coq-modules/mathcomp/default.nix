@@ -20,6 +20,7 @@
   withDoc ? false,
   single ? false,
   coq,
+  rocqPackages,
   hierarchy-builder,
   stdlib,
   version ? null,
@@ -235,6 +236,24 @@ let
           buildTargets = "doc";
           extraInstallFlags = [ "-f Makefile.coq" ];
         }
+        //
+          lib.optionalAttrs
+            (coq.version != null && (coq.version == "dev" || lib.versions.isGe "9.0" coq.version))
+            {
+              # this is just a wrapper for rocPackages.mathcomp for Rocq >= 9.0
+              configurePhase = ''
+                echo no configuration
+              '';
+              buildPhase = ''
+                echo building nothing
+              '';
+              installPhase = ''
+                echo installing nothing
+              '';
+              propagatedBuildInputs = [
+                (if package == "all" then rocqPackages.mathcomp else rocqPackages."${pname}")
+              ];
+            }
       );
       patched-derivation1 = derivation.overrideAttrs (
         o:
