@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
   isPyPy,
 
@@ -15,7 +14,6 @@
   iconv,
 
   # dependencies
-  importlib-resources,
   python-dateutil,
   time-machine,
   tzdata,
@@ -27,40 +25,24 @@
 
 buildPythonPackage rec {
   pname = "pendulum";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sdispater";
     repo = "pendulum";
     tag = version;
-    hash = "sha256-v0kp8dklvDeC7zdTDOpIbpuj13aGub+oCaYz2ytkEpI=";
+    hash = "sha256-ZjQaN5vT1+3UxwLNNsUmU4gSs6reUl90VSEumS0sEGY=";
   };
-
-  postPatch = ''
-    substituteInPlace rust/Cargo.lock \
-      --replace "3.0.0-beta-1" "3.0.0"
-  '';
 
   cargoRoot = "rust";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     sourceRoot = "${src.name}/rust";
-    hash = "sha256-6WgGIfz9I+xRJqXWhjfGDZM1umYwVlUEpLAiecZNZmI=";
-    postPatch = ''
-      substituteInPlace Cargo.lock \
-        --replace "3.0.0-beta-1" "3.0.0"
-    '';
+    hash = "sha256-F5bCuvI8DcyeUTS7UyYBixCjuGFKGOXPw8HLVlYKuxA=";
   };
-
-  patches = [
-    # fix build on 32bit
-    # https://github.com/sdispater/pendulum/pull/842
-    (fetchpatch {
-      url = "https://github.com/sdispater/pendulum/commit/6f2fcb8b025146ae768a5889be4a437fbd3156d6.patch";
-      hash = "sha256-47591JvpADxGQT2q7EYWHfStaiWyP7dt8DPTq0tiRvk=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -70,15 +52,10 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
-  propagatedBuildInputs =
-    [
-      python-dateutil
-      tzdata
-    ]
-    ++ lib.optional (!isPyPy) [ time-machine ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-resources
-    ];
+  propagatedBuildInputs = [
+    python-dateutil
+    tzdata
+  ] ++ lib.optional (!isPyPy) [ time-machine ];
 
   pythonImportsCheck = [ "pendulum" ];
 
