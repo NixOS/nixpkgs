@@ -11,9 +11,7 @@
   libxcrypt,
   installShellFiles,
   sphinx,
-  systemd,
   stdenv,
-  fetchpatch,
   versionCheckHook,
 }:
 
@@ -111,6 +109,13 @@ rustPlatform.buildRustPackage {
 
     cp ${./Cargo.lock} Cargo.lock
     rm .cargo/config.toml
+
+    # avoid some unnecessary dependendcies, stemming from greedy linkage by rustc
+    # see also upstream Makefile for similar workaround
+    mkdir -p .dep-stubs
+    echo '!<arch>' >.dep-stubs/libsystemd.a
+    echo '!<arch>' >.dep-stubs/libuuid.a
+    echo '!<arch>' >.dep-stubs/libcrypt.a
   '';
 
   postBuild = ''
@@ -145,6 +150,8 @@ rustPlatform.buildRustPackage {
     "--bin=pxar"
   ];
 
+  RUSTFLAGS = [ "-L.dep-stubs" ];
+
   doCheck = false;
 
   # pbs-buildcfg requires this set, would be the git commit id
@@ -156,14 +163,14 @@ rustPlatform.buildRustPackage {
     installShellFiles
     sphinx
   ];
+
   buildInputs = [
     openssl
     fuse3
-    libuuid
     acl
-    libxcrypt
-    systemd.dev
   ];
+
+  strictDeps = true;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
