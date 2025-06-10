@@ -17,6 +17,10 @@ concurrency:
 permissions:
   pull-requests: write
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   check:
     name: cherry-pick-check

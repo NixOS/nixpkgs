@@ -14,6 +14,10 @@ permissions:
   issues: write
   pull-requests: write
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   backport:
     name: Backport Pull Request
