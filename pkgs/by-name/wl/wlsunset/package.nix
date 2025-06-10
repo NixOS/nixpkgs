@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     changelog = "https://git.sr.ht/~kennylevinsen/wlsunset/refs/${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "wlsunset";
   };
 }

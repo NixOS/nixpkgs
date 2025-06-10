@@ -98,6 +98,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/fbi-improved/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }
