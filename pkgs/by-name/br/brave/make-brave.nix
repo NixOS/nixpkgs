@@ -216,7 +216,7 @@ stdenv.mkDerivation {
       done
 
       # Fix paths
-      substituteInPlace $out/share/applications/brave-browser.desktop \
+      substituteInPlace $out/share/applications/{brave-browser,com.brave.Browser}.desktop \
           --replace /usr/bin/brave-browser-stable $out/bin/brave
       substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
           --replace /opt/brave.com $out/opt/brave.com
