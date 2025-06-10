@@ -3813,6 +3813,12 @@
     githubId = 2379774;
     name = "Sean Buckley";
   };
+  bugarela = {
+    email = "gabrielamoreira05@gmail.com";
+    github = "bugarela";
+    githubId = 18356186;
+    name = "Gabriela Moreira";
+  };
   bugworm = {
     email = "bugworm@zoho.com";
     github = "bugworm";
