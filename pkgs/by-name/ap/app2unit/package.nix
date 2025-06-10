@@ -18,6 +18,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     install -Dt $out/bin app2unit
     ln -s $out/bin/app2unit $out/bin/app2unit-open
+    ln -s $out/bin/app2unit $out/bin/app2unit-term
   '';
 
   dontPatchShebangs = true;
