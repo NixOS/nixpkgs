@@ -6,7 +6,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 import datetime
 import hashlib
 import json
-import ctypes
+from ctypes import CDLL
 import os
 import psutil
 import re
@@ -17,11 +17,25 @@ import tempfile
 import textwrap
 
 
-limine_dir = None
-can_use_direct_paths = False
-install_config = json.load(open('@configPath@', 'r'))
-libc = ctypes.CDLL("libc.so.6")
+@dataclass
+class BootSpec:
+    system: str
+    init: str
+    kernel: str
+    kernelParams: List[str]
+    label: str
+    toplevel: str
+    specialisations: Dict[str, "BootSpec"]
+    initrd: str | None = None
+    initrdSecrets: str | None = None
 
+
+install_config = json.load(open('@configPath@', 'r'))
+libc = CDLL("libc.so.6")
+
+limine_dir: Optional[str] = None
+can_use_direct_paths = False
+paths: Dict[str, bool] = {}
 
 def config(*path: List[str]) -> Optional[Any]:
     result = install_config
@@ -76,8 +90,6 @@ def is_encrypted(device: str) -> bool:
 def is_fs_type_supported(fs_type: str) -> bool:
     return fs_type.startswith('vfat')
 
-paths = {}
-
 def get_copied_path_uri(path: str, target: str) -> str:
     result = ''
 
@@ -116,20 +128,6 @@ def get_file_uri(profile: str, gen: Optional[str], spec: Optional[str], name: st
 
 def get_kernel_uri(kernel_path: str) -> str:
     return get_copied_path_uri(kernel_path, "kernels")
-
-
-@dataclass
-class BootSpec:
-    system: str
-    init: str
-    kernel: str
-    kernelParams: List[str]
-    label: str
-    toplevel: str
-    specialisations: Dict[str, "BootSpec"]
-    initrd: str | None = None
-    initrdSecrets: str | None = None
-
 
 def bootjson_to_bootspec(bootjson: dict) -> BootSpec:
     specialisations = bootjson['org.nixos.specialisation.v1']
