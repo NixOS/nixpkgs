@@ -95,6 +95,17 @@
   enableNuma ? lib.meta.availableOn stdenv.targetPlatform numactl,
   numactl,
 
+  # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
+  # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
+  # see #84670 and #49071 for more background.
+  useLdGold ?
+    stdenv.targetPlatform.linker == "gold"
+    || (
+      stdenv.targetPlatform.linker == "bfd"
+      && (stdenv.targetCC.bintools.bintools.hasGold or false)
+      && !stdenv.targetPlatform.isMusl
+    ),
+
   # What flavour to build. Flavour string may contain a flavour and flavour
   # transformers as accepted by hadrian.
   ghcFlavour ?
@@ -424,17 +435,6 @@ let
 
   # targetPrefix aware lib.getExe'
   getToolExe = drv: name: lib.getExe' drv "${drv.targetPrefix or ""}${name}";
-
-  # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
-  # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
-  # see #84670 and #49071 for more background.
-  useLdGold =
-    targetPlatform.linker == "gold"
-    || (
-      targetPlatform.linker == "bfd"
-      && (targetCC.bintools.bintools.hasGold or false)
-      && !targetPlatform.isMusl
-    );
 
   # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
   variantSuffix = lib.concatStrings [
