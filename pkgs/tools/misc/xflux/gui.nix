@@ -1,8 +1,7 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
-  buildPythonApplication,
-  python,
   wrapGAppsHook3,
   xflux,
   gtk3,
@@ -10,32 +9,24 @@
   pango,
   gdk-pixbuf,
   atk,
-  pexpect,
-  pygobject3,
-  pyxdg,
-  libappindicator-gtk3,
+  libayatana-appindicator,
+  redshift,
 }:
-buildPythonApplication rec {
+
+python3Packages.buildPythonApplication rec {
   pname = "xflux-gui";
-  version = "1.2.0";
+  version = "2.0";
 
   src = fetchFromGitHub {
     repo = "xflux-gui";
     owner = "xflux-gui";
-    rev = "v${version}";
-    sha256 = "09zphcd9821ink63636swql4g85hg6lpsazqg1mawlk9ikc8zbps";
+    tag = "v${version}";
+    hash = "sha256-/hIJYfumpPtkgiQD2leAwym1yxMSis6M6rlIpWu1Qcc=";
   };
 
-  propagatedBuildInputs = [
-    pyxdg
-    pexpect
-    pygobject3
-  ];
-
-  buildInputs = [
-    xflux
-    gtk3
-  ];
+  postPatch = ''
+    patchPythonScript src/fluxgui/fluxapp.py
+  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -43,24 +34,34 @@ buildPythonApplication rec {
     pango
     gdk-pixbuf
     atk
-    libappindicator-gtk3
   ];
 
-  postPatch = ''
-    substituteInPlace src/fluxgui/xfluxcontroller.py \
-      --replace "pexpect.spawn(\"xflux\"" "pexpect.spawn(\"${xflux}/bin/xflux\""
-  '';
+  buildInputs = [
+    xflux
+    gtk3
+  ];
 
-  postFixup = ''
-    wrapGAppsHook
-    wrapPythonPrograms
-    patchPythonScript $out/${python.sitePackages}/fluxgui/fluxapp.py
-  '';
+  dependencies =
+    with python3Packages;
+    [
+      pyxdg
+      pexpect
+      pygobject3
+    ]
+    ++ [ libayatana-appindicator ];
+
+  dontWrapGApps = true;
+
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+    "--prefix PATH : ${lib.makeBinPath [ redshift ]}"
+  ];
 
   meta = {
     description = "Better lighting for Linux. Open source GUI for xflux";
     homepage = "https://justgetflux.com/linux.html";
-    license = lib.licenses.unfree; # marked as unfree since the source code contains a copy of the unfree xflux binary
+    mainProgram = "fluxgui";
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sheenobu ];
     platforms = lib.platforms.linux;
   };
