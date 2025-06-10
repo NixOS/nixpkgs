@@ -3,10 +3,14 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  runCommandLocal,
   withFzf ? true,
   fzf,
   installShellFiles,
   libiconv,
+  testers,
+  nushell,
+  zoxide,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,6 +35,28 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-Nonid/5Jh0WIQV0G3fpmkW0bql6bvlcNJBMZ+6MTTPQ=";
+
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = zoxide;
+      };
+      nushell-integration =
+        runCommandLocal "test-${zoxide.name}-nushell-integration"
+          ({
+            nativeBuildInputs = [
+              nushell
+              zoxide
+            ];
+            meta.platforms = nushell.meta.platforms;
+          })
+          (''
+            mkdir $out
+            nu -c "zoxide init nushell | save zoxide.nu"
+            nu -c "source zoxide.nu"
+          '');
+    };
+  };
 
   postInstall = ''
     installManPage man/man*/*
