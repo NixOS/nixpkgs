@@ -63,14 +63,24 @@ buildGoModule (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/lima-vm/lima";
     description = "Lima Guest Agents for emulating non-native architectures";
     longDescription = ''
-      Use this package only for a guest with a different architecture than the host.
-      This package requires "lima" to be available.
+      This package should only be used when your guest's architecture differs from the host's.
+
+      To enable its functionality in `limactl`, set `withAdditionalGuestAgents = true` in the `lima` package:
+      ```nix
+      pkgs.lima.override {
+        withAdditionalGuestAgents = true;
+      }
+      ```
+
+      Typically, you won't need to directly add this package to your *.nix files.
     '';
     changelog = "https://github.com/lima-vm/lima/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
