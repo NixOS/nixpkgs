@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
   unstableGitUpdater,
 }:
 
@@ -21,6 +22,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
+    "-X 'main.rawVersion=${finalAttrs.version}'"
   ];
 
   checkFlags =
@@ -39,6 +41,11 @@ buildGoModule (finalAttrs: {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/tofu-ls";
+  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = unstableGitUpdater { };
