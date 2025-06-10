@@ -4,21 +4,23 @@
   buildPythonPackage,
   pythonOlder,
   cython,
+  setuptools,
   pytestCheckHook,
   requests-toolbelt,
 }:
 
 buildPythonPackage rec {
   pname = "streaming-form-data";
-  version = "1.13.0";
-  format = "setuptools";
+  version = "1.19.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "siddhantgoel";
     repo = "streaming-form-data";
     rev = "v${version}";
-    hash = "sha256-Ntiad5GZtfRd+2uDPgbDzLBzErGFroffK6ZAmMcsfXA=";
+    hash = "sha256-3tK7dX5p1uH/azmFxzELM1bflGI/SHoLvsw+Ta+7rC4=";
   };
 
   # streaming-form-data has a small bit of code that uses smart_open, which has a massive closure.
@@ -26,13 +28,10 @@ buildPythonPackage rec {
   # So, just drop the dependency to not have to deal with it.
   patches = [ ./drop-smart-open.patch ];
 
-  # The repo has a vendored copy of the cython output, which doesn't build on 3.13,
-  # so regenerate it with our cython, which does.
-  preBuild = ''
-    cython streaming_form_data/_parser.pyx
-  '';
-
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
