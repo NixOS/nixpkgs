@@ -136,7 +136,46 @@ rec {
               (listOf valueType)
             ])
             // {
-              description = "YAML value";
+              description = "YAML 1.1 value";
+            };
+        in
+        valueType;
+
+    };
+
+  yaml_1_2 =
+    { }:
+    {
+      generate =
+        name: value:
+        pkgs.callPackage (
+          { runCommand, remarshal }:
+          runCommand name
+            {
+              nativeBuildInputs = [ remarshal ];
+              value = builtins.toJSON value;
+              passAsFile = [ "value" ];
+              preferLocalBuild = true;
+            }
+            ''
+              json2yaml "$valuePath" "$out"
+            ''
+        ) { };
+
+      type =
+        let
+          valueType =
+            nullOr (oneOf [
+              bool
+              int
+              float
+              str
+              path
+              (attrsOf valueType)
+              (listOf valueType)
+            ])
+            // {
+              description = "YAML 1.2 value";
             };
         in
         valueType;
