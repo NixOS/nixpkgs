@@ -190,11 +190,19 @@ stdenv.mkDerivation rec {
       --set-default LANG en_US.UTF-8 \
       --set-default LC_ALL en_US.UTF-8
 
+    makeWrapper "$out/dist/mupip" "$out/bin/mupip" \
+      --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath [ icu ]}" \
+      --set-default ydb_dist $out/dist/utf8 \
+      --set-default ydb_chset UTF-8 \
+      --set-default ydb_icu_version $(icu-config --version) \
+      --set-default LANG en_US.UTF-8 \
+      --set-default LC_ALL en_US.UTF-8
+
     cd $out/dist
     ln -rs yottadb mumps
     substitute "${yottadbGde}" gde --replace "@@YDB_PKG_DIR@@" "$out"
     chmod a+x gde
-    for utl in dse ftok gde gtcm_gnp_server gtcm_pkdisp gtcm_play gtcm_server gtcm_shmclean lke mupip semstat2 yottadb mumps ; do
+    for utl in dse ftok gde gtcm_gnp_server gtcm_pkdisp gtcm_play gtcm_server gtcm_shmclean lke semstat2 yottadb mumps ; do
       ln -rs $utl ../bin/
       ln -rs $utl ./utf8/
     done
