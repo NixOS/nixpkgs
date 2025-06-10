@@ -2318,6 +2318,8 @@ self: super: with self; {
 
   cdcs = callPackage ../development/python-modules/cdcs { };
 
+  cebra = callPackage ../development/python-modules/cebra { };
+
   celery = callPackage ../development/python-modules/celery { };
 
   celery-batches = callPackage ../development/python-modules/celery-batches { };
