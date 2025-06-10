@@ -270,7 +270,12 @@ in
     };
 
     # Set up the environment variables for running Nix.
-    environment.sessionVariables = cfg.envVars;
+    environment.sessionVariables =
+      # By default, including as the `root` user, Nix invocations should run via the daemon.
+      # If the user needs to override this, they can simply unset `NIX_REMOTE` if needed.
+      {
+        NIX_REMOTE = "daemon";
+      } // cfg.envVars;
 
     nix.nrBuildUsers = lib.mkDefault (
       if cfg.settings.auto-allocate-uids or false then
