@@ -1,25 +1,27 @@
 {
-  blas,
-  boost,
-  cmake,
-  fetchFromGitHub,
-  gfortran12,
   lib,
   stdenv,
+  fetchFromGitHub,
+  cmake,
+  blas,
+  boost,
+  gfortran12,
   tbb,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papilo";
-  version = "2.3.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-rB8kRyBxd+zn3XFueTQoN16jbFpXMvneqatQm8Hh2Hg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/1AsAesUh/5YXeCU2OYopoG3SXAwAecPD88QvGkb2bY=";
   };
+
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     blas
@@ -29,11 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  nativeBuildInputs = [ cmake ];
-
   propagatedBuildInputs = [ tbb ];
 
   strictDeps = true;
+
+  cmakeFlags = [ "-DTBB=off" ];
 
   doCheck = true;
 
