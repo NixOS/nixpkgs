@@ -30,6 +30,8 @@ let
 
         alsa = callPackage ../development/ocaml-modules/alsa { };
 
+        ancient = callPackage ../development/ocaml-modules/ancient { };
+
         angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
         angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
