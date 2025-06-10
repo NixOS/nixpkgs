@@ -145,11 +145,11 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
         entry += f'module_path: ' + get_kernel_uri(bootspec.initrd) + '\n'
 
     if bootspec.initrdSecrets:
-        initrd_secrets_path = limine_dir + '/kernels/' + os.path.basename(toplevel) + '-secrets'
+        initrd_secrets_path = limine_dir + '/kernels/' + os.path.basename(bootspec.toplevel) + '-secrets'
         os.makedirs(initrd_secrets_path)
 
         old_umask = os.umask(0o137)
-        initrd_secrets_path_temp = tempfile.mktemp(os.path.basename(toplevel) + '-secrets')
+        initrd_secrets_path_temp = tempfile.mktemp(os.path.basename(bootspec.toplevel) + '-secrets')
 
         if os.system(bootspec.initrdSecrets + " " + initrd_secrets_path_temp) != 0:
             print(f'warning: failed to create initrd secrets for "{label}"', file=sys.stderr)
