@@ -13,8 +13,8 @@ let
   param =
     if lib.versionAtLeast ppxlib.version "0.26.0" then
       {
-        version = "3.4";
-        sha256 = "sha256-mJMv2zl1UfFJjYdwv68hi7TWP+/oZB9tKHXt13r1SlA=";
+        version = "3.6";
+        sha256 = "sha256-NiNqur7sce6dxictVB+saOC1c4N/EO/3Ici/icsGkIA=";
       }
     else
       {

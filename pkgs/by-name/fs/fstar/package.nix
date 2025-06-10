@@ -1,6 +1,7 @@
 {
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   lib,
   makeWrapper,
@@ -28,7 +29,12 @@ ocamlPackages.buildDunePackage rec {
     hash = "sha256-PhjfThXF6fJlFHtNEURG4igCnM6VegWODypmRvnZPdA=";
   };
 
-  duneVersion = "3";
+  # Compatibility with sedlex ≥ 3.5
+  patches = fetchpatch {
+    url = "https://github.com/FStarLang/FStar/commit/11aff952b955d2c9582515ee2d64ca6993ce1b73.patch";
+    hash = "sha256-HlppygegUAYYPDVSzFJvMHXdDSoug636bFa19v3TGkc=";
+    excludes = [ "fstar.opam" ];
+  };
 
   nativeBuildInputs = [
     ocamlPackages.menhir
