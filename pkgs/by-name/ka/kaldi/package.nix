@@ -19,13 +19,13 @@
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 stdenv.mkDerivation (finalAttrs: {
   pname = "kaldi";
-  version = "0-unstable-2024-11-29";
+  version = "0-unstable-2025-04-28";
 
   src = fetchFromGitHub {
     owner = "kaldi-asr";
     repo = "kaldi";
-    rev = "701f13107fda71195ab76a7f9f51ed45ce4ec728";
-    sha256 = "sha256-Uusj5nkLyOiPI0mAdlykBDNEzHWE+tU/kUhVYzwjhOY=";
+    rev = "4b2bce7ffbb5777c40056784f7b6296037cebf29";
+    sha256 = "sha256-51IY07zasifeCMpW5RZ5x97JComBEddILwGpz/osEDs=";
   };
 
   cmakeFlags = [
