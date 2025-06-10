@@ -13,16 +13,16 @@
 
 buildNpmPackage rec {
   pname = "cinny-unwrapped";
-  version = "4.8.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
     tag = "v${version}";
-    hash = "sha256-yM+P7KXT/cspKt2l4+COoH68jCJUSs2TrfJGZHF/lYY=";
+    hash = "sha256-1F49KHAfCtvcqMeRYI8r6Ke7oz+EQqOfkgdgn5E1DU4=";
   };
 
-  npmDepsHash = "sha256-RWc8nSh/HuXUokU2RZnmwYUCfBxpL9Wp1Sgi2l1CN38=";
+  npmDepsHash = "sha256-Tx+08NrbFolI7agC6AtNvkOgCJWJa4fsY0CFC02h4r0=";
 
   nativeBuildInputs = [
     python3
