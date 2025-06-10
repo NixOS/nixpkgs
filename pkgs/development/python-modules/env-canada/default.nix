@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.10.2";
+  version = "0.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
-    tag = version;
+    tag = "v${version}";
     hash = "sha256-OguS5oRo7wNQUvT33k6+Sg8GE4GipFo84F/13TADUpw=";
   };
 
