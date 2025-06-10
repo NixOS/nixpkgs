@@ -14,7 +14,7 @@ let
       liminePath = cfg.package;
       efiMountPoint = efi.efiSysMountPoint;
       fileSystems = config.fileSystems;
-      luksDevices = config.boot.initrd.luks.devices;
+      luksDevices = builtins.attrNames config.boot.initrd.luks.devices;
       canTouchEfiVariables = efi.canTouchEfiVariables;
       efiSupport = cfg.efiSupport;
       efiRemovable = cfg.efiInstallAsRemovable;

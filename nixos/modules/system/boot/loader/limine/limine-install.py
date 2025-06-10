@@ -80,7 +80,7 @@ def get_gens(profile: str = 'system') -> List[Tuple[int, List[str]]]:
 
 
 def is_encrypted(device: str) -> bool:
-    for name, _ in config('luksDevices').items():
+    for name in config('luksDevices'):
         if os.readlink(os.path.join('/dev/mapper', name)) == os.readlink(device):
             return True
 
