@@ -15,6 +15,10 @@ concurrency:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   nixpkgs-lib-tests:
     name: nixpkgs-lib-tests
