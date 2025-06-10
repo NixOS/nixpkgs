@@ -12956,6 +12956,13 @@
     githubId = 8211181;
     name = "Kevin Kandlbinder";
   };
+  keyruu = {
+    name = "Lucas";
+    email = "me@keyruu.de";
+    matrix = "@keyruu:matrix.org";
+    github = "Keyruu";
+    githubId = 53177682;
+  };
   keysmashes = {
     email = "x-89cjg9@keysmash.solutions";
     github = "keysmashes";
