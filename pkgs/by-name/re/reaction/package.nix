@@ -1,29 +1,22 @@
 {
   lib,
-  buildGoModule,
   fetchFromGitLab,
+  rustPlatform,
+  nix-update-script,
 }:
-let
-  version = "1.4.1";
-in
-buildGoModule {
-  inherit version;
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "ppom";
     repo = "reaction";
-    rev = "v${version}";
-    hash = "sha256-UL3ck+gejZAu/mZS3ZiZ78a2/I+OesaSRZUhHirgu9o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HpnLh0JfGZsHcvDQSiKfW62QcCe/QDsVP/nGBo9x494=";
   };
 
-  vendorHash = "sha256-THUIoWFzkqaTofwH4clBgsmtUlLS9WIB2xjqW7vkhpg=";
-
-  ldflags = [
-    "-X main.version=${version}"
-    "-X main.commit=unknown"
-  ];
+  cargoHash = "sha256-i8KZygESxgty8RR3C+JMuE1aAsBxoLuGsL4jqjdGr0E=";
 
   postBuild = ''
     $CC helpers_c/ip46tables.c -o ip46tables
@@ -34,13 +27,15 @@ buildGoModule {
     cp ip46tables nft46 $out/bin
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Scan logs and take action: an alternative to fail2ban";
     homepage = "https://framagit.org/ppom/reaction";
-    changelog = "https://framagit.org/ppom/reaction/-/releases/v${version}";
+    changelog = "https://framagit.org/ppom/reaction/-/releases/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     mainProgram = "reaction";
     maintainers = with lib.maintainers; [ ppom ];
     platforms = lib.platforms.unix;
   };
-}
+})
