@@ -110,7 +110,11 @@ buildNpmPackage (finalAttrs: {
       genericName = "Shogi Frontend";
       comment = finalAttrs.meta.description;
       categories = [ "Game" ];
-      startupWMClass = "ShogiHome";
+
+      # The project was renamed "shogihome" from "electron-shogi."
+      # Some references to "electron-shogi" remain for compatibility.
+      # ref: https://github.com/sunfish-shogi/shogihome/commit/e5bbc4d43d231df23ac31c655adb64e11890993e
+      startupWMClass = "electron-shogi";
     })
   ];
 
