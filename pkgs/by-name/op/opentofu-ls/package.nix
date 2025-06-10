@@ -2,22 +2,21 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  versionCheckHook,
   unstableGitUpdater,
 }:
 
-buildGoModule {
-  pname = "opentofu-ls";
-  version = "0-unstable-2025-02-26";
+buildGoModule (finalAttrs: {
+  pname = "tofu-ls";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "opentofu";
-    repo = "opentofu-ls";
-    rev = "978a5fb56519a9f17833709119d2eb5fe604784e";
-    hash = "sha256-xBJkIuYqqUan2fo+s426vEIr5Qri8dM5arJACvKFjws=";
+    repo = "tofu-ls";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ioUhESBnGhVxeJQ+0lZ4tjfCWbc3mS2o584EXuXIqso=";
   };
 
-  vendorHash = "sha256-CrbLqcwPXHB80m4VhqrC8j5VhU2BUeuNy87+bc+Bq6I=";
+  vendorHash = "sha256-rUvqIebAhnR9b/RAiW8Md/D8NgDDKro1XodXSCtstjA=";
 
   ldflags = [
     "-s"
@@ -47,9 +46,9 @@ buildGoModule {
 
   meta = {
     description = "OpenTofu Language Server";
-    homepage = "https://github.com/opentofu/opentofu-ls";
+    homepage = "https://github.com/opentofu/tofu-ls";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    mainProgram = "opentofu-ls";
+    mainProgram = "tofu-ls";
   };
-}
+})
