@@ -32,6 +32,12 @@ let
 
         ancient = callPackage ../development/ocaml-modules/ancient { };
 
+        amqp-client = callPackage ../development/ocaml-modules/amqp-client { };
+
+        amqp-client-async = callPackage ../development/ocaml-modules/amqp-client/async.nix { };
+
+        amqp-client-lwt = callPackage ../development/ocaml-modules/amqp-client/lwt.nix { };
+
         angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
         angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
