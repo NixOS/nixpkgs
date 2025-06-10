@@ -2715,6 +2715,10 @@ self: super: with self; {
 
   colcon-output = callPackage ../development/python-modules/colcon-output { };
 
+  colcon-package-information =
+    callPackage ../development/python-modules/colcon-package-information
+      { };
+
   colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
 
   colcon-ros-domain-id-coordinator =
