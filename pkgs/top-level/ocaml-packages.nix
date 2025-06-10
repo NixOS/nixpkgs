@@ -1308,14 +1308,12 @@ let
 
         mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { };
 
-        mirage-crypto-rng-async = callPackage ../development/ocaml-modules/mirage-crypto/rng-async.nix { };
-
-        mirage-crypto-rng-eio = callPackage ../development/ocaml-modules/mirage-crypto/rng-eio.nix { };
-
-        mirage-crypto-rng-lwt = callPackage ../development/ocaml-modules/mirage-crypto/rng-lwt.nix { };
-
         mirage-crypto-rng-mirage =
           callPackage ../development/ocaml-modules/mirage-crypto/rng-mirage.nix
+            { };
+
+        mirage-crypto-rng-miou-unix =
+          callPackage ../development/ocaml-modules/mirage-crypto/rng-miou-unix.nix
             { };
 
         mirage-device = callPackage ../development/ocaml-modules/mirage-device { };
