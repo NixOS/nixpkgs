@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
   fetchpatch,
+  fetchFromGitLab,
   cairo,
   meson,
   ninja,
@@ -35,15 +35,24 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7/M9fcKSuwdKJ4jqiHtigzmP/e+vpJ+30I7+ZlimVkg=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "gstreamer";
+    repo = "gstreamer";
+    rev = finalAttrs.version;
+    hash = "sha256-FGhtpT6FKbA9YcdLwIzy3GMWKOt2xBuvivt4TwuXDeI=";
   };
+  sourceRoot = "${finalAttrs.src.name}/subprojects/gst-devtools";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src cargoRoot;
+    inherit (finalAttrs)
+      src
+      patches
+      sourceRoot
+      cargoRoot
+      ;
     name = "gst-devtools-${finalAttrs.version}";
-    hash = "sha256-p26jeKRDSPTgQzf4ckhLPSFa8RKsgkjUEXJG8IlPPZo=";
+    hash = "sha256-GLxevEwoTgS7kmDlul0AA2wIFRY7js8Ij4UIu1ZQf8I=";
   };
 
   patches = [
@@ -54,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
       stripLen = 2;
       hash = "sha256-CpBFTmdn+VO6ZeNe6NZR6ELvakZqQdaF3o3G5TSDuUU=";
     })
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/9208
+    ./update-static-files.patch
   ];
 
   depsBuildBuild = [

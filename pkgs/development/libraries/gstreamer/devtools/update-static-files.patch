@@ -1,0 +1,38 @@
+diff --git a/subprojects/gst-devtools/dots-viewer/Cargo.lock b/subprojects/gst-devtools/dots-viewer/Cargo.lock
+index 040cca0d41..94cae42569 100644
+--- a/dots-viewer/Cargo.lock
++++ b/dots-viewer/Cargo.lock
+@@ -1700,9 +1700,9 @@ checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
+ 
+ [[package]]
+ name = "static-files"
+-version = "0.2.4"
++version = "0.2.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4e8590e848e1c53be9258210bcd4a8f4118e08988f03a4e2d63b62e4ad9f7ced"
++checksum = "f9c425c07353535ef55b45420f5a8b0a397cd9bc3d7e5236497ca0d90604aa9b"
+ dependencies = [
+  "change-detection",
+  "mime_guess",
+diff --git a/subprojects/gst-devtools/dots-viewer/Cargo.toml b/subprojects/gst-devtools/dots-viewer/Cargo.toml
+index c795d83e82..5573fb3b14 100644
+--- a/dots-viewer/Cargo.toml
++++ b/dots-viewer/Cargo.toml
+@@ -20,7 +20,7 @@ once_cell = "1"
+ clap = { version = "4", features = ["derive"] }
+ serde = { version = "1.0", features = ["derive"] }
+ actix-web-static-files = "4.0"
+-static-files = "0.2.1"
++static-files = { version = "0.2.5", features = ["sort"] }
+ glob = "0.3"
+ single-instance = "0.3.3"
+ opener = "0.7.1"
+@@ -28,7 +28,7 @@ anyhow = "1.0"
+ windows = { version = "0.59", features = ["Win32_UI_Shell"] }
+ 
+ [build-dependencies]
+-static-files = "0.2.1"
++static-files = { version = "0.2.5", features = ["sort"] }
+ 
+ [[bin]]
+ name = "gst-dots-viewer"
