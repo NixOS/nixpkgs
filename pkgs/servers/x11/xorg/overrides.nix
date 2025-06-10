@@ -151,80 +151,6 @@ self: super:
 
   mkfontdir = xorg.mkfontscale;
 
-  libxcb = super.libxcb.overrideAttrs (attrs: {
-    # $dev/include/xcb/xcb.h includes pthread.h
-    propagatedBuildInputs =
-      attrs.propagatedBuildInputs or [ ]
-      ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
-    configureFlags = [
-      "--enable-xkb"
-      "--enable-xinput"
-    ] ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
-    outputs = [
-      "out"
-      "dev"
-      "man"
-      "doc"
-    ];
-    meta = attrs.meta // {
-      pkgConfigModules = [
-        "xcb-composite"
-        "xcb-damage"
-        "xcb-dpms"
-        "xcb-dri2"
-        "xcb-dri3"
-        "xcb-glx"
-        "xcb-present"
-        "xcb-randr"
-        "xcb-record"
-        "xcb-render"
-        "xcb-res"
-        "xcb-screensaver"
-        "xcb-shape"
-        "xcb-shm"
-        "xcb-sync"
-        "xcb-xf86dri"
-        "xcb-xfixes"
-        "xcb-xinerama"
-        "xcb-xinput"
-        "xcb-xkb"
-        "xcb-xtest"
-        "xcb-xv"
-        "xcb-xvmc"
-        "xcb"
-      ];
-      platforms = lib.platforms.unix ++ lib.platforms.windows;
-    };
-  });
-
-  libX11 = super.libX11.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "man"
-    ];
-    configureFlags =
-      attrs.configureFlags or [ ]
-      ++ malloc0ReturnsNullCrossFlag
-      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
-    depsBuildBuild =
-      [
-        buildPackages.stdenv.cc
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isStatic [
-        (xorg.buildPackages.libc.static or null)
-      ];
-    preConfigure = ''
-      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
-    '';
-    postInstall = ''
-      # Remove useless DocBook XML files.
-      rm -rf $out/share/doc
-    '';
-    CPP = lib.optionalString stdenv.hostPlatform.isDarwin "clang -E -";
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
-  });
-
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [
       autoreconfHook
@@ -232,25 +158,6 @@ self: super:
     ];
     meta = attrs.meta // {
       platforms = lib.platforms.darwin;
-    };
-  });
-
-  libXau = super.libXau.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
-  });
-
-  libXdmcp = super.libXdmcp.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    meta = attrs.meta // {
-      pkgConfigModules = [ "xdmcp" ];
     };
   });
 
@@ -407,20 +314,6 @@ self: super:
     passthru = attrs.passthru // {
       inherit freetype fontconfig;
     };
-  });
-
-  libXext = super.libXext.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "man"
-      "doc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.xorgproto
-      xorg.libXau
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
   libXfixes = super.libXfixes.overrideAttrs (attrs: {
@@ -849,13 +742,6 @@ self: super:
     };
   });
 
-  xdriinfo = super.xdriinfo.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ libGL ];
-    meta = attrs.meta // {
-      mainProgram = "xdriinfo";
-    };
-  });
-
   xev = addMainProgram super.xev { };
   xeyes = addMainProgram super.xeyes { };
 
@@ -929,13 +815,6 @@ self: super:
       nativeBuildInputs = old.nativeBuildInputs ++ [ automake ];
       postPatch = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
-
-  xlsfonts = super.xlsfonts.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      license = lib.licenses.mit;
-      mainProgram = "xlsfonts";
-    };
-  });
 
   xorgserver = super.xorgserver.overrideAttrs (
     attrs_passed:
@@ -1209,7 +1088,6 @@ self: super:
 
   xbacklight = addMainProgram super.xbacklight { };
   xclock = addMainProgram super.xclock { };
-  xcmsdb = addMainProgram super.xcmsdb { };
   xcompmgr = addMainProgram super.xcompmgr { };
   xconsole = addMainProgram super.xconsole { };
   xcursorgen = addMainProgram super.xcursorgen { };
@@ -1337,11 +1215,8 @@ self: super:
   xkbprint = addMainProgram super.xkbprint { };
   xkill = addMainProgram super.xkill { };
   xload = addMainProgram super.xload { };
-  xlsatoms = addMainProgram super.xlsatoms { };
-  xlsclients = addMainProgram super.xlsclients { };
   xmag = addMainProgram super.xmag { };
   xmessage = addMainProgram super.xmessage { };
-  xmodmap = addMainProgram super.xmodmap { };
   xmore = addMainProgram super.xmore { };
 
   xpr = addMainProgram super.xpr { };
