@@ -31,7 +31,7 @@ class BootSpec:
 install_config = json.load(open('@configPath@', 'r'))
 libc = CDLL("libc.so.6")
 
-limine_dir: Optional[str] = None
+limine_install_dir: Optional[str] = None
 can_use_direct_paths = False
 paths: Dict[str, bool] = {}
 
@@ -93,7 +93,7 @@ def get_copied_path_uri(path: str, target: str) -> str:
     package_id = os.path.basename(os.path.dirname(path))
     suffix = os.path.basename(path)
     dest_file = f'{package_id}-{suffix}'
-    dest_path = os.path.join(limine_dir, target, dest_file)
+    dest_path = os.path.join(limine_install_dir, target, dest_file)
 
     if not os.path.exists(dest_path):
         copy_file(path, dest_path)
@@ -145,7 +145,7 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
         entry += f'module_path: ' + get_kernel_uri(bootspec.initrd) + '\n'
 
     if bootspec.initrdSecrets:
-        initrd_secrets_path = limine_dir + '/kernels/' + os.path.basename(bootspec.toplevel) + '-secrets'
+        initrd_secrets_path = limine_install_dir + '/kernels/' + os.path.basename(bootspec.toplevel) + '-secrets'
         os.makedirs(initrd_secrets_path)
 
         old_umask = os.umask(0o137)
@@ -229,7 +229,7 @@ def option_from_config(name: str, config_path: List[str], conversion: Callable[[
 
 
 def install_bootloader() -> None:
-    global limine_dir
+    global limine_install_dir
 
     boot_fs = None
 
@@ -238,9 +238,9 @@ def install_bootloader() -> None:
             boot_fs = fs
 
     if config('efiSupport'):
-        limine_dir = os.path.join(config('efiMountPoint'), 'limine')
+        limine_install_dir = os.path.join(config('efiMountPoint'), 'limine')
     elif boot_fs and is_fs_type_supported(boot_fs['fsType']) and not is_encrypted(boot_fs['device']):
-        limine_dir = '/boot/limine'
+        limine_install_dir = '/boot/limine'
     else:
         possible_causes = []
         if not boot_fs:
@@ -264,10 +264,10 @@ def install_bootloader() -> None:
         print("There are no sbctl secure boot keys present. Please generate some.")
         sys.exit(1)
 
-    if not os.path.exists(limine_dir):
-        os.makedirs(limine_dir)
+    if not os.path.exists(limine_install_dir):
+        os.makedirs(limine_install_dir)
     else:
-        for dir, dirs, files in os.walk(limine_dir, topdown=True):
+        for dir, dirs, files in os.walk(limine_install_dir, topdown=True):
             for file in files:
                 paths[os.path.join(dir, file)] = False
 
@@ -328,7 +328,7 @@ def install_bootloader() -> None:
             config_file += generate_config_entry(profile, gen, isFirst)
             isFirst = False
 
-    config_file_path = os.path.join(limine_dir, 'limine.conf')
+    config_file_path = os.path.join(limine_install_dir, 'limine.conf')
     config_file += '\n# NixOS boot entries end here\n\n'
 
     config_file += config('extraEntries')
@@ -343,7 +343,7 @@ def install_bootloader() -> None:
     paths[config_file_path] = True
 
     for dest_path, source_path in config('additionalFiles').items():
-        dest_path = os.path.join(limine_dir, dest_path)
+        dest_path = os.path.join(limine_install_dir, dest_path)
 
         copy_file(source_path, dest_path)
 
@@ -452,7 +452,7 @@ def install_bootloader() -> None:
             raise Exception(f'Unsupported CPU family for BIOS install: {cpu_family}')
 
         limine_sys = os.path.join(config('liminePath'), 'share', 'limine', 'limine-bios.sys')
-        limine_sys_dest = os.path.join(limine_dir, 'limine-bios.sys')
+        limine_sys_dest = os.path.join(limine_install_dir, 'limine-bios.sys')
 
         copy_file(limine_sys, limine_sys_dest)
 
