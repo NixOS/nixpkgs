@@ -103,6 +103,7 @@ in
 
     xdg = {
       icons.fallbackCursorThemes = lib.mkDefault [ "Cosmic" ];
+      autostart.enable = lib.mkDefault true;
 
       portal = {
         enable = true;
@@ -111,17 +112,6 @@ in
           xdg-desktop-portal-gtk
         ];
         configPackages = lib.mkDefault [ pkgs.xdg-desktop-portal-cosmic ];
-      };
-    };
-
-    systemd = {
-      packages = [ pkgs.cosmic-session ];
-      user.targets = {
-        # TODO: remove when upstream has XDG autostart support
-        cosmic-session = {
-          wants = [ "xdg-desktop-autostart.target" ];
-          before = [ "xdg-desktop-autostart.target" ];
-        };
       };
     };
 
@@ -144,6 +134,7 @@ in
     services.geoclue2.enableDemoAgent = false;
     services.libinput.enable = true;
     services.upower.enable = true;
+    systemd.packages = [ pkgs.cosmic-session ];
     # Required for screen locker
     security.pam.services.cosmic-greeter = { };
 
