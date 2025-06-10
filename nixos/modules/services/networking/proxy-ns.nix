@@ -23,7 +23,6 @@ in
 {
   options.services.proxy-ns = {
     enable = lib.mkEnableOption "proxy-ns";
-    #    config = mkConfig;
     config = lib.mkOption { type = lib.type.path; };
     package = lib.mkPackageOption pkgs "proxy-ns";
   };
