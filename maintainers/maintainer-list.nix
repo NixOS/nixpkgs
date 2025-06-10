@@ -13947,6 +13947,12 @@
     githubId = 567634;
     name = "Daniel Kuehn";
   };
+  leleuvilela = {
+    email = "viniciusvilela19@gmail.com";
+    github = "leleuvilela";
+    githubId = 19839085;
+    name = "Vinicius Vilela";
+  };
   lelgenio = {
     email = "lelgenio@lelgenio.com";
     github = "lelgenio";
@@ -14949,6 +14955,13 @@
     githubId = 42996147;
     name = "Mæve";
     keys = [ { fingerprint = "96C9 D086 CC9D 7BD7 EF24  80E2 9168 796A 1CC3 AEA2"; } ];
+  };
+  maeve-oake = {
+    email = "maeve@oa.ke";
+    matrix = "@maeve:oa.ke";
+    github = "maeve-oake";
+    githubId = 38541651;
+    name = "maeve";
   };
   mafo = {
     email = "Marc.Fontaine@gmx.de";
