@@ -150,7 +150,6 @@ stdenv.mkDerivation rec {
       lgpl21Only
     ];
     maintainers = with lib.maintainers; [
-      primeos
       oxalica
     ];
     outputsToInstall = [ "bin" ];
