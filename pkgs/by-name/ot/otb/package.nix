@@ -309,6 +309,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.orfeo-toolbox.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
+    teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.linux;
   };
 })
