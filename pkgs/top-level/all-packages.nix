@@ -3286,8 +3286,6 @@ with pkgs;
 
   heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack { };
 
-  heimdall = libsForQt5.callPackage ../tools/misc/heimdall { };
-
   heimdall-gui = heimdall.override { enableGUI = true; };
 
   headscale = callPackage ../servers/headscale { };
@@ -9813,10 +9811,6 @@ with pkgs;
 
   xgboostWithCuda = xgboost.override { cudaSupport = true; };
 
-  yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt { };
-
-  yubikey-personalization-gui = libsForQt5.callPackage ../tools/misc/yubikey-personalization-gui { };
-
   zlib = callPackage ../development/libraries/zlib {
     stdenv =
       # zlib is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
@@ -16229,10 +16223,6 @@ with pkgs;
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
 
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
-
-  mailcore2 = callPackage ../development/libraries/mailcore2 {
-    icu = icu71;
-  };
 
   meilisearch_1_11 = callPackage ../by-name/me/meilisearch/package.nix { version = "1.11.3"; };
 
