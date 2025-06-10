@@ -16,7 +16,6 @@ import sys
 import tempfile
 import textwrap
 
-
 @dataclass
 class BootSpec:
     system: str
@@ -29,7 +28,6 @@ class BootSpec:
     initrd: str | None = None
     initrdSecrets: str | None = None
 
-
 install_config = json.load(open('@configPath@', 'r'))
 libc = CDLL("libc.so.6")
 
@@ -37,12 +35,11 @@ limine_dir: Optional[str] = None
 can_use_direct_paths = False
 paths: Dict[str, bool] = {}
 
-def config(*path: List[str]) -> Optional[Any]:
+def config(*path: str) -> Optional[Any]:
     result = install_config
     for component in path:
         result = result[component]
     return result
-
 
 def get_system_path(profile: str = 'system', gen: Optional[str] = None, spec: Optional[str] = None) -> str:
     basename = f'{profile}-{gen}-link' if gen is not None else profile
