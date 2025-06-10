@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -21,6 +22,10 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-X main.Version=${version}" ];
+
+  passthru.tests = {
+    inherit (nixosTests) postfix-tlspol;
+  };
 
   meta = {
     description = "Lightweight MTA-STS + DANE/TLSA resolver and TLS policy server for Postfix, prioritizing DANE.";
