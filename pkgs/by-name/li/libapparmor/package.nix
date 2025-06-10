@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch2,
   autoreconfHook,
   autoconf-archive,
   pkg-config,
@@ -33,26 +32,15 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libapparmor";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitLab {
     owner = "apparmor";
     repo = "apparmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oj6mGw/gvoRGpJqw72Lk6LJuurg8efjiV1pvZYbXz6A=";
+    hash = "sha256-f9FgowlV4lZKKuddGCirqbajhIGyTUQc7IFHSvqY6eQ=";
   };
   sourceRoot = "${finalAttrs.src.name}/libraries/libapparmor";
-
-  patches = [
-    # avoid creating non-reproducible pycache in check phase
-    # https://gitlab.com/apparmor/apparmor/-/merge_requests/1697
-    # remove on next release
-    (fetchpatch2 {
-      url = "https://gitlab.com/apparmor/apparmor/-/commit/b50ee983522f0efb5920676db545ae25b2e8998d.patch";
-      hash = "sha256-AXl0osJHX4uUGppiOuHjpvlSRChqGyRCqv+8TYoLYMk=";
-      stripLen = 2;
-    })
-  ];
 
   postPatch = ''
     substituteInPlace swig/perl/Makefile.am \
