@@ -41,11 +41,25 @@ stdenv.mkDerivation rec {
     mv usr $out
     # Wrap the service binary
     makeWrapper $out/lib/wi-fiman-desktop/wifiman-desktopd $out/bin/wifiman-desktopd \
-      --prefix PATH : ${wirelesstools}/bin:${iw}/bin:${nettools}/bin
+      --prefix PATH : ${
+      lib.makeBinPath [
+        iw
+        nettools
+        wirelesstools
+      ]
+    }
     # Wrap the desktop binary
     wrapProgram $out/bin/wi-fiman-desktop \
-      --prefix PATH : ${desktop-file-utils}/bin \
-      --prefix LD_LIBRARY_PATH : ${libayatana-appindicator}/lib
+      --prefix PATH : ${
+        lib.makeBinPath [
+          desktop-file-utils
+        ]
+      } \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libayatana-appindicator
+        ]
+      }
   '';
 
   meta = with lib; {
