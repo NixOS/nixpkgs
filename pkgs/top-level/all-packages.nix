@@ -6375,13 +6375,11 @@ with pkgs;
 
   beam26Packages = recurseIntoAttrs beam.packages.erlang_26.beamPackages;
   beam27Packages = recurseIntoAttrs beam.packages.erlang_27.beamPackages;
-  # 28 is pre-release
-  beam28Packages = dontRecurseIntoAttrs beam.packages.erlang_28.beamPackages;
+  beam28Packages = recurseIntoAttrs beam.packages.erlang_28.beamPackages;
 
   beamMinimal26Packages = recurseIntoAttrs beam_minimal.packages.erlang_26.beamPackages;
   beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27.beamPackages;
-  # 28 is pre-release
-  beamMinimal28Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_28.beamPackages;
+  beamMinimal28Packages = recurseIntoAttrs beam_minimal.packages.erlang_28.beamPackages;
 
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
