@@ -148,8 +148,7 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
         initrd_secrets_path = limine_dir + '/kernels/' + os.path.basename(toplevel) + '-secrets'
         os.makedirs(initrd_secrets_path)
 
-        old_umask = os.umask()
-        os.umask(0o137)
+        old_umask = os.umask(0o137)
         initrd_secrets_path_temp = tempfile.mktemp(os.path.basename(toplevel) + '-secrets')
 
         if os.system(bootspec.initrdSecrets + " " + initrd_secrets_path_temp) != 0:
