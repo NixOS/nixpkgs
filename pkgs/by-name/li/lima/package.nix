@@ -116,6 +116,9 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://github.com/lima-vm/lima";
     description = "Linux virtual machines with automatic file sharing and port forwarding";
+    longDescription = ''
+      Guest agents for non-native architectures are in the "lima-additional-guestagents" package.
+    '';
     changelog = "https://github.com/lima-vm/lima/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

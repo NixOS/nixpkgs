@@ -68,6 +68,10 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://github.com/lima-vm/lima";
     description = "Lima Guest Agents for emulating non-native architectures";
+    longDescription = ''
+      Use this package only for a guest with a different architecture than the host.
+      This package requires "lima" to be available.
+    '';
     changelog = "https://github.com/lima-vm/lima/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
