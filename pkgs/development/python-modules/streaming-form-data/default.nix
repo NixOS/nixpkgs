@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   cython,
   setuptools,
   pytestCheckHook,
@@ -14,12 +13,10 @@ buildPythonPackage rec {
   version = "1.19.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "siddhantgoel";
     repo = "streaming-form-data";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3tK7dX5p1uH/azmFxzELM1bflGI/SHoLvsw+Ta+7rC4=";
   };
 
@@ -28,7 +25,7 @@ buildPythonPackage rec {
   # So, just drop the dependency to not have to deal with it.
   patches = [ ./drop-smart-open.patch ];
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
   ];
@@ -42,14 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "streaming_form_data" ];
 
-  preCheck = ''
-    # remove in-tree copy to make pytest find the installed one, with the native parts already built
-    rm -rf streaming_form_data
-  '';
-
   meta = {
     description = "Streaming parser for multipart/form-data";
     homepage = "https://github.com/siddhantgoel/streaming-form-data";
+    changelog = "https://github.com/siddhantgoel/streaming-form-data/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
   };
