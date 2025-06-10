@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   unzip,
@@ -300,6 +301,13 @@ effectiveStdenv.mkDerivation {
   patches =
     [
       ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+      # NOTE: remove patch in opencv v4.12.0 (next release)
+      # https://github.com/opencv/opencv/pull/27428
+      # it is required to allow cross compilation by letting PROTOC_EXE be set by protobuf hook
+      (fetchpatch2 {
+        url = "https://github.com/opencv/opencv/commit/bbe2f50b5d50a282b2260100be9e559067e55fbf.patch?full_index=1";
+        hash = "sha256-T+zmrOeyEmNyu1hJPDGUub59EMXwe6ZqP6PV/tDJFCk=";
+      })
     ]
     ++ optionals enableCuda [
       ./cuda_opt_flow.patch
