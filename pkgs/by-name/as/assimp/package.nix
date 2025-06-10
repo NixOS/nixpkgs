@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "assimp";
-  version = "5.4.3";
+  version = "6.0.2";
   outputs = [
     "out"
     "lib"
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";
-    hash = "sha256-sOYhYHBz3Tg+pi1OIJ1mGmsjEc6dPO6nFH0aolfpLRA=";
+    hash = "sha256-ixtqK+3iiL17GEbEVHz5S6+gJDDQP7bVuSfRMJMGEOY=";
   };
 
   nativeBuildInputs = [ cmake ];
