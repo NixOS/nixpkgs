@@ -3,13 +3,11 @@
   desktop-file-utils,
   dpkg,
   fetchurl,
-  gtk3,
   iw,
   lib,
   libayatana-appindicator,
   makeWrapper,
   nettools,
-  openresolv,
   stdenv,
   webkitgtk_4_0,
   wirelesstools,
@@ -28,7 +26,6 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     dpkg
     makeWrapper
-    openresolv
   ];
 
   buildInputs = [
