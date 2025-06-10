@@ -35,20 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
   ];
-  cmakeFlags = [
-    (lib.cmakeBool "MI_INSTALL_TOPLEVEL" true)
-    (lib.cmakeBool "DMI_SECURE" secureBuild)
-    (lib.cmakeBool "MI_BUILD_SHARED" (
-      !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.hasSharedLibraries
-    ))
-    (lib.cmakeBool "MI_LIBC_MUSL" (stdenv.hostPlatform.libc == "musl"))
-    (lib.cmakeBool "MI_LOCAL_DYNAMIC_TLS" localDynamicTLS)
-    (lib.cmakeBool "MI_BUILD_TESTS" finalAttrs.doCheck)
+  cmakeFlags = lib.mapAttrsToList lib.cmakeBool {
+    MI_INSTALL_TOPLEVEL = true;
+    MI_SECURE = secureBuild;
+    MI_BUILD_SHARED = !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.hasSharedLibraries;
+    MI_LIBC_MUSL = stdenv.hostPlatform.libc == "musl";
+    MI_LOCAL_DYNAMIC_TLS = localDynamicTLS;
+    MI_BUILD_TESTS = finalAttrs.doCheck;
 
     # MI_OPT_ARCH is inaccurate (e.g. it assumes aarch64 == armv8.1-a).
     # Nixpkgs's native platform configuration does a better job.
-    (lib.cmakeBool "MI_OPT_ARCH" false)
-  ];
+    MI_NO_OPT_ARCH = true;
+  };
 
   postPatch = ''
     substituteInPlace cmake/mimalloc-config.cmake \
