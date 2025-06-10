@@ -1,9 +1,10 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   makeWrapper,
   patchelf,
+  bintools,
   dpkg,
 
   # Linked dynamic libraries.
@@ -176,7 +177,7 @@ let
     ++ lib.optionals libvaSupport [ libva ];
 in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
   version = "137.0.3296.68";
 
@@ -272,7 +273,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     for elf in $out/share/microsoft/$appname/{msedge,msedge-sandbox,msedge_crashpad_handler}; do
       patchelf --set-rpath $rpath $elf
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
+      patchelf --set-interpreter ${bintools.dynamicLinker} $elf
     done
 
     runHook postInstall
@@ -289,7 +290,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       cholli
       ulrikstrid
-      emaryn
       maeve-oake
       leleuvilela
     ];
