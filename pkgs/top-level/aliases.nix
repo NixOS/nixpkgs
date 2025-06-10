@@ -1781,6 +1781,7 @@ mapAliases {
   SP800-90B_EntropyAssessment = sp800-90b-entropyassessment; # Added on 2024-06-12
   SPAdes = spades; # Added 2024-06-12
   spark2014 = gnatprove; # Added 2024-02-25
+  space-orbit = throw "'space-orbit' has been removed because it is unmaintained; Debian upstream stopped tracking it in 2011."; # Added 2025-06-08
   spatialite_gui = throw "spatialite_gui has been renamed to spatialite-gui"; # Added 2025-01-12
   spatialite_tools = throw "spatialite_tools has been renamed to spatialite-tools"; # Added 2025-02-06
 
