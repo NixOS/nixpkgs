@@ -13,6 +13,6 @@ buildDotnetGlobalTool {
     changelog = "https://github.com/belav/csharpier/blob/main/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ zoriya ];
-    mainProgram = "dotnet-csharpier";
+    mainProgram = "csharpier";
   };
 }
