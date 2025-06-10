@@ -290,7 +290,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       cholli
       ulrikstrid
-      emaryn
       maeve-oake
       leleuvilela
     ];
