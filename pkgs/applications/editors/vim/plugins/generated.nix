@@ -5490,19 +5490,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  gleam-vim = buildVimPlugin {
-    pname = "gleam.vim";
-    version = "2025-04-24";
-    src = fetchFromGitHub {
-      owner = "gleam-lang";
-      repo = "gleam.vim";
-      rev = "7174886f4974629a4427b0c703d6ce77f39422c5";
-      sha256 = "0g99zc9x9l5mdh6nmlkwfqh4hk82ncqcgdzjp5b702fiymjhpkf4";
-    };
-    meta.homepage = "https://github.com/gleam-lang/gleam.vim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   glow-nvim = buildVimPlugin {
     pname = "glow.nvim";
     version = "2025-03-21";
