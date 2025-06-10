@@ -22,6 +22,10 @@ concurrency:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   request:
     name: Request
