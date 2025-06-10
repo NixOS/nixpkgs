@@ -1,6 +1,5 @@
 {
   cmake,
-  callPackage,
   fetchFromGitHub,
   fetchpatch,
   makeWrapper,
@@ -43,7 +42,7 @@
   enableThirdParty ? true,
 }:
 let
-  inherit (lib) optionalString optionals optional;
+  inherit (lib) optionals;
   pythonInputs =
     optionals enablePython (with python3.pkgs; [ numpy ]) ++ (extraPythonPackages python3.pkgs);
 
