@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nbraud";
+    owner = "nicoonoclaste";
     repo = "memtree";
     rev = "279f1fa0a811de86c278ce74830bd8aa1b00db58";
     hash = "sha256-gUULox3QSx68x8lb1ytanY36cw/I9L4HdpR8OPOsxuc=";
