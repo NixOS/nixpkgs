@@ -7,23 +7,21 @@
 
 python3Packages.buildPythonApplication {
   pname = "memtree";
-  version = "0-unstable-2024-01-04";
+  version = "0-unstable-2025-06-10";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nbraud";
+    owner = "nicoonoclaste";
     repo = "memtree";
-    rev = "97615952eabdc5e8e1a4bd590dd1f4971f3c5a24";
-    hash = "sha256-Ifp8hwkuyBw57fGer3GbDiJaRjL4TD3hzj+ecGXWqI0=";
+    rev = "ad1a7d1e4fa5f195c2aa1012101d01ab580a05e8";
+    hash = "sha256-UmleB7wr1bh9t7vwt3o8Uwp3LUzAzB5jlPi3OvgECAg=";
   };
 
-  pythonRelaxDeps = [ "rich" ];
-
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     rich
   ];
 
