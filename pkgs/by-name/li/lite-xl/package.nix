@@ -8,7 +8,6 @@
   cmake,
   pcre2,
   pkg-config,
-  SDL2,
   sdl3,
   stdenv,
 }:
@@ -37,7 +36,6 @@ stdenv.mkDerivation {
     freetype
     lua5_4
     pcre2
-    SDL2
     sdl3
   ];
 
