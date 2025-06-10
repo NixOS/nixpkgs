@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mv usr $out
-    substituteInPlace $out/share/applications/wi-fiman-desktop.desktop --replace /usr/ $out/
     # Wrap the service binary
     makeWrapper $out/lib/wi-fiman-desktop/wifiman-desktopd $out/bin/wifiman-desktopd \
       --prefix PATH : ${wirelesstools}/bin:${iw}/bin:${nettools}/bin
