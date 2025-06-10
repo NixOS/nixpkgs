@@ -70,6 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     platforms = platforms.unix;
     pkgConfigModules = [ "iniparser" ];
-    maintainers = [ maintainers.primeos ];
+    maintainers = [ ];
   };
 })
