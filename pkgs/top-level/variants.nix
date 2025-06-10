@@ -95,6 +95,15 @@ self: super: {
     };
   });
 
+  # Full package set with cuda on rocm off
+  # Mostly useful for asserting pkgs.pkgsCuda.torchWithCuda == pkgs.torchWithCuda and similar
+  pkgsCuda = nixpkgsFun {
+    config = super.config // {
+      cudaSupport = true;
+      rocmSupport = false;
+    };
+  };
+
   # `pkgsForCudaArch` maps each CUDA capability in _cuda.db.cudaCapabilityToInfo to a Nixpkgs variant configured for
   # that target system. For example, `pkgsForCudaArch.sm_90a.python3Packages.torch` refers to PyTorch built for the
   # Hopper architecture, leveraging architecture-specific features.
