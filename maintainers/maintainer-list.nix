@@ -3813,6 +3813,12 @@
     githubId = 2379774;
     name = "Sean Buckley";
   };
+  bugarela = {
+    email = "gabrielamoreira05@gmail.com";
+    github = "bugarela";
+    githubId = 18356186;
+    name = "Gabriela Moreira";
+  };
   bugworm = {
     email = "bugworm@zoho.com";
     github = "bugworm";
@@ -12264,6 +12270,11 @@
     email = "josh@jniemela.dk";
     github = "joshniemela";
     githubId = 88747315;
+  };
+  joshprk = {
+    name = "Joshua Park";
+    github = "joshprk";
+    githubId = 123624726;
   };
   joshuafern = {
     name = "Joshua Fern";
@@ -23673,6 +23684,12 @@
     github = "StarGate01";
     githubId = 6362238;
     name = "Christoph Honal";
+  };
+  starius = {
+    email = "bnagaev@gmail.com";
+    github = "starius";
+    githubId = 920155;
+    name = "Boris Nagaev";
   };
   starkca90 = {
     email = "starkca90@gmail.com";

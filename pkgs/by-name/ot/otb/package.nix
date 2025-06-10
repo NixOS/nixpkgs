@@ -234,9 +234,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./1-otb-swig-include-itk.diff
   ];
 
-  postPatch = (
-    "substituteInPlace Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt --replace-fail '''$''{ITK_INCLUDE_DIRS}' ${otb-itk}/include/ITK-${itkMajorMinorVersion}"
-  );
+  postPatch =
+    ''
+      substituteInPlace Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt \
+        --replace-fail ''\'''${ITK_INCLUDE_DIRS}' "${otb-itk}/include/ITK-${itkMajorMinorVersion}"
+    ''
+    # Add the header file "vcl_legacy_aliases.h", which defines the legacy vcl_* functions.
+    # This patch fixes the unreproducible build of OTB.
+    # See https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2484.
+    + ''
+      sed -i '/#include "vcl_compiler.h"/a #include "vcl_legacy_aliases.h"' Modules/Core/Mosaic/include/otbMosaicFunctors.h
+    '';
 
   nativeBuildInputs = [
     cmake
