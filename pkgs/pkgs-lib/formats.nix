@@ -52,26 +52,26 @@ let
 
   # Attributes added accidentally in https://github.com/NixOS/nixpkgs/pull/335232 (2024-08-18)
   # Deprecated in https://github.com/NixOS/nixpkgs/pull/415666 (2025-06)
-  aliases =
-    lib.mapAttrs (name: lib.warn "`formats.${name}` is deprecated; use `lib.types.${name}` instead.")
-      {
-        inherit
-          attrsOf
-          bool
-          coercedTo
-          either
-          float
-          int
-          listOf
-          luaInline
-          mkOptionType
-          nonEmptyListOf
-          nullOr
-          oneOf
-          path
-          str
-          ;
-      };
+  allowAliases = pkgs.config.allowAliases or false;
+  aliasWarning = name: warn "`formats.${name}` is deprecated; use `lib.types.${name}` instead.";
+  aliases = mapAttrs aliasWarning {
+    inherit
+      attrsOf
+      bool
+      coercedTo
+      either
+      float
+      int
+      listOf
+      luaInline
+      mkOptionType
+      nonEmptyListOf
+      nullOr
+      oneOf
+      path
+      str
+      ;
+  };
 in
 optionalAttrs allowAliases aliases
 // rec {
