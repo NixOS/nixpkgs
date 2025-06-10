@@ -11306,6 +11306,8 @@ self: super: with self; {
 
   pid = callPackage ../development/python-modules/pid { };
 
+  pidng = callPackage ../development/python-modules/pidng { };
+
   piep = callPackage ../development/python-modules/piep { };
 
   piexif = callPackage ../development/python-modules/piexif { };
@@ -11418,6 +11420,8 @@ self: super: with self; {
   pixel-font-knife = callPackage ../development/python-modules/pixel-font-knife { };
 
   pixel-ring = callPackage ../development/python-modules/pixel-ring { };
+
+  pixutils = callPackage ../development/python-modules/pixutils { };
 
   pjsua2 =
     (toPythonModule (
