@@ -49,11 +49,20 @@ buildGoModule (finalAttrs: {
   # voiding the entitlements and making it non-operational.
   dontStrip = stdenv.hostPlatform.isDarwin;
 
-  buildPhase = ''
-    runHook preBuild
-    make "VERSION=v${finalAttrs.version}" "CC=${stdenv.cc.targetPrefix}cc" native
-    runHook postBuild
-  '';
+  buildPhase =
+    let
+      makeFlags = [
+        "VERSION=v${finalAttrs.version}"
+        "CC=${stdenv.cc.targetPrefix}cc"
+      ];
+    in
+    ''
+      runHook preBuild
+
+      make ${lib.escapeShellArgs makeFlags} native
+
+      runHook postBuild
+    '';
 
   installPhase =
     ''

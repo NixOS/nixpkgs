@@ -25,13 +25,20 @@ buildGoModule (finalAttrs: {
     apple-sdk_15
   ];
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    let
+      makeFlags = [
+        "VERSION=v${finalAttrs.version}"
+        "CC=${stdenv.cc.targetPrefix}cc"
+      ];
+    in
+    ''
+      runHook preBuild
 
-    make "VERSION=v${finalAttrs.version}" "CC=${stdenv.cc.targetPrefix}cc" additional-guestagents
+      make ${lib.escapeShellArgs makeFlags} additional-guestagents
 
-    runHook postBuild
-  '';
+      runHook postBuild
+    '';
 
   installPhase = ''
     runHook preInstall
