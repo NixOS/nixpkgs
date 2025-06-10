@@ -71,13 +71,16 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Upstream makefile does not work with system deps on macOS by default, so
+    # we reuse the Linux section instead.
+    ./fix-darwin-system-deps.patch
     # Upstream C++ wrap script only defines fixed-sized integers on macOS but
     # this is required on aarch64-linux too.
     ./fix-cpp-build.patch
   ];
 
   postPatch = ''
-    substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
+    substituteInPlace Makerules --replace-fail "(shell pkg-config" "(shell $PKG_CONFIG"
 
     patchShebangs scripts/mupdfwrap.py
 
@@ -86,7 +89,7 @@ stdenv.mkDerivation rec {
 
     # fix libclang unnamed struct format
     for wrapper in ./scripts/wrap/{cpp,state}.py; do
-      substituteInPlace "$wrapper" --replace 'struct (unnamed' '(unnamed struct'
+      substituteInPlace "$wrapper" --replace-fail 'struct (unnamed' '(unnamed struct'
     done
   '';
 
@@ -259,7 +262,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env.USE_SONAME = "yes";
+  env.USE_SONAME = if (stdenv.hostPlatform.isDarwin) then "no" else "yes";
 
   passthru = {
     tests = {
