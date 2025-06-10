@@ -1181,6 +1181,7 @@ in
   restartByActivationScript = runTest ./restart-by-activation-script.nix;
   restic-rest-server = runTest ./restic-rest-server.nix;
   restic = runTest ./restic.nix;
+  restrict-suid-sgid = runTest ./restrict-suid-sgid.nix;
   retroarch = runTest ./retroarch.nix;
   rke2 = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./rke2 { };
   rkvm = handleTest ./rkvm { };
