@@ -17,13 +17,11 @@ python3Packages.buildPythonApplication {
     hash = "sha256-gUULox3QSx68x8lb1ytanY36cw/I9L4HdpR8OPOsxuc=";
   };
 
-  pythonRelaxDeps = [ "rich" ];
-
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     rich
   ];
 
