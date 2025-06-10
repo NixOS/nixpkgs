@@ -4999,6 +4999,8 @@ self: super: with self; {
 
   files-to-prompt = callPackage ../development/python-modules/files-to-prompt { };
 
+  filesplit = callPackage ../development/python-modules/filesplit { };
+
   filetype = callPackage ../development/python-modules/filetype { };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
@@ -9323,6 +9325,10 @@ self: super: with self; {
   mozart-api = callPackage ../development/python-modules/mozart-api { };
 
   mozilla-django-oidc = callPackage ../development/python-modules/mozilla-django-oidc { };
+
+  mozjpeg_lossless_optimization =
+    callPackage ../development/python-modules/mozjpeg_lossless_optimization
+      { };
 
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
