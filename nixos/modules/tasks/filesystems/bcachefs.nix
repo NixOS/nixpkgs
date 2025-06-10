@@ -211,4 +211,8 @@ in
       })
     ]
   );
+
+  meta = {
+    inherit (pkgs.bcachefs-tools.meta) maintainers;
+  };
 }
