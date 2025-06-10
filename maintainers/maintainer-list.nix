@@ -11091,6 +11091,12 @@
     githubId = 7558482;
     name = "Jack Gerrits";
   };
+  jackr = {
+    name = "Jack Rosenberg";
+    email = "nixos@jackr.eu";
+    github = "jackrosenberg";
+    githubId = 56937175;
+  };
   jacobkoziej = {
     name = "Jacob Koziej";
     email = "jacobkoziej@gmail.com";
