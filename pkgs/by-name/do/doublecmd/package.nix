@@ -10,6 +10,7 @@
   libX11,
   libqtpas,
   wrapQtAppsHook,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "doublecmd";
     repo = "doublecmd";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1rUAyI+Qe4I6F1T9KxMxHxedcARav6CE8W5qvWLu8Y0=";
   };
 
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     getopt
     lazarus
     wrapQtAppsHook
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -42,15 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs build.sh install/linux/install.sh
     substituteInPlace build.sh \
-      --replace '$(which lazbuild)' '"${lazarus}/bin/lazbuild --lazarusdir=${lazarus}/share/lazarus"'
+      --replace-warn '$(which lazbuild)' '"${lazarus}/bin/lazbuild --lazarusdir=${lazarus}/share/lazarus"'
     substituteInPlace install/linux/install.sh \
-      --replace '$DC_INSTALL_PREFIX/usr' '$DC_INSTALL_PREFIX'
+      --replace-warn '$DC_INSTALL_PREFIX/usr' '$DC_INSTALL_PREFIX'
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    export HOME=$(mktemp -d)
     ./build.sh release qt5
 
     runHook postBuild
