@@ -7,13 +7,13 @@
 
 buildGoModule {
   pname = "typescript-go";
-  version = "0-unstable-2025-05-23";
+  version = "0-unstable-2025-06-09";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "typescript-go";
-    rev = "1b88303de8ad861566d479b0bcf5b88874494536";
-    hash = "sha256-qxP8MhUK9ww3yB0ko2K6GPUfY1bcfGL3u5qRACf9ZK0=";
+    rev = "f7d02dd5cc61be86f4f61018171c370cefebe3fd";
+    hash = "sha256-19+t/Yq73Ih8yCoMJe4r65iejOeAeKYEWacMzqGs6jQ=";
     fetchSubmodules = false;
   };
 
