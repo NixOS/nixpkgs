@@ -1,0 +1,25 @@
+From b32db5dd302499b5e7802e6a22b08522d0bee36b Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Tue, 10 Jun 2025 15:36:17 +0200
+Subject: [PATCH] Set default launcher icon location
+
+---
+ data/schemas/com.lomiri.Shell.gschema.xml.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/schemas/com.lomiri.Shell.gschema.xml.in b/data/schemas/com.lomiri.Shell.gschema.xml.in
+index b4419f8..92af8f9 100644
+--- a/data/schemas/com.lomiri.Shell.gschema.xml.in
++++ b/data/schemas/com.lomiri.Shell.gschema.xml.in
+@@ -276,7 +276,7 @@
+       <description>The position of launcher.</description>
+     </key>
+     <key name="logo-picture-uri" type="s">
+-      <default>''</default>
++      <default>'file://@nixosFlakeLocation@'</default>
+       <summary>Logo URI to be displayed on the launcher</summary>
+       <description>
+         URI to use for the launcher's logo. Only .svg files are supported.
+-- 
+2.49.0
+

@@ -3,11 +3,13 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
+  replaceVars,
   testers,
   cmake,
   cmake-extras,
   glib,
   intltool,
+  nixos-icons,
   pkg-config,
   validatePkgConfig,
 }:
@@ -22,6 +24,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-Xm21KM+IxKQwOlBsmGTgFq2bUJy/WTBBcf/2Cqkdlos=";
   };
+
+  patches = [
+    # Set default launcher logo to Nix snowflake
+    # Long-term, we should override these via gsettings overrides
+    # logo-picture-uri (and potentially home-button-background-color) under com.lomiri.Shell.Launcher
+    (replaceVars ./9901-Set-default-launcher-icon-location.patch {
+      nixosFlakeLocation = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
+    })
+  ];
 
   strictDeps = true;
 
