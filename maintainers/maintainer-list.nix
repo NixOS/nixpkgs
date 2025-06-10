@@ -19671,6 +19671,12 @@
     githubId = 38314551;
     name = "Peter Okelmann";
   };
+  Pokeylooted = {
+    email = "pokeyrandomgaming@gmail.com";
+    github = "Pokeylooted";
+    githubId = 79169880;
+    name = "Dani Barton";
+  };
   pokon548 = {
     email = "nix@bukn.uk";
     github = "pokon548";
