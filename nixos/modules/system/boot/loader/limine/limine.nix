@@ -45,6 +45,7 @@ in
 
   options.boot.loader.limine = {
     enable = lib.mkEnableOption "the Limine Bootloader";
+    package = lib.mkPackageOption pkgs "limine" { };
 
     enableEditor = lib.mkEnableOption null // {
       description = ''
@@ -116,8 +117,6 @@ in
         error at boot time.
       '';
     };
-
-    package = lib.mkPackageOption pkgs "limine" { };
 
     efiSupport = lib.mkEnableOption null // {
       default = pkgs.stdenv.hostPlatform.isEfi;
