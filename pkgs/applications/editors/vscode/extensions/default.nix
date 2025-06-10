@@ -3689,6 +3689,8 @@ let
 
       myriad-dreamin.tinymist = callPackage ./myriad-dreamin.tinymist { };
 
+      natqe.reload = callPackage ./natqe.reload { };
+
       naumovs.color-highlight = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "color-highlight";
