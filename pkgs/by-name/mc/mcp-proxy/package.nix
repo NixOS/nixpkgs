@@ -5,13 +5,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "mcp-proxy";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "sparfenyuk";
     repo = "mcp-proxy";
     tag = "v${version}";
-    hash = "sha256-xHy+IwnUoyICSTusqTzGf/kOvT0FvJYcTT9Do0C5DiY=";
+    hash = "sha256-3KGBQyiI6hbDfl37lhhnGYHixHYGsKAgTJH/PSe3UFs=";
   };
 
   pyproject = true;
