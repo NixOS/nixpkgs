@@ -74,6 +74,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Weighs the soul of incoming HTTP requests using proof-of-work to stop AI crawlers";
     homepage = "https://anubis.techaro.lol/";
+    downloadPage = "https://github.com/TecharoHQ/anubis";
     changelog = "https://github.com/TecharoHQ/anubis/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
