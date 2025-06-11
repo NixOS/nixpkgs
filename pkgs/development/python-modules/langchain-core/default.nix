@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -30,6 +29,9 @@
   pytest-xdist,
   pytestCheckHook,
   syrupy,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {

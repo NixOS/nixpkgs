@@ -2,14 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  gitUpdater,
+
+  # build-system
+  pdm-backend,
+
+  # dependencies
   chromadb,
   langchain-core,
-  langchain-tests,
   numpy,
-  pdm-backend,
+
+  # tests
+  langchain-tests,
   pytestCheckHook,
   pytest-asyncio,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {

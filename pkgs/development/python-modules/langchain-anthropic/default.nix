@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -16,6 +15,9 @@
   langchain-tests,
   pytest-asyncio,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
