@@ -7,6 +7,7 @@
   boost,
   brotli,
   callPackage,
+  clipper2,
   cmake,
   colladaSupport ? true,
   config,
@@ -15,6 +16,7 @@
   dbus,
   embree,
   fetchzip,
+  fetchgit,
   ffmpeg,
   fftw,
   fftwFloat,
@@ -48,6 +50,7 @@
   libxkbcommon,
   llvmPackages,
   makeWrapper,
+  manifold,
   mesa,
   nix-update-script,
   openUsdSupport ? !stdenv.hostPlatform.isDarwin,
@@ -110,13 +113,19 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.4.3";
+  version = "4.5";
 
-  src = fetchzip {
-    name = "source";
-    url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vHDOKI7uqB5EbdRu711axBuYX1zM746E6GvK2Nl5hZg=";
+  src = fetchgit {
+    rev = "af6cbae469cec9bf2f216da82f2e2bea3d097b66";
+    url = "https://projects.blender.org/blender/blender.git";
+    hash = "sha256-QCAaLi52lx4jynFi0DKZngLVwzgWLRpjaKjsc5q++Qs=";
   };
+
+  #  src = fetchzip {
+  #    name = "source";
+  #    url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
+  #    hash = "sha256-vHDOKI7uqB5EbdRu711axBuYX1zM746E6GvK2Nl5hZg=";
+  #  };
 
   patches = [ ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
@@ -231,6 +240,7 @@ stdenv'.mkDerivation (finalAttrs: {
     [
       alembic
       boost
+      clipper2
       ffmpeg
       fftw
       fftwFloat
@@ -247,13 +257,14 @@ stdenv'.mkDerivation (finalAttrs: {
       libsndfile
       libtiff
       libwebp
+      (manifold.override { tbb_2021_11 = tbb; })
       opencolorio
       openexr
       openimageio_2
       openjpeg
-      openpgl
+      (openpgl.override { inherit tbb; })
       (opensubdiv.override { inherit cudaSupport; })
-      openvdb
+      (openvdb.override { inherit tbb; })
       potrace
       pugixml
       python3
@@ -263,7 +274,7 @@ stdenv'.mkDerivation (finalAttrs: {
       zstd
     ]
     ++ lib.optional embreeSupport embree
-    ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
+    ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport tbb; })
     ++ (
       if (!stdenv.hostPlatform.isDarwin) then
         [
