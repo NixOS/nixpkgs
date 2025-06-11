@@ -13,12 +13,12 @@ let
         pkgs.buildGoModule (
           args
           // rec {
-            version = "0.24.2";
+            version = "0.25.5";
             src = pkgs.fetchFromGitHub {
               owner = "evanw";
               repo = "esbuild";
               rev = "v${version}";
-              hash = "sha256-XVZNHPMl03hpGHgoaViWWj8eMDZBKDb7BfOrPGlVqEM=";
+              hash = "sha256-jemGZkWmN1x2+ZzJ5cLp3MoXO0oDKjtZTmZS9Be/TDw=";
             };
             vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
           }
@@ -32,10 +32,6 @@ nodePkgs."elm-pages".overrideAttrs (old: {
     makeWrapper
     old.nodejs.pkgs.node-gyp-build
   ];
-
-  preRebuild = ''
-    sed -i 's/"esbuild": "0\.23\.1"/"esbuild": "0.24.2"/' package.json
-  '';
 
   # can't use `patches = [ <patch_file> ]` with a nodePkgs derivation;
   # need to patch in one of the build phases instead.

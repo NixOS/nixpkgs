@@ -10,5 +10,3 @@ $(nix-build $ROOT -A nodePackages.node2nix --no-out-link)/bin/node2nix \
     -o node-packages.nix \
     -c node-composition.nix \
     --no-copy-node-env -e ../../../../node-packages/node-env.nix
-# well, elm-pages requires two different version of esbuild so we twist it's wrist to only use one
-sed -i 's/sources."esbuild-0.23.1"/sources."esbuild-0.24.2"/' node-packages.nix
