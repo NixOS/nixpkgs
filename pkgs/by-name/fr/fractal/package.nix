@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   # We should eventually use a cargo vendor patch hook instead
   preConfigure = ''
     pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
+      patch -p2 < ${glycin-loaders.passthru.glycinPathsPatch}
     popd
   '';
 
