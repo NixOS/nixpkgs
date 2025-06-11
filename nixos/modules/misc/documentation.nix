@@ -291,7 +291,7 @@ in
 
       nixos.enable = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to install NixOS's own documentation.
 
