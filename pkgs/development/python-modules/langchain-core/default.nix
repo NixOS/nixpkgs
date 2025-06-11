@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -29,9 +30,6 @@
   pytest-xdist,
   pytestCheckHook,
   syrupy,
-
-  # passthru
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -88,11 +86,8 @@ buildPythonPackage rec {
       doCheck = true;
     });
 
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "langchain-core==([0-9.]+)"
-      ];
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-core==";
     };
   };
 

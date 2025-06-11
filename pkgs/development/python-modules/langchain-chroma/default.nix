@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
   chromadb,
   langchain-core,
   langchain-tests,
@@ -56,11 +56,8 @@ buildPythonPackage rec {
     "test_chroma_update_document"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-chroma==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-chroma==";
   };
 
   meta = {

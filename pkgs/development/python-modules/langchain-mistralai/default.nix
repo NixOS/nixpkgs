@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -60,11 +60,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_mistralai" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-mistralai==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    pname = "langchain-mistralai==";
   };
 
   meta = {

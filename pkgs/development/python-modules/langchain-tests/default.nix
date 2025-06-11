@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -23,9 +24,6 @@
   pytest-asyncio,
   pytest-socket,
   pytestCheckHook,
-
-  # passthru
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -72,11 +70,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-tests==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-tests==";
   };
 
   meta = {

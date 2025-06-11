@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -121,11 +121,8 @@ buildPythonPackage rec {
     "tests/unit_tests/document_loaders/test_gitbook.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "libs/community/v([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "libs/community/v";
   };
 
   meta = {

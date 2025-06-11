@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  nix-update-script,
+  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -141,11 +141,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain==";
   };
 
   meta = {
