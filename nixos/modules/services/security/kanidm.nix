@@ -279,9 +279,17 @@ in
             type = types.nullOr types.str;
           };
           db_path = mkOption {
-            description = "Path to Kanidm database.";
+            description = ''
+              Path to Kanidm database.
+
+              ::: {.warning
+              Please note that while it is possible to modify this option, extra care
+              must be taken due to hardening options set on the primary kanidm daemon.
+              If changed from the default, the folder containing the kanidm database
+              must be added to `systemd.services."kanidm".serviceConfig.ReadWritePaths`
+              :::
+            '';
             default = "/var/lib/kanidm/kanidm.db";
-            readOnly = true;
             type = types.path;
           };
           tls_chain = mkOption {
