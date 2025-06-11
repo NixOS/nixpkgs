@@ -19,6 +19,7 @@ skawarePackages.buildPackage {
     sha256 = "sha256-Ywke3FG/xhhUd934auDB+iFRDCvy8IJs6IkirP6O/As=";
     description = "mdoc(7) versions of the documentation for the s6-rc service manager";
     maintainers = [ lib.maintainers.qyliss ];
+    withUpdateScript = false;
   };
 
   description = "Service manager for s6-based systems";
