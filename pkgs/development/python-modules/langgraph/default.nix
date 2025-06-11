@@ -44,7 +44,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-bTxtfduuuyRITZqhk15aWwxNwiZ7TMTgBOEPat6zVIc=";
   };
 
@@ -138,7 +138,7 @@ buildPythonPackage rec {
   meta = {
     description = "Build resilient language agents as graphs";
     homepage = "https://github.com/langchain-ai/langgraph";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };

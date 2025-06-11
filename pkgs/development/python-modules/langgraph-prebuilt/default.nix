@@ -96,7 +96,7 @@ buildPythonPackage rec {
   meta = {
     description = "Prebuilt agents add-on for Langgraph. Should always be bundled with langgraph";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/prebuilt";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };

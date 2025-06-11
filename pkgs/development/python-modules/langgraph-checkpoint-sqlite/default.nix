@@ -61,7 +61,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpointsqlite==${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     description = "Library with a SQLite implementation of LangGraph checkpoint saver";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-sqlite";
     license = lib.licenses.mit;
