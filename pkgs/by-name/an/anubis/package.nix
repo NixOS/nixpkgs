@@ -83,6 +83,7 @@ buildGoModule (finalAttrs: {
       soopyc
       ryand56
       sigmasquadron
+      defelo
     ];
     mainProgram = "anubis";
   };
