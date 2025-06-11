@@ -21,14 +21,21 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box64";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = "box64";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CY5Emg5TsMVs++2EukhVzqn9440kF/BO8HZGQgCpGu4=";
+    hash = "sha256-Z8r7aonVj7VSifgLKx/L7VRdGNnQtTvS4mjI+2+uPxY=";
   };
+
+  # Setting cpu doesn't seem to work (or maybe isn't enough / gets overwritten by the wrapper's arch flag?), errors about unsupported instructions for target
+  # (this is for code that gets executed conditionally if the cpu at runtime supports their features, so setting this should be fine)
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'ASMFLAGS  -pipe -mcpu=cortex-a76' 'ASMFLAGS  -pipe -march=armv8.2-a+fp16+dotprod'
+  '';
 
   nativeBuildInputs = [
     cmake
