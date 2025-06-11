@@ -26,7 +26,9 @@ buildGoModule (finalAttrs: {
     "-X=main.commit=${finalAttrs.src.rev}"
   ];
 
-  checkFlags = [ "-run=!S/TestNodeRoundtrip" ]; # OOPS: 46 passed, 1 FAILED
+  # Test failure in vendored yaml package, see:
+  # https://github.com/google/yamlfmt/issues/256
+  checkFlags = [ "-run=!S/TestNodeRoundtrip" ];
 
   passthru.tests.version = testers.testVersion {
     package = yamlfmt;
