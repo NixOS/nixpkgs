@@ -1,6 +1,5 @@
 {
   cmake,
-  callPackage,
   fetchFromGitHub,
   fetchpatch,
   makeWrapper,
@@ -43,7 +42,7 @@
   enableThirdParty ? true,
 }:
 let
-  inherit (lib) optionalString optionals optional;
+  inherit (lib) optionals;
   pythonInputs =
     optionals enablePython (with python3.pkgs; [ numpy ]) ++ (extraPythonPackages python3.pkgs);
 
@@ -309,6 +308,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.orfeo-toolbox.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
+    teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.linux;
   };
 })
