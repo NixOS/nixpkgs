@@ -21,7 +21,7 @@
   tpmSupport ? false,
   trousers,
   which,
-  nettools,
+  net-tools,
   libunistring,
   withP11-kit ? !stdenv.hostPlatform.isStatic,
   p11-kit,
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals doCheck [
       which
-      nettools
+      net-tools
       util-linux
     ];
 

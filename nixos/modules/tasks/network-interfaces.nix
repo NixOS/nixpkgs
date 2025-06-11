@@ -1625,7 +1625,7 @@ in
       ];
       conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
-      serviceConfig.ExecStart = ''${pkgs.nettools}/bin/domainname "${cfg.domain}"'';
+      serviceConfig.ExecStart = ''${pkgs.net-tools}/bin/domainname "${cfg.domain}"'';
       serviceConfig.Type = "oneshot";
     };
 
@@ -1643,7 +1643,7 @@ in
         pkgs.host
         pkgs.iproute2
         pkgs.iputils
-        pkgs.nettools
+        pkgs.net-tools
       ]
       ++ optionals config.networking.wireless.enable [
         pkgs.wirelesstools # FIXME: obsolete?

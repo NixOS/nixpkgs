@@ -5,7 +5,7 @@
   fetchFromGitHub,
   makeWrapper,
   iproute2,
-  nettools,
+  net-tools,
 }:
 
 buildGoModule rec {
@@ -20,7 +20,7 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ nettools ];
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ net-tools ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ iproute2 ];
 
   vendorHash = "sha256-Q3HsfLA6xqzwXVfRc0bOb15kW2tdwj14DvJEZoRy0/4=";

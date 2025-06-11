@@ -11263,11 +11263,11 @@ with pkgs;
     }
   );
 
-  nettools =
+  net-tools =
     if stdenv.hostPlatform.isLinux then
       callPackage ../os-specific/linux/net-tools { }
     else
-      unixtools.nettools;
+      unixtools.net-tools;
 
   nftables = callPackage ../os-specific/linux/nftables { };
 

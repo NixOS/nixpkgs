@@ -832,7 +832,7 @@ in
           pkgs.gawk
           pkgs.gnugrep
           pkgs.gnused
-          pkgs.nettools
+          pkgs.net-tools
           pkgs.util-linux
         ];
       };
