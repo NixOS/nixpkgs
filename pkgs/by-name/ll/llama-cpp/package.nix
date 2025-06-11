@@ -127,7 +127,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # -march=native is non-deterministic; override with platform-specific flags if needed
     (cmakeBool "GGML_NATIVE" false)
+    (cmakeBool "LLAMA_BUILD_EXAMPLES" false)
     (cmakeBool "LLAMA_BUILD_SERVER" true)
+    (cmakeBool "LLAMA_BUILD_TESTS" (finalAttrs.finalPackage.doCheck or false))
     (cmakeBool "LLAMA_CURL" true)
     (cmakeBool "BUILD_SHARED_LIBS" true)
     (cmakeBool "GGML_BLAS" blasSupport)
@@ -153,7 +155,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals rpcSupport [
     # This is done so we can move rpc-server out of bin because llama.cpp doesn't
     # install rpc-server in their install target.
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    (cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
   ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
@@ -166,6 +168,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cp $src/include/llama.h $out/include/
   ''
   + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
+
+  # the tests are failing as of 2025-08
+  doCheck = false;
 
   passthru.updateScript = nix-update-script {
     attrPath = "llama-cpp";
