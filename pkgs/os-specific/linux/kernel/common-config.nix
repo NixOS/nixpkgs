@@ -1102,7 +1102,10 @@ let
 
         # enable support for device trees and overlays
         OF = option yes;
-        OF_OVERLAY = option yes;
+        # OF_OVERLAY breaks v5.10 on x86_64, see https://github.com/NixOS/nixpkgs/issues/403985
+        OF_OVERLAY = lib.mkIf (!(lib.versionOlder version "5.15" && stdenv.hostPlatform.isx86_64)) (
+          option yes
+        );
 
         # Enable initrd support.
         BLK_DEV_INITRD = yes;
@@ -1165,6 +1168,7 @@ let
 
         DVB_DYNAMIC_MINORS = option yes; # we use udev
 
+        EFI = lib.mkIf stdenv.hostPlatform.isEfi yes;
         EFI_STUB = yes; # EFI bootloader in the bzImage itself
         EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER = whenOlder "6.2" (whenAtLeast "5.8" yes); # initrd kernel parameter for EFI
 

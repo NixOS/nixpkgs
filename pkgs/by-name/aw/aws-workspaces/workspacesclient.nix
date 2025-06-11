@@ -12,15 +12,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "workspacesclient";
-  version = "2024.8.5191";
+  version = "2025.0.5296";
 
   src = fetchurl {
     urls = [
       # Check new version at https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/jammy/main/binary-amd64/Packages
       "https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/jammy/main/binary-amd64/workspacesclient_${finalAttrs.version}_amd64.deb"
-      "https://d3nt0h4h6pmmc4.cloudfront.net/new_workspacesclient_jammy_amd64.deb"
     ];
-    hash = "sha256-BDxMycVgWciJZe8CtElXaWVnqYDQO5NmawK10GvP2+k=";
+    hash = "sha256-VPNZN9AsrGJ56O8B5jxlgLMvrUViTv6yto8c5pGQc0A=";
   };
 
   nativeBuildInputs = [

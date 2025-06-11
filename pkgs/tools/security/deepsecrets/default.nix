@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
 }:
@@ -22,11 +23,9 @@ python3.pkgs.buildPythonApplication rec {
     "mmh3"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     dotwiz
     mmh3
     ordered-set
@@ -36,16 +35,24 @@ python3.pkgs.buildPythonApplication rec {
     regex
   ];
 
-  pythonImportsCheck = [
-    "deepsecrets"
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+
+  disabledTests = [
+    # assumes package is built in /app (docker?), and not /build/${src.name} (nix sandbox)
+    "test_1_cli"
+    "test_config"
+    "test_basic_info"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "deepsecrets" ];
+
+  meta = {
     description = "Secrets scanner that understands code";
-    mainProgram = "deepsecrets";
     homepage = "https://github.com/avito-tech/deepsecrets";
     changelog = "https://github.com/avito-tech/deepsecrets/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "deepsecrets";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

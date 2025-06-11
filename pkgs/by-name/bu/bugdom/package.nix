@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jorio";
-    repo = pname;
+    repo = "bugdom";
     rev = version;
     hash = "sha256-0c7v5tSqYuqtLOFl4sqD7+naJNqX/wlKHVntkZQGJ8A=";
     fetchSubmodules = true;

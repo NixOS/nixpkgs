@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "TkTech";
-    repo = pname;
+    repo = "mutf8";
     rev = "v${version}";
     hash = "sha256-4Ojn3t0EbOVdrYEiY8JegJuvW9sz8jt9tKFwOluiGQo=";
   };

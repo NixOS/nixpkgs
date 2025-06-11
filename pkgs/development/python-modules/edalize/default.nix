@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "olofk";
-    repo = pname;
+    repo = "edalize";
     tag = "v${version}";
     hash = "sha256-5c3Szq0tXQdlyzFTFCla44qB/O6RK8vezVOaFOv8sw4=";
   };

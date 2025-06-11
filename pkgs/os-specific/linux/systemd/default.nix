@@ -1037,10 +1037,7 @@ stdenv.mkDerivation (finalAttrs: {
       ofl
       publicDomain
     ];
-    maintainers = with lib.maintainers; [
-      flokli
-      kloenk
-    ];
+    teams = [ lib.teams.systemd ];
     pkgConfigModules = [
       "libsystemd"
       "libudev"

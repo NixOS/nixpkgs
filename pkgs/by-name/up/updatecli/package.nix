@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "updatecli";
-  version = "0.99.0";
+  version = "0.100.0";
 
   src = fetchFromGitHub {
     owner = "updatecli";
     repo = "updatecli";
     rev = "v${version}";
-    hash = "sha256-z9lXacRC8MKfExTpbMPAR5aDAe4nh01/ngP0gibfd30=";
+    hash = "sha256-gzHNUFhctfMSoXEVlnYJW4qD6MmV/NMMoTFSp550FTQ=";
   };
 
-  vendorHash = "sha256-hW7oufBiYmhf0gTGnPujzyoRSwfc0QGDZMTKRiFUUoA=";
+  vendorHash = "sha256-b4mIRfiFqOqRiyZJSrASCDpcE65j45SbgE7E8yFXrCE=";
 
   # tests require network access
   doCheck = false;

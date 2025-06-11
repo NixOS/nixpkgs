@@ -35,12 +35,12 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for exploring each layer in a docker image";
     mainProgram = "dive";
     homepage = "https://github.com/wagoodman/dive";
     changelog = "https://github.com/wagoodman/dive/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

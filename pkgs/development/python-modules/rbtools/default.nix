@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "rbtools";
-  version = "1.0.2";
+  version = "5.2.1";
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchurl {
     url = "https://downloads.reviewboard.org/releases/RBTools/${lib.versions.majorMinor version}/RBTools-${version}.tar.gz";
-    sha256 = "577c2f8bbf88f77bda84ee95af0310b59111c156f48a5aab56ca481e2f77eaf4";
+    sha256 = "f2863515ef6ff1cfcd3905d5f409ab8c4d12878b364d6f805ba848dcaecb97f2";
   };
 
   propagatedBuildInputs = [

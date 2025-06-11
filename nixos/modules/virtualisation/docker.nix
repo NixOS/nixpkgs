@@ -355,7 +355,7 @@ in
             # the `--runtime=nvidia` approach to expose
             # GPU's. Starting with Docker > 25, CDI can be used
             # instead, removing the need for runtime wrappers.
-            path = lib.getExe' pkgs.nvidia-docker "nvidia-container-runtime.legacy";
+            path = lib.getExe' (lib.getOutput "tools" config.hardware.nvidia-container-toolkit.package) "nvidia-container-runtime";
           };
         };
       };

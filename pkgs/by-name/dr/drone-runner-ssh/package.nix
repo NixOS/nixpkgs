@@ -4,13 +4,13 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "drone-runner-ssh";
   version = "unstable-2022-12-22";
 
   src = fetchFromGitHub {
     owner = "drone-runners";
-    repo = pname;
+    repo = "drone-runner-ssh";
     rev = "ee70745c60e070a7fac57d9cecc41252e7a3ff55";
     sha256 = "sha256-YUyhEA1kYIFLN+BI2A8PFeSgifoVNmNPKtdS58MwwVU=";
   };

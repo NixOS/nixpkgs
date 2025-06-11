@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mej";
-    repo = pname;
+    repo = "libast";
     rev = version;
     hash = "sha256-rnqToFi+d6D6O+JDHQxkVjTc/0RBag6Jqv4uDcE4PNc=";
   };

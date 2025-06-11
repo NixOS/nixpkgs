@@ -63,6 +63,7 @@ buildGoModule rec {
     homepage = "https://smallstep.com/certificates/";
     changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
     license = licenses.asl20;
+    mainProgram = "step-ca";
     maintainers = with maintainers; [
       cmcdragonkai
       techknowlogick

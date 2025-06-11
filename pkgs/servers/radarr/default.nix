@@ -27,17 +27,17 @@ let
 
   hash =
     {
-      x64-linux_hash = "sha256-/EeFQdhkPkebyaE2MLpVp1/9rHiEpVDWBWiX2H8xyDg=";
-      arm64-linux_hash = "sha256-VG1oiyYRzfeLoz2mbDbTE29MKvPtjvrZKANb1Hw1VFw=";
-      x64-osx_hash = "sha256-Ss3GtQtEW3QP4PHTo+Q6+LyIxA8Bd7fkV8NfMiYtE0k=";
-      arm64-osx_hash = "sha256-9/gTN4EcQYKcDo0SZiRQHuOFqC3M3iBLFV7XPO7XKbw=";
+      x64-linux_hash = "sha256-cXAOXQE6eBFgJMw/Tai1/bxWon1fuh7guYUdQ+pmIMA=";
+      arm64-linux_hash = "sha256-ogWUNXtgmoUOxhQNE15+stddyurCPCeCb+OdHEdCZE4=";
+      x64-osx_hash = "sha256-+0UevL2jgkv0lLcRP7qJO3HrYfgNCWEPcwlGlSRPWA8=";
+      arm64-osx_hash = "sha256-nhUno+3a76n+gRy7hulfA0qYQ5Bh7dXOX5CcZd+kWPY=";
     }
     ."${arch}-${os}_hash";
 
 in
 stdenv.mkDerivation rec {
   pname = "radarr";
-  version = "5.21.1.9799";
+  version = "5.24.1.10017";
 
   src = fetchurl {
     url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.master.${version}.${os}-core-${arch}.tar.gz";

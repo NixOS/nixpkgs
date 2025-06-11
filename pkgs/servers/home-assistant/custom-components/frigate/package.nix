@@ -18,13 +18,13 @@
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.8.0";
+  version = "5.9.2";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     tag = "v${version}";
-    hash = "sha256-sQgi3F44eT/iL3cE9YuKyjJmE4nZM+OcwirUyl3maGo=";
+    hash = "sha256-XVHw9AjngzbMnzRPJ/VL1Hy0gG3q+rV4Gfh8K7pIW6M=";
   };
 
   dependencies = [ hass-web-proxy-lib ];
@@ -41,12 +41,9 @@ buildHomeAssistantComponent rec {
     ++ (homeassistant.getPackages "mqtt" homeassistant.python.pkgs)
     ++ (homeassistant.getPackages "stream" homeassistant.python.pkgs);
 
-  disabledTests = [
-    # uses deprecated and removed constants
-    # https://github.com/blakeblackshear/frigate-hass-integration/issues/860
-    "test_duplicate"
-    "test_options_advanced"
-    "test_options"
+  disabledTestPaths = [
+    # https://github.com/blakeblackshear/frigate-hass-integration/issues/907
+    "tests/test_media_source.py"
   ];
 
   meta = with lib; {

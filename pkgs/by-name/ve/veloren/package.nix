@@ -30,29 +30,15 @@ rustPlatform.buildRustPackage {
     hash = "sha256-h2hLO227aeK2oEFfdGMgmtMkA9cn9AgQ9w6myb+8W8c=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
-  cargoLock.outputHashes = {
-    # Hashes of dependencies pinned to a git commit
-    "auth-common-0.1.0" = "sha256-6tUutHLY309xSBT2D7YueAmsAWyVn410XNKFT8yuTgA=";
-    "conrod_core-0.63.0" = "sha256-GxakbJBVTFgbtUsa2QB105xgd+aULuWLBlv719MIzQY=";
-    "egui_wgpu_backend-0.26.0" = "sha256-47XZoE7bFRv/TG4EmM2qit5L21qsKT6Nt/t1y/NMneQ=";
-    "fluent-0.16.0" = "sha256-xN+DwObqoToqprLDy3yvTiqclIIOsuUtpAQ6W1mdf0I=";
-    "iced_core-0.4.0" = "sha256-5s6IXcitoGcHS0FUx/cujx9KLBpaUuMnugmBged1cLA=";
-    "keyboard-keynames-0.1.2" = "sha256-5I70zT+Lwt0JXJgTAy/VygHdxIBuE/u3pq8LP8NkRdE=";
-    "naga-0.14.2" = "sha256-yyLrJNhbu/RIVr0hM7D7Rwd7vH3xX8Dns+u6m8NEU2M=";
-    "portpicker-0.1.0" = "sha256-or1907XdrDIyFzHNmW6me2EIyEQ8sjVIowfGsypa4jU=";
-    "shaderc-0.8.0" = "sha256-BU736g075i3GqlyyB9oyoVlQqNcWbZEGa8cdge1aMq0=";
-    "specs-0.20.0" = "sha256-OHnlag6SJ1rlAYnlmVD+uqY+kFNsbQ42W21RrEa8Xn0=";
-  };
   cargoPatches = [
     ./fix-on-rust-stable.patch
     ./fix-assets-path.patch
   ];
 
-  postPatch = ''
-    # Use our Cargo.lock
-    cp ${./Cargo.lock} Cargo.lock
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3XHuAgue0Id1oxCJ8NLZ4wYjMfND+C1iIW+AnMKXd54=";
 
+  postPatch = ''
     # Force vek to build in unstable mode
     cat <<'EOF' | tee "$cargoDepsCopy"/vek-*/build.rs
     fn main() {

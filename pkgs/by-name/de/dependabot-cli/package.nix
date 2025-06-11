@@ -1,42 +1,31 @@
 {
+  lib,
+  stdenv,
   buildGoModule,
   dependabot-cli,
   dockerTools,
   fetchFromGitHub,
   installShellFiles,
-  lib,
   makeWrapper,
   symlinkJoin,
   testers,
 }:
 let
   pname = "dependabot-cli";
-  version = "1.63.0";
+  version = "1.65.0";
 
-  # vv Also update this vv
+  # `tag` is what `dependabot` uses to find the relevant docker images.
   tag = "nixpkgs-dependabot-cli-${version}";
-  updateJobProxy = dockerTools.pullImage {
-    imageName = "ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy";
-    # Get these hashes from
-    # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy --image-tag latest --final-image-name dependabot-update-job-proxy --final-image-tag ${tag}
-    imageDigest = "sha256:cc4a9b7db8ddf3924b6c25cc8a74d9937bf803e64733035809862a1c0a6df984";
-    sha256 = "0wkr0rac7dp1080s4zik5yzi5967gkfylly2148ipgw50sp0sq8s";
 
-    # Don't update this, it's used to refer to the imported image later
-    finalImageName = "dependabot-update-job-proxy";
-    finalImageTag = tag;
-  };
-  updaterGitHubActions = dockerTools.pullImage {
-    imageName = "ghcr.io/dependabot/dependabot-updater-github-actions";
-    # Get these hashes from
-    # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/dependabot/dependabot-updater-github-actions --image-tag latest --final-image-name dependabot-updater-github-actions --final-image-tag ${tag}
-    imageDigest = "sha256:6665b3e26ef97577e83f2dfd0007a73c02b003126e72c0b4b196fe570088ed93";
-    sha256 = "0q7w3yp49wb70gkjjl2syvs75hm1jkva2qslzckwxh73z0kq2z0q";
+  # Get these hashes from
+  # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy --image-tag latest --final-image-name dependabot-update-job-proxy --final-image-tag ${tag}
+  updateJobProxy.imageDigest = "sha256:ef245bd38aaa3cf89cafcffe0630d3ad3cff840488a2051a48517454e7f42368";
+  updateJobProxy.hash = "sha256-yndoGLpyV2MiIs0QXbF/W0xJ6jtmnw/ezL54VM80/CI=";
 
-    # Don't update this, it's used to refer to the imported image later
-    finalImageName = "dependabot-updater-github-actions";
-    finalImageTag = tag;
-  };
+  # Get these hashes from
+  # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/dependabot/dependabot-updater-github-actions --image-tag latest --final-image-name dependabot-updater-github-actions --final-image-tag ${tag}
+  updaterGitHubActions.imageDigest = "sha256:adeaa00b4ae49e942adccec76d4487a393eebd0dec27cd75a3cdf6cc46d801d7";
+  updaterGitHubActions.hash = "sha256-ni9rSEpeo0gIdYy2CIIpnIWg0kttoTnvRwbZ71QwmIg=";
 in
 buildGoModule {
   inherit pname version;
@@ -45,7 +34,7 @@ buildGoModule {
     owner = "dependabot";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-lk0AEFQYemr4wP7JXx5mPzzo2VzSJvygPP5vtUvPaxs=";
+    hash = "sha256-A7CPn0YDeyr+d1OUde2TGfSt3eCfrK4k3S7NWsvCGx0=";
   };
 
   vendorHash = "sha256-pnB1SkuEGm0KfkDfjnoff5fZRsAgD5w2H4UwsD3Jlbo=";
@@ -61,7 +50,7 @@ buildGoModule {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dependabot \
       --bash <($out/bin/dependabot completion bash) \
       --fish <($out/bin/dependabot completion fish) \
@@ -77,18 +66,36 @@ buildGoModule {
     $out/bin/dependabot --help
   '';
 
+  passthru.updateScript = ./update.sh;
+
   passthru.withDockerImages = symlinkJoin {
     name = "dependabot-cli-with-docker-images";
     paths = [ dependabot-cli ];
     buildInputs = [ makeWrapper ];
-    postBuild = ''
-      # Create a wrapper that pins the docker images that are depended upon
-      wrapProgram $out/bin/dependabot \
-        --run "docker load --input ${updateJobProxy} >&2" \
-        --add-flags "--proxy-image=dependabot-update-job-proxy:${tag}" \
-        --run "docker load --input ${updaterGitHubActions} >&2" \
-        --add-flags "--updater-image=dependabot-updater-github-actions:${tag}"
-    '';
+    postBuild =
+      let
+        updateJobProxyImage = dockerTools.pullImage {
+          imageName = "ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy";
+          finalImageName = "dependabot-update-job-proxy";
+          finalImageTag = tag;
+          inherit (updateJobProxy) imageDigest hash;
+        };
+
+        updaterGitHubActionsImage = dockerTools.pullImage {
+          imageName = "ghcr.io/dependabot/dependabot-updater-github-actions";
+          finalImageName = "dependabot-updater-github-actions";
+          finalImageTag = tag;
+          inherit (updaterGitHubActions) imageDigest hash;
+        };
+      in
+      ''
+        # Create a wrapper that pins the docker images that `dependabot` uses.
+        wrapProgram $out/bin/dependabot \
+          --run "docker load --input ${updateJobProxyImage} >&2" \
+          --add-flags "--proxy-image=dependabot-update-job-proxy:${tag}" \
+          --run "docker load --input ${updaterGitHubActionsImage} >&2" \
+          --add-flags "--updater-image=dependabot-updater-github-actions:${tag}"
+      '';
   };
 
   passthru.tests.version = testers.testVersion {
@@ -97,15 +104,15 @@ buildGoModule {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/dependabot/cli/releases/tag/v${version}";
     description = "Tool for testing and debugging Dependabot update jobs";
     mainProgram = "dependabot";
     homepage = "https://github.com/dependabot/cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      l0b0
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       infinisil
+      philiptaron
     ];
   };
 }

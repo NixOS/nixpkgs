@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-chroma";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-chroma==${version}";
-    hash = "sha256-GFDaUA0E25YDHYLwrpsAuOiBWFvHByl61XhwK5NmJbg=";
+    hash = "sha256-6WOViBKXZ844g2M6pYohHsXnzJiWbTNgj9EjN+z+B+4=";
   };
 
   sourceRoot = "${src.name}/libs/partners/chroma";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain-core"
     "numpy"
   ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "^langchain-chroma==([0-9.]+)$"
+      "langchain-chroma==([0-9.]+)"
     ];
   };
 

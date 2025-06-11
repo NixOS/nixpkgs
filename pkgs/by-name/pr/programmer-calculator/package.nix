@@ -11,7 +11,7 @@ gccStdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "alt-romes";
-    repo = pname;
+    repo = "programmer-calculator";
     rev = "v${version}";
     sha256 = "sha256-9mv8Jac6j3fKWLLCu1Bd/T5dbegUB8rRgsj9MaQhFDw=";
   };

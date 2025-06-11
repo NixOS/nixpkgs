@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proksi";
-  version = "0.5.3-unstable-2025-05-05";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "luizfonseca";
     repo = "proksi";
-    rev = "d0d95bd0bc142fafbe095248597a057524ff0721";
-    hash = "sha256-D+MS7Y7aKlgAY7T2vq+rayZ8fjP+98gGJrF5qLvH37Q=";
+    tag = "proksi-v${finalAttrs.version}";
+    hash = "sha256-5IXtMtyKbx7re6CA61AnQ85k/SMdkjZo/ySnNoD2DDo=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-HEwtaERPw6llwhXPgifrtuO1fjV1gCEuH80PaIukp6Q=";
+  cargoHash = "sha256-yjbtP+FlDaJXPhCu1UyaDolpzy+BUejU8nVVSVsKCzE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -61,17 +61,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
-  # remove after updating to the next stable version
-  preVersionCheck = ''
-    export version=0.5.3
-  '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version=branch"
-      "--version-regex=proksi-v(.*)"
-    ];
-  };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=proksi-v(.*)" ]; };
 
   meta = {
     description = "Batteries-included CDN, reverse proxy and Load Balancer using Cloudflare Pingora";

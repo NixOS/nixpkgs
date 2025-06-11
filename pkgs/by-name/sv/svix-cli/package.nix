@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "svix";
-    repo = pname;
+    repo = "svix-cli";
     rev = revision;
     hash = "sha256-bHcxhJs4Nu/hdiftQFZMx4M5iqFtpOzrsvXOgo9NlDc=";
   };

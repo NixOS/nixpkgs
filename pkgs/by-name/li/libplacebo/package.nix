@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -21,15 +22,26 @@
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "7.349.0";
+  version = "7.351.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "libplacebo";
     rev = "v${version}";
-    hash = "sha256-mIjQvc7SRjE1Orb2BkHK+K1TcRQvzj2oUOCUT4DzIuA=";
+    hash = "sha256-ccoEFpp6tOFdrfMyE0JNKKMAdN4Q95tP7j7vzUj+lSQ=";
   };
+
+  patches = [
+    # Breaks mpv vulkan shaders:
+    #   https://code.videolan.org/videolan/libplacebo/-/issues/335
+    (fetchpatch {
+      name = "fix-shaders.patch";
+      url = "https://github.com/haasn/libplacebo/commit/4c6d99edee23284f93b07f0f045cd660327465eb.patch";
+      revert = true;
+      hash = "sha256-zoCgd9POlhFTEOzQmSHFZmJXgO8Zg/f9LtSTSQq5nUA=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

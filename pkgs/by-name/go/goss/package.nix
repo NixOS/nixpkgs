@@ -19,7 +19,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "goss-org";
-    repo = pname;
+    repo = "goss";
     tag = "v${version}";
     hash = "sha256-GdkLasokpWegjK4kZzAskp1NGwcuMjrjjau75cEo8kg=";
   };

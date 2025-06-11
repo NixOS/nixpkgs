@@ -13,11 +13,10 @@
 # - Instead of providing different releases for each version of CUDA, CuTensor has multiple subdirectories in `lib`
 #   -- one for each version of CUDA.
 {
-  cudaVersion,
-  flags,
+  cudaLib,
+  cudaMajorMinorVersion,
   lib,
-  mkVersionedPackageName,
-  stdenv,
+  redistSystem,
 }:
 let
   inherit (lib)
@@ -27,8 +26,6 @@ let
     versions
     trivial
     ;
-
-  inherit (stdenv) hostPlatform;
 
   redistName = "cutensor";
   pname = "libcutensor";
@@ -73,7 +70,7 @@ let
       releaseGrabber
     ]) cutensorVersions;
 
-  # Our cudaVersion tells us which version of CUDA we're building against.
+  # Our cudaMajorMinorVersion tells us which version of CUDA we're building against.
   # The subdirectories in lib/ tell us which versions of CUDA are supported.
   # Typically the names will look like this:
   #
@@ -85,22 +82,19 @@ let
   # libPath :: String
   libPath =
     let
-      cudaMajorMinor = versions.majorMinor cudaVersion;
-      cudaMajor = versions.major cudaVersion;
+      cudaMajorVersion = versions.major cudaMajorMinorVersion;
     in
-    if cudaMajorMinor == "10.2" then cudaMajorMinor else cudaMajor;
+    if cudaMajorMinorVersion == "10.2" then cudaMajorMinorVersion else cudaMajorVersion;
 
   # A release is supported if it has a libPath that matches our CUDA version for our platform.
   # LibPath are not constant across the same release -- one platform may support fewer
   # CUDA versions than another.
-  # redistArch :: String
-  redistArch = flags.getRedistArch hostPlatform.system;
   # platformIsSupported :: Manifests -> Boolean
   platformIsSupported =
     { feature, redistrib, ... }:
     (attrsets.attrByPath [
       pname
-      redistArch
+      redistSystem
     ] null feature) != null;
 
   # TODO(@connorbaker): With an auxiliary file keeping track of the CUDA versions each release supports,
@@ -113,7 +107,8 @@ let
   # Compute versioned attribute name to be used in this package set
   # Patch version changes should not break the build, so we only use major and minor
   # computeName :: RedistribRelease -> String
-  computeName = { version, ... }: mkVersionedPackageName redistName version;
+  computeName =
+    { version, ... }: cudaLib.mkVersionedName redistName (lib.versions.majorMinor version);
 in
 final: _:
 let

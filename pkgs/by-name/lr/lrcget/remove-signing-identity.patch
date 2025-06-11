@@ -1,0 +1,13 @@
+diff --git a/src-tauri/tauri.conf.json b/src-tauri/tauri.conf.json
+index 92d43e7..6519fd0 100644
+--- a/src-tauri/tauri.conf.json
++++ b/src-tauri/tauri.conf.json
+@@ -36,7 +36,7 @@
+       "exceptionDomain": "",
+       "frameworks": [],
+       "providerShortName": null,
+-      "signingIdentity": "-"
++      "signingIdentity": null
+     },
+     "resources": [],
+     "shortDescription": "Utility for mass-downloading LRC synced lyrics for your offline music library.",

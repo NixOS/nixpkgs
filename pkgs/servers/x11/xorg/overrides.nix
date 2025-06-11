@@ -227,22 +227,6 @@ self: super:
     };
   });
 
-  libxcvt = super.libxcvt.overrideAttrs (
-    {
-      meta ? { },
-      ...
-    }:
-    {
-      meta = meta // {
-        homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcvt";
-        mainProgram = "cvt";
-        badPlatforms = meta.badPlatforms or [ ] ++ [
-          lib.systems.inspect.platformPatterns.isStatic
-        ];
-      };
-    }
-  );
-
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [
       "out"
@@ -629,20 +613,10 @@ self: super:
     };
   });
 
-  makedepend = addMainProgram super.makedepend { };
   mkfontscale = addMainProgram super.mkfontscale { };
   oclock = addMainProgram super.oclock { };
   smproxy = addMainProgram super.smproxy { };
   transset = addMainProgram super.transset { };
-
-  utilmacros = super.utilmacros.overrideAttrs (attrs: {
-    # not needed for releases, we propagate the needed tools
-    propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [ ] ++ [
-      automake
-      autoconf
-      libtool
-    ];
-  });
 
   viewres = addMainProgram super.viewres { };
 

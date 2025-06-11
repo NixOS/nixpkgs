@@ -4,8 +4,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "nimlang";
     publisher = "nimlang";
-    version = "1.8.0";
-    hash = "sha256-5GwCKDG8DJnen0zDJYeFuqhyitPyORRPsB+DvbzAivw=";
+    version = "1.8.1";
+    hash = "sha256-Apfq0VeLEmXnxsaipA+aJr/QX+chAQQGQQ+64hqFIbA=";
   };
   meta = {
     description = "Nim language support for VS Code";

@@ -12,7 +12,7 @@
   lib,
   fetchurl,
   makeWrapper,
-  python,
+  python3,
   openssl,
   jq,
   callPackage,
@@ -21,7 +21,21 @@
 }:
 
 let
-  pythonEnv = python.withPackages (
+  # remove ASAP: https://github.com/googleapis/google-api-python-client/issues/2554
+  pythonCustom = python3.override {
+    self = pythonCustom;
+    packageOverrides = _: super: {
+      pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
+        version = "24.2.1";
+        src = old.src.override {
+          tag = version;
+          hash = "sha256-otK7Y7Kb/l3QOErhAcuDHB/CKG9l1vH2BTnOieAWNc0=";
+        };
+      });
+    };
+  };
+
+  pythonEnv = pythonCustom.withPackages (
     p:
     with p;
     [
@@ -50,7 +64,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl (sources stdenv.hostPlatform.system);
 
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   nativeBuildInputs = [
     jq
@@ -85,7 +99,7 @@ stdenv.mkDerivation rec {
         wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
             --set CLOUDSDK_PYTHON_ARGS "-S -W ignore" \
-            --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}" \
+            --prefix PYTHONPATH : "${pythonEnv}/${python3.sitePackages}" \
             --prefix PATH : "${openssl.bin}/bin"
 
         mkdir -p $out/bin

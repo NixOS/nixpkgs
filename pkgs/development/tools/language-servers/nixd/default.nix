@@ -20,14 +20,15 @@
 }:
 
 let
+  nix = nixVersions.nix_2_28;
   common = rec {
-    version = "2.6.3";
+    version = "2.6.4";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-Gd7VFyQ/ayw0NI72sdZ1wFuXaxlIPWyE31Kl53d3zB4=";
+      hash = "sha256-K7S626SPzlNCmRhntSKhGP1iyHJXBZEeHliX4iEwbKk=";
     };
 
     nativeBuildInputs = [
@@ -101,12 +102,10 @@ in
       ];
 
       buildInputs = [
-        nixVersions.nix_2_24
+        nix
         gtest
         boost
       ];
-
-      env.CXXFLAGS = "-include ${nixVersions.nix_2_24.dev}/include/nix/config.h";
 
       passthru.tests.pkg-config = testers.hasPkgConfigModules {
         package = nixt;
@@ -127,7 +126,7 @@ in
       sourceRoot = "${common.src.name}/nixd";
 
       buildInputs = [
-        nixVersions.nix_2_24
+        nix
         nixf
         nixt
         llvmPackages.llvm
@@ -136,8 +135,6 @@ in
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
-
-      env.CXXFLAGS = "-include ${nixVersions.nix_2_24.dev}/include/nix/config.h";
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;

@@ -4,7 +4,7 @@
   cunit,
   docbook5,
   fetchFromGitHub,
-  file,
+  fetchpatch,
   gdalMinimal,
   geos,
   jitSupport,
@@ -50,6 +50,15 @@ postgresqlBuildExtension (finalAttrs: {
     hash = "sha256-1kOLtG6AMavbWQ1lHG2ABuvIcyTYhgcbjuVmqMR4X+g=";
   };
 
+  patches = [
+    # Backport patch for compatibility with GDAL 3.11
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://git.osgeo.org/gitea/postgis/postgis/commit/614eca7c169cd6e9819801d3ea99d5258262c58b.patch";
+      hash = "sha256-VkNZFANAt8Jv+ExCusGvi+ZWB7XLcAheefSx7akA7Go=";
+    })
+  ];
+
   buildInputs =
     [
       geos
@@ -83,7 +92,6 @@ postgresqlBuildExtension (finalAttrs: {
   ];
 
   postgresqlTestUserOptions = "LOGIN SUPERUSER";
-  failureHook = "postgresqlStop";
 
   # postgis config directory assumes /include /lib from the same root for json-c library
   env.NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";

@@ -25,18 +25,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "settings-keyboard";
     rev = version;
-    sha256 = "sha256-/jfUftlNL+B4570ajropS7/2fqro380kZzpPwm+A9fA=";
+    sha256 = "sha256-j2D6NSwHTZQJaHm664fHF4VkcExpYwoq/J3SXus30nw=";
   };
 
   patches = [
     # This will try to install packages with apt.
-    # https://github.com/elementary/switchboard-plug-keyboard/issues/324
+    # https://github.com/elementary/settings-keyboard/issues/324
     ./hide-install-unlisted-engines-button.patch
 
     (replaceVars ./fix-paths.patch {
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Switchboard Keyboard Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-keyboard";
+    homepage = "https://github.com/elementary/settings-keyboard";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     teams = [ teams.pantheon ];

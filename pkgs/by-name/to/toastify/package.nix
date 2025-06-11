@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "hoodie";
-    repo = pname;
+    repo = "toastify";
     rev = "v${version}";
     sha256 = "sha256-hSBh1LTfe3rQDPUryo2Swdf/yLYrOQ/Fg3Dz7ZqV3gw=";
   };

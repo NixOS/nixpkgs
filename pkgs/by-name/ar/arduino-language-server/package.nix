@@ -33,12 +33,12 @@ buildGoModule rec {
       "-extldflags '-static'"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Arduino Language Server based on Clangd to Arduino code autocompletion";
     mainProgram = "arduino-language-server";
     homepage = "https://github.com/arduino/arduino-language-server";
     changelog = "https://github.com/arduino/arduino-language-server/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ BattleCh1cken ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ BattleCh1cken ];
   };
 }

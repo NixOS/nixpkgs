@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.9.7";
+  version = "0.10.3";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage {
     owner = "sectordistrict";
     repo = "intentrace";
     tag = "v${version}";
-    hash = "sha256-24w5EQ3LQ7OxuVaqoLlUrYi2TmSLAfWGLNrkPcxMQMM=";
+    hash = "sha256-mCMARX6y9thgYJpDRFnWGZJupdk+EhVaBGbwABYYjNA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-pLGWXwpgTh/7SaDhs63jr+5Fpsiep1tfl9VlCEBrK1s=";
+  cargoHash = "sha256-BZ+P6UT9bBuAX9zyZCA+fI2pUtV8b98oPcQDwJV5HC8=";
 
   meta = {
     description = "Prettified Linux syscall tracing tool (like strace)";

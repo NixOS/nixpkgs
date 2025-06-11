@@ -7,13 +7,13 @@
   wrapGAppsHook3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "muso";
   version = "unstable-2021-09-02";
 
   src = fetchFromGitHub {
     owner = "quebin31";
-    repo = pname;
+    repo = "muso";
     rev = "6dd1c6d3a82b21d4fb2606accf2f26179eb6eaf9";
     hash = "sha256-09DWUER0ZWQuwfE3sjov2GjJNI7coE3D3E5iUy9mlSE=";
   };

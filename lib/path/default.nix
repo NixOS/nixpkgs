@@ -382,7 +382,7 @@ in
               (splitRoot p).root
               (splitRoot p).subpath
 
-    - Trying to get the parent directory of `root` using [`readDir`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readDir) returns `root` itself:
+    - Trying to get the parent directory of `root` using [`dirOf`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-dirOf) returns `root` itself:
 
           dirOf (splitRoot p).root == (splitRoot p).root
 

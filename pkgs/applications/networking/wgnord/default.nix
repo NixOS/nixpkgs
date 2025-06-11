@@ -56,13 +56,13 @@ resholve.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "NordVPN Wireguard (NordLynx) client in POSIX shell";
     homepage = "https://github.com/phirecc/wgnord";
     changelog = "https://github.com/phirecc/wgnord/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ urandom ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "wgnord";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

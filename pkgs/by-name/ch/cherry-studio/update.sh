@@ -19,10 +19,10 @@ nix-update cherry-studio --version "$latestVersion" || true
 
 export HOME=$(mktemp -d)
 src=$(nix-build --no-link $PWD -A cherry-studio.src)
-TMPDIR=$(mktemp -d)
-cp --recursive --no-preserve=mode $src/* $TMPDIR
-cd $TMPDIR
+WORKDIR=$(mktemp -d)
+cp --recursive --no-preserve=mode $src/* $WORKDIR
+pushd $WORKDIR
 yarn-berry-fetcher missing-hashes yarn.lock >$PACKAGE_DIR/missing-hashes.json
-rm -rf $TMPDIR
+popd
 
 nix-update cherry-studio --version skip || true

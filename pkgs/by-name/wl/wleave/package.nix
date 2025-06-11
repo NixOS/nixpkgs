@@ -2,13 +2,14 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  at-spi2-atk,
+  installShellFiles,
   pkg-config,
+  scdoc,
+  wrapGAppsHook4,
+  at-spi2-atk,
   glib,
   gtk4,
   gtk4-layer-shell,
-  installShellFiles,
-  scdoc,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "wleave";
@@ -25,16 +26,17 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-csnArsVk/Ifhi3aO3bSG0mkSA81KACxR/xC1L8JJfmc=";
 
   nativeBuildInputs = [
-    pkg-config
     installShellFiles
+    pkg-config
     scdoc
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     at-spi2-atk
+    glib
     gtk4
     gtk4-layer-shell
-    glib
   ];
 
   postPatch = ''

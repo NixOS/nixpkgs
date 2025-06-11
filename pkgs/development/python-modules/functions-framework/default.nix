@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "functions-framework";
-  version = "3.8.2";
+  version = "3.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "functions-framework-python";
     rev = "v${version}";
-    hash = "sha256-wLL8VWhRb3AEa41DO/mwx3G0AwmLACiXeDvo+LEq1xM=";
+    hash = "sha256-kfoSGe08vCOXunzFH5FA7/NesOwAklfChKeoIfBXBlQ=";
   };
 
   build-system = [ setuptools ];

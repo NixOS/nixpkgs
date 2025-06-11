@@ -29,4 +29,11 @@
         - .github/workflows/*
         - ci/**/*.*
 
+"backport release-25.05":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - .github/workflows/*
+        - ci/**/*.*
+
 # keep-sorted end

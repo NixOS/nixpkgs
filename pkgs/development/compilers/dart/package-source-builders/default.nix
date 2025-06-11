@@ -16,6 +16,7 @@
   pdfrx = callPackage ./pdfrx { };
   printing = callPackage ./printing { };
   rhttp = callPackage ./rhttp { };
+  sentry_flutter = callPackage ./sentry_flutter { };
   sqlcipher_flutter_libs = callPackage ./sqlcipher_flutter_libs { };
   sqlite3 = callPackage ./sqlite3 { };
   sqlite3_flutter_libs = callPackage ./sqlite3_flutter_libs { };

@@ -255,6 +255,10 @@ stdenv.mkDerivation (finalAttrs: {
       # Certificates generated using perl in `installPhase`
       perl
     ]
+    ++ lib.optionals (!atLeast11 && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      # Certificates generated using keytool in `installPhase`
+      buildPackages.jdk8
+    ]
     ++ [
       unzip
       zip
@@ -580,7 +584,12 @@ stdenv.mkDerivation (finalAttrs: {
       (
         cd $jre/lib/openjdk/jre/lib/security
         rm cacerts
-        perl ${./8/generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+        perl ${./8/generate-cacerts.pl} ${
+          if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+            "$jre/lib/openjdk/jre/bin/keytool"
+          else
+            "keytool"
+        } ${cacert}/etc/ssl/certs/ca-bundle.crt
       )
     ''
     + ''

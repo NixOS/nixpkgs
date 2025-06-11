@@ -34,7 +34,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.20.0";
+  version = "1.20.3";
 
   outputs = [
     "out"
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     tag = finalAttrs.version;
-    hash = "sha256-FHMa8fTr8qNEM5WptuMjMs/XOsvmFxi8pDaCrwJ3/ww=";
+    hash = "sha256-ntTGEsk8GlXkp3i9RtF+T7jqnNdL2GVbu05d68WVTYc=";
   };
 
   patches = [

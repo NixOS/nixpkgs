@@ -15,7 +15,6 @@
   hypothesis,
   kaitaistruct,
   ldap3,
-  mitmproxy-linux,
   mitmproxy-rs,
   msgpack,
   passlib,
@@ -31,7 +30,6 @@
   ruamel-yaml,
   setuptools,
   sortedcontainers,
-  stdenv,
   tornado,
   urwid,
   wsproto,
@@ -40,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.0.1";
+  version = "12.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-BKT/qBWlfShAveL1KY5XXgQjhxR3Vr4zoJwiRxtBJkE=";
+    hash = "sha256-RTHL5+lbR+AbkiE4+z4ZbxZSV2E4NGTmShbMIMRKJPA=";
   };
 
   pythonRelaxDeps = [
@@ -55,6 +53,7 @@ buildPythonPackage rec {
     "h2"
     "passlib"
     "typing-extensions" # https://github.com/NixOS/nixpkgs/pull/397082
+    "tornado"
   ];
 
   build-system = [ setuptools ];

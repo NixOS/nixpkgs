@@ -83,9 +83,9 @@
 
   containerapp = mkAzExtension rec {
     pname = "containerapp";
-    version = "1.1.0b4";
+    version = "1.1.0b5";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
-    hash = "sha256-d2pqanDERA54NGQwzO1S2D+WM1q5w1dmKjYbEdbknik=";
+    hash = "sha256-gC75NiDDRw4DVIDGiyfdCcFSAzdUgVNjyTfrgGgRd90=";
     description = "Microsoft Azure Command-Line Tools Containerapp Extension";
     propagatedBuildInputs = with python3Packages; [
       docker
@@ -156,4 +156,5 @@
   connection-monitor-preview = throw "The 'connection-monitor-preview' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8194
   deidservice = throw "The 'deidservice' extension for azure-cli was moved under healthcareapis"; # Added 2024-11-19, https://github.com/Azure/azure-cli-extensions/pull/8224
   logz = throw "The 'logz' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8459
+  spring = throw "The 'spring' extension for azure-cli was deprecated upstream"; # Added 2025-05-07, https://github.com/Azure/azure-cli-extensions/pull/8652
 }

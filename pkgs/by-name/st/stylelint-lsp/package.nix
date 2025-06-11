@@ -51,10 +51,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib/${finalAttrs.pname}}
-    mv {dist,node_modules} $out/lib/${finalAttrs.pname}
-    chmod a+x $out/lib/${finalAttrs.pname}/dist/index.js
-    ln -s $out/lib/${finalAttrs.pname}/dist/index.js $out/bin/stylelint-lsp
+    mkdir -p $out/{bin,lib/stylelint-lsp}
+    mv {dist,node_modules} $out/lib/stylelint-lsp
+    chmod a+x $out/lib/stylelint-lsp/dist/index.js
+    ln -s $out/lib/stylelint-lsp/dist/index.js $out/bin/stylelint-lsp
 
     runHook postInstall
   '';

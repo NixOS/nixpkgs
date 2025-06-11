@@ -17,13 +17,13 @@
 
 flutter324.buildFlutterApplication rec {
   pname = "harmony-music";
-  version = "1.11.2";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "anandnet";
     repo = "Harmony-Music";
     tag = "v${version}";
-    hash = "sha256-oLtdQWjBM2gRxBJzO++hoXeyvcALu6R4eA7nswQpuqw=";
+    hash = "sha256-czXtJeMcwYD0iBmYNhicywTPSnsW1Y2Yl3T2YS3uuWo=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

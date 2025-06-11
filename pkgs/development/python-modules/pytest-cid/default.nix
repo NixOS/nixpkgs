@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ntninja";
-    repo = pname;
+    repo = "pytest-cid";
     tag = "v${version}";
     hash = "sha256-dcL/i5+scmdXh7lfE8+32w9PdHWf+mkunJL1vpJ5+Co=";
   };

@@ -5,10 +5,52 @@
   makeWrapper,
   xar,
   cpio,
-  pulseaudioSupport ? true,
-  xdgDesktopPortalSupport ? true,
   callPackage,
+  nixosTests,
   buildFHSEnv,
+
+  # Support pulseaudio by default
+  pulseaudioSupport ? true,
+
+  # Whether to support XDG portals at all
+  xdgDesktopPortalSupport ? (
+    plasma6XdgDesktopPortalSupport
+    || plasma5XdgDesktopPortalSupport
+    || lxqtXdgDesktopPortalSupport
+    || gnomeXdgDesktopPortalSupport
+    || hyprlandXdgDesktopPortalSupport
+    || wlrXdgDesktopPortalSupport
+    || xappXdgDesktopPortalSupport
+  ),
+
+  # This is Plasma 6 (KDE) XDG portal support
+  plasma6XdgDesktopPortalSupport ? false,
+
+  # This is Plasma 5 (KDE) XDG portal support
+  plasma5XdgDesktopPortalSupport ? false,
+
+  # This is LXQT XDG portal support
+  lxqtXdgDesktopPortalSupport ? false,
+
+  # This is GNOME XDG portal support
+  gnomeXdgDesktopPortalSupport ? false,
+
+  # This is Hyprland XDG portal support
+  hyprlandXdgDesktopPortalSupport ? false,
+
+  # This is `wlroots` XDG portal support
+  wlrXdgDesktopPortalSupport ? false,
+
+  # This is Xapp XDG portal support, used for GTK and various Cinnamon/MATE/Xfce4 infrastructure.
+  xappXdgDesktopPortalSupport ? false,
+
+  # This function can be overridden to add in extra packages
+  targetPkgs ? pkgs: [ ],
+
+  # This list can be overridden to add in extra packages
+  # that are independent of the underlying package attrset
+  targetPkgsFixed ? [ ],
+
 }:
 
 let
@@ -19,23 +61,23 @@ let
   # and often with different versions. We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "6.4.6.53970";
-  versions.x86_64-darwin = "6.4.6.53970";
-  versions.x86_64-linux = "6.4.6.1370";
+  versions.aarch64-darwin = "6.4.10.56141";
+  versions.x86_64-darwin = "6.4.10.56141";
+  versions.x86_64-linux = "6.4.10.2027";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-yNsiFZNte4432d8DUyDhPUOVbLul7gUdvr+3qK/Y+tk=";
+      hash = "sha256-LIQl+s/2WfYFIEG/ZsvpWlsWRhToB+5+ymAXCMhDqWE=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-Ut93qQFFN0d58wXD5r8u0B17HbihFg3FgY3a1L8nsIA=";
+      hash = "sha256-jP9ajDCo8iImS8YGFLjNMOLLh9g8uSqYIRl3aqhJAaM=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-Y+8garSqDcKLCVv1cTiqGEfrGKpK3UoXIq8X4E8CF+8=";
+      hash = "sha256-BwYO8IlQJjZwwn/qokZ+gAgcgmAjG34uExHCajchVqs=";
     };
   };
 
@@ -100,6 +142,7 @@ let
 
     passthru.updateScript = ./update.sh;
     passthru.tests.startwindow = callPackage ./test.nix { };
+    passthru.tests.nixos-module = nixosTests.zoom-us;
 
     meta = {
       homepage = "https://zoom.us/";
@@ -179,17 +222,19 @@ let
       pkgs.libpulseaudio
       pkgs.pulseaudio
     ]
-    ++ lib.optionals xdgDesktopPortalSupport [
-      pkgs.kdePackages.xdg-desktop-portal-kde
-      pkgs.lxqt.xdg-desktop-portal-lxqt
-      pkgs.plasma5Packages.xdg-desktop-portal-kde
-      pkgs.xdg-desktop-portal
+    ++ lib.optional xdgDesktopPortalSupport pkgs.xdg-desktop-portal
+    ++ lib.optional plasma6XdgDesktopPortalSupport pkgs.kdePackages.xdg-desktop-portal-kde
+    ++ lib.optional plasma5XdgDesktopPortalSupport pkgs.plasma5Packages.xdg-desktop-portal-kde
+    ++ lib.optional lxqtXdgDesktopPortalSupport pkgs.lxqt.xdg-desktop-portal-lxqt
+    ++ lib.optionals gnomeXdgDesktopPortalSupport [
       pkgs.xdg-desktop-portal-gnome
       pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-hyprland
-      pkgs.xdg-desktop-portal-wlr
-      pkgs.xdg-desktop-portal-xapp
-    ];
+    ]
+    ++ lib.optional hyprlandXdgDesktopPortalSupport pkgs.xdg-desktop-portal-hyprland
+    ++ lib.optional wlrXdgDesktopPortalSupport pkgs.xdg-desktop-portal-wlr
+    ++ lib.optional xappXdgDesktopPortalSupport pkgs.xdg-desktop-portal-xapp
+    ++ targetPkgs pkgs
+    ++ targetPkgsFixed;
 
   # We add the `unpacked` zoom archive to the FHS env
   # and also bind-mount its `/opt` directory.
@@ -200,7 +245,10 @@ let
     version = versions.${system} or throwSystem;
 
     targetPkgs = pkgs: (linuxGetDependencies pkgs) ++ [ unpacked ];
-    extraPreBwrapCmds = "unset QT_PLUGIN_PATH";
+    extraPreBwrapCmds = ''
+      unset QT_PLUGIN_PATH
+      unset LANG  # would break settings dialog on non-"en_XX" locales
+    '';
     extraBwrapArgs = [ "--ro-bind ${unpacked}/opt /opt" ];
     runScript = "/opt/zoom/ZoomLauncher";
 

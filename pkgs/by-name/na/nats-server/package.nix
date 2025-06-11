@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "nats-io";
-    repo = pname;
+    repo = "nats-server";
     rev = "v${version}";
     hash = "sha256-Z4EBXWUtBzW65ONvt94sKzVDHw8qVz2cR5qewUm5nXI=";
   };

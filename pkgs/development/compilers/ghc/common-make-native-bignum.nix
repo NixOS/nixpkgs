@@ -645,6 +645,8 @@ stdenv.mkDerivation (
 
       # Our Cabal compiler name
       haskellCompilerName = "ghc-${version}";
+
+      bootstrapAvailable = lib.meta.availableOn stdenv.buildPlatform bootPkgs.ghc;
     };
 
     meta = {

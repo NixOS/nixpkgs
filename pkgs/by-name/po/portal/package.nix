@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "SpatiumPortae";
-    repo = pname;
+    repo = "portal";
     rev = "v${version}";
     sha256 = "sha256-hGB82a2WirUL1Tph6EuoITOQGYA0Lo4zOeKPC46B5Qk=";
   };

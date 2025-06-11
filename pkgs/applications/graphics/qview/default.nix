@@ -1,17 +1,12 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
-  qmake,
-  qtbase,
-  qttools,
-  qtimageformats,
-  qtsvg,
-  qtx11extras,
+  libsForQt5,
   x11Support ? true,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qview";
   version = "6.1";
 
@@ -24,14 +19,17 @@ mkDerivation rec {
 
   qmakeFlags = lib.optionals (!x11Support) [ "CONFIG+=NO_X11" ];
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   buildInputs = [
-    qtbase
-    qttools
-    qtimageformats
-    qtsvg
-  ] ++ lib.optionals x11Support [ qtx11extras ];
+    libsForQt5.qtbase
+    libsForQt5.qttools
+    libsForQt5.qtimageformats
+    libsForQt5.qtsvg
+  ] ++ lib.optionals x11Support [ libsForQt5.qtx11extras ];
 
   meta = with lib; {
     description = "Practical and minimal image viewer";

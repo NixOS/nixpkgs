@@ -6,6 +6,7 @@
   pkg-config,
   libiconv,
   rustPlatform,
+  libz,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage rec {
     [ openssl.dev ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
+      libz
     ];
 
   meta = with lib; {

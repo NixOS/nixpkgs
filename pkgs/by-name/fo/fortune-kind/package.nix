@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   postInstall =
     ''
       wrapProgram $out/bin/fortune-kind \
-        --prefix FORTUNE_DIR : "$out/fortunes"
+        --set-default FORTUNE_DIR "$out/fortunes"
     ''
     + lib.optionalString fortuneAlias ''
       ln -s fortune-kind $out/bin/fortune

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   gtk4,
   installShellFiles,
+  wrapGAppsHook4,
   libadwaita,
   nix-update-script,
   pkg-config,
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -55,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 install_files/44-backlight-permissions.rules -t $out/lib/udev/rules.d
     install -Dm644 install_files/com.sidevesh.Luminance.desktop -t $out/share/applications
     install -Dm644 install_files/com.sidevesh.Luminance.gschema.xml -t $out/share/glib-2.0/schemas
+
+    glib-compile-schemas $out/share/glib-2.0/schemas
 
     mv icons $out/share/icons
     rm $out/share/icons/com.sidevesh.luminance.Source.svg

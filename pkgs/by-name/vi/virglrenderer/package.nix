@@ -5,7 +5,7 @@
   meson,
   ninja,
   pkg-config,
-  python3,
+  buildPackages,
   libGLU,
   libepoxy,
   libX11,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    (python3.withPackages (ps: [
+    (buildPackages.python3.withPackages (ps: [
       ps.pyyaml
     ]))
   ];

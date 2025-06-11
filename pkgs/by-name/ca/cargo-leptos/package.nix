@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "no_downloads" ]; # cargo-leptos will try to install missing dependencies on its own otherwise
   doCheck = false; # Check phase tries to query crates.io
 
-  meta = with lib; {
+  meta = {
     description = "Build tool for the Leptos web framework";
     mainProgram = "cargo-leptos";
     homepage = "https://github.com/leptos-rs/cargo-leptos";
     changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ benwis ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ benwis ];
   };
 }

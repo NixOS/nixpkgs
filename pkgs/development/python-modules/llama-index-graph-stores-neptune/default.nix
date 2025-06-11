@@ -1,16 +1,16 @@
 {
   lib,
+  boto3,
   buildPythonPackage,
   fetchPypi,
-  boto3,
+  hatchling,
   llama-index-core,
-  poetry-core,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-graph-stores-neptune";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,10 +18,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_graph_stores_neptune";
     inherit version;
-    hash = "sha256-jSZ86qdK5KklPFtgyruPtYhJ2Yesd8C1QufhojhKO0A=";
+    hash = "sha256-IqY4dEWcbM9371vuZ7C9NlDux9O/j6wF7Hcc4aiBiIE=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     boto3

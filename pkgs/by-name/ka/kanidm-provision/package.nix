@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanidm-provision";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "kanidm-provision";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+NQJEAJ0DqKEV1cYZN7CLzGoBJNUL3SQAMmxRQG5DMI=";
+    hash = "sha256-kwxGrLz59Zk8PSsfQzPUeA/xWQZrV1NWlS5/yuqfIyI=";
   };
 
   postPatch = ''

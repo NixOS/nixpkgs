@@ -3,9 +3,7 @@
   lib,
   fetchFromGitHub,
   fftw,
-  qtbase,
-  qmake,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,11 +20,11 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     fftw
   ];
 

@@ -9,7 +9,7 @@
   requests,
   tlv8,
   pyserial,
-  protobuf5,
+  protobuf,
   semver,
   crcmod,
   hidapi,
@@ -27,6 +27,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -37,7 +39,7 @@ buildPythonPackage rec {
     crcmod
     cryptography
     hidapi
-    protobuf5
+    protobuf
     pyserial
   ];
 

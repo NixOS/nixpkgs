@@ -45,7 +45,7 @@ let
     # cusparselt
   ];
   cudatoolkit-joined = symlinkJoin {
-    name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
+    name = "cudatoolkit-joined-${cudaPackages.cudaMajorMinorVersion}";
     paths =
       outpaths
       ++ lib.concatMap (f: lib.map f outpaths) [

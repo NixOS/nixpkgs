@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   gitUpdater,
   bison,
   cmake,
@@ -42,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.0.41-32";
+  version = "8.0.42-33";
 
   src = fetchurl {
     url = "https://www.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-3ua/8X0vzbBzjRNhmMjdz3Wfk7ECs67bPoCYBBNXywc=";
+    hash = "sha256-UDdmBz1RVjX/kRivvk69GPdtjLjWTglKxteiLxXKQGc=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
+    # adapted from mysql80's llvm 19 fixes
+    ./libcpp-fixes.patch
+    # fixes using -DWITH_SSL=system with CMAKE_PREFIX_PATH on darwin
+    # https://github.com/Homebrew/homebrew-core/pull/204799
+    (fetchpatch {
+      name = "fix-system-ssl-darwin.patch";
+      url = "https://github.com/percona/percona-server/pull/5537/commits/a693e5d67abf6f27f5284c86361604babec529c6.patch";
+      hash = "sha256-fFBy3AYTMLvHvbsh0g0UvuPkmVMKZzxPsxeBKbsN8Ho=";
+    })
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
     ./coredumper-explicitly-import-unistd.patch # fix build on aarch64-linux
   ];

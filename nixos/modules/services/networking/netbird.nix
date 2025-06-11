@@ -550,7 +550,7 @@ in
               User = client.user.name;
               Group = client.user.group;
 
-              # settings implied by DynamicUser=true, without actully using it,
+              # settings implied by DynamicUser=true, without actually using it,
               # see https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#DynamicUser=
               RemoveIPC = true;
               PrivateTmp = true;

@@ -6,20 +6,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.7.1";
+  version = "4.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = "theharvester";
     tag = version;
-    hash = "sha256-IBisnQGdhPCoVPPH/GHLJg5qoh08KfMuMxbsqF3jjpE=";
+    hash = "sha256-zKytU80jmZl5TwY5ti6YZ85DbJnXIMqFLKjMN9jfw7E=";
   };
 
-  postPatch = ''
-    # Requirements are pinned
-    sed -i 's/==.*//' requirements/base.txt
-  '';
+  pythonRelaxDeps = true;
 
   pythonRemoveDeps = [ "winloop" ];
 

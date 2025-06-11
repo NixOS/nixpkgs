@@ -2,11 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   boehmgc,
   zlib,
   sqlite,
-  pcre,
+  pcre2,
   cmake,
   pkg-config,
   git,
@@ -14,31 +13,23 @@
   apr,
   aprutil,
   libmysqlclient,
-  mbedtls_2,
+  mbedtls,
   openssl,
-  pkgs,
-  gtk2,
+  gtk3,
   libpthreadstubs,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "neko";
-  version = "2.3.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "HaxeFoundation";
     repo = "neko";
     rev = "v${lib.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "19rc59cx7qqhcqlb0znwbnwbg04c1yq6xmvrwm1xi46k3vxa957g";
+    hash = "sha256-cTu+AlDnpXAow6jM77Ct9DM8p//z6N1utk7Wsd+0g9U=";
   };
-
-  patches = [
-    # https://github.com/HaxeFoundation/neko/pull/224
-    (fetchpatch {
-      url = "https://github.com/HaxeFoundation/neko/commit/ff5da9b0e96cc0eabc44ad2c10b7a92623ba49ee.patch";
-      sha256 = "sha256-isM7QGPiyXgT2zpIGd+r12vKg7I1rOWYTTWxuECafro=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -49,16 +40,17 @@ stdenv.mkDerivation rec {
     boehmgc
     zlib
     sqlite
-    pcre
+    pcre2
     apacheHttpd
     apr
     aprutil
     libmysqlclient
-    mbedtls_2
+    mbedtls
     openssl
     libpthreadstubs
-  ] ++ lib.optional stdenv.hostPlatform.isLinux gtk2;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux gtk3;
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
+
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
@@ -73,23 +65,26 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "High-level dynamically typed programming language";
     homepage = "https://nekovm.org";
     license = [
       # list based on https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE
-      licenses.gpl2Plus # nekoc, nekoml
-      licenses.lgpl21Plus # mysql.ndll
-      licenses.bsd3 # regexp.ndll
-      licenses.zlib # zlib.ndll
-      licenses.asl20 # mod_neko, mod_tora, mbedTLS
-      licenses.mit # overall, other libs
+      lib.licenses.gpl2Plus # nekoc, nekoml
+      lib.licenses.lgpl21Plus # mysql.ndll
+      lib.licenses.bsd3 # regexp.ndll
+      lib.licenses.zlib # zlib.ndll
+      lib.licenses.asl20 # mod_neko, mod_tora, mbedTLS
+      lib.licenses.mit # overall, other libs
       "https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE#L24-L40" # boehm gc
     ];
-    maintainers = [
-      maintainers.marcweber
-      maintainers.locallycompact
+    maintainers = with lib.maintainers; [
+      marcweber
+      locallycompact
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }

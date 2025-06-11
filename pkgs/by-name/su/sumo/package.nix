@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumo";
-  version = "1.22.0";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "sumo";
     rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-4HL5wi6LfUe4/v7ObeiDCTyWV8ChRlRXDFb5OBRmjuI=";
+    hash = "sha256-yXXOCvlHAzGmNQeXyWQtmq1UdkQ6qt4L9noUii/voP4=";
     fetchSubmodules = true;
   };
 
@@ -93,6 +93,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/eclipse/sumo";
     license = licenses.epl20;
-    maintainers = with maintainers; [ mtreca ];
+    maintainers = with maintainers; [ ];
   };
 }

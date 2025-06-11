@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "ducc0";
-  version = "0.37.1";
+  version = "0.38.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -23,11 +23,11 @@ buildPythonPackage rec {
     owner = "mtr";
     repo = "ducc";
     tag = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-aBKbDDUUiHIpVX7NtNJOQAH/hov7Zj5O5bE6J25ck10=";
+    hash = "sha256-Be7lw9i1uEOY3w/Efnn7sZ4Xg5DenQuih6uReCmOI1I=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail '"pybind11>=2.6.0", ' ""
+    substituteInPlace pyproject.toml --replace-fail '"pybind11>=2.13.6", ' ""
   '';
 
   DUCC0_USE_NANOBIND = "";

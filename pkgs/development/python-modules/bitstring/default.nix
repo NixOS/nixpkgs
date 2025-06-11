@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "scott-griffiths";
-    repo = pname;
+    repo = "bitstring";
     tag = "bitstring-${version}";
     hash = "sha256-ZABAd42h+BqcpKTFV5PxcBN3F8FKV6Qw3rhP13eX57k=";
   };

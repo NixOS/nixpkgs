@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "adafruit-platformdetect";
-  version = "3.78.0";
+  version = "3.79.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "adafruit_platformdetect";
     inherit version;
-    hash = "sha256-hNUzPgAvsfHDUscOmkacZykEXD1s3M5n785NKnemCVE=";
+    hash = "sha256-E/UixKuSRBYAw/R/15WxYQpkYDSSLs0svB4gfGTDz38=";
   };
 
   build-system = [ setuptools-scm ];

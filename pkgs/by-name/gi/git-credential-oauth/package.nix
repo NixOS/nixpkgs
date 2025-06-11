@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "hickford";
-    repo = pname;
+    repo = "git-credential-oauth";
     rev = "v${version}";
     hash = "sha256-9AoIyQ05Y/usG0Tlehn7U8zjBxC1BYNjNVRtgWgzLbo=";
   };

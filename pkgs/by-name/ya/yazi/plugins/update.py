@@ -49,10 +49,25 @@ def get_github_headers() -> Dict[str, str]:
     return headers
 
 
+def get_default_branch(owner: str, repo: str, headers: Dict[str, str]) -> str:
+    """Get the default branch name for a GitHub repository"""
+    api_url = f"https://api.github.com/repos/{owner}/{repo}"
+
+    try:
+        response = requests.get(api_url, headers=headers)
+        response.raise_for_status()
+        repo_data = response.json()
+        return repo_data["default_branch"]
+    except requests.RequestException as e:
+        print(f"Error fetching repository data: {e}")
+        print("Falling back to 'main' as default branch")
+        return "main"
+
 def fetch_plugin_content(owner: str, repo: str, plugin_pname: str, headers: Dict[str, str]) -> str:
     """Fetch the plugin's main.lua content from GitHub"""
+    default_branch = get_default_branch(owner, repo, headers)
     plugin_path = f"{plugin_pname}/" if owner == "yazi-rs" else ""
-    main_lua_url = f"https://raw.githubusercontent.com/{owner}/{repo}/main/{plugin_path}main.lua"
+    main_lua_url = f"https://raw.githubusercontent.com/{owner}/{repo}/{default_branch}/{plugin_path}main.lua"
 
     try:
         response = requests.get(main_lua_url, headers=headers)
@@ -81,12 +96,14 @@ def check_version_compatibility(plugin_content: str, plugin_name: str, yazi_vers
 
 def get_latest_commit(owner: str, repo: str, plugin_pname: str, headers: Dict[str, str]) -> Tuple[str, str]:
     """Get the latest commit hash and date for the plugin"""
+    default_branch = get_default_branch(owner, repo, headers)
+
     if owner == "yazi-rs":
         # For official plugins, get commit info for the specific plugin file
         api_url = f"https://api.github.com/repos/{owner}/{repo}/commits?path={plugin_pname}/main.lua&per_page=1"
     else:
-        # For third-party plugins, get latest commit on main branch
-        api_url = f"https://api.github.com/repos/{owner}/{repo}/commits/main"
+        # For third-party plugins, get latest commit on default branch
+        api_url = f"https://api.github.com/repos/{owner}/{repo}/commits/{default_branch}"
 
     try:
         response = requests.get(api_url, headers=headers)

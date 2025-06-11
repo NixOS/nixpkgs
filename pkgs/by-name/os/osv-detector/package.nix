@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "G-Rath";
-    repo = pname;
+    repo = "osv-detector";
     rev = "v${version}";
     hash = "sha256-vIkLrKyDeMfRe/0EPhlKlHAO6XB0/OFY5mTUHeZbcg8=";
   };

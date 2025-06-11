@@ -2,36 +2,40 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   jsonschema,
-  poetry-core,
   pymacaroons,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
   typing-extensions,
+  uv-dynamic-versioning,
 }:
 
 buildPythonPackage rec {
   pname = "pypitoken";
-  version = "7.0.1";
+  version = "7.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ewjoachim";
     repo = "pypitoken";
     tag = version;
-    hash = "sha256-1SUR6reZywgFpSdD49E5PjEDNrlvsHH4TK6SkXStUws=";
+    hash = "sha256-esn7Pbmpo4BAvLefOWMeQNEB0UYwBf9vgcuzmuGwH30=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   dependencies = [
     pymacaroons

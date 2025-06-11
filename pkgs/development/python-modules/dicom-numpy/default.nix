@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "innolitics";
-    repo = pname;
+    repo = "dicom-numpy";
     tag = "v${version}";
     hash = "sha256-pgmREQlstr0GY2ThIWt4hbcSWmaNWgkr2gO4PSgGHqE=";
   };

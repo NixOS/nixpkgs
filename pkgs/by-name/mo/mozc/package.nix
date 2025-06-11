@@ -106,7 +106,6 @@ buildBazelPackage rec {
     license = licenses.free;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      ericsagnes
       pineapplehunter
     ];
   };

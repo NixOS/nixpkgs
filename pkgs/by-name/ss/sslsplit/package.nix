@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "droe";
-    repo = pname;
+    repo = "sslsplit";
     rev = version;
     sha256 = "1p43z9ln5rbc76v0j1k3r4nhvfw71hq8jzsallb54z9hvwfvqp3l";
   };

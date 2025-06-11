@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "cement";
-  version = "3.0.12";
+  version = "3.0.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "datafolklabs";
     repo = "cement";
     tag = version;
-    hash = "sha256-weBqmNEjeSh5YQfHK48VVFW3UbZQmV4MiIQ3UPQKTTI=";
+    hash = "sha256-hZ9kKQmMomjy5nnHKQ2RWB+6vIID8XMn3qutg0wCBq8=";
   };
 
   build-system = [ pdm-backend ];

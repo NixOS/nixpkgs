@@ -7,8 +7,7 @@ let
   inherit (pkgs) lib;
 in
 
-self: super:
-{
+self: super: {
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
@@ -98,9 +97,4 @@ self: super:
           --replace-fail "HsWord64 u = atomic_inc64" "HsWord64 u = atomic_inc"
       '';
     } super.ghc-lib-parser;
-}
-// lib.optionalAttrs (lib.versionAtLeast super.ghc.version "9.8.3") {
-  # Breakage related to GHC 9.8.3 / deepseq 1.5.1.0
-  # https://github.com/typeable/generic-arbitrary/issues/18
-  generic-arbitrary = dontCheck super.generic-arbitrary;
 }

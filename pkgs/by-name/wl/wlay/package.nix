@@ -30,12 +30,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     wayland-scanner
   ];
 
   buildInputs = [
-    extra-cmake-modules
     glfw3
     libX11
     libXau

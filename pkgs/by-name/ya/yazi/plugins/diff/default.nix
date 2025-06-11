@@ -16,7 +16,6 @@ mkYaziPlugin {
 
   meta = {
     description = "Diff the selected file with the hovered file, create a living patch, and copy it to the clipboard";
-    homepage = "https://yazi-rs.github.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

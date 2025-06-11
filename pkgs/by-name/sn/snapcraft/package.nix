@@ -7,13 +7,14 @@
   nix-update-script,
   python3Packages,
   squashfsTools,
+  cacert,
   stdenv,
   writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.8.1";
+  version = "8.9.2";
 
   pyproject = true;
 
@@ -21,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     tag = version;
-    hash = "sha256-gn2roiwNLUFJsuen2qGPvl4DyE6gPUQibS1Cn7cj2L8=";
+    hash = "sha256-4Dv2q/aKWnQkQ6ANYev/5fT1fFKh1MytYJtHK0iAzhk=";
   };
 
   patches = [
@@ -116,6 +117,11 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/snapcraft --prefix PATH : ${squashfsTools}/bin
+  '';
+
+  preCheck = ''
+    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
   nativeCheckInputs =

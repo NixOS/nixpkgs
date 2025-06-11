@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "25.2.0";
+  version = "25.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
     tag = version;
-    hash = "sha256-sDJZMAXOfcBx+PgKt48nsATEiR5QvAfyrCP+qWiTzrc=";
+    hash = "sha256-Ve6RBCQ8PJtlN/gzSjj/gxFkJsgcJhlNMAKDybBTx54=";
   };
 
   build-system = [

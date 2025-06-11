@@ -45,6 +45,11 @@ in
         nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
         xdg-utils
       ];
+      # needed for some display managers to locate desktop manager sessions
+      pathsToLink = [
+        "/share/xsessions"
+        "/share/wayland-sessions"
+      ];
     };
 
     fonts.enableDefaultPackages = lib.mkDefault true;

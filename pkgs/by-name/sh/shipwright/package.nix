@@ -278,7 +278,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/HarbourMasters/Shipwright";
     description = "A PC port of Ocarina of Time with modern controls, widescreen, high-resolution, and more";
     mainProgram = "soh";
-    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       j0lol
       matteopacini

@@ -1,9 +1,10 @@
 name: "No channel PR"
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/no-channel.yml
   pull_request_target:
-    # Re-run should be triggered when the base branch is updated, instead of silently failing
-    types: [opened, synchronize, reopened, edited]
 
 permissions: {}
 
@@ -13,7 +14,7 @@ jobs:
       startsWith(github.event.pull_request.base.ref, 'nixos-') ||
       startsWith(github.event.pull_request.base.ref, 'nixpkgs-')
     name: "This PR is targeting a channel branch"
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     steps:
       - run: |
           cat <<EOF

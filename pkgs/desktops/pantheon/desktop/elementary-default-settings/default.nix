@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
-  version = "8.0.3";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "default-settings";
     rev = version;
-    sha256 = "sha256-V8jzebnMD41U0ycu66xIZmssoqrKVS+4L70mqc3GEzg=";
+    sha256 = "sha256-GUq7kXaidzvqbyeVh4ihcxRqZXOzZO3WMXEe8lf477I=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,9 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
     "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
+    # Do not ship elementary OS specific config files.
+    "-Dapparmor-profiles=false"
+    "-Dgeoclue=false"
   ];
 
   postFixup = ''

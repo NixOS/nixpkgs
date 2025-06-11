@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "wakatime-cli";
-  version = "1.115.1";
+  version = "1.115.3";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime-cli";
     tag = "v${version}";
-    hash = "sha256-vvJzYUL9lGPxe2XzeooDJ09jT3/Zv5x8rf6T7Byb7TY=";
+    hash = "sha256-czoAX9CKvIZjODeKcadX9vzBhOcMeyjwbljv1PrMtOg=";
   };
 
   vendorHash = "sha256-1yqpz3DqWHXw3ihh7YAKtl5Co91VAbBMRu68S/igrMc=";

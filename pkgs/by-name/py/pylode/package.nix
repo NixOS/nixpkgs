@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "RDFLib";
-    repo = pname;
+    repo = "pylode";
     tag = version;
     sha256 = "sha256-AtqkxnpEL+580S/iKCaRcsQO6LLYhkJxyNx6fi3atbE=";
   };

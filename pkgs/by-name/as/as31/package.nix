@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.3.1";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/a/as31/${finalAttrs.pname}_${finalAttrs.version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/a/as31/as31_${finalAttrs.version}.orig.tar.gz";
     name = "${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-zSEyWHFon5nyq717Mpmdv1XZ5Hz0e8ZABqsP8M83c1U=";
   };

@@ -11,7 +11,6 @@
   libGL,
   libGLU,
   libjpeg,
-  libopus,
   libpng,
   libpthreadstubs,
   libpulseaudio,
@@ -30,7 +29,6 @@
   libXxf86misc,
   libXxf86vm,
   openal,
-  pcre,
   physfs,
   pkg-config,
   stdenv,
@@ -68,13 +66,11 @@ stdenv.mkDerivation rec {
       libGL
       libGLU
       libjpeg
-      libopus
       libpng
       libtheora
       libvorbis
       libwebp
       openal
-      pcre
       physfs
       texinfo
       zlib

@@ -7,11 +7,39 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
 let
   cfg = config.services.desktopManager.cosmic;
+  excludedCorePkgs = lib.lists.intersectLists corePkgs config.environment.cosmic.excludePackages;
+  # **ONLY ADD PACKAGES WITHOUT WHICH COSMIC CRASHES, NOTHING ELSE**
+  corePkgs =
+    with pkgs;
+    [
+      cosmic-applets
+      cosmic-applibrary
+      cosmic-bg
+      cosmic-comp
+      cosmic-files
+      config.services.displayManager.cosmic-greeter.package
+      cosmic-idle
+      cosmic-launcher
+      cosmic-notifications
+      cosmic-osd
+      cosmic-panel
+      cosmic-session
+      cosmic-settings
+      cosmic-settings-daemon
+      cosmic-workspaces-epoch
+    ]
+    ++ lib.optionals cfg.xwayland.enable [
+      # Why would you want to enable XWayland but exclude the package
+      # providing XWayland support? Doesn't make sense. Add `xwayland` to the
+      # `corePkgs` list.
+      xwayland
+    ];
 in
 {
   meta.maintainers = lib.teams.cosmic.members;
@@ -20,9 +48,20 @@ in
     services.desktopManager.cosmic = {
       enable = lib.mkEnableOption "Enable the COSMIC desktop environment";
 
+      showExcludedPkgsWarning = lib.mkEnableOption "Disable the warning for excluding core packages." // {
+        default = true;
+      };
+
       xwayland.enable = lib.mkEnableOption "Xwayland support for the COSMIC compositor" // {
         default = true;
       };
+    };
+
+    environment.cosmic.excludePackages = lib.mkOption {
+      description = "List of packages to exclude from the COSMIC environment.";
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.cosmic-player ]";
     };
   };
 
@@ -32,45 +71,32 @@ in
       "/share/backgrounds"
       "/share/cosmic"
     ];
-    environment.systemPackages =
-      with pkgs;
-      [
-        adwaita-icon-theme
-        alsa-utils
-        cosmic-applets
-        cosmic-applibrary
-        cosmic-bg
-        cosmic-comp
-        cosmic-edit
-        cosmic-files
-        config.services.displayManager.cosmic-greeter.package
-        cosmic-icons
-        cosmic-idle
-        cosmic-launcher
-        cosmic-notifications
-        cosmic-osd
-        cosmic-panel
-        cosmic-player
-        cosmic-randr
-        cosmic-screenshot
-        cosmic-session
-        cosmic-settings
-        cosmic-settings-daemon
-        cosmic-term
-        cosmic-wallpapers
-        cosmic-workspaces-epoch
-        hicolor-icon-theme
-        playerctl
-        pop-icon-theme
-        pop-launcher
-        xdg-user-dirs
-      ]
-      ++ lib.optionals cfg.xwayland.enable [
-        xwayland
-      ]
-      ++ lib.optionals config.services.flatpak.enable [
-        cosmic-store
-      ];
+    environment.systemPackages = utils.removePackagesByName (
+      corePkgs
+      ++ (
+        with pkgs;
+        [
+          adwaita-icon-theme
+          alsa-utils
+          cosmic-edit
+          cosmic-icons
+          cosmic-player
+          cosmic-randr
+          cosmic-screenshot
+          cosmic-term
+          cosmic-wallpapers
+          hicolor-icon-theme
+          playerctl
+          pop-icon-theme
+          pop-launcher
+          xdg-user-dirs
+        ]
+        ++ lib.optionals config.services.flatpak.enable [
+          # User may have Flatpaks enabled but might not want the `cosmic-store` package.
+          cosmic-store
+        ]
+      )
+    ) config.environment.cosmic.excludePackages;
 
     # Distro-wide defaults for graphical sessions
     services.graphical-desktop.enable = true;
@@ -114,6 +140,8 @@ in
     security.rtkit.enable = true;
     services.accounts-daemon.enable = true;
     services.displayManager.sessionPackages = [ pkgs.cosmic-session ];
+    services.geoclue2.enable = true;
+    services.geoclue2.enableDemoAgent = false;
     services.libinput.enable = true;
     services.upower.enable = true;
     # Required for screen locker
@@ -129,5 +157,22 @@ in
     services.power-profiles-daemon.enable = lib.mkDefault (
       !config.hardware.system76.power-daemon.enable
     );
+
+    warnings = lib.optionals (cfg.showExcludedPkgsWarning && excludedCorePkgs != [ ]) [
+      ''
+        The `environment.cosmic.excludePackages` option was used to exclude some
+        packages from the environment which also includes some packages that the
+        maintainers of the COSMIC DE deem necessary for the COSMIC DE to start
+        and initialize. Excluding said packages creates a high probability that
+        the COSMIC DE will fail to initialize properly, or completely. This is an
+        unsupported use case. If this was not intentional, please assign an empty
+        list to the `environment.cosmic.excludePackages` option. If you want to
+        exclude non-essential packages, please look at the NixOS module for the
+        COSMIC DE and look for the essential packages in the `corePkgs` list.
+
+        You can stop this warning from appearing by setting the option
+        `services.desktopManager.cosmic.showExcludedPkgsWarning` to `false`.
+      ''
+    ];
   };
 }

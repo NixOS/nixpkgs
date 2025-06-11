@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromSourcehut {
     owner = "~ft";
-    repo = pname;
+    repo = "unflac";
     rev = version;
     sha256 = "sha256-xJEVrzooNcS3zEKeF6DB7ZRZEjHfC7dGKgQfswxbD+U=";
   };

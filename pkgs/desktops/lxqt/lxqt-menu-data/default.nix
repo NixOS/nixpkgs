@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-menu-data";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-Q9VPPGPyMueoFrTTdAMlIR+VnWVXu0J2uXhaOlJPTAs=";
+    hash = "sha256-kFgrR7BSl08REC9SgBvLYFhJ9H++FCDQdqQaoAm5Oyw=";
   };
 
   nativeBuildInputs = [

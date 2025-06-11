@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -12,13 +13,13 @@
 
 buildGoModule rec {
   pname = "git-town";
-  version = "19.0.0";
+  version = "20.2.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     tag = "v${version}";
-    hash = "sha256-To+WtPkMbVDuUBaOkemua9i7WOs/X214YunWtbKt02Y=";
+    hash = "sha256-q1wiqE2pd1qLw0nTw3CEpJybGia+KwRacgejofk4kJ8=";
   };
 
   vendorHash = null;
@@ -64,14 +65,16 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  postInstall = ''
-    installShellCompletion --cmd git-town \
-      --bash <($out/bin/git-town completions bash) \
-      --fish <($out/bin/git-town completions fish) \
-      --zsh <($out/bin/git-town completions zsh)
-
-    wrapProgram $out/bin/git-town --prefix PATH : ${lib.makeBinPath [ git ]}
-  '';
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd git-town \
+        --bash <($out/bin/git-town completions bash) \
+        --fish <($out/bin/git-town completions fish) \
+        --zsh <($out/bin/git-town completions zsh)
+    ''
+    + ''
+      wrapProgram $out/bin/git-town --prefix PATH : ${lib.makeBinPath [ git ]}
+    '';
 
   passthru.tests.version = testers.testVersion {
     package = git-town;

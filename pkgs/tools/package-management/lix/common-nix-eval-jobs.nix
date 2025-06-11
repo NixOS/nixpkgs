@@ -11,6 +11,7 @@
   lib,
   lix,
   boost,
+  capnproto,
   nlohmann_json,
   meson,
   pkg-config,
@@ -23,11 +24,16 @@ stdenv.mkDerivation {
   pname = "nix-eval-jobs";
   version = "${version}${suffix}";
   inherit src patches;
-  buildInputs = [
-    nlohmann_json
-    lix
-    boost
-  ];
+  sourceRoot = if lib.versionAtLeast version "2.93" then "source/subprojects/nix-eval-jobs" else null;
+  buildInputs =
+    [
+      nlohmann_json
+      lix
+      boost
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.93") [
+      capnproto
+    ];
   nativeBuildInputs = [
     meson
     pkg-config

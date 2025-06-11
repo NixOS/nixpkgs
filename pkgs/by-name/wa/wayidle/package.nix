@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     description = "Execute a program when a Wayland compositor reports being N seconds idle";
     homepage = "https://git.sr.ht/~whynothugo/wayidle";
     license = licenses.isc;
-    maintainers = with maintainers; [ tomfitzhenry ];
+    maintainers = [ ];
     mainProgram = "wayidle";
     platforms = platforms.linux;
   };

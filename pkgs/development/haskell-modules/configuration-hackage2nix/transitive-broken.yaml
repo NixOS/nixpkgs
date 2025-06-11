@@ -415,25 +415,12 @@ dont-distribute-packages:
  - ZipFold
  - a50
  - abcBridge
- - abstract-par-accelerate
  - ac-machine-conduit
  - accelerate-arithmetic
- - accelerate-fftw
  - accelerate-fourier
- - accelerate-io
- - accelerate-io-JuicyPixels
- - accelerate-io-array
- - accelerate-io-bmp
- - accelerate-io-bytestring
- - accelerate-io-cereal
- - accelerate-io-repa
- - accelerate-io-serialise
- - accelerate-io-vector
  - accelerate-llvm
  - accelerate-llvm-native
- - accelerate-random
  - accelerate-typelits
- - accelerate-utility
  - access-token-provider
  - acme-php
  - acme-safe
@@ -442,10 +429,6 @@ dont-distribute-packages:
  - adhoc-network
  - adict
  - adp-multi-monadiccp
- - aern2-fun
- - aern2-mfun
- - aern2-mp
- - aern2-real
  - aeson-native
  - aeson_1_5_6_0
  - affine
@@ -460,7 +443,6 @@ dont-distribute-packages:
  - algebra-checkers
  - algebra-driven-design
  - algebra-sql
- - algebraic
  - algolia
  - algorithmic-composition-additional
  - algorithmic-composition-basic
@@ -839,6 +821,7 @@ dont-distribute-packages:
  - clickhouse-haskell
  - clifford
  - clippings
+ - clod
  - cloud-haskell
  - cloud-seeder
  - cloudyfs
@@ -869,7 +852,6 @@ dont-distribute-packages:
  - color-counter
  - colorless-http-client
  - colorless-scotty
- - colour-accelerate
  - colour-space
  - columbia
  - columnar
@@ -946,7 +928,6 @@ dont-distribute-packages:
  - coordinate
  - copilot-cbmc
  - copilot-sbv
- - copilot-verifier
  - coroutine-enumerator
  - coroutine-iteratee
  - couch-simple
@@ -972,7 +953,6 @@ dont-distribute-packages:
  - crf-chain2-tiers
  - criu-rpc
  - cron-compat
- - crux-llvm
  - crypto-classical
  - crypto-conduit
  - crypto-pubkey
@@ -990,6 +970,7 @@ dont-distribute-packages:
  - curryer-rpc
  - cv-combinators
  - cypher
+ - dahdit-audio
  - dahdit-midi
  - dahdit-test
  - daino
@@ -1039,11 +1020,9 @@ dont-distribute-packages:
  - ddc-tools
  - ddc-war
  - ddci-core
- - dde
  - debug
  - decimal-arithmetic
  - dedukti
- - deeplearning-hs
  - deepzoom
  - defargs
  - definitive-filesystem
@@ -1489,7 +1468,7 @@ dont-distribute-packages:
  - gridland
  - grisette
  - grisette-monad-coroutine
- - grisette_0_11_0_0
+ - grisette_0_12_0_0
  - gross
  - groundhog-converters
  - groundhog-inspector
@@ -1517,6 +1496,7 @@ dont-distribute-packages:
  - gtkimageview
  - gtkrsync
  - guarded-rewriting
+ - h3spec
  - hOff-display
  - hPDB
  - hPDB-examples
@@ -1589,7 +1569,6 @@ dont-distribute-packages:
  - hascat-system
  - hash-addressed
  - hash-addressed-cli
- - hashable-accelerate
  - hashflare
  - hask-home
  - haskanoid
@@ -1897,6 +1876,7 @@ dont-distribute-packages:
  - http2-client-grpc
  - http2-grpc-proto-lens
  - http2-grpc-proto3-wire
+ - http3
  - https-everywhere-rules
  - https-everywhere-rules-raw
  - httpspec
@@ -1970,6 +1950,7 @@ dont-distribute-packages:
  - imj-base
  - imj-game-hamazed
  - imj-measure-stdout
+ - immutaball-core
  - imparse
  - imperative-edsl
  - imperative-edsl-vhdl
@@ -2164,6 +2145,7 @@ dont-distribute-packages:
  - lame-tester
  - landlock
  - lang
+ - langchain-hs
  - language-Modula2
  - language-ats
  - language-boogie
@@ -2201,7 +2183,6 @@ dont-distribute-packages:
  - legion-extra
  - leksah
  - leksah-server
- - lens-accelerate
  - lens-utils
  - lenz
  - lenz-mtl
@@ -2228,7 +2209,6 @@ dont-distribute-packages:
  - lightstep-haskell
  - lighttpd-conf
  - lighttpd-conf-qq
- - linear-accelerate
  - linear-code
  - linearEqSolver
  - linearscan-hoopl
@@ -2499,7 +2479,6 @@ dont-distribute-packages:
  - mutable-iter
  - mute-unmute
  - mvclient
- - mwc-random-accelerate
  - mwc-random-monad
  - mxnet-dataiter
  - mxnet-examples
@@ -2609,7 +2588,6 @@ dont-distribute-packages:
  - ois-input-manager
  - olwrapper
  - om-kubernetes
- - om-legion
  - one-time-password
  - online-csv
  - oops-examples
@@ -2989,7 +2967,6 @@ dont-distribute-packages:
  - regular-xmlpickler
  - reheat
  - rel8
- - relational-query-postgresql-pure
  - relative-date
  - remote-json
  - remote-json-client
@@ -3594,7 +3571,6 @@ dont-distribute-packages:
  - type-structure
  - type-sub-th
  - typecheck-plugin-nat-simple_0_1_0_11
- - typed-admin
  - typed-encoding-encoding
  - typed-gui
  - typed-streams
@@ -3727,6 +3703,7 @@ dont-distribute-packages:
  - wai-thrift
  - waldo
  - warp-grpc
+ - warp-quic
  - warped
  - wavesurfer
  - wavy

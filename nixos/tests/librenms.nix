@@ -50,9 +50,6 @@ in
         API_USER_NAME=api
         API_TOKEN=${api_token} # random md5 hash
 
-        # seeding database to get the admin roles
-        ${pkgs.librenms}/artisan db:seed --force --no-interaction
-
         # we don't need to know the password, it just has to exist
         API_USER_PASS=$(${pkgs.pwgen}/bin/pwgen -s 64 1)
         ${pkgs.librenms}/artisan user:add $API_USER_NAME -r admin -p $API_USER_PASS

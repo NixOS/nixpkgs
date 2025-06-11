@@ -107,7 +107,7 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           MemoryDenyWriteExecute = true;
-          # Upstream Recommandation
+          # Upstream Recommendation
           LimitNOFILE = 20500;
         };
       };

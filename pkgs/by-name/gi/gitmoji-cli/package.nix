@@ -13,18 +13,18 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gitmoji-cli";
-  version = "9.6.0";
+  version = "9.7.0";
 
   src = fetchFromGitHub {
     owner = "carloscuesta";
     repo = "gitmoji-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LhqwC7F0745KFzGHw9WUkPYxhIkFEmCPTxS1fuZKVHQ=";
+    hash = "sha256-2nQCxmZdDMKHcmVihloU4leKRB9LRBO4Q5AINR1vdCQ=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-/O+UMOYn3dBgy2uBBCeg4vHzC+fXA+7fj7Xk03miZSA=";
+    hash = "sha256-YemcF7hRg+LAkR3US1xAgE0ELAeZTVLhscOphjmheRI=";
   };
 
   nativeBuildInputs = [

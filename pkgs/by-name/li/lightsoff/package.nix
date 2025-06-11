@@ -4,18 +4,15 @@
   fetchurl,
   vala,
   pkg-config,
-  gtk3,
+  glib,
+  gtk4,
+  libadwaita,
   gnome,
-  adwaita-icon-theme,
   gdk-pixbuf,
-  librsvg,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   gettext,
   itstool,
-  clutter,
-  clutter-gtk,
   libxml2,
-  appstream-glib,
   meson,
   ninja,
   python3,
@@ -23,20 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "lightsoff";
-  version = "46.0";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/lightsoff/${lib.versions.major version}/lightsoff-${version}.tar.xz";
-    hash = "sha256-ZysVMuBkX64C8oN6ltU57c/Uw7pPcuWR3HP+R567i5I=";
+    hash = "sha256-LsmVAXE9vNE8WlZaLhGMxMwrUCg2s4enc2z7pAqLOYk=";
   };
 
   nativeBuildInputs = [
     vala
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
     itstool
     gettext
-    appstream-glib
     libxml2
     meson
     ninja
@@ -44,17 +40,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3
-    adwaita-icon-theme
-    gdk-pixbuf
-    librsvg
-    clutter
-    clutter-gtk
+    glib
+    gtk4
+    libadwaita
   ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
     patchShebangs build-aux/meson_post_install.py
+    substituteInPlace build-aux/meson_post_install.py \
+      --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   passthru = {

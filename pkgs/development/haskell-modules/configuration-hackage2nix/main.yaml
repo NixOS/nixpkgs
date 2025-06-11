@@ -90,6 +90,7 @@ extra-packages:
   - hlint == 3.4.1                      # 2022-09-21: preserve for ghc 8.10
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
   - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
+  - hpack == 0.38.0                     # 2025-04-23: preserve for stack == 3.5.1
   - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
@@ -108,6 +109,7 @@ extra-packages:
   - primitive-unlifted == 0.1.3.1       # 2024-03-16: preserve for ghc 9.2
   - retrie < 1.2.0.0                    # 2022-12-30: preserve for ghc < 9.2
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
+  - simple-get-opt < 0.5                # 2025-05-01: for crux-0.7.2
   - stylish-haskell == 0.14.4.0         # 2022-09-19: preserve for ghc 9.0
   - stylish-haskell == 0.14.5.0         # 2025-04-14: needed for hls with ghc-lib 9.6
   - tar == 0.6.0.0                      # 2025-02-08: last version to not require os-string (which can't be built with GHC < 9.2)

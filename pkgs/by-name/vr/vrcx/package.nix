@@ -4,7 +4,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   buildNpmPackage,
-  electron_34,
+  electron_35,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -12,17 +12,15 @@
 }:
 let
   pname = "vrcx";
-  version = "2025.03.01";
+  version = "2025.05.09";
   dotnet = dotnetCorePackages.dotnet_9;
-  electron = electron_34;
+  electron = electron_35;
 
   src = fetchFromGitHub {
     owner = "vrcx-team";
     repo = "VRCX";
-    # v2025.03.01 tag is actually behind a few commits, namely the one that bumps the version (so it complains about not being up-to-date)
-    #tag = "v${version}";
-    rev = "1980eeb4cccebfcf33826d44b7833a9aa6f5a955";
-    hash = "sha256-HiFcHnytynWYbeUd+KsG38dLU1FhDu0VD3JPT3kUO6s=";
+    tag = "v${version}";
+    hash = "sha256-sqdDucjERHC5YykisFDiBOJw40snsldBcuCH1FAahSo=";
   };
 
   backend = buildDotnetModule {
@@ -47,7 +45,7 @@ in
 buildNpmPackage {
   inherit pname version src;
 
-  npmDepsHash = "sha256-2ZU+9NPPx3GbU75XfjVroZCpjXr7IK2HtEIqLJLOjyw=";
+  npmDepsHash = "sha256-sXWKsW9vPyq1oK9ysJod3uAUOICsK/TBLbSekT1SO+k=";
   npmFlags = [ "--ignore-scripts" ];
   makeCacheWritable = true;
 

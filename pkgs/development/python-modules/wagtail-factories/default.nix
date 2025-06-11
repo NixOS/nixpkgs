@@ -13,7 +13,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "wagtail-factories";
     owner = "wagtail";
     tag = version;
     sha256 = "sha256-jo8VwrmxHBJnORmuR6eTLrf/eupNL2vhXcw81EzfTxM=";

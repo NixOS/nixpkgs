@@ -4,6 +4,7 @@
   alsa-lib,
   autoreconfHook,
   avahi,
+  cairo,
   curl,
   dbus,
   faad2,
@@ -13,17 +14,18 @@
   ffmpeg_6,
   flac,
   fluidsynth,
+  fontconfig,
   freefont_ttf,
   freetype,
   fribidi,
   genericUpdater,
   gnutls,
+  harfbuzz,
+  libGL,
   libSM,
   libXext,
   libXinerama,
   libXpm,
-  libXv,
-  libXvMC,
   libarchive,
   libass,
   libbluray,
@@ -36,17 +38,19 @@
   libgcrypt,
   libgpg-error,
   libjack2,
+  libjpeg,
   libkate,
   libmad,
   libmatroska,
   libmicrodns,
   libmodplug,
+  libmpeg2,
   libmtp,
-  liboggz,
+  libogg,
   libopus,
   libplacebo_5,
+  libpng,
   libpulseaudio,
-  libraw1394,
   librsvg,
   libsForQt5,
   libsamplerate,
@@ -57,12 +61,10 @@
   libupnp,
   libv4l,
   libva,
-  libvdpau,
   libvorbis,
   libxml2,
   live555,
   lua5,
-  mpeg2dec,
   ncurses,
   perl,
   pkg-config,
@@ -74,7 +76,7 @@
   speex,
   srt,
   stdenv,
-  systemd,
+  systemdLibs,
   taglib_1,
   unzip,
   wayland,
@@ -109,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JNu+HX367qCZTV3vC73iABdzRxNtv+Vz9bakzuJa+7A=";
   };
 
+  depsBuildBuild = optionals waylandSupport [ pkg-config ];
+
   nativeBuildInputs =
     [
       autoreconfHook
@@ -133,17 +137,19 @@ stdenv.mkDerivation (finalAttrs: {
       a52dec
       alsa-lib
       avahi
+      cairo
       dbus
       faad2
       ffmpeg_6
       flac
       fluidsynth
+      fontconfig
+      freetype
       fribidi
       gnutls
+      harfbuzz
+      libGL
       libSM
-      libXpm
-      libXv
-      libXvMC
       libarchive
       libass
       libbluray
@@ -156,16 +162,18 @@ stdenv.mkDerivation (finalAttrs: {
       libebml
       libgcrypt
       libgpg-error
+      libjpeg
       libkate
       libmad
       libmatroska
       libmodplug
+      libmpeg2
       libmtp
-      liboggz
+      libogg
       libopus
       libplacebo_5
+      libpng
       libpulseaudio
-      libraw1394
       librsvg
       libsamplerate
       libspatialaudio
@@ -175,30 +183,26 @@ stdenv.mkDerivation (finalAttrs: {
       libupnp
       libv4l
       libva
-      libvdpau
       libvorbis
       libxml2
       lua5
-      mpeg2dec
       ncurses
       samba
       schroedinger
       speex
       srt
-      systemd
+      systemdLibs
       taglib_1
       xcbutilkeysyms
-      wayland-scanner # only required for configure script
       zlib
     ]
-    ++ optionals (!stdenv.hostPlatform.isAarch && !onlyLibVLC) [ live555 ]
+    ++ optionals (!onlyLibVLC) [ live555 ]
     ++ optionals jackSupport [ libjack2 ]
     ++ optionals chromecastSupport [
       libmicrodns
       protobuf
     ]
     ++ optionals skins2Support [
-      freetype
       libXext
       libXinerama
       libXpm
@@ -220,16 +224,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   env =
     {
-      # vlc depends on a c11-gcc wrapper script which we don't have so we need to
-      # set the path to the compiler
+      # vlc searches for c11-gcc, c11, c99-gcc, c99, which don't exist and would be wrong for cross compilation anyway.
       BUILDCC = "${pkgsBuildBuild.stdenv.cc}/bin/gcc";
-      PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = "wayland-scanner";
+      LIVE555_PREFIX = live555;
     }
     // lib.optionalAttrs stdenv.cc.isGNU {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-    }
-    // lib.optionalAttrs (!stdenv.hostPlatform.isAarch) {
-      LIVE555_PREFIX = live555;
     };
 
   patches = [
@@ -272,10 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Most of the libraries are auto-detected so we don't need to set a bunch of
   # "--enable-foo" flags here
   configureFlags =
-    [
-      "--enable-srt" # Explicit enable srt to ensure the patch is applied.
-      "--with-kde-solid=$out/share/apps/solid/actions"
-    ]
+    [ "--with-kde-solid=$out/share/apps/solid/actions" ]
     ++ optionals onlyLibVLC [ "--disable-vlc" ]
     ++ optionals skins2Support [ "--enable-skins2" ]
     ++ optionals waylandSupport [ "--enable-wayland" ]
@@ -289,11 +286,6 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     sed -i 's|^#define CONFIGURE_LINE.*$|#define CONFIGURE_LINE "<removed>"|g' config.h
   '';
-
-  # fails on high core machines
-  # ld: cannot find -lvlc_vdpau: No such file or directory
-  # https://code.videolan.org/videolan/vlc/-/issues/27338
-  enableParallelInstalling = false;
 
   # Add missing SOFA files
   # Given in EXTRA_DIST, but not in install-data target
@@ -314,6 +306,7 @@ stdenv.mkDerivation (finalAttrs: {
   # should be the same as pkgsBuildBuild.qt5.qttranslations.
   postFixup =
     ''
+      patchelf --add-rpath ${libv4l}/lib "$out/lib/vlc/plugins/access/libv4l2_plugin.so"
       find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
       ${
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else pkgsBuildBuild.libvlc

@@ -1,10 +1,10 @@
 {
+  lib,
   stdenv,
   nodejs,
   pnpm_9,
   fetchFromGitHub,
   buildGoModule,
-  lib,
   wails,
   webkitgtk_4_0,
   pkg-config,
@@ -17,13 +17,13 @@
 
 let
   pname = "gui-for-clash";
-  version = "1.9.5";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.Clash";
     tag = "v${version}";
-    hash = "sha256-XQbiric4iAxvWRLKCCZtDrpFpPCylQlwnCm9dHSq/KM=";
+    hash = "sha256-Ij9zyBzYpAfDEjJXqOiPxun+5e1T5j3juYudpvraBcQ=";
   };
 
   metaCommon = {
@@ -43,7 +43,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/frontend";
-      hash = "sha256-5SVu8eCyN89k6BvNEqgs4hOrP5IjvjUZrzrVuDwtYCk=";
+      hash = "sha256-5tz1FItH9AvZhJjka8i5Kz22yf/tEmRPkDhz6iswZzc=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
@@ -81,7 +81,7 @@ buildGoModule {
       --replace-fail '@basepath@' "$out"
   '';
 
-  vendorHash = "sha256-Zt3We+Ai8oEqof2eQvcaIkocH85goeldmPf4mmDX17o=";
+  vendorHash = "sha256-Coq8GtaIS7ClmOTFw6PSgGDFW/CpGpKPvXgNw8qz3Hs=";
 
   nativeBuildInputs = [
     wails
@@ -114,12 +114,8 @@ buildGoModule {
       icon = "gui-for-clash";
       genericName = "GUI.for.Clash";
       desktopName = "GUI.for.Clash";
-      categories = [
-        "Network"
-      ];
-      keywords = [
-        "Proxy"
-      ];
+      categories = [ "Network" ];
+      keywords = [ "Proxy" ];
     })
   ];
 

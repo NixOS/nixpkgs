@@ -126,8 +126,6 @@
     xfce.wait_for_text("Pareto Security")
 
     # Test 6: paretosecurity:// URL handler is registered
-    xfce.execute("su - alice -c 'xdg-open paretosecurity://foo >/dev/null &'")
-    xfce.wait_for_text("Failed to add device")
-
+    xfce.succeed("su - alice -c 'xdg-open paretosecurity://foo'")
   '';
 }

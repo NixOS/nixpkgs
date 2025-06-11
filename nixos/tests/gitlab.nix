@@ -106,6 +106,9 @@ in
             otpFile = pkgs.writeText "otpsecret" "Riew9mue";
             dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
             jwsFile = pkgs.runCommand "oidcKeyBase" { } "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
+            activeRecordPrimaryKeyFile = pkgs.writeText "arprimary" "vsaYPZjTRxcbG7W6gNr95AwBmzFUd4Eu";
+            activeRecordDeterministicKeyFile = pkgs.writeText "ardeterministic" "kQarv9wb2JVP7XzLTh5f6DFcMHms4nEC";
+            activeRecordSaltFile = pkgs.writeText "arsalt" "QkgR9CfFU3MXEWGqa7LbP24AntK5ZeYw";
           };
 
           registry = {
@@ -477,6 +480,9 @@ in
       gitlab.start()
     ''
     + waitForServices
+    + ''
+      gitlab.succeed("cp /var/gitlab/state/config/secrets.yml /root/gitlab-secrets.yml")
+    ''
     + test true
     + ''
       gitlab.systemctl("start gitlab-backup.service")
@@ -496,5 +502,9 @@ in
       gitlab.systemctl("start gitlab.target")
     ''
     + waitForServices
+    + ''
+      with subtest("Check that no secrets were auto-generated as these would be non-persistent"):
+          gitlab.succeed("diff -u /root/gitlab-secrets.yml /var/gitlab/state/config/secrets.yml")
+    ''
     + test false;
 }

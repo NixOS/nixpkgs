@@ -27,11 +27,13 @@
 }:
 
 let
+  atLeast15 = lib.versionAtLeast version "15";
   atLeast14 = lib.versionAtLeast version "14";
   atLeast13 = lib.versionAtLeast version "13";
   atLeast12 = lib.versionAtLeast version "12";
   atLeast11 = lib.versionAtLeast version "11";
   atLeast10 = lib.versionAtLeast version "10";
+  is15 = majorVersion == "15";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
@@ -67,6 +69,10 @@ in
   [ (if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch) ]
   ++ (
     {
+      "15" = [
+        ./13/no-sys-dirs-riscv.patch
+        ./13/mangle-NIX_STORE-in-__FILE__.patch
+      ];
       "14" = [
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
@@ -146,8 +152,11 @@ in
 
 # Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
 ++ optional (
-  atLeast14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+  is14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
 ) ../patches/14/libgcc-darwin-detection.patch
+++ optional (
+  atLeast15 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+) ../patches/15/libgcc-darwin-detection.patch
 
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
 ++ optional (
@@ -162,6 +171,7 @@ in
 # Use absolute path in GNAT dylib install names on Darwin
 ++ optionals (stdenv.hostPlatform.isDarwin && langAda) (
   {
+    "15" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
     "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
     "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
     "12" = [ ./gnat-darwin-dylib-install-name.patch ];
@@ -171,6 +181,13 @@ in
 
 ++ optionals canApplyIainsDarwinPatches (
   {
+    "15" = [
+      (fetchpatch {
+        name = "gcc-15-darwin-aarch64-support.patch";
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a25079204c1cb3d78ba9dd7dd22b8aecce7ce264/gcc/gcc-15.1.0.diff";
+        sha256 = "sha256-MJxSGv6LEP1sIM8cDqbmfUV7byV0bYgADeIBY/Teyu8=";
+      })
+    ];
     "14" = [
       (fetchpatch {
         name = "gcc-14-darwin-aarch64-support.patch";

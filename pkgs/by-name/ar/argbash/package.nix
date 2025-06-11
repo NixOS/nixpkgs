@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "argbash";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "matejak";
     repo = "argbash";
     rev = finalAttrs.version;
-    hash = "sha256-G739q6OhsXEldpIxiyOU51AmG4RChMqaN1t2wOy6sPU=";
+    hash = "sha256-B8581sA3dxmHiJqQhmXSChiWaPIFqiLLFUMnwAlCLJs=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://argbash.io/";
+    homepage = "https://argbash.dev/";
     description = "Bash argument parsing code generator";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ];

@@ -201,6 +201,7 @@
             lib.versionOlder version "9.11"
             && !(lib.versionAtLeast version "9.6.7" && lib.versionOlder version "9.8")
             && !(lib.versionAtLeast version "9.8.4" && lib.versionOlder version "9.9")
+            && !(lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.11")
           )
           [
             # Determine size of time related types using hsc2hs instead of assuming CLong.
@@ -284,7 +285,7 @@
       # freeHaskellFunPtr is called with nixpkgs' hardening flags.
       # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
       # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
-      ++ lib.optionals (lib.versionOlder version "9.13" && stdenv.hostPlatform.is32bit) [
+      ++ lib.optionals (lib.versionOlder version "9.13") [
         (fetchpatch {
           name = "ghc-rts-adjustor-fix-i386-stack-overrun.patch";
           url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
@@ -838,6 +839,8 @@ stdenv.mkDerivation (
       # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
       # so haddock isn't available for GHC cross-compilers. Can we fix that?
       hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
+
+      bootstrapAvailable = lib.meta.availableOn stdenv.buildPlatform bootPkgs.ghc;
     };
 
     meta = {

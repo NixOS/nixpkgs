@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "orderly-set";
-  version = "5.3.2";
+  version = "5.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "orderly-set";
     tag = version;
-    hash = "sha256-W42p0wJqomJdS47n3MP/BbxZmlYNLLAMnfQ/hvKn+60=";
+    hash = "sha256-0B8qnXU6oET1J933uTVDf2XIHwNzecxQ3FiP7EMnxQc=";
   };
 
   build-system = [

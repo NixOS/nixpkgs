@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "soldag";
-    repo = pname;
+    repo = "pyflic";
     rev = version;
     sha256 = "sha256-K1trMBZfc1aHSNSddq0v//Gv8ySgT/ONQYgrKWzw2qs=";
   };

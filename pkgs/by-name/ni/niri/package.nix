@@ -25,13 +25,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri";
-  version = "25.02";
+  version = "25.05.1";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mTTHA0RAaQcdYe+9A3Jx77cmmyLFHmRoZdd8RpWa+m8=";
+    hash = "sha256-z4viQZLgC2bIJ3VrzQnR+q2F3gAOEQpU1H5xHtX/2fs=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xUjBQ65INi5qD7s5SpPw9TISgY6I3bjjUBmpubvM43I=";
+  cargoHash = "sha256-8ltuI94yIhff7JxIfe1mog4bDJ/7VFgLooMWOnSTREs=";
 
   strictDeps = true;
 

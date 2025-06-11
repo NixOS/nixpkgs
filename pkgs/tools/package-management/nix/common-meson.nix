@@ -274,6 +274,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl21Plus;
     inherit maintainers teams;
     platforms = platforms.unix;
+    # Gets stuck in functional-tests in cross-trunk jobset and doesn't timeout
+    # https://hydra.nixos.org/build/298175022
+    # probably https://github.com/NixOS/nix/issues/13042
+    broken = stdenv.hostPlatform.system == "i686-linux" && stdenv.buildPlatform != stdenv.hostPlatform;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
     mainProgram = "nix";
   };

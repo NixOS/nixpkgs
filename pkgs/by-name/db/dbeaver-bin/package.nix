@@ -10,14 +10,14 @@
   wrapGAppsHook3,
   gtk3,
   glib,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   glib-networking,
   override_xmx ? "1024m",
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "25.0.4";
+  version = "25.0.5";
 
   src =
     let
@@ -30,10 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-ALtJIld7gT4pj+jGRkwMloq6B/ZBOMYZxws9N7xNNZg=";
-        aarch64-linux = "sha256-Ka+jEI6y1BRqV83yDvu1yDzJfpUIxKKD+zehVHcNQ/o=";
-        x86_64-darwin = "sha256-P8f0NlMjh/46RChQy8JIm71msqX023K2QaFEic2Br9M=";
-        aarch64-darwin = "sha256-a9H9M1j6iPcrVcfDxCZHeZj6e55QH3XochXaL2OStlI=";
+        x86_64-linux = "sha256-8JkvI6OZGP1Ot2TEP2n4hj3s9As7holT+thVf0BvOMQ=";
+        aarch64-linux = "sha256-cZQFEbogSxuIaS/z/tFQcvs08J0Omi21zLqb0eFQNw0=";
+        x86_64-darwin = "sha256-LueOQZIKB/r6gtlj0+xwoJXMRTFvbSY+RTwAB74KiYo=";
+        aarch64-darwin = "sha256-L6bOyvhlsT4sXL1QDhlJtb8DFfDVw21ixyRenOVdCxU=";
       };
     in
     fetchurl {
@@ -83,7 +83,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             lib.makeLibraryPath [
               gtk3
               glib
-              webkitgtk_4_0
+              webkitgtk_4_1
               glib-networking
             ]
           }"

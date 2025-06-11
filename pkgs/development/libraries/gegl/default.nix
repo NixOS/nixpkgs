@@ -37,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gegl";
-  version = "0.4.58";
+  version = "0.4.62";
 
   outputs = [
     "out"
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor finalAttrs.version}/gegl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-1WeLvV/lNZQbgvlluX/Mk4XOk29wyYK9VlpT1VGdG/8=";
+    hash = "sha256-WIdXY3Hr8dnpB5fRDkuafxZYIo1IJ1g+eeHbPZRQXGw=";
   };
 
   nativeBuildInputs = [

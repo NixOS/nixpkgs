@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     description = "SDL 1.2 patched with libsixel support";
     license = lib.licenses.lgpl21;
     mainProgram = "sdl-config";
-    teams = [ lib.teams.sdl ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

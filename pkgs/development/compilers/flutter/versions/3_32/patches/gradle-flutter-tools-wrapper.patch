@@ -42,3 +42,14 @@ index 0000000000..b2485c94b4
 +"""
 +
 +includeBuild(dir)
+--- a/packages/flutter_tools/gradle/build.gradle.kts
++++ b/packages/flutter_tools/gradle/build.gradle.kts
+@@ -4,6 +4,8 @@
+ 
+ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+ 
++gradle.startParameter.projectCacheDir = layout.buildDirectory.dir("cache").get().asFile
++
+ plugins {
+     `java-gradle-plugin`
+     groovy

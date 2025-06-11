@@ -1,15 +1,15 @@
 {
+  callPackage,
   lib,
   jq,
   runCommand,
   writeText,
   python3,
-  ...
 }:
 {
-  beforeResultDir,
-  afterResultDir,
+  combinedDir,
   touchedFilesJson,
+  githubAuthorId,
   byName ? false,
 }:
 let
@@ -19,7 +19,7 @@ let
 
     ---
     Inputs:
-    - beforeResultDir, afterResultDir: The evaluation result from before and after the change.
+    - beforeDir, afterDir: The evaluation result from before and after the change.
       They can be obtained by running `nix-build -A ci.eval.full` on both revisions.
 
     ---
@@ -65,7 +65,6 @@ let
       Example: { name = "python312Packages.numpy"; platform = "x86_64-linux"; }
   */
   inherit (import ./utils.nix { inherit lib; })
-    diff
     groupByKernel
     convertToPackagePlatformAttrs
     groupByPlatform
@@ -73,22 +72,10 @@ let
     getLabels
     ;
 
-  getAttrs =
-    dir:
-    let
-      raw = builtins.readFile "${dir}/outpaths.json";
-      # The file contains Nix paths; we need to ignore them for evaluation purposes,
-      # else there will be a "is not allowed to refer to a store path" error.
-      data = builtins.unsafeDiscardStringContext raw;
-    in
-    builtins.fromJSON data;
-  beforeAttrs = getAttrs beforeResultDir;
-  afterAttrs = getAttrs afterResultDir;
-
   # Attrs
   # - keys: "added", "changed" and "removed"
   # - values: lists of `packagePlatformPath`s
-  diffAttrs = diff beforeAttrs afterAttrs;
+  diffAttrs = builtins.fromJSON (builtins.readFile "${combinedDir}/combined-diff.json");
 
   rebuilds = diffAttrs.added ++ diffAttrs.changed;
   rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs rebuilds;
@@ -114,11 +101,19 @@ let
           # Adds "10.rebuild-*-stdenv" label if the "stdenv" attribute was changed
           ++ lib.mapAttrsToList (kernel: _: "10.rebuild-${kernel}-stdenv") (
             lib.filterAttrs (_: kernelRebuilds: kernelRebuilds ? "stdenv") rebuildsByKernel
-          );
+          )
+          # Adds the "11.by: package-maintainer" label if all of the packages directly
+          # changed are maintained by the PR's author. (https://github.com/NixOS/ofborg/blob/df400f44502d4a4a80fa283d33f2e55a4e43ee90/ofborg/src/tagger.rs#L83-L88)
+          ++ lib.optional (
+            maintainers ? ${githubAuthorId}
+            && lib.all (lib.flip lib.elem maintainers.${githubAuthorId}) (
+              lib.flatten (lib.attrValues maintainers)
+            )
+          ) "11.by: package-maintainer";
       }
     );
 
-  maintainers = import ./maintainers.nix {
+  maintainers = callPackage ./maintainers.nix { } {
     changedattrs = lib.attrNames (lib.groupBy (a: a.name) rebuildsPackagePlatformAttrs);
     changedpathsjson = touchedFilesJson;
     inherit byName;
@@ -140,8 +135,8 @@ runCommand "compare"
     maintainers = builtins.toJSON maintainers;
     passAsFile = [ "maintainers" ];
     env = {
-      BEFORE_DIR = "${beforeResultDir}";
-      AFTER_DIR = "${afterResultDir}";
+      BEFORE_DIR = "${combinedDir}/before";
+      AFTER_DIR = "${combinedDir}/after";
     };
   }
   ''
@@ -178,7 +173,12 @@ runCommand "compare"
       } >> $out/step-summary.md
     fi
 
-    jq -r -f ${./generate-step-summary.jq} < ${changed-paths} >> $out/step-summary.md
+    {
+      echo
+      echo "# Packages"
+      echo
+      jq -r -f ${./generate-step-summary.jq} < ${changed-paths}
+    } >> $out/step-summary.md
 
     cp "$maintainersPath" "$out/maintainers.json"
   ''

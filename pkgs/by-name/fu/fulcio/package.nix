@@ -19,7 +19,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "sigstore";
-    repo = pname;
+    repo = "fulcio";
     rev = "v${version}";
     hash = "sha256-UVUVT4RvNHvzIwV6azu2h1O9lnNu0PQnnkj4wbrY8BA=";
     # populate values that require us to use git. By doing this in postFetch we

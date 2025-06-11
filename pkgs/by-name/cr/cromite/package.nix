@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  makeBinaryWrapper,
+  makeWrapper,
   patchelf,
   copyDesktopItems,
   makeDesktopItem,
@@ -166,15 +166,15 @@ let
       qt6.qtbase
       qt6.qtwayland
     ];
-  commit = "0ffdb845a6a3308cbd9826bb78269d1d05cfb8aa";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cromite";
-  version = "135.0.7049.100";
+  version = "137.0.7151.56";
+  commit = "b4f8d96284c854cbe6448d2e30ee5a30ce3f0b82";
 
   src = fetchurl {
-    url = "https://github.com/uazo/cromite/releases/download/v${finalAttrs.version}-${commit}/chrome-lin64.tar.gz";
-    hash = "sha256-bB6CPqgwT1p7aXIKauOrRhG4dhCQ9tyO+HHRrkbrsPQ=";
+    url = "https://github.com/uazo/cromite/releases/download/v${finalAttrs.version}-${finalAttrs.commit}/chrome-lin64.tar.gz";
+    hash = "sha256-f53Xh6xvk5Z8tkg/SUZS+plO3a7Qvn6ff2Soj7Dvvqw=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -182,7 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = false;
 
   nativeBuildInputs = [
-    makeBinaryWrapper
+    makeWrapper
     patchelf
     copyDesktopItems
   ];
@@ -234,6 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
       --set CHROME_WRAPPER  "cromite" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
+      --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     # Make sure that libGL and libvulkan are found by ANGLE libGLESv2.so
@@ -246,6 +247,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/uazo/cromite/releases";

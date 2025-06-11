@@ -54,6 +54,11 @@ let
       ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
       ./qtbase.patch.d/0010-qtbase-assert.patch
       ./qtbase.patch.d/0011-fix-header_module.patch
+      (fetchpatch {
+        name = "0012-qtbase-loongarch64.patch";
+        url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/81b14ae4eed038662b53cd20786fd5e0816279ec/community/qt5-qtbase/loongarch64.patch";
+        hash = "sha256-BnpejF6/L73kVVts0R0/OMbVN8G4DXVFwBMJPLU9QbE=";
+      })
     ];
     qtdeclarative = [
       ./qtdeclarative.patch
@@ -168,7 +173,14 @@ let
         hash = "sha256-6wg/eVu9J83yvIO428U1FX3otz58tAy6pCvp7fqOBKU=";
       })
     ];
-    qtscript = [ ./qtscript.patch ];
+    qtscript = [
+      ./qtscript.patch
+      (fetchpatch {
+        name = "qtscript-loongarch64.patch";
+        url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/2fa4f3b28affc29835fcca5c75431f19ff3754a3/community/qt5-qtscript/qtscript-loongarch64.patch";
+        hash = "sha256-DUTXX20ClqGRYat8zk3/Facc1IyAw58qCXrbUaDLyiM=";
+      })
+    ];
     qtserialport = [ ./qtserialport.patch ];
     qtsystems = [
       # Fix crash if no X11 display available

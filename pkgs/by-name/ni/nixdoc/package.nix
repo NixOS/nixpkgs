@@ -4,29 +4,29 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixdoc";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixdoc";
-    rev = "v${version}";
-    sha256 = "sha256-7UOjmW8Ef4mEvj7SINaKWh2ZuyNMVEXB82mtuZTQiPA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7UOjmW8Ef4mEvj7SINaKWh2ZuyNMVEXB82mtuZTQiPA=";
   };
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-Aw794yhIET8/pnlQiK2xKVbYC/Kd5MExvFTwkv4LLTc=";
 
-  meta = with lib; {
+  meta = {
     description = "Generate documentation for Nix functions";
     mainProgram = "nixdoc";
     homepage = "https://github.com/nix-community/nixdoc";
-    license = [ licenses.gpl3 ];
-    maintainers = with maintainers; [
+    license = [ lib.licenses.gpl3 ];
+    maintainers = with lib.maintainers; [
       infinisil
       hsjobeki
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

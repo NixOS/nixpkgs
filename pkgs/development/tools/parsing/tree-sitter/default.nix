@@ -28,7 +28,7 @@ let
   # to update:
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) Set NIXPKGS_GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
+  # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
   version = "0.25.3";
   hash = "sha256-xafeni6Z6QgPiKzvhCT2SyfPn0agLHo47y+6ExQXkzE=";
@@ -43,7 +43,7 @@ let
 
   update-all-grammars = callPackage ./update.nix { };
 
-  fetchGrammar = (
+  fetchGrammar =
     v:
     fetchgit {
       inherit (v)
@@ -52,8 +52,7 @@ let
         sha256
         fetchSubmodules
         ;
-    }
-  );
+    };
 
   grammars = runCommand "grammars" { } (
     ''
@@ -61,7 +60,7 @@ let
     ''
     + (lib.concatStrings (
       lib.mapAttrsToList (
-        name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n"
+        name: grammar: "ln -s ${grammar.src or (fetchGrammar grammar)} $out/${name}\n"
       ) (import ./grammars { inherit lib; })
     ))
   );
@@ -134,7 +133,7 @@ let
           };
         };
     in
-    lib.mapAttrs build (grammars);
+    lib.mapAttrs build grammars;
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -255,7 +254,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
-    changelog = "https://github.com/tree-sitter/tree-sitter/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${version}";
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.

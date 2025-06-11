@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "protolint";
-  version = "0.54.0";
+  version = "0.55.6";
 
   src = fetchFromGitHub {
     owner = "yoheimuta";
-    repo = pname;
+    repo = "protolint";
     rev = "v${version}";
-    hash = "sha256-TVDF9q/lZAVs/a/czQZoxTRFtqae6ySpv80m9XlNpBE=";
+    hash = "sha256-RTej9zVQz6GESAoAAChidiolGEoHabUYlEZSV2gc8KQ=";
   };
 
-  vendorHash = "sha256-FRCLa8kpJlmnyp+kczgSUx0USMWtR9Hj09HIE2nGY8k=";
+  vendorHash = "sha256-RS0t7n6pLYVKHluQtXsMjYL1SvN7IZFdKmkxOI8wFoE=";
 
   # Something about the way we run tests causes issues. It doesn't happen
   # when using "go test" directly:
@@ -40,7 +40,7 @@ buildGoModule rec {
     homepage = "https://github.com/yoheimuta/protolint";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.zane ];
+    maintainers = [ ];
     mainProgram = "protolint";
   };
 }

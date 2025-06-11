@@ -25,7 +25,6 @@
   jq,
   curl,
   common-updater-scripts,
-  nix,
   runtimeShell,
   gnupg,
   installShellFiles,
@@ -437,6 +436,9 @@ let
                 "test-fs-readv-sync"
                 "test-vm-memleak"
               ]
+              ++ lib.optional (
+                stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64 && majorVersion == "20"
+              ) "test-tick-processor-arguments" # flaky
             )
           }"
         ];
@@ -520,13 +522,13 @@ let
       passthru.updateScript = import ./update.nix {
         inherit
           writeScript
-          coreutils
-          gnugrep
-          jq
-          curl
           common-updater-scripts
+          coreutils
+          curl
+          fetchurl
+          gnugrep
           gnupg
-          nix
+          jq
           runtimeShell
           ;
         inherit lib;

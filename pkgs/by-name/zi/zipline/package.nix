@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
-  nodejs,
+  pnpm_10,
+  nodejs_24,
   makeWrapper,
-  pkgs,
+  prisma-engines,
   ffmpeg,
   openssl,
   vips,
@@ -15,25 +15,10 @@
 }:
 
 let
-  prisma-engines = pkgs.prisma-engines.overrideAttrs (
-    finalAttrs: prevAttrs: {
-      version = "6.5.0";
-      src = fetchFromGitHub {
-        inherit (prevAttrs.src) owner repo;
-        rev = finalAttrs.version;
-        hash = "sha256-m3LBIMIVMI5GlY0+QNw/nTlNWt2rGOZ28z+CfdP51cY=";
-      };
-      cargoHash = "sha256-yG+omKAS1eWq3sFgKXMoZWhTP4M34dVRes7OhhTUyTQ=";
-      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-        inherit (finalAttrs) pname version src;
-        hash = finalAttrs.cargoHash;
-      };
-    }
-  );
-
   environment = {
     NEXT_TELEMETRY_DISABLED = "1";
-    FFMPEG_BIN = lib.getExe ffmpeg;
+    FFMPEG_PATH = lib.getExe ffmpeg;
+    FFPROBE_PATH = lib.getExe' ffmpeg "ffprobe";
     PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
     PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
     PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
@@ -44,25 +29,25 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.0.2";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-waUc2DzD7oQ/ZuPKvUwu3Yj6uxrZauR4phcQwh7YfKw=";
+    hash = "sha256-5qa2K17RmWHO5mrkz/Imoxv4ODEaJow3BMUBNzl7Dg8=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Q1PHXoiqUorAGcpIvM5iBvPINLRv+dAo0awhG4gvsrI=";
+    hash = "sha256-xFe1Fdsp8Tpz0r+xvPSYuPR8gXTts6iWTq0a9u+Xh3U=";
   };
 
   buildInputs = [ vips ];
 
   nativeBuildInputs = [
-    pnpm_9.configHook
-    nodejs
+    pnpm_10.configHook
+    nodejs_24
     makeWrapper
   ];
 
@@ -81,10 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,share/zipline}
 
-    cp -r build node_modules prisma .next mimes.json code.json package.json $out/share/zipline
+    cp -r build generated node_modules prisma .next mimes.json code.json package.json $out/share/zipline
 
     mkBin() {
-      makeWrapper ${lib.getExe nodejs} "$out/bin/$1" \
+      makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \
         --chdir "$out/share/zipline" \
         --set NODE_ENV production \
         --prefix PATH : ${lib.makeBinPath [ openssl ]} \

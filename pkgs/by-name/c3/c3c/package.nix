@@ -33,6 +33,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace git_hash.cmake \
       --replace-fail "\''${GIT_HASH}" "${rev}"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "-Werror" ""
   '';
 
   nativeBuildInputs = [ cmake ];

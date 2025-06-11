@@ -159,8 +159,8 @@ let
 
       # programs.firefox.enable = true;
 
-      # List packages installed in system profile. To search, run:
-      # \$ nix search wget
+      # List packages installed in system profile.
+      # You can use https://search.nixos.org/ to find more packages (and options).
       # environment.systemPackages = with pkgs; [
       #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
       #   wget
@@ -274,7 +274,7 @@ in
     description = ''
       Disable nixos-rebuild, nixos-generate-config, nixos-installer
       and other NixOS tools. This is useful to shrink embedded,
-      read-only systems which are not expected to be rebuild or
+      read-only systems which are not expected to rebuild or
       reconfigure themselves. Use at your own risk!
     '';
   };

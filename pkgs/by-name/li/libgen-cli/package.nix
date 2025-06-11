@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "ciehanski";
-    repo = pname;
+    repo = "libgen-cli";
     rev = "v${version}";
     sha256 = "sha256-EicXsxAvVe/umpcOn4dVlTexaAol1qYPg/h5MU5dysM=";
   };

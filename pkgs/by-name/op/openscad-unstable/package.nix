@@ -30,30 +30,28 @@
   libsForQt5,
   libspnav,
   libzip,
-  manifold,
   mesa,
   mpfr,
   python3,
-  tbb_2021_11,
+  tbb_2022_0,
   wayland,
   wayland-protocols,
   wrapGAppsHook3,
   xorg,
   mimalloc,
   opencsg,
+  ctestCheckHook,
 }:
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2025-02-07";
+  version = "2025-05-17";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "1308a7d476facb466bf9fae1e77666c35c8e3c8f";
-    hash = "sha256-+0cQ5mgRzOPfP6nl/rfC/hnw3V7yvGJCyLU8hOmlGOc=";
-    # Unfortunately, we can't selectively fetch submodules. It would be good
-    # to see that we don't accidentally depend on it.
-    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD
+    rev = "c76900f9a62fcb98c503dcc5ccce380db8ac564b";
+    hash = "sha256-R2/8T5+BugVTRIUVLaz6SxKQ1YrtyAGbiE4K1Fuc6bg=";
+    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
   };
 
   patches = [ ./test.diff ];
@@ -80,7 +78,7 @@ clangStdenv.mkDerivation rec {
     [
       clipper2
       glm
-      tbb_2021_11
+      tbb_2022_0
       mimalloc
       boost
       cairo
@@ -98,7 +96,6 @@ clangStdenv.mkDerivation rec {
       lib3mf
       libspnav
       libzip
-      manifold
       mpfr
       qscintilla
       qtbase
@@ -118,7 +115,9 @@ clangStdenv.mkDerivation rec {
     "-DEXPERIMENTAL=ON" # enable experimental options
     "-DSNAPSHOT=ON" # nightly icons
     "-DUSE_BUILTIN_OPENCSG=OFF"
-    "-DUSE_BUILTIN_MANIFOLD=OFF"
+    # use builtin manifold: 3.1.0 doesn't pass tests, builtin is 7c8fbe1, between 3.0.1 and 3.1.0
+    # FIXME revisit on version update
+    "-DUSE_BUILTIN_MANIFOLD=ON"
     "-DUSE_BUILTIN_CLIPPER2=OFF"
     "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] version}\""
     "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
@@ -134,6 +133,14 @@ clangStdenv.mkDerivation rec {
   # tests rely on sysprof which is not available on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  # remove unused submodules, to ensure correct dependency usage
+  postUnpack = ''
+    ( cd $sourceRoot
+      for m in submodules/OpenCSG submodules/mimalloc submodules/Clipper2
+      do rm -r $m
+      done )
+  '';
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
@@ -142,12 +149,16 @@ clangStdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     mesa.llvmpipeHook
+    ctestCheckHook
   ];
 
-  checkPhase = ''
+  dontUseNinjaCheck = true;
+  checkFlags = [
+    "-E"
     # some fontconfig issues cause pdf output to have wrong font
-    ctest -j$NIX_BUILD_CORES -E pdfexporttest.\*
-  '';
+    "pdfexporttest"
+  ];
+
   meta = with lib; {
     description = "3D parametric model compiler (unstable)";
     longDescription = ''

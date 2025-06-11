@@ -14,7 +14,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "openclarity";
-    repo = pname;
+    repo = "kubeclarity";
     tag = "v${version}";
     hash = "sha256-MC9GeJeVG7ROkpmOW2HD/fWMMnHo43q4Du9MzWTk2cg=";
   };

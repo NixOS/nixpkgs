@@ -98,6 +98,6 @@ stdenv.mkDerivation rec {
       hexa
       misuzu
     ];
-    broken = (lib.versionOlder cudaPackages.cudaVersion "11.4") || !(withCuDNN -> withCUDA);
+    broken = (cudaPackages.cudaOlder "11.4") || !(withCuDNN -> withCUDA);
   };
 }

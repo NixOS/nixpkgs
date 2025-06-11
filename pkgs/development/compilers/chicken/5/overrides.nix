@@ -70,9 +70,14 @@ in
   epoxy =
     old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=incompatible-function-pointer-types"
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
         "-Wno-error=int-conversion"
       ];
     };
@@ -81,21 +86,31 @@ in
   expat =
     old:
     (addToBuildInputsWithPkgConfig pkgs.expat old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=incompatible-function-pointer-types"
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
       ];
     };
   ezxdisp =
     old:
     (addToBuildInputsWithPkgConfig pkgs.xorg.libX11 old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=implicit-function-declaration"
       ];
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
   fuse = addToBuildInputsWithPkgConfig pkgs.fuse;
+  gl-math = old: {
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
   gl-utils = addPkgConfig;
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
   glls = addPkgConfig;
@@ -118,7 +133,7 @@ in
   mdh =
     old:
     (addToBuildInputs pkgs.pcre old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=implicit-function-declaration"
         "-Wno-error=implicit-int"
