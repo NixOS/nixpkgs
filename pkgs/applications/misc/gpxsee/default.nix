@@ -11,6 +11,7 @@
   qtserialport,
   qtsvg,
   wrapQtAppsHook,
+  wrapGAppsHook3,
 }:
 
 let
@@ -48,7 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     qmake
     qttools
     wrapQtAppsHook
+    wrapGAppsHook3
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=(''${gappsWrapperArgs[@]})
+  '';
 
   preConfigure = ''
     lrelease gpxsee.pro
