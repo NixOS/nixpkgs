@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Matrix group messaging app";
-    homepage = "https://gitlab.gnome.org/GNOME/fractal";
+    homepage = "https://gitlab.gnome.org/World/fractal";
     changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${version}";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome ];
