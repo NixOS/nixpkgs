@@ -3084,8 +3084,8 @@ with pkgs;
       gst-plugins-base
       gst-plugins-good
       gst-plugins-rs
+      gst-plugins-bad
       ;
-    gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
   };
 
   gnome-panel-with-modules = callPackage ../by-name/gn/gnome-panel/wrapper.nix { };
