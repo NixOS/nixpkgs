@@ -10,7 +10,6 @@
   meta = with pkgs.lib.maintainers; {
     maintainers = [
       bjornfor
-      domenkozar
     ];
   };
 
