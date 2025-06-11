@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A random forest model for splice prediction in genomics";
+    description = "Random forest model for splice prediction in genomics";
     license = licenses.mit;
     homepage = "https://github.com/raphaelleman/SPiP";
     maintainers = with maintainers; [ apraga ];

@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
       pkgsCross.avr.buildPackages.binutils
       pkgsCross.avr.buildPackages.binutils.bintools
       pkgsCross.avr.buildPackages.gcc
-      pkgsCross.avr.libcCross
+      pkgsCross.avr.libc
     ];
 
   # no tests implemented

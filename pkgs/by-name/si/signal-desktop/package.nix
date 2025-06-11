@@ -14,6 +14,10 @@
   replaceVars,
   noto-fonts-color-emoji,
   nixosTests,
+
+  # command line arguments which are always set e.g "--password-store=kwallet6"
+  commandLineArgs ? "",
+
   withAppleEmojis ? false,
 }:
 let
@@ -48,13 +52,13 @@ let
     '';
   });
 
-  version = "7.56.0";
+  version = "7.56.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-BrgBlDEgb08oX7Mh/P4nuoM+dkSDpB45zOtDNMYeZr0=";
+    hash = "sha256-zPoZ76ujS8H4ls7RW4bojRIKOrPRJPjdHJVAl1cH9vY=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -124,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1748456277;
+    SOURCE_DATE_EPOCH = 1749072888;
   };
 
   preBuild = ''
@@ -203,7 +207,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
   '';

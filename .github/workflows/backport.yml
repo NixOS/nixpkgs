@@ -9,10 +9,18 @@ on:
   pull_request_target:
     types: [closed, labeled]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   issues: write
   pull-requests: write
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   backport:

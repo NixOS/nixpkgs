@@ -28,16 +28,16 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/steamguard completion --shell zsh) \
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/dyc3/steamguard-cli/releases/tag/v${version}";
     description = "Linux utility for generating 2FA codes for Steam and managing Steam trade confirmations";
     homepage = "https://github.com/dyc3/steamguard-cli";
-    license = with licenses; [ gpl3Only ];
+    license = with lib.licenses; [ gpl3Only ];
     mainProgram = "steamguard";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       surfaceflinger
       sigmasquadron
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

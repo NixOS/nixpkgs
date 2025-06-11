@@ -31,15 +31,15 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/typeshare completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Tool for generating language files with typeshare";
     mainProgram = "typeshare";
     homepage = "https://github.com/1password/typeshare";
     changelog = "https://github.com/1password/typeshare/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

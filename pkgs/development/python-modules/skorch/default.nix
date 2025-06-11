@@ -96,5 +96,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/skorch-dev/skorch/blob/master/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
+    badPlatforms = [
+      # Most tests fail with:
+      # Fatal Python error: Segmentation fault
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

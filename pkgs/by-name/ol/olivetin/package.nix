@@ -81,13 +81,13 @@ buildGoModule (
 
   {
     pname = "olivetin";
-    version = "2025.6.1";
+    version = "2025.6.6";
 
     src = fetchFromGitHub {
       owner = "OliveTin";
       repo = "OliveTin";
       tag = finalAttrs.version;
-      hash = "sha256-Bd+zxVEhP7LZk74Mfai/MkML1pKlPBKm4kh4jAkC/kQ=";
+      hash = "sha256-yzAuhrkJEBErf9yYuRoq5B7PT0XA0w668AG5LNSSRFM=";
     };
 
     modRoot = "service";

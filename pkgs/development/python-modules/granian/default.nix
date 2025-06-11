@@ -13,7 +13,6 @@
   pytest-asyncio,
   websockets,
   httpx,
-  rust-jemalloc-sys,
   sniffio,
   nix-update-script,
 }:
@@ -30,6 +29,14 @@ buildPythonPackage rec {
     hash = "sha256-qJ65ILj7xLqOWmpn1UzNQHUnzFg714gntVSmYHpI65I=";
   };
 
+  # Granian forces a custom allocator for all the things it runs,
+  # which breaks some libraries in funny ways. Make it not do that,
+  # and allow the final application to make the allocator decision
+  # via LD_PRELOAD or similar.
+  patches = [
+    ./no-alloc.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     hash = "sha256-swfqKp8AsxNAUc7dlce6J4dNQbNGWrCcUDc31AhuMmI=";
@@ -38,21 +45,6 @@ buildPythonPackage rec {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
-  ];
-
-  buildInputs = [
-    # fix "Unsupported system page size" on aarch64-linux with 16k pages
-    # https://github.com/NixOS/nixpkgs/issues/410572
-    (rust-jemalloc-sys.overrideAttrs (
-      { configureFlags, ... }:
-      {
-        configureFlags = configureFlags ++ [
-          # otherwise import check fails with:
-          # ImportError: {{storeDir}}/lib/libjemalloc.so.2: cannot allocate memory in static TLS block
-          "--disable-initial-exec-tls"
-        ];
-      }
-    ))
   ];
 
   dependencies = [
@@ -96,6 +88,7 @@ buildPythonPackage rec {
   meta = {
     description = "Rust HTTP server for Python ASGI/WSGI/RSGI applications";
     homepage = "https://github.com/emmett-framework/granian";
+    changelog = "https://github.com/emmett-framework/granian/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     mainProgram = "granian";
     maintainers = with lib.maintainers; [

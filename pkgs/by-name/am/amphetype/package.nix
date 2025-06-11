@@ -10,7 +10,7 @@
 let
   pname = "amphetype";
   version = "1.0.0";
-  description = "An advanced typing practice program";
+  description = "Advanced typing practice program";
 in
 python3Packages.buildPythonApplication {
   inherit pname version;

@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Tunnelling for application that don't speak IPv6";
     mainProgram = "6tunnel";
     homepage = "https://github.com/wojtekka/6tunnel";
     changelog = "https://github.com/wojtekka/6tunnel/blob/${version}/ChangeLog";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ Br1ght0ne ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
+    platforms = lib.platforms.unix;
   };
 }

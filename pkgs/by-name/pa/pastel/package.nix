@@ -18,15 +18,15 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-u+1KDcC2KGqvmOk6k7hOHE16TMvDg92eMOdNMQQszug=";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to generate, analyze, convert and manipulate colors";
     homepage = "https://github.com/sharkdp/pastel";
     changelog = "https://github.com/sharkdp/pastel/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "pastel";
   };
 }

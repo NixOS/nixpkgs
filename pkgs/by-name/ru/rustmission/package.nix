@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A TUI for the Transmission daemon";
+    description = "TUI for the Transmission daemon";
     homepage = "https://github.com/intuis/rustmission";
     changelog = "https://github.com/intuis/rustmission/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;

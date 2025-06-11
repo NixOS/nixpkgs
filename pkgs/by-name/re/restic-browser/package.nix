@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A GUI to browse and restore restic backup repositories";
+    description = "GUI to browse and restore restic backup repositories";
     homepage = "https://github.com/emuell/restic-browser";
     changelog = "https://github.com/emuell/restic-browser/releases/tag/v${version}";
     license = lib.licenses.mit;

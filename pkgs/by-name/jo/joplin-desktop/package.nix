@@ -60,10 +60,11 @@ let
 
     extraInstallCommands = ''
       wrapProgram $out/bin/joplin-desktop \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
       install -Dm644 ${appimageContents}/joplin.desktop $out/share/applications/joplin.desktop
       install -Dm644 ${appimageContents}/joplin.png $out/share/pixmaps/joplin.png
       substituteInPlace $out/share/applications/joplin.desktop \
+        --replace-fail StartupWMClass=Joplin StartupWMClass=@joplin/app-desktop \
         --replace-fail 'Exec=AppRun' 'Exec=joplin-desktop'
     '';
 

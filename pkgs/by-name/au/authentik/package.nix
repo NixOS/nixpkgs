@@ -25,14 +25,14 @@ let
     hash = "sha256-idShMSYIrf3ViG9VFNGNu6TSjBz3Q+GJMMeCzcJwfG4=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Authentication glue you need";
     changelog = "https://github.com/goauthentik/authentik/releases/tag/version%2F${version}";
     homepage = "https://goauthentik.io/";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     broken = stdenvNoCC.buildPlatform != stdenvNoCC.hostPlatform;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jvanbruegge
       risson
     ];
@@ -43,7 +43,7 @@ let
     pname = "authentik-website-deps";
     inherit src version meta;
 
-    sourceRoot = "source/website";
+    sourceRoot = "${src.name}/website";
 
     outputHash = "sha256-AnQpjCoCTzm28Wl/t3YHx0Kl0CuMHL2OgRjRB1Trrsw=";
     outputHashMode = "recursive";
@@ -75,7 +75,7 @@ let
       substituteInPlace package.json --replace-fail 'cross-env ' ""
     '';
 
-    sourceRoot = "source/website";
+    sourceRoot = "${src.name}/website";
 
     buildPhase = ''
       runHook preBuild

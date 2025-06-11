@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A graphical tool for developing on containers and Kubernetes";
+    description = "Graphical tool for developing on containers and Kubernetes";
     homepage = "https://podman-desktop.io";
     changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;

@@ -21,13 +21,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "ns-usbloader";
-  version = "7.1";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "developersu";
     repo = "ns-usbloader";
     rev = "v${version}";
-    sha256 = "sha256-gSf5SCIhcUEYGsYssXVGjUweVU+guxOI+lzD3ANr96w=";
+    sha256 = "sha256-nZfAZ+IjoYXEWwH9oOhOQ5TOYUNiAGAqhHRhskyx/Vo=";
   };
 
   patches = [

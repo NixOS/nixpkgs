@@ -79,8 +79,13 @@ in
     )
 
     (mkRemovedOptionModule [ "services" "gitea" "ssh" "enable" ]
-      "services.gitea.ssh.enable has been migrated into freeform setting services.gitea.settings.server.DISABLE_SSH. Keep in mind that the setting is inverted"
+      "It has been migrated into freeform setting services.gitea.settings.server.DISABLE_SSH. Keep in mind that the setting is inverted."
     )
+    (mkRemovedOptionModule [
+      "services"
+      "gitea"
+      "useWizard"
+    ] "Has been removed because it was broken and lacked automated testing.")
   ];
 
   options = {
@@ -92,12 +97,6 @@ in
       };
 
       package = mkPackageOption pkgs "gitea" { };
-
-      useWizard = mkOption {
-        default = false;
-        type = types.bool;
-        description = "Do not generate a configuration and use gitea' installation wizard instead. The first registered user will be administrator.";
-      };
 
       stateDir = mkOption {
         default = "/var/lib/gitea";
@@ -495,9 +494,7 @@ in
                   This can be disabled by using this option.
 
                   *Note:* please keep in mind that this should be added after the initial
-                  deploy unless [](#opt-services.gitea.useWizard)
-                  is `true` as the first registered user will be the administrator if
-                  no install wizard is used.
+                  deploy as the first registered user will be the administrator.
                 '';
               };
             };
@@ -752,62 +749,60 @@ in
         in
         ''
           # copy custom configuration and generate random secrets if needed
-          ${optionalString (!cfg.useWizard) ''
-            function gitea_setup {
-              cp -f '${configFile}' '${runConfig}'
+          function gitea_setup {
+            cp -f '${configFile}' '${runConfig}'
 
-              if [ ! -s '${secretKey}' ]; then
-                  ${exe} generate secret SECRET_KEY > '${secretKey}'
+            if [ ! -s '${secretKey}' ]; then
+                ${exe} generate secret SECRET_KEY > '${secretKey}'
+            fi
+
+            # Migrate LFS_JWT_SECRET filename
+            if [[ -s '${oldLfsJwtSecret}' && ! -s '${lfsJwtSecret}' ]]; then
+                mv '${oldLfsJwtSecret}' '${lfsJwtSecret}'
+            fi
+
+            if [ ! -s '${oauth2JwtSecret}' ]; then
+                ${exe} generate secret JWT_SECRET > '${oauth2JwtSecret}'
+            fi
+
+            ${lib.optionalString cfg.lfs.enable ''
+              if [ ! -s '${lfsJwtSecret}' ]; then
+                  ${exe} generate secret LFS_JWT_SECRET > '${lfsJwtSecret}'
               fi
+            ''}
 
-              # Migrate LFS_JWT_SECRET filename
-              if [[ -s '${oldLfsJwtSecret}' && ! -s '${lfsJwtSecret}' ]]; then
-                  mv '${oldLfsJwtSecret}' '${lfsJwtSecret}'
-              fi
+            if [ ! -s '${internalToken}' ]; then
+                ${exe} generate secret INTERNAL_TOKEN > '${internalToken}'
+            fi
 
-              if [ ! -s '${oauth2JwtSecret}' ]; then
-                  ${exe} generate secret JWT_SECRET > '${oauth2JwtSecret}'
-              fi
+            chmod u+w '${runConfig}'
+            ${replaceSecretBin} '#secretkey#' '${secretKey}' '${runConfig}'
+            ${replaceSecretBin} '#dbpass#' '${cfg.database.passwordFile}' '${runConfig}'
+            ${replaceSecretBin} '#oauth2jwtsecret#' '${oauth2JwtSecret}' '${runConfig}'
+            ${replaceSecretBin} '#internaltoken#' '${internalToken}' '${runConfig}'
 
-              ${lib.optionalString cfg.lfs.enable ''
-                if [ ! -s '${lfsJwtSecret}' ]; then
-                    ${exe} generate secret LFS_JWT_SECRET > '${lfsJwtSecret}'
-                fi
-              ''}
+            ${lib.optionalString cfg.lfs.enable ''
+              ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
+            ''}
 
-              if [ ! -s '${internalToken}' ]; then
-                  ${exe} generate secret INTERNAL_TOKEN > '${internalToken}'
-              fi
+            ${lib.optionalString (cfg.camoHmacKeyFile != null) ''
+              ${replaceSecretBin} '#hmackey#' '${cfg.camoHmacKeyFile}' '${runConfig}'
+            ''}
 
-              chmod u+w '${runConfig}'
-              ${replaceSecretBin} '#secretkey#' '${secretKey}' '${runConfig}'
-              ${replaceSecretBin} '#dbpass#' '${cfg.database.passwordFile}' '${runConfig}'
-              ${replaceSecretBin} '#oauth2jwtsecret#' '${oauth2JwtSecret}' '${runConfig}'
-              ${replaceSecretBin} '#internaltoken#' '${internalToken}' '${runConfig}'
+            ${lib.optionalString (cfg.mailerPasswordFile != null) ''
+              ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
+            ''}
 
-              ${lib.optionalString cfg.lfs.enable ''
-                ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
-              ''}
+            ${lib.optionalString (cfg.metricsTokenFile != null) ''
+              ${replaceSecretBin} '#metricstoken#' '${cfg.metricsTokenFile}' '${runConfig}'
+            ''}
 
-              ${lib.optionalString (cfg.camoHmacKeyFile != null) ''
-                ${replaceSecretBin} '#hmackey#' '${cfg.camoHmacKeyFile}' '${runConfig}'
-              ''}
-
-              ${lib.optionalString (cfg.mailerPasswordFile != null) ''
-                ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
-              ''}
-
-              ${lib.optionalString (cfg.metricsTokenFile != null) ''
-                ${replaceSecretBin} '#metricstoken#' '${cfg.metricsTokenFile}' '${runConfig}'
-              ''}
-
-              ${lib.optionalString (cfg.captcha.secretFile != null) ''
-                ${replaceSecretBin} '#captchasecret#' '${cfg.captcha.secretFile}' '${runConfig}'
-              ''}
-              chmod u-w '${runConfig}'
-            }
-            (umask 027; gitea_setup)
-          ''}
+            ${lib.optionalString (cfg.captcha.secretFile != null) ''
+              ${replaceSecretBin} '#captchasecret#' '${cfg.captcha.secretFile}' '${runConfig}'
+            ''}
+            chmod u-w '${runConfig}'
+          }
+          (umask 027; gitea_setup)
 
           # run migrations/init the database
           ${exe} migrate

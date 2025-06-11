@@ -38,13 +38,13 @@ buildGoModule rec {
     package = osv-scanner;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Vulnerability scanner written in Go which uses the data provided by https://osv.dev";
     mainProgram = "osv-scanner";
     homepage = "https://github.com/google/osv-scanner";
     changelog = "https://github.com/google/osv-scanner/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       stehessel
       urandom
     ];

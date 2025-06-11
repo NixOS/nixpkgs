@@ -34,13 +34,13 @@ appimageTools.wrapType2 rec {
     allowedVersions = ".+\\.[0-9]{6}\\..+";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tuta official desktop client";
     homepage = "https://tuta.com/";
     changelog = "https://github.com/tutao/tutanota/releases/tag/tutanota-desktop-release-${version}";
-    license = licenses.gpl3Only;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = [ ];
+    license = lib.licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "tutanota-desktop";
     platforms = [ "x86_64-linux" ];
   };

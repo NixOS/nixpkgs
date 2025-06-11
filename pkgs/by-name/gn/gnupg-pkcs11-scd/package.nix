@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/alonbl/gnupg-pkcs11-scd/blob/gnupg-pkcs11-scd-${version}/ChangeLog";
     description = "Smart-card daemon to enable the use of PKCS#11 tokens with GnuPG";
     mainProgram = "gnupg-pkcs11-scd";
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
       daemon to enable the use of PKCS#11 tokens with GnuPG.
     '';
     homepage = "https://gnupg-pkcs11.sourceforge.net/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       philandstuff
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
