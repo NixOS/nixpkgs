@@ -122,7 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     mainProgram = "dunst";
     maintainers = with lib.maintainers; [
-      domenkozar
       gepbird
     ];
     # NOTE: 'unix' or even 'all' COULD work too, I'm not sure

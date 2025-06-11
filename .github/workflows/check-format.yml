@@ -12,6 +12,10 @@ concurrency:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   nixos:
     name: fmt-check
