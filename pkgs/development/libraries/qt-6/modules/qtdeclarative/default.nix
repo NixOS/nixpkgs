@@ -10,7 +10,6 @@
   lib,
   pkgsBuildBuild,
   replaceVars,
-  fetchpatch2,
 }:
 
 qtModule {
