@@ -6101,6 +6101,7 @@ with pkgs;
 
   tbb_2020_3 = callPackage ../development/libraries/tbb/2020_3.nix { };
   tbb_2021_11 = callPackage ../development/libraries/tbb { };
+  tbb_2021_13 = callPackage ../development/libraries/tbb/2021_13.nix { };
   tbb_2022_0 = callPackage ../development/libraries/tbb/2022_0.nix { };
   # many packages still fail with latest version
   tbb = tbb_2020_3;

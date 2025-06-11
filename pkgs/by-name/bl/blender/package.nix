@@ -7,6 +7,7 @@
   boost,
   brotli,
   callPackage,
+  clipper2,
   cmake,
   colladaSupport ? true,
   config,
@@ -15,6 +16,7 @@
   dbus,
   embree,
   fetchzip,
+  fetchgit,
   ffmpeg,
   fftw,
   fftwFloat,
@@ -48,6 +50,7 @@
   libxkbcommon,
   llvmPackages,
   makeWrapper,
+  manifold,
   mesa,
   nix-update-script,
   openUsdSupport ? !stdenv.hostPlatform.isDarwin,
@@ -72,7 +75,7 @@
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
   sse2neon,
   stdenv,
-  tbb,
+  tbb_2022_0,
   vulkan-headers,
   vulkan-loader,
   wayland,
@@ -106,17 +109,26 @@ let
     url = "https://developer.download.nvidia.com/redist/optix/v7.4/OptiX-7.4.0-Include.zip";
     hash = "sha256-ca08XetwaUYC9foeP5bff9kcDfuFgEzopvjspn2s8RY=";
   };
+  # tbb = tbb_2022_0;
 in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.4.3";
+  version = "4.5";
 
-  src = fetchzip {
-    name = "source";
-    url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vHDOKI7uqB5EbdRu711axBuYX1zM746E6GvK2Nl5hZg=";
+  src = fetchgit {
+    rev = "6df4c14e4bbac54d3bc946cc0632e0a1ed0b8928";
+    url = "https://projects.blender.org/blender/blender.git";
+    hash = "sha256-IJ5aqrZ5rLtT1x/sCsr8yEMb8S5R+Nl/8BD4q2m2ja0=";
+    # required otherwise you get runtime errors about missing files.
+    fetchLFS = true;
   };
+
+  #  src = fetchzip {
+  #    name = "source";
+  #    url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
+  #    hash = "sha256-vHDOKI7uqB5EbdRu711axBuYX1zM746E6GvK2Nl5hZg=";
+  #  };
 
   patches = [ ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
@@ -231,6 +243,7 @@ stdenv'.mkDerivation (finalAttrs: {
     [
       alembic
       boost
+      clipper2
       ffmpeg
       fftw
       fftwFloat
@@ -247,23 +260,24 @@ stdenv'.mkDerivation (finalAttrs: {
       libsndfile
       libtiff
       libwebp
+      (manifold.override { tbb_2021_11 = tbb_2022_0; })
       opencolorio
       openexr
       openimageio_2
       openjpeg
-      openpgl
+      (openpgl.override { tbb = tbb_2022_0; })
       (opensubdiv.override { inherit cudaSupport; })
-      openvdb
+      (openvdb.override { tbb = tbb_2022_0; })
       potrace
       pugixml
       python3
       python3Packages.materialx
-      tbb
+      tbb_2022_0
       zlib
       zstd
     ]
     ++ lib.optional embreeSupport embree
-    ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
+    ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; tbb = tbb_2022_0; })
     ++ (
       if (!stdenv.hostPlatform.isDarwin) then
         [
