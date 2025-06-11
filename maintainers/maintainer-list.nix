@@ -5150,6 +5150,12 @@
     githubId = 1573344;
     name = "Andrey Pavlov";
   };
+  cowboycodr = {
+    name = "Kian McKenna";
+    email = "kian@mckenna.cloud";
+    github = "cowboycodr";
+    githubId = 59800761;
+  };
   cpages = {
     email = "page@ruiec.cat";
     github = "cpages";
