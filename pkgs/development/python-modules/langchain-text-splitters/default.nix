@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -50,11 +50,8 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^langchain-test-splitters==([0-9.]+)$"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-text-splitters==";
   };
 
   meta = {

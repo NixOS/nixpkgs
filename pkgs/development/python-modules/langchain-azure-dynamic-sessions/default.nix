@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
 
   # build-system
   poetry-core,
@@ -72,11 +72,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_azure_dynamic_sessions" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^langchain-azure-dynamic-sessions==([0-9.]+)$"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-azure-dynamic-sessions==";
   };
 
   meta = {

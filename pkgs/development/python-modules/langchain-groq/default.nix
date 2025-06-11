@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -52,11 +52,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_groq" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^langchain-groq==([0-9.]+)$"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-groq==";
   };
 
   meta = {

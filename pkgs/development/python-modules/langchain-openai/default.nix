@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -24,9 +25,6 @@
   responses,
   syrupy,
   toml,
-
-  # passthru
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -99,11 +97,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-openai==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-openai==";
   };
 
   meta = {

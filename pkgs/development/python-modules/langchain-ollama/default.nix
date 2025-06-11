@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -15,9 +16,6 @@
   pytestCheckHook,
   pytest-asyncio,
   syrupy,
-
-  # passthru
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -60,11 +58,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_ollama" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-ollama==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-ollama==";
   };
 
   meta = {

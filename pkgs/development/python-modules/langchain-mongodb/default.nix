@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
 
   # build-system
   poetry-core,
@@ -64,11 +64,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_mongodb" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^langchain-mongodb==([0-9.]+)$"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-mongodb==";
   };
 
   meta = {

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
 
   # build-system
   pdm-backend,
@@ -60,11 +60,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_fireworks" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-fireworks==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-fireworks==";
   };
 
   meta = {
