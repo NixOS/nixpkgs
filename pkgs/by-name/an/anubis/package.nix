@@ -70,6 +70,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.tests = { inherit (nixosTests) anubis; };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Weighs the soul of incoming HTTP requests using proof-of-work to stop AI crawlers";
