@@ -7,7 +7,7 @@
   gnugrep,
   iproute2,
   makeWrapper,
-  nettools,
+  net-tools,
   openresolv,
   systemd,
 }:
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
         --prefix PATH : "${
           lib.makeBinPath (
             [
-              nettools
+              net-tools
               gawk
               coreutils
               gnugrep

@@ -29,7 +29,7 @@
   noiseprotocol,
 
   # tests
-  nettools,
+  net-tools,
   unixtools,
   magic-wormhole-transit-relay,
   magic-wormhole-mailbox-server,
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     ''
     # fix the location of the ifconfig binary
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
+      sed -i -e "s|'ifconfig'|'${net-tools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
     '';
 
   build-system = [

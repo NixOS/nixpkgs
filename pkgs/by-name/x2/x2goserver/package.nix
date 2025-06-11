@@ -15,7 +15,7 @@
   gnugrep,
   findutils,
   xorg,
-  nettools,
+  net-tools,
   iproute2,
   bc,
   procps,
@@ -77,7 +77,7 @@ let
     gnused
     gnugrep
     findutils
-    nettools
+    net-tools
     iproute2
     bc
     procps

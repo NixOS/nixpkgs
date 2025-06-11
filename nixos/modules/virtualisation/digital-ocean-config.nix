@@ -144,7 +144,7 @@ with lib;
         systemd.services.digitalocean-set-hostname = mkIf (hostName == "") {
           path = [
             pkgs.curl
-            pkgs.nettools
+            pkgs.net-tools
           ];
           description = "Set hostname provided by Digitalocean";
           wantedBy = [ "network.target" ];
