@@ -441,6 +441,10 @@ let
         };
       };
 
+      rocm-bandwidth-test = self.callPackage ./rocm-bandwidth-test {
+        rocmPackages = self;
+      };
+
       rocm-tests = self.callPackage ./rocm-tests {
         rocmPackages = self;
       };
