@@ -276,6 +276,7 @@ in
           ExecStart = lib.concatStringsSep " " (
             (lib.singleton (lib.getExe cfg.package)) ++ instance.extraFlags
           );
+          RuntimeDirectoryPreserve = "yes";
           RuntimeDirectory =
             if
               lib.any (lib.hasPrefix "/run/anubis") (
