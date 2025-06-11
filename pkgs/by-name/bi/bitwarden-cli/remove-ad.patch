@@ -1,0 +1,16 @@
+diff --git i/apps/cli/src/program.ts w/apps/cli/src/program.ts
+index c6b79c7dff..139ebf0323 100644
+--- i/apps/cli/src/program.ts
++++ w/apps/cli/src/program.ts
+@@ -74,11 +74,6 @@ export class Program extends BaseProgram {
+     });
+ 
+     program.on("--help", () => {
+-      writeLn(
+-        chalk.yellowBright(
+-          "\n  Tip: Managing and retrieving secrets for dev environments is easier with Bitwarden Secrets Manager. Learn more under https://bitwarden.com/products/secrets-manager/",
+-        ),
+-      );
+       writeLn("\n  Examples:");
+       writeLn("");
+       writeLn("    bw login");
