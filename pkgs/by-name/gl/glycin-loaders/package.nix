@@ -1,7 +1,8 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  rustPlatform,
+  fetchFromGitLab,
   replaceVars,
   bubblewrap,
   cairo,
@@ -26,9 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
   version = "1.2.1";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zMV46aPoPQ3BU1c30f2gm6qVxxZ/Xl7LFfeGZUCU7tU=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "glycin";
+    rev = "1.2.1";
+    hash = "sha256-M4DcWLE40OPB7zIkv4uLj6xTac3LTDcZ2uAO2S/cUz4=";
   };
 
   patches = [
@@ -39,6 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
     finalAttrs.passthru.glycinPathsPatch
   ];
 
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    hash = "sha256-iNSpLvIi3oZKSRlkwkDJp5i8MdixRvmWIOCzbFHIdHw=";
+  };
+
   nativeBuildInputs = [
     cargo
     gettext # for msgfmt
@@ -47,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustc
+    rustPlatform.cargoSetupHook
   ];
 
   buildInputs = [

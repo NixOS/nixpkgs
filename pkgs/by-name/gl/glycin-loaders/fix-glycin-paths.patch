@@ -1,7 +1,7 @@
-diff --git a/vendor/glycin/src/sandbox.rs b/vendor/glycin/src/sandbox.rs
+diff --git a/glycin/src/sandbox.rs b/glycin/src/sandbox.rs
 index 08db832..4f44b21 100644
---- a/vendor/glycin/src/sandbox.rs
-+++ b/vendor/glycin/src/sandbox.rs
+--- a/glycin/src/sandbox.rs
++++ b/glycin/src/sandbox.rs
 @@ -202,7 +202,7 @@ impl Sandbox {
  
                  args.push(self.exec());
