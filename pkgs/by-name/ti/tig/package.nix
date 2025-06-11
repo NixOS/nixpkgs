@@ -81,7 +81,6 @@ stdenv.mkDerivation rec {
     description = "Text-mode interface for git";
     maintainers = with maintainers; [
       bjornfor
-      domenkozar
       qknight
       globin
       ma27
