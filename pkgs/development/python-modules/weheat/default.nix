@@ -23,10 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-CBW+LehZPZCHZ2zFeCOWwNAVlGcGdKQ5XgmCOv8jr5Q=";
   };
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
-
   build-system = [ setuptools ];
 
   dependencies = [
@@ -46,6 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library to interact with the weheat API";
     homepage = "https://github.com/wefabricate/wh-python";
+    changelog = "https://github.com/wefabricate/wh-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
