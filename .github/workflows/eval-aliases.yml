@@ -12,6 +12,10 @@ concurrency:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   eval-aliases:
     name: Eval nixpkgs with aliases enabled
