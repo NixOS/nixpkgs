@@ -5,7 +5,6 @@
 
   # build-system
   pdm-backend,
-  poetry-core,
 
   # dependencies
   langchain-core,
