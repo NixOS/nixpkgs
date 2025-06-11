@@ -1,0 +1,337 @@
+From e18f91d4ddbc30920c828e782ce40fbe844fcab9 Mon Sep 17 00:00:00 2001
+From: Mike Naberezny <mike@naberezny.com>
+Date: Sun, 25 Dec 2022 10:58:24 -0800
+Subject: [PATCH] Remove unused test_suite() that now causes unittest and
+ pytest warnings
+
+supervisor/tests/test_confecho.py::test_suite
+  /home/runner/work/supervisor/supervisor/supervisor/tests/test_confecho.py:18: DeprecationWarning: unittest.findTestCases() is deprecated and will be removed in Python 3.13. Please use unittest.TestLoader.loadTestsFromModule() instead.
+    return unittest.findTestCases(sys.modules[__name__])
+
+supervisor/tests/test_confecho.py::test_suite
+  /home/runner/work/supervisor/supervisor/.tox/py311/lib/python3.11/site-packages/_pytest/python.py:199: PytestReturnNotNoneWarning: Expected None, but supervisor/tests/test_confecho.py::test_suite returned <unittest.suite.TestSuite tests=[<unittest.suite.TestSuite tests=[<supervisor.tests.test_confecho.TopLevelFunctionTests testMethod=test_main_writes_data_out_that_looks_like_a_config_file>]>]>, which will be an error in a future version of pytest.  Did you mean to use `assert` instead of `return`?
+---
+ supervisor/tests/test_childutils.py     |  7 -------
+ supervisor/tests/test_confecho.py       |  7 -------
+ supervisor/tests/test_dispatchers.py    |  6 ------
+ supervisor/tests/test_end_to_end.py     |  6 ------
+ supervisor/tests/test_events.py         |  7 -------
+ supervisor/tests/test_http.py           |  6 ------
+ supervisor/tests/test_loggers.py        |  6 ------
+ supervisor/tests/test_options.py        |  7 -------
+ supervisor/tests/test_poller.py         |  7 -------
+ supervisor/tests/test_rpcinterfaces.py  |  8 --------
+ supervisor/tests/test_socket_manager.py | 20 --------------------
+ supervisor/tests/test_states.py         |  7 -------
+ supervisor/tests/test_supervisorctl.py  |  7 -------
+ supervisor/tests/test_supervisord.py    |  7 -------
+ supervisor/tests/test_templating.py     |  9 ---------
+ supervisor/tests/test_web.py            |  6 ------
+ supervisor/tests/test_xmlrpc.py         |  1 -
+ 17 files changed, 124 deletions(-)
+
+diff --git a/supervisor/tests/test_childutils.py b/supervisor/tests/test_childutils.py
+index f2b39d8..94193fc 100644
+--- a/supervisor/tests/test_childutils.py
++++ b/supervisor/tests/test_childutils.py
+@@ -132,10 +132,3 @@ class TestEventListenerProtocol(unittest.TestCase):
+         listener.send(msg, stdout)
+         expected = '%s%s\n%s' % (begin, len(msg), msg)
+         self.assertEqual(stdout.getvalue(), expected)
+-
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+diff --git a/supervisor/tests/test_confecho.py b/supervisor/tests/test_confecho.py
+index 6ae5108..f35f845 100644
+--- a/supervisor/tests/test_confecho.py
++++ b/supervisor/tests/test_confecho.py
+@@ -12,10 +12,3 @@ class TopLevelFunctionTests(unittest.TestCase):
+ 
+         output = sio.getvalue()
+         self.assertTrue("[supervisord]" in output)
+-
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+diff --git a/supervisor/tests/test_dispatchers.py b/supervisor/tests/test_dispatchers.py
+index 87692e2..ee6e44a 100644
+--- a/supervisor/tests/test_dispatchers.py
++++ b/supervisor/tests/test_dispatchers.py
+@@ -1227,9 +1227,3 @@ class stripEscapeTests(unittest.TestCase):
+     def test_noansi(self):
+         noansi = b'Hello world... this is longer than a token!'
+         self.assertEqual(self._callFUT(noansi), noansi)
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+diff --git a/supervisor/tests/test_end_to_end.py b/supervisor/tests/test_end_to_end.py
+index dd5c977..763da48 100644
+--- a/supervisor/tests/test_end_to_end.py
++++ b/supervisor/tests/test_end_to_end.py
+@@ -419,9 +419,3 @@ class EndToEndTests(BaseTestCase):
+         finally:
+             transport.close()
+         self.assertEqual(ident, "from_command_line")
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+diff --git a/supervisor/tests/test_events.py b/supervisor/tests/test_events.py
+index bd33a0c..a432da8 100644
+--- a/supervisor/tests/test_events.py
++++ b/supervisor/tests/test_events.py
+@@ -508,10 +508,3 @@ class TestUtilityFunctions(unittest.TestCase):
+             self.assertTrue(events.EventTypes.FOO is FooEvent)
+         finally:
+             del events.EventTypes.FOO
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+-
+diff --git a/supervisor/tests/test_http.py b/supervisor/tests/test_http.py
+index 1198597..f4c4496 100644
+--- a/supervisor/tests/test_http.py
++++ b/supervisor/tests/test_http.py
+@@ -684,9 +684,3 @@ class DummyProducer:
+             return self.data.pop(0)
+         else:
+             return b''
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+diff --git a/supervisor/tests/test_loggers.py b/supervisor/tests/test_loggers.py
+index 0742c17..a9ae297 100644
+--- a/supervisor/tests/test_loggers.py
++++ b/supervisor/tests/test_loggers.py
+@@ -599,9 +599,3 @@ class DummyHandler:
+         self.records.append(record)
+     def close(self):
+         self.closed = True
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+diff --git a/supervisor/tests/test_options.py b/supervisor/tests/test_options.py
+index f43537a..18e7399 100644
+--- a/supervisor/tests/test_options.py
++++ b/supervisor/tests/test_options.py
+@@ -3804,10 +3804,3 @@ class UtilFunctionsTests(unittest.TestCase):
+         self.assertEqual(s('process'), ('process', 'process'))
+         self.assertEqual(s('group:'), ('group', None))
+         self.assertEqual(s('group:*'), ('group', None))
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+-
+diff --git a/supervisor/tests/test_poller.py b/supervisor/tests/test_poller.py
+index 1b12a8e..fb5bf81 100644
+--- a/supervisor/tests/test_poller.py
++++ b/supervisor/tests/test_poller.py
+@@ -437,10 +437,3 @@ class FakeKEvent(object):
+     def __init__(self, ident, filter):
+         self.ident = ident
+         self.filter = filter
+-
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+diff --git a/supervisor/tests/test_rpcinterfaces.py b/supervisor/tests/test_rpcinterfaces.py
+index 0827adf..ec88a90 100644
+--- a/supervisor/tests/test_rpcinterfaces.py
++++ b/supervisor/tests/test_rpcinterfaces.py
+@@ -2392,14 +2392,6 @@ class Test_make_main_rpcinterface(unittest.TestCase):
+             )
+ 
+ 
+-
+ class DummyRPCInterface:
+     def hello(self):
+         return 'Hello!'
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+-
+diff --git a/supervisor/tests/test_socket_manager.py b/supervisor/tests/test_socket_manager.py
+index 626d786..8eaafaa 100644
+--- a/supervisor/tests/test_socket_manager.py
++++ b/supervisor/tests/test_socket_manager.py
+@@ -51,7 +51,6 @@ class ProxyTest(unittest.TestCase):
+         proxy = self._makeOne(Subject(), on_delete=self.setOnDeleteCalled)
+         self.assertEqual(5, proxy.getValue())
+         proxy = None
+-        gc_collect()
+         self.assertTrue(self.on_deleteCalled)
+ 
+ class ReferenceCounterTest(unittest.TestCase):
+@@ -94,9 +93,6 @@ class ReferenceCounterTest(unittest.TestCase):
+ 
+ class SocketManagerTest(unittest.TestCase):
+ 
+-    def tearDown(self):
+-        gc_collect()
+-
+     def _getTargetClass(self):
+         from supervisor.socket_manager import SocketManager
+         return SocketManager
+@@ -160,12 +156,10 @@ class SocketManagerTest(unittest.TestCase):
+         self.assertTrue(sock_manager.is_prepared())
+         self.assertFalse(sock_manager.socket.close_called)
+         sock = None
+-        gc_collect()
+         # Socket not actually closed yet b/c ref ct is 1
+         self.assertTrue(sock_manager.is_prepared())
+         self.assertFalse(sock_manager.socket.close_called)
+         sock2 = None
+-        gc_collect()
+         # Socket closed
+         self.assertFalse(sock_manager.is_prepared())
+         self.assertTrue(sock_manager.socket.close_called)
+@@ -178,7 +172,6 @@ class SocketManagerTest(unittest.TestCase):
+         self.assertNotEqual(sock_id, sock3_id)
+         # Drop ref ct to zero
+         del sock3
+-        gc_collect()
+         # Now assert that socket is closed
+         self.assertFalse(sock_manager.is_prepared())
+         self.assertTrue(sock_manager.socket.close_called)
+@@ -193,7 +186,6 @@ class SocketManagerTest(unittest.TestCase):
+         self.assertEqual('Creating socket %s' % repr(conf), logger.data[0])
+         # socket close
+         del sock
+-        gc_collect()
+         self.assertEqual(len(logger.data), 2)
+         self.assertEqual('Closing socket %s' % repr(conf), logger.data[1])
+ 
+@@ -242,15 +234,3 @@ class SocketManagerTest(unittest.TestCase):
+             self.fail()
+         except Exception as e:
+             self.assertEqual(e.args[0], 'Socket has not been prepared')
+-
+-def gc_collect():
+-    if __pypy__ is not None:
+-        gc.collect()
+-        gc.collect()
+-        gc.collect()
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+diff --git a/supervisor/tests/test_states.py b/supervisor/tests/test_states.py
+index ba8e58f..41fed7b 100644
+--- a/supervisor/tests/test_states.py
++++ b/supervisor/tests/test_states.py
+@@ -50,10 +50,3 @@ class TopLevelEventListenerStateTests(unittest.TestCase):
+     def test_getEventListenerStateDescription_returns_None_when_not_found(self):
+         self.assertEqual(states.getEventListenerStateDescription(3.14159),
+             None)
+-    
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+diff --git a/supervisor/tests/test_supervisorctl.py b/supervisor/tests/test_supervisorctl.py
+index 3c0e097..af2149b 100644
+--- a/supervisor/tests/test_supervisorctl.py
++++ b/supervisor/tests/test_supervisorctl.py
+@@ -2067,10 +2067,3 @@ class DummyPlugin:
+ 
+     def do_help(self, arg):
+         self.helped = True
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+-
+diff --git a/supervisor/tests/test_supervisord.py b/supervisor/tests/test_supervisord.py
+index 3d7b4ff..4099bba 100644
+--- a/supervisor/tests/test_supervisord.py
++++ b/supervisor/tests/test_supervisord.py
+@@ -834,10 +834,3 @@ class SupervisordTests(unittest.TestCase):
+         self.assertEqual(supervisord.ticks[3600], 3600)
+         self.assertEqual(len(L), 6)
+         self.assertEqual(L[-1].__class__, events.Tick3600Event)
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+-
+diff --git a/supervisor/tests/test_templating.py b/supervisor/tests/test_templating.py
+index 29311a7..8970c4f 100644
+--- a/supervisor/tests/test_templating.py
++++ b/supervisor/tests/test_templating.py
+@@ -1785,12 +1785,3 @@ def normalize_xml(s):
+     s = re.sub(r"(?s)\s+<", "<", s)
+     s = re.sub(r"(?s)>\s+", ">", s)
+     return s
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-def main():
+-    unittest.main(defaultTest='test_suite')
+-
+-if __name__ == '__main__':
+-    main()
+diff --git a/supervisor/tests/test_web.py b/supervisor/tests/test_web.py
+index 8bae3ed..f31972d 100644
+--- a/supervisor/tests/test_web.py
++++ b/supervisor/tests/test_web.py
+@@ -177,9 +177,3 @@ class StatusViewTests(unittest.TestCase):
+ 
+ class DummyContext:
+     pass
+-
+-def test_suite():
+-    return unittest.findTestCases(sys.modules[__name__])
+-
+-if __name__ == '__main__':
+-    unittest.main(defaultTest='test_suite')
+diff --git a/supervisor/tests/test_xmlrpc.py b/supervisor/tests/test_xmlrpc.py
+index 3d49ce0..8cee058 100644
+--- a/supervisor/tests/test_xmlrpc.py
++++ b/supervisor/tests/test_xmlrpc.py
+@@ -917,4 +917,3 @@ class DummyConnection:
+ 
+     def close(self):
+         self.closed = True
+-
+-- 
+2.49.0
+

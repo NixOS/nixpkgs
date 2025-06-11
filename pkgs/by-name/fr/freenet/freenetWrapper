@@ -1,0 +1,17 @@
+#! @bash@/bin/bash
+set -eo pipefail
+PATH=@coreutils@/bin:$PATH
+export CLASSPATH=@CLASSPATH@
+
+export FREENET_HOME="$HOME/.local/share/freenet"
+if [ -n "$XDG_DATA_HOME" ] ; then
+  FREENET_HOME="$XDG_DATA_HOME/freenet"
+fi
+
+mkdir -p -- $FREENET_HOME
+
+cp -u -- @seednodes@/seednodes.fref $FREENET_HOME/seednodes.fref
+chmod u+rw -- $FREENET_HOME/seednodes.fref
+
+cd -- $FREENET_HOME
+exec @jre@/bin/java -Xmx1024M freenet.node.NodeStarter "$@"

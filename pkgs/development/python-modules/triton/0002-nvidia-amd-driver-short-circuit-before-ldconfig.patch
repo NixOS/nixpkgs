@@ -1,0 +1,70 @@
+From 7407cb03eec82768e333909d87b7668b633bfe86 Mon Sep 17 00:00:00 2001
+From: SomeoneSerge <else+aalto@someonex.net>
+Date: Sun, 13 Oct 2024 14:28:48 +0000
+Subject: [PATCH 2/3] {nvidia,amd}/driver: short-circuit before ldconfig
+
+---
+ python/triton/runtime/build.py       | 6 +++---
+ third_party/amd/backend/driver.py    | 7 +++++++
+ third_party/nvidia/backend/driver.py | 3 +++
+ 3 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/python/triton/runtime/build.py b/python/triton/runtime/build.py
+index d334dce77..a64e98da0 100644
+--- a/python/triton/runtime/build.py
++++ b/python/triton/runtime/build.py
+@@ -42,6 +42,9 @@ def _build(name, src, srcdir, library_dirs, include_dirs, libraries):
+     py_include_dir = sysconfig.get_paths(scheme=scheme)["include"]
+     include_dirs = include_dirs + [srcdir, py_include_dir]
+     cc_cmd = [cc, src, "-O3", "-shared", "-fPIC", "-o", so]
++    cc_cmd += [f'-l{lib}' for lib in libraries]
++    cc_cmd += [f"-L{dir}" for dir in library_dirs]
++    cc_cmd += [f"-I{dir}" for dir in include_dirs if dir is not None]
+ 
+     # Nixpkgs support branch
+     # Allows passing e.g. extra -Wl,-rpath
+@@ -50,9 +53,6 @@ def _build(name, src, srcdir, library_dirs, include_dirs, libraries):
+         import shlex
+         cc_cmd.extend(shlex.split(cc_cmd_extra_flags))
+ 
+-    cc_cmd += [f'-l{lib}' for lib in libraries]
+-    cc_cmd += [f"-L{dir}" for dir in library_dirs]
+-    cc_cmd += [f"-I{dir}" for dir in include_dirs if dir is not None]
+     ret = subprocess.check_call(cc_cmd)
+     if ret == 0:
+         return so
+diff --git a/third_party/amd/backend/driver.py b/third_party/amd/backend/driver.py
+index 0a8cd7bed..aab8805f6 100644
+--- a/third_party/amd/backend/driver.py
++++ b/third_party/amd/backend/driver.py
+@@ -24,6 +24,13 @@ def _get_path_to_hip_runtime_dylib():
+             return env_libhip_path
+         raise RuntimeError(f"TRITON_LIBHIP_PATH '{env_libhip_path}' does not point to a valid {lib_name}")
+ 
++    # ...on release/3.1.x:
++    #         return mmapped_path
++    #     raise RuntimeError(f"memory mapped '{mmapped_path}' in process does not point to a valid {lib_name}")
++
++    if os.path.isdir("@libhipDir@"):
++        return ["@libhipDir@"]
++
+     paths = []
+ 
+     import site
+diff --git a/third_party/nvidia/backend/driver.py b/third_party/nvidia/backend/driver.py
+index 90f71138b..30fbadb2a 100644
+--- a/third_party/nvidia/backend/driver.py
++++ b/third_party/nvidia/backend/driver.py
+@@ -21,6 +21,9 @@ def libcuda_dirs():
+     if env_libcuda_path:
+         return [env_libcuda_path]
+ 
++    if os.path.exists("@libcudaStubsDir@"):
++        return ["@libcudaStubsDir@"]
++
+     libs = subprocess.check_output(["/sbin/ldconfig", "-p"]).decode()
+     # each line looks like the following:
+     # libcuda.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libcuda.so.1
+-- 
+2.46.0
+

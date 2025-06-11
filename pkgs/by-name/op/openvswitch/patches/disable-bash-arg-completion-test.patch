@@ -1,0 +1,12 @@
+diff --git a/tests/completion.at b/tests/completion.at
+index b6155af25..6367cb545 100644
+--- a/tests/completion.at
++++ b/tests/completion.at
+@@ -425,6 +425,7 @@ AT_CLEANUP
+ 
+ 
+ AT_SETUP([vsctl-bashcomp - argument completion])
++AT_SKIP_IF([true])
+ AT_SKIP_IF([test -z ${BASH_VERSION+x}])
+ AT_SKIP_IF([eval 'test ${BASH_VERSINFO[[0]]} -lt 4'])
+ OVS_VSWITCHD_START(

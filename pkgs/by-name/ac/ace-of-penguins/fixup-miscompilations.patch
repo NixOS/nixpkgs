@@ -1,0 +1,80 @@
+--- ace-1.4/lib/xwin.c	
++++ ace-1.4/lib/xwin.c	
+@@ -89,10 +89,10 @@
+ /* Motif window hints */
+ typedef struct
+ {
+-  unsigned flags;
+-  unsigned functions;
+-  unsigned decorations;
+-  int inputMode;
++  unsigned long flags;
++  unsigned long functions;
++  unsigned long decorations;
++  long inputMode;
+ } PropMotifWmHints;
+ 
+ typedef PropMotifWmHints        PropMwmHints;
+@@ -841,13 +841,13 @@
+   png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, 0, 0, 0);
+   info_ptr = png_create_info_struct (png_ptr);
+ 
+-  if (setjmp (png_ptr->jmpbuf)) {
++  if (setjmp (png_jmpbuf (png_ptr))) {
+     fprintf(stderr, "Invalid PNG image!\n");
+     return;
+   }
+ 
+   file_bytes = src->file_data;
+-  png_set_read_fn (png_ptr, (voidp)&file_bytes, (png_rw_ptr)png_reader);
++  png_set_read_fn (png_ptr, (void *)&file_bytes, (png_rw_ptr)png_reader);
+ 
+   png_read_info (png_ptr, info_ptr);
+ 
+--- ace-1.4/lib/make-imglib.c	
++++ ace-1.4/lib/make-imglib.c	
+@@ -86,7 +86,7 @@
+     png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, 0, 0, 0);
+     info_ptr = png_create_info_struct (png_ptr);
+ 
+-    if (setjmp (png_ptr->jmpbuf)) {
++    if (setjmp (png_jmpbuf (png_ptr))) {
+       fclose (f);
+       continue;
+     }
+
+--- ace-1.4/lib/Makefile.am	
++++ ace-1.4/lib/Makefile.am
+@@ -6,7 +6,7 @@
+ CLEANFILES = images.c images.d
+ 
+ INCLUDES = $(X_CFLAGS) @PDA@
+-AM_LDFLAGS = $(X_LIBS)
++AM_LDFLAGS = $(X_LIBS) -lpng -lz -lm
+ 
+ BUILD_CC = @BUILD_CC@
+ AR = @AR@
+
+--- ace-1.4/lib/xwin.c  2020-10-07 02:07:59.000000000 +0300
++++ ace-1.4/lib/xwin.c    2020-10-07 02:15:05.941784967 +0300
+@@ -55,7 +55,6 @@
+   { "-visual", OPTION_INTEGER, &visual_id },
+   { 0, 0, 0 }
+ };
+-OptionDesc *xwin_options = xwin_options_list;
+
+ Display *display=0;
+ int screen=0;
+--- ace-1.4/config.guess	2012-03-24 19:00:49.000000000 +0100
++++ ace-1.4/config.guess	2021-07-05 11:02:16.685843793 +0200
+@@ -882,6 +882,9 @@
+ 	    echo ${UNAME_MACHINE}-unknown-linux-gnueabi
+ 	fi
+ 	exit ;;
++    aarch64*:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
++	exit ;;
+     avr32*:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-gnu
+ 	exit ;;
+

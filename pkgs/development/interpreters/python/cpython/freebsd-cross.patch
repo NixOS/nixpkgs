@@ -1,0 +1,22 @@
+--- a/configure.ac	2024-06-07 09:17:50.608162031 -0700
++++ b/configure.ac	2024-06-07 09:45:59.844518241 -0700
+@@ -554,6 +554,9 @@
+ 	*-*-wasi)
+ 	    ac_sys_system=WASI
+ 	    ;;
++	*-*-freebsd)
++	    ac_sys_system=FreeBSD
++	    ;;
+ 	*)
+ 		# for now, limit cross builds to known configurations
+ 		MACHDEP="unknown"
+@@ -614,6 +617,9 @@
+ 	wasm32-*-* | wasm64-*-*)
+ 		_host_cpu=$host_cpu
+ 		;;
++	x86_64-*-freebsd)
++		_host_cpu=x86_64
++		;;
+ 	*)
+ 		# for now, limit cross builds to known configurations
+ 		MACHDEP="unknown"

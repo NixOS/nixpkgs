@@ -1,0 +1,16 @@
+diff --git a/sqlite3.c b/sqlite3.c
+index 80433f6..7c234f6 100644
+--- a/sqlite3.c
++++ b/sqlite3.c
+@@ -231721,6 +231721,11 @@ static int sessionChangesetApply(
+     }
+   }
+ 
++  {
++    int rc2 = sqlite3_exec(db, "PRAGMA defer_foreign_keys = 0", 0, 0, 0);
++    if( rc==SQLITE_OK ) rc = rc2;
++  }
++
+   if( (flags & SQLITE_CHANGESETAPPLY_NOSAVEPOINT)==0 ){
+     if( rc==SQLITE_OK ){
+       rc = sqlite3_exec(db, "RELEASE changeset_apply", 0, 0, 0);

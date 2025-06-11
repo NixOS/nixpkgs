@@ -1,0 +1,43 @@
+diff --git a/src/lsp/main.ml b/src/lsp/main.ml
+index 8d6fc760..b52dd25c 100644
+--- a/src/lsp/main.ml
++++ b/src/lsp/main.ml
+@@ -3,7 +3,7 @@
+ 
+ let run () =
+   let s = new Server.dolmen_lsp_server in
+-  let server = Linol_lwt.Jsonrpc2.create_stdio s in
++  let server = Linol_lwt.Jsonrpc2.create_stdio ~env:() s in
+   let task = Linol_lwt.Jsonrpc2.run server in
+   match Linol_lwt.run task with
+   | () -> ()
+diff --git a/src/lsp/server.ml b/src/lsp/server.ml
+index e895cc6a..c9a3f237 100644
+--- a/src/lsp/server.ml
++++ b/src/lsp/server.ml
+@@ -44,6 +44,8 @@ class dolmen_lsp_server =
+   object(self)
+     inherit Linol_lwt.Jsonrpc2.server
+ 
++    method spawn_query_handler _ = ()
++
+     (* one env per document *)
+     val buffers: (Lsp.Types.DocumentUri.t, State.t) Hashtbl.t = Hashtbl.create 32
+ 
+@@ -55,14 +57,14 @@ class dolmen_lsp_server =
+       let change = Lsp.Types.TextDocumentSyncKind.Incremental in
+       (* Lsp.Types.TextDocumentSyncKind.Full *)
+       Lsp.Types.TextDocumentSyncOptions.create ~openClose:true ~change
+-        ~save:(Lsp.Types.SaveOptions.create ~includeText:false ())
++        ~save:(`SaveOptions (Lsp.Types.SaveOptions.create ~includeText:false ()))
+         ()
+ 
+     method private _on_doc
+         ~(notify_back:Linol_lwt.Jsonrpc2.notify_back)
+         (uri:Lsp.Types.DocumentUri.t) (contents:string) =
+       (* TODO: unescape uri/translate it to a correct path ? *)
+-      match Loop.process prelude (preprocess_uri uri) (Some contents) with
++      match Loop.process prelude (preprocess_uri (Lsp.Types.DocumentUri.to_string uri)) (Some contents) with
+       | Ok state ->
+         let diags = State.get State.diagnostics state in
+         Hashtbl.replace buffers uri state;

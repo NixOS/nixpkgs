@@ -1,0 +1,12 @@
+diff --git a/tests.py b/tests.py
+index 704f049..ef68728 100755
+--- a/tests.py
++++ b/tests.py
+@@ -225,6 +225,7 @@ class TestPypandoc(unittest.TestCase):
+             received = pypandoc.convert_file(file_url, 'rst')
+             self.assertEqualExceptForNewlineEnd(expected, received)
+ 
++    @unittest.skip("no network access during checkPhase")
+     def test_basic_conversion_from_http_url(self):
+         url = 'https://raw.githubusercontent.com/bebraw/pypandoc/master/README.md'
+         received = pypandoc.convert_file(url, 'html')

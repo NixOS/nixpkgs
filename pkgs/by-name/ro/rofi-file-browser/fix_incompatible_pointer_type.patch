@@ -1,0 +1,27 @@
+diff --git a/src/filebrowser.c b/src/filebrowser.c
+index a5a19af..59f0140 100644
+--- a/src/filebrowser.c
++++ b/src/filebrowser.c
+@@ -256,21 +256,21 @@ static char *file_browser_get_display_value ( const Mode *sw, unsigned int selec
+         FBCmd *fbcmd = &pd->cmds[selected_line];
+         char* name = fbcmd->name != NULL ? fbcmd->name : fbcmd->cmd;
+         return rofi_force_utf8 ( name, strlen ( name ) );
+     } else {
+         int index = pd->open_custom ? pd->open_custom_index : selected_line;
+         FBFile *fbfile = &fd->files[index];
+         return rofi_force_utf8 ( fbfile->name, strlen ( fbfile->name ) );
+     }
+ }
+ 
+-static cairo_surface_t *file_browser_get_icon ( const Mode *sw, unsigned int selected_line, int height )
++static cairo_surface_t *file_browser_get_icon ( const Mode *sw, unsigned int selected_line, unsigned int height )
+ {
+     FileBrowserModePrivateData *pd = ( FileBrowserModePrivateData * ) mode_get_private_data ( sw );
+     FileBrowserFileData *fd = &pd->file_data;
+     FileBrowserIconData *id = &pd->icon_data;
+ 
+     if ( ! id->show_icons ) {
+         return NULL;
+     }
+ 
+     if ( pd->open_custom && pd->show_cmds ) {

@@ -1,0 +1,97 @@
+From 2846b56c7e1d88942bd3de96cbe3fec6b0304012 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 13 Nov 2024 13:53:14 -0500
+Subject: [PATCH 10/18] Add vendored libtapi to the ld64 build
+
+---
+ meson.build                          |  3 +-
+ subprojects/libtapi/meson.build      | 44 ++++++++++++++++++++++++++++
+ subprojects/libtapi/tapi/meson.build | 11 +++++++
+ 3 files changed, 57 insertions(+), 1 deletion(-)
+ create mode 100644 subprojects/libtapi/meson.build
+ create mode 100644 subprojects/libtapi/tapi/meson.build
+
+diff --git a/meson.build b/meson.build
+index a79f03f..244458c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -26,7 +26,8 @@ libcodedirectory_dep = dependency(
+ )
+ libtapi_dep = dependency(
+     'libtapi',
+-    version : [ '>=1500' , '<1600' ],
++    version : [ '>=1600' , '<1700' ],
++    fallback : [ 'libtapi', 'libtapi_dep' ],
+ )
+ llvm_dep = dependency(
+     'llvm',
+diff --git a/subprojects/libtapi/meson.build b/subprojects/libtapi/meson.build
+new file mode 100644
+index 0000000..9cd1dcc
+--- /dev/null
++++ b/subprojects/libtapi/meson.build
+@@ -0,0 +1,44 @@
++project(
++    'libtapi',
++    'c', 'cpp',
++    default_options : {'c_std': 'c23', 'cpp_std': 'c++23'},
++    license : 'NCSA',
++    license_files : 'LICENSE.TXT',
++    meson_version : '>=1.6.0',
++    version : '1600.0.11.8',
++)
++
++
++cc = meson.get_compiler('c')
++cxx = meson.get_compiler('cpp')
++
++# libtapi only needs a subset of functionality from LLVM, so link only what it needs statically
++# to avoid ODR violations when loading LTO plugins (which don’t use these APIs).
++llvm_dep = dependency(
++    'llvm',
++    modules : [
++        'Demangle',
++        'TargetParser',
++        'TextAPI',
++    ],
++    static : true,
++    version : '>=19.1'
++)
++
++
++subdir('tapi')
++
++libtapi = static_library(
++    'tapi',
++    sources : [
++        'APIVersion.cpp',
++        'LinkerInterfaceFile.cpp',
++        'Version.cpp',
++    ],
++)
++
++libtapi_dep = declare_dependency(
++    dependencies : [ llvm_dep ],
++    include_directories : [ '.' ],
++    link_with : libtapi,
++)
+diff --git a/subprojects/libtapi/tapi/meson.build b/subprojects/libtapi/tapi/meson.build
+new file mode 100644
+index 0000000..c9e463a
+--- /dev/null
++++ b/subprojects/libtapi/tapi/meson.build
+@@ -0,0 +1,11 @@
++version_components = meson.project_version().split('.')
++version_inc = configure_file(
++    configuration : {
++        'TAPI_VERSION' : meson.project_version(),
++        'TAPI_VERSION_MAJOR' : version_components[0],
++        'TAPI_VERSION_MINOR' : version_components[1],
++        'TAPI_VERSION_PATCH' : version_components[2],
++    },
++    input : 'Version.inc.in',
++    output : '@BASENAME@',
++)
+-- 
+2.47.2
+

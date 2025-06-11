@@ -1,0 +1,46 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 24c7d85..3d070d5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -79,6 +79,7 @@ if(NOT CMAKE_SYSTEM_NAME STREQUAL "Windows")
+     find_package(TBB REQUIRED)
+ endif()
+ 
++#[==[
+ if(NOT DEFINED ESPLUGIN_URL)
+     set(ESPLUGIN_URL "https://github.com/Ortham/esplugin/archive/refs/tags/6.1.0.tar.gz")
+     set(ESPLUGIN_HASH "SHA256=52dec796d98426e1c75c5cf3c41351c0b3431a6301137e00fcf6023f4e47b502")
+@@ -153,6 +154,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+ else()
+     set(LCI_LIBRARIES ${LCI_LIBRARIES} dl)
+ endif()
++#]==]
+ 
+ FetchContent_Declare(
+     fmt
+@@ -307,10 +309,6 @@ set(LIBLOOT_ALL_SOURCES
+ 
+ # Build API.
+ add_library(loot ${LIBLOOT_ALL_SOURCES})
+-add_dependencies(loot
+-    esplugin
+-    libloadorder
+-    loot-condition-interpreter)
+ target_link_libraries(loot PRIVATE
+     Boost::headers
+     ${ESPLUGIN_LIBRARIES}
+diff --git a/cmake/tests.cmake b/cmake/tests.cmake
+index ebccd82..2cef53c 100644
+--- a/cmake/tests.cmake
++++ b/cmake/tests.cmake
+@@ -108,10 +108,6 @@ set(LIBLOOT_INTERFACE_TESTS_ALL_SOURCES
+ 
+ # Build tests.
+ add_executable(libloot_internals_tests ${LIBLOOT_INTERNALS_TESTS_ALL_SOURCES})
+-add_dependencies(libloot_internals_tests
+-    esplugin
+-    libloadorder
+-    loot-condition-interpreter)
+ target_link_libraries(libloot_internals_tests PRIVATE
+     Boost::headers
+     ${ESPLUGIN_LIBRARIES}
