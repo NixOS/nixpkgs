@@ -17161,6 +17161,13 @@
     githubId = 110892040;
     name = "Mykyta Polchanov";
   };
+  myzel394 = {
+    email = "github.7a2op@simplelogin.co";
+    github = "Myzel394";
+    githubId = 50424412;
+    matrix = "@myzel394:matrix.org";
+    name = "Myzel394";
+  };
   mzabani = {
     email = "mzabani@gmail.com";
     github = "mzabani";
