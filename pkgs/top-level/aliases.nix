@@ -1967,6 +1967,7 @@ mapAliases {
   ### U ###
 
   uade123 = uade; # Added 2022-07-30
+  uae = throw "'uae' has been removed due to lack of upstream maintenance. Consider using 'fsuae' instead."; # Added 2025-06-11
   uberwriter = throw "'uberwriter' has been renamed to/replaced by 'apostrophe'"; # Converted to throw 2024-10-17
   ubootBeagleboneBlack = throw "'ubootBeagleboneBlack' has been renamed to/replaced by 'ubootAmx335xEVM'"; # Converted to throw 2024-10-17
   ubuntu_font_family = ubuntu-classic; # Added 2024-02-19
