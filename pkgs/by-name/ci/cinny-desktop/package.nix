@@ -18,19 +18,19 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.8.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cixpsn0jMufd6VrBCsCH9t3bpkKdgi1i0qnkBlLgLG0=";
+    hash = "sha256-Q9iCEJu/HgWnMqiT0EjtJUk7dp7o0hbLoamlkFEaR4M=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-twfRuoA4z+Xgyyn7aIRy6MV1ozN2+qhSLh8i+qOTa2Q=";
+  cargoHash = "sha256-lWU1NrUwcAXQR6mEiCr6Ze3TzpDYvCx5/fBIef9ao5I=";
 
   postPatch =
     let
