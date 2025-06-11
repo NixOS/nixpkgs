@@ -4,8 +4,7 @@
   fetchFromGitHub,
   nixosTests,
   stdenv,
-
-  anubis-xess,
+  buildNpmPackage,
 
   esbuild,
   brotli,
@@ -31,6 +30,25 @@ buildGoModule (finalAttrs: {
     zstd
   ];
 
+  xess = buildNpmPackage {
+    pname = "anubis-xess";
+    inherit (finalAttrs) version src;
+
+    npmDepsHash = "sha256-wI8XCUGq3aI20B++RAT3lc/nBrDMEmE9+810lewzXa0=";
+
+    buildPhase = ''
+      runHook preBuild
+      npx postcss ./xess/xess.css -o xess.min.css
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      install -Dm644 xess.min.css $out/xess.min.css
+      runHook postInstall
+    '';
+  };
+
   subPackages = [ "cmd/anubis" ];
 
   ldflags = [
@@ -44,7 +62,7 @@ buildGoModule (finalAttrs: {
   '';
 
   preBuild = ''
-    go generate ./... && ./web/build.sh && cp -r ${anubis-xess}/xess.min.css ./xess
+    go generate ./... && ./web/build.sh && cp -r ${finalAttrs.xess}/xess.min.css ./xess
   '';
 
   preCheck = ''
