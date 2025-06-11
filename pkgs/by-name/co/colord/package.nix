@@ -35,7 +35,7 @@
 
 stdenv.mkDerivation rec {
   pname = "colord";
-  version = "1.4.6";
+  version = "1.4.7";
 
   outputs = [
     "out"
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/colord/releases/colord-${version}.tar.xz";
-    sha256 = "dAdjGie/5dG2cueuQndwAcEF2GC3tzkig8jGMA3ojm8=";
+    sha256 = "sha256-3gLZkQY0rhWVR1hc7EFORQ9xHCcjVFO0+bOKnyNhplM=";
   };
 
   patches = [
