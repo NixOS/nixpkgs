@@ -81,6 +81,7 @@ in
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
   htree = doDistribute self.htree_0_2_0_0;
   ormolu = doDistribute self.ormolu_0_7_7_0;
+  stylish-haskell = doDistribute self.stylish-haskell_0_15_0_1;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = doDistribute self.ghc-exactprint_1_9_0_0;
@@ -118,17 +119,11 @@ in
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
   monad-dijkstra = dontCheck super.monad-dijkstra; # needs hlint 3.10
 
-  haskell-language-server = disableCabalFlag "retrie" (
-    disableCabalFlag "hlint" (
-      disableCabalFlag "stylishhaskel" (
-        super.haskell-language-server.override {
-          stylish-haskell = null;
-          retrie = null;
-          apply-refact = null;
-          hlint = null;
-        }
-      )
-    )
-  );
+  haskell-language-server = super.haskell-language-server.override {
+    floskell = null;
+    retrie = null;
+    hlint = null;
+    apply-refact = null;
+  };
 
 }
