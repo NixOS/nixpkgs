@@ -44,9 +44,7 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail 'codesign -f -v --entitlements vz.entitlements -s -' 'codesign -f --entitlements vz.entitlements -s -'
-
-    substituteInPlace Makefile \
+      --replace-fail 'codesign -f -v --entitlements vz.entitlements -s -' 'codesign -f --entitlements vz.entitlements -s -' \
       --replace-fail 'rm -rf _output vendor' 'rm -rf _output'
   '';
 
