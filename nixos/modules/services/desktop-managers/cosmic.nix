@@ -141,6 +141,7 @@ in
     services.accounts-daemon.enable = true;
     services.displayManager.sessionPackages = [ pkgs.cosmic-session ];
     services.geoclue2.enable = true;
+    services.geoclue2.agentWhitelist = [ "geoclue-demo-agent" ];
     services.geoclue2.enableDemoAgent = false;
     services.libinput.enable = true;
     services.upower.enable = true;
