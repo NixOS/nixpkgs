@@ -99,13 +99,13 @@
     "vendorHash": "sha256-YIn8akPW+DCVF0eYZxsmJxmrJuYhK4QLG/uhmmrXd4c="
   },
   "auth0": {
-    "hash": "sha256-85U2EFC8defpag89zssO4nd5JovdwkyyobgH1t85/jY=",
+    "hash": "sha256-QYP/VyMp4veJenA/bTlEGnKAc1NB+pVWJa7jPieOZ9A=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.20.1",
+    "rev": "v1.21.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-eMnWzin7lTMHQ0NEvt8KiMqJz+ihxKBwXniAyWkkqd0="
+    "vendorHash": "sha256-AmRdgQVREU+uN8FFMAogXVdaEG0DMPaBYqKW0yJWJJM="
   },
   "avi": {
     "hash": "sha256-e8yzc3nRP0ktcuuKyBXydS9NhoceYZKzJcqCWOfaPL0=",
@@ -144,11 +144,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-dd/PAMkdnVlcjOk8Q5i4TsfmSWJgG25FgI/lF0OrVXI=",
+    "hash": "sha256-NghMNvsCRtgZjOTnnSYGn53KhP8ZY0hizkgEmI/+P6A=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.31.0",
+    "rev": "v4.32.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -651,13 +651,13 @@
     "vendorHash": null
   },
   "ibm": {
-    "hash": "sha256-5AYTRuZ9hhi5AgAT3woHTv3vMmqUUXUjZKZjaBRf9H8=",
+    "hash": "sha256-ivy9RuScV4MxrJVBtZoX3wfnwva17FRpkspG5KvhGkQ=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.78.4",
+    "rev": "v1.79.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ug5TAuOJCk2wmhhwLQLYXVL3xxODUum6oEK/8A6ojIA="
+    "vendorHash": "sha256-lphCy2RTpA0kwjlr52VfXUqNH7IKB36ublRqjRCpXDg="
   },
   "icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
@@ -922,22 +922,22 @@
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
   "oci": {
-    "hash": "sha256-aV69aOYkHQwD8JVFC9zD+pV0Wwjx5ZqG1PoP20aED8o=",
+    "hash": "sha256-byNyMIfebQYBZMO46+F2A4xf8ONy67JI+wgfp1TCs7A=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v7.2.0",
+    "rev": "v7.4.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "okta": {
-    "hash": "sha256-8dFl39q8GTLGFR2O7ZIstA957x6gkAxL0qauXUxVMcI=",
+    "hash": "sha256-nHeFvCquh+xEAJZxuUmmPYacDpK+uwStGRHCCLhlUm8=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v4.19.0",
+    "rev": "v4.20.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-5BkKjne3r3V8T+SkqjfHVEpXXK8sKTYMc23g1EaLoOE="
+    "vendorHash": "sha256-XmTIyHZOWgoE3+9KVgv8CY//rc62PSddn2iRTBUdkSs="
   },
   "oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",
