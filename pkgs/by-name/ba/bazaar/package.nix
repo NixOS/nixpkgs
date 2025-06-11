@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  writers,
   wrapGAppsHook4,
   nix-update-script,
 
@@ -23,7 +24,39 @@
   meson,
   ninja,
   pkg-config,
+
+  configFile ? null,
 }:
+
+let
+  # this is just the example from the readme as a PoC
+  defaultConfig = writers.writeYAML "bazaar-config.yaml" {
+    sections = [
+      {
+        title = "Section #1";
+        subtitle = "The first section";
+        description = "These are some of my favorite apps!";
+        rows = 3;
+        banner = "https://pixls.us/articles/processing-a-nightscape-in-siril/resultat_03_final.jpg";
+        banner-fit = "cover";
+        appids = [
+          "com.usebottles.bottles"
+          "io.mgba.mGBA"
+          "net.pcsx2.PCSX2"
+          "org.blender.Blender"
+          "org.desmume.DeSmuME"
+          "org.duckstation.DuckStation"
+          "org.freecad.FreeCAD"
+          "org.gimp.GIMP"
+          "org.gnome.Builder"
+          "org.gnome.Loupe"
+          "org.inkscape.Inkscape"
+          "org.kde.krita"
+        ];
+      }
+    ];
+  };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bazaar";
@@ -65,6 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
+  mesonFlags = [
+    (lib.mesonOption "hardcoded_content_config_path" "${finalAttrs.passthru.configFile}")
+  ];
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PATH : "${lib.makeBinPath [ bubblewrap ]}"
@@ -74,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+    configFile = if configFile != null then configFile else defaultConfig;
   };
 
   meta = {
