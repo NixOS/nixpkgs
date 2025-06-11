@@ -100,6 +100,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       kachick
     ];
-    platforms = lib.platforms.all;
+    inherit (jdk.meta) platforms;
   };
 })
