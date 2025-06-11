@@ -36,40 +36,6 @@ with elmLib;
       };
   };
 
-  elm-coverage =
-    let
-      patched = patchNpmElm (patchBinwrap [ elmi-to-json ] nodePkgs.elm-coverage);
-    in
-    patched.override (old: {
-      # Symlink Elm instrument binary
-      preRebuild =
-        (old.preRebuild or "")
-        + ''
-          # Noop custom installation script
-          sed 's/\"install\".*/\"install\":\"echo no-op\"/g' --in-place package.json
-
-          # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
-          # in case of just this package
-          # TODO: investigate
-          sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
-        '';
-      postInstall =
-        (old.postInstall or "")
-        + ''
-          mkdir -p unpacked_bin
-          ln -sf ${elm-instrument}/bin/elm-instrument unpacked_bin/elm-instrument
-        '';
-      meta =
-        with lib;
-        nodePkgs.elm-coverage.meta
-        // {
-          description = "Work in progress - Code coverage tooling for Elm";
-          homepage = "https://github.com/zwilias/elm-coverage";
-          license = licenses.bsd3;
-          maintainers = [ maintainers.turbomack ];
-        };
-    });
-
   create-elm-app = patchNpmElm nodePkgs.create-elm-app // {
     meta =
       with lib;
