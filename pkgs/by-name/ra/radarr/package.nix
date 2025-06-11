@@ -32,7 +32,7 @@ let
       hash = "sha256-Pzdkm9oxPJRdzdCjRC22XgLBS5ffBY5u9m2QwkoZzOM=";
     };
     postPatch = ''
-      mv src/NuGet.config NuGet.Config  
+      mv src/NuGet.config NuGet.Config
     '';
     patches = lib.optionals (lib.versionOlder version "6.0") [
       # See https://github.com/Radarr/Radarr/pull/11064
