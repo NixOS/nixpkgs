@@ -335,7 +335,6 @@ package-maintainers:
     - optics
     - pandoc
     - pandoc-cli
-    - pandoc-crossref
     - postgresql-simple
     - purebred-email
     - reflex-dom
