@@ -17,6 +17,7 @@
   ruamel-yaml,
   typing-extensions,
   ujson,
+  distutils,
 }:
 
 let
@@ -33,6 +34,10 @@ let
     };
 
     build-system = [ setuptools ];
+
+    dependencies = [ distutils ];
+
+    pythonImportsCheck = [ "GPUtil" ];
 
     meta = {
       homepage = "https://github.com/anderskm/gputil";
