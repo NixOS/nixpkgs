@@ -46,7 +46,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.79.0";
+  version = "1.86.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-exOE3Ha0SB4Q7OrWVUGOgELpfyHZVdtvgxyFyFncDm4=";
+    hash = "sha256-PDYyuvCkDfQrbkSz0CPfJr++WUu5mODY2nVzTanwqjo=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
