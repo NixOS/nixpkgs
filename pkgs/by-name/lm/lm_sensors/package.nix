@@ -15,8 +15,8 @@
 let
   version = "3.6.0";
   tag = "V" + lib.replaceStrings [ "." ] [ "-" ] version;
-in
 
+in
 stdenv.mkDerivation {
   pname = "lm-sensors";
   inherit version;
@@ -45,13 +45,20 @@ stdenv.mkDerivation {
     "doc"
   ];
 
-  # Upstream build system have knob to enable and disable building of static
-  # library, shared library is built unconditionally.
-  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
-    sed -i 'lib/Module.mk' -e '/LIBTARGETS :=/,+1d; /-m 755/ d'
-    substituteInPlace prog/sensors/Module.mk \
-      --replace-fail 'lib/$(LIBSHBASENAME)' ""
-  '';
+  postPatch =
+    # This allows sensors to continue reading the sensors3.conf as provided by
+    # upstream and also look for config fragments in /etc/sensors.d
+    ''
+      substituteInPlace lib/init.c \
+        --replace-fail 'ETCDIR "/sensors.d"' '"/etc/sensors.d"'
+    ''
+    # Upstream build system have knob to enable and disable building of static
+    # library, shared library is built unconditionally.
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
+      sed -i 'lib/Module.mk' -e '/LIBTARGETS :=/,+1d; /-m 755/ d'
+      substituteInPlace prog/sensors/Module.mk \
+        --replace-fail 'lib/$(LIBSHBASENAME)' ""
+    '';
 
   nativeBuildInputs = [
     bison

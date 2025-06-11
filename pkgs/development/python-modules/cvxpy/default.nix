@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "cvxpy";
     repo = "cvxpy";
     tag = "v${version}";
-    hash = "sha256-xbynw/9jUI41H7tYcARqqw5X+Cr8jDBMwxM6E9thpp0=";
+    hash = "sha256-dn29rAm0f0cgUFtnHSykBE2p/U/EPorozjuuLWuH/Tw=";
   };
 
   # we need to patch out numpy version caps from upstream
