@@ -75,19 +75,19 @@ stdenv.mkDerivation rec {
     bpf = nixosTests.bpf;
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-level tracing language for Linux eBPF";
     homepage = "https://github.com/bpftrace/bpftrace";
     changelog = "https://github.com/bpftrace/bpftrace/releases/tag/v${version}";
     mainProgram = "bpftrace";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rvl
       thoughtpolice
       martinetd
       mfrw
       illustris
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -55,13 +55,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Web software for signing PDFs and also organize pages, edit metadata and compress pdf";
     mainProgram = "signaturepdf";
     homepage = "https://pdf.24eme.fr/";
     changelog = "https://github.com/24eme/signaturepdf/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ DamienCassou ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ DamienCassou ];
   };
 }

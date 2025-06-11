@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A more featureful runner for sbt, the simple/scala/standard build tool";
+    description = "More featureful runner for sbt, the simple/scala/standard build tool";
     homepage = "https://github.com/paulp/sbt-extras";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [

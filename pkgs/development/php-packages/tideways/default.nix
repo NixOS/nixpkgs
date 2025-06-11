@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported platform for tideways-php: ${stdenvNoCC.hostPlatform.system}");
 
-  nativeBuildInputs = lib.optionals stdenvNoCC.isLinux [
+  nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 

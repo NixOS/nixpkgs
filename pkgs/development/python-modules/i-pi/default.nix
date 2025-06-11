@@ -65,7 +65,7 @@ buildPythonPackage rec {
       gpl3Only
       mit
     ];
-    homepage = "http://ipi-code.org/";
+    homepage = "https://ipi-code.org/";
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };

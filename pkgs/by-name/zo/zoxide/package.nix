@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage rec {
       --zsh contrib/completions/_zoxide
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast cd command that learns your habits";
     homepage = "https://github.com/ajeetdsouza/zoxide";
     changelog = "https://github.com/ajeetdsouza/zoxide/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       ysndr
       cole-h
       SuperSandro2000

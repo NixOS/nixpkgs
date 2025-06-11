@@ -50,6 +50,11 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-+UXRBYfbkb114mwDGj36oG5ZT3TQtcEzsbyZvtWTMxM=";
 
+  postInstall = ''
+    install -Dm444 de.feschber.LanMouse.desktop -t $out/share/applications
+    install -Dm444 lan-mouse-gtk/resources/de.feschber.LanMouse.svg -t $out/share/icons/hicolor/scalable/apps
+  '';
+
   meta = {
     description = "Software KVM switch for sharing a mouse and keyboard with multiple hosts through the network";
     homepage = "https://github.com/feschber/lan-mouse";

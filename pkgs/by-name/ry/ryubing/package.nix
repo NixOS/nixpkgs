@@ -101,7 +101,7 @@ buildDotnetModule rec {
     "--set SDL_VIDEODRIVER x11"
   ];
 
-  preInstall = lib.optionalString stdenv.isLinux ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # workaround for https://github.com/Ryujinx/Ryujinx/issues/2349
     mkdir -p $out/lib/sndio-6
     ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6

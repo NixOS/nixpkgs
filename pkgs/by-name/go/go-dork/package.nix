@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-6V58RRRPamBMDAf0gg4sQMQkoD5dWauCFtPrwf5EasI=";
 
-  meta = with lib; {
+  meta = {
     description = "Dork scanner";
     homepage = "https://github.com/dwisiswant0/go-dork";
     changelog = "https://github.com/dwisiswant0/go-dork/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "go-dork";
   };
 }

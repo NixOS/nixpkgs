@@ -30,10 +30,10 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tunneling/pivoting tool that uses a TUN interface";
     homepage = "https://github.com/tnpitsecurity/ligolo-ng";
     changelog = "https://github.com/nicocha30/ligolo-ng/releases/tag/v${version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
   };
 }

@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Can't find libdispatch without this on NixOS. (swift 5.8)
-  LD_LIBRARY_PATH = lib.optionalString stdenv.isLinux "${swiftPackages.Dispatch}/lib";
+  LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isLinux "${swiftPackages.Dispatch}/lib";
 
   postPatch =
     let

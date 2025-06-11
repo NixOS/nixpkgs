@@ -55,12 +55,12 @@ rustPlatform.buildRustPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mozilla/cbindgen/blob/v${version}/CHANGES";
     description = "Project for generating C bindings from Rust code";
     mainProgram = "cbindgen";
     homepage = "https://github.com/mozilla/cbindgen";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

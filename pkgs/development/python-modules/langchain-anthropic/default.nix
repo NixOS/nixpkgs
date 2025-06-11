@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-anthropic";
-  version = "0.3.13";
+  version = "0.3.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-anthropic==${version}";
-    hash = "sha256-CloIxDPnBnKDUeS4psRvpz8ifK/xR/U62wG+ORHginM=";
+    hash = "sha256-GOD6pMuUDCfrQ6MP+/HXZIg5wHUDRysosEjXjewY/9M=";
   };
 
   sourceRoot = "${src.name}/libs/partners/anthropic";
@@ -52,7 +52,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  disabledTestPaths = [
+    "tests/integration_tests"
+  ];
 
   pythonImportsCheck = [ "langchain_anthropic" ];
 

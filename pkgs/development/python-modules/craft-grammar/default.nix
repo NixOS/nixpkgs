@@ -25,12 +25,14 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [ overrides ];
+  dependencies = [
+    overrides
+    pydantic
+  ];
 
   pythonImportsCheck = [ "craft_grammar" ];
 
   nativeCheckInputs = [
-    pydantic
     pytestCheckHook
     pyyaml
   ];

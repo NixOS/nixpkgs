@@ -353,13 +353,13 @@ lib.warnIf (useHardenedMalloc != null)
         };
       };
 
-      meta = with lib; {
+      meta = {
         description = "Privacy-focused browser routing traffic through the Tor network";
         mainProgram = "tor-browser";
         homepage = "https://www.torproject.org/";
         changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
-        platforms = attrNames sources;
-        maintainers = with maintainers; [
+        platforms = lib.attrNames sources;
+        maintainers = with lib.maintainers; [
           felschr
           panicgh
           joachifm
@@ -368,13 +368,13 @@ lib.warnIf (useHardenedMalloc != null)
         # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
         # the compound is "libre" in a strict sense (some components place certain
         # restrictions on redistribution), it's free enough for our purposes.
-        license = with licenses; [
+        license = with lib.licenses; [
           mpl20
           lgpl21Plus
           lgpl3Plus
           free
         ];
-        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       };
     }
   )

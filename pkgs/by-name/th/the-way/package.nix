@@ -33,14 +33,14 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal code snippets manager";
     mainProgram = "the-way";
     homepage = "https://github.com/out-of-cheese-error/the-way";
     changelog = "https://github.com/out-of-cheese-error/the-way/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       numkem
     ];

@@ -31,7 +31,7 @@ buildGoModule rec {
 
   versionCheckProgramArg = "-version";
 
-  meta = with lib; {
+  meta = {
     description = "API wrapper to search for exposed hosts";
     longDescription = ''
       uncover is a go wrapper using APIs of well known search engines to quickly
@@ -41,8 +41,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/uncover";
     changelog = "https://github.com/projectdiscovery/uncover/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "uncover";
   };
 }

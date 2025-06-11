@@ -1,0 +1,28 @@
+diff --git a/doc/iksemel.texi b/doc/iksemel.texi
+index f57779c..2a7fb31 100644
+--- a/doc/iksemel.texi
++++ b/doc/iksemel.texi
+@@ -1,7 +1,6 @@
+ \input texinfo @c -*-texinfo-*-
+ @c %**start of header
+ @setfilename iksemel
+-@setcontentsaftertitlepage
+ @settitle Iksemel Programmers Manual
+ @set VERSION 1.2
+ @c %**end of header
+@@ -24,6 +23,8 @@ MA 02111-1307, USA.
+ 
+ @end titlepage
+ 
++@contents
++
+ @ifinfo
+ @node Top, , , (dir)
+ @top iksemel Programmers Manual
+@@ -1538,6 +1539,4 @@ Jabber Protocol Documents @url{http://www.jabber.org/protocol/}
+ @unnumbered Function Index
+ @printindex fn
+ 
+-
+-@contents
+ @bye

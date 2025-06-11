@@ -32,13 +32,13 @@ buildGoModule rec {
       --zsh  <($out/bin/kubecfg completion --shell=zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing Kubernetes resources as code";
     mainProgram = "kubecfg";
     homepage = "https://github.com/kubecfg/kubecfg";
     changelog = "https://github.com/kubecfg/kubecfg/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       benley
       qjoly
     ];

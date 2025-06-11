@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A command-line implementation of WCHISPTool, for flashing ch32 MCUs";
+    description = "Command-line implementation of WCHISPTool, for flashing ch32 MCUs";
     homepage = "https://ch32-rs.github.io/wchisp/";
     changelog = "https://github.com/ch32-rs/wchisp/releases/tag/v${version}";
     license = with lib.licenses; [ gpl2Only ];

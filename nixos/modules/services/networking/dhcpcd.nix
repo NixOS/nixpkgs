@@ -6,7 +6,13 @@
 }:
 let
 
-  dhcpcd = if !config.boot.isContainer then pkgs.dhcpcd else pkgs.dhcpcd.override { udev = null; };
+  dhcpcd =
+    if !config.boot.isContainer then
+      pkgs.dhcpcd
+    else
+      pkgs.dhcpcd.override {
+        withUdev = false;
+      };
 
   cfg = config.networking.dhcpcd;
 

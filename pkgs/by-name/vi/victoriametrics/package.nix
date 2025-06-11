@@ -14,13 +14,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.117.1";
+  version = "1.119.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y3Ai5e9bJnGlWfxOMWMhesJ/eHrklSbR+YmR1EgzFS0=";
+    hash = "sha256-Gc3B3JmTbINdPJ8PIhcuQhFD+FoxNOskoBEcDoMAUUk=";
   };
 
   vendorHash = null;
@@ -78,8 +78,11 @@ buildGoModule (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = {
-    inherit (nixosTests) victoriametrics;
+  passthru = {
+    tests = {
+      inherit (nixosTests) victoriametrics;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = {

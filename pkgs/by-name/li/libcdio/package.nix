@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-izjZk2kz9PkLm9+INUdl1e7jMz3nUsQKdplKI9Io+CM=";
   };
 
-  env = lib.optionalAttrs stdenv.is32bit {
+  env = lib.optionalAttrs stdenv.hostPlatform.is32bit {
     NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
   };
 

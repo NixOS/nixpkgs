@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     zip
     wrapQtAppsHook
   ];
-  patches = lib.optionals stdenv.isDarwin [ ./bundle-destination.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./bundle-destination.patch ];
 
   meta = {
     description = "UEFI firmware image viewer and editor";

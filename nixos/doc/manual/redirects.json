@@ -50,11 +50,26 @@
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
   ],
+  "module-services-firefox-syncserver-clients": [
+    "index.html#module-services-firefox-syncserver-clients"
+  ],
+  "module-services-firefox-syncserver-clients-android": [
+    "index.html#module-services-firefox-syncserver-clients-android"
+  ],
+  "module-services-firefox-syncserver-clients-desktop": [
+    "index.html#module-services-firefox-syncserver-clients-desktop"
+  ],
   "module-services-opencloud": [
     "index.html#module-services-opencloud"
   ],
   "module-services-opencloud-basic-usage": [
     "index.html#module-services-opencloud-basic-usage"
+  ],
+  "module-services-networking-pihole-ftl-configuration-inherit-dnsmasq": [
+    "index.html#module-services-networking-pihole-ftl-configuration-inherit-dnsmasq"
+  ],
+  "module-services-networking-pihole-ftl-configuration-multiple-interfaces": [
+    "index.html#module-services-networking-pihole-ftl-configuration-multiple-interfaces"
   ],
   "module-services-strfry": [
     "index.html#module-services-strfry"
@@ -742,6 +757,15 @@
   ],
   "module-services-davis-basic-usage": [
     "index.html#module-services-davis-basic-usage"
+  ],
+  "module-services-draupnir": [
+    "index.html#module-services-draupnir"
+  ],
+  "module-services-draupnir-setup": [
+    "index.html#module-services-draupnir-setup"
+  ],
+  "module-services-draupnir-setup-ems": [
+    "index.html#module-services-draupnir-setup-ems"
   ],
   "module-services-castopod": [
     "index.html#module-services-castopod"
@@ -1447,6 +1471,21 @@
   ],
   "module-services-input-methods-kime": [
     "index.html#module-services-input-methods-kime"
+  ],
+  "module-services-networking-pihole-ftl": [
+    "index.html#module-services-networking-pihole-ftl"
+  ],
+  "module-services-networking-pihole-ftl-administration": [
+    "index.html#module-services-networking-pihole-ftl-administration"
+  ],
+  "module-services-networking-pihole-ftl-configuration": [
+    "index.html#module-services-networking-pihole-ftl-configuration"
+  ],
+  "module-services-web-apps-pihole-web": [
+    "index.html#module-services-web-apps-pihole-web"
+  ],
+  "module-services-web-apps-pihole-web-configuration": [
+    "index.html#module-services-web-apps-pihole-web-configuration"
   ],
   "ch-profiles": [
     "index.html#ch-profiles"

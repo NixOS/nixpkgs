@@ -530,7 +530,6 @@ stdenv.mkDerivation {
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     maintainers = with lib.maintainers; [
       prusnak
-      domenkozar
     ];
     teams = [ lib.teams.haskell ];
   };
