@@ -68,7 +68,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-fireworks==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Build LangChain applications with Fireworks";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/fireworks";
     license = lib.licenses.mit;

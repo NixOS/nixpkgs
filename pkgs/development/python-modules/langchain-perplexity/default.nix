@@ -66,7 +66,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-perplexity/releases/tag/langchain-perplexity==${version}";
+    changelog = "https://github.com/langchain-ai/langchain-perplexity/releases/tag/${src.tag}";
     description = "Build LangChain applications with Perplexity";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/perplexity";
     license = lib.licenses.mit;

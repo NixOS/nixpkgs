@@ -68,7 +68,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-mistralai/releases/tag/langchain-mistralai==${version}";
+    changelog = "https://github.com/langchain-ai/langchain-mistralai/releases/tag/${src.tag}";
     description = "Build LangChain applications with mistralai";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mistralai";
     license = lib.licenses.mit;
