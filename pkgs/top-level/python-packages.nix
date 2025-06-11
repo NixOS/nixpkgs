@@ -16883,6 +16883,9 @@ self: super: with self; {
   standard-chunk =
     if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-chunk { } else null;
 
+  standard-cgi =
+    if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-cgi { } else null;
+
   standard-imghdr =
     if pythonAtLeast "3.13" then
       callPackage ../development/python-modules/standard-imghdr { }
