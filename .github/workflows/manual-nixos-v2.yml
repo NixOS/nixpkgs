@@ -24,6 +24,10 @@ concurrency:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   nixos:
     name: nixos-manual-build

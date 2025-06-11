@@ -22,6 +22,10 @@ concurrency:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   request:
     name: Request
@@ -58,6 +62,7 @@ jobs:
       # In the more special case, when a PR is undrafted an eval run will have started already.
       - name: Wait for comparison to be done
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        id: eval
         with:
           script: |
             const run_id = (await github.rest.actions.listWorkflowRuns({
@@ -67,6 +72,8 @@ jobs:
               event: context.eventName,
               head_sha: context.payload.pull_request.head.sha
             })).data.workflow_runs[0].id
+
+            core.setOutput('run-id', run_id)
 
             // Waiting 120 * 5 sec = 10 min. max.
             // The extreme case is an Eval run that just started when the PR is undrafted.
@@ -86,6 +93,8 @@ jobs:
       - name: Download the comparison results
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
+          run-id: ${{ steps.eval.outputs.run-id }}
+          github-token: ${{ github.token }}
           pattern: comparison
           path: comparison
           merge-multiple: true
