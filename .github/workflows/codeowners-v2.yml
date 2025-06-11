@@ -35,6 +35,10 @@ concurrency:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 env:
   OWNERS_FILE: ci/OWNERS
   # Don't do anything on draft PRs

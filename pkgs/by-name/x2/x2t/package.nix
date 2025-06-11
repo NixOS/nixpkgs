@@ -27,12 +27,25 @@ let
     mkdir $BUILDRT/Common/3dParty/icu/linux_64
     ln -s ${icu}/lib $BUILDRT/Common/3dParty/icu/linux_64/build
   '';
+  icuQmakeFlags = [
+    "QMAKE_LFLAGS+=-Wl,--no-undefined"
+    "QMAKE_LFLAGS+=-licuuc"
+    "QMAKE_LFLAGS+=-licudata"
+    "QMAKE_LFLAGS+=-L${icu}/lib"
+  ];
   # see core/Common/3dParty/html/fetch.sh
   katana-parser-src = fetchFromGitHub {
     owner = "jasenhuang";
     repo = "katana-parser";
     rev = "be6df458d4540eee375c513958dcb862a391cdd1";
     hash = "sha256-SYJFLtrg8raGyr3zQIEzZDjHDmMmt+K0po3viipZW5c=";
+  };
+  # see build_tools scripts/core_common/modules/googletest.py
+  googletest-src = fetchFromGitHub {
+    owner = "google";
+    repo = "googletest";
+    tag = "v1.13.0";
+    hash = "sha256-LVLEn+e7c8013pwiLzJiiIObyrlbBHYaioO/SWbItPQ=";
   };
   # 'latest' version
   # (see build_tools scripts/core_common/modules/hyphen.py)
@@ -83,11 +96,12 @@ let
   #qmakeFlags = [ "CONFIG+=debug" ];
   qmakeFlags = [ ];
   dontStrip = false;
+  core-rev = "d257c68d5fdd71a33776a291914f2c856426c259";
   core = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core";
     # rev that the 'core' submodule in documentserver points at
-    rev = "d257c68d5fdd71a33776a291914f2c856426c259";
+    rev = core-rev;
     hash = "sha256-EXeqG8MJWS1asjFihnuMnDSHeKt2x+Ui+8MYK50AnSY=";
   };
   buildCoreComponent =
@@ -95,7 +109,9 @@ let
     stdenv.mkDerivation (
       finalAttrs:
       {
-        name = "onlyoffice-core-${rootdir}";
+        pname = "onlyoffice-core-${rootdir}";
+        # Could be neater, but these are intermediate derivations anyway
+        version = core-rev;
         src = core;
         sourceRoot = "${finalAttrs.src.name}/${rootdir}";
         dontWrapQtApps = true;
@@ -107,7 +123,7 @@ let
           export SRCRT=$(pwd)
           cd $(echo "${rootdir}" | sed -s "s/[^/]*/../g")
           export BUILDRT=$(pwd)
-          ln -s ../source ../core
+          ln -s $(pwd)/../source ../core
           chmod -R u+w .
         '';
         postPatch = ''
@@ -128,12 +144,20 @@ let
     );
   buildCoreTests =
     rootdir: attrs:
-    (buildCoreComponent (rootdir + "/test") (
+    (buildCoreComponent rootdir (
       {
         doCheck = true;
+        qmakeFlags = qmakeFlags ++ icuQmakeFlags;
         checkPhase = ''
           runHook preCheck
-          ./build/linux_64/test
+          TEST=$(find . -type f -name test)
+          if [ -f "$TEST" ]; then
+              $TEST
+          else
+              echo "Test executable not found"
+              find .
+              exit 1
+          fi
           runHook postCheck
         '';
         installPhase = ''
@@ -147,6 +171,7 @@ let
       # icu needs c++20 for include/unicode/localpointer.h
       ./common-cpp20.patch
     ];
+    qmakeFlags = qmakeFlags ++ icuQmakeFlags;
     preConfigure = ''
       source ${fixIcu}
 
@@ -156,6 +181,40 @@ let
         UnicodeConverter.cpp \
         --replace-fail "TRUE" "true"
     '';
+    passthru.tests = buildCoreTests "UnicodeConverter/test" {
+      buildInputs = [
+        unicodeConverter
+        kernel
+      ];
+      qmakeFlags = qmakeFlags ++ icuQmakeFlags;
+      preConfigure = ''
+        source ${fixIcu}
+        echo -e "\ninclude(../../Common/3dParty/icu/icu.pri)" >> test.pro
+      '';
+      checkPhase = ''
+        # Many of the tests do not appear to produce the 'expected' output,
+        # but it's not obvious whether this an error in the behaviour
+        # or in the test expectations:
+        TESTS=$(ls testfiles/*_utf8.txt | grep -v "/0_" | grep -v "/11_" | grep -v "/17_" | grep -v "/18_" | grep -v "/20_" | grep -v "/21_" | grep -v "/22_" | grep -v "/23_" | grep -v "/24_" | grep -v "/25_" | grep -v "/26_" | grep -v "/27_" | grep -v "/29_" | grep -v "/30_" | grep -v "/31_" | grep -v "/33_" | grep -v "/35_" | grep -v "/41_" | grep -v "/42_" | grep -v "/43_" | cut -d "/" -f 2 | cut -d "_" -f 1 | sort | uniq)
+
+        # This test expects the test input exactly here:
+        mkdir -p $out/bin
+        cp $(find ./core_build -name test) $out/bin
+        cp -r testfiles $out
+        $out/bin/test
+
+        for test in $TESTS; do
+          echo "Checking test $test"
+          diff $out/testfiles/''${test}_utf8.txt $out/testfiles/''${test}_test_utf8.txt >/dev/null
+        done
+      '';
+      installPhase = ''
+        # TODO: this produces files in $out/testfiles. It looks like this should
+        # test that the files are identical, which they are not - but it is not
+        # obvious the test is 'wrong' :/
+        #md5sum $out/testfiles/*
+      '';
+    };
   };
   kernel = buildCoreComponent "Common" {
     patches = [
@@ -164,31 +223,7 @@ let
     buildInputs = [
       unicodeConverter
     ];
-  };
-  unicodeConverterTests = buildCoreComponent "UnicodeConverter/test" {
-    buildInputs = [
-      unicodeConverter
-      kernel
-      icu
-    ];
-    preConfigure = ''
-      source ${fixIcu}
-
-      # adds includes but not build the lib?
-      echo -e "\ninclude(../../Common/3dParty/icu/icu.pri)" >> test.pro
-    '';
-    postBuild = ''
-      patchelf --add-rpath ${icu}/lib $(find ./core_build -name test)
-    '';
-    installPhase = ''
-      mkdir -p $out/bin
-      cp $(find ./core_build -name test) $out/bin
-      cp -r testfiles $out
-      # TODO: this produces files in $out/testfiles. It looks like this should
-      # test that the files are identical, which they are not - but it is not
-      # obvious the test is 'wrong' :/
-      $out/bin/test
-    '';
+    qmakeFlags = qmakeFlags ++ icuQmakeFlags;
   };
   graphics = buildCoreComponent "DesktopEditor/graphics/pro" {
     patches = [
@@ -209,6 +244,19 @@ let
 
       ln -s ${hyphen-src} $BUILDRT/Common/3dParty/hyphen/hyphen
     '';
+    passthru.tests = lib.attrsets.genAttrs [ "alphaMask" "graphicsLayers" "TestPICT" ] (
+      test:
+      buildCoreTests "DesktopEditor/graphics/tests/${test}" {
+        preConfigure = ''
+          source ${fixIcu}
+        '';
+        buildInputs = [
+          graphics
+          kernel
+          unicodeConverter
+        ];
+      }
+    );
   };
   network = buildCoreComponent "Common/Network" {
     buildInputs = [
@@ -283,6 +331,17 @@ let
       runHook postInstall
     '';
     doCheck = true;
+    passthru.tests = buildCoreTests "Apple/test" {
+      buildInputs = [
+        unicodeConverter
+        kernel
+        iworkfile
+      ];
+      qmakeFlags = qmakeFlags ++ icuQmakeFlags;
+      preConfigure = ''
+        source ${fixIcu}
+      '';
+    };
   };
   vbaformatlib = buildCoreComponent "MsBinaryFile/Projects/VbaFormatLib/Linux" {
     buildInputs = [ boost ];
@@ -321,6 +380,24 @@ let
       kernel
       graphics
     ];
+    passthru.tests = buildCoreTests "DocxRenderer/test" {
+      buildInputs = [
+        unicodeConverter
+        kernel
+        network
+        graphics
+        pdffile
+        djvufile
+        xpsfile
+        docxrenderer
+      ];
+      preConfigure = ''
+        # (not as patch because of line endings)
+        sed -i '47 a #include <limits>' $BUILDRT/Common/OfficeFileFormatChecker2.cpp
+
+        source ${fixIcu}
+      '';
+    };
   };
   xpsfile = buildCoreComponent "XpsFile" {
     buildInputs = [
@@ -355,15 +432,19 @@ let
       # needed for c++ 20 for nodejs_23
       ./common-pole-c20.patch
     ];
-    qmakeFlags = qmakeFlags ++ [
-      # c++1z for nodejs_22.libv8 (20 seems to produce errors around 'is_void_v' there)
-      # c++ 20 for nodejs_23.libv8
-      "CONFIG+=c++2a"
-      # v8_base.h will set nMaxVirtualMemory to 4000000000/5000000000
-      # which is not page-aligned, so disable memory limitation for now
-      "QMAKE_CXXFLAGS+=-DV8_VERSION_121_PLUS"
-      "QMAKE_CXXFLAGS+=-DDISABLE_MEMORY_LIMITATION"
-    ];
+    qmakeFlags =
+      qmakeFlags
+      ++ icuQmakeFlags
+      ++ [
+        # c++1z for nodejs_22.libv8 (20 seems to produce errors around 'is_void_v' there)
+        # c++ 20 for nodejs_23.libv8
+        "CONFIG+=c++2a"
+        # v8_base.h will set nMaxVirtualMemory to 4000000000/5000000000
+        # which is not page-aligned, so disable memory limitation for now
+        "QMAKE_CXXFLAGS+=-DV8_VERSION_121_PLUS"
+        "QMAKE_CXXFLAGS+=-DDISABLE_MEMORY_LIMITATION"
+        "QMAKE_LFLAGS+=-licui18n"
+      ];
     preConfigure = ''
       cd $BUILDRT
 
@@ -393,6 +474,15 @@ let
 
       cd $BUILDRT/DesktopEditor/doctrenderer
     '';
+    passthru.tests = lib.attrsets.genAttrs [ "embed/external" "embed/internal" "js_internal" "json" ] (
+      test:
+      buildCoreTests "DesktopEditor/doctrenderer/test/${test}" {
+        buildInputs = [ doctrenderer ];
+        preConfigure = ''
+          ln -s ${googletest-src} $BUILDRT/Common/3dParty/googletest/googletest
+        '';
+      }
+    );
   };
   htmlfile2 = buildCoreComponent "HtmlFile2" {
     buildInputs = [
@@ -421,19 +511,19 @@ let
       graphics
       boost
     ];
+    qmakeFlags = qmakeFlags ++ [
+      "QMAKE_LFLAGS+=-Wl,--no-undefined"
+    ];
     preConfigure = ''
       ln -s ${gumbo-parser-src} $BUILDRT/Common/3dParty/html/gumbo-parser
     '';
-    passthru.tests.run = buildCoreTests "Fb2File" {
+    passthru.tests.run = buildCoreTests "Fb2File/test" {
       buildInputs = [
         fb2file
         kernel
       ];
       preConfigure = ''
         source ${fixIcu}
-      '';
-      postBuild = ''
-        patchelf --add-rpath ${icu}/lib build/*/*
       '';
       checkPhase = ''
         for i in ../examples/*.fb2; do
@@ -449,6 +539,7 @@ let
       kernel
       graphics
     ];
+    qmakeFlags = qmakeFlags ++ icuQmakeFlags;
     preConfigure = ''
       source ${fixIcu}
     '';
@@ -458,8 +549,6 @@ let
 
       mkdir -p $out/bin
       cp $BUILDRT/build/bin/*/* $BUILDRT/build/bin/*/*/* $out/bin
-
-      patchelf --add-rpath ${icu}/lib $out/bin/allfontsgen
 
       runHook postInstall
     '';
@@ -484,18 +573,12 @@ let
       --output-web=$out/fonts
   '';
 in
-stdenv.mkDerivation (finalAttrs: {
+buildCoreComponent "X2tConverter/build/Qt" {
   pname = "x2t";
   # x2t is not 'directly' versioned, so we version it after the version
   # of documentserver it's pulled into as a submodule
   version = "8.3.2";
 
-  src = core;
-
-  nativeBuildInputs = [
-    pkg-config
-    qt5.full
-  ];
   buildInputs = [
     unicodeConverter
     kernel
@@ -526,34 +609,23 @@ stdenv.mkDerivation (finalAttrs: {
     vbaformatlib
     odfformatlib
   ];
-  dontStrip = true;
-  buildPhase = ''
-    runHook preBuild
-
-    BUILDRT=$(pwd)
+  qmakeFlags = qmakeFlags ++ icuQmakeFlags ++ [ "X2tConverter.pro" ];
+  preConfigure = ''
     source ${fixIcu}
 
     # (not as patch because of line endings)
-    sed -i '47 a #include <limits>' Common/OfficeFileFormatChecker2.cpp
+    sed -i '47 a #include <limits>' $BUILDRT/Common/OfficeFileFormatChecker2.cpp
 
     substituteInPlace \
-      ./Test/Applications/TestDownloader/mainwindow.h \
+      $BUILDRT/Test/Applications/TestDownloader/mainwindow.h \
       --replace-fail "../core" ""
-
-    echo "== X2tConverter =="
-    cd X2tConverter/build/Qt
-    qmake "CONFIG+=debug" -o Makefile X2tConverter.pro
-    make -j$NIX_BUILD_CORES
-    cd ../../..
-
-    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
-    cp ./build/bin/linux_64/*/x2t $out/bin
+    find $BUILDRT/build -type f -exec cp {} $out/bin \;
 
     mkdir -p $out/etc
     cat >$out/etc/DoctRenderer.config <<EOF
@@ -567,13 +639,15 @@ stdenv.mkDerivation (finalAttrs: {
           </Settings>
     EOF
 
-    patchelf --add-rpath ${icu}/lib $out/bin/x2t
-
     runHook postInstall
   '';
   passthru.tests = {
-    unicodeConverter = unicodeConverterTests;
-    fb2file = fb2file.tests.run;
+    unicodeConverter = unicodeConverter.tests;
+    fb2file = fb2file.tests;
+    graphics = graphics.tests;
+    iworkfile = iworkfile.tests;
+    docxrenderer = docxrenderer.tests;
+    doctrenderer = doctrenderer.tests;
     x2t = runCommand "x2t-test" { } ''
       (${x2t}/bin/x2t || true) | grep "OOX/binary file converter." && mkdir -p $out
     '';
@@ -584,7 +658,6 @@ stdenv.mkDerivation (finalAttrs: {
       allfonts
       unicodeConverter
       kernel
-      unicodeConverterTests
       graphics
       network
       docxformatlib
@@ -605,4 +678,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ raboof ];
     platforms = lib.platforms.all;
   };
-})
+}
