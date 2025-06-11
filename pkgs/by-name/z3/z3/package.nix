@@ -22,13 +22,13 @@ assert ocamlBindings -> ocaml != null && findlib != null && zarith != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z3";
-  version = "4.15.0";
+  version = "4.15.1";
 
   src = fetchFromGitHub {
     owner = "Z3Prover";
     repo = "z3";
     rev = "z3-${finalAttrs.version}";
-    hash = "sha256-fk3NyV6vIDXivhiNOW2Y0i5c+kzc7oBqaeBWj/JjpTM=";
+    hash = "sha256-mzU21AlKjC5406lQXfBSz/AIwo/1FThqap5JgldkAgQ=";
   };
 
   strictDeps = true;
