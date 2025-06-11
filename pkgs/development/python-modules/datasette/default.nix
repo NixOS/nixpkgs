@@ -73,6 +73,7 @@ buildPythonPackage rec {
     platformdirs
     pluggy
     pyyaml
+    setuptools
     typing-extensions
     uvicorn
   ];
@@ -99,6 +100,8 @@ buildPythonPackage rec {
   disabledTests = [
     "facet"
     "_invalid_database" # checks error message when connecting to invalid database
+    # skip the max_csv_mb test see https://github.com/simonw/datasette/issues/2355
+    "test_max_csv_mb"
   ];
 
   pythonImportsCheck = [
