@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  gitUpdater,
 
   # build-system
   poetry-core,
@@ -19,6 +18,9 @@
   pytestCheckHook,
   pytest-mock,
   syrupy,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
