@@ -1,5 +1,47 @@
 { lib, pkgs }:
-rec {
+let
+  inherit (lib.types)
+    attrsOf
+    bool
+    coercedTo
+    either
+    float
+    int
+    listOf
+    luaInline
+    mkOptionType
+    nonEmptyListOf
+    nullOr
+    oneOf
+    path
+    str
+    ;
+
+  # Attributes added accidentally in https://github.com/NixOS/nixpkgs/pull/335232 (2024-08-18)
+  # Deprecated in https://github.com/NixOS/nixpkgs/pull/415666 (2025-06)
+  aliases =
+    lib.mapAttrs (name: lib.warn "`formats.${name}` is deprecated; use `lib.types.${name}` instead.")
+      {
+        inherit
+          attrsOf
+          bool
+          coercedTo
+          either
+          float
+          int
+          listOf
+          luaInline
+          mkOptionType
+          nonEmptyListOf
+          nullOr
+          oneOf
+          path
+          str
+          ;
+      };
+in
+lib.optionalAttrs pkgs.config.allowAliases aliases
+// rec {
 
   /*
     Every following entry represents a format for program configuration files
@@ -42,25 +84,6 @@ rec {
   hocon = (import ./formats/hocon/default.nix { inherit lib pkgs; }).format;
 
   php = (import ./formats/php/default.nix { inherit lib pkgs; }).format;
-
-  inherit (lib) mkOptionType;
-  inherit (lib.types)
-    nullOr
-    oneOf
-    coercedTo
-    listOf
-    nonEmptyListOf
-    attrsOf
-    either
-    ;
-  inherit (lib.types)
-    bool
-    int
-    float
-    str
-    path
-    luaInline
-    ;
 
   json =
     { }:
