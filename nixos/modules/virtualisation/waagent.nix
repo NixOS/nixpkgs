@@ -67,7 +67,7 @@ let
         convert =
           attrs:
           pipe (recurse [ ] attrs) [
-            # Filter out null values and emoty lists
+            # Filter out null values and empty lists
             (filter (kv: kv.value != null && kv.value != [ ]))
             # Transform to Key=Value form, then concatenate
             (map (kv: "${kv.name}=${transform kv.value}"))

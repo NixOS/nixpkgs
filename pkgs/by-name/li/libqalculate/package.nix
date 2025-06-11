@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       doronbehar
-      alyaeanyx
+      pentane
     ];
     mainProgram = "qalc";
     platforms = platforms.all;

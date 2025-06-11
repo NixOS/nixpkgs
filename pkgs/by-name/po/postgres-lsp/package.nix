@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  rust-jemalloc-sys,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-lsp";
@@ -20,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    rust-jemalloc-sys
   ];
 
   env = {
@@ -43,7 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Tools and language server for Postgres";
     homepage = "https://pgtools.dev";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      myypo
+    ];
     mainProgram = "postgrestools";
   };
 })

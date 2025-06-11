@@ -24,7 +24,7 @@
   tomli-w,
   werkzeug,
 
-  # coupled downsteam dependencies
+  # coupled downstream dependencies
   pip-tools,
 }:
 

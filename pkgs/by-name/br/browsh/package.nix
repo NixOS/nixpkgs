@@ -6,14 +6,14 @@
 }:
 
 let
-  version = "1.8.2";
+  version = "1.8.3";
 
   # TODO: must build the extension instead of downloading it. But since it's
   # literally an asset that is indifferent regardless of the platform, this
   # might be just enough.
   webext = fetchurl {
     url = "https://github.com/browsh-org/browsh/releases/download/v${version}/browsh-${version}.xpi";
-    hash = "sha256-04rLyQt8co3Z7UJnDJmj++E4n7of0Zh1jQ90Bfwnx5A=";
+    hash = "sha256-wLctfGHDCgy3nMG/nc882qNjHOAp8VeOZcEWJD7QThY=";
   };
 
 in
@@ -29,10 +29,10 @@ buildGoModule rec {
     owner = "browsh-org";
     repo = "browsh";
     rev = "v${version}";
-    hash = "sha256-KbBVcNuERBL94LuRx872zpjQTzR6c5GalsBoNR52SuQ=";
+    hash = "sha256-Abna1bAaqOT44zZJsObLMR5fTW2xlWBg1M0JYH0Yc6g=";
   };
 
-  vendorHash = "sha256-eCvV3UuM/JtCgMqvwvqWF3bpOmPSos5Pfhu6ETaS58c=";
+  vendorHash = "sha256-481dC7UrNMnb1QswvK2FqUiioTZ9xJP4dSd3rvRkqro=";
 
   preBuild = ''
     cp "${webext}" src/browsh/browsh.xpi

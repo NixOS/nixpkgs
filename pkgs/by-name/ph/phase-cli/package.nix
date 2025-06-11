@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "phase-cli";
-  version = "1.19.1";
+  version = "1.19.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "phasehq";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-2FVnOQ6A7PopqE9KRlZP1QhGP6Ia5kGPDvguOI45aPI=";
+    hash = "sha256-XicOP/V9j74kogu6KEUyk06D0kCq/oG5N635h6X1eng=";
   };
 
   build-system = with python3Packages; [

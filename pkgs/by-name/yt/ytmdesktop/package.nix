@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # instead of runnning git during the build process
+    # instead of running git during the build process
     # use the .COMMIT file generated in the fetcher FOD
     ./git-rev-parse.patch
   ];
@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/ytmdesktop/ytmdesktop/tag/v${finalAttrs.version}";
-    description = "A Desktop App for YouTube Music";
+    description = "Desktop App for YouTube Music";
     downloadPage = "https://github.com/ytmdesktop/ytmdesktop/releases";
     homepage = "https://ytmdesktop.app/";
     license = lib.licenses.gpl3Only;

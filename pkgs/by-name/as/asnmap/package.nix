@@ -25,12 +25,12 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to gather network ranges using ASN information";
     homepage = "https://github.com/projectdiscovery/asnmap";
     changelog = "https://github.com/projectdiscovery/asnmap/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "asnmap";
   };
 }

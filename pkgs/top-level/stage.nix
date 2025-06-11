@@ -328,7 +328,7 @@ let
 
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
-  # previous bootstrapping phases which have already been overlayed.
+  # previous bootstrapping phases which have already been overlaid.
   toFix = lib.foldl' (lib.flip lib.extends) (self: { }) (
     [
       stdenvBootstappingAndPlatforms

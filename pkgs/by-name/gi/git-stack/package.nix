@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
     package = git-stack;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Stacked branch management for Git";
     homepage = "https://github.com/gitext-rs/git-stack";
     changelog = "https://github.com/gitext-rs/git-stack/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ stehessel ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ stehessel ];
     mainProgram = "git-stack";
   };
 }

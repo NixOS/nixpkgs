@@ -69,6 +69,7 @@ let
     version = config.system.nixos.release;
     revision = "release-${version}";
     extraSources = cfg.nixos.extraModuleSources;
+    checkRedirects = cfg.nixos.checkRedirects;
     options =
       let
         scrubbedEval = evalModules {
@@ -350,6 +351,14 @@ in
         example = literalExpression ''
           # e.g. with options from modules in ''${pkgs.customModules}/nix:
           [ pkgs.customModules ]
+        '';
+      };
+
+      nixos.checkRedirects = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Check redirects for manualHTML.
         '';
       };
 

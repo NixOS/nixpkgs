@@ -23,7 +23,7 @@
 }:
 
 let
-  version = "1.84.0";
+  version = "1.84.1";
 in
 buildGoModule {
   pname = "tailscale";
@@ -38,7 +38,7 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-8/kDUr1OBkKuEXut7Eqd3dnm+82+9b9D+cRsn0ke/bY=";
+    hash = "sha256-rEfBoRKOM1DnMfgEkPI6wzzMwGIOUhowJRlaAQ8QZjY=";
   };
 
   vendorHash = "sha256-QBYCMOWQOBCt+69NtJtluhTZIOiBWcQ78M9Gbki6bN0=";
@@ -149,6 +149,9 @@ buildGoModule {
 
           # context deadline exceeded
           "TestPacketFilterFromNetmap"
+
+          # flaky: https://github.com/tailscale/tailscale/issues/15348
+          "TestSafeFuncHappyPath"
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # syscall default route interface en0 differs from netstat

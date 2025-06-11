@@ -54,12 +54,12 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/neverest completion zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI to synchronize, backup and restore emails";
     mainProgram = "neverest";
     homepage = "https://pimalaya.org/neverest/cli/v${version}/";
     changelog = "https://git.sr.ht/~soywod/neverest-cli/tree/v${version}/item/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ soywod ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ soywod ];
   };
 }

@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   passthru.fetch = callPackage ./fetch.nix { };
 
   meta = with lib; {
-    description = "A MITM caching proxy for use in nixpkgs";
+    description = "MITM caching proxy for use in nixpkgs";
     homepage = "https://github.com/chayleaf/mitm-cache#readme";
     license = licenses.mit;
     maintainers = with maintainers; [ chayleaf ];

@@ -66,6 +66,10 @@ in
       pantheon-tweaks is no longer a switchboard plugin but an independent app,
       adding the package to environment.systemPackages is sufficient.
     '')
+    (mkRemovedOptionModule [ "programs" "thefuck" ] ''
+      The corresponding package was removed from nixpkgs,
+      consider using `programs.pay-respects` instead.
+    '')
     (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] (
       "way-cooler is abandoned by its author: "
@@ -219,6 +223,11 @@ in
       "services"
       "shout"
     ] "shout was removed because it was deprecated upstream in favor of thelounge.")
+    (mkRemovedOptionModule [ "services" "siproxd" ] ''
+      The siproxd package and the corresponding module have been removed due to
+      the service being unmaintained. `services.asterisk.*` or `services.freeswitch.*`
+      could be used instead.
+    '')
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to
       the program being unmaintained. The options `programs.msmtp.*` can be

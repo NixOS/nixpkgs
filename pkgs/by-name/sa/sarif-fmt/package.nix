@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A CLI tool to pretty print SARIF diagnostics";
+    description = "CLI tool to pretty print SARIF diagnostics";
     homepage = "https://psastras.github.io/sarif-rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];

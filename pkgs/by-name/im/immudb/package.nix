@@ -15,13 +15,13 @@ let
 in
 buildGoModule rec {
   pname = "immudb";
-  version = "1.9.6";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = "immudb";
     rev = "v${version}";
-    sha256 = "sha256-sQLxHHaKdqocjJVXuuuQqx+BNubl6bjVcp50r4kPQEs=";
+    sha256 = "sha256-tYQYQyYhHMn0+PQWDEb4zY9EbDt1pVzZIcP0Gnsplrk=";
   };
 
   postPatch = ''

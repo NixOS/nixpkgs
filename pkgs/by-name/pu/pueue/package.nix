@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion pueue.{bash,fish} _pueue
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Nukesor/pueue";
     description = "Daemon for managing long running shell commands";
     longDescription = ''
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
       processed, even if you no longer have any active ssh sessions.
     '';
     changelog = "https://github.com/Nukesor/pueue/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sarcasticadmin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
   };
 }

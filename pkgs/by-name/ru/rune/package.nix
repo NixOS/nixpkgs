@@ -21,15 +21,15 @@ rustPlatform.buildRustPackage rec {
     RUNE_VERSION = version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Interpreter for the Rune Language, an embeddable dynamic programming language for Rust";
     homepage = "https://rune-rs.github.io/";
     changelog = "https://github.com/rune-rs/rune/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "rune";
   };
 }

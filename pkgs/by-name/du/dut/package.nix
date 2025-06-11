@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
-    description = "A disk usage calculator for Linux";
+    description = "Disk usage calculator for Linux";
     homepage = "https://codeberg.org/201984/dut";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ errnoh ];

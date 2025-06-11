@@ -136,16 +136,16 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Stream VR games from your PC to your headset via Wi-Fi";
     homepage = "https://github.com/alvr-org/ALVR/";
     changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "alvr_dashboard";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       luNeder
       jopejoe1
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

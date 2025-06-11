@@ -21,17 +21,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "0-nightly-2025-05-22";
+  version = "0-nightly-2025-06-01";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
     tag = lib.strings.removePrefix "0-" finalAttrs.version;
-    hash = "sha256-30mKM2CfqlFXLjp8Ui7qXodrfVL1GFvjkEYBPMAiQsI=";
+    hash = "sha256-7fkeQZHrzyKxga5wWkIA4uo0ka1pNfYrXIz250uJ1KI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-RqvFLGYVxB9WimReMXDuAkSkLRuySHkjmAUliapCSdo=";
+  cargoHash = "sha256-pCE70CP5+Rm28yokh88zP9Si2lmikCRxD7cRKFrz+o0=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
   env =

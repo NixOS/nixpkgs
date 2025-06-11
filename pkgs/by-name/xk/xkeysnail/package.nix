@@ -37,11 +37,11 @@ python3Packages.buildPythonApplication {
       --add-flags "-q" --add-flags "$out/share/browser.py"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Yet another keyboard remapping tool for X environment";
     homepage = "https://github.com/mooz/xkeysnail";
-    platforms = platforms.linux;
-    license = licenses.gpl1Only;
-    maintainers = with maintainers; [ bb2020 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl1Only;
+    maintainers = with lib.maintainers; [ bb2020 ];
   };
 }

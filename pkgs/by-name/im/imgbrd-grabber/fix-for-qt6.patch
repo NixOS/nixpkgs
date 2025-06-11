@@ -1,0 +1,11 @@
+diffsrc/cli/vendor/qcommandlinecommandparser/qcommandlinecommandparser.cpp b/src/cli/vendor/qcommandlinecommandparser/qcommandlinecommandparser.cpp
+index 0742cac1..da820e94 100644
+--- src/cli/vendor/qcommandlinecommandparser/qcommandlinecommandparser.cpp
++++ src/cli/vendor/qcommandlinecommandparser/qcommandlinecommandparser.cpp
+@@ -1,5 +1,6 @@
+ #include "qcommandlinecommandparser.h"
+ #include <QString>
++#include <QDebug>
+ #include "vendor.h"
+
+ Q_CORE_EXPORT void qt_call_post_routines();

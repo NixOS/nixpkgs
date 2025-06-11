@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [
       doronbehar
-      alyaeanyx
+      pentane
       aleksana
     ];
     license = licenses.gpl2Plus;

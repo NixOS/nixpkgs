@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     "-DSENTRY_BACKEND=breakpad"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/getsentry/sentry-native";
     description = "Sentry SDK for C, C++ and native applications";
     changelog = "https://github.com/getsentry/sentry-native/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       wheelsandmetal
       daniel-fahey
     ];

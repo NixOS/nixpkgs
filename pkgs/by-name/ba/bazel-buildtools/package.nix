@@ -34,15 +34,15 @@ buildGoModule rec {
     "-X main.buildScmRevision=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps";
     homepage = "https://github.com/bazelbuild/buildtools";
     changelog = "https://github.com/bazelbuild/buildtools/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       elasticdog
       uri-canva
     ];
-    teams = [ teams.bazel ];
+    teams = [ lib.teams.bazel ];
   };
 }

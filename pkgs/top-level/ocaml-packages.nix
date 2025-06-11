@@ -30,6 +30,8 @@ let
 
         alsa = callPackage ../development/ocaml-modules/alsa { };
 
+        ancient = callPackage ../development/ocaml-modules/ancient { };
+
         angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
         angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
@@ -88,6 +90,8 @@ let
 
         benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
+        bencode = callPackage ../development/ocaml-modules/bencode { };
+
         bheap = callPackage ../development/ocaml-modules/bheap { };
 
         bigarray-compat = callPackage ../development/ocaml-modules/bigarray-compat { };
@@ -104,7 +108,7 @@ let
 
         binning = callPackage ../development/ocaml-modules/binning { };
 
-        biocaml = janeStreet_0_15.biocaml;
+        biocaml = throw "biocaml has been removed"; # 2025-06-04
 
         biotk = callPackage ../development/ocaml-modules/biotk { };
 
@@ -201,6 +205,8 @@ let
         carton-lwt = callPackage ../development/ocaml-modules/carton/lwt.nix {
           git-binary = pkgs.git;
         };
+
+        cbor = callPackage ../development/ocaml-modules/cbor { };
 
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
@@ -325,6 +331,26 @@ let
         dates_calc = callPackage ../development/ocaml-modules/dates_calc { };
 
         dbf = callPackage ../development/ocaml-modules/dbf { };
+
+        decoders = callPackage ../development/ocaml-modules/decoders { };
+
+        decoders-bencode = callPackage ../development/ocaml-modules/decoders-bencode { };
+
+        decoders-cbor = callPackage ../development/ocaml-modules/decoders-cbor { };
+
+        decoders-ezjsonm = callPackage ../development/ocaml-modules/decoders-ezjsonm { };
+
+        decoders-ezxmlm = callPackage ../development/ocaml-modules/decoders-ezxmlm { };
+
+        decoders-jsonaf = callPackage ../development/ocaml-modules/decoders-jsonaf { };
+
+        decoders-jsonm = callPackage ../development/ocaml-modules/decoders-jsonm { };
+
+        decoders-msgpck = callPackage ../development/ocaml-modules/decoders-msgpck { };
+
+        decoders-sexplib = callPackage ../development/ocaml-modules/decoders-sexplib { };
+
+        decoders-yojson = callPackage ../development/ocaml-modules/decoders-yojson { };
 
         decompress = callPackage ../development/ocaml-modules/decompress { };
 
@@ -973,15 +999,6 @@ let
                   piqi-ocaml = self.piqi-ocaml.override { inherit piqi; };
                 };
 
-              biocaml =
-                let
-                  angstrom = self.angstrom.override { inherit ppx_let; };
-                in
-                callPackage ../development/ocaml-modules/biocaml {
-                  uri = self.uri.override { inherit angstrom; };
-                  cfstream = self.cfstream.override { inherit core_kernel; };
-                };
-
               ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
             }
           )).overrideScope
@@ -1284,14 +1301,12 @@ let
 
         mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { };
 
-        mirage-crypto-rng-async = callPackage ../development/ocaml-modules/mirage-crypto/rng-async.nix { };
-
-        mirage-crypto-rng-eio = callPackage ../development/ocaml-modules/mirage-crypto/rng-eio.nix { };
-
-        mirage-crypto-rng-lwt = callPackage ../development/ocaml-modules/mirage-crypto/rng-lwt.nix { };
-
         mirage-crypto-rng-mirage =
           callPackage ../development/ocaml-modules/mirage-crypto/rng-mirage.nix
+            { };
+
+        mirage-crypto-rng-miou-unix =
+          callPackage ../development/ocaml-modules/mirage-crypto/rng-miou-unix.nix
             { };
 
         mirage-device = callPackage ../development/ocaml-modules/mirage-device { };

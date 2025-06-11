@@ -8,12 +8,13 @@
   buildPythonApplication,
   pytestCheckHook,
   requests-mock,
+  setuptools,
 }:
 
 buildPythonApplication rec {
   pname = "meraki-cli";
   version = "1.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "meraki_cli";
@@ -29,18 +30,19 @@ buildPythonApplication rec {
     "TestUpgrade"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     argcomplete
     jinja2
     meraki
     rich
   ];
 
-  nativeBuildInputs = [
-    pytestCheckHook
-  ];
-
   nativeCheckInputs = [
+    pytestCheckHook
     requests-mock
   ];
 

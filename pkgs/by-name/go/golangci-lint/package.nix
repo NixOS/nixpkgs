@@ -36,13 +36,13 @@ buildGo124Module rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast linters Runner for Go";
     homepage = "https://golangci-lint.run/";
     changelog = "https://github.com/golangci/golangci-lint/blob/v${version}/CHANGELOG.md";
     mainProgram = "golangci-lint";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
       mic92
     ];

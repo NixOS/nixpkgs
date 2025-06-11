@@ -12,6 +12,8 @@
   mtime,
   ptime,
   uri,
+  stdenv,
+  darwin,
 }:
 
 buildDunePackage rec {
@@ -37,6 +39,8 @@ buildDunePackage rec {
     ptime
     uri
   ];
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   # Checks depend on caqti-driver-sqlite3 (circural dependency)
   doCheck = false;

@@ -54,14 +54,14 @@
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.15.1";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${version}";
-    hash = "sha256-k+uyOhsxWPpiA82wCCEn53W2VQgSHGgSABFipEPErRk=";
+    hash = "sha256-NklR2Aoa5UdWkqNOfX+xl3R158JDSQtStXv9DkklOwM=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
@@ -176,7 +176,7 @@ buildPythonPackage rec {
   meta = {
     description = "Standardized Serverless ML Inference Platform on Kubernetes";
     homepage = "https://github.com/kserve/kserve/tree/master/python/kserve";
-    changelog = "https://github.com/kserve/kserve/releases/tag/v${version}";
+    changelog = "https://github.com/kserve/kserve/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

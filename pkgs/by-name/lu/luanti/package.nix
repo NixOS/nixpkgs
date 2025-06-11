@@ -34,18 +34,18 @@
   buildClient ? true,
   buildServer ? true,
   SDL2,
-  useSDL2 ? false,
+  useSDL2 ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luanti";
-  version = "5.11.0";
+  version = "5.12.0";
 
   src = fetchFromGitHub {
-    owner = "minetest";
-    repo = "minetest";
+    owner = "luanti-org";
+    repo = "luanti";
     tag = finalAttrs.version;
-    hash = "sha256-0PJK7sS2oFTNWex9rLTgVIqaRhwuUb6H5HIlVOGA08k=";
+    hash = "sha256-voP2/6s2tjsIULHa5+M08oNNLg0YQmtFmPeNO4TnE9E=";
   };
 
   patches = [
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (buildClient && useSDL2) [
       SDL2
     ]
-    ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin && !useSDL2) [
+    ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
       xorg.libX11
       xorg.libXi
     ]
@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.luanti.org/";
-    description = "An open source voxel game engine (formerly Minetest)";
+    description = "Open source voxel game engine (formerly Minetest)";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [

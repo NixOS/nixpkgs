@@ -16,6 +16,10 @@ on:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   periodic-merge:
     if: github.repository_owner == 'NixOS'

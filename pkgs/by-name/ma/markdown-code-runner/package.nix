@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
   dontUseCargoParallelTests = true;
 
   meta = {
-    description = "A configurable Markdown code runner that executes and optionally replaces code blocks using external commands";
+    description = "Configurable Markdown code runner that executes and optionally replaces code blocks using external commands";
     longDescription = ''
       markdown-code-runner is a command-line tool that scans Markdown files for fenced code blocks,
       executes them using per-language configuration, and optionally replaces the block content

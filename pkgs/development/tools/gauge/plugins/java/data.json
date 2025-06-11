@@ -1,19 +1,19 @@
 {
-  "version": "0.11.4",
+  "version": "0.12.0",
   "aarch64-darwin": {
-    "url": "https://github.com/getgauge/gauge-java/releases/download/v0.11.4/gauge-java-0.11.4-darwin.arm64.zip",
-    "hash": "sha256-+GuJZRmxQQzHBsiiXRDF4CJPF1tc7iaTYb4nnYwUYso="
+    "url": "https://github.com/getgauge/gauge-java/releases/download/v0.12.0/gauge-java-0.12.0-darwin.arm64.zip",
+    "hash": "sha256-vN0FqYT/73+OPGIYEsPwB+eSQ6n5SrFwlHfFybBDpEo="
   },
   "x86_64-darwin": {
-    "url": "https://github.com/getgauge/gauge-java/releases/download/v0.11.4/gauge-java-0.11.4-darwin.x86_64.zip",
-    "hash": "sha256-nVNxxzbEUHlOdHFkaxLqylAZAN1l4dpSbrtoI59bUeQ="
+    "url": "https://github.com/getgauge/gauge-java/releases/download/v0.12.0/gauge-java-0.12.0-darwin.x86_64.zip",
+    "hash": "sha256-loKFJzvFshMY206t1z01d4q5jTxKtB0o7nmN4qFWDDQ="
   },
   "aarch64-linux": {
-    "url": "https://github.com/getgauge/gauge-java/releases/download/v0.11.4/gauge-java-0.11.4-linux.arm64.zip",
-    "hash": "sha256-mxCyeu2+hOnikVP2UcMExslt7j3TO1NScFRsYiOoUus="
+    "url": "https://github.com/getgauge/gauge-java/releases/download/v0.12.0/gauge-java-0.12.0-linux.arm64.zip",
+    "hash": "sha256-z6nclV/gUDR/jTA4DKaP1HVwuM3U3IVljbYzrlGF15A="
   },
   "x86_64-linux": {
-    "url": "https://github.com/getgauge/gauge-java/releases/download/v0.11.4/gauge-java-0.11.4-linux.x86_64.zip",
-    "hash": "sha256-YoEBequRqEaCGB8b+yWLXsJ14cw7yq1L32+PbYmkcdY="
+    "url": "https://github.com/getgauge/gauge-java/releases/download/v0.12.0/gauge-java-0.12.0-linux.x86_64.zip",
+    "hash": "sha256-raJK4VslnzF53JsywITcBOpCN6dKgctqF3oDwNt9lsI="
   }
 }

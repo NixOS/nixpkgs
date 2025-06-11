@@ -30,7 +30,7 @@
   libiconv,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spidermonkey";
   inherit version;
 

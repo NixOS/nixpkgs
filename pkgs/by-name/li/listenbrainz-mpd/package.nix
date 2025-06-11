@@ -63,12 +63,12 @@ rustPlatform.buildRustPackage rec {
     installManPage listenbrainz-mpd.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/elomatreb/listenbrainz-mpd";
     changelog = "https://codeberg.org/elomatreb/listenbrainz-mpd/src/tag/v${version}/CHANGELOG.md";
     description = "ListenBrainz submission client for MPD";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ DeeUnderscore ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ DeeUnderscore ];
     mainProgram = "listenbrainz-mpd";
   };
 }

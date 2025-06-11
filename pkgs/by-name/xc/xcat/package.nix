@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "xcat" ];
 
-  meta = with lib; {
+  meta = {
     description = "XPath injection tool";
     mainProgram = "xcat";
     longDescription = ''
@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/orf/xcat";
     changelog = "https://github.com/orf/xcat/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

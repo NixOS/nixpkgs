@@ -25,12 +25,12 @@ rustPlatform.buildRustPackage rec {
     version = "hx ${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Futuristic take on hexdump, made in Rust";
     homepage = "https://github.com/sitkevij/hex";
     changelog = "https://github.com/sitkevij/hex/releases/tag/v${version}";
     mainProgram = "hx";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
   };
 }

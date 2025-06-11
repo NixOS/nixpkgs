@@ -32,7 +32,7 @@ let
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/ollama/default.nix
 
   pname = "tabby";
-  version = "0.27.1";
+  version = "0.28.0";
 
   availableAccelerations = flatten [
     (optional cudaSupport "cuda")
@@ -121,12 +121,12 @@ rustPlatform.buildRustPackage {
     owner = "TabbyML";
     repo = "tabby";
     tag = "v${version}";
-    hash = "sha256-mpLy+bSKoJr3fo9bEE1dyES1ZeIHQLSvzpt23E55b4o=";
+    hash = "sha256-cdY1/k7zZ4am6JP9ghnnJFHop/ZcnC/9alzd2MS8xqc=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-einG593Brv59j1F5sebUATFnfER/PmXwQJpF3VLPKjg=";
+  cargoHash = "sha256-yEns0QAARmuV697/na08K8uwJWZihY3pMyCZcERDlFM=";
 
   # Don't need to build llama-cpp-server (included in default build)
   # We also don't add CUDA features here since we're using the overridden llama-cpp package

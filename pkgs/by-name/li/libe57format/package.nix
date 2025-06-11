@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libe57format";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "asmaloney";
     repo = "libE57Format";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bOuWh9Nkxva2v0M6+vnAya8EW/G3WQePxHakQt8T9NE=";
+    hash = "sha256-GyzfJshL2cOTEDp8eR0sqQq4GSnOdskiLi5mY1a2KW0=";
     fetchSubmodules = true; # for submodule-vendored libraries such as `gtest`
   };
 
@@ -23,23 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
   libE57Format-test-data_src = fetchFromGitHub {
     owner = "asmaloney";
     repo = "libE57Format-test-data";
-    rev = "4960564a732c6444c50dfae5b2273e68837399cd";
-    hash = "sha256-k26yVbYSQJ3EMgcpjm35N1OAxarFmfMvzfTN2Hdyu8c=";
+    rev = "2171612112b06afd4fec5babe8837be69d910149";
+    hash = "sha256-JARpxp6Z2VioBfY0pZSyQU2mG/EllbaF3qteSFM9u8o=";
   };
 
   CXXFLAGS = [
     # GCC 13: error: 'int16_t' has not been declared in 'std'
     "-include cstdint"
-  ];
-
-  patches = [
-    # TODO: Remove with the next release: https://github.com/asmaloney/libE57Format/pull/299
-    (fetchpatch {
-      name = "libE57Format-Dont-force-warnings-as-errors-when-building-self.patch"; # https://github.com/apache/thrift/pull/2726
-      url = "https://github.com/asmaloney/libE57Format/commit/66bb5af15937b4c10a7f412ca4d1673f42bbad28.patch";
-      hash = "sha256-2cNURjMLP0TijYY5gbuWLE7H/PlMW936wAeOqJ/w9C0=";
-    })
-
   ];
 
   nativeBuildInputs = [
@@ -51,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    # Without this, LTO will be enabled, which seems to cause
+    # errors when consumers try to link the `.a` file, see:
+    #     https://github.com/asmaloney/libE57Format/pull/313#issuecomment-2907797367
+    "-DE57_RELEASE_LTO=OFF"
     # See https://github.com/asmaloney/libE57Format/blob/9372bdea8db2cc0c032a08f6d655a53833d484b8/test/README.md
     (
       if finalAttrs.finalPackage.doCheck then

@@ -33,11 +33,11 @@ buildGoModule rec {
     package = devspace;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source developer tool for Kubernetes that lets you develop and deploy cloud-native software faster";
     homepage = "https://devspace.sh/";
     changelog = "https://github.com/devspace-sh/devspace/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ darkonion0 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ darkonion0 ];
   };
 }
