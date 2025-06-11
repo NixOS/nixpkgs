@@ -15913,6 +15913,8 @@ self: super: with self; {
 
   scipy = callPackage ../development/python-modules/scipy { };
 
+  scipy-stubs = callPackage ../development/python-modules/scipy-stubs { };
+
   scmrepo = callPackage ../development/python-modules/scmrepo { };
 
   scooby = callPackage ../development/python-modules/scooby { };
