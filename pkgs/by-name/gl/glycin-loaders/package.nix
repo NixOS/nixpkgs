@@ -7,7 +7,9 @@
   bubblewrap,
   cairo,
   cargo,
+  fontconfig,
   gettext,
+  gobject-introspection,
   git,
   gnome,
   gtk4,
@@ -21,10 +23,12 @@
   ninja,
   pkg-config,
   rustc,
+
+  libGlycinOnly ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "glycin-loaders";
+  pname = if libGlycinOnly then "libglycin-1" else "glycin-loaders";
   version = "1.2.1";
 
   src = fetchFromGitLab {
@@ -45,10 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
-      pname
       version
       src
       ;
+    # as to dedupe between both packages which have mostly the same deps
+    pname = "glycin";
     hash = "sha256-iNSpLvIi3oZKSRlkwkDJp5i8MdixRvmWIOCzbFHIdHw=";
   };
 
@@ -61,22 +66,29 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustc
     rustPlatform.cargoSetupHook
-  ];
+  ] ++ lib.optional libGlycinOnly gtk4; # for Gdk-4.0.gir
 
-  buildInputs = [
-    gtk4 # for GdkTexture
-    cairo
-    lcms2
-    libheif
-    libxml2 # for librsvg crate
-    librsvg
-    libseccomp
-    libjxl
-  ];
+  buildInputs =
+    [
+      libseccomp
+      lcms2
+      gtk4 # for GdkTexture
+    ]
+    ++ lib.optionals (!libGlycinOnly) [
+      cairo
+      libheif
+      libxml2 # for librsvg crate
+      librsvg
+      libjxl
+    ]
+    ++ lib.optionals libGlycinOnly [
+      fontconfig
+      gobject-introspection
+    ];
 
   mesonFlags = [
-    "-Dglycin-loaders=true"
-    "-Dlibglycin=false"
+    (lib.mesonBool "glycin-loaders" (!libGlycinOnly))
+    (lib.mesonBool "libglycin" libGlycinOnly)
     "-Dvapi=false"
   ];
 
