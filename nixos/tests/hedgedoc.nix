@@ -2,10 +2,7 @@
 {
   name = "hedgedoc";
 
-  meta = with lib.maintainers; {
-    maintainers = [ willibutz ];
-  };
-
+  meta.maintainers = [ ];
   nodes = {
     hedgedocSqlite =
       { ... }:

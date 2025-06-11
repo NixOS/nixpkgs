@@ -70,7 +70,6 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       globin
-      willibutz
     ];
     platforms = lib.platforms.unix;
     mainProgram = "opsdroid";
