@@ -115,8 +115,8 @@ All new projects should use the CUDA redistributables available in [`cudaPackage
 
 ### Updating supported compilers and GPUs {#updating-supported-compilers-and-gpus}
 
-1. Update `nvccCompatibilities` in `pkgs/development/cuda-modules/_cuda/data/nvcc.nix` to include the newest release of NVCC, as well as any newly supported host compilers.
-2. Update `cudaCapabilityToInfo` in `pkgs/development/cuda-modules/_cuda/data/cuda.nix` to include any new GPUs supported by the new release of CUDA.
+1. Update `nvccCompatibilities` in `pkgs/development/cuda-modules/_cuda/db/bootstrap/nvcc.nix` to include the newest release of NVCC, as well as any newly supported host compilers.
+2. Update `cudaCapabilityToInfo` in `pkgs/development/cuda-modules/_cuda/db/bootstrap/cuda.nix` to include any new GPUs supported by the new release of CUDA.
 
 ### Updating the CUDA Toolkit runfile installer {#updating-the-cuda-toolkit}
 
