@@ -128,10 +128,11 @@ buildPythonPackage rec {
     "tests/test_pregel_async.py"
   ];
 
+  # Since `langgraph` is the only unprefixed package, we have to use an explicit match
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "^(\\d+\\.\\d+\\.\\d+)"
+      "([0-9.]+)"
     ];
   };
 
