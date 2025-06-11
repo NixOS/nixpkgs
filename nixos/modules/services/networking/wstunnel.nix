@@ -66,6 +66,37 @@ let
       certConfig = outerConfig.security.acme.certs.${config.useACMEHost};
     in
     {
+      imports =
+        [
+          ../../misc/assertions.nix
+
+          (lib.mkRenamedOptionModule
+            [
+              "enableHTTPS"
+            ]
+            [
+              "listen"
+              "enableHTTPS"
+            ]
+          )
+        ]
+        ++ lib.map
+          (
+            option:
+            lib.mkRemovedOptionModule [ option ] ''
+              The wstunnel module now uses RFC-42-style settings, please modify your config accordingly
+            ''
+          )
+          [
+            "extraArgs"
+            "websocketPingInterval"
+            "loggingLevel"
+
+            "restrictTo"
+            "tlsCertificate"
+            "tlsKey"
+          ];
+
       options = commonOptions // {
         listen = lib.mkOption {
           description = ''
@@ -174,6 +205,33 @@ let
   clientSubmodule =
     { config, ... }:
     {
+      imports =
+        [
+          ../../misc/assertions.nix
+        ]
+        ++ lib.map
+          (
+            option:
+            lib.mkRemovedOptionModule [ option ] ''
+              The wstunnel module now uses RFC-42-style settings, please modify your config accordingly
+            ''
+          )
+          [
+            "extraArgs"
+            "websocketPingInterval"
+            "loggingLevel"
+
+            "localToRemote"
+            "remoteToLocal"
+            "httpProxy"
+            "soMark"
+            "upgradePathPrefix"
+            "tlsSNI"
+            "tlsVerifyCertificate"
+            "upgradeCredentials"
+            "customHeaders"
+          ];
+
       options = commonOptions // {
         connectTo = lib.mkOption {
           description = "Server address and port to connect to.";
@@ -401,6 +459,10 @@ in
           If services.wstunnel.servers."${name}".listen.enableHTTPS is set to true, either services.wstunnel.servers."${name}".useACMEHost or both services.wstunnel.servers."${name}".settings.tls-private-key and services.wstunnel.servers."${name}".settings.tls-certificate need to be set.
         '';
       }) cfg.servers)
+      ++ (lib.foldlAttrs (
+        assertions: _: server:
+        assertions ++ server.assertions
+      ) [ ] cfg.servers)
 
       ++ (lib.mapAttrsToList (
         name: clientCfg:
@@ -415,7 +477,21 @@ in
             Either one of services.wstunnel.clients."${name}".settings.local-to-remote or services.wstunnel.clients."${name}".settings.remote-to-local must be set.
           '';
         }
-      ) cfg.clients);
+      ) cfg.clients)
+      ++ (lib.foldlAttrs (
+        assertions: _: client:
+        assertions ++ client.assertions
+      ) [ ] cfg.clients);
+
+    warnings =
+      (lib.foldlAttrs (
+        warnings: _: server:
+        warnings ++ server.warnings
+      ) [ ] cfg.servers)
+      ++ (lib.foldlAttrs (
+        warnings: _: client:
+        warnings ++ client.warnings
+      ) [ ] cfg.clients);
   };
 
   meta.maintainers = with lib.maintainers; [
