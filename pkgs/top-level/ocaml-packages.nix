@@ -414,6 +414,8 @@ let
 
         dream = callPackage ../development/ocaml-modules/dream { };
 
+        dream-html = callPackage ../development/ocaml-modules/dream-html { };
+
         dream-httpaf = callPackage ../development/ocaml-modules/dream/httpaf.nix { };
 
         dream-pure = callPackage ../development/ocaml-modules/dream/pure.nix { };
@@ -1818,6 +1820,8 @@ let
         pulseaudio = callPackage ../development/ocaml-modules/pulseaudio {
           inherit (pkgs) pulseaudio;
         };
+
+        pure-html = callPackage ../development/ocaml-modules/dream-html/pure.nix { };
 
         pure-splitmix = callPackage ../development/ocaml-modules/pure-splitmix { };
 
