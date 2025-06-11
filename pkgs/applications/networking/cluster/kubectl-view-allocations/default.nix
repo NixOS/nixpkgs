@@ -3,25 +3,22 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  Security ? null,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kubectl-view-allocations";
-  version = "0.20.5";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "davidB";
     repo = "kubectl-view-allocations";
     tag = version;
-    hash = "sha256-Y+Yki0wTi/OTWbUvk+8EhTlhF7H51RrdFLFXk2VqF1M=";
+    hash = "sha256-WIByZc2B38NC+kp0ODQjYS81R7vX60A2aoVaE86w/NQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-6sRpsXydzKB0ZaV1HeagINgb6ol9dj3XT0+pd53QOCw=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  cargoHash = "sha256-aSI5SN0RujHVq7VNNsV6m3KnQqVTWyqfLmGHhwH/3ig=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

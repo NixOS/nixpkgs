@@ -9,7 +9,7 @@
   makeDesktopItem,
   openjdk21,
   stdenvNoCC,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   gitUpdater,
 }:
@@ -29,16 +29,16 @@ let
     glib-networking
     gtk3
     libsecret
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "PortfolioPerformance";
-  version = "0.76.0";
+  version = "0.77.1";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-F3U6CU6hZktN2Lq9pPRAw7OSLubEz6ddTAym5azRj1c=";
+    hash = "sha256-gD8tUOsuce0qxBDByOddoPqCqUkPfgGbbnAa+SLJnVU=";
   };
 
   nativeBuildInputs = [

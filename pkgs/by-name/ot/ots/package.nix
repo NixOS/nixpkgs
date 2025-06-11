@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "sniptt-official";
-    repo = pname;
+    repo = "ots";
     rev = "v${version}";
     hash = "sha256-GOCuH9yiVs3N3sHCCoSGaQkaaJs4NY/klNBRWjZGLE4=";
   };
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-X main.buildSource=nix"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Share end-to-end encrypted secrets with others via a one-time URL";
     mainProgram = "ots";
     homepage = "https://ots.sniptt.com";
     changelog = "https://github.com/sniptt-official/ots/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ elliot ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ elliot ];
   };
 }

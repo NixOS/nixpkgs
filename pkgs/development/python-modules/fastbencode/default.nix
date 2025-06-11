@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "fastbencode";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X+DLfRc2iRr2HSreQM6UiUHUbpCLFvU4P1XxJ4SNoZc=";
+    hash = "sha256-o0wyxQSw7J3hpJk0btJJMjWetGI0sotwl1pQ/fqhSrU=";
   };
 
   build-system = [ setuptools ];

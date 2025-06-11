@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-wacom";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ct+1n/GmrS9xi8QIJDWKfwNL1kvNz3o+0tsxLZtwjmI=";
+    sha256 = "sha256-xTv3QPlLPJQ6C5t4Udy1H9IrLQGuik8prvGlpfFm1DQ=";
   };
 
   nativeBuildInputs = [

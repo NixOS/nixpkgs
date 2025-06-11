@@ -18,7 +18,6 @@
   huggingface-hub,
   pandas,
   pytestCheckHook,
-  pythonAtLeast,
   tqdm,
   transformers,
 }:
@@ -36,10 +35,6 @@ buildPythonPackage {
     rev = "24fbe4b5dab9a6c250a014573613c1890190536c"; # no tags
     hash = "sha256-BVPon+T7chkpozX/IZU3KZMw1zRzlYVvF/22JWKjT2Y=";
   };
-
-  # Python 3.13 support requires PyTorch 2.6, which is not merged into master yet
-  # https://github.com/NixOS/nixpkgs/pull/377785
-  disabled = pythonAtLeast "3.13";
 
   build-system = [
     setuptools
@@ -63,7 +58,7 @@ buildPythonPackage {
       transformers
     ];
     # `deepspeed` is not yet packaged in nixpkgs
-    # ++ lib.optionals (!stdenv.isDarwin) [
+    # ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     #   deepspeed
     # ];
   };

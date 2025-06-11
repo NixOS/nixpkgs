@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "goverter";
-  version = "1.7.0";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "jmattheis";
     repo = "goverter";
     tag = "v${version}";
-    hash = "sha256-VgwmnB6FP7hlUrZpKun38T4K2YSDl9yYuMjdzsEhCF4=";
+    hash = "sha256-ytW52raI4MV6cX/ThR6p9hohtngwBYuvSrtOfjnqwXc=";
   };
 
-  vendorHash = "sha256-uQ1qKZLRwsgXKqSAERSqf+1cYKp6MTeVbfGs+qcdakE=";
+  vendorHash = "sha256-YOtcidMhtQqw/KxY1R3L3XnrhayGQBvHkRdbvYyCQFM=";
 
   subPackages = [ "cmd/goverter" ];
 

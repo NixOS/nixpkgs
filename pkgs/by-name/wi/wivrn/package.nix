@@ -51,13 +51,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "0.24.1";
+  version = "0.25";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aWQcGIrBoDAO7XqWb3dQLBKg5RZYxC7JxwZ+OBSwmEs=";
+    hash = "sha256-dDf+BW0AZMWRlWl0ye5s3Muurz+CiM3U5+bYgaFIT7M=";
   };
 
   monado = applyPatches {
@@ -65,13 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "848a24aa106758fd6c7afcab6d95880c57dbe450";
-      hash = "sha256-+rax9/CG/3y8rLYwGqoWJa4FxH+Z3eREiwhuxDOUzLs=";
+      rev = "2a6932d46dad9aa957205e8a47ec2baa33041076";
+      hash = "sha256-Bus9GTNC4+nOSwN8pUsMaFsiXjlpHYioQfBLxbQEF+0=";
     };
-
-    patches = [
-      ./force-enable-steamvr_lh.patch
-    ];
 
     postPatch = ''
       ${finalAttrs.src}/patches/apply.sh ${finalAttrs.src}/patches/monado/*
@@ -171,8 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
     ];
 
-  postFixup = ''
-    wrapProgram $out/bin/wivrn-dashboard \
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    wrapQtApp "$out/bin/wivrn-dashboard" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
@@ -191,14 +189,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "An OpenXR streaming application to a standalone headset";
+  meta = {
+    description = "OpenXR streaming application to a standalone headset";
     homepage = "https://github.com/WiVRn/WiVRn/";
-    changelog = "https://github.com/WiVRn/WiVRn/releases/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ passivelemon ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/WiVRn/WiVRn/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      ImSapphire
+      passivelemon
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "wivrn-server";
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
 })

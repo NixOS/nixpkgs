@@ -5,8 +5,6 @@
   robloxSupport ? true,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,22 +25,18 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals robloxSupport [
-      openssl
-    ]
-    ++ lib.optionals (robloxSupport && stdenv.hostPlatform.isDarwin) [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = lib.optionals robloxSupport [
+    openssl
+  ];
 
   buildNoDefaultFeatures = !robloxSupport;
 
-  meta = with lib; {
+  meta = {
     description = "Blazing-fast modern Lua linter written in Rust";
     mainProgram = "selene";
     homepage = "https://github.com/kampfkarren/selene";
     changelog = "https://github.com/kampfkarren/selene/blob/${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

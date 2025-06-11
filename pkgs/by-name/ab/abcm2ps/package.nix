@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchfossil,
   docutils,
   pkg-config,
   freetype,
@@ -11,13 +11,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abcm2ps";
-  version = "8.14.15";
+  version = "8.14.17";
 
-  src = fetchFromGitHub {
-    owner = "leesavide";
-    repo = "abcm2ps";
+  src = fetchfossil {
+    url = "https://chiselapp.com/user/moinejf/repository/abcm2ps";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0ZSMKARX16/33sIWR8LOVOFblI/Q+iZgnfVq/xqRMnI=";
+    hash = "sha256-YA36wfj7owKu/KyWgCj6U8EJEh831cFtQj4/JtH6kVg=";
   };
 
   configureFlags = [

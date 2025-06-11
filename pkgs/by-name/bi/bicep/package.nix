@@ -10,13 +10,13 @@
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.34.44";
+  version = "0.36.1";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-vyPRLPTvQkwN7unlIHs6DvpjXnXyW1PDtH9hhIOgN1A=";
+    hash = "sha256-I7FBJhRLzRCsDS4pKJqi/IwuRCpjbJeeYY0BjQ2UiMk=";
   };
 
   patches = [
@@ -56,7 +56,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/Azure/bicep/";
     changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ khaneliman ];
+    maintainers = [ ];
     teams = [ lib.teams.stridtech ];
     mainProgram = "bicep";
   };

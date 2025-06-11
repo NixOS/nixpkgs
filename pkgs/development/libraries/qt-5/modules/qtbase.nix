@@ -88,7 +88,6 @@ let
       throw "Please add a qtPlatformCross entry for ${plat.config}";
 
   # Per https://doc.qt.io/qt-5/macos.html#supported-versions: build SDK = 13.x or 14.x.
-  # SDK 13.x causes weird linking errors on x86_64-darwin, so use 14.x
   darwinVersionInputs = [
     apple-sdk_14
   ];

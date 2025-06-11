@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "openpreserve";
-    repo = pname;
+    repo = "jpylyzer";
     rev = version;
     hash = "sha256-P42qAks8suI/Xknwd8WAkymbGE7RApRa/a11J/V4LA0=";
   };

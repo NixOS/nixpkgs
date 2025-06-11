@@ -22,13 +22,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-of493Gd3vc6/a3l+ft/gQ3lUskdW/8yMa4FrY+BGDd4=";
   };
 
-  # ld64 on darwin doesn't support nested archives and as the nested lib
-  # (libbase64.a) is not required to build so leave it out
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace share/Makefile.am \
-      --replace-fail libpicture_a_LIBADD '#libpicture_a_LIBADD'
-  '';
-
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

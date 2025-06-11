@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "uburuntu";
-    repo = pname;
+    repo = "throttler";
     tag = "v${version}";
     hash = "sha256-fE35zPjBUn4e1VRkkIUMtYJ/+LbnUxnxyfnU+UEPwr4=";
   };
@@ -32,6 +32,11 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [ "tests/" ];
+
+  disabledTestPaths = [
+    # time sensitive tests
+    "tests/test_execution_timer.py"
+  ];
 
   meta = with lib; {
     description = "Zero-dependency Python package for easy throttling with asyncio support";

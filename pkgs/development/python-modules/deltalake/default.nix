@@ -7,7 +7,6 @@
   pyarrow-hotfix,
   openssl,
   stdenv,
-  darwin,
   libiconv,
   pkg-config,
   pytestCheckHook,
@@ -45,8 +44,6 @@ buildPythonPackage rec {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
       libiconv
     ];
 

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   nodejs,
   closurecompiler,
@@ -17,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.73";
+  version = "4.0.8";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-bqxUlxpIH1IAx9RbnaMq4dZW8fy+M/Q02Q7VrW/AKNQ=";
+    npmDepsHash = "sha256-fGlBtXsYOQ5V4/PRPPIpL3nxb+hUAuj9q7Jw0kL7ph0=";
 
     dontBuild = true;
 
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-QlC2k2rhF3/Pz+knnrlBDV8AfHHBSlGr7b9Ae6TNsxY=";
+    hash = "sha256-xiqi3SMmlfV7NaA61QZAW7BFHu9xOVN9QMWwwDInBeE=";
     rev = version;
   };
 
@@ -60,6 +61,17 @@ stdenv.mkDerivation rec {
     (replaceVars ./0001-emulate-clang-sysroot-include-logic.patch {
       resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
     })
+    # The following patches work around a bug where EM_CACHE is not copied with
+    # the correct permissions; the bug will be fixed in the next release (probably 4.0.10).
+    # See also: https://github.com/emscripten-core/emscripten/issues/24404
+    (fetchpatch {
+      url = "https://github.com/emscripten-core/emscripten/commit/99c6e41154f701e423074e33a4fdaf5eea49d073.patch";
+      hash = "sha256-/wkhz08NhbgxsrXd7YFfdCGX6LrS2Ncct8dcwxBMsjY=";
+    })
+    (fetchpatch {
+      url = "https://github.com/emscripten-core/emscripten/commit/f4d358d740a238b67a1d6935e71638519d25afa0.patch";
+      hash = "sha256-hib5ZAN/R2dH+rTv3nYF37+xKZmeboKxnS+5mkht2lM=";
+    })
   ];
 
   buildPhase = ''
@@ -67,8 +79,8 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    # emscripten 3.1.67 requires LLVM tip-of-tree instead of LLVM 18
-    sed -i -e "s/EXPECTED_LLVM_VERSION = 20/EXPECTED_LLVM_VERSION = 19/g" tools/shared.py
+    # emscripten 4 requires LLVM tip-of-tree instead of LLVM 20
+    sed -i -e "s/EXPECTED_LLVM_VERSION = 21/EXPECTED_LLVM_VERSION = 20.1/g" tools/shared.py
 
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py

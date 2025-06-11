@@ -93,6 +93,8 @@ buildPythonPackage rec {
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Issue with creating a temp file in the sandbox
     "tests/wids/test_wids_mmtar.py"
+    # hangs the build *after* the tests
+    "tests/webdataset/test_loaders.py"
   ];
 
   meta = {

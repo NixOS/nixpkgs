@@ -36,7 +36,10 @@
   withSecurityKey ? !stdenv.hostPlatform.isStatic,
   withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey,
   withPAM ? stdenv.hostPlatform.isLinux,
-  dsaKeysSupport ? false,
+  # Attempts to mlock the entire sshd process on startup to prevent swapping.
+  # Currently disabled when PAM support is enabled due to crashes
+  # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1103418
+  withLinuxMemlock ? (stdenv.hostPlatform.isLinux && !withPAM),
   linkOpenssl ? true,
   isNixos ? stdenv.hostPlatform.isLinux,
 }:
@@ -48,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   patches = [
+    # Making openssh pass the LOCALE_ARCHIVE variable to the forked session processes,
+    # so the session 'bash' will receive the proper locale archive, and thus process
+    # UTF-8 properly.
     ./locale_archive.patch
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
@@ -106,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-libedit=yes"
       "--disable-strip"
       (lib.withFeature withPAM "pam")
-      (lib.enableFeature dsaKeysSupport "dsa-keys")
     ]
     ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional (!withSecurityKey) "--disable-security-key"
@@ -119,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ lib.optional withLdns "--with-ldns"
     ++ lib.optional stdenv.hostPlatform.isOpenBSD "--with-bsd-auth"
+    ++ lib.optional withLinuxMemlock "--with-linux-memlock-onfault"
     ++ extraConfigureFlags;
 
   ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} =
@@ -200,6 +206,13 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [
     "sysconfdir=\${out}/etc/ssh"
   ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    for binary in ssh sshd; do
+      $out/bin/$binary -V 2>&1 | grep -P "$(printf '^OpenSSH_\\Q%s\\E,' "$version")"
+    done
+  '';
 
   passthru = {
     inherit withKerberos;

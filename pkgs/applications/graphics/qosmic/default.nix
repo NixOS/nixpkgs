@@ -2,9 +2,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  qmake,
-  wrapQtAppsHook,
-  qtbase,
+  libsForQt5,
   pkg-config,
   lua,
   flam3,
@@ -51,13 +49,13 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
     pkg-config
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     lua
     flam3
     libxml2

@@ -30,6 +30,8 @@ let
 
         alsa = callPackage ../development/ocaml-modules/alsa { };
 
+        ancient = callPackage ../development/ocaml-modules/ancient { };
+
         angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
         angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
@@ -88,6 +90,8 @@ let
 
         benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
+        bencode = callPackage ../development/ocaml-modules/bencode { };
+
         bheap = callPackage ../development/ocaml-modules/bheap { };
 
         bigarray-compat = callPackage ../development/ocaml-modules/bigarray-compat { };
@@ -104,7 +108,7 @@ let
 
         binning = callPackage ../development/ocaml-modules/binning { };
 
-        biocaml = janeStreet_0_15.biocaml;
+        biocaml = throw "biocaml has been removed"; # 2025-06-04
 
         biotk = callPackage ../development/ocaml-modules/biotk { };
 
@@ -118,9 +122,7 @@ let
 
         bitwuzla-cxx = callPackage ../development/ocaml-modules/bitwuzla-cxx { };
 
-        bjack = callPackage ../development/ocaml-modules/bjack {
-          inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreAudio;
-        };
+        bjack = callPackage ../development/ocaml-modules/bjack { };
 
         bls12-381 = callPackage ../development/ocaml-modules/bls12-381 { };
         bls12-381-gen = callPackage ../development/ocaml-modules/bls12-381/gen.nix { };
@@ -145,9 +147,7 @@ let
 
         ca-certs-nss = callPackage ../development/ocaml-modules/ca-certs-nss { };
 
-        cairo2 = callPackage ../development/ocaml-modules/cairo2 {
-          inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
-        };
+        cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
         calendar = callPackage ../development/ocaml-modules/calendar { };
 
@@ -205,6 +205,8 @@ let
         carton-lwt = callPackage ../development/ocaml-modules/carton/lwt.nix {
           git-binary = pkgs.git;
         };
+
+        cbor = callPackage ../development/ocaml-modules/cbor { };
 
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
@@ -329,6 +331,26 @@ let
         dates_calc = callPackage ../development/ocaml-modules/dates_calc { };
 
         dbf = callPackage ../development/ocaml-modules/dbf { };
+
+        decoders = callPackage ../development/ocaml-modules/decoders { };
+
+        decoders-bencode = callPackage ../development/ocaml-modules/decoders-bencode { };
+
+        decoders-cbor = callPackage ../development/ocaml-modules/decoders-cbor { };
+
+        decoders-ezjsonm = callPackage ../development/ocaml-modules/decoders-ezjsonm { };
+
+        decoders-ezxmlm = callPackage ../development/ocaml-modules/decoders-ezxmlm { };
+
+        decoders-jsonaf = callPackage ../development/ocaml-modules/decoders-jsonaf { };
+
+        decoders-jsonm = callPackage ../development/ocaml-modules/decoders-jsonm { };
+
+        decoders-msgpck = callPackage ../development/ocaml-modules/decoders-msgpck { };
+
+        decoders-sexplib = callPackage ../development/ocaml-modules/decoders-sexplib { };
+
+        decoders-yojson = callPackage ../development/ocaml-modules/decoders-yojson { };
 
         decompress = callPackage ../development/ocaml-modules/decompress { };
 
@@ -561,45 +583,24 @@ let
         ffmpeg = callPackage ../development/ocaml-modules/ffmpeg { };
         ffmpeg-av = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-av.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
         };
         ffmpeg-avcodec = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avcodec.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
         };
         ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks)
-            AppKit
-            AudioToolbox
-            AVFoundation
-            Cocoa
-            CoreImage
-            ForceFeedback
-            OpenGL
-            VideoToolbox
-            ;
         };
         ffmpeg-avfilter = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avfilter.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks)
-            AppKit
-            CoreImage
-            OpenGL
-            VideoToolbox
-            ;
         };
         ffmpeg-avutil = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avutil.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
         };
         ffmpeg-swresample = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swresample.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks) VideoToolbox;
         };
         ffmpeg-swscale = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swscale.nix {
           ffmpeg = pkgs.ffmpeg_6;
-          inherit (pkgs.darwin.apple_sdk.frameworks) VideoToolbox;
         };
 
         fiber = callPackage ../development/ocaml-modules/fiber { };
@@ -717,9 +718,7 @@ let
           inherit (pkgs) gsl;
         };
 
-        gstreamer = callPackage ../development/ocaml-modules/gstreamer {
-          inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Foundation;
-        };
+        gstreamer = callPackage ../development/ocaml-modules/gstreamer { };
 
         ### H ###
 
@@ -1000,15 +999,6 @@ let
                   piqi-ocaml = self.piqi-ocaml.override { inherit piqi; };
                 };
 
-              biocaml =
-                let
-                  angstrom = self.angstrom.override { inherit ppx_let; };
-                in
-                callPackage ../development/ocaml-modules/biocaml {
-                  uri = self.uri.override { inherit angstrom; };
-                  cfstream = self.cfstream.override { inherit core_kernel; };
-                };
-
               ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
             }
           )).overrideScope
@@ -1017,6 +1007,8 @@ let
         javalib = callPackage ../development/ocaml-modules/javalib { };
 
         jingoo = callPackage ../development/ocaml-modules/jingoo { };
+
+        jose = callPackage ../development/ocaml-modules/jose { };
 
         js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
@@ -1088,9 +1080,7 @@ let
 
         lablgtk3-sourceview3 = callPackage ../development/ocaml-modules/lablgtk3/sourceview3.nix { };
 
-        labltk = callPackage ../development/ocaml-modules/labltk {
-          inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
-        };
+        labltk = callPackage ../development/ocaml-modules/labltk { };
 
         lacaml = callPackage ../development/ocaml-modules/lacaml { };
 
@@ -1174,6 +1164,8 @@ let
 
         lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
 
+        lwt_eio = callPackage ../development/ocaml-modules/lwt_eio { };
+
         lwt-exit = callPackage ../development/ocaml-modules/lwt-exit { };
 
         lwt_log = callPackage ../development/ocaml-modules/lwt_log { };
@@ -1220,6 +1212,8 @@ let
         mec = callPackage ../development/ocaml-modules/mec { };
 
         melange = callPackage ../development/tools/ocaml/melange { };
+
+        melange-json = callPackage ../development/ocaml-modules/melange-json { };
 
         memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
@@ -1307,14 +1301,12 @@ let
 
         mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { };
 
-        mirage-crypto-rng-async = callPackage ../development/ocaml-modules/mirage-crypto/rng-async.nix { };
-
-        mirage-crypto-rng-eio = callPackage ../development/ocaml-modules/mirage-crypto/rng-eio.nix { };
-
-        mirage-crypto-rng-lwt = callPackage ../development/ocaml-modules/mirage-crypto/rng-lwt.nix { };
-
         mirage-crypto-rng-mirage =
           callPackage ../development/ocaml-modules/mirage-crypto/rng-mirage.nix
+            { };
+
+        mirage-crypto-rng-miou-unix =
+          callPackage ../development/ocaml-modules/mirage-crypto/rng-miou-unix.nix
             { };
 
         mirage-device = callPackage ../development/ocaml-modules/mirage-device { };
@@ -1450,9 +1442,7 @@ let
 
         ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
 
-        ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt {
-          inherit (pkgs.darwin.apple_sdk.frameworks) Foundation AppKit;
-        };
+        ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
 
         ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
 
@@ -1496,7 +1486,7 @@ let
 
         ocaml-version = callPackage ../development/ocaml-modules/ocaml-version { };
 
-        ocaml-vdom = callPackage ../development/ocaml-modules/ocaml-vdom { };
+        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
 
         ocamlbuild =
           if lib.versionOlder "4.03" ocaml.version then
@@ -1613,6 +1603,8 @@ let
         ogg = callPackage ../development/ocaml-modules/ogg { };
 
         ohex = callPackage ../development/ocaml-modules/ohex { };
+
+        oidc = callPackage ../development/ocaml-modules/oidc { };
 
         ojs = callPackage ../development/ocaml-modules/gen_js_api/ojs.nix { };
 
@@ -2083,15 +2075,7 @@ let
 
         trie = callPackage ../development/ocaml-modules/trie { };
 
-        tsdl = callPackage ../development/ocaml-modules/tsdl {
-          inherit (pkgs.darwin.apple_sdk.frameworks)
-            AudioToolbox
-            Cocoa
-            CoreAudio
-            CoreVideo
-            ForceFeedback
-            ;
-        };
+        tsdl = callPackage ../development/ocaml-modules/tsdl { };
 
         tsdl-image = callPackage ../development/ocaml-modules/tsdl-image { };
 
@@ -2110,6 +2094,8 @@ let
         type_eq = callPackage ../development/ocaml-modules/type_eq { };
 
         type_id = callPackage ../development/ocaml-modules/type_id { };
+
+        tyre = callPackage ../development/ocaml-modules/tyre { };
 
         tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
@@ -2156,6 +2142,8 @@ let
         ### V ###
 
         vchan = callPackage ../development/ocaml-modules/vchan { };
+
+        vdom = callPackage ../development/ocaml-modules/vdom { };
 
         vector = callPackage ../development/ocaml-modules/vector { };
 

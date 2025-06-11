@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "fabfuel";
-    repo = pname;
+    repo = "circuitbreaker";
     tag = version;
     hash = "sha256-7BpYGhha0PTYzsE9CsN4KxfJW/wm2i6V+uAeamBREBQ=";
   };

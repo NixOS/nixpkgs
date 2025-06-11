@@ -12,13 +12,13 @@ let
     let
       self = {
         inherit pname;
-        version = "0-unstable-2023-11-25";
+        version = "0-unstable-2025-05-08";
 
         src = fetchFromGitHub {
           owner = "Eisa01";
           repo = "mpv-scripts";
-          rev = "48d68283cea47ff8e904decc9003b3abc3e2123e";
-          hash = "sha256-edJfotlC5T8asqPIygR67BEWjP4i54Wx54StLfjpc48=";
+          rev = "4701419f9b9063a5425f3942ec62cc029599430d";
+          hash = "sha256-QXpuqViVXIGCDbX0OVjDW7E67odZTMbk1iXfz7bBasU=";
           # avoid downloading screenshots and videos
           sparseCheckout = [
             "scripts/"

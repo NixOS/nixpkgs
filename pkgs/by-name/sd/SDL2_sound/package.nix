@@ -9,15 +9,8 @@
   libmikmod,
   libvorbis,
   timidity,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks)
-    AudioToolbox
-    CoreAudio
-    ;
-in
 stdenv.mkDerivation rec {
   pname = "SDL2_sound";
   version = "2.0.1";
@@ -42,24 +35,20 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSDLSOUND_DECODER_MIDI=1" ];
 
-  buildInputs =
-    [
-      SDL2
-      flac
-      libmikmod
-      libvorbis
-      timidity
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioToolbox
-      CoreAudio
-    ];
+  buildInputs = [
+    SDL2
+    flac
+    libmikmod
+    libvorbis
+    timidity
+  ];
 
   meta = with lib; {
     description = "SDL2 sound library";
     mainProgram = "playsound";
     platforms = platforms.unix;
     license = licenses.zlib;
+    teams = [ lib.teams.sdl ];
     homepage = "https://www.icculus.org/SDL_sound/";
   };
 }

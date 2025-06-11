@@ -1,6 +1,5 @@
 {
   alsa-lib,
-  autoPatchelfHook,
   cargo,
   dbus,
   fetchFromGitHub,
@@ -36,39 +35,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    sourceRoot = "source/${finalAttrs.cargoRoot}";
+    inherit (finalAttrs) src cargoRoot;
     hash = "sha256-T79G2bShJuFRfaCqG3IDHqW0s68yAdGyv58kdDYg6kg=";
   };
   cargoRoot = "extensions";
 
   nativeBuildInputs = [
-    autoPatchelfHook
     cargo
     godot_4_4
-    godot_4_4.export-templates-bin
     pkg-config
     rustPlatform.cargoSetupHook
-  ];
-
-  runtimeDependencies = [
-    alsa-lib
-    dbus
-    gamescope
-    hwdata
-    libGL
-    libpulseaudio
-    mesa-demos
-    udev
-    upower
-    vulkan-loader
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXres
-    xorg.libXtst
   ];
 
   dontStrip = withDebug;
@@ -81,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       GODOT = lib.getExe godot_4_4;
       GODOT_VERSION = lib.elemAt versionAndRelease 0;
       GODOT_RELEASE = lib.elemAt versionAndRelease 1;
-      EXPORT_TEMPLATE = "${godot_4_4.export-templates-bin}";
+      EXPORT_TEMPLATE = "${godot_4_4.export-template}/share/godot/export_templates";
       BUILD_TYPE = "${finalAttrs.buildType}";
     };
 
@@ -92,15 +68,26 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     # Godot looks for export templates in HOME
     export HOME=$(mktemp -d)
-    mkdir -p $HOME/.local/share/godot/export_templates
-    ln -s "${godot_4_4.export-templates-bin}" "$HOME/.local/share/godot/export_templates/$GODOT_VERSION.$GODOT_RELEASE"
+    mkdir -p $HOME/.local/share/godot/
+    ln -s "$EXPORT_TEMPLATE" "$HOME"/.local/share/godot/
   '';
 
-  postInstall = ''
-    # The Godot binary looks in "../lib" for gdextensions
-    mkdir -p $out/share/lib
-    mv $out/share/opengamepadui/*.so $out/share/lib
-  '';
+  postInstall =
+    let
+      runtimeDependencies = [
+        gamescope
+        hwdata
+        mesa-demos
+        udev
+        upower
+      ];
+    in
+    ''
+      # The Godot binary looks in "../lib" for gdextensions
+      mkdir -p $out/share/lib
+      mv $out/share/opengamepadui/*.so $out/share/lib
+      patchelf --add-rpath ${lib.makeLibraryPath runtimeDependencies} $out/share/lib/*.so
+    '';
 
   passthru.updateScript = nix-update-script { };
 

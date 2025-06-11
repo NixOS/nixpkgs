@@ -6,7 +6,6 @@
   openssl,
   pkg-config,
   libiconv,
-  darwin,
   protobuf,
 }:
 
@@ -27,8 +26,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl.dev ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   nativeBuildInputs = [
@@ -36,11 +33,11 @@ rustPlatform.buildRustPackage rec {
     protobuf
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Nostr relay written in Rust";
     homepage = "https://sr.ht/~gheartsfield/nostr-rs-relay/";
     changelog = "https://github.com/scsibug/nostr-rs-relay/releases/tag/${version}";
-    maintainers = with maintainers; [ jurraca ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ jurraca ];
+    license = lib.licenses.mit;
   };
 }

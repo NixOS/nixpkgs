@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "2.3.2";
+  version = "2.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
     tag = "v${version}";
-    hash = "sha256-odO4DSuLNyGndj+n++DupAyOUywYJtnmkO0lUM1xS2I=";
+    hash = "sha256-NUs544J/pC2QNyR2aIlac2P06so7JmB2P6FB/gmR7wI=";
   };
 
   build-system = [ hatchling ];

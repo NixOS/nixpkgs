@@ -9,8 +9,6 @@
 
   # native darwin dependencies
   libiconv,
-  Security,
-  SystemConfiguration,
 
   # tests
   pytestCheckHook,
@@ -37,12 +35,11 @@ buildPythonPackage rec {
   # call `cargo build --release` in bindings/python and copy the
   # resulting lock file
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit pname version src;
     postPatch = ''
       cd bindings/python
       ln -s ${./Cargo.lock} Cargo.lock
     '';
-    name = "${pname}-${version}";
     hash = "sha256-4zi29ZdALummwcWxYqDDEPAjKptmLqyYUJzWMrEK4os=";
   };
 
@@ -53,8 +50,6 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Security
-    SystemConfiguration
   ];
 
   pythonImportsCheck = [ "css_inline" ];

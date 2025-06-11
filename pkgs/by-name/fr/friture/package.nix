@@ -68,7 +68,7 @@ python3Packages.buildPythonApplication rec {
     platforms = platforms.linux; # fails on Darwin
     maintainers = with maintainers; [
       laikq
-      alyaeanyx
+      pentane
     ];
   };
 }

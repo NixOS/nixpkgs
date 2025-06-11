@@ -7,7 +7,7 @@
   makeWrapper,
 }:
 let
-  version = "4.1.4";
+  version = "4.1.8";
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "tailwindcss has not been packaged for ${system} yet.";
 
@@ -22,10 +22,10 @@ let
 
   hash =
     {
-      aarch64-darwin = "sha256-x7piRWxtlEF3XJDKbwo9+AD4LO3k6SOJ+TRTbejPUuk=";
-      aarch64-linux = "sha256-oUU371GpnBpVw3ZLc7gWgdhP91GXrXZvmmYo1hDPJ08=";
-      x86_64-darwin = "sha256-zQ4adIfAuRip9LLSLTGHUhgeiRi4Z1cLQJCC9pR1zYg=";
-      x86_64-linux = "sha256-D6i7uL7KckL2RVvwG7410wg4ePYwjsSkzsMK7Ra8pG0=";
+      aarch64-darwin = "sha256-GeUnkdNW3VnbaCdK42pYebqwzp2sI8x7Dxn8e3wdN6I=";
+      aarch64-linux = "sha256-KKd9Hlmw5FtBaDweOUdiH9/nP2iVsF23w09j8/SJjo0=";
+      x86_64-darwin = "sha256-SmyyYNdcS9ygck+8w7I6WttScVrW14WVRjyGEoyhwyk=";
+      x86_64-linux = "sha256-j4TOgQvf8iXlmXgdHi2qgrQoIikCHIZ6cbQZ9Z+aqDY=";
     }
     .${system} or throwSystem;
 in

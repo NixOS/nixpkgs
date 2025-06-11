@@ -42,32 +42,33 @@
 
   # linux installation
   rsync,
+  commandLineArgs ? "",
 
   # darwin build
   undmg,
 }:
 let
   pname = "cursor";
-  version = "0.49.6";
+  version = "1.0.0";
 
   inherit (stdenvNoCC) hostPlatform;
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/linux/x64/Cursor-0.49.6-x86_64.AppImage";
-      hash = "sha256-WH4/Zw0VJmRGyRzMlkThkhZ4fGysMKBUSIPCTsyGS4w=";
+      url = "https://downloads.cursor.com/production/53b99ce608cba35127ae3a050c1738a959750865/linux/x64/Cursor-1.0.0-x86_64.AppImage";
+      hash = "sha256-HJiT3aDB66K2slcGJDC21+WhK/kv4KCKVZgupbfmLG0=";
     };
     aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/linux/arm64/Cursor-0.49.6-aarch64.AppImage";
-      hash = "sha256-cpNoff6mDRkT2RicaDlxzqVP9BNe6UEGgJVHr1xMiv0=";
+      url = "https://downloads.cursor.com/production/53b99ce608cba35127ae3a050c1738a959750865/linux/arm64/Cursor-1.0.0-aarch64.AppImage";
+      hash = "sha256-/F+OUD+sjnIt2ishusi7F/W1kK/n7hwL7Bz1cO3u+x4=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/darwin/x64/Cursor-darwin-x64.dmg";
-      hash = "sha256-fAaLY9YTIuNThFl5OsIMHavy2xwDgYooL4xTSp4Cwzw=";
+      url = "https://downloads.cursor.com/production/53b99ce608cba35127ae3a050c1738a959750865/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-7JTgauy+vdoaPOtbYjhSCR+ZtVwzRYKHVelpnvS5oKw=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/0781e811de386a0c5bcb07ceb259df8ff8246a52/darwin/arm64/Cursor-darwin-arm64.dmg";
-      hash = "sha256-DNN2+gfs9u0tZmh75J258d2TL6ErIYludMgPJZcgfb8=";
+      url = "https://downloads.cursor.com/production/53b99ce608cba35127ae3a050c1738a959750865/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-kbSN4+ozVGVAGLqEuaDnWBNfzmFHYdAvbOsCb/KTpe8=";
     };
   };
 
@@ -162,7 +163,8 @@ stdenvNoCC.mkDerivation {
 
       wrapProgram $out/bin/cursor \
         --add-flags "--update=false" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=x11 --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update" \
+        --add-flags ${lib.escapeShellArg commandLineArgs}
     ''}
 
     ${lib.optionalString hostPlatform.isDarwin ''
@@ -188,8 +190,8 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      sarahec
       aspauldingcode
+      prince213
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cursor";

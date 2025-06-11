@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "smartHomeHub";
   domain = "smartir";
-  version = "1.18.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "smartHomeHub";
     repo = "SmartIR";
     tag = version;
-    hash = "sha256-Sy1wxVUApKWm9TlDia2Gwd+mIi7WbDkzJrAtyb0tTbM=";
+    hash = "sha256-gi5xlBOY6ek5roQKNqL7I0jrmJNPrxHHwEqOB/n2Itk=";
   };
 
   dependencies = [

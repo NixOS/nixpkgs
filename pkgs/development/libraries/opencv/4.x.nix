@@ -87,7 +87,6 @@
   enabledModules ? [ ],
 
   bzip2,
-  apple-sdk_14, # earlier SDKs cause linking issues on x86_64
   callPackage,
 }@inputs:
 
@@ -275,8 +274,7 @@ let
   #https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
 
-  inherit (cudaPackages) cudaFlags;
-  inherit (cudaFlags) cmakeCudaArchitecturesString cudaCapabilities;
+  inherit (cudaPackages.flags) cmakeCudaArchitecturesString cudaCapabilities;
 
 in
 
@@ -415,7 +413,6 @@ effectiveStdenv.mkDerivation {
     ]
     ++ optionals effectiveStdenv.hostPlatform.isDarwin [
       bzip2
-      apple-sdk_14
     ]
     ++ optionals enableDocs [
       doxygen
@@ -588,9 +585,13 @@ effectiveStdenv.mkDerivation {
       mkdir -p "$cxxdev/nix-support"
       echo "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
     ''
+    # hard-wire CUDA_TOOLKIT_ROOT_DIR so FindCUDA sees the toolkit
     # remove the requirement that the exact same version of CUDA is used in packages
-    # consuming OpenCV's CMakes files
+    #   consuming OpenCV's CMakes files
     + optionalString enableCuda ''
+      sed -i '1s;^;set(CUDA_TOOLKIT_ROOT_DIR ${cudaPackages.cudatoolkit})\n;' \
+        "$out/lib/cmake/opencv4/OpenCVConfig.cmake"
+
       substituteInPlace "$out/lib/cmake/opencv4/OpenCVConfig.cmake" \
         --replace-fail \
           'find_host_package(CUDA ''${OpenCV_CUDA_VERSION} EXACT REQUIRED)' \

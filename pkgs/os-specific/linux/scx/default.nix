@@ -2,7 +2,6 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchpatch2,
 }:
 let
   scx-common = rec {

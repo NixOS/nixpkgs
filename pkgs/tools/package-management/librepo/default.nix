@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  python,
+  python3,
   pkg-config,
   libxml2,
   glib,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python
+    python3
     libxml2
     glib
     openssl
@@ -59,10 +59,10 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  cmakeFlags = [ "-DPYTHON_DESIRED=${lib.substring 0 1 python.pythonVersion}" ];
+  cmakeFlags = [ "-DPYTHON_DESIRED=${lib.substring 0 1 python3.pythonVersion}" ];
 
   postFixup = ''
-    moveToOutput "lib/${python.libPrefix}" "$py"
+    moveToOutput "lib/${python3.libPrefix}" "$py"
   '';
 
   passthru.updateScript = nix-update-script { };

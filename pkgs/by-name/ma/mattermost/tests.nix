@@ -140,6 +140,10 @@ mattermost.overrideAttrs (
         "TestElasticSearchIndexerJobIsEnabled"
         "TestElasticSearchIndexerPending"
 
+        # Broken in the sandbox.
+        "TestVersion"
+        "TestRunServerNoSystemd"
+
         # Appear to be broken.
         "TestSessionStore/MySQL/SessionGetWithDeviceId"
         "TestSessionStore/MySQL/GetMobileSessionMetadata"

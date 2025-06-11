@@ -7,15 +7,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "fleet";
-  version = "4.67.2";
+  version = "4.68.1";
 
   src = fetchFromGitHub {
     owner = "fleetdm";
     repo = "fleet";
     tag = "fleet-v${finalAttrs.version}";
-    hash = "sha256-iMLD9M4EzXHRxvc5px9UcXEdjRIO1jm+hYwhaYaFON8=";
+    hash = "sha256-XhnvhWjaU+McklFTsAhGEcSA+UkrYy8DgJ8ADE66U3o=";
   };
-  vendorHash = "sha256-UkdHwjCcxNX7maI4QClLm5WWaLXwGlEu80eZXVoYy60=";
+  vendorHash = "sha256-ZdkpgZbXchDp5kiEgCsSsd3/ltltSRjOuTPOhiBEloc=";
 
   subPackages = [
     "cmd/fleet"

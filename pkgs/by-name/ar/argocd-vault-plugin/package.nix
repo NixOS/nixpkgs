@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "argoproj-labs";
-    repo = pname;
+    repo = "argocd-vault-plugin";
     rev = "v${version}";
     hash = "sha256-rWNR4GVivuEprdX/xhwk/9SReeJ19UWDWx8Bf8z6CTI=";
   };
@@ -36,12 +36,12 @@ buildGoModule rec {
     version = "argocd-vault-plugin v${version} (unknown) BuildDate: 1970-01-01T00:00:00Z";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://argocd-vault-plugin.readthedocs.io";
     changelog = "https://github.com/argoproj-labs/argocd-vault-plugin/releases/tag/v${version}";
     description = "Argo CD plugin to retrieve secrets from Secret Management tools and inject them into Kubernetes secrets";
     mainProgram = "argocd-vault-plugin";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ urandom ];
   };
 }

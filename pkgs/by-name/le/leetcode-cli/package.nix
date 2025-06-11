@@ -8,7 +8,6 @@
   dbus,
   sqlite,
   stdenv,
-  darwin,
   testers,
   leetcode-cli,
 }:
@@ -30,16 +29,11 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      openssl
-      dbus
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+    dbus
+    sqlite
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd leetcode \

@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  darwin, # Accelerate
   llvmPackages, # openmp
   withMkl ? false,
   mkl,
@@ -80,11 +79,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       llvmPackages.openmp
-      darwin.apple_sdk.frameworks.Accelerate
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.CoreVideo
     ];
 
   passthru.tests = {
@@ -104,6 +98,6 @@ stdenv.mkDerivation rec {
       hexa
       misuzu
     ];
-    broken = (lib.versionOlder cudaPackages.cudaVersion "11.4") || !(withCuDNN -> withCUDA);
+    broken = (cudaPackages.cudaOlder "11.4") || !(withCuDNN -> withCUDA);
   };
 }

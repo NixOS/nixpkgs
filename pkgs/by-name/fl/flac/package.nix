@@ -6,12 +6,12 @@
   lib,
   libogg,
   nix-update-script,
-  pandoc,
+  buildPackages,
   pkg-config,
   stdenv,
   versionCheckHook,
+  enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "flac";
   version = "1.5.0";
@@ -23,17 +23,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-B6XRai5UOAtY/7JXNbI3YuBgazi1Xd2ZOs6vvLq9LIs=";
   };
 
+  hardeningDisable = [ "trivialautovarinit" ];
+
   nativeBuildInputs = [
     cmake
     doxygen
     graphviz
-    pandoc
     pkg-config
-  ];
+  ] ++ lib.optional enableManpages buildPackages.pandoc;
 
   buildInputs = [ libogg ];
 
-  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isStatic) [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags =
+    lib.optionals (!stdenv.hostPlatform.isStatic) [
+      "-DBUILD_SHARED_LIBS=ON"
+    ]
+    ++ lib.optionals (!enableManpages) [
+      "-DINSTALL_MANPAGES=OFF"
+    ];
 
   CFLAGS = [
     "-O3"
@@ -44,13 +51,16 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./package.patch ];
   doCheck = true;
 
-  outputs = [
-    "bin"
-    "dev"
-    "doc"
-    "man"
-    "out"
-  ];
+  outputs =
+    [
+      "bin"
+      "dev"
+      "doc"
+      "out"
+    ]
+    ++ lib.optionals enableManpages [
+      "man"
+    ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

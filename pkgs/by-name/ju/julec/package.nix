@@ -1,43 +1,43 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
 }:
 
 let
   irFile =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
+    if clangStdenv.hostPlatform.system == "x86_64-linux" then
       "linux-amd64.cpp"
-    else if stdenv.hostPlatform.system == "aarch64-linux" then
+    else if clangStdenv.hostPlatform.system == "aarch64-linux" then
       "linux-arm64.cpp"
-    else if stdenv.hostPlatform.system == "i686-linux" then
+    else if clangStdenv.hostPlatform.system == "i686-linux" then
       "linux-i386.cpp"
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
+    else if clangStdenv.hostPlatform.system == "x86_64-darwin" then
       "darwin-amd64.cpp"
-    else if stdenv.hostPlatform.system == "aarch64-darwin" then
+    else if clangStdenv.hostPlatform.system == "aarch64-darwin" then
       "darwin-arm64.cpp"
     else
-      throw "Unsupported platform: ${stdenv.hostPlatform.system}";
+      throw "Unsupported platform: ${clangStdenv.hostPlatform.system}";
 in
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "julec";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "julelang";
     repo = "jule";
     tag = "jule${finalAttrs.version}";
     name = "jule-${finalAttrs.version}";
-    hash = "sha256-hFWoGeTmfXIPcICWXa5W36QDOk3yB7faORxFaM9shcQ=";
+    hash = "sha256-gFlca9XdRNv2CI3jfMiWejcmGGzabP0VGs4vlvFs72o=";
   };
 
   irSrc = fetchFromGitHub {
     owner = "julelang";
     repo = "julec-ir";
     # revision determined by the upstream commit hash in julec-ir/README.md
-    rev = "a274782922e4275c4a036d63acffd3369dbc382f";
+    rev = "4a3bf4fc84b53aa607855df6635d95d3e310f7ad";
     name = "jule-ir-${finalAttrs.version}";
-    hash = "sha256-TXMSXTGTzZntPUhT6QTmn3nD2k855ZoAW9aQWyhrE8s=";
+    hash = "sha256-Wl5AYRGYcQpj/R9nynxNC5r1HK1EmImwkLokdZfp9sE=";
   };
 
   dontConfigure = true;
@@ -58,16 +58,20 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    echo "Building ${finalAttrs.meta.mainProgram} v${finalAttrs.version} for ${stdenv.hostPlatform.system}..."
+    echo "Building ${finalAttrs.meta.mainProgram}-bootstrap v${finalAttrs.version} for ${clangStdenv.hostPlatform.system}..."
     mkdir -p bin
-    ${stdenv.cc.targetPrefix}c++ ir.cpp \
+    ${clangStdenv.cc.targetPrefix}c++ ir.cpp \
       --std=c++17 \
       -Wno-everything \
-      -O3 \
-      -flto \
+      -fwrapv \
+      -ffloat-store \
       -DNDEBUG \
       -fomit-frame-pointer \
-      -o "bin/${finalAttrs.meta.mainProgram}"
+      -fno-strict-aliasing \
+      -o "bin/${finalAttrs.meta.mainProgram}-bootstrap"
+
+    echo "Building ${finalAttrs.meta.mainProgram} v${finalAttrs.version} for ${clangStdenv.hostPlatform.system}..."
+    bin/${finalAttrs.meta.mainProgram}-bootstrap --opt L2 -p -o "bin/${finalAttrs.meta.mainProgram}" "src/${finalAttrs.meta.mainProgram}"
 
     runHook postBuild
   '';

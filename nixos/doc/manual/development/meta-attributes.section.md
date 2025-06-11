@@ -22,7 +22,7 @@ file.
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ericsagnes ];
+    maintainers = with lib.maintainers; [ ];
     doc = ./default.md;
     buildDocsInSandbox = true;
   };

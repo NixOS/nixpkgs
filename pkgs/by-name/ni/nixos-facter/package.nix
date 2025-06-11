@@ -23,13 +23,13 @@ let
 in
 buildGoModule rec {
   pname = "nixos-facter";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
     rev = "v${version}";
-    hash = "sha256-QD9b3r91ukGbAg+ZWj9cdBsXb6pl3wlVgEY3zF+tDQI=";
+    hash = "sha256-SuD6FTyCGT+H5uEPkPmBSI00R87weAoO5xZHPJElSu8=";
   };
 
   vendorHash = "sha256-A7ZuY8Gc/a0Y8O6UG2WHWxptHstJOxi4n9F8TY6zqiw=";

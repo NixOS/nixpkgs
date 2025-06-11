@@ -11,7 +11,6 @@
   # libraries
   brotli,
   bzip2,
-  darwin,
   gpgme,
   libhsts,
   libidn2,
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "gnuwget";
-    repo = pname;
+    repo = "wget2";
     tag = "v${version}";
     hash = "sha256-0tOoStZHr5opehFmuQdFRPYvOv8IMrDTBNFtoweY3VM=";
   };
@@ -76,9 +75,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals sslSupport [
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
     ];
 
   # TODO: include translation files

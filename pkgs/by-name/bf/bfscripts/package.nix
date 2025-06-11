@@ -34,13 +34,13 @@ let
     "bfup"
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bfscripts";
   version = "unstable-2023-05-15";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
-    repo = pname;
+    repo = "bfscripts";
     rev = "1da79f3ece7cdf99b2571c00e8b14d2e112504a4";
     hash = "sha256-pTubrnZKEFmtAj/omycFYeYwrCog39zBDEszoCrsQNQ=";
   };

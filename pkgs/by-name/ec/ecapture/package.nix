@@ -22,13 +22,13 @@
 
 buildGoModule rec {
   pname = "ecapture";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "gojue";
     repo = "ecapture";
     tag = "v${version}";
-    hash = "sha256-ZBuilCZKKc2jCLvpvESgJ2vC6awJiImoqTjospoxJdw=";
+    hash = "sha256-mYnAa4zh7MqTTS2iU97YOhRbrCLd8C7D5furHNSO0F8=";
     fetchSubmodules = true;
   };
 
@@ -113,7 +113,7 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  vendorHash = "sha256-3ry4eLe6W9YFFH7TdQm87CPvj8X/63XNC48A6EXqoDs=";
+  vendorHash = "sha256-B2Jq6v1PibZ1P9OylFsVp/ULZa/ne5T+vCsBWWrjW/4=";
 
   passthru.updateScript = nix-update-script { };
 

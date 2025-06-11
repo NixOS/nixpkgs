@@ -16,7 +16,6 @@ in
   perl,
   runCommand,
   zlib,
-  CoreServices,
 
   enableGold ? withGold stdenv.targetPlatform,
   enableGoldDefault ? false,
@@ -122,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     zlib
     gettext
-  ] ++ lib.optionals hostPlatform.isDarwin [ CoreServices ];
+  ];
 
   inherit noSysDirs;
 

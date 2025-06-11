@@ -148,14 +148,15 @@ switch arg [
       in
       {
         version = rv.version or v;
-        src = rv.src or fetcher (
-          location
-          // {
-            rev = releaseRev v;
-            artifact = releaseArtifact v;
-          }
-          // rv
-        );
+        src =
+          rv.src or (fetcher (
+            location
+            // {
+              rev = releaseRev v;
+              artifact = releaseArtifact v;
+            }
+            // rv
+          ));
       };
   }
   {

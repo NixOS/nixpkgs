@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   restic,
@@ -9,15 +9,15 @@
   resticprofile,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "resticprofile";
-  version = "0.29.1";
+  version = "0.30.1";
 
   src = fetchFromGitHub {
     owner = "creativeprojects";
     repo = "resticprofile";
     tag = "v${version}";
-    hash = "sha256-6s58rI+YMu6sCV8UsG9GOdF46Br3cMWIUqciVd2d4dY=";
+    hash = "sha256-Pg7rqllNRc/pN5VSgy7KiHQ7V7xOxiGM5fk5Y6+OBjw=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ buildGo123Module rec {
 
   '';
 
-  vendorHash = "sha256-N39zPGos5EYRXGylsHFSjJ4EcQ9jahBOGV8xn7fF7gc=";
+  vendorHash = "sha256-M9S6F/Csz7HnOq8PSWjpENKm1704kVx9zDts1ieraTE=";
 
   ldflags = [
     "-X main.version=${version}"
@@ -44,14 +44,16 @@ buildGo123Module rec {
   nativeBuildInputs = [ installShellFiles ];
 
   preCheck = ''
-    rm battery_test.go # tries to get battery data
-    rm update_test.go # tries to use network
+    rm batt/battery_test.go # tries to get battery data
+    rm commands_test.go # tries to use systemctl
+    rm config/path_test.go # expects normal environment
     rm lock/lock_test.go # needs ping
     rm preventsleep/caffeinate_test.go # tries to communicate with dbus
     rm priority/ioprio_test.go # tries to set nice(2) IO priority
     rm restic/downloader_test.go # tries to use network
-    rm schedule/schedule_test.go # tries to use systemctl
-    rm config/path_test.go # expects normal environment
+    rm schedule/*_test.go # tries to use systemctl
+    rm update_test.go # tries to use network
+    rm user/user_test.go # expects normal environment
     rm util/tempdir_test.go # expects normal environment
   '';
 

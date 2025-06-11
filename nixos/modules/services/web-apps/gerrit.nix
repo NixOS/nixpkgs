@@ -68,7 +68,7 @@ in
 
       package = mkPackageOption pkgs "gerrit" { };
 
-      jvmPackage = mkPackageOption pkgs "jre_headless" { };
+      jvmPackage = mkPackageOption pkgs "jdk21_headless" { };
 
       jvmOpts = mkOption {
         type = types.listOf types.str;
@@ -261,6 +261,7 @@ in
   meta.maintainers = with lib.maintainers; [
     edef
     zimbatm
+    felixsinger
   ];
   # uses attributes of the linked package
   meta.buildDocsInSandbox = false;

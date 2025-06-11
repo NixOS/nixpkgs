@@ -2,7 +2,6 @@
   lib,
   SDL2,
   curl,
-  darwin,
   docbook_xml_dtd_45,
   docbook_xsl,
   fetchurl,
@@ -62,9 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
       libGLU
       libX11
       libXpm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libobjc
     ];
 
   configureFlags =

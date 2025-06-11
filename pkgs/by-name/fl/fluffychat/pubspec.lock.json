@@ -1008,11 +1008,11 @@
       "dependency": "direct main",
       "description": {
         "name": "go_router",
-        "sha256": "f02fd7d2a4dc512fec615529824fdd217fecb3a3d3de68360293a551f21634b3",
+        "sha256": "0b1e06223bee260dee31a171fb1153e306907563a0b0225e8c1733211911429a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "14.8.1"
+      "version": "15.1.2"
     },
     "gtk": {
       "dependency": "transitive",
@@ -1434,11 +1434,11 @@
       "dependency": "direct main",
       "description": {
         "name": "matrix",
-        "sha256": "829f225f74b2a8c83b6b1f960004ecf742215d9ee9d8cc9e0f1974ff8e281f0f",
+        "sha256": "7d15fdbc760be7e40c58bb65e03baa8241b1e31db2bc67dab61883aabc083a85",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.39.1"
+      "version": "0.40.0"
     },
     "meta": {
       "dependency": "transitive",

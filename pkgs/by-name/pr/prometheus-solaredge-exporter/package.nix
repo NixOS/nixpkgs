@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "paepckehh";
     repo = "solaredge_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Aw6rMXE0jgqdUScQcFplNnpglwl13BRdTEN1gMQJSd0=";
+    hash = "sha256-vo0WaiigwjSEA+wEUs8Wdko+UHq5OXXcVcfgna/QVHE=";
   };
 
   ldflags = [

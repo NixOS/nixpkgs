@@ -18,7 +18,7 @@ for (my $n = 0; $n < @ARGV; $n += 2) {
     my $relPath = $ARGV[$n + 1];
     my $parents = 0;
     foreach my $comp (split /\//, $relPath) {
-        $parents++ if ($comp eq "..") 
+        $parents++ if ($comp eq "..")
     }
     $maxParents = $parents if $parents > $maxParents;
 }
@@ -36,7 +36,7 @@ for (my $n = 0; $n < @ARGV; $n += 2) {
     my $relPath = $ARGV[$n + 1];
 
     createDirs $relPath;
-        
+
     symlink $fullPath, $relPath or die "cannot create symlink `$relPath'";
 }
 

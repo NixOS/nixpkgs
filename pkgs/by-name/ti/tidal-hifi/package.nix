@@ -3,8 +3,6 @@
   buildNpmPackage,
   fetchFromGitHub,
   callPackage,
-  libdbusmenu,
-  xdg-utils,
   makeShellWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -106,13 +104,6 @@ buildNpmPackage {
     copyDesktopItems
   ];
 
-  runtimeDependencies = [
-    (lib.getLib systemd)
-    libnotify
-    libdbusmenu
-    xdg-utils
-  ];
-
   npmDepsHash = "sha256-TNhD/ZkqJtsidAEIOL/WmJZw09BuFgd4ECnzbieNhVY=";
   forceGitDeps = true;
   makeCacheWritable = true;
@@ -134,6 +125,7 @@ buildNpmPackage {
 
   desktopItems = [
     (makeDesktopItem {
+      exec = "tidal-hifi";
       name = "TIDAL Hi-Fi";
       desktopName = "tidal-hifi";
       genericName = "TIDAL Hi-Fi";
@@ -189,8 +181,7 @@ buildNpmPackage {
       $out/share/tidal-hifi/lib*GL*
 
     # replace bundled vulkan-loader
-    rm "$out/share/tidal-hifi/libvulkan.so.1"
-    ln -s -t "$out/share/tidal-hifi" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+    ln -sf -t "$out/share/tidal-hifi" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
 
     makeShellWrapper "$out/share/tidal-hifi/tidal-hifi" "$out/bin/tidal-hifi" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \

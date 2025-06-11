@@ -51,5 +51,4 @@ let
 in
 genTests {
   inherit makeTestFor;
-  filter = n: _: lib.hasSuffix "_jit" n;
 }

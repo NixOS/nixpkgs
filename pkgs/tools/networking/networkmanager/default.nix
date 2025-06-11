@@ -134,8 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
         gnused
         ;
       inherit runtimeShell;
-      # patch context
-      OUTPUT = null;
     })
 
     # Meson does not support using different directories during build and
@@ -237,7 +235,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
     maintainers = with maintainers; [
-      domenkozar
       obadz
     ];
     teams = [ teams.freedesktop ];

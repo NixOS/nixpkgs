@@ -21,10 +21,10 @@ buildOctavePackage rec {
     sed -i s/is_bool_type/islogical/g src/*.cc
   '';
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/quaternion/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/quaternion/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Quaternion package for GNU Octave, includes a quaternion class with overloaded operators";
   };
 }

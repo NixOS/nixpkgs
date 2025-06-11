@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "collerek";
-    repo = pname;
+    repo = "ormar";
     tag = version;
     hash = "sha256-jg1qgOJiRBJCRThhq/jaXNmSoL0FmceIOWMKNxtyGJI=";
   };

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildGoModule,
-  darwin,
   fetchFromGitHub,
   restish,
   testers,
@@ -22,18 +21,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-qeArar0WnMACUnKBlC+PcFeJPzofwbK440A4M/rQ04U=";
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.Kernel
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libXrandr
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXinerama
+    xorg.libXrandr
+  ];
 
   ldflags = [
     "-s"
@@ -49,12 +43,12 @@ buildGoModule rec {
     package = restish;
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for interacting with REST-ish HTTP APIs";
     homepage = "https://rest.sh/";
     changelog = "https://github.com/danielgtaylor/restish/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "restish";
   };
 }

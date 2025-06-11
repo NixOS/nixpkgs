@@ -294,7 +294,17 @@ stdenv.mkDerivation (
       ++
         lib.optional (lib.versionAtLeast release_version "15")
           # Just like the `llvm-lit-cfg` patch, but for `polly`.
-          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch");
+          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
+      ++
+        lib.optional (lib.versions.major release_version == "20")
+          # https://github.com/llvm/llvm-project/pull/139822 adds a commit which didn't get backported but is necessary for tests.
+          (
+            fetchpatch {
+              url = "https://github.com/llvm/llvm-project/commit/ff2e8f93f6090965e82d799af43f6dfef52baa66.patch";
+              stripLen = 1;
+              hash = "sha256-CZBTZKzi4cYkZhgTB5oXIo1UdEAArg9I4vR/m0upSRk=";
+            }
+          );
 
     nativeBuildInputs =
       [
@@ -559,19 +569,11 @@ stdenv.mkDerivation (
         ));
 
     # Workaround for configure flags that need to have spaces
-    preConfigure =
-      if lib.versionAtLeast release_version "15" then
-        ''
-          cmakeFlagsArray+=(
-            -DLLVM_LIT_ARGS="-svj''${NIX_BUILD_CORES} --no-progress-bar"
-          )
-        ''
-      else
-        ''
-          cmakeFlagsArray+=(
-            -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
-          )
-        '';
+    preConfigure = ''
+      cmakeFlagsArray+=(
+        -DLLVM_LIT_ARGS="--verbose -j''${NIX_BUILD_CORES}"
+      )
+    '';
 
     # E.g. Mesa uses the build-id as a cache key (see #93946):
     LDFLAGS = optionalString (

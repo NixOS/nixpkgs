@@ -66,8 +66,6 @@
   adwaita-icon-theme,
   alsa-lib,
   desktopToDarwinBundle,
-  AppKit,
-  Cocoa,
 }:
 
 let
@@ -79,7 +77,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.0.2";
+  version = "3.0.4";
 
   outputs = [
     "out"
@@ -89,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VG3cMMstDnkSPH/LTXghHh7npqrOkaagrYy8v26lcaI=";
+    hash = "sha256-jKouwnW/CTJldWVKwnavwIP4SR58ykXRnPKeaWrsqyU=";
   };
 
   patches = [
@@ -202,8 +200,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       llvmPackages.openmp
-      AppKit
-      Cocoa
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libgudev
@@ -246,9 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    patchShebangs \
-      app/tests/create_test_env.sh \
-      tools/gimp-mkenums
+    patchShebangs tools/gimp-mkenums
 
     # GIMP is executed at build time so we need to fix this.
     # TODO: Look into if we can fix the interp thing.

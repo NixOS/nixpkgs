@@ -25,11 +25,12 @@
   ant,
   maven,
   jdk,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.8.0";
+  version = "2.12.0";
 
   pyproject = true;
 
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-1SnT/yB6vJm82yhszBRjeph13B91KYap8/KR4L9VcjM=";
+    hash = "sha256-mm5s7lHbU9SJsS9wTkXkJpmVsGG0qVXIeaQ+TiGz/7o=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -76,13 +77,10 @@ buildPythonPackage rec {
     requests-mock
     socat
     squashfsTools
+    writableTmpDirAsHomeHook
   ];
 
   pytestFlagsArray = [ "tests/unit" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # Relies upon paths not present in Nix (like /bin/bash)

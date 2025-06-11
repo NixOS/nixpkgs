@@ -24,10 +24,10 @@
   sqlite,
   xz,
   zlib,
+  zstd,
 
   # platform-specific dependencies
   bashNonInteractive,
-  darwin,
   windows,
 
   # optional dependencies
@@ -72,6 +72,7 @@
   enableFramework ? false,
   noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch",
   enableGIL ? true,
+  enableDebug ? false,
 
   # pgo (not reproducible) + -fno-semantic-interposition
   # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
@@ -197,6 +198,8 @@ let
     ++ optionals (!stdenv.hostPlatform.isDarwin) [
       autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
       autoreconfHook
+    ]
+    ++ optionals (!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") [
       pkg-config
     ]
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -228,11 +231,11 @@ let
       xz
       zlib
     ]
+    ++ optionals (passthru.pythonAtLeast "3.14") [
+      zstd
+    ]
     ++ optionals bluezSupport [
       bluez
-    ]
-    ++ optionals enableFramework [
-      darwin.apple_sdk.frameworks.Cocoa
     ]
     ++ optionals stdenv.hostPlatform.isMinGW [
       windows.dlfcn
@@ -322,10 +325,6 @@ stdenv.mkDerivation (finalAttrs: {
       # libuuid, slowing down program startup a lot).
       noldconfigPatch
     ]
-    ++ optionals (pythonOlder "3.12") [
-      # https://www.cve.org/CVERecord?id=CVE-2025-0938
-      ./CVE-2025-0938.patch
-    ]
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
       # Cross compilation only supports a limited number of "known good"
       # configurations. If you're reading this and it's been a long time
@@ -340,6 +339,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals (pythonAtLeast "3.13") [
       ./3.13/virtualenv-permissions.patch
+    ]
+    ++ optionals (pythonAtLeast "3.14") [
+      ./3.14/CVE-2025-4517.patch
     ]
     ++ optionals mimetypesSupport [
       # Make the mimetypes module refer to the right file
@@ -377,15 +379,6 @@ stdenv.mkDerivation (finalAttrs: {
       ./loongarch-support.patch
       # fix failing tests with openssl >= 3.4
       # https://github.com/python/cpython/pull/127361
-    ]
-    ++ optionals (pythonAtLeast "3.10" && pythonOlder "3.11") [
-      ./3.10/raise-OSError-for-ERR_LIB_SYS.patch
-    ]
-    ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.12") [
-      (fetchpatch {
-        url = "https://github.com/python/cpython/commit/f4b31edf2d9d72878dab1f66a36913b5bcc848ec.patch";
-        sha256 = "sha256-w7zZMp0yqyi4h5oG8sK4z9BwNEkqg4Ar+en3nlWcxh0=";
-      })
     ]
     ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
       # backport fix for https://github.com/python/cpython/issues/95855
@@ -480,6 +473,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals enableOptimizations [
       "--enable-optimizations"
     ]
+    ++ optionals enableDebug [
+      "--with-pydebug"
+    ]
     ++ optionals (sqlite != null) [
       "--enable-loadable-sqlite-extensions"
     ]
@@ -519,6 +515,7 @@ stdenv.mkDerivation (finalAttrs: {
       "ac_cv_func_lchmod=no"
     ]
     ++ optionals static [
+      "--disable-test-modules"
       "LDFLAGS=-static"
       "MODULE_BUILDTYPE=static"
     ]
@@ -610,7 +607,11 @@ stdenv.mkDerivation (finalAttrs: {
           echo $item
         fi
       done
+    ''
+    + lib.optionalString (!static) ''
       touch $out/lib/${libPrefix}/test/__init__.py
+    ''
+    + ''
 
       # Determinism: Windows installers were not deterministic.
       # We're also not interested in building Windows installers.

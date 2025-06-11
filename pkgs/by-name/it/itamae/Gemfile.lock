@@ -7,7 +7,7 @@ GEM
     docker-api (2.4.0)
       excon (>= 0.64.0)
       multi_json
-    ed25519 (1.3.0)
+    ed25519 (1.4.0)
     excon (1.2.5)
       logger
     hashie (5.0.0)
@@ -25,7 +25,7 @@ GEM
     net-telnet (0.2.0)
     schash (0.1.2)
     sfl (2.3)
-    specinfra (2.92.0)
+    specinfra (2.94.0)
       base64
       net-scp
       net-ssh (>= 2.7)
@@ -43,4 +43,4 @@ DEPENDENCIES
   itamae
 
 BUNDLED WITH
-   2.6.2
+   2.6.6

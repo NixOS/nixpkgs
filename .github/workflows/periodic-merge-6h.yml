@@ -16,6 +16,10 @@ on:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   periodic-merge:
     if: github.repository_owner == 'NixOS'
@@ -35,4 +39,5 @@ jobs:
     with:
       from: ${{ matrix.pairs.from }}
       into: ${{ matrix.pairs.into }}
+    name: ${{ format('{0} → {1}', matrix.pairs.from, matrix.pairs.into) }}
     secrets: inherit

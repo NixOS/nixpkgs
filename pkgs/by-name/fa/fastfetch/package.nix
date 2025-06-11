@@ -38,6 +38,7 @@
   xorg,
   yyjson,
   zlib,
+  zfs,
   # Feature flags
   audioSupport ? true,
   brightnessSupport ? true,
@@ -54,16 +55,17 @@
   waylandSupport ? true,
   x11Support ? true,
   xfceSupport ? true,
+  zfsSupport ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.42.0";
+  version = "2.45.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-nlhW3ftBOjb2BHz1qjOI4VGiSn1+VAUcaA9n0nPikCU=";
+    hash = "sha256-HDr4goUvAKeMk2UGmF2ON72ETQQipNwLfsvyB+f74LE=";
   };
 
   outputs = [
@@ -175,6 +177,10 @@ stdenv.mkDerivation (finalAttrs: {
           #  Needed for XFWM theme and XFCE Terminal font.
           xfce.xfconf
         ]
+        ++ lib.optionals zfsSupport [
+          # Needed for zpool module
+          zfs
+        ]
       );
 
       macosDeps = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -198,6 +204,8 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "ENABLE_CHAFA" imageSupport)
 
       (lib.cmakeBool "ENABLE_SQLITE3" sqliteSupport)
+
+      (lib.cmakeBool "ENABLE_LIBZFS" zfsSupport)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.cmakeBool "ENABLE_PULSE" audioSupport)
@@ -257,7 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An actively maintained, feature-rich and performance oriented, neofetch like system information tool";
+    description = "Actively maintained, feature-rich and performance oriented, neofetch like system information tool";
     homepage = "https://github.com/fastfetch-cli/fastfetch";
     changelog = "https://github.com/fastfetch-cli/fastfetch/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
@@ -270,7 +278,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       Fast and highly customizable system info script.
 
-      Feature flags (all default to 'true' except rpmSupport and flashfetchSupport):
+      Feature flags (all default to 'true' except rpmSupport, flashfetchSupport and zfsSupport):
       * audioSupport: PulseAudio functionality
       * brightnessSupport: External display brightness detection via DDCUtil
       * dbusSupport: DBus functionality for Bluetooth, WiFi, player & media detection
@@ -286,6 +294,7 @@ stdenv.mkDerivation (finalAttrs: {
       * waylandSupport: Wayland display detection
       * x11Support: X11 display information
       * xfceSupport: XFCE integration for theme and terminal font detection
+      * zfsSupport: zpool information
     '';
   };
 })

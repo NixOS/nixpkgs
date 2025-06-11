@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "Ullaakut";
-    repo = pname;
+    repo = "cameradar";
     rev = "v${version}";
     sha256 = "sha256-GOqmz/aiOLGMfs9rQBIEQSgBycPzhu8BohcAc2U+gBw=";
   };
@@ -33,12 +33,12 @@ buildGoModule rec {
   # At least one test is outdated
   #doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "RTSP stream access tool";
     homepage = "https://github.com/Ullaakut/cameradar";
     changelog = "https://github.com/Ullaakut/cameradar/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     # Upstream issue, doesn't build with latest curl, see
     # https://github.com/Ullaakut/cameradar/issues/320
     # https://github.com/andelf/go-curl/issues/84

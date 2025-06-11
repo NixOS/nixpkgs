@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dennisschroer";
-    repo = pname;
+    repo = "energyflip-client";
     tag = "v${version}";
     hash = "sha256-neuZ6pZWW/Rgexu/iCEymjnxi5l/IuLKPFn6S9U4DgU=";
   };

@@ -302,6 +302,7 @@ stdenv.mkDerivation (
         ++ (finalAttrs.passthru.hardeningUnsupportedFlags or [ ]);
     };
 
+    requiredSystemFeatures = [ "big-parallel" ];
     meta = llvm_meta // {
       homepage = "https://clang.llvm.org/";
       description = "C language family frontend for LLVM";

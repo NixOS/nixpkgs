@@ -11,7 +11,6 @@
   ninja,
   pkg-config,
   python3Packages,
-  Xplugin,
   xorg,
   zlib,
 }:
@@ -46,7 +45,6 @@ stdenv.mkDerivation {
   buildInputs = [
     libxml2 # should be propagated from libllvm
     llvmPackages.libllvm
-    Xplugin
     xorg.libX11
     xorg.libXext
     xorg.libXfixes

@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,21 +22,17 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [ openssl ];
 
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple HTTP server in Rust";
     homepage = "https://github.com/TheWaWaR/simple-http-server";
     changelog = "https://github.com/TheWaWaR/simple-http-server/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       mephistophiles
     ];

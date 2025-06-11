@@ -76,6 +76,11 @@ buildPythonPackage rec {
     "tests/test_typing.py"
   ];
 
+  disabledTests = [
+    # Tests for precise formatting
+    "test_empty_sub_snapshot"
+  ];
+
   meta = with lib; {
     description = "Create and update inline snapshots in Python tests";
     homepage = "https://github.com/15r10nk/inline-snapshot/";

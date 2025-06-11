@@ -13,7 +13,6 @@
   libxkbcommon,
   libglvnd,
   mpv-unwrapped,
-  darwin,
   waylandSupport ? false,
 }:
 
@@ -64,13 +63,6 @@ buildGoModule rec {
       wayland
       wayland-protocols
       libxkbcommon
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-      darwin.apple_sdk_11_0.frameworks.Kernel
-      darwin.apple_sdk_11_0.frameworks.OpenGL
-      darwin.apple_sdk_11_0.frameworks.UserNotifications
-      darwin.apple_sdk_11_0.frameworks.MediaPlayer
     ];
 
   postInstall =
@@ -103,7 +95,7 @@ buildGoModule rec {
 
   meta = with lib; {
     mainProgram = "supersonic" + lib.optionalString waylandSupport "-wayland";
-    description = "A lightweight cross-platform desktop client for Subsonic music servers";
+    description = "Lightweight cross-platform desktop client for Subsonic music servers";
     homepage = "https://github.com/dweymouth/supersonic";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl3Plus;

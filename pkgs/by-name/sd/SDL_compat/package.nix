@@ -11,13 +11,18 @@
   pkg-config,
   pkg-config-unwrapped,
   stdenv,
+  testers,
+  dosbox,
+  SDL_image,
+  SDL_ttf,
+  SDL_mixer,
+  SDL_sound,
   # Boolean flags
   libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
   openglSupport ? libGLSupported,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
   inherit (darwin) autoSignDarwinBinariesHook;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -50,11 +55,35 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Cocoa
     ]
     ++ lib.optionals openglSupport [ libGLU ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_SKIP_RPATH TRUE)' 'set(CMAKE_SKIP_RPATH FALSE)'
+  '';
+
+  dontPatchELF = true; # don't strip rpath
+
+  cmakeFlags =
+    let
+      rpath = lib.makeLibraryPath [ sdl2-compat ];
+    in
+    [
+      (lib.cmakeFeature "CMAKE_INSTALL_RPATH" rpath)
+      (lib.cmakeFeature "CMAKE_BUILD_RPATH" rpath)
+      (lib.cmakeBool "SDL12TESTS" finalAttrs.finalPackage.doCheck)
+    ];
+
   enableParallelBuilding = true;
+
+  # Darwin fails with "Critical error: required built-in appearance SystemAppearance not found"
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  checkPhase = ''
+    runHook preCheck
+    ./testver
+    runHook postCheck
+  '';
 
   postInstall = ''
     # allow as a drop in replacement for SDL
@@ -68,24 +97,17 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./find-headers.patch ];
   setupHook = ./setup-hook.sh;
 
-  postFixup = ''
-    for lib in $out/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}* ; do
-      if [[ -L "$lib" ]]; then
-        ${
-          if stdenv.hostPlatform.isDarwin then
-            ''
-              install_name_tool ${
-                lib.strings.concatMapStrings (x: " -add_rpath ${lib.makeLibraryPath [ x ]} ") finalAttrs.buildInputs
-              } "$lib"
-            ''
-          else
-            ''
-              patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath finalAttrs.buildInputs}" "$lib"
-            ''
-        }
-      fi
-    done
-  '';
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+    inherit
+      SDL_image
+      SDL_ttf
+      SDL_mixer
+      SDL_sound
+      dosbox
+      ;
+  };
 
   meta = {
     homepage = "https://www.libsdl.org/";
@@ -95,5 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ peterhoeg ];
     teams = [ lib.teams.sdl ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [
+      "sdl"
+      "sdl12_compat"
+    ];
   };
 })

@@ -12,7 +12,6 @@
   doxygen,
   xorg,
   python3,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,10 +44,6 @@ stdenv.mkDerivation rec {
       swig
       xorg.libXi
       xorg.libXmu
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.GLUT
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libglut

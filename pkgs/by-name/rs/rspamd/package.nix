@@ -24,7 +24,9 @@
   xxHash,
   zstd,
   libarchive,
-  withBlas ? true,
+  # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
+  # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/issues/321
+  withBlas ? false,
   withLuaJIT ? stdenv.hostPlatform.isx86_64,
   nixosTests,
 }:

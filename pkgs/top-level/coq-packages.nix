@@ -94,6 +94,7 @@ let
       coqtail-math = callPackage ../development/coq-modules/coqtail-math { };
       coquelicot = callPackage ../development/coq-modules/coquelicot { };
       coqutil = callPackage ../development/coq-modules/coqutil { };
+      coqfmt = callPackage ../development/coq-modules/coqfmt { };
       corn = callPackage ../development/coq-modules/corn { };
       deriving = callPackage ../development/coq-modules/deriving { };
       dpdgraph = callPackage ../development/coq-modules/dpdgraph { };
@@ -129,6 +130,8 @@ let
       math-classes = callPackage ../development/coq-modules/math-classes { };
       mathcomp = callPackage ../development/coq-modules/mathcomp { };
       ssreflect = self.mathcomp.ssreflect;
+      mathcomp-boot = self.mathcomp.boot;
+      mathcomp-order = self.mathcomp.order;
       mathcomp-ssreflect = self.mathcomp.ssreflect;
       mathcomp-fingroup = self.mathcomp.fingroup;
       mathcomp-algebra = self.mathcomp.algebra;
@@ -165,6 +168,18 @@ let
       metacoq-erasure-plugin = self.metacoq.erasure-plugin;
       metacoq-translations = self.metacoq.translations;
       metalib = callPackage ../development/coq-modules/metalib { };
+      metarocq = callPackage ../development/coq-modules/metarocq { };
+      metarocq-utils = self.metarocq.utils;
+      metarocq-common = self.metarocq.common;
+      metarocq-template-rocq = self.metarocq.template-rocq;
+      metarocq-pcuic = self.metarocq.pcuic;
+      metarocq-safechecker = self.metarocq.safechecker;
+      metarocq-template-pcuic = self.metarocq.template-pcuic;
+      metarocq-erasure = self.metarocq.erasure;
+      metarocq-quotation = self.metarocq.quotation;
+      metarocq-safechecker-plugin = self.metarocq.safechecker-plugin;
+      metarocq-erasure-plugin = self.metarocq.erasure-plugin;
+      metarocq-translations = self.metarocq.translations;
       mtac2 = callPackage ../development/coq-modules/mtac2 { };
       multinomials = callPackage ../development/coq-modules/multinomials { };
       odd-order = callPackage ../development/coq-modules/odd-order { };
@@ -172,6 +187,7 @@ let
       paco = callPackage ../development/coq-modules/paco { };
       paramcoq = callPackage ../development/coq-modules/paramcoq { };
       parsec = callPackage ../development/coq-modules/parsec { };
+      parseque = callPackage ../development/coq-modules/parseque { };
       pocklington = callPackage ../development/coq-modules/pocklington { };
       QuickChick = callPackage ../development/coq-modules/QuickChick { };
       reglang = callPackage ../development/coq-modules/reglang { };

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   meta = {
     broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
     homepage = "https://cabinpkg.com";
-    description = "A package manager and build system for C++";
+    description = "Package manager and build system for C++";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.qwqawawow ];
     platforms = lib.platforms.unix;

@@ -243,6 +243,14 @@ in
           ];
         };
 
+        linux_6_15 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "6.15";
+          kernelPatches = [
+            kernelPatches.bridge_stp_helper
+            kernelPatches.request_key_helper
+          ];
+        };
+
         linux_testing =
           let
             testing = callPackage ../os-specific/linux/kernel/mainline.nix {
@@ -327,6 +335,7 @@ in
         linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
         linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
         linux_6_13_hardened = hardenedKernelFor kernels.linux_6_13 { };
+        linux_6_14_hardened = hardenedKernelFor kernels.linux_6_14 { };
 
       }
       // lib.optionalAttrs config.allowAliases {
@@ -460,8 +469,6 @@ in
         it87 = callPackage ../os-specific/linux/it87 { };
 
         asus-ec-sensors = callPackage ../os-specific/linux/asus-ec-sensors { };
-
-        asus-wmi-sensors = callPackage ../os-specific/linux/asus-wmi-sensors { };
 
         ena = callPackage ../os-specific/linux/ena { };
 
@@ -751,6 +758,7 @@ in
       linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
       linux_6_13 = recurseIntoAttrs (packagesFor kernels.linux_6_13);
       linux_6_14 = recurseIntoAttrs (packagesFor kernels.linux_6_14);
+      linux_6_15 = recurseIntoAttrs (packagesFor kernels.linux_6_15);
     }
     // lib.optionalAttrs config.allowAliases {
       linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
@@ -793,6 +801,7 @@ in
       linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
       linux_6_12_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_12_hardened);
       linux_6_13_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_13_hardened);
+      linux_6_14_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_14_hardened);
 
       linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
       linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -819,7 +828,7 @@ in
     {
       linux_default = packages.linux_6_12;
       # Update this when adding the newest kernel major version!
-      linux_latest = packages.linux_6_14;
+      linux_latest = packages.linux_6_15;
       linux_rt_default = packages.linux_rt_5_15;
       linux_rt_latest = packages.linux_rt_6_6;
     }

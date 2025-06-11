@@ -9,9 +9,6 @@
   systemd,
   fmt,
   buildPackages,
-  # Darwin inputs
-  AudioToolbox,
-  AudioUnit,
   # Inputs
   curl,
   libcdio,
@@ -53,8 +50,9 @@
   pcre2,
   libgcrypt,
   expat,
-  # Services
-  yajl,
+  nlohmann_json,
+  zlib,
+  libupnp,
   # Client support
   libmpdclient,
   # Tag support
@@ -100,7 +98,10 @@ let
     gme = [ game-music-emu ];
     mad = [ libmad ];
     mikmod = [ libmikmod ];
-    mpg123 = [ mpg123 ];
+    mpg123 = [
+      libid3tag
+      mpg123
+    ];
     opus = [ libopus ];
     vorbis = [ libvorbis ];
     # Encoder plugins
@@ -119,16 +120,15 @@ let
     qobuz = [
       curl
       libgcrypt
-      yajl
-    ];
-    soundcloud = [
-      curl
-      yajl
+      nlohmann_json
     ];
     # Client support
     libmpdclient = [ libmpdclient ];
     # Tag support
-    id3tag = [ libid3tag ];
+    id3tag = [
+      libid3tag
+      zlib
+    ];
     # Misc
     dbus = [ dbus ];
     expat = [ expat ];
@@ -137,7 +137,6 @@ let
     sqlite = [ sqlite ];
     syslog = [ ];
     systemd = [ systemd ];
-    yajl = [ yajl ];
     zeroconf = [
       avahi
       dbus
@@ -200,30 +199,25 @@ let
     in
     stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.24.2";
+      version = "0.24.4";
 
       src = fetchFromGitHub {
         owner = "MusicPlayerDaemon";
         repo = "MPD";
         rev = "v${version}";
-        sha256 = "sha256-6wEFgiMsEoWvmfH609d+UZY7jzqDoNmXalpHBipqTN0=";
+        sha256 = "sha256-wiQa6YtaD9/BZsC9trEIZyLcIs72kzuP99O4QVP15nQ=";
       };
 
-      buildInputs =
-        [
-          glib
-          fmt
-          # According to the configurePhase of meson, gtest is considered a
-          # runtime dependency. Quoting:
-          #
-          #    Run-time dependency GTest found: YES 1.10.0
-          gtest
-        ]
-        ++ concatAttrVals features_ featureDependencies
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          AudioToolbox
-          AudioUnit
-        ];
+      buildInputs = [
+        glib
+        fmt
+        # According to the configurePhase of meson, gtest is considered a
+        # runtime dependency. Quoting:
+        #
+        #    Run-time dependency GTest found: YES 1.10.0
+        gtest
+        libupnp
+      ] ++ concatAttrVals features_ featureDependencies;
 
       nativeBuildInputs = [
         meson
@@ -234,25 +228,13 @@ let
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
       postPatch =
-        ''
-          # Basically a revert of https://github.com/MusicPlayerDaemon/MPD/commit/0aeda01ba6d22a8d9fc583faa67ffc6473869a43
-          # We use a yajl fork that fixed this issue in the pkg-config manifest
-          substituteInPlace \
-            src/lib/yajl/Callbacks.hxx \
-            src/lib/yajl/Handle.hxx \
-            --replace-fail "<yajl_parse.h>" "<yajl/yajl_parse.h>"
-          substituteInPlace \
-            src/lib/yajl/Gen.hxx \
-            --replace-fail "<yajl_gen.h>" "<yajl/yajl_gen.h>"
-        ''
-        +
-          lib.optionalString
-            (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0")
-            ''
-              substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
-                --replace kAudioObjectPropertyElement{Main,Master} \
-                --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
-            '';
+        lib.optionalString
+          (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0")
+          ''
+            substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
+              --replace kAudioObjectPropertyElement{Main,Master} \
+              --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
+          '';
 
       # Otherwise, the meson log says:
       #
@@ -281,7 +263,8 @@ let
         ++ map (x: "-D${x}=enabled") features_
         ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
         ++ lib.optional (builtins.elem "zeroconf" features_) "-Dzeroconf=avahi"
-        ++ lib.optional (builtins.elem "systemd" features_) "-Dsystemd_system_unit_dir=etc/systemd/system";
+        ++ lib.optional (builtins.elem "systemd" features_) "-Dsystemd_system_unit_dir=etc/systemd/system"
+        ++ lib.optional (builtins.elem "qobuz" features_) "-Dnlohmann_json=enabled";
 
       passthru.tests.nixos = nixosTests.mpd;
 
@@ -330,9 +313,7 @@ in
         "id3tag"
         "expat"
         "pcre"
-        "yajl"
         "sqlite"
-        "soundcloud"
         "qobuz"
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [

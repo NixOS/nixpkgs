@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "noamgat";
-    repo = pname;
+    repo = "lm-format-enforcer";
     tag = "v${version}";
     hash = "sha256-8BsfA1R/X+wA0H0MqQKn+CljUIT8VdoInoczSGvu74o=";
   };

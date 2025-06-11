@@ -2,7 +2,6 @@
   lib,
   stdenv,
   bash,
-  darwin,
   fetchFromGitHub,
   libiconv,
   makeWrapper,
@@ -35,7 +34,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.Security
     ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -55,12 +53,12 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Command-line client for WebSockets (like netcat/socat)";
     homepage = "https://github.com/vi/websocat";
     changelog = "https://github.com/vi/websocat/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       Br1ght0ne
     ];

@@ -121,6 +121,8 @@ agda.withPackages {
 }
 ```
 
+To install Agda without GHC, use `ghc = null;`.
+
 ## Writing Agda packages {#writing-agda-packages}
 
 To write a nix derivation for an Agda library, first check that the library has a `*.agda-lib` file.

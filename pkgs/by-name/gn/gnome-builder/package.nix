@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-builder";
-  version = "47.2";
+  version = "48.0";
 
   outputs = [
     "out"
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-builder/${lib.versions.major finalAttrs.version}/gnome-builder-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Roe5PEfNHjNmWi3FA3kLYhPugnhy/ABNl40UvL+ptJU=";
+    hash = "sha256-ev6aejs8ZiF2i8RqYdaY3XiLNlP7RqcII4vcz03me6Q=";
   };
 
   patches = [

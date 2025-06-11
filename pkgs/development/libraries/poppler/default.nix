@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchFromGitLab,
-  fetchpatch,
   cairo,
   cmake,
   boost,
@@ -56,13 +55,13 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "400f3ff05b2b1c0ae17797a0bd50e75e35c1f1b1";
-    hash = "sha256-Y4aNOJLqo4g6tTW6TAb60jAWtBhRgT/JXsub12vi3aU=";
+    rev = "91ee031c882634c36f2f0f2f14eb6646dd542fb9";
+    hash = "sha256-bImTdlhMAA79kwbKPrHN3a9vVrtsgBh3rFjH3B7tEbQ=";
   };
 in
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
-  version = "24.02.0"; # beware: updates often break cups-filters build, check scribus too!
+  version = "25.05.0"; # beware: updates often break cups-filters build, check scribus too!
 
   outputs = [
     "out"
@@ -70,26 +69,9 @@ stdenv.mkDerivation (finalAttrs: rec {
   ];
 
   src = fetchurl {
-    url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-    hash = "sha256-GRh6P90F8z59YExHmcGD3lygEYZAyIs3DdzzE2NDIi4=";
+    url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
+    hash = "sha256-mxYnxbdoFqxeQFKgP1tgW6QLRc8GsCyt0EeWILSZqzg=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://access.redhat.com/security/cve/CVE-2024-6239
-      name = "CVE-2024-6239.patch";
-      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/0554731052d1a97745cb179ab0d45620589dd9c4.patch";
-      hash = "sha256-I78wJ4l1DSh+x/e00ZL8uvrGdBH+ufp+EDm0A1XWyCU=";
-    })
-
-    (fetchpatch {
-      # fixes build on clang-19
-      # https://gitlab.freedesktop.org/poppler/poppler/-/merge_requests/1526
-      name = "char16_t-not-short.patch";
-      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/b4ac7d9af7cb5edfcfcbda035ed8b8c218ba8564.patch";
-      hash = "sha256-2aEq3VDITJabvB/+bcdULBXbqVbDdL0xJr2TWLiWqX8=";
-    })
-  ];
 
   nativeBuildInputs =
     [
@@ -199,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   meta = {
     homepage = "https://poppler.freedesktop.org/";
-    changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${finalAttrs.version}/NEWS";
     description = "PDF rendering library";
     longDescription = ''
       Poppler is a PDF rendering library based on the xpdf-3.0 code base. In

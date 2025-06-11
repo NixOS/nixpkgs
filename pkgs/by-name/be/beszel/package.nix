@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "beszel";
-  version = "0.10.2";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${version}";
-    hash = "sha256-yYSX58qA4vE7Bp3ADc6rIMf9yaeU7Zw7D5rmES6x6oA=";
+    hash = "sha256-tAi48PAHDGIZn/HMsnCq0mLpvFSqUOMocq47hooiFT8=";
   };
 
   webui = buildNpmPackage {
@@ -53,7 +53,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/beszel";
 
-  vendorHash = "sha256-VX9mil0Hdmb85Zd9jfvm5Zz2pPQx+oAGHY+BI04bYQY=";
+  vendorHash = "sha256-B6mOqOgcrRn0jV9wnDgRmBvfw7I/Qy5MNYvTiaCgjBE=";
 
   preBuild = ''
     mkdir -p site/dist

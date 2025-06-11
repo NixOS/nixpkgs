@@ -26,6 +26,7 @@ let
     isAttrs
     isString
     mapAttrs
+    filterAttrs
     ;
 
   inherit (lib.lists)
@@ -119,7 +120,7 @@ let
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
 
-  # Alow granular checks to allow only some unfree packages
+  # Allow granular checks to allow only some unfree packages
   # Example:
   # {pkgs, ...}:
   # {
@@ -411,6 +412,10 @@ let
       isFcitxEngine = bool;
       isIbusEngine = bool;
       isGutenprint = bool;
+
+      # Used for the original location of the maintainer and team attributes to assist with pings.
+      maintainersPosition = any;
+      teamsPosition = any;
     };
 
   checkMetaAttr =
@@ -589,10 +594,24 @@ let
         )
       ] ++ optional (hasOutput "man") "man";
     }
+    // (filterAttrs (_: v: v != null) {
+      # CI scripts look at these to determine pings. Note that we should filter nulls out of this,
+      # or nix-env complains: https://github.com/NixOS/nix/blob/2.18.8/src/nix-env/nix-env.cc#L963
+      maintainersPosition = builtins.unsafeGetAttrPos "maintainers" (attrs.meta or { });
+      teamsPosition = builtins.unsafeGetAttrPos "teams" (attrs.meta or { });
+    })
     // attrs.meta or { }
     # Fill `meta.position` to identify the source location of the package.
     // optionalAttrs (pos != null) {
       position = pos.file + ":" + toString pos.line;
+    }
+    // {
+      # Maintainers should be inclusive of teams.
+      # Note that there may be external consumers of this API (repology, for instance) -
+      # if you add a new maintainer or team attribute please ensure that this expectation is still met.
+      maintainers =
+        attrs.meta.maintainers or [ ]
+        ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
     }
     // {
       # Expose the result of the checks for everyone to see.

@@ -135,10 +135,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -D usr/lib/x86_64-linux-gnu/ideamaker/ideamaker \
-      $out/bin/${finalAttrs.pname}
+      $out/bin/ideamaker
 
     patchelf --replace-needed libquazip.so.1 libquazip1-qt5.so \
-      $out/bin/${finalAttrs.pname}
+      $out/bin/ideamaker
 
     mimetypeDir=$out/share/icons/hicolor/128x128/mimetypes
     mkdir -p ''$mimetypeDir
@@ -146,10 +146,10 @@ stdenv.mkDerivation (finalAttrs: {
       mv $file ''$mimetypeDir/''$(basename ''${file%.ico}).png
     done
     install -D ${./mimetypes.xml} \
-      $out/share/mime/packages/${finalAttrs.pname}.xml
+      $out/share/mime/packages/ideamaker.xml
 
     install -D usr/share/ideamaker/icons/ideamaker-icon.png \
-      $out/share/pixmaps/${finalAttrs.pname}.png
+      $out/share/pixmaps/ideamaker.png
 
     ln -s ${finalAttrs.desktopItem}/share/applications $out/share/
 
@@ -157,9 +157,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   desktopItem = makeDesktopItem {
-    name = finalAttrs.pname;
-    exec = finalAttrs.pname;
-    icon = finalAttrs.pname;
+    name = "ideamaker";
+    exec = "ideamaker";
+    icon = "ideamaker";
     desktopName = "Ideamaker";
     comment = "ideaMaker - www.raise3d.com";
     categories = [

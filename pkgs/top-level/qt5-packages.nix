@@ -190,22 +190,11 @@ makeScopeWithSplicing' {
 
         liblastfm = callPackage ../development/libraries/liblastfm { };
 
-        libopenshot = callPackage ../development/libraries/libopenshot {
-          stdenv =
-            if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
-          python3 = pkgs.python311;
-        };
+        libopenshot = callPackage ../development/libraries/libopenshot { };
 
         packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
-        libopenshot-audio = callPackage ../development/libraries/libopenshot-audio {
-          inherit (pkgs.darwin.apple_sdk.frameworks)
-            Accelerate
-            AGL
-            Cocoa
-            Foundation
-            ;
-        };
+        libopenshot-audio = callPackage ../development/libraries/libopenshot-audio { };
 
         libqglviewer = callPackage ../development/libraries/libqglviewer { };
 
@@ -250,8 +239,6 @@ makeScopeWithSplicing' {
         pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
         qca = callPackage ../development/libraries/qca {
-          stdenv =
-            if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
           inherit (libsForQt5) qtbase;
         };
         qca-qt5 = self.qca;
@@ -260,11 +247,11 @@ makeScopeWithSplicing' {
 
         qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
 
+        qcustomplot = callPackage ../development/libraries/qcustomplot { };
+
         qjson = callPackage ../development/libraries/qjson { };
 
-        qmltermwidget = callPackage ../development/libraries/qmltermwidget {
-          inherit (pkgs.darwin.apple_sdk.libs) utmp;
-        };
+        qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
 
         qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
 
@@ -282,11 +269,7 @@ makeScopeWithSplicing' {
 
         qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
-        qtkeychain = callPackage ../development/libraries/qtkeychain {
-          stdenv =
-            if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
-          inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
-        };
+        qtkeychain = callPackage ../development/libraries/qtkeychain { };
 
         qtmpris = callPackage ../development/libraries/qtmpris { };
 

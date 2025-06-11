@@ -1,9 +1,13 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
   openssl,
+  # darwin dependencies
+  libiconv,
+  curl,
   # testing
   testers,
   cargo-geiger,
@@ -23,18 +27,22 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-aDgpEfX0QRkQD6c4ant6uSN18WLHVnZISRr7lyu9IzA=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    openssl
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      curl
+    ];
+  nativeBuildInputs =
+    [ pkg-config ]
+    # curl-sys wants to run curl-config on darwin
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl.dev ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
+  # skip tests with networking or other failures
   checkFlags = [
     # panics
     "--skip serialize_test2_quick_report"

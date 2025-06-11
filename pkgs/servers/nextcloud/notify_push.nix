@@ -13,23 +13,23 @@ rustPlatform.buildRustPackage rec {
   # in nixpkgs!
   # For that, check the `<dependencies>` section of `appinfo/info.xml`
   # in the app (https://github.com/nextcloud/notify_push/blob/main/appinfo/info.xml)
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "notify_push";
     tag = "v${version}";
-    hash = "sha256-Y71o+ARi/YB2BRDfEyORbrA9HPvsUlWdh5UjM8hzmcA=";
+    hash = "sha256-mHoVNKvE4Hszi1wg9fIHjRMJp5+CIBCgUPzreJ6Jnew=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bO3KN+ynxNdbnFv1ZHJSSPWd4SxWQGIis3O3Gfba8jw=";
+  cargoHash = "sha256-PkRWyz4Gd2gGg9n4yChtR96QNOjEK5HNVhBwkkVjVPE=";
 
   passthru = rec {
     app = fetchNextcloudApp {
       appName = "notify_push";
       appVersion = version;
-      hash = "sha256-4yCs4Q25PhYVICAIFlNiRTOFvL0JdmUwR5bNxp54GiA=";
+      hash = "sha256-nxbmzRaW4FYmwTF27P9K7SebKYiL5KOMdyU5unif+NQ=";
       license = "agpl3Plus";
       homepage = "https://github.com/nextcloud/notify_push";
       url = "https://github.com/nextcloud-releases/notify_push/releases/download/v${version}/notify_push-v${version}.tar.gz";
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
       buildAndTestSubdir = "test_client";
 
       useFetchCargoVendor = true;
-      cargoHash = "sha256-bO3KN+ynxNdbnFv1ZHJSSPWd4SxWQGIis3O3Gfba8jw=";
+      cargoHash = "sha256-PkRWyz4Gd2gGg9n4yChtR96QNOjEK5HNVhBwkkVjVPE=";
 
       meta = meta // {
         mainProgram = "test_client";

@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.23.2";
+  version = "1.23.4";
 
   src = fetchFromGitHub {
     owner = "shadowsocks";
     repo = "shadowsocks-rust";
     tag = "v${version}";
-    hash = "sha256-Yt2Zc+b7QpN/yO6MTg9a+7xTw9pHkYFHdq3Sz3Agdi4=";
+    hash = "sha256-YUDPD46EVCJe/FFUaSyDDSXPk87CiGduzFyPtjr2fDI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-eJFXFkevSS/N4A1+tCcwWUQsklA9HUQgLHw40fW5oxM=";
+  cargoHash = "sha256-E4vhgaUtUTNt+tRrLxDNXICMIH8N3EL+mkC9Ga+lI70=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 

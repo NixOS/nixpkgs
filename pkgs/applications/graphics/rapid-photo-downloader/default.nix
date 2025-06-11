@@ -1,8 +1,8 @@
 {
   lib,
-  mkDerivationWith,
   fetchFromGitHub,
   python3Packages,
+  libsForQt5,
   file,
   intltool,
   gobject-introspection,
@@ -20,7 +20,7 @@
   gitUpdater,
 }:
 
-mkDerivationWith python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
   version = "0.9.36";
   pyproject = true;
@@ -75,6 +75,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
+    libsForQt5.wrapQtAppsHook
     file
     intltool
     gobject-introspection

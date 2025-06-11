@@ -8,7 +8,6 @@
   nettle,
   openssl,
   sqlite,
-  darwin,
   gnupg,
 }:
 rustPlatform.buildRustPackage rec {
@@ -35,10 +34,6 @@ rustPlatform.buildRustPackage rec {
     [
       openssl
       sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      # See comment near sequoia-openpgp/crypto- buildFeatures
     ]
     ++ lib.optionals (!stdenv.targetPlatform.isWindows) [
       nettle

@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
-    repo = pname;
+    repo = "cf-vault";
     rev = version;
     sha256 = "sha256-vp9ufjNZabY/ck2lIT+QpD6IgaVj1BkBRTjPxkb6IjQ=";
   };

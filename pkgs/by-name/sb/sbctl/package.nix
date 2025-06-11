@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "sbctl";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "sbctl";
     tag = version;
-    hash = "sha256-BLSvjo6GCqpECJPJtQ6C2zEz1p03uyvxTYa+DoxZ78s=";
+    hash = "sha256-7dCaWemkus2GHxILBEx5YvzdAmv89JfcPbqZZ6QwriI";
   };
 
-  vendorHash = "sha256-srfZ+TD93szabegwtzLTjB+uo8aj8mB4ecQ9m8er00A=";
+  vendorHash = "sha256-gpHEJIbLnB0OiYB00rHK6OwrnHTHCj/tTVlUzuFjFKY=";
 
   ldflags = [
     "-s"
@@ -57,17 +57,18 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Secure Boot key manager";
     mainProgram = "sbctl";
     homepage = "https://github.com/Foxboron/sbctl";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      Pokeylooted
       raitobezarius
       Scrumplex
     ];
-    # go-uefi do not support darwin at the moment:
+    # go-uefi does not support darwin at the moment:
     # see upstream on https://github.com/Foxboron/go-uefi/issues/13
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

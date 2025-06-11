@@ -34,7 +34,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.20.0";
+  version = "1.20.3";
 
   outputs = [
     "out"
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     tag = finalAttrs.version;
-    hash = "sha256-FHMa8fTr8qNEM5WptuMjMs/XOsvmFxi8pDaCrwJ3/ww=";
+    hash = "sha256-ntTGEsk8GlXkp3i9RtF+T7jqnNdL2GVbu05d68WVTYc=";
   };
 
   patches = [
@@ -92,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
       pipewire
       gst_all_1.gst-plugins-base
       libgudev
-      umockdev
 
       # For icon validator
       gdk-pixbuf
@@ -125,6 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     umockdev
   ];
 
+  checkInputs = [ umockdev ];
+
   mesonFlags =
     [
       "--sysconfdir=/etc"
@@ -153,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests/run-test.sh
   '';
 
-  preCheck = ''
+  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck ''
     # For test_trash_file
     export HOME=$(mktemp -d)
 

@@ -2,8 +2,6 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,10 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-bjNB0aoG9Mrz1JzD80j2Czfg0pfU2uGlFFsi5WO4pdU=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   meta = with lib; {
     description = "Super simple HTTP server that replies a fixed body with a fixed response code";

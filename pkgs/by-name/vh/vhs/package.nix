@@ -16,7 +16,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
-    repo = pname;
+    repo = "vhs";
     rev = "v${version}";
     hash = "sha256-ceY4zLd+4EwXpwunKiWnaAB25qutSK1b1SyIriAbAI0=";
   };
@@ -52,13 +52,13 @@ buildGoModule rec {
       --zsh <($out/bin/vhs completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for generating terminal GIFs with code";
     mainProgram = "vhs";
     homepage = "https://github.com/charmbracelet/vhs";
     changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       maaslalani
       penguwin
     ];

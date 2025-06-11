@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   version = "1704.00";
 
   src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
+    owner = "voxelands";
+    repo = "voxelands";
     rev = version;
     sha256 = "0yj9z9nygpn0z63y739v72l3kg81wd71xgix5k045vfzhqsam5m0";
   };

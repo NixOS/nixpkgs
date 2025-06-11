@@ -16,16 +16,16 @@ let
       inherit tiling_wm;
     };
   stableVersion = {
-    version = "2024.3.1.15"; # "Android Studio Meerkat | 2024.3.1 Patch 2"
-    sha256Hash = "sha256-Qo5H/fqJ28HigN8iQSIIqavDX9hnYuIDbpJfCgZfxiE=";
+    version = "2024.3.2.15"; # "Android Studio Meerkat Feature Drop | 2024.3.2 Patch 1"
+    sha256Hash = "sha256-L8s8l1/Q4AJEGvdzTLLu9sRZlkNyRDMQvK8moZXOeIE=";
   };
   betaVersion = {
-    version = "2024.3.2.12"; # "Android Studio Meerkat Feature Drop | 2024.3.2 RC 3"
-    sha256Hash = "sha256-wmCPkYV88/OwuPqm10t3jT1x+cFRK+7Mgy683Au1P3g=";
+    version = "2025.1.1.11"; # "Android Studio Narwhal | 2025.1.1 RC 1"
+    sha256Hash = "sha256-upx+qcrd+E4XVV94iaqZPN8w1RpcD8KfV37397nkznU=";
   };
   latestVersion = {
-    version = "2025.1.1.7"; # "Android Studio Narwhal | 2025.1.1 Canary 7"
-    sha256Hash = "sha256-RQOmTzmk0el8WXE3cnSBCnpginFk0bK45Aij7eil1uM=";
+    version = "2025.1.2.4"; # "Android Studio Narwhal Feature Drop | 2025.1.2 Canary 4"
+    sha256Hash = "sha256-MhonmDupcXGvwWUB+p/9AkqxCP9+j8a7D1bCseEu8GY=";
   };
 in
 {

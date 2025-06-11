@@ -32,15 +32,16 @@
   libgcc,
   krb5,
   wrapGAppsHook3,
+  _experimental-update-script-combinators,
 }:
 let
-  version = "5";
+  version = "7";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-xrbYghNymny6MQrvFn++GaI+kUoOphPQMWcqH47U1Yg=";
+    hash = "sha256-EaAMkYbQwj0IXDraRZHqvdK19SlyKtXfqkIOGzkiY7Q=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -60,7 +61,7 @@ let
     '';
   };
 in
-buildDotnetModule {
+buildDotnetModule (finalAttrs: {
   pname = "grayjay";
 
   inherit version src frontend;
@@ -113,7 +114,8 @@ buildDotnetModule {
 
   nugetDeps = ./deps.json;
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
 
   executables = [ "Grayjay" ];
 
@@ -164,14 +166,17 @@ buildDotnetModule {
     libsecret
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "frontend"
-      "--url"
-      "https://github.com/futo-org/Grayjay.Desktop"
-    ];
-  };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+        "--url"
+        "https://github.com/futo-org/Grayjay.Desktop"
+      ];
+    })
+    (finalAttrs.passthru.fetch-deps)
+  ];
 
   meta = {
     description = "Cross-platform application to stream and download content from various sources";
@@ -188,4 +193,4 @@ buildDotnetModule {
     platforms = [ "x86_64-linux" ];
     mainProgram = "Grayjay";
   };
-}
+})

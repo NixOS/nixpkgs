@@ -5,7 +5,6 @@
   pkg-config,
   openssl,
   stdenv,
-  darwin,
   alsa-lib,
 }:
 

@@ -36,6 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     GEN_ARTIFACTS = "artifacts";
     OPENSSL_NO_VENDOR = true;
+    # to not have "unknown hash" in help output
+    TYPST_VERSION = finalAttrs.version;
   };
 
   # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"

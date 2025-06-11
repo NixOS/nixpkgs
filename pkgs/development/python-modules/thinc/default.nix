@@ -6,7 +6,7 @@
   catalogue,
   confection,
   cymem,
-  cython_0,
+  cython,
   fetchPypi,
   hypothesis,
   mock,
@@ -22,23 +22,18 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "9.1.1";
+  version = "8.3.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IfrimG13d6bwULkEbcnqsRhS8cmpl9zJAy8+zCJ4Sko=";
+    hash = "sha256-SZg/m33cQ0OpUyaUqRGN0hbXpgBSCiGEmkO2wmjsbK0=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml setup.cfg \
-      --replace-fail "blis>=1.0.0,<1.1.0" blis
-  '';
 
   build-system = [
     blis
     cymem
-    cython_0
+    cython
     murmurhash
     numpy
     preshed

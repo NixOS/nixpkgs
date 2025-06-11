@@ -375,16 +375,7 @@ let
     nodePackages.prettier
   ];
 
-  inputs =
-    basePackages
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        CoreServices
-      ]
-    );
+  inputs = basePackages ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
   # define shell startup command
   hooks = ''

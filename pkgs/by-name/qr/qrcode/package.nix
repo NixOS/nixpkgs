@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "qrcode";
-  version = "0-unstable-2024-07-18";
+  version = "0-unstable-2025-04-29";
 
   src = fetchFromGitHub {
     owner = "qsantos";
     repo = "qrcode";
-    rev = "6e882a26a30ab9478ba98591ecc547614fb62b69";
-    hash = "sha256-wJL+XyYnI8crKVu+xwCioD5YcFjE5a92qkbOB7juw+s=";
+    rev = "29140c67b69b79e5c8a52911489648853fddf85f";
+    hash = "sha256-WQeZB8G9Nm68mYmLr0ksZdFDcQxF54X0yJxigJZWvMo=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

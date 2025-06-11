@@ -5,7 +5,6 @@
   cargo,
   fetchFromGitHub,
   libiconv,
-  Foundation,
   rustPlatform,
   rustc,
   setuptools-rust,
@@ -25,14 +24,12 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-9OgUuuMuo2l4YsZMhBZJBqKqbNwj1W4yidoogjcNgm8=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Foundation
   ];
   nativeBuildInputs = [
     setuptools-rust

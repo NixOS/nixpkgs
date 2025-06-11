@@ -14,19 +14,19 @@ let
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-fn9cVi5fa+wv2LitNi4Bb4oFIDKFdl1mTrNPlK3Z0XE=";
+        hash = "sha256-pEmDg//DyZvSiJdvqlNH7kuK6Dz3w2tpeAPpUTVCraI=";
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-B+oKdmNBZAydWfwZHdgVMc1eemrrrANnQyhIphKcDxg=";
+        hash = "sha256-Vh7VkYH93wVS+WzGsGZ/w+DzbE5Z4y4KFl2SvmAgcVI=";
       };
       x86_64-darwin = {
         arch = "darwin-x64";
-        hash = "sha256-sJ4ZfdMytAOehcBQANl5X3Q2snbjd9/t7uUIb9QRMGw=";
+        hash = "sha256-Lmru00/I43IP9Wf3wtXsnh5rlzWPdvMtNImJzN5ELsg=";
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-xCs61aCeIUlICyVCu5sKoVakpVPr01FBxIlmA3SZnt0=";
+        hash = "sha256-lh7YX65p/88GeAHAAGHovektYci3sXrXgdSyXJwfUF4=";
       };
     }
     .${system} or (throw "Unsupported system: ${system}");
@@ -38,7 +38,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     # Please update the corresponding binary (typos-lsp)
     # when updating this extension.
     # See pkgs/by-name/ty/typos-lsp/package.nix
-    version = "0.1.36";
+    version = "0.1.38";
     inherit (extInfo) hash arch;
   };
 

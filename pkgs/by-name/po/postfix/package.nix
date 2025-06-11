@@ -67,11 +67,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.10.1";
+  version = "3.10.2";
 
   src = fetchurl {
     url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
-    hash = "sha256-dYaNt6jtJSzToUwTo844Pd1CVjFgwCAn0GEgLuNnmb8=";
+    hash = "sha256-vMpWQTLUz1+cnONU2rndNe6OniGQCGRiPIFdrBa/vCc=";
   };
 
   nativeBuildInputs = [
@@ -183,16 +183,16 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.postfix.org/";
     changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
     description = "Fast, easy to administer, and secure mail server";
-    license = with licenses; [
+    license = with lib.licenses; [
       ipl10
       epl20
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       globin
       dotlambda
       lewo

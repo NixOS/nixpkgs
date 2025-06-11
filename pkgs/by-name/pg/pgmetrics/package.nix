@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "rapidloop";
-    repo = pname;
+    repo = "pgmetrics";
     rev = "v${version}";
     sha256 = "sha256-SaJc09RRm8MR8OiBIznCRHLhpflQ4Gi8tlXQvYd/j9A=";
   };

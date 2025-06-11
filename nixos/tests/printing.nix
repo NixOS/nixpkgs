@@ -14,7 +14,6 @@ in
   name = "printing";
   meta = with lib.maintainers; {
     maintainers = [
-      domenkozar
       matthewbauer
     ];
   };

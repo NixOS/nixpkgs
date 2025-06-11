@@ -3,7 +3,7 @@
 ## Introduction {#ssec-octave-introduction}
 
 Octave is a modular scientific programming language and environment.
-A majority of the packages supported by Octave from their [website](https://octave.sourceforge.io/packages.php) are packaged in nixpkgs.
+A majority of the packages supported by Octave from their [website](https://gnu-octave.github.io/packages/) are packaged in nixpkgs.
 
 ## Structure {#ssec-octave-structure}
 

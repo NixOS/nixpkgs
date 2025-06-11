@@ -17,48 +17,47 @@ let
     if stdenv.hostPlatform.isDarwin then
       "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
     else
-      "${lldb.out}/bin/lldb-server";
+      "${lib.getBin lldb}/bin/lldb-server";
+  LLVM_TRIPLE = stdenv.buildPlatform.rust.rustcTarget;
 in
 rustPlatform.buildRustPackage {
   pname = "${pname}-adapter";
   inherit version src;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-7tGX8wt2bb1segoWbBEBwZbznOaAiAyh9i/JC5FKUBU=";
+  cargoHash = "sha256-Nh4YesgWa1JR8tLfrIRps9TBdsAfilXu6G2/kB08co8=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ lldb ];
+  # Environment variables, based on <https://github.com/vadimcn/codelldb/blob/master/cargo_config.unix.toml>
+  # The LLDB_* variables are used in adapter/lldb/build.rs.
+  "CC_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/cc";
+  "CXX_${LLVM_TRIPLE}" = "${stdenv.cc}/bin/c++";
+  LLDB_INCLUDE = "${lib.getDev lldb}/include";
+  LLDB_LINK_LIB = "lldb";
+  LLDB_LINK_SEARCH = "${lib.getLib lldb}/lib";
 
   nativeBuildInputs = [ makeWrapper ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-llldb -lc++abi"; };
-
   buildAndTestSubdir = "adapter";
 
-  buildFeatures = [ "weak-linkage" ];
+  # There's isn't much point in enabling the `weaklink` feature
+  # when we provide lldb via Nix.
+  # buildFeatures = [ "weaklink" ];
 
   cargoBuildFlags = [
-    "--lib"
     "--bin=codelldb"
   ];
 
   postFixup = ''
-    mkdir -p $out/share/{adapter,formatters}
-    # codelldb expects libcodelldb.so to be in the same
-    # directory as the executable, and can't find it in $out/lib.
-    # To make codelldb executable as a standalone,
-    # we put all files in $out/share, and then wrap the binary in $out/bin.
+    mkdir -p $out/share/{adapter,lang_support}
     mv $out/bin/* $out/share/adapter
-    cp $out/lib/* $out/share/adapter
     cp -r adapter/scripts $out/share/adapter
-    cp -t $out/share/formatters formatters/*.py
+    cp -t $out/share/lang_support lang_support/*.py
     ln -s ${lib.getLib lldb} $out/share/lldb
     makeWrapper $out/share/adapter/codelldb $out/bin/codelldb \
       --set-default LLDB_DEBUGSERVER_PATH "${lldbServer}"
   '';
 
-  patches = [ ./patches/adapter-output-shared_object.patch ];
-
-  # Tests are linked to liblldb but it is not available here.
+  # Tests fail to build (as of version 1.11.4).
   doCheck = false;
 
   passthru = { inherit lldbServer; };

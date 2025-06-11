@@ -26,8 +26,7 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-B652Bfanw51e+U6rHukWtfdr7bjoWDUx/nUczDwyzZk=";
   };
 

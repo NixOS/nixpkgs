@@ -23,7 +23,7 @@
   ninja,
   numpy,
   opencolorio,
-  openimageio_2,
+  openimageio,
   opensubdiv,
   osl,
   ptex,
@@ -51,14 +51,14 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "25.02a";
+  version = "25.05.01";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     tag = "v${version}";
-    hash = "sha256-QFwG6kOLM+R+QIAozk/Dbldj8LRt9kCJv0W/EGHkq6Q=";
+    hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
   };
 
   stdenv = python.stdenv;
@@ -69,8 +69,8 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "port-to-embree-4.patch";
       # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/a07a6b4d1da19bfc499db49641d74fb7c1a71e9b.patch?full_index=1";
-      hash = "sha256-Gww6Ll2nKwpcxMY9lnf5BZ3eqUWz1rik9P3mPKDOf+Y=";
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/9ea3bc1ab550ec46c426dab04292d9667ccd2518.patch?full_index=1";
+      hash = "sha256-QjA3kjUDsSleUr+S/bQLb+QK723SNFvnmRPT+ojjgq8=";
     })
   ];
 
@@ -100,6 +100,8 @@ buildPythonPackage rec {
       cmake
       ninja
       setuptools
+      opensubdiv.dev
+      opensubdiv.static
     ]
     ++ lib.optionals withDocs [
       git
@@ -118,8 +120,7 @@ buildPythonPackage rec {
       imath
       materialx
       opencolorio
-      openimageio_2
-      opensubdiv
+      openimageio
       ptex
       tbb
     ]
@@ -137,6 +138,7 @@ buildPythonPackage rec {
       boost
       jinja2
       numpy
+      opensubdiv
       pyopengl
       distutils
     ]

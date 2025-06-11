@@ -13,7 +13,7 @@
 
 let
   pname = "freeplane";
-  version = "1.12.8";
+  version = "1.12.10";
 
   jdk = jdk17;
   gradle = gradle_8;
@@ -22,7 +22,7 @@ let
     owner = "freeplane";
     repo = "freeplane";
     rev = "release-${version}";
-    hash = "sha256-yzjzaobXuQH8CHz183ditL2LsCXU5xLh4+3El4Ffu20=";
+    hash = "sha256-08Rl3vhXtlylNDc1gh5aZJ9/RoxeyxpDbklmhMVJuq4=";
   };
 
 in
@@ -37,10 +37,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Plugin update to support Gradle 8.13; remove when included in a release.
+    # freeplane is using the wrong repository for a plugin
+    # remove when https://github.com/freeplane/freeplane/pull/2453 is merged and released
     (fetchpatch {
-      url = "https://github.com/freeplane/freeplane/commit/e58958783ef6f85ab00bf270c1f897093c4d7006.patch";
-      hash = "sha256-oQF/GbItl2ZEVlTKzojqk9xTWl8CVP7V3yig/py71hk=";
+      url = "https://github.com/amadejkastelic/freeplane/commit/973c49b7a73622e434bb86c8caea15383201b58a.patch";
+      hash = "sha256-iztFmISXZu8xKWqpwDYgBSl8ZSpZEtNriwM+EW1+s+Y=";
     })
   ];
 

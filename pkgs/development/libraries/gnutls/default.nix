@@ -3,11 +3,9 @@
   stdenv,
   fetchurl,
   zlib,
-  lzo,
   libtasn1,
   nettle,
   pkg-config,
-  lzip,
   perl,
   gmp,
   autoconf,
@@ -27,7 +25,6 @@
   libunistring,
   withP11-kit ? !stdenv.hostPlatform.isStatic,
   p11-kit,
-  Security, # darwin Security.framework
   # certificate compression - only zlib now, more possible: zstd, brotli
 
   # for passthru.tests
@@ -142,8 +139,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      lzo
-      lzip
       libtasn1
       libidn2
       zlib
@@ -153,7 +148,7 @@ stdenv.mkDerivation rec {
       gettext
       libiconv
     ]
-    ++ lib.optional (withP11-kit) p11-kit
+    ++ lib.optional withP11-kit p11-kit
     ++ lib.optional (tpmSupport && stdenv.hostPlatform.isLinux) trousers;
 
   nativeBuildInputs =
@@ -172,10 +167,7 @@ stdenv.mkDerivation rec {
       util-linux
     ];
 
-  propagatedBuildInputs =
-    [ nettle ]
-    # Builds dynamically linking against gnutls seem to need the framework now.
-    ++ lib.optional isDarwin Security;
+  propagatedBuildInputs = [ nettle ];
 
   inherit doCheck;
   # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` breaks tests.
@@ -212,8 +204,8 @@ stdenv.mkDerivation rec {
       samba
       openconnect
       ;
-    inherit (ocamlPackages) ocamlnet;
-    haskell-gnutls = haskellPackages.gnutls;
+    #inherit (ocamlPackages) ocamlnet;
+    #haskell-gnutls = haskellPackages.gnutls;
     python3-gnutls = python3Packages.python3-gnutls;
     rsyslog = rsyslog.override { withGnutls = true; };
     static = pkgsStatic.gnutls;

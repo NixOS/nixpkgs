@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
-    repo = pname;
+    repo = "pretender";
     tag = "v${version}";
     hash = "sha256-c8uXN7UMj6UZPVt2aNSg6mRex8w+u7J5I7TAB7MzEWg=";
   };
@@ -20,12 +20,12 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for handling machine-in-the-middle tasks";
     mainProgram = "pretender";
     homepage = "https://github.com/RedTeamPentesting/pretender";
     changelog = "https://github.com/RedTeamPentesting/pretender/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

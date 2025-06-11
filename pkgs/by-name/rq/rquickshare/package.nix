@@ -3,7 +3,6 @@
   cargo-tauri,
   cargo-tauri_1,
   fetchFromGitHub,
-  applyPatches,
   glib-networking,
   libayatana-appindicator,
   libsoup_2_4,
@@ -11,7 +10,6 @@
   nix-update,
   nodejs,
   openssl,
-  perl,
   pkg-config,
   pnpm_9,
   protobuf,
@@ -42,15 +40,14 @@ rustPlatform.buildRustPackage rec {
   pname = "rquickshare" + (app-type-either "" "-legacy");
   version = "0.11.5";
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "Martichou";
-      repo = "rquickshare";
-      tag = "v${version}";
-      hash = "sha256-DZdzk0wqKhVa51PgQf8UsAY6EbGKvRIGru71Z8rvrwA=";
-    };
-    patches = [ ./fix-pnpm-outdated-lockfile.patch ];
+  src = fetchFromGitHub {
+    owner = "Martichou";
+    repo = "rquickshare";
+    tag = "v${version}";
+    hash = "sha256-DZdzk0wqKhVa51PgQf8UsAY6EbGKvRIGru71Z8rvrwA=";
   };
+
+  patches = [ ./fix-pnpm-outdated-lockfile.patch ];
 
   # from https://github.com/NixOS/nixpkgs/blob/04e40bca2a68d7ca85f1c47f00598abb062a8b12/pkgs/by-name/ca/cargo-tauri/test-app.nix#L23-L26
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -60,46 +57,57 @@ rustPlatform.buildRustPackage rec {
 
   pnpmRoot = "app/${app-type}";
   pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
-
-    sourceRoot = "${src.name}/app/${app-type}";
+    inherit
+      pname
+      version
+      src
+      patches
+      ;
+    postPatch = "cd ${pnpmRoot}";
     hash = app-type-either "sha256-V46V/VPwCKEe3sAp8zK0UUU5YigqgYh1GIOorqIAiNE=" "sha256-8QRigYNtxirXidFFnTzA6rP0+L64M/iakPqe2lZKegs=";
   };
 
   useFetchCargoVendor = true;
   cargoRoot = "app/${app-type}/src-tauri";
   buildAndTestSubdir = cargoRoot;
-  cargoPatches = [ ./remove-duplicate-versions-of-sys-metrics.patch ];
+  cargoPatches = [
+    ./remove-duplicate-versions-of-sys-metrics.patch
+    ./remove-code-signing-darwin.patch
+  ];
   cargoHash = app-type-either "sha256-XfN+/oC3lttDquLfoyJWBaFfdjW/wyODCIiZZksypLM=" "sha256-4vBHxuKg4P9H0FZYYNUT+AVj4Qvz99q7Bhd7x47UC2w=";
 
-  nativeBuildInputs = [
-    proper-cargo-tauri.hook
+  nativeBuildInputs =
+    [
+      proper-cargo-tauri.hook
 
-    # Setup pnpm
-    nodejs
-    pnpm_9.configHook
+      # Setup pnpm
+      nodejs
+      pnpm_9.configHook
 
-    # Make sure we can find our libraries
-    perl
-    pkg-config
-    protobuf
-    wrapGAppsHook4
-  ];
-
-  buildInputs =
-    [ openssl ]
+      protobuf
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pkg-config
+      wrapGAppsHook4
+    ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux (
+    [
       glib-networking
       libayatana-appindicator
+      openssl
     ]
     ++ lib.optionals (app-type == "main") [
-      webkitgtk_4_1
       libsoup_3
+      webkitgtk_4_1
     ]
     ++ lib.optionals (app-type == "legacy") [
-      webkitgtk_4_0
       libsoup_2_4
-    ];
+      webkitgtk_4_0
+    ]
+  );
+
+  env.OPENSSL_NO_VENDOR = 1;
 
   passthru =
     # Don't set an update script for the legacy version

@@ -29,26 +29,22 @@
   nixosTests,
   unstableGitUpdater,
   apple-sdk_14,
+  libtommath,
 }:
 
 let
-  adobe-icc-profiles = fetchurl {
-    url = "https://download.adobe.com/pub/adobe/iccprofiles/win/AdobeICCProfilesCS4Win_end-user.zip";
-    hash = "sha256-kgQ7fDyloloPaXXQzcV9tgpn3Lnr37FbFiZzEb61j5Q=";
-    name = "adobe-icc-profiles.zip";
-  };
   # Note: The cacert version is synthetic and must match the version in the package's CMake
   cacert_version = "2023-12-12";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-03-27";
+  version = "0-unstable-2025-06-03";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "5ea45da15f5ac956db1cfe0aad74b570f7e88339";
-    hash = "sha256-wODm5O15jwnyxvkHVCQBptwoC97tTD0KzwYqGPdY520=";
+    rev = "4c54a28c45be4e8185158d40a37e083e038a6465";
+    hash = "sha256-YHWkG2RJk6NaouRvis2L+njtYWKB7T569y1Tq+mYdz0=";
   };
 
   postPatch = ''
@@ -83,10 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir build/Caches/PublicSuffix
     cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
-
-    mkdir build/Caches/AdobeICCProfiles
-    cp ${adobe-icc-profiles} build/Caches/AdobeICCProfiles/adobe-icc-profiles.zip
-    chmod +w build/Caches/AdobeICCProfiles
   '';
 
   nativeBuildInputs = [
@@ -95,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     qt6Packages.wrapQtAppsHook
+    libtommath
   ];
 
   buildInputs =
@@ -131,6 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
+      # Takes an enormous amount of resources, even with mold
+      (lib.cmakeBool "ENABLE_LTO_FOR_RELEASE" false)
       # Disable network operations
       "-DSERENITY_CACHE_DIR=Caches"
       "-DENABLE_NETWORK_DOWNLOADS=OFF"
@@ -144,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
   # ld: [...]/OESVertexArrayObject.cpp.o: undefined reference to symbol 'glIsVertexArrayOES'
   # ld: [...]/libGL.so.1: error adding symbols: DSO missing from command line
   # https://github.com/LadybirdBrowser/ladybird/issues/371#issuecomment-2616415434
-  env.NIX_LDFLAGS = "-lGL";
+  env.NIX_LDFLAGS = "-lGL -lfontconfig";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications $out/bin

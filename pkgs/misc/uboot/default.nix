@@ -27,8 +27,9 @@
   armTrustedFirmwareRK3568,
   armTrustedFirmwareRK3588,
   armTrustedFirmwareS905,
+  opensbi,
   buildPackages,
-}:
+}@pkgs:
 
 let
   defaultVersion = "2025.01";
@@ -59,6 +60,7 @@ let
       extraMakeFlags ? [ ],
       extraMeta ? { },
       crossTools ? false,
+      stdenv ? pkgs.stdenv,
       ...
     }@args:
     stdenv.mkDerivation (
@@ -607,6 +609,18 @@ in
     filesToInstall = [ "u-boot.rom" ];
   };
 
+  ubootQemuX86_64 = buildUBoot {
+    defconfig = "qemu-x86_64_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+    '';
+    extraMeta.platforms = [ "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
+  };
+
   ubootQuartz64B = buildUBoot {
     defconfig = "quartz64-b-rk3566_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
@@ -794,6 +808,26 @@ in
     # sata init; load sata 0 $loadaddr u-boot-with-nand-spl.imx
     # sf probe; sf update $loadaddr 0 80000
   };
+
+  ubootVisionFive2 =
+    let
+      opensbi_vf2 = opensbi.overrideAttrs (attrs: {
+        makeFlags = attrs.makeFlags ++ [
+          # Matches u-boot documentation: https://docs.u-boot.org/en/latest/board/starfive/visionfive2.html
+          "FW_TEXT_START=0x40000000"
+          "FW_OPTIONS=0"
+        ];
+      });
+    in
+    buildUBoot {
+      defconfig = "starfive_visionfive2_defconfig";
+      extraMeta.platforms = [ "riscv64-linux" ];
+      OPENSBI = "${opensbi_vf2}/share/opensbi/lp64/generic/firmware/fw_dynamic.bin";
+      filesToInstall = [
+        "spl/u-boot-spl.bin.normal.out"
+        "u-boot.itb"
+      ];
+    };
 
   ubootWandboard = buildUBoot {
     defconfig = "wandboard_defconfig";

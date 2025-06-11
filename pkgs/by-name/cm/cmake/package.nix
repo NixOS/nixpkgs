@@ -29,13 +29,11 @@
   useSharedLibraries ? (!isMinimalBuild && !stdenv.hostPlatform.isCygwin),
   uiToolkits ? [ ], # can contain "ncurses" and/or "qt5"
   buildDocs ? !(isMinimalBuild || (uiToolkits == [ ])),
-  darwin,
   libsForQt5,
   gitUpdater,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   inherit (libsForQt5) qtbase wrapQtAppsHook;
   cursesUI = lib.elem "ncurses" uiToolkits;
   qt5UI = lib.elem "qt5" uiToolkits;
@@ -78,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9900
       # Needed to correctly link curl in pkgsStatic.
       ./008-FindCURL-Add-more-target-properties-from-pkg-config.diff
+      # Backport of https://gitlab.kitware.com/cmake/cmake/-/commit/1b0c92a3a1b782ff3e1c4499b6ab8db614d45bcd
+      ./009-cmCurl-Avoid-using-undocumented-type-for-CURLOPT_NETRC-values.diff
     ];
 
   outputs =
@@ -117,9 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional useOpenSSL openssl
     ++ lib.optional cursesUI ncurses
-    ++ lib.optional qt5UI qtbase
-    ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && !isMinimalBuild) SystemConfiguration;
+    ++ lib.optional qt5UI qtbase;
 
   preConfigure = ''
     fixCmakeFiles .

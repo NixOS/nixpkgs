@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.3.7";
+  version = "0.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-text-splitters==${version}";
-    hash = "sha256-tIX1nxmXU3xhJuM2Q3Tm4fbCoJwI0A8+G1aSyLcoNo0=";
+    hash = "sha256-Ia3ZZ94uLZUVr1/w4HLPZLM6u8leA4OJtAwUf7eSAE0=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain-core"
   ];
 

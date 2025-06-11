@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
+    repo = "libdmapsharing";
     rev = "${lib.toUpper pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "oR9lpOFxgGfrtzncFT6dbmhKQfcuH/NvhOR/USHAHQc=";
   };

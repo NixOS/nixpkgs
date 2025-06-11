@@ -4,18 +4,16 @@
   fetchFromGitHub,
   cmake,
   ninja,
-  installCompatHeader ? false,
-  installLegacyHeaders ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gsl-lite";
-  version = "0.42.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "gsl-lite";
     repo = "gsl-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4CQG+sX/UTQ4zICmDR6YBfapuh0hSqkWk5skZAVAy2o=";
+    hash = "sha256-QlAeXUKVzH0QYxbKgWPS64h1iL4nnsmJ10h/wzoxq78=";
   };
 
   nativeBuildInputs = [
@@ -25,8 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "GSL_LITE_OPT_BUILD_TESTS" finalAttrs.doCheck)
-    (lib.cmakeBool "GSL_LITE_OPT_INSTALL_COMPAT_HEADER" installCompatHeader)
-    (lib.cmakeBool "GSL_LITE_OPT_INSTALL_LEGACY_HEADERS" installLegacyHeaders)
   ];
 
   # Building tests is broken on Darwin.

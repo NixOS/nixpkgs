@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   unixtools,
-  php82,
+  php,
   python3,
   makeWrapper,
   nixosTests,
@@ -23,20 +23,20 @@
 }:
 
 let
-  phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
+  phpPackage = php.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "25.4.0";
+  version = "25.5.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
-    repo = pname;
+    repo = "librenms";
     tag = version;
-    sha256 = "sha256-t+RupwKnUtQd3A0VzWhCXNzc+TnVnDMaMJ6Jcgp+Sfg=";
+    sha256 = "sha256-I1bHEFWGgwHq1U8Ipbm9tu7t6ikfMG+EIPjCsLAP/tk=";
   };
 
-  vendorHash = "sha256-t/3wBSXJJHqbGR1iKF4zC2Ia99gXNlanabR/iPPlHqw=";
+  vendorHash = "sha256-bt7DXkQ3Jgab4L9fB8qInbHvlRxFfkzP+F8DVQ9qWJ4=";
 
   php = phpPackage;
 

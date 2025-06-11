@@ -72,7 +72,11 @@ let
     else
       targetPlatform.parsed.kernel.name;
 
-  swiftArch = stdenv.hostPlatform.darwinArch;
+  # This causes swiftPackages.XCTest to fail to build on aarch64-linux
+  # as I believe this is because Apple calls the architecture aarch64
+  # on Linux rather than arm64 when used with macOS.
+  swiftArch =
+    if hostPlatform.isDarwin then hostPlatform.darwinArch else targetPlatform.parsed.cpu.name;
 
   # On Darwin, a `.swiftmodule` is a subdirectory in `lib/swift/<OS>`,
   # containing binaries for supported archs. On other platforms, binaries are

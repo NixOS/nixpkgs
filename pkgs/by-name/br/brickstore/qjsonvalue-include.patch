@@ -1,0 +1,12 @@
+diff --git a/src/bricklink/order.cpp b/src/bricklink/order.cpp
+index 14426e5b..59856f0c 100755
+--- a/src/bricklink/order.cpp
++++ b/src/bricklink/order.cpp
+@@ -16,6 +16,7 @@
+ #include <QtSql/QSqlError>
+ #include <QtSql/QSqlQueryModel>
+ #include <QtCore/QLoggingCategory>
++#include <QtCore/QJsonValue>
+ 
+ #include "bricklink/core.h"
+ #include "bricklink/io.h"

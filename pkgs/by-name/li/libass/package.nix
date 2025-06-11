@@ -11,7 +11,6 @@
   fontconfig ? null, # fontconfig support
   largeTilesSupport ? false, # Use larger tiles in the rasterizer
   libiconv,
-  darwin,
 }:
 
 assert fontconfigSupport -> fontconfig != null;
@@ -49,9 +48,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional fontconfigSupport fontconfig
     ++ lib.optional stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.ApplicationServices
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreText
     ];
 
   meta = with lib; {

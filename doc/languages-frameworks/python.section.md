@@ -136,7 +136,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      domenkozar
       lovek323
       madjar
       lsix
@@ -1259,6 +1258,13 @@ as many tests should be enabled as possible. Failing tests can still be
 a good indication that the package is not in a valid state.
 :::
 
+::: {.note}
+We only want to test the functionality of a package. In particular, we are not
+interested in coverage, formatting, and type checking. If pytest fails with
+`unrecognized arguments: --cov`, add `pytest-cov-stub` to `nativeCheckInputs`
+rather than `pytest-cov`.
+:::
+
 #### Using pytest {#using-pytest}
 
 Pytest is the most common test runner for python repositories. A trivial
@@ -2117,6 +2123,7 @@ because we can only provide security support for non-vendored dependencies.
 
 We recommend [nix-init](https://github.com/nix-community/nix-init) for creating new python packages within nixpkgs,
 as it already prefetches the source, parses dependencies for common formats and prefills most things in `meta`.
+When using the tool, pull from the original source repository instead of PyPI, if possible.
 
 See also [contributing section](#contributing).
 
@@ -2172,7 +2179,8 @@ The following rules are desired to be respected:
 * Make sure the tests are enabled using for example [`pytestCheckHook`](#using-pytestcheckhook) and, in the case of
   libraries, are passing for all interpreters. If certain tests fail they can be
   disabled individually. Try to avoid disabling the tests altogether. In any
-  case, when you disable tests, leave a comment explaining why.
+  case, when you disable tests, leave a comment explaining not only _what_ the failure
+  is but _why_ the test failure can be ignored for safe distribution with nixpkgs.
 * `pythonImportsCheck` is set. This is still a good smoke test even if `pytestCheckHook` is set.
 * `meta.platforms` takes the default value in many cases.
   It does not need to be set explicitly unless the package requires a specific platform.
@@ -2190,6 +2198,8 @@ The following rules are desired to be respected:
   that characters should be converted to lowercase and `.` and `_` should be
   replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz).
   If necessary, `pname` has to be given a different value within `fetchPypi`.
+* It's generally preferable to fetch `src` directly from the repo and not from
+  PyPI. Use `fetchPypi` when there's a clear technical reason to do so.
 * Packages from sources such as GitHub and GitLab that do not exist on PyPI
   should not use a name that is already used on PyPI. When possible, they should
   use the package repository name prefixed with the owner (e.g. organization) name

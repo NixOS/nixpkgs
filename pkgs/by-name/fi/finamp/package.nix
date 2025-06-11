@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter,
+  flutter329,
   mpv-unwrapped,
   patchelf,
   fetchFromGitHub,
@@ -11,7 +11,7 @@
 let
   version = "0.9.16-beta";
 in
-flutter.buildFlutterApplication {
+flutter329.buildFlutterApplication {
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {

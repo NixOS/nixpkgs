@@ -10,7 +10,6 @@
 
   # native dependencies
   abseil-cpp,
-  darwin,
 
   # tests
   pytestCheckHook,
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [
-    abseil-cpp
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.CoreServices ];
+  buildInputs = [ abseil-cpp ];
 
   pythonImportsCheck = [ "webrtc_noise_gain" ];
 

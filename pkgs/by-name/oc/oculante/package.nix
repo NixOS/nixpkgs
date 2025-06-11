@@ -16,7 +16,6 @@
   wayland,
   stdenv,
   gtk3,
-  darwin,
   perl,
   wrapGAppsHook3,
 }:
@@ -57,9 +56,6 @@ rustPlatform.buildRustPackage rec {
       gtk3
       libxkbcommon
       wayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libobjc
     ];
 
   checkFlags = [

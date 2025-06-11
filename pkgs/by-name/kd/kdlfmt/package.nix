@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kdlfmt";
-  version = "0.0.15";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "hougesen";
     repo = "kdlfmt";
     rev = "v${version}";
-    hash = "sha256-nnr3QXEXQGbJKjVvQXqhJ+iFBgI++AKK3wKMt2OqIYc=";
+    hash = "sha256-qc2wU/borl3h2fop6Sav0zCrg8WdvHrB3uMA72uwPis=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-VMjsTVJ9pyI1pdvkD5nAgFELK+o2tl5lu6peN87ssqs=";
+  cargoHash = "sha256-xoOnFJqDucg3fUDx5XbXsZT4rSjZhzt5rNbH+DZ1kGA=";
 
   meta = {
     description = "Formatter for kdl documents";

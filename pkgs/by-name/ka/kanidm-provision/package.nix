@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  yq,
   versionCheckHook,
   nix-update-script,
   nixosTests,
@@ -10,25 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanidm-provision";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "kanidm-provision";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+NQJEAJ0DqKEV1cYZN7CLzGoBJNUL3SQAMmxRQG5DMI=";
+    hash = "sha256-m3bF4wFPVRc2E+E/pZc3js9T4rYbTejo/FFpysytWKw=";
   };
 
-  postPatch = ''
-    tomlq -ti '.package.version = "${finalAttrs.version}"' Cargo.toml
-  '';
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-uo/TGyfNChq/t6Dah0HhXhAwktyQk0V/wewezZuftNk=";
-
-  nativeBuildInputs = [
-    yq # for `tomlq`
-  ];
+  cargoHash = "sha256-dPTrIc/hTbMlFDXYMk/dTjqaNECazldfW43egDOwyLM=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -40,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "A small utility to help with kanidm provisioning";
+    description = "Small utility to help with kanidm provisioning";
     homepage = "https://github.com/oddlama/kanidm-provision";
     license = with lib.licenses; [
       asl20

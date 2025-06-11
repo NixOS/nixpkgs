@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitLab,
 
-  ApplicationServices,
   asciidoctor,
   bcg729,
   bison,
@@ -43,7 +42,6 @@
   snappy,
   spandsp3,
   speexdsp,
-  SystemConfiguration,
   wrapGAppsHook3,
   zlib-ng,
   zstd,
@@ -148,9 +146,7 @@ stdenv.mkDerivation rec {
       sbc
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
       gmp
-      SystemConfiguration
     ];
 
   strictDeps = true;
@@ -218,7 +214,7 @@ stdenv.mkDerivation rec {
     cp -r $out/lib/wireshark/extcap $out/Applications/Wireshark.app/Contents/MacOS/extcap
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Powerful network protocol analyzer";
     longDescription = ''
       Wireshark (formerly known as "Ethereal") is a powerful network
@@ -227,9 +223,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.wireshark.org";
     changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${version}.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       bjornfor
       fpletz
     ];

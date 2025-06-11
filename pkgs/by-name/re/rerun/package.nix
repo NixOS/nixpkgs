@@ -34,13 +34,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.23.1";
+  version = "0.23.3";
 
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
-    hash = "sha256-P4PNGguBlHlVRlABNDZGxdAKL0NkoROrcR+7+q7Ln4Q=";
+    hash = "sha256-XVrhVUP7AIywIq357HoSP/ZCmYTnLiX/tgaOzhh6PHo=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1DNrgptSeggyxS/JFaFinS2RqpKVJ8SoGgLtffaS9HU=";
+  cargoHash = "sha256-tj9+dvXF3iDbUoxk7Hdz+PTuyDpCgdRE6ZqHBLTZuMU=";
 
   cargoBuildFlags = [ "--package rerun-cli" ];
   cargoTestFlags = [ "--package rerun-cli" ];

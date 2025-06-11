@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  python311Packages,
+  python3Packages,
   desktop-file-utils,
   freecell-solver,
   black-hole-solver,
@@ -10,7 +10,7 @@
   gitUpdater,
 }:
 
-python311Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pysolfc";
   version = "3.2.0";
 
@@ -51,7 +51,7 @@ python311Packages.buildPythonApplication rec {
     '';
   };
 
-  propagatedBuildInputs = with python311Packages; [
+  propagatedBuildInputs = with python3Packages; [
     tkinter
     six
     random2
@@ -98,7 +98,7 @@ python311Packages.buildPythonApplication rec {
   );
 
   meta = with lib; {
-    description = "A collection of more than 1000 solitaire card games";
+    description = "Collection of more than 1000 solitaire card games";
     mainProgram = "pysol.py";
     homepage = "https://pysolfc.sourceforge.io";
     license = licenses.gpl3;

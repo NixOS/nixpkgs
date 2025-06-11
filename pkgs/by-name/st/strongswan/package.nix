@@ -28,7 +28,6 @@
   tpm2-tss,
   enableNetworkManager ? false,
   networkmanager,
-  darwin,
   nixosTests,
 }:
 
@@ -78,9 +77,6 @@ stdenv.mkDerivation rec {
       pam
       iptables
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks; [ SystemConfiguration ]
-    )
     ++ lib.optionals enableNetworkManager [
       networkmanager
       glib

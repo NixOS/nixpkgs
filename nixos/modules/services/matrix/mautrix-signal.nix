@@ -270,7 +270,7 @@ in
     buildDocsInSandbox = false;
     doc = ./mautrix-signal.md;
     maintainers = with lib.maintainers; [
-      alyaeanyx
+      pentane
       frederictobiasc
     ];
   };

@@ -134,6 +134,12 @@ let
         # APEI Generic Hardware Error Source
         ACPI_APEI_GHES = (option yes);
 
+        # Without this, on some hardware the kernel fails at some
+        # point after the EFI stub has executed but before a console
+        # is set up. Regardless, it's good to have the extra debug
+        # anyway.
+        ACPI_DEBUG = yes;
+
         # Enable lazy RCUs for power savings:
         # https://lore.kernel.org/rcu/20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1/
         # RCU_LAZY depends on RCU_NOCB_CPU depends on NO_HZ_FULL
@@ -282,7 +288,7 @@ let
         IP_VS_PROTO_ESP = yes;
         IP_VS_PROTO_AH = yes;
         IP_VS_IPV6 = yes;
-        IP_DCCP_CCID3 = no; # experimental
+        IP_DCCP_CCID3 = whenOlder "6.16" no; # experimental
         CLS_U32_PERF = yes;
         CLS_U32_MARK = yes;
         BPF_JIT = whenPlatformHasEBPFJit yes;
@@ -1102,7 +1108,10 @@ let
 
         # enable support for device trees and overlays
         OF = option yes;
-        OF_OVERLAY = option yes;
+        # OF_OVERLAY breaks v5.10 on x86_64, see https://github.com/NixOS/nixpkgs/issues/403985
+        OF_OVERLAY = lib.mkIf (!(lib.versionOlder version "5.15" && stdenv.hostPlatform.isx86_64)) (
+          option yes
+        );
 
         # Enable initrd support.
         BLK_DEV_INITRD = yes;
@@ -1165,6 +1174,7 @@ let
 
         DVB_DYNAMIC_MINORS = option yes; # we use udev
 
+        EFI = lib.mkIf stdenv.hostPlatform.isEfi yes;
         EFI_STUB = yes; # EFI bootloader in the bzImage itself
         EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER = whenOlder "6.2" (whenAtLeast "5.8" yes); # initrd kernel parameter for EFI
 

@@ -69,13 +69,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GSettings editor for GNOME";
     mainProgram = "dconf-editor";
     homepage = "https://apps.gnome.org/DconfEditor/";
     changelog = "https://gitlab.gnome.org/GNOME/dconf-editor/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

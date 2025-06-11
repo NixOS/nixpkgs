@@ -174,11 +174,11 @@ py.pkgs.buildPythonPackage rec {
     "test_050_non_json_response"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://irrd.readthedocs.io/en/v${version}/releases/";
     description = "Internet Routing Registry database server, processing IRR objects in the RPSL format";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/irrdnet/irrd";
-    teams = [ teams.wdz ];
+    teams = [ lib.teams.wdz ];
   };
 }

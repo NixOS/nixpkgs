@@ -4,8 +4,10 @@
   mkDerivation,
   aeson,
   base,
+  base64-bytestring,
   bytestring,
   containers,
+  cryptohash-sha256,
   directory,
   fetchgit,
   hsyslog,
@@ -18,6 +20,7 @@
   optparse-applicative,
   pretty-simple,
   process,
+  random,
   streaming-commons,
   string-qq,
   strings,
@@ -31,11 +34,11 @@
 }:
 mkDerivation {
   pname = "oama";
-  version = "0.19.0";
+  version = "0.20.2";
   src = fetchgit {
     url = "https://github.com/pdobsan/oama.git";
-    sha256 = "1nrgpnh76fcmkdw1j3ha5cam7bnxkgfns2plj8609qv0v0swmj4s";
-    rev = "3eef17b7e290dfced252375a13bc8dd46849adf0";
+    sha256 = "1zr2a77b3azdqyk6hzchhg573gwwb5h0d7x382srggm25lp3isk9";
+    rev = "bbe5a6d9f87659c8a24b6515694acf1b522a396b";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -43,8 +46,10 @@ mkDerivation {
   libraryHaskellDepends = [
     aeson
     base
+    base64-bytestring
     bytestring
     containers
+    cryptohash-sha256
     directory
     hsyslog
     http-conduit
@@ -55,6 +60,7 @@ mkDerivation {
     optparse-applicative
     pretty-simple
     process
+    random
     streaming-commons
     string-qq
     strings
@@ -69,8 +75,10 @@ mkDerivation {
   executableHaskellDepends = [
     aeson
     base
+    base64-bytestring
     bytestring
     containers
+    cryptohash-sha256
     directory
     hsyslog
     http-conduit
@@ -81,6 +89,7 @@ mkDerivation {
     optparse-applicative
     pretty-simple
     process
+    random
     streaming-commons
     string-qq
     strings

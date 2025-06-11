@@ -33,13 +33,13 @@
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.13.1";
+  version = "0.13.6";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-++GyVa6WaZw30apjqsBeZcCdaYMiUDaf1db6fxzHfiI=";
+    hash = "sha256-Qsz0SJvWOJ/MH9eIMyBODCBCGC7vp2lzPsq+32tRKU8=";
   };
 
   build-system = [ hatchling ];

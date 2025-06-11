@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.5.1";
+  version = "2.7.1";
   format = "wheel";
 
   src =
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     in
     fetchurl srcs;
 
-  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.13");
+  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.14");
 
   buildInputs =
     [
@@ -90,6 +90,9 @@ buildPythonPackage rec {
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }

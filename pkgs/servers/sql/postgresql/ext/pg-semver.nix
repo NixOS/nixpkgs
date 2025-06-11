@@ -4,7 +4,6 @@
   postgresql,
   postgresqlBuildExtension,
   postgresqlTestExtension,
-  testers,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

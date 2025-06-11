@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pypglab";
-  version = "0.0.3";
+  version = "0.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pglab-electronics";
     repo = "pypglab";
     tag = version;
-    hash = "sha256-b+o98DrTK1HBKvRfTjdJ1MkdUHEg/TaQZhoLR7URZ0c=";
+    hash = "sha256-nnLGFVV+aWkaE7RnAzLHji/tKxIiA9qJS/BUTv3KNeo=";
   };
 
   build-system = [ hatchling ];

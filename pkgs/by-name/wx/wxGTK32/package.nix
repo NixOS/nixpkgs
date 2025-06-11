@@ -28,7 +28,7 @@
   unicode ? true,
   withMesa ? !stdenv.hostPlatform.isDarwin,
   withWebKit ? true,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
 }:
 let
   catch = fetchFromGitHub {
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       xorgproto
     ]
     ++ lib.optional withMesa libGLU
-    ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_0
+    ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_1
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       expat
     ];

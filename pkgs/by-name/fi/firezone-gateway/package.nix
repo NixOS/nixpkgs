@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "firezone-gateway";
-  version = "1.4.6";
+  version = "1.4.10";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
     tag = "gateway-${version}";
-    hash = "sha256-ra5ZWPwNhyZEc9pBkcITvQyomgQ22yiWI16dnv1Fm3E=";
+    hash = "sha256-3iU7AHu3GupqiZEDkuOEb+rFPA2KB1fjVNX1BY4abXc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-5B9nvFanHXZV8p8m2vsRLC5pSzwL2lX+V651oV8joJs=";
+  cargoHash = "sha256-p2zLhLFL6NbHvVojQU5+1amf+Kh0jRAbIESPt2vqWwg=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "gateway";
   RUSTFLAGS = "--cfg system_certs";
@@ -41,5 +41,6 @@ rustPlatform.buildRustPackage rec {
       patrickdag
     ];
     mainProgram = "firezone-gateway";
+    platforms = lib.platforms.linux;
   };
 }

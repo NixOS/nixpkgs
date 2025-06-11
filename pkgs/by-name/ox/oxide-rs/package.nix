@@ -7,8 +7,6 @@
   libgit2,
   openssl,
   zlib,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,24 +45,19 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curl
-      libgit2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    curl
+    libgit2
+    openssl
+    zlib
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
   };
 
   meta = {
-    description = "The Oxide Rust SDK and CLI";
+    description = "Oxide Rust SDK and CLI";
     homepage = "https://github.com/oxidecomputer/oxide.rs";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [

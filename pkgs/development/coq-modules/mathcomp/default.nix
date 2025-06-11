@@ -35,6 +35,10 @@ let
     in
     lib.switch coq.coq-version [
       {
+        case = range "8.20" "9.0";
+        out = "2.4.0";
+      }
+      {
         case = range "8.19" "9.0";
         out = "2.3.0";
       }
@@ -108,6 +112,7 @@ let
       }
     ] null;
   release = {
+    "2.4.0".sha256 = "sha256-A1XgLLwZRvKS8QyceCkSQa7ue6TYyf5fMft5gSx9NOs=";
     "2.3.0".sha256 = "sha256-wa6OBig8rhAT4iwupSylyCAMhO69rADa0MQIX5zzL+Q=";
     "2.2.0".sha256 = "sha256-SPyWSI5kIP5w7VpgnQ4vnK56yEuWnJylNQOT7M77yoQ=";
     "2.1.0".sha256 = "sha256-XDLx0BIkVRkSJ4sGCIE51j3rtkSGemNTs/cdVmTvxqo=";
@@ -131,22 +136,28 @@ let
   releaseRev = v: "mathcomp-${v}";
 
   # list of core mathcomp packages sorted by dependency order
-  packages = [
-    "ssreflect"
-    "fingroup"
-    "algebra"
-    "solvable"
-    "field"
-    "character"
-    "all"
-  ];
+  packages = {
+    "boot" = [ ];
+    "order" = [ "boot" ];
+    "fingroup" = [ "boot" ];
+    "ssreflect" = [
+      "boot"
+      "order"
+    ];
+    "algebra" = [
+      "order"
+      "fingroup"
+    ];
+    "solvable" = [ "algebra" ];
+    "field" = [ "solvable" ];
+    "character" = [ "field" ];
+    "all" = [ "character" ];
+  };
 
   mathcomp_ =
     package:
     let
-      mathcomp-deps = lib.optionals (package != "single") (
-        map mathcomp_ (lib.head (lib.splitList (lib.pred.equal package) packages))
-      );
+      mathcomp-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
       pkgpath = if package == "single" then "." else package;
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''
@@ -188,7 +199,7 @@ let
             + ''
               # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
               test -d mathcomp && cd mathcomp
-              cd ${pkgpath}
+              cd ${pkgpath} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
             ''
             + lib.optionalString (package == "all") pkgallMake;
 
@@ -202,7 +213,7 @@ let
             ];
           };
         }
-        // lib.optionalAttrs (package != "single") { passthru = lib.genAttrs packages mathcomp_; }
+        // lib.optionalAttrs (package != "single") { passthru = lib.mapAttrs (p: _: mathcomp_ p) packages; }
         // lib.optionalAttrs withDoc {
           htmldoc_template = fetchzip {
             url = "https://github.com/math-comp/math-comp.github.io/archive/doc-1.12.0.zip";
@@ -264,7 +275,28 @@ let
           propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
         }
       );
+      # boot and order packages didn't exist before 2.5,
+      # so make boot behave as ssreflect then (c.f., above)
+      # and building nothing in order and ssreflect
+      patched-derivation5 = patched-derivation4.overrideAttrs (
+        o:
+        lib.optionalAttrs
+          (
+            lib.elem package [
+              "order"
+              "ssreflect"
+            ]
+            && o.version != null
+            && o.version != "dev"
+            && lib.versions.isLt "2.5" o.version
+          )
+          {
+            preBuild = "";
+            buildPhase = "echo doing nothing";
+            installPhase = "echo doing nothing";
+          }
+      );
     in
-    patched-derivation4;
+    patched-derivation5;
 in
 mathcomp_ (if single then "single" else "all")

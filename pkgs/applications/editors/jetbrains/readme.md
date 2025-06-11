@@ -1,12 +1,19 @@
 This directory contains the build expressions needed to build any of the jetbrains IDEs.
 The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
-To test the build process of every IDE (as well as the process for adding plugins), build `jetbrains.plugins.tests.default`.
+
+## Tests:
+- To test the build process of every IDE (as well as the process for adding plugins), build `jetbrains.plugins.tests.empty`.
+- To test the build process with all plugins\* supported by all IDEs, build `jetbrains.plugins.tests.all`.
+- To test only plugins for a specific IDE\*, build `jetbrains.ide-name.tests.plugins.all`.
+- To test that plugins are correctly stored in the plugins directory, build `jetbrains.plugins.tests.stored-correctly`.
+
+\*: Plugins marked as broken in nixpkgs are skipped: When updating/fixing plugins, please check the `broken-plugins` in `plugins/tests.nix` and update it if needed.
 
 ## How to use plugins:
  - Get the ide you want and call `jetbrains.plugins.addPlugins` with a list of plugins you want to add.
  - The list of plugins can be a list of ids or names (as in `plugins/plugins.json`)
  - Example: `jetbrains.plugins.addPlugins jetbrains.pycharm-professional [ "nixidea" ]`
- - The list can also contain a drv giving a `.jar` or `.zip` (this is how you use a plugin not added to nixpkgs)
+ - The list can also contain drvs giving the directory contents of the plugin (this is how you use a plugin not added to nixpkgs) or a single `.jar` (executable). For an example, look at the implementation of `fetchPluginSrc` in `plugins/default.nix`.
 
 ### How to add a new plugin to nixpkgs
  - Find the page for the plugin on https://plugins.jetbrains.com

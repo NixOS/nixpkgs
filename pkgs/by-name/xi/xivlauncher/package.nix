@@ -116,7 +116,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/goatcorp/XIVLauncher.Core";
     license = licenses.gpl3;
     maintainers = with maintainers; [
-      sersorrel
+      keysmashes
       witchof0x20
     ];
     platforms = [ "x86_64-linux" ];

@@ -17,13 +17,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "anyrun";
-  version = "0-unstable-2025-04-04";
+  version = "0-unstable-2025-05-27";
 
   src = fetchFromGitHub {
     owner = "kirottu";
     repo = "anyrun";
-    rev = "786f539d69d5abcefa68978dbaa964ac14536a00";
-    hash = "sha256-f+oXT9b3xuBDmm4v4nDqJvlHabxxZRB6+pay4Ub/NvA=";
+    rev = "25367153f225a59c5ce5746583e39a71ff052f09";
+    hash = "sha256-pg0w4uOZI32dLASD6UbBezeQg5PwOa0GLv7rTwn3VxY=";
   };
 
   useFetchCargoVendor = true;

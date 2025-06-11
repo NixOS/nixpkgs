@@ -18,7 +18,6 @@
   pkg-config,
   doxygen,
   graphviz,
-  pcre,
   libpthreadstubs,
   libXdmcp,
   unixODBC,
@@ -47,7 +46,7 @@
   opencascade-occt_7_6,
   libngspice,
   valgrind,
-  protobuf,
+  protobuf_29,
   nng,
 
   stable,
@@ -171,7 +170,6 @@ stdenv.mkDerivation rec {
       libX11
       wxGTK
       gtk3
-      pcre
       libXdmcp
       gettext
       glew
@@ -186,7 +184,7 @@ stdenv.mkDerivation rec {
       unixODBC
       libdeflate
       opencascade-occt
-      protobuf
+      protobuf_29
 
       # This would otherwise cause a linking requirement for mbedtls.
       (nng.override { mbedtlsSupport = false; })
@@ -226,5 +224,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.kicad.org/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

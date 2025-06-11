@@ -63,7 +63,7 @@ in
       };
       source = lib.mkIf cfg.useNetworkingTimeServers (
         map (ts: {
-          mode = "server";
+          mode = if lib.strings.hasInfix "pool" ts then "pool" else "server";
           address = ts;
         }) config.networking.timeServers
       );

@@ -37,7 +37,7 @@ let
   helloCheckpoint = prepareCheckpointBuild pkgs.hello;
   changedHello = pkgs.hello.overrideAttrs (_: {
     doCheck = false;
-    patchPhase = ''
+    postPatch = ''
       sed -i 's/Hello, world!/Hello, Nix!/g' src/hello.c
     '';
   });

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "boumenot";
-    repo = pname;
+    repo = "gocover-cobertura";
     rev = "v${version}";
     sha256 = "sha256-Cxv1iuCYHSI0BFR1OLbeDIQfVLlMDxlTgU7ljpXWHjU=";
   };

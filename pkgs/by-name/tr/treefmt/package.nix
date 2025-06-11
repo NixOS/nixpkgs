@@ -1,22 +1,21 @@
 {
   lib,
   buildGoModule,
-  callPackage,
   callPackages,
   fetchFromGitHub,
 }:
 buildGoModule rec {
   pname = "treefmt";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "treefmt";
     rev = "v${version}";
-    hash = "sha256-gNGDqCRPvXjbfDQkEP8UsEStL9fsvUVYWPv3d8o1Bq0=";
+    hash = "sha256-Z1AGLaGrRrUd75aQJc/UKwzMGb9gI/p5WxQ5XUgp98o=";
   };
 
-  vendorHash = "sha256-47yOjk3eO5K0T01GUDvheJxoAJz0ZmiV2RdqTv01pYQ=";
+  vendorHash = "sha256-9yAvqz99YlBfFU/hGs1PB/sH0iOyWaVadqGhfXMkj5E=";
 
   subPackages = [ "." ];
 
@@ -30,39 +29,36 @@ buildGoModule rec {
   ];
 
   passthru = {
-    /**
-      Wrap treefmt, configured  using structured settings.
-
-      # Type
-
-      ```
-      AttrSet -> Derivation
-      ```
-
-      # Inputs
-
-      - `name`: `String` (default `"treefmt-configured"`)
-      - `settings`: `Module` (default `{ }`)
-      - `runtimeInputs`: `[Derivation]` (default `[ ]`)
-    */
-    withConfig = callPackage ./with-config.nix { };
-
-    /**
-      Build a treefmt config file from structured settings.
-
-      # Type
-
-      ```
-      Module -> Derivation
-      ```
-    */
-    buildConfig = callPackage ./build-config.nix { };
+    inherit (callPackages ./lib.nix { })
+      evalConfig
+      withConfig
+      buildConfig
+      ;
 
     tests = callPackages ./tests.nix { };
+
+    # Documentation for functions defined in `./lib.nix`
+    functionsDoc = callPackages ./functions-doc.nix { };
+
+    # Documentation for options declared in `treefmt.evalConfig` configurations
+    optionsDoc = callPackages ./options-doc.nix { };
   };
 
   meta = {
     description = "one CLI to format the code tree";
+    longDescription = ''
+      [treefmt](${meta.homepage}) streamlines the process of applying formatters
+      to your project, making it a breeze with just one command line.
+
+      The `treefmt` package provides functions for configuring treefmt using
+      the module system, which are documented in the [treefmt section] of the
+      Nixpkgs Manual.
+
+      Alternatively, treefmt can be configured using [treefmt-nix].
+
+      [treefmt section]: https://nixos.org/manual/nixpkgs/unstable#treefmt
+      [treefmt-nix]: https://github.com/numtide/treefmt-nix
+    '';
     homepage = "https://github.com/numtide/treefmt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

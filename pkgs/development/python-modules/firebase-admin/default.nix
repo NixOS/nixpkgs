@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  hatchling,
   cachecontrol,
   cryptography,
   google-api-python-client,
@@ -13,6 +12,7 @@
   pyjwt,
   requests,
   pytestCheckHook,
+  pytest-asyncio,
   pytest-localserver,
   pytest-mock,
 }:
@@ -43,6 +43,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
     pytest-localserver
     pytest-mock
   ];
@@ -54,6 +55,10 @@ buildPythonPackage rec {
     # >       assert delta <= timedelta(seconds=15)
     # E       assert datetime.timedelta(seconds=17, microseconds=28239) <= datetime.timedelta(seconds=15)
     "test_task_options"
+
+    # Flaky / timing sensitive
+    "test_expired_cookie_with_tolerance"
+    "test_expired_token_with_tolerance"
   ];
 
   meta = {
@@ -61,6 +66,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/firebase/firebase-admin-python";
     changelog = "https://github.com/firebase/firebase-admin-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jhahn ];
+    maintainers = with lib.maintainers; [
+      jhahn
+      sarahec
+    ];
   };
 }

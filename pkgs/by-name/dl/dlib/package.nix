@@ -20,13 +20,13 @@
 }@inputs:
 (if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
   pname = "dlib";
-  version = "19.24.8";
+  version = "19.24.9";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     tag = "v${version}";
-    sha256 = "sha256-b8DFlfBnF4Fk7beJPxQJDVHaCR7s5/4uAPi3RV9cBZ4=";
+    sha256 = "sha256-Uil7Eh6LNaglrMY6fK6b00PdA4E2KnZKng4s7v1tewo=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@
     ]
     ++ lib.optionals cudaSupport [
       (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (
-        builtins.concatStringsSep "," (with cudaPackages.flags; map dropDot cudaCapabilities)
+        builtins.concatStringsSep "," (with cudaPackages.flags; map dropDots cudaCapabilities)
       ))
     ];
 

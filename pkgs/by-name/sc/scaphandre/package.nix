@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "hubblo-org";
-    repo = pname;
+    repo = "scaphandre";
     rev = "v${version}";
     hash = "sha256-I+cECdpLoIj4yuWXfirwHlcn0Hkm9NxPqo/EqFiBObw=";
   };
@@ -73,5 +73,8 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ gaelreyrol ];
     mainProgram = "scaphandre";
+    # Upstream needs to decide what to do about a broken dependency
+    # https://github.com/hubblo-org/scaphandre/issues/403
+    broken = true;
   };
 }

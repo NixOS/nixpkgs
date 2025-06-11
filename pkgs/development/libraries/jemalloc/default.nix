@@ -50,8 +50,6 @@ stdenv.mkDerivation rec {
     automake
   ];
 
-  preConfigure = "";
-
   # TODO: switch to autoreconfHook when updating beyond 5.3.0
   # https://github.com/jemalloc/jemalloc/issues/2346
   configureScript = "./autogen.sh";

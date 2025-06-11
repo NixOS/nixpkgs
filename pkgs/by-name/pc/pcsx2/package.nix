@@ -43,6 +43,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Remove PCSX2_GIT_REV
     ./0000-define-rev.patch
+
+    ./remove-cubeb-vendor.patch
   ];
 
   cmakeFlags = [
@@ -54,6 +56,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     strip-nondeterminism
     wrapQtAppsHook
@@ -62,7 +65,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
-    extra-cmake-modules
     ffmpeg
     libaio
     libbacktrace
@@ -80,7 +82,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     wayland
     zstd
-  ] ++ cubeb.passthru.backendLibs;
+    cubeb
+  ];
 
   strictDeps = true;
 
@@ -94,13 +97,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     let
-      libs = lib.makeLibraryPath (
-        [
-          vulkan-loader
-          shaderc
-        ]
-        ++ cubeb.passthru.backendLibs
-      );
+      libs = lib.makeLibraryPath ([
+        vulkan-loader
+        shaderc
+      ]);
     in
     [ "--prefix LD_LIBRARY_PATH : ${libs}" ];
 

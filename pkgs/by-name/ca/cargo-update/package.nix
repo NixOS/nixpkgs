@@ -12,7 +12,6 @@
   libssh2,
   openssl,
   zlib,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,7 +46,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      darwin.apple_sdk.frameworks.Security
     ];
 
   postBuild = ''
@@ -65,12 +63,12 @@ rustPlatform.buildRustPackage rec {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       gerschtli
       Br1ght0ne
       johntitor

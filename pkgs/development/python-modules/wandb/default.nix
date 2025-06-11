@@ -7,6 +7,7 @@
   buildGoModule,
   git,
   versionCheckHook,
+  fetchpatch2,
 
   ## gpu-stats
   rustPlatform,
@@ -71,28 +72,29 @@
   soundfile,
   tenacity,
   torch,
+  torchvision,
   tqdm,
   writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "0.19.8";
+  version = "0.19.11";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-hveMyGeu9RhdtWMbV/4GQ4KUNfjSt0CKyW7Yx8QtlLM=";
+    hash = "sha256-JsciaNN1l3Ldty8dB2meRXWz62JdLRXeG09b7PNrQx4=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
     pname = "gpu-stats";
-    version = "0.3.0";
+    version = "0.4.0";
     inherit src;
 
     sourceRoot = "${src.name}/gpu_stats";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-KrwZh8OoVwImfYDmvT2Je2MYyiTZVQYngwvVC+7fTzI=";
+    cargoHash = "sha256-q8csheytw57C6+wPPaANkMkW1Smoo+IViiA6Cdrag4Q=";
 
     checkFlags = [
       # fails in sandbox
@@ -117,11 +119,28 @@ let
 
     sourceRoot = "${src.name}/core";
 
+    # x86_64-darwin fails with:
+    # "link: duplicated definition of symbol dlopen, from github.com/ebitengine/purego and github.com/ebitengine/purego"
+    # This is fixed in purego 0.8.3, but wandb-core uses 0.8.2, so we pull in the fix here.
+    patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      (fetchpatch2 {
+        url = "https://github.com/ebitengine/purego/commit/1638563e361522e5f63511d84c4541ae1c5fd704.patch";
+        stripLen = 1;
+        extraPrefix = "vendor/github.com/ebitengine/purego/";
+        # These are not vendored by wandb-core
+        excludes = [
+          "vendor/github.com/ebitengine/purego/.github/workflows/test.yml"
+          "vendor/github.com/ebitengine/purego/internal/fakecgo/gen.go"
+        ];
+        hash = "sha256-GoT/OL6r3rJY5zoUyl3kGzSRpX3PoI7Yjpe7oRb0cFc=";
+      })
+    ];
+
     # hardcode the `gpu_stats` binary path.
     postPatch = ''
-      substituteInPlace pkg/monitor/gpu.go \
+      substituteInPlace pkg/monitor/gpuresourcemanager.go \
         --replace-fail \
-          'cmdPath, err := getGPUStatsCmdPath()' \
+          'cmdPath, err := getGPUCollectorCmdPath()' \
           'cmdPath, err := "${lib.getExe gpu-stats}", error(nil)'
     '';
 
@@ -136,6 +155,18 @@ let
     ];
     versionCheckProgramArg = "--version";
     doInstallCheck = true;
+
+    checkFlags =
+      let
+        skippedTests = [
+          # gpu sampling crashes in the sandbox
+          "TestSystemMonitor_BasicStateTransitions"
+          "TestSystemMonitor_RepeatedCalls"
+          "TestSystemMonitor_UnexpectedTransitions"
+          "TestSystemMonitor_FullCycle"
+        ];
+      in
+      [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
     __darwinAllowLocalNetworking = true;
 
@@ -238,6 +269,7 @@ buildPythonPackage rec {
     soundfile
     tenacity
     torch
+    torchvision
     tqdm
     writableTmpDirAsHomeHook
   ];
@@ -343,6 +375,12 @@ buildPythonPackage rec {
       "test_matplotlib_plotly_with_multiple_axes"
       "test_matplotlib_to_plotly"
       "test_plotly_from_matplotlib_with_image"
+
+      # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
+      "test_wandb_image_with_matplotlib_figure"
+
+      # HandleAbandonedError / SystemExit when run in sandbox
+      "test_makedirs_raises_oserror__uses_temp_dir"
     ];
 
   pythonImportsCheck = [ "wandb" ];

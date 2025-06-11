@@ -11,7 +11,6 @@
   libxml2,
   json_c,
   ncurses,
-  darwin,
   asciidoctor,
   libiconv,
   makeWrapper,
@@ -59,15 +58,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       json_c
       ncurses
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        Foundation
-        libiconv
-        gettext
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      gettext
+    ];
 
   postBuild = ''
     make -j $NIX_BUILD_CORES prefix="$out"

@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A cli application for bluesky social";
+    description = "Cli application for bluesky social";
     homepage = "https://github.com/mattn/bsky";
     changelog = "https://github.com/mattn/bsky/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;

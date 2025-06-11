@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.37.0";
+  version = "1.37.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "adrienverge";
     repo = "yamllint";
     tag = "v${version}";
-    hash = "sha256-874VqcJyHMVIvrR3qzL2H7/Hz7qRb7GDWI56SAdCz00=";
+    hash = "sha256-CohqiBoQcgvGVP0Bt6U768BY1aIwh59YRsgzJfaDmP0=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     [
       # test failure reported upstream: https://github.com/adrienverge/yamllint/issues/373
       "test_find_files_recursively"
-      # Issue wih fixture
+      # Issue with fixture
       "test_codec_built_in_equivalent"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Linter for YAML files";
     homepage = "https://github.com/adrienverge/yamllint";
-    changelog = "https://github.com/adrienverge/yamllint/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/adrienverge/yamllint/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mikefaille ];
     mainProgram = "yamllint";

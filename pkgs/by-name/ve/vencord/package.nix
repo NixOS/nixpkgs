@@ -1,6 +1,5 @@
 {
   curl,
-  esbuild,
   fetchFromGitHub,
   git,
   jq,
@@ -15,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.11.9";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/CJt4CZ9R1xB72Zwc76te51Fb3q4KHuzDxP3jWGzW8E=";
+    hash = "sha256-fOZXgyA61G+D7otNNO8d89ghR/GiYPJ7vSZtj9TeGuU=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
@@ -36,20 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
-    ESBUILD_BINARY_PATH = lib.getExe (
-      esbuild.overrideAttrs (
-        final: _: {
-          version = "0.25.1";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${final.version}";
-            hash = "sha256-vrhtdrvrcC3dQoJM6hWq6wrGJLSiVww/CNPlL1N5kQ8=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
-      )
-    );
     VENCORD_REMOTE = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
     VENCORD_HASH = "${finalAttrs.version}";
   };

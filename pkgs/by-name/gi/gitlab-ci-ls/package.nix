@@ -2,31 +2,25 @@
   rustPlatform,
   lib,
   fetchFromGitHub,
-  darwin,
   openssl,
   pkg-config,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gitlab-ci-ls";
-  version = "1.0.4";
+  version = "1.1.0";
   src = fetchFromGitHub {
     owner = "alesbrelih";
     repo = "gitlab-ci-ls";
     rev = "${version}";
-    hash = "sha256-rgdrbPqpdQlIVcQMLAi2rtTPpeWj+azbm6FaqUBHIIw=";
+    hash = "sha256-ULkRF/NtlETStG/Qy0Y7qUAzMvOlOvxErKJ79atgCaw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-WjTfIKWu5fivPXmlGXduHWA5dKmKz2620tprtuoJbD4=";
+  cargoHash = "sha256-1HHwAGN193cNoOktVkrwgS37FJEK++tGMD//RnIALQA=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     homepage = "https://github.com/alesbrelih/gitlab-ci-ls";

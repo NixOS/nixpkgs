@@ -15,8 +15,8 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.5";
 
   src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
+    owner = "screenkey";
+    repo = "screenkey";
     rev = "v${version}";
     hash = "sha256-kWktKzRyWHGd1lmdKhPwrJoSzAIN2E5TKyg30uhM4Ug=";
   };

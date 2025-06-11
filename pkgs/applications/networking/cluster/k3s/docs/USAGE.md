@@ -28,6 +28,7 @@ Multi-node setup
 it is simple to create a cluster of multiple nodes in a highly available setup (all nodes are in the control-plane and are a part of the etcd cluster).
 
 The first node is configured like this:
+
 ```
 {
   services.k3s = {
@@ -55,3 +56,11 @@ Any other subsequent nodes can be added with a slightly different config:
 For this to work you need to open the aforementioned API, etcd, and flannel ports in the firewall. Official documentation on what ports need to be opened for specific use cases can be found on [k3s' documentation site](https://docs.k3s.io/installation/requirements#inbound-rules-for-k3s-nodes). Note that it is [recommended](https://etcd.io/docs/v3.3/faq/#why-an-odd-number-of-cluster-members) to use an odd number of nodes in such a cluster.
 
 Tip: If you run into connectivity issues between nodes for specific applications (e.g. ingress controller), please verify the firewall settings you have enabled (example under [Single Node](#single-node)) against the documentation for that specific application. In the ingress controller example, you may want to open 443 or 80 depending on your use case.
+
+## Quirks
+
+### `prefer-bundled-bin`
+
+K3s has a config setting `prefer-bundled-bin` (and CLI flag `--prefer-bundled-bin`) that makes k3s use binaries from the `/var/lib/rancher/k3s/data/current/bin/aux/` directory, as unpacked by the k3s binary, before the system `$PATH`.
+This works with the official distribution of k3s but not with the package from nixpkgs, as it does not bundle the upstream binaries from [`k3s-root`](https://github.com/k3s-io/k3s-root) into the k3s binary.
+Thus the `prefer-bundled-bin` setting **cannot** be used to work around issues (like [this `mount` regression](https://github.com/util-linux/util-linux/issues/3474)) with binaries used/called by the kubelet.

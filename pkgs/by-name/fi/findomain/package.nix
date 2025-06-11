@@ -5,8 +5,6 @@
   installShellFiles,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,13 +26,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -44,12 +38,12 @@ rustPlatform.buildRustPackage rec {
     installManPage findomain.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fastest and cross-platform subdomain enumerator";
     homepage = "https://github.com/Findomain/Findomain";
     changelog = "https://github.com/Findomain/Findomain/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       figsoda
     ];

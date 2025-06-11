@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Zsh configuration framework with blazing speed and modular extensions";
+    description = "Zsh configuration framework with blazing speed and modular extensions";
     homepage = "https://zimfw.sh";
     license = licenses.mit;
     maintainers = [ maintainers.joedevivo ];

@@ -55,6 +55,13 @@ let
         preferLocalBuild = true;
         allowSubstitutes = false;
         packages = lib.unique (map toString udevPackages);
+
+        nativeBuildInputs = [
+          # We only include the out output here to avoid needing to include all
+          # other outputs in the installer tests as well
+          # We only need the udevadm command anyway
+          pkgs.systemdMinimal.out
+        ];
       }
       ''
         mkdir -p $out
@@ -146,6 +153,11 @@ let
           done
           exit 1
         fi
+
+        # Verify all the udev rules
+        echo "Verifying udev rules using udevadm verify..."
+        udevadm verify --resolve-names=never --no-style $out
+        echo "OK"
 
         # If auto-configuration is disabled, then remove
         # udev's 80-drivers.rules file, which contains rules for

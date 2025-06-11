@@ -24,8 +24,6 @@
   libwebp,
   openssl,
   pango,
-  Security,
-  SystemConfiguration,
   gst-plugins-good,
   nix-update-script,
   # specifies a limited subset of plugins to build (the default `null` means all plugins supported on the stdenv platform)
@@ -35,6 +33,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null,
   hotdoc,
   mopidy,
+  apple-sdk_gstreamer,
 }:
 
 let
@@ -58,31 +57,21 @@ let
     mp4 = [ ];
 
     # net
-    aws = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+    aws = [ openssl ];
     hlssink3 = [ ];
     ndi = [ ];
     onvif = [ pango ];
     raptorq = [ ];
-    reqwest = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+    reqwest = [ openssl ];
     rtp = [ ];
-    webrtc =
-      [
-        gst-plugins-bad
-        openssl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Security
-        SystemConfiguration
-      ];
-    webrtchttp =
-      [
-        gst-plugins-bad
-        openssl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Security
-        SystemConfiguration
-      ];
+    webrtc = [
+      gst-plugins-bad
+      openssl
+    ];
+    webrtchttp = [
+      gst-plugins-bad
+      openssl
+    ];
 
     # text
     textahead = [ ];
@@ -236,10 +225,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
 
-  buildInputs = [
-    gstreamer
-    gst-plugins-base
-  ] ++ lib.concatMap (plugin: lib.getAttr plugin validPlugins) selectedPlugins;
+  buildInputs =
+    [
+      gstreamer
+      gst-plugins-base
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_gstreamer
+    ]
+    ++ lib.concatMap (plugin: lib.getAttr plugin validPlugins) selectedPlugins;
 
   checkInputs = [
     gst-plugins-good

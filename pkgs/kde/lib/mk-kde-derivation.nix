@@ -98,7 +98,9 @@ let
     attrName: attrValue:
     let
       pretty = lib.generators.toPretty { };
-      duplicates = builtins.filter (dep: (builtins.elem (lib.getName dep) filteredDepNames)) attrValue;
+      duplicates = builtins.filter (
+        dep: dep != null && builtins.elem (lib.getName dep) filteredDepNames
+      ) attrValue;
     in
     if duplicates != [ ] then
       lib.warn "Duplicate dependencies in ${attrName} of package ${pname}: ${pretty duplicates}"

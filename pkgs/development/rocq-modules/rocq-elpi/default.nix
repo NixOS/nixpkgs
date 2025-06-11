@@ -31,10 +31,10 @@ let
     defaultVersion = lib.switch rocq-core.rocq-version [
       {
         case = "9.0";
-        out = "2.5.0";
+        out = "2.5.2";
       }
     ] null;
-    release."2.5.0".sha256 = "sha256-Z5xjO83X/ZoTQlWnVupGXPH3HuJefr57Kv128I0dltg=";
+    release."2.5.2".sha256 = "sha256-lLzjPrbVB3rrqox528YiheUb0u89R84Xmrgkn0oplOs=";
     releaseRev = v: "v${v}";
 
     mlPlugin = true;

@@ -10,7 +10,7 @@ in
 {
   meta.maintainers = [ lib.maintainers.quadradical ];
   options.services.lk-jwt-service = {
-    enable = lib.mkEnableOption "Enable lk-jwt-service";
+    enable = lib.mkEnableOption "lk-jwt-service";
     package = lib.mkPackageOption pkgs "lk-jwt-service" { };
 
     livekitUrl = lib.mkOption {
@@ -28,9 +28,7 @@ in
         Path to a file containing the credential mapping (`<keyname>: <secret>`) to access LiveKit.
 
         Example:
-        ```
-          lk-jwt-service: f6lQGaHtM5HfgZjIcec3cOCRfiDqIine4CpZZnqdT5cE
-        ```
+        `lk-jwt-service: f6lQGaHtM5HfgZjIcec3cOCRfiDqIine4CpZZnqdT5cE`
 
         For more information, see <https://github.com/element-hq/lk-jwt-service#configuration>.
       '';

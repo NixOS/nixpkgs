@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "kopf";
-  version = "1.37.5";
+  version = "1.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nolar";
     repo = "kopf";
     tag = version;
-    hash = "sha256-FwQnt5UoK+Qx7suFACwEtTIvBneJQ19/WmdelWmf+Z0=";
+    hash = "sha256-H2Q5nDIODp2VFtMIJ0g8b+/SMZzLueRGBkh1g6LBbgc=";
   };
 
   build-system = [
@@ -79,7 +79,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python framework to write Kubernetes operators";
     homepage = "https://kopf.readthedocs.io/";
-    changelog = "https://github.com/nolar/kopf/releases/tag/${version}";
+    changelog = "https://github.com/nolar/kopf/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
   };

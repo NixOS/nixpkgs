@@ -52,6 +52,7 @@
   modemmanager,
   pango,
   polkit,
+  readline,
   sqlite,
   tpm2-tss,
   valgrind,
@@ -130,7 +131,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.8";
+  version = "2.0.9";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -148,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-8IFopG/EY/UAB3JSyBJsGmlwGiMufn7rfkeJ9iYfCGU=";
+    hash = "sha256-Izh6PHMgUsOeez9uWSLoA2GhvawYQlEZo480vovxn38=";
   };
 
   patches = [
@@ -237,6 +238,7 @@ stdenv.mkDerivation (finalAttrs: {
       pango
       polkit
       protobufc
+      readline
       sqlite
       tpm2-tss
       valgrind

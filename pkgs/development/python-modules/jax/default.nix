@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${version}";
-    hash = "sha256-leadxLK21JF/cF/hMveUPgrwyumjR+zMm9Wsn7bWNLQ=";
+    hash = "sha256-Am+ksPC4U3vL5LGmePzSaMSwWJOCcVrC+DFkJzJP+1U=";
   };
 
   build-system = [ setuptools ];

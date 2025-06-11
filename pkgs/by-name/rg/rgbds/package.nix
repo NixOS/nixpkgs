@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "rgbds";
-  version = "0.9.1";
+  version = "0.9.2";
   src = fetchFromGitHub {
     owner = "gbdev";
     repo = "rgbds";
     rev = "v${version}";
-    hash = "sha256-Rv2ylZavLy+G4XFLBdNGjk78hSb8cDoX9lW1l2TRmtk=";
+    hash = "sha256-Ho9aSpENukNutb5VscopY2p6RGXbRgvtIcRgxTtZews=";
   };
   nativeBuildInputs = [
     bison

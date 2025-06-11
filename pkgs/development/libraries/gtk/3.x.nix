@@ -46,9 +46,6 @@
   xineramaSupport ? stdenv.hostPlatform.isLinux,
   cupsSupport ? stdenv.hostPlatform.isLinux,
   cups,
-  AppKit,
-  Cocoa,
-  QuartzCore,
   broadwaySupport ? true,
   wayland-scanner,
   testers,
@@ -139,9 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
       (libepoxy.override { inherit x11Support; })
       isocodes
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-    ]
     ++ lib.optionals trackerSupport [
       tinysparql
     ];
@@ -168,11 +162,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXrandr
       libXrender
       pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # explicitly propagated, always needed
-      Cocoa
-      QuartzCore
     ]
     ++ lib.optionals waylandSupport [
       libGL

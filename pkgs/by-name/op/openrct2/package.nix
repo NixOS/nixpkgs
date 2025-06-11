@@ -33,7 +33,7 @@
 }:
 
 let
-  openrct2-version = "0.4.21";
+  openrct2-version = "0.4.22";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    hash = "sha256-exG6pXqok/mrDSCtqIs6VS2WwCr6XlP1gHJA1FgPOiM=";
+    hash = "sha256-dFELAfJIgizM0nRc4SMrFGIqFQo/ImTtR89GVkb4/TQ=";
   };
 
   nativeBuildInputs = [
@@ -147,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       oxzi
       keenanweaver
+      kylerisse
     ];
   };
 })

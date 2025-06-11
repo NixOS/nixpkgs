@@ -9,18 +9,21 @@
 }:
 stdenv.mkDerivation {
   pname = "msi-ec-kmods";
-  version = "0-unstable-2024-11-04";
+  version = "0-unstable-2025-05-17";
 
   src = fetchFromGitHub {
     owner = "BeardOverflow";
     repo = "msi-ec";
-    rev = "be6f7156cd15f6ecf9d48dfcc30cbd1f693916b8";
-    hash = "sha256-gImiP4OaBt80n+qgVnbhd0aS/zW+05o3DzGCw0jq+0g=";
+    rev = "796be9047b13c311ac4cdec33913775f4057f600";
+    hash = "sha256-npJbnWFBVb8TK9ynVD/kXWq2iqO0ACKF4UYsu5mQuok=";
   };
 
   dontMakeSourcesWritable = false;
 
-  patches = [ ./patches/makefile.patch ];
+  patches = [
+    ./patches/makefile.patch
+    ./patches/kernel-string-choices.patch
+  ];
 
   hardeningDisable = [ "pic" ];
 

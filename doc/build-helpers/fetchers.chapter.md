@@ -773,9 +773,14 @@ Additionally, the following optional arguments can be given:
 
 : Whether to fetch LFS objects.
 
+*`preFetch`* (String)
+
+: Shell code to be executed before the repository has been fetched, to allow
+  changing the environment the fetcher runs in.
+
 *`postFetch`* (String)
 
-: Shell code executed after the file has been fetched successfully.
+: Shell code executed after the repository has been fetched successfully.
   This can do things like check or transform the file.
 
 *`leaveDotGit`* (Boolean)
@@ -789,6 +794,10 @@ Additionally, the following optional arguments can be given:
 
 : Clone the entire repository as opposing to just creating a shallow clone.
   This implies `leaveDotGit`.
+
+*`fetchTags`* (Boolean)
+
+: Whether to fetch all tags from the remote repository. This is useful when the build process needs to run `git describe` or other commands that require tag information to be available. This parameter implies `leaveDotGit`, as tags are stored in the `.git` directory.
 
 *`sparseCheckout`* (List of String)
 

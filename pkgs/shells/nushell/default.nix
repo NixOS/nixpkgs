@@ -9,9 +9,6 @@
   pkg-config,
   python3,
   xorg,
-  Libsystem,
-  AppKit,
-  Security,
   nghttp2,
   libgit2,
   withDefaultFeatures ? true,
@@ -23,7 +20,7 @@
 }:
 
 let
-  version = "0.104.0";
+  version = "0.104.1";
 in
 
 rustPlatform.buildRustPackage {
@@ -34,11 +31,11 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     tag = version;
-    hash = "sha256-F4nHCOpbcvmdXDX5KJc9MS3hIIrtMlZR8IjDU7Us/xs=";
+    hash = "sha256-ibQBwcoWzxl7t5q0KpiCiEmAasJJjBg2LMGf28y3sCk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zem4HgxO0DD22Bxvs9KN3Zb5E991svV5qcw7MfDUOq4=";
+  cargoHash = "sha256-8HxLX94i86F9vsnlZFgvVdTCkponlEA51WXCT3zlc2w=";
 
   nativeBuildInputs =
     [ pkg-config ]
@@ -52,12 +49,9 @@ rustPlatform.buildRustPackage {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       zlib
-      Libsystem
-      Security
     ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
-      AppKit
       nghttp2
       libgit2
     ];

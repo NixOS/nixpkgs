@@ -12,7 +12,7 @@ buildGoModule {
 
   src = fetchFromGitHub {
     owner = "mfridman";
-    repo = pname;
+    repo = "tparse";
     rev = "v${version}";
     hash = "sha256-yU4hP+EJ+Ci3Ms0dAoSuqZFT9RRwqmN1V0x5cV+87z0=";
   };

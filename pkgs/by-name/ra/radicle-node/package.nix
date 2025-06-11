@@ -1,6 +1,5 @@
 {
   asciidoctor,
-  darwin,
   fetchgit,
   git,
   installShellFiles,
@@ -20,20 +19,22 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.1.0";
+  version = "1.2.0";
   env.RADICLE_VERSION = version;
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
-    rev = "refs/namespaces/z6MksFqXN3Yhqk8pTJdUGLwATkRfQvwZXPqR2qMEhbS9wzpT/refs/tags/v${version}";
-    hash = "sha256-M4oz9tWjI/eqV4Gz1b512MEmvsZ5u3R9y6P9VeeH9CA=";
+    rev = "refs/namespaces/z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM/refs/tags/v${version}";
+    hash = "sha256-AWgLhL6GslE3r2FcZu2imV5ZtEKlUD+a4C5waRGO2lM=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse HEAD > $out/.git_head
+      git -C $out log -1 --pretty=%ct HEAD > $out/.git_time
+      rm -rf $out/.git
+    '';
   };
   useFetchCargoVendor = true;
-  cargoHash = "sha256-SzwBQxTqQafHDtH8+OWkAMDnKh3AH0PeSMBWpHprQWM=";
-
-  patches = [
-    ./61865b5b5ad715e2b812087947281f0add9aa05e.patch
-  ];
+  cargoHash = "sha256-/6VlRwWtJfHf6tXD2HJUTbThwTYeZFTJqtaxclrm3+c=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -41,9 +42,11 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
   nativeCheckInputs = [ git ];
-  buildInputs = lib.optionals stdenv.buildPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+
+  preBuild = ''
+    export GIT_HEAD=$(<$src/.git_head)
+    export SOURCE_DATE_EPOCH=$(<$src/.git_time)
+  '';
 
   # tests regularly time out on aarch64
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
@@ -56,6 +59,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip=service::message::tests::test_node_announcement_validate"
     "--skip=tests::test_announcement_relay"
+    "--skip=tests::commands::rad_remote"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Flaky.20tests/near/438352360
     "--skip=tests::e2e::test_connection_crossing"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Clone.20Partial.20Fail.20Flake

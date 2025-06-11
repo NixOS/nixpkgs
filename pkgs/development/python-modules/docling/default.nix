@@ -7,6 +7,7 @@
   poetry-core,
 
   # dependencies
+  accelerate,
   beautifulsoup4,
   certifi,
   docling-core,
@@ -34,6 +35,8 @@
   rtree,
   scipy,
   tesserocr,
+  tqdm,
+  transformers,
   typer,
 
   # optional dependencies
@@ -49,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.31.0";
+  version = "2.31.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-hvNvplEjF/zEchJBN2yJ0/D5Yec/Grr6kdpzRLXeyZU=";
+    hash = "sha256-a2PZORT4Umf6AI3yEDDcUD0tm22Ahzm7Dwij/5ZUjNs=";
   };
 
   build-system = [
@@ -64,6 +67,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    accelerate
     beautifulsoup4
     certifi
     docling-core
@@ -91,6 +95,8 @@ buildPythonPackage rec {
     rtree
     scipy
     tesserocr
+    tqdm
+    transformers
     typer
   ];
 

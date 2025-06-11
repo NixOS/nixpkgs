@@ -3,8 +3,6 @@
   lib,
   rustPlatform,
   nushell,
-  IOKit,
-  CoreFoundation,
   nix-update-script,
   pkg-config,
   openssl,
@@ -17,15 +15,10 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs =
-    [
-      openssl
-      curl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      CoreFoundation
-    ];
+  buildInputs = [
+    openssl
+    curl
+  ];
   cargoBuildFlags = [ "--package nu_plugin_query" ];
 
   checkPhase = ''

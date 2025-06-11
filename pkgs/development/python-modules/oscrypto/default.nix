@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "wbond";
-    repo = pname;
+    repo = "oscrypto";
     rev = version;
     hash = "sha256-CmDypmlc/kb6ONCUggjT1Iqd29xNSLRaGh5Hz36dvOw=";
   };

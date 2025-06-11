@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # https://github.com/fillods/grig/issues/22
-    ./0001-Fix-grig-for-hamlib-4.6.x.patch
+    ./0001-Fix-grig-for-hamlib-4.6.2.patch
   ];
 
   nativeBuildInputs = [
@@ -46,6 +46,9 @@ stdenv.mkDerivation rec {
     homepage = "https://groundstation.sourceforge.net/grig/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ melling ];
+    maintainers = with maintainers; [
+      melling
+      mafo
+    ];
   };
 }

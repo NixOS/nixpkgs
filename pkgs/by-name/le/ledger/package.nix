@@ -108,19 +108,19 @@ stdenv.mkDerivation rec {
     installShellCompletion --cmd ledger --bash $src/contrib/ledger-completion.bash
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Double-entry accounting system with a command-line reporting interface";
     mainProgram = "ledger";
     homepage = "https://www.ledger-cli.org/";
     changelog = "https://github.com/ledger/ledger/raw/v${version}/NEWS.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     longDescription = ''
       Ledger is a powerful, double-entry accounting system that is accessed
       from the UNIX command-line. This may put off some users, as there is
       no flashy UI, but for those who want unparalleled reporting access to
       their data, there really is no alternative.
     '';
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jwiegley ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jwiegley ];
   };
 }
