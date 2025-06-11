@@ -268,7 +268,7 @@ in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   stdenv = stdenv';
