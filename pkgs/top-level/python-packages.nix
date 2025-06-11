@@ -13662,6 +13662,8 @@ self: super: with self; {
 
   pysmappee = callPackage ../development/python-modules/pysmappee { };
 
+  pysmarlaapi = callPackage ../development/python-modules/pysmarlaapi { };
+
   pysmart = callPackage ../development/python-modules/pysmart { };
 
   pysmartapp = callPackage ../development/python-modules/pysmartapp { };
