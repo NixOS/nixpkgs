@@ -131,7 +131,7 @@ buildPythonPackage rec {
   meta = {
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain-community";
-    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/libs%2Fcommunity%2fv${version}";
+    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

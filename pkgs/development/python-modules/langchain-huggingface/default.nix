@@ -88,7 +88,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-huggingface==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "An integration package connecting Huggingface related classes and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/huggingface";
     license = lib.licenses.mit;

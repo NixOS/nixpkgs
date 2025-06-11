@@ -58,7 +58,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-text-splitters==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "LangChain utilities for splitting into chunks a wide variety of text documents";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/text-splitters";
     license = lib.licenses.mit;
