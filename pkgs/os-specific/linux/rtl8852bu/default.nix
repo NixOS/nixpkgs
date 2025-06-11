@@ -7,7 +7,7 @@
   nukeReferences,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtl8852bu";
   version = "${kernel.version}-unstable-2025-05-18";
 
@@ -61,15 +61,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Driver for Realtek rtl8852bu and rtl8832bu chipsets, provides the 8852bu mod";
     homepage = "https://github.com/morrownr/rtl8852bu-20240418";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
     broken = kernel.kernelOlder "6" && kernel.isHardened; # Similar to 79c1cf6
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lonyelon
       thtrf
     ];
   };
-}
+})
