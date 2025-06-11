@@ -67,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
           --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
         # Expose the binary in bin to make runnable.
         ln -s $out/opt/filebot.sh $out/bin/filebot
-
     # Use nixpkgs default libmediainfo to avoid conflicts
     system="${system}"
 
@@ -84,10 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Keep default libs
     exit 1
     esac
-
-
-
-
   '';
   passthru.updateScript = genericUpdater {
     versionLister = writeShellScript "filebot-versionLister" ''
