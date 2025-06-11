@@ -28,7 +28,7 @@
   glycin-loaders,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
   version = "11.2";
 
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UE0TRC9DeP+fl85fzuQ8/3ioIPdeSqsJWnW1olB1gmo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-I+1pGZWxn9Q/CL8D6VxsaO3H4EdBek4wyykvNgCNRZI=";
   };
 
@@ -110,10 +110,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Matrix group messaging app";
     homepage = "https://gitlab.gnome.org/World/fractal";
-    changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${version}";
+    changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${finalAttrs.version}";
     license = licenses.gpl3Plus;
     teams = [ teams.gnome ];
     platforms = platforms.linux;
     mainProgram = "fractal";
   };
-}
+})
