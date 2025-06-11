@@ -119,6 +119,10 @@ let
 in
 with pkgs;
 {
+  kafka_3_6 = makeKafkaTest "kafka_3_6" {
+    kafkaPackage = apacheKafka_3_6;
+    mode = "zookeeper";
+  };
   kafka_3_7 = makeKafkaTest "kafka_3_7" {
     kafkaPackage = apacheKafka_3_7;
     mode = "zookeeper";

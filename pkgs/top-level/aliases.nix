@@ -286,8 +286,7 @@ mapAliases {
   anbox = throw "'anbox' has been removed as the upstream project is unmaintained, see https://github.com/anbox/.github/blob/main/profile/README.md"; # Added 2025-01-04
   antic = throw "'antic' has been removed as it has been merged into 'flint3'"; # Added 2025-03-28
   anevicon = throw "'anevicon' has been removed because the upstream repository no longer exists"; # Added 2025-01-26
-  apacheKafka_3_5 = throw "apacheKafka_2_8 through _3_6 have been removed from nixpkgs as outdated"; # Added 2024-06-13
-  apacheKafka_3_6 = throw "apacheKafka_2_8 through _3_6 have been removed from nixpkgs as outdated"; # Added 2024-11-27
+  apacheKafka_3_5 = throw "apacheKafka_2_8 through _3_5 have been removed from nixpkgs as outdated"; # Added 2024-06-13
   antimicroX = throw "'antimicroX' has been renamed to/replaced by 'antimicrox'"; # Converted to throw 2024-10-17
   apacheAnt = ant; # Added 2024-11-28
   apple-sdk_10_12 = throw "apple-sdk_10_12 was removed as Nixpkgs no longer supports macOS 10.12; see the 25.05 release notes"; # Added 2024-10-27
