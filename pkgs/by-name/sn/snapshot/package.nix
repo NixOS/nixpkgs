@@ -31,10 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OTF2hZogt9I138MDAxuiDGhkQRBpiNyRHdkbe21m4f0=";
   };
 
-  patches = [
+  preConfigure = ''
     # Fix paths in glycin library
-    glycin-loaders.passthru.glycinPathsPatch
-  ];
+    patch -d vendor -p1 ${glycin-loaders.passthru.glycinPathsPatch}
+  '';
 
   nativeBuildInputs = [
     cargo
