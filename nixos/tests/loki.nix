@@ -3,9 +3,7 @@
 {
   name = "loki";
 
-  meta = with lib.maintainers; {
-    maintainers = [ willibutz ];
-  };
+  meta.maintainers = [ ];
 
   nodes.machine =
     { ... }:
