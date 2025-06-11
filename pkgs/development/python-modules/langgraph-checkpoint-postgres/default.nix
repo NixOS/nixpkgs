@@ -21,7 +21,7 @@
   pytest-asyncio,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -90,11 +90,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langgraph.checkpoint.postgres" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "checkpointpostgres==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "checkpointpostgres==";
   };
 
   meta = {

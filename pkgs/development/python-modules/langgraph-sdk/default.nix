@@ -13,7 +13,7 @@
   typing-extensions,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -43,11 +43,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langgraph_sdk" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "sdk==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "sdk==";
   };
 
   meta = {
