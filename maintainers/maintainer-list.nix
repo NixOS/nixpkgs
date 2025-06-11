@@ -265,6 +265,7 @@
   };
   _6543 = {
     email = "6543@obermui.de";
+    matrix = "@marddl:obermui.de";
     github = "6543";
     githubId = 24977596;
     name = "6543";
@@ -723,6 +724,11 @@
     github = "AerialX";
     githubId = 117295;
     name = "Aaron Lindsay";
+  };
+  aescalera-defenseunicorns = {
+    name = "Antonio Escalera";
+    github = "aescalera-defenseunicorns";
+    githubId = 207777671;
   };
   aespinosa = {
     email = "allan.espinosa@outlook.com";
@@ -15219,6 +15225,12 @@
     name = "Marius Kimmina";
     github = "mariuskimmina";
     githubId = 38843153;
+  };
+  markasoftware = {
+    name = "Mark Polyakov";
+    email = "mark@markasoftware.com";
+    github = "markasoftware";
+    githubId = 6380084;
   };
   markbeep = {
     email = "mrkswrn@gmail.com";
