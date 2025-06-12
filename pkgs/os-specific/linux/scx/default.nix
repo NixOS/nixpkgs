@@ -22,7 +22,10 @@ let
       license = lib.licenses.gpl2Only;
       platforms = lib.platforms.linux;
       badPlatforms = [ "aarch64-linux" ];
-      maintainers = with lib.maintainers; [ johnrtitor ];
+      maintainers = with lib.maintainers; [
+        johnrtitor
+        Gliczy
+      ];
     };
   };
 
