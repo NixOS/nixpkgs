@@ -571,6 +571,9 @@ let
       inherit (self.versions)
         splitVersion
         ;
+      inherit (self.network.ipv6)
+        mkEUI64Suffix
+        ;
     }
   );
 in
