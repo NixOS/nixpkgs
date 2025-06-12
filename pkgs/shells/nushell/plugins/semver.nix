@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_semver";
-  version = "0.11.4";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "abusch";
     repo = "nu_plugin_semver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VTMaZUYgb7wZqiZmd5IVxQsjbHx3QC75VQQdJqaCvfY=";
+    hash = "sha256-2H30cWUk7JGFwl/v5NRO9BlkEQ+hek4UfuirzuFECKo=";
   };
 
-  cargoHash = "sha256-oPP4lwXe4jJLfTjUWfaHxQX6CfHbXO5DajyK4r/l6bo=";
+  cargoHash = "sha256-GWZYHlkRYLHbEDruKpviOP8PMEbwlyor/pDbRJs7IDk=";
 
   passthru.update-script = nix-update-script { };
 
