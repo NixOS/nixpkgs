@@ -373,7 +373,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 redirects_path.parent.mkdir(parents=True, exist_ok=True)
 
             with open(redirects_path.as_posix(), 'w') as file:
-                file.write(self._redirects.get_redirect_script(toc.target.path, str(self._outfile)))
+                file.write(self._redirects.get_redirect_script(str(self._outfile)))
 
             scripts.append(redirects_file_name)
 
