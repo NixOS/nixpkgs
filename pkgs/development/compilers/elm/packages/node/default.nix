@@ -12,25 +12,6 @@ let
     inherit pkgs nodejs;
     inherit (pkgs.stdenv.hostPlatform) system;
   };
-  ESBUILD_BINARY_PATH = lib.getExe (
-    pkgs.esbuild.override {
-      buildGoModule =
-        args:
-        pkgs.buildGoModule (
-          args
-          // rec {
-            version = "0.20.2";
-            src = pkgs.fetchFromGitHub {
-              owner = "evanw";
-              repo = "esbuild";
-              rev = "v${version}";
-              hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
-            };
-            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-          }
-        );
-    }
-  );
 in
 with self;
 with elmLib;
@@ -43,23 +24,17 @@ with elmLib;
     elm-git-install
     ;
 
-  elm-verify-examples =
-    let
-      patched = nodePkgs.elm-verify-examples // {
-        meta =
-          with lib;
-          nodePkgs.elm-verify-examples.meta
-          // {
-            description = "Verify examples in your docs";
-            homepage = "https://github.com/stoeffel/elm-verify-examples";
-            license = licenses.bsd3;
-            maintainers = [ maintainers.turbomack ];
-          };
+  elm-verify-examples = nodePkgs.elm-verify-examples // {
+    meta =
+      with lib;
+      nodePkgs.elm-verify-examples.meta
+      // {
+        description = "Verify examples in your docs";
+        homepage = "https://github.com/stoeffel/elm-verify-examples";
+        license = licenses.bsd3;
+        maintainers = [ maintainers.turbomack ];
       };
-    in
-    patched.override (old: {
-      inherit ESBUILD_BINARY_PATH;
-    });
+  };
 
   elm-coverage =
     let
