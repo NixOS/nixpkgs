@@ -24,6 +24,8 @@
   bintrans,
   xargs-j,
   kldxref,
+  ctfconvert,
+  ctfmerge,
 }:
 let
   baseConfigFile =
@@ -53,26 +55,19 @@ let
       for f in sys/conf/*.mk; do
         substituteInPlace "$f" --replace-quiet 'KERN_DEBUGDIR}''${' 'KERN_DEBUGDIR_'
       done
-
-      sed -i sys/${hostArchBsd}/conf/${baseConfig} \
-        -e 's/WITH_CTF=1/WITH_CTF=0/' \
-        -e '/KDTRACE/d'
-    ''
-    + lib.optionalString (baseConfigFile != null) ''
-      cat ${baseConfigFile} >>sys/${hostArchBsd}/conf/${baseConfig}
-    '';
+      ''
+      + lib.optionalString (baseConfigFile != null) ''
+        cat ${baseConfigFile} >>sys/${hostArchBsd}/conf/${baseConfig}
+      '';
   };
 
   # Kernel modules need this for kern.opts.mk
-  env = {
-    MK_CTF = "no";
-  }
-  // (lib.flip lib.mapAttrs' extraFlags (
+  env = lib.flip lib.mapAttrs' extraFlags (
     name: value: {
       name = "MK_${lib.toUpper name}";
       value = lib.boolToYesNo value;
     }
-  ));
+  );
 in
 mkDerivation rec {
   pname = "sys";
@@ -96,6 +91,8 @@ mkDerivation rec {
     bintrans
     xargs-j
     kldxref
+    ctfconvert
+    ctfmerge
   ];
 
   # --dynamic-linker /red/herring is used when building the kernel.
