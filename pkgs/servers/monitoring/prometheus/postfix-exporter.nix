@@ -43,7 +43,6 @@ buildGoModule rec {
     mainProgram = "postfix_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      willibutz
       globin
     ];
   };

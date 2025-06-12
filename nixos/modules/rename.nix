@@ -75,6 +75,9 @@ in
       "way-cooler is abandoned by its author: "
       + "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"
     ))
+    (mkRemovedOptionModule [ "programs" "yabar" ]
+      "programs.yabar has been removed from NixOS. This is because the yabar repository has been archived upstream."
+    )
     (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
       The hidepid module was removed, since the underlying machinery
       is broken when using cgroups-v2.

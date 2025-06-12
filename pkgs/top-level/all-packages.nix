@@ -177,6 +177,23 @@ with pkgs;
 
   __flattenIncludeHackHook = callPackage ../build-support/setup-hooks/flatten-include-hack { };
 
+  arrayUtilities =
+    let
+      arrayUtilitiesPackages = makeScopeWithSplicing' {
+        otherSplices = generateSplicesForMkScope "arrayUtilities";
+        f =
+          finalArrayUtilities:
+          {
+            callPackages = lib.callPackagesWith (pkgs // finalArrayUtilities);
+          }
+          // lib.packagesFromDirectoryRecursive {
+            inherit (finalArrayUtilities) callPackage;
+            directory = ../build-support/setup-hooks/arrayUtilities;
+          };
+      };
+    in
+    recurseIntoAttrs arrayUtilitiesPackages;
+
   addBinToPathHook = callPackage (
     { makeSetupHook }:
     makeSetupHook {
@@ -1059,8 +1076,6 @@ with pkgs;
   alice-tools-qt6 = qt6Packages.callPackage ../tools/games/alice-tools { };
 
   auditwheel = with python3Packages; toPythonApplication auditwheel;
-
-  bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
 
   davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix {
     studioVariant = true;
@@ -10134,7 +10149,6 @@ with pkgs;
       spatial
       survival
     ];
-    radian = python3Packages.radian;
     # Override this attribute to register additional libraries.
     packages = [ ];
     # Override this attribute if you want to expose R with the same set of
@@ -11107,8 +11121,7 @@ with pkgs;
 
   projecteur = libsForQt5.callPackage ../os-specific/linux/projecteur { };
 
-  lkl = callPackage ../applications/virtualization/lkl { };
-  lklWithFirewall = callPackage ../applications/virtualization/lkl { firewallSupport = true; };
+  lklWithFirewall = lkl.override { firewallSupport = true; };
 
   inherit (callPackages ../os-specific/linux/kernel-headers { inherit (pkgsBuildBuild) elf-header; })
     linuxHeaders
@@ -14579,10 +14592,6 @@ with pkgs;
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
-
-  yabar = callPackage ../applications/window-managers/yabar { };
-
-  yabar-unstable = callPackage ../applications/window-managers/yabar/unstable.nix { };
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 

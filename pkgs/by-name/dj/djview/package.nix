@@ -61,6 +61,11 @@ stdenv.mkDerivation rec {
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p ${Applications}
       cp -a src/djview.app -t ${Applications}
+
+      mkdir -p $out/bin
+      pushd $out/bin
+      ln -sf ../Applications/djview.app/Contents/MacOS/djview
+      popd
     '';
 
   meta = with lib; {

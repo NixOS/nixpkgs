@@ -160,7 +160,7 @@ python.pkgs.buildPythonApplication rec {
       channels-redis
       concurrent-log-handler
       dateparser
-      django_5
+      django
       django-allauth
       django-auditlog
       django-celery-results

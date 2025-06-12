@@ -2960,8 +2960,8 @@ let
         mktplcRef = {
           name = "vscord";
           publisher = "leonardssh";
-          version = "5.3.2";
-          hash = "sha256-kj1D0X6Wj088nwgFlWZkPG+zaHsqb0MapycPIfRWEIk=";
+          version = "5.3.5";
+          hash = "sha256-b5osn7UeSkr8gnLZ/PkrxS0WmgHUwfS0jnwTc1Uw0Sg=";
         };
         meta = {
           description = "Highly customizable Discord Rich Presence extension for Visual Studio Code";
@@ -3350,8 +3350,8 @@ let
         mktplcRef = {
           name = "vscode-kubernetes-tools";
           publisher = "ms-kubernetes-tools";
-          version = "1.3.23";
-          hash = "sha256-8s1fuuTwUPd1Z32EqZNloD50KaFlPOxlvMmo5D6NaE4=";
+          version = "1.3.24";
+          hash = "sha256-LO8WWLxvLZKSpQx+iLR8RpRxnck0oZU/A0WzEeDPgyQ=";
         };
         meta = {
           license = lib.licenses.mit;

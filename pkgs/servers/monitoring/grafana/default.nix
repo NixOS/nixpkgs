@@ -158,7 +158,6 @@ buildGoModule rec {
     maintainers = with maintainers; [
       offline
       fpletz
-      willibutz
       globin
       ma27
       Frostman

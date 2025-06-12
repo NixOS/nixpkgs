@@ -14989,6 +14989,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  trailblazer-nvim = buildVimPlugin {
+    pname = "trailblazer.nvim";
+    version = "2025-02-04";
+    src = fetchFromGitHub {
+      owner = "LeonHeidelbach";
+      repo = "trailblazer.nvim";
+      rev = "5c0e3ac01e227bb9afe428583f29f0ec34801408";
+      sha256 = "0fvm4gb190b9a2gv3spf7429p2adjbsxcgpgd89azmpgqcsdg509";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/LeonHeidelbach/trailblazer.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   train-nvim = buildVimPlugin {
     pname = "train.nvim";
     version = "2023-07-31";

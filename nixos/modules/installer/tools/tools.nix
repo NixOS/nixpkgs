@@ -280,6 +280,7 @@ in
   };
 
   options.system.rebuild.enableNg = lib.mkEnableOption "" // {
+    default = true;
     description = ''
       Whether to use ‘nixos-rebuild-ng’ in place of ‘nixos-rebuild’, the
       Python-based re-implementation of the original in Bash.
@@ -329,6 +330,12 @@ in
 
   config = {
     documentation.man.man-db.skipPackages = [ nixos-version ];
+
+    warnings = lib.optional (!config.system.disableInstallerTools && !config.system.rebuild.enableNg) ''
+      The Bash implementation of nixos-rebuild will be deprecated and removed in the 26.05 release of NixOS.
+      Please migrate to the newer implementation by removing 'system.rebuild.enableNg = false' from your configuration.
+      If you are unable to migrate due to any issues with the new implementation, please create an issue and tag the maintainers of 'nixos-rebuild-ng'.
+    '';
 
     # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
     system.build = {

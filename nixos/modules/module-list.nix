@@ -355,7 +355,6 @@
   ./programs/xonsh.nix
   ./programs/xss-lock.nix
   ./programs/xwayland.nix
-  ./programs/yabar.nix
   ./programs/yazi.nix
   ./programs/ydotool.nix
   ./programs/yubikey-touch-detector.nix
@@ -739,6 +738,7 @@
   ./services/mail/opendkim.nix
   ./services/mail/opensmtpd.nix
   ./services/mail/pfix-srsd.nix
+  ./services/mail/postfix-tlspol.nix
   ./services/mail/postfix.nix
   ./services/mail/postfixadmin.nix
   ./services/mail/postgrey.nix
