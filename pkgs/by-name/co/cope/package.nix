@@ -7,13 +7,13 @@
 
 perlPackages.buildPerlPackage {
   pname = "cope";
-  version = "0-unstable-2024-03-27";
+  version = "0-unstable-2025-06-11";
 
   src = fetchFromGitHub {
     owner = "deftdawg";
     repo = "cope";
-    rev = "ad0c1ebec5684f5ec3e8becf348414292c489175";
-    hash = "sha256-LMAir7tUkjHtKz+KME/Raa9QHGN1g0bzr56fNxfURQY=";
+    rev = "4275d3a2d788591124d237717cf8c1b0f4ba5293";
+    hash = "sha256-MEMh6QJ1hNJFdEtyjyrehkY3CKEOrHs7msk17T35MMg=";
   };
 
   buildInputs = with perlPackages; [
@@ -25,11 +25,13 @@ perlPackages.buildPerlPackage {
     RegexpCommon
     RegexpIPv6
   ];
-
   postInstall = ''
-    mkdir -p $out/bin
-    mv $out/${perlPackages.perl.libPrefix}/${perlPackages.perl.version}/auto/share/dist/Cope/* $out/bin/
+    mkdir -p $out/bin $out/libexec
+    mv $out/${perlPackages.perl.libPrefix}/${perlPackages.perl.version}/auto/share/dist/Cope/* $out/libexec/
     rm -r $out/${perlPackages.perl.libPrefix}/${perlPackages.perl.version}/auto
+    # replace cope with a new cope
+    cp $src/new-cope $out/bin/cope
+    cp -f $src/new-cope $out/libexec/cope
   '';
 
   meta = {
