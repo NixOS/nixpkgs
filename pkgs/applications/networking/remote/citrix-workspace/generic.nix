@@ -42,6 +42,7 @@
   cacert,
   systemd,
   libcxx,
+  sane-backends,
   symlinkJoin,
   libpulseaudio,
   pcsclite,
@@ -165,6 +166,7 @@ stdenv.mkDerivation rec {
     openssl'
     pango
     pcsclite
+    sane-backends
     speex
     (lib.getLib systemd)
     stdenv.cc.cc
