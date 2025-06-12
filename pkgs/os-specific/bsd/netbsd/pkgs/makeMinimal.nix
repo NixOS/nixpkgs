@@ -1,4 +1,5 @@
 {
+  lib,
   mkDerivation,
   bsdSetupHook,
   netbsdSetupHook,
@@ -44,4 +45,6 @@ mkDerivation {
   '';
 
   extraPaths = [ make.path ];
+
+  meta.platforms = lib.platforms.unix;
 }

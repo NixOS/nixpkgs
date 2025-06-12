@@ -1,3 +1,8 @@
-{ mkDerivation }:
-
-mkDerivation { path = "usr.bin/nbperf"; }
+{
+  lib,
+  mkDerivation,
+}:
+mkDerivation {
+  path = "usr.bin/nbperf";
+  meta.platforms = lib.platforms.unix;
+}
