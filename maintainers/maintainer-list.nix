@@ -11567,6 +11567,13 @@
     githubId = 110620;
     name = "Jevin Maltais";
   };
+  jezcope = {
+    email = "j.cope@erambler.co.uk";
+    github = "jezcope";
+    githubId = 457628;
+    name = "Jez Cope";
+    keys = [ { fingerprint = "D9DA 3E47 E8BD 377D A317  B3D0 9E42 CE07 1C45 59D1"; } ];
+  };
   jfchevrette = {
     email = "jfchevrette@gmail.com";
     github = "jfchevrette";
