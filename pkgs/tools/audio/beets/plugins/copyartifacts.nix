@@ -45,7 +45,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pytestFlags = [
-    # -r fEs
+    # This is the same as:
+    #   -r fEs
     "-rfEs"
   ];
 
