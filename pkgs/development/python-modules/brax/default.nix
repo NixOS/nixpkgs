@@ -5,7 +5,7 @@
   stdenv,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   absl-py,
@@ -30,7 +30,7 @@
   pytinyrenderer,
   scipy,
   tensorboardx,
-  trimesh,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -40,29 +40,27 @@
 
 buildPythonPackage rec {
   pname = "brax";
-  version = "0.12.1";
+  version = "0.12.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brax";
     tag = "v${version}";
-    hash = "sha256-whkkqTTy5CY6soyS5D7hWtBZuVHc6si1ArqwLgzHDkw=";
+    hash = "sha256-WshTiWK6XpwK2h/aw/YogA5pGo5U7RdZBz6UjD1Ft/4=";
   };
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [
     absl-py
-    # TODO: remove dm_env after dropping legacy v1 code
     dm-env
     etils
     flask
     flask-cors
     flax
-    # TODO: remove grpcio and gym after dropping legacy v1 code
     grpcio
     gym
     jax
@@ -76,11 +74,10 @@ buildPythonPackage rec {
     optax
     orbax-checkpoint
     pillow
-    # TODO: remove pytinyrenderer after dropping legacy v1 code
     pytinyrenderer
     scipy
     tensorboardx
-    trimesh
+    typing-extensions
   ];
 
   nativeCheckInputs = [
