@@ -18,7 +18,7 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-xwu260fcRfnUarEW3dnMcl8YheR0YmYCgNQGy7LaDGw=";
+      hash = "sha256-mn55+Fb2cU2rNB5Nwt41nWXjcZfgd07ijYAAnZnnnwI=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -48,7 +48,7 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-VtrgDVB+U4uM1SQ1h5IMFwU+nRcleYolDjQYJZ7iHbA=";
+      hash = "sha256-VA6xqJBjD4XmQabTN8M+PLvfrG7Hq2ooxChtz2jAT8A=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -70,7 +70,7 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-q4RDjn9i4wHtCctqcNIfilS9SNfS+LHohE0dSMHMOt8=";
+      hash = "sha256-c/Nmr0Uscalnndq72Y6jPM1JDs5OyOCERtuX/GXkxp8=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -92,7 +92,7 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-HrVoSXXo8P05JbJebKQ/bSPTIxQc9gTDT2RJLhJVhO8=";
+      hash = "sha256-AmY8RkFX0POmVpW71nNz4+dFbr0FHGhNR3RJymDNoaw=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -114,7 +114,7 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-x/a3iAb8vNkplAoS57IX+4BxIcH9roCixrBArUQN+04=";
+      hash = "sha256-vofKxpIfbAs7HR43Y7ojHLQEn6/WIdjZPgZieBMsz74=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -136,7 +136,7 @@
 
     src = fetchurl {
       url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-kGH+Wuqn3vkATL8+aKjXbtuBEQro1tekut+7te8abQs=";
+      hash = "sha256-u7HF6X+ClT4rT3LJcTHXWi5oSxCKPXoUDH+QFRI2S0w=";
     };
 
     buildInputs = [ buildbot-pkg ];
