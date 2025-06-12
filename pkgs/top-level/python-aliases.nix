@@ -198,6 +198,7 @@ mapAliases ({
   django_contrib_comments = django-contrib-comments; # added 2023-07-25
   django-crispy-bootstrap3 = crispy-bootstrap3; # added 2025-06-11
   django-crispy-bootstrap4 = crispy-bootstrap4; # added 2025-06-11
+  django-crispy-bootstrap5 = crispy-bootstrap5; # added 2025-06-11
   django-crontab = throw "django-crontabe has been removed beacause it is unmaintained since 2018"; # added 2024-08-21
   django-discover-runner = throw "django-discover-runner was removed because it is no longer maintained."; # added 2022-11-21
   django_environ = django-environ; # added 2021-12-25
