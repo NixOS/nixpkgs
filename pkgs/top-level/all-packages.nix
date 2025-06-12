@@ -14578,10 +14578,6 @@ with pkgs;
 
   xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
 
-  yabar = callPackage ../applications/window-managers/yabar { };
-
-  yabar-unstable = callPackage ../applications/window-managers/yabar/unstable.nix { };
-
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 
   yokadi = python3Packages.callPackage ../applications/misc/yokadi { };
