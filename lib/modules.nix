@@ -1377,6 +1377,36 @@ let
   */
   mkDefinition = args@{ file, value, ... }: args // { _type = "definition"; };
 
+  /**
+    Produce a _property_ or "modifier" that assigns the given priority to an option definition.
+
+    The priority mechanism is responsible for ignoring defaults when user-defined definitions are set, and ignoring regular definitions when `mkForce` is used.
+
+    Given a list of definitions, only those with the highest priority (lowest number) are merged (if applicable) to become the option value.
+
+    # Input
+
+    - `priority` (number): How to prioritise the value (high number -> lower priority, low number -> higher priority)
+    - `value` (any): The value to prioritise.
+
+    # Example
+
+     In one file the Nextcloud service could be enabled by default, but depending on some condition that could be overridden.
+
+    **configuration.nix**
+    ```nix
+    {
+      services.nextcloud.enable = lib.mkDefault true;
+    }
+    ```
+
+    **my-module.nix**
+    ```nix
+    {
+      services.nextcloud.enable = lib.mkOverride 50 false;
+    }
+    ```
+  */
   mkOverride = priority: content: {
     _type = "override";
     inherit priority content;

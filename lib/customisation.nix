@@ -81,6 +81,7 @@ rec {
     ```
 
     # Examples
+
     :::{.example}
     ## `lib.customisation.overrideDerivation` usage example
 
@@ -134,6 +135,7 @@ rec {
     ```
 
     # Examples
+
     :::{.example}
     ## `lib.customisation.makeOverridable` usage example
 
@@ -148,7 +150,6 @@ rec {
     nix-repl> y.override { a = 10; }
     { override = «lambda»; overrideDerivation = «lambda»; result = 12; }
     ```
-
     :::
   */
   makeOverridable =
@@ -189,23 +190,58 @@ rec {
     );
 
   /**
-    Call the package function in the file `fn` with the required
-    arguments automatically.  The function is called with the
-    arguments `args`, but any missing arguments are obtained from
-    `autoArgs`.  This function is intended to be partially
-    parameterised, e.g.,
+    Call the function (or the function within the file) `funcOrPath` with `defaultArgs`, which can be overridden by `args`. This function is intended to be partially parameterised / curried (see examples).
+
+    # Inputs (positional)
+
+    - `defaultArgs` - `AttrSet`
+
+      Default
+
+    - `funcOrPath` - `(AttrSet -> a) | Path`
+
+      Either a function that is expected to build a package from the given attribute set or a file that returns such a function when imported.
+
+    - `args` - `AttrSet`
+
+      Arguments that will be passed to the function. These are merged with `defaultArgs`.
+      Attributes in `args` replace those in `defaultArgs`.
+
+      It is quite common to pass an empty attribute set if the `defaultArgs` suffice.
+
+    # Type
+
+    ```
+    callPackageWith :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
+    ```
+
+    # Examples
+
+    ## `pkgs.callPackage`
+
+    The most common use for this is the `pkgs.callPackage` function that uses `pkgs` as the `defaultArgs`.
+    See the documentation of that function for examples.
+
+    ## Contrived
+
+    :::{.example}
+    ## Create a custom `callPackage` function
+
+      This custom `callPackage` will call the function (or file with a function) that is passed to it with `libfoo` and `libbar` in the function arguments.
 
       ```nix
-      callPackage = callPackageWith pkgs;
       pkgs = {
         libfoo = callPackage ./foo.nix { };
         libbar = callPackage ./bar.nix { };
       };
+      callPackage = callPackageWith pkgs;
       ```
+    :::
 
-    If the `libbar` function expects an argument named `libfoo`, it is
-    automatically passed as an argument.  Overrides or missing
-    arguments can be supplied in `args`, e.g.
+    If the `libbar` function expects an argument named `libfoo`, it is automatically passed as an argument. Overrides or missing arguments can be supplied in `args`.
+
+    :::{.example}
+    ## Override `libfoo` and enable X11 in `libbar`
 
       ```nix
       libbar = callPackage ./bar.nix {
@@ -213,38 +249,17 @@ rec {
         enableX11 = true;
       };
       ```
-
-    <!-- TODO: Apply "Example:" tag to the examples above -->
-
-    # Inputs
-
-    `autoArgs`
-
-    : 1\. Function argument
-
-    `fn`
-
-    : 2\. Function argument
-
-    `args`
-
-    : 3\. Function argument
-
-    # Type
-
-    ```
-    callPackageWith :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
-    ```
+    :::
   */
   callPackageWith =
-    autoArgs: fn: args:
+    defaultArgs: funcOrPath: args:
     let
-      f = if isFunction fn then fn else import fn;
-      fargs = functionArgs f;
+      func = if isFunction funcOrPath then funcOrPath else import funcOrPath;
+      fargs = functionArgs func;
 
       # All arguments that will be passed to the function
       # This includes automatic ones and ones passed explicitly
-      allArgs = intersectAttrs fargs autoArgs // args;
+      allArgs = intersectAttrs fargs defaultArgs // args;
 
       # a list of argument names that the function requires, but
       # wouldn't be passed to it
@@ -259,7 +274,7 @@ rec {
       # Get a list of suggested argument names for a given missing one
       getSuggestions =
         arg:
-        pipe (autoArgs // args) [
+        pipe (defaultArgs // args) [
           attrNames
           # Only use ones that are at most 2 edits away. While mork would work,
           # levenshteinAtMost is only fast for 2 or less.
@@ -290,8 +305,8 @@ rec {
           loc' =
             if loc != null then
               loc.file + ":" + toString loc.line
-            else if !isFunction fn then
-              toString fn + optionalString (pathIsDirectory fn) "/default.nix"
+            else if !isFunction funcOrPath then
+              toString funcOrPath + optionalString (pathIsDirectory funcOrPath) "/default.nix"
             else
               "<unknown location>";
         in
@@ -303,7 +318,7 @@ rec {
 
     in
     if missingArgs == { } then
-      makeOverridable f allArgs
+      makeOverridable func allArgs
     # This needs to be an abort so it can't be caught with `builtins.tryEval`,
     # which is used by nix-env and ofborg to filter out packages that don't evaluate.
     # This way we're forced to fix such errors in Nixpkgs,
