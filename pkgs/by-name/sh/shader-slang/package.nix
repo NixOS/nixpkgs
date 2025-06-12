@@ -144,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Shading language that makes it easier to build and maintain large shader codebases in a modular and extensible fashion";
     homepage = "https://github.com/shader-slang/slang";
+    changelog = "https://github.com/shader-slang/slang/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       llvm-exception
