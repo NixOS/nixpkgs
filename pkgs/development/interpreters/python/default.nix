@@ -4,7 +4,6 @@
   config,
   db,
   lib,
-  libffiBoot,
   makeScopeWithSplicing',
   pythonPackagesExtensions,
   stdenv,
@@ -117,7 +116,7 @@
           libxcrypt = null;
           xz = null;
           zlib = null;
-          libffi = libffiBoot; # without test suite
+          libffi = null;
           stripConfig = true;
           stripIdlelib = true;
           stripTests = true;
@@ -136,7 +135,6 @@
           */
           allowedReferenceNames = [
             "bashNonInteractive"
-            "libffi"
           ];
         }
         // sources.python313
