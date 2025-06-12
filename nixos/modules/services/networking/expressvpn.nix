@@ -5,21 +5,21 @@
   ...
 }:
 {
-  options.services.expressvpn.enable = lib.mkOption {
+  options.services.expressvpn-service.enable = lib.mkOption {
     type = lib.types.bool;
     default = false;
     description = ''
-      Enable the ExpressVPN daemon.
+      Enable the ExpressVPN daemon service.
     '';
   };
 
-  config = lib.mkIf config.services.expressvpn.enable {
+  config = lib.mkIf config.services.expressvpn-service.enable {
     boot.kernelModules = [ "tun" ];
 
-    systemd.services.expressvpn = {
-      description = "ExpressVPN Daemon";
+    systemd.services.expressvpn-service = {
+      description = "ExpressVPN Daemon Service";
       serviceConfig = {
-        ExecStart = "${pkgs.expressvpn}/bin/expressvpnd";
+        ExecStart = "${pkgs.expressvpn}/bin/expressvpn-daemon";
         Restart = "on-failure";
         RestartSec = 5;
       };
@@ -30,7 +30,9 @@
         "network-online.target"
       ];
     };
-  };
 
-  meta.maintainers = with lib.maintainers; [ yureien ];
+    # These groups are required by expressvpn-daemon
+    users.groups.expressvpn = { };
+    users.groups.expressvpnhnsd = { };
+  };
 }
