@@ -830,6 +830,14 @@ builtins.intersectAttrs super {
     pkgs.z3
   ] super.crucible-llvm;
 
+  # yaml doesn't build its executables (json2yaml, yaml2json) by default:
+  # https://github.com/snoyberg/yaml/issues/194
+  yaml = lib.pipe super.yaml [
+    (disableCabalFlag "no-exe")
+    enableSeparateBinOutput
+    (addBuildDepend self.optparse-applicative)
+  ];
+
   # Compile manpages (which are in RST and are compiled with Sphinx).
   futhark =
     overrideCabal
