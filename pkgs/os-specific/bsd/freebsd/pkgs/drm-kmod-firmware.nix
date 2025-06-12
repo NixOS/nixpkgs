@@ -21,6 +21,11 @@ mkDerivation rec {
     hash = "sha256-RS8uXZMYoHfjDSC0OUJUU81eR8rLlEgFhuh+Y7+kXtA=";
   };
 
+  outputs = [
+    "out"
+    "debug"
+  ];
+
   extraNativeBuildInputs = [ buildFreebsd.xargs-j ];
 
   hardeningDisable = [
@@ -40,8 +45,15 @@ mkDerivation rec {
 
   env = sys.passthru.env;
   SYSDIR = "${sys.src}/sys";
+  KERN_DEBUGDIR = "${builtins.placeholder "debug"}/lib/debug";
+  KERN_DEBUGDIR_KODIR = "${KERN_DEBUGDIR}/kernel";
+  KERN_DEBUGDIR_KMODDIR = "${KERN_DEBUGDIR}/kernel";
 
   KMODDIR = "${placeholder "out"}/kernel";
+
+  makeFlags = [
+    "DEBUG_FLAGS=-g"
+  ];
 
   meta = {
     description = "GPU firmware for FreeBSD drm-kmod";
