@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "ternaris";
     repo = "declinate";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-JEO/GtbG/yQuj8vJJaWex9mGy6qpWOPHGlKrdG9vt28=";
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Command line interface generator";
     homepage = "https://gitlab.com/ternaris/declinate";
-    changelog = "https://gitlab.com/ternaris/declinate/-/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://gitlab.com/ternaris/declinate/-/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
