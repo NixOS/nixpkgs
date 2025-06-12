@@ -385,7 +385,6 @@ in
         recurseIntoAttrs
         removeSuffix
         ;
-      inherit (lib.path) append;
 
       # Generate an attrset corresponding to a given directory.
       # This function is outside `packagesFromDirectoryRecursive`'s lambda expression,
@@ -396,7 +395,7 @@ in
           name: type:
           # for each directory entry
           let
-            path = append directory name;
+            path = directory + "/${name}";
           in
           if type == "directory" then
             {
@@ -429,7 +428,7 @@ in
       directory,
     }@args:
     let
-      defaultPath = append directory "package.nix";
+      defaultPath = directory + "/package.nix";
     in
     if pathExists defaultPath then
       # if `${directory}/package.nix` exists, call it directly
