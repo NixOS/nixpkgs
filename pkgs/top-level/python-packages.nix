@@ -15016,8 +15016,6 @@ self: super: with self; {
 
   rachiopy = callPackage ../development/python-modules/rachiopy { };
 
-  radian = callPackage ../development/python-modules/radian { };
-
   radicale-infcloud = callPackage ../development/python-modules/radicale-infcloud {
     radicale = pkgs.radicale.override { python3 = python; };
   };
@@ -18601,8 +18599,6 @@ self: super: with self; {
   ua-parser-builtins = callPackage ../development/python-modules/ua-parser-builtins { };
 
   ua-parser-rs = callPackage ../development/python-modules/ua-parser-rs { };
-
-  uamqp = callPackage ../development/python-modules/uamqp { };
 
   uarray = callPackage ../development/python-modules/uarray { };
 
