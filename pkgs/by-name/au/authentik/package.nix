@@ -159,7 +159,8 @@ let
   python = python312.override {
     self = python;
     packageOverrides = final: prev: {
-      django = final.django_5;
+      # https://github.com/goauthentik/authentik/pull/14709
+      django = final.django_5_1;
 
       # Running authentik currently requires a custom version.
       # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.
