@@ -6,18 +6,20 @@
   openjdk11,
   jnr-posix,
   makeWrapper,
-  openjfx17,
   zip,
   nixosTests,
   bash,
+  glib,
+  xorg,
+  alsa-lib,
 }:
 stdenv.mkDerivation rec {
   pname = "microsoft-identity-broker";
   version = "2.0.1";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/microsoft-identity-broker/microsoft-identity-broker_${version}_amd64.deb";
-    hash = "sha256-v/FxtdvRaUHYqvFSkJIZyicIdcyxQ8lPpY5rb9smnqA=";
+    url = "https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/m/microsoft-identity-broker/microsoft-identity-broker_${version}_amd64.deb";
+    hash = "sha256-JheJnsu1ZxJbcpt0367FqfHVdwWWvPem2fm0i8s7MGE=";
   };
 
   nativeBuildInputs = [
@@ -27,24 +29,15 @@ stdenv.mkDerivation rec {
     zip
   ];
 
+  buildInputs = [
+    glib
+    xorg.libXtst
+    alsa-lib
+  ];
+
   buildPhase = ''
     runHook preBuild
-
     rm opt/microsoft/identity-broker/lib/jnr-posix-3.1.4.jar
-    jar -uf opt/microsoft/identity-broker/lib/javafx-graphics-15-linux.jar -C ${openjfx17}/modules_libs/javafx.graphics/ libglass.so
-    jar -uf opt/microsoft/identity-broker/lib/javafx-graphics-15-linux.jar -C ${openjfx17}/modules_libs/javafx.graphics/ libglassgtk3.so
-    jar -uf opt/microsoft/identity-broker/lib/javafx-graphics-15-linux.jar -C ${openjfx17}/modules_libs/javafx.graphics/ libprism_es2.so
-    zip -d opt/microsoft/identity-broker/lib/javafx-media-15-linux.jar libavplugin-54.so
-    zip -d opt/microsoft/identity-broker/lib/javafx-media-15-linux.jar libavplugin-56.so
-    zip -d opt/microsoft/identity-broker/lib/javafx-media-15-linux.jar libavplugin-57.so
-    zip -d opt/microsoft/identity-broker/lib/javafx-media-15-linux.jar libavplugin-ffmpeg-56.so
-    zip -d opt/microsoft/identity-broker/lib/javafx-media-15-linux.jar libavplugin-ffmpeg-57.so
-    zip -d opt/microsoft/identity-broker/lib/javafx-media-15-linux.jar libavplugin-ffmpeg-58.so
-    jar -uf opt/microsoft/identity-broker/lib/javafx-media-15-linux.jar -C ${openjfx17}/modules_libs/javafx.media/ libavplugin.so
-    jar -uf opt/microsoft/identity-broker/lib/javafx-media-15-linux.jar -C ${openjfx17}/modules_libs/javafx.media/ libfxplugins.so
-    jar -uf opt/microsoft/identity-broker/lib/javafx-media-15-linux.jar -C ${openjfx17}/modules_libs/javafx.media/ libgstreamer-lite.so
-    jar -uf opt/microsoft/identity-broker/lib/javafx-media-15-linux.jar -C ${openjfx17}/modules_libs/javafx.media/ libjfxmedia.so
-
     runHook postBuild
   '';
 
@@ -60,13 +53,20 @@ stdenv.mkDerivation rec {
     classpath="$classpath:${jnr-posix}/share/java/jnr-posix-${jnr-posix.version}.jar"
     mkdir -p $out/bin
     makeWrapper ${openjdk11}/bin/java $out/bin/microsoft-identity-broker \
-      --add-flags "-classpath $classpath com.microsoft.identity.broker.service.IdentityBrokerService" \
-      --add-flags "-verbose"
-    makeWrapper ${openjdk11}/bin/java $out/bin/microsoft-identity-device-broker \
-      --add-flags "-verbose" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       --add-flags "-classpath $classpath" \
-      --add-flags "com.microsoft.identity.broker.service.DeviceBrokerService" \
-      --add-flags "save"
+      --add-flags "-Xmx256m -Xss256k -XX:+UseParallelGC -XX:ParallelGCThreads=1" \
+      --add-flags "-verbose" \
+      --add-flags "-Djava.net.useSystemProxies=true" \
+      --add-flags "com.microsoft.identity.broker.service.IdentityBrokerService"
+
+    makeWrapper ${openjdk11}/bin/java $out/bin/microsoft-identity-device-broker \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
+      --add-flags "-classpath $classpath" \
+      --add-flags "-Xmx256m -Xss256k -XX:+UseParallelGC -XX:ParallelGCThreads=1" \
+      --add-flags "-verbose" \
+      --add-flags "-Djava.net.useSystemProxies=true" \
+      --add-flags "com.microsoft.identity.broker.service.DeviceBrokerService"
 
     runHook postInstall
   '';
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
         $out/bin/microsoft-identity-device-broker \
       --replace \
         /usr/lib/jvm/java-11-openjdk-amd64 \
-        ${openjdk11}/bin/java
+        ${openjdk11}
   '';
 
   passthru = {

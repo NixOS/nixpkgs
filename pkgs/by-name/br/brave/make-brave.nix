@@ -205,7 +205,7 @@ stdenv.mkDerivation {
 
       # Fix path to bash in $BINARYWRAPPER
       substituteInPlace $BINARYWRAPPER \
-          --replace /bin/bash ${stdenv.shell} \
+          --replace-fail /bin/bash ${stdenv.shell} \
           --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
 
       ln -sf $BINARYWRAPPER $out/bin/brave
@@ -217,14 +217,14 @@ stdenv.mkDerivation {
       done
 
       # Fix paths
-      substituteInPlace $out/share/applications/brave-browser.desktop \
-          --replace /usr/bin/brave-browser-stable $out/bin/brave
+      substituteInPlace $out/share/applications/{brave-browser,com.brave.Browser}.desktop \
+          --replace-fail /usr/bin/brave-browser-stable $out/bin/brave
       substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
-          --replace /opt/brave.com $out/opt/brave.com
+          --replace-fail /opt/brave.com $out/opt/brave.com
       substituteInPlace $out/share/menu/brave-browser.menu \
-          --replace /opt/brave.com $out/opt/brave.com
+          --replace-fail /opt/brave.com $out/opt/brave.com
       substituteInPlace $out/opt/brave.com/brave/default-app-block \
-          --replace /opt/brave.com $out/opt/brave.com
+          --replace-fail /opt/brave.com $out/opt/brave.com
 
       # Correct icons location
       icon_sizes=("16" "24" "32" "48" "64" "128" "256")
