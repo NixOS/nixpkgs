@@ -1,43 +1,10 @@
 {
   lib,
-  buildPythonApplication,
   fetchPypi,
-  # build inputs
-  about-time,
-  aiofiles,
-  aiohttp,
-  aiosignal,
-  alive-progress,
-  async-timeout,
-  attrs,
-  cddlparser,
-  certifi,
-  charset-normalizer,
-  cssselect,
-  frozenlist,
-  html5lib,
-  idna,
-  isodate,
-  json-home-client,
-  kdl-py,
-  lxml,
-  multidict,
-  pillow,
-  pygments,
-  requests,
-  result,
-  setuptools,
-  six,
-  tenacity,
-  typing-extensions,
-  uri-template,
-  urllib3,
-  webencodings,
-  widlparser,
-  yarl,
+  python3Packages,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "bikeshed";
   version = "5.2.0";
   pyproject = true;
@@ -47,11 +14,11 @@ buildPythonApplication rec {
     hash = "sha256-HUPkLEpwLRnrffUMN62WPqsZX2UsGqPfjEa91UMbUMM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ python3Packages.setuptools ];
 
   pythonRelaxDeps = true;
 
-  dependencies = [
+  dependencies = with python3Packages; [
     about-time
     aiofiles
     aiohttp
