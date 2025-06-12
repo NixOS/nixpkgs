@@ -134,8 +134,8 @@ rec {
       "sha256-0Ex+gq7lC3J1pxSpDZD6SJhxHnWosedNXMFMHdfG2Pc=";
 
   mypy-boto3-appsync =
-    buildMypyBoto3Package "appsync" "1.38.2"
-      "sha256-5hCTRhwqD1apJqpV/i2tLX09O6uA9Zn6c+gswBHO5H0=";
+    buildMypyBoto3Package "appsync" "1.38.33"
+      "sha256-M7OsH06ljwqo4U0f1gMpYmgZFvZIzLcm0DdwJa38IoM=";
 
   mypy-boto3-arc-zonal-shift =
     buildMypyBoto3Package "arc-zonal-shift" "1.38.0"
@@ -182,8 +182,8 @@ rec {
       "sha256-WXMpTKmBXa1q51tnLTE5sOxJyn0LLqOwpV2wdZfM1v0=";
 
   mypy-boto3-ce =
-    buildMypyBoto3Package "ce" "1.38.24"
-      "sha256-daz9r4KWlK/n3ZcxDRARlOlSKcUbhyW/12HPWja30RY=";
+    buildMypyBoto3Package "ce" "1.38.33"
+      "sha256-3VFyffSGPB1C/l4m7tLiDNYcuq+TU1K7gng+HETgDow=";
 
   mypy-boto3-chime =
     buildMypyBoto3Package "chime" "1.38.0"
@@ -366,8 +366,8 @@ rec {
       "sha256-lurpm+SfLFZKROAdMiPhthRnaihxDXTLO296JUQSbYc=";
 
   mypy-boto3-customer-profiles =
-    buildMypyBoto3Package "customer-profiles" "1.38.0"
-      "sha256-EuS4aLejTOf1w1mkx1Yp9Rj2Dy10Rcrcrwnfe25/5cM=";
+    buildMypyBoto3Package "customer-profiles" "1.38.33"
+      "sha256-Gz5Qm83HTg5sjnqeMoM/mW+Qh7qq66vAnoc18l9Szjg=";
 
   mypy-boto3-databrew =
     buildMypyBoto3Package "databrew" "1.38.0"
@@ -446,8 +446,8 @@ rec {
       "sha256-RQh46jrXqj4bXTRJ+tPR9sql7yUn7Ek9u4p0OU0A7b0=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.38.25"
-      "sha256-rtfXRsfGr34/dUJK1kgpp85blNyHERSkScQDraIpVMs=";
+    buildMypyBoto3Package "ec2" "1.38.33"
+      "sha256-XQf8ENX2gvhXAAC6U73sAO5JgXFQmUOHdFHCzMvDQaM=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.38.0"
@@ -466,8 +466,8 @@ rec {
       "sha256-f/ZRV3fRPB1B7xP8lJX/jPXVuFY+gdUm4lZJlZCj55k=";
 
   mypy-boto3-efs =
-    buildMypyBoto3Package "efs" "1.38.0"
-      "sha256-Z2LMQFtcTNqxsoWKGg4iBFtbwnXGVVXQrRa/bZdnl40=";
+    buildMypyBoto3Package "efs" "1.38.33"
+      "sha256-Yxumhn6IHvstfAvmJnRsf3Xpeq5j5l+cKnpYyMIOojY=";
 
   mypy-boto3-eks =
     buildMypyBoto3Package "eks" "1.38.28"
@@ -846,8 +846,8 @@ rec {
       "sha256-b9t29BqBHshYWb9g/GD6no1NXYVmsjwY6knE8cIZBEA=";
 
   mypy-boto3-marketplace-catalog =
-    buildMypyBoto3Package "marketplace-catalog" "1.38.0"
-      "sha256-thLr5C7nCa4NyRHIVIFGwWAfl572eUJ4Z7P22s52BDc=";
+    buildMypyBoto3Package "marketplace-catalog" "1.38.33"
+      "sha256-65S8wh5kDMdNXuPUJlwjXzt4SJ35P4nq/+UknulFMcQ=";
 
   mypy-boto3-marketplace-entitlement =
     buildMypyBoto3Package "marketplace-entitlement" "1.38.0"
