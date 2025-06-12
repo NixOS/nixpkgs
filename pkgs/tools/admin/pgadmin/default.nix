@@ -22,14 +22,14 @@
 
 let
   pname = "pgadmin";
-  version = "9.3";
-  yarnHash = "sha256-T6RKWuAAoJgbzJKef4ioOoUDtoGM9s9BFqxFdy5EtyQ=";
+  version = "9.4";
+  yarnHash = "sha256-AlAyHtadjmKZb0rHNIlaPtEcGFQ15Fc6rExMsNFGwDc=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-4uupF1dw6OE/briAI5PWiQ7h6RPx1sUqf8PB8cJsNSU=";
+    hash = "sha256-oslp9g63mYeP9CmpCzF80nlyqF1ftGbMRIsp6goJOx4=";
   };
 
   mozjpeg-bin = fetchFromGitHub {
@@ -247,7 +247,6 @@ pythonPackages.buildPythonApplication rec {
     azure-identity
     sphinxcontrib-youtube
     dnspython
-    speaklater3
     google-auth-oauthlib
     google-api-python-client
     keyring
