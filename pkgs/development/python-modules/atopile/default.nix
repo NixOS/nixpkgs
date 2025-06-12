@@ -58,7 +58,7 @@ buildPythonPackage rec {
   version = "0.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "atopile";
