@@ -91,6 +91,7 @@
 , "makam"
 , "gulp"
 , "gulp-cli"
+, "hardhat"
 , "he"
 , "hs-airdrop"
 , "imapnotify"
