@@ -69,7 +69,7 @@ buildPythonPackage rec {
     ++ (lib.optional (pythonOlder "3.11") typing-extensions)
     ++ (lib.flatten (lib.attrValues optional-dependencies));
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # 1Password CLI is not available

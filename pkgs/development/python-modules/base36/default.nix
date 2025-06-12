@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test_base36.py" ];
+  enabledTestPaths = [ "test_base36.py" ];
   pythonImportsCheck = [ "base36" ];
 
   meta = with lib; {
