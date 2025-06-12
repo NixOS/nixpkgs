@@ -152,13 +152,18 @@ let
                 configurePhase ''${preBuildPhases[*]:-} buildPhase checkPhase" \
                 genericBuild
 
+              # intentionally after calling stdenv
+              set -Eeuo pipefail
+              shopt -s nullglob
+
               depsFiles=(./src/*/deps.json)
 
-              jq . $(nix-build ${toString ./combine-deps.nix} \
+              combined=$(nix-build ${toString ./combine-deps.nix} \
                 --arg list "[ ''${depsFiles[*]} ]" \
                 --argstr baseRid ${targetRid} \
-                --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}' \
-                ) > deps.json
+                --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}')
+
+              jq . "$combined" > deps.json
 
               mv deps.json "${toString prebuiltPackages.sourceFile}"
               EOF
