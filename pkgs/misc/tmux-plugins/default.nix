@@ -870,21 +870,21 @@ in
 
   tmux-sessionx = mkTmuxPlugin {
     pluginName = "sessionx";
-    version = "0-unstable-2024-09-22";
+    version = "0-unstable-2025-01-07";
     src = fetchFromGitHub {
       owner = "omerxx";
       repo = "tmux-sessionx";
-      rev = "508359b8a6e2e242a9270292160624406be3bbca";
-      hash = "sha256-nbzn3qxMGRzxFnLBVrjqGl09++9YOK4QrLoYiHUS9jY=";
+      rev = "42c18389e73b80381d054dd1005b8c9a66942248";
+      hash = "sha256-SRKI4mliMSMp/Yd+oSn48ArbbRA+szaj70BQeTd8NhM=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postPatch = ''
       substituteInPlace sessionx.tmux \
-        --replace-fail "\$CURRENT_DIR/scripts/sessionx.sh" "$out/share/tmux-plugins/sessionx/scripts/sessionx.sh"
+        --replace "\$CURRENT_DIR/scripts/sessionx.sh" "$out/share/tmux-plugins/sessionx/scripts/sessionx.sh"
       substituteInPlace scripts/sessionx.sh \
-        --replace-fail "/tmux-sessionx/scripts/preview.sh" "$out/share/tmux-plugins/sessionx/scripts/preview.sh"
+        --replace "/tmux-sessionx/scripts/preview.sh" "$out/share/tmux-plugins/sessionx/scripts/preview.sh"
       substituteInPlace scripts/sessionx.sh \
-        --replace-fail "/tmux-sessionx/scripts/reload_sessions.sh" "$out/share/tmux-plugins/sessionx/scripts/reload_sessions.sh"
+        --replace "/tmux-sessionx/scripts/reload_sessions.sh" "$out/share/tmux-plugins/sessionx/scripts/reload_sessions.sh";
     '';
     postInstall = ''
       chmod +x $target/scripts/sessionx.sh
