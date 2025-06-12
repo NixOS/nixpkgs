@@ -77,6 +77,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       pkg-config
       zstd
       protobuf
+      llvmPackages.libllvm
     ]
     ++ bpftools.buildInputs
     ++ bpftools.nativeBuildInputs;
