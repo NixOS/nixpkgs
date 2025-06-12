@@ -19324,6 +19324,8 @@ self: super: with self; {
 
   wsdiscovery = callPackage ../development/python-modules/wsdiscovery { };
 
+  wsdot = callPackage ../development/python-modules/wsdot { };
+
   wsgi-intercept = callPackage ../development/python-modules/wsgi-intercept { };
 
   wsgidav = callPackage ../development/python-modules/wsgidav { };
