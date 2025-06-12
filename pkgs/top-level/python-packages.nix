@@ -16447,6 +16447,8 @@ self: super: with self; {
 
   sortedcontainers = callPackage ../development/python-modules/sortedcontainers { };
 
+  sortedl1 = callPackage ../development/python-modules/sortedl1 { };
+
   sotabenchapi = callPackage ../development/python-modules/sotabenchapi { };
 
   soundcard = callPackage ../development/python-modules/soundcard { };
