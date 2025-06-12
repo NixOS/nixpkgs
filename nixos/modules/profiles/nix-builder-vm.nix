@@ -111,6 +111,14 @@ in
       };
     };
 
+    # DNS fails for QEMU user networking (SLiRP) on macOS.  See:
+    #
+    # https://github.com/utmapp/UTM/issues/2353
+    #
+    # This works around that by using a public DNS server other than the DNS
+    # server that QEMU provides (normally 10.0.2.3)
+    networking.nameservers = [ "8.8.8.8" ];
+
     # The linux builder is a lightweight VM for remote building; not evaluation.
     nix.channel.enable = false;
 
