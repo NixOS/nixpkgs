@@ -74,7 +74,7 @@ new_version = old_version
 # https://github.com/Radarr/Radarr/blob/edec432244933a2143c5d13c71de7eb210434e7b/src/NzbDrone.Core/Update/UpdatePackageProvider.cs
 # https://github.com/Radarr/Radarr/blob/edec432244933a2143c5d13c71de7eb210434e7b/src/NzbDrone.Common/Cloud/RadarrCloudRequestBuilder.cs
 version_update = requests.get(
-    f"https://radarr.servarr.com/v1/update/master?version={old_version}",
+    f"https://radarr.servarr.com/v1/update/master?version={old_version}&includeMajorVersion=true",
 ).json()
 if version_update["available"]:
     new_version = version_update["updatePackage"]["version"]
