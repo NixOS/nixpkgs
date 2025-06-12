@@ -667,6 +667,7 @@ mapAliases ({
   qcodes-loop = throw "qcodes-loop has been removed due to deprecation"; # added 2023-11-30
   qiskit-aqua = throw "qiskit-aqua has been removed due to deprecation, with its functionality moved to different qiskit packages";
   rabbitpy = throw "rabbitpy has been removed, since it is unmaintained and broken"; # added 2023-07-01
+  radian = throw "radian has been promoted to a top-level attribute name: `pkgs.radian`"; # added 2025-05-02
   radicale_infcloud = radicale-infcloud; # added 2024-01-07
   radio_beam = radio-beam; # added 2023-11-04
   ratelimiter = throw "ratelimiter has been removed, since it is unmaintained and broken"; # added 2023-10-21
