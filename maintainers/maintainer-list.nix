@@ -3863,15 +3863,14 @@
     github = "c4f3z1n";
     githubId = 22820003;
   };
-  c4thebomb = {
+  c4patino = {
     name = "Ceferino Patino";
     email = "c4patino@gmail.com";
-    github = "c4thebomb";
+    github = "c4patino";
     githubId = 79673111;
     keys = [
-      {
-        fingerprint = "EA60 D516 A926 7532 369D  3E67 E161 DF22 9EC1 280E";
-      }
+      { fingerprint = "EA60 D516 A926 7532 369D  3E67 E161 DF22 9EC1 280E"; }
+      { fingerprint = "D088 A5AF C45B 78D1 CD4F  457C 6957 B3B6 46F2 BB4E"; }
     ];
   };
   caarlos0 = {
