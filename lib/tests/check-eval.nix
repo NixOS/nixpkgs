@@ -1,10 +1,14 @@
 # Throws an error if any of our lib tests fail.
 
 let
+  lib = import ../default.nix;
   tests = [
     "misc"
     "systems"
   ];
-  all = builtins.concatLists (map (f: import (./. + "/${f}.nix")) tests);
+  failures = builtins.concatLists (map (f: import (./. + "/${f}.nix")) tests);
 in
-if all == [ ] then null else throw (builtins.toJSON all)
+lib.debug.throwTestFailures {
+  inherit failures;
+  description = "check-eval.nix tests";
+}
