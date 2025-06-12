@@ -31,8 +31,6 @@ let
       )
     ) (attrValues cfg.vswitches);
 
-  slaveIfs = map (i: cfg.interfaces.${i}) (filter (i: cfg.interfaces ? ${i}) slaves);
-
   rstpBridges = flip filterAttrs cfg.bridges (_: { rstp, ... }: rstp);
 
   needsMstpd = rstpBridges != { };
@@ -1536,47 +1534,56 @@ in
   ###### implementation
 
   config = {
+    warnings.networking.interfaces = lib.mapAttrs (_: i: i.warnings) cfg.interfaces;
+    warnings.networking.systemdNetworkdDhcpdClash = {
+      condition = config.systemd.network.enable && cfg.useDHCP && !cfg.useNetworkd;
+      message = ''
+        The combination of `systemd.network.enable = true`, `networking.useDHCP = true` and `networking.useNetworkd = false`
+        can cause both networkd and dhcpcd to manage the same interfaces. This can lead to loss of networking.
+        It is recommended you choose only one of networkd (by also enabling `networking.useNetworkd`) or scripting
+        (by disabling `systemd.network.enable`)
+      '';
+    };
 
-    warnings =
-      (concatMap (i: i.warnings) interfaces)
-      ++ (lib.optional (config.systemd.network.enable && cfg.useDHCP && !cfg.useNetworkd) ''
-        The combination of `systemd.network.enable = true`, `networking.useDHCP = true` and `networking.useNetworkd = false` can cause both networkd and dhcpcd to manage the same interfaces. This can lead to loss of networking. It is recommended you choose only one of networkd (by also enabling `networking.useNetworkd`) or scripting (by disabling `systemd.network.enable`)
-      '');
+    assertions.networking.interfaces = lib.flip lib.mapAttrs cfg.interfaces (
+      iName: iCfg: {
+        nameLessThan16Chars = {
+          # With the linux kernel, interface name length is limited by IFNAMSIZ
+          # to 16 bytes, including the trailing null byte.
+          # See include/linux/if.h in the kernel sources
+          assertion = stringLength iName < 16;
+          message = ''
+            The name of networking.interfaces."${iName}" is too long, it needs to be less than 16 characters.
+          '';
+        };
 
-    assertions =
-      (forEach interfaces (i: {
-        # With the linux kernel, interface name length is limited by IFNAMSIZ
-        # to 16 bytes, including the trailing null byte.
-        # See include/linux/if.h in the kernel sources
-        assertion = stringLength i.name < 16;
-        message = ''
-          The name of networking.interfaces."${i.name}" is too long, it needs to be less than 16 characters.
-        '';
-      }))
-      ++ (forEach slaveIfs (i: {
-        assertion = i.ipv4.addresses == [ ] && i.ipv6.addresses == [ ];
-        message = ''
-          The networking.interfaces."${i.name}" must not have any defined ips when it is a slave.
-        '';
-      }))
-      ++ (forEach interfaces (i: {
-        assertion = i.tempAddress != "disabled" -> cfg.enableIPv6;
-        message = ''
-          Temporary addresses are only needed when IPv6 is enabled.
-        '';
-      }))
-      ++ (forEach interfaces (i: {
-        assertion = (i.virtual && i.virtualType == "tun") -> i.macAddress == null;
-        message = ''
-          Setting a MAC Address for tun device ${i.name} isn't supported.
-        '';
-      }))
-      ++ [
-        {
-          assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
-          message = "Invalid value given to the networking.hostId option.";
-        }
-      ];
+        slaveInterfacesMustNotHaveIpAddresses = {
+          assertion = elem iName slaves -> (iCfg.ipv4.addresses == [ ] && iCfg.ipv6.addresses == [ ]);
+          message = ''
+            The networking.interfaces."${iName}" must not have any defined ips when it is a slave.
+          '';
+        };
+
+        tempAddressOnlyForIpv6 = {
+          assertion = iCfg.tempAddress != "disabled" -> cfg.enableIPv6;
+          message = ''
+            Temporary addresses are only needed when IPv6 is enabled.
+          '';
+        };
+
+        noMacAddressForTunDevices = {
+          assertion = (iCfg.virtual && iCfg.virtualType == "tun") -> iCfg.macAddress == null;
+          message = ''
+            Setting a MAC Address for tun device ${iName} isn't supported.
+          '';
+        };
+      }
+    );
+
+    assertions.networking.validHostId = {
+      assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
+      message = "Invalid value given to the networking.hostId option.";
+    };
 
     boot.kernelModules =
       [ ]
