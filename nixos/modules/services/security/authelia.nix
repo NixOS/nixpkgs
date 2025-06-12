@@ -74,6 +74,14 @@ let
                 '';
               };
 
+              notifierSmtpPasswordFile = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                description = ''
+                  Path to your SMTP password file used to authenticate with the SMTP server.
+                '';
+              };
+
               oidcIssuerPrivateKeyFile = mkOption {
                 type = types.nullOr types.path;
                 default = null;
@@ -372,6 +380,7 @@ in
               AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = instance.secrets.storageEncryptionKeyFile;
               AUTHELIA_SESSION_SECRET_FILE = instance.secrets.sessionSecretFile;
               AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = instance.secrets.oidcHmacSecretFile;
+              AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = instance.secrets.notifierSmtpPasswordFile;
             })
             // instance.environmentVariables;
 
