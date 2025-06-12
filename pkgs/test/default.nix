@@ -40,6 +40,8 @@ with pkgs;
               (filter (n: n != "gccCrossLibcStdenv"))
               (filter (n: n != "gcc49Stdenv"))
               (filter (n: n != "gcc6Stdenv"))
+              (filter (n: n != "gcc7Stdenv"))
+              (filter (n: n != "gcc8Stdenv"))
             ]
             ++
               lib.optionals
