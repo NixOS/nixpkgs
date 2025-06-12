@@ -11,15 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnum4";
-  version = "1.4.19";
+  version = "1.4.20";
 
   src = fetchurl {
     url = "mirror://gnu/m4/m4-${version}.tar.bz2";
-    sha256 = "sha256-swapHA/ZO8QoDPwumMt6s5gf91oYe+oyk4EfRSyJqMg=";
+    hash = "sha256-rGmJ7l0q7YFzl4BjDMLOCX4qZUb+uWpKVNs31GoUUuQ=";
   };
 
-  # https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-devel/m4/m4-1.4.19-r1.ebuild
-  patches = lib.optional stdenv.hostPlatform.isLoongArch64 ./loong-fix-build.patch;
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch =
