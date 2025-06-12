@@ -74,7 +74,7 @@ new_version = old_version
 # https://github.com/Prowlarr/Prowlarr/blob/7d813ef97a01af0f36a2beaec32e9cd854fc67f3/src/NzbDrone.Core/Update/UpdatePackageProvider.cs
 # https://github.com/Prowlarr/Prowlarr/blob/7d813ef97a01af0f36a2beaec32e9cd854fc67f3/src/NzbDrone.Common/Cloud/ProwlarrCloudRequestBuilder.cs
 version_update = requests.get(
-    f"https://prowlarr.servarr.com/v1/update/master?version={old_version}",
+    f"https://prowlarr.servarr.com/v1/update/master?version={old_version}&includeMajorVersion=true",
 ).json()
 if version_update["available"]:
     new_version = version_update["updatePackage"]["version"]
