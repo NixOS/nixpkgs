@@ -90,6 +90,14 @@ let
                 '';
               };
 
+              notifierSmtpTlsPrivateKeyFile = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                description = ''
+                  Path to your private key file used for TLS connection verification with the SMTP server.
+                '';
+              };
+
               oidcIssuerPrivateKeyFile = mkOption {
                 type = types.nullOr types.path;
                 default = null;
@@ -391,6 +399,7 @@ in
               AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = instance.secrets.notifierSmtpPasswordFile;
               AUTHELIA_NOTIFIER_SMTP_TLS_CERTIFICATE_CHAIN_FILE =
                 instance.secrets.notifierSmtpTlsCertificateChainFile;
+              AUTHELIA_NOTIFIER_SMTP_TLS_PRIVATE_KEY_FILE = instance.secrets.notifierSmtpTlsPrivateKeyFile;
             })
             // instance.environmentVariables;
 
