@@ -12939,6 +12939,8 @@ with pkgs;
 
   jalv-qt = jalv.override { useQt = true; };
 
+  joplin-desktop = joplin-desktop-bin;
+
   js8call = qt5.callPackage ../applications/radio/js8call { };
 
   jwm = callPackage ../applications/window-managers/jwm { };

@@ -8,7 +8,7 @@
 }:
 
 let
-  pname = "joplin-desktop";
+  pname = "joplin-desktop-bin";
   inherit (releaseData) version;
 
   inherit (stdenv.hostPlatform) system;
@@ -53,6 +53,8 @@ let
       meta
       ;
     nativeBuildInputs = [ makeWrapper ];
+
+    executableName = "joplin-desktop";
 
     profile = ''
       export LC_ALL=C.UTF-8
