@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bw2/ConfigArgParse";
     changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = [ ];
   };
 }
