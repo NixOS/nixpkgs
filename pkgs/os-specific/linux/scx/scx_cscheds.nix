@@ -126,8 +126,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  # Enable this when default kernel in nixpkgs is 6.12+
-  doCheck = false;
+  doCheck = true;
 
   meta = scx-common.meta // {
     description = "Sched-ext C userspace schedulers";
