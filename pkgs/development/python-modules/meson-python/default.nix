@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
@@ -55,6 +56,18 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
   ];
+
+  # meson-python respectes MACOSX_DEPLOYMENT_TARGET, but compares it with the
+  # actual platform version during tests, which mismatches.
+  # https://github.com/mesonbuild/meson-python/issues/760
+  # FIXME: drop in 0.19.0
+  preCheck =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        unset MACOSX_DEPLOYMENT_TARGET
+      ''
+    else
+      null;
 
   setupHooks = [ ./add-build-flags.sh ];
 

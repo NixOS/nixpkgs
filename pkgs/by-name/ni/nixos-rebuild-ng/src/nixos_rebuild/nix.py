@@ -41,7 +41,6 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "--no-ask-password",
     "--pipe",
     "--quiet",
-    "--same-dir",
     "--service-type=exec",
     "--unit=nixos-rebuild-switch-to-configuration",
 ]
