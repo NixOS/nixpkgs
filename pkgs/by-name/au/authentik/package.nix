@@ -161,16 +161,6 @@ let
     packageOverrides = final: prev: {
       django = final.django_5;
 
-      django-tenants = prev.django-tenants.overrideAttrs {
-        version = "3.7.0-unstable-2025-03-14";
-        src = fetchFromGitHub {
-          owner = "rissson";
-          repo = "django-tenants";
-          rev = "156e53a6f5902d74b73dd9d0192fffaa2587a740";
-          hash = "sha256-xmhfPgCmcFr5axVV65fCq/AcV8ApRVvFVEpq3cQSVqo=";
-        };
-      };
-
       # Running authentik currently requires a custom version.
       # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.
       # See https://github.com/goauthentik/authentik/pull/14057 for latest version bump.
