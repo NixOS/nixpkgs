@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  django_5_2,
+  django,
   psycopg,
   python-dateutil,
 }:
@@ -21,8 +21,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "django"
+  ];
+
   dependencies = [
-    django_5_2
+    django
     psycopg
     python-dateutil
   ];
