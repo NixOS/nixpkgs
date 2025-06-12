@@ -14,7 +14,7 @@
   libxml2,
   pixman,
   pkg-config,
-  podofo,
+  podofo_0_10,
   poppler,
   poppler_data,
   python3,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libxml2
     pixman
-    podofo
+    podofo_0_10
     poppler
     poppler_data
     pythonEnv
