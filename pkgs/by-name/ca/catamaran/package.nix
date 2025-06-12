@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation {
 
   meta = with lib; {
     homepage = "https://fonts.google.com/specimen/Catamaran";
-    description = "A stylish sans-serif Tamil and Latin typeface";
+    description = "Stylish sans-serif Tamil and Latin typeface";
     longDescription = ''
       Catamaran is a Unicode-compliant Latin and Tamil text type family designed for the digital age.
       The Tamil is monolinear and was designed alongside the sans serif Latin and Devanagari family Palanquin.

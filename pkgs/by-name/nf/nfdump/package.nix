@@ -50,15 +50,15 @@ stdenv.mkDerivation rec {
     "--enable-nfpcapd"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for working with netflow data";
     longDescription = ''
       nfdump is a set of tools for working with netflow data.
     '';
     homepage = "https://github.com/phaag/nfdump";
     changelog = "https://github.com/phaag/nfdump/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ takikawa ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ takikawa ];
+    platforms = lib.platforms.unix;
   };
 }

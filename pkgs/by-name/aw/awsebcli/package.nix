@@ -25,14 +25,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.24";
+  version = "3.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
     tag = version;
-    hash = "sha256-i1CcOlrrtizvQMXKoj5xQYlmaTB8JWb4X5S+EcnQXps=";
+    hash = "sha256-t6dqiC9zY3Apcc4F/x5c/QhsNKGBZxIY20a50wCEER8=";
   };
 
   pythonRelaxDeps = [
@@ -46,6 +46,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python.pkgs; [
+    packaging
     blessed
     botocore
     cement
@@ -92,12 +93,12 @@ python.pkgs.buildPythonApplication rec {
     "test_aws_eb_profile_environment_variable_found__profile_exists_in_credentials_file"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for Elastic Beanstalk";
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kirillrdy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kirillrdy ];
     mainProgram = "eb";
   };
 }

@@ -224,7 +224,7 @@ in
               # Thus, disable distribution for improved simplicity and security:
               #
               # When distribution is enabled,
-              # Elixir spwans the Erlang VM, which will listen by default on all
+              # Elixir spawns the Erlang VM, which will listen by default on all
               # interfaces for messages between Erlang nodes (capable of
               # remote code execution); it can be protected by a cookie; see
               # https://erlang.org/doc/reference_manual/distributed.html#security).

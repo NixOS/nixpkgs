@@ -37,12 +37,12 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       sciencentistguy
     ];

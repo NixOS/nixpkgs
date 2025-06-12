@@ -1,15 +1,23 @@
+# Evaluates all the accessible paths in nixpkgs.
+# *This only builds on Linux* since it requires the Linux sandbox isolation to
+# be able to write in various places while evaluating inside the sandbox.
+#
+# This file is used by nixpkgs CI (see .github/workflows/eval.yml) as well as
+# being used directly as an entry point in Lix's CI (in `flake.nix` in the Lix
+# repo).
+#
+# If you know you are doing a breaking API change, please ping the nixpkgs CI
+# maintainers and the Lix maintainers (`nix eval -f . lib.teams.lix`).
 {
   callPackage,
   lib,
   runCommand,
   writeShellScript,
-  writeText,
   symlinkJoin,
   time,
   procps,
-  nixVersions,
+  nix,
   jq,
-  python3,
 }:
 
 let
@@ -30,8 +38,6 @@ let
         ]
       );
     };
-
-  nix = nixVersions.latest;
 
   supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
 

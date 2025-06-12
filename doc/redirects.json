@@ -40,8 +40,17 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "ghc-deprecation-policy": [
+    "index.html#ghc-deprecation-policy"
+  ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
+  ],
+  "major-ghc-deprecation": [
+    "index.html#major-ghc-deprecation"
+  ],
+  "minor-ghc-deprecation": [
+    "index.html#minor-ghc-deprecation"
   ],
   "neovim": [
     "index.html#neovim"
@@ -1694,6 +1703,12 @@
   "ex-haspkgconfigmodules-explicitmodules": [
     "index.html#ex-haspkgconfigmodules-explicitmodules"
   ],
+  "tester-hasCmakeConfigModules": [
+    "index.html#tester-hasCmakeConfigModules"
+  ],
+  "ex-hascmakeconfigmodules": [
+    "index.html#ex-hascmakeconfigmodules"
+  ],
   "tester-lycheeLinkCheck": [
     "index.html#tester-lycheeLinkCheck"
   ],
@@ -2429,6 +2444,9 @@
   "tetex-tex-live": [
     "index.html#tetex-tex-live"
   ],
+  "udevcheckhook": [
+    "index.html#udevcheckhook"
+  ],
   "unzip": [
     "index.html#unzip"
   ],
@@ -3002,6 +3020,9 @@
   ],
   "ex-buildGoModule": [
     "index.html#ex-buildGoModule"
+  ],
+  "ssec-go-toolchain-versions" : [
+    "index.html#ssec-go-toolchain-versions"
   ],
   "buildGoModule-goModules-override": [
     "index.html#buildGoModule-goModules-override"

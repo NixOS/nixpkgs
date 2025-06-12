@@ -119,7 +119,7 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    description = "The CNCF sandbox for observability visualisation";
+    description = "CNCF sandbox for observability visualisation";
     homepage = "https://perses.dev/";
     changelog = "https://github.com/perses/perses/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;

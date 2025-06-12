@@ -27,21 +27,21 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${finalAttrs.pname}/
-    mv resources/app.asar* $out/share/${finalAttrs.pname}/
+    mkdir -p $out/bin $out/share/stretchly/
+    mv resources/app.asar* $out/share/stretchly/
 
     mkdir -p $out/share/applications
     ln -s ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
 
-    makeWrapper ${electron}/bin/electron $out/bin/${finalAttrs.pname} \
-      --add-flags $out/share/${finalAttrs.pname}/app.asar
+    makeWrapper ${electron}/bin/electron $out/bin/stretchly \
+      --add-flags $out/share/stretchly/app.asar
 
     runHook postInstall
   '';
 
   desktopItem = makeDesktopItem {
-    name = finalAttrs.pname;
-    exec = finalAttrs.pname;
+    name = "stretchly";
+    exec = "stretchly";
     icon = finalAttrs.icon;
     desktopName = "Stretchly";
     genericName = "Stretchly";

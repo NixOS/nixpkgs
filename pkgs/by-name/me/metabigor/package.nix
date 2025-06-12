@@ -25,12 +25,12 @@ buildGoModule rec {
   # Disabled for now as there are some failures ("undefined:")
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to perform OSINT tasks";
     homepage = "https://github.com/j3ssie/metabigor";
     changelog = "https://github.com/j3ssie/metabigor/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "metabigor";
   };
 }

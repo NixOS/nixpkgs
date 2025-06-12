@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication {
   pname = "memtree";
-  version = "0-unstable-2024-01-04";
+  version = "0-unstable-2025-06-06";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbraud";
     repo = "memtree";
-    rev = "97615952eabdc5e8e1a4bd590dd1f4971f3c5a24";
-    hash = "sha256-Ifp8hwkuyBw57fGer3GbDiJaRjL4TD3hzj+ecGXWqI0=";
+    rev = "279f1fa0a811de86c278ce74830bd8aa1b00db58";
+    hash = "sha256-gUULox3QSx68x8lb1ytanY36cw/I9L4HdpR8OPOsxuc=";
   };
 
   pythonRelaxDeps = [ "rich" ];

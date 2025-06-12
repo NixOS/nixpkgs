@@ -8,7 +8,7 @@
 stdenv.mkDerivation {
   pname = "usb-reset";
   # not tagged, but changelog has this with the date of the e9a9d6c commit
-  # and no significant change occured between bumping the version in the Makefile and that
+  # and no significant change occurred between bumping the version in the Makefile and that
   # and the changes since then (up to ff822d8) seem snap related
   version = "0.3";
 

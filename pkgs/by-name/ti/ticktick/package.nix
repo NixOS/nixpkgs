@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   unpackPhase = ''
     runHook preUnpack
 
-    mkdir -p "$out/share" "$out/opt/${finalAttrs.pname}" "$out/bin"
+    mkdir -p "$out/share" "$out/opt/ticktick" "$out/bin"
     dpkg-deb --fsys-tarfile "$src" | tar --extract --directory="$out"
 
     runHook postUnpack
@@ -66,13 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    cp -av $out/opt/TickTick/* $out/opt/${finalAttrs.pname}
+    cp -av $out/opt/TickTick/* $out/opt/ticktick
     cp -av $out/usr/share/* $out/share
     rm -rf $out/usr $out/opt/TickTick
-    ln -sf "$out/opt/${finalAttrs.pname}/${finalAttrs.pname}" "$out/bin/${finalAttrs.pname}"
+    ln -sf "$out/opt/ticktick/ticktick" "$out/bin/ticktick"
 
-    substituteInPlace "$out/share/applications/${finalAttrs.pname}.desktop" \
-      --replace "Exec=/opt/TickTick/ticktick" "Exec=$out/bin/${finalAttrs.pname}"
+    substituteInPlace "$out/share/applications/ticktick.desktop" \
+      --replace "Exec=/opt/TickTick/ticktick" "Exec=$out/bin/ticktick"
 
     runHook postInstall
   '';

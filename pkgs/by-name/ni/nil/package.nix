@@ -31,15 +31,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Yet another language server for Nix";
     homepage = "https://github.com/oxalica/nil";
     changelog = "https://github.com/oxalica/nil/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       oxalica
     ];

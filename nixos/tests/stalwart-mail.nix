@@ -42,14 +42,30 @@ in
               bind = [ "[::]:143" ];
               protocol = "imap";
             };
+
+            "http" = {
+              bind = [ "[::]:80" ];
+              protocol = "http";
+            };
           };
 
           session.auth.mechanisms = "[plain]";
           session.auth.directory = "'in-memory'";
           storage.directory = "in-memory";
 
+          storage.data = "rocksdb";
+          storage.fts = "rocksdb";
+          storage.blob = "rocksdb";
+          storage.lookup = "rocksdb";
+
           session.rcpt.directory = "'in-memory'";
           queue.outbound.next-hop = "'local'";
+
+          store."rocksdb" = {
+            type = "rocksdb";
+            path = "/var/lib/stalwart-mail/data";
+            compression = "lz4";
+          };
 
           directory."in-memory" = {
             type = "memory";
@@ -114,9 +130,19 @@ in
       main.wait_for_unit("stalwart-mail.service")
       main.wait_for_open_port(587)
       main.wait_for_open_port(143)
+      main.wait_for_open_port(80)
 
       main.succeed("test-smtp-submission")
+
+      # restart stalwart to test rocksdb compaction of existing database
+      main.succeed("systemctl restart stalwart-mail.service")
+      main.wait_for_open_port(587)
+      main.wait_for_open_port(143)
+
       main.succeed("test-imap-read")
+
+      main.succeed("test -d /var/cache/stalwart-mail/STALWART_WEBADMIN")
+      main.succeed("curl --fail http://localhost")
     '';
 
   meta = {

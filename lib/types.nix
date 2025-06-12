@@ -75,7 +75,7 @@ let
     if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
 
   # Internal functor to help for migrating functor.wrapped to functor.payload.elemType
-  # Note that individual attributes can be overriden if needed.
+  # Note that individual attributes can be overridden if needed.
   elemTypeFunctor =
     name:
     { elemType, ... }@payload:
@@ -1455,8 +1455,14 @@ let
           nestedTypes.coercedType = coercedType;
           nestedTypes.finalType = finalType;
         };
+      /**
+        Augment the given type with an additional type check function.
 
-      # Augment the given type with an additional type check function.
+        :::{.warning}
+        This function has some broken behavior see: [#396021](https://github.com/NixOS/nixpkgs/issues/396021)
+        Fixing is not trivial, we appreciate any help!
+        :::
+      */
       addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
     };

@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Live cryptocurrency prices CLI";
     homepage = "https://github.com/mayeranalytics/coinlive";
     changelog = "https://github.com/mayeranalytics/coinlive/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "coinlive";
   };
 }

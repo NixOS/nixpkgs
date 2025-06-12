@@ -1,8 +1,8 @@
 diff --git a/samples/CMakeLists.txt b/samples/CMakeLists.txt
-index 5020345..97af8c6 100644
+index 46d5a23..7572b0b 100644
 --- a/samples/CMakeLists.txt
 +++ b/samples/CMakeLists.txt
-@@ -17,47 +17,12 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "GLFW Examples")
+@@ -17,49 +17,12 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "GLFW Examples")
  set(GLFW_BUILD_TESTS OFF CACHE BOOL "GLFW Tests")
  set(GLFW_INSTALL OFF CACHE BOOL "GLFW Install")
  
@@ -43,6 +43,8 @@ index 5020345..97af8c6 100644
 -target_link_libraries(imgui PUBLIC glfw glad)
 -target_include_directories(imgui PUBLIC ${IMGUI_DIR} ${IMGUI_DIR}/backends)
 -target_compile_definitions(imgui PUBLIC IMGUI_DISABLE_OBSOLETE_FUNCTIONS)
+-# The sample app also uses stb_truetype and this keeps the symbols separate
+-target_compile_definitions(imgui PRIVATE IMGUI_STB_NAMESPACE=imgui_stb)
 -set_target_properties(imgui PROPERTIES
 -	CXX_STANDARD 20
 -    CXX_STANDARD_REQUIRED YES

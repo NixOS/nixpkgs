@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "The other cutest Discord client mod";
+    description = "Other cutest Discord client mod";
     homepage = "https://github.com/Equicord/Equicord";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;

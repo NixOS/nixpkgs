@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GTFO Command Line Interface for search binaries commands to bypass local security restrictions";
     homepage = "https://github.com/cmd-tools/gtfocli";
     changelog = "https://github.com/cmd-tools/gtfocli/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gtfocli";
   };
 }

@@ -101,6 +101,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    # Fails to build on x86_64-linux as of 2025-03-16 and potentially earlier
+    broken = true;
     description = "Jagged Alliance 2, with community fixes";
     license = "SFI Source Code license agreement";
     homepage = "https://ja2-stracciatella.github.io/";

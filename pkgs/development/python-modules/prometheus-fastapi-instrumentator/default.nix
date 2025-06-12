@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   # numerous test failures on Darwin
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   pythonImportsCheck = [ "prometheus_fastapi_instrumentator" ];
 

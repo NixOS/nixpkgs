@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/jim-easterbrook/Photini";
     changelog = "https://photini.readthedocs.io/en/release-${version}/misc/changelog.html";
-    description = "An easy to use digital photograph metadata (Exif, IPTC, XMP) editing application";
+    description = "Easy to use digital photograph metadata (Exif, IPTC, XMP) editing application";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ zebreus ];
     mainProgram = "photini";

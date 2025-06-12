@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OSINT command line tool for investigating network data";
     longDescription = ''
       ASN / RPKI validity / BGP stats / IPv4v6 / Prefix / URL / ASPath / Organization /
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/nitefood/asn";
     changelog = "https://github.com/nitefood/asn/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ devhell ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ devhell ];
     mainProgram = "asn";
   };
 }

@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     xz
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to write images files to portable media";
     homepage = "https://github.com/FedoraQt/MediaWriter";
     changelog = "https://github.com/FedoraQt/MediaWriter/releases/tag/${version}";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mediawriter";
   };
 }

@@ -91,13 +91,13 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for the btrfs filesystem";
     homepage = "https://btrfs.readthedocs.io/en/latest/";
     changelog = "https://github.com/kdave/btrfs-progs/raw/v${version}/CHANGES";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "btrfs";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -13,7 +13,7 @@
   nix-update-script,
   pcre,
   pkg-config,
-  python311Packages,
+  python3Packages,
   qt5,
   stdenv,
   vulkan-loader,
@@ -51,9 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
     [
       libXdmcp
       libpthreadstubs
-      python311Packages.pyside2
-      python311Packages.pyside2-tools
-      python311Packages.shiboken2
+      python3Packages.pyside2
+      python3Packages.pyside2-tools
+      python3Packages.shiboken2
       qt5.qtbase
       qt5.qtsvg
       vulkan-loader
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pcre
     pkg-config
-    python311Packages.python
+    python3Packages.python
     qt5.qtx11extras
     qt5.wrapQtAppsHook
   ];

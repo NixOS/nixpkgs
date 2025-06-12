@@ -10,6 +10,8 @@
   gnused,
   xdg-utils,
   dbus,
+  libGL,
+  libX11,
   hwdata,
   mangohud32,
   addDriverRunpath,
@@ -20,7 +22,6 @@
   ninja,
   pkg-config,
   unzip,
-  libX11,
   wayland,
   libXNVCtrl,
   nlohmann_json,
@@ -138,6 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
       ];
 
       libdbus = dbus.lib;
+      libGL = libGL;
+      libX11 = libX11;
       inherit hwdata;
     })
   ];

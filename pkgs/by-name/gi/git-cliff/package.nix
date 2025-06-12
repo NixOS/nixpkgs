@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-cliff";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "git-cliff";
     rev = "v${version}";
-    hash = "sha256-B421xXt7TrBJVwi04vygnw9t5o7/KLVpuItQtwV4E24=";
+    hash = "sha256-ZxMwQBhU+49+MaId16tH2np2slgCmq4yKi6PI9Dy+o4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-GGEKQgnSB2HW3VIj4CfxzUZaWYE2/nHJPN9ZMmHY5Ns=";
+  cargoHash = "sha256-QPxrdmuQINzuZXyRRYDA+HguRdt6n++XuLj/OF0ceKU=";
 
   # attempts to run the program on .git in src which is not deterministic
   doCheck = false;
@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage rec {
     installManPage $OUT_DIR/git-cliff.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Highly customizable Changelog Generator that follows Conventional Commit specifications";
     homepage = "https://github.com/orhun/git-cliff";
     changelog = "https://github.com/orhun/git-cliff/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       siraben
       matthiasbeyer
     ];

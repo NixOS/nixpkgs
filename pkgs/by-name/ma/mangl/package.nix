@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/zigalenarcic/mangl";
-    description = "A graphical man page viewer based on the mandoc library";
+    description = "Graphical man page viewer based on the mandoc library";
     license = licenses.bsd2;
     maintainers = with maintainers; [ nrabulinski ];
     platforms = platforms.linux;

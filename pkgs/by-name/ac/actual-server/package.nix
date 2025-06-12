@@ -208,7 +208,7 @@ stdenv.mkDerivation {
     mainProgram = "actual-server";
     license = lib.licenses.mit;
     # https://github.com/NixOS/nixpkgs/issues/403846
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = [
       lib.maintainers.oddlama
       lib.maintainers.patrickdag

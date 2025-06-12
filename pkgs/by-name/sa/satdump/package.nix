@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A generic satellite data processing software";
+    description = "Generic satellite data processing software";
     homepage = "https://www.satdump.org/";
     changelog = "https://github.com/SatDump/SatDump/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;

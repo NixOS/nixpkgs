@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "The classic linker for Darwin";
+    description = "Classic linker for Darwin";
     homepage = "https://opensource.apple.com/releases/";
     license = with lib.licenses; [
       apple-psl20

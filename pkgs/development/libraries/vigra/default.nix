@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Pathes to fix compiling on LLVM 19 from https://github.com/ukoethe/vigra/pull/592
+    # Patches to fix compiling on LLVM 19 from https://github.com/ukoethe/vigra/pull/592
     ./fix-llvm-19-1.patch
     ./fix-llvm-19-2.patch
   ];

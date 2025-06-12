@@ -25,7 +25,7 @@ qtModule {
   ];
   strictDeps = true;
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
   ];
 

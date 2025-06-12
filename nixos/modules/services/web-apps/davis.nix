@@ -348,7 +348,7 @@ in
                 else if
                   pgsqlLocal
                 # note: davis expects a non-standard postgres uri (due to the underlying doctrine library)
-                # specifically the dummy hostname which is overriden by the host query parameter
+                # specifically the dummy hostname which is overridden by the host query parameter
                 then
                   "postgres://${user}@localhost/${db.name}?host=/run/postgresql"
                 else if mysqlLocal then

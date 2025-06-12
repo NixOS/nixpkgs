@@ -7,12 +7,12 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "reddit-tui";
-  version = "0.3.8";
+  version = "0.3.9";
   src = fetchFromGitHub {
     owner = "tonymajestro";
     repo = "reddit-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RorH4O4SKZOGb9UmEr1vsKu2w21Fx9IcZbSlGPX8Kms=";
+    hash = "sha256-dqmxY3AkJ03/zbn+6irh43luUrGaVQ/5lGzl5jeUNDE=";
   };
   vendorHash = "sha256-Yqo80adzA9gtSD3qzM+fObzRt3WbcMATQef0g7/z2Dw=";
   doCheck = false;

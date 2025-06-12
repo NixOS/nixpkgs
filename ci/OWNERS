@@ -15,12 +15,9 @@
 
 # CI
 /.github/*_TEMPLATE*                    @SigmaSquadron
-/.github/actions                        @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther
-/.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther
-/.github/workflows/check-format.yml     @infinisil @wolfgangwalther
-/.github/workflows/codeowners-v2.yml    @infinisil @wolfgangwalther
-/.github/workflows/nixpkgs-vet.yml      @infinisil @philiptaron @wolfgangwalther
-/ci                                     @infinisil @philiptaron @NixOS/Security @wolfgangwalther
+/.github/actions                        @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
+/.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
+/ci                                     @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
 /ci/OWNERS                              @infinisil @philiptaron
 
 # Development support
@@ -59,6 +56,7 @@
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
+/pkgs/build-support/setup-hooks/arrayUtilities   @ConnorBaker
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/by-name/au/auto-patchelf                   @layus
 
@@ -230,6 +228,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/tests/snapcast.nix @mweinelt
 
 # Browsers
+/pkgs/applications/networking/browsers/librewolf @squalus @DominicWrege @fpletz @LordGrimmauld
 /pkgs/applications/networking/browsers/firefox @mweinelt
 /pkgs/applications/networking/browsers/chromium @emilylange @networkException
 /nixos/tests/chromium.nix @emilylange @networkException

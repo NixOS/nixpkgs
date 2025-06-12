@@ -27,12 +27,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Golang Tool to discover unused Kubernetes Resources";
     homepage = "https://github.com/yonahd/kor";
     changelog = "https://github.com/yonahd/kor/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.ivankovnatsky ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ivankovnatsky ];
     mainProgram = "kor";
   };
 }

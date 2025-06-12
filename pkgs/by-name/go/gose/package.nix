@@ -7,13 +7,13 @@
   lib,
 }:
 let
-  version = "0.10.6";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     repo = "gose";
     owner = "stv0g";
     tag = "v${version}";
-    hash = "sha256-H+15d0wCfL+jd+xjKSOrimLIAG1Mh8vO+5MaHaVocJg=";
+    hash = "sha256-Wz3gcx9/wrSfiHkOGnjAoUFfN0tiA1C+31GlnHqL3M0=";
   };
 
   frontend = buildNpmPackage {

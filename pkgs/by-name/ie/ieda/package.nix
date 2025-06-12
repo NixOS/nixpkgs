@@ -35,11 +35,11 @@ let
   });
   rootSrc = stdenv.mkDerivation {
     pname = "iEDA-src";
-    version = "2025-04-14";
+    version = "2025-05-30";
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
-      rev = "51d198884cde2ecda643071a1a6cb4ec0e09d881";
-      sha256 = "sha256-kDVEAttSqa8l7qcRs7MQiBgPbAKBExEQvIE8tc7PLpM=";
+      rev = "3096147fcea491c381da2928be6fb5a12c2d97b7";
+      sha256 = "sha256-rPkcE+QFMlEuwwJ/QBgyLTXP5lWLQPj5SOlZysJ6WTI=";
     };
 
     patches = [
@@ -59,6 +59,11 @@ let
       })
     ];
 
+    postPatch = ''
+      # Comment out the iCTS test cases that will fail due to some linking issues on aarch64-linux
+      sed -i '17,28s/^/# /' src/operation/iCTS/test/CMakeLists.txt
+    '';
+
     dontBuild = true;
     dontFixup = true;
     installPhase = ''
@@ -71,7 +76,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "iEDA";
-  version = "0-unstable-2025-04-14";
+  version = "0-unstable-2025-05-30";
 
   src = rootSrc;
 

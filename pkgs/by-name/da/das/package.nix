@@ -40,12 +40,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "das" ];
 
-  meta = with lib; {
+  meta = {
     description = "Divide full port scan results and use it for targeted Nmap runs";
     homepage = "https://github.com/snovvcrash/DivideAndScan";
     changelog = "https://github.com/snovvcrash/DivideAndScan/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "das";
   };
 }

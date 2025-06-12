@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "conan";
-  version = "2.15.1";
+  version = "2.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     tag = version;
-    hash = "sha256-yJe8DOpIsrAoM5d0txppnq/B6VlOtkTIRfVl35KtCKI=";
+    hash = "sha256-b+GVFy195wwQyWaiEMg1vVcWnkTB01IbQQsOHhQY6pY=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -124,7 +124,7 @@ python3Packages.buildPythonApplication rec {
     description = "Decentralized and portable C/C++ package manager";
     mainProgram = "conan";
     homepage = "https://conan.io";
-    changelog = "https://github.com/conan-io/conan/releases/tag/${version}";
+    changelog = "https://github.com/conan-io/conan/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ HaoZeke ];
   };

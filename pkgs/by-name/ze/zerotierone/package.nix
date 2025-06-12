@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    sourceRoot = "source/rustybits";
+    sourceRoot = "${src.name}/rustybits";
     hash = "sha256-CSpm4zBWKhcrM/KXGU6/51NSQ6hzpT44D2J+QETBtpQ=";
 
     # REMOVEME when https://github.com/NixOS/nixpkgs/pull/300532 is merged

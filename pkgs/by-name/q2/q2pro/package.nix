@@ -30,7 +30,7 @@
   waylandSupport ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "q2pro";
   version = "0-unstable-2025-05-03";
 
@@ -90,9 +90,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     (lib.mesonEnable "windows-crash-dumps" false)
   ];
 
-  internalVersion = "r${revCount}~${builtins.substring 0 8 src.rev}";
+  internalVersion = "r${finalAttrs.revCount}~${builtins.substring 0 8 finalAttrs.src.rev}";
   postPatch = ''
-    echo '${internalVersion}' > VERSION
+    echo '${finalAttrs.internalVersion}' > VERSION
   '';
 
   postInstall =
@@ -105,13 +105,13 @@ stdenv.mkDerivation (finalAttrs: rec {
       makeWrapper $out/bin/q2pro-unwrapped $out/bin/q2pro \
         --prefix ${ldLibraryPathEnvName} : "${lib.makeLibraryPath finalAttrs.buildInputs}"
 
-      install -D ${src}/src/unix/res/q2pro.xpm $out/share/icons/hicolor/32x32/apps/q2pro.xpm
+      install -D ${finalAttrs.src}/src/unix/res/q2pro.xpm $out/share/icons/hicolor/32x32/apps/q2pro.xpm
     '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   preVersionCheck = ''
-    export version='${internalVersion}'
+    export version='${finalAttrs.internalVersion}'
   '';
   doInstallCheck = true;
 

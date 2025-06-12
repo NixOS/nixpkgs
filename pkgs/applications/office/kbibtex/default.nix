@@ -79,13 +79,13 @@ mkDerivation rec {
     "${lib.makeBinPath [ bibutils ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bibliography editor for KDE";
     mainProgram = "kbibtex";
     homepage = "https://userbase.kde.org/KBibTeX";
     changelog = "https://invent.kde.org/office/kbibtex/-/raw/v${version}/ChangeLog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.linux;
   };
 }

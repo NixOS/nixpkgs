@@ -278,13 +278,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mupdf.com";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     changelog = "https://git.ghostscript.com/?p=mupdf.git;a=blob_plain;f=CHANGES;hb=${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.unix;
     mainProgram = "mupdf";
   };
 }

@@ -64,6 +64,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Expose your FastAPI endpoints as Model Context Protocol (MCP) tools, with Auth";
     homepage = "https://github.com/tadata-org/fastapi_mcp";

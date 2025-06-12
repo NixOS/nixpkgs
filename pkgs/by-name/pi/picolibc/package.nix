@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "picolibc";
-    repo = finalAttrs.pname;
+    repo = "picolibc";
     tag = finalAttrs.version;
     hash = "sha256-djOZKkinsaaYD4tUEA6mKdo+5em0GP1/+rI0mIm7Vs8=";
   };

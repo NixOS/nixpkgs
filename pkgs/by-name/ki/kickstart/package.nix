@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Scaffolding tool to get new projects up and running quickly";
     homepage = "https://github.com/Keats/kickstart";
     changelog = "https://github.com/Keats/kickstart/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "kickstart";
   };
 }

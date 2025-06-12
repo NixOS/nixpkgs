@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     testdisk
     imagemagick
     jdkWithJfx
+    sleuthkit
   ];
 
   installPhase = ''
@@ -44,9 +45,11 @@ stdenv.mkDerivation rec {
     # Run the provided setup script to make files executable and copy sleuthkit
     TSK_JAVA_LIB_PATH="${sleuthkit}/share/java" bash $out/unix_setup.sh -j '${jdkWithJfx}' -n autopsy
 
+    # --add-flags "--nosplash" -> https://github.com/sleuthkit/autopsy/issues/6980
     substituteInPlace $out/bin/autopsy \
       --replace-warn 'APPNAME=`basename "$PRG"`' 'APPNAME=autopsy'
     wrapProgram $out/bin/autopsy \
+      --add-flags "--nosplash" \
       --run 'export SOLR_LOGS_DIR="$HOME/.autopsy/dev/var/log"' \
       --run 'export SOLR_PID_DIR="$HOME/.autopsy/dev"' \
       --prefix PATH : "${

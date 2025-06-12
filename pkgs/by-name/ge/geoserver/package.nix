@@ -8,22 +8,16 @@
   jre,
   unzip,
 }:
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geoserver";
-  version = "2.27.0";
+  version = "2.27.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
-    hash = "sha256-bhL+u+BoKgW2cwOXEzaq0h07dKFz9u9WB2jW8nAF0vI=";
+    url = "mirror://sourceforge/geoserver/GeoServer/${finalAttrs.version}/geoserver-${finalAttrs.version}-bin.zip";
+    hash = "sha256-7IrnznWa5NI/2gFHVTRQ0IerOkodStbr0aGpKPpeLQk=";
   };
 
-  sourceRoot = "source";
-
-  unpackPhase = ''
-    runHook preUnpack
-    unzip $src -d "$sourceRoot"
-    runHook postUnpack
-  '';
+  sourceRoot = ".";
 
   patches = [
     # set GEOSERVER_DATA_DIR to current working directory if not provided
@@ -92,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: rec {
       updateScript = ./update.sh;
     };
 
-  meta = with lib; {
+  meta = {
     description = "Open source server for sharing geospatial data";
     homepage = "https://geoserver.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2Plus;
-    teams = [ teams.geospatial ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.all;
   };
 })

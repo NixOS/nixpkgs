@@ -11,21 +11,21 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "flareteam";
-    repo = pname;
-    rev = "v${version}";
+    repo = "flare-game";
+    tag = "v${version}";
     hash = "sha256-tINIwxyQn8eeJCHwRmAMo2TYRgrgJlGaUrnrgbmM3Jo=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Fantasy action RPG using the FLARE engine";
     homepage = "https://github.com/flareteam/flare-game";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aanderse
       McSinyx
     ];
-    license = [ licenses.cc-by-sa-30 ];
-    platforms = platforms.unix;
+    license = [ lib.licenses.cc-by-sa-30 ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -43,7 +43,7 @@ buildPythonApplication rec {
   dontWrapPythonPrograms = true;
 
   meta = with lib; {
-    homepage = "http://github.com/CxxTest/cxxtest";
+    homepage = "https://github.com/CxxTest/cxxtest";
     description = "Unit testing framework for C++";
     mainProgram = "cxxtestgen";
     license = licenses.lgpl3;

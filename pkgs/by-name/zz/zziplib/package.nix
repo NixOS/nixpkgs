@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     "-DBUILDTESTS=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gdraheim/zziplib";
     changelog = "https://github.com/gdraheim/zziplib/blob/${version}/ChangeLog";
     description = "Library to extract data from files archived in a zip file";
@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
       The implementation is based only on the (free) subset of compression with
       the zlib algorithm which is actually used by the zip/unzip tools.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       mpl11
     ];
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
   };
 }

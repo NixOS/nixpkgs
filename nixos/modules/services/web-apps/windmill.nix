@@ -132,7 +132,7 @@ in
       {
 
         # coming from https://github.com/windmill-labs/windmill/blob/main/init-db-as-superuser.sql
-        # modified to not grant priviledges on all tables
+        # modified to not grant privileges on all tables
         # create role windmill_user and windmill_admin only if they don't exist
         postgresql.postStart = lib.mkIf cfg.database.createLocally (
           lib.mkAfter ''

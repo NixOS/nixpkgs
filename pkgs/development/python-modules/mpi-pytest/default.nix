@@ -11,22 +11,15 @@
 
 buildPythonPackage rec {
   pname = "mpi-pytest";
-  version = "2025.4.0";
+  version = "2025.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "mpi-pytest";
     tag = "v${version}";
-    hash = "sha256-r9UB5H+qAJc6k2SVAiOCI2yRDLNv2zKRmfrAan+cX9I=";
+    hash = "sha256-Eq53rCM3xwY30BuGUaTH4Nuloc/9kGJMFhspLH04zqE=";
   };
-
-  # A temporary fixup to support fork mode with openmpi implemention
-  # See https://github.com/firedrakeproject/mpi-pytest/pull/17
-  postPatch = lib.optionalString (mpi4py.mpi.pname == "openmpi") ''
-    substituteInPlace pytest_mpi/plugin.py \
-      --replace-fail '"-genv", CHILD_PROCESS_FLAG, "1"' '"-x", f"{CHILD_PROCESS_FLAG}=1"'
-  '';
 
   build-system = [
     setuptools

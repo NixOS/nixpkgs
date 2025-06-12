@@ -295,7 +295,7 @@ let
       (
         lib.mapAttrs (
           k: v:
-          # Not necesssary, but prettier rendering
+          # Not necessary, but prettier rendering
           if
             lib.elem k [
               "AutomapHostsSuffixes"

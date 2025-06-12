@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = {
-    description = "A crosshair overlay for wlroots compositor";
+    description = "Crosshair overlay for wlroots compositor";
     homepage = "https://github.com/lelgenio/wl-crosshair";
     license = lib.licenses.unfree; # didn't found a license
     mainProgram = "wl-crosshair";

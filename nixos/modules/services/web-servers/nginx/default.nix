@@ -1002,17 +1002,14 @@ in
       };
 
       mapHashBucketSize = mkOption {
-        type = types.nullOr (
-          types.enum [
-            32
-            64
-            128
-          ]
-        );
+        type = types.nullOr (types.ints.positive);
         default = null;
         description = ''
           Sets the bucket size for the map variables hash tables. Default
           value depends on the processor’s cache line size.
+
+          Refer to [the nginx docs on hashes](https://nginx.org/en/docs/hash.html)
+          for more information.
         '';
       };
 

@@ -11,7 +11,6 @@
   python3Packages,
   mpi,
   bzip2,
-  lz4,
   c-blosc2,
   hdf5-mpi,
   libfabric,
@@ -22,8 +21,6 @@
   zeromq,
   zfp,
   zlib,
-  zlib-ng,
-  zstd,
   ucx,
   yaml-cpp,
   nlohmann_json,
@@ -69,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       mpi
       bzip2
-      lz4
       c-blosc2
       (hdf5-mpi.override { inherit mpi; })
       libfabric
@@ -80,12 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
       zeromq
       zfp
       zlib
-      zlib-ng # required by c-blocs2
-      zstd # required by c-blocs2
       yaml-cpp
       nlohmann_json
 
-      # Todo: add these optional dependcies in nixpkgs.
+      # Todo: add these optional dependencies in nixpkgs.
       # sz
       # mgard
       # catalyst
@@ -138,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://adios2.readthedocs.io/en/latest/";
-    description = "The Adaptable Input/Output System version 2";
+    description = "Adaptable Input/Output System version 2";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];

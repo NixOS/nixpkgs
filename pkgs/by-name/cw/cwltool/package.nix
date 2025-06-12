@@ -99,12 +99,12 @@ py.pkgs.buildPythonApplication rec {
     "cwltool"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Common Workflow Language reference implementation";
     homepage = "https://www.commonwl.org";
     changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veprbl ];
     mainProgram = "cwltool";
   };
 }

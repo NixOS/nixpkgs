@@ -25,11 +25,11 @@ let
     modRoot = "./src";
     patches = [
       # A patch required to build boringssl compatible with `boring-sys2`.
-      # See https://github.com/0x676e67/boring2/blob/1a0f1cd24e728aac100df68027c820f858199224/boring-sys/build/main.rs#L486-L489
+      # See https://github.com/0x676e67/boring2/blob/refs/tags/v4.15.11/boring-sys/build/main.rs#L486-L489
       (fetchpatch {
         name = "boringssl-44b3df6f03d85c901767250329c571db405122d5.patch";
-        url = "https://raw.githubusercontent.com/0x676e67/boring2/4edbff8cade24d5d83cc372c4502b59c5192b5a1/boring-sys/patches/boringssl-44b3df6f03d85c901767250329c571db405122d5.patch";
-        hash = "sha256-lM+2lLvfDHnxLl+OgZ6R8Y4Z6JfA9AiDqboT1mbxmao=";
+        url = "https://raw.githubusercontent.com/0x676e67/boring2/refs/tags/v4.15.11/boring-sys/patches/boringssl-44b3df6f03d85c901767250329c571db405122d5.patch";
+        hash = "sha256-JRRATcCXo0HBQTzgCAuLpxC3NEGrTw1cEmC0VHOgO2M=";
       })
     ];
 
@@ -45,7 +45,11 @@ let
       oa.env.NIX_CFLAGS_COMPILE
       + " "
       + toString (
-        lib.optionals stdenv.cc.isGNU [
+        lib.optionals stdenv.cc.isClang [
+          "-Wno-error=reorder-ctor"
+        ]
+        ++ lib.optionals stdenv.cc.isGNU [
+          "-Wno-error=reorder"
           "-Wno-error=ignored-attributes"
         ]
       );
@@ -61,19 +65,19 @@ let
 in
 buildPythonPackage rec {
   pname = "primp";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "primp";
     tag = "v${version}";
-    hash = "sha256-LrSygeioJlccOH1oyagw02ankkZK+H6Mzrgy8tB83mo=";
+    hash = "sha256-13o0Ni0dvZaoKgYy2cFQhebwKAJGm5Z2s+gVAddxYxU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-iPf25DMGNHrWYByNTylB6bPpLfzs0ADwgkjfhVxiiXA=";
+    hash = "sha256-UBpf9f3wJgbizHERsm83cuKHiMixj/8JX/IGvteySIo=";
   };
 
   nativeBuildInputs = [

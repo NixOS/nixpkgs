@@ -102,13 +102,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Single-column Fediverse client for desktop";
     mainProgram = "whalebird";
     homepage = "https://whalebird.social";
     changelog = "https://github.com/h3poteto/whalebird-desktop/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ weathercold ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ weathercold ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

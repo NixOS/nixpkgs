@@ -61,13 +61,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests.coturn = nixosTests.coturn;
 
-  meta = with lib; {
+  meta = {
     description = "TURN server";
     homepage = "https://coturn.net/";
     changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog";
-    license = with licenses; [ bsd3 ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ _0x4A6F ];
+    license = with lib.licenses; [ bsd3 ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     broken = stdenv.hostPlatform.isDarwin; # 2018-10-21
   };
 }

@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     inherit rav1e;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to build and install C-ABI compatible dynamic and static libraries";
     longDescription = ''
       Cargo C-ABI helpers. A cargo applet that produces and installs a correct
@@ -60,8 +60,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/lu-zero/cargo-c";
     changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cpu
       matthiasbeyer
     ];

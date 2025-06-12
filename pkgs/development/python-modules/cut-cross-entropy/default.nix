@@ -58,7 +58,7 @@ buildPythonPackage {
       transformers
     ];
     # `deepspeed` is not yet packaged in nixpkgs
-    # ++ lib.optionals (!stdenv.isDarwin) [
+    # ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     #   deepspeed
     # ];
   };

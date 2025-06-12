@@ -18,16 +18,16 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-nQ1g0rBWx7yHQO9U/J0/XI76quEAvpCyhZDcTJKYYXo=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to check that your Cargo.toml dependencies are sorted alphabetically";
     mainProgram = "cargo-sort";
     homepage = "https://github.com/devinr528/cargo-sort";
     changelog = "https://github.com/devinr528/cargo-sort/blob/v${version}/changelog.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       matthiasbeyer
     ];

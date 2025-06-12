@@ -79,13 +79,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "animeko";
-  version = "4.10.1";
+  version = "4.11.1";
 
   src = fetchFromGitHub {
     owner = "open-ani";
     repo = "animeko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sFEq6tJfADH5x8+wdQ9T89awT7/Qx2RV5r+cND3J0iw=";
+    hash = "sha256-JLOwWJvBfwqvAfaFn5qr8lsHL7/u97qYjZsckBjAu6I=";
     fetchSubmodules = true;
   };
 
@@ -207,6 +207,8 @@ stdenv.mkDerivation (finalAttrs: {
     "libdca.so.0"
     "liba52-0.7.4.so"
     "libFLAC.so.12"
+    "libtheoradec.so.1"
+    "libtheoraenc.so.1"
   ];
 
   dontWrapQtApps = true;

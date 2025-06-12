@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veryl";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "veryl-lang";
     repo = "veryl";
     rev = "v${version}";
-    hash = "sha256-KlW5GC5fgUnS6YAb01VEaKv48+yu8VqgAe/5QsilYjs=";
+    hash = "sha256-/GbykOurK3IHmknMh+TftU7aFcLqAlnEeiJ51sJcTeQ=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-HKDkV2eDjhfuky2ORdKwbyBa/kt1gEqK55AibKg5VYE=";
+  cargoHash = "sha256-MQkxeV+06hL9DqReuHy7H8SMvh2Xn6Hqj/VY8a1scyQ=";
 
   nativeBuildInputs = [
     pkg-config

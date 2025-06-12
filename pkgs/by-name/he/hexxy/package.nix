@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A modern and beautiful alternative to xxd and hexdump";
+    description = "Modern and beautiful alternative to xxd and hexdump";
     homepage = "https://github.com/sweetbbak/hexxy";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.NotAShelf ];

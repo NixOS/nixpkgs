@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "A bridge service that connects web wallets like Rabby to BitBox02";
+    description = "Bridge service that connects web wallets like Rabby to BitBox02";
     homepage = "https://github.com/BitBoxSwiss/bitbox-bridge";
     downloadPage = "https://bitbox.swiss/download/";
     changelog = "https://github.com/BitBoxSwiss/bitbox-bridge/blob/v${finalAttrs.version}/CHANGELOG.md";

@@ -85,11 +85,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lima-vm/lima";
     description = "Linux virtual machines (on macOS, in most cases)";
     changelog = "https://github.com/lima-vm/lima/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ anhduy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ anhduy ];
   };
 }

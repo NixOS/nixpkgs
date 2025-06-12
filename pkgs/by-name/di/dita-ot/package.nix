@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dita-ot";
-  version = "4.3.1";
+  version = "4.3.2";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ openjdk17 ];
 
   src = fetchzip {
     url = "https://github.com/dita-ot/dita-ot/releases/download/${finalAttrs.version}/dita-ot-${finalAttrs.version}.zip";
-    hash = "sha256-MwE6HnOrVtoT23wF0Tyje8T52au8kD6waY9tsrLQVck=";
+    hash = "sha256-LmXkFuejnWQh0i1L0/GcD/NBNBCMKE5+7M7bUC0DLIg=";
   };
 
   installPhase = ''
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://dita-ot.org";
     changelog = "https://www.dita-ot.org/dev/release-notes/#v${finalAttrs.version}";
-    description = "The open-source publishing engine for content authored in the Darwin Information Typing Architecture";
+    description = "Open-source publishing engine for content authored in the Darwin Information Typing Architecture";
     license = lib.licenses.asl20;
     mainProgram = "dita";
     platforms = openjdk17.meta.platforms;

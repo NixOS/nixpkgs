@@ -220,16 +220,16 @@ stdenv.mkDerivation {
     });
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/dnkl/foot/";
     changelog = "https://codeberg.org/dnkl/foot/releases/tag/${version}";
     description = "Fast, lightweight and minimalistic Wayland terminal emulator";
-    license = licenses.mit;
-    maintainers = [
-      maintainers.sternenseemann
-      maintainers.abbe
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      sternenseemann
+      abbe
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "foot";
   };
 }

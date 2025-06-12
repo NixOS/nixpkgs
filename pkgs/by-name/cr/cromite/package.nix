@@ -169,12 +169,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cromite";
-  version = "137.0.7151.44";
-  commit = "1abdac0aff0916b1e4a4bd52f1896eec00834262";
+  version = "137.0.7151.72";
+  commit = "4ea840397d139bcaf3298a54a80a93d135f7dac7";
 
   src = fetchurl {
     url = "https://github.com/uazo/cromite/releases/download/v${finalAttrs.version}-${finalAttrs.commit}/chrome-lin64.tar.gz";
-    hash = "sha256-33GS4uD3RJHy9M0S5TRB6kRb1SZR+ABLyOR1oeVLQto=";
+    hash = "sha256-WqOQaoboRqgYXW2tzyW3LMo5WRA8l5UWjUnfBIq6r9k=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly

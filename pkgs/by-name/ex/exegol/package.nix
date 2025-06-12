@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "exegol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fully featured and community-driven hacking environment";
     longDescription = ''
       Exegol is a community-driven hacking environment, powerful and yet

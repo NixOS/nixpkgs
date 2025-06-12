@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/apache/orc/releases/tag/v${finalAttrs.version}";
-    description = "The smallest, fastest columnar storage for Hadoop workloads";
+    description = "Smallest, fastest columnar storage for Hadoop workloads";
     homepage = "https://github.com/apache/orc/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ drupol ];

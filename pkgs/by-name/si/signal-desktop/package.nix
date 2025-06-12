@@ -3,7 +3,7 @@
   lib,
   nodejs_22,
   pnpm_10,
-  electron_35,
+  electron_36,
   python3,
   makeWrapper,
   callPackage,
@@ -14,12 +14,16 @@
   replaceVars,
   noto-fonts-color-emoji,
   nixosTests,
+
+  # command line arguments which are always set e.g "--password-store=kwallet6"
+  commandLineArgs ? "",
+
   withAppleEmojis ? false,
 }:
 let
   nodejs = nodejs_22;
   pnpm = pnpm_10.override { inherit nodejs; };
-  electron = electron_35;
+  electron = electron_36;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -48,13 +52,13 @@ let
     '';
   });
 
-  version = "7.54.0";
+  version = "7.56.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-dv1Yi7gSd7kY3MSrsPjcaf2hAEq6Y+XoWtlBfvd86ac=";
+    hash = "sha256-zPoZ76ujS8H4ls7RW4bojRIKOrPRJPjdHJVAl1cH9vY=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -64,7 +68,7 @@ let
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname src version;
-      hash = "sha256-TuPyRVNFIlR0A4YHMpQsQ6m+lm2fsp79FzQ1P5qqjIc=";
+      hash = "sha256-cT7Ixl/V/mesPHvJUsG63Y/wXwKjbjkjdjP3S7uEOa0=";
     };
 
     strictDeps = true;
@@ -116,15 +120,15 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     hash =
       if withAppleEmojis then
-        "sha256-Kdg0+kLEDFobWEEhJgKuaou/pYwn1dTugye7OcMYfEQ="
+        "sha256-RP3d1t4bbvehdCDSL3bHrlJEnn65TDViI5jVjSiuJw8="
       else
-        "sha256-cit/Hn7L6qmfIJCDF2wlx/4aKygRYy+zvBQGX6Mg+og=";
+        "sha256-KJvc+kVcwRKsUVW3lK7fPXUSqDQlJFPbYAzQjhFtfoU=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1747170390;
+    SOURCE_DATE_EPOCH = 1749072888;
   };
 
   preBuild = ''
@@ -203,7 +207,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
   '';

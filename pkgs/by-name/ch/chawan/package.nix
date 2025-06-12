@@ -9,20 +9,20 @@
   nim,
   pandoc,
   pkg-config,
+  brotli,
   zlib,
   unstableGitUpdater,
-  replaceVars,
 }:
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2025-04-18";
+  version = "0-unstable-2025-05-25";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "656092f399d36c13a551b4a2474c8aded3388b1a";
-    hash = "sha256-GYCmRIswHFM+VehBlf8NSAt0ewrl7SVD0y9lLhFYkvo=";
+    rev = "e571c8b1ede3a3c6dc4a5a4d0c6c8f48473076d2";
+    hash = "sha256-OBXc4jnB5Y+KXO9J7P1Z2HXkNCS+xnG+IGWw8wb66J8=";
   };
 
   patches = [ ./mancha-augment-path.diff ];
@@ -43,6 +43,7 @@ stdenv.mkDerivation {
     nim
     pandoc
     pkg-config
+    brotli
   ];
 
   buildInputs = [
@@ -79,7 +80,7 @@ stdenv.mkDerivation {
     homepage = "https://sr.ht/~bptato/chawan/";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ jtbx ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "cha";
   };
 }

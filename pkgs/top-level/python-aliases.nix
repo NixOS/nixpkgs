@@ -166,6 +166,7 @@ mapAliases ({
   cryptacular = throw "cryptacular was removed, because it was disabled on all python version since 3.6 and last updated in 2021"; # Added 2024-05-13
   cryptography_vectors = "cryptography_vectors is no longer exposed in python*Packages because it is used for testing cryptography only."; # Added 2022-03-23
   cufflinks = throw "cufflinks has removed, since it is abandoned and broken"; # added 2025-02-16
+  curve25519-donna = throw "curve25519-donna was removed, since it is abandoned and unmaintained since 2015"; # added 2025-06-03
   cx_Freeze = cx-freeze; # added 2023-08-02
   cx_oracle = cx-oracle; # added 2024-01-03
   d2to1 = throw "d2to1 is archived and no longer works with setuptools v68"; # added 2023-07-30
@@ -666,6 +667,7 @@ mapAliases ({
   qcodes-loop = throw "qcodes-loop has been removed due to deprecation"; # added 2023-11-30
   qiskit-aqua = throw "qiskit-aqua has been removed due to deprecation, with its functionality moved to different qiskit packages";
   rabbitpy = throw "rabbitpy has been removed, since it is unmaintained and broken"; # added 2023-07-01
+  radian = throw "radian has been promoted to a top-level attribute name: `pkgs.radian`"; # added 2025-05-02
   radicale_infcloud = radicale-infcloud; # added 2024-01-07
   radio_beam = radio-beam; # added 2023-11-04
   ratelimiter = throw "ratelimiter has been removed, since it is unmaintained and broken"; # added 2023-10-21
@@ -791,6 +793,7 @@ mapAliases ({
   types-enum34 = throw "types-enum34 is obselete since Python 3.4"; # added 2025-02-15
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   types-typed-ast = throw "types-typed-ast was removed because so was typed-ast"; # added 2025-05-24
+  uamqp = throw "'uamqp' has been removed because it is broken and unmaintained."; # added 2025-06-11
   ufoLib2 = ufolib2; # added 2024-01-07
   ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05
   unblob-native = throw "unblob-native has been removed because its functionality is merged into unblob 25.4.14."; # Added 2025-05-02

@@ -40,6 +40,26 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 :::
 
+## `hasCmakeConfigModules` {#tester-hasCmakeConfigModules}
+
+Checks whether a package exposes a given list of `*config.cmake` modules.
+Note the moduleNames used in cmake find_package are case sensitive.
+
+:::{.example #ex-hascmakeconfigmodules}
+
+# Check that `*config.cmake` modules are exposed using explicit module names
+
+```nix
+{
+  passthru.tests.cmake-config = testers.hasCmakeConfigModules {
+    package = finalAttrs.finalPackage;
+    moduleNames = [ "Foo" ];
+  };
+}
+```
+
+:::
+
 ## `lycheeLinkCheck` {#tester-lycheeLinkCheck}
 
 Check a packaged static site's links with the [`lychee` package](https://search.nixos.org/packages?show=lychee&type=packages&query=lychee).

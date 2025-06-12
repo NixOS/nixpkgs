@@ -6,14 +6,14 @@
 }:
 buildPythonApplication rec {
   pname = "djhtml";
-  version = "3.0.7";
+  version = "3.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rtts";
     repo = "djhtml";
     tag = version;
-    hash = "sha256-W93J3UFUrCqT718zoGcu96ORYFt0NLyYP7iVWbr8FYo=";
+    hash = "sha256-1bopV6mjwjXdoIN9i3An4NvSpeGcVlQ24nLLjP/UfQU=";
   };
 
   build-system = [ setuptools ];
@@ -23,7 +23,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/rtts/djhtml";
     description = "Django/Jinja template indenter";
-    changelog = "https://github.com/rtts/djhtml/releases/tag/${version}";
+    changelog = "https://github.com/rtts/djhtml/releases/tag/${src.tag}";
     license = licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "djhtml";

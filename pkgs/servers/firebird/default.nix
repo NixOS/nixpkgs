@@ -55,34 +55,6 @@ let
   };
 in
 rec {
-
-  firebird_2_5 = stdenv.mkDerivation (
-    base
-    // rec {
-      version = "2.5.9";
-
-      src = fetchFromGitHub {
-        owner = "FirebirdSQL";
-        repo = "firebird";
-        rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
-        sha256 = "sha256-YyvlMeBux80OpVhsCv+6IVxKXFRsgdr+1siupMR13JM=";
-      };
-
-      configureFlags = base.configureFlags ++ [ "--with-system-icu" ];
-
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out
-        cp -r gen/firebird/* $out
-        runHook postInstall
-      '';
-
-      meta = base.meta // {
-        platforms = [ "x86_64-linux" ];
-      };
-    }
-  );
-
   firebird_3 = stdenv.mkDerivation (
     base
     // rec {

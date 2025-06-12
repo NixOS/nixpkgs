@@ -29,12 +29,12 @@ buildGoModule rec {
     mv $out/bin/client $out/bin/kubectl-relay
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Drop-in replacement for `kubectl port-forward` with some enhanced features";
     homepage = "https://github.com/knight42/krelay";
     changelog = "https://github.com/knight42/krelay/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ivankovnatsky ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ivankovnatsky ];
     mainProgram = "kubectl-relay";
   };
 }

@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple scanning utility";
     mainProgram = "simple-scan";
     longDescription = ''
@@ -95,8 +95,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.gnome.org/GNOME/simple-scan";
     changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

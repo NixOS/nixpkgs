@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://boundaryproject.io/";
     changelog = "https://github.com/hashicorp/boundary/blob/v${version}/CHANGELOG.md";
     description = "Enables identity-based access management for dynamic infrastructure";
@@ -67,13 +67,13 @@ stdenv.mkDerivation rec {
       and resilient. It can run in clouds, on-prem, secure enclaves and more,
       and does not require an agent to be installed on every end host.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       jk
       techknowlogick
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "boundary";
   };
 }

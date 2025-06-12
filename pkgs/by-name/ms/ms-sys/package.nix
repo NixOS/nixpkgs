@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ms-sys";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/ms-sys/ms-sys-${finalAttrs.version}.tar.gz";
-    hash = "sha256-a4Rs9BwX/nhGfLbNzqQapWvzwhHIKLfFaehJYszQ9RQ=";
+    hash = "sha256-qQLuPr0MtwOO0HfjqoqMgzWmxHL1BW1+CK8z1+eD8Vc=";
   };
 
   nativeBuildInputs = [ gettext ];

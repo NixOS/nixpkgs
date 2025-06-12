@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pgmoneta";
-  version = "0.16.1";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "pgmoneta";
     repo = "pgmoneta";
     rev = version;
-    hash = "sha256-NsbCgXruRIyzEdJjzImJJeTjDhMQwmo7bCTg9LTND+Y=";
+    hash = "sha256-5yatgiNl9szTnZbn6nKaGKgfnm2bOG4gvXGN5SqtbJI=";
   };
 
   nativeBuildInputs = [
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  meta = with lib; {
+  meta = {
     description = "Backup / restore solution for PostgreSQL";
     homepage = "https://pgmoneta.github.io/";
     changelog = "https://github.com/pgmoneta/pgmoneta/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

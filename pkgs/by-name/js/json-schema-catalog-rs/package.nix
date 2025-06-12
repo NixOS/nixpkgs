@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "json-schema-catalog-rs";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "roberth";
     repo = "json-schema-catalog-rs";
     tag = finalAttrs.version;
-    hash = "sha256-BbEPpolv2aoKFlfZ6A+CmUlr5sySGIqRlv3rLgf1VkA=";
+    hash = "sha256-AEtE57WYmuTaU1hQUw2NyA+hj9odIktZVQ+mDE2+Sdc=";
   };
 
-  cargoHash = "sha256-YI2LN2DBzC1B5wCZOrGAZi/hkKHoAm6xLkdJ+8DDFo8=";
+  cargoHash = "sha256-fW2sODIFRXcDfzPnmYW0sH/dLe8sbRjQLtLWDlAJPxQ=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -160,7 +160,7 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An unofficial, unendorsed language server for Meson written in C++";
+    description = "Unofficial, unendorsed language server for Meson written in C++";
     homepage = "https://github.com/JCWasmx86/mesonlsp";
     changelog = "https://github.com/JCWasmx86/mesonlsp/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Plus;

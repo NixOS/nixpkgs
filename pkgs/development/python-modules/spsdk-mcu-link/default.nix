@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "spsdk-mcu-link";
-  version = "0.6.0";
+  version = "0.6.4";
   pyproject = true;
 
   # Latest tag missing on GitHub
   src = fetchPypi {
     pname = "spsdk_mcu_link";
     inherit version;
-    hash = "sha256-x+aOfFdD0+IfDT7LA2QlYqR7kMOwPfvlMCcZvOYnM0Q=";
+    hash = "sha256-9PI/h40vUbdvIRIfITo1b6bB+FyT1CS0F8ygx0IgQKI=";
   };
 
   build-system = [

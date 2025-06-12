@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
     cp ${includeScript} $out/include.php
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple, modern & fast web-based email client";
     homepage = "https://snappymail.eu";
     changelog = "https://github.com/the-djmaze/snappymail/blob/v${version}/CHANGELOG.md";
     downloadPage = "https://github.com/the-djmaze/snappymail/releases";
-    license = licenses.agpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

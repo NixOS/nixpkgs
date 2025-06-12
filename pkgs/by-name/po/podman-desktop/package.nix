@@ -27,14 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
     (lib.getExe (writeShellApplication {
-      name = "${finalAttrs.pname}-dependencies-updater";
+      name = "podman-desktop-dependencies-updater";
       runtimeInputs = [
         nix
         jq
         gnugrep
       ];
       runtimeEnv = {
-        PNAME = finalAttrs.pname;
+        PNAME = "podman-desktop";
         PKG_FILE = builtins.toString ./package.nix;
       };
       text = ''
@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A graphical tool for developing on containers and Kubernetes";
+    description = "Graphical tool for developing on containers and Kubernetes";
     homepage = "https://podman-desktop.io";
     changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;

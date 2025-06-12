@@ -23,15 +23,15 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];
 
-  meta = with lib; {
+  meta = {
     description = "Interruption-free notification system for Linux";
     homepage = "https://github.com/ellsclytn/nofi/";
     changelog = "https://github.com/ellsclytn/nofi/raw/v${version}/CHANGELOG.md";
     license = [
-      licenses.asl20 # or
-      licenses.mit
+      lib.licenses.asl20 # or
+      lib.licenses.mit
     ];
     mainProgram = "nofi";
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [ lib.maintainers.magnetophon ];
   };
 }

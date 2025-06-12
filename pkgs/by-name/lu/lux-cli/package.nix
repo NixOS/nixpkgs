@@ -1,11 +1,11 @@
 {
+  fetchFromGitHub,
   gnupg,
   gpgme,
   installShellFiles,
   lib,
   libgit2,
   libgpg-error,
-  luaPackages,
   luajit,
   makeWrapper,
   nix,
@@ -17,13 +17,18 @@
 rustPlatform.buildRustPackage rec {
   pname = "lux-cli";
 
-  version = "0.5.3";
+  version = "0.7.0";
 
-  src = luaPackages.lux-lua.src;
+  src = fetchFromGitHub {
+    owner = "nvim-neorocks";
+    repo = "lux";
+    tag = "v0.7.0";
+    hash = "sha256-I0e9nOkY6+tYNORrS1AhgaFM2WtNNV2vFq6gh0YNOYE=";
+  };
 
   buildAndTestSubdir = "lux-cli";
   useFetchCargoVendor = true;
-  cargoHash = luaPackages.lux-lua.cargoHash;
+  cargoHash = "sha256-qtkyuTJNik+B9zaUgpKXBTAEqPbFQoPxqmlVJ/y0i7o=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

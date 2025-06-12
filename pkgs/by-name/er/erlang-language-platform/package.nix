@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An IDE-first library for the semantic analysis of Erlang code, including LSP server, linting and refactoring tools.";
+    description = "IDE-first library for the semantic analysis of Erlang code, including LSP server, linting and refactoring tools";
     homepage = "https://github.com/WhatsApp/erlang-language-platform/";
     license = with lib.licenses; [
       mit

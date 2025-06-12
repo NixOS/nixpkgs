@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "newt";
-  version = "1.1.3";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "newt";
     tag = version;
-    hash = "sha256-wfm2UI4QUiYiAJIYBiSCOD/w72WRJIv2cyLIkfqGsek=";
+    hash = "sha256-dZsHPEhvrElFdmJ6mgqyLqcblyUfpt8dtLsNFm1emrw=";
   };
 
-  vendorHash = "sha256-8VlT9cy2uNhQPiUpr1jJuQSgUR6TtlbQ+etran2Htxs=";
+  vendorHash = "sha256-Yc5IXnShciek/bKkVezkAcaq47zGiZP8vUHFb9p09LI=";
 
   postPatch = ''
     substituteInPlace main.go \

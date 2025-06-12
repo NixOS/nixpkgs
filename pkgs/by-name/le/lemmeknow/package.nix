@@ -16,12 +16,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-65PPIYfwVO8O4K8yr499vRQScpAREiBZ8O0rrDMCXB8=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to identify anything";
     homepage = "https://github.com/swanandx/lemmeknow";
     changelog = "https://github.com/swanandx/lemmeknow/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       Br1ght0ne
     ];

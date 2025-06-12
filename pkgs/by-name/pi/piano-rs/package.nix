@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A multiplayer piano using UDP sockets that can be played using computer keyboard, in the terminal";
+    description = "Multiplayer piano using UDP sockets that can be played using computer keyboard, in the terminal";
     homepage = "https://github.com/ritiek/piano-rs";
     license = licenses.mit;
     mainProgram = "piano-rs";

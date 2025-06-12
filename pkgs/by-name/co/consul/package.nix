@@ -50,13 +50,13 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for service discovery, monitoring and configuration";
     changelog = "https://github.com/hashicorp/consul/releases/tag/v${version}";
     homepage = "https://www.consul.io/";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       adamcstephens
       pradeepchhetri
       vdemeester

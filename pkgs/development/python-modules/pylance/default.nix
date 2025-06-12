@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.27.2";
+  version = "0.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-fk32CnWH9wVKfTgT2Es6+tnvB+rPzkA8in0J726JHx0=";
+    hash = "sha256-lEGxutBKbRFqr9Uhdv2oOXCdb8Y2quqLoSoJ0F+F3h0=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -51,7 +51,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-N7ODbv+q9xX8lb4vvUzMGTul/whNw+dVrBp/YcEaREI=";
+    hash = "sha256-NZeFgEWkiDewWI5R+lpBsMTU7+7L7oaHefSGAS+CoFU=";
   };
 
   nativeBuildInputs = [
@@ -103,6 +103,7 @@ buildPythonPackage rec {
       # Writes to read-only build directory
       "test_add_data_storage_version"
       "test_fix_data_storage_version"
+      "test_fts_backward_v0_27_0"
 
       # AttributeError: 'SessionContext' object has no attribute 'register_table_provider'
       "test_table_loading"
@@ -110,6 +111,9 @@ buildPythonPackage rec {
       # subprocess.CalledProcessError: Command ... returned non-zero exit status 1.
       # ModuleNotFoundError: No module named 'lance'
       "test_tracing"
+
+      # Flaky (AssertionError)
+      "test_index_cache_size"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...

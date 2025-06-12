@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "music_assistant_frontend" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/music-assistant/frontend/releases/tag/${version}";
-    description = "The Music Assistant frontend";
+    description = "Music Assistant frontend";
     homepage = "https://github.com/music-assistant/frontend";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -61,9 +61,6 @@ trace "Done"
 trace -n "Merging base branch into the HEAD commit in $tmp/merged.. "
 git -C "$tmp/merged" merge -q --no-edit "$baseSha"
 trace -e "\e[34m$(git -C "$tmp/merged" rev-parse HEAD)\e[0m"
-trace -n "Reading pinned nixpkgs-vet version from pinned-version.txt.. "
-toolVersion=$(<"$tmp/merged/ci/nixpkgs-vet/pinned-version.txt")
-trace -e "\e[34m$toolVersion\e[0m"
 
 trace "Running nixpkgs-vet.."
 nix-build ci -A nixpkgs-vet --argstr base "$tmp/base" --argstr head "$tmp/merged"

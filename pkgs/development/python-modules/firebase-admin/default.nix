@@ -50,18 +50,16 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests =
-    [
-      # Flaky (AssertionError)
-      # >       assert delta <= timedelta(seconds=15)
-      # E       assert datetime.timedelta(seconds=17, microseconds=28239) <= datetime.timedelta(seconds=15)
-      "test_task_options"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Flaky / timing sensitive
-      "test_expired_cookie_with_tolerance"
-      "test_expired_token_with_tolerance"
-    ];
+  disabledTests = [
+    # Flaky (AssertionError)
+    # >       assert delta <= timedelta(seconds=15)
+    # E       assert datetime.timedelta(seconds=17, microseconds=28239) <= datetime.timedelta(seconds=15)
+    "test_task_options"
+
+    # Flaky / timing sensitive
+    "test_expired_cookie_with_tolerance"
+    "test_expired_token_with_tolerance"
+  ];
 
   meta = {
     description = "Firebase Admin Python SDK";

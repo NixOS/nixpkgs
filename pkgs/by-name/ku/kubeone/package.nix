@@ -42,11 +42,11 @@ buildGoModule rec {
     command = "kubeone version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automate cluster operations on all your cloud, on-prem, edge, and IoT environments";
     homepage = "https://kubeone.io/";
     changelog = "https://github.com/kubermatic/kubeone/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lblasc ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lblasc ];
   };
 }

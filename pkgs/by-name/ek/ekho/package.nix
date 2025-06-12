@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Chinese text-to-speech software";
-    homepage = "http://www.eguidedog.net/ekho.php";
+    homepage = "https://www.eguidedog.net/ekho.php";
     longDescription = ''
       Ekho (余音) is a free, open source and multilingual text-to-speech (TTS)
       software. It supports Cantonese (Chinese dialect spoken in Hong Kong and

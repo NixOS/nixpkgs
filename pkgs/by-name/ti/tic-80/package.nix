@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A free and open source fantasy computer for making, playing and sharing tiny games";
+    description = "Free and open source fantasy computer for making, playing and sharing tiny games";
     longDescription = ''
       TIC-80 is a free and open source fantasy computer for making, playing and
       sharing tiny games.

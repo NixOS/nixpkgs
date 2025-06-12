@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
     homepage = "https://www.sozu.io";
     changelog = "https://github.com/sozu-proxy/sozu/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       gaelreyrol
     ];

@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${zig}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to compile Cargo projects with zig as the linker";
     mainProgram = "cargo-zigbuild";
     homepage = "https://github.com/messense/cargo-zigbuild";
     changelog = "https://github.com/messense/cargo-zigbuild/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

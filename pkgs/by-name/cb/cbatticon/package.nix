@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/valr/cbatticon";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
   };
 }

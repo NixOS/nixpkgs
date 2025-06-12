@@ -31,16 +31,16 @@ rustPlatform.buildRustPackage rec {
   # requires internet access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to fetch the source code of a Rust crate";
     mainProgram = "cargo-clone";
     homepage = "https://github.com/janlikar/cargo-clone";
     changelog = "https://github.com/janlikar/cargo-clone/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       matthiasbeyer
       janlikar

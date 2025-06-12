@@ -8,6 +8,7 @@
   asciidoc,
   docbook_xml_dtd_45,
   docbook_xsl,
+  desktopToDarwinBundle,
   libxml2,
   libxslt,
   withPdfReader ? true,
@@ -25,15 +26,15 @@ let
   isQt6 = lib.versions.major qt6Packages.qtbase.version == "6";
   pdfjs =
     let
-      version = "5.1.91";
+      version = "5.3.31";
     in
     fetchzip {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-      hash = "sha256-e1zBpH9F8TI4ET4FvkxJsoOYVKLWJBP2KaNNC2kpaVk=";
+      hash = "sha256-8QNFCIRSaF0y98P1mmx0u+Uf0/Zd7nYlFGXp9SkURTc=";
       stripRoot = false;
     };
 
-  version = "3.5.0";
+  version = "3.5.1";
 in
 
 python3.pkgs.buildPythonApplication {
@@ -43,7 +44,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
-    hash = "sha256-+hQsjRwoJbBotxs2BKiy1oLi7YShTD5ott54RDMdgLs=";
+    hash = "sha256-gmu6MooINXJI1eWob6qwpzZVSXQ5rVTSaeISBVkms44=";
   };
 
   # Needs tox
@@ -69,7 +70,7 @@ python3.pkgs.buildPythonApplication {
     docbook_xsl
     libxml2
     libxslt
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   dependencies = with python3.pkgs; [
     colorama
@@ -131,6 +132,11 @@ python3.pkgs.buildPythonApplication {
   preFixup =
     let
       libPath = lib.makeLibraryPath [ pipewire ];
+      resourcesPath =
+        if (isQt6 && stdenv.hostPlatform.isDarwin) then
+          "${qt6Packages.qtwebengine}/lib/QtWebEngineCore.framework/Resources"
+        else
+          "${qt6Packages.qtwebengine}/resources";
     in
     ''
       makeWrapperArgs+=(
@@ -145,18 +151,18 @@ python3.pkgs.buildPythonApplication {
           --set-default QSG_RHI_BACKEND vulkan
         ''}
         ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
-        --set QTWEBENGINE_RESOURCES_PATH "${qt6Packages.qtwebengine}/resources"
+        --set QTWEBENGINE_RESOURCES_PATH "${resourcesPath}"
       )
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/qutebrowser/qutebrowser";
     changelog = "https://github.com/qutebrowser/qutebrowser/blob/v${version}/doc/changelog.asciidoc";
     description = "Keyboard-focused browser with a minimal GUI";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "qutebrowser";
     platforms = if enableWideVine then [ "x86_64-linux" ] else qt6Packages.qtwebengine.meta.platforms;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jagajaga
       rnhmjoj
       ebzzry

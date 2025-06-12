@@ -7,7 +7,7 @@
 }:
 let
   pname = "whisper-ctranslate2";
-  version = "0.5.2";
+  version = "0.5.3";
 in
 python3Packages.buildPythonApplication {
   inherit pname version;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication {
     owner = "Softcatala";
     repo = "whisper-ctranslate2";
     tag = version;
-    hash = "sha256-53sKuaZJcH/i2C4oeKcvxRs3OmkvR3USw6nnPh+i+Eo=";
+    hash = "sha256-rRxadVYv69Jgzai+ANS6oKHOArTI9vPDPeTybtOySww=";
   };
 
   build-system = [ python3Packages.setuptools ];

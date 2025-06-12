@@ -20,7 +20,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A simple terminal UI player for di.fm";
+    description = "Simple terminal UI player for di.fm";
     homepage = "https://github.com/acaloiaro/di-tui";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.acaloiaro ];

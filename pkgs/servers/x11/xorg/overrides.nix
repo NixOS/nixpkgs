@@ -242,7 +242,7 @@ self: super:
         buildPackages.stdenv.cc
       ]
       ++ lib.optionals stdenv.hostPlatform.isStatic [
-        (xorg.buildPackages.stdenv.cc.libc.static or null)
+        (xorg.buildPackages.libc.static or null)
       ];
     preConfigure = ''
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure

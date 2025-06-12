@@ -40,13 +40,13 @@ rustPlatform.buildRustPackage rec {
   # disable tests because they require postgres and redis to be running
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "svix-server";
     description = "Enterprise-ready webhooks service";
     homepage = "https://github.com/svix/svix-webhooks";
     changelog = "https://github.com/svix/svix-webhooks/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ techknowlogick ];
     broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin; # aws-lc-sys currently broken on darwin x86_64
   };
 }

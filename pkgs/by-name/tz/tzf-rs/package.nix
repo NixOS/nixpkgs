@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A fast timezone finder for Rust";
+    description = "Fast timezone finder for Rust";
     homepage = "https://github.com/ringsaturn/tzf-rs";
     changelog = "https://github.com/ringsaturn/tzf-rs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;

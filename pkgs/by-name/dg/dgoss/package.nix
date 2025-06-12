@@ -36,13 +36,13 @@ resholve.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/goss-org/goss/blob/v${version}/extras/dgoss/README.md";
     changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       hyzual
       anthonyroussel
     ];

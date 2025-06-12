@@ -52,12 +52,12 @@ buildPythonPackage rec {
     "s3_storage_provider"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Synapse storage provider to fetch and store media in Amazon S3";
     mainProgram = "s3_media_upload";
     homepage = "https://github.com/matrix-org/synapse-s3-storage-provider";
     changelog = "https://github.com/matrix-org/synapse-s3-storage-provider/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -19,6 +19,7 @@
   gettext,
   texinfo,
   libtool,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -108,6 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   checkTarget = "check";
+
+  passthru.tests = nixosTests.taler.basic;
 
   meta = {
     description = "Exchange component for the GNU Taler electronic payment system";

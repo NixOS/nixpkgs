@@ -20,14 +20,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bitbox";
-  version = "4.47.2";
+  version = "4.47.3";
 
   src = fetchFromGitHub {
     owner = "BitBoxSwiss";
     repo = "bitbox-wallet-app";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-sRE+Nnb3oqiJEjqiyG+3/sZLp23nquw5+4VpbZVFCQ8=";
+    hash = "sha256-Rxlj9Xm78xI61ynOonokxii2jnemumWy6fX+82bDp+w=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     pname = "bitbox-web";
     inherit version;
     inherit src;
-    sourceRoot = "source/frontends/web";
+    sourceRoot = "${src.name}/frontends/web";
     npmDepsHash = "sha256-eazc3OIusY8cbaF8RJOrVcyWPQexcz6lZYLLCpB1mHc=";
     installPhase = "cp -r build $out";
   };

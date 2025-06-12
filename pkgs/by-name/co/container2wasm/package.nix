@@ -27,12 +27,12 @@ buildGoModule rec {
     "cmd/c2w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Container to WASM converter";
     homepage = "https://github.com/ktock/container2wasm";
     changelog = "https://github.com/ktock/container2wasm/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "c2w";
   };
 }

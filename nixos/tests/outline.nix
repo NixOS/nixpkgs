@@ -44,7 +44,7 @@ in
 
     # Create a test bucket on the server
     machine.succeed(
-        "mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
+        "mc alias set minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
     )
     machine.succeed("mc mb minio/outline")
 

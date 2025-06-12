@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kubetui";
-  version = "1.7.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "sarub0b0";
     repo = "kubetui";
     tag = "v${version}";
-    hash = "sha256-CtKckAmvXdH+CU+nV1hNGhemOCj5HRkAEQDSMD32CFE=";
+    hash = "sha256-L4/PqlVECVKMNSCFdaCxLxLAqmkzAdAvh/amQPZddts=";
   };
 
   checkFlags = [
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-+O22eo2vj4WLbSQoUfGOOfp2a43j2RrVXvB7CmYRA1o=";
+  cargoHash = "sha256-Mmz7p7bz6EQDl7/xSVP+7kLHNCYlBIkQGiCeuH7qpWY=";
 
   meta = {
     homepage = "https://github.com/sarub0b0/kubetui";
