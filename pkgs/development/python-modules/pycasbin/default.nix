@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "casbin";
+  pname = "pycasbin";
   version = "1.45.0";
   pyproject = true;
 
