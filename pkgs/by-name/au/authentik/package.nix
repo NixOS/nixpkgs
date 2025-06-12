@@ -159,19 +159,12 @@ let
   python = python312.override {
     self = python;
     packageOverrides = final: prev: {
-      django-tenants = prev.django-tenants.overrideAttrs {
-        version = "3.6.1-unstable-2024-01-11";
-        src = fetchFromGitHub {
-          owner = "rissson";
-          repo = "django-tenants";
-          rev = "a7f37c53f62f355a00142473ff1e3451bb794eca";
-          hash = "sha256-YBT0kcCfETXZe0j7/f1YipNIuRrcppRVh1ecFS3cvNo=";
-        };
-      };
-      # Use 3.14.0 until https://github.com/encode/django-rest-framework/issues/9358 is fixed.
-      # Otherwise applying blueprints/default/default-brand.yaml fails with:
-      #   authentik.flows.models.RelatedObjectDoesNotExist: FlowStageBinding has no target.
-      djangorestframework = prev.buildPythonPackage rec {
+      django = final.django_5;
+
+      # Running authentik currently requires a custom version.
+      # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.
+      # See https://github.com/goauthentik/authentik/pull/14057 for latest version bump.
+      djangorestframework = prev.buildPythonPackage {
         pname = "djangorestframework";
         version = "3.14.0";
         format = "setuptools";
