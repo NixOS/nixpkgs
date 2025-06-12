@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
+  patches = [
+    ./0001-Install-the-macOS-bundle-to-the-install-prefix.patch
+  ];
+
   outputs = [
     "out"
     "udev"
