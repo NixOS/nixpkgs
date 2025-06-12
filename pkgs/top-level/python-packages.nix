@@ -12513,8 +12513,6 @@ self: super: with self; {
 
   pyexploitdb = callPackage ../development/python-modules/pyexploitdb { };
 
-  pyezviz = callPackage ../development/python-modules/pyezviz { };
-
   pyezvizapi = callPackage ../development/python-modules/pyezvizapi { };
 
   pyface = callPackage ../development/python-modules/pyface { };
@@ -13638,6 +13636,8 @@ self: super: with self; {
 
   pysignalclirestapi = callPackage ../development/python-modules/pysignalclirestapi { };
 
+  pysignalr = callPackage ../development/python-modules/pysignalr { };
+
   pysigset = callPackage ../development/python-modules/pysigset { };
 
   pysilero-vad = callPackage ../development/python-modules/pysilero-vad { };
@@ -13659,6 +13659,8 @@ self: super: with self; {
   pysma = callPackage ../development/python-modules/pysma { };
 
   pysmappee = callPackage ../development/python-modules/pysmappee { };
+
+  pysmarlaapi = callPackage ../development/python-modules/pysmarlaapi { };
 
   pysmart = callPackage ../development/python-modules/pysmart { };
 
@@ -19319,6 +19321,8 @@ self: super: with self; {
   ws4py = callPackage ../development/python-modules/ws4py { };
 
   wsdiscovery = callPackage ../development/python-modules/wsdiscovery { };
+
+  wsdot = callPackage ../development/python-modules/wsdot { };
 
   wsgi-intercept = callPackage ../development/python-modules/wsgi-intercept { };
 
