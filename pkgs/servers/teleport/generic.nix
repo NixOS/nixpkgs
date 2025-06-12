@@ -265,5 +265,8 @@ buildGoModule rec {
     broken =
       stdenv.hostPlatform.parsed.cpu.bits < 64
       || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+    knownVulnerabilities = [
+      "Security fixes need a newer Go version in the toolchain, which will not be available in 24.11."
+    ];
   };
 }
