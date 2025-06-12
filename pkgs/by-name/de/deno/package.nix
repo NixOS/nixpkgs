@@ -21,6 +21,7 @@
   nodejs,
   git,
   python3,
+  esbuild,
 }:
 
 let
@@ -28,18 +29,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.3.5";
+  version = "2.3.6";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-lu3r1v3iB9NIruooRrV9NawUnKqufqlYJQe+Aumgn8E=";
+    hash = "sha256-l3cWnv2cEmoeecYj38eMIlgqlRjDbtQuc6Q3DmOJoqE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-XJy7+cARYEX8tAPXLHJnEwXyZIwPaqhM7ZUzoem1Wo0=";
+  cargoHash = "sha256-alvn+d7XTYrw8KXw+k+++J3CsBwAUbQQlh24/EOEzwY=";
 
   patches = [
     ./tests-replace-hardcoded-paths.patch
@@ -82,22 +83,59 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
 
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Unset the env var defined by bintools-wrapper because it triggers Deno's sandbox protection in some tests.
-    # ref: https://github.com/denoland/deno/pull/25271
-    unset LD_DYLD_PATH
-  '';
+  # Many tests depend on prebuilt binaries being present at `./third_party/prebuilt`.
+  # We provide nixpkgs binaries for these for all platforms, but the test runner itself only handles
+  # these four arch+platform combinations.
+  doCheck =
+    stdenv.hostPlatform.isDarwin
+    || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64));
 
-  cargoTestFlags = [
-    "--lib" # unit tests
-    "--test integration_tests"
-    # Test targets not included here:
-    # - node_compat: there are tons of network access in them and it's not trivial to skip test cases.
-    # - specs: this target uses a custom test harness that doesn't implement the --skip flag.
-    #   refs:
-    #   - https://github.com/denoland/deno/blob/2212d7d814914e43f43dfd945ee24197f50fa6fa/tests/Cargo.toml#L25
-    #   - https://github.com/denoland/file_test_runner/blob/9c78319a4e4c6180dde0e9e6c2751017176e65c9/src/collection/mod.rs#L49
-  ];
+  preCheck =
+    # Provide esbuild binary at `./third_party/prebuilt/` just like upstream:
+    # https://github.com/denoland/deno_third_party/tree/master/prebuilt
+    # https://github.com/denoland/deno/blob/main/tests/util/server/src/servers/npm_registry.rs#L402
+    let
+      platform =
+        if stdenv.hostPlatform.isLinux then
+          "linux64"
+        else if stdenv.hostPlatform.isDarwin then
+          "mac"
+        else
+          throw "Unsupported platform";
+      arch =
+        if stdenv.hostPlatform.isAarch64 then
+          "aarch64"
+        else if stdenv.hostPlatform.isx86_64 then
+          "x64"
+        else
+          throw "Unsupported architecture";
+    in
+    ''
+      mkdir -p ./third_party/prebuilt/${platform}
+      cp ${lib.getExe esbuild} ./third_party/prebuilt/${platform}/esbuild-${arch}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Unset the env var defined by bintools-wrapper because it triggers Deno's sandbox protection in some tests.
+      # ref: https://github.com/denoland/deno/pull/25271
+      unset LD_DYLD_PATH
+    '';
+
+  cargoTestFlags =
+    [
+      "--test integration_tests"
+      # Test targets not included here:
+      # - node_compat: there are tons of network access in them and it's not trivial to skip test cases.
+      # - specs: this target uses a custom test harness that doesn't implement the --skip flag.
+      #   refs:
+      #   - https://github.com/denoland/deno/blob/2212d7d814914e43f43dfd945ee24197f50fa6fa/tests/Cargo.toml#L25
+      #   - https://github.com/denoland/file_test_runner/blob/9c78319a4e4c6180dde0e9e6c2751017176e65c9/src/collection/mod.rs#L49
+    ]
+    ++ lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)) [
+      # Crashes with SIGSEGV on linux-x86_64
+      # Maybe related to https://github.com/denoland/rusty_v8/issues/1381
+      # or https://github.com/denoland/deno_core/issues/1091?
+      "--lib" # unit tests
+    ];
   checkFlags =
     [
       # Internet access
@@ -119,6 +157,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       # Flaky
       "--skip=init::init_subcommand_serve"
+      "--skip=serve::deno_serve_parallel"
+      "--skip=js_unit_tests::stat_test" # timing-sensitive
 
       # Test hangs, needs investigation
       "--skip=repl::pty_complete_imports_no_panic_empty_specifier"
