@@ -1,6 +1,14 @@
 { lib }:
 let
   inherit (import ./internal.nix { inherit lib; }) _ipv6;
+  inherit (lib.strings) match concatStringsSep toLower;
+  inherit (lib.trivial)
+    pipe
+    bitXor
+    fromHexString
+    toHexString
+    ;
+  inherit (lib.lists) elemAt;
 in
 {
   ipv6 = {
@@ -45,5 +53,49 @@ in
       {
         inherit address prefixLength;
       };
+
+    /**
+      Converts a 48-bit MAC address into a EUI-64 IPv6 address suffix.
+
+      # Example
+
+      ```nix
+      mkEUI64Suffix "66:75:63:6B:20:75"
+      => "6475:63ff:fe6b:2075"
+      ```
+
+      # Type
+
+      ```
+      mkEUI64Suffix :: String -> String
+      ```
+
+      # Argumemts
+
+      mac
+      : The MAC address (may contain these delimiters: `:`, `-` or `.` but it's not necessary)
+    */
+    mkEUI64Suffix =
+      mac:
+      pipe mac [
+        # match mac address
+        (match "^([0-9A-Fa-f]{2})[-:.]?([0-9A-Fa-f]{2})[-:.]?([0-9A-Fa-f]{2})[-:.]?([0-9A-Fa-f]{2})[-:.]?([0-9A-Fa-f]{2})[-:.]?([0-9A-Fa-f]{2})$")
+
+        # check if there are matches
+        (matches: if matches == null then throw ''"${mac}" doesn't meet MAC address criteria'' else matches)
+
+        # transform to result hextets
+        (mac: [
+          (toHexString (bitXor 512 (fromHexString ((elemAt mac 0) + (elemAt mac 1)))))
+          "${elemAt mac 2}ff"
+          "fe${elemAt mac 3}"
+          ((elemAt mac 4) + (elemAt mac 5))
+        ])
+
+        # concat to result suffix
+        (concatStringsSep ":")
+
+        toLower
+      ];
   };
 }
