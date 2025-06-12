@@ -454,7 +454,8 @@ let
   )
   ++ setupHaskellDepends
   ++ collectedToolDepends
-  ++ optional stdenv.hostPlatform.isGhcjs nodejs;
+  ++ optional stdenv.hostPlatform.isGhcjs nodejs
+  ++ optional (ghc.useLdLld or false) buildPackages.llvmPackages.bintools;
   propagatedBuildInputs =
     buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =

@@ -106,6 +106,9 @@
       && !stdenv.targetPlatform.isMusl
     ),
 
+  # Use the lld linker
+  useLdLld ? false,
+
   # What flavour to build. Flavour string may contain a flavour and flavour
   # transformers as accepted by hadrian.
   ghcFlavour ?
@@ -329,6 +332,9 @@ assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == std
 assert lib.assertMsg (stdenv.buildPlatform == stdenv.hostPlatform)
   "GHC >= 9.6 can't be cross-compiled. If you meant to build a GHC cross-compiler, use `buildPackages`.";
 
+# We can't use multiple linkers at once.
+assert !useLdGold || !useLdLld;
+
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -379,7 +385,8 @@ let
         pkgsBuildTarget.targetPackages.stdenv.cc
     )
   ]
-  ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
+  ++ lib.optional useLLVM buildTargetLlvmPackages.llvm
+  ++ lib.optional useLdLld buildTargetLlvmPackages.bintools;
 
   buildCC = buildPackages.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
@@ -435,6 +442,18 @@ let
 
   # targetPrefix aware lib.getExe'
   getToolExe = drv: name: lib.getExe' drv "${drv.targetPrefix or ""}${name}";
+
+  targetLinker =
+    if useLdLld then
+      "${buildTargetLlvmPackages.bintools}/bin/${buildTargetLlvmPackages.bintools.targetPrefix}ld.lld"
+    else
+      toolPath "ld${lib.optionalString useLdGold ".gold"}" targetCC;
+
+  installLinker =
+    if useLdLld then
+      "${llvmPackages.bintools}/bin/${llvmPackages.bintools.targetPrefix}ld.lld"
+    else
+      toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC;
 
   # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
   variantSuffix = lib.concatStrings [
@@ -503,7 +522,7 @@ stdenv.mkDerivation (
       export CC="${toolPath "cc" targetCC}"
       export CXX="${toolPath "c++" targetCC}"
       # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-      export LD="${toolPath "ld${lib.optionalString useLdGold ".gold"}" targetCC}"
+      export LD="${targetLinker}"
       export AS="${toolPath "as" targetCC}"
       export AR="${toolPath "ar" targetCC}"
       export NM="${toolPath "nm" targetCC}"
@@ -650,6 +669,11 @@ stdenv.mkDerivation (
       "CFLAGS=-fuse-ld=gold"
       "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
       "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
+    ]
+    ++ lib.optionals useLdLld [
+      "CFLAGS=-fuse-ld=lld"
+      "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=lld"
+      "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=lld"
     ]
     ++ lib.optionals disableLargeAddressSpace [
       "--disable-large-address-space"
@@ -816,8 +840,8 @@ stdenv.mkDerivation (
         "C compiler command" "${toolPath "cc" installCC}" \
         "Haskell CPP command" "${toolPath "cc" installCC}" \
         "C++ compiler command" "${toolPath "c++" installCC}" \
-        "ld command" "${toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC}" \
-        "Merge objects command" "${toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC}" \
+        "ld command" "${installLinker}" \
+        "Merge objects command" "${installLinker}" \
         "ar command" "${toolPath "ar" installCC}" \
         "ranlib command" "${toolPath "ranlib" installCC}"
     ''
@@ -868,6 +892,8 @@ stdenv.mkDerivation (
 
       # Expose hadrian used for bootstrapping, for debugging purposes
       inherit hadrian;
+
+      inherit useLdGold useLdLld;
 
       bootstrapAvailable = lib.meta.availableOn stdenv.buildPlatform bootPkgs.ghc;
     };
