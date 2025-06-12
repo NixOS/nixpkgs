@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation {
   pname = "wlvncc";
-  version = "0-unstable-2025-04-21";
+  version = "0-unstable-2025-04-20";
 
   src = fetchFromGitHub {
     owner = "any1";
