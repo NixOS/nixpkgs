@@ -12,6 +12,7 @@
   ninja,
   meson-python,
   pyproject-metadata,
+  nix-update-script,
 
   fontconfig,
   freetype,
@@ -157,6 +158,8 @@ buildPythonPackage rec {
     "pygame.sysfont"
     "pygame.version"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.tests = {
     inherit pygame-gui;
