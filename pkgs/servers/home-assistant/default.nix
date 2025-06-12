@@ -432,6 +432,9 @@ python.pkgs.buildPythonApplication rec {
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
+    # Copy default blueprints without preserving permissions
+    ./patches/default-blueprint-permissions.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
