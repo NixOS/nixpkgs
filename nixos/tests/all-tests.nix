@@ -1123,6 +1123,7 @@ in
   paretosecurity = runTest ./paretosecurity.nix;
   pass-secret-service = runTest ./pass-secret-service.nix;
   patroni = handleTestOn [ "x86_64-linux" ] ./patroni.nix { };
+  pangolin = runTest ./pangolin.nix;
   pantalaimon = runTest ./matrix/pantalaimon.nix;
   pantheon = runTest ./pantheon.nix;
   pantheon-wayland = runTest ./pantheon-wayland.nix;
