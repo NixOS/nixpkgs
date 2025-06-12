@@ -10134,7 +10134,6 @@ with pkgs;
       spatial
       survival
     ];
-    radian = python3Packages.radian;
     # Override this attribute to register additional libraries.
     packages = [ ];
     # Override this attribute if you want to expose R with the same set of
