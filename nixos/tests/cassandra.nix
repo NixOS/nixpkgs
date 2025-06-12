@@ -1,74 +1,81 @@
-import ./make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    testPackage ? pkgs.cassandra,
-    ...
-  }:
-  let
-    clusterName = "NixOS Automated-Test Cluster";
+{
+  config,
+  lib,
+  ...
+}:
+let
+  pkgs = config.node.pkgs;
+  testPackage = config.node.package;
 
-    testRemoteAuth = lib.versionAtLeast testPackage.version "3.11";
-    jmxRoles = [
-      {
-        username = "me";
-        password = "password";
-      }
-    ];
-    jmxRolesFile = ./cassandra-jmx-roles;
-    jmxAuthArgs = "-u ${(builtins.elemAt jmxRoles 0).username} -pw ${(builtins.elemAt jmxRoles 0).password}";
-    jmxPort = 7200; # Non-standard port so it doesn't accidentally work
-    jmxPortStr = toString jmxPort;
+  clusterName = "NixOS Automated-Test Cluster";
 
-    # Would usually be assigned to 512M.
-    # Set it to a different value, so that we can check whether our config
-    # actually changes it.
-    numMaxHeapSize = "400";
-    getHeapLimitCommand = ''
-      nodetool info -p ${jmxPortStr} | grep "^Heap Memory" | awk '{print $NF}'
-    '';
-    checkHeapLimitCommand = pkgs.writeShellScript "check-heap-limit.sh" ''
-      [ 1 -eq "$(echo "$(${getHeapLimitCommand}) < ${numMaxHeapSize}" | ${pkgs.bc}/bin/bc)" ]
-    '';
+  testRemoteAuth = lib.versionAtLeast testPackage.version "3.11";
+  jmxRoles = [
+    {
+      username = "me";
+      password = "password";
+    }
+  ];
+  jmxRolesFile = ./cassandra-jmx-roles;
+  jmxAuthArgs = "-u ${(builtins.elemAt jmxRoles 0).username} -pw ${(builtins.elemAt jmxRoles 0).password}";
+  jmxPort = 7200; # Non-standard port so it doesn't accidentally work
+  jmxPortStr = toString jmxPort;
 
-    cassandraCfg = ipAddress: {
-      enable = true;
-      inherit clusterName;
-      listenAddress = ipAddress;
-      rpcAddress = ipAddress;
-      seedAddresses = [ "192.168.1.1" ];
-      package = testPackage;
-      maxHeapSize = "${numMaxHeapSize}M";
-      heapNewSize = "100M";
-      inherit jmxPort;
-    };
-    nodeCfg =
-      ipAddress: extra:
-      { pkgs, config, ... }:
-      rec {
-        environment.systemPackages = [ testPackage ];
-        networking = {
-          firewall.allowedTCPPorts = [
-            7000
-            9042
-            services.cassandra.jmxPort
-          ];
-          useDHCP = false;
-          interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-            {
-              address = ipAddress;
-              prefixLength = 24;
-            }
-          ];
-        };
-        services.cassandra = cassandraCfg ipAddress // extra;
+  # Would usually be assigned to 512M.
+  # Set it to a different value, so that we can check whether our config
+  # actually changes it.
+  numMaxHeapSize = "400";
+  getHeapLimitCommand = ''
+    nodetool info -p ${jmxPortStr} | grep "^Heap Memory" | awk '{print $NF}'
+  '';
+  checkHeapLimitCommand = pkgs.writeShellScript "check-heap-limit.sh" ''
+    [ 1 -eq "$(echo "$(${getHeapLimitCommand}) < ${numMaxHeapSize}" | ${pkgs.bc}/bin/bc)" ]
+  '';
+
+  cassandraCfg = ipAddress: {
+    enable = true;
+    inherit clusterName;
+    listenAddress = ipAddress;
+    rpcAddress = ipAddress;
+    seedAddresses = [ "192.168.1.1" ];
+    maxHeapSize = "${numMaxHeapSize}M";
+    heapNewSize = "100M";
+    inherit jmxPort;
+  };
+  nodeCfg =
+    ipAddress: extra:
+    { pkgs, config, ... }:
+    rec {
+      environment.systemPackages = [ testPackage ];
+      networking = {
+        firewall.allowedTCPPorts = [
+          7000
+          9042
+          services.cassandra.jmxPort
+        ];
+        useDHCP = false;
+        interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
+          {
+            address = ipAddress;
+            prefixLength = 24;
+          }
+        ];
       };
-  in
-  {
+      services.cassandra = cassandraCfg ipAddress // extra;
+    };
+in
+{
+  imports = [
+    ./common/set-package.nix
+  ];
+
+  config = {
     name = "cassandra-${testPackage.version}";
     meta = {
       maintainers = with lib.maintainers; [ johnazoidberg ];
     };
+
+    setPackage = pkg: { services.cassandra.package = pkg; };
 
     nodes = {
       cass0 = nodeCfg "192.168.1.1" { };
@@ -158,5 +165,5 @@ import ./make-test-python.nix (
     passthru = {
       inherit testPackage;
     };
-  }
-)
+  };
+}

@@ -8,14 +8,14 @@
   darwinMinVersionHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ghostunnel";
   version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NnRm1HEdfK6WI5ntilLSwdR2B5czG5CIcMFzl2TzEds=";
   };
 
@@ -35,7 +35,10 @@ buildGoModule rec {
   checkFlags = [ "-skip=^Test(ImportDelete|Signer|Certificate)(RSA|ECDSA|EC)$" ];
 
   passthru.tests = {
-    nixos = nixosTests.ghostunnel;
+    nixos = nixosTests.ghostunnel.setPackage finalAttrs.finalPackage;
+    /**
+      does not support overriding yet!
+    */
     podman = nixosTests.podman-tls-ghostunnel;
   };
 
@@ -50,4 +53,4 @@ buildGoModule rec {
     ];
     mainProgram = "ghostunnel";
   };
-}
+})
