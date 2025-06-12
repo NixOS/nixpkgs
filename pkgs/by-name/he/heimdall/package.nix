@@ -61,7 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cross-platform open-source tool suite used to flash firmware onto Samsung Galaxy devices";
     homepage = "https://git.sr.ht/~grimler/Heimdall";
     license = lib.licenses.mit;
-    mainProgram = if enableGUI then "heimdall-frontend" else "heimdall";
+    mainProgram =
+      (if enableGUI then "heimdall-frontend" else "heimdall")
+      + lib.optionalString stdenv.hostPlatform.isWindows ".exe";
     maintainers = with lib.maintainers; [
       surfaceflinger
     ];
