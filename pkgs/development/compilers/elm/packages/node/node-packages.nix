@@ -19157,7 +19157,7 @@ in
         sources."tsx-4.19.2"
         // {
           dependencies = [
-            sources."esbuild-0.23.1"
+            sources."esbuild-0.24.2"
           ];
         }
       )
