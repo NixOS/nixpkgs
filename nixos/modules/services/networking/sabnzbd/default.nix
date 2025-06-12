@@ -57,14 +57,14 @@ in
   config = mkIf cfg.enable {
     users.users = mkIf (cfg.user == "sabnzbd") {
       sabnzbd = {
-        uid = config.ids.uids.sabnzbd;
+        isSystemUser = true;
         group = cfg.group;
         description = "sabnzbd user";
       };
     };
 
     users.groups = mkIf (cfg.group == "sabnzbd") {
-      sabnzbd.gid = config.ids.gids.sabnzbd;
+      sabnzbd = { };
     };
 
     systemd.services.sabnzbd = {
