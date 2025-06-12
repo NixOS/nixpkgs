@@ -13,12 +13,12 @@ let
         pkgs.buildGoModule (
           args
           // rec {
-            version = "0.21.5";
+            version = "0.24.2";
             src = pkgs.fetchFromGitHub {
               owner = "evanw";
               repo = "esbuild";
               rev = "v${version}";
-              hash = "sha256-FpvXWIlt67G8w3pBKZo/mcp57LunxDmRUaCU/Ne89B8=";
+              hash = "sha256-XVZNHPMl03hpGHgoaViWWj8eMDZBKDb7BfOrPGlVqEM=";
             };
             vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
           }
@@ -34,7 +34,7 @@ nodePkgs."elm-pages".overrideAttrs (old: {
   ];
 
   preRebuild = ''
-    sed -i 's/"esbuild": "0\.19\.12"/"esbuild": "0.21.5"/' package.json
+    sed -i 's/"esbuild": "0\.23\.1"/"esbuild": "0.24.2"/' package.json
   '';
 
   # can't use `patches = [ <patch_file> ]` with a nodePkgs derivation;
