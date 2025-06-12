@@ -164,7 +164,7 @@ mkDerivation rec {
       jagajaga
       jraygauthier
       gador
-      c4thebomb
+      c4patino
     ];
   };
 }
