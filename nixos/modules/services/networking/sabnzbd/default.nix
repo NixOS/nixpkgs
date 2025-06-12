@@ -145,6 +145,35 @@ in
         '';
       };
 
+      secretFiles = mkOption {
+        type = with types; listOf path;
+        description = ''
+          Path to a list of ini file containing confidential settings such as credentials.
+          Settings here will be merged with the rest of the configuration (with
+          the secret settings taking precedence in case of conflicts, and files
+          that occur later in this list taking precedence over those that
+          occur earlier).
+          Recommended settings:
+          - misc.api_key, misc.nzb_key, misc.username, misc.password
+          - misc.email_account, misc.email_pwd if email alerts are enabled
+          - servers.<name>.username, servers.<name>.password
+        '';
+        default = [ ];
+      };
+
+      allowConfigWrite = mkOption {
+        type = types.bool;
+        description = ''
+          By default we create the sabnzbd configuration read-only,
+          which keeps the nixos configuration as the single source
+          of truth. If you want to enable configuration of
+          sabnzbd via the web interface or use options that require
+          a writeable configuration, such as quota tracking, enable
+          this option.
+        '';
+        default = lib.versionOlder config.system.stateVersion "25.11";
+      };
+
       settings = mkOption {
         description = ''
           The sabnzbd configuration (see also
@@ -481,7 +510,9 @@ in
 
     systemd.services.sabnzbd =
       let
-        publicIniQuoted = lib.escapeShellArg publicSettingsIni;
+        files =
+          (lib.optional cfg.allowConfigWrite sabnzbdIniPath) ++ [ publicSettingsIni ] ++ cfg.secretFiles;
+        iniPathQuoted = lib.escapeShellArg sabnzbdIniPath;
       in
       {
         description = "sabnzbd server";
@@ -495,6 +526,17 @@ in
           StateDirectory = cfg.stateDir;
           ExecStart = "${lib.getExe cfg.package} -d -f ${iniPathQuoted}";
         };
+        preStart = ''
+          set -euo pipefail
+
+          ${lib.toShellVar "files" files}
+
+          ${lib.getExe (pkgs.python3.withPackages (py: [ py.configobj ]))} \
+            ${./config_merge.py} \
+            "''${files[@]}" | \
+          install -D -m ${if cfg.allowConfigWrite then "600" else "400"} \
+            -o '${cfg.user}' -g '${cfg.group}' /dev/stdin ${iniPathQuoted}
+        '';
       };
 
     networking.firewall = mkIf cfg.openFirewall {
