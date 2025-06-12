@@ -109,8 +109,6 @@ buildPythonPackage rec {
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   preCheck = ''
     # make sure the installed library gets imported
     rm -rf django
@@ -128,7 +126,8 @@ buildPythonPackage rec {
     runHook preCheck
 
     pushd tests
-    ${python.interpreter} runtests.py --settings=test_sqlite
+    # without --parallel=1, tests fail with an "unexpected error due to a database lock" on Darwin
+    ${python.interpreter} runtests.py --settings=test_sqlite ${lib.optionalString stdenv.hostPlatform.isDarwin "--parallel=1"}
     popd
 
     runHook postCheck
