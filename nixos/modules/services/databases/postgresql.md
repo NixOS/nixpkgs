@@ -111,7 +111,7 @@ as the database superuser `postgres`.
       serviceConfig.Type = "oneshot";
       requiredBy = "service1.service";
       before = "service1.service";
-      after = "postgresql-setup.service";
+      after = "postgresql.target";
       serviceConfig.User = "postgres";
       environment.PGPORT = toString services.postgresql.settings.port;
       path = [ postgresql ];
@@ -152,7 +152,7 @@ as the database superuser `postgres`.
       serviceConfig.Type = "oneshot";
       requiredBy = "service1.service";
       before = "service1.service";
-      after = "postgresql.service";
+      after = "postgresql.target";
       serviceConfig.User = "service1";
       environment.PGPORT = toString services.postgresql.settings.port;
       path = [ postgresql ];
