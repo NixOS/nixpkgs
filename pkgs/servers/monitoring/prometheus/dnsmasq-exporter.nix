@@ -29,7 +29,6 @@ buildGoModule rec {
     mainProgram = "dnsmasq_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      willibutz
       globin
     ];
     # Broken on darwin for Go toolchain > 1.22, with error:

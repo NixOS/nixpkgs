@@ -6,11 +6,17 @@
 # https://github.com/NixOS/rfcs/blob/master/rfcs/0052-dynamic-ids.md
 #
 # Use of static ids is deprecated within NixOS. Dynamic allocation is
-# required, barring special circumstacnes. Please check if the service
+# required, barring special circumstances. Please check if the service
 # is applicable for systemd's DynamicUser option and does not need a
-# uid/gid allocation at all.  Systemd can also change ownership of
-# service directories using the RuntimeDirectory/StateDirectory
-# options.
+# uid/gid allocation at all. If DynamicUser is problematic consider
+# making a `isSystemUser=true` user with the uid and gid unset and let
+# NixOS pick dynamic persistent ids on activation. These IDs are persisted
+# locally on the host in the event that the user is removed and added back.
+# Systemd will also change ownership of service directories using the
+# RuntimeDirectory/StateDirectory options just in case a change happens.
+# It's only for special circumstances like for example the ids being hardcoded
+# in the application or the ids having to be consistent across multiple hosts
+# that configuring static ids in this file makes sense.
 
 { lib, ... }:
 

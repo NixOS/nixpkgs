@@ -6,7 +6,7 @@
   python3,
   bison,
   flex,
-  fuse,
+  fuse3,
   libarchive,
   buildPackages,
 
@@ -16,11 +16,7 @@
 stdenv.mkDerivation {
   pname = "lkl";
 
-  # NOTE: pinned to the last known version that doesn't have a hang in cptofs.
-  # Please verify `nix build -f nixos/release-combined.nix nixos.ova` works
-  # before attempting to update again.
-  # ref: https://github.com/NixOS/nixpkgs/pull/219434
-  version = "2022-08-08";
+  version = "2025-03-20";
 
   outputs = [
     "dev"
@@ -31,8 +27,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "lkl";
     repo = "linux";
-    rev = "ffbb4aa67b3e0a64f6963f59385a200d08cb2d8b";
-    sha256 = "sha256-24sNREdnhkF+P+3P0qEh2tF1jHKF7KcbFSn/rPK2zWs=";
+    rev = "fd33ab3d21a99a31683ebada5bd3db3a54a58800";
+    sha256 = "sha256-3uPkOyL/hoA/H2gKrEEDsuJvwOE2x27vxY5Y2DyNNxU=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +39,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    fuse
+    fuse3
     libarchive
   ];
 
@@ -116,7 +112,7 @@ stdenv.mkDerivation {
     platforms = platforms.linux; # Darwin probably works too but I haven't tested it
     license = licenses.gpl2;
     maintainers = with maintainers; [
-      raitobezarius
+      timschumi
     ];
   };
 }
