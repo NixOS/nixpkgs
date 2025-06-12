@@ -1124,6 +1124,89 @@ rec {
   attrsToList = mapAttrsToList nameValuePair;
 
   /**
+    Recursively deconstructs attrset to a list of path-value pairs.
+
+    Note that this function ignores empty sets. If you need them in your result,
+    look at `attrsToList'`.
+
+    # Inputs
+
+    `set`
+
+    : The attribute set to deconstruct.
+
+    # Type
+
+    ```
+    attrsToListRecursive :: AttrSet -> [ { path :: [ String ]; value :: Any; } ]
+    ```
+
+    # Examples
+
+    ```nix
+    attrsToListRecursive { n = { a = "A"; m = { b = "B"; c = {}; }; }; d = "D"; e = {}; }
+    => [ { path = [ "d" ]; value = "D"; } { path = [ "n" "a" ]; value = "A"; } { path = [ "n" "m" "b" ]; value = "B"; } ]
+    ```
+  */
+  attrsToListRecursive =
+    set:
+    let
+      op =
+        acc: path: value:
+        # the current value is tree
+        if (isAttrs value) then
+          (recurse acc path value)
+        # the current value is leaf
+        else
+          acc ++ [ { inherit path value; } ];
+      recurse =
+        acc: path: value:
+        foldl' (acc: key: op acc (path ++ [ key ]) value.${key}) acc (attrNames value);
+    in
+    recurse [ ] [ ] set;
+
+  /**
+    Like `attrsToListRecursive` but takes empty sets in tree as a leaves.
+
+    # Inputs
+
+    `set`
+
+    : The attribute set to deconstruct.
+
+    # Type
+
+    ```
+    attrsToListRecursive' :: AttrSet -> [ { path :: [ String ]; value :: Any; } ]
+    ```
+
+    # Examples
+
+    ```nix
+    attrsToListRecursive' { n = { a = "A"; m = { b = "B"; c = {}; }; }; d = "D"; e = {}; }
+    => [ { path = [ "d" ]; value = "D"; } { path = [ "e" ]; value = { }; } { path = [ "n" "a" ]; value = "A"; } { path = [ "n" "m" "b" ]; value = "B"; } { path = [ "n" "m" "c" ]; value = { }; } ]
+    ```
+  */
+  attrsToListRecursive' =
+    set:
+    let
+      op =
+        acc: path: value:
+        # the current value is leaf or empty tree
+        if ((!isAttrs value) || (value == { })) then
+          acc ++ [ { inherit path value; } ]
+        # the current value is non-empty tree
+        else
+          (recurse acc path value);
+
+      recurse =
+        acc: path: value:
+        foldl' (acc: key: op acc (path ++ [ key ]) value.${key}) acc (attrNames value);
+
+    in
+    recurse [ ] [ ] set;
+
+  /**
     Like `mapAttrs`, except that it recursively applies itself to the *leaf* attributes of a potentially-nested attribute set:
     the second argument of the function will never be an attrset.
     Also, the first argument of the mapping function is a *list* of the attribute names that form the path to the leaf attribute.

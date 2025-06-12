@@ -203,6 +203,8 @@ let
         mapAttrs'
         mapAttrsToList
         attrsToList
+        attrsToListRecursive
+        attrsToListRecursive'
         concatMapAttrs
         mapAttrsRecursive
         mapAttrsRecursiveCond
