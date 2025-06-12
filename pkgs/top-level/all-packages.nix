@@ -11104,8 +11104,7 @@ with pkgs;
 
   projecteur = libsForQt5.callPackage ../os-specific/linux/projecteur { };
 
-  lkl = callPackage ../applications/virtualization/lkl { };
-  lklWithFirewall = callPackage ../applications/virtualization/lkl { firewallSupport = true; };
+  lklWithFirewall = lkl.override { firewallSupport = true; };
 
   inherit (callPackages ../os-specific/linux/kernel-headers { inherit (pkgsBuildBuild) elf-header; })
     linuxHeaders
