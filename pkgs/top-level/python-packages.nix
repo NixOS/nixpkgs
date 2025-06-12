@@ -2979,6 +2979,8 @@ self: super: with self; {
 
   credstash = callPackage ../development/python-modules/credstash { };
 
+  crispy-bootstrap3 = callPackage ../development/python-modules/crispy-bootstrap3 { };
+
   crochet = callPackage ../development/python-modules/crochet { };
 
   crocoddyl = toPythonModule (
@@ -3736,8 +3738,6 @@ self: super: with self; {
   django-cors-headers = callPackage ../development/python-modules/django-cors-headers { };
 
   django-countries = callPackage ../development/python-modules/django-countries { };
-
-  django-crispy-bootstrap3 = callPackage ../development/python-modules/django-crispy-bootstrap3 { };
 
   django-crispy-bootstrap4 = callPackage ../development/python-modules/django-crispy-bootstrap4 { };
 
