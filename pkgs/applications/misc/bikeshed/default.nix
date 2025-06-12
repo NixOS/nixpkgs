@@ -102,6 +102,9 @@ buildPythonApplication rec {
     '';
     homepage = "https://tabatkins.github.io/bikeshed/";
     license = licenses.cc0;
-    maintainers = with lib.maintainers; [ hemera ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      hemera
+    ];
   };
 }
