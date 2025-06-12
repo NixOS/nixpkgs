@@ -45,7 +45,7 @@ with elmLib;
 
   elm-verify-examples =
     let
-      patched = patchBinwrap [ elmi-to-json ] nodePkgs.elm-verify-examples // {
+      patched = nodePkgs.elm-verify-examples // {
         meta =
           with lib;
           nodePkgs.elm-verify-examples.meta
@@ -59,14 +59,6 @@ with elmLib;
     in
     patched.override (old: {
       inherit ESBUILD_BINARY_PATH;
-      preRebuild =
-        (old.preRebuild or "")
-        + ''
-          # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
-          # in case of just this package
-          # TODO: investigate, same as for elm-coverage below
-          sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
-        '';
     });
 
   elm-coverage =
