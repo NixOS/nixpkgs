@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "repoze/lru/tests.py" ];
+  enabledTestPaths = [ "repoze/lru/tests.py" ];
 
   disabledTests = [
     # time sensitive tests

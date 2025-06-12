@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "isbnlib/test/" ];
+  enabledTestPaths = [ "isbnlib/test/" ];
 
   # All disabled tests require a network connection
   disabledTests = [
