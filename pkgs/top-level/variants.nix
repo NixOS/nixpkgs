@@ -35,6 +35,12 @@ self: super: {
     crossSystem = stdenv.hostPlatform // {
       useLLVM = true;
       linker = "lld";
+      cc = "clang";
+      bintools = "llvm";
+      cxxlib = "libcxx";
+      cxxrtlib = "libcxxabi";
+      unwindlib = "libunwind";
+      rtlib = "compiler-rt";
     };
   };
 
@@ -50,6 +56,12 @@ self: super: {
     crossSystem = stdenv.hostPlatform // {
       useArocc = true;
       linker = "lld";
+      cc = "arocc";
+      bintools = "llvm";
+      cxxlib = "libcxx";
+      cxxrtlib = "libcxxabi";
+      unwindlib = "libunwind";
+      rtlib = "compiler-rt";
     };
   };
 
@@ -65,6 +77,12 @@ self: super: {
     crossSystem = stdenv.hostPlatform // {
       useZig = true;
       linker = "lld";
+      cc = "zig";
+      bintools = "llvm";
+      cxxlib = "libcxx";
+      cxxrtlib = "libcxxabi";
+      unwindlib = "libunwind";
+      rtlib = "compiler-rt";
     };
   };
 
