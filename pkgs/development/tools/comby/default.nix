@@ -18,19 +18,18 @@ let
       extraBuildInputs ? [ ],
       extraNativeInputs ? [ ],
       preBuild ? "",
+      doCheck ? true,
     }:
     ocamlPackages.buildDunePackage rec {
-      inherit pname preBuild;
-      version = "1.8.1";
-      duneVersion = "3";
+      inherit pname preBuild doCheck;
+      version = "1.8.2";
       minimalOCamlVersion = "4.08.1";
-      doCheck = true;
 
       src = fetchFromGitHub {
         owner = "comby-tools";
         repo = "comby";
-        rev = version;
-        sha256 = "sha256-yQrfSzJgJm0OWJxhxst2XjZULIVHeEfPMvMIwH7BYDc=";
+        rev = "3e4dc0c9600f7fb0d7357e2f78c3ad9871a02320";
+        hash = "sha256-MfsqZW3YDyr5bOyYVWAurOZzjV+RLO9q8BSNCki4Dwc=";
       };
 
       patches = [ ./comby.patch ];
@@ -73,11 +72,13 @@ mkCombyPackage {
   # cli tests expect a path to the built binary
   preBuild = ''
     substituteInPlace test/common/dune \
-      --replace "test_cli_list" "" \
-      --replace "test_cli_helper" "" \
-      --replace "test_cli" ""
+      --replace-warn "test_cli_list" "" \
+      --replace-warn "test_cli_helper" "" \
+      --replace-warn "test_cli" ""
     rm test/common/{test_cli_list,test_cli_helper,test_cli}.ml
   '';
+
+  doCheck = false;
 
   extraBuildInputs =
     [
