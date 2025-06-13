@@ -6,6 +6,8 @@
 mkKdeDerivation {
   pname = "kcoreaddons";
 
+  hasPythonBindings = true;
+
   extraNativeBuildInputs = [
     shared-mime-info
   ];

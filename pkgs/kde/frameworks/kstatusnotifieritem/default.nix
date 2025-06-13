@@ -2,4 +2,5 @@
 mkKdeDerivation {
   pname = "kstatusnotifieritem";
 
+  hasPythonBindings = true;
 }
