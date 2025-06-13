@@ -67,9 +67,13 @@ stdenv.mkDerivation (
     dontPatchShebangs = true;
 
     configurePhase = ''
+      runHook preConfigure
+
       mkdir -p node_modules/
       cp -r $offlineCache/node_modules/* node_modules/
       substituteInPlace package.json --replace-fail "tsx " "node node_modules/tsx/dist/cli.mjs "
+
+      runHook postConfigure
     '';
 
     buildPhase = ''
