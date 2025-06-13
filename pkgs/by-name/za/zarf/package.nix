@@ -19,7 +19,7 @@ buildGoModule rec {
   vendorHash = "sha256-AJd/QVL+ZoLORqeYrC/WkRtggYd3nhg8AEZ9Gb1j2tQ=";
   proxyVendor = true;
 
-  nativeBuildInputs = [installShellFiles];
+  nativeBuildInputs = [ installShellFiles ];
 
   preBuild = ''
     mkdir -p build/ui
