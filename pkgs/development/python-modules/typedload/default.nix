@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "ltworf";
-    repo = pname;
+    repo = "typedload";
     rev = version;
     hash = "sha256-H7w2+yVsQPnvVD8Ro/Ibx5gECm/odF7ssV26JrXkN6w=";
   };
