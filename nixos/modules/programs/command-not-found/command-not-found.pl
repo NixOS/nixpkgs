@@ -10,6 +10,20 @@ my $program = $ARGV[0];
 
 my $dbPath = "@dbPath@";
 
+if (! -e $dbPath) {
+    print STDERR "$program: command not found\n";
+    print STDERR "\n";
+    print STDERR "An error occured while looking up the command-not-found:";
+    print STDERR "@scriptPath@: Database not found, this likely means the database hasn't been generated yet. This tool requires using nix-channels to generate the database, for a non-nix-channels approach, see nix-index and nix-index-database.\n";
+    print STDERR "\n";
+    print STDERR "If you are using nix-channels you can run:\n";
+    print STDERR "    sudo nix-channels --update\n";
+    print STDERR "\n";
+    print STDERR "If you would like to disable this message you can set:\n";
+    print STDERR "    programs.command-not-found.enabled = false;\n";
+    exit 127;
+}
+
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbPath", "", "")
     or die "cannot open database `$dbPath'";
 $dbh->{RaiseError} = 0;

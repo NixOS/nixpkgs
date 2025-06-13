@@ -19,6 +19,7 @@ let
     isExecutable = true;
     replacements = {
       inherit (cfg) dbPath;
+      scriptPath = ./command-not-found.pl;
       perl = pkgs.perl.withPackages (p: [
         p.DBDSQLite
         p.StringShellQuote
