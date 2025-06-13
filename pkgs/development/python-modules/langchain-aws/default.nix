@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build-system
   poetry-core,
@@ -18,6 +17,9 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -69,15 +71,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_aws" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-aws==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-aws==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${src.tag}";
     description = "Build LangChain application on AWS";
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;
