@@ -86,7 +86,10 @@ in
       aspauldingcode
       prince213
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ] ++ lib.platforms.darwin;
     mainProgram = "cursor";
   };
 }).overrideAttrs
