@@ -9,7 +9,7 @@ let
       owner = "OkamiW";
       repo = name;
       rev = "v${version}";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-km+Rd3oXeyOX7wCoLL9f67AU/AVZTuGlvU0jtgTvgJE=";
     };
     ldflags = [ "-s" "-w" "-X main.SysConfDir=${placeholder "out"}" ];
     GOFLAGS = [
@@ -18,7 +18,7 @@ let
     ];
     postInstall = ''
       mkdir -p $out/etc/proxy-ns
-      '';
+    '';
   };
 in
 proxyns
