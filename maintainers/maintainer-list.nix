@@ -20330,6 +20330,12 @@
     matrix = "@qyriad:katesiria.org";
     name = "Qyriad";
   };
+  r-aizawa = {
+    github = "Xantibody";
+    githubId = 109563705;
+    name = "Ryu Aizawa";
+    email = "zeku.bushinryu38@gmail.com";
+  };
   r-burns = {
     email = "rtburns@protonmail.com";
     github = "r-burns";
