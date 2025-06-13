@@ -10915,6 +10915,14 @@ self: super: with self; {
 
   packvers = callPackage ../development/python-modules/packvers { };
 
+  pacparser = toPythonModule (
+    pkgs.pacparser.override {
+      inherit (self) python;
+      enablePython = true;
+      pythonPackages = self;
+    }
+  );
+
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
   paddle-bfloat = callPackage ../development/python-modules/paddle-bfloat { };
