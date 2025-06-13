@@ -13,10 +13,10 @@ buildGoModule rec {
     owner = "zarf-dev";
     repo = "zarf";
     tag = "v${version}";
-    hash = "sha256-UoTbw5QW9HpGDWHOC0Wv/4FaTKWEztHRp/XAOatqqjs=";
+    hash = "sha256-PHVv4Eh1Jo6mDzmeCUeg+rSbyE1e77XVbbybez1nA/k=";
   };
 
-  vendorHash = "sha256-AJd/QVL+ZoLORqeYrC/WkRtggYd3nhg8AEZ9Gb1j2tQ=";
+  vendorHash = "sha256-cviYtUgpgBSJimQ854zOO2JxDuh18w9kdD9sYxWpyDo=";
   proxyVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
