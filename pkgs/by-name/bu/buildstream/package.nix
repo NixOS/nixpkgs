@@ -13,6 +13,9 @@
   addBinToPathHook,
   gitMinimal,
   versionCheckHook,
+
+  # Optional features
+  enableBuildstreamPlugins ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -58,6 +61,8 @@ python3Packages.buildPythonApplication rec {
     lzip
     patch
   ];
+
+  propagatedBuildInputs = with python3Packages; lib.singleton buildstream-plugins;
 
   pythonImportsCheck = [ "buildstream" ];
 
