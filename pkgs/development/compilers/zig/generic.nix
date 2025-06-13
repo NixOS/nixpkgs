@@ -142,28 +142,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru = {
-    hook = callPackage ./hook.nix { zig = finalAttrs.finalPackage; };
-
-    bintools-unwrapped = callPackage ./bintools.nix { zig = finalAttrs.finalPackage; };
-    bintools = wrapBintoolsWith { bintools = finalAttrs.finalPackage.bintools-unwrapped; };
-
-    cc-unwrapped = callPackage ./cc.nix { zig = finalAttrs.finalPackage; };
-    cc = wrapCCWith {
-      cc = finalAttrs.finalPackage.cc-unwrapped;
-      bintools = finalAttrs.finalPackage.bintools;
-      extraPackages = [ ];
-      nixSupport.cc-cflags =
-        [
-          "-target"
-          "${stdenv.targetPlatform.system}-${stdenv.targetPlatform.parsed.abi.name}"
-        ]
-        ++ lib.optional (
-          stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
-        ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
-    };
-
-    stdenv = overrideCC stdenv finalAttrs.finalPackage.cc;
+  passthru = import ./passthru.nix {
+    inherit
+      lib
+      stdenv
+      callPackage
+      wrapCCWith
+      wrapBintoolsWith
+      overrideCC
+      targetPackages
+      ;
+    zig = finalAttrs.finalPackage;
   };
 
   meta = {
