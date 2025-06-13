@@ -2,7 +2,6 @@
   mkKdeDerivation,
   qt5compat,
   qtsvg,
-  qttools,
   qtdeclarative,
   eigen,
 }:
@@ -12,7 +11,6 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     qt5compat
     qtsvg
-    qttools
   ];
   extraBuildInputs = [
     qtdeclarative

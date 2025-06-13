@@ -131,7 +131,8 @@ let
 
     # FIXME: figure out what to propagate here
     propagatedBuildInputs = deps ++ extraPropagatedBuildInputs;
-    strictDeps = true;
+    # FIXME: is this even fixable? cmake does not have enough context for this...
+    # strictDeps = true;
 
     dontFixCmake = true;
     cmakeFlags = [ "-DQT_MAJOR_VERSION=6" ] ++ extraCmakeFlags;
