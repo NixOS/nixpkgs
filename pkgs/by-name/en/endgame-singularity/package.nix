@@ -10,7 +10,7 @@
 
 let
   pname = "endgame-singularity";
-  version = "1.00-unstable-2025-03-18";
+  version = "1.1";
 
   main_src = fetchFromGitHub {
     owner = "singularity";
