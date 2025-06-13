@@ -31,6 +31,8 @@
   jpsHash,
   restarterHash,
   mvnDeps,
+  repositories,
+  kotlin-jps-plugin,
 }:
 
 let
@@ -183,19 +185,7 @@ let
   mkRepoEntry = entry: {
     name = ".m2/repository/" + entry.path;
     path = fetchurl {
-      urls = [
-        "https://cache-redirector.jetbrains.com/repo1.maven.org/maven2/${entry.url}"
-        "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/ij/intellij-dependencies/${entry.url}"
-        "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/${entry.url}"
-        "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/grazi/grazie-platform-public/${entry.url}"
-        "https://cache-redirector.jetbrains.com/dl.google.com/dl/android/maven2/${entry.url}"
-        "https://packages.jetbrains.team/maven/p/kpm/public/${entry.url}"
-        "https://packages.jetbrains.team/maven/p/ki/maven/${entry.url}"
-        "https://packages.jetbrains.team/maven/p/dpgpv/maven/${entry.url}"
-        "https://cache-redirector.jetbrains.com/download.jetbrains.com/teamcity-repository/${entry.url}"
-        "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/${entry.url}"
-        "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/public/p/compose/dev/${entry.url}"
-      ];
+      urls = builtins.map (url: "${url}/${entry.url}") repositories;
       sha256 = entry.hash;
     };
   };
@@ -206,7 +196,7 @@ let
       repoUrl = "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies";
       groupId = builtins.replaceStrings [ "." ] [ "/" ] "org.jetbrains.kotlin";
       artefactId = "kotlin-jps-plugin-classpath";
-      version = "2.1.10";
+      version = kotlin-jps-plugin.version;
     in
     fetchurl {
       url =
@@ -222,7 +212,7 @@ let
         + "-"
         + version
         + ".jar";
-      hash = "sha256-Bu5eCHxls6EoIgzadiEY31plAcxZ6DA2a10CXAtPqV4=";
+      hash = kotlin-jps-plugin.hash;
     };
 
   targetClass =
