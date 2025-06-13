@@ -29,13 +29,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "orca";
-  version = "48.1";
+  version = "48.2";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/orca/${lib.versions.major version}/orca-${version}.tar.xz";
-    hash = "sha256-ZsbwmCIUnaJDpGM6fYSnsduq8UU0qf653yv+AaUFF4o=";
+    hash = "sha256-oIPaV4ZLVLoqPl9IG1QM/L5hiASjZDZoJ3Jw4mNTaf4=";
   };
 
   patches = [
