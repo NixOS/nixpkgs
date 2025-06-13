@@ -64,7 +64,7 @@ mkDerivation rec {
   meta = {
     description = "Linux C libraries and Python modules for manipulating GPIO";
     homepage = "https://github.com/joan2937/lg";
-    license = with lib.licenses; [ unlicense ];
+    license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux;
   };
