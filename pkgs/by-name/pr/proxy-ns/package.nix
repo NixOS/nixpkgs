@@ -9,7 +9,7 @@ let
       owner = "OkamiW";
       repo = name;
       rev = "v${version}";
-      hash = "";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     };
     ldflags = [ "-s" "-w" "-X main.SysConfDir=${placeholder "out"}" ];
     GOFLAGS = [

@@ -24,12 +24,14 @@ in
   options.services.proxy-ns = {
     enable = lib.mkEnableOption "proxy-ns";
     config = lib.mkOption { type = lib.type.path; };
-    package = lib.mkPackageOption pkgs "proxy-ns";
+    package = lib.mkPackageOption pkgs "proxy-ns" {};
   };
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [cfg.package];
     security.wrappers.proxy-ns = {
       source = "${cfg.package}/bin/proxy-ns";
+      owner = "root";
+      group = "root";
       capabilities = "cap_net_bind_service,cap_fowner,cap_chown,cap_sys_chroot,cap_sys_admin,cap_net_admin=ep";
     };
   };
