@@ -23,9 +23,7 @@ maven.buildMavenPackage rec {
   installPhase = ''
     runHook preInstall
 
-    echo oida
-
-    ls -alh . pdf-over-gui pdf-over-build pdf-over-gui/target pdf-over-signer pdf-over-build
+    echo oida # authentic Austrian experience (this is important)
 
     install -Dt $out/share/pdf-over pdf-over-build/pdf-over_linux-x86_64.jar
 
