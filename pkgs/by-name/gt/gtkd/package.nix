@@ -1,12 +1,13 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
   atk,
   cairo,
-  dcompiler,
+  dcompiler ? ldc,
   gdk-pixbuf,
   gst_all_1,
+  ldc,
   librsvg,
   glib,
   gtk3,
@@ -23,12 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gtkd";
-  version = "3.10.0";
+  version = "3.11.0";
 
-  src = fetchzip {
-    url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
-    sha256 = "DEKVDexGyg/T3SdnnvRjaHq1LbDo8ekNslxKROpMCCE=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "gtkd-developers";
+    repo = "GtkD";
+    tag = "v${version}";
+    hash = "sha256-UpPoskHtnI4nUOKdLorK89grgUUPrCvO4zrAl9LfjHA=";
   };
 
   nativeBuildInputs = [
@@ -155,10 +157,10 @@ stdenv.mkDerivation rec {
     inherit dcompiler;
   };
 
-  meta = with lib; {
+  meta = {
     description = "D binding and OO wrapper for GTK";
     homepage = "https://gtkd.org";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.lgpl3Plus;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }
