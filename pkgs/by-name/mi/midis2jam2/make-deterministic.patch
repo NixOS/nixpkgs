@@ -1,0 +1,23 @@
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 9d948c8..f3ef543 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -45,13 +45,13 @@ tasks.processResources {
+     doFirst {
+         val gitHash = System.getenv("GIT_HASH")
+         val buildTime = DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC)).format(Instant.now())
+-        File(projectDir, "src/main/resources/build.txt").writeText("$buildTime${gitHash?.let { " $it" } ?: ""}")
++        File(projectDir, "src/main/resources/build.txt").writeText("????")
+         println("Build time: $buildTime")
+ 
+-        copy {
+-            from("build/reports/license/dependency-license.json")
+-            into("src/main/resources")
+-        }
++        val proc = ProcessBuilder("sh", "-c", "jq '.dependencies |= sort' build/reports/license/dependency-license.json > src/main/resources/dependency-license.json")
++            .redirectErrorStream(true)
++            .start();
++        check(proc.waitFor() == 0) { proc.inputStream.bufferedReader().readText() }
+ 
+         val midis2jam2Version: String by project
+         File(projectDir, "src/main/resources/version.txt").writeText(midis2jam2Version)
