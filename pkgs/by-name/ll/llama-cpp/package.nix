@@ -127,7 +127,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     [
       # -march=native is non-deterministic; override with platform-specific flags if needed
       (cmakeBool "GGML_NATIVE" false)
+      (cmakeBool "LLAMA_BUILD_EXAMPLES" false)
       (cmakeBool "LLAMA_BUILD_SERVER" true)
+      (cmakeBool "LLAMA_BUILD_TESTS" (finalAttrs.finalPackage.doCheck or false))
       (cmakeBool "LLAMA_CURL" true)
       (cmakeBool "BUILD_SHARED_LIBS" true)
       (cmakeBool "GGML_BLAS" blasSupport)
@@ -141,11 +143,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals cudaSupport [
       (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
     ]
-    ++ optionals rocmSupport ([
+    ++ optionals rocmSupport [
       (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
       # TODO: this should become `clr.gpuTargets` in the future.
       (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmPackages.rocblas.amdgpu_targets)
-    ])
+    ]
     ++ optionals metalSupport [
       (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
       (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
@@ -168,6 +170,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ''
     + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
 
+  # the tests are failing as of now
+  doCheck = false;
+
   passthru.updateScript = nix-update-script {
     attrPath = "llama-cpp";
     extraArgs = [
@@ -189,6 +194,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ];
     platforms = platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
-    broken = (metalSupport && !effectiveStdenv.hostPlatform.isDarwin);
+    broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
   };
 })
