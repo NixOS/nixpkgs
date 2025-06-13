@@ -65,6 +65,13 @@ in
       }
     '';
 
+    # NOTE: Fish by itself checks for nixos command-not-found, let's instead makes it explicit.
+    programs.fish.interactiveShellInit = ''
+      function fish_command_not_found
+         "${commandNotFound}/bin/command-not-found" $argv
+      end
+    '';
+
     environment.systemPackages = [ commandNotFound ];
   };
 
