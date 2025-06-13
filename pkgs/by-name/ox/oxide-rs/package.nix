@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxide-rs";
-  version = "0.9.0+20241204.0.0";
+  version = "0.11.1+20250409.0.0";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "oxide.rs";
     rev = "v${version}";
-    hash = "sha256-NtTXpXDYazcXilQNW455UDkqMCFzFPvTUkbEBQsWIDo=";
+    hash = "sha256-4WPeK576/9F+GfcH4NReux4Ogmw0/tUSBpF76eNxQP8=";
     # leaveDotGit is necessary because `build.rs` expects git information which
     # is used to write a `built.rs` file which is read by the CLI application
     # to display version information.
@@ -25,11 +25,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-We5yNF8gtHWAUAead0uc99FIoMcicDWdGbTzPgpiFyY=";
-
-  cargoPatches = [
-    ./0001-use-crates-io-over-git-dependencies.patch
-  ];
+  cargoHash = "sha256-aE0Pofj6hlSafduMgdu3JzhHiYadmWXopK8O2x6Q3TM=";
 
   cargoBuildFlags = [
     "--package=oxide-cli"
