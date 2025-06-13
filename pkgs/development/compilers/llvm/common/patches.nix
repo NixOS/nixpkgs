@@ -188,6 +188,12 @@
       path = ../12;
     }
   ];
+  "compiler-rt/libc-free.patch" = [
+    {
+      after = "20";
+      path = ../20;
+    }
+  ];
   "lldb/procfs.patch" = [
     {
       after = "15";
