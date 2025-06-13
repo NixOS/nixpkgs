@@ -17,7 +17,7 @@ on:
       - python-updates
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  group: eval-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 permissions: {}
@@ -256,8 +256,6 @@ jobs:
     permissions:
       issues: write
       pull-requests: write
-    with:
-      caller: ${{ github.workflow }}
 
   reviewers:
     name: Reviewers
@@ -268,5 +266,3 @@ jobs:
     if: needs.prepare.outputs.targetSha
     uses: ./.github/workflows/reviewers.yml
     secrets: inherit
-    with:
-      caller: ${{ github.workflow }}
