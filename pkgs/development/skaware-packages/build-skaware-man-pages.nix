@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  nix-update-script,
 }:
 
 {
@@ -22,8 +21,6 @@
   owner ? "~flexibeast",
   # : string
   rev ? "v${version}",
-  # : boolean
-  withUpdateScript ? true,
 }:
 
 let
@@ -35,28 +32,18 @@ let
   };
 in
 
-stdenv.mkDerivation (
-  {
-    inherit pname version src;
+stdenv.mkDerivation {
+  inherit pname version src;
 
-    makeFlags = [
-      "MAN_DIR=${manDir}"
-    ];
+  makeFlags = [
+    "MAN_DIR=${manDir}"
+  ];
 
-    dontBuild = true;
+  dontBuild = true;
 
-    meta = with lib; {
-      inherit description license maintainers;
-      inherit (src.meta) homepage;
-      platforms = platforms.all;
-    };
-  }
-  // lib.optionalAttrs withUpdateScript {
-    passthru.updateScript = nix-update-script {
-      extraArgs = [
-        "--override-filename"
-        "pkgs/development/skaware-packages/${lib.removeSuffix "-man-pages" pname}/default.nix"
-      ];
-    };
-  }
-)
+  meta = with lib; {
+    inherit description license maintainers;
+    inherit (src.meta) homepage;
+    platforms = platforms.all;
+  };
+}
