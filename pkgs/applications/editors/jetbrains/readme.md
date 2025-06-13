@@ -17,12 +17,7 @@ To test the build process of every IDE (as well as the process for adding plugin
 ## How to update stuff:
  - Run ./bin/update_bin.py, this will update binary IDEs and plugins, and automatically commit them
  - Source builds need a bit more effort, as they **aren't automated at the moment**:
-   - Find the build of the stable release you want to target (usually different for pycharm and idea, should have three components)
-   - Build number is available on JetBrains website:
-     - IDEA: https://www.jetbrains.com/idea/download/other.html
-     - PyCharm: https://www.jetbrains.com/pycharm/download/other.html
-   - Update the `version` & `buildNumber` fields in source/ides.json
-   - Empty the `ideaHash`, `androidHash`, `jpsHash` and `restarterHash` (only `ideaHash` and `restarterHash` changes on a regular basis) fields and try to build to get the new hashes
+   - Run ./source/update.py ./source/ides.json ./bin/versions.json. This will update the source version to the version of their corresponding binary packages.
    - Run these commands respectively:
      - `nix build .#jetbrains.idea-community-src.src.src && ./source/build_maven.py source/idea_maven_artefacts.json result/` for IDEA
      - `nix build .#jetbrains.pycharm-community-src.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
