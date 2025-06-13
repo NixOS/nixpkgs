@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nixosTests,
   fetchFromGitHub,
   nodejs,
   node-gyp,
@@ -116,6 +117,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postInstall = ''
+    # provide a environment variable to override the cache directory
+    # https://github.com/vercel/next.js/discussions/58864
+    # solution copied from nextjs-ollama-llm-ui
+    substituteInPlace $out/lib/karakeep/apps/web/.next/standalone/node_modules/next/dist/server/image-optimizer.js \
+                      --replace '_path.join)(distDir,' '_path.join)(process.env["NEXT_CACHE_DIR"] || distDir,'
+  '';
+
   postFixup = ''
     # Remove large dependencies that are not necessary during runtime
     rm -rf $out/lib/karakeep/node_modules/{@next,next,@swc,react-native,monaco-editor,faker,@typescript-eslint,@microsoft,@typescript-eslint,pdfjs-dist}
@@ -123,6 +132,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove broken symlinks
     find $out -type l ! -exec test -e {} \; -delete
   '';
+
+  passthru = {
+    tests = {
+      karakeep = nixosTests.karakeep;
+    };
+  };
 
   meta = {
     homepage = "https://karakeep.app/";
