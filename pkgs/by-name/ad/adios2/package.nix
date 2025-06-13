@@ -9,6 +9,7 @@
   pkg-config,
   python3Packages,
   mpi,
+  catalyst,
   bzip2,
   c-blosc2,
   hdf5,
@@ -36,6 +37,9 @@ let
     hdf5 = hdf5.override {
       inherit mpi mpiSupport;
       cppSupport = !mpiSupport;
+    };
+    catalyst = catalyst.override {
+      inherit mpi mpiSupport pythonSupport;
     };
     mpi4py = python3Packages.mpi4py.override { inherit mpi; };
   };
@@ -80,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       bzip2
       c-blosc2
+      adios2Packages.catalyst
       adios2Packages.hdf5
       libfabric
       libpng
@@ -95,7 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
       # Todo: add these optional dependencies in nixpkgs.
       # sz
       # mgard
-      # catalyst
     ]
     ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ucx) ucx
     # openmp required by zfp
@@ -134,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ADIOS2_USE_Fortran" true)
     (lib.cmakeBool "ADIOS2_USE_UCX" (lib.meta.availableOn stdenv.hostPlatform ucx))
     (lib.cmakeBool "ADIOS2_USE_Sodium" true)
-    (lib.cmakeBool "ADIOS2_USE_Catalyst" false)
+    (lib.cmakeBool "ADIOS2_USE_Catalyst" true)
     (lib.cmakeBool "ADIOS2_USE_Campaign" true)
     (lib.cmakeBool "ADIOS2_USE_AWSSDK" false)
 
