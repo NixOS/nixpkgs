@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_top";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchurl {
     url = "https://pg_top.gitlab.io/source/pg_top-${version}.tar.xz";
-    sha256 = "sha256-85LObBS9aAt7Ck5yiK0g2CAKxiYtnWp5XnTAUB5ui/k=";
+    sha256 = "sha256-XvMqhwAtzVqRNmSFISKVdKZsDeXYhO915s6lOEMB2Fk=";
   };
 
   buildInputs = [
