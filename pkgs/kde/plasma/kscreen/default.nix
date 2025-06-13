@@ -6,7 +6,7 @@
 mkKdeDerivation {
   pname = "kscreen";
 
-  extraBuildInputs = [ qtsensors ];
+  extraNativeBuildInputs = [ qtsensors ];
 
   postFixup = ''
     substituteInPlace $out/share/kglobalaccel/org.kde.kscreen.desktop \

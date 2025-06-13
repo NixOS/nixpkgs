@@ -14,7 +14,11 @@
 mkKdeDerivation {
   pname = "gwenview";
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    pkg-config
+    qtwayland
+  ];
+
   extraBuildInputs = [
     qtsvg
     qtwayland

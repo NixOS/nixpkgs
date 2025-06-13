@@ -6,6 +6,7 @@
   shared-mime-info,
 
   qtpositioning,
+  qtserialport,
   qtsvg,
   qttools,
   qtwebengine,
@@ -25,10 +26,14 @@ mkKdeDerivation {
     perl
     pkg-config
     shared-mime-info
+    qtpositioning
+    qtserialport
+    qtwebengine
   ];
 
   extraBuildInputs = [
     qtpositioning
+    qtserialport
     qtsvg
     qttools
     qtwebengine
