@@ -14,9 +14,9 @@
 # Processing of this file is implemented in workflows/codeowners-v2.yml
 
 # CI
-/.github/actions                        @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
-/.github/workflows                      @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
-/ci                                     @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
+/.github/actions                        @NixOS/nixpkgs-ci
+/.github/workflows                      @NixOS/nixpkgs-ci
+/ci                                     @NixOS/nixpkgs-ci
 /ci/OWNERS                              @infinisil @philiptaron
 
 # Development support
