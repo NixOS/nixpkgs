@@ -5,10 +5,9 @@
   installShellFiles,
   stdenv,
 }:
-
 buildGoModule rec {
   pname = "zarf";
-  version = "0.55.6";
+  version = "0.56.0";
 
   src = fetchFromGitHub {
     owner = "zarf-dev";
@@ -20,7 +19,7 @@ buildGoModule rec {
   vendorHash = "sha256-AJd/QVL+ZoLORqeYrC/WkRtggYd3nhg8AEZ9Gb1j2tQ=";
   proxyVendor = true;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [installShellFiles];
 
   preBuild = ''
     mkdir -p build/ui
@@ -58,6 +57,7 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       ragingpastry
+      aescalera-defenseunicorns
     ];
   };
 }
