@@ -44,7 +44,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-bTxtfduuuyRITZqhk15aWwxNwiZ7TMTgBOEPat6zVIc=";
   };
 
@@ -128,17 +128,18 @@ buildPythonPackage rec {
     "tests/test_pregel_async.py"
   ];
 
+  # Since `langgraph` is the only unprefixed package, we have to use an explicit match
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "^(\\d+\\.\\d+\\.\\d+)"
+      "([0-9.]+)"
     ];
   };
 
   meta = {
     description = "Build resilient language agents as graphs";
     homepage = "https://github.com/langchain-ai/langgraph";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };

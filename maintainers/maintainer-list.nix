@@ -2787,6 +2787,13 @@
     githubId = 68944906;
     name = "Nikita";
   };
+  bandithedoge = {
+    email = "bandithedoge@protonmail.com";
+    matrix = "@bandithedoge:matrix.org";
+    github = "bandithedoge";
+    githubId = 26331682;
+    name = "Mikołaj Lercher";
+  };
   bandresen = {
     email = "bandresen@gmail.com";
     github = "bennyandresen";
@@ -8027,12 +8034,6 @@
     github = "fare";
     githubId = 8073;
     name = "Francois-Rene Rideau";
-  };
-  farlion = {
-    email = "florian.peter@gmx.at";
-    github = "workflow";
-    githubId = 1276854;
-    name = "Florian Peter";
   };
   farnoy = {
     email = "jakub@okonski.org";
@@ -17189,6 +17190,13 @@
     github = "myypo";
     githubId = 110892040;
     name = "Mykyta Polchanov";
+  };
+  myzel394 = {
+    email = "github.7a2op@simplelogin.co";
+    github = "Myzel394";
+    githubId = 50424412;
+    matrix = "@myzel394:matrix.org";
+    name = "Myzel394";
   };
   mzabani = {
     email = "mzabani@gmail.com";
@@ -26963,6 +26971,13 @@
     github = "womfoo";
     githubId = 1595132;
     name = "Kranium Gikos Mendoza";
+  };
+  workflow = {
+    email = "4farlion@gmail.com";
+    github = "workflow";
+    githubId = 1276854;
+    name = "Florian Peter";
+    keys = [ { fingerprint = "C349 3C74 E232 A1EE E005  1678 2457 5DB9 3F6C EC16"; } ];
   };
   worldofpeace = {
     email = "worldofpeace@protonmail.ch";
