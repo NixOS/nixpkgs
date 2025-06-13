@@ -37,6 +37,12 @@ in
       description = ''
         Whether interactive shells should show which Nix package (if
         any) provides a missing command.
+
+        Requires nix-channels to be set and downloaded (sudo nix-channels --update.)
+
+        See also nix-index and nix-index-database as an alternative for flakes-based systems.
+
+        Additionally, having the env var NIX_AUTO_RUN set will automatically run the matching package, and with NIX_AUTO_RUN_INTERACTIVE it will confirm the package before running.
       '';
     };
 
