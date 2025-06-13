@@ -32,7 +32,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.5.0";
+  version = "3.5.1";
 
   pyproject = true;
 
@@ -40,7 +40,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     tag = version;
-    hash = "sha256-NIOfjd4r9mDP0x1IpIVJlU+Aza0a17bc3jDxtInrf4A=";
+    hash = "sha256-4zlUHttny6nIRhx/5aDz2sh1Va0+nN+7cezBGtt5Img=";
   };
 
   postPatch = ''
