@@ -14429,6 +14429,12 @@
     name = "legendofmiracles";
     keys = [ { fingerprint = "CC50 F82C 985D 2679 0703  AF15 19B0 82B3 DEFE 5451"; } ];
   };
+  lonerOrz = {
+    email = "2788892716@qq.com";
+    name = "lonerOrz";
+    github = "lonerOrz";
+    githubId = 68736947;
+  };
   longer = {
     email = "michal@mieszczak.com.pl";
     name = "Michał Mieszczak";
