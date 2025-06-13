@@ -12,6 +12,10 @@ concurrency:
 
 permissions: {}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   tests:
     name: nix-files-parseable-check
