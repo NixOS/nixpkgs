@@ -373,6 +373,20 @@ in
         description = "Path to a file containing the metrics authentication token.";
       };
 
+      minioAccessKeyId = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/minio_access_key_id";
+        description = "Path to a file containing the Minio access key id.";
+      };
+
+      minioSecretAccessKey = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/minio_secret_access_key";
+        description = "Path to a file containing the Minio secret access key.";
+      };
+
       settings = mkOption {
         default = { };
         description = ''
@@ -655,6 +669,15 @@ in
         };
 
         packages.CHUNKED_UPLOAD_PATH = "${cfg.stateDir}/tmp/package-upload";
+
+        storage = mkMerge [
+          (mkIf (cfg.minioAccessKeyId != null) {
+            MINIO_ACCESS_KEY_ID = "#minioaccesskeyid#";
+          })
+          (mkIf (cfg.minioSecretAccessKey != null) {
+            MINIO_SECRET_ACCESS_KEY = "#miniosecretaccesskey#";
+          })
+        ];
       };
 
     services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
@@ -795,6 +818,13 @@ in
 
             ${lib.optionalString (cfg.metricsTokenFile != null) ''
               ${replaceSecretBin} '#metricstoken#' '${cfg.metricsTokenFile}' '${runConfig}'
+            ''}
+
+            ${lib.optionalString (cfg.minioAccessKeyId != null) ''
+              ${replaceSecretBin} '#minioaccesskeyid#' '${cfg.minioAccessKeyId}' '${runConfig}'
+            ''}
+            ${lib.optionalString (cfg.minioSecretAccessKey != null) ''
+              ${replaceSecretBin} '#miniosecretaccesskey#' '${cfg.minioSecretAccessKey}' '${runConfig}'
             ''}
 
             ${lib.optionalString (cfg.captcha.secretFile != null) ''
