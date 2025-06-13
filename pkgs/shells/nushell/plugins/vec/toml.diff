@@ -1,0 +1,18 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 8e637ca..2b315c9 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -9,9 +9,9 @@ readme = "README.md"
+ version = "1.1.6"
+
+ [dependencies]
+-nu-plugin = "0.105.1"
+-nu-protocol = "0.105.1"
++nu-plugin = "0.104.0"
++nu-protocol = "0.104.0"
+ itertools = "0.14.0"
+
+ [dev-dependencies]
+-nu-plugin-test-support = { version = "0.105.1" }
+\ No newline at end of file
++nu-plugin-test-support = "0.104.0"
