@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nbfc-linux";
-  version = "0.3.18";
+  version = "0.3.19";
 
   src = fetchFromGitHub {
     owner = "nbfc-linux";
     repo = "nbfc-linux";
     tag = "${finalAttrs.version}";
-    hash = "sha256-6TyAhPt/692nd3pQVvcJEarXmUsByPiCXt1TuQBDTMQ=";
+    hash = "sha256-ARUhm1K3A0bzVRen6VO3KvomkPl1S7vx2+tmg2ZtL8s=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

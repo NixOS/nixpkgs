@@ -86,11 +86,20 @@ buildPythonPackage rec {
     transforms3d
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
-    # Flaky:
-    # AssertionError: Array(-0.00135638, dtype=float32) != 0.0 within 0.001 delta (Array(0.00135638, dtype=float32) difference)
-    "test_pendulum_period2"
-  ];
+  disabledTests =
+    [
+      # Broken after mujoco was updated to 3.3.3:
+      # TypeError: Data.init() got an unexpected keyword argument 'contact'
+      # Reported upstream: https://github.com/google/brax/issues/618
+      "test_pendulum"
+      "test_pipeline_ant"
+      "test_pipeline_init_with_ctrl"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      # Flaky:
+      # AssertionError: Array(-0.00135638, dtype=float32) != 0.0 within 0.001 delta (Array(0.00135638, dtype=float32) difference)
+      "test_pendulum_period2"
+    ];
 
   disabledTestPaths = [
     # ValueError: matmul: Input operand 1 has a mismatch in its core dimension
