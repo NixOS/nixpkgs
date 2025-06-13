@@ -11,14 +11,14 @@
 }:
 buildPythonPackage rec {
   pname = "gguf";
-  version = "0.16.3";
+  version = "0.17.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7muCe/g8iZ/oJ2vsJ2xDpvaxyLgCfvvr+kyPqFKl09U=";
+    hash = "sha256-4/iCeOb2d44DSPvJcxOkovivY7CP4l3DgSUdnGEdrgM=";
   };
 
   dependencies = [
