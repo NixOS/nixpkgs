@@ -11,12 +11,12 @@
   sqlalchemy,
 
   # testing
+  fsspec,
   hypothesis,
   pandas,
   pyarrow,
   pytest-remotedata,
   pytestCheckHook,
-  python,
   pythonAtLeast,
   pythonOlder,
   snapshottest,
@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.15.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
     tag = "v${version}";
-    hash = "sha256-mxv6xYO31MDzHvIf7Zk+kFtm6fX3x3AaJNn7RhvJ2fY=";
+    hash = "sha256-AhYCiIhi7jMWKIdDwZZ8MgfDg3F02/jooGLOp6E+E5g=";
   };
 
   build-system = [ poetry-core ];
@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   checkInputs =
     [
+      fsspec
       hypothesis
       pandas
       pyarrow
