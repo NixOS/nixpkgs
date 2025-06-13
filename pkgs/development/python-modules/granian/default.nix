@@ -15,6 +15,7 @@
   httpx,
   sniffio,
   nix-update-script,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -84,6 +85,10 @@ buildPythonPackage rec {
   versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = {
+    paperless-ngx = nixosTests.paperless;
+  };
 
   meta = {
     description = "Rust HTTP server for Python ASGI/WSGI/RSGI applications";
