@@ -16,11 +16,18 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ seq ];
 
-  meta = with lib; {
+  meta = {
     description = "Optimized parsing and printing library for the JSON format";
+    longDescription = ''
+      Yojson is an optimized parsing and printing library for the JSON format.
+
+      ydump is a pretty-printing command-line program provided with the
+      yojson package.
+    '';
+    changelog = "https://raw.githubusercontent.com/ocaml-community/${pname}/refs/tags/${version}/CHANGES.md";
     homepage = "https://github.com/ocaml-community/${pname}";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ vbgl ];
     mainProgram = "ydump";
   };
 }
