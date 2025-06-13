@@ -131,10 +131,11 @@ let
           echo "${version}-default" > $out/include/config/kernel.release
         '';
 
-      meta = with lib; {
+      meta = {
         description = "Header files and scripts for Linux kernel";
-        license = licenses.gpl2Only;
-        platforms = platforms.linux;
+        license = lib.licenses.gpl2Only;
+        platforms = lib.platforms.linux;
+        teams = [ lib.teams.linux-kernel ];
       };
     };
 in
