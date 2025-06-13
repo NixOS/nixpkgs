@@ -2125,6 +2125,7 @@ mapAliases {
   youtrack_2022_3 = throw "'youtrack_2022_3' has been removed as it was deprecated. Please update to the 'youtrack' package."; # Added 2024-10-17
   yabar = throw "'yabar' has been removed as the upstream project was archived"; # Added 2025-06-10
   yabar-unstable = yabar; # Added 2025-06-10
+  yeahwm = throw "'yeahwm' has been removed, as it was broken and unmaintained upstream."; # Added 2025-06-12
   yrd = throw "'yrd' has been removed, as it was broken and unmaintained"; # added 2024-05-27
   yubikey-manager-qt = throw "'yubikey-manager-qt' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
   yubikey-personalization-gui = throw "'yubikey-personalization-gui' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
