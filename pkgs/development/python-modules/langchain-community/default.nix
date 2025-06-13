@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -36,6 +35,9 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -121,17 +123,14 @@ buildPythonPackage rec {
     "tests/unit_tests/document_loaders/test_gitbook.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "libs/community/v([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "libs/community/v";
   };
 
   meta = {
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain-community";
-    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/libs%2Fcommunity%2fv${version}";
+    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

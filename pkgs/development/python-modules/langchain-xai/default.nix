@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -18,6 +17,9 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -60,15 +62,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_xai" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-xai==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-xai==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-xai/releases/tag/langchain-xai==${version}";
+    changelog = "https://github.com/langchain-ai/langchain-xai/releases/tag/${src.tag}";
     description = "Build LangChain applications with X AI";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/xai";
     license = lib.licenses.mit;
