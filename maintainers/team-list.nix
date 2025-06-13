@@ -186,6 +186,20 @@ with lib.maintainers;
     shortName = "Categorization";
   };
 
+  ci = {
+    members = [
+      azuwis
+      MattSturgeon
+      mic92
+      philiptaron
+      wolfgangwalther
+      zowoq
+    ];
+    githubTeams = [ "Nixpkgs-CI" ];
+    scope = "Maintain Nixpkgs' in-tree Continuous Integration, including GitHub Actions.";
+    shortName = "CI";
+  };
+
   cinnamon = {
     members = [
       bobby285271
