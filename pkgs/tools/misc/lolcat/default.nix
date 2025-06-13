@@ -1,10 +1,11 @@
 {
   lib,
   bundlerApp,
+  ruby_3_4,
   bundlerUpdateScript,
 }:
 
-bundlerApp {
+(bundlerApp.override { ruby = ruby_3_4; }) {
   pname = "lolcat";
   gemdir = ./.;
   exes = [ "lolcat" ];
