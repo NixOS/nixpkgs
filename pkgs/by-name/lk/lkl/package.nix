@@ -53,7 +53,7 @@ stdenv.mkDerivation {
       # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
       sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
     ''
-    + lib.optionalString stdenv.hostPlatform.isi686 ''
+    + lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isLoongArch64) ''
       echo CONFIG_KALLSYMS=n >> arch/lkl/configs/defconfig
       echo CONFIG_KALLSYMS_BASE_RELATIVE=n >> arch/lkl/configs/defconfig
     ''
@@ -91,6 +91,12 @@ stdenv.mkDerivation {
   # Fixes the following error when using liblkl-hijack.so on aarch64-linux:
   # symbol lookup error: liblkl-hijack.so: undefined symbol: __aarch64_ldadd4_sync
   env.NIX_CFLAGS_LINK = "-lgcc_s";
+
+  # Fixes the following error when linking on loongarch64-linux:
+  # ld: tools/lkl/liblkl.a(lkl.o): relocation R_LARCH_PCREL20_S2 overflow 0x200090
+  # ld: recompile with 'gcc -mno-relax' or 'as -mno-relax' or 'ld --no-relax'
+  # ld: final link failed: bad value
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLoongArch64 "--no-relax";
 
   makeFlags = [
     "-C tools/lkl"
