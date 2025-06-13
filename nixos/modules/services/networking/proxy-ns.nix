@@ -28,7 +28,7 @@ in
   };
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [cfg.package];
-    security.wrapper.proxy-ns = {
+    security.wrappers.proxy-ns = {
       source = "${cfg.package}/bin/proxy-ns";
       capabilities = "cap_net_bind_service,cap_fowner,cap_chown,cap_sys_chroot,cap_sys_admin,cap_net_admin=ep";
     };
