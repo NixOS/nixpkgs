@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mm-common";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "tVxGA3282rxc7js4nqEcw5EK22jr6IPpR3hHqmYIYuc=";
+    sha256 = "SUq/zngUGCWbHp2IiMc69N5LbzvjbMddm6qLqg8qejk=";
   };
 
   strictDeps = true;
