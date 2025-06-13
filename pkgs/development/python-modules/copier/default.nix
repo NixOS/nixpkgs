@@ -12,6 +12,7 @@
   lib,
   mkdocs-material,
   mkdocs-mermaid2-plugin,
+  nix-update-script,
   mkdocstrings,
   packaging,
   pathspec,
@@ -70,6 +71,8 @@ buildPythonPackage rec {
   ];
 
   makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ git ]}" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Library and command-line utility for rendering projects templates";
