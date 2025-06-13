@@ -6,6 +6,7 @@
   icmake,
   util-linux,
   bash,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -78,6 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://gitlab.com/fbb-git/yodl/-/blob/${finalAttrs.src.tag}/yodl/changelog";
