@@ -763,6 +763,7 @@ def test_switch_to_configuration_without_systemd_run(
             profile_path,
             m.Action.SWITCH,
             sudo=False,
+            build_host=None,
             target_host=None,
             specialisation=None,
             install_bootloader=False,
@@ -779,6 +780,7 @@ def test_switch_to_configuration_without_systemd_run(
             config_path,
             m.Action.BOOT,
             sudo=False,
+            build_host=None,
             target_host=None,
             specialisation="special",
         )
@@ -797,6 +799,7 @@ def test_switch_to_configuration_without_systemd_run(
             Path("/path/to/config"),
             m.Action.TEST,
             sudo=True,
+            build_host=None,
             target_host=target_host,
             install_bootloader=True,
             specialisation="special",
@@ -827,6 +830,7 @@ def test_switch_to_configuration_with_systemd_run(
             profile_path,
             m.Action.SWITCH,
             sudo=False,
+            build_host=None,
             target_host=None,
             specialisation=None,
             install_bootloader=False,
@@ -842,7 +846,7 @@ def test_switch_to_configuration_with_systemd_run(
         remote=None,
     )
 
-    target_host = m.Remote("user@localhost", [], None)
+    target_host = m.Remote("target@localhost", [], None)
     with monkeypatch.context() as mp:
         mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
         mp.setenv("PATH", "/path/to/bin")
@@ -852,6 +856,7 @@ def test_switch_to_configuration_with_systemd_run(
             Path("/path/to/config"),
             m.Action.TEST,
             sudo=True,
+            build_host=None,
             target_host=target_host,
             install_bootloader=True,
             specialisation="special",
@@ -865,6 +870,36 @@ def test_switch_to_configuration_with_systemd_run(
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "1"},
         sudo=True,
         remote=target_host,
+    )
+
+    build_host = m.Remote("build@localhost", [], None)
+    with monkeypatch.context() as mp:
+        mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
+        mp.setenv("PATH", "/path/to/bin")
+        mp.setattr(Path, Path.exists.__name__, lambda self: True)
+
+        n.switch_to_configuration(
+            Path("/path/to/config"),
+            m.Action.TEST,
+            sudo=True,
+            build_host=build_host,
+            target_host=target_host,
+            install_bootloader=True,
+            transfer_mode=m.TransferMode.BASTION,
+        )
+    mock_run.assert_called_with(
+        [
+            "ssh",
+            "target@localhost",
+            "--",
+            "sudo",
+            "env",
+            "NIXOS_INSTALL_BOOTLOADER=1",
+            *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            config_path / "/path/to/config/bin/switch-to-configuration",
+            "test",
+        ],
+        remote=build_host,
     )
 
 

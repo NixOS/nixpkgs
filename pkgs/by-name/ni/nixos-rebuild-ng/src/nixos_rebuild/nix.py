@@ -242,13 +242,12 @@ def copy_closure(
         case (Remote(_), Remote(_), TransferMode.DEFAULT):
             # With newer Nix, use `nix copy` instead of `nix-copy-closure`
             # since it supports `--to` and `--from` at the same time
-            # TODO: once we drop Nix 2.3 from nixpkgs, remove support for
-            # `nix-copy-closure`
             nix_copy(from_host, to_host)
         case (Remote(_), Remote(_), TransferMode.NIX_2_3):
             # With older Nix, we need to copy from to local and local to
             # host. This means it is slower and need additional disk space
             # in local
+            # TODO: remove once we drop Nix 2.3 from nixpkgs
             nix_copy_closure(from_host=from_host)
             nix_copy_closure(to_host=to_host)
         case (Remote(_), Remote(_), TransferMode.BASTION):
@@ -641,10 +640,12 @@ def set_profile(
 def switch_to_configuration(
     path_to_config: Path,
     action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
+    build_host: Remote | None,
     target_host: Remote | None,
     sudo: bool,
     install_bootloader: bool = False,
     specialisation: str | None = None,
+    transfer_mode: TransferMode = TransferMode.DEFAULT,
 ) -> None:
     """Call `<config>/bin/switch-to-configuration <action>`.
 
@@ -674,12 +675,32 @@ def switch_to_configuration(
         )
         cmd = []
 
-    run_wrapper(
-        [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
-        extra_env={"NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0"},
-        remote=target_host,
-        sudo=sudo,
-    )
+    if transfer_mode == TransferMode.BASTION and build_host and target_host:
+        run_wrapper(
+            [
+                "ssh",
+                *target_host.opts,
+                target_host.host,
+                "--",
+                # XXX: we are neither passing the sudo password nor allocating
+                # a pseudo-TTY here, so the only way this will work is if the
+                # bastion host is configured for password-less sudo
+                "sudo" if sudo else "",
+                "env",
+                f"NIXOS_INSTALL_BOOTLOADER={'1' if install_bootloader else '0'}",
+                *cmd,
+                path_to_config / "bin/switch-to-configuration",
+                str(action),
+            ],
+            remote=build_host,
+        )
+    else:
+        run_wrapper(
+            [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
+            extra_env={"NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0"},
+            remote=target_host,
+            sudo=sudo,
+        )
 
 
 def upgrade_channels(all_channels: bool = False) -> None:

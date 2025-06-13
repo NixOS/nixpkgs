@@ -274,9 +274,9 @@ It must be one of the following:
 	  depend in the localhost network, however the build host needs to be
 	  configured to communicate with target host directly (e.g., having the
 	  keys in build host or configuring SSH Agent Forwarding, adding the
-	  target host to `authorized_keys`, etc). This was also the only mode
-	  available in legacy *nixos-rebuild*, so if you want to keep the same
-	  workflow this is the mode that should be used.
+	  target host to `authorized_keys`) and also either support for
+	  password-less _sudo_ (with *--sudo* flag) or using an user with
+	  _root_ permissions if you want to activate the configuration.
 
 *--use-substitutes*
 	When set, nixos-rebuild will add *--use-substitutes* to each invocation
