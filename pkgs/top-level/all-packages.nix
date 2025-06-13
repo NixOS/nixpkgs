@@ -3178,8 +3178,11 @@ with pkgs;
     isStereo = true;
   };
 
-  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
+  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk {
+    python3 = python312;
+  };
   google-cloud-sdk-gce = google-cloud-sdk.override {
+    python3 = python312;
     with-gce = true;
   };
 
