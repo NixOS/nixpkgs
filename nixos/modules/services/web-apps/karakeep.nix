@@ -151,6 +151,8 @@
             in
             lib.mkDefault "http://${listenAddress}:${toString listenPort}";
           BROWSER_WEB_URL = lib.mkDefault "http://127.0.0.1:${toString cfg.browser.port}";
+          # uses systemd unit CacheDirectory (in /var/cache)
+          NEXT_CACHE_DIR = lib.mkDefault "$CACHE_DIRECTORY";
         };
 
         # add settings.env generated in karakeep-init first to be overridable
