@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
+    hash = "sha256-/7xbLCEetpVf4WmS42qChAYnFzoeiCmHagXumW5oIjA=";
     fetchSubmodules = true;
   };
 
