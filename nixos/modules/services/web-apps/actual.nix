@@ -75,7 +75,7 @@ in
         User = "actual";
         Group = "actual";
         StateDirectory = "actual";
-        WorkingDirectory = dataDir;
+        WorkingDirectory = cfg.settings.dataDir;
         LimitNOFILE = "1048576";
         PrivateTmp = true;
         PrivateDevices = true;
