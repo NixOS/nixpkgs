@@ -12,7 +12,7 @@ let
     src = fetchFromGitHub {
       owner = "sched-ext";
       repo = "scx";
-      rev = "refs/tags/v${versionInfo.scx.version}";
+      tag = "v${versionInfo.scx.version}";
       inherit (versionInfo.scx) hash;
     };
 
