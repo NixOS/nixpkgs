@@ -29,7 +29,9 @@ maven.buildMavenPackage rec {
 
     install -Dt $out/share/pdf-over pdf-over-build/pdf-over_linux-x86_64.jar
 
-    makeWrapper ${lib.getExe jre} $out/bin/pdf-over --add-flags "-jar $out/share/pdf-over/pdf-over_linux-x86_64.jar"
+    makeWrapper ${lib.getExe jre} $out/bin/pdf-over \
+      --add-flags "-jar $out/share/pdf-over/pdf-over_linux-x86_64.jar" \
+      --set GDK_BACKEND x11,wayland
 
     runHook postInstall
   '';
