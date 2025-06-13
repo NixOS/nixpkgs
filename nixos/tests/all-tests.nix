@@ -1,11 +1,9 @@
 {
   system,
   pkgs,
-
   # Projects the test configuration into a the desired value; usually
   # the test runner: `config: config.test`.
   callTest,
-
 }:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leaves.
@@ -983,6 +981,7 @@ in
   nzbget = runTest ./nzbget.nix;
   nzbhydra2 = runTest ./nzbhydra2.nix;
   ocis = runTest ./ocis.nix;
+  oci-tools = handleTest ./oci-tools.nix { };
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix { };
   obs-studio = runTest ./obs-studio.nix;
   oh-my-zsh = runTest ./oh-my-zsh.nix;
