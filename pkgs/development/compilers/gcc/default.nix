@@ -423,7 +423,9 @@ pipe
           ;
         isGNU = true;
         hardeningUnsupportedFlags =
-          optional (!atLeast11) "zerocallusedregs"
+          optional (
+            !(atLeast11 && (targetPlatform.isx86_64 || targetPlatform.isAarch64 || targetPlatform.isSparc))
+          ) "zerocallusedregs"
           ++ optionals (!atLeast12) [
             "fortify3"
             "trivialautovarinit"
