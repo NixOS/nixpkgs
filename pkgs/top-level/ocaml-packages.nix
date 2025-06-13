@@ -853,7 +853,7 @@ let
           else
             null;
 
-        janeStreet =
+        janeStreet = lib.recurseIntoAttrs (
           if lib.versionOlder "5.1" ocaml.version then
             import ../development/ocaml-modules/janestreet/0.17.nix {
               inherit self;
@@ -910,14 +910,15 @@ let
             }
           else
             import ../development/ocaml-modules/janestreet {
-            };
+            }
+        );
 
-        janeStreet_0_15 =
+        janeStreet_0_15 = lib.recurseIntoAttrs (
           (lib.makeScope self.newScope (
             self': with self'; {
 
               # ocamlPackages that janestreet v0.15 packages depend on.
-              jsDeps =
+              jsDeps = lib.recurseIntoAttrs (
                 let
                   uri-sexp = self.uri-sexp.override { inherit (self') ppx_sexp_conv sexplib0; };
                   cohttp = self.cohttp.override {
@@ -926,7 +927,7 @@ let
                   };
                   ipaddr-sexp = self.ipaddr-sexp.override { inherit (self') ppx_sexp_conv; };
                   conduit = self.conduit.override {
-                    inherit (self') ppx_sexp_conv sexplib;
+                    inherit (self') ppx_sexp_conv sexplib0;
                     inherit ipaddr-sexp;
                   };
                   conduit-async = self.conduit-async.override {
@@ -935,8 +936,7 @@ let
                       ppx_sexp_conv
                       ppx_here
                       core
-                      sexplib
-                      async_ssl
+                      sexplib0
                       ;
                     inherit conduit ipaddr-sexp;
                   };
@@ -952,6 +952,25 @@ let
                     ounit
                     ctypes
                     ctypes-foreign
+                    inotify
+                    js_of_ocaml-ppx
+                    js_of_ocaml
+                    js_of_ocaml-compiler
+                    uri-sexp
+                    cryptokit
+                    zarith
+                    angstrom
+                    base64
+                    magic-mime
+                    gen_js_api
+                    ojs
+                    lambdasoup
+                    tyxml
+                    faraday
+                    ocaml_pcre
+                    sedlex
+                    pyml
+                    angstrom-async
                     ;
                   ppxlib = self.ppxlib.override { inherit (self') stdio; };
                   cohttp-async = self.cohttp-async.override {
@@ -968,7 +987,8 @@ let
                     inherit uri-sexp cohttp conduit-async;
                   };
                   janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage_0_15.nix { };
-                };
+                }
+              );
 
               janeStreet = import ../development/ocaml-modules/janestreet/0.15.nix {
                 self = self' // jsDeps;
@@ -1004,7 +1024,8 @@ let
               ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
             }
           )).overrideScope
-            liftJaneStreet;
+            liftJaneStreet
+        );
 
         javalib = callPackage ../development/ocaml-modules/javalib { };
 
