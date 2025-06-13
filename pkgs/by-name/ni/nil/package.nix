@@ -3,26 +3,30 @@
   rustPlatform,
   fetchFromGitHub,
   nix,
+  nixfmt-rfc-style,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nil";
-  version = "2024-08-06";
+  version = "2025-06-13";
 
   src = fetchFromGitHub {
     owner = "oxalica";
     repo = "nil";
     rev = version;
-    hash = "sha256-DqsN/VkYVr4M0PVRQKXPPOTaind5miYZURIYqM4MxYM=";
+    hash = "sha256-oxvVAFUO9husnRk6XZcLFLjLWL9z0pW25Fk6kVKwt1c=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-7TR/xTc66WpPszJDrpisVvHXl2+FGrUOskZAkGyY04Q=";
+  cargoHash = "sha256-OZIajxv8xNfCGalVw/FUAwWdQzPqfGuDoeRg2E2RR7s=";
 
   nativeBuildInputs = [ nix ];
 
-  env.CFG_RELEASE = version;
+  env = {
+    CFG_RELEASE = version;
+    CFG_DEFAULT_FORMATTER = lib.getExe nixfmt-rfc-style;
+  };
 
   # might be related to https://github.com/NixOS/nix/issues/5884
   preBuild = ''
