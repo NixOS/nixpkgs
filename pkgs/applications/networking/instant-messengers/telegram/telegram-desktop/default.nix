@@ -9,6 +9,9 @@
   qtsvg,
   qtwayland,
   kimageformats,
+  libavif,
+  libheif,
+  libjxl,
   wrapGAppsHook3,
   wrapQtAppsHook,
   glib-networking,
@@ -34,10 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
       qtbase
       qtimageformats
       qtsvg
-      kimageformats
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      kimageformats
       qtwayland
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libavif
+      libheif
+      libjxl
     ]
     ++ lib.optionals withWebkit [
       glib-networking
