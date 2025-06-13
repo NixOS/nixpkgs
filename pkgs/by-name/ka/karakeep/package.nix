@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+  testers,
   nodejs,
   node-gyp,
   inter,
@@ -123,6 +125,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove broken symlinks
     find $out -type l ! -exec test -e {} \; -delete
   '';
+
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        # remove hardcoded version if upstream syncs general version with cli
+        # version
+        version = "0.23.0";
+      };
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://karakeep.app/";
