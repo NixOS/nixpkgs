@@ -2990,6 +2990,12 @@ self: super: with self; {
 
   credstash = callPackage ../development/python-modules/credstash { };
 
+  crispy-bootstrap3 = callPackage ../development/python-modules/crispy-bootstrap3 { };
+
+  crispy-bootstrap4 = callPackage ../development/python-modules/crispy-bootstrap4 { };
+
+  crispy-bootstrap5 = callPackage ../development/python-modules/crispy-bootstrap5 { };
+
   crochet = callPackage ../development/python-modules/crochet { };
 
   crocoddyl = toPythonModule (
@@ -3748,12 +3754,6 @@ self: super: with self; {
 
   django-countries = callPackage ../development/python-modules/django-countries { };
 
-  django-crispy-bootstrap3 = callPackage ../development/python-modules/django-crispy-bootstrap3 { };
-
-  django-crispy-bootstrap4 = callPackage ../development/python-modules/django-crispy-bootstrap4 { };
-
-  django-crispy-bootstrap5 = callPackage ../development/python-modules/django-crispy-bootstrap5 { };
-
   django-crispy-forms = callPackage ../development/python-modules/django-crispy-forms { };
 
   django-crossdomainmedia = callPackage ../development/python-modules/django-crossdomainmedia { };
@@ -4015,8 +4015,7 @@ self: super: with self; {
 
   django_4 = callPackage ../development/python-modules/django/4.nix { };
 
-  # Pre-release
-  django_5 = self.django_5_1;
+  django_5 = self.django_5_2;
 
   django_5_1 = callPackage ../development/python-modules/django/5_1.nix { };
 
