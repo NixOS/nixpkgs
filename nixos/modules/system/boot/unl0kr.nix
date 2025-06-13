@@ -15,7 +15,7 @@ in
       description = ''Whether to enable the unl0kr on-screen keyboard in initrd to unlock LUKS.'';
     };
 
-    package = lib.mkPackageOption pkgs "buffybox" { };
+    package = lib.mkPackageOption pkgs "unl0kr" { };
 
     allowVendorDrivers = lib.mkEnableOption "load optional drivers" // {
       description = ''Whether to load additional drivers for certain vendors (I.E: Wacom, Intel, etc.)'';
@@ -93,7 +93,7 @@ in
       ];
 
       packages = [
-        pkgs.buffybox
+        cfg.package
       ];
 
       paths.unl0kr-agent.wantedBy = [ "local-fs-pre.target" ];
