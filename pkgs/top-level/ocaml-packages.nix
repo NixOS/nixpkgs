@@ -749,6 +749,8 @@ let
 
         hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
+        hc = callPackage ../development/ocaml-modules/hc { };
+
         hex = callPackage ../development/ocaml-modules/hex { };
 
         hidapi = callPackage ../development/ocaml-modules/hidapi { };
@@ -1652,6 +1654,8 @@ let
 
         path_glob = callPackage ../development/ocaml-modules/path_glob { };
 
+        patricia-tree = callPackage ../development/ocaml-modules/patricia-tree { };
+
         pbkdf = callPackage ../development/ocaml-modules/pbkdf { };
 
         pbrt = callPackage ../development/ocaml-modules/pbrt { };
@@ -1766,6 +1770,8 @@ let
 
         pratter = callPackage ../development/ocaml-modules/pratter { };
 
+        prelude = callPackage ../development/ocaml-modules/prelude { };
+
         prettym = callPackage ../development/ocaml-modules/prettym { };
 
         printbox = callPackage ../development/ocaml-modules/printbox { };
@@ -1773,6 +1779,8 @@ let
         printbox-text = callPackage ../development/ocaml-modules/printbox/text.nix { };
 
         process = callPackage ../development/ocaml-modules/process { };
+
+        processor = callPackage ../development/ocaml-modules/processor { };
 
         prometheus = callPackage ../development/ocaml-modules/prometheus { };
 
@@ -1913,6 +1921,8 @@ let
 
         sawja = callPackage ../development/ocaml-modules/sawja { };
 
+        scfg = callPackage ../development/ocaml-modules/scfg { };
+
         secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
           inherit (pkgs) secp256k1;
         };
@@ -1944,6 +1954,8 @@ let
         simple-diff = callPackage ../development/ocaml-modules/simple-diff { };
 
         slug = callPackage ../development/ocaml-modules/slug { };
+
+        smtml = callPackage ../development/ocaml-modules/smtml { };
 
         sodium = callPackage ../development/ocaml-modules/sodium { };
 
@@ -2195,9 +2207,7 @@ let
 
         ### Z ###
 
-        z3 = callPackage ../development/ocaml-modules/z3 {
-          inherit (pkgs) z3;
-        };
+        z3 = callPackage ../development/ocaml-modules/z3 { };
 
         zarith = callPackage ../development/ocaml-modules/zarith { };
 
