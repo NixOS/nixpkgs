@@ -9,13 +9,10 @@
 
   # dependencies
   absl-py,
-  dm-env,
   etils,
   flask,
   flask-cors,
   flax,
-  grpcio,
-  gym,
   jax,
   jaxlib,
   jaxopt,
@@ -27,12 +24,13 @@
   optax,
   orbax-checkpoint,
   pillow,
-  pytinyrenderer,
   scipy,
   tensorboardx,
   typing-extensions,
 
   # tests
+  dm-env,
+  gym,
   pytestCheckHook,
   pytest-xdist,
   transforms3d,
@@ -40,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "brax";
-  version = "0.12.3";
+  version = "0.12.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brax";
     tag = "v${version}";
-    hash = "sha256-WshTiWK6XpwK2h/aw/YogA5pGo5U7RdZBz6UjD1Ft/4=";
+    hash = "sha256-/eb0WjMzHwD1tjTyZ2fb2dzvGrWnyOLcVLOx4BeKvqk=";
   };
 
   build-system = [
@@ -56,13 +54,10 @@ buildPythonPackage rec {
 
   dependencies = [
     absl-py
-    dm-env
     etils
     flask
     flask-cors
     flax
-    grpcio
-    gym
     jax
     jaxlib
     jaxopt
@@ -74,32 +69,24 @@ buildPythonPackage rec {
     optax
     orbax-checkpoint
     pillow
-    pytinyrenderer
     scipy
     tensorboardx
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    dm-env
+    gym
     pytestCheckHook
     pytest-xdist
     transforms3d
   ];
 
-  disabledTests =
-    [
-      # Broken after mujoco was updated to 3.3.3:
-      # TypeError: Data.init() got an unexpected keyword argument 'contact'
-      # Reported upstream: https://github.com/google/brax/issues/618
-      "test_pendulum"
-      "test_pipeline_ant"
-      "test_pipeline_init_with_ctrl"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # Flaky:
-      # AssertionError: Array(-0.00135638, dtype=float32) != 0.0 within 0.001 delta (Array(0.00135638, dtype=float32) difference)
-      "test_pendulum_period2"
-    ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+    # Flaky:
+    # AssertionError: Array(-0.00135638, dtype=float32) != 0.0 within 0.001 delta (Array(0.00135638, dtype=float32) difference)
+    "test_pendulum_period2"
+  ];
 
   disabledTestPaths = [
     # ValueError: matmul: Input operand 1 has a mismatch in its core dimension
