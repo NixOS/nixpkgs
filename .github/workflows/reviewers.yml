@@ -10,14 +10,9 @@ on:
   pull_request_target:
     types: [ready_for_review]
   workflow_call:
-    inputs:
-      caller:
-        description: Name of the calling workflow.
-        required: true
-        type: string
 
 concurrency:
-  group: ${{ inputs.caller }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  group: reviewers-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 permissions: {}
