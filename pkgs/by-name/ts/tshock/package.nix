@@ -7,13 +7,13 @@
 }:
 buildDotnetModule rec {
   pname = "tshock";
-  version = "5.2.3";
+  version = "5.2.4";
 
   src = fetchFromGitHub {
     owner = "Pryaxis";
     repo = "TShock";
     rev = "v${version}";
-    sha256 = "sha256-1EtHpBZ7bbwVbl+tMfwpjgPuxu98XKvxlZ2+SbUlWV4=";
+    sha256 = "sha256-dQ4yux5k4K1t6ah9r4X6d1KPAMqzzCsGvBKhm0TYIjA=";
     fetchSubmodules = true;
   };
 
