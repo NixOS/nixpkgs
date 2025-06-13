@@ -237,7 +237,7 @@ in
 
       unitConfig.ConditionCapability = "CAP_SYS_TIME";
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         ExecStart = "${chronyPkg}/bin/chronyd ${builtins.toString chronyFlags}";
 
         # Proc filesystem
