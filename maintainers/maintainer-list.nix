@@ -8035,12 +8035,6 @@
     githubId = 8073;
     name = "Francois-Rene Rideau";
   };
-  farlion = {
-    email = "florian.peter@gmx.at";
-    github = "workflow";
-    githubId = 1276854;
-    name = "Florian Peter";
-  };
   farnoy = {
     email = "jakub@okonski.org";
     github = "farnoy";
@@ -26977,6 +26971,13 @@
     github = "womfoo";
     githubId = 1595132;
     name = "Kranium Gikos Mendoza";
+  };
+  workflow = {
+    email = "4farlion@gmail.com";
+    github = "workflow";
+    githubId = 1276854;
+    name = "Florian Peter";
+    keys = [ { fingerprint = "C349 3C74 E232 A1EE E005  1678 2457 5DB9 3F6C EC16"; } ];
   };
   worldofpeace = {
     email = "worldofpeace@protonmail.ch";
