@@ -158,8 +158,8 @@ stdenvNoCC.mkDerivation {
       rsync -a -q ${appimageContents}/usr/share $out/ --exclude "*.so"
 
       # Fix the desktop file to point to the correct location
-      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "$out/bin/cursor"
-      substituteInPlace $out/share/applications/cursor-url-handler.desktop --replace-fail "/usr/share/cursor/cursor" "$out/bin/cursor"
+      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "cursor"
+      substituteInPlace $out/share/applications/cursor-url-handler.desktop --replace-fail "/usr/share/cursor/cursor" "cursor"
 
       wrapProgram $out/bin/cursor \
         --add-flags "--update=false" \
