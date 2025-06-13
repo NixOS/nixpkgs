@@ -6,9 +6,7 @@
 mkKdeDerivation {
   pname = "elisa";
 
-  extraBuildInputs = [
-    qtmultimedia
-    libvlc
-  ];
+  extraNativeBuildInputs = [ qtmultimedia ];
+  extraBuildInputs = [ libvlc ];
   meta.mainProgram = "elisa";
 }

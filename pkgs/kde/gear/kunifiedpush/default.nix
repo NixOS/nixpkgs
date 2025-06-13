@@ -7,8 +7,9 @@
 mkKdeDerivation {
   pname = "kunifiedpush";
 
+  extraNativeBuildInputs = [ qtwebsockets ];
+
   extraBuildInputs = [
-    qtwebsockets
     kdeclarative
     kpackage
   ];

@@ -6,9 +6,7 @@
 mkKdeDerivation {
   pname = "kwordquiz";
 
-  extraBuildInputs = [
-    qtsvg
-    qtmultimedia
-  ];
+  extraNativeBuildInputs = [ qtmultimedia ];
+  extraBuildInputs = [ qtsvg ];
   meta.mainProgram = "kwordquiz";
 }

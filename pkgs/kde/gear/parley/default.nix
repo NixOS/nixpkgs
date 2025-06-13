@@ -7,10 +7,12 @@
 mkKdeDerivation {
   pname = "parley";
 
-  extraBuildInputs = [
-    qtsvg
+  extraNativeBuildInputs = [
     qtmultimedia
     qtwebengine
   ];
+
+  extraBuildInputs = [ qtsvg ];
+
   meta.mainProgram = "parley";
 }

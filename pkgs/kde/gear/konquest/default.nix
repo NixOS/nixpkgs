@@ -6,9 +6,8 @@
 mkKdeDerivation {
   pname = "konquest";
 
-  extraBuildInputs = [
-    qtscxml
-    qtsvg
-  ];
+  extraNativeBuildInputs = [ qtscxml ];
+  extraBuildInputs = [ qtsvg ];
+
   meta.mainProgram = "konquest";
 }

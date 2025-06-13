@@ -23,6 +23,7 @@ mkKdeDerivation rec {
     rustPlatform.cargoSetupHook
     cargo
     rustc
+    qtwebengine
   ];
 
   extraBuildInputs = [

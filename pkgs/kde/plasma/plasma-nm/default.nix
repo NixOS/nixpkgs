@@ -16,7 +16,11 @@ mkKdeDerivation {
     })
   ];
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    pkg-config
+    qtwebengine
+  ];
+
   extraBuildInputs = [
     qtwebengine
     mobile-broadband-provider-info

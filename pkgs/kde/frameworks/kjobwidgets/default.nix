@@ -1,9 +1,5 @@
-{
-  mkKdeDerivation,
-  qttools,
-}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "kjobwidgets";
 
-  extraNativeBuildInputs = [ qttools ];
 }

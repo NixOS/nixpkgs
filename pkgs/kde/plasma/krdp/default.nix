@@ -7,7 +7,7 @@
   qtwayland,
   freerdp,
   fetchpatch,
-  wayland,
+  wayland-scanner,
   wayland-protocols,
 }:
 mkKdeDerivation {
@@ -24,11 +24,13 @@ mkKdeDerivation {
     })
   ];
 
-  extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [
+  extraNativeBuildInputs = [
+    pkg-config
     qtwayland
+  ];
+
+  extraBuildInputs = [
     freerdp
-    wayland
-    wayland-protocols
+    qtwayland
   ];
 }

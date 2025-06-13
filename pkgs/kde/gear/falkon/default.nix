@@ -1,22 +1,22 @@
 {
   mkKdeDerivation,
   extra-cmake-modules,
+  qt5compat,
   qtwebchannel,
   qtwebengine,
-  qttools,
   python3Packages,
 }:
 mkKdeDerivation {
   pname = "falkon";
 
   extraNativeBuildInputs = [
-    qttools
     qtwebchannel
     qtwebengine
   ];
 
   extraBuildInputs = [
     extra-cmake-modules
+    qt5compat
     qtwebchannel
     qtwebengine
     python3Packages.pyside6

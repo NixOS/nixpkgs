@@ -6,9 +6,8 @@
 mkKdeDerivation {
   pname = "klettres";
 
-  extraBuildInputs = [
-    qtmultimedia
-    qtsvg
-  ];
+  extraNativeBuildInputs = [ qtmultimedia ];
+  extraBuildInputs = [ qtsvg ];
+
   meta.mainProgram = "klettres";
 }

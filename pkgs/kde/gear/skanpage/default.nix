@@ -8,10 +8,14 @@
 mkKdeDerivation {
   pname = "skanpage";
 
-  extraBuildInputs = [
+  extraNativeBuildInputs = [
     qtwebengine
+  ];
+
+  extraBuildInputs = [
     (tesseract5.override { enableLanguages = tesseractLanguages; })
     leptonica
   ];
+
   meta.mainProgram = "skanpage";
 }

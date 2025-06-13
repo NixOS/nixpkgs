@@ -26,10 +26,14 @@ mkKdeDerivation {
     echo "${sshfs}" > $out/nix-support/depends
   '';
 
-  extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [
+  extraNativeBuildInputs = [
+    pkg-config
     qtconnectivity
     qtmultimedia
+    qtwayland
+  ];
+
+  extraBuildInputs = [
     qtwayland
     wayland
     wayland-protocols

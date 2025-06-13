@@ -10,11 +10,14 @@
 mkKdeDerivation {
   pname = "tokodon";
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    pkg-config
+    qtwebsockets
+  ];
+
   extraBuildInputs = [
     qtmultimedia
     qtsvg
-    qtwebsockets
     qtwebview
     sonnet
   ];

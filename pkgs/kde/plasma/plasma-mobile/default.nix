@@ -8,11 +8,16 @@
 mkKdeDerivation {
   pname = "plasma-mobile";
 
-  extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [
+  extraNativeBuildInputs = [
+    pkg-config
     qtsensors
     qtwayland
   ];
+
+  extraBuildInputs = [
+    qtwayland
+  ];
+
   postFixup = ''
     substituteInPlace "$out/share/wayland-sessions/plasma-mobile.desktop" \
       --replace-fail \

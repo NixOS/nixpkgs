@@ -9,7 +9,11 @@
 mkKdeDerivation {
   pname = "plasma-dialer";
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    pkg-config
+    qtwayland
+  ];
+
   extraBuildInputs = [
     qtwayland
     callaudiod

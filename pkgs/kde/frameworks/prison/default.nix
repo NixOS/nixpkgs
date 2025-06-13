@@ -8,6 +8,8 @@
 mkKdeDerivation {
   pname = "prison";
 
+  propagatedNativeBuildInputs = [ qtmultimedia ];
+
   extraBuildInputs = [
     qtdeclarative
     qtmultimedia

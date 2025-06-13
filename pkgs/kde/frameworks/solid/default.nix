@@ -1,6 +1,5 @@
 {
   mkKdeDerivation,
-  qttools,
   bison,
   flex,
   libimobiledevice,
@@ -14,7 +13,6 @@ mkKdeDerivation {
   ];
 
   extraNativeBuildInputs = [
-    qttools
     bison
     flex
   ];

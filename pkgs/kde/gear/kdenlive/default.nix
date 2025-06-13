@@ -32,12 +32,12 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     shared-mime-info
+    qtnetworkauth
   ];
 
   extraBuildInputs = [
     qtsvg
     qtmultimedia
-    qtnetworkauth
 
     qqc2-desktop-style
 

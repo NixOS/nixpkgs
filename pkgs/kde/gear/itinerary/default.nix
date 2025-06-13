@@ -15,11 +15,13 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     shared-mime-info
+    qtpositioning
   ];
+
   extraBuildInputs = [
     qtlocation
-    qtpositioning
     libical
   ];
+
   meta.mainProgram = "itinerary";
 }

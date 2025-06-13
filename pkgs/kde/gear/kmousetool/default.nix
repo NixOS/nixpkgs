@@ -6,9 +6,7 @@
 mkKdeDerivation {
   pname = "kmousetool";
 
-  extraBuildInputs = [
-    qtmultimedia
-    xorg.libXt
-  ];
+  extraNativeBuildInputs = [ qtmultimedia ];
+  extraBuildInputs = [ xorg.libXt ];
   meta.mainProgram = "kmousetool";
 }

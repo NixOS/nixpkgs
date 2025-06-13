@@ -7,9 +7,13 @@
 mkKdeDerivation {
   pname = "spectacle";
 
-  extraBuildInputs = [
+  extraNativeBuildInputs = [
     qtwayland
     qtmultimedia
+  ];
+
+  extraBuildInputs = [
+    qtwayland
     (opencv.override {
       enableCuda = false; # fails to compile, disabled in case someone sets config.cudaSupport
       enabledModules = [
