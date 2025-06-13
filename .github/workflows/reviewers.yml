@@ -17,7 +17,7 @@ on:
         type: string
 
 concurrency:
-  group: ${{ inputs.caller }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  group: ${{ inputs.caller }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 permissions: {}
