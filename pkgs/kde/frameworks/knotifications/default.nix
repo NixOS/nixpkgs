@@ -6,6 +6,8 @@
 mkKdeDerivation {
   pname = "knotifications";
 
+  hasPythonBindings = true;
+
   extraBuildInputs = [
     qtdeclarative
     libcanberra

@@ -2,4 +2,5 @@
 mkKdeDerivation {
   pname = "kwidgetsaddons";
 
+  hasPythonBindings = true;
 }
