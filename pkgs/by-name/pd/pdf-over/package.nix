@@ -1,0 +1,36 @@
+{
+  lib,
+  fetchFromGitHub,
+  jre,
+  makeWrapper,
+  maven,
+}:
+maven.buildMavenPackage rec {
+  pname = "PDF-Over";
+  version = "4.4.6";
+
+  src = fetchFromGitHub {
+    owner = "a-sit";
+    repo = "PDF-Over";
+    tag = "pdf-over-${version}";
+    hash = "sha256-MPTSE1bdjFcUTF1QJiH2q5K+VuVizeUmW2BKTJCKNco=";
+  };
+
+  mvnHash = "sha256-y//DzR3Y599QcK1O9nczlqYFhsmsw2ommA655wlG948=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    runHook preInstall
+
+    echo oida
+
+    ls -alh . pdf-over-gui pdf-over-build pdf-over-gui/target pdf-over-signer pdf-over-build
+
+    install -Dt $out/share/pdf-over pdf-over-build/pdf-over_linux-x86_64.jar
+
+    makeWrapper ${lib.getExe jre} $out/bin/pdf-over --add-flags "-jar $out/share/pdf-over/pdf-over_linux-x86_64.jar"
+
+    runHook postInstall
+  '';
+}
