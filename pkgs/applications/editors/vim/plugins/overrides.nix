@@ -3899,7 +3899,7 @@ in
 
   vim-textobj-entire = super.vim-textobj-entire.overrideAttrs {
     dependencies = [ self.vim-textobj-user ];
-    meta.maintainers = with lib.maintainers; [ farlion ];
+    meta.maintainers = with lib.maintainers; [ workflow ];
   };
 
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {
