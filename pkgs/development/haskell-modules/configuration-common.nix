@@ -1233,6 +1233,10 @@ with haskellLib;
   # https://github.com/xu-hao/namespace/issues/1
   namespace = doJailbreak super.namespace;
 
+  # yaml doesn't build its executables (json2yaml, yaml2json) by default:
+  # https://github.com/snoyberg/yaml/issues/194
+  yaml = addBuildDepend self.optparse-applicative (disableCabalFlag "no-exe" super.yaml);
+
   # https://github.com/danidiaz/streaming-eversion/issues/1
   streaming-eversion = dontCheck super.streaming-eversion;
 
