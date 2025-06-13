@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "requests-unixsocket2";
-  version = "0.4.2";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "requests_unixsocket2";
-    hash = "sha256-kpxY7MWYHz0SdmHOueyMduDwjTHFLkSrFGKsDc1VtfU=";
+    hash = "sha256-jGytAyY2lljbkxtMNvA80czLdmjggef7OXK1AKk7tWM=";
   };
 
   nativeBuildInputs = [ pbr ];
