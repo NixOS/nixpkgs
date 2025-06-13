@@ -20,13 +20,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "steamtinkerlaunch";
-  version = "12.12-unstable-2025-02-21";
+  version = "12.12-unstable-2025-06-02";
 
   src = fetchFromGitHub {
     owner = "sonic2kk";
     repo = "steamtinkerlaunch";
-    rev = "36e917c383a333caa43e187c06c0aed0c30c0421";
-    hash = "sha256-I7Aa7bZ6WB5LfCxyZUbl7fshyr2YWlZTMZDJKCODvhY=";
+    rev = "32bf79010dd2eb981ad5022c5b79fb65d2324d8a";
+    hash = "sha256-iWGbUI56e7uoTtAlykvkDCnS61WsRExfTDIIS85x5pQ=";
   };
 
   passthru.updateScript = unstableGitUpdater {
