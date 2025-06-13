@@ -28,7 +28,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.24.2";
+  version = "2.25.4";
   pyproject = true;
 
   disabled = python.pkgs.pythonOlder "3.8";
@@ -37,7 +37,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "pdm-project";
     repo = "pdm";
     tag = version;
-    hash = "sha256-z2p7guCQrKpDSYRHaGcHuwoTDsprrvJo9SH3sGBILSQ=";
+    hash = "sha256-zJ2kAB3TaUDO8EL6wxG09GEMF4Zb+BUdTJ0yaIbH2/s=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
@@ -49,6 +49,10 @@ python.pkgs.buildPythonApplication rec {
     pdm-build-locked
   ];
 
+  optional-dependencies = {
+    msgpack = [ python.pkgs.msgpack ];
+  };
+
   dependencies =
     with python.pkgs;
     [
@@ -59,7 +63,6 @@ python.pkgs.buildPythonApplication rec {
       hishel
       httpx
       installer
-      msgpack
       packaging
       pbs-installer
       platformdirs
