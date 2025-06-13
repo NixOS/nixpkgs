@@ -44,7 +44,10 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     python3
+    qtsensors
+    qtwayland
   ];
+
   extraBuildInputs = [
     qtquick3d
     qtsensors

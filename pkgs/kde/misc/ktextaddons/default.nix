@@ -16,6 +16,9 @@ mkKdeDerivation rec {
     hash = "sha256-2YRlBaUvl72mTq0ZMDK8KVc+wxSB9HO+PFhvW4Mh7Nw=";
   };
 
+  extraNativeBuildInputs = [
+    qtspeech
+  ];
 
   extraBuildInputs = [
     qtspeech

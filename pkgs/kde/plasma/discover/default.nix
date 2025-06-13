@@ -15,7 +15,11 @@ mkKdeDerivation {
     ./qml-deps.patch
   ];
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    pkg-config
+    qtwebview
+  ];
+
   extraBuildInputs = [
     qtwebview
     discount

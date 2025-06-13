@@ -2,7 +2,6 @@
   stdenv,
   mkKdeDerivation,
   qtsvg,
-  qttools,
   qtdeclarative,
   qt5compat,
   qqc2-desktop-style,
@@ -17,12 +16,11 @@ let
   unwrapped = mkKdeDerivation {
     pname = "kirigami";
 
-    extraNativeBuildInputs = [
-      qtsvg
-      qttools
-    ];
+    extraNativeBuildInputs = [ qtsvg ];
     extraBuildInputs = [ qtdeclarative ];
+
     extraPropagatedBuildInputs = [ qt5compat ];
+    propagatedNativeBuildInputs = [ qt5compat ];
   };
 in
 stdenv.mkDerivation {
