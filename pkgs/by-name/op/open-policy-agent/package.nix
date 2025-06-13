@@ -14,13 +14,13 @@ assert
 
 buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
-  version = "1.4.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4FRNTB24JWyF3Zuhx3T6LjNs83+wDh4gmE9rh3cu/Vk=";
+    hash = "sha256-gIwi+38oUBEVK5DiTU8Avt+lQtXaIf/udyVi4LLvTu8=";
   };
 
   vendorHash = null;
@@ -31,7 +31,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/open-policy-agent/opa/version.Version=${finalAttrs.version}"
   ];
 
@@ -50,6 +49,7 @@ buildGoModule (finalAttrs: {
           # Skip tests that require network, not available in the nix sandbox
           "TestInterQueryCache_ClientError"
           "TestIntraQueryCache_ClientError"
+          "TestSSOCredentialService"
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # Skip tests that require network, not available in the darwin sandbox
