@@ -33,4 +33,16 @@ maven.buildMavenPackage rec {
 
     runHook postInstall
   '';
+
+  meta = {
+    description = "eIDAS-compliant PDF-signing tool for the Austrian eGovernment platform";
+    longDescription = ''
+      A simple, yet configurable eIDAS-compliant PDF-signing tool for the Austrian eGovernment platform
+      supporting both FIDO2 L2 certified security tokens and smartphone-based
+      signing for creating legally valid qualified signatures on PDFs
+    '';
+    homepage = "https://technology.a-sit.at/en/pdf-over/";
+    license = lib.licenses.eupl12;
+    maintainers = with lib.maintainers; [ tanja ];
+  };
 }
