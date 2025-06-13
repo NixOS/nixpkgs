@@ -393,8 +393,6 @@ let
         inherit (pkgsPlatforms.elmPackages)
           elm
           elm-format
-          elm-instrument
-          elmi-to-json
           ;
       };
 
