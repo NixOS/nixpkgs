@@ -4,31 +4,31 @@
   fetchgit,
   cmake,
   pkg-config,
-  qt5,
+  qt6,
   libvorbis,
   libarchive,
   libxml2,
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.7";
+  version = "0.9.0";
   pname = "stopmotion";
 
   src = fetchgit {
     url = "https://invent.kde.org/multimedia/stopmotion";
     rev = version;
-    hash = "sha256-wqrB0mo7sI9ntWF9QlYmGiRiIoLkMzD+mQ6BzhbAKX8=";
+    hash = "sha256-RsFqvAmTJBVg32bnY2eA9jWWnuHgv66rZiWMqa6sviw=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtmultimedia
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtmultimedia
     libvorbis
     libarchive
     libxml2
