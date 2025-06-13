@@ -33,7 +33,7 @@ in
 
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = ''
         Whether interactive shells should show which Nix package (if
         any) provides a missing command.
