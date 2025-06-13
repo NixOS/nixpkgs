@@ -9,6 +9,7 @@
   rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook3,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rmenu";
@@ -61,7 +62,7 @@ rustPlatform.buildRustPackage rec {
     # fix config and theme
     mkdir -p $out/share/rmenu
     cp -vf $src/rmenu/public/config.yaml $out/share/rmenu/config.yaml
-    substituteInPlace $out/share/rmenu/config.yaml --replace "~/.config/rmenu" "$out"
+    substituteInPlace $out/share/rmenu/config.yaml --replace-fail "~/.config/rmenu" "$out"
     ln -sf  $out/themes/dark.css $out/share/rmenu/style.css
   '';
 
@@ -74,6 +75,8 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : "$out/bin"
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/imgurbot12/rmenu/releases/tag/v${version}";
