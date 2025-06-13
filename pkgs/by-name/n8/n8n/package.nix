@@ -17,18 +17,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.95.2";
+  version = "1.97.1";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-MFREFqDuT7xTCOJ6s6bcDG8jjTSckyqJTvAFSukV5x0=";
+    hash = "sha256-3tQx3yfs4LrNMSzHz4jnUduWu9uagvU8G/aGU22Fxq8=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ikGRHuAy9kmpxhu0Aawk6qL2vMYygSgf3YPdfs7OwOM=";
+    hash = "sha256-yO5wOGCZmpiBRuw7wwi1YqllzYPIwLv2SEvWwNufNYM=";
   };
 
   nativeBuildInputs =
