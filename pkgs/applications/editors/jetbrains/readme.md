@@ -28,6 +28,8 @@ To test the build process of every IDE (as well as the process for adding plugin
      - `nix build .#jetbrains.pycharm-community-src.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
    - Update `brokenPlugins` timestamp and hash (from https://web.archive.org/web/*/https://plugins.jetbrains.com/files/brokenPlugins.json)
    - Do a test build
+     - Notice that sometimes a newer Kotlin version is required to build from source, if build fails, first check the recommended Kotlin version in `.idea/kotlinc.xml` in the IDEA source root
+     - Feel free to update the Kotlin version to a compatible one
    - If it succeeds, make a commit
    - Run ./plugins/update_plugins.py, this will update plugins and automatically commit them
    - make a PR/merge
