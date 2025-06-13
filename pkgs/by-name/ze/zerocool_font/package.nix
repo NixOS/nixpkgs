@@ -1,0 +1,31 @@
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  installFonts,
+}:
+
+stdenvNoCC.mkDerivation {
+  pname = "zerocool_font";
+  version = "1.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchzip {
+    url = "https://web.archive.org/web/20250619041906/https://dl.dafont.com/dl/?f=zero_cool";
+    hash = "sha256-w9RNgO+kxhoO3HxK+ESrSA6FGljDwJfxo8TIUZzlzpA=";
+    extension = "zip";
+    stripRoot = false;
+  };
+
+  nativeBuildInputs = [ installFonts ];
+
+  meta = {
+    description = "Playful bold display typeface";
+    homepage = "https://ggbot.itch.io/zero-cool-font";
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ gigahawk ];
+  };
+}
