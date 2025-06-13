@@ -36,10 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typedload" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ltworf.github.io/typedload/";
+    changelog = "https://ltworf.codeberg.page/typedload/CHANGELOG.html";
     description = "Load and dump json-like data into typed data structures";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ppentchev ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ppentchev ];
   };
 }
