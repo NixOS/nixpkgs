@@ -235,7 +235,10 @@ in
     };
 
     systemd.services.tailscaled-set = mkIf (cfg.extraSetFlags != [ ]) {
-      after = [ "tailscaled.service" ];
+      after = [
+        "tailscaled.service"
+        "tailscaled-autoconnect.service"
+      ];
       wants = [ "tailscaled.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
