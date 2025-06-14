@@ -14954,8 +14954,6 @@ with pkgs;
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
 
-  freecad-wayland = freecad.override { withWayland = true; };
-
   freeciv = callPackage ../games/freeciv {
     sdl2Client = false;
     gtkClient = true;
