@@ -262,7 +262,7 @@ let
                 // specialArgs
               );
         in
-        mergeModules prefix (reverseList collected);
+        mergeModules prefix (reverseList collected.modules);
 
       options = merged.matchedOptions;
 
@@ -358,12 +358,30 @@ let
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
+        graph =
+          let
+            collected =
+              collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ])
+                (
+                  {
+                    inherit
+                      lib
+                      options
+                      config
+                      specialArgs
+                      ;
+                    _class = class;
+                  }
+                  // specialArgs
+                );
+          in
+          collected.graph;
         inherit extendModules type class;
       };
     in
     result;
 
-  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> [ Module ]
+  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> ModulesTree
   #
   # Collects all modules recursively through `import` statements, filtering out
   # all modules in disabledModules.
@@ -527,9 +545,25 @@ let
           operator = attrs: keyFilter attrs.modules;
         });
 
+      toGraph =
+        modulesPath:
+        { disabled, modules }:
+        let
+          isDisabledModule = isDisabled modulesPath disabled;
+
+          toModuleGraph = structuredModule: {
+            disabled = isDisabledModule structuredModule;
+            inherit (structuredModule) key;
+            file = structuredModule.module._file;
+            imports = map toModuleGraph structuredModule.modules;
+          };
+        in
+        map toModuleGraph (filter (x: x.key != "lib/modules.nix") modules);
     in
-    modulesPath: initialModules: args:
-    filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+    modulesPath: initialModules: args: {
+      modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+      graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules args);
+    };
 
   /**
     Wrap a module with a default location for reporting errors.
