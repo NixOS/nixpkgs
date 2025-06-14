@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "10.4.0";
+  version = "10.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "pubnub";
     repo = "python";
     tag = version;
-    hash = "sha256-yAQK56X6DKuaijAvUgQtAmpR4V5FioZogAqzZ/yhbHE=";
+    hash = "sha256-NI7rEudQ5sSj6cpPpFxEcqaeiQL6dJKK7C53BTJeMAg=";
   };
 
   pythonRelaxDeps = [ "httpx" ];
@@ -55,6 +55,8 @@ buildPythonPackage rec {
     "tests/integrational"
     "tests/manual"
     "tests/functional/push"
+    # Examples
+    "tests/examples"
   ];
 
   disabledTests = [

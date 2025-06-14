@@ -96,7 +96,7 @@ jobs:
                     name == '12.approved-by: package-maintainer'
                   )
 
-                const approvals =
+                const approvals = new Set(
                   (await github.paginate(github.rest.pulls.listReviews, {
                     owner: context.repo.owner,
                     repo: context.repo.repo,
@@ -104,15 +104,16 @@ jobs:
                   }))
                   .filter(review => review.state == 'APPROVED')
                   .map(review => review.user.id)
-
-                const maintainers = Object.keys(
-                  JSON.parse(await readFile('comparison/maintainers.json', 'utf-8'))
                 )
+
+                const maintainers = new Set(Object.keys(
+                  JSON.parse(await readFile('comparison/maintainers.json', 'utf-8'))
+                ))
 
                 // And the labels that should be there
                 const after = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8')).labels
-                if (approvals.length > 0) after.push(`12.approvals: ${approvals.length > 2 ? '3+' : approvals.length}`)
-                if (maintainers.some(id => approvals.includes(id))) after.push('12.approved-by: package-maintainer')
+                if (approvals.size > 0) after.push(`12.approvals: ${approvals.size > 2 ? '3+' : approvals.size}`)
+                if (Array.from(maintainers).some(m => approvals.has(m))) after.push('12.approved-by: package-maintainer')
 
                 // Remove the ones not needed anymore
                 await Promise.all(
