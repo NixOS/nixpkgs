@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc-menu-generator";
-  version = "0.2.0-unstable-2025-04-30";
+  version = "0.2.0-unstable-2025-06-03";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc-menu-generator";
-    rev = "2ca1be707aca1a06852e3a0ce70941e50bd7c02e";
-    hash = "sha256-LoRhTeS7wnv/yqUibQ9+3y8q3JvYPCZZJ51rDOe9EtM=";
+    rev = "255ae8937598524c9929e3576149473ff90dab39";
+    hash = "sha256-/cpgdBsRSDZobdXEkqOo68W9buP3J1YkCSHu0ld69R0=";
   };
 
   nativeBuildInputs = [

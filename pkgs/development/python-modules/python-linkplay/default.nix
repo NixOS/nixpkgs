@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "python-linkplay";
-  version = "0.2.11";
+  version = "0.2.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Velleman";
     repo = "python-linkplay";
     tag = "v${version}";
-    hash = "sha256-/AXhbcaP3itLO8xiIOoLtHvc5wNs7o+fHH0nN+OoGNs=";
+    hash = "sha256-oE3ILnaUDWMNcN3ZAIQKmGgUTc/tqXYdZTX1bxuHBso=";
   };
 
   build-system = [ setuptools ];
