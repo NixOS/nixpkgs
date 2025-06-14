@@ -116,6 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
+  # CMake 4 dropped support of versions lower than 3.5.
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
+
   nativeBuildInputs = [
     cmake
     makeBinaryWrapper

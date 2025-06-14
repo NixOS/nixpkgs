@@ -1,14 +1,15 @@
-Revert of commit 1af23c4de2c7d58c06171d70b37794b5c860d5f4.
---- b/Modules/Platform/Darwin.cmake
-+++ a/Modules/Platform/Darwin.cmake
-@@ -47,9 +47,7 @@
- set(CMAKE_SHARED_MODULE_SUFFIX ".so")
+diff --git a/Modules/Platform/Darwin.cmake b/Modules/Platform/Darwin.cmake
+index 97e972a31f..f13e70322a 100644
+--- a/Modules/Platform/Darwin.cmake
++++ b/Modules/Platform/Darwin.cmake
+@@ -47,9 +47,7 @@ set(CMAKE_APPLE_IMPORT_FILE_PREFIX "lib")
+ set(CMAKE_APPLE_IMPORT_FILE_SUFFIX ".tbd")
  set(CMAKE_MODULE_EXISTS 1)
  set(CMAKE_DL_LIBS "")
-+set(CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG "-Wl,-rpath,")
 -if(NOT "${_CURRENT_OSX_VERSION}" VERSION_LESS "10.5")
 -  set(CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG "-Wl,-rpath,")
 -endif()
++set(CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG "-Wl,-rpath,")
  
  foreach(lang C CXX OBJC OBJCXX)
    set(CMAKE_${lang}_OSX_COMPATIBILITY_VERSION_FLAG "-compatibility_version ")
