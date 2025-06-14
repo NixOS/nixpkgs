@@ -35,23 +35,28 @@
   nix-update-script,
 }:
 let
-  inherit (python3Packages)
-    boost
-    gitpython
-    ifcopenshell
-    matplotlib
-    opencamlib
-    pivy
-    ply
-    py-slvs
-    pybind11
-    pycollada
-    pyside6
-    python
-    pyyaml
-    scipy
-    shiboken6
-    ;
+  pythonDeps =
+    with python3Packages;
+    [
+      boost
+      gitpython # for addon manager
+      matplotlib
+      opencamlib
+      pivy
+      ply # for openSCAD file support
+      py-slvs
+      pybind11
+      pycollada
+      pyside6
+      python
+      pyyaml # (at least for) PyrateWorkbench
+      scipy
+      shiboken6
+    ]
+    ++ lib.optionals ifcSupport [
+      ifcopenshell
+    ];
+
   freecad-utils = callPackage ./freecad-utils.nix { };
 in
 freecad-utils.makeCustomizable (
@@ -80,44 +85,28 @@ freecad-utils.makeCustomizable (
 
     buildInputs =
       [
-        boost
         coin3d
         eigen
         fmt
-        gitpython # for addon manager
         gts
         hdf5
         libGLU
         libXmu
-        matplotlib
         medfile
         mpi
         ode
-        opencamlib
-        pivy
-        ply # for openSCAD file support
-        py-slvs
-        pybind11
-        pycollada
-        python
-        pyyaml # (at least for) PyrateWorkbench
-        scipy
         vtk
         xercesc
         yaml-cpp
         zlib
         opencascade-occt
-        pyside6
-        shiboken6
         qt6.qtbase
         qt6.qtsvg
         qt6.qttools
         qt6.qtwayland
         qt6.qtwebengine
       ]
-      ++ lib.optionals ifcSupport [
-        ifcopenshell
-      ]
+      ++ pythonDeps
       ++ lib.optionals spaceNavSupport [ libspnav ];
 
     patches = [
@@ -138,13 +127,13 @@ freecad-utils.makeCustomizable (
       "-DFREECAD_USE_PYBIND11=ON"
       "-DBUILD_QT5=OFF"
       "-DBUILD_QT6=ON"
-      "-DSHIBOKEN_INCLUDE_DIR=${shiboken6}/include"
+      "-DSHIBOKEN_INCLUDE_DIR=${python3Packages.shiboken6}/include"
       "-DSHIBOKEN_LIBRARY=Shiboken6::libshiboken"
       (
-        "-DPYSIDE_INCLUDE_DIR=${pyside6}/include"
-        + ";${pyside6}/include/PySide6/QtCore"
-        + ";${pyside6}/include/PySide6/QtWidgets"
-        + ";${pyside6}/include/PySide6/QtGui"
+        "-DPYSIDE_INCLUDE_DIR=${python3Packages.pyside6}/include"
+        + ";${python3Packages.pyside6}/include/PySide6/QtCore"
+        + ";${python3Packages.pyside6}/include/PySide6/QtWidgets"
+        + ";${python3Packages.pyside6}/include/PySide6/QtGui"
       )
       "-DPYSIDE_LIBRARY=PySide6::pyside6"
     ];
@@ -154,13 +143,13 @@ freecad-utils.makeCustomizable (
       export NIX_LDFLAGS="-L${gfortran.cc.lib}/lib64 -L${gfortran.cc.lib}/lib $NIX_LDFLAGS";
     '';
 
-    preConfigure = ''
-      qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
-    '';
+    dontWrapGApps = true;
 
     qtWrapperArgs = [
       "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
       "--prefix PATH : ${libredwg}/bin"
+      "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
+      "\${gappsWrapperArgs[@]}"
     ];
 
     postFixup = ''
