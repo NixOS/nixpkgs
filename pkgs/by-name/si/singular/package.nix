@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gmp,
   bison,
   perl,
@@ -68,6 +69,20 @@ stdenv.mkDerivation rec {
       --replace-fail "-flat_namespace" ""
 
     patchShebangs .
+  '';
+
+  patches = [
+    # Use fq_nmod_mat_entry instead of row pointer (removed in flint 3.3.0)
+    (fetchpatch {
+      url = "https://github.com/Singular/Singular/commit/05f5116e13c8a4f5f820c78c35944dd6d197d442.patch";
+      hash = "sha256-4l7JaCCFzE+xINU+E92eBN5CJKIdtQHly4Ed3ZwbKTA=";
+    })
+  ];
+
+  # flintconv.cc:334:37: error: no member named 'rows' in 'fq_nmod_mat_struct'
+  postPatch = ''
+    substituteInPlace libpolys/polys/flintconv.cc \
+      --replace-fail "M->rows[i-1]+j-1" "fq_nmod_mat_entry(M, i-1, j-1)"
   '';
 
   # For reference (last checked on commit 75f460d):
