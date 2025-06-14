@@ -148,7 +148,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "weston";
     maintainers = with maintainers; [
-      primeos
       qyliss
     ];
   };
