@@ -38,13 +38,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "6.7.1";
+  version = "6.8.0";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "Dorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d4G3royqhz+te5wPWVLNqqG/w0qOvTd7dKcWSzxUMUo=";
+    hash = "sha256-RvaGCAqAcWYA3v7AkdKMiM10Cki0jI418pbHPlVUnCg=";
   };
 
   cargoPatches = [
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1xpAJkS31DjrZCY5WJ4/Z1t1ALED5gz7xYLhVR1Qzww=";
+  cargoHash = "sha256-jLMXwW5q4MyCblw28tmheKGPAIn3BLuceyAtoS4J7bc=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
