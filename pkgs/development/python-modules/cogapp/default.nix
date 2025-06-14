@@ -17,6 +17,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonImportsCheck = [ "cogapp" ];
+
   # there are no tests
   doCheck = false;
 
