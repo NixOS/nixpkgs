@@ -11,18 +11,59 @@ let
 
   dnsmasqResolve = config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries;
 
-  resolvedConf = ''
-    [Resolve]
-    ${optionalString (
-      config.networking.nameservers != [ ]
-    ) "DNS=${concatStringsSep " " config.networking.nameservers}"}
-    ${optionalString (cfg.fallbackDns != null) "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
-    ${optionalString (cfg.domains != [ ]) "Domains=${concatStringsSep " " cfg.domains}"}
-    LLMNR=${cfg.llmnr}
-    DNSSEC=${cfg.dnssec}
-    DNSOverTLS=${cfg.dnsovertls}
-    ${config.services.resolved.extraConfig}
-  '';
+  mdnsLlmnrOpts =
+    name:
+    types.submodule {
+      options = {
+        enable = mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Whether to enable ${name} support.
+          '';
+        };
+        resolveOnly = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Only resolve, do not respond to incoming queries.
+          '';
+        };
+        openFirewall = mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Whether to open the firewall for the required UDP port.
+            Disabling this setting also disables discovering of network devices via the protocol.
+          '';
+        };
+      };
+    };
+
+  resolvedConf =
+    let
+      mkMdnsLlmnr =
+        option:
+        if !option.enable then
+          "false"
+        else if option.resolveOnly then
+          "resolve"
+        else
+          "true";
+    in
+    ''
+      [Resolve]
+      ${optionalString (
+        config.networking.nameservers != [ ]
+      ) "DNS=${concatStringsSep " " config.networking.nameservers}"}
+      ${optionalString (cfg.fallbackDns != null) "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
+      ${optionalString (cfg.domains != [ ]) "Domains=${concatStringsSep " " cfg.domains}"}
+      MulticastDNS=${mkMdnsLlmnr cfg.mdns}
+      LLMNR=${if lib.isAttrs cfg.llmnr then mkMdnsLlmnr cfg.llmnr else cfg.llmnr}
+      DNSSEC=${cfg.dnssec}
+      DNSOverTLS=${cfg.dnsovertls}
+      ${config.services.resolved.extraConfig}
+    '';
 
 in
 {
@@ -71,22 +112,25 @@ in
       '';
     };
 
-    services.resolved.llmnr = mkOption {
-      default = "true";
-      example = "false";
-      type = types.enum [
-        "true"
-        "resolve"
-        "false"
-      ];
+    services.resolved.mdns = mkOption {
+      default = { };
+      type = mdnsLlmnrOpts "mDNS";
       description = ''
-        Controls Link-Local Multicast Name Resolution support
-        (RFC 4795) on the local host.
+        Controls support for Multicast DNS (mDNS, RFC 6762[2]).
+      '';
+    };
 
-        If set to
-        - `"true"`: Enables full LLMNR responder and resolver support.
-        - `"false"`: Disables both.
-        - `"resolve"`: Only resolution support is enabled, but responding is disabled.
+    services.resolved.llmnr = mkOption {
+      default = { };
+      type = types.either (mdnsLlmnrOpts "LLMNR") (
+        types.enum [
+          "true"
+          "resolve"
+          "false"
+        ]
+      );
+      description = ''
+        Controls support for Link-Local Multicast Name Resolution (LLMNR, RFC 4795).
       '';
     };
 
@@ -177,6 +221,14 @@ in
           assertion = !config.networking.useHostResolvConf;
           message = "Using host resolv.conf is not supported with systemd-resolved";
         }
+
+        {
+          assertion = !(cfg.mdns.enable && config.services.avahi.enable);
+          message = ''
+            mDNS resolution cannot be handled by both systemd-resolved and
+            Avahi at the same time.
+          '';
+        }
       ];
 
       users.users.systemd-resolve.group = "systemd-resolve";
@@ -214,6 +266,19 @@ in
 
       networking.resolvconf.package = pkgs.systemd;
 
+      networking.firewall =
+        let
+          fromAttrs = { enable, openFirewall, ... }: enable && openFirewall;
+        in
+        lib.mkMerge [
+          (mkIf (fromAttrs cfg.mdns) {
+            allowedUDPPorts = [ 5353 ];
+          })
+
+          (mkIf (lib.isAttrs cfg.llmnr && fromAttrs cfg.llmnr) {
+            allowedUDPPorts = [ 5355 ];
+          })
+        ];
     })
 
     (mkIf config.boot.initrd.services.resolved.enable {
