@@ -15,12 +15,9 @@
 
 # CI
 /.github/*_TEMPLATE*                    @SigmaSquadron
-/.github/actions                        @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther
-/.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther
-/.github/workflows/check-format.yml     @infinisil @wolfgangwalther
-/.github/workflows/codeowners-v2.yml    @infinisil @wolfgangwalther
-/.github/workflows/nixpkgs-vet.yml      @infinisil @philiptaron @wolfgangwalther
-/ci                                     @infinisil @philiptaron @NixOS/Security @wolfgangwalther
+/.github/actions                        @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
+/.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
+/ci                                     @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
 /ci/OWNERS                              @infinisil @philiptaron
 
 # Development support

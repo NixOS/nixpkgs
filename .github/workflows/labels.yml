@@ -17,6 +17,10 @@ permissions:
   issues: write # needed to create *new* labels
   pull-requests: write
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   labels:
     name: label-pr

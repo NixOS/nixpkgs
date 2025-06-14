@@ -10383,7 +10383,6 @@ with pkgs;
   inherit (callPackages ../servers/firebird { })
     firebird_4
     firebird_3
-    firebird_2_5
     firebird
     ;
 
@@ -14668,10 +14667,6 @@ with pkgs;
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
-
-  yabar = callPackage ../applications/window-managers/yabar { };
-
-  yabar-unstable = callPackage ../applications/window-managers/yabar/unstable.nix { };
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 
