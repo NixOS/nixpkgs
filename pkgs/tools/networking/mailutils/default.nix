@@ -21,7 +21,7 @@
   readline,
   ncurses,
   python3,
-  sasl,
+  gsasl,
   system-sendmail,
   libxcrypt,
   mkpasswd,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       ncurses
       pam
       readline
-      sasl
+      gsasl
       libxcrypt
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ nettools ]
