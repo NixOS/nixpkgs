@@ -339,6 +339,10 @@ buildStdenv.mkDerivation {
     + lib.optionalString (lib.versionAtLeast version "134") ''
       sed -i "s/icu-i18n/icu-uc &/" js/moz.configure
     ''
+    # This entry in the branding file will override our environment variable, if we let it.
+    + lib.optionalString (branding == "browser/branding/aurora") ''
+      sed -i '/^MOZ_APP_REMOTINGNAME=/d' browser/branding/aurora/configure.sh
+    ''
     + extraPostPatch;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
