@@ -38,6 +38,7 @@
   soxr,
   # Outputs
   alsa-lib,
+  libao,
   libjack2,
   libpulseaudio,
   libshout,
@@ -112,6 +113,7 @@ let
     soxr = [ soxr ];
     # Output plugins
     alsa = [ alsa-lib ];
+    ao = [ libao ];
     jack = [ libjack2 ];
     pipewire = [ pipewire ];
     pulse = [ libpulseaudio ];
@@ -262,7 +264,9 @@ let
         ]
         ++ map (x: "-D${x}=enabled") features_
         ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
-        ++ lib.optional (builtins.elem "zeroconf" features_) "-Dzeroconf=avahi"
+        ++ lib.optional (builtins.elem "zeroconf" features_) (
+          "-Dzeroconf=" + (if stdenv.hostPlatform.isDarwin then "bonjour" else "avahi")
+        )
         ++ lib.optional (builtins.elem "systemd" features_) "-Dsystemd_system_unit_dir=etc/systemd/system"
         ++ lib.optional (builtins.elem "qobuz" features_) "-Dnlohmann_json=enabled";
 
