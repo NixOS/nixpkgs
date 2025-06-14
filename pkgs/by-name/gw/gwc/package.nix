@@ -37,6 +37,12 @@ stdenv.mkDerivation rec {
     fftw
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=int-conversion"
+    "-Wno-error=incompatible-pointer-types"
+  ];
+
   enableParallelBuilding = false; # Fails to generate machine.h in time.
 
   meta = with lib; {
