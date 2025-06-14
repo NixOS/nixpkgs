@@ -1,5 +1,5 @@
 #https://github.com/NixOS/nixpkgs/blob/nixos-25.05/pkgs/build-support/go/module.nix
-{ buildGoModule, fetchFromGitHub,lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 let
   proxyns = buildGoModule rec {
     name = "proxy-ns";
@@ -11,7 +11,7 @@ let
       rev = "v${version}";
       hash = "sha256-km+Rd3oXeyOX7wCoLL9f67AU/AVZTuGlvU0jtgTvgJE=";
     };
-    ldflags = [ "-s" "-w"];
+    ldflags = [ "-s" "-w" ];
     GOFLAGS = [
       "-buildvcs=false"
       #"-trimpath" added by default by buildGoModule
@@ -20,11 +20,11 @@ let
       mkdir -p $out/etc/proxy-ns
     '';
     meta = {
-       description = "Linux-specific command-line tool that can force any program to use your SOCKS5 proxy server.";
-       mainProgram = "proxy-ns";
-       homepage = "https://github.com/OkamiW/proxy-ns";
-       license = with lib.licenses; [ gpl3Plus ];
-     };
+      description = "Linux-specific command-line tool that can force any program to use your SOCKS5 proxy server.";
+      mainProgram = "proxy-ns";
+      homepage = "https://github.com/OkamiW/proxy-ns";
+      license = with lib.licenses; [ gpl3Plus ];
+    };
   };
 in
 proxyns
