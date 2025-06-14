@@ -11,7 +11,6 @@
   glib,
   gtk4,
   libadwaita,
-  zbar,
   sqlite,
   openssl,
   pipewire,
@@ -23,7 +22,6 @@
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
-  glycin-loaders,
   nix-update-script,
 }:
 
@@ -48,8 +46,6 @@ clangStdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       # vp8enc preset
       --prefix GST_PRESET_PATH : "${gst-plugins-good}/share/gstreamer-1.0/presets"
-      # See https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
     )
   '';
 
@@ -62,7 +58,6 @@ clangStdenv.mkDerivation rec {
     desktop-file-utils
     cargo
     rustc
-    rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
   ];
 
@@ -70,7 +65,6 @@ clangStdenv.mkDerivation rec {
     glib
     gtk4
     libadwaita
-    zbar
     sqlite
     openssl
     pipewire
