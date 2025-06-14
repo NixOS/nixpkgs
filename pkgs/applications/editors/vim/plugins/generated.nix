@@ -21288,12 +21288,12 @@ final: prev: {
 
   vimtex = buildVimPlugin {
     pname = "vimtex";
-    version = "2025-06-02";
+    version = "2025-06-12";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "vimtex";
-      rev = "f20b11458e97250d690ce0dc8670759b838cace9";
-      sha256 = "1ihq3l1wx7pbm6qw1gky8r51f2z08c723gvc19j1mklcg4gxgw7z";
+      rev = "4b4f18b1b181cdea35fdc418e5eb511f20e1f0fb";
+      sha256 = "1dwp05rkpykq3ppwy45hcy6d8d63sh76i4qmw3387ybisj06929v";
     };
     meta.homepage = "https://github.com/lervag/vimtex/";
     meta.hydraPlatforms = [ ];
