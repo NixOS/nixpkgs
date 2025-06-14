@@ -63,8 +63,8 @@ stdenv.mkDerivation (final: {
       --set QUARTO_ESBUILD ${lib.getExe esbuild} \
       --set QUARTO_DART_SASS ${lib.getExe dart-sass} \
       --set QUARTO_TYPST ${lib.getExe typst} \
-      ${lib.optionalString (rWrapper != null) "--set QUARTO_R ${rWithPackages}/bin/R"} \
-      ${lib.optionalString (python3 != null) "--set QUARTO_PYTHON ${pythonWithPackages}/bin/python3"}
+      ${lib.optionalString (rWrapper != null) "--prefix QUARTO_R : ${rWithPackages}/bin/R"} \
+      ${lib.optionalString (python3 != null) "--prefix QUARTO_PYTHON : ${pythonWithPackages}/bin/python3"}
   '';
 
   installPhase = ''
