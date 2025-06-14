@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xjobs";
-  version = "20200726";
+  version = "20250209";
 
   src = fetchurl {
     url = "mirror://sourceforge//xjobs/files/xjobs-${version}.tgz";
-    sha256 = "0ay6gn43pnm7r1jamwgpycl67bjg5n87ncl27jb01w2x6x70z0i3";
+    sha256 = "sha256-I7Vu7NunJEE4ioLap+GPnqIG2jfzSx6Wj2dOQmb9vuk=";
   };
 
   nativeBuildInputs = [
