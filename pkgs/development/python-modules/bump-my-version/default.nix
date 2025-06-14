@@ -22,8 +22,7 @@
   mercurial,
   gitMinimal,
   freezegun,
-  pre-commit,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-localserver,
   pytest-mock,
   pytestCheckHook,
@@ -70,8 +69,7 @@ buildPythonPackage rec {
     mercurial
     gitMinimal
     freezegun
-    pre-commit
-    pytest-cov
+    pytest-cov-stub
     pytest-localserver
     pytest-mock
     pytestCheckHook
