@@ -112,20 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
-  doInstallCheck = false; # fails
-
-  preCheck = ''
-    # Disable comsat tests that fail without tty in the sandbox.
-    tty -s || echo > comsat/tests/testsuite.at
-    # Remove broken macro
-    sed -i '/AT_TESTED/d' libmu_scm/tests/testsuite.at
-    # Provide libraries for mhn.
-    export LD_LIBRARY_PATH=$(pwd)/lib/.libs
-  '';
-
-  postCheck = ''
-    unset LD_LIBRARY_PATH
-  '';
 
   meta = {
     description = "Rich and powerful protocol-independent mail framework";
