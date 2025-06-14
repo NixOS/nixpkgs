@@ -42,6 +42,14 @@ let
     ip link del dev "${i}" 2>/dev/null || true
   '';
 
+  formatIpArgs =
+    args:
+    lib.pipe args [
+      (lib.filterAttrs (n: v: v != null))
+      (lib.mapAttrsToList (n: v: "${n} ${toString v}"))
+      (lib.concatStringsSep " ")
+    ];
+
   # warn that these attributes are deprecated (2017-2-2)
   # Should be removed in the release after next
   bondDeprecation = rec {
@@ -160,39 +168,41 @@ let
               EOF
             ''}
 
-            # Set the default gateway.
-            ${optionalString (cfg.defaultGateway != null && cfg.defaultGateway.address != "") ''
-              ${optionalString (cfg.defaultGateway.interface != null) ''
-                ip route replace ${cfg.defaultGateway.address} dev ${cfg.defaultGateway.interface} ${
-                  optionalString (cfg.defaultGateway.metric != null) "metric ${toString cfg.defaultGateway.metric}"
-                } proto static
-              ''}
-              ip route replace default ${
-                optionalString (cfg.defaultGateway.metric != null) "metric ${toString cfg.defaultGateway.metric}"
-              } via "${cfg.defaultGateway.address}" ${
-                optionalString (
-                  cfg.defaultGatewayWindowSize != null
-                ) "window ${toString cfg.defaultGatewayWindowSize}"
-              } ${
-                optionalString (cfg.defaultGateway.interface != null) "dev ${cfg.defaultGateway.interface}"
-              } proto static
-            ''}
-            ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
-              ${optionalString (cfg.defaultGateway6.interface != null) ''
-                ip -6 route replace ${cfg.defaultGateway6.address} dev ${cfg.defaultGateway6.interface} ${
-                  optionalString (cfg.defaultGateway6.metric != null) "metric ${toString cfg.defaultGateway6.metric}"
-                } proto static
-              ''}
-              ip -6 route replace default ${
-                optionalString (cfg.defaultGateway6.metric != null) "metric ${toString cfg.defaultGateway6.metric}"
-              } via "${cfg.defaultGateway6.address}" ${
-                optionalString (
-                  cfg.defaultGatewayWindowSize != null
-                ) "window ${toString cfg.defaultGatewayWindowSize}"
-              } ${
-                optionalString (cfg.defaultGateway6.interface != null) "dev ${cfg.defaultGateway6.interface}"
-              } proto static
-            ''}
+            # Set the default gateway
+            ${flip concatMapStrings
+              [
+                {
+                  version = "-4";
+                  gateway = cfg.defaultGateway;
+                }
+                {
+                  version = "-6";
+                  gateway = cfg.defaultGateway6;
+                }
+              ]
+              (
+                { version, gateway }:
+                optionalString (gateway != null && gateway.address != "") ''
+                  ${optionalString (gateway.interface != null) ''
+                    ip ${version} route replace ${gateway.address} proto static ${
+                      formatIpArgs {
+                        metric = gateway.metric;
+                        dev = gateway.interface;
+                      }
+                    }
+                  ''}
+                  ip ${version} route replace default proto static ${
+                    formatIpArgs {
+                      metric = gateway.metric;
+                      via = gateway.address;
+                      window = cfg.defaultGatewayWindowSize;
+                      dev = gateway.interface;
+                      src = gateway.source;
+                    }
+                  }
+                ''
+              )
+            }
           '';
         };
 

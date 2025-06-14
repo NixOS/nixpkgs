@@ -180,6 +180,12 @@ let
           description = "The default gateway metric/preference.";
         };
 
+        source = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "The default source address.";
+        };
+
       };
 
     };
@@ -656,6 +662,7 @@ in
       example = {
         address = "131.211.84.1";
         interface = "enp3s0";
+        source = "131.211.84.2";
       };
       type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''
@@ -669,6 +676,7 @@ in
       example = {
         address = "2001:4d0:1e04:895::1";
         interface = "enp3s0";
+        source = "2001:4d0:1e04:895::2";
       };
       type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''

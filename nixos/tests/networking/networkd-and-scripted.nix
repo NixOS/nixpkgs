@@ -39,11 +39,23 @@ let
           defaultGateway = {
             address = "192.168.1.1";
             interface = "enp1s0";
+            source = "192.168.1.3";
           };
           defaultGateway6 = {
             address = "fd00:1234:5678:1::1";
             interface = "enp1s0";
+            source = "fd00:1234:5678:1::3";
           };
+          interfaces.enp1s0.ipv6.addresses = [
+            {
+              address = "fd00:1234:5678:1::2";
+              prefixLength = 64;
+            }
+            {
+              address = "fd00:1234:5678:1::3";
+              prefixLength = 128;
+            }
+          ];
           interfaces.enp1s0.ipv4.addresses = [
             {
               address = "192.168.1.2";
@@ -89,7 +101,11 @@ let
 
         with subtest("Test default gateway"):
             client.wait_until_succeeds("ping -c 1 192.168.3.1")
-            client.wait_until_succeeds("ping -c 1 fd00:1234:5678:3::1")
+            client.wait_until_succeeds("ping -c 1 fd00:1234:5678:1::1")
+
+        with subtest("Test default addresses"):
+            client.succeed("ip -4 route show default | grep -q 'src 192.168.1.3'")
+            client.succeed("ip -6 route show default | grep -q 'src fd00:1234:5678:1::3'")
       '';
     };
     routeType = {

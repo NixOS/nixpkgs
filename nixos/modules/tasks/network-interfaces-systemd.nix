@@ -46,6 +46,9 @@ let
               // optionalAttrs (gateway.metric != null) {
                 Metric = gateway.metric;
               }
+              // optionalAttrs (gateway.source != null) {
+                PreferredSource = gateway.source;
+              }
             )
           ];
         };
