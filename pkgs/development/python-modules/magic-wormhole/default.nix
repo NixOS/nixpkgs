@@ -34,18 +34,21 @@
   magic-wormhole-transit-relay,
   magic-wormhole-mailbox-server,
   pytestCheckHook,
+  pytest-twisted,
+
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.18.0";
+  version = "0.19.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole";
     tag = version;
-    hash = "sha256-FQ7m6hkJcFZaE+ptDALq/gijn/RcAM1Zvzi2+xpoXBU=";
+    hash = "sha256-5Tipcood5RktXY05p20hQpWhSMMnZm67I4iybjV8TcA=";
   };
 
   postPatch =
@@ -98,9 +101,12 @@ buildPythonPackage rec {
       magic-wormhole-mailbox-server
       magic-wormhole-transit-relay
       pytestCheckHook
+      pytest-twisted
     ]
     ++ optional-dependencies.dilation
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
+
+  pytestFlagsArray = [ "src/wormhole/test" ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -112,10 +118,12 @@ buildPythonPackage rec {
       --zsh wormhole_complete.zsh
   '';
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
     changelog = "https://github.com/magic-wormhole/magic-wormhole/blob/${version}/NEWS.md";
     description = "Securely transfer data between computers";
-    homepage = "https://github.com/magic-wormhole/magic-wormhole";
+    homepage = "https://magic-wormhole.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
     mainProgram = "wormhole";

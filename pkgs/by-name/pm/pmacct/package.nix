@@ -77,16 +77,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small set of multi-purpose passive network monitoring tools";
     longDescription = ''
       pmacct is a small set of multi-purpose passive network monitoring tools
       [NetFlow IPFIX sFlow libpcap BGP BMP RPKI IGP Streaming Telemetry]
     '';
     homepage = "http://www.pmacct.net/";
-    changelog = "https://github.com/pmacct/pmacct/blob/v${version}/ChangeLog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ _0x4A6F ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/pmacct/pmacct/blob/v${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
+    platforms = lib.platforms.unix;
   };
 })

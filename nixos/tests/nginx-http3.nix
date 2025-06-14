@@ -90,6 +90,7 @@ builtins.listToAttrs (
 
           server.wait_for_unit("nginx")
           server.wait_for_open_port(443)
+          client.wait_for_unit("network-online.target")
 
           # Check http connections
           client.succeed("curl --verbose --http3-only https://acme.test | grep 'Hello World!'")

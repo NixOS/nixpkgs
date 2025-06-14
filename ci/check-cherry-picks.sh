@@ -121,7 +121,7 @@ while read -r new_commit_sha ; do
           # consider this too unlikely to happen, to deal with explicitly.
           max_length=10000
           if [ "${#diff}" -gt $max_length ]; then
-            printf -v diff "%s\n\n[...truncated...]" "$(echo "$diff" | head -c $max_length | head -n-1)"
+            printf -v diff "%s\n>\n> [...truncated...]" "$(echo "$diff" | head -c $max_length | head -n-1)"
           fi
           echo "$diff" >> $markdown_file
           echo '> ```' >> $markdown_file

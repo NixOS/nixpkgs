@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scooter";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "thomasschafer";
     repo = "scooter";
     rev = "v${version}";
-    hash = "sha256-GlqGAzOkW6Jy7qGblfkMfCtzNwjOY/ZmGktqU4uUe90=";
+    hash = "sha256-/wl6xbAXfPUTSI38htgkWC3IlsxtFbPOpBHqcSVBGPk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mh4FoFZ012yXbCr9Ts57crc+1JrcA2cdnZzqjKUspq8=";
+  cargoHash = "sha256-kPweKXAitvODNoKTr2iB+qM9qMWGoKEQCxpkgrpnewY=";
 
   # Many tests require filesystem writes which fail in Nix sandbox
   doCheck = false;

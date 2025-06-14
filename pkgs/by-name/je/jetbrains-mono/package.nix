@@ -27,12 +27,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Typeface made for developers";
     homepage = "https://jetbrains.com/mono/";
     changelog = "https://github.com/JetBrains/JetBrainsMono/blob/v${version}/Changelog.md";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ vinnymeller ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ vinnymeller ];
+    platforms = lib.platforms.all;
   };
 }

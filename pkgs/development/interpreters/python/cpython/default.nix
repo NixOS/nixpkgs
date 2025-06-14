@@ -340,6 +340,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals (pythonAtLeast "3.13") [
       ./3.13/virtualenv-permissions.patch
     ]
+    ++ optionals (pythonAtLeast "3.14") [
+      ./3.14/CVE-2025-4517.patch
+    ]
     ++ optionals mimetypesSupport [
       # Make the mimetypes module refer to the right file
       ./mimetypes.patch

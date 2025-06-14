@@ -36,16 +36,16 @@ rustPlatform.buildRustPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic output configuration tool that automatically detects and configures connected outputs based on a set of profiles";
     homepage = "https://gitlab.com/w0lff/shikane";
     changelog = "https://gitlab.com/w0lff/shikane/-/tags/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       michaelpachec0
       natsukium
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "shikane";
   };
 }

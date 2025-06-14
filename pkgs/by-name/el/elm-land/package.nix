@@ -63,7 +63,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/elm-land/elm-land";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      domenkozar
       zupo
     ];
     mainProgram = "elm-land";

@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mihomo-party";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src =
     let
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     fetchurl {
       url = "https://github.com/mihomo-party-org/mihomo-party/releases/download/v${version}/mihomo-party-linux-${version}-${arch}.deb";
       hash = selectSystem {
-        x86_64-linux = "sha256-IzOW36nJS8SBc3o6/E6eGdBi9I7JApmWydk1x0gEWUw=";
-        aarch64-linux = "sha256-AKOATvsAqX1CkoQrMQzVlbf2x+BzIP4bcj49vPRIkEg=";
+        x86_64-linux = "sha256-pQcDW9ztCTIS5dbmPuvig32cXWfzYiHksa3Jv/O5J7E=";
+        aarch64-linux = "sha256-YHLHJ05sdMj/Wz/WAEianbDIUz9X+AER2wm9T/QHRXI=";
       };
     };
 

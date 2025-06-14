@@ -25,7 +25,7 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "TLS grabber focused on TLS based data collection";
     longDescription = ''
       A fast and configurable TLS grabber focused on TLS based data
@@ -33,7 +33,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/tlsx";
     changelog = "https://github.com/projectdiscovery/tlsx/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

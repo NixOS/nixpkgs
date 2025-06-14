@@ -29,12 +29,12 @@ buildGoModule rec {
     "-X=main.gitDescription=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Scanner for end-of-life (EOL) software and dependencies in container images, filesystems, and SBOMs";
     homepage = "https://github.com/xeol-io/xeol";
     changelog = "https://github.com/xeol-io/xeol/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "xeol";
   };
 }

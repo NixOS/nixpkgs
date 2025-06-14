@@ -141,17 +141,17 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform shell connection hub and remote file manager";
     homepage = "https://github.com/xpipe-io/${pname}";
     downloadPage = "https://github.com/xpipe-io/${pname}/releases/latest";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     changelog = "https://github.com/xpipe-io/${pname}/releases/tag/${version}";
     license = [
-      licenses.asl20
-      licenses.unfree
+      lib.licenses.asl20
+      lib.licenses.unfree
     ];
-    maintainers = with maintainers; [ crschnick ];
+    maintainers = with lib.maintainers; [ crschnick ];
     platforms = [ "x86_64-linux" ];
     mainProgram = pname;
   };

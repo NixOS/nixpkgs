@@ -40,12 +40,12 @@ python3.pkgs.buildPythonApplication rec {
     "sslstrip"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for exploiting SSL stripping attacks";
     homepage = "https://github.com/L1ghtn1ng/sslstrip";
     changelog = "https://github.com/L1ghtn1ng/sslstrip/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sslstrip";
   };
 }

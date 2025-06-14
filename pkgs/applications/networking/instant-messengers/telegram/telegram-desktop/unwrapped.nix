@@ -11,7 +11,6 @@
   tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
   qtbase,
-  qtimageformats,
   qtsvg,
   qtwayland,
   kcoreaddons,
@@ -47,14 +46,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "5.14.3";
+  version = "5.15.3";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-nNYQpWbBK+E/LAbwTWpNUhs2+wb8iuMfqkxJKjaFmhg=";
+    hash = "sha256-ATGzh9zJezIOZ3uSm3rIV+KQ4XFWJvf5NaJ0ptjzYGc=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -82,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       qtbase
-      qtimageformats
       qtsvg
       lz4
       xxHash
@@ -147,6 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ nickcao ];
-    mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
+    mainProgram = "Telegram";
   };
 })

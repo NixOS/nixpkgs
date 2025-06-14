@@ -8,7 +8,7 @@
   mailcap,
   buildPackages,
   pkgsBuildTarget,
-  threadsCross,
+  targetPackages,
   testers,
   skopeo,
   buildGo124Module,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildTarget = lib.optional isCross targetCC;
 
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross.package;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows targetPackages.threads.package;
 
   postPatch = ''
     patchShebangs .

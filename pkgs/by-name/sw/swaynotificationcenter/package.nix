@@ -92,14 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
     command = "${xvfb-run}/bin/xvfb-run swaync --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple notification daemon with a GUI built for Sway";
     homepage = "https://github.com/ErikReider/SwayNotificationCenter";
     changelog = "https://github.com/ErikReider/SwayNotificationCenter/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "swaync";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       berbiche
       pedrohlc
     ];

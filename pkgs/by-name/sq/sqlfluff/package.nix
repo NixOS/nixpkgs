@@ -68,12 +68,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "sqlfluff" ];
 
-  meta = with lib; {
+  meta = {
     description = "SQL linter and auto-formatter";
     homepage = "https://www.sqlfluff.com/";
     changelog = "https://github.com/sqlfluff/sqlfluff/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sqlfluff";
   };
 }

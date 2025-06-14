@@ -100,5 +100,6 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.imsick ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    broken = true; # needs older version of fprintd (v1.94.4)
   };
 }

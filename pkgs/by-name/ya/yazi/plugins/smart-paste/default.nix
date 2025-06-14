@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Previewing archive contents with smart-filter";
+    description = "Paste files into the hovered directory or to the CWD if hovering over a file";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

@@ -11,7 +11,6 @@
   xz,
   freetype,
   fontconfig,
-  nlohmann_json,
   curl,
   icu,
   harfbuzz,
@@ -35,30 +34,43 @@
   alsa-lib,
   libjack2,
   makeWrapper,
+  buildPackages,
 }:
 
 let
   opengfx = fetchzip {
     url = "https://cdn.openttd.org/opengfx-releases/7.1/opengfx-7.1-all.zip";
-    sha256 = "sha256-daJ/Qwg/okpmLQkXcCjruIiP8GEwyyp02YWcGQepxzs=";
+    hash = "sha256-daJ/Qwg/okpmLQkXcCjruIiP8GEwyyp02YWcGQepxzs=";
   };
 
   opensfx = fetchzip {
     url = "https://cdn.openttd.org/opensfx-releases/1.0.3/opensfx-1.0.3-all.zip";
-    sha256 = "sha256-QmfXizrRTu/fUcVOY7tCndv4t4BVW+fb0yUi8LgSYzM=";
+    hash = "sha256-QmfXizrRTu/fUcVOY7tCndv4t4BVW+fb0yUi8LgSYzM=";
   };
 
   openmsx = fetchzip {
     url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
-    sha256 = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
+    hash = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
   };
+
+  # OpenTTD builds and uses some of its own tools during the build and we need those to be available for cross-compilation.
+  # Build the tools for buildPlatform with minimal dependencies, using the "OPTION_TOOLS_ONLY" flag.
+  crossTools = buildPackages.openttd.overrideAttrs (oldAttrs: {
+    pname = "openttd-tools";
+    buildInputs = [ ];
+    cmakeFlags = oldAttrs.cmakeFlags or [ ] ++ [ (lib.cmakeBool "OPTION_TOOLS_ONLY" true) ];
+    installPhase = ''
+      install -Dm555 src/strgen/strgen -t $out/bin
+      install -Dm555 src/settingsgen/settingsgen -t $out/bin
+    '';
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openttd";
   version = "14.1";
 
   src = fetchzip {
-    url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
+    url = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/openttd-${finalAttrs.version}-source.tar.xz";
     hash = "sha256-YT4IE/rJ9pnpeMWKbOra6AbSUwW19RwOKlXkxwoMeKY=";
   };
 
@@ -72,11 +84,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      makeWrapper
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      crossTools
+    ];
+
   buildInputs =
     [
       SDL2
@@ -85,7 +102,6 @@ stdenv.mkDerivation rec {
       zlib
       freetype
       fontconfig
-      nlohmann_json
       curl
       icu
       harfbuzz
@@ -107,9 +123,7 @@ stdenv.mkDerivation rec {
       libjack2
     ];
 
-  prefixKey = "--prefix-dir=";
-
-  configureFlags = [ "--without-liblzo2" ];
+  strictDeps = true;
 
   postPatch = ''
     substituteInPlace src/music/fluidsynth.cpp \
@@ -128,7 +142,7 @@ stdenv.mkDerivation rec {
       tar -xf ${openmsx}/*.tar -C $out/share/games/openttd/baseset
     '';
 
-  meta = with lib; {
+  meta = {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
     mainProgram = "openttd";
     longDescription = ''
@@ -142,12 +156,12 @@ stdenv.mkDerivation rec {
         - observe as spectators
     '';
     homepage = "https://www.openttd.org/";
-    changelog = "https://cdn.openttd.org/openttd-releases/${version}/changelog.txt";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    changelog = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/changelog.txt";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       jcumming
       fpletz
     ];
   };
-}
+})

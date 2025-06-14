@@ -50,7 +50,7 @@ let
         runHook postInstall
       '';
 
-      postInstallPhase = ''
+      postInstall = ''
         ln -s ${cfg.filesDir} $out/share/php/drupal/sites/default/files
         ln -s ${cfg.stateDir}/sites/default/settings.php $out/share/php/drupal/sites/default/settings.php
         ln -s ${cfg.modulesDir} $out/share/php/drupal/modules
@@ -91,14 +91,14 @@ let
           type = types.path;
           default = "/var/lib/drupal/${name}/modules";
           defaultText = "/var/lib/drupal/<name>/modules";
-          description = "The location of Drupal modules.";
+          description = "The location for users to install Drupal modules.";
         };
 
         themesDir = mkOption {
           type = types.path;
           default = "/var/lib/drupal/${name}/themes";
-          defaultText = "/varlib/drupal/<name>/themes";
-          description = "The location of Drupal themes.";
+          defaultText = "/var/lib/drupal/<name>/themes";
+          description = "The location for users to install Drupal themes.";
         };
 
         phpOptions = mkOption {

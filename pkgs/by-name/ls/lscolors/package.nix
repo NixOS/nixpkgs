@@ -21,15 +21,15 @@ rustPlatform.buildRustPackage rec {
   # setid is not allowed in the sandbox
   checkFlags = [ "--skip=tests::style_for_setid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rust library and tool to colorize paths using LS_COLORS";
     homepage = "https://github.com/sharkdp/lscolors";
     changelog = "https://github.com/sharkdp/lscolors/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "lscolors";
   };
 }

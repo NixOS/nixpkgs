@@ -801,6 +801,7 @@ with self;
       js_of_ocaml-ppx
       sedlex
     ];
+    meta.broken = true; # Not compatible with sedlex > 3.4
   };
 
   ppx_csv_conv = janePackage {

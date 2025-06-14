@@ -34,13 +34,13 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jfrog/jfrog-cli";
     description = "Client for accessing to JFrog's Artifactory and Mission Control through their respective REST APIs";
     changelog = "https://github.com/jfrog/jfrog-cli/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "jf";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       detegr
       aidalgol
     ];

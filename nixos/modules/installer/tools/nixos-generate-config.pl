@@ -49,6 +49,7 @@ if (-e "/etc/nixos-generate-config.conf") {
         $rootDir = File::Spec->rel2abs($rootDir); # resolve absolute path
     }
     $kernel = $cfg->val("Defaults", "Kernel") // $kernel;
+    $flake = $cfg->val("Defaults", "Flake") // $flake;
 }
 
 for (my $n = 0; $n < scalar @ARGV; $n++) {

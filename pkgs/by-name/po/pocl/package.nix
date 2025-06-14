@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "portable open source (MIT-licensed) implementation of the OpenCL standard";
-    homepage = "http://portablecl.org";
+    homepage = "https://portablecl.org";
     changelog = "https://github.com/pocl/pocl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

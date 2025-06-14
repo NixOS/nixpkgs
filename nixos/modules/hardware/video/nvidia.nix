@@ -204,11 +204,22 @@ in
 
       prime.offload.enableOffloadCmd = lib.mkEnableOption ''
         adding a `nvidia-offload` convenience script to {option}`environment.systemPackages`
-        for offloading programs to an nvidia device. To work, should have also enabled
+        for offloading programs to an nvidia device. To work, you must also enable
         {option}`hardware.nvidia.prime.offload.enable` or {option}`hardware.nvidia.prime.reverseSync.enable`.
 
-        Example usage `nvidia-offload sauerbraten_client`
+        Example usage: `nvidia-offload sauerbraten_client`
+
+        This script can be renamed with {option}`hardware.nvidia.prime.offload.enableOffloadCmd`.
       '';
+      prime.offload.offloadCmdMainProgram = lib.mkOption {
+        type = lib.types.str;
+        description = ''
+          Specifies the CLI name of the {option}`hardware.nvidia.prime.offload.enableOffloadCmd`
+          convenience script for offloading programs to an nvidia device.
+        '';
+        default = "nvidia-offload";
+        example = "prime-run";
+      };
 
       prime.reverseSync.enable = lib.mkEnableOption ''
         NVIDIA Optimus support using the NVIDIA proprietary driver via reverse
@@ -558,7 +569,7 @@ in
             lib.optional cfg.nvidiaSettings nvidia_x11.settings
             ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced
             ++ lib.optional offloadCfg.enableOffloadCmd (
-              pkgs.writeShellScriptBin "nvidia-offload" ''
+              pkgs.writeShellScriptBin cfg.prime.offload.offloadCmdMainProgram ''
                 export __NV_PRIME_RENDER_OFFLOAD=1
                 export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
                 export __GLX_VENDOR_LIBRARY_NAME=nvidia

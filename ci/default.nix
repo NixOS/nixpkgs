@@ -76,7 +76,13 @@ in
   inherit pkgs fmt;
   requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
-  eval = pkgs.callPackage ./eval { };
+
+  # FIXME(lf-): it might be useful to test other Nix implementations
+  # (nixVersions.stable and Lix) here somehow at some point to ensure we don't
+  # have eval divergence.
+  eval = pkgs.callPackage ./eval {
+    nix = pkgs.nixVersions.latest;
+  };
 
   # CI jobs
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };

@@ -12,6 +12,7 @@
   fetchYarnDeps,
   stdenv,
   cctools,
+  nixosTests,
 }:
 
 # docs: https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#yarn2nix-javascript-yarn2nix
@@ -95,7 +96,10 @@ mkYarnPackage rec {
 
   distPhase = "true";
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = { inherit (nixosTests) draupnir; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Moderation tool for Matrix";

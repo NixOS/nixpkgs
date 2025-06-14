@@ -33,15 +33,15 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) static-web-server;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous web server for static files-serving";
     homepage = "https://static-web-server.net/";
     changelog = "https://github.com/static-web-server/static-web-server/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       misilelab
     ];
