@@ -37,9 +37,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-UWgDjFojPBYgykrCrJyYvVWY+Gc5d4aRGjTWjc528AM=";
   };
 
-  postPatch = lib.optionalString stdenv.cc.isClang ''
-    sed -i 's/gcc/clang/g' utils/*/DATS/atscc_util.dats
-  '';
+  postPatch =
+    ''
+      ln -sf ../../../../../share/Makefile.gen contrib/atscntrb/atscntrb-hx-cstream/SATS/DOCUGEN/Makefile.gen
+      ln -sf ../../../../../share/Makefile.gen contrib/atscntrb/atscntrb-hx-intinf/SATS/DOCUGEN/Makefile.gen
+      ln -sf ../../../../../share/Makefile.gen contrib/atscntrb/atscntrb-hx-libgmp/SATS/DOCUGEN/Makefile.gen
+      ln -sf ../../../../../share/Makefile.gen contrib/atscntrb/atscntrb-hx-libjson-c/SATS/DOCUGEN/Makefile.gen
+      ln -sf ../../../../../share/Makefile.gen contrib/atscntrb/atscntrb-hx-libpcre/SATS/DOCUGEN/Makefile.gen
+      ln -sf ../../../../../../share/Makefile.gen npm-utils/contrib/atscntrb/atscntrb-hx-libcairo/SATS/DOCUGEN/Makefile.gen
+      ln -sf ../../../../../../share/Makefile.gen npm-utils/contrib/atscntrb/atscntrb-hx-libsdl2/SATS/DOCUGEN/Makefile.gen
+    ''
+    + lib.optionalString stdenv.cc.isClang ''
+      sed -i 's/gcc/clang/g' utils/*/DATS/atscc_util.dats
+    '';
 
   buildInputs = [ gmp ];
 
