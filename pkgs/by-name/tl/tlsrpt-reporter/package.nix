@@ -5,6 +5,7 @@
   installShellFiles,
   python3,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -49,6 +50,10 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "tlsrpt_reporter"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) tlsrpt;
+  };
 
   meta = {
     description = "Application suite to receive TLSRPT datagrams and to generate and deliver TLSRPT reports";
