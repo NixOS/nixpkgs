@@ -617,6 +617,8 @@ with pkgs;
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
 
+  fetchtor = callPackage ../build-support/fetchtor { };
+
   fetchtorrent = callPackage ../build-support/fetchtorrent { };
 
   fetchsvn =
