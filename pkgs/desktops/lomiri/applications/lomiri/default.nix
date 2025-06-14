@@ -7,7 +7,6 @@
   linkFarm,
   replaceVars,
   nixosTests,
-  ayatana-indicator-datetime,
   bash,
   biometryd,
   boost,
@@ -33,6 +32,7 @@
   lomiri-api,
   lomiri-app-launch,
   lomiri-download-manager,
+  lomiri-indicator-datetime,
   lomiri-indicator-network,
   lomiri-notifications,
   lomiri-settings-components,
@@ -143,7 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ayatana-indicator-datetime
     bash
     boost
     cmake-extras
@@ -163,6 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-api
     lomiri-app-launch
     lomiri-download-manager
+    lomiri-indicator-datetime
     lomiri-indicator-network
     lomiri-schemas
     lomiri-system-settings-unwrapped
