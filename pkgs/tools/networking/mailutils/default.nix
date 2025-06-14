@@ -13,7 +13,7 @@
   gdbm,
   gnutls,
   gss,
-  guile_2_2,
+  guile,
   libmysqlclient,
   mailcap,
   nettools,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ nettools ]
     ++ lib.optionals pythonSupport [ python3 ]
-    ++ lib.optionals guileSupport [ guile_2_2 ];
+    ++ lib.optionals guileSupport [ guile ];
 
   patches = [
     ./fix-build-mb-len-max.patch
