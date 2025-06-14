@@ -5,26 +5,26 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.wmderland;
 in
 
 {
   options.services.xserver.windowManager.wmderland = {
-    enable = mkEnableOption "wmderland";
+    enable = lib.mkEnableOption "wmderland";
 
-    extraSessionCommands = mkOption {
+    package = lib.mkPackageOption pkgs "wmderland" { };
+
+    extraSessionCommands = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Shell commands executed just before wmderland is started.
       '';
     };
 
-    extraPackages = mkOption {
-      type = with types; listOf package;
+    extraPackages = lib.mkOption {
+      type = with lib.types; listOf package;
       default = with pkgs; [
         rofi
         dunst
@@ -33,7 +33,7 @@ in
         feh
         rxvt-unicode
       ];
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         with pkgs; [
           rofi
           dunst
@@ -49,18 +49,18 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "wmderland";
       start = ''
         ${cfg.extraSessionCommands}
 
-        ${pkgs.wmderland}/bin/wmderland &
+        ${cfg.package}/bin/wmderland &
         waitPID=$!
       '';
     };
     environment.systemPackages = [
-      pkgs.wmderland
+      cfg.package
       pkgs.wmderlandc
     ] ++ cfg.extraPackages;
   };
