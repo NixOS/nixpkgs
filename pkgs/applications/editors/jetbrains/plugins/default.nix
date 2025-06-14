@@ -45,7 +45,12 @@ let
 
   selectFile =
     id: ide: build:
-    if !builtins.elem ide pluginsJson.plugins."${id}".compatible then
+    let
+      # Allow all PyCharm plugins for PyCharm Community - TODO: Remove this special case once PyCharm Community is removed
+      pycharmCommunityCheck =
+        id != "pycharm-community" || builtins.elem ide pluginsJson.plugins.pycharm.compatible;
+    in
+    if !pycharmCommunityCheck && !builtins.elem ide pluginsJson.plugins."${id}".compatible then
       throw "Plugin with id ${id} does not support IDE ${ide}"
     else if !pluginsJson.plugins."${id}".builds ? "${build}" then
       throw "Jetbrains IDEs with build ${build} are not in nixpkgs. Try update_plugins.py with --with-build?"

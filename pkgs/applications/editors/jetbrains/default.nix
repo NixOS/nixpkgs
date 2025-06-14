@@ -1,11 +1,20 @@
 let
   # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
   # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
+
+  # TODOs for ./bin/ides.json:
+  # - pycharm-community can be removed once pycharm-src is available.
+  # - pycharm MAYBE can be set to `isOpenSource = true` once we know how to build it.
+  #   - It is however unlikely that the bin version provided by Jetbrains is ACTUALLY open source. As of now it contains propreitary bundled plugins
+  #     at least. Instead we probably need to keep it as `isOpenSource = false` but change the build so that all source builds are always asumed to be OSS.
   ideInfo = builtins.fromJSON (builtins.readFile ./bin/ides.json);
+  # TODOs for ./bin/versions.json:
+  # - pycharm-community can be removed once pycharm-src is available.
   versions = builtins.fromJSON (builtins.readFile ./bin/versions.json);
 in
 
 {
+  config,
   lib,
   stdenv,
   callPackage,
@@ -155,6 +164,20 @@ let
       }
     );
 
+  # TODO: These should be moved down again once we throw instead of warn in the deprecated aliases
+
+  pycharm-bin = buildPycharm {
+    pname = "pycharm";
+    extraBuildInputs = [ musl ];
+  };
+  # TODO: To be defined once Jetbrains provides PyCharm source builds.
+  #pycharm-src = buildPycharm {
+  #  pname = "pycharm";
+  #  extraBuildInputs = [ musl ];
+  #  fromSource = true;
+  #};
+  # TODO - see above, should then be: pycharm = if stdenv.hostPlatform.isDarwin then pycharm-bin else pycharm-src;
+  pycharm = pycharm-bin;
 in
 rec {
   # Sorted alphabetically
@@ -304,20 +327,27 @@ rec {
     ];
   };
 
-  pycharm-community-bin = buildPycharm { pname = "pycharm-community"; };
+  inherit pycharm pycharm-bin; # TODO: Add pycharm-src once Jetbrains provides way to build PyCharm from source.
 
-  pycharm-community-src = buildPycharm {
-    pname = "pycharm-community";
-    fromSource = true;
-  };
+  # TODO: Replace with alias (see bottom) once pycharm-src is available.
+  pycharm-community-bin =
+    lib.warnOnInstantiate
+      "PyCharm has been unified into a single product and PyCharm Community has been discontinued. This package will be replaced with jetbrains.pycharm-bin soon, once Jetbrains provides a way to build PyCharm from source. Until then updates may not be provided and plugins from nixpkgs may not work. You can use `jetbrains.pycharm-bin` in the meantime."
+      (buildPycharm {
+        pname = "pycharm-community";
+      });
+
+  # TODO: Replace with alias (see bottom) once pycharm-src is available.
+  pycharm-community-src =
+    lib.warnOnInstantiate
+      "PyCharm has been unified into a single product and PyCharm Community has been discontinued. This package will be replaced with jetbrains.pycharm-src soon, once Jetbrains provides a way to build PyCharm from source. Until then updates may not be provided and plugins from nixpkgs may not work. You can use `jetbrains.pycharm-bin` in the meantime."
+      (buildPycharm {
+        pname = "pycharm-community";
+        fromSource = true;
+      });
 
   pycharm-community =
     if stdenv.hostPlatform.isDarwin then pycharm-community-bin else pycharm-community-src;
-
-  pycharm-professional = buildPycharm {
-    pname = "pycharm-professional";
-    extraBuildInputs = [ musl ];
-  };
 
   rider =
     (mkJetBrainsProduct {
@@ -430,4 +460,12 @@ rec {
     __attrsFailEvaluation = true;
   };
 
+}
+// lib.optionalAttrs config.allowAliases {
+  # PyCharm Community is discontinued and PyCharm Professional renamed to PyCharm - Added 2025-06-01
+  # TODO: Enable once Jetbrains provides a way to build PyCharm from source.
+  #pycharm-community = lib.warnOnInstantiate "PyCharm has been unified into a single product and PyCharm Community has been discontinued. This deprecated alias now provides the new PyCharm (formerly Professional), you may be asked to migrate your settings. Please use jetbrains.pycharm instead. On Linux you can for now still build PyCharm Community from source using jetbrains.pycharm-community-src." pycharm;
+  #pycharm-community-bin = lib.warnOnInstantiate "PyCharm has been unified into a single product and PyCharm Community has been discontinued. This deprecated alias now provides the new PyCharm (formerly Professional), you may be asked to migrate your settings. Please use jetbrains.pycharm-bin instead." pycharm-bin;
+  #pycharm-community-src = lib.warnOnInstantiate "PyCharm has been unified into a single product and PyCharm Community has been discontinued. This deprecated alias now provides the new PyCharm (formerly Professional), you may be asked to migrate your settings. Please use jetbrains.pycharm-src instead." pycharm-src;
+  pycharm-professional = lib.warnOnInstantiate "PyCharm has been unified into a single product and PyCharm Professional has been renamed. Please use jetbrains.pycharm-bin instead." pycharm-bin;
 }
