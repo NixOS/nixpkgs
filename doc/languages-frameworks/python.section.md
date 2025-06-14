@@ -136,7 +136,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      domenkozar
       lovek323
       madjar
       lsix

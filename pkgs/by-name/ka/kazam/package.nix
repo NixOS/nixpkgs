@@ -68,7 +68,7 @@ python3Packages.buildPythonApplication {
     homepage = "https://github.com/niknah/kazam";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     mainProgram = "kazam";
   };
 }

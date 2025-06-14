@@ -75,6 +75,7 @@ mapAliases (
     floating-nvim = throw "floating.nvim has been removed: abandoned by upstream. Use popup-nvim or nui-nvim"; # Added 2024-11-26
     ghc-mod-vim = ghcmod-vim;
     ghcmod = ghcmod-vim;
+    gleam-vim = throw "gleam.vim has been removed: its code was merged into vim."; # Added 2025-06-10
     goyo = goyo-vim;
     Gist = vim-gist;
     gitgutter = vim-gitgutter;

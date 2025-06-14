@@ -5490,19 +5490,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  gleam-vim = buildVimPlugin {
-    pname = "gleam.vim";
-    version = "2025-04-24";
-    src = fetchFromGitHub {
-      owner = "gleam-lang";
-      repo = "gleam.vim";
-      rev = "7174886f4974629a4427b0c703d6ce77f39422c5";
-      sha256 = "0g99zc9x9l5mdh6nmlkwfqh4hk82ncqcgdzjp5b702fiymjhpkf4";
-    };
-    meta.homepage = "https://github.com/gleam-lang/gleam.vim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   glow-nvim = buildVimPlugin {
     pname = "glow.nvim";
     version = "2025-03-21";
@@ -6622,20 +6609,6 @@ final: prev: {
       sha256 = "1z2zi951xgssq1d343b0rhcj1xn4qwvv1b2wzvy8jg7ak9pgrl1a";
     };
     meta.homepage = "https://github.com/neoclide/jsonc.vim/";
-    meta.hydraPlatforms = [ ];
-  };
-
-  jsonfly-nvim = buildVimPlugin {
-    pname = "jsonfly.nvim";
-    version = "2024-09-30";
-    src = fetchFromGitHub {
-      owner = "Myzel394";
-      repo = "jsonfly.nvim";
-      rev = "d713d9ef38115ab09b4a2828dac67b2b3f7d35c4";
-      sha256 = "12nafsy2s01ci679sj6s980kx4lgd7zyqng7xv3gbf2r2xvj3prr";
-      fetchSubmodules = true;
-    };
-    meta.homepage = "https://github.com/Myzel394/jsonfly.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -14999,6 +14972,20 @@ final: prev: {
       sha256 = "118zicpmw7gca1fvzfm3sb101kzksgwf06hdk4790ry7xsrmnank";
     };
     meta.homepage = "https://github.com/markonm/traces.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  trailblazer-nvim = buildVimPlugin {
+    pname = "trailblazer.nvim";
+    version = "2025-02-04";
+    src = fetchFromGitHub {
+      owner = "LeonHeidelbach";
+      repo = "trailblazer.nvim";
+      rev = "5c0e3ac01e227bb9afe428583f29f0ec34801408";
+      sha256 = "0fvm4gb190b9a2gv3spf7429p2adjbsxcgpgd89azmpgqcsdg509";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/LeonHeidelbach/trailblazer.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

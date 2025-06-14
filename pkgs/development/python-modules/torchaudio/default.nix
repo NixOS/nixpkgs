@@ -77,7 +77,7 @@ let
 in
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -86,7 +86,7 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "audio";
     tag = "v${version}";
-    hash = "sha256-/5XIVj0jLE7+A1LZxA3bFH3mdwNIcrV4XMOa4xznr/w=";
+    hash = "sha256-T1V+/Oho6Dblh3ah5PljpxKcndy2e1dAlVxC3ay4AM0=";
   };
 
   patches = [

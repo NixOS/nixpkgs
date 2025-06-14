@@ -170,8 +170,8 @@ rec {
 
             config.foo.enable = true;
           }
-        ]:
-      }
+        ];
+      };
     in
     eval.config
     => { foo.enable = true; }

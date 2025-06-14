@@ -35,7 +35,7 @@ let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      version = "19.1.4";
+      version = "20.0";
 
       nativeBuildInputs = [
         (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; })
@@ -57,9 +57,9 @@ let
             outputHashAlgo = "sha256";
             outputHash =
               if studioVariant then
-                "sha256-OTL83suZXt7DxDz+89zIRJD8R25/HZUQMMGlfS+Ow4I="
+                "sha256-q0jfP/DtroK7Dzj/BiB1JmYPihCma/OgcGmQOE/uwGY="
               else
-                "sha256-2u1gkaL3vdI+4RnPl5bEXE+zeRhg2BzPWjni015ISWI=";
+                "sha256-JM/V449KUEXuQmRpyQC2z9DRmID7hJ3Mnt5N6p/HOXA=";
 
             impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -302,6 +302,7 @@ buildFHSEnv {
       amarshall
       jshcmpbll
       orivej
+      XBagon
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

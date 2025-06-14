@@ -124,7 +124,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "ulauncher";
     maintainers = with maintainers; [
       aaronjanse
-      sebtm
     ];
   };
 }

@@ -9,51 +9,55 @@
   openssh ? null,
 }:
 
+let
+  repoToName =
+    url: rev:
+    let
+      inherit (lib)
+        removeSuffix
+        splitString
+        reverseList
+        head
+        last
+        elemAt
+        ;
+      base = removeSuffix "/" (last (splitString ":" url));
+      path = reverseList (splitString "/" base);
+      repoName =
+        # ../repo/trunk -> repo
+        if head path == "trunk" then
+          elemAt path 1
+        # ../repo/branches/branch -> repo-branch
+        else if elemAt path 1 == "branches" then
+          "${elemAt path 2}-${head path}"
+        # ../repo/tags/tag -> repo-tag
+        else if elemAt path 1 == "tags" then
+          "${elemAt path 2}-${head path}"
+        # ../repo (no trunk) -> repo
+        else
+          head path;
+    in
+    "${repoName}-r${toString rev}";
+in
+
 {
   url,
   rev ? "HEAD",
+  name ? repoToName url rev,
   sha256 ? "",
   hash ? "",
   ignoreExternals ? false,
   ignoreKeywords ? false,
-  name ? null,
   preferLocalBuild ? true,
 }:
 
 assert sshSupport -> openssh != null;
 
-let
-  repoName =
-    let
-      fst = lib.head;
-      snd = l: lib.head (lib.tail l);
-      trd = l: lib.head (lib.tail (lib.tail l));
-      path_ =
-        (p: if lib.head p == "" then lib.tail p else p) # ~ drop final slash if any
-          (lib.reverseList (lib.splitString "/" url));
-      path = [ (lib.removeSuffix "/" (lib.head path_)) ] ++ (lib.tail path_);
-    in
-    # ../repo/trunk -> repo
-    if fst path == "trunk" then
-      snd path
-    # ../repo/branches/branch -> repo-branch
-    else if snd path == "branches" then
-      "${trd path}-${fst path}"
-    # ../repo/tags/tag -> repo-tag
-    else if snd path == "tags" then
-      "${trd path}-${fst path}"
-    # ../repo (no trunk) -> repo
-    else
-      fst path;
-
-  name_ = if name == null then "${repoName}-r${toString rev}" else name;
-in
-
 if hash != "" && sha256 != "" then
   throw "Only one of sha256 or hash can be set"
 else
   stdenvNoCC.mkDerivation {
-    name = name_;
+    inherit name;
     builder = ./builder.sh;
     nativeBuildInputs = [
       cacert

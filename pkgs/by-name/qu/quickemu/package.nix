@@ -3,6 +3,7 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
+  gitUpdater,
   cdrtools,
   curl,
   gawk,
@@ -98,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru = {
+    tests = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Quickly create and run optimised Windows, macOS and Linux virtual machines";

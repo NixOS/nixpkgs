@@ -9,6 +9,7 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
+  imagemagick,
 }:
 
 let
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     qmake
     makeWrapper
     copyDesktopItems
+    imagemagick
   ];
   buildInputs = [
     qtbase
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "minizinc";
+      name = "MiniZincIDE";
       desktopName = "MiniZincIDE";
       icon = "minizinc";
       comment = meta.description;
@@ -70,6 +72,11 @@ stdenv.mkDerivation rec {
       wrapProgram ${executableLoc} \
         --prefix PATH ":" ${lib.makeBinPath [ minizinc ]} \
         --set QT_QPA_PLATFORM_PLUGIN_PATH "${qtbase}/lib/qt-6/plugins/platforms"
+
+      for size in 16 24 32 48 64 128 256 512; do
+        mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+        magick -background none ${src}/MiniZincIDE/images/mznicon.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/minizinc.png
+      done
     '';
 
   meta = with lib; {

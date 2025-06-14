@@ -1,8 +1,6 @@
 {
-  dbus,
   fetchFromGitHub,
   lib,
-  iwd,
   rustPlatform,
 }:
 
@@ -18,11 +16,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-NjA8n11pOytXsotEQurYxDHPhwXG5vpdlyscmVUIzfA=";
-
-  buildInputs = [
-    dbus
-    iwd
-  ];
 
   meta = {
     homepage = "https://github.com/e-tho/iwmenu";

@@ -57,6 +57,9 @@ stdenv.mkDerivation rec {
     export HOME="$TMPDIR"
     yarn config --offline set yarn-offline-mirror "$offlineCache"
     fixup-yarn-lock yarn.lock
+    # Ensure that the node_modules folder is created by yarn install.
+    # See https://github.com/yarnpkg/yarn/issues/5500#issuecomment-1221456246
+    echo "nodeLinker: node-modules" > .yarnrc.yml
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 

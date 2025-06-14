@@ -27,21 +27,21 @@ let
   # pulling it out of the Git history every few months and checking which files
   # we need to update now is slightly annoying.
   patchGoVersion = ''
-    find . -name go.mod -not -path "./.bingo/*" -not -path "./.citools/*" -print0 | while IFS= read -r -d ''' line; do
+    find . -name go.mod -not -path "./.bingo/*" -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.2" "go 1.24.2"
+        --replace-fail "go 1.24.3" "go 1.24.2"
     done
     find . -name go.work -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.2" "go 1.24.2"
+        --replace-fail "go 1.24.3" "go 1.24.2"
     done
     substituteInPlace Makefile \
-      --replace-fail "GO_VERSION = 1.24.2" "GO_VERSION = 1.24.2"
+      --replace-fail "GO_VERSION = 1.24.3" "GO_VERSION = 1.24.2"
   '';
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "12.0.0+security-01";
+  version = "12.0.1+security-01";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -53,7 +53,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-4i9YHhoneptF72F4zvV+KVUJiP8xfiowPJExQ9iteK4=";
+    hash = "sha256-cYEWNXuIrTrtXR3XHqizDJ17QyBYkaccIThSorWO5GA=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -67,14 +67,14 @@ buildGoModule rec {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-yLrGllct+AGG/u/E2iX2gog1d/iKNfkYu6GV6Pw6nuc=";
+    hash = "sha256-Vjr/jyXqHoM/3o49IDJ2aT1s1tMkP90H+2E+yUiviF4=";
   };
 
   disallowedRequisites = [ offlineCache ];
 
   postPatch = patchGoVersion;
 
-  vendorHash = "sha256-dpLcU4ru/wIsxwYAI1qROtYwHJ2WOJSZpIhd9/qMwZo=";
+  vendorHash = "sha256-Vlao6eNEHtl1+6vAAjDOxINuGxSwAqdi6Hc8oVniTO8=";
 
   proxyVendor = true;
 
@@ -158,7 +158,6 @@ buildGoModule rec {
     maintainers = with maintainers; [
       offline
       fpletz
-      willibutz
       globin
       ma27
       Frostman

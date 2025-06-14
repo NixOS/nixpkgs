@@ -922,6 +922,13 @@ with lib.maintainers;
     shortName = "NGI";
   };
 
+  nixos-rebuild = {
+    members = [ thiagokokada ];
+    scope = "Maintain nixos-rebuild(-ng).";
+    shortName = "nixos-rebuild";
+    enableFeatureFreezePing = true;
+  };
+
   node = {
     members = [ winter ];
     scope = "Maintain Node.js runtimes and build tooling.";

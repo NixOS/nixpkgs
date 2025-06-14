@@ -255,7 +255,7 @@ buildPythonPackage rec {
       # we have to update both the python hash and the cargo one,
       # so use nix-update-script
       extraArgs = [
-        "--versionRegex"
+        "--version-regex"
         "([0-9].+)"
       ];
     };

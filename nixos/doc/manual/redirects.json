@@ -50,6 +50,15 @@
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
   ],
+  "module-services-firefox-syncserver-clients": [
+    "index.html#module-services-firefox-syncserver-clients"
+  ],
+  "module-services-firefox-syncserver-clients-android": [
+    "index.html#module-services-firefox-syncserver-clients-android"
+  ],
+  "module-services-firefox-syncserver-clients-desktop": [
+    "index.html#module-services-firefox-syncserver-clients-desktop"
+  ],
   "module-services-opencloud": [
     "index.html#module-services-opencloud"
   ],
