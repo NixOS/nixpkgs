@@ -4,7 +4,7 @@
   fetchurl,
   jdk21,
   stdenv,
-  _7zz,
+  undmg-hdiutil,
 }:
 let
   pname = "nosql-workbench";
@@ -50,12 +50,8 @@ if stdenv.hostPlatform.isDarwin then
       meta
       ;
 
-    sourceRoot = ".";
-
-    # DMG file is using APFS which is unsupported by "undmg".
-    # Instead, use "7zz" to extract the contents.
-    # "undmg" issue: https://github.com/matthewbauer/undmg/issues/4
-    nativeBuildInputs = [ _7zz ];
+    # dmg is APFS formatted
+    nativeBuildInputs = [ undmg-hdiutil ];
 
     buildInputs = [ jdk21 ];
 
