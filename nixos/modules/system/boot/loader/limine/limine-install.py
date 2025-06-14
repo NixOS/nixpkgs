@@ -463,7 +463,7 @@ def install_bootloader() -> None:
             print("note: boot.loader.limine.biosSupport is set, but device is set to nodev, only the stage 2 bootloader will be installed.", file=sys.stderr)
             return
 
-        limine_deploy_args: list[str] = [limine_binary, 'bios-install', device]
+        limine_deploy_args: List[str] = [limine_binary, 'bios-install', device]
 
         if config('partitionIndex'):
             limine_deploy_args.append(str(config('partitionIndex')))
