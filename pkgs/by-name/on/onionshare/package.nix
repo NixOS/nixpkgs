@@ -135,7 +135,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://onionshare.org/";
     changelog = "https://github.com/onionshare/onionshare/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ bbjubjub ];
+    maintainers = with lib.maintainers; [
+      bbjubjub
+      dotlambda
+    ];
     mainProgram = "onionshare-cli";
   };
 }
