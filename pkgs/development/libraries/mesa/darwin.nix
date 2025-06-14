@@ -61,6 +61,12 @@ stdenv.mkDerivation {
     (lib.mesonEnable "llvm" true)
   ];
 
+  # For reasons unclear, if fixup phase is used here, xinit end up with some
+  # files not included (for one or both platforms).
+  postInstall = ''
+    install_name_tool -add_rpath "$out/lib" "$out/lib/libGL.dylib"
+  '';
+
   passthru = {
     # needed to pass evaluation of bad platforms
     driverLink = throw "driverLink not supported on darwin";
