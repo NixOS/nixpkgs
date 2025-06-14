@@ -7,6 +7,7 @@
   libXi,
   libXtst,
   libevdev,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,6 +24,8 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-3ylJSb6ItIkOl5Unhnm5aL83mQvWIM0PUg+1lMtUbPY=";
 
+  doInstallCheck = true;
+
   buildInputs = [
     libX11
     libXi
@@ -32,6 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    udevCheckHook
   ];
 
   postInstall = ''

@@ -71,8 +71,6 @@ buildPythonPackage rec {
     substituteInPlace test/functional/test_other.py \
       --replace 'import ipfshttpclient' 'import ipfshttpclient; import pytest' \
       --replace 'assert ipfs_is_available' 'pytest.skip("Unknown test failure with IPFS >=0.11.0"); assert ipfs_is_available'
-    substituteInPlace test/run-tests.py \
-      --replace '--cov-fail-under=90' '--cov-fail-under=75'
   '';
 
   checkPhase = ''

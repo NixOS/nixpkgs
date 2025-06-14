@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixman";
-  version = "0.44.2";
+  version = "0.46.0";
 
   src = fetchurl {
     urls = with finalAttrs; [
       "mirror://xorg/individual/lib/${pname}-${version}.tar.gz"
       "https://cairographics.org/releases/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-Y0kGHOGjOKtpUrkhlNGwN3RyJEII1H/yW++G/HGXNGY=";
+    hash = "sha256-Atn/e4RY72FzHD01X4VLv0Yf0KTTVjxR8cHHsAY4BQ0=";
   };
 
   # Raise test timeout, 120s can be slightly exceeded on slower hardware

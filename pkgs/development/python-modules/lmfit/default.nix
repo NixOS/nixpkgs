@@ -7,6 +7,7 @@
   matplotlib,
   numpy,
   pandas,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   scipy,
@@ -27,11 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-czIea4gfL2hiNXIaffwCr2uw8DCiXv62Zjj2KxxgU6E=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=lmfit --cov-report html" ""
-  '';
-
   build-system = [
     setuptools
     setuptools-scm
@@ -48,6 +44,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     matplotlib
     pandas
+    pytest-cov-stub
     pytestCheckHook
   ];
 

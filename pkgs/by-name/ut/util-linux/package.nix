@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalPackage: rec {
       ./rtcwake-search-PATH-for-shutdown.patch
       # https://github.com/util-linux/util-linux/pull/3013
       ./fix-darwin-build.patch
+      # https://github.com/util-linux/util-linux/pull/3479 (fixes https://github.com/util-linux/util-linux/issues/3474)
+      ./fix-mount-regression.patch
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
       (fetchurl {

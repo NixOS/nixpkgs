@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  udevCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -16,6 +17,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   dontBuild = true;
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   # 80-* renamed to 70-* for uaccess TAG
   installPhase = ''

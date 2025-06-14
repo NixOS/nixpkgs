@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitLab,
   pkg-config,
   autoreconfHook,
   libintl,
@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
-  version = "2.13.8";
+  version = "2.14.3";
 
   outputs =
     [
@@ -46,9 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor finalAttrs.version}/libxml2-${finalAttrs.version}.tar.xz";
-    hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "libxml2";
+    rev = "5133461b05f0f66e6c5b0fecd5f29dc5cd967302"; # some security- and bugfixes ahead of 2.14
+    hash = "sha256-xLRey6mRsRhgfASIQWOTofcQcLU0Daeg33pxGN0l66I=";
   };
 
   strictDeps = true;

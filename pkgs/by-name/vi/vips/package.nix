@@ -32,7 +32,7 @@
   libjpeg,
   libjxl,
   librsvg,
-  libspng,
+  libpng,
   libtiff,
   libwebp,
   matio,
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libjxl
     librsvg
-    libspng
+    libpng
     libtiff
     libwebp
     matio
@@ -125,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       (lib.mesonEnable "pdfium" false)
       (lib.mesonEnable "nifti" false)
+      (lib.mesonEnable "spng" false) # we want to use libpng
       (lib.mesonEnable "introspection" withIntrospection)
     ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) (

@@ -19,6 +19,7 @@
   procps,
   gtksourceview4,
   bash,
+  udevCheckHook,
   nixosTests,
   # Change the default log level to debug for easier debugging of package issues
   withDebugLogLevel ? false,
@@ -65,6 +66,7 @@ in
     glib
     gobject-introspection
     pygobject3
+    udevCheckHook
   ] ++ maybeXmodmap;
 
   dependencies = [

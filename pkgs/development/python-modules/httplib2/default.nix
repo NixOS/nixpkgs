@@ -6,6 +6,7 @@
   fetchFromGitHub,
   mock,
   pyparsing,
+  pytest-cov-stub,
   pytest-forked,
   pytest-randomly,
   pytest-timeout,
@@ -26,15 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-76gdiRbF535CEaNXwNqsVeVc0dKglovMPQpGsOkbd/4=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
-
   propagatedBuildInputs = [ pyparsing ];
 
   nativeCheckInputs = [
     cryptography
     mock
+    pytest-cov-stub
     pytest-forked
     pytest-randomly
     pytest-timeout

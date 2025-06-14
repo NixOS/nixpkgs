@@ -49,6 +49,8 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
   disabledTests = [
     # touches network
     "test_decode_car"

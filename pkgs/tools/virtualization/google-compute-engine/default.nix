@@ -7,6 +7,7 @@
   util-linux,
   setuptools,
   distro,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,6 +25,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     setuptools
     distro
+  ];
+
+  nativeBuildInputs = [
+    udevCheckHook
   ];
 
   postPatch = ''
@@ -53,7 +58,6 @@ buildPythonPackage rec {
     patchShebangs $out/bin/*
   '';
 
-  doCheck = false;
   pythonImportsCheck = [ "google_compute_engine" ];
 
   meta = with lib; {

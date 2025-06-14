@@ -52,7 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     HOME=$TMPDIR $out/bin/openrgb --help > /dev/null
+
+    runHook postInstallCheck
   '';
 
   passthru.withPlugins =

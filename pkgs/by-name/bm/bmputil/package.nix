@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
+  udevCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bmputil";
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeBuildInputs = [ udevCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 

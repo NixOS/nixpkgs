@@ -58,6 +58,8 @@ buildPythonPackage rec {
     pytest-benchmark
   ];
 
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
   disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # Segfaults: boost_histogram/_internal/hist.py", line 799 in sum
     # Fatal Python error: Segmentation fault

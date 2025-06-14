@@ -46,6 +46,8 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
   pythonImportsCheck = [ "ical" ];
 
   meta = {
