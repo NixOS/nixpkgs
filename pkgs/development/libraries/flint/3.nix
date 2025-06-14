@@ -22,11 +22,11 @@ assert
 
 stdenv.mkDerivation rec {
   pname = "flint3";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "https://flintlib.org/download/flint-${version}.tar.gz";
-    hash = "sha256-ynvkbXeXInfrb+DE92dUhDL1a7U0qhfW26LXzOFc0j8=";
+    hash = "sha256-2a4PExglNycGgnDb+jxLVRVeP0t75sqcBW5Y8oOPFbM=";
   };
 
   nativeBuildInputs = [
