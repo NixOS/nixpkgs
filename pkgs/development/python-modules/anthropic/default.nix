@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.52.2";
+  version = "0.54.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${version}";
-    hash = "sha256-vCIS2NDsScKESfYFHDTSRLb9ZhUsrEPHyfuubrbc+44=";
+    hash = "sha256-ajxePJZ+UsVDVd825ZzgvZ1Wgl/Dj2Eh58OSAhbiV9I=";
   };
 
   postPatch = ''
