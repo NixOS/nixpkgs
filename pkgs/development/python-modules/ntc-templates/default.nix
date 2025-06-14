@@ -28,7 +28,11 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ textfsm ];
+  pythonRelaxDeps = [
+    "textfsm"
+  ];
+
+  dependencies = [ textfsm ];
 
   nativeCheckInputs = [
     invoke
@@ -36,12 +40,6 @@ buildPythonPackage rec {
     ruamel-yaml
     toml
     yamllint
-  ];
-
-  # https://github.com/networktocode/ntc-templates/issues/743
-  disabledTests = [
-    "test_raw_data_against_mock"
-    "test_verify_parsed_and_reference_data_exists"
   ];
 
   meta = with lib; {
