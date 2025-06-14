@@ -46,7 +46,7 @@ stdenv'.mkDerivation rec {
   cmakeFlags = lib.optionals cudaSupport [
     (lib.cmakeBool "CUDA_ENABLED" true)
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
-      lib.strings.concatStringsSep ";" (map cudaPackages.flags.dropDot cudaCapabilities)
+      lib.strings.concatStringsSep ";" (map cudaPackages.flags.dropDots cudaCapabilities)
     ))
   ];
 
