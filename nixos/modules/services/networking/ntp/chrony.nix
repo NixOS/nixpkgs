@@ -237,7 +237,7 @@ in
 
       unitConfig.ConditionCapability = "CAP_SYS_TIME";
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         ExecStart = "${chronyPkg}/bin/chronyd ${builtins.toString chronyFlags}";
 
         # Proc filesystem
@@ -316,6 +316,13 @@ in
           Unless you are very sure the former isn't what you want, please remove
           `rtcsync` from `services.chrony.extraConfig`.
           Alternatively, disable this behaviour by `services.chrony.enableRTCTrimming = false;`
+        '';
+      }
+      {
+        assertion = !(cfg.enable && config.environment.memoryAllocator.provider == "graphene-hardened");
+        message = ''
+          Chrony doesn't work with the graphene-hardened memory allocator set by
+          `environment.memoryAllocator.provider`.
         '';
       }
     ];
