@@ -15148,22 +15148,17 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  quake3wrapper = callPackage ../games/quake3/wrapper { };
-
-  quake3demo = quake3wrapper {
-    name = "quake3-demo-${lib.getVersion quake3demodata}";
-    description = "Demo of Quake 3 Arena, a classic first-person shooter";
-    paks = [
-      quake3pointrelease
-      quake3demodata
-    ];
-  };
-
-  quake3demodata = callPackage ../games/quake3/content/demo.nix { };
-
-  quake3pointrelease = callPackage ../games/quake3/content/pointrelease.nix { };
-
-  quake3hires = callPackage ../games/quake3/content/hires.nix { };
+  inherit (import ../games/quake3 pkgs.callPackage)
+    quake3wrapper
+    quake3arenadata
+    quake3demodata
+    quake3pointrelease
+    quake3arena
+    quake3arena-hires
+    quake3demo
+    quake3demo-hires
+    quake3hires
+    ;
 
   quakespasm = callPackage ../games/quakespasm { };
   vkquake = callPackage ../games/quakespasm/vulkan.nix { };
