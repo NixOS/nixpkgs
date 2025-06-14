@@ -2,11 +2,8 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  breeze-icons,
   gtk-engine-murrine,
   jdupes,
-  plasma-framework,
-  plasma-workspace,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -148,16 +145,6 @@ stdenvNoCC.mkDerivation rec {
     find $out -xtype l -print -delete
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    # Propagate sddm theme dependencies to user env otherwise sddm
-    # does not find them. Putting them in buildInputs is not enough.
-
-    mkdir -p $sddm/nix-support
-
-    printWords ${breeze-icons} ${plasma-framework} ${plasma-workspace} \
-      >> $sddm/nix-support/propagated-user-env-packages
   '';
 
   meta = {
