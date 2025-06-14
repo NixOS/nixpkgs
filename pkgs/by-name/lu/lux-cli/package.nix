@@ -17,18 +17,18 @@
 rustPlatform.buildRustPackage rec {
   pname = "lux-cli";
 
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "nvim-neorocks";
     repo = "lux";
-    tag = "v0.7.0";
-    hash = "sha256-I0e9nOkY6+tYNORrS1AhgaFM2WtNNV2vFq6gh0YNOYE=";
+    tag = "v0.7.1";
+    hash = "sha256-x5Bs/Zq0gfJAC3VFKG1hCg95IZ0qpgf8kBfFccP5HgU=";
   };
 
   buildAndTestSubdir = "lux-cli";
   useFetchCargoVendor = true;
-  cargoHash = "sha256-qtkyuTJNik+B9zaUgpKXBTAEqPbFQoPxqmlVJ/y0i7o=";
+  cargoHash = "sha256-lGQToe1nM6tjcoxYy94wiGMevm3/B7MD6NOIX61GpMA=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://nvim-neorocks.github.io/";
     changelog = "https://github.com/nvim-neorocks/lux/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mrcjkb
     ];
