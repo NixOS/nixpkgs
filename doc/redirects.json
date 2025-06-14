@@ -478,6 +478,9 @@
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
   ],
+  "sssec-pkgs-dockerTools-helpers-nixConf": [
+    "index.html#sssec-pkgs-dockerTools-helpers-nixConf"
+  ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
   ],
@@ -3021,7 +3024,7 @@
   "ex-buildGoModule": [
     "index.html#ex-buildGoModule"
   ],
-  "ssec-go-toolchain-versions" : [
+  "ssec-go-toolchain-versions": [
     "index.html#ssec-go-toolchain-versions"
   ],
   "buildGoModule-goModules-override": [

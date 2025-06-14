@@ -966,6 +966,50 @@ rec {
     ln -s ${bashInteractive}/bin/bash $out/bin/sh
   '';
 
+  # This provides an utility to easily generate a nix conf
+  nixConf = (
+    conf:
+    let
+      # Use this config as starting point
+      defaultConf = {
+        sandbox = false;
+        trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+      };
+
+      nixConfContents =
+        (lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (
+            n: v:
+            let
+              vStr =
+                if builtins.isList v then
+                  lib.concatStringsSep " " v
+                else if true == v then
+                  "true"
+                else if false == v then
+                  "false"
+                else
+                  (builtins.toString v);
+            in
+            "${n} = ${vStr}"
+          ) (defaultConf // conf)
+        ))
+        + "\n";
+    in
+    runCommand "nix-conf"
+      {
+        inherit nixConfContents;
+
+        passAsFile = [
+          "nixConfContents"
+        ];
+      }
+      ''
+        mkdir -p $out/etc/nix
+        cat $nixConfContentsPath > $out/etc/nix/nix.conf
+      ''
+  );
+
   # This provides the ca bundle in common locations
   caCertificates = runCommand "ca-certificates" { } ''
     mkdir -p $out/etc/ssl/certs $out/etc/pki/tls/certs
