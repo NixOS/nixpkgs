@@ -3,7 +3,7 @@
 # access to the GitHub API. This means that it should not evaluate user input in
 # a way that allows code injection.
 
-name: "Label PR"
+name: Labels
 
 on:
   workflow_call:
@@ -26,8 +26,7 @@ defaults:
     shell: bash
 
 jobs:
-  labels:
-    name: label-pr
+  update:
     runs-on: ubuntu-24.04-arm
     if: "!contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
@@ -38,7 +37,7 @@ jobs:
             const run_id = (await github.rest.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'eval.yml',
+              workflow_id: 'pr.yml',
               event: 'pull_request_target',
               head_sha: context.payload.pull_request?.head.sha ?? context.payload.workflow_run.head_sha
             })).data.workflow_runs[0]?.id

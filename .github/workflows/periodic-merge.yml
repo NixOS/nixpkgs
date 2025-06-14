@@ -1,4 +1,4 @@
-name: "Merge"
+name: Merge
 
 on:
   workflow_call:

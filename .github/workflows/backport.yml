@@ -23,8 +23,8 @@ defaults:
     shell: bash
 
 jobs:
-  backport:
-    name: Backport Pull Request
+  create-pull-request:
+    name: create pull request
     if: vars.NIXPKGS_CI_APP_ID && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
     runs-on: ubuntu-24.04-arm
     steps:
