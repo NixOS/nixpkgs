@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spider";
-  version = "2.37.91";
+  version = "2.37.104";
 
   src = fetchFromGitHub {
     owner = "spider-rs";
     repo = "spider";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1WDsvEIoeWOUIN2HbTJeLkTlUgUZhExurPtN7ef/Egs=";
+    hash = "sha256-u9Xbn+BK6pzMh2m02WKimVPRWTOuYPAf3IeQvKGyrv0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-0DEJltTM8hH5Nsx5j2S9kURO7kLm/Mnv0M/QrarojaU=";
+  cargoHash = "sha256-HU15of5imnk609GF+RtlYpxQwgfEy8+6cbjl4RuytBw=";
 
   nativeBuildInputs = [
     pkg-config
