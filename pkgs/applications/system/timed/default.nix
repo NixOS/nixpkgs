@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "timed";
-  version = "3.6.23";
+  version = "3.6.24";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sailfishos";
     repo = "timed";
     tag = finalAttrs.version;
-    hash = "sha256-EJ0xxAkrISQfylBneYAEOINRvMUTWWw4E5GKjbq67aU=";
+    hash = "sha256-6axLd3XRCIsuYnKQ0AiCD6Cxut9Ck9hNWwIbkj4Aza8=";
   };
 
   postPatch = ''
