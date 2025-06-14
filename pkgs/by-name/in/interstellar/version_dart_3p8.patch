@@ -1,0 +1,76 @@
+diff --git a/lib/src/models/notification.dart b/lib/src/models/notification.dart
+index e4c1713..620d40b 100644
+--- a/lib/src/models/notification.dart
++++ b/lib/src/models/notification.dart
+@@ -1,3 +1,4 @@
++// @dart=3.8
+ import 'package:freezed_annotation/freezed_annotation.dart';
+ import 'package:interstellar/src/models/user.dart';
+ import 'package:interstellar/src/utils/models.dart';
+diff --git a/lib/src/models/post.dart b/lib/src/models/post.dart
+index 0ee3cd4..dae3397 100644
+--- a/lib/src/models/post.dart
++++ b/lib/src/models/post.dart
+@@ -1,3 +1,4 @@
++// @dart=3.8
+ import 'package:freezed_annotation/freezed_annotation.dart';
+ import 'package:interstellar/src/models/domain.dart';
+ import 'package:interstellar/src/models/image.dart';
+diff --git a/lib/src/models/search.dart b/lib/src/models/search.dart
+index e059300..ce8d38f 100644
+--- a/lib/src/models/search.dart
++++ b/lib/src/models/search.dart
+@@ -1,3 +1,4 @@
++// @dart=3.8
+ import 'package:freezed_annotation/freezed_annotation.dart';
+ import 'package:interstellar/src/models/comment.dart';
+ import 'package:interstellar/src/models/community.dart';
+diff --git a/lib/src/models/user.dart b/lib/src/models/user.dart
+index 2f1b2e8..cc4149f 100644
+--- a/lib/src/models/user.dart
++++ b/lib/src/models/user.dart
+@@ -1,3 +1,4 @@
++// @dart=3.8
+ import 'package:freezed_annotation/freezed_annotation.dart';
+ import 'package:interstellar/src/models/image.dart';
+ import 'package:interstellar/src/models/notification.dart';
+diff --git a/lib/src/widgets/content_item/content_item.dart b/lib/src/widgets/content_item/content_item.dart
+index d3ac440..ca1547a 100644
+--- a/lib/src/widgets/content_item/content_item.dart
++++ b/lib/src/widgets/content_item/content_item.dart
+@@ -1,3 +1,4 @@
++// @dart=3.8
+ import 'package:flutter/material.dart';
+ import 'package:interstellar/src/controller/controller.dart';
+ import 'package:interstellar/src/controller/server.dart';
+diff --git a/lib/src/widgets/markdown/drafts_controller.dart b/lib/src/widgets/markdown/drafts_controller.dart
+index 813097b..1fcc302 100644
+--- a/lib/src/widgets/markdown/drafts_controller.dart
++++ b/lib/src/widgets/markdown/drafts_controller.dart
+@@ -1,3 +1,4 @@
++// @dart=3.8
+ import 'package:flutter/material.dart';
+ import 'package:freezed_annotation/freezed_annotation.dart';
+ import 'package:interstellar/src/controller/database.dart';
+diff --git a/lib/src/widgets/user_status_icons.dart b/lib/src/widgets/user_status_icons.dart
+index 6f7ff5e..e334dd7 100644
+--- a/lib/src/widgets/user_status_icons.dart
++++ b/lib/src/widgets/user_status_icons.dart
+@@ -1,3 +1,4 @@
++// @dart=3.8
+ import 'dart:math';
+ 
+ import 'package:flutter/material.dart';
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 32b62ae..f505893 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -3,7 +3,7 @@ name: interstellar
+ # Prevent accidental publishing to pub.dev.
+ publish_to: 'none'
+ 
+-version: 0.0.0
++version: 0.9.3
+ 
+ environment:
+   sdk: '>=3.8.0 <4.0.0'
