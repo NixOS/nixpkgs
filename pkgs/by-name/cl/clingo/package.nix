@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clingo";
   version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "potassco";
     repo = "clingo";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-VhfWGAcrq4aN5Tgz84v7vLOWexsA89vRaang58SXVyI=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     homepage = "https://potassco.org/";
     downloadPage = "https://github.com/potassco/clingo/releases/";
   };
-}
+})
