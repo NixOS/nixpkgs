@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/which/";
     description = "Shows the full path of (shell) commands";
     license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     mainProgram = "which";
     platforms = lib.platforms.all;
   };
