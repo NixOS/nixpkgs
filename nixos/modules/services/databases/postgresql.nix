@@ -120,8 +120,22 @@ in
 
       enableJIT = mkEnableOption "JIT support";
 
-      package = mkPackageOption pkgs "postgresql" {
-        example = "postgresql_15";
+      package = mkOption {
+        type = types.package;
+        example = literalExpression "pkgs.postgresql_15";
+        defaultText = literalExpression ''
+          if versionAtLeast config.system.stateVersion "24.11" then
+            pkgs.postgresql_16
+          else if versionAtLeast config.system.stateVersion "23.11" then
+            pkgs.postgresql_15
+          else if versionAtLeast config.system.stateVersion "22.05" then
+            pkgs.postgresql_14
+          else
+            pkgs.postgresql_13
+        '';
+        description = ''
+          The package being used by postgresql.
+        '';
       };
 
       finalPackage = mkOption {
@@ -656,6 +670,7 @@ in
             See also https://endoflife.date/postgresql
           '';
         base =
+          # XXX Don't forget to keep `defaultText` of `services.postgresql.package` up to date!
           if versionAtLeast config.system.stateVersion "24.11" then
             pkgs.postgresql_16
           else if versionAtLeast config.system.stateVersion "23.11" then
