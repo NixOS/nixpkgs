@@ -237,12 +237,6 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  # workaround for
-  # https://github.com/root-project/root/issues/14778
-  env.NIX_LDFLAGS = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin
-  ) "--version-script,${writeText "version.map" "ROOT { global: *; };"}";
-
   # To use the debug information on the fly (without installation)
   # add the outPath of root.debug into NIX_DEBUG_INFO_DIRS (in PATH-like format)
   # and make sure that gdb from Nixpkgs can be found in PATH.
