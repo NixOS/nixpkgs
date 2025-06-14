@@ -13,10 +13,12 @@
   bison,
   flex,
   gettext,
+  libintl,
   xz,
   setupDebugInfoDirs,
   argp-standalone,
-  enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform libarchive,
+  enableDebuginfod ?
+    lib.meta.availableOn stdenv.hostPlatform libarchive && !stdenv.hostPlatform.isFreeBSD,
   sqlite,
   curl,
   json_c,
@@ -38,6 +40,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [
+      ./nonlinux-perf.patch
       ./debug-info-from-env.patch
       (fetchpatch {
         name = "fix-aarch64_fregs.patch";
@@ -63,7 +66,34 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ]
     # Prevent headers and binaries from colliding which results in an error.
     # https://sourceware.org/pipermail/elfutils-devel/2024q3/007281.html
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) ./cxx-header-collision.patch;
+    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) ./cxx-header-collision.patch
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/ed3a65c936adead5ef586d5121aebed85585a75e/devel/elfutils/files/patch-configure.ac";
+        hash = "sha256-tUdqqcB5m/oIphHBc9ubia7rOoN78eQmwGrbM+3L8GA=";
+        extraPrefix = "";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/412c9ba424c45d482bb7ca2740933cebcca5bacf/devel/elfutils/files/patch-lib_eu-config.h";
+        hash = "sha256-yF37OBz/oBiH8okPts2GMGJaJbJ5X58AI7MsvO3SKuM=";
+        extraPrefix = "";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/adf6019c3c9053e617353dfb9f0843e4880ab4ae/devel/elfutils/files/patch-lib_stdio__ext.h";
+        hash = "sha256-I11AX6mRkiOsqSHHb1ObP6Ft0E925nyyUWlolas9q5I=";
+        extraPrefix = "";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/2c1e4c5f2dda0912ede3a03515b54a99eea90997/devel/elfutils/files/patch-libelf_elf.h";
+        hash = "sha256-UVj8dzMrS01YTyjl2xPOih/f6Kvs+QO4Fq+cwwln760=";
+        extraPrefix = "";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/2c1e4c5f2dda0912ede3a03515b54a99eea90997/devel/elfutils/files/patch-libelf_gelf.h";
+        hash = "sha256-dNbX9um1dHCc8v7R3dl0xD4NIkLlhPPk49RG4uC7OZg=";
+        extraPrefix = "";
+      })
+    ];
 
   postPatch =
     ''
@@ -74,6 +104,23 @@ stdenv.mkDerivation rec {
       #
       # > dwfl_thread_getframes: No DWARF information found
       sed -i s/run-backtrace-dwarf.sh//g tests/Makefile.in
+    ''
+    + lib.optionalString stdenv.hostPlatform.isFreeBSD (
+      # alloca is part of stdlib.h here
+      ''
+        sed -E -i -e "/alloca.h/d" lib/libeu.h
+      ''
+      # one of the ports patches targets an older version which interacts poorly with a #pragma poision directive
+      + ''
+        sed -E -i -e '/^#define.*basename.*eu_basename$/d' lib/eu-config.h
+      ''
+      # C compilers are strict
+      + ''
+        substituteInPlace lib/eu-config.h --replace-fail 'return (memchr(s, c, SSIZE_MAX))' 'return ((void*)memchr(s, c, SSIZE_MAX))'
+      ''
+    )
+    + lib.optionalString (!enableDebuginfod) ''
+      sed -E -i -e '/size_t BUFFER_SIZE/d' src/srcfiles.cxx
     '';
 
   outputs = [
@@ -93,7 +140,7 @@ stdenv.mkDerivation rec {
       gettext
       bzip2
     ]
-    ++ lib.optional enableDebuginfod pkg-config
+    ++ lib.optional (enableDebuginfod || stdenv.targetPlatform.useLLVM or false) pkg-config
     ++ lib.optional (stdenv.targetPlatform.useLLVM or false) autoreconfHook;
   buildInputs =
     [
@@ -113,9 +160,19 @@ stdenv.mkDerivation rec {
       json_c
       libmicrohttpd
       libarchive
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      argp-standalone
+      libintl
+      musl-obstack
     ];
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    NIX_CFLAGS_COMPILE = "-Wno-error=format-nonliteral -DFREEBSD_HAS_MEMPCPY -D_GL_CONFIG_H_INCLUDED";
+    NIX_LDFLAGS = "-lobstack";
+  };
 
   hardeningDisable = [ "strictflexarrays3" ];
 
@@ -164,7 +221,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://sourceware.org/elfutils/";
     description = "Set of utilities to handle ELF objects";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.freebsd;
     # https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # licenses are GPL2 or LGPL3+ for libraries, GPL3+ for bins,
