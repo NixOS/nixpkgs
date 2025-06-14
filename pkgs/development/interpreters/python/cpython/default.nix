@@ -85,6 +85,11 @@
   enableLTO ?
     stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.is64bit && stdenv.hostPlatform.isLinux),
 
+  # enable experimental just-in-time compilation on 3.13 and newer,
+  enableJIT ? false,
+  clang_18,
+  llvm_18,
+
   # enable asserts to ensure the build remains reproducible
   reproducibleBuild ? false,
 
@@ -141,6 +146,7 @@ let
   inherit (passthru) pythonOnBuildForHost;
 
   tzdataSupport = tzdata != null && passthru.pythonAtLeast "3.9";
+  jitSupport = enableJIT && passthru.pythonAtLeast "3.13";
 
   passthru =
     let
@@ -215,7 +221,11 @@ let
         )
         [
           stdenv.cc.cc.libllvm.out
-        ];
+        ]
+    ++ optionals jitSupport [
+      clang_18
+      llvm_18
+    ];
 
   buildInputs = lib.filter (p: p != null) (
     [
@@ -427,20 +437,24 @@ stdenv.mkDerivation (finalAttrs: {
         "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
     '';
 
-  env = {
-    CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
-    LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-    LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin) "-lcrypt"}";
-    NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) (
-      {
-        "glibc" = "-lgcc_s";
-        "musl" = "-lgcc_eh";
-      }
-      ."${stdenv.hostPlatform.libc}" or ""
-    );
-    # Determinism: We fix the hashes of str, bytes and datetime objects.
-    PYTHONHASHSEED = 0;
-  };
+  env =
+    {
+      CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
+      LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
+      LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin) "-lcrypt"}";
+      NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) (
+        {
+          "glibc" = "-lgcc_s";
+          "musl" = "-lgcc_eh";
+        }
+        ."${stdenv.hostPlatform.libc}" or ""
+      );
+      # Determinism: We fix the hashes of str, bytes and datetime objects.
+      PYTHONHASHSEED = 0;
+    }
+    // lib.optionalAttrs jitSupport {
+      PYTHON_FOR_REGEN = lib.getExe pkgsBuildBuild.python3Minimal;
+    };
 
   # https://docs.python.org/3/using/configure.html
   configureFlags =
@@ -469,6 +483,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals (pythonAtLeast "3.13") [
       (enableFeature enableGIL "gil")
+    ]
+    ++ optionals jitSupport [
+      "--enable-experimental-jit=yes-off"
     ]
     ++ optionals enableOptimizations [
       "--enable-optimizations"
