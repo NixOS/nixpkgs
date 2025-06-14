@@ -25,6 +25,7 @@ _nixos-rebuild_ \[--verbose] [--max-jobs MAX_JOBS] [--cores CORES] [--log-format
 	\[--specialisation SPECIALISATION] [--rollback] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--no-reexec]++
 	\[--image-variant VARIANT]++
 	\[--build-host BUILD_HOST] [--target-host TARGET_HOST]++
+	\[--transfer-mode {default,nix23,bastion}]++
 	\[{switch,boot,test,build,edit,repl,dry-build,dry-run,dry-activate,build-image,build-vm,build-vm-with-bootloader,list-generations}]
 
 # DESCRIPTION
@@ -248,6 +249,34 @@ It must be one of the following:
 	the given configuration but disregards the true architecture of the
 	target host. Hence the _nixpkgs.crossSystem_ setting has to match the
 	target platform or else activation will fail.
+
+*--transfer-mode* {default,nix23,bastion}
+	When *--build-host* and *--target-host* are used together, we need to
+	transfer the built closure from build host to target host for
+	activation. There are multiple strategies that can be used, and this
+	option allow selection of which mode you want to use.
+
+	- _default_: will use `nix copy --from <build_host> --to
+	  <target_host>`. Generally the most reliable method and works as long
+	  the localhost can access both build and target host, hence being the
+	  default if Nix >=2.18 is being used.
+
+	- _nix23_: will use `nix-copy-closure --from <build_host>` and
+	  `nix-copy-closure --to <target_host>`, so it first copies the built
+	  closure to the localhost and then copies it to target. Uses twice the
+	  bandwidth and needs enough storage in localhost to store the
+	  intermediate build, but works in Nix 2.3+. This is also the default
+	  mode if `nixos-rebuild-ng` is build with a version of Nix <2.18. This
+	  mode may be removed in future.
+
+	- _bastion_: will SSH to the build host and run `nix-copy-closure --to
+	  <target_host>`. Generally the most efficient method since it doesn't
+	  depend in the localhost network, however the build host needs to be
+	  configured to communicate with target host directly (e.g., having the
+	  keys in build host or configuring SSH Agent Forwarding, adding the
+	  target host to `authorized_keys`) and also either support for
+	  password-less _sudo_ (with *--sudo* flag) or using an user with
+	  _root_ permissions if you want to activate the configuration.
 
 *--use-substitutes*
 	When set, nixos-rebuild will add *--use-substitutes* to each invocation
