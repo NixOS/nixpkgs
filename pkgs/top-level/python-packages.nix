@@ -4381,6 +4381,8 @@ self: super: with self; {
 
   e2b = callPackage ../development/python-modules/e2b { };
 
+  e2b-code-interpreter = callPackage ../development/python-modules/e2b-code-interpreter { };
+
   e3-core = callPackage ../development/python-modules/e3-core { };
 
   e3-testsuite = callPackage ../development/python-modules/e3-testsuite { };
