@@ -83,6 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://lists.gnu.org/archive/html/bug-mailutils/2020-11/txtiNjqcNpqOk.txt";
       hash = "sha256-2rhuopBANngq/PRCboIr+ewdawr8472cYwiLjtHCHz4=";
     })
+    # Avoid hardeningDisable = [ "format" ]; - this patch is from the project's master branch and can be removed at the next version
+    (fetchpatch {
+      url = "https://cgit.git.savannah.gnu.org/cgit/mailutils.git/patch/?id=9379ec9e25ae6bdbd3d6f5ef9930ac2176d2efe7";
+      hash = "sha256-00R1DLMDPsvz3R6UgRO1ZvgMNCiHYS3lfjqAC9VD+Y4=";
+    })
     # https://github.com/NixOS/nixpkgs/issues/223967
     # https://lists.gnu.org/archive/html/bug-mailutils/2023-04/msg00000.html
     ./don-t-use-descrypt-password-in-the-test-suite.patch
@@ -90,8 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
   strictDeps = true;
-
-  hardeningDisable = [ "format" ];
 
   configureFlags =
     [
