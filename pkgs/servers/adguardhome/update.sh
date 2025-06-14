@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p curl gnugrep nix-prefetch jq
+#! nix-shell -i bash -p curl gnugrep jq nix-prefetch nix-update
 
 # This file is based on /pkgs/servers/gotify/update.sh
 
