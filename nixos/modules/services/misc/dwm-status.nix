@@ -25,12 +25,8 @@ in
     ] "Use services.dwm-status.settings instead.")
   ];
 
-  ###### interface
-
   options = {
-
     services.dwm-status = {
-
       enable = lib.mkEnableOption "dwm-status user service";
 
       package = lib.mkPackageOption pkgs "dwm-status" {
@@ -74,25 +70,17 @@ in
           for available options.
         '';
       };
-
     };
-
   };
 
-  ###### implementation
-
   config = lib.mkIf cfg.enable {
-
     services.upower.enable = lib.mkIf (lib.elem "battery" cfg.settings.order) true;
 
     systemd.user.services.dwm-status = {
       description = "Highly performant and configurable DWM status service";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
-
       serviceConfig.ExecStart = "${cfg.package}/bin/dwm-status ${configFile} --quiet";
     };
-
   };
-
 }
