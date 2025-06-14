@@ -20,6 +20,18 @@ toVersions = {}
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
+def substitute_mirrors(url):
+    mirror_prefix = "mirror://jetbrains/"
+    if url.startswith(mirror_prefix):
+        for mirror in (
+            "https://download.jetbrains.com/",
+            "https://download-cf.jetbrains.com/",
+        ):
+            yield mirror + url[len(mirror_prefix) :]
+    else:
+        yield url
+
+
 def one_or_more(x):
     return x if isinstance(x, list) else [x]
 
@@ -64,11 +76,12 @@ def get_url(template, version_or_build_number, version_number):
     for k in range(len(release), 0, -1):
         s = ".".join(release[0:k])
         url = template.format(version=version_or_build_number, versionMajorMinor=s)
-        try:
-            if urllib.request.urlopen(url).getcode() == 200:
-                return url
-        except HTTPError:
-            pass
+        for address in substitute_mirrors(url):
+            try:
+                if urllib.request.urlopen(address).getcode() == 200:
+                    return (url, address)
+            except HTTPError:
+                pass
     return None
 
 
@@ -96,14 +109,14 @@ def update_product(name, product):
             download_url = get_url(product["url-template"], version_or_build_number, version_number)
             if not download_url:
                 raise Exception(f"No valid url for {name} version {version_or_build_number}")
-            product["url"] = download_url
+            product["url"] = download_url[0]
             if "sha256" not in product or product.get("build_number") != new_build_number:
                 fromVersions[name] = product["version"]
                 toVersions[name] = new_version
                 logging.info("Found a newer version %s with build number %s.", new_version, new_build_number)
                 product["version"] = new_version
                 product["build_number"] = new_build_number
-                product["sha256"] = download_sha256(download_url)
+                product["sha256"] = download_sha256(download_url[1])
             else:
                 logging.info("Already at the latest version %s with build number %s.", new_version, new_build_number)
         except Exception as e:
