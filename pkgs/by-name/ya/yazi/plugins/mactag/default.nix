@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Previewing archive contents with mactag";
+    description = "Bring macOS's awesome tagging feature to Yazi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
     platforms = lib.platforms.darwin;
