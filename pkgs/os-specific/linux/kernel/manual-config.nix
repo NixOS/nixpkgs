@@ -239,6 +239,8 @@ lib.makeOverridable (
 
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
+        BINDGEN_EXTRA_CLANG_ARGS = "-Qunused-arguments";
+
         # avoid leaking Rust source file names into the final binary, which adds
         # a false dependency on rust-lib-src on targets with uncompressed kernels
         KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
@@ -536,21 +538,14 @@ lib.makeOverridable (
         } // extraMeta;
       };
 
-    # Absolute paths for compilers avoid any PATH-clobbering issues.
-    commonMakeFlags =
-      [
-        "ARCH=${stdenv.hostPlatform.linuxArch}"
-        "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-      ]
-      ++ lib.optionals (stdenv.isx86_64 && stdenv.cc.bintools.isLLVM) [
-        # The wrapper for ld.lld breaks linking the kernel. We use the
-        # unwrapped linker as workaround. See:
-        #
-        # https://github.com/NixOS/nixpkgs/issues/321667
-        "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
-      ]
-      ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
-      ++ extraMakeFlags;
+    commonMakeFlags = import ./common-flags.nix {
+      inherit
+        lib
+        stdenv
+        buildPackages
+        extraMakeFlags
+        ;
+    };
   in
 
   stdenv.mkDerivation (
@@ -561,14 +556,14 @@ lib.makeOverridable (
 
         enableParallelBuilding = true;
 
-        hardeningDisable = [
-          "bindnow"
-          "format"
-          "fortify"
-          "stackprotector"
-          "pic"
-          "pie"
-        ];
+        #hardeningDisable = [
+        #  "bindnow"
+        #  "format"
+        #  "fortify"
+        #  "stackprotector"
+        #  "pic"
+        #  "pie"
+        #];
 
         makeFlags = [
           "O=$(buildRoot)"
