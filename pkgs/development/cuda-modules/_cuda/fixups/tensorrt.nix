@@ -1,11 +1,11 @@
 {
   _cuda,
+  cudaAtLeast,
   cudaOlder,
   cudaPackages,
   cudaMajorMinorVersion,
   lib,
   patchelf,
-  requireFile,
   stdenv,
 }:
 let
@@ -23,16 +23,18 @@ let
     aarch64-linux = "aarch64-linux-gnu";
   };
 in
-finalAttrs: prevAttrs: {
+finalAttrs: prevAttrs:
+let
+  constraints = _cuda.db.archive.sha256.${finalAttrs.src.hash or ""}.extraConstraints or { };
+in
+{
   # Useful for inspecting why something went wrong.
   brokenConditions =
     let
-      cudaTooOld = cudaOlder finalAttrs.passthru.featureRelease.minCudaVersion;
-      cudaTooNew =
-        (finalAttrs.passthru.featureRelease.maxCudaVersion != null)
-        && strings.versionOlder finalAttrs.passthru.featureRelease.maxCudaVersion cudaMajorMinorVersion;
-      cudnnVersionIsSpecified = finalAttrs.passthru.featureRelease.cudnnVersion != null;
-      cudnnVersionSpecified = versions.majorMinor finalAttrs.passthru.featureRelease.cudnnVersion;
+      cudaTooOld = constraints ? cuda.">=" && !(cudaAtLeast constraints.cuda.">=");
+      cudaTooNew = constraints ? cuda."<" && !(cudaOlder constraints.cuda."<");
+      cudnnVersionIsSpecified = constraints.cudnn.">=" or null != null;
+      cudnnVersionSpecified = versions.majorMinor constraints.cudnn.">=" or null;
       cudnnVersionProvided = versions.majorMinor finalAttrs.passthru.cudnn.version;
       cudnnTooOld =
         cudnnVersionIsSpecified && (strings.versionOlder cudnnVersionProvided cudnnVersionSpecified);
@@ -46,21 +48,6 @@ finalAttrs: prevAttrs: {
       "CUDNN version is too old" = cudnnTooOld;
       "CUDNN version is too new" = cudnnTooNew;
     };
-
-  src = requireFile {
-    name = finalAttrs.passthru.redistribRelease.filename;
-    inherit (finalAttrs.passthru.redistribRelease) hash;
-    message = ''
-      To use the TensorRT derivation, you must join the NVIDIA Developer Program and
-      download the ${finalAttrs.version} TAR package for CUDA ${cudaMajorMinorVersion} from
-      ${finalAttrs.meta.homepage}.
-
-      Once you have downloaded the file, add it to the store with the following
-      command, and try building this derivation again.
-
-      $ nix-store --add-fixed sha256 ${finalAttrs.passthru.redistribRelease.filename}
-    '';
-  };
 
   # We need to look inside the extracted output to get the files we need.
   sourceRoot = "TensorRT-${finalAttrs.version}";
@@ -103,20 +90,15 @@ finalAttrs: prevAttrs: {
     # unless it is not available, in which case the default cudnn derivation will be used.
     cudnn =
       let
-        desiredName = _cuda.lib.mkVersionedName "cudnn" (
-          lib.versions.majorMinor finalAttrs.passthru.featureRelease.cudnnVersion
-        );
+        desiredName = _cuda.lib.mkVersionedName "cudnn" constraints."cudnn".">=" or "";
       in
-      if finalAttrs.passthru.featureRelease.cudnnVersion == null || (cudaPackages ? desiredName) then
+      if constraints."cudnn".">=" or null == null || (cudaPackages ? desiredName) then
         cudaPackages.cudnn
       else
         cudaPackages.${desiredName};
   };
 
   meta = prevAttrs.meta or { } // {
-    badPlatforms =
-      prevAttrs.meta.badPlatforms or [ ]
-      ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
     maintainers = prevAttrs.meta.maintainers or [ ] ++ [ maintainers.aidalgol ];
     teams = prevAttrs.meta.teams or [ ];

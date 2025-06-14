@@ -181,7 +181,7 @@
   mkRedistUrl =
     redistName: relativePath:
     lib.concatStringsSep "/" (
-      [ _cuda.db.redistUrlPrefix ]
+      [ (lib.removeSuffix "/" _cuda.db.base_url) ]
       ++ (
         if redistName != "tensorrt" then
           [
