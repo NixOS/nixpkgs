@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   bash,
   bison,
   flex,
@@ -13,7 +12,7 @@
 }:
 
 let
-  version = "3.6.0";
+  version = "3.6.2";
   tag = "V" + lib.replaceStrings [ "." ] [ "-" ] version;
 
 in
@@ -22,20 +21,11 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "lm-sensors";
+    owner = "hramrach"; # openSUSE fork used by openSUSE and Gentoo
     repo = "lm-sensors";
     inherit tag;
-    hash = "sha256-9lfHCcODlS7sZMjQhK0yQcCBEoGyZOChx/oM0CU37sY=";
+    hash = "sha256-EmS9H3TQac6bHs2G8t1C2cQNAjN13zPoKDysny6aTFw=";
   };
-
-  patches = [
-    # Fix compile failure on GCC 14 with `sensord` enabled.
-    # From: https://github.com/lm-sensors/lm-sensors/pull/483
-    (fetchpatch {
-      url = "https://github.com/lm-sensors/lm-sensors/pull/483/commits/7a6170f07d05cc6601b4668f211e9389f2e75286.patch";
-      hash = "sha256-Q49quv3eXeMvY3jgZFs/F7Rljbq4YyehIDIlsgmloBQ=";
-    })
-  ];
 
   outputs = [
     "bin"
@@ -51,13 +41,6 @@ stdenv.mkDerivation {
     ''
       substituteInPlace lib/init.c \
         --replace-fail 'ETCDIR "/sensors.d"' '"/etc/sensors.d"'
-    ''
-    # Upstream build system have knob to enable and disable building of static
-    # library, shared library is built unconditionally.
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
-      sed -i 'lib/Module.mk' -e '/LIBTARGETS :=/,+1d; /-m 755/ d'
-      substituteInPlace prog/sensors/Module.mk \
-        --replace-fail 'lib/$(LIBSHBASENAME)' ""
     '';
 
   nativeBuildInputs = [
@@ -80,6 +63,8 @@ stdenv.mkDerivation {
     "MANDIR=${placeholder "man"}/share/man"
     # This is a dependency of the library.
     "ETCDIR=${placeholder "out"}/etc"
+    "BUILD_SHARED_LIB=${if stdenv.hostPlatform.isStatic then "0" else "1"}"
+    "BUILD_STATIC_LIB=${if stdenv.hostPlatform.isStatic then "1" else "0"}"
 
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
@@ -87,21 +72,15 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  # Making regexp to patch-out installing of .so symlinks from Makefile is
-  # complicated, it is easier to remove them post-install.
-  postInstall =
-    ''
-      mkdir -p $doc/share/doc/lm_sensors
-      cp -r configs doc/* $doc/share/doc/lm_sensors
-    ''
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
-      rm $out/lib/*.so*
-    '';
+  postInstall = ''
+    mkdir -p $doc/share/doc/lm_sensors
+    cp -r configs doc/* $doc/share/doc/lm_sensors
+  '';
 
   meta = {
     homepage = "https://hwmon.wiki.kernel.org/lm_sensors";
-    changelog = "https://raw.githubusercontent.com/lm-sensors/lm-sensors/${tag}/CHANGES";
-    description = "Tools for reading hardware sensors";
+    changelog = "https://raw.githubusercontent.com/hramrach/lm-sensors/${tag}/CHANGES";
+    description = "Tools for reading hardware sensors - maintained fork";
     license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
