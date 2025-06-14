@@ -13,6 +13,10 @@ let
     systemctl --user import-environment PATH DISPLAY XAUTHORITY DESKTOP_SESSION XDG_CONFIG_DIRS XDG_DATA_DIRS XDG_RUNTIME_DIR XDG_SESSION_ID DBUS_SESSION_BUS_ADDRESS || true
     dbus-update-activation-environment --systemd --all || true
   '';
+  defaultPackages = [
+    dmenu
+    i3status
+  ];
 in
 
 {
@@ -47,23 +51,8 @@ in
 
     package = mkPackageOption pkgs "i3" { };
 
-    extraPackages = mkOption {
-      type = with types; listOf package;
-      default = with pkgs; [
-        dmenu
-        i3status
-        i3lock
-      ];
-      defaultText = literalExpression ''
-        with pkgs; [
-          dmenu
-          i3status
-          i3lock
-        ]
-      '';
-      description = ''
-        Extra packages to be installed system wide.
-      '';
+    includeDefaultPackages = (mkEnableOption "extra default packages (dmenu, i3status, i3lock)") // {
+      default = true;
     };
   };
 
@@ -81,10 +70,13 @@ in
         '';
       }
     ];
-    environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
+    environment.systemPackages = [
+      cfg.package
+    ] ++ optionals cfg.includeDefaultPackages defaultPackages;
     environment.etc."i3/config" = mkIf (cfg.configFile != null) {
       source = cfg.configFile;
     };
+    programs.i3lock.enable = mkDefault cfg.includeDefaultPackages;
   };
 
   imports = [
@@ -95,5 +87,15 @@ in
       "i3-gaps"
       "enable"
     ] "i3-gaps was merged into i3. Use services.xserver.windowManager.i3.enable instead.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "xserver"
+        "windowManager"
+        "i3"
+        "extraPackages"
+      ]
+      "Move any packages you configured here to environment.systemPackages and set services.x11.window-managers.i3.includeDefaultPackages to 'false' to disable the defaults. If you configured i3lock, use programs.i3lock.enable instead."
+    )
   ];
 }
