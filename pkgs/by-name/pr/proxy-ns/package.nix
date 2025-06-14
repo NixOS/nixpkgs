@@ -11,7 +11,7 @@ let
       rev = "v${version}";
       hash = "sha256-km+Rd3oXeyOX7wCoLL9f67AU/AVZTuGlvU0jtgTvgJE=";
     };
-    ldflags = [ "-s" "-w" "-X main.SysConfDir=${placeholder "out"}" ];
+    ldflags = [ "-s" "-w"];
     GOFLAGS = [
       "-buildvcs=false"
       #"-trimpath" added by default by buildGoModule
