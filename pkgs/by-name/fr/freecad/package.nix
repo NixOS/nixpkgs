@@ -13,14 +13,12 @@
   hdf5,
   libGLU,
   libredwg,
-  libsForQt5,
   libspnav,
   libXmu,
   medfile,
   mpi,
   ninja,
   ode,
-  opencascade-occt_7_6,
   opencascade-occt,
   pkg-config,
   python3Packages,
@@ -34,8 +32,6 @@
   yaml-cpp,
   zlib,
   withWayland ? false,
-  qtVersion ? 5,
-  qt5,
   qt6,
   nix-update-script,
 }:
@@ -51,13 +47,10 @@ let
     py-slvs
     pybind11
     pycollada
-    pyside2
-    pyside2-tools
     pyside6
     python
     pyyaml
     scipy
-    shiboken2
     shiboken6
     ;
   freecad-utils = callPackage ./freecad-utils.nix { };
@@ -75,21 +68,16 @@ freecad-utils.makeCustomizable (
       fetchSubmodules = true;
     };
 
-    nativeBuildInputs =
-      [
-        cmake
-        ninja
-        pkg-config
-        gfortran
-        swig
-        doxygen
-        wrapGAppsHook3
-      ]
-      ++ lib.optionals (qtVersion == 5) [
-        pyside2-tools
-        qt5.wrapQtAppsHook
-      ]
-      ++ lib.optionals (qtVersion == 6) [ qt6.wrapQtAppsHook ];
+    nativeBuildInputs = [
+      cmake
+      ninja
+      pkg-config
+      gfortran
+      swig
+      doxygen
+      wrapGAppsHook3
+      qt6.wrapQtAppsHook
+    ];
 
     buildInputs =
       [
@@ -119,20 +107,6 @@ freecad-utils.makeCustomizable (
         xercesc
         yaml-cpp
         zlib
-      ]
-      ++ lib.optionals (qtVersion == 5) [
-        libsForQt5.soqt
-        opencascade-occt_7_6
-        pyside2
-        pyside2-tools
-        shiboken2
-        qt5.qtbase
-        qt5.qttools
-        qt5.qtwayland
-        qt5.qtwebengine
-        qt5.qtxmlpatterns
-      ]
-      ++ lib.optionals (qtVersion == 6) [
         opencascade-occt
         pyside6
         shiboken6
@@ -145,9 +119,7 @@ freecad-utils.makeCustomizable (
       ++ lib.optionals ifcSupport [
         ifcopenshell
       ]
-      ++ lib.optionals spaceNavSupport (
-        [ libspnav ] ++ lib.optionals (qtVersion == 5) [ libsForQt5.qtx11extras ]
-      );
+      ++ lib.optionals spaceNavSupport [ libspnav ];
 
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
@@ -158,40 +130,25 @@ freecad-utils.makeCustomizable (
       })
     ];
 
-    cmakeFlags =
-      [
-        "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
-        "-DBUILD_FLAT_MESH:BOOL=ON"
-        "-DBUILD_DRAWING=ON"
-        "-DBUILD_FLAT_MESH:BOOL=ON"
-        "-DINSTALL_TO_SITEPACKAGES=OFF"
-        "-DFREECAD_USE_PYBIND11=ON"
-      ]
-      ++ lib.optionals (qtVersion == 5) [
-        "-DBUILD_QT5=ON"
-        "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"
-        "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
-        (
-          "-DPYSIDE_INCLUDE_DIR=${pyside2}/include"
-          + ";${pyside2}/include/PySide2/QtCore"
-          + ";${pyside2}/include/PySide2/QtWidgets"
-          + ";${pyside2}/include/PySide2/QtGui"
-        )
-        "-DPYSIDE_LIBRARY=PySide2::pyside2"
-      ]
-      ++ lib.optionals (qtVersion == 6) [
-        "-DBUILD_QT5=OFF"
-        "-DBUILD_QT6=ON"
-        "-DSHIBOKEN_INCLUDE_DIR=${shiboken6}/include"
-        "-DSHIBOKEN_LIBRARY=Shiboken6::libshiboken"
-        (
-          "-DPYSIDE_INCLUDE_DIR=${pyside6}/include"
-          + ";${pyside6}/include/PySide6/QtCore"
-          + ";${pyside6}/include/PySide6/QtWidgets"
-          + ";${pyside6}/include/PySide6/QtGui"
-        )
-        "-DPYSIDE_LIBRARY=PySide6::pyside6"
-      ];
+    cmakeFlags = [
+      "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
+      "-DBUILD_FLAT_MESH:BOOL=ON"
+      "-DBUILD_DRAWING=ON"
+      "-DBUILD_FLAT_MESH:BOOL=ON"
+      "-DINSTALL_TO_SITEPACKAGES=OFF"
+      "-DFREECAD_USE_PYBIND11=ON"
+      "-DBUILD_QT5=OFF"
+      "-DBUILD_QT6=ON"
+      "-DSHIBOKEN_INCLUDE_DIR=${shiboken6}/include"
+      "-DSHIBOKEN_LIBRARY=Shiboken6::libshiboken"
+      (
+        "-DPYSIDE_INCLUDE_DIR=${pyside6}/include"
+        + ";${pyside6}/include/PySide6/QtCore"
+        + ";${pyside6}/include/PySide6/QtWidgets"
+        + ";${pyside6}/include/PySide6/QtGui"
+      )
+      "-DPYSIDE_LIBRARY=PySide6::pyside6"
+    ];
 
     # This should work on both x86_64, and i686 linux
     preBuild = ''
