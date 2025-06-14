@@ -2,19 +2,25 @@
   lib,
   stdenv,
   fetchurl,
+  directoryListingUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "which";
   version = "2.23";
 
   src = fetchurl {
-    url = "mirror://gnu/which/which-${version}.tar.gz";
+    url = "mirror://gnu/which/which-${finalAttrs.version}.tar.gz";
     hash = "sha256-osVYIm/E2eTOMxvS/Tw/F/lVEV0sAORHYYpO+ZeKKnM=";
   };
 
   strictDeps = true;
   enableParallelBuilding = true;
+
+  passthru.updateScript = directoryListingUpdater {
+    inherit (finalAttrs) pname version;
+    url = "https://ftp.gnu.org/gnu/which/";
+  };
 
   meta = {
     homepage = "https://www.gnu.org/software/which/";
@@ -23,4 +29,4 @@ stdenv.mkDerivation rec {
     mainProgram = "which";
     platforms = lib.platforms.all;
   };
-}
+})
