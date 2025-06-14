@@ -113,7 +113,7 @@ jobs:
                 // And the labels that should be there
                 const after = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8')).labels
                 if (approvals.size > 0) after.push(`12.approvals: ${approvals.size > 2 ? '3+' : approvals.size}`)
-                if (Array.from(maintainers).some(approvals.has)) after.push('12.approved-by: package-maintainer')
+                if (Array.from(maintainers).some(m => approvals.has(m))) after.push('12.approved-by: package-maintainer')
 
                 // Remove the ones not needed anymore
                 await Promise.all(
