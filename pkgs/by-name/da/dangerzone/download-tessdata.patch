@@ -1,0 +1,71 @@
+diff --git a/install/common/download-tessdata.py b/install/common/download-tessdata.py
+index 47c909e53a..206ccc427e 100644
+--- a/install/common/download-tessdata.py
++++ b/install/common/download-tessdata.py
+@@ -37,57 +37,22 @@
+         datefmt="%Y-%m-%d %H:%M:%S",
+     )
+ 
+-    share_dir = git_root() / "share"
++    share_dir = pathlib.Path.cwd() / "share"
+     tessdata_dir = share_dir / "tessdata"
+ 
+     # Get the list of OCR languages that Dangerzone supports.
+     with open(share_dir / "ocr-languages.json") as f:
+         langs_short = sorted(json.loads(f.read()).values())
+ 
+-    # Check if these languages have already been downloaded.
+-    if tessdata_dir.exists():
+-        expected_files = {f"{lang}.traineddata" for lang in langs_short}
+-        files = {f.name for f in tessdata_dir.iterdir()}
+-        if files == expected_files:
+-            logger.info("Skipping tessdata download, language data already exists")
+-            return
+-        elif not files:
+-            logger.info("Tesseract dir is empty, proceeding to download language data")
+-        else:
+-            logger.info(f"Found {tessdata_dir} but contents do not match")
+-            return 1
+-
+-    # Get latest release of Tesseract data.
+-    logger.info("Getting latest tessdata release")
+-    with urllib.request.urlopen(TESSDATA_RELEASES_URL) as f:
+-        resp = f.read()
+-        releases = json.loads(resp)
+-        tag = releases["tag_name"]
+-
+-    # Get latest release of Tesseract data.
+-    logger.info(f"Downloading tessdata release {tag}")
+-    archive_url = TESSDATA_ARCHIVE_URL.format(tessdata_version=tag)
+-    with urllib.request.urlopen(archive_url) as f:
+-        archive = f.read()
+-        digest = hashlib.sha256(archive).hexdigest()
+-        if digest != TESSDATA_CHECKSUM:
+-            raise RuntimeError(f"Checksum mismatch {digest} != {TESSDATA_CHECKSUM}")
+-
+     # Extract the languages models from the tessdata archive.
+-    logger.info(f"Extracting tessdata archive into {tessdata_dir}")
+-    with tarfile.open(fileobj=io.BytesIO(archive)) as t:
+-        for lang in langs_short:
+-            member = f"tessdata_fast-{tag}/{lang}.traineddata"
+-            logger.info(f"Extracting {member}")
+-            # NOTE: We want `filter="data"` because it ignores ownership info, as
+-            # recorded in the tarfile. This filter will become the default in Python
+-            # 3.14. See:
+-            #
+-            # https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter
+-            t.extract(member=member, path=share_dir, filter="data")
+-
+-    tessdata_dl_dir = share_dir / f"tessdata_fast-{tag}"
+-    tessdata_dl_dir.rename(tessdata_dir)
++    import shutil
++    tessdata_store_dir = pathlib.Path("@tessdata@")
++    tessdata_dir.mkdir()
++    logger.info(f"Copying tessdata files into {tessdata_dir}")
++    for lang in langs_short:
++        member = f"{lang}.traineddata"
++        logger.info(f"Copying {member}")
++        shutil.copyfile(tessdata_store_dir / member, tessdata_dir / member)
+ 
+ 
+ if __name__ == "__main__":
