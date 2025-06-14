@@ -11,13 +11,13 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "kcc";
-  version = "7.3.3";
+  version = "7.4.1";
 
   src = fetchFromGitHub {
     owner = "ciromattia";
     repo = "kcc";
     tag = "v${version}";
-    hash = "sha256-6zHUV4s1bOdARsTwNRxFM+s0p+6FLJhqJ9qG5BaBgas=";
+    hash = "sha256-9XYc749dSFNYK61BfuNxH/CJrT/P7YsXNroBsHcsZNA=";
   };
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
