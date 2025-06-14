@@ -12,23 +12,18 @@
 
 let
   cfg = config.programs.command-not-found;
-  commandNotFound = pkgs.replaceVarsWith {
-    name = "command-not-found";
-    dir = "bin";
-    src = ./command-not-found.pl;
-    isExecutable = true;
-    replacements = {
-      inherit (cfg) dbPath;
-      perl = pkgs.perl.withPackages (p: [
-        p.DBDSQLite
-        p.StringShellQuote
-      ]);
-    };
-  };
-
 in
-
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "programs"
+        "command-not-found"
+        "dbPath"
+      ]
+      "Use programs.command-not-found.package = pkgs.command-not-found.override { dbPath = \"\"; } instead."
+    )
+  ];
   options.programs.command-not-found = {
 
     enable = lib.mkOption {
@@ -37,18 +32,20 @@ in
       description = ''
         Whether interactive shells should show which Nix package (if
         any) provides a missing command.
+
+        This option does not take effect when using flakes.
+        Flake users should use `programs.nix-index.enable` instead.
       '';
     };
 
-    dbPath = lib.mkOption {
-      default = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite";
-      description = ''
-        Absolute path to programs.sqlite.
+    package = lib.mkPackageOption pkgs "command-not-found" {
+      extraDescription = ''
+        To specify a custom `programs.sqlite` file, you can override the package as follows:
 
-        By default this file will be provided by your channel
-        (nixexprs.tar.xz).
+        package = pkgs.command-not-found.override { dbPath = "/absolute/path/to/programs.sqlite"; };
+
+        By default, this file is provided by your channel via `nixexprs.tar.xz`.
       '';
-      type = lib.types.path;
     };
   };
 
@@ -56,8 +53,8 @@ in
     programs.bash.interactiveShellInit = ''
       # This function is called whenever a command is not found.
       command_not_found_handle() {
-        local p='${commandNotFound}/bin/command-not-found'
-        if [ -x "$p" ] && [ -f '${cfg.dbPath}' ]; then
+        local p='${cfg.package}/bin/command-not-found'
+        if [ -x "$p" ] && [ -f '${cfg.package.passthru.dbPath}' ]; then
           # Run the helper program.
           "$p" "$@"
           # Retry the command if we just installed it.
@@ -76,8 +73,8 @@ in
     programs.zsh.interactiveShellInit = ''
       # This function is called whenever a command is not found.
       command_not_found_handler() {
-        local p='${commandNotFound}/bin/command-not-found'
-        if [ -x "$p" ] && [ -f '${cfg.dbPath}' ]; then
+        local p='${cfg.package}/bin/command-not-found'
+        if [ -x "$p" ] && [ -f '${cfg.package.passthru.dbPath}' ]; then
           # Run the helper program.
           "$p" "$@"
 
@@ -95,7 +92,7 @@ in
       }
     '';
 
-    environment.systemPackages = [ commandNotFound ];
+    environment.systemPackages = [ cfg.package ];
   };
 
 }
