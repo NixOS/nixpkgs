@@ -109,6 +109,8 @@ buildPythonPackage rec {
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "tests/unit/executor/test_environment.py"
       "tests/unit/features/overlay/test_executor_environment.py"
+      # Hard-coded assumptions about arguments relating to 'x86_64'
+      "tests/unit/plugins/test_dotnet_v2_plugin.py"
     ];
 
   passthru.updateScript = nix-update-script { };
