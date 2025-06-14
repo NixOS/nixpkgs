@@ -109,9 +109,12 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       # Rewrite library references for all executables.
-      find "$out" -executable -type f | while read executable; do
-        install_name_tool "''${change_args[@]}" "$executable"
-      done
+      find "$out" -type f -executable -path "*/bin/*" -o -type f -executable -path "*/share/*/samples/*" \
+        | while read executable; do
+          if isMachO "$executable"; then
+            install_name_tool "''${change_args[@]}" "$executable"
+          fi
+        done
     '';
 
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
