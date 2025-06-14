@@ -1375,6 +1375,7 @@ in
   tmate-ssh-server = handleTest ./tmate-ssh-server.nix { };
   tomcat = handleTest ./tomcat.nix { };
   tor = handleTest ./tor.nix { };
+  tlsrpt = runTest ./tlsrpt.nix;
   tpm-ek = handleTest ./tpm-ek { };
   traefik = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./traefik.nix;
   trafficserver = handleTest ./trafficserver.nix { };
