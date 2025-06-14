@@ -20,6 +20,15 @@
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
   ],
+  "cuda-testing-packages": [
+    "index.html#cuda-testing-packages"
+  ],
+  "cuda-testing-packages-passthru-testers": [
+    "index.html#cuda-testing-packages-passthru-testers"
+  ],
+  "cuda-testing-packages-passthru-tests": [
+    "index.html#cuda-testing-packages-passthru-tests"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
@@ -3021,7 +3030,7 @@
   "ex-buildGoModule": [
     "index.html#ex-buildGoModule"
   ],
-  "ssec-go-toolchain-versions" : [
+  "ssec-go-toolchain-versions": [
     "index.html#ssec-go-toolchain-versions"
   ],
   "buildGoModule-goModules-override": [
