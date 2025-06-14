@@ -6,7 +6,6 @@
   cmake,
   cmark,
   cryptopp,
-  extra-cmake-modules,
   immer,
   kdePackages,
   lager,
@@ -56,8 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
     zug
   ];
-
-  strictDeps = true;
 
   meta = {
     description = "Convergent matrix client and instant messaging app";

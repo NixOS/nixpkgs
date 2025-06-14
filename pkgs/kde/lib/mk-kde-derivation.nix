@@ -6,6 +6,8 @@ self:
   cmake,
   ninja,
   qt6,
+  python3,
+  python3Packages,
 }:
 let
   dependencies = (lib.importJSON ../generated/dependencies.json).dependencies;
@@ -73,7 +75,7 @@ let
       None = null;
     };
 
-  moveDevHook = makeSetupHook { name = "kf6-move-dev-hook"; } ./move-dev-hook.sh;
+  moveOutputsHook = makeSetupHook { name = "kf6-move-outputs-hook"; } ./move-outputs-hook.sh;
 in
 {
   pname,
@@ -84,6 +86,7 @@ in
   extraPropagatedBuildInputs ? [ ],
   extraCmakeFlags ? [ ],
   excludeDependencies ? [ ],
+  hasPythonBindings ? false,
   ...
 }@args:
 let
@@ -119,19 +122,35 @@ let
       "out"
       "dev"
       "devtools"
-    ];
+    ] ++ lib.optionals hasPythonBindings [ "python" ];
 
-    nativeBuildInputs = [
-      cmake
-      ninja
-      qt6.wrapQtAppsHook
-      moveDevHook
-    ] ++ extraNativeBuildInputs;
-    buildInputs = [ qt6.qtbase ] ++ extraBuildInputs;
+    nativeBuildInputs =
+      [
+        cmake
+        ninja
+        qt6.wrapQtAppsHook
+        moveOutputsHook
+      ]
+      ++ lib.optionals hasPythonBindings [
+        python3Packages.shiboken6
+        (python3.withPackages (ps: [
+          ps.build
+          ps.setuptools
+        ]))
+      ]
+      ++ extraNativeBuildInputs;
+
+    buildInputs =
+      [ qt6.qtbase ]
+      ++ lib.optionals hasPythonBindings [
+        python3Packages.pyside6
+      ]
+      ++ extraBuildInputs;
 
     # FIXME: figure out what to propagate here
     propagatedBuildInputs = deps ++ extraPropagatedBuildInputs;
-    strictDeps = true;
+    # FIXME: is this even fixable? cmake does not have enough context for this...
+    # strictDeps = true;
 
     dontFixCmake = true;
     cmakeFlags = [ "-DQT_MAJOR_VERSION=6" ] ++ extraCmakeFlags;
@@ -147,6 +166,7 @@ let
     "extraPropagatedBuildInputs"
     "extraCmakeFlags"
     "excludeDependencies"
+    "hasPythonBindings"
     "meta"
   ];
 

@@ -2,7 +2,6 @@
   lib,
   mkKdeDerivation,
   fetchurl,
-  qttools,
   qtsvg,
 }:
 mkKdeDerivation rec {
@@ -14,10 +13,7 @@ mkKdeDerivation rec {
     hash = "sha256-Rlmwws2dsYFD9avZyAYJHDqrarwalWu/goFas9MYnG0=";
   };
 
-  extraNativeBuildInputs = [
-    qttools
-    qtsvg
-  ];
+  extraNativeBuildInputs = [ qtsvg ];
 
   meta.license = [ lib.licenses.gpl2Only ];
 }
