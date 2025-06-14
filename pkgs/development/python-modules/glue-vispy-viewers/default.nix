@@ -3,44 +3,34 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  astropy,
-  dill,
-  echo,
-  fast-histogram,
-  h5py,
-  ipython,
+  glue-core,
   matplotlib,
-  mpl-scatter-density,
   numpy,
-  openpyxl,
-  pandas,
-  pyqt-builder,
   pytestCheckHook,
-  qt6,
+  echo,
   scipy,
+  glfw,
+  imageio,
+  vispy,
+  pyopengl,
+  pytest-cov,
   setuptools,
   setuptools-scm,
-  shapely,
-  xlrd,
 }:
 
 buildPythonPackage rec {
-  pname = "glueviz";
-  version = "1.22.2";
+  pname = "glue-vispy-viewers";
+  version = "1.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "glue-viz";
-    repo = "glue";
+    repo = "glue-vispy-viewers";
     tag = "v${version}";
-    hash = "sha256-5YwZxVer3icA/7YmUIXTuyIlZYKrlFn5+4OYMbfvIlU=";
+    hash = "sha256-rmfi0hyNhpI0mYCFX2AYboSGGbe70a9KBonlyMK6EIM=";
   };
-
-  buildInputs = [ pyqt-builder ];
-
-  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
   build-system = [
     setuptools
@@ -48,21 +38,16 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    astropy
-    dill
+    glue-core
     echo
-    fast-histogram
-    h5py
-    ipython
     matplotlib
-    mpl-scatter-density
+    glfw
+    imageio
+    vispy
     numpy
-    openpyxl
-    pandas
-    scipy
     setuptools
-    shapely
-    xlrd
+    scipy
+    pyopengl
   ];
 
   dontConfigure = true;
@@ -71,9 +56,12 @@ buildPythonPackage rec {
   # qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
   doCheck = false;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov
+  ];
 
-  pythonImportsCheck = [ "glue" ];
+  pythonImportsCheck = [ "glue_vispy_viewers" ];
 
   dontWrapQtApps = true;
 
@@ -83,8 +71,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://glueviz.org";
-    description = "Linked Data Visualizations Across Multiple Files";
-    license = licenses.bsd3; # https://github.com/glue-viz/glue/blob/main/LICENSE
+    description = "Vispy-based viewers for Glue";
+    license = licenses.bsd2; # https://github.com/glue-viz/glue-vispy-viewers/blob/main/LICENSE
     maintainers = with maintainers; [ ifurther ];
   };
 }
