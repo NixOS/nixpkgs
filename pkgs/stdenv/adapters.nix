@@ -376,6 +376,25 @@ rec {
             }
       );
 
+  useWildLinker =
+    stdenv:
+    if !stdenv.targetPlatform.isLinux then
+      throw "Wild only supports Linux targets"
+    else
+      let
+        bintools = stdenv.cc.bintools.override {
+          extraBuildCommands = ''
+            wrap ld.wild ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.wild}/bin/wild
+            wrap ${stdenv.cc.bintools.targetPrefix}ld.wild ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.wild}/bin/wild
+            wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.wild}/bin/wild
+          '';
+        };
+      in
+      stdenv.override (_: {
+        allowedRequisites = null;
+        cc = stdenv.cc.override { inherit bintools; };
+      });
+
   /*
     Modify a stdenv so that it builds binaries optimized specifically
     for the machine they are built on.
