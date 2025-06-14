@@ -50,7 +50,7 @@
         }
       ];
       services.resolved.enable = true;
-      services.resolved.fallbackDns = [ ];
+      services.resolved.settings.Resolve.FallbackDNS = [ ];
       networking.useNetworkd = true;
       networking.useDHCP = false;
       systemd.network.networks."40-eth0".enable = false;
