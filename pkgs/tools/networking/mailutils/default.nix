@@ -30,12 +30,12 @@
   guileSupport ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mailutils";
   version = "3.19";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/mailutils/mailutils-${finalAttrs.version}.tar.xz";
     hash = "sha256-UCMNIANsW4rYyWsNmWF38fEz+6THx+O0YtOe6zCEn0U=";
   };
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     # https://lists.gnu.org/archive/html/bug-mailutils/2020-11/msg00038.html
     (fetchpatch {
       url = "https://lists.gnu.org/archive/html/bug-mailutils/2020-11/txtiNjqcNpqOk.txt";
-      sha256 = "0ghzqb8qx2q8cffbvqzw19mivv7r5f16whplzhm7hdj0j2i6xf6s";
+      hash = "sha256-2rhuopBANngq/PRCboIr+ewdawr8472cYwiLjtHCHz4=";
     })
     # https://github.com/NixOS/nixpkgs/issues/223967
     # https://lists.gnu.org/archive/html/bug-mailutils/2023-04/msg00000.html
@@ -89,6 +89,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
+
   hardeningDisable = [ "format" ];
 
   configureFlags =
@@ -108,6 +110,7 @@ stdenv.mkDerivation rec {
     dejagnu
     mkpasswd
   ];
+
   doCheck = !stdenv.hostPlatform.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
   doInstallCheck = false; # fails
 
@@ -124,7 +127,7 @@ stdenv.mkDerivation rec {
     unset LD_LIBRARY_PATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rich and powerful protocol-independent mail framework";
 
     longDescription = ''
@@ -146,17 +149,17 @@ stdenv.mkDerivation rec {
       and an implementation of MH message handling system.
     '';
 
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Plus # libraries
       gpl3Plus # tools
     ];
 
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with lib.maintainers; [ orivej ];
 
     homepage = "https://www.gnu.org/software/mailutils/";
     changelog = "https://git.savannah.gnu.org/cgit/mailutils.git/tree/NEWS";
 
     # Some of the dependencies fail to build on {cyg,dar}win.
-    platforms = platforms.gnu ++ platforms.unix;
+    platforms = lib.platforms.gnu ++ lib.platforms.unix;
   };
-}
+})
