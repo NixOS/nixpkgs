@@ -33,6 +33,7 @@ imageVariant=
 buildHost=
 targetHost=
 remoteSudo=
+localSudo=
 noSSHTTY=
 verboseScript=
 noFlake=
@@ -173,6 +174,9 @@ while [ "$#" -gt 0 ]; do
       --use-remote-sudo)
         remoteSudo=1
         ;;
+      --use-local-sudo)
+        localSudo=1
+        ;;
       --no-ssh-tty)
         noSSHTTY=1
         ;;
@@ -256,7 +260,7 @@ targetHostSudoCmd() {
         t="-t"
     fi
 
-    if [ -n "$remoteSudo" ]; then
+    if [[ -n "$remoteSudo" || -n "$localSudo" ]]; then
         useSudo=1 SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     else
         # While a tty might not be necessary, we apply it to be consistent with
