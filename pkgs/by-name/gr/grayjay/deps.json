@@ -45,16 +45,6 @@
     "hash": "sha256-BsitQQnUSm1YupzI5N/LFx0kPFdk1FP8VdM1S3uttvs="
   },
   {
-    "pname": "Microsoft.AspNetCore.App.Ref",
-    "version": "8.0.16",
-    "hash": "sha256-nV9G5UWIh4A/4vsgmARABY9lM2nzpWevsETKuHfhz9o="
-  },
-  {
-    "pname": "Microsoft.AspNetCore.App.Runtime.linux-x64",
-    "version": "8.0.16",
-    "hash": "sha256-QcnhPjQNVZGAyh5O74sV94u3DHCQDHjg5U2CXrTykw4="
-  },
-  {
     "pname": "Microsoft.ClearScript.Core",
     "version": "7.4.5",
     "hash": "sha256-6wRLv+fbo2SF9irQ8BwmUR7JcQAlyEk1Dov+teSXY+E="
@@ -133,21 +123,6 @@
     "pname": "Microsoft.NET.Test.Sdk",
     "version": "17.6.0",
     "hash": "sha256-pogseJyMGIikTZORsDXKwyAhRPTkxiOAAV+ceR6/3K4="
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Host.linux-x64",
-    "version": "8.0.16",
-    "hash": "sha256-j1xxV7RXTrmmqHEaEXtPAz2FQoQiK7RO7a7GRwKCW90="
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Ref",
-    "version": "8.0.16",
-    "hash": "sha256-ARNf4NsLtYpChsiMv015znXluW7EDWnnw+32I1lu7zU="
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Runtime.linux-x64",
-    "version": "8.0.16",
-    "hash": "sha256-rDkCCwXkHMDQAQj33BDPitTucHYPx3V85kE9L+CwSRA="
   },
   {
     "pname": "Microsoft.NETCore.Platforms",

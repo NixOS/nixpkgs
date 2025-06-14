@@ -139,6 +139,11 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (lib.versionOlder version "9") [
       ./fix-aspnetcore-portable-build.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "10") [
+      # src/repos/projects/Directory.Build.targets(106,5): error MSB4018: The "AddSourceToNuGetConfig" task failed unexpectedly.
+      # src/repos/projects/Directory.Build.targets(106,5): error MSB4018: System.Xml.XmlException->Microsoft.Build.Framework.BuildException.GenericBuildTransferredException: There are multiple root elements. Line 9, position 2.
+      ./source-build-externals-overwrite-rather-than-append-.patch
     ];
 
   postPatch =
@@ -178,7 +183,7 @@ stdenv.mkDerivation rec {
       xmlstarlet ed \
         --inplace \
         -u //_:Project/_:PropertyGroup/_:BuildNumber -v 0 \
-        src/source-build-externals/src/application-insights/.props/_GlobalStaticVersion.props
+        src/source-build-externals/src/${lib.optionalString (lib.versionAtLeast version "10") "repos/src/"}application-insights/.props/_GlobalStaticVersion.props
 
       # this fixes compile errors with clang 15 (e.g. darwin)
       substituteInPlace \
@@ -193,53 +198,56 @@ stdenv.mkDerivation rec {
         -s \$prev -t elem -n KeepNativeSymbols -v false \
         src/runtime/Directory.Build.props
     ''
-    + lib.optionalString (lib.versionAtLeast version "9") ''
-      # repro.csproj fails to restore due to missing freebsd packages
-      xmlstarlet ed \
-        --inplace \
-        -s //Project -t elem -n PropertyGroup \
-        -s \$prev -t elem -n RuntimeIdentifiers -v ${targetRid} \
-        src/runtime/src/coreclr/tools/aot/ILCompiler/repro/repro.csproj
+    + lib.optionalString (lib.versionAtLeast version "9") (
+      ''
+        # repro.csproj fails to restore due to missing freebsd packages
+        xmlstarlet ed \
+          --inplace \
+          -s //Project -t elem -n PropertyGroup \
+          -s \$prev -t elem -n RuntimeIdentifiers -v ${targetRid} \
+          src/runtime/src/coreclr/tools/aot/ILCompiler/repro/repro.csproj
 
-      # https://github.com/dotnet/runtime/pull/98559#issuecomment-1965338627
-      xmlstarlet ed \
-        --inplace \
-        -s //Project -t elem -n PropertyGroup \
-        -s \$prev -t elem -n NoWarn -v '$(NoWarn);CS9216' \
-        src/runtime/Directory.Build.props
+        # https://github.com/dotnet/runtime/pull/98559#issuecomment-1965338627
+        xmlstarlet ed \
+          --inplace \
+          -s //Project -t elem -n PropertyGroup \
+          -s \$prev -t elem -n NoWarn -v '$(NoWarn);CS9216' \
+          src/runtime/Directory.Build.props
 
-      # patch packages installed from npm cache
-      xmlstarlet ed \
-        --inplace \
-        -s //Project -t elem -n Import \
-        -i \$prev -t attr -n Project -v "${./patch-npm-packages.proj}" \
-        src/aspnetcore/eng/DotNetBuild.props
+        # https://github.com/dotnet/source-build/issues/3131#issuecomment-2030215805
+        substituteInPlace \
+          src/aspnetcore/eng/Dependencies.props \
+          --replace-fail \
+          "'\$(DotNetBuildSourceOnly)' == 'true'" \
+          "'\$(DotNetBuildSourceOnly)' == 'true' and \$(PortableBuild) == 'false'"
 
-      # https://github.com/dotnet/source-build/issues/3131#issuecomment-2030215805
-      substituteInPlace \
-        src/aspnetcore/eng/Dependencies.props \
-        --replace-fail \
-        "'\$(DotNetBuildSourceOnly)' == 'true'" \
-        "'\$(DotNetBuildSourceOnly)' == 'true' and \$(PortableBuild) == 'false'"
+        # https://github.com/dotnet/source-build/issues/4325
+        xmlstarlet ed \
+          --inplace \
+          -r '//Target[@Name="UnpackTarballs"]/Move' -v Copy \
+          eng/init-source-only.proj
 
-      # https://github.com/dotnet/source-build/issues/4325
-      xmlstarlet ed \
-        --inplace \
-        -r '//Target[@Name="UnpackTarballs"]/Move' -v Copy \
-        eng/init-source-only.proj
+        # error: _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror,-W#warnings]
+        substituteInPlace \
+          src/runtime/src/coreclr/ilasm/CMakeLists.txt \
+          --replace-fail 'set_source_files_properties( prebuilt/asmparse.cpp PROPERTIES COMPILE_FLAGS "-O0" )' ""
 
-      # error: _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror,-W#warnings]
-      substituteInPlace \
-        src/runtime/src/coreclr/ilasm/CMakeLists.txt \
-        --replace-fail 'set_source_files_properties( prebuilt/asmparse.cpp PROPERTIES COMPILE_FLAGS "-O0" )' ""
-
-      # https://github.com/dotnet/source-build/issues/4444
-      xmlstarlet ed \
-        --inplace \
-        -s '//Project/Target/MSBuild[@Targets="Restore"]' \
-        -t attr -n Properties -v "NUGET_PACKAGES='\$(CurrentRepoSourceBuildPackageCache)'" \
-        src/aspnetcore/eng/Tools.props
-    ''
+        # https://github.com/dotnet/source-build/issues/4444
+        xmlstarlet ed \
+          --inplace \
+          -s '//Project/Target/MSBuild[@Targets="Restore"]' \
+          -t attr -n Properties -v "NUGET_PACKAGES='\$(CurrentRepoSourceBuildPackageCache)'" \
+          src/aspnetcore/eng/Tools.props
+      ''
+      + lib.optionalString (lib.versionOlder version "10") ''
+        # patch packages installed from npm cache
+        xmlstarlet ed \
+          --inplace \
+          -s //Project -t elem -n Import \
+          -i \$prev -t attr -n Project -v "${./patch-npm-packages.proj}" \
+          src/aspnetcore/eng/DotNetBuild.props
+      ''
+    )
     + lib.optionalString isLinux (
       ''
         substituteInPlace \

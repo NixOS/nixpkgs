@@ -114,7 +114,16 @@ buildDotnetModule (finalAttrs: {
 
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0 // {
+    inherit
+      (dotnetCorePackages.combinePackages [
+        dotnetCorePackages.sdk_9_0
+        dotnetCorePackages.sdk_8_0
+      ])
+      packages
+      targetPackages
+      ;
+  };
   dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
 
   executables = [ "Grayjay" ];
