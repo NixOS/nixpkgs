@@ -4255,4 +4255,32 @@ runTests {
         };
       };
     };
+
+  testThrowTestFailuresEmpty = {
+    expr = lib.debug.throwTestFailures {
+      failures = [ ];
+    };
+
+    expected = null;
+  };
+
+  testThrowTestFailures = testingThrow (
+    lib.debug.throwTestFailures {
+      failures = [
+        {
+          name = "testDerivation";
+          expected = builtins.derivation {
+            name = "a";
+            builder = "bash";
+            system = "x86_64-linux";
+          };
+          result = builtins.derivation {
+            name = "b";
+            builder = "bash";
+            system = "x86_64-linux";
+          };
+        }
+      ];
+    }
+  );
 }
