@@ -47,6 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
     "CXXFLAGS=-std=c++14"
   ];
 
+  # Needed for cross compilation to avoid check errors
+  # https://github.com/NixOS/nixpkgs/issues/413910
+  configureFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+    "kyua_cv_getopt_plus=yes"
+    "kyua_cv_attribute_noreturn=yes"
+    "kyua_cv_getcwd_works=yes"
+  ];
+
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [
