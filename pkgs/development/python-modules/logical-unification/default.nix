@@ -40,7 +40,7 @@ buildPythonPackage rec {
     "test_reify_recursion_limit"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-skip"
     "--html=testing-report.html"
     "--self-contained-html"

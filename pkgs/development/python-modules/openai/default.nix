@@ -106,9 +106,8 @@ buildPythonPackage rec {
     respx
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
     # snapshot mismatches
     "--inline-snapshot=update"
   ];

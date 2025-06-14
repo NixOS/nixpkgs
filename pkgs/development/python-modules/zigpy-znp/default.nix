@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--reruns=3" ];
+  pytestFlags = [ "--reruns=3" ];
 
   disabledTests = [
     # failing since zigpy 0.60.0
