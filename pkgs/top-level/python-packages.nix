@@ -15018,9 +15018,12 @@ self: super: with self; {
 
   rachiopy = callPackage ../development/python-modules/rachiopy { };
 
-  radicale-infcloud = callPackage ../development/python-modules/radicale-infcloud {
-    radicale = pkgs.radicale.override { python3 = python; };
-  };
+  radicale-infcloud = toPythonModule (
+    pkgs.radicale.override {
+      withInfCloud = true;
+      python3 = python;
+    }
+  );
 
   radio-beam = callPackage ../development/python-modules/radio-beam { };
 
