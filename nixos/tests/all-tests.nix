@@ -968,6 +968,7 @@ in
   nomad = runTest ./nomad.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix { };
   non-switchable-system = runTest ./non-switchable-system.nix;
+  nordvpn = runTest ./nordvpn.nix;
   noto-fonts = runTest ./noto-fonts.nix;
   noto-fonts-cjk-qt-default-weight = runTest ./noto-fonts-cjk-qt-default-weight.nix;
   novacomd = handleTestOn [ "x86_64-linux" ] ./novacomd.nix { };
