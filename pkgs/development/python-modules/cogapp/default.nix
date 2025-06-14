@@ -1,8 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -10,17 +11,18 @@ buildPythonPackage rec {
   version = "3.5.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8ZDEoPBLs4kyCmaLxxsTsLiGwKoc+o56lb1++RLg47E=";
+  src = fetchFromGitHub {
+    owner = "nedbat";
+    repo = "cog";
+    tag = "v${version}";
+    hash = "sha256-jmHAHBzUw8VLCudT8slisCJ7yOUTVrrLiUbEiiTcfew=";
   };
 
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "cogapp" ];
 
-  # there are no tests
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Code generator for executing Python snippets in source files";
