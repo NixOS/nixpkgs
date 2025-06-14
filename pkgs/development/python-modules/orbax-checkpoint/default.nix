@@ -2,35 +2,29 @@
   lib,
   stdenv,
   absl-py,
+  aiofiles,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
+  chex,
   etils,
+  fetchFromGitHub,
+  flit-core,
+  google-cloud-logging,
   humanize,
   importlib-resources,
   jax,
+  mock,
   msgpack,
   nest-asyncio,
   numpy,
+  optax,
+  portpicker,
   protobuf,
+  pytest-xdist,
+  pytestCheckHook,
   pyyaml,
   simplejson,
   tensorstore,
   typing-extensions,
-
-  # tests
-  aiofiles,
-  chex,
-  google-cloud-logging,
-  mock,
-  optax,
-  portpicker,
-  pytest-xdist,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -49,9 +43,7 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  pythonRelaxDeps = [
-    "jax"
-  ];
+  pythonRelaxDeps = [ "jax" ];
 
   dependencies = [
     absl-py
