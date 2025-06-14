@@ -36,5 +36,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ matthiasbenaets ];
+  meta.maintainers = with lib.maintainers; [
+    amadejkastelic
+    matthiasbenaets
+  ];
 }
