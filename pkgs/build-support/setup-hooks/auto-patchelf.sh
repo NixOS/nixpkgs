@@ -95,6 +95,7 @@ autoPatchelfPostFixup() {
     if [[ -z "${dontAutoPatchelf-}" ]]; then
         autoPatchelf -- $(for output in $(getAllOutputNames); do
             [ -e "${!output}" ] || continue
+            [ "${output}" = debug ] && continue
             echo "${!output}"
         done)
     fi
