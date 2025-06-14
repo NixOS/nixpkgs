@@ -17,14 +17,14 @@
 
 python313Packages.buildPythonApplication rec {
   pname = "high-tide";
-  version = "0.1.5";
+  version = "0.1.6";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "high-tide";
     tag = "v${version}";
-    hash = "sha256-HoPyqsLPLfqyQbrhoPzr3n81yX1MHZVUVmq5RKDN5pI=";
+    hash = "sha256-xsMtKsu7Fg/zMAm+QUoNX8XIwWn5rkG92xMEECSu76k=";
   };
 
   nativeBuildInputs = [
