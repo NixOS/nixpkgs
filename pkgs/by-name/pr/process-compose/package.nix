@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch2,
   installShellFiles,
 }:
 
@@ -29,6 +30,15 @@ buildGoModule rec {
     '';
   };
 
+  patches = [
+    # Fix a linker issue with dlopen on x86_64-darwin
+    # https://github.com/f1bonacc1/process-compose/pull/342
+    (fetchpatch2 {
+      url = "https://github.com/F1bonacc1/process-compose/commit/af82749c5dacaa20f2c3b07ca4e081d1b38e40c4.patch";
+      hash = "sha256-5Hgvwn2GEp/lINPefxXdJUGb2TJfufqAPm+/3gdi6XY=";
+    })
+  ];
+
   # ldflags based on metadata from git and source
   preBuild = ''
     ldflags+=" -X ${config-module}.Commit=$(cat COMMIT)"
@@ -45,7 +55,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  vendorHash = "sha256-NEKHTSLEF8jBSmAnHq/q+kyV8vPz3DTNj4Jquf5rnso=";
+  vendorHash = "sha256-qkfJo+QGqcqiZMLuWbj0CpgRWxbqTu6DGAW8pBu4O/0=";
 
   doCheck = false;
 
