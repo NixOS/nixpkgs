@@ -12,6 +12,7 @@
   ninja,
   meson-python,
   pyproject-metadata,
+  nix-update-script,
 
   fontconfig,
   freetype,
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "pygame-ce";
-  version = "2.5.4";
+  version = "2.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +40,7 @@ buildPythonPackage rec {
     owner = "pygame-community";
     repo = "pygame-ce";
     tag = version;
-    hash = "sha256-joMc3QaQNbZ65pBJ7r5D6lWAGW9eM+e0k/ozOHfQL4U=";
+    hash = "sha256-OWC063N7G8t2ai/Qyz8DwP76BrFve5ZCbLD/mQwVbi4=";
     # Unicode files cause different checksums on HFS+ vs. other filesystems
     postFetch = "rm -rf $out/docs/reST";
   };
@@ -157,6 +158,8 @@ buildPythonPackage rec {
     "pygame.sysfont"
     "pygame.version"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.tests = {
     inherit pygame-gui;
