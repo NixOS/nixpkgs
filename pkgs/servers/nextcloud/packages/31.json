@@ -239,6 +239,16 @@
       "agpl"
     ]
   },
+  "nextpod": {
+    "hash": "sha256-yQD4e5R6ZfBQkEsPVpddGMLDVOlV6HSVZjttgUjEdro=",
+    "url": "https://github.com/pbek/nextcloud-nextpod/releases/download/v0.7.7/nextpod-nc.tar.gz",
+    "version": "0.7.7",
+    "description": "This Nextcloud app lets you visualize your podcast subscriptions and episode downloads from\n[GPodderSync](https://apps.nextcloud.com/apps/gpoddersync), which acts as a basic gpodder.net\napi to sync podcast consumer apps (podcatchers) like AntennaPod.\n\nYou need to have [GPodderSync](https://apps.nextcloud.com/apps/gpoddersync) installed to use this app!",
+    "homepage": "https://github.com/pbek/nextcloud-nextpod",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "notes": {
     "hash": "sha256-/Zym7bNotcdradtR3cG+rIaAH9jZs+/3PCP7zXS6WJo=",
     "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.12.1/notes-v4.12.1.tar.gz",
