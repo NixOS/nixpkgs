@@ -9,5 +9,6 @@ pg_config.env: $(top_builddir)/src/port/pg_config_paths.h | $(top_builddir)/src/
 	echo "LDFLAGS_EX=\"$(LDFLAGS_EX)\"" >>$@
 	echo "LDFLAGS_SL=\"$(LDFLAGS_SL)\"" >>$@
 	echo "LIBS=\"$(LIBS)\"" >>$@
+	echo "PGXS=\"$(dev)/lib/pgxs/src/makefiles/pgxs.mk\"" >>$@
 	cat $(top_builddir)/src/port/pg_config_paths.h $(top_builddir)/src/include/pg_config.h \
 	  | sed -nE 's/^#define ([^ ]+) ("?)(.*)\2$$/\1="\3"/p' >>$@
