@@ -18,8 +18,9 @@ let
     unix_socket = "${runDir}/headscale.sock";
   };
 
+  configOptions = lib.recursiveUpdate cfg.settings cfg.extraSettings;
   settingsFormat = pkgs.formats.yaml { };
-  configFile = settingsFormat.generate "headscale.yaml" cfg.settings;
+  configFile = settingsFormat.generate "headscale.yaml" configOptions;
   cliConfigFile = settingsFormat.generate "headscale.yaml" cliConfig;
 
   assertRemovedOption = option: message: {
@@ -478,6 +479,15 @@ in
             };
           };
         };
+      };
+
+      extraSettings = lib.mkOption {
+        default = { };
+        type = lib.types.attrsOf lib.types.anything;
+        description = ''
+          Extra configuration options which are serialized to yaml and added
+          to the headscale.yaml file.
+        '';
       };
     };
   };
