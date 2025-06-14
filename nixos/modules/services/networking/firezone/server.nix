@@ -1105,8 +1105,8 @@ in
       systemd.services.firezone-initialize = {
         description = "Backend initialization service for the Firezone zero-trust access platform";
 
-        after = mkIf cfg.enableLocalDB [ "postgresql.service" ];
-        requires = mkIf cfg.enableLocalDB [ "postgresql.service" ];
+        after = mkIf cfg.enableLocalDB [ "postgresql.target" ];
+        requires = mkIf cfg.enableLocalDB [ "postgresql.target" ];
         wantedBy = [ "firezone.target" ];
         partOf = [ "firezone.target" ];
 

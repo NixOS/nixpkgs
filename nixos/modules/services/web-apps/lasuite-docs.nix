@@ -350,10 +350,10 @@ in
       description = "Docs from SuiteNumérique";
       after =
         [ "network.target" ]
-        ++ (optional cfg.postgresql.createLocally "postgresql.service")
+        ++ (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wants =
-        (optional cfg.postgresql.createLocally "postgresql.service")
+        (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wantedBy = [ "multi-user.target" ];
 
@@ -398,10 +398,10 @@ in
       description = "Docs Celery broker from SuiteNumérique";
       after =
         [ "network.target" ]
-        ++ (optional cfg.postgresql.createLocally "postgresql.service")
+        ++ (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wants =
-        (optional cfg.postgresql.createLocally "postgresql.service")
+        (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wantedBy = [ "multi-user.target" ];
 

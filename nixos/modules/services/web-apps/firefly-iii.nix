@@ -308,7 +308,7 @@ in
 
     systemd.services.firefly-iii-setup = {
       after = [
-        "postgresql.service"
+        "postgresql.target"
         "mysql.service"
       ];
       requiredBy = [ "phpfpm-firefly-iii.service" ];
@@ -325,7 +325,7 @@ in
     systemd.services.firefly-iii-cron = {
       after = [
         "firefly-iii-setup.service"
-        "postgresql.service"
+        "postgresql.target"
         "mysql.service"
       ];
       wants = [ "firefly-iii-setup.service" ];
