@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "prov";
-  version = "2.0.1";
+  version = "2.0.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DiOMFAXRpVxyvTmzttc9b3q/2dCn+rLsBpOhmimlYX8=";
+    hash = "sha256-7X2Gb7Yi+7F/UxHYSdD+EC2LMAASGKqRYIfw/QNOqEQ=";
   };
 
   propagatedBuildInputs = [
