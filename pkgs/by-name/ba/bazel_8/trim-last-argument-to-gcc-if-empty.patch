@@ -1,0 +1,37 @@
+From 177b4720d6fbaa7fdd17e5e11b2c79ac8f246786 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Thu, 27 Jun 2019 21:08:51 -0700
+Subject: [PATCH] Trim last argument to gcc if empty, on Darwin
+
+On Darwin, the last argument to GCC is coming up as an empty string.
+This is breaking the build of proto_library targets. However, I was not
+able to reproduce with the example cpp project[0].
+
+This commit removes the last argument if it's an empty string. This is
+not a problem on Linux.
+
+[0]: https://github.com/bazelbuild/examples/tree/master/cpp-tutorial/stage3
+---
+ tools/cpp/osx_cc_wrapper.sh.tpl | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/tools/cpp/osx_cc_wrapper.sh.tpl b/tools/cpp/osx_cc_wrapper.sh.tpl
+index 4c85cd9b6b..6c611e3d25 100644
+--- a/tools/cpp/osx_cc_wrapper.sh.tpl
++++ b/tools/cpp/osx_cc_wrapper.sh.tpl
+@@ -53,7 +53,11 @@ done
+ %{env}
+ 
+ # Call the C++ compiler
+-%{cc} "$@"
++if [[ ${*: -1} = "" ]]; then
++    %{cc} "${@:0:$#}"
++else
++    %{cc} "$@"
++fi
+ 
+ function get_library_path() {
+     for libdir in ${LIB_DIRS}; do
+-- 
+2.19.2
+
