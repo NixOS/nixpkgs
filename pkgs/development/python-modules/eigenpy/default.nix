@@ -12,7 +12,7 @@
   scipy,
 
   # buildInputs
-  boost,
+  boost-python,
 
   # propagatedBuildInputs
   eigen,
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  buildInputs = [ boost ];
+  buildInputs = [ boost-python ];
 
   propagatedBuildInputs = [
     eigen

@@ -41,7 +41,7 @@
 }:
 let
   inherit (python3Packages)
-    boost
+    boost-python
     gitpython
     ifcopenshell
     matplotlib
@@ -93,7 +93,7 @@ freecad-utils.makeCustomizable (
 
     buildInputs =
       [
-        boost
+        boost-python
         coin3d
         eigen
         fmt

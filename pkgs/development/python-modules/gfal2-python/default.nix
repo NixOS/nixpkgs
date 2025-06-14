@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  boost,
+  boost-python,
   gfal2,
   glib,
   pythonAtLeast,
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pkg-config
   ];
   buildInputs = [
-    boost
+    boost-python
     gfal2
     glib
   ];

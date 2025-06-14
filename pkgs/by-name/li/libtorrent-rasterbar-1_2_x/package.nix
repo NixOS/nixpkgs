@@ -16,20 +16,6 @@
 let
   version = "1.2.19";
 
-  # Make sure we override python, so the correct version is chosen
-  # for the bindings, if overridden
-  boostPython = boost186.override (_: {
-    enablePython = true;
-    python = python311;
-    enableStatic = true;
-    enableShared = false;
-    enableSingleThreaded = false;
-    enableMultiThreaded = true;
-    # So that libraries will be named like 'libboost_system.a' instead
-    # of 'libboost_system-x64.a'.
-    taggedLayout = false;
-  });
-
   opensslStatic = openssl.override (_: {
     static = true;
   });
@@ -43,7 +29,7 @@ stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "v${version}";
-    hash = "sha256-HkpaOCBL+0Kc7M9DmnW2dUGC+b60a7n5n3i1SyRfkb4=";
+    hash = "sha256-KxyJmG7PdOjGPe18Dd3nzKI5X7B0MovWN8vq7llFFRc=";
   };
 
   enableParallelBuilding = true;
@@ -56,7 +42,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boostPython
+    (boost186.withPython python311)
     opensslStatic
     zlib
     python311
@@ -87,8 +73,8 @@ stdenv.mkDerivation {
   configureFlags = [
     "--enable-python-binding"
     "--with-libiconv=yes"
-    "--with-boost=${boostPython.dev}"
-    "--with-boost-libdir=${boostPython.out}/lib"
+    "--with-boost=${lib.getDev boost186}"
+    "--with-boost-libdir=${boost186.withPython python311}/lib"
   ];
 
   meta = with lib; {
