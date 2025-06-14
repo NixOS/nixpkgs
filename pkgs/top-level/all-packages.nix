@@ -15498,7 +15498,6 @@ with pkgs;
   inherit
     (callPackage ./coq-packages.nix {
       inherit (ocaml-ng)
-        ocamlPackages_4_05
         ocamlPackages_4_09
         ocamlPackages_4_10
         ocamlPackages_4_12
@@ -15506,10 +15505,6 @@ with pkgs;
         ;
     })
     mkCoqPackages
-    coqPackages_8_5
-    coq_8_5
-    coqPackages_8_6
-    coq_8_6
     coqPackages_8_7
     coq_8_7
     coqPackages_8_8

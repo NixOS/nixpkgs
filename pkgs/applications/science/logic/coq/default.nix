@@ -14,7 +14,6 @@
   pkg-config,
   gnumake42,
   customOCamlPackages ? null,
-  ocamlPackages_4_05,
   ocamlPackages_4_09,
   ocamlPackages_4_10,
   ocamlPackages_4_12,
@@ -35,12 +34,6 @@ let
   lib = import ../../../../build-support/coq/extra-lib.nix { inherit (args) lib; };
 
   release = {
-    "8.5pl1".sha256 = "1976ki5xjg2r907xj9p7gs0kpdinywbwcqlgxqw75dgp0hkgi00n";
-    "8.5pl2".sha256 = "109rrcrx7mz0fj7725kjjghfg5ydwb24hjsa5hspa27b4caah7rh";
-    "8.5pl3".sha256 = "15c3rdk59nifzihsp97z4vjxis5xmsnrvpb86qiazj143z2fmdgw";
-    "8.6.0".sha256 = "148mb48zpdax56c0blfi7v67lx014lnmrvxxasi28hsibyz2lvg4";
-    "8.6.0".rev = "V8.6";
-    "8.6.1".sha256 = "0llrxcxwy5j87vbbjnisw42rfw1n1pm5602ssx64xaxx3k176g6l";
     "8.7.0".sha256 = "1h18b7xpnx3ix9vsi5fx4zdcbxy7bhra7gd5c5yzxmk53cgf1p9m";
     "8.7.1".sha256 = "0gjn59jkbxwrihk8fx9d823wjyjh5m9gvj9l31nv6z6bcqhgdqi8";
     "8.7.2".sha256 = "0a0657xby8wdq4aqb2xsxp3n7pmc2w4yxjmrb2l4kccs1aqvaj4w";
@@ -130,10 +123,6 @@ let
         {
           case = lib.versions.range "8.7" "8.10";
           out = ocamlPackages_4_09;
-        }
-        {
-          case = lib.versions.range "8.5" "8.6";
-          out = ocamlPackages_4_05;
         }
       ] ocamlPackages_4_14;
   ocamlNativeBuildInputs = [
