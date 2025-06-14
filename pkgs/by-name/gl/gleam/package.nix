@@ -53,7 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://gleam.run/";
     changelog = "https://github.com/gleam-lang/gleam/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.philtaken ];
+    maintainers = with lib.maintainers; [
+      philtaken
+      llakala
+    ];
     teams = [ lib.teams.beam ];
   };
 })
