@@ -15,15 +15,15 @@ buildPythonPackage rec {
     hash = "sha256-8ZDEoPBLs4kyCmaLxxsTsLiGwKoc+o56lb1++RLg47E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   # there are no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Code generator for executing Python snippets in source files";
     homepage = "https://nedbatchelder.com/code/cog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lovek323 ];
   };
 }
