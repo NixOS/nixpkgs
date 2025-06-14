@@ -86,7 +86,7 @@ body:
       label: "Notify maintainers"
       description: |
         Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
-      value: |
+      value: |2
 
 
         ---
