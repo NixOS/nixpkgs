@@ -56,13 +56,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mixxx";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    hash = "sha256-s66XrcMGgA8KvBDxljg95nbKW1pIv8rJJ+DyxirHwDo=";
+    hash = "sha256-dKk3n3KDindnLbON52SW5h4cz96WVi0OPjwA27HqQCI=";
   };
 
   nativeBuildInputs = [
