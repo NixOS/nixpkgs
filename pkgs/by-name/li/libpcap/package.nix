@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     if [ "$dontDisableStatic" -ne "1" ]; then
       rm -f $out/lib/libpcap.a
     fi
+    ln -s $out/lib/libpcap.so $out/lib/libpcap.so.0.8
   '';
 
   enableParallelBuilding = true;
