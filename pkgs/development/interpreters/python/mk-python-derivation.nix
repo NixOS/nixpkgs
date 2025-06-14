@@ -278,11 +278,12 @@ let
 
       isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
 
+      name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
+
     in
     (cleanAttrs attrs)
     // {
-
-      name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
+      inherit name;
 
       inherit catchConflicts;
 
@@ -314,7 +315,7 @@ let
           unzip
         ]
         ++ optionals (format' == "setuptools") [
-          setuptoolsBuildHook
+          (lib.warn "${name} uses the deprecated setuptools format. Remove `format` and configure `pyproject = true` and `build-system = [ setuptools ]` instead." setuptoolsBuildHook)
         ]
         ++ optionals (format' == "pyproject") [
           (
