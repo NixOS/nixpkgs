@@ -1,0 +1,31 @@
+diff --git a/scripts/bootstrap/compile.sh b/scripts/bootstrap/compile.sh
+index 1bad14cba7..d312fe08bb 100755
+--- a/scripts/bootstrap/compile.sh
++++ b/scripts/bootstrap/compile.sh
+@@ -402,7 +402,7 @@ cp $OUTPUT_DIR/libblaze.jar ${ARCHIVE_DIR}
+ # TODO(b/28965185): Remove when xcode-locator is no longer required in embedded_binaries.
+ log "Compiling xcode-locator..."
+ if [[ $PLATFORM == "darwin" ]]; then
+-  run /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices -framework Foundation -o ${ARCHIVE_DIR}/xcode-locator tools/osx/xcode_locator.m
++  run @clangDarwin@ -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices -framework Foundation -o ${ARCHIVE_DIR}/xcode-locator tools/osx/xcode_locator.m
+ else
+   cp tools/osx/xcode_locator_stub.sh ${ARCHIVE_DIR}/xcode-locator
+ fi
+diff --git a/tools/osx/BUILD b/tools/osx/BUILD
+index 0358fb0ffe..1e6eae1f33 100644
+--- a/tools/osx/BUILD
++++ b/tools/osx/BUILD
+@@ -27,9 +27,9 @@ exports_files([
+ ])
+ 
+ DARWIN_XCODE_LOCATOR_COMPILE_COMMAND = """
+-  /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices \
+-      -framework Foundation -arch arm64 -arch x86_64 -Wl,-no_adhoc_codesign -Wl,-no_uuid -o $@ $< && \
+-  env -i codesign --identifier $@ --force --sign - $@
++  @clangDarwin@ -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices \
++      -framework Foundation -Wl,-no_adhoc_codesign -Wl,-no_uuid -o $@ $< && \
++  @usrBinEnv@ @codesign@ --identifier $@ --force --sign - $@
+ """
+ 
+ genrule(
+
