@@ -13,7 +13,6 @@
   zlib,
   version,
   hash,
-  replaceVars,
   versionCheckHook,
 
   # downstream dependencies
@@ -42,14 +41,27 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
-  patches = lib.optionals (lib.versionOlder version "22") [
-    # fix protobuf-targets.cmake installation paths, and allow for CMAKE_INSTALL_LIBDIR to be absolute
-    # https://github.com/protocolbuffers/protobuf/pull/10090
-    (fetchpatch {
-      url = "https://github.com/protocolbuffers/protobuf/commit/a7324f88e92bc16b57f3683403b6c993bf68070b.patch";
-      hash = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
-    })
-  ];
+  patches =
+    lib.optionals (lib.versionOlder version "22") [
+      # fix protobuf-targets.cmake installation paths, and allow for CMAKE_INSTALL_LIBDIR to be absolute
+      # https://github.com/protocolbuffers/protobuf/pull/10090
+      (fetchpatch {
+        url = "https://github.com/protocolbuffers/protobuf/commit/a7324f88e92bc16b57f3683403b6c993bf68070b.patch";
+        hash = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
+      })
+    ]
+    ++ lib.optionals (lib.head (lib.splitVersion version) == "21") [
+      # patch 3163111b6fb1da08b9d6ad75518d91b89cd03bbf with additional modifications
+      ./cmake-configure-protoc-exe-21.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "22" && lib.versionOlder version "29") [
+      # for cross compilation allow for invocations of `protobuf_generate` pass their preferred programs
+      # https://github.com/protocolbuffers/protobuf/pull/17888 (in tree from 29 onwards)
+      (fetchpatch {
+        url = "https://github.com/protocolbuffers/protobuf/commit/3163111b6fb1da08b9d6ad75518d91b89cd03bbf.patch";
+        hash = "sha256-px085y1MRt9qgYHCqR7ZOaNaHO1RV+VK3WWaI9I9wPg=";
+      })
+    ];
 
   # hook to provide the path to protoc executable, used at build time
   build_protobuf =
