@@ -32,6 +32,7 @@
   popplerSupport ? true,
   speechSupport ? true,
   unrarSupport ? false,
+  zenity,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
       hash = "sha256-V/ZUTH0l4QSfM0dHrgLGdJjF/CCQ0S/fnCP/ZKD563U=";
     })
+    ./fix_native_dialog.patch
   ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
@@ -200,6 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
               libjpeg
               libwebp
               optipng
+              zenity
             ]
           } \
           ${if popplerSupport then popplerArgs else ""}
