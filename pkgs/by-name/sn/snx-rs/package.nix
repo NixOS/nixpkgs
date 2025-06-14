@@ -12,8 +12,10 @@
   libsoup_3,
   openssl,
   pkg-config,
+  qt6,
   rustPlatform,
   webkitgtk_4_1,
+  wrapGAppsHook4,
   graphene,
   nix-update-script,
   versionCheckHook,
@@ -34,6 +36,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     iproute2
     pkg-config
+    qt6.wrapQtAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -65,6 +69,12 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/snx-rs";
   versionCheckProgramArg = "--version";
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  dontWrapGApps = true;
 
   meta = {
     description = "Open source Linux client for Checkpoint VPN tunnels";
