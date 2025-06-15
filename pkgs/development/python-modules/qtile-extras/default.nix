@@ -94,6 +94,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/elParaguayo/qtile-extras";
     changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.rev}/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ arjan-s ];
+    maintainers = with maintainers; [
+      arjan-s
+      gurjaka
+    ];
   };
 }
