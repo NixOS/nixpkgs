@@ -46,6 +46,9 @@ stdenv.mkDerivation (
       "dev"
       "info"
     ];
+    # TODO: binaries in dev output must be compiled for the builder
+    # (important when cross compiling)
+    # If fixed, unset meta.broken in gpgme.
     outputBin = "dev"; # deps want just the lib, most likely
 
     # If architecture-dependent MO files aren't available, they're generated
