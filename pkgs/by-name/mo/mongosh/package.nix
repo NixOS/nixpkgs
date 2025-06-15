@@ -2,39 +2,27 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
-  libmongocrypt,
-  krb5,
   testers,
   nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "mongosh";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "mongodb-js";
     repo = "mongosh";
-
-    # Tracking a few commits ahead of 2.5.1 to ensure the package-lock.json patch below applies
-    #tag = "v${finalAttrs.version}";
-    rev = "2163e8b10a77af18e0cedfa164526506c051593e";
-
-    hash = "sha256-DYX8NqAISwzBpdilcv3YVrL72byXMeC4z/nLqd2nf2c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0rol41XNdpfVRGY8KXFmQ0GHg5QqgnCaF21ZFyxfKeQ=";
   };
 
-  patches = [
-    # https://github.com/mongodb-js/mongosh/pull/2452
-    (fetchpatch {
-      url = "https://github.com/mongodb-js/mongosh/commit/30f66260fce3e1744298d086bd2b54b2d2bfffbb.patch";
-      hash = "sha256-c2QM/toeoagfhvuh4r+/5j7ZyV6DEr9brA9mXpEy1kM=";
-    })
+  npmDepsHash = "sha256-rB8Dg4nQb5zbEKpCx0kN4f3sC8zDY4wrmOp5jdAufoY=";
 
+  patches = [
     ./disable-telemetry.patch
   ];
 
-  npmDepsHash = "sha256-6uXEKAAGXxaODjXIszYml5Af4zSuEzy/QKdMgSzLD84=";
   npmFlags = [
     "--omit=optional"
     "--ignore-scripts"
@@ -53,7 +41,12 @@ buildNpmPackage (finalAttrs: {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   meta = {
