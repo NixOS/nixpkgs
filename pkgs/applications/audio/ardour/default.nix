@@ -230,6 +230,7 @@ in {
     maintainers = with lib.maintainers; [
       magnetophon
       mitchmindtree
+      ryand56
     ];
   };
 })
