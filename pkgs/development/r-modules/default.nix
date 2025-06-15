@@ -2721,6 +2721,7 @@ let
       preConfigure = ''
         patchShebangs configure
         patchShebangs src/library/curl/configure
+        patchShebangs src/library/keyring/configure
         patchShebangs src/library/pkgdepends/configure
         patchShebangs src/library/ps/configure
       '';
