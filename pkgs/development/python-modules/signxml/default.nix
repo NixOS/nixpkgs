@@ -8,12 +8,13 @@
   pyopenssl,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "signxml";
-  version = "4.0.3";
+  version = "4.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,10 +23,13 @@ buildPythonPackage rec {
     owner = "XML-Security";
     repo = "signxml";
     tag = "v${version}";
-    hash = "sha256-TZqYNYVzGEhftP/RXiBtThK38AOPLi2DRAwnFh2Za5U=";
+    hash = "sha256-dO7erKXyX/3qwWVC1laABOb+0yAkCy51rrnG1opL6pY=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     certifi
