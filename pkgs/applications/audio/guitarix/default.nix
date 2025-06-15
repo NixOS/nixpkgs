@@ -64,35 +64,38 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # TODO: identify sets of optional dependencies and add corresponding parameters
-  buildInputs = [
-    avahi
-    bluez
-    boost
-    curl
-    eigen
-    fftw
-    glib
-    glib-networking.out
-    glibmm
-    gperf
-    adwaita-icon-theme
-    gsettings-desktop-schemas
-    gtk3
-    gtkmm3
-    ladspaH
-    libjack2
-    libsndfile
-    liblo
-    lilv
-    lrdf
-    lv2
-    sassc
-    serd
-    sord
-    sratom
-    zita-convolver
-    zita-resampler
-  ];
+  buildInputs =
+    [
+      avahi
+      boost
+      curl
+      eigen
+      fftwFloat
+      glib
+      glib-networking.out
+      glibmm
+      gperf
+      adwaita-icon-theme
+      gsettings-desktop-schemas
+      gtk3
+      gtkmm3
+      ladspaH
+      libjack2
+      libsndfile
+      liblo
+      lilv
+      lrdf
+      lv2
+      sassc
+      serd
+      sord
+      sratom
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      bluez
+      zita-convolver
+      zita-resampler
+    ];
 
   # There are many bad shebangs which can fail builds.
   # See https://github.com/brummer10/guitarix/issues/97
