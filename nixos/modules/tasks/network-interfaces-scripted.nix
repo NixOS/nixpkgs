@@ -627,7 +627,7 @@ let
               deps = deviceDependency v.dev;
             in
             {
-              description = "6-to-4 Tunnel Interface ${n}";
+              description = "IPv6 in IPv4 Tunnel Interface ${n}";
               wantedBy = [
                 "network-setup.service"
                 (subsystemDevice n)
@@ -641,18 +641,19 @@ let
               script = ''
                 # Remove Dead Interfaces
                 ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
-                ip link add name "${n}" type sit \
-                  ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
-                  ${optionalString (v.local != null) "local \"${v.local}\""} \
-                  ${optionalString (v.ttl != null) "ttl ${toString v.ttl}"} \
-                  ${optionalString (v.dev != null) "dev \"${v.dev}\""} \
-                  ${optionalString (v.encapsulation != null)
-                    "encap ${v.encapsulation.type} encap-dport ${toString v.encapsulation.port} ${
-                      optionalString (
-                        v.encapsulation.sourcePort != null
-                      ) "encap-sport ${toString v.encapsulation.sourcePort}"
-                    }"
+                ip link add name "${n}" type sit ${
+                  formatIpArgs {
+                    inherit (v)
+                      remote
+                      local
+                      ttl
+                      dev
+                      ;
+                    encap = if v.encapsulation.type == "6in4" then null else v.encapsulation.type;
+                    encap-dport = v.encapsulation.port;
+                    encap-sport = v.encapsulation.sourcePort;
                   }
+                }
                 ip link set dev "${n}" up
               '';
               postStop = ''
