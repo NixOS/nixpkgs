@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   dependencies =
     with python3Packages;
     [
-      chromadb_0
+      chromadb
       colorlog
       httpx
       json5

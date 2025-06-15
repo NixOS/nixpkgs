@@ -8,11 +8,6 @@
 let
   cfg = config.services.geoclue2;
 
-  defaultWhitelist = [
-    "gnome-shell"
-    "io.elementary.desktop.agent-geoclue2"
-  ];
-
   appConfigModule = lib.types.submodule (
     { name, ... }:
     {
@@ -83,6 +78,16 @@ in
         description = ''
           Whether to enable GeoClue 2 daemon, a DBus service
           that provides location information for accessing.
+        '';
+      };
+      whitelistedAgents = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "gnome-shell"
+          "io.elementary.desktop.agent-geoclue2"
+        ];
+        description = ''
+          Desktop IDs (without the .desktop extension) of whitelisted agents.
         '';
       };
 
@@ -321,7 +326,10 @@ in
       {
         agent = {
           whitelist = lib.concatStringsSep ";" (
-            lib.optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist
+            lib.lists.unique (
+              cfg.whitelistedAgents
+              ++ lib.optionals config.services.geoclue2.enableDemoAgent [ "geoclue-demo-agent" ]
+            )
           );
         };
         network-nmea = {
