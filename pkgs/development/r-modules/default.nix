@@ -1582,6 +1582,7 @@ let
     "TreeSearch"
     "ACNE"
     "APAlyzer"
+    "BAT"
     "EstMix"
     "Patterns"
     "PECA"
