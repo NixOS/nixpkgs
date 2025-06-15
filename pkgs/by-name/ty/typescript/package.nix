@@ -6,9 +6,10 @@
   writeShellApplication,
   nodejs,
   gnutar,
+  jq,
+  moreutils,
   nix-update,
   prefetch-npm-deps,
-  gnused,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -26,11 +27,21 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-cuddvrksLm65o0y1nXT6tcLubzKgMkqJQF9hZdWgg3Q=";
   };
 
+  # The upstream GitHub repository's package-lock.json differs from the package.json in the npmjs tarball.
+  # For example, package-lock.json for v5.8.3 defines TypeScript as version 5.9.0. Therefore, we should use our own package-lock.json file.
+  # These files are typically large due to devDependencies. Removing the devDependencies section is better, especially considering issue #327064.
+  #
+  # We've removed devDependencies from package-lock.json via updateScript to minimize its size.
+  # Now, we must also modify package.json to reflect this change.
+  # As TypeScript will then have no dependencies, place an empty node_modules directory.
   postPatch = ''
+    ${lib.getExe jq} 'del(.devDependencies)' package.json | ${moreutils}/bin/sponge package.json
     ln -s '${./package-lock.json}' package-lock.json
+    mkdir -p node_modules
   '';
 
-  npmDepsHash = "sha256-Y/+QPAVOQWKxrHBNEejC3UZrYKQNm7CleR0whFm2sLw=";
+  npmDepsHash = "sha256-f/7Dxwoz0qv7T3Ez4jeRvmu7PxhzObwczjO7JcEcCr4=";
+  forceEmptyCache = true;
 
   dontNpmBuild = true;
 
@@ -47,13 +58,15 @@ buildNpmPackage (finalAttrs: {
       runtimeInputs = [
         nodejs
         gnutar
+        jq
         nix-update
         prefetch-npm-deps
-        gnused
       ];
       runtimeEnv = {
         PNAME = finalAttrs.pname;
         PKG_DIR = builtins.toString ./.;
+        FORCE_EMPTY_CACHE = "true";
+        OLD_NPM_DEPS_HASH = finalAttrs.npmDepsHash;
       };
       text = builtins.readFile ./update.bash;
     });
