@@ -8,7 +8,6 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   sensor-state-data,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "bthome-ble";
   version = "3.13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
