@@ -1,11 +1,12 @@
 {
   lib,
   stdenv,
+  setuptools,
   buildPythonPackage,
   certifi,
   chardet,
   charset-normalizer,
-  fetchPypi,
+  fetchFromGitHub,
   idna,
   pysocks,
   pytest-mock,
@@ -17,25 +18,25 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.32.3";
-  format = "setuptools";
+  version = "2.32.4";
+  pyproject = true;
+  build-system = [ setuptools ];
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VTZUF3NOsYJVWQqf+euX6eHaho1MzWQCOZ6vaK8gp2A=";
+  src = fetchFromGitHub {
+    owner = "psf";
+    repo = "requests";
+    rev = "v2.32.4";
+    hash = "sha256-sD9GLCAa3y9L1J+fcd+ZXBtW4jNL40hOesKXORhcjGQ=";
   };
 
   patches = [
     # https://github.com/psf/requests/issues/6730
     # https://github.com/psf/requests/pull/6731
     ./ca-load-regression.patch
-
-    # https://seclists.org/fulldisclosure/2025/Jun/2
-    ./CVE-2024-47081.patch
   ];
 
   dependencies = [
