@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "2025.1.76253";
 
   src = fetchzip {
-    url = "https://download.jetbrains.com/charisma/youtrack-${finalAttrs.version}.zip";
+    url = "mirror://jetbrains/charisma/youtrack-${finalAttrs.version}.zip";
     hash = "sha256-DW3LZAlkfB7Uqy+xj4Oe3LkYD5fQyi4lDcgv/6brSEs=";
   };
 
