@@ -419,23 +419,23 @@ expectFailure '_emptyWithoutBase' 'lib.fileset: Directly evaluating a file set i
 
 # Past versions of the internal representation are supported
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 0; _internalBase = ./.; }' \
-    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalIsEmptyWithoutBase = false; _internalVersion = 3; _type = "fileset"; }'
+    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalHasVirtualFiles = false; _internalIsEmptyWithoutBase = false; _internalVersion = 4; _type = "fileset"; }'
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 1; }' \
-    '{ _type = "fileset"; _internalIsEmptyWithoutBase = false; _internalVersion = 3; }'
+    '{ _type = "fileset"; _internalHasVirtualFiles = false; _internalIsEmptyWithoutBase = false; _internalVersion = 4; }'
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 2; }' \
-    '{ _type = "fileset"; _internalIsEmptyWithoutBase = false; _internalVersion = 3; }'
+    '{ _type = "fileset"; _internalHasVirtualFiles = false; _internalIsEmptyWithoutBase = false; _internalVersion = 4; }'
 
 # Future versions of the internal representation are unsupported
-expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 4; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
-[[:blank:]]*- Internal version of the file set: 4
-[[:blank:]]*- Internal version of the library: 3
+expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 5; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
+[[:blank:]]*- Internal version of the file set: 5
+[[:blank:]]*- Internal version of the library: 4
 [[:blank:]]*Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.'
 
 # _create followed by _coerce should give the inputs back without any validation
 expectEqual '{
-  inherit (_coerce "<test>" (_create ./. "directory"))
+  inherit (_coerce "<test>" (_create false ./. "directory"))
     _internalVersion _internalBase _internalTree;
-}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 3; }'
+}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 4; }'
 
 #### Resulting store path ####
 
@@ -517,9 +517,9 @@ checkFileset './c'
 
 # Test the source filter for the somewhat special case of files in the filesystem root
 # We can't easily test this with the above functions because we can't write to the filesystem root and we don't want to make any assumptions which files are there in the sandbox
-expectEqual '_toSourceFilter (_create /. null) "/foo" ""' 'false'
-expectEqual '_toSourceFilter (_create /. { foo = "regular"; }) "/foo" ""' 'true'
-expectEqual '_toSourceFilter (_create /. { foo = null; }) "/foo" ""' 'false'
+expectEqual '_toSourceFilter (_create false /. null) "/foo" ""' 'false'
+expectEqual '_toSourceFilter (_create false /. { foo = "regular"; }) "/foo" ""' 'true'
+expectEqual '_toSourceFilter (_create false /. { foo = null; }) "/foo" ""' 'false'
 
 
 ## lib.fileset.toList
@@ -566,8 +566,8 @@ expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.uni
 
 # The tree of later arguments should not be evaluated if a former argument already includes all files
 tree=()
-checkFileset 'union ./. (_create ./. (abort "This should not be used!"))'
-checkFileset 'unions [ ./. (_create ./. (abort "This should not be used!")) ]'
+checkFileset 'union ./. (_create false ./. (abort "This should not be used!"))'
+checkFileset 'unions [ ./. (_create false ./. (abort "This should not be used!")) ]'
 
 # unions doesn't include any files for an empty list or only empty values without a base
 tree=(
@@ -669,18 +669,18 @@ expectFailure 'toSource { root = ./.; fileset = intersection ./. ./b; }' 'lib.fi
 tree=(
     [a]=0
 )
-checkFileset 'intersection _emptyWithoutBase (_create ./. (abort "This should not be used!"))'
+checkFileset 'intersection _emptyWithoutBase (_create false ./. (abort "This should not be used!"))'
 # We don't have any combinators that can explicitly remove files yet, so we need to rely on internal functions to test this for now
-checkFileset 'intersection (_create ./. { a = null; }) (_create ./. { a = abort "This should not be used!"; })'
+checkFileset 'intersection (_create false ./. { a = null; }) (_create false ./. { a = abort "This should not be used!"; })'
 
 # If either side is empty, the result is empty
 tree=(
     [a]=0
 )
 checkFileset 'intersection _emptyWithoutBase _emptyWithoutBase'
-checkFileset 'intersection _emptyWithoutBase (_create ./. null)'
-checkFileset 'intersection (_create ./. null) _emptyWithoutBase'
-checkFileset 'intersection (_create ./. null) (_create ./. null)'
+checkFileset 'intersection _emptyWithoutBase (_create false ./. null)'
+checkFileset 'intersection (_create false ./. null) _emptyWithoutBase'
+checkFileset 'intersection (_create false ./. null) (_create false ./. null)'
 
 # If the intersection base paths are not overlapping, the result is empty and has no base path
 mkdir a b c
@@ -701,7 +701,7 @@ tree=(
     [b]=1
     [c]=0
 )
-checkFileset 'intersection (_create ./. { a = "regular"; b = "regular"; c = null; }) (_create ./. { a = null; b = "regular"; c = "regular"; })'
+checkFileset 'intersection (_create false ./. { a = "regular"; b = "regular"; c = null; }) (_create false ./. { a = null; b = "regular"; c = "regular"; })'
 
 # Actually computes the intersection between files
 tree=(
@@ -746,15 +746,15 @@ tree=(
 checkFileset 'difference ./. ./.'
 
 # The tree of the second argument should not be evaluated if not needed
-checkFileset 'difference _emptyWithoutBase (_create ./. (abort "This should not be used!"))'
-checkFileset 'difference (_create ./. null) (_create ./. (abort "This should not be used!"))'
+checkFileset 'difference _emptyWithoutBase (_create false ./. (abort "This should not be used!"))'
+checkFileset 'difference (_create false ./. null) (_create false ./. (abort "This should not be used!"))'
 
 # Subtracting nothing gives the same thing back
 tree=(
     [a]=1
 )
 checkFileset 'difference ./. _emptyWithoutBase'
-checkFileset 'difference ./. (_create ./. null)'
+checkFileset 'difference ./. (_create false ./. null)'
 
 # Subtracting doesn't influence the base path
 mkdir a b
@@ -842,9 +842,7 @@ checkFileset 'difference ./. ./b'
 expectFailure 'fileFilter null (abort "this is not needed")' 'lib.fileset.fileFilter: First argument is of type null, but it should be a function instead.'
 
 # The second argument needs to be an existing path
-expectFailure 'fileFilter (file: abort "this is not needed") _emptyWithoutBase' 'lib.fileset.fileFilter: Second argument is a file set, but it should be a path instead.
-[[:blank:]]*If you need to filter files in a file set, use `intersection fileset \(fileFilter pred \./\.\)` instead.'
-expectFailure 'fileFilter (file: abort "this is not needed") null' 'lib.fileset.fileFilter: Second argument is of type null, but it should be a path instead.'
+expectFailure 'fileFilter (file: abort "this is not needed") null' 'lib.fileset.fileFilter: Second argument is of type null, but it should be a file set or a path instead.'
 expectFailure 'fileFilter (file: abort "this is not needed") ./a' 'lib.fileset.fileFilter: Second argument \('"$work"'/a\) is a path that does not exist.'
 
 # The predicate is not called when there's no files
@@ -962,7 +960,7 @@ checkFileset 'fileFilter (file: assert file.name == "a"; false) ./a'
 expectEqual 'trace ./. "some value"' 'builtins.trace "(empty)" "some value"'
 
 # The fileset traceVal argument is returned
-expectEqual 'traceVal ./.' 'builtins.trace "(empty)" (_create ./. "directory")'
+expectEqual 'traceVal ./.' 'builtins.trace "(empty)" (_create false ./. "directory")'
 
 # The tracing happens before the final argument is needed
 expectEqual 'trace ./.' 'builtins.trace "(empty)" (x: x)'
@@ -1032,7 +1030,7 @@ rm -rf -- *
 
 # Completely filtered out directories also print as empty
 touch a
-expectTrace '_create ./. {}' '(empty)'
+expectTrace '_create false ./. {}' '(empty)'
 rm -rf -- *
 
 # A general test to make sure the resulting format makes sense
@@ -1083,14 +1081,14 @@ rm -rf -- *
 
 # Partially included directories trace entries as they are evaluated
 touch a b c
-expectTrace '_create ./. { a = null; b = "regular"; c = throw "b"; }' "$work"'
+expectTrace '_create false ./. { a = null; b = "regular"; c = throw "b"; }' "$work"'
 - b (regular)'
 
 # Except entries that need to be evaluated to even figure out if it's only partially included:
 # Here the directory could be fully excluded or included just from seeing a and b,
 # so c needs to be evaluated before anything can be traced
-expectTrace '_create ./. { a = null; b = null; c = throw "c"; }' ''
-expectTrace '_create ./. { a = "regular"; b = "regular"; c = throw "c"; }' ''
+expectTrace '_create false ./. { a = null; b = null; c = throw "c"; }' ''
+expectTrace '_create false ./. { a = "regular"; b = "regular"; c = throw "c"; }' ''
 rm -rf -- *
 
 # We can trace large directories (10000 here) without any problems
@@ -1298,7 +1296,7 @@ expectEqual 'trace (fromSource (cleanSourceWith {
       true
     else
       abort "This filter should not be called with path ${pathString}";
-})) null' 'trace (_create ./. { b = "directory"; }) null'
+})) null' 'trace (_create false ./. { b = "directory"; }) null'
 rm -rf -- *
 
 # The filter is called lazily:
