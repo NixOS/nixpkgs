@@ -1,32 +1,34 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   libdvdread,
   libdvdcss,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vobcopy";
-  version = "1.2.0";
+  version = "1.2.1";
 
-  src = fetchurl {
-    url = "http://www.vobcopy.org/download/vobcopy-${version}.tar.bz2";
-    sha256 = "01l1yihbd73srzghzzx5dgfg3yfb5kml5dix52mq0snhjp8h89c9";
+  src = fetchFromGitHub {
+    owner = "barak";
+    repo = "vobcopy";
+    tag = version;
+    hash = "sha256-lxaf+cx6sowlbA2/waW4nt/S449/mtGJ2Od9QXWxPQM=";
   };
 
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
   buildInputs = [
     libdvdread
     libdvdcss
   ];
-  makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX=/"
-  ];
 
   meta = {
     description = "Copies DVD .vob files to harddisk, decrypting them on the way";
-    homepage = "http://vobcopy.org/projects/c/c.shtml";
+    homepage = "https://github.com/barak/vobcopy";
     license = lib.licenses.gpl2Plus;
 
     maintainers = [ lib.maintainers.bluescreen303 ];
