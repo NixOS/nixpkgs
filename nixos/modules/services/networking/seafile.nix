@@ -84,7 +84,7 @@ in
       default = { };
       description = ''
         Configuration for ccnet, see
-        <https://manual.seafile.com/config/ccnet-conf/>
+        <https://manual.seafile.com/11.0/config/ccnet-conf/>
         for supported values.
       '';
     };
@@ -122,7 +122,7 @@ in
       default = { };
       description = ''
         Configuration for seafile-server, see
-        <https://manual.seafile.com/config/seafile-conf/>
+        <https://manual.seafile.com/11.0/config/seafile-conf/>
         for supported values.
       '';
     };
@@ -235,7 +235,7 @@ in
       type = types.lines;
       description = ''
         Extra config to append to `seahub_settings.py` file.
-        Refer to <https://manual.seafile.com/config/seahub_settings_py/>
+        Refer to <https://manual.seafile.com/11.0/config/seahub_settings_py/>
         for all available options.
       '';
     };
