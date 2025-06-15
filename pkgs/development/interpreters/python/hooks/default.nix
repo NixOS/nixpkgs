@@ -157,7 +157,7 @@ in
       name = "pytest-check-hook";
       propagatedBuildInputs = [ pytest ];
       substitutions = {
-        inherit pythonCheckInterpreter;
+        inherit pythonCheckInterpreter pythonSitePackages;
       };
       passthru = {
         tests = {
