@@ -6,7 +6,14 @@
   # If we build the python packages, these two are not null
   buildPythonPackage ? null,
   lgpioWithoutPython ? null,
-  # When building a python Packages, this specifies the python subproject
+  # When building a python Packages, this specifies the python subproject - a
+  # folder in the repository. The current options are:
+  #
+  # - <empty>
+  # - PY_LGPIO
+  # - PY_RGPIO
+  #
+  # Where an empty value means 'build the non python project'.
   pyProject ? "",
 }:
 
@@ -28,30 +35,18 @@ mkDerivation rec {
     swig
   ];
 
-  preConfigure =
-    if pyProject != "" then
-      ''
-        cd ${pyProject}
-      ''
-    else
-      "";
+  preConfigure = lib.optionalString (pyProject != "") ''
+    cd ${pyProject}
+  '';
   # Emulate ldconfig when building the C API
-  postConfigure =
-    if pyProject == "" then
-      ''
-        substituteInPlace Makefile \
-          --replace ldconfig 'echo ldconfig'
-      ''
-    else
-      "";
+  postConfigure = lib.optionalString (pyProject == "") ''
+    substituteInPlace Makefile \
+      --replace ldconfig 'echo ldconfig'
+  '';
 
-  preBuild =
-    if pyProject == "PY_LGPIO" then
-      ''
-        swig -python lgpio.i
-      ''
-    else
-      "";
+  preBuild = lib.optionalString (pyProject == "PY_LGPIO") ''
+    swig -python lgpio.i
+  '';
 
   buildInputs = [
     lgpioWithoutPython
@@ -64,7 +59,7 @@ mkDerivation rec {
   meta = {
     description = "Linux C libraries and Python modules for manipulating GPIO";
     homepage = "https://github.com/joan2937/lg";
-    license = with lib.licenses; [ unlicense ];
+    license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux;
   };
