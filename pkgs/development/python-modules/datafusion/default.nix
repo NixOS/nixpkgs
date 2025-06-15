@@ -75,7 +75,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datafusion" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--pyargs"
     pname
   ];

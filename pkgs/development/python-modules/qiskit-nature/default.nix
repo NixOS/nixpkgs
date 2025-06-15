@@ -59,7 +59,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qiskit_nature" ];
 
-  pytestFlagsArray = [ "--durations=10" ];
+  pytestFlags = [ "--durations=10" ];
 
   disabledTests = [
     "test_two_qubit_reduction" # failure cause unclear

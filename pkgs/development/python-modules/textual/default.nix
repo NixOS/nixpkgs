@@ -79,7 +79,7 @@ buildPythonPackage rec {
     "test_textual_env_var"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Some tests in groups require state from previous tests
     # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
     "--dist=loadgroup"
