@@ -1159,6 +1159,7 @@ in
   qgis-ltr = handleTest ./qgis.nix { package = pkgs.qgis-ltr; };
   qownnotes = runTest ./qownnotes.nix;
   qtile = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile.nix;
+  qtile-extras = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile-extras;
   quake3 = runTest ./quake3.nix;
   quicktun = runTest ./quicktun.nix;
   quickwit = runTest ./quickwit.nix;

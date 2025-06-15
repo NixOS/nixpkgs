@@ -16,8 +16,8 @@
   requests,
   setuptools-scm,
   xorgserver,
+  nixosTests,
 }:
-
 buildPythonPackage rec {
   pname = "qtile-extras";
   version = "0.31.0";
@@ -83,6 +83,11 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "qtile_extras" ];
+
+  passthru = {
+    tests.qtile = nixosTests.qtile-extras;
+    providedSessions = [ "qtile" ];
+  };
 
   meta = with lib; {
     description = "Extra modules and widgets for the Qtile tiling window manager";
