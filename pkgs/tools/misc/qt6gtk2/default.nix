@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation {
   pname = "qt6gtk2";
-  version = "0.4-unstable-2025-05-11";
+  version = "0.5-unstable-2025-06-08";
 
   src = fetchFromGitLab {
     domain = "opencode.net";
     owner = "trialuser";
     repo = "qt6gtk2";
-    rev = "a95d620193bfc3a2d5e17c3d1c883849182f77b8";
-    hash = "sha256-gcCujWImw7WOnz7QI4h4ye/v5EZWVIq5eFLYoOxYoog=";
+    rev = "8e019e8b67b4022d15a6c1344e42ca5b9bb9df40";
+    hash = "sha256-G2TQ4LU8Cmvd+u6/s1ugbUkZcRXHTBm3+ISY0g/5/60=";
   };
 
   buildInputs = [
