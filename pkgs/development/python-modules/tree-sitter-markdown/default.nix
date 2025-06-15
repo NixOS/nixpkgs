@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter-markdown";
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter-grammars";
     repo = "tree-sitter-markdown";
     tag = "v${version}";
-    hash = "sha256-Oe2iL5b1Cyv+dK0nQYFNLCCOCe+93nojxt6ukH2lEmU=";
+    hash = "sha256-I9KDE1yZce8KIGPLG5tmv5r/NCWwN95R6fIyvGdx+So=";
   };
 
   build-system = [
