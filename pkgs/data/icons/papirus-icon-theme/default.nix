@@ -4,11 +4,9 @@
   fetchFromGitHub,
   gtk3,
   breeze-icons,
-  elementary-icon-theme,
   hicolor-icon-theme,
   papirus-folders,
   color ? null,
-  withElementary ? false,
   gitUpdater,
 }:
 
@@ -32,9 +30,6 @@ stdenvNoCC.mkDerivation rec {
     [
       breeze-icons
       hicolor-icon-theme
-    ]
-    ++ lib.optional withElementary [
-      elementary-icon-theme
     ];
 
   dontDropIconThemeCache = true;
@@ -43,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/share/icons
-    mv ${lib.optionalString withElementary "{,e}"}Papirus* $out/share/icons
+    mv Papirus* $out/share/icons
 
     for theme in $out/share/icons/*; do
       ${lib.optionalString (
