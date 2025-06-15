@@ -31,6 +31,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rose-pine/kvantum";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ amadaluzia ];
-    license = lib.licenses.unfree; # rose-pine/kvantum#1
+    license = lib.licenses.mit;
   };
 })
