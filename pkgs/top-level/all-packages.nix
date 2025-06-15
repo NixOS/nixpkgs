@@ -12464,7 +12464,7 @@ with pkgs;
 
   firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
     pname = "firefox-devedition-bin";
-    wmClass = "firefox-aurora";
+    wmClass = "firefox-dev";
   };
 
   librewolf-unwrapped = import ../applications/networking/browsers/librewolf {
