@@ -21,13 +21,13 @@ let
       extraMeta ? { },
       ...
     }@args:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "barebox-${defconfig}";
 
       version = "2025.04.0";
 
       src = fetchurl {
-        url = "https://www.barebox.org/download/barebox-${version}.tar.bz2";
+        url = "https://www.barebox.org/download/barebox-${finalAttrs.version}.tar.bz2";
         sha256 = "sha256-MSTzwradnOBRKy1A+hfKzpw1b2XwBaY9oEdDh7iDnEE=";
       };
 
@@ -83,7 +83,7 @@ let
           maintainers = with maintainers; [ emantor ];
         }
         // extraMeta;
-    }
+    })
     // removeAttrs args [ "extraMeta" ]
   );
 in
