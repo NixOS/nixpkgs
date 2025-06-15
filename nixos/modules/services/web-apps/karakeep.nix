@@ -116,13 +116,30 @@
       };
     };
 
-    meilisearch.enable = lib.mkEnableOption ''
-      Enable Meilisearch and configure Karakeep to use it. Meilisearch is
-      required for text search.
+    meilisearch = {
+      enable = lib.mkEnableOption ''
+        Enable Meilisearch and configure Karakeep to use it. Meilisearch is
+        required for text search.
 
-      See [](#module-services-meilisearch) in the NixOS manual.
-    '';
+        See [](#module-services-meilisearch) in the NixOS manual.
+      '';
 
+      # TODO: remove when this is either handled by karakeep or becomes default
+      #       in services.meilisearch.
+      dumplessUpgrade = lib.mkOption {
+        default = false;
+        example = true;
+        description = ''
+          Whether to enable (experimental) dumpless upgrade of the search index.
+
+          Allows upgrading Meilisearch without manually dumping and importing
+          the database.
+
+          More information at https://www.meilisearch.com/docs/learn/update_and_migration/updating#dumpless-upgrade
+        '';
+        type = lib.types.bool;
+      };
+    };
   };
 
   config =
