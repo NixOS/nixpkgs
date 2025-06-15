@@ -5,6 +5,7 @@
   gmp,
   mpfr,
   ntl,
+  windows,
   autoconf,
   automake,
   gettext,
@@ -13,7 +14,7 @@
   blas,
   lapack,
   withBlas ? true,
-  withNtl ? true,
+  withNtl ? !ntl.meta.broken,
 }:
 
 assert
@@ -49,6 +50,9 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withNtl [
       ntl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      windows.mingw_w64_pthreads
     ];
 
   # We're not using autoreconfHook because flint's bootstrap
@@ -79,7 +83,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ smasher164 ];
     teams = [ teams.sage ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
     homepage = "https://www.flintlib.org/";
     downloadPage = "https://www.flintlib.org/downloads.html";
   };
