@@ -28,7 +28,6 @@ python3.pkgs.buildPythonApplication {
     description = "RDP Bitmap Cache parser";
     homepage = "https://github.com/ANSSI-FR/bmc-tools";
     license = lib.licenses.cecill21;
-    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ mikehorn ];
     mainProgram = "bmc-tools";
   };
