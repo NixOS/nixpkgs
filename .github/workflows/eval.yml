@@ -52,7 +52,7 @@ jobs:
   outpaths:
     name: Outpaths
     runs-on: ubuntu-24.04-arm
-    needs: [ prepare ]
+    needs: [prepare]
     strategy:
       fail-fast: false
       matrix:
@@ -163,7 +163,7 @@ jobs:
   compare:
     name: Comparison
     runs-on: ubuntu-24.04-arm
-    needs: [ prepare, outpaths ]
+    needs: [prepare, outpaths]
     if: needs.prepare.outputs.targetSha
     permissions:
       issues: write # needed to create *new* labels
@@ -251,7 +251,7 @@ jobs:
 
   labels:
     name: Labels
-    needs: [ compare ]
+    needs: [compare]
     uses: ./.github/workflows/labels.yml
     permissions:
       issues: write
@@ -262,7 +262,7 @@ jobs:
     # No dependency on "compare", so that it can start at the same time.
     # We only wait for the "comparison" artifact to be available, which makes the start-to-finish time
     # for the eval workflow considerably faster.
-    needs: [ prepare, outpaths ]
+    needs: [prepare, outpaths]
     if: needs.prepare.outputs.targetSha
     uses: ./.github/workflows/reviewers.yml
     secrets: inherit
