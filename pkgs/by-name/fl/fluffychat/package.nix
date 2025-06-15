@@ -5,7 +5,7 @@
   imagemagick,
   libgbm,
   libdrm,
-  flutter327,
+  flutter332,
   pulseaudio,
   makeDesktopItem,
   olm,
@@ -20,33 +20,44 @@ let
   ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 in
-flutter327.buildFlutterApplication (
+flutter332.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "1.26.1";
+    version = "1.27.0";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-c7vSrJ8IYBMQ9JwyLFJGamlvKK7DVzh5y/sybDaibgI=";
+      hash = "sha256-kt4VpegxcZ+d0NIKan2A0AUqFLdYNcU9HY/4zyd2eSU=";
     };
+
+    # lib/widgets/mxc_image.dart:119:16: Error: The getter '_' isn't defined for the class '_MxcImageState'.
+    #  - '_MxcImageState' is from 'package:fluffychat/widgets/mxc_image.dart' ('lib/widgets/mxc_image.dart').
+    # Try correcting the name to the name of an existing getter, or defining a getter or field named '_'.
+    #       _tryLoad(_);
+    #                ^
+    postPatch = ''
+      substituteInPlace lib/widgets/mxc_image.dart \
+        --replace-fail '_tryLoad(_)' '_tryLoad(somethingIdkWhyItIsNeeded)'
+    '';
 
     inherit pubspecLock;
 
     gitHashes = {
+      flutter_secure_storage_linux = "sha256-cFNHW7dAaX8BV7arwbn68GgkkBeiAgPfhMOAFSJWlyY=";
       flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
       flutter_typeahead = "sha256-ZGXbbEeSddrdZOHcXE47h3Yu3w6oV7q+ZnO6GyW7Zg8=";
     };
 
     inherit targetFlutterPlatform;
 
-    meta = with lib; {
+    meta = {
       description = "Chat with your friends (matrix client)";
       homepage = "https://fluffychat.im/";
-      license = licenses.agpl3Plus;
+      license = lib.licenses.agpl3Plus;
       mainProgram = "fluffychat";
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         mkg20001
         tebriel
         aleksana
@@ -55,7 +66,7 @@ flutter327.buildFlutterApplication (
         "x86_64-linux"
         "aarch64-linux"
       ];
-      sourceProvenance = [ sourceTypes.fromSource ];
+      sourceProvenance = [ lib.sourceTypes.fromSource ];
       inherit (olm.meta) knownVulnerabilities;
     };
   }
@@ -89,7 +100,7 @@ flutter327.buildFlutterApplication (
       for size in 24 32 42 64 128 256 512; do
         D=$ICO/hicolor/''${s}x''${s}/apps
         mkdir -p $D
-        convert $FAV -resize ''${size}x''${size} $D/fluffychat.png
+        magick $FAV -resize ''${size}x''${size} $D/fluffychat.png
       done
 
       patchelf --add-rpath ${libwebrtcRpath} $out/app/fluffychat-linux/lib/libwebrtc.so
