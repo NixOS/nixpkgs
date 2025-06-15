@@ -115,7 +115,7 @@ body:
         Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
 
         If this issue is related to the Darwin packaging architecture as a whole, or is related to the core Darwin frameworks, consider mentioning the `@NixOS/darwin-core` team.
-      value: |
+      value: |2
 
 
         ---
