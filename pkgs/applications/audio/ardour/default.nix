@@ -62,7 +62,9 @@
   optimize ? true, # disable to print Lua DSP script output to stdout
   videoSupport ? true,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: let
+  majorVersion = lib.versions.major finalAttrs.version;
+in {
   pname = "ardour";
   version = "8.12";
 
@@ -70,7 +72,7 @@ stdenv.mkDerivation rec {
   # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-4IgBQ53cwPA35YwNQyo+qBqsMGv+TLn6w1zaDX97erE=";
   };
 
@@ -90,7 +92,7 @@ stdenv.mkDerivation rec {
   # Ardour's wscript requires git revision and date to be available.
   # Since they are not, let's generate the file manually.
   postPatch = ''
-    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${finalAttrs.version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
     sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
     patchShebangs ./tools/
     substituteInPlace libs/ardour/video_tools_paths.cc \
@@ -186,20 +188,20 @@ stdenv.mkDerivation rec {
       # wscript does not install these for some reason
       install -vDm 644 "build/gtk2_ardour/ardour.xml" \
         -t "$out/share/mime/packages"
-      install -vDm 644 "build/gtk2_ardour/ardour${lib.versions.major version}.desktop" \
+      install -vDm 644 "build/gtk2_ardour/ardour${majorVersion}.desktop" \
         -t "$out/share/applications"
       for size in 16 22 32 48 256 512; do
         install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
-          "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour${lib.versions.major version}.png"
+          "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour${majorVersion}.png"
       done
       install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
 
       # install additional bundled beats, chords and progressions
-      cp -rp "${bundledContent}"/* "$out/share/ardour${lib.versions.major version}/media"
+      cp -rp "${finalAttrs.bundledContent}"/* "$out/share/ardour${majorVersion}/media"
     ''
     + lib.optionalString videoSupport ''
       # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
-      wrapProgram "$out/bin/ardour${lib.versions.major version}" \
+      wrapProgram "$out/bin/ardour${majorVersion}" \
         --prefix PATH : "${
           lib.makeBinPath [
             harvid
@@ -230,4 +232,4 @@ stdenv.mkDerivation rec {
       mitchmindtree
     ];
   };
-}
+})
