@@ -335,7 +335,7 @@ rec {
             installShellCompletion --cmd docker \
               --bash <($out/bin/docker completion bash) \
               --fish <($out/bin/docker completion fish) \
-              --zsh <($out/bin/docker completion zsh) 
+              --zsh <($out/bin/docker completion zsh)
           '';
 
         passthru = {
