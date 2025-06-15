@@ -332,9 +332,10 @@ rec {
           ''
           + ''
             # completion (cli)
-            installShellCompletion --bash ./contrib/completion/bash/docker
-            installShellCompletion --fish ./contrib/completion/fish/docker.fish
-            installShellCompletion --zsh  ./contrib/completion/zsh/_docker
+            installShellCompletion --cmd docker \
+              --bash <($out/bin/docker completion bash) \
+              --fish <($out/bin/docker completion fish) \
+              --zsh <($out/bin/docker completion zsh) 
           '';
 
         passthru = {
