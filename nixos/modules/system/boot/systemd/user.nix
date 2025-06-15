@@ -14,6 +14,12 @@ let
 
   systemd = config.systemd.package;
 
+  # No need to have duplicate paths in PATH
+  uniquePATHs = lib.lists.unique config.systemd.user.config.DefaultEnvironment.paths;
+  # We do this to ensure that `$PATH` is at the very end
+  uniquePATHsWithoutPATH = lib.lists.remove "$PATH" uniquePATHs;
+  finalUniquePATHs = uniquePATHsWithoutPATH ++ [ "$PATH" ];
+
   inherit (systemdUtils.lib)
     makeUnit
     generateUnits
@@ -66,6 +72,27 @@ let
 in
 {
   options = {
+    systemd.user.config.populatePATH = mkEnableOption ''
+      Weather to add the paths populated in the option
+      {option}`systemd.user.config.DefaultEnvironment.paths` to the
+      user's systemd config.
+    '';
+
+    systemd.user.config.DefaultEnvironment.paths = mkOption {
+      type = types.listOf types.str;
+      example = lib.literalExpression ''[ "%h/.nix-profile/bin" ]'';
+      default = [
+        "/run/wrappers/bin"
+        "/etc/profiles/per-user/%u/bin"
+        "/nix/var/nix/profiles/default/bin"
+        "/run/current-system/sw/bin"
+      ];
+      description = ''
+        The paths to include in the PATH environment variable for the
+        systemd units for the user.
+      '';
+    };
+
     systemd.user.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -197,6 +224,7 @@ in
 
       "systemd/user.conf".text = ''
         [Manager]
+        ${lib.strings.optionalString config.systemd.user.config.populatePATH ''DefaultEnvironment="PATH=${lib.strings.concatStringsSep ":" finalUniquePATHs}"''}
         ${cfg.extraConfig}
       '';
     };
