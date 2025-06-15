@@ -1332,6 +1332,10 @@ Adding `pytest` is not required, since it is included with `pytestCheckHook`.
 
 :   To append additional command-line arguments to `pytest`.
 
+`dontCheckWithSitePackages`
+
+:   Not to append the installed site packages to `PYTHONPATH` when running `pytest`.
+
 By default, `pytest` automatically discovers which tests to run.
 If tests are explicitly enabled, only those tests will run.
 A test, that is both enabled and disabled, will not run.

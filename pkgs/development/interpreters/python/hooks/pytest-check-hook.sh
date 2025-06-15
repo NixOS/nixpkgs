@@ -88,7 +88,17 @@ EOF
 
     concatTo flagsArray pytestFlags
     echoCmd 'pytest flags' "${flagsArray[@]}"
+
+    _pathonPathOld="$PYTHONPATH"
+    if [[ -z "${dontCheckWithSitePackages}" ]]; then
+        # Reference to the installed (built) site packages
+        # instead of those in the source.
+        addToSearchPath PYTHONPATH "$out"/@pythonSitePackages@
+    fi
+
     @pythonCheckInterpreter@ -m pytest "${flagsArray[@]}"
+
+    export PYTHONPATH=$_pathonPathOld
 
     runHook postCheck
     echo "Finished executing pytestCheckPhase"
