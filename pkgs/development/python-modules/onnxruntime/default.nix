@@ -84,7 +84,7 @@ buildPythonPackage {
       # Many downstream packages (vectorcode for e.g.) crash when importing `onnxruntime`:
       # in onnxruntime/capi/_pybind_state.py
       # Fatal Python error: Aborted
-      "aarch64-linux"
+      # "aarch64-linux"
     ];
   };
 }

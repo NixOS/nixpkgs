@@ -108,6 +108,9 @@ effectiveStdenv.mkDerivation rec {
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
     ./nvcc-gsl.patch
+
+    # https://github.com/microsoft/onnxruntime/pull/15661
+    ./fix-cpuinfo-logging.patch
   ];
 
   nativeBuildInputs =
