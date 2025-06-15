@@ -1084,6 +1084,7 @@ let
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
     chebpol = [ pkgs.pkg-config ];
+    baseline = [ pkgs.lapack ];
     eds = [ pkgs.zlib.dev ];
     pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
