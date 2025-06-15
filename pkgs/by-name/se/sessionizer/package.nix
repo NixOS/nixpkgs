@@ -23,7 +23,7 @@ buildGoModule {
   buildInputs = [pkgs.fzf];
 
   meta = with lib; {
-    description = "Session manager for tmux";
+    description = "Sessionizer helps you to search through your projects and creates custom tmux sessions for them";
     homepage = "https://github.com/salfel/sessionizer";
     license = licenses.gpl3;
     maintainers = with maintainers; [salfel];
