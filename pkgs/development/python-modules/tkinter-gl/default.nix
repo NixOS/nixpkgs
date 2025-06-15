@@ -1,9 +1,12 @@
 {
   lib,
+  python,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
   tkinter,
+  pyopengl,
+  libGL,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +23,18 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [ tkinter ];
+  buildInputs = [ libGL ];
+
+  dependencies = [
+    tkinter
+    pyopengl
+  ];
+
+  postInstall = ''
+    cp -r src/tkinter_gl/tk $out/${python.sitePackages}/tkinter_gl/
+    patchelf --set-rpath ${lib.makeLibraryPath [ libGL ]} \
+      $out/${python.sitePackages}/tkinter_gl/tk/*/*/*.so
+  '';
 
   pythonImportsCheck = [ "tkinter_gl" ];
 
