@@ -5,7 +5,7 @@
   iproute2,
   lib,
   lsof,
-  nettools,
+  net-tools,
   pkg-config,
   procps,
   psmisc,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     iproute2
     lsof
-    nettools
+    net-tools
     procps
     psmisc
   ];

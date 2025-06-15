@@ -9,7 +9,7 @@
   gitlabEnterprise ? false,
   lib,
   makeWrapper,
-  nettools,
+  net-tools,
   nixosTests,
   nodejs_20,
   replace,
@@ -220,7 +220,7 @@ stdenv.mkDerivation {
     rubyEnv.bundler
     tzdata
     git
-    nettools
+    net-tools
   ];
 
   patches = [

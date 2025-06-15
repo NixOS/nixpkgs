@@ -71,7 +71,7 @@ let
       path = [
         pkgs.iptables
         pkgs.iproute2
-        pkgs.nettools
+        pkgs.net-tools
       ];
 
       serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
