@@ -497,7 +497,73 @@ let
           } in fous, "fou4 exists"
         '';
     };
-    sit =
+    sit-6in4 =
+      let
+        node =
+          {
+            address4,
+            remote,
+            address6,
+          }:
+          {
+            virtualisation.interfaces.enp1s0.vlan = 1;
+            networking = {
+              useNetworkd = networkd;
+              useDHCP = false;
+              sits.sit = {
+                inherit remote;
+                local = address4;
+                dev = "enp1s0";
+              };
+              nftables.enable = true;
+              firewall.extraInputRules = "meta l4proto 41 accept";
+              interfaces.enp1s0.ipv4.addresses = lib.mkOverride 0 [
+                {
+                  address = address4;
+                  prefixLength = 24;
+                }
+              ];
+              interfaces.sit.ipv6.addresses = lib.mkOverride 0 [
+                {
+                  address = address6;
+                  prefixLength = 64;
+                }
+              ];
+            };
+          };
+      in
+      {
+        name = "Sit-6in4";
+        nodes.client1 = node {
+          address4 = "192.168.1.1";
+          remote = "192.168.1.2";
+          address6 = "fc00::1";
+        };
+        nodes.client2 = node {
+          address4 = "192.168.1.2";
+          remote = "192.168.1.1";
+          address6 = "fc00::2";
+        };
+        testScript = ''
+          start_all()
+
+          with subtest("Wait for networking to be configured"):
+              client1.wait_for_unit("network.target")
+              client2.wait_for_unit("network.target")
+
+              # Print diagnostic information
+              client1.succeed("ip addr >&2")
+              client2.succeed("ip addr >&2")
+
+          with subtest("Test ipv6"):
+              client1.wait_until_succeeds("ping -c 1 fc00::1")
+              client1.wait_until_succeeds("ping -c 1 fc00::2")
+
+              client2.wait_until_succeeds("ping -c 1 fc00::1")
+              client2.wait_until_succeeds("ping -c 1 fc00::2")
+        '';
+      };
+    sit-fou =
       let
         node =
           {
@@ -532,7 +598,7 @@ let
           };
       in
       {
-        name = "Sit";
+        name = "Sit-fou";
         # note on firewalling: the two nodes are explicitly asymmetric.
         # client1 sends SIT packets in UDP, but accepts only proto-41 incoming.
         # client2 does the reverse, sending in proto-41 and accepting only UDP incoming.
@@ -547,7 +613,8 @@ let
             } args)
             {
               networking = {
-                firewall.extraCommands = "iptables -A INPUT -p 41 -j ACCEPT";
+                nftables.enable = true;
+                firewall.extraInputRules = "meta l4proto 41 accept";
                 sits.sit.encapsulation = {
                   type = "fou";
                   port = 9001;
