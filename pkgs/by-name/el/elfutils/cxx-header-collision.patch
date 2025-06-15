@@ -1,35 +1,31 @@
-From: Tristan Ross <tristan.ross@midstall.com>
-Date: Wed, 31 Jul 2024 04:03:03 +0000 (-0700)
-Subject: Prevent binaries in src from colliding with libc++ headers
-X-Git-Url: https://sourceware.org/git/?p=elfutils.git;a=commitdiff_plain;h=232b9ede92cbecabbd61291c2fc9aaf3fc61061f;hp=87a60d22299c4ba7b94cbce04a32c2abf015f98a
+commit 014dd313f994768b41ea982089c43e555b4aa220
+Author: Tristan Ross <tristan.ross@midstall.com>
+Date:   Wed Jun 4 19:48:16 2025 -0700
 
-Prevent binaries in src from colliding with libc++ headers
-
-Discovered with Nix and LLVM 17. Headers inside of libc++ can easily
-collide with binaries being linked in src. This results in clang trying
-to include a binary as a header.
-
-Fix this by removing '-I.' and '-I$(srcdir)' from AM_CPPFLAGS and
-DEFAULT_INCLUDES in src/Makefile.am.
-
-To facilitate this config/eu.am has been refactored.  New file
-config/eu-common.am contains all of the old eu.am but with the
-AM_CPPFLAGS definition removed. eu.am now includes eu-common.am and
-contains the old AM_CPPFLAGS definition.
-
-eu.am functionality does not change, but src/Makefile.am can instead
-include eu-common.am and define its own AM_CPPFLAGS without causing a
-"multiply defined" warning during autoreconf.
-
-Signed-off-by: Tristan Ross <tristan.ross@midstall.com>
----
+    Prevent binaries in src from colliding with libc++ headers
+    
+    Discovered with Nix and LLVM 17. Headers inside of libc++ can easily
+    collide with binaries being linked in src. This results in clang trying
+    to include a binary as a header.
+    
+    Fix this by removing '-I.' and '-I$(srcdir)' from AM_CPPFLAGS and
+    DEFAULT_INCLUDES in src/Makefile.am.
+    
+    To facilitate this config/eu.am has been refactored.  New file
+    config/eu-common.am contains all of the old eu.am but with the
+    AM_CPPFLAGS definition removed. eu.am now includes eu-common.am and
+    contains the old AM_CPPFLAGS definition.
+    
+    eu.am functionality does not change, but src/Makefile.am can instead
+    include eu-common.am and define its own AM_CPPFLAGS without causing a
+    "multiply defined" warning during autoreconf.
 
 diff --git a/config/eu-common.am b/config/eu-common.am
 new file mode 100644
-index 00000000..9cc7f696
+index 00000000..06249478
 --- /dev/null
 +++ b/config/eu-common.am
-@@ -0,0 +1,148 @@
+@@ -0,0 +1,156 @@
 +## Common automake fragments for elfutils subdirectory makefiles.
 +##
 +## Copyright (C) 2010, 2014, 2016 Red Hat, Inc.
@@ -125,7 +121,7 @@ index 00000000..9cc7f696
 +USE_AFTER_FREE3_WARNING=
 +endif
 +
-+AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
++AM_CFLAGS = -Wall -Wshadow -Wformat=2 \
 +	    -Wold-style-definition -Wstrict-prototypes $(TRAMPOLINES_WARNING) \
 +	    $(LOGICAL_OP_WARNING) $(DUPLICATED_COND_WARNING) \
 +	    $(NULL_DEREFERENCE_WARNING) $(IMPLICIT_FALLTHROUGH_WARNING) \
@@ -166,7 +162,15 @@ index 00000000..9cc7f696
 +	$(AM_V_CC)$(COMPILE.os) -c -o $@ $(fpic_CFLAGS) $(DEFS.os) $<
 +endif
 +
-+CLEANFILES = *.gcno *.gcda
++COVERAGE_OUTPUT_DIRECTORY = coverage
++COVERAGE_OUTPUT_FILE = $(PACKAGE_NAME).lcov
++
++.PHONY: clean-coverage coverage
++
++clean-local: clean-coverage
++clean-coverage:
++	-rm -rf $(COVERAGE_OUTPUT_DIRECTORY)
++	-rm -f $(COVERAGE_OUTPUT_FILE) *.gcno *.gcda
 +
 +textrel_msg = echo "WARNING: TEXTREL found in '$@'"
 +if FATAL_TEXTREL
@@ -179,22 +183,15 @@ index 00000000..9cc7f696
 +print-%:
 +	@echo $*=$($*)
 diff --git a/config/eu.am b/config/eu.am
-index 0b7dab5b..3aa6048a 100644
+index 5157a34e..6b1425d6 100644
 --- a/config/eu.am
 +++ b/config/eu.am
-@@ -1,4 +1,5 @@
--## Common automake fragments for elfutils subdirectory makefiles.
-+## Common automake fragments for elfutils subdirectory makefiles
-+## with AM_CPPFLAGS set.
- ##
- ## Copyright (C) 2010, 2014, 2016 Red Hat, Inc.
- ## Copyright (C) 2023, Mark J. Wielaard <mark@klomp.org>
-@@ -30,120 +31,5 @@
+@@ -30,128 +30,5 @@
  ## not, see <http://www.gnu.org/licenses/>.
  ##
  
 -DEFS = -D_GNU_SOURCE -DHAVE_CONFIG_H -DLOCALEDIR='"${localedir}"'
--AM_CPPFLAGS = -iquote . -I$(srcdir) -I$(top_srcdir)/lib -I..
+ AM_CPPFLAGS = -iquote . -I$(srcdir) -I$(top_srcdir)/lib -I..
 -
 -# Drop the 'u' flag that automake adds by default. It is incompatible
 -# with deterministic archives.
@@ -257,7 +254,7 @@ index 0b7dab5b..3aa6048a 100644
 -USE_AFTER_FREE3_WARNING=
 -endif
 -
--AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
+-AM_CFLAGS = -Wall -Wshadow -Wformat=2 \
 -	    -Wold-style-definition -Wstrict-prototypes $(TRAMPOLINES_WARNING) \
 -	    $(LOGICAL_OP_WARNING) $(DUPLICATED_COND_WARNING) \
 -	    $(NULL_DEREFERENCE_WARNING) $(IMPLICIT_FALLTHROUGH_WARNING) \
@@ -298,7 +295,15 @@ index 0b7dab5b..3aa6048a 100644
 -	$(AM_V_CC)$(COMPILE.os) -c -o $@ $(fpic_CFLAGS) $(DEFS.os) $<
 -endif
 -
--CLEANFILES = *.gcno *.gcda
+-COVERAGE_OUTPUT_DIRECTORY = coverage
+-COVERAGE_OUTPUT_FILE = $(PACKAGE_NAME).lcov
+-
+-.PHONY: clean-coverage coverage
+-
+-clean-local: clean-coverage
+-clean-coverage:
+-	-rm -rf $(COVERAGE_OUTPUT_DIRECTORY)
+-	-rm -f $(COVERAGE_OUTPUT_FILE) *.gcno *.gcda
 -
 -textrel_msg = echo "WARNING: TEXTREL found in '$@'"
 -if FATAL_TEXTREL
@@ -310,13 +315,12 @@ index 0b7dab5b..3aa6048a 100644
 -
 -print-%:
 -	@echo $*=$($*)
-+AM_CPPFLAGS = -I. -I$(srcdir) -I$(top_srcdir)/lib -I..
 +include $(top_srcdir)/config/eu-common.am
 diff --git a/src/Makefile.am b/src/Makefile.am
-index 97a0c61a..5bb8c078 100644
+index 4a3fb957..8b9e2758 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
-@@ -16,14 +16,15 @@
+@@ -16,15 +16,21 @@
  ## You should have received a copy of the GNU General Public License
  ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ##
@@ -328,11 +332,19 @@ index 97a0c61a..5bb8c078 100644
 -DEFAULT_INCLUDES =
 -AM_CPPFLAGS += -I$(srcdir)/../libelf -I$(srcdir)/../libebl \
 -	    -I$(srcdir)/../libdw -I$(srcdir)/../libdwelf \
--	    -I$(srcdir)/../libdwfl -I$(srcdir)/../libasm -I../debuginfod
+-	    -I$(srcdir)/../libdwfl -I$(srcdir)/../libdwfl_stacktrace \
+-	    -I$(srcdir)/../libasm -I../debuginfod
 +DEFAULT_INCLUDES = -I$(top_builddir)
-+AM_CPPFLAGS = -I$(top_srcdir)/lib -I.. \
-+	    -I$(srcdir)/../libelf -I$(srcdir)/../libebl \
-+ 	    -I$(srcdir)/../libdw -I$(srcdir)/../libdwelf \
-+ 	    -I$(srcdir)/../libdwfl -I$(srcdir)/../libasm -I../debuginfod
++AM_CPPFLAGS = -I$(top_srcdir)/lib \
++            -I.. \
++	    -I$(srcdir)/../libelf \
++            -I$(srcdir)/../libebl \
++ 	    -I$(srcdir)/../libdw \
++            -I$(srcdir)/../libdwelf \
++ 	    -I$(srcdir)/../libdwfl \
++            -I$(srcdir)/../libdwfl_stacktrace \
++            -I$(srcdir)/../libasm \
++            -I../debuginfod
  
  AM_LDFLAGS = -Wl,-rpath-link,../libelf:../libdw $(STACK_USAGE_NO_ERROR)
+ 
