@@ -28,17 +28,18 @@ let
   single = x: lib.optional (x != null) x;
 
 in
-lib.checkListOfEnum "${pname}: window control buttons variants" [ "normal" "alt" "all" ] altVariants
+lib.checkListOfEnum "whitesur-gtk-theme: window control buttons variants" [ "normal" "alt" "all" ]
+  altVariants
   lib.checkListOfEnum
-  "${pname}: color variants"
+  "whitesur-gtk-theme: color variants"
   [ "light" "dark" ]
   colorVariants
   lib.checkListOfEnum
-  "${pname}: opacity variants"
+  "whitesur-gtk-theme: opacity variants"
   [ "normal" "solid" ]
   opacityVariants
   lib.checkListOfEnum
-  "${pname}: accent color variants"
+  "whitesur-gtk-theme: accent color variants"
   [
     "default"
     "blue"
@@ -53,11 +54,11 @@ lib.checkListOfEnum "${pname}: window control buttons variants" [ "normal" "alt"
   ]
   themeVariants
   lib.checkListOfEnum
-  "${pname}: colorscheme style variants"
+  "whitesur-gtk-theme: colorscheme style variants"
   [ "standard" "nord" ]
   schemeVariants
   lib.checkListOfEnum
-  "${pname}: activities icon variants"
+  "whitesur-gtk-theme: activities icon variants"
   [
     "standard"
     "apple"
@@ -79,15 +80,15 @@ lib.checkListOfEnum "${pname}: window control buttons variants" [ "normal" "alt"
   ]
   (single iconVariant)
   lib.checkListOfEnum
-  "${pname}: nautilus style"
+  "whitesur-gtk-theme: nautilus style"
   [ "stable" "normal" "mojave" "glassy" "right" ]
   (single nautilusStyle)
   lib.checkListOfEnum
-  "${pname}: panel opacity"
+  "whitesur-gtk-theme: panel opacity"
   [ "default" "30" "45" "60" "75" ]
   (single panelOpacity)
   lib.checkListOfEnum
-  "${pname}: panel size"
+  "whitesur-gtk-theme: panel size"
   [ "default" "smaller" "bigger" ]
   (single panelSize)
 
@@ -98,7 +99,7 @@ lib.checkListOfEnum "${pname}: window control buttons variants" [ "normal" "alt"
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "whitesur-gtk-theme";
       rev = version;
       hash = "sha256-XSghDBpxAjdQMB9tyV2NIM6j/AzmzsnybGGDYi7u3BQ=";
     };
