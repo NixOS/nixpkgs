@@ -233,6 +233,7 @@ stdenv.mkDerivation (
       maintainers = with lib.maintainers; [
         magnetophon
         mitchmindtree
+        ryand56
       ];
     };
   }
