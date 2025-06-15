@@ -32,7 +32,6 @@
   nixosTests,
   extraPackages ? [ ],
 }:
-
 buildPythonPackage rec {
   pname = "qtile";
   version = "0.31.0";
@@ -112,6 +111,7 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       arjan-s
       sigmanificient
+      gurjaka
     ];
   };
 }
