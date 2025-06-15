@@ -13,7 +13,7 @@
 }:
 
 let
-  buildBarebox =
+  buildBarebox = lib.makeOverridable (
     {
       filesToInstall,
       installDir ? "$out",
@@ -84,8 +84,8 @@ let
         }
         // extraMeta;
     }
-    // removeAttrs args [ "extraMeta" ];
-
+    // removeAttrs args [ "extraMeta" ]
+  );
 in
 {
   inherit buildBarebox;
