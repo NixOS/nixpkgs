@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   pcre,
   pcre2,
   jemalloc,
@@ -55,6 +56,30 @@ let
         ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
       buildFlags = [ "localstatedir=/var/run" ];
+
+      patches =
+        lib.optionals (stdenv.isDarwin && lib.versionAtLeast version "7.7") [
+          # Fix VMOD section attribute on macOS
+          # Unreleased commit on master
+          (fetchpatch2 {
+            url = "https://github.com/varnishcache/varnish-cache/commit/a95399f5b9eda1bfdba6ee6406c30a1ed0720167.patch";
+            hash = "sha256-T7DIkmnq0O+Cr9DTJS4/rOtg3J6PloUo8jHMWoUZYYk=";
+          })
+          # Fix endian.h compatibility on macOS
+          # PR: https://github.com/varnishcache/varnish-cache/pull/4339
+          (fetchpatch2 {
+            url = "https://github.com/varnishcache/varnish-cache/commit/3e679cd0aa093f7b1c426857d24a88d3db747f24.patch";
+            hash = "sha256-tVvjQmPU95hHZcJvC3goT3oswbcYoAEVvuUMUrGQuko=";
+          })
+        ]
+        ++ lib.optionals (stdenv.isDarwin && lib.versionOlder version "7.6") [
+          # Fix duplicate OS_CODE definitions on macOS
+          # https://github.com/varnishcache/varnish-cache/pull/4347
+          (fetchpatch2 {
+            url = "https://github.com/varnishcache/varnish-cache/commit/f56b314408d22252bf62d6cd2e098cf8139bd048.patch";
+            hash = "sha256-z0amPsY3Kkp5dw0Z1G7aA+lcPV9KnEmEhREv3D3BFlQ=";
+          })
+        ];
 
       postPatch = ''
         substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
