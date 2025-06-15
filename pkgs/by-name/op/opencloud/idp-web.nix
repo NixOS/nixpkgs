@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pnpmRoot}";
-    hash = "sha256-gFhWDYk3DcwUowZ9AQjCqHZL1oniK3YCNiG1cDGabYg=";
+    hash = "sha256-yseRO1tClLTRpQj5BzMscElUlgLEzj1u8ndT1+di2+Y=";
   };
 
   nativeBuildInputs = [

@@ -670,6 +670,8 @@ mapAliases {
   fingerd_bsd = bsd-fingerd;
   fira-code-nerdfont = lib.warnOnInstantiate "fira-code-nerdfont is redundant. Use nerd-fonts.fira-code instead." nerd-fonts.fira-code; # Added 2024-11-10
   firebird_2_5 = throw "'firebird_2_5' has been removed as it has reached end-of-life and does not build."; # Added 2025-06-10
+  firefox-beta-bin = lib.warnOnInstantiate "`firefox-beta-bin` is removed.  Please use `firefox-beta` or `firefox-bin` instead." firefox-beta;
+  firefox-devedition-bin = lib.warnOnInstantiate "`firefox-devedition-bin` is removed.  Please use `firefox-devedition` or `firefox-bin` instead." firefox-devedition;
   firefox-esr-115 = throw "The Firefox 115 ESR series has reached its end of life. Upgrade to `firefox-esr` or `firefox-esr-128` instead.";
   firefox-esr-115-unwrapped = throw "The Firefox 115 ESR series has reached its end of life. Upgrade to `firefox-esr-unwrapped` or `firefox-esr-128-unwrapped` instead.";
   firefox-wayland = firefox; # Added 2022-11-15
@@ -697,6 +699,8 @@ mapAliases {
   fractal-next = fractal; # added 2023-11-25
   framework-system-tools = framework-tool; # added 2023-12-09
   francis = kdePackages.francis; # added 2024-07-13
+  freecad-qt6 = freecad; # added 2025-06-14
+  freecad-wayland = freecad; # added 2025-06-14
   freerdp3 = freerdp; # added 2025-03-25
   freerdpUnstable = freerdp; # added 2025-03-25
   frostwire = throw "frostwire was removed, as it was broken due to reproducibility issues, use `frostwire-bin` package instead."; # added 2024-05-17
@@ -870,6 +874,7 @@ mapAliases {
   gtk-engine-bluecurve = "'gtk-engine-bluecurve' has been removed as it has been archived upstream."; # Added 2024-12-04
   gtk2fontsel = throw "'gtk2fontsel' has been removed due to lack of maintenance upstream. GTK now has a built-in font chooser so it's no longer needed for newer apps"; # Added 2024-10-19
   gtkcord4 = dissent; # Added 2024-03-10
+  gtkextra = throw "'gtkextra' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
   gtkperf = throw "'gtkperf' has been removed due to lack of maintenance upstream"; # Added 2024-09-14
   guardian-agent = throw "'guardian-agent' has been removed, as it hasn't been maintained upstream in years and accumulated many vulnerabilities"; # Added 2024-06-09
   guile-disarchive = disarchive; # Added 2023-10-27
@@ -2064,6 +2069,7 @@ mapAliases {
   wg-bond = throw "'wg-bond' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   whatsapp-for-linux = wasistlos; # Added 2025-01-30
   wineWayland = wine-wayland;
+  winhelpcgi = throw "'winhelpcgi' has been removed as it was unmaintained upstream and broken with GCC 14"; # Added 2025-06-14
   win-virtio = virtio-win; # Added 2023-10-17
   wireguard-vanity-address = throw "'wireguard-vanity-address' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   wkhtmltopdf-bin = wkhtmltopdf; # Added 2024-07-17

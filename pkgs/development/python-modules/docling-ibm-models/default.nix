@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "docling-ibm-models";
-  version = "3.4.3";
+  version = "3.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-ibm-models";
     tag = "v${version}";
-    hash = "sha256-EcBlvb6UNHe2lZFBuC4eSa6Ka82HRNnsQqK/AQuPvoA=";
+    hash = "sha256-a2y4vXgALPRtLhdH0Tqqht1gpdcfa1Gv4puthKDMk7U=";
   };
 
   build-system = [
