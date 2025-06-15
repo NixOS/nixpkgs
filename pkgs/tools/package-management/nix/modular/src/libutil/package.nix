@@ -11,6 +11,7 @@
   libsodium,
   nlohmann_json,
   openssl,
+  pkg-config,
 
   # Configuration Options
 
@@ -23,12 +24,14 @@ mkMesonLibrary (finalAttrs: {
 
   workDir = ./.;
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs =
     [
       brotli
     ]
     ++ lib.optional (lib.versionAtLeast version "2.27") [
-      libblake3
+      (lib.getDev libblake3)
     ]
     ++ [
       libsodium
