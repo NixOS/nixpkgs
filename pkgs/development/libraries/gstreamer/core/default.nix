@@ -136,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
     moveToOutput "share/bash-completion" "$bin"
   '';
 
