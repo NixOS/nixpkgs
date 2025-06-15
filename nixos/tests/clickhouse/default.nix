@@ -1,12 +1,8 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
-}:
+{ runTest }:
 
 {
-  base = import ./base.nix { inherit system pkgs; };
-  kafka = import ./kafka.nix { inherit system pkgs; };
-  keeper = import ./keeper.nix { inherit system pkgs; };
-  s3 = import ./s3.nix { inherit system pkgs; };
+  base = runTest ./base.nix;
+  kafka = runTest ./kafka.nix;
+  keeper = runTest ./keeper.nix;
+  s3 = runTest ./s3.nix;
 }
