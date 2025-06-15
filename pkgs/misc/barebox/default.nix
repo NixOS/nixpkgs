@@ -13,8 +13,16 @@
 }:
 
 let
+  defaultVersion = "2026.06.1";
+  defaultSrc = fetchurl {
+    url = "https://www.barebox.org/download/barebox-${defaultVersion}.tar.bz2";
+    sha256 = "sha256-h1KzdSgZ7EqvhIodBt8FJCpklUUl+xW2zwezw91+vX8=";
+  };
+
   buildBarebox = lib.makeOverridable (
     {
+      version ? null,
+      src ? null,
       filesToInstall,
       installDir ? "$out",
       defconfig,
@@ -24,12 +32,9 @@ let
     stdenv.mkDerivation (finalAttrs: {
       pname = "barebox-${defconfig}";
 
-      version = "2026.06.1";
+      version = if src == null then defaultVersion else version;
 
-      src = fetchurl {
-        url = "https://www.barebox.org/download/barebox-${version}.tar.bz2";
-        sha256 = "sha256-h1KzdSgZ7EqvhIodBt8FJCpklUUl+xW2zwezw91+vX8=";
-      };
+      src = if src == null then defaultSrc else src;
 
       postPatch = ''
         patchShebangs scripts
