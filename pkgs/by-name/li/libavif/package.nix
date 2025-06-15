@@ -34,6 +34,11 @@ stdenv.mkDerivation rec {
   pname = "libavif";
   version = "1.2.1";
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = "libavif";
