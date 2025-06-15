@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "smplayer-dev";
     repo = "smplayer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dyUT8PdvsFZsEZQNSsC2TQd90KOrY9FIb9Do+JKdUHs=";
+    hash = "sha256-txGz6v9hkvnrmVmBHsi1B2eC/iNT1tg4dU5AcMsSCic=";
   };
 
   nativeBuildInputs = [
