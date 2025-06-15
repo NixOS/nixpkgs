@@ -67,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
       It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
     '';
     license = lib.licenses.zlib;
-    maintainers = [ lib.maintainers.astsmtl ];
     platforms = lib.platforms.unix;
     badPlatforms = [
       # error: implicit instantiation of undefined template 'std::char_traits<unsigned int>'

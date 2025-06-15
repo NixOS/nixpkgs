@@ -277,7 +277,6 @@ let
         homepage = "https://www.musicpd.org/";
         license = licenses.gpl2Only;
         maintainers = with maintainers; [
-          astsmtl
           tobim
         ];
         platforms = platforms.unix;
