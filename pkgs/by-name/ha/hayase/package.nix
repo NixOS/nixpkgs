@@ -4,8 +4,8 @@
   callPackage,
 }:
 let
-  pname = "miru";
-  version = "5.5.10";
+  pname = "hayase";
+  version = "6.3.7";
   meta = {
     description = "Stream anime torrents, real-time with no waiting for downloads";
     homepage = "https://miru.watch";
@@ -14,7 +14,7 @@ let
       d4ilyrun
       matteopacini
     ];
-    mainProgram = "miru";
+    mainProgram = "hayase";
 
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
