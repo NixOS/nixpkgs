@@ -63,7 +63,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langchain_mistralai" ];
 
   passthru.updateScript = gitUpdater {
-    pname = "langchain-mistralai==";
+    rev-prefix = "langchain-mistralai==";
   };
 
   meta = {
