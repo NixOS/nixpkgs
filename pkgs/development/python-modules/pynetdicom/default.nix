@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "2.1.1-unstable-2024-12-22";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
