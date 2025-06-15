@@ -12,7 +12,7 @@ The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
 ## How to use plugins:
  - Get the ide you want and call `jetbrains.plugins.addPlugins` with a list of plugins you want to add.
  - The list of plugins can be a list of ids or names (as in `plugins/plugins.json`)
- - Example: `jetbrains.plugins.addPlugins jetbrains.pycharm-professional [ "nixidea" ]`
+ - Example: `jetbrains.plugins.addPlugins jetbrains.pycharm [ "nixidea" ]`
  - The list can also contain drvs giving the directory contents of the plugin (this is how you use a plugin not added to nixpkgs) or a single `.jar` (executable). For an example, look at the implementation of `fetchPluginSrc` in `plugins/default.nix`.
 
 ### How to add a new plugin to nixpkgs
