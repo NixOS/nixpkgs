@@ -18,8 +18,11 @@ on:
         default: 0 # everything since last run
 
 concurrency:
-  group: labels-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
-  cancel-in-progress: true
+  # This explicitly avoids using `run_id` for the concurrency key to make sure that only
+  # *one* non-PR run can run at a time.
+  group: labels-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number }}
+  # PR- and manually-triggered runs will be cancelled, but scheduled runs will be queued.
+  cancel-in-progress: ${{ github.event_name != 'schedule' }}
 
 permissions:
   issues: write # needed to create *new* labels
