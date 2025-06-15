@@ -3575,8 +3575,8 @@ let
         mktplcRef = {
           name = "remote-containers";
           publisher = "ms-vscode-remote";
-          version = "0.413.0";
-          hash = "sha256-OLi4gSjoz+TRgkb5UH1u6UTNfEF8ZgawrcXFDkoJtIc=";
+          version = "0.417.0";
+          hash = "sha256-kWen+uBzQg+N/cWKnS9UjWTbWdV/6NnZ0IgeW1QqRNM=";
         };
         meta = {
           description = "Open any folder or repository inside a Docker container";
