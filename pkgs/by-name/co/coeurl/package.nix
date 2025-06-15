@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-NGplM5c/dMGSQbhKeuPOTWL8KsqvMd/76YuwCxnqNNE=";
   };
+  patches = [
+    ./curl-8.13-support.patch
+  ];
   postPatch = ''
     substituteInPlace subprojects/curl.wrap --replace '[provides]' '[provide]'
   '';
