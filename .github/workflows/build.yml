@@ -24,10 +24,10 @@ jobs:
         include:
           - runner: ubuntu-24.04
             system: x86_64-linux
-            builds: [shell,manual-nixos,lib-tests]
+            builds: [shell, manual-nixos, lib-tests]
           - runner: ubuntu-24.04-arm
             system: aarch64-linux
-            builds: [shell,manual-nixos,manual-nixpkgs,manual-nixpkgs-tests]
+            builds: [shell, manual-nixos, manual-nixpkgs, manual-nixpkgs-tests]
           - runner: macos-13
             system: x86_64-darwin
             builds: [shell]
