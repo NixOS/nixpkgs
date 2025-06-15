@@ -114,8 +114,10 @@ class Redirects:
             if identifier not in xref_targets:
                 continue
 
-            if not locations or locations[0] != f"{xref_targets[identifier].path}#{identifier}":
-                identifiers_missing_current_outpath.add(identifier)
+            # This rule is not needed anymore since the id are automatically located
+            # TODO: Remove it properly, i.e. handle test cases
+            # if not locations or locations[0] != f"{xref_targets[identifier].path}#{identifier}":
+            #     identifiers_missing_current_outpath.add(identifier)
 
             for location in locations[1:]:
                 if '#' in location:
@@ -154,17 +156,18 @@ class Redirects:
 
         self._xref_targets = xref_targets
 
-    def get_client_redirects(self, target: str):
-        paths_to_target = {src for src, dest in self.get_server_redirects().items() if dest == target}
+    def get_client_redirects(self, current_location: str):
         client_redirects = {}
         for locations in self._raw_redirects.values():
+            _, id_to_redirect_to = locations[0].split("#")
             for location in locations[1:]:
                 if '#' not in location:
                     continue
                 path, anchor = location.split('#')
-                if path not in [target, *paths_to_target]:
-                    continue
-                client_redirects[anchor] = locations[0]
+                # FIXME: Quick fix so that each file get the information to redirect to anywhere
+                # if path not in [target, *paths_to_target]:
+                #    continue
+                client_redirects[anchor] = self._xref_targets[id_to_redirect_to].href_from(current_location)
         return client_redirects
 
     def get_server_redirects(self):
@@ -175,6 +178,10 @@ class Redirects:
                     server_redirects[location] = self._xref_targets[identifier].path
         return server_redirects
 
-    def get_redirect_script(self, target: str) -> str:
-        client_redirects = self.get_client_redirects(target)
-        return self._redirects_script.replace('REDIRECTS_PLACEHOLDER', json.dumps(client_redirects))
+    def get_redirect_script(self, current_location: str) -> str:
+        client_redirects = self.get_client_redirects(current_location)
+
+        id_to_location = { id:xref.path for (id, xref) in self._xref_targets.items() } | client_redirects
+        script = self._redirects_script.replace("LOCATION_PLACEHOLDER", current_location)
+
+        return script.replace('REDIRECTS_PLACEHOLDER', json.dumps(id_to_location))
