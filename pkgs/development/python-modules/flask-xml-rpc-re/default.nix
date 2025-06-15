@@ -30,8 +30,10 @@ buildPythonPackage rec {
     nose2
   ];
 
-  checkPhase = ''
+  installCheckPhase = ''
+    runHook preInstallCheck
     nose2 -v
+    runHook postInstallCheck
   '';
 
   pythonImportsCheck = [ "flask_xmlrpcre" ];

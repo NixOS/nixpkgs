@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  gitUpdater,
   lib,
   postgresql,
   postgresqlBuildExtension,
