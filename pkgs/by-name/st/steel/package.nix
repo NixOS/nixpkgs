@@ -11,10 +11,7 @@
   sqlite,
   zlib,
 
-  unstableGitUpdater,
-  writeShellScript,
-  yq,
-
+  nix-update-script,
   includeLSP ? true,
   includeForge ? true,
 }:
@@ -95,20 +92,8 @@ rustPlatform.buildRustPackage {
     STEEL_HOME = "${placeholder "out"}/lib/steel";
   };
 
-  passthru.updateScript = unstableGitUpdater {
-    tagConverter = writeShellScript "steel-tagConverter.sh" ''
-      export PATH="${
-        lib.makeBinPath [
-          curl
-          yq
-        ]
-      }:$PATH"
-
-      version=$(curl -s https://raw.githubusercontent.com/mattwparas/steel/refs/heads/master/Cargo.toml | tomlq -r .workspace.package.version)
-
-      read -r tag
-      test "$tag" = "0" && tag="$version"; echo "$tag"
-    '';
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
   };
 
   meta = {
