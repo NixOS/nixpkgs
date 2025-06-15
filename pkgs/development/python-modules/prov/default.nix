@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   lxml,
   networkx,
   python-dateutil,
@@ -12,21 +13,26 @@
 buildPythonPackage rec {
   pname = "prov";
   version = "2.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-7X2Gb7Yi+7F/UxHYSdD+EC2LMAASGKqRYIfw/QNOqEQ=";
   };
 
-  propagatedBuildInputs = [
-    lxml
+  build-system = [ setuptools ];
+
+  dependencies = [
     networkx
+    pydot
     python-dateutil
-    rdflib
   ];
 
   nativeCheckInputs = [ pydot ];
+  optional-dependencies = {
+    rdf = [ rdflib ];
+    xml = [ lxml ];
+  };
 
   # Multiple tests are out-dated and failing
   doCheck = false;
