@@ -89,13 +89,11 @@ not possible to fix, please open an issue and we can discuss a solution.
   your password wrong, it will fail during activation (this can be improved
   though)
 - When `--build-host` and `--target-host` are used together, we will use `nix
-  copy` (or 2 `nix-copy-closure` if you're using Nix <2.18) instead of SSH'ing
-  to build host and using `nix-copy-closure --to target-host`. The reason for
-  this is documented in PR
+  copy` (or 2 `nix-copy-closure` if you're using Nix <2.18) by default instead
+  of SSH'ing to build host and using `nix-copy-closure --to target-host`. The
+  reason for this is documented in PR
   [#364698](https://github.com/NixOS/nixpkgs/pull/364698). If you do need the
-  previous behavior, you can simulate it using `ssh build-host --
-  nixos-rebuild-ng switch --target-host target-host`. If that is not the case,
-  please open an issue
+  previous behavior, you can use `--transfer-mode=bastion`
 - We do some additional validation of flags, like exiting with an error when
   `--build-host` or `--target-host` is used with `repl`, since the user could
   assume that the `repl` would be run remotely while it always run the local

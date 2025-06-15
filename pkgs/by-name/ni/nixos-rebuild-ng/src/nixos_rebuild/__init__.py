@@ -9,7 +9,15 @@ from typing import Final, assert_never
 
 from . import nix, tmpdir
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
-from .models import Action, BuildAttr, Flake, ImageVariants, NRError, Profile
+from .models import (
+    Action,
+    BuildAttr,
+    Flake,
+    ImageVariants,
+    NRError,
+    Profile,
+    TransferMode,
+)
 from .process import Remote, cleanup_ssh
 from .utils import Args, LogFormatter, tabulate
 
@@ -187,6 +195,12 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--image-variant",
         help="Selects an image variant to build from the "
         + "config.system.build.images attribute of the given configuration",
+    )
+    main_parser.add_argument(
+        "--transfer-mode",
+        help="Transfer mode to be used when both --build-host and --target-host are used",
+        choices=TransferMode.values(),
+        default=TransferMode.DEFAULT if WITH_NIX_2_18 else TransferMode.NIX_2_3,
     )
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
@@ -394,6 +408,7 @@ def execute(argv: list[str]) -> None:
             dry_run = action == Action.DRY_BUILD
             no_link = action in (Action.SWITCH, Action.BOOT)
             rollback = bool(args.rollback)
+            transfer_mode = TransferMode(args.transfer_mode)
 
             def validate_image_variant(variants: ImageVariants) -> None:
                 if args.image_variant not in variants:
@@ -488,6 +503,7 @@ def execute(argv: list[str]) -> None:
                     to_host=target_host,
                     from_host=build_host,
                     copy_flags=copy_flags,
+                    transfer_mode=transfer_mode,
                 )
                 if action in (Action.SWITCH, Action.BOOT):
                     nix.set_profile(
@@ -508,9 +524,11 @@ def execute(argv: list[str]) -> None:
                         path_to_config,
                         action,
                         target_host=target_host,
+                        build_host=build_host,
                         sudo=args.sudo,
                         specialisation=args.specialisation,
                         install_bootloader=args.install_bootloader,
+                        transfer_mode=transfer_mode,
                     )
                     print_result("Done. The new configuration is", path_to_config)
                 case Action.BUILD:
