@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-python-dateutil";
-  version = "2.9.0.20241206";
+  version = "2.9.0.20250516";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_python_dateutil";
     inherit version;
-    hash = "sha256-GPSTQUwm/7ppKnI2n+p6FUxQJkYwHr/j1WoEs3ZyhMs=";
+    hash = "sha256-E+gNbJxH3yOtdz1UsoJr1S27tBvofD8zk4HBcArSHuU=";
   };
 
   build-system = [ setuptools ];
