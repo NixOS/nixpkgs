@@ -16,6 +16,7 @@
   fetchurl,
   fetchpatch,
   fetchpatch2,
+  fetchDebianPatch,
   fetchFromGitHub,
   fetchFromGitLab,
   perl,
@@ -37749,20 +37750,51 @@ with self;
     };
   };
 
-  WWWCurl = buildPerlPackage {
+  WWWCurl = buildPerlPackage rec {
     pname = "WWW-Curl";
     version = "4.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SZ/SZBALINT/WWW-Curl-4.17.tar.gz";
       hash = "sha256-Uv+rEQ4yNI13XyQclz61b5awju28EQ130lfNsKJKt7o=";
     };
-    patches = [
-      (fetchpatch {
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/makefile.patch?h=perl-www-curl&id=7e004bb8c5dc49c903a5d5fa5ff28c30a58e2595";
-        hash = "sha256-8JZbe4IMfRZyLa118AAH/wsXrazOFy79OoH3Nuy57A4=";
-        name = "perl-www-curl-makefile.patch";
-      })
-    ];
+    # Convenience link: https://salsa.debian.org/perl-team/modules/packages/libwww-curl-perl/-/tree/master/debian/patches
+    patches =
+      let
+        pname = "libwww-curl-perl";
+        debianRevision = "12";
+      in
+      [
+        # needed for curl 7.50.2 compat
+        (fetchDebianPatch {
+          inherit debianRevision pname version;
+          patch = "Skip-preprocessor-symbol-only-CURL_STRICTER.patch";
+          hash = "sha256-9NcGBjVTbXWr4axl9cKsaAKt+spxDf97M76KDX7vl0I=";
+        })
+        # needed for curl 7.70.0 compat
+        (fetchDebianPatch {
+          inherit debianRevision pname version;
+          patch = "WWW-Curl-4.17-RT130591.patch";
+          hash = "sha256-RoAjUSt8WwcxEgjDgitr8u+0BKcHUzIJts3ohKKmzg4=";
+        })
+        # Ignore undefined DEPRECAT macros from curl 7.87.0
+        (fetchDebianPatch {
+          inherit debianRevision pname version;
+          patch = "workaround_DEPRECAT.patch";
+          hash = "sha256-oZBk2RUr2wVtrFhFN20TI2eWSCtcJbG+fPKhc1Br7JY=";
+        })
+        # Fix typo in "therefore" in man page
+        (fetchDebianPatch {
+          inherit debianRevision pname version;
+          patch = "typo_therefore.patch";
+          hash = "sha256-UQTyv9YgIZC3S5Ih3qazPmQR4RLY7IEAmuMJUAyjewA=";
+        })
+        # needed for curl 8.13.0 compat
+        (fetchDebianPatch {
+          inherit debianRevision pname version;
+          patch = "curl_8.13.0.patch";
+          hash = "sha256-VTp0CtVakGti23DvRJwnuP3//eS4BzV5/n+A2zg/a+k=";
+        })
+      ];
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
     buildInputs = [ pkgs.curl ];
     doCheck = false; # performs network access
