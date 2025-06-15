@@ -27,7 +27,6 @@ python3.pkgs.buildPythonApplication {
     description = "Modern Python-3-based alternative to RegRipper";
     homepage = "https://github.com/airbus-cert/regrippy";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ mikehorn ];
     mainProgram = "regrip.py";
   };
