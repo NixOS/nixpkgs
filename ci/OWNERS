@@ -15,9 +15,9 @@
 
 # CI
 /.github/*_TEMPLATE*                    @SigmaSquadron
-/.github/actions                        @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
-/.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
-/ci                                     @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
+/.github/actions                        @NixOS/Nixpkgs-CI
+/.github/workflows                      @NixOS/Nixpkgs-CI
+/ci                                     @NixOS/Nixpkgs-CI
 /ci/OWNERS                              @infinisil @philiptaron
 
 # Development support
