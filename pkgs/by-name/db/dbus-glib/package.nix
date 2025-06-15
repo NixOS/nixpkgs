@@ -11,12 +11,12 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-glib";
   version = "0.114";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/dbus-glib/dbus-glib-${version}.tar.gz";
+    url = "${finalAttrs.meta.homepage}/releases/dbus-glib/dbus-glib-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-wJxcCFsqDjkbjufXg6HWP+RE6WcXzBgU1htej8KCenw=";
   };
 
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     "devdoc"
   ];
   outputBin = "dev";
+  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
 
   nativeBuildInputs = [
     pkg-config
@@ -64,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})
