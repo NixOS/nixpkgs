@@ -1046,6 +1046,8 @@ self: super: with self; {
 
   asyncstdlib = callPackage ../development/python-modules/asyncstdlib { };
 
+  asyncstdlib-fw = callPackage ../development/python-modules/asyncstdlib-fw { };
+
   asynctest = callPackage ../development/python-modules/asynctest { };
 
   asyncua = callPackage ../development/python-modules/asyncua { };
