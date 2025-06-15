@@ -140,16 +140,9 @@ jobs:
                   expectedHash: artifact.digest
                 })
 
-                // Shortcut for all issue endpoints related to labels
-                const pr = {
-                  ...context.repo,
-                  issue_number: pull_request.number
-                }
-
                 // Get all currently set labels that we manage
                 const before =
-                  (await github.paginate(github.rest.issues.listLabelsOnIssue, pr))
-                  .map(({ name }) => name)
+                  pull_request.labels.map(({ name }) => name)
                   .filter(name =>
                     name.startsWith('10.rebuild') ||
                     name == '11.by: package-maintainer' ||
@@ -159,8 +152,7 @@ jobs:
 
                 const approvals = new Set(
                   (await github.paginate(github.rest.pulls.listReviews, {
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
+                    ...context.repo,
                     pull_number: pull_request.number
                   }))
                   .filter(review => review.state == 'APPROVED')
@@ -180,7 +172,8 @@ jobs:
                 await Promise.all(
                   before.filter(name => !after.includes(name))
                   .map(name => github.rest.issues.removeLabel({
-                    ...pr,
+                    ...context.repo,
+                    issue_number: pull_request.number
                     name
                   }))
                 )
@@ -189,7 +182,8 @@ jobs:
                 const added = after.filter(name => !before.includes(name))
                 if (added.length > 0) {
                   await github.rest.issues.addLabels({
-                    ...pr,
+                    ...context.repo,
+                    issue_number: pull_request.number
                     labels: added
                   })
                 }
