@@ -8,6 +8,7 @@
   python-dateutil,
   rdflib,
   pydot,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,21 +29,29 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  nativeCheckInputs = [ pydot ];
   optional-dependencies = {
     rdf = [ rdflib ];
     xml = [ lxml ];
   };
 
-  # Multiple tests are out-dated and failing
-  doCheck = false;
+  nativeCheckInputs = [ unittestCheckHook ] ++ optional-dependencies.xml ++ optional-dependencies.rdf;
+
+  unittestFlags = [ "src" ];
+
+  # disable failing tests
+  # prov.model.ProvException: The provided identifier "http://www.example.org/bundle" is not valid
+  preCheck = ''
+    sed -i 's/from prov.model import ProvDocument/import unittest\nfrom prov.model import ProvDocument/' src/prov/tests/qnames.py
+    sed -i 's/def test_namespace_inheritance(self):/@unittest.skip\n    def test_namespace_inheritance(self):/' src/prov/tests/qnames.py
+    sed -i 's/def test_default_namespace_inheritance(self):/@unittest.skip\n    def test_default_namespace_inheritance(self):/' src/prov/tests/qnames.py
+  '';
 
   pythonImportsCheck = [ "prov" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for W3C Provenance Data Model (PROV)";
     homepage = "https://github.com/trungdong/prov";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }
