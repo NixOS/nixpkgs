@@ -61,8 +61,11 @@ buildPythonPackage {
     python3 ./example.py db upgrade
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-x"
+  ];
+
+  disabledTestPaths = [
     "tests/func/"
     "tests/unit"
   ];

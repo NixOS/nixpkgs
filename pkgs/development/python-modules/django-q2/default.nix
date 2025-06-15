@@ -99,7 +99,7 @@ buildPythonPackage rec {
     "django_q/tests/test_commands.py"
   ];
 
-  pytestFlagsArray = [ "-vv" ];
+  pytestFlags = [ "-vv" ];
 
   __darwinAllowLocalNetworking = true;
 

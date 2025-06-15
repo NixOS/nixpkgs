@@ -147,8 +147,8 @@ buildPythonPackage rec {
     "test_threading_atomic_cached_property_different_instances"
   ];
 
-  pytestFlagsArray = [
-    "-m 'not network'"
+  disabledTestMarks = [
+    "network"
   ];
 
   # Allow for package to use pep420's native namespaces

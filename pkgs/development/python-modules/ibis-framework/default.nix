@@ -143,11 +143,11 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-disable"
-    "-m"
-    "'${lib.concatStringsSep " or " testBackends} or core'"
   ];
+
+  enabledTestMarks = testBackends ++ [ "core" ];
 
   disabledTests = [
     # tries to download duckdb extensions

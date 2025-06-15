@@ -77,7 +77,10 @@ buildPythonPackage rec {
   # cmake is only used for tests
   dontUseCmakeConfigure = true;
 
-  pytestFlagsArray = [ "-m 'not isolated and not network'" ];
+  disabledTestMarks = [
+    "isolated"
+    "network"
+  ];
 
   disabledTestPaths = [
     # store permissions issue in Nix:

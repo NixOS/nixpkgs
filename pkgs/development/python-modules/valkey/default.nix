@@ -75,7 +75,10 @@ buildPythonPackage rec {
     uvloop
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [ "-m 'not onlycluster and not ssl'" ];
+  disabledTestMarks = [
+    "onlycluster"
+    "ssl"
+  ];
 
   disabledTests =
     [

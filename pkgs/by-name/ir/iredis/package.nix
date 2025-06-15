@@ -45,19 +45,22 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray =
+  enabledTestPaths = [
+    # Only execute unittests, because cli tests require a running Redis
+    "tests/unittests/"
+  ];
+
+  disabledTestPaths =
     [
       # Fails on sandbox
-      "--ignore=tests/unittests/test_client.py"
-      "--deselect=tests/unittests/test_render_functions.py::test_render_unixtime_config_raw"
-      "--deselect=tests/unittests/test_render_functions.py::test_render_time"
-      # Only execute unittests, because cli tests require a running Redis
-      "tests/unittests/"
+      "tests/unittests/test_client.py"
+      "tests/unittests/test_render_functions.py::test_render_unixtime_config_raw"
+      "tests/unittests/test_render_functions.py::test_render_time"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Flaky tests
-      "--deselect=tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
-      "--deselect=tests/unittests/test_utils.py::test_timer"
+      "tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
+      "tests/unittests/test_utils.py::test_timer"
     ];
 
   pythonImportsCheck = [ "iredis" ];
