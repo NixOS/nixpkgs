@@ -75,10 +75,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynetdicom" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # https://github.com/pydicom/pynetdicom/issues/923
-    "-W"
-    "ignore::pytest.PytestRemovedIn9Warning"
+    "-Wignore::pytest.PytestRemovedIn9Warning"
   ];
 
   meta = with lib; {
