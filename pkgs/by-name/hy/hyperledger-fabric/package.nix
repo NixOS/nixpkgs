@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hyperledger-fabric";
-  version = "2.5.5";
+  version = "2.5.13";
 
   src = fetchFromGitHub {
     owner = "hyperledger";
     repo = "fabric";
-    rev = "v${version}";
-    hash = "sha256-Ev9a+d15kr6apKyGR5xTa/2I3cByyPSTW2Y+HAQk9GU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HLDafeDe7eXuVZ8JqGYIr5Y5YicsR3PaDX/UeSqg8Vw=";
   };
 
   vendorHash = null;
@@ -38,11 +38,11 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/hyperledger/fabric/common/metadata.Version=${version}"
-    "-X github.com/hyperledger/fabric/common/metadata.CommitSha=${src.rev}"
+    "-X github.com/hyperledger/fabric/common/metadata.Version=${finalAttrs.version}"
+    "-X github.com/hyperledger/fabric/common/metadata.CommitSha=${finalAttrs.src.tag}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "High-performance, secure, permissioned blockchain network";
     longDescription = ''
       Hyperledger Fabric is an enterprise-grade permissioned distributed ledger
@@ -52,7 +52,7 @@ buildGoModule rec {
       preserving privacy.
     '';
     homepage = "https://wiki.hyperledger.org/display/fabric";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
