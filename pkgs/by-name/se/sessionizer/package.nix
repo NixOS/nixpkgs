@@ -1,4 +1,8 @@
-{ lib, pkgs, buildGoModule, }:
+{
+  lib,
+  pkgs,
+  buildGoModule,
+}:
 buildGoModule {
   pname = "sessionizer";
   version = "0.1.4";
@@ -19,8 +23,7 @@ buildGoModule {
   buildInputs = [ pkgs.fzf ];
 
   meta = with lib; {
-    description =
-      "Sessionizer helps you to search through your projects and creates custom tmux sessions for them";
+    description = "Sessionizer helps you to search through your projects and creates custom tmux sessions for them";
     homepage = "https://github.com/salfel/sessionizer";
     license = licenses.gpl3;
     maintainers = with maintainers; [ salfel ];
