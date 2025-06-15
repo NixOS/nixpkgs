@@ -14,17 +14,13 @@ let
   OS = if hostPlatform.isDarwin then "osx" else hostPlatform.parsed.kernel.name;
   ARCH =
     if hostPlatform.isDarwin && hostPlatform.isAarch64 then "arm64" else hostPlatform.parsed.cpu.name;
-  # Work around macOS Sequoia 15.4 segfault by downgrading the bootstrap compiler - see:
-  # - https://github.com/NixOS/nixpkgs/issues/398443
-  # - https://github.com/dlang/dmd/issues/21126#issuecomment-2775948553
-  # TODO: Remove this when bootstrap can be upgraded to a fixed version (>= 1.41.0-beta2)?
-  version = if hostPlatform.isDarwin then "1.28.1" else "1.30.0";
+  version = "1.41.0";
   hashes = {
     # Get these from `nix store prefetch-file https://github.com/ldc-developers/ldc/releases/download/v1.19.0/ldc2-1.19.0-osx-x86_64.tar.xz` etc..
-    osx-x86_64 = "sha256-mqQ+hNlDePOGX2mwgEEzHGiOAx3SxfNA6x8+ML3qYmw=";
-    linux-x86_64 = "sha256-V4TUzEfQhFrwiX07dHOgjdAoGkzausCkhnQIQNAU/eE=";
-    linux-aarch64 = "sha256-kTeglub75iv/jWWNPCn15aCGAbmck0RQl6L7bFOUu7Y=";
-    osx-arm64 = "sha256-m93rGywncBnPEWslcrXuGBnZ+Z/mNgLIaevkL/uBOu0=";
+    osx-x86_64 = "sha256-W8/0i2PFakXbqs2wxb3cjqa+htSgx7LHyDGOBH9yEYE=";
+    linux-x86_64 = "sha256-SkOUV/D+WeadAv1rV1Sfw8h60PVa2fueQlB7b44yfI8=";
+    linux-aarch64 = "sha256-HEuVChPVM3ntT1ZDZsJ+xW1iYeIWhogNcMdIaz6Me6g=";
+    osx-arm64 = "sha256-FXJnBC8QsEchBhkxSqcZtPC/iHYB6TscY0qh7LPFRuQ=";
   };
 in
 stdenv.mkDerivation {
