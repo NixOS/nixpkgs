@@ -8326,8 +8326,6 @@ with pkgs;
     }
   );
 
-  qxmpp = qt6Packages.callPackage ../development/libraries/qxmpp { };
-
   gnutls = callPackage ../development/libraries/gnutls {
     util-linux = util-linuxMinimal; # break the cyclic dependency
     autoconf = buildPackages.autoconf269;
@@ -12138,7 +12136,7 @@ with pkgs;
     docker_28
     ;
 
-  docker = docker_27;
+  docker = docker_28;
   docker-client = docker.override { clientOnly = true; };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
