@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.6.10";
+  version = "0.6.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-k9YpsVFV1HkIIIFPB7Iz7Jar+lY5vK6gpzNIlX55ZDY=";
+    hash = "sha256-7RI5F7r4yX3wqAuakdBvZOvDRWn8IHntU0fyTPIXjT4=";
   };
 
   build-system = with python3Packages; [
