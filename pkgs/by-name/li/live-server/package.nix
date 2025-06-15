@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "live-server";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "lomirus";
     repo = "live-server";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0IP7F8+Vdl/h4+zcghRqowvzz6zjQYDTjMSZPuGOOj4=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.philiptaron ];
     platforms = platforms.unix;
   };
-}
+})
