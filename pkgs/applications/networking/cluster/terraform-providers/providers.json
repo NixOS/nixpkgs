@@ -1138,13 +1138,13 @@
     "vendorHash": null
   },
   "sakuracloud": {
-    "hash": "sha256-KrzqIAK6ImUW22Iik97R4HARoXN4lG6AquitLjCqS/A=",
+    "hash": "sha256-HGG6Tf1MR7V+AAo1ic9H1xWChSFiiEKfUN0D4QFUNfU=",
     "homepage": "https://registry.terraform.io/providers/sacloud/sakuracloud",
     "owner": "sacloud",
     "repo": "terraform-provider-sakuracloud",
-    "rev": "v2.26.1",
+    "rev": "v2.27.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-Ry791h5AuYP03nex9nM8X5Mk6PeL7hNDbFyVRvVPJNE="
+    "vendorHash": "sha256-dW3qlNRcmsuWidBYPmFpjBi2u+oT67UPJELAeALq1FY="
   },
   "scaleway": {
     "hash": "sha256-rAbCLMA4u+bOXbmGDdM5wHIzPytwuX8HTOUgYQwLAdg=",
@@ -1237,11 +1237,11 @@
     "vendorHash": "sha256-K/44Jio2a1kKYuyI6o/5wwMNRaZvx9zrNEC85v56xdU="
   },
   "spacelift": {
-    "hash": "sha256-AptuuQV+uswWPU8ltjqSWqkPWTglPrrUkeVafD+RQ0U=",
+    "hash": "sha256-lBt1ZtQ5pxX/t4b264LzQwajXDozE9veYOOV3lhfTZQ=",
     "homepage": "https://registry.terraform.io/providers/spacelift-io/spacelift",
     "owner": "spacelift-io",
     "repo": "terraform-provider-spacelift",
-    "rev": "v1.24.0",
+    "rev": "v1.25.0",
     "spdx": "MIT",
     "vendorHash": "sha256-Tft0YjNUtwDH0SliSseXHqMKB2yzQTsAG1Wfc5ihpvE="
   },
