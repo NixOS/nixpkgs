@@ -2,6 +2,9 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
+  "module-services-amule": [
+    "index.html#module-services-amule"
+  ],
   "module-services-anubis": [
     "index.html#module-services-anubis"
   ],
