@@ -4,10 +4,11 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   click,
+  langgraph-sdk,
 
   # testing
   pytest-asyncio,
@@ -20,21 +21,24 @@
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "0.2.10";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "cli==${version}";
-    hash = "sha256-gSiyFjk1lXiCv7JpX4J00WAPoMv4VsXDuCswbFhP2kY=";
+    hash = "sha256-wf3RYahpjzWjQyC2ouC74qwWfslv6prQNnvPjbmSLI4=";
   };
 
   sourceRoot = "${src.name}/libs/cli";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  dependencies = [ click ];
+  dependencies = [
+    click
+    langgraph-sdk
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -57,6 +61,9 @@ buildPythonPackage rec {
     "test_config_to_compose_watch"
     # Tests exit value, needs to happen in a passthru test
     "test_dockerfile_command_with_docker_compose"
+    # Integration test that requires a running Docker daemon
+    "test_build_command_shows_wolfi_warning"
+    "test_build_generate_proper_build_context"
   ];
 
   passthru.updateScript = gitUpdater {
