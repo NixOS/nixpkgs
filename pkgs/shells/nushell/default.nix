@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage {
     ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
-  buildFeatures = additionalFeatures [ ];
+  buildFeatures = additionalFeatures [ "system-clipboard" ];
 
   checkPhase = ''
     runHook preCheck
