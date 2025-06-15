@@ -29,7 +29,7 @@
   lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "easyeda";
+  name = "easyeda-std";
   version = "6.5.46";
 
   src = fetchzip {
