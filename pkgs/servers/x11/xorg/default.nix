@@ -12,6 +12,7 @@
   lndir,
   luit,
   makedepend,
+  mkfontscale,
   pixman,
   sessreg,
   util-macros,
@@ -36,6 +37,7 @@ self: with self; {
     lndir
     luit
     makedepend
+    mkfontscale
     pixman
     sessreg
     xbitmaps
@@ -3342,46 +3344,6 @@ self: with self; {
         libXmu
         xorgproto
         libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  mkfontscale = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libfontenc,
-      freetype,
-      xorgproto,
-      zlib,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "mkfontscale";
-      version = "1.2.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/mkfontscale-1.2.3.tar.xz";
-        sha256 = "0pp7dyfrrkrqxslk9q8660k0h4swaqlixsnnph2fxb7i8k1ws899";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libfontenc
-        freetype
-        xorgproto
-        zlib
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
