@@ -429,7 +429,7 @@ in
                   // (optionalAttrs (sit.ttl != null) {
                     TTL = sit.ttl;
                   })
-                  // (optionalAttrs (sit.encapsulation != null) (
+                  // (optionalAttrs (sit.encapsulation.type != "6in4") (
                     {
                       FooOverUDP = true;
                       Encapsulation = if sit.encapsulation.type == "fou" then "FooOverUDP" else "GenericUDPEncapsulation";
