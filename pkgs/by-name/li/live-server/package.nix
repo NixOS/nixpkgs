@@ -4,6 +4,7 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,6 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Local network server with live reload feature for static pages";
