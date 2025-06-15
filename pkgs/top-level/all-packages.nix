@@ -15498,12 +15498,6 @@ with pkgs;
 
   samtools = callPackage ../applications/science/biology/samtools { };
 
-  inherit (callPackages ../applications/science/biology/sumatools { })
-    sumalibs
-    sumaclust
-    sumatra
-    ;
-
   trimmomatic = callPackage ../applications/science/biology/trimmomatic {
     jdk = pkgs.jdk21_headless;
     # Reduce closure size
