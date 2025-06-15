@@ -69,6 +69,13 @@
       with subtest("Check if sessionPath option actually works"):
           machine.succeed("${eval "imports.gi.GIRepository.Repository.get_search_path\\(\\)"} | grep gpaste")
 
+      with subtest("Check if various environment variables are set"):
+          cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/nemo-desktop)/environ"
+          machine.succeed(f"{cmd} | grep 'XDG_SESSION_TYPE' | grep 'x11'")
+          machine.succeed(f"{cmd} | grep '__NIXOS_SET_ENVIRONMENT_DONE' | grep '1'")
+          # From the nixos/cinnamon module
+          machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
+
       with subtest("Open Cinnamon Settings"):
           machine.succeed("${su "cinnamon-settings themes >&2 &"}")
           machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'cinnamon-settings'")
