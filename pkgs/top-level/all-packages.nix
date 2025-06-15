@@ -11745,10 +11745,6 @@ with pkgs;
 
   openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf" ]; };
 
-  papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme {
-    inherit (plasma5Packages) breeze-icons;
-  };
-
   papirus-maia-icon-theme = callPackage ../data/icons/papirus-maia-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
