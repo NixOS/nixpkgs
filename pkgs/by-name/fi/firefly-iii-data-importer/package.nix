@@ -66,7 +66,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru = {
     phpPackage = php84;
     tests = nixosTests.firefly-iii-data-importer;
-    updateScript = nix-update-script { extraArgs = [ "--version-regex='v([0-9]+\.[0-9]+\.[0-9]+)'" ]; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(\\d+\\.\\d+\\.\\d+)"
+      ];
+    };
   };
 
   postInstall = ''
