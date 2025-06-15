@@ -22075,6 +22075,12 @@
     githubId = 78461130;
     keys = [ { fingerprint = "CA52 EE7B E681 720E 32B6  6792 FE52 FD65 B76E 4751"; } ];
   };
+  salfel = {
+    name = "Felix Salcher";
+    email = "dev.felix.salcher@gmail.com";
+    github = "salfel";
+    githubId = 120563991;
+  };
   samalws = {
     email = "sam@samalws.com";
     name = "Sam Alws";
