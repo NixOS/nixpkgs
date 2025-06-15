@@ -110,7 +110,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ darwin;
     mainProgram = "goldendict";
     maintainers = with maintainers; [
-      astsmtl
       sikmir
     ];
     license = licenses.gpl3Plus;
