@@ -57,6 +57,8 @@ in
       # with virtualisation.fileSystems.
       virtualisation.fileSystems = lib.mkForce { };
 
+      system.switch.enable = true;
+
       imports = [ externalModule ];
     };
 
