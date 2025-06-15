@@ -126,7 +126,13 @@ patchShebangs() {
 
                 # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
                 timestamp=$(stat --printf "%y" "$f")
-                sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
+                # Don't use sed -i to avoid creating temp files directly under
+                # /nix/store, which results in sandbox failures on Darwin
+                # (see: https://github.com/NixOS/nixpkgs/issues/343576).
+                tmpPath=$(mktemp)
+                sed -e "1 s|.*|#\!$escapedInterpreterLine|" "$f" > "$tmpPath"
+                chmod --reference="$f" "$tmpPath"
+                mv "$tmpPath" "$f"
                 touch --date "$timestamp" "$f"
             fi
         fi
