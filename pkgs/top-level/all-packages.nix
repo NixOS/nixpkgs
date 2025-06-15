@@ -4396,8 +4396,6 @@ with pkgs;
 
   splot = haskell.lib.compose.justStaticExecutables haskellPackages.splot;
 
-  sourcehut = callPackage ../applications/version-management/sourcehut { };
-
   sshfs = sshfs-fuse; # added 2017-08-14
 
   inherit (callPackages ../tools/misc/sshx { })
