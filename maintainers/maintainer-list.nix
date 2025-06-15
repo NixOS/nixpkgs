@@ -13832,6 +13832,11 @@
     githubId = 61395246;
     name = "Lampros Pitsillos";
   };
+  langsjo = {
+    name = "langsjo";
+    github = "langsjo";
+    githubId = 104687438;
+  };
   larsr = {
     email = "Lars.Rasmusson@gmail.com";
     github = "larsr";
