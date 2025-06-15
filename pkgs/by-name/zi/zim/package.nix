@@ -7,6 +7,8 @@
   gobject-introspection,
   wrapGAppsHook3,
   adwaita-icon-theme,
+  writableTmpDirAsHomeHook,
+  xvfb-run,
 }:
 
 # TODO: Declare configuration options for the following optional dependencies:
@@ -16,33 +18,43 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zim";
-  version = "0.75.2";
+  version = "0.76.3";
 
   src = fetchurl {
     url = "https://zim-wiki.org/downloads/zim-${version}.tar.gz";
-    hash = "sha256-QIkNsFsWeNHEcXhGHHZyJDMMW2lNvdwMJLGxeCZaLdI=";
+    hash = "sha256-St8J6z8HcTj+Vb8m8T5sTZk2Fv5CSnmdG6a+CYzk6wU=";
   };
 
-  buildInputs = [
-    gtk3
-    adwaita-icon-theme
-  ];
-  propagatedBuildInputs = with python3Packages; [
-    pyxdg
-    pygobject3
-  ];
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook3
   ];
 
-  dontWrapGApps = true;
+  buildInputs = [
+    gtk3
+    adwaita-icon-theme
+  ];
 
-  preFixup = ''
-    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share)
-    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : ${adwaita-icon-theme}/share)
-    makeWrapperArgs+=(--argv0 $out/bin/.zim-wrapped)
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  dependencies = with python3Packages; [
+    pyxdg
+    pygobject3
+  ];
+
+  # (test.py:800): GLib-GIO-ERROR **: 20:59:45.754:
+  # No GSettings schemas are installed on the system
+  doCheck = false;
+
+  nativeCheckInputs = [
+    xvfb-run
+    writableTmpDirAsHomeHook
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    xvfb-run ${python3Packages.python.interpreter} test.py
+
+    runHook postCheck
   '';
 
   postInstall = ''
@@ -54,16 +66,18 @@ python3Packages.buildPythonApplication rec {
         size=''${size%.svg}
         dimensions="''${size}x''${size}"
         mkdir -p $out/share/icons/hicolor/$dimensions/apps
-        cp $img $out/share/icons/hicolor/$dimensions/apps/${pname}.png
+        cp $img $out/share/icons/hicolor/$dimensions/apps/zim.png
       done
     )
   '';
 
-  # RuntimeError: could not create GtkClipboard object
-  doCheck = false;
+  dontWrapGApps = true;
 
-  checkPhase = ''
-    ${python3Packages.python.interpreter} test.py
+  preFixup = ''
+    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share)
+    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : ${adwaita-icon-theme}/share)
+    makeWrapperArgs+=(--argv0 $out/bin/.zim-wrapped)
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = {
