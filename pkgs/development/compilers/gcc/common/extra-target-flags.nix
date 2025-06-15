@@ -5,6 +5,7 @@
   langD ? false,
   libcCross,
   threadsCross,
+  pkgsTargetTarget,
 }:
 
 let
@@ -29,7 +30,8 @@ in
         );
     in
     mkFlags libcCross langD
-    ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null) langD);
+    ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null) langD)
+    ++ lib.optionals targetPlatform.isFreeBSD (mkFlags pkgsTargetTarget.freebsd.libncurses-tinfo langD);
 
   EXTRA_LDFLAGS_FOR_TARGET =
     let
