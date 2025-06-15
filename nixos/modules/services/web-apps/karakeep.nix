@@ -90,6 +90,21 @@ in
             required for text search.
           '';
         };
+
+        # TODO: remove when this is either handled by karakeep or becomes default
+        #       in services.meilisearch.
+        dumplessUpgrade = lib.mkOption {
+          default = true;
+          description = ''
+            Whether to enable (experimental) dumpless upgrade of the search index.
+            Allows upgrading Meilisearch without manually dumping and importing
+            the database.
+            {option}`services.meilisearch.dumplessUpgrade` overrides this option
+            if set explicitly.
+            More information at https://www.meilisearch.com/docs/learn/update_and_migration/updating#dumpless-upgrade
+          '';
+          type = lib.types.bool;
+        };
       };
     };
   };
@@ -103,8 +118,9 @@ in
       group = "karakeep";
     };
 
-    services.meilisearch = lib.mkIf cfg.meilisearch.enable {
-      enable = true;
+    services.meilisearch = {
+      enable = cfg.meilisearch.enable;
+      dumplessUpgrade = lib.mkDefault cfg.meilisearch.dumplessUpgrade;
     };
 
     systemd.services.karakeep-init = {
