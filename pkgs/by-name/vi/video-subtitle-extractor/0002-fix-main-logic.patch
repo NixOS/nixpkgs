@@ -1,0 +1,66 @@
+--- a/backend/main.py
++++ b/backend/main.py
+@@ -82,7 +82,7 @@ class SubtitleExtractor:
+         # 通过视频路径获取视频名称
+         self.vd_name = Path(self.video_path).stem
+         # 临时存储文件夹
+-        self.temp_output_dir = os.path.join(os.path.dirname(BASE_DIR), 'output', str(self.vd_name))
++        self.temp_output_dir = os.path.join(os.path.expanduser('~'), '.cache', 'video-subtitle-extractor', str(self.vd_name))
+         # 视频帧总数
+         self.frame_count = self.video_cap.get(cv2.CAP_PROP_FRAME_COUNT)
+         # 视频帧率
+@@ -473,8 +473,26 @@ class SubtitleExtractor:
+         if platform.system() == 'Windows':
+             path_vsf = os.path.join(BASE_DIR, 'subfinder', 'windows', 'VideoSubFinderWXW.exe')
+         else:
+-            path_vsf = os.path.join(BASE_DIR, 'subfinder', 'linux', 'VideoSubFinderCli.run')
+-            os.chmod(path_vsf, 0o775)
++            # Create a writable copy of subfinder in cache directory
++            import shutil
++            cache_subfinder_dir = os.path.join(os.path.expanduser('~'), '.cache', 'video-subtitle-extractor', 'subfinder', 'linux')
++            original_subfinder_dir = os.path.join(BASE_DIR, 'subfinder', 'linux')
++            
++            # To ensure it's a clean copy with correct permissions, remove old one.
++            if os.path.exists(cache_subfinder_dir):
++                shutil.rmtree(cache_subfinder_dir)
++            
++            shutil.copytree(original_subfinder_dir, cache_subfinder_dir)
++
++            # Make copied directory and all its contents writable by user
++            os.chmod(cache_subfinder_dir, 0o775)
++            for root, dirs, files in os.walk(cache_subfinder_dir):
++                for name in dirs:
++                    os.chmod(os.path.join(root, name), 0o775)
++                for name in files:
++                    os.chmod(os.path.join(root, name), 0o775)
++            
++            path_vsf = os.path.join(cache_subfinder_dir, 'VideoSubFinderCli.run')
+         # ：图像上半部分所占百分比，取值【0-1】
+         top_end = 1 - self.sub_area[0] / self.frame_height
+         # bottom_end：图像下半部分所占百分比，取值【0-1】
+@@ -517,7 +535,7 @@ class SubtitleExtractor:
+             self.vsf_running = True
+             try:
+                 p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1,
+-                                    close_fds='posix' in sys.builtin_module_names, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
++                                    close_fds='posix' in sys.builtin_module_names, shell=True)
+                 Thread(target=vsf_output, daemon=True, args=(p.stderr,)).start()
+                 ProcessManager.instance().add_process(p)
+                 self.manage_process(p.pid)
+@@ -1017,11 +1035,12 @@ class SubtitleExtractor:
+         :param frame_extract 视频帧提取进度
+         """
+         if ocr is not None:
+-            self.progress_ocr = ocr
++            self.progress_ocr = max(0, min(100, ocr))  # Clamp value between 0 and 100
+         if frame_extract is not None:
+-            self.progress_frame_extract = frame_extract
+-        self.progress_total = (self.progress_frame_extract + self.progress_ocr) / 2
+-        # 通知所有监听器
++            self.progress_frame_extract = max(0, min(100, frame_extract))  # Clamp value between 0 and 100
++
++        self.progress_total = (self.progress_frame_extract * 0.4) + (self.progress_ocr * 0.6)
++        # Notify listeners
+         self.notify_progress_listeners()
+ 
+     def start_subtitle_ocr_async(self):

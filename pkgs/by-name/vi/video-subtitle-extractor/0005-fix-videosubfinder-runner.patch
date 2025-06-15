@@ -1,0 +1,9 @@
+--- a/backend/subfinder/linux/VideoSubFinderCli.run
++++ b/backend/subfinder/linux/VideoSubFinderCli.run
+@@ -1,5 +1,4 @@
+ #!/bin/sh
+ cd ${0%/*}
+-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD:/lib64
+-chmod +x ./VideoSubFinderCli
++export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD
+ ./VideoSubFinderCli "$@"
