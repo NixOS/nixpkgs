@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vertical-canvas";
-  version = "1.4.10";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "Aitum";
     repo = "obs-vertical-canvas";
     rev = version;
-    sha256 = "sha256-0XfJ8q8n2ANO0oDtLZhZjRunZ5S1EouQ6Ak/pxEQYOQ=";
+    sha256 = "sha256-rwIhmrkj+jLjSOAmFqD/hZ9/BPL5npGehSdumBoWows=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,16 +27,15 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  cmakeFlags = [
-    "-DBUILD_OUT_OF_TREE=On"
-    ''-DCMAKE_CXX_FLAGS="-Wno-error=deprecated-declarations"''
-  ];
-
   dontWrapQtApps = true;
 
+  # Fix CMakeLists.txt to use new find_package syntax
+  preConfigure = ''
+    sed -i 's|find_qt(|find_package(Qt6 |' CMakeLists.txt
+  '';
+
   postInstall = ''
-    rm -rf $out/data
-    rm -rf $out/obs-plugins
+    rm -rf $out/data $out/obs-plugins
   '';
 
   meta = {
