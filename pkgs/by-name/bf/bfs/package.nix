@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bfs";
-  version = "4.0.6";
+  version = "4.0.7";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    hash = "sha256-TXnoy+VWkS5ilW6QEtE6vd80FaJ/nIWGaeBJ/cjvquM=";
+    hash = "sha256-/Xj8zfl/2gjKd+/V2QS/i6Dw4AO0VudnYturWi68kbk=";
   };
 
   buildInputs =
