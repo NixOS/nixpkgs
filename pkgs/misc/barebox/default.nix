@@ -21,7 +21,7 @@ let
       extraMeta ? { },
       ...
     }@args:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "barebox-${defconfig}";
 
       version = "2026.06.1";
@@ -83,7 +83,7 @@ let
           maintainers = with maintainers; [ emantor ];
         }
         // extraMeta;
-    }
+    })
     // removeAttrs args [ "extraMeta" ]
   );
 in
