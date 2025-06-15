@@ -4,23 +4,24 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  dbus,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "upcloud-cli";
-  version = "3.15.0";
+  version = "3.20.1";
 
   src = fetchFromGitHub {
     owner = "UpCloudLtd";
     repo = "upcloud-cli";
-    tag = "v${version}";
-    hash = "sha256-bluq5rrfsd8xmKeqtNDqsZnhEAVZ4VqY/eYvOzXFKv4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X+nv9MA20z2fJ2N+gyUkwGCHjX2hYMHSv8jfwKbegNE=";
   };
 
-  vendorHash = "sha256-J0hLDQzyLYa8Nao0pR2eRkuJ5gP2VM9z+2n694YDYgI=";
+  vendorHash = "sha256-kyIsTNLC1hKsSbZel97eUtBLyH/3iTEvSMsV+6u347c=";
 
   ldflags = [
-    "-s -w -X github.com/UpCloudLtd/upcloud-cli/v3/internal/config.Version=${version}"
+    "-s -w -X github.com/UpCloudLtd/upcloud-cli/v3/internal/config.Version=${finalAttrs.version}"
   ];
 
   subPackages = [
@@ -28,23 +29,29 @@ buildGoModule rec {
     "internal/*"
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeCheckInputs = [ dbus ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestConfig_LoadKeyring" # Not equal: expected: "unittest_password" actual  : ""
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/upctl";
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/UpCloudLtd/upcloud-cli/blob/refs/tags/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/UpCloudLtd/upcloud-cli/blob/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
     description = "Command-line tool for managing UpCloud services";
     homepage = "https://github.com/UpCloudLtd/upcloud-cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lu1a ];
     mainProgram = "upctl";
   };
-}
+})
