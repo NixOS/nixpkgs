@@ -24,21 +24,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-aws";
-  version = "0.2.22";
+  version = "0.2.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "langchain-aws==${version}";
-    hash = "sha256-tEkwa+rpitGxstci754JH5HCqD7+WX0No6ielJJnbxk=";
+    hash = "sha256-Qk3D8XtpzV7YgMM0WeainzCp6Sq1uZEaM0PFbGKIO7U=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "--snapshot-warn-unused" ""
-    substituteInPlace tests/unit_tests/{test_standard.py,chat_models/test_bedrock_converse.py} \
-      --replace-fail "langchain_standard_tests" "langchain_tests"
   '';
 
   sourceRoot = "${src.name}/libs/aws";
