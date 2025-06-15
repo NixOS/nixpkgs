@@ -100,15 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  # Deactivate the upstream update mechanism
-  postPatch = ''
-    jq '
-      .bundle.createUpdaterArtifacts = false |
-      .plugins.updater = {"active": false, "pubkey": "", "endpoints": []}
-    ' \
-    src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
-  '';
-
   postFixup = ''
     wrapProgram "$out/bin/surrealist" \
       --set GIO_EXTRA_MODULES ${glib-networking}/lib/gio/modules \
