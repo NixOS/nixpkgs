@@ -10,14 +10,14 @@
   gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "papirus-icon-theme";
   version = "20250501";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
-    repo = pname;
-    rev = version;
+    repo = "papirus-icon-theme";
+    tag = finalAttrs.version;
     hash = "sha256-KbUjHmNzaj7XKj+MOsPM6zh2JI+HfwuXvItUVAZAClk=";
   };
 
@@ -26,11 +26,10 @@ stdenvNoCC.mkDerivation rec {
     papirus-folders
   ];
 
-  propagatedBuildInputs =
-    [
-      breeze-icons
-      hicolor-icon-theme
-    ];
+  propagatedBuildInputs = [
+    breeze-icons
+    hicolor-icon-theme
+  ];
 
   dontDropIconThemeCache = true;
 
@@ -41,9 +40,7 @@ stdenvNoCC.mkDerivation rec {
     mv Papirus* $out/share/icons
 
     for theme in $out/share/icons/*; do
-      ${lib.optionalString (
-        color != null
-      ) "${papirus-folders}/bin/papirus-folders -t $theme -o -C ${color}"}
+      ${lib.optionalString (color != null) "papirus-folders -t $theme -o -C ${color}"}
       gtk-update-icon-cache --force $theme
     done
 
@@ -52,15 +49,15 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Pixel perfect icon theme for Linux";
     homepage = "https://github.com/PapirusDevelopmentTeam/papirus-icon-theme";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     # darwin gives hash mismatch in source, probably because of file names differing only in case
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       romildo
       moni
     ];
   };
-}
+})
