@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Previewing archive contents with toggle-pane";
+    description = "Toggle the show, hide, and maximize states for different panes";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };
