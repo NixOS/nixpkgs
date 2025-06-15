@@ -1,13 +1,14 @@
 {
   lib,
   fetchFromGitHub,
+  python3,
   rustPlatform,
   nix-update-script,
 }:
 
 let
   pname = "gluesql";
-  version = "0.14.0";
+  version = "0.16.3";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -16,19 +17,23 @@ rustPlatform.buildRustPackage {
     owner = "gluesql";
     repo = "gluesql";
     rev = "v${version}";
-    hash = "sha256-z2fpyPJfyPtO13Ly7XRmMW3rp6G3jNLsMMFz83Wmr0E=";
+    hash = "sha256-3A/Lru03cO14aKIFS+fu6O8LxF1+tYK+7w97v1PbgyU=";
   };
 
+  nativeBuildInputs = [
+    python3
+  ];
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-QITNkSB/IneKj0w12FCKV1Y0vRAlOfENs8BpFbDpK2M=";
+  cargoHash = "sha256-MVp3QMF9qXy0P72bOXsRbiV5+k497JjKLNRTjB75kww=";
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "GlueSQL is quite sticky. It attaches to anywhere";
     homepage = "https://github.com/gluesql/gluesql";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.all;
   };
 }
