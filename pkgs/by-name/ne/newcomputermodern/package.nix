@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchgit,
   fontforge,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -35,6 +36,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -m444 -Dt $out/share/fonts/opentype/public sfd/*.otf
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Computer Modern fonts including matching non-latin alphabets";
