@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Local network server with live reload feature for static pages";
     downloadPage = "https://github.com/lomirus/live-server/releases";
     homepage = "https://github.com/lomirus/live-server";
+    changelog = "https://github.com/lomirus/live-server/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "live-server";
     maintainers = [ lib.maintainers.philiptaron ];
