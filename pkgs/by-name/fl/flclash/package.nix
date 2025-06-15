@@ -12,14 +12,14 @@
 
 let
   pname = "flclash";
-  version = "0.8.85";
+  version = "0.8.86";
 
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
       tag = "v${version}";
-      hash = "sha256-bMx9yQkzUZ8cJpT1WBIqmYKoUvkPND9qg26HoRiY5kM=";
+      hash = "sha256-bPMj9KWkup0nIhFAQ4BP8KiD8uP2/2b/GPy4APR+dho=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -62,7 +62,10 @@ flutter332.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes.flutter_js = "sha256-4PgiUL7aBnWVOmz2bcSxKt81BRVMnopabj5LDbtPYk4=";
+  gitHashes = {
+    flutter_js = "sha256-4PgiUL7aBnWVOmz2bcSxKt81BRVMnopabj5LDbtPYk4=";
+    re_editor = "sha256-PuaXoByTmkov2Dsz0kBHBHr/o63+jgPrnY9gpK7AOhA=";
+  };
 
   nativeBuildInputs = [
     copyDesktopItems
