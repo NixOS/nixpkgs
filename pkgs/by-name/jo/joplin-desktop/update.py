@@ -1,18 +1,25 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p 'python3.withPackages(ps: [ps.requests ps.plumbum])' nix-prefetch
+#!nix-shell -i python3 -p 'python3.withPackages(ps: [ps.requests ps.plumbum])' nix-prefetch yarn-berry_3 yarn-berry_3.yarn-berry-fetcher
 import json
 import requests
+import tempfile
+import shutil
 
 from pathlib import Path
 
-from plumbum.cmd import nix_prefetch_url
+from plumbum.cmd import nix_prefetch, nix_build, yarn, chmod, yarn_berry_fetcher
 
 HERE = Path(__file__).parent
-SUFFIXES = (
-    ("x86_64-linux", ".AppImage"),
-    ("x86_64-darwin", ".dmg"),
-    ("aarch64-darwin", "-arm64.dmg"),
-)
+
+def write_release(release):
+    with HERE.joinpath("release-data.json").open("w") as fd:
+        json.dump(release, fd, indent=2)
+        fd.write("\n")
+
+package = HERE.joinpath("package.nix")
+
+
+print("fetching latest release...")
 
 latest = requests.get(
     "https://api.github.com/repos/laurent22/joplin/releases/latest"
@@ -23,10 +30,98 @@ release = {
     "version": version,
 }
 
-for arch, suffix in SUFFIXES:
-    url = f"https://github.com/laurent22/joplin/releases/download/v{version}/Joplin-{version}{suffix}"
-    release[arch] = {"url": url, "sha256": nix_prefetch_url(url).strip()}
+print(version)
 
-with HERE.joinpath("release-data.json").open("w") as fd:
-    json.dump(release, fd, indent=2)
-    fd.write("\n")
+
+print("prefetching source...")
+
+release["hash"] = nix_prefetch[
+    "--option",
+    "extra-experimental-features",
+    "flakes",
+    "--rev",
+    f"refs/tags/v{version}",
+    package
+]().strip()
+
+print(release["hash"])
+
+# use new version and hash
+write_release(release)
+
+src_dir = nix_build[
+    "--no-out-link",
+    "-E",
+    f"((import <nixpkgs> {{}}).callPackage {package} {{}}).src"
+]().strip()
+
+print(src_dir)
+
+
+print("prefetching default plugins...")
+
+default_plugins_dir = Path(src_dir).joinpath("packages/default-plugins")
+
+with default_plugins_dir.joinpath("pluginRepositories.json").open() as fd:
+    plugin_repositories = json.load(fd)
+
+release["plugins"] = dict()
+
+for key, value in plugin_repositories.items():
+    print(key)
+    plugin = dict()
+    plugin["url"] = f"{value["cloneUrl"].removesuffix('.git')}/archive/{value["commit"]}.tar.gz"
+    plugin["hash"] = nix_prefetch[
+        "--option",
+        "extra-experimental-features",
+        "flakes",
+        """
+            {fetchzip, npm-lockfile-fix, lib}: fetchzip {
+                postFetch = "${lib.getExe npm-lockfile-fix} $out/package-lock.json";
+            }
+        """,
+        "--url",
+        plugin["url"]
+    ]().strip()
+    release["plugins"][key] = plugin
+
+
+print("updating yarn.lock...")
+
+with tempfile.TemporaryDirectory() as tmp_dir:
+    shutil.copytree(
+        src_dir,
+        tmp_dir,
+        copy_function=shutil.copy,
+        dirs_exist_ok=True
+    )
+    chmod["-R", "+w", tmp_dir]()
+
+    yarn.with_cwd(tmp_dir)["install", "--mode=update-lockfile"]()
+
+    shutil.copy(Path(tmp_dir).joinpath("yarn.lock"), HERE)
+
+
+print("fetching missing-hashes...")
+
+yarn_lock = HERE.joinpath("yarn.lock")
+missing_hashes = HERE.joinpath("missing-hashes.json")
+
+with missing_hashes.open("w") as fd:
+    new_missing_hashes = yarn_berry_fetcher[
+        "missing-hashes",
+        yarn_lock
+    ]()
+    fd.write(new_missing_hashes)
+
+
+print("prefetching offline cache...")
+
+release["deps_hash"] = yarn_berry_fetcher[
+    "prefetch",
+    yarn_lock,
+    missing_hashes
+]().strip()
+
+
+write_release(release)

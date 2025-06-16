@@ -12917,6 +12917,16 @@ with pkgs;
 
   jalv-qt = jalv.override { useQt = true; };
 
+  # fallback to joplin-desktop-bin on Darwin until build is fixed
+  joplin-desktop =
+    let
+      joplin-desktop-source = callPackage ../by-name/jo/joplin-desktop/package.nix { };
+      package = if lib.meta.availableOn stdenv.hostPlatform joplin-desktop-source
+        then joplin-desktop-source
+        else joplin-desktop-bin;
+    in
+      package;
+
   js8call = qt5.callPackage ../applications/radio/js8call { };
 
   jwm = callPackage ../applications/window-managers/jwm { };
