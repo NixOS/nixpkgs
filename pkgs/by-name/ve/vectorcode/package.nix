@@ -4,30 +4,52 @@
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
+  rustPlatform,
 
   lspSupport ? true,
 }:
 
+let
+
+  chromadb_0 = python3Packages.chromadb.overridePythonAttrs (old: rec {
+    version = "0.6.3";
+    src = fetchFromGitHub {
+      owner = "chroma-core";
+      repo = "chroma";
+      tag = version;
+      hash = "sha256-yvAX8buETsdPvMQmRK5+WFz4fVaGIdNlfhSadtHwU5U=";
+    };
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit src;
+      name = "${old.pname}-${version}-vendor";
+      hash = "sha256-lHRBXJa/OFNf4x7afEJw9XcuDveTBIy3XpQ3+19JXn4=";
+    };
+  });
+in
 python3Packages.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.6.10";
+  version = "0.6.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-k9YpsVFV1HkIIIFPB7Iz7Jar+lY5vK6gpzNIlX55ZDY=";
+    hash = "sha256-7RI5F7r4yX3wqAuakdBvZOvDRWn8IHntU0fyTPIXjT4=";
   };
 
   build-system = with python3Packages; [
     pdm-backend
   ];
 
+  pythonRelaxDeps = [
+    "chromadb"
+  ];
+
   dependencies =
     with python3Packages;
     [
-      chromadb
+      chromadb_0
       colorlog
       httpx
       json5
