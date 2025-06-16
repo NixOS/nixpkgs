@@ -1181,13 +1181,18 @@ substituteAllInPlace() {
 # the environment used for building.
 dumpVars() {
     if [ "${noDumpEnvVars:-0}" != 1 ]; then
-        # On darwin, install(1) cannot be called with /dev/stdin or fd from process substitution
-        # so first we create the file and then write to it
-        # See https://github.com/NixOS/nixpkgs/issues/335016
-        {
-            install -m 0600 /dev/null "$NIX_BUILD_TOP/env-vars" &&
-            export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars"
-        } || true
+        # Don't use `install` here to prevent executing a process each time.
+
+        # Set umask to create env-vars file with 0600 permissions (owner read/write only)
+        local old_umask
+        old_umask=$(umask)
+        umask 0077
+
+        # Dump all environment variables to the env-vars file
+        export 2>/dev/null > "$NIX_BUILD_TOP/env-vars"
+
+        # Restore original umask
+        umask "$old_umask"
     fi
 }
 
