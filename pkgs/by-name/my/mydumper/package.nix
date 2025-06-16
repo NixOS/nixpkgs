@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = (
     if stdenv.hostPlatform.isDarwin then
       toString [
-        "-Wno-error=deprecated-non-prototype"
         "-Wno-error=format"
+        "-Wno-error=sometimes-uninitialized"
       ]
     else
       "-Wno-error=maybe-uninitialized"
