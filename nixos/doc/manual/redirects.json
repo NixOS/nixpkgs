@@ -95,6 +95,9 @@
   "sec-contributing-development-env": [
     "index.html#sec-contributing-development-env"
   ],
+  "sec-contributing-devmode": [
+    "index.html#sec-contributing-devmode"
+  ],
   "sec-mattermost": [
     "index.html#sec-mattermost"
   ],
@@ -550,6 +553,18 @@
   ],
   "module-services-youtrack-upgrade-2022_3-2023_1": [
     "index.html#module-services-youtrack-upgrade-2022_3-2023_1"
+  ],
+  "module-services-szurubooru": [
+    "index.html#module-services-szurubooru"
+  ],
+  "module-services-szurubooru-basic-usage": [
+    "index.html#module-services-szurubooru-basic-usage"
+  ],
+  "module-services-szurubooru-reverse-proxy-configuration": [
+    "index.html#module-services-szurubooru-reverse-proxy-configuration"
+  ],
+  "module-services-szurubooru-extra-config": [
+    "index.html#module-services-szurubooru-extra-config"
   ],
   "module-services-suwayomi-server": [
     "index.html#module-services-suwayomi-server"
