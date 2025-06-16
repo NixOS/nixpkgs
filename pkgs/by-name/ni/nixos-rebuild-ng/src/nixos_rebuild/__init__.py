@@ -13,9 +13,7 @@ from .models import Action, BuildAttr, Flake, ImageVariants, NRError, Profile
 from .process import Remote, cleanup_ssh
 from .utils import Args, LogFormatter, tabulate
 
-NIXOS_REBUILD_ATTR: Final = "config.system.build.nixos-rebuild"
-
-logger: Final = logging.getLogger(__name__)
+logger: Final = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
@@ -278,28 +276,26 @@ def reexec(
     flake_build_flags: Args,
 ) -> None:
     drv = None
+    attr = "config.system.build.nixos-rebuild"
     try:
         # Parsing the args here but ignore ask_sudo_password since it is not
         # needed and we would end up asking sudo password twice
         if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host, None)):
             drv = nix.build_flake(
-                NIXOS_REBUILD_ATTR,
+                attr,
                 flake,
                 flake_build_flags | {"no_link": True},
-                quiet=True,
             )
         else:
             build_attr = BuildAttr.from_arg(args.attr, args.file)
             drv = nix.build(
-                NIXOS_REBUILD_ATTR,
+                attr,
                 build_attr,
                 build_flags | {"no_out_link": True},
-                quiet=True,
             )
     except CalledProcessError:
         logger.warning(
-            "could not build a newer version of nixos-rebuild, using current version",
-            exc_info=logger.isEnabledFor(logging.DEBUG),
+            "could not build a newer version of nixos-rebuild, using current version"
         )
 
     if drv:
@@ -323,9 +319,9 @@ def reexec(
                 # - Exec format error (e.g.: another OS/CPU arch)
                 logger.warning(
                     "could not re-exec in a newer version of nixos-rebuild, "
-                    + "using current version",
-                    exc_info=logger.isEnabledFor(logging.DEBUG),
+                    + "using current version"
                 )
+                logger.debug("re-exec exception", exc_info=True)
                 # We already run clean-up, let's re-exec in the current version
                 # to avoid issues
                 os.execve(current, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
