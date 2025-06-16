@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   name = "clickhouse";
-  meta.maintainers = with pkgs.lib.maintainers; [ ];
+  meta.maintainers = with pkgs.lib.maintainers; [ jpds ];
 
   nodes.machine = {
     services.clickhouse.enable = true;
