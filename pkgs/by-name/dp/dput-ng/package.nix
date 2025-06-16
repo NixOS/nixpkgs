@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication {
     coverage
     xdg
     python-debian
+    distro-info
   ];
 
   postInstall = ''
