@@ -970,8 +970,8 @@
   },
   {
     "pname": "SixLabors.ImageSharp",
-    "version": "3.1.8",
-    "hash": "sha256-cE9BQfbCvJ0Mf+fQiTD8elOZEPcfZHjDz2BHdiO+D08="
+    "version": "3.1.9",
+    "hash": "sha256-sB1wGc419iqT+Stm+RFMFhBy3LM0YnHhrgmhYiGlf4Q="
   },
   {
     "pname": "Swashbuckle.AspNetCore.Annotations",
