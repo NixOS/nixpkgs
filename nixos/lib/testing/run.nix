@@ -42,7 +42,7 @@ in
     };
   };
 
-  config = rec {
+  config = {
     rawTestDerivation = hostPkgs.stdenv.mkDerivation {
       name = "vm-test-run-${config.name}";
 
@@ -64,8 +64,11 @@ in
 
       meta = config.meta;
     };
-
-    test = rawTestDerivation;
+    test = lib.lazyDerivation {
+      # lazyDerivation improves performance when only passthru items and/or meta are used.
+      derivation = config.rawTestDerivation;
+      inherit (config) passthru meta;
+    };
 
     # useful for inspection (debugging / exploration)
     passthru.config = config;
