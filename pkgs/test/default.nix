@@ -226,4 +226,6 @@ with pkgs;
   rust-hooks = recurseIntoAttrs (callPackages ../build-support/rust/hooks/test { });
 
   setup-hooks = recurseIntoAttrs (callPackages ../build-support/setup-hooks/tests { });
+
+  build-deno-package = callPackage ./build-deno-package { };
 }

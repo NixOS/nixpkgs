@@ -15496,6 +15496,10 @@ self: super: with self; {
 
   robotframework = callPackage ../development/python-modules/robotframework { };
 
+  robotframework-assertion-engine =
+    callPackage ../development/python-modules/robotframework-assertion-engine
+      { };
+
   robotframework-databaselibrary =
     callPackage ../development/python-modules/robotframework-databaselibrary
       { };
@@ -17811,6 +17815,8 @@ self: super: with self; {
   torchWithoutCuda = self.torch.override { cudaSupport = false; };
 
   torchWithoutRocm = self.torch.override { rocmSupport = false; };
+
+  torchao = callPackage ../development/python-modules/torchao { };
 
   torchaudio = callPackage ../development/python-modules/torchaudio { };
 

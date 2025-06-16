@@ -1,0 +1,13 @@
+{
+  "name": "binary build",
+  "tasks": {
+      "build": "deno run --allow-all main.ts"
+  },
+  "imports": {
+      "@luca/cases": "jsr:@luca/cases@1.0.0",
+      "@std/cli": "jsr:@std/cli@1.0.17",
+      "cowsay": "npm:cowsay@1.6.0",
+      "cases": "https://deno.land/x/case@2.2.0/mod.ts"
+  },
+  "vendor": true
+}

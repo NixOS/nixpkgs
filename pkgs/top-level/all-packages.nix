@@ -3040,7 +3040,7 @@ with pkgs;
     garage_0_9
     garage_0_8_7
     garage_0_9_4
-    garage_1_1_0
+    garage_1_2_0
     garage_1_x
     ;
 
@@ -3627,6 +3627,12 @@ with pkgs;
   nodePackages = dontRecurseIntoAttrs nodejs.pkgs;
 
   node2nix = nodePackages.node2nix;
+
+  buildDenoPackage = callPackage ../build-support/deno/build-deno-package { };
+
+  inherit (callPackages ../build-support/deno/fetch-deno-deps { }) fetchDenoDeps;
+
+  denoHooks = callPackage ../build-support/deno/build-deno-package/hooks { };
 
   kcollectd = libsForQt5.callPackage ../tools/misc/kcollectd { };
 
@@ -5059,7 +5065,6 @@ with pkgs;
   flutter332 = flutterPackages.v3_32;
   flutter329 = flutterPackages.v3_29;
   flutter327 = flutterPackages.v3_27;
-  flutter326 = flutterPackages.v3_26;
   flutter324 = flutterPackages.v3_24;
 
   fpc = callPackage ../development/compilers/fpc { };
