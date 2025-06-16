@@ -173,7 +173,7 @@ jobs:
                   before.filter(name => !after.includes(name))
                   .map(name => github.rest.issues.removeLabel({
                     ...context.repo,
-                    issue_number: pull_request.number
+                    issue_number: pull_request.number,
                     name
                   }))
                 )
@@ -183,7 +183,7 @@ jobs:
                 if (added.length > 0) {
                   await github.rest.issues.addLabels({
                     ...context.repo,
-                    issue_number: pull_request.number
+                    issue_number: pull_request.number,
                     labels: added
                   })
                 }
