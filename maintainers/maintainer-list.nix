@@ -14288,6 +14288,12 @@
     githubId = 75130626;
     keys = [ { fingerprint = "80EE AAD8 43F9 3097 24B5  3D7E 27E9 7B91 E63A 7FF8"; } ];
   };
+  link00000000 = {
+    email = "crandall.logan@gmail.com";
+    github = "link00000000";
+    githubId = 9771505;
+    name = "Logan Crandall";
+  };
   link2xt = {
     email = "link2xt@testrun.org";
     githubId = 18373967;
