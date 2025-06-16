@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "smplayer-dev";
     repo = "smplayer";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-dyUT8PdvsFZsEZQNSsC2TQd90KOrY9FIb9Do+JKdUHs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-txGz6v9hkvnrmVmBHsi1B2eC/iNT1tg4dU5AcMsSCic=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       options of MPlayer, SMPlayer adds other interesting features like the
       possibility to play Youtube videos or download subtitles.
     '';
-    changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
