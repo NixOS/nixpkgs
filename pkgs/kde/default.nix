@@ -47,6 +47,11 @@ let
       // {
         inherit sources;
 
+        # Aliases to simplify test-building entire package sets
+        frameworks = lib.dontRecurseIntoAttrs frameworks;
+        gear = lib.dontRecurseIntoAttrs gear;
+        plasma = lib.dontRecurseIntoAttrs plasma;
+
         mkKdeDerivation = self.callPackage (import ./lib/mk-kde-derivation.nix self) { };
 
         # THIRD PARTY
