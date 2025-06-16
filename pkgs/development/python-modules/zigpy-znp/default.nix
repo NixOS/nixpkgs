@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy-znp";
     tag = "v${version}";
-    hash = "sha256-vYB04vEFqpqrjJMS73mtYXakp7lEIJjB+tT0SF9hpWM=";
+    hash = "sha256-V662zDUBMbr+cARxrwt8196Ml4zlGEAudR3BtvY96HM=";
   };
 
   postPatch = ''
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for zigpy which communicates with TI ZNP radios";
     homepage = "https://github.com/zigpy/zigpy-znp";
-    changelog = "https://github.com/zigpy/zigpy-znp/releases/tag/v${version}";
+    changelog = "https://github.com/zigpy/zigpy-znp/releases/tag/${src.tag}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mvnetbiz ];
     platforms = platforms.linux;
