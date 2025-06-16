@@ -13,7 +13,7 @@
   gdbm,
   gnutls,
   gss,
-  guile_2_2,
+  guile,
   libmysqlclient,
   mailcap,
   nettools,
@@ -21,7 +21,7 @@
   readline,
   ncurses,
   python3,
-  sasl,
+  gsasl,
   system-sendmail,
   libxcrypt,
   mkpasswd,
@@ -30,13 +30,13 @@
   guileSupport ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mailutils";
-  version = "3.18";
+  version = "3.19";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-VZBJyNhRYEFSipBsE52bt6YvHQXX5WF/qP4PIxoTFXc=";
+    url = "mirror://gnu/mailutils/mailutils-${finalAttrs.version}.tar.xz";
+    hash = "sha256-UCMNIANsW4rYyWsNmWF38fEz+6THx+O0YtOe6zCEn0U=";
   };
 
   separateDebugInfo = true;
@@ -67,12 +67,12 @@ stdenv.mkDerivation rec {
       ncurses
       pam
       readline
-      sasl
+      gsasl
       libxcrypt
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ nettools ]
     ++ lib.optionals pythonSupport [ python3 ]
-    ++ lib.optionals guileSupport [ guile_2_2 ];
+    ++ lib.optionals guileSupport [ guile ];
 
   patches = [
     ./fix-build-mb-len-max.patch
@@ -81,7 +81,12 @@ stdenv.mkDerivation rec {
     # https://lists.gnu.org/archive/html/bug-mailutils/2020-11/msg00038.html
     (fetchpatch {
       url = "https://lists.gnu.org/archive/html/bug-mailutils/2020-11/txtiNjqcNpqOk.txt";
-      sha256 = "0ghzqb8qx2q8cffbvqzw19mivv7r5f16whplzhm7hdj0j2i6xf6s";
+      hash = "sha256-2rhuopBANngq/PRCboIr+ewdawr8472cYwiLjtHCHz4=";
+    })
+    # Avoid hardeningDisable = [ "format" ]; - this patch is from the project's master branch and can be removed at the next version
+    (fetchpatch {
+      url = "https://cgit.git.savannah.gnu.org/cgit/mailutils.git/patch/?id=9379ec9e25ae6bdbd3d6f5ef9930ac2176d2efe7";
+      hash = "sha256-00R1DLMDPsvz3R6UgRO1ZvgMNCiHYS3lfjqAC9VD+Y4=";
     })
     # https://github.com/NixOS/nixpkgs/issues/223967
     # https://lists.gnu.org/archive/html/bug-mailutils/2023-04/msg00000.html
@@ -89,7 +94,7 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  hardeningDisable = [ "format" ];
+  strictDeps = true;
 
   configureFlags =
     [
@@ -108,23 +113,10 @@ stdenv.mkDerivation rec {
     dejagnu
     mkpasswd
   ];
+
   doCheck = !stdenv.hostPlatform.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
-  doInstallCheck = false; # fails
 
-  preCheck = ''
-    # Disable comsat tests that fail without tty in the sandbox.
-    tty -s || echo > comsat/tests/testsuite.at
-    # Remove broken macro
-    sed -i '/AT_TESTED/d' libmu_scm/tests/testsuite.at
-    # Provide libraries for mhn.
-    export LD_LIBRARY_PATH=$(pwd)/lib/.libs
-  '';
-
-  postCheck = ''
-    unset LD_LIBRARY_PATH
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Rich and powerful protocol-independent mail framework";
 
     longDescription = ''
@@ -146,17 +138,17 @@ stdenv.mkDerivation rec {
       and an implementation of MH message handling system.
     '';
 
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Plus # libraries
       gpl3Plus # tools
     ];
 
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with lib.maintainers; [ orivej ];
 
     homepage = "https://www.gnu.org/software/mailutils/";
     changelog = "https://git.savannah.gnu.org/cgit/mailutils.git/tree/NEWS";
 
     # Some of the dependencies fail to build on {cyg,dar}win.
-    platforms = platforms.gnu ++ platforms.unix;
+    platforms = lib.platforms.gnu ++ lib.platforms.unix;
   };
-}
+})
