@@ -18,7 +18,7 @@ buildSddmThemePackage rec {
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "sddm";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-mDOiIGcpIvl4d3Dtsb2AX/1OggFEJ+hAjCd2LH7lqv0=";
     };
 
