@@ -1,7 +1,8 @@
 {
   lib,
   fetchFromGitLab,
-  mkDerivation,
+  stdenv,
+  wrapQtAppsHook,
   qtbase,
   cmake,
   kconfig,
@@ -17,14 +18,14 @@
   breeze-icons,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kcollectd";
-  version = "0.12.1";
+  version = "0.12.2";
   src = fetchFromGitLab {
     owner = "aerusso";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-bUVL5eRQ5UkSZo562pnyEcj0fVoSC5WHRq4BfN67jEM=";
+    hash = "sha256-35zb5Kx0tRP5l0hILdomCu2YSQfng02mbyyAClm4uZs=";
   };
 
   postPatch = lib.optional (!lib.versionOlder rrdtool.version "1.9.0") ''
@@ -32,6 +33,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [
+    wrapQtAppsHook
     cmake
     extra-cmake-modules
     shared-mime-info
