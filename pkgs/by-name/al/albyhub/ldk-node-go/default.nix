@@ -5,7 +5,7 @@
   ldkNode,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "ldk-node-go";
   version = "0-unstable-2025-05-25";
 
