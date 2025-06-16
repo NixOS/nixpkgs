@@ -7822,12 +7822,7 @@ with pkgs;
 
   bc-soci = callPackage ../development/libraries/soci/bc-soci.nix { };
 
-  # TODO(@Ericson2314): Build bionic libc from source
-  bionic =
-    if stdenv.hostPlatform.useAndroidPrebuilt then
-      pkgs."androidndkPkgs_${stdenv.hostPlatform.androidNdkVersion}".libraries
-    else
-      callPackage ../os-specific/linux/bionic-prebuilt { };
+  bionic = callPackage ../os-specific/linux/bionic-prebuilt { };
 
   inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
     boost177
