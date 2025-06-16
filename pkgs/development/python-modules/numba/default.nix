@@ -58,6 +58,11 @@ buildPythonPackage rec {
       --replace-fail \
         "dldir = [" \
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
+
+    substituteInPlace setup.py \
+      --replace-fail 'max_numpy_run_version = "2.3"' 'max_numpy_run_version = "2.4"'
+    substituteInPlace numba/__init__.py \
+      --replace-fail "numpy_version > (2, 2)" "numpy_version > (2, 3)"
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
