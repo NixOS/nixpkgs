@@ -14,12 +14,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-XYL76L266MKqClxfbPn/C6+x/vcs7AD56DtiDmQam2A=";
   };
 
+  sourceRoot = "${finalAttrs.src.name}/DepartureMono-${finalAttrs.version}";
+
   installPhase = ''
     runHook preInstall
 
-    install -D -m 444 DepartureMono-1.500/*.otf -t $out/share/fonts/otf
-    install -D -m 444 DepartureMono-1.500/*.woff -t $out/share/fonts/woff
-    install -D -m 444 DepartureMono-1.500/*.woff2 -t $out/share/fonts/woff2
+    install -D -m 444 *.otf -t $out/share/fonts/otf
+    install -D -m 444 *.woff -t $out/share/fonts/woff
+    install -D -m 444 *.woff2 -t $out/share/fonts/woff2
 
     runHook postInstall
   '';
