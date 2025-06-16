@@ -14,3 +14,15 @@ executable bar
   main-is:             Bar.hs
   build-depends:       base
   default-language:    Haskell2010
+
+-- A library that the executables don't depend on.
+library
+  exposed-modules:     SomeModule
+  build-depends:       base
+  default-language:    Haskell2010
+
+test-suite sometest
+  type:                exitcode-stdio-1.0
+  main-is:             sometest.hs
+  build-depends:       base
+  default-language:    Haskell2010
