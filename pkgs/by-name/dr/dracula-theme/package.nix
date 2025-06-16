@@ -22,11 +22,11 @@ let
       hash = "sha256-8p9IS5aMZGP/VCuFTjQU+D3wfFIwfT/lcY7ujUv3SRc=";
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/dracula/gtk";
-      license = licenses.gpl3;
+      license = lib.licenses.gpl3;
 
-      maintainers = with maintainers; [ alexarice ];
+      maintainers = with lib.maintainers; [ alexarice ];
     };
   };
 
