@@ -1,0 +1,8 @@
+{
+  "tasks": { "test": "deno test" },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1.0.13",
+    "@std/cli": "jsr:@std/cli@1.0.16",
+    "@std/fs": "jsr:@std/fs@1.0.16"
+  }
+}
