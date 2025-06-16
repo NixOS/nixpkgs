@@ -13634,6 +13634,10 @@ self: super: with self; {
 
   pyside6-qtads = callPackage ../development/python-modules/pyside6-qtads { };
 
+  pysidesix-frameless-window =
+    callPackage ../development/python-modules/pysidesix-frameless-window
+      { };
+
   pysigma = callPackage ../development/python-modules/pysigma { };
 
   pysigma-backend-elasticsearch =
