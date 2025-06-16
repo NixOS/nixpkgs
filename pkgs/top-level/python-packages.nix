@@ -1042,6 +1042,8 @@ self: super: with self; {
 
   asyncer = callPackage ../development/python-modules/asyncer { };
 
+  asyncgui = callPackage ../development/python-modules/asyncgui { };
+
   asyncinotify = callPackage ../development/python-modules/asyncinotify { };
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
