@@ -7,6 +7,10 @@
   kcoreaddons,
   kwidgetsaddons,
   wrapQtAppsHook,
+  kdbusaddons,
+  kde-cli-tools,
+  plasma-workspace,
+  qtstyleplugin-kvantum,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "koi";
@@ -18,6 +22,27 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-fXLGlq41Qwdp0cYJcNqPlYnlpVXsZk0imYxP7Bgdcvw=";
   };
+
+  patches = [
+    # koi tries to access KDE utility binaries at their absolute paths or by using `whereis`.
+    # We patch the absolute paths below in `postPatch` and replace the `whereis` invocations
+    # here with a placeholder that is also substituted in `postPatch`.
+    ./0001-locate-plasma-tools.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/utils.cpp \
+      --replace-fail /usr/bin/kquitapp6 ${lib.getExe' kdbusaddons "kquitapp6"} \
+      --replace-fail /usr/bin/kstart ${lib.getExe' kde-cli-tools "kstart"}
+    substituteInPlace src/plugins/plasmastyle.cpp \
+      --replace-fail /usr/bin/plasma-apply-desktoptheme ${lib.getExe' plasma-workspace "plasma-apply-desktoptheme"}
+    substituteInPlace src/plugins/colorscheme.cpp \
+      --replace-fail '@plasma-apply-colorscheme@' ${lib.getExe' plasma-workspace "plasma-apply-colorscheme"}
+    substituteInPlace src/plugins/icons.cpp \
+      --replace-fail '@plasma-changeicons@' ${plasma-workspace}/libexec/plasma-changeicons
+    substituteInPlace src/plugins/kvantumstyle.cpp \
+      --replace-fail /usr/bin/kvantummanager ${lib.getExe' qtstyleplugin-kvantum "kvantummanager"}
+  '';
 
   nativeBuildInputs = [
     cmake
