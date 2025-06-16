@@ -42,18 +42,14 @@ mkMesonExecutable (finalAttrs: {
           {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
           }
-          (
-            lib.optionalString stdenv.hostPlatform.isWindows ''
-              export HOME="$PWD/home-dir"
-              mkdir -p "$HOME"
-            ''
-            + ''
-              export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
-              export NIX_CONFIG="extra-experimental-features = flakes"
-              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
-              touch $out
-            ''
-          );
+          (''
+            export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
+            export NIX_CONFIG="extra-experimental-features = flakes"
+            export HOME="$TMPDIR/home"
+            mkdir -p "$HOME"
+            ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
+            touch $out
+          '');
     };
   };
 
