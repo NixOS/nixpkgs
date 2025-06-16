@@ -110,7 +110,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
-      primeos
       fpletz
       globin
     ];

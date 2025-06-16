@@ -32,7 +32,6 @@ rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       k900
-      primeos
       vcunat
     ]; # Help is welcome :)
   };

@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     platforms = lib.subtractLists platforms.darwin platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }
