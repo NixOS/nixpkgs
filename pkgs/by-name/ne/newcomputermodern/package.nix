@@ -42,6 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Computer Modern fonts including matching non-latin alphabets";
     homepage = "https://ctan.org/pkg/newcomputermodern";
+    changelog = "https://mirrors.rit.edu/CTAN/fonts/newcomputermodern/README";
     # "The GUST Font License (GFL), which is a free license, legally
     # equivalent to the LaTeX Project Public License (LPPL), version 1.3c or
     # later." - GUST website
