@@ -2823,8 +2823,6 @@ with pkgs;
 
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
-  sl1-to-photon = callPackage ../applications/misc/sl1-to-photon { };
-
   drone = callPackage ../development/tools/continuous-integration/drone { };
   drone-oss = callPackage ../development/tools/continuous-integration/drone {
     enableUnfree = false;
