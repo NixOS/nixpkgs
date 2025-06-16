@@ -119,6 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace tests/mocks/CMakeLists.txt \
         --replace-fail 'add_subdirectory(QtMir/Application)' ""
 
+      # This needs to launch the *lomiri* indicators, now that datetime is split into lomiri and non-lomiri variants
+      substituteInPlace data/lomiri-greeter-wrapper \
+        --replace-fail 'ayatana-indicators.target' 'lomiri-indicators.target'
+
       # NixOS-ify
 
       # Use Nix flake instead of Canonical's Ubuntu logo
