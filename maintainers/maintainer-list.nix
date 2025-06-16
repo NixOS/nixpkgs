@@ -1648,6 +1648,12 @@
     github = "angaz";
     githubId = 10219618;
   };
+  angelodlfrtr = {
+    name = "Angelo Delefortrie";
+    email = "angelo.delefortrie@gmail.com";
+    github = "angelodlfrtr";
+    githubId = 5405598;
+  };
   angristan = {
     email = "angristan@pm.me";
     github = "angristan";
