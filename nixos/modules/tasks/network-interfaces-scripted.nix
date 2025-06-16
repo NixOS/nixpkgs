@@ -107,6 +107,7 @@ let
             || (hasAttr dev cfg.bonds)
             || (hasAttr dev cfg.macvlans)
             || (hasAttr dev cfg.sits)
+            || (hasAttr dev cfg.ipips)
             || (hasAttr dev cfg.vlans)
             || (hasAttr dev cfg.greTunnels)
             || (hasAttr dev cfg.vswitches)
@@ -662,6 +663,52 @@ let
             }
           );
 
+        createIpipDevice =
+          n: v:
+          nameValuePair "${n}-netdev" (
+            let
+              deps = deviceDependency v.dev;
+            in
+            {
+              description = "IP in IP Tunnel Interface ${n}";
+              wantedBy = [
+                "network-setup.service"
+                (subsystemDevice n)
+              ];
+              bindsTo = deps;
+              after = [ "network-pre.target" ] ++ deps;
+              before = [ "network-setup.service" ];
+              serviceConfig.Type = "oneshot";
+              serviceConfig.RemainAfterExit = true;
+              path = [ pkgs.iproute2 ];
+              script = ''
+                # Remove Dead Interfaces
+                ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
+                ip tunnel add name "${n}" ${
+                  formatIpArgs {
+                    inherit (v)
+                      remote
+                      local
+                      ttl
+                      dev
+                      ;
+                    mode =
+                      {
+                        "4in6" = "ipip6";
+                        "ipip" = "ipip";
+                      }
+                      .${v.encapsulation.type};
+                    encaplimit = if v.encapsulation.type == "ipip" then null else v.encapsulation.limit;
+                  }
+                }
+                ip link set dev "${n}" up
+              '';
+              postStop = ''
+                ip link delete dev "${n}" || true
+              '';
+            }
+          );
+
         createGreDevice =
           n: v:
           nameValuePair "${n}-netdev" (
@@ -743,6 +790,7 @@ let
       // mapAttrs' createMacvlanDevice cfg.macvlans
       // mapAttrs' createFouEncapsulation cfg.fooOverUDP
       // mapAttrs' createSitDevice cfg.sits
+      // mapAttrs' createIpipDevice cfg.ipips
       // mapAttrs' createGreDevice cfg.greTunnels
       // mapAttrs' createVlanDevice cfg.vlans
       // {
