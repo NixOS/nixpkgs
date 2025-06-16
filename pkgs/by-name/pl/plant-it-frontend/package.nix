@@ -1,13 +1,14 @@
 {
   lib,
-  flutter326,
+  flutter329,
   plant-it,
 }:
 
-flutter326.buildFlutterApplication {
+flutter329.buildFlutterApplication {
   pname = "plant-it-frontend";
   inherit (plant-it) version src;
-  sourceRoot = "source/frontend";
+
+  sourceRoot = "${plant-it.src.name}/frontend";
 
   targetFlutterPlatform = "web";
 
@@ -15,5 +16,6 @@ flutter326.buildFlutterApplication {
 
   meta = plant-it.meta // {
     description = "Frontend for Plant It";
+    platforms = lib.platforms.linux;
   };
 }
