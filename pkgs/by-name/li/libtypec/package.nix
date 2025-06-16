@@ -7,6 +7,7 @@
 , libusb1
 , systemd
 , libudev0-shim
+, gtk3 # utils
 }:
 
 stdenv.mkDerivation rec {
@@ -30,22 +31,13 @@ stdenv.mkDerivation rec {
     libusb1
     libudev0-shim
     systemd
+    gtk3
   ];
 
-  # postInstall = ''
-  #   cd $NIX_BUILD_TOP/source/utils
-  #   cmake CMakeLists.txt
-  #   cmake -P cmake_install.cmake
-  #   make
-  #   ls -al $NIX_BUILD_TOP/source/utils
-
-
-  #   # # TODO: use ins
-  #   # mkdir $out/bin
-  #   # cp $NIX_BUILD_TOP/source/utils/lstypec ${placeholder "bin"}/bin/lstypec
-  #   # cp $NIX_BUILD_TOP/source/utils/typecstatus ${placeholder "bin"}/bin/typecstatus
-  #   # # patchelf --print-rpath "$out/bin/lstypec"
-  # '';
+  mesonFlags = [
+    # (lib.mesonEnable "utils" true)
+    "-Dutils=true"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/Rajaram-Regupathy/libtypec";
