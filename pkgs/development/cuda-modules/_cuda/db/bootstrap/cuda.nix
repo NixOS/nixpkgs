@@ -33,44 +33,6 @@
         , dontDefaultAfterCudaMajorMinorVersion :: Null | MajorMinorVersion
         }
     ```
-
-    `archName`
-
-    : The name of the microarchitecture
-
-    `cudaCapability`
-
-    : The CUDA capability
-
-    `isJetson`
-
-    : Whether this capability is part of NVIDIA's line of Jetson embedded computers. This field is notable
-      because it tells us what architecture to build for (as Jetson devices are aarch64).
-      More on Jetson devices here: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/
-      NOTE: These architectures are only built upon request.
-
-    `isArchitectureSpecific`
-
-    : Whether this capability is an architecture-specific feature set.
-      NOTE: These architectures are only built upon request.
-
-    `isFamilySpecific`
-
-    : Whether this capability is a family-specific feature set.
-      NOTE: These architectures are only built upon request.
-
-    `minCudaMajorMinorVersion`
-
-    : The minimum (inclusive) CUDA version that supports this capability.
-
-    `maxCudaMajorMinorVersion`
-
-    : The maximum (exclusive) CUDA version that supports this capability.
-      `null` means there is no maximum.
-
-    `dontDefaultAfterCudaMajorMinorVersion`
-
-    : The CUDA version after which to exclude this capability from the list of default capabilities we build.
   */
   cudaCapabilityToInfo =
     lib.mapAttrs

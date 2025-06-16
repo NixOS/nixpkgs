@@ -17,22 +17,6 @@ let
     ;
 in
 finalAttrs: prevAttrs: {
-  src = fetchurl { inherit (finalAttrs.passthru.redistribRelease) hash url; };
-
-  # Useful for inspecting why something went wrong.
-  badPlatformsConditions =
-    let
-      cudaTooOld = cudaOlder finalAttrs.passthru.featureRelease.minCudaVersion;
-      cudaTooNew =
-        (finalAttrs.passthru.featureRelease.maxCudaVersion != null)
-        && strings.versionOlder finalAttrs.passthru.featureRelease.maxCudaVersion cudaMajorMinorVersion;
-    in
-    prevAttrs.badPlatformsConditions or { }
-    // {
-      "CUDA version is too old" = cudaTooOld;
-      "CUDA version is too new" = cudaTooNew;
-    };
-
   buildInputs =
     prevAttrs.buildInputs or [ ]
     ++ [ zlib ]
