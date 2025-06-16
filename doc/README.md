@@ -56,11 +56,7 @@ Make sure that your local files aren't added to Git history by adding the follow
 
 #### `devmode`
 
-The shell in the manual source directory makes available a command, `devmode`.
-It is a daemon, that:
-1. watches the manual's source for changes and when they occur — rebuilds
-2. HTTP serves the manual, injecting a script that triggers reload on changes
-3. opens the manual in the default browser
+Use [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview when editing the manual.
 
 ### Testing redirects
 

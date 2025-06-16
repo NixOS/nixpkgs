@@ -124,6 +124,9 @@
   uv,
   # nvim-vstsl dependencies
   vtsls,
+  # search-and-replace.nvim dependencies
+  fd,
+  sad,
 }:
 self: super:
 let
@@ -3020,6 +3023,13 @@ in
 
   searchbox-nvim = super.searchbox-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
+  };
+
+  search-and-replace-nvim = super.search-and-replace-nvim.overrideAttrs {
+    runtimeDeps = [
+      fd
+      sad
+    ];
   };
 
   skim = buildVimPlugin {

@@ -9676,6 +9676,8 @@ with pkgs;
 
   svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
 
+  szurubooru = callPackage ../servers/web-apps/szurubooru { };
+
   tclap = tclap_1_2;
 
   tclap_1_2 = callPackage ../development/libraries/tclap/1.2.nix { };
@@ -15497,12 +15499,6 @@ with pkgs;
   raxml-mpi = raxml.override { useMpi = true; };
 
   samtools = callPackage ../applications/science/biology/samtools { };
-
-  inherit (callPackages ../applications/science/biology/sumatools { })
-    sumalibs
-    sumaclust
-    sumatra
-    ;
 
   trimmomatic = callPackage ../applications/science/biology/trimmomatic {
     jdk = pkgs.jdk21_headless;
