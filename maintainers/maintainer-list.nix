@@ -16054,6 +16054,11 @@
     github = "mevatron";
     githubId = 714585;
   };
+  mfcrizz = {
+    github = "MfCrizz";
+    githubId = 56442772;
+    name = "Manuel Fragner";
+  };
   mfossen = {
     email = "msfossen@gmail.com";
     github = "mfossen";
