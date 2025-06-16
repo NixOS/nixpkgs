@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "0.93.0";
+  version = "0.94.1";
 
   serverSource_x64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-Server-v${version}-linux-x64.tar.xz";
-  serverSource_x64.sha256 = "0gm0j8w16ynwb1rsgxd7g4pa4vm47728d8393bazppxgf91gnh3d";
+  serverSource_x64.sha256 = "10q5swzbwkzx70slqxmssjqkrn93p06l8334yx9ljpafawyrriyg";
   serverSource_arm64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-Server-v${version}-linux-arm64.tar.xz";
-  serverSource_arm64.sha256 = "0in1y3zsx4mni02lq17q0camn07p7fngl1qjmjnhkps7pr799d2q";
+  serverSource_arm64.sha256 = "0c4j35gwm0l067mpz8w9h67pki8jmkn8zznrrm9589x99lzww1p8";
 
   serverSource =
     if stdenv.hostPlatform.isx86_64 then
@@ -27,11 +27,6 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl serverSource;
-
-  patches = [
-    # patch logger to use console instead of rolling files
-    ./0001-Use-console-logger-instead-of-rolling-files.patch
-  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -53,10 +48,7 @@ stdenv.mkDerivation {
 
     makeWrapper "$out/share/trilium-server/node/bin/node" "$out/bin/trilium-server" \
       --chdir "$out/share/trilium-server" \
-      --add-flags "src/main"
-
-    # Clean up broken symlinks and build tools.
-    rm -r "$out"/share/trilium-server/node_modules/{@npmcli,@rollup,@babel}
+      --add-flags "main.cjs"
 
     runHook postInstall
   '';
