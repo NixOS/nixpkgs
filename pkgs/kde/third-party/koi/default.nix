@@ -8,19 +8,19 @@
   kwidgetsaddons,
   wrapQtAppsHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "koi";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "baduhai";
     repo = "Koi";
-    rev = version;
-    sha256 = "sha256-ip7e/Sz/l5UiTFUTLJPorPO7NltE2Isij2MCmvHZV40=";
+    tag = finalAttrs.version;
+    hash = "sha256-ip7e/Sz/l5UiTFUTLJPorPO7NltE2Isij2MCmvHZV40=";
   };
 
   # See https://github.com/baduhai/Koi/blob/master/development/Nix%20OS/dev.nix
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     kwidgetsaddons
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Scheduling LIGHT/DARK Theme Converter for the KDE Plasma Desktop";
     longDescription = ''
       Koi is a program designed to provide the KDE Plasma Desktop functionality to automatically switch between light and dark themes. Koi is under semi-active development, and while it is stable enough to use daily, expect bugs. Koi is designed to be used with Plasma, and while some features may function under different desktop environments, they are unlikely to work and untested.
@@ -47,9 +47,10 @@ stdenv.mkDerivation rec {
       - Hide application to system tray
       - Toggle between LIGHT/DARK themes by clicking mouse wheel
     '';
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    changelog = "https://github.com/baduhai/Koi/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/baduhai/Koi";
     maintainers = with lib.maintainers; [ fnune ];
   };
-}
+})
