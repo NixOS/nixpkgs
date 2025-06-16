@@ -659,6 +659,140 @@ let
               client2.wait_until_succeeds("ping -c 1 fc00::2")
         '';
       };
+    ipip-4in6 =
+      let
+        node =
+          {
+            address4,
+            remote,
+            address6,
+          }:
+          {
+            virtualisation.interfaces.enp1s0.vlan = 1;
+            networking = {
+              useNetworkd = networkd;
+              useDHCP = false;
+              ipips."4in6" = {
+                inherit remote;
+                local = address6;
+                dev = "enp1s0";
+                encapsulation.type = "4in6";
+              };
+              firewall.enable = false;
+              nftables.enable = true;
+              firewall.extraInputRules = "meta l4proto ipip accept";
+              interfaces.enp1s0.ipv6.addresses = lib.mkOverride 0 [
+                {
+                  address = address6;
+                  prefixLength = 64;
+                }
+              ];
+              interfaces."4in6".ipv4.addresses = lib.mkOverride 0 [
+                {
+                  address = address4;
+                  prefixLength = 24;
+                }
+              ];
+            };
+          };
+      in
+      {
+        name = "ipip-4in6";
+        nodes.client1 = node {
+          address6 = "fc00::1";
+          address4 = "192.168.1.1";
+          remote = "fc00::2";
+        };
+        nodes.client2 = node {
+          address6 = "fc00::2";
+          address4 = "192.168.1.2";
+          remote = "fc00::1";
+        };
+        testScript = ''
+          start_all()
+
+          with subtest("Wait for networking to be configured"):
+              client1.wait_for_unit("network.target")
+              client2.wait_for_unit("network.target")
+
+              # Print diagnostic information
+              client1.succeed("ip addr >&2")
+              client2.succeed("ip addr >&2")
+
+          with subtest("Test ipv6"):
+              client1.wait_until_succeeds("ping -c 1 192.168.1.1")
+              client1.wait_until_succeeds("ping -c 1 192.168.1.2")
+
+              client2.wait_until_succeeds("ping -c 1 192.168.1.1")
+              client2.wait_until_succeeds("ping -c 1 192.168.1.2")
+        '';
+      };
+    ipip =
+      let
+        node =
+          {
+            local,
+            remote,
+            address,
+          }:
+          {
+            virtualisation.interfaces.enp1s0.vlan = 1;
+            networking = {
+              useNetworkd = networkd;
+              useDHCP = false;
+              ipips.ipip = {
+                inherit local remote;
+                dev = "enp1s0";
+                encapsulation.type = "ipip";
+              };
+              nftables.enable = true;
+              firewall.extraInputRules = "meta l4proto 4 accept";
+              interfaces.enp1s0.ipv4.addresses = lib.mkOverride 0 [
+                {
+                  address = local;
+                  prefixLength = 24;
+                }
+              ];
+              interfaces.ipip.ipv4.addresses = lib.mkOverride 0 [
+                {
+                  inherit address;
+                  prefixLength = 24;
+                }
+              ];
+            };
+          };
+      in
+      {
+        name = "ipip";
+        nodes.client1 = node {
+          local = "192.168.1.1";
+          remote = "192.168.1.2";
+          address = "192.168.10.1";
+        };
+        nodes.client2 = node {
+          local = "192.168.1.2";
+          remote = "192.168.1.1";
+          address = "192.168.10.2";
+        };
+        testScript = ''
+          start_all()
+
+          with subtest("Wait for networking to be configured"):
+              client1.wait_for_unit("network.target")
+              client2.wait_for_unit("network.target")
+
+              # Print diagnostic information
+              client1.succeed("ip addr >&2")
+              client2.succeed("ip addr >&2")
+
+          with subtest("Test IPIP tunnel"):
+              client1.wait_until_succeeds("ping -c 1 192.168.10.1")
+              client1.wait_until_succeeds("ping -c 1 192.168.10.2")
+
+              client2.wait_until_succeeds("ping -c 1 192.168.10.1")
+              client2.wait_until_succeeds("ping -c 1 192.168.10.2")
+        '';
+      };
     gre =
       let
         node =

@@ -1137,6 +1137,104 @@ in
         });
     };
 
+    networking.ipips = mkOption {
+      default = { };
+      example = literalExpression ''
+        {
+          wan4in6 = {
+            remote = "2001:db8::1";
+            local = "2001:db8::3";
+            dev = "wan6";
+            encapsulation.type = "4in6";
+            encapsulation.limit = 0;
+          };
+        }
+      '';
+      description = ''
+        This option allows you to define interfaces encapsulating IP
+        packets within IP packets; which should be automatically created.
+
+        For example, this allows you to create 4in6 (RFC 2473)
+        or IP within IP (RFC 2003) tunnels.
+      '';
+      type =
+        with types;
+        attrsOf (submodule {
+          options = {
+
+            remote = mkOption {
+              type = types.str;
+              example = "2001:db8::1";
+              description = ''
+                The address of the remote endpoint to forward traffic over.
+              '';
+            };
+
+            local = mkOption {
+              type = types.str;
+              example = "2001:db8::3";
+              description = ''
+                The address of the local endpoint which the remote
+                side should send packets to.
+              '';
+            };
+
+            ttl = mkOption {
+              type = types.nullOr types.int;
+              default = null;
+              example = 255;
+              description = ''
+                The time-to-live of the connection to the remote tunnel endpoint.
+              '';
+            };
+
+            dev = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "wan6";
+              description = ''
+                The underlying network device on which the tunnel resides.
+              '';
+            };
+
+            encapsulation.type = mkOption {
+              type = types.enum [
+                "ipip"
+                "4in6"
+                "ip6ip6"
+              ];
+              default = "ipip";
+              description = ''
+                Select the encapsulation type:
+
+                - `ipip` to create an IPv4 within IPv4 tunnel (RFC 2003).
+
+                - `4in6` to create a 4in6 tunnel (RFC 2473);
+
+                - `ip6ip6` to create an IPv6 within IPv6 tunnel (RFC 2473);
+
+                ::: {.note}
+                For encapsulating IPv6 within IPv4 packets, see
+                the ad-hoc {option}`networking.sits` option.
+                :::
+              '';
+            };
+
+            encapsulation.limit = mkOption {
+              type = types.either (types.enum [ "none" ]) types.ints.unsigned;
+              default = 4;
+              example = "none";
+              description = ''
+                For an IPv6-based tunnel, the maximum number of nested
+                encapsulation to allow. 0 means no nesting, "none" unlimited.
+              '';
+            };
+
+          };
+
+        });
+    };
+
     networking.sits = mkOption {
       default = { };
       example = literalExpression ''
