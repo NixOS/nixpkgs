@@ -7,6 +7,7 @@
   cacert,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  stdenv,
 }:
 let
   version = "4.10.0";
@@ -26,6 +27,17 @@ let
           substituteInPlace pyproject.toml --replace-fail "setuptools==75.8.0" "setuptools"
           substituteInPlace craft_application/git/_git_repo.py --replace-fail "/snap/core22/current/etc/ssl/certs" "${cacert}/etc/ssl/certs"
         '';
+
+        disabledTestPaths = [
+          # These tests assert outputs of commands that assume Ubuntu-related output.
+          "tests/unit/services/test_lifecycle.py"
+        ];
+
+        disabledTests =
+          old.disabledTests
+          ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+            "test_process_grammar_full"
+          ];
       });
     };
   };
