@@ -56,7 +56,7 @@ Make sure that your local files aren't added to Git history by adding the follow
 
 #### `devmode`
 
-Use [`devmode`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/de/devmode/README.md) for a live preview when editing the manual.
+Use [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview when editing the manual.
 
 ### Testing redirects
 
