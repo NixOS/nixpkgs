@@ -10,17 +10,15 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "koi";
-  version = "0.4";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "baduhai";
     repo = "Koi";
     tag = finalAttrs.version;
-    hash = "sha256-ip7e/Sz/l5UiTFUTLJPorPO7NltE2Isij2MCmvHZV40=";
+    hash = "sha256-fXLGlq41Qwdp0cYJcNqPlYnlpVXsZk0imYxP7Bgdcvw=";
   };
 
-  # See https://github.com/baduhai/Koi/blob/master/development/Nix%20OS/dev.nix
-  sourceRoot = "${finalAttrs.src.name}/src";
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
