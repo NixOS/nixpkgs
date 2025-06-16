@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.14";
+  version = "0.6.15";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-tq6npchWuEzgMOoCUvwHGbDjpJPOO1eSCS/88IzhWvQ=";
+    hash = "sha256-MD7d+5JuTzChqKLxXyZFLyPktXFta1EOe4Oj4uEGaho=";
   };
 
   frontend = buildNpmPackage rec {
