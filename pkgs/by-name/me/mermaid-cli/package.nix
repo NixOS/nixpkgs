@@ -4,6 +4,7 @@
   stdenv,
   fetchFromGitHub,
   chromium,
+  nix-update-script,
 }:
 let
   version = "11.4.2";
@@ -33,6 +34,10 @@ buildNpmPackage {
   npmBuildScript = "prepare";
 
   makeWrapperArgs = lib.lists.optional (lib.meta.availableOn stdenv.hostPlatform chromium) "--set PUPPETEER_EXECUTABLE_PATH '${lib.getExe chromium}'";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Generation of diagrams from text in a similar manner as markdown";
