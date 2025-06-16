@@ -14197,6 +14197,8 @@ self: super: with self; {
 
   python-constraint = callPackage ../development/python-modules/python-constraint { };
 
+  python-control = callPackage ../development/python-modules/python-control { };
+
   python-creole = callPackage ../development/python-modules/python-creole { };
 
   python-crfsuite = callPackage ../development/python-modules/python-crfsuite { };
