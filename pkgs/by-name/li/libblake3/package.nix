@@ -13,6 +13,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libblake3";
   version = "1.8.2";
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "BLAKE3-team";
     repo = "BLAKE3";
