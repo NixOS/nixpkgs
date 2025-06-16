@@ -34,6 +34,7 @@
   blockbuster,
   freezegun,
   gunicorn,
+  isa-l,
   isal,
   proxy-py,
   pytest-codspeed,
@@ -58,6 +59,10 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-ciZGOOfVXYoLzYNIkota3MXMRMxlztf+mFFo0y9r+Lk=";
   };
+
+  patches = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform isa-l) [
+    ./remove-isal.patch
+  ];
 
   postPatch = ''
     rm -r vendor
@@ -105,7 +110,8 @@ buildPythonPackage rec {
     blockbuster
     freezegun
     gunicorn
-    isal
+    # broken on aarch64-darwin
+    (if lib.meta.availableOn stdenv.hostPlatform isa-l then isal else null)
     proxy-py
     pytest-codspeed
     pytest-cov-stub
