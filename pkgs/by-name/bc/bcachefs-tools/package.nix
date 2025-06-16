@@ -128,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       davidak
+      johnrtitor
       Madouura
     ];
     platforms = lib.platforms.linux;

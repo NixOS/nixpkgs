@@ -7,6 +7,7 @@
 }:
 
 let
+  cfgScrub = config.services.bcachefs.autoScrub;
 
   bootFs = lib.filterAttrs (
     n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)
@@ -159,6 +160,32 @@ let
 in
 
 {
+  options.services.bcachefs.autoScrub = {
+    enable = lib.mkEnableOption "regular bcachefs scrub";
+
+    fileSystems = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
+      example = [ "/" ];
+      description = ''
+        List of paths to bcachefs filesystems to regularly call {command}`bcachefs scrub` on.
+        Defaults to all mount points with bcachefs filesystems.
+      '';
+    };
+
+    interval = lib.mkOption {
+      default = "monthly";
+      type = lib.types.str;
+      example = "weekly";
+      description = ''
+        Systemd calendar expression for when to scrub bcachefs filesystems.
+        The recommended period is a month but could be less.
+        See
+        {manpage}`systemd.time(7)`
+        for more information on the syntax.
+      '';
+    };
+  };
+
   config = lib.mkIf (config.boot.supportedFilesystems.bcachefs or false) (
     lib.mkMerge [
       {
@@ -205,6 +232,99 @@ in
 
         boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
       })
+
+      (lib.mkIf (cfgScrub.enable) {
+        assertions = [
+          {
+            assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.14";
+            message = "Bcachefs scrubbing is supported from kernel version 6.14 or later.";
+          }
+          {
+            assertion = cfgScrub.enable -> (cfgScrub.fileSystems != [ ]);
+            message = ''
+              If 'services.bcachefs.autoScrub' is enabled, you need to have at least one
+              bcachefs file system mounted via 'fileSystems' or specify a list manually
+              in 'services.bcachefs.autoScrub.fileSystems'.
+            '';
+          }
+        ];
+
+        # This will remove duplicated units from either having a filesystem mounted multiple
+        # time, or additionally mounted subvolumes, as well as having a filesystem span
+        # multiple devices (provided the same device is used to mount said filesystem).
+        services.bcachefs.autoScrub.fileSystems =
+          let
+            isDeviceInList = list: device: builtins.filter (e: e.device == device) list != [ ];
+
+            uniqueDeviceList = lib.foldl' (
+              acc: e: if isDeviceInList acc e.device then acc else acc ++ [ e ]
+            ) [ ];
+          in
+          lib.mkDefault (
+            map (e: e.mountPoint) (
+              uniqueDeviceList (
+                lib.mapAttrsToList (name: fs: {
+                  mountPoint = fs.mountPoint;
+                  device = fs.device;
+                }) (lib.filterAttrs (name: fs: fs.fsType == "bcachefs") config.fileSystems)
+              )
+            )
+          );
+
+        systemd.timers =
+          let
+            scrubTimer =
+              fs:
+              let
+                fs' = utils.escapeSystemdPath fs;
+              in
+              lib.nameValuePair "bcachefs-scrub-${fs'}" {
+                description = "regular bcachefs scrub timer on ${fs}";
+
+                wantedBy = [ "timers.target" ];
+                timerConfig = {
+                  OnCalendar = cfgScrub.interval;
+                  AccuracySec = "1d";
+                  Persistent = true;
+                };
+              };
+          in
+          lib.listToAttrs (map scrubTimer cfgScrub.fileSystems);
+
+        systemd.services =
+          let
+            scrubService =
+              fs:
+              let
+                fs' = utils.escapeSystemdPath fs;
+              in
+              lib.nameValuePair "bcachefs-scrub-${fs'}" {
+                description = "bcachefs scrub on ${fs}";
+                # scrub prevents suspend2ram or proper shutdown
+                conflicts = [
+                  "shutdown.target"
+                  "sleep.target"
+                ];
+                before = [
+                  "shutdown.target"
+                  "sleep.target"
+                ];
+
+                script = "${lib.getExe pkgs.bcachefs-tools} data scrub ${fs}";
+
+                serviceConfig = {
+                  Type = "oneshot";
+                  Nice = 19;
+                  IOSchedulingClass = "idle";
+                };
+              };
+          in
+          lib.listToAttrs (map scrubService cfgScrub.fileSystems);
+      })
     ]
   );
+
+  meta = {
+    inherit (pkgs.bcachefs-tools.meta) maintainers;
+  };
 }
