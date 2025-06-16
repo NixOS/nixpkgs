@@ -1084,6 +1084,7 @@ let
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
     chebpol = [ pkgs.pkg-config ];
+    baseline = [ pkgs.lapack ];
     eds = [ pkgs.zlib.dev ];
     pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
@@ -1582,6 +1583,7 @@ let
     "TreeSearch"
     "ACNE"
     "APAlyzer"
+    "BAT"
     "EstMix"
     "Patterns"
     "PECA"
@@ -2720,6 +2722,7 @@ let
       preConfigure = ''
         patchShebangs configure
         patchShebangs src/library/curl/configure
+        patchShebangs src/library/keyring/configure
         patchShebangs src/library/pkgdepends/configure
         patchShebangs src/library/ps/configure
       '';
