@@ -12,7 +12,7 @@ buildSddmThemePackage rec {
   src = fetchFromGitHub {
     owner = "MarianArlt";
     repo = "sddm-sugar-dark";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-C3qB9hFUeuT5+Dos2zFj5SyQegnghpoFV9wHvE9VoD8=";
   };
 
