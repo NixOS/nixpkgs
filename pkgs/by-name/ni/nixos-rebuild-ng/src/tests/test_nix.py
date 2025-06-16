@@ -56,8 +56,7 @@ def test_build(mock_run: Mock) -> None:
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
-    monkeypatch.chdir(tmpdir)
+def test_build_flake(mock_run: Mock) -> None:
     flake = m.Flake.parse(".#hostname")
 
     assert n.build_flake(
@@ -193,10 +192,7 @@ def test_build_remote(
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_build_remote_flake(
-    mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path
-) -> None:
-    monkeypatch.chdir(tmpdir)
+def test_build_remote_flake(mock_run: Mock, monkeypatch: MonkeyPatch) -> None:
     flake = m.Flake.parse(".#hostname")
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
@@ -318,7 +314,7 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_edit(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
     # Flake
-    flake = m.Flake.parse(f"{tmpdir}#attr")
+    flake = m.Flake.parse("#attr")
     n.edit(flake, {"commit_lock_file": True})
     mock_run.assert_called_with(
         [
@@ -328,7 +324,7 @@ def test_edit(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
             "edit",
             "--commit-lock-file",
             "--",
-            f'{tmpdir}#nixosConfigurations."attr"',
+            '.#nixosConfigurations."attr"',
         ],
         check=False,
     )

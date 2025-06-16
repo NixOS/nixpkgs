@@ -61,45 +61,6 @@ class BuildAttr:
         return cls(Path(file or "default.nix"), attr)
 
 
-def discover_git(location: Path) -> Path | None:
-    """
-    Discover the current git repository in the given location.
-    """
-    current = location.resolve()
-    previous = None
-
-    while current.is_dir() and current != previous:
-        dotgit = current / ".git"
-        if dotgit.is_dir():
-            return current
-        elif dotgit.is_file():  # this is a worktree
-            with dotgit.open() as f:
-                dotgit_content = f.read().strip()
-                if dotgit_content.startswith("gitdir: "):
-                    return Path(dotgit_content.split("gitdir: ")[1])
-        previous = current
-        current = current.parent
-
-    return None
-
-
-def discover_closest_flake(location: Path) -> Path | None:
-    """
-    Discover the closest flake.nix file starting from the given location upwards.
-    """
-    current = location.resolve()
-    previous = None
-
-    while current.is_dir() and current != previous:
-        flake_file = current / "flake.nix"
-        if flake_file.is_file():
-            return current
-        previous = current
-        current = current.parent
-
-    return None
-
-
 @dataclass(frozen=True)
 class Flake:
     path: Path | str
@@ -127,19 +88,22 @@ class Flake:
         if ":" in path_str:
             return cls(path_str, nixos_attr)
         else:
-            path = Path(path_str)
-            git_repo = discover_git(path)
-            if git_repo is not None:
-                url = f"git+file://{git_repo}"
-                flake_path = discover_closest_flake(path)
-                if (
-                    flake_path is not None
-                    and flake_path != git_repo
-                    and flake_path.is_relative_to(git_repo)
-                ):
-                    url += f"?dir={flake_path.relative_to(git_repo)}"
-                return cls(url, nixos_attr)
-            return cls(path, nixos_attr)
+            # Since we use builtins.getFlake we have behavior differences
+            # between normal nix build and the nix repl because
+            # builtins.getFlake won't pick up local flakes as git+file
+            # but assumes path:// flakes instead.
+            # This can have surprising effects such as beeing able to access
+            # untracked files that would lead to build failures otherwise
+            # or copying large files to the nix store.
+            # We could force git+file:// protocol to fix this, but thanks to
+            # another issue in nix this causes a nasty issue where
+            # nixos-rebuild is run inside a symlink to a nix store path
+            # (e.g. /run/opengl-driver/lib).
+            # See:
+            # - https://github.com/NixOS/nixpkgs/pull/375493
+            # - https://github.com/NixOS/nixpkgs/pull/410498
+            # - https://github.com/NixOS/nixpkgs/issues/93694
+            return cls(Path(path_str), nixos_attr)
 
     @classmethod
     def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:
