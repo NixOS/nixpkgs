@@ -8,12 +8,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "newcomputermodern";
-  version = "6.0.0";
+  version = "7.0.2";
 
   src = fetchgit {
     url = "https://git.gnu.org.ua/newcm.git";
     rev = finalAttrs.version;
-    hash = "sha256-AMzEytBn9PbyYFNJ2CMPg8ejsL3eFhY+eZHXShaLG9E=";
+    hash = "sha256-J2k3gbQgmb+hsIYQi+kCccejrNccHryuC140rNwNPTQ=";
   };
 
   nativeBuildInputs = [ fontforge ];
