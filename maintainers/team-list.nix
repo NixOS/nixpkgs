@@ -915,6 +915,7 @@ with lib.maintainers;
     members = [
       eljamm
       fricklerhandwerk
+      prince213
       wegank
     ];
     scope = "Maintain NGI-supported software.";
