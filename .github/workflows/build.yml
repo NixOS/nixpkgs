@@ -1,14 +1,10 @@
 name: Build
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/build.yml
-  pull_request_target:
-
-concurrency:
-  group: build-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
-  cancel-in-progress: true
+  workflow_call:
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
 
 permissions: {}
 

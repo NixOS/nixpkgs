@@ -1,14 +1,7 @@
 name: Lint
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/lint.yml
-  pull_request_target:
-
-concurrency:
-  group: lint-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
-  cancel-in-progress: true
+  workflow_call:
 
 permissions: {}
 
