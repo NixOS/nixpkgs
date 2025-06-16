@@ -21,17 +21,13 @@ rustPlatform.buildRustPackage rec {
     leaveDotGit = true; # git command in build.rs
   };
 
-  # The lockfile in the repo is not up to date
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoPatches = [
+    # The lockfile in the repo is not up to date
+    ./update-cargo-lock.patch
+  ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "elefren-0.22.0" = "sha256-zCmopdkBHT0gzNGQqZzsnIyMyAt0XBbQdOCpegF6TsY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aj0S9n8MFTZLVjogxW9WnN85EUP3a79Hk+95Z5vzM6c=";
 
   nativeBuildInputs = [
     pkg-config

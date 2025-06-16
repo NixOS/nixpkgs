@@ -33,18 +33,14 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  # FIXME: Remove this after https://github.com/GRA0007/crab.fit/pull/341 is merged,
-  # or upstream bumps their locked version of 0.3 time to 0.3.36 or later
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoPatches = [
+    # FIXME: Remove this after https://github.com/GRA0007/crab.fit/pull/341 is merged,
+    # or upstream bumps their locked version of 0.3 time to 0.3.36 or later
+    ./update-time-and-chrono.patch
+  ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "google-cloud-0.2.1" = "sha256-3/sUeAXnpxO6kzx5+R7ukvMCEM001VoEPP6HmaRihHE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qbNymrvc2f4CEQt08PuFByn17WjAkFi/GyavngvdnYI=";
 
   nativeBuildInputs = [
     pkg-config
