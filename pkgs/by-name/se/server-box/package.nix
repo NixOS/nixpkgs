@@ -1,6 +1,6 @@
 {
   lib,
-  flutter329,
+  flutter332,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -12,15 +12,15 @@
   gitUpdater,
 }:
 
-flutter329.buildFlutterApplication {
+flutter332.buildFlutterApplication rec {
   pname = "server-box";
-  version = "1.0.1130-unstable-2025-04-25";
+  version = "1.0.1189";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
-    rev = "8f09085cf30f9b48209c7c3c1e9dceac5aa5eeeb";
-    hash = "sha256-D2FzL34FV+7FnxyEVi/Rm2qO3c9eQmCjlH/4pMWlU5s=";
+    tag = "v${version}";
+    hash = "sha256-gz+4uJe0JHi8oYNz/oLylkYUmHQA8wnxp/4TadYNMfo=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -28,12 +28,12 @@ flutter329.buildFlutterApplication {
   gitHashes = {
     circle_chart = "sha256-BcnL/hRf+Yv2U8Nkl7pc8BtncBW+M2by86jO5IbFIRk=";
     computer = "sha256-qaD6jn78zDyZBktwJ4WTQa8oCvCWQJOBDaozBVsXNb8=";
-    dartssh2 = "sha256-bS916CwUuOKhRyymtmvMxt7vGXmlyiLep4AZsxRJ6iU=";
-    fl_build = "sha256-CSKe2yEIisftM0q79HbDTghShirWg02zi9v+hD5R57g=";
-    fl_lib = "sha256-+eHUpn89BI7k/MbCp09gUWGMlqLBrxOy9PgL9uXnkDI=";
+    dartssh2 = "sha256-XlbruyraMmZGNRppQdBLS89Qyd7mm5Noiap2BhZjEPw=";
+    fl_build = "sha256-hCojuXFuN33/prCyuPcMoehWiGfaR2yOJA2V6dOuz4E=";
+    fl_lib = "sha256-cauq5kbcCE52Jp3K/xBdHEmdfuF8aQsujNTjbE93Pww=";
     plain_notification_token = "sha256-Cy1/S8bAtKCBnjfDEeW4Q2nP4jtwyCstAC1GH1efu8I=";
     watch_connectivity = "sha256-9TyuElr0PNoiUvbSTOakdw1/QwWp6J2GAwzVHsgYWtM=";
-    xterm = "sha256-LTCMaGVqehL+wFSzWd63KeTBjjU4xCyuhfD9QmQaP0Q=";
+    xterm = "sha256-yMETVh1qEdQAIYaQWbL5958N5dGpczJ/Y8Zvl1WjRnw=";
   };
 
   nativeBuildInputs = [

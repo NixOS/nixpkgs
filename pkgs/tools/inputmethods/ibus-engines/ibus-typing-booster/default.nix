@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     description = "Completion input method for faster typing";
     mainProgram = "emoji-picker";
-    maintainers = with maintainers; [ ncfavier ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     isIbusEngine = true;
   };
