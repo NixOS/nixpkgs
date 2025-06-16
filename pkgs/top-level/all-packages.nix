@@ -14685,7 +14685,7 @@ with pkgs;
 
   ledger-agent = with python3Packages; toPythonApplication ledger-agent;
 
-  napari = with python3Packages; toPythonApplication napari;
+  napari = with python312Packages; toPythonApplication napari;
 
   nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
 
