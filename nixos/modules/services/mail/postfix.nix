@@ -516,6 +516,17 @@ in
               ])
             );
           options = {
+            message_size_limit = mkOption {
+              type = with types; nullOr int;
+              default = null;
+              example = "52428800"; # 50 MiB
+              description = ''
+                Maximum size of an email message in bytes.
+
+                <https://www.postfix.org/postconf.5.html#message_size_limit>
+              '';
+            };
+
             mydestination = mkOption {
               type = with types; nullOr (listOf str);
               default = null;
