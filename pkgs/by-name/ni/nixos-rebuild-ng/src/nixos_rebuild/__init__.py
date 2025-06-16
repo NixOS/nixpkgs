@@ -306,7 +306,7 @@ def reexec(
         new = drv / f"bin/{EXECUTABLE}"
         current = Path(argv[0])
         if new != current:
-            logging.debug(
+            logger.debug(
                 "detected newer version of script, re-exec'ing, current=%s, new=%s",
                 current,
                 new,
