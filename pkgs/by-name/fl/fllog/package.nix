@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.8";
+  version = "1.2.9";
   pname = "fllog";
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-kJLb1ifd8sUOwGgNsIEmlhH29fQLdTfDMjKLrzK7r1I=";
+    sha256 = "sha256-3eJvT9PjHTrMn0/pArUDIIE7T7y1YnayG5PuGokwtRk=";
   };
 
   buildInputs = [
