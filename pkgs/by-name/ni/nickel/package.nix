@@ -9,7 +9,7 @@
   pkg-config,
   nixVersions,
   nix-update-script,
-  enableNixImport ? true,
+  enableNixImport ? false,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
