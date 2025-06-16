@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "s-search";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "zquestz";
     repo = "s";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5hkorROs11nrDK5/BBEPIugVYeVUWtAnpCBBuKTj15g=";
+    hash = "sha256-g+Gz16U5rP3v+RbutDUh5+1YdTDe+ROFEnNAlNZX1fw=";
   };
 
   vendorHash = "sha256-0E/9fONanSxb2Tv5wKIpf1J/A6Hdge23xy3r6pFyV9E=";
