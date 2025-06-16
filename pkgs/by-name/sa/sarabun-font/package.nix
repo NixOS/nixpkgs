@@ -20,11 +20,12 @@ stdenvNoCC.mkDerivation {
     "doc"
   ];
 
-  buildPhase = ''
+  installPhase = ''
+    runHook preInstall
     mkdir -p $doc/sarabun $out/share/fonts/truetype
-
     cp -r $src/OFL.txt $src/docs/* $doc/sarabun
     cp $src/fonts/*.ttf $out/share/fonts/truetype
+    runHook postInstall
   '';
 
   meta = {
