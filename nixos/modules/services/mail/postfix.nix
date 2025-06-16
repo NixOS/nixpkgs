@@ -355,23 +355,43 @@ in
       enableSmtp = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Whether to enable smtp in master.cf.";
+        description = ''
+          Whether to enable the `smtp` service configured in the master.cf.
+
+          This service listens for plain text SMTP connections on port 25
+          and supports explicit TLS via StartTLS.
+
+          It is the primary port used by SMTP servers to exchange mail.
+        '';
       };
 
       enableSubmission = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Whether to enable smtp submission.";
+        description = "
+          Whether to enable the `submission` service configured in master.cf.
+
+          This service listens for plain text SMTP connections on port 587
+          and supports explicit TLS via StartTLS.
+
+          It is a way for clients to login and submit mails after an inband
+          connection upgrade using StartTLS.
+
+          [RFC8314](https://www.rfc-editor.org/rfc/rfc8314) discourages the use
+          of implicit TLS for mail submissionn.
+        ";
       };
 
       enableSubmissions = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = ''
-          Whether to enable smtp submission via smtps.
+          Whether to enable the `submissions` service configured in master.cf.
 
-          According to RFC 8314 this should be preferred
-          over STARTTLS for submission of messages by end user clients.
+          This service listen for implicit TLS connections on port 465.
+
+          Per [RFC8314](https://www.rfc-editor.org/rfc/rfc8314) implicit TLS
+          is recommended for mail submission.
         '';
       };
 
