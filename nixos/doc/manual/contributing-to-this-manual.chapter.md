@@ -39,7 +39,7 @@ Make sure that your local files aren't added to Git history by adding the follow
 
 ### `devmode` {#sec-contributing-devmode}
 
-Use [`devmode`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/de/devmode/README.md) to hot reload updates to the manual.
+Use [`devmode`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/de/devmode/README.md) for a live preview when editing the manual.
 
 ## Testing redirects {#sec-contributing-redirects}
 
