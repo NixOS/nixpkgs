@@ -139,7 +139,6 @@ stdenv.mkDerivation {
     updateScript = import ./update.nix {
       inherit
         pname
-        lib
         writeScript
         xidel
         coreutils
