@@ -69,13 +69,14 @@ jobs:
               // Normally a scheduled run, but could be workflow_dispatch, see above. Go back as far
               // as the last successful run of this workflow to make sure we are not leaving anyone
               // behind on GHA failures.
+              // Defaults to go back 1 hour on the first run.
               return (await github.rest.actions.listWorkflowRuns({
                 ...context.repo,
                 workflow_id: 'labels.yml',
                 event: 'schedule',
                 status: 'success',
                 exclude_pull_requests: true
-              })).data.workflow_runs[0]?.created_at
+              })).data.workflow_runs[0]?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000
             })())
             core.info('cutoff timestamp: ' + cutoff.toISOString())
 
