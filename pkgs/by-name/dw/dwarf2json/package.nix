@@ -2,20 +2,25 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  versionCheckHook,
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "dwarf2json";
-  version = "unstable-2021-04-15";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "volatilityfoundation";
     repo = "dwarf2json";
-    rev = "e8a1ce85dc33bf2039adc7f8a5f47f3016153720";
-    sha256 = "sha256-hnS00glAcj78mZp5as63CsEn+dcr+GNEkz8iC3KM0h0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-M5KKtn5kly23TwbjD5MVLzIum58exXqCFs6jxsg6oGM=";
   };
 
-  vendorHash = "sha256-tgs0l+sYdAxMHwVTew++keNpDyrHmevpmOBVIiuL+34=";
+  vendorHash = "sha256-3PnXB8AfZtgmYEPJuh0fwvG38dtngoS/lxyx3H+rvFs=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     homepage = "https://github.com/volatilityfoundation/dwarf2json";
@@ -24,4 +29,4 @@ buildGoModule {
     maintainers = with maintainers; [ arkivm ];
     mainProgram = "dwarf2json";
   };
-}
+})
