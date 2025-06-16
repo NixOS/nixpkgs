@@ -9,7 +9,13 @@
 let
 
   requiredPackages =
-    map (pkg: lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg)
+    map
+      (
+        pkg:
+        lib.setPrio (
+          (pkg.meta.priority or lib.meta.defaultPriority) + config.environment.requiredPackagesPriorityOffset
+        ) pkg
+      )
       [
         pkgs.acl
         pkgs.attr
@@ -80,6 +86,20 @@ in
         '';
       };
 
+      requiredPackagesPriorityOffset = lib.mkOption {
+        type = lib.types.int;
+        default = 3;
+        example = lib.literalExpression "-5";
+        description = ''
+          Override the priority of base system packages that are
+          required in a NixOS System by setting an offset.
+
+          The priority is inverse to the value. Meaning, a lower
+          offset (-5) results in a higher priority for package. And
+          a higher offset (5) results in a lower priority for package.
+        '';
+      };
+
       defaultPackages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = defaultPackages;
@@ -138,6 +158,14 @@ in
 
     system = {
 
+      pathDrv = lib.mkOption {
+        internal = true;
+        description = ''
+          A "dummy" option containing the initial derivation of
+          `system-path`, allowing users to override the final derivation
+          getting assigned to `system.path`.
+        '';
+      };
       path = lib.mkOption {
         internal = true;
         description = ''
@@ -172,7 +200,8 @@ in
       "/share/thumbnailers"
     ];
 
-    system.path = pkgs.buildEnv {
+    system.path = lib.mkDefault config.system.pathDrv;
+    system.pathDrv = pkgs.buildEnv {
       name = "system-path";
       paths = config.environment.systemPackages;
       inherit (config.environment) pathsToLink extraOutputsToInstall;
