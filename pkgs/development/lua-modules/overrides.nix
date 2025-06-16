@@ -949,6 +949,20 @@ in
     })
   ) { };
 
+  rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs (oa: {
+
+    doCheck = true;
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+    ];
+    checkPhase = ''
+      runHook preCheck
+      busted spec
+      runHook postCheck
+    '';
+  });
+
   rtp-nvim = prev.rtp-nvim.overrideAttrs (oa: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
