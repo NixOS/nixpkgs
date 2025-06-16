@@ -99,6 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       felschr
       matthiasbeyer
+      yannham
     ];
     mainProgram = "nickel";
   };
