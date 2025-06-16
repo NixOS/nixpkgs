@@ -2,7 +2,7 @@
 
 ## Conventions for adding new extensions
 
-* Extensions are named in the **lowercase** version of the extension's unique identifier. Which is found on the marketplace extension page, and is the name under which the extension is installed by VSCode under `~/.vscode`.
+* Extensions are named in the **lowercase** version of the extension's unique identifier which is found on the extension's marketplace page, and is the name under which the extension is installed by VSCode under `~/.vscode`.
   Extension location should be: ${lib.strings.toLower mktplcRef.publisher}.${lib.string.toLower mktplcRef.name}
 
 * When adding a new extension, place its definition in a `default.nix` file in a directory with the extension's ID (e.g. `publisher.extension-name/default.nix`) and refer to it in `./default.nix`, e.g. `publisher.extension-name = callPackage ./publisher.extension-name { };`.
