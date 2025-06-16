@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Viewer for .slint files from the Slint Project";
     mainProgram = "slint-viewer";
     homepage = "https://crates.io/crates/slint-viewer";
+    changelog = "https://github.com/slint-ui/slint/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ dtomvan ];
