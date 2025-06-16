@@ -18,6 +18,7 @@
   enableZstd ? true,
   zstd,
   nixosTests,
+  fakeroot,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +48,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableOpenSSL openssl
     ++ lib.optional enableXXHash xxHash;
 
+  checkInputs = [ fakeroot ];
+
   configureFlags =
     [
       (lib.enableFeature enableLZ4 "lz4")
@@ -70,6 +73,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
+
+  doCheck = true;
 
   meta = with lib; {
     description = "Fast incremental file transfer utility";

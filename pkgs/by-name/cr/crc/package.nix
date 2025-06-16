@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   coreutils,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
@@ -45,17 +46,13 @@ buildGoModule (finalAttrs: {
     "-X github.com/crc-org/crc/v2/pkg/crc/segment.WriteKey=${writeKey}"
   ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
-
   doInstallCheck = true;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    HOME=$(mktemp -d) $out/bin/crc version | grep ${finalAttrs.version} > /dev/null
-
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = ./update.sh;
 

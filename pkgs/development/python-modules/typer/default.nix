@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.15.2";
+  version = "0.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
     tag = version;
-    hash = "sha256-9YukmX16fn5u7N9K9fUqZsAzKjio4bl70gHNmsYuQxo";
+    hash = "sha256-lZJKE8bxYxmDxAmnL7L/fL89gMe44voyHT20DUazd9E=";
   };
 
   build-system = [ pdm-backend ];

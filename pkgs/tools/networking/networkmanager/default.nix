@@ -52,6 +52,7 @@
   nixosTests,
   systemd,
   udev,
+  udevCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
@@ -184,6 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
       docbook_xml_dtd_42
       docbook_xml_dtd_43
       pythonForDocs
+      udevCheckHook
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       mesonEmulatorHook
@@ -218,6 +220,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${buildPackages.networkmanager.devdoc} $devdoc
     cp -r ${buildPackages.networkmanager.man} $man
   '';
+
+  doInstallCheck = true;
 
   passthru = {
     updateScript = gitUpdater {

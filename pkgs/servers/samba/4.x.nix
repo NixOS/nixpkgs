@@ -57,7 +57,7 @@
   enableGlusterFS ? false,
   glusterfs,
   libuuid,
-  enableAcl ? (!stdenv.hostPlatform.isDarwin),
+  enableAcl ? stdenv.hostPlatform.isLinux,
   acl,
   enableLibunwind ? (!stdenv.hostPlatform.isDarwin),
   libunwind,
@@ -76,6 +76,16 @@ let
   };
 
   inherit (lib) optional optionals;
+
+  needsAnswers =
+    stdenv.hostPlatform != stdenv.buildPlatform
+    && !(stdenv.hostPlatform.emulatorAvailable buildPackages);
+  answers =
+    {
+      x86_64-freebsd = ./answers-x86_64-freebsd;
+    }
+    .${stdenv.hostPlatform.system}
+      or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
@@ -103,6 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
       name = "samba-reproducible-builds.patch";
       url = "https://gitlab.com/raboof/samba/-/commit/9995c5c234ece6888544cdbe6578d47e83dea0b5.patch";
       hash = "sha256-TVKK/7wGsfP1pVf8o1NwazobiR8jVJCCMj/FWji3f2A=";
+    })
+    (fetchpatch {
+      name = "cross-compile.patch";
+      url = "https://gitlab.com/samba-team/samba/-/merge_requests/3990/diffs.patch?commit_id=52af20db81f24cbfaa6fef8233584fc40fc72d34";
+      hash = "sha256-GMPxM6KMtMPRljhRI+dDD2fOp+y5kpRqbjqkj19Du4Q=";
     })
   ];
 
@@ -141,7 +156,6 @@ stdenv.mkDerivation (finalAttrs: {
       popt
       dbus
       jansson
-      libbsd
       libarchive
       zlib
       gnutls
@@ -149,8 +163,11 @@ stdenv.mkDerivation (finalAttrs: {
       tdb
       libxcrypt
     ]
+    ++ optionals (!stdenv.hostPlatform.isBSD) [
+      libbsd
+    ]
     ++ optionals stdenv.hostPlatform.isLinux [
-      liburing
+      #liburing # FIXME: better solution
       systemd
     ]
     ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ]
@@ -180,20 +197,33 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional enableLibunwind libunwind
     ++ optional enablePam pam;
 
-  postPatch = ''
-    # Removes absolute paths in scripts
-    sed -i 's,/sbin/,,g' ctdb/config/functions
+  postPatch =
+    ''
+      # Removes absolute paths in scripts
+      sed -i 's,/sbin/,,g' ctdb/config/functions
 
-    # Fix the XML Catalog Paths
-    sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
+      # Fix the XML Catalog Paths
+      sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
 
-    patchShebangs ./buildtools/bin
-  '';
+      patchShebangs ./buildtools/bin
+    ''
+    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      substituteInPlace wscript source3/wscript nsswitch/wscript_build lib/replace/wscript source4/ntvfs/sysdep/wscript_configure --replace-fail 'sys.platform' '"${stdenv.hostPlatform.parsed.kernel.name}"'
+    '';
 
-  preConfigure = ''
-    export PKGCONFIG="$PKG_CONFIG"
-    export PYTHONHASHSEED=1
-  '';
+  preConfigure =
+    ''
+      export PKGCONFIG="$PKG_CONFIG"
+      export PYTHONHASHSEED=1
+    ''
+    + lib.optionalString needsAnswers ''
+      cp ${answers} answers
+      chmod +w answers
+    '';
+
+  env.NIX_LDFLAGS = lib.optionalString (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "--undefined-version";
 
   wafConfigureFlags =
     [
@@ -220,11 +250,16 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional enableProfiling "--with-profiling-data"
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam"
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
       "--bundled-libraries=!asn1_compile,!compile_et"
       "--cross-compile"
-      "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-    ]
+      (
+        if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
+          "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+        else
+          "--cross-answers=answers"
+      )
+    ])
     ++ optionals stdenv.buildPlatform.is32bit [
       # By default `waf configure` spawns as many as available CPUs. On
       # 32-bit systems with many CPUs (like `i686` chroot on `x86_64`

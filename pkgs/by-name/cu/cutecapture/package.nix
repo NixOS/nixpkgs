@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   '';
 
+  doInstallCheck = true;
+
   postInstall = ''
     install -Dm644 -t $out/lib/udev/rules.d 95-{3,}dscapture.rules
     install -Dm444 -t $out/share/applications Cute{3,}DSCapture.desktop

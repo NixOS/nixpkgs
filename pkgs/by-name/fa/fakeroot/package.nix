@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     po4a
   ];
-  buildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) libcap;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux libcap;
 
   postUnpack = ''
     sed -i \

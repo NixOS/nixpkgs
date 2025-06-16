@@ -39,6 +39,12 @@ buildPythonPackage rec {
     hash = "sha256-ZkC1+I2d9wY9J7IoCGHGWG2gOVN7wW274UpN1lQxmJY=";
   };
 
+  patches = [
+    # https://github.com/fonttools/fonttools/pull/3855
+    # FIXME: remove when merged
+    ./python-3.13.4.patch
+  ];
+
   build-system = [
     setuptools
     setuptools-scm

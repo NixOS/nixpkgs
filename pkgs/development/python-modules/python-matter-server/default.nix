@@ -28,6 +28,7 @@
   python,
   pytest,
   pytest-aiohttp,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -76,8 +77,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace '--cov' ""
+      --replace 'version = "0.0.0"' 'version = "${version}"'
   '';
 
   build-system = [
@@ -107,6 +107,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 

@@ -73,6 +73,8 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
   pythonImportsCheck = [ "pytensor" ];
 
   # Ensure that the installed package is used instead of the source files from the current workdir

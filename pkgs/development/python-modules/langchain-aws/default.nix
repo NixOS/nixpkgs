@@ -15,6 +15,7 @@
   # tests
   langchain-tests,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
 
   # passthru
@@ -35,8 +36,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--snapshot-warn-unused" "" \
-      --replace-fail "--cov=langchain_aws" ""
+      --replace-fail "--snapshot-warn-unused" ""
   '';
 
   sourceRoot = "${src.name}/libs/aws";
@@ -61,6 +61,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     langchain-tests
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

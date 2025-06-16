@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "1.4.2";
+  version = "1.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I4LFgWsmNvvSCgng9Ona1HNnZf37fcpYKUO5wTZrPw4=";
+    hash = "sha256-2HV/lVOJo916IxUuQ7wpfC4MLTBgBW2tD+78iKBpObU=";
   };
 
   nativeBuildInputs = [ setuptools ];

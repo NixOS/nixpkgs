@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
   zeep,
@@ -20,14 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-rSos8usCXeQIIQI182tK4xJS3jGGJAzKqBJuEXy4JpA=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail " --cov=stdnum --cov-report=term-missing:skip-covered --cov-report=html" ""
-  '';
-
   nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   optional-dependencies = {
     SOAP = [ zeep ];

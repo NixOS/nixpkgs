@@ -120,12 +120,25 @@ let
           metadata.release_version
         else
           lib.versions.major metadata.release_version;
-      mkExtraBuildCommands0 = cc: ''
-        rsrc="$out/resource-root"
-        mkdir "$rsrc"
-        ln -s "${lib.getLib cc}/lib/clang/${clangVersion}/include" "$rsrc"
-        echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-      '';
+      mkExtraBuildCommands0 =
+        cc:
+        ''
+          rsrc="$out/resource-root"
+          mkdir "$rsrc"
+          echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+        ''
+        # clang standard c headers are incompatible with FreeBSD so we have to put them in -idirafter instead of -resource-dir
+        # see https://github.com/freebsd/freebsd-src/commit/f382bac49b1378da3c2dd66bf721beaa16b5d471
+        + (
+          if stdenv.targetPlatform.isFreeBSD then
+            ''
+              echo "-idirafter ${lib.getLib cc}/lib/clang/${clangVersion}/include" >> $out/nix-support/cc-cflags
+            ''
+          else
+            ''
+              ln -s "${lib.getLib cc}/lib/clang/${clangVersion}/include" "$rsrc"
+            ''
+        );
       mkExtraBuildCommandsBasicRt =
         cc:
         mkExtraBuildCommands0 cc

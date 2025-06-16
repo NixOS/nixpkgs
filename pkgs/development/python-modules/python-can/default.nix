@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  future,
   hypothesis,
   packaging,
   parameterized,
@@ -53,7 +52,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    future
     hypothesis
     parameterized
     pytest-cov-stub

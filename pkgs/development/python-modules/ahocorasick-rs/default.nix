@@ -42,6 +42,8 @@ buildPythonPackage rec {
     hypothesis
   ];
 
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
   pythonImportsCheck = [ "ahocorasick_rs" ];
 
   meta = with lib; {

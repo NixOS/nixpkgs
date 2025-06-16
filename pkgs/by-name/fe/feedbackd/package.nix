@@ -21,6 +21,7 @@
   gmobile,
   umockdev,
   feedbackd-device-themes,
+  udevCheckHook,
   nix-update-script,
 }:
 
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     vala
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -97,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
         done
     fi
   '';
+
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };

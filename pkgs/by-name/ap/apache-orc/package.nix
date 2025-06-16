@@ -7,7 +7,7 @@
   cmake,
   gtest,
   lz4,
-  protobuf,
+  protobuf_30,
   snappy,
   zlib,
   zstd,
@@ -15,30 +15,21 @@
 
 let
   orc-format = fetchurl {
-    name = "orc-format-1.0.0.tar.gz";
-    url = "https://www.apache.org/dyn/closer.lua/orc/orc-format-1.0.0/orc-format-1.0.0.tar.gz?action=download";
-    hash = "sha256-c5+uX/lLH4ErQTB3KANhBFv5LlEO8Es0phDiOpRdjNU=";
+    name = "orc-format-1.1.0.tar.gz";
+    url = "https://www.apache.org/dyn/closer.lua/orc/orc-format-1.1.0/orc-format-1.1.0.tar.gz?action=download";
+    hash = "sha256-1KesdsVEKr9xGeLLhOcbZ34HWv9TUYqoZgVeLq0EUNc=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-orc";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "orc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ib02mIUQaLEVwIBv5xdKDyX+FeI8vhh9+5hM7miKwHo=";
+    hash = "sha256-hNKzqNOagBJOWQRebkVHIuvqfpk9Mi30bu4z7dGbsxk=";
   };
-
-  patches = [
-    # Patch that adds 2 missing imports in source files
-    # To be removed this PR land: https://github.com/apache/orc/pull/2175
-    (fetchpatch {
-      url = "https://github.com/apache/orc/commit/fb20db2440226da6b92d38ce260e5b850d2f0092.patch";
-      hash = "sha256-rHGECXJoBPgZ62yZciYdSMq4pGnVt75lxkHyO46IiyQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -47,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtest
     lz4
-    protobuf
+    protobuf_30
     snappy
     zlib
     zstd
@@ -64,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     GTEST_HOME = gtest.dev;
     LZ4_ROOT = lz4;
     ORC_FORMAT_URL = orc-format;
-    PROTOBUF_HOME = protobuf;
+    PROTOBUF_HOME = protobuf_30;
     SNAPPY_ROOT = snappy.dev;
     ZLIB_ROOT = zlib.dev;
     ZSTD_ROOT = zstd.dev;

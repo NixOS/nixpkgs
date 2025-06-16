@@ -235,6 +235,7 @@ buildPythonPackage rec {
     ];
 
     pytestFlagsArray = [
+      "--benchmark-disable"
       "-n auto"
       "--dist loadgroup"
       ''-m "slow or not slow"''

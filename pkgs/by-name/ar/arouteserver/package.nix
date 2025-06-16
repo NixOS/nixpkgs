@@ -26,6 +26,8 @@ python3Packages.buildPythonPackage rec {
 
   build-system = with python3Packages; [ setuptools ];
 
+  pythonRelaxDeps = [ "packaging" ];
+
   dependencies = with python3Packages; [
     aggregate6
     jinja2

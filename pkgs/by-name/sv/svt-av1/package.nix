@@ -2,9 +2,11 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch2,
   gitUpdater,
   cmake,
   nasm,
+  cpuinfo,
 
   # for passthru.tests
   ffmpeg,
@@ -12,18 +14,32 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
-  version = "2.3.0";
+  version = "3.0.2";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JMOFWke/qO3cWHuhWJChzaH+sD5AVqYCTTz0Q0+r2AE=";
+    hash = "sha256-WS9awjnJV0ok6ePlLcpHPAr2gsZjbZcdFSDEmyx7vwk=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    nasm
+  patches = [
+    (fetchpatch2 {
+      url = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/commit/ec699561b51f3204e2df6d4c2578eea1f7bd52be.patch?full_index=1";
+      hash = "sha256-QVdvqWWT5tlNKBX9pQJwWgaOq+wNkYiBJTSeytRxrwo=";
+    })
+  ];
+
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      nasm
+    ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
+    cpuinfo
   ];
 
   cmakeFlags = [
@@ -58,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
     ];
     maintainers = with maintainers; [ Madouura ];
+    mainProgram = "SvtAv1EncApp";
     platforms = platforms.unix;
   };
 })

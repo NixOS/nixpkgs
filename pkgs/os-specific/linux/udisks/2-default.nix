@@ -35,6 +35,7 @@
   nilfs-utils,
   ntfs3g,
   nixosTests,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -93,6 +94,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_412
     docbook_xml_dtd_43
     docbook_xsl
+    udevCheckHook
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -136,6 +138,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+  doInstallCheck = true;
 
   passthru = {
     inherit libblockdev;

@@ -4334,7 +4334,8 @@
       ];
     "paperless_ngx" =
       ps: with ps; [
-      ]; # missing inputs: pypaperless
+        pypaperless
+      ];
     "pcs_lighting" =
       ps: with ps; [
       ];
@@ -7368,6 +7369,7 @@
     "panasonic_viera"
     "pandora"
     "panel_custom"
+    "paperless_ngx"
     "peblar"
     "peco"
     "pegel_online"

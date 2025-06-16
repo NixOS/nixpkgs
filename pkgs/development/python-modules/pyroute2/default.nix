@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.8.1";
+  version = "0.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "svinota";
     repo = "pyroute2";
     tag = version;
-    hash = "sha256-eItzD9ub8COaOkNLEKLtf8uJil4W4rqjzVa95LJahHw=";
+    hash = "sha256-46QpFW9Yo1fHH9m8hxpdPRMBdiE6ptWAWRcaizKjBOw=";
   };
 
   build-system = [ setuptools ];

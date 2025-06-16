@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.45.3-unstable-2024-10-17";
+  version = "7.45.6";
   pyproject = true;
 
   disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
@@ -23,10 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycurl";
     repo = "pycurl";
-    # Pinned to newer commit, since the release cadence is not keeping up with curl itself
-    #rev = "refs/tags/REL_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    rev = "885d08b4d3cbc59547b8b80fbd13ab5fc6f27238";
-    hash = "sha256-WnrQhv6xiA+/Uz0hUmQxmEUasxtvlIV2EjlO+ZOUgI8=";
+    tag = "REL_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-M4rO0CaI2SmjdJVS7hWnJZrL72WvayB4aKn707KoNiQ=";
   };
 
   preConfigure = ''

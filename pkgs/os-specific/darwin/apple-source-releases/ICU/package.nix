@@ -2,7 +2,7 @@
   lib,
   bootstrapStdenv,
   buildPackages,
-  fixDarwinDylibNames,
+  fetchpatch2,
   mkAppleDerivation,
   python3,
   testers,
@@ -26,6 +26,13 @@ let
     patches = [
       # Skip MessageFormatTest test, which is known to crash sometimes and should be suppressed if it does.
       ./patches/suppress-icu-check-crash.patch
+
+      # Python 3.13 compatibility
+      (fetchpatch2 {
+        url = "https://github.com/unicode-org/icu/commit/60d6bd71efc0cde8f861b109ff87dbbf9fc96586.patch?full_index=1";
+        hash = "sha256-aJBSVvKidPUjD956jLjyRk8fewUZ9f+Ip4ka6rjevzU=";
+        stripLen = 2;
+      })
     ];
 
     preConfigure = ''

@@ -37,7 +37,6 @@
   x264,
   x265,
   libavif,
-  libspng,
   openh264,
   libyuv,
   xauth,
@@ -48,6 +47,7 @@
   clang,
   withHtml ? true,
   xpra-html5,
+  udevCheckHook,
 }@args:
 
 let
@@ -120,6 +120,7 @@ buildPythonApplication rec {
     pkg-config
     wrapGAppsHook3
     pandoc
+    udevCheckHook
   ] ++ lib.optional withNvenc cudatoolkit;
 
   buildInputs =
@@ -164,7 +165,6 @@ buildPythonApplication rec {
       x264
       x265
       libavif
-      libspng
       openh264
       libyuv
       xxHash
@@ -273,7 +273,7 @@ buildPythonApplication rec {
       ln -s ${xpra-html5}/share/xpra/www $out/share/xpra/www;
     '';
 
-  doCheck = false;
+  # doCheck = false;
 
   enableParallelBuilding = true;
 

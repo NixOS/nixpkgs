@@ -12,6 +12,7 @@
   gobject-introspection,
   cairo,
   libgudev,
+  udevCheckHook,
   gtk-doc,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_43
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
