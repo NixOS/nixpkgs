@@ -17722,6 +17722,8 @@ self: super: with self; {
 
   tmb = callPackage ../development/python-modules/tmb { };
 
+  tmdbsimple = callPackage ../development/python-modules/tmdbsimple { };
+
   tnefparse = callPackage ../development/python-modules/tnefparse { };
 
   todoist = callPackage ../development/python-modules/todoist { };
