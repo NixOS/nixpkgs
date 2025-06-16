@@ -315,6 +315,8 @@ rec {
 
         installPhase =
           ''
+            runHook preInstall
+
             install -Dm755 ./build/docker $out/libexec/docker/docker
 
             makeWrapper $out/libexec/docker/docker $out/bin/docker \
@@ -330,11 +332,16 @@ rec {
             ln -s ${moby}/etc/systemd/system/docker.service $out/etc/systemd/system/docker.service
             ln -s ${moby}/etc/systemd/system/docker.socket $out/etc/systemd/system/docker.socket
           ''
-          + ''
+          # Required to avoid breaking cross builds
+          + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
             # completion (cli)
-            installShellCompletion --bash ./contrib/completion/bash/docker
-            installShellCompletion --fish ./contrib/completion/fish/docker.fish
-            installShellCompletion --zsh  ./contrib/completion/zsh/_docker
+            installShellCompletion --cmd docker \
+              --bash <($out/bin/docker completion bash) \
+              --fish <($out/bin/docker completion fish) \
+              --zsh <($out/bin/docker completion zsh)
+          ''
+          + ''
+            runHook postInstall
           '';
 
         passthru = {

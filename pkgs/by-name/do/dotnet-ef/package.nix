@@ -2,9 +2,9 @@
 
 buildDotnetGlobalTool {
   pname = "dotnet-ef";
-  version = "9.0.5";
+  version = "9.0.6";
 
-  nugetHash = "sha256-Mu+MlsjH/qa4kMb7z/TuG1lSVSKPX9j9S4mJLVRZ2+E=";
+  nugetHash = "sha256-dHOGvqdIfYhuAz7JwQoG/4uJNE9wpfI/dnL4zj3lD6A=";
 
   meta = {
     description = "Tools to help with design-time development tasks";
