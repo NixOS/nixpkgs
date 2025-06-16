@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "H3rmt";
-    repo = "hyprswitch";
+    repo = "hyprshell";
     tag = "v${finalAttrs.version}";
     hash = "sha256-SLLc1NCH8fvql1aSI9Uddt+oZoJVjv19UoLPPLoW/Vs=";
   };
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "CLI/GUI that allows switching between windows in Hyprland";
     mainProgram = "hyprshell";
-    homepage = "https://github.com/H3rmt/hyprswitch";
+    homepage = "https://github.com/H3rmt/hyprshell";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ arminius-smh ];
