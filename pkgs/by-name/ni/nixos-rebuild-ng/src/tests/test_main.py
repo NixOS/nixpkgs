@@ -11,6 +11,7 @@ import pytest
 from pytest import MonkeyPatch
 
 import nixos_rebuild as nr
+from nixos_rebuild import tmpdir
 
 from .helpers import get_qualified_name
 
@@ -409,6 +410,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
                 check=True,
                 stdout=PIPE,
                 stderr=None,
+                cwd=tmpdir.TMPDIR_PATH,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -477,6 +479,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
                 check=True,
                 stdout=PIPE,
                 stderr=None,
+                cwd=tmpdir.TMPDIR_PATH,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -768,6 +771,7 @@ def test_execute_nix_switch_flake_target_host(
                 check=True,
                 stdout=PIPE,
                 stderr=None,
+                cwd=tmpdir.TMPDIR_PATH,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -1076,6 +1080,7 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
                 check=True,
                 stdout=PIPE,
                 stderr=None,
+                cwd=tmpdir.TMPDIR_PATH,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(

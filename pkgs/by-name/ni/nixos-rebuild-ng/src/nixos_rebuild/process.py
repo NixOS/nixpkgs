@@ -7,6 +7,7 @@ import shlex
 import subprocess
 from collections.abc import Sequence
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Final, Self, TypedDict, Unpack
 
 from . import tmpdir
@@ -67,6 +68,7 @@ class Remote:
 # Not exhaustive, but we can always extend it later.
 class RunKwargs(TypedDict, total=False):
     capture_output: bool
+    cwd: str | Path | None
     stderr: int | None
     stdout: int | None
 

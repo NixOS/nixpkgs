@@ -79,6 +79,7 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
         ],
         stdout=PIPE,
         stderr=None,
+        cwd=ANY,
     )
 
     assert n.build_flake(
@@ -98,6 +99,7 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
         ],
         stdout=PIPE,
         stderr=PIPE,
+        cwd=ANY,
     )
 
 

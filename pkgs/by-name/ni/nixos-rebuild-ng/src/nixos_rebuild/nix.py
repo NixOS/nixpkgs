@@ -86,7 +86,18 @@ def build_flake(
         flake.to_attr(attr),
         *dict_to_flags(flake_build_flags),
     ]
-    r = run_wrapper(run_args, stdout=PIPE, stderr=PIPE if quiet else None)
+    r = run_wrapper(
+        run_args,
+        stdout=PIPE,
+        stderr=PIPE if quiet else None,
+        # Running build inside tmpdir thanks to this nasty bug from `nix`
+        # that happens when `nix build` is run from a symlink pointing to the
+        # nix store (e.g., /run/opengl-driver/lib)
+        # See:
+        # - https://github.com/NixOS/nix/issues/13367
+        # - https://github.com/NixOS/nixpkgs/issues/144811
+        cwd=tmpdir.TMPDIR_PATH,
+    )
     return Path(r.stdout.strip())
 
 
