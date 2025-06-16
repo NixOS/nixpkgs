@@ -1,17 +1,12 @@
 {
   lib,
-  buildPythonApplication,
   fetchFromGitHub,
-  pillow,
-  pyside2,
-  numpy,
-  pyphotonfile,
-  shiboken2,
+  python312Packages,
 }:
 let
   version = "0.1.3+";
 in
-buildPythonApplication rec {
+python312Packages.buildPythonApplication rec {
   pname = "sl1-to-photon";
   inherit version;
 
@@ -22,7 +17,7 @@ buildPythonApplication rec {
     sha256 = "ssFfjlBMi3FHosDBUA2gs71VUIBkEdPVcV3STNxmOIM=";
   };
 
-  pythonPath = [
+  pythonPath = with python312Packages; [
     pyphotonfile
     pillow
     numpy
