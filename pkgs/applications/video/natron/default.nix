@@ -13,7 +13,7 @@
   extra-cmake-modules,
   glog,
   libXdmcp,
-  python3,
+  python312,
   wayland,
 }:
 
@@ -26,6 +26,7 @@ let
     rev = "Natron-v${minorVersion}";
     hash = "sha256-TD7Uge9kKbFxOmOCn+TSQovnKTmFS3uERTu5lmZFHbc=";
   };
+  python3 = python312;
 in
 stdenv.mkDerivation {
   inherit version;
