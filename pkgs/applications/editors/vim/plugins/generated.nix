@@ -13199,6 +13199,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  search-and-replace-nvim = buildVimPlugin {
+    pname = "search-and-replace.nvim";
+    version = "2025-06-16";
+    src = fetchFromGitHub {
+      owner = "mahyarmirrashed";
+      repo = "search-and-replace.nvim";
+      rev = "12dce26afc7f3c66d6ffbf2eae91ce19d4cdcc74";
+      sha256 = "0i197fs58qk6mgqsxi7cacba8sya7kh9cdnnz6sa79ry42cdff6a";
+    };
+    meta.homepage = "https://github.com/mahyarmirrashed/search-and-replace.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   searchbox-nvim = buildVimPlugin {
     pname = "searchbox.nvim";
     version = "2025-01-09";
