@@ -105,6 +105,7 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = [ maintainers.puffnfresh ];
     platforms = platforms.linux;
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
+    # error: 'LogMessageVoidify' is not a member of 'google'
+    broken = true;
   };
 }
