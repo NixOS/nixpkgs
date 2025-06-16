@@ -5,7 +5,7 @@
 * Extensions are named in the **lowercase** version of the extension's unique identifier. Which is found on the marketplace extension page, and is the name under which the extension is installed by VSCode under `~/.vscode`.
   Extension location should be: ${lib.strings.toLower mktplcRef.publisher}.${lib.string.toLower mktplcRef.name}
 
-* Move extension to a discrete directory whenever the extension needs extra parameters/packages (at top of the file) or other files (such as patches, update script, components). Global index file parameters/packages should be utilities shared by many extensions. Extension specific parameters/packages should not be in the global index page.
+* When adding a new extension, place its definition in a `default.nix` file in a directory with the extension's ID (e.g. `publisher.extension-name/default.nix`) and refer to it in `./default.nix`, e.g. `publisher.extension-name = callPackage ./publisher.extension-name { };`.
 
 * Currently `nixfmt-rfc-style` formatter is being used to format the VSCode extensions.
 
