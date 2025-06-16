@@ -8,7 +8,6 @@
   capnproto,
   doxygen,
   flex,
-  libdwarf-lite,
   pkg-config,
   python3,
   tbb_2021_11,
@@ -63,14 +62,11 @@ stdenv.mkDerivation {
     boost
     capnproto # cmake modules
     flex # include dir
-    libdwarf-lite
     tbb_2021_11
     python3
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_LIBDWARF" true)
-    (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_ZSTD" true)
     # provide correct executables for cross
     (lib.cmakeFeature "Python3_EXECUTABLE" (lib.getExe python3.pythonOnBuildForHost))
     # TODO: remove these once capnp cross is fixed properly
