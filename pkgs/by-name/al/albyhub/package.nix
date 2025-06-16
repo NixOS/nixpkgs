@@ -21,14 +21,14 @@ let
 
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "albyhub";
   version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "hub";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7+5VWLO4J+ArHyTxapqVQL5GPofV4/QXCu5g+Ix9HoI=";
   };
 
@@ -48,7 +48,7 @@ buildGoModule rec {
   ];
 
   frontendYarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/frontend/yarn.lock";
+    yarnLock = finalAttrs.src + "/frontend/yarn.lock";
     hash = "sha256-SStTJGqeqPvXBKjFMPjKEts+jg6A9Vaqi+rZkr/ytdc=";
   };
 
@@ -56,7 +56,7 @@ buildGoModule rec {
     export HOME=$TMPDIR
     pushd frontend
       fixup-yarn-lock yarn.lock
-      yarn config set yarn-offline-mirror "${frontendYarnOfflineCache}"
+      yarn config set yarn-offline-mirror "${finalAttrs.frontendYarnOfflineCache}"
       yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules
       yarn --offline build:http
@@ -68,7 +68,7 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X github.com/getAlby/hub/version.Tag=v${version}"
+    "-X github.com/getAlby/hub/version.Tag=v${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -95,4 +95,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ bleetube ];
     mainProgram = "albyhub";
   };
-}
+})
