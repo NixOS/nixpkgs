@@ -5,15 +5,15 @@
 }:
 let
   pname = "ankama-launcher";
-  version = "3.12.39";
+  version = "3.12.44";
 
   # The original URL for the launcher is:
   # https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage
   # As it does not encode the version, we use the wayback machine (web.archive.org) to get a fixed URL.
   # To update the client, head to web.archive.org and create a new snapshot of the download page.
   src = fetchurl {
-    url = "https://web.archive.org/web/20250413180128/https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage";
-    hash = "sha256-25x+x5Y0pIxvJyjbctt9weCEiH0UlqGbGM7/RKkyHXA=";
+    url = "https://web.archive.org/web/20250602031258/https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage";
+    hash = "sha256-d9FEXVuN7wiilskKhPbp/ssn16l8F1a/C6VBNVv3x20=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
