@@ -14,12 +14,12 @@ let
   # kernel config in the xanmod version commit
   variants = {
     lts = {
-      version = "6.12.30";
-      hash = "sha256-OqO41rbb3nBegL+ZjgqR0RGwrka6oLv0QOYXJ8Wdpv8=";
+      version = "6.12.31";
+      hash = "sha256-qYbwHt6j2Sh7V1PDjp1oEIKo+k2T5PcRz5MzZgYwbqg=";
     };
     main = {
-      version = "6.14.8";
-      hash = "sha256-ap3NaM/pk+TWg3RBRxFJPwnfv2n042r47bo66jhj3ck=";
+      version = "6.14.9";
+      hash = "sha256-kwMvXdqr1i3UZ3+N/qsQDjU1TvnymS54tCdOLNxL0nc=";
     };
   };
 
