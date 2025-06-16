@@ -1052,6 +1052,8 @@ self: super: with self; {
 
   asyncio-throttle = callPackage ../development/python-modules/asyncio-throttle { };
 
+  asynckivy = callPackage ../development/python-modules/asynckivy { };
+
   asyncmy = callPackage ../development/python-modules/asyncmy { };
 
   asyncpg = callPackage ../development/python-modules/asyncpg { };
