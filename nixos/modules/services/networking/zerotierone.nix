@@ -38,6 +38,19 @@ in
 
   options.services.zerotierone.package = mkPackageOption pkgs "zerotierone" { };
 
+  options.services.zerotierone.systemdManagerPackage =
+    mkPackageOption pkgs "zerotier-systemd-manager"
+      { };
+
+  options.services.zerotierone.generateSystemdNetworkdConfig = mkOption {
+    default = false;
+    type = types.bool;
+    description = ''
+      Generate the files necessary for resoltion of zerotier DNS names to work
+      with systemd-networkd using the zerotier-systemd-manager tool.
+    '';
+  };
+
   options.services.zerotierone.localConf = mkOption {
     default = { };
     description = ''
@@ -83,6 +96,14 @@ in
           ln -s ${localConfFile} ${localConfFilePath}
         '';
 
+      postStart =
+        lib.optionalString (cfg.generateSystemdNetworkdConfig && cfg.systemdManagerPackage != null)
+          ''
+            # let zerotier connect before attempting to configure dns
+            sleep 5
+            "${cfg.systemdManagerPackage}/bin/zerotier-systemd-manager"
+          '';
+
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/zerotier-one -p${toString cfg.port}";
         Restart = "always";
@@ -97,7 +118,11 @@ in
     # ZeroTier receives UDP transmissions
     networking.firewall.allowedUDPPorts = [ cfg.port ];
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages =
+      [ cfg.package ]
+      ++ lib.optional (
+        cfg.generateSystemdNetworkdConfig && cfg.systemdManagerPackage != null
+      ) cfg.systemdManagerPackage;
 
     # Prevent systemd from potentially changing the MAC address
     systemd.network.links."50-zerotier" = {
