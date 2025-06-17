@@ -104,7 +104,6 @@ stdenv.mkDerivation {
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
     inherit
       pname
-      lib
       writeScript
       xidel
       coreutils
@@ -116,7 +115,6 @@ stdenv.mkDerivation {
       versionSuffix
       ;
     baseName = "thunderbird";
-    channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
   };

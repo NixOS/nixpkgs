@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Previewing archive contents with smart-filter";
+    description = "Yazi plugin that makes filters smarter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

@@ -47,12 +47,12 @@ buildNpmPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating ECMAScript code";
     homepage = "https://github.com/bufbuild/protobuf-es";
     changelog = "https://github.com/bufbuild/protobuf-es/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       felschr
       jtszalay
     ];

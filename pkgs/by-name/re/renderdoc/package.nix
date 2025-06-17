@@ -13,7 +13,8 @@
   nix-update-script,
   pcre,
   pkg-config,
-  python311Packages,
+  python3Packages,
+  python312Packages,
   qt5,
   stdenv,
   vulkan-loader,
@@ -23,6 +24,9 @@
 }:
 
 let
+  pythonPackages' =
+    # lib.meta.availableOn does not respect meta.broken?
+    if python3Packages.shiboken2.meta.available then python3Packages else python312Packages;
   custom_swig = fetchFromGitHub {
     owner = "baldurk";
     repo = "swig";
@@ -51,9 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     [
       libXdmcp
       libpthreadstubs
-      python311Packages.pyside2
-      python311Packages.pyside2-tools
-      python311Packages.shiboken2
+      pythonPackages'.pyside2
+      pythonPackages'.pyside2-tools
+      pythonPackages'.shiboken2
       qt5.qtbase
       qt5.qtsvg
       vulkan-loader
@@ -71,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pcre
     pkg-config
-    python311Packages.python
+    pythonPackages'.python
     qt5.qtx11extras
     qt5.wrapQtAppsHook
   ];
@@ -137,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "renderdoccmd";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ pbsds ];
     platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
   };
 })

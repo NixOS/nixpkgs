@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to determine which gc-roots take space in your nix store";
     homepage = "https://github.com/symphorien/nix-du";
-    license = licenses.lgpl3Only;
-    maintainers = [ maintainers.symphorien ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Only;
+    maintainers = [ lib.maintainers.symphorien ];
+    platforms = lib.platforms.unix;
     mainProgram = "nix-du";
     changelog = "https://github.com/symphorien/nix-du/blob/v${version}/CHANGELOG.md";
   };

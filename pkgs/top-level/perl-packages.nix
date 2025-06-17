@@ -9495,7 +9495,7 @@ with self;
     doCheck = false;
     meta = {
       description = "Code coverage metrics for Perl";
-      homepage = "http://www.pjcj.net/perl.html";
+      homepage = "https://www.pjcj.net/perl.html";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -13327,6 +13327,9 @@ with self;
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/File-Find-Rule-0.34.tar.gz";
       hash = "sha256-fm8WzDPrHyn/Jb7lHVE/S4qElHu/oY7bLTzECi1kyv4=";
     };
+    patches = [
+      ../development/perl-modules/FileFindRule-CVE-2011-10007.patch
+    ];
     propagatedBuildInputs = [
       NumberCompare
       TextGlob
@@ -25698,6 +25701,9 @@ with self;
       url = "mirror://cpan/authors/id/J/JU/JUERD/Net-MQTT-Simple-1.28.tar.gz";
       hash = "sha256-Sp6hB+a8IuJrUzZ4oKPMbEI7N4TsP8ROjjM5t8Vr7gM=";
     };
+    propagatedBuildInputs = [
+      IOSocketSSL
+    ];
     meta = {
       description = "Minimal MQTT version 3 interface";
       license = with lib.licenses; [

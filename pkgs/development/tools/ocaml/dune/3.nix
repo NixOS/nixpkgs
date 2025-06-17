@@ -14,11 +14,11 @@ else
 
   stdenv.mkDerivation rec {
     pname = "dune";
-    version = "3.19.0";
+    version = "3.19.1";
 
     src = fetchurl {
       url = "https://github.com/ocaml/dune/releases/download/${version}/dune-${version}.tbz";
-      hash = "sha256-0vYX39NPfYgvQYGiLjWbuQtGZp7YeyZQ64QvBTL8aWw=";
+      hash = "sha256-oQOG+YDNqUF9FGVGa+1Q3SrvnJO50GoPf+7tsKFUEVg=";
     };
 
     nativeBuildInputs = [

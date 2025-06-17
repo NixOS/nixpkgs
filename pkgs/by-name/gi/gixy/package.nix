@@ -73,7 +73,7 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/yandex/gixy";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.mpl20;
-    maintainers = [ lib.maintainers.willibutz ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

@@ -9,11 +9,12 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "py-synologydsm-api";
-  version = "2.7.2";
+  version = "2.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "mib1185";
     repo = "py-synologydsm-api";
     tag = "v${version}";
-    hash = "sha256-I9Ew3rBmgG+FuT66e8VgMa0WzAwr+ng5R8uYMzSyYyg=";
+    hash = "sha256-LaeqAY+8WfoMwrZhwZUEcuafGvv+7reuxEh8zQ7j5S4=";
   };
 
   build-system = [ setuptools ];
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [ "synology_dsm" ];

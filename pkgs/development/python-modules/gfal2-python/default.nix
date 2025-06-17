@@ -13,12 +13,12 @@
 }:
 buildPythonPackage rec {
   pname = "gfal2-python";
-  version = "1.12.2";
+  version = "1.13.0";
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-python";
     rev = "v${version}";
-    hash = "sha256-Xk+gLTrqfWb0kGB6QhnM62zAHVFb8rRAqCIBxn0V824=";
+    hash = "sha256-TF8EwT1UEtB9lhfq8Jkn9rrSkSxMSLzuAywfB23K1kE=";
   };
   nativeBuildInputs = [
     cmake
@@ -44,8 +44,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/cern-fts/gfal2-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ ShamrockLee ];
-    # It currently fails to build against Python 3.12 or later,
-    # complaining CMake faililng to find Python include path, library path and site package path.
-    broken = pythonAtLeast "3.12";
   };
 }

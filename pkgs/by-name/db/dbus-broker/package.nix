@@ -39,7 +39,7 @@ let
       ];
       inherit buildInputs;
       meta = meta // {
-        description = "The C-Util Project is a collection of utility libraries for the C11 language.";
+        description = "C-Util Project is a collection of utility libraries for the C11 language";
         homepage = "https://c-util.github.io/";
         license = [
           lib.licenses.asl20

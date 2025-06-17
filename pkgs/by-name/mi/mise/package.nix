@@ -21,17 +21,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2025.5.10";
+  version = "2025.6.2";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-G6bvWSjFhZRVkIZKUG+v7Ct1AtiLCQYmu5WLsVxfVgA=";
+    hash = "sha256-vptTQdP7r9m328DK7USB6bV7muLVPIkZG8596nfdNQ8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-OVXcmlIrb+Q7B/FAayfrC/e4WdnWUgvjLn6hPDo8Ru4=";
+  cargoHash = "sha256-0PS3WWQo3+fJ2TivvRalYCzDFmNxPRZStJj13kAP9bg=";
 
   nativeBuildInputs = [
     installShellFiles

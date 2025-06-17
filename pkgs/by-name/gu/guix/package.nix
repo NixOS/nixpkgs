@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) guix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Functional package manager with a Scheme interface";
     longDescription = ''
       GNU Guix is a purely functional package manager for the GNU system, and a distribution thereof.
@@ -176,13 +176,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.gnu.org/software/guix";
     changelog = "https://git.savannah.gnu.org/cgit/guix.git/plain/NEWS?h=v${version}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "guix";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cafkafk
       foo-dogsquared
       hpfr
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

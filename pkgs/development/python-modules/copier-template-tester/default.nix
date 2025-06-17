@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "copier-template-tester";
-  version = "2.1.1";
+  version = "2.2.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = pname;
-    rev = version;
-    hash = "sha256-q1SNsy5CbBmGTGVejSN8P8BkdiasZjnW8BWMXOfSD1s=";
+    tag = version;
+    hash = "sha256-n/39Gl4q24QKfVFaeeqqu0AQt2jRSRrcnEOFRHQ+SQE=";
   };
 
   build-system = [

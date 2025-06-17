@@ -18,6 +18,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
 }

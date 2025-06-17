@@ -22,7 +22,7 @@ buildGoModule rec {
     "main.appVersion=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI for file search with SQL like syntax.";
     longDescription = ''
       zfind allows you to search for files, including inside tar, zip, 7z and rar archives.
@@ -30,8 +30,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/laktak/zfind";
     changelog = "https://github.com/laktak/zfind/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "zfind";
-    maintainers = with maintainers; [ eeedean ];
+    maintainers = with lib.maintainers; [ eeedean ];
   };
 }

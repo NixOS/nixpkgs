@@ -63,6 +63,10 @@ let
   };
 
   extraDisabledTests = {
+    conversation = [
+      # intent fixture mismatch
+      "test_error_no_device_on_floor"
+    ];
     forecast_solar = [
       # language fixture mismatch
       "test_enabling_disable_by_default"

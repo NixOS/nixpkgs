@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of utilities for Windows Subsystem for Linux";
     homepage = "https://github.com/wslutilities/wslu";
     changelog = "https://github.com/wslutilities/wslu/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jamiemagee ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jamiemagee ];
+    platforms = lib.platforms.linux;
   };
 }

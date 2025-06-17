@@ -39,7 +39,6 @@ in
   name = "bittorrent";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
-      domenkozar
       rob
       bobvanderlinden
     ];

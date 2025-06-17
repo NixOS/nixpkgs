@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "An app runtime based on Chromium and node.js";
+    description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = [
       "i686-linux"

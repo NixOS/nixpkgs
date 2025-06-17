@@ -2,24 +2,21 @@
   lib,
   fetchFromGitHub,
   dooit,
-  python311,
+  python3,
   testers,
   nix-update-script,
   extraPackages ? [ ],
 }:
-let
-  python3 = python311;
-in
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "3.2.2";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dooit-org";
     repo = "dooit";
     tag = "v${version}";
-    hash = "sha256-2W3iO4AOuDdDKJDMMY8YKXlI+dQKRI3PQtkdi9J3wZo=";
+    hash = "sha256-bI9X+2tTLnQwxfsnBmy2vBI3lJ4UX418zOy3oniVKWc=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];

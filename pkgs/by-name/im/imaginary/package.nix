@@ -42,12 +42,12 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fly.io/docs/app-guides/run-a-global-image-service";
     changelog = "https://github.com/h2non/imaginary/releases/tag/v${version}";
     description = "Fast, simple, scalable, Docker-ready HTTP microservice for high-level image processing";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dotlambda
       urandom
     ];

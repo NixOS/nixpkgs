@@ -52,6 +52,21 @@ let
         # See https://github.com/NixOS/nixfmt
         programs.nixfmt.enable = true;
 
+        programs.yamlfmt = {
+          enable = true;
+          settings.formatter = {
+            retain_line_breaks = true;
+          };
+        };
+        settings.formatter.yamlfmt.excludes = [
+          # Breaks helm templating
+          "nixos/tests/k3s/k3s-test-chart/templates/*"
+          # Aligns comments with whitespace
+          "pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml"
+          # TODO: Fix formatting for auto-generated file
+          "pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml"
+        ];
+
         settings.formatter.editorconfig-checker = {
           command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";
           options = [ "-disable-indent-size" ];
@@ -76,7 +91,13 @@ in
   inherit pkgs fmt;
   requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
-  eval = pkgs.callPackage ./eval { };
+
+  # FIXME(lf-): it might be useful to test other Nix implementations
+  # (nixVersions.stable and Lix) here somehow at some point to ensure we don't
+  # have eval divergence.
+  eval = pkgs.callPackage ./eval {
+    nix = pkgs.nixVersions.latest;
+  };
 
   # CI jobs
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };

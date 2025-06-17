@@ -89,16 +89,16 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "OpenMP_SUPPORT" (!stdenv.hostPlatform.isDarwin))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "System for Automated Geoscientific Analyses";
     homepage = "https://saga-gis.sourceforge.io";
     changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog ${version}/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       michelk
       mpickering
     ];
-    teams = [ teams.geospatial ];
-    platforms = with platforms; unix;
+    teams = [ lib.teams.geospatial ];
+    platforms = with lib.platforms; unix;
   };
 }

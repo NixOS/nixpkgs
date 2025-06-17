@@ -87,18 +87,26 @@ in
       };
 
       # Have to take care of GDM + Cinnamon on Wayland users
-      environment.extraInit = ''
-        ${concatMapStrings (p: ''
-          if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
-            export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
-          fi
+      environment.extraInit =
+        ''
+          ${concatMapStrings (p: ''
+            if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+              export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+            fi
 
-          if [ -d "${p}/lib/girepository-1.0" ]; then
-            export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
-            export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+            if [ -d "${p}/lib/girepository-1.0" ]; then
+              export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+              export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+            fi
+          '') cfg.sessionPath}
+        ''
+        + lib.optionalString config.services.gnome.gcr-ssh-agent.enable ''
+          # Hack: https://bugzilla.redhat.com/show_bug.cgi?id=2250704 still
+          # applies to sessions not managed by systemd.
+          if [ -z "$SSH_AUTH_SOCK" ] && [ -n "$XDG_RUNTIME_DIR" ]; then
+            export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
           fi
-        '') cfg.sessionPath}
-      '';
+        '';
 
       # Default services
       services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
@@ -116,6 +124,7 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
+      services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gvfs.enable = true;
       services.power-profiles-daemon.enable = mkDefault true;
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper

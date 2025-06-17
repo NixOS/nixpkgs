@@ -62,7 +62,7 @@ buildGoModule rec {
 
   passthru.tests.gotosocial = nixosTests.gotosocial;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gotosocial.org";
     changelog = "https://codeberg.org/superseriousbusiness/gotosocial/releases/tag/v${version}";
     description = "Fast, fun, ActivityPub server, powered by Go";
@@ -73,7 +73,7 @@ buildGoModule rec {
       advertised to! A light-weight alternative to Mastodon
       and Pleroma, with support for clients!
     '';
-    maintainers = with maintainers; [ blakesmith ];
-    license = licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ blakesmith ];
+    license = lib.licenses.agpl3Only;
   };
 }

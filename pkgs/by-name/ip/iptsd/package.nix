@@ -63,16 +63,16 @@ stdenv.mkDerivation rec {
     "-Db_lto=false" # plugin needed to handle lto object -> undefined reference to ...
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/linux-surface/iptsd/releases/tag/v${version}";
     description = "Userspace daemon for Intel Precise Touch & Stylus";
     homepage = "https://github.com/linux-surface/iptsd";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "iptsd";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tomberek
       dotlambda
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -48,6 +48,15 @@ in
       '';
     };
 
+    environmentFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      example = "/run/secrets/alloy.env";
+      description = ''
+        EnvironmentFile as defined in {manpage}`systemd.exec(5)`.
+      '';
+    };
+
     extraFlags = lib.mkOption {
       type = with lib.types; listOf str;
       default = [ ];
@@ -84,6 +93,7 @@ in
         StateDirectory = "alloy";
         WorkingDirectory = "%S/alloy";
         Type = "simple";
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
       };
     };
   };

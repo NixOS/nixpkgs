@@ -12,6 +12,7 @@
   postgresqlBuildExtension,
   postgresqlTestExtension,
   python3,
+  unstableGitUpdater,
 }:
 
 let
@@ -19,13 +20,13 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  version = "0-unstable-2025-05-16";
+  version = "0-unstable-2025-06-03";
 
   src = fetchFromGitHub {
     owner = "omnigres";
     repo = "omnigres";
-    rev = "84f14792d80fb6fd60b680b7825245a8e7c5583e";
-    hash = "sha256-jOlHXl7ANhMwOPizd5KH+wYZmBNNkkIa9jbXZR8Xu28=";
+    rev = "d347be5ae1d79645ac277d19080eacba7b229cf8";
+    hash = "sha256-LKsH+aeLg7v2RfK80D3mgXdPB8jMIv5uFdf+3c5Z0vA=";
   };
 
   strictDeps = true;
@@ -73,6 +74,10 @@ postgresqlBuildExtension (finalAttrs: {
 
       SELECT identity_type('user_id');
     '';
+  };
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
   };
 
   meta = {

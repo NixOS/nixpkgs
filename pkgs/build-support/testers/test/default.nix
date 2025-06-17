@@ -37,6 +37,8 @@ lib.recurseIntoAttrs {
 
   hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
 
+  hasCmakeConfigModules = pkgs.callPackage ../hasCmakeConfigModules/tests.nix { };
+
   shellcheck = pkgs.callPackage ../shellcheck/tests.nix { };
 
   shfmt = pkgs.callPackages ../shfmt/tests.nix { };

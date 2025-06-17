@@ -96,7 +96,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-jsonschema/jsonschema";
     changelog = "https://github.com/python-jsonschema/jsonschema/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
     mainProgram = "jsonschema";
   };
 }

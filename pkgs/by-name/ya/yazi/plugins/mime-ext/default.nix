@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Previewing archive contents with mime-ext";
+    description = "Mime-type provider based on a file extension database, replacing the builtin file to speed up mime-type retrieval at the expense of accuracy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

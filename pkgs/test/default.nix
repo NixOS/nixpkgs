@@ -40,6 +40,8 @@ with pkgs;
               (filter (n: n != "gccCrossLibcStdenv"))
               (filter (n: n != "gcc49Stdenv"))
               (filter (n: n != "gcc6Stdenv"))
+              (filter (n: n != "gcc7Stdenv"))
+              (filter (n: n != "gcc8Stdenv"))
             ]
             ++
               lib.optionals
@@ -200,6 +202,16 @@ with pkgs;
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
 
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
+
+  # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
+  arrayUtilities = recurseIntoAttrs (
+    lib.concatMapAttrs (
+      name: value:
+      lib.optionalAttrs (value ? passthru.tests) {
+        ${name} = value.passthru.tests;
+      }
+    ) arrayUtilities
+  );
 
   srcOnly = callPackage ../build-support/src-only/tests.nix { };
 

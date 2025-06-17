@@ -70,12 +70,12 @@ stdenv.mkDerivation rec {
                 --prefix=$out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lasso.entrouvert.org/";
     description = "Liberty Alliance Single Sign-On library";
     changelog = "https://git.entrouvert.org/entrouvert/lasso/raw/tag/v${version}/ChangeLog";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ womfoo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ womfoo ];
   };
 }

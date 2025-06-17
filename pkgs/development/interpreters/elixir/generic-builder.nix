@@ -5,6 +5,7 @@
   fetchFromGitHub,
   erlang,
   makeWrapper,
+  nix-update-script,
   coreutils,
   curl,
   bash,
@@ -116,6 +117,15 @@ stdenv.mkDerivation ({
     substituteInPlace $out/bin/mix \
       --replace "/usr/bin/env elixir" "${elixirShebang}"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v(${lib.versions.major version}\\.${lib.versions.minor version}\\.[0-9\\-rc.]+)"
+      "--override-filename"
+      "pkgs/development/interpreters/elixir/${lib.versions.major version}.${lib.versions.minor version}.nix"
+    ];
+  };
 
   pos = builtins.unsafeGetAttrPos "sha256" args;
   meta = with lib; {

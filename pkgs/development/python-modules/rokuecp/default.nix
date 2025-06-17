@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.19.4";
+  version = "0.19.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "ctalkington";
     repo = "python-rokuecp";
     tag = version;
-    hash = "sha256-GotVSRSMdbAtDmVEXNizf5Pf/02sva1R/6ULL6h7ciY=";
+    hash = "sha256-HPJORJQ/LqWCpywiZmwFXKKFRE8V9kG5iDrbzPX2YVg=";
   };
 
   postPatch = ''

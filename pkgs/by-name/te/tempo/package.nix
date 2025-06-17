@@ -44,6 +44,6 @@ buildGoModule rec {
     description = "High volume, minimal dependency trace storage";
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/tempo/";
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = [ ];
   };
 }

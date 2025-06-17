@@ -70,7 +70,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aquasecurity/starboard";
     changelog = "https://github.com/aquasecurity/starboard/releases/tag/v${version}";
     description = "Kubernetes-native security tool kit";
@@ -84,7 +84,7 @@ buildGoModule rec {
       plug-in that make security reports available through familiar Kubernetes
       tools.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

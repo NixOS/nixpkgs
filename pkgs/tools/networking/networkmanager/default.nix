@@ -235,7 +235,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
     maintainers = with maintainers; [
-      domenkozar
       obadz
     ];
     teams = [ teams.freedesktop ];

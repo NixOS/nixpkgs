@@ -1,14 +1,9 @@
 {
   callPackage,
-  kernel ? null,
-  stdenv,
   nixosTests,
   ...
 }@args:
 
-let
-  stdenv' = if kernel == null then stdenv else kernel.stdenv;
-in
 callPackage ./generic.nix args {
   # You have to ensure that in `pkgs/top-level/linux-kernels.nix`
   # this attribute is the correct one for this package.

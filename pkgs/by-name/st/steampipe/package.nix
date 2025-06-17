@@ -11,7 +11,7 @@
 
 buildGoModule rec {
   pname = "steampipe";
-  version = "1.1.3";
+  version = "1.1.4";
 
   env.CGO_ENABLED = 0;
 
@@ -19,10 +19,10 @@ buildGoModule rec {
     owner = "turbot";
     repo = "steampipe";
     tag = "v${version}";
-    hash = "sha256-XLUL4RFhLlxBUYrfDr1YCWqUyr7+NY+etSldahVE1a8=";
+    hash = "sha256-kK06lYUQZGvRZs1WN/dVXc1BDRNFbQUfxpzTl1l5PBU=";
   };
 
-  vendorHash = "sha256-OxC5Gtxy2ipyGkoZHm/0bt1QLuyZUxRt4WHuX8ddF/M=";
+  vendorHash = "sha256-3SQH3TG7DwhaAPesNCIRZLEXqsLWhtWfuWYgQUqSp2o=";
   proxyVendor = true;
 
   postPatch = ''

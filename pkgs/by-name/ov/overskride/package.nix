@@ -77,14 +77,14 @@ rustPlatform.buildRustPackage {
     glib-compile-schemas $out/share/gsettings-schemas/${name}-${version}/glib-2.0/schemas
   '';
 
-  meta = with lib; {
-    description = "A Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
+  meta = {
+    description = "Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
     homepage = "https://github.com/${owner}/${name}";
     changelog = "https://github.com/${owner}/${name}/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = name;
-    maintainers = with maintainers; [ mrcjkb ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    platforms = lib.platforms.linux;
   };
 
 }

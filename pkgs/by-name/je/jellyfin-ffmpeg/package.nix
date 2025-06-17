@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "7.1.1-3";
+  version = "7.1.1-6";
 in
 
 (ffmpeg_7-full.override {
@@ -14,7 +14,7 @@ in
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    hash = "sha256-pJLIhXDPDRhEqzmc1bXViSTSnRifFhMlixkEbGA0GRE=";
+    hash = "sha256-mXPiNSI/c1CEblUxOC69gRRcPgDlopmHGHFE2r7RaHk=";
   };
 }).overrideAttrs
   (old: {

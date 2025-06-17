@@ -33,9 +33,9 @@ let
     "19.1.7".officialRelease.sha256 = "sha256-cZAB5vZjeTsXt9QHbP5xluWNQnAHByHtHnAhVDV0E6I=";
     "20.1.5".officialRelease.sha256 = "sha256-WKfY+VvAsZEEc0xYgF6+MsXDXZz7haMU6bxqmUpaHuQ=";
     "21.0.0-git".gitRelease = {
-      rev = "0004c37c1cd55c461bbf24b83165d11f49be1397";
-      rev-version = "21.0.0-unstable-2025-05-25";
-      sha256 = "sha256-n8WFnYNb46kK7MEh7XF/Psdbn+KJQFKs/LQBZxCklY4=";
+      rev = "9adde28df784f5c0cc960bdabd413ac131a5852e";
+      rev-version = "21.0.0-unstable-2025-06-15";
+      sha256 = "sha256-8HrUSKL3vOd/Jg9svso9ChCr4tvlGOliyGfi18oZLDY=";
     };
   } // llvmVersions;
 

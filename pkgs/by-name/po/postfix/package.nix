@@ -26,6 +26,8 @@
   libmysqlclient,
   withSQLite ? false,
   sqlite,
+  withTLSRPT ? true,
+  libtlsrpt,
 }:
 
 let
@@ -48,6 +50,7 @@ let
       "-DHAS_LDAP"
       "-DUSE_LDAP_SASL"
     ]
+    ++ lib.optional withTLSRPT "-DUSE_TLSRPT"
   );
   auxlibs = lib.concatStringsSep " " (
     [
@@ -62,6 +65,7 @@ let
     ++ lib.optional withMySQL "-lmysqlclient"
     ++ lib.optional withSQLite "-lsqlite3"
     ++ lib.optional withLDAP "-lldap"
+    ++ lib.optional withTLSRPT "-ltlsrpt"
   );
 
 in
@@ -90,7 +94,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional withPgSQL libpq
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withSQLite sqlite
-    ++ lib.optional withLDAP openldap;
+    ++ lib.optional withLDAP openldap
+    ++ lib.optional withTLSRPT libtlsrpt;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];
@@ -183,16 +188,16 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.postfix.org/";
     changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
     description = "Fast, easy to administer, and secure mail server";
-    license = with licenses; [
+    license = with lib.licenses; [
       ipl10
       epl20
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       globin
       dotlambda
       lewo

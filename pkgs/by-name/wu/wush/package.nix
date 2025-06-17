@@ -25,12 +25,12 @@ buildGoModule {
 
   env.CGO_ENABLED = 0;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/coder/wush";
     description = "Transfer files between computers via WireGuard";
     changelog = "https://github.com/coder/wush/releases/tag/v${version}";
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
     mainProgram = "wush";
-    maintainers = with maintainers; [ abbe ];
+    maintainers = with lib.maintainers; [ abbe ];
   };
 }

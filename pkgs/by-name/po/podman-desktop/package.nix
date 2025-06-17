@@ -22,7 +22,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.19.1";
+  version = "1.19.2";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HTfrbMwXw+GGseVzJR2eagBJ7AmuPeFMuy/lO7EADmY=";
+    hash = "sha256-Yw4HPHtMMxaI7MLamZy+MglvHHpO6h4/kHY2TBXWErg=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A graphical tool for developing on containers and Kubernetes";
+    description = "Graphical tool for developing on containers and Kubernetes";
     homepage = "https://podman-desktop.io";
     changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;

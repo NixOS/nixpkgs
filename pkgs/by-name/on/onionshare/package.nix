@@ -11,7 +11,6 @@
   snowflake,
   tor,
 
-  fetchpatch,
   versionCheckHook,
   gitUpdater,
   onionshare-gui,
@@ -19,14 +18,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "onionshare-cli";
-  version = "2.6.2";
+  version = "2.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
     tag = "v${version}";
-    hash = "sha256-J8Hdriy8eWpHuMCI87a9a/zCR6xafM3A/Tkyom0Ktko=";
+    hash = "sha256-DY5rSHkmiqLIa49gcbq7VfcMM1AMFTJ5FPQtS2kR2Zs=";
   };
 
   sourceRoot = "${src.name}/cli";
@@ -41,15 +40,6 @@ python3Packages.buildPythonApplication rec {
         tor
         ;
       inherit (tor) geoip;
-    })
-
-    # Remove distutils for Python 3.12 compatibility
-    # https://github.com/onionshare/onionshare/pull/1907
-    (fetchpatch {
-      url = "https://github.com/onionshare/onionshare/commit/1fb1a470df20d8a7576c8cf51213e5928528d59a.patch";
-      includes = [ "onionshare_cli/onion.py" ];
-      stripLen = 1;
-      hash = "sha256-4XkqaEhMhvj6PyMssnLfXRazdP4k+c9mMDveho7pWg8=";
     })
   ];
 
@@ -143,9 +133,12 @@ python3Packages.buildPythonApplication rec {
       person you're sharing with can access the files.
     '';
     homepage = "https://onionshare.org/";
-    changelog = "https://github.com/onionshare/onionshare/releases/tag/v${version}";
+    changelog = "https://github.com/onionshare/onionshare/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ bbjubjub ];
+    maintainers = with lib.maintainers; [
+      bbjubjub
+      dotlambda
+    ];
     mainProgram = "onionshare-cli";
   };
 }

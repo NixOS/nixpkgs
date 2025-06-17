@@ -221,6 +221,14 @@ import ../make-test-python.nix (
             machine.succeed("incus storage show default")
 
       ''
+      + lib.optionalString appArmor ''
+        with subtest("Verify AppArmor service is started without issue"):
+            # restart AppArmor service since the Incus AppArmor folders are
+            # created after AA service is started
+            machine.systemctl("restart apparmor.service")
+            machine.succeed("systemctl --no-pager -l status apparmor.service")
+            machine.wait_for_unit("apparmor.service")
+      ''
       + lib.optionalString instanceContainer (
         lib.foldl (
           acc: variant:

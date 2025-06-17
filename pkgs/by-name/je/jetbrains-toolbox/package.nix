@@ -55,9 +55,6 @@ let
     src = appimageTools.extractType2 {
       inherit pname version;
       src = source + "/jetbrains-toolbox";
-      postExtract = ''
-        patchelf --add-rpath ${lib.makeLibraryPath [ icu ]} $out/jetbrains-toolbox
-      '';
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -66,7 +63,12 @@ let
       install -Dm644 ${src}/jetbrains-toolbox.desktop $out/share/applications/jetbrains-toolbox.desktop
       install -Dm644 ${src}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
       wrapProgram $out/bin/jetbrains-toolbox \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libappindicator-gtk3 ]} \
+        --prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath [
+            icu
+            libappindicator-gtk3
+          ]
+        } \
         --append-flags "--update-failed"
     '';
 

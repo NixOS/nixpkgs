@@ -264,6 +264,7 @@ in
   bpf = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./bpf.nix { };
   bpftune = runTest ./bpftune.nix;
   breitbandmessung = runTest ./breitbandmessung.nix;
+  broadcast-box = runTest ./broadcast-box.nix;
   brscan5 = runTest ./brscan5.nix;
   btrbk = runTest ./btrbk.nix;
   btrbk-doas = runTest ./btrbk-doas.nix;
@@ -305,7 +306,7 @@ in
   cinnamon-wayland = runTest ./cinnamon-wayland.nix;
   cjdns = runTest ./cjdns.nix;
   clatd = runTest ./clatd.nix;
-  clickhouse = runTest ./clickhouse.nix;
+  clickhouse = import ./clickhouse { inherit runTest; };
   cloud-init = handleTest ./cloud-init.nix { };
   cloud-init-hostname = handleTest ./cloud-init-hostname.nix { };
   cloudlog = runTest ./cloudlog.nix;
@@ -408,11 +409,13 @@ in
   domination = runTest ./domination.nix;
   dovecot = handleTest ./dovecot.nix { };
   drawterm = discoverTests (import ./drawterm.nix);
+  draupnir = runTest ./matrix/draupnir.nix;
   drbd = runTest ./drbd.nix;
   druid = handleTestOn [ "x86_64-linux" ] ./druid { };
   drupal = runTest ./drupal.nix;
   drbd-driver = runTest ./drbd-driver.nix;
   dublin-traceroute = runTest ./dublin-traceroute.nix;
+  dwl = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./dwl.nix;
   earlyoom = handleTestOn [ "x86_64-linux" ] ./earlyoom.nix { };
   early-mount-options = handleTest ./early-mount-options.nix { };
   ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
@@ -534,6 +537,7 @@ in
   gancio = runTest ./gancio.nix;
   garage = handleTest ./garage { };
   gatus = runTest ./gatus.nix;
+  getaddrinfo = runTest ./getaddrinfo.nix;
   gemstash = handleTest ./gemstash.nix { };
   geoclue2 = runTest ./geoclue2.nix;
   geoserver = runTest ./geoserver.nix;
@@ -764,13 +768,13 @@ in
   lomiri = discoverTests (import ./lomiri.nix);
   lomiri-calculator-app = runTest ./lomiri-calculator-app.nix;
   lomiri-calendar-app = runTest ./lomiri-calendar-app.nix;
-  lomiri-camera-app = runTest ./lomiri-camera-app.nix;
+  lomiri-camera-app = discoverTests (import ./lomiri-camera-app.nix);
   lomiri-clock-app = runTest ./lomiri-clock-app.nix;
   lomiri-docviewer-app = runTest ./lomiri-docviewer-app.nix;
   lomiri-filemanager-app = runTest ./lomiri-filemanager-app.nix;
   lomiri-mediaplayer-app = runTest ./lomiri-mediaplayer-app.nix;
   lomiri-music-app = runTest ./lomiri-music-app.nix;
-  lomiri-gallery-app = runTest ./lomiri-gallery-app.nix;
+  lomiri-gallery-app = discoverTests (import ./lomiri-gallery-app.nix);
   lomiri-system-settings = runTest ./lomiri-system-settings.nix;
   lorri = handleTest ./lorri/default.nix { };
   lxqt = runTest ./lxqt.nix;
@@ -934,11 +938,12 @@ in
   nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = runTest ./nix-serve.nix;
   nix-serve-ssh = runTest ./nix-serve-ssh.nix;
+  nix-store-veritysetup = runTest ./nix-store-veritysetup.nix;
   nixops = handleTest ./nixops/default.nix { };
   nixos-generate-config = runTest ./nixos-generate-config.nix;
   nixos-rebuild-install-bootloader = handleTestOn [
     "x86_64-linux"
-  ] ./nixos-rebuild-install-bootloader.nix { };
+  ] ./nixos-rebuild-install-bootloader.nix { withNg = false; };
   nixos-rebuild-install-bootloader-ng = handleTestOn [
     "x86_64-linux"
   ] ./nixos-rebuild-install-bootloader.nix { withNg = true; };
@@ -1099,6 +1104,7 @@ in
   postfix-raise-smtpd-tls-security-level =
     handleTest ./postfix-raise-smtpd-tls-security-level.nix
       { };
+  postfix-tlspol = runTest ./postfix-tlspol.nix;
   postfixadmin = runTest ./postfixadmin.nix;
   postgres-websockets = runTest ./postgres-websockets.nix;
   postgresql = handleTest ./postgresql { };
@@ -1367,6 +1373,7 @@ in
   systemd-homed = runTest ./systemd-homed.nix;
   systemtap = handleTest ./systemtap.nix { };
   startx = import ./startx.nix { inherit pkgs runTest; };
+  szurubooru = handleTest ./szurubooru.nix { };
   taler = handleTest ./taler { };
   tandoor-recipes = runTest ./tandoor-recipes.nix;
   tandoor-recipes-script-name = runTest ./tandoor-recipes-script-name.nix;
@@ -1503,7 +1510,6 @@ in
   xss-lock = runTest ./xss-lock.nix;
   xterm = runTest ./xterm.nix;
   xxh = runTest ./xxh.nix;
-  yabar = runTest ./yabar.nix;
   yarr = runTest ./yarr.nix;
   ydotool = handleTest ./ydotool.nix { };
   yggdrasil = runTest ./yggdrasil.nix;
@@ -1526,7 +1532,6 @@ in
   zoom-us = runTest ./zoom-us.nix;
   zram-generator = runTest ./zram-generator.nix;
   zrepl = runTest ./zrepl.nix;
-  zsh-history = runTest ./zsh-history.nix;
   zwave-js = runTest ./zwave-js.nix;
   zwave-js-ui = runTest ./zwave-js-ui.nix;
 }

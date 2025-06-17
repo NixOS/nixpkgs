@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-RhB0Ht6vyDxYwDGS+A9HZL9ySIjWlhdB4S+gHxvQQBg=";
   };
 
-  sourceRoot = "source/pyobjc-core";
+  sourceRoot = "${src.name}/pyobjc-core";
 
   build-system = [ setuptools ];
 

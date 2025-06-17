@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
       --zsh  <($out/bin/imdl completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly and featureful command-line BitTorrent metainfo utility";
     homepage = "https://github.com/casey/intermodal";
     changelog = "https://github.com/casey/intermodal/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       xrelkd
     ];

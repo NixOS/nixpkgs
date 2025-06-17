@@ -50,12 +50,12 @@ rustPlatform.buildRustPackage rec {
     patchelf $out/bin/epick --add-rpath ${lib.makeLibraryPath [ libGL ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple color picker that lets the user create harmonic palettes with ease";
     homepage = "https://github.com/vv9k/epick";
     changelog = "https://github.com/vv9k/epick/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "epick";
   };
 }

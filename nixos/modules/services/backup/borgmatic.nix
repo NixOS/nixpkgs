@@ -25,7 +25,7 @@ let
         in
         {
           pg_dump_command =
-            if d.name == "all" then
+            if d.name == "all" && (!(d ? format) || isNull d.format) then
               "${as_user}${postgresql}/bin/pg_dumpall"
             else
               "${as_user}${postgresql}/bin/pg_dump";

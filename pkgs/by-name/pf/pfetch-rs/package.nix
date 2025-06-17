@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-36MjBzSzEOVaSnd6dTqYnV+Pi+5EDoUskkYsvYMGrgg=";
 
-  meta = with lib; {
+  meta = {
     description = "Rewrite of the pfetch system information tool in Rust";
     homepage = "https://github.com/Gobidev/pfetch-rs";
     changelog = "https://github.com/Gobidev/pfetch-rs/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gobidev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gobidev ];
     mainProgram = "pfetch";
   };
 }

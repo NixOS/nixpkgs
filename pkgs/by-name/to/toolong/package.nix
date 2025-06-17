@@ -1,12 +1,12 @@
 {
   lib,
-  python311Packages,
+  python3Packages,
   fetchFromGitHub,
   testers,
   toolong,
 }:
 
-python311Packages.buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "toolong";
   version = "1.4.0";
   pyproject = true;
@@ -18,8 +18,8 @@ python311Packages.buildPythonApplication {
     hash = "sha256-HrmU7HxWKYrbV25Y5CHLw7/7tX8Y5mTsTL1aXGGTSIo=";
   };
 
-  build-system = [ python311Packages.poetry-core ];
-  dependencies = with python311Packages; [
+  build-system = [ python3Packages.poetry-core ];
+  dependencies = with python3Packages; [
     click
     textual
     typing-extensions

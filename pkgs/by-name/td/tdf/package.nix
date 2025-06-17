@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Tui-based PDF viewer";
     homepage = "https://github.com/itsjunetime/tdf";
-    license = lib.licenses.mpl20;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       DieracDelta

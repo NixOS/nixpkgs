@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "The Oxide Rust SDK and CLI";
+    description = "Oxide Rust SDK and CLI";
     homepage = "https://github.com/oxidecomputer/oxide.rs";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [

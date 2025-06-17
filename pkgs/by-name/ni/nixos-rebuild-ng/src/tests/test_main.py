@@ -140,7 +140,7 @@ def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -
     mock_build.assert_has_calls(
         [
             call(
-                "config.system.build.nixos-rebuild",
+                nr.NIXOS_REBUILD_ATTR,
                 nr.models.BuildAttr(ANY, ANY),
                 {"build": True, "no_out_link": True},
             )
@@ -184,7 +184,7 @@ def test_reexec_flake(
 
     nr.reexec(argv, args, {"build": True}, {"flake": True})
     mock_build.assert_called_once_with(
-        "config.system.build.nixos-rebuild",
+        nr.NIXOS_REBUILD_ATTR,
         nr.models.Flake(ANY, ANY),
         {"flake": True, "no_link": True},
     )

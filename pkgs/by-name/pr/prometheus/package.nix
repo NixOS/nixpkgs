@@ -137,7 +137,6 @@ buildGoModule (finalAttrs: {
     license = licenses.asl20;
     maintainers = with maintainers; [
       fpletz
-      willibutz
       Frostman
     ];
   };

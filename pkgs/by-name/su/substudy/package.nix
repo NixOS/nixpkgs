@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Learn foreign languages using audio and subtitles extracted from video files";
-    homepage = "http://www.randomhacks.net/substudy";
+    homepage = "https://www.randomhacks.net/substudy";
     license = licenses.asl20;
     mainProgram = "substudy";
     maintainers = with maintainers; [ paveloom ];

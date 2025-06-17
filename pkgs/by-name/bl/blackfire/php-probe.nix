@@ -16,50 +16,50 @@ let
   phpMajor = lib.versions.majorMinor php.version;
   inherit (stdenv.hostPlatform) system;
 
-  version = "1.92.36";
+  version = "1.92.38";
 
   hashes = {
     "x86_64-linux" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-Fn+6aZi8UuyF0f94t09SwhUwvHqjvN6m2HBq2mbr/CA=";
-        "8.2" = "sha256-b8YyT9P+KQonwHqXSn17EDRTdTw9CuvIX0PzjvGlmCo=";
-        "8.3" = "sha256-YLQi530JkoQfAx/ZBR9w2dthK6IsDSyqq3U+rGugUPw=";
-        "8.4" = "sha256-zpXYElris1fjMlwpTwuRDkCdO3MNHCLp3D24x5X/S88=";
+        "8.1" = "sha256-W8VlvHa6vmNbDX5r5FG8pB0vpXRn5hPu61td9aARecA=";
+        "8.2" = "sha256-f3AKwh9mUCoFDaXM+EwTORk0/TFyArtEa+sv7cMZmDs=";
+        "8.3" = "sha256-6zigke1VY439IIxrQg5Dxcggn+7Q0BE/spPycvxdyik=";
+        "8.4" = "sha256-n89OCTUGsWhpc61P9WvKyjdJ52wJHoj6NEb2mcs0whA=";
       };
     };
     "i686-linux" = {
       system = "i386";
       hash = {
-        "8.1" = "sha256-3mNgyfrkgiZBkLE8ppans7R72lOeXFup2nwLoP6Gve0=";
-        "8.2" = "sha256-PT7virnfH8Ujkol/fK84TmVTc4jK4xGfaDL1kb9bj/4=";
-        "8.3" = "sha256-h4Gf4YR2I+R9dMDiFpAN1WB2o6BNP3C80fX7vKEN6Gs=";
-        "8.4" = "sha256-lRunm8coAkwiLvPELWquAsoNQEZv0LvL13Hdg+9dOfA=";
+        "8.1" = "sha256-31lJOGL9i8kL22zH8zzYZtxB94ssJiw+qXQRmQilR+c=";
+        "8.2" = "sha256-f+D7DZvLQk6ebLfJ43qFSqWzU6YQoP/7nVGajLRll5g=";
+        "8.3" = "sha256-56/+604Vymb+otL7oria3d/w4b1o8Pt199aXK4nfJC4=";
+        "8.4" = "sha256-K26Dy0S9w0uWTX7GkIjh0jUtaa768B+ls9gq8LXNZUA=";
       };
     };
     "aarch64-linux" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-DDco6F8cD/D4J3KM1B111bjcJkRxd++CLR+x0azcR0g=";
-        "8.2" = "sha256-AQPQQM5Q5wlhvkXOnVNgPLcQpZ5xda/CYFqvm5J7e0c=";
-        "8.3" = "sha256-Yae7UVRrIdShIVZDSza9IrukYHgfX5CrVIpuH4rEAek=";
-        "8.4" = "sha256-l0+DN5zEqGJLg8Ig5U4PvZGms1O0eZ/PqjXgSw4bCA4=";
+        "8.1" = "sha256-aSjOxMZdP+Lrd4FaXgkbHykmKBn9WuzGumrYpJEKpS8=";
+        "8.2" = "sha256-ckhHA/EYeRlhSrc5nMUl6jS0iAaW1q1sZAYYxjcGOwQ=";
+        "8.3" = "sha256-p3P94uPTbekbxgICuC72NEA5XFpYng2MZI+9L+0R/Ew=";
+        "8.4" = "sha256-KCMRNpS2A5Tb5Td8fpBusu70FNIOfJ+6pYRUgw/5kDg=";
       };
     };
     "aarch64-darwin" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-xb28nloEKKfJfddrDShBFuLHPOIyBo74erHWB9H5im4=";
-        "8.2" = "sha256-vmjjmGem7SdEkBWIjDfxgLQhmO9B/x1gIP5GSlAPPDs=";
-        "8.3" = "sha256-l6XrHQIigav6gMpgg7HEwm+2PeuU76AX3je8UVrcPEQ=";
+        "8.1" = "sha256-5JPn9lNsh6NJemCRmrBrTIvhEUQfjmIGbASaoiKoZDo=";
+        "8.2" = "sha256-e9tsXi3SML9HZ81XD5LhGcm7L8Ag9fOvyTo0Gy42YRw=";
+        "8.3" = "sha256-RCmYyrcSi7hfkbGOSp8ywFkm1IFGy0bgu8tmdrTID6c=";
       };
     };
     "x86_64-darwin" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-xY/5UQuLM/UrdDvA1WUF117m+Coj3ElEgV3cbelfKvM=";
-        "8.2" = "sha256-bGpijGg++VJNZFHN9K6Gx1R+jBn3o+Qeh/RpmPC8NPE=";
-        "8.3" = "sha256-3uiTuEmEsp3sKOOR0WxH72pVPCs5ogR1yi3VQ7+/fw8=";
+        "8.1" = "sha256-SuD9iDjxMBt2GZtDXPIjCCl1mEt9K2GciuC7S9ppNZQ=";
+        "8.2" = "sha256-om1L/VQiwdV4D2awuz98ko7Oz9h1GYRtqYZrQRZpy7E=";
+        "8.3" = "sha256-H1xkneOLk7DCPqtbknLlQX2iKe/U6/ilmToOOtiRabs=";
       };
     };
   };
