@@ -209,11 +209,11 @@ let
   nativeBuildInputs = [
     nukeReferences
   ]
-  ++ optionals (!stdenv.hostPlatform.isDarwin) [
+  ++ optionals (!stdenv.hostPlatform.isDarwin && !withMinimalDeps) [
     autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
     autoreconfHook
   ]
-  ++ optionals (!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") [
+  ++ optionals ((!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") && !withMinimalDeps) [
     pkg-config
   ]
   ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
