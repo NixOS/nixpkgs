@@ -93,9 +93,9 @@
         major = "3";
         minor = "14";
         patch = "0";
-        suffix = "b2";
+        suffix = "b3";
       };
-      hash = "sha256-esnoSES7wKWo8feaN6aLO4yvKli0qlmZxJInyzbnDqY=";
+      hash = "sha256-xvSL9R8B9Q2HAHpEXdev5KTHqHq0glcL6STB3f0NNoI=";
       inherit passthruFun;
     };
     # Minimal versions of Python (built without optional dependencies)
