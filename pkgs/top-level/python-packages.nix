@@ -11801,6 +11801,8 @@ self: super: with self; {
 
   propcache = callPackage ../development/python-modules/propcache { };
 
+  property-cached = callPackage ../development/python-modules/property-cached { };
+
   property-manager = callPackage ../development/python-modules/property-manager { };
 
   prophet = callPackage ../development/python-modules/prophet { };
