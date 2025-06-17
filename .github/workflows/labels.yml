@@ -130,8 +130,10 @@ jobs:
 
                   // Instead of checking the boolean artifact.expired, we will give us a minute to
                   // actually download the artifact in the next step and avoid that race condition.
+                  // Older PRs, where the workflow run was already eval.yml, but the artifact was not
+                  // called "comparison", yet, will be skipped as well.
                   log('Artifact expires at', artifact?.expires_at ?? '<not found>')
-                  if (new Date(artifact.expires_at) < new Date(new Date().getTime() + 60 * 1000)) return;
+                  if (new Date(artifact?.expires_at ?? 0) < new Date(new Date().getTime() + 60 * 1000)) return;
 
                   await artifactClient.downloadArtifact(artifact.id, {
                     findBy: {
