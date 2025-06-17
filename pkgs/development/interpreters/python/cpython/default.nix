@@ -12,17 +12,23 @@
   pkg-config,
   python-setup-hook,
 
+  # high level switches
+  withMinimalDeps ? false,
+
   # runtime dependencies
   bzip2,
-  withExpat ? true,
+  withExpat ? !withMinimalDeps,
   expat,
   libffi,
   libuuid,
+  withLibxcrypt ? !withMinimalDeps,
   libxcrypt,
-  withMpdecimal ? true,
+  withMpdecimal ? !withMinimalDeps,
   mpdecimal,
   ncurses,
+  withOpenssl ? !withMinimalDeps,
   openssl,
+  withSqlite ? !withMinimalDeps,
   sqlite,
   xz,
   zlib,
@@ -35,12 +41,12 @@
   # optional dependencies
   bluezSupport ? false,
   bluez,
-  mimetypesSupport ? true,
+  mimetypesSupport ? !withMinimalDeps,
   mailcap,
   tzdata,
-  withGdbm ? !stdenv.hostPlatform.isWindows,
+  withGdbm ? !withMinimalDeps && !stdenv.hostPlatform.isWindows,
   gdbm,
-  withReadline ? !stdenv.hostPlatform.isWindows,
+  withReadline ? !withMinimalDeps && !stdenv.hostPlatform.isWindows,
   readline,
   x11Support ? false,
   tcl,
@@ -63,13 +69,13 @@
   sourceVersion,
   hash,
   passthruFun,
-  stripConfig ? false,
-  stripIdlelib ? false,
-  stripTests ? false,
-  stripTkinter ? false,
-  rebuildBytecode ? true,
+  stripConfig ? withMinimalDeps,
+  stripIdlelib ? withMinimalDeps,
+  stripTests ? withMinimalDeps,
+  stripTkinter ? withMinimalDeps,
+  rebuildBytecode ? !withMinimalDeps,
   stripBytecode ? true,
-  includeSiteCustomize ? true,
+  includeSiteCustomize ? !withMinimalDeps,
   static ? stdenv.hostPlatform.isStatic,
   enableFramework ? false,
   noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch",
@@ -85,7 +91,8 @@
 
   # enabling LTO on 32bit arch causes downstream packages to fail when linking
   enableLTO ?
-    stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.is64bit && stdenv.hostPlatform.isLinux),
+    !withMinimalDeps
+    && (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.is64bit && stdenv.hostPlatform.isLinux)),
 
   # enable asserts to ensure the build remains reproducible
   reproducibleBuild ? false,
@@ -97,7 +104,9 @@
   testers,
 
   # allow pythonMinimal to prevent accidental dependencies it doesn't want
-  allowedReferenceNames ? [ ],
+  # Having this as an option is useful to allow overriding, eg. adding things to
+  # python3Minimal
+  allowedReferenceNames ? if withMinimalDeps then [ "bashNonInteractive" ] else [ ],
 
 }@inputs:
 
@@ -140,12 +149,12 @@ let
     ;
 
   # mixes libc and libxcrypt headers and libs and causes segfaults on importing crypt
-  libxcrypt = if stdenv.hostPlatform.isFreeBSD then null else inputs.libxcrypt;
+  libxcrypt = if stdenv.hostPlatform.isFreeBSD && withMinimalDeps then null else inputs.libxcrypt;
 
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
 
-  tzdataSupport = tzdata != null && passthru.pythonAtLeast "3.9";
+  tzdataSupport = !withMinimalDeps && tzdata != null && passthru.pythonAtLeast "3.9";
 
   passthru =
     let
@@ -223,25 +232,31 @@ let
       ];
 
   buildInputs = lib.filter (p: p != null) (
-    [
+    optionals (!withMinimalDeps) [
       bzip2
       libffi
       libuuid
-      libxcrypt
       ncurses
-      openssl
-      sqlite
       xz
       zlib
     ]
-    ++ optionals (passthru.pythonAtLeast "3.14") [
-      zstd
+    ++ optionals withLibxcrypt [
+      libxcrypt
+    ]
+    ++ optionals withOpenssl [
+      openssl
+    ]
+    ++ optionals withSqlite [
+      sqlite
     ]
     ++ optionals withMpdecimal [
       mpdecimal
     ]
     ++ optionals withExpat [
       expat
+    ]
+    ++ optionals (passthru.pythonAtLeast "3.14") [
+      zstd
     ]
     ++ optionals bluezSupport [
       bluez
@@ -435,7 +450,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
     LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-    LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin && libxcrypt != null) "-lcrypt"}";
+    LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin && withLibxcrypt) "-lcrypt"}";
     NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) (
       {
         "glibc" = "-lgcc_s";
@@ -457,7 +472,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withMpdecimal [
     "--with-system-libmpdec"
   ]
-  ++ optionals (openssl != null) [
+  ++ optionals withOpenssl [
     "--with-openssl=${openssl.dev}"
   ]
   ++ optionals tzdataSupport [
@@ -484,10 +499,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals enableDebug [
     "--with-pydebug"
   ]
-  ++ optionals (sqlite != null) [
+  ++ optionals withSqlite [
     "--enable-loadable-sqlite-extensions"
   ]
-  ++ optionals (libxcrypt != null) [
+  ++ optionals withLibxcrypt [
     "CFLAGS=-I${libxcrypt}/include"
     "LIBS=-L${libxcrypt}/lib"
   ]
@@ -592,7 +607,7 @@ stdenv.mkDerivation (finalAttrs: {
         [
           (placeholder "out")
         ]
-        ++ lib.optional (libxcrypt != null) libxcrypt
+        ++ lib.optional withLibxcrypt libxcrypt
         ++ lib.optional tzdataSupport tzdata
       );
     in
@@ -758,7 +773,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
   disallowedReferences =
-    lib.optionals (openssl != null && !static && !enableFramework) [
+    lib.optionals (withOpenssl && !static && !enableFramework) [
       openssl.dev
     ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
