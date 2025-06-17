@@ -11626,6 +11626,11 @@
     githubId = 110620;
     name = "Jevin Maltais";
   };
+  jf-uu = {
+    github = "jf-uu";
+    githubId = 181011550;
+    name = "jf-uu";
+  };
   jfchevrette = {
     email = "jfchevrette@gmail.com";
     github = "jfchevrette";
