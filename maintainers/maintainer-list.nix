@@ -1648,6 +1648,12 @@
     github = "angaz";
     githubId = 10219618;
   };
+  angelodlfrtr = {
+    name = "Angelo Delefortrie";
+    email = "angelo.delefortrie@gmail.com";
+    github = "angelodlfrtr";
+    githubId = 5405598;
+  };
   angristan = {
     email = "angristan@pm.me";
     github = "angristan";
@@ -11626,6 +11632,13 @@
     githubId = 110620;
     name = "Jevin Maltais";
   };
+  jezcope = {
+    email = "j.cope@erambler.co.uk";
+    github = "jezcope";
+    githubId = 457628;
+    name = "Jez Cope";
+    keys = [ { fingerprint = "D9DA 3E47 E8BD 377D A317  B3D0 9E42 CE07 1C45 59D1"; } ];
+  };
   jfchevrette = {
     email = "jfchevrette@gmail.com";
     github = "jfchevrette";
@@ -20067,6 +20080,12 @@
     github = "PowerUser64";
     githubId = 24578572;
     name = "Blake North";
+  };
+  powwu = {
+    name = "powwu";
+    email = "hello@powwu.sh";
+    github = "powwu";
+    githubId = 20643401;
   };
   poz = {
     name = "Jacek Poziemski";

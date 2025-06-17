@@ -1,7 +1,0 @@
-{
-  "workspace":[
-    "./sub1",
-    "./sub2"
-  ],
-  "vendor": true
-}
