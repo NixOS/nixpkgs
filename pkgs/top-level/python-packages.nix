@@ -11963,6 +11963,8 @@ self: super: with self; {
     callPackage ../development/python-modules/pure-python-adb-homeassistant
       { };
 
+  pure-sasl = callPackage ../development/python-modules/pure-sasl { };
+
   puremagic = callPackage ../development/python-modules/puremagic { };
 
   purepng = callPackage ../development/python-modules/purepng { };
