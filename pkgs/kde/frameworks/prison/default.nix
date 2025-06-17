@@ -8,9 +8,11 @@
 mkKdeDerivation {
   pname = "prison";
 
+  propagatedNativeBuildInputs = [ qtmultimedia ];
+  extraPropagatedBuildInputs = [ qtmultimedia ];
+
   extraBuildInputs = [
     qtdeclarative
-    qtmultimedia
     qrencode
     libdmtx
   ];
