@@ -36,7 +36,7 @@ jobs:
   labels:
     name: label-pr
     runs-on: ubuntu-24.04-arm
-    if: "!contains(github.event.pull_request.title, '[skip treewide]')"
+    if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
     steps:
       - name: Install dependencies
         run: npm install @actions/artifact
