@@ -26444,6 +26444,13 @@
     name = "Volker Diels-Grabsch";
     keys = [ { fingerprint = "A7E6 9C4F 69DC 5D6C FC84  EE34 A29F BD51 5F89 90AF"; } ];
   };
+  void = {
+    email = "hannah@totient.eu";
+    name = "Hannah Izzie Gesser";
+    github = "497a";
+    githubId = 39408844;
+    keys = [ { fingerprint = "AB27 F5D1 136B 20D3 149F  BCC0 0389 4517 31A3 ADDD"; } ];
+  };
   voidless = {
     email = "julius.schmitt@yahoo.de";
     github = "bratorange";
