@@ -2580,13 +2580,6 @@ let
       '';
     });
 
-    proj4 = old.proj4.overrideAttrs (attrs: {
-      preConfigure = ''
-        substituteInPlace configure \
-          --replace "-lsqlite3" "-L${lib.makeLibraryPath [ pkgs.sqlite ]} -lsqlite3"
-      '';
-    });
-
     rrd = old.rrd.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
