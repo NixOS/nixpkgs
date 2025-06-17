@@ -286,7 +286,6 @@ def reexec(
                 NIXOS_REBUILD_ATTR,
                 flake,
                 flake_build_flags | {"no_link": True},
-                quiet=True,
             )
         else:
             build_attr = BuildAttr.from_arg(args.attr, args.file)
@@ -294,7 +293,6 @@ def reexec(
                 NIXOS_REBUILD_ATTR,
                 build_attr,
                 build_flags | {"no_out_link": True},
-                quiet=True,
             )
     except CalledProcessError:
         logger.warning(
@@ -306,7 +304,7 @@ def reexec(
         new = drv / f"bin/{EXECUTABLE}"
         current = Path(argv[0])
         if new != current:
-            logging.debug(
+            logger.debug(
                 "detected newer version of script, re-exec'ing, current=%s, new=%s",
                 current,
                 new,
