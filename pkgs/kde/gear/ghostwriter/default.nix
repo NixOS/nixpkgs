@@ -16,7 +16,12 @@
 mkKdeDerivation {
   pname = "ghostwriter";
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    pkg-config
+    qtwebchannel
+    qtwebengine
+  ];
+
   extraBuildInputs = [
     qtsvg
     qttools

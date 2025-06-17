@@ -16,6 +16,8 @@ mkKdeDerivation rec {
     hash = "sha256-WQoeozREN4GsqUC4OlYTrirt+fYa1yeT90RaJxvTH3I=";
   };
 
+  extraNativeBuildInputs = [ qtwebengine ];
+
   extraBuildInputs = [
     qtsvg
     qtwebengine

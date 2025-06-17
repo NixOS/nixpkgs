@@ -51,7 +51,6 @@ def build(
     attr: str,
     build_attr: BuildAttr,
     build_flags: Args | None = None,
-    quiet: bool = False,
 ) -> Path:
     """Build NixOS attribute using classic Nix.
 
@@ -64,7 +63,7 @@ def build(
         build_attr.to_attr(attr),
         *dict_to_flags(build_flags),
     ]
-    r = run_wrapper(run_args, stdout=PIPE, stderr=PIPE if quiet else None)
+    r = run_wrapper(run_args, stdout=PIPE)
     return Path(r.stdout.strip())
 
 
@@ -72,7 +71,6 @@ def build_flake(
     attr: str,
     flake: Flake,
     flake_build_flags: Args | None = None,
-    quiet: bool = False,
 ) -> Path:
     """Build NixOS attribute using Flakes.
 
@@ -86,7 +84,7 @@ def build_flake(
         flake.to_attr(attr),
         *dict_to_flags(flake_build_flags),
     ]
-    r = run_wrapper(run_args, stdout=PIPE, stderr=PIPE if quiet else None)
+    r = run_wrapper(run_args, stdout=PIPE)
     return Path(r.stdout.strip())
 
 

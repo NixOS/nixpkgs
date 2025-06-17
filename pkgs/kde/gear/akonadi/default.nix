@@ -1,7 +1,6 @@
 {
   lib,
   mkKdeDerivation,
-  qttools,
   accounts-qt,
   kaccounts-integration,
   shared-mime-info,
@@ -36,7 +35,6 @@ mkKdeDerivation {
     ];
 
   extraNativeBuildInputs = [
-    qttools
     shared-mime-info
   ];
 

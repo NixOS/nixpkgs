@@ -94,6 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     kdePackages.wrapQtAppsHook
     wrapGAppsHook3
+
+    kdePackages.qtmultimedia
+    kdePackages.qtnetworkauth
+    kdePackages.qtscxml
+    kdePackages.qtwebengine
   ];
 
   # Based on <https://www.digikam.org/api/index.html#externaldeps>,

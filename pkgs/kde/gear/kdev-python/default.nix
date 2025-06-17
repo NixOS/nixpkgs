@@ -1,4 +1,6 @@
-{ mkKdeDerivation }:
+{
+  mkKdeDerivation,
+}:
 mkKdeDerivation {
   pname = "kdev-python";
 }

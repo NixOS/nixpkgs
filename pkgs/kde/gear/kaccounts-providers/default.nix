@@ -7,7 +7,11 @@
 mkKdeDerivation {
   pname = "kaccounts-providers";
 
-  extraNativeBuildInputs = [ intltool ];
+  extraNativeBuildInputs = [
+    intltool
+    qtwebengine
+  ];
+
   extraBuildInputs = [
     qtdeclarative
     qtwebengine
