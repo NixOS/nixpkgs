@@ -38,7 +38,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--package=oxide-cli"
-    "--package=xtask"
   ];
 
   cargoTestFlags = [
