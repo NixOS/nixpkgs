@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchFromGitHub,
   cmake,
   libtiff,
@@ -8,25 +8,27 @@
   tesseract3,
 }:
 
-stdenv.mkDerivation {
+gccStdenv.mkDerivation {
   pname = "vobsub2srt";
-  version = "unstable-2014-08-17";
+  version = "0-unstable-2017-12-18";
 
   src = fetchFromGitHub {
     owner = "ruediger";
     repo = "VobSub2SRT";
-    rev = "a6abbd61127a6392d420bbbebdf7612608c943c2";
-    sha256 = "sha256-i6V2Owb8GcTcWowgb/BmdupOSFsYiCF2SbC9hXa26uY=";
+    rev = "0ba6e25e078a040195d7295e860cc9064bef7c2c";
+    hash = "sha256-ePqvPSgI9PGE9bymRBGmaa+WcLvJihNLP0N/SU8gQIM=";
   };
-
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [ "-std=c++11" ]);
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [ libtiff ];
+
   propagatedBuildInputs = [ tesseract3 ];
+
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++11" ];
 
   meta = {
     homepage = "https://github.com/ruediger/VobSub2SRT";
