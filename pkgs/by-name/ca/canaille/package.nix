@@ -1,18 +1,17 @@
 {
   lib,
-  python3,
+  python312,
   fetchFromGitLab,
-  fetchpatch,
   openldap,
   nixosTests,
 }:
 
 let
-  python = python3;
+  python = python312;
 in
 python.pkgs.buildPythonApplication rec {
   pname = "canaille";
-  version = "0.0.74";
+  version = "0.0.86";
   pyproject = true;
 
   disabled = python.pythonOlder "3.10";
@@ -21,16 +20,8 @@ python.pkgs.buildPythonApplication rec {
     owner = "yaal";
     repo = "canaille";
     rev = "refs/tags/${version}";
-    hash = "sha256-FL02ADM7rUU43XR71UWr4FLr/NeUau7zRwTMOSFm1T4=";
+    hash = "sha256-5gHCPX724VUdCur2yKOOL/pSkhVAKrWpqSo8UoVjP8o=";
   };
-
-  patches = [
-    # https://gitlab.com/yaal/canaille/-/merge_requests/275
-    (fetchpatch {
-      url = "https://gitlab.com/yaal/canaille/-/commit/1c7fc8b1034a4423f7f46ad8adeced854910b702.patch";
-      hash = "sha256-fu7D010NG7yUChOve7HY3e7mm2c/UGpfcTAiTU8BnGg=";
-    })
-  ];
 
   build-system = with python.pkgs; [
     hatchling
@@ -42,6 +33,7 @@ python.pkgs.buildPythonApplication rec {
     with python.pkgs;
     [
       blinker
+      click
       flask
       flask-caching
       flask-wtf
@@ -76,7 +68,13 @@ python.pkgs.buildPythonApplication rec {
     ++ optional-dependencies.ldap
     ++ optional-dependencies.postgresql
     ++ optional-dependencies.otp
-    ++ optional-dependencies.sms;
+    ++ optional-dependencies.sms
+    ++ optional-dependencies.server;
+
+  disabledTests = [
+    # Tries to use DNS resolution
+    "test_send_new_email_error"
+  ];
 
   postInstall = ''
     mkdir -p $out/etc/schema
@@ -131,7 +129,12 @@ python.pkgs.buildPythonApplication rec {
       qrcode
     ];
     sms = [ smpplib ];
-    server = [ hypercorn ];
+    server = [
+      asgiref
+      hypercorn
+      pydanclick
+      tomlkit
+    ];
   };
 
   passthru = {
