@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "6.2.2501";
+  version = "6.2.2504";
 
   src = fetchFromGitHub {
     owner = "ngsolve";
     repo = "netgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IzYulT3bo7XZiEEy8vNCct0zqHCnbQaH+y4fHMorzZw=";
+    hash = "sha256-N4mmh2H2qvc+3Pa9CHm38arViI76Qvwp8fOVGZbMv1M=";
   };
 
   patches = [
