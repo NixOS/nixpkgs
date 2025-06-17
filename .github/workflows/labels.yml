@@ -105,6 +105,7 @@ jobs:
 
                   log('Last updated at', pull_request.updated_at)
                   if (new Date(pull_request.updated_at) < cutoff) return done()
+                  log('URL', pull_request.html_url)
 
                   const run_id = (await github.rest.actions.listWorkflowRuns({
                     ...context.repo,
@@ -118,7 +119,7 @@ jobs:
 
                   // Newer PRs might not have run Eval to completion, yet. We can skip them, because this
                   // job will be run as part of that Eval run anyway.
-                  log('Last eval run', run_id)
+                  log('Last eval run', run_id ?? '<pending>')
                   if (!run_id) return;
 
                   const artifact = (await github.rest.actions.listWorkflowRunArtifacts({
@@ -129,7 +130,7 @@ jobs:
 
                   // Instead of checking the boolean artifact.expired, we will give us a minute to
                   // actually download the artifact in the next step and avoid that race condition.
-                  log('Artifact expires at', artifact.expires_at)
+                  log('Artifact expires at', artifact?.expires_at ?? '<not found>')
                   if (new Date(artifact.expires_at) < new Date(new Date().getTime() + 60 * 1000)) return;
 
                   await artifactClient.downloadArtifact(artifact.id, {
