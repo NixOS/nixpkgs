@@ -7798,8 +7798,8 @@ self: with self; {
       version = "21.1.17";
       builder = ./builder.sh;
       src = fetchurl {
-        url = "mirror://xorg/individual/xserver/xorg-server-21.1.16.tar.xz";
-        sha256 = "b14a116d2d805debc5b5b2aac505a279e69b217dae2fae2dfcb62400471a9970";
+        url = "mirror://xorg/individual/xserver/xorg-server-21.1.17.tar.xz";
+        sha256 = "1l7cxxk2z8vxz42a3bjm7l2mzhd44kna9lwk5lncvx2m3b143552";
       };
       hardeningDisable = [
         "bindnow"
