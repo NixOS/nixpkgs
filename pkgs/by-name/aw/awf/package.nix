@@ -9,7 +9,7 @@
   libnotify,
   hicolor-icon-theme,
   pkg-config,
-  wrapGAppsHook3
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
