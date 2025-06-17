@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch2,
+  nix-update-script,
   cmake,
   pkg-config,
   git,
@@ -36,12 +37,6 @@
 }:
 
 let
-  # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "18014-27359d3d3";
-  rpcs3Version = "0.0.37-18014-27359d3d3";
-  rpcs3Revision = "27359d3d329693c3f6bab2d480a08603511f2261";
-  rpcs3Hash = "sha256-LI8aPAedhsYLwRuB87Phf9erMkvdrvlIqan648V4+8E=";
-
   inherit (qt6Packages)
     qtbase
     qtmultimedia
@@ -49,16 +44,16 @@ let
     qtwayland
     ;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpcs3";
-  version = rpcs3Version;
+  version = "0.0.37";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
-    rev = rpcs3Revision;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/ve1qe76Rc+mXHemq8DI2U9IP6+tPV5m5SNh/wmppEw=";
     fetchSubmodules = true;
-    hash = rpcs3Hash;
   };
 
   patches = [
@@ -69,11 +64,11 @@ stdenv.mkDerivation {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   preConfigure = ''
     cat > ./rpcs3/git-version.h <<EOF
-    #define RPCS3_GIT_VERSION "${rpcs3GitVersion}"
+    #define RPCS3_GIT_VERSION "nixpkgs"
     #define RPCS3_GIT_FULL_BRANCH "RPCS3/rpcs3/master"
     #define RPCS3_GIT_BRANCH "HEAD"
     #define RPCS3_GIT_VERSION_NO_UPDATE 1
@@ -170,4 +165,4 @@ stdenv.mkDerivation {
     ];
     mainProgram = "rpcs3";
   };
-}
+})
