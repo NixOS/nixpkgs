@@ -10775,6 +10775,8 @@ self: super: with self; {
 
   optuna = callPackage ../development/python-modules/optuna { };
 
+  optuna-dashboard = callPackage ../development/python-modules/optuna-dashboard { };
+
   opuslib = callPackage ../development/python-modules/opuslib { };
 
   opytimark = callPackage ../development/python-modules/opytimark { };
