@@ -7,6 +7,7 @@
   runCommand,
   vimPlugins,
   tree-sitter-grammars,
+  writableTmpDirAsHomeHook,
 }:
 
 self: super:
@@ -88,12 +89,14 @@ in
         in
         runCommand "nvim-treesitter-check-queries"
           {
-            nativeBuildInputs = [ nvimWithAllGrammars ];
+            nativeBuildInputs = [
+              nvimWithAllGrammars
+              writableTmpDirAsHomeHook
+            ];
             CI = true;
           }
           ''
             touch $out
-            export HOME=$(mktemp -d)
             ln -s ${withAllGrammars}/CONTRIBUTING.md .
             export ALLOWED_INSTALLATION_FAILURES=ipkg,norg
 
