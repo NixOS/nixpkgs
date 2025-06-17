@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  breeze-icons,
+  kdePackages,
   hicolor-icon-theme,
   papirus-folders,
   color ? null,
@@ -27,9 +27,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    breeze-icons
+    kdePackages.breeze-icons
     hicolor-icon-theme
   ];
+
+  # breeze-icons propagates qtbase
+  dontWrapQtApps = true;
 
   dontDropIconThemeCache = true;
 
