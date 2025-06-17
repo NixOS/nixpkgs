@@ -36,18 +36,14 @@ def test_build(mock_run: Mock) -> None:
             "foo",
         ],
         stdout=PIPE,
-        stderr=None,
     )
 
     assert n.build(
-        "config.system.build.attr",
-        m.BuildAttr(Path("file"), "preAttr"),
-        quiet=True,
+        "config.system.build.attr", m.BuildAttr(Path("file"), "preAttr")
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
         ["nix-build", Path("file"), "--attr", "preAttr.config.system.build.attr"],
         stdout=PIPE,
-        stderr=PIPE,
     )
 
 
@@ -78,26 +74,6 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
             "foo",
         ],
         stdout=PIPE,
-        stderr=None,
-    )
-
-    assert n.build_flake(
-        "config.system.build.toplevel",
-        flake,
-        None,
-        quiet=True,
-    ) == Path("/path/to/file")
-    mock_run.assert_called_with(
-        [
-            "nix",
-            "--extra-experimental-features",
-            "nix-command flakes",
-            "build",
-            "--print-out-paths",
-            '.#nixosConfigurations."hostname".config.system.build.toplevel',
-        ],
-        stdout=PIPE,
-        stderr=PIPE,
     )
 
 
