@@ -123,18 +123,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoTestFlags =
     [
       "--test integration_tests"
+      "--lib" # unit tests
       # Test targets not included here:
       # - node_compat: there are tons of network access in them and it's not trivial to skip test cases.
       # - specs: this target uses a custom test harness that doesn't implement the --skip flag.
       #   refs:
       #   - https://github.com/denoland/deno/blob/2212d7d814914e43f43dfd945ee24197f50fa6fa/tests/Cargo.toml#L25
       #   - https://github.com/denoland/file_test_runner/blob/9c78319a4e4c6180dde0e9e6c2751017176e65c9/src/collection/mod.rs#L49
-    ]
-    ++ lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)) [
-      # Crashes with SIGSEGV on linux-x86_64
-      # Maybe related to https://github.com/denoland/rusty_v8/issues/1381
-      # or https://github.com/denoland/deno_core/issues/1091?
-      "--lib" # unit tests
     ];
   checkFlags =
     [
@@ -175,6 +170,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "--skip=watcher"
       "--skip=node_unit_tests::_fs_watch_test"
       "--skip=js_unit_tests::fs_events_test"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+      # These tests lead to SIGSEGV on x86_64-linux
+      "--skip=ops::tests::tcp_set_keepalive"
+      "--skip=ops::ipc::impl_::tests::ipc_serialization"
     ];
 
   __darwinAllowLocalNetworking = true;
