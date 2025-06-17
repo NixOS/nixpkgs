@@ -41,7 +41,7 @@ do
     wget -P "$DIR" "ftp.gnu.org/gnu/$PROJECT/$PROJECT-$VERSION-patches/$PROJECT$VERSION_CONDENSED-$i.sig"
     gpg --verify "$DIR/$PROJECT$VERSION_CONDENSED-$i.sig"
     hash=$(nix-hash --flat --type sha256 --base32 "$DIR/$PROJECT$VERSION_CONDENSED-$i")
-    echo "(patch \"$i\" \"$hash\")"	\
+    echo "  (patch \"$i\" \"$hash\")"	\
     >> "$PATCH_LIST"
 
     rm -f "$DIR/$PROJECT$VERSION_CONDENSED-$i"{,.sig}
