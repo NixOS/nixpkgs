@@ -22,6 +22,42 @@ in
   ];
 
   options.services.vikunja = with lib; {
+    auth = {
+      local = {
+        # Note that this is 'enabled' not 'enable' because it's writing the
+        # Vikunja config directly rather than translating from NixOS standard (enable)
+        # to Vikunja config (enabled)
+        enabled = mkEnableOption "local auth";
+      };
+      openid = {
+        # Note that this is 'enabled' not 'enable' because it's writing the
+        # Vikunja config directly rather than translating from NixOS standard (enable)
+        # to Vikunja config (enabled)
+        enabled = mkEnableOption "openid auth";
+        providers = mkOption {
+          type = with types; listOf (submodule {
+            options = {
+              authurl = mkOption {
+                type = str;
+                description = "The auth url to send users to if they want to authenticate using OpenID Connect.";
+              };
+              clientid = mkOption {
+                type = str;
+                description = "The clientID";
+              };
+              clientsecret = mkOption {
+                type = str;
+                description = "The client secret";
+              };
+              name = mkOption {
+                type = str;
+                description = "the display name";
+              };
+            };
+          });
+        };
+      };
+    };
     enable = mkEnableOption "vikunja service";
     package = mkPackageOption pkgs "vikunja" { };
     environmentFiles = mkOption {
@@ -61,6 +97,37 @@ in
       '';
     };
     database = {
+      database = mkOption {
+        type = types.str;
+        default = "vikunja";
+        description = "Database name.";
+      };
+      host = mkOption {
+        type = types.str;
+        default = "localhost";
+        description = "Database host address. Can also be a socket.";
+      };
+      password = mkOption {
+        type = types.str;
+        default = "";
+        description = "The password to use when connecting to the database.";
+      };
+      path = mkOption {
+        type = types.str;
+        default = "/var/lib/vikunja/vikunja.db";
+        description = "Path to the sqlite3 database file.";
+      };
+      sslmode = mkOption {
+        default = "require";
+        description = "Postres-only, SSL mode";
+        example = "require";
+        type = types.enum [
+          "disable"
+          "require"
+          "verify-full"
+          "verify-ca"
+        ];
+      };
       type = mkOption {
         type = types.enum [
           "sqlite"
@@ -71,45 +138,102 @@ in
         default = "sqlite";
         description = "Database engine to use.";
       };
-      host = mkOption {
-        type = types.str;
-        default = "localhost";
-        description = "Database host address. Can also be a socket.";
-      };
       user = mkOption {
         type = types.str;
         default = "vikunja";
         description = "Database user.";
       };
-      database = mkOption {
-        type = types.str;
-        default = "vikunja";
-        description = "Database name.";
+    };
+    mailer = {
+      authtype = mkOption {
+        type = types.enum [
+          "cram-md5"
+          "login"
+          "plain"
+        ];
+        example = "login";
+        default = "plain";
+        description = "SMTP auth type.";
       };
-      path = mkOption {
+      # Note that this is 'enabled' not 'enable' because it's writing the
+      # Vikunja config directly rather than translating from NixOS standard (enable)
+      # to Vikunja config (enabled)
+      enabled = mkEnableOption "vikunja service";
+      fromemail = mkOption {
         type = types.str;
-        default = "/var/lib/vikunja/vikunja.db";
-        description = "Path to the sqlite3 database file.";
+        description = "The from address for sending email";
+      };
+      forcessl = mkEnableOption "By default Vikunja uses starttls, this option forces ssl instead.";
+      host = mkOption {
+        type = types.str;
+        description = "The SMTP host for sending email";
+      };
+      password = mkOption {
+        type = types.str;
+        description = "The SMTP password";
+      };
+      port = mkOption {
+        type = types.int;
+        default = 587;
+        description = "The SMTP port to communicate with the host";
+      };
+      queuelength = mkOption {
+        type = types.int;
+        default = 100;
+        description = "The length of the mail queue";
+      };
+      queuetimeout = mkOption {
+        type = types.int;
+        default = 30;
+        description = "The timeout in seconds after which the current open connection to the mailserver will be closed";
+      };
+      skiptlsverify = mkEnableOption "skip TLS verification";
+      username = mkOption {
+        type = types.str;
+        description = "The SMTP username";
       };
     };
   };
   config = lib.mkIf cfg.enable {
     services.vikunja.settings = {
+      auth = {
+        inherit (cfg.auth)
+          local
+          openid
+          ;
+      };
       database = {
         inherit (cfg.database)
-          type
-          host
-          user
           database
+          host
+          type
           path
+          password
+          sslmode
+          user
+          ;
+      };
+      files = {
+        basepath = "/var/lib/vikunja/files";
+      };
+      mailer = {
+        inherit (cfg.mailer)
+          authtype
+          enabled
+          fromemail
+          forcessl
+          host
+          password
+          port
+          queuelength
+          queuetimeout
+          skiptlsverify
+          username
           ;
       };
       service = {
         interface = ":${toString cfg.port}";
         frontendurl = "${cfg.frontendScheme}://${cfg.frontendHostname}/";
-      };
-      files = {
-        basepath = "/var/lib/vikunja/files";
       };
     };
 
