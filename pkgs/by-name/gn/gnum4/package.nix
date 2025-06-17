@@ -11,15 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnum4";
-  version = "1.4.19";
+  version = "1.4.20";
 
   src = fetchurl {
     url = "mirror://gnu/m4/m4-${version}.tar.bz2";
-    sha256 = "sha256-swapHA/ZO8QoDPwumMt6s5gf91oYe+oyk4EfRSyJqMg=";
+    hash = "sha256-rGmJ7l0q7YFzl4BjDMLOCX4qZUb+uWpKVNs31GoUUuQ=";
   };
 
-  # https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-devel/m4/m4-1.4.19-r1.ebuild
-  patches = lib.optional stdenv.hostPlatform.isLoongArch64 ./loong-fix-build.patch;
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch =
@@ -34,6 +32,10 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   enableParallelBuilding = true;
+
+  # Without the change the build fails on Darwin as https://hydra.nixos.org/build/300264726/nixlog/3/tail:
+  #   clean-temp.c:235:14: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "format" ];
 
   doCheck = false;
 
