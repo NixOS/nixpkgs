@@ -29,24 +29,14 @@
 }:
 
 let
-  sources = import ./sources.nix;
-  srcs = {
-    x86_64-linux = fetchurl {
-      url = sources.amd64_url;
-      hash = sources.amd64_hash;
-    };
-    aarch64-linux = fetchurl {
-      url = sources.arm64_url;
-      hash = sources.arm64_hash;
-    };
-  };
-  src =
-    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  sources = import ./sources.nix { inherit fetchurl; };
+  source =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation {
   pname = "qq";
-  version = sources.version;
-  inherit src;
+  inherit (source) version src;
 
   nativeBuildInputs = [
     autoPatchelfHook
