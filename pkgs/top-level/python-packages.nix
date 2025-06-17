@@ -4870,13 +4870,6 @@ self: super: with self; {
     }
   );
 
-  f3d_egl = toPythonModule (
-    pkgs.f3d_egl.override {
-      withPythonBinding = true;
-      python3Packages = self;
-    }
-  );
-
   f5-icontrol-rest = callPackage ../development/python-modules/f5-icontrol-rest { };
 
   f5-sdk = callPackage ../development/python-modules/f5-sdk { };
@@ -19389,12 +19382,7 @@ self: super: with self; {
 
   vtjp = callPackage ../development/python-modules/vtjp { };
 
-  vtk = toPythonModule (
-    pkgs.vtk_9.override {
-      inherit python;
-      enablePython = true;
-    }
-  );
+  vtk = toPythonModule (pkgs.vtk-full.override { python3Packages = self; });
 
   vttlib = callPackage ../development/python-modules/vttlib { };
 
