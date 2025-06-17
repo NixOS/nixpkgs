@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr-regex";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Anomalocaridid";
     repo = "handlr-regex";
     rev = "v${version}";
-    hash = "sha256-ZQAUqR0u+2kBLGyeT7qTcfwF87LY2qRClZ0T3WH78+w=";
+    hash = "sha256-7psjlu0qyoZYTVwq2JYJJkB76ejlmMtmstDw+liMcj8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mTb4K2/JNoo1A7AyYapgOhz4oOgJrWftdyDnWh4Bgto=";
+  cargoHash = "sha256-a91WaIFBS9Rh4T/dwpLQJMoE604Tj0mVN38RKmNcZU0=";
 
   nativeBuildInputs = [
     installShellFiles
