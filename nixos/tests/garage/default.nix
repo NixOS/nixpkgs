@@ -1,13 +1,9 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
+  runTest,
+  package,
 }:
-with pkgs.lib;
-
 let
   mkNode =
-    package:
     {
       replicationMode,
       publicV6Address ? "::1",
@@ -55,24 +51,22 @@ let
       virtualisation.diskSize = 2 * 1024;
     };
 in
-foldl
-  (
-    matrix: ver:
-    matrix
-    // {
-      "basic${toString ver}" = import ./basic.nix {
-        inherit system pkgs ver;
-        mkNode = mkNode pkgs."garage_${ver}";
-      };
-      "with-3node-replication${toString ver}" = import ./with-3node-replication.nix {
-        inherit system pkgs ver;
-        mkNode = mkNode pkgs."garage_${ver}";
-      };
-    }
-  )
-  { }
-  [
-    "0_8"
-    "0_9"
-    "1_x"
-  ]
+{
+  basic = runTest {
+    imports = [
+      ./basic.nix
+    ];
+    _module.args = {
+      inherit mkNode;
+    };
+  };
+
+  with-3node-replication = runTest {
+    imports = [
+      ./with-3node-replication.nix
+    ];
+    _module.args = {
+      inherit mkNode;
+    };
+  };
+}
