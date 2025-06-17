@@ -14805,6 +14805,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  tinted-nvim = buildVimPlugin {
+    pname = "tinted-nvim";
+    version = "2025-06-10";
+    src = fetchFromGitHub {
+      owner = "tinted-theming";
+      repo = "tinted-nvim";
+      rev = "d3e6d9b0875e60e9aa9d105ff8eb64ee9d599514";
+      sha256 = "08wn9kzxblbvrjnzx5v52lk57av0dbg6jnk581jaiia8z6c5bja2";
+    };
+    meta.homepage = "https://github.com/tinted-theming/tinted-nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   tinted-vim = buildVimPlugin {
     pname = "tinted-vim";
     version = "2025-06-10";
