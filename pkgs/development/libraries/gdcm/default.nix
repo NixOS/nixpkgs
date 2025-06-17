@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
   patches =
     [
       ./add-missing-losslylosslessarray-in-TestTransferSyntax.patch
+      # Fix vtk deprecated api, See https://docs.vtk.org/en/latest/release_details/9.3.html#id13.
+      # Upstream mailing list: https://sourceforge.net/p/gdcm/mailman/message/59197515.
+      ./fix-vtk-deprecated-api.patch
     ]
     ++ lib.optionals (lib.versionOlder vtk.version "9.3") [
       (fetchpatch2 {
