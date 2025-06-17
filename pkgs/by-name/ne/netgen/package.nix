@@ -100,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     imagemagick
     cmake
     python3Packages.pybind11-stubgen
+    python3Packages.pythonImportsCheckHook
   ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
@@ -194,7 +195,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pytest
     python3Packages.pytest-check
     python3Packages.pytest-mpi
-    python3Packages.pythonImportsCheckHook
     mpiCheckPhaseHook
   ];
 
