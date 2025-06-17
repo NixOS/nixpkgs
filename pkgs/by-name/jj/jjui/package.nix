@@ -17,6 +17,8 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-2nUU5rrVWBk+9ljC+OiAVLcRnWghPPfpvq5yoNSRdVk=";
 
+  ldflags = [ "-X main.Version=${finalAttrs.version}" ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
