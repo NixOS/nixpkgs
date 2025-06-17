@@ -4,6 +4,8 @@ from unittest.mock import Mock, patch
 
 import nixos_rebuild.models as m
 
+from .helpers import get_qualified_name
+
 
 def test_build_attr_from_arg() -> None:
     assert m.BuildAttr.from_arg(None, None) == m.BuildAttr("<nixpkgs/nixos>", None)
@@ -26,22 +28,32 @@ def test_build_attr_to_attr() -> None:
     )
 
 
-def test_flake_parse() -> None:
+@patch("platform.node", autospec=True, return_value="hostname")
+def test_flake_parse(mock_node: Mock) -> None:
     assert m.Flake.parse("/path/to/flake#attr") == m.Flake(
         Path("/path/to/flake"), 'nixosConfigurations."attr"'
     )
-    assert m.Flake.parse("/path/ to /flake", lambda: "hostname") == m.Flake(
+    assert m.Flake.parse("/path/ to /flake") == m.Flake(
         Path("/path/ to /flake"), 'nixosConfigurations."hostname"'
     )
-    assert m.Flake.parse("/path/to/flake", lambda: "hostname") == m.Flake(
+    assert m.Flake.parse("/path/to/flake") == m.Flake(
         Path("/path/to/flake"), 'nixosConfigurations."hostname"'
     )
     assert m.Flake.parse("path:/to/flake#attr") == m.Flake(
         "path:/to/flake", 'nixosConfigurations."attr"'
     )
     assert m.Flake.parse("github:user/repo/branch") == m.Flake(
-        "github:user/repo/branch", 'nixosConfigurations."default"'
+        "github:user/repo/branch", 'nixosConfigurations."hostname"'
     )
+    with patch(
+        get_qualified_name(m.run_wrapper, m),
+        autospec=True,
+        return_value=subprocess.CompletedProcess([], 0, stdout="remote\n"),
+    ):
+        target_host = m.Remote("remote", [], None)
+        assert m.Flake.parse("/path/to/flake", target_host) == m.Flake(
+            Path("/path/to/flake"), 'nixosConfigurations."remote"'
+        )
 
 
 def test_flake_to_attr() -> None:
@@ -53,10 +65,8 @@ def test_flake_to_attr() -> None:
     )
 
 
-@patch("platform.node", autospec=True)
+@patch("platform.node", autospec=True, return_value="hostname")
 def test_flake_from_arg(mock_node: Mock) -> None:
-    mock_node.return_value = "hostname"
-
     # Flake string
     assert m.Flake.from_arg("/path/to/flake#attr", None) == m.Flake(
         Path("/path/to/flake"), 'nixosConfigurations."attr"'
