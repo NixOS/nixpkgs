@@ -2523,7 +2523,7 @@ let
 
     Rhtslib = old.Rhtslib.overrideAttrs (attrs: {
       preConfigure = ''
-        substituteInPlace R/zzz.R --replace "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
+        substituteInPlace R/zzz.R --replace-fail "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
       '';
     });
 
@@ -2534,7 +2534,7 @@ let
 
         # during runtime the package directory is not writable as it's in the
         # nix store, so store the jar in the user's cache directory instead
-        substituteInPlace R/connection.R --replace \
+        substituteInPlace R/connection.R --replace-fail \
           'dest_file <- file.path(dest_folder, "h2o.jar")' \
           'dest_file <- file.path("~/.cache/", "h2o.jar")'
       '';
@@ -2674,7 +2674,7 @@ let
     rmarkdown = old.rmarkdown.overrideAttrs (_: {
       preConfigure = ''
         substituteInPlace R/pandoc.R \
-          --replace '"~/opt/pandoc"' '"~/opt/pandoc", "${pkgs.pandoc}/bin"'
+          --replace-fail '"~/opt/pandoc"' '"~/opt/pandoc", "${pkgs.pandoc}/bin"'
       '';
     });
 
@@ -2700,7 +2700,7 @@ let
     tesseract = old.tesseract.overrideAttrs (_: {
       preConfigure = ''
         substituteInPlace configure \
-          --replace 'PKG_CONFIG_NAME="tesseract"' 'PKG_CONFIG_NAME="tesseract lept"'
+          --replace-fail 'PKG_CONFIG_NAME="tesseract"' 'PKG_CONFIG_NAME="tesseract lept"'
       '';
     });
 
