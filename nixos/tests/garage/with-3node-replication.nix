@@ -1,32 +1,28 @@
-args@{ mkNode, ver, ... }:
-(import ../make-test-python.nix (
-  { pkgs, ... }:
-  {
-    name = "garage-3node-replication";
-    meta = {
-      maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
-    };
+{ mkNode, ... }:
+{
+  name = "garage-3node-replication";
 
-    nodes = {
-      node1 = mkNode {
-        replicationMode = "3";
-        publicV6Address = "fc00:1::1";
-      };
-      node2 = mkNode {
-        replicationMode = "3";
-        publicV6Address = "fc00:1::2";
-      };
-      node3 = mkNode {
-        replicationMode = "3";
-        publicV6Address = "fc00:1::3";
-      };
-      node4 = mkNode {
-        replicationMode = "3";
-        publicV6Address = "fc00:1::4";
-      };
+  nodes = {
+    node1 = mkNode {
+      replicationMode = "3";
+      publicV6Address = "fc00:1::1";
     };
+    node2 = mkNode {
+      replicationMode = "3";
+      publicV6Address = "fc00:1::2";
+    };
+    node3 = mkNode {
+      replicationMode = "3";
+      publicV6Address = "fc00:1::3";
+    };
+    node4 = mkNode {
+      replicationMode = "3";
+      publicV6Address = "fc00:1::4";
+    };
+  };
 
-    testScript = ''
+  testScript = # python
+    ''
       from typing import List
       from dataclasses import dataclass
       import re
@@ -68,9 +64,7 @@ args@{ mkNode, ver, ... }:
          machine.succeed(f"garage layout apply --version {version}")
 
       def create_api_key(machine: Machine, key_name: str) -> S3Key:
-         output = machine.succeed(f"garage key ${
-           if ver == "0_8" then "new --name" else "create"
-         } {key_name}")
+         output = machine.succeed(f"garage key create {key_name}")
          m = key_creation_regex.match(output)
          if not m or not m.group('key_id') or not m.group('secret_key'):
             raise ValueError('Cannot parse API key data')
@@ -125,7 +119,7 @@ args@{ mkNode, ver, ... }:
         zones = ["nixcon", "nixcon", "paris_meetup", "fosdem"]
         apply_garage_layout(node1,
         [
-          f'{ndata.node_id} -z {zones[index]} -c ${if ver == "0_8" then "1" else "1G"}'
+          f'{ndata.node_id} -z {zones[index]} -c 1G'
           for index, ndata in enumerate(node_ids.values())
         ])
         # Now Garage is operational.
@@ -133,6 +127,4 @@ args@{ mkNode, ver, ... }:
         for node in nodes:
            test_bucket_over_http(get_machine(node))
     '';
-  }
-))
-  args
+}

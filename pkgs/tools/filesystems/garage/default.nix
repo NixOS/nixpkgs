@@ -92,7 +92,7 @@ let
         "k2v::poll::test_poll_item"
       ];
 
-      passthru.tests = nixosTests.garage;
+      passthru.tests = nixosTests."garage_${lib.versions.major version}";
 
       meta = {
         description = "S3-compatible object store for small self-hosted geo-distributed deployments";

@@ -535,7 +535,10 @@ in
   mimir = runTest ./mimir.nix;
   galene = discoverTests (import ./galene.nix);
   gancio = runTest ./gancio.nix;
-  garage = handleTest ./garage { };
+  garage_1 = import ./garage {
+    inherit runTest;
+    package = pkgs.garage_1_x;
+  };
   gatus = runTest ./gatus.nix;
   getaddrinfo = runTest ./getaddrinfo.nix;
   gemstash = handleTest ./gemstash.nix { };
