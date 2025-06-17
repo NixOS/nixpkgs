@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "c-stdaux";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "c-util";
     repo = "c-stdaux";
     tag = "v${version}";
-    hash = "sha256-MsnuEyVCmOIr/q6I1qyPsNXp48jxIEcXoYLHbOAZtW0=";
+    hash = "sha256-/15lop+WUkTW9v9h7BBdwRSpJgcBXaJNtMM7LXgcQE4=";
   };
 
   nativeBuildInputs = [
