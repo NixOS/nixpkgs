@@ -13,6 +13,7 @@
 
 let
   cfg = config.services.desktopManager.cosmic;
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.cosmic.excludePackages;
   excludedCorePkgs = lib.lists.intersectLists corePkgs config.environment.cosmic.excludePackages;
   # **ONLY ADD PACKAGES WITHOUT WHICH COSMIC CRASHES, NOTHING ELSE**
   corePkgs =
