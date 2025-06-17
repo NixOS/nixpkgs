@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "sarabun";
-  version = "unstable-2018-08-24";
+  version = "0-unstable-2018-08-24";
 
   src = fetchFromGitHub {
     owner = "cadsondemak";
