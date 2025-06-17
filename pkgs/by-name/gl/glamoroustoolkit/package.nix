@@ -17,6 +17,7 @@
   libXi,
   libXrandr,
   libXrender,
+  libxkbcommon,
   libgit2,
   libglvnd,
   libuuid,
@@ -91,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
         libXi
         libXrandr
         libXrender
+        libxkbcommon
         libglvnd
         libuuid
         libxcb
@@ -123,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
         --set-rpath "${libPath}:$out/lib" \
         $out/lib/libPharoVMCore.so \
         $out/lib/libWinit.so \
+        $out/lib/libWinit30.so \
         $out/lib/libPixels.so
       patchelf --set-rpath $out/lib $out/lib/libssl.so
 
