@@ -14641,16 +14641,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  bitcoin-abc = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc {
-    withGui = true;
-    protobuf = protobuf_21;
-  };
-  bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc {
-    mkDerivation = stdenv.mkDerivation;
-    protobuf = protobuf_21;
-    withGui = false;
-  };
-
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
 
   elements = libsForQt5.callPackage ../applications/blockchains/elements {
