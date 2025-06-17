@@ -256,115 +256,117 @@ let
             '';
         }
       );
+    in
 
-      server = stdenv.mkDerivation (
-        common
-        // {
-          pname = "mariadb-server";
+    stdenv.mkDerivation (
+      finalAttrs:
+      common
+      // {
+        pname = "mariadb-server";
 
-          nativeBuildInputs = common.nativeBuildInputs ++ [
-            bison
-            boost.dev
-            flex
+        nativeBuildInputs = common.nativeBuildInputs ++ [
+          bison
+          boost.dev
+          flex
+        ];
+
+        buildInputs =
+          common.buildInputs
+          ++ [
+            bzip2
+            lz4
+            lzo
+            snappy
+            xz
+            zstd
+            cracklib
+            judy
+            libevent
+            libxml2
+          ]
+          ++ lib.optional withNuma numactl
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
+          ++ lib.optional (!stdenv.hostPlatform.isDarwin) mytopEnv
+          ++ lib.optionals withStorageMroonga [
+            kytea
+            libsodium
+            msgpack
+            zeromq
+          ]
+          ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+
+        propagatedBuildInputs = lib.optional withNuma numactl;
+
+        postPatch = ''
+          substituteInPlace scripts/galera_new_cluster.sh \
+            --replace ":-mariadb" ":-mysql"
+        '';
+
+        cmakeFlags =
+          common.cmakeFlags
+          ++ [
+            "-DMYSQL_DATADIR=/var/lib/mysql"
+            "-DENABLED_LOCAL_INFILE=OFF"
+            "-DWITH_READLINE=ON"
+            "-DWITH_EXTRA_CHARSETS=all"
+            "-DWITH_EMBEDDED_SERVER=${if withEmbedded then "ON" else "OFF"}"
+            "-DWITH_UNIT_TESTS=OFF"
+            "-DWITH_WSREP=ON"
+            "-DWITH_INNODB_DISALLOW_WRITES=ON"
+            "-DWITHOUT_EXAMPLE=1"
+            "-DWITHOUT_FEDERATED=1"
+            "-DWITHOUT_TOKUDB=1"
+          ]
+          ++ lib.optionals withNuma [
+            "-DWITH_NUMA=ON"
+          ]
+          ++ lib.optionals (!withStorageMroonga) [
+            "-DWITHOUT_MROONGA=1"
+          ]
+          ++ lib.optionals (!withStorageRocks) [
+            "-DWITHOUT_ROCKSDB=1"
+          ]
+          ++ lib.optionals (!stdenv.hostPlatform.isDarwin && withStorageRocks) [
+            "-DWITH_ROCKSDB_JEMALLOC=ON"
+          ]
+          ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+            "-DWITH_JEMALLOC=yes"
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            "-DPLUGIN_AUTH_PAM=NO"
+            "-DPLUGIN_AUTH_PAM_V1=NO"
+            "-DWITHOUT_OQGRAPH=1"
+            "-DWITHOUT_PLUGIN_S3=1"
           ];
 
-          buildInputs =
-            common.buildInputs
-            ++ [
-              bzip2
-              lz4
-              lzo
-              snappy
-              xz
-              zstd
-              cracklib
-              judy
-              libevent
-              libxml2
-            ]
-            ++ lib.optional withNuma numactl
-            ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
-            ++ lib.optional (!stdenv.hostPlatform.isDarwin) mytopEnv
-            ++ lib.optionals withStorageMroonga [
-              kytea
-              libsodium
-              msgpack
-              zeromq
-            ]
-            ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+        preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+          patchShebangs scripts/mytop.sh
+        '';
 
-          propagatedBuildInputs = lib.optional withNuma numactl;
-
-          postPatch = ''
-            substituteInPlace scripts/galera_new_cluster.sh \
-              --replace ":-mariadb" ":-mysql"
+        postInstall =
+          common.postInstall
+          + ''
+            rm -r "$out"/share/aclocal
+            chmod +x "$out"/bin/wsrep_sst_common
+            rm -f "$out"/bin/{mariadb-client-test,mariadb-test,mysql_client_test,mysqltest}
+          ''
+          + lib.optionalString withStorageMroonga ''
+            mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
+          ''
+          + lib.optionalString (!stdenv.hostPlatform.isDarwin && lib.versionAtLeast common.version "10.4") ''
+            mv "$out"/OFF/suite/plugins/pam/pam_mariadb_mtr.so "$out"/share/pam/lib/security
+            mv "$out"/OFF/suite/plugins/pam/mariadb_mtr "$out"/share/pam/etc/security
+            rm -r "$out"/OFF
           '';
 
-          cmakeFlags =
-            common.cmakeFlags
-            ++ [
-              "-DMYSQL_DATADIR=/var/lib/mysql"
-              "-DENABLED_LOCAL_INFILE=OFF"
-              "-DWITH_READLINE=ON"
-              "-DWITH_EXTRA_CHARSETS=all"
-              "-DWITH_EMBEDDED_SERVER=${if withEmbedded then "ON" else "OFF"}"
-              "-DWITH_UNIT_TESTS=OFF"
-              "-DWITH_WSREP=ON"
-              "-DWITH_INNODB_DISALLOW_WRITES=ON"
-              "-DWITHOUT_EXAMPLE=1"
-              "-DWITHOUT_FEDERATED=1"
-              "-DWITHOUT_TOKUDB=1"
-            ]
-            ++ lib.optionals withNuma [
-              "-DWITH_NUMA=ON"
-            ]
-            ++ lib.optionals (!withStorageMroonga) [
-              "-DWITHOUT_MROONGA=1"
-            ]
-            ++ lib.optionals (!withStorageRocks) [
-              "-DWITHOUT_ROCKSDB=1"
-            ]
-            ++ lib.optionals (!stdenv.hostPlatform.isDarwin && withStorageRocks) [
-              "-DWITH_ROCKSDB_JEMALLOC=ON"
-            ]
-            ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-              "-DWITH_JEMALLOC=yes"
-            ]
-            ++ lib.optionals stdenv.hostPlatform.isDarwin [
-              "-DPLUGIN_AUTH_PAM=NO"
-              "-DPLUGIN_AUTH_PAM_V1=NO"
-              "-DWITHOUT_OQGRAPH=1"
-              "-DWITHOUT_PLUGIN_S3=1"
-            ];
+        CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
 
-          preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-            patchShebangs scripts/mytop.sh
-          '';
-
-          postInstall =
-            common.postInstall
-            + ''
-              rm -r "$out"/share/aclocal
-              chmod +x "$out"/bin/wsrep_sst_common
-              rm -f "$out"/bin/{mariadb-client-test,mariadb-test,mysql_client_test,mysqltest}
-            ''
-            + lib.optionalString withStorageMroonga ''
-              mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
-            ''
-            + lib.optionalString (!stdenv.hostPlatform.isDarwin && lib.versionAtLeast common.version "10.4") ''
-              mv "$out"/OFF/suite/plugins/pam/pam_mariadb_mtr.so "$out"/share/pam/lib/security
-              mv "$out"/OFF/suite/plugins/pam/mariadb_mtr "$out"/share/pam/etc/security
-              rm -r "$out"/OFF
-            '';
-
-          CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
-        }
-      );
-    in
-    server
-    // {
-      inherit client server;
-    };
+        passthru = {
+          inherit client;
+          server = finalAttrs.finalPackage;
+        };
+      }
+    );
 in
 self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
