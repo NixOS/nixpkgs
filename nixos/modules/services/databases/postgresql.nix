@@ -124,7 +124,9 @@ in
         type = types.package;
         example = literalExpression "pkgs.postgresql_15";
         defaultText = literalExpression ''
-          if versionAtLeast config.system.stateVersion "24.11" then
+          if versionAtLeast config.system.stateVersion "25.11" then
+            pkgs.postgresql_17
+          else if versionAtLeast config.system.stateVersion "24.11" then
             pkgs.postgresql_16
           else if versionAtLeast config.system.stateVersion "23.11" then
             pkgs.postgresql_15
@@ -671,7 +673,9 @@ in
           '';
         base =
           # XXX Don't forget to keep `defaultText` of `services.postgresql.package` up to date!
-          if versionAtLeast config.system.stateVersion "24.11" then
+          if versionAtLeast config.system.stateVersion "25.11" then
+            pkgs.postgresql_17
+          else if versionAtLeast config.system.stateVersion "24.11" then
             pkgs.postgresql_16
           else if versionAtLeast config.system.stateVersion "23.11" then
             pkgs.postgresql_15
