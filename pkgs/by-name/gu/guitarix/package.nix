@@ -34,9 +34,15 @@
   sord,
   sratom,
   wafHook,
+  which,
   wrapGAppsHook3,
   zita-convolver,
   zita-resampler,
+
+  enableFaust ? !stdenv.hostPlatform.isLinux, # Compile dsp files with Faust
+  withBluez ? stdenv.hostPlatform.isLinux, # Enable Bluetooth support
+  withZitaConvolver ? stdenv.hostPlatform.isLinux, # Use nixpkgs zita-convolver
+  withZitaResampler ? stdenv.hostPlatform.isLinux, # Use nixpkgs zita-resampler
   optimizationSupport ? false, # Enable support for native CPU extensions
 }:
 
@@ -54,47 +60,53 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/trunk";
 
-  nativeBuildInputs = [
-    gettext
-    hicolor-icon-theme
-    intltool
-    pkg-config
-    python3
-    wafHook
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs =
+    [
+      gettext
+      hicolor-icon-theme
+      intltool
+      pkg-config
+      python3
+      wafHook
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals enableFaust [
+      faust
+      # TODO: See if we can patch out the need for this
+      which
+    ];
 
   # TODO: identify sets of optional dependencies and add corresponding parameters
-  buildInputs = [
-    adwaita-icon-theme
-    avahi
-    bluez
-    boost
-    curl
-    eigen
-    faust
-    fftwFloat
-    glib
-    glib-networking.out
-    glibmm
-    gperf
-    gsettings-desktop-schemas
-    gtk3
-    gtkmm3
-    ladspaH
-    libjack2
-    liblo
-    libsndfile
-    lilv
-    lrdf
-    lv2
-    sassc
-    serd
-    sord
-    sratom
-    zita-convolver
-    zita-resampler
-  ];
+  buildInputs =
+    [
+      avahi
+      boost
+      curl
+      eigen
+      fftwFloat
+      glib
+      glib-networking
+      glibmm
+      gperf
+      adwaita-icon-theme
+      gsettings-desktop-schemas
+      gtk3
+      gtkmm3
+      ladspaH
+      libjack2
+      liblo
+      libsndfile
+      lilv
+      lrdf
+      lv2
+      sassc
+      serd
+      sord
+      sratom
+    ]
+    ++ lib.optional withBluez bluez
+    ++ lib.optional withZitaConvolver zita-convolver
+    ++ lib.optional withZitaResampler zita-resampler;
 
   # There are many bad shebangs which can fail builds.
   # See https://github.com/brummer10/guitarix/issues/97
@@ -102,13 +114,24 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build tools/**
   '';
 
-  wafConfigureFlags = [
-    "--no-font-cache-update"
-    "--shared-lib"
-    "--no-desktop-update"
-    "--enable-nls"
-    "--install-roboto-font"
-  ] ++ lib.optional optimizationSupport "--optimization";
+  postPatch = lib.optionalString enableFaust ''
+    # Attempt to build with unsupported Faust versionso
+    sed -ie "s/check_in_faust_version =.*/check_in_faust_version = '${faust.version}'/" wscript
+  '';
+
+  wafConfigureFlags =
+    [
+      "--no-font-cache-update"
+      "--shared-lib"
+      "--no-desktop-update"
+      "--enable-nls"
+      "--install-roboto-font"
+    ]
+    ++ lib.optional (!enableFaust) "--no-faust"
+    ++ lib.optional (!withBluez) "--no-bluez"
+    ++ lib.optional (!withZitaConvolver) "--includeconvolver"
+    ++ lib.optional (!withZitaResampler) "--includeresampler"
+    ++ lib.optional optimizationSupport "--optimization";
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
@@ -117,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/brummer10/guitarix";
     license = lib.licenses.gpl3Plus;
     mainProgram = "guitarix";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       astsmtl
       lord-valen
