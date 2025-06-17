@@ -39,6 +39,7 @@ mapAliases (
     airline = vim-airline;
     alternative = a-vim; # backwards compat, added 2014-10-21
     bats = bats-vim;
+    blueballs-neovim = throw "`blueballs-neovim` has been removed"; # added 2025-06-17
     BufOnly = BufOnly-vim;
     calendar = calendar-vim;
     coffee-script = vim-coffee-script;

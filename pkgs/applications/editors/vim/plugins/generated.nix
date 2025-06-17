@@ -1661,19 +1661,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  blueballs-neovim = buildVimPlugin {
-    pname = "blueballs-neovim";
-    version = "2021-11-28";
-    src = fetchFromGitHub {
-      owner = "blueballs-theme";
-      repo = "blueballs-neovim";
-      rev = "6201c1bf272bd3d8516a68579f5ead8ac5ab95b0";
-      sha256 = "1k9fh5r64csp1xxr647s3rd67h1ay36y57afkp67xgv7mlk17cv5";
-    };
-    meta.homepage = "https://github.com/blueballs-theme/blueballs-neovim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   bluloco-nvim = buildVimPlugin {
     pname = "bluloco.nvim";
     version = "2025-06-11";
