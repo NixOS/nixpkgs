@@ -162,9 +162,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "--skip=init::init_subcommand_serve"
       "--skip=serve::deno_serve_parallel"
       "--skip=js_unit_tests::stat_test" # timing-sensitive
+      "--skip=repl::pty_complete_imports"
+      "--skip=repl::pty_complete_expression"
 
       # Test hangs, needs investigation
       "--skip=repl::pty_complete_imports_no_panic_empty_specifier"
+
+      # Use of VSOCK, might not be available on all platforms
+      "--skip=js_unit_tests::serve_test"
+      "--skip=js_unit_tests::fetch_test"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Expects specific shared libraries from macOS to be linked
