@@ -166,7 +166,7 @@ jobs:
 
                   const maintainers = new Set(Object.keys(
                     JSON.parse(await readFile(`${pull_request.number}/maintainers.json`, 'utf-8'))
-                  ))
+                  ).map(m => Number.parseInt(m, 10)))
 
                   // And the labels that should be there
                   const after = JSON.parse(await readFile(`${pull_request.number}/changed-paths.json`, 'utf-8')).labels
