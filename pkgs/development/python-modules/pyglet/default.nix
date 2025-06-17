@@ -17,6 +17,7 @@
   ffmpeg-full,
   openal,
   libpulseaudio,
+  harfbuzz,
   mesa,
 }:
 
@@ -78,6 +79,8 @@ buildPythonPackage rec {
                   path = '${xorg.libXinerama}/lib/libXinerama${ext}'
               elif name == 'Xxf86vm':
                   path = '${xorg.libXxf86vm}/lib/libXxf86vm${ext}'
+              elif name == 'harfbuzz':
+                  path = '${harfbuzz}/lib/libharfbuzz${ext}'
               if path is not None:
                   return ctypes.cdll.LoadLibrary(path)
           raise Exception("Could not load library {}".format(names))
