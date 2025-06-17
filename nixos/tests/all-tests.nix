@@ -536,7 +536,11 @@ in
   gancio = handleTest ./gancio.nix { };
   garage_1 = import ./garage {
     inherit runTest;
-    package = pkgs.garage_1_x;
+    package = pkgs.garage_1;
+  };
+  garage_2 = import ./garage {
+    inherit runTest;
+    package = pkgs.garage_2;
   };
   gatus = runTest ./gatus.nix;
   gemstash = handleTest ./gemstash.nix { };

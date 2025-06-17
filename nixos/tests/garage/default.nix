@@ -5,8 +5,8 @@
 let
   mkNode =
     {
-      replicationMode,
       publicV6Address ? "::1",
+      extraSettings ? { },
     }:
     { pkgs, ... }:
     {
@@ -26,8 +26,6 @@ let
         enable = true;
         inherit package;
         settings = {
-          replication_mode = replicationMode;
-
           rpc_bind_addr = "[::]:3901";
           rpc_public_addr = "[${publicV6Address}]:3901";
           rpc_secret = "5c1915fa04d0b6739675c61bf5907eb0fe3d9c69850c83820f51b4d25d13868c";
@@ -43,7 +41,7 @@ let
             root_domain = ".web.garage";
             index = "index.html";
           };
-        };
+        } // extraSettings;
       };
       environment.systemPackages = [ pkgs.minio-client ];
 
@@ -54,19 +52,21 @@ in
 {
   basic = runTest {
     imports = [
+      ./common.nix
       ./basic.nix
     ];
     _module.args = {
-      inherit mkNode;
+      inherit mkNode package;
     };
   };
 
   with-3node-replication = runTest {
     imports = [
+      ./common.nix
       ./with-3node-replication.nix
     ];
     _module.args = {
-      inherit mkNode;
+      inherit mkNode package;
     };
   };
 }
