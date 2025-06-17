@@ -7518,7 +7518,7 @@ self: with self; {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "xorg-server";
-      version = "21.1.16";
+      version = "21.1.17";
       builder = ./builder.sh;
       src = fetchurl {
         url = "mirror://xorg/individual/xserver/xorg-server-21.1.16.tar.xz";
