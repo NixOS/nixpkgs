@@ -14,6 +14,10 @@ let
     inherit openssl;
     python = python3;
   };
+
+  gypPatches = callPackage ./gyp-patches.nix {
+    patch_tools = false;
+  };
 in
 buildNodejs {
   inherit enableNpm;
@@ -44,6 +48,7 @@ buildNodejs {
         hash = "sha256-hSTLljmVzYmc3WAVeRq9EPYluXGXFeWVXkykufGQPVw=";
       })
     ]
+    ++ gypPatches
     ++ [
       ./configure-armv6-vfpv2.patch
       ./disable-darwin-v8-system-instrumentation-node19.patch
@@ -57,16 +62,6 @@ buildNodejs {
         url = "https://github.com/nodejs/node/commit/9aa57bf8dab2dbfb8b6974fe71d5dbe6daf66244.patch?full_index=1";
         hash = "sha256-k3h8mPgvaIYGAkGmaL+ix7kUnyLw4/PF7wXMAWrPMXo=";
         revert = true;
-      })
-      # Fixes builds with Nix sandbox on Darwin for gyp.
-      # See https://github.com/NixOS/nixpkgs/issues/261820
-      # and https://github.com/nodejs/gyp-next/pull/216
-      (fetchpatch2 {
-        name = "gyp-darwin-sandbox.patch";
-        url = "https://github.com/nodejs/gyp-next/commit/706d04aba5bd18f311dc56f84720e99f64c73466.patch?full_index=1";
-        hash = "sha256-1iyeeAprmWpmLafvOOXW45iZ4jWFSloWJxQ0reAKBOo=";
-        stripLen = 1;
-        extraPrefix = "deps/npm/node_modules/node-gyp/gyp/";
       })
     ];
 }
