@@ -104,10 +104,5 @@ ecmHostPathHook() {
             break
         fi
     done
-
-    if [ -d "$1/share/dbus-1" ]
-    then
-        appendToVar propagatedUserEnvPkgs "$1"
-    fi
 }
 addEnvHooks "$hostOffset" ecmHostPathHook
