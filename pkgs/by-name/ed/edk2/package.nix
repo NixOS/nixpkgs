@@ -120,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -vp $out
     mv -v BaseTools $out
     mv -v edksetup.sh $out
@@ -128,6 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
       chmod +x "$i"
       patchShebangs --build "$i"
     done
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
