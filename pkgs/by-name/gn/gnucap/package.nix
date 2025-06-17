@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
   ];
+
   buildInputs = [
     readline
     termcap
@@ -75,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Gnu Circuit Analysis Package";
     longDescription = ''
       Gnucap is a modern general purpose circuit simulator with several advantages over Spice derivatives.
@@ -83,10 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.gnucap.org/";
     changelog = "https://git.savannah.gnu.org/gitweb/?p=gnucap.git;a=blob;f=NEWS";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Relies on LD_LIBRARY_PATH
-    maintainers = [ maintainers.raboof ];
+    maintainers = [ lib.maintainers.raboof ];
     mainProgram = "gnucap";
   };
 })
