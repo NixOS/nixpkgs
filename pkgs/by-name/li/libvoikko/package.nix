@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvoikko";
-  version = "4.3.2";
+  version = "4.3.3";
 
   src = fetchFromGitHub {
     owner = "voikko";
     repo = "corevoikko";
     tag = "rel-libvoikko-${finalAttrs.version}";
-    hash = "sha256-0MIQ54dCxyAfdgYWmmTVF+Yfa15K2sjJyP1JNxwHP2M=";
+    hash = "sha256-iWBIXAJKzjSP5mEBSfI+uZl0b2wRsjrYfdX2cHF/uuk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libvoikko";
