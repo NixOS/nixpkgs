@@ -7,7 +7,7 @@ name: "Label PR"
 
 on:
   schedule:
-    - cron: '37 * * * *'
+    - cron: '07,17,27,37,47,57 * * * *'
   workflow_call:
   workflow_dispatch:
     inputs:
@@ -36,7 +36,7 @@ jobs:
   labels:
     name: label-pr
     runs-on: ubuntu-24.04-arm
-    if: "!contains(github.event.pull_request.title, '[skip treewide]')"
+    if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
     steps:
       - name: Install dependencies
         run: npm install @actions/artifact
@@ -105,6 +105,7 @@ jobs:
 
                   log('Last updated at', pull_request.updated_at)
                   if (new Date(pull_request.updated_at) < cutoff) return done()
+                  log('URL', pull_request.html_url)
 
                   const run_id = (await github.rest.actions.listWorkflowRuns({
                     ...context.repo,
@@ -118,7 +119,7 @@ jobs:
 
                   // Newer PRs might not have run Eval to completion, yet. We can skip them, because this
                   // job will be run as part of that Eval run anyway.
-                  log('Last eval run', run_id)
+                  log('Last eval run', run_id ?? '<pending>')
                   if (!run_id) return;
 
                   const artifact = (await github.rest.actions.listWorkflowRunArtifacts({
@@ -129,8 +130,10 @@ jobs:
 
                   // Instead of checking the boolean artifact.expired, we will give us a minute to
                   // actually download the artifact in the next step and avoid that race condition.
-                  log('Artifact expires at', artifact.expires_at)
-                  if (new Date(artifact.expires_at) < new Date(new Date().getTime() + 60 * 1000)) return;
+                  // Older PRs, where the workflow run was already eval.yml, but the artifact was not
+                  // called "comparison", yet, will be skipped as well.
+                  log('Artifact expires at', artifact?.expires_at ?? '<not found>')
+                  if (new Date(artifact?.expires_at ?? 0) < new Date(new Date().getTime() + 60 * 1000)) return;
 
                   await artifactClient.downloadArtifact(artifact.id, {
                     findBy: {
@@ -163,7 +166,7 @@ jobs:
 
                   const maintainers = new Set(Object.keys(
                     JSON.parse(await readFile(`${pull_request.number}/maintainers.json`, 'utf-8'))
-                  ))
+                  ).map(m => Number.parseInt(m, 10)))
 
                   // And the labels that should be there
                   const after = JSON.parse(await readFile(`${pull_request.number}/changed-paths.json`, 'utf-8')).labels
