@@ -59,6 +59,12 @@ jobs:
 
             const artifactClient = new DefaultArtifactClient()
 
+            const stats = {
+              prs: 0,
+              requests: 0,
+              artifacts: 0
+            }
+
             // Rate-Limiting and Throttling, see for details:
             //   https://github.com/octokit/octokit.js/issues/1069#throttling
             //   https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api
@@ -74,6 +80,7 @@ jobs:
             // Pause between mutative requests
             const writeLimits = new Bottleneck({ minTime: 1000 }).chain(allLimits)
             github.hook.wrap('request', async (request, options) => {
+              stats.requests++
               if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method))
                 return writeLimits.schedule(request.bind(null, options))
               else
@@ -117,7 +124,7 @@ jobs:
               base: context.payload.pull_request.base.ref
             }
 
-            await github.paginate(
+            const prs = await github.paginate(
               github.rest.pulls.list,
               {
                 ...context.repo,
@@ -126,7 +133,7 @@ jobs:
                 direction: 'desc',
                 ...prEventCondition
               },
-              async (response, done) => (await Promise.allSettled(response.data.map(async (pull_request) => {
+              (response, done) => response.data.map(async (pull_request) => {
                 try {
                   const log = (k,v,skip) => {
                     core.info(`PR #${pull_request.number} - ${k}: ${v}` + (skip ? ' (skipped)' : ''))
@@ -135,6 +142,7 @@ jobs:
 
                   if (log('Last updated at', pull_request.updated_at, new Date(pull_request.updated_at) < cutoff))
                     return done()
+                  stats.prs++
                   log('URL', pull_request.html_url)
 
                   const run_id = (await github.rest.actions.listWorkflowRuns({
@@ -165,6 +173,7 @@ jobs:
                   const expired = new Date(artifact?.expires_at ?? 0) < new Date(new Date().getTime() + 60 * 1000)
                   if (log('Artifact expires at', artifact?.expires_at ?? '<not found>', expired))
                     return;
+                  stats.artifacts++
 
                   await artifactClient.downloadArtifact(artifact.id, {
                     findBy: {
@@ -226,10 +235,14 @@ jobs:
                 } catch (cause) {
                   throw new Error(`Labeling PR #${pull_request.number} failed.`, { cause })
                 }
-              })))
+              })
+            );
+
+            (await Promise.allSettled(prs.flat()))
               .filter(({ status }) => status == 'rejected')
               .map(({ reason }) => core.setFailed(`${reason.message}\n${reason.cause.stack}`))
-            )
+
+            core.notice(`Processed ${stats.prs} PRs, made ${stats.requests + stats.artifacts} API requests and downloaded ${stats.artifacts} artifacts.`)
 
       - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
         name: Labels from touched files
