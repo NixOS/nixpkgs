@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyahocorasick";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "WojciechMula";
     repo = "pyahocorasick";
-    tag = version;
-    hash = "sha256-SCIgu0uEjiSUiIP0WesJG+y+3ZqFBfI5PdgUzviOVrs=";
+    tag = "v${version}";
+    hash = "sha256-lFJhHDN9QAKw5dqzgjRxcs+7+LuTqP9qQ68B5LlCNmU=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
       key strings occurrences at once in some input text.
     '';
     homepage = "https://github.com/WojciechMula/pyahocorasick";
-    changelog = "https://github.com/WojciechMula/pyahocorasick/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/WojciechMula/pyahocorasick/blob/${src.tag}/CHANGELOG.rst";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
