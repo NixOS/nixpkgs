@@ -39,7 +39,7 @@ jobs:
     if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
     steps:
       - name: Install dependencies
-        run: npm install @actions/artifact
+        run: npm install @actions/artifact bottleneck
 
       - name: Log current API rate limits
         env:
@@ -52,11 +52,33 @@ jobs:
           UPDATED_WITHIN: ${{ inputs.updatedWithin }}
         with:
           script: |
+            const Bottleneck = require('bottleneck')
             const path = require('node:path')
             const { DefaultArtifactClient } = require('@actions/artifact')
             const { readFile } = require('node:fs/promises')
 
             const artifactClient = new DefaultArtifactClient()
+
+            // Rate-Limiting and Throttling, see for details:
+            //   https://github.com/octokit/octokit.js/issues/1069#throttling
+            //   https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api
+            const allLimits = new Bottleneck({
+              // Avoid concurrent requests
+              maxConcurrent: 1,
+              // Hourly limit is at 5000, but other jobs need some, too!
+              // https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
+              reservoir: 1000,
+              reservoirRefreshAmount: 1000,
+              reservoirRefreshInterval: 60 * 60 * 1000
+            })
+            // Pause between mutative requests
+            const writeLimits = new Bottleneck({ minTime: 1000 }).chain(allLimits)
+            github.hook.wrap('request', async (request, options) => {
+              if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method))
+                return writeLimits.schedule(request.bind(null, options))
+              else
+                return allLimits.schedule(request.bind(null, options))
+            })
 
             if (process.env.UPDATED_WITHIN && !/^\d+$/.test(process.env.UPDATED_WITHIN))
               throw new Error('Please enter "updated within" as integer in hours.')
