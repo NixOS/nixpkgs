@@ -18827,6 +18827,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-moonfly-colors = buildVimPlugin {
+    pname = "vim-moonfly-colors";
+    version = "2025-05-28";
+    src = fetchFromGitHub {
+      owner = "bluz71";
+      repo = "vim-moonfly-colors";
+      rev = "ff822100c5d268e0db79e8e725cbd3ade3470de3";
+      sha256 = "14ffclg7yjkyw05bdqwc7rmzf195vjswfpmcfi7sd85rr4d3midz";
+    };
+    meta.homepage = "https://github.com/bluz71/vim-moonfly-colors/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-move = buildVimPlugin {
     pname = "vim-move";
     version = "2023-10-08";
