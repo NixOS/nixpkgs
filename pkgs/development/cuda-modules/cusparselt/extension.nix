@@ -1,11 +1,9 @@
 # Support matrix can be found at
 # https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-880/support-matrix/index.html
 {
+  cudaLib,
   lib,
-  stdenv,
-  cudaMajorMinorVersion,
-  flags,
-  mkVersionedPackageName,
+  redistSystem,
 }:
 let
   inherit (lib)
@@ -14,8 +12,6 @@ let
     modules
     trivial
     ;
-
-  inherit (stdenv) hostPlatform;
 
   redistName = "cusparselt";
   pname = "libcusparse_lt";
@@ -54,17 +50,12 @@ let
       releaseGrabber
     ]) cusparseltVersions;
 
-  # A release is supported if it has a libPath that matches our CUDA version for our platform.
-  # LibPath are not constant across the same release -- one platform may support fewer
-  # CUDA versions than another.
-  # redistArch :: String
-  redistArch = flags.getRedistArch hostPlatform.system;
   # platformIsSupported :: Manifests -> Boolean
   platformIsSupported =
     { feature, redistrib, ... }:
     (attrsets.attrByPath [
       pname
-      redistArch
+      redistSystem
     ] null feature) != null;
 
   # TODO(@connorbaker): With an auxiliary file keeping track of the CUDA versions each release supports,
@@ -77,7 +68,8 @@ let
   # Compute versioned attribute name to be used in this package set
   # Patch version changes should not break the build, so we only use major and minor
   # computeName :: RedistribRelease -> String
-  computeName = { version, ... }: mkVersionedPackageName redistName version;
+  computeName =
+    { version, ... }: cudaLib.mkVersionedName redistName (lib.versions.majorMinor version);
 in
 final: _:
 let
