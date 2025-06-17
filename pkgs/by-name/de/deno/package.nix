@@ -162,6 +162,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       # Test hangs, needs investigation
       "--skip=repl::pty_complete_imports_no_panic_empty_specifier"
+
+      # Use of VSOCK, might not be available on all platforms
+      "--skip=js_unit_tests::serve_test"
+      "--skip=js_unit_tests::fetch_test"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Expects specific shared libraries from macOS to be linked
