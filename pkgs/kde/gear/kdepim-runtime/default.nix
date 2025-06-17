@@ -18,7 +18,9 @@ mkKdeDerivation {
     pkg-config
     shared-mime-info
     libxslt
+    qtnetworkauth
   ];
+
   # FIXME: libkolabxml
   extraBuildInputs = [
     qtnetworkauth

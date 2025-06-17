@@ -9,6 +9,12 @@
 mkKdeDerivation {
   pname = "arianna";
 
+  extraNativeBuildInputs = [
+    qthttpserver
+    qtwebchannel
+    qtwebengine
+  ];
+
   extraBuildInputs = [
     qthttpserver
     qtsvg
@@ -16,5 +22,6 @@ mkKdeDerivation {
     qtwebengine
     kitemmodels
   ];
+
   meta.mainProgram = "arianna";
 }

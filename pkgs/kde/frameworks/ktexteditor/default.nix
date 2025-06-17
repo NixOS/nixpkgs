@@ -7,6 +7,8 @@
 mkKdeDerivation {
   pname = "ktexteditor";
 
+  extraNativeBuildInputs = [ qtspeech ];
+
   extraBuildInputs = [
     qtdeclarative
     qtspeech
