@@ -1944,6 +1944,10 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    tergo = old.tergo.overrideAttrs (attrs: {
+      patchPhase = "patchShebangs configure";
+    });
+
     luajr = old.luajr.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
       postPatch = "patchShebangs configure";
