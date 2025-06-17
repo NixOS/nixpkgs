@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   git,
@@ -36,10 +37,10 @@
 
 let
   # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "17736-c86a25079";
-  rpcs3Version = "0.0.36-17736-c86a25079";
-  rpcs3Revision = "c86a25079518032d73395a79979970acb2581a91";
-  rpcs3Hash = "sha256-e+mT3qn1oz1fh2bqu5YM+m774Can34If57Kd1T1EGbk=";
+  rpcs3GitVersion = "18014-27359d3d3";
+  rpcs3Version = "0.0.37-18014-27359d3d3";
+  rpcs3Revision = "27359d3d329693c3f6bab2d480a08603511f2261";
+  rpcs3Hash = "sha256-LI8aPAedhsYLwRuB87Phf9erMkvdrvlIqan648V4+8E=";
 
   inherit (qt6Packages)
     qtbase
@@ -61,11 +62,11 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    # Modified from https://github.com/RPCS3/rpcs3/pull/17009; doesn't apply cleanly due to intermediate commits
-    ./fix-qt6.9-compilation.patch
-
-    # https://github.com/RPCS3/rpcs3/pull/17246
-    ./0001-cmake-add-option-to-use-system-cubeb.patch
+    (fetchpatch2 {
+      # https://github.com/RPCS3/rpcs3/pull/17316
+      url = "https://github.com/RPCS3/rpcs3/commit/bad6e992586264344ee1a3943423863d2bd39b45.patch?full_index=1";
+      hash = "sha256-rSyA1jcmRiV6m8rPKqTnDFuBh9WYFTGmyTSU2qrd+Go=";
+    })
   ];
 
   passthru.updateScript = ./update.sh;
