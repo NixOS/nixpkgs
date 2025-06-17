@@ -128,8 +128,9 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      fee1-dead
       bot-wxt1221
+      fee1-dead
+      prince213
     ];
   };
 }
