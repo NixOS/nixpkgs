@@ -1,0 +1,49 @@
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  lib,
+  packaging,
+  pan-python,
+  poetry-core,
+  python3Packages,
+}:
+
+buildPythonPackage rec {
+  pname = "pan-os-python";
+  version = "1.12.3";
+  format = "pyproject";
+
+  src = fetchPypi {
+    pname = "pan_os_python";
+    inherit version;
+    hash = "sha256-b3jHu//GX031UbApDzYjCUXpI5MOdHwk9mXVymsFttk=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'poetry.masonry.api' 'poetry.core.masonry.api' \
+      --replace 'poetry>=0.12' 'poetry-core' \
+      --replace 'pan-python = "^0.17.0"' 'pan-python = "^0.25.0"'
+    substituteInPlace panos/__init__.py \
+      --replace "from distutils.version import LooseVersion" "from packaging.version import Version as LooseVersion"
+  '';
+
+  propagatedBuildInputs = [
+    packaging
+    pan-python
+  ];
+
+  buildInputs = [
+    poetry-core
+  ];
+
+  pythonImportsCheck = [ "panos" ];
+
+  meta = {
+    description = "Palo Alto Networks PAN-OS SDK for Python";
+    homepage = "https://github.com/PaloAltoNetworks/pan-os-python";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ jherland ];
+  };
+}
