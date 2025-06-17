@@ -89,8 +89,8 @@ let
         mktplcRef = {
           publisher = "42Crunch";
           name = "vscode-openapi";
-          version = "4.34.0";
-          hash = "sha256-iGVXWKa7xX4WrUeta8ofsXWHQSlxpv8289R9iFdPaII=";
+          version = "4.35.0";
+          hash = "sha256-wpWPT8BW2GPo2SCzM+l1HTpiXMTnbDOc9Oj9wDT/o/8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
@@ -685,8 +685,8 @@ let
         mktplcRef = {
           name = "markdown-preview-github-styles";
           publisher = "bierner";
-          version = "2.1.0";
-          hash = "sha256-6Gs05RcYbeKBCi67K33KIpL0aGLGykYgyy3IPlx7ybo=";
+          version = "2.2.0";
+          hash = "sha256-Jg8XpMoSVZA/VpQhLY3bmmG9pb0XL2CRlhlemcWvzSg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/bierner.markdown-preview-github-styles/changelog";
@@ -1416,8 +1416,8 @@ let
         mktplcRef = {
           name = "profiler-php-vscode";
           publisher = "devsense";
-          version = "1.58.17223";
-          hash = "sha256-LC/I/r7ZPOZJ21eGPKLOZEtiKXeIIggAaE8fSKHnTjg=";
+          version = "1.59.17478";
+          hash = "sha256-rFgB+gR9l/Y//6q1j6Wo6GAKoEwhR4QVljUKymOKdJ0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.profiler-php-vscode/changelog";
@@ -4270,8 +4270,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.51.0";
-          hash = "sha256-yLSOLVxulSH4b6EitMyws3FvKub/KXZHuIBGfri9thw=";
+          version = "1.52.0";
+          hash = "sha256-oF/NNP8PfzwQRYxV1rNgcWX6hlZasxppxa0AphQDSVg=";
         };
         meta = {
           license = lib.licenses.asl20;
@@ -4372,8 +4372,8 @@ let
         mktplcRef = {
           publisher = "shopify";
           name = "ruby-lsp";
-          version = "0.9.26";
-          hash = "sha256-DKtrXdCRLZn7GzOGkp3mrH5Y5me5cE9NqpWTWCv8ZqY=";
+          version = "0.9.28";
+          hash = "sha256-VJzj6a4CkZDoHGLds4qTkAJsccTFa9QWLIF7N4cDWp4=";
         };
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";
