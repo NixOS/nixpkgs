@@ -13,6 +13,7 @@
   glib,
   glib-networking,
   glibmm,
+  gperf,
   adwaita-icon-theme,
   gsettings-desktop-schemas,
   gtk3,
@@ -21,6 +22,7 @@
   intltool,
   ladspaH,
   libjack2,
+  liblo,
   libsndfile,
   lilv,
   lrdf,
@@ -66,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
+  # TODO: identify sets of optional dependencies and add corresponding parameters
   buildInputs = [
     avahi
     bluez
@@ -77,12 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking.out
     glibmm
+    gperf
     adwaita-icon-theme
     gsettings-desktop-schemas
     gtk3
     gtkmm3
     ladspaH
     libjack2
+    liblo
     libsndfile
     lilv
     lrdf
@@ -94,6 +99,12 @@ stdenv.mkDerivation (finalAttrs: {
     zita-convolver
     zita-resampler
   ];
+
+  # There are many bad shebangs which can fail builds.
+  # See https://github.com/brummer10/guitarix/issues/97
+  prePatch = ''
+    patchShebangs --build tools/**
+  '';
 
   wafConfigureFlags = [
     "--no-font-cache-update"
