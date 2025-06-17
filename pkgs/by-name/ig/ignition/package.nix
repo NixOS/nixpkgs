@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ignition";
-  version = "2.1.1";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "flattool";
