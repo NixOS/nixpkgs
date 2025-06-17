@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $out/Applications/netgen.app/Contents/{MacOS,Resouces}
       substituteInPlace $out/Info.plist --replace-fail "Netgen1" "netgen"
       mv $out/Info.plist $out/Applications/netgen.app/Contents
-      mv $out/Netgen.icns $out/Applications/netgen.app/Contents/Resouces
+      mv $out/Netgen.icns $out/Applications/netgen.app/Contents/Resources
       ln -s $out/bin/netgen $out/Applications/netgen.app/Contents/MacOS/netgen
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
