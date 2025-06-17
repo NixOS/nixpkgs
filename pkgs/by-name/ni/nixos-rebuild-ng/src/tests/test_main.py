@@ -143,7 +143,6 @@ def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -
                 nr.NIXOS_REBUILD_ATTR,
                 nr.models.BuildAttr(ANY, ANY),
                 {"build": True, "no_out_link": True},
-                quiet=True,
             )
         ]
     )
@@ -185,10 +184,9 @@ def test_reexec_flake(
 
     nr.reexec(argv, args, {"build": True}, {"flake": True})
     mock_build.assert_called_once_with(
-        "config.system.build.nixos-rebuild",
+        nr.NIXOS_REBUILD_ATTR,
         nr.models.Flake(ANY, ANY),
         {"flake": True, "no_link": True},
-        quiet=True,
     )
     # do not exec if there is no new version
     mock_execve.assert_not_called()
@@ -268,7 +266,6 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
                 ],
                 check=True,
                 stdout=PIPE,
-                stderr=None,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -343,7 +340,6 @@ def test_execute_nix_build_vm(mock_run: Mock, tmp_path: Path) -> None:
                 ],
                 check=True,
                 stdout=PIPE,
-                stderr=None,
                 **DEFAULT_RUN_KWARGS,
             )
         ]
@@ -408,7 +404,6 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
                 ],
                 check=True,
                 stdout=PIPE,
-                stderr=None,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -476,7 +471,6 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
                 ],
                 check=True,
                 stdout=PIPE,
-                stderr=None,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -767,7 +761,6 @@ def test_execute_nix_switch_flake_target_host(
                 ],
                 check=True,
                 stdout=PIPE,
-                stderr=None,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -1035,7 +1028,6 @@ def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
                 ],
                 check=True,
                 stdout=PIPE,
-                stderr=None,
                 **DEFAULT_RUN_KWARGS,
             )
         ]
@@ -1075,7 +1067,6 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
                 ],
                 check=True,
                 stdout=PIPE,
-                stderr=None,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
