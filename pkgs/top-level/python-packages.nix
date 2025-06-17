@@ -11260,6 +11260,8 @@ self: super: with self; {
 
   pamqp = callPackage ../development/python-modules/pamqp { };
 
+  pan-os-python = callPackage ../development/python-modules/pan-os-python { };
+
   pan-python = callPackage ../development/python-modules/pan-python { };
 
   panacotta = callPackage ../development/python-modules/panacotta { };
