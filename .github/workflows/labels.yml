@@ -128,10 +128,13 @@ jobs:
               },
               async (response, done) => (await Promise.allSettled(response.data.map(async (pull_request) => {
                 try {
-                  const log = (k,v) => core.info(`PR #${pull_request.number} - ${k}: ${v}`)
+                  const log = (k,v,skip) => {
+                    core.info(`PR #${pull_request.number} - ${k}: ${v}` + (skip ? ' (skipped)' : ''))
+                    return skip
+                  }
 
-                  log('Last updated at', pull_request.updated_at)
-                  if (new Date(pull_request.updated_at) < cutoff) return done()
+                  if (log('Last updated at', pull_request.updated_at, new Date(pull_request.updated_at) < cutoff))
+                    return done()
                   log('URL', pull_request.html_url)
 
                   const run_id = (await github.rest.actions.listWorkflowRuns({
@@ -146,8 +149,8 @@ jobs:
 
                   // Newer PRs might not have run Eval to completion, yet. We can skip them, because this
                   // job will be run as part of that Eval run anyway.
-                  log('Last eval run', run_id ?? '<pending>')
-                  if (!run_id) return;
+                  if (log('Last eval run', run_id ?? '<pending>', !run_id))
+                    return;
 
                   const artifact = (await github.rest.actions.listWorkflowRunArtifacts({
                     ...context.repo,
@@ -159,8 +162,9 @@ jobs:
                   // actually download the artifact in the next step and avoid that race condition.
                   // Older PRs, where the workflow run was already eval.yml, but the artifact was not
                   // called "comparison", yet, will be skipped as well.
-                  log('Artifact expires at', artifact?.expires_at ?? '<not found>')
-                  if (new Date(artifact?.expires_at ?? 0) < new Date(new Date().getTime() + 60 * 1000)) return;
+                  const expired = new Date(artifact?.expires_at ?? 0) < new Date(new Date().getTime() + 60 * 1000)
+                  if (log('Artifact expires at', artifact?.expires_at ?? '<not found>', expired))
+                    return;
 
                   await artifactClient.downloadArtifact(artifact.id, {
                     findBy: {
