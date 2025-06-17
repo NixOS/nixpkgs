@@ -186,11 +186,11 @@ in
 
   saxon_12-he = common rec {
     pname = "saxon-he";
-    version = "12.6";
+    version = "12.7";
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      hash = "sha256-y7ZlfaBhwVVHatnkOjVkpMySjUlR6+7S6v5aCqdOKu4=";
+      hash = "sha256-+J4ghaw1fZtsuKIxcHrrxff20LTsOmJhRLqWVvdZLN4=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 3.1, and XQuery 3.1";

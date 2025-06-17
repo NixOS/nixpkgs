@@ -1,10 +1,12 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   curl,
   pkg-config,
   makeBinaryWrapper,
+  installShellFiles,
   libgit2,
   oniguruma,
   openssl,
@@ -34,6 +36,7 @@ rustPlatform.buildRustPackage {
     makeBinaryWrapper
     pkg-config
     rustPlatform.bindgenHook
+    installShellFiles
   ];
 
   buildInputs = [
@@ -68,19 +71,26 @@ rustPlatform.buildRustPackage {
   # Tests are disabled since they always fail when building with Nix
   doCheck = false;
 
-  postInstall = ''
-    mkdir -p $out/lib/steel
+  postInstall =
+    ''
+      mkdir -p $out/lib/steel
 
-    substituteInPlace cogs/installer/download.scm \
-      --replace-fail '"cargo-steel-lib"' '"$out/bin/cargo-steel-lib"'
+      substituteInPlace cogs/installer/download.scm \
+        --replace-fail '"cargo-steel-lib"' '"$out/bin/cargo-steel-lib"'
 
-    pushd cogs
-    $out/bin/steel install.scm
-    popd
+      pushd cogs
+      $out/bin/steel install.scm
+      popd
 
-    mv $out/lib/steel/bin/repl-connect $out/bin
-    rm -rf $out/lib/steel/bin
-  '';
+      mv $out/lib/steel/bin/repl-connect $out/bin
+      rm -rf $out/lib/steel/bin
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd steel \
+        --bash <($out/bin/steel completions bash) \
+        --fish <($out/bin/steel completions fish) \
+        --zsh <($out/bin/steel completions zsh)
+    '';
 
   postFixup = ''
     wrapProgram $out/bin/steel --set-default STEEL_HOME "$out/lib/steel"

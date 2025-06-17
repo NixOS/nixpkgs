@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gretl";
-  version = "2025a";
+  version = "2025b";
 
   src = fetchurl {
     url = "mirror://sourceforge/gretl/gretl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5B9V1Z12+Hu00x++u2ndUXWq91k/SXy723DoLOefhEQ=";
+    hash = "sha256-DW0QXWbx0nMWTfjxO15ZGR/DsvFM7eee0DDsqrm5vHM=";
   };
 
   buildInputs = [
