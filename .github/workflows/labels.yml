@@ -41,6 +41,11 @@ jobs:
       - name: Install dependencies
         run: npm install @actions/artifact
 
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
       - name: Labels from API data and Eval results
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         env:
