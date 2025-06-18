@@ -18611,6 +18611,8 @@ self: super: with self; {
 
   types-tqdm = callPackage ../development/python-modules/types-tqdm { };
 
+  types-tzlocal = callPackage ../development/python-modules/types-tzlocal { };
+
   types-ujson = callPackage ../development/python-modules/types-ujson { };
 
   types-urllib3 = callPackage ../development/python-modules/types-urllib3 { };
