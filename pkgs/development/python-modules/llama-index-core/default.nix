@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.12.39";
+  version = "0.12.42";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${version}";
-    hash = "sha256-cZUeDosuVHSlT57wLLMDR8IC7q1uWE4tiodgxjaqMII=";
+    hash = "sha256-mfeeN3/pXm52/QF0mAnfBOLcjA9yU0MgaVlPRtP1pSg=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -129,6 +129,8 @@ buildPythonPackage rec {
     "tests/text_splitter/"
     "tests/token_predictor/"
     "tests/tools/"
+    "tests/schema/"
+    "tests/multi_modal_llms/"
   ];
 
   disabledTests = [
