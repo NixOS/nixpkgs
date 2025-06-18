@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "swagger-typescript-api";
     description = "Generate TypeScript API client and definitions for fetch or axios from an OpenAPI specification";
     homepage = "https://github.com/acacode/swagger-typescript-api";
+    changelog = "https://github.com/acacode/swagger-typescript-api/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ angelodlfrtr ];
