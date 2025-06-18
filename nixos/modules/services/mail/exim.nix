@@ -121,19 +121,18 @@ in
     systemd.services.exim = {
       description = "Exim Mail Daemon";
       wantedBy = [ "multi-user.target" ];
+      after = [ "systemd-tmpfiles-setup.service" ];
       restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
         ExecStart = "!${cfg.package}/bin/exim -bdf -q${cfg.queueRunnerInterval}";
         ExecReload = "!${coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
       };
-      preStart = ''
-        if ! test -d ${cfg.spoolDir}; then
-          ${coreutils}/bin/mkdir -p ${cfg.spoolDir}
-          ${coreutils}/bin/chown ${cfg.user}:${cfg.group} ${cfg.spoolDir}
-        fi
-      '';
     };
+
+    systemd.tmpfiles.rules = [
+      "d ${cfg.spoolDir} 700 ${cfg.user} ${cfg.group}"
+    ];
 
   };
 
