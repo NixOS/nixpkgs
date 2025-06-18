@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tbb";
-  version = "2020.3";
+  version = "2020.3.3";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "oneapi-src";
     repo = "oneTBB";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-prO2O5hd+Wz5iA0vfrqmyHFr0Ptzk64so5KpSpvuKmU=";
+    hash = "sha256-pCZpQ+t7dDzuS4vhlfSVLwieI0iSQHukXb8Nk5kMMBo=";
   };
 
   patches = [
@@ -34,14 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://github.com/openembedded/meta-openembedded/raw/39185eb1d1615e919e3ae14ae63b8ed7d3e5d83f/meta-oe/recipes-support/tbb/tbb/0001-mallinfo-is-glibc-specific-API-mark-it-so.patch";
       hash = "sha256-xp8J/il855VTFIKCN/bFtf+vif6HzcVl4t4/L9nW/xk=";
-    })
-
-    # Fixes build with upcoming gcc-13:
-    #  https://github.com/oneapi-src/oneTBB/pull/833
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/oneapi-src/oneTBB/pull/833/commits/c18342ba667d1f33f5e9a773aa86b091a9694b97.patch";
-      hash = "sha256-LWgf7Rm6Zp4TJdvMqnAkoAebbVS+WV2kB+4iY6jRka4=";
     })
 
     # Fixes build for aarch64-darwin
