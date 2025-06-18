@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  llvmPackages_18,
+  llvmPackages_20,
   overrideCC,
   rocm-device-libs,
   rocm-runtime,
@@ -25,10 +25,11 @@
   # frame pointers for sampling profilers (-fno-omit-frame-pointer -momit-leaf-frame-pointer)
   # TODO: Should also apply to downstream packages which use rocmClangStdenv
   profilableStdenv ? false,
-}:
+}@args:
 
 let
-  llvmPackagesNoBintools = llvmPackages_18.override {
+  llvmPackages_base = llvmPackages_20;
+  llvmPackagesNoBintools = llvmPackages_base.override {
     bootBintools = null;
     bootBintoolsNoLibc = null;
   };
@@ -37,7 +38,7 @@ let
   llvmStdenv = overrideCC llvmPackagesNoBintools.libcxxStdenv llvmPackagesNoBintools.clangUseLLVM;
   llvmLibstdcxxStdenv = overrideCC llvmPackagesNoBintools.stdenv (
     llvmPackagesNoBintools.libstdcxxClang.override {
-      inherit (llvmPackages_18) bintools;
+      inherit (llvmPackages_base) bintools;
     }
   );
   stdenvToBuildRocmLlvm = if useLibcxx then llvmStdenv else llvmLibstdcxxStdenv;
@@ -57,40 +58,49 @@ let
     stdenvToBuildRocmLlvm.cc
     stdenvToBuildRocmLlvm.cc.cc
   ];
-  gcc-prefix =
-    let
-      gccPrefixPaths = [
-        gcc-unwrapped
-        gcc-unwrapped.lib
-        glibc.dev
-      ];
-    in
-    symlinkJoin {
-      name = "gcc-prefix";
-      paths = gccPrefixPaths ++ [
-        glibc
-      ];
-      disallowedRequisites = gccPrefixPaths;
-      postBuild = ''
-        rm -rf $out/{bin,libexec,nix-support,lib64,share,etc}
-        rm $out/lib/gcc/x86_64-unknown-linux-gnu/*/plugin/include/auto-host.h
+  gcc-prefix-headers = symlinkJoin {
+    name = "gcc-prefix-headers";
+    paths = [
+      glibc.dev
+      gcc-unwrapped.out
+    ];
+    disallowedRequisites = [
+      glibc.dev
+      gcc-unwrapped.out
+    ];
+    postBuild = ''
+      rm -rf $out/{bin,libexec,nix-support,lib64,share,etc}
+      rm $out/lib/gcc/x86_64-unknown-linux-gnu/*/plugin/include/auto-host.h
 
-        mkdir /build/tmpout
-        mv $out/* /build/tmpout
-        cp -Lr --no-preserve=mode /build/tmpout/* $out/
-        set -x
-        versionedIncludePath="$(echo $out/include/c++/*/)"
-        mv $versionedIncludePath/* $out/include/c++/
-        rm -rf $versionedIncludePath/
-
-        find $out/lib -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${gcc-unwrapped.lib} {} +
-
-        ln -s $out $out/x86_64-unknown-linux-gnu
-      '';
-    };
-  version = "6.3.1";
+      mkdir /build/tmpout
+      mv $out/* /build/tmpout
+      cp -Lr --no-preserve=mode /build/tmpout/* $out/
+      set -x
+      versionedIncludePath="$(echo $out/include/c++/*/)"
+      mv $versionedIncludePath/* $out/include/c++/
+      rm -rf $versionedIncludePath/
+    '';
+  };
+  gcc-prefix = symlinkJoin {
+    name = "gcc-prefix";
+    paths = [
+      gcc-prefix-headers
+      glibc
+      gcc-unwrapped.lib
+    ];
+    disallowedRequisites = [
+      glibc.dev
+      gcc-unwrapped.out
+    ];
+    postBuild = ''
+      rm -rf $out/{bin,libexec,nix-support,lib64,share,etc}
+      rm $out/lib/ld-linux-x86-64.so.2
+      ln -s $out $out/x86_64-unknown-linux-gnu
+    '';
+  };
+  version = "6.4.2";
   # major version of this should be the clang version ROCm forked from
-  rocmLlvmVersion = "18.0.0-${llvmSrc.rev}";
+  rocmLlvmVersion = "19.0.0-${llvmSrc.rev}";
   usefulOutputs =
     drv:
     builtins.filter (x: x != null) [
@@ -100,18 +110,16 @@ let
     ];
   listUsefulOutputs = builtins.concatMap usefulOutputs;
   llvmSrc = fetchFromGitHub {
-    # Performance improvements cherry-picked on top of rocm-6.3.x
-    # most importantly, amdgpu-early-alwaysinline memory usage fix
-    owner = "LunNova";
-    repo = "llvm-project-rocm";
-    rev = "4182046534deb851753f0d962146e5176f648893";
-    hash = "sha256-sPmYi1WiiAqnRnHVNba2nPUxGflBC01FWCTNLPlYF9c=";
+    owner = "ROCm";
+    repo = "llvm-project";
+    rev = "rocm-6.4.2";
+    hash = "sha256-12ftH5fMPAsbcEBmhADwW1YY/Yxo/MAK1FafKczITMg=";
   };
   llvmSrcFixed = llvmSrc;
   llvmMajorVersion = lib.versions.major rocmLlvmVersion;
   # An llvmPackages (pkgs/development/compilers/llvm/) built from ROCm LLVM's source tree
   # optionally using LLVM libcxx
-  llvmPackagesRocm = llvmPackages_18.override (_old: {
+  llvmPackagesRocm = llvmPackages_base.override (_old: {
     stdenv = stdenvToBuildRocmLlvm; # old.stdenv #llvmPackagesNoBintools.libcxxStdenv;
 
     # not setting gitRelease = because that causes patch selection logic to use git patches
@@ -163,6 +171,7 @@ let
     (
       (lib.strings.hasSuffix "add-nostdlibinc-flag.patch" (builtins.baseNameOf x))
       || (lib.strings.hasSuffix "clang-at-least-16-LLVMgold-path.patch" (builtins.baseNameOf x))
+      || (lib.strings.hasSuffix "gnu-install-dirs.patch" (builtins.baseNameOf x))
     );
   llvmTargetsFlag = "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${
     {
@@ -188,10 +197,31 @@ in
 rec {
   inherit (llvmPackagesRocm) libunwind;
   inherit (llvmPackagesRocm) libcxx;
+  inherit args;
   # Pass through original attrs for debugging where non-overridden llvm/clang is getting used
   # llvm-orig = llvmPackagesRocm.llvm; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.llvm-orig
   # clang-orig = llvmPackagesRocm.clang; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.clang-orig
   llvm = (llvmPackagesRocm.llvm.override { ninja = emptyDirectory; }).overrideAttrs (old: {
+    patches = old.patches ++ [
+      (fetchpatch {
+        # fix compile error in tools/gold/gold-plugin.cpp
+        name = "gold-plugin-fix.patch";
+        url = "https://github.com/llvm/llvm-project/commit/b0baa1d8bd68a2ce2f7c5f2b62333e410e9122a1.patch";
+        hash = "sha256-yly93PvGIXOnFeDGZ2W+W6SyhdWFM6iwA+qOeaptrh0=";
+        relative = "llvm";
+      })
+      (fetchpatch {
+        # fix tools/llvm-exegesis/X86/latency/ failing with glibc 2.4+
+        name = "exegesis-latency-glibc-fix.patch";
+        sha256 = "sha256-CjKxQlYwHXTM0mVnv8k/ssg5OXuKpJxRvBZGXjrFZAg=";
+        url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
+        relative = "llvm";
+      })
+      ./perf-increase-namestring-size.patch
+      # TODO: consider reapplying "Don't include aliases in RegisterClassInfo::IgnoreCSRForAllocOrder"
+      # it was reverted as it's a pessimization for non-GPU archs, but this compiler
+      # is used mostly for amdgpu
+    ];
     dontStrip = profilableStdenv;
     nativeBuildInputs = old.nativeBuildInputs ++ [ removeReferencesTo ];
     buildInputs = old.buildInputs ++ [
@@ -312,6 +342,9 @@ rec {
           filteredPatches = builtins.filter (x: !(findClangNostdlibincPatch x)) old.patches;
         in
         {
+          passthru = old.passthru // {
+            inherit gcc-prefix;
+          };
           meta.platforms = [
             "x86_64-linux"
           ];
@@ -322,6 +355,8 @@ rec {
             # Prevents builds timing out if a single compiler invocation is very slow but
             # per-arch jobs are completing by ensuring there's terminal output
             ./clang-log-jobs.diff
+            ./opt-offload-compress-on-by-default.patch
+            ./perf-shorten-gcclib-include-paths.patch
             (fetchpatch {
               # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
               sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
@@ -379,10 +414,20 @@ rec {
             ]
             ++ lib.optionals (!useLibcxx) [
               # FIXME: Config file in rocmcxx instead of GCC_INSTALL_PREFIX?
+              # Expected to be fully removed eventually
+              "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
               "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
             ];
+          preInstall = ''
+            # HACK: for major version == 19 nixpkgs llbm expects this to exist, but rocm llvm uses $lib correctly
+            mkdir -p $lib/lib
+          '';
           postFixup = (old.postFixup or "") + ''
+            mv $out/lib/* $lib/lib/
+            rm -rf $out/lib
+            find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm} {} +
             find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
+            find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc.cc} {} +
             find $lib -type f -exec remove-references-to -t ${stdenv.cc} {} +
             find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
             find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
@@ -436,6 +481,12 @@ rec {
         name = "Fix-missing-main-function-in-float16-bfloat16-support-checks.patch";
         url = "https://github.com/ROCm/llvm-project/commit/68d8b3846ab1e6550910f2a9a685690eee558af2.patch";
         hash = "sha256-Db+L1HFMWVj4CrofsGbn5lnMoCzEcU+7q12KKFb17/g=";
+        relative = "compiler-rt";
+      })
+      (fetchpatch {
+        # Fixes fortify hardening compile error related to openat usage
+        hash = "sha256-pgpN1q1vIQrPXHPxNSZ6zfgV2EflHO5Amzl+2BDjXbs=";
+        url = "https://github.com/llvm/llvm-project/commit/155b7a12820ec45095988b6aa6e057afaf2bc892.patch";
         relative = "compiler-rt";
       })
     ];
