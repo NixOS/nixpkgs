@@ -136,7 +136,10 @@ stdenv.mkDerivation (finalAttrs: {
     export SWIFT_LIB_DYNAMIC="${lib.getLib swift.swift}/lib/swift/macosx"
   '';
 
+  dontAddPrefix = true;
   mesonFlags = [
+    (lib.mesonOption "prefix" "/")
+    (lib.mesonOption "sysconfdir" "etc")
     (lib.mesonOption "default_library" "shared")
     (lib.mesonBool "libmpv" true)
     (lib.mesonEnable "manpage-build" true)
@@ -240,6 +243,14 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  mesonInstallFlags = [
+    "--destdir=${placeholder "out"}"
+  ];
+
+  preInstall = ''
+    mkdir -p $out/bin
+  '';
+
   postInstall =
     ''
       # Use a standard font
@@ -257,6 +268,13 @@ stdenv.mkDerivation (finalAttrs: {
         mpv.desktop > umpv.desktop
       printf "NoDisplay=true\n" >> umpv.desktop
       popd
+
+      # Scuffed solution to the problem that everything is installed relative to destdir, while we need to provide multiple outputs.
+      # Since we must set destdir and prefix to ensure that mpv reads from /etc,
+      # the alternative would be to specific libdir, mandir, etc. and use moveToOutput later, which is less reliable, or
+      # patch the source, which would be even less reliable.
+      cp -r $out/nix/* -t /nix
+      rm -rf $out/nix
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
