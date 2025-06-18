@@ -18,6 +18,27 @@ concurrency:
 permissions: {}
 
 jobs:
+  prepare:
+    runs-on: ubuntu-24.04-arm
+    outputs:
+      mergedSha: ${{ steps.get-merge-commit.outputs.mergedSha }}
+      targetSha: ${{ steps.get-merge-commit.outputs.targetSha }}
+      systems: ${{ steps.systems.outputs.systems }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          sparse-checkout: |
+            .github/actions
+            ci/supportedSystems.json
+      - name: Check if the PR can be merged and get the test merge commit
+        uses: ./.github/actions/get-merge-commit
+        id: get-merge-commit
+
+      - name: Load supported systems
+        id: systems
+        run: |
+          echo "systems=$(jq -c <ci/supportedSystems.json)" >> "$GITHUB_OUTPUT"
+
   check:
     name: Check
     uses: ./.github/workflows/check.yml
@@ -31,6 +52,7 @@ jobs:
 
   eval:
     name: Eval
+    needs: [prepare]
     uses: ./.github/workflows/eval.yml
     permissions:
       # compare
@@ -39,6 +61,10 @@ jobs:
       statuses: write
     secrets:
       OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+    with:
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
+      systems: ${{ needs.prepare.outputs.systems }}
 
   build:
     name: Build
