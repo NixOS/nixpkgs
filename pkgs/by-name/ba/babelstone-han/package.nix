@@ -6,12 +6,12 @@
 
 stdenvNoCC.mkDerivation {
   pname = "babelstone-han";
-  version = "13.0.3";
+  version = "16.0.2";
 
   src = fetchzip {
     # upstream download links are unversioned, so hash changes
-    url = "https://web.archive.org/web/20200210125314/https://www.babelstone.co.uk/Fonts/Download/BabelStoneHan.zip";
-    hash = "sha256-LLhNtHu2hh5DY2XVSrLuVzzR6OtMdSSHetyA0k1IFs0=";
+    url = "http://web.archive.org/web/20241108030253/https://www.babelstone.co.uk/Fonts/Download/BabelStoneHan.zip";
+    hash = "sha256-mrZkrsTfbOsydo0TVv69o5zW1fLtDDj5QM579o0g13k=";
   };
 
   installPhase = ''
@@ -29,6 +29,6 @@ stdenvNoCC.mkDerivation {
 
     license = licenses.arphicpl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ emily deeengan ];
   };
 }
