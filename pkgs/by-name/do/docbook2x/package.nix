@@ -52,6 +52,11 @@ stdenv.mkDerivation rec {
       XMLNamespaceSupport
     ]);
 
+  # configure tries to find osx in PATH and hardcodes the resulting path
+  # (if any) on the Perl code. this fails under strictDeps, so override
+  # the autoconf test:
+  OSX = "${opensp}/bin/osx";
+
   postConfigure = ''
     # Broken substitution is used for `perl/config.pl', which leaves literal
     # `$prefix' in it.
