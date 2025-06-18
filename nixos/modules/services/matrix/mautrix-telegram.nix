@@ -194,12 +194,9 @@ in
           # substitute the settings file by environment variables
           # in this case read from EnvironmentFile
           test -f '${settingsFile}' && rm -f '${settingsFile}'
-          old_umask=$(umask)
-          umask 0177
-          ${pkgs.envsubst}/bin/envsubst \
-            -o '${settingsFile}' \
+          install -m 600 <( ${pkgs.envsubst}/bin/envsubst \
             -i '${settingsFileUnsubstituted}'
-          umask $old_umask
+            ) '${settingsFile}'
 
           # generate the appservice's registration file if absent
           if [ ! -f '${registrationFile}' ]; then
@@ -209,18 +206,15 @@ in
               --registration='${registrationFile}'
           fi
 
-          old_umask=$(umask)
-          umask 0177
           # 1. Overwrite registration tokens in config
           #    is set, set it as the login shared secret value for the configured
           #    homeserver domain.
-          ${pkgs.yq}/bin/yq -s '.[0].appservice.as_token = .[1].as_token
+          install -m 600 <( ${pkgs.yq}/bin/yq -s '.[0].appservice.as_token = .[1].as_token
             | .[0].appservice.hs_token = .[1].hs_token
             | .[0]' \
-            '${settingsFile}' '${registrationFile}' > '${settingsFile}.tmp'
+            '${settingsFile}' '${registrationFile}'
+            ) '${settingsFile}.tmp'
           mv '${settingsFile}.tmp' '${settingsFile}'
-
-          umask $old_umask
         ''
         + lib.optionalString (cfg.package ? alembic) ''
           # run automatic database init and migration scripts
