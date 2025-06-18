@@ -38,6 +38,15 @@ let
 
       bignums = callPackage ../development/rocq-modules/bignums { };
       hierarchy-builder = callPackage ../development/rocq-modules/hierarchy-builder { };
+      mathcomp = callPackage ../development/rocq-modules/mathcomp { };
+      mathcomp-boot = self.mathcomp.boot;
+      mathcomp-order = self.mathcomp.order;
+      mathcomp-ssreflect = self.mathcomp.ssreflect;
+      mathcomp-fingroup = self.mathcomp.fingroup;
+      mathcomp-algebra = self.mathcomp.algebra;
+      mathcomp-solvable = self.mathcomp.solvable;
+      mathcomp-field = self.mathcomp.field;
+      mathcomp-character = self.mathcomp.character;
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
 
