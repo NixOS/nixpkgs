@@ -10585,6 +10585,8 @@ self: super: with self; {
 
   objax = callPackage ../development/python-modules/objax { };
 
+  object-ql = callPackage ../development/python-modules/object-ql { };
+
   objexplore = callPackage ../development/python-modules/objexplore { };
 
   objgraph = callPackage ../development/python-modules/objgraph {
