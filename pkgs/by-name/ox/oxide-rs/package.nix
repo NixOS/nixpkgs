@@ -11,29 +11,33 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxide-rs";
-  version = "0.9.0+20241204.0.0";
+  version = "0.12.0+20250604.0.0";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "oxide.rs";
     rev = "v${version}";
-    hash = "sha256-NtTXpXDYazcXilQNW455UDkqMCFzFPvTUkbEBQsWIDo=";
-    # leaveDotGit is necessary because `build.rs` expects git information which
-    # is used to write a `built.rs` file which is read by the CLI application
-    # to display version information.
-    leaveDotGit = true;
+    hash = "sha256-XtN/ZRaVrw4pB82cCmWijjTMZzte7VlUzx5BaCq2mCc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-We5yNF8gtHWAUAead0uc99FIoMcicDWdGbTzPgpiFyY=";
-
-  cargoPatches = [
-    ./0001-use-crates-io-over-git-dependencies.patch
+  patches = [
+    # original patch: https://git.iliana.fyi/nixos-configs/tree/packages/oxide-git-version.patch?id=0e4dc0d21def9084e2c6c1e20f3da08c31590945
+    ./rm-built-ref-head-lookup.patch
+    ./rm-commit-hash-in-version-output.patch
   ];
+
+  checkFlags = [
+    # skip since output check includes git commit hash
+    "--skip=cmd_version::version_success"
+    # skip due to failure with loopback on debug
+    "--skip=test_cmd_auth_debug_logging"
+  ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-b3RYPjkKgmcE70wSYl5Lu2uMS2gALxRSbLoKzXisUx4=";
 
   cargoBuildFlags = [
     "--package=oxide-cli"
-    "--package=xtask"
   ];
 
   cargoTestFlags = [
