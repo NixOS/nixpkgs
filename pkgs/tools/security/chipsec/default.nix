@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.10.6";
+  version = "1.13.12";
 
   disabled = !stdenv.hostPlatform.isLinux;
 
@@ -19,18 +19,8 @@ python3.pkgs.buildPythonApplication rec {
     owner = "chipsec";
     repo = "chipsec";
     rev = version;
-    hash = "sha256-+pbFG1SmSO/cnt1e+kel7ereC0I1OCJKKsS0KaJDWdc=";
+    hash = "sha256-qxrwiUkKNHqQYhODpCEgrV1Z1QtcD54DVEr735pzY1U=";
   };
-
-  patches = lib.optionals withDriver [
-    ./ko-path.diff
-    ./compile-ko.diff
-  ];
-
-  postPatch = ''
-    substituteInPlace tests/software/util.py \
-      --replace-fail "assertRegexpMatches" "assertRegex"
-  '';
 
   KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
@@ -43,27 +33,14 @@ python3.pkgs.buildPythonApplication rec {
     ]
     ++ lib.optionals withDriver kernel.moduleBuildDependencies;
 
+  propagatedBuildInputs = with python3.pkgs; [
+    brotli
+  ];
+
   nativeCheckInputs = with python3.pkgs; [
     distro
     pytestCheckHook
   ];
-
-  preBuild = lib.optionalString withDriver ''
-    export CHIPSEC_BUILD_LIB=$(mktemp -d)
-    mkdir -p $CHIPSEC_BUILD_LIB/chipsec/helper/linux
-    appendToVar setupPyBuildFlags "--build-lib=$CHIPSEC_BUILD_LIB"
-  '';
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=dangling-pointer"
-  ];
-
-  preInstall = lib.optionalString withDriver ''
-    mkdir -p $out/${python3.pkgs.python.sitePackages}/drivers/linux
-    mv $CHIPSEC_BUILD_LIB/chipsec/helper/linux/chipsec.ko \
-      $out/${python3.pkgs.python.sitePackages}/drivers/linux/chipsec.ko
-  '';
 
   setupPyBuildFlags = lib.optionals (!withDriver) [
     "--skip-driver"
