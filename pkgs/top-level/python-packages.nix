@@ -5892,6 +5892,10 @@ self: super: with self; {
 
   google-cloud-datastore = callPackage ../development/python-modules/google-cloud-datastore { };
 
+  google-cloud-discoveryengine =
+    callPackage ../development/python-modules/google-cloud-discoveryengine
+      { };
+
   google-cloud-dlp = callPackage ../development/python-modules/google-cloud-dlp { };
 
   google-cloud-dns = callPackage ../development/python-modules/google-cloud-dns { };
