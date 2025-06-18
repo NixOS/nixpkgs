@@ -1,0 +1,16 @@
+diff --git a/renpy/common/00steam.rpy b/renpy/common/00steam.rpy
+index 9a5f9c405..68c8c26e0 100644
+--- a/renpy/common/00steam.rpy
++++ b/renpy/common/00steam.rpy
+@@ -1029,11 +1029,6 @@ init -1499 python in achievement:
+             steam = None
+             steamapi = None
+ 
+-    if renpy.windows or renpy.macintosh or renpy.linux:
+-        steam_preinit()
+-        steam_init()
+-
+-
+ init 1500 python in achievement:
+ 
+     # Steam position.

@@ -1,0 +1,31 @@
+diff --git a/CMakeModules/ForgeConfigureDepsVars.cmake b/CMakeModules/ForgeConfigureDepsVars.cmake
+index ee5c2fc..2f75181 100644
+--- a/CMakeModules/ForgeConfigureDepsVars.cmake
++++ b/CMakeModules/ForgeConfigureDepsVars.cmake
+@@ -84,7 +84,7 @@ macro(fg_dep_check_and_populate dep_prefix)
+         URL            ${fdcp_args_URI}
+         URL_HASH       ${fdcp_args_REF}
+         DOWNLOAD_COMMAND \"\"
+-        UPDATE_DISCONNECTED ON
++        UPDATE_COMMAND \"\"
+         SOURCE_DIR     "${Forge_SOURCE_DIR}/extern/${dep_prefix}-src"
+         BINARY_DIR     "${Forge_BINARY_DIR}/extern/${dep_prefix}-build"
+         SUBBUILD_DIR   "${Forge_BINARY_DIR}/extern/${dep_prefix}-subbuild"
+@@ -94,7 +94,7 @@ macro(fg_dep_check_and_populate dep_prefix)
+         QUIET
+         URL            ${fdcp_args_URI}
+         DOWNLOAD_COMMAND \"\"
+-        UPDATE_DISCONNECTED ON
++        UPDATE_COMMAND \"\"
+         SOURCE_DIR     "${Forge_SOURCE_DIR}/extern/${dep_prefix}-src"
+         BINARY_DIR     "${Forge_BINARY_DIR}/extern/${dep_prefix}-build"
+         SUBBUILD_DIR   "${Forge_BINARY_DIR}/extern/${dep_prefix}-subbuild"
+@@ -106,7 +106,7 @@ macro(fg_dep_check_and_populate dep_prefix)
+         GIT_REPOSITORY ${fdcp_args_URI}
+         GIT_TAG        ${fdcp_args_REF}
+         DOWNLOAD_COMMAND \"\"
+-        UPDATE_DISCONNECTED ON
++        UPDATE_COMMAND \"\"
+         SOURCE_DIR     "${Forge_SOURCE_DIR}/extern/${dep_prefix}-src"
+         BINARY_DIR     "${Forge_BINARY_DIR}/extern/${dep_prefix}-build"
+         SUBBUILD_DIR   "${Forge_BINARY_DIR}/extern/${dep_prefix}-subbuild"

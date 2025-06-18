@@ -1,0 +1,58 @@
+From aae1e774dd9de22fe3520cf9eb2bfbf7216f5eb0 Mon Sep 17 00:00:00 2001
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
+Date: Sun, 20 Sep 2020 16:09:36 -0400
+Subject: [PATCH] build: add a gnome_session_ctl_path option
+
+In gsd.service.in the ExecStopPost expects g-s-d libexecdir to
+be from the same prefix as gnome-session's, and this is not necessarily
+true as there are linux distro's that install their packages into their
+own individual prefixes (like NixOS or Guix).
+---
+ meson_options.txt      | 1 +
+ plugins/gsd.service.in | 2 +-
+ plugins/meson.build    | 6 ++++++
+ 3 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/meson_options.txt b/meson_options.txt
+index 3e04cf64f..21e003c61 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -1,4 +1,5 @@
+ option('udev_dir', type: 'string', value: '', description: 'Absolute path of the udev base directory')
++option('gnome_session_ctl_path', type: 'string', value: '', description: 'Absolute path to the gnome-session-ctl binary')
+ option('systemd', type: 'boolean', value: true, description: 'Enable systemd integration')
+ 
+ option('alsa', type: 'boolean', value: true, description: 'build with ALSA support (not optional on Linux platforms)')
+diff --git a/plugins/gsd.service.in b/plugins/gsd.service.in
+index 79b5f5536..bfbde6d05 100644
+--- a/plugins/gsd.service.in
++++ b/plugins/gsd.service.in
+@@ -23,4 +23,4 @@ BusName=@plugin_dbus_name@
+ TimeoutStopSec=5
+ # We cannot use OnFailure as e.g. dependency failures are normal
+ # https://github.com/systemd/systemd/issues/12352
+-ExecStopPost=@libexecdir@/gnome-session-ctl --exec-stop-check
++ExecStopPost=@gnome_session_ctl@ --exec-stop-check
+diff --git a/plugins/meson.build b/plugins/meson.build
+index 83e018854..266a0f093 100644
+--- a/plugins/meson.build
++++ b/plugins/meson.build
+@@ -20,6 +20,11 @@ all_plugins = [
+ 
+ disabled_plugins = []
+ 
++gnome_session_ctl = get_option('gnome_session_ctl_path')
++if gnome_session_ctl == ''
++  gnome_session_ctl = join_paths(gsd_libexecdir, 'gnome-session-ctl')
++endif
++
+ if not enable_smartcard
+     disabled_plugins += ['smartcard']
+ endif
+@@ -125,6 +130,7 @@ foreach plugin: all_plugins
+         unit_conf.set('plugin_name', plugin_name)
+         unit_conf.set('description', plugin_description)
+         unit_conf.set('libexecdir', gsd_libexecdir)
++        unit_conf.set('gnome_session_ctl', gnome_session_ctl)
+         unit_conf.set('plugin_dbus_name', plugin_dbus_name)
+         unit_conf.set('plugin_restart', plugin_restart_rule.get(plugin_name, 'on-failure'))

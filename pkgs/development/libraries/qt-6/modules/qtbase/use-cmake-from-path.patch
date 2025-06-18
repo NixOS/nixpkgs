@@ -1,0 +1,34 @@
+--- a/bin/qt-cmake-create.in
++++ b/bin/qt-cmake-create.in
+@@ -7,12 +7,7 @@ HELP_MESSAGE="Usage
+ script_dir_path=`dirname $0`
+ script_dir_path=`(cd "$script_dir_path"; /bin/pwd)`
+ 
+-# Try to use original cmake, otherwise to make it relocatable, use any cmake found in PATH.
+-original_cmake_path="@CMAKE_COMMAND@"
+-cmake_path=$original_cmake_path
+-if ! test -f "$cmake_path"; then
+-    cmake_path="cmake"
+-fi
++cmake_path="cmake"
+ 
+ if [ "$#" -gt 1 ]; then
+     echo "Invalid number of arguments"
+diff --git a/bin/qt-cmake.in b/bin/qt-cmake.in
+index f719257f602..571ffe788fa 100755
+--- a/bin/qt-cmake.in
++++ b/bin/qt-cmake.in
+@@ -4,12 +4,7 @@
+ script_dir_path=`dirname $0`
+ script_dir_path=`(cd "$script_dir_path"; /bin/pwd)`
+ 
+-# Try to use original cmake, otherwise to make it relocatable, use any cmake found in PATH.
+-original_cmake_path="@CMAKE_COMMAND@"
+-cmake_path=$original_cmake_path
+-if ! test -f "$cmake_path"; then
+-    cmake_path="cmake"
+-fi
++cmake_path="cmake"
+ 
+ toolchain_path="$script_dir_path/@__GlobalConfig_relative_path_from_bin_dir_to_cmake_config_dir@/qt.toolchain.cmake"
+ 

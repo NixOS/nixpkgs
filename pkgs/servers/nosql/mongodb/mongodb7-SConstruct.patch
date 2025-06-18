@@ -1,0 +1,63 @@
+diff --git a/SConstruct b/SConstruct
+index 07579349b83..68a26f26a49 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -23,7 +23,6 @@ from pkg_resources import parse_version
+ 
+ import SCons
+ import SCons.Script
+-from mongo_tooling_metrics.lib.top_level_metrics import SConsToolingMetrics
+ from site_scons.mongo import build_profiles
+ 
+ # This must be first, even before EnsureSConsVersion, if
+@@ -1653,16 +1652,6 @@ env = Environment(variables=env_vars, **envDict)
+ del envDict
+ env.AddMethod(lambda env, name, **kwargs: add_option(name, **kwargs), 'AddOption')
+ 
+-# The placement of this is intentional. Here we setup an atexit method to store tooling metrics.
+-# We should only register this function after env, env_vars and the parser have been properly initialized.
+-SConsToolingMetrics.register_metrics(
+-    utc_starttime=datetime.utcnow(),
+-    artifact_dir=env.Dir('$BUILD_DIR').get_abspath(),
+-    env_vars=env_vars,
+-    env=env,
+-    parser=_parser,
+-)
+-
+ if get_option('build-metrics'):
+     env['BUILD_METRICS_ARTIFACTS_DIR'] = '$BUILD_ROOT/$VARIANT_DIR'
+     env.Tool('build_metrics')
+@@ -3549,33 +3538,6 @@ def doConfigure(myenv):
+         myenv.AddMethod(
+             functools.partial(var_func, var=var, func=CheckFlag), f"Check{var}Supported")
+ 
+-    if myenv.ToolchainIs('gcc', 'clang'):
+-        # This tells clang/gcc to use the gold linker if it is available - we prefer the gold linker
+-        # because it is much faster. Don't use it if the user has already configured another linker
+-        # selection manually.
+-        if any(flag.startswith('-fuse-ld=') for flag in env['LINKFLAGS']):
+-            myenv.FatalError(
+-                f"Use the '--linker' option instead of modifying the LINKFLAGS directly.")
+-
+-        linker_ld = get_option('linker')
+-        if linker_ld == 'auto':
+-            if not env.TargetOSIs('darwin', 'macOS'):
+-                if not myenv.AddToLINKFLAGSIfSupported('-fuse-ld=lld'):
+-                    myenv.FatalError(
+-                        f"The recommended linker 'lld' is not supported with the current compiler configuration, you can try the 'gold' linker with '--linker=gold'."
+-                    )
+-        elif link_model.startswith("dynamic") and linker_ld == 'bfd':
+-            # BFD is not supported due to issues with it causing warnings from some of
+-            # the third party libraries that mongodb is linked with:
+-            # https://jira.mongodb.org/browse/SERVER-49465
+-            myenv.FatalError(f"Linker {linker_ld} is not supported with dynamic link model builds.")
+-        else:
+-            if not myenv.AddToLINKFLAGSIfSupported(f'-fuse-ld={linker_ld}'):
+-                myenv.FatalError(f"Linker {linker_ld} could not be configured.")
+-
+-        if has_option('gcov') and myenv.AddToCCFLAGSIfSupported('-fprofile-update=single'):
+-            myenv.AppendUnique(LINKFLAGS=['-fprofile-update=single'])
+-
+     detectCompiler = Configure(
+         myenv,
+         help=False,

@@ -1,0 +1,39 @@
+From 9e843a203f68ca75d430f1032a92d3c87f9ed2c2 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Sun, 29 Sep 2024 12:05:07 +0200
+Subject: [PATCH] plugins/AccountsService/AccountsService.cpp: If keymap unset,
+ read fallbacks from NixOS-specific file
+
+---
+ plugins/AccountsService/AccountsService.cpp | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/plugins/AccountsService/AccountsService.cpp b/plugins/AccountsService/AccountsService.cpp
+index bfc4bf3ce..9308220a9 100644
+--- a/plugins/AccountsService/AccountsService.cpp
++++ b/plugins/AccountsService/AccountsService.cpp
+@@ -311,6 +311,21 @@ QStringList AccountsService::keymaps() const
+         return simplifiedMaps;
+     }
+ 
++    QFile fallbackNixosLayouts ("@nixosLayoutFile@");
++    if (fallbackNixosLayouts.open(QIODevice::ReadOnly | QIODevice::Text)) {
++        while (!fallbackNixosLayouts.atEnd()) {
++            QString line = QString(fallbackNixosLayouts.readLine()).simplified();
++            if (!line.isEmpty()) {
++                simplifiedMaps.append(line);
++            }
++        }
++        fallbackNixosLayouts.close();
++    }
++
++    if (!simplifiedMaps.isEmpty()) {
++        return simplifiedMaps;
++    }
++
+     return {QStringLiteral("us")};
+ }
+ 
+-- 
+2.44.1
+

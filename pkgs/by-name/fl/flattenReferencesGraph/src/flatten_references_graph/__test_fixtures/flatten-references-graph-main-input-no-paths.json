@@ -1,0 +1,23 @@
+{
+  "graph": [
+    {
+      "closureSize": 168,
+      "narHash": "sha256:0dl4kfhb493yz8a5wgh0d2z3kr61z65gp85vx33rqwa1m1lnymy8",
+      "narSize": 168,
+      "path": "/nix/store/fakehash000000000000000000000000-no-store-paths-base.json",
+      "references": []
+    }
+  ],
+  "pipeline": [
+    [
+      "popularity_contest"
+    ],
+    [
+      "limit_layers",
+      99
+    ]
+  ],
+  "exclude_paths": [
+    "/nix/store/fakehash000000000000000000000000-no-store-paths-base.json"
+  ]
+}

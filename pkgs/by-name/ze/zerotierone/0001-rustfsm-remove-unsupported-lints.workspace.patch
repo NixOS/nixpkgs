@@ -1,0 +1,24 @@
+From b83e6354de099860bcb1ca3876c222c57de89f0c Mon Sep 17 00:00:00 2001
+From: Michael Hoang <enzime@users.noreply.github.com>
+Date: Mon, 10 Feb 2025 18:03:12 +0700
+Subject: [PATCH] rustfsm: remove unsupported `lints.workspace`
+
+This patch will no longer be necessary when
+https://github.com/NixOS/nixpkgs/pull/300532 is merged
+---
+ fsm/Cargo.toml | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/fsm/Cargo.toml b/fsm/Cargo.toml
+index 5e9e1c9..3fda704 100644
+--- a/fsm/Cargo.toml
++++ b/fsm/Cargo.toml
+@@ -17,5 +17,3 @@ rustfsm_trait = { version = "0.1", path = "rustfsm_trait" }
+ [package.metadata.workspaces]
+ independent = true
+ 
+-[lints]
+-workspace = true
+-- 
+2.46.0
+

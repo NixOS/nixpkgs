@@ -1,0 +1,43 @@
+diff --git a/minic/mcc b/minic/mcc
+index 492947e..5258aac 100755
+--- a/minic/mcc
++++ b/minic/mcc
+@@ -31,9 +31,9 @@ then
+ fi
+ 
+ 
+-$DIR/minic < $file          > /tmp/minic.ssa &&
+-$QBE       < /tmp/minic.ssa > /tmp/minic.s   &&
+-cc /tmp/minic.s $flags
++$DIR/minic < $file          > ${TMPDIR:-/tmp}/minic.ssa &&
++$QBE       < ${TMPDIR:-/tmp}/minic.ssa > ${TMPDIR:-/tmp}/minic.s   &&
++cc ${TMPDIR:-/tmp}/minic.s $flags
+ 
+ if test $? -ne 0
+ then
+diff --git a/tools/cra.sh b/tools/cra.sh
+index 5988267..57a4b34 100755
+--- a/tools/cra.sh
++++ b/tools/cra.sh
+@@ -2,7 +2,7 @@
+ 
+ DIR=`cd $(dirname "$0"); pwd`
+ QBE=$DIR/../qbe
+-BUGF=/tmp/bug.id
++BUGF=${TMPDIR:-/tmp}/bug.id
+ FIND=$1
+ FIND=${FIND:-afl-find}
+ 
+diff --git a/tools/test.sh b/tools/test.sh
+index 23c6663..fb36222 100755
+--- a/tools/test.sh
++++ b/tools/test.sh
+@@ -4,7 +4,7 @@ dir=`dirname "$0"`
+ bin=$dir/../qbe
+ binref=$dir/../qbe.ref
+ 
+-tmp=/tmp/qbe.zzzz
++tmp=${TMPDIR:-/tmp}/qbe.zzzz
+ 
+ drv=$tmp.c
+ asm=$tmp.s

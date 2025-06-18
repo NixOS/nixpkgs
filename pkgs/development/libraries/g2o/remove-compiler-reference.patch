@@ -1,0 +1,25 @@
+From b9bfed09e4e3c481b7eb36bee1ff4202ccf69dee Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Fri, 17 May 2019 19:05:36 -0400
+Subject: [PATCH] Remove reference to compiler.
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a3f66dd..bb05bd0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -371,7 +371,7 @@ set(G2O_HAVE_CHOLMOD ${CHOLMOD_FOUND})
+ set(G2O_HAVE_CSPARSE ${CSPARSE_FOUND})
+ set(G2O_SHARED_LIBS ${BUILD_SHARED_LIBS})
+ set(G2O_LGPL_SHARED_LIBS ${BUILD_LGPL_SHARED_LIBS})
+-set(G2O_CXX_COMPILER "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER}")
++set(G2O_CXX_COMPILER "${CMAKE_CXX_COMPILER_ID} unknown")
+ 
+ configure_file(config.h.in "${PROJECT_BINARY_DIR}/g2o/config.h")
+ install(FILES ${PROJECT_BINARY_DIR}/g2o/config.h DESTINATION ${INCLUDES_DESTINATION}/g2o)
+-- 
+2.21.0
+

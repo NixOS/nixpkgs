@@ -1,0 +1,33 @@
+diff --git a/player/CMakeLists.txt b/player/CMakeLists.txt
+index c160e10..62c2611 100644
+--- a/player/CMakeLists.txt
++++ b/player/CMakeLists.txt
+@@ -25,4 +25,4 @@ target_include_directories(
+ target_link_libraries(
+   player
+   PUBLIC core error asio_helper PkgConfig::LIBAV
+-  PRIVATE ctre cubeb::cubeb)
++  PRIVATE ctre cubeb)
+diff --git a/third_party/CMakeLists.txt b/third_party/CMakeLists.txt
+index 45345d3..f797b48 100644
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -41,10 +41,7 @@ option(USE_SANITIZERS "" OFF)
+ set(USE_WINMM
+     OFF
+     CACHE BOOL "")
+-add_subdirectory(cubeb EXCLUDE_FROM_ALL)
+-set_property(TARGET cubeb PROPERTY MSVC_RUNTIME_LIBRARY
+-                                   "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+-add_library(cubeb::cubeb ALIAS cubeb)
++find_package(cubeb REQUIRED)
+ 
+ option(KDSingleApplication_QT6 "" ON)
+ option(KDSingleApplication_STATIC "" ON)
+@@ -55,4 +52,4 @@ add_subdirectory(KDSingleApplication)
+ 
+ 
+ add_library(pegtl INTERFACE)
+-target_include_directories(pegtl INTERFACE PEGTL/include)
+\ No newline at end of file
++target_include_directories(pegtl INTERFACE PEGTL/include)

@@ -1,0 +1,13 @@
+diff --git a/serialize.h b/serialize.h
+index 6e977ac..4d7413d 100644
+--- a/serialize/serialize.h
++++ b/serialize/serialize.h
+@@ -1400,7 +1400,7 @@ namespace serialize
+ 
+     template <typename Stream> bool serialize_float_internal( Stream & stream, float & value )
+     {
+-        uint32_t int_value;
++        uint32_t int_value = 0;
+         if ( Stream::IsWriting )
+         {
+             memcpy( (char*) &int_value, &value, 4 );

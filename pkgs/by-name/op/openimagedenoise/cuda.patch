@@ -1,0 +1,32 @@
+Remove upstream workarounds for CMake "limitations" that do not appear to exist
+in nixpkgs build environment, but rather break the build, presumably because
+CMAKE_INSTALL_{BIN,LIB}DIR is an absolute path in our build so
+CMAKE_INSTALL_PREFIX has no effect.
+
+diff --git a/devices/CMakeLists.txt b/devices/CMakeLists.txt
+index d5111cd..43986ad 100644
+--- a/devices/CMakeLists.txt
++++ b/devices/CMakeLists.txt
+@@ -53,7 +53,6 @@ if(OIDN_DEVICE_CUDA)
+       -DCMAKE_CXX_COMPILER:FILEPATH=${_host_compiler}
+       -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${CMAKE_TOOLCHAIN_FILE}
+       -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+-      -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/cuda/preinstall
+       -DCMAKE_INSTALL_BINDIR:PATH=${CMAKE_INSTALL_BINDIR}
+       -DCMAKE_INSTALL_LIBDIR:PATH=${CMAKE_INSTALL_LIBDIR}
+       -DCUDAToolkit_ROOT:PATH=${CUDAToolkit_ROOT}
+@@ -69,14 +68,6 @@ if(OIDN_DEVICE_CUDA)
+     DEPENDS
+       OpenImageDenoise_core
+   )
+-
+-  # Due to limitations of CMake, the module is pre-installed at build time to a temporary location,
+-  # and then copied to the real install location at install time.
+-  install(DIRECTORY
+-    ${CMAKE_CURRENT_BINARY_DIR}/cuda/preinstall/
+-    DESTINATION "."
+-    USE_SOURCE_PERMISSIONS
+-  )
+ endif()
+ 
+ if(OIDN_DEVICE_HIP)

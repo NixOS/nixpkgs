@@ -1,0 +1,286 @@
+From efc78eb26886e59a303a280466c4837e1671890f Mon Sep 17 00:00:00 2001
+From: Jasper Phelps <jasper.s.phelps@gmail.com>
+Date: Mon, 1 Jul 2024 18:01:33 +0200
+Subject: [PATCH] Grant basic compatibility with numpy2.0.0
+
+This commit includes the results of running
+`ruff check --select NPY201 --fix` on the code in this repo,
+plus the removal of `np.{dtype}0` aliases that currently aren't
+caught by the NPY201 ruff rule (see
+https://github.com/numpy/numpy/issues/26800 where this is mentioned)
+plus removing the `numpy<2.0.0` pin from `requirements.txt`.
+After this commit, `import nptyping` succeeds in an environment with
+`numpy==2.0.0`. No additional testing has been done at this time,
+and additional changes could very well be necessary before nptyping
+is fully compatible with numpy2.0.0. But this should be a start!
+---
+ dependencies/requirements.txt |  2 +-
+ nptyping/__init__.py          | 14 --------------
+ nptyping/typing_.py           | 32 +++++++++-----------------------
+ nptyping/typing_.pyi          | 18 +++++++++---------
+ tests/test_ndarray.py         |  2 +-
+ 5 files changed, 20 insertions(+), 48 deletions(-)
+
+diff --git a/dependencies/requirements.txt b/dependencies/requirements.txt
+index 14a87b7..8a6f6b6 100644
+--- a/dependencies/requirements.txt
++++ b/dependencies/requirements.txt
+@@ -1,3 +1,3 @@
+ numpy==1.21.5; python_version<'3.8'
+-numpy>=1.20.0,<2.0.0; python_version>='3.8'
++numpy>=1.20.0; python_version>='3.8'
+ typing_extensions>=4.0.0,<5.0.0; python_version<'3.10'
+diff --git a/nptyping/__init__.py b/nptyping/__init__.py
+index 5fd5b2c..feb5f12 100644
+--- a/nptyping/__init__.py
++++ b/nptyping/__init__.py
+@@ -41,10 +41,8 @@
+ from nptyping.structure import Structure
+ from nptyping.typing_ import (
+     Bool,
+-    Bool8,
+     Byte,
+     Bytes,
+-    Bytes0,
+     CDouble,
+     CFloat,
+     Character,
+@@ -67,7 +65,6 @@
+     Half,
+     Inexact,
+     Int,
+-    Int0,
+     Int8,
+     Int16,
+     Int32,
+@@ -81,17 +78,14 @@
+     LongLong,
+     Number,
+     Object,
+-    Object0,
+     Short,
+     SignedInteger,
+     Single,
+     SingleComplex,
+-    Str0,
+     String,
+     Timedelta64,
+     UByte,
+     UInt,
+-    UInt0,
+     UInt8,
+     UInt16,
+     UInt32,
+@@ -103,7 +97,6 @@
+     UnsignedInteger,
+     UShort,
+     Void,
+-    Void0,
+ )
+ 
+ __all__ = [
+@@ -123,9 +116,7 @@
+     "DType",
+     "Number",
+     "Bool",
+-    "Bool8",
+     "Object",
+-    "Object0",
+     "Datetime64",
+     "Integer",
+     "SignedInteger",
+@@ -137,7 +128,6 @@
+     "Short",
+     "IntC",
+     "IntP",
+-    "Int0",
+     "Int",
+     "LongLong",
+     "Timedelta64",
+@@ -150,7 +140,6 @@
+     "UShort",
+     "UIntC",
+     "UIntP",
+-    "UInt0",
+     "UInt",
+     "ULongLong",
+     "Inexact",
+@@ -177,12 +166,9 @@
+     "LongComplex",
+     "Flexible",
+     "Void",
+-    "Void0",
+     "Character",
+     "Bytes",
+     "String",
+-    "Bytes0",
+     "Unicode",
+-    "Str0",
+     "DataFrame",
+ ]
+diff --git a/nptyping/typing_.py b/nptyping/typing_.py
+index 2639e07..e40126e 100644
+--- a/nptyping/typing_.py
++++ b/nptyping/typing_.py
+@@ -48,10 +48,8 @@
+ 
+ Number = np.number
+ Bool = np.bool_
+-Bool8 = np.bool8
+ Obj = np.object_  # Obj is a common abbreviation and should be usable.
+ Object = np.object_
+-Object0 = np.object0
+ Datetime64 = np.datetime64
+ Integer = np.integer
+ SignedInteger = np.signedinteger
+@@ -63,7 +61,6 @@
+ Short = np.short
+ IntC = np.intc
+ IntP = np.intp
+-Int0 = np.int0
+ Int = np.integer  # Int should translate to the "generic" int type.
+ Int_ = np.int_
+ LongLong = np.longlong
+@@ -77,7 +74,6 @@
+ UShort = np.ushort
+ UIntC = np.uintc
+ UIntP = np.uintp
+-UInt0 = np.uint0
+ UInt = np.uint
+ ULongLong = np.ulonglong
+ Inexact = np.inexact
+@@ -88,38 +84,33 @@
+ Half = np.half
+ Single = np.single
+ Double = np.double
+-Float = np.float_
++Float = np.float64
+ LongDouble = np.longdouble
+-LongFloat = np.longfloat
++LongFloat = np.longdouble
+ ComplexFloating = np.complexfloating
+ Complex64 = np.complex64
+ Complex128 = np.complex128
+ CSingle = np.csingle
+-SingleComplex = np.singlecomplex
++SingleComplex = np.complex64
+ CDouble = np.cdouble
+-Complex = np.complex_
+-CFloat = np.cfloat
++Complex = np.complex128
++CFloat = np.complex128
+ CLongDouble = np.clongdouble
+-CLongFloat = np.clongfloat
+-LongComplex = np.longcomplex
++CLongFloat = np.clongdouble
++LongComplex = np.clongdouble
+ Flexible = np.flexible
+ Void = np.void
+-Void0 = np.void0
+ Character = np.character
+ Bytes = np.bytes_
+ Str = np.str_
+-String = np.string_
+-Bytes0 = np.bytes0
+-Unicode = np.unicode_
+-Str0 = np.str0
++String = np.bytes_
++Unicode = np.str_
+ 
+ dtypes = [
+     (Number, "Number"),
+     (Bool, "Bool"),
+-    (Bool8, "Bool8"),
+     (Obj, "Obj"),
+     (Object, "Object"),
+-    (Object0, "Object0"),
+     (Datetime64, "Datetime64"),
+     (Integer, "Integer"),
+     (SignedInteger, "SignedInteger"),
+@@ -131,7 +122,6 @@
+     (Short, "Short"),
+     (IntC, "IntC"),
+     (IntP, "IntP"),
+-    (Int0, "Int0"),
+     (Int, "Int"),
+     (LongLong, "LongLong"),
+     (Timedelta64, "Timedelta64"),
+@@ -144,7 +134,6 @@
+     (UShort, "UShort"),
+     (UIntC, "UIntC"),
+     (UIntP, "UIntP"),
+-    (UInt0, "UInt0"),
+     (UInt, "UInt"),
+     (ULongLong, "ULongLong"),
+     (Inexact, "Inexact"),
+@@ -171,14 +160,11 @@
+     (LongComplex, "LongComplex"),
+     (Flexible, "Flexible"),
+     (Void, "Void"),
+-    (Void0, "Void0"),
+     (Character, "Character"),
+     (Bytes, "Bytes"),
+     (String, "String"),
+     (Str, "Str"),
+-    (Bytes0, "Bytes0"),
+     (Unicode, "Unicode"),
+-    (Str0, "Str0"),
+ ]
+ 
+ name_per_dtype = dict(dtypes)
+diff --git a/nptyping/typing_.pyi b/nptyping/typing_.pyi
+index fcf83ce..157641a 100644
+--- a/nptyping/typing_.pyi
++++ b/nptyping/typing_.pyi
+@@ -85,29 +85,29 @@ Float64: TypeAlias = np.dtype[np.float64]
+ Half: TypeAlias = np.dtype[np.half]
+ Single: TypeAlias = np.dtype[np.single]
+ Double: TypeAlias = np.dtype[np.double]
+-Float: TypeAlias = np.dtype[np.float_]
++Float: TypeAlias = np.dtype[np.float64]
+ LongDouble: TypeAlias = np.dtype[np.longdouble]
+-LongFloat: TypeAlias = np.dtype[np.longfloat]
++LongFloat: TypeAlias = np.dtype[np.longdouble]
+ ComplexFloating: TypeAlias = np.dtype[np.complexfloating[Any, Any]]
+ Complex64: TypeAlias = np.dtype[np.complex64]
+ Complex128: TypeAlias = np.dtype[np.complex128]
+ CSingle: TypeAlias = np.dtype[np.csingle]
+-SingleComplex: TypeAlias = np.dtype[np.singlecomplex]
++SingleComplex: TypeAlias = np.dtype[np.complex64]
+ CDouble: TypeAlias = np.dtype[np.cdouble]
+-Complex: TypeAlias = np.dtype[np.complex_]
+-CFloat: TypeAlias = np.dtype[np.cfloat]
++Complex: TypeAlias = np.dtype[np.complex128]
++CFloat: TypeAlias = np.dtype[np.complex128]
+ CLongDouble: TypeAlias = np.dtype[np.clongdouble]
+-CLongFloat: TypeAlias = np.dtype[np.clongfloat]
+-LongComplex: TypeAlias = np.dtype[np.longcomplex]
++CLongFloat: TypeAlias = np.dtype[np.clongdouble]
++LongComplex: TypeAlias = np.dtype[np.clongdouble]
+ Flexible: TypeAlias = np.dtype[np.flexible]
+ Void: TypeAlias = np.dtype[np.void]
+ Void0: TypeAlias = np.dtype[np.void0]
+ Character: TypeAlias = np.dtype[np.character]
+ Bytes: TypeAlias = np.dtype[np.bytes_]
+ Str: TypeAlias = np.dtype[np.str_]
+-String: TypeAlias = np.dtype[np.string_]
++String: TypeAlias = np.dtype[np.bytes_]
+ Bytes0: TypeAlias = np.dtype[np.bytes0]
+-Unicode: TypeAlias = np.dtype[np.unicode_]
++Unicode: TypeAlias = np.dtype[np.str_]
+ Str0: TypeAlias = np.dtype[np.str0]
+ 
+ dtype_per_name: Dict[str, np.dtype[Any]]
+diff --git a/tests/test_ndarray.py b/tests/test_ndarray.py
+index f4f7676..c957e19 100644
+--- a/tests/test_ndarray.py
++++ b/tests/test_ndarray.py
+@@ -264,7 +264,7 @@ def test_str(self):
+ 
+     def test_types_with_numpy_dtypes(self):
+         self.assertIsInstance(np.array([42]), NDArray[Any, np.int_])
+-        self.assertIsInstance(np.array([42.0]), NDArray[Any, np.float_])
++        self.assertIsInstance(np.array([42.0]), NDArray[Any, np.float64])
+         self.assertIsInstance(np.array([np.uint8(42)]), NDArray[Any, np.uint8])
+         self.assertIsInstance(np.array([True]), NDArray[Any, np.bool_])
+ 

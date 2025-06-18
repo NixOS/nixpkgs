@@ -1,0 +1,306 @@
+diff -ur a/src/c-client/netmsg.c b/src/c-client/netmsg.c
+--- a/src/c-client/netmsg.c	2011-07-22 20:20:18.000000000 -0400
++++ b/src/c-client/netmsg.c	2023-10-17 22:23:29.026638315 -0400
+@@ -29,6 +29,7 @@
+ 
+ #include <stdio.h>
+ #include <errno.h>
++#include <time.h>
+ extern int errno;		/* just in case */
+ #include "c-client.h"
+ #include "netmsg.h"
+diff -ur a/src/c-client/nntp.c b/src/c-client/nntp.c
+--- a/src/c-client/nntp.c	2011-07-22 20:20:18.000000000 -0400
++++ b/src/c-client/nntp.c	2023-10-17 22:23:05.195194961 -0400
+@@ -29,6 +29,7 @@
+ 
+ #include <ctype.h>
+ #include <stdio.h>
++#include <time.h>
+ #include "c-client.h"
+ #include "newsrc.h"
+ #include "netmsg.h"
+diff -ur a/src/dmail/dmail.c b/src/dmail/dmail.c
+--- a/src/dmail/dmail.c	2011-07-22 20:19:57.000000000 -0400
++++ b/src/dmail/dmail.c	2023-10-17 22:44:23.049223758 -0400
+@@ -27,6 +27,7 @@
+  */
+ 
+ #include <stdio.h>
++#include <ctype.h>
+ #include <pwd.h>
+ #include <errno.h>
+ extern int errno;		/* just in case */
+diff -ur a/src/mlock/mlock.c b/src/mlock/mlock.c
+--- a/src/mlock/mlock.c	2011-07-22 20:19:57.000000000 -0400
++++ b/src/mlock/mlock.c	2023-10-17 22:44:44.533985203 -0400
+@@ -31,6 +31,9 @@
+ #include <stdio.h>
+ #include <sysexits.h>
+ #include <syslog.h>
++#include <ctype.h>
++#include <time.h>
++#include <unistd.h>
+ #include <grp.h>
+ #include <sys/types.h>
+ #include <sys/file.h>
+diff -ur a/src/osdep/unix/dummy.c b/src/osdep/unix/dummy.c
+--- a/src/osdep/unix/dummy.c	2011-07-22 20:20:10.000000000 -0400
++++ b/src/osdep/unix/dummy.c	2023-10-17 22:23:17.123963204 -0400
+@@ -30,6 +30,7 @@
+ #include <stdio.h>
+ #include <ctype.h>
+ #include <errno.h>
++#include <time.h>
+ extern int errno;		/* just in case */
+ #include "mail.h"
+ #include "osdep.h"
+diff -ur a/src/osdep/unix/mbx.c b/src/osdep/unix/mbx.c
+--- a/src/osdep/unix/mbx.c	2011-07-22 20:20:11.000000000 -0400
++++ b/src/osdep/unix/mbx.c	2023-10-17 22:25:13.189158845 -0400
+@@ -41,6 +41,7 @@
+ #include "mail.h"
+ #include "osdep.h"
+ #include <pwd.h>
++#include <utime.h>
+ #include <sys/stat.h>
+ #include <sys/time.h>
+ #include "misc.h"
+diff -ur a/src/osdep/unix/mh.c b/src/osdep/unix/mh.c
+--- a/src/osdep/unix/mh.c	2011-07-22 20:20:09.000000000 -0400
++++ b/src/osdep/unix/mh.c	2023-10-17 22:31:50.240740603 -0400
+@@ -30,6 +30,7 @@
+ #include <stdio.h>
+ #include <ctype.h>
+ #include <errno.h>
++#include <utime.h>
+ extern int errno;		/* just in case */
+ #include "mail.h"
+ #include "osdep.h"
+@@ -103,8 +104,8 @@
+ 	      long options);
+ long mh_append (MAILSTREAM *stream,char *mailbox,append_t af,void *data);
+ 
+-int mh_select (struct direct *name);
+-int mh_numsort (const void *d1,const void *d2);
++int mh_select (const struct direct *name);
++int mh_numsort (const struct dirent **d1,const struct dirent **d2);
+ char *mh_file (char *dst,char *name);
+ long mh_canonicalize (char *pattern,char *ref,char *pat);
+ void mh_setdate (char *file,MESSAGECACHE *elt);
+@@ -1194,7 +1195,7 @@
+  * Returns: T to use file name, NIL to skip it
+  */
+ 
+-int mh_select (struct direct *name)
++int mh_select (const struct direct *name)
+ {
+   char c;
+   char *s = name->d_name;
+@@ -1209,10 +1210,10 @@
+  * Returns: negative if d1 < d2, 0 if d1 == d2, postive if d1 > d2
+  */
+ 
+-int mh_numsort (const void *d1,const void *d2)
++int mh_numsort (const struct dirent **d1,const struct dirent **d2)
+ {
+-  return atoi ((*(struct direct **) d1)->d_name) -
+-    atoi ((*(struct direct **) d2)->d_name);
++  return atoi ((*d1)->d_name) -
++    atoi ((*d2)->d_name);
+ }
+ 
+ 
+diff -ur a/src/osdep/unix/mix.c b/src/osdep/unix/mix.c
+--- a/src/osdep/unix/mix.c	2011-07-22 20:20:10.000000000 -0400
++++ b/src/osdep/unix/mix.c	2023-10-17 22:35:22.368131654 -0400
+@@ -125,7 +125,7 @@
+ long mix_create (MAILSTREAM *stream,char *mailbox);
+ long mix_delete (MAILSTREAM *stream,char *mailbox);
+ long mix_rename (MAILSTREAM *stream,char *old,char *newname);
+-int mix_rselect (struct direct *name);
++int mix_rselect (const struct direct *name);
+ MAILSTREAM *mix_open (MAILSTREAM *stream);
+ void mix_close (MAILSTREAM *stream,long options);
+ void mix_abort (MAILSTREAM *stream);
+@@ -140,8 +140,8 @@
+ long mix_ping (MAILSTREAM *stream);
+ void mix_check (MAILSTREAM *stream);
+ long mix_expunge (MAILSTREAM *stream,char *sequence,long options);
+-int mix_select (struct direct *name);
+-int mix_msgfsort (const void *d1,const void *d2);
++int mix_select (const struct direct *name);
++int mix_msgfsort (const struct dirent **d1,const struct dirent **d2);
+ long mix_addset (SEARCHSET **set,unsigned long start,unsigned long size);
+ long mix_burp (MAILSTREAM *stream,MIXBURP *burp,unsigned long *reclaimed);
+ long mix_burp_check (SEARCHSET *set,size_t size,char *file);
+@@ -587,7 +587,7 @@
+  * Returns: T if mix file name, NIL otherwise
+  */
+ 
+-int mix_rselect (struct direct *name)
++int mix_rselect (const struct direct *name)
+ {
+   return mix_dirfmttest (name->d_name);
+ }
+@@ -1146,7 +1146,7 @@
+  * ".mix" with no suffix was used by experimental versions
+  */
+ 
+-int mix_select (struct direct *name)
++int mix_select (const struct direct *name)
+ {
+   char c,*s;
+ 				/* make sure name has prefix */
+@@ -1165,10 +1165,10 @@
+  * Returns: -1 if d1 < d2, 0 if d1 == d2, 1 d1 > d2
+  */
+ 
+-int mix_msgfsort (const void *d1,const void *d2)
++int mix_msgfsort (const struct dirent **d1,const struct dirent **d2)
+ {
+-  char *n1 = (*(struct direct **) d1)->d_name + sizeof (MIXNAME) - 1;
+-  char *n2 = (*(struct direct **) d2)->d_name + sizeof (MIXNAME) - 1;
++  char *n1 = (*d1)->d_name + sizeof (MIXNAME) - 1;
++  char *n2 = (*d2)->d_name + sizeof (MIXNAME) - 1;
+   return compare_ulong (*n1 ? strtoul (n1,NIL,16) : 0,
+ 			*n2 ? strtoul (n2,NIL,16) : 0);
+ }
+diff -ur a/src/osdep/unix/mmdf.c b/src/osdep/unix/mmdf.c
+--- a/src/osdep/unix/mmdf.c	2011-07-22 20:20:10.000000000 -0400
++++ b/src/osdep/unix/mmdf.c	2023-10-17 22:25:37.095313031 -0400
+@@ -33,6 +33,7 @@
+ #include "mail.h"
+ #include "osdep.h"
+ #include <time.h>
++#include <utime.h>
+ #include <sys/stat.h>
+ #include "pseudo.h"
+ #include "fdstring.h"
+diff -ur a/src/osdep/unix/mtx.c b/src/osdep/unix/mtx.c
+--- a/src/osdep/unix/mtx.c	2011-07-22 20:20:10.000000000 -0400
++++ b/src/osdep/unix/mtx.c	2023-10-17 22:26:48.973160400 -0400
+@@ -37,6 +37,7 @@
+ #include <stdio.h>
+ #include <ctype.h>
+ #include <errno.h>
++#include <utime.h>
+ extern int errno;		/* just in case */
+ #include "mail.h"
+ #include "osdep.h"
+diff -ur a/src/osdep/unix/mx.c b/src/osdep/unix/mx.c
+--- a/src/osdep/unix/mx.c	2011-07-22 20:20:09.000000000 -0400
++++ b/src/osdep/unix/mx.c	2023-10-17 22:33:25.621907970 -0400
+@@ -30,6 +30,7 @@
+ #include <stdio.h>
+ #include <ctype.h>
+ #include <errno.h>
++#include <utime.h>
+ extern int errno;		/* just in case */
+ #include "mail.h"
+ #include "osdep.h"
+@@ -98,8 +99,8 @@
+ long mx_append_msg (MAILSTREAM *stream,char *flags,MESSAGECACHE *elt,
+ 		    STRING *st,SEARCHSET *set);
+ 
+-int mx_select (struct direct *name);
+-int mx_numsort (const void *d1,const void *d2);
++int mx_select (const struct direct *name);
++int mx_numsort (const struct dirent **d1,const struct dirent **d2);
+ char *mx_file (char *dst,char *name);
+ long mx_lockindex (MAILSTREAM *stream);
+ void mx_unlockindex (MAILSTREAM *stream);
+@@ -1110,7 +1111,7 @@
+  * Returns: T to use file name, NIL to skip it
+  */
+ 
+-int mx_select (struct direct *name)
++int mx_select (const struct direct *name)
+ {
+   char c;
+   char *s = name->d_name;
+@@ -1125,10 +1126,10 @@
+  * Returns: negative if d1 < d2, 0 if d1 == d2, postive if d1 > d2
+  */
+ 
+-int mx_numsort (const void *d1,const void *d2)
++int mx_numsort (const struct dirent **d1,const struct dirent **d2)
+ {
+-  return atoi ((*(struct direct **) d1)->d_name) -
+-    atoi ((*(struct direct **) d2)->d_name);
++  return atoi ((*d1)->d_name) -
++    atoi ((*d2)->d_name);
+ }
+ 
+ 
+diff -ur a/src/osdep/unix/news.c b/src/osdep/unix/news.c
+--- a/src/osdep/unix/news.c	2011-07-22 20:20:10.000000000 -0400
++++ b/src/osdep/unix/news.c	2023-10-17 22:29:32.461013229 -0400
+@@ -76,8 +76,8 @@
+ long news_delete (MAILSTREAM *stream,char *mailbox);
+ long news_rename (MAILSTREAM *stream,char *old,char *newname);
+ MAILSTREAM *news_open (MAILSTREAM *stream);
+-int news_select (struct direct *name);
+-int news_numsort (const void *d1,const void *d2);
++int news_select (const struct direct *name);
++int news_numsort (const struct dirent **d1,const struct dirent **d2);
+ void news_close (MAILSTREAM *stream,long options);
+ void news_fast (MAILSTREAM *stream,char *sequence,long flags);
+ void news_flags (MAILSTREAM *stream,char *sequence,long flags);
+@@ -402,7 +402,7 @@
+  * Returns: T to use file name, NIL to skip it
+  */
+ 
+-int news_select (struct direct *name)
++int news_select (const struct direct *name)
+ {
+   char c;
+   char *s = name->d_name;
+@@ -417,10 +417,10 @@
+  * Returns: negative if d1 < d2, 0 if d1 == d2, postive if d1 > d2
+  */
+ 
+-int news_numsort (const void *d1,const void *d2)
++int news_numsort (const struct dirent **d1,const struct dirent **d2)
+ {
+-  return atoi ((*(struct direct **) d1)->d_name) -
+-    atoi ((*(struct direct **) d2)->d_name);
++  return atoi ((*d1)->d_name) -
++    atoi ((*d2)->d_name);
+ }
+ 
+ 
+diff -ur a/src/osdep/unix/tenex.c b/src/osdep/unix/tenex.c
+--- a/src/osdep/unix/tenex.c	2011-07-22 20:20:10.000000000 -0400
++++ b/src/osdep/unix/tenex.c	2023-10-17 22:26:15.349497223 -0400
+@@ -42,6 +42,8 @@
+ #include <stdio.h>
+ #include <ctype.h>
+ #include <errno.h>
++#include <time.h>
++#include <utime.h>
+ extern int errno;		/* just in case */
+ #include "mail.h"
+ #include "osdep.h"
+diff -ur a/src/osdep/unix/unix.c b/src/osdep/unix/unix.c
+--- a/src/osdep/unix/unix.c	2011-07-22 20:20:10.000000000 -0400
++++ b/src/osdep/unix/unix.c	2023-10-17 22:24:46.358134773 -0400
+@@ -45,6 +45,7 @@
+ #include "mail.h"
+ #include "osdep.h"
+ #include <time.h>
++#include <utime.h>
+ #include <sys/stat.h>
+ #include "unix.h"
+ #include "pseudo.h"
+diff -ur a/src/tmail/tmail.c b/src/tmail/tmail.c
+--- a/src/tmail/tmail.c	2011-07-22 20:19:58.000000000 -0400
++++ b/src/tmail/tmail.c	2023-10-17 22:36:32.723585260 -0400
+@@ -27,6 +27,7 @@
+  */
+ 
+ #include <stdio.h>
++#include <ctype.h>
+ #include <pwd.h>
+ #include <errno.h>
+ extern int errno;		/* just in case */

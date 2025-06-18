@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "prh": {
+      "rulePaths": [ "@textlint_rule_prh@/lib/node_modules/textlint-rule-prh/node_modules/prh/prh-rules/media/WEB+DB_PRESS.yml" ]
+    }
+  }
+}

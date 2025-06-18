@@ -1,0 +1,146 @@
+OpenBSD's rc is supremely, supremely uncooperative when it comes to
+customization and configuration, providing exactly two places to inject
+services (pkg_scripts from rc.conf and /etc/rc.local), which are very much not
+useful for configuring more intimate parts of the boot process. This patch
+pulls the scripts to start at various injection points from /etc/rc.order. It
+also removes some of the parts of the boot script which are inappropriate for a
+nix-based system, for example, re-linking code objects and setting PATH.
+
+diff --git a/etc/rc b/etc/rc
+index 9d87fac8caf..581c1e3f4ab 100644
+--- a/etc/rc
++++ b/etc/rc
+@@ -9,6 +9,10 @@ set +o sh
+ 
+ # Subroutines (have to come first).
+ 
++daemon_phase() {
++	. /etc/rc.order/$1
++}
++
+ # Strip in- and whole-line comments from a file.
+ # Strip leading and trailing whitespace if IFS is set.
+ # Usage: stripcom /path/to/file
+@@ -337,7 +341,6 @@ trap : 3	# Shouldn't be needed.
+ 
+ export HOME=/
+ export INRC=1
+-export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+ 
+ # /etc/myname contains my symbolic name.
+ if [[ -f /etc/myname ]]; then
+@@ -413,17 +416,12 @@ fi
+ # From now on, allow user to interrupt (^C) the boot process.
+ trap "echo 'Boot interrupted.'; exit 1" 3
+ 
+-# Unmount all filesystems except root.
+-umount -a >/dev/null 2>&1
+-
+ # Mount all filesystems except those of type NFS and VND.
+ mount -a -t nonfs,vnd
+ 
+ # Re-mount the root filesystem read/writeable. (root on nfs requires this,
+ # others aren't hurt.)
+ mount -uw /
+-chmod og-rwx /bsd
+-ln -fh /bsd /bsd.booted
+ 
+ rm -f /fastboot
+ 
+@@ -483,9 +481,9 @@ mount -s /var >/dev/null 2>&1		# cannot be on NFS
+ mount -s /var/log >/dev/null 2>&1	# cannot be on NFS
+ mount -s /usr >/dev/null 2>&1		# if NFS, fstab must use IP address
+ 
+-reorder_libs 2>&1 |&
++daemon_phase 10
+ 
+-start_daemon slaacd dhcpleased resolvd >/dev/null 2>&1
++daemon_phase 20
+ 
+ echo 'starting network'
+ 
+@@ -495,12 +493,10 @@ ifconfig -g carp carpdemote 128
+ 
+ sh /etc/netstart
+ 
+-start_daemon unwind >/dev/null 2>&1
++daemon_phase 30
+ 
+ random_seed
+ 
+-wait_reorder_libs
+-
+ # Load pf rules and bring up pfsync interface.
+ if [[ $pf != NO ]]; then
+ 	if [[ -f /etc/pf.conf ]]; then
+@@ -522,8 +518,7 @@ dmesg >/var/run/dmesg.boot
+ make_keys
+ 
+ echo -n 'starting early daemons:'
+-start_daemon syslogd ldattach pflogd nsd unbound ntpd
+-start_daemon iscsid isakmpd iked sasyncd ldapd npppd
++daemon_phase 40
+ echo '.'
+ 
+ # Load IPsec rules.
+@@ -532,11 +527,7 @@ if [[ $ipsec != NO && -f /etc/ipsec.conf ]]; then
+ fi
+ 
+ echo -n 'starting RPC daemons:'
+-start_daemon portmap
+-if [[ -n $(domainname) ]]; then
+-	start_daemon ypldap ypserv ypbind
+-fi
+-start_daemon mountd nfsd lockd statd amd
++daemon_phase 50
+ echo '.'
+ 
+ # Check and mount remaining file systems and enable additional swap.
+@@ -626,43 +617,24 @@ echo 'preserving editor files.'; /usr/libexec/vi.recover
+ run_upgrade_script sysmerge
+ 
+ echo -n 'starting network daemons:'
+-start_daemon ldomd sshd snmpd ldpd ripd ospfd ospf6d bgpd ifstated
+-start_daemon relayd dhcpd dhcrelay mrouted dvmrpd radiusd eigrpd route6d
+-start_daemon rad hostapd lpd smtpd slowcgi bgplgd httpd ftpd
+-start_daemon ftpproxy ftpproxy6 tftpd tftpproxy identd inetd rarpd bootparamd
+-start_daemon rbootd mopd vmd spamd spamlogd sndiod
++daemon_phase 60
+ echo '.'
+ 
+ # If rc.firsttime exists, run it just once, and make sure it is deleted.
+ run_upgrade_script firsttime
+ 
+-# Run rc.d(8) scripts from packages.
+-if [[ -n $pkg_scripts ]]; then
+-	echo -n 'starting package daemons:'
+-	for _daemon in $pkg_scripts; do
+-		if [[ -x /etc/rc.d/$_daemon ]]; then
+-			start_daemon $_daemon
+-		else
+-			echo -n " ${_daemon}(absent)"
+-		fi
+-	done
+-	echo '.'
+-fi
+-
+ [[ -f /etc/rc.local ]] && sh /etc/rc.local
+ 
++daemon_phase 70
++
+ # Disable carp interlock.
+ ifconfig -g carp -carpdemote 128
+ 
+ mixerctl_conf
+ 
+ echo -n 'starting local daemons:'
+-start_daemon apmd sensorsd hotplugd watchdogd cron wsmoused xenodm
++daemon_phase 80
+ echo '.'
+ 
+-# Re-link the kernel, placing the objects in a random order.
+-# Replace current with relinked kernel and inform root about it.
+-/usr/libexec/reorder_kernel &
+-
+ date
+ exit 0

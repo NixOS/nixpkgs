@@ -1,0 +1,14 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 84cc68c..2e02194 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -85,7 +85,7 @@ install(TARGETS KF6FileMetaData EXPORT KF6FileMetaDataTargets ${KF_INSTALL_TARGE
+
+ install(EXPORT KF6FileMetaDataTargets
+         NAMESPACE KF6::
+-        DESTINATION ${KDE_INSTALL_LIBDIR}/cmake/KF6FileMetaData
++        DESTINATION ${KDE_INSTALL_FULL_CMAKEPACKAGEDIR}/KF6FileMetaData
+         FILE KF6FileMetaDataTargets.cmake)
+
+ install(FILES
+ 

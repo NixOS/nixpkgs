@@ -1,0 +1,15 @@
+diff --git a/sweep.h b/sweep.h
+index 198349d..549f39f 100644
+--- a/sweep.h
++++ b/sweep.h
+@@ -32,6 +32,10 @@
+ #include <string.h>
+ #endif /* HAVE_STRING_H */
+ 
++#ifdef HAVE_STRINGS_H
++#include <strings.h>
++#endif /* HAVE_STRINGS_H */
++
+ #ifdef HAVE_GETOPT_H
+ #include <getopt.h>
+ #endif /* HAVE_GETOPT_H */

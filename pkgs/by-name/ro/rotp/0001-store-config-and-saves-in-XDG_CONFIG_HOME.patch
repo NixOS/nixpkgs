@@ -1,0 +1,106 @@
+From 0b49ad87d24193b819dfaf706b4f9f62256863ac Mon Sep 17 00:00:00 2001
+From: Joshua Trees <me@jtrees.io>
+Date: Tue, 31 Jan 2023 22:59:55 +0100
+Subject: [PATCH] store config and saves in XDG_CONFIG_HOME
+
+---
+ src/rotp/Rotp.java               | 15 +++++++++++++++
+ src/rotp/lang/bn/labels.txt      |  2 +-
+ src/rotp/lang/en/labels.txt      |  2 +-
+ src/rotp/ui/UserPreferences.java |  7 ++++---
+ 4 files changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/src/rotp/Rotp.java b/src/rotp/Rotp.java
+index 72d8e446..a8fcd695 100644
+--- a/src/rotp/Rotp.java
++++ b/src/rotp/Rotp.java
+@@ -43,6 +43,7 @@ public class Rotp {
+     public static String exeFileName = "Remnants.exe";
+     public static boolean countWords = false;
+     private static String startupDir = System.getProperty("startupdir");
++    private static String configDir = null;
+     private static JFrame frame;
+     public static String releaseId = "1.04";
+     public static long startMs = System.currentTimeMillis();
+@@ -165,6 +166,20 @@ public class Rotp {
+         }
+         return startupDir;
+     }
++    public static String configDir()  {
++        if (configDir == null) {
++            configDir = getXdgConfigHome() + File.separator + "rotp" + File.separator;
++        }
++        return configDir;
++    }
++    private static String getXdgConfigHome() {
++        String value = System.getenv().get("XDG_CONFIG_HOME");
++        if (value == null || value.trim().length() == 0) {
++            String XDG_CONFIG_HOME_DEFAULT = System.getenv().get("HOME") + File.separator + ".config";
++            value = XDG_CONFIG_HOME_DEFAULT;
++        }
++        return value;
++    }
+     private static void stopIfInsufficientMemory(JFrame frame, int allocMb) {
+         if (allocMb < 260) {
+             JOptionPane.showMessageDialog(frame, "Error starting game: Not enough free memory to play");
+diff --git a/src/rotp/lang/bn/labels.txt b/src/rotp/lang/bn/labels.txt
+index bdbc47ef..6072c90a 100644
+--- a/src/rotp/lang/bn/labels.txt
++++ b/src/rotp/lang/bn/labels.txt
+@@ -362,7 +362,7 @@ GAME_SETTINGS_BACKUP_DESC         | Enable to have your current game periodicall
+ GAME_SETTINGS_SAVEDIR             | Save Directory: %1
+ GAME_SETTINGS_SAVEDIR_DEFAULT     | Default
+ GAME_SETTINGS_SAVEDIR_CUSTOM      | Custom
+-GAME_SETTINGS_SAVEDIR_DESC1       | The save directory is currently set to the same directory as the game.
++GAME_SETTINGS_SAVEDIR_DESC1       | The save directory is currently set to the default location.
+ GAME_SETTINGS_SAVEDIR_DESC2       | The save directory is currently set to: %1
+ 
+ // Load Game UI
+diff --git a/src/rotp/lang/en/labels.txt b/src/rotp/lang/en/labels.txt
+index 6ba316ae..59e3f0e6 100644
+--- a/src/rotp/lang/en/labels.txt
++++ b/src/rotp/lang/en/labels.txt
+@@ -362,7 +362,7 @@ GAME_SETTINGS_BACKUP_DESC         | Enable to have your current game periodicall
+ GAME_SETTINGS_SAVEDIR             | Save Directory: %1
+ GAME_SETTINGS_SAVEDIR_DEFAULT     | Default
+ GAME_SETTINGS_SAVEDIR_CUSTOM      | Custom
+-GAME_SETTINGS_SAVEDIR_DESC1       | The save directory is currently set to the same directory as the game.
++GAME_SETTINGS_SAVEDIR_DESC1       | The save directory is currently set to the default location.
+ GAME_SETTINGS_SAVEDIR_DESC2       | The save directory is currently set to: %1
+ 
+ // Load Game UI
+diff --git a/src/rotp/ui/UserPreferences.java b/src/rotp/ui/UserPreferences.java
+index 6deec256..a792091e 100644
+--- a/src/rotp/ui/UserPreferences.java
++++ b/src/rotp/ui/UserPreferences.java
+@@ -190,7 +190,7 @@ public class UserPreferences {
+     public static void screenSizePct(int i) { setScreenSizePct(i); }
+     public static String saveDirectoryPath() {
+         if (saveDir.isEmpty())
+-            return Rotp.jarPath();
++            return Rotp.configDir();
+         else
+             return saveDir;
+     }
+@@ -233,7 +233,7 @@ public class UserPreferences {
+         save();
+     }
+     public static void load() {
+-        String path = Rotp.jarPath();
++        String path = Rotp.configDir();
+         File configFile = new File(path, PREFERENCES_FILE);
+ 		// modnar: change to InputStreamReader, force UTF-8
+ 		try ( BufferedReader in = new BufferedReader( new InputStreamReader( new FileInputStream(configFile), "UTF-8"));) {
+@@ -251,7 +251,8 @@ public class UserPreferences {
+         }
+     }
+     public static int save() {
+-        String path = Rotp.jarPath();
++        String path = Rotp.configDir();
++        new File(path).mkdirs();
+         try (FileOutputStream fout = new FileOutputStream(new File(path, PREFERENCES_FILE));
+             // modnar: change to OutputStreamWriter, force UTF-8
+             PrintWriter out = new PrintWriter(new OutputStreamWriter(fout, "UTF-8")); ) {
+-- 
+2.38.3
+

@@ -1,0 +1,6 @@
+option(
+    'target_prefix',
+    type : 'string',
+    value : '',
+    description: 'Specifies the prefix to use when building for cross-compilation (e.g., `aarch64-apple-darwin`)'
+)

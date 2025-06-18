@@ -1,0 +1,26 @@
+diff --git a/src-qt5/core/libLumina/LuminaOS-NixOS.cpp b/src-qt5/core/libLumina/LuminaOS-NixOS.cpp
+index b92d1b0..441b1bf 100644
+--- a/src-qt5/core/libLumina/LuminaOS-NixOS.cpp
++++ b/src-qt5/core/libLumina/LuminaOS-NixOS.cpp
+@@ -13,17 +13,17 @@
+ //can't read xbrightness settings - assume invalid until set
+ static int screenbrightness = -1;
+ 
+-QString LOS::OSName(){ return "Gentoo Linux"; }
++QString LOS::OSName(){ return "NixOS"; }
+ 
+ //OS-specific prefix(s)
+ // NOTE: PREFIX, L_ETCDIR, L_SHAREDIR are defined in the OS-detect.pri project file and passed in
+ QString LOS::LuminaShare(){ return (L_SHAREDIR+"/lumina-desktop/"); } //Install dir for Lumina share files
+-QString LOS::AppPrefix(){ return "/usr/"; } //Prefix for applications
+-QString LOS::SysPrefix(){ return "/"; } //Prefix for system
++QString LOS::AppPrefix(){ return PREFIX+"/usr"; } //Prefix for applications
++QString LOS::SysPrefix(){ return PREFIX; } //Prefix for system
+ 
+ //OS-specific application shortcuts (*.desktop files)
+ QString LOS::ControlPanelShortcut(){ return ""; } //system control panel
+-QString LOS::AppStoreShortcut(){ return LOS::AppPrefix() + "/share/applications/porthole.desktop"; } //graphical app/pkg manager
++QString LOS::AppStoreShortcut(){ return ""; } //graphical app/pkg manager
+ //OS-specific RSS feeds (Format: QStringList[ <name>::::<url> ]; )
+ QStringList LOS::RSSFeeds(){ return QStringList(); } 
+ 

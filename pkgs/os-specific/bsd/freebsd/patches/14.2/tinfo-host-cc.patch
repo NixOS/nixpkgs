@@ -1,0 +1,15 @@
+--- a/lib/ncurses/tinfo/Makefile	2023-12-26 23:02:07.827892619 -0800
++++ b/lib/ncurses/tinfo/Makefile	2023-12-26 23:01:24.175546100 -0800
+@@ -282,10 +282,10 @@
+ build-tools: make_hash make_keys
+ 
+ make_keys: make_keys.c names.c ncurses_def.h ${HEADERS} ${BUILD_TOOLS_META}
+-	${CC:N${CCACHE_BIN}} -o $@ ${CFLAGS} ${NCURSES_DIR}/ncurses/tinfo/make_keys.c
++	${CC_HOST:N${CCACHE_BIN}} -o $@ ${CFLAGS} ${NCURSES_DIR}/ncurses/tinfo/make_keys.c
+ 
+ make_hash: make_hash.c hashsize.h ncurses_def.h ${HEADERS} ${BUILD_TOOLS_META}
+-	${CC:N${CCACHE_BIN}} -o $@ ${CFLAGS} -DMAIN_PROGRAM \
++	${CC_HOST:N${CCACHE_BIN}} -o $@ ${CFLAGS} -DMAIN_PROGRAM \
+ 		${NCURSES_DIR}/ncurses/tinfo/make_hash.c
+ .endif
+ .if ${MK_DIRDEPS_BUILD} == "yes" && ${MACHINE} != "host"

@@ -1,0 +1,19 @@
+diff --git a/config.c b/config.c
+index 6477259..c462ed3 100644
+--- a/config.c
++++ b/config.c
+@@ -114,9 +114,12 @@ cf_check(void)
+ void
+ cf_parse(void)
+ {
+-  FILE *f = fopen(CONFIG_FILE, "r");
++  char *config_file = getenv("ISOLATE_CONFIG_FILE");
++  if(!config_file)
++    die("ISOLATE_CONFIG_FILE environment variable not set");
++  FILE *f = fopen(config_file, "r");
+   if (!f)
+-    die("Cannot open %s: %m", CONFIG_FILE);
++    die("Cannot open %s: %m", config_file);
+ 
+   char line[MAX_LINE_LEN];
+   while (fgets(line, sizeof(line), f))

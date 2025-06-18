@@ -1,0 +1,292 @@
+# WARNING:
+# When extending this action, be aware that $GITHUB_TOKEN allows some write
+# access to the GitHub API. This means that it should not evaluate user input in
+# a way that allows code injection.
+
+name: Labels
+
+on:
+  schedule:
+    - cron: '07,17,27,37,47,57 * * * *'
+  workflow_call:
+  workflow_dispatch:
+    inputs:
+      updatedWithin:
+        description: 'Updated within [hours]'
+        type: number
+        required: false
+        default: 0 # everything since last run
+
+concurrency:
+  # This explicitly avoids using `run_id` for the concurrency key to make sure that only
+  # *one* non-PR run can run at a time.
+  group: labels-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number }}
+  # PR- and manually-triggered runs will be cancelled, but scheduled runs will be queued.
+  cancel-in-progress: ${{ github.event_name != 'schedule' }}
+
+permissions:
+  issues: write # needed to create *new* labels
+  pull-requests: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  update:
+    runs-on: ubuntu-24.04-arm
+    if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
+    steps:
+      - name: Install dependencies
+        run: npm install @actions/artifact bottleneck
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Labels from API data and Eval results
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          UPDATED_WITHIN: ${{ inputs.updatedWithin }}
+        with:
+          script: |
+            const Bottleneck = require('bottleneck')
+            const path = require('node:path')
+            const { DefaultArtifactClient } = require('@actions/artifact')
+            const { readFile } = require('node:fs/promises')
+
+            const artifactClient = new DefaultArtifactClient()
+
+            const stats = {
+              prs: 0,
+              requests: 0,
+              artifacts: 0
+            }
+
+            // Rate-Limiting and Throttling, see for details:
+            //   https://github.com/octokit/octokit.js/issues/1069#throttling
+            //   https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api
+            const allLimits = new Bottleneck({
+              // Avoid concurrent requests
+              maxConcurrent: 1,
+              // Hourly limit is at 5000, but other jobs need some, too!
+              // https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
+              reservoir: 1000,
+              reservoirRefreshAmount: 1000,
+              reservoirRefreshInterval: 60 * 60 * 1000
+            })
+            // Pause between mutative requests
+            const writeLimits = new Bottleneck({ minTime: 1000 }).chain(allLimits)
+            github.hook.wrap('request', async (request, options) => {
+              stats.requests++
+              if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method))
+                return writeLimits.schedule(request.bind(null, options))
+              else
+                return allLimits.schedule(request.bind(null, options))
+            })
+
+            if (process.env.UPDATED_WITHIN && !/^\d+$/.test(process.env.UPDATED_WITHIN))
+              throw new Error('Please enter "updated within" as integer in hours.')
+
+            const cutoff = new Date(await (async () => {
+              // Always run for Pull Request triggers, no cutoff since there will be a single
+              // response only anyway. 0 is the Unix epoch, so always smaller.
+              if (context.payload.pull_request?.number) return 0
+
+              // Manually triggered via UI when updatedWithin is set. Will fallthrough to the last
+              // option if the updatedWithin parameter is set to 0, which is the default.
+              const updatedWithin = Number.parseInt(process.env.UPDATED_WITHIN, 10)
+              if (updatedWithin) return new Date().getTime() - updatedWithin * 60 * 60 * 1000
+
+              // Normally a scheduled run, but could be workflow_dispatch, see above. Go back as far
+              // as the last successful run of this workflow to make sure we are not leaving anyone
+              // behind on GHA failures.
+              // Defaults to go back 1 hour on the first run.
+              return (await github.rest.actions.listWorkflowRuns({
+                ...context.repo,
+                workflow_id: 'labels.yml',
+                event: 'schedule',
+                status: 'success',
+                exclude_pull_requests: true
+              })).data.workflow_runs[0]?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000
+            })())
+            core.info('cutoff timestamp: ' + cutoff.toISOString())
+
+            // To simplify this action's logic we fetch the pull_request data again below, even if
+            // we are already in a pull_request event's context and would have the data readily
+            // available. We do this by filtering the list of pull requests with head and base
+            // branch - there can only be a single open Pull Request for any such combination.
+            const prEventCondition = !context.payload.pull_request ? undefined : {
+              // "label" is in the format of `user:branch` or `org:branch`
+              head: context.payload.pull_request.head.label,
+              base: context.payload.pull_request.base.ref
+            }
+
+            const prs = await github.paginate(
+              github.rest.pulls.list,
+              {
+                ...context.repo,
+                state: 'open',
+                sort: 'updated',
+                direction: 'desc',
+                ...prEventCondition
+              },
+              (response, done) => response.data.map(async (pull_request) => {
+                try {
+                  const log = (k,v,skip) => {
+                    core.info(`PR #${pull_request.number} - ${k}: ${v}` + (skip ? ' (skipped)' : ''))
+                    return skip
+                  }
+
+                  if (log('Last updated at', pull_request.updated_at, new Date(pull_request.updated_at) < cutoff))
+                    return done()
+                  stats.prs++
+                  log('URL', pull_request.html_url)
+
+                  const run_id = (await github.rest.actions.listWorkflowRuns({
+                    ...context.repo,
+                    workflow_id: 'pr.yml',
+                    event: 'pull_request_target',
+                    // For PR events, the workflow run is still in progress with this job itself.
+                    status: prEventCondition ? 'in_progress' : 'success',
+                    exclude_pull_requests: true,
+                    head_sha: pull_request.head.sha
+                  })).data.workflow_runs[0]?.id
+
+                  // Newer PRs might not have run Eval to completion, yet. We can skip them, because this
+                  // job will be run as part of that Eval run anyway.
+                  if (log('Last eval run', run_id ?? '<pending>', !run_id))
+                    return;
+
+                  const artifact = (await github.rest.actions.listWorkflowRunArtifacts({
+                    ...context.repo,
+                    run_id,
+                    name: 'comparison'
+                  })).data.artifacts[0]
+
+                  // Instead of checking the boolean artifact.expired, we will give us a minute to
+                  // actually download the artifact in the next step and avoid that race condition.
+                  // Older PRs, where the workflow run was already eval.yml, but the artifact was not
+                  // called "comparison", yet, will be skipped as well.
+                  const expired = new Date(artifact?.expires_at ?? 0) < new Date(new Date().getTime() + 60 * 1000)
+                  if (log('Artifact expires at', artifact?.expires_at ?? '<not found>', expired))
+                    return;
+                  stats.artifacts++
+
+                  await artifactClient.downloadArtifact(artifact.id, {
+                    findBy: {
+                      repositoryName: context.repo.repo,
+                      repositoryOwner: context.repo.owner,
+                      token: core.getInput('github-token')
+                    },
+                    path: path.resolve(pull_request.number.toString()),
+                    expectedHash: artifact.digest
+                  })
+
+                  // Get all currently set labels that we manage
+                  const before =
+                    pull_request.labels.map(({ name }) => name)
+                    .filter(name =>
+                      name.startsWith('10.rebuild') ||
+                      name == '11.by: package-maintainer' ||
+                      name.startsWith('12.approvals:') ||
+                      name == '12.approved-by: package-maintainer'
+                    )
+
+                  const approvals = new Set(
+                    (await github.paginate(github.rest.pulls.listReviews, {
+                      ...context.repo,
+                      pull_number: pull_request.number
+                    }))
+                    .filter(review => review.state == 'APPROVED')
+                    .map(review => review.user?.id)
+                  )
+
+                  const maintainers = new Set(Object.keys(
+                    JSON.parse(await readFile(`${pull_request.number}/maintainers.json`, 'utf-8'))
+                  ).map(m => Number.parseInt(m, 10)))
+
+                  // And the labels that should be there
+                  const after = JSON.parse(await readFile(`${pull_request.number}/changed-paths.json`, 'utf-8')).labels
+                  if (approvals.size > 0) after.push(`12.approvals: ${approvals.size > 2 ? '3+' : approvals.size}`)
+                  if (Array.from(maintainers).some(m => approvals.has(m))) after.push('12.approved-by: package-maintainer')
+
+                  // Remove the ones not needed anymore
+                  await Promise.all(
+                    before.filter(name => !after.includes(name))
+                    .map(name => github.rest.issues.removeLabel({
+                      ...context.repo,
+                      issue_number: pull_request.number,
+                      name
+                    }))
+                  )
+
+                  // And add the ones that aren't set already
+                  const added = after.filter(name => !before.includes(name))
+                  if (added.length > 0) {
+                    await github.rest.issues.addLabels({
+                      ...context.repo,
+                      issue_number: pull_request.number,
+                      labels: added
+                    })
+                  }
+                } catch (cause) {
+                  throw new Error(`Labeling PR #${pull_request.number} failed.`, { cause })
+                }
+              })
+            );
+
+            (await Promise.allSettled(prs.flat()))
+              .filter(({ status }) => status == 'rejected')
+              .map(({ reason }) => core.setFailed(`${reason.message}\n${reason.cause.stack}`))
+
+            core.notice(`Processed ${stats.prs} PRs, made ${stats.requests + stats.artifacts} API requests and downloaded ${stats.artifacts} artifacts.`)
+
+      - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        name: Labels from touched files
+        if: |
+          github.event_name == 'pull_request_target' &&
+          github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
+            github.head_ref == 'haskell-updates' ||
+            github.head_ref == 'python-updates' ||
+            github.head_ref == 'staging-next' ||
+            startsWith(github.head_ref, 'staging-next-')
+          )
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml # default
+          sync-labels: true
+
+      - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        name: Labels from touched files (no sync)
+        if: |
+          github.event_name == 'pull_request_target' &&
+          github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
+            github.head_ref == 'haskell-updates' ||
+            github.head_ref == 'python-updates' ||
+            github.head_ref == 'staging-next' ||
+            startsWith(github.head_ref, 'staging-next-')
+          )
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler-no-sync.yml
+          sync-labels: false
+
+      - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        name: Labels from touched files (development branches)
+        # Development branches like staging-next, haskell-updates and python-updates get special labels.
+        # This is to avoid the mass of labels there, which is mostly useless - and really annoying for
+        # the backport labels.
+        if: |
+          github.event_name == 'pull_request_target' &&
+          github.event.pull_request.head.repo.owner.login == 'NixOS' && (
+            github.head_ref == 'haskell-updates' ||
+            github.head_ref == 'python-updates' ||
+            github.head_ref == 'staging-next' ||
+            startsWith(github.head_ref, 'staging-next-')
+          )
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler-development-branches.yml
+          sync-labels: true

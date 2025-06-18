@@ -1,0 +1,17 @@
+[
+  {
+    "pname": "CommandLineParser",
+    "version": "2.9.1",
+    "hash": "sha256-ApU9y1yX60daSjPk3KYDBeJ7XZByKW8hse9NRZGcjeo="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "SixLabors.ImageSharp",
+    "version": "3.1.5",
+    "hash": "sha256-3UehX9T+I81nfgv2dTHlpoPgYzXFk7kHr1mmlQOCBfw="
+  }
+]

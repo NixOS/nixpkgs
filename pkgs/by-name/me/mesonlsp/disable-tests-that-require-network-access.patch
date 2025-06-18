@@ -1,0 +1,57 @@
+From 5a886abd956607503e9dc7cd22923eaf8b01e46f Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <contact@paveloom.dev>
+Date: Mon, 3 Jun 2024 20:31:27 +0300
+Subject: [PATCH] Disable tests that require network access.
+
+---
+ tests/integration/meson.build |  2 --
+ tests/libutils/test.cpp       | 20 --------------------
+ 2 files changed, 22 deletions(-)
+
+diff --git a/tests/integration/meson.build b/tests/integration/meson.build
+index da1b3b76..8908e690 100644
+--- a/tests/integration/meson.build
++++ b/tests/integration/meson.build
+@@ -51,8 +51,6 @@ wrap_files = files(
+     'wrap-test/vorbis.wrap',
+ )
+
+-test('wrap-test', wrap_tester, args: [wrap_files], timeout: 200000)
+-
+ partial_interpreter_tests = [
+     [
+         'foreach',
+diff --git a/tests/libutils/test.cpp b/tests/libutils/test.cpp
+index 2b20191c..c313312b 100644
+--- a/tests/libutils/test.cpp
++++ b/tests/libutils/test.cpp
+@@ -131,26 +131,6 @@ TEST(UtilsTest, testMergingDirectories) {
+   ASSERT_EQ('a', std::ifstream(outputDir / "i1/a.txt").get());
+ }
+
+-TEST(UtilsTest, testDownloadAndExtraction) {
+-  auto zipFileName = std::filesystem::path{randomFile() + "-1"};
+-  auto result = downloadFile(
+-      "https://github.com/JCWasmx86/mesonlsp/archive/refs/heads/main.zip",
+-      zipFileName);
+-  ASSERT_TRUE(result);
+-  auto directoryName = std::filesystem::path{randomFile() + "-2"};
+-  std::filesystem::create_directory(directoryName);
+-  result = extractFile(zipFileName, directoryName);
+-  ASSERT_TRUE(result);
+-  auto mustExist =
+-      directoryName / "mesonlsp-main/Benchmarks/extract_git_data.sh";
+-  ASSERT_TRUE(std::filesystem::exists(mustExist));
+-  auto mustFailFilename = std::filesystem::path{randomFile() + "-3"};
+-  result =
+-      downloadFile("lnfvwoefvnwefvwvipwnefv2efvpov2nvov", mustFailFilename);
+-  ASSERT_FALSE(result);
+-  ASSERT_FALSE(std::filesystem::exists(mustFailFilename));
+-}
+-
+ int main(int argc, char **argv) {
+   testing::InitGoogleTest(&argc, argv);
+   return RUN_ALL_TESTS();
+--
+2.45.1
+

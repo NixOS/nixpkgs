@@ -1,0 +1,306 @@
+From 86f2f767ddffd9f7c6f1470b987ae7b0d251b988 Mon Sep 17 00:00:00 2001
+From: Liu Hao <lh_mouse@126.com>
+Date: Wed, 25 Apr 2018 21:54:19 +0800
+Subject: [PATCH] Added 'mcf' thread model support from mcfgthread.
+
+Signed-off-by: Liu Hao <lh_mouse@126.com>
+---
+ config/gthr.m4                          |  1 +
+ gcc/config.gcc                          |  3 +++
+ gcc/config/i386/mingw-mcfgthread.h      |  1 +
+ gcc/config/i386/mingw-w64.h             |  2 +-
+ gcc/config/i386/mingw32.h               | 11 ++++++++++-
+ gcc/configure                           |  2 +-
+ gcc/configure.ac                        |  2 +-
+ libatomic/configure.tgt                 |  2 +-
+ libgcc/config.host                      |  6 ++++++
+ libgcc/config/i386/gthr-mcf.h           |  1 +
+ libgcc/config/i386/t-mingw-mcfgthread   |  2 ++
+ libgcc/configure                        |  1 +
+ libstdc++-v3/configure                  |  1 +
+ libstdc++-v3/libsupc++/atexit_thread.cc | 18 ++++++++++++++++++
+ libstdc++-v3/libsupc++/guard.cc         | 23 +++++++++++++++++++++++
+ libstdc++-v3/src/c++11/thread.cc        |  9 +++++++++
+ 16 files changed, 80 insertions(+), 5 deletions(-)
+ create mode 100644 gcc/config/i386/mingw-mcfgthread.h
+ create mode 100644 libgcc/config/i386/gthr-mcf.h
+ create mode 100644 libgcc/config/i386/t-mingw-mcfgthread
+
+diff --git a/config/gthr.m4 b/config/gthr.m4
+index 7b29f1f3327..82e21fe1709 100644
+--- a/config/gthr.m4
++++ b/config/gthr.m4
+@@ -21,6 +21,7 @@ case $1 in
+     tpf)	thread_header=config/s390/gthr-tpf.h ;;
+     vxworks)	thread_header=config/gthr-vxworks.h ;;
+     win32)	thread_header=config/i386/gthr-win32.h ;;
++    mcf)	thread_header=config/i386/gthr-mcf.h ;;
+ esac
+ AC_SUBST(thread_header)
+ ])
+diff --git a/gcc/config.gcc b/gcc/config.gcc
+index 46a9029acec..112c24e95a3 100644
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -1758,6 +1758,9 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 	if test x$enable_threads = xposix ; then
+ 		tm_file="${tm_file} i386/mingw-pthread.h"
+ 	fi
++	if test x$enable_threads = xmcf ; then
++		tm_file="${tm_file} i386/mingw-mcfgthread.h"
++	fi
+ 	tm_file="${tm_file} i386/mingw32.h"
+ 	# This makes the logic if mingw's or the w64 feature set has to be used
+ 	case ${target} in
+diff --git a/gcc/config/i386/mingw-mcfgthread.h b/gcc/config/i386/mingw-mcfgthread.h
+new file mode 100644
+index 00000000000..ec381a7798f
+--- /dev/null
++++ b/gcc/config/i386/mingw-mcfgthread.h
+@@ -0,0 +1 @@
++#define TARGET_USE_MCFGTHREAD 1
+diff --git a/gcc/config/i386/mingw-w64.h b/gcc/config/i386/mingw-w64.h
+index 484dc7a9e9f..a15bbeea500 100644
+--- a/gcc/config/i386/mingw-w64.h
++++ b/gcc/config/i386/mingw-w64.h
+@@ -48,7 +48,7 @@ along with GCC; see the file COPYING3.  If not see
+ 		 "%{mwindows:-lgdi32 -lcomdlg32} " \
+      "%{fvtable-verify=preinit:-lvtv -lpsapi; \
+         fvtable-verify=std:-lvtv -lpsapi} " \
+-		 "-ladvapi32 -lshell32 -luser32 -lkernel32"
++		 LIB_MCFGTHREAD "-ladvapi32 -lshell32 -luser32 -lkernel32"
+ 
+ #undef SPEC_32
+ #undef SPEC_64
+diff --git a/gcc/config/i386/mingw32.h b/gcc/config/i386/mingw32.h
+index 0612b87199a..76cea94f3b7 100644
+--- a/gcc/config/i386/mingw32.h
++++ b/gcc/config/i386/mingw32.h
+@@ -32,6 +32,14 @@ along with GCC; see the file COPYING3.  If not see
+ 	 | MASK_STACK_PROBE | MASK_ALIGN_DOUBLE \
+ 	 | MASK_MS_BITFIELD_LAYOUT)
+ 
++#ifndef TARGET_USE_MCFGTHREAD
++#define CPP_MCFGTHREAD()  ((void)0)
++#define LIB_MCFGTHREAD     ""
++#else
++#define CPP_MCFGTHREAD()  (builtin_define("__USING_MCFGTHREAD__"))
++#define LIB_MCFGTHREAD     " -lmcfgthread "
++#endif
++
+ /* See i386/crtdll.h for an alternative definition. _INTEGRAL_MAX_BITS
+    is for compatibility with native compiler.  */
+ #define EXTRA_OS_CPP_BUILTINS()					\
+@@ -50,6 +58,7 @@ along with GCC; see the file COPYING3.  If not see
+ 	  builtin_define_std ("WIN64");				\
+ 	  builtin_define ("_WIN64");				\
+ 	}							\
++	CPP_MCFGTHREAD();	\
+     }								\
+   while (0)
+ 
+@@ -93,7 +102,7 @@ along with GCC; see the file COPYING3.  If not see
+ 		 "%{mwindows:-lgdi32 -lcomdlg32} " \
+      "%{fvtable-verify=preinit:-lvtv -lpsapi; \
+         fvtable-verify=std:-lvtv -lpsapi} " \
+-                 "-ladvapi32 -lshell32 -luser32 -lkernel32"
++                 LIB_MCFGTHREAD "-ladvapi32 -lshell32 -luser32 -lkernel32"
+ 
+ /* Weak symbols do not get resolved if using a Windows dll import lib.
+    Make the unwind registration references strong undefs.  */
+diff --git a/gcc/configure b/gcc/configure
+index 6121e163259..52f0e00efe6 100755
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -11693,7 +11693,7 @@ case ${enable_threads} in
+     target_thread_file='single'
+     ;;
+   aix | dce | lynx | mipssde | posix | rtems | \
+-  single | tpf | vxworks | win32)
++  single | tpf | vxworks | win32 | mcf)
+     target_thread_file=${enable_threads}
+     ;;
+   *)
+diff --git a/gcc/configure.ac b/gcc/configure.ac
+index b066cc609e1..4ecdba88de7 100644
+--- a/gcc/configure.ac
++++ b/gcc/configure.ac
+@@ -1612,7 +1612,7 @@ case ${enable_threads} in
+     target_thread_file='single'
+     ;;
+   aix | dce | lynx | mipssde | posix | rtems | \
+-  single | tpf | vxworks | win32)
++  single | tpf | vxworks | win32 | mcf)
+     target_thread_file=${enable_threads}
+     ;;
+   *)
+diff --git a/libatomic/configure.tgt b/libatomic/configure.tgt
+index ea8c34f8c71..23134ad7363 100644
+--- a/libatomic/configure.tgt
++++ b/libatomic/configure.tgt
+@@ -145,7 +145,7 @@ case "${target}" in
+   *-*-mingw*)
+ 	# OS support for atomic primitives.
+         case ${target_thread_file} in
+-          win32)
++          win32 | mcf)
+             config_path="${config_path} mingw"
+             ;;
+           posix)
+diff --git a/libgcc/config.host b/libgcc/config.host
+index 11b4acaff55..9fbd38650bd 100644
+--- a/libgcc/config.host
++++ b/libgcc/config.host
+@@ -737,6 +737,9 @@ i[34567]86-*-mingw*)
+ 	  posix)
+ 	    tmake_file="i386/t-mingw-pthread $tmake_file"
+ 	    ;;
++	  mcf)
++	    tmake_file="i386/t-mingw-mcfgthread $tmake_file"
++	    ;;
+ 	esac
+ 	# This has to match the logic for DWARF2_UNWIND_INFO in gcc/config/i386/cygming.h
+ 	if test x$ac_cv_sjlj_exceptions = xyes; then
+@@ -761,6 +764,9 @@ x86_64-*-mingw*)
+ 	  posix)
+ 	    tmake_file="i386/t-mingw-pthread $tmake_file"
+ 	    ;;
++	  mcf)
++	    tmake_file="i386/t-mingw-mcfgthread $tmake_file"
++	    ;;
+ 	esac
+ 	# This has to match the logic for DWARF2_UNWIND_INFO in gcc/config/i386/cygming.h
+ 	if test x$ac_cv_sjlj_exceptions = xyes; then
+diff --git a/libgcc/config/i386/gthr-mcf.h b/libgcc/config/i386/gthr-mcf.h
+new file mode 100644
+index 00000000000..5ea2908361f
+--- /dev/null
++++ b/libgcc/config/i386/gthr-mcf.h
+@@ -0,0 +1 @@
++#include <mcfgthread/gthread.h>
+diff --git a/libgcc/config/i386/t-mingw-mcfgthread b/libgcc/config/i386/t-mingw-mcfgthread
+new file mode 100644
+index 00000000000..4b9b10e32d6
+--- /dev/null
++++ b/libgcc/config/i386/t-mingw-mcfgthread
+@@ -0,0 +1,2 @@
++SHLIB_PTHREAD_CFLAG =
++SHLIB_PTHREAD_LDFLAG = -lmcfgthread
+diff --git a/libgcc/configure b/libgcc/configure
+index b2f3f870844..eff889dc3b3 100644
+--- a/libgcc/configure
++++ b/libgcc/configure
+@@ -5451,6 +5451,7 @@ case $target_thread_file in
+     tpf)	thread_header=config/s390/gthr-tpf.h ;;
+     vxworks)	thread_header=config/gthr-vxworks.h ;;
+     win32)	thread_header=config/i386/gthr-win32.h ;;
++    mcf)	thread_header=config/i386/gthr-mcf.h ;;
+ esac
+ 
+ 
+diff --git a/libstdc++-v3/configure b/libstdc++-v3/configure
+index ba094be6f15..979a5ab9ace 100755
+--- a/libstdc++-v3/configure
++++ b/libstdc++-v3/configure
+@@ -15187,6 +15187,7 @@ case $target_thread_file in
+     tpf)	thread_header=config/s390/gthr-tpf.h ;;
+     vxworks)	thread_header=config/gthr-vxworks.h ;;
+     win32)	thread_header=config/i386/gthr-win32.h ;;
++    mcf)	thread_header=config/i386/gthr-mcf.h ;;
+ esac
+ 
+ 
+diff --git a/libstdc++-v3/libsupc++/atexit_thread.cc b/libstdc++-v3/libsupc++/atexit_thread.cc
+index de920d714c6..665fb74bd6b 100644
+--- a/libstdc++-v3/libsupc++/atexit_thread.cc
++++ b/libstdc++-v3/libsupc++/atexit_thread.cc
+@@ -25,6 +25,22 @@
+ #include <cstdlib>
+ #include <new>
+ #include "bits/gthr.h"
++
++#ifdef __USING_MCFGTHREAD__
++
++#include <mcfgthread/gthread.h>
++namespace __cxxabiv1 {
++extern "C" int
++__cxa_thread_atexit (void (_GLIBCXX_CDTOR_CALLABI *dtor)(void *),
++				 void *obj, void *dso_handle)
++  _GLIBCXX_NOTHROW
++{
++  return ::_MCFCRT_AtThreadExit((void (*)(_MCFCRT_STD intptr_t))dtor, (_MCFCRT_STD intptr_t)obj) ? 0 : -1;
++  (void)dso_handle;
++}
++}
++#else // __USING_MCFGTHREAD__
++
+ #ifdef _GLIBCXX_THREAD_ATEXIT_WIN32
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
+@@ -167,3 +183,5 @@ __cxxabiv1::__cxa_thread_atexit (void (*dtor)(void *), void *obj, void */*dso_ha
+ }
+ 
+ #endif /* _GLIBCXX_HAVE___CXA_THREAD_ATEXIT_IMPL */
++
++#endif // __USING_MCFGTHREAD__
+diff --git a/libstdc++-v3/libsupc++/guard.cc b/libstdc++-v3/libsupc++/guard.cc
+index 3a2ec3ad0d6..8b4cc96199b 100644
+--- a/libstdc++-v3/libsupc++/guard.cc
++++ b/libstdc++-v3/libsupc++/guard.cc
+@@ -28,6 +28,27 @@
+ #include <cxxabi.h>
+ #include <exception>
+ #include <new>
++
++#ifdef __USING_MCFGTHREAD__
++
++#include <mcfgthread/gthread.h>
++
++namespace __cxxabiv1 {
++
++extern "C" int __cxa_guard_acquire(__guard *g){
++	return ::_MCFCRT_WaitForOnceFlagForever((::_MCFCRT_OnceFlag *)g) == ::_MCFCRT_kOnceResultInitial;
++}
++extern "C" void __cxa_guard_abort(__guard *g) throw() {
++	::_MCFCRT_SignalOnceFlagAsAborted((::_MCFCRT_OnceFlag *)g);
++}
++extern "C" void __cxa_guard_release(__guard *g) throw() {
++	::_MCFCRT_SignalOnceFlagAsFinished((::_MCFCRT_OnceFlag *)g);
++}
++
++}
++
++#else // __USING_MCFGTHREAD__
++
+ #include <ext/atomicity.h>
+ #include <ext/concurrence.h>
+ #include <bits/atomic_lockfree_defines.h>
+@@ -425,3 +446,5 @@ namespace __cxxabiv1
+ #endif
+   }
+ }
++
++#endif
+diff --git a/libstdc++-v3/src/c++11/thread.cc b/libstdc++-v3/src/c++11/thread.cc
+index 8238817c2e9..0c6a1f85f6f 100644
+--- a/libstdc++-v3/src/c++11/thread.cc
++++ b/libstdc++-v3/src/c++11/thread.cc
+@@ -55,6 +55,15 @@ static inline int get_nprocs()
+ #elif defined(_GLIBCXX_USE_SC_NPROC_ONLN)
+ # include <unistd.h>
+ # define _GLIBCXX_NPROCS sysconf(_SC_NPROC_ONLN)
++#elif defined(_WIN32)
++# include <windows.h>
++static inline int get_nprocs()
++{
++  SYSTEM_INFO sysinfo;
++  GetSystemInfo(&sysinfo);
++  return (int)sysinfo.dwNumberOfProcessors;
++}
++# define _GLIBCXX_NPROCS get_nprocs()
+ #else
+ # define _GLIBCXX_NPROCS 0
+ #endif
+-- 
+2.17.0
+

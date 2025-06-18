@@ -1,0 +1,9 @@
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -28,4 +28,6 @@ subprojects {
+             }
+         }
+     }
++
++    tasks.withType<Javadoc>().configureEach { enabled = false }
+ }

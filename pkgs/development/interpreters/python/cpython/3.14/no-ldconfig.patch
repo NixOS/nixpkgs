@@ -1,0 +1,40 @@
+diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
+index 117bf06cb01..ff50cb083bd 100644
+--- a/Lib/ctypes/util.py
++++ b/Lib/ctypes/util.py
+@@ -280,34 +280,7 @@ def find_library(name, is64 = False):
+     else:
+ 
+         def _findSoname_ldconfig(name):
+-            import struct
+-            if struct.calcsize('l') == 4:
+-                machine = os.uname().machine + '-32'
+-            else:
+-                machine = os.uname().machine + '-64'
+-            mach_map = {
+-                'x86_64-64': 'libc6,x86-64',
+-                'ppc64-64': 'libc6,64bit',
+-                'sparc64-64': 'libc6,64bit',
+-                's390x-64': 'libc6,64bit',
+-                'ia64-64': 'libc6,IA-64',
+-                }
+-            abi_type = mach_map.get(machine, 'libc6')
+-
+-            # XXX assuming GLIBC's ldconfig (with option -p)
+-            regex = r'\s+(lib%s\.[^\s]+)\s+\(%s'
+-            regex = os.fsencode(regex % (re.escape(name), abi_type))
+-            try:
+-                with subprocess.Popen(['/sbin/ldconfig', '-p'],
+-                                      stdin=subprocess.DEVNULL,
+-                                      stderr=subprocess.DEVNULL,
+-                                      stdout=subprocess.PIPE,
+-                                      env={'LC_ALL': 'C', 'LANG': 'C'}) as p:
+-                    res = re.search(regex, p.stdout.read())
+-                    if res:
+-                        return os.fsdecode(res.group(1))
+-            except OSError:
+-                pass
++            return None
+ 
+         def _findLib_ld(name):
+             # See issue #9998 for why this is needed

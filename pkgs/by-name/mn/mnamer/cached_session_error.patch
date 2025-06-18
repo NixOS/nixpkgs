@@ -1,0 +1,28 @@
+From 94ea94de526770e783d04d75b981dfa3ac90fd20 Mon Sep 17 00:00:00 2001
+From: o7-machienhum <ryan.cjw@gmail.com>
+Date: Tue, 30 Jan 2024 03:29:09 -0800
+Subject: [PATCH] Fixes crash
+
+---
+ mnamer/utils.py | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/mnamer/utils.py b/mnamer/utils.py
+index 84df7870..8eba68f8 100644
+--- a/mnamer/utils.py
++++ b/mnamer/utils.py
+@@ -256,7 +256,6 @@ def request_json(
+         "like Gecko) Chrome/79.0.3945.88 Safari/537.36"
+     )
+ 
+-    initial_cache_state = session._disabled  # yes, i'm a bad person
+     try:
+         session._disabled = not cache
+         response = session.request(
+@@ -272,8 +271,6 @@ def request_json(
+     except:
+         content = None
+         status = 500
+-    finally:
+-        session._disabled = initial_cache_state
+     return status, (content or {})

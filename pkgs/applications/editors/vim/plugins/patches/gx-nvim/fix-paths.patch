@@ -1,0 +1,13 @@
+diff --git a/lua/gx/init.lua b/lua/gx/init.lua
+index 12272d4..c51771a 100644
+--- a/lua/gx/init.lua
++++ b/lua/gx/init.lua
+@@ -73,7 +73,7 @@ local function get_open_browser_app()
+   if sysname == "Darwin" then
+     app = "open"
+   elseif sysname == "Linux" then
+-    app = "xdg-open"
++    app = "@xdg-utils@/bin/xdg-open"
+   elseif sysname == "Windows_NT" then
+     app = "powershell.exe"
+   end

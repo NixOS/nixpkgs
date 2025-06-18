@@ -1,0 +1,15 @@
+--- setup.py	2025-04-01 11:24:54.530984662 +0000
++++ setup.py	2025-04-01 13:54:46.961341548 +0000
+ 
+@@ -111,9 +111,11 @@
+                 info('compressing man page to %s', gzfile)
+ 
+                 if not self.dry_run:
+-                    compressed = gzip.open(gzfile, 'w', 9)
+-                    compressed.write(manpage)
+-                    compressed.close()
++                    with open(gzfile, 'wb') as file:
++                        with gzip.GzipFile(fileobj=file, mode='wb', filename='', mtime=0, compresslevel=9) as compressed:
++                            compressed.write(manpage)
++                            compressed.close()
++                            file.close()

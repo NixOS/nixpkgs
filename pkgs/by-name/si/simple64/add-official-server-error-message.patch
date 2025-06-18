@@ -1,0 +1,15 @@
+diff --git a/simple64-gui/netplay/joinroom.cpp b/simple64-gui/netplay/joinroom.cpp
+index 3b5c34e..68b46f2 100644
+--- a/simple64-gui/netplay/joinroom.cpp
++++ b/simple64-gui/netplay/joinroom.cpp
+@@ -308,7 +308,9 @@ void JoinRoom::processTextMessage(QString message)
+         }
+         else
+         {
+-            msgBox.setText(json.value("message").toString());
++            QString msg = json.value("message").toString();
++            if(msg == "Bad authentication code") msg += "<br>Note: using the official netplay servers is not allowed on unofficial builds.<br>You can host your own server with `simple64-netplay-server`";
++            msgBox.setText(msg);
+             msgBox.exec();
+         }
+     }

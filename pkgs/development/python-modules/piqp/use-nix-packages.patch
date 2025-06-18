@@ -1,0 +1,88 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ea1da5e..0a6f096 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -100,7 +100,7 @@ if (BUILD_PYTHON_INTERFACE OR BUILD_MATLAB_INTERFACE)
+     include(FetchContent)
+     FetchContent_Declare(
+         cpu_features
+-        URL https://github.com/google/cpu_features/archive/refs/tags/v0.9.0.zip
++	DOWNLOAD_COMMAND true
+     )
+     set(BUILD_SHARED_LIBS_COPY ${BUILD_SHARED_LIBS})
+     set(BUILD_SHARED_LIBS OFF)
+diff --git a/interfaces/c/tests/CMakeLists.txt b/interfaces/c/tests/CMakeLists.txt
+index 010f038..c8f9ec4 100644
+--- a/interfaces/c/tests/CMakeLists.txt
++++ b/interfaces/c/tests/CMakeLists.txt
+@@ -13,18 +13,8 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+ endif()
+ 
+ # Google Test
+-include(FetchContent)
+-FetchContent_Declare(
+-        googletest
+-        URL https://github.com/google/googletest/archive/86add13493e5c881d7e4ba77fb91c1f57752b3a4.zip
+-)
+-# For Windows: Prevent overriding the parent project's compiler/linker settings
+-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+-FetchContent_GetProperties(googletest)
+-if(NOT googletest_POPULATED)
+-    FetchContent_Populate(googletest)
+-    add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR} EXCLUDE_FROM_ALL)
+-endif()
++# Use find_package to use the gtest package provided by Nix
++find_package(GTest REQUIRED)
+ 
+ enable_testing()
+ 
+diff --git a/interfaces/python/CMakeLists.txt b/interfaces/python/CMakeLists.txt
+index f7415dc..885aeff 100644
+--- a/interfaces/python/CMakeLists.txt
++++ b/interfaces/python/CMakeLists.txt
+@@ -14,19 +14,7 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+ endif()
+ 
+ # Find pybind11
+-include(FetchContent)
+-FetchContent_Declare(
+-    pybind11
+-    URL https://github.com/pybind/pybind11/archive/refs/tags/v2.12.0.zip
+-)
+-FetchContent_MakeAvailable(pybind11)
+-
+-# detect arm64 cross compilation on macOS
+-if(DEFINED ENV{_PYTHON_HOST_PLATFORM})
+-    if($ENV{_PYTHON_HOST_PLATFORM} MATCHES "arm64")
+-        set(CMAKE_SYSTEM_PROCESSOR "arm64")
+-    endif()
+-endif()
++find_package(pybind11 REQUIRED)
+ 
+ # add instruction set detection on x86/amd64
+ pybind11_add_module(instruction_set src/instruction_set.cpp)
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index d11bd37..2275a62 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -14,18 +14,8 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+ endif()
+ 
+ # Google Test
+-include(FetchContent)
+-FetchContent_Declare(
+-        googletest
+-        URL https://github.com/google/googletest/archive/86add13493e5c881d7e4ba77fb91c1f57752b3a4.zip
+-)
+-# For Windows: Prevent overriding the parent project's compiler/linker settings
+-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+-FetchContent_GetProperties(googletest)
+-if(NOT googletest_POPULATED)
+-    FetchContent_Populate(googletest)
+-    add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR} EXCLUDE_FROM_ALL)
+-endif()
++# Use find_package to use the gtest package provided by Nix
++find_package(GTest REQUIRED)
+ 
+ enable_testing()
+ 

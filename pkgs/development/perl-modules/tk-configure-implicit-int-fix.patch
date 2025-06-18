@@ -1,0 +1,11 @@
+--- a/JPEG/jpeg/configure	2013-11-15 18:50:03.000000000 -0500
++++ b/JPEG/jpeg/configure	2023-09-05 23:36:12.675151164 -0400
+@@ -623,7 +623,7 @@
+ cat > conftest.$ac_ext <<EOF
+ #line 625 "configure"
+ #include "confdefs.h"
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:629: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+   ac_cv_prog_cc_works=yes

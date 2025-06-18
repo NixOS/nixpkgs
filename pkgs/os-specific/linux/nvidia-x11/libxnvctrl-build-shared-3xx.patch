@@ -1,0 +1,24 @@
+--- a/src/libXNVCtrl/Makefile
++++ b/src/libXNVCtrl/Makefile
+@@ -33,6 +33,8 @@
+ 
+ LIBXNVCTRL = libXNVCtrl.a
+ 
++LIBXNVCTRL_SHARED = $(OUTPUTDIR)/libXNVCtrl.so
++
+ LIBXNVCTRL_PROGRAM_NAME = "libXNVCtrl"
+ 
+ LIBXNVCTRL_VERSION := $(NVIDIA_VERSION)
+@@ -62,6 +64,12 @@
+ $(LIBXNVCTRL) : $(OBJS)
+ 	$(AR) ru $@ $(OBJS)
+ 
++$(LIBXNVCTRL_SHARED): $(LIBXNVCTRL_OBJ)
++	$(RM) $@ $@.*
++	$(CC) -shared -Wl,-soname=$(@F).0 -o $@.0.0.0 $(LDFLAGS) $^ -lXext -lX11
++	ln -s $(@F).0.0.0 $@.0
++	ln -s $(@F).0 $@
++
+ # define the rule to build each object file
+ $(foreach src,$(SRC),$(eval $(call DEFINE_OBJECT_RULE,TARGET,$(src))))
+ 

@@ -1,0 +1,28 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3755adc..55e1eb3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -25,6 +25,7 @@ include(OptimizeForNative) # option(OPTIMIZE_FOR_NATIVE)
+ include(UninstallTarget)
+
+ find_package(PkgConfig)
++find_package(NanoSVG REQUIRED)
+ pkg_check_modules(FONTCONFIG REQUIRED IMPORTED_TARGET fontconfig)
+
+ option(ENABLE_OPENGL "Enable the OpenGL renderer"       ON)
+@@ -106,7 +107,6 @@ include_directories(
+   ${PROJECT_SOURCE_DIR}/include
+   ${CMAKE_BINARY_DIR}
+   ${CMAKE_BINARY_DIR}/include
+-  ${PROJECT_TOP}/repos/nanosvg/src
+ )
+
+ link_libraries(
+@@ -161,6 +161,7 @@ target_compile_definitions(looking-glass-client PRIVATE CIMGUI_DEFINE_ENUMS_AND_
+ target_link_libraries(looking-glass-client
+   ${EXE_FLAGS}
+   PkgConfig::FONTCONFIG
++  NanoSVG::nanosvg
+   lg_resources
+   lg_common
+   displayservers

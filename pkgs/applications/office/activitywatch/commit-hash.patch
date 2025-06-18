@@ -1,0 +1,13 @@
+diff --git a/vue.config.js b/vue.config.js
+index d6fdd46..141d28f 100644
+--- a/vue.config.js
++++ b/vue.config.js
+@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url); // get the resolved path to t
+ const __dirname = path.dirname(__filename); // get the name of the directory
+ 
+ // get git info from command line
+-const _COMMIT_HASH = child_process.execSync('git rev-parse --short HEAD').toString().trim();
++const _COMMIT_HASH = "@commit_hash@";
+ console.info('Commit hash:', _COMMIT_HASH);
+ 
+ export default {

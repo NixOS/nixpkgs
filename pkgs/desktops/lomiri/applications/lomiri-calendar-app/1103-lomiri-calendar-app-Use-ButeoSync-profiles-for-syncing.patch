@@ -1,0 +1,97 @@
+From 06750cc6f042cbcf4fa5e2fdd5a6eb29aff0d1b3 Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Mon, 4 Nov 2024 16:54:13 +0100
+Subject: [PATCH] Use ButeoSync profiles for sync management
+
+---
+ src/qml/CalendarChoicePopup.qml | 20 +++++++++-----------
+ src/qml/EventActions.qml        |  7 ++++---
+ 2 files changed, 13 insertions(+), 14 deletions(-)
+
+diff --git a/src/qml/CalendarChoicePopup.qml b/src/qml/CalendarChoicePopup.qml
+index 5d29ef86..8fa1e4b2 100644
+--- a/src/qml/CalendarChoicePopup.qml
++++ b/src/qml/CalendarChoicePopup.qml
+@@ -20,8 +20,7 @@ import QtQuick 2.4
+ import QtOrganizer 5.0
+ import Lomiri.Components 1.3
+ import Lomiri.Content 1.3
+-//import Lomiri.SyncMonitor 0.1
+-import Buteo 0.1
++import Buteo.Profiles 0.1
+ import Lomiri.Components.Popups 1.3
+ import SSO.OnlineAccounts 0.1
+ 
+@@ -31,6 +30,7 @@ Page {
+     objectName: "calendarchoicepopup"
+ 
+     property var model
++    readonly property var canSynchronize: !networkError && buteoSync.serviceAvailable && buteoSync.profiles.length > 0 && !buteoSync.synchronizing
+     signal collectionUpdated()
+ 
+     function accountFromId(accountId)
+@@ -60,22 +60,20 @@ Page {
+             // TRANSLATORS: Please translate this string  to 15 characters only.
+             // Currently ,there is no way we can increase width of action menu currently.
+             text: enabled ? i18n.tr("Sync") : i18n.tr("Syncing")
+-            onTriggered: buteoSync.startSyncByCategory("calendar")
+-            enabled: (!buteoSync.synchronizing)
+-            visible: !networkError
++            onTriggered: buteoSync.synchronize()
++            enabled: calendarChoicePage.canSynchronize
++            visible: buteoSync.serviceAvailable
+         }
+         flickable: flickable
+     }
+ 
+-    ButeoSync {
++    SyncManager {
+         id: buteoSync
++        filterHidden: true
++        filterBy.key: "category"
++        filterBy.value: "calendar"
+     }
+ 
+-
+-   // SyncMonitor {
+-   //     id: syncMonitor
+-   // }
+-
+     Flickable {
+         id: flickable
+ 
+diff --git a/src/qml/EventActions.qml b/src/qml/EventActions.qml
+index d583eb1a..d46e8e25 100644
+--- a/src/qml/EventActions.qml
++++ b/src/qml/EventActions.qml
+@@ -18,7 +18,6 @@
+ 
+ import QtQuick 2.4
+ import Lomiri.Components 1.3
+-//import Lomiri.SyncMonitor 0.1
+ import Buteo.Profiles 0.1
+ import Lomiri.Components.Popups 1.3
+ import Qt.labs.settings 1.0
+@@ -31,6 +30,8 @@ Item {
+     property alias settingsAction: _settingsAction
+     property Settings settings
+     readonly property bool syncInProgress: buteoSync.synchronizing
++    readonly property var canSynchronize: !networkError && buteoSync.serviceAvailable && buteoSync.profiles.length > 0 && !buteoSync.synchronizing
++
+ 
+     onSyncInProgressChanged: {
+ 
+@@ -79,8 +80,8 @@ Item {
+         // Currently ,there is no way we can increase width of action menu currently.
+         text: i18n.tr("Sync")
+         onTriggered: buteoSync.synchronize()
+-        enabled: buteoSync.profiles.length > 0 ? true: false
+-        visible: buteoSync.serviceAvailable ? true : false
++        enabled: actionPool.canSynchronize
++        visible: buteoSync.serviceAvailable
+     }
+ 
+     SyncManager {
+-- 
+GitLab
+

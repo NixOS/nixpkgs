@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 3465765c..ae128922 100755
+--- a/setup.py
++++ b/setup.py
+@@ -137,7 +137,7 @@ class build_ext(_build_ext):
+         elif platform.system().lower() == "windows":
+             driver_build_function = self._build_win_driver
+ 
+-        if not self.skip_driver:
++        if True:
+             driver_build_function()
+ 
+     def get_source_files(self):
