@@ -100,7 +100,7 @@ let
           (getLabels rebuildCountByKernel)
           # Adds "10.rebuild-*-stdenv" label if the "stdenv" attribute was changed
           ++ lib.mapAttrsToList (kernel: _: "10.rebuild-${kernel}-stdenv") (
-            lib.filterAttrs (_: kernelRebuilds: kernelRebuilds ? "stdenv") rebuildsByKernel
+            lib.filterAttrs (_: lib.elem "stdenv") rebuildsByKernel
           )
           # Adds the "11.by: package-maintainer" label if all of the packages directly
           # changed are maintained by the PR's author. (https://github.com/NixOS/ofborg/blob/df400f44502d4a4a80fa283d33f2e55a4e43ee90/ofborg/src/tagger.rs#L83-L88)
