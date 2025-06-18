@@ -332,6 +332,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         withGles = zed-editor.override { withGLES = true; };
       };
   };
+  env.CARGO_INCREMENTAL = 0;
 
   meta = {
     description = "High-performance, multiplayer code editor from the creators of Atom and Tree-sitter";
