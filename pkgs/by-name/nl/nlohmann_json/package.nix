@@ -14,24 +14,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nlohmann_json";
-  version = "3.11.3";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7F0Jon+1oWL7uqet5i1IgHX0fUw/+z0QwEcA3zs5xHg=";
+    hash = "sha256-cECvDOLxgX7Q9R3IE86Hj9JJUxraDQvhoyPDF03B2CY=";
   };
-
-  patches = lib.optionals stdenv.cc.isClang [
-    # tests fail to compile on clang-19
-    # https://github.com/nlohmann/json/issues/4490
-    ./make-tests-build-clang-19.diff
-  ];
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
+    # .pc file uses INCLUDEDIR as a relative path
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DJSON_BuildTests=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DJSON_FastTests=ON"
     "-DJSON_MultipleHeaders=ON"
