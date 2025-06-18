@@ -66,14 +66,7 @@ lib.extendMkDerivation {
 
       ...
     }@args:
-    {
-      inherit
-        modRoot
-        vendorHash
-        deleteVendor
-        proxyVendor
-        goSum
-        ;
+    let
       goModules =
         if (finalAttrs.vendorHash == null) then
           ""
@@ -203,6 +196,16 @@ lib.extendMkDerivation {
             # in case an overlay clears passthru by accident, don't fail evaluation
           }).overrideAttrs
             (finalAttrs.passthru.overrideModAttrs or overrideModAttrs);
+    in
+    {
+      inherit
+        modRoot
+        vendorHash
+        deleteVendor
+        proxyVendor
+        goSum
+        goModules
+        ;
 
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
@@ -389,7 +392,7 @@ lib.extendMkDerivation {
       disallowedReferences = lib.optional (!allowGoReference) go;
 
       passthru = {
-        inherit go;
+        inherit go goModules;
         # Canonicallize `overrideModAttrs` as an attribute overlay.
         # `passthru.overrideModAttrs` will be overridden
         # when users want to override `goModules`.
