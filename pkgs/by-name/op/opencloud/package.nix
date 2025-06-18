@@ -6,7 +6,7 @@
   ncurses,
   gettext,
   pigeon,
-  go-mockery,
+  go-mockery_2,
   protoc-go-inject-tag,
   libxcrypt,
   vips,
@@ -76,7 +76,7 @@ buildGoModule rec {
     ncurses
     gettext
     pigeon
-    go-mockery
+    go-mockery_2
     protoc-go-inject-tag
     pkg-config
   ];
