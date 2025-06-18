@@ -973,7 +973,7 @@ in
             '';
           path = [
             cfg.package
-            config.services.postgresql.package
+            (if databaseActuallyCreateLocally then config.services.postgresql.package else pkgs.postgresql)
           ];
           environment =
             env
