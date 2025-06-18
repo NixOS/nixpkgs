@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "src-cli";
-  version = "6.3.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
