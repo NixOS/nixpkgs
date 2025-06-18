@@ -1,10 +1,14 @@
 {
+  autodiffSupport ? true,
   boost,
   casadi,
   casadiSupport ? true,
   cmake,
+  codegenSupport ? true,
   collisionSupport ? true,
   console-bridge,
+  cppad,
+  cppadcodegen,
   doxygen,
   eigen,
   example-robot-data,
@@ -73,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
       jrl-cmakemodules
       urdfdom
     ]
+    ++ lib.optionals autodiffSupport [ cppad ]
+    ++ lib.optionals codegenSupport [ cppadcodegen ]
     ++ lib.optionals (!pythonSupport) [
       boost
       eigen
@@ -92,7 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
     [
       (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
       (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
+      (lib.cmakeBool "BUILD_WITH_AUTODIFF_SUPPORT" autodiffSupport)
       (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
+      (lib.cmakeBool "BUILD_WITH_CODEGEN_SUPPORT" casadiSupport)
       (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
       (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
       # Disable test that fails on darwin
