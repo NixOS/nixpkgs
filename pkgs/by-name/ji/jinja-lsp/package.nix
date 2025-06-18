@@ -5,17 +5,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jinja-lsp";
-  version = "0.1.86";
+  version = "0.1.89";
 
   src = fetchFromGitHub {
     owner = "uros-5";
     repo = "jinja-lsp";
     tag = "v${version}";
-    hash = "sha256-Cj09E0uQ/HFD5nU7QonKyFdsQyICgWOPyCNu1V0oFQw=";
+    hash = "sha256-K+7HS1dtDtHNMIseXopWzkFM3wC5b/sfYeHI3vxw74Q=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rzGe8XK/MRIvbJCF5Cx7Sm+wAK7SQx3gCCXSnWeJ+Xo=";
+  cargoHash = "sha256-TxpQ5kGGjEXNSzLdcwVmzuD189xcX1ndYRdRvLTlIQw=";
 
   cargoBuildFlags = [
     "-p"
