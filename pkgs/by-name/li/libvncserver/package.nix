@@ -12,9 +12,9 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvncserver";
-  version = "0.9.14";
+  version = "0.9.15";
 
   outputs = [
     "out"
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LibVNC";
     repo = "libvncserver";
-    rev = "LibVNCServer-${version}";
-    sha256 = "sha256-kqVZeCTp+Z6BtB6nzkwmtkJ4wtmjlSQBg05lD02cVvQ=";
+    tag = "LibVNCServer-${finalAttrs.version}";
+    hash = "sha256-a3acEjJM+ZA9jaB6qZ/czjIfx/L3j71VjJ6mtlqYcSw=";
   };
 
   patches = [
@@ -37,9 +37,7 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  cmakeFlags = [
-    "-DWITH_SYSTEMD=${if withSystemd then "ON" else "OFF"}"
-  ];
+  cmakeFlags = [ (lib.cmakeBool "WITH_SYSTEMD" withSystemd) ];
 
   buildInputs =
     [
@@ -63,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
   };
-}
+})
