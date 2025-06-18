@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
+  postInstall = ''
+    ln -s $out/lib/libmcfgthread.{dll.a,a}
+  '';
+
   meta = {
     description = "Threading support library for Windows 7 and above";
     homepage = "https://github.com/lhmouse/mcfgthread/wiki";
