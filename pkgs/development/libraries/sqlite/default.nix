@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
     # https://sqlite.org/src/info/d7c07581
     # TODO: Remove in 3.49.0
     ./3.48.0-fk-conflict-handling.patch
+
+    # https://sqlite.org/src/info/2025-02-16T10:57z
+    ./CVE-2025-3277_CVE-2025-29087.patch
   ];
 
   outputs = [
