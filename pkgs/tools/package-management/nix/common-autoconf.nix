@@ -111,7 +111,7 @@ let
       "shadowstack"
     ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-    nativeInstallCheckInputs = lib.optional atLeast224 [
+    nativeInstallCheckInputs = lib.optionals atLeast224 [
       git
       man
     ];
