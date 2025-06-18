@@ -335,7 +335,6 @@ in
 
       # Preferences are converted into a policy
       programs.firefox.policies = {
-        DisableAppUpdate = true;
         Preferences = (
           builtins.mapAttrs (_: value: {
             Value = value;
