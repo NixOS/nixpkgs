@@ -12,7 +12,6 @@
   pango,
   expat,
   fribidi,
-  fmt,
   wayland,
   systemd,
   wayland-protocols,
@@ -46,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.1.12";
+  version = "5.1.13";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-Jk7YY6nrY1Yn9KeNlRJbMF/fCMIlUVg/Elt7SymlK84=";
+    hash = "sha256-nqJrdlHR9wyRAAxolzgTjbxFzKvceLy+bscEyvNsXhs=";
   };
 
   prePatch = ''
@@ -69,7 +68,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
-    fmt
     isocodes
     cairo
     enchant
