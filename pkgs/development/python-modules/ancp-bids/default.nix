@@ -7,6 +7,7 @@
   setuptools,
   numpy,
   pandas,
+  fixVersioneerSourcesHook,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,8 @@ buildPythonPackage rec {
     owner = "ANCPLabOldenburg";
     repo = "ancp-bids";
     tag = version;
-    hash = "sha256-vmw8SAikvbaHnPOthBQxTbyvDwnnZwCOV97aUogIgxw=";
+    hash = "sha256-Gf11e+TrdGBNFEXqU2HLhnA4DSAq9TGEOkqQ+wBpIhE=";
+    nativeBuildInputs = [ fixVersioneerSourcesHook ];
   };
 
   build-system = [ setuptools ];
