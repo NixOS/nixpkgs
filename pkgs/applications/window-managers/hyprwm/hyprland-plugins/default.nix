@@ -33,6 +33,7 @@ let
     } # Added 2025-05-09
     { hyprspace = import ./hyprspace.nix; }
     { hyprsplit = import ./hyprsplit.nix; }
+    { hyprslidr = import ./hyprslidr.nix; }
     (import ./hyprland-plugins.nix)
   ];
 in
