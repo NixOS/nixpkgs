@@ -234,6 +234,8 @@ jobs:
                       '12.approvals: 2': approvals.size == 2,
                       '12.approvals: 3+': approvals.size >= 3,
                       '12.approved-by: package-maintainer': Array.from(maintainers).some(m => approvals.has(m)),
+                      '12.first-time contribution':
+                        [ 'NONE', 'FIRST_TIMER', 'FIRST_TIME_CONTRIBUTOR' ].includes(pull_request.author_association),
                     }
                   )
 
