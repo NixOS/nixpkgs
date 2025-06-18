@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     "out"
     "vlock"
     "dev"
+    "scripts"
+    "man"
   ];
 
   configureFlags =
@@ -77,9 +79,10 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    for i in $out/bin/unicode_{start,stop}; do
-      substituteInPlace "$i" \
+    for s in unicode_{start,stop}; do
+      substituteInPlace ''${!outputBin}/bin/$s \
         --replace-fail /usr/bin/tty ${coreutils}/bin/tty
+      moveToOutput "bin/$s" "$scripts"
     done
   '';
 
