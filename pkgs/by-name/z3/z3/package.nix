@@ -17,7 +17,7 @@
   cmake,
   ninja,
   testers,
-  useCmakeBuild ? (!ocamlBindings), # TODO: remove gnu make build once cmake supports ocaml
+  useCmakeBuild ? false, # TODO: remove gnu make build once cmake supports ocaml
   ...
 }:
 
