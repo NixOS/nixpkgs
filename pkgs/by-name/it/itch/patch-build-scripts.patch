@@ -1,0 +1,69 @@
+diff --git a/release/packaging/build.js b/release/packaging/build.js
+index 2315cfa..3c43f4b 100644
+--- a/release/packaging/build.js
++++ b/release/packaging/build.js
+@@ -44,7 +44,6 @@ async function build(cx) {
+     // TODO: legacy-peer-deps is used here due to react-json-inspector having
+     // dependencies set incorrectly locked to old version of react. In the future we should remove it
+     // this flag was added for npm 7 support
+-    $(`npm install --no-save --legacy-peer-deps ${externals.join(" ")}`);
+   });
+ }
+ 
+diff --git a/release/packaging/context.js b/release/packaging/context.js
+index 965b9ca..0a3aa99 100644
+--- a/release/packaging/context.js
++++ b/release/packaging/context.js
+@@ -105,9 +105,7 @@ async function parseContext() {
+     os === "darwin" ? `./${appName}.app/Contents/MacOS` : ".";
+ 
+   const iconsPath = ospath.join("release", "images", `${appName}-icons`);
+-  const electronVersion = JSON.parse(
+-    readFileSync("package.json", { encoding: "utf-8" })
+-  ).devDependencies.electron.replace(/^\^/, "");
++  const electronVersion = "@electronVersion@";
+ 
+   console.log(`| ${chalk.green(appName)} for ${chalk.green(os)}-${chalk.green(arch)}, Electron ${chalk.blue(electronVersion)}, code signing (${shouldSign ? chalk.green("enabled") : chalk.magenta("disabled")})`);
+ 
+diff --git a/release/packaging/do-package.js b/release/packaging/do-package.js
+index e345be6..53389ef 100644
+--- a/release/packaging/do-package.js
++++ b/release/packaging/do-package.js
+@@ -35,9 +35,11 @@ async function doPackage(cx) {
+     appVersion,
+     buildVersion: appVersion,
+     appCopyright: "MIT license, (c) itch corp.",
+-    asar: false,
++    asar: true,
+     overwrite: true,
+     out: outDir,
++    electronZipDir: '@electronZipDir@',
++    tmpdir: false,
+     ...getElectronOptions(cx),
+   };
+ 
+diff --git a/release/packaging/test.js b/release/packaging/test.js
+index d467dd8..451c553 100644
+--- a/release/packaging/test.js
++++ b/release/packaging/test.js
+@@ -9,7 +9,6 @@ const ospath = require("path");
+  */
+ async function test(cx) {
+   await cd("integration-tests", async () => {
+-    $(`go build -o runner -v`);
+   });
+   process.env.ELECTRON_DISABLE_SANDBOX = "1";
+ 
+diff --git a/src/main/broth/formulas.ts b/src/main/broth/formulas.ts
+index f43f174..59adde1 100644
+--- a/src/main/broth/formulas.ts
++++ b/src/main/broth/formulas.ts
+@@ -63,6 +63,7 @@ describeFormula("butler", {
+  * https://github.com/itchio/itch-setup
+  */
+ describeFormula("itch-setup", {
++  requiredAtStartup: false,
+   sanityCheck: async (ctx, logger, versionPrefix) => {
+     await spawn({
+       ctx,
+ 
