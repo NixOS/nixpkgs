@@ -4,7 +4,7 @@
   lib,
   pkg-config,
   jansson,
-  pcre,
+  pcre2,
   libxcrypt,
   expat,
   zlib,
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       jansson
-      pcre
+      pcre2
       libxcrypt
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
