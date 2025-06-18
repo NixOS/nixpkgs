@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pyviz-comms";
-  version = "3.0.4";
+  version = "3.0.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyviz_comms";
     inherit version;
-    hash = "sha256-1w4XVV9yYsSISmt7ycoZy4FlB6AyozTZy0EbRUbK/0w=";
+    hash = "sha256-+w34wtFLbwotsz5MLvRkrcQ6JU2IT2SAoT7DtHp6iwY=";
   };
 
   postPatch = ''
