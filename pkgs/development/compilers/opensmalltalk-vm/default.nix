@@ -15,6 +15,7 @@
   pango,
   pkg-config,
   xorg,
+  libGL,
 }:
 let
   buildVM =
@@ -30,8 +31,8 @@ let
       src = fetchFromGitHub {
         owner = "OpenSmalltalk";
         repo = "opensmalltalk-vm";
-        rev = "202206021410";
-        hash = "sha256-QqElPiJuqD5svFjWrLz1zL0Tf+pHxQ2fPvkVRn2lyBI=";
+        rev = "202312181441";
+        hash = "sha256-j8fVL8072ccdaRyW5sPDcYXxMcIZIvSFJ+4Q1+41ey0=";
       };
     in
     stdenv.mkDerivation {
@@ -43,6 +44,10 @@ let
       version = src.rev;
 
       inherit src;
+
+      # Fixes build errors triggered by the format-security compiler flag
+      # and caused by passing non-literals as the first argument to printf.
+      patches = [ ./printOptionStrings.patch ];
 
       postPatch = ''
         vmVersionFiles=$(sed -n 's/^versionfiles="\(.*\)"/\1/p' ./scripts/updateSCCSVersions)
@@ -73,9 +78,12 @@ let
 
       configureFlags = [ "--with-scriptname=${scriptName}" ] ++ configureFlags;
 
-      buildFlags = [ "all" ];
+      buildFlags = [
+        "getversion"
+        "all"
+      ];
 
-      enableParallelBuilding = true;
+      enableParallelBuilding = false;
 
       nativeBuildInputs = [
         file
@@ -85,6 +93,7 @@ let
       buildInputs = [
         alsa-lib
         freetype
+        libGL
         libpulseaudio
         libtool
         libuuid
@@ -105,7 +114,7 @@ let
       '';
 
       meta = {
-        description = "Cross-platform virtual machine for Squeak, Pharo, Cuis, and Newspeak";
+        description = "Cross-platform virtual machine for Squeak, Pharo, and Cuis";
         mainProgram = scriptName;
         homepage = "https://opensmalltalk.org/";
         license = with lib.licenses; [ mit ];
@@ -122,7 +131,7 @@ let
         scriptName = "squeak";
         configureFlagsArray = ''
           (
-            CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
+            CFLAGS="-fpermissive -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
             LIBS="-lrt"
           )
         '';
@@ -131,6 +140,7 @@ let
           "--with-src=src/spur64.cog"
           "--without-npsqueak"
           "--enable-fast-bitblt"
+          "--disable-dynamicopenssl"
         ];
       };
 
@@ -140,7 +150,7 @@ let
         scriptName = "squeak";
         configureFlagsArray = ''
           (
-            CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
+            CFLAGS="-fpermissive -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
           )
         '';
         configureFlags = [
@@ -148,41 +158,26 @@ let
           "--with-src=src/spur64.stack"
           "--disable-cogit"
           "--without-npsqueak"
+          "--disable-dynamicopenssl"
         ];
       };
     };
 
     "x86_64-linux" = {
-      "newspeak-cog-spur" = buildVM {
-        platformDir = "linux64x64";
-        vmName = "newspeak.cog.spur";
-        scriptName = "newspeak";
-        configureFlagsArray = ''
-          (
-            CFLAGS="-DNDEBUG -DDEBUGVM=0"
-          )
-        '';
-        configureFlags = [
-          "--with-vmversion=5.0"
-          "--with-src=src/spur64.cog.newspeak"
-          "--without-vm-display-fbdev"
-          "--without-npsqueak"
-        ];
-      };
-
       "squeak-cog-spur" = buildVM {
         platformDir = "linux64x64";
         vmName = "squeak.cog.spur";
         scriptName = "squeak";
         configureFlagsArray = ''
           (
-            CFLAGS="-DNDEBUG -DDEBUGVM=0 -DCOGMTVM=0"
+            CFLAGS="-fpermissive -DNDEBUG -DDEBUGVM=0 -DCOGMTVM=0"
           )
         '';
         configureFlags = [
           "--with-vmversion=5.0"
           "--with-src=src/spur64.cog"
           "--without-npsqueak"
+          "--disable-dynamicopenssl"
         ];
       };
     };
