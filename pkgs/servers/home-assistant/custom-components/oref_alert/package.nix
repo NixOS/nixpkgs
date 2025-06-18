@@ -21,6 +21,11 @@ buildHomeAssistantComponent rec {
     hash = "sha256-OO3My8U8SCmhaJQI7y0kxVKj/stvfp3pdqhFdTCcIWs=";
   };
 
+  postPatch = ''
+    substituteInPlace custom_components/oref_alert/manifest.json \
+      --replace-fail shapely==2.0.7 shapely
+  '';
+
   dependencies = [
     aiofiles
     shapely
