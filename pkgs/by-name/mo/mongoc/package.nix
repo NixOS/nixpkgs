@@ -10,17 +10,24 @@
   icu,
   cyrus_sasl,
   snappy,
+  version ? "1.30.3",
 }:
 
+let
+  hashes = {
+    "1.30.3" = "sha256-3mzqsrbXfrtAAC5igIna5dAgU8FH23lkMS2IacVlCmI=";
+    "2.0.1" = "sha256-4Arifb4Ms0PwjWzYphU0+ERQ8id1sRNBCWdR6P3v/Kc=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.30.3";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     tag = version;
-    hash = "sha256-3mzqsrbXfrtAAC5igIna5dAgU8FH23lkMS2IacVlCmI=";
+    hash = hashes.${version};
   };
 
   nativeBuildInputs = [
