@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agenix-cli";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "cole-h";
     repo = "agenix-cli";
     rev = "v${version}";
-    sha256 = "sha256-0+QVY1sDhGF4hAN6m2FdKZgm9V1cuGGjY4aitRBnvKg=";
+    sha256 = "sha256-hMJZducLOSLiHSQK3sGTQagx1ZfzoH+L5qYv9LMeDek=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xpA9BTA7EK3Pw8EJOjIq1ulBAcX4yNhc4kqhxsoCbv0=";
+  cargoHash = "sha256-hUtnbxpR2e7hZFFpp8kQ09uNF7UCgf6cIxd7sloj4Yg=";
 
   passthru.updateScript = nix-update-script { };
 
