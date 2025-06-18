@@ -76,11 +76,17 @@ stdenv.mkDerivation rec {
     "man"
   ] ++ lib.optional isFuse3 "udev";
 
-  mesonFlags = lib.optionals isFuse3 [
-    "-Dudevrulesdir=/udev/rules.d"
-    "-Duseroot=false"
-    "-Dinitscriptdir="
-  ];
+  mesonFlags = lib.optionals isFuse3 (
+    [
+      "-Dudevrulesdir=/udev/rules.d"
+      "-Duseroot=false"
+      "-Dinitscriptdir="
+    ]
+    # examples fail to build on musl
+    # error: ‘RENAME_NOREPLACE’ was not declared in this scope
+    # lib.optionals instead of lib.mesonBool to avoid rebuilds
+    ++ lib.optionals (stdenv.hostPlatform.isMusl) [ "-Dexamples=false" ]
+  );
 
   # Ensure that FUSE calls the setuid wrapper, not
   # $out/bin/fusermount. It falls back to calling fusermount in
