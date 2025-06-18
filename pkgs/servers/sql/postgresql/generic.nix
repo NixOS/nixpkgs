@@ -49,6 +49,12 @@ let
       stdenvNoCC,
       testers,
 
+      # Block size
+      # Changing the block size will break on-disk database compatibility. See:
+      # https://www.postgresql.org/docs/current/install-make.html#CONFIGURE-OPTION-WITH-BLOCKSIZE
+      withBlocksize ? null,
+      withWalBlocksize ? null,
+
       # bonjour
       bonjourSupport ? false,
 
@@ -318,6 +324,8 @@ let
           (if stdenv.hostPlatform.isFreeBSD then "--with-uuid=bsd" else "--with-uuid=e2fs")
           (withFeature perlSupport "perl")
         ]
+        ++ lib.optionals (withBlocksize != null) [ "--with-blocksize=${toString withBlocksize}" ]
+        ++ lib.optionals (withWalBlocksize != null) [ "--with-wal-blocksize=${toString withWalBlocksize}" ]
         ++ lib.optionals lz4Enabled [ "--with-lz4" ]
         ++ lib.optionals zstdEnabled [ "--with-zstd" ]
         ++ lib.optionals gssSupport [ "--with-gssapi" ]
@@ -501,7 +509,11 @@ let
           !(stdenv'.hostPlatform.isDarwin)
         &&
           # Regression tests currently fail in pkgsMusl because of a difference in EXPLAIN output.
-          !(stdenv'.hostPlatform.isMusl);
+          !(stdenv'.hostPlatform.isMusl)
+        &&
+          # Modifying block sizes is expected to break regression tests.
+          # https://www.postgresql.org/message-id/E1TJOeZ-000717-Lg%40wrigleys.postgresql.org
+          (withBlocksize == null && withWalBlocksize == null);
       installCheckTarget = "check-world";
 
       passthru =

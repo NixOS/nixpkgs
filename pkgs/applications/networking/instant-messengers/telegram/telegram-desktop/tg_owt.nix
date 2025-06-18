@@ -33,21 +33,15 @@
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "0-unstable-2024-10-28";
+  version = "0-unstable-2025-06-02";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "8198c4d8b91e22d68eb5c7327fd408e3b6abcc79";
-    hash = "sha256-3sLa3Px0VWgRYqnnLlwLnx+WWnneqZyhQPrRMBriXQA=";
+    rev = "62321fd7128ab2650b459d4195781af8185e46b5";
+    hash = "sha256-l6EdHJLd42TU+4pLakdU3a5PLVxrxjta0CSRy5hVBFU=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix build with Pipewire 1.4
-    # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
-    ./tg_owt-pipewire-1.4.patch
-  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/modules/desktop_capture/linux/wayland/egl_dmabuf.cc \

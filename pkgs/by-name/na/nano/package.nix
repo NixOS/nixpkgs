@@ -31,11 +31,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nano";
-  version = "8.4";
+  version = "8.5";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    hash = "sha256-WtKSIrvVViTYfqZ3kosxBqdDEU1sb5tB82yXviqOYo0=";
+    hash = "sha256-AAsBHTOcFBr5ZG1DKI9UMl/1xujTnW5IK3h7vGZUwmo=";
   };
 
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
@@ -63,6 +63,10 @@ stdenv.mkDerivation rec {
       ''
         cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
       '';
+
+  # https://hydra.nixos.org/build/300187289/nixlog/1
+  # openat-die.c:57:10: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+  hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
   strictDeps = true;

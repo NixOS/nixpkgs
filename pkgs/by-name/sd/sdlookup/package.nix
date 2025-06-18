@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "sdlookup";
   version = "unstable-2022-03-10";
 
   src = fetchFromGitHub {
     owner = "j3ssie";
-    repo = pname;
+    repo = "sdlookup";
     rev = "8554bfa27284c4764401dbd8da23800d4ae968a2";
     hash = "sha256-c6xAgOxle51waiFsSWvwO9eyt1KXuM0dEeepVsRQHkk=";
   };

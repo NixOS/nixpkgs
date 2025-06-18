@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "pocketbase";
-  version = "0.28.2";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "pocketbase";
     repo = "pocketbase";
     rev = "v${version}";
-    hash = "sha256-R8sXa3Cs7GFRAs8/+wAoWteFYBUVsgVA+eJDKACb0k8=";
+    hash = "sha256-oFM2QcMxW+1iVUy7GzpNBtMQznq0vL7eeDiUhVPYCOM=";
   };
 
-  vendorHash = "sha256-bTXxhHibKiu+btHhnktTpNycMJSzGekRJ+w9b1IwAQs=";
+  vendorHash = "sha256-hOB8MOfG+RHDJEP5DSDvSiphb+c86QySNEmRr8633cM=";
 
   # This is the released subpackage from upstream repo
   subPackages = [ "examples/base" ];

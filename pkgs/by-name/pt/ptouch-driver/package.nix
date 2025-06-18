@@ -73,14 +73,14 @@ stdenv.mkDerivation rec {
     "foomatic-rip" # cups-filters
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/philpem/printer-driver-ptouch/releases/tag/v${version}";
     description = "Printer Driver for Brother P-touch and QL Label Printers";
     downloadPage = "https://github.com/philpem/printer-driver-ptouch";
     homepage = "https://github.com/philpem/printer-driver-ptouch";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sascha8a ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ sascha8a ];
+    platforms = lib.platforms.linux;
     longDescription = ''
       This is ptouch-driver, a printer driver based on CUPS and foomatic,
       for the Brother P-touch and QL label printer families.

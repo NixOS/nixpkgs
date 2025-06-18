@@ -13,13 +13,13 @@ telegram-desktop.override {
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "ayugram-desktop-unwrapped";
-      version = "5.12.3";
+      version = "5.14.3";
 
       src = fetchFromGitHub {
         owner = "AyuGram";
         repo = "AyuGramDesktop";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-Zjik+9J0YtabVW1VEkJr/Bl3SIakVQ8EiTLYm28rEIk=";
+        hash = "sha256-cirUnGtjEc8aQzXH0r5kVhobEqf63eoZ17Gg99e+FCQ=";
         fetchSubmodules = true;
       };
 

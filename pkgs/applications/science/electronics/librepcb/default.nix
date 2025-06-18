@@ -42,8 +42,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    sourceRoot = "source/${cargoRoot}";
+    inherit src cargoRoot;
     hash = "sha256-1td3WjxbDq2lX7c0trpYRhO82ChNAG/ZABBRsekYtq4=";
   };
 

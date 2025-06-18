@@ -6,6 +6,7 @@
   pkg-config,
   libevdev,
   udev,
+  udevCheckHook,
   acl,
 }:
 
@@ -23,11 +24,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
+    udevCheckHook
   ];
   buildInputs = [
     libevdev
     udev
   ];
+
+  doInstallCheck = true;
 
   # CMake has hardcoded install paths
   installPhase = ''

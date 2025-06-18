@@ -139,7 +139,7 @@ let
       [
         (yamlFormat.generate "helm-chart-manifest-${name}.yaml" (mkHelmChartCR name value))
       ]
-      # alternate the YAML doc seperator (---) and extraDeploy manifests to create
+      # alternate the YAML doc separator (---) and extraDeploy manifests to create
       # multi document YAMLs
       ++ (lib.concatMap (x: [
         yamlDocSeparator

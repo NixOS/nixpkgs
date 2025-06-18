@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
   preCheck = "export GIRT_BUILD_GIT_HASH=${version}";
   postCheck = "unset GIRT_BUILD_GIT_HASH";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/MitMaro/git-interactive-rebase-tool";
     description = "Native cross platform full feature terminal based sequence editor for git interactive rebase";
     changelog = "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
       zowoq
       ma27

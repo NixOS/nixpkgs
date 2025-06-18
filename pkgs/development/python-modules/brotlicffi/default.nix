@@ -4,7 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   cffi,
-  # overriden as pkgs.brotli
+  # overridden as pkgs.brotli
   brotli,
   setuptools,
   pytestCheckHook,

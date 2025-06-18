@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
-  version = "8.3.0";
+  version = "8.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-daemon";
     rev = version;
-    sha256 = "sha256-0/G5h1eZi3qnjesrvWF6MiMX+FmpW4ys2tRUMBiUCS0=";
+    sha256 = "sha256-bYwgxUrPMDaxv/Vv+DuMUzOT1/GRcvNHZW+fjiN5Kdo=";
   };
 
   nativeBuildInputs = [

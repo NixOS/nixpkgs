@@ -2,38 +2,36 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  cereal_1_3_2,
-  cmake,
-  doxygen,
-  eigen,
   fontconfig,
-  graphviz,
-  jrl-cmakemodules,
-  simde,
-  matio,
+  nix-update-script,
   pythonSupport ? false,
   python3Packages,
+
+  # nativeBuildInputs
+  cmake,
+  doxygen,
+  graphviz,
+
+  # propagatedBuildInputs
+  cereal_1_3_2,
+  eigen,
+  jrl-cmakemodules,
+  simde,
+
+  # checkInputs
+  matio,
+
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxsuite";
-  version = "0.6.7";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "simple-robotics";
     repo = "proxsuite";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iKc55WDHArmmIM//Wir6FHrNV84HnEDcBUlwnsbtMME=";
+    hash = "sha256-1+a5tFOlEwzhGZtll35EMFceD0iUOOQCbwJd9NcFDlk=";
   };
-
-  patches = [
-    # Fix use of system cereal
-    # This was merged upstream and can be removed on next release
-    (fetchpatch {
-      url = "https://github.com/Simple-Robotics/proxsuite/pull/352/commits/8305864f13ca7dff7210f89004a56652b71f8891.patch";
-      hash = "sha256-XMS/zHFVrEp1P6aDlGrLbrcmuKq42+GdZRH9ObewNCY=";
-    })
-  ];
 
   outputs = [
     "doc"
@@ -52,17 +50,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    graphviz
-  ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
+  nativeBuildInputs =
+    [
+      cmake
+      doxygen
+      graphviz
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.python
+      python3Packages.pythonImportsCheckHook
+    ];
+
   propagatedBuildInputs = [
     cereal_1_3_2
     eigen
     jrl-cmakemodules
     simde
-  ] ++ lib.optionals pythonSupport [ python3Packages.pybind11 ];
+  ] ++ lib.optionals pythonSupport [ python3Packages.nanobind ];
+
   checkInputs =
     [ matio ]
     ++ lib.optionals pythonSupport [
@@ -85,11 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   pythonImportsCheck = [ "proxsuite" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "The Advanced Proximal Optimization Toolbox";
+    description = "Advanced Proximal Optimization Toolbox";
     homepage = "https://github.com/Simple-Robotics/proxsuite";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nim65s ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })

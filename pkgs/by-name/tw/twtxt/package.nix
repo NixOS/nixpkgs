@@ -35,12 +35,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_tweet_relative_datetime"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Decentralised, minimalist microblogging service for hackers";
     homepage = "https://github.com/buckket/twtxt";
     changelog = "https://github.com/buckket/twtxt/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
     mainProgram = "twtxt";
   };
 }

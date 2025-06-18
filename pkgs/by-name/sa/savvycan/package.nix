@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
     ln -s $out/Applications/SavvyCAN.app/Contents/MacOS/SavvyCAN $out/bin/SavvyCAN
   '';
 
-  meta = with lib; {
+  meta = {
     description = "QT based cross platform canbus tool";
     homepage = "https://savvycan.com/";
     changelog = "https://github.com/collin80/SavvyCAN/releases/tag/${version}";
-    maintainers = with maintainers; [ simoneruffini ];
-    platforms = platforms.all;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ simoneruffini ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
     mainProgram = "SavvyCAN";
     longDescription = ''
       SavvyCAN is a cross platform QT based C++ program. It is a CAN bus reverse

@@ -19,6 +19,7 @@
   libpulseaudio,
   wrapGAppsHook3,
   mateUpdateScript,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -54,6 +56,8 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 

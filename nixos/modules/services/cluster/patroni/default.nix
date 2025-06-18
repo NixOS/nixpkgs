@@ -175,6 +175,21 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          !(
+            cfg.enable
+            && config.services.postgresql.enable
+            && cfg.postgresqlDataDir == config.services.postgresql.dataDir
+          );
+        message = ''
+          Both services.patroni and services.postgresql are enabled and
+          services.patroni.postgresqlDataDir == services.postgresql.dataDir
+          Disable one or the other, or configure them to use different directories.
+        '';
+      }
+    ];
 
     services.patroni.settings = {
       scope = cfg.scope;

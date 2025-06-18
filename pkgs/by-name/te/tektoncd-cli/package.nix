@@ -59,7 +59,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tekton.dev";
     changelog = "https://github.com/tektoncd/cli/releases/tag/v${version}";
     description = "Provides a CLI for interacting with Tekton - tkn";
@@ -69,8 +69,8 @@ buildGoModule rec {
       Tekton CLI, tkn, together with the core component of Tekton, Tekton
       Pipelines.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jk
       mstrangfeld
       vdemeester

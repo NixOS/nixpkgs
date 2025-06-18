@@ -35,12 +35,12 @@ buildGoModule rec {
       --zsh <($out/bin/leetgo completion zsh)
   '';
 
-  meta = with lib; {
-    description = "A command-line tool for LeetCode";
+  meta = {
+    description = "Command-line tool for LeetCode";
     homepage = "https://github.com/j178/leetgo";
     changelog = "https://github.com/j178/leetgo/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Ligthiago ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Ligthiago ];
     mainProgram = "leetgo";
   };
 }

@@ -25,24 +25,24 @@ stdenv.mkDerivation rec {
   preCheck = "patchShebangs tests/unit";
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Userspace RCU (read-copy-update) library";
     homepage = "https://lttng.org/urcu";
     changelog = "https://github.com/urcu/userspace-rcu/raw/v${version}/ChangeLog";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     # https://git.liburcu.org/?p=userspace-rcu.git;a=blob;f=include/urcu/arch.h
-    platforms = intersectLists platforms.unix (
-      platforms.x86
-      ++ platforms.power
-      ++ platforms.s390
-      ++ platforms.arm
-      ++ platforms.aarch64
-      ++ platforms.mips
-      ++ platforms.m68k
-      ++ platforms.riscv
-      ++ platforms.loongarch64
+    platforms = lib.intersectLists lib.platforms.unix (
+      lib.platforms.x86
+      ++ lib.platforms.power
+      ++ lib.platforms.s390
+      ++ lib.platforms.arm
+      ++ lib.platforms.aarch64
+      ++ lib.platforms.mips
+      ++ lib.platforms.m68k
+      ++ lib.platforms.riscv
+      ++ lib.platforms.loongarch64
     );
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 
 }

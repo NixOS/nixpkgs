@@ -17,7 +17,7 @@
   ./update-from-overlay
 
   It will update both melpa and elpa packages using
-  https://github.com/nix-community/emacs-overlay. It's almost instantenous and
+  https://github.com/nix-community/emacs-overlay. It's almost instantaneous and
   formats commits for you.
 */
 
@@ -1355,7 +1355,7 @@ let
           hyperbole = ignoreCompilationError (addPackageRequires (mkHome super.hyperbole) [ self.el-mock ]); # elisp error
 
           # needs non-existent "browser database directory" during compilation
-          # TODO report to upsteam about missing dependency websocket
+          # TODO report to upstream about missing dependency websocket
           ibrowse = ignoreCompilationError (addPackageRequires super.ibrowse [ self.websocket ]);
 
           # elisp error and missing optional dependencies
@@ -1368,7 +1368,7 @@ let
 
           indium = mkHome super.indium;
 
-          # TODO report to upsteam
+          # TODO report to upstream
           inlineR = addPackageRequires super.inlineR [ self.ess ];
 
           # https://github.com/duelinmarkers/insfactor.el/issues/7
@@ -1547,7 +1547,7 @@ let
 
           org-gtd = ignoreCompilationError super.org-gtd; # elisp error
 
-          # needs newer org than the Eamcs 29.4 builtin one
+          # needs newer org than the Emacs 29.4 builtin one
           org-link-beautify = addPackageRequires super.org-link-beautify [
             self.org
             self.qrencode

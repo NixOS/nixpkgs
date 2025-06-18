@@ -106,11 +106,11 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "295";
+  version = "298";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-BxyE14vXS7lGFwWsruDAcdXMRsoETFwXPQxfMpSh1+E=";
+    hash = "sha256-GakldHALDu1TXg/b0qEQD7NNK3Ljk2yQXnv5+Sr+rNw=";
   };
 
   outputs = [
@@ -315,7 +315,7 @@ python.pkgs.buildPythonApplication rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Perform in-depth comparison of files, archives, and directories";
     longDescription = ''
       diffoscope will try to get to the bottom of what makes files or directories
@@ -329,13 +329,13 @@ python.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://diffoscope.org/";
     changelog = "https://diffoscope.org/news/diffoscope-${version}-released/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       dezgeg
       danielfullmer
       raitobezarius
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "diffoscope";
   };
 }

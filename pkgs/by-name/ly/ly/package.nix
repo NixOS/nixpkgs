@@ -1,51 +1,55 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGitea,
   linux-pam,
   libxcb,
   makeBinaryWrapper,
-  zig_0_13,
+  zig_0_14,
   callPackage,
   nixosTests,
+  x11Support ? true,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.0.3";
+  version = "1.1.0";
 
-  src = fetchFromGitHub {
-    owner = "fairyglade";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "AnErrupTion";
     repo = "ly";
-    rev = "v1.0.3";
-    hash = "sha256-TsEn0kH7j4myjjgwHnbOUmIZjHn8A1d/7IjamoWxpXQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+rRvrlzV5MDwb/7pr/oZjxxDmE1kbnchyUi70xwp0Cw=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    zig_0_13.hook
+    zig_0_14.hook
   ];
   buildInputs = [
-    libxcb
     linux-pam
-  ];
+  ] ++ (lib.optionals x11Support [ libxcb ]);
 
   postPatch = ''
     ln -s ${
       callPackage ./deps.nix {
-        zig = zig_0_13;
+        zig = zig_0_14;
       }
     } $ZIG_GLOBAL_CACHE_DIR/p
   '';
+  zigBuildFlags = [
+    "-Denable_x11_support=${lib.boolToString x11Support}"
+  ];
 
   passthru.tests = { inherit (nixosTests) ly; };
 
-  meta = with lib; {
+  meta = {
     description = "TUI display manager";
-    license = licenses.wtfpl;
-    homepage = "https://github.com/fairyglade/ly";
-    maintainers = [ maintainers.vidister ];
-    platforms = platforms.linux;
+    license = lib.licenses.wtfpl;
+    homepage = "https://codeberg.org/AnErrupTion/ly";
+    maintainers = [ lib.maintainers.vidister ];
+    platforms = lib.platforms.linux;
     mainProgram = "ly";
   };
-}
+})

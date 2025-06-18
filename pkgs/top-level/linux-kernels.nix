@@ -470,8 +470,6 @@ in
 
         asus-ec-sensors = callPackage ../os-specific/linux/asus-ec-sensors { };
 
-        asus-wmi-sensors = callPackage ../os-specific/linux/asus-wmi-sensors { };
-
         ena = callPackage ../os-specific/linux/ena { };
 
         lenovo-legion-module = callPackage ../os-specific/linux/lenovo-legion { };

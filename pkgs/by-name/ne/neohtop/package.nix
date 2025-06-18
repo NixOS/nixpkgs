@@ -17,23 +17,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "neohtop";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Abdenasser";
     repo = "neohtop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5hDxMQlDPXf0llu51Hwb/9n0GX0YSvVJUS+RvEiLsnM=";
+    hash = "sha256-a6yHg3LqnVQJPi4+WpsxHjvWC2hZhZZkAFqgOVmfWfg=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-qhAdKLtTQ2iUFc7UNJNeB1Mzbzg/NrGAWrKQTdGiN4Y=";
+    hash = "sha256-t0REXcsy9XIIARiI7lkOc5lO/ZSL50KOUK+SMsXpjdM=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-nYBPvfBzRIJdvfuOZnzs+kuSozlkBB/ImqjDYfvNBrA=";
+  cargoHash = "sha256-nFWF1ER3vk1G/MBw8to+lDJAv6HJNobhdPXV0hVERFE=";
 
   cargoRoot = "src-tauri";
 

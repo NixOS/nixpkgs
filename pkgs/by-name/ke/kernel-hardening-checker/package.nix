@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "a13xp0p0v";
-    repo = pname;
+    repo = "kernel-hardening-checker";
     rev = "v${version}";
     hash = "sha256-gxDaOb14jFezxe/qHZF3e52o7obVL0WMIKxwIj3j5QY=";
   };

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
-    repo = pname;
+    repo = "bazelisk";
     rev = "v${version}";
     sha256 = "sha256-1/J/Y2NlIghxQS/5CnGX+2z+glOeOZVEgSE4KWft9Zw=";
   };
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X main.BazeliskVersion=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly launcher for Bazel";
     mainProgram = "bazelisk";
     longDescription = ''
@@ -31,7 +31,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/bazelbuild/bazelisk";
     changelog = "https://github.com/bazelbuild/bazelisk/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ elasticdog ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ elasticdog ];
   };
 }

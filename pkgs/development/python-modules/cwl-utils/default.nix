@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "cwl-utils";
-  version = "0.37";
+  version = "0.38";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "common-workflow-language";
     repo = "cwl-utils";
     tag = "v${version}";
-    hash = "sha256-OD8Nz8SIqB0Ie3S5663sQg3GjlCkC+qBvOXM9HZNuQU=";
+    hash = "sha256-goeMlyHYiS4JLOVBFjcLSzdYrdoIZ904hJHFPGZyxKo=";
   };
 
   build-system = [ setuptools ];
@@ -63,6 +63,15 @@ buildPythonPackage rec {
     "test_remote_packing"
     "test_remote_packing_github_soft_links"
     "test_cwl_inputs_to_jsonschema"
+  ];
+
+  disabledTestPaths = [
+    # Tests require podman
+    "tests/test_docker_extract.py"
+    # Tests requires singularity
+    "tests/test_js_sandbox.py"
+    # Circular dependencies
+    "tests/test_graph_split.py"
   ];
 
   meta = with lib; {

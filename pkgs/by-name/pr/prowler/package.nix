@@ -21,14 +21,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "5.7.1";
+  version = "5.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = version;
-    hash = "sha256-gs/upAQLdMfmoWQrl1wS1wo/8gpmkuRv/tuWhviqSMU=";
+    hash = "sha256-SC3C8JSe0n8aHwP8gelh+tDrLO6HiGN+7/Rcxhwr6Ec=";
   };
 
   pythonRelaxDeps = true;

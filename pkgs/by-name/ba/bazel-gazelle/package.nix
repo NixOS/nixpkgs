@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
-    repo = pname;
+    repo = "bazel-gazelle";
     rev = "v${version}";
     hash = "sha256-jj2mAGzz5BOim008LNRH0tVLbJy/mNodsTENMVbjUbk=";
   };

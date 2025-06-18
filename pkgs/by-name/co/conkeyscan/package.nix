@@ -57,12 +57,12 @@ python.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "conkeyscan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scan Confluence for keywords";
     homepage = "https://github.com/CompassSecurity/conkeyscan";
     changelog = "https://github.com/CompassSecurity/conkeyscan/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "conkeyscan";
   };
 }

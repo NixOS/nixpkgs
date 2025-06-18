@@ -6,6 +6,7 @@
   callPackage,
   cmake,
   cpuinfo,
+  cubeb,
   curl,
   extra-cmake-modules,
   libXrandr,
@@ -56,7 +57,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     cpuinfo
-    sources.cubeb
+    cubeb
     curl
     libXrandr
     libbacktrace

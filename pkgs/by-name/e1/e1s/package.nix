@@ -19,13 +19,13 @@ buildGoModule {
 
   vendorHash = "sha256-1lise/u40Q8W9STsuyrWIbhf2HY+SFCytUL1PTSWvfY=";
 
-  meta = with lib; {
+  meta = {
     description = "Easily Manage AWS ECS Resources in Terminal 🐱";
     homepage = "https://github.com/keidarcy/e1s";
     changelog = "https://github.com/keidarcy/e1s/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "e1s";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       zelkourban
       carlossless
     ];

@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage rec {
       --bash <($out/bin/flavours --completions bash)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use base16 scheme manager/builder that integrates with any workflow";
     homepage = "https://github.com/Misterio77/flavours";
     changelog = "https://github.com/Misterio77/flavours/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       moni
       misterio77
     ];

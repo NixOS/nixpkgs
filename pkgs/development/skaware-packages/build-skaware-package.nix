@@ -3,6 +3,7 @@
   stdenv,
   cleanPackaging,
   fetchurl,
+  nix-update-script,
 }:
 {
   # : string
@@ -148,7 +149,19 @@ stdenv.mkDerivation {
     ${cleanPackaging.checkForRemainingFiles}
   '';
 
-  passthru = passthru // (if manpages == null then { } else { inherit manpages; });
+  passthru =
+    {
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--url"
+          "https://github.com/skarnet/${pname}"
+          "--override-filename"
+          "pkgs/development/skaware-packages/${pname}/default.nix"
+        ];
+      };
+    }
+    // passthru
+    // (if manpages == null then { } else { inherit manpages; });
 
   meta = {
     homepage = "https://skarnet.org/software/${pname}/";

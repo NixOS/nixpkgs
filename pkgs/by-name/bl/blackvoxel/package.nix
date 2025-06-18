@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A Sci-Fi game with industry and automation";
+    description = "Sci-Fi game with industry and automation";
     homepage = "https://www.blackvoxel.com";
     changelog = "https://github.com/Blackvoxel/Blackvoxel/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [

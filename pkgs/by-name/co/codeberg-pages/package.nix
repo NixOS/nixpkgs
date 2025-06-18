@@ -39,13 +39,13 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "pages";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       laurent-f1z1
       christoph-heiss
     ];
-    license = licenses.eupl12;
+    license = lib.licenses.eupl12;
     homepage = "https://codeberg.org/Codeberg/pages-server";
     description = "Static websites hosting from Gitea repositories";
     changelog = "https://codeberg.org/Codeberg/pages-server/releases/tag/v${version}";

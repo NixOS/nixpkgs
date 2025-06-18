@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (mlton.meta) platforms;
 
     description = "Manipulate INI files from the command line";
     mainProgram = "initool";
     homepage = "https://github.com/dbohdan/initool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ e1mo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ e1mo ];
     changelog = "https://github.com/dbohdan/initool/releases/tag/v${version}";
   };
 }

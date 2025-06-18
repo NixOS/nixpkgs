@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "akopytov";
-    repo = pname;
+    repo = "sysbench";
     rev = version;
     sha256 = "1sanvl2a52ff4shj62nw395zzgdgywplqvwip74ky8q7s6qjf5qy";
   };

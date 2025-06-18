@@ -13,6 +13,19 @@
   docbook_xml_dtd_45,
 }:
 
+let
+  needsAnswers =
+    stdenv.hostPlatform != stdenv.buildPlatform
+    && !(stdenv.hostPlatform.emulatorAvailable buildPackages);
+  answers =
+    {
+      # PYTHONHASHSEED=1 python3.9 ./buildtools/bin/waf configure --bundled-libraries=NONE --builtin-libraries=replace --cross-compile --cross-execute=' ' --cross-answers=answers
+      x86_64-freebsd = ./answers-x86_64-freebsd;
+    }
+    .${stdenv.hostPlatform.system}
+      or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
+in
+
 stdenv.mkDerivation rec {
   pname = "tdb";
   version = "1.4.13";
@@ -39,10 +52,15 @@ stdenv.mkDerivation rec {
 
   # otherwise the configure script fails with
   # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
-  preConfigure = ''
-    export PKGCONFIG="$PKG_CONFIG"
-    export PYTHONHASHSEED=1
-  '';
+  preConfigure =
+    ''
+      export PKGCONFIG="$PKG_CONFIG"
+      export PYTHONHASHSEED=1
+    ''
+    + lib.optionalString needsAnswers ''
+      cp ${answers} answers
+      chmod +w answers
+    '';
 
   wafPath = "buildtools/bin/waf";
 
@@ -53,7 +71,12 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-compile"
-      "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+      (
+        if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
+          "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+        else
+          "--cross-answers=answers"
+      )
     ];
 
   postFixup =

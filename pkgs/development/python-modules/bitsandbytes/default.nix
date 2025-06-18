@@ -11,7 +11,7 @@
 
 let
   pname = "bitsandbytes";
-  version = "0.45.1";
+  version = "0.46.0";
 
   inherit (torch) cudaPackages cudaSupport;
   inherit (cudaPackages) cudaMajorMinorVersion;
@@ -54,10 +54,10 @@ buildPythonPackage {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "TimDettmers";
+    owner = "bitsandbytes-foundation";
     repo = "bitsandbytes";
     tag = version;
-    hash = "sha256-MZ+3mUXaAhRb+rBtE+eQqT3XdtFxlWJc/CmTEwQkKSA=";
+    hash = "sha256-q1ltNYO5Ex6F2bfCcsekdsWjzXoal7g4n/LIHVGuj+k=";
   };
 
   # By default, which library is loaded depends on the result of `torch.cuda.is_available()`.
@@ -112,8 +112,8 @@ buildPythonPackage {
 
   meta = {
     description = "8-bit CUDA functions for PyTorch";
-    homepage = "https://github.com/TimDettmers/bitsandbytes";
-    changelog = "https://github.com/TimDettmers/bitsandbytes/releases/tag/${version}";
+    homepage = "https://github.com/bitsandbytes-foundation/bitsandbytes";
+    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

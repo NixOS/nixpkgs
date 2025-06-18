@@ -117,12 +117,12 @@ rustPlatform.buildRustPackage rec {
         "''${gappsWrapperArgs[@]}"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Backup tool for PC game saves";
     homepage = "https://github.com/mtkennerly/ludusavi";
     changelog = "https://github.com/mtkennerly/ludusavi/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       pasqui23
       megheaiulian
     ];

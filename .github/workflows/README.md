@@ -18,3 +18,25 @@ Some architectural notes about key decisions and concepts in our workflows:
 - **head commit**: The HEAD commit in the pull request's branch. Same as `github.event.pull_request.head.sha`.
 - **merge commit**: The temporary "test merge commit" that GitHub Actions creates and updates for the pull request. Same as `refs/pull/${{ github.event.pull_request.number }}/merge`.
 - **target commit**: The base branch's parent of the "test merge commit" to compare against.
+
+## Concurrency Groups
+
+We use [GitHub's Concurrency Groups](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/control-the-concurrency-of-workflows-and-jobs) to cancel older jobs on pushes to Pull Requests.
+When two workflows are in the same group, a newer workflow cancels an older workflow.
+Thus, it is important how to construct the group keys:
+
+- Because we want to run jobs for different events at same time, we add `github.event_name` to the key. This is the case for the `pull_request` which runs on changes to the workflow files to test the new files and the same workflow from the base branch run via `pull_request_event`.
+
+- We don't want workflows of different Pull Requests to cancel each other, so we include `github.event.pull_request.number`. The [GitHub docs](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/control-the-concurrency-of-workflows-and-jobs#example-using-a-fallback-value) show using `github.head_ref` for this purpose, but this doesn't work well with forks: Different users could have the same head branch name in their forks and run CI for their PRs at the same time.
+
+- Sometimes, there is no `pull_request.number`. To ensure non-PR runs are never cancelled, we add a fallback of `github.run_id`. This is a unique value for each workflow run.
+
+- Of course, we run multiple workflows at the same time, so we add `github.workflow` to the key. Otherwise workflows would cancel each other.
+
+- There is a special case for reusable workflows called via `workflow_call` - they will have `github.workflow` set to their parent workflow's name. Thus, they would cancel each other. That's why we additionally hardcode the name of the workflow as well.
+
+This results in a key with the following semantics:
+
+```
+<running-workflow>-<triggering-workflow>-<triggered-event>-<pull-request/fallback>
+```

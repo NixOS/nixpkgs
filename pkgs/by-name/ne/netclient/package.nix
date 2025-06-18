@@ -23,12 +23,12 @@ buildGoModule rec {
 
   hardeningEnabled = [ "pie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated WireGuard® Management Client";
     mainProgram = "netclient";
     homepage = "https://netmaker.io";
     changelog = "https://github.com/gravitl/netclient/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ wexder ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ wexder ];
   };
 }

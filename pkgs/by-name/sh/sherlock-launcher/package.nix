@@ -10,17 +10,20 @@
   wayland,
   openssl,
   sqlite,
+  gdk-pixbuf,
+  librsvg,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sherlock-launcher";
-  version = "0.1.11";
+  version = "0.1.13-hotfix-1";
 
   src = fetchFromGitHub {
     owner = "Skxxtz";
     repo = "sherlock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YuAJbLQc7SIV9HkWGcQBPdZ6uxI5qeeSIaK0t8owe4A=";
+    hash = "sha256-h8/72EipLTssik2I4GSfBRSc34ecAm0L39wA9hnGrR4=";
   };
 
   nativeBuildInputs = [
@@ -36,9 +39,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sqlite
     glib
     wayland
+    gdk-pixbuf
+    librsvg
   ];
 
-  cargoHash = "sha256-1swjAwDH1vyMcVv/Mx4P8lrdUJGdvoR1SVIjaUe4zZo=";
+  cargoHash = "sha256-F2jXCJnj2kGPANXSzx65DfKxKgXtwR0xRNFZie6PYx0=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lightweight and efficient application launcher for Wayland built with Rust and GTK4";

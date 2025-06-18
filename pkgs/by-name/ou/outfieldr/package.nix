@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "outfieldr";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "ve-nt";
     repo = "outfieldr";
     rev = finalAttrs.version;
-    hash = "sha256-Xz5BxwPWrZfDsWnvVR9KvHidbUdPsxy7b2ONiSZY+uk=";
+    hash = "sha256-rokGB1be09ExK9VH5tCW8ccZiIMd3A9pbuMFrOouhOc=";
   };
 
   nativeBuildInputs = [

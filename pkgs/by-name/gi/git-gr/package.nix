@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "9999years";
-    repo = pname;
+    repo = "git-gr";
     tag = "v${version}";
     hash = "sha256-t308Ep27iRvRHSdvVMOrRGVoajBtnTutHAkKbZkO7Wg=";
   };
@@ -54,12 +54,12 @@ rustPlatform.buildRustPackage {
       --zsh <(${gitGr} completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/9999years/git-gr";
     changelog = "https://github.com/9999years/git-gr/releases/tag/v${version}";
     description = "Gerrit CLI client";
-    license = [ licenses.mit ];
-    maintainers = [ maintainers._9999years ];
+    license = [ lib.licenses.mit ];
+    maintainers = [ lib.maintainers._9999years ];
     mainProgram = "git-gr";
   };
 

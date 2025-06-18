@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "The official CLI tool for Rundeck";
+    description = "Official CLI tool for Rundeck";
     longDescription = ''
       The rd command provides command line access to the Rundeck HTTP API,
       allowing you to access and control your Rundeck server from the

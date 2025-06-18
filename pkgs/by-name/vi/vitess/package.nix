@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "vitessio";
-    repo = pname;
+    repo = "vitess";
     rev = "v${version}";
     hash = "sha256-YfFGKOYlsCy9mSjtRB+ajmXnXIB8Awjm54DGGhTnu5U=";
   };
@@ -25,11 +25,11 @@ buildGoModule rec {
   # integration tests require access to syslog and root
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://vitess.io/";
     changelog = "https://github.com/vitessio/vitess/releases/tag/v${version}";
     description = "Database clustering system for horizontal scaling of MySQL";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ urandom ];
   };
 }

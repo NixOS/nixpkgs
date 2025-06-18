@@ -2,8 +2,8 @@
   lib,
   buildBatExtrasPkg,
   shfmt,
-  nodePackages,
   clang-tools,
+  prettier,
   rustfmt,
 
   withShFmt ? true,
@@ -15,7 +15,7 @@ buildBatExtrasPkg {
   name = "prettybat";
   dependencies =
     lib.optional withShFmt shfmt
-    ++ lib.optional withPrettier nodePackages.prettier
+    ++ lib.optional withPrettier prettier
     ++ lib.optional withClangTools clang-tools
     ++ lib.optional withRustFmt rustfmt;
   meta.description = "Pretty-print source code and highlight it with bat";

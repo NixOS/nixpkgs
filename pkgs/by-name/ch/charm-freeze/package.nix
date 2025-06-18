@@ -23,13 +23,13 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to generate images of code and terminal output";
     mainProgram = "freeze";
     homepage = "https://github.com/charmbracelet/freeze";
     changelog = "https://github.com/charmbracelet/freeze/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       caarlos0
       maaslalani
     ];

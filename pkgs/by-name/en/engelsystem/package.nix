@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.engelsystem;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/engelsystem/engelsystem/releases/tag/v${version}";
     description = "Coordinate your volunteers in teams, assign them to work shifts or let them decide for themselves when and where they want to help with what";
     homepage = "https://engelsystem.de";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "migrate";
-    maintainers = [ ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.all;
   };
 }

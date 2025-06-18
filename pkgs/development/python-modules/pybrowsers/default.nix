@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pybrowsers";
-  version = "1.1.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roniemartinez";
     repo = "browsers";
     tag = version;
-    hash = "sha256-9YO/FTgL/BzabPnpi2RM/C08F7/d6FNshWnGsT6NQlg=";
+    hash = "sha256-GW5yuBc9lwGIUK/ZH4qHFXlA+wyMD6HdShq0A/ydb+k=";
   };
 
   build-system = [ poetry-core ];

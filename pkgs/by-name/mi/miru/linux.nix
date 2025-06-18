@@ -1,5 +1,6 @@
 {
   fetchurl,
+  makeWrapper,
   appimageTools,
 
   pname,
@@ -22,6 +23,8 @@ appimageTools.wrapType2 rec {
     hash = "sha256-nLPqEI6u5NNQ/kPbXRWPG0pIwutKNK2J8JeTPN6wHlg=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands =
     let
       contents = appimageTools.extractType2 { inherit pname version src; };
@@ -32,6 +35,9 @@ appimageTools.wrapType2 rec {
       cp -r ${contents}/{locales,resources} "$out/share/lib/miru"
       cp -r ${contents}/usr/* "$out"
       cp "${contents}/${pname}.desktop" "$out/share/applications/"
+      # https://github.com/ThaUnknown/miru/issues/562
+      # Miru does not work under wayland currently, so force it to use X11
+      wrapProgram $out/bin/miru --set ELECTRON_OZONE_PLATFORM_HINT x11
       substituteInPlace $out/share/applications/${pname}.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
     '';
 }

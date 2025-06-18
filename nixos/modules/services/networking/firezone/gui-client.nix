@@ -6,7 +6,6 @@
 }:
 let
   inherit (lib)
-    boolToString
     getExe'
     mkEnableOption
     mkIf
@@ -28,7 +27,7 @@ in
         default = [ ];
         description = ''
           All listed users will become part of the `firezone-client` group so
-          they can control the IPC service. This is a convenience option.
+          they can control the tunnel service. This is a convenience option.
         '';
       };
 
@@ -58,8 +57,8 @@ in
     # Required for the token store in the gui application
     services.gnome.gnome-keyring.enable = true;
 
-    systemd.services.firezone-ipc-service = {
-      description = "GUI IPC service for the Firezone zero-trust access platform";
+    systemd.services.firezone-tunnel-service = {
+      description = "GUI tunnel service for the Firezone zero-trust access platform";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
@@ -73,7 +72,7 @@ in
           export FIREZONE_ID=$(< client_id)
         fi
 
-        exec ${getExe' cfg.package "firezone-client-ipc"} run
+        exec ${getExe' cfg.package "firezone-client-tunnel"} run
       '';
 
       environment = {

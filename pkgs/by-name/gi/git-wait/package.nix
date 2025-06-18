@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = {
-    description = "A simple git wrapper that waits until index.lock file is removed when present before running the command";
+    description = "Simple git wrapper that waits until index.lock file is removed when present before running the command";
     homepage = "https://github.com/darshanparajuli/git-wait";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];

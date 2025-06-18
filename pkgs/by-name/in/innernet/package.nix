@@ -60,12 +60,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Private network system that uses WireGuard under the hood";
     homepage = "https://github.com/tonarino/innernet";
     changelog = "https://github.com/tonarino/innernet/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       tomberek
       _0x4A6F
     ];

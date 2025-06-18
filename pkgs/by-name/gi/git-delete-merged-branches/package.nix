@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "hartwork";
-    repo = pname;
+    repo = "git-delete-merged-branches";
     tag = version;
     sha256 = "sha256-2MSdUpToOiurtiL0Ws2dLEWqd6wj4nQ2RsEepBytgAk=";
   };

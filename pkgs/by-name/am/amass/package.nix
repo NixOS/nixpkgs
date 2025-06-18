@@ -31,7 +31,7 @@ buildGoModule rec {
   # https://github.com/OWASP/Amass/issues/640
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "In-Depth DNS Enumeration and Network Mapping";
     longDescription = ''
       The OWASP Amass tool suite obtains subdomain names by scraping data
@@ -46,8 +46,8 @@ buildGoModule rec {
     '';
     homepage = "https://owasp.org/www-project-amass/";
     changelog = "https://github.com/OWASP/Amass/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kalbasit
       fab
     ];

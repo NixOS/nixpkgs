@@ -42,7 +42,7 @@ let
       # values must be separated by whitespace or even commas.
       # Consult either sshd_config(5) or, as last resort, the OpehSSH source for parsing
       # the options at servconf.c:process_server_config_line_depth() to determine the right "mode"
-      # for each. But fortunaly this fact is documented for most of them in the manpage.
+      # for each. But fortunately this fact is documented for most of them in the manpage.
       commaSeparated = [
         "Ciphers"
         "KexAlgorithms"

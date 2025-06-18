@@ -9,7 +9,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "siddhantac";
-    repo = pname;
+    repo = "puffin";
     rev = "v${version}";
     hash = "sha256-cXhnCCg5A/G/FKWfCpq130qSD1iTGpgidqzGGnIPqO8=";
   };

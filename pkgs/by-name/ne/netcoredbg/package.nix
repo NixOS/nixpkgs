@@ -29,7 +29,7 @@ let
 
   src = fetchFromGitHub {
     owner = "Samsung";
-    repo = pname;
+    repo = "netcoredbg";
     rev = version;
     inherit hash;
   };

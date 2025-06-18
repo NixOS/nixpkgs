@@ -154,7 +154,7 @@ php.buildComposerProject2 (finalAttrs: {
     mkdir -p $out/bin
     cat << EOF > $out/bin/movim
     #!${lib.getExe dash}
-    ${lib.getExe finalAttrs.php} $out/share/php/${finalAttrs.pname}/daemon.php "\$@"
+    ${lib.getExe finalAttrs.php} $out/share/php/movim/daemon.php "\$@"
     EOF
     chmod +x $out/bin/movim
 

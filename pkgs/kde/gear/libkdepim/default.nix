@@ -1,9 +1,4 @@
-{
-  mkKdeDerivation,
-  qttools,
-}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "libkdepim";
-
-  extraNativeBuildInputs = [ qttools ];
 }

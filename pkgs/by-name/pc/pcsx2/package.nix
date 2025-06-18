@@ -1,7 +1,7 @@
 {
   lib,
-  SDL2,
-  callPackage,
+  fetchFromGitHub,
+  sdl3,
   cmake,
   cubeb,
   curl,
@@ -25,11 +25,19 @@
   wayland,
   zip,
   zstd,
-  fetchpatch,
+  plutovg,
+  plutosvg,
+  kddockwidgets,
 }:
 
 let
-  sources = callPackage ./sources.nix { };
+  pcsx2_patches = fetchFromGitHub {
+    owner = "PCSX2";
+    repo = "pcsx2_patches";
+    rev = "49d2f7bb0b4387e9cb7c68233e2bdc156850542b";
+    hash = "sha256-WByW40lf5h1hlnxxiiP9WyEhk8NwxATZDguWQj+j3iA=";
+  };
+
   inherit (qt6)
     qtbase
     qtsvg
@@ -37,19 +45,17 @@ let
     qtwayland
     wrapQtAppsHook
     ;
-
-  cubeb' = cubeb.overrideAttrs (old: {
-    patches = (old.patches or [ ]) ++ [
-      (fetchpatch {
-        url = "https://github.com/PCSX2/pcsx2/commit/430e31abe4a9e09567cb542f1416b011bb9b6ef9.patch";
-        stripLen = 2;
-        hash = "sha256-bbH0c1X3lMeX6hfNKObhcq5xraFpicFV3mODQGYudvQ=";
-      })
-    ];
-  });
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
-  inherit (sources.pcsx2) pname version src;
+  pname = "pcsx2";
+  version = "2.3.407";
+  src = fetchFromGitHub {
+    pname = "pcsx2-source";
+    owner = "PCSX2";
+    repo = "pcsx2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3/nnGdEr7flA8g9jPC8clAyvZlwQh12/YH4+t0O9OuU=";
+  };
 
   patches = [
     # Remove PCSX2_GIT_REV
@@ -62,7 +68,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "PACKAGE_MODE" true)
     (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
     (lib.cmakeBool "USE_LINKED_FFMPEG" true)
-    (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.rev)
+    (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.tag)
   ];
 
   nativeBuildInputs = [
@@ -87,13 +93,16 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     qtsvg
     qttools
     qtwayland
-    SDL2
+    sdl3
+    plutovg
+    plutosvg
+    kddockwidgets
     shaderc
     soundtouch
     vulkan-headers
     wayland
     zstd
-    cubeb'
+    cubeb
   ];
 
   strictDeps = true;
@@ -102,7 +111,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
-    zip -jq $out/share/PCSX2/resources/patches.zip ${sources.pcsx2_patches.src}/patches/*
+    zip -jq $out/share/PCSX2/resources/patches.zip ${pcsx2_patches}/patches/*
     strip-nondeterminism $out/share/PCSX2/resources/patches.zip
   '';
 
@@ -122,6 +131,11 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/pcsx2-qt \
       --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
   '';
+
+  passthru = {
+    inherit pcsx2_patches;
+    updateScript.command = [ ./update.sh ];
+  };
 
   meta = {
     homepage = "https://pcsx2.net";

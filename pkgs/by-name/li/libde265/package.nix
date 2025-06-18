@@ -14,14 +14,14 @@
   gst_all_1,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.0.15";
   pname = "libde265";
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libde265";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-guiLM4RNe5O0qpeCoQUbs1Z7j0wp8iK9za2+6NIB8yY=";
   };
 

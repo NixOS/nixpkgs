@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://codeberg.org/rgherdt/scheme-lsp-server";
-    description = "An LSP server for Guile";
+    description = "LSP server for Guile";
     mainProgram = "guile-lsp-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ knightpp ];

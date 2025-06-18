@@ -6,7 +6,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "iceshelf";
   version = "unstable-2019-07-03";
 
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "mrworf";
-    repo = pname;
+    repo = "iceshelf";
     rev = "26768dde3fc54fa412e523eb8f8552e866b4853b";
     sha256 = "08rcbd14vn7312rmk2hyvdzvhibri31c4r5lzdrwb1n1y9q761qm";
   };
@@ -26,9 +26,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/doc/${pname} $out/${python3.sitePackages}
+    mkdir -p $out/bin $out/share/doc/iceshelf $out/${python3.sitePackages}
     cp -v iceshelf iceshelf-restore $out/bin
-    cp -v iceshelf.sample.conf $out/share/doc/${pname}/
+    cp -v iceshelf.sample.conf $out/share/doc/iceshelf/
     cp -rv modules $out/${python3.sitePackages}
   '';
 

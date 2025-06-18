@@ -38,12 +38,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "keepwn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to automate KeePass discovery and secret extraction";
     homepage = "https://github.com/Orange-Cyberdefense/KeePwn";
     changelog = "https://github.com/Orange-Cyberdefense/KeePwn/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "keepwn";
   };
 }

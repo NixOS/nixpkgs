@@ -6,6 +6,7 @@
   udev,
   pkg-config,
   installShellFiles,
+  udevCheckHook,
   versionCheckHook,
 }:
 
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    udevCheckHook
   ];
 
   useFetchCargoVendor = true;

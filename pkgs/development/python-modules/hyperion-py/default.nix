@@ -3,60 +3,44 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pytestCheckHook,
-  pythonOlder,
   poetry-core,
   pytest-aiohttp,
   pytest-asyncio,
+  pytest-cov-stub,
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "hyperion-py";
-  version = "0.7.5";
-  disabled = pythonOlder "3.8";
-  format = "pyproject";
+  version = "0.7.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
     repo = "hyperion-py";
-    rev = "v${version}";
-    hash = "sha256-arcnpCQsRuiWCrAz/t4TCjTe8DRDtRuzYp8k7nnjGDk=";
+    tag = "v${version}";
+    hash = "sha256-14taFSrtmgTBiie0eY2fSRkZndJSZ4GJNRx3MonrTzs=";
   };
 
-  patches = [
-    (fetchpatch {
-      # python3.10 compat: Drop loop kwarg in asyncio.sleep call
-      url = "https://github.com/dermotduffy/hyperion-py/commit/f02af52fcce17888984c99bfc03935e372011394.patch";
-      hash = "sha256-4nfsQVxd77VV9INwNxTyFRDlAjwdTYqfSGuF487hFCs=";
-    })
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [ aiohttp ];
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-aiohttp
+    pytest-cov-stub
+    pytest-timeout
     pytestCheckHook
   ];
-
-  pytestFlagsArray = [
-    # pytest-asyncio 0.17.0 compat
-    "--asyncio-mode=auto"
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --timeout=9 --cov=hyperion" ""
-  '';
 
   pythonImportsCheck = [ "hyperion" ];
 
   meta = with lib; {
     description = "Python package for Hyperion Ambient Lighting";
     homepage = "https://github.com/dermotduffy/hyperion-py";
+    changelog = "https://github.com/dermotduffy/hyperion-py/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

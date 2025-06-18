@@ -27,11 +27,16 @@ pkgs.haskell.packages.ghc96.override {
               --prefix PATH ':' ${lib.makeBinPath [ nodejs ]}
           '';
 
+          patches = [
+            # Fix TLS compatibility issues with package.elm-lang.org
+            # see: https://github.com/elm/compiler/pull/2325
+            ./tls-compatibility.patch
+          ];
+
           description = "Delightful language for reliable webapps";
           homepage = "https://elm-lang.org/";
           license = lib.licenses.bsd3;
           maintainers = with lib.maintainers; [
-            domenkozar
             turbomack
           ];
         }) (self.callPackage ./elm { });

@@ -19,12 +19,12 @@
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.22.11";
+  version = "1.22.19";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dpkg";
     rev = "applied/${version}";
-    hash = "sha256-mKyS0lPTG3ROcw8AhB4IdjNjvZK2YTGV9pbpjz/OLAc=";
+    hash = "sha256-lSuq5VqBj5yKusZaT50sOf82/wd2FeS4g2ILaZT0HPM=";
   };
 
   configureFlags = [
@@ -112,6 +112,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ siriobalmelli ];
   };
 }

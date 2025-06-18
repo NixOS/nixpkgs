@@ -140,7 +140,7 @@ def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -
     mock_build.assert_has_calls(
         [
             call(
-                "config.system.build.nixos-rebuild",
+                nr.NIXOS_REBUILD_ATTR,
                 nr.models.BuildAttr(ANY, ANY),
                 {"build": True, "no_out_link": True},
             )
@@ -184,7 +184,7 @@ def test_reexec_flake(
 
     nr.reexec(argv, args, {"build": True}, {"flake": True})
     mock_build.assert_called_once_with(
-        "config.system.build.nixos-rebuild",
+        nr.NIXOS_REBUILD_ATTR,
         nr.models.Flake(ANY, ANY),
         {"flake": True, "no_link": True},
     )
@@ -385,7 +385,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "nix",
                     "eval",
                     "--json",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.images",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.images',
                     "--apply",
                     "builtins.attrNames",
                 ],
@@ -400,7 +400,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "nix-command flakes",
                     "build",
                     "--print-out-paths",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.images.azure",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure',
                 ],
                 check=True,
                 stdout=PIPE,
@@ -411,7 +411,7 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "nix",
                     "eval",
                     "--json",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.images.azure.passthru.filePath",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure.passthru.filePath',
                 ],
                 check=True,
                 stdout=PIPE,
@@ -462,7 +462,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "nix-command flakes",
                     "build",
                     "--print-out-paths",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.toplevel",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
                     "-v",
                     "--option",
                     "narinfo-cache-negative-ttl",
@@ -756,7 +756,7 @@ def test_execute_nix_switch_flake_target_host(
                     "nix-command flakes",
                     "build",
                     "--print-out-paths",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.toplevel",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
                     "--no-link",
                 ],
                 check=True,
@@ -860,7 +860,7 @@ def test_execute_nix_switch_flake_build_host(
                     "nix-command flakes",
                     "eval",
                     "--raw",
-                    "/path/to/config#nixosConfigurations.hostname.config.system.build.toplevel.drvPath",
+                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
                 ],
                 check=True,
                 stdout=PIPE,
@@ -1063,7 +1063,7 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "nix-command flakes",
                     "build",
                     "--print-out-paths",
-                    "github:user/repo#nixosConfigurations.hostname.config.system.build.toplevel",
+                    'github:user/repo#nixosConfigurations."hostname".config.system.build.toplevel',
                 ],
                 check=True,
                 stdout=PIPE,

@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
   pname = "mesa-gl-headers";
 
   # These are a bigger rebuild and don't change often, so keep them separate.
-  version = "25.0.1";
+  version = "25.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "mesa";
     rev = "mesa-${version}";
-    hash = "sha256-9D4d7EEdZysvXDRcmpbyt85Lo64sldNRomp6/HUVORo=";
+    hash = "sha256-UlI+6OMUj5F6uVAw+Mg2wOZrjfdRq73d1qufaXVI/go";
   };
 
   dontBuild = true;

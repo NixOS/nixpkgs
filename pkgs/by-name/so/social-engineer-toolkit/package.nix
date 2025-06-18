@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "trustedsec";
-    repo = pname;
+    repo = "social-engineer-toolkit";
     rev = version;
     sha256 = "ePbmUvnzLO0Wfuhym3bNSPV1x8rcCPqKMeWSRcbJGAo=";
   };

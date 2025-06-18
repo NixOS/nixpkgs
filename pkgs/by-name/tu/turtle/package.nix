@@ -4,20 +4,22 @@
   fetchFromGitLab,
   gobject-introspection,
   wrapGAppsHook4,
+  installShellFiles,
   libadwaita,
+  meld,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "turtle";
-  version = "0.11";
+  version = "0.13.3";
   pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "philippun1";
     repo = "turtle";
-    rev = "refs/tags/${version}";
-    hash = "sha256-st6Y2hIaMiApoAG7IFoyQC9hKXdvothkv+5toXsUdVA=";
+    tag = version;
+    hash = "sha256-bfoo2xWBr4jR5EX5H8hiXl6C6HSpNJ93icDg1gwWXqE=";
   };
 
   postPatch = ''
@@ -29,6 +31,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook4
+    installShellFiles
   ];
 
   buildInputs = [ libadwaita ];
@@ -44,6 +47,7 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     python ./install.py install
+    installManPage data/man/*
   '';
 
   # Avoid wrapping two times
@@ -67,6 +71,8 @@ python3Packages.buildPythonApplication rec {
       for nautilus_extensions in $out/share/nautilus-python/extensions/*.py; do
         patchPythonScript $nautilus_extensions
       done
+      substituteInPlace $out/share/nautilus-python/extensions/turtle_nautilus_compare.py \
+        --replace-fail 'Popen(["meld"' 'Popen(["${lib.getExe meld}"'
     '';
 
   meta = {

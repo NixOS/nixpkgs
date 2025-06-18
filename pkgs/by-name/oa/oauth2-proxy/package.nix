@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "7.9.0";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "oauth2-proxy";
     owner = "oauth2-proxy";
     sha256 = "sha256-ykC29q7/rTv7POGETMiypj9CQYdYVo7rjT5B+3nfj/U=";
     rev = "v${version}";

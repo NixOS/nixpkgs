@@ -161,6 +161,27 @@ completely incompatible with packages from `haskellPackages`.
 
 <!-- TODO(@maralorn) Link to package set generation docs in the contributors guide below. -->
 
+### GHC Deprecation Policy {#ghc-deprecation-policy}
+
+We remove GHC versions according to the following policy:
+
+#### Major GHC versions {#major-ghc-deprecation}
+
+We keep the following GHC major versions:
+1. The current Stackage LTS as the default and all later major versions.
+2. The two latest major versions older than our default.
+3. The currently recommended GHCup version and all later major versions.
+
+Older GHC versions might be kept longer, if there are in-tree consumers. We will coordinate with the maintainers of those dependencies to find a way forward.
+
+#### Minor GHC versions {#minor-ghc-deprecation}
+
+Every major version has a default minor version. The default minor version will be updated as soon as viable without breakage.
+
+Older minor versions for a supported major version will only be kept, if they are the last supported version of a major Stackage LTS release.
+
+<!-- Policy introduced here: https://discourse.nixos.org/t/nixpkgs-ghc-deprecation-policy-user-feedback-necessary/64153 -->
+
 ## `haskellPackages.mkDerivation` {#haskell-mkderivation}
 
 Every haskell package set has its own haskell-aware `mkDerivation` which is used

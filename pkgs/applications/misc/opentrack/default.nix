@@ -96,12 +96,12 @@ mkDerivation {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/opentrack/opentrack";
     description = "Head tracking software for MS Windows, Linux, and Apple OSX";
     mainProgram = "opentrack";
     changelog = "https://github.com/opentrack/opentrack/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ zaninime ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ zaninime ];
   };
 }

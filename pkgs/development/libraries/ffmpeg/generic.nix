@@ -34,7 +34,7 @@
   # all dependants in Nixpkgs
   withSmallDeps ? ffmpegVariant == "small" || withFullDeps,
 
-  # Everything enabled; only guarded behind platform exclusivity or brokeness.
+  # Everything enabled; only guarded behind platform exclusivity or brokenness.
   # If you need to depend on ffmpeg-full because ffmpeg is missing some feature
   # your package needs, you should enable that feature in regular ffmpeg
   # instead.
@@ -496,6 +496,13 @@ stdenv.mkDerivation (
         (fetchpatch2 {
           url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
           hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
+        })
+      ]
+      ++ optionals (lib.versionOlder version "7.2") [
+        (fetchpatch2 {
+          name = "unbreak-svt-av1-3.0.0.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d1ed5c06e3edc5f2b5f3664c80121fa55b0baa95";
+          hash = "sha256-2NVkIhQVS1UQJVYuDdeH+ZvWYKVbtwW9Myu5gx7JnbA=";
         })
       ];
 

@@ -149,7 +149,6 @@ rec {
         xorg.libpciaccess
 
         glib
-        gtk2
         bzip2
         zlib
         gdk-pixbuf
@@ -218,7 +217,6 @@ rec {
         speex
         SDL2_ttf
         SDL2_mixer
-        libappindicator-gtk2
         libcaca
         libcanberra
         libgcrypt

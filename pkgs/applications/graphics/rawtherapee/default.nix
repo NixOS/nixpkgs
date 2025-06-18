@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rawtherapee";
-  version = "5.11";
+  version = "5.12";
 
   src = fetchFromGitHub {
-    owner = "Beep6581";
+    owner = "RawTherapee";
     repo = "RawTherapee";
-    rev = version;
-    hash = "sha256-jIAbguwF2aqRTk72ro5oHNTawA7biPSFC41YHgRR730=";
+    tag = version;
+    hash = "sha256-h8eWnw9I1R0l9WAI/DylsdA241qU9NhYGEPYz+JlE18=";
     # The developers ask not to use the tarball from Github releases, see
     # https://www.rawtherapee.com/downloads/5.10/#news-relevant-to-package-maintainers
     forceFetchGit = true;

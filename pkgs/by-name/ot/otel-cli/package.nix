@@ -14,7 +14,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "equinix-labs";
-    repo = pname;
+    repo = "otel-cli";
     rev = "v${version}";
     hash = "sha256-JYi9CbP4mUhX0zNjhi6QlBzLKcj2zdPwlyBSIYKp6vk=";
   };
@@ -39,11 +39,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/equinix-labs/otel-cli";
     description = "Command-line tool for sending OpenTelemetry traces";
     changelog = "https://github.com/equinix-labs/otel-cli/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       emattiza
       urandom

@@ -16,7 +16,8 @@
 let
   python = python3.override {
     packageOverrides = final: prev: {
-      django = prev.django_5;
+      # https://github.com/django-crispy-forms/crispy-bootstrap3/issues/12
+      django = prev.django_5_1;
       djangorestframework = prev.djangorestframework.overridePythonAttrs (old: {
         # https://github.com/encode/django-rest-framework/discussions/9342
         disabledTests = (old.disabledTests or [ ]) ++ [ "test_invalid_inputs" ];
@@ -26,7 +27,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.11.4";
+  version = "5.12.1";
 
   pyproject = true;
 
@@ -39,7 +40,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-0/PYl8A95r0xulaSawnSyrSqB7SiEBgd9TVP7OIla00=";
+    hash = "sha256-8tqPxvSvVG1j/TGMozihtBYsn7oly41lP4iK3BwTmVk=";
   };
 
   patches = [
@@ -81,7 +82,7 @@ python.pkgs.buildPythonApplication rec {
       celery
       certifi
       charset-normalizer
-      django-crispy-bootstrap3
+      crispy-bootstrap3
       cryptography
       cssselect
       cython
@@ -134,6 +135,7 @@ python.pkgs.buildPythonApplication rec {
       siphashc
       social-auth-app-django
       social-auth-core
+      standardwebhooks
       tesserocr
       translate-toolkit
       translation-finder
@@ -148,7 +150,7 @@ python.pkgs.buildPythonApplication rec {
     ++ drf-spectacular.optional-dependencies.sidecar
     ++ drf-standardized-errors.optional-dependencies.openapi;
 
-  pythonRelaxDeps = [ "django-otp-webauthn" ];
+  pythonRelaxDeps = [ "certifi" ];
 
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];
