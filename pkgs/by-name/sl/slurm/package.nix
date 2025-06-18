@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   runCommand,
   config,
   pkg-config,
@@ -62,6 +63,11 @@ stdenv.mkDerivation rec {
     # increase string length to allow for full
     # path of 'echo' in nix store
     ./common-env-echo.patch
+    # PMIx v6.x support
+    (fetchpatch {
+      url = "https://github.com/SchedMD/slurm/commit/483f5f29a79e6a417e37267a537e0a2bbec05bed.patch";
+      hash = "sha256-TKNKLioz4hVk6nOzF//NaKOZARRQtsx3TEO47iawbE0=";
+    })
   ];
 
   prePatch =
