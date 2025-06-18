@@ -274,7 +274,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     seen_source_keys = set()
     for pkg in cargo_lock_toml["package"]:
 
-        # ignore local dependenices
+        # ignore local dependencies
         if "source" not in pkg.keys():
             continue
 
@@ -290,6 +290,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
             git_sha_rev = source_info["git_sha_rev"]
             git_tree = vendor_staging_dir / "git" / git_sha_rev
 
+            crate_out_dir = crate_out_dir.parent / f"{crate_out_dir.name}-{git_sha_rev}"
             copy_and_patch_git_crate_subtree(git_tree, pkg["name"], crate_out_dir)
 
             # git based crates allow having no checksum information
