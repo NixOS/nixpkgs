@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  nix-update-script,
   buildPythonPackage,
   fetchFromGitHub,
   jsonschema,
@@ -43,6 +44,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "dtschema" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Tooling for devicetree validation using YAML and jsonschema";
