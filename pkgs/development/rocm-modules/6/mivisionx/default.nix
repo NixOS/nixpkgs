@@ -42,13 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "6.3.3";
+  version = "6.4.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIVisionX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-SisCbUDCAiWQ1Ue7qrtoT6vO/1ztzqji+3cJD6MXUNw=";
+    hash = "sha256-07MivgCYmKLnhGDjOYsFBfwIxEoQLYNoRbOo3MPpVzE=";
   };
 
   patches = [

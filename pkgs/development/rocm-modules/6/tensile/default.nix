@@ -6,6 +6,7 @@
   buildPythonPackage,
   pytestCheckHook,
   setuptools,
+  distro,
   pyyaml,
   msgpack,
   simplejson,
@@ -23,7 +24,7 @@ buildPythonPackage rec {
   pname = if isTensileLite then "tensilelite" else "tensile";
   # Using a specific commit which has code object compression support from after the 6.3 release
   # Without compression packages are too large for hydra
-  version = "6.3-unstable-2024-12-10";
+  version = "6.4.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -64,6 +65,7 @@ buildPythonPackage rec {
       msgpack
       pandas
       joblib
+      distro
     ]
     ++ lib.optionals (!isTensileLite) [
       rich
@@ -83,8 +85,9 @@ buildPythonPackage rec {
       url = "https://github.com/GZGavinZhao/Tensile/commit/855cb15839849addb0816a6dde45772034a3e41f.patch";
     })
     ++ lib.optional isTensileLite ./tensilelite-create-library-dont-copy-twice.diff
-    ++ lib.optional isTensileLite ./tensilelite-gen_assembly-venv-err-handling.diff
-    ++ lib.optional isTensileLite ./tensilelite-compression.diff;
+    ++ lib.optional isTensileLite ./tensilelite-gen_assembly-venv-err-handling.diff;
+  # FIXME: update this? Some compression support was upstreamed - may be unneeded now
+  # ++ lib.optional isTensileLite ./tensilelite-compression.diff;
 
   doCheck = false; # Too many errors, not sure how to set this up properly
 

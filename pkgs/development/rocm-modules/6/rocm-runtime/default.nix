@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "6.3.3";
+  version = "6.4.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCR-Runtime";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-du20+5VNYgwchGO7W7FIVebBqLPtfSBnmPVbPpgEZjo=";
+    hash = "sha256-LOILnvjGwlLoB99+TdZib7VJsgp45yGJiEPgrlwXItI=";
   };
 
   env.CFLAGS = "-I${numactl.dev}/include -I${elfutils.dev}/include -w";
@@ -61,11 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
       # [PATCH] hsa-runtime: set underlying type of hsa_region_info_t and hsa_amd_region_info_t to int
       url = "https://github.com/ROCm/ROCR-Runtime/commit/39a6a168fa07e289a10f6e20e6ead4e303e99ba0.patch";
       hash = "sha256-CshJJDvII1nNyNmt+YjwMwfBHUTlrdsxkhwfgBwO+WE=";
-    })
-    (fetchpatch {
-      # [PATCH] rocr: refactor of runtime.cpp based on Coverity
-      url = "https://github.com/ROCm/ROCR-Runtime/commit/441bd9fe6c7bdb5c4c31f71524ed642786bc923e.patch";
-      hash = "sha256-7bQXxGkipzgT2aXRxCuh3Sfmo/zc/IOmA0x1zB+fMb0=";
     })
     (fetchpatch {
       # [PATCH] queues: fix UB due to 1 << 31

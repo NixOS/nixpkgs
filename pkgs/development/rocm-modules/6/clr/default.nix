@@ -55,7 +55,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "6.3.3";
+  version = "6.4.1";
 
   outputs = [
     "out"
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "clr";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-4qjfnn0kto2sNaSumXxHRHFrf3a3RZILOdhVSxkEs1I=";
+    hash = "sha256-MA9MS/HF3j5iqpFuatHQJZ+nNkcGgzCvpkiNO6CjoPg=";
   };
 
   nativeBuildInputs = [
@@ -124,28 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./cmake-find-x11-libgl.patch
-
-    (fetchpatch {
-      # Fix handling of old fatbin version https://github.com/ROCm/clr/issues/99
-      sha256 = "sha256-CK/QwgWJQEruiG4DqetF9YM0VEWpSiUMxAf1gGdJkuA=";
-      url = "https://src.fedoraproject.org/rpms/rocclr/raw/rawhide/f/0001-handle-v1-of-compressed-fatbins.patch";
-    })
-    (fetchpatch {
-      # improve rocclr isa compatibility check
-      sha256 = "sha256-wUrhpYN68AbEXeFU5f366C6peqHyq25kujJXY/bBJMs=";
-      url = "https://github.com/GZGavinZhao/clr/commit/22c17a0ac09c6b77866febf366591f669a1ed133.patch";
-    })
-    (fetchpatch {
-      # [PATCH] Improve hipamd compat check
-      sha256 = "sha256-uZQ8rMrWH61CCbxwLqQGggDmXFmYTi6x8OcgYPrZRC8=";
-      url = "https://github.com/GZGavinZhao/clr/commit/63c6ee630966744d4199fdfb854e98d2da9e1122.patch";
-    })
-    (fetchpatch {
-      # [PATCH] SWDEV-504340 - Move cast of cl_mem inside the condition
-      # Fixes crash due to UB in KernelBlitManager::setArgument
-      sha256 = "sha256-nL4CZ7EOXqsTVUtYhuu9DLOMpnMeMRUhkhylEQLTg9I=";
-      url = "https://github.com/ROCm/clr/commit/fa63919a6339ea2a61111981ba2362c97fbdf743.patch";
-    })
     (fetchpatch {
       # [PATCH] SWDEV-507104 - Removes alignment requirement for Semaphore class to resolve runtime misaligned memory issues
       sha256 = "sha256-nStJ22B/CM0fzQTvYjbHDbQt0GlE8DXxVK+UDU9BAx4=";
@@ -220,23 +198,26 @@ stdenv.mkDerivation (finalAttrs: {
       # See: https://github.com/ROCm/ROCm/blob/77cbac4abab13046ee93d8b5bf410684caf91145/README.md#library-target-matrix
       # Generic targets are not yet available in rocm-6.3.1 llvm
       gpuTargets = lib.forEach [
-        # "9-generic"
+        "9-generic"
         "900" # MI25, Vega 56/64
         "906" # MI50/60, Radeon VII
         "908" # MI100
         "90a" # MI210 / MI250
-        # "9-4-generic"
+        "9-4-generic"
         # 940/1 - never released publicly, maybe HPE cray specific MI3xx?
         "942" # MI300
-        # "10-1-generic"
+        "10-1-generic"
         "1010"
         "1012"
-        # "10-3-generic"
+        "10-3-generic"
         "1030" # W6800, various Radeon cards
-        # "11-generic"
+        "11-generic"
         "1100"
         "1101"
         "1102"
+        "1200"
+        "1201"
+        "12-generic"
         "1200" # RX 9070
         "1201" # RX 9070 XT
       ] (target: "gfx${target}");

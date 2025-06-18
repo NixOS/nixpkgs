@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "composable_kernel_base";
   # Picked this version over 6.3 because much easier to get to build
   # and it matches the version torch 2.6 wants
-  version = "6.4.0-unstable-20241220";
+  version = "6.4.1";
 
   outputs =
     [
@@ -56,8 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "composable_kernel";
-    rev = "07339c738396ebeae57374771ded4dcf11bddf1e";
-    hash = "sha256-EvEBxlOpQ71BF57VW79WBo/cdxAwTKFXFMiYKyGyyEs=";
+    # FIXME: check rev matches what pytorch wants
+    rev = "6.4.1";
+    hash = "sha256-1vEBxlOpQ71BF57VW79WBo/cdxAwTKFXFMiYKyGyyEs=";
   };
 
   nativeBuildInputs = [
@@ -102,6 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
       "-DBUILD_DEV=OFF"
       "-DROCM_PATH=${clr}"
       "-DCMAKE_HIP_COMPILER_ROCM_ROOT=${clr}"
+      # FIXME: disable HUGE _mha instance build iff possible
+      # Is being made non-default upstream https://github.com/ROCm/composable_kernel/pull/2225
+      # but MIOpen might still need it for 6.4
 
       # FP8 can build for 908/90a but very slow build
       # and produces unusably slow kernels that are huge
