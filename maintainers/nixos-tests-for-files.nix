@@ -4,7 +4,7 @@
   A more detailed structure than a list is available in the `meta.tests` option value.
 
   Example:
-    nix-build maintainers/nixos-tests-for-files.nix --arg files '[ nixos/modules/services/databases/postgresql.nix ]'
+    nix-build maintainers/nixos-tests-for-files.nix --arg files '[ ./nixos/modules/services/databases/postgresql.nix ]'
 */
 {
   files,
