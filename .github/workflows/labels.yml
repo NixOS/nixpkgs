@@ -186,7 +186,11 @@ jobs:
 
                   // Get all currently set labels that we manage
                   const before =
-                    pull_request.labels.map(({ name }) => name)
+                    (await github.paginate(github.rest.issues.listLabelsOnIssue, {
+                      ...context.repo,
+                      issue_number: pull_request.number
+                    }))
+                    .map(({ name }) => name)
                     .filter(name =>
                       name.startsWith('10.rebuild') ||
                       name == '11.by: package-maintainer' ||
