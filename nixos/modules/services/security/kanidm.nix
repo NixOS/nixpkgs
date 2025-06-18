@@ -78,7 +78,9 @@ let
   defaultServiceConfig = {
     # Setting the type to notify enables additional healthchecks, ensuring units
     # after and requiring kanidm-* wait for it to complete startup
-    Type = "notify";
+    Type =
+      # notify-reload adds service reloading support.
+      if lib.versionAtLeast (lib.getVersion cfg.package) "1.6.0" then "notify-reload" else "notify";
     BindReadOnlyPaths = [
       "/nix/store"
       # For healthcheck notifications
