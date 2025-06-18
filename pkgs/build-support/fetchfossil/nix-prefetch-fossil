@@ -1,0 +1,206 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# All informational echo calls should go to stderr to keep stdout clean for JSON output.
+print_usage() {
+  echo "Usage: $0 --url <URL> --rev <REVISION> [--name <NAME>] [--quiet]" >&2
+  echo "Prefetches a Fossil repository, calculates its hash, and outputs derivation info as JSON." >&2
+  exit 1
+}
+
+URL=""
+REV=""
+# NAME is not directly used by fossil checkout in the same way as some tarball names,
+# but could be part of the output JSON if desired, or for a temporary directory name.
+# For now, it's not critical to the fetching/hashing process itself.
+# NAME="fossil-archive"
+QUIET=false
+
+# Temporary directories
+CLONE_DIR=""
+SOURCE_DIR=""
+
+# Cleanup temporary directories on exit
+cleanup_temp_dirs() {
+  if [ -n "$CLONE_DIR" ] && [ -d "$CLONE_DIR" ]; then
+    if ! $QUIET; then echo "Cleaning up temporary clone directory: $CLONE_DIR" >&2; fi
+    rm -rf "$CLONE_DIR"
+  fi
+  if [ -n "$SOURCE_DIR" ] && [ -d "$SOURCE_DIR" ]; then
+    if ! $QUIET; then echo "Cleaning up temporary source directory: $SOURCE_DIR" >&2; fi
+    rm -rf "$SOURCE_DIR"
+  fi
+}
+trap cleanup_temp_dirs EXIT
+
+# Parse command-line arguments
+while [[ $# -gt 0 ]]; do
+  key="$1"
+  case $key in
+    --url)
+      URL="$2"
+      shift 2
+      ;;
+    --rev)
+      REV="$2"
+      shift 2
+      ;;
+    # --name option is parsed but not used in this version
+    --name)
+      # NAME="$2"
+      shift 2
+      ;;
+    --quiet|-q)
+      QUIET=true
+      shift 1
+      ;;
+    --help|-h)
+      print_usage
+      ;;
+    *) # unknown option
+      echo "Error: Unknown option: $1" >&2
+      print_usage
+      ;;
+  esac
+done
+
+# If URL is provided, but REV is not, attempt to get the latest revision.
+if [ -n "$URL" ] && [ -z "$REV" ]; then
+  # Ensure fossil is available before attempting to use it for rev detection
+  if ! command -v fossil &> /dev/null; then
+      echo "Error: fossil command could not be found. It is needed to determine the latest revision." >&2
+      exit 1
+  fi
+  if ! $QUIET; then echo "Revision not specified, attempting to fetch the latest revision for $URL..." >&2; fi
+
+  # Create a temporary directory for cloning, just to get the latest revision info
+  # This is separate from the CLONE_DIR used later for the actual checkout, to keep logic clean
+  # and ensure it's cleaned up if this preliminary step fails.
+  TEMP_CLONE_INFO_DIR=$(mktemp -d -t nix-prefetch-fossil-revinfo.XXXXXX)
+  # shellcheck disable=SC2064 # TEMP_CLONE_INFO_DIR is intentionally expanded now
+  trap "rm -rf '$TEMP_CLONE_INFO_DIR'" EXIT # Add to cleanup
+
+  if ! $QUIET; then echo "Cloning (for rev info) from $URL to $TEMP_CLONE_INFO_DIR/repo.fossil..." >&2; fi
+  HOME="$TEMP_CLONE_INFO_DIR" fossil clone "$URL" "$TEMP_CLONE_INFO_DIR/repo.fossil" >&2
+  if [[ $? -ne 0 ]]; then
+      echo "Error: fossil clone (for rev info) failed." >&2
+      rm -rf "$TEMP_CLONE_INFO_DIR" # Explicit cleanup before exit because trap might not cover this context fully
+      exit 1
+  fi
+
+  if ! $QUIET; then echo "Querying latest revision from $TEMP_CLONE_INFO_DIR/repo.fossil..." >&2; fi
+  # Try to run fossil info in a way that avoids user-specific config or prompts.
+  # Using `fossil timeline` as an alternative to `fossil info tip`
+  LATEST_REV_INFO=$(HOME="$TEMP_CLONE_INFO_DIR" fossil timeline -R "$TEMP_CLONE_INFO_DIR/repo.fossil" -n 1 -W 0 tip)
+  INFO_EXIT_CODE=$?
+  if [[ $INFO_EXIT_CODE -ne 0 ]] || [ -z "$LATEST_REV_INFO" ]; then
+      echo "Error: fossil timeline tip failed (exit code $INFO_EXIT_CODE) or returned empty for $TEMP_CLONE_INFO_DIR/repo.fossil." >&2
+      echo "Command output was: $LATEST_REV_INFO" >&2 # Print output for debugging
+      rm -rf "$TEMP_CLONE_INFO_DIR"
+      exit 1
+  fi
+
+  # Extract the revision hash (uuid)
+  # Example timeline output: "=== YYYY-MM-DD ===
+  # HH:MM:SS [REVISION_ID] ... (user: ..., tags: ...)"
+  # We need the REVISION_ID part.
+  REV=$(echo "$LATEST_REV_INFO" | grep -oE '\[[0-9a-fA-F]{8,}\]' | sed -e 's/\[//' -e 's/\]//' | head -n 1)
+
+  if [ -z "$REV" ]; then
+    echo "Error: Could not automatically determine the latest revision." >&2
+    rm -rf "$TEMP_CLONE_INFO_DIR"
+    exit 1
+  else
+    if ! $QUIET; then echo "Using latest revision: $REV" >&2; fi
+  fi
+  
+  # Clean up the temporary directory used for rev info
+  if ! $QUIET; then echo "Cleaning up temporary rev info directory: $TEMP_CLONE_INFO_DIR" >&2; fi
+  rm -rf "$TEMP_CLONE_INFO_DIR"
+  # Remove the specific trap for TEMP_CLONE_INFO_DIR as it's now cleaned.
+  # The main cleanup_temp_dirs will handle CLONE_DIR and SOURCE_DIR.
+  # We need a way to remove a specific trap, which is tricky in bash.
+  # For simplicity, we let it be, it will just try to rm -rf a non-existent dir on EXIT.
+fi
+
+if [ -z "$URL" ]; then
+  echo "Error: --url is a required argument." >&2
+  print_usage
+fi
+
+if [ -z "$REV" ]; then
+  echo "Error: --rev is a required argument (or could not be auto-determined)." >&2
+  print_usage
+fi
+
+# Ensure fossil and nix are available
+if ! command -v fossil &> /dev/null; then
+    echo "Error: fossil command could not be found. It should be in PATH via nix-shell dependencies." >&2
+    exit 1
+fi
+if ! command -v nix &> /dev/null; then
+    echo "Error: nix command could not be found. Make sure Nix is installed and in your PATH." >&2
+    exit 1
+fi
+
+# Create temporary directory for the clone
+CLONE_DIR=$(mktemp -d -t nix-prefetch-fossil-clone.XXXXXX)
+if ! $QUIET; then echo "Cloning Fossil repository from $URL to $CLONE_DIR..." >&2; fi
+
+# Clone to a temporary file first
+echo "Cloning Fossil repository from $URL to $CLONE_DIR/repo.fossil..."
+HOME="$CLONE_DIR" fossil clone "$URL" "$CLONE_DIR/repo.fossil"
+if [[ $? -ne 0 ]]; then
+    echo "Error: fossil clone failed." >&2
+    exit 1
+fi
+
+# Create a temporary directory to check out the specific revision
+SOURCE_DIR=$(mktemp -d -t nix-prefetch-fossil-src.XXXXXX)
+if ! $QUIET; then echo "Checking out revision $REV into $SOURCE_DIR..." >&2; fi
+
+# Open the repository and update to the specific revision
+echo "Opening repository $CLONE_DIR/repo.fossil into $SOURCE_DIR..."
+HOME="$SOURCE_DIR" fossil open "$CLONE_DIR/repo.fossil" --workdir "$SOURCE_DIR" --force --nested
+if [[ $? -ne 0 ]]; then
+    echo "Error: fossil open failed." >&2
+    exit 1
+fi
+
+# The .fossil file is the checkout database, specific to this checkout dir.
+# It should be removed before hashing to match typical source tarball contents.
+CHECKOUT_DB_FILE="$SOURCE_DIR/.fossil"
+if [ -f "$CHECKOUT_DB_FILE" ]; then
+  if ! $QUIET; then echo "Removing checkout database $CHECKOUT_DB_FILE..." >&2; fi
+  rm -f "$CHECKOUT_DB_FILE"
+else
+  if ! $QUIET; then echo "Warning: Checkout database $CHECKOUT_DB_FILE not found." >&2; fi
+fi
+
+# Calculate the hash of the source directory
+if ! $QUIET; then echo "Calculating Nix NAR hash for $SOURCE_DIR..." >&2; fi
+# `nix hash path` outputs the SRI hash directly.
+SRI_HASH=$(nix hash path --type sha256 --base32 "$SOURCE_DIR")
+
+if [ -z "$SRI_HASH" ]; then
+  echo "Error: Failed to calculate hash for $SOURCE_DIR" >&2
+  exit 1
+fi
+
+# Extract the plain SHA256 hash from the SRI hash (e.g., sha256-Abc... -> Abc...)
+# SRI format: <algo>-<base32hash>
+PLAIN_SHA256=$(echo "$SRI_HASH" | sed 's/^sha256-//')
+
+# Construct JSON output
+# Note: `rev` in the output is the requested rev. Fossil doesn't always give an easy
+# way to get the fully resolved SHA1 from a tag/branch rev via CLI during this process
+# without more complex parsing, unlike git. For fixed-output derivations, the input `rev` is what matters.
+cat <<EOF
+{
+  "url": "$URL",
+  "rev": "$REV",
+  "sha256": "$PLAIN_SHA256",
+  "narHash": "$PLAIN_SHA256",
+  "sri": "$SRI_HASH"
+}
+EOF
