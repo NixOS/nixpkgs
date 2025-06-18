@@ -61,7 +61,6 @@ let
       watchexec \
         --shell=none \
         --restart \
-        --print-events \
         build-and-link
     '';
   };
