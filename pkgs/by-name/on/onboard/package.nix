@@ -72,6 +72,8 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/void-linux/void-packages/raw/9ef46bf26ac5acc1af5809f11c97b19c5e2233ed/srcpkgs/onboard/patches/fix-brokenformat.patch";
       hash = "sha256-r9mvJNWpPR1gsayuSSLpzIuafEKqtADYklre0Ju+KOM=";
     })
+
+    ./bool.patch
   ];
 
   nativeBuildInputs = [
