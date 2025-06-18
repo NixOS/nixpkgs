@@ -9,12 +9,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnum4";
   version = "1.4.20";
 
   src = fetchurl {
-    url = "mirror://gnu/m4/m4-${version}.tar.bz2";
+    url = "mirror://gnu/m4/m4-${finalAttrs.version}.tar.bz2";
     hash = "sha256-rGmJ7l0q7YFzl4BjDMLOCX4qZUb+uWpKVNs31GoUUuQ=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 
-}
+})
