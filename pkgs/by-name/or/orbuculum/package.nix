@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     libelf
   ];
 
+  doInstallCheck = true;
+
   installFlags = [ "INSTALL_ROOT=$(out)/" ];
 
   postInstall = ''

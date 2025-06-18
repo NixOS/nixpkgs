@@ -204,6 +204,12 @@
       path = ../12;
     }
   ];
+  "llvm/no-pipes.patch" = [
+    {
+      before = "16";
+      path = ../12;
+    }
+  ];
   "openmp/fix-find-tool.patch" = [
     {
       after = "17";

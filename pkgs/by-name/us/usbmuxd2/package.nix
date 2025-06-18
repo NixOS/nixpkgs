@@ -72,6 +72,8 @@ clangStdenv.mkDerivation rec {
     libusb1
   ];
 
+  doInstallCheck = true;
+
   configureFlags = [
     "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"

@@ -6,6 +6,7 @@
   pkg-config,
   alsa-lib,
   rust,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-DnOnqi60JsRX8yqEM/5zZ3yX/rk85/ruwL3aW1FRXKg=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ alsa-lib ];
 
   postPatch = ''
@@ -38,6 +42,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   dontCargoInstall = true;
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Userspace daemon written in Rust that implements an analogue of the Texas Instruments Smart Amp speaker protection model";

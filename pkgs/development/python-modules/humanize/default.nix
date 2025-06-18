@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "humanize";
-  version = "4.12.2";
+  version = "4.12.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "python-humanize";
     repo = "humanize";
     tag = version;
-    hash = "sha256-MGWjh7C9JXTwH+eLyrjU0pjcZ2+oH925eiqHgBS8198=";
+    hash = "sha256-VsB59tS2KRZ0JKd1FzA+RTEzpkUyj9RhhSopseHg+m8=";
   };
 
   nativeBuildInputs = [

@@ -37,6 +37,7 @@
   ctestCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
+  udevCheckHook,
   z3,
   wxGTK-override ? null,
   opencascade-override ? null,
@@ -90,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     wxGTK-override'
+    udevCheckHook
   ];
 
   buildInputs =
@@ -132,6 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   separateDebugInfo = true;
+
+  doInstallCheck = true;
 
   # The build system uses custom logic - defined in
   # cmake/modules/FindNLopt.cmake in the package source - for finding the nlopt

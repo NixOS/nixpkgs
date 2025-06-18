@@ -142,6 +142,8 @@ stdenv.mkDerivation {
       qtwayland
     ];
 
+  doInstallCheck = true;
+
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';

@@ -90,6 +90,7 @@ buildPythonPackage rec {
     "pyarrow"
 
     "pydot"
+    "redis"
   ];
 
   sourceRoot = "${src.name}/sdks/python";

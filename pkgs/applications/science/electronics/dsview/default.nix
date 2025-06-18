@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
+  doInstallCheck = true;
+
   meta = {
     description = "GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
     mainProgram = "DSView";

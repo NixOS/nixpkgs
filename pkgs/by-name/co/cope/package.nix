@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage {
   buildInputs = with perlPackages; [
     EnvPath
     FileShareDir
-    IOPty
+    IOTty
     IOStty
     ListMoreUtils
     RegexpCommon

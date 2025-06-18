@@ -7,9 +7,13 @@
 mkKdeDerivation {
   pname = "massif-visualizer";
 
+  extraNativeBuildInputs = [
+    shared-mime-info
+    qt5compat
+  ];
+
   extraBuildInputs = [
     qt5compat
     qtsvg
   ];
-  extraNativeBuildInputs = [ shared-mime-info ];
 }
