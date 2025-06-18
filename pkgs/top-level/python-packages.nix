@@ -16127,6 +16127,8 @@ self: super: with self; {
 
   sievelib = callPackage ../development/python-modules/sievelib { };
 
+  sifts = callPackage ../development/python-modules/sifts { };
+
   signalslot = callPackage ../development/python-modules/signalslot { };
 
   signedjson = callPackage ../development/python-modules/signedjson { };
