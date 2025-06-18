@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "A collection of 52 Plotly figure templates with a Bootstrap theme";
     homepage = "https://github.com/AnnMarieW/dash-bootstrap-templates";
-    changelog = "https://github.com/AnnMarieW/dash-bootstrap-templates/releases/tag/V${src.tag}";
+    changelog = "https://github.com/AnnMarieW/dash-bootstrap-templates/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];
   };
