@@ -47,6 +47,10 @@ with lib;
       script = ''
         rootDevice="${config.fileSystems."/".device}"
         rootDevice="$(readlink -f "$rootDevice")"
+        if [[ "$rootDevice" == /dev/dm-* ]]; then
+          echo "Skipping growpart for device mapper device: $rootDevice" >&2
+          exit 0
+        fi
         parentDevice="$rootDevice"
         while [ "''${parentDevice%[0-9]}" != "''${parentDevice}" ]; do
           parentDevice="''${parentDevice%[0-9]}";
