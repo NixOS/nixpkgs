@@ -135,8 +135,6 @@ jobs:
     needs: [eval]
     if: inputs.targetSha
     permissions:
-      issues: write # needed to create *new* labels
-      pull-requests: write
       statuses: write
     steps:
       - name: Download output paths and eval stats for all systems
@@ -216,25 +214,6 @@ jobs:
               description,
               target_url
             })
-
-  labels:
-    name: Labels
-    needs: [compare]
-    uses: ./.github/workflows/labels.yml
-    permissions:
-      issues: write
-      pull-requests: write
-
-  reviewers:
-    name: Reviewers
-    # No dependency on "compare", so that it can start at the same time.
-    # We only wait for the "comparison" artifact to be available, which makes the start-to-finish time
-    # for the eval workflow considerably faster.
-    needs: [eval]
-    if: inputs.targetSha
-    uses: ./.github/workflows/reviewers.yml
-    secrets:
-      OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
 
   misc:
     if: ${{ github.event_name != 'push' }}
