@@ -247,6 +247,22 @@ let
     };
   };
 
+  promTypes.http_header = types.submodule {
+    options = {
+      values = mkOpt (types.listOf types.str) ''
+        Header values.
+      '';
+
+      secrets = mkOpt (types.listOf types.str) ''
+        Header values. Hidden in configuration page.
+      '';
+
+      files = mkOpt (types.listOf types.path) ''
+        Files to read header values from.
+      '';
+    };
+  };
+
   promTypes.sigv4 = types.submodule {
     options = {
       region = mkOpt types.str ''
@@ -429,6 +445,11 @@ let
 
       proxy_url = mkOpt types.str ''
         Optional proxy URL.
+      '';
+
+      http_headers = mkOpt (types.attrsOf promTypes.http_header) ''
+        Custom HTTP headers to be sent along with each request.
+        Headers that are set by Prometheus itself can't be overwritten.
       '';
 
       azure_sd_configs = mkOpt (types.listOf promTypes.azure_sd_config) ''
