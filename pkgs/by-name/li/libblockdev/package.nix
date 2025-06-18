@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   gtk-doc,
@@ -43,6 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-Q7610i+2PQi+Oza3c2SwPneljrb+1cuFA4K4DQTpt8A=";
   };
+
+  patches = [
+    # CVE-2025-6019: https://www.openwall.com/lists/oss-security/2025/06/17/5
+    (fetchpatch {
+      url = "https://github.com/storaged-project/libblockdev/commit/4e35eb93e4d2672686789b9705623cc4f9f85d02.patch";
+      hash = "sha256-3pQxvbFX6jmT5LCaePoVfvPTNPoTPPhT0GcLaGkVVso=";
+    })
+  ];
 
   outputs = [
     "out"

@@ -7,23 +7,19 @@
   versionCheckHook,
 }:
 
-let
-  version = "10.3.0";
-in
-
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wstunnel";
-  inherit version;
+  version = "10.4.3";
 
   src = fetchFromGitHub {
     owner = "erebe";
     repo = "wstunnel";
-    tag = "v${version}";
-    hash = "sha256-Eq5d80hLg0ZkXtnObDQXmC+weUq9eN5SIQ6teVxB3a4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Qg+9ClYbb1+g3BPioCwDdJYyPrl2g+44LD5OCDjMBzI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-V5ohlS+dTrmhsvxpXW9JA7YpH/LWiyepUwEdBRrHiYE=";
+  cargoHash = "sha256-LZkiSu9KRI7QYZrCakwR+VVvR6ZpwEGB7Z9jM1C8qvk=";
 
   cargoBuildFlags = [ "--package wstunnel-cli" ];
 
@@ -47,7 +43,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Tunnel all your traffic over Websocket or HTTP2 - Bypass firewalls/DPI";
     homepage = "https://github.com/erebe/wstunnel";
-    changelog = "https://github.com/erebe/wstunnel/releases/tag/v${version}";
+    changelog = "https://github.com/erebe/wstunnel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       raylas
@@ -56,4 +52,4 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "wstunnel";
   };
-}
+})

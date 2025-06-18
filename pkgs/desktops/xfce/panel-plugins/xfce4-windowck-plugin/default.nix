@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-windowck-plugin";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "mirror://xfce/src/panel-plugins/xfce4-windowck-plugin/${lib.versions.majorMinor finalAttrs.version}/xfce4-windowck-plugin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-dJeSszth86ICe2VHBW5JOYqNajPgeg66hYOvnF9hdj8=";
+    hash = "sha256-Ay4wXXTxe9ZbKL0mDPGS/PiqDfM9EWCH5IX9E2i3zzk=";
   };
 
   strictDeps = true;

@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
+    repo = "starboard";
     rev = "v${version}";
     hash = "sha256-mCYnJ1SFa3OuYQlPWTq9vWV9s/jtaQ6dOousV/UNR18=";
     # populate values that require us to use git. By doing this in postFetch we
@@ -70,7 +70,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aquasecurity/starboard";
     changelog = "https://github.com/aquasecurity/starboard/releases/tag/v${version}";
     description = "Kubernetes-native security tool kit";
@@ -84,7 +84,7 @@ buildGoModule rec {
       plug-in that make security reports available through familiar Kubernetes
       tools.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

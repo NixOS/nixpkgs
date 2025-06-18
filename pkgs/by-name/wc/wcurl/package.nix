@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wcurl";
-  version = "2025.04.20";
+  version = "2025.05.26";
 
   src = fetchFromGitHub {
     owner = "curl";
     repo = "wcurl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6ZW1VTtggp72vDgOAnieWK68ITU+E5x0gV2N2IJ5JDQ=";
+    hash = "sha256-YeH+K+P+3iJ4v9et/B1PBi9nAr9L2xaYoMfSMP9ar9c=";
   };
 
   strictDeps = true;

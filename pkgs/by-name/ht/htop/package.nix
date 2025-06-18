@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "htop-dev";
-    repo = pname;
+    repo = "htop";
     rev = version;
     hash = "sha256-fVqQwXbJus2IVE1Bzf3yJJpKK4qcZN/SCTX1XYkiHhU=";
   };
@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
       ${optionalPatch systemdSupport "${systemd}/lib/libsystemd.so"}
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive process viewer";
     homepage = "https://htop.dev";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       rob
       relrod
       SuperSandro2000

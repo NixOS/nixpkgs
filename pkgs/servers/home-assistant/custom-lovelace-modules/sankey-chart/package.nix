@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "sankey-chart";
-  version = "3.8.1";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "MindFreeze";
     repo = "ha-sankey-chart";
     rev = "v${version}";
-    hash = "sha256-qDFCrnx0G+RsDq1V8wvo04AelR82SlXOYqWJntnSBJY=";
+    hash = "sha256-5ojqL0AYkF/VnvaQsn8CJn4y9srZUWUtyz+zauqGAkA=";
   };
 
-  npmDepsHash = "sha256-A4aw4OKBQRsc6O60ewp88QxABANjnNlejSUfcFGyyRA=";
+  npmDepsHash = "sha256-/29XdA+y4ppbK0II1sy+IDFGYUQuPFUq3MMooqA6cBo=";
 
   installPhase = ''
     runHook preInstall

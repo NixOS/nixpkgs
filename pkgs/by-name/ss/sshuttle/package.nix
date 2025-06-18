@@ -73,7 +73,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/sshuttle/sshuttle/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
-      domenkozar
       carlosdagos
     ];
   };

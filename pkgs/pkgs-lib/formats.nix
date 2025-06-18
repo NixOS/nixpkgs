@@ -1,5 +1,80 @@
 { lib, pkgs }:
-rec {
+let
+  inherit (lib)
+    concatStringsSep
+    escape
+    flatten
+    id
+    isAttrs
+    isFloat
+    isInt
+    isList
+    isString
+    mapAttrs
+    mapAttrsToList
+    mkOption
+    optionalAttrs
+    optionalString
+    pipe
+    types
+    singleton
+    warn
+    ;
+
+  inherit (lib.generators)
+    mkValueStringDefault
+    toGitINI
+    toINI
+    toINIWithGlobalSection
+    toKeyValue
+    toLua
+    mkLuaInline
+    ;
+
+  inherit (lib.types)
+    attrsOf
+    atom
+    bool
+    coercedTo
+    either
+    float
+    int
+    listOf
+    luaInline
+    mkOptionType
+    nonEmptyListOf
+    nullOr
+    oneOf
+    path
+    str
+    submodule
+    ;
+
+  # Attributes added accidentally in https://github.com/NixOS/nixpkgs/pull/335232 (2024-08-18)
+  # Deprecated in https://github.com/NixOS/nixpkgs/pull/415666 (2025-06)
+  allowAliases = pkgs.config.allowAliases or false;
+  aliasWarning = name: warn "`formats.${name}` is deprecated; use `lib.types.${name}` instead.";
+  aliases = mapAttrs aliasWarning {
+    inherit
+      attrsOf
+      bool
+      coercedTo
+      either
+      float
+      int
+      listOf
+      luaInline
+      mkOptionType
+      nonEmptyListOf
+      nullOr
+      oneOf
+      path
+      str
+      ;
+  };
+in
+optionalAttrs allowAliases aliases
+// rec {
 
   /*
     Every following entry represents a format for program configuration files
@@ -42,25 +117,6 @@ rec {
   hocon = (import ./formats/hocon/default.nix { inherit lib pkgs; }).format;
 
   php = (import ./formats/php/default.nix { inherit lib pkgs; }).format;
-
-  inherit (lib) mkOptionType;
-  inherit (lib.types)
-    nullOr
-    oneOf
-    coercedTo
-    listOf
-    nonEmptyListOf
-    attrsOf
-    either
-    ;
-  inherit (lib.types)
-    bool
-    int
-    float
-    str
-    path
-    luaInline
-    ;
 
   json =
     { }:
@@ -136,7 +192,46 @@ rec {
               (listOf valueType)
             ])
             // {
-              description = "YAML value";
+              description = "YAML 1.1 value";
+            };
+        in
+        valueType;
+
+    };
+
+  yaml_1_2 =
+    { }:
+    {
+      generate =
+        name: value:
+        pkgs.callPackage (
+          { runCommand, remarshal }:
+          runCommand name
+            {
+              nativeBuildInputs = [ remarshal ];
+              value = builtins.toJSON value;
+              passAsFile = [ "value" ];
+              preferLocalBuild = true;
+            }
+            ''
+              json2yaml "$valuePath" "$out"
+            ''
+        ) { };
+
+      type =
+        let
+          valueType =
+            nullOr (oneOf [
+              bool
+              int
+              float
+              str
+              path
+              (attrsOf valueType)
+              (listOf valueType)
+            ])
+            // {
+              description = "YAML 1.2 value";
             };
         in
         valueType;
@@ -165,7 +260,7 @@ rec {
           }:
           let
             singleIniAtomOr =
-              if atomsCoercedToLists then coercedTo singleIniAtom lib.singleton else either singleIniAtom;
+              if atomsCoercedToLists then coercedTo singleIniAtom singleton else either singleIniAtom;
           in
           if listsAsDuplicateKeys then
             singleIniAtomOr (listOf singleIniAtom)
@@ -189,9 +284,9 @@ rec {
         maybeToList =
           listToValue:
           if listToValue != null then
-            lib.mapAttrs (key: val: if lib.isList val then listToValue val else val)
+            mapAttrs (key: val: if isList val then listToValue val else val)
           else
-            lib.id;
+            id;
       in
       {
         ini =
@@ -216,14 +311,14 @@ rec {
           in
           {
 
-            type = lib.types.attrsOf (iniSection atom);
+            type = attrsOf (iniSection atom);
             lib.types.atom = atom;
 
             generate =
               name: value:
-              lib.pipe value [
-                (lib.mapAttrs (_: maybeToList listToValue))
-                (lib.generators.toINI (
+              pipe value [
+                (mapAttrs (_: maybeToList listToValue))
+                (toINI (
                   removeAttrs args [
                     "listToValue"
                     "atomsCoercedToLists"
@@ -254,14 +349,14 @@ rec {
             };
           in
           {
-            type = lib.types.submodule {
+            type = submodule {
               options = {
-                sections = lib.mkOption rec {
-                  type = lib.types.attrsOf (iniSection atom);
+                sections = mkOption rec {
+                  type = attrsOf (iniSection atom);
                   default = { };
                   description = type.description;
                 };
-                globalSection = lib.mkOption rec {
+                globalSection = mkOption rec {
                   type = iniSection atom;
                   default = { };
                   description = "global " + type.description;
@@ -277,14 +372,14 @@ rec {
                 ...
               }:
               pkgs.writeText name (
-                lib.generators.toINIWithGlobalSection
+                toINIWithGlobalSection
                   (removeAttrs args [
                     "listToValue"
                     "atomsCoercedToLists"
                   ])
                   {
                     globalSection = maybeToList listToValue globalSection;
-                    sections = lib.mapAttrs (_: maybeToList listToValue) sections;
+                    sections = mapAttrs (_: maybeToList listToValue) sections;
                   }
               );
           };
@@ -304,7 +399,7 @@ rec {
           {
             type = attrsOf (attrsOf (either atom (attrsOf atom)));
             lib.types.atom = atom;
-            generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
+            generate = name: value: pkgs.writeText name (toGitINI value);
           };
 
       }
@@ -320,7 +415,7 @@ rec {
   # optional config options.
   systemd =
     let
-      mkValueString = lib.generators.mkValueStringDefault { };
+      mkValueString = mkValueStringDefault { };
       mkKeyValue = k: v: if v == null then "# ${k} is unset" else "${k} = ${mkValueString v}";
     in
     ini {
@@ -356,12 +451,12 @@ rec {
 
           atom =
             if listsAsDuplicateKeys then
-              coercedTo singleAtom lib.singleton (listOf singleAtom)
+              coercedTo singleAtom singleton (listOf singleAtom)
               // {
                 description = singleAtom.description + " or a list of them for duplicate keys";
               }
             else if listToValue != null then
-              coercedTo singleAtom lib.singleton (nonEmptyListOf singleAtom)
+              coercedTo singleAtom singleton (nonEmptyListOf singleAtom)
               // {
                 description = singleAtom.description + " or a non-empty list of them";
               }
@@ -376,13 +471,11 @@ rec {
         let
           transformedValue =
             if listToValue != null then
-              lib.mapAttrs (key: val: if lib.isList val then listToValue val else val) value
+              mapAttrs (key: val: if isList val then listToValue val else val) value
             else
               value;
         in
-        pkgs.writeText name (
-          lib.generators.toKeyValue (removeAttrs args [ "listToValue" ]) transformedValue
-        );
+        pkgs.writeText name (toKeyValue (removeAttrs args [ "listToValue" ]) transformedValue);
 
     };
 
@@ -520,18 +613,18 @@ rec {
           "true"
         else if value == false then
           "false"
-        else if lib.isInt value || lib.isFloat value then
+        else if isInt value || isFloat value then
           toString value
-        else if lib.isString value then
+        else if isString value then
           string value
-        else if lib.isAttrs value then
+        else if isAttrs value then
           attrs value
-        else if lib.isList value then
+        else if isList value then
           list value
         else
           abort "formats.elixirConf: should never happen (value = ${value})";
 
-      escapeElixir = lib.escape [
+      escapeElixir = escape [
         "\\"
         "#"
         "\""
@@ -545,11 +638,11 @@ rec {
         else
           let
             toKeyword = name: value: "${name}: ${toElixir value}";
-            keywordList = lib.concatStringsSep ", " (lib.mapAttrsToList toKeyword set);
+            keywordList = concatStringsSep ", " (mapAttrsToList toKeyword set);
           in
           "[" + keywordList + "]";
 
-      listContent = values: lib.concatStringsSep ", " (map toElixir values);
+      listContent = values: concatStringsSep ", " (map toElixir values);
 
       list = values: "[" + (listContent values) + "]";
 
@@ -570,7 +663,7 @@ rec {
         set:
         let
           toEntry = name: value: "${toElixir name} => ${toElixir value}";
-          entries = lib.concatStringsSep ", " (lib.mapAttrsToList toEntry set);
+          entries = concatStringsSep ", " (mapAttrsToList toEntry set);
         in
         "%{${entries}}";
 
@@ -582,13 +675,13 @@ rec {
           keyConfig =
             rootKey: key: value:
             "config ${rootKey}, ${key}, ${toElixir value}";
-          keyConfigs = rootKey: values: lib.mapAttrsToList (keyConfig rootKey) values;
-          rootConfigs = lib.flatten (lib.mapAttrsToList keyConfigs values);
+          keyConfigs = rootKey: values: mapAttrsToList (keyConfig rootKey) values;
+          rootConfigs = flatten (mapAttrsToList keyConfigs values);
         in
         ''
           import Config
 
-          ${lib.concatStringsSep "\n" rootConfigs}
+          ${concatStringsSep "\n" rootConfigs}
         '';
     in
     {
@@ -692,7 +785,7 @@ rec {
               # Wrap standard types, since anything in the Elixir configuration
               # can be raw Elixir
             }
-            // lib.mapAttrs (_name: type: elixirOr type) lib.types;
+            // mapAttrs (_name: type: elixirOr type) types;
         };
 
       generate =
@@ -748,12 +841,12 @@ rec {
               inherit columnWidth;
               inherit indentWidth;
               indentType = if indentUsingTabs then "Tabs" else "Spaces";
-              value = lib.generators.toLua { inherit asBindings multiline; } value;
+              value = toLua { inherit asBindings multiline; } value;
               passAsFile = [ "value" ];
               preferLocalBuild = true;
             }
             ''
-              ${lib.optionalString (!asBindings) ''
+              ${optionalString (!asBindings) ''
                 echo -n 'return ' >> $out
               ''}
               cat $valuePath >> $out

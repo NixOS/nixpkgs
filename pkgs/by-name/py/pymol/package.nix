@@ -17,7 +17,7 @@
 }:
 let
   pname = "pymol";
-  description = "A Python-enhanced molecular graphics tool";
+  description = "Python-enhanced molecular graphics tool";
 
   desktopItem = makeDesktopItem {
     name = pname;

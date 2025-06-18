@@ -9,6 +9,8 @@
   hidapi,
   psutil,
   pygobject3,
+  udevCheckHook,
+  stdenv,
 }:
 
 buildPythonApplication rec {
@@ -28,6 +30,7 @@ buildPythonApplication rec {
     # Populate GI_TYPELIB_PATH
     gobject-introspection
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   propagatedBuildInputs = [

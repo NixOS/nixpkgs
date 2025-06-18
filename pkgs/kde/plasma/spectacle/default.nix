@@ -7,6 +7,11 @@
 mkKdeDerivation {
   pname = "spectacle";
 
+  extraNativeBuildInputs = [
+    qtwayland
+    qtmultimedia
+  ];
+
   extraBuildInputs = [
     qtwayland
     qtmultimedia

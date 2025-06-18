@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
 
@@ -19,15 +18,15 @@
   webkitgtk_4_1,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "1.5.12";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-5iJ04/q/emPwG0ILurFx2gNlXkZrfP2D6xv25AIlhfc=";
+    hash = "sha256-OaUpyG+XdP7AIA55enPf6/viBGBBQVuNi2QxgD5EVNc=";
   };
 
   postPatch = ''
@@ -35,33 +34,22 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    name = "gale-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     hash = "sha256-yaPUNtlb2vMwK42u+3/rViGx6YzhYxRDJylPu++tbNs=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      cargoRoot
-      ;
-    hash = "sha256-GGH5kQlnYIlKbTAKbF275mH4J9BcbcBHSdzP7RgfDwk=";
-  };
-
   cargoRoot = "src-tauri";
-
   buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  cargoHash = "sha256-v0/A4jUq5t61KB7NLwvsl6wR7N0UUbdVCk7nFZVTOi8=";
 
   nativeBuildInputs = [
     jq
     moreutils
     npmHooks.npmConfigHook
     nodejs
-    rustPlatform.cargoSetupHook
     cargo-tauri.hook
-    rustPlatform.cargoCheckHook
     pkg-config
     wrapGAppsHook3
   ];

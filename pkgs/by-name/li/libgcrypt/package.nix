@@ -32,10 +32,16 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
-  # The CPU Jitter random number generator must not be compiled with
-  # optimizations and the optimize -O0 pragma only works for gcc.
-  # The build enables -O2 by default for everything else.
-  hardeningDisable = lib.optional stdenv.cc.isClang "fortify";
+  hardeningDisable =
+    [
+      "strictflexarrays3"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      # The CPU Jitter random number generator must not be compiled with
+      # optimizations and the optimize -O0 pragma only works for gcc.
+      # The build enables -O2 by default for everything else.
+      "fortify"
+    ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -101,12 +107,12 @@ stdenv.mkDerivation rec {
     inherit gnupg libotr rsyslog;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/libgcrypt/";
     changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
     description = "General-purpose cryptographic library";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.all;
-    maintainers = [ ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ];
   };
 }

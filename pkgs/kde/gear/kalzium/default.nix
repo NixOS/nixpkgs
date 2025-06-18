@@ -14,12 +14,15 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     ocaml
+    qtscxml
   ];
+
   extraBuildInputs = [
     eigen
     openbabel
     qtsvg
     qtscxml
   ];
+
   meta.mainProgram = "kalzium";
 }

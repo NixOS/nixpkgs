@@ -14,7 +14,7 @@
   perl,
   # mxnet cuda support is turned off, but dependencies like opencv can still be built with cudaSupport
   # and fail to compile without the cudatoolkit
-  # mxnet cuda support will not be availaible, as mxnet requires version <=11
+  # mxnet cuda support will not be available, as mxnet requires version <=11
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 }:

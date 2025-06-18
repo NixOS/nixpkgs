@@ -438,11 +438,14 @@ in
         wantedBy = [ "fwupd.service" ];
         partOf = [ "fwupd.service" ];
         before = [ "fwupd.service" ];
+
+        unitConfig.ConditionPathIsDirectory = "/var/lib/sbctl";
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
           RuntimeDirectory = "fwupd-efi";
         };
+
         script = ''
           cp ${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi /run/fwupd-efi/
           chmod +w /run/fwupd-efi/fwupd*.efi

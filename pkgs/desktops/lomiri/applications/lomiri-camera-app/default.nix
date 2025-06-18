@@ -28,14 +28,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-camera-app";
-  version = "4.0.8";
+  version = "4.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-camera-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4Tkiv0f+1uZKkeyE60G/ThThMyNp+l8q6d4tiKipM3A=";
+    hash = "sha256-rGWIcaU3iFZIse69DUVjCebWH18yVrqWHcGoXItGX3k=";
   };
+
+  patches = [
+    # Remove when https://gitlab.com/ubports/development/apps/lomiri-camera-app/-/merge_requests/234 merged & in release
+    ./1001-treewide-Fix-imports-in-tests-after-QML-files-were-moved.patch
+  ];
 
   # We don't want absolute paths in desktop files
   postPatch = ''
@@ -132,7 +137,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.vm = nixosTests.lomiri-camera-app;
+    tests = {
+      inherit (nixosTests.lomiri-camera-app)
+        basic
+        v4l2-photo
+        v4l2-qr
+        ;
+    };
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 

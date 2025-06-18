@@ -26,12 +26,12 @@ buildGoModule rec {
     "-skip=TestEnrich" # Requires network access
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scans Software Bill of Materials (SBOMs) for vulnerabilities";
     homepage = "https://github.com/devops-kung-fu/bomber";
     changelog = "https://github.com/devops-kung-fu/bomber/releases/tag/v${version}";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "bomber";
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -167,8 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
     ];
 
-  postFixup = ''
-    wrapProgram $out/bin/wivrn-dashboard \
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    wrapQtApp "$out/bin/wivrn-dashboard" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
@@ -188,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An OpenXR streaming application to a standalone headset";
+    description = "OpenXR streaming application to a standalone headset";
     homepage = "https://github.com/WiVRn/WiVRn/";
     changelog = "https://github.com/WiVRn/WiVRn/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;

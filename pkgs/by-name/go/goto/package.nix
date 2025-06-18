@@ -2,7 +2,6 @@
   fetchFromGitHub,
   gawk,
   lib,
-  nix-update-script,
   runCommand,
   stdenvNoCC,
   writableTmpDirAsHomeHook,
@@ -47,10 +46,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         touch $out
       '';
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
 
   meta = {
     description = "Alias and navigate to directories with tab completion";

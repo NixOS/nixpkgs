@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/leo-arch/clifm";
     changelog = "https://github.com/leo-arch/clifm/releases/tag/v${finalAttrs.version}";
-    description = "A CLI-based, shell-like, and non-curses terminal file manager";
+    description = "CLI-based, shell-like, and non-curses terminal file manager";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nadir-ishiguro ];
     platforms = lib.platforms.unix;

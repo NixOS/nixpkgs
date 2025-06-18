@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "ko-build";
-    repo = pname;
+    repo = "ko";
     tag = "v${version}";
     hash = "sha256-fAdogzNCuz8vHWF1UOFmDKSRXbNvY5knKIhfJzXNGzw=";
   };
@@ -62,7 +62,7 @@ buildGoModule rec {
       --zsh <($out/bin/ko completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ko-build/ko";
     changelog = "https://github.com/ko-build/ko/releases/tag/v${version}";
     description = "Build and deploy Go applications";
@@ -73,8 +73,8 @@ buildGoModule rec {
       ko builds images by effectively executing go build on your local machine, and as such doesn't require docker to be installed. This can make it a good fit for lightweight CI/CD use cases.
       ko makes multi-platform builds easy, produces SBOMs by default, and includes support for simple YAML templating which makes it a powerful tool for Kubernetes applications.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nickcao
       jk
       vdemeester

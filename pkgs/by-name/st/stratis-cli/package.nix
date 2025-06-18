@@ -7,21 +7,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "stratis-cli";
-  version = "3.7.0";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
-    repo = pname;
+    repo = "stratis-cli";
     tag = "v${version}";
-    hash = "sha256-F/RP/bWf2fV1IvNbrkYX3d94om1kACNe+oJI8pXM5P4=";
+    hash = "sha256-zyby53QEC9txH/EP0plV4vUg9fRV6tZJtdQEWQ2iKCA=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     dbus-client-gen
     dbus-python-client-gen
     justbytes
@@ -41,6 +41,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "stratis_cli" ];
+
+  env.STRATIS_STRICT_POOL_FEATURES = "1"; # required for unit tests
 
   passthru.tests = nixosTests.stratis;
 

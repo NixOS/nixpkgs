@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "kool";
-  version = "3.5.0";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "kool-dev";
     repo = "kool";
     rev = version;
-    hash = "sha256-iB/9owaBNQVzdA4edrx0zl+COs7yVLs61Mij5kfjEhg=";
+    hash = "sha256-yUJbuMOLEa9LVRltskSwD0XBdmwwLcEaLYUHsSQOiCk=";
   };
 
   vendorHash = "sha256-IqUkIf0uk4iUTedTO5xRzjmJwHS+p6apo4E0WEEU6cc=";

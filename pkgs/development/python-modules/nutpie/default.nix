@@ -31,20 +31,19 @@
 
 buildPythonPackage rec {
   pname = "nutpie";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
     tag = "v${version}";
-    hash = "sha256-451dkBysxPAhG71Z4Wnx8pQ0jV3vqmJYiNzWP9ylMM0=";
+    hash = "sha256-Mt3hCgmkgT9zWaHMvyjmO6U77/2os7E4zNOiyKWrRMo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-k17M2YhhNQWfxJCI0LX7FuwSgbpv2WtJw8X2+PF/g4M=";
+    inherit pname version src;
+    hash = "sha256-ZUBrZqdesy0qKaxuD5gSlq7qOoXWn0aZNOidUb0grMM=";
   };
 
   build-system = [

@@ -309,6 +309,7 @@ let
         stringLength
         substring
         isString
+        replaceString
         replaceStrings
         intersperse
         concatStringsSep
@@ -432,6 +433,8 @@ let
         pathHasContext
         canCleanSource
         pathIsGitRepo
+        revOrTag
+        repoRevToName
         ;
       inherit (self.modules)
         evalModules

@@ -18,7 +18,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "abiosoft";
-    repo = pname;
+    repo = "colima";
     rev = "v${version}";
     hash = "sha256-RQnHqEabxyoAKr8BfmVhk8z+l5oy8pa5JPTWk/0FV5g=";
     # We need the git revision

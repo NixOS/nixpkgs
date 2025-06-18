@@ -104,6 +104,7 @@ self: super: {
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags
             ++ [
+              "strictflexarrays1"
               "shadowstack"
               "nostrictaliasing"
               "pacret"
@@ -119,7 +120,6 @@ self: super: {
           # causes shadowstack disablement
           pcre = super'.pcre.override { enableJit = false; };
           pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
-          pcre16 = super'.pcre16.override { enableJit = false; };
         }
       )
     ] ++ overlays;

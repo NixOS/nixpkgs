@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   # Do not build amd64 assembly code on Darwin, because it fails to compile
-  # with unknow directive errors
+  # with unknown directive errors
   configureFlags =
     optional stdenv.hostPlatform.isDarwin "--enable-amd64=no"
     ++ optional (!svgSupport) "--without-svg"

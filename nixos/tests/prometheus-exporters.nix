@@ -1905,9 +1905,7 @@ mapAttrs (
         ${nodeName}.shutdown()
       '';
 
-      meta = with maintainers; {
-        maintainers = [ willibutz ];
-      };
+      meta.maintainers = [ ];
     }
   ))
 ) exporterTests

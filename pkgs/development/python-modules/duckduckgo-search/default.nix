@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "8.0.0";
+  version = "8.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "deedy5";
     repo = "duckduckgo_search";
     tag = "v${version}";
-    hash = "sha256-FoGBVHxEXM9Mt0wpy7GctrlqUfhZb8DlK3UhlHld7E0=";
+    hash = "sha256-V7/KvoVNpIrYA9pLd/E6u/mpwPpeFJn1SRlHXUpEzYk=";
   };
 
   build-system = [ setuptools ];

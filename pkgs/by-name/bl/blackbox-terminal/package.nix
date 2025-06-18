@@ -106,16 +106,16 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dblackbox_is_flatpak=false" ];
 
-  meta = with lib; {
+  meta = {
     description = "Beautiful GTK 4 terminal";
     mainProgram = "blackbox";
     homepage = "https://gitlab.gnome.org/raggesilver/blackbox";
     changelog = "https://gitlab.gnome.org/raggesilver/blackbox/-/raw/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       chuangzhu
       linsui
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "abctl";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "airbytehq";
     repo = "abctl";
     tag = "v${version}";
-    hash = "sha256-ZM0ae4Oiz/q4KSkxVxEXPe6oJa5fsNWzw+fX5hobc1c=";
+    hash = "sha256-FbL9jfTg2wV203XwMTTDgkfjX4+J/aEagIHE/q4sYDs=";
   };
 
   checkFlags =

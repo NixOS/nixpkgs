@@ -37,6 +37,7 @@
   limesuite,
   pkg-config,
   zeromq,
+  udevCheckHook,
 }:
 
 let
@@ -86,6 +87,7 @@ let
           cmake
           ninja
           pkg-config
+          udevCheckHook
         ] ++ nativeBuildInputs;
 
         checkInputs = [ gtest ];
@@ -102,6 +104,8 @@ let
           done
           ${postInstall}
         '';
+
+        doInstallCheck = true;
 
         meta =
           with lib;

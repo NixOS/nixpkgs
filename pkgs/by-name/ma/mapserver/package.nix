@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withPython [
       swig
       python3.pkgs.setuptools
+      python3.pkgs.pythonImportsCheckHook
     ];
 
   buildInputs = [
@@ -81,6 +82,13 @@ stdenv.mkDerivation rec {
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
   ];
+
+  postInstall = lib.optionalString withPython ''
+    mkdir -p $out/${python3.sitePackages}
+    cp -r src/mapscript/python/mapscript $out/${python3.sitePackages}
+  '';
+
+  pythonImportsCheck = [ "mapscript" ];
 
   meta = {
     description = "Platform for publishing spatial data and interactive mapping applications to the web";

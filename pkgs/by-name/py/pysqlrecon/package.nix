@@ -36,12 +36,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pysqlrecon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Offensive MSSQL toolkit";
     homepage = "https://github.com/Tw1sm/PySQLRecon";
     changelog = "https://github.com/Tw1sm/PySQLRecon/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pysqlrecon";
   };
 }

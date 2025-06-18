@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +13,12 @@ stdenv.mkDerivation rec {
     url = "https://github.com/evgeni/hdapsd/releases/download/${version}/hdapsd-${version}.tar.gz";
     sha256 = "0ppgrfabd0ivx9hyny3c3rv4rphjyxcdsd5svx5pgfai49mxnl36";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   postInstall = builtins.readFile ./postInstall.sh;
 

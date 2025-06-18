@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "segmentio";
-    repo = pname;
+    repo = "chamber";
     rev = "v${version}";
     sha256 = "sha256-9+I/zH4sHlLQkEn+fCboI3vCjYjlk+hdYnWuxq47r5I=";
   };
@@ -26,7 +26,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A tool for managing secrets by storing them in AWS SSM Parameter Store";
+    description = "Tool for managing secrets by storing them in AWS SSM Parameter Store";
     homepage = "https://github.com/segmentio/chamber";
     license = licenses.mit;
     maintainers = with maintainers; [ kalekseev ];

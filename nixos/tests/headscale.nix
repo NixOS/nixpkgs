@@ -43,7 +43,10 @@ in
                 region_id = 999;
                 stun_listen_addr = "0.0.0.0:${toString stunPort}";
               };
-              dns.base_domain = "tailnet";
+              dns = {
+                base_domain = "tailnet";
+                override_local_dns = false;
+              };
             };
           };
           nginx = {
@@ -77,7 +80,7 @@ in
 
     # Create headscale user and preauth-key
     headscale.succeed("headscale users create test")
-    authkey = headscale.succeed("headscale preauthkeys -u test create --reusable")
+    authkey = headscale.succeed("headscale preauthkeys -u 1 create --reusable")
 
     # Connect peers
     up_cmd = f"tailscale up --login-server 'https://headscale' --auth-key {authkey}"

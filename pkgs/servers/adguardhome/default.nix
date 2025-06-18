@@ -8,15 +8,15 @@
 
 buildGoModule rec {
   pname = "adguardhome";
-  version = "0.107.61";
+  version = "0.107.62";
   src = fetchFromGitHub {
     owner = "AdguardTeam";
     repo = "AdGuardHome";
     tag = "v${version}";
-    hash = "sha256-nKN1yr0HxUrjFD/9e87pxNqbQkNFlreJI2OHEQkbW2Q=";
+    hash = "sha256-CqXf19DyDFgSnd/dziUq9Gl1d1V20OWE5MTQMi260Zc=";
   };
 
-  vendorHash = "sha256-odUfgLTSBLnzN1wsl7TOftGn7OmdbACO/83ukZ8PUaQ=";
+  vendorHash = "sha256-lY24TtW4vpMRUzOZmeX3Ip9ikUc4z1HG49DpeECExdk=";
 
   dashboard = buildNpmPackage {
     inherit src;

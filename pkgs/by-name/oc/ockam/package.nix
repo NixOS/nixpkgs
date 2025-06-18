@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "build-trust";
-    repo = pname;
+    repo = "ockam";
     rev = "ockam_v${version}";
     hash = "sha256-AY0i7qXA7JXfIEY0htmL+/yn71xAuh7WowXOs2fD6n8=";
   };

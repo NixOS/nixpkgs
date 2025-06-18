@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.19.00";
+  version = "0.19.01";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "stress-ng";
     rev = "V${version}";
-    hash = "sha256-CbGbGGWZDil7l04KNuizlAu9IACdtbHR5rrn39AAhio=";
+    hash = "sha256-ZfL7u6OCEYnjlXlGaKFT4aemMI1b7keIf+KZdgeasfA=";
   };
 
   postPatch = ''
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   # mystery, though. :-(
   enableParallelBuilding = (!stdenv.hostPlatform.isi686);
 
-  meta = with lib; {
+  meta = {
     description = "Stress test a computer system";
     longDescription = ''
       stress-ng will stress test a computer system in various selectable ways. It
@@ -94,9 +94,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/stress-ng";
     downloadPage = "https://github.com/ColinIanKing/stress-ng/tags";
     changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${version}/debian/changelog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ c0bw3b ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ c0bw3b ];
+    platforms = lib.platforms.unix;
     mainProgram = "stress-ng";
   };
 }

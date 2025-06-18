@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "NETGEN_VERSION_GIT" "v${finalAttrs.version}-0")
     (lib.cmakeFeature "NG_INSTALL_DIR_BIN" "bin")
     (lib.cmakeFeature "NG_INSTALL_DIR_LIB" "lib")
-    (lib.cmakeFeature "NG_INSTALL_DIR_CMAKE" "lib/cmake/${finalAttrs.pname}")
+    (lib.cmakeFeature "NG_INSTALL_DIR_CMAKE" "lib/cmake/netgen")
     (lib.cmakeFeature "NG_INSTALL_DIR_PYTHON" python3Packages.python.sitePackages)
     (lib.cmakeFeature "NG_INSTALL_DIR_RES" "share")
     (lib.cmakeFeature "NG_INSTALL_DIR_INCLUDE" "include")
@@ -160,11 +160,11 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       rm $out/bin/{Netgen1,startup.sh}
-      mkdir -p $out/Applications/${finalAttrs.pname}.app/Contents/{MacOS,Resouces}
+      mkdir -p $out/Applications/netgen.app/Contents/{MacOS,Resouces}
       substituteInPlace $out/Info.plist --replace-fail "Netgen1" "netgen"
-      mv $out/Info.plist $out/Applications/${finalAttrs.pname}.app/Contents
-      mv $out/Netgen.icns $out/Applications/${finalAttrs.pname}.app/Contents/Resouces
-      ln -s $out/bin/netgen $out/Applications/${finalAttrs.pname}.app/Contents/MacOS/netgen
+      mv $out/Info.plist $out/Applications/netgen.app/Contents
+      mv $out/Netgen.icns $out/Applications/netgen.app/Contents/Resouces
+      ln -s $out/bin/netgen $out/Applications/netgen.app/Contents/MacOS/netgen
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       # Extract pngs from the Apple icon image and create

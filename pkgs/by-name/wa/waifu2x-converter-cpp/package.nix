@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "DeadSix27";
-    repo = pname;
+    repo = "waifu2x-converter-cpp";
     rev = "v${version}";
     sha256 = "0rv8bnyxz89za6gwk9gmdbaf3j7c1j52mip7h81rir288j35m84x";
   };

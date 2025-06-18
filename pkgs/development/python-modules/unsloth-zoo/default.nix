@@ -13,6 +13,7 @@
   datasets,
   hf-transfer,
   huggingface-hub,
+  msgspec,
   packaging,
   peft,
   psutil,
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "unsloth-zoo";
-  version = "2025.4.1";
+  version = "2025.5.11";
   pyproject = true;
 
   # no tags on GitHub
   src = fetchPypi {
     pname = "unsloth_zoo";
     inherit version;
-    hash = "sha256-mRs/NMCNJWT52S7mtbQI332IQR6+/IaL29XmtMOz3fE=";
+    hash = "sha256-QRKcFkNlr7pICEy3il+za6hDYjvsSxHIBM6VaB1c5mk=";
   };
 
   # pyproject.toml requires an obsolete version of protobuf,
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   # Upstream issue: https://github.com/unslothai/unsloth-zoo/pull/68
   pythonRelaxDeps = [
     "protobuf"
+    "transformers"
   ];
 
   patches = [
@@ -59,6 +61,7 @@ buildPythonPackage rec {
     datasets
     hf-transfer
     huggingface-hub
+    msgspec
     packaging
     peft
     psutil

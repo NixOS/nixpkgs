@@ -10,15 +10,15 @@
 
 let
   pname = "cargo-mobile2";
-  version = "0.20.0";
+  version = "0.20.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
   src = fetchFromGitHub {
     owner = "tauri-apps";
-    repo = pname;
+    repo = "cargo-mobile2";
     rev = "cargo-mobile2-v${version}";
-    hash = "sha256-7/ol4Jb/2s007LeSMo6YYDT5vipsZZF6O4hfJ7ylHGg=";
+    hash = "sha256-gKqGmd34nNKMc3fl5lMH09oOGnmRaMDBwsbHhAeUMBc=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
   # sourceRoot = "${src.name}/tooling/cli";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zSUT2zClpSlBDu6vgMv4TZn9Jp0Ych6EQKo1AwkSMXU=";
+  cargoHash = "sha256-QEZe+7/i0XygXxs7pwdS9WtYbE2pfrUuRQC0dm+WqTo=";
 
   preBuild = ''
     mkdir -p $out/share/

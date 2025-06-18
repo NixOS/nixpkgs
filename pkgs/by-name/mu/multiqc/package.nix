@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "multiqc";
-  version = "1.28";
+  version = "1.29";
 
   # Two data sources. One for the code, another for the test data
   srcs = [
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
       owner = "MultiQC";
       repo = "MultiQC";
       tag = "v${version}";
-      hash = "sha256-rYZaecoVAO1RE44XCw60aVwvWhKcZ/RrG3WpVRcLbuA=";
+      hash = "sha256-KKLdDNf889lEbCyNpJFZoE8rNO50CRzNP4hKpKHRAcE=";
     })
     (fetchFromGitHub {
       owner = "MultiQC";
@@ -29,6 +29,15 @@ python3Packages.buildPythonApplication rec {
       name = "test-data";
     })
   ];
+
+  # Multiqc cannot remove temporary directories in some case.
+  # Default is 10 retries, lower it to 2
+  postPatch = ''
+    substituteInPlace multiqc/utils/util_functions.py \
+      --replace-fail \
+        "max_retries: int = 10," \
+        "max_retries: int = 2,"
+  '';
 
   sourceRoot = "multiqc";
 
@@ -43,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     numpy
     packaging
     requests
+    polars
     pillow
     plotly
     pyyaml

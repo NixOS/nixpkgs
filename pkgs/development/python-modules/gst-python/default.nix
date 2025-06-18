@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchurl,
   fetchpatch,
@@ -77,6 +78,10 @@ buildPythonPackage rec {
   # TODO: Meson setup hook does not like buildPythonPackage
   # https://github.com/NixOS/nixpkgs/issues/47390
   installCheckPhase = "meson test --print-errorlogs";
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export DYLD_LIBRARY_PATH="${gst_all_1.gst-plugins-base}/lib"
+  '';
 
   passthru = {
     updateScript = directoryListingUpdater { };

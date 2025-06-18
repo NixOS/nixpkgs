@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "stdlibs";
-  version = "2024.5.15";
+  version = "2025.5.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "omnilib";
     repo = "stdlibs";
     tag = "v${version}";
-    hash = "sha256-DthHvL5x3HVwACLnxeyuoC0hb8OokabODircEY9eEhE=";
+    hash = "sha256-pvQZ+sRmad5m274wbIulHh5Tifim35uH7mz69jopVRw=";
   };
 
   build-system = [ flit-core ];

@@ -241,7 +241,7 @@ stdenv.mkDerivation rec {
     # guarantee that it will always run in any nix context.
     #
     # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
-    # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
+    # NIX_BUILD_TOP env var to conditionally disable sleep features inside the
     # sandbox.
     #
     # If you want to investigate the sandbox profile path,

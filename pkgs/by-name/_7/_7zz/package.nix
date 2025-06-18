@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm555 -t $out/bin b/*/7zz${stdenv.hostPlatform.extensions.executable}
-    install -Dm444 -t $out/share/doc/${finalAttrs.pname} ../../../../DOC/*.txt
+    install -Dm444 -t $out/share/doc/7zz ../../../../DOC/*.txt
 
     runHook postInstall
   '';

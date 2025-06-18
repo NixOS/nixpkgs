@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DKDSingleApplication_QT6=true" ];
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "KDAB's helper class for single-instance policy applications";
     homepage = "https://www.kdab.com/";
-    maintainers = with maintainers; [ hellwolf ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ hellwolf ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     changelog = "https://github.com/KDAB/KDSingleApplication/releases/tag/v${version}";
   };
 }

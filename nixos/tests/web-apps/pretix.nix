@@ -10,6 +10,8 @@
 
   nodes = {
     pretix = {
+      virtualisation.memorySize = 2048;
+
       networking.extraHosts = ''
         127.0.0.1 tickets.local
       '';

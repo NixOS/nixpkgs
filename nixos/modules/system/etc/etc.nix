@@ -390,11 +390,11 @@ in
     system.build.etcMetadataImage =
       let
         etcJson = pkgs.writeText "etc-json" (builtins.toJSON etc');
-        etcDump = pkgs.runCommand "etc-dump" { } ''
+        etcDump = pkgs.runCommandLocal "etc-dump" { } ''
           ${lib.getExe pkgs.buildPackages.python3} ${./build-composefs-dump.py} ${etcJson} > $out
         '';
       in
-      pkgs.runCommand "etc-metadata.erofs"
+      pkgs.runCommandLocal "etc-metadata.erofs"
         {
           nativeBuildInputs = with pkgs.buildPackages; [
             composefs

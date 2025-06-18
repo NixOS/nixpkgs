@@ -31,7 +31,7 @@ let
 in
 {
   name = "quake3";
-  meta.maintainers = with lib.maintainers; [ domenkozar ];
+  meta.maintainers = with lib.maintainers; [ ];
 
   node.pkgsReadOnly = false;
 

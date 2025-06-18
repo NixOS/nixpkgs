@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pytedee-async";
-  version = "0.2.22";
+  version = "0.2.23";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "zweckj";
     repo = "pytedee_async";
     tag = "v${version}";
-    hash = "sha256-bMIsyjXiruj8QdyDRiXwjRfgi6Oxlhk0B2vLn6jeCi0=";
+    hash = "sha256-aRxZcYm+xXt0QiUVeAe7OocY3Tew/UPiKzMCvSTaUuw=";
   };
 
   build-system = [ setuptools ];

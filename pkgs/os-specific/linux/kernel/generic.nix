@@ -69,6 +69,7 @@ let
           "pc"
         ],
       extraMeta ? { },
+      extraPassthru ? { },
 
       isZen ? false,
       isLibre ? false,
@@ -299,6 +300,7 @@ let
 
         passthru =
           previousAttrs.passthru or { }
+          // extraPassthru
           // basicArgs
           // {
             features = kernelFeatures;

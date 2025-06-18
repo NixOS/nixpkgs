@@ -2,46 +2,63 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3,
+  python3Packages,
   fixDarwinDylibNames,
   nix-update-script,
   versionCheckHook,
 
   javaBindings ? false,
   ocamlBindings ? false,
-  pythonBindings ? true,
+  pythonBindings ? (!stdenv.hostPlatform.isStatic),
   jdk ? null,
   ocaml ? null,
   findlib ? null,
   zarith ? null,
+  cmake,
+  ninja,
+  testers,
+  useCmakeBuild ? (!ocamlBindings), # TODO: remove gnu make build once cmake supports ocaml
   ...
 }:
 
-assert javaBindings -> jdk != null;
-assert ocamlBindings -> ocaml != null && findlib != null && zarith != null;
+assert pythonBindings -> !stdenv.hostPlatform.isStatic;
+assert javaBindings -> jdk != null && (!stdenv.hostPlatform.isStatic);
+assert
+  ocamlBindings
+  -> ocaml != null && findlib != null && zarith != null && (!stdenv.hostPlatform.isStatic);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z3";
-  version = "4.15.0";
+  version = "4.15.1";
 
   src = fetchFromGitHub {
     owner = "Z3Prover";
     repo = "z3";
     rev = "z3-${finalAttrs.version}";
-    hash = "sha256-fk3NyV6vIDXivhiNOW2Y0i5c+kzc7oBqaeBWj/JjpTM=";
+    hash = "sha256-mzU21AlKjC5406lQXfBSz/AIwo/1FThqap5JgldkAgQ=";
   };
+
+  patches = lib.optionals useCmakeBuild [
+    ./fix-pkg-config-paths.patch
+  ];
 
   strictDeps = true;
 
   nativeBuildInputs =
-    [ python3 ]
+    [ python3Packages.python ]
+    ++ lib.optionals pythonBindings [ python3Packages.setuptools ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ]
     ++ lib.optionals javaBindings [ jdk ]
     ++ lib.optionals ocamlBindings [
       ocaml
       findlib
+    ]
+    ++ lib.optionals useCmakeBuild [
+      cmake
+      ninja
     ];
-  propagatedBuildInputs = [ python3.pkgs.setuptools ] ++ lib.optionals ocamlBindings [ zarith ];
+
+  propagatedBuildInputs = lib.optionals ocamlBindings [ zarith ];
   enableParallelBuilding = true;
 
   postPatch = lib.optionalString ocamlBindings ''
@@ -49,58 +66,94 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $OCAMLFIND_DESTDIR/stublibs
   '';
 
-  configurePhase = ''
+  configurePhase = lib.optionalString (!useCmakeBuild) ''
     runHook preConfigure
 
-    ${python3.pythonOnBuildForHost.interpreter} \
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} \
       scripts/mk_make.py \
       --prefix=$out \
       ${lib.optionalString javaBindings "--java"} \
       ${lib.optionalString ocamlBindings "--ml"} \
-      ${lib.optionalString pythonBindings "--python --pypkgdir=$out/${python3.sitePackages}"}
+      ${lib.optionalString pythonBindings "--python --pypkgdir=$out/${python3Packages.python.sitePackages}"}
 
     cd build
 
     runHook postConfigure
   '';
 
+  cmakeFlags =
+    [
+      (lib.cmakeBool "Z3_BUILD_PYTHON_BINDINGS" pythonBindings)
+      (lib.cmakeBool "Z3_INSTALL_PYTHON_BINDINGS" pythonBindings)
+      (lib.cmakeBool "Z3_BUILD_JAVA_BINDINGS" javaBindings)
+      (lib.cmakeBool "Z3_INSTALL_JAVA_BINDINGS" javaBindings)
+      (lib.cmakeBool "Z3_BUILD_OCAML_BINDINGS" ocamlBindings) # FIXME: ocaml does not properly install build output on cmake
+      (lib.cmakeBool "Z3_SINGLE_THREADED" (!finalAttrs.enableParallelBuilding))
+      (lib.cmakeBool "Z3_BUILD_LIBZ3_SHARED" (!stdenv.hostPlatform.isStatic))
+      (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "out"))
+      (lib.cmakeBool "Z3_BUILD_TEST_EXECUTABLES" finalAttrs.doCheck)
+      (lib.cmakeBool "Z3_ENABLE_EXAMPLE_TARGETS" false)
+    ]
+    ++ lib.optionals pythonBindings [
+      (lib.cmakeFeature "CMAKE_INSTALL_PYTHON_PKG_DIR" "${placeholder "python"}/${python3Packages.python.sitePackages}")
+      (lib.cmakeFeature "Python3_EXECUTABLE" "${lib.getExe python3Packages.python}")
+    ]
+    ++ lib.optionals javaBindings [
+      (lib.cmakeFeature "Z3_JAVA_JNI_LIB_INSTALLDIR" "${placeholder "java"}/lib")
+      (lib.cmakeFeature "Z3_JAVA_JAR_INSTALLDIR" "${placeholder "java"}/share/java")
+    ];
+
   doCheck = true;
   checkPhase = ''
     runHook preCheck
 
-    make -j $NIX_BUILD_CORES test
+    ${if useCmakeBuild then "ninja test-z3" else "make test"} -j $NIX_BUILD_CORES
     ./test-z3 -a
 
     runHook postCheck
   '';
 
   postInstall =
-    ''
-      mkdir -p $dev $lib
-      mv $out/lib $lib/lib
-      mv $out/include $dev/include
-    ''
+    lib.optionalString (!useCmakeBuild) (
+      ''
+        mkdir -p $dev $lib
+        mv $out/lib $lib/lib
+        mv $out/include $dev/include
+      ''
+      + lib.optionalString pythonBindings ''
+        mkdir -p $python/lib
+        mv $lib/lib/python* $python/lib/
+
+        # need to delete the lib folder to properly link the actual lib output
+        rm -rf $python/${python3Packages.python.sitePackages}/z3/lib
+      ''
+      + lib.optionalString javaBindings ''
+        mkdir -p $java/share/java $java/lib
+        mv $lib/lib/com.microsoft.z3.jar $java/share/java
+        mv $lib/lib/libz3java* $java/lib
+      ''
+    )
     + lib.optionalString pythonBindings ''
-      mkdir -p $python/lib
-      mv $lib/lib/python* $python/lib/
-      ln -sf $lib/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary} $python/${python3.sitePackages}/z3/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary}
-    ''
-    + lib.optionalString javaBindings ''
-      mkdir -p $java/share/java
-      mv com.microsoft.z3.jar $java/share/java
-      moveToOutput "lib/libz3java.${stdenv.hostPlatform.extensions.sharedLibrary}" "$java"
+      ln -sf $lib/lib $python/${python3Packages.python.sitePackages}/z3/lib
     '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ] ++ lib.optionals pythonBindings [ python3Packages.pythonImportsCheckHook ];
+
+  pythonImportsCheck = [
+    "z3"
+  ];
 
   outputs =
     [
       "out"
       "lib"
       "dev"
-      "python"
     ]
+    ++ lib.optionals pythonBindings [ "python" ]
     ++ lib.optionals javaBindings [ "java" ]
     ++ lib.optionals ocamlBindings [ "ocaml" ];
 
@@ -110,6 +163,9 @@ stdenv.mkDerivation (finalAttrs: {
         "--version-regex"
         "^z3-([0-9]+\\.[0-9]+\\.[0-9]+)$"
       ];
+    };
+    tests = lib.optionalAttrs useCmakeBuild {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };
 
@@ -125,5 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
       ttuegel
       numinit
     ];
+    pkgConfigModules = lib.optionals useCmakeBuild [ "z3" ];
+    broken = useCmakeBuild && ocamlBindings;
   };
 })

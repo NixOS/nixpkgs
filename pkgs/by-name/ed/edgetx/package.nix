@@ -14,6 +14,7 @@
   gtest,
   miniz,
   yaml-cpp,
+  udevCheckHook,
   # List of targets to build simulators for
   targetsToBuild ? import ./targets.nix,
 }:
@@ -55,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     pythonEnv
     libsForQt5.qttools
     libsForQt5.wrapQtAppsHook
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -84,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's|/usr/.*bin/dfu-util|${dfu-util}/bin/dfu-util|'
     patchShebangs companion/util radio/util
   '';
+
+  doInstallCheck = true;
 
   cmakeFlags = [
     # Unvendoring these libraries is infeasible. At least lets reuse the same sources.

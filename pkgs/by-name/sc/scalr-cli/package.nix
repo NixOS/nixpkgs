@@ -33,12 +33,12 @@ buildGoModule rec {
 
   doCheck = false; # Skip tests as they require creating actual Scalr resources.
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool that communicates directly with the Scalr API";
     homepage = "https://github.com/Scalr/scalr-cli";
     changelog = "https://github.com/Scalr/scalr-cli/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dylanmtaylor ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dylanmtaylor ];
     mainProgram = "scalr";
   };
 }

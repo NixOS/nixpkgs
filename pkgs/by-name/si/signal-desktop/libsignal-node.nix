@@ -24,23 +24,23 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-node";
-  version = "0.70.0";
+  version = "0.72.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6CBhLvD0UflLzJHAMB21wSH8MWTUNx0uPdqOUo/Eq44=";
+    hash = "sha256-A8EAHHcBFSD4ZlvFig64g4+eoZQCuqE/qv509hA3I4s=";
   };
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4bSPPf16nUQTl6INa3mLhPIe8iiFfpPw1E5fpNvnKqs=";
+  cargoHash = "sha256-+vJrywIi/RcGGGns42XlN6S63RBil3fB4XByTLsaFVc=";
 
   npmRoot = "node";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-npm-deps";
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-djk+YGZ/eUq6MXjUEE47bgKnQlUSuaoUPx8hUMtjvyQ=";
+    hash = "sha256-ZD0ZN2b7KReGbnvarqvGpOlQ5TsJfnaHmmOWQ42Y48E=";
   };
 
   nativeBuildInputs = [
@@ -56,9 +56,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
   env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 
-  patchPhase = ''
-    runHook prePatch
-
+  patches = [
+    # This is used to strip absolute paths of dependencies to avoid leaking info about build machine. Nix builders
+    # already solve this problem by chrooting os this is not needed.
+    ./dont-strip-absolute-paths.patch
+  ];
+  postPatch = ''
     substituteInPlace node/binding.gyp \
       --replace-fail "'--out-dir', '<(PRODUCT_DIR)/'," \
                      "'--out-dir', '$out/lib/<(NODE_OS_NAME)-<(target_arch)/'," \
@@ -68,8 +71,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace node/build_node_bridge.py \
       --replace-fail "dst_base = 'libsignal_client_%s_%s' % (node_os_name, node_arch)" \
                      "dst_base = '@signalapp+libsignal-client'"
-
-    runHook postPatch
   '';
 
   buildPhase = ''

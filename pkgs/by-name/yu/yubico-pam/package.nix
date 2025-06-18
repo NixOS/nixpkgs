@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "2.27";
   src = fetchFromGitHub {
     owner = "Yubico";
-    repo = pname;
+    repo = "yubico-pam";
     rev = version;
     sha256 = "0hb773zlf11xz4bwmsqv2mq5d4aq2g0crdr5cp9xwc4ivi5gd4kg";
   };

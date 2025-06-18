@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
-    repo = pname;
+    repo = "pc-ble-driver";
     rev = "v${version}";
     hash = "sha256-srH7Gdiy9Lsv68fst/9jhifx03R2e+4kMia6pU/oCZg=";
   };

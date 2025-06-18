@@ -128,16 +128,22 @@ in
           ];
         };
         lovelaceConfigWritable = true;
+      };
 
-        blueprints.automation = [
-          (pkgs.fetchurl {
-            url = "https://github.com/home-assistant/core/raw/2025.1.4/homeassistant/components/automation/blueprints/motion_light.yaml";
-            hash = "sha256-4HrDX65ycBMfEY2nZ7A25/d3ZnIHdpHZ+80Cblp+P5w=";
-          })
-        ];
-        blueprints.template = [
-          "${pkgs.home-assistant.src}/homeassistant/components/template/blueprints/inverted_binary_sensor.yaml"
-        ];
+      # Add blueprints next, because we want to test the installation of the default blueprints first
+      specialisation.addBlueprints = {
+        inheritParentConfig = true;
+        configuration.services.home-assistant = {
+          blueprints.automation = [
+            (pkgs.fetchurl {
+              url = "https://github.com/home-assistant/core/raw/2025.1.4/homeassistant/components/automation/blueprints/motion_light.yaml";
+              hash = "sha256-4HrDX65ycBMfEY2nZ7A25/d3ZnIHdpHZ+80Cblp+P5w=";
+            })
+          ];
+          blueprints.template = [
+            "${pkgs.home-assistant.src}/homeassistant/components/template/blueprints/inverted_binary_sensor.yaml"
+          ];
+        };
       };
 
       # Cause a configuration change inside `configuration.yml` and verify that the process is being reloaded.
@@ -237,7 +243,16 @@ in
       with subtest("Check extra components are considered in systemd unit hardening"):
           hass.succeed("systemctl show -p DeviceAllow home-assistant.service | grep -q char-ttyUSB")
 
-      with subtest("Check that blueprints are installed"):
+      with subtest("Check that default blueprints are copied writable"):
+          hass.succeed("stat -c '%a' ${configDir}/blueprints/automation/homeassistant | grep 700")
+          hass.succeed("stat -c '%a' ${configDir}/blueprints/automation/homeassistant/motion_light.yaml | grep 600")
+          # Delete blueprints, so we can check the declarative setup next
+          hass.execute("rm -rf ${configDir}/blueprints")
+
+      with subtest("Check that configured blueprints are installed"):
+          cursor = get_journal_cursor()
+          hass.succeed("${system}/specialisation/addBlueprints/bin/switch-to-configuration test")
+          wait_for_homeassistant(cursor)
           hass.succeed("test -L '${configDir}/blueprints/automation/motion_light.yaml'")
           hass.succeed("test -L '${configDir}/blueprints/template/inverted_binary_sensor.yaml'")
 

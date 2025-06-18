@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    description = "A fully Go userland with Linux bootloaders";
+    description = "Fully Go userland with Linux bootloaders";
     longDescription = ''
       u-root can create a one-binary root file system (initramfs) containing a busybox-like set of tools written in Go.
 

@@ -45,14 +45,14 @@ stdenv.mkDerivation rec {
     graphviz
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Workbench for writing toy implementations of distributed systems";
     homepage = "https://github.com/jepsen-io/maelstrom";
     changelog = "https://github.com/jepsen-io/maelstrom/releases/tag/${version}";
     mainProgram = "maelstrom";
-    sourceProvenance = [ sourceTypes.binaryBytecode ];
-    license = licenses.epl10;
-    maintainers = [ maintainers.emilioziniades ];
-    platforms = platforms.linux ++ platforms.darwin;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    license = lib.licenses.epl10;
+    maintainers = [ lib.maintainers.emilioziniades ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

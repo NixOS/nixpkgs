@@ -71,13 +71,13 @@ let
   embedded = {
     buildPackages.binutils = nativePlatforms;
     buildPackages.gcc = nativePlatforms;
-    libcCross = nativePlatforms;
+    libc = nativePlatforms;
   };
 
   common = {
     buildPackages.binutils = nativePlatforms;
     gmp = nativePlatforms;
-    libcCross = nativePlatforms;
+    libc = nativePlatforms;
     nix = nativePlatforms;
     nixVersions.git = nativePlatforms;
     mesa = nativePlatforms;

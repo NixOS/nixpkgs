@@ -4,7 +4,7 @@
 # correct time, we need to connect to an NTP server, which usually requires resolving its hostname.
 #
 # This test does the following:
-# - Sets up a DNS server (tinydns) listening on the eth1 ip addess, serving .ntp and fake.ntp records.
+# - Sets up a DNS server (tinydns) listening on the eth1 ip address, serving .ntp and fake.ntp records.
 # - Configures that DNS server as a resolver and enables DNSSEC in systemd-resolved settings.
 # - Configures systemd-timesyncd to use fake.ntp hostname as an NTP server.
 # - Performs a regular DNS lookup, to ensure it fails due to broken DNSSEC.

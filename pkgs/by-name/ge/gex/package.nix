@@ -5,6 +5,8 @@
   pkg-config,
   libgit2,
   nix-update-script,
+  zlib,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libgit2
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;

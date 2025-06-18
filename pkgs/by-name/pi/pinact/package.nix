@@ -47,7 +47,11 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=^v([\\d\\.]+)$"
+      ];
+    };
   };
 
   ldflags = [
