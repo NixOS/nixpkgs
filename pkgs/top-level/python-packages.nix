@@ -607,6 +607,8 @@ self: super: with self; {
 
   aliyun-python-sdk-sts = callPackage ../development/python-modules/aliyun-python-sdk-sts { };
 
+  allantools = callPackage ../development/python-modules/allantools { };
+
   allpairspy = callPackage ../development/python-modules/allpairspy { };
 
   allure-behave = callPackage ../development/python-modules/allure-behave { };
