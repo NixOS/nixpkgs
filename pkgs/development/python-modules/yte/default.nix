@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "yte";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "koesterlab";
     repo = "yte";
     tag = "v${version}";
-    hash = "sha256-C4yhHT+7B0Gncqj/fKKtBpsO4TxImfEMbEkuwC5uSgw=";
+    hash = "sha256-0YIZd0qgtriyD+xCxJZENY7Z1fART3MS8pubnpysGRc=";
   };
 
   build-system = [ poetry-core ];
