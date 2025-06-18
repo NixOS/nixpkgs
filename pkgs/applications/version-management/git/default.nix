@@ -574,6 +574,7 @@ stdenv.mkDerivation (finalAttrs: {
       globin
       kashw2
       me-and
+      philiptaron
     ];
     mainProgram = "git";
   };
