@@ -13,7 +13,10 @@
 
 let
   meta = {
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      rvdp
+    ];
     platforms = lib.platforms.linux;
   };
 
