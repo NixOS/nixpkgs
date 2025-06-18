@@ -35,12 +35,10 @@ buildGoModule rec {
     "-X=github.com/sourcegraph/src-cli/internal/version.BuildTag=${version}"
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   passthru.tests = {
     version = testers.testVersion {
       package = src-cli;
-      command = "src version || true";
+      command = "src version -client-only";
     };
   };
 
