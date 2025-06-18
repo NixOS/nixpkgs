@@ -10,6 +10,8 @@
   libpng,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
+
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "WITH_SYSTEMD" withSystemd) ];
+  cmakeFlags = [
+    (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+  ];
 
   buildInputs =
     [
