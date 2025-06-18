@@ -8,6 +8,7 @@
   flex,
   check,
   pam,
+  bash,
   coreutils,
   gzip,
   bzip2,
@@ -85,6 +86,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     check
     pam
+    bash
   ];
   NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isStatic "-laudit";
   nativeBuildInputs = [
@@ -92,6 +94,7 @@ stdenv.mkDerivation rec {
     pkg-config
     flex
   ];
+  strictDeps = true;
 
   passthru.tests = {
     inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
