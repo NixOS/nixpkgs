@@ -104,9 +104,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -rf updater
 
     # patch cargo-deps
-    pushd $cargoDepsCopy/tauri-plugin-shell-*
-    patch -p1 < /build/source/src-tauri/patches/tauri-plugin-shell+*.patch
-    popd
+    patch -d $cargoDepsCopy/tauri-plugin-shell-* -p1 < ./src-tauri/patches/tauri-plugin-shell+*.patch
 
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
@@ -120,7 +118,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ln -s ${shelter} src-tauri/injection/shelter.js
 
     # link html/frontend data
-    ln -s /build/source/src /build/source/src-tauri/html
+    ln -s $(pwd)/src src-tauri/html
   '';
 
   configurePhase = ''
@@ -130,7 +128,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildPhase = ''
     ninjaBuildPhase
-    cd /build/source
+    cd ../..
     tauriBuildHook
   '';
 
