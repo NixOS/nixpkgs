@@ -11,7 +11,7 @@
   pkg-config,
   clang,
   bintools,
-  python3Packages,
+  python312Packages,
   git,
   fetchpatch,
   fetchpatch2,
@@ -48,7 +48,8 @@ let
     else
       targetPlatform.darwinMinVersion;
 
-  python3 = python3Packages.python.withPackages (p: [ p.setuptools ]); # python 3.12 compat.
+  # Use Python 3.12 for now because Swift 5.8 depends on Python's PyEval_ThreadsInitialized(), which was removed in 3.13.
+  python3 = python312Packages.python.withPackages (p: [ p.setuptools ]); # python 3.12 compat.
 
   inherit (stdenv) hostPlatform targetPlatform;
 

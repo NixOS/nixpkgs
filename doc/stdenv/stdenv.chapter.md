@@ -1622,6 +1622,22 @@ Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Execut
 Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
 If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 
+#### `strictflexarrays1` {#strictflexarrays1}
+
+This flag adds the `-fstrict-flex-arrays=1` compiler option, which reduces the cases the compiler treats as "flexible arrays" to those declared with length `[1]`, `[0]` or (the correct) `[]`. This increases the coverage of fortify checks, because such arrays declared as the trailing element of a structure can normally not have their intended length determined by the compiler.
+
+Enabling this flag on packages that still use length declarations of flexible arrays >1 may cause the package to fail to compile citing accesses beyond the bounds of an array or even crash at runtime by detecting an array access as an "overrun". Few projects still use length declarations of flexible arrays >1.
+
+Disabling `strictflexarrays1` implies disablement of `strictflexarrays3`.
+
+#### `strictflexarrays3` {#strictflexarrays3}
+
+This flag adds the `-fstrict-flex-arrays=3` compiler option, which reduces the cases the compiler treats as "flexible arrays" to only those declared with length as (the correct) `[]`. This increases the coverage of fortify checks, because such arrays declared as the trailing element of a structure can normally not have their intended length determined by the compiler.
+
+Enabling this flag on packages that still use non-empty length declarations for flexible arrays may cause the package to fail to compile citing accesses beyond the bounds of an array or even crash at runtime by detecting an array access as an "overrun". Many projects still use such non-empty length declarations for flexible arrays.
+
+Enabling this flag implies enablement of `strictflexarrays1`. Disabling this flag does not imply disablement of `strictflexarrays1`.
+
 #### `shadowstack` {#shadowstack}
 
 Adds the `-fcf-protection=return` compiler option. This enables the Shadow Stack feature supported by some newer processors, which maintains a user-inaccessible copy of the program's stack containing only return-addresses. When returning from a function, the processor compares the return-address value on the two stacks and throws an error if they do not match, considering it a sign of corruption and possible tampering. This should significantly increase the difficulty of ROP attacks.

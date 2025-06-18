@@ -37,6 +37,7 @@
   udev,
   util-linux,
   xmlsec,
+  udevCheckHook,
   withX ? true,
 }:
 let
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     makeWrapper
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs =
@@ -139,6 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optional (!withX) "--without-x";
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
 
   preConfigure = ''
     mkdir -p ${placeholder "out"}/lib/udev/rules.d

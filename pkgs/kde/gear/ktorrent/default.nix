@@ -7,6 +7,8 @@
 mkKdeDerivation {
   pname = "ktorrent";
 
+  extraNativeBuildInputs = [ qtwebengine ];
+
   extraBuildInputs = [
     qtwebengine
     taglib

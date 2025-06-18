@@ -6,7 +6,6 @@
   setuptools,
   dbus,
   pytest,
-  pytest-cov-stub,
   pytest-asyncio,
   pytest-timeout,
 }:
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     dbus
     pytest
-    pytest-cov-stub
     pytest-asyncio
     pytest-timeout
   ];
@@ -42,7 +40,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf \
-      ${python.interpreter} -m pytest -sv --cov=dbus_next \
+      ${python.interpreter} -m pytest -sv \
       -k "not test_peer_interface and not test_tcp_connection_with_forwarding"
     runHook postCheck
   '';

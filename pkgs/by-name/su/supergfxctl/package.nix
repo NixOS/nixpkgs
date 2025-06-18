@@ -4,6 +4,7 @@
   fetchFromGitLab,
   pkg-config,
   systemd,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,11 +26,16 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace data/99-nvidia-ac.rules --replace /usr/bin/systemctl ${systemd}/bin/systemctl
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ systemd ];
 
   # upstream doesn't have tests, don't build twice just to find that out
   doCheck = false;
+
+  doInstallCheck = true;
 
   postInstall = ''
     install -Dm444 -t $out/lib/udev/rules.d/ data/*.rules

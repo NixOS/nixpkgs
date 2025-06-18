@@ -142,6 +142,8 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'if(LIBUSB_FOUND AND NOT APPLE)' 'if(LIBUSB_FOUND)'
     '';
 
+  doInstallCheck = true;
+
   postInstall =
     ''
       mv $out/bin/dolphin-emu $out/bin/dolphin-emu-primehack

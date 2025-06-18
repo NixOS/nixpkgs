@@ -37,6 +37,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytest-rerunfailures
+    pytest-cov-stub
     pytestCheckHook
     typing-extensions
   ];

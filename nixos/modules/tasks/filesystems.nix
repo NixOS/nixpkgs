@@ -33,6 +33,12 @@ let
   # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
   escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
 
+  # A list of attrnames is coerced into an attrset of bools by
+  # setting the values to true.
+  attrNamesToTrue = types.coercedTo (types.listOf types.str) (
+    enabledList: lib.genAttrs enabledList (_attrName: true)
+  ) (types.attrsOf types.bool);
+
   addCheckDesc =
     desc: elemType: check:
     types.addCheck elemType check // { description = "${elemType.description} (with check: ${desc})"; };
@@ -344,9 +350,7 @@ in
           zfs = lib.mkForce false;
         }
       '';
-      type = types.coercedTo (types.listOf types.str) (
-        enabled: lib.listToAttrs (map (fs: lib.nameValuePair fs true) enabled)
-      ) (types.attrsOf types.bool);
+      type = attrNamesToTrue;
       description = ''
         Names of supported filesystem types, or an attribute set of file system types
         and their state. The set form may be used together with `lib.mkForce` to

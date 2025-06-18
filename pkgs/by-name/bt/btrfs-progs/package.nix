@@ -16,6 +16,7 @@
   btrfs-progs,
   gitUpdater,
   udevSupport ? true,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +31,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
       pkg-config
+    ]
+    ++ lib.optionals udevSupport [
+      udevCheckHook
     ]
     ++ [
       (buildPackages.python3.withPackages (
@@ -74,6 +78,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
 
   passthru.tests = {
     simple-filesystem = runCommand "btrfs-progs-create-fs" { } ''

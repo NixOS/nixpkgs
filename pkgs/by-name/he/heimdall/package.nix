@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -m644 -t $udev/lib/udev/rules.d $src/heimdall/60-heimdall.rules
   '';
 
+  doInstallCheck = true;
+
   # heimdall cli looked up from PATH by gui
   preFixup = lib.optional enableGUI ''
     qtWrapperArgs+=(--prefix PATH : "$out/bin")

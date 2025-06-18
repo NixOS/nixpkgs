@@ -6,7 +6,6 @@
   zlib,
   readline,
   ncurses,
-  updateAutotoolsGnuConfigScriptsHook,
 
   # for tests
   python3Packages,
@@ -19,6 +18,7 @@
   interactive ? false,
 
   gitUpdater,
+  buildPackages,
 }:
 
 let
@@ -27,30 +27,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.48.0";
+  version = "3.50.1";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2025/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-rJkvf8o5id5+0f6ZwWNj+Eh5TIwyoVja/U65J6LgL9U=";
+    hash = "sha256-AKZRFNaXz6qP4GMCgddv0bd6/Nlc1eQOxqAsu62/6nE=";
   };
   docsrc = fetchurl {
     url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-PcE3/NfGrLMmr2CmG5hE3RXTdzywXnqc4nbEH3E9dlo=";
+    hash = "sha256-ZiIF9jOC5X0Qceqr08eQjdchFKggqOvPGg1xqdazgrQ=";
   };
-
-  patches = [
-    # https://sqlite.org/forum/forumpost/3380558ea82c8a3e
-    # Can be removed with the next release.
-    # Test: pkgsStatic.gnupg
-    ./Libs.private.patch
-
-    # https://sqlite.org/forum/forumpost/00f3aab3d3be9690
-    # https://sqlite.org/src/info/d7c07581
-    # TODO: Remove in 3.49.0
-    ./3.48.0-fk-conflict-handling.patch
-  ];
 
   outputs = [
     "bin"
@@ -61,8 +49,11 @@ stdenv.mkDerivation rec {
   ];
   separateDebugInfo = stdenv.hostPlatform.isLinux;
 
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
   nativeBuildInputs = [
-    updateAutotoolsGnuConfigScriptsHook
     unzip
   ];
   buildInputs =
@@ -77,9 +68,21 @@ stdenv.mkDerivation rec {
     patchShebangs configure
   '';
 
-  configureFlags = [ "--enable-threadsafe" ] ++ lib.optional interactive "--enable-readline";
+  # sqlite relies on autosetup now; so many of the
+  # previously-understood flags are gone. They should instead be set
+  # on a per-output basis.
+  setOutputFlags = false;
 
-  env.NIX_CFLAGS_COMPILE = toString ([
+  configureFlags =
+    [
+      "--bindir=${placeholder "bin"}/bin"
+      "--includedir=${placeholder "dev"}/include"
+      "--libdir=${placeholder "out"}/lib"
+    ]
+    ++ lib.optional (!interactive) "--disable-readline"
+    ++ lib.optional (stdenv.hostPlatform.isStatic) "--disable-shared";
+
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"
@@ -88,7 +91,10 @@ stdenv.mkDerivation rec {
     "-DSQLITE_ENABLE_FTS3_TOKENIZER"
     "-DSQLITE_ENABLE_FTS4"
     "-DSQLITE_ENABLE_FTS5"
+    "-DSQLITE_ENABLE_GEOPOLY"
+    "-DSQLITE_ENABLE_MATH_FUNCTIONS"
     "-DSQLITE_ENABLE_PREUPDATE_HOOK"
+    "-DSQLITE_ENABLE_RBU"
     "-DSQLITE_ENABLE_RTREE"
     "-DSQLITE_ENABLE_SESSION"
     "-DSQLITE_ENABLE_STMT_SCANSTATUS"
@@ -97,7 +103,7 @@ stdenv.mkDerivation rec {
     "-DSQLITE_SECURE_DELETE"
     "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
     "-DSQLITE_MAX_EXPR_DEPTH=10000"
-  ]);
+  ];
 
   # Test for features which may not be available at compile time
   preBuild = ''
@@ -142,7 +148,7 @@ stdenv.mkDerivation rec {
     };
 
     updateScript = gitUpdater {
-      # No nicer place to look for patest version.
+      # No nicer place to look for latest version.
       url = "https://github.com/sqlite/sqlite.git";
       # Expect tags like "version-3.43.0".
       rev-prefix = "version-";

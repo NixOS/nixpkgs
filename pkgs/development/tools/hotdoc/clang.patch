@@ -1,0 +1,52 @@
+diff --git a/hotdoc/extensions/c/c_extension.py b/hotdoc/extensions/c/c_extension.py
+index 1cfd5b3..cff20c8 100644
+--- a/hotdoc/extensions/c/c_extension.py
++++ b/hotdoc/extensions/c/c_extension.py
+@@ -89,7 +89,7 @@ def get_clang_headers():
+     try:
+         # Clang 5.0+ can tell us directly
+         resource_dir = subprocess.check_output(
+-            ['clang', '--print-resource-dir']).strip().decode()
++            ['@clang@', '--print-resource-dir']).strip().decode()
+         if len(resource_dir) > 0:
+             include_dir = os.path.join(resource_dir, 'include')
+             if os.path.exists(include_dir):
+diff --git a/hotdoc/extensions/c/clang/cindex.py b/hotdoc/extensions/c/clang/cindex.py
+index fc93fda..2eb8eaf 100644
+--- a/hotdoc/extensions/c/clang/cindex.py
++++ b/hotdoc/extensions/c/clang/cindex.py
+@@ -3937,20 +3937,23 @@ class Config:
+         if Config.library_file:
+             return Config.library_file
+ 
+-        import platform
+-        name = platform.system()
++        if Config.library_path:
++            import platform
++            name = platform.system()
+ 
+-        if name == 'Darwin':
+-            file = 'libclang.dylib'
+-        elif name == 'Windows':
+-            file = 'libclang.dll'
+-        else:
+-            file = 'libclang.so'
++            if name == 'Darwin':
++                file = 'libclang.dylib'
++            elif name == 'Windows':
++                file = 'libclang.dll'
++            else:
++                file = 'libclang.so'
+ 
+-        if Config.library_path:
+-            file = Config.library_path + '/' + file
++            if Config.library_path:
++                file = Config.library_path + '/' + file
++
++            return file
+ 
+-        return file
++        return "@libclang@"
+ 
+     def get_cindex_library(self):
+         try:

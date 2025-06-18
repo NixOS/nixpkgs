@@ -56,6 +56,8 @@ stdenv.mkDerivation (final: {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+
   desktopItems = [
     (makeDesktopItem {
       name = "openterfaceQT";

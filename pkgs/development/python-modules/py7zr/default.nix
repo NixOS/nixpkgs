@@ -65,6 +65,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
   pythonImportsCheck = [
     "py7zr"
   ];

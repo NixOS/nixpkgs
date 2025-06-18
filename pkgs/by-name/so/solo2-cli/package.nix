@@ -7,6 +7,7 @@
   pkg-config,
   pcsclite,
   udev,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs =
@@ -42,6 +44,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doCheck = true;
+  doInstallCheck = true;
 
   buildFeatures = [ "cli" ];
 

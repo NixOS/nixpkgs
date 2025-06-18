@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     libimobiledevice-glue
   ];
 
+  doInstallCheck = true;
+
   preAutoreconf = ''
     export RELEASE_VERSION=${version}
   '';

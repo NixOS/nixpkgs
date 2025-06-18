@@ -7,6 +7,7 @@
   attrs,
   pythonOlder,
   pytest7CheckHook,
+  pytest-cov-stub,
   pytest-xdist,
   numpy,
 }:
@@ -29,13 +30,9 @@ buildPythonPackage rec {
     attrs
   ];
 
-  postPatch = ''
-    # remove coverage arguments to pytest
-    sed -i '/--cov/d' setup.cfg
-  '';
-
   nativeCheckInputs = [
     pytest7CheckHook
+    pytest-cov-stub
     pytest-xdist
     numpy
   ];

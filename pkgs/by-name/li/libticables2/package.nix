@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     "--enable-libusb10"
   ];
 
+  doInstallCheck = true;
+
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
     cat > $out/etc/udev/rules.d/69-libsane.rules << EOF

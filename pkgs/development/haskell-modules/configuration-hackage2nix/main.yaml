@@ -23,29 +23,24 @@
 # WARNING: We import a list of default-package-overrides from stackage which is
 # tracked in stackage.yaml. Adding conflicting overrides with stackage here will
 # not work.
+# keep-sorted start skip_lines=1 case=no numeric=yes
 default-package-overrides:
-  # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
-  - ghc-bignum == 1.0
-  - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
   - chs-cabal < 0.1.1.2 # Incompatible with Cabal < 3.12
-  # 2024-08-17: Stackage doesn't contain hnix-store-core >= 0.8 yet, so we need to restrict hnix-store-remote
-  - hnix-store-remote < 0.7
   # 2024-12-23: last version to be compatible with Stackage LTS 22/23 (due to data-default)
   - diagrams-input < 0.1.4
-  # 2024-12-31: last version that's compatible with GHC < 9.9
-  - htree < 0.2.0.0
+  - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
+  # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
+  - ghc-bignum == 1.0
+  # 2024-08-17: Stackage doesn't contain hnix-store-core >= 0.8 yet, so we need to restrict hnix-store-remote
+  - hnix-store-remote < 0.7
   # 2025-01-17: need to match stackage version of hosc
   - hsc3 < 0.21
+  # 2024-12-31: last version that's compatible with GHC < 9.9
+  - htree < 0.2.0.0
+# keep-sorted end
 
+# keep-sorted start skip_lines=1 case=no numeric=yes
 extra-packages:
-  - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
-  - Cabal == 3.10.*
-  - Cabal == 3.12.*                     # version required for cabal-install and other packages
-  - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
-  - Cabal-syntax == 3.8.*               # version required for ormolu and fourmolu on ghc 9.0
-  - Cabal-syntax == 3.10.*
-  - Cabal-syntax == 3.12.*              # version required for cabal-install and other packages
-  - ShellCheck == 0.9.0                 # 2024-03-21: pinned by haskell-ci
   - aeson < 2                           # required by pantry-0.5.2
   - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
   - ansi-terminal < 1.1                 # 2025-02-27: required for ghcjs
@@ -53,6 +48,13 @@ extra-packages:
   - ansi-wl-pprint >= 0.6 && < 0.7      # 2024-03-23: required for ghcjs
   - apply-refact == 0.9.*               # 2022-12-12: needed for GHC < 9.2
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
+  - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
+  - Cabal == 3.10.*
+  - Cabal == 3.12.*                     # version required for cabal-install and other packages
+  - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
+  - Cabal-syntax == 3.8.*               # version required for ormolu and fourmolu on ghc 9.0
+  - Cabal-syntax == 3.10.*
+  - Cabal-syntax == 3.12.*              # version required for cabal-install and other packages
   - commonmark-pandoc < 0.2.3           # 2025-04-06: Needed for pandoc 3.6
   - extensions == 0.1.0.2               # 2024-10-20: for GHC 9.10/Cabal 3.12
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
@@ -109,6 +111,7 @@ extra-packages:
   - primitive-unlifted == 0.1.3.1       # 2024-03-16: preserve for ghc 9.2
   - retrie < 1.2.0.0                    # 2022-12-30: preserve for ghc < 9.2
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
+  - ShellCheck == 0.9.0                 # 2024-03-21: pinned by haskell-ci
   - simple-get-opt < 0.5                # 2025-05-01: for crux-0.7.2
   - stylish-haskell == 0.14.4.0         # 2022-09-19: preserve for ghc 9.0
   - stylish-haskell == 0.14.5.0         # 2025-04-14: needed for hls with ghc-lib 9.6
@@ -119,7 +122,9 @@ extra-packages:
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
+# keep-sorted end
 
+# keep-sorted start skip_lines=1 case=no
 package-maintainers:
   abbradar:
     - Agda
@@ -193,12 +198,12 @@ package-maintainers:
     - hevm
   athas:
     - futhark
+  bdesham:
+    - pinboard-notes-backup
   berberman:
     - nvfetcher
     - arch-web
     - uusi
-  bdesham:
-    - pinboard-notes-backup
   cdepillabout:
     - cloudy
     - password
@@ -350,6 +355,27 @@ package-maintainers:
     - tz
     - weeder
     - witch
+  mpscholten:
+    - ihp-hsx
+    - push-notify-apn
+    - hs-pkpass
+    - raven-haskell
+    - stripe-concepts
+    - stripe-signature
+    - http2-client
+    - zip
+    - currencies
+    - string-random
+    - inflections
+    - pcre-heavy
+    - mmark
+    - mmark-ext
+    - typerep-map
+    - minio-hs
+    - smtp-mail
+    - pdftotext
+    - warp-systemd
+    - amazonka
   ncfavier:
     - irc-client
     - lambdabot
@@ -504,24 +530,6 @@ package-maintainers:
     - rest-rewrite
   terlar:
     - nix-diff
-  turion:
-    - Agda
-    - cabal-gild
-    - dunai
-    - essence-of-live-coding
-    - essence-of-live-coding-gloss
-    - essence-of-live-coding-pulse
-    - essence-of-live-coding-quickcheck
-    - essence-of-live-coding-warp
-    - finite-typelits
-    - has-transformers
-    - monad-bayes
-    - monad-schedule
-    - pulse-simple
-    - rhine
-    - rhine-gloss
-    - simple-affine-space
-    - time-domain
   thielema:
     - accelerate-arithmetic
     - accelerate-fftw
@@ -640,35 +648,34 @@ package-maintainers:
     - magico
     - resistor-cube
     - linear-circuit
+  turion:
+    - Agda
+    - cabal-gild
+    - dunai
+    - essence-of-live-coding
+    - essence-of-live-coding-gloss
+    - essence-of-live-coding-pulse
+    - essence-of-live-coding-quickcheck
+    - essence-of-live-coding-warp
+    - finite-typelits
+    - has-transformers
+    - monad-bayes
+    - monad-schedule
+    - pulse-simple
+    - rhine
+    - rhine-gloss
+    - simple-affine-space
+    - time-domain
   utdemir:
     - nix-tree
-  zowoq:
-    - ShellCheck
-  mpscholten:
-    - ihp-hsx
-    - push-notify-apn
-    - hs-pkpass
-    - raven-haskell
-    - stripe-concepts
-    - stripe-signature
-    - http2-client
-    - zip
-    - currencies
-    - string-random
-    - inflections
-    - pcre-heavy
-    - mmark
-    - mmark-ext
-    - typerep-map
-    - minio-hs
-    - smtp-mail
-    - pdftotext
-    - warp-systemd
-    - amazonka
   wolfgangwalther:
     - postgres-websockets
     - postgrest
+  zowoq:
+    - ShellCheck
+# keep-sorted end
 
+# keep-sorted start skip_lines=1 case=no
 unsupported-platforms:
   Allure:                                       [ platforms.darwin ]
   bdcs-api:                                     [ platforms.darwin ]
@@ -677,12 +684,13 @@ unsupported-platforms:
   bustle:                                       [ platforms.darwin ] # uses glibc-specific ptsname_r
   bytelog:                                      [ platforms.darwin ] # due to posix-api
   camfort:                                      [ aarch64-linux ]
-  chalkboard:                                   [ platforms.darwin ] # depends on Codec-Image-DevIL
   chalkboard-viewer:                            [ platforms.darwin ] # depends on chalkboard
+  chalkboard:                                   [ platforms.darwin ] # depends on Codec-Image-DevIL
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
   Codec-Image-DevIL:                            [ platforms.darwin ] # depends on mesa
   coinor-clp:                                   [ aarch64-linux ] # aarch64-linux is not supported by required system dependency clp
   cut-the-crap:                                 [ platforms.darwin ]
+  emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
   essence-of-live-coding-PortMidi:              [ platforms.darwin ]
   Euterpea:                                     [ platforms.darwin ]
   follow-file:                                  [ platforms.darwin ]
@@ -691,16 +699,16 @@ unsupported-platforms:
   fuzzytime:                                    [ platforms.darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
   ghc-gc-hook:                                  [ platforms.darwin ] # requires C11 threads which Apple doesn't support
   gi-adwaita:                                   [ platforms.darwin ]
-  gi-dbusmenugtk3:                              [ platforms.darwin ]
   gi-dbusmenu:                                  [ platforms.darwin ]
+  gi-dbusmenugtk3:                              [ platforms.darwin ]
   gi-ggit:                                      [ platforms.darwin ]
   gi-gtk-layer-shell:                           [ platforms.darwin ] # depends on gtk-layer-shell which is not supported on darwin
   gi-ibus:                                      [ platforms.darwin ]
   gi-javascriptcore:                            [ platforms.darwin ] # webkitgtk marked broken on darwin
   gi-ostree:                                    [ platforms.darwin ]
   gi-vte:                                       [ platforms.darwin ]
-  gi-webkit2webextension:                       [ platforms.darwin ] # webkitgtk marked broken on darwin
   gi-webkit2:                                   [ platforms.darwin ] # webkitgtk marked broken on darwin
+  gi-webkit2webextension:                       [ platforms.darwin ] # webkitgtk marked broken on darwin
   gi-wnck:                                      [ platforms.darwin ]
   gl:                                           [ platforms.darwin ] # depends on mesa
   GLHUI:                                        [ platforms.darwin ] # depends on mesa
@@ -718,6 +726,7 @@ unsupported-platforms:
   iwlib:                                        [ platforms.darwin ]
   Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
   jsaddle-webkit2gtk:                           [ platforms.darwin ]
+  kmonad:                                       [ platforms.darwin ]
   Kulitta:                                      [ platforms.darwin ] # depends on Euterpea
   LambdaHack:                                   [ platforms.darwin ]
   large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
@@ -730,10 +739,10 @@ unsupported-platforms:
   lio-fs:                                       [ platforms.darwin ]
   logging-facade-journald:                      [ platforms.darwin ]
   longshot:                                     [ aarch64-linux ]
-  mpi-hs:                                       [ aarch64-linux, platforms.darwin ]
   mpi-hs-binary:                                [ aarch64-linux, platforms.darwin ]
   mpi-hs-cereal:                                [ aarch64-linux, platforms.darwin ]
   mpi-hs-store:                                 [ aarch64-linux, platforms.darwin ]
+  mpi-hs:                                       [ aarch64-linux, platforms.darwin ]
   mplayer-spot:                                 [ aarch64-linux, platforms.darwin ]
   mptcp-pm:                                     [ platforms.darwin ]
   netlink:                                      [ platforms.darwin ]
@@ -746,8 +755,8 @@ unsupported-platforms:
   persist-state:                                [ aarch64-linux, armv7l-linux ] # https://github.com/minad/persist-state/blob/6fd68c0b8b93dec78218f6d5a1f4fa06ced4e896/src/Data/PersistState.hs#L122-L128
   piyo:                                         [ platforms.darwin ]
   PortMidi-simple:                              [ platforms.darwin ]
-  PortMidi:                                     [ platforms.darwin ]
   portmidi-utility:                             [ platforms.darwin ]
+  PortMidi:                                     [ platforms.darwin ]
   posix-api:                                    [ platforms.darwin ]
   Raincat:                                      [ platforms.darwin ]
   reactive-balsa:                               [ platforms.darwin ] # depends on alsa-core
@@ -765,16 +774,15 @@ unsupported-platforms:
   spade:                                        [ platforms.darwin ] # depends on sdl2-mixer, which doesn't work on darwin
   synthesizer-alsa:                             [ platforms.darwin ]
   taffybar:                                     [ platforms.darwin ]
-  twirl:                                        [ platforms.darwin ] # depends on sdl2-mixer
-  emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
   termonad:                                     [ platforms.darwin ]
   tokyotyrant-haskell:                          [ platforms.darwin ]
+  twirl:                                        [ platforms.darwin ] # depends on sdl2-mixer
   Unixutils-shadow:                             [ platforms.darwin ]
   verifiable-expressions:                       [ aarch64-linux ]
   vrpn:                                         [ platforms.darwin ]
+  vulkan-utils:                                 [ platforms.darwin ]
   vulkan:                                       [ i686-linux, armv7l-linux, platforms.darwin ]
   VulkanMemoryAllocator:                        [ i686-linux, armv7l-linux, platforms.darwin ]
-  vulkan-utils:                                 [ platforms.darwin ]
   webkit2gtk3-javascriptcore:                   [ platforms.darwin ]
   wiringPi:                                     [ aarch64-darwin ]
   xattr:                                        [ platforms.darwin ]
@@ -783,13 +791,14 @@ unsupported-platforms:
   xmonad-extras:                                [ platforms.darwin ]
   xmonad-volume:                                [ platforms.darwin ]
   xnobar:                                       [ platforms.darwin ]
-  kmonad:                                       [ platforms.darwin ]
+# keep-sorted end
 
+# keep-sorted start skip_lines=1 case=no
 supported-platforms:
-  AWin32Console:                                [ platforms.windows ]
   alsa-mixer:                                   [ platforms.linux ]
   alsa-pcm:                                     [ platforms.linux ]
   alsa-seq:                                     [ platforms.linux ]
+  AWin32Console:                                [ platforms.windows ]
   barbly:                                       [ platforms.darwin ]
   bindings-parport:                             [ platforms.linux ] # parport is a linux kernel component
   blake3:                                       [ platforms.x86 ] # uses x86 intrinsics
@@ -804,24 +813,24 @@ supported-platforms:
   dx9d3d:                                       [ platforms.windows ]
   dx9d3dx:                                      [ platforms.windows ]
   erebos-tester:                                [ platforms.linux ] # depends on linux-namespaces
-  evdev:                                        [ platforms.linux ]
   evdev-streamly:                               [ platforms.linux ]
-  geomancy:                                     [ platforms.x86 ] # x86 intrinsics
+  evdev:                                        [ platforms.linux ]
   geomancy-layout:                              [ platforms.x86 ] # x86 intrinsics
-  gi-gtkosxapplication:                         [ platforms.darwin ]
+  geomancy:                                     [ platforms.x86 ] # x86 intrinsics
   ghcjs-base:                                   [ javascript-ghcjs ]
   ghcjs-dom-javascript:                         [ javascript-ghcjs ]
+  gi-gtkosxapplication:                         [ platforms.darwin ]
   gtk-mac-integration:                          [ platforms.darwin ]
   gtk3-mac-integration:                         [ platforms.darwin ]
   halide-haskell:                               [ platforms.linux ]
   halide-JuicyPixels:                           [ platforms.linux ]
   hb3sum:                                       [ platforms.x86 ] # due to blake3
+  HFuse:                                        [ platforms.linux ]
   hommage-ds:                                   [ platforms.windows ]
   hpapi:                                        [ platforms.linux ] # limited by pkgs.papi
-  hsignal:                                      [ platforms.x86 ] # -msse2
-  HFuse:                                        [ platforms.linux ]
   HQu:                                          [ platforms.x86 ] # vendored C++ library needs i686/x86_64
   hs-swisstable-hashtables-class:               [ platforms.x86_64 ] # depends on swisstable, which Needs AVX2
+  hsignal:                                      [ platforms.x86 ] # -msse2
   htune:                                        [ platforms.linux ] # depends on alsa-pcm
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
   inline-asm:                                   [ platforms.x86 ] # x86 assembler
@@ -865,12 +874,13 @@ supported-platforms:
   Win32-extras:                                 [ platforms.windows ]
   Win32-junction-point:                         [ platforms.windows ]
   Win32-notify:                                 [ platforms.windows ]
-  Win32:                                        [ platforms.windows ]
   Win32-security:                               [ platforms.windows ]
-  Win32-services:                               [ platforms.windows ]
   Win32-services-wrapper:                       [ platforms.windows ]
+  Win32-services:                               [ platforms.windows ]
+  Win32:                                        [ platforms.windows ]
   XInput:                                       [ platforms.windows ]
   yesod-auth-simple:                            [ platforms.x86 ] # requires scrypt which only supports x86
+# keep-sorted end
 
 dont-distribute-packages:
   # Depends on shine, which is a ghcjs project.

@@ -62,6 +62,7 @@
   desktop-file-utils,
   egl-wayland,
   graphene,
+  udevCheckHook,
   wayland,
   wayland-protocols,
 }:
@@ -115,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     xorgserver
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -185,6 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   separateDebugInfo = true;
+
+  doInstallCheck = true;
 
   passthru = {
     libdir = "${finalAttrs.finalPackage}/lib/mutter-14";
