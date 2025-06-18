@@ -201,7 +201,7 @@ jobs:
                       pull_number: pull_request.number
                     }))
                     .filter(review => review.state == 'APPROVED')
-                    .map(review => review.user.id)
+                    .map(review => review.user?.id)
                   )
 
                   const maintainers = new Set(Object.keys(
