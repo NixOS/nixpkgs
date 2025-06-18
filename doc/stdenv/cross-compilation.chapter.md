@@ -2,7 +2,7 @@
 
 ## Introduction {#sec-cross-intro}
 
-"Cross-compilation" means compiling a program on one machine for another type of machine. For example, a typical use of cross-compilation is to compile programs for embedded devices. These devices often don't have the computing power and memory to compile their own programs. One might think that cross-compilation is a fairly niche concern. However, there are significant advantages to rigorously distinguishing between build-time and run-time environments! Significant, because the benefits apply even when one is developing and deploying on the same machine. Nixpkgs is increasingly adopting the opinion that packages should be written with cross-compilation in mind, and Nixpkgs should evaluate in a similar way (by minimizing cross-compilation-specific special cases) whether or not one is cross-compiling.
+"Cross-compilation" means compiling a program on one machine for another type of machine. For example, a typical use of cross-compilation is to compile programs for embedded devices. These devices often don't have the computing power and memory to compile their own programs. One might think that cross-compilation is a fairly niche concern. However, there are significant advantages to rigorously distinguishing between build-time and run-time environments! Significant, because the benefits apply even when one is developing and deploying on the same machine. Nixpkgs adopts the opinion that packages should be written with cross-compilation in mind, and Nixpkgs should evaluate in a similar way (by minimizing cross-compilation-specific special cases) whether or not one is cross-compiling.
 
 This chapter will be organized in three parts. First, it will describe the basics of how to package software in a way that supports cross-compilation. Second, it will describe how to use Nixpkgs when cross-compiling. Third, it will describe the internal infrastructure supporting cross-compilation.
 
@@ -70,15 +70,17 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 
 : This is, quite frankly, a dumping ground of ad-hoc settings (it's an attribute set). See `lib.systems.platforms` for examples—there's hopefully one in there that will work verbatim for each platform that is working. Please help us triage these flags and give them better homes!
 
+Using these attributes, the build process of a package can change depending on the situation.
+
 ### Theory of dependency categorization {#ssec-cross-dependency-categorization}
 
 ::: {.note}
 This is a rather philosophical description that isn't very Nixpkgs-specific. For an overview of all the relevant attributes given to `mkDerivation`, see [](#ssec-stdenv-dependencies). For a description of how everything is implemented, see [](#ssec-cross-dependency-implementation).
 :::
 
-In this section we explore the relationship between both runtime and build-time dependencies and the 3 Autoconf platforms.
+In this section we explore the relationship between both run-time and build-time dependencies and the 3 Autoconf platforms.
 
-A run time dependency between two packages requires that their host platforms match. This is directly implied by the meaning of "host platform" and "runtime dependency": The package dependency exists while both packages are running on a single host platform.
+A run time dependency between two packages requires that their host platforms match. This is directly implied by the meaning of "host platform" and "run-time dependency": The package dependency exists while both packages are running on a single host platform.
 
 A build time dependency, however, has a shift in platforms between the depending package and the depended-on package. "build time dependency" means that to build the depending package we need to be able to run the depended-on's package. The depending package's build platform is therefore equal to the depended-on package's host platform.
 
@@ -131,6 +133,9 @@ software floating point emulation.  `libgcc` would be a "target→ *" dependency
 
 Some frequently encountered problems when packaging for cross-compilation should be answered here. Ideally, the information above is exhaustive, so this section cannot provide any new information, but it is ludicrous and cruel to expect everyone to spend effort working through the interaction of many features just to figure out the same answer to the same common problem. Feel free to add to this list!
 
+#### How do I test cross-compilation using emulation? {#cross-qa-emulation}
+Compile the package and run `nix-shell -p qemu`, then run `qemu-system-<arch>` where `<arch>` is the architecture of interest.  Alternatively, Nixpkgs has some logic to dispatch to the right emulator, see [\#106375](https://github.com/NixOS/nixpkgs/issues/106375)
+
 #### My package fails to find a binutils command (`cc`/`ar`/`ld` etc.) {#cross-qa-fails-to-find-binutils}
 Many packages assume that an unprefixed binutils (`cc`/`ar`/`ld` etc.) is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefix. For instance, instead of `cc`, use `${stdenv.cc.targetPrefix}cc`.
 
@@ -156,7 +161,6 @@ Add the following to your `mkDerivation` invocation.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 }
 ```
-
 #### My package’s testsuite needs to run host platform code. {#cross-testsuite-runs-host-code}
 
 Add the following to your `mkDerivation` invocation.
