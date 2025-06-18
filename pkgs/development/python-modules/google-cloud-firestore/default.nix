@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.20.2";
+  version = "2.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_firestore";
     inherit version;
-    hash = "sha256-CtLjP6faC6j7fMwyT5HT9Xhmt3DiSEC9YvaicvdHxfk=";
+    hash = "sha256-DDf6qFBil/gn7vw4/rFVJHpty5pUEoljEBXRJfGwA/g=";
   };
 
   build-system = [ setuptools ];
