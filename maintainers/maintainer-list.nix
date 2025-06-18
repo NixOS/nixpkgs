@@ -3411,7 +3411,7 @@
     email = "bilgehankuch@gmail.com";
     name = "Bilgehan Kuş";
     github = "blghnks";
-    githubId = "175811412";
+    githubId = 175811412;
   };
   blinry = {
     name = "blinry";
