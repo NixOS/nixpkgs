@@ -967,6 +967,7 @@ let
       cargo
       rustc
     ];
+    gglinedensity = [ pkgs.cargo ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
     Rsymphony = [ pkgs.pkg-config ];
