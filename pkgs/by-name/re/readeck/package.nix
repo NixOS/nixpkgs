@@ -27,14 +27,14 @@ in
 
 buildGoModule rec {
   pname = "readeck";
-  version = "0.18.2";
+  version = "0.19.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "readeck";
     repo = "readeck";
     tag = version;
-    hash = "sha256-geKhug1sQ51i+6qw2LVzW8lXyvre6AlVHWvGlEXWki8=";
+    hash = "sha256-gTU1RMd6b1wLIqI8VGa1Fn8+ydhW76E8ft5du71E1zM=";
   };
 
   nativeBuildInputs = [
@@ -80,10 +80,10 @@ buildGoModule rec {
 
   npmDeps = fetchNpmDeps {
     src = "${src}/web";
-    hash = "sha256-3MVrzpilJKptT0iRBQx2Cl0iKVoOJu5cBT987U1/C1k=";
+    hash = "sha256-RkyQ7uY7OIpBY7ep2L2Ilq5abY0f91g2uqigdS64sL0=";
   };
 
-  vendorHash = "sha256-RjU3PW7GeMkQE0oHkI4EmFNr4HT3vRyFITUzYX9AHpw=";
+  vendorHash = "sha256-gqiK96FnfvRAzT0RUpYnT7HftZ1YV9jxbjstcKtGBho=";
 
   meta = {
     description = "Web application that lets you save the readable content of web pages you want to keep forever.";

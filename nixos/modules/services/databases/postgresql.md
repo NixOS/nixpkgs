@@ -21,7 +21,10 @@ To enable PostgreSQL, add the following to your {file}`configuration.nix`:
   services.postgresql.package = pkgs.postgresql_15;
 }
 ```
-Note that you are required to specify the desired version of PostgreSQL (e.g. `pkgs.postgresql_15`). Since upgrading your PostgreSQL version requires a database dump and reload (see below), NixOS cannot provide a default value for [](#opt-services.postgresql.package) such as the most recent release of PostgreSQL.
+
+The default PostgreSQL version is approximately the latest major version available on the NixOS release matching your [`system.stateVersion`](#opt-system.stateVersion).
+This is because PostgreSQL upgrades require a manual migration process (see below).
+Hence, upgrades must happen by setting [`services.postgresql.package`](#opt-services.postgresql.package) explicitly.
 
 <!--
 After running {command}`nixos-rebuild`, you can verify
