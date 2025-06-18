@@ -72,8 +72,8 @@ jobs:
               maxConcurrent: 1,
               // Hourly limit is at 5000, but other jobs need some, too!
               // https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
-              reservoir: 1000,
-              reservoirRefreshAmount: 1000,
+              reservoir: 500,
+              reservoirRefreshAmount: 500,
               reservoirRefreshInterval: 60 * 60 * 1000
             })
             // Pause between mutative requests
