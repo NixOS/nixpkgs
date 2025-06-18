@@ -11,3 +11,42 @@ index be365cfb8..204dcdc7b 100644
  #else
      template<typename R, typename... Types>
      constexpr ScriptFunctionPointer(Function<R, Types...> addr) : ScriptIdentity(addr), addr(addr) {}
+diff --git a/apps/openmw/mwstate/charactermanager.hpp b/apps/openmw/mwstate/charactermanager.hpp
+index 2daf73401..ad36d2f06 100644
+--- a/apps/openmw/mwstate/charactermanager.hpp
++++ b/apps/openmw/mwstate/charactermanager.hpp
+@@ -5,6 +5,8 @@
+ 
+ #include "character.hpp"
+ 
++#include <list>
++
+ namespace MWState
+ {
+     class CharacterManager
+diff --git a/components/myguiplatform/myguidatamanager.cpp b/components/myguiplatform/myguidatamanager.cpp
+index 0310e996b..3c4aeffa3 100644
+--- a/components/myguiplatform/myguidatamanager.cpp
++++ b/components/myguiplatform/myguidatamanager.cpp
+@@ -7,6 +7,8 @@
+ 
+ #include <components/debug/debuglog.hpp>
+ 
++#include <memory>
++
+ namespace osgMyGUI
+ {
+ 
+diff --git a/components/vfs/filesystemarchive.cpp b/components/vfs/filesystemarchive.cpp
+index 6eef4b93a..f0d172aa6 100644
+--- a/components/vfs/filesystemarchive.cpp
++++ b/components/vfs/filesystemarchive.cpp
+@@ -4,6 +4,8 @@
+ 
+ #include <components/debug/debuglog.hpp>
+ 
++#include <algorithm>
++
+ namespace VFS
+ {
+ 
