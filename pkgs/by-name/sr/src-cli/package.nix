@@ -25,10 +25,6 @@ buildGoModule rec {
     "cmd/src"
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-  ];
-
   ldflags = [
     "-s"
     "-w"
