@@ -10,26 +10,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libhwy";
-  version = "1.0.7";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "highway";
     rev = version;
-    hash = "sha256-Z+mAR9nSAbCskUvo6oK79Yd85bu0HtI2aR5THS1EozM=";
+    hash = "sha256-yJQH5ZkpEdJ6lsTAt6yJSN3TQnVoxNpkbChENaxhcHo=";
   };
 
-  patches =
-    lib.optional stdenv.hostPlatform.isRiscV
-      # Adds CMake option HWY_CMAKE_RVV
-      # https://github.com/google/highway/pull/1743
-      (
-        fetchpatch {
-          name = "libhwy-add-rvv-optout.patch";
-          url = "https://github.com/google/highway/commit/5d58d233fbcec0c6a39df8186a877329147324b3.patch";
-          hash = "sha256-ileSNYddOt1F5rooRB0fXT20WkVlnG+gP5w7qJdBuww=";
-        }
-      );
+  patches = [
+    (fetchpatch {
+      name = "disable-RVV-runtime-dispatch.patch";
+      url = "https://github.com/google/highway/commit/c95cc0237d2f7a0f5ca5dc3fb4b5961b2b1dcdfc.patch";
+      hash = "sha256-oQfyZrjZ9MGcSrFInbbj+0iOLjPng7tgTzli1QTITSg=";
+    })
+  ];
 
   hardeningDisable = lib.optionals stdenv.hostPlatform.isAarch64 [
     # aarch64-specific code gets:
