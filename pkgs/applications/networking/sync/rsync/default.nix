@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableOpenSSL openssl
     ++ lib.optional enableXXHash xxHash;
 
-  checkInputs = [ fakeroot ];
+  # fakeroot doesn't work well on darwin anymore, apparently
+  checkInputs = lib.optionals (!stdenv.isDarwin) [ fakeroot ];
 
   configureFlags =
     [
