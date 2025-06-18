@@ -86,6 +86,7 @@ let
         "libvirt"
         "lnd"
         "mail"
+        "mailman3"
         "mikrotik"
         "modemmanager"
         "mongodb"
