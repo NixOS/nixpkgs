@@ -9,6 +9,7 @@
   libarchive,
   libpcap,
   libslirp,
+  pipewire,
   pkg-config,
   qt6,
   stdenv,
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libpcap
+          pipewire
           wayland
         ]
       }"
