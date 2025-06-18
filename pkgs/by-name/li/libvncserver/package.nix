@@ -12,6 +12,7 @@
   systemd,
 
   enableShared ? !stdenv.hostPlatform.isStatic,
+  buildExamples ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
     (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+    (lib.cmakeBool "WITH_EXAMPLES" buildExamples)
   ];
 
   buildInputs =
