@@ -7,7 +7,7 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tbb";
   version = "2021.11.0";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneTBB";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zGZHMtAUVzBKFbCshpepm3ce3tW6wQ+F30kYYXAQ/TE=";
   };
 
@@ -93,10 +93,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Intel Thread Building Blocks C++ Library";
     homepage = "http://threadingbuildingblocks.org/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     longDescription = ''
       Intel Threading Building Blocks offers a rich and complete approach to
       expressing parallelism in a C++ program. It is a library that helps you
@@ -105,11 +105,11 @@ stdenv.mkDerivation rec {
       represents a higher-level, task-based parallelism that abstracts platform
       details and threading mechanisms for scalability and performance.
     '';
-    platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       silvanshade
       thoughtpolice
       tmarkus
     ];
   };
-}
+})
