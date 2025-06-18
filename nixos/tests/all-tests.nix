@@ -1398,6 +1398,7 @@ in
   tinydns = runTest ./tinydns.nix;
   tinyproxy = runTest ./tinyproxy.nix;
   tinywl = runTest ./tinywl.nix;
+  tlsrpt = runTest ./tlsrpt.nix;
   tmate-ssh-server = runTest ./tmate-ssh-server.nix;
   tomcat = runTest ./tomcat.nix;
   tor = runTest ./tor.nix;
