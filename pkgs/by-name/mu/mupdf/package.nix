@@ -233,7 +233,7 @@ stdenv.mkDerivation rec {
     '')
     + (lib.optionalString (enableX11 || enableGL) ''
       mkdir -p $bin/share/icons/hicolor/48x48/apps
-      cp docs/logo/mupdf-icon-48.png $bin/share/icons/hicolor/48x48/apps
+      cp docs/logo/mupdf-icon-48.png $bin/share/icons/hicolor/48x48/apps/mupdf.png
     '')
     + (
       if enableGL then
