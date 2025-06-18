@@ -84,6 +84,13 @@ rec {
     By default, there is no separator, so option `-c` and value `5` would become ["-c" "5"].
     This is useful if the command requires equals, for example, `-c=5`.
 
+    `wrappingValueString`
+
+    : The string to surround an option's value with.
+    Values aren't quoted by default, so option `foo` and value `bar` would become ["--foo bar"]
+    This is useful if your value could be misinterpreted by your shell without quoting.
+    For example, if you wanted a result of `["--foo \"bar\" "]`, you could set `wrappingValueString` to a literal quote.
+
     # Examples
     :::{.example}
     ## `lib.cli.toGNUCommandLine` usage example
@@ -118,19 +125,32 @@ rec {
 
       mkList ? k: v: lib.concatMap (mkOption k) v,
 
+      optionValueSeparator ? null,
+
+      wrappingValueString ? "",
+
       mkOption ?
         k: v:
+        let
+          surroundedString =
+            wrappingValueString + lib.generators.mkValueStringDefault { } v + wrappingValueString;
+        in
         if v == null then
           [ ]
+        # We need the option and its value in different list elements, to play nice with `lib.escapeShellArgs`
         else if optionValueSeparator == null then
           [
             (mkOptionName k)
-            (lib.generators.mkValueStringDefault { } v)
+            surroundedString
           ]
         else
-          [ "${mkOptionName k}${optionValueSeparator}${lib.generators.mkValueStringDefault { } v}" ],
-
-      optionValueSeparator ? null,
+          [
+            (lib.concatStrings [
+              (mkOptionName k)
+              optionValueSeparator
+              surroundedString
+            ])
+          ],
     }:
     options:
     let
