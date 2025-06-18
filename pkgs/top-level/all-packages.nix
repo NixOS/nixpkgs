@@ -15975,7 +15975,9 @@ with pkgs;
 
   stellarium = qt6Packages.callPackage ../applications/science/astronomy/stellarium { };
 
-  tulip = libsForQt5.callPackage ../applications/science/misc/tulip { };
+  tulip = libsForQt5.callPackage ../applications/science/misc/tulip {
+    python3 = python312; # fails to build otherwise
+  };
 
   vite = libsForQt5.callPackage ../applications/science/misc/vite { };
 
