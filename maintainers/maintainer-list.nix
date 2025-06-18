@@ -7651,6 +7651,12 @@
     github = "ErinvanderVeen";
     githubId = 10973664;
   };
+  ern775 = {
+    email = "eren.demir2479090@gmail.com";
+    github = "ern775";
+    githubId = 188162351;
+    name = "Eren Demir";
+  };
   erooke = {
     email = "ethan@roo.ke";
     name = "Ethan Rooke";
