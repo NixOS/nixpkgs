@@ -4287,8 +4287,6 @@ with pkgs;
 
   wayback_machine_downloader = callPackage ../applications/networking/wayback_machine_downloader { };
 
-  radarr = callPackage ../servers/radarr { };
-
   radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
 
   rainbowstream = with python3.pkgs; toPythonApplication rainbowstream;
