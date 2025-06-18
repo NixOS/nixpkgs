@@ -5,10 +5,8 @@
   fetchFromGitHub,
   pkg-config,
   gitMinimal,
-  libgit2,
   openssl,
   versionCheckHook,
-  zlib,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,11 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libgit2
-    openssl
-    zlib
-  ];
+  buildInputs = [ (lib.getDev openssl) ];
 
   nativeCheckInputs = [ gitMinimal ];
 
@@ -43,7 +37,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/bgreenwell/lstr";
     changelog = "https://github.com/bgreenwell/lstr/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ philiptaron ];
+    maintainers = with lib.maintainers; [
+      DieracDelta
+      philiptaron
+    ];
     mainProgram = "lstr";
   };
 })
