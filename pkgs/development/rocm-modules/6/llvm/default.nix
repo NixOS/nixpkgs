@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  llvmPackages_18,
+  llvmPackages_20,
   overrideCC,
   rocm-device-libs,
   rocm-runtime,
@@ -28,7 +28,8 @@
 }:
 
 let
-  llvmPackagesNoBintools = llvmPackages_18.override {
+  llvmPackages_base = llvmPackages_20;
+  llvmPackagesNoBintools = llvmPackages_base.override {
     bootBintools = null;
     bootBintoolsNoLibc = null;
   };
@@ -37,7 +38,7 @@ let
   llvmStdenv = overrideCC llvmPackagesNoBintools.libcxxStdenv llvmPackagesNoBintools.clangUseLLVM;
   llvmLibstdcxxStdenv = overrideCC llvmPackagesNoBintools.stdenv (
     llvmPackagesNoBintools.libstdcxxClang.override {
-      inherit (llvmPackages_18) bintools;
+      inherit (llvmPackages_base) bintools;
     }
   );
   stdenvToBuildRocmLlvm = if useLibcxx then llvmStdenv else llvmLibstdcxxStdenv;
@@ -88,9 +89,9 @@ let
         ln -s $out $out/x86_64-unknown-linux-gnu
       '';
     };
-  version = "6.3.1";
+  version = "6.4.1";
   # major version of this should be the clang version ROCm forked from
-  rocmLlvmVersion = "18.0.0-${llvmSrc.rev}";
+  rocmLlvmVersion = "19.0.0-${llvmSrc.rev}";
   usefulOutputs =
     drv:
     builtins.filter (x: x != null) [
@@ -100,18 +101,17 @@ let
     ];
   listUsefulOutputs = builtins.concatMap usefulOutputs;
   llvmSrc = fetchFromGitHub {
-    # Performance improvements cherry-picked on top of rocm-6.3.x
-    # most importantly, amdgpu-early-alwaysinline memory usage fix
-    owner = "LunNova";
-    repo = "llvm-project-rocm";
-    rev = "4182046534deb851753f0d962146e5176f648893";
-    hash = "sha256-sPmYi1WiiAqnRnHVNba2nPUxGflBC01FWCTNLPlYF9c=";
+    # FIXME: Add patches currently in LunNova/llvm-project-rocm IF not upstreamed
+    owner = "ROCm";
+    repo = "llvm-project";
+    rev = "rocm-6.4.1";
+    hash = "sha256-84+ZsKjIhXip2yLU5jpoV53+ejxy2dzgamVU6AcAngU=";
   };
   llvmSrcFixed = llvmSrc;
   llvmMajorVersion = lib.versions.major rocmLlvmVersion;
   # An llvmPackages (pkgs/development/compilers/llvm/) built from ROCm LLVM's source tree
   # optionally using LLVM libcxx
-  llvmPackagesRocm = llvmPackages_18.override (_old: {
+  llvmPackagesRocm = llvmPackages_base.override (_old: {
     stdenv = stdenvToBuildRocmLlvm; # old.stdenv #llvmPackagesNoBintools.libcxxStdenv;
 
     # not setting gitRelease = because that causes patch selection logic to use git patches
@@ -163,6 +163,7 @@ let
     (
       (lib.strings.hasSuffix "add-nostdlibinc-flag.patch" (builtins.baseNameOf x))
       || (lib.strings.hasSuffix "clang-at-least-16-LLVMgold-path.patch" (builtins.baseNameOf x))
+      || (lib.strings.hasSuffix "gnu-install-dirs.patch" (builtins.baseNameOf x))
     );
   llvmTargetsFlag = "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${
     {
@@ -192,6 +193,17 @@ rec {
   # llvm-orig = llvmPackagesRocm.llvm; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.llvm-orig
   # clang-orig = llvmPackagesRocm.clang; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.clang-orig
   llvm = (llvmPackagesRocm.llvm.override { ninja = emptyDirectory; }).overrideAttrs (old: {
+    # patches = [ ../../../compilers/llvm/19/clang/gnu-install-dirs.patch ]
+    #  ++ builtins.filter (x: !(lib.strings.hasSuffix "gnu-install-dirs.patch" x)) old.patches;
+    patches = old.patches ++ [
+      (fetchpatch {
+        name = "gold-plugin-fix.patch";
+        url = "https://github.com/llvm/llvm-project/commit/b0baa1d8bd68a2ce2f7c5f2b62333e410e9122a1.patch";
+        hash = "sha256-yly93PvGIXOnFeDGZ2W+W6SyhdWFM6iwA+qOeaptrh0=";
+        relative = "llvm";
+      })
+    ];
+    doCheck = false;
     dontStrip = profilableStdenv;
     nativeBuildInputs = old.nativeBuildInputs ++ [ removeReferencesTo ];
     buildInputs = old.buildInputs ++ [
@@ -379,12 +391,22 @@ rec {
             ]
             ++ lib.optionals (!useLibcxx) [
               # FIXME: Config file in rocmcxx instead of GCC_INSTALL_PREFIX?
+              # Expected to be fully removed eventually
+              "-DUSE_DEPRECATED_GCC_INSTALL_PREFIX=ON"
               "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
             ];
+          preInstall = ''
+            # HACK: for major version == 19 nixpkgs llbm expects this to exist, but rocm llvm uses $lib correctly
+            mkdir -p $lib/lib
+          '';
           postFixup =
             (old.postFixup or "")
             + ''
+              mv $out/lib/* $lib/lib/
+              rm -rf $out/lib
+              find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm} {} +
               find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
+              find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc.cc} {} +
               find $lib -type f -exec remove-references-to -t ${stdenv.cc} {} +
               find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
               find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
@@ -443,6 +465,7 @@ rec {
         relative = "compiler-rt";
       })
     ];
+    hardeningDisable = [ "fortify" ];
   });
   compiler-rt = compiler-rt-libc;
   bintools = wrapBintoolsWith {

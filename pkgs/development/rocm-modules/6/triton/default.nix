@@ -12,12 +12,12 @@
   (old: {
     doCheck = false;
     stdenv = rocmPackages.llvm.rocmClangStdenv;
-    version = "3.2.0";
+    version = "v3.3.1";
     src = fetchFromGitHub {
       owner = "triton-lang";
       repo = "triton";
-      rev = "9641643da6c52000c807b5eeed05edaec4402a67"; # "release/3.2.x";
-      hash = "sha256-V1lpARwOLn28ZHfjiWR/JJWGw3MB34c+gz6Tq1GOVfo=";
+      rev = "v3.3.1";
+      hash = "sha256-11lpARwOLn28ZHfjiWR/JJWGw3MB34c+gz6Tq1GOVfo=";
     };
     buildInputs = old.buildInputs ++ [
       rocmPackages.clr

@@ -54,13 +54,13 @@
 let
   # FIXME: cmake files need patched to include this properly
   cFlags = "-O3 -DNDEBUG -Wno-documentation-pedantic --offload-compress -I${hipblas-common}/include  -I${hipblas}/include -I${roctracer}/include -I${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
-  version = "6.3.3";
+  version = "6.4.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIOpen";
     rev = "rocm-${version}";
-    hash = "sha256-rX+BE6wBDMnLyc6eai3bDVvmfahomDO0s10n6HhWu7c=";
+    hash = "sha256-DEcVj2vOwIYYyNKEKFqZ0fb9o+/QRpwiSksxwnmgEMc=";
     fetchLFS = true;
     fetchSubmodules = true;
     # WORKAROUND: .lfsconfig is incorrectly set to exclude everything upstream

@@ -67,7 +67,7 @@ let
       rocminfo = self.callPackage ./rocminfo { };
 
       # Unfree
-      hsa-amd-aqlprofile-bin = self.callPackage ./hsa-amd-aqlprofile-bin { };
+      aqlprofile = self.callPackage ./aqlprofile { };
 
       rdc = self.callPackage ./rdc { };
 

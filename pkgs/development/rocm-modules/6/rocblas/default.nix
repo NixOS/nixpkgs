@@ -63,7 +63,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas${clr.gpuArchSuffix}";
-  version = "6.3.3";
+  version = "6.4.1";
 
   outputs = [
     "out"
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocBLAS";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-IYcrVcGH4yZDkFZeNOJPfG0qsPS/WiH0fTSUSdo1BH4=";
+    hash = "sha256-To5V5bydYR5iuUxkwpx79RrNdncvWmR/v/w9VnlKBq4=";
   };
 
   nativeBuildInputs =
