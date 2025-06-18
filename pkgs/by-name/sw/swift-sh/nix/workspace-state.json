@@ -1,0 +1,161 @@
+{
+  "object": {
+    "artifacts": [],
+    "dependencies": [
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "aexml",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/tadija/AEXML.git",
+          "name": "AEXML"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "38f7d00b23ecd891e1ee656fa6aeebd6ba04ecc3",
+            "version": "4.6.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "AEXML"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "cryptoswift",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/krzyzanowskim/CryptoSwift",
+          "name": "CryptoSwift"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "4b0565384d3c4c588af09e660535b2c7c9bf5b39",
+            "version": "1.4.2"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "CryptoSwift"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "legibleerror",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/mxcl/LegibleError",
+          "name": "LegibleError"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "3aeb15455edc0cd6ea0e8d562079db4ab9a25afc",
+            "version": "1.0.5"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "LegibleError"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "path.swift",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/mxcl/Path.swift",
+          "name": "Path.swift"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "9c6f807b0a76be0e27aecc908bc6f173400d839e",
+            "version": "1.4.0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "Path.swift"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "pathkit",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/kylef/PathKit.git",
+          "name": "PathKit"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "3bfd2737b700b9a36565a8c94f4ad2b050a5e574",
+            "version": "1.0.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "PathKit"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "spectre",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/kylef/Spectre.git",
+          "name": "Spectre"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "26cc5e9ae0947092c7139ef7ba612e34646086c7",
+            "version": "0.10.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "Spectre"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "streamreader",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/mxcl/StreamReader",
+          "name": "StreamReader"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "0cabaa9d539037da1b25b8cbe58a8ecafaedea67",
+            "version": "1.0.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "StreamReader"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "version",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/mxcl/Version",
+          "name": "Version"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "1fe824b80d89201652e7eca7c9252269a1d85e25",
+            "version": "2.0.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "Version"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "xcodeproj",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/tuist/xcodeproj",
+          "name": "XcodeProj"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "446f3a0db73e141c7f57e26fcdb043096b1db52c",
+            "version": "8.3.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "xcodeproj"
+      }
+    ]
+  },
+  "version": 6
+}
