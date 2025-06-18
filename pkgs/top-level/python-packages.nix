@@ -16436,6 +16436,8 @@ self: super: with self; {
     callPackage ../development/python-modules/snowflake-connector-python
       { };
 
+  snowflake-core = callPackage ../development/python-modules/snowflake-core { };
+
   snowflake-sqlalchemy = callPackage ../development/python-modules/snowflake-sqlalchemy { };
 
   snowplow-tracker = callPackage ../development/python-modules/snowplow-tracker { };
