@@ -15,6 +15,7 @@
   nix,
   jq,
   gnugrep,
+  podman,
 }:
 
 let
@@ -86,6 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.autoSignDarwinBinariesHook
     ];
+
+  buildInputs = [
+    podman
+  ];
 
   buildPhase = ''
     runHook preBuild
