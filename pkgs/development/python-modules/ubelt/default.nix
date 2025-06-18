@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ubelt";
-  version = "1.3.6";
+  version = "1.3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "Erotemic";
     repo = "ubelt";
     tag = "v${version}";
-    hash = "sha256-ygoJqyTscfuZVDGVbrZobZFvlcuF4HavTU65tmhyU+w=";
+    hash = "sha256-LGcCJCP3iBjwDxMN/qqkvcUt1ry5OMEJ9xqTp27rk0A=";
   };
 
   nativeBuildInputs = [
