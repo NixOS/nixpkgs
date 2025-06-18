@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "google-guest-configs";
-  version = "20211116.00";
+  version = "20250516.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-configs";
     rev = version;
-    sha256 = "sha256-0SRu6p/DsHNNI20mkXJitt/Ee5S2ooiy5hNmD+ndecM=";
+    sha256 = "sha256-DbAlP9+tIkjOhxSrcESG2x1pKLfmOaM65hY/ilotnMQ=";
   };
 
   binDeps = lib.makeBinPath [
