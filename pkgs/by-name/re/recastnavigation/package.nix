@@ -9,7 +9,7 @@
   catch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "recastai";
   # use latest revision for the CMake build process and OpenMW
   # OpenMW use e75adf86f91eb3082220085e42dda62679f9a3ea
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       # Expects SDL2.framework in specific location, which we don't have
       # Change where SDL2 headers are searched for to match what we do have
       substituteInPlace RecastDemo/CMakeLists.txt \
-        --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${SDL2.dev}/include/SDL2)'
+        --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${lib.getInclude SDL2}/include/SDL2)'
     '';
 
   doCheck = true;

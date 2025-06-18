@@ -25,7 +25,7 @@
 
 let
   pname = "faiss";
-  version = "1.10.0";
+  version = "1.11.0";
 
   inherit (cudaPackages) flags backendStdenv;
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     owner = "facebookresearch";
     repo = "faiss";
     tag = "v${version}";
-    hash = "sha256-TeoM8fKSZuV+2XnkwSz7dJh4piGU8mP1vQfCbRxJ3/Q=";
+    hash = "sha256-N8UkL+KS9Da6RtaHI9pY5gAzFtTSMJ9R5h4RSX9b1Ro=";
   };
 
   nativeBuildInputs =
@@ -106,6 +106,7 @@ stdenv.mkDerivation {
     description = "Library for efficient similarity search and clustering of dense vectors by Facebook Research";
     mainProgram = "demo_ivfpq_indexing";
     homepage = "https://github.com/facebookresearch/faiss";
+    changelog = "https://github.com/facebookresearch/faiss/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ SomeoneSerge ];

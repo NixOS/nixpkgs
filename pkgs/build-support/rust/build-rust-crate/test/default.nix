@@ -680,7 +680,7 @@ rec {
           # By default ".", meaning the top level directory is assumed.
           # Using null will trigger a search.
           workspace_member = null;
-          src = symlinkJoin rec {
+          src = symlinkJoin {
             name = "find-cargo-toml";
             paths = [
               (mkCargoToml { name = "ignoreMe"; })
@@ -736,7 +736,7 @@ rec {
       ) cases;
     in
     tests
-    // rec {
+    // {
 
       crateBinWithPathOutputs = assertOutputs {
         name = "crateBinWithPath";

@@ -8,26 +8,27 @@
 
 stdenv.mkDerivation rec {
   pname = "iotop-c";
-  version = "1.27";
+  version = "1.30";
 
   src = fetchFromGitHub {
     owner = "Tomas-M";
     repo = "iotop";
     rev = "v${version}";
-    sha256 = "sha256-o8OJnZjrDbzzhwfzRWmyCmhBWxMVKRDeDWWBCXy3C90=";
+    sha256 = "sha256-L0zChYDtlEi9tdHdNNWO0KugTorFIbYK0zDPNcLUMuo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ ncurses ];
+
   makeFlags = [
-    "DESTDIR=$(out)"
     "TARGET=iotop-c"
+    "PREFIX=${placeholder "out"}"
+    "BINDIR=${placeholder "out"}/bin"
   ];
 
   postInstall = ''
-    mv $out/usr/share/man/man8/{iotop,iotop-c}.8
-    ln -s $out/usr/sbin $out/bin
-    ln -s $out/usr/share $out/share
+    mv $out/share/man/man8/{iotop,iotop-c}.8
   '';
 
   meta = with lib; {

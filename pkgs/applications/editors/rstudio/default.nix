@@ -1,67 +1,63 @@
 {
   lib,
   stdenv,
-  runCommand,
-  fetchzip,
+
+  server ? false, # build server version
+
   fetchFromGitHub,
+  fetchNpmDeps,
+  fetchYarnDeps,
+  fetchzip,
   replaceVars,
-  cmake,
-  boost186,
-  zlib,
-  openssl,
-  R,
-  fontconfig,
-  quarto,
-  libuuid,
-  hunspellDicts,
+  runCommand,
+
   ant,
+  cacert,
+  cmake,
+  git,
   jdk,
-  gnumake,
-  pandoc,
-  llvmPackages,
-  yaml-cpp,
-  soci,
-  sqlite,
-  apple-sdk_11,
-  xcbuild,
+  makeWrapper,
   nodejs,
   npmHooks,
-  fetchNpmDeps,
+  xcbuild,
   yarn,
   yarnConfigHook,
-  fetchYarnDeps,
   zip,
-  git,
-  makeWrapper,
-  electron_33,
-  server ? false, # build server version
+
+  apple-sdk_11,
+  boost187,
+  electron_34,
+  fontconfig,
+  gnumake,
+  hunspellDicts,
+  libuuid,
+  llvmPackages,
+  openssl,
   pam,
+  pandoc,
+  quarto,
+  R,
+  soci,
+  sqlite,
+  zlib,
+
   nixosTests,
 }:
 
 let
-  # Note: we shouldn't use the latest electron here, since the node-abi dependency might
-  # need to be updated every time the latest electron gets a new abi version number
-  electron = electron_33;
-
-  # unpack tarball containing electron's headers
-  electron-headers = runCommand "electron-headers" { } ''
-    mkdir -p $out
-    tar -C $out --strip-components=1 -xvf ${electron.headers}
-  '';
+  electron = electron_34;
 
   mathJaxSrc = fetchzip {
     url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-27.zip";
     hash = "sha256-J7SZK/9q3HcXTD7WFHxvh++ttuCd89Vc4SEBrUEU0AI=";
   };
 
-  # Ideally, rev should match the rstudio release name.
-  # e.g. release/rstudio-mountain-hydrangea
+  # rev should ideally be the last commit of the release/rstudio-[codename] branch
   quartoSrc = fetchFromGitHub {
     owner = "quarto-dev";
     repo = "quarto";
-    rev = "bb264a572c6331d46abcf087748c021d815c55d7";
-    hash = "sha256-lZnZvioztbBWWa6H177X6rRrrgACx2gMjVFDgNup93g=";
+    rev = "8ee12b5d6bd49c7b212eae894bd011ffbeea1c48";
+    hash = "sha256-pTrWedYeG2SWQ4jl2fstKjsweWhj4aAvVDiSfkdU3No=";
   };
 
   hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
@@ -83,72 +79,125 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "RStudio";
-  version = "2024.04.2+764";
-
-  RSTUDIO_VERSION_MAJOR = lib.versions.major version;
-  RSTUDIO_VERSION_MINOR = lib.versions.minor version;
-  RSTUDIO_VERSION_PATCH = lib.versions.patch version;
-  RSTUDIO_VERSION_SUFFIX = "+" + toString (lib.tail (lib.splitString "+" version));
+  version = "2025.05.0+496";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     tag = "v${version}";
-    hash = "sha256-j258eW1MYQrB6kkpjyolXdNuwQ3zSWv9so4q0QLsZuw=";
+    hash = "sha256-yZy/fEYln/jGxErwJiWFgr9w0GvwtMwzpmmHf71chBQ=";
+  };
+
+  # sources fetched into _deps via cmake's FetchContent
+  extSrcs = stdenv.mkDerivation {
+    name = "${pname}-${version}-ext-srcs";
+    inherit src;
+
+    nativeBuildInputs = [
+      cacert
+      cmake
+      git
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      # this will fail, since this is not meant to be a cmake entrypoint
+      # but it will fetch the dependencies regardless
+      cmake -S src/cpp/ext -B build || true
+
+      mkdir -p "$out"
+      cp -r build/_deps/*-src "$out/"
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+
+      runHook postInstall
+    '';
+
+    dontConfigure = true;
+    dontBuild = true;
+    dontFixup = true;
+
+    outputHash = "sha256-YW+l0/RZf8ek217pfWTwsR4PTugMGHyW+vaZEwGjMas=";
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
   };
 
   nativeBuildInputs =
     [
       cmake
+      git
+
       ant
       jdk
+
       nodejs
       yarn
       yarnConfigHook
       zip
-      git
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xcbuild
+    ]
     ++ lib.optionals (!server) [
+      makeWrapper
       (nodejs.python.withPackages (ps: [ ps.setuptools ]))
       npmHooks.npmConfigHook
-      makeWrapper
     ];
 
   buildInputs =
     [
-      boost186
-      zlib
+      boost187
+      libuuid
       openssl
       R
-      libuuid
-      yaml-cpp
       soci
       sqlite.dev
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ]
-    ++ lib.optionals server [ pam ]
-    ++ lib.optionals (!server) [ fontconfig ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+    ]
+    ++ lib.optionals (!server) [
+      fontconfig
+    ]
+    ++ lib.optionals server [
+      pam
+      zlib
+    ];
 
   cmakeFlags =
     [
       (lib.cmakeFeature "RSTUDIO_TARGET" (if server then "Server" else "Electron"))
-      (lib.cmakeBool "RSTUDIO_USE_SYSTEM_SOCI" true)
+
+      # don't try fetching the external dependencies already fetched in extSrcs
+      (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+
       (lib.cmakeBool "RSTUDIO_USE_SYSTEM_BOOST" true)
-      (lib.cmakeBool "RSTUDIO_USE_SYSTEM_YAML_CPP" true)
+      (lib.cmakeBool "RSTUDIO_USE_SYSTEM_SOCI" true)
+
       (lib.cmakeBool "RSTUDIO_DISABLE_CHECK_FOR_UPDATES" true)
       (lib.cmakeBool "QUARTO_ENABLED" true)
+      (lib.cmakeBool "RSTUDIO_ENABLE_COPILOT" false) # copilot-language-server is unfree
       (lib.cmakeBool "RSTUDIO_CRASHPAD_ENABLED" false) # This is a NOOP except on x86_64-darwin
+
       (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (
-        (placeholder "out") + (if stdenv.isDarwin then "/Applications" else "/lib/rstudio")
+        (placeholder "out") + (if stdenv.hostPlatform.isDarwin then "/Applications" else "/lib/rstudio")
       ))
     ]
     ++ lib.optionals (!server) [
       (lib.cmakeBool "RSTUDIO_INSTALL_FREEDESKTOP" stdenv.hostPlatform.isLinux)
     ];
 
-  # on Darwin, cmake uses find_library to locate R instead of using the PATH
-  env.NIX_LDFLAGS = "-L${R}/lib/R/lib";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+    # on Darwin, cmake uses find_library to locate R instead of using the PATH
+    NIX_LDFLAGS = "-L${R}/lib/R/lib";
+
+    RSTUDIO_VERSION_MAJOR = lib.versions.major version;
+    RSTUDIO_VERSION_MINOR = lib.versions.minor version;
+    RSTUDIO_VERSION_PATCH = lib.versions.patch version;
+    RSTUDIO_VERSION_SUFFIX = "+" + toString (lib.tail (lib.splitString "+" version));
+  };
 
   patches = [
     # Hack RStudio to only use the input R and provided libclang.
@@ -159,28 +208,24 @@ stdenv.mkDerivation rec {
       libclang = lib.getLib llvmPackages.libclang;
     })
 
-    ./fix-resources-path.patch
     ./ignore-etc-os-release.patch
     ./dont-yarn-install.patch
-    ./boost-1.86.patch
     ./fix-darwin.patch
-    # needed for rebuilding for later electron versions
-    ./update-nan-and-node-abi.patch
   ];
 
   postPatch = ''
     # fix .desktop Exec field
     substituteInPlace src/node/desktop/resources/freedesktop/rstudio.desktop.in \
-      --replace-fail "''${CMAKE_INSTALL_PREFIX}/rstudio" "rstudio"
+      --replace-fail "\''${CMAKE_INSTALL_PREFIX}/rstudio" "rstudio"
 
     # set install path of freedesktop files
-    substituteInPlace src/{cpp,node}/desktop/CMakeLists.txt \
+    substituteInPlace src/node/desktop/CMakeLists.txt \
       --replace-fail "/usr/share" "$out/share"
   '';
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = quartoSrc + "/yarn.lock";
-    hash = "sha256-Qw8O1Jzl2EO0DEF3Jrw/cIT9t22zs3jyKgDA5XZbuGA=";
+    hash = "sha256-F+gqVNNhLmyrC+tJuElw7cpx5z/WLHOiYow/y86KR5c=";
   };
 
   dontYarnInstallDeps = true; # will call manually in preConfigure
@@ -190,17 +235,21 @@ stdenv.mkDerivation rec {
   # don't build native modules with node headers
   npmFlags = [ "--ignore-scripts" ];
 
+  makeCacheWritable = true;
+
   npmDeps = fetchNpmDeps {
     name = "rstudio-${version}-npm-deps";
     inherit src;
-    patches = [ ./update-nan-and-node-abi.patch ];
     postPatch = "cd ${npmRoot}";
-    hash = "sha256-CtHCN4sWeHNDd59TV/TgTC4d6h7X1Cl4E/aJkAfRk7g=";
+    hash = "sha256-ispV6FJdtOELtFNIZDn1lKbwvO/iTO8mrZ8nIOs2uhs=";
   };
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-
   preConfigure = ''
+    # populate the directories used by cmake's FetchContent
+    mkdir -p build/_deps
+    cp -r "$extSrcs"/* build/_deps
+    chmod -R u+w build/_deps
+
     # set up node_modules directory inside quarto so that panmirror can be built
     mkdir src/gwt/lib/quarto
     cp -r --no-preserve=all ${quartoSrc}/* src/gwt/lib/quarto
@@ -226,11 +275,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p dependencies/common/node
     # node used by cmake
-    # version in CMakeGlobals.txt (RSTUDIO_NODE_VERSION)
-    ln -s ${nodejs} dependencies/common/node/18.18.2
-    # node used at runtime
-    # version in CMakeGlobals.txt (RSTUDIO_INSTALLED_NODE_VERSION)
-    ln -s ${nodejs} dependencies/common/node/18.20.3
+    # version in cmake/globals.cmake (RSTUDIO_NODE_VERSION)
+    ln -s ${nodejs} dependencies/common/node/22.13.1
 
     ${lib.optionalString (!server) ''
       pushd $npmRoot
@@ -239,7 +285,7 @@ stdenv.mkDerivation rec {
         --replace-fail "npm ci && " ""
 
       # use electron's headers to make node-gyp compile against the electron ABI
-      export npm_config_nodedir="${electron-headers}"
+      export npm_config_nodedir="${electron.headers}"
 
       ### override the detected electron version
       substituteInPlace node_modules/@electron-forge/core-utils/dist/electron-version.js \
@@ -256,7 +302,7 @@ stdenv.mkDerivation rec {
       rm -r electron-dist
 
       # force @electron/packager to use our electron instead of downloading it
-      substituteInPlace node_modules/@electron/packager/src/index.js \
+      substituteInPlace node_modules/@electron/packager/dist/packager.js \
         --replace-fail "await this.getElectronZipPath(downloadOpts)" "'$(pwd)/electron.zip'"
 
       # Work around known nan issue for electron_33 and above
@@ -305,12 +351,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit server;
-    tests = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit (nixosTests) rstudio-server;
     };
   };
 
   meta = {
+    changelog = "https://github.com/rstudio/rstudio/tree/${src.rev}/version/news";
     description = "Set of integrated tools for the R language";
     homepage = "https://www.rstudio.com/";
     license = lib.licenses.agpl3Only;
@@ -320,6 +367,7 @@ stdenv.mkDerivation rec {
       tomasajt
     ];
     mainProgram = "rstudio" + lib.optionalString server "-server";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # rstudio-server on darwin is only partially supported by upstream
+    platforms = lib.platforms.linux ++ lib.optionals (!server) lib.platforms.darwin;
   };
 }

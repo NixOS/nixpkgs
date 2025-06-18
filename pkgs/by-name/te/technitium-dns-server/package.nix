@@ -4,18 +4,19 @@
   fetchFromGitHub,
   dotnetCorePackages,
   technitium-dns-server-library,
+  libmsquic,
   nixosTests,
   nix-update-script,
 }:
 buildDotnetModule rec {
   pname = "technitium-dns-server";
-  version = "13.2";
+  version = "13.6.0";
 
   src = fetchFromGitHub {
     owner = "TechnitiumSoftware";
     repo = "DnsServer";
     tag = "v${version}";
-    hash = "sha256-oxLMBs+XkzvlfSst6ZD56ZIgiXwm0Px8Tn3Trdd/6H8=";
+    hash = "sha256-2OSuLGWdaiiPxyW0Uvq736wHKa7S3CHv79cmZZ86GRE=";
     name = "${pname}-${version}";
   };
 
@@ -35,6 +36,10 @@ buildDotnetModule rec {
   postFixup = ''
     mv $out/bin/DnsServerApp $out/bin/technitium-dns-server
   '';
+
+  runtimeDeps = [
+    libmsquic
+  ];
 
   passthru.tests = {
     inherit (nixosTests) technitium-dns-server;

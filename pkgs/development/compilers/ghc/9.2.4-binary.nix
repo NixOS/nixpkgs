@@ -218,7 +218,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
   pname = "ghc-binary${binDistUsed.variantSuffix}";
 
@@ -341,6 +341,15 @@ stdenv.mkDerivation rec {
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # GHC tries to remove xattrs when installing to work around Gatekeeper
+  # (see https://gitlab.haskell.org/ghc/ghc/-/issues/17418). This step normally
+  # succeeds in nixpkgs because xattrs are not allowed in the store, but it
+  # can fail when a file has the `com.apple.provenance` xattr, and it can’t be
+  # modified (such as target of the symlink to `libiconv.dylib`).
+  # The `com.apple.provenance` xattr is a new feature of macOS as of macOS 13.
+  # See: https://eclecticlight.co/2023/03/13/ventura-has-changed-app-quarantine-with-a-new-xattr/
+  makeFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "XATTR=/does-not-exist" ];
 
   # Patch scripts to include runtime dependencies in $PATH.
   postInstall = ''
@@ -489,6 +498,6 @@ stdenv.mkDerivation rec {
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
-    maintainers = lib.teams.haskell.members;
+    teams = [ lib.teams.haskell ];
   };
 }

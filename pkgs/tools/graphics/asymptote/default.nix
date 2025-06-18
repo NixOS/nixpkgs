@@ -32,11 +32,10 @@
   curl,
   texinfo,
   texliveSmall,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.95";
+  version = "3.04";
   pname = "asymptote";
 
   outputs = [
@@ -49,14 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-FWBP0Cy23bxbgHUp0ub8YXyCWhhN0Ne3E5DFZ66seOc=";
+    hash = "sha256-+T0n2SX9C8Mz0Fb+vkny1x+TWETC+NN67MjfD+6Twys=";
   };
-
-  # https://github.com/vectorgraphics/asymptote/issues/513
-  postConfigure = lib.optionalString (stdenv.hostPlatform.isLinux) ''
-    substituteInPlace Makefile \
-      --replace-fail 'glew.o -lGLX' 'glew.o'
-  '';
 
   # override with TeX Live containers to avoid building sty, docs from source
   texContainer = null;
@@ -132,15 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
       libGLU
       libGL
       libglvnd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        OpenGL
-        GLUT
-        Cocoa
-      ]
-    );
+    ];
 
   dontWrapQtApps = true;
 

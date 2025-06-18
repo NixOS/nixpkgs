@@ -56,7 +56,7 @@ vimUtils.buildVimPlugin {
     ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
   '';
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Dependent on active fuzzy search state
     "sg.cody.fuzzy"
   ];

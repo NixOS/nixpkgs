@@ -6,6 +6,8 @@
   cmake,
   ncurses,
   SDL2,
+  libGL,
+  libX11,
 }:
 
 stdenv.mkDerivation {
@@ -31,6 +33,8 @@ stdenv.mkDerivation {
   buildInputs = [
     ncurses
     SDL2
+    libGL
+    libX11
   ];
 
   meta = with lib; {

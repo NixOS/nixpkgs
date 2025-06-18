@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kwok";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kwok";
     tag = "v${version}";
-    hash = "sha256-RVyXGPT30Fz+K1VdMneYldXvzHyimuCX406DMKOtUq4=";
+    hash = "sha256-gtDGkAXbNCWUVGL4+C6mOkWwrPcik6+nGEQNrjLb57U=";
   };
 
-  vendorHash = "sha256-xzFbcsL6pz91GFwjkriTMKlX2fgm2NMO9+H3lqH/C2c=";
+  vendorHash = "sha256-UNso+e/zYah0jApHZgWnQ3cUSV44HsMqPy4q4JMCyiA=";
 
   doCheck = false; # docker is need for test
 

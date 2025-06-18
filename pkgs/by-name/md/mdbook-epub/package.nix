@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "michael-f-bryan";
-    repo = pname;
+    repo = "mdbook-epub";
     tag = version;
     hash = "sha256-ddWClkeGabvqteVUtuwy4pWZGnarrKrIbuPEe62m6es=";
   };

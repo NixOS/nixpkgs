@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "asottile";
-    repo = pname;
+    repo = "editdistance-s";
     rev = "v${version}";
     sha256 = "0w2qd5b6a3c3ahd0xy9ykq4wzqk0byqwdqrr26dyn8j2425j46lg";
   };

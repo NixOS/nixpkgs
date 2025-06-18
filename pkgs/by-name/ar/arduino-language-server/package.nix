@@ -7,18 +7,18 @@
 
 buildGoModule rec {
   pname = "arduino-language-server";
-  version = "0.7.6";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "arduino-language-server";
     tag = version;
-    hash = "sha256-PmPGhbB1HqxZRK+f28SdZNh4HhE0oseYsdJuEAAk90I=";
+    hash = "sha256-twTbJ5SFbL4AIX+ffB0LdOYXUxh4SzmZguJSRdEo1lQ=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-tS6OmH757VDdViPHJAJAftQu+Y1YozE7gXkt5anDlT0=";
+  vendorHash = "sha256-wXArVPzYmuiivx+8M86rrvfKsvCMtkN3WgXQByr5fC4=";
 
   doCheck = false;
 
@@ -33,12 +33,12 @@ buildGoModule rec {
       "-extldflags '-static'"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Arduino Language Server based on Clangd to Arduino code autocompletion";
     mainProgram = "arduino-language-server";
     homepage = "https://github.com/arduino/arduino-language-server";
     changelog = "https://github.com/arduino/arduino-language-server/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ BattleCh1cken ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ BattleCh1cken ];
   };
 }

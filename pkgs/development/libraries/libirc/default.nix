@@ -6,7 +6,7 @@
   qtbase,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libirc";
   version = "unstable-2022-10-15";
 

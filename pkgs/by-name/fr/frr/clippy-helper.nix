@@ -15,7 +15,7 @@
 
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "frr-clippy-helper";
   version = frrVersion;
 

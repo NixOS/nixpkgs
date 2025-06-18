@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
       make -f Makefile.cmdline
     ''
     + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-      make -f Makefile.sharedlibrary
+      make INSTALL_PREFIX="$out" -f Makefile.sharedlibrary
     '';
 
   installPhase =
@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
       install -d $out/lib/pkgconfig
       install -d $out/include
-      make -f Makefile.sharedlibrary install INSTALL_PREFIX=$out
-      substituteAll ${./duktape.pc.in} $out/lib/pkgconfig/duktape.pc
+
+      make INSTALL_PREFIX="$out" -f Makefile.sharedlibrary install
     '';
 
   enableParallelBuilding = true;

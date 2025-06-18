@@ -11,14 +11,14 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = "auto-cpufreq";
     tag = "v${version}";
-    hash = "sha256-iDvgL5dQerQnu2ERKAWGvWppG7cQ/0uKEfVY93ItvO4=";
+    hash = "sha256-DEs6jbWYJFJgpaPtF5NT3DQs3erjzdm2brLNHpjrEPA=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,9 @@ python3Packages.buildPythonPackage rec {
       poetry-dynamic-versioning
       setuptools
       pyinotify
+      urwid
+      pyasyncore
+      requests
     ]
     ++ [ getent ];
 

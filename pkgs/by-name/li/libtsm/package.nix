@@ -7,7 +7,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libtsm";
   version = "4.0.2-unstable-2023-12-24";
 

@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 import tomllib
+from os.path import islink, realpath
 from pathlib import Path
 from typing import Any, TypedDict, cast
 from urllib.parse import unquote
@@ -194,11 +195,41 @@ def find_crate_manifest_in_tree(tree: Path, crate_name: str) -> Path:
 
 
 def copy_and_patch_git_crate_subtree(git_tree: Path, crate_name: str, crate_out_dir: Path) -> None:
+
+    # This function will get called by copytree to decide which entries of a directory should be copied
+    # We'll copy everything except symlinks that are invalid
+    def ignore_func(dir_str: str, path_strs: list[str]) -> list[str]:
+        ignorelist: list[str] = []
+
+        dir = Path(realpath(dir_str, strict=True))
+
+        for path_str in path_strs:
+            path = dir / path_str
+            if not islink(path):
+                continue
+
+            # Filter out cyclic symlinks and symlinks pointing at nonexistant files
+            try:
+                target_path = Path(realpath(path, strict=True))
+            except OSError:
+                ignorelist.append(path_str)
+                eprint(f"Failed to resolve symlink, ignoring: {path}")
+                continue
+
+            # Filter out symlinks that point outside of the current crate's base git tree
+            # This can be useful if the nix build sandbox is turned off and there is a symlink to a common absolute path
+            if not target_path.is_relative_to(git_tree):
+                ignorelist.append(path_str)
+                eprint(f"Symlink points outside of the crate's base git tree, ignoring: {path} -> {target_path}")
+                continue
+
+        return ignorelist
+
     crate_manifest_path = find_crate_manifest_in_tree(git_tree, crate_name)
     crate_tree = crate_manifest_path.parent
 
     eprint(f"Copying to {crate_out_dir}")
-    shutil.copytree(crate_tree, crate_out_dir)
+    shutil.copytree(crate_tree, crate_out_dir, ignore=ignore_func)
     crate_out_dir.chmod(0o755)
 
     with open(crate_manifest_path, "r") as f:

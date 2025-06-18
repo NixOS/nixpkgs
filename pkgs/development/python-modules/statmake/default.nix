@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "daltonmaag";
-    repo = pname;
+    repo = "statmake";
     tag = "v${version}";
     hash = "sha256-3BZ71JVvj7GCojM8ycu160viPj8BLJ1SiW86Df2fzsw=";
   };

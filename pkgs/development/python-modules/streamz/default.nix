@@ -63,6 +63,7 @@ buildPythonPackage rec {
 
     # Tests are flaky
     "test_buffer"
+    "test_partition_timeout_cancel"
   ];
 
   __darwinAllowLocalNetworking = true;

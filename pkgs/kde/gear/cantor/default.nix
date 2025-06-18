@@ -19,7 +19,9 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     shared-mime-info
+    qtwebengine
   ];
+
   extraBuildInputs = [
     qtsvg
     qttools

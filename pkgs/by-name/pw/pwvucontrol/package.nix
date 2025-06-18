@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   cargo,
   desktop-file-utils,
   meson,
@@ -31,22 +32,29 @@ let
       tag = version;
       hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
     };
+
+    patches = [
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/f4f495ee212c46611303dec9cd18996830d7f721.patch";
+        hash = "sha256-dxVlXFGyNvWKZBrZniFatPPnK+38pFGig7LGAsc6Ydc=";
+      })
+    ];
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pwvucontrol";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "pwvucontrol";
     tag = finalAttrs.version;
-    hash = "sha256-E3UfZO0R6WGeUffgGQ2ceHiG4hwIuFntTdCpojaWL8E=";
+    hash = "sha256-fmEXVUz3SerVgWijT/CAoelSUzq861AkBVjP5qwS0ao=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-uaRpaiVjxc0j4oDbmmwt8SPS7O7hWzoYO62jLYzHl1c=";
+    hash = "sha256-oQSH4P9WxvkXZ53KM5ZoRAZyQFt60Zz7guBbgT1iiBk=";
   };
 
   nativeBuildInputs = [

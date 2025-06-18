@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   google-auth,
   requests-oauthlib,
@@ -13,13 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "google_auth_oauthlib";
-    inherit version;
-    hash = "sha256-r9DK0JKi6qU82OgphVfW3hA0xstKdAUAtTV7ZIr5cmM=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-auth-library-python-oauthlib";
+    rev = "v${version}";
+    sha256 = "sha256-nkXS1vNsq7k30EmNHclRblsmGTMYuIAaHuaVDORqRmc=";
   };
 
   build-system = [ setuptools ];
@@ -57,7 +58,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
     changelog = "https://github.com/googleapis/google-auth-library-python-oauthlib/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ terlar ];
+    maintainers = with lib.maintainers; [
+      sarahec
+      terlar
+    ];
     mainProgram = "google-oauthlib-tool";
   };
 }

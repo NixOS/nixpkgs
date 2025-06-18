@@ -6,6 +6,7 @@
   djangorestframework,
   djangorestframework-simplejwt,
   fetchFromGitHub,
+  fetchpatch,
   python,
   responses,
   setuptools,
@@ -23,6 +24,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-bus7Sf5H4PA5YFrkX7hbALOq04koDz3KTO42hHFJPhw=";
   };
+
+  patches = [
+    # See https://github.com/iMerica/dj-rest-auth/pull/683
+    (fetchpatch {
+      name = "djangorestframework-simplejwt_5.5_compatibility.patch";
+      url = "https://github.com/iMerica/dj-rest-auth/commit/cc5587e4e3f327697709f3f0d491650bff5464e7.diff";
+      hash = "sha256-2LahibxuNECAfjqsbNs2ezaWt1VH0ZBNwSNWCZwIe8I=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

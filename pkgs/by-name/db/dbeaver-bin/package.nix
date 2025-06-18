@@ -10,14 +10,14 @@
   wrapGAppsHook3,
   gtk3,
   glib,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   glib-networking,
   override_xmx ? "1024m",
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "24.3.5";
+  version = "25.1.0";
 
   src =
     let
@@ -30,10 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-Kt+CPPgeqKMxZZeWG3NjNKdlcQFyS9NvEaAQSI9c5CI=";
-        aarch64-linux = "sha256-9O0BhsrhVMpf3FMzqZeaNrCKdSscsOrLmo6Mq42aRLU=";
-        x86_64-darwin = "sha256-4uZrlgjHJz7zOgGn7mTRtz/qjlvzBglXAVcjf7SDmCs=";
-        aarch64-darwin = "sha256-Hm9215hcoNEc/amTQ9mBX2wl95aTCF1/T+5crctbaeA=";
+        x86_64-linux = "sha256-Bpc4p6WNFdc6nwVeZI4THETzODfNUj2SouEgOhDFTkk=";
+        aarch64-linux = "sha256-mqeG/Vzn/5qsBoD7U6i/6GxXBUvP+55pC1U1wBKF1T0=";
+        x86_64-darwin = "sha256-3RoJGvOafuKRo9dn+m8J274O06F8YUWx1YAcRMQb/Qs=";
+        aarch64-darwin = "sha256-11VbGnZz2fDtG5LRQZWnQdXCT7qrIia22aO+5nA/LQE=";
       };
     in
     fetchurl {
@@ -63,7 +63,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preInstall = ''
     # most directories are for different architectures, only keep what we need
     shopt -s extglob
-    pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_5.15.0.v20240915-2000/com/sun/jna/
+    pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_*/com/sun/jna/
     rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
     popd
   '';
@@ -83,16 +83,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             lib.makeLibraryPath [
               gtk3
               glib
-              webkitgtk_4_0
+              webkitgtk_4_1
               glib-networking
             ]
           }"
 
         mkdir -p $out/share/icons/hicolor/256x256/apps
-        # for some reason it's missing from the aarch64 build
-        if [ -e $out/opt/dbeaver/dbeaver.png ]; then
-          ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
-        fi
+        ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
 
         mkdir -p $out/share/applications
         ln -s $out/opt/dbeaver/dbeaver-ce.desktop $out/share/applications/dbeaver.desktop

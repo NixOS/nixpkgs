@@ -48,7 +48,12 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImporeCheck = [ "polyfactory" ];
+  disabledTests = [
+    # Unsupported type: LiteralAlias
+    "test_type_alias"
+  ];
+
+  pythonImportsCheck = [ "polyfactory" ];
 
   meta = {
     homepage = "https://polyfactory.litestar.dev/";

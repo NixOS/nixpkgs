@@ -1,54 +1,48 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-anthropic,
   anthropic,
   pytestCheckHook,
   pytest-asyncio,
   pytest-recording,
-  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "llm-anthropic";
-  version = "0.14.1";
+  version = "0.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-anthropic";
     tag = version;
-    hash = "sha256-tKgcag8sBJA4QWunaFyZxkZH0mtc0SS17104YuX1Kac=";
+    hash = "sha256-2fatBKZMttC5flzfC7MWCpduc3m6IOVWZiW1K2dYqis=";
   };
 
   build-system = [
     setuptools
+  ];
+
+  dependencies = [
+    anthropic
     llm
   ];
-  dependencies = [ anthropic ];
-
-  # Otherwise tests will fail to create directory
-  # Permission denied: '/homeless-shelter'
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-recording
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "llm_anthropic" ];
 
-  passthru.updateScript = nix-update-script { };
-
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-anthropic;
 
   meta = {
     description = "LLM access to models by Anthropic, including the Claude series";

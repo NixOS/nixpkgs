@@ -159,18 +159,25 @@ in
         Group = config.users.users.wakapi.group;
 
         DynamicUser = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        PrivateDevices = true;
         ProtectHome = true;
         ProtectHostname = true;
+        ProtectClock = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        NoNewPrivileges = true;
         ProtectProc = "invisible";
-        ProtectSystem = "strict";
+        ProtectSystem = "full";
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
           "AF_UNIX"
         ];
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

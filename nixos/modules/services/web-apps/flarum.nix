@@ -196,6 +196,10 @@ in
       }
     ];
 
+    systemd.services."phpfpm-flarum" = {
+      restartTriggers = [ cfg.package ];
+    };
+
     systemd.services.flarum-install = {
       description = "Flarum installation";
       requiredBy = [ "phpfpm-flarum.service" ];

@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "pymilvus";
-  version = "2.5.4";
+  version = "2.5.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milvus-io";
     repo = "pymilvus";
     tag = "v${version}";
-    hash = "sha256-w7ZsBXmmkCp3K+YaitZXPHK5pxh/dSJm8aR7xM0VrfU=";
+    hash = "sha256-O8037LYuR6PX57s78OawPFyPrIi0ZFRX2vV3lC+wT0I=";
   };
 
   build-system = [
@@ -81,7 +81,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python SDK for Milvus";
     homepage = "https://github.com/milvus-io/pymilvus";
-    changelog = "https://github.com/milvus-io/pymilvus/releases/tag/v${version}";
+    changelog = "https://github.com/milvus-io/pymilvus/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };

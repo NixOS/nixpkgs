@@ -11,7 +11,6 @@
   avrlibc,
   libGLU,
   libGL,
-  GLUT,
 }:
 
 let
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
     libglut
     libGLU
     libGL
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin GLUT;
+  ];
 
   # remove forbidden references to $TMPDIR
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''

@@ -15,7 +15,7 @@
   shared-mime-info,
   stdenv,
   unzip,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   zlib,
 }:
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
           glib
           gtk3
           libXtst
-          webkitgtk_4_0
+          webkitgtk_4_1
         ])
       } \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     libXtst
     zlib
     shared-mime-info
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   dontBuild = true;

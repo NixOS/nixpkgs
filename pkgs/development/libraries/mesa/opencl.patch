@@ -13,8 +13,8 @@ index c150bff74ff..37fa7f0531b 100644
  
 diff --git a/meson_options.txt b/meson_options.txt
 index 82324617884..4bde97a8568 100644
---- a/meson_options.txt
-+++ b/meson_options.txt
+--- a/meson.options
++++ b/meson.options
 @@ -738,3 +738,10 @@ option(
      'none', 'dri2'
    ],

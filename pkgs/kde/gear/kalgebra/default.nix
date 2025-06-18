@@ -8,6 +8,8 @@
 mkKdeDerivation {
   pname = "kalgebra";
 
+  extraNativeBuildInputs = [ qtwebengine ];
+
   extraBuildInputs = [
     qtsvg
     qtwebengine

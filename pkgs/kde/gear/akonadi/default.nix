@@ -1,13 +1,12 @@
 {
   lib,
   mkKdeDerivation,
-  qttools,
   accounts-qt,
   kaccounts-integration,
   shared-mime-info,
   xz,
   mariadb,
-  postgresql,
+  libpq,
   sqlite,
   backend ? "mysql",
 }:
@@ -32,11 +31,10 @@ mkKdeDerivation {
       "-DMYSQLD_SCRIPTS_PATH=${lib.getBin mariadb}/bin"
     ]
     ++ lib.optionals (backend == "postgres") [
-      "-DPOSTGRES_PATH=${lib.getBin postgresql}/bin"
+      "-DPOSTGRES_PATH=${lib.getBin libpq}/bin"
     ];
 
   extraNativeBuildInputs = [
-    qttools
     shared-mime-info
   ];
 
@@ -47,7 +45,7 @@ mkKdeDerivation {
       xz
     ]
     ++ lib.optionals (backend == "mysql") [ mariadb ]
-    ++ lib.optionals (backend == "postgres") [ postgresql ]
+    ++ lib.optionals (backend == "postgres") [ libpq ]
     ++ lib.optionals (backend == "sqlite") [ sqlite ];
 
   # Hardcoded as a QString, which is UTF-16 so Nix can't pick it up automatically
@@ -60,6 +58,6 @@ mkKdeDerivation {
       echo "${mariadb}" > $out/nix-support/depends
     ''
     + lib.optionalString (backend == "postgres") ''
-      echo "${postgresql}" > $out/nix-support/depends
+      echo "${libpq}" > $out/nix-support/depends
     '';
 }

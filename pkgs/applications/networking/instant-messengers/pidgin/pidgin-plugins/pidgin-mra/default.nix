@@ -6,7 +6,7 @@
   pidgin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pidgin-mra";
   version = "unstable-2014-07-08";
 

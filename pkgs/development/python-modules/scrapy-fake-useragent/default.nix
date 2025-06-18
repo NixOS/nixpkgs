@@ -12,7 +12,7 @@
   scrapy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "scrapy-fake-useragent";
   version = "1.4.4";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # PyPi tarball is corrupted
   src = fetchFromGitHub {
     owner = "alecxe";
-    repo = pname;
+    repo = "scrapy-fake-useragent";
     rev = "59c20d38c58c76618164760d546aa5b989a79b8b"; # no tags
     hash = "sha256-khQMOQrrdHokvNqfaMWqXV7AzwGxTuxaLsZoLkNpZ3k=";
   };

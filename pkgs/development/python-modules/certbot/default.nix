@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "3.1.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-lYGJgUNDzX+bE64GJ+djdKR+DXmhpcNbFJrAEnP86yQ=";
+    hash = "sha256-GS4JLLXrX4+BQ4S6ySbOHUaUthCFYTCHWnOaMpfnIj8=";
   };
 
   postPatch = "cd certbot"; # using sourceRoot would interfere with patches
@@ -84,14 +84,12 @@ buildPythonPackage rec {
     '';
 
   meta = with lib; {
-    # AttributeError: module 'josepy' has no attribute 'ComparableX509'
-    broken = lib.versionAtLeast josepy.version "2";
     homepage = "https://github.com/certbot/certbot";
     changelog = "https://github.com/certbot/certbot/blob/${src.tag}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
     mainProgram = "certbot";
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
     license = with licenses; [ asl20 ];
   };
 }

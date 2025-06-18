@@ -5,7 +5,7 @@
   cmake,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "cmake";
   inherit (cmake) version;
   format = "pyproject";

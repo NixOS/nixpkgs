@@ -2,7 +2,6 @@
   stdenv,
   lib,
   requireFile,
-  wrapQtAppsHook,
   autoPatchelfHook,
   unixtools,
   fakeroot,
@@ -31,20 +30,7 @@
   gdk-pixbuf,
   gtk3,
   pango,
-  # Qt 6 subpackages
-  qtbase,
-  qtserialport,
-  qtserialbus,
-  qtvirtualkeyboard,
-  qtmultimedia,
-  qt3d,
-  mlt,
-  qtlocation,
-  qtwebengine,
-  qtquick3d,
-  qtwayland,
-  qtwebview,
-  qtscxml,
+  qt6Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     unixtools.script
     fakeroot
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     autoPatchelfHook
     mailcap
     libudev0-shim
@@ -102,20 +88,20 @@ stdenv.mkDerivation (finalAttrs: {
       gtk3
       pango
       # Qt stuff
-      qt3d
-      mlt
-      qtbase
+      qt6Packages.qt3d
+      qt6Packages.mlt
+      qt6Packages.qtbase
       #qtgamepad
-      qtserialport
-      qtserialbus
-      qtvirtualkeyboard
-      qtmultimedia
-      qtlocation
-      qtwebengine
-      qtquick3d
-      qtwayland
-      qtwebview
-      qtscxml
+      qt6Packages.qtserialport
+      qt6Packages.qtserialbus
+      qt6Packages.qtvirtualkeyboard
+      qt6Packages.qtmultimedia
+      qt6Packages.qtlocation
+      qt6Packages.qtwebengine
+      qt6Packages.qtquick3d
+      qt6Packages.qtwayland
+      qt6Packages.qtwebview
+      qt6Packages.qtscxml
     ]
     ++ (with xorg; [
       libX11

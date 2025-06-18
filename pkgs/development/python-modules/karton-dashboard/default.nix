@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
-    repo = pname;
+    repo = "karton-dashboard";
     tag = "v${version}";
     hash = "sha256-VzBC7IATF8QBtTXMv4vmorAzBlImEsayjenQ2Uz5jIo=";
   };

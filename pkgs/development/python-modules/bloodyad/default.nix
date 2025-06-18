@@ -2,13 +2,13 @@
   lib,
   asn1crypto,
   buildPythonPackage,
+  certipy,
   cryptography,
   dnspython,
   fetchFromGitHub,
-  gssapi,
   hatchling,
-  ldap3,
-  msldap,
+  minikerberos-bad,
+  msldap-bad,
   pyasn1,
   pytestCheckHook,
   pythonOlder,
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "bloodyad";
-  version = "2.1.8";
+  version = "2.1.18";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,15 @@ buildPythonPackage rec {
     owner = "CravateRouge";
     repo = "bloodyAD";
     tag = "v${version}";
-    hash = "sha256-CggC7Cdw++Rgp6U4zK3er+ctBbfsxtxow9gFkYvIDds=";
+    hash = "sha256-4/5cAYt3IhRxbd8bSXlyvCOCMLIJjWxWnke0vslyD2Y=";
   };
+
+  pythonRelaxDeps = [ "cryptography" ];
+
+  pythonRemoveDeps = [
+    "minikerberos-bad"
+    "msldap-bad"
+  ];
 
   build-system = [ hatchling ];
 
@@ -35,24 +42,27 @@ buildPythonPackage rec {
     asn1crypto
     cryptography
     dnspython
-    gssapi
-    ldap3
-    msldap
-    pyasn1
+    minikerberos-bad
+    msldap-bad
     winacl
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    certipy
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bloodyAD" ];
 
   disabledTests = [
     # Tests require network access
+    "test_kerberos_authentications"
     "test_01AuthCreateUser"
     "test_02SearchAndGetChildAndGetWritable"
     "test_03UacOwnerGenericShadowGroupPasswordDCSync"
     "test_04ComputerRbcdGetSetAttribute"
     "test_06AddRemoveGetDnsRecord"
+    "test_certificate_authentications"
   ];
 
   meta = with lib; {

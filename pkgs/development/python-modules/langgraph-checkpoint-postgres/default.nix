@@ -2,33 +2,38 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenvNoCC,
+
+  # build system
+  poetry-core,
+
+  # dependencies
   langgraph-checkpoint,
-  langgraph-sdk,
-  orjson,
+  ormsgpack,
   psycopg,
   psycopg-pool,
-  poetry-core,
-  pythonOlder,
+
+  # testing
   pgvector,
   postgresql,
   postgresqlTestHook,
   pytestCheckHook,
   pytest-asyncio,
-  stdenvNoCC,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-postgres";
-  version = "2.0.15";
+  version = "2.0.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointpostgres==${version}";
-    hash = "sha256-8JNPKaaKDM7VROd1n9TDALN6yxKRz1CuAultBcqBMG0=";
+    hash = "sha256-hl1EBOtUkSfHGxsM+LOZPLSvkW7hdHS08klpvA7/Bd0=";
   };
 
   postgresqlTestSetupPost = ''
@@ -43,7 +48,7 @@ buildPythonPackage rec {
 
   dependencies = [
     langgraph-checkpoint
-    orjson
+    ormsgpack
     psycopg
     psycopg-pool
   ];
@@ -79,21 +84,20 @@ buildPythonPackage rec {
     "test_vector_search_with_filters"
     "test_vector_search_pagination"
     "test_vector_search_edge_cases"
+    # Flaky under a parallel build (database in use)
+    "test_store_ttl"
   ];
 
   pythonImportsCheck = [ "langgraph.checkpoint.postgres" ];
 
-  passthru = {
-    updateScript = langgraph-sdk.updateScript;
-
-    # multiple tags confuse the bulk updater
-    skipBulkUpdate = true;
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "checkpointpostgres==";
   };
 
   meta = {
     description = "Library with a Postgres implementation of LangGraph checkpoint saver";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-postgres";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpointpostgres==${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       drupol

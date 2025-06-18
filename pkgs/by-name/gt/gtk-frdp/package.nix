@@ -9,21 +9,21 @@
   gobject-introspection,
   glib,
   gtk3,
-  freerdp3,
+  freerdp,
   fuse3,
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gtk-frdp";
-  version = "0-unstable-2024-12-23";
+  version = "0-unstable-2025-03-14";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
-    rev = "46ca0beb9b5bf8c9b245a596231016bcca9baf6b";
-    sha256 = "zRC3YVe2WwOmVzEDaJwsct3YQ4ZbvYTr2CTyRmfCXFY=";
+    repo = "gtk-frdp";
+    rev = "a0187fa02e1ff249e9583e8c09a2c2f5915ce2a3";
+    hash = "sha256-oi4Iwi9/elfUDKK0IhoNgtS8ORIzVUBagqBVdNRxGjI=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    freerdp3
+    freerdp
     fuse3
   ];
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gtk-frdp";
     description = "RDP viewer widget for GTK";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
   };

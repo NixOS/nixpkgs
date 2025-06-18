@@ -16,11 +16,12 @@
   setuptools,
   simplejson,
   tabulate,
+  tldextract,
 }:
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.22.1";
+  version = "1.24.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "infobyte";
     repo = "faraday_plugins";
     tag = version;
-    hash = "sha256-F1yIZ76MVxom1qqU76D3QwpStlN3g9AIshsIs4ynaDI=";
+    hash = "sha256-CTBEerFfqE9zRTe6l7IDKXOP+WVEPYdNMuMk2PBkkdw=";
   };
 
   postPatch = ''
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     requests
     simplejson
     tabulate
+    tldextract
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -74,7 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Security tools report parsers for Faraday";
     homepage = "https://github.com/infobyte/faraday_plugins";
-    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${version}";
+    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${src.tag}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "faraday-plugins";

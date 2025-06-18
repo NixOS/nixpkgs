@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "tabcmd";
-  version = "2.0.17";
+  version = "2.0.18";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7qVh8FSor6ZcHGMB/h25RQjMIOwCUgKfr+QDuGa7mas=";
+    hash = "sha256-erGngJ3CW+c3PuVq4BTrPGSZ2L/M0EykSoZocku0lOE=";
   };
 
   prePatch = ''
@@ -90,7 +90,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tabcmd" ];
 
   meta = with lib; {
-    broken = true;
     description = "Command line client for working with Tableau Server";
     homepage = "https://github.com/tableau/tabcmd";
     changelog = "https://github.com/tableau/tabcmd/releases/tag/v${version}";

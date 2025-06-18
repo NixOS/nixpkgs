@@ -9,7 +9,6 @@
   openssh,
   hwloc,
   python3,
-  darwin,
   # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
   # these libraries currently build so this argument is ignored on Darwin.
   ch4backend,
@@ -82,8 +81,7 @@ stdenv.mkDerivation rec {
       hwloc
     ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) ch4backend
-    ++ lib.optional pmixSupport pmix
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Foundation;
+    ++ lib.optional pmixSupport pmix;
 
   # test_double_serializer.test fails on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

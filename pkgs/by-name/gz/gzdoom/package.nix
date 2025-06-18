@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
-  version = "4.14.1";
+  version = "4.14.2";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "gzdoom";
     rev = "g${version}";
     fetchSubmodules = true;
-    hash = "sha256-Hrqi2xpyMGcTJ2rI59EpcEtoJ+gCGmwEy+F396M3f/4=";
+    hash = "sha256-kYw+r08v/Q/hphJuvjn38Dj5mZRijE6pWKoEZBlN5P4=";
   };
 
   outputs = [ "out" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "doc" ];

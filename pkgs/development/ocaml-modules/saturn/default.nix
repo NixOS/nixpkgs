@@ -11,7 +11,7 @@
   qcheck-stm,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "saturn";
 
   inherit (saturn_lockfree) src version;

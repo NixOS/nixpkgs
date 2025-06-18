@@ -24,7 +24,7 @@
   syntax-highlighting,
   libmtp,
   libssh,
-  openexr_3,
+  openexr,
   libtirpc,
   phonon,
   qtsvg,
@@ -71,7 +71,7 @@ mkDerivation {
     syntax-highlighting
     libmtp
     libssh
-    openexr_3
+    openexr
     libtirpc
     phonon
     qtsvg

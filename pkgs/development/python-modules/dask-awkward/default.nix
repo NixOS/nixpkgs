@@ -17,7 +17,6 @@
   pyarrow,
 
   # tests
-  dask-histogram,
   distributed,
   hist,
   pandas,
@@ -27,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2025.2.0";
+  version = "2025.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
     tag = version;
-    hash = "sha256-hhAY2cPUOYnP86FGsLvxlMeoEwY+sTrjPMKyuZrO0/M=";
+    hash = "sha256-TLMT7YxedBUfz05F8wTsS5LQ9LyBbcUhQENM8C7Xric=";
   };
 
   build-system = [
@@ -73,12 +72,11 @@ buildPythonPackage rec {
     "test_basic_root_works"
     # Flaky. https://github.com/dask-contrib/dask-awkward/issues/506.
     "test_distance_behavior"
-  ];
 
-  disabledTestPaths = [
-    # TypeError: Blockwise.__init__() got an unexpected keyword argument 'dsk'
-    # https://github.com/dask-contrib/dask-awkward/issues/557
-    "tests/test_str.py"
+    # RuntimeError: Attempting to use an asynchronous Client in a synchronous context of `dask.compute`
+    # https://github.com/dask-contrib/dask-awkward/issues/573
+    "test_persist"
+    "test_ravel_fail"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -86,7 +84,7 @@ buildPythonPackage rec {
   meta = {
     description = "Native Dask collection for awkward arrays, and the library to use it";
     homepage = "https://github.com/dask-contrib/dask-awkward";
-    changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${version}";
+    changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };

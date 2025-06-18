@@ -13,7 +13,7 @@
   typing,
 }:
 
-rec {
+{
   /*
     Upstream isn't interested in packaging this as a library
     (or accepting all of the patches we need to do so).

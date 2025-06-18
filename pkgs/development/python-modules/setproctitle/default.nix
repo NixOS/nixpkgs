@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "setproctitle";
-  version = "1.3.4";
+  version = "1.3.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O0DTKj4fBOlCMe1t/uDankO0+ca1RQ1T5t13VMNODFA=";
+    hash = "sha256-yfMrlscAuzhPM/fPB5VLtgnTXdgnUs71f7LuCWhAkWk=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -2,8 +2,8 @@
   bash,
   cargo,
   fetchFromGitHub,
-  hatch,
   lib,
+  nix-update-script,
   python3Packages,
   rustPlatform,
   scdoc,
@@ -13,18 +13,18 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "umu-launcher-unwrapped";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "Open-Wine-Components";
     repo = "umu-launcher";
     tag = version;
-    hash = "sha256-bZ6Ywc524NrapkFrwFiWbqmVe1j0hunEH9YKrYQ8R2E=";
+    hash = "sha256-DkfB78XhK9CXgN/OpJZTjwHB7IcLC4h2HM/1JW42ZO0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-nU4xZn9NPd7NgexiaNYLdo4BCbH98duZ07XYeUiceP0=";
+    hash = "sha256-JhNErFDJsM20BhgIgJSUBeNzAst8f+s1NzpLfl2m2es=";
   };
 
   nativeCheckInputs = [
@@ -34,9 +34,10 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = [
     cargo
-    hatch
     python3Packages.build
     python3Packages.installer
+    python3Packages.hatchling
+    python3Packages.hatch-vcs
     rustPlatform.cargoSetupHook
     scdoc
   ];
@@ -82,6 +83,8 @@ python3Packages.buildPythonPackage rec {
     # Fails with AssertionError: SystemExit not raised
     "test_parse_args_noopts"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Unified launcher for Windows games on Linux using the Steam Linux Runtime and Tools";

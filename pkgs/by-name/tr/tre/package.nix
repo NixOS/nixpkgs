@@ -4,7 +4,6 @@
   fetchFromGitHub,
   autoconf,
   automake,
-  darwin,
   gettext,
   libiconv,
   libtool,

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "korfuri";
-    repo = pname;
+    repo = "django-prometheus";
     rev = "v${version}";
     hash = "sha256-JiLH+4mmNdb9BN81J5YFiMPna/3gaKUK6ARjmCa3fE8=";
   };

@@ -1,10 +1,10 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   pcre2,
   sqlite,
-  ncurses,
   readline,
   zlib,
   bzip2,
@@ -19,51 +19,70 @@
   cargo,
   rustPlatform,
   rustc,
+  libunistring,
+  prqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lnav";
-  version = "0.12.3";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
-    rev = "v${version}";
-    sha256 = "sha256-m0r7LAo9pYFpS+oimVCNCipojxPzMMsLLjhjkitEwow=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XS3/km2sJwRnWloLKu9X9z07+qBFRfUsaRpZVYjoclI=";
   };
 
+  patches = [
+    # fixes lnav in tmux by patching vendored dependency notcurses
+    # https://github.com/tstack/lnav/issues/1390
+    # remove on next release
+    (fetchpatch {
+      url = "https://github.com/tstack/lnav/commit/5e0bfa483714f05397265a690960d23ae22e1838.patch";
+      hash = "sha256-dArPJik9KVI0KQjGw8W11oqGrbsBCNOr93gaH3yDPpo=";
+    })
+  ];
+
   enableParallelBuilding = true;
+
   separateDebugInfo = true;
 
   strictDeps = true;
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [
-    autoconf
-    automake
-    zlib
-    curl.dev
-    re2c
-    cargo
-    rustPlatform.cargoSetupHook
-    rustc
-  ];
+
+  nativeBuildInputs =
+    [
+      autoconf
+      automake
+      zlib
+      curl.dev
+      re2c
+    ]
+    ++ lib.optionals prqlSupport [
+      cargo
+      rustPlatform.cargoSetupHook
+      rustc
+    ];
+
   buildInputs =
     [
       bzip2
-      ncurses
       pcre2
       readline
       sqlite
       curl
       libarchive
+      libunistring
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       gpm
     ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    src = "${src}/src/third-party/prqlc-c";
-    hash = "sha256-jfmr6EuNW2mEHTEVHn6YnBDMzKxKI097vEFHXC4NT2Y=";
+    src = "${finalAttrs.src}/src/third-party/prqlc-c";
+    hash = "sha256-svi+C3ELw6Ly0mtji8xOv+DDqR0z5shFNazHa3kDQVg=";
   };
 
   cargoRoot = "src/third-party/prqlc-c";
@@ -74,7 +93,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tstack/lnav";
     description = "Logfile Navigator";
     longDescription = ''
@@ -87,14 +106,13 @@ stdenv.mkDerivation rec {
       will allow the user to quickly and efficiently zero in on problems.
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       dochang
       symphorien
       pcasaretto
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "lnav";
   };
-
-}
+})

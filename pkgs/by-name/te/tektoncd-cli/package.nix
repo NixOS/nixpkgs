@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "tektoncd-cli";
-  version = "0.40.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-LcYd8v6+at/GqlEV2Qkj5g+WNiTBfnQuhDtpP7lmnuk=";
+    sha256 = "sha256-X+zFYPoHf8Q1K0bLjrsnwOZxxAeJCzgKqmr3FYK5AKA=";
   };
 
   vendorHash = null;
@@ -59,7 +59,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tekton.dev";
     changelog = "https://github.com/tektoncd/cli/releases/tag/v${version}";
     description = "Provides a CLI for interacting with Tekton - tkn";
@@ -69,8 +69,8 @@ buildGoModule rec {
       Tekton CLI, tkn, together with the core component of Tekton, Tekton
       Pipelines.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jk
       mstrangfeld
       vdemeester

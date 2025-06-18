@@ -45,6 +45,7 @@
   # Test dependencies
   cxxtest,
   ruby,
+  ctestCheckHook,
 }:
 
 assert builtins.any (g: guiModule == g) [
@@ -151,28 +152,19 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [
     cxxtest
     ruby
+    ctestCheckHook
   ];
 
-  # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
-  checkPhase =
-    let
-      disabledTests =
-        # PortChecker is non-deterministic. It's fixed in the master
-        # branch, but backporting would require an update to rtosc, so
-        # we'll just disable it until the next release.
-        [ "PortChecker" ]
-
-        # Tests fail on aarch64
-        ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-          "MessageTest"
-          "UnisonTest"
-        ];
-    in
-    ''
-      runHook preCheck
-      ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
-      runHook postCheck
-    '';
+  disabledTests =
+    # PortChecker is non-deterministic. It's fixed in the master
+    # branch, but backporting would require an update to rtosc, so
+    # we'll just disable it until the next release.
+    [ "PortChecker" ]
+    # Tests fail on aarch64
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      "MessageTest"
+      "UnisonTest"
+    ];
 
   # Use Zyn-Fusion logo for zest build
   # An SVG version of the logo isn't hosted anywhere we can fetch, I

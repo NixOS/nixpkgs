@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchurl,
+  cmake,
   intltool,
   pkg-config,
   portaudio,
@@ -14,36 +15,35 @@
   alsa-lib,
   gsl,
   libpng,
-  sfml,
+  sfml_2,
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-  libpulseaudio ? null,
+  libpulseaudio,
   useQt ? false,
   qtbase ? null,
   wrapQtAppsHook ? null,
   # can be turned off if used as a library
   useGtk ? true,
-  gtk3 ? null,
+  gtk3,
   wrapGAppsHook3 ? null,
 }:
 
-assert pulseaudioSupport -> libpulseaudio != null;
-
-stdenv.mkDerivation rec {
-  version = "2.1.0";
+stdenv.mkDerivation (finalAttrs: {
   pname = "guvcview";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${version}.tar.bz2";
-    hash = "sha256-PZPkyfq40aepveGm278E1s+dNHwTS1EotFhqHZC2PPs=";
+    url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-0q3HznYpYehTw+FrURutYVBEktEvPi634w2kovet5a8=";
   };
 
   nativeBuildInputs =
     [
       intltool
       pkg-config
+      cmake
     ]
-    ++ lib.optionals (useGtk) [ wrapGAppsHook3 ]
-    ++ lib.optionals (useQt) [ wrapQtAppsHook ];
+    ++ lib.optionals useGtk [ wrapGAppsHook3 ]
+    ++ lib.optionals useQt [ wrapQtAppsHook ];
 
   buildInputs =
     [
@@ -56,26 +56,27 @@ stdenv.mkDerivation rec {
       udev
       gsl
       libpng
-      sfml
+      sfml_2
     ]
-    ++ lib.optionals (pulseaudioSupport) [ libpulseaudio ]
-    ++ lib.optionals (useGtk) [ gtk3 ]
-    ++ lib.optionals (useQt) [
+    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+    ++ lib.optionals useGtk [ gtk3 ]
+    ++ lib.optionals useQt [
       qtbase
     ];
+
   configureFlags =
     [
       "--enable-sfml"
     ]
-    ++ lib.optionals (useGtk) [ "--enable-gtk3" ]
-    ++ lib.optionals (useQt) [ "--enable-qt5" ];
+    ++ lib.optionals useGtk [ "--enable-gtk3" ]
+    ++ lib.optionals useQt [ "--enable-qt5" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple interface for devices supported by the linux UVC driver";
     mainProgram = "guvcview";
     homepage = "https://guvcview.sourceforge.net";
-    maintainers = [ maintainers.coconnor ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.coconnor ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
-}
+})

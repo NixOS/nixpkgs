@@ -1,33 +1,35 @@
-{ lib, stdenv
-, makeWrapper
-, fetchurl
-, cabextract
-, gettext
-, gnupg
-, icoutils
-, imagemagick
-, mesa-demos
-, netcat-gnu
-, p7zip
-, python3
-, unzip
-, wget
-, wine
-, xdg-user-dirs
-, xterm
-, pkgs
-, pkgsi686Linux
-, which
-, curl
-, jq
-, xorg
-, libGL
-, steam-run
-# needed for avoiding crash on file selector
-, gsettings-desktop-schemas
-, glib
-, wrapGAppsHook3
-, hicolor-icon-theme
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchurl,
+  cabextract,
+  gettext,
+  gnupg,
+  icoutils,
+  imagemagick,
+  mesa-demos,
+  netcat-gnu,
+  p7zip,
+  python3,
+  unzip,
+  wget,
+  wine,
+  xdg-user-dirs,
+  xterm,
+  pkgs,
+  pkgsi686Linux,
+  which,
+  curl,
+  jq,
+  xorg,
+  libGL,
+  steam-run,
+  # needed for avoiding crash on file selector
+  gsettings-desktop-schemas,
+  glib,
+  wrapGAppsHook3,
+  hicolor-icon-theme,
 }:
 
 let
@@ -54,20 +56,31 @@ let
   ];
 
   ld32 =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
-    else if stdenv.hostPlatform.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
-    else throw "Unsupported platform for PlayOnLinux: ${stdenv.hostPlatform.system}";
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "${stdenv.cc}/nix-support/dynamic-linker-m32"
+    else if stdenv.hostPlatform.system == "i686-linux" then
+      "${stdenv.cc}/nix-support/dynamic-linker"
+    else
+      throw "Unsupported platform for PlayOnLinux: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
-  libs = pkgs: lib.makeLibraryPath [ xorg.libX11 libGL ];
+  libs =
+    pkgs:
+    lib.makeLibraryPath [
+      xorg.libX11
+      libGL
+    ];
 
-  python = python3.withPackages(ps: with ps; [
-    wxpython
-    setuptools
-    natsort
-    pyasyncore
-  ]);
+  python = python3.withPackages (
+    ps: with ps; [
+      wxpython
+      setuptools
+      natsort
+      pyasyncore
+    ]
+  );
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "playonlinux";
   inherit version;
 
@@ -80,7 +93,10 @@ in stdenv.mkDerivation {
     ./0001-fix-locale.patch
   ];
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   preBuild = ''
     makeFlagsArray+=(PYTHON="python -m py_compile")
@@ -120,12 +136,17 @@ in stdenv.mkDerivation {
 
     bunzip2 $out/share/playonlinux/bin/check_dd_x86.bz2
     patchelf --set-interpreter $(cat ${ld32}) --set-rpath ${libs pkgsi686Linux} $out/share/playonlinux/bin/check_dd_x86
-    ${if stdenv.hostPlatform.system == "x86_64-linux" then ''
-      bunzip2 $out/share/playonlinux/bin/check_dd_amd64.bz2
-      patchelf --set-interpreter $(cat ${ld64}) --set-rpath ${libs pkgs} $out/share/playonlinux/bin/check_dd_amd64
-    '' else ''
-      rm $out/share/playonlinux/bin/check_dd_amd64.bz2
-    ''}
+    ${
+      if stdenv.hostPlatform.system == "x86_64-linux" then
+        ''
+          bunzip2 $out/share/playonlinux/bin/check_dd_amd64.bz2
+          patchelf --set-interpreter $(cat ${ld64}) --set-rpath ${libs pkgs} $out/share/playonlinux/bin/check_dd_amd64
+        ''
+      else
+        ''
+          rm $out/share/playonlinux/bin/check_dd_amd64.bz2
+        ''
+    }
     for f in $out/share/playonlinux/bin/*; do
       bzip2 $f
     done
@@ -146,7 +167,10 @@ in stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3;
     maintainers = [ maintainers.pasqui23 ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     mainProgram = "playonlinux";
   };
 }

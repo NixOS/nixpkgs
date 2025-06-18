@@ -3,16 +3,17 @@
   stdenvNoCC,
   fetchgit,
   fontforge,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "newcomputermodern";
-  version = "6.0.0";
+  version = "7.0.3";
 
   src = fetchgit {
     url = "https://git.gnu.org.ua/newcm.git";
     rev = finalAttrs.version;
-    hash = "sha256-AMzEytBn9PbyYFNJ2CMPg8ejsL3eFhY+eZHXShaLG9E=";
+    hash = "sha256-sMjzM0nRcMxgJax3ecJ/a5YB3mH7+7RWbNkdhU+V7dU=";
   };
 
   nativeBuildInputs = [ fontforge ];
@@ -36,9 +37,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
     description = "Computer Modern fonts including matching non-latin alphabets";
     homepage = "https://ctan.org/pkg/newcomputermodern";
+    changelog = "https://mirrors.rit.edu/CTAN/fonts/newcomputermodern/README";
     # "The GUST Font License (GFL), which is a free license, legally
     # equivalent to the LaTeX Project Public License (LPPL), version 1.3c or
     # later." - GUST website

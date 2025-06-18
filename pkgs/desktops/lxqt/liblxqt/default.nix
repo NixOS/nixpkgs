@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liblxqt";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-90t7jukm2vNfkgZ3326UDMXNzwJ+FIVEF3kNZ2SgNN8=";
+    hash = "sha256-04t6wssTuSKlqSuUTmcDU66NVGikWh7p2irWBngN494=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lxqt/liblxqt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

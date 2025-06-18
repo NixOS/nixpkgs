@@ -31,12 +31,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "smbmap" ];
 
-  meta = with lib; {
+  meta = {
     description = "SMB enumeration tool";
     homepage = "https://github.com/ShawnDEvans/smbmap";
     changelog = "https://github.com/ShawnDEvans/smbmap/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "smbmap";
   };
 }

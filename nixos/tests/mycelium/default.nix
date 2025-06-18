@@ -61,11 +61,13 @@ import ../make-test-python.nix (
       peer1.wait_for_unit("mycelium.service")
       peer2.wait_for_unit("mycelium.service")
 
+      # Give mycelium some time to discover the other peer
+      peer1.wait_until_succeeds("ping -c1 ${peer2-ip}", timeout=10)
+      peer2.succeed("ping -c1 ${peer1-ip}")
+
       peer1.succeed("mycelium peers list | grep 192.168.1.12")
       peer2.succeed("mycelium peers list | grep 192.168.1.11")
 
-      peer1.succeed("ping -c5 ${peer2-ip}")
-      peer2.succeed("ping -c5 ${peer1-ip}")
     '';
   }
 )

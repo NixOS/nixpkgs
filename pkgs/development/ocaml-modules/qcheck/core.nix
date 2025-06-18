@@ -6,15 +6,15 @@
 
 buildDunePackage rec {
   pname = "qcheck-core";
-  version = "0.23";
+  version = "0.25";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "qcheck";
-    rev = "v${version}";
-    hash = "sha256-tH7NFpAFKOb0jXxLK+zNOIZS9TSORKXe8FuwY13iEUY=";
+    tag = "v${version}";
+    hash = "sha256-Z89jJ21zm89wb9m5HthnbHdnE9iXLyaH9k8S+FAWkKQ=";
   };
 
   meta = {

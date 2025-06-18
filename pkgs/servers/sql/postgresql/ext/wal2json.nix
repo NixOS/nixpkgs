@@ -1,34 +1,34 @@
 {
-  lib,
   fetchFromGitHub,
-  postgresql,
-  buildPostgresqlExtension,
+  lib,
   nixosTests,
+  postgresql,
+  postgresqlBuildExtension,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "wal2json";
   version = "${builtins.replaceStrings [ "_" ] [ "." ] (
-    lib.strings.removePrefix "wal2json_" src.rev
+    lib.strings.removePrefix "wal2json_" finalAttrs.src.rev
   )}";
 
   src = fetchFromGitHub {
     owner = "eulerto";
     repo = "wal2json";
-    rev = "wal2json_2_6";
-    sha256 = "sha256-+QoACPCKiFfuT2lJfSUmgfzC5MXf75KpSoc2PzPxKyM=";
+    tag = "wal2json_2_6";
+    hash = "sha256-+QoACPCKiFfuT2lJfSUmgfzC5MXf75KpSoc2PzPxKyM=";
   };
 
   makeFlags = [ "USE_PGXS=1" ];
 
   passthru.tests = nixosTests.postgresql.wal2json.passthru.override postgresql;
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL JSON output plugin for changeset extraction";
     homepage = "https://github.com/eulerto/wal2json";
-    changelog = "https://github.com/eulerto/wal2json/releases/tag/${src.rev}";
-    maintainers = with maintainers; [ euank ];
+    changelog = "https://github.com/eulerto/wal2json/releases/tag/${finalAttrs.src.rev}";
+    maintainers = with lib.maintainers; [ euank ];
     platforms = postgresql.meta.platforms;
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
-}
+})

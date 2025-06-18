@@ -11,26 +11,25 @@
   qcs-api-client-common,
   quil,
   rustPlatform,
-  darwin,
   libiconv,
   syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.21.12";
+  version = "0.21.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
     tag = "python/v${version}";
-    hash = "sha256-5tabdxMvYW0g2k48MTAm15+o/OI7yFyL19xirUBN7D4=";
+    hash = "sha256-uN9SQnQR5y4gyJeQI5H04hT1OL1ZQBwCdz8GkNMMTLY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-YOBI0q7OsjFhoQUO2K4Q3CprcxHgJbTmg+klXj41p0o=";
+    hash = "sha256-PqQMG8RKF8Koz796AeoG/X9SeL1TruwOVPqwfKuq984=";
   };
 
   buildAndTestSubdir = "crates/python";
@@ -50,8 +49,6 @@ buildPythonPackage rec {
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
     libiconv
   ];
 
@@ -71,6 +68,8 @@ buildPythonPackage rec {
     "test_get_report"
     "test_get_version_info"
     "test_list_quantum_processors_timeout"
+    "test_quilc_tracing"
+    "test_qvm_tracing"
   ];
 
   meta = {

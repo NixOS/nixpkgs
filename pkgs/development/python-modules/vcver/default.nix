@@ -5,7 +5,7 @@
   packaging,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "vcver";
   version = "0.2.12";
   format = "setuptools";

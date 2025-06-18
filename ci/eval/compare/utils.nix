@@ -94,32 +94,6 @@ rec {
     uniqueStrings (builtins.map (p: p.name) packagePlatformAttrs);
 
   /*
-    Computes the key difference between two attrs
-
-    {
-      added: [ <keys only in the second object> ],
-      removed: [ <keys only in the first object> ],
-      changed: [ <keys with different values between the two objects> ],
-    }
-  */
-  diff =
-    let
-      filterKeys = cond: attrs: lib.attrNames (lib.filterAttrs cond attrs);
-    in
-    old: new: {
-      added = filterKeys (n: _: !(old ? ${n})) new;
-      removed = filterKeys (n: _: !(new ? ${n})) old;
-      changed = filterKeys (
-        n: v:
-        # Filter out attributes that don't exist anymore
-        (new ? ${n})
-
-        # Filter out attributes that are the same as the new value
-        && (v != (new.${n}))
-      ) old;
-    };
-
-  /*
     Group a list of `packagePlatformAttr`s by platforms
 
     Turns

@@ -36,12 +36,12 @@ ocamlPackages.buildDunePackage rec {
     cp -r tools/beluga-mode.el $out/share/emacs/site-lisp/beluga
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Functional language for reasoning about formal systems";
     homepage = "https://complogic.cs.mcgill.ca/beluga";
     changelog = "https://github.com/Beluga-lang/Beluga/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.bcdarwin ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    platforms = lib.platforms.unix;
   };
 }

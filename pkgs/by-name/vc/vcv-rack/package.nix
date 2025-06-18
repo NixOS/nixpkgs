@@ -88,7 +88,7 @@ let
     rev = "5ed79544161e0fa9a55faa7c0a5f299e828e12ab"; # tip of branch v2
     sha256 = "0c6qpigyr0ppvra20hcy1fdcmqa212jckb9wkx4f6fgdby7565wv";
   };
-  vcv-rtaudio = stdenv.mkDerivation rec {
+  vcv-rtaudio = stdenv.mkDerivation {
     pname = "vcv-rtaudio";
     version = "unstable-2020-01-30";
 

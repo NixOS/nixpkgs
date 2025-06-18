@@ -4,6 +4,7 @@
   curl,
   expat,
   fetchFromGitHub,
+  gspell,
   gst_all_1,
   gtk3,
   libGL,
@@ -12,9 +13,12 @@
   libXinerama,
   libXtst,
   libXxf86vm,
+  libnotify,
   libpng,
+  libsecret,
   libtiff,
   libjpeg_turbo,
+  libxkbcommon,
   zlib,
   pcre2,
   pkg-config,
@@ -24,7 +28,7 @@
   unicode ? true,
   withMesa ? !stdenv.hostPlatform.isDarwin,
   withWebKit ? true,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
 }:
 let
   catch = fetchFromGitHub {
@@ -43,13 +47,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  version = "3.2.6";
+  version = "3.2.7.1";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-7dc7NGiKSonFFaWp3UxLYqDc1Cc6no1Eba0QmtzX5mM=";
+    hash = "sha256-CKU0Aa78YrtGKLE9/MF9VNc2fmzPZ1j4lviX1aAv9cQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -66,15 +70,19 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       curl
+      gspell # wxTextCtrl spell checking
       gtk3
       libSM
       libXinerama
       libXtst
       libXxf86vm
+      libnotify # wxNotificationMessage backend
+      libsecret # wxSecretStore backend
+      libxkbcommon # proper key codes in key events
       xorgproto
     ]
     ++ lib.optional withMesa libGLU
-    ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_0
+    ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_1
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       expat
     ];
@@ -142,7 +150,10 @@ stdenv.mkDerivation rec {
       database support, HTML viewing and printing, and much more.
     '';
     license = licenses.wxWindows;
-    maintainers = with maintainers; [ tfmoraes ];
+    maintainers = with maintainers; [
+      tfmoraes
+      fliegendewurst
+    ];
     platforms = platforms.unix;
   };
 }

@@ -115,7 +115,7 @@ let
       passthru = allVersions;
 
     };
-  wxGTK31-prusa = wxGTK31.overrideAttrs (old: rec {
+  wxGTK31-prusa = wxGTK31.overrideAttrs (old: {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.1.4";
     src = fetchFromGitHub {

@@ -14,7 +14,7 @@
   sendmailPath ? "/run/wrappers/bin/sendmail",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vmime";
   # XXX: using unstable rev for now to comply with the removal of
   # deprecated symbols in the latest release of gsasl

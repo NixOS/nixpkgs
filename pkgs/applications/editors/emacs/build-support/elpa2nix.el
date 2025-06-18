@@ -1,12 +1,24 @@
 (require 'package)
 (package-initialize)
 
+;; TODO remove this patch when Emacs bug#77143 is fixed
+;; see that bug for more info
+(defun package--description-file (dir)
+  "Return package description file name for package DIR."
+  (concat (let ((subdir (file-name-nondirectory
+                         (directory-file-name dir))))
+            (if (string-match "\\([^.].*?\\)-\\([0-9]+\\(?:[.][0-9]+\\|\\(?:pre\\|beta\\|alpha\\|snapshot\\)[0-9]+\\)*\\)\\'" subdir)
+                (match-string 1 subdir) subdir))
+          "-pkg.el"))
+
 (defun elpa2nix-install-package ()
   (if (not noninteractive)
       (error "`elpa2nix-install-package' is to be used only with -batch"))
   (pcase command-line-args-left
-    (`(,archive ,elpa)
-     (progn (setq package-user-dir elpa)
+    (`(,archive ,elpa ,turn-compilation-warning-to-error ,ignore-compilation-error)
+     (progn (setq byte-compile-error-on-warn (string= turn-compilation-warning-to-error "t"))
+            (setq byte-compile-debug (string= ignore-compilation-error "nil"))
+            (setq package-user-dir elpa)
             (elpa2nix-install-file archive)))))
 
 (defun elpa2nix-install-from-buffer ()
@@ -31,13 +43,3 @@ The file can either be a tar file or an Emacs Lisp file."
 
 ;; Allow installing package tarfiles larger than 10MB
 (setq large-file-warning-threshold nil)
-
-(let ((flag (getenv "turnCompilationWarningToError")))
-  (when (and flag
-             ;; we do not use `string-empty-p' because it requires subr-x in Emacs <= 26
-             (not (string= flag "")))
-    (setq byte-compile-error-on-warn t)))
-
-(let ((flag (getenv "ignoreCompilationError")))
-  (when (string= flag "")
-    (setq byte-compile-debug t)))

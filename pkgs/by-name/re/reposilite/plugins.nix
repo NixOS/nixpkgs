@@ -1,7 +1,11 @@
 {
+  lib,
   generateSplicesForMkScope,
   makeScopeWithSplicing',
 }:
+let
+  pluginHashes = lib.importJSON ./plugins.json;
+in
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "reposilitePlugins";
   f =
@@ -39,11 +43,5 @@ makeScopeWithSplicing' {
         )
       ) { };
     }
-    // builtins.mapAttrs (name: hash: self.fetchPlugin { inherit name hash; }) {
-      checksum = "sha256-s7GADQqFsoEDM2vtJFE/C/F5jGyQeYlT3BntvHS4DtQ=";
-      groovy = "sha256-8HWMqZZNIqCBpkMuCjKxqTLcQ2dYaOAAYON9QrXYEyo=";
-      migration = "sha256-Xv0+RsXZzyGV/4v0IT3hfNANiC1OWVYFoTZHDxduKh0=";
-      prometheus = "sha256-F5fSUo6wt7L3R/xCike0SlfG3CyxHKrlrg+SNrUYtm4=";
-      swagger = "sha256-wyXKrYBhigHVtxq/RZiJhnigc3Z/UCbYotrF6VLLTGA=";
-    };
+    // builtins.mapAttrs (name: hash: self.fetchPlugin { inherit name hash; }) pluginHashes;
 }

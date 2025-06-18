@@ -1,7 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  nodejs,
+  yarn-berry_3,
   hatch-jupyter-builder,
   hatchling,
   async-lru,
@@ -24,15 +26,34 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.3.4";
+  version = "4.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8LubCaBHZuNCPMzC/CMWmqL/7c34cT6eD7M8rAtoWdA=";
+  src = fetchFromGitHub {
+    owner = "jupyterlab";
+    repo = "jupyterlab";
+    tag = "v${version}";
+    hash = "sha256-j1K5aBLLGSWER3S0Vojrwdd+9T9vYbp1+XgxYD2NORY=";
   };
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+  ];
+
+  preConfigure = ''
+    pushd jupyterlab/staging
+  '';
+
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit src;
+    sourceRoot = "${src.name}/jupyterlab/staging";
+    hash = "sha256-rko09rqT7UQUq/Ddi8lo3V02eJQEEnpjH5RaLSgqj/o=";
+  };
+
+  preBuild = ''
+    popd
+  '';
 
   build-system = [
     hatch-jupyter-builder
@@ -74,7 +95,7 @@ buildPythonPackage rec {
     description = "Jupyter lab environment notebook server extension";
     license = licenses.bsd3;
     homepage = "https://jupyter.org/";
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-lab";
   };
 }

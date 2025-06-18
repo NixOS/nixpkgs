@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kitsas";
-  version = "5.8";
+  version = "5.9";
 
   src = fetchFromGitHub {
     owner = "artoh";
     repo = "kitupiikki";
     rev = "v${version}";
-    hash = "sha256-w4RttQUzCPqqMwNf0P9lThu4JaLD3yEHm3yPLU1P4KA=";
+    hash = "sha256-4FCfpUFfi+N207SEAKz8nLpVS8MxfmDwM6r6i5pyqEM=";
   };
 
   nativeBuildInputs = [

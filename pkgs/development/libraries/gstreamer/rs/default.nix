@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchFromGitHub,
   fetchpatch,
   rustPlatform,
   meson,
@@ -25,8 +24,6 @@
   libwebp,
   openssl,
   pango,
-  Security,
-  SystemConfiguration,
   gst-plugins-good,
   nix-update-script,
   # specifies a limited subset of plugins to build (the default `null` means all plugins supported on the stdenv platform)
@@ -35,6 +32,8 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null,
   hotdoc,
+  mopidy,
+  apple-sdk_gstreamer,
 }:
 
 let
@@ -58,31 +57,21 @@ let
     mp4 = [ ];
 
     # net
-    aws = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+    aws = [ openssl ];
     hlssink3 = [ ];
     ndi = [ ];
     onvif = [ pango ];
     raptorq = [ ];
-    reqwest = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+    reqwest = [ openssl ];
     rtp = [ ];
-    webrtc =
-      [
-        gst-plugins-bad
-        openssl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Security
-        SystemConfiguration
-      ];
-    webrtchttp =
-      [
-        gst-plugins-bad
-        openssl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Security
-        SystemConfiguration
-      ];
+    webrtc = [
+      gst-plugins-bad
+      openssl
+    ];
+    webrtchttp = [
+      gst-plugins-bad
+      openssl
+    ];
 
     # text
     textahead = [ ];
@@ -158,7 +147,7 @@ assert lib.assertMsg (invalidPlugins == [ ])
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.13.3";
+  version = "0.13.5";
 
   outputs = [
     "out"
@@ -170,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
-    hash = "sha256-G6JdZXBNiZfbu6EBTOsJ4Id+BvPhIToZmHHi7zuapnE=";
+    hash = "sha256-5jR/YLCBeFnB0+O2OOCLBEKwikiQ5e+SbOeQCijnd8Q=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
@@ -192,13 +181,25 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  cargoDeps =
-    with finalAttrs;
-    rustPlatform.fetchCargoVendor {
-      inherit src;
-      name = "${pname}-${version}";
-      hash = "sha256-NFB9kNmCF3SnOgpSd7SSihma+Ooqwxtrym9Il4A+uQY=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src patches;
+    name = "gst-plugins-rs-${finalAttrs.version}";
+    hash = "sha256-ErQ5Um0e7bWhzDErEN9vmSsKTpTAm4MA5PZ7lworVKU=";
+  };
+
+  patches = [
+    # Disable uriplaylistbin test that requires network access.
+    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/676
+    # TODO: Remove in 0.14, it has been replaced by a different fix:
+    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/2140
+    ./ignore-network-tests.patch
+
+    # Fix reqwest tests failing due to broken TLS lookup in native-tls dependency.
+    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/675
+    # Cannot be upstreamed due to MSRV bump in native-tls:
+    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/2142
+    ./reqwest-init-tls.patch
+  ];
 
   strictDeps = true;
 
@@ -224,10 +225,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
 
-  buildInputs = [
-    gstreamer
-    gst-plugins-base
-  ] ++ lib.concatMap (plugin: lib.getAttr plugin validPlugins) selectedPlugins;
+  buildInputs =
+    [
+      gstreamer
+      gst-plugins-base
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_gstreamer
+    ]
+    ++ lib.concatMap (plugin: lib.getAttr plugin validPlugins) selectedPlugins;
 
   checkInputs = [
     gst-plugins-good
@@ -258,6 +264,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonCheckFlags = [ "--verbose" ];
 
+  preCheck = ''
+    # Fontconfig error: No writable cache directories
+    export XDG_CACHE_HOME=$(mktemp -d)
+  '';
+
   doInstallCheck =
     (lib.elem "webp" selectedPlugins) && !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isElf;
   installCheckPhase = ''
@@ -266,13 +277,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = nix-update-script {
-    # use numbered releases rather than gstreamer-* releases
-    # this matches upstream's recommendation: https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/470#note_2202772
-    extraArgs = [
-      "--version-regex"
-      "([0-9.]+)"
-    ];
+  passthru = {
+    tests = {
+      # Applies patches.
+      # TODO: remove with 0.14
+      inherit mopidy;
+    };
+
+    updateScript = nix-update-script {
+      # use numbered releases rather than gstreamer-* releases
+      # this matches upstream's recommendation: https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/470#note_2202772
+      extraArgs = [
+        "--version-regex"
+        "([0-9.]+)"
+      ];
+    };
   };
 
   meta = with lib; {

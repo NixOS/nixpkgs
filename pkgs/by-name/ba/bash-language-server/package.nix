@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   meta = with lib; {
-    description = "A language server for Bash";
+    description = "Language server for Bash";
     homepage = "https://github.com/bash-lsp/bash-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];

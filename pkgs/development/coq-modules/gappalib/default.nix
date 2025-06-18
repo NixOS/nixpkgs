@@ -13,7 +13,20 @@ mkCoqDerivation {
   owner = "gappa";
   domain = "gitlab.inria.fr";
   inherit version;
-  defaultVersion = if lib.versions.range "8.8" "8.20" coq.coq-version then "1.6.0" else null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = range "8.16" "8.20";
+        out = "1.7.0";
+      }
+      {
+        case = range "8.8" "8.15";
+        out = "1.5.5";
+      }
+    ] null;
+
+  release."1.7.0".sha256 = "sha256-NHKfX2on0tw2T0AqOLIFDCHlkl9OXkLiRExEwauwGqE=";
   release."1.6.0".sha256 = "sha256-GQls31TT4y3h18RUxAX+LpHIKon5UvDfW1GuURRKeKA=";
   release."1.5.5".sha256 = "sha256-qxi2Kg3N3o6+ncq7aPNEg98dBmQC5WCa86zROPJSDdo=";
   release."1.5.4".sha256 = "sha256-9PlkXqCu4rbFD7qnMF1GSpPCVmwJ3r593RfAvkJbbdA=";

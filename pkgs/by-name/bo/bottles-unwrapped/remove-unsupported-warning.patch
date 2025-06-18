@@ -1,10 +1,8 @@
-diff --git a/bottles/frontend/windows/main_window.py b/bottles/frontend/windows/main_window.py
-index 79bf0d72..e37ca43e 100644
---- a/bottles/frontend/windows/main_window.py
-index 79bf0d72..e37ca43e 100644
---- a/bottles/frontend/windows/main_window.py
-+++ b/bottles/frontend/windows/main_window.py
-@@ -104,29 +104,15 @@ class MainWindow(Adw.ApplicationWindow):
+diff --git a/bottles/frontend/windows/window.py b/bottles/frontend/windows/window.py
+index 802b08b5..c4cada1d 100644
+--- a/bottles/frontend/windows/window.py
++++ b/bottles/frontend/windows/window.py
+@@ -102,29 +102,15 @@ class BottlesWindow(Adw.ApplicationWindow):
  
              def response(dialog, response, *args):
                  if response == "close":

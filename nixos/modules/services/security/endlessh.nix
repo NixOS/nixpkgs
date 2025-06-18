@@ -48,6 +48,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.endlessh = {
       description = "SSH tarpit";
+      documentation = [ "man:endlessh(1)" ];
       requires = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig =

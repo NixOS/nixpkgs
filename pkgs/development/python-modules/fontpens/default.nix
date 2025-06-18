@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "robotools";
-    repo = pname;
+    repo = "fontpens";
     tag = "v${version}";
     sha256 = "13msj0s7mg45klzbnd2w4f4ljb16bp9m0s872s6hczn0j7jmyz11";
   };

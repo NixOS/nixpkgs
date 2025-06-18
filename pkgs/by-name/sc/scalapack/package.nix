@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Reference-ScaLAPACK";
-    repo = pname;
+    repo = "scalapack";
     tag = "v${version}";
     hash = "sha256-KDMW/D7ubGaD2L7eTwULJ04fAYDPAKl8xKPZGZMkeik=";
   };

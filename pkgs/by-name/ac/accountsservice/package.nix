@@ -104,7 +104,8 @@ stdenv.mkDerivation rec {
     description = "D-Bus interface for user account query and manipulation";
     homepage = "https://www.freedesktop.org/wiki/Software/AccountsService";
     license = licenses.gpl3Plus;
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ pSub ]);
+    maintainers = with maintainers; [ pSub ];
+    teams = [ teams.freedesktop ];
     platforms = platforms.linux;
   };
 }

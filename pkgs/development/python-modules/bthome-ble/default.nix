@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "bthome-ble";
-  version = "3.12.4";
+  version = "3.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bthome-ble";
     tag = "v${version}";
-    hash = "sha256-1Kr+KKL8o1qsu/ncwclsokPcO1QHYadul/f+/Nnv6SQ=";
+    hash = "sha256-e6R3Qjj82z0E+gIxqDVM08Op3KlK9ZG1iNmkqqIEjWY=";
   };
 
   build-system = [ poetry-core ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for BThome BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/bthome-ble";
-    changelog = "https://github.com/bluetooth-devices/bthome-ble/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/bluetooth-devices/bthome-ble/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

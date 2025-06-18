@@ -6,20 +6,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pls";
-  version = "0.0.1-beta.8";
+  version = "0.0.1-beta.9";
 
   src = fetchFromGitHub {
     owner = "pls-rs";
     repo = "pls";
-    rev = "v${version}";
-    hash = "sha256-gJufm2krZSTdBbbfZ+355M9e3MJQbDEpSPf0EbZEayQ=";
+    tag = "v${version}";
+    hash = "sha256-ofwdhGpqYlADDY2BLe0SkoHWqSeRNtQaXK61zWVFXzw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-q6tLSq9MkWOT+XUmtv123C9VwncJ7ljTnaGEZOZqLjk=";
+  cargoHash = "sha256-P+4jRuakDUPaICJPsNJ6nXfhm09K/GC/VA9bsTXIMvc=";
 
   meta = {
-    changelog = "https://github.com/pls-rs/pls/releases/tag/${src.rev}";
+    changelog = "https://github.com/pls-rs/pls/releases/tag/${src.tag}";
     description = "Prettier and powerful ls";
     homepage = "http://pls.cli.rs";
     license = lib.licenses.gpl3Plus;

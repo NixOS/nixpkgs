@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  boost,
+  boost183,
   qtbase,
   qtimageformats,
   qttools,
@@ -12,7 +12,7 @@
 }:
 
 let
-  boost_static = boost.override { enableStatic = true; };
+  boost_static = boost183.override { enableStatic = true; };
 
 in
 stdenv.mkDerivation rec {

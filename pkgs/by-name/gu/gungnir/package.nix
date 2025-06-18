@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gungnir";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "g0ldencybersec";
     repo = "gungnir";
     rev = "v${version}";
-    hash = "sha256-a3qELEkScfqrAS5di4+k+mvUf/VHV+z16Ns2zHwSUHo=";
+    hash = "sha256-42qaVLEFAV6/6xMVM+mLi0Acp26AKOHvs4EUK2y09as=";
   };
 
-  vendorHash = "sha256-heuJZbWZBEt4GvkixaYdgRb8mAj6w7dp4ZvdQYzs89U=";
+  vendorHash = "sha256-O4KPbPtZhUMYsTyefPh5ok0JWY10cw8XhPvEGX2gMzY=";
 
   ldflags = [
     "-s"

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
   pytestCheckHook,
   setuptools,
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   # `tests/data` dir missing from PyPI dist
   src = fetchFromGitHub {
     owner = "ANCPLabOldenburg";
-    repo = pname;
+    repo = "ancp-bids";
     tag = version;
     hash = "sha256-vmw8SAikvbaHnPOthBQxTbyvDwnnZwCOV97aUogIgxw=";
   };

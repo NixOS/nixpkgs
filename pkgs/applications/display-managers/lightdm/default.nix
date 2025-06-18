@@ -128,6 +128,6 @@ stdenv.mkDerivation rec {
     description = "Cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

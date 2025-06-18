@@ -30,13 +30,16 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-cHuaqA89r90TCPVHNP7B1cfK+WxqmfTXndJ/dRdmM24=";
   };
-
   # Allows to forward cmake args through the conventional `cmakeFlags`
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail \
         "cmake_args = [" \
         'cmake_args = [ *os.environ.get("cmakeFlags", "").split(),'
+    substituteInPlace tree/CMakeLists.txt \
+      --replace-fail \
+        "CMAKE_CXX_STANDARD 14" \
+        "CMAKE_CXX_STANDARD 17"
   '';
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_ABSEIL" true)

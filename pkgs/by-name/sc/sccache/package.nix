@@ -4,8 +4,6 @@
   rustPlatform,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,28 +23,23 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
   ];
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   # Tests fail because of client server setup which is not possible inside the
   # pure environment, see https://github.com/mozilla/sccache/issues/460
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Ccache with Cloud Storage";
     mainProgram = "sccache";
     homepage = "https://github.com/mozilla/sccache";
     changelog = "https://github.com/mozilla/sccache/releases/tag/v${version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       doronbehar
       figsoda
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "cryptography"
+    "docx2txt"
     "fastapi"
     "llama-index-core"
     "llama-index-readers-file"

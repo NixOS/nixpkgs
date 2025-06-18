@@ -2,14 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  requests,
   pytestCheckHook,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "wikipedia-api";
   version = "0.8.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martin-majlis";
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-5wi1HVkD36RnmIAKSKRYTc30HtYMiFrRoYzZRWENd/M=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

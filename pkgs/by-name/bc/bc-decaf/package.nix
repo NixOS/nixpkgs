@@ -6,7 +6,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bc-decaf";
   version = "unstable-2022-07-20";
 

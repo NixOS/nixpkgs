@@ -16,7 +16,7 @@
   disnix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "unstable-2020-11-02";
   pname = "dydisnix";
 

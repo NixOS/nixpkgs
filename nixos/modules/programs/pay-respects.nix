@@ -44,7 +44,7 @@ let
         ''
           mkdir -p $out/bin
           makeWrapper ${getExe cfg.package} $out/bin/${cfg.package.meta.mainProgram} \
-            ${optionalString (cfg.aiIntegration == false) "--set _PR_AI_DISABLE true"}
+            ${optionalString (cfg.aiIntegration == false) "--set _PR_AI_DISABLE true"} \
             ${optionalString (cfg.aiIntegration != false) ''
               --set _PR_AI_URL ${cfg.aiIntegration.url} \
               --set _PR_AI_MODEL ${cfg.aiIntegration.model} \
@@ -59,7 +59,7 @@ let
     shell:
     if (shell != "fish") then
       ''
-        eval $(${getExe finalPackage} ${shell} --alias ${cfg.alias})
+        eval "$(${getExe finalPackage} ${shell} --alias ${cfg.alias})"
       ''
     else
       ''

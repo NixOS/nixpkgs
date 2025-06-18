@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch2,
   python3,
   nodejs,
   node-gyp,
@@ -31,12 +31,69 @@
   perl,
   pixman,
   vips,
+  buildPackages,
   sourcesJSON ? ./sources.json,
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
   sources = lib.importJSON sourcesJSON;
   inherit (sources) version;
+
+  esbuild_0_23 = buildPackages.esbuild.override {
+    buildGoModule =
+      args:
+      buildPackages.buildGoModule (
+        args
+        // rec {
+          version = "0.23.0";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            tag = "v${version}";
+            hash = "sha256-AH4Y5ELPicAdJZY5CBf2byOxTzOyQFRh4XoqRUQiAQw=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
+  };
+
+  esbuild_0_25 = buildPackages.esbuild.override {
+    buildGoModule =
+      args:
+      buildPackages.buildGoModule (
+        args
+        // rec {
+          version = "0.25.2";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            tag = "v${version}";
+            hash = "sha256-aDxheDMeQYqCT9XO3In6RbmzmXVchn+bjgf3nL3VE4I=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
+  };
+
+  # Immich server does not actually need esbuild, but react-email and vite do.
+  # As esbuild doesn't support passing multiple binaries, we use a custom
+  # "shim", that picks the right version depending on the working directory.
+  # The correct version can be looked up in package-lock.json
+  # TODO: There are numerous other env vars this *could* be based on.
+  esbuildShim = buildPackages.writeShellScriptBin "esbuild" ''
+    echo "nixpkgs: esbuild shim for '$PWD'" >&2
+    case "$PWD" in
+      "/build/server/node_modules/esbuild")
+        exec ${lib.getExe esbuild_0_23} "$@"
+      ;;
+      "/build/server/node_modules/vite/node_modules/esbuild")
+        exec ${lib.getExe esbuild_0_25} "$@"
+        exit 0
+      ;;
+    esac
+    echo "nixpkgs: Couldn't resolve esbuild version for '$PWD'" >&2
+    exit 1
+  '';
 
   buildLock = {
     sources =
@@ -120,6 +177,16 @@ let
     sourceRoot = "${src.name}/web";
     inherit (sources.components.web) npmDepsHash;
 
+    # prePatch is needed because npmConfigHook is a postPatch
+    prePatch = ''
+      # some part of the build wants to use un-prefixed binaries. let them.
+      mkdir -p $TMP/bin
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}pkg-config)" $TMP/bin/pkg-config || true
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}c++filt)" $TMP/bin/c++filt || true
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}readelf)" $TMP/bin/readelf || true
+      export PATH="$TMP/bin:$PATH"
+    '';
+
     preBuild = ''
       rm node_modules/@immich/sdk
       ln -s ${openapi} node_modules/@immich/sdk
@@ -161,11 +228,19 @@ buildNpmPackage' {
   src = "${src}/server";
   inherit (sources.components.server) npmDepsHash;
 
-  postPatch = ''
+  # prePatch is needed because npmConfigHook is a postPatch
+  prePatch = ''
     # pg_dumpall fails without database root access
     # see https://github.com/immich-app/immich/issues/13971
     substituteInPlace src/services/backup.service.ts \
       --replace-fail '`/usr/lib/postgresql/''${databaseMajorVersion}/bin/pg_dumpall`' '`pg_dump`'
+
+    # some part of the build wants to use un-prefixed binaries. let them.
+    mkdir -p $TMP/bin
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}pkg-config)" $TMP/bin/pkg-config || true
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}c++filt)" $TMP/bin/c++filt || true
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}readelf)" $TMP/bin/readelf || true
+    export PATH="$TMP/bin:$PATH"
   '';
 
   nativeBuildInputs = [
@@ -188,6 +263,7 @@ buildNpmPackage' {
   makeCacheWritable = true;
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
+  env.ESBUILD_BINARY_PATH = lib.getExe esbuildShim;
 
   preBuild = ''
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
@@ -254,7 +330,7 @@ buildNpmPackage' {
       Scrumplex
       titaniumtown
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     mainProgram = "server";
   };
 }

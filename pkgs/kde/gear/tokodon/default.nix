@@ -5,20 +5,25 @@
   qtsvg,
   qtwebsockets,
   qtwebview,
-  mpv-unwrapped,
   sonnet,
 }:
 mkKdeDerivation {
   pname = "tokodon";
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    pkg-config
+    qtwebsockets
+  ];
+
   extraBuildInputs = [
     qtmultimedia
     qtsvg
     qtwebsockets
     qtwebview
-    mpv-unwrapped
     sonnet
   ];
+
+  extraCmakeFlags = [ "-DUSE_QTMULTIMEDIA=1" ];
+
   meta.mainProgram = "tokodon";
 }

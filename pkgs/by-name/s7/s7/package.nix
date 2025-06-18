@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s7";
-  version = "11.2-unstable-2024-12-19";
+  version = "11.5-unstable-2025-06-15";
 
   src = fetchFromGitLab {
     domain = "cm-gitlab.stanford.edu";
     owner = "bil";
     repo = "s7";
-    rev = "a5515d455f5aca49d5275a5a35ac88935f3ad401";
-    hash = "sha256-Ik3edzpO9hIhJBZHyzL/CsTVKGbDdGVfE9pNrBeSjp8=";
+    rev = "9ab3baa97bd90b1fb3d8d7cef1e0adc31f89c6e2";
+    hash = "sha256-ZhhaRdk6hf+tu2THGFnnpTB/0VE8h87RxLDT46MuiLc=";
   };
 
   buildInputs = [
@@ -72,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     cc notcurses_s7.c -o libnotcurses_s7.so \
         -O2 -I. \
+        -Wno-error=implicit-function-declaration \
         -shared \
         -lnotcurses-core \
         -fPIC

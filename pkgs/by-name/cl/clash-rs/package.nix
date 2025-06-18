@@ -5,20 +5,23 @@
   protobuf,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.7.4";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
-    tag = "v${version}";
-    hash = "sha256-PaXcMJuenUrcCBdU3CZEIk9U5tZxSAVVtm9ttAldVLM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x89sFBQ6bAIHvaRTCxqKKgFKo7PpquVze0R6VicwrJw=";
   };
 
   useFetchCargoVendor = true;
+  cargoHash = "sha256-jfc0Rmt9eEN3ds5Rakj+IcJcUa28CbhiSu4AfqHurf0=";
 
-  cargoHash = "sha256-ynGp1MU0l48mD+gfsyOFNo4jJDiDWgoPLc02WblPjt4=";
+  patches = [
+    ./unbounded-shifts.patch
+  ];
 
   nativeInstallCheckInputs = [
     protobuf
@@ -54,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ aaronjheng ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

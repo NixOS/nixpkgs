@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "metakernel";
-  version = "0.30.2";
+  version = "0.30.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Siff2FO4SfASgkLFUgTuWXpajYZClPJghLry+8gU1aQ=";
+    hash = "sha256-nryNTYciAq16xkpW4HIm2NPFzkW1tCDQQB9UfHUKR10=";
   };
 
   build-system = [ hatchling ];

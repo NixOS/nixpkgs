@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
-    repo = pname;
+    repo = "badrobot";
     rev = "v${version}";
     sha256 = "sha256-U3b5Xw+GjnAEXteivztHdcAcXx7DYtgaUbW5oax0mIk=";
   };
@@ -32,7 +32,7 @@ buildGoModule rec {
       --zsh <($out/bin/badrobot completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/controlplaneio/badrobot";
     changelog = "https://github.com/controlplaneio/badrobot/blob/v${version}/CHANGELOG.md";
     description = "Operator Security Audit Tool";
@@ -45,7 +45,7 @@ buildGoModule rec {
       likelihood that a compromised Operator would be able to obtain full
       cluster permissions.
     '';
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ jk ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

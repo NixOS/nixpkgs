@@ -75,13 +75,11 @@ python3Packages.buildPythonApplication rec {
     description = "ESP8266 and ESP32 serial bootloader utility";
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;
-    maintainers =
-      with maintainers;
-      [
-        dezgeg
-        dotlambda
-      ]
-      ++ teams.lumiguide.members;
+    maintainers = with maintainers; [
+      dezgeg
+      dotlambda
+    ];
+    teams = [ lib.teams.lumiguide ];
     platforms = with platforms; linux ++ darwin;
     mainProgram = "esptool.py";
   };

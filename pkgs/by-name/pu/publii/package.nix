@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "publii";
-  version = "0.46.3";
+  version = "0.46.5";
 
   src = fetchurl {
     url = "https://getpublii.com/download/Publii-${version}.deb";
-    hash = "sha256-fbK9DVdwjzoxYMvR0EXpZ1Uv3CIMIVAdYcgRdD1p0F4=";
+    hash = "sha256-VymAHQNv3N7Mqe8wiUfYawi1BooczLFClxuwaW8NetA=";
   };
 
   dontConfigure = true;
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Static Site CMS with GUI to build privacy-focused SEO-friendly website";
     mainProgram = "Publii";
     longDescription = ''
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://getpublii.com";
     changelog = "https://github.com/getpublii/publii/releases/tag/v${version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       urandom
       sebtm

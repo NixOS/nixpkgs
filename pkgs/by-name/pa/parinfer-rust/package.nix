@@ -5,7 +5,7 @@
   llvmPackages,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "parinfer-rust";
   version = "0.4.3-unstable-2024-05-07";
 

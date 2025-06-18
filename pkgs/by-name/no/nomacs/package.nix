@@ -18,8 +18,8 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
-  version = "3.19.1";
-  hash = "sha256-NRwZ/ShJaLCMFv7QdfRoJY5zQFo18cAVWGRpS3ap3Rw=";
+  version = "3.21.1";
+  hash = "sha256-RRa19vj7iTtGzdssdtHVOsDzS4X+p1HeiZKy8EIWxq8=";
 
   src = fetchFromGitHub {
     owner = "nomacs";
@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   plugins = fetchFromGitHub {
     owner = "novomesk";
     repo = "nomacs-plugins";
-    rev = "40d0f7089b7f108077dac5dede52e8a303b243b3";
-    hash = "sha256-7+JMmHaTvWjVTkLwXGtQHnoaC/3vK7haCzNvVIZ9F/g=";
+    rev = "20101da282f13d3184ece873388e1c234a79b5e7";
+    hash = "sha256-gcRc4KoWJQ5BirhLuk+c+5HwBeyQtlJ3iyX492DXeVk=";
   };
 
   outputs =

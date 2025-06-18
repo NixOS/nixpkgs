@@ -9,13 +9,13 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sstp-client";
   version = "unstable-2023-03-25";
 
   src = fetchFromGitLab {
     owner = "sstp-project";
-    repo = pname;
+    repo = "sstp-client";
     rev = "3f7835df9ac5e84729903ca536cf65e4a7b04c6c";
     hash = "sha256-8VF5thSABqf5SXEDCa+0dyDt7kVrQcs6deWLlYWM8dg=";
   };

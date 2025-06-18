@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
@@ -11,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20250215.2";
+  version = "20250607.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FbykqwXXCse8CPD6Dm/w5I8lco5XWLH3BlJJtHuU8Vk=";
+    hash = "sha256-Zr1d6kCwAyhjeV2tQ+n9y9x80yD/Atb6TJq7AnRz+PQ=";
   };
 
   build-system = [ setuptools ];
@@ -40,6 +41,11 @@ buildPythonPackage rec {
     "--deselect=tests/validation.py::TestValidateAndInsert::testRun"
     "--deselect=tests/validation.py::TestValidateUpdateInsert::testRun"
     "--deselect=tests/validators.py::TestValidators::test_IS_IN_DB"
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+    "test_scheduler"
   ];
 
   pythonImportsCheck = [ "pydal" ];

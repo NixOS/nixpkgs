@@ -2,18 +2,21 @@
   fetchFromGitHub,
   lib,
   rustPlatform,
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage {
   name = "uefisettings";
-  version = "0-unstable-2024-03-26";
+  version = "0-unstable-2024-11-28";
 
   src = fetchFromGitHub {
     owner = "linuxboot";
     repo = "uefisettings";
-    rev = "f90aed759b9c2217bea336e37ab5282616ece390";
-    hash = "sha256-Cik8uVdzhMmgXfx23axkUJBg8zd5afMgYvluN0BJsdo=";
+    rev = "f4d12fbdb32d1bc355dd37d5077add0a0a049be4";
+    hash = "sha256-f6CTmnY/BzIP/nfHa3Q4HWd1Ee+b7C767FB/8A4DUUM=";
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-adCC5o17j6tuffymiLUn2SEPlrjMzYn6a74/4a9HI/w=";

@@ -39,8 +39,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-DBWg9Xss1ChbPyI3MiN7eTXhSUG37ZaYS/HFxou9d/w=";
   };
 
@@ -86,7 +85,8 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/Shortwave";
     description = "Find and listen to internet radio stations";
     mainProgram = "shortwave";
-    maintainers = with lib.maintainers; [ lasandell ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ lasandell ];
+    teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };

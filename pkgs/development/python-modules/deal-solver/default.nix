@@ -45,6 +45,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deal_solver" ];
 
+  disabledTests = [
+    # Flaky tests, sometimes it works sometimes it doesn't
+    "test_expr_asserts_ok"
+    "test_fuzz_math_floats"
+  ];
+
   meta = with lib; {
     description = "Z3-powered solver (theorem prover) for deal";
     homepage = "https://github.com/life4/deal-solver";

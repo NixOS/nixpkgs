@@ -8,7 +8,7 @@
   unstableGitUpdater,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "labwc-gtktheme";
   version = "0-unstable-2025-02-11";
   pyproject = false;

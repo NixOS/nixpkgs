@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "govee-ble";
-  version = "0.43.1";
+  version = "0.44.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "govee-ble";
     tag = "v${version}";
-    hash = "sha256-JhhHg/ht5vfW3zvX9nRwMzvPTgRsnj7WZiS9y7XX9IM=";
+    hash = "sha256-19kGgelUFuMuiZxzb0ySkG6L52I/CHsfPQdzSbwucPY=";
   };
 
   build-system = [ poetry-core ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Govee BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/govee-ble";
-    changelog = "https://github.com/bluetooth-devices/govee-ble/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/bluetooth-devices/govee-ble/blob/${src.tag}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

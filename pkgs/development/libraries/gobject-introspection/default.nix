@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   glib,
   flex,
   bison,
@@ -42,7 +43,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.82.0";
+  version = "1.84.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -56,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    hash = "sha256-D1pMGQhCS/JrxB6TYRaMNjaFCA+9uHoZbIkchAHKLwk=";
+    hash = "sha256-lFtX2n7CYuXCZrieCR0UvoAMxCQnfYKgKHK315SoR3k=";
   };
 
   patches =
@@ -67,6 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
       (replaceVars ./absolute_shlib_path.patch {
         inherit nixStoreDir;
       })
+
+      # Fix getter heuristics regression
+      # https://gitlab.gnome.org/GNOME/gobject-introspection/-/merge_requests/529
+      ./0001-scanner-Prefer-some-getters-over-others.patch
     ]
     ++ lib.optionals x11Support [
       # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
@@ -178,12 +183,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
-    maintainers =
-      teams.gnome.members
-      ++ (with maintainers; [
-        lovek323
-        artturin
-      ]);
+    maintainers = with maintainers; [
+      lovek323
+      artturin
+    ];
+    teams = [ teams.gnome ];
     pkgConfigModules = [ "gobject-introspection-1.0" ];
     platforms = platforms.unix;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];

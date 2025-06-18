@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "rraval";
-    repo = pname;
+    repo = "git-nomad";
     rev = "v${version}";
     sha256 = "sha256-G/i+mCKZSe8tPMuCLzymkU9SGyFNHY74cGhcC4ru0/k=";
   };
@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ git ];
 
-  meta = with lib; {
+  meta = {
     description = "Synchronize work-in-progress git branches in a light weight fashion";
     homepage = "https://github.com/rraval/git-nomad";
     changelog = "https://github.com/rraval/git-nomad/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rraval ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rraval ];
     mainProgram = "git-nomad";
   };
 }

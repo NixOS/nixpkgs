@@ -47,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
+    "--benchmark-disable"
     # Tests accessing Internet
     "-m 'not vcr'"
   ];
@@ -57,6 +58,6 @@ buildPythonPackage rec {
     description = "A Python client for working with STAC Catalogs and APIs";
     homepage = "https://github.com/stac-utils/pystac-client";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

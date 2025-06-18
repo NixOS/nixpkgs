@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   graphviz,
+  gitUpdater,
   jre,
   makeBinaryWrapper,
   testers,
@@ -10,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plantuml";
-  version = "1.2025.0";
+  version = "1.2025.2";
 
   src = fetchurl {
     url = "https://github.com/plantuml/plantuml/releases/download/v${finalAttrs.version}/plantuml-pdf-${finalAttrs.version}.jar";
-    hash = "sha256-tHlhO7+q/iG5jbivTzQtvaOiDXoIEC/thA2nJnS6Kak=";
+    hash = "sha256-mDP72BLe7+WqjCsxIrhF//jVQVpmU0jwgFeH2sW1mH0=";
   };
 
   nativeBuildInputs = [
@@ -38,9 +39,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     $out/bin/plantuml -testdot
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "plantuml --version";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "plantuml --version";
+    };
+    updateScript = gitUpdater {
+      url = "https://github.com/plantuml/plantuml.git";
+      allowedVersions = "^1\\.[0-9\\.]+$";
+      rev-prefix = "v";
+    };
   };
 
   meta = {

@@ -12,14 +12,14 @@
 }:
 
 let
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-qgiVE5UUjxRLya0mD2vfKdzdTdy5ThYOrHAGoFQ9PWA=";
+    hash = "sha256-rnsc2VXaypIPVtYQHTGe9lg7PuAyjfjz4aeATmFzp5s=";
   };
 
   frigate-web = callPackage ./web.nix {
@@ -88,7 +88,8 @@ python.pkgs.buildPythonApplication rec {
         --replace-fail "/usr/local/lib/vec0" "${lib.getLib sqlite-vec}/lib/vec0${stdenv.hostPlatform.extensions.sharedLibrary}"
 
     ''
-    + lib.optionalString (stdenv.hostPlatform == "x86_64-linux") ''
+    # clang-rocm, provided by `rocmPackages.clr`, only works on x86_64-linux specifically
+    + lib.optionalString (with stdenv.hostPlatform; isx86_64 && isLinux) ''
       substituteInPlace frigate/detectors/plugins/rocm.py \
         --replace-fail "/opt/rocm/bin/rocminfo" "rocminfo" \
         --replace-fail "/opt/rocm/lib" "${rocmPackages.clr}/lib"
@@ -207,7 +208,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/v${version}";
+    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/${src.tag}";
     description = "NVR with realtime local object detection for IP cameras";
     longDescription = ''
       A complete and local NVR designed for Home Assistant with AI

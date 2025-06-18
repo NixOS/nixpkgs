@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openjph";
-  version = "0.21.0";
+  version = "0.21.3";
 
   src = fetchFromGitHub {
     owner = "aous72";
     repo = "openjph";
     rev = finalAttrs.version;
-    hash = "sha256-TU9K0msmhlfzBkwpsPXW8QWplthLBM2OeTPYV40rnBA=";
+    hash = "sha256-KiDDpNNPN43YevIjnCl1dYyWgKIB8tTxs3UYSCufxhA=";
   };
 
   nativeBuildInputs = [

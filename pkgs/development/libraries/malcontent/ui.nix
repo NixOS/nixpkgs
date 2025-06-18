@@ -20,7 +20,7 @@
   glib-testing,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "malcontent-ui";
 
   inherit (malcontent) version src;

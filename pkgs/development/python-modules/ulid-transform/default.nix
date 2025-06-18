@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ulid-transform";
-  version = "1.2.0";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "ulid-transform";
     tag = "v${version}";
-    hash = "sha256-+P5sd3FSk9SYmeHkatB88EE+/1vktyiJJeaecbBkBhI=";
+    hash = "sha256-qGqqb1V5wVKQK4/K2t8j/Vm52iS2EybEleCT3nLCJzc=";
   };
 
   build-system = [

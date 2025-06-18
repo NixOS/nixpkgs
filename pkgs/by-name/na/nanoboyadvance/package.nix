@@ -22,22 +22,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanoboyadvance";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "nba-emu";
     repo = "NanoBoyAdvance";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-du3dPTg3OxNTWXDQo2m9W0rJxtrkn+lQSh/XGiu/eGg=";
+    hash = "sha256-IH2X0B3HwEG0/wvKacLVPBQad14W0HBy5VFHjk8vgJk=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "add-missing-gcc14-include.patch";
-      url = "https://github.com/nba-emu/NanoBoyAdvance/commit/f5551cc1aa6a12b3d65dd56d186c73a67f3d9dd6.patch";
-      hash = "sha256-TCyN0qz7o7BDhVZtaTsWCZAcKThi5oVqUM0NGmj44FI=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -53,13 +45,24 @@ stdenv.mkDerivation (finalAttrs: {
     libunarr
   ];
 
-  cmakeFlags = [
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GLAD" "${gladSrc}")
-    (lib.cmakeBool "USE_SYSTEM_FMT" true)
-    (lib.cmakeBool "USE_SYSTEM_TOML11" true)
-    (lib.cmakeBool "USE_SYSTEM_UNARR" true)
-    (lib.cmakeBool "PORTABLE_MODE" false)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GLAD" "${gladSrc}")
+      (lib.cmakeBool "USE_SYSTEM_FMT" true)
+      (lib.cmakeBool "USE_SYSTEM_TOML11" true)
+      (lib.cmakeBool "USE_SYSTEM_UNARR" true)
+      (lib.cmakeBool "PORTABLE_MODE" false)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.cmakeBool "MACOS_BUILD_APP_BUNDLE" true)
+      (lib.cmakeBool "MACOS_BUNDLE_QT" false)
+    ];
+
+  # Make it runnable from the terminal on Darwin
+  postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
+    mkdir "$out/bin"
+    ln -s "$out/Applications/NanoBoyAdvance.app/Contents/MacOS/NanoBoyAdvance" "$out/bin/NanoBoyAdvance"
+  '';
 
   meta = {
     description = "Cycle-accurate Nintendo Game Boy Advance emulator";

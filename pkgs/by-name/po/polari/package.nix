@@ -86,7 +86,10 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/Polari/";
     description = "IRC chat client designed to integrate with the GNOME desktop";
     mainProgram = "polari";
-    maintainers = teams.gnome.members ++ teams.gnome-circle.members;
+    teams = [
+      teams.gnome
+      teams.gnome-circle
+    ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

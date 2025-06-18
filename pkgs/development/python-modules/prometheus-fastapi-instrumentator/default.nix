@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "prometheus-fastapi-instrumentator";
-  version = "7.0.2";
+  version = "7.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "trallnag";
     repo = "prometheus-fastapi-instrumentator";
     tag = "v${version}";
-    hash = "sha256-ObzaKWrN+9+MUpSOlqbW16KKTklMVo5nPRHodk+GEPs=";
+    hash = "sha256-54h/kwIdzFzxdYglwcEBPkLYno1YH2iWklg35qY2b00=";
   };
 
   build-system = [
@@ -44,6 +45,9 @@ buildPythonPackage rec {
     requests
   ];
 
+  # numerous test failures on Darwin
+  doCheck = stdenv.hostPlatform.isLinux;
+
   pythonImportsCheck = [ "prometheus_fastapi_instrumentator" ];
 
   meta = {
@@ -55,6 +59,6 @@ buildPythonPackage rec {
       bsd3
     ];
     maintainers = with lib.maintainers; [ bcdarwin ];
-    platforms = lib.platforms.linux; # numerous test failures on Darwin
+    platforms = lib.platforms.unix;
   };
 }

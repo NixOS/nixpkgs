@@ -12,14 +12,14 @@
   libserialport,
   doxygen,
   glibmm,
-  python,
+  python3,
   hidapi,
   libieee1284,
   bluez,
   sigrok-firmware-fx2lafw,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libsigrok";
   version = "0.5.2-unstable-2024-10-20";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     doxygen
     pkg-config
-    python
+    python3
   ];
   buildInputs =
     [
@@ -65,10 +65,14 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     # assert that c++ bindings are included
     # note that this is only true for modern (>0.5) versions; the 0.3 series does not have these
     [[ -f $out/include/libsigrokcxx/libsigrokcxx.hpp ]] \
       || { echo 'C++ bindings were not generated; check configure output'; false; }
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

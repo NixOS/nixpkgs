@@ -12,6 +12,7 @@
   doxygen,
   pkg-config,
   python,
+  requests,
   sip,
   which,
   buildPackages,
@@ -29,8 +30,7 @@
   libglvnd,
   libgbm,
   pango,
-  SDL,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wxGTK,
   xorgproto,
 
@@ -42,13 +42,13 @@
 
 buildPythonPackage rec {
   pname = "wxpython";
-  version = "4.2.2";
+  version = "4.2.3";
   format = "other";
 
   src = fetchPypi {
     pname = "wxPython";
     inherit version;
-    hash = "sha256-XbywZQ9n/cLFlleVolX/qj17CfsUmqjaLQ2apE444ro=";
+    hash = "sha256-INbgySfifO2FZDcZvWPp9/1QHfbpqKqxSJsDmJf9fAE=";
   };
 
   patches = [
@@ -70,8 +70,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     attrdict
     pkg-config
+    requests
     setuptools
-    SDL
     sip
     which
     wxGTK
@@ -80,7 +80,6 @@ buildPythonPackage rec {
   buildInputs =
     [
       wxGTK
-      SDL
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       gst_all_1.gst-plugins-base
@@ -93,7 +92,7 @@ buildPythonPackage rec {
       libXxf86vm
       libglvnd
       libgbm
-      webkitgtk_4_0
+      webkitgtk_4_1
       xorgproto
     ];
 
@@ -103,13 +102,13 @@ buildPythonPackage rec {
     six
   ];
 
+  wafPath = "bin/waf";
+
   buildPhase = ''
     runHook preBuild
 
     export DOXYGEN=${doxygen}/bin/doxygen
     export PATH="${wxGTK}/bin:$PATH"
-    export SDL_CONFIG="${SDL.dev}/bin/sdl-config"
-    export WAF=$PWD/bin/waf
 
     ${python.pythonOnBuildForHost.interpreter} build.py -v --use_syswx dox etg sip --nodoc build_py
 

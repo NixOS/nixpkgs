@@ -8,7 +8,6 @@
   cmake,
   cairo,
   deno,
-  fetchurl,
   go,
   lld,
   makeWrapper,
@@ -16,16 +15,13 @@
   openssl,
   pango,
   pixman,
-  giflib,
   pkg-config,
   python3,
   rustfmt,
   stdenv,
-  swagger-cli,
   perl,
   _experimental-update-script-combinators,
   nix-update-script,
-  writeScript,
   librusty_v8 ? (
     callPackage ./librusty_v8.nix {
       inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
@@ -67,15 +63,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTY_V8_ARCHIVE = librusty_v8;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "php-parser-rs-0.1.3" = "sha256-ZeI3KgUPmtjlRfq6eAYveqt8Ay35gwj6B9iOQRjQa9A=";
-      "postgres-native-tls-0.5.0" = "sha256-hhvZkdc2KnU6IkgeTHY4M2dp9//NL8DQjOIcAh3sSRM=";
-      "progenitor-0.3.0" = "sha256-F6XRZFVIN6/HfcM8yI/PyNke45FL7jbcznIiqj22eIQ=";
-      "tinyvector-0.1.0" = "sha256-NYGhofU4rh+2IAM+zwe04YQdXY8Aa4gTmn2V2HtzRfI=";
-    };
-  };
+  cargoHash = "sha256-6htM6p09mPUQmS+QVBDO7Y/tuwweHgA+W/E3XTNunB8=";
+  useFetchCargoVendor = true;
 
   buildFeatures =
     [

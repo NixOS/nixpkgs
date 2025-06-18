@@ -17,7 +17,6 @@
   yapf,
 
   # dependencies
-  cloudpickle,
   crcmod,
   dill,
   fastavro,
@@ -63,14 +62,14 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.63.0";
+  version = "2.65.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${version}";
-    hash = "sha256-ixJstawgU3UGtNKVzkwMCLkdY7QKTbxNe6JJ7vG+vmA=";
+    hash = "sha256-vDW0PVNep+egIZBe4t8IPwLgsQDmoO4rrA4wUoAHzfg=";
   };
 
   pythonRelaxDeps = [
@@ -84,11 +83,14 @@ buildPythonPackage rec {
     # See https://github.com/NixOS/nixpkgs/issues/156957
     "dill"
 
+    "protobuf"
+
     # As of apache-beam v2.45.0, the requirement is pyarrow<10.0.0,>=0.15.1, but
     # the current (2023-02-22) nixpkgs's pyarrow version is 11.0.0.
     "pyarrow"
 
     "pydot"
+    "redis"
   ];
 
   sourceRoot = "${src.name}/sdks/python";
@@ -107,7 +109,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    cloudpickle
     crcmod
     dill
     fastavro

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "j";
-  version = "9.5.1";
+  version = "9.6.2";
 
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
-    rev = "${version}";
-    hash = "sha256-QRQhE8138+zaGQOdq9xUOrifkVIprzbJWbmMK+WhEOU=";
+    tag = version;
+    hash = "sha256-Afa2QzzgJYijcavurgGH/qwyofNn4rtFMIHzlqJwFGU=";
   };
 
   nativeBuildInputs = [ which ];

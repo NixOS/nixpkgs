@@ -6,7 +6,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "aocd-example-parser";
   version = "2024.12.25";
   pyproject = true;

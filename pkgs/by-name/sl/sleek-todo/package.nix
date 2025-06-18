@@ -4,7 +4,7 @@
   fetchurl,
   undmg,
   appimageTools,
-
+  makeWrapper,
 }:
 
 let
@@ -66,8 +66,10 @@ else
       src
       meta
       ;
-
+    nativeBuildInputs = [ makeWrapper ];
     extraInstallCommands = ''
+      wrapProgram $out/bin/sleek-todo \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       mkdir -p $out/share/{applications,sleek}
       cp -a ${appimageContents}/{locales,resources} $out/share/sleek
       cp -a ${appimageContents}/usr/share/icons $out/share

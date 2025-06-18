@@ -7,11 +7,12 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  validators,
 }:
 
 buildPythonPackage rec {
   pname = "faraday-agent-parameters-types";
-  version = "1.7.3";
+  version = "1.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "faraday_agent_parameters_types";
     inherit version;
-    hash = "sha256-dpMxmCFo7e+/VA1SdpdSYRKR9rvr7zQWTri4pJt/4PY=";
+    hash = "sha256-ZyTaQN6T+F8QKPuTfGcEtdKM/2hvtekghG4UwtER02A=";
   };
 
   postPatch = ''
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   dependencies = [
     marshmallow
     packaging
+    validators
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

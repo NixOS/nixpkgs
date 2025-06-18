@@ -6,10 +6,11 @@
   pkg-config,
   libevdev,
   udev,
+  udevCheckHook,
   acl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "joycond";
   version = "unstable-2021-07-30";
 
@@ -23,11 +24,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    udevCheckHook
   ];
   buildInputs = [
     libevdev
     udev
   ];
+
+  doInstallCheck = true;
 
   # CMake has hardcoded install paths
   installPhase = ''

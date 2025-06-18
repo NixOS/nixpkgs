@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "cri-o";
-  version = "1.32.0";
+  version = "1.33.1";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    hash = "sha256-bjZjmgIYFroyUdBeUbrRz7dD0yQOqc9TDsGxvle1PnE=";
+    hash = "sha256-leWFoZ8aMGQgy0JDcbyZ+GX9B6Qdm+f5ng1X0beIcw0=";
   };
   vendorHash = null;
 
@@ -85,7 +85,7 @@ buildGoModule rec {
       Kubernetes Container Runtime Interface
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    teams = [ teams.podman ];
     platforms = platforms.linux;
   };
 }

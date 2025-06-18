@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "all-the-package-names";
-  version = "2.0.2070";
+  version = "2.0.2154";
 
   src = fetchFromGitHub {
     owner = "nice-registry";
     repo = "all-the-package-names";
     tag = "v${version}";
-    hash = "sha256-yODB3vnQ3V0p+2tatYStrc5X1hA3nfm+mULhGEgIIPc=";
+    hash = "sha256-JAWD64CTQACKH8uGyGcbWqTkCQxmRvtQIyco4rK3l6Y=";
   };
 
-  npmDepsHash = "sha256-Ylqp5Zq04VyL4jYDkv4VLg2up2qFldHqleJaKQXKE/s=";
+  npmDepsHash = "sha256-yzjW4m0gHKfWulgAIR04IkWDnHvfCohF/wHi6Wu42cY=";
 
   passthru.updateScript = nix-update-script { };
 

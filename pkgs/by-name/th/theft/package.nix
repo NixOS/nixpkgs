@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "1n2mkawfl2bpd4pwy3mdzxwlqjjvb5bdrr2x2gldlyqdwbk7qjhd";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "ar -rcs" "${stdenv.cc.targetPrefix}ar -rcs"
+  '';
+
   preConfigure = "patchShebangs ./scripts/mk_bits_lut";
 
   doCheck = true;

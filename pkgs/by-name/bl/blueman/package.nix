@@ -20,6 +20,7 @@
   networkmanager,
   withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
+  procps,
 }:
 
 let
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
       librsvg
       adwaita-icon-theme
       networkmanager
+      procps
     ]
     ++ pythonPath
     ++ lib.optional withPulseAudio libpulseaudio;
@@ -92,12 +94,12 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/blueman-project/blueman";
     description = "GTK-based Bluetooth Manager";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     changelog = "https://github.com/blueman-project/blueman/releases/tag/${version}";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

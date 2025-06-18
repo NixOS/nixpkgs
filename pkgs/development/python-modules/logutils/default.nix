@@ -6,7 +6,7 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
-  redis-server,
+  valkey,
   redis,
   setuptools,
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     substituteInPlace tests/test_dictconfig.py \
       --replace-fail "assertEquals" "assertEqual"
     substituteInPlace tests/test_redis.py \
-      --replace-fail "'redis-server'" "'${redis-server}/bin/redis-server'"
+      --replace-fail "'redis-server'" "'${valkey}/bin/redis-server'"
   '';
 
   build-system = [ setuptools ];

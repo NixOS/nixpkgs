@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "meetecho";
-    repo = pname;
+    repo = "janus-gateway";
     rev = "v${version}";
     sha256 = "sha256-Y4MdbB706aziKPxM9y/3uCKpc60dMDlV0xgugDjfa7A=";
   };
@@ -98,12 +98,12 @@ stdenv.mkDerivation rec {
     moveToOutput etc "$doc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "General purpose WebRTC server";
     homepage = "https://janus.conf.meetecho.com/";
     changelog = "https://github.com/meetecho/janus-gateway/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, csxcad
-, fparser
-, tinyxml
-, hdf5
-, vtk
-, boost
-, zlib
-, cmake
-, octave
-, mpi
-, withQcsxcad ? true
-, withMPI ? false
-, withHyp2mat ? true
-, qcsxcad
-, hyp2mat
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  csxcad,
+  fparser,
+  tinyxml,
+  hdf5,
+  vtk,
+  boost,
+  zlib,
+  cmake,
+  octave,
+  mpi,
+  withQcsxcad ? true,
+  withMPI ? false,
+  withHyp2mat ? true,
+  qcsxcad,
+  hyp2mat,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,15 +36,17 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals withMPI [ "-DWITH_MPI=ON" ];
 
-  buildInputs = [
-    fparser
-    tinyxml
-    hdf5
-    vtk
-    boost
-    zlib
-    csxcad
-    (octave.override { inherit hdf5; }) ]
+  buildInputs =
+    [
+      fparser
+      tinyxml
+      hdf5
+      vtk
+      boost
+      zlib
+      csxcad
+      (octave.override { inherit hdf5; })
+    ]
     ++ lib.optionals withQcsxcad [ qcsxcad ]
     ++ lib.optionals withMPI [ mpi ]
     ++ lib.optionals withHyp2mat [ hyp2mat ];

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
-    repo = pname;
+    repo = "rehex";
     rev = version;
     hash = "sha256-RlYpg3aon1d25n8K/bbHGVLn5/iOOUSlvjT8U0fp9hA=";
   };
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Reverse Engineers' Hex Editor";
     longDescription = ''
       A cross-platform (Windows, Linux, Mac) hex editor for reverse
@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/solemnwarning/rehex";
     changelog = "https://github.com/solemnwarning/rehex/raw/${version}/CHANGES.txt";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       markus1189
       wegank
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "rehex";
   };
 }

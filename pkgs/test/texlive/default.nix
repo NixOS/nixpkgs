@@ -438,6 +438,9 @@ rec {
     let
       # TODO known broken binaries
       broken = [
+        # do not know how to test without a valid build.lua
+        "ppmcheckpdf"
+
         # *.inc files in source container rather than run
         "texaccents"
 
@@ -622,7 +625,7 @@ rec {
         "outocp"
         "pmxab"
 
-        # GUI scripts that accept no argument or crash without a graphics server; please test manualy
+        # GUI scripts that accept no argument or crash without a graphics server; please test manually
         "epspdftk"
         "texdoctk"
         "tlshell"
@@ -660,6 +663,8 @@ rec {
         "allcm"
         "allec"
         "chkweb"
+        "explcheck"
+        "extractbb"
         "fontinst"
         "ht*"
         "installfont-tl"

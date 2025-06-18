@@ -20,7 +20,7 @@ let
   defaults = {
     # without UseDefaultInterface, sometimes wlan0 simply goes AWOL with NetworkManager
     # https://iwd.wiki.kernel.org/interface_lifecycle#interface_management_in_iwd
-    General.UseDefaultInterface =
+    DriverQuirks.UseDefaultInterface =
       with config.networking.networkmanager;
       (enable && (wifi.backend == "iwd"));
   };
@@ -59,6 +59,12 @@ in
         assertion = !config.networking.wireless.enable;
         message = ''
           Only one wireless daemon is allowed at the time: networking.wireless.enable and networking.wireless.iwd.enable are mutually exclusive.
+        '';
+      }
+      {
+        assertion = !(cfg.settings ? General && cfg.settings.General ? UseDefaultInterface);
+        message = ''
+          `networking.wireless.iwd.settings.General.UseDefaultInterface` has been deprecated. Use `networking.wireless.iwd.settings.DriverQuirks.UseDefaultInterface` instead.
         '';
       }
     ];

@@ -43,7 +43,9 @@ lib.extendMkDerivation {
 
           emacs --batch -Q -l "$elpa2nix" \
               -f elpa2nix-install-package \
-              "$src" "$out/share/emacs/site-lisp/elpa"
+              "$src" "$out/share/emacs/site-lisp/elpa" \
+              ${if finalAttrs.turnCompilationWarningToError then "t" else "nil"} \
+              ${if finalAttrs.ignoreCompilationError then "t" else "nil"}
 
           runHook postInstall
         '';

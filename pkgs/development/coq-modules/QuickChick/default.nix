@@ -2,7 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
-  ssreflect,
+  mathcomp-boot,
   ExtLib,
   simple-io,
   version ? null,
@@ -17,7 +17,7 @@ in
   inherit version;
   defaultVersion =
     lib.switch
-      [ coq.coq-version ssreflect.version ]
+      [ coq.coq-version mathcomp-boot.version ]
       [
         {
           cases = [
@@ -127,7 +127,7 @@ in
   mlPlugin = true;
   nativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
   propagatedBuildInputs =
-    [ ssreflect ]
+    [ mathcomp-boot ]
     ++ lib.optionals recent [
       ExtLib
       simple-io

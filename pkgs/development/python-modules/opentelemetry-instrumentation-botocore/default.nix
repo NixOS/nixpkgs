@@ -13,7 +13,7 @@
   aws-xray-sdk,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-botocore";
   pyproject = true;

@@ -20,6 +20,7 @@
   sbc,
   bluez5,
   udev,
+  udevCheckHook,
   openssl,
   fftwFloat,
   soxr,
@@ -61,10 +62,6 @@
   # Whether to build only the library.
   libOnly ? false,
 
-  AudioUnit,
-  Cocoa,
-  CoreServices,
-  CoreAudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -114,8 +111,9 @@ stdenv.mkDerivation rec {
       perlPackages.perl
       perlPackages.XMLParser
       m4
+      udevCheckHook
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ glib ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ glib ]
     # gstreamer plugin discovery requires wrapping
     ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook3;
 
@@ -130,15 +128,11 @@ stdenv.mkDerivation rec {
       fftwFloat
       check
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       glib
       dbus
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-      Cocoa
-      CoreServices
-      CoreAudio
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
       libintl
     ]
     ++ lib.optionals (!libOnly) (
@@ -178,6 +172,13 @@ stdenv.mkDerivation rec {
       ++ lib.optional remoteControlSupport lirc
       ++ lib.optional zeroconfSupport avahi
     );
+
+  env =
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/3848
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
   mesonFlags =
     [
@@ -229,6 +230,9 @@ stdenv.mkDerivation rec {
 
   # tests fail on Darwin because of timeouts
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  doInstallCheck = true;
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
@@ -274,7 +278,9 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  passthru.tests = { inherit (nixosTests) pulseaudio; };
+  passthru.tests = {
+    inherit (nixosTests) pulseaudio;
+  };
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";

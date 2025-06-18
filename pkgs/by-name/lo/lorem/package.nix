@@ -18,20 +18,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lorem";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World/design";
     repo = "lorem";
     rev = finalAttrs.version;
-    hash = "sha256-6+kDKKK1bkIOZlqzKWpzpjAS5o7bkbVFITMZVmJijuU=";
+    hash = "sha256-q6gpxxNebf2G/lT5wWXT/lVp3zR8QLWB8/sdK+wLTJ8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    src = finalAttrs.src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-l6vd521DmV019Yu5O1Kf5RKan2ROCBHlPiEDhf34Grc=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-4JYYcfsEoCGJWZCp0273gXrf8hfuHL/QSsLEHvNa4uA=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/Lorem/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "lorem";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

@@ -169,6 +169,16 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-media "9.0.0" "zip"
           "sha256-TI7l8sSQ2QUgPqiE3Cu/F67Wna+KHbQS3fuIjOb95ZM=";
 
+      # ModuleNotFoundError: No module named 'azure.mgmt.monitor.operations'
+      azure-mgmt-monitor = super.azure-mgmt-monitor.overridePythonAttrs (attrs: rec {
+        version = "7.0.0b1";
+        src = fetchPypi {
+          pname = "azure_mgmt_monitor"; # Different from src.pname in the original package.
+          inherit version;
+          hash = "sha256-WR4YZMw4njklpARkujsRnd6nwTZ8M5vXFcy9AfL9oj4=";
+        };
+      });
+
       # AttributeError: module 'azure.mgmt.rdbms.postgresql_flexibleservers.operations' has no attribute 'BackupsOperations'
       azure-mgmt-rdbms =
         overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b17" "tar.gz"
@@ -203,6 +213,14 @@ let
       azure-mgmt-synapse =
         overrideAzureMgmtPackage super.azure-mgmt-synapse "2.1.0b5" "zip"
           "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
+
+      # Observed error during runtime:
+      # AttributeError: Can't get attribute 'NormalizedResponse' on <module 'msal.throttled_http_client' from
+      # '/nix/store/xxx-python3.12-msal-1.32.0/lib/python3.12/site-packages/msal/throttled_http_client.py'>.
+      # Did you mean: '_msal_public_app_kwargs'?
+      msal =
+        overrideAzureMgmtPackage super.msal "1.32.3" "tar.gz"
+          "sha256-XuoDhonHilpwyo7L4SRUWLVahXvQlu+2mJxpuhWYXTU=";
     };
   };
 in

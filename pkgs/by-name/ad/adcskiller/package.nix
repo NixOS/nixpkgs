@@ -5,7 +5,7 @@
   coercer,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "adcskiller";
   version = "0-unstable-2024-05-19";
   format = "other";

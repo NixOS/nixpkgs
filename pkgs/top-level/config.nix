@@ -17,19 +17,28 @@ let
     types
     ;
 
-  mkMassRebuild = args: mkOption (builtins.removeAttrs args [ "feature" ] // {
-    type = args.type or (types.uniq types.bool);
-    default = args.default or false;
-    description = ((args.description or ''
-      Whether to ${args.feature} while building nixpkgs packages.
-    '') + ''
-      Changing the default may cause a mass rebuild.
-    '');
-  });
+  mkMassRebuild =
+    args:
+    mkOption (
+      builtins.removeAttrs args [ "feature" ]
+      // {
+        type = args.type or (types.uniq types.bool);
+        default = args.default or false;
+        description = (
+          (args.description or ''
+            Whether to ${args.feature} while building nixpkgs packages.
+          ''
+          )
+          + ''
+            Changing the default may cause a mass rebuild.
+          ''
+        );
+      }
+    );
 
   options = {
 
-    /* Internal stuff */
+    # Internal stuff
 
     # Hide built-in module system options from docs.
     _module.args = mkOption {
@@ -38,16 +47,62 @@ let
 
     warnings = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       internal = true;
     };
 
-    /* Config options */
+    # Config options
 
     warnUndeclaredOptions = mkOption {
       description = "Whether to warn when `config` contains an unrecognized attribute.";
       type = types.bool;
       default = false;
+    };
+
+    fetchedSourceNameDefault = mkOption {
+      type = types.uniq (
+        types.enum [
+          "source"
+          "versioned"
+          "full"
+        ]
+      );
+      default = "source";
+      description = ''
+        This controls the default derivation `name` attribute set by the
+        `fetch*` (`fetchzip`, `fetchFromGitHub`, etc) functions.
+
+        Possible values and the resulting `.name`:
+
+        - `"source"` -> `"source"`
+        - `"versioned"` -> `"''${repo}-''${rev}-source"`
+        - `"full"` -> `"''${repo}-''${rev}-''${fetcherName}-source"`
+
+        The default `"source"` is the best choice for minimal rebuilds, it
+        will ignore any non-hash changes (like branches being renamed, source
+        URLs changing, etc) at the cost of `/nix/store` being easily
+        cache-poisoned (see [NixOS/nix#969](https://github.com/NixOS/nix/issues/969)).
+
+        Setting this to `"versioned"` greatly helps with discoverability of
+        sources in `/nix/store` and makes cache-poisoning of `/nix/store` much
+        harder, at the cost of a single mass-rebuild for all `src`
+        derivations, and an occasional rebuild when a source changes some of
+        its non-hash attributes.
+
+        Setting this to `"full"` is similar to setting it to `"versioned"`,
+        but the use of `fetcherName` in the derivation name will force a
+        rebuild when `src` switches between `fetch*` functions, thus forcing
+        `nix` to check new derivation's `outputHash`, which is useful for
+        debugging.
+
+        Also, `"full"` is useful for easy collection and tracking of
+        statistics of where the packages you use are hosted.
+
+        If you are a developer, you should probably set this to at
+        least`"versioned"`.
+
+        Changing the default will cause a mass rebuild.
+      '';
     };
 
     doCheckByDefault = mkMassRebuild {
@@ -128,9 +183,19 @@ let
       '';
     };
 
-    cudaSupport = mkMassRebuild {
+    allowVariants = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
+      description = ''
+        Whether to expose the nixpkgs variants.
+
+        Variants are instances of the current nixpkgs instance with different stdenvs or other applied options.
+        This allows for using different toolchains, libcs, or global build changes across nixpkgs.
+        Disabling can ensure nixpkgs is only building for the platform which you specified.
+      '';
+    };
+
+    cudaSupport = mkMassRebuild {
       feature = "build packages with CUDA support by default";
     };
 
@@ -163,14 +228,12 @@ let
     };
 
     rocmSupport = mkMassRebuild {
-      type = types.bool;
-      default = false;
       feature = "build packages with ROCm support by default";
     };
 
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
-      default = [];
+      default = [ ];
       description = ''
         Which warnings to display for potentially dangerous
         or deprecated values passed into `stdenv.mkDerivation`.
@@ -190,23 +253,51 @@ let
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
       '';
     };
+
+    rewriteURL = mkOption {
+      type = types.functionTo (types.nullOr types.str);
+      description = ''
+        A hook to rewrite/filter URLs before they are fetched.
+
+        The function is passed the URL as a string, and is expected to return a new URL, or null if the given URL should not be attempted.
+
+        This function is applied _prior_ to resolving mirror:// URLs.
+
+        The intended use is to allow URL rewriting to insert company-internal mirrors, or work around company firewalls and similar network restrictions.
+      '';
+      default = lib.id;
+      defaultText = literalExpression "(url: url)";
+      example = literalExpression ''
+        {
+          # Use Nix like it's 2024! ;-)
+          rewriteURL = url: "https://web.archive.org/web/2024/''${url}";
+        }
+      '';
+    };
   };
 
-in {
+in
+{
 
   freeformType =
-    let t = types.lazyAttrsOf types.raw;
-    in t // {
-      merge = loc: defs:
-        let r = t.merge loc defs;
-        in r // { _undeclared = r; };
+    let
+      t = types.lazyAttrsOf types.raw;
+    in
+    t
+    // {
+      merge =
+        loc: defs:
+        let
+          r = t.merge loc defs;
+        in
+        r // { _undeclared = r; };
     };
 
   inherit options;
 
   config = {
     warnings = optionals config.warnUndeclaredOptions (
-      mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or {}
+      mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
     );
   };
 

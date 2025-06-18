@@ -12,7 +12,6 @@
   numpy,
   packaging,
   pyyaml,
-  tensorboardx,
   torch,
   torchmetrics,
   tqdm,
@@ -25,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "2.5.0.post0";
+  version = "2.5.1.post0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     tag = version;
-    hash = "sha256-TkwDncyfv1VoV/IErUgF4p0Or5PJbwKoABqo1xXGLVg=";
+    hash = "sha256-Vp9RpoyqHiMw3BchmenXgfmmm95uIjuhkhyq1ZrBiiI=";
   };
 
   preConfigure = ''
@@ -47,7 +46,6 @@ buildPythonPackage rec {
     numpy
     packaging
     pyyaml
-    tensorboardx
     torch
     torchmetrics
     tqdm

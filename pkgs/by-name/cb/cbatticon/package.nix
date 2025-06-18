@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "valr";
-    repo = pname;
+    repo = "cbatticon";
     rev = version;
     sha256 = "sha256-VQjJujF9lnVvQxV+0YqodLgnI9F90JKDAGBu5nM/Q/c=";
   };
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/valr/cbatticon";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
   };
 }

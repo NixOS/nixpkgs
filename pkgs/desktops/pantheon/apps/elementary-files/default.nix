@@ -1,39 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, libcanberra
-, gtk3
-, glib
-, libgee
-, libhandy
-, libportal-gtk3
-, granite
-, pango
-, sqlite
-, zeitgeist
-, libcloudproviders
-, libgit2-glib
-, wrapGAppsHook3
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  desktop-file-utils,
+  libcanberra,
+  gtk3,
+  glib,
+  libgee,
+  libhandy,
+  libportal-gtk3,
+  granite,
+  pango,
+  sqlite,
+  zeitgeist,
+  libcloudproviders,
+  libgit2-glib,
+  wrapGAppsHook3,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "7.1.0";
+  version = "7.1.3";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "files";
     rev = version;
-    hash = "sha256-KGp1qhUhig4h8iQljJTBdwZT3P2prB/pFyfJWXjtPLk=";
+    hash = "sha256-GeHaDZGOdvc7dXA3AE4Gt9u3RVgkU7d3FxAC3uXsgUs=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +74,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/files";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.files";
   };
 }

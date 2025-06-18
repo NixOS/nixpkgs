@@ -39,6 +39,27 @@ cd ${WORKDIR}
 
 FAKE_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
+# Get sha256sums for amd64 and arm64
+SHA256_AMD64=$(curl -L "https://github.com/rancher/rke2/releases/download/v${RKE2_VERSION}/sha256sum-amd64.txt")
+SHA256_ARM64=$(curl -L "https://github.com/rancher/rke2/releases/download/v${RKE2_VERSION}/sha256sum-arm64.txt")
+# Merge both sha256sums in a single variable, one entry per line
+SHA256_SUMS="$SHA256_AMD64\n$SHA256_ARM64"
+# Get a list of images archives that are assets of this release, one entry (name and download_url) per line
+IMAGES_ARCHIVES=$(curl "https://api.github.com/repos/rancher/rke2/releases/tags/v${RKE2_VERSION}" | \
+    # Filter the assets by name, discard .txt files and legacy image archives (e.g. rke2-images.linux-arm64.tar.gz)
+    jq -r '.assets[] | select(.name | test("^rke2-images-.*\\.tar\\.")) | "\(.name) \(.browser_download_url)"')
+# Iterate over all lines of IMAGES_ARCHIVES, pick the appropriate sha256, and create a JSON file
+# that can be imported by builder.nix
+while read -r name url; do
+  sha256=$(grep "$name" <<< "$SHA256_SUMS" | cut -d ' ' -f 1)
+  # Remove the rke2 prefix and replace all dots in $name with hyphens
+  clean_name=$(sed -e "s/^rke2-//" -e "s/\./-/g" <<< "$name")
+  jq --null-input --arg name "$clean_name" \
+    --arg url "$url" \
+    --arg sha256 "$sha256" \
+    '{$name: {"url": $url, "sha256": $sha256}}'
+done <<<"${IMAGES_ARCHIVES}" | jq --slurp 'reduce .[] as $item ({}; . * $item)' > "${WORKDIR}/1_${MINOR_VERSION}/images-versions.json"
+
 cat << EOF > "${WORKDIR}/1_${MINOR_VERSION}/versions.nix"
 {
   rke2Version = "${RKE2_VERSION}";
@@ -50,6 +71,7 @@ cat << EOF > "${WORKDIR}/1_${MINOR_VERSION}/versions.nix"
   pauseVersion = "${PAUSE_VERSION}";
   ccmVersion = "${CCM_VERSION}";
   dockerizedVersion = "${DOCKERIZED_VERSION}";
+  imagesVersions = with builtins; fromJSON (readFile ./images-versions.json);
 }
 EOF
 

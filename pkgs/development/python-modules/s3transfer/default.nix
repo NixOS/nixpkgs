@@ -5,29 +5,32 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.10.1";
+  version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = "s3transfer";
     tag = version;
-    hash = "sha256-EHNkYviafnuU8AADp9oyaDuAnoPOdOVNSLCcoONnHPY=";
+    hash = "sha256-Ou3U7IPGJdK9exOLMgPFoTbOQi9IA+ivoGVOygB4ACE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ botocore ];
+  dependencies = [
+    botocore
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   disabledTestPaths =
     [
@@ -43,14 +46,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "s3transfer" ];
 
   optional-dependencies = {
-    crt = [ botocore.optional-dependencies.crt ];
+    crt = botocore.optional-dependencies.crt;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for managing Amazon S3 transfers";
     homepage = "https://github.com/boto/s3transfer";
     changelog = "https://github.com/boto/s3transfer/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

@@ -17,17 +17,17 @@
 
 buildGoModule rec {
   pname = "grafana-alloy";
-  version = "1.7.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
     tag = "v${version}";
-    hash = "sha256-t1YDYQ+0RKHYaL/oE9XGjV7/g28rHO9avL6/CTfMHeE=";
+    hash = "sha256-j3zuV+a3hLgHrb1jcPav9AhQpT8WT/cP4KSZ9gJY0p4=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-d9uWbZ+5YSnB3yqL/YZ0ld+8soO3oGb8gttzj3Q7MXs=";
+  vendorHash = "sha256-bePkYhKL8yNzVgX3Can9jyC1WKFQzHoX+L3qapZ0fjQ=";
 
   nativeBuildInputs = [
     fixup-yarn-lock
@@ -70,7 +70,7 @@ buildGoModule rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/internal/web/ui/yarn.lock";
-    hash = "sha256-4vZr3mPvk5IXoqSPuqhzYobAuK2NDK0dceNZUIQILvI=";
+    hash = "sha256-oCDP2XJczLXgzEjyvFEIFBanlnzjrj0So09izG5vufs=";
   };
 
   preBuild = ''
@@ -146,7 +146,6 @@ buildGoModule rec {
     maintainers = with maintainers; [
       azahi
       flokli
-      emilylange
       hbjydev
     ];
     platforms = lib.platforms.unix;

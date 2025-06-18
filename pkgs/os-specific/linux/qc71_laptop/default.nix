@@ -4,17 +4,18 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qc71_laptop";
-  version = "unstable-2023-03-02";
+  version = "0-unstable-2025-01-07";
 
   src = fetchFromGitHub {
     owner = "pobrn";
     repo = "qc71_laptop";
-    rev = "8805dc5639f6659addf153a295ad4bbaa2483fa3";
-    hash = "sha256-wg7APGArjrl9DEAHTG6BknOBx+UbtNrzziwmLueKPfA=";
+    rev = "ebab4af0b2c5b162bb9f27c80cd284c36b8fb7a9";
+    hash = "sha256-sRvxcdocYKnwMH/qYkKj66uClI1bSmMSxXHrHsc7uco=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -30,11 +31,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
   meta = with lib; {
     description = "Linux driver for QC71 laptop";
     homepage = "https://github.com/pobrn/qc71_laptop/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ aacebedo ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

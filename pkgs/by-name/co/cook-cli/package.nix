@@ -1,26 +1,23 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
   rustPlatform,
   pkg-config,
   openssl,
-  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cook-cli";
-  version = "0.7.1";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "cooklang";
     repo = "cookcli";
     rev = "v${version}";
-    hash = "sha256-3gLVsk6GCxOG24Md7E9fk28Vnc4kVDdwyZUD/GtSwFE=";
+    hash = "sha256-2vY68PUoHDyyH3hJ/Fvjxbof7RzWFWYTg1UhsjWNpww=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-EoTCKpH8G3SsXkhQVsr9aX4Cupm+fzPtXHpoM1knqss=";
+  cargoHash = "sha256-H4soSp9fDwrqcv3eL5WqGYHWAt07gyVLoEVp1VbYchQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  ];
 
   postPatch = ''
     rm -rf "ui/public"
@@ -41,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   passthru.ui = buildNpmPackage {
     name = "ui";
     src = "${src}/ui";
-    npmDepsHash = "sha256-uMyOAYLVHhY4ytvEFvVzdoQ7ExzQ4sH+ZtDrEacu5bk=";
+    npmDepsHash = "sha256-zx8G6Raop1EZAVy1YCF5ag5aL9NutRxbPfTARmjP2SY=";
     makeCacheWritable = true;
     npmFlags = [ "--legacy-peer-deps" ];
     installPhase = ''
@@ -51,13 +48,13 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/cooklang/cookcli/releases/tag/v${version}";
     description = "Suite of tools to create shopping lists and maintain recipes";
     homepage = "https://cooklang.org/";
-    license = [ licenses.mit ];
+    license = lib.licenses.mit;
     mainProgram = "cook";
-    maintainers = [ maintainers.emilioziniades ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ lib.maintainers.emilioziniades ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

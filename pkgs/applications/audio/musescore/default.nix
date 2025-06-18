@@ -36,14 +36,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.4";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/1kAgzmSbnuCqd6YxbaYW2+gE0Gvy373y5VfUK4OVzI=";
+    sha256 = "sha256-9jafh9zyf+tuC+WU6nQIMBVm+Gqqcig8jS2R1h/YnIo=";
   };
+
+  # Backport + additional patch to fix build on Qt 6.9
+  # FIXME: remove when no longer required
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/musescore/MuseScore/commit/05056ed19520060c3912a09a3adfa0927057f956.patch";
+      hash = "sha256-50Hytuu2lQRbAI2JEwlKeMUmJxTUtfqgwru6U760hAY=";
+    })
+    ./qt-6.9.patch
+  ];
 
   cmakeFlags = [
     "-DMUSE_APP_BUILD_MODE=release"
@@ -128,17 +138,12 @@ stdenv.mkDerivation (finalAttrs: {
       qtwayland
     ];
 
-  postInstall =
-    ''
-      # Remove unneeded bundled libraries and headers
-      rm -r $out/{include,lib}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out/Applications"
-      mv "$out/mscore.app" "$out/Applications/mscore.app"
-      mkdir -p $out/bin
-      ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
-    '';
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv "$out/mscore.app" "$out/Applications/mscore.app"
+    mkdir -p $out/bin
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
+  '';
 
   # muse-sounds-manager installs Muse Sounds sampler libMuseSamplerCoreLib.so.
   # It requires that argv0 of the calling process ends with "/mscore" or "/MuseScore-4".

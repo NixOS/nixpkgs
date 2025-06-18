@@ -1,28 +1,30 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lib
-, stdenv
-, testers
-, kubevela
-, nix-update-script
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  stdenv,
+  testers,
+  kubevela,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "kubevela";
-  version = "1.10.1";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "kubevela";
     repo = "kubevela";
     rev = "v${version}";
-    hash = "sha256-McQz9K0l5RVvBF9X9r/p2yzpC463Eyi7jYk1fiWO+TU=";
+    hash = "sha256-ZOe22u0K760AsSWkKKhIqay6+zi4D0GpK9HAbDKi2Wo=";
   };
 
-  vendorHash = "sha256-hlNGkE3/PzRSdJyyoJdcoDPa6UUUU55z2Ql8tD5dE3I=";
+  vendorHash = "sha256-e6buEk5snG199CIb5OGgghmkFCGY/wfNUbpxW9OUdWE=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/oam-dev/kubevela/version.VelaVersion=${version}"
   ];
 

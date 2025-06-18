@@ -10,7 +10,7 @@
   libnotify,
   libarchive,
   gspell,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   libgringotts,
   wrapGAppsHook3,
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libnotify
     libarchive
     gspell
-    webkitgtk_4_0
+    webkitgtk_4_1
     libgringotts
   ];
 

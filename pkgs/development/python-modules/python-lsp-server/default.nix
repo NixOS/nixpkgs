@@ -111,7 +111,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ] ++ optional-dependencies.all;
   versionCheckProgram = "${placeholder "out"}/bin/pylsp";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # avoid dependencies on many Qt things just to run one singular test

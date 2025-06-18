@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchzip
-, autoPatchelfHook
-, dpkg
-, gtk3
-, openssl
-, pcsclite
+{
+  stdenv,
+  lib,
+  fetchzip,
+  autoPatchelfHook,
+  dpkg,
+  gtk3,
+  openssl,
+  pcsclite,
 }:
 
 stdenv.mkDerivation rec {

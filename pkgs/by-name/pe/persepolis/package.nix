@@ -1,26 +1,27 @@
-{ lib
-, qt5
-, python3
-, fetchFromGitHub
-, ffmpeg
-, libnotify
-, pulseaudio
-, sound-theme-freedesktop
-, pkg-config
-, meson
-, ninja
+{
+  lib,
+  qt5,
+  python3,
+  fetchFromGitHub,
+  ffmpeg,
+  libnotify,
+  pulseaudio,
+  sound-theme-freedesktop,
+  pkg-config,
+  meson,
+  ninja,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "persepolis";
-  version = "5.0.1";
+  version = "5.1.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "persepolisdm";
     repo = "persepolis";
     tag = version;
-    hash = "sha256-ffEXPkpHGwvVzUxO6sjAEKYbxRod7o8f7DWR5AN+SkA=";
+    hash = "sha256-+gdrcEOUrMZw4nTO4bFLGanD4f7OumxTE99hpXlo69w=";
   };
 
   postPatch = ''
@@ -30,34 +31,37 @@ python3.pkgs.buildPythonApplication rec {
 
   # prevent double wrapping
   dontWrapQtApps = true;
-  nativeBuildInputs = [ meson ninja pkg-config qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
 
   # feed args to wrapPythonApp
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ ffmpeg libnotify ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        ffmpeg
+        libnotify
+      ]
+    }"
     "\${qtWrapperArgs[@]}"
   ];
 
-  # The presence of these dependencies is checked during setuptoolsCheckPhase,
-  # but apart from that, they're not required during build, only runtime
-  nativeCheckInputs = [
-    libnotify
-    pulseaudio
-    sound-theme-freedesktop
-    ffmpeg
-  ];
-
-  propagatedBuildInputs = [
-    pulseaudio
-    sound-theme-freedesktop
-  ] ++ (with python3.pkgs; [
-    psutil
-    pyqt5
-    requests
-    setproctitle
-    setuptools
-    yt-dlp
-  ]);
+  propagatedBuildInputs =
+    [
+      pulseaudio
+      sound-theme-freedesktop
+    ]
+    ++ (with python3.pkgs; [
+      psutil
+      pyqt5
+      requests
+      setproctitle
+      setuptools
+      yt-dlp
+    ]);
 
   meta = with lib; {
     description = "Download manager GUI written in Python";

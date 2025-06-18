@@ -1,7 +1,6 @@
 {
   blas,
   fetchzip,
-  fetchpatch,
   gfortran,
   lapack,
   lib,
@@ -12,7 +11,6 @@
   withPtScotch ? mpiSupport,
   stdenv,
   fixDarwinDylibNames,
-  mpi,
   mpiSupport ? false,
   mpiCheckPhaseHook,
   scalapack,
@@ -149,7 +147,5 @@ stdenv.mkDerivation (finalAttrs: {
       qbisi
     ];
     platforms = lib.platforms.unix;
-    # Dependency of scalapack for mpiSupport is broken on darwin platform
-    broken = mpiSupport && stdenv.hostPlatform.isDarwin;
   };
 })

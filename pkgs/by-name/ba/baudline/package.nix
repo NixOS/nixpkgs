@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
-        url = "https://www.baudline.com/baudline_${version}_linux_x86_64.tar.gz";
-        sha256 = "09fn0046i69in1jpizkzbaq5ggij0mpflcsparyskm3wh71mbzvr";
+        url = "https://web.archive.org/web/20230130224632/https://www.baudline.com/baudline_${version}_linux_x86_64.tar.gz";
+        hash = "sha256-RG8QPSXHo2qfOEn6eWWTh0ilg44tI1KyjXFm+SYnKKM=";
       }
     else if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
-        url = "https://www.baudline.com/baudline_${version}_linux_i686.tar.gz";
-        sha256 = "1waip5pmcf5ffcfvn8lf1rvsaq2ab66imrbfqs777scz7k8fhhjb";
+        url = "https://web.archive.org/web/20230130224632/https://www.baudline.com/baudline_${version}_linux_i686.tar.gz";
+        hash = "sha256-2A13FyUl4NNWzRConw6gGjBaHxCXYlwtgxbz0ARgI28=";
       }
     else
       throw "baudline isn't supported (yet?) on ${stdenv.hostPlatform.system}";

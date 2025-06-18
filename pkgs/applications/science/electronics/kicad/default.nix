@@ -309,7 +309,7 @@ stdenv.mkDerivation rec {
     supportedFeatures = [ "commit" ];
   };
 
-  meta = rec {
+  meta = {
     description =
       (
         if (stable) then

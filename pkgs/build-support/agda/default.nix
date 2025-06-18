@@ -66,7 +66,7 @@ let
       ''
         mkdir -p $out/bin
         makeWrapper ${Agda.bin}/bin/agda $out/bin/agda \
-          --add-flags "--with-compiler=${ghc}/bin/ghc" \
+          ${lib.optionalString (ghc != null) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
           --add-flags "--library-file=${library-file}"
         ln -s ${Agda.bin}/bin/agda-mode $out/bin/agda-mode
       '';

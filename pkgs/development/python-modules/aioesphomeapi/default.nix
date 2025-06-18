@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "29.3.1";
+  version = "32.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${version}";
-    hash = "sha256-Gv3uM3ZKxcU5BA8HfzHJqTEODM8sfcKbLGfk96yb8u4=";
+    hash = "sha256-1ZepZJdJosPPdFhx8PwArIaoz415GfA1vfc3JJ77LNo=";
   };
 
   build-system = [

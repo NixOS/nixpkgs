@@ -8,16 +8,18 @@
 
 buildGoModule rec {
   pname = "filebeat";
-  version = "8.17.2";
+  version = "8.18.2";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "beats";
     tag = "v${version}";
-    hash = "sha256-Gk+F4OOe/n3SdiycKwJe4nPwfEKAVesKj5Fmvbe9Q5U=";
+    hash = "sha256-8gpmrWBiJr5ibVNMqz/RYyOH7vIVTW1IPAsuDTn1BKc=";
   };
 
-  vendorHash = "sha256-p2Bm2MM85BFI/ePw+ZY90UgqeFKbozGvFvsjY6M82ts=";
+  proxyVendor = true; # darwin/linux hash mismatch
+
+  vendorHash = "sha256-wBh6mWg1xuhcaDA3guWTWjs4WgSHkNGPW/6KWuZ5L7w=";
 
   subPackages = [ "filebeat" ];
 
@@ -25,7 +27,7 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
   doInstallCheck = true;
 
   passthru = {

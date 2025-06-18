@@ -54,9 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fujiwarat/ibus-anthy";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      gebner
-      ericsagnes
-    ];
+    maintainers = with maintainers; [ ];
   };
 }

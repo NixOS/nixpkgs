@@ -7,8 +7,6 @@
   pkg-config,
   asciidoctor,
   openssl,
-  Security,
-  SystemConfiguration,
   ansi2html,
   installShellFiles,
 }:
@@ -29,15 +27,10 @@ rustPlatform.buildRustPackage rec {
     asciidoctor
     installShellFiles
   ];
-  buildInputs =
-    [
-      curl
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [
+    curl
+    openssl
+  ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-8A0RLbFkh3fruZAbjJzipQvuFLchqIRovPcc6MSKdOc=";

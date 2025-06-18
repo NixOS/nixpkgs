@@ -5,6 +5,7 @@
   buildPackages,
   fetchurl,
   flex,
+  lzip,
   readline,
   ed,
   texinfo,
@@ -12,10 +13,10 @@
 
 stdenv.mkDerivation rec {
   pname = "bc";
-  version = "1.08.1";
+  version = "1.08.2";
   src = fetchurl {
-    url = "mirror://gnu/bc/bc-${version}.tar.xz";
-    hash = "sha256-UVQwEVszNMY2MXUDRgoJUN/3mUCqMlnOLBqmfCiB0CM=";
+    url = "mirror://gnu/bc/bc-${version}.tar.lz";
+    hash = "sha256-eeMeAiqEsx3YCYFQY9S46lkLQJY3pSxQ7J9Cwr8zJxE=";
   };
 
   configureFlags = [ "--with-readline" ];
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     ed
     flex
+    lzip
     texinfo
     # Libraries for build
     buildPackages.readline

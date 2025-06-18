@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.5.2";
+  version = "0.5.2-unstable-2024-01-24";
 
 in
 stdenv.mkDerivation {
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyRemote";
-    rev = "soapy-remote-${version}";
-    sha256 = "124sy9v08fm51ds1yzrxspychn34y0rl6y48mzariianazvzmfax";
+    rev = "54caa5b2af348906607c5516a112057650d0873d";
+    sha256 = "sha256-uekElbcbX2P5TEufWEoP6tgUM/4vxgSQZu8qaBCSo18=";
   };
 
   nativeBuildInputs = [ cmake ];

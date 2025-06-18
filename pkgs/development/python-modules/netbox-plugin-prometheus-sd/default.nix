@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "netbox-plugin-prometheus-sd";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "FlxPeters";
     repo = "netbox-plugin-prometheus-sd";
     tag = "v${version}";
-    hash = "sha256-UtvSkqs2PN3uxCB78hJjh0lZ1WbZGjDpwlKyeAGpiEM=";
+    hash = "sha256-L5kJnaY9gKpsWAgwkjVRQQauL2qViinqk7rHLXTVzT4=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Netbox plugin to provide Netbox entires to Prometheus HTTP service discovery";
     homepage = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd";
-    changelog = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd/releases/tag/v${version}";
+    changelog = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ xanderio ];
   };

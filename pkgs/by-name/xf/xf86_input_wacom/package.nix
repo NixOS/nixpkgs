@@ -14,6 +14,7 @@
   pixman,
   pkg-config,
   udev,
+  udevCheckHook,
   utilmacros,
   xorgserver,
 }:
@@ -24,14 +25,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxwacom";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "xf86-input-wacom";
+    rev = "xf86-input-wacom-${version}";
     sha256 = "sha256-0eDik4fhsg1HAL6lCZMll/0VAghpzMSHY0RoKxSOIbc=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
     xorgproto
     xorgserver
   ];
+
+  doInstallCheck = true;
 
   configureFlags = [
     "--with-xorg-module-dir=${placeholder "out"}/lib/xorg/modules"

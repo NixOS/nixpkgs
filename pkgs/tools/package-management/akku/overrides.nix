@@ -1,18 +1,26 @@
-{ stdenv, lib, akku, curl, git }:
+{
+  stdenv,
+  lib,
+  akku,
+  curl,
+  git,
+}:
 let
   joinOverrides =
     overrides: pkg: old:
     lib.attrsets.mergeAttrsList (map (o: o pkg old) overrides);
-  addToBuildInputs =
-    extras: pkg: old:
-    { propagatedBuildInputs = old.propagatedBuildInputs ++ extras; };
+  addToBuildInputs = extras: pkg: old: {
+    propagatedBuildInputs = old.propagatedBuildInputs ++ extras;
+  };
   broken = lib.addMetaAttrs { broken = true; };
   skipTests = pkg: old: { doCheck = false; };
   # debugging
   showLibs = pkg: old: { preCheck = "echo $CHEZSCHEMELIBDIRS"; };
   runTests = pkg: old: { doCheck = true; };
   brokenOnAarch64 = _: lib.addMetaAttrs { broken = stdenv.hostPlatform.isAarch64; };
-  brokenOnx86_64Darwin = lib.addMetaAttrs { broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64; };
+  brokenOnx86_64Darwin = lib.addMetaAttrs {
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
+  };
   brokenOnDarwin = lib.addMetaAttrs { broken = stdenv.hostPlatform.isDarwin; };
 in
 {
@@ -40,7 +48,10 @@ in
 
   akku = joinOverrides [
     # uses chez
-    (addToBuildInputs [ curl git ])
+    (addToBuildInputs [
+      curl
+      git
+    ])
     (pkg: old: {
       # bump akku to 1.1.0-unstable-2024-03-03
       src = akku.src;

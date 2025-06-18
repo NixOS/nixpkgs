@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   cmake,
   cups,
   ninja,
@@ -56,13 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (shiboken6) version src;
 
-  sourceRoot = "pyside-setup-everywhere-src-6.8.0/sources/pyside6";
+  sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/pyside6";
 
-  patches = [
-    # Manual backport of https://code.qt.io/cgit/pyside/pyside-setup.git/patch/?id=cacc9c5803a6dec820dd46211a836453183c8dab
-    # to fit our structure.
-    # FIXME: remove for 6.8.1
-    ./fix-installing-docs.patch
+  # Qt Designer plugin moved to a separate output to reduce closure size
+  # for downstream things
+  outputs = [
+    "out"
+    "devtools"
   ];
 
   # cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS
@@ -117,6 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
     cd ../../..
     ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=pyside6
     cp -r PySide6.egg-info $out/${python.sitePackages}/
+
+    mkdir -p "$devtools"
+    moveToOutput "${python.pkgs.qt6.qtbase.qtPluginPrefix}/designer" "$devtools"
   '';
 
   pythonImportsCheck = [ "PySide6" ];
@@ -130,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     changelog = "https://code.qt.io/cgit/pyside/pyside-setup.git/tree/doc/changelogs/changes-${finalAttrs.version}?h=v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

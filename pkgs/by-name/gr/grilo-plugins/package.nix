@@ -26,7 +26,7 @@
   json-glib,
   avahi,
   tinysparql,
-  dleyna-server,
+  dleyna,
   itstool,
   totem-pl-parser,
 }:
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     avahi
     libmediaart
     tinysparql
-    dleyna-server
+    dleyna
     gst_all_1.gstreamer
   ];
 
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/grilo-plugins";
     description = "Collection of plugins for the Grilo framework";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
   };

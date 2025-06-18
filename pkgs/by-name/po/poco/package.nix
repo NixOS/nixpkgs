@@ -7,11 +7,11 @@
   pkg-config,
   zlib,
   pcre2,
+  utf8proc,
   expat,
   sqlite,
   openssl,
   unixODBC,
-  utf8proc,
   libmysqlclient,
 }:
 
@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     unixODBC
-    utf8proc
     libmysqlclient
   ];
 
   propagatedBuildInputs = [
     zlib
     pcre2
+    utf8proc
     expat
     sqlite
     openssl

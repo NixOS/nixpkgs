@@ -24,6 +24,7 @@
   vala,
   withDemoAgent ? false,
   nix-update-script,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -107,7 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs demo/install-file.py
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) geoclue2;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin && withDemoAgent;

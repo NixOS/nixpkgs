@@ -9,17 +9,18 @@
   bzip2,
   check,
   ncurses,
+  udevCheckHook,
   util-linux,
   zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gfs2-utils";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchurl {
     url = "https://pagure.io/gfs2-utils/archive/${version}/gfs2-utils-${version}.tar.gz";
-    hash = "sha256-1+wgG8HEB3ic/hyLDY+JaPElqicHrSsS2AUBq6kh3sc=";
+    hash = "sha256-VxvjRwPeWiImeJsSV7IJFrH0AvqD+IPgt22u9Gbqk4I=";
   };
 
   outputs = [
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     bison
     flex
     pkg-config
+    udevCheckHook
   ];
   buildInputs = [
     bzip2
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ check ];
   doCheck = true;
+  doInstallCheck = true;
 
   enableParallelBuilding = true;
 

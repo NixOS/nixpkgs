@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sailfishos/libiodata";
     changelog = "https://github.com/sailfishos/libiodata/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl21Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

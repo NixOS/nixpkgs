@@ -12,7 +12,7 @@
 
 assert tlsSupport -> openssl != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uhub";
   version = "unstable-2019-12-13";
 

@@ -102,7 +102,7 @@ buildPythonPackage rec {
     ]
     ++ fakeredis.optional-dependencies.lua
     ++ optional-dependencies.optional;
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   disabledTests =
     [

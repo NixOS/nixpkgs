@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   version = "0.12";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/mi2ly/mi2ly.${version}.tar.bz2";
-    sha256 = "sha256-lFbqH+syFaQDMbXfb+OUcWnyKnjfVz9yl7DbTTn7JKw=";
+    url = "mirror://savannah/${pname}/${pname}.${version}.tar.bz2";
+    hash = "sha256-lFbqH+syFaQDMbXfb+OUcWnyKnjfVz9yl7DbTTn7JKw=";
   };
 
   sourceRoot = ".";

@@ -4,12 +4,9 @@
   fetchFromGitHub,
   fetchpatch,
   pkg-config,
-  wrapQtAppsHook,
+  libsForQt5,
   poppler,
   gnuplot,
-  qmake,
-  qtbase,
-  qttools,
 }:
 
 # This package only builds ktikz without KDE integration because KDE4 is
@@ -54,15 +51,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    qttools
-    qmake
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
-  QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
+  QT_PLUGIN_PATH = "${libsForQt5.qtbase}/${libsForQt5.qtbase.qtPluginPrefix}";
 
   buildInputs = [
-    qtbase
-    poppler
+    libsForQt5.qtbase
+    libsForQt5.poppler
   ];
 
   qmakeFlags = [

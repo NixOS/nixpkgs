@@ -48,6 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/cassidyjames/clairvoyant";
     license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.cassidyjames.clairvoyant";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
   };
 })

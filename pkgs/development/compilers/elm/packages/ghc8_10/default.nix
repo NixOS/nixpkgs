@@ -6,7 +6,7 @@ pkgs.haskell.packages.ghc810.override {
     self: super:
     let
       inherit (pkgs.haskell.lib.compose) justStaticExecutables overrideCabal doJailbreak;
-      elmPkgs = rec {
+      elmPkgs = {
         elmi-to-json = justStaticExecutables (
           overrideCabal (drv: {
             version = "unstable-2021-07-19";

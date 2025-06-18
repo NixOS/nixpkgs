@@ -19,10 +19,11 @@ let
     add = "a";
     cpw = "c";
     delete = "d";
+    get-keys = "e";
     get = "i";
     list = "l";
     modify = "m";
-    all = "*";
+    all = "x";
   };
 
   aclConfigs = lib.pipe cfg.settings.realms [

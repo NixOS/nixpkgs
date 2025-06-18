@@ -1,30 +1,31 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, fetchzip
-, writeText
-, lib
-, openssl
-, cmake
-, autoconf
-, automake
-, libtool
-, pkg-config
-, bison
-, flex
-, groff
-, perl
-, python3
-, ncurses
-, time
-, upx
-, gtest
-, libffi
-, libxml2
-, zlib
-, enableTests ? true
-, buildDevTools ? true
-, compileYaraPatterns ? true
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchzip,
+  writeText,
+  lib,
+  openssl,
+  cmake,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  bison,
+  flex,
+  groff,
+  perl,
+  python3,
+  ncurses,
+  time,
+  upx,
+  gtest,
+  libffi,
+  libxml2,
+  zlib,
+  enableTests ? true,
+  buildDevTools ? true,
+  compileYaraPatterns ? true,
 }:
 
 let
@@ -64,56 +65,57 @@ let
 
   retdec-support-version = "2019-03-08";
   retdec-support =
-    { rev = retdec-support-version; } // # for checking the version against the expected version
-    fetchzip {
+    {
+      rev = retdec-support-version;
+    }
+    # for checking the version against the expected version
+    // fetchzip {
       url = "https://github.com/avast-tl/retdec-support/releases/download/${retdec-support-version}/retdec-support_${retdec-support-version}.tar.xz";
       hash = "sha256-t1tx4MfLW/lwtbO5JQ1nrFBIOeMclq+0dENuXW+ahIM=";
       stripRoot = false;
     };
 
-  check-dep = name: dep:
-    ''
-      context="$(grep ${name}_URL --after-context 1 cmake/deps.cmake)"
-      expected="$(echo "$context" | grep --only-matching '".*"')"
-      have="${dep.rev}"
+  check-dep = name: dep: ''
+    context="$(grep ${name}_URL --after-context 1 cmake/deps.cmake)"
+    expected="$(echo "$context" | grep --only-matching '".*"')"
+    have="${dep.rev}"
 
-      echo "checking ${name} dependency matches deps.cmake...";
-      if ! echo "$expected" | grep -q "$have"; then
-        printf '%s\n' "${name} version does not match!"  "  nix: $have, expected: $expected"
-        false
-      fi
-    '';
+    echo "checking ${name} dependency matches deps.cmake...";
+    if ! echo "$expected" | grep -q "$have"; then
+      printf '%s\n' "${name} version does not match!"  "  nix: $have, expected: $expected"
+      false
+    fi
+  '';
 
-  deps = {
-    CAPSTONE = capstone;
-    LLVM = llvm;
-    YARA = yaracpp;
-    YARAMOD = yaramod;
-    SUPPORT_PKG = retdec-support;
-  } // lib.optionalAttrs enableTests {
-    KEYSTONE = keystone;
-    # nixpkgs googletest is used
-    # GOOGLETEST = googletest;
-  };
+  deps =
+    {
+      CAPSTONE = capstone;
+      LLVM = llvm;
+      YARA = yaracpp;
+      YARAMOD = yaramod;
+      SUPPORT_PKG = retdec-support;
+    }
+    // lib.optionalAttrs enableTests {
+      KEYSTONE = keystone;
+      # nixpkgs googletest is used
+      # GOOGLETEST = googletest;
+    };
 
   # overwrite install-share.py to copy instead of download.
   # we use this so the copy happens at the right time in the build,
   # otherwise, the build process cleans the directory.
-  install-share =
-    writeText
-      "install-share.py"
-      ''
-        import os, sys, shutil, subprocess
+  install-share = writeText "install-share.py" ''
+    import os, sys, shutil, subprocess
 
-        install_path, arch_url, sha256hash_ref, version = sys.argv[1:]
-        support_dir = os.path.join(install_path, 'share', 'retdec', 'support')
+    install_path, arch_url, sha256hash_ref, version = sys.argv[1:]
+    support_dir = os.path.join(install_path, 'share', 'retdec', 'support')
 
-        assert os.path.isdir(arch_url), "nix install-share.py expects a path for support url"
+    assert os.path.isdir(arch_url), "nix install-share.py expects a path for support url"
 
-        os.makedirs(support_dir, exist_ok=True)
-        shutil.copytree(arch_url, support_dir, dirs_exist_ok=True)
-        subprocess.check_call(['chmod', '-R', 'u+w', support_dir])
-      '';
+    os.makedirs(support_dir, exist_ok=True)
+    shutil.copytree(arch_url, support_dir, dirs_exist_ok=True)
+    subprocess.check_call(['chmod', '-R', 'u+w', support_dir])
+  '';
 in
 stdenv.mkDerivation (self: {
   pname = "retdec";
@@ -170,8 +172,7 @@ stdenv.mkDerivation (self: {
 
   preConfigure =
     lib.concatStringsSep "\n" (lib.mapAttrsToList check-dep deps)
-    +
-    ''
+    + ''
       cp -v ${install-share} ./support/install-share.py
 
       # the CMakeLists assume CMAKE_INSTALL_BINDIR, etc are path components but in Nix, they are absolute.

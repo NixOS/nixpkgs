@@ -11,6 +11,7 @@
   luajit,
   sdcv,
   SDL2,
+  openssl,
   nix-update-script,
 }:
 let
@@ -18,21 +19,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2024.11";
+  version = "2025.04";
 
   src =
     {
       aarch64-linux = fetchurl {
         url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-arm64.deb";
-        hash = "sha256-uy+4+pNyz10xrGM0QF9q0y6UpQK1B9PGNqrcK6nENQY=";
+        hash = "sha256-bpKNP+1C0oHZEv6HGL4dBziv3RfCow882yV8JFLtDJ4=";
       };
       armv7l-linux = fetchurl {
         url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-armhf.deb";
-        hash = "sha256-lTc12qmoe0kGUhrStlGfDRw+cNJnX7F09/jKKc/1U9g=";
+        hash = "sha256-q3M33f0b5FAU/nmPfzsXu93mVZOhXMVgBbfwnieqkeM=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-        hash = "sha256-ibehFrOcJqhM+CMAcHDn3Xwy6CueB8kdnoYMMDe/2Js=";
+        hash = "sha256-ZZujk98YVvNJmffW2fDg+n+z1xgtkha7y1LasYEhCR4=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -40,9 +41,9 @@ stdenv.mkDerivation rec {
   src_repo = fetchFromGitHub {
     repo = "koreader";
     owner = "koreader";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-EI8UOQuwhJqcAp8QnLYhI0K+uV/7ZqxdHNk8mPkDWA0=";
+    hash = "sha256-Kt00AZARfQjGY8FzDcQB8UaowWW2+KWyXJzexFNmZmM=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     luajit_lua52
     sdcv
     SDL2
+    openssl
   ];
 
   dontConfigure = true;
@@ -63,18 +65,31 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
+    dpkg-deb -x $src .
     cp -R usr/* $out/
+
+    # Link required binaries
     ln -sf ${luajit_lua52}/bin/luajit $out/lib/koreader/luajit
     ln -sf ${sdcv}/bin/sdcv $out/lib/koreader/sdcv
     ln -sf ${gnutar}/bin/tar $out/lib/koreader/tar
+
+    # Link SSL/network libraries
+    ln -sf ${openssl.out}/lib/libcrypto.so.3 $out/lib/koreader/libs/libcrypto.so.1.1
+    ln -sf ${openssl.out}/lib/libssl.so.3 $out/lib/koreader/libs/libssl.so.1.1
+
+    # Copy fonts
     find ${src_repo}/resources/fonts -type d -execdir cp -r '{}' $out/lib/koreader/fonts \;
+
+    # Remove broken symlinks
     find $out -xtype l -print -delete
-    wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : ${
+
+    wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : $out/lib/koreader/libs:${
       lib.makeLibraryPath [
         gtk3-x11
         SDL2
         glib
         stdenv.cc.cc
+        openssl.out
       ]
     }
   '';
@@ -83,19 +98,19 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/koreader/koreader";
     changelog = "https://github.com/koreader/koreader/releases/tag/v${version}";
-    description = "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
+    description = "Ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
     mainProgram = "koreader";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-linux"
       "armv7l-linux"
       "x86_64-linux"
     ];
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       contrun
       neonfuz
       liberodark

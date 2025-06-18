@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
-    repo = pname;
+    repo = "pantheon-tweaks";
     rev = version;
-    hash = "sha256-5RsNVUQ8FJmtdI7Z2le+qt9b13zHlQxiyTaUY15wSkw=";
+    hash = "sha256-+dkjmeY4WJfXwgNR8HlRaVfvS/2icbi8eSAkiB9x7uI=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
       elementary-terminal # io.elementary.terminal.settings
       granite7
       switchboard
+      wingpanel-indicator-sound # io.elementary.desktop.wingpanel.sound
     ]);
 
   mesonFlags = [
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pantheon-tweaks/pantheon-tweaks";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "pantheon-tweaks";
   };
 }

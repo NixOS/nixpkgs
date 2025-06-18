@@ -17,7 +17,7 @@ let
   offloadCfg = pCfg.offload;
   reverseSyncCfg = pCfg.reverseSync;
   primeEnabled = syncCfg.enable || reverseSyncCfg.enable || offloadCfg.enable;
-  busIDType = lib.types.strMatching "([[:print:]]+[:@][0-9]{1,3}:[0-9]{1,2}:[0-9])?";
+  busIDType = lib.types.strMatching "([[:print:]]+:[0-9]{1,3}(@[0-9]{1,10})?:[0-9]{1,2}:[0-9])?";
   ibtSupport = useOpenModules || (nvidia_x11.ibtSupport or false);
   settingsFormat = pkgs.formats.keyValue { };
 in
@@ -120,30 +120,48 @@ in
       prime.nvidiaBusId = lib.mkOption {
         type = busIDType;
         default = "";
-        example = "PCI:1:0:0";
+        example = "PCI:1@0:0:0";
         description = ''
           Bus ID of the NVIDIA GPU. You can find it using lspci; for example if lspci
-          shows the NVIDIA GPU at "01:00.0", set this option to "PCI:1:0:0".
+          shows the NVIDIA GPU at "0001:02:03.4", set this option to "PCI:2@1:3:4".
+
+          lspci might omit the PCI domain (0001 in above example) if it is zero.
+          In which case, use "@0" instead.
+
+          Please be aware that this option takes decimal address while lspci reports
+          hexadecimal address. So for device at domain "10000", use "@65536".
         '';
       };
 
       prime.intelBusId = lib.mkOption {
         type = busIDType;
         default = "";
-        example = "PCI:0:2:0";
+        example = "PCI:0@0:2:0";
         description = ''
           Bus ID of the Intel GPU. You can find it using lspci; for example if lspci
-          shows the Intel GPU at "00:02.0", set this option to "PCI:0:2:0".
+          shows the Intel GPU at "0001:02:03.4", set this option to "PCI:2@1:3:4".
+
+          lspci might omit the PCI domain (0001 in above example) if it is zero.
+          In which case, use "@0" instead.
+
+          Please be aware that this option takes decimal address while lspci reports
+          hexadecimal address. So for device at domain "10000", use "@65536".
         '';
       };
 
       prime.amdgpuBusId = lib.mkOption {
         type = busIDType;
         default = "";
-        example = "PCI:4:0:0";
+        example = "PCI:4@0:0:0";
         description = ''
           Bus ID of the AMD APU. You can find it using lspci; for example if lspci
-          shows the AMD APU at "04:00.0", set this option to "PCI:4:0:0".
+          shows the AMD APU at "0001:02:03.4", set this option to "PCI:2@1:3:4".
+
+          lspci might omit the PCI domain (0001 in above example) if it is zero.
+          In which case, use "@0" instead.
+
+          Please be aware that this option takes decimal address while lspci reports
+          hexadecimal address. So for device at domain "10000", use "@65536".
         '';
       };
 
@@ -186,11 +204,22 @@ in
 
       prime.offload.enableOffloadCmd = lib.mkEnableOption ''
         adding a `nvidia-offload` convenience script to {option}`environment.systemPackages`
-        for offloading programs to an nvidia device. To work, should have also enabled
+        for offloading programs to an nvidia device. To work, you must also enable
         {option}`hardware.nvidia.prime.offload.enable` or {option}`hardware.nvidia.prime.reverseSync.enable`.
 
-        Example usage `nvidia-offload sauerbraten_client`
+        Example usage: `nvidia-offload sauerbraten_client`
+
+        This script can be renamed with {option}`hardware.nvidia.prime.offload.enableOffloadCmd`.
       '';
+      prime.offload.offloadCmdMainProgram = lib.mkOption {
+        type = lib.types.str;
+        description = ''
+          Specifies the CLI name of the {option}`hardware.nvidia.prime.offload.enableOffloadCmd`
+          convenience script for offloading programs to an nvidia device.
+        '';
+        default = "nvidia-offload";
+        example = "prime-run";
+      };
 
       prime.reverseSync.enable = lib.mkEnableOption ''
         NVIDIA Optimus support using the NVIDIA proprietary driver via reverse
@@ -325,14 +354,23 @@ in
             ];
 
             # Don't add `nvidia-uvm` to `kernelModules`, because we want
-            # `nvidia-uvm` be loaded only after `udev` rules for `nvidia` kernel
-            # module are applied.
+            # `nvidia-uvm` be loaded only after the GPU device is available, i.e. after `udev` rules
+            # for `nvidia` kernel module are applied.
+            # This matters on Azure GPU instances: https://github.com/NixOS/nixpkgs/pull/267335
             #
             # Instead, we use `softdep` to lazily load `nvidia-uvm` kernel module
             # after `nvidia` kernel module is loaded and `udev` rules are applied.
             extraModprobeConfig = ''
               softdep nvidia post: nvidia-uvm
             '';
+
+            # Exception is the open-source kernel module failing to load nvidia-uvm using softdep
+            # for unknown reasons.
+            # It affects CUDA: https://github.com/NixOS/nixpkgs/issues/334180
+            # Previously nvidia-uvm was explicitly loaded only when xserver was enabled:
+            # https://github.com/NixOS/nixpkgs/pull/334340/commits/4548c392862115359e50860bcf658cfa8715bde9
+            # We are now loading the module eagerly for all users of the open driver (including headless).
+            kernelModules = lib.optionals useOpenModules [ "nvidia_uvm" ];
           };
           systemd.tmpfiles.rules = lib.mkIf config.virtualisation.docker.enableNvidia [
             "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
@@ -531,7 +569,7 @@ in
             lib.optional cfg.nvidiaSettings nvidia_x11.settings
             ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced
             ++ lib.optional offloadCfg.enableOffloadCmd (
-              pkgs.writeShellScriptBin "nvidia-offload" ''
+              pkgs.writeShellScriptBin cfg.prime.offload.offloadCmdMainProgram ''
                 export __NV_PRIME_RENDER_OFFLOAD=1
                 export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
                 export __GLX_VENDOR_LIBRARY_NAME=nvidia
@@ -621,16 +659,11 @@ in
           boot = {
             extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
             # nvidia-uvm is required by CUDA applications.
-            kernelModules =
-              lib.optionals config.services.xserver.enable [
-                "nvidia"
-                "nvidia_modeset"
-                "nvidia_drm"
-              ]
-              # With the open driver, nvidia-uvm does not automatically load as
-              # a softdep of the nvidia module, so we explicitly load it for now.
-              # See https://github.com/NixOS/nixpkgs/issues/334180
-              ++ lib.optionals (config.services.xserver.enable && useOpenModules) [ "nvidia_uvm" ];
+            kernelModules = lib.optionals config.services.xserver.enable [
+              "nvidia"
+              "nvidia_modeset"
+              "nvidia_drm"
+            ];
 
             # If requested enable modesetting via kernel parameters.
             kernelParams =

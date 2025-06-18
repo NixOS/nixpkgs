@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "debugpy";
     publisher = "ms-python";
-    version = "2025.4.0";
-    hash = "sha256-WbnR949zHuoW+jR6vugvHussScBvgRIi8PYi9HbJxjc=";
+    version = "2025.8.0";
+    hash = "sha256-sfQG5LgGruInheqA7C8YxdC0EhmmmKhbfyXhHUhCaNI=";
   };
 
   meta = {

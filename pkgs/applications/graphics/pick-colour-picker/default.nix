@@ -1,16 +1,14 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonPackage,
-  pygobject3,
-  pycairo,
+  python3Packages,
   glib,
   gtk3,
   gobject-introspection,
   wrapGAppsHook3,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage {
   pname = "pick-colour-picker";
   version = "unstable-2022-05-08";
 
@@ -32,7 +30,7 @@ buildPythonPackage rec {
     wrapGAppsHook3
   ];
 
-  pythonPath = [
+  pythonPath = with python3Packages; [
     pygobject3
     pycairo
   ];

@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Sphinx extension for running sphinx-apidoc on each build";
     homepage = "https://github.com/sphinx-contrib/apidoc";
     license = licenses.bsd2;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

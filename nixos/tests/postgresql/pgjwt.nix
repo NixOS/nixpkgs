@@ -14,7 +14,6 @@ let
       meta = with lib.maintainers; {
         maintainers = [
           spinus
-          willibutz
         ];
       };
 
@@ -24,7 +23,6 @@ let
           services.postgresql = {
             inherit package;
             enable = true;
-            enableJIT = lib.hasInfix "-jit-" package.name;
             extensions =
               ps: with ps; [
                 pgjwt

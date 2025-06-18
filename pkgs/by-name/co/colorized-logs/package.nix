@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "colorized-logs";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "kilobyte";
     repo = "colorized-logs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QiZeIYeIWA3C7wYi2G2EItdW+jLjVrCbIYllur/RtY8=";
+    hash = "sha256-m7M/1OuWDUflxTA4E6cSeg7BqkEW8eB/wIgq+z97K/g=";
   };
 
   nativeBuildInputs = [

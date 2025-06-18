@@ -89,7 +89,7 @@
 let
   version = "2.7.3";
 
-  airflow-src = fetchFromGitHub rec {
+  airflow-src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
     rev = "refs/tags/${version}";

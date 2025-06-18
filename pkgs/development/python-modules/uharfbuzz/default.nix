@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -9,7 +8,6 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  ApplicationServices,
 }:
 
 buildPythonPackage rec {
@@ -38,8 +36,6 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

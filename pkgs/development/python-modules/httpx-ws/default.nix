@@ -7,6 +7,7 @@
   httpcore,
   httpx,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   starlette,
   trio,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-ws";
-  version = "0.7.1";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "frankie567";
     repo = "httpx-ws";
     tag = "v${version}";
-    hash = "sha256-UO9O4d7QfPdIWL4CtlOuwQRsk/9sEFknahDLWIOfeA0=";
+    hash = "sha256-ixaD7X6V/tUalZbYtic7D9lRqv8yGnwl+j5m832n/hQ=";
   };
 
   # we don't need to use the hatch-regex-commit plugin
@@ -33,8 +34,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail 'source = "regex_commit"' "" \
       --replace-fail 'commit_extra_args = ["-e"]' "" \
-      --replace-fail '"hatch-regex-commit"' "" \
-      --replace-fail 'addopts = "--cov=httpx_ws/ --cov-report=term-missing"' ""
+      --replace-fail '"hatch-regex-commit"' ""
   '';
 
   build-system = [ hatchling ];
@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     starlette
     trio
     uvicorn

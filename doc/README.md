@@ -34,13 +34,29 @@ $ nix-build doc
 
 If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.html`.
 
-### devmode
+### Development environment
 
-The shell in the manual source directory makes available a command, `devmode`.
-It is a daemon, that:
-1. watches the manual's source for changes and when they occur — rebuilds
-2. HTTP serves the manual, injecting a script that triggers reload on changes
-3. opens the manual in the default browser
+In order to reduce repetition, consider using tools from the provided development environment:
+
+Load it from the Nixpkgs documentation directory with
+
+```ShellSession
+$ cd /path/to/nixpkgs/doc
+$ nix-shell
+```
+
+To load the development utilities automatically when entering that directory, [set up `nix-direnv`](https://nix.dev/guides/recipes/direnv).
+
+Make sure that your local files aren't added to Git history by adding the following lines to `.git/info/exclude` at the root of the Nixpkgs repository:
+
+```
+/**/.envrc
+/**/.direnv
+```
+
+#### `devmode`
+
+Use [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview when editing the manual.
 
 ### Testing redirects
 
@@ -108,6 +124,7 @@ A few markups for other kinds of literals are also available:
 These literal kinds are used mostly in NixOS option documentation.
 
 This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point). Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
+They are handled by `myst_role` defined per renderer. <!-- reverse references in code -->
 
 #### Admonitions
 

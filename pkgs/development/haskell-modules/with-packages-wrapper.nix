@@ -47,9 +47,9 @@ selectPackages:
 let
   inherit (haskellPackages) llvmPackages ghc;
 
-  packages =
-    selectPackages haskellPackages
-    ++ lib.optional withHoogle (hoogleWithPackages selectPackages);
+  hoogleWithPackages' = if withHoogle then hoogleWithPackages selectPackages else null;
+
+  packages = selectPackages haskellPackages ++ [ hoogleWithPackages' ];
 
   isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
@@ -62,13 +62,6 @@ let
     else
       "$out/lib/${ghc.targetPrefix}${ghc.haskellCompilerName}"
       + lib.optionalString (ghc ? hadrian) "/lib";
-  # Boot libraries for GHC are present in a separate directory.
-  bootLibDir =
-    let
-      arch = if stdenv.targetPlatform.isAarch64 then "aarch64" else "x86_64";
-      platform = if stdenv.targetPlatform.isDarwin then "osx" else "linux";
-    in
-    "${ghc}/lib/${ghc.haskellCompilerName}/lib/${arch}-${platform}-${ghc.haskellCompilerName}";
   docDir = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths = lib.concatLists (
@@ -154,14 +147,17 @@ else
           # symlinkJoin:
           rm -f $dynamicLinksDir/*
 
-          # Boot libraries are located differently than other libraries since GHC 9.6, so handle them separately.
-          if [[ -x "${bootLibDir}" ]]; then
-            ln -s "${bootLibDir}"/*.dylib $dynamicLinksDir
-          fi
+          dynamicLibraryDirs=()
 
-          for d in $(grep -Poz "dynamic-library-dirs:\s*\K .+\n" $packageConfDir/*|awk '{print $2}'|sort -u); do
-            ln -s $d/*.dylib $dynamicLinksDir
+          for pkg in $($out/bin/ghc-pkg list --simple-output); do
+            dynamicLibraryDirs+=($($out/bin/ghc-pkg --simple-output field "$pkg" dynamic-library-dirs))
           done
+
+          for dynamicLibraryDir in $(echo "''${dynamicLibraryDirs[@]}" | tr ' ' '\n' | sort -u); do
+            echo "Linking $dynamicLibraryDir/*.dylib from $dynamicLinksDir"
+            find "$dynamicLibraryDir" -name '*.dylib' -exec ln -s {} "$dynamicLinksDir" \;
+          done
+
           for f in $packageConfDir/*.conf; do
             # Initially, $f is a symlink to a read-only file in one of the inputs
             # (as a result of this symlinkJoin derivation).
@@ -201,6 +197,8 @@ else
     preferLocalBuild = true;
     passthru = {
       inherit (ghc) version meta;
+
+      hoogle = hoogleWithPackages';
 
       # Inform users about backwards incompatibilities with <= 21.05
       override =

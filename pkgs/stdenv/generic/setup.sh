@@ -1260,7 +1260,7 @@ _defaultUnpack() {
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
-        cp -r --preserve=mode,timestamps --reflink=auto -- "$fn" "$destination"
+        cp -r --preserve=timestamps --reflink=auto -- "$fn" "$destination"
 
     else
 
@@ -1642,10 +1642,9 @@ fixupPhase() {
 
     # Propagate user-env packages into the output with binaries, TODO?
 
-    if [ -n "${propagatedUserEnvPkgs:-}" ]; then
+    if [ -n "${propagatedUserEnvPkgs[*]:-}" ]; then
         mkdir -p "${!outputBin}/nix-support"
-        # shellcheck disable=SC2086
-        printWords $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
+        printWords "${propagatedUserEnvPkgs[@]}" > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
     runHook postFixup

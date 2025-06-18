@@ -23,7 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-i011oL7Xa2e0Vu9wEfTrbJilVsn4N2Qt8iAscxL8zBo=";
   };
 
-  pythonRelaxDeps = [ "readme-renderer" ];
+  pythonRelaxDeps = [ "readme_renderer" ];
 
   build-system = [ setuptools ];
 

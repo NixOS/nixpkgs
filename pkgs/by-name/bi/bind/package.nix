@@ -3,7 +3,6 @@
   lib,
   fetchurl,
   removeReferencesTo,
-  darwin,
   perl,
   pkg-config,
   libcap,
@@ -11,6 +10,7 @@
   libtool,
   libxml2,
   openssl,
+  liburcu,
   libuv,
   nghttp2,
   jemalloc,
@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.18.33";
+  version = "9.20.9";
 
   src = fetchurl {
-    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+zc/rF67xBxkUWCv1an7RRkY9sDmmrHZR0FU4rUV3kA=";
+    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
+    hash = "sha256-PSaQDtnJqFkHP/6puX4pLBJI2tGCebF7BfyyPDCR+G0=";
   };
 
   outputs = [
@@ -58,14 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
       libtool
       libxml2
       openssl
+      liburcu
       libuv
       nghttp2
       jemalloc
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
-    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -92,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i "$f" -e 's|-L${openssl.dev}|-L${lib.getLib openssl}|g'
     done
 
+    mkdir -p $out/etc
     cat <<EOF >$out/etc/rndc.conf
     include "/etc/bind/rndc.key";
     options {
@@ -135,13 +136,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
-      withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
-      inherit (nixosTests) bind;
-      prometheus-exporter = nixosTests.prometheus-exporters.bind;
-      kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
-      kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
-    };
+    tests =
+      {
+        withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+        inherit (nixosTests) bind;
+        prometheus-exporter = nixosTests.prometheus-exporters.bind;
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+        kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
+        kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+      };
 
     updateScript = gitUpdater {
       # No nicer place to find latest stable release.
@@ -159,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
 
     outputsToInstall = [

@@ -1,22 +1,23 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "typos-lsp";
   # Please update the corresponding VSCode extension too.
   # See pkgs/applications/editors/vscode/extensions/tekumara.typos-vscode/default.nix
-  version = "0.1.34";
+  version = "0.1.38";
 
   src = fetchFromGitHub {
     owner = "tekumara";
     repo = "typos-lsp";
     tag = "v${version}";
-    hash = "sha256-WqICNpheCJJAmmbj5QIejFeUIW/7ghrhQRP73PLLMJ4=";
+    hash = "sha256-WzQh+XGROekMzjnR292REI0S1hhaxSHYNWbtwPHy/tA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-tmBRUoBsNQlJY0JYtDknD5xeeFnokTE9cnHzktMIiBU=";
+  cargoHash = "sha256-TDcf8AyvpgpVUC5Pw2y+N6ZBhnimrpt39appwZAE8T0=";
 
   # fix for compilation on aarch64
   # see https://github.com/NixOS/nixpkgs/issues/145726

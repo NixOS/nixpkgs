@@ -5,7 +5,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stfl";
   version = "0.24-unstable-2021-11-29";
 

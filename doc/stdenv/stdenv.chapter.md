@@ -20,14 +20,14 @@ stdenv.mkDerivation {
 **Since [RFC 0035](https://github.com/NixOS/rfcs/pull/35), this is preferred for packages in Nixpkgs**, as it allows us to reuse the version easily:
 
 ```nix
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfoo";
   version = "1.2.3";
   src = fetchurl {
-    url = "http://example.org/libfoo-source-${version}.tar.bz2";
+    url = "http://example.org/libfoo-source-${finalAttrs.version}.tar.bz2";
     hash = "sha256-tWxU/LANbQE32my+9AXyt3nCT7NBVfJ45CX757EMT3Q=";
   };
-}
+})
 ```
 
 Many packages have dependencies that are not provided in the standard environment. It’s usually sufficient to specify those dependencies in the `buildInputs` attribute:
@@ -37,7 +37,11 @@ stdenv.mkDerivation {
   pname = "libfoo";
   version = "1.2.3";
   # ...
-  buildInputs = [libbar perl ncurses];
+  buildInputs = [
+    libbar
+    perl
+    ncurses
+  ];
 }
 ```
 
@@ -49,13 +53,24 @@ Often it is necessary to override or modify some aspect of the build. To make th
 stdenv.mkDerivation {
   pname = "fnord";
   version = "4.5";
+
   # ...
+
   buildPhase = ''
+    runHook preBuild
+
     gcc foo.c -o foo
+
+    runHook postBuild
   '';
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp foo $out/bin
+
+    runHook postInstall
   '';
 }
 ```
@@ -208,16 +223,20 @@ These dependencies are only injected when [`doCheck`](#var-stdenv-doCheck) is se
 
 Consider for example this simplified derivation for `solo5`, a sandboxing tool:
 ```nix
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "solo5";
   version = "0.7.5";
 
   src = fetchurl {
-    url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
+    url = "https://github.com/Solo5/solo5/releases/download/v${finalAttrs.version}/solo5-v${finalAttrs.version}.tar.gz";
     hash = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
+
   buildInputs = [ libseccomp ];
 
   postInstall = ''
@@ -227,13 +246,23 @@ stdenv.mkDerivation rec {
       --replace-fail "cp " "cp --no-preserve=mode "
 
     wrapProgram $out/bin/solo5-virtio-mkimage \
-      --prefix PATH : ${lib.makeBinPath [ dosfstools mtools parted syslinux ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          dosfstools
+          mtools
+          parted
+          syslinux
+        ]
+      }
   '';
 
   doCheck = true;
-  nativeCheckInputs = [ util-linux qemu ];
-  checkPhase = '' [elided] '';
-}
+  nativeCheckInputs = [
+    util-linux
+    qemu
+  ];
+  # `checkPhase` elided
+})
 ```
 
 - `makeWrapper` is a setup hook, i.e., a shell script sourced by the generic builder of `stdenv`.
@@ -272,7 +301,7 @@ This can lead to conflicting dependencies that cannot easily be resolved.
 # A propagated dependency
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 let
   bar = stdenv.mkDerivation {
     name = "bar";
@@ -442,8 +471,7 @@ If you pass a function to `mkDerivation`, it will receive as its argument the fi
 mkDerivation (finalAttrs: {
   pname = "hello";
   withFeature = true;
-  configureFlags =
-    lib.optionals finalAttrs.withFeature ["--with-feature"];
+  configureFlags = lib.optionals finalAttrs.withFeature [ "--with-feature" ];
 })
 ```
 
@@ -460,28 +488,32 @@ various bindings:
 
 ```nix
 # `pkg` is the _original_ definition (for illustration purposes)
-let pkg =
-  mkDerivation (finalAttrs: {
+let
+  pkg = mkDerivation (finalAttrs: {
     # ...
 
     # An example attribute
-    packages = [];
+    packages = [ ];
 
     # `passthru.tests` is a commonly defined attribute.
     passthru.tests.simple = f finalAttrs.finalPackage;
 
     # An example of an attribute containing a function
-    passthru.appendPackages = packages':
-      finalAttrs.finalPackage.overrideAttrs (newSelf: super: {
-        packages = super.packages ++ packages';
-      });
+    passthru.appendPackages =
+      packages':
+      finalAttrs.finalPackage.overrideAttrs (
+        newSelf: super: {
+          packages = super.packages ++ packages';
+        }
+      );
 
     # For illustration purposes; referenced as
     # `(pkg.overrideAttrs(x)).finalAttrs` etc in the text below.
     passthru.finalAttrs = finalAttrs;
     passthru.original = pkg;
   });
-in pkg
+in
+pkg
 ```
 
 Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.finalPackage` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
@@ -566,6 +598,8 @@ Additional file types can be supported by setting the `unpackCmd` variable (see 
 ##### `srcs` / `src` {#var-stdenv-src}
 
 The list of source files or directories to be unpacked or copied. One of these must be set. Note that if you use `srcs`, you should also set `sourceRoot` or `setSourceRoot`.
+
+These should ideally actually be sources and licensed under a FLOSS license.  If you have to use a binary upstream release or package non-free software, make sure you correctly mark your derivation as such in the [`sourceProvenance`](#var-meta-sourceProvenance) and [`license`](#sec-meta-license) fields of the [`meta`](#chap-meta) section.
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 
@@ -955,7 +989,7 @@ To make GDB find debug information for the `socat` package and its dependencies,
 ```nix
 let
   pkgs = import ./. {
-    config = {};
+    config = { };
     overlays = [
       (final: prev: {
         ncurses = prev.ncurses.overrideAttrs { separateDebugInfo = true; };
@@ -974,19 +1008,19 @@ let
     ];
   };
 in
-  pkgs.mkShell {
+pkgs.mkShell {
 
-    NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
+  NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
 
-    packages = [
-      pkgs.gdb
-      pkgs.socat
-    ];
+  packages = [
+    pkgs.gdb
+    pkgs.socat
+  ];
 
-    shellHook = ''
-      ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
-    '';
-  }
+  shellHook = ''
+    ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
+  '';
+}
 ```
 
 This setup works as follows:
@@ -1109,11 +1143,14 @@ They cannot be overridden without rebuilding the package.
 
 If dependencies should be resolved at runtime, use `--suffix` to append fallback values to `PATH`.
 
-There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh` for the `makeWrapper` implementation and in `nixpkgs/pkgs/build-support/setup-hooks/make-binary-wrapper/make-binary-wrapper.sh` for the `makeBinaryWrapper` implementation.
+There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh` for the `makeWrapper` implementation and in `nixpkgs/pkgs/by-name/ma/makeBinaryWrapper/make-binary-wrapper.sh` for the `makeBinaryWrapper` implementation.
 
 `wrapProgram` is a convenience function you probably want to use most of the time, implemented by both `makeWrapper` and `makeBinaryWrapper`.
 
 Using the `makeBinaryWrapper` implementation is usually preferred, as it creates a tiny _compiled_ wrapper executable, that can be used as a shebang interpreter. This is needed mostly on Darwin, where shebangs cannot point to scripts, [due to a limitation with the `execve`-syscall](https://stackoverflow.com/questions/67100831/macos-shebang-with-absolute-path-not-working). Compiled wrappers generated by `makeBinaryWrapper` can be inspected with `less <path-to-wrapper>` - by scrolling past the binary data you should be able to see the shell command that generated the executable and there see the environment variables that were injected into the wrapper.
+
+However, `makeWrapper` is more flexible and implements more arguments.
+Use `makeWrapper` if you need the wrapper to use shell features (e.g. look up environment variables) at runtime.
 
 ### `remove-references-to -t` \<storepath\> [ `-t` \<storepath\> ... ] \<file\> ... {#fun-remove-references-to}
 
@@ -1568,6 +1605,10 @@ This flag adds the `-fstack-clash-protection` compiler option, which causes grow
 
 The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
 
+#### `nostrictaliasing` {#nostrictaliasing}
+
+This flag adds the `-fno-strict-aliasing` compiler option, which prevents the compiler from assuming code has been written strictly following the standard in regards to pointer aliasing and therefore performing optimizations that may be unsafe for code that has not followed these rules.
+
 #### `pie` {#pie}
 
 This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for
@@ -1581,6 +1622,22 @@ Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Execut
 Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
 If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 
+#### `strictflexarrays1` {#strictflexarrays1}
+
+This flag adds the `-fstrict-flex-arrays=1` compiler option, which reduces the cases the compiler treats as "flexible arrays" to those declared with length `[1]`, `[0]` or (the correct) `[]`. This increases the coverage of fortify checks, because such arrays declared as the trailing element of a structure can normally not have their intended length determined by the compiler.
+
+Enabling this flag on packages that still use length declarations of flexible arrays >1 may cause the package to fail to compile citing accesses beyond the bounds of an array or even crash at runtime by detecting an array access as an "overrun". Few projects still use length declarations of flexible arrays >1.
+
+Disabling `strictflexarrays1` implies disablement of `strictflexarrays3`.
+
+#### `strictflexarrays3` {#strictflexarrays3}
+
+This flag adds the `-fstrict-flex-arrays=3` compiler option, which reduces the cases the compiler treats as "flexible arrays" to only those declared with length as (the correct) `[]`. This increases the coverage of fortify checks, because such arrays declared as the trailing element of a structure can normally not have their intended length determined by the compiler.
+
+Enabling this flag on packages that still use non-empty length declarations for flexible arrays may cause the package to fail to compile citing accesses beyond the bounds of an array or even crash at runtime by detecting an array access as an "overrun". Many projects still use such non-empty length declarations for flexible arrays.
+
+Enabling this flag implies enablement of `strictflexarrays1`. Disabling this flag does not imply disablement of `strictflexarrays1`.
+
 #### `shadowstack` {#shadowstack}
 
 Adds the `-fcf-protection=return` compiler option. This enables the Shadow Stack feature supported by some newer processors, which maintains a user-inaccessible copy of the program's stack containing only return-addresses. When returning from a function, the processor compares the return-address value on the two stacks and throws an error if they do not match, considering it a sign of corruption and possible tampering. This should significantly increase the difficulty of ROP attacks.
@@ -1593,7 +1650,7 @@ This breaks some code that does advanced stack management or exception handling.
 
 #### `trivialautovarinit` {#trivialautovarinit}
 
-Adds the `-ftrivial-auto-var-init=pattern` compiler option. This causes "trivially-initializable" uninitialized stack variables to be forcibly initialized with a nonzero value that is likely to cause a crash (and therefore be noticed). Uninitialized variables generally take on their values based on fragments of previous program state, and attackers can carefully manipulate that state to craft malicious initial values for these variables.
+Adds the `-ftrivial-auto-var-init=pattern` compiler option. Uninitialized variables generally take on their values based on fragments of previous program state, and attackers can carefully manipulate that state to craft malicious initial values for these variables. This flag causes "trivially-initializable" uninitialized stack variables to be forcibly initialized with a nonzero value that is likely to cause a crash (and therefore be noticed).
 
 Use of this flag is controversial as it can prevent tools that detect uninitialized variable use (such as valgrind) from operating correctly.
 

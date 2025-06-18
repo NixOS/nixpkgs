@@ -6,7 +6,6 @@
   docutils,
   ell,
   enableExperimental ? false,
-  fetchpatch,
   fetchurl,
   glib,
   json_c,
@@ -24,34 +23,17 @@
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gitUpdater,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.79";
+  version = "5.80";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QWSlMDqfcccPSMA/9gvjQjG1aNk6mtXnmSjTTmqg6oo=";
+    hash = "sha256-pNC8oymWkfBtW9l3O4VGOCBKUaUCbEKwrX8cbPFrRZo=";
   };
-
-  patches =
-    [
-      (fetchpatch {
-        name = "musl.patch";
-        url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=9d69dba21f1e46b34cdd8ae27fec11d0803907ee";
-        hash = "sha256-yMXPRPK8aT+luVoXNxx9zIa4c6E0BKYKS55DCfr8EQ0=";
-      })
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64)
-      # Disable one failing test with musl libc, also seen by alpine
-      # https://github.com/bluez/bluez/issues/726
-      (
-        fetchurl {
-          url = "https://git.alpinelinux.org/aports/plain/main/bluez/disable_aics_unit_testcases.patch?id=8e96f7faf01a45f0ad8449c1cd825db63a8dfd48";
-          hash = "sha256-1PJkipqBO3qxxOqRFQKfpWlne1kzTCgtnTFYI1cFQt4=";
-        }
-      );
 
   buildInputs = [
     alsa-lib
@@ -70,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.pygments
     python3Packages.wrapPython
+    udevCheckHook
   ];
 
   outputs = [
@@ -87,12 +70,21 @@ stdenv.mkDerivation (finalAttrs: {
       # Disable some tests:
       # - test-mesh-crypto depends on the following kernel settings:
       #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
+      # - test-vcp is flaky (?), see:
+      #     - https://github.com/bluez/bluez/issues/683
+      #     - https://github.com/bluez/bluez/issues/726
       ''
-        if [[ ! -f unit/test-mesh-crypto.c ]]; then
-          echo "unit/test-mesh-crypto.c no longer exists"
-          false
-        fi
-        echo 'int main() { return 77; }' > unit/test-mesh-crypto.c
+        skipTest() {
+          if [[ ! -f unit/$1.c ]]; then
+            echo "unit/$1.c no longer exists"
+            false
+          fi
+
+          echo 'int main() { return 77; }' > unit/$1.c
+        }
+
+        skipTest test-mesh-crypto
+        skipTest test-vcp
       '';
 
   configureFlags = [
@@ -131,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.hostPlatform.isx86_64;
+  doInstallCheck = true;
 
   postInstall =
     let

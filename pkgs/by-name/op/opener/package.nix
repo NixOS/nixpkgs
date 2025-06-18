@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "opener";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "superbrothers";
     repo = "opener";
     tag = "v${version}";
-    hash = "sha256-pp2jn4J6gYyZky5rVBaai9sVVqvPgM+fGryseM58WEI=";
+    hash = "sha256-rYeQ45skFXWxdxMj0dye8IBEYcQCRqdt9nLVXF36od8=";
   };
 
-  vendorHash = "sha256-xwMRWEwrG12QevVVTMC9OTdjIBoxR1AHkoa6OErPpF4=";
+  vendorHash = "sha256-lju+QlWxUb11UV9NvXSgQ+ZG37WhyZVahJTM5voDEfw=";
 
   postPatch = ''
     substituteInPlace opener.go \

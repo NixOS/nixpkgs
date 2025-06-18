@@ -8,9 +8,10 @@ with lib;
   ];
 
   config = {
-    fileSystems."/" = {
+    fileSystems."/" = lib.mkImageMediaOverride {
       device = "/dev/disk/by-label/nixos";
       autoResize = true;
+      fsType = "ext4";
     };
 
     boot.growPartition = true;

@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index dc281211..c36b9bcb 100644
+index a933d0ab64..fced38bc32 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -154,6 +154,8 @@ advanced_option(
+@@ -160,6 +160,8 @@ advanced_option(
      "Build using system unordered dense"
      OFF
  )
@@ -11,7 +11,7 @@ index dc281211..c36b9bcb 100644
  
  option(
      SLANG_SPIRV_HEADERS_INCLUDE_DIR
-@@ -289,6 +291,34 @@ if(${SLANG_USE_SYSTEM_UNORDERED_DENSE})
+@@ -386,6 +388,34 @@ if(${SLANG_USE_SYSTEM_UNORDERED_DENSE})
      find_package(unordered_dense CONFIG QUIET)
  endif()
  
@@ -47,10 +47,10 @@ index dc281211..c36b9bcb 100644
  
  # webgpu_dawn is only available as a fetched shared library, since Dawn's nested source
 diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
-index 43105a5f..8b9c0f14 100644
+index 55d9e4941d..ff8a244651 100644
 --- a/external/CMakeLists.txt
 +++ b/external/CMakeLists.txt
-@@ -73,19 +73,24 @@ if(NOT ${SLANG_USE_SYSTEM_SPIRV_HEADERS})
+@@ -117,6 +117,7 @@ if(NOT ${SLANG_USE_SYSTEM_SPIRV_HEADERS})
  endif()
  
  if(SLANG_ENABLE_SLANG_GLSLANG)
@@ -58,9 +58,10 @@ index 43105a5f..8b9c0f14 100644
      # SPIRV-Tools
      set(SPIRV_TOOLS_BUILD_STATIC ON)
      set(SPIRV_WERROR OFF)
-     set(SPIRV_HEADER_DIR "${CMAKE_CURRENT_LIST_DIR}/spirv-headers/")
-     set(SPIRV_SKIP_TESTS ON)
-     add_subdirectory(spirv-tools EXCLUDE_FROM_ALL ${system})
+@@ -138,11 +139,14 @@ if(SLANG_ENABLE_SLANG_GLSLANG)
+             ${system}
+         )
+     endif()
 +endif()
  
 +if(NOT ${SLANG_USE_SYSTEM_GLSLANG})
@@ -69,7 +70,12 @@ index 43105a5f..8b9c0f14 100644
      set(ENABLE_OPT ON)
      set(ENABLE_PCH OFF)
 +    set(ALLOW_EXTERNAL_SPIRV_TOOLS ${SLANG_USE_SYSTEM_SPIRV_TOOLS})
-     add_subdirectory(glslang EXCLUDE_FROM_ALL ${system})
+     if(NOT SLANG_OVERRIDE_GLSLANG_PATH)
+         add_subdirectory(glslang EXCLUDE_FROM_ALL ${system})
+     else()
+@@ -154,6 +158,7 @@ if(SLANG_ENABLE_SLANG_GLSLANG)
+         )
+     endif()
  endif()
 +endif()
  

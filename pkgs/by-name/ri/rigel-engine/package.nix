@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  libX11,
   SDL2,
   SDL2_mixer,
   buildOpenGLES ? false,
@@ -25,6 +26,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    libX11
     SDL2
     SDL2_mixer
   ];

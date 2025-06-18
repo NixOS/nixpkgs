@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jreisinger";
-    repo = pname;
+    repo = "checkip";
     tag = "v${version}";
     hash = "sha256-bjKRHIY9OIEft//g8VHKHTUrwWn8UU38SPP4IdPbIQE=";
   };
@@ -25,12 +25,12 @@ buildGoModule rec {
   # Requires network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool that checks an IP address using various public services";
     homepage = "https://github.com/jreisinger/checkip";
     changelog = "https://github.com/jreisinger/checkip/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "checkip";
   };
 }

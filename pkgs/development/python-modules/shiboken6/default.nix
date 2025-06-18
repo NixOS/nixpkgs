@@ -13,16 +13,14 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "shiboken6";
-  version = "6.8.0.2";
+  version = "6.9.1";
 
   src = fetchurl {
-    # https://download.qt.io/official_releases/QtForPython/shiboken6/
-    # FIXME: inconsistent version numbers in directory name and tarball?
-    url = "mirror://qt/official_releases/QtForPython/shiboken6/PySide6-6.8.0.2-src/pyside-setup-everywhere-src-6.8.0.tar.xz";
-    hash = "sha256-Ghohmo8yfjQNJYJ1+tOp8mG48EvFcEF0fnPdatJStOE=";
+    url = "mirror://qt/official_releases/QtForPython/pyside6/PySide6-${finalAttrs.version}-src/pyside-setup-everywhere-src-${finalAttrs.version}.tar.xz";
+    hash = "sha256-BMcSxbkjSt0Nm1qjwBoMrt5kpVtJYSd1H11SojDP90g=";
   };
 
-  sourceRoot = "pyside-setup-everywhere-src-6.8.0/sources/shiboken6";
+  sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/shiboken6";
 
   patches = [ ./fix-include-qt-headers.patch ];
 
@@ -69,7 +67,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     changelog = "https://code.qt.io/cgit/pyside/pyside-setup.git/tree/doc/changelogs/changes-${finalAttrs.version}?h=v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

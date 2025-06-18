@@ -32,15 +32,15 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Zero setup cross compilation and cross testing";
     homepage = "https://github.com/cross-rs/cross";
     changelog = "https://github.com/cross-rs/cross/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ otavio ];
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "cross";
   };
 }

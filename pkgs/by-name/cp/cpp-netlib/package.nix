@@ -3,25 +3,35 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost,
+  boost186,
   openssl,
+  llvmPackages_18,
 }:
-
-stdenv.mkDerivation rec {
+let
+  # std::char_traits has been removed
+  stdenvForCppNetlib = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
+in
+stdenvForCppNetlib.mkDerivation rec {
   pname = "cpp-netlib";
   version = "0.13.0-final";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "${pname}-${version}";
+    owner = "cpp-netlib";
+    repo = "cpp-netlib";
+    rev = "cpp-netlib-${version}";
     sha256 = "18782sz7aggsl66b4mmi1i0ijwa76iww337fi9sygnplz2hs03a3";
     fetchSubmodules = true;
   };
 
+  patches = [
+    # 'u32_to_u8_iterator' was not declared
+    ./0001-Compatibility-with-boost-1.83.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    boost
+    # io_service.hpp has been removed in boost 1.87+
+    boost186
     openssl
   ];
 

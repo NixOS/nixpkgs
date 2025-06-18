@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    libpq.pg_config
   ];
 
   buildInputs = [

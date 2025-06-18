@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
-    repo = pname;
+    repo = "poetry-dynamic-versioning";
     tag = "v${version}";
     hash = "sha256-V5UuODRwm829c1KPdQm9oqeN6YdcCo1ODDsEHbm4e/Y=";
   };

@@ -12,13 +12,13 @@
 }:
 mkLibretroCore {
   core = "mupen64plus-next";
-  version = "0-unstable-2024-10-29";
+  version = "0-unstable-2025-06-04";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "mupen64plus-libretro-nx";
-    rev = "4249e39b2c200e5f0895385f76d99928785f2bea";
-    hash = "sha256-nII/PMYo2xLznmAcKs6jDWGRS1DC3tiDeT6KJKRnaCI=";
+    rev = "0346d3ef26016bb4de604cf918d004bd791447ee";
+    hash = "sha256-DV6X94BHr97S1jW3zNUDx6w35JcEnSFNgv6fCi2amek=";
   };
 
   # Fix for GCC 14
@@ -41,11 +41,13 @@ mkLibretroCore {
     })
   ];
 
+  extraNativeBuildInputs = [
+    nasm
+  ];
   extraBuildInputs = [
     libGLU
     libGL
     libpng
-    nasm
     xorg.libX11
   ];
   makefile = "Makefile";

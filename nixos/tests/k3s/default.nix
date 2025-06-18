@@ -4,13 +4,18 @@
   lib ? pkgs.lib,
 }:
 let
-  allK3s = lib.filterAttrs (n: _: lib.strings.hasPrefix "k3s_" n) pkgs;
+  allK3s = lib.filterAttrs (
+    n: _: lib.strings.hasPrefix "k3s_" n && (builtins.tryEval pkgs.${n}).success
+  ) pkgs;
 in
 {
   airgap-images = lib.mapAttrs (
     _: k3s: import ./airgap-images.nix { inherit system pkgs k3s; }
   ) allK3s;
   auto-deploy = lib.mapAttrs (_: k3s: import ./auto-deploy.nix { inherit system pkgs k3s; }) allK3s;
+  auto-deploy-charts = lib.mapAttrs (
+    _: k3s: import ./auto-deploy-charts.nix { inherit system pkgs k3s; }
+  ) allK3s;
   containerd-config = lib.mapAttrs (
     _: k3s: import ./containerd-config.nix { inherit system pkgs k3s; }
   ) allK3s;

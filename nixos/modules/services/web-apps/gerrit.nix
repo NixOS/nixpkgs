@@ -1,21 +1,26 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.services.gerrit;
 
   # NixOS option type for git-like configs
-  gitIniType = with types;
+  gitIniType =
+    with types;
     let
       primitiveType = either str (either bool int);
       multipleType = either primitiveType (listOf primitiveType);
       sectionType = lazyAttrsOf multipleType;
       supersectionType = lazyAttrsOf (either multipleType sectionType);
-    in lazyAttrsOf supersectionType;
+    in
+    lazyAttrsOf supersectionType;
 
-  gerritConfig = pkgs.writeText "gerrit.conf" (
-    lib.generators.toGitINI cfg.settings
-  );
+  gerritConfig = pkgs.writeText "gerrit.conf" (lib.generators.toGitINI cfg.settings);
 
   replicationConfig = pkgs.writeText "replication.conf" (
     lib.generators.toGitINI cfg.replicationSettings
@@ -35,26 +40,26 @@ let
       "$@"
   '';
 
-  gerrit-plugins = pkgs.runCommand
-    "gerrit-plugins"
-    {
-      buildInputs = [ gerrit-cli ];
-    }
-    ''
-      shopt -s nullglob
-      mkdir $out
+  gerrit-plugins =
+    pkgs.runCommand "gerrit-plugins"
+      {
+        buildInputs = [ gerrit-cli ];
+      }
+      ''
+        shopt -s nullglob
+        mkdir $out
 
-      for name in ${toString cfg.builtinPlugins}; do
-        echo "Installing builtin plugin $name.jar"
-        gerrit cat plugins/$name.jar > $out/$name.jar
-      done
+        for name in ${toString cfg.builtinPlugins}; do
+          echo "Installing builtin plugin $name.jar"
+          gerrit cat plugins/$name.jar > $out/$name.jar
+        done
 
-      for file in ${toString cfg.plugins}; do
-        name=$(echo "$file" | cut -d - -f 2-)
-        echo "Installing plugin $name"
-        ln -sf "$file" $out/$name
-      done
-    '';
+        for file in ${toString cfg.plugins}; do
+          name=$(echo "$file" | cut -d - -f 2-)
+          echo "Installing plugin $name"
+          ln -sf "$file" $out/$name
+        done
+      '';
 in
 {
   options = {
@@ -63,7 +68,7 @@ in
 
       package = mkPackageOption pkgs "gerrit" { };
 
-      jvmPackage = mkPackageOption pkgs "jre_headless" { };
+      jvmPackage = mkPackageOption pkgs "jdk21_headless" { };
 
       jvmOpts = mkOption {
         type = types.listOf types.str;
@@ -94,7 +99,7 @@ in
 
       settings = mkOption {
         type = gitIniType;
-        default = {};
+        default = { };
         description = ''
           Gerrit configuration. This will be generated to the
           `etc/gerrit.config` file.
@@ -103,7 +108,7 @@ in
 
       replicationSettings = mkOption {
         type = gitIniType;
-        default = {};
+        default = { };
         description = ''
           Replication configuration. This will be generated to the
           `etc/replication.config` file.
@@ -112,7 +117,7 @@ in
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         description = ''
           List of plugins to add to Gerrit. Each derivation is a jar file
           itself where the name of the derivation is the name of plugin.
@@ -121,7 +126,7 @@ in
 
       builtinPlugins = mkOption {
         type = types.listOf (types.enum cfg.package.passthru.plugins);
-        default = [];
+        default = [ ];
         description = ''
           List of builtins plugins to install. Those are shipped in the
           `gerrit.war` file.
@@ -144,7 +149,7 @@ in
 
     assertions = [
       {
-        assertion = cfg.replicationSettings != {} -> elem "replication" cfg.builtinPlugins;
+        assertion = cfg.replicationSettings != { } -> elem "replication" cfg.builtinPlugins;
         message = "Gerrit replicationSettings require enabling the replication plugin";
       }
     ];
@@ -173,7 +178,10 @@ in
 
       wantedBy = [ "multi-user.target" ];
       requires = [ "gerrit.socket" ];
-      after = [ "gerrit.socket" "network.target" ];
+      after = [
+        "gerrit.socket"
+        "network.target"
+      ];
 
       path = [
         gerrit-cli
@@ -210,8 +218,7 @@ in
         # install the plugins
         rm -rf plugins
         ln -sv ${gerrit-plugins} plugins
-      ''
-      ;
+      '';
 
       serviceConfig = {
         CacheDirectory = "gerrit";
@@ -237,17 +244,25 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "noaccess";
         ProtectSystem = "full";
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        UMask = 027;
+        UMask = 27;
       };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ edef zimbatm ];
+  meta.maintainers = with lib.maintainers; [
+    edef
+    zimbatm
+    felixsinger
+  ];
   # uses attributes of the linked package
   meta.buildDocsInSandbox = false;
 }

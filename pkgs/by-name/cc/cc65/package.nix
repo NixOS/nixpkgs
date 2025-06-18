@@ -10,7 +10,7 @@ gccStdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cc65";
-    repo = pname;
+    repo = "cc65";
     rev = "V${version}";
     sha256 = "01a15yvs455qp20hri2pbg2wqvcip0d50kb7dibi9427hqk9cnj4";
   };

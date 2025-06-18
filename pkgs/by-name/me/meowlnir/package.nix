@@ -9,23 +9,23 @@
 
 buildGoModule rec {
   pname = "meowlnir";
-  version = "0.2.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "maunium";
     repo = "meowlnir";
     tag = "v${version}";
-    hash = "sha256-Fzi9KI6bPrmKMku176rAnLpfVcAjYlKUQ8MiSQB9hpU=";
+    hash = "sha256-1YuSXKRiMUCRbxGIDOQKGKK7CxM3VD0LLEeULQJ/zRo=";
   };
 
   buildInputs = [ olm ];
 
-  vendorHash = "sha256-G1+KDssamPRFlGs/moBk0qJDT/IctiKgnM+mVfCDMwg=";
+  vendorHash = "sha256-g0be4ftBRV6Ver1kULfhnVBAF+iL3+/4e25sozpJ7+s=";
 
   doCheck = true;
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

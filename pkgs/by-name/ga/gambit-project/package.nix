@@ -4,7 +4,6 @@
   fetchFromGitHub,
   stdenv,
   wxGTK31,
-  darwin,
   withGui ? true,
 }:
 
@@ -21,9 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withGui wxGTK31;
 
-  buildInputs =
-    lib.optional withGui wxGTK31
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  buildInputs = lib.optional withGui wxGTK31;
 
   strictDeps = true;
 
@@ -33,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Open-source collection of tools for doing computation in game theory";
-    homepage = "http://www.gambit-project.org";
+    homepage = "https://www.gambit-project.org";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ t4ccer ];
     platforms = with lib.platforms; unix ++ windows;

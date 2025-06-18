@@ -48,12 +48,19 @@ It is useful with functions in `dockerTools` to allow building Docker images tha
 This example includes the `hello` binary in the image so it can do something besides just have the extra files.
 
 ```nix
-{ dockerTools, fakeNss, hello }:
+{
+  dockerTools,
+  fakeNss,
+  hello,
+}:
 dockerTools.buildImage {
   name = "image-with-passwd";
   tag = "latest";
 
-  copyToRoot = [ fakeNss hello ];
+  copyToRoot = [
+    fakeNss
+    hello
+  ];
 
   config = {
     Cmd = [ "/bin/hello" ];
@@ -70,8 +77,8 @@ The following code uses `override` to add extra lines to `/etc/passwd` and `/etc
 ```nix
 { fakeNss }:
 fakeNss.override {
-  extraPasswdLines = ["newuser:x:9001:9001:new user:/var/empty:/bin/sh"];
-  extraGroupLines = ["newuser:x:9001:"];
+  extraPasswdLines = [ "newuser:x:9001:9001:new user:/var/empty:/bin/sh" ];
+  extraGroupLines = [ "newuser:x:9001:" ];
 }
 ```
 :::

@@ -8,8 +8,12 @@ in
 
 self: super: {
 
-  # Should be llvmPackages_6 which has been removed from nixpkgs
-  llvmPackages = null;
+  # Should be llvmPackages_6 which has been removed from nixpkgs,
+  # create attribute set to prevent eval errors.
+  llvmPackages = {
+    llvm = null;
+    clang = null;
+  };
 
   # Disable GHC 8.6.x core libraries.
   array = null;
@@ -43,7 +47,7 @@ self: super: {
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      doDistribute self.terminfo_0_4_1_6;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
@@ -58,30 +62,20 @@ self: super: {
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
 
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
   # Needs Cabal 3.0.x.
   jailbreak-cabal = super.jailbreak-cabal.overrideScope (cself: _: { Cabal = cself.Cabal_3_2_1_0; });
-
-  # https://github.com/tibbe/unordered-containers/issues/214
-  unordered-containers = dontCheck super.unordered-containers;
 
   # Test suite does not compile.
   data-clist = doJailbreak super.data-clist; # won't cope with QuickCheck 2.12.x
   dates = doJailbreak super.dates; # base >=4.9 && <4.12
-  Diff = dontCheck super.Diff;
-  equivalence = dontCheck super.equivalence; # test suite doesn't compile https://github.com/pa-ba/equivalence/issues/5
   HaTeX = doJailbreak super.HaTeX; # containers >=0.4 && <0.6 is too tight; https://github.com/Daniel-Diaz/HaTeX/issues/126
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
   http-api-data = doJailbreak super.http-api-data;
-  persistent-sqlite = dontCheck super.persistent-sqlite;
-  unicode-transforms = dontCheck super.unicode-transforms;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
-  RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
-  github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
-  binary-orphans = dontCheck super.binary-orphans; # tasty upper bound exceeded; https://github.com/phadej/binary-orphans/commit/8ce857226595dd520236ff4c51fa1a45d8387b33
   rebase = doJailbreak super.rebase; # time ==1.9.* is too low
-
-  # https://github.com/jgm/skylighting/issues/55
-  skylighting-core = dontCheck super.skylighting-core;
 
   # cabal2nix needs the latest version of Cabal, and the one
   # hackage-db uses must match, so take the latest
@@ -93,17 +87,11 @@ self: super: {
   # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
+
   # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
   exceptions = self.exceptions_0_10_9;
 
-  # vector 0.12.2 indroduced doctest checks that don’t work on older compilers
-  vector = dontCheck super.vector;
-
-  # https://github.com/haskellari/time-compat/issues/23
-  time-compat = dontCheck super.time-compat;
-
   mime-string = disableOptimization super.mime-string;
-
-  # https://github.com/fpco/inline-c/issues/127 (recommend to upgrade to Nixpkgs GHC >=9.0)
-  inline-c-cpp = (if isDarwin then dontCheck else x: x) super.inline-c-cpp;
 }

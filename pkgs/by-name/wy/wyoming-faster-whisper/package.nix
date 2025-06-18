@@ -37,12 +37,12 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/rhasspy/wyoming-faster-whisper/releases/tag/v${version}";
     description = "Wyoming Server for Faster Whisper";
     homepage = "https://github.com/rhasspy/wyoming-faster-whisper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "wyoming-faster-whisper";
   };
 }

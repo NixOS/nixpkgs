@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-h2l9YKMeELXLhqnwZR4ex77pgyDQSMBzlDGqw9V2T7Y=";
+    hash = "sha256-aL7b/q9z99hr4qfZm8+9QJPYKfUncIk5Ga4XTAsjV8o=";
   };
 
   outputs = [

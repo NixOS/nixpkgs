@@ -18,6 +18,9 @@
   pytestCheckHook,
   pytest-mock,
   syrupy,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -37,6 +40,9 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individual components.
+    "langchain-core"
     "numpy"
   ];
 
@@ -60,14 +66,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_mongodb" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-mongodb==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-mongodb==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Integration package connecting MongoDB and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mongodb";
     license = lib.licenses.mit;

@@ -1,36 +1,42 @@
 {
   lib,
-  fetchFromGitHub,
+  stdenv,
   python3Packages,
-  libiconv,
+  fetchFromGitHub,
+  julia,
+  julia-bin,
+
+  # tests
+  cabal-install,
   cargo,
+  gitMinimal,
+  go,
+  perl,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
   coursier,
   dotnet-sdk,
-  gitMinimal,
-  glibcLocales,
-  go,
   nodejs,
-  perl,
-  cabal-install,
+
+  # passthru
+  callPackage,
   pre-commit,
 }:
 
-with python3Packages;
 let
   i686Linux = stdenv.buildPlatform.system == "i686-linux";
+  julia' = if lib.meta.availableOn stdenv.hostPlatform julia then julia else julia-bin;
 in
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pre-commit";
-  version = "4.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.9";
+  version = "4.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
     tag = "v${version}";
-    hash = "sha256-qMNnzAxJOS7mabHmGYZ/VkDrpaZbqTJyETSCxq/OrGQ=";
+    hash = "sha256-rUhI9NaxyRfLu/mfLwd5B0ybSnlAQV2Urx6+fef0sGM=";
   };
 
   patches = [
@@ -39,7 +45,11 @@ buildPythonApplication rec {
     ./pygrep-pythonpath.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     cfgv
     identify
     nodeenv
@@ -50,19 +60,22 @@ buildPythonApplication rec {
 
   nativeCheckInputs =
     [
+      cabal-install
       cargo
       gitMinimal
-      glibcLocales
       go
-      libiconv # For rust tests on Darwin
+      julia'
       perl
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ]
+    ++ (with python3Packages; [
       pytest-env
       pytest-forked
       pytest-xdist
       pytestCheckHook
       re-assert
-      cabal-install
-    ]
+    ])
     ++ lib.optionals (!i686Linux) [
       # coursier can be moved back to the main nativeCheckInputs list once we’re able to bootstrap a
       # JRE on i686-linux: <https://github.com/NixOS/nixpkgs/issues/314873>. When coursier gets
@@ -77,14 +90,15 @@ buildPythonApplication rec {
       # Node.js-related tests that are currently disabled on i686-linux.
       nodejs
     ];
+  versionCheckProgramArg = "--version";
 
   postPatch = ''
     substituteInPlace pre_commit/resources/hook-tmpl \
       --subst-var-by pre-commit $out
     substituteInPlace pre_commit/languages/python.py \
-      --subst-var-by virtualenv ${virtualenv}
+      --subst-var-by virtualenv ${python3Packages.virtualenv}
     substituteInPlace pre_commit/languages/node.py \
-      --subst-var-by nodeenv ${nodeenv}
+      --subst-var-by nodeenv ${python3Packages.nodeenv}
 
     patchShebangs pre_commit/resources/hook-tmpl
   '';
@@ -101,15 +115,13 @@ buildPythonApplication rec {
     + ''
       export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
              GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_EMAIL=test@example.com \
-             VIRTUALENV_NO_DOWNLOAD=1 PRE_COMMIT_NO_CONCURRENCY=1 LANG=en_US.UTF-8
+             VIRTUALENV_NO_DOWNLOAD=1 PRE_COMMIT_NO_CONCURRENCY=1
     ''
     + lib.optionalString (!i686Linux) ''
       # Resolve `.NET location: Not found` errors for dotnet tests
       export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
     ''
     + ''
-      export HOME=$(mktemp -d)
-
       git init -b master
 
       python -m venv --system-site-packages venv
@@ -137,6 +149,7 @@ buildPythonApplication rec {
       "test_additional_node_dependencies_installed"
       "test_additional_rust_cli_dependencies_installed"
       "test_additional_rust_lib_dependencies_installed"
+      "test_automatic_toolchain_switching"
       "test_coursier_hook"
       "test_coursier_hook_additional_dependencies"
       "test_dart"
@@ -152,6 +165,8 @@ buildPythonApplication rec {
       "test_language_version_with_rustup"
       "test_installs_rust_missing_rustup"
       "test_installs_without_links_outside_env"
+      "test_julia_hook"
+      "test_julia_repo_local"
       "test_local_golang_additional_deps"
       "test_lua"
       "test_lua_additional_dependencies"
@@ -199,15 +214,21 @@ buildPythonApplication rec {
     "pre_commit"
   ];
 
+  # add gitMinimal as fallback, if git is not installed
+  preFixup = ''
+    makeWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gitMinimal ]})
+  '';
+
   passthru.tests = callPackage ./tests.nix {
     inherit gitMinimal pre-commit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ borisbabic ];
+    changelog = "https://github.com/pre-commit/pre-commit/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ borisbabic ];
     mainProgram = "pre-commit";
   };
 }

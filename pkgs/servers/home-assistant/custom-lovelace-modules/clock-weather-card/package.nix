@@ -9,18 +9,18 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "clock-weather-card";
-  version = "2.8.10";
+  version = "2.8.11";
 
   src = fetchFromGitHub {
     owner = "pkissling";
     repo = "clock-weather-card";
     tag = "v${version}";
-    hash = "sha256-ZmqtvA6kRkqkoRCBerLZXqRB1wwTF0jrc+KfigaE7Pw=";
+    hash = "sha256-CZ4tv6U94HbOJ0JwLgd8Fgw2BS6ayGVhqWBK9mJ6JEk=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-Z9UZHsmaRjaf7fIDYhNmlLU2T1l1hlFKvyEahPK3Y3E=";
+    hash = "sha256-L/piPdtHFQORD3dnKG/2gnMQ2y3EXdlGMyl8yS0s7KA=";
   };
 
   nativeBuildInputs = [

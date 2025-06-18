@@ -221,6 +221,6 @@ stdenv.mkDerivation rec {
     description = "Cinnamon desktop environment";
     license = [ licenses.gpl2 ];
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

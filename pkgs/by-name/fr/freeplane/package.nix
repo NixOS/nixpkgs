@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   makeBinaryWrapper,
   makeDesktopItem,
   jdk17,
@@ -12,7 +13,7 @@
 
 let
   pname = "freeplane";
-  version = "1.12.8";
+  version = "1.12.10";
 
   jdk = jdk17;
   gradle = gradle_8;
@@ -21,7 +22,7 @@ let
     owner = "freeplane";
     repo = "freeplane";
     rev = "release-${version}";
-    hash = "sha256-yzjzaobXuQH8CHz183ditL2LsCXU5xLh4+3El4Ffu20=";
+    hash = "sha256-08Rl3vhXtlylNDc1gh5aZJ9/RoxeyxpDbklmhMVJuq4=";
   };
 
 in
@@ -35,12 +36,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
+  patches = [
+    # freeplane is using the wrong repository for a plugin
+    # remove when https://github.com/freeplane/freeplane/pull/2453 is merged and released
+    (fetchpatch {
+      url = "https://github.com/amadejkastelic/freeplane/commit/973c49b7a73622e434bb86c8caea15383201b58a.patch";
+      hash = "sha256-iztFmISXZu8xKWqpwDYgBSl8ZSpZEtNriwM+EW1+s+Y=";
+    })
+  ];
+
   mitmCache = gradle.fetchDeps {
     inherit pname;
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk}" "-x" "test" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk}"
+    "-x"
+    "test"
+  ];
 
   # share/freeplane/core/org.freeplane.core/META-INF doesn't
   # always get generated with parallel building enabled

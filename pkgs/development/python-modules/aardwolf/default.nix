@@ -13,7 +13,6 @@
   iconv,
   pillow,
   pyperclip,
-  pythonOlder,
   rustPlatform,
   rustc,
   setuptools,
@@ -24,23 +23,20 @@
 
 buildPythonPackage rec {
   pname = "aardwolf";
-  version = "0.2.11";
+  version = "0.2.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aardwolf";
-    rev = "0586591e948977ca5945252c893ba8f766ff8d28";
-    hash = "sha256-daDxkQ7N0+yS2JOLfXJq4jv+5VQNnwtqIMy2p8j+Sag=";
+    tag = version;
+    hash = "sha256-CMO3qhxYmwB9kWIiHWV/0gAfs/yCnHzpfNYLTy4wX78=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit pname version src;
     sourceRoot = "${src.name}/aardwolf/utils/rlers";
-    name = "${pname}-${version}";
-    hash = "sha256-doBraJQtekrO/ZZV9KFz7BdIgBVVWtQztUS2Gz8dDdA=";
+    hash = "sha256-+2hENnrG35eRgQwtCCJUux9mYEkzD2astLgOqWHrH/M=";
   };
 
   cargoRoot = "aardwolf/utils/rlers";
@@ -79,7 +75,7 @@ buildPythonPackage rec {
     mainProgram = "ardpscan";
     homepage = "https://github.com/skelsec/aardwolf";
     changelog = "https://github.com/skelsec/aardwolf/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

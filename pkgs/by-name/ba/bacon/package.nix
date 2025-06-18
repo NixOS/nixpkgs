@@ -27,17 +27,17 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bacon";
-  version = "3.11.0";
+  version = "3.16.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yFU4U1TWoumg61Vs6F5Gqz22VuI2Qs0IRz/TPGBYX4E=";
+    hash = "sha256-+gcH527HaYQsyCqULWhEgz8DNwK8vIWJjVSZhcGme74=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-g8DWFhgguxPked7kCCsmUPXzRqu5DaPopoxORBl4/1o=";
+  cargoHash = "sha256-kr6c5n9A6Cjv3CPdIS9XkelauK/uBsTDt5iowWmAZn4=";
 
   buildFeatures = lib.optionals withSound [
     "sound"
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = lib.optionals withSound soundDependencies;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   postInstall =

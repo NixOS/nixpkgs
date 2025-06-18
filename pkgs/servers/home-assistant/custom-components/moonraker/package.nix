@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "marcolivierarsenault";
   domain = "moonraker";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "marcolivierarsenault";
     repo = "moonraker-home-assistant";
     tag = version;
-    hash = "sha256-CicM7XVHEp43ZvPZKdV53jhHH4R4mAv/wiWQPd1oWtg=";
+    hash = "sha256-FamZ4MvfWzynTpAKCMnABsX6h1+nB4jAOkO386J02OM=";
   };
 
   dependencies = [
@@ -23,7 +23,6 @@ buildHomeAssistantComponent rec {
 
   #skip phases with nothing to do
   dontConfigure = true;
-  dontBuild = true;
   doCheck = false;
 
   meta = with lib; {

@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.36";
+  version = "1.37.1.2";
   pname = "fakeroot";
 
   src = fetchFromGitLab {
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "fakeroot";
     rev = "upstream/${finalAttrs.version}";
     domain = "salsa.debian.org";
-    hash = "sha256-QNScrkX2Vffsj/I5EJO8qs5AHQ9b5s6nHLHQKUdRzLE=";
+    hash = "sha256-2ihdvYRnv2wpZrEikP4hCdshY8Eqarqnw3s9HPb+xKU=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     po4a
   ];
-  buildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) libcap;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux libcap;
 
   postUnpack = ''
     sed -i \

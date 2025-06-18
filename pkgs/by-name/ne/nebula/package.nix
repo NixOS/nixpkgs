@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "slackhq";
-    repo = pname;
+    repo = "nebula";
     tag = "v${version}";
     hash = "sha256-IJMmVKdgYCXCaRndlcoozFBr+RsUhzC1Eqo427K1k+o=";
   };
@@ -29,7 +29,7 @@ buildGoModule rec {
     inherit (nixosTests) nebula;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Overlay networking tool with a focus on performance, simplicity and security";
     longDescription = ''
       Nebula is a scalable overlay networking tool with a focus on performance,
@@ -48,8 +48,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/slackhq/nebula";
     changelog = "https://github.com/slackhq/nebula/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       numinit
     ];

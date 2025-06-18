@@ -23,6 +23,7 @@
   typing-extensions,
 
   # tests
+  aiofiles,
   chex,
   google-cloud-logging,
   mock,
@@ -34,19 +35,23 @@
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.6";
+  version = "0.11.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-2bnm9D+ywhploTmtZ+frwf8VuTjczBVN+wqcfe3x77I=";
+    hash = "sha256-yy/BsmkBLlS6bd9I8rKKifRG+/T5/0XV00fq07LivPE=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
 
   build-system = [ flit-core ];
+
+  pythonRelaxDeps = [
+    "jax"
+  ];
 
   dependencies = [
     absl-py
@@ -65,6 +70,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiofiles
     chex
     google-cloud-logging
     mock
@@ -79,12 +85,19 @@ buildPythonPackage rec {
     "orbax.checkpoint"
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Probably failing because of a filesystem impurity
-    # self.assertFalse(os.path.exists(dst_dir))
-    # AssertionError: True is not false
-    "test_create_snapshot"
-  ];
+  disabledTests =
+    [
+      # Flaky
+      # AssertionError: 2 not greater than 2.0046136379241943
+      "test_async_mkdir_parallel"
+      "test_async_mkdir_sequential"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Probably failing because of a filesystem impurity
+      # self.assertFalse(os.path.exists(dst_dir))
+      # AssertionError: True is not false
+      "test_create_snapshot"
+    ];
 
   disabledTestPaths = [
     # E   absl.flags._exceptions.DuplicateFlagError: The flag 'num_processes' is defined twice.
@@ -98,6 +111,8 @@ buildPythonPackage rec {
     "orbax/checkpoint/_src/metadata/tree_rich_types_test.py"
     "orbax/checkpoint/_src/metadata/tree_test.py"
     "orbax/checkpoint/_src/testing/test_tree_utils.py"
+    "orbax/checkpoint/_src/tree/parts_of_test.py"
+    "orbax/checkpoint/_src/tree/structure_utils_test.py"
     "orbax/checkpoint/_src/tree/utils_test.py"
     "orbax/checkpoint/single_host_test.py"
     "orbax/checkpoint/transform_utils_test.py"

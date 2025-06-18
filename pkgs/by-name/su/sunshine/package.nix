@@ -47,6 +47,8 @@
   miniupnpc,
   nlohmann_json,
   config,
+  coreutils,
+  udevCheckHook,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 }:
@@ -91,9 +93,12 @@ stdenv'.mkDerivation rec {
       wayland-scanner
       # Avoid fighting upstream's usage of vendored ffmpeg libraries
       autoPatchelfHook
+      udevCheckHook
     ]
     ++ lib.optionals cudaSupport [
       autoAddDriverRunpath
+      cudaPackages.cuda_nvcc
+      (lib.getDev cudaPackages.cuda_cudart)
     ];
 
   buildInputs =
@@ -198,7 +203,8 @@ stdenv'.mkDerivation rec {
 
     substituteInPlace packaging/linux/sunshine.service.in \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
-      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine
+      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
+      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
   '';
 
   preBuild = ''
@@ -226,6 +232,8 @@ stdenv'.mkDerivation rec {
   postInstall = ''
     install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
   '';
+
+  doInstallCheck = true;
 
   passthru = {
     tests.sunshine = nixosTests.sunshine;

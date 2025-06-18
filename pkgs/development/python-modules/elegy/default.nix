@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "poets-ai";
-    repo = pname;
+    repo = "elegy";
     tag = version;
     hash = "sha256-FZmLriYhsX+zyQKCtCjbOy6MH+AvjzHRNUyaDSXGlLI=";
   };

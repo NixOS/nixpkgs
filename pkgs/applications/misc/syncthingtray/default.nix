@@ -38,14 +38,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.7.2";
+  version = "1.7.8";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pQd6Ngxcn5qJKhjqXXJ6LZLgSI8gJ/d9TNuIAZlWHGA=";
+    hash = "sha256-aUIZJ+nSLs1W0zycu6Mz2pknJw4e+jNxaFLUpSP6EKA=";
   };
 
   buildInputs =

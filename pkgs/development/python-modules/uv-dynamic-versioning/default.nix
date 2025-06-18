@@ -9,6 +9,7 @@
   # dependencies
   dunamai,
   eval-type-backport,
+  jinja2,
   pydantic,
   returns,
   tomlkit,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "uv-dynamic-versioning";
-  version = "0.4.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     tag = "v${version}";
     # Tests perform mock operations on the local repo
     leaveDotGit = true;
-    hash = "sha256-5pc05yazeHyQvmNk0uy6XkLrmX4ZQF6Lj7fDDtVcpu4=";
+    hash = "sha256-iIWghJXhs0IblO7Kgfe6lEc0F/KYF1c8/TN5tkIvXa0=";
   };
 
   build-system = [
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     dunamai
     eval-type-backport
     hatchling
+    jinja2
     pydantic
     returns
     tomlkit

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "12.3.1";
+  version = "13.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -29,12 +29,12 @@ buildPythonPackage rec {
     owner = "DeebotUniverse";
     repo = "client.py";
     tag = version;
-    hash = "sha256-2ZdWe9fVmQq7YGKzBut6hec3OeR9iXDkoDmYFYHX90A=";
+    hash = "sha256-dnh+3/viaaxlx3H0ceDH1N72kC1HBC7Szz+Gb6ryUJM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-PrHm85Tzfd3jS5ofKKpECkWhL44yKBc8Hvrh0zbl7lw=";
+    hash = "sha256-v8FtW1gPoPfOpcxUrM7g0LKR8k0VPR13hsHCPT8uLzs=";
   };
 
   pythonRelaxDeps = [

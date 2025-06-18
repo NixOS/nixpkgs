@@ -1,30 +1,31 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hole";
-  version = "0.8.0";
-  format = "setuptools";
+  version = "0.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zkghLJe1SzN2qOeL23+T2ISjGkuODd9tJA1tO3hw2a0=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-ecosystem";
+    repo = "python-hole";
+    tag = version;
+    hash = "sha256-yyqLbnW49R7f8C0IBL8z9Sq69TtaS5Ng2VQLJofNqcI=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-  ];
+  build-system = [ setuptools ];
 
-  # no tests are present
+  dependencies = [ aiohttp ];
+
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "hole" ];
@@ -32,8 +33,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for interacting with a Pihole instance";
     homepage = "https://github.com/home-assistant-ecosystem/python-hole";
-    changelog = "https://github.com/home-assistant-ecosystem/python-hole/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/home-assistant-ecosystem/python-hole/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

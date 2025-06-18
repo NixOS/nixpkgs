@@ -1,6 +1,11 @@
-{ lib, buildDunePackage, fetchurl
-, dune-configurator, cmdliner
-, lwt, withLwt ? true
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  dune-configurator,
+  cmdliner,
+  lwt,
+  withLwt ? true,
 }:
 
 buildDunePackage rec {

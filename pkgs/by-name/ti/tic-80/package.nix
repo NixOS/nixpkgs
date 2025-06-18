@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A free and open source fantasy computer for making, playing and sharing tiny games";
+    description = "Free and open source fantasy computer for making, playing and sharing tiny games";
     longDescription = ''
       TIC-80 is a free and open source fantasy computer for making, playing and
       sharing tiny games.
@@ -151,5 +151,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "tic80";
     maintainers = with maintainers; [ blinry ];
+    # /build/source/vendor/sdl2/src/audio/pipewire/SDL_pipewire.c:623:37: error: passing argument 1 of 'pw_node_enum_params' from incompatible pointer type [-Wincompatible-pointer-types]
+    broken = true;
   };
 }

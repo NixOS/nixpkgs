@@ -14,6 +14,25 @@
   python3,
 }:
 
+let
+  /*
+    Upstream petsc has lots of fortran api change since 3.22.0
+    We will keep using older version until pflotran supports the latest petsc.
+    Pflotran also requires Parmetis support in Petsc to have actual parmetis support.
+  */
+  petsc' =
+    (petsc.overrideAttrs rec {
+      version = "3.21.4";
+      src = fetchzip {
+        url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
+        hash = "sha256-l7v+ASBL9FLbBmBGTRWDwBihjwLe3uLz+GwXtn8u7e0=";
+      };
+    }).override
+      {
+        withMetis = true;
+        withParmetis = true;
+      };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "PFLOTRAN";
   version = "6.0.1";
@@ -30,15 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gfortran ];
 
   buildInputs = [
-    # upstream petsc has lots of fortran api change since 3.22.*
-    # will keep using old petsc-3.21.4 until pflotran support latest petsc
-    (petsc.overrideAttrs rec {
-      version = "3.21.4";
-      src = fetchzip {
-        url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
-        hash = "sha256-l7v+ASBL9FLbBmBGTRWDwBihjwLe3uLz+GwXtn8u7e0=";
-      };
-    })
+    petsc'
     blas
     lapack
     hdf5-fortran-mpi

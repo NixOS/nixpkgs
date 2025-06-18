@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libffi";
-  version = "3.4.6";
+  version = "3.4.8";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-sN6p3yPIY6elDoJUQPPr/6vWXfFJcQjl1Dd0eEOJWk4=";
+    hash = "sha256-vJhCoYiYv6yw7RJSxP68x+ePoTn9J/3Ho+MNnZNWEZs=";
   };
 
   # Note: this package is used for bootstrapping fetchurl, and thus
@@ -27,9 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
   # cgit) that are needed here should be included directly in Nixpkgs as
   # files.
   patches = [
-    # https://github.com/libffi/libffi/pull/857
-    # function label needs to come before .cfi_startproc
-    ./label-before-cfi_startproc.patch
   ];
 
   strictDeps = true;

@@ -40,7 +40,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2025.02.10.00";
+  version = "2025.04.21.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OuMbxZ9sl9KPDHFae503R0AqzDYFdyuaGK1BospRtfs=";
+    hash = "sha256-P2saSFVRBWt5xjAWlKmcPJT9MFV9CXFmA18dIDCO84o=";
   };
 
   nativeBuildInputs = [
@@ -116,7 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  doCheck = true;
+  # https://github.com/facebook/folly/blob/main/folly/DiscriminatedPtr.h
+  # error: #error "DiscriminatedPtr is x64, arm64, ppc64 and riscv64 specific code."
+  doCheck =
+    stdenv.hostPlatform.isx86_64
+    || stdenv.hostPlatform.isAarch64
+    || stdenv.hostPlatform.isPower64
+    || stdenv.hostPlatform.isRiscV64;
 
   patches = [
     # The base template for std::char_traits has been removed in LLVM 19

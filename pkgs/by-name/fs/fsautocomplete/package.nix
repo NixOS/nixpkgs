@@ -4,19 +4,18 @@
   fetchFromGitHub,
   dotnetCorePackages,
   testers,
-  _experimental-update-script-combinators,
   nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "fsautocomplete";
-  version = "0.77.2";
+  version = "0.78.3";
 
   src = fetchFromGitHub {
     owner = "fsharp";
     repo = "FsAutoComplete";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-rCfiWzVsK9lvo4uMNrgWdXsjrvBQDZOyFpKxKdbT/3g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZY0sRRGTazaesHyqUe5C/l8xmo+teTS34KVXd0DnO84=";
   };
 
   nugetDeps = ./deps.json;
@@ -38,20 +37,17 @@ buildDotnetModule (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script { })
-      finalAttrs.passthru.fetch-deps
-    ];
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "FsAutoComplete project (FSAC) provides a backend service for rich editing or intellisense features for editors";
     mainProgram = "fsautocomplete";
     homepage = "https://github.com/fsharp/FsAutoComplete";
-    changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       gbtb
       mdarocha
     ];

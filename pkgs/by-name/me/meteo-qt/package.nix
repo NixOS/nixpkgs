@@ -2,31 +2,40 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  qt5,
+  qt6,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "meteo-qt";
-  version = "3.4";
-  format = "setuptools";
+  version = "4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dglent";
     repo = "meteo-qt";
     tag = "v${version}";
-    hash = "sha256-J9R6UGfj3vaPfn0vmjeRMsHryc/1pxoKyIE9wteVYbY=";
+    hash = "sha256-s02A5WwJffjbB497sXyugkIolqyK3OpEY7aBgnOBdbM=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "lrelease-pro-qt6" "${qt6.qttools}/libexec/lrelease-pro"
+  '';
+
   nativeBuildInputs = [
-    qt5.qttools
-    qt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
+    python3Packages.pyqt6
   ];
 
-  build-system = with python3Packages; [ sip ];
+  build-system = with python3Packages; [
+    setuptools
+    sip
+  ];
 
   dependencies = with python3Packages; [
     lxml
-    pyqt5
+    pyqt6
   ];
 
   postFixup = ''

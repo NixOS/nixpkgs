@@ -24,11 +24,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
-  version = "5.1.6";
+  version = "5.1.7";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20230917142929/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
-    hash = "sha256-9XRYhedCDWtNPjAKzK4lOprHwbJjOgF6HN2MZnlZ9IE=";
+    hash = "sha256-GpjWo2+AsT0hD3CJJ8Pf/K5TbWtG0ZE2tIpH/UEGTws=";
   };
 
   unpackPhase = "tar xvf $src";

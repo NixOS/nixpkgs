@@ -13,7 +13,7 @@
   attrNamesOnly ? false,
 
   # Set this to `null` to build for builtins.currentSystem only
-  systems ? import ../../ci/supportedSystems.nix,
+  systems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
 }:
 let
   lib = import (path + "/lib");
@@ -27,7 +27,7 @@ let
           config = {
             allowAliases = false;
             allowBroken = includeBroken;
-            allowUnfree = false;
+            allowUnfree = true;
             allowInsecurePredicate = x: true;
             checkMeta = checkMeta;
 

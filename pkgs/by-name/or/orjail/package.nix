@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   version = "1.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "orjail";
+    repo = "orjail";
     rev = "v${version}";
     sha256 = "06bwqb3l7syy4c1d8xynxwakmdxvm3qfm8r834nidsknvpdckd9z";
   };

@@ -143,7 +143,7 @@ stdenv.mkDerivation {
     description = "ANSI Common Lisp Implementation";
     homepage = "http://clisp.org";
     mainProgram = "clisp";
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux ++ darwin;
   };

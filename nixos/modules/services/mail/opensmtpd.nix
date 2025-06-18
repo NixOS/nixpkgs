@@ -76,8 +76,8 @@ in
         description = ''
           Packages to search for filters, tables, queues, and schedulers.
 
-          Add OpenSMTPD-extras here if you want to use the filters, etc. from
-          that package.
+          Add packages here if you want to use them as as such, for example
+          from the opensmtpd-table-* packages.
         '';
       };
     };
@@ -121,25 +121,41 @@ in
       }
     );
 
-    systemd.tmpfiles.rules = [
-      "d /var/spool/smtpd 711 root - - -"
-      "d /var/spool/smtpd/offline 770 root smtpq - -"
-      "d /var/spool/smtpd/purge 700 smtpq root - -"
-    ];
+    systemd.tmpfiles.settings.opensmtpd = {
+      "/var/spool/smtpd".d = {
+        mode = "0711";
+        user = "root";
+      };
+      "/var/spool/smtpd/offline".d = {
+        mode = "0770";
+        user = "root";
+        group = "smtpq";
+      };
+      "/var/spool/smtpd/purge".d = {
+        mode = "0700";
+        user = "smtpq";
+        group = "root";
+      };
+      "/var/spool/smtpd/queue".d = {
+        mode = "0700";
+        user = "smtpq";
+        group = "root";
+      };
+    };
 
     systemd.services.opensmtpd =
       let
         procEnv = pkgs.buildEnv {
           name = "opensmtpd-procs";
           paths = [ cfg.package ] ++ cfg.procPackages;
-          pathsToLink = [ "/libexec/opensmtpd" ];
+          pathsToLink = [ "/libexec/smtpd" ];
         };
       in
       {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
-        environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
+        environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/smtpd";
       };
   };
 }

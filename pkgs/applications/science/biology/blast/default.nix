@@ -9,7 +9,6 @@
   cpio,
   gawk,
   coreutils,
-  ApplicationServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -101,7 +100,7 @@ stdenv.mkDerivation rec {
     gawk
     zlib
     bzip2
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
+  ];
 
   strictDeps = true;
 

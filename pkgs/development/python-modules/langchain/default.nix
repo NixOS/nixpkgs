@@ -24,6 +24,7 @@
   tenacity,
 
   # tests
+  blockbuster,
   freezegun,
   httpx,
   lark,
@@ -36,18 +37,21 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.18";
+  version = "0.3.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-oJ4lUbQqHNEqd9UdgLH0ZmTkdZpUbJ7UNsQyIrs8JvI=";
+    hash = "sha256-B2Kg8kC6Qlu89hZVMhgqPU32BwFvgAti0IIYUdosT1A=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -57,6 +61,9 @@ buildPythonPackage rec {
   buildInputs = [ bash ];
 
   pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individual components.
+    "langchain-core"
     "numpy"
     "tenacity"
   ];
@@ -79,6 +86,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    blockbuster
     freezegun
     httpx
     lark
@@ -135,16 +143,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain==";
   };
 
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

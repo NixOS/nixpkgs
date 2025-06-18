@@ -30,12 +30,10 @@ in
         configuration file via `environment.etc."alloy/config.alloy"`.
 
         This allows config reload, contrary to specifying a store path.
-        A `reloadTrigger` for `config.alloy` is configured.
 
-        Other `*.alloy` files in the same directory (ignoring subdirs) are also
-        honored, but it's necessary to manually extend
-        `systemd.services.alloy.reloadTriggers` to enable config reload
-        during nixos-rebuild switch.
+        All `.alloy` files in the same directory (ignoring subdirs) are also
+        honored and are added to `systemd.services.alloy.reloadTriggers` to
+        enable config reload during nixos-rebuild switch.
 
         This can also point to another directory containing `*.alloy` files, or
         a single Alloy file in the Nix store (at the cost of reload).
@@ -47,6 +45,15 @@ in
         file fail, potentially marking components as unhealthy depending on
         the nature of the failure. When this happens, Alloy will continue
         functioning in the last valid state.
+      '';
+    };
+
+    environmentFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      example = "/run/secrets/alloy.env";
+      description = ''
+        EnvironmentFile as defined in {manpage}`systemd.exec(5)`.
       '';
     };
 
@@ -67,8 +74,11 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.alloy = {
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      reloadTriggers = [ config.environment.etc."alloy/config.alloy".source or null ];
+      reloadTriggers = lib.mapAttrsToList (_: v: v.source or null) (
+        lib.filterAttrs (n: _: lib.hasPrefix "alloy/" n && lib.hasSuffix ".alloy" n) config.environment.etc
+      );
       serviceConfig = {
         Restart = "always";
         DynamicUser = true;
@@ -83,6 +93,7 @@ in
         StateDirectory = "alloy";
         WorkingDirectory = "%S/alloy";
         Type = "simple";
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
       };
     };
   };

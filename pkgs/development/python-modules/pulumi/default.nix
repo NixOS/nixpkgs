@@ -20,7 +20,7 @@
 }:
 let
   inherit (pkgs.pulumi) pname version src;
-  inherit (pulumiPackages) pulumi-language-python;
+  inherit (pulumiPackages) pulumi-python;
   sourceRoot = "${src.name}/sdk/python";
 in
 buildPythonPackage {
@@ -63,16 +63,16 @@ buildPythonPackage {
     pytest
     pytest-asyncio
     pytest-timeout
-    pulumi-language-python
+    pulumi-python
   ];
 
   # https://github.com/pulumi/pulumi/blob/0acaf8060640fdd892abccf1ce7435cd6aae69fe/sdk/python/scripts/test_fast.sh#L10-L11
   # https://github.com/pulumi/pulumi/blob/0acaf8060640fdd892abccf1ce7435cd6aae69fe/sdk/python/scripts/test_fast.sh#L16
   installCheckPhase = ''
     runHook preInstallCheck
-    ${python.executable} -m pytest --ignore=lib/test/automation lib/test
+    ${python.executable} -m pytest --junit-xml= --ignore=lib/test/automation lib/test
     pushd lib/test_with_mocks
-    ${python.executable} -m pytest
+    ${python.executable} -m pytest --junit-xml=
     popd
     runHook postInstallCheck
   '';

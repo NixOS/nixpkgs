@@ -16,7 +16,6 @@
   fetchpatch,
   gfortran,
   gpuTargets ? [ ], # Non-CUDA targets, that is HIP
-  rocmPackages_5 ? null,
   rocmPackages,
   lapack,
   lib,
@@ -49,7 +48,12 @@ let
   inherit (effectiveCudaPackages) cudaAtLeast flags cudaOlder;
 
   effectiveRocmPackages =
-    if strings.versionOlder version "2.8.0" then rocmPackages_5 else rocmPackages;
+    if strings.versionOlder version "2.8.0" then
+      throw ''
+        the required ROCm 5.7 version for magma ${version} has been removed
+      ''
+    else
+      rocmPackages;
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
   #   of the first list *from* the second list. That means:
@@ -90,7 +94,7 @@ let
   minArch =
     let
       # E.g. [ "80" "86" "90" ]
-      cudaArchitectures = (builtins.map flags.dropDot flags.cudaCapabilities);
+      cudaArchitectures = (builtins.map flags.dropDots flags.cudaCapabilities);
       minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
     in
     # "75" -> "750"  Cf. https://github.com/icl-utk-edu/magma/blob/v2.9.0/CMakeLists.txt#L200-L201
@@ -117,18 +121,11 @@ stdenv.mkDerivation {
     "test"
   ];
 
-  patches = lib.optionals (version == "2.9.0") [
-    # get ROCm version directly
-    # https://github.com/icl-utk-edu/magma/pull/27
-    (fetchpatch {
-      url = "https://github.com/icl-utk-edu/magma/commit/10fe816b763c41099fa1c978a79d6869246671cf.patch";
-      hash = "sha256-qSY5ACMHyHofJdQKyPqx8sI8GbPD6IZezmCd8qOS5OM=";
-    })
-  ];
-
-  # Fixup for the python test runners
   postPatch =
     ''
+      # For rocm version script invoked by cmake
+      patchShebangs tools/
+      # Fixup for the python test runners
       patchShebangs ./testing/run_{tests,summarize}.py
     ''
     + lib.optionalString (strings.versionOlder version "2.9.0") ''
@@ -201,6 +198,10 @@ stdenv.mkDerivation {
       (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
     ]
     ++ lists.optionals rocmSupport [
+      # Can be removed once https://github.com/icl-utk-edu/magma/pull/27 is merged
+      # Can't easily apply the PR as a patch because we rely on the tarball with pregenerated
+      # hipified files ∴ fetchpatch of the PR will apply cleanly but fail to build
+      (strings.cmakeFeature "ROCM_CORE" "${effectiveRocmPackages.clr}")
       (strings.cmakeFeature "CMAKE_C_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
       (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
     ];
@@ -257,11 +258,6 @@ stdenv.mkDerivation {
       || !(cudaSupport || rocmSupport) # At least one back-end enabled
       || (cudaSupport && rocmSupport) # Mutually exclusive
       || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null)
-      || (rocmSupport && strings.versionOlder version "2.8.0" && rocmPackages_5 == null)
-      || (
-        rocmSupport
-        && strings.versionAtLeast version "2.8.0"
-        && strings.versionOlder rocmPackages.clr.version "6.3"
-      );
+      || (rocmSupport && strings.versionOlder version "2.8.0");
   };
 }

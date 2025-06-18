@@ -2,12 +2,12 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   pkg-config,
   libcdio,
   libxml2,
   popt,
   libiconv,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,21 +19,21 @@ stdenv.mkDerivation rec {
     sha256 = "0ypnb1vp49nmzp5571ynlz6n1gh90f23w3z4x95hb7c2p7pmylb7";
   };
 
+  patches = [
+    # Fix build with libxml 2.14
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/vcdimager/-/raw/88dc511b7f3dea8fb45e0c2bfa1345a75a088848/libxml214.diff";
+      hash = "sha256-gGD6gKsbR76zkQsT6RWo7zJpOQSbR8f0ZTyzwZ2oDJY=";
+    })
+  ];
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libxml2
-      popt
-      libiconv
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        IOKit
-        DiskArbitration
-      ]
-    );
+  buildInputs = [
+    libxml2
+    popt
+    libiconv
+  ];
 
   propagatedBuildInputs = [ libcdio ];
 

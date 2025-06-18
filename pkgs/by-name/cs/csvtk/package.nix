@@ -7,7 +7,7 @@
   buildPackages,
 }:
 let
-  version = "0.32.0";
+  version = "0.33.0";
 in
 buildGoModule {
   pname = "csvtk";
@@ -17,7 +17,7 @@ buildGoModule {
     owner = "shenwei356";
     repo = "csvtk";
     tag = "v${version}";
-    hash = "sha256-t1juidSPCOEFsApvMWW8F/gF2F6JwK0Ds7O/GSZRg30=";
+    hash = "sha256-Zacs1hw4pryVNxnrkLIoBNWo0jcKjtYdx6kW2LTFEIs=";
   };
 
   vendorHash = "sha256-T9flXxly3i8SKQlhp4AF2FNCqgcnGAHxv5b7nqzM3DI=";

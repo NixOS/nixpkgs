@@ -67,7 +67,7 @@ let
         convert =
           attrs:
           pipe (recurse [ ] attrs) [
-            # Filter out null values and emoty lists
+            # Filter out null values and empty lists
             (filter (kv: kv.value != null && kv.value != [ ]))
             # Transform to Key=Value form, then concatenate
             (map (kv: "${kv.name}=${transform kv.value}"))
@@ -228,11 +228,11 @@ let
         };
       };
 
-      AutoUpdate.Enable = lib.mkOption {
+      AutoUpdate.UpdateToLatestVersion = lib.mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Whether or not to enable autoupdate for goal state processing.
+          Whether or not to enable auto-update of the Extension Handler.
         '';
       };
     };

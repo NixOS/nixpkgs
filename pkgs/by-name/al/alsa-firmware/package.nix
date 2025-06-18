@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = lib.optional (
     stdenv.buildPlatform != stdenv.hostPlatform
     || stdenv.hostPlatform.isAarch64
+    || stdenv.hostPlatform.isLoongArch64
     || stdenv.hostPlatform.isRiscV64
   ) buildPackages.stdenv.cc;
 

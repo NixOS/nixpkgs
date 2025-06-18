@@ -11,12 +11,12 @@
 
 let
   pname = "bitsandbytes";
-  version = "0.45.1";
+  version = "0.46.0";
 
   inherit (torch) cudaPackages cudaSupport;
-  inherit (cudaPackages) cudaVersion;
+  inherit (cudaPackages) cudaMajorMinorVersion;
 
-  cudaVersionString = lib.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor cudaVersion);
+  cudaMajorMinorVersionString = lib.replaceStrings [ "." ] [ "" ] cudaMajorMinorVersion;
 
   # NOTE: torchvision doesn't use cudnn; torch does!
   #   For this reason it is not included.
@@ -32,7 +32,7 @@ let
   ];
 
   cuda-native-redist = symlinkJoin {
-    name = "cuda-native-redist-${cudaVersion}";
+    name = "cuda-native-redist-${cudaMajorMinorVersion}";
     paths =
       with cudaPackages;
       [
@@ -45,7 +45,7 @@ let
   };
 
   cuda-redist = symlinkJoin {
-    name = "cuda-redist-${cudaVersion}";
+    name = "cuda-redist-${cudaMajorMinorVersion}";
     paths = cuda-common-redist;
   };
 in
@@ -54,10 +54,10 @@ buildPythonPackage {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "TimDettmers";
+    owner = "bitsandbytes-foundation";
     repo = "bitsandbytes";
     tag = version;
-    hash = "sha256-MZ+3mUXaAhRb+rBtE+eQqT3XdtFxlWJc/CmTEwQkKSA=";
+    hash = "sha256-q1ltNYO5Ex6F2bfCcsekdsWjzXoal7g4n/LIHVGuj+k=";
   };
 
   # By default, which library is loaded depends on the result of `torch.cuda.is_available()`.
@@ -73,7 +73,7 @@ buildPythonPackage {
       --replace-fail "if cuda_specs:" "if True:" \
       --replace-fail \
         "cuda_binary_path = get_cuda_bnb_library_path(cuda_specs)" \
-        "cuda_binary_path = PACKAGE_DIR / 'libbitsandbytes_cuda${cudaVersionString}.so'"
+        "cuda_binary_path = PACKAGE_DIR / 'libbitsandbytes_cuda${cudaMajorMinorVersionString}.so'"
   '';
 
   nativeBuildInputs = [
@@ -112,8 +112,8 @@ buildPythonPackage {
 
   meta = {
     description = "8-bit CUDA functions for PyTorch";
-    homepage = "https://github.com/TimDettmers/bitsandbytes";
-    changelog = "https://github.com/TimDettmers/bitsandbytes/releases/tag/${version}";
+    homepage = "https://github.com/bitsandbytes-foundation/bitsandbytes";
+    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

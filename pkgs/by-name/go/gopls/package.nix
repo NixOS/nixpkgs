@@ -1,37 +1,51 @@
 {
   lib,
-  buildGoModule,
+  # gopls breaks if it is compiled with a lower version than the one it is running against.
+  # This will affect users especially when project they work on bump go minor version before
+  # the update went through nixpkgs staging. Further, gopls is a central ecosystem component.
+  buildGoLatestModule,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoLatestModule (finalAttrs: {
   pname = "gopls";
-  version = "0.18.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
-    rev = "gopls/v${version}";
-    hash = "sha256-5w6R3kaYwrZyhIYjwLqfflboXT/z3HVpZiowxeUyaWg=";
+    tag = "gopls/v${finalAttrs.version}";
+    hash = "sha256-2K93S7ApzHmsbeReKoSmIhgXuZR3oFODiTWDTO5wDOU=";
   };
 
   modRoot = "gopls";
-  vendorHash = "sha256-/tca93Df90/8K1dqhOfUsWSuFoNfg9wdWy3csOtFs6Y=";
+  vendorHash = "sha256-uWbcf/PadGXw2ryg6GjJrHzrZ88kKzfhr6gtYsLTvkg=";
 
   # https://github.com/golang/tools/blob/9ed98faa/gopls/main.go#L27-L30
-  ldflags = [ "-X main.version=v${version}" ];
+  ldflags = [ "-X main.version=v${finalAttrs.version}" ];
 
   doCheck = false;
 
-  # Only build gopls, and not the integration tests or documentation generator.
-  subPackages = [ "." ];
+  # Only build gopls & modernize, not the integration tests or documentation generator.
+  subPackages = [
+    "."
+    "internal/analysis/modernize/cmd/modernize"
+  ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=gopls/(.*)" ]; };
+
+  meta = {
+    changelog = "https://github.com/golang/tools/releases/tag/gopls/v${finalAttrs.version}";
     description = "Official language server for the Go language";
     homepage = "https://github.com/golang/tools/tree/master/gopls";
-    changelog = "https://github.com/golang/tools/releases/tag/${src.rev}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       mic92
       rski
       SuperSandro2000
@@ -39,4 +53,4 @@ buildGoModule rec {
     ];
     mainProgram = "gopls";
   };
-}
+})

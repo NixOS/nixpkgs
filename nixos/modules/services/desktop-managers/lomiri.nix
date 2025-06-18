@@ -62,9 +62,11 @@ in
         packages = (
           with pkgs;
           [
-            ayatana-indicator-datetime # Clock
             ayatana-indicator-session # Controls for shutting down etc
           ]
+          ++ (with lomiri; [
+            lomiri-indicator-datetime # Clock
+          ])
         );
       };
     })
@@ -202,8 +204,9 @@ in
 
       systemd.user.services =
         let
+          lomiriService = "lomiri.service";
           lomiriServiceNames = [
-            "lomiri.service"
+            lomiriService
             "lomiri-full-greeter.service"
             "lomiri-full-shell.service"
             "lomiri-greeter.service"
@@ -225,9 +228,9 @@ in
 
           "lomiri-polkit-agent" = {
             description = "Lomiri Polkit agent";
-            wantedBy = lomiriServiceNames;
-            after = [ "graphical-session.target" ];
-            partOf = lomiriServiceNames;
+            wantedBy = [ lomiriService ];
+            after = [ lomiriService ];
+            partOf = [ lomiriService ];
             serviceConfig = {
               Type = "simple";
               Restart = "always";

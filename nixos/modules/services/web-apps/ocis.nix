@@ -16,7 +16,11 @@ in
     services.ocis = {
       enable = lib.mkEnableOption "ownCloud Infinite Scale";
 
-      package = lib.mkPackageOption pkgs "ocis-bin" { };
+      package = lib.mkOption {
+        type = types.package;
+        description = "Which package to use for the ownCloud Infinite Scale instance.";
+        relatedPackages = [ "ocis_5-bin" ];
+      };
 
       configDir = lib.mkOption {
         type = types.nullOr types.path;
@@ -137,6 +141,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.ocis.package = lib.mkDefault pkgs.ocis_5-bin;
+
     users.users.${defaultUser} = lib.mkIf (cfg.user == defaultUser) {
       group = cfg.group;
       home = cfg.stateDir;

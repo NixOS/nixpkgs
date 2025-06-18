@@ -1,29 +1,28 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, makeBinaryWrapper
-, curlMinimal
-, mandoc
-, ncurses
-, nim
-, pandoc
-, pkg-config
-, zlib
-, unstableGitUpdater
-, libseccomp
-, replaceVars
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  makeBinaryWrapper,
+  curlMinimal,
+  mandoc,
+  ncurses,
+  nim,
+  pandoc,
+  pkg-config,
+  brotli,
+  zlib,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2025-01-06";
+  version = "0-unstable-2025-06-14";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "30a933adb2bade2ceee08a9b36371cecf554d648";
-    hash = "sha256-EepSEN66GTdWfCSiR/p69pN5bvTEiUFOMErCxedrq+g=";
-    fetchSubmodules = true;
+    rev = "288896b6f3da9bb6e4e24190d4163e031f8a2751";
+    hash = "sha256-/8pp1E4YAXXh8ORRHseIe48BIG14u8gNkmotA+CXPYY=";
   };
 
   patches = [ ./mancha-augment-path.diff ];
@@ -44,32 +43,35 @@ stdenv.mkDerivation {
     nim
     pandoc
     pkg-config
+    brotli
   ];
 
   buildInputs = [
     curlMinimal
-    libseccomp
     ncurses
     zlib
   ];
 
-  buildFlags = [ "all" "manpage" ];
+  buildFlags = [
+    "all"
+    "manpage"
+  ];
   installFlags = [
     "DESTDIR=$(out)"
     "PREFIX=/"
   ];
 
   postInstall =
-  let
-    makeWrapperArgs = ''
-      --set MANCHA_CHA $out/bin/cha \
-      --set MANCHA_MAN ${mandoc}/bin/man
+    let
+      makeWrapperArgs = ''
+        --set MANCHA_CHA $out/bin/cha \
+        --set MANCHA_MAN ${mandoc}/bin/man
+      '';
+    in
+    ''
+      wrapProgram $out/bin/cha ${makeWrapperArgs}
+      wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
-  in
-  ''
-    wrapProgram $out/bin/cha ${makeWrapperArgs}
-    wrapProgram $out/bin/mancha ${makeWrapperArgs}
-  '';
 
   passthru.updateScript = unstableGitUpdater { };
 
@@ -78,8 +80,7 @@ stdenv.mkDerivation {
     homepage = "https://sr.ht/~bptato/chawan/";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ jtbx ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "cha";
-    broken = stdenv.hostPlatform.isDarwin; # pending PR #292043
   };
 }

@@ -1,26 +1,21 @@
-{ lib, stdenv, appimageTools, fetchurl, makeWrapper, _7zz }:
+{
+  lib,
+  stdenv,
+  appimageTools,
+  fetchurl,
+  makeWrapper,
+  _7zz,
+}:
 
 let
   pname = "joplin-desktop";
-  version = "3.1.24";
+  inherit (releaseData) version;
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  suffix = {
-    x86_64-linux = ".AppImage";
-    x86_64-darwin = ".dmg";
-    aarch64-darwin = "-arm64.dmg";
-  }.${system} or throwSystem;
-
-  src = fetchurl {
-    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
-    sha256 = {
-      x86_64-linux = "sha256-ImFB4KwJ/vAHtZUbLAdnIRpd+o2ZaXKy9luw/jnPLSE=";
-      x86_64-darwin = "sha256-Of6VXX40tCis+ou26LtJKOZm/87P3rsTHtnvSDwF8VY=";
-      aarch64-darwin = "sha256-HtHuZQhIkiI8GrhB9nCOTAN1hOs+9POJFRIsRUNikYs=";
-    }.${system} or throwSystem;
-  };
+  releaseData = lib.importJSON ./release-data.json;
+  src = fetchurl releaseData.${system} or throwSystem;
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
@@ -38,12 +33,25 @@ let
     '';
     homepage = "https://joplinapp.org";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ hugoreeves qjoly ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      hugoreeves
+      qjoly
+      yajo
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 
-  linux = appimageTools.wrapType2 rec {
-    inherit pname version src meta;
+  linux = appimageTools.wrapType2 {
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
     nativeBuildInputs = [ makeWrapper ];
 
     profile = ''
@@ -51,28 +59,39 @@ let
     '';
 
     extraInstallCommands = ''
-      wrapProgram $out/bin/${pname} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
-      install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications
-      install -Dm444 ${appimageContents}/@joplinapp-desktop.png -t $out/share/pixmaps
-      substituteInPlace $out/share/applications/@joplinapp-desktop.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}' \
-        --replace 'Icon=joplin' "Icon=@joplinapp-desktop"
+      wrapProgram $out/bin/joplin-desktop \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      install -Dm644 ${appimageContents}/joplin.desktop $out/share/applications/joplin.desktop
+      install -Dm644 ${appimageContents}/joplin.png $out/share/pixmaps/joplin.png
+      substituteInPlace $out/share/applications/joplin.desktop \
+        --replace-fail StartupWMClass=Joplin StartupWMClass=@joplin/app-desktop \
+        --replace-fail 'Exec=AppRun' 'Exec=joplin-desktop'
     '';
+
+    passthru.updateScript = ./update.py;
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
     nativeBuildInputs = [ _7zz ];
 
     unpackPhase = ''
       runHook preUnpack
-      7zz x -x'!Joplin ${version}/Applications' $src
+      7zz x -x'!Joplin ${version}/Applications' -xr'!*:com.apple.cs.Code*' $src
       runHook postUnpack
     '';
 
     sourceRoot = if stdenv.hostPlatform.isx86_64 then "Joplin ${version}" else ".";
+
+    postPatch = ''
+      chmod a+x Joplin.app/Contents/Resources/build/7zip/7za
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -80,8 +99,8 @@ let
       cp -R Joplin.app $out/Applications
       runHook postInstall
     '';
+
+    passthru.updateScript = ./update.py;
   };
 in
-if stdenv.hostPlatform.isDarwin
-then darwin
-else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

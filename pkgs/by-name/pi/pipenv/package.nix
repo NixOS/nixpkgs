@@ -33,14 +33,14 @@ let
 in
 buildPythonApplication rec {
   pname = "pipenv";
-  version = "2024.4.0";
+  version = "2025.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipenv";
     tag = "v${version}";
-    hash = "sha256-SyRkOKZ1q1j37hqdkNkEZI5e/WbBgLL5iglrvT2V5Fs=";
+    hash = "sha256-3uf0nCTv6ebq4am4mqJpdkidx6dbO8jI4IMtjZQ+8Qc=";
   };
 
   env.LC_ALL = "en_US.UTF-8";
@@ -74,7 +74,7 @@ buildPythonApplication rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # this test wants access to the internet

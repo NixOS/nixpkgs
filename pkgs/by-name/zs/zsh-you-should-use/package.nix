@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, ncurses, fetchFromGitHub, gitUpdater }:
+{
+  lib,
+  stdenvNoCC,
+  ncurses,
+  fetchFromGitHub,
+  gitUpdater,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-you-should-use";

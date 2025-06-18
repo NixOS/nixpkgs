@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 buildPythonPackage {
-  pname = "anchor";
-  version = "3";
-  format = "setuptools";
+  pname = "anchor-kr";
+  version = "0.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "justfoolingaround";
@@ -16,12 +17,14 @@ buildPythonPackage {
     hash = "sha256-t75IFBSz6ncHRqXRxbrM9EQdr8xPXjSd9di+/y2LegE=";
   };
 
+  build-system = [ setuptools ];
+
   pythonImportsCheck = [ "anchor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for scraping";
     homepage = "https://github.com/justfoolingaround/anchor";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ passivelemon ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ passivelemon ];
   };
 }

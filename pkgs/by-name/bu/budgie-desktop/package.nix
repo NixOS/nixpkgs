@@ -70,6 +70,20 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/ba8170b4f3108f9de28331b6a98a9d92bb0ed4de.patch";
       hash = "sha256-T//1/NmaV81j0jiIYK7vEp8sgKCgF2i10D+Rk9qAAeE=";
     })
+
+    # Resolve vala 0.56.18 compact class inheritance removal
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/issues/679
+    (fetchpatch {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/46c83b1265b4230668da472d9ef6926941678418.patch";
+      hash = "sha256-qnA8iBEctZbE86qIPudI1vMbgFy4xDWrxxej517ORws=";
+    })
+
+    # Add override for overlay-key to prevent crash with mutter-common v48-rc
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/683
+    (fetchpatch {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/c24091bb424abe99ebcdd33eedd37068f735ad2a.patch";
+      hash = "sha256-4WEkscftOGZmzH7imMTmcTDPH6eHMeEhgto+R5NNlh0=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -138,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
       cc-by-sa-30
     ];
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "budgie-1.0"

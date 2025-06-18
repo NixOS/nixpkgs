@@ -16,7 +16,6 @@
   libXcursor,
   libXfixes,
   libXmu,
-  libIDL,
   SDL2,
   libcap,
   libGL,
@@ -74,9 +73,9 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.1.6";
-  virtualboxSubVersion = "a";
-  virtualboxSha256 = "5a7b13066ec71990af0cc00a5eea9c7ec3c71ca5ed99bb549c85494ce2ea395d";
+  virtualboxVersion = "7.1.10";
+  virtualboxSubVersion = "";
+  virtualboxSha256 = "7d60010a4c9102613554b46f61d17b825c30ee59d8be071e52d8aac664ca9869";
 
   kvmPatchVersion = "20250207";
   kvmPatchHash = "sha256-GzRLIXhzWL1NLvaGKcWVBCdvay1IxgJUE4koLX1ze7Y=";
@@ -148,7 +147,6 @@ stdenv.mkDerivation (finalAttrs: {
       libX11
       libXext
       libXcursor
-      libIDL
       libcap
       glib
       lvm2
@@ -249,8 +247,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional enableKvm (
       let
         patchVboxVersion =
-          # There is no updated patch for 7.0.22 yet, but the older one still applies.
-          if finalAttrs.virtualboxVersion == "7.0.22" then "7.0.20" else finalAttrs.virtualboxVersion;
+          # There is no updated patch for 7.1.10 yet, but the older one still applies.
+          if finalAttrs.virtualboxVersion == "7.1.10" then "7.1.6" else finalAttrs.virtualboxVersion;
       in
       fetchpatch {
         name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
@@ -320,7 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${optionalString (enableKvm) "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
-    sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
+    sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig@' \
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
         -i Config.kmk
@@ -418,7 +416,7 @@ stdenv.mkDerivation (finalAttrs: {
       fromSource
       binaryNativeCode
     ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Only;
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
       sander

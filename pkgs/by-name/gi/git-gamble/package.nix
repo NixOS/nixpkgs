@@ -9,13 +9,13 @@
 }:
 
 let
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitLab {
     owner = "pinage404";
     repo = "git-gamble";
     rev = "version/${version}";
-    hash = "sha256-hMP5mBKXcO+Ws04G3OxdYuB5JoaSjlYtlkerRQ6+bXw=";
+    hash = "sha256-oWbV3KhDcb/LlDkaGqkrYU/b2LEijUTX0RaHi0yS5cw=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -23,12 +23,16 @@ rustPlatform.buildRustPackage {
   inherit version src;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-t58vf/xhJi5HV9lBWvXzKMZ8I2stjTAmCOrdLWPerGI=";
+  cargoHash = "sha256-v8sQuFmHHWuLUhRND1CzI5VkybgHRETVyNNabw1Uhyg=";
 
   nativeCheckInputs = [ gitMinimal ];
   preCheck = ''
     patchShebangs tests/editor/fake_editor.sh
   '';
+  checkFlags = [
+    # this test can be flaky ; help is needed to stabilize it in upstream
+    "--skip=git_time_keeper::white_box::lock_file::create_as_many_as_lock_files_when_starting_several_times"
+  ];
 
   nativeBuildInputs = [
     installShellFiles

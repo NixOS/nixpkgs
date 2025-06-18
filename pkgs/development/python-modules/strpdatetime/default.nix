@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   textx,
   pytestCheckHook,
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-a+KUM9gQAcNg3ju+YyQXafDlADYCV6B+Wy7EBtcO3S4=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [ textx ];
   pythonRelaxDeps = [ "textx" ];

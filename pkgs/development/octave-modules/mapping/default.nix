@@ -9,14 +9,14 @@
 
 buildOctavePackage rec {
   pname = "mapping";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-mrUQWqC15Ul5AHDvhMlNStqIMG2Zxa+hB2vDyeizLaI=";
+    sha256 = "sha256-IYiyRjnHCHhAFy5gR/dcuKWY11gSCubggQzmMAqGmhs=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     gdal
   ];
 
@@ -25,10 +25,10 @@ buildOctavePackage rec {
     geometry
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/mapping/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/mapping/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Simple mapping and GIS .shp .dxf and raster file functions";
   };
 }

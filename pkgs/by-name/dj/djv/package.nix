@@ -105,7 +105,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "djv";
   version = djvVersion;
 

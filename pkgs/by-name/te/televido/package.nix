@@ -14,7 +14,7 @@
   desktop-file-utils,
   openssl,
   gst_all_1,
-  clapper,
+  clapper-unwrapped,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,8 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-D9gchFS5zrD1cttq/gveT7wY2Y/5hfiUrwBa7qHD9cs=";
   };
 
@@ -49,10 +48,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libadwaita
     desktop-file-utils
-    clapper
+    clapper-unwrapped
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
   ];
 
   meta = {

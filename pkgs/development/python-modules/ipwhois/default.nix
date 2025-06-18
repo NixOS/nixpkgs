@@ -5,7 +5,6 @@
   defusedxml,
   dnspython,
   fetchFromGitHub,
-  fetchpatch,
   iana-etc,
   libredirect,
   pytestCheckHook,

@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "2.37.0";
+  version = "2.38.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "phonopy";
     repo = "phonopy";
     tag = "v${version}";
-    hash = "sha256-Asrgf4sTriEOv4Vovejshl5HXAYQEckxbHvZ7GmSQgg=";
+    hash = "sha256-oQcKBwrjQGmjJIHROb9Z/8j7CmfoSxlIzHRABBg+tSs=";
   };
 
   build-system = [
@@ -70,6 +70,9 @@ buildPythonPackage rec {
     homepage = "https://phonopy.github.io/phonopy/";
     changelog = "http://phonopy.github.io/phonopy/changelog.html";
     license = lib.licenses.bsd0;
-    maintainers = with lib.maintainers; [ psyanticy ];
+    maintainers = with lib.maintainers; [
+      psyanticy
+      chn
+    ];
   };
 }

@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "badaix";
-    repo = pname;
+    repo = "aixlog";
     rev = "v${version}";
     hash = "sha256-Xhle7SODRZlHT3798mYIzBi1Mqjz8ai74/UnbVWetiY=";
   };
@@ -32,6 +32,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/badaix/aixlog";
     changelog = "https://github.com/badaix/aixlog/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
   };
 }

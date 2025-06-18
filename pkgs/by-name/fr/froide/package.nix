@@ -1,11 +1,12 @@
 {
+  stdenv,
   lib,
   python3Packages,
   fetchFromGitHub,
   makeWrapper,
   gdal,
   geos,
-  pnpm_9,
+  pnpm,
   nodejs,
   postgresql,
   postgresqlTestHook,
@@ -20,20 +21,21 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "froide";
-  version = "0-unstable-2024-11-22";
+  version = "0-unstable-2025-04-25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "okfde";
     repo = "froide";
-    rev = "a90f5c4d40b46a161111eefdc84e5214e85715b0";
-    hash = "sha256-Q+iNI3yqxqAtDONHY+SaZeMyjY6hqTxwy7YmiiY94+0=";
+    rev = "9e4838fc5f17a0506af42ad5fd1ebc66cff4b92a";
+    hash = "sha256-0EC6oCaiK7gw5ikemskiK3qOlflGHzlG4giDQNj9tBQ=";
   };
 
   patches = [ ./django_42_storages.patch ];
 
+  # Relax dependency pinning
+  # Channels: https://github.com/okfde/froide/issues/995
   pythonRelaxDeps = [
-    "pikepdf"
     "channels"
   ];
 
@@ -42,7 +44,7 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    pnpm.configHook
   ];
 
   dependencies = with python.pkgs; [
@@ -75,6 +77,7 @@ python.pkgs.buildPythonApplication rec {
     djangorestframework
     djangorestframework-csv
     djangorestframework-jsonp
+    dogtail
     drf-spectacular
     drf-spectacular-sidecar
     easy-thumbnails
@@ -99,9 +102,9 @@ python.pkgs.buildPythonApplication rec {
     websockets
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-DMoaXNm5S64XBERHFnFM6IKBkzXRGDEYWSTruccK9Hc=";
+    hash = "sha256-IeuQoiI/r9AKLZgKkZx0C+qE9ueWuC39Y77MB08zSAc=";
   };
 
   postBuild = ''
@@ -155,14 +158,20 @@ python.pkgs.buildPythonApplication rec {
     "test_logfile_rotation"
   ];
 
-  preCheck = ''
-    export PGUSER="froide"
-    export postgresqlEnableTCP=1
-    export postgresqlTestUserOptions="LOGIN SUPERUSER"
-    export GDAL_LIBRARY_PATH="${gdal}/lib/libgdal.so"
-    export GEOS_LIBRARY_PATH="${geos}/lib/libgeos_c.so"
-    export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
-  '';
+  preCheck =
+    ''
+      export PGUSER="froide"
+      export postgresqlEnableTCP=1
+      export postgresqlTestUserOptions="LOGIN SUPERUSER"
+      export GDAL_LIBRARY_PATH="${gdal}/lib/libgdal.so"
+      export GEOS_LIBRARY_PATH="${geos}/lib/libgeos_c.so"
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
+      export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
+    '';
+
+  # Playwright tests not supported on RiscV yet
+  doCheck = lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers;
 
   meta = {
     description = "Freedom of Information Portal";

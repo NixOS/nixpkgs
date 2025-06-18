@@ -1,5 +1,3 @@
-{ lib, ... }:
-
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
@@ -7,8 +5,6 @@ in
 
 {
   name = "wstunnel";
-
-  meta.platforms = lib.platforms.linux;
 
   nodes = {
     server = {

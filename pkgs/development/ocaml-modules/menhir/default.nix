@@ -6,7 +6,7 @@
   menhirSdk,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "menhir";
 
   minimalOCamlVersion = "4.03";

@@ -1,12 +1,18 @@
+{
+  lib,
+}:
 # Almost directly vendored from https://github.com/NixOS/ofborg/blob/5a4e743f192fb151915fcbe8789922fa401ecf48/ofborg/src/maintainers.nix
-{ changedattrs, changedpathsjson }:
+{
+  changedattrs,
+  changedpathsjson,
+  byName ? false,
+}:
 let
   pkgs = import ../../.. {
     system = "x86_64-linux";
     config = { };
     overlays = [ ];
   };
-  inherit (pkgs) lib;
 
   changedpaths = builtins.fromJSON (builtins.readFile changedpathsjson);
 
@@ -41,7 +47,16 @@ let
   ) validPackageAttributes;
 
   attrsWithMaintainers = builtins.map (
-    pkg: pkg // { maintainers = (pkg.package.meta or { }).maintainers or [ ]; }
+    pkg:
+    let
+      meta = pkg.package.meta or { };
+    in
+    pkg
+    // {
+      # TODO: Refactor this so we can ping entire teams instead of the individual members.
+      # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
+      maintainers = meta.maintainers or [ ];
+    }
   ) attrsWithPackages;
 
   relevantFilenames =
@@ -49,7 +64,8 @@ let
     (lib.lists.unique (
       builtins.map (pos: lib.strings.removePrefix (toString ../..) pos.file) (
         builtins.filter (x: x != null) [
-          (builtins.unsafeGetAttrPos "maintainers" (drv.meta or { }))
+          ((drv.meta or { }).maintainersPosition or null)
+          ((drv.meta or { }).teamsPosition or null)
           (builtins.unsafeGetAttrPos "src" drv)
           # broken because name is always set by stdenv:
           #    # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
@@ -83,12 +99,13 @@ let
     pkg:
     builtins.map (maintainer: {
       id = maintainer.githubId;
+      inherit (maintainer) github;
       packageName = pkg.name;
       dueToFiles = pkg.filenames;
     }) pkg.maintainers
   ) attrsWithModifiedFiles;
 
-  byMaintainer = lib.groupBy (ping: toString ping.id) listToPing;
+  byMaintainer = lib.groupBy (ping: toString ping.${if byName then "github" else "id"}) listToPing;
 
   packagesPerMaintainer = lib.attrsets.mapAttrs (
     maintainer: packages: builtins.map (pkg: pkg.packageName) packages

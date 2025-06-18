@@ -7,7 +7,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "em100";
   version = "0-unstable-2024-11-14";
 
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     "em100"
     "makedpfw"
   ];
+
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall

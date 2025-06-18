@@ -37,6 +37,7 @@
   limesuite,
   pkg-config,
   zeromq,
+  udevCheckHook,
 }:
 
 let
@@ -45,7 +46,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-J9WPoaULH6UXL1q1O76+IDW97ydQWkHIID6n7wvOdE4=";
+    hash = "sha256-REmeIP0Cl5FfwUnL40u0dqZaJugBlLGT/Bts5j1bvgw=";
   };
 
   buildIndi3rdParty =
@@ -67,7 +68,7 @@ let
         pname = "indi-3rdparty-${pname}";
         inherit src version;
 
-        sourceRoot = "source/${pname}";
+        sourceRoot = "${src.name}/${pname}";
 
         cmakeFlags =
           [
@@ -86,6 +87,7 @@ let
           cmake
           ninja
           pkg-config
+          udevCheckHook
         ] ++ nativeBuildInputs;
 
         checkInputs = [ gtest ];
@@ -102,6 +104,8 @@ let
           done
           ${postInstall}
         '';
+
+        doInstallCheck = true;
 
         meta =
           with lib;
@@ -120,29 +124,6 @@ let
           // meta;
       }
     );
-
-  libahp-gt = buildIndi3rdParty {
-    pname = "libahp-gt";
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
-    };
-  };
-
-  # broken: needs libdfu
-  libahp-xc = buildIndi3rdParty {
-    pname = "libahp-xc";
-    buildInputs = [
-      libusb-compat-0_1
-      urjtag
-      libftdi1
-    ];
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      broken = true;
-      platforms = [ ];
-    };
-  };
 
   libaltaircam = buildIndi3rdParty {
     pname = "libaltaircam";
@@ -172,8 +153,9 @@ let
 
     postPatch = ''
       substituteInPlace 99-asi.rules \
-        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
-        --replace-fail "/bin/sh" "${bash}/bin/sh"
+        --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${lib.getExe bash}" \
+        --replace-fail "/bin/chmod" "${lib.getBin coreutils}/bin/chmod"
     '';
 
     buildInputs = [
@@ -350,8 +332,8 @@ let
     pname = "libplayerone";
     postPatch = ''
       substituteInPlace 99-player_one_astronomy.rules \
-        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
-        --replace-fail "/bin/sh" "${bash}/bin/sh"
+        --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${lib.getExe bash}"
     '';
 
     buildInputs = [
@@ -376,7 +358,7 @@ let
       substituteInPlace 85-qhyccd.rules \
         --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
         --replace-fail "/lib/firmware" "$out/lib/firmware" \
-        --replace-fail "/bin/sleep" "${coreutils}/bin/sleep"
+        --replace-fail "/bin/sleep" "${lib.getBin coreutils}/bin/sleep"
 
       sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i 85-qhyccd.rules
     '';
@@ -464,6 +446,15 @@ let
     };
   };
 
+  libsvbonycam = buildIndi3rdParty {
+    pname = "libsvbonycam";
+    nativeBuildInputs = [ autoPatchelfHook ];
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+    };
+  };
+
   libtoupcam = buildIndi3rdParty {
     pname = "libtoupcam";
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -490,12 +481,20 @@ in
     buildInputs = [ indilib ];
   };
 
-  # libahc-xc needs libdfu, which is not packaged
-  # indi-ahp-xc = buildIndi3rdParty {
-  #   pname = "indi-ahp-xc";
-  #   buildInputs = [ cfitsio indilib libahp-xc libnova zlib ];
-  #   meta.platforms = libahp-xc.meta.platforms;
-  # };
+  indi-ahp-xc = buildIndi3rdParty {
+    pname = "indi-ahp-xc";
+    buildInputs = [
+      cfitsio
+      indilib
+      libnova
+      zlib
+    ];
+    meta = {
+      platforms = [ ];
+      # libahc-xc not packaged
+      broken = true;
+    };
+  };
 
   indi-aok = buildIndi3rdParty {
     pname = "indi-aok";
@@ -658,11 +657,9 @@ in
       indilib
       gsl
       gtest
-      libahp-gt
       libnova
       zlib
     ];
-    meta.platforms = libahp-gt.meta.platforms;
   };
 
   indi-ffmv = buildIndi3rdParty {
@@ -762,7 +759,6 @@ in
     meta.platforms = libinovasdk.meta.platforms;
   };
 
-  # broken, wants rpicam-apps
   indi-libcamera = buildIndi3rdParty {
     pname = "indi-libcamera";
     buildInputs = [
@@ -778,6 +774,7 @@ in
       zlib
     ];
     meta.platforms = [ ];
+    # broken, wants rpicam-apps
     meta.broken = true;
   };
 
@@ -879,6 +876,7 @@ in
       cfitsio
       indilib
       libraw
+      libjpeg
       zlib
     ];
     propagatedBuildInputs = [
@@ -1041,6 +1039,7 @@ in
       libogmacam
       libomegonprocam
       libstarshootg
+      libsvbonycam
       libtoupcam
       libtscam
     ];

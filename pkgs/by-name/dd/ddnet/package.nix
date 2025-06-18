@@ -32,18 +32,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "19.0";
+  version = "19.2.1";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = "ddnet";
     tag = version;
-    hash = "sha256-R9LXcYM96fibHzpXDWIOSASKIbh+GeiGyz7xVvV2v1Q=";
+    hash = "sha256-0G0rVqkrIKjSGW7TF218TqakzJxiCzDipLGDzJvgdRg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    name = "${pname}-${version}";
-    inherit src;
+    inherit pname version src;
     hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
   };
 
@@ -111,7 +110,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/metainfo
   '';
 
-  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preFixup = lib.optionalString (stdenv.hostPlatform.isDarwin && buildClient) ''
     # Upstream links against <prefix>/lib while it installs this library in <prefix>/lib/ddnet
     install_name_tool -change "$out/lib/libsteam_api.dylib" "$out/lib/ddnet/libsteam_api.dylib" "$out/bin/DDNet"
   '';
@@ -137,6 +136,6 @@ stdenv.mkDerivation rec {
       Scrumplex
       sirseruju
     ];
-    mainProgram = "DDNet";
+    mainProgram = "DDNet${lib.optionalString (!buildClient) "-Server"}";
   };
 }

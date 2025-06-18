@@ -7,16 +7,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-delete-merged-branches";
-  version = "7.4.2";
+  version = "7.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hartwork";
-    repo = pname;
+    repo = "git-delete-merged-branches";
     tag = version;
-    sha256 = "sha256-l+R4gINZJ8bJdhcK+U9jOuIoAm2/bd5P+w9AbwPZMrk=";
+    sha256 = "sha256-2MSdUpToOiurtiL0Ws2dLEWqd6wj4nQ2RsEepBytgAk=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     colorama
     prompt-toolkit
   ];
@@ -25,7 +28,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line tool to delete merged Git branches";
-    homepage = "https://pypi.org/project/git-delete-merged-branches/";
+    homepage = "https://github.com/hartwork/git-delete-merged-branches/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

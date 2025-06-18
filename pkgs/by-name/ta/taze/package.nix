@@ -13,18 +13,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taze";
-  version = "18.6.0";
+  version = "19.1.0";
 
   src = fetchFromGitHub {
     owner = "antfu-collective";
     repo = "taze";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IHWDBX2j+HQ77gGLcUBxywDbN6jHEVxT+x6ojWKPr3I=";
+    hash = "sha256-hBXs8S8mOMV7FQIhCzJuhcbTczkwMc5B44fTacAJvyw=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-dlGW5WQMctVoVWLd+MnnNlmSh/MRxwcnlkCb5Dm7qsU=";
+    hash = "sha256-aUMV2REINp5LDcj1s8bgQAj/4508UEewu+ebD+JT0+M=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

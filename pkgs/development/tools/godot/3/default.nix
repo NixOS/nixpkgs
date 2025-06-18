@@ -38,6 +38,12 @@ stdenv.mkDerivation (self: {
     sha256 = "sha256-4WQYO1BBDK9+eyblpI8qRgbBG4+qPRVZMjeAFAtot+0=";
   };
 
+  # Fix PIE hardening: https://github.com/godotengine/godot/pull/50737
+  postPatch = ''
+    substituteInPlace platform/x11/detect.py \
+      --replace-fail 'env.Append(LINKFLAGS=["-no-pie"])' ""
+  '';
+
   nativeBuildInputs = [
     autoPatchelfHook
     installShellFiles
@@ -77,6 +83,9 @@ stdenv.mkDerivation (self: {
     # of the OS. This isn't as surgical as just fixing the PATH, but it seems to work, and
     # seems to be the Nix community's current strategy when using Scons.
     /SConstruct/dontClobberEnvironment.patch
+    # Fix compile error with mono 6.14
+    # https://github.com/godotengine/godot/pull/106578
+    /move-MonoGCHandle-into-gdmono-namespace.patch
   ];
 
   enableParallelBuilding = true;

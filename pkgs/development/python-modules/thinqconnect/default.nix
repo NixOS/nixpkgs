@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "thinqconnect";
-  version = "1.0.4";
+  version = "1.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "thinq-connect";
     repo = "pythinqconnect";
     tag = version;
-    hash = "sha256-LVmvJvGbiPPg+WlrTOYueNCNZNjldWJVC+OqFl9CcK0=";
+    hash = "sha256-K2IkXUbJubSDE4uvR+Fu6uQADJMGNo7ZQDccZs3BOF8=";
   };
 
   build-system = [ setuptools ];

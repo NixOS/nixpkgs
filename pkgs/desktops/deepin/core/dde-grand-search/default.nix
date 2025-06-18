@@ -11,7 +11,7 @@
   deepin-pdfium,
   qt5integration,
   qt5platform-plugins,
-  taglib,
+  taglib_1,
   ffmpeg,
   ffmpegthumbnailer,
   pcre,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     deepin-pdfium
     qt5integration
     qt5platform-plugins
-    taglib
+    taglib_1
     ffmpeg
     ffmpegthumbnailer
     pcre
@@ -77,6 +77,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-grand-search";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 }

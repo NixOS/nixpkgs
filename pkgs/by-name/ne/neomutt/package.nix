@@ -9,6 +9,7 @@
   ncurses,
   perl,
   cyrus_sasl,
+  gitUpdater,
   gss,
   gpgme,
   libkrb5,
@@ -33,6 +34,7 @@
   enableLua ? false,
   enableSmimeKeys ? true,
   withContrib ? true,
+  withNotmuch ? true,
 }:
 
 assert lib.warnIf (
@@ -41,13 +43,13 @@ assert lib.warnIf (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
-  version = "20250113";
+  version = "20250510";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     tag = finalAttrs.version;
-    hash = "sha256-30uagr4Z748U34yaTpw0lqxifuMlQRqccuZHKpbkXVE=";
+    hash = "sha256-62J7qyHC3hSgEgTA2zB+BQtZb+5BUXjQEOB3vGZGSNw=";
   };
 
   buildInputs =
@@ -58,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
       libkrb5
       libidn2
       ncurses
-      notmuch
       openssl
       perl
       lmdb
@@ -66,7 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       sqlite
     ]
     ++ lib.optional enableZstd zstd
-    ++ lib.optional enableLua lua;
+    ++ lib.optional enableLua lua
+    ++ lib.optional withNotmuch notmuch;
 
   nativeBuildInputs = [
     docbook_xsl
@@ -108,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
       "--gpgme"
       "--gss"
       "--lmdb"
-      "--notmuch"
       "--ssl"
       "--sasl"
       "--with-homespool=mailbox"
@@ -119,7 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
       "--zlib"
     ]
     ++ lib.optional enableZstd "--zstd"
-    ++ lib.optional enableLua "--lua";
+    ++ lib.optional enableLua "--lua"
+    ++ lib.optional withNotmuch "--notmuch";
 
   postInstall =
     ''
@@ -162,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       rev = "8e97688693ca47ea1055f3d15055a4f4ecc5c832";
       hash = "sha256-tx5Y819rNDxOpjg3B/Y2lPcqJDArAxVwjbYarVmJ79k=";
     };
+    updateScript = gitUpdater { };
   };
 
   checkTarget = "test";

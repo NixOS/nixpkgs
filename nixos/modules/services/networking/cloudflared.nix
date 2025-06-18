@@ -7,6 +7,18 @@
 let
   cfg = config.services.cloudflared;
 
+  certificateFile = lib.mkOption {
+    type = with lib.types; nullOr path;
+    description = ''
+      Account certificate file, necessary to create, delete and manage tunnels. It can be obtained by running `cloudflared login`.
+
+      Note that this is **necessary** for a fully declarative set up, as routes can not otherwise be created outside of the Cloudflare interface.
+
+      See [Cert.pem](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#certpem) for information about the file, and [Tunnel permissions](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/do-more-with-tunnels/local-management/tunnel-permissions/) for a comparison between the account certificate and the tunnel credentials file.
+    '';
+    default = null;
+  };
+
   originRequest = {
     connectTimeout = lib.mkOption {
       type = with lib.types; nullOr str;
@@ -144,20 +156,38 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "cloudflared"
+        "user"
+      ]
+      ''
+        Cloudflared now uses a dynamic user, and this option no longer has any effect.
+
+        If the user is still necessary, please define it manually using users.users.cloudflared.
+      ''
+    )
+
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "cloudflared"
+        "group"
+      ]
+      ''
+        Cloudflared now uses a dynamic user, and this option no longer has any effect.
+
+        If the group is still necessary, please define it manually using users.groups.cloudflared.
+      ''
+    )
+  ];
+
   options.services.cloudflared = {
+    inherit certificateFile;
+
     enable = lib.mkEnableOption "Cloudflare Tunnel client daemon (formerly Argo Tunnel)";
-
-    user = lib.mkOption {
-      type = lib.types.str;
-      default = "cloudflared";
-      description = "User account under which Cloudflared runs.";
-    };
-
-    group = lib.mkOption {
-      type = lib.types.str;
-      default = "cloudflared";
-      description = "Group under which cloudflared runs.";
-    };
 
     package = lib.mkPackageOption pkgs "cloudflared" { };
 
@@ -170,10 +200,10 @@ in
           { name, ... }:
           {
             options = {
-              inherit originRequest;
+              inherit certificateFile originRequest;
 
               credentialsFile = lib.mkOption {
-                type = lib.types.str;
+                type = lib.types.path;
                 description = ''
                   Credential file.
 
@@ -303,7 +333,7 @@ in
 
         fullConfig = filterConfig {
           tunnel = name;
-          "credentials-file" = tunnel.credentialsFile;
+          credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
           warp-routing = filterConfig tunnel.warp-routing;
           originRequest = filterConfig tunnel.originRequest;
           ingress =
@@ -322,8 +352,9 @@ in
         };
 
         mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
+        certFile = if (tunnel.certificateFile != null) then tunnel.certificateFile else cfg.certificateFile;
       in
-      lib.nameValuePair "cloudflared-tunnel-${name}" ({
+      lib.nameValuePair "cloudflared-tunnel-${name}" {
         after = [
           "network.target"
           "network-online.target"
@@ -334,24 +365,20 @@ in
         ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
+          RuntimeDirectory = "cloudflared-tunnel-${name}";
+          RuntimeDirectoryMode = "0400";
+          LoadCredential = [
+            "credentials.json:${tunnel.credentialsFile}"
+          ] ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
+
           ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
           Restart = "on-failure";
+          DynamicUser = true;
         };
-      })
+
+        environment.TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
+      }
     ) config.services.cloudflared.tunnels;
-
-    users.users = lib.mkIf (cfg.user == "cloudflared") {
-      cloudflared = {
-        group = cfg.group;
-        isSystemUser = true;
-      };
-    };
-
-    users.groups = lib.mkIf (cfg.group == "cloudflared") {
-      cloudflared = { };
-    };
   };
 
   meta.maintainers = with lib.maintainers; [

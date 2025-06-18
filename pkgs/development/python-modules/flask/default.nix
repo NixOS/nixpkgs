@@ -32,12 +32,12 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X4c8UYTIl8jZ0bBd8ePQGxSRDOaWB6EXvTJ3CYpYNqw=";
+    hash = "sha256-KEx7jy9Yy3N/DPHDD9fq8Mz83hlgmdJOzt4/wgBapZ4=";
   };
 
   build-system = [ flit-core ];

@@ -13,7 +13,6 @@
   libadwaita,
   libsecret,
   tinysparql,
-  darwin,
   nix-update-script,
 }:
 
@@ -24,14 +23,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
+    repo = "health";
     rev = version;
     hash = "sha256-PrNPprSS98yN8b8yw2G6hzTSaoE65VbsM3q7FVB4mds=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-eR1ZGtTZQNhofFUEjI7IX16sMKPJmAl7aIFfPJukecg=";
   };
 
@@ -46,16 +44,11 @@ stdenv.mkDerivation rec {
     blueprint-compiler
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      libsecret
-      tinysparql
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    libadwaita
+    libsecret
+    tinysparql
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isClang [
@@ -72,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/app/dev.Cogitri.Health";
     license = licenses.gpl3Plus;
     mainProgram = "dev.Cogitri.Health";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = platforms.unix;
   };
 }

@@ -4,8 +4,8 @@
   python,
   callPackage,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
+  hatch-vcs,
   pytestCheckHook,
   configargparse,
   cryptography,
@@ -26,20 +26,17 @@
 
 buildPythonPackage rec {
   pname = "locust";
-  version = "2.32.6";
+  version = "2.33.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "locustio";
     repo = "locust";
     tag = version;
-    hash = "sha256-KWPIZLdOx09iMlnczjmlzPmy32ozw0xEBZI9li+fJ24=";
+    hash = "sha256-cOYdf3F1OF1P4xFEG3isuiePIl1tHnjL7UVoFIpb40A=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'script = "pre_build.py"' ""
-
     substituteInPlace locust/test/test_main.py \
       --replace-fail '"locust"' '"${placeholder "out"}/bin/locust"'
 
@@ -52,14 +49,9 @@ buildPythonPackage rec {
     src = "${src}/locust/webui";
   };
 
-  preBuild = ''
-    mkdir -p $out/${python.sitePackages}/${pname}
-    ln -sf ${webui} $out/${python.sitePackages}/${pname}/webui
-  '';
-
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   pythonRelaxDeps = [

@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
@@ -21,20 +19,18 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-76/JK9IKYD6mxMddUyTgKAw53GM4EUhC0NbKFKdg8CI=";
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
-
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
 
   versionCheckProgram = [ "${placeholder "out"}/bin/rcat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Port listener and reverse shell";
     homepage = "https://github.com/robiot/rustcat";
     changelog = "https://github.com/robiot/rustcat/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "rcat";
   };
 }

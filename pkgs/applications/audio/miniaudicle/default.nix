@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, wrapQtAppsHook
-, qt6Packages
-, bison
-, flex
-, which
-, alsa-lib
-, libsndfile
-, libpulseaudio
-, libjack2
-, audioBackend ? "pulse" # "pulse", "alsa", or "jack"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
+  qt6Packages,
+  bison,
+  flex,
+  which,
+  alsa-lib,
+  libsndfile,
+  libpulseaudio,
+  libjack2,
+  audioBackend ? "pulse", # "pulse", "alsa", or "jack"
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,12 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    alsa-lib
-    libsndfile
-    qt6Packages.qscintilla
-  ] ++ lib.optional (audioBackend == "pulse") libpulseaudio
-    ++ lib.optional (audioBackend == "jack")  libjack2;
+  buildInputs =
+    [
+      alsa-lib
+      libsndfile
+      qt6Packages.qscintilla
+    ]
+    ++ lib.optional (audioBackend == "pulse") libpulseaudio
+    ++ lib.optional (audioBackend == "jack") libjack2;
 
   buildFlags = [ "linux-${audioBackend}" ];
 

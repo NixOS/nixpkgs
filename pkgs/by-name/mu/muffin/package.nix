@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "muffin";
     rev = version;
     hash = "sha256-cGC1yGft3uEqefm2DvZrMaROoZKYd6LNY0IJ+58f6vs=";
   };
@@ -126,6 +126,6 @@ stdenv.mkDerivation rec {
     mainProgram = "muffin";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

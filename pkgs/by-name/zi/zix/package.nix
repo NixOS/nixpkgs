@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "drobilla";
-    repo = pname;
+    repo = "zix";
     rev = "v${version}";
     hash = "sha256-nMm3Mdqc4ncCae8SoyGxZYURzmXLNcp1GjsSExfB6x4=";
   };

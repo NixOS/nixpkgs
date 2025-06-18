@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
     '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-implicit-function-declaration";
 
   configureFlags =
     [
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
         ln -s $out/bin/gpg $out/bin/gpg2
 
         # Make libexec tools available in PATH
-        for f in $out/libexec/; do
+        for f in $out/libexec/*; do
           if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
           ln -s $f $out/bin/$(basename $f)
         done

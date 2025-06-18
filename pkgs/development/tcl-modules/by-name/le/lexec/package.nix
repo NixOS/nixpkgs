@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation {
   pname = "lexec";
   version = "0-unstable-2020-03-11";
 

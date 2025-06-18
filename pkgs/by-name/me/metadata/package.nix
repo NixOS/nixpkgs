@@ -9,7 +9,7 @@
   installShellFiles,
   asciidoc,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "metadata";
   version = "0.1.9";
 
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Media metadata parser and formatter designed for human consumption, powered by FFmpeg";
-    maintainers = with lib.maintainers; [ clevor ];
+    maintainers = with lib.maintainers; [ ];
     license = lib.licenses.mit;
     homepage = "https://github.com/zmwangx/metadata";
     mainProgram = "metadata";
