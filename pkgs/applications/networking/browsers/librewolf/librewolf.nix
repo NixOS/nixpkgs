@@ -4,7 +4,7 @@ let
 in
 rec {
 
-  inherit (src) packageVersion firefox source;
+  inherit (src) packageVersion firefox release source;
 
   extraPatches = [ "${source}/patches/pref-pane/pref-pane-small.patch" ];
 
@@ -50,6 +50,6 @@ rec {
     librewolf = {
       inherit src extraPatches;
     };
-    inherit extraPrefsFiles extraPoliciesFiles;
+    inherit extraPrefsFiles extraPoliciesFiles release;
   };
 }

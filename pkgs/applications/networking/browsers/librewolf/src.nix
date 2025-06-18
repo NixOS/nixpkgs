@@ -17,6 +17,7 @@ in
       fetchSubmodules = true;
     }
   );
+  release = src.firefox.version;
   firefox = fetchurl (
     src.firefox
     // {
