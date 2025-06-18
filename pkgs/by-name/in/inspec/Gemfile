@@ -1,3 +1,7 @@
 source 'https://rubygems.org'
 gem "inspec"
 gem "inspec-bin"
+
+gem "syslog", "~> 0.3.0"
+
+gem "csv", "~> 3.3"
