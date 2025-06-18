@@ -88,7 +88,7 @@ EOF
 
     concatTo flagsArray pytestFlags
     echoCmd 'pytest flags' "${flagsArray[@]}"
-    @pythonCheckInterpreter@ -m pytest "${flagsArray[@]}"
+    pytest "${flagsArray[@]}"
 
     runHook postCheck
     echo "Finished executing pytestCheckPhase"
