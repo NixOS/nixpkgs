@@ -1569,6 +1569,7 @@ let
     "PCRA"
     "PSCBS"
     "iemisc"
+    "red"
     "repmis"
     "R_cache"
     "R_filesets"
