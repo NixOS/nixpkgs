@@ -1,0 +1,13 @@
+diff --git a/vm/cli/cli.rs b/vm/cli/cli.rs
+index 6597cf101..06c829f56 100644
+--- a/vm/cli/cli.rs
++++ b/vm/cli/cli.rs
+@@ -62,7 +62,7 @@ impl Command {
+             Self::Execute(command) => command.parse(),
+             Self::New(command) => command.parse(),
+             Self::Run(command) => command.parse(),
+-            Self::Update(command) => command.parse(),
++            Self::Update(_) => anyhow::bail!("Package must be updated via Nix."),
+         }
+     }
+ }
