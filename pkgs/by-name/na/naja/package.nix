@@ -10,7 +10,7 @@
   flex,
   pkg-config,
   python3,
-  tbb_2021_11,
+  tbb_2021,
   buildPackages,
   nix-update-script,
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     capnproto # cmake modules
     flex # include dir
-    tbb_2021_11
+    tbb_2021
     python3
   ];
 

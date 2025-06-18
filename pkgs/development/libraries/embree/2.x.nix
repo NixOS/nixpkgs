@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     ispc
-    # tbb_2021_0 is not backward compatible
+    # tbb_2021 is not backward compatible
     tbb_2020_3
     glfw
     openimageio_2
