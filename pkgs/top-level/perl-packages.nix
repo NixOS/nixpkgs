@@ -36352,13 +36352,24 @@ with self;
     };
   };
 
-  TextUnaccent = buildPerlPackage {
+  TextUnaccent = buildPerlPackage rec {
     pname = "Text-Unaccent";
     version = "1.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDACHARY/Text-Unaccent-1.08.tar.gz";
       hash = "sha256-J45u/Jsk82mclh77NuvmAqNAi1QVcgF97hMdFScocys=";
     };
+    patches = [
+      # Fix build with gcc 14
+      # Convenience link to patch: https://salsa.debian.org/perl-team/modules/packages/libtext-unaccent-perl/-/blob/debian/1.08-2/debian/patches/bug848156.patch
+      (fetchDebianPatch {
+        inherit version;
+        pname = "libtext-unaccent-perl";
+        debianRevision = "2";
+        patch = "bug848156.patch";
+        hash = "sha256-RonSt/nPFYgAxbNU0jyfe1YpipxAJrLcIxwaUPxddoE=";
+      })
+    ];
     # https://rt.cpan.org/Public/Bug/Display.html?id=124815
     env.NIX_CFLAGS_COMPILE = "-DHAS_VPRINTF";
     meta = {
