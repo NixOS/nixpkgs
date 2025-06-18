@@ -892,6 +892,7 @@ in
   neo4j = handleTest ./neo4j.nix { };
   netbird = runTest ./netbird.nix;
   netdata = runTest ./netdata.nix;
+  nezha = runTest ./nezha.nix;
   nimdow = runTest ./nimdow.nix;
   nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
   networking.scripted = handleTest ./networking/networkd-and-scripted.nix { networkd = false; };
