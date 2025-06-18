@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
         meson
         ninja
         pkg-config
-        udevCheckHook
       ]
+      ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ udevCheckHook ] # inf rec on musl, so skip
     else
       [
         autoreconfHook
