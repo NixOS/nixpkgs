@@ -92,3 +92,23 @@ jobs:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+
+  # This job's only purpose is to serve as a target for the "Required Status Checks" branch ruleset.
+  # It "needs" all the jobs that should block merging a PR.
+  # If they pass, it is skipped — which counts as "success" for purposes of the branch ruleset.
+  # However, if any of them fail, this job will also fail — thus blocking the branch ruleset.
+  no-pr-failures:
+    # Modify this list to add or remove jobs from required status checks.
+    needs:
+      - check
+      - lint
+      - eval
+      - build
+    # WARNING:
+    # Do NOT change the name of this job, otherwise the rule will not catch it anymore.
+    # This would prevent all PRs from merging.
+    name: no PR failures
+    if: ${{ failure() }}
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - run: exit 1
