@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "17.11.0";
+  version = "18.0.3";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jppy8IG0Oq95RDDkvN1FpXjJuSc3DkfhGgnfpaUSKa4=";
+    hash = "sha256-V1/QJdizTDQ2kY8G+iJXgzk3PCN/FtozvlG9LDNXgYQ=";
   };
 
-  vendorHash = "sha256-wxFVDkqiqs7jaZEPGyawWfs6h6UgAhCWSckM90G44lA=";
+  vendorHash = "sha256-olrKR4J0kwCZEXrriSEEMHjT9qdM/7SvGHrSETiNG30=";
 
   # For patchShebangs
   buildInputs = [ bash ];
