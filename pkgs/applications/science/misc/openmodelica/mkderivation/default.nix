@@ -138,6 +138,8 @@ stdenv.mkDerivation (
 
     dontUseCmakeConfigure = true;
 
+    enableParallelBuilding = true;
+
     hardeningDisable = [ "format" ];
   }
 )
