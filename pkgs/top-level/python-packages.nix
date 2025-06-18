@@ -13049,10 +13049,6 @@ self: super: with self; {
 
   pypca = callPackage ../development/python-modules/pypca { };
 
-  pypcap = callPackage ../development/python-modules/pypcap {
-    inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
-  };
-
   pypck = callPackage ../development/python-modules/pypck { };
 
   pypdf = callPackage ../development/python-modules/pypdf { };
