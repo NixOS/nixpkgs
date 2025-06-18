@@ -1,0 +1,39 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d91c7bf..158bdd3 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -331,8 +331,13 @@ if(DEFINED ENV{CPACK_DEBIAN_PACKAGE_RELEASE})
+ else()
+    set(CPACK_DEBIAN_PACKAGE_RELEASE "local")
+ endif()
+-set(CPACK_DEBIAN_PACKAGE_SUGGESTS "sudo, libdrm-dev, libdrm-amdgpu-dev")
+-set(CPACK_RPM_PACKAGE_SUGGESTS "sudo, libdrm-dev, libdrm-amdgpu-dev")
++set(CPACK_DEBIAN_PACKAGE_SUGGESTS "sudo")
++set(CPACK_RPM_PACKAGE_SUGGESTS "sudo")
++# Add libdrm as hard dependencies since headers directly include libdrm files
++string(APPEND CPACK_DEBIAN_PACKAGE_DEPENDS ", libdrm-dev, libdrm-amdgpu-dev")
++string(APPEND CPACK_DEBIAN_ASAN_PACKAGE_DEPENDS ", libdrm-dev, libdrm-amdgpu-dev")
++string(APPEND CPACK_RPM_PACKAGE_REQUIRES ", libdrm-devel, libdrm-amdgpu-devel")
++string(APPEND CPACK_RPM_ASAN_PACKAGE_REQUIRES ", libdrm-devel, libdrm-amdgpu-devel")
+ 
+ ## Process the Debian install/remove scripts to update the CPACK variables
+ configure_file(
+diff --git a/rocm_smi-config.cmake.in b/rocm_smi-config.cmake.in
+index 83a8871..1561eac 100644
+--- a/rocm_smi-config.cmake.in
++++ b/rocm_smi-config.cmake.in
+@@ -7,9 +7,13 @@
+ @PACKAGE_INIT@
+ get_filename_component(ROCM_SMI_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+ 
++# Find required dependencies
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(LIBDRM REQUIRED libdrm)
++
+ set_and_check( rocm_smi_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@" )
+ set_and_check( ROCM_SMI_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@" )
+-set_and_check( ROCM_SMI_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@" )
++set( ROCM_SMI_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@;${LIBDRM_INCLUDE_DIRS}" )
+ set_and_check( rocm_smi_LIB_DIR "@PACKAGE_LIB_INSTALL_DIR@" )
+ set_and_check( ROCM_SMI_LIB_DIR "@PACKAGE_LIB_INSTALL_DIR@" )
+ set_and_check( ROCM_SMI_LIB_DIRS "@PACKAGE_LIB_INSTALL_DIR@" )

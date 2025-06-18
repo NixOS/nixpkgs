@@ -170,6 +170,10 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
+  env.CFLAGS = "-DADD_" + lib.optionalString rocmSupport " -fopenmp";
+  env.CXXFLAGS = finalAttrs.env.CFLAGS;
+  env.FFLAGS = "-DADD_";
+
   cmakeFlags = [
     (strings.cmakeFeature "GPU_TARGET" gpuTargetString)
     (strings.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
@@ -179,9 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
     # otherwise not be set in NVCC_FLAGS or DEVCCFLAGS (which we cannot modify).
     # See https://github.com/NixOS/nixpkgs/issues/281656#issuecomment-1902931289
     (strings.cmakeBool "USE_FORTRAN" true)
-    (strings.cmakeFeature "CMAKE_C_FLAGS" "-DADD_")
-    (strings.cmakeFeature "CMAKE_CXX_FLAGS" "-DADD_")
-    (strings.cmakeFeature "FORTRAN_CONVENTION" "-DADD_")
   ]
   ++ lists.optionals cudaSupport [
     (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
@@ -192,8 +193,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Can't easily apply the PR as a patch because we rely on the tarball with pregenerated
     # hipified files ∴ fetchpatch of the PR will apply cleanly but fail to build
     (strings.cmakeFeature "ROCM_CORE" "${rocmPackages.clr}")
-    (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")
-    (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+    (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/clang")
+    (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/clang++")
   ];
 
   # Magma doesn't have a test suite we can easily run, just loose executables, all of which require a GPU.
