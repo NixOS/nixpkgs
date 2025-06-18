@@ -60,8 +60,6 @@ jobs:
     uses: ./.github/workflows/eval.yml
     permissions:
       # compare
-      issues: write
-      pull-requests: write
       statuses: write
     secrets:
       OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
@@ -69,6 +67,22 @@ jobs:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
       systems: ${{ needs.prepare.outputs.systems }}
+
+  labels:
+    name: Labels
+    needs: [eval]
+    uses: ./.github/workflows/labels.yml
+    permissions:
+      issues: write
+      pull-requests: write
+
+  reviewers:
+    name: Reviewers
+    needs: [prepare, eval]
+    if: needs.prepare.outputs.targetSha
+    uses: ./.github/workflows/reviewers.yml
+    secrets:
+      OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
 
   build:
     name: Build
