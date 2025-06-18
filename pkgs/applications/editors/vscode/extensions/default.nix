@@ -3844,6 +3844,8 @@ let
 
       oops418.nix-env-picker = callPackage ./oops418.nix-env-picker { };
 
+      ph-hawkins.arc-plus = callPackage ./ph-hawkins.arc-plus { };
+
       phind.phind = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "phind";
