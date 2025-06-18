@@ -683,6 +683,7 @@
   ./services/hardware/udisks2.nix
   ./services/hardware/undervolt.nix
   ./services/hardware/upower.nix
+  ./services/hardware/usbipd.nix
   ./services/hardware/usbmuxd.nix
   ./services/hardware/usbrelayd.nix
   ./services/hardware/vdr.nix
