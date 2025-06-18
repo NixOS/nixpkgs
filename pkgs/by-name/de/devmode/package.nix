@@ -25,8 +25,7 @@ let
           }
         </style>
       </head>
-      <body><pre>$1</pre></body>
-      </html>
+      <body/><pre/>building...
       EOF
     '';
   };
@@ -35,17 +34,17 @@ let
     name = "build-and-link";
     runtimeInputs = [ error-page ];
     text = ''
+      error-page
+
       set +e
-      stderr=$(2>&1 nix-build --out-link "''${staging:?}" ${buildArgs})
+      2>&1 nix-build --out-link "''${staging:?}" ${buildArgs} \
+        | tee -a "''${error_page_absolute:?}"
       exit_status=$?
       set -e
 
-      rm -rf "''${serve:?}"
-
       if [ $exit_status -eq 0 ]; then
+        rm -rf "''${serve:?}"
         mv "''${staging:?}" "''${serve:?}"
-      else
-        error-page "$stderr"
       fi
     '';
   };
@@ -95,9 +94,9 @@ writeShellApplication {
 
     export serve="$tmpdir/serve"
     export staging="$tmpdir/staging"
-
     export error_page_absolute="$serve/${open}"
-    error-page "building …"
+
+    error-page
 
     parallel \
       --will-cite \
