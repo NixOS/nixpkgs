@@ -10,13 +10,13 @@ let
   pythonPackages = python3.pkgs;
   finalAttrs = {
     pname = "pyp";
-    version = "1.2.0";
+    version = "1.3.0";
 
     src = fetchFromGitHub {
       owner = "hauntsaninja";
       repo = "pyp";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-hnEgqWOIVj2ugOhd2aS9IulfkVnrlkhwOtrgH4qQqO8=";
+      hash = "sha256-u9yxjYNQrtYtFtUh5tTJ1mGmGB+Ry+FRupli8RzRu3c=";
     };
 
     pyproject = true;
