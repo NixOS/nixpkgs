@@ -148,6 +148,12 @@ python.pkgs.buildPythonApplication rec {
     "test_supported_rerankers_initialization"
   ];
 
+  passthru = {
+    # Expose these overridden inputs for debugging
+    inherit python;
+    inherit (python.pkgs) chromadb;
+  };
+
   meta = {
     description = "Code repository indexing tool to supercharge your LLM experience";
     homepage = "https://github.com/Davidyz/VectorCode";
