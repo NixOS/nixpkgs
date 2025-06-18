@@ -12,12 +12,12 @@ let
   okdVersion = "4.15.0-0.okd-2024-02-23-163410";
   microshiftVersion = "4.18.2";
   writeKey = "$(MODULEPATH)/pkg/crc/segment.WriteKey=cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
-  gitCommit = "e843be9c9889abd33ce2f9aee161fac1d44e3fa8";
-  gitHash = "sha256-irlVpRBZzE6lfjK8nlNmWlryGj25u/5LcX7pG3WD/Fs=";
+  gitCommit = "80aa80ab331ad193c67bbe0972ce15c662a6e52e";
+  gitHash = "sha256-6FZjFPKrrOm0idLdWCv89LOiaiFCFwiYL8j8zrMTgik=";
 in
 buildGoModule (finalAttrs: {
   pname = "crc";
-  version = "2.49.0";
+  version = "2.51.0";
 
   src = fetchFromGitHub {
     owner = "crc-org";
