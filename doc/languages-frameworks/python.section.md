@@ -290,6 +290,55 @@ This is particularly useful for numpy and scipy users who want to gain speed wit
 Note that using `scipy = super.scipy.override { blas = super.pkgs.mkl; };` will likely result in
 compilation issues, because scipy dependencies need to use the same blas implementation as well.
 
+##### Building packages with extensions on Darwin {#python-building-cxx-extensions-on-darwin}
+
+Building Python packages with extensions on Darwin (macOS) may fail because of
+missing C++ or OS framework libraries. The former case is because Python uses
+`clang` instead of `clang++` to compile C++ extensions (see [unixcompiler.py][
+cpython_cxx_unix_compiler]), but Nix doesn't include C++ standard libraries in
+the `clang` wrapper on Darwin. The latter case is because a package may require
+OS framework libraries. To fix either issue include C++ libraries in the
+derivation like so:
+
+```nix
+{ lib, stdenv, buildPythonPackage, darwin }:
+
+buildPythonPackage {
+  # ...
+  buildInputs = [
+    # ...
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Add any Apple framework libraries your package needs, e.g.
+    darwin.apple_sdk.frameworks.IOKit
+  ];
+  # Include C++ standard library
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  # ...
+}
+```
+
+This technique also works when installing packages in a virtual environment
+inside of a `nix-shell`:
+
+```nix
+{ pkgs ? import <nixpkgs> {}}:
+
+with pkgs; mkShell {
+  # ...
+  buildInputs = [
+    # ...
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Add any Apple framework libraries your package needs, e.g.
+    darwin.apple_sdk.frameworks.IOKit
+  ];
+  # Include C++ standard library
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  # ...
+}
+```
+
+[cpython_cxx_unix_compiler]: https://github.com/python/cpython/blob/71cf7c3dddd9c49ec70c1a95547f2fcd5daa7034/Tools/c-analyzer/distutils/unixccompiler.py#L51
+
 #### `buildPythonApplication` function {#buildpythonapplication-function}
 
 The [`buildPythonApplication`](#buildpythonapplication-function) function is practically the same as
