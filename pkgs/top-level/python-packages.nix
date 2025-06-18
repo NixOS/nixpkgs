@@ -6195,6 +6195,8 @@ self: super: with self; {
 
   gramps-ql = callPackage ../development/python-modules/gramps-ql { };
 
+  gramps-web-api = callPackage ../development/python-modules/gramps-web-api { };
+
   grandalf = callPackage ../development/python-modules/grandalf { };
 
   granian = callPackage ../development/python-modules/granian { };
