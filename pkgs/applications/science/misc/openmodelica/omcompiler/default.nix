@@ -49,6 +49,10 @@ mkOpenModelicaDerivation (
       binutils
     ];
 
+    patches = [
+      ./always-compile-with-cxx.patch
+    ];
+
     postPatch = ''
       sed -i -e '/^\s*AR=ar$/ s/ar/${stdenv.cc.targetPrefix}ar/
                  /^\s*ar / s/ar /${stdenv.cc.targetPrefix}ar /
