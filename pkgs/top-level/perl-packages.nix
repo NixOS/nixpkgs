@@ -212,7 +212,7 @@ with self;
     version = "0.009";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Algorithm-Backoff-0.009.tar.gz";
-      sha256 = "9f0ffcdf1e65a88022d6412f46ad977ede5a7b64be663009d13948fe8c9d180b";
+      hash = "sha256-nw/83x5lqIAi1kEvRq2Xft5ae2S+ZjAJ0TlI/oydGAs=";
     };
     buildInputs = [
       TestException
@@ -2469,7 +2469,7 @@ with self;
     version = "3.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AV/AVULLO/Bio-DB-HTS-3.01.tar.gz";
-      sha256 = "12a6bc1f579513cac8b9167cce4e363655cc8eba26b7d9fe1170dfe95e044f42";
+      hash = "sha256-Eqa8H1eVE8rIuRZ8zk42NlXMjromt9n+EXDf6V4ET0I=";
     };
 
     buildInputs = [
@@ -9816,6 +9816,22 @@ with self;
     };
   };
 
+  DBDODBC = buildPerlPackage {
+    pname = "DBD-ODBC";
+    version = "1.61";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MJ/MJEVANS/DBD-ODBC-1.61.tar.gz";
+      hash = "sha256-lt70OMlhDXLQ4k0AfqDqzQBZtSA8F+rbYjveoi+p9Ao=";
+    };
+    buildInputs = [ pkgs.unixODBC ];
+    propagatedBuildInputs = [ DBI ];
+    meta = {
+      homepage = "http://search.cpan.org/dist/DBD-ODBC/";
+      description = "ODBC DBD for Perl DBI";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DBDOracle = buildPerlPackage {
     pname = "DBD-Oracle";
     version = "1.83";
@@ -13242,7 +13258,7 @@ with self;
     pname = "File-DirList";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TP/TPABA/File-DirList/File-DirList-0.05.tar.gz";
-      sha256 = "sha256-mTt9dmLlV5hEih7azLmr0oHSvSO+fquZ9Wm44pYtO8M=";
+      hash = "sha256-mTt9dmLlV5hEih7azLmr0oHSvSO+fquZ9Wm44pYtO8M=";
     };
     preCheck = ''
       export HOME="$TMPDIR"
@@ -14620,6 +14636,19 @@ with self;
       ];
       mainProgram = "web-service-request";
     };
+  };
+
+  GeometryAffineTransform = buildPerlPackage {
+    pname = "Geometry-AffineTransform";
+    version = "1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LI/LIYANAGE/Geometry-AffineTransform-1.4.tar.gz";
+      hash = "sha256-Lahayp2k3WK1H9qmhuVoP76HCLoMf7HkH7677VmUQuQ=";
+    };
+    meta = {
+      description = "Affine Transformation to map 2D coordinates to other 2D coordinates";
+    };
+    propagatedBuildInputs = [ TestClass ];
   };
 
   GetoptArgvFile = buildPerlPackage {
@@ -19641,6 +19670,22 @@ with self;
     };
   };
 
+  MarpaR2 = buildPerlModule {
+    pname = "Marpa-R2";
+    version = "8.000000";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JK/JKEGL/Marpa-R2-8.000000.tar.gz";
+      hash = "sha256-VuaUpxmOoMgd195hqcSV9ahkJoI7j0ucVK5GCoQCj+g=";
+    };
+    buildInputs = [ ConfigAutoConf ];
+    propagatedBuildInputs = [ HTMLParser PPI ];
+    meta = {
+      homepage = "http://savage.net.au/Marpa.html";
+      description = "Release 2 of Marpa";
+      license = lib.licenses.lgpl3Plus;
+    };
+  };
+
   MCE = buildPerlPackage {
     pname = "MCE";
     version = "1.889";
@@ -19757,6 +19802,36 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  LogReport = buildPerlPackage {
+    pname = "Log-Report";
+    version = "1.33";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Log-Report-1.33.tar.gz";
+      hash = "sha256-SWJNozj9fVcoj6IqRyQUdvtc4vYAgYH3hseDD+WvAf8=";
+    };
+    propagatedBuildInputs = [ DevelGlobalDestruction LogReportOptional StringPrint ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Report a problem, pluggable handlers and language support";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  LogReportOptional = buildPerlPackage {
+    pname = "Log-Report-Optional";
+    version = "1.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Log-Report-Optional-1.07.tar.gz";
+      hash = "sha256-smWLUxdt9a+l0CeJNocVyGuYyNBOzZMCUrzX+DLMYiQ=";
+    };
+    propagatedBuildInputs = [ StringPrint ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Log::Report in the lightest form";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -31520,6 +31595,21 @@ with self;
     };
   };
 
+  StringPrint = buildPerlPackage {
+    pname = "String-Print";
+    version = "0.94";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/String-Print-0.94.tar.gz";
+      hash = "sha256-mzzWd623pAyxg71sYNuA2Wrcq9Wq4n4yTj7jfjJ1Ips=";
+    };
+    propagatedBuildInputs = [ HTMLParser TimeDate UnicodeLineBreak ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Printf extensions";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   StringRandom = buildPerlModule {
     pname = "String-Random";
     version = "0.32";
@@ -32862,6 +32952,21 @@ with self;
         ];
       };
     };
+
+  TermReadLinePerl = buildPerlPackage {
+    pname = "Term-ReadLine-Perl";
+    version = "1.0303";
+    outputs = [ "out" ];
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/Term-ReadLine-Perl-1.0303.tar.gz";
+      hash = "sha256-MUufjffonnfqrCALm7y+KOAeDasmRq2oPFsmWEg5CV0=";
+    };
+    meta = {
+      homepage = "https://metacpan.org/dist/Term-ReadLine";
+      description = "Perl interface to various readline packages.";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
 
   TermReadLineGnu = buildPerlPackage {
     pname = "Term-ReadLine-Gnu";
@@ -38187,7 +38292,7 @@ with self;
     version = "1.4.27";
     src = fetchurl {
       url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
-      sha256 = "1fhq6rydjymmyn79cdza0j4rmlizrrwmf5mx276rlmwyh085wfxs";
+      hash = "sha256-ujteEICeV5rNEb0WV3nOP9KaiQTqN5aO9bV62Xw2GLo=";
     };
     buildInputs = [ pkgs.xapian ];
     preConfigure = ''
@@ -38208,6 +38313,51 @@ with self;
       description = "Bindings allowing Xapian to be used from Perl";
       homepage = "https://xapian.org";
       license = [ lib.licenses.gpl2Plus ];
+    };
+  };
+
+  XMLCompile = buildPerlPackage {
+    pname = "XML-Compile";
+    version = "1.63";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/XML-Compile-1.63.tar.gz";
+      hash = "sha256-Swhx70pwv/NyZtUxvrzR0GWxCej1xemW+HGJqfktWV8=";
+    };
+    propagatedBuildInputs = [ LogReport TestDeep TypesSerialiser XMLCompileTester XMLLibXML ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Compilation based XML processing";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  XMLCompileCache = buildPerlPackage {
+    pname = "XML-Compile-Cache";
+    version = "1.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/XML-Compile-Cache-1.06.tar.gz";
+      hash = "sha256-WRsTa9koQsgaUXYIJQP0ffbVzE2ODXiVPvFVf3RwOKA=";
+    };
+    propagatedBuildInputs = [ LogReport XMLCompile XMLCompileTester XMLLibXMLSimple ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Cache compiled XML translators";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  XMLCompileTester = buildPerlPackage {
+    pname = "XML-Compile-Tester";
+    version = "0.91";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/XML-Compile-Tester-0.91.tar.gz";
+      hash = "sha256-5czG+WVUM5GkPSUIei+ai9UiBCX8YkTgdNmkyOPnP7c=";
+    };
+    propagatedBuildInputs = [ LogReport TestDeep ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Support XML::Compile related regression testing";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
