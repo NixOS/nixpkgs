@@ -161,7 +161,11 @@ lib.recurseIntoAttrs rec {
       echo "-D__ANDROID_API__=${stdenv.targetPlatform.androidSdkVersion}" >> $out/nix-support/cc-cflags
       # Android needs executables linked with -pie since version 5.0
       # Use -fPIC for compilation, and link with -pie if no -shared flag used in ldflags
-      echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
+      if [ ${targetInfo.triple} == arm-linux-androideabi ]; then
+        echo "-target armv7a-linux-androideabi -fPIC" >> $out/nix-support/cc-cflags
+      else
+        echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
+      fi
       echo "-z,noexecstack -z,relro -z,now -z,muldefs" >> $out/nix-support/cc-ldflags
       echo 'expandResponseParams "$@"' >> $out/nix-support/add-flags.sh
       echo 'if [[ ! (" ''${params[@]} " =~ " -shared ") && ! (" ''${params[@]} " =~ " -no-pie ") ]]; then NIX_LDFLAGS_${suffixSalt}+=" -pie"; fi' >> $out/nix-support/add-flags.sh
