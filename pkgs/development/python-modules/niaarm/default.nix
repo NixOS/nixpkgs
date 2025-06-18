@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "numpy"
+    "plotly"
     "scikit-learn"
   ];
 
