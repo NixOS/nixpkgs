@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  desktop-file-utils,
   stdenv,
   ffmpeg,
   frei0r,
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    desktop-file-utils
     gobject-introspection
     makeWrapper
     wrapGAppsHook3
