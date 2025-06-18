@@ -5,18 +5,20 @@
   cmake,
   qtcharts,
   qttools,
+  qtsvg,
+  qtwayland,
   wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "stacer";
-  version = "1.1.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
-    owner = "oguzhaninan";
+    owner = "QuentiumYT";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0qndzzkbq6abapvwq202kva8j619jdn9977sbqmmfs9zkjz4mbsd";
+    tag = "v${version}";
+    hash = "sha256-sBgq51BqD3/8FC/dkIL/HCitoLC4LRnvkR9UNRRHWmo=";
   };
 
   postPatch = ''
@@ -28,11 +30,17 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtcharts
     qttools
+    qtsvg
+    qtwayland
   ];
 
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=g++")
   ];
 
   preConfigure = ''
