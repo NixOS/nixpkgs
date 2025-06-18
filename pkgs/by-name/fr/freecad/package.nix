@@ -152,6 +152,9 @@ freecad-utils.makeCustomizable (
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
       ./0002-FreeCad-OndselSolver-pkgconfig.patch
+
+      # https://github.com/FreeCAD/FreeCAD/pull/21710
+      ./0003-FreeCad-fix-font-load-crash.patch
       (fetchpatch {
         url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
         hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
