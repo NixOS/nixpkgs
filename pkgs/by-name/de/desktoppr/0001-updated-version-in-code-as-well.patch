@@ -1,0 +1,25 @@
+From 419363c28c99eb0f391bf231813af5e507c35573 Mon Sep 17 00:00:00 2001
+From: Armin Briegel <1933192+scriptingosx@users.noreply.github.com>
+Date: Mon, 8 Jul 2024 08:57:14 +0200
+Subject: [PATCH 1/2] updated version in code as well...
+
+---
+ desktoppr/main.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/desktoppr/main.swift b/desktoppr/main.swift
+index f68f020..d54daff 100644
+--- a/desktoppr/main.swift
++++ b/desktoppr/main.swift
+@@ -22,7 +22,7 @@ import Foundation
+ import AppKit
+ import CryptoKit
+ 
+-let version = "0.5b"
++let version = "0.5"
+ 
+ enum ScreenOption : Equatable {
+   case all
+-- 
+2.48.1
+
