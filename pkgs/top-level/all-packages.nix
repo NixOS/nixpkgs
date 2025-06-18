@@ -311,7 +311,7 @@ with pkgs;
   };
 
   basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
-    tbb = tbb_2021_11;
+    tbb = tbb_2021;
     cereal = cereal_1_3_2;
     opencv = opencv.override { enableGtk3 = true; };
   };
@@ -6101,7 +6101,6 @@ with pkgs;
   swi-prolog-gui = swi-prolog.override { withGui = true; };
 
   tbb_2020_3 = callPackage ../development/libraries/tbb/2020_3.nix { };
-  tbb_2021_11 = callPackage ../development/libraries/tbb { };
   # many packages still fail with latest version
   tbb = tbb_2020_3;
 
@@ -7383,7 +7382,7 @@ with pkgs;
 
   ikos = callPackage ../development/tools/analysis/ikos {
     inherit (llvmPackages_14) stdenv clang llvm;
-    tbb = tbb_2021_11;
+    tbb = tbb_2021;
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
@@ -7882,7 +7881,7 @@ with pkgs;
 
   cctag = callPackage ../development/libraries/cctag {
     stdenv = clangStdenv;
-    tbb = tbb_2021_11;
+    tbb = tbb_2021;
   };
 
   ceedling = callPackage ../development/tools/ceedling { };
