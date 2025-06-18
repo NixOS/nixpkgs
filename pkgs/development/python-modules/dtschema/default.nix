@@ -52,7 +52,10 @@ buildPythonPackage rec {
       bsd2 # or
       gpl2Only
     ];
-    maintainers = with maintainers; [ sorki ];
+    maintainers = with maintainers; [
+      sorki
+      dramforever
+    ];
 
     broken = (
       # Library not loaded: @rpath/libfdt.1.dylib
