@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "0.8.0";
+  version = "1.0.0";
 in
 rustPlatform.buildRustPackage {
   pname = "kittysay";
@@ -14,11 +14,11 @@ rustPlatform.buildRustPackage {
     owner = "uncenter";
     repo = "kittysay";
     rev = "v${version}";
-    hash = "sha256-ZYHrDBJ8cTqJAh2KUGSCsS1bY/emHRodPxZX2vxAhDs=";
+    hash = "sha256-y95Yh+kYcGkJVnVqwnLQV2oOTybj7d9qFYph0bovRIE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-LIAXlOArm5V7Kbm82GDRs3XvMTgKjuOL2C+fQfEDwb4=";
+  cargoHash = "sha256-cCkPz/PymUDLxl7Ily4jC9ZnD5YaN6cyqlZg/vMg8sI=";
 
   meta = {
     description = "Cowsay, but with a cute kitty :3";
