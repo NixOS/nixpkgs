@@ -7253,6 +7253,13 @@
     githubId = 103082;
     name = "Ed Brindley";
   };
+  eleloi = {
+    email = "eleloi@gmail.com";
+    github = "eleloi";
+    githubId = 14278421;
+    name = "Eloi Vallverdú";
+    keys = [ { fingerprint = "E585 7821 1BBA 9DA8 C1F3  4C46 BCB0 25FB 4B63 30F7"; } ];
+  };
   elesiuta = {
     email = "elesiuta@gmail.com";
     github = "elesiuta";
