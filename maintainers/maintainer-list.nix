@@ -3407,6 +3407,12 @@
     github = "blenderfreaky";
     githubId = 14351657;
   };
+  blghnks = {
+    email = "bilgehankuch@gmail.com";
+    name = "Bilgehan Kuş";
+    github = "blghnks";
+    githubId = 175811412;
+  };
   blinry = {
     name = "blinry";
     email = "mail@blinry.org";
@@ -7650,6 +7656,12 @@
     email = "erin@erinvanderveen.nl";
     github = "ErinvanderVeen";
     githubId = 10973664;
+  };
+  ern775 = {
+    email = "eren.demir2479090@gmail.com";
+    github = "ern775";
+    githubId = 188162351;
+    name = "Eren Demir";
   };
   erooke = {
     email = "ethan@roo.ke";
