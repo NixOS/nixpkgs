@@ -110,8 +110,5 @@ in
           };
         })
       ) cfg.sessions;
-
-    environment.systemPackages = [ pkgs.autossh ];
-
   };
 }
