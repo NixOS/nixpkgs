@@ -104,7 +104,7 @@ in
     doCheck = false;
 
     meta = {
-      inherit (old.meta) license;
+      inherit (old.meta) license pkgConfigModules;
       mainProgram = "ffprobe";
       description = "${old.meta.description} (Servarr fork)";
       homepage = "https://github.com/Servarr/FFmpeg";
