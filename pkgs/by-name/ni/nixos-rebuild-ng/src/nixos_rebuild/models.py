@@ -11,7 +11,7 @@ from .process import Remote, run_wrapper
 type ImageVariants = list[str]
 
 
-class NRError(Exception):
+class NixOSRebuildError(Exception):
     "nixos-rebuild general error."
 
     def __init__(self, message: str) -> None:
