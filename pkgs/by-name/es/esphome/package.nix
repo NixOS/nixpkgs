@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.5.2";
+  version = "2025.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-p4+OuBGS9OJxxiQ4xOO2WseUrw3yXWyCZn7jilnh06E=";
+    hash = "sha256-tjjBz3XWCRHMCWWaNJ7LIRwBiWYbNaciVKLvQqcy9DM=";
   };
 
   build-systems = with python.pkgs; [
@@ -61,7 +61,7 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.4.0" "setuptools"
+      --replace-fail "setuptools==80.9.0" "setuptools"
   '';
 
   # Remove esptool and platformio from requirements
@@ -136,7 +136,26 @@ python.pkgs.buildPythonApplication rec {
     # race condition, also visible in upstream tests
     # tests/dashboard/test_web_server.py:78: IndexError
     "test_devices_page"
+
+    # platformio builds; requires networking for dependency resolution
+    "test_api_message_size_batching"
+    "test_host_mode_basic"
+    "test_host_mode_batch_delay"
+    "test_host_mode_empty_string_options"
+    "test_host_mode_entity_fields"
+    "test_host_mode_fan_preset"
+    "test_host_mode_many_entities"
+    "test_host_mode_many_entities_multiple_connections"
+    "test_host_mode_noise_encryption"
+    "test_host_mode_noise_encryption_wrong_key"
+    "test_host_mode_reconnect"
+    "test_host_mode_with_sensor"
+    "test_large_message_batching"
   ];
+
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+  '';
 
   postCheck = ''
     $out/bin/esphome --help > /dev/null

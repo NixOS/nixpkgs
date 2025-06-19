@@ -12,7 +12,7 @@ let
     let
       self = {
         inherit pname;
-        version = "25-09-2023-unstable-2025-05-14";
+        version = "0-unstable-2025-05-14";
 
         src = fetchFromGitHub {
           owner = "Eisa01";
