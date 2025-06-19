@@ -23,9 +23,11 @@ let
       "-buildvcs=false"
       #"-trimpath" added by default by buildGoModule
     ];
-    postInstall = ''
-      mkdir -p $out/etc/proxy-ns
-    '';
+    /*
+      postInstall = ''
+        mkdir -p $out/etc/proxy-ns
+      '';
+    */
     meta = {
       description = "Linux-specific command-line tool that can force any program to use your SOCKS5 proxy server.";
       mainProgram = "proxy-ns";
