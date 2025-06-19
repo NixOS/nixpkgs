@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
       heatshrink
       catch2_3
       webkitgtk_4_1
-      z3
+      (z3.override { useCmakeBuild = true; })
     ]
     ++ lib.optionals withSystemd [
       systemd
