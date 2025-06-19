@@ -3587,6 +3587,8 @@ self: super: with self; {
 
   discogs-client = callPackage ../development/python-modules/discogs-client { };
 
+  discord-rpc = callPackage ../development/python-modules/discord-rpc { };
+
   discordpy = callPackage ../development/python-modules/discordpy { };
 
   discovery30303 = callPackage ../development/python-modules/discovery30303 { };
