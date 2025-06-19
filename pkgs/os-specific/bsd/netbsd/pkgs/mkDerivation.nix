@@ -96,7 +96,7 @@ lib.makeOverridable (
           matthewbauer
           qyliss
         ];
-        platforms = platforms.unix;
+        platforms = platforms.netbsd;
         license = licenses.bsd2;
       };
     }
