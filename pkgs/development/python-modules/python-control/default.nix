@@ -33,6 +33,8 @@ buildPythonPackage rec {
     matplotlib
   ];
 
+  pythonImportsCheck = [ "control" ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
