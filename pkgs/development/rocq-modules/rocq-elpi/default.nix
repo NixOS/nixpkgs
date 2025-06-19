@@ -12,12 +12,11 @@ let
     if elpi-version != null then
       elpi-version
     else
-      (lib.switch rocq-core.rocq-version [
-        {
-          case = "9.0";
-          out = "2.0.7";
+      (lib.switch rocq-core.rocq-version (lib.lists.sort (x: y: lib.versions.isLe x.out y.out) (
+        lib.mapAttrsToList (out: case: { inherit case out; }) {
+          "2.0.7" = "9.0";
         }
-      ] { });
+      )) { });
   elpi = rocq-core.ocamlPackages.elpi.override { version = default-elpi-version; };
   propagatedBuildInputs_wo_elpi = [
     rocq-core.ocamlPackages.findlib
@@ -28,12 +27,14 @@ let
     repo = "coq-elpi";
     owner = "LPCIC";
     inherit version;
-    defaultVersion = lib.switch rocq-core.rocq-version [
-      {
-        case = "9.0";
-        out = "2.5.2";
-      }
-    ] null;
+    defaultVersion = lib.switch rocq-core.rocq-version (lib.lists.sort
+      (x: y: lib.versions.isLe x.out y.out)
+      (
+        lib.mapAttrsToList (out: case: { inherit case out; }) {
+          "2.5.2" = "9.0";
+        }
+      )
+    ) null;
     release."2.5.2".sha256 = "sha256-lLzjPrbVB3rrqox528YiheUb0u89R84Xmrgkn0oplOs=";
     releaseRev = v: "v${v}";
 
