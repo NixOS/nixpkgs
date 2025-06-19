@@ -103,6 +103,7 @@
   ./hardware/sata.nix
   ./hardware/sensor/hddtemp.nix
   ./hardware/sensor/iio.nix
+  ./hardware/smfc.nix
   ./hardware/steam-hardware.nix
   ./hardware/system-76.nix
   ./hardware/tuxedo-drivers.nix
