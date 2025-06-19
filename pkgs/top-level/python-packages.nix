@@ -3871,6 +3871,8 @@ self: super: with self; {
 
   django-markup = callPackage ../development/python-modules/django-markup { };
 
+  django-mcp-server = callPackage ../development/python-modules/django-mcp-server { };
+
   django-mdeditor = callPackage ../development/python-modules/django-mdeditor { };
 
   django-mfa3 = callPackage ../development/python-modules/django-mfa3 { };
