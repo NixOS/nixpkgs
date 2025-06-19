@@ -283,7 +283,8 @@ buildPythonPackage rec {
   postPatch = ''
     # pythonRelaxDeps does not cover build-system
     substituteInPlace pyproject.toml \
-      --replace-fail "torch ==" "torch >="
+      --replace-fail "torch ==" "torch >=" \
+      --replace-fail "setuptools>=77.0.3,<80.0.0" "setuptools"
 
     # Ignore the python version check because it hard-codes minor versions and
     # lags behind `ray`'s python interpreter support
