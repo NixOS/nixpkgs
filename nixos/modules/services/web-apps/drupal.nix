@@ -461,7 +461,7 @@ in
         enable = true;
         virtualHosts = mapAttrs' (
           hostName: cfg:
-          (nameValuePair "http://${hostName}" {
+          (nameValuePair hostName {
             extraConfig = ''
               root * ${pkg hostName cfg}/share/php/drupal
               file_server
