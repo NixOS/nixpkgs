@@ -7,6 +7,7 @@
   pkg-config,
   libpulseaudio,
   qt5compat,
+  qttools,
 }:
 mkKdeDerivation rec {
   pname = "phonon";
@@ -24,7 +25,10 @@ mkKdeDerivation rec {
     qt5compat
   ];
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    pkg-config
+    qttools
+  ];
 
   cmakeFlags = [
     "-DPHONON_BUILD_QT5=0"

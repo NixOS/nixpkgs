@@ -16,13 +16,9 @@ mkKdeDerivation {
     })
   ];
 
-  extraNativeBuildInputs = [
-    pkg-config
-    qtwayland
-  ];
-
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
-    freerdp
     qtwayland
+    freerdp
   ];
 }
