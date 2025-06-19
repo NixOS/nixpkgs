@@ -18,8 +18,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/fonts/truetype
-    cp $src $out/share/fonts/truetype/SamanDere-Regular.ttf
+    install -Dm644 $src $out/share/fonts/truetype/SamanDere-Regular.ttf
     runHook postInstall
   '';
 
