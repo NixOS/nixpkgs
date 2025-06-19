@@ -27,7 +27,6 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     shared-mime-info
-    qtwebengine
   ];
 
   # FIXME: Musicbrainz 2.x???, musepack

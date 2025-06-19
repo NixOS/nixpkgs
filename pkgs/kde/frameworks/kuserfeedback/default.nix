@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  qttools,
   qtsvg,
 }:
 mkKdeDerivation {
@@ -10,5 +11,8 @@ mkKdeDerivation {
     "-DENABLE_CONSOLE=0"
     "-DENABLE_CLI=0"
   ];
-  extraNativeBuildInputs = [ qtsvg ];
+  extraNativeBuildInputs = [
+    qttools
+    qtsvg
+  ];
 }

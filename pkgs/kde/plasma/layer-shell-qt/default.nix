@@ -6,10 +6,6 @@
 mkKdeDerivation {
   pname = "layer-shell-qt";
 
-  extraNativeBuildInputs = [
-    pkg-config
-    qtwayland
-  ];
-
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [ qtwayland ];
 }

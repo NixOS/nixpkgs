@@ -1,7 +1,9 @@
 {
   mkKdeDerivation,
   pkg-config,
+  qt5compat,
   qtsensors,
+  qttools,
   qtwayland,
   xorg,
   libcanberra,
@@ -24,12 +26,12 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     python3
-    qtsensors
-    qtwayland
   ];
 
   extraBuildInputs = [
+    qt5compat
     qtsensors
+    qttools
     qtwayland
 
     libgbm
