@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -19,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casilda";
-  version = "0.2.0";
+  version = "0.3.0-unstable-2025-06-16";
 
   outputs = [
     "out"
@@ -30,22 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "jpu";
     repo = "casilda";
-    tag = finalAttrs.version;
-    hash = "sha256-wTYx4Wj8u52+yNc/A5Lg0zqmhKh8X0q99e+TilpUrC4=";
+    rev = "5b5933d32f0221341c98a25dea1ce5ef78199a79";
+    hash = "sha256-LrXoVK7KMjIko6jUkrKY06QdZMQaVrHhG7/C5ickdJA=";
   };
 
-  patches = [
-    # Fix missing clock_gettime function
-    # https://gitlab.gnome.org/jpu/casilda/-/merge_requests/4
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/jpu/casilda/-/commit/dcebb8e67d6dc7c47332d1c76a1d5bf60eaee7b1.patch";
-      hash = "sha256-l3zu29PPRwzDuoeoqUs4Gi3JziyZ9vDdqvRfz7GQ4Sw=";
-    })
-  ];
-
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
@@ -61,12 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     wayland # for wayland-server
     libxkbcommon
+    wlroots_0_18
   ];
 
-  propagatedBuildInputs = [
-    gtk4
-    wlroots_0_18 # todo: move to buildInputs after https://gitlab.gnome.org/jpu/casilda/-/merge_requests/7
-  ];
+  propagatedBuildInputs = [ gtk4 ];
 
   strictDeps = true;
 
