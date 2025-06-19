@@ -8,11 +8,6 @@
   mcp,
   uritemplate,
   poetry-core,
-  pytestCheckHook,
-  pytest,
-  httpx,
-  asgiref,
-  anyio,
 }:
 
 buildPythonPackage rec {
@@ -42,7 +37,7 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=mcpexample.mcpexample.settings
   '';
 
-  pythonImportsCheck = "mcp_server";
+  pythonImportsCheck = [ "mcp_server" ];
 
   doCheck = false; # Needs to run both test server and client simultaneously
 
