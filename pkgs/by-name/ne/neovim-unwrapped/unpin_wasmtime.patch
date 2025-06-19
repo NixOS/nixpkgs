@@ -1,0 +1,13 @@
+diff --git a/src/nvim/CMakeLists.txt b/src/nvim/CMakeLists.txt
+index 2a60eefe7c..a4e6266150 100644
+--- a/src/nvim/CMakeLists.txt
++++ b/src/nvim/CMakeLists.txt
+@@ -49,7 +49,7 @@ if(ENABLE_LIBINTL)
+ endif()
+
+ if(ENABLE_WASMTIME)
+-  find_package(Wasmtime 29.0.1 EXACT REQUIRED)
++  find_package(Wasmtime REQUIRED)
+   target_link_libraries(main_lib INTERFACE wasmtime)
+   target_compile_definitions(nvim_bin PRIVATE HAVE_WASMTIME)
+ endif()
