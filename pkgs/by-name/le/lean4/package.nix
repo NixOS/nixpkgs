@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.19.0";
+  version = "4.20.0";
 
   # Using a vendored version rather than nixpkgs' version to match the exact version required by
   # Lean.  Apparently, even a slight version change can impact greatly the final performance.
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Iw5JSamrty9l6aJ2WwslAolSHfi2q0UO8P8HI1gp+j8=";
+    hash = "sha256-1V3Uk96wdNJ3IP+hvXb5Hep8w8QK8GjqaeTVG+KUqXU=";
   };
 
   postPatch =
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     + (lib.optionalString enableMimalloc ''
       substituteInPlace CMakeLists.txt \
         --replace-fail 'MIMALLOC-SRC' '${finalAttrs.mimalloc-src}'
-      for file in src/CMakeLists.txt src/runtime/CMakeLists.txt; do
+      for file in stage0/src/CMakeLists.txt stage0/src/runtime/CMakeLists.txt src/CMakeLists.txt src/runtime/CMakeLists.txt; do
         substituteInPlace "$file" \
           --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
       done
