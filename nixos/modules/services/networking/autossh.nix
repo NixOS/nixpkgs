@@ -95,18 +95,23 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
 
-          # To be able to start the service with no network connection
-          environment.AUTOSSH_GATETIME = "0";
+          environment = {
+            # To be able to start the service with no network connection
+            AUTOSSH_GATETIME = "0";
 
-          # How often AutoSSH checks the network, in seconds
-          environment.AUTOSSH_POLL = "30";
+            # How often AutoSSH checks the network, in seconds
+            AUTOSSH_POLL = "30";
+
+            # We use the variable instead of the flag to allow `ssh -M` "master mode" to be used
+            AUTOSSH_PORT = toString value.monitoringPort;
+          };
 
           serviceConfig = {
             User = "${value.user}";
             # AutoSSH may exit with 0 code if the SSH session was
             # gracefully terminated by either local or remote side.
             Restart = "on-success";
-            ExecStart = "${pkgs.autossh}/bin/autossh -M ${toString value.monitoringPort} ${lib.strings.concatStringsSep " " value.sshArgs} ${value.destination}";
+            ExecStart = "${pkgs.autossh}/bin/autossh ${lib.strings.concatStringsSep " " value.sshArgs} ${value.destination}";
           };
         })
       ) cfg.sessions;
