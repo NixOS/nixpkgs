@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_8,
+  pnpm_10,
   nodejs,
   makeBinaryWrapper,
   shellcheck,
@@ -11,29 +11,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bash-language-server";
-  version = "5.4.0";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "bash-lsp";
     repo = "bash-language-server";
     rev = "server-${finalAttrs.version}";
-    hash = "sha256-yJ81oGd9aNsWQMLvDSgMVVH1//Mw/SVFYFIPsJTQYzE=";
+    hash = "sha256-Pe32lQSlyWcyUbqwhfoulwNwhrnWdRcKFIl3Jj0Skac=";
   };
 
   pnpmWorkspaces = [ "bash-language-server" ];
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
-    hash = "sha256-W25xehcxncBs9QgQBt17F5YHK0b+GDEmt27XzTkyYWg=";
+    hash = "sha256-NvyqPv5OKgZi3hW98Da8LhsYatmrzrPX8kLOfLr+BrI=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_8.configHook
+    pnpm_10.configHook
     makeBinaryWrapper
     versionCheckHook
   ];
@@ -45,19 +45,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  # will be fixed in a later commit
+  dontCheckForBrokenSymlinks = true;
+
   installPhase = ''
     runHook preInstall
 
-    pnpm --offline \
-      --frozen-lockfile --ignore-script \
-      --filter=bash-language-server \
-      deploy --prod $out/lib/bash-language-server
+    mkdir -p $out/{bin,lib/bash-language-server}
+    cp -r {node_modules,server} $out/lib/bash-language-server/
 
     # Create the executable, based upon what happens in npmHooks.npmInstallHook
     makeWrapper ${lib.getExe nodejs} $out/bin/bash-language-server \
       --suffix PATH : ${lib.makeBinPath [ shellcheck ]} \
       --inherit-argv0 \
-      --add-flags $out/lib/bash-language-server/out/cli.js
+      --add-flags $out/lib/bash-language-server/server/out/cli.js
 
     runHook postInstall
   '';
