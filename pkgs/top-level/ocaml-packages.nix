@@ -1116,6 +1116,8 @@ let
 
         linol = callPackage ../development/ocaml-modules/linol { };
 
+        linol-eio = callPackage ../development/ocaml-modules/linol/eio.nix { };
+
         linol-lwt = callPackage ../development/ocaml-modules/linol/lwt.nix { };
 
         llvm = callPackage ../development/ocaml-modules/llvm {
