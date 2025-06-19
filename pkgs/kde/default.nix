@@ -90,6 +90,7 @@ let
         pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt { };
 
         applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 { };
+        dynamic-workspaces = self.callPackage ./third-party/dynamic-workspaces { };
         karousel = self.callPackage ./third-party/karousel { };
         koi = self.callPackage ./third-party/koi { };
         krohnkite = self.callPackage ./third-party/krohnkite { };
