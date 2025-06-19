@@ -4158,6 +4158,34 @@ runTests {
     };
   };
 
+  # Make sure that passing a string for the `directory` works.
+  #
+  # See: https://github.com/NixOS/nixpkgs/pull/361424#discussion_r1934813568
+  # See: https://github.com/NixOS/nix/issues/9428
+  testPackagesFromDirectoryRecursiveStringDirectory = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      # Do NOT remove the `builtins.toString` call here!!!
+      directory = builtins.toString ./packages-from-directory/plain;
+    };
+    expected = {
+      a = "a";
+      b = "b";
+      # Note: Other files/directories in `./test-data/c/` are ignored and can be
+      # used by `package.nix`.
+      c = "c";
+      my-namespace = {
+        d = "d";
+        e = "e";
+        f = "f";
+        my-sub-namespace = {
+          g = "g";
+          h = "h";
+        };
+      };
+    };
+  };
+
   # Check that `packagesFromDirectoryRecursive` can process a directory with a
   # top-level `package.nix` file into a single package.
   testPackagesFromDirectoryRecursiveTopLevelPackageNix = {
