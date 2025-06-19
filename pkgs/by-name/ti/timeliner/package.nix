@@ -25,7 +25,6 @@ buildGoModule {
     description = "Rewrite of mactime, a bodyfile reader";
     homepage = "https://github.com/airbus-cert/timeliner";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ mikehorn ];
     mainProgram = "timeliner";
   };
