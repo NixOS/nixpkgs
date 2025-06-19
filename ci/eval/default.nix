@@ -55,6 +55,7 @@ let
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
+        export NIX_STORE_DIR=$(mktemp -d)
         mkdir $out
         export GC_INITIAL_HEAP_SIZE=4g
         command time -f "Attribute eval done [%MKB max resident, %Es elapsed] %C" \
@@ -144,6 +145,7 @@ let
       }
       ''
         export NIX_STATE_DIR=$(mktemp -d)
+        export NIX_STORE_DIR=$(mktemp -d)
         nix-store --init
 
         echo "System: $evalSystem"
