@@ -7,20 +7,33 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wamr";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-micro-runtime";
     rev = "WAMR-${finalAttrs.version}";
-    hash = "sha256-Rhn26TRyjkR30+zyosfooOGjhvG+ztYtJVQlRfzWEFo=";
+    hash = "sha256-jrJ9aO/nc6TEUjehMm0deBtCXpx22YBSKyEB/Dzbc3c=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinSdkVersion}"
-  ];
+  postPatch = ''
+        # Remove version.h generation since it already exists and source is read-only
+        substituteInPlace ../../../build-scripts/version.cmake \
+          --replace "configure_file(
+      \''${WAMR_ROOT_DIR}/core/version.h.in
+      \''${WAMR_ROOT_DIR}/core/version.h
+    )" ""
+  '';
+
+  cmakeFlags =
+    [
+      "-DWAMR_BUILD_SIMD=0" # Disable SIMD to avoid fetching simde dependency
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinSdkVersion}"
+    ];
 
   sourceRoot =
     let
@@ -39,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/bytecodealliance/wasm-micro-runtime";
     license = licenses.asl20;
     mainProgram = "iwasm";
-    maintainers = with maintainers; [ ereslibre ];
+    maintainers = with maintainers; [
+      ereslibre
+      bubblepipe
+    ];
     platforms = platforms.unix;
   };
 })
