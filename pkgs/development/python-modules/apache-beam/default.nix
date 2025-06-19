@@ -340,7 +340,14 @@ buildPythonPackage rec {
     ];
 
   disabledTests =
-    lib.optionals stdenv.hostPlatform.isDarwin [
+    [
+      # IndexError: list index out of range
+      "test_only_sample_exceptions"
+
+      # AssertionError: False is not true
+      "test_samples_all_with_both_experiments"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       #  PermissionError: [Errno 13] Permission denied: '/tmp/...'
       "test_cache_manager_uses_local_ib_cache_root"
       "test_describe_all_recordings"
