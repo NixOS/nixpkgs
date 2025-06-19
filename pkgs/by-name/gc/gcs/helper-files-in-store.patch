@@ -1,0 +1,103 @@
+diff --git a/nixpkgs/main.go b/nixpkgs/main.go
+new file mode 100644
+index 00000000..952c8617
+--- /dev/null
++++ b/nixpkgs/main.go
+@@ -0,0 +1,10 @@
++package main
++
++import (
++	"github.com/richardwilkes/gcs/v5/ux"
++)
++
++func main() {
++	ux.RegisterKnownFileTypes()
++	ux.InstallHelperFiles()
++}
+diff --git a/ux/platform_linux.go b/ux/platform_linux.go
+index 6bc14321..d6fac60c 100644
+--- a/ux/platform_linux.go
++++ b/ux/platform_linux.go
+@@ -16,7 +16,6 @@ import (
+ 	"fmt"
+ 	"image"
+ 	"image/png"
+-	"log/slog"
+ 	"os"
+ 	"os/exec"
+ 	"path/filepath"
+@@ -27,7 +26,6 @@ import (
+ 	"github.com/richardwilkes/toolbox/cmdline"
+ 	"github.com/richardwilkes/toolbox/errs"
+ 	"github.com/richardwilkes/toolbox/formats/icon"
+-	"github.com/richardwilkes/toolbox/xio/fs/paths"
+ )
+ 
+ // See https://developer.gnome.org/documentation/guidelines/maintainer/integrating.html
+@@ -36,15 +34,12 @@ import (
+ var docIconBytes []byte
+ 
+ func performPlatformLateStartup() {
+-	exePath, err := os.Executable()
+-	if err != nil {
+-		errs.Log(err)
+-		return
+-	}
+-	if filepath.Base(exePath) != cmdline.AppCmdName {
+-		slog.Warn("skipping desktop integration", "name", filepath.Base(exePath), "expected", cmdline.AppCmdName)
+-		return
+-	}
++	// no-op
++}
++
++func InstallHelperFiles() {
++	cmdline.AppIdentifier = "com.trollworks.gcs"
++	exePath, err := "gcs", error(nil)
+ 	if err = installDesktopIcons(); err != nil {
+ 		errs.Log(err)
+ 	}
+@@ -57,7 +52,7 @@ func performPlatformLateStartup() {
+ }
+ 
+ func installDesktopFiles(exePath string) error {
+-	dir := filepath.Join(paths.HomeDir(), ".local", "share", "applications")
++	dir := filepath.Join("@out@", "share", "applications")
+ 	if err := os.MkdirAll(dir, 0o750); err != nil {
+ 		return errs.Wrap(err)
+ 	}
+@@ -79,7 +74,7 @@ Terminal=false
+ }
+ 
+ func installDesktopIcons() error {
+-	hicolorDir := filepath.Join(paths.HomeDir(), ".local", "share", "icons", "hicolor")
++	hicolorDir := filepath.Join("@out@", "share", "icons", "hicolor")
+ 	baseDir := filepath.Join(hicolorDir, "256x256")
+ 	dir := filepath.Join(baseDir, "apps")
+ 	if err := os.MkdirAll(dir, 0o750); err != nil {
+@@ -93,6 +88,9 @@ func installDesktopIcons() error {
+ 	if err := os.MkdirAll(dir, 0o750); err != nil {
+ 		return errs.Wrap(err)
+ 	}
++	// skip generating mime-type png icons from svgs, because it requires a GUI window
++	// there are already some pre-rendered pngs in the src of the package
++	return nil
+ 	docIcon, _, err := image.Decode(bytes.NewBuffer(docIconBytes))
+ 	if err != nil {
+ 		return errs.Wrap(err)
+@@ -143,7 +141,7 @@ func writePNG(dstPath string, img image.Image) (err error) {
+ }
+ 
+ func installMimeInfo() error {
+-	mimeDir := filepath.Join(paths.HomeDir(), ".local", "share", "mime")
++	mimeDir := filepath.Join("@out@", "share", "mime")
+ 	dir := filepath.Join(mimeDir, "packages")
+ 	if err := os.MkdirAll(dir, 0o750); err != nil {
+ 		return errs.Wrap(err)
+@@ -169,6 +167,7 @@ func installMimeInfo() error {
+ 	if err := os.WriteFile(filepath.Join(dir, cmdline.AppIdentifier+".xml"), buffer.Bytes(), 0o640); err != nil {
+ 		return errs.Wrap(err)
+ 	}
++	return nil
+ 	cmdPath, err := exec.LookPath("update-mime-database")
+ 	if err != nil {
+ 		if errors.Is(err, exec.ErrNotFound) {
