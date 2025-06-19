@@ -27,5 +27,13 @@ rec {
 
       machine.fail("test -e /var/lib/systemd/linger/bob")
       machine.fail("systemctl status user-${uidStrings.bob}.slice")
+
+      with subtest("mutable users can linger"):
+          machine.succeed("useradd clare")
+          machine.succeed("test ! -e /var/lib/systemd/linger/clare")
+          machine.succeed("loginctl enable-linger clare")
+          machine.succeed("test -e /var/lib/systemd/linger/clare")
+          machine.systemctl("restart linger-users")
+          machine.succeed("test -e /var/lib/systemd/linger/clare")
     '';
 }

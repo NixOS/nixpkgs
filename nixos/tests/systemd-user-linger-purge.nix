@@ -25,5 +25,13 @@ rec {
           machine.succeed("touch /var/lib/systemd/linger/alice")
           machine.systemctl("restart linger-users")
           machine.succeed("test ! -e /var/lib/systemd/linger/alice")
+
+      with subtest("mutable users can linger"):
+          machine.succeed("useradd alice")
+          machine.succeed("test ! -e /var/lib/systemd/linger/alice")
+          machine.succeed("loginctl enable-linger alice")
+          machine.succeed("test -e /var/lib/systemd/linger/alice")
+          machine.systemctl("restart linger-users")
+          machine.succeed("test -e /var/lib/systemd/linger/alice")
     '';
 }
