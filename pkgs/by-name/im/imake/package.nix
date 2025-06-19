@@ -55,9 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     }\"'";
   };
 
+  preInstall = ''
+    mkdir -p $out/lib/X11/config
+    ln -s ${xorg-cf-files}/lib/X11/config/* $out/lib/X11/config
+  '';
+
   inherit tradcpp xorg-cf-files;
   setupHook = ./setup-hook.sh;
-  x11BuildHook = ./x11-build-hook.sh;
 
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''
