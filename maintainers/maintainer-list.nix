@@ -27115,6 +27115,13 @@
     githubId = 13378502;
     name = "Wulfsta";
   };
+  wulpine = {
+    name = "Wulpey";
+    email = "wulpine@proton.me";
+    matrix = "@wulpine:matrix.org";
+    github = "wulpine";
+    githubId = 59339992;
+  };
   wunderbrick = {
     name = "Andrew Phipps";
     email = "lambdafuzz@tutanota.com";
