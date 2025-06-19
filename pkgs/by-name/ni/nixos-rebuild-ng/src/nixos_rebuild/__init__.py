@@ -330,6 +330,14 @@ def reexec(
                 os.execve(current, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
 
 
+def validate_image_variant(image_variant: str, variants: ImageVariants) -> None:
+    if image_variant not in variants:
+        raise NRError(
+            "please specify one of the following supported image variants via "
+            "--image-variant:\n" + "\n".join(f"- {v}" for v in variants)
+        )
+
+
 def validate_nixos_config(path_to_config: Path) -> None:
     if not (path_to_config / "nixos-version").exists() and not os.environ.get(
         "NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM"
@@ -350,8 +358,7 @@ def validate_nixos_config(path_to_config: Path) -> None:
                 Please open an issue if this is the case.
             """
         ).strip()
-        logger.error(msg)
-        sys.exit(1)
+        raise NRError(msg)
 
 
 def execute(argv: list[str]) -> None:
@@ -418,28 +425,20 @@ def execute(argv: list[str]) -> None:
             no_link = action in (Action.SWITCH, Action.BOOT)
             rollback = bool(args.rollback)
 
-            def validate_image_variant(variants: ImageVariants) -> None:
-                if args.image_variant not in variants:
-                    raise NRError(
-                        "please specify one of the following "
-                        "supported image variants via --image-variant:\n"
-                        + "\n".join(f"- {v}" for v in variants)
-                    )
-
             match action:
                 case Action.BUILD_IMAGE if flake:
                     variants = nix.get_build_image_variants_flake(
                         flake,
                         eval_flags=flake_common_flags,
                     )
-                    validate_image_variant(variants)
+                    validate_image_variant(args.image_variant, variants)
                     attr = f"config.system.build.images.{args.image_variant}"
                 case Action.BUILD_IMAGE:
                     variants = nix.get_build_image_variants(
                         build_attr,
                         instantiate_flags=common_flags,
                     )
-                    validate_image_variant(variants)
+                    validate_image_variant(args.image_variant, variants)
                     attr = f"config.system.build.images.{args.image_variant}"
                 case Action.BUILD_VM:
                     attr = "config.system.build.vm"
