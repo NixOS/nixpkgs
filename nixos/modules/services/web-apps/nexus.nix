@@ -5,64 +5,99 @@
   ...
 }:
 
-with lib;
-
 let
-
   cfg = config.services.nexus;
-
+  pkg = cfg.package;
 in
 {
   options = {
     services.nexus = {
-      enable = mkEnableOption "Sonatype Nexus3 OSS service";
+      enable = lib.mkEnableOption "Sonatype Nexus3 OSS service";
 
-      package = lib.mkPackageOption pkgs "nexus" { };
+      package = lib.mkOption {
+        type = lib.types.package;
+        default =
+          if lib.versionAtLeast config.system.stateVersion "26.11" then pkgs.nexus_3 else pkgs.nexus;
+        defaultText = lib.literalExpression ''
+          if lib.versionAtLeast config.system.stateVersion "26.11"
+          then pkgs.nexus_3
+          else pkgs.nexus;
+        '';
+        description = ''
+          Nexus package to use. Note that upgrading from the nexus to the nexus3
+          package requires manual intervention before the upgrade.
+        '';
+      };
 
-      jdkPackage = lib.mkPackageOption pkgs "openjdk8" { };
+      jdkPackage = lib.mkOption {
+        type = lib.types.package;
+        default = if lib.versionAtLeast pkg.version "3.71.0" then pkgs.jdk21_headless else pkgs.openjdk8;
+        defaultText = lib.literalExpression ''
+          if lib.versionAtLeast pkg "3.71.0"
+          then pkgs.jdk21_headless
+          else pkgs.openjdk8;
+        '';
+        description = ''
+          JDK Package used to run nexus. Note that newer versions of nexus require JDK 21 or higher.
+        '';
+      };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "nexus";
         description = "User which runs Nexus3.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "nexus";
         description = "Group which runs Nexus3.";
       };
 
-      home = mkOption {
-        type = types.str;
+      home = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/sonatype-work";
         description = "Home directory of the Nexus3 instance.";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "Address to listen on.";
       };
 
-      listenPort = mkOption {
-        type = types.port;
+      listenPort = lib.mkOption {
+        type = lib.types.port;
         default = 8081;
         description = "Port to listen on.";
       };
 
-      jvmOpts = mkOption {
-        type = types.lines;
+      initialJavaHeapSize = lib.mkOption {
+        type = lib.types.str;
+        default = "1024M";
+        description = "Initial JVM heap size in MiB to allocate.";
+      };
+
+      maxJavaHeapMemory = lib.mkOption {
+        type = lib.types.str;
+        default = cfg.initialJavaHeapSize;
+        defaultText = lib.literalExpression "cfg.intialJavaHeapSize";
+        description = "Maxium heap size in MiB the JVM is allowed to allocate.";
+      };
+
+      maxDirectMemorySize = lib.mkOption {
+        type = lib.types.str;
+        default = "2G";
+        description = "Sets the maximum total size (in bytes) of the `java.nio` package, direct-buffer allocations. If not set, the flag is ignored and the JVM chooses the size for NIO direct-buffer allocations automatically.";
+      };
+
+      jvmOpts = lib.mkOption {
+        type = lib.types.lines;
         default = ''
-          -Xms1200M
-          -Xmx1200M
-          -XX:MaxDirectMemorySize=2G
-          -XX:+UnlockDiagnosticVMOptions
-          -XX:+UnsyncloadClass
-          -XX:+LogVMOutput
-          -XX:LogFile=${cfg.home}/nexus3/log/jvm.log
+          -Xms${cfg.initialJavaHeapSize}
+          -Xmx${cfg.maxJavaHeapMemory}
+          -XX:MaxDirectMemorySize=${cfg.maxDirectMemorySize}
           -XX:-OmitStackTraceInFastThrow
-          -Djava.net.preferIPv4Stack=true
           -Dkaraf.home=${cfg.package}
           -Dkaraf.base=${cfg.package}
           -Dkaraf.etc=${cfg.package}/etc/karaf
@@ -70,19 +105,13 @@ in
           -Dkaraf.data=${cfg.home}/nexus3
           -Djava.io.tmpdir=${cfg.home}/nexus3/tmp
           -Dkaraf.startLocalConsole=false
-          -Djava.endorsed.dirs=${cfg.package}/lib/endorsed
         '';
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           '''
-            -Xms1200M
-            -Xmx1200M
-            -XX:MaxDirectMemorySize=2G
-            -XX:+UnlockDiagnosticVMOptions
-            -XX:+UnsyncloadClass
-            -XX:+LogVMOutput
-            -XX:LogFile=''${home}/nexus3/log/jvm.log
+            -Xms''${initialJavaHeapSize}
+            -Xmx''${maxJavaHeapMemory}
+            -XX:MaxDirectMemorySize=''${maxDirectMemorySize}
             -XX:-OmitStackTraceInFastThrow
-            -Djava.net.preferIPv4Stack=true
             -Dkaraf.home=''${package}
             -Dkaraf.base=''${package}
             -Dkaraf.etc=''${package}/etc/karaf
@@ -90,7 +119,6 @@ in
             -Dkaraf.data=''${home}/nexus3
             -Djava.io.tmpdir=''${home}/nexus3/tmp
             -Dkaraf.startLocalConsole=false
-            -Djava.endorsed.dirs=''${package}/lib/endorsed
           '''
         '';
 
@@ -103,7 +131,17 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+    warnings = lib.optional (lib.versionOlder pkg.version "3.71.0") ''
+      A legacy Nexus version (from before NixOS 26.11) may be installed.
+
+      To upgrade to a version higher than ${pkg.version}, the database needs to
+      be updated to a v2.x H2 database. See https://help.sonatype.com/en/upgrading-to-nexus-repository-3-71-0-and-beyond.html
+      for a guide for upgrading from both OrientDB or H2 v1.x databases.
+
+      After successful database migration, set `services.nexus.package` to `pkgs.nexus_3`.
+    '';
+
     users.users.${cfg.user} = {
       isSystemUser = true;
       inherit (cfg) group home;
@@ -123,7 +161,7 @@ in
         NEXUS_USER = cfg.user;
         NEXUS_HOME = cfg.home;
 
-        INSTALL4J_JAVA_HOME = cfg.jdkPackage;
+        APP_JAVA_HOME = cfg.jdkPackage;
         VM_OPTS_FILE = pkgs.writeText "nexus.vmoptions" cfg.jvmOpts;
       };
 
@@ -152,5 +190,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ironpinguin ];
+  meta.maintainers = with lib.maintainers; [
+    ironpinguin
+    transcaffeine
+  ];
 }
