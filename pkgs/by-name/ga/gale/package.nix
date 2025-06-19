@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 
   jq,
   moreutils,
@@ -20,13 +21,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "1.7.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-OaUpyG+XdP7AIA55enPf6/viBGBBQVuNi2QxgD5EVNc=";
+    hash = "sha256-o4Jcr+SnRRgN2AAJgn91esFuUaYOmlSkTAbTVwcV2aQ=";
   };
 
   postPatch = ''
@@ -36,13 +37,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   npmDeps = fetchNpmDeps {
     name = "gale-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-yaPUNtlb2vMwK42u+3/rViGx6YzhYxRDJylPu++tbNs=";
+    hash = "sha256-vR66MdNbUzqklivSNqoklQ0CCdH1VfHcgiI+Y7MOkvA=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-v0/A4jUq5t61KB7NLwvsl6wR7N0UUbdVCk7nFZVTOi8=";
+  cargoHash = "sha256-oAEzL4lEqF5lWVsnnDpOgGTtcQDUI0nuur72Gl49EGk=";
 
   nativeBuildInputs = [
     jq
@@ -60,6 +61,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     webkitgtk_4_1
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lightweight Thunderstore client";
