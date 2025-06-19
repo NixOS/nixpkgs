@@ -116,7 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Fix references to gettext introduced by ./git-sh-i18n.patch
       substituteInPlace git-sh-i18n.sh \
           --subst-var-by gettext ${gettext}
-
+    ''
+    + lib.optionalString doInstallCheck ''
       # ensure we are using the correct shell when executing the test scripts
       patchShebangs t/*.sh
     ''
@@ -282,10 +283,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall =
     ''
-      notSupported() {
-        unlink $1 || true
-      }
-
       # Set up the flags array for make in the same way as for the main install
       # phase from stdenv.
       local flagsArray=(
@@ -381,8 +378,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          # replace git-svn by notification script
-          notSupported $out/libexec/git-core/git-svn
+          rm $out/libexec/git-core/git-svn
         ''
     )
 
@@ -395,14 +391,13 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          # replace git-send-email by notification script
-          notSupported $out/libexec/git-core/git-send-email
+          rm $out/libexec/git-core/git-send-email
         ''
     )
 
     + lib.optionalString withManual ''
       # Install man pages
-      make "''${flagsArray[@]}" cmd-list.made install install-html \
+      make "''${flagsArray[@]}" install install-html \
         -C Documentation
     ''
 
@@ -419,9 +414,8 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          # Don't wrap Tcl/Tk, replace them by notification scripts
           for prog in bin/gitk libexec/git-core/git-gui; do
-            notSupported "$out/$prog"
+            rm "$out/$prog"
           done
         ''
     )
