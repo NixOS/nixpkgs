@@ -652,7 +652,7 @@ def switch_to_configuration(
     if r.returncode:
         logger.debug(
             "skipping systemd-run to switch configuration since systemd is "
-            + "not working in target host"
+            "not working in target host"
         )
         cmd = []
 
