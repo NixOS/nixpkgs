@@ -1,33 +1,43 @@
 {
   lib,
-  stdenv,
+  buildGoModule,
   fetchFromGitHub,
-  coreutils,
-  findutils,
-  git,
+  installShellFiles,
 }:
-
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "gibo";
-  version = "1.0.6";
+  version = "3.0.14";
 
   src = fetchFromGitHub {
     owner = "simonwhitaker";
     repo = "gibo";
-    rev = version;
-    sha256 = "07j3sv9ar9l074krajw8nfmsfmdp836irsbd053dbqk2v880gfm6";
+    tag = "v${version}";
+    sha256 = "sha256-6w+qhwOHkfKt0hgKO98L6Si0RNJN+CXOOFzGlvxFjcA=";
   };
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/bash-completion/completions
-    cp gibo $out/bin
-    cp gibo-completion.bash $out/share/bash-completion/completions
+  vendorHash = "sha256-pD+7yvBydg1+BQFP0G8rRYTCO//Wg/6pzY19DLs42Gk=";
 
-    sed -e 's|\<git |${git}/bin/git |g' \
-        -e 's|\<basename |${coreutils}/bin/basename |g' \
-        -i "$out/bin/gibo"
-    sed -e 's|\<find |${findutils}/bin/find |g' \
-        -i "$out/share/bash-completion/completions/gibo-completion.bash"
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/simonwhitaker/gibo/cmd.version=v${version}"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd gibo \
+      --bash <($out/bin/gibo completion bash) \
+      --fish <($out/bin/gibo completion fish) \
+      --zsh <($out/bin/gibo completion zsh)
+  '';
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/gibo version | grep -F "${version}"
+    runHook postInstallCheck
   '';
 
   meta = {
