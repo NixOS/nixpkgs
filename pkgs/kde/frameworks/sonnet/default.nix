@@ -1,6 +1,7 @@
 {
   mkKdeDerivation,
   qtdeclarative,
+  qttools,
   pkg-config,
   aspell,
   hunspell,
@@ -8,7 +9,10 @@
 mkKdeDerivation {
   pname = "sonnet";
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    qttools
+    pkg-config
+  ];
   extraBuildInputs = [
     qtdeclarative
     aspell

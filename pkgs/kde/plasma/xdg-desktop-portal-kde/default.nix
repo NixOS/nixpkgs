@@ -7,11 +7,7 @@
 mkKdeDerivation {
   pname = "xdg-desktop-portal-kde";
 
-  extraNativeBuildInputs = [
-    pkg-config
-    qtwayland
-  ];
-
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtwayland
     cups

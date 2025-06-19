@@ -32,7 +32,6 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     shared-mime-info
-    qtnetworkauth
   ];
 
   extraBuildInputs = [

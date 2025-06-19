@@ -9,11 +9,7 @@
 mkKdeDerivation {
   pname = "kasts";
 
-  extraNativeBuildInputs = [
-    pkg-config
-    qtmultimedia
-  ];
-
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtsvg
     qtmultimedia
