@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "zerocool_ttf";
-  version = "20230425";
+  version = "1.0";
 
   src = fetchurl {
     url = "https://dl.dafont.com/dl/?f=zero_cool";
@@ -16,9 +16,6 @@ stdenvNoCC.mkDerivation {
   };
 
   nativeBuildInputs = [ unzip ];
-  unpackPhase = ''
-    unzip "$src"
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -27,7 +24,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Playful bold display typeface";
     homepage = "https://ggbot.itch.io/zero-cool-font";
     license = licenses.ofl;
