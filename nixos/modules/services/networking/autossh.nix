@@ -19,14 +19,9 @@ in
     services.autossh = {
 
       sessions = lib.mkOption {
-        type = lib.types.listOf (
+        type = lib.types.attrsOf (
           lib.types.submodule {
             options = {
-              name = lib.mkOption {
-                type = lib.types.str;
-                example = "socks-peer";
-                description = "Name of the local AutoSSH session";
-              };
               user = lib.mkOption {
                 type = lib.types.str;
                 example = "bill";
@@ -57,20 +52,19 @@ in
           }
         );
 
-        default = [ ];
+        default = { };
         description = ''
           List of AutoSSH sessions to start as systemd services. Each service is
-          named 'autossh-{session.name}'.
+          named 'autossh-{name}'.
         '';
 
-        example = [
-          {
-            name = "socks-peer";
+        example = {
+          socks-peer = {
             user = "bill";
             monitoringPort = 20000;
             extraArguments = "-N -D4343 billremote@socks.host.net";
-          }
-        ];
+          };
+        };
 
       };
     };
@@ -83,33 +77,29 @@ in
 
     systemd.services =
 
-      lib.foldr (
-        s: acc:
-        acc
-        // {
-          "autossh-${s.name}" =
-            {
-              description = "AutoSSH session (" + s.name + ")";
+      lib.attrsets.mapAttrs' (
+        name: value:
+        lib.attrsets.nameValuePair ("autossh-${name}") ({
+          description = "AutoSSH session (" + name + ")";
 
-              after = [ "network.target" ];
-              wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
 
-              # To be able to start the service with no network connection
-              environment.AUTOSSH_GATETIME = "0";
+          # To be able to start the service with no network connection
+          environment.AUTOSSH_GATETIME = "0";
 
-              # How often AutoSSH checks the network, in seconds
-              environment.AUTOSSH_POLL = "30";
+          # How often AutoSSH checks the network, in seconds
+          environment.AUTOSSH_POLL = "30";
 
-              serviceConfig = {
-                User = "${s.user}";
-                # AutoSSH may exit with 0 code if the SSH session was
-                # gracefully terminated by either local or remote side.
-                Restart = "on-success";
-                ExecStart = "${pkgs.autossh}/bin/autossh -M ${toString s.monitoringPort} ${s.extraArguments}";
-              };
-            };
-        }
-      ) { } cfg.sessions;
+          serviceConfig = {
+            User = "${value.user}";
+            # AutoSSH may exit with 0 code if the SSH session was
+            # gracefully terminated by either local or remote side.
+            Restart = "on-success";
+            ExecStart = "${pkgs.autossh}/bin/autossh -M ${toString value.monitoringPort} ${value.extraArguments}";
+          };
+        })
+      ) cfg.sessions;
 
     environment.systemPackages = [ pkgs.autossh ];
 
