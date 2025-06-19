@@ -28,13 +28,17 @@ in
                 description = "Name of the user the AutoSSH session should run as";
               };
               monitoringPort = lib.mkOption {
-                type = lib.types.int;
+                type = lib.types.oneOf [
+                  lib.types.int
+                  lib.types.str
+                ];
                 default = 0;
                 example = 20000;
                 description = ''
-                  Port to be used by AutoSSH for peer monitoring. Note, that
-                  AutoSSH also uses mport+1. Value of 0 disables the keep-alive
-                  style monitoring
+                  Port to be used by AutoSSH for peer monitoring. Can be an integer,
+                  in which case AutoSSH also uses mport+1. If it is a string, should
+                  be in the format of port:port to use both instead of mport+1.
+                  A value of 0 disables the keep-alive style monitoring.
                 '';
               };
               sshArgs = lib.mkOption {
