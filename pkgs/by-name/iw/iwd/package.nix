@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-NY0WB62ehxKH64ssAF4vkF6YroG5HHH+ii+AFG9EaE4=";
   };
 
