@@ -8,7 +8,7 @@
   isPyPy,
 
   # build-system
-  cython_3_1,
+  cython,
   pkgconfig,
   setuptools,
 
@@ -75,7 +75,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    cython_3_1
+    cython
     pkgconfig
     setuptools
   ];
