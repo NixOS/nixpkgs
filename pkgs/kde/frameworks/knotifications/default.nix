@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  qttools,
   qtdeclarative,
   libcanberra,
 }:
@@ -8,6 +9,7 @@ mkKdeDerivation {
 
   hasPythonBindings = true;
 
+  extraNativeBuildInputs = [ qttools ];
   extraBuildInputs = [
     qtdeclarative
     libcanberra

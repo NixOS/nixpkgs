@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  qttools,
   qtsvg,
   pkg-config,
   eigen,
@@ -11,6 +12,7 @@ mkKdeDerivation {
   pname = "step";
 
   extraNativeBuildInputs = [
+    qttools
     qtsvg
     pkg-config
     shared-mime-info

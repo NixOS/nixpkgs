@@ -6,11 +6,7 @@
 mkKdeDerivation {
   pname = "konqueror";
 
-  extraNativeBuildInputs = [
-    hunspell
-    qtwebengine
-  ];
-
+  extraNativeBuildInputs = [ hunspell ];
   extraBuildInputs = [ qtwebengine ];
 
   extraCmakeFlags = [
