@@ -68,7 +68,7 @@ let
       nativeCheckInputs = with pypkgs; [
         pytestCheckHook
         pytest-twisted
-        pytest-cov
+        pytest-cov-stub
         mock
         mccabe
         pylint
