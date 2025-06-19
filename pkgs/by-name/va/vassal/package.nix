@@ -6,6 +6,7 @@
   jre,
   makeWrapper,
   wrapGAppsHook3,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +48,13 @@ stdenv.mkDerivation rec {
     "man"
     "info"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/vassal";
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Free, open-source boardgame engine";
