@@ -9,10 +9,7 @@
 mkKdeDerivation {
   pname = "kscreen";
 
-  extraNativeBuildInputs = [
-    pkg-config
-    qtsensors
-  ];
+  extraNativeBuildInputs = [ pkg-config ];
 
   extraBuildInputs = [
     qtsensors

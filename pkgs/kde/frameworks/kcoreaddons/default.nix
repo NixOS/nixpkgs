@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  qttools,
   shared-mime-info,
   qtdeclarative,
 }:
@@ -9,6 +10,7 @@ mkKdeDerivation {
   hasPythonBindings = true;
 
   extraNativeBuildInputs = [
+    qttools
     shared-mime-info
   ];
   extraBuildInputs = [ qtdeclarative ];

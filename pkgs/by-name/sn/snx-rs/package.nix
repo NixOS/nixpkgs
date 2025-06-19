@@ -2,19 +2,11 @@
   fetchFromGitHub,
   glib,
   gtk4,
-  iproute2,
   kdePackages,
   lib,
-  libappindicator,
-  libappindicator-gtk2,
-  libappindicator-gtk3,
-  libayatana-appindicator,
-  libsoup_3,
   openssl,
   pkg-config,
-  qt6,
   rustPlatform,
-  webkitgtk_4_1,
   wrapGAppsHook4,
   graphene,
   nix-update-script,
@@ -34,9 +26,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [
-    iproute2
     pkg-config
-    qt6.wrapQtAppsHook
     wrapGAppsHook4
   ];
 
@@ -44,13 +34,7 @@ rustPlatform.buildRustPackage rec {
     glib
     gtk4
     kdePackages.kstatusnotifieritem
-    libappindicator
-    libappindicator-gtk2
-    libappindicator-gtk3
-    libayatana-appindicator
-    libsoup_3
     openssl
-    webkitgtk_4_1
     graphene
   ];
 
@@ -69,12 +53,6 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/snx-rs";
   versionCheckProgramArg = "--version";
-
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
-  dontWrapGApps = true;
 
   meta = {
     description = "Open source Linux client for Checkpoint VPN tunnels";

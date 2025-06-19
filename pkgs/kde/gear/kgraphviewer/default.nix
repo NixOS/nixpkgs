@@ -9,11 +9,7 @@
 mkKdeDerivation {
   pname = "kgraphviewer";
 
-  extraNativeBuildInputs = [
-    pkg-config
-    qt5compat
-  ];
-
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qt5compat
     qtsvg

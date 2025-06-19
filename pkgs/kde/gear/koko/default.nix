@@ -37,11 +37,7 @@ mkKdeDerivation {
     ./optional-runtime-dependencies.patch
   ];
 
-  extraNativeBuildInputs = [
-    pkg-config
-    qtpositioning
-  ];
-
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtmultimedia
     qtpositioning
