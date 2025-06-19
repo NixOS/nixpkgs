@@ -6,6 +6,7 @@
 }:
 let
   inherit (lib)
+    literalExpression
     mkOption
     types
     ;
@@ -355,23 +356,43 @@ in
       enableSmtp = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Whether to enable smtp in master.cf.";
+        description = ''
+          Whether to enable the `smtp` service configured in the master.cf.
+
+          This service listens for plain text SMTP connections on port 25
+          and supports explicit TLS via StartTLS.
+
+          It is the primary port used by SMTP servers to exchange mail.
+        '';
       };
 
       enableSubmission = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Whether to enable smtp submission.";
+        description = "
+          Whether to enable the `submission` service configured in master.cf.
+
+          This service listens for plain text SMTP connections on port 587
+          and supports explicit TLS via StartTLS.
+
+          It is a way for clients to login and submit mails after an inband
+          connection upgrade using StartTLS.
+
+          [RFC8314](https://www.rfc-editor.org/rfc/rfc8314) discourages the use
+          of implicit TLS for mail submissionn.
+        ";
       };
 
       enableSubmissions = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = ''
-          Whether to enable smtp submission via smtps.
+          Whether to enable the `submissions` service configured in master.cf.
 
-          According to RFC 8314 this should be preferred
-          over STARTTLS for submission of messages by end user clients.
+          This service listen for implicit TLS connections on port 465.
+
+          Per [RFC8314](https://www.rfc-editor.org/rfc/rfc8314) implicit TLS
+          is recommended for mail submission.
         '';
       };
 
@@ -443,95 +464,6 @@ in
         '';
       };
 
-      networks = lib.mkOption {
-        type = lib.types.nullOr (lib.types.listOf lib.types.str);
-        default = null;
-        example = [ "192.168.0.1/24" ];
-        description = ''
-          Net masks for trusted - allowed to relay mail to third parties -
-          hosts. Leave empty to use mynetworks_style configuration or use
-          default (localhost-only).
-        '';
-      };
-
-      networksStyle = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = ''
-          Name of standard way of trusted network specification to use,
-          leave blank if you specify it explicitly or if you want to use
-          default (localhost-only).
-        '';
-      };
-
-      hostname = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = ''
-          Hostname to use. Leave blank to use just the hostname of machine.
-          It should be FQDN.
-        '';
-      };
-
-      domain = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = ''
-          Domain to use. Leave blank to use hostname minus first component.
-        '';
-      };
-
-      origin = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = ''
-          Origin to use in outgoing e-mail. Leave blank to use hostname.
-        '';
-      };
-
-      destination = lib.mkOption {
-        type = lib.types.nullOr (lib.types.listOf lib.types.str);
-        default = null;
-        example = [ "localhost" ];
-        description = ''
-          Full (!) list of domains we deliver locally. Leave blank for
-          acceptable Postfix default.
-        '';
-      };
-
-      relayDomains = lib.mkOption {
-        type = lib.types.nullOr (lib.types.listOf lib.types.str);
-        default = null;
-        example = [ "localdomain" ];
-        description = ''
-          List of domains we agree to relay to. Default is empty.
-        '';
-      };
-
-      relayHost = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = ''
-          Mail relay for outbound mail.
-        '';
-      };
-
-      relayPort = lib.mkOption {
-        type = lib.types.int;
-        default = 25;
-        description = ''
-          SMTP port for relay mail relay.
-        '';
-      };
-
-      lookupMX = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Whether relay specified is just domain whose MX must be used.
-        '';
-      };
-
       postmasterAlias = lib.mkOption {
         type = lib.types.str;
         default = "root";
@@ -584,6 +516,159 @@ in
               ])
             );
           options = {
+            message_size_limit = mkOption {
+              type = with types; nullOr int;
+              default = null;
+              example = "52428800"; # 50 MiB
+              description = ''
+                Maximum size of an email message in bytes.
+
+                <https://www.postfix.org/postconf.5.html#message_size_limit>
+              '';
+            };
+
+            mydestination = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              description = ''
+                List of domains intended for local delivery using /etc/passwd and /etc/aliases.
+
+                ::: {.warning}
+                Do not include [virtual](https://www.postfix.org/VIRTUAL_README.html) domains in this list.
+                :::
+
+                Leave unset for Postfix to populate this with reasonable defaults.
+
+                <https://www.postfix.org/postconf.5.html#mydestination>
+              '';
+            };
+
+            myhostname = mkOption {
+              type = types.str;
+              default = config.networking.fqdn;
+              defaultText = literalExpression ''
+                config.networking.fqdn
+              '';
+              example = "mail.example.com";
+              description = ''
+                The fully-qualified domain name of the system.
+
+                <https://www.postfix.org/postconf.5.html#myhostname>
+              '';
+            };
+
+            mynetworks = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              example = [
+                "127.0.0.0/8"
+                "::1"
+              ];
+              description = ''
+                List of trusted remote SMTP clients, that are allowed to relay mail.
+
+                Leave unset to let Postfix populate this list based on the {option}`mynetworks_style` setting.
+
+                <https://www.postfix.org/postconf.5.html#mynetworks>
+              '';
+            };
+
+            mynetworks_style = mkOption {
+              type =
+                with types;
+                nullOr (enum [
+                  "host"
+                  "subnet"
+                  "class"
+                ]);
+              default = null;
+              description = ''
+                The method used for generating the default value for {option}`mynetworks`, if that option is unset.
+
+                <https://www.postfix.org/postconf.5.html#mynetworks_style>
+              '';
+            };
+
+            recipient_delimiter = lib.mkOption {
+              type = with types; nullOr str;
+              default = null;
+              example = "+";
+              description = ''
+                Set of characters used as the delimiters for address extensions.
+
+                This allows creating different forwarding rules per extension.
+
+                <https://www.postfix.org/postconf.5.html#recipient_delimiter>
+              '';
+            };
+
+            relayhost = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              example = [ "[relay.example.com]:587" ];
+              description = ''
+                List of hosts to use for relaying outbound mail.
+
+                ::: {.note}
+                Putting the hostname in angled brackets, e.g. `[relay.example.com]`, turns off MX and SRV lookups for the hostname.
+                :::
+
+                <https://www.postfix.org/postconf.5.html#relayhost>
+              '';
+            };
+
+            relay_domains = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              example = [ "lists.example.com" ];
+              description = ''
+                List of domains delivered via the relay transport.
+
+                <https://www.postfix.org/postconf.5.html#relay_domains>
+              '';
+            };
+
+            smtp_tls_CAfile = mkOption {
+              type = types.path;
+              default = config.security.pki.caBundle;
+              defaultText = lib.literalExpression ''
+                config.security.pki.caBundle
+              '';
+              example = lib.literalExpression ''
+                ''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
+              '';
+              description = ''
+                file containing CA certificates of root CAs trusted to sign either remote SMTP server certificates or intermediate CA certificates.
+
+                Defaults to the system CA bundle that is managed through the `security.pki` options.
+
+                <https://www.postfix.org/postconf.5.html#smtp_tls_CAfile>
+              '';
+            };
+
+            smtp_tls_security_level = mkOption {
+              type = types.enum [
+                "none"
+                "may"
+                "encrypt"
+                "dane"
+                "dane-only"
+                "fingerprint"
+                "verify"
+                "secure"
+              ];
+              default = "may";
+              description = ''
+                The client TLS security level.
+
+                ::: {.tip}
+                Use `dane` with a local DNSSEC validating DNS resolver enabled.
+                :::
+
+                <https://www.postfix.org/postconf.5.html#smtp_tls_security_level>
+              '';
+            };
+
             smtpd_tls_chain_files = mkOption {
               type = with types; listOf path;
               default = [ ];
@@ -626,6 +711,10 @@ in
           The main.cf configuration file as key value set.
 
           Null values will not be rendered.
+
+          ::: {.tip}
+          Check `postconf -d` for the default values of all settings.
+          :::
         '';
         example = {
           mail_owner = "postfix";
@@ -638,25 +727,6 @@ in
         default = "";
         description = ''
           Extra lines to be added verbatim to the main.cf configuration file.
-        '';
-      };
-
-      tlsTrustedAuthorities = lib.mkOption {
-        type = lib.types.str;
-        default = config.security.pki.caBundle;
-        defaultText = lib.literalExpression "config.security.pki.caBundle";
-        example = lib.literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
-        description = ''
-          File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This sets [smtp_tls_CAfile](https://www.postfix.org/postconf.5.html#smtp_tls_CAfile). Defaults to system trusted certificates (see `security.pki.*` options).
-        '';
-      };
-
-      recipientDelimiter = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        example = "+";
-        description = ''
-          Delimiter for address extension: so mail to user+test can be handled by ~user/.forward+test
         '';
       };
 
@@ -973,24 +1043,6 @@ in
             mail_spool_directory = "/var/spool/mail/";
             setgid_group = cfg.setgidGroup;
           })
-          // lib.optionalAttrs (cfg.relayHost != "") {
-            relayhost =
-              if cfg.lookupMX then
-                "${cfg.relayHost}:${toString cfg.relayPort}"
-              else
-                "[${cfg.relayHost}]:${toString cfg.relayPort}";
-          }
-          // lib.optionalAttrs (!config.networking.enableIPv6) { inet_protocols = lib.mkDefault "ipv4"; }
-          // lib.optionalAttrs (cfg.networks != null) { mynetworks = cfg.networks; }
-          // lib.optionalAttrs (cfg.networksStyle != "") { mynetworks_style = cfg.networksStyle; }
-          // lib.optionalAttrs (cfg.hostname != "") { myhostname = cfg.hostname; }
-          // lib.optionalAttrs (cfg.domain != "") { mydomain = cfg.domain; }
-          // lib.optionalAttrs (cfg.origin != "") { myorigin = cfg.origin; }
-          // lib.optionalAttrs (cfg.destination != null) { mydestination = cfg.destination; }
-          // lib.optionalAttrs (cfg.relayDomains != null) { relay_domains = cfg.relayDomains; }
-          // lib.optionalAttrs (cfg.recipientDelimiter != "") {
-            recipient_delimiter = cfg.recipientDelimiter;
-          }
           // lib.optionalAttrs haveAliases { alias_maps = [ "${cfg.aliasMapType}:/etc/postfix/aliases" ]; }
           // lib.optionalAttrs haveTransport { transport_maps = [ "hash:/etc/postfix/transport" ]; }
           // lib.optionalAttrs haveVirtual {
@@ -1010,10 +1062,6 @@ in
           }
           // lib.optionalAttrs cfg.enableHeaderChecks {
             header_checks = [ "regexp:/etc/postfix/header_checks" ];
-          }
-          // lib.optionalAttrs (cfg.tlsTrustedAuthorities != "") {
-            smtp_tls_CAfile = cfg.tlsTrustedAuthorities;
-            smtp_tls_security_level = lib.mkDefault "may";
           };
 
         services.postfix.masterConfig =
@@ -1183,6 +1231,51 @@ in
     )
     (lib.mkRemovedOptionModule [ "services" "postfix" "sslKey" ]
       "services.postfix.sslKey was removed. Use services.postfix.config.smtpd_tls_chain_files for server private key, or services.postfix.config.smtp_tls_chain_files for the client private key."
+    )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "lookupMX" ]
+      "services.postfix.lookupMX was removed. Use services.postfix.config.relayhost and put the hostname in angled brackets, if you need to turn off MX and SRV lookups."
+    )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "relayHost" ]
+      "services.postfix.relayHost was removed in favor of services.postfix.config.relayhost, which now takes a list of host/port."
+    )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "relayPort" ]
+      "services.postfix.relayHost was removed in favor of services.postfix.config.relayhost, which now takes a list of host/port."
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "networks" ]
+      [ "services" "postfix" "config" "mynetworks" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "networkStyle" ]
+      [ "services" "postfix" "config" "mynetworks_style" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "hostname" ]
+      [ "services" "postfix" "config" "myhostname" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "domain" ]
+      [ "services" "postfix" "config" "mydomain" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "origin" ]
+      [ "services" "postfix" "config" "myorigin" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "destination" ]
+      [ "services" "postfix" "config" "mydestination" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "relayDomains" ]
+      [ "services" "postfix" "config" "relay_domains" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "recipientDelimiter" ]
+      [ "services" "postfix" "config" "recipient_delimiter" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "tlsTrustedAuthoriies" ]
+      [ "services" "postfix" "config" "smtp_tls_CAfile" ]
     )
 
     (lib.mkChangedOptionModule
