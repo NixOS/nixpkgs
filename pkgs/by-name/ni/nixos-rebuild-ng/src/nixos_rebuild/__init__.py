@@ -10,7 +10,7 @@ from typing import Final, assert_never
 
 from . import nix, tmpdir
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
-from .models import Action, BuildAttr, Flake, ImageVariants, NRError, Profile
+from .models import Action, BuildAttr, Flake, ImageVariants, NixOSRebuildError, Profile
 from .process import Remote, cleanup_ssh
 from .utils import Args, LogFormatter, tabulate
 
@@ -332,7 +332,7 @@ def reexec(
 
 def validate_image_variant(image_variant: str, variants: ImageVariants) -> None:
     if image_variant not in variants:
-        raise NRError(
+        raise NixOSRebuildError(
             "please specify one of the following supported image variants via "
             "--image-variant:\n" + "\n".join(f"- {v}" for v in variants)
         )
@@ -358,7 +358,7 @@ def validate_nixos_config(path_to_config: Path) -> None:
                 Please open an issue if this is the case.
             """
         ).strip()
-        raise NRError(msg)
+        raise NixOSRebuildError(msg)
 
 
 def execute(argv: list[str]) -> None:
@@ -459,9 +459,11 @@ def execute(argv: list[str]) -> None:
                     if maybe_path_to_config:  # kinda silly but this makes mypy happy
                         path_to_config = maybe_path_to_config
                     else:
-                        raise NRError("could not find previous generation")
+                        raise NixOSRebuildError("could not find previous generation")
                 case (_, True, _, _):
-                    raise NRError(f"--rollback is incompatible with '{action}'")
+                    raise NixOSRebuildError(
+                        f"--rollback is incompatible with '{action}'"
+                    )
                 case (_, False, Remote(_), Flake(_)):
                     path_to_config = nix.build_remote_flake(
                         attr,
