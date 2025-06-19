@@ -29,6 +29,7 @@ body:
     attributes:
       label: "Nixpkgs Revision"
       description: "In which commit of Nixpkgs is this package displaying unreproducibility?"
+      placeholder: "e.g., 1234567890abcdef or nixos-unstable commit hash"
   - type: "textarea"
     id: "introduction"
     attributes:
@@ -108,6 +109,7 @@ body:
         Please copy and paste the relevant `diffoscope` log output, gathered from the steps above.
         This will be automatically formatted into a monospaced text block, so no need for backticks.
       render: "console"
+      placeholder: "Paste diffoscope output here"
   - type: "textarea"
     id: "additional-context"
     attributes:
@@ -115,11 +117,12 @@ body:
       description: "Add any other context about the problem here."
     validations:
       required: false
+  - type: "textarea"
     id: "maintainers"
     attributes:
       label: "Notify maintainers"
       description: |
-        Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
+        Please mention the people who are in the **Maintainers** list of the offending package. This is done by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
       value: |2
 
 
