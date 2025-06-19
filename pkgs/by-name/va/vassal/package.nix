@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ tvestelind ];
-    platforms = platforms.unix;
+    platforms = with lib.platforms; unix ++ windows;
     mainProgram = "vassal";
   };
 }
