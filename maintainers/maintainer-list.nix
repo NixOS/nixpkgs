@@ -25218,6 +25218,13 @@
     github = "tiferrei";
     githubId = 8849915;
   };
+  tigergorilla2 = {
+    name = "TigerGorilla2";
+    email = "tigergorilla2@proton.me";
+    github = "TigerGorilla2";
+    githubId = 108592791;
+    keys = [ { fingerprint = "F296 E613 4408 A425 0DAF  0263 200D 7FB9 535B 5658"; } ];
+  };
   tilcreator = {
     name = "TilCreator";
     email = "contact.nixos@tc-j.de";
