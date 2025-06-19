@@ -83,6 +83,8 @@ buildPythonPackage rec {
     # See https://github.com/NixOS/nixpkgs/issues/156957
     "dill"
 
+    "numpy"
+
     "protobuf"
 
     # As of apache-beam v2.45.0, the requirement is pyarrow<10.0.0,>=0.15.1, but
