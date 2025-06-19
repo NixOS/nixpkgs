@@ -74,6 +74,8 @@ lib.warnIf (withDocs != null)
     patchFlags = [ "-p0" ];
 
     patches = upstreamPatches ++ [
+      # enable PGRP_PIPE when building on recent kernels as well
+      # https://github.com/NixOS/nixpkgs/pull/77196
       ./pgrp-pipe-5.patch
       # Apply parallel build fix pending upstream inclusion:
       #   https://savannah.gnu.org/patch/index.php?10373
