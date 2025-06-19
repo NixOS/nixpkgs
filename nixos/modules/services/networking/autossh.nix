@@ -88,9 +88,6 @@ in
         acc
         // {
           "autossh-${s.name}" =
-            let
-              mport = if s ? monitoringPort then s.monitoringPort else 0;
-            in
             {
               description = "AutoSSH session (" + s.name + ")";
 
@@ -108,7 +105,7 @@ in
                 # AutoSSH may exit with 0 code if the SSH session was
                 # gracefully terminated by either local or remote side.
                 Restart = "on-success";
-                ExecStart = "${pkgs.autossh}/bin/autossh -M ${toString mport} ${s.extraArguments}";
+                ExecStart = "${pkgs.autossh}/bin/autossh -M ${toString s.monitoringPort} ${s.extraArguments}";
               };
             };
         }
