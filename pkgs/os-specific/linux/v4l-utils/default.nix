@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   version = "1.24.1";
 
   src = fetchurl {
-    url = "https://linuxtv.org/downloads/${pname}/${pname}-${version}.tar.bz2";
+    url = "https://linuxtv.org/downloads/v4l-utils/v4l-utils-${version}.tar.bz2";
     hash = "sha256-y7f+imMH9c5TOgXN7XC7k8O6BjlaubbQB+tTt12AX1s=";
   };
 
