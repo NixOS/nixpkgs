@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "qir-runner";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "qir-alliance";
     repo = "qir-runner";
     tag = "v${version}";
-    hash = "sha256-ExCIjn5XqDIIYhvEesHRtNZuc4mRr+b9EYE5LNKqNTc=";
+    hash = "sha256-KskBPvRlTw4ITuoAXyY+CyFfgTW0RtbLWDa97ftFOTA=";
   };
 
   nativeBuildInputs = [ llvmPackages_19.llvm ];
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-XzxkSzbjJdJaUmXK2nwd9naIDCsfXiLLlTyf8AFSvzA=";
+  cargoHash = "sha256-3Ww5PEvk1CqiJTqEUdinmcAfcHLQjctrlM4F3BPBWQw=";
 
   meta = {
     description = "QIR bytecode runner to assist with QIR development and validation";
