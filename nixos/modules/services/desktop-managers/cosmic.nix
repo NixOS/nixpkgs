@@ -163,6 +163,7 @@ in
     services.avahi.enable = lib.mkDefault true;
     services.gnome.gnome-keyring.enable = lib.mkDefault true;
     services.gvfs.enable = lib.mkDefault true;
+    services.orca.enable = lib.mkDefault (notExcluded pkgs.orca);
     services.power-profiles-daemon.enable = lib.mkDefault (
       !config.hardware.system76.power-daemon.enable
     );
