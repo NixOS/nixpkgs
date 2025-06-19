@@ -37,15 +37,21 @@ in
                   style monitoring
                 '';
               };
-              extraArguments = lib.mkOption {
-                type = lib.types.separatedString " ";
-                example = "-N -D4343 bill@socks.example.net";
+              sshArgs = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                example = [
+                  "-N"
+                  "-D4343"
+                ];
                 description = ''
-                  Arguments to be passed to AutoSSH and retransmitted to SSH
-                  process. Some meaningful options include -N (don't run remote
-                  command), -D (open SOCKS proxy on local port), -R (forward
-                  remote port), -L (forward local port), -v (Enable debug). Check
-                  ssh manual for the complete list.
+                  Arguments to be passed to the SSH session, see `man ssh` for possible options.
+                '';
+              };
+              destination = lib.mkOption {
+                type = lib.types.str;
+                example = "bill@socks.example.net";
+                description = ''
+                  The user and host you want AutoSSH to connect to.
                 '';
               };
             };
@@ -62,7 +68,11 @@ in
           socks-peer = {
             user = "bill";
             monitoringPort = 20000;
-            extraArguments = "-N -D4343 billremote@socks.host.net";
+            sshArgs = [
+              "-N"
+              "-D4343"
+            ];
+            destination = "bill@socks.example.net";
           };
         };
 
@@ -96,7 +106,7 @@ in
             # AutoSSH may exit with 0 code if the SSH session was
             # gracefully terminated by either local or remote side.
             Restart = "on-success";
-            ExecStart = "${pkgs.autossh}/bin/autossh -M ${toString value.monitoringPort} ${value.extraArguments}";
+            ExecStart = "${pkgs.autossh}/bin/autossh -M ${toString value.monitoringPort} ${lib.strings.concatStringsSep " " value.sshArgs} ${value.destination}";
           };
         })
       ) cfg.sessions;
