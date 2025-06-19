@@ -10,6 +10,9 @@ on:
   pull_request_target:
     types: [ready_for_review]
   workflow_call:
+    secrets:
+      OWNER_APP_PRIVATE_KEY:
+        required: true
 
 concurrency:
   group: reviewers-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
@@ -23,7 +26,6 @@ defaults:
 
 jobs:
   request:
-    name: Request
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Check out the PR at the base commit
@@ -63,7 +65,7 @@ jobs:
             const run_id = (await github.rest.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'eval.yml',
+              workflow_id: 'pr.yml',
               event: context.eventName,
               head_sha: context.payload.pull_request.head.sha
             })).data.workflow_runs[0].id

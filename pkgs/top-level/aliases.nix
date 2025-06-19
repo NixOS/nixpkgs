@@ -917,6 +917,7 @@ mapAliases {
   javacard-devkit = throw "javacard-devkit was dropped due to having a dependency on the Oracle JDK, as well as being several years out-of-date."; # Added 2024-11-01
   jd-cli = throw "jd-cli has been removed due to upstream being unmaintained since 2019. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI)."; # Added 2024-10-30
   jd-gui = throw "jd-gui has been removed due to a dependency on the dead JCenter Bintray. Other Java decompilers in Nixpkgs include bytecode-viewer (GUI), cfr (CLI), and procyon (CLI)."; # Added 2024-10-30
+  jikespg = throw "'jikespg' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
   jsawk = throw "'jsawk' has been removed because it is unmaintained upstream"; # Added 2028-08-07
 
   # Julia
@@ -1007,6 +1008,7 @@ mapAliases {
   liboop = throw "liboop has been removed as it is unmaintained upstream."; # Added 2024-08-14
   libosmo-sccp = libosmo-sigtran; # Added 2024-12-20
   libpqxx_6 = throw "libpqxx_6 has been removed, please use libpqxx"; # Added 2024-10-02
+  libpromhttp = throw "'libpromhttp' has been removed as it is broken and unmaintained upstream."; # Added 2025-06-16
   libpulseaudio-vanilla = libpulseaudio; # Added 2022-04-20
   libqt5pas = libsForQt5.libqtpas; # Added 2024-12-25
   libquotient = libsForQt5.libquotient; # Added 2023-11-11
