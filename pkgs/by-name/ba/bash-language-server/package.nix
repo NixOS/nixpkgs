@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   pnpm_10,
   nodejs,
@@ -9,14 +9,14 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bash-language-server";
   version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "bash-lsp";
     repo = "bash-language-server";
-    rev = "server-${finalAttrs.version}";
+    tag = "server-${finalAttrs.version}";
     hash = "sha256-Pe32lQSlyWcyUbqwhfoulwNwhrnWdRcKFIl3Jj0Skac=";
   };
 
@@ -75,12 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Language server for Bash";
     homepage = "https://github.com/bash-lsp/bash-language-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      doronbehar
+    ];
     mainProgram = "bash-language-server";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })
