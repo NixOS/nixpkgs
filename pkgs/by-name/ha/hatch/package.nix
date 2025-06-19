@@ -129,6 +129,10 @@ python3Packages.buildPythonApplication rec {
       # Relies on FHS
       # Could not read ELF interpreter from any of the following paths: /bin/sh, /usr/bin/env, /bin/dash, /bin/ls
       "test_new_selected_python"
+
+      # https://github.com/pypa/hatch/issues/2006
+      "test_project_location_basic_set_first_project"
+      "test_project_location_complex_set_first_project"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # This test assumes it is running on macOS with a system shell on the PATH.
