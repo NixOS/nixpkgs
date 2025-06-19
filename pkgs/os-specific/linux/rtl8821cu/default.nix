@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Realtek rtl8821cu driver";
-    homepage = "https://github.com/morrownr/8821cu";
+    homepage = "https://github.com/morrownr/8821cu-20210916";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.contrun ];
