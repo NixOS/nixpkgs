@@ -35,10 +35,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/python-control/python-control/releases/tag/${src.tag}";
     description = "Python Control Systems Library";
     homepage = "https://github.com/python-control/python-control";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ Peter3579 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ Peter3579 ];
   };
 }
