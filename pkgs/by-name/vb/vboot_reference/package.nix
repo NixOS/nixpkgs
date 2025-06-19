@@ -6,18 +6,40 @@
   libuuid,
   openssl,
   libyaml,
+  nss,
+  flashrom,
   xz,
 }:
+let
+  version = "138.16295";
+  versionFormatted = lib.concatStringsSep "-" (lib.versions.splitVersion version);
 
-stdenv.mkDerivation {
-  version = "111.15329";
+  rev = "refs/heads/release-R${versionFormatted}.B";
 
+  flashrom_chromeos = flashrom.overrideAttrs (_prev: {
+    src = fetchFromGitiles {
+      url = "https://chromium.googlesource.com/chromiumos/third_party/flashrom";
+      rev = rev + "-master";
+      hash = "sha256-9A5Ewrjxv5XYZeobmnznTmf+h0yqLFcZNBLgZqnSeRA=";
+    };
+
+    mesonFlags = _prev.mesonFlags ++ [
+      # require git
+      (lib.mesonEnable "documentation" false)
+    ];
+
+    # require specific hardware
+    doCheck = false;
+  });
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "vboot_reference";
+  inherit version;
 
   src = fetchFromGitiles {
+    inherit rev;
     url = "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
-    rev = "1a1cb5c9a38030a5868e2aaad295c68432c680fd"; # refs/heads/release-R111-15329.B
-    sha256 = "sha256-56/hqqFiKHw0/ah0D20U1ueIU2iq8I4Wn5DiEWxB9qA=";
+    hash = "sha256-QTc1uxObR7hzJJuUd9AktnRJn7QIMcAsKgu4XbrhJLU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -26,13 +48,15 @@ stdenv.mkDerivation {
     libyaml
     openssl
     xz
+    nss
+    flashrom_chromeos
   ];
 
   enableParallelBuilding = true;
 
   env.NIX_CFLAGS_COMPILE = toString [
     # This apparently doesn't work as expected:
-    #  - https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/refs/heads/release-R111-15329.B/Makefile#439
+    #  - https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/refs/heads/release-R138-16295.B/Makefile#504
     # Let's apply the same flag manually.
     "-Wno-error=deprecated-declarations"
   ];
@@ -52,9 +76,9 @@ stdenv.mkDerivation {
   makeFlags = [
     "DESTDIR=$(out)"
     "HOST_ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
-    "USE_FLASHROM=0"
+    "USE_FLASHROM=1"
     # Upstream has weird opinions about DESTDIR
-    # https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/refs/heads/release-R111-15329.B/Makefile#51
+    # https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/refs/heads/release-R138-16295.B/Makefile#52
     "UB_DIR=${placeholder "out"}/bin"
     "UL_DIR=${placeholder "out"}/lib"
     "UI_DIR=${placeholder "out"}/include/vboot"
@@ -66,10 +90,10 @@ stdenv.mkDerivation {
     cp -r tests/devkeys* $out/share/vboot/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Chrome OS partitioning and kernel signing tools";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ moraxyc ];
   };
-}
+})
