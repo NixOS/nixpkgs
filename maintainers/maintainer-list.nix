@@ -6961,6 +6961,12 @@
     githubId = 277927;
     name = "Dylan Taylor";
   };
+  dynamicgoose = {
+    email = "gezaahs@gmail.com";
+    github = "dynamicgoose";
+    githubId = 75172915;
+    name = "Géza Ahsendorf";
+  };
   dysinger = {
     email = "tim@dysinger.net";
     github = "dysinger";
