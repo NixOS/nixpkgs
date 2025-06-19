@@ -6228,7 +6228,11 @@ self: super: with self; {
 
   guessit = callPackage ../development/python-modules/guessit { };
 
-  guestfs = callPackage ../development/python-modules/guestfs { qemu = pkgs.qemu; };
+  guestfs = toPythonModule (
+    pkgs.libguestfs.override {
+      python3 = python;
+    }
+  );
 
   guidance = callPackage ../development/python-modules/guidance { };
 
