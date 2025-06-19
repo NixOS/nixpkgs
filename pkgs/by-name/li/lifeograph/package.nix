@@ -40,11 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     libshumate
   ];
 
-  postInstall = ''
-    substituteInPlace $out/share/applications/net.sourceforge.Lifeograph.desktop \
-      --replace-fail "Exec=" "Exec=$out/bin/"
-  '';
-
   meta = {
     homepage = "https://lifeograph.sourceforge.net/doku.php?id=start";
     description = "Off-line and private journal and note taking application";
