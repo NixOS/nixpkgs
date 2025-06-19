@@ -100,7 +100,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--attr",
         "-A",
         help="Enable and build the NixOS system from nix file and use the "
-        + "specified attribute path from file specified by the --file option",
+        "specified attribute path from file specified by the --file option",
     )
     main_parser.add_argument(
         "--flake",
@@ -118,7 +118,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--install-bootloader",
         action="store_true",
         help="Causes the boot loader to be (re)installed on the device specified "
-        + "by the relevant configuration options",
+        "by the relevant configuration options",
     )
     main_parser.add_argument(
         "--install-grub",
@@ -143,7 +143,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--upgrade",
         action="store_true",
         help="Update the root user's channel named 'nixos' before rebuilding "
-        + "the system and channels which have a file named '.update-on-nixos-rebuild'",
+        "the system and channels which have a file named '.update-on-nixos-rebuild'",
     )
     main_parser.add_argument(
         "--upgrade-all",
@@ -187,7 +187,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     main_parser.add_argument(
         "--image-variant",
         help="Selects an image variant to build from the "
-        + "config.system.build.images attribute of the given configuration",
+        "config.system.build.images attribute of the given configuration",
     )
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
@@ -322,7 +322,7 @@ def reexec(
                 # - Exec format error (e.g.: another OS/CPU arch)
                 logger.warning(
                     "could not re-exec in a newer version of nixos-rebuild, "
-                    + "using current version",
+                    "using current version",
                     exc_info=logger.isEnabledFor(logging.DEBUG),
                 )
                 # We already run clean-up, let's re-exec in the current version
@@ -422,7 +422,7 @@ def execute(argv: list[str]) -> None:
                 if args.image_variant not in variants:
                     raise NRError(
                         "please specify one of the following "
-                        + "supported image variants via --image-variant:\n"
+                        "supported image variants via --image-variant:\n"
                         + "\n".join(f"- {v}" for v in variants)
                     )
 
