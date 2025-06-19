@@ -78,9 +78,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Language server for Bash";
     homepage = "https://github.com/bash-lsp/bash-language-server";
+    changelog = "https://github.com/bash-lsp/bash-language-server/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       doronbehar
+      gepbird
     ];
     mainProgram = "bash-language-server";
     platforms = lib.platforms.all;
