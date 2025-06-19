@@ -23,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NY0WB62ehxKH64ssAF4vkF6YroG5HHH+ii+AFG9EaE4=";
   };
 
+  patches = [
+    # Remove dbus config referencing the netdev group, which we don't have.
+    # Users are advised to use the wheel group instead.
+    ./no_netdev_group.diff
+  ];
+
   outputs = [
     "out"
     "man"
