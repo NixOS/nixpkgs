@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "spire";
   version = "1.12.3";
 
@@ -17,16 +17,49 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "spiffe";
     repo = "spire";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-ZtSJ5/Qg4r2dkFGM/WiDWwQc2OtkX45kGXTdXU35Cng=";
   };
 
   vendorHash = "sha256-1ngjcqGwUNMyR/wBCo0MYguD1gGH8rbI2j9BB+tGL9k=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/spiffe/spire/pkg/common/version.gittag=${finalAttrs.version}"
+  ];
+
   subPackages = [
     "cmd/spire-agent"
     "cmd/spire-server"
   ];
+
+  excludedPackages = [
+    # ensure these files aren't evaluated, see preCheck
+    "test/tmpsimulator"
+    "pkg/agent/plugin/nodeattestor/tpmdevid"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags =
+    let
+      skippedTests = [
+        # wants to reach remote TUF mirror
+        "TestDockerConfig"
+        "TestPlugin"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  preCheck = ''
+    # remove test files which reference github.com/google/go-tpm-tools/simulator
+    # since it requires cgo and some missing header files
+    rm -rf test/tpmsimulator pkg/server/plugin/nodeattestor/tpmdevid/devid_test.go
+
+    # unset to run all tests
+    unset subPackages
+  '';
 
   # Usually either the agent or server is needed for a given use case, but not both
   postInstall = ''
@@ -38,11 +71,34 @@ buildGoModule rec {
     ln -vs $server/bin/spire-server $out/bin/spire-server
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/spire-agent -h
+    if [ "$($out/bin/spire-agent --version 2>&1)" != "${finalAttrs.version}" ]; then
+      echo "spire-agent version does not match"
+      exit 1
+    fi
+
+    $out/bin/spire-server -h
+    if [ "$($out/bin/spire-server --version 2>&1)" != "${finalAttrs.version}" ]; then
+      echo "spire-server version does not match"
+      exit 1
+    fi
+
+    runHook postInstallCheck
+  '';
+
   meta = {
     description = "SPIFFE Runtime Environment";
-    homepage = "https://github.com/spiffe/spire";
-    changelog = "https://github.com/spiffe/spire/releases/tag/v${version}";
+    homepage = "https://spiffe.io/";
+    downloadPage = "https://github.com/spiffe/spire";
+    changelog = "https://github.com/spiffe/spire/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fkautz ];
+    maintainers = with lib.maintainers; [
+      fkautz
+      jk
+    ];
   };
-}
+})
