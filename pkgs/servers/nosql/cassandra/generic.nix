@@ -32,7 +32,7 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cassandra";
   inherit version;
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python311Packages.wrapPython ];
 
-  buildInputs = [ python311Packages.python ] ++ pythonPath;
+  buildInputs = [ python311Packages.python ] ++ finalAttrs.pythonPath;
 
   installPhase = ''
     runHook preInstall
@@ -54,15 +54,15 @@ stdenv.mkDerivation rec {
     mv * $out
 
     # Clean up documentation.
-    mkdir -p $out/share/doc/${pname}-${version}
+    mkdir -p $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
     mv $out/CHANGES.txt \
        $out/LICENSE.txt \
        $out/NEWS.txt \
        $out/NOTICE.txt \
-       $out/share/doc/${pname}-${version}
+       $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
 
     if [[ -d $out/doc ]]; then
-      mv "$out/doc/"* $out/share/doc/${pname}-${version}
+      mv "$out/doc/"* $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
       rmdir $out/doc
     fi
 
@@ -116,15 +116,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests =
-      let
-        test = nixosTests."cassandra_${generation}";
-      in
-      {
-        nixos =
-          assert test.testPackage.version == version;
-          test;
-      };
+    tests = nixosTests."cassandra_${generation}".setPackage finalAttrs.finalPackage;
 
     updateScript = callPackage ./update-script.nix { inherit generation; };
   };
@@ -143,4 +135,4 @@ stdenv.mkDerivation rec {
       maintainers = [ maintainers.roberth ];
     }
     // extraMeta;
-}
+})
