@@ -24,12 +24,12 @@ let
 
 in
 # we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "v4l-utils";
   version = "1.24.1";
 
   src = fetchurl {
-    url = "https://linuxtv.org/downloads/v4l-utils/v4l-utils-${version}.tar.bz2";
+    url = "https://linuxtv.org/downloads/v4l-utils/v4l-utils-${finalAttrs.version}.tar.bz2";
     hash = "sha256-y7f+imMH9c5TOgXN7XC7k8O6BjlaubbQB+tTt12AX1s=";
   };
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
     homepage = "https://linuxtv.org/projects.php";
-    changelog = "https://git.linuxtv.org/v4l-utils.git/plain/ChangeLog?h=v4l-utils-${version}";
+    changelog = "https://git.linuxtv.org/v4l-utils.git/plain/ChangeLog?h=v4l-utils-${finalAttrs.version}";
     license = with licenses; [
       lgpl21Plus
       gpl2Plus
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
   };
-}
+})
