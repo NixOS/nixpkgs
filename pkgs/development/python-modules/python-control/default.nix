@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "python-control";
     repo = "python-control";
     tag = version;
-    sha256 = "sha256-wLDYPuLnsZ2+cXf7j3BxUbn4IjHPt09LE9cjQGXWrO0=";
+    hash = "sha256-wLDYPuLnsZ2+cXf7j3BxUbn4IjHPt09LE9cjQGXWrO0=";
   };
 
   build-system = [
