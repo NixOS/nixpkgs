@@ -927,10 +927,10 @@ in
             done
 
             if (( ''${#nonLingeringUserNames[*]} > 0 )); then
-                ${pkgs.systemd}/bin/loginctl disable-linger "''${nonLingeringUserNames[@]}"
+                ${config.systemd.package}/bin/loginctl disable-linger "''${nonLingeringUserNames[@]}"
             fi
             if (( ''${#lingeringUserNames[*]} > 0 )); then
-                ${pkgs.systemd}/bin/loginctl enable-linger "''${lingeringUserNames[@]}"
+                ${config.systemd.package}/bin/loginctl enable-linger "''${lingeringUserNames[@]}"
             fi
           '';
 
