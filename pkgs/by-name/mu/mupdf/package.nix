@@ -276,7 +276,7 @@ stdenv.mkDerivation rec {
     };
 
     updateScript = gitUpdater {
-      url = "https://git.ghostscript.com/mupdf.git";
+      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git";
       ignoredVersions = ".rc.*";
     };
   };
@@ -284,7 +284,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://mupdf.com";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
-    changelog = "https://git.ghostscript.com/?p=mupdf.git;a=blob_plain;f=CHANGES;hb=${version}";
+    changelog = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/plain/CHANGES?h=refs/tags/${version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.unix;
