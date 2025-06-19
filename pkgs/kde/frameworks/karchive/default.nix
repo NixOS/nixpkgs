@@ -1,11 +1,15 @@
 {
   mkKdeDerivation,
+  qttools,
   pkg-config,
   xz,
 }:
 mkKdeDerivation {
   pname = "karchive";
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    qttools
+    pkg-config
+  ];
   extraBuildInputs = [ xz ];
 }
