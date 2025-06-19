@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lifeograph";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchgit {
     url = "https://git.launchpad.net/lifeograph";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eb31/ncGH5+Wz1vPCHeEFP1AiKe29rAOg5SL2cjabCc=";
+    hash = "sha256-VaDxmbTVx6wiFMDRYuBM5Y4oPODWPTm8QP6zpT+yBOY=";
   };
 
   nativeBuildInputs = [
