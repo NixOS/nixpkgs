@@ -4,14 +4,14 @@
   fetchFromGitHub,
   installShellFiles,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gibo";
   version = "3.0.14";
 
   src = fetchFromGitHub {
     owner = "simonwhitaker";
     repo = "gibo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-6w+qhwOHkfKt0hgKO98L6Si0RNJN+CXOOFzGlvxFjcA=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/simonwhitaker/gibo/cmd.version=v${version}"
+    "-X github.com/simonwhitaker/gibo/cmd.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ buildGoModule rec {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/gibo version | grep -F "${version}"
+    $out/bin/gibo version | grep -F "${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
@@ -47,4 +47,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "gibo";
   };
-}
+})
