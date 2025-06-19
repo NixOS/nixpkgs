@@ -33,7 +33,7 @@ let
   });
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "vboot_reference";
+  pname = "vboot-utils";
   inherit version;
 
   src = fetchFromGitiles {
