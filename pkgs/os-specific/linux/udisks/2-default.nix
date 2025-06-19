@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   pkg-config,
   gnused,
@@ -77,6 +78,13 @@ stdenv.mkDerivation rec {
         parted
         util-linux
       ];
+    })
+
+    # CVE-2025-6019: https://www.openwall.com/lists/oss-security/2025/06/17/5
+    (fetchpatch {
+      name = "CVE-2025-6019-2.patch";
+      url = "https://www.openwall.com/lists/oss-security/2025/06/17/5/2";
+      hash = "sha256-pgTA6yxQ1o9OU3qBeV1lh2O6mBkaUcc9md4uwFwz+AM=";
     })
   ];
 
