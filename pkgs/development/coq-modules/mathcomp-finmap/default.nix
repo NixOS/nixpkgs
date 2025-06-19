@@ -17,88 +17,27 @@ mkCoqDerivation {
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch
-      [ coq.version mathcomp-boot.version ]
-      [
-        {
-          cases = [
-            (range "8.20" "9.0")
-            (range "2.3" "2.4")
-          ];
-          out = "2.2.0";
-        }
-        {
-          cases = [
-            (range "8.16" "9.0")
-            (range "2.0" "2.3")
-          ];
-          out = "2.1.0";
-        }
-        {
-          cases = [
-            (range "8.16" "8.18")
-            (range "2.0" "2.1")
-          ];
-          out = "2.0.0";
-        }
-        {
-          cases = [
-            (range "8.13" "8.20")
-            (range "1.12" "1.19")
-          ];
-          out = "1.5.2";
-        }
-        {
-          cases = [
-            (isGe "8.10")
-            (range "1.11" "1.17")
-          ];
-          out = "1.5.1";
-        }
-        {
-          cases = [
-            (range "8.7" "8.11")
-            "1.11.0"
-          ];
-          out = "1.5.0";
-        }
-        {
-          cases = [
-            (isEq "8.11")
-            (range "1.8" "1.10")
-          ];
-          out = "1.4.0+coq-8.11";
-        }
-        {
-          cases = [
-            (range "8.7" "8.11.0")
-            (range "1.8" "1.10")
-          ];
-          out = "1.4.0";
-        }
-        {
-          cases = [
-            (range "8.7" "8.11.0")
-            (range "1.8" "1.10")
-          ];
-          out = "1.3.4";
-        }
-        {
-          cases = [
-            (range "8.7" "8.9")
-            "1.7.0"
-          ];
-          out = "1.1.0";
-        }
-        {
-          cases = [
-            (range "8.6" "8.7")
-            (range "1.6.1" "1.7")
-          ];
-          out = "1.0.0";
-        }
-      ]
-      null;
+    let
+      cmc = c: mc: [
+        c
+        mc
+      ];
+    in
+    lib.switch [ coq.coq-version mathcomp-boot.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: cases: { inherit cases out; }) {
+        "2.2.0" = cmc (range "8.20" "9.0") (range "2.3" "2.4");
+        "2.1.0" = cmc (range "8.16" "9.0") (range "2.0" "2.3");
+        "2.0.0" = cmc (range "8.16" "8.18") (range "2.0" "2.1");
+        "1.5.2" = cmc (range "8.13" "8.20") (range "1.12" "1.19");
+        "1.5.1" = cmc (isGe "8.10") (range "1.11" "1.17");
+        "1.5.0" = cmc (range "8.7" "8.11") "1.11.0";
+        "1.4.0+coq-8.11" = cmc (isEq "8.11") (range "1.8" "1.10");
+        "1.4.0" = cmc (range "8.7" "8.11.0") (range "1.8" "1.10");
+        "1.3.4" = cmc (range "8.7" "8.11.0") (range "1.8" "1.10");
+        "1.1.0" = cmc (range "8.7" "8.9") "1.7.0";
+        "1.0.0" = cmc (range "8.6" "8.7") (range "1.6.1" "1.7");
+      }
+    )) null;
   release = {
     "2.2.0".sha256 = "sha256-oDQEZOutrJxmN8FvzovUIhqw0mwc8Ej7thrieJrW8BY=";
     "2.1.0".sha256 = "sha256-gh0cnhdVDyo+D5zdtxLc10kGKQLQ3ITzHnMC45mCtpY=";

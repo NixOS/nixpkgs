@@ -13,20 +13,13 @@
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch coq.coq-version [
-      {
-        case = range "9.0" "9.0";
-        out = "9.0.0+rocq${coq.coq-version}";
+    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: case: { inherit case out; }) {
+        "9.0.0+rocq${coq.coq-version}" = range "9.0" "9.0";
+        "9.0.0+coq${coq.coq-version}" = range "8.13" "8.20";
+        "${coq.coq-version}.0" = range "8.6" "8.17";
       }
-      {
-        case = range "8.13" "8.20";
-        out = "9.0.0+coq${coq.coq-version}";
-      }
-      {
-        case = range "8.6" "8.17";
-        out = "${coq.coq-version}.0";
-      }
-    ] null;
+    )) null;
 
   release."9.0.0+rocq9.0".sha256 = "sha256-ctnwpyNVhryEUA5YEsAImrcJsNMhtBgDSOz+z5Z4R78=";
   release."9.0.0+coq8.20".sha256 = "sha256-pkvyDaMXRalc6Uu1eBTuiqTpRauRrzu946c6TavyTKY=";

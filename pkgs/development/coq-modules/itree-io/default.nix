@@ -15,14 +15,13 @@ mkCoqDerivation {
 
   defaultVersion =
     let
-      inherit (lib.versions) range;
+      inherit (lib.versions) isLe range;
     in
-    lib.switch coq.coq-version [
-      {
-        case = range "8.12" "8.19";
-        out = "0.1.1";
+    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: case: { inherit case out; }) {
+        "0.1.1" = range "8.12" "8.19";
       }
-    ] null;
+    )) null;
   release = {
     "0.1.1".sha256 = "sha256-IFwIj8dxW4jm2gvuUJ8LKZFSJeljp0bsn8fezxY6t2o=";
   };

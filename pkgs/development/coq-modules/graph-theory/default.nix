@@ -25,53 +25,22 @@ mkCoqDerivation {
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch
-      [ coq.coq-version mathcomp.version ]
-      [
-        {
-          cases = [
-            (range "8.18" "9.0")
-            (range "2.0.0" "2.4.0")
-          ];
-          out = "0.9.6";
-        }
-        {
-          cases = [
-            (range "8.16" "8.19")
-            (range "2.0.0" "2.3.0")
-          ];
-          out = "0.9.4";
-        }
-        {
-          cases = [
-            (range "8.16" "8.18")
-            (range "2.0.0" "2.1.0")
-          ];
-          out = "0.9.3";
-        }
-        {
-          cases = [
-            (range "8.14" "8.18")
-            (range "1.13.0" "1.18.0")
-          ];
-          out = "0.9.2";
-        }
-        {
-          cases = [
-            (range "8.14" "8.16")
-            (range "1.13.0" "1.14.0")
-          ];
-          out = "0.9.1";
-        }
-        {
-          cases = [
-            (range "8.12" "8.13")
-            (range "1.12.0" "1.14.0")
-          ];
-          out = "0.9";
-        }
-      ]
-      null;
+    let
+      cmc = c: mc: [
+        c
+        mc
+      ];
+    in
+    lib.switch [ coq.coq-version mathcomp.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: cases: { inherit cases out; }) {
+        "0.9.6" = cmc (range "8.18" "9.0") (range "2.0.0" "2.4.0");
+        "0.9.4" = cmc (range "8.16" "8.19") (range "2.0.0" "2.3.0");
+        "0.9.3" = cmc (range "8.16" "8.18") (range "2.0.0" "2.1.0");
+        "0.9.2" = cmc (range "8.14" "8.18") (range "1.13.0" "1.18.0");
+        "0.9.1" = cmc (range "8.14" "8.16") (range "1.13.0" "1.14.0");
+        "0.9" = cmc (range "8.12" "8.13") (range "1.12.0" "1.14.0");
+      }
+    )) null;
 
   propagatedBuildInputs = [
     mathcomp.algebra

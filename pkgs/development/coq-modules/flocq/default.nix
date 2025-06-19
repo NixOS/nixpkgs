@@ -15,36 +15,17 @@ mkCoqDerivation {
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch coq.coq-version [
-      {
-        case = range "8.15" "9.0";
-        out = "4.2.1";
+    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: case: { inherit case out; }) {
+        "4.2.1" = range "8.15" "9.0";
+        "4.2.0" = range "8.14" "8.20";
+        "4.1.3" = range "8.14" "8.18";
+        "4.1.1" = range "8.14" "8.17";
+        "4.1.0" = range "8.14" "8.16";
+        "3.4.3" = range "8.7" "8.15";
+        "2.6.1" = range "8.5" "8.8";
       }
-      {
-        case = range "8.14" "8.20";
-        out = "4.2.0";
-      }
-      {
-        case = range "8.14" "8.18";
-        out = "4.1.3";
-      }
-      {
-        case = range "8.14" "8.17";
-        out = "4.1.1";
-      }
-      {
-        case = range "8.14" "8.16";
-        out = "4.1.0";
-      }
-      {
-        case = range "8.7" "8.15";
-        out = "3.4.3";
-      }
-      {
-        case = range "8.5" "8.8";
-        out = "2.6.1";
-      }
-    ] null;
+    )) null;
   release."4.2.1".sha256 = "sha256-W5hcAm0GGmNsvre79/iGNcoBwFzStC4G177hZ3ds/4E=";
   release."4.2.0".sha256 = "sha256-uTeo4GCs6wTLN3sLKsj0xLlt1fUDYfozXtq6iooLUgM=";
   release."4.1.4".sha256 = "sha256-Use6Mlx79yef1CkCPyGoOItsD69B9KR+mQArCtmre4s=";

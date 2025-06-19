@@ -31,86 +31,31 @@ let
   withDoc = single && (args.withDoc or false);
   defaultVersion =
     let
-      inherit (lib.versions) range;
+      inherit (lib.versions) isLe range;
     in
-    lib.switch coq.coq-version [
-      {
-        case = range "8.20" "9.0";
-        out = "2.4.0";
+    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: case: { inherit case out; }) {
+        "2.4.0" = range "8.20" "9.0";
+        "2.3.0" = range "8.19" "9.0";
+        "2.2.0" = range "8.17" "8.20";
+        "2.1.0" = range "8.17" "8.18";
+        "2.0.0" = range "8.17" "8.18";
+        "1.19.0" = range "8.19" "8.20";
+        "1.18.0" = range "8.17" "8.18";
+        "1.17.0" = range "8.15" "8.18";
+        "1.16.0" = range "8.13" "8.18";
+        "1.15.0" = range "8.14" "8.16";
+        "1.14.0" = range "8.11" "8.15";
+        "1.13.0" = range "8.11" "8.15";
+        "1.12.0" = range "8.10" "8.13";
+        "1.11.0" = range "8.7" "8.12";
+        "1.10.0" = range "8.7" "8.11";
+        "1.9.0" = range "8.7" "8.11";
+        "1.8.0" = range "8.7" "8.9";
+        "1.7.0" = range "8.6" "8.9";
+        "1.6.4" = range "8.5" "8.7";
       }
-      {
-        case = range "8.19" "9.0";
-        out = "2.3.0";
-      }
-      {
-        case = range "8.17" "8.20";
-        out = "2.2.0";
-      }
-      {
-        case = range "8.17" "8.18";
-        out = "2.1.0";
-      }
-      {
-        case = range "8.17" "8.18";
-        out = "2.0.0";
-      }
-      {
-        case = range "8.19" "8.20";
-        out = "1.19.0";
-      }
-      {
-        case = range "8.17" "8.18";
-        out = "1.18.0";
-      }
-      {
-        case = range "8.15" "8.18";
-        out = "1.17.0";
-      }
-      {
-        case = range "8.13" "8.18";
-        out = "1.16.0";
-      }
-      {
-        case = range "8.14" "8.16";
-        out = "1.15.0";
-      }
-      {
-        case = range "8.11" "8.15";
-        out = "1.14.0";
-      }
-      {
-        case = range "8.11" "8.15";
-        out = "1.13.0";
-      }
-      {
-        case = range "8.10" "8.13";
-        out = "1.12.0";
-      }
-      {
-        case = range "8.7" "8.12";
-        out = "1.11.0";
-      }
-      {
-        case = range "8.7" "8.11";
-        out = "1.10.0";
-      }
-      {
-        case = range "8.7" "8.11";
-        out = "1.9.0";
-      }
-      {
-        case = range "8.7" "8.9";
-        out = "1.8.0";
-      }
-      {
-        case = range "8.6" "8.9";
-        out = "1.7.0";
-      }
-      {
-        case = range "8.5" "8.7";
-        out = "1.6.4";
-      }
-    ] null;
+    )) null;
   release = {
     "2.4.0".sha256 = "sha256-A1XgLLwZRvKS8QyceCkSQa7ue6TYyf5fMft5gSx9NOs=";
     "2.3.0".sha256 = "sha256-wa6OBig8rhAT4iwupSylyCAMhO69rADa0MQIX5zzL+Q=";

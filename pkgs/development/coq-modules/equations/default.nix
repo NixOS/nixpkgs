@@ -12,72 +12,26 @@
   repo = "Coq-Equations";
   opam-name = "rocq-equations";
   inherit version;
-  defaultVersion = lib.switch coq.coq-version [
-    {
-      case = "9.0";
-      out = "1.3.1+9.0";
+  defaultVersion = lib.switch coq.coq-version (lib.lists.sort (x: y: lib.versions.isLe x.out y.out) (
+    lib.mapAttrsToList (out: case: { inherit case out; }) {
+      "1.3.1+9.0" = "9.0";
+      "1.3.1+8.20" = "8.20";
+      "1.3+8.19" = "8.19";
+      "1.3+8.18" = "8.18";
+      "1.3+8.17" = "8.17";
+      "1.3+8.16" = "8.16";
+      "1.3+8.15" = "8.15";
+      "1.3+8.14" = "8.14";
+      "1.3+8.13" = "8.13";
+      "1.2.4+coq8.12" = "8.12";
+      "1.2.4+coq8.11" = "8.11";
+      "1.2.1+coq8.10-2" = "8.10";
+      "1.2.1+coq8.9" = "8.9";
+      "1.2+coq8.8" = "8.8";
+      "1.0+coq8.7" = "8.7";
+      "1.0+coq8.6" = "8.6";
     }
-    {
-      case = "8.20";
-      out = "1.3.1+8.20";
-    }
-    {
-      case = "8.19";
-      out = "1.3+8.19";
-    }
-    {
-      case = "8.18";
-      out = "1.3+8.18";
-    }
-    {
-      case = "8.17";
-      out = "1.3+8.17";
-    }
-    {
-      case = "8.16";
-      out = "1.3+8.16";
-    }
-    {
-      case = "8.15";
-      out = "1.3+8.15";
-    }
-    {
-      case = "8.14";
-      out = "1.3+8.14";
-    }
-    {
-      case = "8.13";
-      out = "1.3+8.13";
-    }
-    {
-      case = "8.12";
-      out = "1.2.4+coq8.12";
-    }
-    {
-      case = "8.11";
-      out = "1.2.4+coq8.11";
-    }
-    {
-      case = "8.10";
-      out = "1.2.1+coq8.10-2";
-    }
-    {
-      case = "8.9";
-      out = "1.2.1+coq8.9";
-    }
-    {
-      case = "8.8";
-      out = "1.2+coq8.8";
-    }
-    {
-      case = "8.7";
-      out = "1.0+coq8.7";
-    }
-    {
-      case = "8.6";
-      out = "1.0+coq8.6";
-    }
-  ] null;
+  )) null;
 
   release."1.0+coq8.6".version = "1.0";
   release."1.0+coq8.6".rev = "v1.0";

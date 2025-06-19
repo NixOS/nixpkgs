@@ -57,25 +57,18 @@ mkCoqDerivation {
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch
-      [ coq.version mathcomp.version ]
-      [
-        {
-          cases = [
-            (range "8.16" "9.0")
-            (isGe "2.0")
-          ];
-          out = "3.2";
-        }
-        {
-          cases = [
-            (range "8.12" "8.20")
-            (range "1.12" "1.19")
-          ];
-          out = "2.4";
-        }
-      ]
-      null;
+    let
+      cmc = c: mc: [
+        c
+        mc
+      ];
+    in
+    lib.switch [ coq.coq-version mathcomp.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: cases: { inherit cases out; }) {
+        "3.2" = cmc (range "8.16" "9.0") (isGe "2.0");
+        "2.4" = cmc (range "8.12" "8.20") (range "1.12" "1.19");
+      }
+    )) null;
 
   propagatedBuildInputs = [
     mathcomp.algebra
