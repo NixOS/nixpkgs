@@ -764,22 +764,31 @@ let
             let
               # Attribute set for efficient key lookup
               removedKeys = lib.listToAttrs (
-                lib.concatLists (
+                lib.flatten (
                   lib.imap1 (
                     n: def:
                     if !isType "remove" def.value then
                       [ ]
                     else
-                      imap1 (m: singleDef: rec {
-                        name = toKey value;
-                        value =
-                          (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
-                            {
-                              value = singleDef;
-                              file = def.file;
-                            }
-                          ]).mergedValue;
-                      }) def.value.value
+                      imap1 (
+                        m: singleDef:
+                        let
+                          optionalValue =
+                            (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                              {
+                                value = singleDef;
+                                file = def.file;
+                              }
+                            ]).mergedValue;
+                        in
+                        if optionalValue ? value then
+                          {
+                            value = optionalValue.value;
+                            name = toKey optionalValue;
+                          }
+                        else
+                          [ ]
+                      ) def.value.value
                   ) defs
                 )
               );
@@ -794,16 +803,18 @@ let
                       imap1 (
                         m: singleDef:
                         let
-                          key =
-                            toKey
-                              (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
-                                {
-                                  value = singleDef;
-                                  file = def.file;
-                                }
-                              ]).mergedValue;
+                          optionalValue =
+                            (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                              {
+                                value = singleDef;
+                                file = def.file;
+                              }
+                            ]).optionalValue;
+                          key = toKey optionalValue.value;
                         in
-                        if removedKeys ? ${key} then
+                        if !optionalValue ? value then
+                          { }
+                        else if removedKeys ? ${key} then
                           { }
                         else
                           {
@@ -1282,7 +1293,7 @@ let
           allModules =
             defs:
             map (
-              { value, file }:
+              { value, file, ... }:
               if isAttrs value && shorthandOnlyDefinesConfig then
                 {
                   _file = file;
