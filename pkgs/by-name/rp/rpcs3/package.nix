@@ -162,7 +162,6 @@ stdenv.mkDerivation {
       abbradar
       neonfuz
       ilian
-      zane
     ];
     license = licenses.gpl2Only;
     platforms = [
