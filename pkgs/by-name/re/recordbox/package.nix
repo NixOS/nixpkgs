@@ -4,13 +4,16 @@
   appstream-glib,
   blueprint-compiler,
   cargo,
+  dbus,
   desktop-file-utils,
   fetchFromGitea,
   glib,
   gst_all_1,
   gtk4,
   hicolor-icon-theme,
+  lcms2,
   libadwaita,
+  libseccomp,
   libxml2,
   meson,
   ninja,
@@ -22,29 +25,22 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "recordbox";
-  version = "0.9.3";
+  version = "0.10.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "edestcroix";
     repo = "Recordbox";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-168L5i6mXeEqv7EKPMq4zHP5JRVxC7MNrUE9yj1zI60=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EIJG0SIY/8w6QUzUSNPmrdzZq9PK3ywry3P1U5+9jhI=";
   };
 
-  # Patch in our Cargo.lock and ensure AppStream tests don't use the network
-  # TODO: Switch back to the default `validate` when the upstream file actually
-  # passes it
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-
-    substituteInPlace data/meson.build \
-      --replace-fail "['validate', appstream_file]" "['validate-relax', '--nonet', appstream_file]"
-  '';
-
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-iyHjOISaVW2eSrjKWQObCJGFf3Io9nqJvYhVwpSVHtk=";
+  };
 
   strictDeps = true;
 
@@ -67,9 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
+      dbus
       gtk4
       hicolor-icon-theme
+      lcms2
       libadwaita
+      libseccomp
       sqlite
     ]
     ++ (with gst_all_1; [
@@ -84,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonBuildType = "release";
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-  cargoCheckType = if (finalAttrs.mesonBuildType != "debug") then "release" else "debug";
+  cargoCheckType = if (mesonBuildType != "debug") then "release" else "debug";
 
   checkPhase = ''
     runHook preCheck
@@ -107,4 +106,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "recordbox";
     platforms = lib.platforms.linux;
   };
-})
+}
