@@ -1,5 +1,5 @@
-{ callPackage }:
-callPackage ./generic.nix { } {
+{ callPackage, commandLineArgs }:
+callPackage ./generic.nix { inherit commandLineArgs; } {
   pname = "signal-desktop-bin";
   version = "7.58.0";
 
