@@ -43,12 +43,9 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     spirv-tools
-    qtlocation
-    qtpositioning
-    qtwayland
   ];
-
   extraBuildInputs = [
+    qtlocation
     qtpositioning
     qtsvg
     qtwayland

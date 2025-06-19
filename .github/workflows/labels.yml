@@ -212,6 +212,11 @@ jobs:
                   if (approvals.size > 0) after.push(`12.approvals: ${approvals.size > 2 ? '3+' : approvals.size}`)
                   if (Array.from(maintainers).some(m => approvals.has(m))) after.push('12.approved-by: package-maintainer')
 
+                  if (context.eventName == 'pull_request') {
+                    core.info('Skipping labeling on a pull_request event (no privileges).')
+                    return
+                  }
+
                   // Remove the ones not needed anymore
                   await Promise.all(
                     before.filter(name => !after.includes(name))
@@ -247,12 +252,12 @@ jobs:
         name: Labels from touched files
         if: |
           github.event_name == 'pull_request_target' &&
-          github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
+          (github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
             github.head_ref == 'haskell-updates' ||
             github.head_ref == 'python-updates' ||
             github.head_ref == 'staging-next' ||
             startsWith(github.head_ref, 'staging-next-')
-          )
+          ))
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml # default
@@ -262,12 +267,12 @@ jobs:
         name: Labels from touched files (no sync)
         if: |
           github.event_name == 'pull_request_target' &&
-          github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
+          (github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
             github.head_ref == 'haskell-updates' ||
             github.head_ref == 'python-updates' ||
             github.head_ref == 'staging-next' ||
             startsWith(github.head_ref, 'staging-next-')
-          )
+          ))
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler-no-sync.yml
@@ -280,12 +285,12 @@ jobs:
         # the backport labels.
         if: |
           github.event_name == 'pull_request_target' &&
-          github.event.pull_request.head.repo.owner.login == 'NixOS' && (
+          (github.event.pull_request.head.repo.owner.login == 'NixOS' && (
             github.head_ref == 'haskell-updates' ||
             github.head_ref == 'python-updates' ||
             github.head_ref == 'staging-next' ||
             startsWith(github.head_ref, 'staging-next-')
-          )
+          ))
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler-development-branches.yml

@@ -27,7 +27,6 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [
     ps.pybind11
-    qtmultimedia
   ];
 
   extraBuildInputs = [

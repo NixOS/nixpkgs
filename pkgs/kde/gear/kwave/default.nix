@@ -19,11 +19,7 @@
 mkKdeDerivation {
   pname = "kwave";
 
-  extraNativeBuildInputs = [
-    pkg-config
-    qtmultimedia
-  ];
-
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtmultimedia
 

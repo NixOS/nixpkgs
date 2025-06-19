@@ -2,6 +2,7 @@
   lib,
   mkKdeDerivation,
   fetchurl,
+  qttools,
   libvlc,
 }:
 mkKdeDerivation rec {
@@ -13,6 +14,7 @@ mkKdeDerivation rec {
     hash = "sha256-M4R53EUeS5SzyltXje90Hc+C9cYmooB9NiNb4tznyaU=";
   };
 
+  extraNativeBuildInputs = [ qttools ];
   extraBuildInputs = [ libvlc ];
 
   cmakeFlags = [
