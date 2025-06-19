@@ -61,8 +61,6 @@ mkKdeDerivation {
     "-DKF5XmlGui_DIR=${libsForQt5.kxmlgui.dev}/lib/cmake/KF5XmlGui"
   ];
 
-  extraNativeBuildInputs = [ qtwayland ];
-
   extraBuildInputs = [
     qtwayland
     xorg.libXcursor

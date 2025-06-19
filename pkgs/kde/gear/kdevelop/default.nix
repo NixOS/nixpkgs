@@ -23,6 +23,10 @@ mkKdeDerivation {
     shared-mime-info
   ];
 
+  extraPropagatedBuildInputs = [
+    qtwebengine
+  ];
+
   extraBuildInputs = [
     qttools
     apr
@@ -33,9 +37,6 @@ mkKdeDerivation {
     libllvm
     subversion
   ];
-
-  propagatedNativeBuildInputs = [ qtwebengine ];
-  extraPropagatedBuildInputs = [ qtwebengine ];
 
   extraCmakeFlags = [
     "-DCLANG_BUILTIN_DIR=${lib.getLib libclang}/lib/clang/${lib.versions.major libclang.version}/include"
