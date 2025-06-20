@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.0.3";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "linux-audit";
     repo = "audit-userspace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+M5Nai/ruK16udsHcMwv1YoVQbCLKNuz/4FCXaLbiCw=";
+    hash = "sha256-SgMt1MmcH7r7O6bmJCetRg3IdoZXAXjVJyeu0HRfyf8=";
   };
 
   postPatch = ''
