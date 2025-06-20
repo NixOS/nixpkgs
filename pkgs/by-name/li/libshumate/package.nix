@@ -31,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
   ];
   outputBin = "devdoc"; # demo app
-  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
 
   src = fetchurl {
     url = "mirror://gnome/sources/libshumate/${lib.versions.majorMinor finalAttrs.version}/libshumate-${finalAttrs.version}.tar.xz";
