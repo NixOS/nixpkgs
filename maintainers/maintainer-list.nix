@@ -11333,6 +11333,12 @@
     githubId = 6789916;
     name = "Jason Odoom";
   };
+  jatcwang = {
+    email = "jatcwang@gmail.com";
+    github = "jatcwang";
+    githubId = 4957161;
+    name = "Jacob Wang";
+  };
   javaes = {
     email = "jan+dev@vanesdonk.de";
     github = "javaes";
