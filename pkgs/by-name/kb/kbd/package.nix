@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for i in $out/bin/unicode_{start,stop}; do
       substituteInPlace "$i" \
-        --replace /usr/bin/tty ${coreutils}/bin/tty
+        --replace-fail /usr/bin/tty ${coreutils}/bin/tty
     done
   '';
 
