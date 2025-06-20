@@ -41,7 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wc9UnC7DzznrXse/FXMTSeYbJqIbXpY5IttCIzO64Zc=";
   };
 
-  outputs = [ "out" ] ++ lib.optional withUtils "lib" ++ [ "dev" ];
+  outputs =
+    [ "out" ]
+    ++ lib.optional withUtils "lib"
+    ++ [
+      "doc"
+      "dev"
+    ];
 
   mesonFlags = [
     (lib.mesonBool "v4l-utils" withUtils)
