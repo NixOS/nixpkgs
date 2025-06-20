@@ -7,9 +7,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  flake8,
   moto,
-  psutil,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -41,10 +39,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
+  optional-dependencies.optional = [
     aiodns
     aiohttp
-    aiosqlite
     boto3
     sqlalchemy
     websocket-client
@@ -54,12 +51,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "slack_sdk" ];
 
   nativeCheckInputs = [
-    flake8
+    aiosqlite
     moto
-    psutil
     pytest-asyncio
     pytestCheckHook
-  ];
+  ] ++ optional-dependencies.optional;
 
   disabledTests = [
     # Requires internet access (to slack API)
