@@ -178,6 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     isocodes
     json-glib
     libX11
+    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
   ]
   ++ lib.optionals (!libOnly) [
     gtk3
@@ -185,7 +186,6 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     libdbusmenu-gtk3
     libnotify
-    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
   ]
   ++ lib.optionals withWayland [
     libxkbcommon
