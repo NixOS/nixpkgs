@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "backtesting";
-  version = "0.6.3";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchPypi {
