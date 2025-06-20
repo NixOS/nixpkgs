@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
+  fetchpatch,
   coreutils,
   findutils,
   gnused,
@@ -24,9 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (fetchpatch2 {
-      url = "https://patch-diff.githubusercontent.com/raw/structurizr/cli/pull/175.patch";
-      hash = "sha256-Ut9Rma54vb9UYtvHiCf8LI9i3trlCa45/60sRyKdPnQ=";
+    # Use `gradle-application-plugin` to generate scripts and dist zip instead of in-house launch script
+    # PR at https://github.com/structurizr/cli/pull/175
+    (fetchpatch {
+      url = "https://github.com/structurizr/cli/compare/v2025.05.28...1a11940d089a8d70d6e298660c6f5db638cc8d00.patch";
+      hash = "sha256-qWq2x4riXNMnl8RBljjYenpj+pun5VrtcJFubnNcHSc=";
     })
   ];
 
