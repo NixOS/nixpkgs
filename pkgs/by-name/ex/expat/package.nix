@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "$"'{_IMPORT_PREFIX}' $out
   '';
 
+  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fix lib.getExe
   passthru.tests = {
     inherit python3;
     inherit (python3.pkgs) xmltodict;
