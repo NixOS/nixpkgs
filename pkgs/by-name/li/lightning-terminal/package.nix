@@ -1,8 +1,13 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
-  mkYarnPackage,
+  nodejs,
+  yarn,
+  yarnConfigHook,
+  yarnBuildHook,
+  yarnInstallHook,
   fetchYarnDeps,
   go,
   versionCheckHook,
@@ -29,6 +34,18 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-Gbx4uz6q9Ef4QNv6DpIoCACjhT66iZ7GPNpd/g9MgKQ=";
+
+  buildInputs = [ lightning-app ];
+  postUnpack = ''
+    echo "Copying app build output into app/build dir to embed into litd."
+    cp -r ${lightning-app}/* source/app/build/
+
+    echo "Asserting that app/build/index.html exists."
+    if [ ! -f source/app/build/index.html ]; then
+      echo "ERROR: app/build/index.html not found!"
+      exit 1
+    fi
+  '';
 
   ldflags = [
     "-s"
@@ -75,24 +92,46 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  lightning-app = mkYarnPackage {
+  lightning-app = stdenv.mkDerivation {
     pname = "lightning-app";
     src = "${src}/app";
     version = "0.0.1";
-    packageJSON = ./package.json;
-    yarnLock = "${src}/app/yarn.lock";
-    offlineCache = fetchYarnDeps {
+    yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/app/yarn.lock";
       hash = "sha256-ulOgKQRLG4cRi1N1DajmbZ0L7d08g5cYDA9itXu+Esw=";
     };
+
+    # Remove this command from package.json. It requires Git and it is not
+    # really needed.
+    postPatch = ''
+      substituteInPlace package.json \
+        --replace '"postbuild": "git restore build/.gitkeep",' ' '
+    '';
+
+    nativeBuildInputs = [
+      nodejs
+      yarn
+      yarnConfigHook
+      yarnBuildHook
+      yarnInstallHook
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      # Disable linter. It finds a lot of proposed substitutions and fails.
+      export DISABLE_ESLINT_PLUGIN=true
+      export CI=false
+      yarn build
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      mkdir -p $out
+      cp -r build/* $out/
+    '';
   };
-  outputs = [
-    "out"
-    "app"
-  ];
-  postFixup = ''
-    ln -s ${lightning-app} "$app"
-  '';
 
   meta = {
     description = "All-in-one Lightning node management tool that includes LND, Loop, Pool, Faraday, and Tapd";
