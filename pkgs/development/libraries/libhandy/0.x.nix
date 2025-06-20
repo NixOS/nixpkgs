@@ -18,7 +18,7 @@
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libhandy";
   version = "0.0.13";
 
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
-    repo = pname;
-    rev = "v${version}";
+    repo = "libhandy";
+    tag = "v${finalAttrs.version}";
     sha256 = "1y23k623sjkldfrdiwfarpchg5mg58smcy1pkgnwfwca15wm1ra5";
   };
 
@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
+  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fix lib.getExe
+
   meta = with lib; {
     description = "Library full of GTK widgets for mobile phones";
     mainProgram = "handy-0.0-demo";
@@ -83,4 +85,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = platforms.unix;
   };
-}
+})
