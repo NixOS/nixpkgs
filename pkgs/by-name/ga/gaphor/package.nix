@@ -84,11 +84,24 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = {
-    description = "Simple modeling tool written in Python";
-    homepage = "https://github.com/gaphor/gaphor";
+    description = "UML and SysML modeling tool";
+    longDescription = ''
+      Gaphor is a UML, SysML, RAAML, and C4 modeling application. It
+      is designed to be easy to use, while still being powerful.
+      Gaphor implements a fully-compliant UML 2 data model, so it is
+      much more than a picture drawing tool. You can use Gaphor to
+      quickly visualize different aspects of a system as well as
+      create complete, highly complex models.
+
+      Gaphor provides four modeling languages: UML, SysML, RAAML and C4 and
+      makes them accessible to beginners.
+    '';
+    homepage = "https://gaphor.org/";
     changelog = "https://github.com/gaphor/gaphor/releases/tag/${version}";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ normalcea ];
     teams = [ lib.teams.gnome-circle ];
+    mainProgram = "gaphor";
     platforms = lib.platforms.linux;
   };
 }
