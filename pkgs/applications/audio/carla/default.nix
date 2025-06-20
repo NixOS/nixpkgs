@@ -10,7 +10,7 @@
   libpulseaudio,
   libsndfile,
   pkg-config,
-  python3Packages,
+  python312Packages,
   which,
   gtk2 ? null,
   gtk3 ? null,
@@ -37,14 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    python3Packages.wrapPython
+    python312Packages.wrapPython
     pkg-config
     which
     wrapQtAppsHook
   ];
 
   pythonPath =
-    with python3Packages;
+    with python312Packages;
     [
       rdflib
       pyliblo
