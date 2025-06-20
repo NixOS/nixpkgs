@@ -21,7 +21,8 @@
   cudaSupport ? config.cudaSupport,
   rocmSupport ? config.rocmSupport,
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
-  # one of [ null "cpu" "rocm" "cuda" "metal" ];
+  vulkanSupport ? false,
+  # one of [ null "cpu" "rocm" "cuda" "metal" "vulkan"];
   acceleration ? null,
 }:
 
@@ -38,6 +39,7 @@ let
     (optional cudaSupport "cuda")
     (optional rocmSupport "rocm")
     (optional metalSupport "metal")
+    (optional vulkanSupport "vulkan")
   ];
 
   warnIfMultipleAccelerationMethods =
@@ -82,6 +84,7 @@ let
     "rocm"
     "cuda"
     "metal"
+    "vulkan"
   ];
 
   # TODO(ghthor): there is a bug here where featureDevice could be cuda, but enableCuda is false
@@ -89,6 +92,7 @@ let
   enableRocm = validAccel && (featureDevice == "rocm") && (warnIfNotLinux "rocm");
   enableCuda = validAccel && (featureDevice == "cuda") && (warnIfNotLinux "cuda");
   enableMetal = validAccel && (featureDevice == "metal") && (warnIfNotDarwinAarch64 "metal");
+  enableVulkan = validAccel && (featureDevice == "vulkan");
 
   # We have to use override here because tabby doesn't actually tell llama-cpp
   # to use a specific device type as it is relying on llama-cpp only being
@@ -100,6 +104,7 @@ let
     rocmSupport = enableRocm;
     cudaSupport = enableCuda;
     metalSupport = enableMetal;
+    vulkanSupport = enableVulkan;
   };
 
   # TODO(ghthor): some of this can be removed
@@ -164,7 +169,7 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     # NOTE: Project contains a subproject for building llama-server
     # But, we already have a derivation for this
-    ln -s ${lib.getExe' llama-cpp "llama-server"} $out/bin/llama-server
+    ln -s ${lib.getExe' llamaccpPackage "llama-server"} $out/bin/llama-server
   '';
 
   env = {
