@@ -4,7 +4,7 @@
   buildPythonPackage,
   sphinx,
   pytest-cov-stub,
-  pytest,
+  pytestCheckHook,
   mako,
   numpy,
   funcsigs,
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     sphinx
     pytest-cov-stub
-    pytest
+    pytestCheckHook
   ];
 
   propagatedBuildInputs =
@@ -38,10 +38,6 @@ buildPythonPackage rec {
     ]
     ++ lib.optional withCuda pycuda
     ++ lib.optional withOpenCL pyopencl;
-
-  checkPhase = ''
-    py.test
-  '';
 
   # Requires device
   doCheck = false;

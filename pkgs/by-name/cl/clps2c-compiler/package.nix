@@ -31,7 +31,7 @@ buildDotnetModule rec {
     (fetchFromGitHub {
       name = pname;
       inherit owner;
-      repo = pname;
+      repo = "CLPS2C-Compiler";
       rev = "CLPS2C-Compiler-${version}";
       sha256 = "sha256-4gLdrIxyw9BFSxF+EXZqTgUf9Kik6oK7eO9HBUzk4QM=";
     })
