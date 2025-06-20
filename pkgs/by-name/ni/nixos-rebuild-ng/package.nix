@@ -5,7 +5,6 @@
   installShellFiles,
   mkShell,
   nix,
-  nixosTests,
   python3,
   python3Packages,
   runCommand,
@@ -16,6 +15,10 @@
   # Very long tmp dirs lead to "too long for Unix domain socket"
   # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
   withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null,
+  # passthru.tests
+  nixosTests,
+  nixVersions,
+  nixos-rebuild-ng,
 }:
 let
   executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
@@ -105,6 +108,17 @@ python3Packages.buildPythonApplication rec {
       };
 
       tests = {
+        with_nix_latest = nixos-rebuild-ng.override {
+          nix = nixVersions.latest;
+        };
+        with_nix_stable = nixos-rebuild-ng.override {
+          nix = nixVersions.stable;
+        };
+        with_nix_2_3 = nixos-rebuild-ng.override {
+          # oldest / minimum supported version in nixpkgs
+          nix = nixVersions.nix_2_3;
+        };
+
         inherit (nixosTests)
           nixos-rebuild-install-bootloader-ng
           nixos-rebuild-specialisations-ng
