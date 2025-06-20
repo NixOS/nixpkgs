@@ -87,6 +87,15 @@ let
     '';
   };
 
+  libxml2' = symlinkJoin {
+    name = "libxml2-backwards-compat";
+    nativeBuildInputs = [ makeWrapper ];
+    paths = [ (lib.getLib libxml2) ];
+    postBuild = ''
+      ln -sf $out/lib/libxml2.so $out/lib/libxml2.so.2
+    '';
+  };
+
 in
 
 stdenv.mkDerivation rec {
@@ -157,7 +166,7 @@ stdenv.mkDerivation rec {
     libsecret
     libsoup_2_4
     libvorbis
-    libxml2
+    libxml2'
     llvmPackages.libunwind
     libgbm
     nspr
