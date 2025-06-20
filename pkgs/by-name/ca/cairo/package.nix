@@ -132,6 +132,7 @@ stdenv.mkDerivation (
           -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype.dev}/include/freetype2 -I${freetype.dev}/include|g'
     '';
 
+    passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fix lib.getExe
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
     meta = with lib; {
