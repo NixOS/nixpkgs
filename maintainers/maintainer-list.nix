@@ -23582,6 +23582,12 @@
     githubId = 26417242;
     name = "Mikolaj Galkowski";
   };
+  tesujimath = {
+    name = "Simon Guest";
+    email = "simon.guest@tesujimath.org";
+    github = "tesujimath";
+    githubId = 4411912;
+  };
   TethysSvensson = {
     email = "freaken@freaken.dk";
     github = "TethysSvensson";
