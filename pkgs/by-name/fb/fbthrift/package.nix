@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Homebrew sets this, and the shared library build fails without
-      # it. I don‘t know, either. It scares me.
+      # it. I don’t know, either. It scares me.
       (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
     ];
 
