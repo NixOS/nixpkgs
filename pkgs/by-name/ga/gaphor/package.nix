@@ -1,34 +1,19 @@
 {
   lib,
-  buildPythonApplication,
   fetchPypi,
   copyDesktopItems,
   gobject-introspection,
-  poetry-core,
   wrapGAppsHook4,
   gtksourceview5,
   libadwaita,
   pango,
-  gaphas,
-  generic,
-  jedi,
-  pycairo,
-  pillow,
-  dulwich,
-  pydot,
-  defusedxml,
-  better-exceptions,
-  babel,
-  pygobject3,
-  tinycss2,
   gtk4,
   librsvg,
   makeDesktopItem,
-  python,
+  python3Packages,
   nix-update-script,
 }:
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gaphor";
   version = "3.0.0";
   pyproject = true;
@@ -41,6 +26,7 @@ buildPythonApplication rec {
   pythonRelaxDeps = [
     "defusedxml"
     "gaphas"
+    "pydot"
   ];
 
   nativeBuildInputs = [
@@ -55,9 +41,9 @@ buildPythonApplication rec {
     libadwaita
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ python3Packages.poetry-core ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     babel
     better-exceptions
     defusedxml
@@ -84,10 +70,6 @@ buildPythonApplication rec {
 
   # Disable automatic wrapGAppsHook4 to prevent double wrapping
   dontWrapGApps = true;
-
-  postInstall = ''
-    install -Dm644 $out/${python.sitePackages}/gaphor/ui/icons/hicolor/scalable/apps/org.gaphor.Gaphor.svg $out/share/pixmaps/gaphor.svg
-  '';
 
   preFixup = ''
     makeWrapperArgs+=(
