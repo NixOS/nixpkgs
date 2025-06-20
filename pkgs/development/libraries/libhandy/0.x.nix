@@ -18,7 +18,7 @@
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libhandy";
   version = "0.0.13";
 
@@ -28,13 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
   ];
   outputBin = "dev";
-  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
-    repo = "libhandy";
-    tag = "v${finalAttrs.version}";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "1y23k623sjkldfrdiwfarpchg5mg58smcy1pkgnwfwca15wm1ra5";
   };
 
@@ -84,4 +83,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = platforms.unix;
   };
-})
+}

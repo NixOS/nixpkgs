@@ -25,7 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
   ];
   outputBin = "devdoc"; # for demo
-  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
 
   src = fetchFromGitHub {
     owner = "wmww";
