@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "mcpo";
-  version = "0.0.14";
+  version = "0.0.15";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "open-webui";
     repo = "mcpo";
     tag = "v${version}";
-    hash = "sha256-viwf0wjNvp/MyJHHYrWOqQe/bUJp6y7Yu9uVan7gC/U=";
+    hash = "sha256-b9zCeMwZdss/5bR6t7rvNWhVRJ8p3aIDEKwezU+CzB0=";
   };
 
   build-system = [
