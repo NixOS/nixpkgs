@@ -4,6 +4,7 @@
   fetchFromGitHub,
   stdenv,
   installShellFiles,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,6 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <($out/bin/kdlfmt completions fish) \
       --zsh <($out/bin/kdlfmt completions zsh)
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Formatter for kdl documents";
