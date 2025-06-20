@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-cases";
-  version = "3.8.6";
+  version = "3.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pytest_cases";
     inherit version;
-    hash = "sha256-XCTgqwy2+OgCpGm3llkGozPTuruHRYbrxW9+LL4afEQ=";
+    hash = "sha256-xOGB8bUlyTGjGNSBL6jeZWwsj7d/zPFXHs8Mxf6Of48=";
   };
 
   build-system = [ setuptools-scm ];
