@@ -4,8 +4,11 @@
   fetchFromGitHub,
   rustPlatform,
   python3Packages,
+  makeBinaryWrapper,
   nix-update-script,
   cmake,
+  cargo,
+  rustc,
 
   # tests
   firefox-unwrapped,
@@ -27,6 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-BErgOnmatxpfF5Ip44WOqnEWOzOJaVP6vfhXPsF9wuc=";
 
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
+
   nativeCheckInputs = [
     cmake
     python3Packages.cython
@@ -47,6 +54,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # https://github.com/eqrion/cbindgen/issues/628
       "--skip test_body"
     ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/cbindgen" \
+      --suffix PATH : ${
+        lib.makeBinPath [
+          cargo
+          rustc
+        ]
+      }
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
