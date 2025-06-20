@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.7.0";
+  version = "65.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "pennersr";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
+    hash = "sha256-gusA9TnsgSSnWBPwHsNYeESD9nX5DWh4HqMgcsoJRw0=";
   };
 
   nativeBuildInputs = [ gettext ];
