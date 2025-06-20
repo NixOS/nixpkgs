@@ -1,7 +1,9 @@
 {
   lib,
+  pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  callPackage,
 
   # build-system
   setuptools,
@@ -45,8 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "leanblueprint" ];
 
+  passthru.tests.simple-blueprint = callPackage ./tests/simple-blueprint.nix { };
+
   meta = {
-    description = "This plasTeX plugin allowing to write blueprints for Lean 4 projects";
+    description = "A plasTeX plugin allowing to write blueprints for Lean 4 projects";
     homepage = "https://github.com/PatrickMassot/leanblueprint";
     maintainers = with lib.maintainers; [ niklashh ];
     license = lib.licenses.asl20;
