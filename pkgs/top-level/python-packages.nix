@@ -4078,6 +4078,8 @@ self: super: with self; {
 
   djmail = callPackage ../development/python-modules/djmail { };
 
+  djoser = callPackage ../development/python-modules/djoser { };
+
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
   dlib = callPackage ../development/python-modules/dlib { inherit (pkgs) dlib; };
