@@ -42,7 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/hougesen/kdlfmt";
     changelog = "https://github.com/hougesen/kdlfmt/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ airrnot ];
+    maintainers = with lib.maintainers; [
+      airrnot
+      defelo
+    ];
     mainProgram = "kdlfmt";
   };
 })
