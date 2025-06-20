@@ -15,6 +15,7 @@
   stdenv,
   xercesc,
   zxing-cpp,
+  bc-openldap,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_STATIC=NO" # Do not build static libraries
     "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
     "-DENABLE_STRICT=NO" # Do not build with -Werror
+    "-DENABLE_LDAP=ON"
   ];
 
   buildInputs = [
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
     sqlite
     xercesc
     zxing-cpp
+
+    bc-openldap
   ];
 
   nativeBuildInputs = [
