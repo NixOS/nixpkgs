@@ -6,6 +6,7 @@
   python,
   pythonOlder,
   setuptools,
+  legacy-cgi,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,8 @@ buildPythonPackage rec {
     # prove we're running tests against installed package, not build dir
     rm -r appconf
   '';
+
+  nativeCheckInputs = [ legacy-cgi ];
 
   checkPhase = ''
     runHook preCheck
