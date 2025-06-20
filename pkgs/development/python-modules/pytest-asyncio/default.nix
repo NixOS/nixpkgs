@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.26.0"; # N.B.: when updating, tests bleak and aioesphomeapi tests
+  version = "1.0.0"; # N.B.: when updating, tests bleak and aioesphomeapi tests
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-asyncio";
     tag = "v${version}";
-    hash = "sha256-GEhFwwQCXwtqfSiew/sOvJYV3JREqOGD4fQONlRR/Mw=";
+    hash = "sha256-AnIBtqMig4behfAmDoLEyOk4hBI3MwCShTQUrCnmqmg=";
   };
 
   outputs = [
