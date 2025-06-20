@@ -6587,6 +6587,8 @@ self: super: with self; {
 
   html2image = callPackage ../development/python-modules/html2image { };
 
+  html2pdf4doc = callPackage ../development/python-modules/html2pdf4doc { };
+
   html2text = callPackage ../development/python-modules/html2text { };
 
   html5-parser = callPackage ../development/python-modules/html5-parser { };
