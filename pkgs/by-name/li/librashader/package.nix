@@ -24,11 +24,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-fKYpRvH8zt7GeiaBf1oZHBY4WSCVQzZ0Ca7Q3ek6QE0=";
 
-  RUSTC_BOOTSTRAP = 1;
-
   buildPhase = ''
     runHook preBuild
-    cargo run -p librashader-build-script -- --profile optimized
+    cargo run -p librashader-build-script -- --profile optimized --stable
     runHook postBuild
   '';
 
@@ -54,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ''
     )
     + ''
-      install -m644 librashader.h -t $out/include/librashader
+      install -m644 ../../include/librashader.h -t $out/include/librashader
       install -m644 ../../include/librashader_ld.h -t $out/include/librashader
       runHook postInstall
     '';
