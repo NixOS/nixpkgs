@@ -41,6 +41,7 @@ python3Packages.buildPythonApplication rec {
     jinja2
     markupsafe
     packaging
+    pkgs.buildbox
     pluginbase
     protobuf
     psutil
@@ -53,7 +54,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    buildbox
     fuse3
     lzip
     patch
