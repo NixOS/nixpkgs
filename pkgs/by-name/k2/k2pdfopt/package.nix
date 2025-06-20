@@ -4,7 +4,6 @@
   runCommand,
   fetchzip,
   fetchurl,
-  fetchpatch,
   fetchFromGitHub,
   cmake,
   jbig2dec,
@@ -64,6 +63,7 @@ let
       name,
       src,
       patchCommands,
+      fixupCommands ? "",
     }:
     runCommand "${name}-k2pdfopt.patch" { inherit src; } ''
       unpackPhase
@@ -77,12 +77,14 @@ let
       popd >/dev/null
 
       diff -Naur $orig $new > $out || true
+
+      ${fixupCommands}
     '';
 
   pname = "k2pdfopt";
   version = "2.55";
   k2pdfopt_src = fetchzip {
-    url = "http://www.willus.com/${pname}/src/${pname}_v${version}_src.zip";
+    url = "https://www.willus.com/${pname}/src/${pname}_v${version}_src.zip";
     hash = "sha256-orQNDXQkkcCtlA8wndss6SiJk4+ImiFCG8XRLEg963k=";
   };
 in
@@ -135,44 +137,18 @@ stdenv.mkDerivation rec {
           cp ${k2pdfopt_src}/mupdf_mod/{filter-basic,font,stext-device,string}.c ./source/fitz/
           cp ${k2pdfopt_src}/mupdf_mod/pdf-* ./source/pdf/
         '';
+        # manually fix merge conflicts in the generated patch
+        fixupCommands = ''
+          patch $out ${./mupdf-k2pdfopt-fixup.patch}
+        '';
       };
-      # mupdf_patch no longer applies cleanly against mupdf 1.25.0 or later, due to a conflicting
-      # hunk (mupdf_conflict) introduced in commit bd8d337939f36f55b96cb6984f5c7bbf2f488ce0 of mupdf.
-      # This merge conflict can be resolved as desired by reverting mupdf_conflict, applying mupdf_patch,
-      # and finally reapplying mupdf_conflict, with an increased fuzz factor (see mupdf_modded below).
-      # TODO: remove workaround with conflicting hunk when mupdf in k2pdfopt is updated to 1.25.0 or later
-      mupdf_conflict =
-        hash: revert:
-        fetchpatch {
-          name = "mupdf-conflicting-hunk" + (lib.optionalString revert "-reverted") + ".patch";
-          url = "https://github.com/ArtifexSoftware/mupdf/commit/bd8d337939f36f55b96cb6984f5c7bbf2f488ce0.patch";
-          inherit hash revert;
-          includes = [ "source/fitz/stext-device.c" ];
-          postFetch = ''
-            filterdiff -#6 "$out" > "$tmpfile"
-            mv "$tmpfile" "$out"
-          '';
-        };
       mupdf_modded = mupdf.overrideAttrs (
         {
           patches ? [ ],
           ...
         }:
         {
-          # The fuzz factor is increased to automatically resolve the merge conflict.
-          patchFlags = [
-            "-p1"
-            "-F3"
-          ];
-          # Reverting and reapplying the conflicting hunk is necessary, otherwise the result will be faulty.
-          patches = patches ++ [
-            # revert conflicting hunk
-            (mupdf_conflict "sha256-24tl9YBuZBYhb12yY3T0lKsA7NswfK0QcMYhb2IpepA=" true)
-            # apply modifications
-            mupdf_patch
-            # reapply conflicting hunk
-            (mupdf_conflict "sha256-bnBV7LyX1w/BXxBFF1bkA8x+/0I9Am33o8GiAeEKHYQ=" false)
-          ];
+          patches = patches ++ [ mupdf_patch ];
           # This function is missing in font.c, see font-win32.c
           postPatch = ''
             echo "void pdf_install_load_system_font_funcs(fz_context *ctx) {}" >> source/fitz/font.c
@@ -276,7 +252,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Optimizes PDF/DJVU files for mobile e-readers (e.g. the Kindle) and smartphones";
-    homepage = "http://www.willus.com/k2pdfopt";
+    homepage = "https://www.willus.com/k2pdfopt";
     changelog = "https://www.willus.com/k2pdfopt/k2pdfopt_version.txt";
     license = licenses.gpl3;
     platforms = platforms.linux;

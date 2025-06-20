@@ -1,0 +1,20 @@
+mupdf_patch: resolve merge conflicts
+
+mupdf_patch no longer applies cleanly against mupdf >= 1.25.0, due to merge conflicts in source/fitz/stext-device.c::fz_new_stext_device arising from the following commits
+* https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/diff/source/fitz/stext-device.c?id=bd8d337939f36f55b96cb6984f5c7bbf2f488ce0#:~:text=14%20%40%40-,fz%5Fnew%5Fstext%5Fdevice%28
+* https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/diff/source/fitz/stext-device.c?id=3c260284afce11bb50f32950a7c9f64e6af1af15#:~:text=11%20%40%40-,fz%5Fnew%5Fstext%5Fdevice%28
+This patch resolves these merge conflicts.
+---
++++
+@@ -15,7 +15,7 @@
+-@@ -971,6 +971,9 @@
+- 
+- 	if (opts)
+- 		dev->flags = opts->flags;
++@@ -2460,6 +2460,9 @@ fz_new_stext_device(fz_context *ctx, fz_stext_page *page, const fz_stext_options
++ 			dev->super.stroke_path = fz_stext_stroke_path;
++ 		}
++ 	}
+ +/* willus mod */
+ +else dev->flags=0;
+ +
