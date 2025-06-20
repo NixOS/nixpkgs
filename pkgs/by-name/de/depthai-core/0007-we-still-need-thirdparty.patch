@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4115bc1f1..1e4104cc0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -162,11 +162,9 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
+ 
+ 
+ # TODO Remove shared naming
+-if(DEPTHAI_ENABLE_3RDPARTY)
+ set(DEPTHAI_SHARED_3RDPARTY_INCLUDE
+     ${CMAKE_CURRENT_LIST_DIR}/include/3rdparty/
+ )
+-endif()
+ 
+ # Add depthai-bootloader-shared
+ include(${CMAKE_CURRENT_LIST_DIR}/shared/depthai-bootloader-shared.cmake)
