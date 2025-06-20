@@ -45,7 +45,6 @@
     config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   sndioSupport ? false,
-  testSupport ? true,
   traySupport ? true,
   waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
@@ -60,15 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
   version = "3.2.20";
 
-  outputs =
-    [
-      "lib"
-      "dev"
-      "out"
-    ]
-    ++ lib.optionals testSupport [
-      "installedTests"
-    ];
+  outputs = [
+    "lib"
+    "dev"
+    "out"
+    "installedTests"
+  ];
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
@@ -80,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch =
     # Tests timeout on Darwin
     # `testtray` loads assets from a relative path, which we are patching to be absolute
-    lib.optionalString testSupport ''
+    lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
 
@@ -171,17 +167,17 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_PIPEWIRE" pipewireSupport)
     (lib.cmakeBool "SDL_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "SDL_SNDIO" sndioSupport)
-    (lib.cmakeBool "SDL_TEST_LIBRARY" testSupport)
+    (lib.cmakeBool "SDL_TEST_LIBRARY" true)
     (lib.cmakeBool "SDL_TRAY_DUMMY" (!traySupport))
     (lib.cmakeBool "SDL_WAYLAND" waylandSupport)
     (lib.cmakeBool "SDL_WAYLAND_LIBDECOR" libdecorSupport)
     (lib.cmakeBool "SDL_X11" x11Support)
 
-    (lib.cmakeBool "SDL_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "SDL_INSTALL_TESTS" testSupport)
+    (lib.cmakeBool "SDL_TESTS" true)
+    (lib.cmakeBool "SDL_INSTALL_TESTS" true)
   ];
 
-  doCheck = testSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = true;
 
   # See comment below. We actually *do* need these RPATH entries
   dontPatchELF = true;
@@ -194,10 +190,9 @@ stdenv.mkDerivation (finalAttrs: {
     ) "-rpath ${lib.makeLibraryPath (finalAttrs.dlopenBuildInputs)}";
   };
 
-  postInstall = lib.optionalString testSupport ''
+  postInstall = ''
     moveToOutput "share/installed-tests" "$installedTests"
     moveToOutput "libexec/installed-tests" "$installedTests"
-    install -Dm 444 -t $installedTests/share/assets test/*.bmp
   '';
 
   passthru = {
