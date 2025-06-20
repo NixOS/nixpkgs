@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   pkg-config,
   libpng,
   libiconv,
@@ -22,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fukuchi";
     repo = "libqrencode";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nbrmg9SqCqMrLE7WCfNEzMV/eS9UVCKCrjBrGMzAsLk";
   };
 
@@ -48,22 +49,28 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.tests = finalAttrs.finalPackage.overrideAttrs (_: {
-    configureFlags = [ "--with-tests" ];
-    doCheck = true;
-  });
+  passthru = {
+    tests = finalAttrs.finalPackage.overrideAttrs {
+      configureFlags = [ "--with-tests" ];
+      doCheck = true;
+    };
+    updateScript = nix-update-script { };
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fukuchi.org/works/qrencode/";
-    description = "C library for encoding data in a QR Code symbol";
+    description = "C library and command line tool for encoding data in a QR Code symbol";
     longDescription = ''
       Libqrencode is a C library for encoding data in a QR Code symbol,
       a kind of 2D symbology that can be scanned by handy terminals
-      such as a mobile phone with CCD.
+      such as a smartphone.
+
+      The library also contains qrencode, a command-line utility to output
+      QR Code images in various formats.
     '';
-    license = licenses.lgpl21Plus;
-    maintainers = [ ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.mdaniels5757 ];
+    platforms = lib.platforms.all;
     mainProgram = "qrencode";
   };
 })
