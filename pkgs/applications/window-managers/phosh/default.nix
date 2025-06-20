@@ -19,6 +19,7 @@
   glib,
   modemmanager,
   gtk4,
+  gtk3,
   gnome-bluetooth,
   gnome-control-center,
   gnome-desktop,
@@ -39,16 +40,18 @@
   evolution-data-server,
   nixosTests,
   gmobile,
+  gobject-introspection,
+  appstream,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.44.1";
+  version = "0.47.0";
 
   src = fetchurl {
     # Release tarball which includes subprojects gvc and libcall-ui
     url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-rczGr7YSmVFu13oa3iSTmSQ4jsjl7lv38zQtD7WmDis=";
+    hash = "sha256-FD8Iu/2Zkas/265jMHrGB9bmVF+jHfUO8/ZAXUBaDyg=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     wayland-scanner
     wrapGAppsHook4
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -71,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     callaudiod
     evolution-data-server
     pulseaudio
-    glib
+    glib.dev
     modemmanager
     gcr
     networkmanager
@@ -82,11 +86,17 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     gnome-session
     gtk4
+    gtk3
     pam
     systemd
     upower
     wayland
     feedbackd
+    appstream
+  ];
+
+  patches = [
+    ./0001-plugins-scaling-quick-setting-specify-missing-depend.patch
   ];
 
   nativeCheckInputs = [
@@ -101,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dcompositor=${phoc}/bin/phoc"
     # Save some time building if tests are disabled
     "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
+    # We need this for phrog
+    "-Dbindings-lib=true"
   ];
 
   checkPhase = ''
