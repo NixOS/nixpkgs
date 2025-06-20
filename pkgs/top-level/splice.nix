@@ -164,9 +164,50 @@ in
 {
   inherit splicePackages;
 
-  # We use `callPackage' to be able to omit function arguments that can be
-  # obtained `pkgs` or `buildPackages` and their `xorg` package sets. Use
-  # `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
+  /**
+    We use `callPackage' to be able to omit function arguments that can be obtained `pkgs` or `buildPackages` and their `xorg` package sets. Use `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
+
+    # Inputs (positional)
+
+    - `funcOrPath` - `(AttrSet -> a) | Path`
+
+      Either a function that is expected to build a package from the given attribute set or a file that returns such a function when imported.
+
+    - `args` - `AttrSet`
+
+      Arguments that will be passed to the function, overriding or extending attributes of `pkgs`.
+
+    # Examples
+
+    Define a function that uses attributes from `pkgs`
+
+    :::{.example}
+      **say-hello.nix**
+      ```nix
+      {
+        # Attributes found in `pkgs`
+        hello, lib, writeScript,
+        # An additional attribute not in `pkgs`
+        name,
+        ...
+      }:
+
+      writeScript "say-hello-${name}" ''
+        export PATH=${lib.strings.makeBinPath [hello]}
+        hello -g "Hello ${name}!"
+      ''
+      ```
+
+    In another file, call `say-hello.nix` without worrying about passing all the arguments found in `pkgs`.
+    `name` must be passed though as it is not in the `pkgs` attribute set.
+
+    ```nix
+    { pkgs, ...}:
+    {
+      sayHelloPackage = pkgs.callPackage ./say-hello.nix { name = "Medina"; };
+    }
+    ```
+  */
   callPackage = pkgs.newScope { };
 
   callPackages = lib.callPackagesWith pkgsForCall;

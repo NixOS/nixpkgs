@@ -1167,6 +1167,9 @@ let
             mergedOption.type;
       };
 
+      /**
+        See https://nixos.org/manual/nixos/unstable/#sec-option-types-submodule
+      */
       submoduleWith =
         {
           modules,
