@@ -198,7 +198,7 @@ let
   pos_str = meta: meta.position or "«unknown-file»";
 
   remediation = {
-    unfree = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate");
+    unfree = remediate_unfree;
     non-source = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate");
     broken = remediate_allowlist "Broken" (x: "");
     unsupported = remediate_allowlist "UnsupportedSystem" (x: "");
@@ -256,6 +256,50 @@ let
     to ~/.config/nixpkgs/config.nix.
   '';
 
+  remediate_unfree = attrs: ''
+    You can install it anyway by allowing this package, using one of the
+    following methods:
+
+    a) if this happened while building a NixOS config, e.g. by
+       running `fc-manage switch`, you can add ‘${lib.getName attrs}’
+       to `flyingcircus.allowedUnfreePackageNames`, like this:
+
+         {
+           flyingcircus.allowedUnfreePackageNames = [
+             "${lib.getName attrs}"
+           ];
+         }
+
+    b) when using our channel tarballs (e.g. a tarball from the FCIO Hydra or
+       `import <fc> {}`), you can the following declarations to the `import` argument:
+
+         {
+           config.allowedUnfreePackageNames = [
+             "${lib.getName attrs}"
+           ];
+         }
+
+    c) when using nixpkgs directly (e.g. via `import <nixpkgs> {}`), you can add
+       the following declarations to the `import` argument:
+
+         {
+           # to allow ANY unfree package
+           config.allowUnfree = true;
+
+           # to allow ONLY THIS unfree package
+           config.allowUnfreePredicate = pkg: builtins.elem (pkg.pname or (builtins.parseDrvName pkg).name) [
+             "${lib.getName attrs}"
+           ];
+         }
+
+    d) temporarily allowing any unfree package can be enabled via
+
+         $ export NIXPKGS_ALLOW_UNFREE=1
+
+       Please note that this only advisable for interactive use, e.g. for `nix-shell`
+       and should NOT be used for NixOS configurations or user envs.
+  '';
+
   remediate_insecure =
     attrs:
     ''
@@ -265,34 +309,36 @@ let
     + (concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities))
     + ''
 
-      You can install it anyway by allowing this package, using the
+      You can install it anyway by allowing this package, using one of the
       following methods:
 
-      a) To temporarily allow all insecure packages, you can use an environment
-         variable for a single invocation of the nix tools:
+      a) if this happened while building a NixOS config, e.g. by
+         running `fc-manage switch`, you can add ‘${getNameWithVersion attrs}’
+         to `flyingcircus.permittedInsecurePackages`, like this:
+
+           {
+             flyingcircus.permittedInsecurePackages = [
+               "${getNameWithVersion attrs}"
+             ];
+           }
+
+      b) when using nixpkgs directly, you can set `permittedInsecurePackages` like this:
+
+           {
+             config.permittedInsecurePackages = [
+               "${getNameWithVersion attrs}"
+             ];
+           }
+
+         This is relevant when importing a channel tarball from Hydra
+         or the machine's nixpkgs (i.e. `import <nixpkgs>`), e.g. in a user env.
+
+      c) temporarily allowing any insecure package can be enabled via
 
            $ export NIXPKGS_ALLOW_INSECURE=1
-           ${flakeNote}
-      b) for `nixos-rebuild` you can add ‘${getNameWithVersion attrs}’ to
-         `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
-         like so:
 
-           {
-             nixpkgs.config.permittedInsecurePackages = [
-               "${getNameWithVersion attrs}"
-             ];
-           }
-
-      c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-         ‘${getNameWithVersion attrs}’ to `permittedInsecurePackages` in
-         ~/.config/nixpkgs/config.nix, like so:
-
-           {
-             permittedInsecurePackages = [
-               "${getNameWithVersion attrs}"
-             ];
-           }
-
+         Please note that this only advisable for interactive use, e.g. for `nix-shell`
+         and should NOT be used for NixOS configurations or user envs.
     '';
 
   remediateOutputsToInstall =
