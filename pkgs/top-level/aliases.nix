@@ -1,4 +1,4 @@
-lib: self: super:
+lib': self: _super:
 
 ### Deprecated aliases - for backward compatibility
 ### Please maintain this list in ASCIIbetical ordering.
@@ -16,8 +16,6 @@ lib: self: super:
 # valid examples of what to preserve:
 #   distro aliases such as:
 #     debian-package-name -> nixos-package-name
-
-with self;
 
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute set
@@ -46,7 +44,7 @@ let
     "${p} has been renamed to ${p3} since ${p4} is also available. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)";
 
   deprecatedPlasma5Packages = {
-    inherit (plasma5Packages)
+    inherit (self.plasma5Packages)
       akonadi
       akregator
       arianna
@@ -178,7 +176,7 @@ let
       zanshin
       ;
 
-    inherit (plasma5Packages.thirdParty)
+    inherit (self.plasma5Packages.thirdParty)
       krohnkite
       krunner-ssh
       krunner-symbols
@@ -188,7 +186,7 @@ let
       plasma-applet-virtual-desktop-bar
       ;
 
-    inherit (libsForQt5)
+    inherit (self.libsForQt5)
       sddm
       ;
   };
@@ -209,13 +207,60 @@ let
   # Make sure that we are not shadowing something from all-packages.nix.
   checkInPkgs =
     n: alias:
-    if builtins.hasAttr n super then throw "Alias ${n} is still in all-packages.nix" else alias;
+    if builtins.hasAttr n _super then throw "Alias ${n} is still in all-packages.nix" else alias;
+
+  # `config.warnAliases` machinery
+  # These are no-ops when warnAliases=false
+
+  selfWithAliasWarningNames =
+    if _super.config.warnAliases then
+      lib.mapAttrs (
+        name: package:
+        if lib.isDerivation package then
+          # smuggle the attribute name of each package
+          package // { __aliasWarningAttrName = name; }
+        else
+          package
+      ) self
+    else
+      self;
+
+  addAliasWarnOnInstantiate =
+    if _super.config.warnAliases then
+      name: alias:
+      if !alias ? __aliasWarningAttrName then
+        alias
+      else
+        # our lib.warnOnInstantiate override also removes __aliasWarningAttrName
+        lib.warnOnInstantiate "'${name}' has been renamed to/replaced by '${alias.__aliasWarningAttrName}'"
+          alias
+    else
+      name: alias: alias;
+
+  lib = lib'.extend (
+    final: prev:
+    lib'.optionalAttrs _super.config.warnAliases {
+      # make warnOnInstantiate also remove __aliasWarningAttrName
+      # to enable tailoring alias warnings without producing double warnings
+      warnOnInstantiate =
+        message: package:
+        prev.warnOnInstantiate message (prev.removeAttrs package [ "__aliasWarningAttrName" ]);
+    }
+  );
 
   mapAliases =
     aliases:
     lib.mapAttrs (
-      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
+      name: alias:
+      addAliasWarnOnInstantiate name (
+        removeDistribute (removeRecurseForDerivations (checkInPkgs name alias))
+      )
     ) aliases;
+in
+
+with selfWithAliasWarningNames;
+let
+  pkgs = selfWithAliasWarningNames;
 in
 
 mapAliases {
