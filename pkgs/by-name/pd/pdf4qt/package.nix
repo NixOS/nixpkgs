@@ -8,7 +8,7 @@
   qt6,
   wrapGAppsHook3,
   openjpeg,
-  tbb_2021_11,
+  tbb_2021,
   blend2d,
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtspeech
     lcms
     openjpeg
-    tbb_2021_11
+    tbb_2021
     blend2d
   ];
 
