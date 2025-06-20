@@ -9238,6 +9238,18 @@ with pkgs;
 
   openssl = openssl_3_4;
 
+  openssl_quantum = openssl.override {
+    providers = [
+      {
+        name = "oqsprovider";
+        package = pkgs.oqs-provider;
+      }
+    ];
+    autoloadProviders = true;
+    
+    conf = ../development/libraries/openssl/quantum_safe.cnf;
+  };
+
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
   };
