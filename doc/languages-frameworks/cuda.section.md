@@ -8,7 +8,9 @@ Nixpkgs provides a number of CUDA package sets, each based on a different CUDA r
 
 - `cudaPackages_x_y`: A major-minor-versioned package set for a specific CUDA release, where `x` and `y` are the major and minor versions of the CUDA release.
 - `cudaPackages_x`: A major-versioned alias to the major-minor-versioned CUDA package set with the latest widely supported major CUDA release.
-- `cudaPackages`: An alias to the major-versioned alias for the latest widely supported CUDA release. This package set referenced by this alias is also referred to as the "default" CUDA package set. As an example, which is an alias to the most recent variant of `cudaPackages_x`. This is also referred to as the "default" CUDA package set.
+- `cudaPackages`: An unversioned alias to the major-versioned alias for the latest widely supported CUDA release. The package set referenced by this alias is also referred to as the "default" CUDA package set.
+
+While versioned package sets are available (e.g., `cudaPackages_12_2`), it is recommended to use the unversioned `cudaPackages` attribute, as versioned attributes are periodically removed.
 
 Here are two examples to illustrate the naming conventions:
 
@@ -59,7 +61,7 @@ The `cudaForwardCompat` boolean configuration option determines whether PTX supp
 
 ## Configuring CUDA package sets {#cuda-configuring-cuda-package-sets}
 
-CUDA package sets are created by `callPackage`-ing `pkgs/top-level/cuda-packages.nix` with an explicit argument for `cudaMajorMinorVersion`, a string of the form `"<major>.<minor>"` (e.g., `"12.2"`), which informs the CUDA package set tooling which version of CUDA to use. The majority of the CUDA package set tooling is available through the top-level attribute set `_cuda`, a fixed-point which exists apart from any instance of the CUDA package set.
+CUDA package sets are created by `callPackage`-ing `pkgs/top-level/cuda-packages.nix` with an explicit argument for `cudaMajorMinorVersion`, a string of the form `"<major>.<minor>"` (e.g., `"12.2"`), which informs the CUDA package set tooling which version of CUDA to use. The majority of the CUDA package set tooling is available through the top-level attribute set `_cuda`, a fixed-point defined outside the CUDA package sets.
 
 ::: {.caution}
 The `cudaMajorMinorVersion` and `_cuda` attributes are not part of the CUDA package set fixed-point, but are instead provided by `callPackage` from the top-level in the construction of the package set. As such, they must be modified via the package set's `override` attribute.
@@ -73,7 +75,7 @@ As indicated by the underscore prefix, `_cuda` is an implementation detail and n
 The `_cuda` attribute set fixed-point should be modified through its `extend` attribute.
 :::
 
-The `_cuda.fixups` attribute set is a mapping from package name to a `callPackage`-able expression which will be provided to `overrideAttrs` on the result of our generic builder.
+The `_cuda.fixups` attribute set is a mapping from package name (`pname`) to a `callPackage`-able expression which will be provided to `overrideAttrs` on the result of our generic builder.
 
 ::: {.caution}
 Fixups are chosen from `_cuda.fixups` by `pname`. As a result, packages with multiple versions (e.g., `cudnn`, `cudnn_8_9`, etc.) all share a single fixup function (i.e., `_cuda.fixups.cudnn`, which is `pkgs/development/cuda-modules/fixups/cudnn.nix`).
@@ -83,10 +85,10 @@ As an example, you can change the fixup function used for cuDNN for only the def
 
 ```nix
 final: prev: {
-  cudaPackages = prev.cudaPackages.override (prevAttrs: {
-    _cuda = prevAttrs._cuda.extend (
-      _: prevAttrs': {
-        fixups = prevAttrs'.fixups // {
+  cudaPackages = prev.cudaPackages.override (prevArgs: {
+    _cuda = prevArgs._cuda.extend (
+      _: prevAttrs: {
+        fixups = prevAttrs.fixups // {
           cudnn = <your-fixup-function>;
         };
       }
@@ -116,8 +118,6 @@ final: prev: {
 ::: {.caution}
 A non-trivial amount of CUDA package discoverability and usability relies on the various setup hooks used by a CUDA package set. As a result, users will likely encounter issues trying to perform builds within a `devShell` without manually invoking phases.
 :::
-
-Nixpkgs makes CUDA package sets available under a number of attributes. While versioned package sets are available (e.g., `cudaPackages_12_2`), it is recommended to use the unversioned `cudaPackages` attribute, which is an alias to the latest version, as versioned attributes are periodically removed.
 
 To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA support is optional, add a `config` and `cudaSupport` parameter:
 
@@ -150,7 +150,7 @@ When using `callPackage`, you can choose to pass in a different variant, e.g. wh
 ```
 
 ::: {.caution}
-Overriding the CUDA package set used by a package may cause inconsistencies, since the override does not affect dependencies of the package. As a result, it is easy to end up with a package which uses a different CUDA package set than its dependencies. If at all possible, it is recommended to change the default CUDA package set globally, to ensure a consistent environment.
+Overriding the CUDA package set used by a package may cause inconsistencies, since the override affects niether the direct nor transitive dependencies of the package. As a result, it is easy to end up with a package which uses a different CUDA package set than its dependencies. If at all possible, it is recommended to change the default CUDA package set globally, to ensure a consistent environment.
 :::
 
 ## Using `cudaPackages.pkgs` {#cuda-using-cudapackages-pkgs}
