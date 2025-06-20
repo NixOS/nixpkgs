@@ -106,6 +106,10 @@ python.pkgs.buildPythonApplication rec {
     ];
   };
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   postInstall = ''
     $out/bin/vectorcode --print-completion=bash >vectorcode.bash
     $out/bin/vectorcode --print-completion=zsh >vectorcode.zsh
@@ -116,7 +120,6 @@ python.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs =
     [
-      installShellFiles
       versionCheckHook
     ]
     ++ (with python.pkgs; [
