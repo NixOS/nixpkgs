@@ -64,10 +64,10 @@ in
         ];
         # Result options to expose the list module to bash as plain attribute path
         options.listResult = mkOption {
-          default = (builtins.head options.listOfModule.valueMeta.list).options.bar.value;
+          default = (builtins.head options.listOfModule.valueMeta.list).configuration.options.bar.value;
         };
         options.mergedListResult = mkOption {
-          default = (builtins.head options.mergedListOfModule.valueMeta.list).options.bar.value;
+          default = (builtins.head options.mergedListOfModule.valueMeta.list).configuration.options.bar.value;
         };
       }
     )

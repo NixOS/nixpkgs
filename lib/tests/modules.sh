@@ -768,8 +768,8 @@ checkConfigOutput '2' config.listOfResult ./types-valueMeta.nix
 
 # Check that composed types expose the 'valueMeta'
 # attrsOf submodule (also on merged options,types)
-checkConfigOutput '42' options.attrsOfModule.valueMeta.attrs.foo.options.bar.value ./composed-types-valueMeta.nix
-checkConfigOutput '42' options.mergedAttrsOfModule.valueMeta.attrs.foo.options.bar.value ./composed-types-valueMeta.nix
+checkConfigOutput '42' options.attrsOfModule.valueMeta.attrs.foo.configuration.options.bar.value ./composed-types-valueMeta.nix
+checkConfigOutput '42' options.mergedAttrsOfModule.valueMeta.attrs.foo.configuration.options.bar.value ./composed-types-valueMeta.nix
 
 # listOf submodule (also on merged options,types)
 checkConfigOutput '42' config.listResult ./composed-types-valueMeta.nix
