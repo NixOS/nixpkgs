@@ -1,9 +1,14 @@
 {
   lib,
   stdenv,
-  fetchzip,
-  makeBinaryWrapper,
+  fetchFromGitHub,
+  fetchpatch2,
+  coreutils,
+  findutils,
+  gnused,
   jre,
+  gradle,
+  makeWrapper,
   versionCheckHook,
 }:
 
@@ -11,48 +16,76 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "structurizr-cli";
   version = "2025.05.28";
 
-  src = fetchzip {
-    url = "https://github.com/structurizr/cli/releases/download/v${finalAttrs.version}/structurizr-cli.zip";
-    hash = "sha256-UYqUZydjsAoy5be/UhAyX/7OvLq8pXA6STwbEnCG7CU=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "structurizr";
+    repo = "cli";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bypCW7fEfSzVQHhb7wzxQUkXnoDb8QHUsPCpHV7pW/w=";
   };
 
-  strictDeps = true;
-  nativeBuildInputs = [ makeBinaryWrapper ];
-  buildInputs = [ jre ];
+  patches = [
+    (fetchpatch2 {
+      url = "https://patch-diff.githubusercontent.com/raw/structurizr/cli/pull/175.patch";
+      hash = "sha256-Ut9Rma54vb9UYtvHiCf8LI9i3trlCa45/60sRyKdPnQ=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace src/main/resources/build.properties \
+      --subst-var-by BUILD_NUMBER "${finalAttrs.version}" \
+      --subst-var-by BUILD_DATE "1970-01-01T00:00:00Z"
+  '';
+
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
+  ];
+
+  mitmCache = gradle.fetchDeps {
+    inherit (finalAttrs) pname;
+    data = ./deps.json;
+  };
+
+  __darwinAllowLocalNetworking = true;
+
+  gradleBuildTask = "installDist";
 
   installPhase = ''
     runHook preInstall
 
-    # Create folder structure
-    mkdir -p $out/bin
-    # Copy all jars
-    cp -r $src/. $out/
+    mkdir -p $out/{bin,lib}
 
-    # Find the names of all jars
-    jars=$(find $out/lib -name "*.jar" | tr '\n' ':')
-    jars=$(echo $jars | sed 's/:$//')
+    cp -r build/install/structurizr-cli $out/lib/structurizr-cli
 
-    # Create custom wrapper, since we want to inject our own java
-    makeBinaryWrapper ${jre}/bin/java $out/bin/structurizr-cli \
-      --add-flags "-cp $jars com.structurizr.cli.StructurizrCliApplication"
+    makeWrapper $out/lib/structurizr-cli/bin/structurizr-cli $out/bin/structurizr-cli \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          coreutils
+          findutils
+          gnused
+          jre
+        ]
+      }"
 
     runHook postInstall
   '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
+
+  strictDeps = true;
 
   meta = {
     description = "Structurizr CLI for publishing C4 architecture diagrams and models";
     homepage = "https://github.com/structurizr/cli";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mhemeryck ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = lib.platforms.all;
     mainProgram = "structurizr-cli";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
   };
 })
