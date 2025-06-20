@@ -16,12 +16,14 @@ let
       image,
       params,
       initrd,
+      devicetree,
     }:
     ''
       menuentry '${name}' --class ${class} {
         # Fallback to UEFI console for boot, efifb sometimes has difficulties.
         terminal_output console
 
+        ${lib.optionalString (devicetree != null) "devicetree ${devicetree}"}
         linux ${image} \''${isoboot} ${params}
         initrd ${initrd}
       }
@@ -46,6 +48,11 @@ let
         params = "init=${cfg.system.build.toplevel}/init ${toString cfg.boot.kernelParams} ${toString params}";
         image = "/boot/${cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile}";
         initrd = "/boot/${cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile}";
+        devicetree =
+          if cfg.hardware.deviceTree.enable then
+            "/boot/${cfg.hardware.deviceTree.package + "/" + cfg.hardware.deviceTree.name}"
+          else
+            null;
         class = "installer";
       };
     in
@@ -911,16 +918,24 @@ in
       let
         cfgFiles =
           cfg:
-          lib.optionals cfg.isoImage.showConfiguration ([
-            {
-              source = cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
-              target = "/boot/" + cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
-            }
-            {
-              source = cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
-              target = "/boot/" + cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
-            }
-          ])
+          lib.optionals cfg.isoImage.showConfiguration (
+            [
+              {
+                source = cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
+                target = "/boot/" + cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
+              }
+              {
+                source = cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
+                target = "/boot/" + cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
+              }
+            ]
+            ++ lib.optionals cfg.hardware.deviceTree.enable [
+              {
+                source = cfg.hardware.deviceTree.package + "/" + cfg.hardware.deviceTree.name;
+                target = "/boot/" + cfg.hardware.deviceTree.package + "/" + cfg.hardware.deviceTree.name;
+              }
+            ]
+          )
           ++ lib.concatLists (
             lib.mapAttrsToList (_: { configuration, ... }: cfgFiles configuration) cfg.specialisation
           );
