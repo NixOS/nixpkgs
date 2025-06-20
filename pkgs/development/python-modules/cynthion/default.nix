@@ -2,6 +2,14 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  python,
+
+  # gateware
+  makeSetupHook,
+  nextpnr,
+  trellis,
+  which,
+  yosys,
 
   # build-system
   setuptools,
@@ -25,6 +33,20 @@
   pytestCheckHook,
   udevCheckHook,
 }:
+let
+  build-gateware-hook = makeSetupHook {
+    name = "build-gateware-hook";
+    substitutions = {
+      pythonSitePackages = python.sitePackages;
+    };
+    propagatedBuildInputs = [
+      nextpnr
+      trellis
+      which
+      yosys
+    ];
+  } ./build-gateware.sh;
+in
 buildPythonPackage rec {
   pname = "cynthion";
   version = "0.2.4";
@@ -69,9 +91,14 @@ buildPythonPackage rec {
     tqdm
   ];
 
+  nativeBuildInputs = [
+    build-gateware-hook
+  ];
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  enableParallelBuilding = true;
 
   pythonImportsCheck = [ "cynthion" ];
 
