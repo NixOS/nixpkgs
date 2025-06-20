@@ -12,7 +12,7 @@
   polars,
   pytestCheckHook,
   pytest-benchmark,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
   pandas,
   azure-storage-blob,
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     pandas
     polars
     pytest-benchmark
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
     azure-storage-blob
   ];

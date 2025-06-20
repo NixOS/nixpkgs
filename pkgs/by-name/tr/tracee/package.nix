@@ -24,7 +24,7 @@ buildGoModule rec {
   # src = /home/tim/repos/tracee;
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
+    repo = "tracee";
     # project has branches and tags of the same name
     tag = "v${version}";
     hash = "sha256-9uP0yoW+xRYv7wHuCfUMU8B2oTQjiSW5p/Ty76ni2wo=";

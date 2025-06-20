@@ -29,8 +29,6 @@ let
       "LOONGARCH64"
     else
       throw "Unsupported architecture";
-
-  buildType = if stdenv.hostPlatform.isDarwin then "CLANGPDB" else "GCC5";
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -172,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
         finalAttrsInner:
         let
           attrs = lib.toFunction attrsOrFun finalAttrsInner;
+          buildType = attrs.buildType or (if stdenv.hostPlatform.isDarwin then "CLANGPDB" else "GCC5");
         in
         {
           inherit (finalAttrs) src;
