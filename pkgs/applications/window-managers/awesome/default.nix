@@ -126,17 +126,22 @@ stdenv.mkDerivation rec {
     "-DOVERRIDE_VERSION=${version}"
   ] ++ lib.optional lua.pkgs.isLuaJIT "-DLUA_LIBRARY=${lua}/lib/libluajit-5.1.so";
 
+  DYLD_LIBRARY_PATH = lib.optional stdenv.hostPlatform.isDarwin (lib.makeLibraryPath [ cairo ]);
+
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
   # LUA_CPATH and LUA_PATH are used only for *building*, see the --search flags
   # below for how awesome finds the libraries it needs at runtime.
   LUA_CPATH = "${luaEnv}/lib/lua/${lua.luaversion}/?.so";
   LUA_PATH = "${luaEnv}/share/lua/${lua.luaversion}/?.lua;;";
 
+  makeWrapperArgs = lib.optionalString stdenv.hostPlatform.isDarwin "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ cairo ]}";
+
   postInstall = ''
     # Don't use wrapProgram or the wrapper will duplicate the --search
     # arguments every restart
     mv "$out/bin/awesome" "$out/bin/.awesome-wrapped"
     makeWrapper "$out/bin/.awesome-wrapped" "$out/bin/awesome" \
+      $makeWrapperArgs \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --add-flags '--search ${luaEnv}/lib/lua/${lua.luaversion}' \
       --add-flags '--search ${luaEnv}/share/lua/${lua.luaversion}' \
@@ -158,6 +163,6 @@ stdenv.mkDerivation rec {
       lovek323
       rasendubi
     ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
