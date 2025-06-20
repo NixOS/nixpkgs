@@ -1473,6 +1473,7 @@ in
   vikunja = runTest ./vikunja.nix;
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
   vm-variant = handleTest ./vm-variant.nix { };
+  vpp = handleTest ./vpp.nix { };
   vscode-remote-ssh = handleTestOn [ "x86_64-linux" ] ./vscode-remote-ssh.nix { };
   vscodium = discoverTests (import ./vscodium.nix);
   vsftpd = runTest ./vsftpd.nix;
