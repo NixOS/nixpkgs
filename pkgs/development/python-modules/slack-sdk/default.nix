@@ -6,6 +6,7 @@
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   flake8,
   moto,
   psutil,
@@ -29,6 +30,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-yjYpALyHSTLQSuwd6xth7nqfi3m1C9tqnWrrVRmI220=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-aiohttp-test_init_with_loop.patch";
+      url = "https://github.com/slackapi/python-slack-sdk/pull/1697.patch";
+      hash = "sha256-rHaJBH/Yxm3Sz/jmzc4G1pVJJXz0PL2880bz5n7w3ck=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
