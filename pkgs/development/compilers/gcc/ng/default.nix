@@ -1,0 +1,79 @@
+{
+  lib,
+  callPackage,
+  stdenv,
+  stdenvAdapters,
+  recurseIntoAttrs,
+  gccVersions ? { },
+  patchesFn ? lib.id,
+  buildPackages,
+  targetPackages,
+  binutilsNoLibc,
+  binutils,
+  generateSplicesForMkScope,
+  pkgsBuildBuild,
+  pkgsBuildHost,
+  pkgsBuildTarget,
+  pkgsHostHost,
+  pkgsHostTarget,
+  pkgsTargetTarget,
+  ...
+}@packageSetArgs:
+let
+  versions = {
+    "15.1.0".officialRelease.sha256 = "sha256-4rCewhZg8B/s/7cV4BICZSFpQ/A40OSKmGhxPlTwbOo=";
+  } // gccVersions;
+
+  mkPackage =
+    {
+      name ? null,
+      officialRelease ? null,
+      gitRelease ? null,
+      monorepoSrc ? null,
+      version ? null,
+    }@args:
+    let
+      inherit
+        (import ./common/common-let.nix {
+          inherit
+            lib
+            gitRelease
+            officialRelease
+            version
+            ;
+        })
+        releaseInfo
+        ;
+      inherit (releaseInfo) release_version;
+      attrName =
+        args.name or (if (gitRelease != null) then "git" else lib.versions.major release_version);
+    in
+    lib.nameValuePair attrName (
+      recurseIntoAttrs (
+        callPackage ./common (
+          {
+            inherit (stdenvAdapters) overrideCC;
+            inherit
+              officialRelease
+              gitRelease
+              monorepoSrc
+              version
+              patchesFn
+              ;
+
+            selfBuildBuild = pkgsBuildBuild."gccNGPackages_${attrName}";
+            selfBuildHost = pkgsBuildHost."gccNGPackages_${attrName}";
+            selfBuildTarget = pkgsBuildTarget."gccNGPackages_${attrName}";
+            selfHostHost = pkgsHostHost."gccNGPackages_${attrName}";
+            selfHostTarget = pkgsHostTarget."gccNGPackages_${attrName}";
+            selfTargetTarget = pkgsTargetTarget."gccNGPackages_${attrName}" or gccPackages."${attrName}";
+            otherSplices = generateSplicesForMkScope "gccNGPackages_${attrName}";
+          }
+          // packageSetArgs # Allow overrides.
+        )
+      )
+    );
+
+  gccPackages = lib.mapAttrs' (version: args: mkPackage (args // { inherit version; })) versions;
+in
+gccPackages // { inherit mkPackage; }
