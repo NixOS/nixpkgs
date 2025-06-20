@@ -1,0 +1,19 @@
+diff --git a/desktop/packages/management-interface/build.sh b/desktop/packages/management-interface/build.sh
+index db0369fc42..24757ef2cc 100755
+--- a/desktop/packages/management-interface/build.sh
++++ b/desktop/packages/management-interface/build.sh
+@@ -35,12 +35,14 @@ else
+   "$NODE_MODULES_DIR/grpc_tools_node_protoc" \
+       --js_out=import_style=commonjs,binary:$OUT_DIR \
+       --grpc_out=grpc_js:$OUT_DIR \
++      --proto_path=../../node_modules/grpc-tools/bin/ \
+       --proto_path=$PROTO_DIR \
+       $PROTO_DIR/$PROTO_FILENAME
+ 
+   "$NODE_MODULES_DIR/grpc_tools_node_protoc" \
+       --plugin=protoc-gen-ts="$TS_PROTOC_PLUGIN" \
+       --ts_out=grpc_js:$OUT_DIR \
++      --proto_path=../../node_modules/grpc-tools/bin/ \
+       --proto_path=$PROTO_DIR \
+       $PROTO_DIR/$PROTO_FILENAME
+ fi
