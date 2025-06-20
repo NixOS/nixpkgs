@@ -31,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
   ];
   outputBin = "devdoc"; # demo app
-  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

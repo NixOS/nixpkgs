@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch2,
   aqbanking,
   boost,
   cmake,
@@ -89,6 +90,12 @@ stdenv.mkDerivation rec {
     ./0004-exec-fq-wrapper.patch
     # this patch adds in env vars to the Python lib that makes it able to find required resource files
     ./0005-python-env.patch
+    # this patch backports a fix to remove unused includes causing build failures
+    (fetchpatch2 {
+      url = "https://github.com/Gnucash/gnucash/commit/940085a0172216240232551022686cea4da86096.patch?full_index=1";
+      name = "0006-remove-unused-includes.patch";
+      hash = "sha256-4CpBtKDkcT1HlOAHsbASxPiHKVpZ9ETWS3fXEupOl0Q=";
+    })
   ];
 
   postPatch = ''
@@ -188,7 +195,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      rski
       nevivurn
     ];
     platforms = platforms.unix;

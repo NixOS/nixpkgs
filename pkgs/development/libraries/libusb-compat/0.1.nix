@@ -7,7 +7,7 @@
   libusb1,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libusb-compat";
   version = "0.1.8";
 
@@ -16,12 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ]; # get rid of propagating systemd closure
   outputBin = "dev";
-  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
 
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb-compat-0.1";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     sha256 = "sha256-pAPERYSxoc47gwpPUoMkrbK8TOXyx03939vlFN0hHRg=";
   };
 
@@ -37,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   # without this, libusb-compat is unable to find libusb1
   postFixup = ''
     find $out/lib -name \*.so\* -type f -exec \
-      patchelf --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs} {} \;
+      patchelf --set-rpath ${lib.makeLibraryPath buildInputs} {} \;
   '';
 
   meta = with lib; {
@@ -51,4 +50,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
   };
-})
+}

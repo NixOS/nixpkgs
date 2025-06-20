@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit (finalAttrs) offlineCache webUi;
+    inherit (finalAttrs) offlineCache;
     tests = nixosTests.actual;
   };
 
