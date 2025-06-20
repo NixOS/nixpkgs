@@ -5,6 +5,7 @@
   coreutils,
   installShellFiles,
   makeWrapper,
+  gitMinimal,
   writeShellScript,
   curl,
   jq,
@@ -13,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gk-cli";
-  version = "2.1.2";
+  version = "3.0.9";
 
   src = (
     finalAttrs.passthru.sources.${stdenv.system}
@@ -28,18 +29,34 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 gk -t $out/bin/
+    install -Dm555 gk*/gk -t $out/bin/
 
-    installShellCompletion --bash ./**/gk.bash
-    installShellCompletion --fish ./**/gk.fish
-    installShellCompletion --zsh ./**/_gk
+    wrapProgram $out/bin/gk \
+      --prefix PATH : "${lib.makeBinPath [ gitMinimal ]}"
 
     runHook postInstall
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/gk \
-      --prefix PATH : "${lib.makeBinPath [ coreutils ]}"
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # Use timeout because gk hangs instead of closing in the sandbox
+    installShellCompletion --cmd gk \
+      --bash <(HOME="$(mktemp --directory)" timeout 3 $out/bin/gk completion bash) \
+      --fish <(HOME="$(mktemp --directory)" timeout 3 $out/bin/gk completion fish) \
+      --zsh <(HOME="$(mktemp --directory)" timeout 3 $out/bin/gk completion zsh)
+  '';
+
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  installCheckPhase = ''
+    OUTPUT="$(
+      HOME="$(mktemp --directory)" \
+      timeout 3 `# Use timeout because gk hangs instead of closing in the sandbox` \
+      $out/bin/gk setup \
+      2>/dev/null \
+      || true # Command fails because not logged in
+    )"
+
+    echo "$OUTPUT" | grep --quiet '^Git binary found: ✓$'
+    echo "$OUTPUT" | grep --quiet '^CLI version: ${finalAttrs.version}$'
   '';
 
   passthru = {
@@ -48,49 +65,44 @@ stdenv.mkDerivation (finalAttrs: {
         base_url = "https://github.com/gitkraken/gk-cli/releases/download/v${finalAttrs.version}/gk_${finalAttrs.version}_";
       in
       {
-        armv6l-linux = fetchzip {
-          url = "${base_url}Linux_arm6.zip";
-          hash = "sha256-pnEFTkx1JSmQlniVCXvIB6xGD8XyDh9OLDU0V9AZBTs=";
-          stripRoot = false;
-        };
-        armv7l-linux = fetchzip {
-          url = "${base_url}Linux_arm7.zip";
-          hash = "sha256-qj0++i698s4ELKHU9B2sGIqf9hUJip4+2Car+brkRkM=";
-          stripRoot = false;
-        };
         aarch64-linux = fetchzip {
-          url = "${base_url}Linux_arm64.zip";
-          hash = "sha256-vHGhlRHbk2/s3YmBdOPDbalEydpQVFkHiCkBVywa4N0=";
+          url = "${base_url}linux_arm64.zip";
+          hash = "sha256-aYgHLpG4nX3Op0+j733jYbK4ZwVKkctMkDPweNTJWso=";
           stripRoot = false;
         };
         x86_32-linux = fetchzip {
-          url = "${base_url}Linux_i386.zip";
-          hash = "sha256-t+P9SpS9u/17kga74kbYjD6nkjiFusyIwCRGDnkP3tU=";
+          url = "${base_url}linux_386.zip";
+          hash = "sha256-lVu25S7e6a/kHmiD5dxGAlHMQ5yN46+SdFpt8lghejM=";
           stripRoot = false;
         };
         x86_64-linux = fetchzip {
-          url = "${base_url}Linux_x86_64.zip";
-          hash = "sha256-O6T27edHi20ZFHiNaZKdk/5dtCn2Tpxm0PR934SRwFk=";
+          url = "${base_url}linux_amd64.zip";
+          hash = "sha256-/z2G//Zh8lTHkeJPahyld1EEXXhd/cgIvCojUmzFX8E=";
           stripRoot = false;
         };
         aarch64-darwin = fetchzip {
-          url = "${base_url}macOS_arm64.zip";
-          hash = "sha256-LW2K+aveJiyYqfga2jpF3DvvFeHJuozqbc/afgtq2Oc=";
+          url = "${base_url}darwin_arm64.zip";
+          hash = "sha256-nDVehD0TTNTvhuDU8RB4lZiVcEJpB+l6EGkzckC7JuU=";
           stripRoot = false;
         };
         x86_64-darwin = fetchzip {
-          url = "${base_url}macOS_x86_64.zip";
-          hash = "sha256-1w8B4YWouVViTGoUh987pPQIoqdzB0S+M2bBiRI6Kfg=";
+          url = "${base_url}darwin_amd64.zip";
+          hash = "sha256-Lhuqb5592T6VcTMVmAdIDfGMXaS4dSu0wbQeHheXXk4=";
+          stripRoot = false;
+        };
+        aarch64-windows = fetchzip {
+          url = "${base_url}windows_arm64.zip";
+          hash = "sha256-sXHeqR4AW/sRPp74PieXI1n4VGV94CnrcMF1ovAek8E=";
           stripRoot = false;
         };
         i686-windows = fetchzip {
-          url = "${base_url}Windows_i386.zip";
-          hash = "sha256-t81/wK1weZ/uEZ5TzivylARTUqks9rLIG7WzeoWXb1k=";
+          url = "${base_url}windows_386.zip";
+          hash = "sha256-u6DyHoYIaExS2CHu20odDVJxzI4k9PpdFQf6UDPAzz0=";
           stripRoot = false;
         };
         x86_64-windows = fetchzip {
-          url = "${base_url}Windows_x86_64.zip";
-          hash = "sha256-9yydDMI9Gz/OswRhJHF+2c3Ia0zDmXMbf7byj6PJe24=";
+          url = "${base_url}windows_amd64.zip";
+          hash = "sha256-nh+JPR95IWLm7CTrS8qK2dP3c4SH/zm1oIS5GNgxcyo=";
           stripRoot = false;
         };
       };
