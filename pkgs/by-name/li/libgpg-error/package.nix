@@ -78,7 +78,7 @@ stdenv.mkDerivation (
 
     meta = {
       homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
-      changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
+      changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${finalAttrs.version}";
       description = "Small library that defines common error values for all GnuPG components";
       mainProgram = if genPosixLockObjOnly then "gen-posix-lock-obj" else "gpg-error";
 
