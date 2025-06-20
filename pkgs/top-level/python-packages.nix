@@ -14735,6 +14735,8 @@ self: super: with self; {
 
   pytorch-pfn-extras = callPackage ../development/python-modules/pytorch-pfn-extras { };
 
+  pytorch-tabnet = callPackage ../development/python-modules/pytorch-tabnet { };
+
   pytorch3d = callPackage ../development/python-modules/pytorch3d { };
 
   pytouchline-extended = callPackage ../development/python-modules/pytouchline-extended { };
