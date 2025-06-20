@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,6 +19,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-xoOnFJqDucg3fUDx5XbXsZT4rSjZhzt5rNbH+DZ1kGA=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd kdlfmt \
+      --bash <($out/bin/kdlfmt completions bash) \
+      --fish <($out/bin/kdlfmt completions fish) \
+      --zsh <($out/bin/kdlfmt completions zsh)
+  '';
 
   meta = {
     description = "Formatter for kdl documents";
