@@ -17,7 +17,7 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.20.0";
   pname = "librepo";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "librepo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KYBHImdGQgf/IZ5FMhzrbBTeZF76AIP3RjVPT3w0oT8=";
   };
 
@@ -67,11 +67,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Library providing C and Python (libcURL like) API for downloading linux repository metadata and packages";
     homepage = "https://rpm-software-management.github.io/librepo/";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})
