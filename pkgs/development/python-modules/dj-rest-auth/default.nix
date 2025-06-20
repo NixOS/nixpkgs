@@ -37,6 +37,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "==" ">="
+    substituteInPlace dj_rest_auth/tests/test_social.py \
+      --replace-fail "provider import GRAPH_API_URL" "constants import GRAPH_API_URL"
   '';
 
   build-system = [ setuptools ];
