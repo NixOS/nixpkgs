@@ -5,11 +5,11 @@
 }:
 let
   pname = "handheld-daemon-ui";
-  version = "3.3.6";
+  version = "3.3.7";
 
   src = fetchurl {
     url = "https://github.com/hhd-dev/hhd-ui/releases/download/v${version}/hhd-ui.Appimage";
-    hash = "sha256-M9YTP4Q27bqeTD5JhO58ltPDxgMuGAftOXYAGHQNmhc=";
+    hash = "sha256-+Rahmj+Y50NPXyeHdI9iXAe8FX9Gq5b4vQQBkzD6+ms=";
   };
   extractedFiles = appimageTools.extractType2 { inherit pname version src; };
 in
