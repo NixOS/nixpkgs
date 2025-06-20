@@ -5,6 +5,7 @@
   stdenv,
   buildPackages,
   installShellFiles,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,6 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --zsh <(${emulator} $out/bin/kdlfmt completions zsh)
     ''
   );
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Formatter for kdl documents";
