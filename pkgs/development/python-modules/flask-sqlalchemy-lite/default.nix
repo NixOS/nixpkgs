@@ -26,7 +26,7 @@ buildPythonPackage rec {
     # fix python3.13 compat
     (fetchpatch2 {
       url = "https://github.com/pallets-eco/flask-sqlalchemy-lite/commit/b4117beaa6caa0a5945d6e3451db8b80dc4cc8cf.patch?full_index=1";
-      hash = "sha256-S0LGRJCoo0rHNk8K/XPcYl0C0QTruZhN02lC2KlKG+I=";
+      hash = "sha256-zCeUWB3iuKqco030pULaRpRsIOpSRz9+VYxI/RQhIyw=";
     })
   ];
 
