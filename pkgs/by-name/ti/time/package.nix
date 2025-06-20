@@ -2,7 +2,12 @@
   lib,
   stdenv,
   fetchurl,
+  withPrefix ? false,
 }:
+
+let
+  prefix = lib.optionalString withPrefix "g";
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "time";
@@ -17,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     # fixes cross-compilation to riscv64-linux
     ./time-1.9-implicit-func-decl-clang.patch
   ];
+
+  configureFlags = lib.optional withPrefix "--program-prefix=g";
 
   meta = {
     description = "Tool that runs programs and summarizes the system resources they use";
@@ -36,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     homepage = "https://www.gnu.org/software/time/";
     platforms = lib.platforms.unix;
-    mainProgram = "time";
+    mainProgram = prefix + "time";
   };
 })

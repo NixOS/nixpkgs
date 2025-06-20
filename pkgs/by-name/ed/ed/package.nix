@@ -5,12 +5,17 @@
   runtimeShellPackage,
   stdenv,
   testers,
+  withPrefix ? false,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use
 # fetchpatch! Any mutable patches (retrieved from GitHub, cgit or any other
 # place) that are needed here should be directly included together as regular
 # files.
+
+let
+  prefix = lib.optionalString withPrefix "g";
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ed";
@@ -27,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
-  ];
+  ] ++ lib.optional withPrefix "--program-prefix=g";
 
   strictDeps = true;
 
@@ -53,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       full-screen editors such as GNU Emacs or GNU Moe.
     '';
     license = lib.licenses.gpl3Plus;
-    mainProgram = "ed";
+    mainProgram = prefix + "ed";
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };

@@ -4,7 +4,12 @@
   fetchurl,
   m4,
   perl,
+  withPrefix ? false,
 }:
+
+let
+  prefix = lib.optionalString withPrefix "g";
+in
 
 stdenv.mkDerivation rec {
   pname = "libtool";
@@ -17,6 +22,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ m4 ];
   buildInputs = [ perl ];
+
+  configureFlags = lib.optional withPrefix "--program-prefix=g";
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
@@ -41,6 +48,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
 
-    mainProgram = "libtool";
+    mainProgram = prefix + "libtool";
   };
 }
