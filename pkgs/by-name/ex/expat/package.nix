@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ]; # TODO: fix referrers
   outputBin = "dev";
+  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
 
   enableParallelBuilding = true;
 
