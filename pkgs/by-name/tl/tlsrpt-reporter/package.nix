@@ -5,6 +5,7 @@
   installShellFiles,
   python3,
   fetchFromGitHub,
+  fetchpatch,
   nixosTests,
 }:
 
@@ -24,6 +25,14 @@ python3.pkgs.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-IH8hJX9l+YonqOuszcMome4mjdIaedgGNIptxTyH1ng=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/sys4/tlsrpt-reporter/issues/43
+      url = "https://github.com/sys4/tlsrpt-reporter/commit/32d00c13508dd7f9695b77e253e88c88dc838fbd.patch";
+      hash = "sha256-RUNF86RkTu6DLv6/7eaY//fFB8kGzmZxQ70kdNpLxj8=";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoctor
