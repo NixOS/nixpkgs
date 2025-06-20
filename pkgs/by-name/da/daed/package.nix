@@ -95,6 +95,12 @@ buildGoModule rec {
     runHook postBuild
   '';
 
+  postInstall = ''
+    install -Dm444 $src/install/daed.service -t $out/lib/systemd/system
+    substituteInPlace $out/lib/systemd/system/daed.service \
+      --replace-fail /usr/bin $out/bin
+  '';
+
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script {
       attrPath = "daed.web";

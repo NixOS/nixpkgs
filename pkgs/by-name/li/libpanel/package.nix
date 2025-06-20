@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   outputBin = "dev";
+  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
 
   src = fetchurl {
     url = "mirror://gnome/sources/libpanel/${lib.versions.majorMinor finalAttrs.version}/libpanel-${finalAttrs.version}.tar.xz";
