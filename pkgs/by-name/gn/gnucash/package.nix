@@ -188,7 +188,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      rski
       nevivurn
     ];
     platforms = platforms.unix;
