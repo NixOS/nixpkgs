@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-eeqqzHMeXLRiXzbY+ay8gJ/YDuxDj3f6+d6eXA1uZHE=";
   };
 
+  patches = lib.optionals stdenv.cc.isClang [
+    # This test fails to compile with Clang 20
+    # See: https://github.com/catchorg/Catch2/issues/2991
+    ./clang-20-disable-broken-test.patch
+  ];
+
   postPatch = ''
     substituteInPlace CMake/*.pc.in \
       --replace-fail "\''${prefix}/" ""
