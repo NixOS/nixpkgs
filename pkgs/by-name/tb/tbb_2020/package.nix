@@ -7,9 +7,9 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tbb";
-  version = "2020.3";
+  version = "2020.3.3";
 
   outputs = [
     "out"
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneTBB";
-    rev = "v${version}";
-    sha256 = "prO2O5hd+Wz5iA0vfrqmyHFr0Ptzk64so5KpSpvuKmU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pCZpQ+t7dDzuS4vhlfSVLwieI0iSQHukXb8Nk5kMMBo=";
   };
 
   patches = [
@@ -34,14 +34,6 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/openembedded/meta-openembedded/raw/39185eb1d1615e919e3ae14ae63b8ed7d3e5d83f/meta-oe/recipes-support/tbb/tbb/0001-mallinfo-is-glibc-specific-API-mark-it-so.patch";
       hash = "sha256-xp8J/il855VTFIKCN/bFtf+vif6HzcVl4t4/L9nW/xk=";
-    })
-
-    # Fixes build with upcoming gcc-13:
-    #  https://github.com/oneapi-src/oneTBB/pull/833
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/oneapi-src/oneTBB/pull/833/commits/c18342ba667d1f33f5e9a773aa86b091a9694b97.patch";
-      hash = "sha256-LWgf7Rm6Zp4TJdvMqnAkoAebbVS+WV2kB+4iY6jRka4=";
     })
 
     # Fixes build for aarch64-darwin
@@ -91,29 +83,27 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postInstall =
-    let
-      pcTemplate = fetchurl {
-        url = "https://github.com/oneapi-src/oneTBB/raw/478de5b1887c928e52f029d706af6ea640a877be/integration/pkg-config/tbb.pc.in";
-        sha256 = "2pCad9txSpNbzac0vp/VY3x7HNySaYkbH3Rx8LK53pI=";
-      };
-    in
-    ''
-      # Generate pkg-config file based on upstream template.
-      # It should not be necessary with tbb after 2021.2.
-      mkdir -p "$out/lib/pkgconfig"
-      substitute "${pcTemplate}" "$out/lib/pkgconfig/tbb.pc" \
-        --subst-var-by CMAKE_INSTALL_PREFIX "$out" \
-        --subst-var-by CMAKE_INSTALL_LIBDIR "lib" \
-        --subst-var-by CMAKE_INSTALL_INCLUDEDIR "include" \
-        --subst-var-by TBB_VERSION "${version}" \
-        --subst-var-by TBB_LIB_NAME "tbb"
-    '';
+  pcTemplate = fetchurl {
+    url = "https://github.com/oneapi-src/oneTBB/raw/478de5b1887c928e52f029d706af6ea640a877be/integration/pkg-config/tbb.pc.in";
+    hash = "sha256-2pCad9txSpNbzac0vp/VY3x7HNySaYkbH3Rx8LK53pI=";
+  };
 
-  meta = with lib; {
+  postInstall = ''
+    # Generate pkg-config file based on upstream template.
+    # It should not be necessary with tbb after 2021.2.
+    mkdir -p "$out/lib/pkgconfig"
+    substitute "${finalAttrs.pcTemplate}" "$out/lib/pkgconfig/tbb.pc" \
+    --subst-var-by CMAKE_INSTALL_PREFIX "$out" \
+    --subst-var-by CMAKE_INSTALL_LIBDIR "lib" \
+    --subst-var-by CMAKE_INSTALL_INCLUDEDIR "include" \
+    --subst-var-by TBB_VERSION "${finalAttrs.version}" \
+    --subst-var-by TBB_LIB_NAME "tbb"
+  '';
+
+  meta = {
     description = "Intel Thread Building Blocks C++ Library";
     homepage = "http://threadingbuildingblocks.org/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     longDescription = ''
       Intel Threading Building Blocks offers a rich and complete approach to
       expressing parallelism in a C++ program. It is a library that helps you
@@ -122,11 +112,11 @@ stdenv.mkDerivation rec {
       represents a higher-level, task-based parallelism that abstracts platform
       details and threading mechanisms for scalability and performance.
     '';
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       silvanshade
       thoughtpolice
       tmarkus
     ];
   };
-}
+})

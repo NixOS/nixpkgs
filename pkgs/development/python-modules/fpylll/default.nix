@@ -48,7 +48,10 @@ buildPythonPackage rec {
     fplll
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [
+    numpy
+    cysignals
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

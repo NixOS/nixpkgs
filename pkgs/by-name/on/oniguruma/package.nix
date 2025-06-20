@@ -5,13 +5,13 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "oniguruma";
   version = "6.9.10";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = fetchurl {
-    url = "https://github.com/kkos/oniguruma/releases/download/v${finalAttrs.version}/onig-${finalAttrs.version}.tar.gz";
+    url = "https://github.com/kkos/oniguruma/releases/download/v${version}/onig-${version}.tar.gz";
     sha256 = "sha256-Klz8WuJZ5Ol/hraN//wVLNr/6U4gYLdwy4JyONdp/AU=";
   };
 
@@ -21,7 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
   outputBin = "dev"; # onig-config
-  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
 
   nativeBuildInputs = [ autoreconfHook ];
   configureFlags = [ "--enable-posix-api=yes" ];
@@ -34,4 +33,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ artturin ];
     platforms = platforms.unix;
   };
-})
+}

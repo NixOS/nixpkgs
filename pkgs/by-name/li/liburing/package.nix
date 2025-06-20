@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liburing";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "axboe";
     repo = "liburing";
     tag = "liburing-${version}";
-    hash = "sha256-yw21Krg/xsBGCbwwQDIbrq/7q+LNCwC3cXyGPANjkEA=";
+    hash = "sha256-V73QP89WMrL2fkPRbo/TSkfO7GeDsCudlw2Ut5baDzA=";
   };
 
   separateDebugInfo = true;

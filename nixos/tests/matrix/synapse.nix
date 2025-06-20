@@ -187,8 +187,6 @@ in
           networksStyle = "subnet";
           enableSubmission = true;
           tlsTrustedAuthorities = "${mailerCerts.ca.cert}";
-          sslCert = "${mailerCerts.${mailerDomain}.cert}";
-          sslKey = "${mailerCerts.${mailerDomain}.key}";
 
           # blackhole transport
           transport = "example.com discard:silently";
@@ -205,6 +203,14 @@ in
             smtp_tls_protocols = "TLSv1.3, TLSv1.2, !TLSv1.1, !TLSv1, !SSLv2, !SSLv3";
             smtpd_tls_mandatory_protocols = "TLSv1.3, TLSv1.2, !TLSv1.1, !TLSv1, !SSLv2, !SSLv3";
             smtp_tls_mandatory_protocols = "TLSv1.3, TLSv1.2, !TLSv1.1, !TLSv1, !SSLv2, !SSLv3";
+            smtp_tls_chain_files = [
+              "${mailerCerts.${mailerDomain}.key}"
+              "${mailerCerts.${mailerDomain}.cert}"
+            ];
+            smtpd_tls_chain_files = [
+              "${mailerCerts.${mailerDomain}.key}"
+              "${mailerCerts.${mailerDomain}.cert}"
+            ];
           };
         };
       };
