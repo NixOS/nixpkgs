@@ -54,11 +54,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "24.1.7";
+  version = "24.1.8";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    hash = "sha256-99l+JICSh4o/fTxosl2rZSv5cNnmoX0w+/RXquoTnMs=";
+    hash = "sha256-yJCNV8jtnOuCk8Frp61a9SLvrxun5R+eTPPAd00ZmQc=";
   };
 
   postPatch = ''
