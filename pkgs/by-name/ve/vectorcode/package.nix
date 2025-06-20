@@ -127,6 +127,12 @@ python.pkgs.buildPythonApplication rec {
       };
   '';
 
+  # Test collection breaks on aarch64-linux, because the transitive onnxruntime
+  # tries to read /sys/devices/system/cpu, which does not exist in the sandbox.
+  #
+  # We inherit the issue from chromadb, so inherit its `doCheck` attribute.
+  inherit (python.pkgs.chromadb) doCheck;
+
   pythonImportsCheck = [ "vectorcode" ];
 
   nativeCheckInputs =
