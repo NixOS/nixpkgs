@@ -90,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fix lib.getExe
     updateScript = gnome.updateScript {
       packageName = "libshumate";
     };
