@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kdlfmt";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "hougesen";
     repo = "kdlfmt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qc2wU/borl3h2fop6Sav0zCrg8WdvHrB3uMA72uwPis=";
   };
 
@@ -21,9 +21,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Formatter for kdl documents";
     homepage = "https://github.com/hougesen/kdlfmt.git";
-    changelog = "https://github.com/hougesen/kdlfmt/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/hougesen/kdlfmt/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ airrnot ];
     mainProgram = "kdlfmt";
   };
-}
+})
