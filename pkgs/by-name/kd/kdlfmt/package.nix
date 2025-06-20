@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hougesen";
     repo = "kdlfmt";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qc2wU/borl3h2fop6Sav0zCrg8WdvHrB3uMA72uwPis=";
   };
 
