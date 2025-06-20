@@ -775,6 +775,13 @@ checkConfigOutput '42' options.mergedAttrsOfModule.valueMeta.attrs.foo.configura
 checkConfigOutput '42' config.listResult ./composed-types-valueMeta.nix
 checkConfigOutput '42' config.mergedListResult ./composed-types-valueMeta.nix
 
+# Add check
+checkConfigOutput '^0$' config.v1CheckedPass ./add-check.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.v1CheckedFail ./add-check.nix
+checkConfigOutput '^true$' config.v2checkedPass ./add-check.nix
+checkConfigError 'A definition for option .* is not of type .attribute set of signed integer.*' config.v2checkedFail ./add-check.nix
+
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
