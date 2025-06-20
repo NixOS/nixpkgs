@@ -24,6 +24,11 @@ buildGoModule rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  ldflags = [
+    # Recommended in 0.7.0 release notes https://git.sr.ht/~xenrox/hut/refs/v0.7.0
+    "-X main.version=v${version}"
+  ];
+
   postBuild = ''
     make $makeFlags completions doc/hut.1
   '';
