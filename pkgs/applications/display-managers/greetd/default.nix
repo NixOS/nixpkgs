@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage rec {
       Comes with agreety, a simple, text-based greeter.
     '';
     homepage = "https://sr.ht/~kennylevinsen/greetd/";
+    mainProgram = "greetd";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
