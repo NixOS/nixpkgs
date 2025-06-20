@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Formatter for kdl documents";
-    homepage = "https://github.com/hougesen/kdlfmt.git";
+    homepage = "https://github.com/hougesen/kdlfmt";
     changelog = "https://github.com/hougesen/kdlfmt/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ airrnot ];
