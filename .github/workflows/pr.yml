@@ -71,6 +71,7 @@ jobs:
       pull-requests: write
     with:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
+      headBranch: ${{ needs.prepare.outputs.headBranch }}
 
   lint:
     name: Lint
@@ -107,7 +108,9 @@ jobs:
   reviewers:
     name: Reviewers
     needs: [prepare, eval]
-    if: needs.prepare.outputs.targetSha
+    if: |
+      needs.prepare.outputs.targetSha &&
+      !contains(fromJSON(needs.prepare.outputs.headBranch).type, 'development')
     uses: ./.github/workflows/reviewers.yml
     secrets:
       OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
