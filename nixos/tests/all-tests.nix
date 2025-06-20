@@ -393,6 +393,7 @@ in
   deluge = runTest ./deluge.nix;
   dendrite = runTest ./matrix/dendrite.nix;
   dependency-track = runTest ./dependency-track.nix;
+  device-tree = handleTestOn [ "aarch64-linux" ] ./device-tree.nix { };
   devpi-server = runTest ./devpi-server.nix;
   dex-oidc = runTest ./dex-oidc.nix;
   dhparams = handleTest ./dhparams.nix { };

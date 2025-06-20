@@ -769,6 +769,16 @@ in
         '';
       };
 
+      loadDeviceTree = mkOption {
+        default = with config.hardware.deviceTree; enable && name != null;
+        type = types.bool;
+        defaultText = ''with config.hardware.deviceTree; enable && name != null'';
+        description = ''
+          Load the devicetree blob specified by `config.hardware.deviceTree.name`
+          and instruct grub to pass this DTB to linux.
+        '';
+      };
+
     };
 
   };
@@ -797,6 +807,10 @@ in
       ];
 
       boot.loader.supportsInitrdSecrets = true;
+
+      boot.bootspec.extensions."org.nixos.grub" = lib.mkIf cfg.loadDeviceTree {
+        devicetree = "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
+      };
 
       system.systemBuilderArgs.configurationName = cfg.configurationName;
       system.systemBuilderCommands = ''
@@ -876,6 +890,11 @@ in
           {
             assertion = !(options.boot.loader.grub.version.isDefined && cfg.version == 1);
             message = "Support for version 0.9x of GRUB was removed after being unsupported upstream for around a decade";
+          }
+          {
+            assertion =
+              cfg.loadDeviceTree -> config.hardware.deviceTree.enable -> config.hardware.deviceTree.name != null;
+            message = "Cannot load devicetree without 'config.hardware.deviceTree.enable' enabled and 'config.hardware.deviceTree.name' set";
           }
         ]
         ++ flip concatMap cfg.mirroredBoots (
