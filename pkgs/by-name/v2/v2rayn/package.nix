@@ -21,13 +21,13 @@
 
 buildDotnetModule rec {
   pname = "v2rayn";
-  version = "7.12.5";
+  version = "7.12.7";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = version;
-    hash = "sha256-gXVriD9g4Coc0B0yN5AlfNre9C9l8V5wv4q3KgKRsF0=";
+    hash = "sha256-pYkUbctdN3qaGxI5DbreoOGmXyIVrpHqYlN3BFRCcZ8=";
     fetchSubmodules = true;
   };
 
