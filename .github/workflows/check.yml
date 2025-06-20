@@ -6,6 +6,9 @@ on:
       baseBranch:
         required: true
         type: string
+      headBranch:
+        required: true
+        type: string
 
 permissions: {}
 
@@ -31,7 +34,7 @@ jobs:
   cherry-pick:
     if: |
       github.event_name == 'pull_request' ||
-      fromJSON(inputs.baseBranch).stable
+      (fromJSON(inputs.baseBranch).stable && !contains(fromJSON(inputs.headBranch).type, 'development'))
     permissions:
       pull-requests: write
     runs-on: ubuntu-24.04-arm
