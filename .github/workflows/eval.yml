@@ -92,14 +92,13 @@ jobs:
             let run_id
             try {
               run_id = (await github.rest.actions.listWorkflowRuns({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                ...context.repo,
                 workflow_id: 'push.yml',
                 event: 'push',
                 head_sha: targetSha
               })).data.workflow_runs[0].id
             } catch {
-              throw new Error(`Could not find an push.yml workflow run for ${targetSha}.`)
+              throw new Error(`Could not find a push.yml workflow run for ${targetSha}.`)
             }
 
             core.setOutput('targetRunId', run_id)
@@ -108,8 +107,7 @@ jobs:
             // Eval takes max 5-6 minutes, normally.
             for (let i = 0; i < 120; i++) {
               const result = await github.rest.actions.listWorkflowRunArtifacts({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                ...context.repo,
                 run_id,
                 name: `merged-${system}`
               })
@@ -224,10 +222,9 @@ jobs:
               `${serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${runId}?pr=${payload.pull_request.number}`
 
             await github.rest.repos.createCommitStatus({
-              owner: repo.owner,
-              repo: repo.repo,
+              ...repo,
               sha: payload.pull_request.head.sha,
-              context: 'Eval / Summary',
+              context: 'Eval Summary',
               state: 'success',
               description,
               target_url
