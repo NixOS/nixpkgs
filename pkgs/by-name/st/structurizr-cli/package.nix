@@ -8,7 +8,7 @@
   gnused,
   jre,
   gradle,
-  makeWrapper,
+  makeBinaryWrapper,
   versionCheckHook,
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gradle
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -53,11 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib}
+    find build/install/structurizr-cli -type f | while read -r f; do
+      rel="$(echo "$f" | sed 's|^build/install/structurizr-cli/||')"
+      install -D "$f" "$out/lib/structurizr-cli/$rel"
+    done
 
-    cp -r build/install/structurizr-cli $out/lib/structurizr-cli
-
-    makeWrapper $out/lib/structurizr-cli/bin/structurizr-cli $out/bin/structurizr-cli \
+    makeBinaryWrapper $out/lib/structurizr-cli/bin/structurizr-cli $out/bin/structurizr-cli \
       --prefix PATH : "${
         lib.makeBinPath [
           coreutils
