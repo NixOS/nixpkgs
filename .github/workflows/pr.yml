@@ -8,6 +8,7 @@ on:
       - .github/workflows/eval.yml
       - .github/workflows/lint.yml
       - .github/workflows/pr.yml
+      - .github/workflows/labels.yml
       - .github/workflows/reviewers.yml # needs eval results from the same event type
   pull_request_target:
 
