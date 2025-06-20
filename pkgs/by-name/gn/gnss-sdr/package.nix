@@ -19,6 +19,7 @@
   matio,
   pugixml,
   protobuf,
+  enableOsmosdr ? true,
 }:
 
 gnuradio.pkgs.mkDerivation rec {
@@ -81,6 +82,9 @@ gnuradio.pkgs.mkDerivation rec {
     ]
     ++ lib.optionals (gnuradio.hasFeature "gr-pdu") [
       gnuradio.unwrapped.libad9361
+    ]
+    ++ lib.optionals (enableOsmosdr) [
+      gnuradio.pkgs.osmosdr
     ];
 
   cmakeFlags = [
@@ -98,6 +102,7 @@ gnuradio.pkgs.mkDerivation rec {
     (lib.cmakeBool "ENABLE_UHD" (gnuradio.hasFeature "gr-uhd"))
     (lib.cmakeBool "ENABLE_FMCOMMS2" (gnuradio.hasFeature "gr-iio" && gnuradio.hasFeature "gr-pdu"))
     (lib.cmakeBool "ENABLE_PLUTOSDR" (gnuradio.hasFeature "gr-iio"))
+    (lib.cmakeBool "ENABLE_OSMOSDR" enableOsmosdr)
     (lib.cmakeBool "ENABLE_UNIT_TESTING" false)
 
     # Requires unpackaged gnsstk
