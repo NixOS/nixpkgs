@@ -1,43 +1,39 @@
 {
   lib,
-  fetchPypi,
-  copyDesktopItems,
+  fetchFromGitHub,
+  glib,
   gobject-introspection,
   wrapGAppsHook4,
   gtksourceview5,
   libadwaita,
-  pango,
-  gtk4,
-  librsvg,
-  makeDesktopItem,
   python3Packages,
   nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gaphor";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-I5n0XeZLQw4qje6gwh2aMu5Zo5tuXgESHhkR0xegaYM=";
+  src = fetchFromGitHub {
+    owner = "gaphor";
+    repo = "gaphor";
+    tag = version;
+    hash = "sha256-0xivimpYM1gwOO2QrovYiJPNUfuGclr+F/WyHLNl+jw=";
   };
 
   pythonRelaxDeps = [
-    "defusedxml"
-    "gaphas"
     "pydot"
+    "pygobject"
   ];
 
   nativeBuildInputs = [
-    copyDesktopItems
+    glib
     gobject-introspection
     wrapGAppsHook4
   ];
 
   buildInputs = [
     gtksourceview5
-    pango
     libadwaita
   ];
 
@@ -58,25 +54,29 @@ python3Packages.buildPythonApplication rec {
     tinycss2
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = pname;
-      exec = "gaphor";
-      icon = "gaphor";
-      comment = meta.description;
-      desktopName = "Gaphor";
-    })
-  ];
+  postInstall = ''
+    install -Dm644 data/org.gaphor.Gaphor.appdata.xml -t $out/share/metainfo/
+    install -Dm644 data/org.gaphor.Gaphor.desktop -t $out/share/applications/
+    install -Dm644 data/org.gaphor.Gaphor.xml -t $out/share/mime/packages/
+    install -Dm644 data/logos/org.gaphor.Gaphor.svg -t $out/share/icons/hicolor/scalable/apps/
+    install -Dm644 data/logos/org.gaphor.Gaphor-symbolic.svg -t $out/share/icons/hicolor/symbolic/apps/
 
-  # Disable automatic wrapGAppsHook4 to prevent double wrapping
+    install -Dm644 data/logos/gaphor-24x24.png $out/share/icons/hicolor/24x24/apps/org.gaphor.Gaphor.png
+    install -Dm644 data/logos/gaphor-48x48.png $out/share/icons/hicolor/48x48/apps/org.gaphor.Gaphor.png
+
+    install -Dm644 gaphor/ui/installschemas/org.gaphor.Gaphor.gschema.xml -t $out/share/glib-2.0/schemas/
+    glib-compile-schemas $out/share/glib-2.0/schemas/
+
+    install -Dm644 data/org.gaphor.Gaphor.service -t $out/share/dbus-1/services/
+    substituteInPlace $out/share/dbus-1/services/org.gaphor.Gaphor.service \
+                      --replace-fail "Exec=/usr/bin/gaphor" "Exec=$out/bin/gaphor"
+  '';
+
+  # Prevent double wrapping
   dontWrapGApps = true;
 
   preFixup = ''
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}" \
-      --prefix XDG_DATA_DIRS : "${gtk4}/share/gsettings-schemas/${gtk4.name}/" \
-      --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
-    )
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   passthru = {
