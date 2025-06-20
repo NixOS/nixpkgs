@@ -5,15 +5,15 @@
   scdoc,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hut";
   version = "0.7.0";
 
   src = fetchFromSourcehut {
     owner = "~xenrox";
     repo = "hut";
-    rev = "v${version}";
-    sha256 = "sha256-pc6E3ORDmaMhoNe8GQeYZrxhe5ySQqsMPe/iUbclnGk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pc6E3ORDmaMhoNe8GQeYZrxhe5ySQqsMPe/iUbclnGk=";
   };
 
   vendorHash = "sha256-/51cv/EvcBCyCOf91vJ5M75p0bkAQqVoRUp+C+i70Os=";
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   ldflags = [
     # Recommended in 0.7.0 release notes https://git.sr.ht/~xenrox/hut/refs/v0.7.0
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   postBuild = ''
@@ -37,11 +37,11 @@ buildGoModule rec {
     make $makeFlags install
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sr.ht/~xenrox/hut/";
     description = "CLI tool for Sourcehut / sr.ht";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "hut";
   };
-}
+})
