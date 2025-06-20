@@ -1,0 +1,36 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lesscpy,
+  matplotlib,
+  notebook,
+}:
+
+buildPythonPackage rec {
+  pname = "jupyter-themes";
+  version = "0.20.0";
+
+  src = fetchFromGitHub {
+    owner = "dunovank";
+    repo = "jupyter-themes";
+    tag = "v${version}";
+    hash = "sha256-AWbUXMOA6k2LpZtcJOPxTZb1oL5vLDbBq4aEhXWvy9M=";
+  };
+
+  dependencies = [
+    lesscpy
+    matplotlib
+    notebook
+  ];
+
+  pythonImportsCheck = [ "jupyterthemes" ];
+
+  meta = {
+    description = "Theme-ify your Jupyter Notebooks!";
+    homepage = "https://github.com/dunovank/jupyter-themes";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jherland ];
+    mainProgram = "jupyter-theme";
+  };
+}
