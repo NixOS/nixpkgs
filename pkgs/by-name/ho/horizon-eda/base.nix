@@ -15,7 +15,7 @@
   ninja,
   opencascade-occt_7_6,
   pkg-config,
-  podofo,
+  podofo_0_10,
   sqlite,
 }:
 let
@@ -51,7 +51,7 @@ rec {
     librsvg
     libuuid
     opencascade-occt
-    podofo
+    podofo_0_10
     sqlite
   ];
 
