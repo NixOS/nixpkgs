@@ -317,15 +317,20 @@ stdenv.mkDerivation (
     };
   }
   // lib.optionalAttrs crossCompiling rec {
-    crossVersion = "1.6";
+    crossVersion = "1.6.2";
 
     perl-cross-src = fetchFromGitHub {
       name = "perl-cross-${crossVersion}";
       owner = "arsv";
       repo = "perl-cross";
       rev = crossVersion;
-      sha256 = "sha256-TVDLxw8ctl64LSfLfB4/WLYlSTO31GssSzmdVfqkBmg=";
+      hash = "sha256-mG9ny+eXGBL4K/rXqEUPSbar+4Mq4IaQrGRFIHIyAAw=";
     };
+    patches = [
+      # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
+      # https://github.com/arsv/perl-cross/pull/159
+      ./cross-fdopendir.patch
+    ];
 
     depsBuildBuild = [
       buildPackages.stdenv.cc
