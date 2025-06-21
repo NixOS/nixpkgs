@@ -5,7 +5,6 @@
   installShellFiles,
   mkShell,
   nix,
-  nixosTests,
   python3,
   python3Packages,
   runCommand,
@@ -16,6 +15,11 @@
   # Very long tmp dirs lead to "too long for Unix domain socket"
   # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
   withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null,
+  # passthru.tests
+  nixosTests,
+  nixVersions,
+  lixPackageSets,
+  nixos-rebuild-ng,
 }:
 let
   executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
@@ -23,6 +27,8 @@ let
   # implemented in newer versions of Nix, but not necessary 2.18.
   # However, Lix is a fork of Nix 2.18, so this looks like a good version
   # to cut specific functionality.
+  # ATTN: This currently doesn't disambiguate between Nix and Lix, so using this
+  # in a conditional needs careful checking against both Nix implementations.
   withNix218 = lib.versionAtLeast nix.version "2.18";
 in
 python3Packages.buildPythonApplication rec {
@@ -105,6 +111,25 @@ python3Packages.buildPythonApplication rec {
       };
 
       tests = {
+        with_nix_latest = nixos-rebuild-ng.override {
+          nix = nixVersions.latest;
+        };
+        with_nix_stable = nixos-rebuild-ng.override {
+          nix = nixVersions.stable;
+        };
+        with_nix_2_3 = nixos-rebuild-ng.override {
+          # oldest / minimum supported version in nixpkgs
+          nix = nixVersions.nix_2_3;
+        };
+        with_lix_latest = nixos-rebuild-ng.override {
+          # oldest / minimum supported version in nixpkgs
+          nix = lixPackageSets.latest.lix;
+        };
+        with_lix_stable = nixos-rebuild-ng.override {
+          # oldest / minimum supported version in nixpkgs
+          nix = lixPackageSets.stable.lix;
+        };
+
         inherit (nixosTests)
           nixos-rebuild-install-bootloader-ng
           nixos-rebuild-specialisations-ng

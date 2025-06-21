@@ -1556,6 +1556,9 @@
   "sect-nixos-systemd-nixos": [
     "index.html#sect-nixos-systemd-nixos"
   ],
+  "sect-nixos-systemd-custom-services": [
+    "index.html#sect-nixos-systemd-custom-services"
+  ],
   "sect-nixos-systemd-template-units": [
     "index.html#sect-nixos-systemd-template-units"
   ],
