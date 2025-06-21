@@ -29,10 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-OaUpyG+XdP7AIA55enPf6/viBGBBQVuNi2QxgD5EVNc=";
   };
 
-  postPatch = ''
-    jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
-  '';
-
   npmDeps = fetchNpmDeps {
     name = "gale-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
