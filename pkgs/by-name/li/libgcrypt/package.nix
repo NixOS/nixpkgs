@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   # TODO: figure out why this is even necessary and why the missing dylib only crashes
   # random instead of every test
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) ''
     mkdir -p $lib/lib
     cp src/.libs/libgcrypt.20.dylib $lib/lib
   '';
