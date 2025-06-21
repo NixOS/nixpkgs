@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   installShellFiles,
   libxml2,
@@ -23,6 +24,16 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-WyNActmsHpr5fgN1a3X9ApEACWFVJMVoi4fBvKhGgZ0=";
+
+  patches = [
+    # Fix build with libxml-2.14, remove after next hurl release
+    # https://github.com/Orange-OpenSource/hurl/pull/3977
+    (fetchpatch {
+      name = "fix-libxml-2.14";
+      url = "https://github.com/Orange-OpenSource/hurl/commit/7c7b410c3017aeab0dfc74a6144e4cb8e186a10a.patch";
+      hash = "sha256-y90RfnY9SMx+AgevMTxExM6tLhIdg2wc2XbLjB69M5Q=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
