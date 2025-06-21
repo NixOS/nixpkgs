@@ -189,9 +189,16 @@ in
           ];
         in
         ''
-          while [[ "$(${statusCommand})" == "NoState" ]]; do
+          count=0
+          maxRetries=10
+          while [[ "$(${statusCommand})" == "NoState" && $count -lt $maxRetries ]]; do
             sleep 0.5
+            count=$((count + 1))
           done
+          if [[ $count -eq $maxRetries ]]; then
+            echo "Failed to get initial status after ''${maxRetries} retries."
+            exit 1
+          fi
           status=$(${statusCommand})
           if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
             ${lib.getExe cfg.package} up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
