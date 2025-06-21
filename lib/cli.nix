@@ -1,6 +1,6 @@
 { lib }:
 
-rec {
+{
   /**
     Automatically convert an attribute set to command-line options.
 
@@ -38,7 +38,8 @@ rec {
 
     :::
   */
-  toGNUCommandLineShell = options: attrs: lib.escapeShellArgs (toGNUCommandLine options attrs);
+  toGNUCommandLineShell =
+    options: attrs: lib.escapeShellArgs (lib.cli.toGNUCommandLine options attrs);
 
   /**
     Automatically convert an attribute set to a list of command-line options.
@@ -145,4 +146,102 @@ rec {
 
     in
     builtins.concatLists (lib.mapAttrsToList render options);
+
+  gnuOptionFormatLong = optionName: {
+    option = "--${optionName}";
+    sep = "=";
+    skipBool = true;
+  };
+
+  gnuOptionFormat =
+    optionName:
+    let
+      shortFormat = {
+        option = "-${optionName}";
+        sep = "";
+        skipBool = true;
+      };
+    in
+    if lib.stringLength optionName == 1 then shortFormat else lib.cli.gnuOptionFormatLong optionName;
+
+  toCommandLineShell =
+    optionFormat: attrs: lib.escapeShellArgs (lib.cli.toCommandLine optionFormat attrs);
+
+  /**
+    Convert an attribute set into a list of command line options.
+
+    `toCommandLine` returns a list of string arguments.
+
+    # Inputs
+
+    `optionFormat`
+
+    : The option format, refer to gnuOptionFormat for an example.
+
+    `attrs`
+
+    : The attributes to transform into arguments.
+
+    # Examples
+    :::{.example}
+    ## `lib.cli.toCommandLine` usage example
+
+    ```nix
+    lib.cli.toCommandLine lib.cli.gnuOptionFormat {
+      v = true;
+      verbose = [true true false null];
+      i = ".bak";
+      testsuite = ["unit" "integration"];
+      e = ["s/a/b/" "s/b/c/"];
+      n = false;
+      data = builtins.toJSON {id = 0;};
+    }
+    => [
+      "--data={\"id\":0}"
+      "-es/a/b/"
+      "-es/b/c/"
+      "-i.bak"
+      "--testsuite=unit"
+      "--testsuite=integration"
+      "-v"
+      "--verbose"
+      "--verbose"
+    ]
+    ```
+
+    :::
+  */
+  toCommandLine =
+    optionFormat: attrs:
+    let
+      handlePair =
+        k: v: if builtins.isList v then builtins.concatMap (handleOption k) v else handleOption k v;
+
+      handleOption = k: renderOption (optionFormat k) k;
+
+      renderOption =
+        {
+          option,
+          sep,
+          skipBool,
+          formatArg ? lib.generators.mkValueStringDefault { },
+        }:
+        k: v:
+        if v == null || v == false && skipBool then
+          [ ]
+        else if v == true && skipBool then
+          [ option ]
+        else
+          let
+            arg = formatArg v;
+          in
+          if sep != null then
+            [ "${option}${sep}${arg}" ]
+          else
+            [
+              option
+              arg
+            ];
+    in
+    builtins.concatLists (lib.mapAttrsToList handlePair attrs);
 }
