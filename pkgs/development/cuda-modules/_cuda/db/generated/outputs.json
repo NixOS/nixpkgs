@@ -1,0 +1,283 @@
+{
+  "package": {
+    "outputs": {
+      "collectx_bringup": {
+        "out": true
+      },
+      "cuda_cccl": {
+        "dev": true,
+        "out": true
+      },
+      "cuda_compat": {
+        "out": true
+      },
+      "cuda_cudart": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "cuda_cuobjdump": {
+        "bin": true,
+        "out": true
+      },
+      "cuda_cupti": {
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "sample": true,
+        "static": true
+      },
+      "cuda_cuxxfilt": {
+        "bin": true,
+        "dev": true,
+        "out": true,
+        "static": true
+      },
+      "cuda_demo_suite": {
+        "out": true
+      },
+      "cuda_documentation": {
+        "out": true
+      },
+      "cuda_gdb": {
+        "bin": true,
+        "out": true
+      },
+      "cuda_memcheck": {
+        "bin": true,
+        "out": true
+      },
+      "cuda_nsight": {
+        "bin": true,
+        "out": true
+      },
+      "cuda_nvcc": {
+        "bin": true,
+        "dev": true,
+        "out": true,
+        "static": true
+      },
+      "cuda_nvdisasm": {
+        "bin": true,
+        "out": true
+      },
+      "cuda_nvml_dev": {
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "cuda_nvprof": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true
+      },
+      "cuda_nvprune": {
+        "bin": true,
+        "out": true
+      },
+      "cuda_nvrtc": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "cuda_nvtx": {
+        "dev": true,
+        "lib": true,
+        "out": true
+      },
+      "cuda_nvvp": {
+        "bin": true,
+        "out": true
+      },
+      "cuda_opencl": {
+        "dev": true,
+        "lib": true,
+        "out": true
+      },
+      "cuda_profiler_api": {
+        "dev": true,
+        "out": true
+      },
+      "cuda_sandbox_dev": {
+        "dev": true,
+        "out": true
+      },
+      "cuda_sanitizer_api": {
+        "bin": true,
+        "out": true
+      },
+      "cudnn": {
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "cudnn_jit": {
+        "out": true
+      },
+      "cudnn_samples": {
+        "out": true
+      },
+      "driver_assistant": {
+        "out": true
+      },
+      "fabricmanager": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true
+      },
+      "imex": {
+        "out": true
+      },
+      "libcublas": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "libcudla": {
+        "dev": true,
+        "lib": true,
+        "out": true
+      },
+      "libcufft": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "libcufile": {
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "sample": true,
+        "static": true
+      },
+      "libcurand": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "libcusolver": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "libcusparse": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "libcusparse_lt": {
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "libcutensor": {
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "libnpp": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "libnvfatbin": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "libnvidia_nscq": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true
+      },
+      "libnvjitlink": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "libnvjpeg": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true,
+        "static": true
+      },
+      "libnvsdm": {
+        "bin": true,
+        "dev": true,
+        "lib": true,
+        "out": true
+      },
+      "libnvvm_samples": {
+        "out": true
+      },
+      "mft": {
+        "out": true
+      },
+      "mft_autocomplete": {
+        "out": true
+      },
+      "mft_oem": {
+        "out": true
+      },
+      "nsight_compute": {
+        "bin": true,
+        "out": true
+      },
+      "nsight_nvtx": {
+        "out": true
+      },
+      "nsight_systems": {
+        "bin": true,
+        "out": true
+      },
+      "nsight_vse": {
+        "out": true
+      },
+      "nvidia_driver": {
+        "bin": true,
+        "lib": true,
+        "out": true
+      },
+      "nvidia_fs": {
+        "out": true
+      },
+      "nvlsm": {
+        "out": true
+      },
+      "tensorrt": {
+        "out": true
+      },
+      "visual_studio_integration": {
+        "out": true
+      }
+    }
+  }
+}
