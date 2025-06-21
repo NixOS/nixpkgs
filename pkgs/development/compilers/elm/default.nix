@@ -19,9 +19,6 @@ let
       ;
   };
 
-  # Haskell packages that require ghc 8.10
-  hs810Pkgs = import ./packages/ghc8_10 { inherit pkgs lib; };
-
   # Haskell packages that require ghc 9.4
   hs94Pkgs = import ./packages/ghc9_4 { inherit pkgs lib; };
 
@@ -37,11 +34,7 @@ let
 
   assembleScope =
     self: basics:
-    (hs96Pkgs self).elmPkgs
-    // (hs94Pkgs self).elmPkgs
-    // (hs810Pkgs self).elmPkgs
-    // (patchedNodePkgs self)
-    // basics;
+    (hs96Pkgs self).elmPkgs // (hs94Pkgs self).elmPkgs // (patchedNodePkgs self) // basics;
 in
 lib.makeScope pkgs.newScope (
   self:
@@ -53,21 +46,14 @@ lib.makeScope pkgs.newScope (
       /*
         Node/NPM based dependencies can be upgraded using script `packages/generate-node-packages.sh`.
 
-        * Packages which rely on `bin-wrap` will fail by default
-          and can be patched using `patchBinwrap` function defined in `packages/lib.nix`.
-
         * Packages which depend on npm installation of elm can be patched using
-          `patchNpmElm` function also defined in `packages/lib.nix`.
+          `patchNpmElm` function defined in `packages/lib.nix`.
       */
-      elmLib =
-        let
-          hsElmPkgs = (hs810Pkgs self) // (hs96Pkgs self);
-        in
-        import ./lib {
-          inherit lib;
-          inherit (pkgs) writeScriptBin stdenv;
-          inherit (self) elm;
-        };
+      elmLib = import ./lib {
+        inherit lib;
+        inherit (pkgs) writeScriptBin stdenv;
+        inherit (self) elm;
+      };
 
       elm-json = callPackage ./packages/elm-json { };
 

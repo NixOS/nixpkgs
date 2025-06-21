@@ -393,8 +393,6 @@ let
         inherit (pkgsPlatforms.elmPackages)
           elm
           elm-format
-          elm-instrument
-          elmi-to-json
           ;
       };
 
@@ -515,6 +513,14 @@ let
                   ;
               };
 
+              haskell.packages.ghc910 = {
+                inherit (packagePlatforms pkgs.pkgsCross.aarch64-android-prebuilt.haskell.packages.ghc910)
+                  ghc
+                  hello
+                  microlens
+                  ;
+              };
+
               haskell.packages.ghcHEAD = {
                 inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
                   ghc
@@ -579,6 +585,11 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
+      git-annex = [
+        # for 9.10, test that using filepath (instead of filepath-bytestring) works.
+        compilerNames.ghc9101
+        compilerNames.ghc9102
+      ];
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 2.3.0.0
         compilerNames.ghc8107

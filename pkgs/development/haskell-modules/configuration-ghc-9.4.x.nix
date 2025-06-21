@@ -2,20 +2,10 @@
 
 let
   inherit (pkgs) fetchpatch lib;
-  checkAgainAfter =
-    pkg: ver: msg: act:
-    if builtins.compareVersions pkg.version ver <= 0 then
-      act
-    else
-      builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
 in
 
 with haskellLib;
-self: super:
-let
-  jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
-in
-{
+self: super: {
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC core libraries.
@@ -148,6 +138,12 @@ in
     hlint
     stylish-haskell
     ;
+
+  # directory-ospath-streaming requires the ospath API in core packages
+  # filepath, directory and unix.
+  stan = super.stan.override {
+    directory-ospath-streaming = null;
+  };
 
   # Packages which need compat library for GHC < 9.6
   inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)
