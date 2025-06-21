@@ -5,6 +5,7 @@
   python,
   pytestCheckHook,
   setuptools,
+  isPyPy,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,11 @@ buildPythonPackage rec {
   postCheck = ''
     ${python.interpreter} -m pycodestyle --statistics pycodestyle.py
   '';
+
+  disabledTests = lib.optionals isPyPy [
+    # PyPy reports a SyntaxError instead of ValueError
+    "test_check_nullbytes"
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/PyCQA/pycodestyle/blob/${version}/CHANGES.txt";
