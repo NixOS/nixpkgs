@@ -70,18 +70,22 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optional withPython python3;
 
-  cmakeFlags = [
-    (lib.cmakeBool "WITH_KML" true)
-    (lib.cmakeBool "WITH_SOS" true)
-    (lib.cmakeBool "WITH_RSVG" true)
-    (lib.cmakeBool "WITH_CURL" true)
-    (lib.cmakeBool "WITH_CLIENT_WMS" true)
-    (lib.cmakeBool "WITH_CLIENT_WFS" true)
-    (lib.cmakeBool "WITH_PYTHON" withPython)
+  cmakeFlags =
+    [
+      (lib.cmakeBool "WITH_KML" true)
+      (lib.cmakeBool "WITH_SOS" true)
+      (lib.cmakeBool "WITH_RSVG" true)
+      (lib.cmakeBool "WITH_CURL" true)
+      (lib.cmakeBool "WITH_CLIENT_WMS" true)
+      (lib.cmakeBool "WITH_CLIENT_WFS" true)
+      (lib.cmakeBool "WITH_PYTHON" withPython)
 
-    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
-  ];
+      # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+      (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+    ]
+    ++ lib.optionals stdenv.buildPlatform.isDarwin [
+      (lib.cmakeFeature "CMAKE_INSTALL_RPATH" "${placeholder "out"}/lib")
+    ];
 
   postInstall = lib.optionalString withPython ''
     mkdir -p $out/${python3.sitePackages}
