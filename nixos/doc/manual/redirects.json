@@ -71,6 +71,21 @@
   "module-services-networking-pihole-ftl-configuration-multiple-interfaces": [
     "index.html#module-services-networking-pihole-ftl-configuration-multiple-interfaces"
   ],
+  "module-services-ocis": [
+    "index.html#module-services-ocis"
+  ],
+  "module-services-ocis-basic-usage": [
+    "index.html#module-services-ocis-basic-usage"
+  ],
+  "module-services-ocis-configuration-via-environment-variables": [
+    "index.html#module-services-ocis-configuration-via-environment-variables"
+  ],
+  "module-services-ocis-maintainer-info": [
+    "index.html#module-services-ocis-maintainer-info"
+  ],
+  "module-services-ocis-upgrading": [
+    "index.html#module-services-ocis-upgrading"
+  ],
   "module-services-strfry": [
     "index.html#module-services-strfry"
   ],
