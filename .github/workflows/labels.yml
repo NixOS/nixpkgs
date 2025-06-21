@@ -72,8 +72,8 @@ jobs:
               maxConcurrent: 1,
               // Hourly limit is at 5000, but other jobs need some, too!
               // https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
-              reservoir: 1000,
-              reservoirRefreshAmount: 1000,
+              reservoir: 500,
+              reservoirRefreshAmount: 500,
               reservoirRefreshInterval: 60 * 60 * 1000
             })
             // Pause between mutative requests
@@ -152,7 +152,17 @@ jobs:
                     status: prEventCondition ? 'in_progress' : 'success',
                     exclude_pull_requests: true,
                     head_sha: pull_request.head.sha
-                  })).data.workflow_runs[0]?.id
+                  })).data.workflow_runs[0]?.id ??
+                    // TODO: Remove this after 2025-09-17, at which point all eval.yml artifacts will have expired.
+                    (await github.rest.actions.listWorkflowRuns({
+                      ...context.repo,
+                      // In older PRs, we need eval.yml instead of pr.yml.
+                      workflow_id: 'eval.yml',
+                      event: 'pull_request_target',
+                      status: 'success',
+                      exclude_pull_requests: true,
+                      head_sha: pull_request.head.sha
+                    })).data.workflow_runs[0]?.id
 
                   // Newer PRs might not have run Eval to completion, yet. We can skip them, because this
                   // job will be run as part of that Eval run anyway.
@@ -186,7 +196,11 @@ jobs:
 
                   // Get all currently set labels that we manage
                   const before =
-                    pull_request.labels.map(({ name }) => name)
+                    (await github.paginate(github.rest.issues.listLabelsOnIssue, {
+                      ...context.repo,
+                      issue_number: pull_request.number
+                    }))
+                    .map(({ name }) => name)
                     .filter(name =>
                       name.startsWith('10.rebuild') ||
                       name == '11.by: package-maintainer' ||
