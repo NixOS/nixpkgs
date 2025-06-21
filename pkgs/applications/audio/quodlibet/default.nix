@@ -118,7 +118,8 @@ python3.pkgs.buildPythonApplication {
     ++ lib.optionals withMusicBrainzNgs [ musicbrainzngs ]
     ++ lib.optionals withPahoMqtt [ paho-mqtt ]
     ++ lib.optionals withPypresence [ pypresence ]
-    ++ lib.optionals withSoco [ soco ];
+    ++ lib.optionals withSoco [ soco ]
+    ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
   nativeCheckInputs =
     [
