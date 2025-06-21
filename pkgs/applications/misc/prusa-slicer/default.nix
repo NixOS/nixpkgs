@@ -3,7 +3,6 @@
   lib,
   binutils,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   wrapGAppsHook3,
@@ -33,11 +32,12 @@
   xorg,
   libbgcode,
   heatshrink,
-  catch2,
+  catch2_3,
   webkitgtk_4_1,
   ctestCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
+  z3,
   wxGTK-override ? null,
   opencascade-override ? null,
 }:
@@ -60,36 +60,37 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.9.0";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-6BrmTNIiu6oI/CbKPKoFQIh1aHEVfJPIkxomQou0xKk=";
+    hash = "sha256-j/fdEgcFq0nWBLpyapwZIbBIXCnqEWV6Tk+6sTHk/Bc=";
     rev = "version_${finalAttrs.version}";
   };
 
-  # https://github.com/prusa3d/PrusaSlicer/pull/14010
+  # only applies to prusa slicer because super-slicer overrides *all* patches
   patches = [
-    (fetchpatch {
-      url = "https://github.com/prusa3d/PrusaSlicer/commit/cdc3db58f9002778a0ca74517865527f50ade4c3.patch";
-      hash = "sha256-zgpGg1jtdnCBaWjR6oUcHo5sGuZx5oEzpux3dpRdMAM=";
-    })
-    # https://github.com/prusa3d/PrusaSlicer/pull/11769
-    ./fix-ambiguous-constructors.patch
+    # https://github.com/NixOS/nixpkgs/issues/415703
+    # https://gitlab.archlinux.org/archlinux/packaging/packages/prusa-slicer/-/merge_requests/5
+    ./allow_wayland.patch
   ];
 
-  # Patch required for GCC 14.
   # (not applicable to super-slicer fork)
-  # Make Gcode viewer open newer bgcode files.
-  postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") ''
-    substituteInPlace src/slic3r-arrange/include/arrange/DataStoreTraits.hpp \
-      --replace-fail \
-      "WritableDataStoreTraits<ArrItem>::template set" \
-      "WritableDataStoreTraits<ArrItem>::set"
-    substituteInPlace src/platform/unix/PrusaGcodeviewer.desktop \
-      --replace-fail 'MimeType=text/x.gcode;' 'MimeType=application/x-bgcode;text/x.gcode;'
-  '';
+  postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") (
+    # Patch required for GCC 14, but breaks on clang
+    lib.optionalString stdenv.cc.isGNU ''
+      substituteInPlace src/slic3r-arrange/include/arrange/DataStoreTraits.hpp \
+        --replace-fail \
+        "WritableDataStoreTraits<ArrItem>::template set" \
+        "WritableDataStoreTraits<ArrItem>::set"
+    ''
+    # Make Gcode viewer open newer bgcode files.
+    + ''
+      substituteInPlace src/platform/unix/PrusaGcodeviewer.desktop \
+        --replace-fail 'MimeType=text/x.gcode;' 'MimeType=application/x-bgcode;text/x.gcode;'
+    ''
+  );
 
   nativeBuildInputs = [
     cmake
@@ -127,8 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libX11
       libbgcode
       heatshrink
-      catch2
+      catch2_3
       webkitgtk_4_1
+      (z3.override { useCmakeBuild = true; })
     ]
     ++ lib.optionals withSystemd [
       systemd
@@ -161,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     # dlopen(3) for context.
     if [ -f "src/libslic3r/Format/STEP.cpp" ]; then
       substituteInPlace src/libslic3r/Format/STEP.cpp \
-        --replace 'libpath /= "OCCTWrapper.so";' 'libpath = "OCCTWrapper.so";'
+        --replace-fail 'libpath /= "OCCTWrapper.so";' 'libpath = "OCCTWrapper.so";'
     fi
     # https://github.com/prusa3d/PrusaSlicer/issues/9581
     if [ -f "cmake/modules/FindEXPAT.cmake" ]; then
@@ -169,8 +171,10 @@ stdenv.mkDerivation (finalAttrs: {
     fi
 
     # Fix resources folder location on macOS
-    substituteInPlace src/PrusaSlicer.cpp \
-      --replace "#ifdef __APPLE__" "#if 0"
+    substituteInPlace src/${
+      if finalAttrs.pname == "prusa-slicer" then "CLI/Setup.cpp" else "PrusaSlicer.cpp"
+    } \
+      --replace-fail "#ifdef __APPLE__" "#if 0"
   '';
 
   cmakeFlags = [
