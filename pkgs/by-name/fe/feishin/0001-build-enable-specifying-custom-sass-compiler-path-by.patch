@@ -1,0 +1,176 @@
+commit 7079ab4685823bcfcb8d48416e1e55f83a6643e6
+Author: adithyagenie <adithyagenie@gmail.com>
+Date:   Sun Jun 8 00:13:27 2025 +0530
+
+    patch: use custom sass compiler
+
+    Signed-off-by: adithyagenie <adithyagenie@gmail.com>
+
+diff --git a/package.json b/package.json
+index 1a41e677..5df4bc91 100644
+--- a/package.json
++++ b/package.json
+@@ -168,7 +168,10 @@
+         "onlyBuiltDependencies": [
+             "electron",
+             "esbuild"
+-        ]
++        ],
++        "patchedDependencies": {
++            "sass-embedded@1.89.0": "patches/sass-embedded@1.89.0.patch"
++        }
+     },
+     "productName": "feishin"
+ }
+diff --git a/patches/sass-embedded@1.89.0.patch b/patches/sass-embedded@1.89.0.patch
+new file mode 100644
+index 00000000..f941a8e1
+--- /dev/null
++++ b/patches/sass-embedded@1.89.0.patch
+@@ -0,0 +1,15 @@
++diff --git a/dist/lib/src/compiler-path.js b/dist/lib/src/compiler-path.js
++index ae33aa3028e1a120d9e84b043bb19a71f1083b96..7a49d16a54982312ad638632d6750d7bec670f02 100644
++--- a/dist/lib/src/compiler-path.js
+++++ b/dist/lib/src/compiler-path.js
++@@ -24,6 +24,10 @@ function isLinuxMusl(path) {
++ }
++ /** The full command for the embedded compiler executable. */
++ exports.compilerCommand = (() => {
+++    const binPath = process.env.SASS_EMBEDDED_BIN_PATH;
+++    if (binPath) {
+++        return [binPath];
+++    }
++     const platform = process.platform === 'linux' && isLinuxMusl(process.execPath)
++         ? 'linux-musl'
++         : process.platform;
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index 86e0bb2f..fbc9c8be 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -4,6 +4,11 @@ settings:
+   autoInstallPeers: true
+   excludeLinksFromLockfile: false
+
++patchedDependencies:
++  sass-embedded@1.89.0:
++    hash: 817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc
++    path: patches/sass-embedded@1.89.0.patch
++
+ importers:
+
+   .:
+@@ -251,7 +256,7 @@ importers:
+         version: 8.18.1
+       '@vitejs/plugin-react':
+         specifier: ^4.3.4
+-        version: 4.5.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0)(terser@5.39.2))
++        version: 4.5.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc))(terser@5.39.2))
+       concurrently:
+         specifier: ^7.1.0
+         version: 7.6.0
+@@ -269,7 +274,7 @@ importers:
+         version: 3.2.1
+       electron-vite:
+         specifier: ^3.1.0
+-        version: 3.1.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0)(terser@5.39.2))
++        version: 3.1.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc))(terser@5.39.2))
+       eslint:
+         specifier: ^9.24.0
+         version: 9.27.0
+@@ -308,7 +313,7 @@ importers:
+         version: 18.3.1(react@18.3.1)
+       sass-embedded:
+         specifier: ^1.89.0
+-        version: 1.89.0
++        version: 1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc)
+       stylelint:
+         specifier: ^15.10.3
+         version: 15.11.0(typescript@5.8.3)
+@@ -335,7 +340,7 @@ importers:
+         version: 3.0.0(typescript@5.8.3)
+       vite:
+         specifier: ^6.3.5
+-        version: 6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0)(terser@5.39.2)
++        version: 6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc))(terser@5.39.2)
+       vite-plugin-conditional-import:
+         specifier: ^0.1.7
+         version: 0.1.7
+@@ -344,7 +349,7 @@ importers:
+         version: 1.6.0
+       vite-plugin-ejs:
+         specifier: ^1.7.0
+-        version: 1.7.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0)(terser@5.39.2))
++        version: 1.7.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc))(terser@5.39.2))
+
+ packages:
+
+@@ -6206,7 +6211,7 @@ snapshots:
+       '@typescript-eslint/types': 8.32.1
+       eslint-visitor-keys: 4.2.0
+
+-  '@vitejs/plugin-react@4.5.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0)(terser@5.39.2))':
++  '@vitejs/plugin-react@4.5.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc))(terser@5.39.2))':
+     dependencies:
+       '@babel/core': 7.27.1
+       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.27.1)
+@@ -6214,7 +6219,7 @@ snapshots:
+       '@rolldown/pluginutils': 1.0.0-beta.9
+       '@types/babel__core': 7.20.5
+       react-refresh: 0.17.0
+-      vite: 6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0)(terser@5.39.2)
++      vite: 6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc))(terser@5.39.2)
+     transitivePeerDependencies:
+       - supports-color
+
+@@ -7154,7 +7159,7 @@ snapshots:
+     transitivePeerDependencies:
+       - supports-color
+
+-  electron-vite@3.1.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0)(terser@5.39.2)):
++  electron-vite@3.1.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc))(terser@5.39.2)):
+     dependencies:
+       '@babel/core': 7.27.1
+       '@babel/plugin-transform-arrow-functions': 7.27.1(@babel/core@7.27.1)
+@@ -7162,7 +7167,7 @@ snapshots:
+       esbuild: 0.25.4
+       magic-string: 0.30.17
+       picocolors: 1.1.1
+-      vite: 6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0)(terser@5.39.2)
++      vite: 6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc))(terser@5.39.2)
+     transitivePeerDependencies:
+       - supports-color
+
+@@ -9267,7 +9272,7 @@ snapshots:
+   sass-embedded-win32-x64@1.89.0:
+     optional: true
+
+-  sass-embedded@1.89.0:
++  sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc):
+     dependencies:
+       '@bufbuild/protobuf': 2.4.0
+       buffer-builder: 0.2.0
+@@ -10070,12 +10075,12 @@ snapshots:
+       fast-glob: 3.3.3
+       magic-string: 0.30.17
+
+-  vite-plugin-ejs@1.7.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0)(terser@5.39.2)):
++  vite-plugin-ejs@1.7.0(vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc))(terser@5.39.2)):
+     dependencies:
+       ejs: 3.1.10
+-      vite: 6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0)(terser@5.39.2)
++      vite: 6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc))(terser@5.39.2)
+
+-  vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0)(terser@5.39.2):
++  vite@6.3.5(@types/node@22.15.21)(sass-embedded@1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc))(terser@5.39.2):
+     dependencies:
+       esbuild: 0.25.4
+       fdir: 6.4.4(picomatch@4.0.2)
+@@ -10086,7 +10091,7 @@ snapshots:
+     optionalDependencies:
+       '@types/node': 22.15.21
+       fsevents: 2.3.3
+-      sass-embedded: 1.89.0
++      sass-embedded: 1.89.0(patch_hash=817aa33b2891be10faa146630a9027ebfbea2ae354141af0e99572d0c07071bc)
+       terser: 5.39.2
+
+   void-elements@3.1.0: {}
