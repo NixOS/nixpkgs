@@ -3,7 +3,7 @@
   stdenv,
   buildPackages,
   runCommand,
-  nettools,
+  net-tools,
   bc,
   bison,
   flex,
@@ -214,7 +214,7 @@ lib.makeOverridable (
             flex
             perl
             bc
-            nettools
+            net-tools
             openssl
             rsync
             gmp
