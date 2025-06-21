@@ -69,7 +69,7 @@ buildPythonPackage {
 
   meta = with lib; {
     changelog = "https://github.com/theOehrly/Fast-F1/releases/tag/v${version}";
-    description = "Python package for accessing and analyzing Formula 1 results, schedules, timing data and telemetry.";
+    description = "Python package for accessing and analyzing Formula 1 results, schedules, timing data and telemetry";
     homepage = "https://github.com/theOehrly/Fast-F1";
     license = licenses.mit;
     maintainers = with maintainers; [ vaisriv ];
