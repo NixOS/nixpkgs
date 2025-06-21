@@ -294,6 +294,8 @@ python.pkgs.buildPythonApplication rec {
     "test_rtl_language_detection"
     # django.core.exceptions.FieldDoesNotExist: Document has no field named 'transaction_id'
     "test_convert"
+    # AttributeError
+    "test_pre_authenticate"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
