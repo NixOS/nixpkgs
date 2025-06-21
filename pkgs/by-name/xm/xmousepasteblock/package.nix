@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     description = "Middle mouse button primary X selection/clipboard paste disabler";
     homepage = "https://github.com/milaq/XMousePasteBlock";
     license = lib.licenses.gpl2Only;
-    maintainers = [ maintainers.petercommand ];
     mainProgram = "xmousepasteblock";
   };
 }
