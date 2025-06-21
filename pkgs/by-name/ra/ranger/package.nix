@@ -7,11 +7,13 @@
   highlight,
   w3m,
   imagemagick,
+  ffmpegthumbnailer,
   imagePreviewSupport ? true,
   sixelPreviewSupport ? true,
   neoVimSupport ? true,
   improvedEncodingDetection ? true,
   rightToLeftTextSupport ? false,
+  videoThumbnailSupport ? true,
   unstableGitUpdater,
 }:
 
@@ -42,7 +44,8 @@ python3Packages.buildPythonApplication {
     ++ lib.optionals sixelPreviewSupport [ imagemagick ]
     ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
     ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
-    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
+    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ]
+    ++ lib.optionals videoThumbnailSupport [ ffmpegthumbnailer ];
 
   preConfigure =
     ''
@@ -66,6 +69,13 @@ python3Packages.buildPythonApplication {
       # give image previews out of the box when building with w3m
       substituteInPlace ranger/config/rc.conf \
         --replace "set preview_images false" "set preview_images true"
+    ''
+    + lib.optionalString videoThumbnailSupport ''
+      substituteInPlace ranger/data/scope.sh \
+        --replace-fail "# video/*)" "video/*)" \
+        --replace-fail "#     ffmpegthumbnailer -i \"\''${FILE_PATH}\" -o \"\''${IMAGE_CACHE_PATH}\" -s 0 && exit 6" \
+            '    ffmpegthumbnailer -i "''${FILE_PATH}" -o "''${IMAGE_CACHE_PATH}" -s 0 && exit 6
+                  exit 1;;'
     '';
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
