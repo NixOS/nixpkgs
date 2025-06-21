@@ -142,7 +142,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "anndata" ];
 
   meta = {
-    description = "Annotated data";
+    description = "Python package for handling annotated data matrices in memory and on disk";
     homepage = "https://anndata.readthedocs.io/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ samuela ];
