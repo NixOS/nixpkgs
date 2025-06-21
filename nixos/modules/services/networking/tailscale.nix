@@ -195,11 +195,34 @@ in
           getState() {
             tailscale status --json --peers=false | jq -r '.BackendState'
           }
+
+          lastState=""
+          while state="$(getState)"; do
+            if [[ "$state" != "$lastState" ]]; then
+              # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+              case "$state" in
+                NoState | Starting)
+                  echo "Waiting for Tailscale to start. [state = $state]"
+                  ;;
+                NeedsLogin | NeedsMachineAuth)
+                  echo "Server needs authentication, sending auth key. [state = $state]"
+                  tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+                  ;;
+                Running)
+                  echo "Tailscale is running. [state = $state]"
+                  READY=1
+                  break
+                  ;;
+                *)
+                  echo "Waiting for Tailscale. [state = $state]"
+                  ;;
+              esac
+            fi
+            lastState="$state"
+            sleep .5
           done
-          status=$(${statusCommand})
-          if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
-            ${lib.getExe cfg.package} up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
-          fi
+
+          [[ "$READY" == "1" ]] && systemd-notify --ready
         '';
     };
 
