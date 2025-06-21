@@ -42,6 +42,7 @@ buildPythonPackage rec {
     python-dateutil
     requests
     sqlalchemy
+    standard-nntplib
     zope-component
     zope-configuration
   ];
