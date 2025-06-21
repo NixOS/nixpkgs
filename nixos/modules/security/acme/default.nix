@@ -1233,6 +1233,7 @@ in
 
   meta = {
     maintainers = lib.teams.acme.members;
+    tests = { nixosTests }: nixosTests.acme;
     doc = ./default.md;
   };
 }

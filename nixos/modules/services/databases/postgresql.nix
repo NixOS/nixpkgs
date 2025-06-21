@@ -898,4 +898,5 @@ in
     thoughtpolice
     danbst
   ];
+  meta.tests = { nixosTests }: nixosTests.postgresql;
 }
