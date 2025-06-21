@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "esptool";
-  version = "4.8.1";
+  version = "4.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     tag = "v${version}";
-    hash = "sha256-cNEg2a3j7Vql06GwVaE9y86UtMkNsUdJYM00OEUra2w=";
+    hash = "sha256-iIFjInqiqjeqiDYL7BU3vT99pCVnu8OhU7u9uKwe/SI=";
   };
 
   postPatch = ''
@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    changelog = "https://github.com/espressif/esptool/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/espressif/esptool/blob/${src.tag}/CHANGELOG.md";
     description = "ESP8266 and ESP32 serial bootloader utility";
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;
