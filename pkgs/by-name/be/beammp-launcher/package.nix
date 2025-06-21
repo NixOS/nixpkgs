@@ -1,0 +1,50 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  boost,
+  httplib,
+  openssl,
+  nlohmann_json,
+  curl,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "beammp-launcher";
+  version = "2.4.0";
+
+  src = fetchFromGitHub {
+    owner = "BeamMP";
+    repo = "BeamMP-Launcher";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-aAQmgK03a3BY4YWuDyTmJzcePchD74SXfbkHwnaOYW8=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    boost
+    httplib
+    openssl
+    nlohmann_json
+    curl
+  ];
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 BeamMP-Launcher $out/bin/BeamMP-Launcher
+    runHook postInstall
+  '';
+
+  meta = {
+    description = "Launcher for the BeamMP mod for BeamNG.drive";
+    homepage = "https://github.com/BeamMP/BeamMP-Launcher";
+    mainProgram = "BeamMP-Launcher";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ invertedEcho ];
+    platforms = lib.platforms.linux;
+  };
+})
