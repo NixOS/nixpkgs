@@ -55,6 +55,7 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     wrapGAppsHook4
     desktop-file-utils
+    bash
     fakeroot
     gobject-introspection
   ];
@@ -81,7 +82,10 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+    "--prefix PATH : ${lib.makeBinPath [ fakeroot ]}"
+  ];
 
   postInstallCheck = ''
     mesonCheckPhase
