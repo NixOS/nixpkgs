@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gtest";
-  version = "1.16.0";
+  version = "1.17.0";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "googletest";
     rev = "v${version}";
-    hash = "sha256-01PK9LxqHno89gypd7ze5gDP4V3en2J5g6JZRqohDB0=";
+    hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
   };
 
   patches = [
