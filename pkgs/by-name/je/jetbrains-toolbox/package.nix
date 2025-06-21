@@ -19,10 +19,7 @@ let
     homepage = "https://jetbrains.com/";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [
-      AnatolyPopov
-      ners
-    ];
+    maintainers = with lib.maintainers; [ ners ];
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"
