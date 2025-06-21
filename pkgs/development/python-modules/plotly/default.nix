@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "6.1.0";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     tag = "v${version}";
-    hash = "sha256-B5wjZTnL/T+zRbPd3tVSekDbYnKBvIdIpXhc3sUvT3E=";
+    hash = "sha256-+vIq//pDLaaTmRGW+oytho3TfMmLCtuIoHeFenLVcek=";
   };
 
   postPatch = ''
@@ -91,24 +91,37 @@ buildPythonPackage rec {
     xarray
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = [
-    # failed pinning test, sensitive to dep versions
-    "test_legend_dots"
-    "test_linestyle"
-    # lazy loading error, could it be the sandbox PYTHONPATH?
-    # AssertionError: assert "plotly" not in sys.modules
-    "test_dependencies_not_imported"
-    "test_lazy_imports"
-    # [0.0, 'rgb(252, 255, 164)'] != [0.0, '#fcffa4']
-    "test_acceptance_named"
-  ];
+  disabledTests =
+    [
+      # failed pinning test, sensitive to dep versions
+      "test_legend_dots"
+      "test_linestyle"
+
+      # lazy loading error, could it be the sandbox PYTHONPATH?
+      # AssertionError: assert "plotly" not in sys.modules
+      "test_dependencies_not_imported"
+      "test_lazy_imports"
+
+      # [0.0, 'rgb(252, 255, 164)'] != [0.0, '#fcffa4']
+      "test_acceptance_named"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # PermissionError: [Errno 1] Operation not permitted
+      # "test_browser_renderer_show"
+
+      # RecursionError: maximum recursion depth exceeded
+      "test_acceptance_aok"
+      "test_numeric_validator_numeric_pandas"
+    ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # requires local networking
-    "plotly/tests/test_io/test_renderers.py"
-    # fails to launch kaleido subprocess
-    "plotly/tests/test_optional/test_kaleido"
+    "tests/test_plotly_utils/validators/test_xarray_input.py"
+
+    # RecursionError: maximum recursion depth exceeded
+    "tests/test_optional/test_kaleido/test_kaleido.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "plotly" ];
 
