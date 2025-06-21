@@ -2,55 +2,83 @@
   lib,
   stdenv,
   fetchzip,
-  mono,
-  sqlite,
-  makeWrapper,
+  autoPatchelfHook,
+  gcc-unwrapped,
+  zlib,
+  lttng-ust_2_12,
+  icu,
+  openssl,
+  makeBinaryWrapper,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "duplicati";
-  version = "2.1.0.2";
-  channel = "beta";
-  build_date = "2024-11-29";
+stdenv.mkDerivation (
+  finalAttrs:
+  let
+    _supportedPlatforms = {
+      "armv7l-linux" = "linux-arm7";
+      "x86_64-linux" = "linux-x64";
+      "aarch64-linux" = "linux-arm64";
+    };
+    _platform = _supportedPlatforms."${stdenv.hostPlatform.system}";
+    _fileName = with finalAttrs; "duplicati-${version}_${channel}_${buildDate}-${_platform}-cli";
+    # nix hash convert --to sri "sha256:`nix-prefetch-url --unpack https://updates.duplicati.com/stable/duplicati-2.1.0.5_stable_2025-03-04-linux-arm64-cli.zip`"
+    _fileHashForSystem = {
+      "armv7l-linux" = "sha256-FQQ07M0rwvxNkHPW6iK5WBTKgFrZ4LOP4vgINfmtq4k=";
+      "x86_64-linux" = "sha256-1QspF/A3hOtqd8bVbSqClJIHUN9gBrd18J5qvZJLkQE=";
+      "aarch64-linux" = "sha256-mSNInaCkNf1MBZK2M42SjJnYRtB5SyGMvSGSn5oH1Cs=";
+    };
+  in
+  {
+    # TODO build duplicati from source https://github.com/duplicati/duplicati/blob/master/.github/workflows/build-packages.yml
+    pname = "duplicati";
+    version = "2.1.0.5";
+    channel = "stable";
+    buildDate = "2025-03-04";
 
-  src = fetchzip {
-    url =
-      with finalAttrs;
-      "https://github.com/duplicati/duplicati/releases/download/v${version}-${version}_${channel}_${build_date}/duplicati-${version}_${channel}_${build_date}.zip";
-    hash = "sha256-LmW6yGutxP33ghFqyOLKrGDNCQdr8DDFn/IHigsLpzA=";
-    stripRoot = false;
-  };
+    src = fetchzip {
+      url = "https://updates.duplicati.com/stable/${_fileName}.zip";
+      hash = _fileHashForSystem."${stdenv.hostPlatform.system}";
+      stripRoot = true;
+    };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    mkdir -p $out/{bin,share/duplicati-${finalAttrs.version}}
-    cp -r * $out/share/duplicati-${finalAttrs.version}
-    makeWrapper "${lib.getExe mono}" $out/bin/duplicati-cli \
-      --add-flags "$out/share/duplicati-${finalAttrs.version}/Duplicati.CommandLine.exe" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          sqlite
-        ]
-      }
-    makeWrapper "${lib.getExe mono}" $out/bin/duplicati-server \
-      --add-flags "$out/share/duplicati-${finalAttrs.version}/Duplicati.Server.exe" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          sqlite
-        ]
-      }
-  '';
-
-  meta = {
-    description = "Free backup client that securely stores encrypted, incremental, compressed backups on cloud storage services and remote file servers";
-    homepage = "https://www.duplicati.com/";
-    license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [
-      nyanloutre
-      bot-wxt1221
+    nativeBuildInputs = [
+      autoPatchelfHook
+      makeBinaryWrapper
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    platforms = lib.platforms.all;
-  };
-})
+    buildInputs = [
+      gcc-unwrapped
+      zlib
+      lttng-ust_2_12
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/{bin,share}
+      cp -r * "$out/share/"
+      for file in $out/share/duplicati-*; do
+        makeBinaryWrapper "$file" "$out/bin/$(basename $file)" \
+        --prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath [
+            icu
+            openssl
+          ]
+        }
+      done
+
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "Free backup client that securely stores encrypted, incremental, compressed backups on cloud storage services and remote file servers";
+      homepage = "https://www.duplicati.com/";
+      license = lib.licenses.lgpl21;
+      maintainers = with lib.maintainers; [
+        nyanloutre
+        bot-wxt1221
+      ];
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+      platforms = builtins.attrNames _supportedPlatforms;
+    };
+  }
+)
