@@ -18615,6 +18615,8 @@ self: super: with self; {
 
   types-setuptools = callPackage ../development/python-modules/types-setuptools { };
 
+  types-six = callPackage ../development/python-modules/types-six { };
+
   types-tabulate = callPackage ../development/python-modules/types-tabulate { };
 
   types-toml = callPackage ../development/python-modules/types-toml { };
