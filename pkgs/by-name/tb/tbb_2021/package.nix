@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tbb";
-  version = "2021.13.0";
+  version = "2021.12.0";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "oneapi-src";
     repo = "oneTBB";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZoUzY71SweVQ8/1k09MNSXiEqab6Ae+QTbxORnar9JU=";
+    hash = "sha256-yG/Fs+3f9hNKzZ8le+W7+JDZk9hMzPsVAzbq0yTcUTc=";
   };
 
   nativeBuildInputs = [
