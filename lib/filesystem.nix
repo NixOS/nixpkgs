@@ -454,4 +454,46 @@ in
       )
     else
       processDir args;
+
+  /**
+    Append `/default.nix` if the passed path is a directory.
+
+    # Type
+
+    ```
+    resolveDefaultNix :: (Path | String) -> (Path | String)
+    ```
+
+    # Inputs
+
+    A single argument which can be a [path](https://nix.dev/manual/nix/stable/language/types#type-path) value or a string containing an absolute path.
+
+    # Output
+
+    If the input refers to a directory that exists, the output is that same path with `/default.nix` appended.
+    Furthermore, if the input is a string that ends with `/`, `default.nix` is appended to it.
+    Otherwise, the input is returned unchanged.
+
+    # Examples
+    :::{.example}
+    ## `lib.filesystem.resolveDefaultNix` usage example
+
+    This expression checks whether `a` and `b` refer to the same locally available Nix file path.
+
+    ```nix
+    resolveDefaultNix a == resolveDefaultNix b
+    ```
+
+    For instance, if `a` is `/some/dir` and `b` is `/some/dir/default.nix`, and `/some/dir/` exists, the expression evaluates to `true`, despite `a` and `b` being different references to the same Nix file.
+  */
+  resolveDefaultNix =
+    v:
+    if pathIsDirectory v then
+      v + "/default.nix"
+    else if lib.isString v && hasSuffix "/" v then
+      # A path ending in `/` can only refer to a directory, so we take the hint, even if we can't verify the validity of the path's `/` assertion.
+      # A `/` is already present, so we don't add another one.
+      v + "default.nix"
+    else
+      v;
 }
