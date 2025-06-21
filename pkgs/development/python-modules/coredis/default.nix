@@ -14,6 +14,7 @@
   redis,
   typing-extensions,
   wrapt,
+  fixVersioneerSourcesHook,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     repo = "coredis";
     tag = version;
     hash = "sha256-EMiZkKUcVbinWtYimNSQ715PH7pCrXpNKqseLFCu/48=";
+    nativeBuildInputs = [ fixVersioneerSourcesHook ];
   };
 
   postPatch = ''
