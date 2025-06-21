@@ -171,13 +171,17 @@ in
       after = [ "tailscaled.service" ];
       wants = [ "tailscaled.service" ];
       wantedBy = [ "multi-user.target" ];
+
       serviceConfig = {
-        Type = "oneshot";
+        Type = "notify";
       };
-      # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+      path = [
+        cfg.package
+        pkgs.jq
+      ];
+      enableStrictShellChecks = true;
       script =
         let
-          statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
           paramToString = v: if (builtins.isBool v) then (lib.boolToString v) else (toString v);
           params = lib.pipe cfg.authKeyParameters [
             (lib.filterAttrs (_: v: v != null))
@@ -186,9 +190,11 @@ in
             (params: if params != "" then "?${params}" else "")
           ];
         in
+        # bash
         ''
-          while [[ "$(${statusCommand})" == "NoState" ]]; do
-            sleep 0.5
+          getState() {
+            tailscale status --json --peers=false | jq -r '.BackendState'
+          }
           done
           status=$(${statusCommand})
           if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
