@@ -36,6 +36,8 @@
   commandLineArgs ? "",
   pkgsBuildBuild,
   pkgs,
+  qt6Support ? false,
+  qt6,
 }:
 
 let
@@ -78,6 +80,7 @@ let
         cupsSupport
         pulseSupport
         ungoogled
+        qt6Support
         ;
       gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
         version = if (upstream-info.deps.gn ? "version") then upstream-info.deps.gn.version else "0";
@@ -127,7 +130,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     makeWrapper
     ed
-  ];
+  ] ++ lib.optional qt6Support qt6.wrapQtAppsHook;
+
+  ${if qt6Support then "dontWrapQtApps" else null} = true;
 
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
@@ -141,7 +146,7 @@ stdenv.mkDerivation {
 
     # Needed for kerberos at runtime
     libkrb5
-  ];
+  ] ++ lib.optional qt6Support qt6.qtbase;
 
   outputs = [
     "out"
@@ -164,7 +169,7 @@ stdenv.mkDerivation {
     ''
       mkdir -p "$out/bin"
 
-      makeWrapper "${browserBinary}" "$out/bin/chromium" \
+      makeShellWrapper "${browserBinary}" "$out/bin/chromium" ${lib.optionalString qt6Support "\${qtWrapperArgs[@]} "}\
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
