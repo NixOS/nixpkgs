@@ -6,7 +6,7 @@
   A more detailed structure than a list is available in the `meta.tests` option value.
 
   Example usage (to be run from the Nixpkgs root):
-    nix-build maintainers/scripts/nixos-tests-for-files.nix --arg files '[ ./nixos/modules/services/databases/postgresql.nix ]'
+    nix-build maintainers/scripts/nixos-tests-for-files.nix --arg files '[ ./nixos/modules/security/acme ]'
 */
 {
   files,
