@@ -3,6 +3,9 @@ name: Build
 on:
   workflow_call:
     inputs:
+      baseBranch:
+        required: true
+        type: string
       mergedSha:
         required: true
         type: string
@@ -63,7 +66,7 @@ jobs:
       - name: Build NixOS manual
         if: |
           contains(matrix.builds, 'manual-nixos') && !cancelled() &&
-          (github.base_ref == 'master' || startsWith(github.base_ref, 'release-'))
+          contains(fromJSON(inputs.baseBranch).type, 'primary')
         run: nix-build untrusted/ci -A manual-nixos --argstr system ${{ matrix.system }} --out-link nixos-manual
 
       - name: Build Nixpkgs manual
@@ -81,7 +84,7 @@ jobs:
       - name: Upload NixOS manual
         if: |
           contains(matrix.builds, 'manual-nixos') && !cancelled() &&
-          (github.base_ref == 'master' || startsWith(github.base_ref, 'release-'))
+          contains(fromJSON(inputs.baseBranch).type, 'primary')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: nixos-manual-${{ matrix.system }}
