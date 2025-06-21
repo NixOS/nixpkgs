@@ -257,19 +257,19 @@ in
 
     security.wrappers =
       let
-        mkSetuidRoot = source: {
-          setuid = true;
+        mkMountCap = source: {
+          capabilities = "cap_net_admin+eip";
           owner = "root";
           group = "root";
           inherit source;
         };
       in
       {
-        # These are mount related wrappers that require the +s permission.
-        fusermount = mkSetuidRoot "${lib.getBin pkgs.fuse}/bin/fusermount";
-        fusermount3 = mkSetuidRoot "${lib.getBin pkgs.fuse3}/bin/fusermount3";
-        mount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
-        umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
+        # These are mount related wrappers that require CAP_SYS_ADMIN.
+        fusermount = mkMountCap "${lib.getBin pkgs.fuse}/bin/fusermount";
+        fusermount3 = mkMountCap "${lib.getBin pkgs.fuse3}/bin/fusermount3";
+        mount = mkMountCap "${lib.getBin pkgs.util-linux}/bin/mount";
+        umount = mkMountCap "${lib.getBin pkgs.util-linux}/bin/umount";
       };
 
     # Make sure our wrapperDir exports to the PATH env variable when
