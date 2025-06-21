@@ -1,5 +1,5 @@
 diff --git a/Makefile b/Makefile
-index b688485c..c4fc6fb1 100644
+index 0d493cf7..dfe45ba6 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -60,6 +60,7 @@ IMAGEOPTS = inline
@@ -19,7 +19,7 @@ index b688485c..c4fc6fb1 100644
  
  # Invokes all the automated checks, but CHECK_XREFS can be set to empty
  # on the command line to avoid building an HTML spec target.
-@@ -602,13 +603,24 @@ manhtmlpages: $(REFPATH)/apispec.adoc $(GENDEPENDS)
+@@ -618,13 +619,24 @@ manhtmlpages: $(REFPATH)/apispec.adoc $(GENDEPENDS)
  	$(QUIET) echo "manhtmlpages: building HTML refpages with these options:"
  	$(QUIET) echo $(ASCIIDOC) -b html5 $(ADOCOPTS) $(ADOCHTMLOPTS) \
  	    $(ADOCREFOPTS) -d manpage -o REFPAGE.html REFPAGE.adoc
@@ -47,7 +47,7 @@ index b688485c..c4fc6fb1 100644
  
  # Asciidoctor options to build refpages
  #
-@@ -636,6 +648,16 @@ $(MANHTMLDIR)/%.html: $(REFPATH)/%.adoc $(GENDEPENDS) $(KATEXINSTDIR)
+@@ -652,6 +664,16 @@ $(MANHTMLDIR)/%.html: $(REFPATH)/%.adoc $(GENDEPENDS) $(KATEXINSTDIR)
  	    $(TRANSLATEMATH) $@ ; \
  	fi
  
@@ -64,7 +64,7 @@ index b688485c..c4fc6fb1 100644
  # The 'manhtml' and 'manpdf' targets are NO LONGER SUPPORTED by Khronos.
  # They generate HTML5 and PDF single-file versions of the refpages.
  # The generated refpage sources are included by $(REFPATH)/apispec.adoc,
-@@ -665,9 +687,13 @@ $(OUTDIR)/apispec.html: $(SPECVERSION) $(REFPATH)/apispec.adoc $(SVGFILES) $(GEN
+@@ -681,9 +703,13 @@ $(OUTDIR)/apispec.html: $(SPECVERSION) $(REFPATH)/apispec.adoc $(SVGFILES) $(GEN
  # Create links for refpage aliases
  
  MAKEMANALIASES = $(SCRIPTS)/makemanaliases.py
@@ -80,7 +80,7 @@ index b688485c..c4fc6fb1 100644
  
  # Targets generated from the XML and registry processing scripts
 diff --git a/scripts/makemanaliases.py b/scripts/makemanaliases.py
-index 972d2727..7a205158 100755
+index 4d9102e6..e0c3b279 100755
 --- a/scripts/makemanaliases.py
 +++ b/scripts/makemanaliases.py
 @@ -20,6 +20,8 @@ if __name__ == '__main__':
@@ -94,11 +94,11 @@ index 972d2727..7a205158 100755
      # Look for apimap.py in the specified directory
 @@ -45,6 +47,10 @@ if __name__ == '__main__':
  
-         alias = key + '.html'
-         src = api.alias[key] + '.html'
+         alias = f"{key}.html"
+         src = f"{api.alias[key]}.html"
 +        if args.man3:
-+            alias = key + '.3'
-+            src = api.alias[key] + '.3'
++            alias = f"{key}.3"
++            src = f"{api.alias[key]}.3"
 +        
  
          if not os.access(src, os.R_OK):
