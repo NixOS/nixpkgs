@@ -10,6 +10,7 @@
   nodePackages,
   katex ? nodePackages.katex,
   he ? nodePackages.he,
+  allExtensions ? true,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vulkan-docs";
@@ -47,6 +48,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace config/katex_replace/extension.rb \
       --replace-warn "../katex/" "${katex}/lib/node_modules/katex/dist/"
   '';
+
+  preBuild = toString (
+    lib.optional allExtensions ''
+      makeFlagsArray+=(EXTENSIONS="$(python3 ${./all-extensions.py})")
+    ''
+  );
 
   makeFlags = [ "alldocs" ];
 
