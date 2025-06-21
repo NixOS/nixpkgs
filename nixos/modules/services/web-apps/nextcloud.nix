@@ -55,6 +55,10 @@ let
     };
   };
 
+  # Load the shipped.json from the Nextcloud package to get alwaysEnabled apps
+  shippedJson = builtins.fromJSON (builtins.readFile "${overridePackage}/core/shipped.json");
+  mandatoryApps = shippedJson.alwaysEnabled;
+
   webroot =
     pkgs.runCommand "${overridePackage.name or "nextcloud"}-with-apps"
       {
@@ -415,6 +419,16 @@ in
         Enabled by default unless there are packages in [](#opt-services.nextcloud.extraApps).
         Set this to true to force enable the store even if [](#opt-services.nextcloud.extraApps) is used.
         Set this to false to disable the installation of apps from the global appstore. App management is always enabled regardless of this setting.
+      '';
+    };
+    enabledApps = mkOption {
+      type = types.nullOr (types.listOf types.str);
+      default = null;
+      example = [ ];
+      description = ''
+        If set will ensure only set apps are enabled, all other will be disabled.
+        If `extraApps` is uded and `extraAppsEnable` is true, extraApps are automatically included.
+        Mandatory apps will always stay enabled, no need to add them.
       '';
     };
     https = mkOption {
@@ -1213,9 +1227,45 @@ in
 
               ${lib.getExe occ} config:system:delete trusted_domains
 
+              # Get list of currently enabled apps
+              ENABLED_APPS=$(${lib.getExe occ} app:list | ${lib.getExe pkgs.gnused} -n '/^Enabled:/,/^Disabled:/p' | ${lib.getExe pkgs.gnugrep} '^ *- ' | ${lib.getExe pkgs.gnused} 's/^ *- \([^:]*\):.*$/\1/' | tr '\n' ' ' | ${lib.getExe pkgs.gnused} 's/ $//')
+
               ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
-                # Try to enable apps
-                ${lib.getExe occ} app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
+                # Try to enable extra apps
+                for app in ${concatStringsSep " " (attrNames cfg.extraApps)}; do
+                  if ! echo "$ENABLED_APPS" | ${lib.getExe pkgs.gnugrep} -q "\b$app\b"; then
+                    ${lib.getExe occ} app:enable "$app" || { echo "Could not enable app $app"; exit 1; }
+                    ENABLED_APPS="$ENABLED_APPS $app"
+                  fi
+                done
+              ''}
+
+              ${lib.optionalString (cfg.enabledApps != null) ''
+                # Enable specified apps only if not already enabled
+                for app in ${concatStringsSep " " (lib.unique cfg.enabledApps)}; do
+                  if ! echo "$ENABLED_APPS" | ${lib.getExe pkgs.gnugrep} -q "\b$app\b"; then
+                    ${lib.getExe occ} app:enable "$app" || { echo "Could not enable app $app"; exit 1; }
+                    ENABLED_APPS="$ENABLED_APPS $app"
+                  fi
+                done
+
+                # List of apps that should be enabled
+                SHOULD_BE_ENABLED="${
+                  concatStringsSep " " (
+                    lib.unique (
+                      mandatoryApps
+                      ++ cfg.enabledApps
+                      ++ lib.optionals (cfg.extraAppsEnable && cfg.extraApps != { }) (attrNames cfg.extraApps)
+                    )
+                  )
+                }"
+
+                # Disable apps that are enabled but not in our desired list
+                for app in $ENABLED_APPS; do
+                  if ! echo "$SHOULD_BE_ENABLED" | ${lib.getExe pkgs.gnugrep} -q "\b$app\b"; then
+                    ${lib.getExe occ} app:disable "$app" || { echo "Could not disable app $app"; exit 1; }
+                  fi
+                done
               ''}
 
               ${occSetTrustedDomainsCmd}
