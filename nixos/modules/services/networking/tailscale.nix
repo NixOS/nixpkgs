@@ -151,12 +151,8 @@ in
           "PORT=${toString cfg.port}"
           ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${toString cfg.extraDaemonFlags}"''
         ]
-        ++ (lib.optionals (cfg.permitCertUid != null) [
-          "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
-        ])
-        ++ (lib.optionals (cfg.disableTaildrop) [
-          "TS_DISABLE_TAILDROP=true"
-        ]);
+        ++ (lib.optionals (cfg.permitCertUid != null) [ "TS_PERMIT_CERT_UID=${cfg.permitCertUid}" ])
+        ++ (lib.optionals (cfg.disableTaildrop) [ "TS_DISABLE_TAILDROP=true" ]);
       # Restart tailscaled with a single `systemctl restart` at the
       # end of activation, rather than a `stop` followed by a later
       # `start`. Activation over Tailscale can hang for tens of
