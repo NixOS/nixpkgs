@@ -3216,10 +3216,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0x3mijjklsrlzfmwqp7x58fla7sk8pfwijhk988nmba787r8rf9g";
+      sha256 = "sha256-jvf8FQWxB3oUmjkGK8oDRvPDTmy9/oLVF3M/nZxAyHc=";
       type = "gem";
     };
-    version = "3.0.10";
+    version = "3.0.18";
   };
   rack-protection = {
     dependencies = [
