@@ -66,6 +66,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       Cryolitia
       phdyellow
+      aleksana
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "monitor_cpu";
