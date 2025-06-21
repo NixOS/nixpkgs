@@ -6,41 +6,48 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "strictdoc";
-  version = "0.0.58";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
     tag = version;
-    hash = "sha256-0X74Lv25pUdOUgQzqQU6p+fjuxhC/JqfKEFI7c5t67U=";
+    hash = "sha256-hT7QlJZRilC7GeX96mS2g99rvKYmiO+09AZ/IZL+S/o=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     python3.pkgs.hatchling
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
+    datauri
     docutils
     fastapi
     graphviz
+    html2pdf4doc
     html5lib
     jinja2
+    lark
     lxml
+    openpyxl
     pybtex
     pygments
-    datauri
     python-multipart
-    selenium
-    requests
-    spdx-tools
-    webdriver-manager
     reqif
+    requests
+    robotframework
+    selenium
     setuptools
+    spdx-tools
     textx
     toml
+    tree-sitter
+    tree-sitter-grammars.tree-sitter-cpp
+    tree-sitter-grammars.tree-sitter-python
     uvicorn
+    webdriver-manager
     websockets
     xlrd
     xlsxwriter
@@ -66,12 +73,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "strictdoc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Software for technical documentation and requirements management";
     homepage = "https://github.com/strictdoc-project/strictdoc";
     changelog = "https://github.com/strictdoc-project/strictdoc/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yuu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yuu ];
     mainProgram = "strictdoc";
   };
 }
