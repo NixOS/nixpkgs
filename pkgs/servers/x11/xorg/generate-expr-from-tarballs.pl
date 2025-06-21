@@ -39,14 +39,25 @@ $pcMap{"hwdata"} = "hwdata";
 $pcMap{"fontutil"} = "fontutil";
 $pcMap{"pciaccess"} = "libpciaccess";
 $pcMap{"pthread-stubs"} = "libpthreadstubs";
+$pcMap{"x11"} = "libX11";
+$pcMap{"x11-xcb"} = "libX11";
+$pcMap{"xau"} = "libXau";
 $pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"xcb-proto"} = "xcbproto";
+$pcMap{"xdmcp"} = "libXdmcp";
+$pcMap{"xext"} = "libXext";
 $pcMap{"xtrans"} = "xtrans";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
 $pcMap{"\$DRI2PROTO"} = "xorgproto";
 $pcMap{"\${XKBMODULE}"} = "libxkbfile";
+foreach my $mod ("xcb", "xcb-composite", "xcb-damage", "xcb-dpms", "xcb-dri2", "xcb-dri3",
+    "xcb-glx", "xcb-present", "xcb-randr", "xcb-record", "xcb-render", "xcb-res", "xcb-screensaver",
+    "xcb-shape", "xcb-shm", "xcb-sync", "xcb-xf86dri", "xcb-xfixes", "xcb-xinerama", "xcb-xinput",
+    "xcb-xkb", "xcb-xtest", "xcb-xv", "xcb-xvmc") {
+    $pcMap{$mod} = "libxcb";
+}
 foreach my $mod ("applewmproto", "bigreqsproto", "compositeproto", "damageproto", "dmxproto",
     "dpmsproto", "dri2proto", "dri3proto", "evieproto", "fixesproto", "fontcacheproto",
     "fontsproto", "glproto", "inputproto", "kbproto", "lg3dproto", "presentproto",
@@ -282,7 +293,12 @@ print OUT <<EOF;
   imake,
   libpciaccess,
   libpthread-stubs,
+  libx11,
+  libxau,
+  libxcb,
   libxcvt,
+  libxdmcp,
+  libxext,
   lndir,
   luit,
   makedepend,
@@ -306,6 +322,7 @@ self: with self; {
     gccmakedep
     imake
     libpciaccess
+    libxcb
     libxcvt
     lndir
     luit
@@ -319,6 +336,10 @@ self: with self; {
   fontalias = font-alias;
   fontutil = font-util;
   libpthreadstubs = libpthread-stubs;
+  libX11 = libx11;
+  libXau = libxau;
+  libXdmcp = libxdmcp;
+  libXext = libxext;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
   xkeyboardconfig = xkeyboard-config;
