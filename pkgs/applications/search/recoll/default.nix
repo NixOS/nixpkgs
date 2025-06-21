@@ -75,11 +75,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.39.1";
+  version = "1.43.2";
 
   src = fetchurl {
     url = "https://www.recoll.org/${pname}-${version}.tar.gz";
-    hash = "sha256-Eeadj/AnuztCb7VIYEy4hKbduH3CzK53tADvI9+PWmQ=";
+    hash = "sha256-FbDXknumjktcikOfAe4FKtPmggJGGHasq8dpD+8mNzE=";
   };
 
   mesonFlags =
@@ -107,13 +107,10 @@ mkDerivation rec {
     ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-DNIXPKGS"
     "-fpermissive" # libxml2-2.12 changed const qualifiers
   ];
 
   patches = [
-    # fix "No/bad main configuration file" error
-    ./fix-datadir.patch
     # use the same configure based build for darwin as linux
     ./0001-no-qtgui-darwin-bundle.patch
   ];
