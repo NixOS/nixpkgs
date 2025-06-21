@@ -426,17 +426,6 @@ let
     in
     "${tools}/bin/${tools.targetPrefix}${name}";
 
-  # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
-  # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
-  # see #84670 and #49071 for more background.
-  useLdGold =
-    targetPlatform.linker == "gold"
-    || (
-      targetPlatform.linker == "bfd"
-      && (targetCC.bintools.bintools.hasGold or false)
-      && !targetPlatform.isMusl
-    );
-
   # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
   variantSuffix = lib.concatStrings [
     (lib.optionalString stdenv.hostPlatform.isMusl "-musl")
@@ -506,8 +495,7 @@ stdenv.mkDerivation (
         # the *host* tools.
         export CC="${toolPath "cc" targetCC}"
         export CXX="${toolPath "c++" targetCC}"
-        # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-        export LD="${toolPath "ld${lib.optionalString useLdGold ".gold"}" targetCC}"
+        export LD="${toolPath "ld" targetCC}"
         export AS="${toolPath "as" targetCC}"
         export AR="${toolPath "ar" targetCC}"
         export NM="${toolPath "nm" targetCC}"
@@ -635,11 +623,6 @@ stdenv.mkDerivation (
           ]
       ++ lib.optionals (targetPlatform != hostPlatform) [
         "--enable-bootstrap-with-devel-snapshot"
-      ]
-      ++ lib.optionals useLdGold [
-        "CFLAGS=-fuse-ld=gold"
-        "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
-        "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
       ]
       ++ lib.optionals (disableLargeAddressSpace) [
         "--disable-large-address-space"
@@ -799,8 +782,8 @@ stdenv.mkDerivation (
           "C compiler command" "${toolPath "cc" installCC}" \
           "Haskell CPP command" "${toolPath "cc" installCC}" \
           "C++ compiler command" "${toolPath "c++" installCC}" \
-          "ld command" "${toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC}" \
-          "Merge objects command" "${toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC}" \
+          "ld command" "${toolPath "ld" installCC}" \
+          "Merge objects command" "${toolPath "ld" installCC}" \
           "ar command" "${toolPath "ar" installCC}" \
           "ranlib command" "${toolPath "ranlib" installCC}"
       ''
