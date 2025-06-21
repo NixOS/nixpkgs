@@ -22,13 +22,13 @@
 
 buildGoModule rec {
   pname = "ecapture";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "gojue";
     repo = "ecapture";
     tag = "v${version}";
-    hash = "sha256-mYnAa4zh7MqTTS2iU97YOhRbrCLd8C7D5furHNSO0F8=";
+    hash = "sha256-4cdjdTJjblI6ywpVE1/ZuM4gGkD2uZdfwfFx2gtr5yE=";
     fetchSubmodules = true;
   };
 
