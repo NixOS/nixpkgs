@@ -797,7 +797,7 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "137.0.7151.103",
+    "version": "137.0.7151.119",
     "deps": {
       "depot_tools": {
         "rev": "1fcc527019d786502b02f71b8b764ee674a40953",
@@ -808,16 +808,16 @@
         "hash": "sha256-+nKP2hBUKIqdNfDz1vGggXSdCuttOt0GwyGUQ3Z1ZHI="
       },
       "ungoogled-patches": {
-        "rev": "137.0.7151.103-1",
-        "hash": "sha256-KMzO25yruwrT7rpqbQ56FMGxkVZOwDSsvFqCZbUUM5Y="
+        "rev": "137.0.7151.119-1",
+        "hash": "sha256-SMEe/Wc4cjaZfw4pQIWeblEvB9CmOJWVNkDvCKAow3Q="
       },
       "npmHash": "sha256-I6MsfAhrLRmgiRJ13LSejfy2N63C3Oug5tOOXA622j4="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "3dcc738117a3439068c9773ccd31f9858923fc4a",
-        "hash": "sha256-MIEjHLpfKIBiTFh+bO+NUf6iDpizTP9yfXQqbHfiDwo=",
+        "rev": "e0ac9d12dff5f2d33c935958b06bf1ded7f1c08c",
+        "hash": "sha256-+3C2n/7bbIOpXGvBrFnSMNlgLVRMoPtOF14CDROVClI=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -1037,8 +1037,8 @@
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "e423961606946be24c8c1ec0d1ec91511efbabc5",
-        "hash": "sha256-MhooXuF6aw+ixPzvVCBl+6T+79cTReCYx86qqXAZ6bg="
+        "rev": "afc8e923a37090445d6d97ca23fea49d9eb7b9cf",
+        "hash": "sha256-io0J6tt0RXumjjSklZyJpALV5IikPbROd40xcrX4iBs="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -1587,8 +1587,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "41f53aba7095888c959932bd8f2ee8b4e16af223",
-        "hash": "sha256-ICrdvHA6fe2CUphRgPdlofazr0L+NFypWDNOI5e5QIM="
+        "rev": "075234cf3d7622d9d588a6f748fc4501aa23080c",
+        "hash": "sha256-wrLxRuJ3rq1yC0PIUGPsuDB/YNee1x3J/i6ZSLk70HM="
       }
     }
   }
