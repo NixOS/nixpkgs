@@ -71,18 +71,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.12.0";
+  version = "0.12.0-unstable-2025-06-13";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
-    tag = finalAttrs.version;
-    hash = "sha256-VpT3ePqmo75Ni6/02KFGV6ltnpiV70/ovG/p1f2wKkU=";
+    # TODO: switch back to using tag when a new version is released which
+    # includes the fixes for issues like
+    # https://github.com/Alexays/Waybar/issues/3956
+    rev = "2c482a29173ffcc03c3e4859808eaef6c9014a1f";
+    hash = "sha256-29g4SN3Yr4q7zxYS3dU48i634jVsXHBwUUeALPAHZGM=";
   };
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.3
+    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.4
     patchShebangs .
     popd
   '';
@@ -188,7 +191,9 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";
-  doInstallCheck = true;
+
+  # TODO: re-enable after bump to next release.
+  doInstallCheck = false;
 
   passthru = {
     updateScript = nix-update-script { };
