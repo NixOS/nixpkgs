@@ -13,15 +13,21 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iwd";
-  version = "3.8";
+  version = "3.9";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
-    rev = version;
-    hash = "sha256-BNGXOiyV+aTHym4EBStVdQ0XekmkFEyx7PqmlG8HcVc=";
+    tag = finalAttrs.version;
+    hash = "sha256-NY0WB62ehxKH64ssAF4vkF6YroG5HHH+ii+AFG9EaE4=";
   };
+
+  patches = [
+    # Remove dbus config referencing the netdev group, which we don't have.
+    # Users are advised to use the wheel group instead.
+    ./no_netdev_group.diff
+  ];
 
   outputs = [
     "out"
@@ -101,14 +107,14 @@ stdenv.mkDerivation rec {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       dtzWill
       fpletz
     ];
   };
-}
+})
