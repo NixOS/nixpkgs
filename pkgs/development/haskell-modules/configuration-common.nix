@@ -2528,6 +2528,24 @@ with haskellLib;
       '';
   }) super.hermes-json;
 
+  # hexstring is not compatible with newer versions of base16-bytestring
+  # See https://github.com/solatis/haskell-hexstring/issues/3
+  hexstring = overrideCabal (old: {
+    # Prevent DOS line endings from Hackage from breaking a patch
+    prePatch =
+      old.prePatch or ""
+      + ''
+        ${pkgs.buildPackages.dos2unix}/bin/dos2unix src/Data/HexString.hs
+      '';
+    patches = old.patches or [ ] ++ [
+      (pkgs.fetchpatch {
+        name = "fix-base16-bytestring-compat";
+        url = "https://github.com/solatis/haskell-hexstring/commit/4f0a27c64ecb4a767eeea2efebebfd7edba18de0.patch";
+        hash = "sha256-DHT566Ov1D++1VNjUor9xSeOsuSi2LPiIAGT55gqr8s=";
+      })
+    ];
+  }) super.hexstring;
+
   # Disabling doctests.
   regex-tdfa = overrideCabal {
     testTargets = [ "regex-tdfa-unittest" ];
