@@ -139,6 +139,12 @@ self: super: {
     stylish-haskell
     ;
 
+  # directory-ospath-streaming requires the ospath API in core packages
+  # filepath, directory and unix.
+  stan = super.stan.override {
+    directory-ospath-streaming = null;
+  };
+
   # Packages which need compat library for GHC < 9.6
   inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)
     indexed-traversable
