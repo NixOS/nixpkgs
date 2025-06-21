@@ -1,0 +1,19 @@
+diff --git a/packages/flutter_tools/lib/src/base/os.dart b/packages/flutter_tools/lib/src/base/os.dart
+index 9134a014f8d..0b820fffaa8 100644
+--- a/packages/flutter_tools/lib/src/base/os.dart
++++ b/packages/flutter_tools/lib/src/base/os.dart
+@@ -312,13 +312,7 @@ class _LinuxUtils extends _PosixUtils {
+               : '/usr/lib/os-release';
+       String prettyName;
+       String kernelRelease;
+-      try {
+-        final String osRelease = _fileSystem.file(osReleasePath).readAsStringSync();
+-        prettyName = _getOsReleaseValueForKey(osRelease, prettyNameKey);
+-      } on Exception catch (e) {
+-        _logger.printTrace('Failed obtaining PRETTY_NAME for Linux: $e');
+-        prettyName = '';
+-      }
++      prettyName = 'Nix';
+       try {
+         // Split the operating system version which should be formatted as
+         // "Linux kernelRelease build", by spaces.
