@@ -28,10 +28,10 @@
     with subtest("Prowlarr data directory migration works"):
       machine.systemctl("stop prowlarr.service")
       machine.succeed("mkdir -p /tmp/prowlarr-migration")
-      machine.succeed("mv /var/lib/prowlarr/* /tmp/prowlarr-migration")
+      machine.succeed("rsync -a -delete /var/lib/prowlarr/ /tmp/prowlarr-migration")
       machine.succeed("${config.nodes.machine.system.build.toplevel}/specialisation/customDataDir/bin/switch-to-configuration test")
       machine.wait_for_unit("var-lib-private-prowlarr.mount")
-      machine.succeed("mv /tmp/prowlarr-migration/* /var/lib/prowlarr")
+      machine.succeed("rsync -a -delete /tmp/prowlarr-migration/ /var/lib/prowlarr")
       machine.systemctl("restart prowlarr.service")
       # Check that we're using a bind mount when using a non-default dataDir
       machine.succeed("findmnt /var/lib/private/prowlarr | grep /srv/prowlarr")
