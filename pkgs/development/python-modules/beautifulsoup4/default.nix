@@ -65,6 +65,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
+  disabledTests = [
+    # fail with latest libxml, by not actually rejecting
+    "test_rejected_markup"
+    "test_rejected_input"
+  ];
+
   pythonImportsCheck = [ "bs4" ];
 
   passthru.tests = {
