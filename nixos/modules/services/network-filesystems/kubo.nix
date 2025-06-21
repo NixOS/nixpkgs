@@ -161,7 +161,7 @@ in
       autoMount = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Whether Kubo should try to mount /ipfs and /ipns at startup.";
+        description = "Whether Kubo should try to mount /ipfs, /ipns and /mfs at startup.";
       };
 
       autoMigrate = lib.mkOption {
@@ -235,6 +235,12 @@ in
               type = lib.types.str;
               default = "/ipns";
               description = "Where to mount the IPNS namespace to";
+            };
+
+            Mounts.MFS = lib.mkOption {
+              type = lib.types.str;
+              default = "/mfs";
+              description = "Where to mount the MFS namespace to";
             };
           };
         };
@@ -356,6 +362,7 @@ in
         ${cfg.dataDir}.d = defaultConfig;
         ${cfg.settings.Mounts.IPFS}.d = lib.mkIf (cfg.autoMount) defaultConfig;
         ${cfg.settings.Mounts.IPNS}.d = lib.mkIf (cfg.autoMount) defaultConfig;
+        ${cfg.settings.Mounts.MFS}.d = lib.mkIf (cfg.autoMount) defaultConfig;
       };
 
     # The hardened systemd unit breaks the fuse-mount function according to documentation in the unit file itself
@@ -401,8 +408,8 @@ in
               ipfs --offline config replace -
           '';
         postStop = lib.mkIf cfg.autoMount ''
-          # After an unclean shutdown the fuse mounts at cfg.settings.Mounts.IPFS and cfg.settings.Mounts.IPNS are locked
-          umount --quiet '${cfg.settings.Mounts.IPFS}' '${cfg.settings.Mounts.IPNS}' || true
+          # After an unclean shutdown the fuse mounts at cfg.settings.Mounts.IPFS, cfg.settings.Mounts.IPNS and cfg.settings.Mounts.MFS are locked
+          umount --quiet '${cfg.settings.Mounts.IPFS}' '${cfg.settings.Mounts.IPNS}' '${cfg.settings.Mounts.MFS}' || true
         '';
         serviceConfig = {
           ExecStart = [
