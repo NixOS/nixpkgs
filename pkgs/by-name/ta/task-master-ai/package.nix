@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs,
   nix-update-script,
 }:
 buildNpmPackage (finalAttrs: {
@@ -18,6 +19,8 @@ buildNpmPackage (finalAttrs: {
   npmDepsHash = "sha256-0usq016nVWxhDx36ijk5O7oN1pkdTu38mgjfBPIBqss=";
 
   dontNpmBuild = true;
+
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ nodejs ]}" ];
 
   passthru.updateScript = nix-update-script { };
 
