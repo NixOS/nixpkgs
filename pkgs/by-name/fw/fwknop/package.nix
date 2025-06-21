@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.cipherdyne.org/fwknop/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

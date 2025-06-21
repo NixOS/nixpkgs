@@ -96,6 +96,6 @@ stdenv.mkDerivation rec {
       bsd3
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

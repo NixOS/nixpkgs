@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     mainProgram = "swaybg";
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

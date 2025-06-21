@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     '';
     changelog = "https://github.com/francma/wob/releases/tag/${version}";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
     mainProgram = "wob";
   };
