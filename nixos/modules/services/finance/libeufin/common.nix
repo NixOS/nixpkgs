@@ -96,7 +96,9 @@ libeufinComponent:
             };
           in
           {
-            path = [ config.services.postgresql.package ];
+            path = [
+              (if cfg.createLocalDatabase then config.services.postgresql.package else pkgs.postgresql)
+            ];
             serviceConfig = {
               Type = "oneshot";
               DynamicUser = true;

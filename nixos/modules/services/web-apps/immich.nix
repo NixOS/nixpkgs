@@ -46,6 +46,9 @@ let
     mkOption
     mkEnableOption
     ;
+
+  postgresqlPackage =
+    if cfg.database.enable then config.services.postgresql.package else pkgs.postgresql;
 in
 {
   options.services.immich = {
@@ -265,7 +268,7 @@ in
       in
       [
         ''
-          ${lib.getExe' config.services.postgresql.package "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+          ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
         ''
       ];
 
@@ -333,7 +336,7 @@ in
       path = [
         # gzip and pg_dumpall are used by the backup service
         pkgs.gzip
-        config.services.postgresql.package
+        postgresqlPackage
       ];
 
       serviceConfig = commonServiceConfig // {
