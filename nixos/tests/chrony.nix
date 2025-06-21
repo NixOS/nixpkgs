@@ -13,7 +13,6 @@ import ./make-test-python.nix (
 
         specialisation.hardened.configuration = {
           services.chrony.enableMemoryLocking = true;
-          environment.memoryAllocator.provider = "graphene-hardened";
         };
       };
     };
