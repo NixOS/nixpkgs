@@ -58,14 +58,6 @@
             type = "erofs";
             options = "loop,ro,nodev,nosuid";
             unitConfig = {
-              # Since this unit depends on the nix store being mounted, it cannot
-              # be a dependency of local-fs.target, because if it did, we'd have
-              # local-fs.target ordered after the nix store mount which would cause
-              # things like network.target to only become active after the nix store
-              # has been mounted.
-              # This breaks for instance setups where sshd needs to be up before
-              # any encrypted disks can be mounted.
-              DefaultDependencies = false;
               RequiresMountsFor = [
                 "/sysroot/nix/store"
               ];
