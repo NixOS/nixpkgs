@@ -48,6 +48,7 @@ let
         Caddyfile = pkgs.writeTextDir "Caddyfile" ''
           {
             ${cfg.globalConfig}
+            admin ${cfg.admin}
           }
           ${cfg.extraConfig}
           ${concatMapStringsSep "\n" mkVHostConf virtualHosts}
@@ -83,6 +84,29 @@ in
   # interface
   options.services.caddy = {
     enable = mkEnableOption "Caddy web server";
+
+    admin = mkOption {
+      default = "unix/${cfg.dataDir}/admin.sock";
+      defaultText = literalExpression "unix//var/lib/caddy/admin.sock";
+      type = with types; either str lines;
+      description = ''
+        Administration endpoint which can be accessed via HTTP using a REST API.
+
+        ::: {.note}
+        If left as the default value, the admin endpoint will be set to a
+        unix socket named `admin.sock` located at Caddy's data directory.
+        The value can be set to the string "off" to disable the admin endpoint,
+        a unix socket (e.g. "unix//var/run/caddy.sock"), a URL (e.g. "localhost:12345"),
+        or options specified in <https://caddyserver.com/docs/caddyfile/options#admin>.
+        :::
+      '';
+      example = ''
+        :2019 {
+          origins localhost
+          enforce_origin
+        }
+      '';
+    };
 
     user = mkOption {
       default = "caddy";
@@ -306,13 +330,14 @@ in
     };
 
     enableReload = mkOption {
-      default = true;
+      default = cfg.admin != "off";
+      defaultText = literalExpression ''config.services.caddy.admin != "off"'';
       type = types.bool;
       description = ''
         Reload Caddy instead of restarting it when configuration file changes.
 
         Note that enabling this option requires the [admin API](https://caddyserver.com/docs/caddyfile/options#admin)
-        to not be turned off.
+        to not be turned off (will be turned on by default transitively through the default admin API configuration).
 
         If you enable this option, consider setting [`grace_period`](https://caddyserver.com/docs/caddyfile/options#grace-period)
         to a non-infinite value in {option}`services.caddy.globalConfig`
@@ -383,6 +408,10 @@ in
 
     assertions =
       [
+        {
+          assertion = cfg.enableReload -> cfg.admin != "off";
+          message = "The admin endpoint must be enabled to use the reload feature";
+        }
         {
           assertion = cfg.configFile == configFile -> cfg.adapter == "caddyfile" || cfg.adapter == null;
           message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
