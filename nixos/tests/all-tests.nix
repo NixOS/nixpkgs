@@ -1246,6 +1246,7 @@ in
   sing-box = runTest ./sing-box.nix;
   slimserver = runTest ./slimserver.nix;
   slurm = runTest ./slurm.nix;
+  slurm-pam = runTest ./slurm-pam.nix;
   snmpd = runTest ./snmpd.nix;
   smokeping = runTest ./smokeping.nix;
   snapcast = runTest ./snapcast.nix;
