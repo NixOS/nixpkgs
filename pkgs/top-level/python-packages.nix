@@ -9080,6 +9080,8 @@ self: super: with self; {
 
   misaka = callPackage ../development/python-modules/misaka { };
 
+  misaki = callPackage ../development/python-modules/misaki { };
+
   misoc = callPackage ../development/python-modules/misoc { };
 
   miss-hit = callPackage ../development/python-modules/miss-hit { };
