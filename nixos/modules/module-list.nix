@@ -735,6 +735,7 @@
   ./services/mail/opendkim.nix
   ./services/mail/opensmtpd.nix
   ./services/mail/pfix-srsd.nix
+  ./services/mail/postfix-tlspol.nix
   ./services/mail/postfix.nix
   ./services/mail/postfixadmin.nix
   ./services/mail/postgrey.nix
@@ -749,6 +750,7 @@
   ./services/mail/spamassassin.nix
   ./services/mail/stalwart-mail.nix
   ./services/mail/sympa.nix
+  ./services/mail/tlsrpt.nix
   ./services/mail/zeyple.nix
   ./services/matrix/appservice-discord.nix
   ./services/matrix/appservice-irc.nix
