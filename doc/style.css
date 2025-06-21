@@ -7,6 +7,7 @@ body {
     margin: 0;
 }
 
+.content,
 .book,
 .appendix {
     margin: auto;
@@ -14,6 +15,7 @@ body {
 }
 
 @media screen and (min-width: 768px) {
+    .content,
     .book,
     .appendix {
         max-width: 46rem;
@@ -21,6 +23,7 @@ body {
 }
 
 @media screen and (min-width: 992px) {
+    .content,
     .book,
     .appendix {
         max-width: 60rem;
@@ -28,13 +31,14 @@ body {
 }
 
 @media screen and (min-width: 1200px) {
+    .content,
     .book,
     .appendix {
         max-width: 73rem;
     }
 }
 
-.book .list-of-examples {
+.content .list-of-examples, .book .list-of-examples {
     display: none;
 }
 

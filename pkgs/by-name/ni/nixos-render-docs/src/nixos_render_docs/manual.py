@@ -8,7 +8,7 @@ import xml.sax.saxutils as xml
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Callable, cast, ClassVar, Generic, get_args, NamedTuple
+from typing import Any, Callable, cast, ClassVar, Generic, get_args, NamedTuple, Iterable, Tuple
 
 from markdown_it.token import Token
 
@@ -17,6 +17,7 @@ from .html import HTMLRenderer, UnresolvedXrefError
 from .manual_structure import check_structure, FragmentType, is_include, make_xml_id, TocEntry, TocEntryType, XrefTarget
 from .md import Converter, Renderer
 from .redirects import Redirects
+from .utils import relative_path_from
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
     # per-converter configuration for ns:arg=value arguments to include blocks, following
@@ -212,6 +213,7 @@ class HTMLParameters(NamedTuple):
     chunk_toc_depth: int
     section_toc_depth: int
     media_dir: Path
+    split_pages: bool
 
 class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     _base_path: Path
@@ -221,12 +223,14 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
 
     def __init__(self, toplevel_tag: str, revision: str, html_params: HTMLParameters,
                  manpage_urls: Mapping[str, str], xref_targets: dict[str, XrefTarget],
-                 redirects: Redirects | None, in_dir: Path, base_path: Path):
+                 redirects: Redirects | None, in_dir: Path, base_path: Path, outfile: Path):
         super().__init__(toplevel_tag, revision, manpage_urls, xref_targets)
+        self._outfile = outfile
         self._in_dir = in_dir
         self._base_path = base_path.absolute()
         self._html_params = html_params
         self._redirects = redirects
+        self._into_file_context = None
 
     def _pull_image(self, src: str) -> str:
         src_path = Path(src)
@@ -241,14 +245,14 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         target_path.write_bytes(content)
         return f"./{self._html_params.media_dir}/{target_name}"
 
-    def _push(self, tag: str, hlevel_offset: int) -> Any:
-        result = (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir)
+    def _push(self, tag: str, hlevel_offset: int, outfile: Path) -> Any:
+        result = (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir, self._outfile)
         self._hlevel_offset += hlevel_offset
-        self._toplevel_tag, self._headings, self._attrspans = tag, [], []
+        self._toplevel_tag, self._headings, self._attrspans, self._outfile = tag, [], [], outfile
         return result
 
     def _pop(self, state: Any) -> None:
-        (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir) = state
+        (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir, self._outfile) = state
 
     def _render_book(self, tokens: Sequence[Token]) -> str:
         assert tokens[4].children
@@ -279,20 +283,21 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         prev_a, next_a, parent_title = "", "", "&nbsp;"
         nav_html = ""
         home = toc.root
+
         if toc.prev:
-            prev_link = f'<link rel="prev" href="{toc.prev.target.href()}" title="{toc.prev.target.title}" />'
-            prev_a = f'<a accesskey="p" href="{toc.prev.target.href()}">Prev</a>'
+            prev_link = f'<link rel="prev" href="{toc.prev.target.href_from(toc.target.path)}" title="{toc.prev.target.title}" />'
+            prev_a = f'<a accesskey="p" href="{toc.prev.target.href_from(toc.target.path)}">Prev</a>'
         if toc.parent:
             up_link = (
-                f'<link rel="up" href="{toc.parent.target.href()}" '
+                f'<link rel="up" href="{toc.parent.target.href_from(toc.target.path)}" '
                 f'title="{toc.parent.target.title}" />'
             )
             if (part := toc.parent) and part.kind != 'book':
                 assert part.target.title
                 parent_title = part.target.title
         if toc.next:
-            next_link = f'<link rel="next" href="{toc.next.target.href()}" title="{toc.next.target.title}" />'
-            next_a = f'<a accesskey="n" href="{toc.next.target.href()}">Next</a>'
+            next_link = f'<link rel="next" href="{toc.next.target.href_from(toc.target.path)}" title="{toc.next.target.title}" />'
+            next_a = f'<a accesskey="n" href="{toc.next.target.href_from(toc.target.path)}">Next</a>'
         if toc.prev or toc.parent or toc.next:
             nav_html = "\n".join([
                 '  <div class="navheader">',
@@ -310,12 +315,19 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 '  </div>',
             ])
 
-        scripts = self._html_params.scripts
+        scripts = list(self._html_params.scripts[:])
         if self._redirects:
-            redirects_path = f'{self._base_path}/{toc.target.path.split('.html')[0]}-redirects.js'
-            with open(redirects_path, 'w') as file:
-                file.write(self._redirects.get_redirect_script(toc.target.path))
-            scripts.append(redirects_path)
+            redirects_file_name = f'{toc.target.path.split('.html')[0]}-redirects.js'
+            redirects_path = Path(f'{Path(self._base_path)}/{redirects_file_name}')
+
+            # TODO: Is this the best place to create the directory ?
+            if not redirects_path.parent.exists():
+                redirects_path.parent.mkdir(parents=True, exist_ok=True)
+
+            with open(redirects_path.as_posix(), 'w') as file:
+                file.write(self._redirects.get_redirect_script(str(self._outfile)))
+
+            scripts.append(redirects_file_name)
 
         return "\n".join([
             '<?xml version="1.0" encoding="utf-8" standalone="no"?>',
@@ -325,12 +337,12 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             ' <head>',
             '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
             f' <title>{toc.target.title}</title>',
-            "".join((f'<link rel="stylesheet" type="text/css" href="{html.escape(style, True)}" />'
+            "".join((f'<link rel="stylesheet" type="text/css" href="{html.escape(relative_path_from(toc.target.path, style), True)}" />'
                      for style in self._html_params.stylesheets)),
-            "".join((f'<script src="{html.escape(script, True)}" type="text/javascript"></script>'
+            "".join((f'<script src="{html.escape(relative_path_from(toc.target.path, script), True)}" type="text/javascript"></script>'
                      for script in scripts)),
             f' <meta name="generator" content="{html.escape(self._html_params.generator, True)}" />',
-            f' <link rel="home" href="{home.target.href()}" title="{home.target.title}" />' if home.target.href() else "",
+            f' <link rel="home" href="{home.target.href_from(toc.target.path)}" title="{home.target.title}" />' if home.target.href() else "",
             f' {up_link}{prev_link}{next_link}',
             ' </head>',
             ' <body>',
@@ -344,15 +356,15 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         nav_html = ""
         home = toc.root
         if toc.prev:
-            prev_a = f'<a accesskey="p" href="{toc.prev.target.href()}">Prev</a>'
+            prev_a = f'<a accesskey="p" href="{toc.prev.target.href_from(toc.target.path)}">Prev</a>'
             assert toc.prev.target.title
             prev_text = toc.prev.target.title
         if toc.parent:
-            home_a = f'<a accesskey="h" href="{home.target.href()}">Home</a>'
+            home_a = f'<a accesskey="h" href="{home.target.href_from(toc.target.path)}">Home</a>'
             if toc.parent != home:
-                up_a = f'<a accesskey="u" href="{toc.parent.target.href()}">Up</a>'
+                up_a = f'<a accesskey="u" href="{toc.parent.target.href_from(toc.target.path)}">Up</a>'
         if toc.next:
-            next_a = f'<a accesskey="n" href="{toc.next.target.href()}">Next</a>'
+            next_a = f'<a accesskey="n" href="{toc.next.target.href_from(toc.target.path)}">Next</a>'
             assert toc.next.target.title
             next_text = toc.next.target.title
         if toc.prev or toc.parent or toc.next:
@@ -387,7 +399,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         toc = TocEntry.of(tokens[i])
         if toc.kind == 'section' and self._html_params.section_toc_depth < 1:
             return ""
-        def walk_and_emit(toc: TocEntry, depth: int) -> list[str]:
+        def walk_and_emit(toc: TocEntry, root_toc:  TocEntry, depth: int) -> list[str]:
             if depth <= 0:
                 return []
             result = []
@@ -395,13 +407,13 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 result.append(
                     f'<dt>'
                     f' <span class="{html.escape(child.kind, True)}">'
-                    f'  <a href="{child.target.href()}">{child.target.toc_html}</a>'
+                    f'  <a href="{child.target.href_from(root_toc.target.path)}">{child.target.toc_html}</a>'
                     f' </span>'
                     f'</dt>'
                 )
                 # we want to look straight through parts because docbook-xsl did too, but it
                 # also makes for more uesful top-level tocs.
-                next_level = walk_and_emit(child, depth - (0 if child.kind == 'part' else 1))
+                next_level = walk_and_emit(child, root_toc, depth - (0 if child.kind == 'part' else 1))
                 if next_level:
                     result.append(f'<dd><dl>{"".join(next_level)}</dl></dd>')
             return result
@@ -409,8 +421,8 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             if not lst:
                 return ""
             entries = [
-                f'<dt>{i}. <a href="{e.target.href()}">{e.target.toc_html}</a></dt>'
-                for i, e in enumerate(lst, start=1)
+                f'<dt>{i}. <a href="{e.target.href_from(toc.target.path)}">{e.target.toc_html}</a></dt>'
+                for _, e in enumerate(lst, start=1)
             ]
             return (
                 f'<div class="{id}">'
@@ -432,7 +444,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             toc_depth = self._html_params.chunk_toc_depth
         else:
             toc_depth = self._html_params.toc_depth
-        if not (items := walk_and_emit(toc, toc_depth)):
+        if not (items := walk_and_emit(toc, toc, toc_depth)):
             return ""
         figures = build_list("Figures", "list-of-figures", toc.figures)
         examples = build_list("Examples", "list-of-examples", toc.examples)
@@ -448,7 +460,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         ])
 
     def _make_hN(self, level: int) -> tuple[str, str]:
-        # for some reason chapters didn't increase the hN nesting count in docbook xslts.
+        # for some reason test_chapters didn't increase the hN nesting count in docbook xslts.
         # originally this was duplicated here for consistency with docbook rendering, but
         # it could be reevaluated and changed now that docbook is gone.
         if self._toplevel_tag == 'chapter':
@@ -462,37 +474,73 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         return tag, style
 
     def _included_thing(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
-        outer, inner = [], []
-        # since books have no non-include content the toplevel book wrapper will not count
-        # towards nesting depth. other types will have at least a title+id heading which
-        # *does* count towards the nesting depth. chapters give a -1 to included sections
-        # mirroring the special handing in _make_hN. sigh.
+        into = token.meta['include-args'].get('into-file')
+        split_pages = self._html_params.split_pages and not (into or self._into_file_context)
+
+        fragments = token.meta['included']
+
         hoffset = (
             0 if not self._headings
             else self._headings[-1].level - 1 if self._toplevel_tag == 'chapter'
             else self._headings[-1].level
         )
-        outer.append(self._maybe_close_partintro())
-        into = token.meta['include-args'].get('into-file')
-        fragments = token.meta['included']
-        state = self._push(tag, hoffset)
-        if into:
-            toc = TocEntry.of(fragments[0][0][0])
-            inner.append(self._file_header(toc))
-            # we do not set _hlevel_offset=0 because docbook didn't either.
-        else:
-            inner = outer
-        in_dir = self._in_dir
-        for included, path in fragments:
-            try:
+
+        outer = [ self._maybe_close_partintro() ]
+
+        if split_pages:
+            in_dir = self._in_dir
+            for included, path in fragments:
+                toc = TocEntry.of(included[0])
+                assert Path(path).is_relative_to(Path(in_dir)), f"path = {path}, in_dir = {in_dir}"
+                sub_file = Path(path).relative_to(Path(in_dir)).with_suffix(".html")
+
+                state = self._push(tag, hoffset, sub_file)
+
+                inner = [
+                    self._file_header(toc),
+                    '<div class="content">',
+                    self.render(included),
+                    '</div>',
+                    self._file_footer(toc),
+                ]
                 self._in_dir = (in_dir / path).parent
-                inner.append(self.render(included))
-            except Exception as e:
-                raise RuntimeError(f"rendering {path}") from e
-        if into:
-            inner.append(self._file_footer(toc))
-            (self._base_path / into).write_text("".join(inner))
-        self._pop(state)
+
+                file_path = (self._base_path / sub_file).with_suffix(".html")
+
+                if not file_path.parent.exists():
+                    file_path.parent.mkdir(exist_ok=True)
+
+                file_path.write_text("".join(inner))
+                self._in_dir = self._in_dir.parent
+                self._pop(state)
+        else:
+            inner = []
+            if into:
+                state = self._push(tag, hoffset, into)
+                toc = TocEntry.of(fragments[0][0][0])
+                inner.append(self._file_header(toc))
+                inner.append('<div class="content">')
+                self._into_file_context = into
+                # we do not set _hlevel_offset=0 because docbook didn't either.
+            else:
+                state = self._push(tag, hoffset, self._outfile)
+                inner = outer
+
+            in_dir = self._in_dir
+            for included, path in fragments:
+                try:
+                    self._in_dir = (in_dir / path).parent
+                    inner.append(self.render(included))
+                except Exception as e:
+                    raise RuntimeError(f"rendering {path}") from e
+            if into:
+                inner.append('</div>')
+                inner.append(self._file_footer(toc))
+                (self._base_path / into).write_text("".join(inner))
+                self._into_file_context = None
+
+            self._pop(state)
+
         return "".join(outer)
 
     def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:
@@ -531,7 +579,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
     def convert(self, infile: Path, outfile: Path) -> None:
         self._renderer = ManualHTMLRenderer(
             'book', self._revision, self._html_params, self._manpage_urls, self._xref_targets,
-            self._redirects, infile.parent, outfile.parent)
+            self._redirects, infile.parent, outfile.parent, Path(outfile.name))
         super().convert(infile, outfile)
 
     def _parse(self, src: str, *, auto_id_prefix: None | str = None) -> list[Token]:
@@ -574,8 +622,8 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         return start
 
     # xref | (id, type, heading inlines, file, starts new file)
-    def _collect_ids(self, tokens: Sequence[Token], target_file: str, typ: str, file_changed: bool
-                     ) -> list[XrefTarget | tuple[str, str, Token, str, bool]]:
+    def _collect_ids(self, tokens: Sequence[Token], in_file: str, target_file: str, typ: str, file_changed: bool
+                     , into_file_context: bool) -> list[XrefTarget | tuple[str, str, Token, str, bool]]:
         result: list[XrefTarget | tuple[str, str, Token, str, bool]] = []
         # collect all IDs and their xref substitutions. headings are deferred until everything
         # has been parsed so we can resolve links in headings. if that's even used anywhere.
@@ -590,10 +638,21 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                     name = html.escape(opt)
                     result.append(XrefTarget(id, f'<code class="option">{name}</code>', name, None, target_file))
             elif bt.type.startswith('included_'):
-                sub_file = bt.meta['include-args'].get('into-file', target_file)
+                into = bt.meta['include-args'].get('into-file', None)
                 subtyp = bt.type.removeprefix('included_').removesuffix('s')
                 for si, (sub, _path) in enumerate(bt.meta['included']):
-                    result += self._collect_ids(sub, sub_file, subtyp, si == 0 and sub_file != target_file)
+                    if into:
+                        sub_file = into
+                    elif self._html_params.split_pages and not into_file_context:
+                        if Path(_path).is_relative_to(Path(in_file).parent):
+                            sub_file = Path(_path).relative_to(Path(in_file).parent).with_suffix(".html").as_posix()
+                        else:
+                            sub_file = Path(_path).with_suffix(".html").name
+                    else:
+                        sub_file = target_file
+
+                    result += self._collect_ids(sub, in_file, sub_file, subtyp, si == 0 and sub_file != target_file, into or into_file_context)
+
             elif bt.type == 'example_open' and (id := cast(str, bt.attrs.get('id', ''))):
                 result.append((id, 'example', tokens[i + 2], target_file, False))
             elif bt.type == 'figure_open' and (id := cast(str, bt.attrs.get('id', ''))):
@@ -604,7 +663,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 result.append(XrefTarget(id, "???", None, None, target_file))
             elif bt.type == 'inline':
                 assert bt.children is not None
-                result += self._collect_ids(bt.children, target_file, typ, False)
+                result += self._collect_ids(bt.children, in_file, target_file, typ, False, into_file_context)
             elif id := cast(str, bt.attrs.get('id', '')):
                 # anchors and examples have no titles we could use, but we'll have to put
                 # *something* here to communicate that there's no title.
@@ -644,7 +703,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
     def _postprocess(self, infile: Path, outfile: Path, tokens: Sequence[Token]) -> None:
         self._number_block('example', "Example", tokens)
         self._number_block('figure', "Figure", tokens)
-        xref_queue = self._collect_ids(tokens, outfile.name, 'book', True)
+        xref_queue = self._collect_ids(tokens, str(infile), outfile.name, 'book', True, False)
 
         failed = False
         deferred = []
@@ -681,7 +740,8 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                     drop_target=True
                 )
 
-        TocEntry.collect_and_link(self._xref_targets, tokens)
+        res = TocEntry.collect_and_link(self._xref_targets, tokens)
+
         if self._redirects:
             self._redirects.validate(self._xref_targets)
             server_redirects = self._redirects.get_server_redirects()
@@ -705,6 +765,7 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--redirects', type=Path)
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
+    p.add_argument('--into-pages', action='store_true')
 
 def _run_cli_html(args: argparse.Namespace) -> None:
     with open(args.manpage_urls) as manpage_urls, open(Path(__file__).parent / "redirects.js") as redirects_script:
@@ -716,7 +777,7 @@ def _run_cli_html(args: argparse.Namespace) -> None:
         md = HTMLConverter(
             args.revision,
             HTMLParameters(args.generator, args.stylesheet, args.script, args.toc_depth,
-                           args.chunk_toc_depth, args.section_toc_depth, args.media_dir),
+                           args.chunk_toc_depth, args.section_toc_depth, args.media_dir, args.into_pages),
             json.load(manpage_urls), redirects)
         md.convert(args.infile, args.outfile)
 

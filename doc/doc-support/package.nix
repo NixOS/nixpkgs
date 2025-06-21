@@ -85,6 +85,7 @@ stdenvNoCC.mkDerivation (
         --script ./anchor-use.js \
         --toc-depth 1 \
         --section-toc-depth 1 \
+        --into-pages \
         manual.md \
         out/index.html
 
