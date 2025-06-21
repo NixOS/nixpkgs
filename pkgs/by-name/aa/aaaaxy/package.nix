@@ -128,12 +128,12 @@ buildGoModule rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Nonlinear 2D puzzle platformer taking place in impossible spaces";
     mainProgram = "aaaaxy";
     homepage = "https://divverent.github.io/aaaaxy/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Luflosi ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Luflosi ];
+    platforms = lib.platforms.linux;
   };
 }

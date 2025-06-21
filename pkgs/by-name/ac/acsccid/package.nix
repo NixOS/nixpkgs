@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card readers";
     longDescription = ''
       acsccid is a PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card
@@ -80,8 +80,8 @@ stdenv.mkDerivation rec {
         services.pcscd.plugins = [ pkgs.acsccid ];
     '';
     homepage = src.meta.homepage;
-    license = licenses.lgpl2Plus;
-    maintainers = [ ];
-    platforms = with platforms; unix;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     "troff"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tools.suckless.org/9base/";
     description = "9base is a port of various original Plan 9 tools for Unix, based on plan9port";
     longDescription = ''
@@ -74,12 +74,12 @@ stdenv.mkDerivation {
       The overall SLOC is about 66kSLOC, so this userland + all libs is much smaller than, e.g. bash.
       9base can be used to run werc instead of the full blown plan9port.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # and
       lpl-102
     ];
-    maintainers = with maintainers; [ jk ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ jk ];
+    platforms = lib.platforms.unix;
     # needs additional work to support aarch64-darwin
     # due to usage of _DARWIN_NO_64_BIT_INODE
     broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin;
