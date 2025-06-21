@@ -1,13 +1,9 @@
 {
   config,
   lib,
-  options,
   pkgs,
   ...
-}: # XXX migration code for freeform settings: `options` can be removed in 2025
-let
-  optionsGlobal = options;
-in
+}:
 
 let
 
@@ -75,7 +71,7 @@ let
     {
       freeformType = attrsOf (either scalarType (listOf scalarType));
       # Client system-options file directives are explained here:
-      # https://www.ibm.com/docs/en/storage-protect/8.1.25?topic=commands-processing-options
+      # https://www.ibm.com/docs/en/storage-protect/8.1.27?topic=commands-processing-options
       options.servername = mkOption {
         type = servernameType;
         default = name;
@@ -150,27 +146,6 @@ let
       };
       config.commmethod = mkDefault "v6tcpip"; # uses v4 or v6, based on dns lookup result
       config.passwordaccess = if config.genPasswd then "generate" else "prompt";
-      # XXX migration code for freeform settings, these can be removed in 2025:
-      options.warnings = optionsGlobal.warnings;
-      options.assertions = optionsGlobal.assertions;
-      imports =
-        let
-          inherit (lib.modules) mkRemovedOptionModule mkRenamedOptionModule;
-        in
-        [
-          (mkRemovedOptionModule [ "extraConfig" ]
-            "Please just add options directly to the server attribute set, cf. the description of `programs.tsmClient.servers`."
-          )
-          (mkRemovedOptionModule [ "text" ]
-            "Please just add options directly to the server attribute set, cf. the description of `programs.tsmClient.servers`."
-          )
-          (mkRenamedOptionModule [ "name" ] [ "servername" ])
-          (mkRenamedOptionModule [ "server" ] [ "tcpserveraddress" ])
-          (mkRenamedOptionModule [ "port" ] [ "tcpport" ])
-          (mkRenamedOptionModule [ "node" ] [ "nodename" ])
-          (mkRenamedOptionModule [ "passwdDir" ] [ "passworddir" ])
-          (mkRenamedOptionModule [ "includeExclude" ] [ "inclexcl" ])
-        ];
     };
 
   options.programs.tsmClient = {
@@ -291,16 +266,7 @@ let
         contain duplicate names
         (note that setting names are case insensitive).
       '';
-    }) cfg.servers)
-    # XXX migration code for freeform settings, this can be removed in 2025:
-    ++ (enrichMigrationInfos "assertions" (
-      addText:
-      { assertion, message }:
-      {
-        inherit assertion;
-        message = addText message;
-      }
-    ));
+    }) cfg.servers);
 
   makeDsmSysLines =
     key: value:
@@ -340,17 +306,6 @@ let
       attrs = removeAttrs serverCfg [
         "servername"
         "genPasswd"
-        # XXX migration code for freeform settings, these can be removed in 2025:
-        "assertions"
-        "warnings"
-        "extraConfig"
-        "text"
-        "name"
-        "server"
-        "port"
-        "node"
-        "passwdDir"
-        "includeExclude"
       ];
     in
     ''
@@ -369,16 +324,6 @@ let
     ${concatLines (map makeDsmSysStanza (attrValues cfg.servers))}
   '';
 
-  # XXX migration code for freeform settings, this can be removed in 2025:
-  enrichMigrationInfos =
-    what: how:
-    concatLists (
-      mapAttrsToList (
-        name: serverCfg:
-        map (how (text: "In `programs.tsmClient.servers.${name}`: ${text}")) serverCfg."${what}"
-      ) cfg.servers
-    );
-
 in
 
 {
@@ -393,8 +338,6 @@ in
       dsmSysApi = dsmSysCli;
     };
     environment.systemPackages = [ cfg.wrappedPackage ];
-    # XXX migration code for freeform settings, this can be removed in 2025:
-    warnings = enrichMigrationInfos "warnings" (addText: addText);
   };
 
   meta.maintainers = [ lib.maintainers.yarny ];
