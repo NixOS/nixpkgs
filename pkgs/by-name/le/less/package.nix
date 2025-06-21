@@ -2,17 +2,17 @@
   lib,
   fetchurl,
   fetchpatch,
-  autoreconfHook,
   ncurses,
   pcre2,
   stdenv,
+  versionCheckHook,
   # Boolean options
   withSecure ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "less";
-  version = "678";
+  version = "679";
 
   # `less` is provided by the following sources:
   # - meta.homepage
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   # homepage, and only those not marked as beta.
   src = fetchurl {
     url = "https://www.greenwoodsoftware.com/less/less-${finalAttrs.version}.tar.gz";
-    hash = "sha256-TAhTZPMCgpDTRkffJ/VgGMNl3EwAkqt9507Y/okBT+c=";
+    hash = "sha256-m2iCDDT6igr2sOAbdPApi83UCgSJxhZJtHBYkIoVPXg=";
   };
 
   buildInputs = [
@@ -41,6 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://www.greenwoodsoftware.com/less/";
