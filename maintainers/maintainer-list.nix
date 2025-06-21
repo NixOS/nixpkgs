@@ -18787,6 +18787,12 @@
     githubId = 75299;
     name = "Malcolm Matalka";
   };
+  orbsa = {
+    email = "mail@ericbell.dev";
+    github = "orbsa";
+    githubId = 9121811;
+    name = "Eric Bell";
+  };
   orhun = {
     email = "orhunparmaksiz@gmail.com";
     github = "orhun";
