@@ -33,7 +33,6 @@
   pylibmc,
   pymemcache,
   python,
-  pywatchman,
   pyyaml,
   pytz,
   redis,
@@ -44,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.2.2";
+  version = "5.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,7 +52,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-x5PTE8oYA1VzErYXfuRzT4xNiMRnfEd6H9lEtB+HBkc=";
+    hash = "sha256-P2WnWkQbzqHNzlIac8boe2VIe2IBdCIB5J6av6J0nvg=";
   };
 
   patches =
@@ -101,7 +100,6 @@ buildPythonPackage rec {
     pillow
     pylibmc
     pymemcache
-    pywatchman
     pyyaml
     pytz
     redis
@@ -109,11 +107,6 @@ buildPythonPackage rec {
     tblib
     tzdata
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  doCheck =
-    !stdenv.hostPlatform.isDarwin
-    # pywatchman depends on folly which does not support 32bits
-    && !stdenv.hostPlatform.is32bit;
 
   preCheck = ''
     # make sure the installed library gets imported
@@ -132,7 +125,8 @@ buildPythonPackage rec {
     runHook preCheck
 
     pushd tests
-    ${python.interpreter} runtests.py --settings=test_sqlite
+    # without --parallel=1, tests fail with an "unexpected error due to a database lock" on Darwin
+    ${python.interpreter} runtests.py --settings=test_sqlite ${lib.optionalString stdenv.hostPlatform.isDarwin "--parallel=1"}
     popd
 
     runHook postCheck

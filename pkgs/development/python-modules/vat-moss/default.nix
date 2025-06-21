@@ -3,17 +3,15 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonAtLeast,
+  setuptools,
+  standard-cgi,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "vat-moss";
   version = "0.11.0";
-  format = "setuptools";
-
-  # uses the removed cgi battery
-  disabled = pythonAtLeast "3.13";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "raphaelm";
@@ -29,6 +27,10 @@ buildPythonPackage rec {
       hash = "sha256-GpxaQ6/1LdFdxzXT/p4HS7FHU0WeM0i3LbdRFeqnFdw=";
     })
   ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [ standard-cgi ];
 
   pythonImportsCheck = [ "vat_moss" ];
 

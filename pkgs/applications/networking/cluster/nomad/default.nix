@@ -12,7 +12,7 @@ let
     {
       buildGoModule,
       version,
-      sha256,
+      hash,
       vendorHash,
       license,
       ...
@@ -21,7 +21,7 @@ let
       attrs' = builtins.removeAttrs attrs [
         "buildGoModule"
         "version"
-        "sha256"
+        "hash"
         "vendorHash"
         "license"
       ];
@@ -37,8 +37,14 @@ let
           owner = "hashicorp";
           repo = pname;
           rev = "v${version}";
-          inherit sha256;
+          inherit hash;
         };
+
+        # Nomad requires Go 1.24.4, but nixpkgs doesn't have it in unstable yet.
+        postPatch = ''
+          substituteInPlace go.mod \
+            --replace-warn "go 1.24.4" "go 1.24.3"
+        '';
 
         nativeBuildInputs = [ installShellFiles ];
 
@@ -59,7 +65,7 @@ let
         '';
 
         meta = with lib; {
-          homepage = "https://www.nomadproject.io/";
+          homepage = "https://developer.hashicorp.com/nomad";
           description = "Distributed, Highly Available, Datacenter-Aware Scheduler";
           mainProgram = "nomad";
           inherit license;
@@ -81,12 +87,24 @@ rec {
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
-  nomad = nomad_1_9;
+  nomad = nomad_1_10;
+
+  nomad_1_10 = generic {
+    buildGoModule = buildGo124Module;
+    version = "1.10.2";
+    hash = "sha256-7i/tMQwaEmLGXNarrdPzmorv+SHrxCzeaF3BI9Jjhwg=";
+    vendorHash = "sha256-yq8xQ9wThPK/X9/lEHD8FCXq1Mrz0lO6UvrP2ipXMnw=";
+    license = lib.licenses.bsl11;
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
+    '';
+  };
 
   nomad_1_9 = generic {
     buildGoModule = buildGo124Module;
     version = "1.9.7";
-    sha256 = "sha256-U02H6DPr1friQ9EwqD/wQnE2Fm20OE5xNccPDJfnsqI=";
+    hash = "sha256-U02H6DPr1friQ9EwqD/wQnE2Fm20OE5xNccPDJfnsqI=";
     vendorHash = "sha256-9GnwqkexJAxrhW9yJFaDTdSaZ+p+/dcMuhlusp4cmyw=";
     license = lib.licenses.bsl11;
     passthru.tests.nomad = nixosTests.nomad;

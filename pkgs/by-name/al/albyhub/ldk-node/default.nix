@@ -6,7 +6,7 @@
   llvmPackages,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ldk-node";
   version = "0-unstable-2025-05-21";
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Embeds the LDK node implementation compiled as shared library objects";
     homepage = "https://github.com/getAlby/ldk-node";
-    changelog = "https://github.com/getAlby/ldk-node/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/getAlby/ldk-node/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -45,4 +45,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bleetube ];
   };
-}
+})

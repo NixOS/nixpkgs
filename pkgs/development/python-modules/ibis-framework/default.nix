@@ -144,6 +144,7 @@ buildPythonPackage rec {
   ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
 
   pytestFlagsArray = [
+    "--benchmark-disable"
     "-m"
     "'${lib.concatStringsSep " or " testBackends} or core'"
   ];

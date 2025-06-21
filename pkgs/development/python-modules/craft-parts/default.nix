@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.10.0";
+  version = "2.12.0";
 
   pyproject = true;
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-nGOLzQ+mlLHmqkknWklCIEN7HOgQznuYO1rbqUvL1N4=";
+    hash = "sha256-mm5s7lHbU9SJsS9wTkXkJpmVsGG0qVXIeaQ+TiGz/7o=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -109,6 +109,8 @@ buildPythonPackage rec {
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "tests/unit/executor/test_environment.py"
       "tests/unit/features/overlay/test_executor_environment.py"
+      # Hard-coded assumptions about arguments relating to 'x86_64'
+      "tests/unit/plugins/test_dotnet_v2_plugin.py"
     ];
 
   passthru.updateScript = nix-update-script { };

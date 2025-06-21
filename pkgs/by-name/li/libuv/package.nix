@@ -134,6 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
           # EOPNOTSUPP when performed in jailed build env
           "tcp_reuseport"
           "udp_reuseport"
+          # jailed build env does not have a hostname
+          "gethostname"
           # Fails when built on non-nix FreeBSD
           # https://github.com/libuv/libuv/issues/4606
           "fs_event_watch_delete_dir"
@@ -142,6 +144,8 @@ stdenv.mkDerivation (finalAttrs: {
     in
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       sed '/${tdRegexp}/d' -i test/test-list.h
+      # https://github.com/libuv/libuv/issues/4794
+      substituteInPlace Makefile.am --replace-fail -lutil "-lutil -lm"
     '';
 
   nativeBuildInputs = [

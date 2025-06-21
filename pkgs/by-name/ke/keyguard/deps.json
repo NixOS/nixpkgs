@@ -2674,8 +2674,8 @@
   "org/bouncycastle/bcutil-jdk18on/maven-metadata": {
    "xml": {
     "groupId": "org.bouncycastle",
-    "lastUpdated": "20250114201150",
-    "release": "1.80"
+    "lastUpdated": "20250604080934",
+    "release": "1.81"
    }
   },
   "org/checkerframework#checker-qual/2.5.8": {

@@ -18,6 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-kxoWLjsn/JDIbxtIux+yxSjCdhR15XycBt4TMRx7VO0=";
   };
 
+  postPatch = ''
+    # https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1988
+    substituteInPlace src/prompt_toolkit/__init__.py \
+      --replace-fail 'metadata.version("prompt_toolkit")' '"${version}"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ wcwidth ];

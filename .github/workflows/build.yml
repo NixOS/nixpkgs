@@ -1,0 +1,89 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      mergedSha:
+        required: true
+        type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            system: x86_64-linux
+            builds: [shell, manual-nixos, lib-tests]
+          - runner: ubuntu-24.04-arm
+            system: aarch64-linux
+            builds: [shell, manual-nixos, manual-nixpkgs, manual-nixpkgs-tests]
+          - runner: macos-13
+            system: x86_64-darwin
+            builds: [shell]
+          - runner: macos-14
+            system: aarch64-darwin
+            builds: [shell]
+    name: ${{ matrix.system }}
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          sparse-checkout: .github/actions
+      - name: Check if the PR can be merged and checkout the merge commit
+        uses: ./.github/actions/get-merge-commit
+        with:
+          mergedSha: ${{ inputs.mergedSha }}
+          merged-as-untrusted: true
+
+      - uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
+        with:
+          extra_nix_config: sandbox = true
+
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
+          name: nixpkgs-ci
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      - name: Build shell
+        if: contains(matrix.builds, 'shell')
+        run: nix-build untrusted/ci -A shell
+
+      - name: Build NixOS manual
+        if: |
+          contains(matrix.builds, 'manual-nixos') && !cancelled() &&
+          (github.base_ref == 'master' || startsWith(github.base_ref, 'release-'))
+        run: nix-build untrusted/ci -A manual-nixos --argstr system ${{ matrix.system }} --out-link nixos-manual
+
+      - name: Build Nixpkgs manual
+        if: contains(matrix.builds, 'manual-nixpkgs') && !cancelled()
+        run: nix-build untrusted/ci -A manual-nixpkgs -A manual-nixpkgs-tests
+
+      - name: Build Nixpkgs manual tests
+        if: contains(matrix.builds, 'manual-nixpkgs-tests') && !cancelled()
+        run: nix-build untrusted/ci -A manual-nixpkgs-tests
+
+      - name: Build lib tests
+        if: contains(matrix.builds, 'lib-tests') && !cancelled()
+        run: nix-build untrusted/ci -A lib-tests
+
+      - name: Upload NixOS manual
+        if: |
+          contains(matrix.builds, 'manual-nixos') && !cancelled() &&
+          (github.base_ref == 'master' || startsWith(github.base_ref, 'release-'))
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: nixos-manual-${{ matrix.system }}
+          path: nixos-manual
+          if-no-files-found: error

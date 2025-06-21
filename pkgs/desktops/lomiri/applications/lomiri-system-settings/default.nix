@@ -5,7 +5,6 @@
   gitUpdater,
   testers,
   accountsservice,
-  ayatana-indicator-datetime,
   biometryd,
   cmake,
   cmake-extras,
@@ -24,6 +23,7 @@
   libqtdbustest,
   libqtdbusmock,
   lomiri-content-hub,
+  lomiri-indicator-datetime,
   lomiri-indicator-network,
   lomiri-schemas,
   lomiri-settings-components,
@@ -121,10 +121,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # QML components and schemas the wrapper needs
   propagatedBuildInputs = [
-    ayatana-indicator-datetime
     biometryd
     libqofono
     lomiri-content-hub
+    lomiri-indicator-datetime
     lomiri-indicator-network
     lomiri-schemas
     lomiri-settings-components

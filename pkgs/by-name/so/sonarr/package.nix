@@ -6,7 +6,7 @@
   dotnetCorePackages,
   sqlite,
   withFFmpeg ? true, # replace bundled ffprobe binary with symlink to ffmpeg package.
-  ffmpeg,
+  servarr-ffmpeg,
   fetchYarnDeps,
   yarn,
   fixup-yarn-lock,
@@ -31,27 +31,26 @@ let
       tag = "v${version}";
       hash = "sha256-gtEDrAosI0Kyk712Kf8QDuloUBq9AArKdukX/PKAo8M=";
     };
-    patches =
-      [
-        ./nuget-config.patch
-      ]
-      ++ lib.optionals (lib.versionOlder version "5.0") [
-        # See https://github.com/Sonarr/Sonarr/issues/7442 and
-        # https://github.com/Sonarr/Sonarr/pull/7443.
-        # Unfortunately, the .NET 8 upgrade was only merged into the v5 branch,
-        # and it may take some time for that to become stable.
-        # However, the patches cleanly apply to v4 as well.
-        (fetchpatch {
-          name = "dotnet8-compatibility";
-          url = "https://github.com/Sonarr/Sonarr/commit/518f1799dca96a7481004ceefe39be465de3d72d.patch";
-          hash = "sha256-e+/rKZrTf6lWq9bmCAwnZrbEPRkqVmI7qNavpLjfpUE=";
-        })
-        (fetchpatch {
-          name = "dotnet8-darwin-compatibility";
-          url = "https://github.com/Sonarr/Sonarr/commit/1a5fa185d11d2548f45fefb8a0facd3731a946d0.patch";
-          hash = "sha256-6Lzo4ph1StA05+B1xYhWH+BBegLd6DxHiEiaRxGXn7k=";
-        })
-      ];
+    postPatch = ''
+      mv src/NuGet.Config NuGet.Config
+    '';
+    patches = lib.optionals (lib.versionOlder version "5.0") [
+      # See https://github.com/Sonarr/Sonarr/issues/7442 and
+      # https://github.com/Sonarr/Sonarr/pull/7443.
+      # Unfortunately, the .NET 8 upgrade was only merged into the v5 branch,
+      # and it may take some time for that to become stable.
+      # However, the patches cleanly apply to v4 as well.
+      (fetchpatch {
+        name = "dotnet8-compatibility";
+        url = "https://github.com/Sonarr/Sonarr/commit/518f1799dca96a7481004ceefe39be465de3d72d.patch";
+        hash = "sha256-e+/rKZrTf6lWq9bmCAwnZrbEPRkqVmI7qNavpLjfpUE=";
+      })
+      (fetchpatch {
+        name = "dotnet8-darwin-compatibility";
+        url = "https://github.com/Sonarr/Sonarr/commit/1a5fa185d11d2548f45fefb8a0facd3731a946d0.patch";
+        hash = "sha256-6Lzo4ph1StA05+B1xYhWH+BBegLd6DxHiEiaRxGXn7k=";
+      })
+    ];
   };
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
@@ -72,7 +71,7 @@ buildDotnetModule {
     hash = "sha256-YkBFvv+g4p22HdM/GQAHVGGW1yLYGWpNtRq7+QJiLIw=";
   };
 
-  ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' ffmpeg "ffprobe");
+  ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' servarr-ffmpeg "ffprobe");
 
   postConfigure = ''
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
@@ -129,6 +128,7 @@ buildDotnetModule {
   dotnetFlags = [
     "--property:TargetFramework=net8.0"
     "--property:EnableAnalyzers=false"
+    "--property:SentryUploadSymbols=false" # Fix Sentry upload failed warnings
     # Override defaults in src/Directory.Build.props that use current time.
     "--property:Copyright=Copyright 2014-2025 sonarr.tv (GNU General Public v3)"
     "--property:AssemblyVersion=${version}"

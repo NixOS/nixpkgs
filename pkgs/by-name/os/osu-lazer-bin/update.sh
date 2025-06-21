@@ -5,7 +5,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 bin_file="$(realpath ./package.nix)"
 
-new_version="$(curl -s "https://api.github.com/repos/ppy/osu/releases?per_page=1" | jq -r '.[0].name')"
+new_version="$(curl -s "https://api.github.com/repos/ppy/osu/releases/latest" | jq -r '.name')"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./package.nix)"
 if [[ "$new_version" == "$old_version" ]]; then
     echo "Already up to date."

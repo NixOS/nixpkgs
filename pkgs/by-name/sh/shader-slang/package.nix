@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.6.1";
+  version = "2025.8.1";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yNPAJX7OxxQLXDm3s7Hx5QA9fxy1qbAMp4LKYVqxMVM=";
+    hash = "sha256-PScbMkJJ4rh8I8ID709GKtLmd5+4Z2x2BlFEdWpoesI=";
     fetchSubmodules = true;
   };
 
@@ -144,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Shading language that makes it easier to build and maintain large shader codebases in a modular and extensible fashion";
     homepage = "https://github.com/shader-slang/slang";
+    changelog = "https://github.com/shader-slang/slang/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       llvm-exception

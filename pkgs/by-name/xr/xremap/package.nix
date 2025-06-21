@@ -10,7 +10,7 @@ let
 
   src = fetchFromGitHub {
     owner = "xremap";
-    repo = pname;
+    repo = "xremap";
     tag = "v${version}";
     hash = "sha256-ZOiQffTHXw+anFckKO0jyd+LPw2zTqtqk87niCC38Q8=";
   };

@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/markfasheh/duperemove";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
-      bluescreen303
       thoughtpolice
     ];
     platforms = platforms.linux;

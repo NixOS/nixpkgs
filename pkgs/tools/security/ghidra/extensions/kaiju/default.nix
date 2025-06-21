@@ -26,13 +26,13 @@ let
 
   self = buildGhidraExtension rec {
     pname = "kaiju";
-    version = "250417";
+    version = "250610";
 
     src = fetchFromGitHub {
       owner = "CERTCC";
       repo = "kaiju";
       rev = version;
-      hash = "sha256-SSvCb3xnOh0mb3H24RJTi11UmN2ARgFgsiiKlZXyufM=";
+      hash = "sha256-qqUnWakQDOBw3sI/6iWD9140iRAsM5PUEQJSV/3/8FQ=";
     };
 
     buildInputs = [
@@ -43,9 +43,9 @@ let
     # https://github.com/CERTCC/kaiju/blob/c9dbb55484b3d2a6abd9dfca2197cd00fb7ee3c1/build.gradle#L189
     preBuild = ''
       mkdir -p build/cmake/z3/java-bindings
-      ln -s ${lib.getOutput "lib" z3_lib}/lib/com.microsoft.z3.jar build/cmake/z3/java-bindings
+      ln -s ${lib.getOutput "java" z3_lib}/share/java/com.microsoft.z3.jar build/cmake/z3/java-bindings
       mkdir -p os/${ghidraPlatformName}
-      cp ${lib.getOutput "lib" z3_lib}/lib/* os/${ghidraPlatformName}
+      cp ${lib.getOutput "java" z3_lib}/lib/* os/${ghidraPlatformName}
     '';
 
     gradleFlags = [ "-PKAIJU_SKIP_Z3_BUILD=true" ];

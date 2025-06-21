@@ -24,17 +24,14 @@ The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
 ## How to update stuff:
  - Run ./bin/update_bin.py, this will update binary IDEs and plugins, and automatically commit them
  - Source builds need a bit more effort, as they **aren't automated at the moment**:
-   - Find the build of the stable release you want to target (usually different for pycharm and idea, should have three components)
-   - Build number is available on JetBrains website:
-     - IDEA: https://www.jetbrains.com/idea/download/other.html
-     - PyCharm: https://www.jetbrains.com/pycharm/download/other.html
-   - Update the `version` & `buildNumber` fields in source/ides.json
-   - Empty the `ideaHash`, `androidHash`, `jpsHash` and `restarterHash` (only `ideaHash` and `restarterHash` changes on a regular basis) fields and try to build to get the new hashes
+   - Run ./source/update.py ./source/ides.json ./bin/versions.json. This will update the source version to the version of their corresponding binary packages.
    - Run these commands respectively:
      - `nix build .#jetbrains.idea-community-src.src.src && ./source/build_maven.py source/idea_maven_artefacts.json result/` for IDEA
      - `nix build .#jetbrains.pycharm-community-src.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
    - Update `brokenPlugins` timestamp and hash (from https://web.archive.org/web/*/https://plugins.jetbrains.com/files/brokenPlugins.json)
    - Do a test build
+     - Notice that sometimes a newer Kotlin version is required to build from source, if build fails, first check the recommended Kotlin version in `.idea/kotlinc.xml` in the IDEA source root
+     - Feel free to update the Kotlin version to a compatible one
    - If it succeeds, make a commit
    - Run ./plugins/update_plugins.py, this will update plugins and automatically commit them
    - make a PR/merge

@@ -14,12 +14,12 @@
   protoc-gen-validate,
 }:
 let
-  version = "0.24.3";
+  version = "0.24.4";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${version}";
-    hash = "sha256-lTMHUVrg3JzTneBh874tr0mbQPp7X3rMKrkOe+wcOL4=";
+    hash = "sha256-Vimc9Z6X1+UBm2UnNnlsYqXEnOV3JcEPm9SD3obKkLc=";
   };
 
   memos-protobuf-gen = stdenvNoCC.mkDerivation {
@@ -61,7 +61,7 @@ let
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/web";
-      hash = "sha256-ooiH13yzMTCSqzmZVvVy2jWoIfJecMlE6JkwcG5EV5k=";
+      hash = "sha256-AyQYY1vtBB6DTcieC7nw5aOOVuwESJSDs8qU6PGyaTw=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [
@@ -92,7 +92,7 @@ buildGoModule {
     memos-protobuf-gen
     ;
 
-  vendorHash = "sha256-SWpnsTdti3hD1alvItpXllTJHGxeKP8q7WD2nBzFG7o=";
+  vendorHash = "sha256-EzVgQpWJJA7EUKdnnnCIvecaOXg856f/WQyfV/WuWFU=";
 
   preBuild = ''
     rm -rf server/router/frontend/dist

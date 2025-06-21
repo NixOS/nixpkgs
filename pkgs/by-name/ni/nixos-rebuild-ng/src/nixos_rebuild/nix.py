@@ -20,7 +20,7 @@ from .models import (
     Generation,
     GenerationJson,
     ImageVariants,
-    NRError,
+    NixOSRebuildError,
     Profile,
     Remote,
 )
@@ -41,7 +41,6 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "--no-ask-password",
     "--pipe",
     "--quiet",
-    "--same-dir",
     "--service-type=exec",
     "--unit=nixos-rebuild-switch-to-configuration",
 ]
@@ -257,7 +256,7 @@ def edit(flake: Flake | None, flake_flags: Args | None = None) -> None:
         )
     else:
         if flake_flags:
-            raise NRError("'edit' does not support extra Nix flags")
+            raise NixOSRebuildError("'edit' does not support extra Nix flags")
         nixos_config = Path(
             os.getenv("NIXOS_CONFIG") or find_file("nixos-config") or "/etc/nixos"
         )
@@ -267,7 +266,7 @@ def edit(flake: Flake | None, flake_flags: Args | None = None) -> None:
         if nixos_config.exists():
             run_wrapper([os.getenv("EDITOR", "nano"), nixos_config], check=False)
         else:
-            raise NRError("cannot find NixOS config file")
+            raise NixOSRebuildError("cannot find NixOS config file")
 
 
 def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
@@ -425,7 +424,7 @@ def get_generations(profile: Profile) -> list[Generation]:
     and if this is the current active profile or not.
     """
     if not profile.path.exists():
-        raise NRError(f"no profile '{profile.name}' found")
+        raise NixOSRebuildError(f"no profile '{profile.name}' found")
 
     def parse_path(path: Path, profile: Profile) -> Generation:
         entry_id = path.name.split("-")[1]
@@ -457,7 +456,7 @@ def get_generations_from_nix_env(
     and if this is the current active profile or not.
     """
     if not profile.path.exists():
-        raise NRError(f"no profile '{profile.name}' found")
+        raise NixOSRebuildError(f"no profile '{profile.name}' found")
 
     # Using `nix-env --list-generations` needs root to lock the profile
     r = run_wrapper(
@@ -636,13 +635,13 @@ def switch_to_configuration(
     """
     if specialisation:
         if action not in (Action.SWITCH, Action.TEST):
-            raise NRError(
+            raise NixOSRebuildError(
                 "'--specialisation' can only be used with 'switch' and 'test'"
             )
         path_to_config = path_to_config / f"specialisation/{specialisation}"
 
         if not path_to_config.exists():
-            raise NRError(f"specialisation not found: {specialisation}")
+            raise NixOSRebuildError(f"specialisation not found: {specialisation}")
 
     r = run_wrapper(
         ["test", "-d", "/run/systemd/system"],
@@ -653,7 +652,7 @@ def switch_to_configuration(
     if r.returncode:
         logger.debug(
             "skipping systemd-run to switch configuration since systemd is "
-            + "not working in target host"
+            "not working in target host"
         )
         cmd = []
 

@@ -51,6 +51,24 @@ python3.pkgs.buildPythonApplication rec {
     pytz
   ];
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  sphinxBuilders = [
+    "singlehtml"
+    "man"
+  ];
+
+  preInstallSphinx = ''
+    # remove invalid outputs for manpages
+    rm .sphinx/man/man/_static/jquery.js
+    rm .sphinx/man/man/_static/_sphinx_javascript_frameworks_compat.js
+    rmdir .sphinx/man/man/_static/
+  '';
+
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
     substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${lib.getExe jq} "

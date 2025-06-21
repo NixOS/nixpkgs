@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    maintainers = with lib.maintainers; [ willibutz ];
+    maintainers = [ ];
     description = "Tool for converting Xen images to raw and back";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

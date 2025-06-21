@@ -181,14 +181,18 @@
       machine.send_key("alt-shift-q")
       machine.wait_until_fails("pgrep --exact gpg")
 
-      # Test swaynag:
-      def get_height():
-          return [node['rect']['height'] for node in walk(swaymsg(type="get_tree")) if node['focused']][0]
 
-      before = get_height()
-      machine.send_key("alt-shift-e")
-      retry(lambda _: get_height() < before)
-      machine.screenshot("sway_exit")
+      ${lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
+        # Test swaynag:
+        # Broken on aarch64-linux, see https://github.com/NixOS/nixpkgs/issues/416217
+        def get_height():
+            return [node['rect']['height'] for node in walk(swaymsg(type="get_tree")) if node['focused']][0]
+
+        before = get_height()
+        machine.send_key("alt-shift-e")
+        retry(lambda _: get_height() < before)
+        machine.screenshot("sway_exit")
+      ''}
 
       swaymsg("exec swaylock")
       machine.wait_until_succeeds("pgrep -xf swaylock")

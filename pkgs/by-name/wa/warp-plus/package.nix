@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "warp-plus";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "bepass-org";
     repo = "warp-plus";
     rev = "v${version}";
-    hash = "sha256-gDn4zicSD+Hz3GsL6pzGpUaiHcw+8KHDaOJGCML6LOA=";
+    hash = "sha256-Zi428QI0DBIPEywXPi0TwDQWJuQyQcB6N5nqtYkkpHk=";
   };
 
-  vendorHash = "sha256-MWzF9+yK+aUr8D4d64+qCD6XIqtmWH5hCLmQoksgFf8=";
+  vendorHash = "sha256-cCMbda2dVZypGqy9zoh0D3lVHWw/HNbCaSe0Nj5wL6s=";
 
   ldflags = [
     "-s"
@@ -32,6 +32,7 @@ buildGoModule rec {
       # Skip tests that require network access
       skippedTests = [
         "TestConcurrencySafety"
+        "TestNoiseHandshake"
         "TestTwoDevicePing"
       ];
     in

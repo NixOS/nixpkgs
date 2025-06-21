@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter-markdown";
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter-grammars";
     repo = "tree-sitter-markdown";
     tag = "v${version}";
-    hash = "sha256-Oe2iL5b1Cyv+dK0nQYFNLCCOCe+93nojxt6ukH2lEmU=";
+    hash = "sha256-I9KDE1yZce8KIGPLG5tmv5r/NCWwN95R6fIyvGdx+So=";
   };
 
   build-system = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Markdown grammar for tree-sitter";
     homepage = "https://github.com/tree-sitter-grammars/tree-sitter-markdown";
-    changelog = "https://github.com/tree-sitter-grammars/tree-sitter-markdown/releases/tag/v${version}";
+    changelog = "https://github.com/tree-sitter-grammars/tree-sitter-markdown/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

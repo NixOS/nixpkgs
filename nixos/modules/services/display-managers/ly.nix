@@ -12,7 +12,7 @@ let
   cfg = config.services.displayManager.ly;
   xEnv = config.systemd.services.display-manager.environment;
 
-  ly = cfg.package;
+  ly = cfg.package.override { x11Support = cfg.x11Support; };
 
   iniFmt = pkgs.formats.iniWithGlobalSection { };
 
@@ -41,13 +41,11 @@ let
     path = "/run/current-system/sw/bin";
     term_reset_cmd = "${pkgs.ncurses}/bin/tput reset";
     term_restore_cursor_cmd = "${pkgs.ncurses}/bin/tput cnorm";
-    mcookie_cmd = "/run/current-system/sw/bin/mcookie";
     waylandsessions = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
-    wayland_cmd = dmcfg.sessionData.wrapper;
     xsessions = "${dmcfg.sessionData.desktops}/share/xsessions";
     xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xorg.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
-    x_cmd_setup = dmcfg.sessionData.wrapper;
+    setup_cmd = dmcfg.sessionData.wrapper;
   };
 
   finalConfig = defaultConfig // cfg.settings;
@@ -59,6 +57,11 @@ in
   options = {
     services.displayManager.ly = {
       enable = mkEnableOption "ly as the display manager";
+      x11Support = mkOption {
+        description = "Whether to enable support for X11";
+        type = lib.types.bool;
+        default = true;
+      };
 
       package = mkPackageOption pkgs [ "ly" ] { };
 

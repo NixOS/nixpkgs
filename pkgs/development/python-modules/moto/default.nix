@@ -10,6 +10,7 @@
   cryptography,
   docker,
   fetchFromGitHub,
+  fetchpatch,
   flask-cors,
   flask,
   freezegun,
@@ -48,6 +49,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-bDRd1FTBpv6t2j8cBzcYiK4B0F4sLcoW9K0Wnd0oo+4=";
   };
+
+  # Fix tests with botocore 1.38.32
+  # FIXME: remove in next update
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/getmoto/moto/commit/8dcaaca0eefdf9ac957650c1562317b6d07fadf9.diff";
+      hash = "sha256-5zaerJR1rsMZQLn8cXjS8RYiKlSQ6azp7dk7JzLp+7I=";
+    })
+  ];
 
   build-system = [
     setuptools

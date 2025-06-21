@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "messense";
-    repo = pname;
+    repo = "cargo-zigbuild";
     rev = "v${version}";
     hash = "sha256-sUoEKLaUBxKKtCwgw/CcLrVRA4OMhto7d0PR+TMU5xk=";
   };

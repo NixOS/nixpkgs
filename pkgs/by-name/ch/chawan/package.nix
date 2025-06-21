@@ -11,18 +11,18 @@
   pkg-config,
   brotli,
   zlib,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0-unstable-2025-05-25";
+  version = "0.2.0";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "e571c8b1ede3a3c6dc4a5a4d0c6c8f48473076d2";
-    hash = "sha256-OBXc4jnB5Y+KXO9J7P1Z2HXkNCS+xnG+IGWw8wb66J8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-DiA7SEXPJTScdoFeGzH45wZP6gZRU8t/fvJLOufuNmU=";
   };
 
   patches = [ ./mancha-augment-path.diff ];
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
       wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Lightweight and featureful terminal web browser";
@@ -83,4 +83,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ ];
     mainProgram = "cha";
   };
-}
+})

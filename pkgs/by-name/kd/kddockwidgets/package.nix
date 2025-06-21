@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "KDAB";
-    repo = pname;
+    repo = "KDDockWidgets";
     rev = "v${version}";
     sha256 = "sha256-4xaTfNwfAIQox2YcusEZJt5f9/Kld+zveFEiIVw5dRc=";
   };

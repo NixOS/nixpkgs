@@ -296,7 +296,7 @@ let
       with subtest("Test nixos-option"):
           kernel_modules = target.succeed("nixos-option boot.initrd.kernelModules")
           assert "virtio_console" in kernel_modules
-          assert "List of modules" in kernel_modules
+          assert "list of modules" in kernel_modules
           assert "qemu-guest.nix" in kernel_modules
 
       target.shutdown()

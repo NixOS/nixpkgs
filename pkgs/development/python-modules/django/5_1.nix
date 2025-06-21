@@ -33,7 +33,6 @@
   pylibmc,
   pymemcache,
   python,
-  pywatchman,
   pyyaml,
   pytz,
   redis,
@@ -44,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.1.10";
+  version = "5.1.11";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,7 +52,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-+VsTrlff1eBGaVBqRHNOivVXqBkfjZvY2dzawE1sOOQ=";
+    hash = "sha256-yHoK7NGa91QEVFLeHqJo126qNg1pTE7W6LEtbCLy4sw=";
   };
 
   patches =
@@ -108,7 +107,6 @@ buildPythonPackage rec {
     pillow
     pylibmc
     pymemcache
-    pywatchman
     pyyaml
     pytz
     redis
@@ -116,11 +114,6 @@ buildPythonPackage rec {
     tblib
     tzdata
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  doCheck =
-    !stdenv.hostPlatform.isDarwin
-    # pywatchman depends on folly which does not support 32bits
-    && !stdenv.hostPlatform.is32bit;
 
   preCheck = ''
     # make sure the installed library gets imported

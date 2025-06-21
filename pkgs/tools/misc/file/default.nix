@@ -38,8 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     # It is included in 5.46+, but we are not updating to it or a later version until:
     #
     # https://bugs.astron.com/view.php?id=622
+    # https://bugs.astron.com/view.php?id=638
     #
-    # is resolved. See also description of the bug here:
+    # are resolved. See also description of the 1st bug here:
     #
     # https://github.com/NixOS/nixpkgs/pull/402318#issuecomment-2881163359
     ./32-bit-time_t.patch

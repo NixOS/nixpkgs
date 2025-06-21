@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.5.3";
+  version = "2025.6.1";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -181,6 +181,10 @@
     "alexa" =
       ps: with ps; [
         pyturbojpeg
+      ];
+    "alexa_devices" =
+      ps: with ps; [
+        aioamazondevices
       ];
     "alpha_vantage" =
       ps: with ps; [
@@ -1163,6 +1167,7 @@
         aiodhcpwatcher
         aiodiscover
         cached-ipaddress
+        ifaddr
       ];
     "diagnostics" =
       ps: with ps; [
@@ -1635,7 +1640,7 @@
     "ezviz" =
       ps: with ps; [
         ha-ffmpeg
-        pyezviz
+        pyezvizapi
       ];
     "faa_delays" =
       ps: with ps; [
@@ -2593,6 +2598,10 @@
       ps: with ps; [
         imgw-pib
       ];
+    "immich" =
+      ps: with ps; [
+        aioimmich
+      ];
     "improv_ble" =
       ps: with ps; [
         aioesphomeapi
@@ -2839,6 +2848,9 @@
     "jvc_projector" =
       ps: with ps; [
         pyjvcprojector
+      ];
+    "kaiser_nienhaus" =
+      ps: with ps; [
       ];
     "kaiterra" =
       ps: with ps; [
@@ -4320,6 +4332,10 @@
       ps: with ps; [
         home-assistant-frontend
       ];
+    "paperless_ngx" =
+      ps: with ps; [
+        pypaperless
+      ];
     "pcs_lighting" =
       ps: with ps; [
       ];
@@ -4482,6 +4498,33 @@
         ifaddr
         mutagen
         pymicro-vad
+        pyserial
+        pyspeex-noise
+        zeroconf
+      ];
+    "probe_plus" =
+      ps: with ps; [
+        aioesphomeapi
+        aiohasupervisor
+        aioruuvigateway
+        aioshelly
+        aiousbwatcher
+        bleak
+        bleak-esphome
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        dbus-fast
+        esphome-dashboard-api
+        ha-ffmpeg
+        habluetooth
+        hassil
+        home-assistant-intents
+        ifaddr
+        mutagen
+        pymicro-vad
+        pyprobeplus
         pyserial
         pyspeex-noise
         zeroconf
@@ -4813,7 +4856,8 @@
     "remote_rpi_gpio" =
       ps: with ps; [
         gpiozero
-      ]; # missing inputs: pigpio
+        pigpio
+      ];
     "renault" =
       ps: with ps; [
         renault-api
@@ -4923,11 +4967,6 @@
       ];
     "rtorrent" =
       ps: with ps; [
-      ];
-    "rtsp_to_webrtc" =
-      ps: with ps; [
-        pyturbojpeg
-        rtsp-to-webrtc
       ];
     "ruckus_unleashed" =
       ps: with ps; [
@@ -5327,6 +5366,10 @@
       ps: with ps; [
         pysmappee
       ];
+    "smarla" =
+      ps: with ps; [
+        pysmarlaapi
+      ];
     "smart_blinds" =
       ps: with ps; [
       ];
@@ -5573,7 +5616,10 @@
       ];
     "suez_water" =
       ps: with ps; [
+        fnv-hash-fast
+        psutil-home-assistant
         pysuezv2
+        sqlalchemy
       ];
     "sun" =
       ps: with ps; [
@@ -6475,6 +6521,7 @@
       ];
     "wsdot" =
       ps: with ps; [
+        wsdot
       ];
     "wyoming" =
       ps: with ps; [
@@ -6691,6 +6738,10 @@
     "ziggo_mediabox_xl" =
       ps: with ps; [
       ]; # missing inputs: ziggo-mediabox-xl
+    "zimi" =
+      ps: with ps; [
+        zcc-helper
+      ];
     "zodiac" =
       ps: with ps; [
       ];
@@ -6749,6 +6800,7 @@
     "alarmdecoder"
     "alert"
     "alexa"
+    "alexa_devices"
     "amberelectric"
     "ambient_network"
     "ambient_station"
@@ -6854,6 +6906,7 @@
     "cover"
     "cpuspeed"
     "crownstone"
+    "cups"
     "daikin"
     "datadog"
     "date"
@@ -6879,6 +6932,8 @@
     "directv"
     "discord"
     "discovergy"
+    "dlib_face_detect"
+    "dlib_face_identify"
     "dlna_dmr"
     "dlna_dms"
     "dnsip"
@@ -6902,6 +6957,7 @@
     "econet"
     "ecovacs"
     "ecowitt"
+    "eddystone_temperature"
     "edl21"
     "efergy"
     "eheimdigital"
@@ -7081,6 +7137,7 @@
     "imap"
     "imeon_inverter"
     "imgw_pib"
+    "immich"
     "improv_ble"
     "incomfort"
     "influxdb"
@@ -7310,7 +7367,9 @@
     "p1_monitor"
     "palazzetti"
     "panasonic_viera"
+    "pandora"
     "panel_custom"
+    "paperless_ngx"
     "peblar"
     "peco"
     "pegel_online"
@@ -7331,6 +7390,7 @@
     "powerfox"
     "powerwall"
     "private_ble_device"
+    "probe_plus"
     "profiler"
     "prometheus"
     "prosegur"
@@ -7352,6 +7412,7 @@
     "qld_bushfire"
     "qnap"
     "qnap_qsw"
+    "quantum_gateway"
     "qwikswitch"
     "rabbitair"
     "rachio"
@@ -7396,7 +7457,6 @@
     "rova"
     "rpi_power"
     "rss_feed_template"
-    "rtsp_to_webrtc"
     "ruckus_unleashed"
     "russound_rio"
     "ruuvi_gateway"
@@ -7446,6 +7506,7 @@
     "slimproto"
     "sma"
     "smappee"
+    "smarla"
     "smart_meter_texas"
     "smartthings"
     "smarttub"
@@ -7654,6 +7715,7 @@
     "zerproc"
     "zeversolar"
     "zha"
+    "zimi"
     "zodiac"
     "zone"
     "zwave_js"

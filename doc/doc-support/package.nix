@@ -57,10 +57,8 @@ stdenvNoCC.mkDerivation (
       substituteInPlace ./languages-frameworks/python.section.md \
         --subst-var-by python-interpreter-table "$(<"${pythonInterpreterTable}")"
 
-      cat \
-        ./functions/library.md.in \
-        ${lib-docs}/index.md \
-        > ./functions/library.md
+      cat ./functions/library.md.in ${lib-docs}/index.md > ./functions/library.md
+
       substitute ./manual.md.in ./manual.md \
         --replace-fail '@MANUAL_VERSION@' '${lib.version}'
 

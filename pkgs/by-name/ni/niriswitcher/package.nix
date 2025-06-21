@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "niriswitcher";
-  version = "0.6.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "isaksamsten";
     repo = "niriswitcher";
     tag = version;
-    hash = "sha256-njEd9s432qlBeQSXRL5gDSIEgzF0qwceND09aGTRo0U=";
+    hash = "sha256-V3G4eKKEysCyjAFUW2a94lOo82TVaZVfRXv/dL+LHNo=";
   };
 
   build-system = [ python3Packages.hatchling ];

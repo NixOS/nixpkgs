@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -14,9 +13,12 @@
   # tests
   langchain-tests,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -49,7 +51,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     langchain-tests
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
@@ -58,15 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_perplexity" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-perplexity==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-perplexity==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-perplexity/releases/tag/langchain-perplexity==${version}";
+    changelog = "https://github.com/langchain-ai/langchain-perplexity/releases/tag/${src.tag}";
     description = "Build LangChain applications with Perplexity";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/perplexity";
     license = lib.licenses.mit;

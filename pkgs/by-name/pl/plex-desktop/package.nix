@@ -153,6 +153,9 @@ buildFHSEnv {
     # db files should have write access.
     chmod --recursive 750 "$PLEX_DB"
 
+    # These environment variables sometimes silently cause plex to crash.
+    unset QT_QPA_PLATFORM QT_STYLE_OVERRIDE
+
     set -o allexport
     ${lib.toShellVars extraEnv}
     exec ${plex-desktop}/Plex.sh

@@ -201,6 +201,8 @@ stdenv.mkDerivation (
       "python"
     ];
 
+    separateDebugInfo = stdenv.buildPlatform.is64bit; # OOMs on 32 bit
+
     postInstall =
       ''
         ln -sv $out/bin/clang $out/bin/cpp

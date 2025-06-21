@@ -18,7 +18,7 @@
 
 let
   pname = "hover";
-  version = "0.47.0";
+  version = "0.47.2";
 
   libs = with xorg; [
     libX11.dev
@@ -36,23 +36,23 @@ let
   hover = buildGoModule {
     inherit pname version;
 
-    meta = with lib; {
+    meta = {
       description = "Build tool to run Flutter applications on desktop";
       homepage = "https://github.com/go-flutter-desktop/hover";
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ ericdallo ];
+      license = [ lib.licenses.bsd3 ];
+      platforms = lib.platforms.linux;
+      maintainers = [ lib.maintainers.ericdallo ];
     };
 
     subPackages = [ "." ];
 
-    vendorHash = "sha256-GDoX5d2aDfaAx9JsKuS4r8137t3swT6rgcCghmaThSM=";
+    vendorHash = "sha256-LDVF1vt1kTm7G/zqWHcjtGK+BsydgmJUET61+sILiE0=";
 
     src = fetchFromGitHub {
-      rev = "v${version}";
+      tag = "v${version}";
       owner = "go-flutter-desktop";
-      repo = pname;
-      sha256 = "sha256-ch59Wx4g72u7x99807ppURI4I+5aJ/W8Zr35q8X68v4=";
+      repo = "hover";
+      sha256 = "sha256-xS4qfsGZAt560dxHpwEnAWdJCd5vuTdX+7fpUGrSqhw=";
     };
 
     nativeBuildInputs = [
@@ -64,19 +64,7 @@ let
 
     checkRun = false;
 
-    patches = [
-      ./fix-assets-path.patch
-    ];
-
-    postPatch = ''
-      sed -i 's|@assetsFolder@|'"''${out}/share/assets"'|g' internal/fileutils/assets.go
-    '';
-
     postInstall = ''
-      mkdir -p $out/share
-      cp -r assets $out/share/assets
-      chmod -R a+rx $out/share/assets
-
       wrapProgram "$out/bin/hover" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath libs}
     '';

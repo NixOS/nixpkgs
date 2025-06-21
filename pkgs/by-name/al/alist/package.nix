@@ -103,6 +103,10 @@ buildGoModule rec {
       # alist-web
       mit
     ];
+    knownVulnerabilities = [
+      "Alist was acquired by Bugotech, a company distrusted by the community"
+      "Uses a questionable API server alist.nn.ci for account creation for certain drivers"
+    ];
     maintainers = with lib.maintainers; [ moraxyc ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
