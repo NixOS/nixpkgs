@@ -55,7 +55,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     awkward
     boltons
     dask
