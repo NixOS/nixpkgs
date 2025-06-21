@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   makeWrapper,
+  nixosTests,
 
   # for addons
   buildNpmPackage,
@@ -12,21 +13,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "omnom";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "omnom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2D+hEOlyjCJQKnLBBO1cXeqTS/QUWraPWPtI8pCf9KM=";
+    hash = "sha256-xspzTRIYUJSdI2Z/FAS2ecLpEEmEVGIwlhjrS5Yxh2c=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-dsS5w8JXIwkneWScOFzLSDiXq+clgK+RdYiMw0+FnvY=";
+  vendorHash = "sha256-qOl6f83k91K7YNF7lBbL66lXb/XWbGHyXeN7ZTchsI8=";
 
   passthru.updateScript = nix-update-script { };
-
-  patches = [ ./0001-fix-minimal-go-version.patch ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -46,6 +45,12 @@ buildGoModule (finalAttrs: {
         npmPackFlags = [ "--ignore-scripts" ];
 
         nativeBuildInputs = [ zip ];
+
+        # Fix path for the `static` directory
+        postConfigure = ''
+          substituteInPlace webpack.config.js \
+          --replace-fail '"..", ".."' '".."'
+        '';
 
         postBuild = ''
           mkdir -p $out
@@ -76,6 +81,8 @@ buildGoModule (finalAttrs: {
     cp -r static templates $out/share
     cp config.yml_sample $out/share/examples/config.yml
   '';
+
+  passthru.tests = nixosTests.omnom;
 
   meta = {
     description = "Webpage bookmarking and snapshotting service";
