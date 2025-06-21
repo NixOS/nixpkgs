@@ -19445,6 +19445,11 @@
     github = "petee";
     githubId = 89916;
   };
+  Peter3579 = {
+    github = "Peter3579";
+    githubId = 170885528;
+    name = "Peter3579";
+  };
   petercommand = {
     email = "petercommand@gmail.com";
     github = "ptrcmd";
