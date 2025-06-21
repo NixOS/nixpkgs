@@ -196,7 +196,7 @@ else
       + postBuild;
     preferLocalBuild = true;
     passthru = {
-      inherit (ghc) version meta;
+      inherit (ghc) version meta targetPrefix;
 
       hoogle = hoogleWithPackages';
 
