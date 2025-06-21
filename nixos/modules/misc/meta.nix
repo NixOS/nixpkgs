@@ -100,8 +100,11 @@ let
       */
       filterForNixBuild =
         paths:
-        # Two calls to `attrValues` because we have exactly two layers to flatten.
-        lib.concatMap lib.attrValues (lib.attrValues (filter paths));
+        let
+          flattenPackageSet = ps: lib.attrValues (lib.removeAttrs ps [ "recurseForDerivations" ]);
+        in
+        # Two calls to `flattenPackageSet` because we have exactly two layers to flatten.
+        lib.concatMap flattenPackageSet (flattenPackageSet (filter paths));
     };
   };
 
