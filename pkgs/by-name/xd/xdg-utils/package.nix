@@ -22,7 +22,7 @@
   gnugrep,
   gnused,
   jq,
-  nettools,
+  net-tools,
   procps,
   which,
   xdg-user-dirs,
@@ -166,7 +166,7 @@ let
       scripts = [ "bin/xdg-open" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        nettools
+        net-tools
         glib.bin
         "${placeholder "out"}/bin"
       ];
@@ -206,7 +206,7 @@ let
       scripts = [ "bin/xdg-screensaver" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        nettools
+        net-tools
         perl
         procps
       ];

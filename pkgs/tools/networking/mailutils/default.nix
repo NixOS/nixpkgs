@@ -16,7 +16,7 @@
   guile_2_2,
   libmysqlclient,
   mailcap,
-  nettools,
+  net-tools,
   pam,
   readline,
   ncurses,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       sasl
       libxcrypt
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ nettools ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ net-tools ]
     ++ lib.optionals pythonSupport [ python3 ]
     ++ lib.optionals guileSupport [ guile_2_2 ];
 
