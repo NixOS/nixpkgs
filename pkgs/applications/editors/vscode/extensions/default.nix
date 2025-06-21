@@ -4485,7 +4485,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=smcpeak.default-keys-windows";
           homepage = "https://github.com/smcpeak/vscode-default-keys-windows";
           license = lib.licenses.mit;
-          maintainers = [ ];
+          maintainers = [ lib.maintainers.ttschnz ];
         };
       };
 
