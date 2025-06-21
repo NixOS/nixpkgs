@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-mongodb";
-  version = "0.2.0";
+  version = "0.2.0.dev1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-mongodb==${version}";
-    hash = "sha256-Jd9toXkS9dGtSIrJQ/5W+swV1z2BJOJKBtkyGzj3oSc=";
+    hash = "sha256-WWWOs0hg0hTWUGA7e8lkl4oUI1yVL0HJEq+wyx9YYcE=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mongodb";
