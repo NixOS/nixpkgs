@@ -250,6 +250,16 @@ in
         };
       };
 
+    server-no-sshd-with-key =
+      { pkgs, ... }:
+      {
+        services.openssh.generateHostKeys = true;
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilPublicKey
+        ];
+        environment.systemPackages = [ pkgs.procps ];
+      };
+
     client =
       { ... }:
       {
@@ -275,6 +285,10 @@ in
     server_lazy.wait_for_unit("sshd.socket", timeout=30)
     server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
     server_lazy_socket.wait_for_unit("sshd.socket", timeout=30)
+
+    # sshd-keygen is a oneshot unit, so just wait for multi-user.target, which
+    # pulls it in.
+    server_no_sshd_with_key.wait_for_unit("multi-user.target", timeout=30)
 
     with subtest("manual-authkey"):
         client.succeed(
@@ -407,6 +421,15 @@ in
         )
 
         server_sftp.wait_for_file("/srv/sftp/uploads/test-file")
+
+    with subtest("keygen without sshd"):
+        client.fail(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@server-no-sshd-with-key true",
+            timeout=30
+        )
+        server_no_sshd_with_key.succeed("test -e /etc/ssh/ssh_host_ed25519_key")
+        server_no_sshd_with_key.succeed("test -e /etc/ssh/ssh_host_ed25519_key.pub")
+        server_no_sshd_with_key.fail("pgrep sshd")
 
     # None of the per-connection units should have failed.
     server_lazy.fail("systemctl is-failed 'sshd@*.service'")
