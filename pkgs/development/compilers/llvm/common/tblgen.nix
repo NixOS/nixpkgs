@@ -51,6 +51,7 @@ let
           cp -r ${monorepoSrc}/clang "$out"
           cp -r ${monorepoSrc}/clang-tools-extra "$out"
           cp -r ${monorepoSrc}/mlir "$out"
+          cp -r ${monorepoSrc}/lldb "$out"
         ''
       )
     else
@@ -83,27 +84,37 @@ let
       updateAutotoolsGnuConfigScriptsHook
     ];
 
-    cmakeFlags = [
-      # Projects with tablegen-like tools.
-      "-DLLVM_ENABLE_PROJECTS=${
-        lib.concatStringsSep ";" (
-          [
-            "llvm"
-            "clang"
-            "clang-tools-extra"
-          ]
-          ++ lib.optionals (lib.versionAtLeast release_version "16") [
-            "mlir"
-          ]
-        )
-      }"
-    ] ++ devExtraCmakeFlags;
+    cmakeFlags =
+      [
+        # Projects with tablegen-like tools.
+        "-DLLVM_ENABLE_PROJECTS=${
+          lib.concatStringsSep ";" (
+            [
+              "llvm"
+              "clang"
+              "clang-tools-extra"
+              "lldb"
+            ]
+            ++ lib.optionals (lib.versionAtLeast release_version "16") [
+              "mlir"
+            ]
+          )
+        }"
+      ]
+      # LLDB test suite requires libc++ on darwin, but we need compile only lldb-tblgen
+      # These flags are needed only for evaluating the CMake file.
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "-DLLDB_INCLUDE_TESTS=OFF"
+        "-DLIBXML2_INCLUDE_DIR=/non-existent"
+      ]
+      ++ devExtraCmakeFlags;
 
     # List of tablegen targets.
     ninjaFlags =
       [
         "clang-tblgen"
         "llvm-tblgen"
+        "lldb-tblgen"
       ]
       ++ lib.optionals (lib.versionAtLeast release_version "15") [
         "clang-tidy-confusable-chars-gen"
@@ -119,6 +130,10 @@ let
 
     installPhase = ''
       mkdir -p $out
+
+      # Remove useless files
+      rm -f bin/{lldb-dotest,lldb-repro,llvm-lit,update_core_linalg_named_ops.sh}
+
       cp -ar bin $out/bin
     '';
   });
