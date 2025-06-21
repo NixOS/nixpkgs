@@ -2600,7 +2600,6 @@ broken-packages:
   - hexpr # failure in job https://hydra.nixos.org/build/233198146 at 2023-09-02
   - hexpress # failure in job https://hydra.nixos.org/build/233219047 at 2023-09-02
   - hexquote # failure in job https://hydra.nixos.org/build/233230240 at 2023-09-02
-  - hexstring # failure in job https://hydra.nixos.org/build/233193009 at 2023-09-02
   - hext # failure in job https://hydra.nixos.org/build/233221345 at 2023-09-02
   - hextra # failure in job https://hydra.nixos.org/build/233238071 at 2023-09-02
   - hextream # failure in job https://hydra.nixos.org/build/252712270 at 2024-03-16
