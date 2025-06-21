@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nexus";
-  version = "3.70.1-02";
+  version = "3.81.1-01";
 
   src = fetchurl {
-    url = "https://download.sonatype.com/nexus/3/nexus-${version}-unix.tar.gz";
-    hash = "sha256-oBappm8WRcgyD5HWqJKPbMHjlwCUo9y5+FtB2Kq1PCE=";
+    url = "https://download.sonatype.com/nexus/3/nexus-${version}-linux-x86_64.tar.gz";
+    hash = "sha256-3CiG/X8WyCx/HkrbUossOnTw6k56eP4ElBq1btxzOjg=";
   };
 
   preferLocalBuild = true;
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace bin/nexus.vmoptions \
       --replace-fail ../sonatype-work /var/lib/sonatype-work \
-      --replace-fail etc/karaf $out/etc/karaf \
       --replace-fail =. =$out
   '';
 
@@ -39,11 +38,13 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
-    cp -rfv * .install4j $out
+    cp -rfv * $out
+    # Remove bundled runtime
+    rm -fvr $out/jdk/
     rm -fv $out/bin/nexus.bat
 
     wrapProgram $out/bin/nexus \
-      --set JAVA_HOME ${jre_headless} \
+      --set-default APP_JAVA_HOME ${jre_headless} \
       --set ALTERNATIVE_NAME "nexus" \
       --prefix PATH "${lib.makeBinPath [ gawk ]}"
 
@@ -60,15 +61,8 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
     platforms = lib.platforms.all;
-    knownVulnerabilities = [
-      "Nexus 3.77 + 3.78 fixed a bunch of security issues: https://help.sonatype.com/en/sonatype-nexus-repository-3-78-0-release-notes.html"
-      "CVE-2024-47554"
-      "CVE-2024-5764"
-      "Sonatype-2015-0286"
-      "Sonatype-2022-6438"
-      "CVE-2023-6378"
-      "CVE-2023-4218"
+    maintainers = with lib.maintainers; [
+      transcaffeine
     ];
-    maintainers = with lib.maintainers; [ ];
   };
 }

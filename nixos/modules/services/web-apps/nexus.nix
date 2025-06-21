@@ -19,7 +19,7 @@ in
 
       package = lib.mkPackageOption pkgs "nexus" { };
 
-      jdkPackage = lib.mkPackageOption pkgs "openjdk8" { };
+      jdkPackage = lib.mkPackageOption pkgs "jdk21_headless" { };
 
       user = mkOption {
         type = types.str;
@@ -57,12 +57,7 @@ in
           -Xms1200M
           -Xmx1200M
           -XX:MaxDirectMemorySize=2G
-          -XX:+UnlockDiagnosticVMOptions
-          -XX:+UnsyncloadClass
-          -XX:+LogVMOutput
-          -XX:LogFile=${cfg.home}/nexus3/log/jvm.log
           -XX:-OmitStackTraceInFastThrow
-          -Djava.net.preferIPv4Stack=true
           -Dkaraf.home=${cfg.package}
           -Dkaraf.base=${cfg.package}
           -Dkaraf.etc=${cfg.package}/etc/karaf
@@ -70,19 +65,13 @@ in
           -Dkaraf.data=${cfg.home}/nexus3
           -Djava.io.tmpdir=${cfg.home}/nexus3/tmp
           -Dkaraf.startLocalConsole=false
-          -Djava.endorsed.dirs=${cfg.package}/lib/endorsed
         '';
         defaultText = literalExpression ''
           '''
             -Xms1200M
             -Xmx1200M
             -XX:MaxDirectMemorySize=2G
-            -XX:+UnlockDiagnosticVMOptions
-            -XX:+UnsyncloadClass
-            -XX:+LogVMOutput
-            -XX:LogFile=''${home}/nexus3/log/jvm.log
             -XX:-OmitStackTraceInFastThrow
-            -Djava.net.preferIPv4Stack=true
             -Dkaraf.home=''${package}
             -Dkaraf.base=''${package}
             -Dkaraf.etc=''${package}/etc/karaf
@@ -90,7 +79,6 @@ in
             -Dkaraf.data=''${home}/nexus3
             -Djava.io.tmpdir=''${home}/nexus3/tmp
             -Dkaraf.startLocalConsole=false
-            -Djava.endorsed.dirs=''${package}/lib/endorsed
           '''
         '';
 
@@ -123,7 +111,7 @@ in
         NEXUS_USER = cfg.user;
         NEXUS_HOME = cfg.home;
 
-        INSTALL4J_JAVA_HOME = cfg.jdkPackage;
+        APP_JAVA_HOME = cfg.jdkPackage;
         VM_OPTS_FILE = pkgs.writeText "nexus.vmoptions" cfg.jvmOpts;
       };
 
@@ -153,5 +141,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ironpinguin ];
+  meta.maintainers = with lib.maintainers; [
+    ironpinguin
+    transcaffeine
+  ];
 }
