@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "librashader";
-  version = "0.6.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "SnowflakePowered";
     repo = "librashader";
     tag = "librashader-v${finalAttrs.version}";
-    hash = "sha256-zkvCpQ5Cq3sDOspc12/gPmNi6hn/nBe1UfWrMGi/o0Q=";
+    hash = "sha256-S0EZES4KLL52UT6ub9GVGl/n2gWxmoxazwZr7oEMTHo=";
   };
 
   patches = [
@@ -22,13 +22,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-9rwrbCt/obrKlRDWzzc1hm6ywHubz5x6Ujm2JMso0vg=";
-
-  RUSTC_BOOTSTRAP = 1;
+  cargoHash = "sha256-fKYpRvH8zt7GeiaBf1oZHBY4WSCVQzZ0Ca7Q3ek6QE0=";
 
   buildPhase = ''
     runHook preBuild
-    cargo run -p librashader-build-script -- --profile optimized
+    cargo run -p librashader-build-script -- --profile optimized --stable
     runHook postBuild
   '';
 
@@ -54,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ''
     )
     + ''
-      install -m644 librashader.h -t $out/include/librashader
+      install -m644 ../../include/librashader.h -t $out/include/librashader
       install -m644 ../../include/librashader_ld.h -t $out/include/librashader
       runHook postInstall
     '';

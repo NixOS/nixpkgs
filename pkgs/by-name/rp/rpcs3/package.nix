@@ -142,6 +142,8 @@ stdenv.mkDerivation {
       qtwayland
     ];
 
+  doInstallCheck = true;
+
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
@@ -160,7 +162,6 @@ stdenv.mkDerivation {
       abbradar
       neonfuz
       ilian
-      zane
     ];
     license = licenses.gpl2Only;
     platforms = [

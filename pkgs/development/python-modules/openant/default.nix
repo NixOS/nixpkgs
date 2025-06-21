@@ -8,6 +8,7 @@
   influxdb-client,
   pyserial,
   pytestCheckHook,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,10 @@ buildPythonPackage rec {
     hash = "sha256-wDtHlkVyD7mMDXZ4LGMgatr9sSlQKVbgkYsKvHGr9Pc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+    udevCheckHook
+  ];
 
   postInstall = ''
     install -dm755 "$out/etc/udev/rules.d"

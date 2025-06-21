@@ -2,6 +2,7 @@
   lib,
   clangStdenv,
   fetchFromGitHub,
+  boehmgc,
   libkrb5,
   openssl,
   pam,
@@ -11,17 +12,18 @@
   sqlite,
   testers,
   zlib,
+  python3Packages,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "pgcopydb";
-  version = "0.15";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "dimitri";
     repo = "pgcopydb";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-m9iIF8h6V3wWLUQuPntXtRAh16RrmR3uqZZIljGCY08=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g5MC4F0BYgTimpJZDX+PepFLXv1QuH7XGlzV66xM11M=";
   };
 
   nativeBuildInputs = [
@@ -31,18 +33,24 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
+      boehmgc
       libkrb5
       openssl
       postgresql
       readline
       sqlite
       zlib
+      python3Packages.sphinxHook
     ]
     ++ lib.optionals clangStdenv.hostPlatform.isLinux [
       pam
     ];
 
   hardeningDisable = [ "format" ];
+
+  sphinxBuilders = [
+    "man"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -58,13 +66,13 @@ clangStdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Copy a Postgres database to a target Postgres server (pg_dump | pg_restore on steroids";
     homepage = "https://github.com/dimitri/pgcopydb";
     changelog = "https://github.com/dimitri/pgcopydb/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     maintainers = [ ];
     mainProgram = "pgcopydb";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

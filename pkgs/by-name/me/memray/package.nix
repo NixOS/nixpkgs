@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       ipython
-      pytest-cov # fix Unknown pytest.mark.no_cover
+      pytest-cov-stub # fix Unknown pytest.mark.no_cover
       pytest-textual-snapshot
       pytestCheckHook
     ]

@@ -2,13 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
   cacert,
   unicode-emoji,
   unicode-character-database,
   unicode-idna,
   publicsuffix-list,
   cmake,
+  copyDesktopItems,
+  makeDesktopItem,
   ninja,
   pkg-config,
   curl,
@@ -38,13 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-06-03";
+  version = "0-unstable-2025-06-18";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "4c54a28c45be4e8185158d40a37e083e038a6465";
-    hash = "sha256-YHWkG2RJk6NaouRvis2L+njtYWKB7T569y1Tq+mYdz0=";
+    rev = "86c8dbbf902d5c84bdc90cd35d19cc167d5848bd";
+    hash = "sha256-CUVKrbpwPDMHPMHQfNSOQLQmRv7Fy4H/xsglZJaPZlI=";
   };
 
   postPatch = ''
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    copyDesktopItems
     ninja
     pkg-config
     python3
@@ -141,10 +143,41 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/LadybirdBrowser/ladybird/issues/371#issuecomment-2616415434
   env.NIX_LDFLAGS = "-lGL -lfontconfig";
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications $out/bin
-    mv $out/bundle/Ladybird.app $out/Applications
-  '';
+  postInstall =
+    ''
+      for size in 48x48 128x128; do
+        mkdir -p $out/share/icons/hicolor/$size/apps
+        ln -s $out/share/Lagom/icons/$size/app-browser.png \
+          $out/share/icons/hicolor/$size/apps/ladybird.png
+      done
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications $out/bin
+      mv $out/bundle/Ladybird.app $out/Applications
+    '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ladybird";
+      desktopName = "Ladybird";
+      exec = "Ladybird -- %U";
+      icon = "ladybird";
+      categories = [
+        "Network"
+        "WebBrowser"
+      ];
+      mimeTypes = [
+        "text/html"
+        "application/xhtml+xml"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+      ];
+      actions.new-window = {
+        name = "New Window";
+        exec = "Ladybird --new-window -- %U";
+      };
+    })
+  ];
 
   # Only Ladybird and WebContent need wrapped, if Qt is enabled.
   # On linux we end up wraping some non-Qt apps, like headless-browser.

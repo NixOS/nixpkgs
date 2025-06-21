@@ -2,18 +2,12 @@
   fetchFromGitHub,
   glib,
   gtk4,
-  iproute2,
   kdePackages,
   lib,
-  libappindicator,
-  libappindicator-gtk2,
-  libappindicator-gtk3,
-  libayatana-appindicator,
-  libsoup_3,
   openssl,
   pkg-config,
   rustPlatform,
-  webkitgtk_4_1,
+  wrapGAppsHook4,
   graphene,
   nix-update-script,
   versionCheckHook,
@@ -32,21 +26,15 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [
-    iproute2
     pkg-config
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
     gtk4
     kdePackages.kstatusnotifieritem
-    libappindicator
-    libappindicator-gtk2
-    libappindicator-gtk3
-    libayatana-appindicator
-    libsoup_3
     openssl
-    webkitgtk_4_1
     graphene
   ];
 

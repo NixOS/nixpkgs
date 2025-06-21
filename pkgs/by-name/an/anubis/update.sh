@@ -3,6 +3,6 @@
 
 set -euo pipefail
 
-nix-update anubis --src-only
+nix-update anubis --src-only --version-regex='^v(\d+\.\d+\.\d+)$'
 nix-update anubis.xess --version=skip
 nix-update anubis --version=skip

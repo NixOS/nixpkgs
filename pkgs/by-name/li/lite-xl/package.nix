@@ -5,46 +5,53 @@
   lua5_4,
   meson,
   ninja,
+  cmake,
   pcre2,
   pkg-config,
-  SDL2,
+  sdl3,
   stdenv,
 }:
-
-stdenv.mkDerivation rec {
+let
   pname = "lite-xl";
-  version = "2.1.7";
+  version = "2.1.8";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "lite-xl";
     repo = "lite-xl";
     rev = "v${version}";
-    hash = "sha256-Ig0XDxnll/zruAwWHwuXiqumBXgAPxuK0E1ELupvcXo=";
+    hash = "sha256-9JpD7f5vOGhLW8dBjjYUI5PSaz/XWW5sIOZCAbKhxtE=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    cmake
   ];
 
   buildInputs = [
     freetype
     lua5_4
     pcre2
-    SDL2
+    sdl3
   ];
 
   mesonFlags = [
     "-Duse_system_lua=true"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight text editor written in Lua";
     homepage = "https://github.com/lite-xl/lite-xl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sefidel ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      luftmensch-luftmensch
+      sefidel
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "lite-xl";
   };
 }

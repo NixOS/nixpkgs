@@ -4,6 +4,7 @@
   fetchgit,
   python3,
   coreutils,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +31,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ pyenv ];
 
   makeFlags = [ "DESTDIR=$(out) prefix=" ];
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://gitlab.com/wavexx/acpilight";

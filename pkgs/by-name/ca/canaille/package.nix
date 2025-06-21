@@ -58,7 +58,7 @@ python.pkgs.buildPythonApplication rec {
       coverage
       flask-webtest
       pyquery
-      pytest-cov
+      pytest-cov-stub
       pytest-httpserver
       pytest-lazy-fixtures
       pytest-smtpd

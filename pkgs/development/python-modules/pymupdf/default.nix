@@ -38,6 +38,7 @@ let
     enableOcr = true;
     enableCxx = true;
     enablePython = true;
+    enableBarcode = true;
     python3 = python;
   };
   mupdf-cxx-lib = toPythonModule (lib.getLib mupdf-cxx);
@@ -45,30 +46,19 @@ let
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.25.2";
+  version = "1.26.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = version;
-    hash = "sha256-6XbHQ8PE9IF0kngUhYkFSGjwgt+r+19v+PeDAQin2Ko=";
+    hash = "sha256-juBjlS9/ykpji9RbDcyOjAu+cVSDaFc3HAmxYHTylt8=";
   };
 
-  patches = [
-    # Fix build against mupdf-1.25.3:
-    #   https://github.com/pymupdf/PyMuPDF/pull/4248
-    (fetchpatch {
-      name = "mupdf-1.25.3.patch";
-      url = "https://github.com/pymupdf/PyMuPDF/commit/f42ef85058fee087d3f5e565f34a7657aad11240.patch";
-      hash = "sha256-X5JF8nPLj4uubdEdvUJ5aEf0yZkW+ks99pzua0vCrZc=";
-    })
-  ];
-
   # swig is not wrapped as Python package
-  # libclang calls itself just clang in wheel metadata
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "ret.append( 'swig')" "pass" \
@@ -128,6 +118,13 @@ buildPythonPackage rec {
     "test_color_count"
     "test_3050"
     "test_textbox3"
+    "test_3493"
+    "test_4180"
+    # Requires downloads
+    "test_4457"
+    "test_4445"
+    # Not a git repository, so git ls-files fails
+    "test_open2"
   ];
 
   pythonImportsCheck = [

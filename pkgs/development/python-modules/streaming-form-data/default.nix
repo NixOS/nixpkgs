@@ -26,6 +26,12 @@ buildPythonPackage rec {
   # So, just drop the dependency to not have to deal with it.
   patches = [ ./drop-smart-open.patch ];
 
+  # The repo has a vendored copy of the cython output, which doesn't build on 3.13,
+  # so regenerate it with our cython, which does.
+  preBuild = ''
+    cython streaming_form_data/_parser.pyx
+  '';
+
   nativeBuildInputs = [ cython ];
 
   nativeCheckInputs = [

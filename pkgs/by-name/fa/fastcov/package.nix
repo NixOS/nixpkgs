@@ -32,7 +32,7 @@ python3Packages.buildPythonPackage rec {
   dontUseCmakeConfigure = true; # cmake is used for testing
 
   nativeCheckInputs = with python3Packages; [
-    pytest
+    pytestCheckHook
     pytest-cov-stub
   ];
 

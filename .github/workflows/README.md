@@ -29,7 +29,7 @@ Thus, it is important how to construct the group keys:
 
 - We don't want workflows of different Pull Requests to cancel each other, so we include `github.event.pull_request.number`. The [GitHub docs](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/control-the-concurrency-of-workflows-and-jobs#example-using-a-fallback-value) show using `github.head_ref` for this purpose, but this doesn't work well with forks: Different users could have the same head branch name in their forks and run CI for their PRs at the same time.
 
-- Sometimes, there is no `pull_request.number`. That's the case for `push` or `workflow_run` events. To ensure non-PR runs are never cancelled, we add a fallback of `github.run_id`. This is a unique value for each workflow run.
+- Sometimes, there is no `pull_request.number`. To ensure non-PR runs are never cancelled, we add a fallback of `github.run_id`. This is a unique value for each workflow run.
 
 - Of course, we run multiple workflows at the same time, so we add `github.workflow` to the key. Otherwise workflows would cancel each other.
 

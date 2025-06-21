@@ -24,6 +24,7 @@
   nixosTests,
   installShellFiles,
   fuseSupport ? false,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.bindgenHook
     makeWrapper
     installShellFiles
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -83,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
+
+  doInstallCheck = true;
 
   postPatch = ''
     substituteInPlace Makefile \

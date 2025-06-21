@@ -64,6 +64,10 @@ stdenv.mkDerivation rec {
         cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
       '';
 
+  # https://hydra.nixos.org/build/300187289/nixlog/1
+  # openat-die.c:57:10: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+  hardeningDisable = [ "format" ];
+
   enableParallelBuilding = true;
   strictDeps = true;
 

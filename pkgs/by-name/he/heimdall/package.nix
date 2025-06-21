@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "heimdall";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromSourcehut {
     owner = "~grimler";
     repo = "Heimdall";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x+mDTT+oUJ4ffZOmn+UDk3+YE5IevXM8jSxLKhGxXSM=";
+    hash = "sha256-ga2hAZhsKosEG//qXEf+1vhJYtsHwyq6QvMlZaSFIgQ=";
   };
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $udev/lib/udev/rules.d
     install -m644 -t $udev/lib/udev/rules.d $src/heimdall/60-heimdall.rules
   '';
+
+  doInstallCheck = true;
 
   # heimdall cli looked up from PATH by gui
   preFixup = lib.optional enableGUI ''

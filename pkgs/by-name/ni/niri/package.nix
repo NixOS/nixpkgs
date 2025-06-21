@@ -110,6 +110,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "-Wl,--pop-state"
       ]
     );
+
+    # Upstream recommends setting the commit hash manually when in a
+    # build environment where the Git repository is unavailable.
+    # See https://github.com/YaLTeR/niri/wiki/Packaging-niri#version-string
+    NIRI_BUILD_COMMIT = "Nixpkgs";
   };
 
   nativeInstallCheckInputs = [ versionCheckHook ];

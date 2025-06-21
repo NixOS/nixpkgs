@@ -122,13 +122,6 @@ self: super:
     };
   });
 
-  bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
-    meta = attrs.meta // {
-      mainProgram = "bdftopcf";
-    };
-  });
-
   bitmap = addMainProgram super.bitmap { };
 
   editres = super.editres.overrideAttrs (attrs: {
@@ -155,29 +148,6 @@ self: super:
 
   iceauth = addMainProgram super.iceauth { };
   ico = addMainProgram super.ico { };
-
-  imake = super.imake.overrideAttrs (attrs: {
-    inherit (xorg) xorgcffiles;
-    x11BuildHook = ./imake.sh;
-    patches = [
-      ./imake.patch
-      ./imake-cc-wrapper-uberhack.patch
-    ];
-    setupHook = ./imake-setup-hook.sh;
-    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${
-      if stdenv.hostPlatform.isDarwin then "${tradcpp}/bin/cpp" else "gcc"
-    }\"'";
-
-    configureFlags = attrs.configureFlags or [ ] ++ [
-      "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
-    ];
-
-    inherit tradcpp;
-
-    meta = attrs.meta // {
-      mainProgram = "imake";
-    };
-  });
 
   mkfontdir = xorg.mkfontscale;
 
@@ -903,29 +873,6 @@ self: super:
     };
   });
 
-  xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
-    prePatch = ''
-      patchShebangs rules/merge.py rules/compat/map-variants.py rules/generate-options-symbols.py rules/xml2lst.pl
-    '';
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      meson
-      ninja
-      python3
-      perl
-      libxslt # xsltproc
-      gettext # msgfmt
-    ];
-    mesonFlags = [
-      (lib.mesonBool "xorg-rules-symlinks" true)
-    ];
-    # 1: compatibility for X11/xkb location
-    # 2: I think pkg-config/ is supposed to be in /lib/
-    postInstall = ''
-      ln -s share "$out/etc"
-      mkdir -p "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
-    '';
-  });
-
   # xkeyboardconfig variant extensible with custom layouts.
   # See nixos/modules/services/x11/extra-layouts.nix
   xkeyboardconfig_custom =
@@ -987,27 +934,6 @@ self: super:
     meta = attrs.meta // {
       license = lib.licenses.mit;
       mainProgram = "xlsfonts";
-    };
-  });
-
-  xorgproto = super.xorgproto.overrideAttrs (attrs: {
-    buildInputs = [ ];
-    propagatedBuildInputs = [ ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      meson
-      ninja
-    ];
-    # adds support for printproto needed for libXp
-    mesonFlags = [ "-Dlegacy=true" ];
-
-    patches = [
-      (fetchpatch {
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/meson.patch?h=mingw-w64-xorgproto&id=7b817efc3144a50e6766817c4ca7242f8ce49307";
-        sha256 = "sha256-Izzz9In53W7CC++k1bLr78iSrmxpFm1cH8qcSpptoUQ=";
-      })
-    ];
-    meta = attrs.meta // {
-      platforms = lib.platforms.unix ++ lib.platforms.windows;
     };
   });
 
@@ -1258,25 +1184,6 @@ self: super:
     ];
   });
 
-  lndir = super.lndir.overrideAttrs (attrs: {
-    buildInputs = [ ];
-    nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
-    preConfigure = ''
-      export XPROTO_CFLAGS=" "
-      export XPROTO_LIBS=" "
-      substituteInPlace lndir.c \
-        --replace '<X11/Xos.h>' '<string.h>' \
-        --replace '<X11/Xfuncproto.h>' '<unistd.h>' \
-        --replace '_X_ATTRIBUTE_PRINTF(1,2)' '__attribute__((__format__(__printf__,1,2)))' \
-        --replace '_X_ATTRIBUTE_PRINTF(2,3)' '__attribute__((__format__(__printf__,2,3)))' \
-        --replace '_X_NORETURN' '__attribute__((noreturn))' \
-        --replace 'n_dirs--;' ""
-    '';
-    meta = attrs.meta // {
-      mainProgram = "lndir";
-    };
-  });
-
   twm = super.twm.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [
       bison
@@ -1437,18 +1344,6 @@ self: super:
   xmodmap = addMainProgram super.xmodmap { };
   xmore = addMainProgram super.xmore { };
 
-  xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
-    '';
-  });
-
-  xorgdocs = super.xorgdocs.overrideAttrs (attrs: {
-    # This makes the man pages discoverable by the default man,
-    # since it looks for packages in $PATH
-    postInstall = "mkdir $out/bin";
-  });
-
   xpr = addMainProgram super.xpr { };
   xprop = addMainProgram super.xprop { };
 
@@ -1456,13 +1351,6 @@ self: super:
     configureFlags = [ "--with-cpp=${mcpp}/bin/mcpp" ];
     meta = attrs.meta // {
       mainProgram = "xrdb";
-    };
-  });
-
-  sessreg = super.sessreg.overrideAttrs (attrs: {
-    preBuild = "sed -i 's|gcc -E|gcc -E -P|' man/Makefile";
-    meta = attrs.meta // {
-      mainProgram = "sessreg";
     };
   });
 

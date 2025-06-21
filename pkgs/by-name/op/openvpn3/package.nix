@@ -22,12 +22,12 @@
   gdbuspp,
   cmake,
   git,
+  nix-update-script,
   enableSystemdResolved ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "openvpn3";
-  # also update openvpn3-core
   version = "24.1";
 
   src = fetchFromGitHub {
@@ -113,6 +113,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = "-lpthread";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OpenVPN 3 Linux client";

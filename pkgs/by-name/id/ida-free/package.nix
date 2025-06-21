@@ -22,7 +22,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "ida-free";
   version = "9.1";
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
 
     # IDA depends on quite some things extracted by the runfile, so first extract everything
     # into $out/opt, then remove the unnecessary files and directories.
-    IDADIR=$out/opt
+    IDADIR=$out/opt/${finalAttrs.pname}-${finalAttrs.version}
 
     # The installer doesn't honor `--prefix` in all places,
     # thus needing to set `HOME` here.
@@ -127,4 +127,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ]; # Right now, the installation script only supports Linux.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
-}
+})

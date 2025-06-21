@@ -162,6 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  doInstallCheck = true;
 
   postPatch = ''
     patchShebangs src/linux/integration-test.py
