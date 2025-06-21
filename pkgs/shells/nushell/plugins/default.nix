@@ -23,6 +23,7 @@ lib.makeScope newScope (
     skim = callPackage ./skim.nix { };
     semver = callPackage ./semver.nix { };
     hcl = callPackage ./hcl.nix { };
+    clipboard = callPackage ./clipboard.nix { };
   }
   // lib.optionalAttrs config.allowAliases {
     regex = throw "`nu_plugin_regex` is no longer compatible with the current Nushell release.";
