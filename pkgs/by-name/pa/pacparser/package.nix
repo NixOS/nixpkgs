@@ -2,7 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  bash,
+  pacparser,
+
+  enablePython ? false,
+  python ? null,
+  pythonPackages ? null,
 }:
+
+assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pacparser";
@@ -22,17 +30,50 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-invalid-pointer-type.patch
   ];
 
-  makeFlags = [
-    "NO_INTERNET=1"
-    "PREFIX=${placeholder "out"}"
+  buildInputs = lib.optionals enablePython [
+    python
   ];
+
+  nativeBuildInputs = lib.optionals enablePython (
+    with pythonPackages;
+    [
+      setuptools
+      wheel
+    ]
+  );
+
+  makeFlags =
+    [
+      "NO_INTERNET=1"
+      "PREFIX=${placeholder "out"}"
+    ]
+    ++ lib.optionals enablePython [
+      "pymod"
+    ];
+  # fix this https://github.com/manugarg/pacparser/issues/27
+  preBuild = "make $makeFlags -j1 pactester";
+
+  installPhase = lib.optionalString enablePython ''
+    export NO_INTERNET=1 && make install-pymod
+  '';
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    patchShebangs tests/runtests.sh
-    cd src
-  '';
+  preConfigure =
+    ''
+      patchShebangs tests/runtests.sh
+      cd src
+      substituteInPlace Makefile \
+      --replace-fail '/bin/bash' \
+      '${lib.getExe bash}' \
+      --replace-fail '$(DESTDIR)/' \
+      '${placeholder "out"}/${python.sitePackages}'
+    ''
+    + lib.optionalString enablePython ''
+      substituteInPlace pymod/setup.py \
+      --replace-fail 'version=pacparser_version()' \
+      'version="${finalAttrs.version}"'
+    '';
 
   hardeningDisable = [ "format" ];
 
