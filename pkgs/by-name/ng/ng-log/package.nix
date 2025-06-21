@@ -95,6 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ng-log.github.io/ng-log/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ superherointj ];
   };
 })
