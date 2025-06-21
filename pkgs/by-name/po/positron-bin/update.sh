@@ -27,7 +27,7 @@ new_hash=$(nix store prefetch-file --json --hash-type sha256 \
 
 sed -i "s|$current_hash|$new_hash|g" $positron_nix
 
-# Update Linux hash.
+# Update Linux x86_64 hash.
 current_hash=$(nix store prefetch-file --json --hash-type sha256 \
     "https://cdn.posit.co/positron/dailies/deb/x86_64/Positron-${current_version}-x64.deb" \
     | jq -r .hash)
@@ -38,17 +38,16 @@ new_hash=$(nix store prefetch-file --json --hash-type sha256 \
 
 sed -i "s|$current_hash|$new_hash|g" $positron_nix
 
+# Update Linux aarch64 hash.
+current_hash=$(nix store prefetch-file --json --hash-type sha256 \
+    "https://cdn.posit.co/positron/dailies/deb/arm64/Positron-${current_version}-arm64.deb" \
+    | jq -r .hash)
+
+new_hash=$(nix store prefetch-file --json --hash-type sha256 \
+    "https://cdn.posit.co/positron/dailies/deb/arm64/Positron-${new_version}-arm64.deb" \
+    | jq -r .hash)
+
+sed -i "s|$current_hash|$new_hash|g" $positron_nix
+
 # Update version
 sed -i "s|$current_version|$new_version|g" $positron_nix
-
-# Attempt to build.
-export NIXPKGS_ALLOW_UNFREE=1
-
-if ! nix-build -A positron-bin "$nixpkgs"; then
-  echo "The updated positron-bin failed to build."
-  exit 1
-fi
-
-# Commit changes
-git add "$positron_nix"
-git commit -m "positron-bin: ${current_version} -> ${new_version}"

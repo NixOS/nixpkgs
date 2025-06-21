@@ -20,14 +20,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "newelle";
-  version = "0.9.7";
+  version = "0.9.8";
   pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "qwersyk";
     repo = "Newelle";
     tag = version;
-    hash = "sha256-h0dWjnUqWcPdSbR60HF2KvQxUyYeR3qHf2GMHt/kSm0=";
+    hash = "sha256-VyUng/ZX8+wInRX705IWdBgTbX439R60h62ONdpZ0+8=";
   };
 
   postPatch = ''

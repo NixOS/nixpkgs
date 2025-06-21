@@ -12,7 +12,7 @@
   polars,
   pytestCheckHook,
   pytest-benchmark,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
   pandas,
   azure-storage-blob,
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     pandas
     polars
     pytest-benchmark
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
     azure-storage-blob
   ];
@@ -78,7 +78,10 @@ buildPythonPackage rec {
     rm -rf deltalake
   '';
 
-  pytestFlagsArray = [ "-m 'not integration'" ];
+  pytestFlagsArray = [
+    "--benchmark-disable"
+    "-m 'not integration'"
+  ];
 
   meta = with lib; {
     description = "Native Rust library for Delta Lake, with bindings into Python";

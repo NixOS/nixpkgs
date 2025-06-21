@@ -348,12 +348,14 @@ in
 
           profile incusd ${lib.getExe' config.virtualisation.incus.package "incusd"} flags=(unconfined) {
             userns,
-            </var/lib/incus/security/apparmor/cache>
-            </var/lib/incus/security/apparmor/profiles>
+
+            include "/var/lib/incus/security/apparmor/cache"
 
             # Site-specific additions and overrides. See local/README for details.
             include if exists <local/incusd>
           }
+
+          include "/var/lib/incus/security/apparmor/profiles"
         '';
       };
       includes."abstractions/base" =

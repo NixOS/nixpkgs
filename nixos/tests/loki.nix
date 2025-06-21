@@ -3,9 +3,7 @@
 {
   name = "loki";
 
-  meta = with lib.maintainers; {
-    maintainers = [ willibutz ];
-  };
+  meta.maintainers = [ ];
 
   nodes.machine =
     { ... }:
@@ -13,10 +11,13 @@
       services.loki = {
         enable = true;
 
-        # FIXME(globin) revert to original file when upstream fix released
+        # FIXME: revert to original file when upstream fix released
+        #  https://github.com/grafana/loki/issues/16990
+        #  https://github.com/grafana/loki/issues/17736
         # configFile = "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml";
-        configFile = pkgs.runCommandNoCC "patched-loki-cfg.yml" { } ''
-          sed '/metric_aggregation/!b;n;/enable/d' "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml" > $out
+        configFile = pkgs.runCommand "patched-loki-cfg.yml" { } ''
+          substitute "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml" "$out" \
+            --replace-fail "enable_multi_variant_queries: true" ""
         '';
       };
       services.promtail = {

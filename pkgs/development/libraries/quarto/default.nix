@@ -58,13 +58,15 @@ stdenv.mkDerivation (final: {
 
   preFixup = ''
     wrapProgram $out/bin/quarto \
-      --set QUARTO_DENO ${lib.getExe deno} \
-      --set QUARTO_PANDOC ${lib.getExe pandoc} \
-      --set QUARTO_ESBUILD ${lib.getExe esbuild} \
-      --set QUARTO_DART_SASS ${lib.getExe dart-sass} \
-      --set QUARTO_TYPST ${lib.getExe typst} \
-      ${lib.optionalString (rWrapper != null) "--set QUARTO_R ${rWithPackages}/bin/R"} \
-      ${lib.optionalString (python3 != null) "--set QUARTO_PYTHON ${pythonWithPackages}/bin/python3"}
+      --set-default QUARTO_DENO ${lib.getExe deno} \
+      --set-default QUARTO_PANDOC ${lib.getExe pandoc} \
+      --set-default QUARTO_ESBUILD ${lib.getExe esbuild} \
+      --set-default QUARTO_DART_SASS ${lib.getExe dart-sass} \
+      --set-default QUARTO_TYPST ${lib.getExe typst} \
+      ${lib.optionalString (rWrapper != null) "--set-default QUARTO_R ${rWithPackages}/bin/R"} \
+      ${lib.optionalString (
+        python3 != null
+      ) "--set-default QUARTO_PYTHON ${pythonWithPackages}/bin/python3"}
   '';
 
   installPhase = ''

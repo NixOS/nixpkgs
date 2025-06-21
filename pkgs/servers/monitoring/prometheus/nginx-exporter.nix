@@ -41,7 +41,6 @@ buildGoModule rec {
     maintainers = with maintainers; [
       benley
       fpletz
-      willibutz
       globin
     ];
   };

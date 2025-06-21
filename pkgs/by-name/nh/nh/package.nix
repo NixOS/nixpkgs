@@ -18,13 +18,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
-  version = "4.1.0";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OiuhBrJe1AyVxC+AV4HMJ+vhDvUfCyLpBmj+Fy7MDtM=";
+    hash = "sha256-v02NsZ589zzPq5xsCxyrG1/ZkFbbMkUthly50QdmYKo=";
   };
 
   strictDeps = true;
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-/tbmzGUd1b4oa+29+eFdkE4l8vxMoIdHx40YgErY9pY=";
+  cargoHash = "sha256-R2S0gbT3DD/Dtx8edqhD0fpDqe8AJgyLmlPoNEKm4BA=";
 
   passthru.updateScript = nix-update-script { };
 

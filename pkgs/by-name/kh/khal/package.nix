@@ -5,6 +5,7 @@
   glibcLocales,
   installShellFiles,
   python3Packages,
+  sphinxHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,6 +28,9 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     glibcLocales
     installShellFiles
+    sphinxHook
+    python3Packages.sphinx-rtd-theme
+    python3Packages.sphinxcontrib-newsfeed
   ];
 
   dependencies = with python3Packages; [
@@ -54,24 +58,22 @@ python3Packages.buildPythonApplication rec {
     vdirsyncer
   ];
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+  sphinxBuilders = [
+    "html"
+    "man"
+  ];
+
   postInstall = ''
     # shell completions
     installShellCompletion --cmd khal \
       --bash <(_KHAL_COMPLETE=bash_source $out/bin/khal) \
       --zsh <(_KHAL_COMPLETE=zsh_source $out/bin/khal) \
       --fish <(_KHAL_COMPLETE=fish_source $out/bin/khal)
-
-    # man page
-    PATH="${
-      python3Packages.python.withPackages (
-        ps: with ps; [
-          sphinx
-          sphinxcontrib-newsfeed
-        ]
-      )
-    }/bin:$PATH" \
-      make -C doc man
-    installManPage doc/build/man/khal.1
 
     # .desktop file
     install -Dm755 misc/khal.desktop -t $out/share/applications

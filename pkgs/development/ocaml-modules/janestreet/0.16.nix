@@ -1057,6 +1057,7 @@ with self;
       sedlex
       virtual_dom
     ];
+    meta.broken = true; # Not compatible with sedlex > 3.4
   };
 
   ppx_csv_conv = janePackage {

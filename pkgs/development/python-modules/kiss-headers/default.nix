@@ -5,6 +5,7 @@
   hatchling,
   requests,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -23,12 +24,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=kiss_headers --doctest-modules --cov-report=term-missing -rxXs" "--doctest-modules -rxXs"
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   disabledTestPaths = [
     # Tests require internet access

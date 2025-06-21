@@ -110,6 +110,15 @@ stdenv.mkDerivation rec {
         # Unity Editor 6000 specific dependencies
         harfbuzz
         vulkan-loader
+
+        # Unity Bug Reporter specific dependencies
+        xorg.libICE
+        xorg.libSM
+
+        # Fonts used by built-in and third party editor tools
+        corefonts
+        dejavu_fonts
+        liberation_ttf
       ]
       ++ extraLibs pkgs;
   };

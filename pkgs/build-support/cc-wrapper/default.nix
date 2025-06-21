@@ -804,9 +804,21 @@ stdenvNoCC.mkDerivation {
     # Do not prevent omission of framepointers on x86 32bit due to the small
     # number of general purpose registers. Keeping EBP available provides
     # non-trivial performance benefits.
-    + optionalString (!targetPlatform.isx86_32) ''
-      echo " -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer " >> $out/nix-support/cc-cflags-before
-    ''
+    + (
+      let
+        enable_fp = !targetPlatform.isx86_32;
+        enable_leaf_fp =
+          enable_fp
+          && (
+            targetPlatform.isx86_64
+            || targetPlatform.isAarch64
+            || (targetPlatform.isRiscV && (!isGNU || versionAtLeast ccVersion "15.1"))
+          );
+      in
+      optionalString enable_fp ''
+        echo " -fno-omit-frame-pointer ${optionalString enable_leaf_fp "-mno-omit-leaf-frame-pointer "}" >> $out/nix-support/cc-cflags-before
+      ''
+    )
 
     # For clang, this is handled in add-clang-cc-cflags-before.sh
     + optionalString (!isClang && machineFlags != [ ]) ''

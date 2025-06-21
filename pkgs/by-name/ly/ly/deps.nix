@@ -89,23 +89,23 @@ let
 in
 linkFarm name [
   {
-    name = "122062d301a203d003547b414237229b09a7980095061697349f8bef41be9c30266b";
+    name = "clap-0.10.0-oBajB434AQBDh-Ei3YtoKIRxZacVPF1iSwp3IX_ZB8f0";
     path = fetchZigArtifact {
       name = "clap";
-      url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.9.1.tar.gz";
-      hash = "sha256-7qxm/4xb+58MGG+iUzssUtR97OG2dRjAqyS0BAet4HY=";
+      url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.10.0.tar.gz";
+      hash = "sha256-cbPGmVlIXwIuRPIfQoFXzwLulT4XEv8rQWcJUl1ueyo=";
     };
   }
   {
-    name = "12209b971367b4066d40ecad4728e6fdffc4cc4f19356d424c2de57f5b69ac7a619a";
+    name = "zigini-0.3.1-BSkB7XJGAAB2E-sKyzhTaQCBlYBL8yqzE4E_jmSY99sC";
     path = fetchZigArtifact {
       name = "zigini";
-      url = "https://github.com/Kawaii-Ash/zigini/archive/0bba97a12582928e097f4074cc746c43351ba4c8.tar.gz";
-      hash = "sha256-OdaJ5tqmk2MPwaAbpK4HRD/CcQCN+Cjj8U63BqUcFMs=";
+      url = "https://github.com/Kawaii-Ash/zigini/archive/2ed3d417f17fab5b0ee8cad8a63c6d62d7ac1042.tar.gz";
+      hash = "sha256-Zj9uU6EEHkNZ1cPIDgDj1E2CEpbmPmpJYjSSFnxxdf0=";
     };
   }
   {
-    name = "1220b0979ea9891fa4aeb85748fc42bc4b24039d9c99a4d65d893fb1c83e921efad8";
+    name = "N-V-__8AAB9qAACwl56piR-krrhXSPxCvEskA52cmaTWXYk_";
     path = fetchZigArtifact {
       name = "ini";
       url = "https://github.com/ziglibs/ini/archive/e18d36665905c1e7ba0c1ce3e8780076b33e3002.tar.gz";

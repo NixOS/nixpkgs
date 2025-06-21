@@ -9,6 +9,7 @@
   callPackage,
   fetchFromGitiles,
   fetchFromGitHub,
+  buildPackages,
 }:
 
 let
@@ -43,7 +44,7 @@ let
     makeSetupHook {
       name = "gclient-unpack-hook";
       substitutions = {
-        jq = lib.getExe jq;
+        jq = lib.getExe buildPackages.jq;
       };
     } ./gclient-unpack-hook.sh
   ) { };

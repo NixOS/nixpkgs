@@ -9,21 +9,12 @@
 }:
 mkKdeDerivation rec {
   pname = "ktextaddons";
-  version = "1.5.4";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/ktextaddons/ktextaddons-${version}.tar.xz";
-    hash = "sha256-ZLgGAuhLJekWRiCvP2NB+oZbhegmq49eAgYa4koneyA=";
+    hash = "sha256-2YRlBaUvl72mTq0ZMDK8KVc+wxSB9HO+PFhvW4Mh7Nw=";
   };
-
-  # Backport fix for Qt 6.9
-  # FIXME: remove in next update
-  patches = [
-    (fetchpatch {
-      url = "https://invent.kde.org/libraries/ktextaddons/-/commit/fdbb082aaa0125d60fdf819c9cb95c40bdb98800.patch";
-      hash = "sha256-S+yGXXhZ/OdIgMGgyzofr1BzNV44/Uz/6NAoxdN9wRk=";
-    })
-  ];
 
   extraBuildInputs = [
     qtspeech

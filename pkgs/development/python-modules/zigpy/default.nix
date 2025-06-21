@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.79.0";
+  version = "0.80.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = version;
-    hash = "sha256-4bvVn9Pv37zngsiwy54g+z05uej5Bfwpt3mC9cxF2hk=";
+    hash = "sha256-OHwX2bwM6XYPGs2n7X5OQ3lW1lsD0RaaPNSFXOX+C/Q=";
   };
 
   postPatch = ''

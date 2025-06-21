@@ -124,6 +124,9 @@
   uv,
   # nvim-vstsl dependencies
   vtsls,
+  # search-and-replace.nvim dependencies
+  fd,
+  sad,
 }:
 self: super:
 let
@@ -3011,11 +3014,22 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
+  schema-companion-nvim = super.schema-companion-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   scretch-nvim = super.scretch-nvim.overrideAttrs {
   };
 
   searchbox-nvim = super.searchbox-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
+  };
+
+  search-and-replace-nvim = super.search-and-replace-nvim.overrideAttrs {
+    runtimeDeps = [
+      fd
+      sad
+    ];
   };
 
   skim = buildVimPlugin {
@@ -3091,6 +3105,15 @@ in
       # https://github.com/camspiers/snap/pull/97
       "snap.preview.help"
       "snap.producer.vim.help"
+    ];
+  };
+
+  solarized-osaka-nvim = super.solarized-osaka-nvim.overrideAttrs {
+    checkInputs = [ self.fzf-lua ];
+
+    nvimSkipModules = [
+      # lua/solarized-osaka/extra/fzf.lua:55: color not found for header:FzfLuaTitle
+      "solarized-osaka.extra.fzf"
     ];
   };
 
@@ -3886,7 +3909,7 @@ in
 
   vim-textobj-entire = super.vim-textobj-entire.overrideAttrs {
     dependencies = [ self.vim-textobj-user ];
-    meta.maintainers = with lib.maintainers; [ farlion ];
+    meta.maintainers = with lib.maintainers; [ workflow ];
   };
 
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {

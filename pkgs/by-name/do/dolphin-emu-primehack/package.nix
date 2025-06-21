@@ -52,14 +52,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu-primehack";
-  version = "1.0.7a";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "shiiion";
     repo = "dolphin";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-vuTSXQHnR4HxAGGiPg5tUzfiXROU3+E9kyjH+T6zVmc=";
+    hash = "sha256-/9AabEJ2ZOvHeSGXWRuOucmjleBMRcJfhX+VDeldbgo=";
   };
 
   nativeBuildInputs =

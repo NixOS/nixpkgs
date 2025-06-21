@@ -5,7 +5,7 @@
   nixosTests,
 }:
 let
-  version = "0.11.0";
+  version = "0.12.0";
 in
 
 buildGoModule {
@@ -17,10 +17,10 @@ buildGoModule {
     owner = "scionproto";
     repo = "scion";
     rev = "v${version}";
-    hash = "sha256-JemqSr1XBwW1hLuWQrApY/hqLj/VpW3xSJedVIoFSiY=";
+    hash = "sha256-J51GIQQhS623wFUU5dI/TwT2rkDH69518lpdCLZ/iM0=";
   };
 
-  vendorHash = "sha256-akFbHgo8xI2/4aQsyutjhXPM5d0A3se3kG/6Ebw1Qcs=";
+  vendorHash = "sha256-Ew/hQM8uhaM89sCcPKUBbiGukDq3h5x+KID3w/8BDHg=";
 
   excludedPackages = [
     "acceptance"

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  texinfo6_5,
+  texinfo6,
   libXext,
   xorgproto,
   libX11,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    texinfo6_5
+    texinfo6
     libXext
     xorgproto
     libX11

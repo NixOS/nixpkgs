@@ -10,15 +10,12 @@
   pkg-config,
   libGL,
   libGLU,
-  opencascade-occt_7_6,
+  opencascade-occt,
   libsForQt5,
   tbb,
   vtkWithQt5,
   llvmPackages,
 }:
-let
-  opencascade-occt = opencascade-occt_7_6;
-in
 stdenv.mkDerivation rec {
   pname = "elmerfem";
   version = "9.0-unstable-2025-05-25";

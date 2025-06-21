@@ -14,7 +14,6 @@ let
       meta = with lib.maintainers; {
         maintainers = [
           spinus
-          willibutz
         ];
       };
 

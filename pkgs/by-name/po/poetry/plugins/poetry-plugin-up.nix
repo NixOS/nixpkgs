@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "MousaZeidBaker";
-    repo = pname;
+    repo = "poetry-plugin-up";
     tag = "v${version}";
     hash = "sha256-gVhx8Vhk+yT/QjcEme8w0F+6BBpnEZOqzCkUJgM9eck=";
   };

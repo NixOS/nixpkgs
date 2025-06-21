@@ -3,6 +3,7 @@
   dbus,
   eudev,
   fetchFromGitHub,
+  installShellFiles,
   libdisplay-info,
   libglvnd,
   libinput,
@@ -15,6 +16,7 @@
   pkg-config,
   rustPlatform,
   seatd,
+  stdenv,
   systemd,
   wayland,
   withDbus ? true,
@@ -46,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
     rustPlatform.bindgenHook
   ];
@@ -88,6 +91,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
     + lib.optionalString withDinit ''
       install -Dm0644 resources/dinit/niri{-shutdown,} -t $out/lib/dinit.d/user
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd $pname \
+        --bash <($out/bin/niri completions bash) \
+        --fish <($out/bin/niri completions fish) \
+        --zsh <($out/bin/niri completions zsh)
     '';
 
   env = {
@@ -101,6 +110,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "-Wl,--pop-state"
       ]
     );
+
+    # Upstream recommends setting the commit hash manually when in a
+    # build environment where the Git repository is unavailable.
+    # See https://github.com/YaLTeR/niri/wiki/Packaging-niri#version-string
+    NIRI_BUILD_COMMIT = "Nixpkgs";
   };
 
   nativeInstallCheckInputs = [ versionCheckHook ];

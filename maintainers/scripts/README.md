@@ -22,7 +22,7 @@ robustly than text search through `maintainer-list.nix`.
 ❯ ./get-maintainer.sh nicoo
 {
   "email": "nicoo@debian.org",
-  "github": "nbraud",
+  "github": "nicoonoclaste",
   "githubId": 1155801,
   "keys": [
     {

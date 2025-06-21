@@ -136,7 +136,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      domenkozar
       lovek323
       madjar
       lsix
@@ -2180,7 +2179,8 @@ The following rules are desired to be respected:
 * Make sure the tests are enabled using for example [`pytestCheckHook`](#using-pytestcheckhook) and, in the case of
   libraries, are passing for all interpreters. If certain tests fail they can be
   disabled individually. Try to avoid disabling the tests altogether. In any
-  case, when you disable tests, leave a comment explaining why.
+  case, when you disable tests, leave a comment explaining not only _what_ the failure
+  is but _why_ the test failure can be ignored for safe distribution with nixpkgs.
 * `pythonImportsCheck` is set. This is still a good smoke test even if `pytestCheckHook` is set.
 * `meta.platforms` takes the default value in many cases.
   It does not need to be set explicitly unless the package requires a specific platform.

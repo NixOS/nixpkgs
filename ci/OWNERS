@@ -15,9 +15,9 @@
 
 # CI
 /.github/*_TEMPLATE*                    @SigmaSquadron
-/.github/actions                        @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
-/.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
-/ci                                     @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther @philiptaron
+/.github/actions                        @NixOS/nixpkgs-ci
+/.github/workflows                      @NixOS/nixpkgs-ci
+/ci                                     @NixOS/nixpkgs-ci
 /ci/OWNERS                              @infinisil @philiptaron
 
 # Development support
@@ -26,13 +26,19 @@
 
 # Libraries
 /lib                        @infinisil @hsjobeki
-/lib/systems                @alyssais @ericson2314 @NixOS/stdenv
 /lib/generators.nix         @infinisil @hsjobeki @Profpatsch
 /lib/cli.nix                @infinisil @hsjobeki @Profpatsch
 /lib/debug.nix              @infinisil @hsjobeki @Profpatsch
 /lib/asserts.nix            @infinisil @hsjobeki @Profpatsch
 /lib/path/*                 @infinisil @hsjobeki
 /lib/fileset                @infinisil @hsjobeki
+## Standard environment–related libraries
+/lib/customisation.nix      @alyssais @NixOS/stdenv
+/lib/derivations.nix        @alyssais @NixOS/stdenv
+/lib/fetchers.nix           @alyssais @NixOS/stdenv
+/lib/meta.nix               @alyssais @NixOS/stdenv
+/lib/source-types.nix       @alyssais @NixOS/stdenv
+/lib/systems                @alyssais @NixOS/stdenv
 ## Libraries / Module system
 /lib/modules.nix            @infinisil @roberth @hsjobeki
 /lib/types.nix              @infinisil @roberth @hsjobeki
@@ -56,6 +62,7 @@
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
+/pkgs/build-support/setup-hooks/arrayUtilities   @ConnorBaker
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/by-name/au/auto-patchelf                   @layus
 

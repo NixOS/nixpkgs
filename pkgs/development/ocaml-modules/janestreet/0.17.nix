@@ -935,6 +935,8 @@ with self;
     meta.description = "A library of intrinsics for OCaml";
     buildInputs = [
       dune-configurator
+    ];
+    propagatedBuildInputs = [
       ocaml_intrinsics_kernel
     ];
     patches = [
@@ -1149,6 +1151,7 @@ with self;
       sedlex
       virtual_dom
     ];
+    meta.broken = true; # Not compatible with sedlex > 3.4
   };
 
   ppx_csv_conv = janePackage {

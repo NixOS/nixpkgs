@@ -15,14 +15,14 @@
 }:
 buildPythonPackage rec {
   pname = "llm-gemini";
-  version = "0.21";
+  version = "0.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-gemini";
     tag = version;
-    hash = "sha256-aCP0YjcghzpgceuZRKGTN15wm7OIPCwcJAJJBxh78f4=";
+    hash = "sha256-8zUOP+LNwdUXx4hR3m5lodcVUmB4ZjyiWqWzk2tV9wM=";
   };
 
   build-system = [ setuptools ];

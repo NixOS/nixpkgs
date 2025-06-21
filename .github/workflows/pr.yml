@@ -1,0 +1,114 @@
+name: PR
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/build.yml
+      - .github/workflows/check.yml
+      - .github/workflows/eval.yml
+      - .github/workflows/lint.yml
+      - .github/workflows/pr.yml
+      - .github/workflows/reviewers.yml # needs eval results from the same event type
+  pull_request_target:
+
+concurrency:
+  group: pr-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04-arm
+    outputs:
+      mergedSha: ${{ steps.get-merge-commit.outputs.mergedSha }}
+      targetSha: ${{ steps.get-merge-commit.outputs.targetSha }}
+      systems: ${{ steps.systems.outputs.systems }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          sparse-checkout: |
+            .github/actions
+            ci/supportedSystems.json
+      - name: Check if the PR can be merged and get the test merge commit
+        uses: ./.github/actions/get-merge-commit
+        id: get-merge-commit
+
+      - name: Load supported systems
+        id: systems
+        run: |
+          echo "systems=$(jq -c <ci/supportedSystems.json)" >> "$GITHUB_OUTPUT"
+
+  check:
+    name: Check
+    uses: ./.github/workflows/check.yml
+    permissions:
+      # cherry-picks
+      pull-requests: write
+
+  lint:
+    name: Lint
+    needs: [prepare]
+    uses: ./.github/workflows/lint.yml
+    with:
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
+
+  eval:
+    name: Eval
+    needs: [prepare]
+    uses: ./.github/workflows/eval.yml
+    permissions:
+      # compare
+      statuses: write
+    secrets:
+      OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+    with:
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
+      systems: ${{ needs.prepare.outputs.systems }}
+
+  labels:
+    name: Labels
+    needs: [eval]
+    uses: ./.github/workflows/labels.yml
+    permissions:
+      issues: write
+      pull-requests: write
+
+  reviewers:
+    name: Reviewers
+    needs: [prepare, eval]
+    if: needs.prepare.outputs.targetSha
+    uses: ./.github/workflows/reviewers.yml
+    secrets:
+      OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+
+  build:
+    name: Build
+    needs: [prepare]
+    uses: ./.github/workflows/build.yml
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    with:
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+
+  # This job's only purpose is to serve as a target for the "Required Status Checks" branch ruleset.
+  # It "needs" all the jobs that should block merging a PR.
+  # If they pass, it is skipped — which counts as "success" for purposes of the branch ruleset.
+  # However, if any of them fail, this job will also fail — thus blocking the branch ruleset.
+  no-pr-failures:
+    # Modify this list to add or remove jobs from required status checks.
+    needs:
+      - check
+      - lint
+      - eval
+      - build
+    # WARNING:
+    # Do NOT change the name of this job, otherwise the rule will not catch it anymore.
+    # This would prevent all PRs from merging.
+    name: no PR failures
+    if: ${{ failure() }}
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - run: exit 1

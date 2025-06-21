@@ -5,7 +5,6 @@
   cups,
   cups-filters,
   foomatic-db-engine,
-  fetchpatch,
   ghostscript,
   libpng,
   libxml2,
@@ -16,23 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ptouch-driver";
-  version = "1.7";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "philpem";
     repo = "printer-driver-ptouch";
     rev = "v${version}";
-    hash = "sha256-3ZotSHn7lERp53hAzx47Ct/k565rEoensCcltwX/Xls=";
+    hash = "sha256-MVvtfos2ze6uXFg8sEH1UlJ9gg4iq91dLK0k0xuTE1Y=";
   };
-
-  patches = [
-    # Fixes some invalid XML file that otherwise causes a build failure
-    (fetchpatch {
-      name = "fix-brother-ql-600.patch";
-      url = "https://github.com/philpem/printer-driver-ptouch/commit/b3c53b3bc4dd98ed172f2c79405c7c09b3b3836a.patch";
-      hash = "sha256-y5bHKFeRXx8Wdl1++l4QNGgiY41LY5uzrRdOlaZyF9I=";
-    })
-  ];
 
   buildInputs = [
     cups

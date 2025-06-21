@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  stdenv,
 }:
 
 buildGoModule rec {
@@ -23,6 +22,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X github.com/nxtrace/NTrace-core/config.Version=v${version}"
+    "-checklinkname=0" # refers to https://github.com/nxtrace/NTrace-core/issues/247
   ];
 
   postInstall = ''
@@ -35,8 +35,5 @@ buildGoModule rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sharzy ];
     mainProgram = "nexttrace";
-    # Broken on darwin for Go toolchain > 1.22, with error:
-    # 'link: github.com/nxtrace/NTrace-core/trace/internal: invalid reference to net.internetSocket'
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

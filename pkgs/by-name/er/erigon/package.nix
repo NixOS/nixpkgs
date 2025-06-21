@@ -51,7 +51,13 @@ buildGoModule {
     "nosilkworm"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # avoid testing‐releases
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ledgerwatch/erigon/";

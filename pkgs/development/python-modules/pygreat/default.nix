@@ -3,22 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   future,
   pyusb,
 }:
 
 buildPythonPackage rec {
   pname = "pygreat";
-  version = "2024.0.3";
+  version = "2024.0.5";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "libgreat";
     tag = "v${version}";
-    hash = "sha256-dJqL85mx1zGYUpMxDa83hNRr7eUn5NNfWXullGFQK70=";
+    hash = "sha256-2PFeCG7m8qiK3eBX2838P6ZsLoQxcJBG+/TppUMT6dE=";
   };
 
   sourceRoot = "${src.name}/host";
@@ -50,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/greatscottgadgets/libgreat/releases/tag/v${version}";
+    changelog = "https://github.com/greatscottgadgets/libgreat/releases/tag/${src.tag}";
     description = "Python library for talking with libGreat devices";
     homepage = "https://github.com/greatscottgadgets/libgreat/";
     license = with lib.licenses; [ bsd3 ];

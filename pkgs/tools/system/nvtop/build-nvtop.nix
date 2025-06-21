@@ -111,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     platforms = if apple then platforms.darwin else platforms.linux;
     maintainers = with maintainers; [
-      willibutz
       gbtb
       anthonyroussel
       moni

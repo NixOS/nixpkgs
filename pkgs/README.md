@@ -97,7 +97,7 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp`](development/libraries/gmp). Also done by the generic builder, but has a dependency on `m4`.
 
-   - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](./by-name/pa/pan/package.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
+   - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](./by-name/pa/pan/package.nix). Has an optional dependency on `gspell`, which is only built if `spellCheck` is `true`.
 
    - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](servers/http/apache-httpd/2.4.nix). A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
@@ -529,13 +529,18 @@ In the interest of keeping our maintenance burden and the size of Nixpkgs to a m
 {
   patches = [
     (fetchpatch2 {
-      name = "fix-check-for-using-shared-freetype-lib.patch";
-      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/patch/?id=8f5d28536e4518716fdfe974e580194c8f57871d";
-      hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
+      name = "make-no-atomics-a-soft-failure.patch";
+      url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch?full_index=1";
+      hash = "sha256-9Goa0NTUdSOs1Vm+FnkoSFhw0o8ZLNOw6cLUqCVnF5Y=";
     })
   ];
 }
 ```
+
+> [!Warning]
+> If the patch file contains short commit hashes, use `fetchpatch` instead of `fetchpatch2` ([tracking issue](https://github.com/NixOS/nixpkgs/issues/257446)).
+> This is the case if the patch contains a line similar to `index 0c97fcc35..f533e464a 100644`.
+> Depending on the patch source it is possible to expand the commit hash, in which case using `fetchpatch2` is acceptable (e.g. GitHub supports appending `?full_index=1` to the URL, as seen above).
 
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch2`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
 

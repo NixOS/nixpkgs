@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmsquic";
-  version = "2.4.11";
+  version = "2.4.12";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "msquic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZI5tutVYs3myjRdsXGOq48F9fce2YUsMcI1Sqg7nyh0=";
+    hash = "sha256-zWg5h5+wguBiAYPN8nZU/lQv1do2b87yyvuFm3445Ys=";
     fetchSubmodules = true;
   };
 

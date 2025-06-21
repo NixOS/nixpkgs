@@ -22,7 +22,7 @@
 }:
 let
   pname = "positron-bin";
-  version = "2025.05.0-75";
+  version = "2025.06.0-146";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -31,12 +31,17 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://cdn.posit.co/positron/dailies/mac/universal/Positron-${version}.dmg";
-        hash = "sha256-dmRYKysQJYrNWyGvH9DsNIC0tIHYNix7QWagVtuGx1g=";
+        hash = "sha256-V9ADtOskxEbGZryXD/6aiUDeTvqPzoY372f/Vo5195s=";
+      }
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      fetchurl {
+        url = "https://cdn.posit.co/positron/dailies/deb/arm64/Positron-${version}-arm64.deb";
+        hash = "sha256-FiCTF5Bmfp4id9HXuB4luSGT9A7OoquaRW/QIh0A3ZY=";
       }
     else
       fetchurl {
         url = "https://cdn.posit.co/positron/dailies/deb/x86_64/Positron-${version}-x64.deb";
-        hash = "sha256-dmJrDE3g44aoCsVBvSDDFLt38uIqxzaXPBhcmu/U5Oo=";
+        hash = "sha256-FnNoLV9uqgUeumYpHtRJuHrFA6mL65KI4jru7Ebq0/o=";
       };
 
   buildInputs =
@@ -133,6 +138,9 @@ stdenv.mkDerivation {
       detroyejr
     ];
     mainProgram = "positron";
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ] ++ platforms.darwin;
   };
 }

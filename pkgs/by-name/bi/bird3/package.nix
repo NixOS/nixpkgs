@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     "--runstatedir=/run/bird"
   ];
 
-  passthru.tests = nixosTests.bird;
+  passthru.tests = nixosTests.bird3;
 
   meta = {
     changelog = "https://gitlab.nic.cz/labs/bird/-/blob/v${version}/NEWS";

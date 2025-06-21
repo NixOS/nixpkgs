@@ -5,15 +5,18 @@ import os
 import sys
 from pathlib import Path
 from subprocess import CalledProcessError, run
+from textwrap import dedent
 from typing import Final, assert_never
 
 from . import nix, tmpdir
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
-from .models import Action, BuildAttr, Flake, ImageVariants, NRError, Profile
+from .models import Action, BuildAttr, Flake, ImageVariants, NixOSRebuildError, Profile
 from .process import Remote, cleanup_ssh
 from .utils import Args, LogFormatter, tabulate
 
-logger: Final = logging.getLogger()
+NIXOS_REBUILD_ATTR: Final = "config.system.build.nixos-rebuild"
+
+logger: Final = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
@@ -97,7 +100,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--attr",
         "-A",
         help="Enable and build the NixOS system from nix file and use the "
-        + "specified attribute path from file specified by the --file option",
+        "specified attribute path from file specified by the --file option",
     )
     main_parser.add_argument(
         "--flake",
@@ -115,7 +118,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--install-bootloader",
         action="store_true",
         help="Causes the boot loader to be (re)installed on the device specified "
-        + "by the relevant configuration options",
+        "by the relevant configuration options",
     )
     main_parser.add_argument(
         "--install-grub",
@@ -140,7 +143,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--upgrade",
         action="store_true",
         help="Update the root user's channel named 'nixos' before rebuilding "
-        + "the system and channels which have a file named '.update-on-nixos-rebuild'",
+        "the system and channels which have a file named '.update-on-nixos-rebuild'",
     )
     main_parser.add_argument(
         "--upgrade-all",
@@ -184,7 +187,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     main_parser.add_argument(
         "--image-variant",
         help="Selects an image variant to build from the "
-        + "config.system.build.images attribute of the given configuration",
+        "config.system.build.images attribute of the given configuration",
     )
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
@@ -276,33 +279,33 @@ def reexec(
     flake_build_flags: Args,
 ) -> None:
     drv = None
-    attr = "config.system.build.nixos-rebuild"
     try:
         # Parsing the args here but ignore ask_sudo_password since it is not
         # needed and we would end up asking sudo password twice
         if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host, None)):
             drv = nix.build_flake(
-                attr,
+                NIXOS_REBUILD_ATTR,
                 flake,
                 flake_build_flags | {"no_link": True},
             )
         else:
             build_attr = BuildAttr.from_arg(args.attr, args.file)
             drv = nix.build(
-                attr,
+                NIXOS_REBUILD_ATTR,
                 build_attr,
                 build_flags | {"no_out_link": True},
             )
     except CalledProcessError:
         logger.warning(
-            "could not build a newer version of nixos-rebuild, using current version"
+            "could not build a newer version of nixos-rebuild, using current version",
+            exc_info=logger.isEnabledFor(logging.DEBUG),
         )
 
     if drv:
         new = drv / f"bin/{EXECUTABLE}"
         current = Path(argv[0])
         if new != current:
-            logging.debug(
+            logger.debug(
                 "detected newer version of script, re-exec'ing, current=%s, new=%s",
                 current,
                 new,
@@ -319,12 +322,43 @@ def reexec(
                 # - Exec format error (e.g.: another OS/CPU arch)
                 logger.warning(
                     "could not re-exec in a newer version of nixos-rebuild, "
-                    + "using current version"
+                    "using current version",
+                    exc_info=logger.isEnabledFor(logging.DEBUG),
                 )
-                logger.debug("re-exec exception", exc_info=True)
                 # We already run clean-up, let's re-exec in the current version
                 # to avoid issues
                 os.execve(current, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+
+
+def validate_image_variant(image_variant: str, variants: ImageVariants) -> None:
+    if image_variant not in variants:
+        raise NixOSRebuildError(
+            "please specify one of the following supported image variants via "
+            "--image-variant:\n" + "\n".join(f"- {v}" for v in variants)
+        )
+
+
+def validate_nixos_config(path_to_config: Path) -> None:
+    if not (path_to_config / "nixos-version").exists() and not os.environ.get(
+        "NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM"
+    ):
+        msg = dedent(
+            # the lowercase for the first letter below is proposital
+            f"""
+                your NixOS configuration path seems to be missing essential files.
+                To avoid corrupting your current NixOS installation, the activation will abort.
+
+                This could be caused by Nix bug: https://github.com/NixOS/nix/issues/13367.
+                This is the evaluated NixOS configuration path: {path_to_config}.
+                Change the directory to somewhere else (e.g., `cd $HOME`) before trying again.
+
+                If you think this is a mistake, you can set the environment variable
+                NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM to 1
+                and re-run the command to continue.
+                Please open an issue if this is the case.
+            """
+        ).strip()
+        raise NixOSRebuildError(msg)
 
 
 def execute(argv: list[str]) -> None:
@@ -391,28 +425,20 @@ def execute(argv: list[str]) -> None:
             no_link = action in (Action.SWITCH, Action.BOOT)
             rollback = bool(args.rollback)
 
-            def validate_image_variant(variants: ImageVariants) -> None:
-                if args.image_variant not in variants:
-                    raise NRError(
-                        "please specify one of the following "
-                        + "supported image variants via --image-variant:\n"
-                        + "\n".join(f"- {v}" for v in variants)
-                    )
-
             match action:
                 case Action.BUILD_IMAGE if flake:
                     variants = nix.get_build_image_variants_flake(
                         flake,
                         eval_flags=flake_common_flags,
                     )
-                    validate_image_variant(variants)
+                    validate_image_variant(args.image_variant, variants)
                     attr = f"config.system.build.images.{args.image_variant}"
                 case Action.BUILD_IMAGE:
                     variants = nix.get_build_image_variants(
                         build_attr,
                         instantiate_flags=common_flags,
                     )
-                    validate_image_variant(variants)
+                    validate_image_variant(args.image_variant, variants)
                     attr = f"config.system.build.images.{args.image_variant}"
                 case Action.BUILD_VM:
                     attr = "config.system.build.vm"
@@ -433,9 +459,11 @@ def execute(argv: list[str]) -> None:
                     if maybe_path_to_config:  # kinda silly but this makes mypy happy
                         path_to_config = maybe_path_to_config
                     else:
-                        raise NRError("could not find previous generation")
+                        raise NixOSRebuildError("could not find previous generation")
                 case (_, True, _, _):
-                    raise NRError(f"--rollback is incompatible with '{action}'")
+                    raise NixOSRebuildError(
+                        f"--rollback is incompatible with '{action}'"
+                    )
                 case (_, False, Remote(_), Flake(_)):
                     path_to_config = nix.build_remote_flake(
                         attr,
@@ -486,6 +514,7 @@ def execute(argv: list[str]) -> None:
                     copy_flags=copy_flags,
                 )
                 if action in (Action.SWITCH, Action.BOOT):
+                    validate_nixos_config(path_to_config)
                     nix.set_profile(
                         profile,
                         path_to_config,

@@ -60,6 +60,8 @@
   # Whether to use graphene-hardened-malloc
   useHardenedMalloc ? null,
 
+  # Whether to use IPC for communicating with Tor
+  useIPCTorService ? false,
   # Whether to disable multiprocess support
   disableContentSandbox ? false,
 
@@ -261,11 +263,13 @@ lib.warnIf (useHardenedMalloc != null)
         lockPref("extensions.torlauncher.torrc-defaults_path", "$TBB_IN_STORE/TorBrowser/Data/Tor/torrc-defaults");
         lockPref("extensions.torlauncher.tor_path", "$TBB_IN_STORE/TorBrowser/Tor/tor");
 
-        // Insist on using IPC for communicating with Tor
+        // Optionally use IPC for communicating with Tor
         //
-        // Defaults to creating \$XDG_RUNTIME_DIR/Tor/{socks,control}.socket
-        lockPref("extensions.torlauncher.control_port_use_ipc", true);
-        lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+        // Sockets are created at \$XDG_RUNTIME_DIR/Tor/{socks,control}.socket
+        ${lib.optionalString useIPCTorService ''
+          lockPref("extensions.torlauncher.control_port_use_ipc", true);
+          lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+        ''}
 
         // Optionally disable multiprocess support.  We always set this to ensure that
         // toggling the pref takes effect.

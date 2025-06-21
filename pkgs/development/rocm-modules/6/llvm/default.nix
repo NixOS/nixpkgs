@@ -54,6 +54,8 @@ let
     stdenv.cc.bintools
     gcc-unwrapped
     stdenvToBuildRocmLlvm
+    stdenvToBuildRocmLlvm.cc
+    stdenvToBuildRocmLlvm.cc.cc
   ];
   gcc-prefix =
     let
@@ -126,28 +128,36 @@ let
     let
       linked = symlinkJoin { inherit name paths; };
     in
-    runCommand name { } ''
-      set -x
-      mkdir -p $out/
-      cp --reflink=auto -rL ${linked}/* $out/
-      chmod -R +rw $out
-      mkdir -p $out/usr
-      ln -s $out/ $out/usr/local
-      mkdir -p $out/nix-support/
-      rm -rf $out/lib64 # we don't need mixed 32 bit
-      echo 'export CC=clang' >> $out/nix-support/setup-hook
-      echo 'export CXX=clang++' >> $out/nix-support/setup-hook
-      mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/linux/
-      ln -s $out/lib/linux/libclang_rt.* $out/lib/clang/${llvmMajorVersion}/lib/linux/
+    runCommand name
+      {
+        # If this is erroring, try why-depends --precise on the symlinkJoin of inputs to look for the problem
+        # nix why-depends --precise .#rocmPackages.llvm.rocmcxx.linked /store/path/its/not/allowed
+        disallowedRequisites = disallowedRefsForToolchain;
+        passthru.linked = linked;
+      }
+      ''
+        set -x
+        mkdir -p $out/
+        cp --reflink=auto -rL ${linked}/* $out/
+        chmod -R +rw $out
+        mkdir -p $out/usr
+        ln -s $out/ $out/usr/local
+        mkdir -p $out/nix-support/
+        # we don't need mixed 32 bit, the presence of lib64 is used by LLVM to decide it's a multilib sysroot
+        rm -rf $out/lib64
+        echo 'export CC=clang' >> $out/nix-support/setup-hook
+        echo 'export CXX=clang++' >> $out/nix-support/setup-hook
+        mkdir -p $out/lib/clang/${llvmMajorVersion}/lib/linux/
+        ln -s $out/lib/linux/libclang_rt.* $out/lib/clang/${llvmMajorVersion}/lib/linux/
 
-      find $out -type f -exec sed -i "s|${cc.out}|$out|g" {} +
-      find $out -type f -exec sed -i "s|${cc.dev}|$out|g" {} +
+        find $out -type f -exec sed -i "s|${cc.out}|$out|g" {} +
+        find $out -type f -exec sed -i "s|${cc.dev}|$out|g" {} +
 
-      # our /include now has more than clang expects, so this specific dir still needs to point to cc.dev
-      # FIXME: could copy into a different subdir?
-      sed -i 's|set(CLANG_INCLUDE_DIRS.*$|set(CLANG_INCLUDE_DIRS "${cc.dev}/include")|g' $out/lib/cmake/clang/ClangConfig.cmake
-      ${lib.getExe rdfind} -makesymlinks true $out/ # create links *within* the sysroot to save space
-    '';
+        # our /include now has more than clang expects, so this specific dir still needs to point to cc.dev
+        # FIXME: could copy into a different subdir?
+        sed -i 's|set(CLANG_INCLUDE_DIRS.*$|set(CLANG_INCLUDE_DIRS "${cc.dev}/include")|g' $out/lib/cmake/clang/ClangConfig.cmake
+        ${lib.getExe rdfind} -makesymlinks true $out/ # create links *within* the sysroot to save space
+      '';
   findClangNostdlibincPatch =
     x:
     (
@@ -371,6 +381,8 @@ rec {
           postFixup =
             (old.postFixup or "")
             + ''
+              find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
+              find $lib -type f -exec remove-references-to -t ${stdenv.cc} {} +
               find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
               find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
             '';

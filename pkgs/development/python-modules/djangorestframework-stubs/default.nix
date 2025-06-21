@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-stubs";
-  version = "3.15.3";
+  version = "3.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";
     tag = version;
-    hash = "sha256-6bs/FGCxxV1sE4J3aqzYS1wIr82mWlnGGXIuYOF5+dw=";
+    hash = "sha256-q/9tCMT79TMHIQ4KH8tiunaTt7L6IItwNYBFlbNxBcE=";
   };
 
   nativeBuildInputs = [ setuptools ];

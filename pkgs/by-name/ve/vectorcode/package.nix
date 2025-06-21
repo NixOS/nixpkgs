@@ -1,33 +1,75 @@
 {
   lib,
-  python3Packages,
+  cargo,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
+  protobuf,
+  python3,
+  rustc,
+  rustPlatform,
   versionCheckHook,
 
   lspSupport ? true,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      # https://github.com/Davidyz/VectorCode/pull/36
+      chromadb = super.chromadb.overridePythonAttrs (old: rec {
+        version = "0.6.3";
+        src = fetchFromGitHub {
+          owner = "chroma-core";
+          repo = "chroma";
+          tag = version;
+          hash = "sha256-yvAX8buETsdPvMQmRK5+WFz4fVaGIdNlfhSadtHwU5U=";
+        };
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          pname = "chromadb";
+          inherit version src;
+          hash = "sha256-lHRBXJa/OFNf4x7afEJw9XcuDveTBIy3XpQ3+19JXn4=";
+        };
+        postPatch = null;
+        build-system = with self; [
+          setuptools
+          setuptools-scm
+        ];
+        nativeBuildInputs = [
+          cargo
+          pkg-config
+          protobuf
+          rustc
+          rustPlatform.cargoSetupHook
+        ];
+        dependencies = old.dependencies ++ [
+          self.chroma-hnswlib
+        ];
+        doCheck = false;
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.6.10";
+  version = "0.6.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-k9YpsVFV1HkIIIFPB7Iz7Jar+lY5vK6gpzNIlX55ZDY=";
+    hash = "sha256-7RI5F7r4yX3wqAuakdBvZOvDRWn8IHntU0fyTPIXjT4=";
   };
 
-  build-system = with python3Packages; [
+  build-system = with python.pkgs; [
     pdm-backend
   ];
 
   dependencies =
-    with python3Packages;
+    with python.pkgs;
     [
-      chromadb_0
+      chromadb
       colorlog
       httpx
       json5
@@ -44,7 +86,7 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ lib.optionals lspSupport optional-dependencies.lsp;
 
-  optional-dependencies = with python3Packages; {
+  optional-dependencies = with python.pkgs; {
     intel = [
       openvino
       optimum
@@ -77,7 +119,7 @@ python3Packages.buildPythonApplication rec {
       installShellFiles
       versionCheckHook
     ]
-    ++ (with python3Packages; [
+    ++ (with python.pkgs; [
       mcp
       pygls
       pytestCheckHook
