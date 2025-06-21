@@ -77,6 +77,7 @@ let
           src = grammar.src or (fetchGrammar grammar);
           location = grammar.location or null;
           generate = grammar.generate or false;
+          broken = grammar.broken or false;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars =
@@ -120,6 +121,7 @@ let
           tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // {
             language = "tree-sitter-markdown_inline";
             location = "tree-sitter-markdown-inline";
+            broken = true;
           };
         }
         // {

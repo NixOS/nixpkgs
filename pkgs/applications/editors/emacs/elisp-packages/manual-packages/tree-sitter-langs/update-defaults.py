@@ -41,6 +41,12 @@ def check_grammar_exists(nixpkgs: str, grammar: str) -> bool:
     )
 
 
+def check_grammar_broken(nixpkgs: str, grammar: str) -> bool:
+    return eval_expr(
+        nixpkgs, f'tree-sitter-grammars.{fmt_grammar(grammar)}.meta.broken'
+    )
+
+
 def build_attr(nixpkgs, attr: str) -> str:
     return (
         subprocess.run(
@@ -55,7 +61,7 @@ def build_attr(nixpkgs, attr: str) -> str:
 
 if __name__ == "__main__":
     cwd = dirname(abspath(__file__))
-    nixpkgs = abspath(join(cwd, "../../../../../.."))
+    nixpkgs = abspath(join(cwd, "../../../../../../.."))
 
     src_dir = build_attr(nixpkgs, "emacs.pkgs.tree-sitter-langs.src")
 
@@ -65,7 +71,12 @@ if __name__ == "__main__":
     for g in grammars:
         exists = check_grammar_exists(nixpkgs, g)
         if exists:
-            existing.append(fmt_grammar(g))
+            broken = check_grammar_broken(nixpkgs, g)
+            if not broken:
+                existing.append(fmt_grammar(g))
+            else:
+                sys.stderr.write("Grammar is broken: " + fmt_grammar(g) + "\n")
+                sys.stderr.flush()
         else:
             sys.stderr.write("Missing grammar: " + fmt_grammar(g) + "\n")
             sys.stderr.flush()
