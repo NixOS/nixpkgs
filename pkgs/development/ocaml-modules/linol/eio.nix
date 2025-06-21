@@ -1,21 +1,21 @@
 {
   buildDunePackage,
+  eio,
   linol,
-  lwt,
   yojson,
 }:
 
 buildDunePackage {
-  pname = "linol-lwt";
+  pname = "linol-eio";
   inherit (linol) version src;
 
   propagatedBuildInputs = [
+    eio
     linol
-    lwt
     yojson
   ];
 
   meta = linol.meta // {
-    description = "LSP server library (with Lwt for concurrency)";
+    description = "LSP server library (with Eio for concurrency)";
   };
 }
