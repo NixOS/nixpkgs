@@ -19,44 +19,19 @@ mkCoqDerivation rec {
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch coq.coq-version [
-      {
-        case = range "8.13" "8.20";
-        out = "4.11.1";
+    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: case: { inherit case out; }) {
+        "4.11.1" = range "8.13" "8.20";
+        "4.10.0" = range "8.12" "8.19";
+        "4.9.0" = range "8.12" "8.18";
+        "4.8.0" = range "8.12" "8.17";
+        "4.6.0" = range "8.12" "8.16";
+        "4.5.2" = range "8.8" "8.16";
+        "4.0.0" = range "8.8" "8.12";
+        "3.4.2" = range "8.7" "8.11";
+        "3.3.0" = range "8.5" "8.6";
       }
-      {
-        case = range "8.12" "8.19";
-        out = "4.10.0";
-      }
-      {
-        case = range "8.12" "8.18";
-        out = "4.9.0";
-      }
-      {
-        case = range "8.12" "8.17";
-        out = "4.8.0";
-      }
-      {
-        case = range "8.12" "8.16";
-        out = "4.6.0";
-      }
-      {
-        case = range "8.8" "8.16";
-        out = "4.5.2";
-      }
-      {
-        case = range "8.8" "8.12";
-        out = "4.0.0";
-      }
-      {
-        case = range "8.7" "8.11";
-        out = "3.4.2";
-      }
-      {
-        case = range "8.5" "8.6";
-        out = "3.3.0";
-      }
-    ] null;
+    )) null;
   release."4.11.1".sha256 = "sha256-QWZvU468rOhK796xCCEawW6rhCRTPnE0iLll9ynKflo=";
   release."4.11.0".sha256 = "sha256-vPwa4zSjyvxHLGDoNaBnHV2pb77dnQFbC50BL80fcvE=";
   release."4.10.0".sha256 = "sha256-MZJVoKGLXjDabdv9BuUSK1L9z1cubzC9cqVuWevKIXQ=";
