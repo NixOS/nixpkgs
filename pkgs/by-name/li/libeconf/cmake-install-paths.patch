@@ -1,0 +1,14 @@
+diff --git a/cmake/libeconf.pc.in b/cmake/libeconf.pc.in
+index 4d71c10..13900f2 100644
+--- a/cmake/libeconf.pc.in
++++ b/cmake/libeconf.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+
+ Name: @PROJECT_NAME@
+ Description: @PROJECT_DESCRIPTION@
