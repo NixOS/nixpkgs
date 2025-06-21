@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ld-audit-search-mod";
-  version = "unstable-2025-06-19";
+  version = "0-unstable-2025-06-19";
 
   src = fetchFromGitHub {
     repo = finalAttrs.pname;
