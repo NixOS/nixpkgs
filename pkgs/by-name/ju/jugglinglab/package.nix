@@ -3,10 +3,18 @@
   stdenv,
   maven,
   fetchFromGitHub,
+  fetchzip,
   makeWrapper,
   wrapGAppsHook3,
   jre,
+  # install example Juggling Lab pattern files
+  withPatterns ? false,
+  # automatically set the working directory to the directory
+  # containing the pattern files for easier access
+  withPatternsWorkdir ? withPatterns,
 }:
+
+assert withPatternsWorkdir -> withPatterns;
 
 let
   platformName =
@@ -50,12 +58,25 @@ maven.buildMavenPackage rec {
 
   dontWrapGApps = true;
 
+  patterns =
+    if withPatterns then
+      fetchzip {
+        # URL found on https://jugglinglab.org/
+        url = "https://storage.googleapis.com/jugglinglab-dl/Patterns-220114.zip";
+        hash = "sha256-J9lRNEHWBzZLONOnmonXR1+2Wvk7zNclU6NrDMnHkRE=";
+      }
+    else
+      null;
+
   installPhase = ''
     runHook preInstall
 
     install -Dm644 bin/JugglingLab.jar -t $out/share/jugglinglab
     ${lib.optionalString (platformName != null) ''
       install -Dm755 bin/ortools-lib/ortools-${platformName}/* -t $out/lib/ortools-lib
+    ''}
+    ${lib.optionalString withPatterns ''
+      cp -a $patterns $out/share/jugglinglab/patterns;
     ''}
 
     runHook postInstall
@@ -66,7 +87,8 @@ maven.buildMavenPackage rec {
     makeWrapper ${jre}/bin/java $out/bin/jugglinglab \
         "''${gappsWrapperArgs[@]}" \
         --add-flags "-Xss2048k -Djava.library.path=$out/lib/ortools-lib" \
-        --add-flags "-jar $out/share/jugglinglab/JugglingLab.jar"
+        --add-flags "-jar $out/share/jugglinglab/JugglingLab.jar" \
+        ${lib.optionalString withPatternsWorkdir "--set-default JL_WORKING_DIR $out/share/jugglinglab/patterns"}
 
     makeWrapper $out/bin/jugglinglab $out/bin/jlab \
         --set-default JL_IS_CLI 1
