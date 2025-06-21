@@ -10,6 +10,7 @@
   pulseaudio,
   writeShellScriptBin,
   gclient2nix,
+  rustc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       exec python3 "$@"
     '')
     python3
+    rustc
     pkg-config
     gclient2nix.gclientUnpackHook
   ];
@@ -70,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     "symbol_level=1"
     "rtc_include_tests=false"
     "rtc_enable_protobuf=false"
+
+    ''rust_sysroot_absolute="${rustc}"''
   ];
   ninjaFlags = [ "webrtc" ];
 
