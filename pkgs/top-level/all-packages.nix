@@ -135,6 +135,8 @@ with pkgs;
 
   common-updater-scripts = callPackage ../common-updater/scripts.nix { };
 
+  vboot_reference = callPackage ../by-name/vb/vboot-utils/package.nix { };
+
   vimPluginsUpdater = callPackage ../applications/editors/vim/plugins/utils/updater.nix {
     inherit (python3Packages) buildPythonApplication;
   };
