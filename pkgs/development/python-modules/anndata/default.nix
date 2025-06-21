@@ -32,7 +32,7 @@
 buildPythonPackage rec {
   pname = "anndata";
   version = "0.11.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
