@@ -39,11 +39,11 @@ toPythonModule (
 
     checkTarget = "xtest";
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/xtensor-stack/xtensor-python";
       description = "Python bindings for the xtensor C++ multi-dimensional array library";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ lsix ];
+      license = lib.licenses.bsd3;
+      maintainers = with lib.maintainers; [ lsix ];
     };
   })
 )
