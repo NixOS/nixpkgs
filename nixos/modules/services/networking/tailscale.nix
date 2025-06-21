@@ -226,10 +226,7 @@ in
       matchConfig = {
         Name = cfg.interfaceName;
       };
-      linkConfig = {
-        Unmanaged = true;
-        ActivationPolicy = "manual";
-      };
+      linkConfig.Unmanaged = true;
     };
   };
 }
