@@ -9,7 +9,6 @@
   withVmAuth ? true, # HTTP proxy for authentication
   withBackupTools ? true, # vmbackup, vmrestore
   withVmctl ? true, # vmctl is used to migrate time series
-  withVictoriaLogs ? true, # logs server
 }:
 
 buildGoModule (finalAttrs: {
@@ -43,12 +42,6 @@ buildGoModule (finalAttrs: {
     ++ lib.optionals withBackupTools [
       "app/vmbackup"
       "app/vmrestore"
-    ]
-    ++ lib.optionals withVictoriaLogs [
-      "app/victoria-logs"
-      "app/vlinsert"
-      "app/vlselect"
-      "app/vlstorage"
     ];
 
   postPatch = ''
