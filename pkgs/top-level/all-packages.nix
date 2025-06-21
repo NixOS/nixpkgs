@@ -3733,10 +3733,6 @@ with pkgs;
     libtool = if stdenv.hostPlatform.isDarwin then cctools else libtool;
   };
 
-  mailutils = callPackage ../tools/networking/mailutils {
-    sasl = gsasl;
-  };
-
   man = man-db;
 
   mangohud = callPackage ../tools/graphics/mangohud {
