@@ -55,6 +55,7 @@
   libsecret,
   libcanberra-gtk3,
   sane-backends,
+  fetchurl,
 
   homepage,
   version,
@@ -85,6 +86,14 @@ let
         ln -s "$so" $out/lib/$(basename "$so").410 || true
       done
     '';
+  };
+
+  libxml2' = libxml2.overrideAttrs rec {
+    version = "2.13.8";
+    src = fetchurl {
+      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+      hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
+    };
   };
 
 in
@@ -157,7 +166,7 @@ stdenv.mkDerivation rec {
     libsecret
     libsoup_2_4
     libvorbis
-    libxml2
+    libxml2'
     llvmPackages.libunwind
     libgbm
     nspr
