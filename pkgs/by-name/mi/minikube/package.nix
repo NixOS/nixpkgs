@@ -15,9 +15,9 @@
 
 buildGoModule rec {
   pname = "minikube";
-  version = "1.34.0";
+  version = "1.36.0";
 
-  vendorHash = "sha256-gw5Ol7Gp26KyIaiMvwik8FJpABpMT86vpFnZnAJ6hhs=";
+  vendorHash = "sha256-ro4QwvTf1O6/iffxEKi6pAenX8E3fPu4omqbLcigsTk=";
 
   doCheck = false;
 
@@ -25,10 +25,14 @@ buildGoModule rec {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${version}";
-    sha256 = "sha256-Z7x3MOQUF3a19X4SSiIUfSJ3xl3482eKH700m/9pqcU=";
+    sha256 = "sha256-We5EyEWvrQ/k27920kE1XMijQWSYvLle7N3KUOsTfbc=";
   };
   postPatch =
-    (lib.optionalString (withQemu && stdenv.hostPlatform.isDarwin) ''
+    ''
+      substituteInPlace Makefile \
+        --replace-fail "export GOTOOLCHAIN := go\$(GO_VERSION)" "export GOTOOLCHAIN := local"
+    ''
+    + (lib.optionalString (withQemu && stdenv.hostPlatform.isDarwin) ''
       substituteInPlace \
         pkg/minikube/registry/drvs/qemu2/qemu2.go \
         --replace "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
