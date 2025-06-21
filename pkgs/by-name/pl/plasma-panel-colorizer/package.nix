@@ -5,6 +5,8 @@
   cmake,
   kdePackages,
   nix-update-script,
+  glib,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +28,21 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     kdePackages.plasma-desktop
   ];
+
+  patches = [
+    ./fix-cmds.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace package/contents/ui/DBusFallback.qml \
+      --replace-fail "@glib@" "${glib}"
+    substituteInPlace package/contents/ui/configPresetAutoload.qml \
+      --replace-fail "@runtimeShell@" "${runtimeShell}"
+    substituteInPlace package/contents/ui/configPresets.qml \
+      --replace-fail "@runtimeShell@" "${runtimeShell}"
+    substituteInPlace package/contents/ui/main.qml \
+      --replace-fail "@runtimeShell@" "${runtimeShell}"
+  '';
 
   strictDeps = true;
 

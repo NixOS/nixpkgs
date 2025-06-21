@@ -1,0 +1,50 @@
+--- a/package/contents/ui/DBusFallback.qml
++++ b/package/contents/ui/DBusFallback.qml
+@@ -16,7 +16,7 @@
+     signal callFinished(reply: var)
+ 
+     function builCmd() {
+-        let cmd = "gdbus call --session --dest " + service + " --object-path " + objectPath + " --method " + iface + "." + method
++        let cmd = "@glib@/bin/gdbus call --session --dest " + service + " --object-path " + objectPath + " --method " + iface + "." + method
+         if (root.arguments.length !== 0) {
+             cmd += ` '${root.arguments.join(" ")}'`
+         }
+--- a/package/contents/ui/configPresetAutoload.qml
++++ b/package/contents/ui/configPresetAutoload.qml
+@@ -18,8 +18,8 @@
+     property string cratePresetsDirCmd: "mkdir -p " + presetsDir
+     property string presetsBuiltinDir: Qt.resolvedUrl("./presets").toString().substring(7) + "/"
+     property string toolsDir: Qt.resolvedUrl("./tools").toString().substring(7) + "/"
+-    property string listUserPresetsCmd: "'" + toolsDir + "list_presets.sh' '" + presetsDir + "'"
+-    property string listBuiltinPresetsCmd: "'" + toolsDir + "list_presets.sh' '" + presetsBuiltinDir + "' b"
++    property string listUserPresetsCmd: "@runtimeShell@ '" + toolsDir + "list_presets.sh' '" + presetsDir + "'"
++    property string listBuiltinPresetsCmd: "@runtimeShell@ '" + toolsDir + "list_presets.sh' '" + presetsBuiltinDir + "' b"
+     property string listPresetsCmd: listBuiltinPresetsCmd+";"+listUserPresetsCmd
+ 
+     property string cfg_presetAutoloading
+--- a/package/contents/ui/configPresets.qml
++++ b/package/contents/ui/configPresets.qml
+@@ -18,8 +18,8 @@
+     property string cratePresetsDirCmd: "mkdir -p '" + presetsDir + "'"
+     property string presetsBuiltinDir: Qt.resolvedUrl("./presets").toString().substring(7) + "/"
+     property string toolsDir: Qt.resolvedUrl("./tools").toString().substring(7) + "/"
+-    property string listUserPresetsCmd: "'" + toolsDir + "list_presets.sh' '" + presetsDir + "'"
+-    property string listBuiltinPresetsCmd: "'" + toolsDir + "list_presets.sh' '" + presetsBuiltinDir + "' b"
++    property string listUserPresetsCmd: "@runtimeShell@ '" + toolsDir + "list_presets.sh' '" + presetsDir + "'"
++    property string listBuiltinPresetsCmd: "@runtimeShell@ '" + toolsDir + "list_presets.sh' '" + presetsBuiltinDir + "' b"
+     property string listPresetsCmd: listBuiltinPresetsCmd+";"+listUserPresetsCmd
+     property string spectaclePreviewCmd: "spectacle -bn -r -o "
+     property var presets: ({})
+--- a/package/contents/ui/main.qml
++++ b/package/contents/ui/main.qml
+@@ -1751,8 +1751,8 @@
+             property string cratePresetsDirCmd: "mkdir -p " + presetsDir
+             property string presetsBuiltinDir: Qt.resolvedUrl("./presets").toString().substring(7) + "/"
+             property string toolsDir: Qt.resolvedUrl("./tools").toString().substring(7) + "/"
+-            property string listUserPresetsCmd: "'" + toolsDir + "list_presets.sh' '" + presetsDir + "'"
+-            property string listBuiltinPresetsCmd: "'" + toolsDir + "list_presets.sh' '" + presetsBuiltinDir + "' b"
++            property string listUserPresetsCmd: "@runtimeShell@ '" + toolsDir + "list_presets.sh' '" + presetsDir + "'"
++            property string listBuiltinPresetsCmd: "@runtimeShell@ '" + toolsDir + "list_presets.sh' '" + presetsBuiltinDir + "' b"
+             property string listPresetsCmd: listBuiltinPresetsCmd+";"+listUserPresetsCmd
+ 
+             ListModel {
