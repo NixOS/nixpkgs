@@ -26,7 +26,6 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     django
-    future
     django-compressor
     django-statici18n
     django-webpack-loader
@@ -57,6 +56,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace seahub/settings.py --replace-fail "SEAFILE_VERSION = '6.3.3'" "SEAFILE_VERSION = '${version}'"
+    substituteInPlace thirdpart/constance/management/commands/constance.py --replace-fail \
+        "from __future__ import unicode_literals" ""
   '';
 
   installPhase = ''
@@ -74,15 +75,15 @@ python3.pkgs.buildPythonApplication rec {
     inherit seafile-server;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web end of seafile server";
     homepage = "https://github.com/haiwen/seahub";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       greizgh
       schmittlauch
       melvyn2
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
