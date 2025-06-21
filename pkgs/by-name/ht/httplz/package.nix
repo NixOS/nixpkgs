@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchCrate,
+  fetchFromGitHub,
   installShellFiles,
   makeWrapper,
   pkg-config,
@@ -11,16 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
-  version = "1.13.2";
+  version = "2.3.0";
 
-  src = fetchCrate {
-    inherit version;
-    pname = "https";
-    hash = "sha256-uxEMgSrcxMZD/3GQuH9S/oYtMUPzgMR61ZzLcb65zXU=";
+  src = fetchFromGitHub {
+    owner = "thecoshman";
+    repo = "http";
+    rev = "v${version}";
+    hash = "sha256-qinhdpm9eaTdpUk4ZZLaH1D/CZ22k4RisHu8clZCEGo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DXSHaiiIRdyrlX4UYPFD3aTAv65k3x/PU2VW047odH0=";
+  cargoPatches = [ ./cargo-lock.patch ];
+  cargoHash = "sha256-R0IExJbvPJNaEClG3ubUtLOkkPfdDGRH+W1EGWMeEY0=";
 
   nativeBuildInputs = [
     installShellFiles
