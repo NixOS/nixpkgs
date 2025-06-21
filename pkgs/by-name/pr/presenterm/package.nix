@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  lld,
   libsixel,
   versionCheckHook,
   nix-update-script,
@@ -18,12 +20,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-5eDGoY4Yb27ATgBhNjlee6tSgwAKiLuuDMrL96cBpko=";
   };
 
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    lld
+  ];
+
   buildInputs = [
     libsixel
   ];
 
+  buildFeatures = [
+    "sixel"
+  ];
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-MOX5QWxN7uEnvm9JU9jRW8Z2D2LMle+H1rOmfMxz100=";
+
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
+
+  checkFeatures = [
+    "sixel"
+  ];
 
   checkFlags = [
     # failed to load .tmpEeeeaQ: No such file or directory (os error 2)
