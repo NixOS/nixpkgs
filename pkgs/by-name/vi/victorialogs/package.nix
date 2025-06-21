@@ -56,6 +56,11 @@ buildGoModule (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
+    tests = {
+      inherit (nixosTests)
+        victorialogs
+        ;
+    };
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex=(.*)-victorialogs" ];
     };
