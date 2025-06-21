@@ -36,18 +36,16 @@ body:
 
         If the package has been updated in unstable, but you believe the update should be backported to the stable release of Nixpkgs, please file the '**Request: backport to stable**' form instead.
       options:
-        - "Please select a version."
-        - "- Unstable (25.11)"
-        - "- Stable (25.05)"
-        - "- Previous Stable (24.11)"
-      default: 0
+        - "Unstable (25.11)"
+        - "Stable (25.05)"
+        - "Previous Stable (24.11)"
     validations:
       required: true
   - type: "input"
     id: "name"
     attributes:
       label: "Package name"
-      description: "Please indicate the name of the package."
+      placeholder: "e.g., cowsay"
     validations:
       required: true
   - type: "input"
@@ -55,6 +53,7 @@ body:
     attributes:
       label: "Upstream version"
       description: "Please indicate the latest version of the package."
+      placeholder: "e.g., 1.0.1"
     validations:
       required: true
   - type: "input"
@@ -64,6 +63,7 @@ body:
       description: |
         Please indicate the current version number in Nixpkgs' **unstable** channel. You can check this by setting the [NixOS Package Search](https://search.nixos.org/packages?channel=unstable) channel to 'unstable' and searching for the package.
         If you meant to request an upgrade in the stable channel, please file the '**Request: backport to stable**' form instead.
+      placeholder: "e.g., 1.0.0"
     validations:
       required: true
   - type: "input"
@@ -71,6 +71,7 @@ body:
     attributes:
       label: "Changelog"
       description: "If applicable, please link the upstream changelog for the latest version."
+      placeholder: "e.g., https://github.com/owner/repo/CHANGELOG.md"
     validations:
       required: false
   - type: "textarea"
@@ -85,7 +86,7 @@ body:
     attributes:
       label: "Notify maintainers"
       description: |
-        Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
+        Please mention the people who are in the **Maintainers** list of the offending package. This is done by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
       value: |2
 
 

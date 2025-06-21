@@ -37,6 +37,7 @@ body:
     attributes:
       label: "Package name"
       description: "Please indicate the name of the package."
+      placeholder: "e.g., cowsay"
     validations:
       required: true
   - type: "input"
@@ -44,6 +45,7 @@ body:
     attributes:
       label: "Version in unstable"
       description: "Please indicate the current version of the package in the unstable channel."
+      placeholder: "e.g., 1.0.1"
     validations:
       required: true
   - type: "input"
@@ -51,6 +53,7 @@ body:
     attributes:
       label: "Version in stable"
       description: "Please indicate the current version of the package in the stable channel."
+      placeholder: "e.g., 1.0.0"
     validations:
       required: true
   - type: "textarea"

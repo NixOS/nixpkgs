@@ -34,11 +34,9 @@ body:
 
         If you are using an older or stable version, please update to the latest **unstable** version and check if the module still does not exist before continuing this request.
       options:
-        - "Please select a version."
-        - "- Unstable (25.11)"
-        - "- Stable (25.05)"
-        - "- Previous Stable (24.11)"
-      default: 0
+        - "Unstable (25.11)"
+        - "Stable (25.05)"
+        - "Previous Stable (24.11)"
     validations:
       required: true
   - type: "textarea"
@@ -46,6 +44,7 @@ body:
     attributes:
       label: "Describe the proposed module"
       description: "Please include a clear and concise description of what the module should accomplish."
+      placeholder: "This module should configure X and Y, and provide Z as an option."
     validations:
       required: true
   - type: "textarea"
@@ -60,7 +59,7 @@ body:
     attributes:
       label: "Notify maintainers"
       description: |
-        Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
+        If there is already a package for this module, please mention the people who are in the **Maintainers** list of that package. This is done by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
       value: |2
 
 
