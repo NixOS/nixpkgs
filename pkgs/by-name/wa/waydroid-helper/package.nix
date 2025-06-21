@@ -56,7 +56,6 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook4
     desktop-file-utils
     bash
-    fakeroot
     gobject-introspection
   ];
 
