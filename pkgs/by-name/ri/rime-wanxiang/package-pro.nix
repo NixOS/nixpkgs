@@ -9,18 +9,18 @@
 }:
 
 let
-  updater = callPackage ./dict-updater.nix { };
+  updater = callPackage ./dict-updater.nix { isProVersion = true; };
 
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "rime-wanxiang";
-  version = "7.1.1";
+  pname = "rime-wanxiang-pro";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "amzxyz";
-    repo = "rime_wanxiang";
+    repo = "rime_wanxiang_pro";
     tag = "v" + finalAttrs.version;
-    hash = "sha256-SPKUTWwyxN/pLn9cSFZL3+RfPYfQuNoOehYRMTOoC4I=";
+    hash = "sha256-CpTMSK/ra2gluWuYKk33+YiNmJBsp3IBeA6VJgCEXMA=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     bin_dir=$out/bin
     mkdir -p $data_dir $bin_dir
 
-    mv default.yaml wanxiang_suggested_default.yaml
+    mv default.yaml wanxiang_pro_suggested_default.yaml
 
     cp -pr -t $data_dir *
     ln -s ${updater}/bin/* $bin_dir
@@ -72,23 +72,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Feature-rich pinyin schema for Rime, standard edition";
+    description = "Feature-rich pinyin schema for Rime, enhanced edition for double pinyin";
     longDescription = ''
-      万象拼音标准版 is a full and double pinyin input schema for Rime based on
+      万象拼音双拼辅助码增强版 is an enhanced double pinyin input schema for
+      Rime based on
       [万象 dictionaries and grammar models](https://github.com/amzxyz/RIME-LMDG),
       supporting multiple input styles, tonal dictionaries and predictions.
 
       The upstream `default.yaml` is included as
-      `wanxiang_suggested_default.yaml`.
+      `wanxiang_pro_suggested_default.yaml`.
       To enable it, please modify your `default.custom.yaml` as such:
 
       ```yaml
       patch:
-        __include: wanxiang_suggested_default:/
+        __include: wanxiang_pro_suggested_default:/
       ```
 
       For further fine-grained tweaks, refer to it's
-      [README page](https://github.com/amzxyz/rime_wanxiang).
+      [README page](https://github.com/amzxyz/rime_wanxiang_pro).
 
       Please note that, the schema requires the grammar model
       `wanxiang-lts-zh-hans.gram` to work. However, it is
@@ -99,14 +100,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       it within this package. Same goes for dictionary releases.
 
       To make it easier updating grammar model and dictionaries, users can
-      run the helper script `update-rime-wanxiang-dict` shipped with this
+      run the helper script `update-rime-wanxiang-pro-dict` shipped with this
       package.
     '';
-    homepage = "https://github.com/amzxyz/rime_wanxiang";
-    downloadPage = "https://github.com/amzxyz/rime_wanxiang/releases";
-    changelog = "https://github.com/amzxyz/rime_wanxiang/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/amzxyz/rime_wanxiang_pro";
+    downloadPage = "https://github.com/amzxyz/rime_wanxiang_pro/releases";
+    changelog = "https://github.com/amzxyz/rime_wanxiang_pro/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc-by-40;
-    maintainers = with lib.maintainers; [ rc-zb ];
+    maintainers = with lib.maintainers; [ peromage ];
     platforms = lib.platforms.all;
   };
 })
