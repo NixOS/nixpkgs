@@ -295,6 +295,19 @@ let
         ]
     );
   };
+  kdeDepsLibs = symlinkJoin {
+    name = "libreoffice-kde-dependencies-${version}";
+    paths = flatten (map (e: [ (getLib e) ]) [
+      qtbase
+      qtmultimedia
+      qtx11extras
+      kconfig
+      kcoreaddons
+      ki18n
+      kio
+      kwindowsystem
+    ]);
+  };
   tarballPath = "external/tarballs";
 
 in
@@ -697,6 +710,12 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-warn "Icon=libreoffice$PRODUCTVERSION" "Icon=libreoffice" \
         --replace-fail "Exec=libreoffice$PRODUCTVERSION" "Exec=libreoffice"
     done
+  '';
+
+  postFixup = optionalString kdeIntegration ''
+    sed -i $out/lib/libreoffice/program/libvclplug_kf6lo.so \
+           $out/lib/libreoffice/program/libvclplug_qt6lo.so \
+      -e 's|${kdeDeps}|${kdeDepsLibs}|g'
   '';
 
   # Wrapping is done in ./wrapper.nix
