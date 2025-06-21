@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  cython_0,
+  cython,
   oldest-supported-numpy,
   setuptools,
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     '';
 
   build-system = [
-    cython_0
+    cython
     oldest-supported-numpy
     setuptools
   ];
