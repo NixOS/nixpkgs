@@ -10,7 +10,7 @@
 let
   mkLib =
     name:
-    stdenv.mkDerivation {
+    stdenv.mkDerivation rec {
       pname = "kicad-${name}";
       version = builtins.substring 0 10 (libSrc name).rev;
 
@@ -24,9 +24,20 @@ let
           zip
         ];
 
-      postInstall = lib.optional (name == "packages3d") ''
-        find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
-      '';
+      passthru.postInstallScripts = {
+        footprints = ''
+          FOOTPRINT_DIR=$out/share/kicad/footprints
+          if [ -d $FOOTPRINT_DIR ]; then
+            find $FOOTPRINT_DIR -type f -name '*.kicad_mod' -exec sed -i 's/\.step/\.stpZ/g' {} \;
+          fi
+        '';
+
+        packages3d = ''
+          find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
+        '';
+      };
+
+      postInstall = passthru.postInstallScripts.${name} or "";
 
       meta = {
         license = lib.licenses.cc-by-sa-40;
