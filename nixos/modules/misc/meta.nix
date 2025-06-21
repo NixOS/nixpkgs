@@ -42,9 +42,6 @@ let
     merge = loc: defs: defs;
   };
 
-  # TODO: add to lib?
-  resolveDefaultNix = p: if lib.pathType p == "directory" then p + "/default.nix" else p;
-
   /**
     Custom type for `meta.tests` option.
   */
