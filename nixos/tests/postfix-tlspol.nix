@@ -8,6 +8,7 @@
   meta.maintainers = with lib.maintainers; [ hexa ];
 
   nodes.machine = {
+    services.postfix.enable = true;
     services.postfix-tlspol.enable = true;
   };
 
@@ -17,6 +18,7 @@
     import json
 
     machine.wait_for_unit("postfix-tlspol.service")
+    machine.succeed("systemctl show -P SupplementaryGroups postfix.service | grep postfix-tlspol")
 
     with subtest("Interact with the service"):
       machine.succeed("postfix-tlspol -purge")
