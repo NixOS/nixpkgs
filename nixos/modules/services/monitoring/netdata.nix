@@ -329,6 +329,9 @@ in
         }
         // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
           DO_NOT_TRACK = "1";
+        }
+        // lib.optionalAttrs (cfg.claimTokenFile != null) {
+          NETDATA_CLAIM_TOKEN = "%d/netdata_claim_token";
         };
       restartTriggers = [
         config.environment.etc."netdata/netdata.conf".source
@@ -397,20 +400,6 @@ in
           LoadCredential = [
             "netdata_claim_token:${cfg.claimTokenFile}"
           ];
-
-          ExecStartPre = pkgs.writeShellScript "netdata-claim" ''
-            set -euo pipefail
-
-            if [[ -f /var/lib/netdata/cloud.d/claimed_id ]]; then
-              # Already registered
-              exit
-            fi
-
-            exec ${cfg.package}/bin/netdata-claim.sh \
-              -token="$(< "$CREDENTIALS_DIRECTORY/netdata_claim_token")" \
-              -url=https://app.netdata.cloud \
-              -daemon-not-running
-          '';
         });
     };
 
