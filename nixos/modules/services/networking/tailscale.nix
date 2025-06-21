@@ -78,6 +78,8 @@ in
       description = ''
         A file containing the auth key.
         Tailscale will be automatically started if provided.
+
+        Services that bind to Tailscale IPs should order using {option}`systemd.services.<name>.after` `tailscaled-autoconnect.service`.
       '';
     };
 
@@ -110,7 +112,7 @@ in
 
     extraUpFlags = mkOption {
       description = ''
-        Extra flags to pass to {command}`tailscale up`. Only applied if `authKeyFile` is specified.";
+        Extra flags to pass to {command}`tailscale up`. Only applied if {option}`services.tailscale.authKeyFile` is specified.
       '';
       type = types.listOf types.str;
       default = [ ];
