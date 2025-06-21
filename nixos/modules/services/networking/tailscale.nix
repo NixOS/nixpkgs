@@ -149,7 +149,7 @@ in
       serviceConfig.Environment =
         [
           "PORT=${toString cfg.port}"
-          ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
+          ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${toString cfg.extraDaemonFlags}"''
         ]
         ++ (lib.optionals (cfg.permitCertUid != null) [
           "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
