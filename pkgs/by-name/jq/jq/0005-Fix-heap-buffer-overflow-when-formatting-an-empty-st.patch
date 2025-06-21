@@ -1,0 +1,45 @@
+From d73a79035e1d24011a3363d52bf36b4eaea67aa6 Mon Sep 17 00:00:00 2001
+From: itchyny <itchyny@cybozu.co.jp>
+Date: Sat, 31 May 2025 11:46:40 +0900
+Subject: [PATCH 5/5] Fix heap buffer overflow when formatting an empty string
+
+The `jv_string_empty` did not properly null-terminate the string data,
+which could lead to a heap buffer overflow. The test case of
+GHSA-p7rr-28xf-3m5w (`0[""*0]`) was fixed by the commit dc849e9bb74a,
+but another case (`0[[]|implode]`) was still vulnerable. This commit
+ensures string data is properly null-terminated, and fixes CVE-2025-48060.
+---
+ src/jv.c      | 1 +
+ tests/jq.test | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/src/jv.c b/src/jv.c
+index 6e8cdd3..3303286 100644
+--- a/src/jv.c
++++ b/src/jv.c
+@@ -1121,6 +1121,7 @@ static jv jvp_string_empty_new(uint32_t length) {
+   jvp_string* s = jvp_string_alloc(length);
+   s->length_hashed = 0;
+   memset(s->data, 0, length);
++  s->data[length] = 0;
+   jv r = {JVP_FLAGS_STRING, 0, 0, 0, {&s->refcnt}};
+   return r;
+ }
+diff --git a/tests/jq.test b/tests/jq.test
+index 10b20e3..680706b 100644
+--- a/tests/jq.test
++++ b/tests/jq.test
+@@ -2042,6 +2042,10 @@ map(try implode catch .)
+ [123,["a"],[nan]]
+ ["implode input must be an array","string (\"a\") can't be imploded, unicode codepoint needs to be numeric","number (null) can't be imploded, unicode codepoint needs to be numeric"]
+ 
++try 0[implode] catch .
++[]
++"Cannot index number with string \"\""
++
+ # walk
+ walk(.)
+ {"x":0}
+-- 
+2.49.0
+
