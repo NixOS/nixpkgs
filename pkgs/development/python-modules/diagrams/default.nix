@@ -34,6 +34,12 @@ buildPythonPackage rec {
       url = "https://github.com/mingrammer/diagrams/commit/59b84698b142f5a0998ee9e395df717a1b77e9b2.patch";
       hash = "sha256-/zV5X4qgHJs+KO9gHyu6LqQ3hB8Zx+BzOFo7K1vQK78=";
     })
+    # Fix poetry include, https://github.com/mingrammer/diagrams/pull/1128
+    (fetchpatch {
+      name = "fix-poetry-include.patch";
+      url = "https://github.com/mingrammer/diagrams/commit/4ecaacf3fa93720a13cc06732d427415ae66d48f.patch";
+      hash = "sha256-eeNoFeyNVvhfu8K9oW4ipznQG6telyRsbGGz/YFonwM=";
+    })
     ./remove-black-requirement.patch
   ];
 
