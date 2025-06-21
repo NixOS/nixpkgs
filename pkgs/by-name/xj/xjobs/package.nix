@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Program which reads job descriptions line by line and executes them in parallel";
     homepage = "https://www.maier-komor.de/xjobs.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.siriobalmelli ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.siriobalmelli ];
     longDescription = ''
       xjobs reads job descriptions line by line and executes them in parallel.
 
