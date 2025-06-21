@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gitUpdater,
+  rename,
   nixosTests,
   variants ? [ ],
   suffix ? "",
@@ -72,7 +73,10 @@ stdenvNoCC.mkDerivation rec {
             fi
           done
         ''
-    );
+    )
+    + ''
+      ${rename}/bin/rename 's/\[.*\]//' $out/share/fonts/noto/*
+    '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "noto-monthly-release-";
