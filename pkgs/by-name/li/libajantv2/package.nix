@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "aja-video";
     repo = "libajantv2";
-    rev = "ntv2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "ntv2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-7APoPj2LnvdwfuVforoJz0YxKU1WmAgRqIfXao4IZmY=";
   };
   patches = [
