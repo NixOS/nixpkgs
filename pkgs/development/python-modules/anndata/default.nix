@@ -142,6 +142,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "anndata" ];
 
   meta = {
+    changelog = "https://github.com/scverse/anndata/blob/main/docs/release-notes/${version}.md";
     description = "Python package for handling annotated data matrices in memory and on disk";
     homepage = "https://anndata.readthedocs.io/";
     license = lib.licenses.bsd3;
