@@ -44,7 +44,16 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
     (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
     (lib.cmakeBool "WITH_EXAMPLES" buildExamples)
+    (lib.cmakeBool "WITH_TESTS" finalAttrs.doCheck)
   ];
+
+  # This test checks if using the **installed** headers works.
+  # As it doesn't set the include paths correctly, and we have nixpkgs-review to check if
+  # packages continue to build, patching it would serve no purpose, so we can just remove the test entirely.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_test(NAME includetest COMMAND' '# add_test(NAME includetest COMMAND'
+  '';
 
   buildInputs =
     [
@@ -60,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     zlib
   ];
+
+  doCheck = enableShared;
 
   meta = with lib; {
     description = "VNC server library";
