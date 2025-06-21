@@ -32,6 +32,10 @@ maven.buildMavenPackage rec {
   patches = [
     # make sure mvnHash doesn't change when maven is updated
     ./fix-default-maven-plugin-versions.patch
+
+    # add some nixpkgs specific logic, so that we don't have to use upstream's
+    # wrapper scripts for launching the application in different modes
+    ./cli.patch
   ];
 
   mvnHash = "sha256-1Uzo9nRw+YR/sd7CC9MTPe/lttkRX6BtmcsHaagP1Do=";
@@ -63,6 +67,9 @@ maven.buildMavenPackage rec {
         "''${gappsWrapperArgs[@]}" \
         --add-flags "-Xss2048k -Djava.library.path=$out/lib/ortools-lib" \
         --add-flags "-jar $out/share/jugglinglab/JugglingLab.jar"
+
+    makeWrapper $out/bin/jugglinglab $out/bin/jlab \
+        --set-default JL_IS_CLI 1
   '';
 
   meta = with lib; {
