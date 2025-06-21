@@ -26840,6 +26840,12 @@
     githubId = 13031455;
     name = "Jakob Schmutz";
   };
+  whimbree = {
+    email = "whimbree@pm.me";
+    name = "Bree Spektor";
+    github = "whimbree";
+    githubId = 20343235;
+  };
   WhiteBlackGoose = {
     email = "wbg@angouri.org";
     github = "WhiteBlackGoose";
