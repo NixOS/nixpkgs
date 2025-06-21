@@ -492,10 +492,11 @@ in
           dontBuilt = true;
           installPhase = ''
             cp -R ext/fast_mmaped_file_rs $out
+            rm $out/Cargo.lock
             cp Cargo.lock $out
           '';
         };
-        hash = "sha256-KVbmDAa9EFwTUTHPF/8ZzycbieMhAuiidiz5rqGIKOo=";
+        hash = "sha256-mukk+tWWeG62q4GcDzkk8TyxVsDjShz30wEj82cElt4=";
       };
 
       nativeBuildInputs = [
