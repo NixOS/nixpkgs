@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "selenium-manager";
-  version = "4.29.0";
+  version = "4.33.0";
 
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
     repo = "selenium";
     tag = "selenium-${version}";
-    hash = "sha256-IyMXgYl/TPTpe/Y0pFyJVKj4Mp0xbkg1LSCNHzFL3bE=";
+    hash = "sha256-29qPCe8h1tsSmXKIh4nSRPMQSPDuUMK+sOVXkS2DT54=";
   };
 
   sourceRoot = "${src.name}/rust";
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-MgnmEJif4Z4CcmBFkC5BJR67DMGm1ttObtl4LhAFw4g=";
+  cargoHash = "sha256-BCu4w0mOqAWBmBAmtQLkzFSYzaSp3ZGZFudub2Up+tc=";
 
   # TODO: enable tests
   # The test suite depends on a number of browsers and network requests,
