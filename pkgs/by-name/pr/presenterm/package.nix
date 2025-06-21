@@ -9,7 +9,9 @@
   versionCheckHook,
   nix-update-script,
 }:
-
+let
+  inherit (stdenv.hostPlatform) isDarwin isx86_64;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "presenterm";
   version = "0.13.0";
@@ -22,10 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   nativeBuildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
+    lib.optionals isDarwin [
       makeBinaryWrapper
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    ++ lib.optionals (isDarwin && isx86_64) [
       lld
     ];
 
@@ -40,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-MOX5QWxN7uEnvm9JU9jRW8Z2D2LMle+H1rOmfMxz100=";
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
+  env = lib.optionalAttrs (isDarwin && isx86_64) {
     NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
@@ -54,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # sixel-sys is dynamically linked to libsixel
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString isDarwin ''
     wrapProgram $out/bin/presenterm \
       --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
   '';
