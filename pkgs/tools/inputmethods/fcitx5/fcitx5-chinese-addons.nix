@@ -34,13 +34,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.1.8";
+  version = "5.1.9";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-QO136EbUFxT7yA1Fs4DvV0CKpdCMw/s5s9sW3vRzGD8=";
+    hash = "sha256-xHLd7X9IdYTsVyqbghVzdC2i9AVipFHKRxP2Zqq7zGw=";
   };
 
   nativeBuildInputs = [
