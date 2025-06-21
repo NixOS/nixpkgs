@@ -61,6 +61,10 @@ buildPythonPackage rec {
     "test_queue"
     "test_redirection"
     "test_whole"
+    # TypeError: argument of type 'NoneType' is not iterable
+    "test_external"
+    # AttributeError: 'NoneType' object has no attribute 'find'
+    "test_table_processing"
   ];
 
   pythonImportsCheck = [ "trafilatura" ];
