@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
-  version = "2.14.3";
+  version = "2.14.4";
 
   outputs =
     [
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libxml2";
-    rev = "5133461b05f0f66e6c5b0fecd5f29dc5cd967302"; # some security- and bugfixes ahead of 2.14
-    hash = "sha256-xLRey6mRsRhgfASIQWOTofcQcLU0Daeg33pxGN0l66I=";
+    rev = "d3e33dc214276498e73b61188be02b2863c9670a"; # some bugfixes in CMake config file right behind 2.14.4
+    hash = "sha256-x9Wla4WdOjWQF+5QHeLjxBrxi8kU8wT3pGQFOo5ErdE=";
   };
 
   strictDeps = true;
@@ -140,6 +140,10 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests = {
       pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "LibXml2" ];
         package = finalAttrs.finalPackage;
       };
     };
