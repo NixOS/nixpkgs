@@ -144,6 +144,7 @@ stdenv.mkDerivation (
           longName
           tests
           updateScript
+          vscodeVersion
           ;
         fhs = fhs { };
         fhsWithPackages = f: fhs { additionalPkgs = f; };
