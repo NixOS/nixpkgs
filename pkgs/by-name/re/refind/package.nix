@@ -153,6 +153,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     uefiCdrom = nixosTests.boot.uefiCdrom;
+    inherit (nixosTests) refind;
   };
 
   meta = with lib; {
@@ -173,7 +174,10 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [ johnrtitor ];
+    maintainers = with maintainers; [
+      johnrtitor
+      RossComputerGuy
+    ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
