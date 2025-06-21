@@ -105,6 +105,9 @@
   "chap-packageconfig": [
     "index.html#chap-packageconfig"
   ],
+  "python-dependencies-avoid-replace": [
+    "index.html#python-dependencies-avoid-replace"
+  ],
   "python-tree-sitter": [
     "index.html#python-tree-sitter"
   ],
@@ -3027,7 +3030,7 @@
   "ex-buildGoModule": [
     "index.html#ex-buildGoModule"
   ],
-  "ssec-go-toolchain-versions" : [
+  "ssec-go-toolchain-versions": [
     "index.html#ssec-go-toolchain-versions"
   ],
   "buildGoModule-goModules-override": [
