@@ -27816,6 +27816,12 @@
     github = "tie";
     githubId = 14792994;
   };
+  tiebe = {
+    name = "Tiebe Groosman";
+    email = "tiebe@groosman.nl";
+    github = "Tiebe";
+    githubId = 9307389;
+  };
   tiferrei = {
     name = "Tiago Ferreira";
     email = "me@tiferrei.com";
