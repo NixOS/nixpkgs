@@ -42,6 +42,7 @@
   # Build inputs
   apple-sdk_13,
   numactl,
+  llvmPackages,
 
   # dependencies
   astunparse,
@@ -120,7 +121,7 @@ let
 
   setBool = v: if v then "1" else "0";
 
-  # https://github.com/pytorch/pytorch/blob/v2.6.0/torch/utils/cpp_extension.py#L2046-L2048
+  # https://github.com/pytorch/pytorch/blob/v2.7.0/torch/utils/cpp_extension.py#L2343-L2345
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -142,6 +143,12 @@ let
         "9.0"
         "9.0a"
         "10.0"
+        "10.0"
+        "10.0a"
+        "10.1"
+        "10.1a"
+        "12.0"
+        "12.0a"
       ];
       ptx = lists.map (x: "${x}+PTX") real;
     in
@@ -173,7 +180,13 @@ let
     else if cudaSupport then
       gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
     else if rocmSupport then
-      rocmPackages.clr.gpuTargets
+      # Remove RDNA1 gfx101x archs from default ROCm support list to avoid
+      # use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
+      # TODO: Retest after ROCm 6.4 or torch 2.8
+      lib.lists.subtractLists [
+        "gfx1010"
+        "gfx1012"
+      ] (rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets)
     else
       throw "No GPU targets specified"
   );
@@ -187,6 +200,7 @@ let
       rccl
       miopen
       aotriton
+      composable_kernel
       rocrand
       rocblas
       rocsparse
@@ -254,7 +268,7 @@ in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.6.0";
+  version = "2.7.0";
   pyproject = true;
 
   stdenv = stdenv';
@@ -279,9 +293,6 @@ buildPythonPackage rec {
   patches =
     [
       ./clang19-template-warning.patch
-      # fix invalid static cast in XNNPACK
-      # https://github.com/google/XNNPACK/issues/7489
-      ./xnnpack-bfloat16.patch
     ]
     ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -298,6 +309,11 @@ buildPythonPackage rec {
 
   postPatch =
     ''
+      # Prevent NCCL from being cloned during the configure phase
+      # TODO: remove when updating to the next release as it will not be needed anymore
+      substituteInPlace tools/build_pytorch_libs.py \
+        --replace-fail "  checkout_nccl()" "  "
+
       substituteInPlace cmake/public/cuda.cmake \
         --replace-fail \
           'message(FATAL_ERROR "Found two conflicting CUDA' \
@@ -323,15 +339,13 @@ buildPythonPackage rec {
 
       # Replace hard-coded rocm paths
       substituteInPlace caffe2/CMakeLists.txt \
-        --replace-fail "/opt/rocm" "${rocmtoolkit_joined}" \
         --replace-fail "hcc/include" "hip/include" \
         --replace-fail "rocblas/include" "include/rocblas" \
         --replace-fail "hipsparse/include" "include/hipsparse"
 
       # Doesn't pick up the environment variable?
       substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
-        --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}" \
-        --replace-fail "/opt/rocm" "${rocmtoolkit_joined}"
+        --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
 
       # Strangely, this is never set in cmake
       substituteInPlace cmake/public/LoadHIP.cmake \
@@ -508,6 +522,7 @@ buildPythonPackage rec {
       blas
       blas.provider
     ]
+    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
     ++ lib.optionals cudaSupport (
       with cudaPackages;
       [
@@ -521,6 +536,7 @@ buildPythonPackage rec {
         cusparselt
         libcublas
         libcufft
+        libcufile
         libcurand
         libcusolver
         libcusparse
@@ -657,7 +673,7 @@ buildPythonPackage rec {
         --replace-fail "\''${_IMPORT_PREFIX}/lib64" "$lib/lib"
 
       substituteInPlace $dev/share/cmake/ATen/ATenConfig.cmake \
-        --replace-fail "/build/source/torch/include" "$dev/include"
+        --replace-fail "/build/${src.name}/torch/include" "$dev/include"
     '';
 
   postFixup =
@@ -723,6 +739,7 @@ buildPythonPackage rec {
     homepage = "https://pytorch.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      GaetanLepage
       teh
       thoughtpolice
       tscholak
