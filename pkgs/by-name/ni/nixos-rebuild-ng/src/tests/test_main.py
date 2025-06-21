@@ -11,6 +11,7 @@ import pytest
 from pytest import MonkeyPatch
 
 import nixos_rebuild as nr
+from nixos_rebuild.constants import WITH_NIX_2_18
 
 from .helpers import get_qualified_name
 
@@ -536,6 +537,10 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
 @patch("subprocess.run", autospec=True)
 @patch("uuid.uuid4", autospec=True)
 @patch(get_qualified_name(nr.cleanup_ssh), autospec=True)
+@pytest.mark.skipif(
+    not WITH_NIX_2_18,
+    reason="Tests internal logic based on the assumption that Nix >= 2.18",
+)
 def test_execute_nix_switch_build_target_host(
     mock_cleanup_ssh: Mock,
     mock_uuid4: Mock,
