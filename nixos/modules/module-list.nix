@@ -1268,6 +1268,7 @@
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
+  ./services/networking/pangolin.nix
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
   ./services/networking/peroxide.nix
