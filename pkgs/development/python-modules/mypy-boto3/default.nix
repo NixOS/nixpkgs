@@ -462,8 +462,8 @@ rec {
       "sha256-aSZu8mxsTho4pvWWbNwlJf0IROjqjTlIUEE5DJkAje4=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.38.36"
-      "sha256-zHlR/wT0ImcaR1vU07ryhW2Al+EOf+2RFlUHf5n8VoI=";
+    buildMypyBoto3Package "ecs" "1.38.41"
+      "sha256-fvU+ncStVtcANZTdU9vtF3lYZnSPy05Vm/+3u309q9g=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.38.33"
