@@ -13,13 +13,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vulkan-docs";
-  version = "1.4.309";
+  version = "1.4.319";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Docs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oV33pbHidQ47Rwn6XekGHIPi6qyF0Nh3HeJukpR6rQs=";
+    hash = "sha256-euJSkdJtith+eeiYM3zYEmJx/4yaVqcBLU0NKjj83l0=";
   };
 
   strictDeps = true;
