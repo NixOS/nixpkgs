@@ -1,6 +1,6 @@
-From b104778a608862789f2be400b9f13a92b1ec5b20 Mon Sep 17 00:00:00 2001
-From: Moraxyc <i@qaq.li>
-Date: Mon, 28 Apr 2025 21:38:02 +0800
+From f7b094a19a47ba515d734f65754d4e57b87239c1 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Thu, 19 Jun 2025 15:45:44 +0800
 Subject: [PATCH 2/2] core: prevent overwriting existing file by validating its
  existence
 
@@ -12,22 +12,22 @@ This enhances the security of log file handling by mitigating arbitrary file ove
  1 file changed, 6 insertions(+)
 
 diff --git a/src/service/core.rs b/src/service/core.rs
-index 51081ed..a2c4f82 100644
+index 21efb26..004d0f0 100644
 --- a/src/service/core.rs
 +++ b/src/service/core.rs
-@@ -275,6 +275,12 @@ impl CoreManager {
-                 ));
-             }
-         }
+@@ -123,6 +123,12 @@ impl CoreManager {
+         let config_file = config.config_file.as_str();
+         let log_file = config.log_file.as_str();
+         let args = vec!["-d", config_dir, "-f", config_file];
 +        {
-+            let log_file = std::path::Path::new(body.log_file.as_str());
-+            if log_file.exists() {
-+                return Err(format!("Log file already exists: {}", log_file.display()));
++            let log_file_2 = std::path::Path::new(log_file);
++            if log_file_2.exists() {
++                return Err(anyhow!(format!("Log file already exists: {}", log_file_2.display())));
 +            }
 +        }
-         {
-             // Check clash & stop if needed
-             let is_running_clash = self
+ 
+         info!("正在启动mihomo: {} -d {} -f {}", bin_path, config_dir, config_file);
+ 
 -- 
 2.49.0
 
