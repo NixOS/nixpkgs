@@ -3390,12 +3390,6 @@
     githubId = 75451918;
     name = "Charlie Root";
   };
-  bluescreen303 = {
-    email = "mathijs@bluescreen303.nl";
-    github = "bluescreen303";
-    githubId = 16330;
-    name = "Mathijs Kwik";
-  };
   blusk = {
     email = "bluskript@gmail.com";
     github = "bluskript";
