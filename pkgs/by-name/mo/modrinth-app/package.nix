@@ -5,6 +5,8 @@
   alsa-lib,
   flite,
   glib-networking,
+  gsettings-desktop-schemas,
+  gtk3,
   jdk17,
   jdk21,
   jdk8,
@@ -65,6 +67,10 @@ symlinkJoin {
 
   postBuild = ''
     gappsWrapperArgs+=(
+      # Fix GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+      # Fix GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
       --prefix PATH : ${lib.makeSearchPath "bin/java" jdks}
       ${lib.optionalString stdenv.hostPlatform.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ xorg.xrandr ]}
