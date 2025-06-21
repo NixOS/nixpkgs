@@ -1,0 +1,28 @@
+--- a/backend/tools/process_manager.py
++++ b/backend/tools/process_manager.py
+@@ -120,9 +120,20 @@ class ProcessManager:
+                 subprocess.run(['taskkill', '/F', '/T', '/PID', str(pid)], 
+                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
+             else:
+-                subprocess.run(['pkill', '-9', '-P', str(pid)], 
+-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=2)
+-                subprocess.run(['kill', '-9', str(pid)], 
+-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
++                # NixOS requires absolute paths for commands in subprocess
++                pkill_path = '/run/current-system/sw/bin/pkill'
++                kill_path = '/run/current-system/sw/bin/kill'
++                if os.path.exists(pkill_path):
++                    subprocess.run([pkill_path, '-9', '-P', str(pid)], 
++                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=2)
++                if os.path.exists(kill_path):
++                    subprocess.run([kill_path, '-9', str(pid)], 
++                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
++                else:
++                    # Fallback for non-NixOS linux
++                    subprocess.run(['pkill', '-9', '-P', str(pid)],
++                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=2)
++                    subprocess.run(['kill', '-9', str(pid)],
++                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=3)
+         except Exception as e:
+             print(f"Error forcibly terminating process with PID {pid}: {str(e)}")
+\ No newline at end of file
