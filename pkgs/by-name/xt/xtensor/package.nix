@@ -13,17 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xtensor";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xtensor";
-    rev = finalAttrs.version;
-    hash = "sha256-hVfdtYcJ6mzqj0AUu6QF9aVKQGYKd45RngY6UN3yOH4=";
+    tag = finalAttrs.version;
+    hash = "sha256-gAGLb5NPT4jiIpXONqY+kalxKCFKFXlNqbM79x1lTKE=";
   };
-
-  # See https://github.com/xtensor-stack/xtensor/pull/2821
-  patches = lib.optionals stdenv.cc.isClang [ ./0001-Fix-clang-build-errors-on-darwin.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -42,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "XTENSOR_CHECK_DIMENSION" enableBoundChecks)
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   nativeCheckInputs = [
     doctest
   ];
