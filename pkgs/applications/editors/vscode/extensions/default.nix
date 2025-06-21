@@ -2451,8 +2451,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.1.53";
-          hash = "sha256-6yhyGMX1U9clMNkcQRjNfa+HpLvWVI1WvhTUyn4g3ZY=";
+          version = "1.1.54";
+          hash = "sha256-CzhDStBa/LB/bzgzrFCUEcVDeBluWJPblneUbHdIcRE=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
