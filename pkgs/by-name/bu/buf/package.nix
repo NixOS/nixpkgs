@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  protobuf_26,
+  protobuf,
   git,
   testers,
   buf,
@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.52.1";
+  version = "1.55.1";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "buf";
     rev = "v${version}";
-    hash = "sha256-oHmTOQBvuJWQdmC/LL72r+n2uwaQC8z3/1BRM0NzMbI=";
+    hash = "sha256-41IY2P2s9kCV6aQh5vg7xVmu4Ovl9gakGmgcI/QSwfw=";
   };
 
-  vendorHash = "sha256-+zJ2pCLyXnqFOIWWfnhAzSnUOjQSDo4AqCxBNNZED7E=";
+  vendorHash = "sha256-eCaq9pG/JfbsBqAfcOMmFyFJu6kb5A9puW7DXz0NAGM=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -36,7 +36,7 @@ buildGoModule rec {
 
   nativeCheckInputs = [
     git # Required for TestGitCloner
-    protobuf_26 # Required for buftesting.GetProtocFilePaths
+    protobuf # Required for buftesting.GetProtocFilePaths
   ];
 
   checkFlags = [
