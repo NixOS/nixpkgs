@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "leo-bogert";
     repo = "accuraterip-checksum";
-    rev = "version${version}";
+    tag = "version${version}";
     sha256 = "1a6biy78jb094rifazn4a2g1dlhryg5q8p8gwj0a60ipl0vfb9bj";
   };
 

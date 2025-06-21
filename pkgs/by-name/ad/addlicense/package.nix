@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "addlicense";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-YMMHj6wctKtJi/rrcMIrLmNw/uvO6wCwokgYRQxcsFw=";
   };
 
