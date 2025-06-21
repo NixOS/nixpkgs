@@ -624,6 +624,7 @@ mapAliases {
   EmptyEpsilon = empty-epsilon; # Added 2024-07-14
   enyo-doom = enyo-launcher; # Added 2022-09-09
   eolie = throw "'eolie' has been removed due to being unmaintained"; # Added 2025-04-15
+  epapirus-icon-theme = throw "'epapirus-icon-theme' has been removed because 'papirus-icon-theme' no longer supports building with elementaryOS icon support"; # Added 2025-06-15
   epdfview = throw "'epdfview' has been removed due to lack of maintenance upstream. Consider using 'qpdfview' instead"; # Added 2024-10-19
   ephemeral = throw "'ephemeral' has been archived upstream since 2022-04-02"; # added 2025-04-12
   epoxy = throw "'epoxy' has been renamed to/replaced by 'libepoxy'"; # Converted to throw 2024-10-17
