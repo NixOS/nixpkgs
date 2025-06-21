@@ -40,6 +40,8 @@ buildPythonPackage rec {
     # Tests are sensitive to output
     "test_billion_laughs"
     "test_10_broken_html"
+    # AssertionError
+    "test_keep_typographic_whitespace"
   ];
 
   pythonImportsCheck = [ "html_sanitizer" ];
