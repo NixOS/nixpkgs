@@ -95,6 +95,7 @@ let
         ++ optional cfg.caching.apcu apcu
         ++ optional cfg.caching.redis redis
         ++ optional cfg.caching.memcached memcached
+        ++ optional (cfg.settings.log_type == "systemd") systemd
       )
       ++ cfg.phpExtraExtensions all; # Enabled by user
     extraConfig = toKeyValue cfg.phpOptions;
@@ -859,7 +860,7 @@ in
             default = "syslog";
             description = ''
               Logging backend to use.
-              systemd requires the php-systemd package to be added to services.nextcloud.phpExtraExtensions.
+              systemd automatically adds the php-systemd extensions to services.nextcloud.phpExtraExtensions.
               See the [nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html) for details.
             '';
           };

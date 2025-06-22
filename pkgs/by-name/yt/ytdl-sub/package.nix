@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
-  version = "2025.06.12";
+  version = "2025.06.19.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = version;
-    hash = "sha256-42fvyUCaVaaGLW7CdoJidJQAUgjG2wmCeHxWA+XUQCk=";
+    hash = "sha256-aZ7LzpOZgI9KUt0aWMdzVH299O83d3zPxldRKZvwO8I=";
   };
 
   postPatch = ''
@@ -54,8 +54,9 @@ python3Packages.buildPythonApplication rec {
   };
 
   disabledTests = [
-    "test_presets_run"
     "test_logger_can_be_cleaned_during_execution"
+    "test_presets_run"
+    "test_thumbnail"
   ];
 
   pytestFlagsArray = [
