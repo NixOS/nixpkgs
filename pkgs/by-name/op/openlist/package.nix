@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "openlist";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ir1yOVbf4qP0YUkE0yxOEp92PPMRyHw0VrIH5DQAvZQ=";
+    hash = "sha256-PqCGA2DAfZvDqdnQzqlmz2vlybYokJe+Ybzp5BcJDGU=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
