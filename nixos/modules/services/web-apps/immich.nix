@@ -231,6 +231,11 @@ in
         assertion = !isPostgresUnixSocket -> cfg.secretsFile != null;
         message = "A secrets file containing at least the database password must be provided when unix sockets are not used.";
       }
+      {
+        # When removing this assertion, please adjust the nixosTests accordingly.
+        assertion = cfg.database.enable -> lib.versionOlder config.services.postgresql.package.version "17";
+        message = "Immich doesn't support PostgreSQL 17+, yet.";
+      }
     ];
 
     services.postgresql = mkIf cfg.database.enable {
