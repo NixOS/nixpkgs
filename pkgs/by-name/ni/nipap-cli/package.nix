@@ -1,6 +1,7 @@
 {
   lib,
   python312Packages,
+  nixosTests,
 }:
 
 let
@@ -34,6 +35,8 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [
     "nipap_cli.nipap_cli"
   ];
+
+  passthru.tests.nixos = nixosTests.nipap;
 
   meta = {
     description = "Neat IP Address Planner CLI";
