@@ -1476,8 +1476,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.22.50";
-          hash = "sha256-O9ourjcg4nwfXZOz9n1vgD6ufTkGYNDZrPLnqPUiCAc=";
+          version = "2.23.9";
+          hash = "sha256-1IwWaaSF3W5y8Cy/lpscbxGm7xyNGf8cAIu3zhTjWKU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
