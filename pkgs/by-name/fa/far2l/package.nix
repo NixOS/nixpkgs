@@ -27,7 +27,7 @@
   # Plugins
   withColorer ? true,
   spdlog,
-  xercesc,
+  libxml2,
   withMultiArc ? true,
   libarchive,
   pcre,
