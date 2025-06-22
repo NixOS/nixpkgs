@@ -714,7 +714,7 @@ def test_switch_to_configuration_without_systemd_run(
         remote=None,
     )
 
-    with pytest.raises(m.NRError) as e:
+    with pytest.raises(m.NixOSRebuildError) as e:
         n.switch_to_configuration(
             config_path,
             m.Action.BOOT,
