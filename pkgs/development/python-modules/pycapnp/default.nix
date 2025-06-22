@@ -2,8 +2,9 @@
   lib,
   buildPythonPackage,
   capnproto,
-  cython_0,
+  cython,
   fetchFromGitHub,
+  fetchpatch2,
   isPy27,
   isPyPy,
   pkgconfig,
@@ -22,8 +23,16 @@ buildPythonPackage rec {
     sha256 = "sha256-SVeBRJMMR1Z8+S+QoiUKGRFGUPS/MlmWLi1qRcGcPoE=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      name = "cython-3.patch";
+      url = "https://github.com/capnproto/pycapnp/pull/334.diff?full_index=1";
+      hash = "sha256-we7v4RaL7c1tePWl+oYfzMHAfnvnpdMkQgVu9YLwC6Y=";
+    })
+  ];
+
   nativeBuildInputs = [
-    cython_0
+    cython
     pkgconfig
   ];
 
