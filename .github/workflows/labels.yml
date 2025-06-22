@@ -165,6 +165,133 @@ jobs:
               base: context.payload.pull_request.base.ref
             }
 
+            async function handle(pull_request, done) {
+              try {
+                const log = (k,v,skip) => {
+                  core.info(`PR #${pull_request.number} - ${k}: ${v}` + (skip ? ' (skipped)' : ''))
+                  return skip
+                }
+
+                if (log('Last updated at', pull_request.updated_at, new Date(pull_request.updated_at) < cutoff))
+                  return done()
+                stats.prs++
+                log('URL', pull_request.html_url)
+
+                const run_id = (await github.rest.actions.listWorkflowRuns({
+                  ...context.repo,
+                  workflow_id: 'pr.yml',
+                  event: 'pull_request_target',
+                  // For PR events, the workflow run is still in progress with this job itself.
+                  status: prEventCondition ? 'in_progress' : 'success',
+                  exclude_pull_requests: true,
+                  head_sha: pull_request.head.sha
+                })).data.workflow_runs[0]?.id ??
+                  // TODO: Remove this after 2025-09-17, at which point all eval.yml artifacts will have expired.
+                  (await github.rest.actions.listWorkflowRuns({
+                    ...context.repo,
+                    // In older PRs, we need eval.yml instead of pr.yml.
+                    workflow_id: 'eval.yml',
+                    event: 'pull_request_target',
+                    status: 'success',
+                    exclude_pull_requests: true,
+                    head_sha: pull_request.head.sha
+                  })).data.workflow_runs[0]?.id
+
+                // Newer PRs might not have run Eval to completion, yet. We can skip them, because this
+                // job will be run as part of that Eval run anyway.
+                if (log('Last eval run', run_id ?? '<pending>', !run_id))
+                  return;
+
+                const artifact = (await github.rest.actions.listWorkflowRunArtifacts({
+                  ...context.repo,
+                  run_id,
+                  name: 'comparison'
+                })).data.artifacts[0]
+
+                // Instead of checking the boolean artifact.expired, we will give us a minute to
+                // actually download the artifact in the next step and avoid that race condition.
+                // Older PRs, where the workflow run was already eval.yml, but the artifact was not
+                // called "comparison", yet, will be skipped as well.
+                const expired = new Date(artifact?.expires_at ?? 0) < new Date(new Date().getTime() + 60 * 1000)
+                if (log('Artifact expires at', artifact?.expires_at ?? '<not found>', expired))
+                  return;
+                stats.artifacts++
+
+                await artifactClient.downloadArtifact(artifact.id, {
+                  findBy: {
+                    repositoryName: context.repo.repo,
+                    repositoryOwner: context.repo.owner,
+                    token: core.getInput('github-token')
+                  },
+                  path: path.resolve(pull_request.number.toString()),
+                  expectedHash: artifact.digest
+                })
+
+                // Create a map (Label -> Boolean) of all currently set labels.
+                // Each label is set to True and can be disabled later.
+                const before = Object.fromEntries(
+                  (await github.paginate(github.rest.issues.listLabelsOnIssue, {
+                    ...context.repo,
+                    issue_number: pull_request.number
+                  }))
+                  .map(({ name }) => [name, true])
+                )
+
+                const approvals = new Set(
+                  (await github.paginate(github.rest.pulls.listReviews, {
+                    ...context.repo,
+                    pull_number: pull_request.number
+                  }))
+                  .filter(review => review.state == 'APPROVED')
+                  .map(review => review.user?.id)
+                )
+
+                const maintainers = new Set(Object.keys(
+                  JSON.parse(await readFile(`${pull_request.number}/maintainers.json`, 'utf-8'))
+                ).map(m => Number.parseInt(m, 10)))
+
+                const evalLabels = JSON.parse(await readFile(`${pull_request.number}/changed-paths.json`, 'utf-8')).labels
+
+                // Manage the labels
+                const after = Object.assign(
+                  {},
+                  before,
+                  // Ignore `evalLabels` if it's an array.
+                  // This can happen for older eval runs, before we switched to objects.
+                  // The old eval labels would have been set by the eval run,
+                  // so now they'll be present in `before`.
+                  // TODO: Simplify once old eval results have expired (~2025-10)
+                  (Array.isArray(evalLabels) ? undefined : evalLabels),
+                  {
+                    '12.approvals: 1': approvals.size == 1,
+                    '12.approvals: 2': approvals.size == 2,
+                    '12.approvals: 3+': approvals.size >= 3,
+                    '12.approved-by: package-maintainer': Array.from(maintainers).some(m => approvals.has(m)),
+                    '12.first-time contribution':
+                      [ 'NONE', 'FIRST_TIMER', 'FIRST_TIME_CONTRIBUTOR' ].includes(pull_request.author_association),
+                  }
+                )
+
+                // No need for an API request, if all labels are the same.
+                const hasChanges = Object.keys(after).some(name => (before[name] ?? false) != after[name])
+                if (log('Has changes', hasChanges, !hasChanges))
+                  return;
+
+                // Skipping labeling on a pull_request event, because we have no privileges.
+                const labels = Object.entries(after).filter(([,value]) => value).map(([name]) => name)
+                if (log('Set labels', labels, context.eventName == 'pull_request'))
+                  return;
+
+                await github.rest.issues.setLabels({
+                  ...context.repo,
+                  issue_number: pull_request.number,
+                  labels
+                })
+              } catch (cause) {
+                throw new Error(`Labeling PR #${pull_request.number} failed.`, { cause })
+              }
+            }
+
             const prs = await github.paginate(
               github.rest.pulls.list,
               {
@@ -174,132 +301,7 @@ jobs:
                 direction: 'desc',
                 ...prEventCondition
               },
-              (response, done) => response.data.map(async (pull_request) => {
-                try {
-                  const log = (k,v,skip) => {
-                    core.info(`PR #${pull_request.number} - ${k}: ${v}` + (skip ? ' (skipped)' : ''))
-                    return skip
-                  }
-
-                  if (log('Last updated at', pull_request.updated_at, new Date(pull_request.updated_at) < cutoff))
-                    return done()
-                  stats.prs++
-                  log('URL', pull_request.html_url)
-
-                  const run_id = (await github.rest.actions.listWorkflowRuns({
-                    ...context.repo,
-                    workflow_id: 'pr.yml',
-                    event: 'pull_request_target',
-                    // For PR events, the workflow run is still in progress with this job itself.
-                    status: prEventCondition ? 'in_progress' : 'success',
-                    exclude_pull_requests: true,
-                    head_sha: pull_request.head.sha
-                  })).data.workflow_runs[0]?.id ??
-                    // TODO: Remove this after 2025-09-17, at which point all eval.yml artifacts will have expired.
-                    (await github.rest.actions.listWorkflowRuns({
-                      ...context.repo,
-                      // In older PRs, we need eval.yml instead of pr.yml.
-                      workflow_id: 'eval.yml',
-                      event: 'pull_request_target',
-                      status: 'success',
-                      exclude_pull_requests: true,
-                      head_sha: pull_request.head.sha
-                    })).data.workflow_runs[0]?.id
-
-                  // Newer PRs might not have run Eval to completion, yet. We can skip them, because this
-                  // job will be run as part of that Eval run anyway.
-                  if (log('Last eval run', run_id ?? '<pending>', !run_id))
-                    return;
-
-                  const artifact = (await github.rest.actions.listWorkflowRunArtifacts({
-                    ...context.repo,
-                    run_id,
-                    name: 'comparison'
-                  })).data.artifacts[0]
-
-                  // Instead of checking the boolean artifact.expired, we will give us a minute to
-                  // actually download the artifact in the next step and avoid that race condition.
-                  // Older PRs, where the workflow run was already eval.yml, but the artifact was not
-                  // called "comparison", yet, will be skipped as well.
-                  const expired = new Date(artifact?.expires_at ?? 0) < new Date(new Date().getTime() + 60 * 1000)
-                  if (log('Artifact expires at', artifact?.expires_at ?? '<not found>', expired))
-                    return;
-                  stats.artifacts++
-
-                  await artifactClient.downloadArtifact(artifact.id, {
-                    findBy: {
-                      repositoryName: context.repo.repo,
-                      repositoryOwner: context.repo.owner,
-                      token: core.getInput('github-token')
-                    },
-                    path: path.resolve(pull_request.number.toString()),
-                    expectedHash: artifact.digest
-                  })
-
-                  // Create a map (Label -> Boolean) of all currently set labels.
-                  // Each label is set to True and can be disabled later.
-                  const before = Object.fromEntries(
-                    (await github.paginate(github.rest.issues.listLabelsOnIssue, {
-                      ...context.repo,
-                      issue_number: pull_request.number
-                    }))
-                    .map(({ name }) => [name, true])
-                  )
-
-                  const approvals = new Set(
-                    (await github.paginate(github.rest.pulls.listReviews, {
-                      ...context.repo,
-                      pull_number: pull_request.number
-                    }))
-                    .filter(review => review.state == 'APPROVED')
-                    .map(review => review.user?.id)
-                  )
-
-                  const maintainers = new Set(Object.keys(
-                    JSON.parse(await readFile(`${pull_request.number}/maintainers.json`, 'utf-8'))
-                  ).map(m => Number.parseInt(m, 10)))
-
-                  const evalLabels = JSON.parse(await readFile(`${pull_request.number}/changed-paths.json`, 'utf-8')).labels
-
-                  // Manage the labels
-                  const after = Object.assign(
-                    {},
-                    before,
-                    // Ignore `evalLabels` if it's an array.
-                    // This can happen for older eval runs, before we switched to objects.
-                    // The old eval labels would have been set by the eval run,
-                    // so now they'll be present in `before`.
-                    // TODO: Simplify once old eval results have expired (~2025-10)
-                    (Array.isArray(evalLabels) ? undefined : evalLabels),
-                    {
-                      '12.approvals: 1': approvals.size == 1,
-                      '12.approvals: 2': approvals.size == 2,
-                      '12.approvals: 3+': approvals.size >= 3,
-                      '12.approved-by: package-maintainer': Array.from(maintainers).some(m => approvals.has(m)),
-                      '12.first-time contribution':
-                        [ 'NONE', 'FIRST_TIMER', 'FIRST_TIME_CONTRIBUTOR' ].includes(pull_request.author_association),
-                    }
-                  )
-
-                  // No need for an API request, if all labels are the same.
-                  const hasChanges = Object.keys(after).some(name => (before[name] ?? false) != after[name])
-                  if (log('Has changes', hasChanges, !hasChanges))
-                    return;
-
-                  // Skipping labeling on a pull_request event, because we have no privileges.
-                  const labels = Object.entries(after).filter(([,value]) => value).map(([name]) => name)
-                  if (log('Set labels', labels, context.eventName == 'pull_request'))
-                    return;
-
-                  await github.rest.issues.setLabels({
-                    ...context.repo,
-                    issue_number: pull_request.number,
-                    labels
-                  })
-                } catch (cause) {
-                  throw new Error(`Labeling PR #${pull_request.number} failed.`, { cause })
-                }
-              })
+              (response, done) => response.data.map(pull_request => handle(pull_request, done))
             );
 
             (await Promise.allSettled(prs.flat()))
