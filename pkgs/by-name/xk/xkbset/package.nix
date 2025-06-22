@@ -1,18 +1,20 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   perl,
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xkbset";
-  version = "0.6";
+  version = "0.8";
 
-  src = fetchurl {
-    url = "http://faculty.missouri.edu/~stephen/software/xkbset/xkbset-${version}.tar.gz";
-    sha256 = "sha256-rAMv7EnExPDyMY0/RhiXDFFBkbFC4GxRpmH+I0KlNaU=";
+  src = fetchFromGitHub {
+    owner = "stephenmontgomerysmith";
+    repo = "xkbset";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N2kD4XeBV09tzdBlHW/Y5ZK3xdr3aiszFtR6bvfTRvU=";
   };
 
   buildInputs = [
@@ -20,9 +22,7 @@ stdenv.mkDerivation rec {
     libX11
   ];
 
-  postPatch = ''
-    sed "s:^X11PREFIX=.*:X11PREFIX=$out:" -i Makefile
-  '';
+  makeFlags = [ "X11PREFIX=${placeholder "out"}" ];
 
   preInstall = ''
     mkdir -p $out/bin
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/xkbset-gui
   '';
 
-  meta = with lib; {
-    homepage = "http://faculty.missouri.edu/~stephen/software/#xkbset";
+  meta = {
+    homepage = "https://github.com/stephenmontgomerysmith/xkbset";
     description = "Program to help manage many of XKB features of X window";
-    maintainers = with maintainers; [ drets ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ drets ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "xkbset";
   };
-}
+})
