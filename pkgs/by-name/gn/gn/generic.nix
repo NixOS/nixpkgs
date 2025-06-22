@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     inherit rev sha256;
   };
 
-  patches = [
+  patches = lib.optionals (lib.versionOlder revNum "2233") [
     (fetchpatch {
       name = "LFS64.patch";
       url = "https://gn.googlesource.com/gn/+/b5ff50936a726ff3c8d4dfe2a0ae120e6ce1350d%5E%21/?format=TEXT";
@@ -58,6 +58,9 @@ stdenv.mkDerivation {
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  # Relax hardening as otherwise gn unstable 2024-06-06 and later fail with:
+  # cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
+  ${if (lib.versionAtLeast revNum "2233") then "hardeningDisable" else null} = [ "format" ];
 
   buildPhase = ''
     python build/gen.py --no-last-commit-position
