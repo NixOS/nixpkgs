@@ -5631,6 +5631,12 @@
     github = "DarkOnion0";
     githubId = 68606322;
   };
+  darkyzhou = {
+    name = "darkyzhou";
+    email = "me@zqy.io";
+    github = "darkyzhou";
+    githubId = 7220778;
+  };
   daru-san = {
     name = "Daru";
     email = "zadarumaka@proton.me";
