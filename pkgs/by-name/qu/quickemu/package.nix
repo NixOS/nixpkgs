@@ -58,13 +58,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.7";
+  version = "4.9.7-unstable-2025-06-17";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = finalAttrs.version;
-    hash = "sha256-sCoCcN6950pH33bRZsLoLc1oSs5Qfpj9Bbywn/uA6Bc=";
+    rev = "9f90d46ea195d62a8b84c6dd45ea5b1443bb3e46";
+    hash = "sha256-M5/EIzh19VlxQ5yTEvupCa5j/PvyqBx7/WqXJ9319oo=";
   };
 
   postPatch = ''
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Quickly create and run optimised Windows, macOS and Linux virtual machines";
     homepage = "https://github.com/quickemu-project/quickemu";
-    changelog = "https://github.com/quickemu-project/quickemu/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/quickemu-project/quickemu/commits/master/?since=2024-12-30&until=2025-06-17";
     mainProgram = "quickemu";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
