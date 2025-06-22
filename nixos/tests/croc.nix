@@ -14,6 +14,7 @@ import ./make-test-python.nix (
       maintainers = [
         equirosa
         SuperSandro2000
+        ryan4yin
       ];
     };
 
