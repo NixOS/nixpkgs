@@ -10,11 +10,14 @@
   libpng,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
+
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  buildExamples ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvncserver";
-  version = "0.9.14";
+  version = "0.9.15";
 
   outputs = [
     "out"
@@ -24,8 +27,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LibVNC";
     repo = "libvncserver";
-    rev = "LibVNCServer-${version}";
-    sha256 = "sha256-kqVZeCTp+Z6BtB6nzkwmtkJ4wtmjlSQBg05lD02cVvQ=";
+    tag = "LibVNCServer-${finalAttrs.version}";
+    hash = "sha256-a3acEjJM+ZA9jaB6qZ/czjIfx/L3j71VjJ6mtlqYcSw=";
   };
 
   patches = [
@@ -38,7 +41,9 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DWITH_SYSTEMD=${if withSystemd then "ON" else "OFF"}"
+    (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+    (lib.cmakeBool "WITH_EXAMPLES" buildExamples)
   ];
 
   buildInputs =
@@ -63,4 +68,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
   };
-}
+})

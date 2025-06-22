@@ -6633,6 +6633,7 @@
   drakon64 = {
     name = "Adam Chance";
     email = "nixpkgs@drakon.cloud";
+    github = "drakon64";
     githubId = 6444703;
   };
   dramaturg = {
@@ -18433,6 +18434,14 @@
     githubId = 107261;
     name = "Andrey Kuznetsov";
   };
+  ontake = {
+    name = "Louis Dalibard";
+    email = "ontake@ontake.dev";
+    github = "make-42";
+    githubId = 17462236;
+    matrix = "@ontake:matrix.ontake.dev";
+    keys = [ { fingerprint = "36BC 916D DD4E B1EE EE82 4BBF DC95 900F 6DA7 9992"; } ];
+  };
   onthestairs = {
     email = "austinplatt@gmail.com";
     github = "onthestairs";
@@ -22873,6 +22882,7 @@
     name = "Zhifan";
     email = "nonno.felice69uwu@gmail.com";
     matrix = "@c3n21:matrix.org";
+    github = "c3n21";
     githubId = 37077738;
   };
   sioodmy = {
