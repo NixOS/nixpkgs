@@ -131,16 +131,6 @@ jobs:
             if (process.env.UPDATED_WITHIN && !/^\d+$/.test(process.env.UPDATED_WITHIN))
               throw new Error('Please enter "updated within" as integer in hours.')
 
-            // To simplify this action's logic we fetch the pull_request data again below, even if
-            // we are already in a pull_request event's context and would have the data readily
-            // available. We do this by filtering the list of pull requests with head and base
-            // branch - there can only be a single open Pull Request for any such combination.
-            const prEventCondition = !context.payload.pull_request ? undefined : {
-              // "label" is in the format of `user:branch` or `org:branch`
-              head: context.payload.pull_request.head.label,
-              base: context.payload.pull_request.base.ref
-            }
-
             async function handle(pull_request, done, cutoff) {
               try {
                 const log = (k,v,skip) => {
@@ -157,8 +147,7 @@ jobs:
                   ...context.repo,
                   workflow_id: 'pr.yml',
                   event: 'pull_request_target',
-                  // For PR events, the workflow run is still in progress with this job itself.
-                  status: prEventCondition ? 'in_progress' : 'success',
+                  status: 'success',
                   exclude_pull_requests: true,
                   head_sha: pull_request.head.sha
                 })).data.workflow_runs[0]?.id ??
@@ -268,47 +257,46 @@ jobs:
               }
             }
 
-            const cutoff = new Date(await (async () => {
-              // Always run for Pull Request triggers, no cutoff since there will be a single
-              // response only anyway. 0 is the Unix epoch, so always smaller.
-              if (context.payload.pull_request?.number) return 0
+            if (context.payload.pull_request) {
+              await handle(context.payload.pull_request)
+            } else {
+              const cutoff = new Date(await (async () => {
+                // Manually triggered via UI when updatedWithin is set. Will fallthrough to the last
+                // option if the updatedWithin parameter is set to 0, which is the default.
+                const updatedWithin = Number.parseInt(process.env.UPDATED_WITHIN, 10)
+                if (updatedWithin) return new Date().getTime() - updatedWithin * 60 * 60 * 1000
 
-              // Manually triggered via UI when updatedWithin is set. Will fallthrough to the last
-              // option if the updatedWithin parameter is set to 0, which is the default.
-              const updatedWithin = Number.parseInt(process.env.UPDATED_WITHIN, 10)
-              if (updatedWithin) return new Date().getTime() - updatedWithin * 60 * 60 * 1000
+                // Normally a scheduled run, but could be workflow_dispatch, see above. Go back as far
+                // as the last successful run of this workflow to make sure we are not leaving anyone
+                // behind on GHA failures.
+                // Defaults to go back 1 hour on the first run.
+                return (await github.rest.actions.listWorkflowRuns({
+                  ...context.repo,
+                  workflow_id: 'labels.yml',
+                  event: 'schedule',
+                  status: 'success',
+                  exclude_pull_requests: true
+                })).data.workflow_runs[0]?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000
+              })())
+              core.info('cutoff timestamp: ' + cutoff.toISOString())
 
-              // Normally a scheduled run, but could be workflow_dispatch, see above. Go back as far
-              // as the last successful run of this workflow to make sure we are not leaving anyone
-              // behind on GHA failures.
-              // Defaults to go back 1 hour on the first run.
-              return (await github.rest.actions.listWorkflowRuns({
-                ...context.repo,
-                workflow_id: 'labels.yml',
-                event: 'schedule',
-                status: 'success',
-                exclude_pull_requests: true
-              })).data.workflow_runs[0]?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000
-            })())
-            core.info('cutoff timestamp: ' + cutoff.toISOString())
+              const prs = await github.paginate(
+                github.rest.pulls.list,
+                {
+                  ...context.repo,
+                  state: 'open',
+                  sort: 'updated',
+                  direction: 'desc',
+                },
+                (response, done) => response.data.map(pull_request => handle(pull_request, done, cutoff))
+              );
 
-            const prs = await github.paginate(
-              github.rest.pulls.list,
-              {
-                ...context.repo,
-                state: 'open',
-                sort: 'updated',
-                direction: 'desc',
-                ...prEventCondition
-              },
-              (response, done) => response.data.map(pull_request => handle(pull_request, done, cutoff))
-            );
+              (await Promise.allSettled(prs.flat()))
+                .filter(({ status }) => status == 'rejected')
+                .map(({ reason }) => core.setFailed(`${reason.message}\n${reason.cause.stack}`))
 
-            (await Promise.allSettled(prs.flat()))
-              .filter(({ status }) => status == 'rejected')
-              .map(({ reason }) => core.setFailed(`${reason.message}\n${reason.cause.stack}`))
-
-            core.notice(`Processed ${stats.prs} PRs, made ${stats.requests + stats.artifacts} API requests and downloaded ${stats.artifacts} artifacts.`)
+              core.notice(`Processed ${stats.prs} PRs, made ${stats.requests + stats.artifacts} API requests and downloaded ${stats.artifacts} artifacts.`)
+            }
             clearInterval(reservoirUpdater)
 
       - name: Log current API rate limits
