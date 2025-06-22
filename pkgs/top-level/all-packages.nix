@@ -11538,8 +11538,6 @@ with pkgs;
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
 
-  epapirus-icon-theme = papirus-icon-theme.override { withElementary = true; };
-
   moeli = eduli;
 
   emojione = callPackage ../data/fonts/emojione {
@@ -11672,11 +11670,6 @@ with pkgs;
   openmoji-color = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf_colr_0" ]; };
 
   openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf" ]; };
-
-  papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme {
-    inherit (pantheon) elementary-icon-theme;
-    inherit (plasma5Packages) breeze-icons;
-  };
 
   papirus-maia-icon-theme = callPackage ../data/icons/papirus-maia-icon-theme {
     inherit (plasma5Packages) breeze-icons;
