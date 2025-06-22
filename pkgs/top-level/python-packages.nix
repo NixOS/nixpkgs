@@ -11977,6 +11977,8 @@ self: super: with self; {
 
   pvo = callPackage ../development/python-modules/pvo { };
 
+  pwdlib = callPackage ../development/python-modules/pwdlib { };
+
   pweave = callPackage ../development/python-modules/pweave { };
 
   pwinput = callPackage ../development/python-modules/pwinput { };
