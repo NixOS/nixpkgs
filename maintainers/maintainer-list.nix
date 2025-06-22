@@ -3201,6 +3201,12 @@
     githubId = 410028;
     name = "Tobias Bergkvist";
   };
+  beriholic = {
+    email = "beriholic@petalmail.com";
+    github = "Beriholic";
+    githubId = 96678707;
+    name = "Beriholic";
+  };
   berquist = {
     name = "Eric Berquist";
     email = "eric.berquist@gmail.com";
