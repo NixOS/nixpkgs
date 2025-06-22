@@ -8,6 +8,7 @@
   bash,
   makeWrapper,
   perlPackages,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +39,8 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Cleanup.cpp src/cleanup-config-page.ui \
       --replace-fail /bin/bash ${bash}/bin/bash \
       --replace-fail /bin/sh ${bash}/bin/sh
+    substituteInPlace src/MountPoints.cpp \
+      --replace-fail /bin/lsblk ${util-linux}/bin/lsblk
     substituteInPlace src/StdCleanup.cpp \
       --replace-fail /bin/bash ${bash}/bin/bash
   '';
