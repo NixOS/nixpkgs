@@ -251,5 +251,8 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ onny ];
+  meta.maintainers = with lib.maintainers; [
+    onny
+    grimmauld
+  ];
 }
