@@ -64,6 +64,12 @@ in
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.port ];
 
+    users.groups."actual" = {};
+    users.users."actual" = {
+      group = "actual";
+      isSystemUser = true;
+    };
+
     systemd.services.actual = {
       description = "Actual server, a local-first personal finance app";
       after = [ "network.target" ];
