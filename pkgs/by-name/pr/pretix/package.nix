@@ -260,6 +260,11 @@ python.pkgs.buildPythonApplication rec {
     "test_same_day_spanish"
     "test_same_month_spanish"
     "test_same_year_spanish"
+
+    # broken with fakeredis>=2.27.0
+    "test_waitinglist_cache_separation"
+    "test_waitinglist_item_active"
+    "test_waitinglist_variation_active"
   ];
 
   preCheck = ''
