@@ -20,7 +20,7 @@ mkCoqDerivation {
         mc
       ];
     in
-    lib.switch [ coq.coq-version ssreflect.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
+    lib.switch [ coq.coq-version ssreflect.version ] (lib.lists.sort (x: y: isLt x.out y.out) (
       lib.mapAttrsToList (out: cases: { inherit cases out; }) {
         "0.2.2" = cmc (range "8.17" "9.0") (range "2.0.0" "2.4.0");
         "0.2.1" = cmc (range "8.17" "9.0") (range "2.0.0" "2.3.0");

@@ -31,9 +31,9 @@ let
   withDoc = single && (args.withDoc or false);
   defaultVersion =
     let
-      inherit (lib.versions) isLe range;
+      inherit (lib.versions) isLt range;
     in
-    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
+    lib.switch coq.coq-version (lib.lists.sort (x: y: isLt x.out y.out) (
       lib.mapAttrsToList (out: case: { inherit case out; }) {
         "2.4.0" = range "8.20" "9.0";
         "2.3.0" = range "8.19" "9.0";

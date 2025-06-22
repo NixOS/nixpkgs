@@ -12,7 +12,7 @@
   repo = "Coq-Equations";
   opam-name = "rocq-equations";
   inherit version;
-  defaultVersion = lib.switch coq.coq-version (lib.lists.sort (x: y: lib.versions.isLe x.out y.out) (
+  defaultVersion = lib.switch coq.coq-version (lib.lists.sort (x: y: lib.versions.isLt x.out y.out) (
     lib.mapAttrsToList (out: case: { inherit case out; }) {
       "1.3.1+9.0" = "9.0";
       "1.3.1+8.20" = "8.20";

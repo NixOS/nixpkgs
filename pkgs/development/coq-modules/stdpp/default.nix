@@ -13,7 +13,7 @@ mkCoqDerivation {
   owner = "iris";
   defaultVersion =
     with lib.versions;
-    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
+    lib.switch coq.coq-version (lib.lists.sort (x: y: isLt x.out y.out) (
       lib.mapAttrsToList (out: case: { inherit case out; }) {
         "1.11.0" = range "8.19" "9.0";
         "1.10.0" = range "8.18" "8.19";

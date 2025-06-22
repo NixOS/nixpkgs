@@ -24,7 +24,7 @@ let
           mc
         ];
       in
-      lib.switch [ coq.coq-version mathcomp.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.switch [ coq.coq-version mathcomp.version ] (lib.lists.sort (x: y: isLt x.out y.out) (
         lib.mapAttrsToList (out: cases: { inherit cases out; }) {
           "2.1.0" = cmc (range "8.20" "9.0") (isGe "2.3.0");
           "2.0.3" = cmc (range "8.16" "8.20") (isGe "2.1.0");
