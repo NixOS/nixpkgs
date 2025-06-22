@@ -194,19 +194,15 @@ jobs:
                     expectedHash: artifact.digest
                   })
 
-                  // Get all currently set labels that we manage
-                  const before =
+                  // Create a map (Label -> Boolean) of all currently set labels.
+                  // Each label is set to True and can be disabled later.
+                  const before = Object.fromEntries(
                     (await github.paginate(github.rest.issues.listLabelsOnIssue, {
                       ...context.repo,
                       issue_number: pull_request.number
                     }))
-                    .map(({ name }) => name)
-                    .filter(name =>
-                      name.startsWith('10.rebuild') ||
-                      name == '11.by: package-maintainer' ||
-                      name.startsWith('12.approvals:') ||
-                      name == '12.approved-by: package-maintainer'
-                    )
+                    .map(({ name }) => [name, true])
+                  )
 
                   const approvals = new Set(
                     (await github.paginate(github.rest.pulls.listReviews, {
@@ -221,35 +217,43 @@ jobs:
                     JSON.parse(await readFile(`${pull_request.number}/maintainers.json`, 'utf-8'))
                   ).map(m => Number.parseInt(m, 10)))
 
-                  // And the labels that should be there
-                  const after = JSON.parse(await readFile(`${pull_request.number}/changed-paths.json`, 'utf-8')).labels
-                  if (approvals.size > 0) after.push(`12.approvals: ${approvals.size > 2 ? '3+' : approvals.size}`)
-                  if (Array.from(maintainers).some(m => approvals.has(m))) after.push('12.approved-by: package-maintainer')
+                  const evalLabels = JSON.parse(await readFile(`${pull_request.number}/changed-paths.json`, 'utf-8')).labels
 
-                  if (context.eventName == 'pull_request') {
-                    core.info('Skipping labeling on a pull_request event (no privileges).')
-                    return
-                  }
-
-                  // Remove the ones not needed anymore
-                  await Promise.all(
-                    before.filter(name => !after.includes(name))
-                    .map(name => github.rest.issues.removeLabel({
-                      ...context.repo,
-                      issue_number: pull_request.number,
-                      name
-                    }))
+                  // Manage the labels
+                  const after = Object.assign(
+                    {},
+                    before,
+                    // Ignore `evalLabels` if it's an array.
+                    // This can happen for older eval runs, before we switched to objects.
+                    // The old eval labels would have been set by the eval run,
+                    // so now they'll be present in `before`.
+                    // TODO: Simplify once old eval results have expired (~2025-10)
+                    (Array.isArray(evalLabels) ? undefined : evalLabels),
+                    {
+                      '12.approvals: 1': approvals.size == 1,
+                      '12.approvals: 2': approvals.size == 2,
+                      '12.approvals: 3+': approvals.size >= 3,
+                      '12.approved-by: package-maintainer': Array.from(maintainers).some(m => approvals.has(m)),
+                      '12.first-time contribution':
+                        [ 'NONE', 'FIRST_TIMER', 'FIRST_TIME_CONTRIBUTOR' ].includes(pull_request.author_association),
+                    }
                   )
 
-                  // And add the ones that aren't set already
-                  const added = after.filter(name => !before.includes(name))
-                  if (added.length > 0) {
-                    await github.rest.issues.addLabels({
-                      ...context.repo,
-                      issue_number: pull_request.number,
-                      labels: added
-                    })
-                  }
+                  // No need for an API request, if all labels are the same.
+                  const hasChanges = Object.keys(after).some(name => (before[name] ?? false) != after[name])
+                  if (log('Has changes', hasChanges, !hasChanges))
+                    return;
+
+                  // Skipping labeling on a pull_request event, because we have no privileges.
+                  const labels = Object.entries(after).filter(([,value]) => value).map(([name]) => name)
+                  if (log('Set labels', labels, context.eventName == 'pull_request'))
+                    return;
+
+                  await github.rest.issues.setLabels({
+                    ...context.repo,
+                    issue_number: pull_request.number,
+                    labels
+                  })
                 } catch (cause) {
                   throw new Error(`Labeling PR #${pull_request.number} failed.`, { cause })
                 }
