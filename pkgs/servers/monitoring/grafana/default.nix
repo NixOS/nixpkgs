@@ -29,19 +29,19 @@ let
   patchGoVersion = ''
     find . -name go.mod -not -path "./.bingo/*" -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.3" "go 1.24.2"
+        --replace-fail "go 1.24.4" "go 1.24.4"
     done
     find . -name go.work -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.3" "go 1.24.2"
+        --replace-fail "go 1.24.4" "go 1.24.4"
     done
     substituteInPlace Makefile \
-      --replace-fail "GO_VERSION = 1.24.3" "GO_VERSION = 1.24.2"
+      --replace-fail "GO_VERSION = 1.24.4" "GO_VERSION = 1.24.4"
   '';
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "12.0.1+security-01";
+  version = "12.0.2";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -53,7 +53,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-cYEWNXuIrTrtXR3XHqizDJ17QyBYkaccIThSorWO5GA=";
+    hash = "sha256-Nzx7QAAON/cWLqadL2IpdRunFNNoXE8PPYrquqPvWfk=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -67,14 +67,14 @@ buildGoModule rec {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-Vjr/jyXqHoM/3o49IDJ2aT1s1tMkP90H+2E+yUiviF4=";
+    hash = "sha256-vQdiQyxebtVrO76Pl4oC3DM37owhtQgZqYWaiIyKysQ=";
   };
 
   disallowedRequisites = [ offlineCache ];
 
   postPatch = patchGoVersion;
 
-  vendorHash = "sha256-Vlao6eNEHtl1+6vAAjDOxINuGxSwAqdi6Hc8oVniTO8=";
+  vendorHash = "sha256-cJxvZPJmf5YY+IWE7rdoGUkXxDeE6b0troGsdpsQzeU=";
 
   proxyVendor = true;
 
