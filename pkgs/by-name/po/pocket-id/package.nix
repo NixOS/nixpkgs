@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "pocket-id";
-  version = "1.3.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I2wKxeXxGO8mx8pHzn/8mAqWsWBrMdFrznmkfEiBzpI=";
+    hash = "sha256-sKQ+f68djyuCRdr2x73QNiN9wbmnsTCmHyg/o1YvwHI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
@@ -42,7 +42,7 @@ buildGoModule (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-CmlYMqRb4+CC0VgpTQKOakc1k6mSIIYbn6l7URu6Eck=";
+    npmDepsHash = "sha256-Ge3+IaffW8jCfUwj2FOt0GR0HbVy70EXel9TN2zVrB4=";
     npmFlags = [ "--legacy-peer-deps" ];
 
     env.BUILD_OUTPUT_PATH = "dist";
