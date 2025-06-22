@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "rospo";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "ferama";
     repo = "rospo";
     rev = "v${version}";
-    hash = "sha256-H6hZbOnX+1P1Ob5fCROQtV+64NiFD9mO3kiaQY63OBM=";
+    hash = "sha256-xfCjRAsKJxtYeY2Mx+l1tDtqAF0SKjTCJCh1gCG+Rl8=";
   };
 
-  vendorHash = "sha256-KyTDyV27YQDqbEyKSYfbJuTKw2EsZAqWsHhmMncUHUs=";
+  vendorHash = "sha256-6hCaguJP7XXdxYYS2KuBegwPaKP8rD9YI5727HZo7uA=";
 
   ldflags = [
     "-s"
