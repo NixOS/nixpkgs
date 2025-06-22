@@ -13,6 +13,7 @@
   scipy,
 
   # tests
+  anywidget,
   igraph,
   ipywidgets,
   matplotlib,
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "kmapper" ];
 
   nativeCheckInputs = [
+    anywidget
     igraph
     ipywidgets
     matplotlib
