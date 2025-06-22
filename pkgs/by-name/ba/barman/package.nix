@@ -4,6 +4,7 @@
   fetchFromGitHub,
   python3Packages,
   versionCheckHook,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -58,6 +59,15 @@ python3Packages.buildPythonApplication rec {
       # FsOperationFailed
       "test_get_file_mode"
     ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^release/(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
+  };
 
   meta = {
     description = "Backup and Recovery Manager for PostgreSQL";
