@@ -521,6 +521,8 @@ When using the `patches` parameter to `mkDerivation`, make sure the patch name c
 >
 > See [Versioning](#versioning) for details on package versioning.
 
+The following describes two ways to include the patch. Regardless of how the patch is included, you _must_ ensure its purpose is clear and obvious. This enables other maintainers to more easily determine when old patches are no longer required. Typically, you can improve clarity with carefully considered filenames, attribute names, and/or comments; these should explain the patch's _intention_. Additionally, it may sometimes be helpful to clarify _how_ it resolves the issue. For example: _"fix gcc14 build by adding missing include"_.
+
 ### Fetching patches
 
 In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch2`:
