@@ -38,13 +38,13 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-06-10";
+    version = "0-unstable-2025-06-14";
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "8888d71ab9391a8865959aa125cc7a1ae537f0b8";
-      hash = "sha256-nQvh8tp11WYe44nzBofLmJr/2el+SECoGK0Ds4lvdC4=";
+      rev = "e52e9bb4b699e39d9ce51874ea339d4773717389";
+      hash = "sha256-azSFD1Uxa8RTbX3xllxkZuLCahpQdh/8F1TiUx2irhA=";
     };
 
     postPatch = ''

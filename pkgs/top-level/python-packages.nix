@@ -19431,6 +19431,8 @@ self: super: with self; {
 
   wsgitools = callPackage ../development/python-modules/wsgitools { };
 
+  wslink = callPackage ../development/python-modules/wslink { };
+
   wsme = callPackage ../development/python-modules/wsme { };
 
   wsproto = callPackage ../development/python-modules/wsproto { };
