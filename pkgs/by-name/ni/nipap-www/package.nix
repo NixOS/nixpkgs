@@ -1,6 +1,7 @@
 {
   lib,
   python3Packages,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -32,6 +33,7 @@ python3Packages.buildPythonApplication rec {
   passthru = {
     inherit (python3Packages) gunicorn python;
     pythonPath = python3Packages.makePythonPath dependencies;
+    tests.nixos = nixosTests.nipap;
   };
 
   meta = {
