@@ -1941,6 +1941,13 @@
     githubId = 76066109;
     name = "Mario Liguori";
   };
+  archercatneo = {
+    name = "ArchercatNEO";
+    email = "tururu.pompella@gmail.com";
+    matrix = "@archercatneo:matrix.org";
+    github = "ArchercatNEO";
+    githubId = 108980279;
+  };
   archseer = {
     email = "blaz@mxxn.io";
     github = "archseer";
