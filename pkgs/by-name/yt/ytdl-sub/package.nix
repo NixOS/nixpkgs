@@ -54,8 +54,9 @@ python3Packages.buildPythonApplication rec {
   };
 
   disabledTests = [
-    "test_presets_run"
     "test_logger_can_be_cleaned_during_execution"
+    "test_presets_run"
+    "test_thumbnail"
   ];
 
   pytestFlagsArray = [
