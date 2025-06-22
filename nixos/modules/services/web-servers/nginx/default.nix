@@ -715,7 +715,7 @@ in
           [
             { addr = "10.0.0.12"; proxyProtocol = true; ssl = true; }
             { addr = "0.0.0.0"; }
-            { addr = "[::0]"; }
+            { addr = "[::]"; }
           ]
         '';
         description = ''
@@ -727,8 +727,8 @@ in
 
       defaultListenAddresses = mkOption {
         type = types.listOf types.str;
-        default = [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]";
-        defaultText = literalExpression ''[ "0.0.0.0" ] ++ lib.optional config.networking.enableIPv6 "[::0]"'';
+        default = [ "0.0.0.0" ] ++ optional enableIPv6 "[::]";
+        defaultText = literalExpression ''[ "0.0.0.0" ] ++ lib.optional config.networking.enableIPv6 "[::]"'';
         example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
         description = ''
           If vhosts do not specify listenAddresses, use these addresses by default.
