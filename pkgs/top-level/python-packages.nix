@@ -16958,6 +16958,9 @@ self: super: with self; {
   standard-mailcap =
     if pythonOlder "3.13" then null else callPackage ../development/python-modules/standard-mailcap { };
 
+  standard-nntplib =
+    if pythonOlder "3.13" then null else callPackage ../development/python-modules/standard-nntplib { };
+
   standard-pipes =
     if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-pipes { } else null;
 

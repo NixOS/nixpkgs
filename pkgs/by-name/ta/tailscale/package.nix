@@ -224,6 +224,7 @@ buildGoModule {
       jk
       mfrw
       pyrox0
+      ryan4yin
     ];
   };
 }
