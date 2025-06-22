@@ -1,0 +1,173 @@
+From 23a6646d697ddfc51e3deab018853a22376dacdf Mon Sep 17 00:00:00 2001
+From: Grazvydas Ignotas <notasas@gmail.com>
+Date: Sun, 7 Jul 2024 00:11:26 +0300
+Subject: [PATCH 1/2] dwmapi: Drop unnecessary static, improve variable names.
+
+---
+ dlls/dwmapi/dwmapi_main.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/dlls/dwmapi/dwmapi_main.c b/dlls/dwmapi/dwmapi_main.c
+index adc02552ba7..8d4ccbb1fc4 100644
+--- a/dlls/dwmapi/dwmapi_main.c
++++ b/dlls/dwmapi/dwmapi_main.c
+@@ -184,9 +184,9 @@ HRESULT WINAPI DwmEnableBlurBehindWindow(HWND hWnd, const DWM_BLURBEHIND *pBlurB
+  */
+ BOOL WINAPI DwmDefWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult)
+ {
+-    static int i;
++    static BOOL once;
+ 
+-    if (!i++) FIXME("stub\n");
++    if (!once++) FIXME("stub\n");
+ 
+     return FALSE;
+ }
+@@ -273,7 +273,8 @@ static int get_display_frequency(void)
+ HRESULT WINAPI DwmGetCompositionTimingInfo(HWND hwnd, DWM_TIMING_INFO *info)
+ {
+     LARGE_INTEGER performance_frequency, qpc;
+-    static int i, display_frequency;
++    int display_frequency;
++    static BOOL once;
+ 
+     if (!info)
+         return E_INVALIDARG;
+@@ -281,7 +282,7 @@ HRESULT WINAPI DwmGetCompositionTimingInfo(HWND hwnd, DWM_TIMING_INFO *info)
+     if (info->cbSize != sizeof(DWM_TIMING_INFO))
+         return MILERR_MISMATCHED_SIZE;
+ 
+-    if(!i++) FIXME("(%p %p)\n", hwnd, info);
++    if (!once++) FIXME("(%p %p)\n", hwnd, info);
+ 
+     memset(info, 0, info->cbSize);
+     info->cbSize = sizeof(DWM_TIMING_INFO);
+-- 
+GitLab
+
+
+From 9bd6b35aa8d9b92593db1722ce533e0e4d8985ad Mon Sep 17 00:00:00 2001
+From: Grazvydas Ignotas <notasas@gmail.com>
+Date: Sun, 7 Jul 2024 00:18:40 +0300
+Subject: [PATCH 2/2] dwmapi: Simulate DwmFlush blocking behavior.
+
+The documentation states it's a blocking call. There are reports of it
+being used for WaitForVBlank-like purposes [1]. Without blocking Softube
+VST plugin logic breaks and they never update their UIs.
+
+[1] https://news.ycombinator.com/item?id=34501612
+
+Wine-Bug: https://bugs.winehq.org/show_bug.cgi?id=56935
+---
+ dlls/dwmapi/dwmapi_main.c  | 23 +++++++++++++++++++--
+ dlls/dwmapi/tests/dwmapi.c | 41 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 62 insertions(+), 2 deletions(-)
+
+diff --git a/dlls/dwmapi/dwmapi_main.c b/dlls/dwmapi/dwmapi_main.c
+index 8d4ccbb1fc4..419216534aa 100644
+--- a/dlls/dwmapi/dwmapi_main.c
++++ b/dlls/dwmapi/dwmapi_main.c
+@@ -32,6 +32,7 @@
+ 
+ WINE_DEFAULT_DEBUG_CHANNEL(dwmapi);
+ 
++static int get_display_frequency(void);
+ 
+ /**********************************************************************
+  *           DwmIsCompositionEnabled         (DWMAPI.@)
+@@ -88,9 +89,26 @@ HRESULT WINAPI DwmGetColorizationColor(DWORD *colorization, BOOL *opaque_blend)
+  */
+ HRESULT WINAPI DwmFlush(void)
+ {
++    static volatile LONG last_time;
+     static BOOL once;
++    DWORD now, interval, last = last_time, target;
++    int freq;
+ 
+-    if (!once++) FIXME("() stub\n");
++    if (!once++) FIXME("() semi-stub\n");
++
++    // simulate the WaitForVBlank-like blocking behavior
++    freq = get_display_frequency();
++    interval = 1000 / freq;
++    now = GetTickCount();
++    if (now - last < interval)
++        target = last + interval;
++    else
++    {
++        // act as if we were called midway between 2 vsyncs
++        target = now + interval / 2;
++    }
++    Sleep(target - now);
++    InterlockedCompareExchange(&last_time, target, last);
+ 
+     return S_OK;
+ }
+@@ -262,7 +280,8 @@ static int get_display_frequency(void)
+     }
+     else
+     {
+-        WARN("Failed to query display frequency, returning a fallback value.\n");
++        static BOOL once;
++        if (!once++) WARN("Failed to query display frequency, returning a fallback value.\n");
+         return 60;
+     }
+ }
+diff --git a/dlls/dwmapi/tests/dwmapi.c b/dlls/dwmapi/tests/dwmapi.c
+index a89a1fd705b..20628578f41 100644
+--- a/dlls/dwmapi/tests/dwmapi.c
++++ b/dlls/dwmapi/tests/dwmapi.c
+@@ -140,9 +140,50 @@ cleanup:
+     DestroyWindow(hwnd);
+ }
+ 
++static void test_DwmFlush(void)
++{
++    LARGE_INTEGER frequency, ts[2];
++    int i, result, ms;
++    DEVMODEA mode;
++    BOOL enabled;
++    HRESULT hr;
++
++    enabled = FALSE;
++    hr = DwmIsCompositionEnabled(&enabled);
++    ok(hr == S_OK, "Got hr %#lx.\n", hr);
++    if (!enabled)
++    {
++        skip("DWM is disabled.\n");
++        return;
++    }
++
++    memset(&mode, 0, sizeof(mode));
++    mode.dmSize = sizeof(mode);
++    result = EnumDisplaySettingsA(NULL, ENUM_CURRENT_SETTINGS, &mode);
++    ok(result, "Failed to get display mode %#lx.\n", GetLastError());
++    ok(mode.dmDisplayFrequency != 0, "dmDisplayFrequency is 0.\n");
++
++    result = QueryPerformanceFrequency(&frequency);
++    ok(result, "Failed to get performance counter frequency.\n");
++
++    result = QueryPerformanceCounter(&ts[0]);
++    ok(result, "Failed to read performance counter.\n");
++    for (i = 0; i < 2; i++)
++    {
++        hr = DwmFlush();
++        ok(hr == S_OK, "Got hr %#lx.\n", hr);
++    }
++    result = QueryPerformanceCounter(&ts[1]);
++    ok(result, "Failed to read performance counter.\n");
++    ms = (ts[1].QuadPart - ts[0].QuadPart) * 1000 / frequency.QuadPart;
++    ok(ms >= 1000 / mode.dmDisplayFrequency,
++        "DwmFlush() took %dms with dmDisplayFrequency %ld.\n", ms, mode.dmDisplayFrequency);
++}
++
+ START_TEST(dwmapi)
+ {
+     test_DwmIsCompositionEnabled();
+     test_DwmGetCompositionTimingInfo();
+     test_DWMWA_EXTENDED_FRAME_BOUNDS();
++    test_DwmFlush();
+ }
+-- 
+GitLab
+
