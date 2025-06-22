@@ -722,6 +722,10 @@ let
                   libxml2.bin
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
+                  (nixos-rebuild-ng.override {
+                    withNgSuffix = false;
+                    withReexec = true;
+                  })
                   ntp
                   perlPackages.ConfigIniFiles
                   perlPackages.FileSlurp
@@ -1110,7 +1114,7 @@ in
   simple = makeInstallerTest "simple" (
     simple-test-config
     // {
-      passthru.override = args: makeInstallerTest "simple" simple-test-config // args;
+      passthru.override = args: makeInstallerTest "simple" (simple-test-config // args);
     }
   );
 

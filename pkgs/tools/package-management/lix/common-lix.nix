@@ -140,6 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
         p.pytest
         p.pytest-xdist
         p.python-frontmatter
+        p.toml
       ]))
       pkg-config
       flex
