@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   python3Packages,
   versionCheckHook,
   nix-update-script,
@@ -19,7 +20,14 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-ffedLH7b/Z1y+yL5EkFJIGdksQZEKc3uu3KOyNc2plw=";
   };
 
-  patches = [ ./unwrap-subprocess.patch ];
+  patches = [
+    ./unwrap-subprocess.patch
+    # fix building with Python 3.13
+    (fetchpatch2 {
+      url = "https://github.com/EnterpriseDB/barman/commit/931f997f1d73bbe360abbca737bea9ae93172989.patch?full_index=1";
+      hash = "sha256-0aqyjsEabxLf4dpC4DeepmypAl7QfCedh7vy98iVifU=";
+    })
+  ];
 
   build-system = with python3Packages; [
     distutils
