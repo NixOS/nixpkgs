@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hdf5-blosc";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "hdf5-blosc";
     rev = "v${version}";
-    sha256 = "1nj2bm1v6ymm3fmyvhbn6ih5fgdiapavlfghh1pvbmhw71cysyqs";
+    sha256 = "sha256-pM438hUEdzdZEGYxoKlBAHi1G27auj9uGSeiXwVPAE8=";
   };
 
   patches = [ ./no-external-blosc.patch ];
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DPLUGIN_INSTALL_PATH=${placeholder "plugin"}/hdf5/lib/plugin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   postInstall = ''
