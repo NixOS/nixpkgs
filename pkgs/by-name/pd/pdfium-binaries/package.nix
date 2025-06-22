@@ -9,7 +9,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdfium-binaries";
   # also update rev of headers in python3Packages.pypdfium2
-  version = "7087";
+  version = "7242";
 
   src =
     let
@@ -28,17 +28,17 @@ stdenv.mkDerivation (finalAttrs: {
       hash =
         if withV8 then
           selectSystem {
-            x86_64-linux = "sha256-nKHXcBTEp165g18HLzaNGfKt8MtTYpKBGNgwIpSO0u4=";
-            aarch64-linux = "sha256-wip/ry42aDbyGiwYSUX8koxDuf88BLGZAmMZE0s+fL0=";
-            x86_64-darwin = "sha256-7pUMfNFgGqQ8Dnox57sHfrKKke+i8CGEma4tePJaTDA=";
-            aarch64-darwin = "sha256-o59kmTNC4nSCFLfww3E+4iIYs2kQ30yyFaX9f2Za7os=";
+            x86_64-linux = "sha256-FiIjbyDZTXD+Ryiq6hz3BYaW61Rue/Myn8GzXeK7DVU=";
+            aarch64-linux = "sha256-fVKAy5XddyZMvpHltR4K9qOrWvhwE2HPCyGYzARJV2o=";
+            x86_64-darwin = "sha256-3hqW3bYIwTrNutBc6KbOp5m30tqZgbPvk2xCOI/x8V4=";
+            aarch64-darwin = "sha256-DZlgOsiasHWl9neIFUdlhN2a2DDTmu3uMDvgfVbohRs=";
           }
         else
           selectSystem {
-            x86_64-linux = "sha256-zn7QlTvChQa2mQCe5K+zEGVUtuD+l/jEtlKticrrSKg=";
-            aarch64-linux = "sha256-080X72NNfKaanHeVtmxE/4uNV6Ue4f/1Mri/p3nOT8c=";
-            x86_64-darwin = "sha256-XMStU0MN9ieCrLQnQL4/jKrNWxgQl9OtZHg9EmemPhU=";
-            aarch64-darwin = "sha256-Q8R/p1hX6+JeVTFc6w7MC9GPNGqxlu6m+iawRIMndic=";
+            x86_64-linux = "sha256-kPd0hlh7LQB6E+Zq/5sta4E8zD0/S5uuKGxw3/tW310=";
+            aarch64-linux = "sha256-aLMst4oQZJdW7zTQ0A1FAPOcVCJYUp3N2o8+1ErABQA=";
+            x86_64-darwin = "sha256-FQN9ljgV733D2//d+hJyK1G1qtnORdL1a/2Nvf0RK30=";
+            aarch64-darwin = "sha256-Fm36ZpCFIj05wWvVLFVolwpAHYGDfhPelEM92TeCm5w=";
           };
       stripRoot = false;
     };
