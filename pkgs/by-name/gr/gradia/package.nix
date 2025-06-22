@@ -9,19 +9,23 @@
   gobject-introspection,
   wrapGAppsHook4,
   blueprint-compiler,
+  pkg-config,
   libadwaita,
   libportal-gtk4,
+  gnome,
+  librsvg,
+  libavif,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gradia";
-  version = "1.4.3";
+  version = "1.5.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
     tag = "v${version}";
-    hash = "sha256-cH8aL1nvDNAnvN+TYAtGez5Ot5DmwpmxugBPS36rY+Q=";
+    hash = "sha256-IamiF3mn3rVmDJrEOl0Ji+7muo8e8kunOxAZJTBNjM8=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +36,7 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
     wrapGAppsHook4
     blueprint-compiler
+    pkg-config
   ];
 
   buildInputs = [
@@ -43,6 +48,17 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     pillow
   ];
+
+  postInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          libavif
+        ];
+      }
+    }"
+  '';
 
   dontWrapGApps = true;
 
