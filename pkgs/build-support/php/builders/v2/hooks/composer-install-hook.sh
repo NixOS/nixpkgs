@@ -11,60 +11,60 @@ preInstallHooks+=(composerInstallInstallHook)
 source @phpScriptUtils@
 
 composerInstallConfigureHook() {
-    echo "Executing composerInstallConfigureHook"
+  echo "Executing composerInstallConfigureHook"
 
-    setComposerRootVersion
+  setComposerRootVersion
 
-    if [[ ! -e "${composerVendor}" ]]; then
-        echo "No local composer vendor found." >&2
-        exit 1
-    fi
+  if [[ ! -e "${composerVendor}" ]]; then
+    echo "No local composer vendor found." >&2
+    exit 1
+  fi
 
-    install -Dm644 ${composerVendor}/composer.json .
+  install -Dm644 ${composerVendor}/composer.json .
 
-    if [[ -f "${composerVendor}/composer.lock" ]]; then
-        install -Dm644 ${composerVendor}/composer.lock .
-    fi
+  if [[ -f "${composerVendor}/composer.lock" ]]; then
+    install -Dm644 ${composerVendor}/composer.lock .
+  fi
 
-    if [[ -f "composer.lock" ]]; then
-        chmod +w composer.lock
-    fi
+  if [[ -f "composer.lock" ]]; then
+    chmod +w composer.lock
+  fi
 
-    chmod +w composer.json
+  chmod +w composer.json
 
-    echo "Finished composerInstallConfigureHook"
+  echo "Finished composerInstallConfigureHook"
 }
 
 composerInstallBuildHook() {
-    echo "Executing composerInstallBuildHook"
+  echo "Executing composerInstallBuildHook"
 
-    echo "Finished composerInstallBuildHook"
+  echo "Finished composerInstallBuildHook"
 }
 
 composerInstallCheckHook() {
-    echo "Executing composerInstallCheckHook"
+  echo "Executing composerInstallCheckHook"
 
-    checkComposerValidate
+  checkComposerValidate
 
-    echo "Finished composerInstallCheckHook"
+  echo "Finished composerInstallCheckHook"
 }
 
 composerInstallInstallHook() {
-    echo "Executing composerInstallInstallHook"
+  echo "Executing composerInstallInstallHook"
 
-    cp -ar ${composerVendor}/* .
+  cp -ar ${composerVendor}/* .
 
-    # Copy the relevant files only in the store.
-    mkdir -p "$out"/share/php/"${pname}"
-    cp -r . "$out"/share/php/"${pname}"/
+  # Copy the relevant files only in the store.
+  mkdir -p "$out"/share/php/"${pname}"
+  cp -r . "$out"/share/php/"${pname}"/
 
-    # Create symlinks for the binaries.
-    mapfile -t BINS < <(jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json)
-    for bin in "${BINS[@]}"; do
-        echo -e "\e[32mCreating symlink ${bin}...\e[0m"
-        mkdir -p "$out/bin"
-        ln -s "$out/share/php/${pname}/${bin}" "$out/bin/$(basename "$bin")"
-    done
+  # Create symlinks for the binaries.
+  mapfile -t BINS < <(jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json)
+  for bin in "${BINS[@]}"; do
+    echo -e "\e[32mCreating symlink ${bin}...\e[0m"
+    mkdir -p "$out/bin"
+    ln -s "$out/share/php/${pname}/${bin}" "$out/bin/$(basename "$bin")"
+  done
 
-    echo "Finished composerInstallInstallHook"
+  echo "Finished composerInstallInstallHook"
 }
