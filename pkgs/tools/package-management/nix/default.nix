@@ -247,6 +247,7 @@ lib.makeExtensible (
         patches = [
           # fixes user/system registries regression: https://github.com/NixOS/nix/issues/13050
           ./patches/0001-Revert-Actually-ignore-system-user-registries-during.patch
+          ./patches/ghsa-g948-229j-48j3-2.28.patch
         ];
       };
 
