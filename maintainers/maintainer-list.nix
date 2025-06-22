@@ -1606,6 +1606,12 @@
     githubId = 7644264;
     name = "Andrew Gazelka";
   };
+  andrewgigena = {
+    email = "work@andrewgigena.dev";
+    github = "andrewgigena";
+    githubId = 37125554;
+    name = "Andrew Gigena";
+  };
   AndrewKvalheim = {
     email = "andrew@kvalhe.im";
     github = "AndrewKvalheim";
