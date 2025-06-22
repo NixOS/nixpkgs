@@ -23,7 +23,6 @@ python3.pkgs.buildPythonApplication rec {
     charset-normalizer
     faust-cchardet
     ffmpeg-python
-    future
     numpy
     pkgs.ffmpeg
     pysubs2
