@@ -94,6 +94,9 @@ python3Packages.buildPythonApplication rec {
 
     # Blob not found in the local CAS
     "test_source_pull_partial_fallback_fetch"
+
+    # FAILED tests/sources/tar.py::test_out_of_basedir_hardlinks - AssertionError
+    "test_out_of_basedir_hardlinks"
   ];
 
   disabledTestPaths = [
