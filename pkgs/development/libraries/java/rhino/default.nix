@@ -63,7 +63,7 @@ stdenv.mkDerivation {
       to provide scripting to end users.
     '';
 
-    homepage = "http://www.mozilla.org/rhino/";
+    homepage = "https://rhino.github.io/";
 
     license = with licenses; [
       mpl11 # or

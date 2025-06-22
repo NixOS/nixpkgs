@@ -56,6 +56,7 @@ buildGoModule rec {
       bryanasdev000
       humancalico
       qjoly
+      ryan4yin
     ];
     mainProgram = "cilium";
   };
