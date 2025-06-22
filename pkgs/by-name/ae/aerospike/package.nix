@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     cp target/Linux-x86_64/bin/asd $out/bin/asd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flash-optimized, in-memory, NoSQL database";
     mainProgram = "asd";
     homepage = "https://aerospike.com/";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }
