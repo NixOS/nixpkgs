@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deputy";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "filiptibell";
     repo = "deputy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dTCikfHqfSVb1F6LYrLqFAEufD6dPgAi6F65yPlCO18=";
   };
 
@@ -29,9 +29,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Language server for tools and package managers";
     homepage = "https://github.com/filiptibell/deputy";
-    changelog = "https://github.com/filiptibell/deputy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/filiptibell/deputy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ niklaskorz ];
     mainProgram = "deputy";
   };
-}
+})
