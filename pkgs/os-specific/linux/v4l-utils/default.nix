@@ -86,7 +86,10 @@ stdenv.mkDerivation rec {
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = with maintainers; [ codyopel ];
+    maintainers = with maintainers; [
+      codyopel
+      yarny
+    ];
     platforms = platforms.linux;
   };
 }
