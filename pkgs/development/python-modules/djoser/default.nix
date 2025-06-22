@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-xPhf7FiJSq5bHfAU5RKbobgnsRh/6cLcXP6vfrLdzJA=";
   };
 
-  buildInputs = [
+  dependencies = [
     django
     djangorestframework-simplejwt
     social-auth-app-django
