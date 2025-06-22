@@ -50,6 +50,11 @@ jobs:
         run: |
           ./trusted/ci/check-cherry-picks.sh "$BASE_SHA" "$HEAD_SHA" checked-cherry-picks.md
 
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
       - name: Prepare review
         if: steps.check.outcome == 'failure'
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -148,3 +153,8 @@ jobs:
                 }`, { node_id: review.node_id })
               })
             )
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
