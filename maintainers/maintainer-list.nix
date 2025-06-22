@@ -6372,6 +6372,12 @@
     github = "dietmarw";
     githubId = 9332;
   };
+  different-name = {
+    name = "different-name";
+    email = "hello@different-name.dev";
+    github = "different-name";
+    githubId = 49257026;
+  };
   diffumist = {
     email = "git@diffumist.me";
     github = "Diffumist";
