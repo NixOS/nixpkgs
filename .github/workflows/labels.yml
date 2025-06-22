@@ -101,6 +101,9 @@ jobs:
             github.hook.wrap('request', async (request, options) => {
               // Requests to the /rate_limit endpoint do not count against the rate limit.
               if (options.url == '/rate_limit') return request(options)
+              // Search requests are in a different resource group, which allows 30 requests / minute.
+              // We do less than a handful each run, so not implementing throttling for now.
+              if (options.url.startsWith('/search/')) return request(options)
               stats.requests++
               if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method))
                 return writeLimits.schedule(request.bind(null, options))
@@ -131,17 +134,28 @@ jobs:
             if (process.env.UPDATED_WITHIN && !/^\d+$/.test(process.env.UPDATED_WITHIN))
               throw new Error('Please enter "updated within" as integer in hours.')
 
-            async function handle(pull_request, done, cutoff) {
+            async function handle(item) {
               try {
                 const log = (k,v,skip) => {
-                  core.info(`PR #${pull_request.number} - ${k}: ${v}` + (skip ? ' (skipped)' : ''))
+                  core.info(`#${item.number} - ${k}: ${v}` + (skip ? ' (skipped)' : ''))
                   return skip
                 }
 
-                if (log('Last updated at', pull_request.updated_at, new Date(pull_request.updated_at) < cutoff))
-                  return done()
+                log('Last updated at', item.updated_at)
                 stats.prs++
-                log('URL', pull_request.html_url)
+                log('URL', item.html_url)
+
+                const pull_number = item.number
+                const issue_number = item.number
+
+                // The search result is of a format that works for both issues and pull requests and thus
+                // does not have all fields of a full pull_request response. Notably, it is missing `head.sha`,
+                // which we need to fetch the workflow run below. When triggered via pull_request event,
+                // this field is already available.
+                const pull_request = item.head ? item : (await github.rest.pulls.get({
+                  ...context.repo,
+                  pull_number
+                })).data
 
                 const run_id = (await github.rest.actions.listWorkflowRuns({
                   ...context.repo,
@@ -188,7 +202,7 @@ jobs:
                     repositoryOwner: context.repo.owner,
                     token: core.getInput('github-token')
                   },
-                  path: path.resolve(pull_request.number.toString()),
+                  path: path.resolve(pull_number.toString()),
                   expectedHash: artifact.digest
                 })
 
@@ -197,7 +211,7 @@ jobs:
                 const before = Object.fromEntries(
                   (await github.paginate(github.rest.issues.listLabelsOnIssue, {
                     ...context.repo,
-                    issue_number: pull_request.number
+                    issue_number
                   }))
                   .map(({ name }) => [name, true])
                 )
@@ -205,17 +219,17 @@ jobs:
                 const approvals = new Set(
                   (await github.paginate(github.rest.pulls.listReviews, {
                     ...context.repo,
-                    pull_number: pull_request.number
+                    pull_number
                   }))
                   .filter(review => review.state == 'APPROVED')
                   .map(review => review.user?.id)
                 )
 
                 const maintainers = new Set(Object.keys(
-                  JSON.parse(await readFile(`${pull_request.number}/maintainers.json`, 'utf-8'))
+                  JSON.parse(await readFile(`${pull_number}/maintainers.json`, 'utf-8'))
                 ).map(m => Number.parseInt(m, 10)))
 
-                const evalLabels = JSON.parse(await readFile(`${pull_request.number}/changed-paths.json`, 'utf-8')).labels
+                const evalLabels = JSON.parse(await readFile(`${pull_number}/changed-paths.json`, 'utf-8')).labels
 
                 // Manage the labels
                 const after = Object.assign(
@@ -249,11 +263,11 @@ jobs:
 
                 await github.rest.issues.setLabels({
                   ...context.repo,
-                  issue_number: pull_request.number,
+                  issue_number,
                   labels
                 })
               } catch (cause) {
-                throw new Error(`Labeling PR #${pull_request.number} failed.`, { cause })
+                throw new Error(`Labeling #${item.number} failed.`, { cause })
               }
             }
 
@@ -280,18 +294,21 @@ jobs:
               })())
               core.info('cutoff timestamp: ' + cutoff.toISOString())
 
-              const prs = await github.paginate(
-                github.rest.pulls.list,
+              const items = await github.paginate(
+                github.rest.search.issuesAndPullRequests,
                 {
-                  ...context.repo,
-                  state: 'open',
-                  sort: 'updated',
-                  direction: 'desc',
-                },
-                (response, done) => response.data.map(pull_request => handle(pull_request, done, cutoff))
+                  q: [
+                    `repo:"${process.env.GITHUB_REPOSITORY}"`,
+                    'type:pr',
+                    'is:open',
+                    `updated:>=${cutoff.toISOString()}`
+                  ].join(' AND '),
+                  // TODO: Remove in 2025-10, when it becomes the default.
+                  advanced_search: true
+                }
               );
 
-              (await Promise.allSettled(prs.flat()))
+              (await Promise.allSettled(items.map(handle)))
                 .filter(({ status }) => status == 'rejected')
                 .map(({ reason }) => core.setFailed(`${reason.message}\n${reason.cause.stack}`))
 
