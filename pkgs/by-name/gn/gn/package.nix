@@ -73,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Meta-build system that generates build files for Ninja";
     mainProgram = "gn";
