@@ -182,6 +182,7 @@ stdenv.mkDerivation rec {
       pradyuman
       stephenmw
       zimbatm
+      ryan4yin
     ];
     platforms = builtins.attrNames data.googleCloudSdkPkgs;
     mainProgram = "gcloud";

@@ -161,6 +161,7 @@ buildGoModule rec {
       globin
       ma27
       Frostman
+      ryan4yin
     ];
     platforms = [
       "x86_64-linux"
