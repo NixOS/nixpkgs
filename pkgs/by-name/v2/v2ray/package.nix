@@ -70,6 +70,9 @@ buildGoModule rec {
     description = "Platform for building proxies to bypass network restrictions";
     mainProgram = "v2ray";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ servalcatty ];
+    maintainers = with lib.maintainers; [
+      servalcatty
+      ryan4yin
+    ];
   };
 }
