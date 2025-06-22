@@ -9,6 +9,7 @@
   bison,
   bc,
   opensnitch,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,6 +58,10 @@ stdenv.mkDerivation rec {
       llvm-strip --strip-debug $file
     done
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) opensnitch;
+  };
 
   meta = with lib; {
     description = "eBPF process monitor module for OpenSnitch";
