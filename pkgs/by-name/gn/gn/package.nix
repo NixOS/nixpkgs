@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gn-unstable";
-  version = "2025-04-28";
+  version = "0-unstable-2025-04-28";
   revNum = 2233;
   revShort = builtins.substring 0 7 finalAttrs.src.rev;
 
@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   setupHook = ./setup-hook.sh;
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Meta-build system that generates build files for Ninja";
