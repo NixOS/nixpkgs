@@ -9,6 +9,11 @@ stdenv.mkDerivation {
   inherit (libajantv2) src;
   sourceRoot = "${libajantv2.src.name}/driver/linux";
 
+  patches = [
+    ./fix-linux-6.15.patch
+  ];
+  patchFlags = "-p3";
+
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
