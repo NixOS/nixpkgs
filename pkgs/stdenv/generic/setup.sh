@@ -4,6 +4,8 @@ __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
 
+# TEST
+
 if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 5 ]]; then
     echo "Detected Bash version that isn't supported by Nixpkgs (${BASH_VERSION})"
     echo "Please install Bash 5 or greater to continue."

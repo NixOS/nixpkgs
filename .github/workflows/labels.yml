@@ -5,6 +5,8 @@
 
 name: Labels
 
+# TEST
+
 on:
   schedule:
     - cron: '07,17,27,37,47,57 * * * *'
