@@ -9,6 +9,7 @@ from importlib.resources import files
 from pathlib import Path
 from string import Template
 from subprocess import PIPE, CalledProcessError
+from textwrap import dedent
 from typing import Final, Literal
 
 from . import tmpdir
@@ -613,6 +614,33 @@ def set_profile(
     sudo: bool,
 ) -> None:
     "Set a path as the current active Nix profile."
+    if not os.environ.get(
+        "NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM"
+    ):
+        r = run_wrapper(
+            ["test", "-f", path_to_config / "nixos-version"],
+            remote=target_host,
+            check=False,
+        )
+        if r.returncode:
+            msg = dedent(
+                # the lowercase for the first letter below is proposital
+                f"""
+                    your NixOS configuration path seems to be missing essential files.
+                    To avoid corrupting your current NixOS installation, the activation will abort.
+
+                    This could be caused by Nix bug: https://github.com/NixOS/nix/issues/13367.
+                    This is the evaluated NixOS configuration path: {path_to_config}.
+                    Change the directory to somewhere else (e.g., `cd $HOME`) before trying again.
+
+                    If you think this is a mistake, you can set the environment variable
+                    NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM to 1
+                    and re-run the command to continue.
+                    Please open an issue if this is the case.
+                """
+            ).strip()
+            raise NixOSRebuildError(msg)
+
     run_wrapper(
         ["nix-env", "-p", profile.path, "--set", path_to_config],
         remote=target_host,
