@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     sparsehash
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility that allows end-users to leverage HFS+/APFS compression";
-    license = licenses.unfree;
-    maintainers = [ maintainers.viraptor ];
-    platforms = platforms.darwin;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ viraptor ];
+    platforms = lib.platforms.darwin;
     homepage = "https://github.com/RJVB/afsctool";
   };
 }
