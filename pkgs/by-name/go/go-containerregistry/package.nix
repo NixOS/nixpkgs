@@ -69,6 +69,9 @@ buildGoModule rec {
     homepage = "https://github.com/google/go-containerregistry";
     license = licenses.asl20;
     mainProgram = "crane";
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = with maintainers; [
+      yurrriq
+      ryan4yin
+    ];
   };
 }
