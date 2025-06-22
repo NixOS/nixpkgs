@@ -9,14 +9,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "httplz";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "thecoshman";
     repo = "http";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qinhdpm9eaTdpUk4ZZLaH1D/CZ22k4RisHu8clZCEGo=";
   };
 
@@ -49,8 +49,8 @@ rustPlatform.buildRustPackage rec {
     description = "Basic http server for hosting a folder fast and simply";
     mainProgram = "httplz";
     homepage = "https://github.com/thecoshman/http";
-    changelog = "https://github.com/thecoshman/http/releases/tag/v${version}";
+    changelog = "https://github.com/thecoshman/http/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ figsoda ];
   };
-}
+})
