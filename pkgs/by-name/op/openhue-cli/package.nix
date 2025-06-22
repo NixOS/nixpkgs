@@ -14,21 +14,28 @@ buildGoModule (finalAttrs: {
     owner = "openhue";
     repo = "openhue-cli";
     tag = finalAttrs.version;
-    hash = "sha256-yIPqjKIvYk2Y9BYieqrm5QvvAHnuImXEDbI1JOy0kBA=";
+    hash = "sha256-LSaHE3gdjpNea6o+D/JGvHtwvG13LbHv2pDcZhlIoEE=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse HEAD > $out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
   vendorHash = "sha256-lqIzmtFtkfrJSrpic79Is0yGpnLUysPQLn2lp/Mh+u4=";
 
   env.CGO_ENABLED = 0;
 
-  rev = "c37f2a910173d8c9df42b40bd6efb583307a40cc";
-
   ldflags = [
     "-s"
     "-w"
     "-X main.version=${finalAttrs.version}"
-    "-X main.commit=${finalAttrs.rev}"
   ];
+
+  preBuild = ''
+    ldflags+=" -X main.commit=$(cat COMMIT)"
+  '';
 
   postInstall = ''
     mv $out/bin/openhue-cli $out/bin/openhue
