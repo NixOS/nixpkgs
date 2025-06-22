@@ -131,30 +131,6 @@ jobs:
             if (process.env.UPDATED_WITHIN && !/^\d+$/.test(process.env.UPDATED_WITHIN))
               throw new Error('Please enter "updated within" as integer in hours.')
 
-            const cutoff = new Date(await (async () => {
-              // Always run for Pull Request triggers, no cutoff since there will be a single
-              // response only anyway. 0 is the Unix epoch, so always smaller.
-              if (context.payload.pull_request?.number) return 0
-
-              // Manually triggered via UI when updatedWithin is set. Will fallthrough to the last
-              // option if the updatedWithin parameter is set to 0, which is the default.
-              const updatedWithin = Number.parseInt(process.env.UPDATED_WITHIN, 10)
-              if (updatedWithin) return new Date().getTime() - updatedWithin * 60 * 60 * 1000
-
-              // Normally a scheduled run, but could be workflow_dispatch, see above. Go back as far
-              // as the last successful run of this workflow to make sure we are not leaving anyone
-              // behind on GHA failures.
-              // Defaults to go back 1 hour on the first run.
-              return (await github.rest.actions.listWorkflowRuns({
-                ...context.repo,
-                workflow_id: 'labels.yml',
-                event: 'schedule',
-                status: 'success',
-                exclude_pull_requests: true
-              })).data.workflow_runs[0]?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000
-            })())
-            core.info('cutoff timestamp: ' + cutoff.toISOString())
-
             // To simplify this action's logic we fetch the pull_request data again below, even if
             // we are already in a pull_request event's context and would have the data readily
             // available. We do this by filtering the list of pull requests with head and base
@@ -165,7 +141,7 @@ jobs:
               base: context.payload.pull_request.base.ref
             }
 
-            async function handle(pull_request, done) {
+            async function handle(pull_request, done, cutoff) {
               try {
                 const log = (k,v,skip) => {
                   core.info(`PR #${pull_request.number} - ${k}: ${v}` + (skip ? ' (skipped)' : ''))
@@ -292,6 +268,30 @@ jobs:
               }
             }
 
+            const cutoff = new Date(await (async () => {
+              // Always run for Pull Request triggers, no cutoff since there will be a single
+              // response only anyway. 0 is the Unix epoch, so always smaller.
+              if (context.payload.pull_request?.number) return 0
+
+              // Manually triggered via UI when updatedWithin is set. Will fallthrough to the last
+              // option if the updatedWithin parameter is set to 0, which is the default.
+              const updatedWithin = Number.parseInt(process.env.UPDATED_WITHIN, 10)
+              if (updatedWithin) return new Date().getTime() - updatedWithin * 60 * 60 * 1000
+
+              // Normally a scheduled run, but could be workflow_dispatch, see above. Go back as far
+              // as the last successful run of this workflow to make sure we are not leaving anyone
+              // behind on GHA failures.
+              // Defaults to go back 1 hour on the first run.
+              return (await github.rest.actions.listWorkflowRuns({
+                ...context.repo,
+                workflow_id: 'labels.yml',
+                event: 'schedule',
+                status: 'success',
+                exclude_pull_requests: true
+              })).data.workflow_runs[0]?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000
+            })())
+            core.info('cutoff timestamp: ' + cutoff.toISOString())
+
             const prs = await github.paginate(
               github.rest.pulls.list,
               {
@@ -301,7 +301,7 @@ jobs:
                 direction: 'desc',
                 ...prEventCondition
               },
-              (response, done) => response.data.map(pull_request => handle(pull_request, done))
+              (response, done) => response.data.map(pull_request => handle(pull_request, done, cutoff))
             );
 
             (await Promise.allSettled(prs.flat()))
