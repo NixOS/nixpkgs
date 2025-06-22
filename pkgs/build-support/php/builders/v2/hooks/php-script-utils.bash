@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 declare -g version
 declare -g -i composerStrictValidation="${composerStrictValidation:-0}"
 
