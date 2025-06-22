@@ -59,7 +59,7 @@ Special care has to be taken with security-critical software components. Because
 
 This section describes a general framework of understanding and exceptions might apply.
 
-Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project.
+If the package you'd like to submit doesn't meet the criteria above, you can still maintain and distribute it to Nix users in other ways, such as by including a `flake.nix` (or `default.nix` if you prefer not to use flakes) in the project's repository, or by submitting your package to the [Nix User Repository](https://github.com/nix-community/nur).
 
 ---
 
