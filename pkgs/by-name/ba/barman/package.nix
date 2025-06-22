@@ -4,20 +4,21 @@
   fetchFromGitHub,
   fetchpatch2,
   python3Packages,
+  rsync,
   versionCheckHook,
   nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "3.13.3";
+  version = "3.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
     tag = "release/${version}";
-    hash = "sha256-ffedLH7b/Z1y+yL5EkFJIGdksQZEKc3uu3KOyNc2plw=";
+    hash = "sha256-Z3+PgUJcyG/M05hMmIhRr3HttzHUDx7BGIs44LA/qE4=";
   };
 
   patches = [
@@ -49,12 +50,13 @@ python3Packages.buildPythonApplication rec {
     python-snappy
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    mock
-    pytestCheckHook
+  nativeCheckInputs = [
+    python3Packages.lz4
+    python3Packages.mock
+    python3Packages.pytestCheckHook
+    python3Packages.zstandard
+    rsync
     versionCheckHook
-    zstandard
-    lz4
   ];
 
   disabledTests =
