@@ -67,7 +67,10 @@ stdenv.mkDerivation rec {
     description = "eBPF process monitor module for OpenSnitch";
     homepage = "https://github.com/evilsocket/opensnitch";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [
+      onny
+      grimmauld
+    ];
     platforms = platforms.linux;
   };
 }
