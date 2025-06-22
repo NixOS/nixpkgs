@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "INSTALL_PREFIX=${placeholder "out"}" ];
 
-  postInstall = ''
+  postFixup = ''
     wrapProgram $out/bin/qdirstat-cache-writer \
       --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.URI ]}"
   '';
