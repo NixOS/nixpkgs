@@ -95,9 +95,16 @@ stdenv.mkDerivation rec {
     ../../../build-support/setup-hooks/role.bash
     ./gettext-setup-hook.sh
   ];
-  env = {
-    gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
-  };
+  env =
+    {
+      gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # macOS iconv implementation is slightly broken since Sonoma
+      # https://github.com/Homebrew/homebrew-core/pull/199639
+      # https://savannah.gnu.org/bugs/index.php?66541
+      am_cv_func_iconv_works = "yes";
+    };
 
   enableParallelBuilding = true;
   enableParallelChecking = false; # fails sometimes
