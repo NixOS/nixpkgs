@@ -4,6 +4,7 @@
   nodejs_22,
   pnpm_10,
   electron_36,
+  gn_2233,
   python3,
   makeWrapper,
   callPackage,
@@ -20,11 +21,12 @@ let
   nodejs = nodejs_22;
   pnpm = pnpm_10.override { inherit nodejs; };
   electron = electron_36;
+  gn = gn_2233;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
 
-  webrtc = callPackage ./webrtc.nix { };
+  webrtc = callPackage ./webrtc.nix { inherit gn; };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
   # Noto Color Emoji PNG files for emoji replacement; see below.
