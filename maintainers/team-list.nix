@@ -769,6 +769,20 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  loongarch64 = {
+    members = [
+      aleksana
+      Cryolitia
+      darkyzhou
+      dramforever
+      wegank
+    ];
+    githubTeams = [ "loongarch64" ];
+    scope = "Maintain LoongArch64 related packages and code";
+    shortName = "LoongArch64";
+    enableFeatureFreezePing = true;
+  };
+
   lua = {
     githubTeams = [ "lua" ];
     scope = "Maintain the lua ecosystem.";
