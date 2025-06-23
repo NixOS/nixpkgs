@@ -12,17 +12,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "kanata";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = "kanata";
     rev = "v${version}";
-    sha256 = "sha256-w/PeSqj51gJOWmAV5UPMprntdzinX/IL49D2ZUMfeSM=";
+    sha256 = "sha256-xxAIwiwCQugDXpWga9bQ9ZGfem46rwDlmf64dX/tw7g=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-T9fZxv3aujYparzVphfYBJ+5ti/T1VkeCeCqWPyllY8=";
+  cargoHash = "sha256-LfjuQHR3vVUr2e0efVymnfCnyYkFRx7ZiNdSIjBZc5s=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_13
