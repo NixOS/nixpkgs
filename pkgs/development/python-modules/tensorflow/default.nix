@@ -55,7 +55,7 @@
   jsoncpp,
   nsync,
   curl,
-  snappy,
+  snappy-cpp,
   flatbuffers-core,
   icu,
   double-conversion,
@@ -328,7 +328,7 @@ let
         (pybind11.overridePythonAttrs (_: {
           inherit stdenv;
         }))
-        snappy
+        snappy-cpp
         sqlite
       ]
       ++ lib.optionals cudaSupport [

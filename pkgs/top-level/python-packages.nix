@@ -17486,6 +17486,7 @@ self: super: with self; {
       grpcio = compat.grpcioTF;
       tensorboard = compat.tensorboardTF;
       abseil-cpp = pkgs.abseil-cpp_202301;
+      snappy-cpp = pkgs.snappy;
 
       # Tensorflow 2.13 doesn't support gcc13:
       # https://github.com/tensorflow/tensorflow/issues/61289
