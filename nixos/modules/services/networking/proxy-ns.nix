@@ -7,7 +7,7 @@
 let
 
   cfg = config.services.proxy-ns;
-  config_path = pkgs.writeTextFile {
+  configFormat = pkgs.formats.json { };
     name = "config.json";
     text = builtins.toJSON cfg.config;
   };
