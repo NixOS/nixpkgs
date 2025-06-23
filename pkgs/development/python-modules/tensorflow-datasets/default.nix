@@ -3,23 +3,29 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  # build system
+  setuptools,
+
   # dependencies
+  absl-py,
   array-record,
-  dill,
   dm-tree,
-  future,
+  etils,
   immutabledict,
-  importlib-resources,
   numpy,
   promise,
   protobuf,
   psutil,
+  pyarrow,
   requests,
   simple-parsing,
-  six,
   tensorflow-metadata,
   termcolor,
+  toml,
   tqdm,
+  wrapt,
+  pythonOlder,
+  importlib-resources,
 
   # tests
   apache-beam,
@@ -27,6 +33,7 @@
   click,
   cloudpickle,
   datasets,
+  dill,
   ffmpeg,
   imagemagick,
   jax,
@@ -67,23 +74,31 @@ buildPythonPackage rec {
     hash = "sha256-ZXaPYmj8aozfe6ygzKybId8RZ1TqPuIOSpd8XxnRHus=";
   };
 
+  build-system = [ setuptools ];
+
   dependencies = [
+    absl-py
     array-record
-    dill
     dm-tree
-    future
+    etils
     immutabledict
-    importlib-resources
     numpy
     promise
     protobuf
     psutil
+    pyarrow
     requests
     simple-parsing
-    six
     tensorflow-metadata
     termcolor
+    toml
     tqdm
+    wrapt
+  ]
+  ++ etils.optional-dependencies.epath
+  ++ etils.optional-dependencies.etree
+  ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
   pythonImportsCheck = [ "tensorflow_datasets" ];
@@ -94,6 +109,7 @@ buildPythonPackage rec {
     click
     cloudpickle
     datasets
+    dill
     ffmpeg
     imagemagick
     jax
