@@ -16,12 +16,12 @@ in
   options.services.proxy-ns = {
     enable = lib.mkEnableOption "proxy-ns";
     settings = lib.mkOption {
-      type = (with lib.types; nullOr (attrsOf unspecified));
       description = ''
         The default setting.
 
         See <https://github.com/OkamiW/proxy-ns>.
       '';
+      type = configFormat.type;
       example = {
         tun_name = "default";
         tun_ip = "10.0.0.1/24";
