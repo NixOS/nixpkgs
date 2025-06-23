@@ -97,6 +97,7 @@ in
             lomiri-filemanager-app
             lomiri-gallery-app
             lomiri-history-service
+            lomiri-keyboard
             lomiri-mediaplayer-app
             lomiri-music-app
             lomiri-polkit-agent
@@ -248,6 +249,25 @@ in
               BusName = "com.lomiri.MediaScanner2.Daemon";
               Restart = "on-failure";
               ExecStart = "${lib.getExe pkgs.lomiri.mediascanner2}";
+            };
+          };
+
+          "lomiri-keyboard" = {
+            description = "Lomiri Keyboard";
+            wantedBy = lomiriServiceNames;
+            after = lomiriServiceNames;
+            environment = {
+              # needed to fix lp:1233550
+              QML_BAD_GUI_RENDER_LOOP = "1";
+
+              PULSE_PROP = "media.role=feedbacksound";
+
+              # Allow keyboard vibration to bypass "Other vibrations" settings.
+              HFD_USE_PRIVILEGED_INTERFACE = "1";
+            };
+            serviceConfig = {
+              ExecStart = "${lib.getExe pkgs.lomiri.lomiri-keyboard}";
+              Restart = "on-failure";
             };
           };
         };
