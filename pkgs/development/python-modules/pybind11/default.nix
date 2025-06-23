@@ -50,6 +50,8 @@ buildPythonPackage rec {
       # Used only for building tests - something we do even when cross
       # compiling.
       catch2
+      boost
+      eigen
     ]
     ++ lib.optionals (pythonOlder "3.9") [
       libxcrypt
@@ -59,8 +61,6 @@ buildPythonPackage rec {
   dontUseCmakeBuildDir = true;
 
   cmakeFlags = [
-    "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
-    "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
     # Always build tests, because even when cross compiling building the tests
     # is another confirmation that everything is OK.
     "-DBUILD_TESTING=ON"
