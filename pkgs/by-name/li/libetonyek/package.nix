@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    gperf
   ];
 
   buildInputs = [
     boost
     cppunit
     glm
-    gperf
     liblangtag
     librevenge
     libxml2
