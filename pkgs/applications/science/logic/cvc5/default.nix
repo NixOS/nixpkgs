@@ -10,10 +10,9 @@
   gmp,
   python3,
   gtest,
-  libantlr3c,
-  antlr3_4,
   boost,
   jdk,
+  libpoly,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,10 +36,9 @@ stdenv.mkDerivation rec {
     symfpu
     gmp
     gtest
-    libantlr3c
-    antlr3_4
     boost
     jdk
+    libpoly
     (python3.withPackages (
       ps: with ps; [
         pyparsing
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=1"
-    "-DANTLR3_JAR=${antlr3_4}/lib/antlr/antlr-3.4-complete.jar"
+    "-DUSE_POLY=ON"
   ];
 
   doCheck = true;
