@@ -9,6 +9,7 @@
   fftw,
   glib,
   gobject-introspection,
+  gpsd,
   gtk-layer-shell,
   gtkmm3,
   howard-hinnant-date,
@@ -49,6 +50,7 @@
   enableManpages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   evdevSupport ? true,
   experimentalPatches ? true,
+  gpsSupport ? true,
   inputSupport ? true,
   jackSupport ? true,
   mpdSupport ? true,
@@ -71,16 +73,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.12.0-unstable-2025-06-13";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
-    # TODO: switch back to using tag when a new version is released which
-    # includes the fixes for issues like
-    # https://github.com/Alexays/Waybar/issues/3956
-    rev = "2c482a29173ffcc03c3e4859808eaef6c9014a1f";
-    hash = "sha256-29g4SN3Yr4q7zxYS3dU48i634jVsXHBwUUeALPAHZGM=";
+    tag = finalAttrs.version;
+    hash = "sha256-KfWjYDqJf2jNmYAnmV7EQHweMObEBreUc2G7/LpvvC0=";
   };
 
   postUnpack = lib.optional cavaSupport ''
@@ -127,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
       portaudio
     ]
     ++ lib.optional evdevSupport libevdev
+    ++ lib.optional gpsSupport gpsd
     ++ lib.optional inputSupport libinput
     ++ lib.optional jackSupport libjack2
     ++ lib.optional mpdSupport libmpdclient
@@ -149,6 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mapAttrsToList lib.mesonEnable {
       "cava" = cavaSupport && lib.asserts.assertMsg sndioSupport "Sndio support is required for Cava";
       "dbusmenu-gtk" = traySupport;
+      "gps" = gpsSupport;
       "jack" = jackSupport;
       "libevdev" = evdevSupport;
       "libinput" = inputSupport;
@@ -192,8 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   versionCheckProgramArg = "--version";
 
-  # TODO: re-enable after bump to next release.
-  doInstallCheck = false;
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
