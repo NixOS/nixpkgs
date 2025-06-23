@@ -24,33 +24,18 @@
   xvfb-run,
   gitUpdater,
   md4c,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellarium";
-  version = "25.1";
+  version = "25.2";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rbnGSdzPuFdSqWPaKtF3n4oLZ9l+4jX7KtnmcrTvwbs=";
+    hash = "sha256-2QK9dHflCdmDrRXEHCBpuJR73jsMz9D9lJNa1pbfrTs=";
   };
-
-  patches = [
-    # Patch from upstream to fix compilation with Qt 6.9
-    (fetchpatch {
-      url = "https://github.com/Stellarium/stellarium/commit/bbcd60ae52b6f1395ef2390a2d2ba9d0f98db548.patch";
-      hash = "sha256-9VaqLASxn1udUApDZRI5SCqCXNGOHUcdbM+pKhW8ZAg=";
-    })
-
-    # Upstream patch to support building with a locally provided md4c package
-    (fetchpatch {
-      url = "https://github.com/Stellarium/stellarium/commit/972c6ba72f575964fbf2049a22d51b4d1fd3983c.patch";
-      hash = "sha256-ef1Jw5NeT0KLVKQt7VcvQh83n2ujMFK+Nv0165ZQ2r8=";
-    })
-  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
