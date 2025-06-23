@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RJVB";
     repo = "afsctool";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cZ0P9cygj+5GgkDRpQk7P9z8zh087fpVfrYXMRRVUAI=";
   };
 
