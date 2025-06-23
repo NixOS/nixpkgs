@@ -20,18 +20,13 @@ let
       throw "Unsupported system: ${stdenv.system}";
 in
 buildNpmPackage rec {
+  # These have the same source, and must be the same version.
+  inherit (rescript-editor-analysis) src;
   pname = "rescript-language-server";
   inherit version;
 
-  src = fetchFromGitHub {
-    owner = "rescript-lang";
-    repo = "rescript-vscode";
-    tag = version;
-    hash = "sha256-Tox5Qq0Kpqikac90sQww2cGr9RHlXnVy7GMnRA18CoA=";
-  };
-
   sourceRoot = "${src.name}/server";
-  npmDepsHash = "sha256-Qi41qDJ0WR0QWw7guhuz1imT51SqI7mORGjNbmZWnio=";
+  npmDepsHash = "sha256-Qi41qDJ0WR0QWw7guhuz1imT51SqI7mORGjNbmZWnio";
 
   strictDeps = true;
   nativeBuildInputs = [ esbuild ];
@@ -57,7 +52,7 @@ buildNpmPackage rec {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex" "([0-9]\.[0-9][0-9]\.[0-9])"]; };
 
   meta = {
     description = "ReScript Language Server";
