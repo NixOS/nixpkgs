@@ -7,6 +7,9 @@
   lib,
   libsForQt5,
   pkcs11helper,
+  common-updater-scripts,
+  nix-update,
+  writeShellScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,6 +70,12 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     patchelf $out/opt/masterpdfeditor/masterpdfeditor5 --add-needed libsmime3.so
+  '';
+
+  passthru.updateScript = writeShellScript "update-masterpdfeditor" ''
+    latestVersion=$(curl -s https://code-industry.net/downloads/ | grep -A1 "fa-linux" | grep -oP 'Version\s+\K[\d.]+' | head -n 1)
+    ${lib.getExe nix-update} masterpdfeditor --version $latestVersion --system x86_64-linux
+    ${lib.getExe' common-updater-scripts "update-source-version"} masterpdfeditor $latestVersion --system=aarch64-linux --ignore-same-version
   '';
 
   meta = {
