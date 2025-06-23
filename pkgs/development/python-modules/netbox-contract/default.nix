@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
+  python,
   fetchFromGitHub,
   setuptools,
   python-dateutil,
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "2.3.2";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
+  disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "mlebreuil";
