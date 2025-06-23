@@ -8,13 +8,13 @@
 }:
 buildGoModule rec {
   pname = "conduktor-ctl";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "conduktor";
     repo = "ctl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-u2WnFpVEN5tvVFyzPlIH68eUYVutJl2oTJKOwyxm18M=";
+    hash = "sha256-z0D7+/mrtQhD5zrVCVqXLHJwArhXfE6R/XSjfWmr6Pg=";
   };
 
   vendorHash = "sha256-kPCBzLU6aH6MNlKZcKKFcli99ZmdOtPV5+5gxPs5GH4=";
