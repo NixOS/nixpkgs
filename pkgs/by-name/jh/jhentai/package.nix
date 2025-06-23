@@ -1,6 +1,6 @@
 {
   lib,
-  flutter324,
+  flutter329,
   fetchFromGitHub,
   autoPatchelfHook,
   webkitgtk_4_1,
@@ -12,15 +12,15 @@
   gitUpdater,
 }:
 
-flutter324.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "jhentai";
-  version = "8.0.7";
+  version = "8.0.8+295";
 
   src = fetchFromGitHub {
     owner = "jiangtian616";
     repo = "JHenTai";
     tag = "v${version}";
-    hash = "sha256-+ZXLtlZ7YPD8CvraDHga4DsTyksFOx6QehdcmZIEFfw=";
+    hash = "sha256-GK+iceh/G3afLbhGXqXx5IwFHsQKoIQsf3ybogp9ZFo=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
