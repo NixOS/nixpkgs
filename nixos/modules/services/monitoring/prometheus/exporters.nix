@@ -128,6 +128,7 @@ let
         "surfboard"
         "systemd"
         "tibber"
+        "tuya-smartplug"
         "unbound"
         "unpoller"
         "v2ray"
