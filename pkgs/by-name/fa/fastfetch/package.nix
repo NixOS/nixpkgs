@@ -245,7 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   postPatch = ''
-    substituteInPlace completions/fastfetch.fish --replace-fail python3 '${python3.interpreter}'
+    substituteInPlace completions/fastfetch.{bash,fish,zsh} --replace-fail python3 '${python3.interpreter}'
   '';
 
   postInstall =
