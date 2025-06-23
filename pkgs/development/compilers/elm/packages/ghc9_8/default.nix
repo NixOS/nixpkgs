@@ -8,12 +8,19 @@ pkgs.haskell.packages.ghc98.override {
       inherit (pkgs.haskell.lib.compose) justStaticExecutables overrideCabal;
 
       elmPkgs = {
-        /*
-          The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
-          `package/nix/build.sh`
-        */
+        # Post-patch override taken from the upstream repository:
+        # https://github.com/avh4/elm-format/blob/e7e5da37716acbfb4954a88128b5cc72b2c911d9/package/nix/generate_derivation.sh
         elm-format = justStaticExecutables (
           overrideCabal (drv: {
+            postPatch = ''
+              mkdir -p ./generated
+              cat <<EOHS > ./generated/Build_elm_format.hs
+              module Build_elm_format where
+              gitDescribe :: String
+              gitDescribe = "${drv.version}"
+              EOHS
+            '';
+
             homepage = "https://github.com/avh4/elm-format";
             maintainers = with lib.maintainers; [
               avh4
