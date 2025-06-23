@@ -215,11 +215,28 @@ jobs:
                   .map(review => review.user?.id)
                 )
 
+                const latest_event_at = new Date(
+                  (await github.paginate(
+                    github.rest.issues.listEventsForTimeline,
+                    {
+                      ...context.repo,
+                      issue_number,
+                      per_page: 100
+                    }
+                  ))
+                  // We also ignore base_ref_force_pushed, which will not happen in nixpkgs, but
+                  // is very useful for testing in forks.
+                  .findLast(({ event }) => !['labeled', 'unlabeled', 'base_ref_force_pushed'].includes(event))
+                  ?.created_at ?? item.created_at
+                )
+                const stale_at = new Date(new Date().setDate(new Date().getDate() - 180))
+
                 // Manage most of the labels, without eval results
                 const after = Object.assign(
                   {},
                   before,
                   {
+                    '2.status: stale': !before['1.severity: security'] && latest_event_at < stale_at,
                     '12.approvals: 1': approvals.size == 1,
                     '12.approvals: 2': approvals.size == 2,
                     '12.approvals: 3+': approvals.size >= 3,
