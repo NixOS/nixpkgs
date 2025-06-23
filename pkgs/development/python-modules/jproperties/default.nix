@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   six,
+  pytest-cov-stub,
   pytest-datadir,
   setuptools-scm,
 }:
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-datadir
     pytestCheckHook
   ];
@@ -32,8 +34,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "setuptools_scm ~= 3.3" "setuptools_scm"
-    substituteInPlace pytest.ini \
-      --replace "--cov=jproperties --cov-report=term --cov-report=html --cov-branch" ""
   '';
 
   disabledTestPaths = [

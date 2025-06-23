@@ -40,6 +40,8 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  doInstallCheck = true;
+
   postInstall = ''
     # to accomodate the makefile
     cp $out/bin/ipp-usb .

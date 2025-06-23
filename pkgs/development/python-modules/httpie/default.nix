@@ -99,10 +99,13 @@ buildPythonPackage rec {
       # Test is flaky
       "test_stdin_read_warning"
       # httpbin compatibility issues
-      "test_compress_form"
       "test_binary_suppresses_when_terminal"
       "test_binary_suppresses_when_not_terminal_but_pretty"
       "test_binary_included_and_correct_when_suitable"
+      # charset-normalizer compat issue
+      # https://github.com/httpie/cli/issues/1628
+      "test_terminal_output_response_charset_detection"
+      "test_terminal_output_request_charset_detection"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Test is flaky

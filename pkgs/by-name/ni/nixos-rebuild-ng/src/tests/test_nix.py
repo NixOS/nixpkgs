@@ -36,18 +36,14 @@ def test_build(mock_run: Mock) -> None:
             "foo",
         ],
         stdout=PIPE,
-        stderr=None,
     )
 
     assert n.build(
-        "config.system.build.attr",
-        m.BuildAttr(Path("file"), "preAttr"),
-        quiet=True,
+        "config.system.build.attr", m.BuildAttr(Path("file"), "preAttr")
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
         ["nix-build", Path("file"), "--attr", "preAttr.config.system.build.attr"],
         stdout=PIPE,
-        stderr=PIPE,
     )
 
 
@@ -78,26 +74,6 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
             "foo",
         ],
         stdout=PIPE,
-        stderr=None,
-    )
-
-    assert n.build_flake(
-        "config.system.build.toplevel",
-        flake,
-        None,
-        quiet=True,
-    ) == Path("/path/to/file")
-    mock_run.assert_called_with(
-        [
-            "nix",
-            "--extra-experimental-features",
-            "nix-command flakes",
-            "build",
-            "--print-out-paths",
-            '.#nixosConfigurations."hostname".config.system.build.toplevel',
-        ],
-        stdout=PIPE,
-        stderr=PIPE,
     )
 
 
@@ -698,6 +674,8 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
 def test_set_profile(mock_run: Mock) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
+    mock_run.return_value = CompletedProcess([], 0)
+
     n.set_profile(
         m.Profile("system", profile_path),
         config_path,
@@ -709,6 +687,19 @@ def test_set_profile(mock_run: Mock) -> None:
         ["nix-env", "-p", profile_path, "--set", config_path],
         remote=None,
         sudo=False,
+    )
+
+    mock_run.return_value = CompletedProcess([], 1)
+
+    with pytest.raises(m.NixOSRebuildError) as e:
+        n.set_profile(
+            m.Profile("system", profile_path),
+            config_path,
+            target_host=None,
+            sudo=False,
+        )
+    assert str(e.value).startswith(
+        "error: your NixOS configuration path seems to be missing essential files."
     )
 
 
@@ -738,7 +729,7 @@ def test_switch_to_configuration_without_systemd_run(
         remote=None,
     )
 
-    with pytest.raises(m.NRError) as e:
+    with pytest.raises(m.NixOSRebuildError) as e:
         n.switch_to_configuration(
             config_path,
             m.Action.BOOT,

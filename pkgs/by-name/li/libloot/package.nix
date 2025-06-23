@@ -18,7 +18,7 @@
   gtest,
   icu,
   spdlog,
-  tbb_2021_11,
+  tbb_2021,
   yaml-cpp,
 }:
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     icu
     (spdlog.override { fmt = fmt_11; })
-    tbb_2021_11
+    tbb_2021
 
     finalAttrs.passthru.yaml-cpp # has merge-key support
     finalAttrs.passthru.libloadorder

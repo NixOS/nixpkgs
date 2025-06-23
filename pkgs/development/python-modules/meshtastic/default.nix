@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "bleak"
+    "packaging"
     "protobuf"
   ];
 

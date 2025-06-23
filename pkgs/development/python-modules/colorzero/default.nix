@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkginfo,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-0NoQsy86OHQNLZsTEuF5s2MlRUoacF28jNeHgFKAH14=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov" ""
-  '';
-
   nativeBuildInputs = [ pkginfo ];
 
   pythonImportsCheck = [ "colorzero" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   meta = with lib; {
     description = "Yet another Python color library";

@@ -16,6 +16,7 @@
   gsl,
   fftw,
   gtest,
+  udevCheckHook,
   indi-full,
 }:
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -60,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ gtest ];
 
   doCheck = true;
+  doInstallCheck = true;
 
   # Socket address collisions between tests
   enableParallelChecking = false;

@@ -8,20 +8,28 @@
 let
   cfg = config.services.wstunnel;
 
-  hostPortToString = { host, port }: "${host}:${toString port}";
-
-  hostPortSubmodule = {
-    options = {
-      host = lib.mkOption {
-        description = "The hostname.";
-        type = lib.types.str;
-      };
-      port = lib.mkOption {
-        description = "The port.";
-        type = lib.types.port;
-      };
-    };
+  argsFormat = {
+    type =
+      let
+        inherit (lib.types)
+          attrsOf
+          listOf
+          oneOf
+          bool
+          int
+          str
+          ;
+      in
+      attrsOf (oneOf [
+        bool
+        int
+        str
+        (listOf str)
+      ]);
+    generate = lib.cli.toGNUCommandLineShell { };
   };
+
+  hostPortToString = { host, port, ... }: "${host}:${toString port}";
 
   commonOptions = {
     enable = lib.mkEnableOption "this `wstunnel` instance" // {
@@ -32,39 +40,6 @@ let
 
     autoStart = lib.mkEnableOption "starting this wstunnel instance automatically" // {
       default = true;
-    };
-
-    extraArgs = lib.mkOption {
-      description = ''
-        Extra command line arguments to pass to `wstunnel`.
-        Attributes of the form `argName = true;` will be translated to `--argName`,
-        and `argName = \"value\"` to `--argName value`.
-      '';
-      type = with lib.types; attrsOf (either str bool);
-      default = { };
-      example = {
-        "someNewOption" = true;
-        "someNewOptionWithValue" = "someValue";
-      };
-    };
-
-    # The original argument name `websocketPingFrequency` is a misnomer, as the frequency is the inverse of the interval.
-    websocketPingInterval = lib.mkOption {
-      description = "Frequency at which the client will send websocket ping to the server.";
-      type = lib.types.nullOr lib.types.ints.unsigned;
-      default = null;
-    };
-
-    loggingLevel = lib.mkOption {
-      description = ''
-        Passed to --log-lvl
-
-        Control the log verbosity. i.e: TRACE, DEBUG, INFO, WARN, ERROR, OFF
-        For more details, checkout [EnvFilter](https://docs.rs/tracing-subscriber/latest/tracing_subscriber/filter/struct.EnvFilter.html#example-syntax)
-      '';
-      type = lib.types.nullOr lib.types.str;
-      example = "INFO";
-      default = null;
     };
 
     environmentFile = lib.mkOption {
@@ -83,8 +58,45 @@ let
   };
 
   serverSubmodule =
+    let
+      outerConfig = config;
+    in
     { config, ... }:
+    let
+      certConfig = outerConfig.security.acme.certs.${config.useACMEHost};
+    in
     {
+      imports =
+        [
+          ../../misc/assertions.nix
+
+          (lib.mkRenamedOptionModule
+            [
+              "enableHTTPS"
+            ]
+            [
+              "listen"
+              "enableHTTPS"
+            ]
+          )
+        ]
+        ++ lib.map
+          (
+            option:
+            lib.mkRemovedOptionModule [ option ] ''
+              The wstunnel module now uses RFC-42-style settings, please modify your config accordingly
+            ''
+          )
+          [
+            "extraArgs"
+            "websocketPingInterval"
+            "loggingLevel"
+
+            "restrictTo"
+            "tlsCertificate"
+            "tlsKey"
+          ];
+
       options = commonOptions // {
         listen = lib.mkOption {
           description = ''
@@ -92,57 +104,36 @@ let
             Setting the port to a value below 1024 will also give the process
             the required `CAP_NET_BIND_SERVICE` capability.
           '';
-          type = lib.types.submodule hostPortSubmodule;
-          default = {
-            host = "0.0.0.0";
-            port = if config.enableHTTPS then 443 else 80;
+          type = lib.types.submodule {
+            options = {
+              host = lib.mkOption {
+                description = "The hostname.";
+                type = lib.types.str;
+              };
+              port = lib.mkOption {
+                description = "The port.";
+                type = lib.types.port;
+              };
+              enableHTTPS = lib.mkOption {
+                description = "Use HTTPS for the tunnel server.";
+                type = lib.types.bool;
+                default = true;
+              };
+            };
           };
-          defaultText = lib.literalExpression ''
+          default =
+            { config, ... }:
             {
               host = "0.0.0.0";
-              port = if enableHTTPS then 443 else 80;
-            }
-          '';
-        };
-
-        restrictTo = lib.mkOption {
-          description = ''
-            Accepted traffic will be forwarded only to this service.
-          '';
-          type = lib.types.listOf (lib.types.submodule hostPortSubmodule);
-          default = [ ];
-          example = [
+              port = if config.enableHTTPS then 443 else 80;
+            };
+          defaultText = lib.literalExpression ''
+            { config, ... }:
             {
-              host = "127.0.0.1";
-              port = 51820;
+              host = "0.0.0.0";
+              port = if config.enableHTTPS then 443 else 80;
             }
-          ];
-        };
-
-        enableHTTPS = lib.mkOption {
-          description = "Use HTTPS for the tunnel server.";
-          type = lib.types.bool;
-          default = true;
-        };
-
-        tlsCertificate = lib.mkOption {
-          description = ''
-            TLS certificate to use instead of the hardcoded one in case of HTTPS connections.
-            Use together with `tlsKey`.
           '';
-          type = lib.types.nullOr lib.types.path;
-          default = null;
-          example = "/var/lib/secrets/cert.pem";
-        };
-
-        tlsKey = lib.mkOption {
-          description = ''
-            TLS key to use instead of the hardcoded on in case of HTTPS connections.
-            Use together with `tlsCertificate`.
-          '';
-          type = lib.types.nullOr lib.types.path;
-          default = null;
-          example = "/var/lib/secrets/key.pem";
         };
 
         useACMEHost = lib.mkOption {
@@ -154,12 +145,93 @@ let
           default = null;
           example = "example.com";
         };
+
+        settings = lib.mkOption {
+          type = lib.types.submodule {
+            freeformType = argsFormat.type;
+
+            options = {
+              restrict-to = lib.mkOption {
+                type = lib.types.listOf (
+                  lib.types.submodule {
+                    options = {
+                      host = lib.mkOption {
+                        description = "The hostname.";
+                        type = lib.types.str;
+                      };
+                      port = lib.mkOption {
+                        description = "The port.";
+                        type = lib.types.port;
+                      };
+                    };
+                  }
+                );
+                default = [ ];
+                example = [
+                  {
+                    host = "127.0.0.1";
+                    port = 51820;
+                  }
+                ];
+                description = ''
+                  Restrictions on the connections that the server will accept.
+                  For more flexibility, and the possibility to also allow reverse tunnels,
+                  look into the `restrict-config` option that takes a path to a yaml file.
+                '';
+              };
+            };
+          };
+          default = { };
+          description = ''
+            Command line arguments to pass to `wstunnel`.
+            Attributes of the form `argName = true;` will be translated to `--argName`,
+            and `argName = \"value\"` to `--argName value`.
+          '';
+          example = {
+            "someNewOption" = true;
+            "someNewOptionWithValue" = "someValue";
+          };
+        };
+      };
+
+      config = {
+        settings = lib.mkIf (config.useACMEHost != null) {
+          tls-certificate = "${certConfig.directory}/fullchain.pem";
+          tls-private-key = "${certConfig.directory}/key.pem";
+        };
       };
     };
 
   clientSubmodule =
     { config, ... }:
     {
+      imports =
+        [
+          ../../misc/assertions.nix
+        ]
+        ++ lib.map
+          (
+            option:
+            lib.mkRemovedOptionModule [ option ] ''
+              The wstunnel module now uses RFC-42-style settings, please modify your config accordingly
+            ''
+          )
+          [
+            "extraArgs"
+            "websocketPingInterval"
+            "loggingLevel"
+
+            "localToRemote"
+            "remoteToLocal"
+            "httpProxy"
+            "soMark"
+            "upgradePathPrefix"
+            "tlsSNI"
+            "tlsVerifyCertificate"
+            "upgradeCredentials"
+            "customHeaders"
+          ];
+
       options = commonOptions // {
         connectTo = lib.mkOption {
           description = "Server address and port to connect to.";
@@ -167,102 +239,36 @@ let
           example = "https://wstunnel.server.com:8443";
         };
 
-        localToRemote = lib.mkOption {
-          description = "Listen on local and forwards traffic from remote.";
-          type = lib.types.listOf (lib.types.str);
-          default = [ ];
-          example = [
-            "tcp://1212:google.com:443"
-            "unix:///tmp/wstunnel.sock:g.com:443"
-          ];
-        };
-
-        remoteToLocal = lib.mkOption {
-          description = "Listen on remote and forwards traffic from local. Only tcp is supported";
-          type = lib.types.listOf lib.types.str;
-          default = [ ];
-          example = [
-            "tcp://1212:google.com:443"
-            "unix://wstunnel.sock:g.com:443"
-          ];
-        };
-
         addNetBind = lib.mkEnableOption "Whether add CAP_NET_BIND_SERVICE to the tunnel service, this should be enabled if you want to bind port < 1024";
 
-        httpProxy = lib.mkOption {
-          description = ''
-            Proxy to use to connect to the wstunnel server (`USER:PASS@HOST:PORT`).
+        settings = lib.mkOption {
+          type = lib.types.submodule {
+            freeformType = argsFormat.type;
 
-            ::: {.warning}
-            Passwords specified here will be world-readable in the Nix store!
-            To pass a password to the service, point the `environmentFile` option
-            to a file containing `PROXY_PASSWORD=<your-password-here>` and set
-            this option to `<user>:$PROXY_PASSWORD@<host>:<port>`.
-            Note however that this will also locally leak the passwords at
-            runtime via e.g. /proc/<pid>/cmdline.
-            :::
-          '';
-          type = lib.types.nullOr lib.types.str;
-          default = null;
-        };
-
-        soMark = lib.mkOption {
-          description = ''
-            Mark network packets with the SO_MARK sockoption with the specified value.
-            Setting this option will also enable the required `CAP_NET_ADMIN` capability
-            for the systemd service.
-          '';
-          type = lib.types.nullOr lib.types.ints.unsigned;
-          default = null;
-        };
-
-        upgradePathPrefix = lib.mkOption {
-          description = ''
-            Use a specific HTTP path prefix that will show up in the upgrade
-            request to the `wstunnel` server.
-            Useful when running `wstunnel` behind a reverse proxy.
-          '';
-          type = lib.types.nullOr lib.types.str;
-          default = null;
-          example = "wstunnel";
-        };
-
-        tlsSNI = lib.mkOption {
-          description = "Use this as the SNI while connecting via TLS. Useful for circumventing hostname-based firewalls.";
-          type = lib.types.nullOr lib.types.str;
-          default = null;
-        };
-
-        tlsVerifyCertificate = lib.mkOption {
-          description = "Whether to verify the TLS certificate of the server. It might be useful to set this to `false` when working with the `tlsSNI` option.";
-          type = lib.types.bool;
-          default = true;
-        };
-
-        upgradeCredentials = lib.mkOption {
-          description = ''
-            Use these credentials to authenticate during the HTTP upgrade request
-            (Basic authorization type, `USER:[PASS]`).
-
-            ::: {.warning}
-            Passwords specified here will be world-readable in the Nix store!
-            To pass a password to the service, point the `environmentFile` option
-            to a file containing `HTTP_PASSWORD=<your-password-here>` and set this
-            option to `<user>:$HTTP_PASSWORD`.
-            Note however that this will also locally leak the passwords at runtime
-            via e.g. /proc/<pid>/cmdline.
-            :::
-          '';
-          type = lib.types.nullOr lib.types.str;
-          default = null;
-        };
-
-        customHeaders = lib.mkOption {
-          description = "Custom HTTP headers to send during the upgrade request.";
-          type = lib.types.attrsOf lib.types.str;
+            options = {
+              http-headers = lib.mkOption {
+                type = lib.types.coercedTo (lib.types.attrsOf lib.types.str) (lib.mapAttrsToList (
+                  n: v: "${n}:${v}"
+                )) (lib.types.listOf lib.types.str);
+                default = { };
+                example = {
+                  "X-Some-Header" = "some-value";
+                };
+                description = ''
+                  Custom headers to send in the upgrade request
+                '';
+              };
+            };
+          };
           default = { };
+          description = ''
+            Command line arguments to pass to `wstunnel`.
+            Attributes of the form `argName = true;` will be translated to `--argName`,
+            and `argName = \"value\"` to `--argName value`.
+          '';
           example = {
-            "X-Some-Header" = "some-value";
+            "someNewOption" = true;
+            "someNewOptionWithValue" = "someValue";
           };
         };
       };
@@ -286,8 +292,6 @@ let
         ];
         wantedBy = lib.optional serverCfg.autoStart "multi-user.target";
 
-        environment.RUST_LOG = serverCfg.loggingLevel;
-
         serviceConfig = {
           Type = "exec";
           EnvironmentFile = lib.optional (serverCfg.environmentFile != null) serverCfg.environmentFile;
@@ -296,7 +300,13 @@ let
           PrivateTmp = true;
           AmbientCapabilities = lib.optionals (serverCfg.listen.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
           NoNewPrivileges = true;
-          RestrictNamespaces = "uts ipc pid user cgroup";
+          RestrictNamespaces = [
+            "uts"
+            "ipc"
+            "pid"
+            "user"
+            "cgroup"
+          ];
           ProtectSystem = "strict";
           ProtectHome = true;
           ProtectKernelTunables = true;
@@ -309,35 +319,22 @@ let
           RestartSec = 2;
           RestartSteps = 20;
           RestartMaxDelaySec = "5min";
-        };
 
-        script = with serverCfg; ''
-          ${lib.getExe package} \
-            server \
-            ${
-              lib.cli.toGNUCommandLineShell { } (
-                lib.recursiveUpdate {
-                  restrict-to = map hostPortToString restrictTo;
-                  websocket-ping-frequency-sec = websocketPingInterval;
-                  tls-certificate =
-                    if !enableHTTPS then
-                      null
-                    else if useACMEHost != null then
-                      "${certConfig.directory}/fullchain.pem"
-                    else
-                      "${tlsCertificate}";
-                  tls-private-key =
-                    if !enableHTTPS then
-                      null
-                    else if useACMEHost != null then
-                      "${certConfig.directory}/key.pem"
-                    else
-                      "${tlsKey}";
-                } extraArgs
-              )
-            } \
-            ${lib.escapeShellArg "${if enableHTTPS then "wss" else "ws"}://${hostPortToString listen}"}
-        '';
+          ExecStart =
+            let
+              convertedSettings = serverCfg.settings // {
+                restrict-to = lib.map hostPortToString serverCfg.settings.restrict-to;
+              };
+            in
+            ''
+              ${lib.getExe serverCfg.package} \
+                server \
+                ${argsFormat.generate convertedSettings} \
+                ${lib.escapeShellArg "${
+                  if serverCfg.listen.enableHTTPS then "wss" else "ws"
+                }://${hostPortToString serverCfg.listen}"}
+            '';
+        };
       };
   };
 
@@ -355,8 +352,6 @@ let
       ];
       wantedBy = lib.optional clientCfg.autoStart "multi-user.target";
 
-      environment.RUST_LOG = clientCfg.loggingLevel;
-
       serviceConfig = {
         Type = "exec";
         EnvironmentFile = lib.optional (clientCfg.environmentFile != null) clientCfg.environmentFile;
@@ -364,9 +359,15 @@ let
         PrivateTmp = true;
         AmbientCapabilities =
           (lib.optionals clientCfg.addNetBind [ "CAP_NET_BIND_SERVICE" ])
-          ++ (lib.optionals (clientCfg.soMark != null) [ "CAP_NET_ADMIN" ]);
+          ++ (lib.optionals ((clientCfg.settings.socket-so-mark or null) != null) [ "CAP_NET_ADMIN" ]);
         NoNewPrivileges = true;
-        RestrictNamespaces = "uts ipc pid user cgroup";
+        RestrictNamespaces = [
+          "uts"
+          "ipc"
+          "pid"
+          "user"
+          "cgroup"
+        ];
         ProtectSystem = "strict";
         ProtectHome = true;
         ProtectKernelTunables = true;
@@ -379,29 +380,14 @@ let
         RestartSec = 2;
         RestartSteps = 20;
         RestartMaxDelaySec = "5min";
-      };
 
-      script = with clientCfg; ''
-        ${lib.getExe package} \
-          client \
-          ${
-            lib.cli.toGNUCommandLineShell { } (
-              lib.recursiveUpdate {
-                local-to-remote = localToRemote;
-                remote-to-local = remoteToLocal;
-                http-headers = lib.mapAttrsToList (n: v: "${n}:${v}") customHeaders;
-                http-proxy = httpProxy;
-                socket-so-mark = soMark;
-                http-upgrade-path-prefix = upgradePathPrefix;
-                tls-sni-override = tlsSNI;
-                tls-verify-certificate = tlsVerifyCertificate;
-                websocket-ping-frequency-sec = websocketPingInterval;
-                http-upgrade-credentials = upgradeCredentials;
-              } extraArgs
-            )
-          } \
-          ${lib.escapeShellArg connectTo}
-      '';
+        ExecStart = ''
+          ${lib.getExe clientCfg.package} \
+            client \
+            ${argsFormat.generate clientCfg.settings} \
+            ${lib.escapeShellArg clientCfg.connectTo}
+        '';
+      };
     };
   };
 in
@@ -418,16 +404,18 @@ in
           listen = {
             host = "0.0.0.0";
             port = 8080;
+            enableHTTPS = true;
           };
-          enableHTTPS = true;
-          tlsCertificate = "/var/lib/secrets/fullchain.pem";
-          tlsKey = "/var/lib/secrets/key.pem";
-          restrictTo = [
-            {
-              host = "127.0.0.1";
-              port = 51820;
-            }
-          ];
+          settings = {
+            tls-certificate = "/var/lib/secrets/fullchain.pem";
+            tls-private-key = "/var/lib/secrets/key.pem";
+            restrict-to = [
+              {
+                host = "127.0.0.1";
+                port = 51820;
+              }
+            ];
+          };
         };
       };
     };
@@ -454,35 +442,56 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services =
-      (lib.mapAttrs' generateServerUnit (lib.filterAttrs (n: v: v.enable) cfg.servers))
-      // (lib.mapAttrs' generateClientUnit (lib.filterAttrs (n: v: v.enable) cfg.clients));
+      (lib.mapAttrs' generateServerUnit (lib.filterAttrs (_: v: v.enable) cfg.servers))
+      // (lib.mapAttrs' generateClientUnit (lib.filterAttrs (_: v: v.enable) cfg.clients));
 
     assertions =
       (lib.mapAttrsToList (name: serverCfg: {
-        assertion = !(serverCfg.useACMEHost != null && serverCfg.tlsCertificate != null);
+        assertion =
+          serverCfg.listen.enableHTTPS
+          ->
+            (serverCfg.useACMEHost != null)
+            || (
+              (serverCfg.settings.tls-certificate or null) != null
+              && (serverCfg.settings.tls-private-key or null) != null
+            );
         message = ''
-          Options services.wstunnel.servers."${name}".useACMEHost and services.wstunnel.servers."${name}".{tlsCertificate, tlsKey} are mutually exclusive.
+          If services.wstunnel.servers."${name}".listen.enableHTTPS is set to true, either services.wstunnel.servers."${name}".useACMEHost or both services.wstunnel.servers."${name}".settings.tls-private-key and services.wstunnel.servers."${name}".settings.tls-certificate need to be set.
         '';
       }) cfg.servers)
-      ++
+      ++ (lib.foldlAttrs (
+        assertions: _: server:
+        assertions ++ server.assertions
+      ) [ ] cfg.servers)
 
-        (lib.mapAttrsToList (name: serverCfg: {
+      ++ (lib.mapAttrsToList (
+        name: clientCfg:
+        let
+          isListAttrDefined = settings: attr: (settings.${attr} or [ ]) != [ ];
+        in
+        {
           assertion =
-            serverCfg.enableHTTPS
-            ->
-              (serverCfg.useACMEHost != null) || (serverCfg.tlsCertificate != null && serverCfg.tlsKey != null);
+            isListAttrDefined clientCfg.settings "local-to-remote"
+            || isListAttrDefined clientCfg.settings "remote-to-local";
           message = ''
-            If services.wstunnel.servers."${name}".enableHTTPS is set to true, either services.wstunnel.servers."${name}".useACMEHost or both services.wstunnel.servers."${name}".tlsKey and services.wstunnel.servers."${name}".tlsCertificate need to be set.
+            Either one of services.wstunnel.clients."${name}".settings.local-to-remote or services.wstunnel.clients."${name}".settings.remote-to-local must be set.
           '';
-        }) cfg.servers)
-      ++
+        }
+      ) cfg.clients)
+      ++ (lib.foldlAttrs (
+        assertions: _: client:
+        assertions ++ client.assertions
+      ) [ ] cfg.clients);
 
-        (lib.mapAttrsToList (name: clientCfg: {
-          assertion = !(clientCfg.localToRemote == [ ] && clientCfg.remoteToLocal == [ ]);
-          message = ''
-            Either one of services.wstunnel.clients."${name}".localToRemote or services.wstunnel.clients."${name}".remoteToLocal must be set.
-          '';
-        }) cfg.clients);
+    warnings =
+      (lib.foldlAttrs (
+        warnings: _: server:
+        warnings ++ server.warnings
+      ) [ ] cfg.servers)
+      ++ (lib.foldlAttrs (
+        warnings: _: client:
+        warnings ++ client.warnings
+      ) [ ] cfg.clients);
   };
 
   meta.maintainers = with lib.maintainers; [

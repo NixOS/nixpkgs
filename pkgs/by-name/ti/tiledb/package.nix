@@ -8,7 +8,7 @@
   bzip2,
   zstd,
   spdlog,
-  tbb_2022_0,
+  tbb_2022,
   openssl,
   boost,
   libpqxx,
@@ -32,7 +32,7 @@ let
     cp -r ${rapidcheck.dev}/* $out
   '';
   catch2 = catch2_3;
-  tbb = tbb_2022_0;
+  tbb = tbb_2022;
 in
 stdenv.mkDerivation rec {
   pname = "tiledb";

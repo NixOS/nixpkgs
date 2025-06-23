@@ -260,6 +260,9 @@ with pkgs;
       auto-patchelf
       bintools
     ];
+    substitutions = {
+      hostPlatform = stdenv.hostPlatform.config;
+    };
   } ../build-support/setup-hooks/auto-patchelf.sh;
 
   appimageTools = callPackage ../build-support/appimage { };
@@ -308,7 +311,7 @@ with pkgs;
   };
 
   basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
-    tbb = tbb_2021_11;
+    tbb = tbb_2021;
     cereal = cereal_1_3_2;
     opencv = opencv.override { enableGtk3 = true; };
   };
@@ -1555,7 +1558,6 @@ with pkgs;
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
   kitty = callPackage ../by-name/ki/kitty/package.nix {
-    harfbuzz = harfbuzz.override { withCoreText = stdenv.hostPlatform.isDarwin; };
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
@@ -1907,7 +1909,7 @@ with pkgs;
 
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
-  bat-extras = recurseIntoAttrs (lib.makeScope newScope (callPackage ../tools/misc/bat-extras { }));
+  bat-extras = recurseIntoAttrs (lib.makeScope newScope (import ../tools/misc/bat-extras));
 
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
     inherit (plasma5Packages) breeze-icons;
@@ -1954,8 +1956,6 @@ with pkgs;
   behave = with python3Packages; toPythonApplication behave;
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
-
-  bookstack = callPackage ../servers/web-apps/bookstack { };
 
   boomerang = libsForQt5.callPackage ../development/tools/boomerang { };
 
@@ -2043,10 +2043,6 @@ with pkgs;
   clickgen = with python3Packages; toPythonApplication clickgen;
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { inherit systemd; };
-
-  clingo = callPackage ../applications/science/logic/potassco/clingo.nix { };
-
-  clingcon = callPackage ../applications/science/logic/potassco/clingcon.nix { };
 
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
 
@@ -2164,8 +2160,6 @@ with pkgs;
 
   easyocr = with python3.pkgs; toPythonApplication easyocr;
 
-  eddy = callPackage ../applications/graphics/eddy { };
-
   element-web = callPackage ../by-name/el/element-web/package.nix {
     conf = config.element-web.conf or { };
   };
@@ -2176,10 +2170,6 @@ with pkgs;
     x11Support = false;
     waylandSupport = true;
     espanso = espanso-wayland;
-  };
-
-  fastly = callPackage ../misc/fastly {
-    # If buildGoModule is overridden, provide a matching version of the go attribute
   };
 
   f3d_egl = f3d.override { vtk_9 = vtk_9_egl; };
@@ -2564,8 +2554,9 @@ with pkgs;
     citrix_workspace_24_05_0
     citrix_workspace_24_08_0
     citrix_workspace_24_11_0
+    citrix_workspace_25_03_0
     ;
-  citrix_workspace = citrix_workspace_24_11_0;
+  citrix_workspace = citrix_workspace_25_03_0;
 
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
@@ -2829,8 +2820,6 @@ with pkgs;
 
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
-  sl1-to-photon = python3Packages.callPackage ../applications/misc/sl1-to-photon { };
-
   drone = callPackage ../development/tools/continuous-integration/drone { };
   drone-oss = callPackage ../development/tools/continuous-integration/drone {
     enableUnfree = false;
@@ -3008,8 +2997,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  fontmatrix = callPackage ../applications/graphics/fontmatrix { };
-
   fox = callPackage ../development/libraries/fox { };
 
   fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
@@ -3030,10 +3017,6 @@ with pkgs;
 
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
-  fstl = callPackage ../applications/graphics/fstl { };
-
-  fwknop = callPackage ../tools/security/fwknop { };
-
   uniscribe = callPackage ../tools/text/uniscribe { };
 
   gandi-cli = python3Packages.callPackage ../tools/networking/gandi-cli { };
@@ -3046,8 +3029,13 @@ with pkgs;
     garage_0_9
     garage_0_8_7
     garage_0_9_4
-    garage_1_1_0
+
+    garage_1_2_0
     garage_1_x
+    garage_1
+
+    garage_2_0_0
+    garage_2
     ;
 
   gaugePlugins = recurseIntoAttrs (callPackage ../by-name/ga/gauge/plugins { });
@@ -3176,8 +3164,11 @@ with pkgs;
     isStereo = true;
   };
 
-  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
+  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk {
+    python3 = python312;
+  };
   google-cloud-sdk-gce = google-cloud-sdk.override {
+    python3 = python312;
     with-gce = true;
   };
 
@@ -3493,8 +3484,6 @@ with pkgs;
   peruse = libsForQt5.callPackage ../tools/misc/peruse { };
 
   ksmoothdock = libsForQt5.callPackage ../applications/misc/ksmoothdock { };
-
-  leocad = callPackage ../applications/graphics/leocad { };
 
   libcoap = callPackage ../applications/networking/libcoap {
     autoconf = buildPackages.autoconf269;
@@ -3840,6 +3829,10 @@ with pkgs;
   # Not in aliases because it wouldn't get picked up by callPackage
   netbox = netbox_4_2;
 
+  netcap-nodpi = callPackage ../by-name/ne/netcap/package.nix {
+    withDpi = false;
+  };
+
   netcat = libressl.nc.overrideAttrs (old: {
     meta = old.meta // {
       description = "Utility which reads and writes data across network connections — LibreSSL implementation";
@@ -3870,6 +3863,7 @@ with pkgs;
   inherit (callPackages ../applications/networking/cluster/nomad { })
     nomad
     nomad_1_9
+    nomad_1_10
     ;
 
   nomacs-qt6 = nomacs.override { qtVersion = 6; };
@@ -3954,8 +3948,6 @@ with pkgs;
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli {
     jre = pkgs.jre_headless;
   };
-
-  openboard = callPackage ../applications/graphics/openboard { };
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
@@ -4061,8 +4053,6 @@ with pkgs;
   ossec-agent = callPackage ../tools/security/ossec/agent.nix { };
 
   ossec-server = callPackage ../tools/security/ossec/server.nix { };
-
-  ovito = callPackage ../applications/graphics/ovito { };
 
   p4c = callPackage ../development/compilers/p4c {
     protobuf = protobuf_21;
@@ -4271,23 +4261,13 @@ with pkgs;
 
   qmarkdowntextedit = libsForQt5.callPackage ../development/libraries/qmarkdowntextedit { };
 
-  qosmic = callPackage ../applications/graphics/qosmic { };
-
-  qtikz = callPackage ../applications/graphics/ktikz { };
-
   qtspim = libsForQt5.callPackage ../development/tools/misc/qtspim { };
 
   quictls = callPackage ../development/libraries/quictls { };
 
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
 
-  qvge = callPackage ../applications/graphics/qvge { };
-
-  qview = callPackage ../applications/graphics/qview { };
-
   wayback_machine_downloader = callPackage ../applications/networking/wayback_machine_downloader { };
-
-  radarr = callPackage ../servers/radarr { };
 
   radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
 
@@ -4440,8 +4420,6 @@ with pkgs;
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
 
   soundkonverter = libsForQt5.soundkonverter;
-
-  sparrow = callPackage ../applications/blockchains/sparrow { };
 
   steck = callPackage ../servers/pinnwand/steck.nix { };
 
@@ -5058,7 +5036,6 @@ with pkgs;
   flutter332 = flutterPackages.v3_32;
   flutter329 = flutterPackages.v3_29;
   flutter327 = flutterPackages.v3_27;
-  flutter326 = flutterPackages.v3_26;
   flutter324 = flutterPackages.v3_24;
 
   fpc = callPackage ../development/compilers/fpc { };
@@ -5994,10 +5971,10 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_86 = callPackage ../development/compilers/rust/1_86.nix {
-    llvm_19 = llvmPackages_19.libllvm;
+  rust_1_87 = callPackage ../development/compilers/rust/1_87.nix {
+    llvm_20 = llvmPackages_20.libllvm;
   };
-  rust = rust_1_86;
+  rust = rust_1_87;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -6005,8 +5982,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_86 = rust_1_86.packages.stable;
-  rustPackages = rustPackages_1_86;
+  rustPackages_1_87 = rust_1_87.packages.stable;
+  rustPackages = rustPackages_1_87;
 
   inherit (rustPackages)
     cargo
@@ -6105,11 +6082,8 @@ with pkgs;
 
   swi-prolog-gui = swi-prolog.override { withGui = true; };
 
-  tbb_2020_3 = callPackage ../development/libraries/tbb/2020_3.nix { };
-  tbb_2021_11 = callPackage ../development/libraries/tbb { };
-  tbb_2022_0 = callPackage ../development/libraries/tbb/2022_0.nix { };
   # many packages still fail with latest version
-  tbb = tbb_2020_3;
+  tbb = tbb_2020;
 
   teyjus = callPackage ../development/compilers/teyjus {
     inherit (ocaml-ng.ocamlPackages_4_14) buildDunePackage;
@@ -6545,11 +6519,11 @@ with pkgs;
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python2 = python27;
-  python3 = python312;
+  python3 = python313;
 
   # pythonPackages further below, but assigned here because they need to be in sync
   python2Packages = dontRecurseIntoAttrs python27Packages;
-  python3Packages = dontRecurseIntoAttrs python312Packages;
+  python3Packages = dontRecurseIntoAttrs python313Packages;
 
   pypy = pypy2;
   pypy2 = pypy27;
@@ -7170,8 +7144,6 @@ with pkgs;
 
   chruby = callPackage ../development/tools/misc/chruby { rubies = null; };
 
-  cloudcompare = callPackage ../applications/graphics/cloudcompare { };
-
   cookiecutter = with python3Packages; toPythonApplication cookiecutter;
 
   corundum = callPackage ../development/tools/corundum { };
@@ -7251,8 +7223,6 @@ with pkgs;
       targetPackages.stdenv.cc.cc
     else
       gcc.cc;
-
-  libsigrok = callPackage ../development/tools/libsigrok { };
 
   distcc = callPackage ../development/tools/misc/distcc {
     libiberty_static = libiberty.override { staticBuild = true; };
@@ -7364,10 +7334,6 @@ with pkgs;
   gradle_8 = wrapGradle gradle_8-unwrapped null;
   gradle = wrapGradle gradle-unwrapped "gradle-unwrapped";
 
-  gperf = callPackage ../development/tools/misc/gperf { };
-  # 3.1 changed some parameters from int to size_t, leading to mismatches.
-  gperf_3_0 = callPackage ../development/tools/misc/gperf/3.0.x.nix { };
-
   griffe = with python3Packages; toPythonApplication griffe;
 
   gwrap = g-wrap;
@@ -7391,7 +7357,7 @@ with pkgs;
 
   ikos = callPackage ../development/tools/analysis/ikos {
     inherit (llvmPackages_14) stdenv clang llvm;
-    tbb = tbb_2021_11;
+    tbb = tbb_2021;
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
@@ -7890,7 +7856,7 @@ with pkgs;
 
   cctag = callPackage ../development/libraries/cctag {
     stdenv = clangStdenv;
-    tbb = tbb_2021_11;
+    tbb = tbb_2021;
   };
 
   ceedling = callPackage ../development/tools/ceedling { };
@@ -8139,8 +8105,6 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  givaro = callPackage ../development/libraries/givaro { };
-
   ghp-import = with python3Packages; toPythonApplication ghp-import;
 
   ghcid = haskellPackages.ghcid.bin;
@@ -8327,8 +8291,6 @@ with pkgs;
     }
   );
 
-  qxmpp = qt6Packages.callPackage ../development/libraries/qxmpp { };
-
   gnutls = callPackage ../development/libraries/gnutls {
     util-linux = util-linuxMinimal; # break the cyclic dependency
     autoconf = buildPackages.autoconf269;
@@ -8367,10 +8329,6 @@ with pkgs;
   cairomm = callPackage ../development/libraries/cairomm { };
 
   cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix { };
-
-  pango = callPackage ../development/libraries/pango {
-    harfbuzz = harfbuzz.override { withCoreText = stdenv.hostPlatform.isDarwin; };
-  };
 
   pangomm = callPackage ../development/libraries/pangomm { };
 
@@ -8448,7 +8406,6 @@ with pkgs;
   };
 
   harfbuzzFull = harfbuzz.override {
-    withCoreText = stdenv.hostPlatform.isDarwin;
     withGraphite2 = true;
     withIcu = true;
   };
@@ -8653,8 +8610,6 @@ with pkgs;
 
   libchipcard = callPackage ../development/libraries/aqbanking/libchipcard.nix { };
 
-  libcomps = callPackage ../tools/package-management/libcomps { };
-
   libcxxrt = callPackage ../development/libraries/libcxxrt {
     stdenv =
       if stdenv.hostPlatform.useLLVM or false then
@@ -8676,8 +8631,6 @@ with pkgs;
   libdevil-nox = callPackage ../development/libraries/libdevil {
     withXorg = false;
   };
-
-  libdnf = callPackage ../tools/package-management/libdnf { };
 
   libdvdnav = callPackage ../development/libraries/libdvdnav { };
   libdvdnav_4_2_1 = callPackage ../development/libraries/libdvdnav/4.2.1.nix {
@@ -8701,8 +8654,6 @@ with pkgs;
   libgnome-games-support_2_0 =
     callPackage ../development/libraries/libgnome-games-support/2.0.nix
       { };
-
-  libiio = callPackage ../development/libraries/libiio { };
 
   libextractor = callPackage ../development/libraries/libextractor {
     libmpeg2 = mpeg2dec;
@@ -8862,14 +8813,11 @@ with pkgs;
       stdenv = gccStdenv; # Required for darwin
     })
     libprom
-    libpromhttp
     ;
 
   libpulsar = callPackage ../development/libraries/libpulsar {
     protobuf = protobuf_21;
   };
-
-  libpwquality = callPackage ../development/libraries/libpwquality { };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
@@ -9199,8 +9147,6 @@ with pkgs;
     };
   };
 
-  opencsg = callPackage ../development/libraries/opencsg { };
-
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     pythonPackages = python3Packages;
     # TODO: LTO does not work.
@@ -9235,8 +9181,6 @@ with pkgs;
   troveclient = with python312Packages; toPythonApplication python-troveclient;
   watcherclient = with python312Packages; toPythonApplication python-watcherclient;
   zunclient = with python312Packages; toPythonApplication python-zunclient;
-
-  openvdb = callPackage ../development/libraries/openvdb { };
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_6
@@ -9294,9 +9238,7 @@ with pkgs;
 
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
-  podofo = callPackage ../development/libraries/podofo { };
-
-  podofo010 = callPackage ../development/libraries/podofo/0.10.x.nix { };
+  podofo = podofo_1_0;
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
 
@@ -9323,14 +9265,13 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  protobuf = protobuf_30;
+  protobuf = protobuf_31;
 
   inherit
     ({
       protobuf_31 = callPackage ../development/libraries/protobuf/31.nix { };
       protobuf_30 = callPackage ../development/libraries/protobuf/30.nix { };
       protobuf_29 = callPackage ../development/libraries/protobuf/29.nix { };
-      protobuf_28 = callPackage ../development/libraries/protobuf/28.nix { };
       protobuf_27 = callPackage ../development/libraries/protobuf/27.nix { };
       protobuf_26 = callPackage ../development/libraries/protobuf/26.nix { };
       protobuf_25 = callPackage ../development/libraries/protobuf/25.nix { };
@@ -9342,7 +9283,6 @@ with pkgs;
     protobuf_31
     protobuf_30
     protobuf_29
-    protobuf_28
     protobuf_27
     protobuf_26
     protobuf_25
@@ -9680,9 +9620,9 @@ with pkgs;
 
   structuresynth = libsForQt5.callPackage ../development/libraries/structuresynth { };
 
-  sundials = callPackage ../development/libraries/sundials { };
-
   svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
+
+  szurubooru = callPackage ../servers/web-apps/szurubooru { };
 
   tclap = tclap_1_2;
 
@@ -10331,8 +10271,6 @@ with pkgs;
   freshrss = callPackage ../servers/web-apps/freshrss { };
   freshrss-extensions = recurseIntoAttrs (callPackage ../servers/web-apps/freshrss/extensions { });
 
-  glabels-qt = callPackage ../applications/graphics/glabels-qt { };
-
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
@@ -10388,15 +10326,10 @@ with pkgs;
 
   jetty = jetty_12;
 
-  kanidm_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix { kanidm = kanidm_1_4; };
   kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix { kanidm = kanidm_1_5; };
   kanidm_1_6 = callPackage ../by-name/ka/kanidm/1_6.nix { kanidm = kanidm_1_6; };
 
   kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_6;
-
-  kanidmWithSecretProvisioning_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix {
-    enableSecretProvisioning = true;
-  };
 
   kanidmWithSecretProvisioning_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix {
     enableSecretProvisioning = true;
@@ -10420,7 +10353,7 @@ with pkgs;
     nodejs = nodejs_20;
   };
 
-  mailmanPackages = callPackage ../servers/mail/mailman { };
+  mailmanPackages = recurseIntoAttrs (callPackage ../servers/mail/mailman { });
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
 
@@ -11610,8 +11543,6 @@ with pkgs;
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
 
-  epapirus-icon-theme = papirus-icon-theme.override { withElementary = true; };
-
   moeli = eduli;
 
   emojione = callPackage ../data/fonts/emojione {
@@ -11745,11 +11676,6 @@ with pkgs;
 
   openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf" ]; };
 
-  papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme {
-    inherit (pantheon) elementary-icon-theme;
-    inherit (plasma5Packages) breeze-icons;
-  };
-
   papirus-maia-icon-theme = callPackage ../data/icons/papirus-maia-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
@@ -11831,7 +11757,7 @@ with pkgs;
 
   whitesur-kde = kdePackages.callPackage ../data/themes/whitesur-kde { };
 
-  xkeyboard_config = xorg.xkeyboardconfig;
+  xkeyboard_config = xkeyboard-config;
 
   xlsx2csv = with python3Packages; toPythonApplication xlsx2csv;
 
@@ -12007,10 +11933,6 @@ with pkgs;
 
   calcmysky = qt6Packages.callPackage ../applications/science/astronomy/calcmysky { };
 
-  calibre = callPackage ../by-name/ca/calibre/package.nix {
-    podofo = podofo010;
-  };
-
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
   inherit (callPackage ../applications/networking/cluster/calico { })
     calico-apiserver
@@ -12030,10 +11952,6 @@ with pkgs;
   cbconvert-gui = cbconvert.gui;
 
   cdparanoia = cdparanoiaIII;
-
-  brotab = callPackage ../tools/misc/brotab { };
-
-  bumblebee-status = callPackage ../applications/window-managers/i3/bumblebee-status { };
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
@@ -12137,12 +12055,10 @@ with pkgs;
 
   inherit (callPackage ../applications/virtualization/docker { })
     docker_25
-    docker_26
-    docker_27
     docker_28
     ;
 
-  docker = docker_27;
+  docker = docker_28;
   docker-client = docker.override { clientOnly = true; };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
@@ -12160,7 +12076,6 @@ with pkgs;
   };
   drawio-headless = callPackage ../applications/graphics/drawio/headless.nix { };
 
-  drawpile = callPackage ../applications/graphics/drawpile { };
   drawpile-server-headless = drawpile.override {
     buildClient = false;
     buildServerGui = false;
@@ -12230,8 +12145,6 @@ with pkgs;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
-  evilpixie = callPackage ../applications/graphics/evilpixie { };
-
   greenfoot = callPackage ../applications/editors/greenfoot {
     openjdk = openjdk21.override {
       enableJavaFX = true;
@@ -12240,8 +12153,6 @@ with pkgs;
   };
 
   haruna = kdePackages.callPackage ../applications/video/haruna { };
-
-  hdrmerge = callPackage ../applications/graphics/hdrmerge { };
 
   input-leap = qt6Packages.callPackage ../applications/misc/input-leap {
     avahi = avahi.override { withLibdnssdCompat = true; };
@@ -12434,33 +12345,11 @@ with pkgs;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     inherit (firefox-unwrapped.passthru) applicationName;
-    channel = "release";
     generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
   };
 
   firefox-bin = wrapFirefox firefox-bin-unwrapped {
     pname = "firefox-bin";
-  };
-
-  firefox-beta-bin-unwrapped = firefox-bin-unwrapped.override {
-    inherit (firefox-beta-unwrapped.passthru) applicationName;
-    channel = "beta";
-    generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
-  };
-
-  firefox-beta-bin = res.wrapFirefox firefox-beta-bin-unwrapped {
-    pname = "firefox-beta-bin";
-  };
-
-  firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    inherit (firefox-devedition-unwrapped.passthru) applicationName;
-    channel = "developer-edition";
-    generated = import ../applications/networking/browsers/firefox-bin/developer-edition_sources.nix;
-  };
-
-  firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {
-    pname = "firefox-devedition-bin";
-    wmClass = "firefox-aurora";
   };
 
   librewolf-unwrapped = import ../applications/networking/browsers/librewolf {
@@ -12723,8 +12612,6 @@ with pkgs;
 
   pixel2svg = python310Packages.callPackage ../tools/graphics/pixel2svg { };
 
-  pixinsight = callPackage ../applications/graphics/pixinsight { };
-
   inherit (callPackage ../applications/virtualization/singularity/packages.nix { })
     apptainer
     singularity
@@ -12827,8 +12714,6 @@ with pkgs;
     subversionSupport = true;
   };
 
-  iksemel = callPackage ../development/libraries/iksemel { };
-
   avalonia-ilspy = callPackage ../applications/misc/avalonia-ilspy {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -12902,8 +12787,6 @@ with pkgs;
 
   img2pdf = with python3Packages; toPythonApplication img2pdf;
 
-  imgp = callPackage ../applications/graphics/imgp { };
-
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
   };
@@ -12970,8 +12853,6 @@ with pkgs;
   kbibtex = libsForQt5.callPackage ../applications/office/kbibtex { };
 
   kexi = libsForQt5.callPackage ../applications/office/kexi { };
-
-  kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
 
   kid3-cli = kid3.override {
     withCLI = true;
@@ -13237,9 +13118,6 @@ with pkgs;
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
 
-  meshlab = callPackage ../applications/graphics/meshlab { };
-  meshlab-unstable = callPackage ../applications/graphics/meshlab-unstable { };
-
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
   miniaudicle = qt6Packages.callPackage ../applications/audio/miniaudicle { };
@@ -13340,8 +13218,6 @@ with pkgs;
   };
 
   rquickshare-legacy = rquickshare.override { app-type = "legacy"; };
-
-  seamly2d = callPackage ../applications/graphics/seamly2d { };
 
   # a somewhat more maintained fork of ympd
   memento = qt6Packages.callPackage ../applications/video/memento { };
@@ -13551,10 +13427,6 @@ with pkgs;
     kreative-square
     ;
 
-  openscad = callPackage ../applications/graphics/openscad { };
-
-  opentoonz = callPackage ../applications/graphics/opentoonz { };
-
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
 
   organicmaps = qt6Packages.callPackage ../applications/misc/organicmaps { };
@@ -13607,10 +13479,6 @@ with pkgs;
   peaclock = callPackage ../applications/misc/peaclock {
     stdenv = gccStdenv;
   };
-
-  photoflare = callPackage ../applications/graphics/photoflare { };
-
-  phototonic = callPackage ../applications/graphics/phototonic { };
 
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
 
@@ -13679,8 +13547,6 @@ with pkgs;
 
   qcad = libsForQt5.callPackage ../applications/misc/qcad { };
 
-  qcomicbook = callPackage ../applications/graphics/qcomicbook { };
-
   qctools = libsForQt5.callPackage ../applications/video/qctools { };
 
   qelectrotech = libsForQt5.callPackage ../applications/misc/qelectrotech { };
@@ -13713,8 +13579,6 @@ with pkgs;
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
-  qimgv = callPackage ../applications/graphics/qimgv { };
-
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
 
   qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
@@ -13727,8 +13591,6 @@ with pkgs;
   qpwgraph = qt6Packages.callPackage ../applications/audio/qpwgraph { };
 
   qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
-
-  qscreenshot = callPackage ../applications/graphics/qscreenshot { };
 
   qsstv = qt5.callPackage ../applications/radio/qsstv { };
 
@@ -13813,8 +13675,6 @@ with pkgs;
     wxGTK = wxGTK32;
   };
 
-  rapid-photo-downloader = callPackage ../applications/graphics/rapid-photo-downloader { };
-
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
   };
@@ -13861,10 +13721,6 @@ with pkgs;
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
   rofi-pass-wayland = callPackage ../tools/security/pass/rofi-pass.nix {
     backend = "wayland";
-  };
-
-  rstudio = callPackage ../applications/editors/rstudio {
-    jdk = jdk8;
   };
 
   rstudio-server = rstudio.override { server = true; };
@@ -13973,8 +13829,6 @@ with pkgs;
   super-slicer-latest = super-slicer.latest;
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge { };
-
-  smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
   soci = callPackage ../development/libraries/soci { };
 
@@ -14285,8 +14139,6 @@ with pkgs;
 
   qpdfview = libsForQt5.callPackage ../applications/office/qpdfview { };
 
-  vimgolf = callPackage ../games/vimgolf { };
-
   # this is a lower-level alternative to wrapNeovim conceived to handle
   # more usecases when wrapping neovim. The interface is being actively worked on
   # so expect breakage. use wrapNeovim instead if you want a stable alternative
@@ -14402,8 +14254,6 @@ with pkgs;
     vscode-generic = ../applications/editors/vscode/generic.nix;
   };
 
-  openvscode-server = callPackage ../servers/openvscode-server { };
-
   code-server = callPackage ../servers/code-server {
     nodejs = nodejs_20;
   };
@@ -14507,7 +14357,9 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
-  x2goclient = libsForQt5.callPackage ../applications/networking/remote/x2goclient { };
+  x2goclient = callPackage ../applications/networking/remote/x2goclient { };
+
+  x2gokdriveclient = libsForQt5.callPackage ../applications/networking/remote/x2gokdriveclient { };
 
   x32edit = callPackage ../applications/audio/midas/x32edit.nix { };
 
@@ -14612,8 +14464,6 @@ with pkgs;
 
   youtube-viewer = perlPackages.WWWYoutubeViewer;
 
-  yuview = libsForQt5.yuview;
-
   zathuraPkgs = callPackage ../applications/misc/zathura { };
   zathura = zathuraPkgs.zathuraWrapper;
 
@@ -14674,16 +14524,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  bitcoin-abc = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc {
-    withGui = true;
-    protobuf = protobuf_21;
-  };
-  bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc {
-    mkDerivation = stdenv.mkDerivation;
-    protobuf = protobuf_21;
-    withGui = false;
-  };
-
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
 
   elements = libsForQt5.callPackage ../applications/blockchains/elements {
@@ -14712,7 +14552,7 @@ with pkgs;
 
   ledger-agent = with python3Packages; toPythonApplication ledger-agent;
 
-  napari = with python3Packages; toPythonApplication napari;
+  napari = with python312Packages; toPythonApplication napari;
 
   nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
 
@@ -14951,12 +14791,6 @@ with pkgs;
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
 
-  freecad-wayland = freecad.override { withWayland = true; };
-  freecad-qt6 = freecad.override {
-    withWayland = true;
-    qtVersion = 6;
-  };
-
   freeciv = callPackage ../games/freeciv {
     sdl2Client = false;
     gtkClient = true;
@@ -15065,8 +14899,6 @@ with pkgs;
   luanti-client = luanti.override { buildServer = false; };
   luanti-server = luanti.override { buildClient = false; };
 
-  mnemosyne = callPackage ../games/mnemosyne { };
-
   mrrescue = callPackage ../games/mrrescue { love = love_0_10; };
 
   mudlet = libsForQt5.callPackage ../games/mudlet {
@@ -15148,22 +14980,17 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  quake3wrapper = callPackage ../games/quake3/wrapper { };
-
-  quake3demo = quake3wrapper {
-    name = "quake3-demo-${lib.getVersion quake3demodata}";
-    description = "Demo of Quake 3 Arena, a classic first-person shooter";
-    paks = [
-      quake3pointrelease
-      quake3demodata
-    ];
-  };
-
-  quake3demodata = callPackage ../games/quake3/content/demo.nix { };
-
-  quake3pointrelease = callPackage ../games/quake3/content/pointrelease.nix { };
-
-  quake3hires = callPackage ../games/quake3/content/hires.nix { };
+  inherit (import ../games/quake3 pkgs.callPackage)
+    quake3wrapper
+    quake3arenadata
+    quake3demodata
+    quake3pointrelease
+    quake3arena
+    quake3arena-hires
+    quake3demo
+    quake3demo-hires
+    quake3hires
+    ;
 
   quakespasm = callPackage ../games/quakespasm { };
   vkquake = callPackage ../games/quakespasm/vulkan.nix { };
@@ -15502,8 +15329,6 @@ with pkgs;
 
   deepdiff = with python3Packages; toPythonApplication deepdiff;
 
-  deepsecrets = callPackage ../tools/security/deepsecrets { };
-
   deep-translator = with python3Packages; toPythonApplication deep-translator;
 
   hh-suite = callPackage ../applications/science/biology/hh-suite {
@@ -15527,8 +15352,6 @@ with pkgs;
     useRx3d = true;
   };
 
-  mrtrix = callPackage ../applications/science/biology/mrtrix { };
-
   minc_tools = callPackage ../applications/science/biology/minc-tools {
     inherit (perlPackages) perl TextFormat;
   };
@@ -15536,14 +15359,6 @@ with pkgs;
   obitools3 = callPackage ../applications/science/biology/obitools/obitools3.nix { };
 
   raxml-mpi = raxml.override { useMpi = true; };
-
-  samtools = callPackage ../applications/science/biology/samtools { };
-
-  inherit (callPackages ../applications/science/biology/sumatools { })
-    sumalibs
-    sumaclust
-    sumatra
-    ;
 
   trimmomatic = callPackage ../applications/science/biology/trimmomatic {
     jdk = pkgs.jdk21_headless;
@@ -16033,13 +15848,13 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };
 
-  ns-3 = callPackage ../development/libraries/science/networking/ns-3 { };
-
   spyder = with python3.pkgs; toPythonApplication spyder;
 
   stellarium = qt6Packages.callPackage ../applications/science/astronomy/stellarium { };
 
-  tulip = libsForQt5.callPackage ../applications/science/misc/tulip { };
+  tulip = libsForQt5.callPackage ../applications/science/misc/tulip {
+    python3 = python312; # fails to build otherwise
+  };
 
   vite = libsForQt5.callPackage ../applications/science/misc/vite { };
 
@@ -16048,8 +15863,6 @@ with pkgs;
   hepmc3 = callPackage ../development/libraries/physics/hepmc3 {
     python = null;
   };
-
-  lhapdf = callPackage ../development/libraries/physics/lhapdf { };
 
   pythia = callPackage ../development/libraries/physics/pythia {
     hepmc = hepmc2;
@@ -16167,10 +15980,6 @@ with pkgs;
   utsushi = callPackage ../misc/drivers/utsushi { };
 
   utsushi-networkscan = callPackage ../misc/drivers/utsushi/networkscan.nix { };
-
-  lima = callPackage ../applications/virtualization/lima {
-    inherit (darwin) sigtool;
-  };
 
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
 
@@ -16473,8 +16282,6 @@ with pkgs;
 
   qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
 
-  pick-colour-picker = callPackage ../applications/graphics/pick-colour-picker { };
-
   romdirfs = callPackage ../tools/filesystems/romdirfs {
     stdenv = gccStdenv;
   };
@@ -16654,8 +16461,6 @@ with pkgs;
     SDL_image = SDL_image.override { SDL = SDL_sixel; };
     SDL_ttf = SDL_ttf.override { SDL = SDL_sixel; };
   };
-
-  yacreader = callPackage ../applications/graphics/yacreader { };
 
   yamale = with python3Packages; toPythonApplication yamale;
 

@@ -5,6 +5,7 @@
   click,
   fetchFromGitHub,
   packaging,
+  pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
@@ -25,11 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-CbaKXD7Sde8euRqvc/IHoXoSMF+dNd7vT9LkLWq4/IU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
-
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
@@ -39,6 +35,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);

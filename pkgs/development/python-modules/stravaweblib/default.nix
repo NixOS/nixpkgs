@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "stravaweblib";
-  version = "0.0.9";
+  version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "stravaweblib";
     tag = "v${version}";
-    hash = "sha256-bKiQ06vQfngELuREje9KQd5JNl6gaoU5jvGOyj3Wyb0=";
+    hash = "sha256-hsXrU7Rad3LzF58GwlgET98911XjTKztFFNqiUSw278=";
   };
 
   build-system = [

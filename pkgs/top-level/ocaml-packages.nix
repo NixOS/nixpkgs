@@ -196,6 +196,8 @@ let
 
         caqti-dynload = callPackage ../development/ocaml-modules/caqti/dynload.nix { };
 
+        caqti-eio = callPackage ../development/ocaml-modules/caqti/eio.nix { };
+
         caqti-lwt = callPackage ../development/ocaml-modules/caqti/lwt.nix { };
 
         caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
@@ -749,6 +751,8 @@ let
 
         hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
+        hc = callPackage ../development/ocaml-modules/hc { };
+
         hex = callPackage ../development/ocaml-modules/hex { };
 
         hidapi = callPackage ../development/ocaml-modules/hidapi { };
@@ -913,80 +917,6 @@ let
           else
             import ../development/ocaml-modules/janestreet {
             };
-
-        janeStreet_0_15 =
-          (lib.makeScope self.newScope (
-            self': with self'; {
-
-              # ocamlPackages that janestreet v0.15 packages depend on.
-              jsDeps =
-                let
-                  uri-sexp = self.uri-sexp.override { inherit (self') ppx_sexp_conv sexplib0; };
-                  cohttp = self.cohttp.override {
-                    inherit (self') ppx_sexp_conv;
-                    inherit uri-sexp;
-                  };
-                  ipaddr-sexp = self.ipaddr-sexp.override { inherit (self') ppx_sexp_conv; };
-                  conduit = self.conduit.override {
-                    inherit (self') ppx_sexp_conv sexplib;
-                    inherit ipaddr-sexp;
-                  };
-                  conduit-async = self.conduit-async.override {
-                    inherit (self')
-                      async
-                      ppx_sexp_conv
-                      ppx_here
-                      core
-                      sexplib
-                      async_ssl
-                      ;
-                    inherit conduit ipaddr-sexp;
-                  };
-                in
-                {
-                  inherit (self)
-                    dune-configurator
-                    alcotest
-                    re
-                    num
-                    octavius
-                    uutf
-                    ounit
-                    ctypes
-                    ctypes-foreign
-                    ;
-                  ppxlib = self.ppxlib.override { inherit (self') stdio; };
-                  cohttp-async = self.cohttp-async.override {
-                    inherit (self')
-                      ppx_sexp_conv
-                      base
-                      async
-                      async_kernel
-                      async_unix
-                      core_unix
-                      sexplib0
-                      core
-                      ;
-                    inherit uri-sexp cohttp conduit-async;
-                  };
-                  janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage_0_15.nix { };
-                };
-
-              janeStreet = import ../development/ocaml-modules/janestreet/0.15.nix {
-                self = self' // jsDeps;
-                inherit ocaml;
-                inherit (pkgs)
-                  bash
-                  fetchpatch
-                  fzf
-                  lib
-                  openssl
-                  zstd
-                  ;
-              };
-            }
-          )).overrideScope
-            liftJaneStreet;
 
         javalib = callPackage ../development/ocaml-modules/javalib { };
 
@@ -1652,6 +1582,8 @@ let
 
         path_glob = callPackage ../development/ocaml-modules/path_glob { };
 
+        patricia-tree = callPackage ../development/ocaml-modules/patricia-tree { };
+
         pbkdf = callPackage ../development/ocaml-modules/pbkdf { };
 
         pbrt = callPackage ../development/ocaml-modules/pbrt { };
@@ -1766,6 +1698,8 @@ let
 
         pratter = callPackage ../development/ocaml-modules/pratter { };
 
+        prelude = callPackage ../development/ocaml-modules/prelude { };
+
         prettym = callPackage ../development/ocaml-modules/prettym { };
 
         printbox = callPackage ../development/ocaml-modules/printbox { };
@@ -1773,6 +1707,8 @@ let
         printbox-text = callPackage ../development/ocaml-modules/printbox/text.nix { };
 
         process = callPackage ../development/ocaml-modules/process { };
+
+        processor = callPackage ../development/ocaml-modules/processor { };
 
         prometheus = callPackage ../development/ocaml-modules/prometheus { };
 
@@ -1912,6 +1848,8 @@ let
         saturn_lockfree = callPackage ../development/ocaml-modules/saturn/lockfree.nix { };
 
         sawja = callPackage ../development/ocaml-modules/sawja { };
+
+        scfg = callPackage ../development/ocaml-modules/scfg { };
 
         secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
           inherit (pkgs) secp256k1;

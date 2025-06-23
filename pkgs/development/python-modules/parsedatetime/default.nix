@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   isPy27,
+  pythonOlder,
   future,
   pytestCheckHook,
 }:
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "4cb368fbb18a0b7231f4d76119165451c8d2e35951455dfee97c62a87b04d455";
   };
 
-  propagatedBuildInputs = [ future ];
+  propagatedBuildInputs = lib.optional (pythonOlder "3.13") future;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

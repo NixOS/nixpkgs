@@ -67,6 +67,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/aplay --set-default ALSA_PLUGIN_DIR ${plugin-dir}
   '';
 
+  postInstall = ''
+    # udev rules are super broken, violating `udevadm verify` in various creative ways.
+    # NixOS has its own set of alsa udev rules, we can just delete the udev rules for this package
+    rm -rf $out/lib/udev
+  '';
+
   passthru.updateScript = directoryListingUpdater {
     url = "https://www.alsa-project.org/files/pub/utils/";
   };

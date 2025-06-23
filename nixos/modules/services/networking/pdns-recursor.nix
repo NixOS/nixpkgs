@@ -252,6 +252,8 @@ in
 
     environment.etc."/pdns-recursor/recursor.yml".source = configFile;
 
+    networking.resolvconf.useLocalResolver = lib.mkDefault true;
+
     services.pdns-recursor.yaml-settings = {
       incoming = mkDefaultAttrs {
         listen = cfg.dns.address;

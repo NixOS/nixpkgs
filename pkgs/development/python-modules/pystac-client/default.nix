@@ -47,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
+    "--benchmark-disable"
     # Tests accessing Internet
     "-m 'not vcr'"
   ];

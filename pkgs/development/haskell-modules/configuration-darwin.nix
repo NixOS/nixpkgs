@@ -334,6 +334,10 @@ self: super:
 
     sysinfo = dontCheck super.sysinfo;
 
+    network = super.network.overrideAttrs (drv: {
+      __darwinAllowLocalNetworking = true;
+    });
+
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin

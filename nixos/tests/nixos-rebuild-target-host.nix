@@ -57,7 +57,7 @@
           users.users.alice.extraGroups = [ "wheel" ];
           users.users.bob.extraGroups = [ "wheel" ];
 
-          # Disable sudo for root to ensure sudo isn't called without `--use-remote-sudo`
+          # Disable sudo for root to ensure sudo isn't called without `--sudo`
           security.sudo.extraRules = lib.mkForce [
             {
               groups = [ "wheel" ];
@@ -170,20 +170,20 @@
       # Ensure sudo is disabled for root
       target.fail("sudo true")
 
-      # This test also ensures that sudo is not called without --use-remote-sudo
+      # This test also ensures that sudo is not called without --sudo
       with subtest("Deploy to root@target"):
         deployer.succeed("nixos-rebuild switch -I nixos-config=/root/configuration-1.nix --target-host root@target &>/dev/console")
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-1-deployed", f"{target_hostname=}"
 
       with subtest("Deploy to alice@target with passwordless sudo"):
-        deployer.succeed("nixos-rebuild switch -I nixos-config=/root/configuration-2.nix --target-host alice@target --use-remote-sudo &>/dev/console")
+        deployer.succeed("nixos-rebuild switch -I nixos-config=/root/configuration-2.nix --target-host alice@target --sudo &>/dev/console")
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-2-deployed", f"{target_hostname=}"
 
       with subtest("Deploy to bob@target with password based sudo"):
         # TODO: investigate why --ask-sudo-password from nixos-rebuild-ng is not working here
-        deployer.succeed(r'${lib.optionalString withNg "NIX_SSHOPTS=-t "}passh -c 3 -C -p ${nodes.target.users.users.bob.password} -P "\[sudo\] password" nixos-rebuild switch -I nixos-config=/root/configuration-3.nix --target-host bob@target --use-remote-sudo &>/dev/console')
+        deployer.succeed(r'${lib.optionalString withNg "NIX_SSHOPTS=-t "}passh -c 3 -C -p ${nodes.target.users.users.bob.password} -P "\[sudo\] password" nixos-rebuild switch -I nixos-config=/root/configuration-3.nix --target-host bob@target --sudo &>/dev/console')
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-3-deployed", f"{target_hostname=}"
 

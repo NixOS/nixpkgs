@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abaddon";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "uowuo";
     repo = "abaddon";
     rev = "v${version}";
-    hash = "sha256-FPhHy+4BmaoGrHGsc5o79Au9JcH5C+iWTYQYwnTLaUY=";
+    hash = "sha256-48lR1rIWMwLaTv+nIdqmQ3mHOayrC1P5OQuUb+URYh0=";
     fetchSubmodules = true;
   };
 

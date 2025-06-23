@@ -9,29 +9,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fedigroups";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitea {
     domain = "git.ondrovo.com";
     owner = "MightyPork";
     repo = "group-actor";
     rev = "v${version}";
-    hash = "sha256-NMqoYUNN2ntye9mNC3KAAc0DBg+QY7+6/DASwHPexY0=";
+    hash = "sha256-Sq22CwLLR10yrN3+dR2KDoS8r99+LWOH7+l+D3RWlKw=";
     forceFetchGit = true; # Archive generation is disabled on this gitea instance
     leaveDotGit = true; # git command in build.rs
   };
 
-  # The lockfile in the repo is not up to date
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "elefren-0.22.0" = "sha256-zCmopdkBHT0gzNGQqZzsnIyMyAt0XBbQdOCpegF6TsY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6UijHshvKANtMMfNADWDViDrh6bGlPvFz4xqJeWdqB0=";
 
   nativeBuildInputs = [
     pkg-config

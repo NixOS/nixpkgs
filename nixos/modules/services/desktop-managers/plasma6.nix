@@ -136,7 +136,6 @@ in
           breeze-icons
           breeze-gtk
           ocean-sound-theme
-          plasma-workspace-wallpapers
           pkgs.hicolor-icon-theme # fallback icons
           qqc2-breeze-style
           qqc2-desktop-style
@@ -156,8 +155,11 @@ in
         ];
         optionalPackages =
           [
+            aurorae
             plasma-browser-integration
+            plasma-workspace-wallpapers
             konsole
+            kwin-x11
             (lib.getBin qttools) # Expose qdbus in PATH
             ark
             elisa
@@ -339,7 +341,34 @@ in
         capabilities = "cap_sys_nice+ep";
         source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
       };
+
+      ksystemstats_intel_helper = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_perfmon+ep";
+        source = "${pkgs.kdePackages.ksystemstats}/libexec/ksystemstats_intel_helper";
+      };
+
+      ksgrd_network_helper = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_net_raw+ep";
+        source = "${pkgs.kdePackages.libksysguard}/libexec/ksysguard/ksgrd_network_helper";
+      };
     };
+
+    # Upstream recommends allowing set-timezone and set-ntp so that the KCM and
+    # the automatic timezone logic work without user interruption.
+    # However, on NixOS NTP cannot be overwritten via dbus, and timezone
+    # can only be set if `time.timeZone` is set to `null`. So, we only allow
+    # set-timezone, and we only allow it when the timezone can actually be set.
+    security.polkit.extraConfig = lib.mkIf (config.time.timeZone != null) ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.timedate1.set-timezone" && subject.active) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
 
     programs.dconf.enable = true;
 

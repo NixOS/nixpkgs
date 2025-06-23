@@ -121,6 +121,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/udev/rules.d"
   '';
 
+  doInstallCheck = true;
+
   installTargets = [
     "install"
     "udev-install"

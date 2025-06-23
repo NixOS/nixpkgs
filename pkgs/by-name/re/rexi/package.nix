@@ -27,9 +27,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    pytest
+    pytestCheckHook
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonRelaxDeps = [

@@ -6,6 +6,7 @@
   bash,
   openssl,
   nixosTests,
+  udevCheckHook,
 }:
 
 let
@@ -26,7 +27,12 @@ python.pkgs.buildPythonApplication rec {
     # Read-only file system: '/etc/ssh/sshd_config'
     ./dont-configure-sshd.patch
   ];
-  doCheck = false;
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   # Replace tools used in udev rules with their full path and ensure they are present.
   postPatch = ''

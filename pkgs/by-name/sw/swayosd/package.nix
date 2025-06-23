@@ -18,6 +18,7 @@
   sassc,
   stdenv,
   udev,
+  udevCheckHook,
 }:
 stdenv.mkDerivation rec {
   pname = "swayosd";
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     cargo
     ninja
     rustPlatform.cargoSetupHook
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -70,6 +72,8 @@ stdenv.mkDerivation rec {
       --replace /bin/chgrp ${coreutils}/bin/chgrp \
       --replace /bin/chmod ${coreutils}/bin/chmod
   '';
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "GTK based on screen display for keyboard shortcuts";

@@ -95,6 +95,7 @@ rustPlatform.buildRustPackage {
       Br1ght0ne
       johntitor
       joaquintrinanes
+      ryan4yin
     ];
     mainProgram = "nu";
   };

@@ -389,6 +389,8 @@ lib.makeScope pkgs.newScope (
 
         swoole = callPackage ../development/php-packages/swoole { };
 
+        systemd = callPackage ../development/php-packages/systemd { };
+
         tideways = callPackage ../development/php-packages/tideways { };
 
         uuid = callPackage ../development/php-packages/uuid { };

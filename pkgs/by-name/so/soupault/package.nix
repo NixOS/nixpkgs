@@ -12,7 +12,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "soupault";
-  version = "5.0.0";
+  version = "5.1.0";
 
   minimalOCamlVersion = "4.13";
 
@@ -21,7 +21,7 @@ ocamlPackages.buildDunePackage rec {
       "https://github.com/PataphysicalSociety/soupault/archive/${version}.tar.gz"
       "https://codeberg.org/PataphysicalSociety/soupault/archive/${version}.tar.gz"
     ];
-    hash = "sha256-patZn5z+ZT3dONdUojSvFgaVOmG1IpVGdehCUh2uRT8=";
+    hash = "sha256-yAkJgNwF763b2DFGA+4Ve+jafFxZbFDm3QxisDD6gYo=";
   };
 
   nativeBuildInputs =

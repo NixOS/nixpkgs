@@ -7,16 +7,19 @@
   bison,
   onigurumaSupport ? true,
   oniguruma,
+  tzdata,
+  nix-update-script,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jq";
-  version = "1.7.1";
+  version = "1.8.0";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = fetchurl {
-    url = "https://github.com/jqlang/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
-    hash = "sha256-R4ycoSn9LjRD/icxS0VeIR4NjGC8j/ffcDhz3u7lgMI=";
+    url = "https://github.com/jqlang/jq/releases/download/jq-${finalAttrs.version}/jq-${finalAttrs.version}.tar.gz";
+    hash = "sha256-kYEVd/kdmmGV/1DCv/7JtyyEKdwF7D6gIv2VwG0rMZw=";
   };
 
   outputs = [
@@ -25,6 +28,15 @@ stdenv.mkDerivation rec {
     "man"
     "dev"
     "out"
+  ];
+
+  # tortured syntax to avoid rebuilds
+  # needed because epoch conversion test here is right at the end of 32 bit integer space
+  # See also: https://github.com/jqlang/jq/blob/859a8073ee8a21f2133154eea7c2bd5e0d60837f/tests/optional.test#L15-L18
+  # "-D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64" would be preferrable, but breaks with dynamic linking,
+  # unless done globally in stdenv for all of 32 bit.
+  ${if stdenv.hostPlatform.is32bit then "patches" else null} = [
+    ./disable-end-of-epoch-conversion-test.patch
   ];
 
   # https://github.com/jqlang/jq/issues/2871
@@ -37,15 +49,18 @@ stdenv.mkDerivation rec {
   # doesn't keep.
   preConfigure = ''
     echo "#!/bin/sh" > scripts/version
-    echo "echo ${version}" >> scripts/version
+    echo "echo ${finalAttrs.version}" >> scripts/version
     patchShebangs scripts/version
   '';
 
   # paranoid mode: make sure we never use vendored version of oniguruma
   # Note: it must be run after automake, or automake will complain
   preBuild = ''
-    rm -r ./modules/oniguruma
+    rm -r ./vendor/oniguruma
   '';
+
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   buildInputs = lib.optionals onigurumaSupport [ oniguruma ];
   nativeBuildInputs = [
@@ -63,9 +78,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
     # jq is linked to libjq:
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}"
-    # https://github.com/jqlang/jq/issues/3252
-    ++ lib.optional stdenv.hostPlatform.isOpenBSD "CFLAGS=-D_BSD_SOURCE=1";
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
   # jq binary includes the whole `configureFlags` in:
   # https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100
@@ -82,24 +95,42 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "check";
 
+  preInstallCheck = ''
+    substituteInPlace tests/shtest \
+      --replace-fail "TZ=" "TZ=${tzdata}/share/zoneinfo/"
+  '';
+
   postInstallCheck = ''
-    $bin/bin/jq --help >/dev/null
     $bin/bin/jq -r '.values[1]' <<< '{"values":["hello","world"]}' | grep '^world$' > /dev/null
   '';
 
-  passthru = { inherit onigurumaSupport; };
+  passthru = {
+    inherit onigurumaSupport;
+    tests.version = testers.testVersion {
+      package = lib.getBin finalAttrs.finalPackage;
+      command = "jq --version";
+    };
 
-  meta = with lib; {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "jq-(.+)"
+      ];
+    };
+  };
+
+  meta = {
+    changelog = "https://github.com/jqlang/jq/releases/tag/jq-${finalAttrs.version}";
     description = "Lightweight and flexible command-line JSON processor";
     homepage = "https://jqlang.github.io/jq/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       raskin
       artturin
       ncfavier
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     downloadPage = "https://jqlang.github.io/jq/download/";
     mainProgram = "jq";
   };
-}
+})

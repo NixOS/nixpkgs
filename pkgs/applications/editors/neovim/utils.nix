@@ -227,12 +227,9 @@ let
       ) vimPlugins.nvim-treesitter.grammarPlugins;
       isNvimGrammar = x: builtins.elem x nvimGrammars;
 
-      toNvimTreesitterGrammar = callPackage (
-        { }:
-        makeSetupHook {
-          name = "to-nvim-treesitter-grammar";
-        } ./to-nvim-treesitter-grammar.sh
-      ) { };
+      toNvimTreesitterGrammar = makeSetupHook {
+        name = "to-nvim-treesitter-grammar";
+      } ./to-nvim-treesitter-grammar.sh;
     in
 
     (toVimPlugin (

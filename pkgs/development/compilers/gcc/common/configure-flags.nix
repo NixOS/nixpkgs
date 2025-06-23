@@ -69,7 +69,6 @@ let
       "--with-as=${
         if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools
       }/bin/${targetPlatform.config}-as"
-      "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
     ]
     ++ (
       if withoutTargetLibc then

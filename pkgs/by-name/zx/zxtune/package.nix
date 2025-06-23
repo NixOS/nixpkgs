@@ -48,7 +48,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zxtune";
-  version = "5090";
+  version = "5100";
 
   outputs = [ "out" ];
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     owner = "zxtune";
     repo = "zxtune";
     rev = "r${version}";
-    hash = "sha256-2k1I3wGnUSMgwzxXY3SKhS8nBtrFU8zH9VaFwdWYgOU=";
+    hash = "sha256-SNHnpLAbiHCo11V090EY/vLH4seoZWpMHMMBLGkr88E=";
   };
 
   passthru.updateScript = nix-update-script {

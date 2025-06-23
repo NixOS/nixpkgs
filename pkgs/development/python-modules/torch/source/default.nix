@@ -46,6 +46,7 @@
 
   # dependencies
   astunparse,
+  binutils,
   expecttest,
   filelock,
   fsspec,
@@ -331,6 +332,10 @@ buildPythonPackage rec {
       # flag from cmakeFlags doesn't work, not clear why
       # setting it at the top of NNPACK's own CMakeLists does
       sed -i '2s;^;set(PYTHON_SIX_SOURCE_DIR ${six.src})\n;' third_party/NNPACK/CMakeLists.txt
+
+      # Ensure that torch profiler unwind uses addr2line from nix
+      substituteInPlace torch/csrc/profiler/unwind/unwind.cpp \
+        --replace-fail 'addr2line_binary_ = "addr2line"' 'addr2line_binary_ = "${lib.getExe' binutils "addr2line"}"'
     ''
     + lib.optionalString rocmSupport ''
       # https://github.com/facebookincubator/gloo/pull/297

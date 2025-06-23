@@ -12,6 +12,9 @@
   versionCheckHook,
   nix-update-script,
   nixosTests,
+  node-gyp,
+  pkg-config,
+  python3,
 }:
 
 let
@@ -43,18 +46,30 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-O8RLaKff4Dj/JDeUOyf7GtcFcOu/aOuclyaZmVqVi5s=";
   };
 
-  buildInputs = [ vips ];
+  buildInputs = [
+    openssl
+    vips
+  ];
 
   nativeBuildInputs = [
     pnpm_10.configHook
     nodejs_24
     makeWrapper
+    # for sharp build:
+    node-gyp
+    pkg-config
+    python3
   ];
 
   env = environment;
 
   buildPhase = ''
     runHook preBuild
+
+    # Force build of sharp against native libvips (requires running install scripts).
+    # This is necessary for supporting old CPUs (ie. without SSE 4.2 instruction set).
+    pnpm config set nodedir ${nodejs_24}
+    pnpm install --force --offline --frozen-lockfile
 
     pnpm build
 
@@ -86,14 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     mkBin ziplinectl ctl
 
     runHook postInstall
-  '';
-
-  preFixup = ''
-    find $out -name libvips-cpp.so.42 -print0 | while read -d $'\0' libvips; do
-      echo replacing libvips at $libvips
-      rm $libvips
-      ln -s ${lib.getLib vips}/lib/libvips-cpp.so.42 $libvips
-    done
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

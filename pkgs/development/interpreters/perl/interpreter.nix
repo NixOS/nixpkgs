@@ -73,6 +73,7 @@ stdenv.mkDerivation (
     patches =
       [
         ./CVE-2024-56406.patch
+        ./CVE-2025-40909.patch
       ]
       # Do not look in /usr etc. for dependencies.
       ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
@@ -316,15 +317,20 @@ stdenv.mkDerivation (
     };
   }
   // lib.optionalAttrs crossCompiling rec {
-    crossVersion = "1.6";
+    crossVersion = "1.6.2";
 
     perl-cross-src = fetchFromGitHub {
       name = "perl-cross-${crossVersion}";
       owner = "arsv";
       repo = "perl-cross";
       rev = crossVersion;
-      sha256 = "sha256-TVDLxw8ctl64LSfLfB4/WLYlSTO31GssSzmdVfqkBmg=";
+      hash = "sha256-mG9ny+eXGBL4K/rXqEUPSbar+4Mq4IaQrGRFIHIyAAw=";
     };
+    patches = [
+      # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
+      # https://github.com/arsv/perl-cross/pull/159
+      ./cross-fdopendir.patch
+    ];
 
     depsBuildBuild = [
       buildPackages.stdenv.cc
