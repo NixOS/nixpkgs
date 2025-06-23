@@ -12917,6 +12917,8 @@ self: super: with self; {
 
   pyliblo = callPackage ../development/python-modules/pyliblo { };
 
+  pyliblo3 = callPackage ../development/python-modules/pyliblo3 { };
+
   pylibmc = callPackage ../development/python-modules/pylibmc { };
 
   pylibrespot-java = callPackage ../development/python-modules/pylibrespot-java { };
