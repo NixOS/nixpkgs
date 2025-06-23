@@ -54,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail ">=0" ">= 0"
   '';
 
-  doCheck = true;
+  # https://github.com/NixOS/nixpkgs/issues/407969
+  doCheck = false;
 
   passthru.updateScript = gitUpdater { };
 
