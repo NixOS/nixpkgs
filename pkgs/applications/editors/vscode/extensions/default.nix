@@ -3215,6 +3215,8 @@ let
         };
       };
 
+      miguelsolorio.min-theme = callPackage ./miguelsolorio.min-theme { };
+
       mikestead.dotenv = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dotenv";
