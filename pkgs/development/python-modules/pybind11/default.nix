@@ -88,23 +88,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # require dependencies not available in nixpkgs
-    "tests/test_embed/test_trampoline.py"
-    "tests/test_embed/test_interpreter.py"
-    # numpy changed __repr__ output of numpy dtypes
-    "tests/test_numpy_dtypes.py"
-    # no need to test internal packaging
-    "tests/extra_python_package/test_files.py"
-    # tests that try to parse setuptools stdout
-    "tests/extra_setuptools/test_setuphelper.py"
-  ];
+  #disabledTestPaths = [
+  #  # require dependencies not available in nixpkgs
+  #  "tests/test_embed/test_trampoline.py"
+  #  "tests/test_embed/test_interpreter.py"
+  #  # numpy changed __repr__ output of numpy dtypes
+  #  "tests/test_numpy_dtypes.py"
+  #  # no need to test internal packaging
+  #  "tests/extra_python_package/test_files.py"
+  #  # tests that try to parse setuptools stdout
+  #  "tests/extra_setuptools/test_setuphelper.py"
+  #];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # expects KeyError, gets RuntimeError
-    # https://github.com/pybind/pybind11/issues/4243
-    "test_cross_module_exception_translator"
-  ];
+  #disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  #  # expects KeyError, gets RuntimeError
+  #  # https://github.com/pybind/pybind11/issues/4243
+  #  "test_cross_module_exception_translator"
+  #];
   passthru = {
     # scikit-build-core's tests depend upon pybind11, and hence introduce
     # infinite recursion. To avoid this, we define here a scikit-build-core
