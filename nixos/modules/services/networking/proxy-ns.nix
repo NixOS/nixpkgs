@@ -16,7 +16,7 @@ in
   options.services.proxy-ns = {
     enable = lib.mkEnableOption "proxy-ns";
     settings = lib.mkOption {
-      type = (with lib.types; nullOr (attrsOf unspecified));
+      type = configFormat.type;
       description = "";
       example = {
         tun_name = "default";
