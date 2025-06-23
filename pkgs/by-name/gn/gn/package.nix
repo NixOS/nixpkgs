@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   configurePhase = ''
+    runHook preConfigure
     python build/gen.py --no-last-commit-position
     export revShort=`cat .nix-files/REV_SHORT`
     export revNum=`cat .nix-files/REV_NUM`
@@ -55,14 +56,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     #endif  // OUT_LAST_COMMIT_POSITION_H_
     EOF
+    runHook postConfigure
   '';
 
   buildPhase = ''
+    runHook preBuild
     ninja -j $NIX_BUILD_CORES -C out gn
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -vD out/gn "$out/bin/gn"
+    runHook postInstall
   '';
 
   setupHook = ./setup-hook.sh;
