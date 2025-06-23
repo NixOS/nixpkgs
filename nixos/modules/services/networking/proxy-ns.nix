@@ -18,7 +18,7 @@ in
     settings = lib.mkOption {
       type = (with lib.types; nullOr (attrsOf unspecified));
       description = ''
-        The configuration object.
+        The default setting.
 
         See <https://github.com/OkamiW/proxy-ns>.
       '';
