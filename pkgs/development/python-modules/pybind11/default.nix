@@ -6,7 +6,8 @@
   fetchFromGitHub,
   cmake,
   ninja,
-  setuptools,
+  scikit-build-core,
+  pybind11,
   boost,
   eigen,
   python,
@@ -29,20 +30,20 @@ let
 in
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.13.6";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
     tag = "v${version}";
-    hash = "sha256-SNLdtrOjaC3lGHN9MAqTf51U9EzNKQLyTMNPe0GcdrU=";
+    hash = "sha256-uyeBTZL38kXIoNxZBWcMRx046+tVJ4ZmCOwGz+D2XJA=";
   };
 
   build-system = [
     cmake
     ninja
-    setuptools
+    pybind11.passthru.scikit-build-core-no-tests
   ];
 
   buildInputs =
@@ -60,11 +61,15 @@ buildPythonPackage rec {
 
   dontUseCmakeBuildDir = true;
 
-  cmakeFlags = [
-    # Always build tests, because even when cross compiling building the tests
-    # is another confirmation that everything is OK.
-    "-DBUILD_TESTING=ON"
-  ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [ "-DPYBIND11_CXX_STANDARD=-std=c++17" ];
+  env = {
+    SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" [
+      # Always build tests, because even when cross compiling building the tests
+      # is another confirmation that everything is OK.
+      (lib.cmakeBool "BUILD_TESTING" true)
+      # From some reason this is needed for tests.
+      (lib.cmakeBool "PYBIND11_NOPYTHON" false)
+    ];
+  };
 
   postBuild = ''
     # build tests
@@ -100,6 +105,16 @@ buildPythonPackage rec {
     # https://github.com/pybind/pybind11/issues/4243
     "test_cross_module_exception_translator"
   ];
+  passthru = {
+    # scikit-build-core's tests depend upon pybind11, and hence introduce
+    # infinite recursion. To avoid this, we define here a scikit-build-core
+    # derivation that doesn't depend on pybind11, and use it for pybind11's
+    # build-system.
+    scikit-build-core-no-tests = scikit-build-core.overridePythonAttrs (old: {
+      doInstallCheck = false;
+      nativeCheckInputs = [ ];
+    });
+  };
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
 
