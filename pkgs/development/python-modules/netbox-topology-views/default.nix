@@ -4,16 +4,16 @@
   fetchFromGitHub,
   setuptools,
   netbox,
-  pythonAtLeast,
   django,
   netaddr,
+  python,
 }:
 buildPythonPackage rec {
   pname = "netbox-topology-views";
   version = "4.2.1";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
+  disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
