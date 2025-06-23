@@ -13,7 +13,7 @@
   glib,
   glog,
   gflags,
-  protobuf_21,
+  protobuf,
   config,
   ocl-icd,
   qimgv,
@@ -335,7 +335,7 @@ effectiveStdenv.mkDerivation {
       glib
       glog
       pcre2
-      protobuf_21
+      protobuf
       zlib
     ]
     ++ optionals enablePython [
