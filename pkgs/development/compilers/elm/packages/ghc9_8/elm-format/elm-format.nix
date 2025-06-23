@@ -20,13 +20,13 @@
   tasty-quickcheck,
   text,
 }:
-mkDerivation {
+mkDerivation rec {
   pname = "elm-format";
-  version = "0.8.7";
+  version = "0.8.8";
   src = fetchgit {
     url = "https://github.com/avh4/elm-format";
-    sha256 = "04l1bn4w8q3ifd6mc4mfrqxfbihmqnpfjdn6gr0x2jqcasjbk0bi";
-    rev = "b5cca4c26b473dab06e5d73b98148637e4770d45";
+    sha256 = "0klhnfvy1l6mck46qwk6pp4d66cvj0m5w91ylghdcr4fb6ka1gp0";
+    rev = "b06902f1e450f8be1e7b318caab7ccb1950893fa";
     fetchSubmodules = true;
   };
   isLibrary = false;
@@ -61,8 +61,18 @@ mkDerivation {
     tasty-quickcheck
     text
   ];
+  doHaddock = false;
   homepage = "https://elm-lang.org";
-  description = "Source code formatter for Elm";
+  description = "A source code formatter for Elm";
   license = lib.licenses.bsd3;
   mainProgram = "elm-format";
+  postPatch = ''
+    mkdir -p ./generated
+    cat <<EOHS > ./generated/Build_elm_format.hs
+    module Build_elm_format where
+
+    gitDescribe :: String
+    gitDescribe = "${version}"
+    EOHS
+  '';
 }
