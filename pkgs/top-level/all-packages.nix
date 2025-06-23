@@ -3029,8 +3029,13 @@ with pkgs;
     garage_0_9
     garage_0_8_7
     garage_0_9_4
+
     garage_1_2_0
     garage_1_x
+    garage_1
+
+    garage_2_0_0
+    garage_2
     ;
 
   gaugePlugins = recurseIntoAttrs (callPackage ../by-name/ga/gauge/plugins { });
@@ -9233,9 +9238,7 @@ with pkgs;
 
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
-  podofo = callPackage ../development/libraries/podofo { };
-
-  podofo010 = callPackage ../development/libraries/podofo/0.10.x.nix { };
+  podofo = podofo_1_0;
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
 
@@ -11540,8 +11543,6 @@ with pkgs;
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
 
-  epapirus-icon-theme = papirus-icon-theme.override { withElementary = true; };
-
   moeli = eduli;
 
   emojione = callPackage ../data/fonts/emojione {
@@ -11674,11 +11675,6 @@ with pkgs;
   openmoji-color = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf_colr_0" ]; };
 
   openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf" ]; };
-
-  papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme {
-    inherit (pantheon) elementary-icon-theme;
-    inherit (plasma5Packages) breeze-icons;
-  };
 
   papirus-maia-icon-theme = callPackage ../data/icons/papirus-maia-icon-theme {
     inherit (plasma5Packages) breeze-icons;
@@ -11936,10 +11932,6 @@ with pkgs;
   breezy = with python3Packages; toPythonApplication breezy;
 
   calcmysky = qt6Packages.callPackage ../applications/science/astronomy/calcmysky { };
-
-  calibre = callPackage ../by-name/ca/calibre/package.nix {
-    podofo = podofo010;
-  };
 
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
   inherit (callPackage ../applications/networking/cluster/calico { })
@@ -14365,7 +14357,7 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
-  x2goclient = libsForQt5.callPackage ../applications/networking/remote/x2goclient { };
+  x2goclient = callPackage ../applications/networking/remote/x2goclient { };
 
   x2gokdriveclient = libsForQt5.callPackage ../applications/networking/remote/x2gokdriveclient { };
 

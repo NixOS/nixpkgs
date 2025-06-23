@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  expat,
   fontconfig,
   freetype,
   libidn,
@@ -11,7 +10,6 @@
   libpng,
   libtiff,
   libxml2,
-  lua5,
   openssl,
   pkg-config,
   zlib,
@@ -19,19 +17,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "podofo";
-  version = "0.10.4";
+  version = "0.10.5";
 
   src = fetchFromGitHub {
     owner = "podofo";
     repo = "podofo";
     rev = finalAttrs.version;
-    hash = "sha256-ZY+kyimLzAeEgvDaflXM7MbyzsGgivOnG1aBD9/ozbk=";
+    hash = "sha256-lYykDGhxFWLwuZhfBIgbw3B0SEhrAP7vLNNXsPKRFZw=";
   };
 
   outputs = [
     "out"
     "dev"
-    "lib"
   ];
 
   nativeBuildInputs = [
@@ -40,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    expat
     fontconfig
     freetype
     libidn
@@ -48,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libtiff
     libxml2
-    lua5
     openssl
     zlib
   ];
@@ -66,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       lgpl2Plus
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      kuflierl
+    ];
   };
 })

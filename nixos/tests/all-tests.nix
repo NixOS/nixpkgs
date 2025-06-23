@@ -543,7 +543,14 @@ in
   mimir = runTest ./mimir.nix;
   galene = discoverTests (import ./galene.nix);
   gancio = runTest ./gancio.nix;
-  garage = handleTest ./garage { };
+  garage_1 = import ./garage {
+    inherit runTest;
+    package = pkgs.garage_1;
+  };
+  garage_2 = import ./garage {
+    inherit runTest;
+    package = pkgs.garage_2;
+  };
   gatus = runTest ./gatus.nix;
   getaddrinfo = runTest ./getaddrinfo.nix;
   gemstash = handleTest ./gemstash.nix { };
@@ -810,6 +817,7 @@ in
   matrix-continuwuity = runTest ./matrix/continuwuity.nix;
   matrix-synapse = runTest ./matrix/synapse.nix;
   matrix-synapse-workers = runTest ./matrix/synapse-workers.nix;
+  mautrix-discord = runTest ./matrix/mautrix-discord.nix;
   mattermost = handleTest ./mattermost { };
   mautrix-meta-postgres = runTest ./matrix/mautrix-meta-postgres.nix;
   mautrix-meta-sqlite = runTest ./matrix/mautrix-meta-sqlite.nix;
