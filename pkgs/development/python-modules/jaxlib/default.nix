@@ -38,7 +38,7 @@
   giflib,
   libjpeg_turbo,
   python,
-  snappy,
+  snappy-cpp,
   zlib,
 
   config,
@@ -254,7 +254,7 @@ let
       pybind11
       scipy
       six
-      snappy
+      snappy-cpp
       zlib
     ] ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
 
@@ -470,7 +470,10 @@ buildPythonPackage {
     numpy
     scipy
     six
-    snappy
+  ];
+
+  buildInputs = [
+    snappy-cpp
   ];
 
   pythonImportsCheck = [

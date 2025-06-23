@@ -7182,7 +7182,9 @@ self: super: with self; {
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix { };
 
-  jaxlib-build = callPackage ../development/python-modules/jaxlib { };
+  jaxlib-build = callPackage ../development/python-modules/jaxlib {
+    snappy-cpp = pkgs.snappy;
+  };
 
   jaxopt = callPackage ../development/python-modules/jaxopt { };
 
