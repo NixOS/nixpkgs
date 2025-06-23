@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "csdreit";
-  version = "0.0.11";
+  version = "0.0.11-unstable";
 
   src = fetchFromGitHub {
     owner = "luarvique";
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     csdr
   ];
 
-  hardeningDisable = lib.optional stdenv.isAarch64 "format";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isAarch64 "format";
 
   meta = with lib; {
-    homepage = "https://github.com/luarvique/csdreti";
+    homepage = "https://github.com/luarvique/csdr-eti";
     description = "A simple DSP library and command-line tool for Software Defined Radio";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

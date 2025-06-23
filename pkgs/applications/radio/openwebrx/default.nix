@@ -94,7 +94,7 @@ buildPythonApplication rec {
     hash = "sha256-fwU1aMsjMMiq3zffFs8tksnR5bhTdeoeDQTaaLM0p7M=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     setuptools
     csdr
     csdreti

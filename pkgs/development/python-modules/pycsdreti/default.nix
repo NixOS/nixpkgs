@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pycsdreti";
   version = "0.1.0-dev";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luarvique";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/luarvique/pycsdr-eti";
-    description = "bindings for the csdreti library";
+    description = "Bindings for the csdreti library";
     license = licenses.gpl3Only;
     maintainers = teams.c3d2.members ++ [ maintainers.mafo ];
   };
