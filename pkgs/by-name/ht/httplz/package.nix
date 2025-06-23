@@ -20,8 +20,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-qinhdpm9eaTdpUk4ZZLaH1D/CZ22k4RisHu8clZCEGo=";
   };
 
-  cargoPatches = [ ./cargo-lock.patch ];
-  cargoHash = "sha256-R0IExJbvPJNaEClG3ubUtLOkkPfdDGRH+W1EGWMeEY0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   nativeBuildInputs = [
     installShellFiles
