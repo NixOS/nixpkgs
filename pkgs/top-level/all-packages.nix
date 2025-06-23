@@ -7398,6 +7398,8 @@ with pkgs;
 
   m4 = gnum4;
 
+  gn_2233 = callPackage ../by-name/gn/gn/2233.nix { };
+
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
   gradle-packages = import ../development/tools/build-managers/gradle {
     inherit
