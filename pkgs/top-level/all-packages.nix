@@ -3025,7 +3025,6 @@ with pkgs;
 
   inherit (callPackages ../tools/filesystems/garage { })
     garage
-    garage_0_8
     garage_0_9
     garage_0_8_7
     garage_0_9_4

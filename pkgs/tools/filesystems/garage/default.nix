@@ -111,19 +111,6 @@ let
     };
 in
 rec {
-  # Until Garage hits 1.0, 0.7.3 is equivalent to 7.3.0 for now, therefore
-  # we have to keep all the numbers in the version to handle major/minor/patch level.
-  # for <1.0.
-  # Please add new versions to nixos/tests/garage/default.nix as well.
-
-  garage_0_8_7 = generic {
-    version = "0.8.7";
-    hash = "sha256-2QGbR6YvMQeMxN3n1MMJ5qfBcEJ5hjXARUOfEn+m4Jc=";
-    cargoHash = "sha256-NmeAkm35Su4o5JEn75pZmxhVHh+VMwKwULKY0eCVlYo=";
-    cargoPatches = [ ./update-time-0.8.patch ];
-    broken = stdenv.hostPlatform.isDarwin;
-  };
-
   garage_0_9_4 = generic {
     version = "0.9.4";
     hash = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
@@ -142,8 +129,6 @@ rec {
     hash = "sha256-dn7FoouF+5qmW6fcC20bKQSc6D2G9yrWdBK3uN3bF58=";
     cargoHash = "sha256-6VM/EesrUIaQOeDGqzb0kOqMz4hW7zBJUnaRQ9C3cqc=";
   };
-
-  garage_0_8 = garage_0_8_7;
 
   garage_0_9 = garage_0_9_4;
 
