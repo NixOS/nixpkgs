@@ -1,12 +1,12 @@
 {
+  lib,
   stdenv,
   fetchurl,
-  sane-backends,
-  nss,
   autoPatchelfHook,
-  lib,
   libsForQt5,
+  nss,
   pkcs11helper,
+  sane-backends,
   common-updater-scripts,
   nix-update,
   writeShellScript,
@@ -36,13 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = with libsForQt5; [
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     nss
-    qtbase
-    qtsvg
-    sane-backends
-    stdenv.cc.cc
     pkcs11helper
+    sane-backends
   ];
 
   dontStrip = true;
@@ -50,26 +50,22 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    p=$out/opt/masterpdfeditor
-    mkdir -p $out/bin
-
-    substituteInPlace masterpdfeditor5.desktop \
-      --replace-fail 'Exec=/opt/master-pdf-editor-5' "Exec=$out/bin" \
-      --replace-fail 'Path=/opt/master-pdf-editor-5' "Path=$out/bin" \
-      --replace-fail 'Icon=/opt/master-pdf-editor-5' "Icon=$out/share/pixmaps"
-
-    install -Dm644 -t $out/share/pixmaps      masterpdfeditor5.png
-    install -Dm644 -t $out/share/applications masterpdfeditor5.desktop
-    install -Dm755 -t $p                      masterpdfeditor5
-    install -Dm644 license_en.txt $out/share/$name/LICENSE
-    ln -s $p/masterpdfeditor5 $out/bin/masterpdfeditor5
-    cp -v -r stamps templates lang fonts $p
+    substituteInPlace usr/share/applications/net.code-industry.masterpdfeditor5.desktop \
+      --replace-fail "Exec=/opt/master-pdf-editor-5/masterpdfeditor5" "Exec=masterpdfeditor5" \
+      --replace-fail "Path=/opt/master-pdf-editor-5" "Path=$out/share/masterpdfeditor" \
+      --replace-fail "/opt/master-pdf-editor-5/masterpdfeditor5.png" "masterpdfeditor5"
+    cp -r usr $out
+    install -Dm755 masterpdfeditor5 -t $out/share/masterpdfeditor
+    cp -r stamps templates lang fonts $out/share/masterpdfeditor
+    mkdir $out/bin
+    ln -s $out/share/masterpdfeditor/masterpdfeditor5 $out/bin/masterpdfeditor5
 
     runHook postInstall
   '';
 
   preFixup = ''
-    patchelf $out/opt/masterpdfeditor/masterpdfeditor5 --add-needed libsmime3.so
+    patchelf $out/share/masterpdfeditor/masterpdfeditor5 \
+      --add-needed libsmime3.so
   '';
 
   passthru.updateScript = writeShellScript "update-masterpdfeditor" ''
