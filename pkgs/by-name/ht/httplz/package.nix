@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "thecoshman";
     repo = "http";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qinhdpm9eaTdpUk4ZZLaH1D/CZ22k4RisHu8clZCEGo=";
   };
 
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Basic http server for hosting a folder fast and simply";
     mainProgram = "httplz";
     homepage = "https://github.com/thecoshman/http";
-    changelog = "https://github.com/thecoshman/http/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/thecoshman/http/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ figsoda ];
   };
