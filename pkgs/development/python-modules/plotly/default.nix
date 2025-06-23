@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "6.1.0";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     tag = "v${version}";
-    hash = "sha256-B5wjZTnL/T+zRbPd3tVSekDbYnKBvIdIpXhc3sUvT3E=";
+    hash = "sha256-+vIq//pDLaaTmRGW+oytho3TfMmLCtuIoHeFenLVcek=";
   };
 
   postPatch = ''
@@ -103,11 +103,28 @@ buildPythonPackage rec {
     "test_acceptance_named"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # requires local networking
-    "plotly/tests/test_io/test_renderers.py"
     # fails to launch kaleido subprocess
-    "plotly/tests/test_optional/test_kaleido"
+    "tests/test_optional/test_kaleido"
+    # numpy2 related error, RecursionError
+    # See: https://github.com/plotly/plotly.py/issues/4852
+    "tests/test_plotly_utils/validators/test_angle_validator.py"
+    "tests/test_plotly_utils/validators/test_any_validator.py"
+    "tests/test_plotly_utils/validators/test_color_validator.py"
+    "tests/test_plotly_utils/validators/test_colorlist_validator.py"
+    "tests/test_plotly_utils/validators/test_colorscale_validator.py"
+    "tests/test_plotly_utils/validators/test_dataarray_validator.py"
+    "tests/test_plotly_utils/validators/test_enumerated_validator.py"
+    "tests/test_plotly_utils/validators/test_fig_deepcopy.py"
+    "tests/test_plotly_utils/validators/test_flaglist_validator.py"
+    "tests/test_plotly_utils/validators/test_infoarray_validator.py"
+    "tests/test_plotly_utils/validators/test_integer_validator.py"
+    "tests/test_plotly_utils/validators/test_number_validator.py"
+    "tests/test_plotly_utils/validators/test_pandas_series_input.py"
+    "tests/test_plotly_utils/validators/test_string_validator.py"
+    "tests/test_plotly_utils/validators/test_xarray_input.py"
   ];
 
   pythonImportsCheck = [ "plotly" ];
