@@ -43,7 +43,7 @@ gccStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "the3dfxdude";
     repo = "7kaa";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kkM+kFQ+tGHS5NrVPeDMRWFQb7waESt8xOLfFGaGdgo=";
   };
 
