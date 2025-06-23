@@ -4,17 +4,37 @@
   fetchFromGitLab,
   fetchpatch,
   anthy,
+  glib,
   gsettings-qt,
   hunspell,
   libchewing,
   libpinyin,
+  lomiri-ui-toolkit,
   maliit-framework,
   pkg-config,
   qmake,
   qtbase,
   qtdeclarative,
+  qtmultimedia,
+  wrapGAppsHook4,
+  wrapQtAppsHook,
+  writeShellApplication,
 }:
 
+let
+  runner = writeShellApplication {
+    name = "lomiri-keyboard";
+    text = ''
+      if [ $# -ne 1 ]; then
+        echo "$0: path-to-maliit-plugins-out"
+        exit 1
+      fi
+
+      PLUGINS_OUT="''${1}"
+      NIX_MALIIT_PLUGINS_DIR="''${PLUGINS_OUT}/lib/maliit" exec ${lib.getExe maliit-framework}
+    '';
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-keyboard";
   version = "1.0.3";
@@ -78,8 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    glib # schema stuff
     pkg-config
     qmake
+    wrapGAppsHook4
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -90,8 +113,13 @@ stdenv.mkDerivation (finalAttrs: {
     libpinyin
     maliit-framework
     qtdeclarative
+
+    # QML
+    lomiri-ui-toolkit
+    qtmultimedia
   ];
 
+  dontWrapGApps = true;
   dontWrapQtApps = true;
 
   qmakeFlags =
@@ -119,6 +147,20 @@ stdenv.mkDerivation (finalAttrs: {
       export QT_QPA_PLATFORM=minimal
       export QT_PLUGIN_PATH=${listToQtVar [ qtbase ] qtbase.qtPluginPrefix}
     '';
+
+  postInstall = ''
+    mkdir -p $out/bin
+    ln -s ${lib.getExe runner} $out/bin/lomiri-keyboard
+
+    glib-compile-schemas --strict $out/share/glib-2.0/schemas
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/lomiri-keyboard \
+      --add-flags "$out" \
+      "''${gappsWrapperArgs[@]}" \
+      "''${qtWrapperArgs[@]}"
+  '';
 
   meta = {
     description = "Ubuntu Touch keyboard as maliit plugin";
