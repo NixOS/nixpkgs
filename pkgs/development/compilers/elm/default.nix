@@ -8,6 +8,9 @@
 let
   fetchElmDeps = pkgs.callPackage ./lib/fetchElmDeps.nix { };
 
+  # Haskell packages that require ghc 9.8
+  hs98Pkgs = import ./packages/ghc9_8 { inherit pkgs lib; };
+
   # Haskell packages that require ghc 9.6
   hs96Pkgs = import ./packages/ghc9_6 {
     inherit
@@ -18,9 +21,6 @@ let
       fetchElmDeps
       ;
   };
-
-  # Haskell packages that require ghc 9.4
-  hs94Pkgs = import ./packages/ghc9_4 { inherit pkgs lib; };
 
   # Patched, originally npm-downloaded, packages
   patchedNodePkgs = import ./packages/node {
@@ -34,7 +34,7 @@ let
 
   assembleScope =
     self: basics:
-    (hs96Pkgs self).elmPkgs // (hs94Pkgs self).elmPkgs // (patchedNodePkgs self) // basics;
+    (hs98Pkgs self).elmPkgs // (hs96Pkgs self).elmPkgs // (patchedNodePkgs self) // basics;
 in
 lib.makeScope pkgs.newScope (
   self:
