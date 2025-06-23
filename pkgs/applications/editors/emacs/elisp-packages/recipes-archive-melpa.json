@@ -133262,11 +133262,11 @@
   "url": "https://git.savannah.gnu.org/git/emacs/nongnu.git",
   "unstable": {
    "version": [
-    20250310,
+    20250613,
     205
    ],
-   "commit": "9ee5a7657a22e836618813c2e2b64a548d27d2ff",
-   "sha256": "0ivpgib2bxv7x6cp04mj8crc1a60d7c77jcc59sj14scq4jqbmjb"
+   "commit": "67c49cfdf5a5a9f28792c500c8eb0017cfe74a3a",
+   "sha256": "sha256-maOhnDkG3GibrbI1EuPRY+Ej4AZJgbFheu6lC72vZ4w="
   },
   "stable": {
    "version": [
