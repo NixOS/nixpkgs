@@ -2,6 +2,13 @@ name: Check
 
 on:
   workflow_call:
+    inputs:
+      baseBranch:
+        required: true
+        type: string
+      headBranch:
+        required: true
+        type: string
 
 permissions: {}
 
@@ -12,9 +19,7 @@ defaults:
 jobs:
   no-channel-base:
     name: no channel base
-    if: |
-      startsWith(github.base_ref, 'nixos-') ||
-      startsWith(github.base_ref, 'nixpkgs-')
+    if: contains(fromJSON(inputs.baseBranch).type, 'channel')
     runs-on: ubuntu-24.04-arm
     steps:
       - run: |
@@ -29,8 +34,7 @@ jobs:
   cherry-pick:
     if: |
       github.event_name == 'pull_request' ||
-      startsWith(github.base_ref, 'release-') ||
-      (startsWith(github.base_ref, 'staging-') && github.base_ref != 'staging-next')
+      (fromJSON(inputs.baseBranch).stable && !contains(fromJSON(inputs.headBranch).type, 'development'))
     permissions:
       pull-requests: write
     runs-on: ubuntu-24.04-arm
