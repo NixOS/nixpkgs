@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jwt";
-  version = "1.3.1";
+  version = "1.4.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -19,8 +19,8 @@ buildPythonPackage rec {
     inherit version;
     owner = "GehirnInc";
     repo = "python-jwt";
-    rev = "v${version}";
-    hash = "sha256-N1J8yBVX/O+92cRp+q2gA2cFsd+C7JjUR9jo0VGoINg=";
+    tag = "v${version}";
+    hash = "sha256-Cv64SmhkETm8mx1Kj5u0WZpCPjPNvC+KS6/XaMzxCho=";
   };
 
   postPatch = ''
