@@ -8,8 +8,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "gn-unstable";
-  version = "2025-04-28";
+  pname = "gn";
+  version = "0-unstable-2025-04-28";
 
   src = fetchgit {
     # Note: The TAR-Archives (+archive/${rev}.tar.gz) are not deterministic!
