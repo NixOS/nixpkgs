@@ -23,18 +23,12 @@ In all cases, you should read the changelog and ideally test the upgrade on a st
 Checking the health of your cluster can be achieved using `garage-manage repair`.
 :::
 
-::: {.warning}
-Until 1.0 is released, patch-level upgrades are considered as minor version upgrades.
-Minor version upgrades are considered as major version upgrades.
-i.e. 0.6 to 0.7 is a major version upgrade.
-:::
-
   - **Straightforward upgrades (patch-level upgrades).**
     Upgrades must be performed one by one, i.e. for each node, stop it, upgrade it : change [stateVersion](#opt-system.stateVersion) or [services.garage.package](#opt-services.garage.package), restart it if it was not already by switching.
   - **Multiple version upgrades.**
     Garage do not provide any guarantee on moving more than one major-version forward.
-    E.g., if you're on `0.7`, you cannot upgrade to `0.9`.
-    You need to upgrade to `0.8` first.
+    E.g., if you're on `0.9`, you cannot upgrade to `2.0`.
+    You need to upgrade to `1.2` first.
     As long as [stateVersion](#opt-system.stateVersion) is declared properly,
     this is enforced automatically. The module will issue a warning to remind the user to upgrade to latest
     Garage *after* that deploy.
@@ -67,8 +61,8 @@ This is inspired from how Nextcloud does it.
 
 While patch-level updates are no problem and can be done directly in the
 package-expression (and should be backported to supported stable branches after that),
-major-releases should be added in a new attribute (e.g. Garage `v0.8.0`
-should be available in `nixpkgs` as `pkgs.garage_0_8_0`).
+major-releases should be added in a new attribute (e.g. Garage `v3.0.0`
+should be available in `nixpkgs` as `pkgs.garage_3`).
 To provide simple upgrade paths it's generally useful to backport those as well to stable
 branches. As long as the package-default isn't altered, this won't break existing setups.
 After that, the versioning-warning in the `garage`-module should be
