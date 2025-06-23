@@ -33,6 +33,7 @@ buildPythonPackage rec {
   version = "3.3.1";
   pyproject = true;
 
+  # Remember to bump triton-llvm as well!
   src = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
@@ -42,7 +43,6 @@ buildPythonPackage rec {
 
   patches =
     [
-      # ./0001-setup.py-introduce-TRITON_OFFLINE_BUILD.patch
       (replaceVars ./0001-_build-allow-extra-cc-flags.patch {
         ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
       })

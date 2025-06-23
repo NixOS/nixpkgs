@@ -1,38 +1,11 @@
-diff --git a/python/triton/runtime/build.py b/python/triton/runtime/build.py
-index 1edbfd3da..2756dccdb 100644
---- a/python/triton/runtime/build.py
-+++ b/python/triton/runtime/build.py
-@@ -30,6 +30,9 @@ def _build(name, src, srcdir, library_dirs, include_dirs, libraries):
-     include_dirs = include_dirs + [srcdir, py_include_dir, *custom_backend_dirs]
-     # for -Wno-psabi, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111047
-     cc_cmd = [cc, src, "-O3", "-shared", "-fPIC", "-Wno-psabi", "-o", so]
-+    cc_cmd += [f'-l{lib}' for lib in libraries]
-+    cc_cmd += [f"-L{dir}" for dir in library_dirs]
-+    cc_cmd += [f"-I{dir}" for dir in include_dirs if dir is not None]
- 
-     # Nixpkgs support branch
-     # Allows passing e.g. extra -Wl,-rpath
-@@ -38,8 +41,5 @@ def _build(name, src, srcdir, library_dirs, include_dirs, libraries):
-         import shlex
-         cc_cmd.extend(shlex.split(cc_cmd_extra_flags))
- 
--    cc_cmd += [f'-l{lib}' for lib in libraries]
--    cc_cmd += [f"-L{dir}" for dir in library_dirs]
--    cc_cmd += [f"-I{dir}" for dir in include_dirs if dir is not None]
-     subprocess.check_call(cc_cmd, stdout=subprocess.DEVNULL)
-     return so
 diff --git a/third_party/amd/backend/driver.py b/third_party/amd/backend/driver.py
-index b99ff86c8..ea8bc103d 100644
+index ca712f904..0961d2dda 100644
 --- a/third_party/amd/backend/driver.py
 +++ b/third_party/amd/backend/driver.py
-@@ -79,6 +79,13 @@ def _get_path_to_hip_runtime_dylib():
+@@ -79,6 +79,9 @@ def _get_path_to_hip_runtime_dylib():
              return mmapped_path
          raise RuntimeError(f"memory mapped '{mmapped_path}' in process does not point to a valid {lib_name}")
  
-+    # ...on release/3.1.x:
-+    #         return mmapped_path
-+    #     raise RuntimeError(f"memory mapped '{mmapped_path}' in process does not point to a valid {lib_name}")
-+
 +    if os.path.isdir("@libhipDir@"):
 +        return ["@libhipDir@"]
 +
@@ -40,7 +13,7 @@ index b99ff86c8..ea8bc103d 100644
  
      import site
 diff --git a/third_party/nvidia/backend/driver.py b/third_party/nvidia/backend/driver.py
-index 5f2621ae5..e7762a3ec 100644
+index d088ec092..625de2db8 100644
 --- a/third_party/nvidia/backend/driver.py
 +++ b/third_party/nvidia/backend/driver.py
 @@ -23,6 +23,9 @@ def libcuda_dirs():
