@@ -17,9 +17,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-JST5Rt4Ec1lRu62PUt98S2G1vKthAyOSpyCpuCnkGmw=";
   };
 
+  # 1. Future-proofs calls to imagemagick's convert feature
+  # 2. Replace hard-coded /usr path to build-system `datadir`
+  postPatch = ''
+    substituteInPlace Makefile \
+        --replace-fail "convert" "magick" \
+        --replace-fail "/usr/share" "\$(datadir)"
+  '';
+
   nativeBuildInputs = [ imagemagick ];
 
   makeFlags = [ "prefix=$(out)" ];
+
+  enableParallelBuilding = true;
 
   passthru.updateScript = nix-update-script { };
 
