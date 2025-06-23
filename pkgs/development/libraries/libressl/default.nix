@@ -23,7 +23,7 @@ let
       inherit version;
 
       src = fetchurl {
-        url = "mirror://openbsd/LibreSSL/${pname}-${version}.tar.gz";
+        url = "mirror://openbsd/LibreSSL/libressl-${version}.tar.gz";
         inherit hash;
       };
 
@@ -38,6 +38,8 @@ let
         "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
         # libressl will append this to the regular prefix for libdir
         "-DCMAKE_INSTALL_LIBDIR=lib"
+
+        "-DTLS_DEFAULT_CA_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
       ]
       ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
 
@@ -48,19 +50,14 @@ let
       preConfigure = ''
         rm configure
         substituteInPlace CMakeLists.txt \
-          --replace 'exec_prefix \''${prefix}' "exec_prefix ${placeholder "bin"}" \
-          --replace 'libdir      \''${exec_prefix}' 'libdir \''${prefix}'
+          --replace-fail 'exec_prefix \''${prefix}' "exec_prefix ${placeholder "bin"}" \
+          --replace-fail 'libdir      \''${exec_prefix}' 'libdir \''${prefix}'
       '';
 
       inherit patches;
 
-      # Since 2.9.x the default location can't be configured from the build using
-      # DEFAULT_CA_FILE anymore, instead we have to patch the default value.
       postPatch = ''
         patchShebangs tests/
-        ${lib.optionalString (lib.versionAtLeast version "2.9.2") ''
-          substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
-        ''}
       '';
 
       doCheck = !(stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isRiscV);
@@ -117,7 +114,6 @@ let
         ];
       };
     };
-
 in
 {
   libressl_3_6 = generic {
