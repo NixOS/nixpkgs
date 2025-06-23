@@ -116,6 +116,7 @@ rec {
     hash = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
     cargoHash = "sha256-ittesFz1GUGipQecsmMA+GEaVoUY+C9DtEvsO0HFNCc=";
     cargoPatches = [ ./update-time.patch ];
+    eol = true;
   };
 
   garage_1_2_0 = generic {
