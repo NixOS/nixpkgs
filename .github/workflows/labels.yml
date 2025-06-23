@@ -141,6 +141,8 @@ jobs:
                 // does not have all fields of a full pull_request response. Notably, it is missing `head.sha`,
                 // which we need to fetch the workflow run below. When triggered via pull_request event,
                 // this field is already available.
+                // This API request is also important for the merge-conflict label, because it triggers the
+                // creation of a new test merge commit. This is needed to actually determine the state of a PR.
                 const pull_request = item.head ? item : (await github.rest.pulls.get({
                   ...context.repo,
                   pull_number
@@ -236,6 +238,18 @@ jobs:
                   {},
                   before,
                   {
+                    // We intentionally don't use the mergeable or mergeable_state attributes.
+                    // Those have an intermediate state while the test merge commit is created.
+                    // This doesn't work well for us, because we might have just triggered another
+                    // test merge commit creation by request the pull request via API at the start
+                    // of this function.
+                    // The attribute merge_commit_sha keeps the old value of null or the hash *until*
+                    // the new test merge commit has either successfully been created or failed so.
+                    // This essentially means we are updating the merge conflict label in two steps:
+                    // On the first pass of the day, we just fetch the pull request, which triggers
+                    // the creation. At this stage, the label is likely not updated, yet.
+                    // The second pass will then read the result from the first pass and set the label.
+                    '2.status: merge conflict': !pull_request.merge_commit_sha,
                     '2.status: stale': !before['1.severity: security'] && latest_event_at < stale_at,
                     '12.approvals: 1': approvals.size == 1,
                     '12.approvals: 2': approvals.size == 2,
