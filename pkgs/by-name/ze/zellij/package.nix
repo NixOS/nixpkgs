@@ -92,6 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       abbe
       pyrox0
       matthiasbeyer
+      ryan4yin
     ];
     mainProgram = "zellij";
   };
