@@ -79,6 +79,12 @@ jobs:
           permission-administration: read
           permission-members: read
 
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
       - name: Validate codeowners
         if: steps.app-token.outputs.token
         env:
@@ -89,6 +95,12 @@ jobs:
           # Set this to "notowned,avoid-shadowing" to check that all files are owned by somebody
           EXPERIMENTAL_CHECKS: "avoid-shadowing"
         run: result/bin/codeowners-validator
+
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
 
   # Request reviews from code owners
   request:
@@ -116,8 +128,20 @@ jobs:
           permission-members: read
           permission-pull-requests: write
 
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
       - name: Request reviews
         if: steps.app-token.outputs.token
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: result/bin/request-code-owner-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
+
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq

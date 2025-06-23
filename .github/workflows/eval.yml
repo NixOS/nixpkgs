@@ -66,6 +66,11 @@ jobs:
           name: merged-${{ matrix.system }}
           path: merged/*
 
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
       - name: Get target run id
         if: inputs.targetSha
         id: targetRunId
@@ -107,6 +112,11 @@ jobs:
             // No artifact found at this stage. This usually means that Eval failed on the target branch.
             // This should only happen when Eval is broken on the target branch and this PR fixes it.
             // Continue without targetRunId to skip the remaining steps, but pass the job.
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
 
       - uses: actions/download-artifact@v4
         if: steps.targetRunId.outputs.targetRunId
