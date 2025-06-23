@@ -84,7 +84,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # tony-webster-97532.jpg
       publicDomain
     ];
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    maintainers = with lib.maintainers; [
+      normalcea
+      pandapip1
+    ];
     platforms = lib.platforms.all;
   };
 })
