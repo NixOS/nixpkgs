@@ -20,3 +20,32 @@ Arguments:
 
 - `BASE_BRANCH`: The base branch to use, e.g. master or release-24.05
 - `REPOSITORY`: The repository from which to fetch the base branch. Defaults to <https://github.com/NixOS/nixpkgs.git>.
+
+# Branch classification
+
+For the purposes of CI, branches in the NixOS/nixpkgs repository are classified as follows:
+
+- **Channel** branches
+  - `nixos-` or `nixpkgs-` prefix
+  - Are only updated from `master` or `release-` branches, when hydra passes.
+  - Otherwise not worked on, Pull Requests are not allowed.
+  - Long-lived, no deletion, no force push.
+- **Primary development** branches
+  - `release-` prefix and `master`
+  - Pull Requests required.
+  - Long-lived, no deletion, no force push.
+- **Secondary development** branches
+  - `staging-` prefix, `haskell-updates` and `python-updates`
+  - Pull Requests normally required, except when merging development branches into each other.
+  - Long-lived, no deletion, no force push.
+- **Work-In-Progress** branches
+  - `backport-`, `revert-` and `wip-` prefixes.
+  - Deprecated: All other branches, not matched by channel/development.
+  - Pull Requests are optional.
+  - Short-lived, force push allowed, deleted after merge.
+
+Some branches also have a version component, which is either `unstable` or `YY.MM`.
+
+`ci/supportedBranches.js` is a script imported by CI to classify the base and head branches of a Pull Request.
+This classification will then be used to skip certain jobs.
+This script can also be run locally to print basic test cases.
