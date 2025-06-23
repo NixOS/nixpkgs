@@ -165,12 +165,12 @@ jobs:
                     head_sha: pull_request.head.sha
                   })).data.workflow_runs[0]?.id
 
-                // Newer PRs might not have run Eval to completion, yet. We can skip them, because this
-                // job will be run as part of that Eval run anyway.
-                if (log('Last eval run', run_id ?? '<pending>', !run_id))
-                  return;
+                // Newer PRs might not have run Eval to completion, yet.
+                // Older PRs might not have an eval.yml workflow, yet.
+                // In either case we continue without fetching an artifact on a best-effort basis.
+                log('Last eval run', run_id ?? '<n/a>')
 
-                const artifact = (await github.rest.actions.listWorkflowRunArtifacts({
+                const artifact = run_id && (await github.rest.actions.listWorkflowRunArtifacts({
                   ...context.repo,
                   run_id,
                   name: 'comparison'
@@ -179,21 +179,22 @@ jobs:
                 // Instead of checking the boolean artifact.expired, we will give us a minute to
                 // actually download the artifact in the next step and avoid that race condition.
                 // Older PRs, where the workflow run was already eval.yml, but the artifact was not
-                // called "comparison", yet, will be skipped as well.
-                const expired = new Date(artifact?.expires_at ?? 0) < new Date(new Date().getTime() + 60 * 1000)
-                if (log('Artifact expires at', artifact?.expires_at ?? '<not found>', expired))
-                  return;
-                stats.artifacts++
+                // called "comparison", yet, will skip the download.
+                const expired = !artifact || new Date(artifact?.expires_at ?? 0) < new Date(new Date().getTime() + 60 * 1000)
+                log('Artifact expires at', artifact?.expires_at ?? '<n/a>')
+                if (!expired) {
+                  stats.artifacts++
 
-                await artifactClient.downloadArtifact(artifact.id, {
-                  findBy: {
-                    repositoryName: context.repo.repo,
-                    repositoryOwner: context.repo.owner,
-                    token: core.getInput('github-token')
-                  },
-                  path: path.resolve(pull_number.toString()),
-                  expectedHash: artifact.digest
-                })
+                  await artifactClient.downloadArtifact(artifact.id, {
+                    findBy: {
+                      repositoryName: context.repo.repo,
+                      repositoryOwner: context.repo.owner,
+                      token: core.getInput('github-token')
+                    },
+                    path: path.resolve(pull_number.toString()),
+                    expectedHash: artifact.digest
+                  })
+                }
 
                 // Create a map (Label -> Boolean) of all currently set labels.
                 // Each label is set to True and can be disabled later.
@@ -214,31 +215,40 @@ jobs:
                   .map(review => review.user?.id)
                 )
 
-                const maintainers = new Set(Object.keys(
-                  JSON.parse(await readFile(`${pull_number}/maintainers.json`, 'utf-8'))
-                ).map(m => Number.parseInt(m, 10)))
-
-                const evalLabels = JSON.parse(await readFile(`${pull_number}/changed-paths.json`, 'utf-8')).labels
-
-                // Manage the labels
+                // Manage most of the labels, without eval results
                 const after = Object.assign(
                   {},
                   before,
-                  // Ignore `evalLabels` if it's an array.
-                  // This can happen for older eval runs, before we switched to objects.
-                  // The old eval labels would have been set by the eval run,
-                  // so now they'll be present in `before`.
-                  // TODO: Simplify once old eval results have expired (~2025-10)
-                  (Array.isArray(evalLabels) ? undefined : evalLabels),
                   {
                     '12.approvals: 1': approvals.size == 1,
                     '12.approvals: 2': approvals.size == 2,
                     '12.approvals: 3+': approvals.size >= 3,
-                    '12.approved-by: package-maintainer': Array.from(maintainers).some(m => approvals.has(m)),
                     '12.first-time contribution':
                       [ 'NONE', 'FIRST_TIMER', 'FIRST_TIME_CONTRIBUTOR' ].includes(pull_request.author_association),
                   }
                 )
+
+                // Manage labels based on eval results
+                if (!expired) {
+                  const maintainers = new Set(Object.keys(
+                    JSON.parse(await readFile(`${pull_number}/maintainers.json`, 'utf-8'))
+                  ).map(m => Number.parseInt(m, 10)))
+
+                  const evalLabels = JSON.parse(await readFile(`${pull_number}/changed-paths.json`, 'utf-8')).labels
+
+                  Object.assign(
+                    after,
+                    // Ignore `evalLabels` if it's an array.
+                    // This can happen for older eval runs, before we switched to objects.
+                    // The old eval labels would have been set by the eval run,
+                    // so now they'll be present in `before`.
+                    // TODO: Simplify once old eval results have expired (~2025-10)
+                    (Array.isArray(evalLabels) ? undefined : evalLabels),
+                    {
+                      '12.approved-by: package-maintainer': Array.from(maintainers).some(m => approvals.has(m)),
+                    }
+                  )
+                }
 
                 // No need for an API request, if all labels are the same.
                 const hasChanges = Object.keys(after).some(name => (before[name] ?? false) != after[name])
