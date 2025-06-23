@@ -4,16 +4,16 @@
   fetchFromGitHub,
   setuptools,
   netbox,
-  pythonAtLeast,
   django,
   netaddr,
+  python,
 }:
 buildPythonPackage rec {
   pname = "netbox-floorplan-plugin";
   version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
+  disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
