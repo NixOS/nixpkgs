@@ -9804,6 +9804,13 @@
     name = "Martin Hardselius";
     keys = [ { fingerprint = "3F35 E4CA CBF4 2DE1 2E90  53E5 03A6 E6F7 8693 6619"; } ];
   };
+  HarisDotParis = {
+    name = "Haris";
+    email = "nix.dev@haris.paris";
+    matrix = "@haris:haris.paris";
+    github = "HarisDotParis";
+    githubId = 67912527;
+  };
   harryposner = {
     email = "nixpkgs@harryposner.com";
     github = "harryposner";
