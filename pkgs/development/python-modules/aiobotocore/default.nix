@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   aiohttp,
   aioitertools,
   botocore,
@@ -24,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.19.0";
+  version = "2.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiobotocore";
     tag = version;
-    hash = "sha256-8wtWIkGja4zb2OoYALH9hTR6i90sIjIjYWTUulfYIYA=";
+    hash = "sha256-Zzwj0osXqWSCWsuxlpiqpptzjLhFwlqfXqiWMP7CgXg=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -75,7 +72,6 @@ buildPythonPackage rec {
     # Test requires network access
     "tests/test_version.py"
     # Test not compatible with latest moto
-    "tests/boto_tests/unit/test_eventstream.py"
     "tests/python3.8/test_eventstreams.py"
     "tests/test_basic_s3.py"
     "tests/test_batch.py"
@@ -94,7 +90,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for amazon services";
     homepage = "https://github.com/aio-libs/aiobotocore";
-    changelog = "https://github.com/aio-libs/aiobotocore/releases/tag/${src.tag}";
+    changelog = "https://github.com/aio-libs/aiobotocore/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ teh ];
   };

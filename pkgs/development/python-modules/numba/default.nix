@@ -32,7 +32,7 @@ let
   cudatoolkit = cudaPackages.cuda_nvcc;
 in
 buildPythonPackage rec {
-  version = "0.61.0";
+  version = "0.61.2";
   pname = "numba";
   pyproject = true;
 
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/numba/_version.py
     '';
-    hash = "sha256-d09armWFI55fqyYCzZNVOq6f5b8BTk0s8fjU0OGrNgo=";
+    hash = "sha256-Qa2B5pOWrLb/1V3PSyiwS1x9ueXwDKRhDMDecBCAN+8=";
   };
 
   postPatch = ''
@@ -60,13 +60,9 @@ buildPythonPackage rec {
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
 
     substituteInPlace setup.py \
-      --replace-fail \
-        'max_numpy_run_version = "2.2"' \
-        'max_numpy_run_version = "3"'
+      --replace-fail 'max_numpy_run_version = "2.3"' 'max_numpy_run_version = "2.4"'
     substituteInPlace numba/__init__.py \
-      --replace-fail \
-        'numpy_version > (2, 1)' \
-        'numpy_version >= (3, 0)'
+      --replace-fail "numpy_version > (2, 2)" "numpy_version > (2, 3)"
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";

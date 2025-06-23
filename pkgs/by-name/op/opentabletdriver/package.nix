@@ -18,6 +18,7 @@
   wrapGAppsHook3,
   versionCheckHook,
   nix-update-script,
+  udevCheckHook,
 }:
 
 buildDotnetModule (finalAttrs: {
@@ -49,6 +50,7 @@ buildDotnetModule (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     wrapGAppsHook3
+    udevCheckHook
     # Dependency of generate-rules.sh
     jq
   ];

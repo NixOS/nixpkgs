@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "garth";
-  version = "0.5.12";
+  version = "0.5.16";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bzEPHhIg6F/WQOUoXuaVlZGxn9PU8VdevA/DQuQ7fBw=";
+    hash = "sha256-5ZmxL5JYHZB5sFrpaCF8vrCo45LAKVYfP/yfilmHprI=";
   };
 
   pythonRelaxDeps = [ "requests-oauthlib" ];

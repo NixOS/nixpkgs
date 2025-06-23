@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "auto-editor";
-  version = "28.0.0";
+  version = "28.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-9U3hDVtSuOdiGnEsKs0InV9v0UrlI3qKaBqfCtVTD0E=";
+    hash = "sha256-n+9qesm2LCTXJ+X/hDaFQ5EjN+xfnLdl6G8+Qna/cyM=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "auto_editor" ];
 
   meta = {
-    changelog = "https://github.com/WyattBlue/auto-editor/releases/tag/${version}";
+    changelog = "https://github.com/WyattBlue/auto-editor/releases/tag/${src.tag}";
     description = "Command line application for automatically editing video and audio by analyzing a variety of methods, most notably audio loudness";
     homepage = "https://auto-editor.com/";
     license = lib.licenses.unlicense;

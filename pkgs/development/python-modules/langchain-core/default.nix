@@ -36,21 +36,24 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.62";
+  version = "0.3.65";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-24y3XGY5AayCtD2PlzVNcHaBiwUC/1GOHL2V0BbCWn0=";
+    hash = "sha256-2iEUrLjvjVpArOPXzF5Z6ZeeQbIGZxuZUTC2buYTOCQ=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
   build-system = [ pdm-backend ];
 
-  pythonRelaxDeps = [ "tenacity" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "tenacity"
+  ];
 
   dependencies = [
     jsonpatch

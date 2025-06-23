@@ -16,6 +16,7 @@
   socat,
   gnutls,
   perl,
+  makeWrapper,
 
   # Tests
   python3,
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl # for pod2man
     python3
     autoreconfHook
+    makeWrapper
   ];
 
   nativeCheckInputs = [
@@ -111,6 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/test_tpm2_swtpm_cert --replace \
         'certtool' \
         'LC_ALL=C.UTF-8 certtool'
+  '';
+
+  # Workaround for https://github.com/stefanberger/swtpm/issues/795
+  postFixup = ''
+    wrapProgram "$out/bin/swtpm_localca" --suffix PATH : "$out/bin"
+    wrapProgram "$out/bin/swtpm_setup" --suffix PATH : "$out/bin"
   '';
 
   doCheck = true;

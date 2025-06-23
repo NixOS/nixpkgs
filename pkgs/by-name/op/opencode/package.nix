@@ -49,7 +49,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Powerful terminal-based AI assistant providing intelligent coding assistance";
-    homepage = "https://github.com/opencode-ai/opencode";
+    homepage = "https://github.com/sst/opencode";
     changelog = "https://github.com/sst/opencode/releases/tag/v${finalAttrs.version}";
     mainProgram = "opencode";
     license = lib.licenses.mit;

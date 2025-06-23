@@ -1,4 +1,8 @@
-{ lib, stdenv }:
+{
+  lib,
+  stdenv,
+  udevCheckHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "numworks-udev-rules";
@@ -6,6 +10,12 @@ stdenv.mkDerivation rec {
 
   udevRules = ./50-numworks-calculator.rules;
   dontUnpack = true;
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   installPhase = ''
     install -Dm 644 "${udevRules}" "$out/lib/udev/rules.d/50-numworks-calculator.rules"

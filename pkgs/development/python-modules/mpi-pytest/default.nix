@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "mpi-pytest";
-  version = "2025.5.0";
+  version = "2025.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "mpi-pytest";
     tag = "v${version}";
-    hash = "sha256-Eq53rCM3xwY30BuGUaTH4Nuloc/9kGJMFhspLH04zqE=";
+    hash = "sha256-hZPTVqVaCd75UMoUQTZXrmnFM6cpMp9ejKqct3lN0Bo=";
   };
 
   build-system = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/firedrakeproject/mpi-pytest";
     description = "Pytest plugin that lets you run tests in parallel with MPI";
     changelog = "https://github.com/firedrakeproject/mpi-pytest/releases/tag/${src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ qbisi ];
   };
 }

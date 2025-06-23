@@ -30,19 +30,20 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.4.0";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "ansible-runner";
     tag = version;
-    hash = "sha256-lmaYTdJ7NlaCJ5/CVds6Xzwbe45QXbtS3h8gi5xqvUc=";
+    hash = "sha256-Fyavc13TRHbslRVoBawyBgvUKhuIZsxBc7go66axE0Y=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools>=45, <=69.0.2", "setuptools-scm[toml]>=6.2, <=8.0.4"' '"setuptools", "setuptools-scm"'
+      --replace-fail "setuptools>=45, <=70.0.0" setuptools \
+      --replace-fail "setuptools-scm[toml]>=6.2, <=8.1.0" setuptools-scm
   '';
 
   build-system = [

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "tenacity";
-  version = "9.0.0";
+  version = "9.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gH83ypfWKqNhJk1Jew4x6SuAJwRJQr+nVhYNkIMg1zs=";
+    hash = "sha256-EWnTdsKX5944jRi0SBdg1Hiw6Zp3fK06nIblVvS2l8s=";
   };
 
   build-system = [ setuptools-scm ];

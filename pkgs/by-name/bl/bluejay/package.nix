@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluejay";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "EbonJaeger";
     repo = "bluejay";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mt64v+TccmB/0qV4+EeXbyjPmOM8cDXPV1nIH4FvXSA=";
+    hash = "sha256-18jpUaFeUIldtvnSuV8nCozO/KYog15AR+/3kby86hs=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     kdePackages.bluez-qt
+    kdePackages.kcolorscheme
     kdePackages.kconfig
     kdePackages.kcoreaddons
     kdePackages.kdbusaddons
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.kirigami
     kdePackages.kirigami-addons
     kdePackages.qtbase
+    kdePackages.qtdeclarative
   ];
 
   passthru.updateScript = nix-update-script { };

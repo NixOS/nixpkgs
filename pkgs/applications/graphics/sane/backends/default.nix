@@ -178,6 +178,8 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/issues/224569
   enableParallelInstalling = false;
 
+  doInstallCheck = true;
+
   passthru.tests = {
     inherit (nixosTests) sane;
   };

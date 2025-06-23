@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "3.4.1";
+  version = "3.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -22,13 +22,8 @@ buildPythonPackage rec {
     owner = "Ousret";
     repo = "charset_normalizer";
     tag = version;
-    hash = "sha256-z6XUXfNJ4+2Gq2O13MgF1D3j/bVBjgAG2wCWLaNgADE=";
+    hash = "sha256-PkFmNEMdp9duDCqMTKooOLAOCqHf3IjrGlr8jKYT2WE=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "mypy>=1.4.1,<=1.14.0" mypy
-  '';
 
   build-system = [
     mypy

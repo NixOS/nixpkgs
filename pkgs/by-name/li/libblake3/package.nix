@@ -4,7 +4,7 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
-  tbb_2021_11,
+  tbb_2021,
 
   useTBB ? true,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = lib.optionals useTBB [
     # 2022.0 crashes on macOS at the moment
-    tbb_2021_11
+    tbb_2021
   ];
 
   cmakeFlags = [

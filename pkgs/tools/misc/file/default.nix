@@ -16,20 +16,34 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "file";
-  version = "5.46";
+  version = "5.45";
 
   src = fetchurl {
     urls = [
       "https://astron.com/pub/file/file-${finalAttrs.version}.tar.gz"
       "https://distfiles.macports.org/file/file-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-ycx3x8VgxUMTXtxVWvYJ1WGdvvARmX6YjOQKPXXYYIg=";
+    hash = "sha256-/Jf1ECm7DiyfTjv/79r2ePDgOe6HK53lwAKm0Jx4TYI=";
   };
 
   outputs = [
     "out"
     "dev"
     "man"
+  ];
+
+  patches = [
+    # Upstream patch to fix 32-bit tests.
+    #
+    # It is included in 5.46+, but we are not updating to it or a later version until:
+    #
+    # https://bugs.astron.com/view.php?id=622
+    # https://bugs.astron.com/view.php?id=638
+    #
+    # are resolved. See also description of the 1st bug here:
+    #
+    # https://github.com/NixOS/nixpkgs/pull/402318#issuecomment-2881163359
+    ./32-bit-time_t.patch
   ];
 
   strictDeps = true;

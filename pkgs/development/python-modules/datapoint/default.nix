@@ -8,22 +8,19 @@
   requests,
   pytestCheckHook,
   requests-mock,
-  pythonOlder,
   versioningit,
 }:
 
 buildPythonPackage rec {
   pname = "datapoint";
-  version = "0.12.1";
+  version = "0.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
-    owner = "EJEP";
+    owner = "Perseudonymous";
     repo = "datapoint-python";
     tag = version;
-    hash = "sha256-caIbz/tMQbFKK5UVhYiEnGv3EoI3H2y5V4EDASQ253o=";
+    hash = "sha256-vgwuoG/2Lzo56cAiXEYNPsXQYfx8Cwg0NJgojDBxoug=";
   };
 
   postPatch = ''
@@ -51,8 +48,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python interface to the Met Office's Datapoint API";
-    homepage = "https://github.com/EJEP/datapoint-python";
-    changelog = "https://github.com/EJEP/datapoint-python/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/Perseudonymous/datapoint-python";
+    changelog = "https://github.com/Perseudonymous/datapoint-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

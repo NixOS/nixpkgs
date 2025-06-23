@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  nix-update-script,
 }:
 
 {
@@ -41,13 +40,6 @@ stdenv.mkDerivation {
   ];
 
   dontBuild = true;
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--override-filename"
-      "pkgs/development/skaware-packages/${lib.removeSuffix "-man-pages" pname}/default.nix"
-    ];
-  };
 
   meta = with lib; {
     inherit description license maintainers;

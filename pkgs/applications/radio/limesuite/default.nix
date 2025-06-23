@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
       wxGTK32
     ];
 
+  doInstallCheck = true;
+
   postInstall = ''
     install -Dm444 -t $out/lib/udev/rules.d ../udev-rules/64-limesuite.rules
     install -Dm444 -t $out/share/limesuite bin/Release/lms7suite_mcu/*

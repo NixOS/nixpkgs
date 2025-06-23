@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
+  nix-update-script,
   cmake,
   pkg-config,
   git,
@@ -35,12 +37,6 @@
 }:
 
 let
-  # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "17736-c86a25079";
-  rpcs3Version = "0.0.36-17736-c86a25079";
-  rpcs3Revision = "c86a25079518032d73395a79979970acb2581a91";
-  rpcs3Hash = "sha256-e+mT3qn1oz1fh2bqu5YM+m774Can34If57Kd1T1EGbk=";
-
   inherit (qt6Packages)
     qtbase
     qtmultimedia
@@ -48,31 +44,31 @@ let
     qtwayland
     ;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpcs3";
-  version = rpcs3Version;
+  version = "0.0.37";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
-    rev = rpcs3Revision;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/ve1qe76Rc+mXHemq8DI2U9IP6+tPV5m5SNh/wmppEw=";
     fetchSubmodules = true;
-    hash = rpcs3Hash;
   };
 
   patches = [
-    # Modified from https://github.com/RPCS3/rpcs3/pull/17009; doesn't apply cleanly due to intermediate commits
-    ./fix-qt6.9-compilation.patch
-
-    # https://github.com/RPCS3/rpcs3/pull/17246
-    ./0001-cmake-add-option-to-use-system-cubeb.patch
+    (fetchpatch2 {
+      # https://github.com/RPCS3/rpcs3/pull/17316
+      url = "https://github.com/RPCS3/rpcs3/commit/bad6e992586264344ee1a3943423863d2bd39b45.patch?full_index=1";
+      hash = "sha256-rSyA1jcmRiV6m8rPKqTnDFuBh9WYFTGmyTSU2qrd+Go=";
+    })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   preConfigure = ''
     cat > ./rpcs3/git-version.h <<EOF
-    #define RPCS3_GIT_VERSION "${rpcs3GitVersion}"
+    #define RPCS3_GIT_VERSION "nixpkgs"
     #define RPCS3_GIT_FULL_BRANCH "RPCS3/rpcs3/master"
     #define RPCS3_GIT_BRANCH "HEAD"
     #define RPCS3_GIT_VERSION_NO_UPDATE 1
@@ -142,6 +138,8 @@ stdenv.mkDerivation {
       qtwayland
     ];
 
+  doInstallCheck = true;
+
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
@@ -160,7 +158,6 @@ stdenv.mkDerivation {
       abbradar
       neonfuz
       ilian
-      zane
     ];
     license = licenses.gpl2Only;
     platforms = [
@@ -169,4 +166,4 @@ stdenv.mkDerivation {
     ];
     mainProgram = "rpcs3";
   };
-}
+})

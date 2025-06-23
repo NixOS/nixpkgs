@@ -478,6 +478,12 @@
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
   ],
+  "strictflexarrays1": [
+    "index.html#strictflexarrays1"
+  ],
+  "strictflexarrays3": [
+    "index.html#strictflexarrays3"
+  ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
   ],
@@ -4509,5 +4515,23 @@
   ],
   "sec-interop.cylonedx-fod": [
     "index.html#sec-interop.cylonedx-fod"
+  ],
+  "module-system-module-argument-_prefix": [
+    "index.html#module-system-module-argument-_prefix"
+  ],
+  "module-system-module-argument-lib": [
+    "index.html#module-system-module-argument-lib"
+  ],
+  "module-system-module-argument-config": [
+    "index.html#module-system-module-argument-config"
+  ],
+  "module-system-module-arguments": [
+    "index.html#module-system-module-arguments"
+  ],
+  "module-system-module-argument-_class": [
+    "index.html#module-system-module-argument-_class"
+  ],
+  "module-system-module-argument-options": [
+    "index.html#module-system-module-argument-options"
   ]
 }

@@ -38,13 +38,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "6.7.1";
+  version = "6.8.0";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "Dorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d4G3royqhz+te5wPWVLNqqG/w0qOvTd7dKcWSzxUMUo=";
+    hash = "sha256-RvaGCAqAcWYA3v7AkdKMiM10Cki0jI418pbHPlVUnCg=";
   };
 
   cargoPatches = [
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1xpAJkS31DjrZCY5WJ4/Z1t1ALED5gz7xYLhVR1Qzww=";
+  cargoHash = "sha256-jLMXwW5q4MyCblw28tmheKGPAIn3BLuceyAtoS4J7bc=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
@@ -104,9 +104,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -rf updater
 
     # patch cargo-deps
-    pushd $cargoDepsCopy/tauri-plugin-shell-*
-    patch -p1 < /build/source/src-tauri/patches/tauri-plugin-shell+*.patch
-    popd
+    patch -d $cargoDepsCopy/tauri-plugin-shell-* -p1 < ./src-tauri/patches/tauri-plugin-shell+*.patch
 
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
@@ -120,7 +118,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ln -s ${shelter} src-tauri/injection/shelter.js
 
     # link html/frontend data
-    ln -s /build/source/src /build/source/src-tauri/html
+    ln -s $(pwd)/src src-tauri/html
   '';
 
   configurePhase = ''
@@ -130,7 +128,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildPhase = ''
     ninjaBuildPhase
-    cd /build/source
+    cd ../..
     tauriBuildHook
   '';
 

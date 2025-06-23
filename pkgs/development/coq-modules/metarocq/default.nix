@@ -10,12 +10,11 @@
 let
   repo = "metarocq";
   owner = "MetaRocq";
-  defaultVersion = lib.switch coq.coq-version [
-    {
-      case = "9.0";
-      out = "1.4-9.0";
+  defaultVersion = lib.switch coq.coq-version (lib.lists.sort (x: y: lib.versions.isLe x.out y.out) (
+    lib.mapAttrsToList (out: case: { inherit case out; }) {
+      "1.4-9.0" = "9.0";
     }
-  ] null;
+  )) null;
   release = {
     "1.4-9.0".sha256 = "sha256-5QecDAMkvgfDPZ7/jDfnOgcE+Eb1LTAozP7nz6nkuxg=";
   };
