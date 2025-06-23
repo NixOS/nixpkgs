@@ -54,9 +54,7 @@ let
     in
     lib.concatStringsSep "\n" (
       lib.mapAttrsToList mkEntry (lib.filterAttrsRecursive (_: value: value != null) cfg.config)
-    )
-    + "\n"
-    + cfg.extraConfig;
+    );
 
   masterCfOptions =
     {
@@ -733,14 +731,6 @@ in
         };
       };
 
-      extraConfig = lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = ''
-          Extra lines to be added verbatim to the main.cf configuration file.
-        '';
-      };
-
       canonical = lib.mkOption {
         type = lib.types.lines;
         default = "";
@@ -1221,7 +1211,7 @@ in
 
   imports = [
     (lib.mkRemovedOptionModule [ "services" "postfix" "sslCACert" ]
-      "services.postfix.sslCACert was replaced by services.postfix.tlsTrustedAuthorities. In case you intend that your server should validate requested client certificates use services.postfix.extraConfig."
+      "services.postfix.sslCACert was replaced by services.postfix.tlsTrustedAuthorities. In case you intend that your server should validate requested client certificates use services.postfix.config.smtp_tls_CAfile."
     )
     (lib.mkRemovedOptionModule [ "services" "postfix" "sslCert" ]
       "services.postfix.sslCert was removed. Use services.postfix.config.smtpd_tls_chain_files for the server certificate, or services.postfix.config.smtp_tls_chain_files for the client certificate."
@@ -1237,6 +1227,9 @@ in
     )
     (lib.mkRemovedOptionModule [ "services" "postfix" "relayPort" ]
       "services.postfix.relayHost was removed in favor of services.postfix.config.relayhost, which now takes a list of host/port."
+    )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "extraConfig" ]
+      "services.postfix.extraConfig was replaced by the structured freeform service.postfix.config option."
     )
     (lib.mkRenamedOptionModule
       [ "services" "postfix" "networks" ]
