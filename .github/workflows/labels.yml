@@ -9,6 +9,10 @@ on:
   schedule:
     - cron: '07,17,27,37,47,57 * * * *'
   workflow_call:
+    inputs:
+      headBranch:
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       updatedWithin:
@@ -275,12 +279,7 @@ jobs:
         name: Labels from touched files
         if: |
           github.event_name == 'pull_request_target' &&
-          (github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
-            github.head_ref == 'haskell-updates' ||
-            github.head_ref == 'python-updates' ||
-            github.head_ref == 'staging-next' ||
-            startsWith(github.head_ref, 'staging-next-')
-          ))
+          !contains(fromJSON(inputs.headBranch).type, 'development')
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml # default
@@ -290,12 +289,7 @@ jobs:
         name: Labels from touched files (no sync)
         if: |
           github.event_name == 'pull_request_target' &&
-          (github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
-            github.head_ref == 'haskell-updates' ||
-            github.head_ref == 'python-updates' ||
-            github.head_ref == 'staging-next' ||
-            startsWith(github.head_ref, 'staging-next-')
-          ))
+          !contains(fromJSON(inputs.headBranch).type, 'development')
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler-no-sync.yml
@@ -308,12 +302,7 @@ jobs:
         # the backport labels.
         if: |
           github.event_name == 'pull_request_target' &&
-          (github.event.pull_request.head.repo.owner.login == 'NixOS' && (
-            github.head_ref == 'haskell-updates' ||
-            github.head_ref == 'python-updates' ||
-            github.head_ref == 'staging-next' ||
-            startsWith(github.head_ref, 'staging-next-')
-          ))
+          contains(fromJSON(inputs.headBranch).type, 'development')
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler-development-branches.yml
