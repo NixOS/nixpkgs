@@ -8,9 +8,6 @@ let
 
   cfg = config.services.proxy-ns;
   configFormat = pkgs.formats.json { };
-    name = "config.json";
-    text = builtins.toJSON cfg.config;
-  };
 in
 {
   options.services.proxy-ns = {
@@ -47,28 +44,15 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = isNull cfg.config != isNull cfg.configFile;
         message = "can't have both setting and settingFile defined ";
       }
     ];
     environment.systemPackages = [ cfg.package ];
     environment.etc.proxy-ns =
-      let
-        _enable = {
-          enable = true;
-          target = "proxy-ns/config.json";
-        };
-      in
       if !isNull cfg.config then
         {
-          source = config_path;
+          source = builtins.toJSON cfg.config;
         }
-        // _enable
-      else if !isNull cfg.configFile then
-        {
-          source = cfg.configFile;
-        }
-        // _enable
       else
         { };
     security.wrappers.proxy-ns = {
