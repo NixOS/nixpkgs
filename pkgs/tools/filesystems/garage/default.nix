@@ -133,10 +133,9 @@ rec {
 
   garage_0_9 = garage_0_9_4;
 
-  garage_1_x = garage_1_2_0;
-  garage_1 = garage_1_x;
+  garage_1 = garage_1_2_0;
 
   garage_2 = garage_2_0_0;
 
-  garage = garage_1_x;
+  garage = garage_1;
 }

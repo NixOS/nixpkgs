@@ -7,9 +7,6 @@ The server setup can be automated using
  client configured to your local Garage instance is available in
  the global environment as `garage-manage`.
 
-The current default by NixOS is `garage_0_8` which is also the latest
-major version available.
-
 ## General considerations on upgrades {#module-services-garage-upgrade-scenarios}
 
 Garage provides a cookbook documentation on how to upgrade:
@@ -45,7 +42,7 @@ Here are some baseline instructions to handle advanced upgrades in Garage, when 
   - Run `systemctl stop garage` to stop the actual Garage version.
   - Backup the metadata folder of ALL your nodes, e.g. for a metadata directory (the default one) in `/var/lib/garage/meta`,
     you can run `pushd /var/lib/garage; tar -acf meta-v0.7.tar.zst meta/; popd`.
-  - Run the offline migration: `nix-shell -p garage_0_8 --run "garage offline-repair --yes"`, this can take some time depending on how many objects are stored in your cluster.
+  - Run the offline migration: `nix-shell -p garage_1 --run "garage offline-repair --yes"`, this can take some time depending on how many objects are stored in your cluster.
   - Bump Garage version in your NixOS configuration, either by changing [stateVersion](#opt-system.stateVersion) or bumping [services.garage.package](#opt-services.garage.package), this should restart Garage automatically.
   - Perform `garage-manage repair --all-nodes --yes tables` and `garage-manage repair --all-nodes --yes blocks`.
   - Wait for a full table sync to run.
@@ -77,8 +74,8 @@ packages, but mark them as insecure in an expression like this (in
 ```nix
 /* ... */
 {
-  garage_0_7_3 = generic {
-    version = "0.7.3";
+  garage_1_2_0 = generic {
+    version = "1.2.0";
     sha256 = "0000000000000000000000000000000000000000000000000000";
     eol = true;
   };
