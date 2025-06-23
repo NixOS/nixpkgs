@@ -4,6 +4,9 @@
   fetchurl,
   autoPatchelfHook,
   libsForQt5,
+  cups,
+  libinput,
+  mtdev,
   nss,
   pkcs11helper,
   sane-backends,
@@ -14,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "masterpdfeditor";
-  version = "5.9.86";
+  version = "5.9.89";
 
   src =
     let
@@ -26,8 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
         aarch64-linux = "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.arm64.tar.gz";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-QBwcsEz13+EdgkKJRdmdsb6f3dt3N6WR/EEACdWbYNo=";
-        aarch64-linux = "sha256-OTn5Z82fRMLQwVSLwoGAaj9c9SfEicyl8e1A1ICOUf0=";
+        x86_64-linux = "sha256-HTYFo3tZD1JiYpsx/q9mr1Sp9JIWA6Kp0ThzmDcvxmo=";
+        aarch64-linux = "sha256-uxCp9iv4923Qbyd2IldHm1/a50GU6VISSG6jfVzQqq4=";
       };
     };
 
@@ -38,8 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
+    cups
     libsForQt5.qtbase
     libsForQt5.qtsvg
+    libinput
+    mtdev
     nss
     pkcs11helper
     sane-backends
