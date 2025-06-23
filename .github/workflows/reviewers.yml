@@ -54,6 +54,10 @@ jobs:
           permission-members: read
           permission-pull-requests: write
 
+      - name: Log current API rate limits (github.token)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
 
       # In the regular case, this workflow is called via workflow_call from the eval workflow directly.
       # In the more special case, when a PR is undrafted an eval run will have started already.
@@ -87,6 +91,11 @@ jobs:
             }
             throw new Error("No comparison artifact found.")
 
+      - name: Log current API rate limits (github.token)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
       - name: Download the comparison results
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
@@ -95,6 +104,17 @@ jobs:
           pattern: comparison
           path: comparison
           merge-multiple: true
+
+      - name: Log current API rate limits (app-token)
+        if: ${{ steps.app-token.outputs.token }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Log current API rate limits (github.token)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
 
       - name: Requesting maintainer reviews
         if: ${{ steps.app-token.outputs.token }}
@@ -111,3 +131,14 @@ jobs:
           jq -r 'keys[]' comparison/maintainers.json \
             | while read -r id; do gh api /user/"$id" --jq .login; done \
             | GH_TOKEN=${{ steps.app-token.outputs.token }} result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
+
+      - name: Log current API rate limits (app-token)
+        if: ${{ steps.app-token.outputs.token }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Log current API rate limits (github.token)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
