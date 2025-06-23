@@ -576,7 +576,7 @@ If you do need to do create this sort of patch file, one way to do so is with gi
 
     ```ShellSession
     $ git init
-    $ git add .
+    $ git add -A
     ```
 
 3. Edit some files to make whatever changes need to be included in the patch.
