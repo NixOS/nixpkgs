@@ -12,7 +12,7 @@
   writeShellScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "masterpdfeditor";
   version = "5.9.86";
 
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     in
     fetchurl {
       url = selectSystem {
-        x86_64-linux = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.x86_64-qt_include.tar.gz";
-        aarch64-linux = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.arm64.tar.gz";
+        x86_64-linux = "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.x86_64-qt_include.tar.gz";
+        aarch64-linux = "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.arm64.tar.gz";
       };
       hash = selectSystem {
         x86_64-linux = "sha256-QBwcsEz13+EdgkKJRdmdsb6f3dt3N6WR/EEACdWbYNo=";
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ cmcdragonkai ];
     mainProgram = "masterpdfeditor5";
   };
-}
+})
