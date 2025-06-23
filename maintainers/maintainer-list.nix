@@ -25301,6 +25301,13 @@
     githubId = 3799330;
     name = "Timo Kaufmann";
   };
+  timon = {
+    name = "Timon Schelling";
+    email = "me@timon.zip";
+    matrix = "@timon:beeper.com";
+    github = "timon-schelling";
+    githubId = 36821505;
+  };
   timor = {
     email = "timor.dd@googlemail.com";
     github = "timor";
