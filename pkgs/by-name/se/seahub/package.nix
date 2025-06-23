@@ -79,7 +79,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/haiwen/seahub";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      greizgh
       schmittlauch
       melvyn2
     ];
