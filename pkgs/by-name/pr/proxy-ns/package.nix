@@ -23,6 +23,7 @@ let
       "-buildvcs=false"
       #"-trimpath" added by default by buildGoModule
     ];
+    env.CGO_ENABLED = 0;
     /*
       postInstall = ''
         mkdir -p $out/etc/proxy-ns
