@@ -5,7 +5,6 @@ import os
 import sys
 from pathlib import Path
 from subprocess import CalledProcessError, run
-from textwrap import dedent
 from typing import Final, assert_never
 
 from . import nix, tmpdir
@@ -338,29 +337,6 @@ def validate_image_variant(image_variant: str, variants: ImageVariants) -> None:
         )
 
 
-def validate_nixos_config(path_to_config: Path) -> None:
-    if not (path_to_config / "nixos-version").exists() and not os.environ.get(
-        "NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM"
-    ):
-        msg = dedent(
-            # the lowercase for the first letter below is proposital
-            f"""
-                your NixOS configuration path seems to be missing essential files.
-                To avoid corrupting your current NixOS installation, the activation will abort.
-
-                This could be caused by Nix bug: https://github.com/NixOS/nix/issues/13367.
-                This is the evaluated NixOS configuration path: {path_to_config}.
-                Change the directory to somewhere else (e.g., `cd $HOME`) before trying again.
-
-                If you think this is a mistake, you can set the environment variable
-                NIXOS_REBUILD_I_UNDERSTAND_THE_CONSEQUENCES_PLEASE_BREAK_MY_SYSTEM to 1
-                and re-run the command to continue.
-                Please open an issue if this is the case.
-            """
-        ).strip()
-        raise NixOSRebuildError(msg)
-
-
 def execute(argv: list[str]) -> None:
     args, args_groups = parse_args(argv)
 
@@ -514,7 +490,6 @@ def execute(argv: list[str]) -> None:
                     copy_flags=copy_flags,
                 )
                 if action in (Action.SWITCH, Action.BOOT):
-                    validate_nixos_config(path_to_config)
                     nix.set_profile(
                         profile,
                         path_to_config,
