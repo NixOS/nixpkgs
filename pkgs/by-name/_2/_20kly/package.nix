@@ -38,11 +38,11 @@ python3Packages.buildPythonApplication rec {
     install -Dm755 lightyears "$out/bin/lightyears"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Steampunk-themed strategy game where you have to manage a steam supply network";
     mainProgram = "lightyears";
     homepage = "http://jwhitham.org.uk/20kly/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

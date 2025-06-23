@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-CHX+Ugy4ND36cpxNEFpnqid6ALHMPXmfXi+D4aktPRk=";
 
-  meta = with lib; {
+  meta = {
     description = "Terminal viewer for 3a format";
     homepage = "https://github.com/DomesticMoth/aaa";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ asciimoth ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ asciimoth ];
     mainProgram = "aaa";
   };
 }
