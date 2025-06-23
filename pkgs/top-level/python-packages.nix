@@ -10443,6 +10443,8 @@ self: super: with self; {
 
   nipype = callPackage ../development/python-modules/nipype { inherit (pkgs) which; };
 
+  niquests = callPackage ../development/python-modules/niquests { };
+
   nitime = callPackage ../development/python-modules/nitime { };
 
   nitpick = callPackage ../applications/version-management/nitpick { };
