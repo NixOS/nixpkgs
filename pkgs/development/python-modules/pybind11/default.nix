@@ -10,7 +10,7 @@
   boost,
   eigen,
   python,
-  catch,
+  catch2,
   numpy,
   pytestCheckHook,
   libxcrypt,
@@ -45,7 +45,15 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  buildInputs =
+    [
+      # Used only for building tests - something we do even when cross
+      # compiling.
+      catch2
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      libxcrypt
+    ];
   propagatedNativeBuildInputs = [ setupHook ];
 
   dontUseCmakeBuildDir = true;
@@ -71,7 +79,6 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    catch
     numpy
     pytestCheckHook
   ];
