@@ -6,6 +6,7 @@
   netbox,
   pythonAtLeast,
   napalm,
+  django,
 }:
 buildPythonPackage rec {
   pname = "netbox-napalm-plugin";
@@ -25,7 +26,10 @@ buildPythonPackage rec {
 
   dependencies = [ napalm ];
 
-  nativeCheckInputs = [ netbox ];
+  nativeCheckInputs = [
+    netbox
+    django
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
