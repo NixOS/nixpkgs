@@ -328,6 +328,12 @@ buildStdenv.mkDerivation {
       # Fixed on Firefox 140
       ./build-fix-RELRHACK_LINKER-setting-when-linker-name-i.patch
     ]
+    ++ lib.optionals (lib.versionOlder version "138") [
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1941479
+      # https://phabricator.services.mozilla.com/D240572
+      # Fixed on Firefox 138
+      ./firefox-cannot-find-type-Allocator.patch
+    ]
     ++ extraPatches;
 
   postPatch =
