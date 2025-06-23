@@ -43,6 +43,11 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ steps.app-token.outputs.token }}
 
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
       - name: Create backport PRs
         id: backport
         uses: korthout/backport-action@436145e922f9561fc5ea157ff406f21af2d6b363 # v3.2.0
@@ -55,6 +60,11 @@ jobs:
 
             * [ ] Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
               * Even as a non-committer, if you find that it is not acceptable, leave a comment.
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
 
       - name: "Add 'has: port to stable' label"
         if: steps.backport.outputs.created_pull_numbers != ''

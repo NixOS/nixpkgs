@@ -1,0 +1,137 @@
+diff --git i/src/lsp/diagnostic.ml w/src/lsp/diagnostic.ml
+index 149cde11..bd93298a 100644
+--- i/src/lsp/diagnostic.ml
++++ w/src/lsp/diagnostic.ml
+@@ -1,13 +1,12 @@
+-
+ (* This file is free software, part of dolmen. See file "LICENSE" for more information *)
+ 
+-type t = Lsp.Types.Diagnostic.t
++type t = Linol__.Common_.Lsp.Types.Diagnostic.t
+ 
+ let lsp_pos line character =
+-  Lsp.Types.Position.create ~line ~character
++  Linol__.Common_.Lsp.Types.Position.create ~line ~character
+ 
+ let lsp_range start end_ =
+-  Lsp.Types.Range.create ~start ~end_
++  Linol__.Common_.Lsp.Types.Range.create ~start ~end_
+ 
+ let start_pos = lsp_pos 1 1
+ let start_range = lsp_range start_pos start_pos
+@@ -23,17 +22,15 @@ let range_of_loc = function
+         (lsp_pos (l.stop_line - 1) l.stop_column)
+ 
+ let warn ?loc message =
+-  Lsp.Types.Diagnostic.create ()
++  Linol__.Common_.Lsp.Types.Diagnostic.create ()
+     ~range:(range_of_loc loc)
+     ~severity:Warning
+     ~source:"dolmenls"
+     ~message
+ 
+ let error ?loc message =
+-  Lsp.Types.Diagnostic.create ()
++  Linol__.Common_.Lsp.Types.Diagnostic.create ()
+     ~range:(range_of_loc loc)
+     ~severity:Error
+     ~source:"dolmenls"
+     ~message
+-
+-
+diff --git i/src/lsp/main.ml w/src/lsp/main.ml
+index 8d6fc760..b52dd25c 100644
+--- i/src/lsp/main.ml
++++ w/src/lsp/main.ml
+@@ -3,7 +3,7 @@
+ 
+ let run () =
+   let s = new Server.dolmen_lsp_server in
+-  let server = Linol_lwt.Jsonrpc2.create_stdio s in
++  let server = Linol_lwt.Jsonrpc2.create_stdio ~env:() s in
+   let task = Linol_lwt.Jsonrpc2.run server in
+   match Linol_lwt.run task with
+   | () -> ()
+diff --git i/src/lsp/server.ml w/src/lsp/server.ml
+index e895cc6a..a01ed9fb 100644
+--- i/src/lsp/server.ml
++++ w/src/lsp/server.ml
+@@ -44,25 +44,28 @@ class dolmen_lsp_server =
+   object(self)
+     inherit Linol_lwt.Jsonrpc2.server
+ 
++    method spawn_query_handler f = Linol_lwt.spawn f
++
+     (* one env per document *)
+-    val buffers: (Lsp.Types.DocumentUri.t, State.t) Hashtbl.t = Hashtbl.create 32
++    val buffers: (Linol__.Common_.Lsp.Types.DocumentUri.t, State.t) Hashtbl.t = Hashtbl.create 32
+ 
+     (* A list of include statements of the prelude files *)
+     val mutable prelude = []
+ 
+     method! config_sync_opts =
+       (* configure how sync happens *)
+-      let change = Lsp.Types.TextDocumentSyncKind.Incremental in
+-      (* Lsp.Types.TextDocumentSyncKind.Full *)
+-      Lsp.Types.TextDocumentSyncOptions.create ~openClose:true ~change
+-        ~save:(Lsp.Types.SaveOptions.create ~includeText:false ())
++      let change = Linol__.Common_.Lsp.Types.TextDocumentSyncKind.Incremental in
++      (* Linol__.Common_.Lsp.Types.TextDocumentSyncKind.Full *)
++      Linol__.Common_.Lsp.Types.TextDocumentSyncOptions.create ~openClose:true ~change
++        ~save:(`SaveOptions (Linol__.Common_.Lsp.Types.SaveOptions.create ~includeText:false ()))
+         ()
+ 
+     method private _on_doc
+         ~(notify_back:Linol_lwt.Jsonrpc2.notify_back)
+-        (uri:Lsp.Types.DocumentUri.t) (contents:string) =
++        (uri:Linol__.Common_.Lsp.Types.DocumentUri.t) (contents:string) =
+       (* TODO: unescape uri/translate it to a correct path ? *)
+-      match Loop.process prelude (preprocess_uri uri) (Some contents) with
++      let uri_path = Linol__.Common_.Lsp.Uri.to_path uri in
++      match Loop.process prelude (preprocess_uri uri_path) (Some contents) with
+       | Ok state ->
+         let diags = State.get State.diagnostics state in
+         Hashtbl.replace buffers uri state;
+@@ -79,9 +82,9 @@ class dolmen_lsp_server =
+       self#_on_doc ~notify_back d.uri new_content
+ 
+     method! on_notification_unhandled
+-        ~notify_back:_ (n:Lsp.Client_notification.t) =
++        ~notify_back:_ (n:Linol__.Common_.Lsp.Client_notification.t) =
+       match n with
+-      | Lsp.Client_notification.ChangeConfiguration { settings; } ->
++      | Linol__.Common_.Lsp.Client_notification.ChangeConfiguration { settings; } ->
+         begin try
+             prelude <- mk_prelude (parse_settings settings);
+             Linol_lwt.Jsonrpc2.IO.return ()
+@@ -89,7 +92,7 @@ class dolmen_lsp_server =
+             Linol_lwt.Jsonrpc2.IO.failwith s
+         end
+       | _ ->
+-        Lwt.return ()
++        Linol_lwt.Jsonrpc2.IO.return ()
+ 
+     method on_notif_doc_did_close ~notify_back d =
+       Hashtbl.remove buffers d.uri;
+diff --git i/src/lsp/state.ml w/src/lsp/state.ml
+index f3e89640..3f8a36ab 100644
+--- i/src/lsp/state.ml
++++ w/src/lsp/state.ml
+@@ -45,7 +45,7 @@ let warn ?file:_ ?loc t warn payload =
+   in
+   Format.kfprintf (fun _ ->
+       let msg = Format.flush_str_formatter () in
+-      let d = Diagnostic.warn ~loc msg in
++      let d = Diagnostic.warn ~loc (`String msg) in
+       add_diag d t) Format.str_formatter "%a"
+     Dolmen_loop.Report.Warning.print (warn, payload)
+ 
+@@ -67,7 +67,7 @@ let error ?file:_ ?loc t err payload =
+   (* Print the error message *)
+   Format.kfprintf (fun _ ->
+       let msg = Format.flush_str_formatter () in
+-      let d = Diagnostic.error ~loc msg in
++      let d = Diagnostic.error ~loc (`String msg) in
+       add_diag d t) Format.str_formatter "%a"
+     Dolmen_loop.Report.Error.print (err, payload)
+ 
