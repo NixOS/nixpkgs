@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       schmittlauch
-      greizgh
     ];
     mainProgram = "seafile-applet";
   };
