@@ -31,7 +31,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/criticalstack/libevhtp";
     license = licenses.bsd3;
     maintainers = with maintainers; [
-      greizgh
       schmittlauch
       melvyn2
     ];
