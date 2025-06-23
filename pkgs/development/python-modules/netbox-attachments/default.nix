@@ -1,9 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
   setuptools,
+  python,
   netbox,
   django,
   netaddr,
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "7.2.0";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
+  disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "Kani999";
