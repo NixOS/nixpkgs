@@ -88,6 +88,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-U6Rs1G73EYSFxKv0q0B8GBY5u4Y0JD7A7R98HoKZvsY=";
   };
 
+  postPatch = ''
+    patchShebangs tools/generate_styles_string.sh
+  '';
+
   nativeBuildInputs = [
     cmake
     desktop-file-utils
