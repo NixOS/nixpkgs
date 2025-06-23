@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gn-unstable";
+  pname = "gn";
   version = "0-unstable-2025-04-28";
   revNum = 2233;
   revShort = builtins.substring 0 7 finalAttrs.src.rev;
