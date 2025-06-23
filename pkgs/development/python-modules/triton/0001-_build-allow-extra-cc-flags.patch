@@ -1,11 +1,11 @@
 diff --git a/python/triton/runtime/build.py b/python/triton/runtime/build.py
-index 1b76548d4..1edbfd3da 100644
+index 1b76548d4..2756dccdb 100644
 --- a/python/triton/runtime/build.py
 +++ b/python/triton/runtime/build.py
-@@ -30,6 +30,14 @@ def _build(name, src, srcdir, library_dirs, include_dirs, libraries):
-     include_dirs = include_dirs + [srcdir, py_include_dir, *custom_backend_dirs]
-     # for -Wno-psabi, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111047
-     cc_cmd = [cc, src, "-O3", "-shared", "-fPIC", "-Wno-psabi", "-o", so]
+@@ -33,5 +33,13 @@ def _build(name, src, srcdir, library_dirs, include_dirs, libraries):
+     cc_cmd += [f'-l{lib}' for lib in libraries]
+     cc_cmd += [f"-L{dir}" for dir in library_dirs]
+     cc_cmd += [f"-I{dir}" for dir in include_dirs if dir is not None]
 +
 +    # Nixpkgs support branch
 +    # Allows passing e.g. extra -Wl,-rpath
@@ -14,6 +14,5 @@ index 1b76548d4..1edbfd3da 100644
 +        import shlex
 +        cc_cmd.extend(shlex.split(cc_cmd_extra_flags))
 +
-     cc_cmd += [f'-l{lib}' for lib in libraries]
-     cc_cmd += [f"-L{dir}" for dir in library_dirs]
-     cc_cmd += [f"-I{dir}" for dir in include_dirs if dir is not None]
+     subprocess.check_call(cc_cmd, stdout=subprocess.DEVNULL)
+     return so
