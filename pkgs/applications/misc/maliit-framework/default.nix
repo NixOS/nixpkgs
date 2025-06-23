@@ -38,6 +38,10 @@ mkDerivation {
     hash = "sha256-iwWLnstQMG8F6uE5rKF6t2X43sXQuR/rIho2RN/D9jE=";
   };
 
+  patches = [
+    ./2000-Allow-external-wrapper-to-point-to-plugins.patch
+  ];
+
   postPatch = ''
     # Fix doubled prefix
     substituteInPlace src/maliit-plugins.prf.in \
