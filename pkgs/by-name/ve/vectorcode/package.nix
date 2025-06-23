@@ -77,6 +77,7 @@ python.pkgs.buildPythonApplication rec {
       pathspec
       psutil
       pygments
+      python-dotenv
       sentence-transformers
       shtab
       tabulate
