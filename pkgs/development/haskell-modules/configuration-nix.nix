@@ -599,6 +599,11 @@ builtins.intersectAttrs super {
     ];
   }) super.fltkhs;
 
+  # Select dependency discovery method and provide said dependency
+  jpeg-turbo = enableCabalFlag "pkgconfig" (
+    addPkgconfigDepends [ pkgs.libjpeg_turbo ] super.jpeg-turbo
+  );
+
   # https://github.com/skogsbaer/hscurses/pull/26
   hscurses = addExtraLibrary pkgs.ncurses super.hscurses;
 
