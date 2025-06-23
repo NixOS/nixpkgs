@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   stdenvNoCC,
   buildPackages,
   cacert,
@@ -36,8 +37,10 @@ let
         # ../repo (no trunk) -> repo
         else
           head path;
+      kind = config.fetchedSourceNameDefault;
+      suffix = lib.optionalString (kind == "full") "-svn";
     in
-    "${repoName}-r${toString rev}";
+    if kind == "source" then "source" else "${repoName}-r${toString rev}${suffix}-source";
 in
 
 {
