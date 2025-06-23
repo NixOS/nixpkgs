@@ -12,6 +12,7 @@
   withAdditionalGuestAgents ? false,
   lima-additional-guestagents,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   testers,
   writeText,
   runCommand,
@@ -92,14 +93,16 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/cb99e9f8d01ebb82d000c7912fcadcd87ec13ad5/pkg/limayaml/defaults.go#L53
     writableTmpDirAsHomeHook
+    versionCheckHook
   ];
   doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/limactl";
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
-  # Don't use versionCheckHook for this package until Env solutions like #403971 or #411609 are available on the master branch.
   installCheckPhase = ''
     runHook preInstallCheck
 
-    [[ "$("$out/bin/limactl" --version | cut -d ' ' -f 3)" == "${finalAttrs.version}" ]]
     USER=nix $out/bin/limactl validate templates/default.yaml
 
     runHook postInstallCheck
