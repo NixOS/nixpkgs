@@ -33,6 +33,8 @@ concurrency:
 
 # This is used as fallback without app only.
 # This happens when testing in forks without setting up that app.
+# Labels will most likely not exist in forks, yet. For this case,
+# we add the issues permission only here.
 permissions:
   issues: write # needed to create *new* labels
   pull-requests: write
@@ -56,6 +58,8 @@ jobs:
         with:
           app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
           private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+          # No issues: write permission here, because labels in Nixpkgs should
+          # be created explicitly via the UI with color and description.
           permission-pull-requests: write
 
       - name: Log current API rate limits
@@ -89,21 +93,40 @@ jobs:
             const allLimits = new Bottleneck({
               // Avoid concurrent requests
               maxConcurrent: 1,
-              // Hourly limit is at 5000, but other jobs need some, too!
-              // https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
-              reservoir: 500,
-              reservoirRefreshAmount: 500,
-              reservoirRefreshInterval: 60 * 60 * 1000
+              // Will be updated with first `updateReservoir()` call below.
+              reservoir: 0
             })
             // Pause between mutative requests
             const writeLimits = new Bottleneck({ minTime: 1000 }).chain(allLimits)
             github.hook.wrap('request', async (request, options) => {
+              // Requests to the /rate_limit endpoint do not count against the rate limit.
+              if (options.url == '/rate_limit') return request(options)
               stats.requests++
               if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method))
                 return writeLimits.schedule(request.bind(null, options))
               else
                 return allLimits.schedule(request.bind(null, options))
             })
+
+            async function updateReservoir() {
+              let response
+              try {
+                response = await github.rest.rateLimit.get()
+              } catch (err) {
+                core.error(`Failed updating reservoir:\n${err}`)
+                // Keep retrying on failed rate limit requests instead of exiting the script early.
+                return
+              }
+              // Always keep 1000 spare requests for other jobs to do their regular duty.
+              // They normally use below 100, so 1000 is *plenty* of room to work with.
+              const reservoir = Math.max(0, response.data.resources.core.remaining - 1000)
+              core.info(`Updating reservoir to: ${reservoir}`)
+              allLimits.updateSettings({ reservoir })
+            }
+            await updateReservoir()
+            // Update remaining requests every minute to account for other jobs running in parallel.
+            const reservoirUpdater = setInterval(updateReservoir, 60 * 1000)
+            process.on('uncaughtException', () => clearInterval(reservoirUpdater))
 
             if (process.env.UPDATED_WITHIN && !/^\d+$/.test(process.env.UPDATED_WITHIN))
               throw new Error('Please enter "updated within" as integer in hours.')
@@ -284,6 +307,7 @@ jobs:
               .map(({ reason }) => core.setFailed(`${reason.message}\n${reason.cause.stack}`))
 
             core.notice(`Processed ${stats.prs} PRs, made ${stats.requests + stats.artifacts} API requests and downloaded ${stats.artifacts} artifacts.`)
+            clearInterval(reservoirUpdater)
 
       - name: Log current API rate limits
         env:
