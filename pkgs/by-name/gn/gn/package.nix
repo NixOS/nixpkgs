@@ -67,13 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Meta-build system that generates build files for Ninja";
     mainProgram = "gn";
     homepage = "https://gn.googlesource.com/gn";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       stesie
       matthewbauer
     ];
