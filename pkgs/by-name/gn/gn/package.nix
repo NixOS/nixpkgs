@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       stesie
       matthewbauer
+      marcin-serwin
     ];
   };
 })
