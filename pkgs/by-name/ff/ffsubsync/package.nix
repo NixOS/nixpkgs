@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  ffmpeg,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,7 +25,6 @@ python3.pkgs.buildPythonApplication rec {
     faust-cchardet
     ffmpeg-python
     numpy
-    pkgs.ffmpeg
     pysubs2
     chardet
     rich
@@ -39,6 +39,13 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ffsubsync" ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${ffmpeg}/bin"
+  ];
 
   meta = {
     homepage = "https://github.com/smacke/ffsubsync";
