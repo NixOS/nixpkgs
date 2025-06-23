@@ -17,7 +17,11 @@ in
     enable = lib.mkEnableOption "proxy-ns";
     config = lib.mkOption {
       type = (with lib.types; nullOr (attrsOf unspecified));
-      description = "";
+      description = ''
+        The configuration object.
+
+        See <https://github.com/OkamiW/proxy-ns>.
+      '';
       example = {
         tun_name = "default";
         tun_ip = "10.0.0.1/24";
@@ -32,7 +36,10 @@ in
     };
     configFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      description = "path to your config.json";
+      description = ''
+        path to your config.json
+        See <https://github.com/OkamiW/proxy-ns>.
+      '';
       default = null;
     };
     package = lib.mkPackageOption pkgs "proxy-ns" { };
