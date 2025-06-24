@@ -5234,6 +5234,8 @@ self: super: with self; {
 
   flask-wtf = callPackage ../development/python-modules/flask-wtf { };
 
+  flask-xml-rpc-re = callPackage ../development/python-modules/flask-xml-rpc-re { };
+
   flatbencode = callPackage ../development/python-modules/flatbencode { };
 
   flatbuffers = callPackage ../development/python-modules/flatbuffers { inherit (pkgs) flatbuffers; };
@@ -10208,6 +10210,8 @@ self: super: with self; {
 
   ninja = callPackage ../development/python-modules/ninja { inherit (pkgs) ninja; };
 
+  nipap = callPackage ../development/python-modules/nipap { };
+
   nipreps-versions = callPackage ../development/python-modules/nipreps-versions { };
 
   nipy = callPackage ../development/python-modules/nipy { };
@@ -13144,6 +13148,8 @@ self: super: with self; {
   pyngrok = callPackage ../development/python-modules/pyngrok { };
 
   pynina = callPackage ../development/python-modules/pynina { };
+
+  pynipap = callPackage ../development/python-modules/pynipap { };
 
   pynisher = callPackage ../development/python-modules/pynisher { };
 
