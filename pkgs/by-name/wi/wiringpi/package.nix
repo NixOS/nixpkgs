@@ -78,11 +78,14 @@ symlinkJoin {
     passthru.wiringPiD
     passthru.gpio
   ];
-  meta = with lib; {
+  meta = {
     description = "Gordon's Arduino wiring-like WiringPi Library for the Raspberry Pi (Unofficial Mirror for WiringPi bindings)";
     homepage = "https://github.com/WiringPi/WiringPi";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
+      doronbehar
+      ryand56
+    ];
+    platforms = lib.platforms.linux;
   };
 }
