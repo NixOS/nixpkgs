@@ -45,7 +45,47 @@ let
         dependencies = old.dependencies ++ [
           self.chroma-hnswlib
         ];
-        doCheck = false;
+
+        # The base package disables additional tests, so explicitly override
+        disabledTests = [
+          # Tests are flaky / timing sensitive
+          "test_fastapi_server_token_authn_allows_when_it_should_allow"
+          "test_fastapi_server_token_authn_rejects_when_it_should_reject"
+
+          # Issue with event loop
+          "test_http_client_bw_compatibility"
+
+          # httpx ReadError
+          "test_not_existing_collection_delete"
+        ];
+
+        disabledTestPaths = [
+          # Tests require network access
+          "chromadb/test/auth/test_simple_rbac_authz.py"
+          "chromadb/test/db/test_system.py"
+          "chromadb/test/ef/test_default_ef.py"
+          "chromadb/test/property/"
+          "chromadb/test/property/test_cross_version_persist.py"
+          "chromadb/test/stress/"
+          "chromadb/test/test_api.py"
+
+          # httpx failures
+          "chromadb/test/api/test_delete_database.py"
+
+          # Cannot be loaded by pytest without path hacks (fixed in 1.0.0)
+          "chromadb/test/test_logservice.py"
+          "chromadb/test/proto/test_utils.py"
+          "chromadb/test/segment/distributed/test_protobuf_translation.py"
+
+          # Hypothesis FailedHealthCheck due to nested @given tests
+          "chromadb/test/cache/test_cache.py"
+
+          # Tests fail when running in parallel.
+          # E.g. when building the building python 3.12 and 3.13 versions simultaneously.
+          # ValueError: An instance of Chroma already exists for ephemeral with different settings
+          "chromadb/test/test_chroma.py"
+          "chromadb/test/test_client.py"
+        ];
       });
     };
   };
@@ -107,6 +147,10 @@ python.pkgs.buildPythonApplication rec {
     ];
   };
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   postInstall = ''
     $out/bin/vectorcode --print-completion=bash >vectorcode.bash
     $out/bin/vectorcode --print-completion=zsh >vectorcode.zsh
@@ -123,11 +167,16 @@ python.pkgs.buildPythonApplication rec {
       };
   '';
 
+  # Test collection breaks on aarch64-linux, because the transitive onnxruntime
+  # tries to read /sys/devices/system/cpu, which does not exist in the sandbox.
+  #
+  # We inherit the issue from chromadb, so inherit its `doCheck` attribute.
+  inherit (python.pkgs.chromadb) doCheck;
+
   pythonImportsCheck = [ "vectorcode" ];
 
   nativeCheckInputs =
     [
-      installShellFiles
       versionCheckHook
     ]
     ++ (with python.pkgs; [
@@ -144,6 +193,12 @@ python.pkgs.buildPythonApplication rec {
     "test_get_reranker"
     "test_supported_rerankers_initialization"
   ];
+
+  passthru = {
+    # Expose these overridden inputs for debugging
+    inherit python;
+    inherit (python.pkgs) chromadb;
+  };
 
   meta = {
     description = "Code repository indexing tool to supercharge your LLM experience";
