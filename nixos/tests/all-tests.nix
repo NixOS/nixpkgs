@@ -347,6 +347,7 @@ in
   containers-unified-hierarchy = runTest ./containers-unified-hierarchy.nix;
   convos = runTest ./convos.nix;
   corerad = handleTest ./corerad.nix { };
+  corteza = runTest ./corteza.nix;
   cosmic = runTest {
     imports = [ ./cosmic.nix ];
     _module.args.testName = "cosmic";
