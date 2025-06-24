@@ -188,21 +188,17 @@ lib.makeExtensible (
         self_attribute_name = "nix_2_28";
       };
 
-      nixComponents_2_29 =
-        (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.29.0";
-          inherit (self.nix_2_24.meta) maintainers teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
-          src = fetchFromGitHub {
-            # FIXME: back to NixOS org once they fix it
-            owner = "vcunat";
-            repo = "nix";
-            rev = "p/jq-1.8.0"; # just a tiny test-only patch atop 2.29.0
-            # see https://github.com/NixOS/nix/pull/13371
-            hash = "sha256-F2ZODsET4cBsgsyOi8Sg/quESU0DnrYri0hYniqu37k=";
-          };
-        }).appendPatches
-          [ ./patches/ghsa-g948-229j-48j3-2.29.patch ];
+      nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix {
+        version = "2.29.1";
+        inherit (self.nix_2_24.meta) maintainers teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          rev = "2.29.1";
+          hash = "sha256-rCL3l4t20jtMeNjCq6fMaTzWvBKgj+qw1zglLrniRfY=";
+        };
+      };
 
       nix_2_29 = addTests "nix_2_29" self.nixComponents_2_29.nix-everything;
 
