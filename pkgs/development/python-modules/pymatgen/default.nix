@@ -50,16 +50,14 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2025.1.24";
+  version = "2025.6.14";
   pyproject = true;
-
-  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "materialsproject";
     repo = "pymatgen";
     tag = "v${version}";
-    hash = "sha256-0P3/M6VI2RKPArMwXD95sjW7dYOTXxUeu4tOliN0IGk=";
+    hash = "sha256-HMYYhXT5k/EjG1sIBq/53K9ogeSk8ZEJQBrDHCgz+SA=";
   };
 
   build-system = [ setuptools ];
