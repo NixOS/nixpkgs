@@ -2877,8 +2877,6 @@ with pkgs;
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
 
-  vorta = qt6Packages.callPackage ../applications/backup/vorta { };
-
   xkcdpass = with python3Packages; toPythonApplication xkcdpass;
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
