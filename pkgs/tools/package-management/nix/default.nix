@@ -169,9 +169,8 @@ lib.makeExtensible (
           };
 
       nix_2_24 = commonAutoconf {
-        version = "2.24.14";
+        version = "2.24.15";
         hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
-        patches = [ ./patches/ghsa-g948-229j-48j3-2.24.patch ];
         self_attribute_name = "nix_2_24";
       };
 
