@@ -26,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace randnum.c --replace-fail 'stdio.h' 'stdlib.h'
     sed -i '1i\
     #include <string.h>' text.c
+
+    # The Makefile tries to install icbm3d immediately after building it, and
+    # ends up trying to copy it to /icbm3d. Normally this just gets an error
+    # and moves on, but it's probably better to not try it in the first place.
+    sed -i '/INSTALLROOT/d' makefile
   '';
 
   installPhase = ''
