@@ -95,6 +95,16 @@ let
       homepage = "https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-latest-2503.html";
     };
 
+    "25.05.0" = {
+      major = "25";
+      minor = "05";
+      patch = "0";
+      x64hash = "0fwqsxggswms40b5k8saxpm1ghkxppl27x19w8jcslq1f0i1fwqx";
+      x86hash = "";
+      x64suffix = "44";
+      x86suffix = "";
+      homepage = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
+    };
   };
 
   # Retain attribute-names for abandoned versions of Citrix workspace to
