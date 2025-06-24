@@ -13,11 +13,13 @@
   glibcLocales,
 
   # dependencies
+  bibtexparser,
   joblib,
   matplotlib,
   monty,
   networkx,
   numpy,
+  orjson,
   palettable,
   pandas,
   plotly,
@@ -68,11 +70,13 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    bibtexparser
     joblib
     matplotlib
     monty
     networkx
     numpy
+    orjson
     palettable
     pandas
     plotly
