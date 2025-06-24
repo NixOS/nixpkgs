@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
       webkitgtk_4_0
       wxGTK'
       xorg.libX11
-      opencv
+      opencv.cxxdev
     ]
     ++ lib.optionals withSystemd [ systemd ]
     ++ checkInputs;
