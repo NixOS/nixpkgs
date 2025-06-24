@@ -9,6 +9,7 @@
   # `lix-doc`.
   docCargoDeps ? null,
   patches ? [ ],
+  knownVulnerabilities ? [ ],
 }@args:
 
 assert lib.assertMsg (
@@ -139,6 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
         p.pytest
         p.pytest-xdist
         p.python-frontmatter
+        p.toml
       ]))
       pkg-config
       flex
@@ -388,5 +390,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
+    inherit knownVulnerabilities;
   };
 })
