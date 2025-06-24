@@ -23,6 +23,7 @@
   pytest-asyncio,
   pytest-timeout,
   redisTestHook,
+  stdenv,
   ujson,
   uvloop,
 }:
@@ -78,13 +79,27 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-m 'not onlycluster and not ssl'" ];
 
-  disabledTests = [
-    # valkey.sentinel.MasterNotFoundError: No master found for 'valkey-py-test'
-    "test_get_from_cache"
-    "test_cache_decode_response"
-    # Expects another valkey instance on port 6380 *shrug*
-    "test_psync"
-  ];
+  disabledTests =
+    [
+      # valkey.sentinel.MasterNotFoundError: No master found for 'valkey-py-test'
+      "test_get_from_cache"
+      "test_cache_decode_response"
+      # Expects another valkey instance on port 6380 *shrug*
+      "test_psync"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # OSError: AF_UNIX path too long
+      "test_uds_connect"
+      # Connection refused
+      "test_network_connection_failure"
+      # The following belong to TestMultiprocessing and throw AttributeErrors because they can't get local objects off
+      # the TestMultiprocessing object.
+      "test_close_connection_in_child"
+      "test_close_connection_in_parent"
+      "test_pool"
+      "test_close_pool_in_main"
+      "test_valkey_client"
+    ];
 
   meta = with lib; {
     description = "Python client for Redis key-value store";
