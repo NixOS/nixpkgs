@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  gettextAutoreconfCompatHook,
   autoreconfHook,
   libiconv,
 }:
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-7Ch51nJ5BeRqs4PEIPnjCGk+Nm2ydgJQCtkcpihXun8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gettextAutoreconfCompatHook
+  ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
