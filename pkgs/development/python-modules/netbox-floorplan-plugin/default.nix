@@ -5,6 +5,8 @@
   setuptools,
   netbox,
   pythonAtLeast,
+  django,
+  netaddr,
 }:
 buildPythonPackage rec {
   pname = "netbox-floorplan-plugin";
@@ -22,7 +24,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ netbox ];
+  nativeCheckInputs = [
+    netbox
+    django
+    netaddr
+  ];
 
   preFixup = ''
     export PYTHONPATH=${netbox}/opt/netbox/netbox:$PYTHONPATH
