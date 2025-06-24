@@ -832,6 +832,15 @@ in
         minsize = "1M";
       };
     };
+
+    # run0 is supposed to authenticate the user via polkit and then run a command. Without this next
+    # part, run0 would fail to run the command even if authentication is successful and the user has
+    # permission to run the command. This next part is only enabled if polkit is enabled because the
+    # error that we’re trying to avoid can’t possibly happen if polkit isn’t enabled. When polkit isn’t
+    # enabled, run0 will fail before it even tries to run the command.
+    security.pam.services = mkIf config.security.polkit.enable {
+      systemd-run0 = { };
+    };
   };
 
   # FIXME: Remove these eventually.
