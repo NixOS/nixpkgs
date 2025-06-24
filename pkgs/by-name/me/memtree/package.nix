@@ -14,7 +14,10 @@ python3Packages.buildPythonApplication {
     owner = "nicoonoclaste";
     repo = "memtree";
     rev = "ad1a7d1e4fa5f195c2aa1012101d01ab580a05e8";
-    hash = "sha256-UmleB7wr1bh9t7vwt3o8Uwp3LUzAzB5jlPi3OvgECAg=";
+    hash = "sha256-stIRBXhaLqYsN2WMQnu46z39ssantzM8M6T3kCOoZKc=";
+
+    # Remove irrelevant content, avoid src hash change on flake.lock updates etc.
+    postFetch = "rm -r $out/.* $out/flake.* $out/bors.toml";
   };
 
   build-system = with python3Packages; [
