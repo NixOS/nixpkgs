@@ -34,6 +34,7 @@
   gtk_engines,
   freetype,
   dconf,
+  libGL,
   libpng12,
   libxml2,
   libjpeg,
@@ -185,6 +186,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     zlib
     sane-backends
+    libGL
   ];
 
   runtimeDependencies = [
@@ -204,6 +206,7 @@ stdenv.mkDerivation rec {
     xorg.libxcb
     xorg.xprop
     xorg.xdpyinfo
+    libGL
   ];
 
   installPhase =
