@@ -28,16 +28,6 @@ let
   # The latest versions can be found at https://www.citrix.com/downloads/workspace-app/linux/
   # x86 is unsupported past 23.11, see https://docs.citrix.com/en-us/citrix-workspace-app-for-linux/deprecation
   supportedVersions = lib.mapAttrs mkVersionInfo {
-    "23.09.0" = {
-      major = "23";
-      minor = "9";
-      patch = "0";
-      x64hash = "7b06339654aa27258d6dfa922828b43256e780b282d07109f452246c7aa27514";
-      x86hash = "95436fb289602cf31c65b7df89da145fc170233cb2e758a2f11116f15b57d382";
-      x64suffix = "24";
-      x86suffix = "24";
-      homepage = "https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-latest9.html";
-    };
 
     "23.11.0" = {
       major = "23";
@@ -114,6 +104,7 @@ let
   unsupportedVersions = [
     "23.02.0"
     "23.07.0"
+    "23.09.0"
   ];
 in
 {
