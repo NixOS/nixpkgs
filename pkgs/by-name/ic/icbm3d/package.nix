@@ -16,11 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libX11 ];
 
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ]; # fix darwin and cross-compiled builds
+
   # Function are declared after they are used in the file, this is error since gcc-14.
   #   randnum.c:25:3: warning: implicit declaration of function 'srand' [-Wimplicit-function-declaration]
   #   randnum.c:33:7: warning: implicit declaration of function 'rand'; did you mean 'randnum'? [-Wimplicit-function-declaration]
   #   text.c:34:50: warning: implicit declaration of function 'strlen' [-Wimplicit-function-declaration]
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  postPatch = ''
+    substituteInPlace randnum.c --replace-fail 'stdio.h' 'stdlib.h'
+    sed -i '1i\
+    #include <string.h>' text.c
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -35,6 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "3D vector-based clone of the atari game Missile Command";
     mainProgram = "icbm3d";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })
