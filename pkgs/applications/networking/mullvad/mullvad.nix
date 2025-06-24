@@ -30,18 +30,18 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2025.6";
+  version = "2025.7";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-WWJcfnp1v1LhEElJQdLx6Gz+bj7MdgbefD6BQ4nihMs=";
+    hash = "sha256-q5RYgU7VlhTXAN0uQeHNTJ1eFCQZzymLo/eiKr805O8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-r6WogC25hpzw2pHa8RQOhr9SWks9RKKatpVHblfs+Nc=";
+  cargoHash = "sha256-UUYAmNdzTthoWOIU5wr7Q059MAezpuRvCadGTjwoKGM=";
 
   cargoBuildFlags = [
     "-p mullvad-daemon --bin mullvad-daemon"
@@ -123,7 +123,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Mullvad VPN command-line client tools";
     homepage = "https://github.com/mullvad/mullvadvpn-app";
-    changelog = "https://github.com/mullvad/mullvadvpn-app/blob/2025.6/CHANGELOG.md";
+    changelog = "https://github.com/mullvad/mullvadvpn-app/blob/2025.7/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ cole-h ];
     mainProgram = "mullvad";
