@@ -3,13 +3,10 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
-  wrapQtAppsHook,
-  qtwayland,
+  qt6Packages,
   borgbackup,
   versionCheckHook,
   makeFontsConf,
-  qtbase,
-  qtsvg,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -25,15 +22,13 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs =
-    [
-      qtsvg
-    ]
+    [ qt6Packages.qtsvg ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
+      qt6Packages.qtwayland
     ];
 
   build-system = with python3Packages; [
@@ -85,7 +80,7 @@ python3Packages.buildPythonApplication rec {
       export FONTCONFIG_FILE=${fontsConf};
       # For tests/test_misc.py::test_autostart
       mkdir -p $HOME/.config/autostart
-      export QT_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}"
+      export QT_PLUGIN_PATH="${qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}"
       export QT_QPA_PLATFORM=offscreen
     '';
 
