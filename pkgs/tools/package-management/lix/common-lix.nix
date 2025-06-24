@@ -9,6 +9,7 @@
   # `lix-doc`.
   docCargoDeps ? null,
   patches ? [ ],
+  knownVulnerabilities ? [ ],
 }@args:
 
 assert lib.assertMsg (
@@ -388,5 +389,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
+    inherit knownVulnerabilities;
   };
 })
