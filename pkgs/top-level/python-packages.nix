@@ -5960,6 +5960,18 @@ self: super: with self; {
 
   google-cloud-storage = callPackage ../development/python-modules/google-cloud-storage { };
 
+  google-cloud-storage_2_19 = google-cloud-storage.overridePythonAttrs (old: rec {
+    version = "2.19.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "googleapis";
+      repo = "python-storage";
+      rev = "v${version}";
+      hash = "sha256-8jYP8w+bawF3TnBS9D6eYIWP3DmVeiGRozwyIsUGgac=";
+    };
+
+    doCheck = false;
+  });
+
   google-cloud-tasks = callPackage ../development/python-modules/google-cloud-tasks { };
 
   google-cloud-testutils = callPackage ../development/python-modules/google-cloud-testutils { };
