@@ -4,27 +4,53 @@
   esbuild,
   buildNpmPackage,
   inter,
+  databaseType ? "sqlite",
 }:
 
+assert lib.assertOneOf "databaseType" databaseType [
+  "sqlite"
+  "pg"
+  "postgres"
+  "postgresql"
+];
+let
+  db =
+    isLong:
+    if (databaseType == "sqlite") then
+      "sqlite"
+    else if isLong then
+      "postgresql"
+    else
+      "pg";
+in
 buildNpmPackage rec {
   pname = "pangolin";
-  version = "1.2.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = version;
-    hash = "sha256-2yrim4pr8cgIh/FBuGIuK+ycwImpMiz+m21H5qYARmU=";
+    hash = "sha256-8YGDDUmA6q7DVt+TcyHLrzLrV6jLC0GZq85V+3STBRY=";
   };
 
-  npmDepsHash = "sha256-fi4e79Bk1LC/LizBJ+EhCjDzLR5ZocgVyWbSXsEJKdw=";
+  npmDepsHash = "sha256-vLRhRfP+8pdEc9VusvBuD5Gyx+nqPQv0r+Zm5n0gqpE=";
+
   nativeBuildInputs = [ esbuild ];
-  # Replace the googleapis.com Inter font with a local copy from nixpkgs
-  # based on
-  # https://github.com/NixOS/nixpkgs/blob/f7bf574774e466b984063a44330384cdbca67d6c/pkgs/by-name/ne/nextjs-ollama-llm-ui/package.nix
+
+  prePatch = ''
+    rm server/db/index.ts
+
+    cat > server/db/index.ts << EOF
+    export * from "./${db false}";
+    EOF
+  '';
+
+  # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
+  # Based on pkgs.nextjs-ollama-llm-ui.
   postPatch = ''
     substituteInPlace src/app/layout.tsx --replace-fail \
-      "{ Figtree, Inter } from \"next/font/google\"" \
+      "{ Inter } from \"next/font/google\"" \
       "localFont from \"next/font/local\""
 
     substituteInPlace src/app/layout.tsx --replace-fail \
@@ -35,8 +61,10 @@ buildNpmPackage rec {
   '';
 
   preBuild = ''
-    npx drizzle-kit generate --dialect sqlite --schema ./server/db/schemas/ --out init
+    npx drizzle-kit generate --dialect ${db true} --schema ./server/db/${db false}/schema.ts --name migration --out init
   '';
+
+  npmBuildScript = "build:${db false}";
 
   installPhase = ''
     runHook preInstall
@@ -60,7 +88,10 @@ buildNpmPackage rec {
     homepage = "https://github.com/fosrl/pangolin";
     changelog = "https://github.com/fosrl/pangolin/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ jackr ];
+    maintainers = with lib.maintainers; [
+      jackr
+      sigmasquadron
+    ];
     platforms = lib.platforms.linux;
   };
 }
