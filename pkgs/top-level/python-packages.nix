@@ -15327,6 +15327,10 @@ self: super: with self; {
 
   qgrid = callPackage ../development/python-modules/qgrid { };
 
+  qh3 = callPackage ../development/python-modules/qh3 {
+    inherit (pkgs) cmake;
+  };
+
   qiling = callPackage ../development/python-modules/qiling { };
 
   qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
