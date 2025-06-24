@@ -30,4 +30,10 @@ buildNpmPackage rec {
 
    # Prevent Playwright download as that will cause the package build to fail
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+
+  # Remove broken symlinks after installation
+  postInstall = ''
+    rm -f $out/lib/node_modules/promptfoo/node_modules/app
+    rm -f $out/lib/node_modules/promptfoo/node_modules/promptfoo-docs
+  '';
 }
