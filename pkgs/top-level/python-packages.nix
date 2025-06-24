@@ -3108,6 +3108,8 @@ self: super: with self; {
 
   curlify = callPackage ../development/python-modules/curlify { };
 
+  cursedspace = callPackage ../development/python-modules/cursedspace { };
+
   curtsies = callPackage ../development/python-modules/curtsies { };
 
   curvefitgui = callPackage ../development/python-modules/curvefitgui { };
