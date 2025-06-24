@@ -253,6 +253,10 @@ lib.makeExtensible (self: {
         inherit src;
         hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
       };
+
+      patches = [
+        ./patches/LIX_HEAD_CVE-2025-46415_46416.patch
+      ];
     };
   };
 
