@@ -171,32 +171,37 @@ lib.makeExtensible (
       nix_2_24 = commonAutoconf {
         version = "2.24.14";
         hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
+        patches = [ ./patches/ghsa-g948-229j-48j3-2.24.patch ];
         self_attribute_name = "nix_2_24";
       };
 
       nix_2_26 = commonMeson {
         version = "2.26.3";
         hash = "sha256-5ZV8YqU8mfFmoAMiUEuBqNwk0T3vUR//x1D12BiYCeY=";
+        patches = [ ./patches/ghsa-g948-229j-48j3-2.26.patch ];
         self_attribute_name = "nix_2_26";
       };
 
       nix_2_28 = commonMeson {
         version = "2.28.3";
         hash = "sha256-TjZp5ITSUvNRAzNznmkZRQxNRzMLiSAplz4bV2T8cbs=";
+        patches = [ ./patches/ghsa-g948-229j-48j3-2.28.patch ];
         self_attribute_name = "nix_2_28";
       };
 
-      nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.29.0";
-        inherit (self.nix_2_24.meta) maintainers teams;
-        otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
-        src = fetchFromGitHub {
-          owner = "NixOS";
-          repo = "nix";
-          rev = version;
-          hash = "sha256-fkbE3RCIUPFjS9A6SoEJbgMW3Rs98cs0ZZV/eTtJjaU=";
-        };
-      };
+      nixComponents_2_29 =
+        (nixDependencies.callPackage ./modular/packages.nix rec {
+          version = "2.29.0";
+          inherit (self.nix_2_24.meta) maintainers teams;
+          otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
+          src = fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nix";
+            rev = version;
+            hash = "sha256-fkbE3RCIUPFjS9A6SoEJbgMW3Rs98cs0ZZV/eTtJjaU=";
+          };
+        }).appendPatches
+          [ ./patches/ghsa-g948-229j-48j3-2.29.patch ];
 
       nix_2_29 = addTests "nix_2_29" self.nixComponents_2_29.nix-everything;
 
