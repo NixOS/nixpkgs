@@ -10569,10 +10569,6 @@ with pkgs;
   mssql_jdbc = callPackage ../servers/sql/mssql/jdbc { };
   jtds_jdbc = callPackage ../servers/sql/mssql/jdbc/jtds.nix { };
 
-  miniflux = callPackage ../by-name/mi/miniflux/package.nix {
-    buildGoModule = buildGo123Module;
-  };
-
   inherit (callPackage ../servers/mir { })
     mir
     mir_2_15
