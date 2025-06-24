@@ -19687,6 +19687,8 @@ self: super: with self; {
 
   wasserstein = callPackage ../development/python-modules/wasserstein { };
 
+  wassima = callPackage ../development/python-modules/wassima { };
+
   wat = callPackage ../development/python-modules/wat { };
 
   watchdog = callPackage ../development/python-modules/watchdog { };
