@@ -81,6 +81,7 @@ let
         ;
       gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
         version = if (upstream-info.deps.gn ? "version") then upstream-info.deps.gn.version else "0";
+        revNum = 9999; # override to prevent gn updates from causing chromium rebuilds
         src = fetchgit {
           url = "https://gn.googlesource.com/gn";
           inherit (upstream-info.deps.gn) rev hash;
