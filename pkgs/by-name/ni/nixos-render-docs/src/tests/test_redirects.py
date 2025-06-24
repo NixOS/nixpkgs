@@ -124,8 +124,9 @@ class TestRedirects(unittest.TestCase):
         before = self.setup_test(
             sources={"foo.md": "# Foo {#foo}\n## Bar {#bar}"},
             raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar"]},
+            tmp_path=self.tmp_path
         )
-        self.run_test(before)
+        self.run_test(before, self.tmp_path)
 
         intermediate = self.setup_test(
             sources={
@@ -133,8 +134,9 @@ class TestRedirects(unittest.TestCase):
                 "bar.md": "# Bar {#bar}"
             },
             raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#foo"]},
+            tmp_path=self.tmp_path
         )
-        self.assert_redirect_error({"identifiers_missing_current_outpath": ["bar"]}, intermediate)
+        self.assert_redirect_error({"identifiers_missing_current_outpath": ["bar"]}, intermediate, self.tmp_path)
 
         after = self.setup_test(
             sources={
@@ -142,16 +144,18 @@ class TestRedirects(unittest.TestCase):
                 "bar.md": "# Bar {#bar}"
             },
             raw_redirects={"foo": ["foo.html#foo"], "bar": ["bar.html#bar", "foo.html#bar"]},
+            tmp_path=self.tmp_path
         )
-        self.run_test(after)
+        self.run_test(after, self.tmp_path)
 
     def test_non_leaf_identifier_moved_to_different_file(self):
         """Test moving a non-leaf identifier to a different output path."""
         before = self.setup_test(
             sources={"foo.md": "# Foo {#foo}\n## Bar {#bar}\n### Baz {#baz}"},
             raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar"], "baz": ["foo.html#baz"]},
+            tmp_path=self.tmp_path
         )
-        self.run_test(before)
+        self.run_test(before, self.tmp_path)
 
         intermediate = self.setup_test(
             sources={
@@ -159,8 +163,9 @@ class TestRedirects(unittest.TestCase):
                 "bar.md": "# Bar {#bar}\n## Baz {#baz}"
             },
             raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar"], "baz": ["foo.html#baz"]},
+            tmp_path=self.tmp_path
         )
-        self.assert_redirect_error({"identifiers_missing_current_outpath": ["bar", "baz"]}, intermediate)
+        self.assert_redirect_error({"identifiers_missing_current_outpath": ["bar", "baz"]}, intermediate, self.tmp_path)
 
         after = self.setup_test(
             sources={
@@ -172,8 +177,9 @@ class TestRedirects(unittest.TestCase):
                 "bar": ["bar.html#bar", "foo.html#bar"],
                 "baz": ["bar.html#baz", "foo.html#baz"]
             },
+            tmp_path=self.tmp_path
         )
-        self.run_test(after)
+        self.run_test(after, self.tmp_path)
 
     def test_conflicting_anchors(self):
         """Test for conflicting anchors."""
