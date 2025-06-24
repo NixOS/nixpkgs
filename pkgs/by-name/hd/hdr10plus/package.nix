@@ -4,7 +4,6 @@
   rust,
   rustPlatform,
   hdr10plus_tool,
-  cargo-c,
   fontconfig,
 }:
 
@@ -12,100 +11,103 @@ let
   inherit (lib) optionals concatStringsSep;
   inherit (rust.envVars) setEnv;
 in
-rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
+rustPlatform.buildRustPackage.override
+  (old: {
+    cargo = old.cargo.withCommands (c: [ c.cargo-c ]);
+  })
+  (finalAttrs: {
+    __structuredAttrs = true;
 
-  pname = "hdr10plus";
-  version = "2.1.3";
+    pname = "hdr10plus";
+    version = "2.1.3";
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-
-  inherit (hdr10plus_tool)
-    src
-    useFetchCargoVendor
-    cargoDeps
-    cargoHash
-    ;
-
-  nativeBuildInputs = [ cargo-c ];
-  buildInputs = [ fontconfig ];
-
-  cargoCFlags = [
-    "--package=hdr10plus"
-    "--frozen"
-    "--prefix=${placeholder "out"}"
-    "--includedir=${placeholder "dev"}/include"
-    "--pkgconfigdir=${placeholder "dev"}/lib/pkgconfig"
-    "--target=${stdenv.hostPlatform.rust.rustcTarget}"
-  ];
-
-  # mirror Cargo flags
-  cargoCBuildFlags =
-    optionals (finalAttrs.cargoBuildType != "debug") [
-      "--profile=${finalAttrs.cargoBuildType}"
-    ]
-    ++ optionals (finalAttrs.cargoBuildNoDefaultFeatures) [
-      "--no-default-features"
-    ]
-    ++ optionals (finalAttrs.cargoBuildFeatures != [ ]) [
-      "--features=${concatStringsSep "," finalAttrs.cargoBuildFeatures}"
+    outputs = [
+      "out"
+      "dev"
     ];
 
-  cargoCTestFlags =
-    optionals (finalAttrs.cargoCheckType != "debug") [
-      "--profile=${finalAttrs.cargoCheckType}"
-    ]
-    ++ optionals (finalAttrs.cargoCheckNoDefaultFeatures) [
-      "--no-default-features"
-    ]
-    ++ optionals (finalAttrs.cargoCheckFeatures != [ ]) [
-      "--features=${concatStringsSep "," finalAttrs.cargoCheckFeatures}"
+    inherit (hdr10plus_tool)
+      src
+      useFetchCargoVendor
+      cargoDeps
+      cargoHash
+      ;
+
+    buildInputs = [ fontconfig ];
+
+    cargoCFlags = [
+      "--package=hdr10plus"
+      "--frozen"
+      "--prefix=${placeholder "out"}"
+      "--includedir=${placeholder "dev"}/include"
+      "--pkgconfigdir=${placeholder "dev"}/lib/pkgconfig"
+      "--target=${stdenv.hostPlatform.rust.rustcTarget}"
     ];
 
-  configurePhase = ''
-    # let stdenv handle stripping
-    export "CARGO_PROFILE_''${cargoBuildType@U}_STRIP"=false
+    # mirror Cargo flags
+    cargoCBuildFlags =
+      optionals (finalAttrs.cargoBuildType != "debug") [
+        "--profile=${finalAttrs.cargoBuildType}"
+      ]
+      ++ optionals (finalAttrs.cargoBuildNoDefaultFeatures) [
+        "--no-default-features"
+      ]
+      ++ optionals (finalAttrs.cargoBuildFeatures != [ ]) [
+        "--features=${concatStringsSep "," finalAttrs.cargoBuildFeatures}"
+      ];
 
-    prependToVar cargoCFlags -j "$NIX_BUILD_CORES"
-  '';
+    cargoCTestFlags =
+      optionals (finalAttrs.cargoCheckType != "debug") [
+        "--profile=${finalAttrs.cargoCheckType}"
+      ]
+      ++ optionals (finalAttrs.cargoCheckNoDefaultFeatures) [
+        "--no-default-features"
+      ]
+      ++ optionals (finalAttrs.cargoCheckFeatures != [ ]) [
+        "--features=${concatStringsSep "," finalAttrs.cargoCheckFeatures}"
+      ];
 
-  buildPhase = ''
-    runHook preBuild
+    configurePhase = ''
+      # let stdenv handle stripping
+      export "CARGO_PROFILE_''${cargoBuildType@U}_STRIP"=false
 
-    ${setEnv} cargo cbuild "''${cargoCFlags[@]}" "''${cargoCBuildFlags[@]}"
+      prependToVar cargoCFlags -j "$NIX_BUILD_CORES"
+    '';
 
-    runHook postBuild
-  '';
+    buildPhase = ''
+      runHook preBuild
 
-  checkPhase = ''
-    runHook preCheck
+      ${setEnv} cargo cbuild "''${cargoCFlags[@]}" "''${cargoCBuildFlags[@]}"
 
-    ${setEnv} cargo ctest "''${cargoCFlags[@]}" "''${cargoCTestFlags[@]}"
+      runHook postBuild
+    '';
 
-    runHook postCheck
-  '';
+    checkPhase = ''
+      runHook preCheck
 
-  installPhase = ''
-    runHook preInstall
+      ${setEnv} cargo ctest "''${cargoCFlags[@]}" "''${cargoCTestFlags[@]}"
 
-    ${setEnv} cargo cinstall "''${cargoCFlags[@]}" "''${cargoCBuildFlags[@]}"
+      runHook postCheck
+    '';
 
-    runHook postInstall
-  '';
+    installPhase = ''
+      runHook preInstall
 
-  passthru.tests = {
-    inherit hdr10plus_tool;
-  };
+      ${setEnv} cargo cinstall "''${cargoCFlags[@]}" "''${cargoCBuildFlags[@]}"
 
-  meta = {
-    description = "Library to work with HDR10+ in HEVC files";
-    homepage = "https://github.com/quietvoid/hdr10plus_tool";
-    changelog = "https://github.com/quietvoid/hdr10plus_tool/releases/tag/${hdr10plus_tool.version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mvs ];
-    pkgConfigModules = [ "hdr10plus-rs" ];
-  };
-})
+      runHook postInstall
+    '';
+
+    passthru.tests = {
+      inherit hdr10plus_tool;
+    };
+
+    meta = {
+      description = "Library to work with HDR10+ in HEVC files";
+      homepage = "https://github.com/quietvoid/hdr10plus_tool";
+      changelog = "https://github.com/quietvoid/hdr10plus_tool/releases/tag/${hdr10plus_tool.version}";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ mvs ];
+      pkgConfigModules = [ "hdr10plus-rs" ];
+    };
+  })
