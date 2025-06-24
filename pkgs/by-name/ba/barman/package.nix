@@ -2,23 +2,33 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   python3Packages,
+  rsync,
   versionCheckHook,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "3.13.3";
+  version = "3.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
     tag = "release/${version}";
-    hash = "sha256-ffedLH7b/Z1y+yL5EkFJIGdksQZEKc3uu3KOyNc2plw=";
+    hash = "sha256-Z3+PgUJcyG/M05hMmIhRr3HttzHUDx7BGIs44LA/qE4=";
   };
 
-  patches = [ ./unwrap-subprocess.patch ];
+  patches = [
+    ./unwrap-subprocess.patch
+    # fix building with Python 3.13
+    (fetchpatch2 {
+      url = "https://github.com/EnterpriseDB/barman/commit/931f997f1d73bbe360abbca737bea9ae93172989.patch?full_index=1";
+      hash = "sha256-0aqyjsEabxLf4dpC4DeepmypAl7QfCedh7vy98iVifU=";
+    })
+  ];
 
   build-system = with python3Packages; [
     distutils
@@ -40,12 +50,13 @@ python3Packages.buildPythonApplication rec {
     python-snappy
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    mock
-    pytestCheckHook
+  nativeCheckInputs = [
+    python3Packages.lz4
+    python3Packages.mock
+    python3Packages.pytestCheckHook
+    python3Packages.zstandard
+    rsync
     versionCheckHook
-    zstandard
-    lz4
   ];
 
   disabledTests =
@@ -59,10 +70,19 @@ python3Packages.buildPythonApplication rec {
       "test_get_file_mode"
     ];
 
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^release/(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
+  };
+
   meta = {
     description = "Backup and Recovery Manager for PostgreSQL";
     homepage = "https://www.pgbarman.org/";
-    changelog = "https://github.com/EnterpriseDB/barman/blob/release/${src.tag}/NEWS";
+    changelog = "https://github.com/EnterpriseDB/barman/blob/${src.tag}/RELNOTES.md";
     mainProgram = "barman";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ freezeboy ];
