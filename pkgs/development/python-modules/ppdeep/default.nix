@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "ppdeep";
-  version = "20200505";
+  version = "20250622";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zx1h0ff0wjjkgd0dzjv31i6ag09jw2p9vcssc1iplp60awlpixc";
+    sha256 = "sha256-QKEcNp8B+K5eE+2DOvfkMMIl9Y+gS3dlGqSWgeQe1Gw=";
   };
 
   # Project has no tests
