@@ -210,6 +210,7 @@ def copy_closure(
         run_wrapper(
             [
                 "nix",
+                *FLAKE_FLAGS,
                 "copy",
                 *dict_to_flags(copy_flags),
                 "--from",
