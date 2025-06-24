@@ -39,6 +39,7 @@
   mariadb,
   mpfr,
   neovim-unwrapped,
+  oniguruma,
   openldap,
   openssl,
   pcre,
@@ -377,6 +378,15 @@ in
   lrexlib-gnu = prev.lrexlib-gnu.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       gnulib
+    ];
+  });
+
+  lrexlib-oniguruma = prev.lrexlib-oniguruma.overrideAttrs (oa: {
+    externalDeps = [
+      {
+        name = "ONIG";
+        dep = oniguruma;
+      }
     ];
   });
 
