@@ -3,20 +3,22 @@
   buildNpmPackage,
   fetchzip,
   nodejs_20,
+  testers,
+  runCommand,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "claude-code";
-  version = "1.0.30";
+  version = "1.0.33";
 
   nodejs = nodejs_20; # required for sandboxed Nix builds on Darwin
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-    hash = "sha256-DwzSXpDrNV8FhfqrRQ3OK/LjmiXd+VHEW91jnyds2P4=";
+    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
+    hash = "sha256-AH/ZokL0Ktsx18DrpUKgYrZKdBnKo29jntwXUWspH8w=";
   };
 
-  npmDepsHash = "sha256-M6H6A4i4JBqcFTG/ZkmxpINa4lw8sO5+iu2YcBqmvi4=";
+  npmDepsHash = "sha256-oHSePK/QiAHP+2Fn+yUf66TcRGCoZg3mrI4x7S/nbCc=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
@@ -33,7 +35,16 @@ buildNpmPackage rec {
       --set DISABLE_AUTOUPDATER 1
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "HOME=$(mktemp -d) claude --version";
+      };
+    };
+  };
 
   meta = {
     description = "Agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster";
@@ -43,7 +54,8 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       malo
       omarjatoi
+      zimbatm
     ];
     mainProgram = "claude";
   };
-}
+})
