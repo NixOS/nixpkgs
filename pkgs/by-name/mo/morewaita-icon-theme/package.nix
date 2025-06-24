@@ -17,6 +17,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-18jI4hADVHC/WCmMTlA+VBuZ1jNGSxL+lO3GwWDiNoU=";
   };
 
+  postPatch = ''
+    patchShebangs install.sh
+
+    # Replace this workaround if https://github.com/somepaulo/MoreWaita/pull/339 is merged
+    substituteInPlace install.sh \
+      --replace-fail '"''${HOME}/.local/share/' '"$out/share/'
+  '';
+
   nativeBuildInputs = [
     gtk3
     xdg-utils
@@ -25,9 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -d $out/share/icons/MoreWaita
-    cp -r . $out/share/icons/MoreWaita
-    gtk-update-icon-cache -f -t $out/share/icons/MoreWaita && xdg-desktop-menu forceupdate
+    ./install.sh
 
     runHook postInstall
   '';
