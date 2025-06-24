@@ -77,6 +77,7 @@ python.pkgs.buildPythonApplication rec {
       pathspec
       psutil
       pygments
+      python-dotenv
       sentence-transformers
       shtab
       tabulate
@@ -110,6 +111,16 @@ python.pkgs.buildPythonApplication rec {
     $out/bin/vectorcode --print-completion=bash >vectorcode.bash
     $out/bin/vectorcode --print-completion=zsh >vectorcode.zsh
     installShellCompletion vectorcode.{bash,zsh}
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/vectorcode \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --set PATH ${
+        lib.makeBinPath [
+          python
+        ]
+      };
   '';
 
   pythonImportsCheck = [ "vectorcode" ];
