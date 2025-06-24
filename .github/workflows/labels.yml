@@ -226,11 +226,32 @@ jobs:
                       per_page: 100
                     }
                   ))
-                  // We also ignore base_ref_force_pushed, which will not happen in nixpkgs, but
-                  // is very useful for testing in forks.
-                  .findLast(({ event }) => !['labeled', 'unlabeled', 'base_ref_force_pushed'].includes(event))
-                  ?.created_at ?? item.created_at
+                  .filter(({ event }) => [
+                    // These events are hand-picked from:
+                    //   https://docs.github.com/en/rest/using-the-rest-api/issue-event-types?apiVersion=2022-11-28
+                    // Each of those causes a PR/issue to *not* be considered as stale anymore.
+                    // Most of these use created_at.
+                    'assigned',
+                    'commented', // uses updated_at, because that could be > created_at
+                    'committed', // uses committer.date
+                    'head_ref_force_pushed',
+                    'milestoned',
+                    'pinned',
+                    'ready_for_review',
+                    'renamed',
+                    'reopened',
+                    'review_dismissed',
+                    'review_requested',
+                    'reviewed', // uses submitted_at
+                    'unlocked',
+                    'unmarked_as_duplicate',
+                  ].includes(event))
+                  .map(({ created_at, updated_at, committer, submitted_at }) => new Date(updated_at ?? created_at ?? submitted_at ?? committer.date))
+                  .sort()
+                  .reverse()
+                  .at(0) ?? item.created_at
                 )
+
                 const stale_at = new Date(new Date().setDate(new Date().getDate() - 180))
 
                 // Manage most of the labels, without eval results
