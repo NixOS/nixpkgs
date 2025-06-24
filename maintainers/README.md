@@ -42,7 +42,7 @@ package's `meta.maintainers` list, and send a PR with the changes.
 
 If you're adding yourself as a maintainer as part of another PR (in which
 you become a maintainer of a package, for example), make your change to
-`maintainer-list.nix` in a separate commit.
+`maintainer-list.nix` in a separate commit titled `maintainers: add <name>`.
 
 ### How to lose maintainer status
 
