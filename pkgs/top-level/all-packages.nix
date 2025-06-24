@@ -3067,8 +3067,6 @@ with pkgs;
 
   gitlab-workhorse = callPackage ../by-name/gi/gitlab/gitlab-workhorse { };
 
-  gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
-
   glogg = libsForQt5.callPackage ../tools/text/glogg { };
 
   gmrender-resurrect = callPackage ../tools/networking/gmrender-resurrect {
@@ -3736,10 +3734,6 @@ with pkgs;
   mailnagWithPlugins = mailnag.withPlugins (builtins.attrValues mailnag.availablePlugins);
   mailpit = callPackage ../servers/mail/mailpit {
     libtool = if stdenv.hostPlatform.isDarwin then cctools else libtool;
-  };
-
-  mailutils = callPackage ../tools/networking/mailutils {
-    sasl = gsasl;
   };
 
   man = man-db;
