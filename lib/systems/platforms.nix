@@ -225,31 +225,6 @@ rec {
     };
   };
 
-  utilite = {
-    linux-kernel = {
-      name = "utilite";
-      maseConfig = "multi_v7_defconfig";
-      autoModules = false;
-      extraConfig = ''
-        # Ubi for the mtd
-        MTD_UBI y
-        UBIFS_FS y
-        UBIFS_FS_XATTR y
-        UBIFS_FS_ADVANCED_COMPR y
-        UBIFS_FS_LZO y
-        UBIFS_FS_ZLIB y
-        UBIFS_FS_DEBUG n
-      '';
-      makeFlags = [ "LOADADDR=0x10800000" ];
-      target = "uImage";
-      DTB = true;
-    };
-    gcc = {
-      cpu = "cortex-a9";
-      fpu = "neon";
-    };
-  };
-
   # https://developer.android.com/ndk/guides/abis#v7a
   armv7a-android = {
     linux-kernel.name = "armeabi-v7a";
@@ -375,35 +350,6 @@ rec {
     gcc = {
       arch = "mips64r6";
       abi = "64";
-    };
-  };
-
-  # based on:
-  #   https://www.mail-archive.com/qemu-discuss@nongnu.org/msg05179.html
-  #   https://gmplib.org/~tege/qemu.html#mips64-debian
-  mips64el-qemu-linux-gnuabi64 = {
-    linux-kernel = {
-      name = "mips64el";
-      baseConfig = "64r2el_defconfig";
-      target = "vmlinuz";
-      autoModules = false;
-      DTB = true;
-      # for qemu 9p passthrough filesystem
-      extraConfig = ''
-        MIPS_MALTA y
-        PAGE_SIZE_4KB y
-        CPU_LITTLE_ENDIAN y
-        CPU_MIPS64_R2 y
-        64BIT y
-        CPU_MIPS64_R2 y
-
-        NET_9P y
-        NET_9P_VIRTIO y
-        9P_FS y
-        9P_FS_POSIX_ACL y
-        PCI y
-        VIRTIO_PCI y
-      '';
     };
   };
 
