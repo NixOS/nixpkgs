@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "shellhub-agent";
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${version}";
-    hash = "sha256-xoGOiaUIjlR2l+l+oM1s3J7YBW9af2dfd+hXwq8zZU8=";
+    hash = "sha256-xFCUq1x9C+W1xxo6UIpW7ej7ltquvEqNUUvvF86rA9o=";
   };
 
   modRoot = "./agent";
