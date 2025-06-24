@@ -1,8 +1,6 @@
 {
   lib,
-  fetchzip,
   fetchFromGitHub,
-  fetchpatch,
   imagemagick,
   libgbm,
   libdrm,
@@ -10,6 +8,16 @@
   pulseaudio,
   makeDesktopItem,
   olm,
+  buildDartApplication,
+  rustPlatform,
+  rustc,
+  wasm-pack,
+  wasm-bindgen-cli_0_2_100,
+  binaryen,
+  which,
+  bash,
+  cargo,
+  writableTmpDirAsHomeHook,
 
   targetFlutterPlatform ? "linux",
 }:
@@ -20,27 +28,80 @@ let
     libdrm
   ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+  dart-vodozemac = buildDartApplication rec {
+    pname = "dart-vodozemac";
+    version = "0-unstable-2025-06-16";
+
+    src = fetchFromGitHub {
+      owner = "famedly";
+      repo = "dart-vodozemac";
+      rev = "a3446206da432a3a48dedf39bb57604a376b3582";
+      hash = "sha256-uRCxZ+FQpUc3iJD/kv4wBHbqdXJIhYvmCFU7kY4W8RY=";
+    };
+
+    pubspecLock = lib.importJSON ./dart-vodozemac.pubspec.lock.json;
+
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit src;
+      sourceRoot = "${src.name}/rust";
+      hash = "sha256-Iw0AkHVjR1YmPe+C0YYBTDu5FsRk/ZpaRyBilcvqm6M=";
+    };
+
+    cargoRoot = "rust";
+
+    postPatch = ''
+      cp dart/pubspec.yaml pubspec.yaml
+      patchShebangs .
+    '';
+
+    nativeBuildInputs = [
+      wasm-pack
+      wasm-bindgen-cli_0_2_100
+      binaryen
+      rustc.llvmPackages.lld
+      rustc
+      which
+      bash
+      cargo
+      rustPlatform.cargoSetupHook
+      writableTmpDirAsHomeHook
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      RUST_LOG=debug packageRun flutter_rust_bridge build-web --dart-root dart --rust-root $(readlink -f rust) --release
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir $out
+      cp rust/dart/web/pkg/vodozemac_bindings_dart* $out
+
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "Library provides bindings to Olm and Megolm libraries from Dart";
+      license = lib.licenses.agpl3Only;
+      inherit (olm.meta) knownVulnerabilities;
+    };
+  };
 in
 flutter332.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "1.27.0";
+    version = "2.0.0";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-kt4VpegxcZ+d0NIKan2A0AUqFLdYNcU9HY/4zyd2eSU=";
+      hash = "sha256-fFc6nIVQUY9OiGkEc7jrzXnBQPDWC5x5A4/XHUhu6hs=";
     };
-
-    # https://github.com/krille-chan/fluffychat/pull/1965
-    patches = [
-      (fetchpatch {
-        name = "fix_compilation_mxc_image.patch";
-        url = "https://github.com/krille-chan/fluffychat/commit/e1ec87d3aaae00eb030bcfda28ec8f247e2c3346.patch";
-        hash = "sha256-/cd3geNVPifAC7iTcx8V1l2WY9Y/mEw+VPl2B4HSJKY=";
-      })
-    ];
 
     inherit pubspecLock;
 
@@ -67,7 +128,7 @@ flutter332.buildFlutterApplication (
         "aarch64-linux"
       ];
       sourceProvenance = [ lib.sourceTypes.fromSource ];
-      inherit (olm.meta) knownVulnerabilities;
+      knownVulnerabilities = lib.optionals (targetFlutterPlatform == "web") olm.meta.knownVulnerabilities;
     };
   }
   // lib.optionalAttrs (targetFlutterPlatform == "linux") {
@@ -98,7 +159,7 @@ flutter332.buildFlutterApplication (
       mkdir $out/share/applications
       cp $desktopItem/share/applications/*.desktop $out/share/applications
       for size in 24 32 42 64 128 256 512; do
-        D=$ICO/hicolor/''${s}x''${s}/apps
+        D=$ICO/hicolor/''${size}x''${size}/apps
         mkdir -p $D
         magick $FAV -resize ''${size}x''${size} $D/fluffychat.png
       done
@@ -107,20 +168,14 @@ flutter332.buildFlutterApplication (
     '';
   }
   // lib.optionalAttrs (targetFlutterPlatform == "web") {
-    prePatch =
-      # https://github.com/krille-chan/fluffychat/blob/v1.17.1/scripts/prepare-web.sh
-      let
-        # Use Olm 1.3.2, the oldest version, for FluffyChat 1.14.1 which depends on olm_flutter 1.2.0.
-        olmVersion = pubspecLock.packages.flutter_olm.version;
-        olmJs = fetchzip {
-          url = "https://github.com/famedly/olm/releases/download/v${olmVersion}/olm.zip";
-          stripRoot = false;
-          hash = "sha256-Vl3Cp2OaYzM5CPOOtTHtUb1W48VXePzOV6FeiIzyD1Y=";
-        };
-      in
-      ''
-        rm -r assets/js/package
-        cp -r '${olmJs}/javascript' assets/js/package
-      '';
+    flutterBuildFlags = [
+      "--dart-define=FLUTTER_WEB_CANVASKIT_URL=canvaskit/"
+      "--release"
+      "--source-maps"
+    ];
+
+    preBuild = ''
+      cp ${dart-vodozemac}/* ./assets/vodozemac/
+    '';
   }
 )
