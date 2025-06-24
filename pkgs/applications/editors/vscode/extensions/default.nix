@@ -580,6 +580,8 @@ let
         };
       };
 
+      bierner.color-info = callPackage ./bierner.color-info { };
+
       bierner.docs-view = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "docs-view";
@@ -1345,8 +1347,8 @@ let
         mktplcRef = {
           name = "composer-php-vscode";
           publisher = "devsense";
-          version = "1.59.17466";
-          hash = "sha256-efgwdF1bRE4sngayKq0fcFWDNtvkX+tgEKbF3RyYY68=";
+          version = "1.59.17515";
+          hash = "sha256-unqWaEtShJHqol0tV4ocb0nI81rWFQuv/W1i+2zMeZM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.composer-php-vscode/changelog";
@@ -2119,8 +2121,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "vscode-pull-request-github";
-          version = "0.110.0";
-          hash = "sha256-roD6ugBm04L2IOKIQiAWULhhq4wo1O9VMYiYtdwCrCc=";
+          version = "0.112.0";
+          hash = "sha256-L1xXgjhYmBEO+M7wZ7vkM5ktOflB9xrouAcWx9KKKT4=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3201,6 +3203,8 @@ let
           license = lib.licenses.unfree;
         };
       };
+
+      miguelsolorio.min-theme = callPackage ./miguelsolorio.min-theme { };
 
       mikestead.dotenv = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -4698,8 +4702,8 @@ let
         mktplcRef = {
           name = "tabnine-vscode";
           publisher = "tabnine";
-          version = "3.288.0";
-          hash = "sha256-2wq7ohOIAzF2EXeSkg2ADRLMvksaIeYBDJfSbPwX9vk=";
+          version = "3.291.0";
+          hash = "sha256-OuLjM/b1quixFRJePmbyHK9UqvtLGjc88rs0OnH67nU=";
         };
         meta = {
           license = lib.licenses.mit;
