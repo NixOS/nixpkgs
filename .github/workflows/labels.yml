@@ -121,7 +121,6 @@ jobs:
             await updateReservoir()
             // Update remaining requests every minute to account for other jobs running in parallel.
             const reservoirUpdater = setInterval(updateReservoir, 60 * 1000)
-            process.on('uncaughtException', () => clearInterval(reservoirUpdater))
 
             async function handle(item) {
               try {
@@ -330,80 +329,83 @@ jobs:
               }
             }
 
-            if (context.payload.pull_request) {
-              await handle(context.payload.pull_request)
-            } else {
-              const workflowData = (await github.rest.actions.listWorkflowRuns({
-                ...context.repo,
-                workflow_id: 'labels.yml',
-                event: 'schedule',
-                status: 'success',
-                exclude_pull_requests: true,
-                per_page: 1
-              })).data
+            try {
+              if (context.payload.pull_request) {
+                await handle(context.payload.pull_request)
+              } else {
+                const workflowData = (await github.rest.actions.listWorkflowRuns({
+                  ...context.repo,
+                  workflow_id: 'labels.yml',
+                  event: 'schedule',
+                  status: 'success',
+                  exclude_pull_requests: true,
+                  per_page: 1
+                })).data
 
-              // Go back as far as the last successful run of this workflow to make sure
-              // we are not leaving anyone behind on GHA failures.
-              // Defaults to go back 1 hour on the first run.
-              const cutoff = new Date(workflowData.workflow_runs[0]?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000)
-              core.info('cutoff timestamp: ' + cutoff.toISOString())
+                // Go back as far as the last successful run of this workflow to make sure
+                // we are not leaving anyone behind on GHA failures.
+                // Defaults to go back 1 hour on the first run.
+                const cutoff = new Date(workflowData.workflow_runs[0]?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000)
+                core.info('cutoff timestamp: ' + cutoff.toISOString())
 
-              const updatedItems = await github.paginate(
-                github.rest.search.issuesAndPullRequests,
-                {
+                const updatedItems = await github.paginate(
+                  github.rest.search.issuesAndPullRequests,
+                  {
+                    q: [
+                      `repo:"${process.env.GITHUB_REPOSITORY}"`,
+                      'type:pr',
+                      'is:open',
+                      `updated:>=${cutoff.toISOString()}`
+                    ].join(' AND '),
+                    // TODO: Remove in 2025-10, when it becomes the default.
+                    advanced_search: true
+                  }
+                )
+
+                const allOptions = {
                   q: [
                     `repo:"${process.env.GITHUB_REPOSITORY}"`,
                     'type:pr',
-                    'is:open',
-                    `updated:>=${cutoff.toISOString()}`
+                    'is:open'
                   ].join(' AND '),
+                  sort: 'created',
+                  direction: 'asc',
                   // TODO: Remove in 2025-10, when it becomes the default.
                   advanced_search: true
                 }
-              )
 
-              const allOptions = {
-                q: [
-                  `repo:"${process.env.GITHUB_REPOSITORY}"`,
-                  'type:pr',
-                  'is:open'
-                ].join(' AND '),
-                sort: 'created',
-                direction: 'asc',
-                // TODO: Remove in 2025-10, when it becomes the default.
-                advanced_search: true
+                const { total_count: total_pulls } = (await github.rest.search.issuesAndPullRequests({
+                  ...allOptions,
+                  per_page: 1
+                })).data
+                const { total_count: total_runs } = workflowData
+                const allItems = (await github.rest.search.issuesAndPullRequests({
+                  ...allOptions,
+                  per_page: 100,
+                  // We iterate through pages of 100 items across scheduled runs. With currently ~7000 open PRs and
+                  // up to 6*24=144 scheduled runs per day, we hit every PR twice each day.
+                  // We might not hit every PR on one iteration, because the pages will shift slightly when
+                  // PRs are closed or merged. We assume this to be OK on the bigger scale, because a PR which was
+                  // missed once, would have to move through the whole page to be missed again. This is very unlikely,
+                  // so it should certainly be hit on the next iteration.
+                  // TODO: Evaluate after a while, whether the above holds still true and potentially implement
+                  // an overlap between runs.
+                  page: total_runs % Math.ceil(total_pulls / 100)
+                })).data.items
+
+                // Some items might be in both search results, so filtering out duplicates as well.
+                const items = [].concat(updatedItems, allItems)
+                  .filter((thisItem, idx, arr) => idx == arr.findIndex(firstItem => firstItem.number == thisItem.number))
+
+                ;(await Promise.allSettled(items.map(handle)))
+                  .filter(({ status }) => status == 'rejected')
+                  .map(({ reason }) => core.setFailed(`${reason.message}\n${reason.cause.stack}`))
+
+                core.notice(`Processed ${stats.prs} PRs, made ${stats.requests + stats.artifacts} API requests and downloaded ${stats.artifacts} artifacts.`)
               }
-
-              const { total_count: total_pulls } = (await github.rest.search.issuesAndPullRequests({
-                ...allOptions,
-                per_page: 1
-              })).data
-              const { total_count: total_runs } = workflowData
-              const allItems = (await github.rest.search.issuesAndPullRequests({
-                ...allOptions,
-                per_page: 100,
-                // We iterate through pages of 100 items across scheduled runs. With currently ~7000 open PRs and
-                // up to 6*24=144 scheduled runs per day, we hit every PR twice each day.
-                // We might not hit every PR on one iteration, because the pages will shift slightly when
-                // PRs are closed or merged. We assume this to be OK on the bigger scale, because a PR which was
-                // missed once, would have to move through the whole page to be missed again. This is very unlikely,
-                // so it should certainly be hit on the next iteration.
-                // TODO: Evaluate after a while, whether the above holds still true and potentially implement
-                // an overlap between runs.
-                page: total_runs % Math.ceil(total_pulls / 100)
-              })).data.items
-
-              // Some items might be in both search results, so filtering out duplicates as well.
-              const items = [].concat(updatedItems, allItems)
-                .filter((thisItem, idx, arr) => idx == arr.findIndex(firstItem => firstItem.number == thisItem.number))
-
-              ;(await Promise.allSettled(items.map(handle)))
-                .filter(({ status }) => status == 'rejected')
-                .map(({ reason }) => core.setFailed(`${reason.message}\n${reason.cause.stack}`))
-
-              core.notice(`Processed ${stats.prs} PRs, made ${stats.requests + stats.artifacts} API requests and downloaded ${stats.artifacts} artifacts.`)
+            } finally {
+              clearInterval(reservoirUpdater)
             }
-            clearInterval(reservoirUpdater)
 
       - name: Log current API rate limits
         env:
