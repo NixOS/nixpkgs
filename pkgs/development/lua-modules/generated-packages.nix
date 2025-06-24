@@ -1511,6 +1511,39 @@ final: prev: {
     }
   ) { };
 
+  lrexlib-oniguruma = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "lrexlib-oniguruma";
+      version = "2.9.2-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/lrexlib-oniguruma-2.9.2-1.rockspec";
+          sha256 = "13m2v6mmmlkf2bd1mnngg118s4ymrqs7n34la6hrb4m1x772adhd";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "rrthomas";
+        repo = "lrexlib";
+        rev = "rel-2-9-2";
+        hash = "sha256-DzNDve+xeKb+kAcW+o7GK/RsoDhaDAVAWAhgjISCyZc=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/rrthomas/lrexlib";
+        description = "Regular expression library binding (oniguruma flavour).";
+        maintainers = with lib.maintainers; [ junestepp ];
+        license.fullName = "MIT/X11";
+      };
+    }
+  ) { };
+
   lrexlib-pcre = callPackage (
     {
       buildLuarocksPackage,

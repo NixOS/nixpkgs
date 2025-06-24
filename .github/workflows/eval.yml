@@ -46,7 +46,7 @@ jobs:
           path: untrusted
 
       - name: Install Nix
-        uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
+        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -166,7 +166,7 @@ jobs:
           path: trusted
 
       - name: Install Nix
-        uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
+        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -243,7 +243,7 @@ jobs:
           merged-as-untrusted: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
+        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
         with:
           extra_nix_config: sandbox = true
 
