@@ -10656,6 +10656,10 @@ self: super: with self; {
 
   opentelemetry-api = callPackage ../development/python-modules/opentelemetry-api { };
 
+  opentelemetry-exporter-gcp-trace =
+    callPackage ../development/python-modules/opentelemetry-exporter-gcp-trace
+      { };
+
   opentelemetry-exporter-otlp =
     callPackage ../development/python-modules/opentelemetry-exporter-otlp
       { };
