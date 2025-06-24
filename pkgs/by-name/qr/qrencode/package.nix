@@ -8,7 +8,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qrencode";
   version = "4.1.1";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   src = fetchFromGitHub {
     owner = "fukuchi";
     repo = "libqrencode";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nbrmg9SqCqMrLE7WCfNEzMV/eS9UVCKCrjBrGMzAsLk";
   };
 
