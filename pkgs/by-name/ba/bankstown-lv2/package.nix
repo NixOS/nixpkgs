@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/chadmed/bankstown";
-    description = "Halfway-decent three-stage psychoacoustic bass approximation";
+    description = "Lightweight psychoacoustic bass enhancement plugin";
     license = licenses.mit;
     maintainers = with maintainers; [
       normalcea
