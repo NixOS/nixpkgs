@@ -120,6 +120,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymatgen" ];
 
+  pytestFlagsArray = [
+    # We have not packaged moyopy yet.
+    "--deselect=tests/analysis/test_prototypes.py::test_get_protostructure_label_from_moyopy"
+  ];
+
   nativeCheckInputs = [
     addBinToPathHook
     pytestCheckHook
