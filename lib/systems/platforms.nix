@@ -631,8 +631,6 @@ rec {
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then
       powernv
 
-    else if platform.isLoongArch64 then
-      loongarch64-multiplatform
     else
       { };
 }
