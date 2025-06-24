@@ -3,6 +3,7 @@ name: PR
 on:
   pull_request:
     paths:
+      - .github/actions/get-merge-commit/action.yml
       - .github/workflows/build.yml
       - .github/workflows/check.yml
       - .github/workflows/eval.yml
