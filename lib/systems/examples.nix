@@ -35,9 +35,9 @@ rec {
     };
   };
 
-  sheevaplug = {
+  armv5tel-multiplatform = {
     config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.sheevaplug;
+  };
 
   raspberryPi = {
     config = "armv6l-unknown-linux-gnueabihf";
@@ -87,10 +87,6 @@ rec {
     useAndroidPrebuilt = false;
     useLLVM = true;
   };
-
-  pogoplug4 = {
-    config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.pogoplug4;
 
   ben-nanonote = {
     config = "mipsel-unknown-linux-uclibc";

@@ -185,7 +185,7 @@ let
       pkgs.pkgsLLVM.stdenv
       pkgs.pkgsStatic.bash
       pkgs.pkgsCross.arm-embedded.stdenv
-      pkgs.pkgsCross.sheevaplug.stdenv # for armv5tel
+      pkgs.pkgsCross.armv5tel-multiplatform.stdenv
       pkgs.pkgsCross.raspberryPi.stdenv # for armv6l
       pkgs.pkgsCross.armv7l-hf-multiplatform.stdenv
       pkgs.pkgsCross.m68k.stdenv
