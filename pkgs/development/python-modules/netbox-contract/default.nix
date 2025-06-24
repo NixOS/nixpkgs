@@ -7,6 +7,7 @@
   python-dateutil,
   drf-yasg,
   netbox,
+  netaddr,
 }:
 buildPythonPackage rec {
   pname = "netbox-contract";
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   # running tests requires initialized django project
   nativeCheckInputs = [
     netbox
+    netaddr
   ];
 
   preFixup = ''
