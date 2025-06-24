@@ -1,30 +1,30 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
-  qmake,
-  qtwebengine,
+  libsForQt5,
   gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gitqlient";
   version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "francescmm";
     repo = "gitqlient";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-gfWky5KTSj+5FC++QIVTJbrDOYi/dirTzs6LvTnO74A=";
   };
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtwebengine
+    libsForQt5.qtwebengine
   ];
 
   qmakeFlags = [
@@ -35,12 +35,12 @@ mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/francescmm/GitQlient";
     description = "Multi-platform Git client written with Qt";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
     mainProgram = "gitqlient";
   };
-}
+})
