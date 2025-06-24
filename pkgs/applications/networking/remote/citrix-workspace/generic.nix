@@ -56,6 +56,7 @@
   libcanberra-gtk3,
   sane-backends,
   fetchurl,
+  libappindicator-gtk3,
 
   homepage,
   version,
@@ -190,6 +191,7 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     pcsclite
+    libappindicator-gtk3
 
     xorg.libX11
     xorg.libXScrnSaver
