@@ -138,8 +138,7 @@ jobs:
 
                 // The search result is of a format that works for both issues and pull requests and thus
                 // does not have all fields of a full pull_request response. Notably, it is missing `head.sha`,
-                // which we need to fetch the workflow run below. When triggered via pull_request event,
-                // this field is already available.
+                // which we need to fetch the workflow run below. This field is already available non-search sources.
                 // This API request is also important for the merge-conflict label, because it triggers the
                 // creation of a new test merge commit. This is needed to actually determine the state of a PR.
                 const pull_request = item.head ? item : (await github.rest.pulls.get({
@@ -362,7 +361,11 @@ jobs:
                   }
                 )
 
-                const allOptions = {
+                // The search endpoint only allows fetching the first 1000 records, but the
+                // pull request list endpoint does not support counting the total number
+                // of results.
+                // Thus, we use /search for counting and /pulls for reading the response.
+                const { total_count: total_pulls } = (await github.rest.search.issuesAndPullRequests({
                   q: [
                     `repo:"${process.env.GITHUB_REPOSITORY}"`,
                     'type:pr',
@@ -371,16 +374,16 @@ jobs:
                   sort: 'created',
                   direction: 'asc',
                   // TODO: Remove in 2025-10, when it becomes the default.
-                  advanced_search: true
-                }
-
-                const { total_count: total_pulls } = (await github.rest.search.issuesAndPullRequests({
-                  ...allOptions,
+                  advanced_search: true,
                   per_page: 1
                 })).data
                 const { total_count: total_runs } = workflowData
-                const allItems = (await github.rest.search.issuesAndPullRequests({
-                  ...allOptions,
+
+                const allPulls = (await github.rest.pulls.list({
+                  ...context.repo,
+                  state: 'open',
+                  sort: 'created',
+                  direction: 'asc',
                   per_page: 100,
                   // We iterate through pages of 100 items across scheduled runs. With currently ~7000 open PRs and
                   // up to 6*24=144 scheduled runs per day, we hit every PR twice each day.
@@ -391,10 +394,10 @@ jobs:
                   // TODO: Evaluate after a while, whether the above holds still true and potentially implement
                   // an overlap between runs.
                   page: total_runs % Math.ceil(total_pulls / 100)
-                })).data.items
+                })).data
 
                 // Some items might be in both search results, so filtering out duplicates as well.
-                const items = [].concat(updatedItems, allItems)
+                const items = [].concat(updatedItems, allPulls)
                   .filter((thisItem, idx, arr) => idx == arr.findIndex(firstItem => firstItem.number == thisItem.number))
 
                 ;(await Promise.allSettled(items.map(handle)))
