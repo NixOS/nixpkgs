@@ -3067,7 +3067,7 @@ with pkgs;
 
   gitlab-workhorse = callPackage ../by-name/gi/gitlab/gitlab-workhorse { };
 
-  gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
+  gitqlient = callPackage ../applications/version-management/gitqlient { };
 
   glogg = libsForQt5.callPackage ../tools/text/glogg { };
 
