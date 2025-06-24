@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "lib4package";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "lib4package";
     tag = "v${version}";
-    hash = "sha256-AxAnSxm8eEnfi63SedWIdUvad1bD4g0rqBk4W/DQGHY=";
+    hash = "sha256-x+JxBH4vfbXaq/e9PlKfkKvJVz2E3kotmsBhR8alhck=";
   };
 
   build-system = [
