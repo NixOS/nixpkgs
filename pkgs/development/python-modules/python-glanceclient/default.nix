@@ -24,8 +24,8 @@ let
   pname = "python-glanceclient";
   version = "4.8.0";
 
-  # Skip tests which require networking.
   disabledTests = [
+    # Skip tests which require networking.
     "test_http_chunked_response"
     "test_v1_download_has_no_stray_output_to_stdout"
     "test_v2_requests_valid_cert_verification"
@@ -40,6 +40,9 @@ let
     "test_v2_requests_valid_cert_no_key"
     "test_v2_requests_valid_cert_verification_no_compression"
     "test_log_request_id_once"
+    # asserts exact amount of mock calls
+    "test_cache_schemas_gets_when_forced"
+    "test_cache_schemas_gets_when_not_exists"
   ];
 in
 buildPythonPackage {
