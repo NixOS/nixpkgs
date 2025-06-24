@@ -8,14 +8,19 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "morewaita-icon-theme";
-  version = "48.1";
+  version = "48.2";
 
   src = fetchFromGitHub {
     owner = "somepaulo";
     repo = "MoreWaita";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-18jI4hADVHC/WCmMTlA+VBuZ1jNGSxL+lO3GwWDiNoU=";
+    hash = "sha256-eCMU5RNlqHN6tImGd2ur+rSC+kR5xQ8Zh4BaRgjBHVc=";
   };
+
+  patches = [
+    # Avoiding "ERROR: noBrokenSymlinks". ref: https://github.com/somepaulo/MoreWaita/pull/335
+    ./fix-broken-symlinks.patch
+  ];
 
   postPatch = ''
     patchShebangs install.sh
