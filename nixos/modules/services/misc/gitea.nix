@@ -366,6 +366,15 @@ in
         description = "Path to a file containing the SMTP password.";
       };
 
+      mailerUseSendmail = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Use the operating system's sendmail command instead of SMTP.
+          Note: some sandbox settings will be disabled.
+        '';
+      };
+
       metricsTokenFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -402,9 +411,11 @@ in
             };
             mailer = {
               ENABLED = true;
-              MAILER_TYPE = "sendmail";
-              FROM = "do-not-reply@example.org";
-              SENDMAIL_PATH = "''${pkgs.system-sendmail}/bin/sendmail";
+              PROTOCOL = "smtp+starttls";
+              SMTP_ADDR = "smtp.example.org";
+              SMTP_PORT = "587";
+              FROM = "Gitea Service <do-not-reply@example.org>";
+              USER = "do-not-reply@example.org";
             };
             other = {
               SHOW_FOOTER_VERSION = false;
@@ -652,9 +663,15 @@ in
           })
         ]);
 
-        mailer = mkIf (cfg.mailerPasswordFile != null) {
-          PASSWD = "#mailerpass#";
-        };
+        mailer = mkMerge [
+          (mkIf (cfg.mailerPasswordFile != null) {
+            PASSWD = "#mailerpass#";
+          })
+          (mkIf cfg.mailerUseSendmail {
+            PROTOCOL = "sendmail";
+            SENDMAIL_PATH = "/run/wrappers/bin/sendmail";
+          })
+        ];
 
         metrics = mkIf (cfg.metricsTokenFile != null) {
           TOKEN = "#metricstoken#";
@@ -867,18 +884,18 @@ in
           cfg.repositoryRoot
           cfg.stateDir
           cfg.lfs.contentDir
-        ];
+        ] ++ optional cfg.mailerUseSendmail "/var/lib/postfix/queue/maildrop";
         UMask = "0027";
         # Capabilities
         CapabilityBoundingSet = "";
         # Security
-        NoNewPrivileges = true;
+        NoNewPrivileges = optional (!cfg.mailerUseSendmail) true;
         # Sandboxing
         ProtectSystem = "strict";
         ProtectHome = true;
         PrivateTmp = true;
         PrivateDevices = true;
-        PrivateUsers = true;
+        PrivateUsers = optional (!cfg.mailerUseSendmail) true;
         ProtectHostname = true;
         ProtectClock = true;
         ProtectKernelTunables = true;
@@ -889,7 +906,7 @@ in
           "AF_UNIX"
           "AF_INET"
           "AF_INET6"
-        ];
+        ] ++ optional cfg.mailerUseSendmail "AF_NETLINK";
         RestrictNamespaces = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
@@ -900,9 +917,9 @@ in
         # System Call Filtering
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid"
+          "~@cpu-emulation @debug @keyring @mount @obsolete @setuid"
           "setrlimit"
-        ];
+        ] ++ optional (!cfg.mailerUseSendmail) "~@privileged";
       };
 
       environment = {
@@ -978,6 +995,7 @@ in
       timerConfig.OnCalendar = cfg.dump.interval;
     };
   };
+
   meta.maintainers = with lib.maintainers; [
     ma27
     techknowlogick
