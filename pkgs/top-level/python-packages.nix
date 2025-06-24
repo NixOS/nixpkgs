@@ -10750,6 +10750,10 @@ self: super: with self; {
 
   opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
 
+  opentelemetry-resourcedetector-gcp =
+    callPackage ../development/python-modules/opentelemetry-resourcedetector-gcp
+      { };
+
   opentelemetry-sdk = callPackage ../development/python-modules/opentelemetry-sdk { };
 
   opentelemetry-semantic-conventions =
