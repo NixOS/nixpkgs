@@ -169,9 +169,8 @@ lib.makeExtensible (
           };
 
       nix_2_24 = commonAutoconf {
-        version = "2.24.14";
+        version = "2.24.15";
         hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
-        patches = [ ./patches/ghsa-g948-229j-48j3-2.24.patch ];
         self_attribute_name = "nix_2_24";
       };
 
@@ -183,27 +182,22 @@ lib.makeExtensible (
       };
 
       nix_2_28 = commonMeson {
-        version = "2.28.3";
-        hash = "sha256-TjZp5ITSUvNRAzNznmkZRQxNRzMLiSAplz4bV2T8cbs=";
-        patches = [ ./patches/ghsa-g948-229j-48j3-2.28.patch ];
+        version = "2.28.4";
+        hash = "sha256-V1tPrBkPteqF8VWUgpotNFYJ2Xm6WmB3aMPexuEHl9I=";
         self_attribute_name = "nix_2_28";
       };
 
-      nixComponents_2_29 =
-        (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.29.0";
-          inherit (self.nix_2_24.meta) maintainers teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
-          src = fetchFromGitHub {
-            # FIXME: back to NixOS org once they fix it
-            owner = "vcunat";
-            repo = "nix";
-            rev = "p/jq-1.8.0"; # just a tiny test-only patch atop 2.29.0
-            # see https://github.com/NixOS/nix/pull/13371
-            hash = "sha256-F2ZODsET4cBsgsyOi8Sg/quESU0DnrYri0hYniqu37k=";
-          };
-        }).appendPatches
-          [ ./patches/ghsa-g948-229j-48j3-2.29.patch ];
+      nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix {
+        version = "2.29.1";
+        inherit (self.nix_2_24.meta) maintainers teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          rev = "2.29.1";
+          hash = "sha256-rCL3l4t20jtMeNjCq6fMaTzWvBKgj+qw1zglLrniRfY=";
+        };
+      };
 
       nix_2_29 = addTests "nix_2_29" self.nixComponents_2_29.nix-everything;
 
