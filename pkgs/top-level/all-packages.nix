@@ -1164,8 +1164,6 @@ with pkgs;
     jdk = jdk8;
   };
 
-  sonar-scanner-cli-minimal = callPackage ../by-name/so/sonar-scanner-cli/minimal.nix { };
-
   supermin = callPackage ../tools/virtualization/supermin {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
