@@ -20836,6 +20836,12 @@
     githubId = 314564;
     name = "Ryan Lahfa";
   };
+  RajwolChapagain = {
+    email = "rajwolchapagain@gmail.com";
+    github = "RajwolChapagain";
+    githubId = 99879861;
+    name = "Rajwol Chapagain";
+  };
   rake5k = {
     email = "christian@harke.ch";
     github = "rake5k";
