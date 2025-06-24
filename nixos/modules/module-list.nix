@@ -1618,6 +1618,7 @@
   ./services/web-apps/nextjs-ollama-llm-ui.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/nifi.nix
+  ./services/web-apps/nipap.nix
   ./services/web-apps/node-red.nix
   ./services/web-apps/nostr-rs-relay.nix
   ./services/web-apps/ocis.nix

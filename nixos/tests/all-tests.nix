@@ -946,6 +946,7 @@ in
   nginx-unix-socket = runTest ./nginx-unix-socket.nix;
   nginx-variants = import ./nginx-variants.nix { inherit pkgs runTest; };
   nifi = runTestOn [ "x86_64-linux" ] ./web-apps/nifi.nix;
+  nipap = runTest ./web-apps/nipap.nix;
   nitter = runTest ./nitter.nix;
   nix-config = runTest ./nix-config.nix;
   nix-ld = runTest ./nix-ld.nix;
