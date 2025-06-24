@@ -595,7 +595,6 @@ mapAliases {
   eidolon = throw "eidolon was removed as it is unmaintained upstream."; # Added 2025-05-28
   eintopf = lauti; # Project was renamed, added 2025-05-01
   elasticsearch7Plugins = elasticsearchPlugins;
-  electron-cash = throw "'electron-cash' has been removed due to lack of maintenance."; # Added 2025-06-17
   electronplayer = throw "'electronplayer' has been removed as it had been discontinued upstream since October 2024"; # Added 2024-12-17
 
   element-desktop-wayland = throw "element-desktop-wayland has been removed. Consider setting NIXOS_OZONE_WL=1 via 'environment.sessionVariables' instead"; # Added 2024-12-17
