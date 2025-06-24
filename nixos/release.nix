@@ -155,7 +155,7 @@ let
         modules = makeModules module { };
       };
       build = configEvaled.config.system.build;
-      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
+      kernelTarget = build.kernel.target;
     in
     configEvaled.pkgs.symlinkJoin {
       name = "netboot";

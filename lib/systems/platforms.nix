@@ -3,60 +3,15 @@
 # targetPlatform, etc) containing at least the minimal set of attrs
 # required (see types.parsedPlatform in lib/systems/parse.nix).  This
 # file takes an already-valid platform and further elaborates it with
-# optional fields; currently these are: linux-kernel, gcc, and rustc.
+# optional fields; currently these are: gcc, and rustc.
 
 { lib }:
 rec {
-  pc = {
-    linux-kernel = {
-      baseConfig = "defconfig";
-      # Build whatever possible as a module, if not stated in the extra config.
-      autoModules = true;
-      target = "bzImage";
-    };
-  };
-
-  powernv = {
-    linux-kernel = {
-      baseConfig = "powernv_defconfig";
-      target = "vmlinux";
-      autoModules = true;
-      # avoid driver/FS trouble arising from unusual page size
-      extraConfig = ''
-        PPC_64K_PAGES n
-        PPC_4K_PAGES y
-
-        ATA_SFF y
-        VIRTIO_MENU y
-      '';
-    };
-  };
-
   ##
   ## ARM
   ##
 
-  armv5tel-multiplatform = {
-    linux-kernel = {
-      baseConfig = "multi_v5_defconfig";
-      DTB = true;
-      autoModules = true;
-      preferBuiltin = true;
-      target = "zImage";
-    };
-    gcc = {
-      arch = "armv5te";
-    };
-  };
-
   raspberrypi = {
-    linux-kernel = {
-      baseConfig = "bcm2835_defconfig";
-      DTB = true;
-      autoModules = true;
-      preferBuiltin = true;
-      target = "zImage";
-    };
     gcc = {
       # https://en.wikipedia.org/wiki/Raspberry_Pi#Specifications
       arch = "armv6kz";
@@ -99,13 +54,6 @@ rec {
   };
 
   armv7l-hf-multiplatform = {
-    linux-kernel = {
-      baseConfig = "defconfig";
-      DTB = true;
-      autoModules = true;
-      preferBuiltin = true;
-      target = "zImage";
-    };
     gcc = {
       # Some table about fpu flags:
       # http://community.arm.com/servlet/JiveServlet/showImage/38-1981-3827/blogentry-103749-004812900+1365712953_thumb.png
@@ -130,18 +78,6 @@ rec {
   };
 
   aarch64-multiplatform = {
-    linux-kernel = {
-      baseConfig = "defconfig";
-      DTB = true;
-      autoModules = true;
-      preferBuiltin = true;
-      extraConfig = ''
-        # The default (=y) forces us to have the XHCI firmware available in initrd,
-        # which our initrd builder can't currently do easily.
-        USB_XHCI_TEGRA m
-      '';
-      target = "Image";
-    };
     gcc = {
       arch = "armv8-a";
     };
@@ -215,16 +151,6 @@ rec {
   ## Other
   ##
 
-  riscv-multiplatform = {
-    linux-kernel = {
-      target = "Image";
-      autoModules = true;
-      preferBuiltin = true;
-      baseConfig = "defconfig";
-      DTB = true;
-    };
-  };
-
   loongarch64-multiplatform = {
     gcc = {
       # https://github.com/loongson/la-softdev-convention/blob/master/la-softdev-convention.adoc#10-operating-system-package-build-requirements
@@ -236,13 +162,6 @@ rec {
       # https://github.com/llvm/llvm-project/pull/132173
       cmodel = "medium";
     };
-    linux-kernel = {
-      target = "vmlinuz.efi";
-      autoModules = true;
-      preferBuiltin = true;
-      baseConfig = "defconfig";
-      DTB = true;
-    };
   };
 
   # This function takes a minimally-valid "platform" and returns an
@@ -250,23 +169,11 @@ rec {
   # included in the platform in order to further elaborate it.
   select =
     platform:
-    # x86
-    if platform.isx86 then
-      pc
+    if platform.isAarch32 && platform.parsed.cpu.version or null == "6" then
+      raspberrypi
 
-    # ARM
-    else if platform.isAarch32 then
-      let
-        version = platform.parsed.cpu.version or null;
-      in
-      if version == null then
-        pc
-      else if lib.versionOlder version "6" then
-        armv5tel-multiplatform
-      else if lib.versionOlder version "7" then
-        raspberrypi
-      else
-        armv7l-hf-multiplatform
+    else if platform.isAarch32 && platform.parsed.cpu.version or null == "7" then
+      armv7l-hf-multiplatform
 
     else if platform.isAarch64 then
       if platform.isDarwin then apple-m1 else aarch64-multiplatform
@@ -274,14 +181,8 @@ rec {
     else if platform.isLoongArch64 then
       loongarch64-multiplatform
 
-    else if platform.isRiscV then
-      riscv-multiplatform
-
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then
       (import ./examples.nix { inherit lib; }).mipsel-linux-gnu
-
-    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then
-      powernv
 
     else
       { };

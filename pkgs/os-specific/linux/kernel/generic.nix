@@ -30,7 +30,16 @@ let
       version,
 
       # Allows overriding the default defconfig
-      defconfig ? null,
+      # TODO: Reconsider some of these defaults?
+      defconfig ?
+        if stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.parsed.cpu.version or null == "5" then
+          "multi_v5_defconfig"
+        else if stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.parsed.cpu.version or null == "6" then
+          "bcm2835_defconfig"
+        else if stdenv.hostPlatform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then
+          "powernv_defconfig"
+        else
+          "defconfig",
 
       # Legacy overrides to the intermediate kernel config, as string
       extraConfig ? "",
@@ -72,9 +81,11 @@ let
       isLibre ? false,
       isHardened ? false,
 
-      # easy overrides to stdenv.hostPlatform.linux-kernel members
-      autoModules ? stdenv.hostPlatform.linux-kernel.autoModules,
-      preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false,
+      autoModules ? true,
+      # TODO: Remove this default?
+      preferBuiltin ?
+        stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isLoongArch64,
+
       kernelArch ? stdenv.hostPlatform.linuxArch,
       kernelTests ? { },
 
@@ -133,7 +144,25 @@ let
         configfile.moduleStructuredConfig.intermediateNixConfig
         # extra config in legacy string format
         + extraConfig
-        + stdenv.hostPlatform.linux-kernel.extraConfig or "";
+        + (
+          if stdenv.hostPlatform.isAarch64 then
+            ''
+              # The default (=y) forces us to have the XHCI firmware available in initrd,
+              # which our initrd builder can't currently do easily.
+              USB_XHCI_TEGRA m
+            ''
+          else if stdenv.hostPlatform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then
+            # avoid driver/FS trouble arising from unusual page size
+            ''
+              PPC_64K_PAGES n
+              PPC_4K_PAGES y
+
+              ATA_SFF y
+              VIRTIO_MENU y
+            ''
+          else
+            ""
+        );
 
       structuredConfigFromPatches = map (
         {
@@ -196,14 +225,9 @@ let
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
         # e.g. "defconfig"
-        kernelBaseConfig =
-          if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
+        kernelBaseConfig = defconfig;
 
-        makeFlags =
-          lib.optionals (
-            stdenv.hostPlatform.linux-kernel ? makeFlags
-          ) stdenv.hostPlatform.linux-kernel.makeFlags
-          ++ extraMakeFlags;
+        makeFlags = extraMakeFlags;
 
         postPatch =
           kernel.postPatch
@@ -272,6 +296,8 @@ let
 
       kernel = (callPackage ./manual-config.nix { inherit lib stdenv buildPackages; }) (
         basicArgs
+        // lib.optionalAttrs (args ? target) { inherit (args) target; }
+        // lib.optionalAttrs (args ? buildDTBs) { inherit (args) buildDTBs; }
         // {
           inherit
             kernelPatches

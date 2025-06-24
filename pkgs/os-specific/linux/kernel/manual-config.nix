@@ -63,6 +63,19 @@ lib.makeOverridable (
     kernelPatches ? [ ],
     # The kernel .config file
     configfile,
+    target ?
+      if stdenv.hostPlatform.isx86 then
+        "bzImage"
+      else if stdenv.hostPlatform.isAarch32 then
+        "zImage"
+      else if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV then
+        "Image"
+      else if stdenv.hostPlatform.isLoongArch64 then
+        "vmlinuz.efi"
+      else
+        "vmlinux",
+    buildDTBs ?
+      stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isLoongArch64,
     # Manually specified nixexpr representing the config
     # If unspecified, this will be autodetected from the .config
     config ? lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
@@ -106,7 +119,7 @@ lib.makeOverridable (
       ;
 
     drvAttrs =
-      config_: kernelConf: kernelPatches: configfile:
+      config_:
       let
         config =
           let
@@ -132,7 +145,7 @@ lib.makeOverridable (
         isModular = config.isYes "MODULES";
         withRust = config.isYes "RUST";
 
-        buildDTBs = kernelConf.DTB or false;
+        inherit buildDTBs;
 
         # Dependencies that are required to build kernel modules
         moduleBuildDependencies =
@@ -164,6 +177,8 @@ lib.makeOverridable (
             config
             kernelPatches
             configfile
+            target
+            buildDTBs
             moduleBuildDependencies
             stdenv
             ;
@@ -301,7 +316,7 @@ lib.makeOverridable (
         buildFlags =
           [
             "KBUILD_BUILD_VERSION=1-NixOS"
-            kernelConf.target
+            target
             "vmlinux" # for "perf" and things like that
           ]
           ++ optional isModular "modules"
@@ -381,13 +396,9 @@ lib.makeOverridable (
 
         # Some image types need special install targets
         installTargets = [
-          (kernelConf.installTarget or (
+          (
             if
-              (
-                kernelConf.target == "zImage"
-                || kernelConf.target == "Image.gz"
-                || kernelConf.target == "vmlinuz.efi"
-              )
+              (target == "zImage" || target == "Image.gz" || target == "vmlinuz.efi")
               && builtins.elem stdenv.hostPlatform.linuxArch [
                 "arm"
                 "arm64"
@@ -398,7 +409,6 @@ lib.makeOverridable (
               "zinstall"
             else
               "install"
-          )
           )
         ];
 
@@ -520,13 +530,12 @@ lib.makeOverridable (
         # https://github.com/NixOS/nixpkgs/issues/321667
         "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
       ]
-      ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
       ++ extraMakeFlags;
   in
 
   stdenv.mkDerivation (
     builtins.foldl' lib.recursiveUpdate { } [
-      (drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile)
+      (drvAttrs config)
       {
         inherit pname version;
 
