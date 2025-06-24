@@ -57,7 +57,7 @@ stdenv.mkDerivation {
     libGL
     lz4
     magic-enum
-    opencv
+    opencv.cxxdev
     tbb
     xorg.libX11
   ];
