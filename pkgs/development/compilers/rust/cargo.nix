@@ -2,6 +2,7 @@
   lib,
   stdenv,
   pkgsHostHost,
+  callPackage,
   file,
   curl,
   pkg-config,
@@ -36,6 +37,11 @@ rustPlatform.buildRustPackage.override
       passthru = {
         rustc = rustc;
         inherit (rustc.unwrapped) tests;
+
+        # cargo.withCommands (c: [ c.cargo-fuzz c.cargo-vet c.cargo-pgo ]);
+        withCommands = callPackage ./make-cargo-wrapper.nix {
+          cargoSubcommands = lib.filterAttrs (name: _: lib.hasPrefix "cargo-" name) pkgsHostHost;
+        };
       };
 
       # changes hash of vendor directory otherwise
