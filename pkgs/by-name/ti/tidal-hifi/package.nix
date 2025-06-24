@@ -87,7 +87,7 @@ let
     vulkan-loader
   ];
 in
-buildNpmPackage {
+buildNpmPackage (self: {
   pname = "tidal-hifi";
   inherit version;
 
@@ -125,21 +125,20 @@ buildNpmPackage {
 
   desktopItems = [
     (makeDesktopItem {
-      type = "Application";
-      name = "TIDAL Hi-Fi";
-      desktopName = "tidal-hifi";
-      genericName = "TIDAL Hi-Fi";
-      comment = "The web version of listen.tidal.com running in electron with hifi support thanks to widevine.";
+      name = self.pname;
+      desktopName = "TIDAL Hi-Fi";
+      genericName = "Music Player";
+      comment = self.meta.description;
       icon = "tidal-hifi";
-      exec = "tidal-hifi";
+      exec = self.meta.mainProgram;
       terminal = false;
       mimeTypes = [ "x-scheme-handler/tidal" ];
       categories = [
-        "Network"
-        "Application"
-        "AudioVideo"
         "Audio"
-        "Video"
+        "Music"
+        "Player"
+        "Network"
+        "AudioVideo"
       ];
       startupNotify = true;
       startupWMClass = "tidal-hifi";
@@ -190,7 +189,7 @@ buildNpmPackage {
 
   meta = {
     changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${version}";
-    description = "Web version of Tidal running in electron with hifi support thanks to widevine";
+    description = "Web version of Tidal running in Electron with Hi-Fi support thanks to Widevine";
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -201,4 +200,4 @@ buildNpmPackage {
     platforms = lib.platforms.linux;
     mainProgram = "tidal-hifi";
   };
-}
+})
