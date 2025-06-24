@@ -52,6 +52,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace tests/test_config/test_lazy.py \
+      --replace-fail "import numpy.compat" ""
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
