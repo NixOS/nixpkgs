@@ -1172,6 +1172,8 @@ with pkgs;
 
   ronin = callPackage ../tools/security/ronin { };
 
+  dsym = callPackage ../tools/misc/dsym { };
+
   inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
   sdkmanager = with python3Packages; toPythonApplication sdkmanager;
