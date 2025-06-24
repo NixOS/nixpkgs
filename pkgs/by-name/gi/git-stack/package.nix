@@ -4,8 +4,9 @@
   rustPlatform,
   testers,
   git-stack,
+  stdenv,
+  zlib,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "git-stack";
   version = "0.10.19";
@@ -26,6 +27,12 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion {
     package = git-stack;
   };
+
+  buildInputs =
+    [ ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      zlib
+    ];
 
   meta = {
     description = "Stacked branch management for Git";
