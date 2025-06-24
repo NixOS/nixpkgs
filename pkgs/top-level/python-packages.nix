@@ -14717,6 +14717,8 @@ self: super: with self; {
 
   pytmx = callPackage ../development/python-modules/pytmx { };
 
+  pytodotxt = callPackage ../development/python-modules/pytodotxt { };
+
   pytomlpp = callPackage ../development/python-modules/pytomlpp { };
 
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
