@@ -55,6 +55,8 @@ buildPythonPackage rec {
   version = "2025.6.14";
   pyproject = true;
 
+  disabled = pythonAtLeast "3.13";
+
   src = fetchFromGitHub {
     owner = "materialsproject";
     repo = "pymatgen";
