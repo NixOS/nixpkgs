@@ -974,6 +974,7 @@ in
   ollama-cuda = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-cuda.nix;
   ollama-rocm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-rocm.nix;
   ombi = handleTest ./ombi.nix { };
+  omnom = runTest ./omnom.nix;
   openarena = handleTest ./openarena.nix { };
   openbao = runTest ./openbao.nix;
   openldap = handleTest ./openldap.nix { };
