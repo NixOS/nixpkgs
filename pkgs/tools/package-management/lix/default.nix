@@ -133,6 +133,10 @@ lib.makeExtensible (self: {
         sourceRoot = "${src.name or src}/lix-doc";
         hash = "sha256-VPcrf78gfLlkTRrcbLkPgLOk0o6lsOJBm6HYLvavpNU=";
       };
+
+      knownVulnerabilities = [
+        "Lix 2.90 is vulnerable to CVE-2025-46415 and CVE-2025-46416 and will not receive updates."
+      ];
     };
 
     nix-eval-jobs-args = {
