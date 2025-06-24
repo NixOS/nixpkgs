@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gettext,
   autoreconfHook,
+  gettextAutoreconfCompatHook,
   libiconv,
 }:
 
@@ -13,7 +14,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gettextAutoreconfCompatHook
+  ];
   buildInputs = [ libiconv ];
 
   # autogen.sh:9
