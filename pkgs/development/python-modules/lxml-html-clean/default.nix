@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxml,
-  unittestCheckHook,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
@@ -26,7 +26,16 @@ buildPythonPackage rec {
 
   dependencies = [ lxml ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # these tests fail with libxml >= 2.13
+    # https://github.com/NixOS/nixpkgs/issues/418689
+    # upstream: https://github.com/fedora-python/lxml_html_clean/issues/24
+    "test_host_whitelist_invalid"
+    "test_host_whitelist_sneaky_userinfo"
+    "test_host_whitelist_valid"
+  ];
 
   pythonImportsCheck = [ "lxml_html_clean" ];
 
