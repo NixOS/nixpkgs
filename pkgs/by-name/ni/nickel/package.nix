@@ -9,22 +9,22 @@
   pkg-config,
   nixVersions,
   nix-update-script,
-  enableNixImport ? true,
+  enableNixImport ? false,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-I7cLVrkJhB3aJeE/A3tpFEUj0AkvcONSXD8NtnE5eQ0=";
+    hash = "sha256-iKLjYE4uT+luIRXjEuO7KjgkO+/jFpLjhCI5tO7TVMM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-DzSfwBVeRT/GAXWyZKZjlDvj95bQzrkqIgZZ2EZw7eQ=";
+  cargoHash = "sha256-O/iat0JOvA90LD+ngAByLYQyd1VBeoa8yj7/NdEYprE=";
 
   cargoBuildFlags = [
     "-p nickel-lang-cli"
@@ -99,6 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       felschr
       matthiasbeyer
+      yannham
     ];
     mainProgram = "nickel";
   };
