@@ -1689,6 +1689,8 @@ self: super: with self; {
 
   batchgenerators = callPackage ../development/python-modules/batchgenerators { };
 
+  batchgeneratorsv2 = callPackage ../development/python-modules/batchgeneratorsv2 { };
+
   batchspawner = callPackage ../development/python-modules/batchspawner { };
 
   batinfo = callPackage ../development/python-modules/batinfo { };
