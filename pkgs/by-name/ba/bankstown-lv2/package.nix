@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,16 +16,21 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-IThXEY+mvT2MCw0PSWU/182xbUafd6dtm6hNjieLlKg=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "target/release" \
+                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
+  '';
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-eMN95QNnQtC7QDix9g3dwb9ZbtQuiVBj8+R+opFs0KI=";
 
-  installPhase = ''
-    export LIBDIR=$out/lib
-    mkdir -p $LIBDIR
+  dontCargoInstall = true;
 
-    make
-    make install
-  '';
+  installFlags = [
+    "DESTDIR=$(out)"
+    "LIBDIR=lib"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/chadmed/bankstown";
