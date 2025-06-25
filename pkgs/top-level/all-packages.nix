@@ -375,8 +375,6 @@ with pkgs;
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
-  copilot-language-server-fhs = copilot-language-server.fhs;
-
   deck = callPackage ../by-name/de/deck/package.nix {
     buildGoModule = buildGo123Module;
   };
