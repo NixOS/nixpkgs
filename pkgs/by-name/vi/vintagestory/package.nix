@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [ dotnet-runtime_7 ];
-
   runtimeLibs = lib.makeLibraryPath (
     [
       gtk2
