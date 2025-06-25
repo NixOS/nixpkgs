@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_34,
+  electron_36,
   fetchFromGitHub,
   makeDesktopItem,
   makeWrapper,
@@ -10,7 +10,7 @@
 }:
 
 let
-  electron = electron_34;
+  electron = electron_36;
   version = "2025.3.1";
 in
 
