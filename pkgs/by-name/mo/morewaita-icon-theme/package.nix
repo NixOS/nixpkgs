@@ -4,17 +4,31 @@
   fetchFromGitHub,
   gtk3,
   xdg-utils,
+  nix-update-script,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "morewaita-icon-theme";
-  version = "48.1";
+  version = "48.2";
 
   src = fetchFromGitHub {
     owner = "somepaulo";
     repo = "MoreWaita";
-    tag = "v${version}";
-    hash = "sha256-18jI4hADVHC/WCmMTlA+VBuZ1jNGSxL+lO3GwWDiNoU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eCMU5RNlqHN6tImGd2ur+rSC+kR5xQ8Zh4BaRgjBHVc=";
   };
+
+  patches = [
+    # Avoiding "ERROR: noBrokenSymlinks". ref: https://github.com/somepaulo/MoreWaita/pull/335
+    ./fix-broken-symlinks.patch
+  ];
+
+  postPatch = ''
+    patchShebangs install.sh
+
+    # Replace this workaround if https://github.com/somepaulo/MoreWaita/pull/339 is merged
+    substituteInPlace install.sh \
+      --replace-fail '"''${HOME}/.local/share/' '"$out/share/'
+  '';
 
   nativeBuildInputs = [
     gtk3
@@ -24,18 +38,23 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -d $out/share/icons/MoreWaita
-    cp -r . $out/share/icons/MoreWaita
-    gtk-update-icon-cache -f -t $out/share/icons/MoreWaita && xdg-desktop-menu forceupdate
+    ./install.sh
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Adwaita style extra icons theme for Gnome Shell";
     homepage = "https://github.com/somepaulo/MoreWaita";
-    license = with licenses; [ gpl3Only ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pkosel ];
+    license = with lib.licenses; [ gpl3Only ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      pkosel
+      kachick
+    ];
   };
-}
+})
