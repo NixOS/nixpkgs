@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "triforce-lv2";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "chadmed";
     repo = "triforce";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-f4i0S6UaVfs1CUeQRqo22PRgMNwYDNoMunHidI1XzBk=";
   };
 
@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
                      "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-2FC6wlFJkQryA/bcjF0GjrMQVb8hlUY+muFqPqShWss=";
 
   dontCargoInstall = true;
@@ -42,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = platforms.linux;
   };
-}
+})
