@@ -20,13 +20,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     librime
-  ];
-
-  buildInputs = [
     rime-data
   ];
 
   dontConfigure = true;
+
+  postPatch = ''
+    rm -r .github custom LICENSE squirrel.yaml weasel.yaml *.md *.trime.yaml
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -46,7 +47,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     dst=$out/share/rime-data
     mkdir -p $dst
 
-    rm -r .github custom LICENSE squirrel.yaml weasel.yaml *.md *.trime.yaml
     mv default.yaml wanxiang_suggested_default.yaml
 
     cp -pr -t $dst *
