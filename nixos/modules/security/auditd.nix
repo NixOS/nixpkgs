@@ -143,6 +143,39 @@ in
     plugins = lib.mkOption {
       type = lib.types.attrsOf plugin_conf;
       default = { };
+      defaultText = lib.literalExpression ''
+        {
+          af_unix = {
+            path = lib.getExe' pkgs.audit "audisp-af_unix";
+            args = [
+              "0640"
+              "/var/run/audispd_events"
+              "string"
+            ];
+            format = "binary";
+          };
+          remote = {
+            path = lib.getExe' pkgs.audit "audisp-remote";
+            config = { };
+          };
+          filter = {
+            path = lib.getExe' pkgs.audit "audisp-filter";
+            args = [
+              "allowlist"
+              "/etc/audit/audisp-filter.conf"
+              (lib.getExe' pkgs.audit "audisp-syslog")
+              "LOG_USER"
+              "LOG_INFO"
+              "interpret"
+            ];
+            config = { };
+          };
+          syslog = {
+            path = lib.getExe' pkgs.audit "audisp-syslog";
+            args = [ "LOG_INFO" ];
+          };
+        }
+      '';
       description = "Plugin definitions to register with auditd";
     };
   };
@@ -176,22 +209,53 @@ in
     # setting this to anything other than /etc/audit/plugins.d will break, so we pin it here
     security.auditd.config.plugin_dir = "/etc/audit/plugins.d";
 
-    environment.etc =
-      {
-        "audit/auditd.conf".text = prepareConfigText cfg.config;
+    environment.etc = {
+      "audit/auditd.conf".text = prepareConfigText cfg.config;
+    }
+    // (lib.mapAttrs' (
+      plugin_name: plugin_definition_config_value:
+      lib.nameValuePair "audit/plugins.d/${plugin_name}.conf" {
+        text = prepareConfigText (lib.removeAttrs plugin_definition_config_value [ "config" ]);
       }
-      // (lib.mapAttrs' (
-        plugin_name: plugin_definition_config_value:
-        lib.nameValuePair "audit/plugins.d/${plugin_name}.conf" {
-          text = prepareConfigText (lib.removeAttrs plugin_definition_config_value [ "config" ]);
-        }
-      ) cfg.plugins)
-      // (lib.mapAttrs' (
-        plugin_name: plugin_specific_config_value:
-        lib.nameValuePair "audit/audisp-${plugin_name}.conf" {
-          text = prepareConfigText plugin_specific_config_value.config;
-        }
-      ) (lib.filterAttrs (_: v: v.config != null) cfg.plugins));
+    ) cfg.plugins)
+    // (lib.mapAttrs' (
+      plugin_name: plugin_specific_config_value:
+      lib.nameValuePair "audit/audisp-${plugin_name}.conf" {
+        text = prepareConfigText plugin_specific_config_value.config;
+      }
+    ) (lib.filterAttrs (_: v: v.config != null) cfg.plugins));
+
+    security.auditd.plugins = {
+      af_unix = {
+        path = lib.getExe' pkgs.audit "audisp-af_unix";
+        args = [
+          "0640"
+          "/var/run/audispd_events"
+          "string"
+        ];
+        format = "binary";
+      };
+      remote = {
+        path = lib.getExe' pkgs.audit "audisp-remote";
+        config = { };
+      };
+      filter = {
+        path = lib.getExe' pkgs.audit "audisp-filter";
+        args = [
+          "allowlist"
+          "/etc/audit/audisp-filter.conf"
+          (lib.getExe' pkgs.audit "audisp-syslog")
+          "LOG_USER"
+          "LOG_INFO"
+          "interpret"
+        ];
+        config = { };
+      };
+      syslog = {
+        path = lib.getExe' pkgs.audit "audisp-syslog";
+        args = [ "LOG_INFO" ];
+      };
+    };
 
     systemd.services.auditd = {
       description = "Linux Audit daemon";
