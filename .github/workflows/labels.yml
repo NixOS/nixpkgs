@@ -390,7 +390,7 @@ jobs:
                   // so it should certainly be hit on the next iteration.
                   // TODO: Evaluate after a while, whether the above holds still true and potentially implement
                   // an overlap between runs.
-                  page: total_runs % Math.ceil(total_pulls / 100)
+                  page: (total_runs % Math.ceil(total_pulls / 100)) + 1
                 })).data
 
                 // Some items might be in both search results, so filtering out duplicates as well.
