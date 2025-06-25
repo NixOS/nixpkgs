@@ -16,6 +16,7 @@
   # python3-config exclusively
   enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
   nix-update-script,
+  testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
@@ -94,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
     tests = {
       musl = pkgsCross.musl64.audit;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };
 
@@ -103,6 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ grimmauld ];
+    pkgConfigModules = [
+      "audit"
+      "auparse"
+    ];
     platforms = lib.platforms.linux;
   };
 })
