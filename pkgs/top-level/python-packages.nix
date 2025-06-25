@@ -5000,6 +5000,8 @@ self: super: with self; {
 
   ffmpy = callPackage ../development/python-modules/ffmpy { };
 
+  fft-conv-pytorch = callPackage ../development/python-modules/fft-conv-pytorch { };
+
   fhir-py = callPackage ../development/python-modules/fhir-py { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
