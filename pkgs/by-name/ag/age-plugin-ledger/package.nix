@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Ledger-Donjon";
     repo = "age-plugin-ledger";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-g5GbWXhaGEafiM3qkGlRXHcOzPZl2pbDWEBPg4gQWcg=";
   };
 
