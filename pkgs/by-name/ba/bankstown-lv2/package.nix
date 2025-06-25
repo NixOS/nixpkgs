@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bankstown-lv2";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "chadmed";
     repo = "bankstown";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-IThXEY+mvT2MCw0PSWU/182xbUafd6dtm6hNjieLlKg=";
   };
 
@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
                      "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-eMN95QNnQtC7QDix9g3dwb9ZbtQuiVBj8+R+opFs0KI=";
 
   dontCargoInstall = true;
@@ -42,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = platforms.linux;
   };
-}
+})
