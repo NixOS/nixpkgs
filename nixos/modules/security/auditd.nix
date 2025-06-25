@@ -170,6 +170,38 @@ in
         n: v: lib.nameValuePair "audit/audisp-${n}.conf" { text = prepareConfigText v.config; }
       ) (lib.filterAttrs (n: v: v.config != null) cfg.plugins));
 
+    security.auditd.plugins = {
+      af_unix = {
+        path = lib.getExe' pkgs.audit "audisp-af_unix";
+        args = [
+          "0640"
+          "/var/run/audispd_events"
+          "string"
+        ];
+        format = "binary";
+      };
+      remote = {
+        path = lib.getExe' pkgs.audit "audisp-remote";
+        config = { };
+      };
+      filter = {
+        path = lib.getExe' pkgs.audit "audisp-filter";
+        args = [
+          "allowlist"
+          "/etc/audit/audisp-filter.conf"
+          (lib.getExe' pkgs.audit "audisp-syslog")
+          "LOG_USER"
+          "LOG_INFO"
+          "interpret"
+        ];
+        config = { };
+      };
+      syslog = {
+        path = lib.getExe' pkgs.audit "audisp-syslog";
+        args = [ "LOG_INFO" ];
+      };
+    };
+
     systemd.services.auditd = {
       description = "Linux Audit daemon";
       documentation = [ "man:auditd(8)" ];
