@@ -1689,6 +1689,10 @@ in
     checkInputs = [ self.nvim-web-devicons ];
   };
 
+  lightswitch-nvim = super.lightswitch-nvim.overrideAttrs {
+    dependencies = [ self.nui-nvim ];
+  };
+
   lir-nvim = super.lir-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
