@@ -46,16 +46,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   dontCargoInstall = true;
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Userspace daemon that implements the Smart Amp protection model";
     mainProgram = "speakersafetyd";
     homepage = "https://github.com/AsahiLinux/speakersafetyd";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       normalcea
       flokli
       yuka
     ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 })
