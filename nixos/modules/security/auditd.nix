@@ -4,14 +4,81 @@
   pkgs,
   ...
 }:
+let
+  cfg = config.security.auditd;
 
+  prepareConfigValue =
+    v:
+    if lib.isBool v then
+      (if v then "yes" else "no")
+    else if lib.isList v then
+      lib.concatStringsSep " " (map prepareConfigValue v)
+    else
+      builtins.toString v;
+  prepareConfigText =
+    conf:
+    lib.concatLines (
+      lib.mapAttrsToList (k: v: if v == null then "#${k} =" else "${k} = ${prepareConfigValue v}") conf
+    );
+in
 {
-  options.security.auditd.enable = lib.mkEnableOption "the Linux Audit daemon";
+  options.security.auditd = {
+    enable = lib.mkEnableOption "the Linux Audit daemon";
 
-  config = lib.mkIf config.security.auditd.enable {
+    config = lib.mkOption {
+      type = lib.types.submodule {
+        freeformType =
+          with lib.types;
+          attrsOf (
+            nullOr (oneOf [
+              bool
+              nonEmptyStr
+              path
+              int
+            ])
+          );
+        options = {
+          # space_left needs to be larger than admin_space_left, yet they default to be the same if left open.
+          space_left = lib.mkOption {
+            type = lib.types.either lib.types.int lib.types.nonEmptyStr;
+            default = 75;
+            description = ''
+              This is a numeric value in megabytes that tells the audit daemon when to perform a configurable action because the system is running
+              low on disk space. This should be considered the last chance to do something before running out of disk space. The numeric value for
+              this parameter should be lower than the number for space_left. You may also append a percent sign (e.g. 1%) to the number to have
+              the audit daemon calculate the number based on the disk partition size.
+            '';
+          };
+          admin_space_left = lib.mkOption {
+            type = lib.types.either lib.types.int lib.types.nonEmptyStr;
+            default = 50;
+            description = ''
+              If the free space in the filesystem containing log_file drops below this value, the audit daemon takes the action specified by
+              space_left_action. If the value of space_left is specified as a whole number, it is interpreted as an absolute size in megabytes
+              (MiB). If the value is specified as a number between 1 and 99 followed by a percentage sign (e.g., 5%), the audit daemon calculates
+              the absolute size in megabytes based on the size of the filesystem  containing  log_file. (E.g., if the filesystem containing
+              log_file is 2 gigabytes in size, and space_left is set to 25%, then the audit daemon sets space_left to approximately 500 megabytes.
+              Note that this calculation is performed when the audit daemon starts, so if you resize the filesystem containing log_file while the
+              audit daemon is running, you should send the audit daemon SIGHUP to re-read the configuration file and recalculate the correct per‐
+              centage.
+            '';
+          };
+        };
+      };
+
+      default = { };
+      description = "auditd configuration file contents. See `man 5 auditd.conf` for supported values.";
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
     boot.kernelParams = [ "audit=1" ];
 
     environment.systemPackages = [ pkgs.audit ];
+
+    environment.etc = {
+      "audit/auditd.conf".text = prepareConfigText cfg.config;
+    };
 
     systemd.services.auditd = {
       description = "Linux Audit daemon";
