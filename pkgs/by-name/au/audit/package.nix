@@ -15,6 +15,7 @@
   # configure script tries executing python to gather info instead of relying on
   # python3-config exclusively
   enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
@@ -89,8 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    musl = pkgsCross.musl64.audit;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      musl = pkgsCross.musl64.audit;
+    };
   };
 
   meta = {
