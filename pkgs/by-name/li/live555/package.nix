@@ -8,6 +8,10 @@
   openssl,
   runCommand,
   stdenv,
+  writeScript,
+
+  # tests
+  vlc,
 }:
 let
   isStatic = stdenv.hostPlatform.isStatic;
@@ -128,7 +132,19 @@ stdenv.mkDerivation (finalAttrs: {
           touch $out
         fi
       '';
+
+      inherit vlc;
     };
+
+  passthru.updateScript = writeScript "update-live555" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+
+    # Expect the text in format of '2025.05.24:'
+    new_version="$(curl -s http://www.live555.com/liveMedia/public/changelog.txt |
+      head -n1 | tr -d ':')"
+    update-source-version live555 "$new_version"
+  '';
 
   meta = {
     homepage = "http://www.live555.com/liveMedia/";
