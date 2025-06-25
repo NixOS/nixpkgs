@@ -1,8 +1,8 @@
 diff --git a/Makefile b/Makefile
-index dd6b8c44..7a703858 100644
+index b9ad6f71..60e71a86 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -73,10 +73,7 @@ endif
+@@ -81,10 +81,7 @@ endif
  export MAKEOPT := -j${NPROCS}
  
  ### systemd
@@ -14,16 +14,7 @@ index dd6b8c44..7a703858 100644
  
  ### check user/group
  USERCHECK := $(shell getent passwd proxysql)
-@@ -238,7 +235,7 @@ build_tap_test_debug: build_tap_tests_debug
- build_tap_tests_debug: build_src_debug
- 	cd test/tap && OPTZ="${O0} -ggdb -DDEBUG" CC=${CC} CXX=${CXX} ${MAKE} debug
- 
--# ClickHouse build targets are now default build targets. 
-+# ClickHouse build targets are now default build targets.
- # To maintain backward compatibility, ClickHouse targets are still available.
- .PHONY: build_deps_clickhouse
- build_deps_clickhouse: build_deps_default
-@@ -382,16 +379,10 @@ cleanbuild:
+@@ -415,16 +412,10 @@ cleanbuild:
  
  .PHONY: install
  install: src/proxysql
@@ -44,10 +35,10 @@ index dd6b8c44..7a703858 100644
  	install -m 0755 etc/init.d/proxysql /etc/init.d
  ifeq ($(DISTRO),"CentOS Linux")
 diff --git a/deps/Makefile b/deps/Makefile
-index 25bcc603..8fafc224 100644
+index 7c8fcc85..4ae0aba1 100644
 --- a/deps/Makefile
 +++ b/deps/Makefile
-@@ -54,10 +54,7 @@ default: $(targets)
+@@ -61,27 +61,22 @@ default: $(targets)
  ### deps targets
  
  libinjection/libinjection/src/libinjection.a:
@@ -57,21 +48,17 @@ index 25bcc603..8fafc224 100644
 -	cd libinjection/libinjection && patch -p1 < ../update-build-py3.diff
  	cd libinjection/libinjection && patch -p1 < ../libinjection_sqli.c.patch
  endif
- ifeq ($(SYS_KERN),Darwin)
-@@ -71,11 +68,7 @@ libinjection: libinjection/libinjection/src/libinjection.a
+ ifeq ($(UNAME_S),Darwin)
+ 	sed -i '' 's/CC=/CC?=/' libinjection/libinjection/src/Makefile
+ else
+ 	sed -i -e 's/CC=/CC?=/' libinjection/libinjection/src/Makefile
+ endif
+ 	cd libinjection/libinjection && CC=${CC} CXX=${CXX} ${MAKE}
  
+ libinjection: libinjection/libinjection/src/libinjection.a
  
- libssl/openssl/libssl.a:
--	cd libssl && rm -rf openssl-openssl-*/ openssl-3*/ || true
--	cd libssl && tar -zxf openssl-*.tar.gz
- 	cd libssl && ./verify-bio_st-match.sh
--#	cd libssl/openssl && patch crypto/ec/curve448/curve448.c < ../curve448.c-multiplication-overflow.patch
--#	cd libssl/openssl && patch crypto/asn1/a_time.c < ../a_time.c-multiplication-overflow.patch
- 	cd libssl/openssl && ./config no-ssl3 no-tests
- 	cd libssl/openssl && CC=${CC} CXX=${CXX} ${MAKE}
- 	cd libssl/openssl && ln -fs ./ lib # curl wants this path
-@@ -84,8 +77,6 @@ libssl: libssl/openssl/libssl.a
- 
+ include ../common_mk/openssl_flags.mk
+ include ../common_mk/openssl_version_check.mk
  
  libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a: libmicrohttpd/libmicrohttpd/src/microhttpd/.libs/libmicrohttpd.a re2/re2/obj/libre2.a
 -	cd libhttpserver && rm -rf libhttpserver-*/ || true
@@ -79,7 +66,7 @@ index 25bcc603..8fafc224 100644
  	cd libhttpserver/libhttpserver && patch -p1 < ../noexcept.patch
  	cd libhttpserver/libhttpserver && patch -p1 < ../re2_regex.patch
  	cd libhttpserver/libhttpserver && patch -p1 < ../final_val_post_process.patch
-@@ -103,8 +94,6 @@ libhttpserver: libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a
+@@ -99,58 +94,49 @@ libhttpserver: libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a
  
  
  libev/libev/.libs/libev.a:
@@ -88,16 +75,30 @@ index 25bcc603..8fafc224 100644
  	cd libev/libev && patch ev.c < ../ev.c-multiplication-overflow.patch
  	cd libev/libev && ./configure
  	cd libev/libev && CC=${CC} CXX=${CXX} ${MAKE}
-@@ -121,8 +110,6 @@ coredumper/coredumper/src/libcoredumper.a:
+ 
+ ev: libev/libev/.libs/libev.a
+ 
+ 
+ coredumper/coredumper/src/libcoredumper.a:
+ 	cd coredumper && rm -rf coredumper-*/ || true
+ 	cd coredumper && tar -zxf coredumper-*.tar.gz
+ 	cd coredumper/coredumper && patch -p1 < ../includes.patch
+ 	cd coredumper/coredumper && cmake . -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Debug
+ 	cd coredumper/coredumper && CC=${CC} CXX=${CXX} ${MAKE}
  coredumper: coredumper/coredumper/src/libcoredumper.a
  
- curl/curl/lib/.libs/libcurl.a: libssl/openssl/libssl.a
+ curl/curl/lib/.libs/libcurl.a:
 -	cd curl && rm -rf curl-*/ || true
 -	cd curl && tar -zxf curl-*.tar.gz
  #	cd curl/curl && ./configure --disable-debug --disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-proxy --disable-dict --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher --disable-manual --disable-ipv6 --disable-sspi --disable-crypto-auth --disable-ntlm-wb --disable-tls-srp --without-nghttp2 --without-libidn2 --without-libssh2 --without-brotli --with-ssl=$(shell pwd)/../../libssl/openssl/ && CC=${CC} CXX=${CXX} ${MAKE}
  	cd curl/curl && autoreconf -fi
- ifeq ($(SYS_KERN),Darwin)
-@@ -134,9 +121,6 @@ curl: curl/curl/lib/.libs/libcurl.a
+ ifeq ($(UNAME_S),Darwin)
+ 	cd curl/curl && patch configure < ../configure.patch
+ endif
+ 	cd curl/curl && CPPFLAGS="-I$(SSL_IDIR)" LDFLAGS="$(LIB_SSL_PATH) $(LIB_CRYPTO_PATH)" ./configure --disable-debug --disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-proxy --disable-dict --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher --disable-manual --disable-ipv6 --disable-sspi --disable-ntlm-wb --disable-tls-srp --without-nghttp2 --without-libidn2 --without-libssh2 --without-brotli --without-librtmp --without-libpsl --without-zstd --with-ssl --enable-shared=yes
+ 	cd curl/curl && CFLAGS=-fPIC CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ curl: curl/curl/lib/.libs/libcurl.a
  
  
  libmicrohttpd/libmicrohttpd/src/microhttpd/.libs/libmicrohttpd.a:
@@ -107,7 +108,15 @@ index 25bcc603..8fafc224 100644
  	cd libmicrohttpd/libmicrohttpd && ./configure --enable-https && CC=${CC} CXX=${CXX} ${MAKE}
  
  microhttpd: libmicrohttpd/libmicrohttpd/src/microhttpd/.libs/libmicrohttpd.a
-@@ -152,8 +136,6 @@ cityhash: cityhash/cityhash/src/.libs/libcityhash.a
+ 
+ 
+ cityhash/cityhash/src/.libs/libcityhash.a:
+ 	cd cityhash && rm -rf cityhash-*/ || true
+ 	cd cityhash && tar -zxf cityhash-*.tar.gz
+ 	cd cityhash/cityhash && cp ../config.guess . && chmod +x config.guess && cp ../config.sub . && chmod +x config.sub
+ 	cd cityhash/cityhash && ./configure && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ cityhash: cityhash/cityhash/src/.libs/libcityhash.a
  
  
  lz4/lz4/lib/liblz4.a:
@@ -116,7 +125,7 @@ index 25bcc603..8fafc224 100644
  	cd lz4/lz4 && CC=${CC} CXX=${CXX} ${MAKE}
  
  lz4: lz4/lz4/lib/liblz4.a
-@@ -171,8 +153,6 @@ clickhouse-cpp: clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib-s
+@@ -168,8 +154,6 @@ clickhouse-cpp: clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib-s
  
  
  libdaemon/libdaemon/libdaemon/.libs/libdaemon.a:
@@ -125,8 +134,8 @@ index 25bcc603..8fafc224 100644
  	cd libdaemon/libdaemon && patch -p0 < ../daemon_fork_umask.patch
  	cd libdaemon/libdaemon && cp ../config.guess . && chmod +x config.guess && cp ../config.sub . && chmod +x config.sub && ./configure --disable-examples
  	cd libdaemon/libdaemon && CC=${CC} CXX=${CXX} ${MAKE}
-@@ -256,8 +236,6 @@ sqlite3: sqlite3/sqlite3/sqlite3.o
- 
+@@ -253,18 +237,13 @@ sqlite3/sqlite3/sqlite3.o:
+ sqlite3: sqlite3/sqlite3/sqlite3.o
  
  libconfig/libconfig/lib/.libs/libconfig++.a:
 -	cd libconfig && rm -rf libconfig-*/ || true
@@ -134,7 +143,7 @@ index 25bcc603..8fafc224 100644
  	cd libconfig/libconfig && ./configure --disable-examples
  	cd libconfig/libconfig && CC=${CC} CXX=${CXX} ${MAKE}
  
-@@ -265,9 +243,6 @@ libconfig: libconfig/libconfig/lib/.libs/libconfig++.a
+ libconfig: libconfig/libconfig/lib/.libs/libconfig++.a
  
  
  prometheus-cpp/prometheus-cpp/lib/libprometheus-cpp-core.a:
@@ -144,7 +153,7 @@ index 25bcc603..8fafc224 100644
  	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../serial_exposer.patch
  	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../registry_counters_reset.patch
  	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../fix_old_distros.patch
-@@ -296,8 +271,6 @@ re2: re2/re2/obj/libre2.a
+@@ -293,17 +272,13 @@ re2: re2/re2/obj/libre2.a
  
  
  pcre/pcre/.libs/libpcre.a:
@@ -153,8 +162,17 @@ index 25bcc603..8fafc224 100644
  	cd pcre/pcre && patch pcretest.c < ../pcretest.c-multiplication-overflow.patch
  	cd pcre/pcre && ./configure
  	cd pcre/pcre && CC=${CC} CXX=${CXX} ${MAKE}
-@@ -334,4 +307,3 @@ cleanall:
- 	cd cityhash && rm -rf cityhash-*/ || true
- 	cd coredumper && rm -rf coredumper-*/ || true
+ 
+ pcre: pcre/pcre/.libs/libpcre.a
+ 
+ postgresql/postgresql/src/interfaces/libpq/libpq.a:
+-	cd postgresql && rm -rf postgresql-*/ || true
+-	cd postgresql && tar -zxf postgresql-*.tar.gz
+ 	cd postgresql/postgresql && patch -p0 < ../get_result_from_pgconn.patch
+ 	cd postgresql/postgresql && patch -p0 < ../handle_row_data.patch
+ 	#cd postgresql/postgresql && LD_LIBRARY_PATH="$(shell pwd)/libssl/openssl" ./configure --with-ssl=openssl --with-includes="$(shell pwd)/libssl/openssl/include/" --with-libraries="$(shell pwd)/libssl/openssl/" --without-readline --enable-debug  CFLAGS="-ggdb -O0 -fno-omit-frame-pointer" CPPFLAGS="-g -O0"
+@@ -360,4 +335,3 @@ cleanall:
+ 	cd libusual && rm -rf libusual-*/ || true
+ 	cd libscram && rm -rf lib/* obj/* || true
  .PHONY: cleanall
 -
