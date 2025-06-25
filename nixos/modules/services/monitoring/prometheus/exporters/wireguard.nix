@@ -62,6 +62,14 @@ in
         Whether or not the remote IP of a WireGuard peer should be exposed via prometheus.
       '';
     };
+
+    latestHandshakeDelay = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Adds the `wireguard_latest_handshake_delay_seconds` metric that automatically calculates the seconds passed since the last handshake.
+      '';
+    };
   };
   serviceOpts = {
     path = [ pkgs.wireguard-tools ];
@@ -76,6 +84,7 @@ in
           ${optionalString cfg.verbose "-v true"} \
           ${optionalString cfg.singleSubnetPerField "-s true"} \
           ${optionalString cfg.withRemoteIp "-r true"} \
+          ${optionalString cfg.latestHandshakeDelay "-d true"} \
           ${optionalString (cfg.wireguardConfig != null) "-n ${escapeShellArg cfg.wireguardConfig}"}
       '';
       RestrictAddressFamilies = [
