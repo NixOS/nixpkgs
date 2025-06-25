@@ -2,24 +2,25 @@
   stdenv,
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
   git,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gigalixir";
-  version = "1.13.1";
+  version = "1.14.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hYIuSLK2HeeXPL28qKvkKwPVpOwObNGrVWbDq6B0/IA=";
+  src = fetchFromGitHub {
+    owner = "gigalixir";
+    repo = "gigalixir-cli";
+    tag = "v${version}";
+    hash = "sha256-D7HbNQ0heQ0aXAA+z0JIwqWlerChPvzXrIGtXz+UiwQ=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "'pytest-runner'," "" \
-      --replace-fail "cryptography==" "cryptography>="
+      --replace-fail "'pytest-runner'," ""
   '';
 
   build-system = with python3Packages; [
@@ -27,6 +28,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   dependencies = with python3Packages; [
+    importlib-metadata
     click
     pygments
     pyopenssl
@@ -47,6 +49,8 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # Test requires network access
     "test_rollback_without_version"
+    "test_rollback"
+    "test_create_user"
     # These following test's are now depraced and removed, check out these commits:
     # https://github.com/gigalixir/gigalixir-cli/commit/00b758ed462ad8eff6ff0b16cd37fa71f75b2d7d
     # https://github.com/gigalixir/gigalixir-cli/commit/76fa25f96e71fd75cc22e5439b4a8f9e9ec4e3e5
@@ -60,7 +64,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Gigalixir Command-Line Interface";
     homepage = "https://github.com/gigalixir/gigalixir-cli";
     license = lib.licenses.mit;
