@@ -97,7 +97,15 @@ let
       deviceUnit = mkDeviceUnit device;
       extractProperty =
         prop: options: (map (lib.removePrefix "${prop}=") (builtins.filter (lib.hasPrefix prop) options));
-      normalizeUnits = unit: if lib.hasPrefix "/" unit then mkDeviceUnit unit else unit;
+      mkMountUnit = path: "${utils.escapeSystemdPath path}.mount";
+      normalizeUnits =
+        unit:
+        if lib.hasPrefix "/dev/" unit then
+          mkDeviceUnit unit
+        else if lib.hasPrefix "/" unit then
+          mkMountUnit unit
+        else
+          unit;
       requiredUnits = map normalizeUnits (extractProperty "x-systemd.requires" fs.options);
       wantedUnits = map normalizeUnits (extractProperty "x-systemd.wants" fs.options);
     in
