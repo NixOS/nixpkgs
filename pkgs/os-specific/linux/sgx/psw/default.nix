@@ -20,15 +20,15 @@
 stdenv.mkDerivation rec {
   pname = "sgx-psw";
   # Version as given in se_version.h
-  version = "2.25.100.3";
+  version = "2.26.100.0";
   # Version as used in the Git tag
-  versionTag = "2.25";
+  versionTag = "2.26";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-RR+vFTd9ZM6XUn3KgQeUM+xoj1Ava4zQzFYA/nfXyaw=";
+    hash = "sha256-g7t51Js4JoF7QeEngzmJJcRP2bQDbEMeKimVzqNDkFI=";
     fetchSubmodules = true;
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       # Fetch the Data Center Attestation Primitives (DCAP) platform enclaves
       # and pre-built sgxssl.
       dcap = rec {
-        version = "1.22";
+        version = "1.23";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
@@ -90,6 +90,10 @@ stdenv.mkDerivation rec {
     # binary. Without changes, the `aesm_service` will be different after every
     # build because the embedded zip file contents have different modified times.
     ./cppmicroservices-no-mtime.patch
+
+    # Add missing `#include <algorithm>` to fix build with GCC 14
+    # PR: <https://github.com/intel/linux-sgx/pull/1063>
+    ./add-missing-header-pr-1063.patch
   ];
 
   postPatch =
