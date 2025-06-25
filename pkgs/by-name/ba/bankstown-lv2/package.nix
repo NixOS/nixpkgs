@@ -31,14 +31,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "LIBDIR=lib"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/chadmed/bankstown";
     description = "Lightweight psychoacoustic bass enhancement plugin";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       normalcea
       yuka
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })
