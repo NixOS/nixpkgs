@@ -142,7 +142,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "renderdoccmd";
-    maintainers = with lib.maintainers; [ pbsds ];
+    maintainers = with lib.maintainers; [
+      pbsds
+      ShyAssassin
+    ];
     platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
   };
 })
