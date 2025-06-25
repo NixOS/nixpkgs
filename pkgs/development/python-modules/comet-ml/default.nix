@@ -31,6 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-MinHgBWPjjSQzM6H+DL0CJRbZQcz1lBKMFM3W8Tjj0A=";
   };
 
+  pyproject = true;
+  build-system = [
+    setuptools
+  ];
+
   dependencies = [
     dulwich
     everett
@@ -44,11 +49,15 @@ buildPythonPackage rec {
     rich
     semantic-version
     sentry-sdk
-    setuptools
     simplejson
     urllib3
     wrapt
     wurlitzer
+  ];
+
+  pythonRelaxDeps = [
+    "everett"
+    "python-box"
   ];
 
   pythonImportsCheck = [ "comet_ml" ];
