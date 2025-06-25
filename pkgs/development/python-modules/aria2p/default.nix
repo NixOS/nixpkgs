@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -88,5 +89,8 @@ buildPythonPackage rec {
     mainProgram = "aria2p";
     license = licenses.isc;
     maintainers = with maintainers; [ koral ];
+    badPlatforms = [
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }
