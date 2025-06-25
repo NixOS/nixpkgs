@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "LIBDIR=lib"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/chadmed/triforce";
     description = "Beamformer for Apple Silicon laptops";
     longDescription = ''
@@ -45,11 +45,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       - MacBook Pro 16" (M1 Pro/Max, M2 Pro/Max)
       - MacBook Air 15" (M2)
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       normalcea
       yuka
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })
