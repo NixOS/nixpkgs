@@ -151,7 +151,7 @@ buildFHSEnv {
       Bolt Launcher supports HDOS/RuneLite by default with an optional feature flag for RS3 (enableRS3).
     '';
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ nezia ];
+    maintainers = with lib.maintainers; [ nezia jaspersurmont ];
     platforms = lib.platforms.linux;
     mainProgram = "${bolt.name}";
   };
