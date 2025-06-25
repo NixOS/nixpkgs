@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "speakersafetyd";
     homepage = "https://github.com/AsahiLinux/speakersafetyd";
     maintainers = with maintainers; [
+      normalcea
       flokli
       yuka
     ];
