@@ -97,7 +97,12 @@ let
         # Some of the libmathdx routines were written by or derived
         # from code written by Meta Platforms, Inc. and affiliates and
         # are subject to the BSD License.
-        bsd
+        bsd3
+
+        # Some of the libmathdx routines were written by or derived from
+        # code written by Victor Zverovich and are subject to the following
+        # license:
+        mit
       ];
       platforms = with lib.platforms; linux ++ [ "x86_64-windows" ];
       maintainers = with lib.maintainers; [ yzx9 ];
