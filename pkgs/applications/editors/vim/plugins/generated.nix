@@ -5946,6 +5946,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  helm-ls-nvim = buildVimPlugin {
+    pname = "helm-ls.nvim";
+    version = "2025-06-07";
+    src = fetchFromGitHub {
+      owner = "qvalentin";
+      repo = "helm-ls.nvim";
+      rev = "2bf45466c26a24e05b5266f82a3abead13e32c16";
+      sha256 = "0h0mp3qf57s4byr37rg1ynbr3bha1wa9fswnv3ypb0n9n9igr5ys";
+    };
+    meta.homepage = "https://github.com/qvalentin/helm-ls.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   helpview-nvim = buildVimPlugin {
     pname = "helpview.nvim";
     version = "2025-04-26";
