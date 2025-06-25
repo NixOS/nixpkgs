@@ -23,6 +23,7 @@
   direnv,
   fzf,
   gawk,
+  helm-ls,
   himalaya,
   htop,
   jq,
@@ -1403,6 +1404,12 @@ in
     # Optional integrations
     checkInputs = [ self.telescope-nvim ];
     luaAttr = luaPackages.haskell-tools-nvim;
+  };
+
+  helm-ls-nvim = super.helm-ls-nvim.overrideAttrs {
+    runtimeDeps = [
+      helm-ls
+    ];
   };
 
   helpview-nvim = super.helpview-nvim.overrideAttrs {
