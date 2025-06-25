@@ -35,11 +35,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   installFlags = [
-    "BINDIR=$(out)/bin"
-    "UNITDIR=$(out)/lib/systemd/system"
-    "UDEVDIR=$(out)/lib/udev/rules.d"
-    "SHAREDIR=$(out)/share"
-    "TMPFILESDIR=$(out)/lib/tmpfiles.d"
+    "DESTDIR=$(out)"
+    "BINDIR=bin"
+    "UNITDIR=lib/systemd/system"
+    "UDEVDIR=lib/udev/rules.d"
+    "SHAREDIR=share"
+    "TMPFILESDIR=lib/tmpfiles.d"
   ];
 
   dontCargoInstall = true;
