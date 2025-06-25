@@ -8,29 +8,29 @@
 }:
 let
   py = python3.override {
-    packageOverrides = _final: prev: { django = prev.django_5; };
+    self = py;
+    packageOverrides = _final: prev: { django = prev.django_5_2; };
   };
 
   extraBuildInputs = plugins py.pkgs;
 in
 py.pkgs.buildPythonApplication rec {
   pname = "netbox";
-  version = "4.2.9";
-
-  format = "other";
+  version = "4.3.2";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox";
     tag = "v${version}";
-    hash = "sha256-uVe4YTZoxRMBfvItFa9SMHu4AaVvygfAg9GDB115TFc=";
+    hash = "sha256-20X/0k60q2cPsWuz+qpgcfXGkg+A2k5qaWx6zHkmpWc=";
   };
 
   patches = [
     ./custom-static-root.patch
   ];
 
-  propagatedBuildInputs =
+  dependencies =
     (
       with py.pkgs;
       [
@@ -45,6 +45,7 @@ py.pkgs.buildPythonApplication rec {
         django-prometheus
         django-redis
         django-rq
+        django-storages
         django-tables2
         django-taggit
         django-timezone-field
@@ -58,8 +59,6 @@ py.pkgs.buildPythonApplication rec {
         nh3
         pillow
         psycopg
-        psycopg.optional-dependencies.c
-        psycopg.optional-dependencies.pool
         pyyaml
         requests
         social-auth-core
@@ -78,22 +77,22 @@ py.pkgs.buildPythonApplication rec {
         # for error reporting
         sentry-sdk
       ]
-      ++ social-auth-core.passthru.optional-dependencies.openidconnect
+      ++ psycopg.optional-dependencies.c
+      ++ psycopg.optional-dependencies.pool
+      ++ social-auth-core.optional-dependencies.openidconnect
     )
     ++ extraBuildInputs;
 
-  buildInputs = with py.pkgs; [
+  nativeBuildInputs = with py.pkgs; [
     mkdocs-material
     mkdocs-material-extensions
     mkdocstrings
     mkdocstrings-python
   ];
 
-  nativeBuildInputs = [ py.pkgs.mkdocs ];
-
   postBuild = ''
     PYTHONPATH=$PYTHONPATH:netbox/
-    python -m mkdocs build
+    ${py.interpreter} -m mkdocs build
   '';
 
   installPhase = ''
@@ -105,12 +104,12 @@ py.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    python = python3;
+    python = py;
     # PYTHONPATH of all dependencies used by the package
-    pythonPath = py.pkgs.makePythonPath propagatedBuildInputs;
+    pythonPath = py.pkgs.makePythonPath dependencies;
     inherit (py.pkgs) gunicorn;
     tests = {
-      netbox = nixosTests.netbox_4_2;
+      netbox = nixosTests.netbox_4_3;
       inherit (nixosTests) netbox-upgrade;
     };
     updateScript = nix-update-script { };
@@ -118,15 +117,14 @@ py.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/netbox-community/netbox";
+    changelog = "https://github.com/netbox-community/netbox/blob/${src.tag}/docs/release-notes/version-${lib.versions.majorMinor version}.md";
     description = "IP address management (IPAM) and data center infrastructure management (DCIM) tool";
     mainProgram = "netbox";
     license = lib.licenses.asl20;
-    knownVulnerabilities = [
-      "Netbox Version ${version} is EOL; please upgrade by following the current release notes instructions"
-    ];
     maintainers = with lib.maintainers; [
       minijackson
       raitobezarius
+      transcaffeine
     ];
   };
 }
