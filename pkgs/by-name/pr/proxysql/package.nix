@@ -7,6 +7,7 @@
   automake,
   bison,
   cmake,
+  pkg-config,
   libtool,
   civetweb,
   coreutils,
@@ -29,17 +30,20 @@
   prometheus-cpp,
   zlib,
   texinfo,
+  postgresql_16,
+  icu,
+  libevent,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxysql";
-  version = "2.7.1";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = "proxysql";
-    rev = finalAttrs.version;
-    hash = "sha256-Ouz1SSc35gQaJcVQO95azkxNgLxuY712ELAwM5buEtY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yGxn46Vm8YdtIvvoTlOHQ1aAP2J/h/kFqr4ehruDsTw=";
   };
 
   patches = [
@@ -53,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     libtool
     perl
+    pkg-config
     python3
     texinfo # for makeinfo
   ];
@@ -62,8 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     flex
     gnutls
+    icu
+    libevent
     libgcrypt
     libuuid
+    openssl
     zlib
   ];
 
@@ -141,10 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
                 p = libmicrohttpd;
               }
               {
-                f = "libssl";
-                p = openssl;
-              }
-              {
                 f = "lz4";
                 p = lz4;
               }
@@ -167,6 +171,10 @@ stdenv.mkDerivation (finalAttrs: {
                   }
                 );
               }
+              {
+                f = "postgresql";
+                p = postgresql_16;
+              }
             ]
         )
       }
@@ -184,8 +192,6 @@ stdenv.mkDerivation (finalAttrs: {
       pushd prometheus-cpp/prometheus-cpp/3rdparty
       replace_dep . "${civetweb.src}" civetweb
       popd
-
-      sed -i s_/usr/bin/env_${coreutils}/bin/env_g libssl/openssl/config
 
       pushd libmicrohttpd/libmicrohttpd
       autoreconf
