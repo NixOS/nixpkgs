@@ -6,7 +6,7 @@
   meta.maintainers = with lib.maintainers; [ MatthieuBarthel ];
 
   # tests are broken on aarch64 on ofborg
-  meta.broken = pkgs.stdenv.hostPlatform.isAarch64;
+  # meta.broken = pkgs.stdenv.hostPlatform.isAarch64;
 
   nodes = {
     machine =
