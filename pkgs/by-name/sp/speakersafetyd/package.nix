@@ -5,21 +5,20 @@
   fetchFromGitHub,
   pkg-config,
   alsa-lib,
-  rust,
   udevCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speakersafetyd";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "speakersafetyd";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ULAGdYUfeMlPki6DT2vD+tvDqKMxJtG16o/+7+ERsv4=";
   };
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-DnOnqi60JsRX8yqEM/5zZ3yX/rk85/ruwL3aW1FRXKg=";
 
   nativeBuildInputs = [
@@ -58,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
   };
-}
+})
