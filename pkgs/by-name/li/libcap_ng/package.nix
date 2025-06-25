@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "libcap-ng" ];
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ grimmauld ];
   };
 })
