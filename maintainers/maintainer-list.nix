@@ -5103,6 +5103,12 @@
     name = "Changsheng Wu";
     githubId = 2083950;
   };
+  connerohnesorge = {
+    email = "conneroisu@outlook.com";
+    github = "conneroisu";
+    githubId = 88785126;
+    name = "Conner Ohnesorge";
+  };
   conni2461 = {
     email = "simon-hauser@outlook.com";
     github = "Conni2461";
