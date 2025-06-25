@@ -6,6 +6,7 @@
   pkg-config,
   alsa-lib,
   udevCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -45,6 +46,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   dontCargoInstall = true;
   doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Userspace daemon that implements the Smart Amp protection model";
