@@ -246,8 +246,8 @@ jobs:
                     'unmarked_as_duplicate',
                   ].includes(event))
                   .map(({ created_at, updated_at, committer, submitted_at }) => new Date(updated_at ?? created_at ?? submitted_at ?? committer.date))
-                  .sort()
-                  .reverse()
+                  // Reverse sort by date value. The default sort() sorts by string representation, which is bad for dates.
+                  .sort((a,b) => b-a)
                   .at(0) ?? item.created_at
                 )
 
