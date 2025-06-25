@@ -143,26 +143,7 @@ let
       intermediateNixConfig =
         configfile.moduleStructuredConfig.intermediateNixConfig
         # extra config in legacy string format
-        + extraConfig
-        + (
-          if stdenv.hostPlatform.isAarch64 then
-            ''
-              # The default (=y) forces us to have the XHCI firmware available in initrd,
-              # which our initrd builder can't currently do easily.
-              USB_XHCI_TEGRA m
-            ''
-          else if stdenv.hostPlatform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then
-            # avoid driver/FS trouble arising from unusual page size
-            ''
-              PPC_64K_PAGES n
-              PPC_4K_PAGES y
-
-              ATA_SFF y
-              VIRTIO_MENU y
-            ''
-          else
-            ""
-        );
+        + extraConfig;
 
       structuredConfigFromPatches = map (
         {
