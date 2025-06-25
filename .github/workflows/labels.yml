@@ -247,6 +247,7 @@ jobs:
                   .sort((a,b) => b-a)
                   .at(0) ?? item.created_at
                 )
+                log('latest_event_at', latest_event_at.toISOString())
 
                 const stale_at = new Date(new Date().setDate(new Date().getDate() - 180))
 
