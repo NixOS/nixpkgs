@@ -236,6 +236,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    knownVulnerabilities = [
+      "wavebox has been removed in NixOS unstable. It's an unmaintained security relevant package"
+    ];
     description = "Wavebox Productivity Browser";
     homepage = "https://wavebox.io";
     license = lib.licenses.unfree;
