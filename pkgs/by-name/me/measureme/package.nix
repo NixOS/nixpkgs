@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Support crate for rustc's self-profiling feature";
     homepage = "https://github.com/rust-lang/measureme";
