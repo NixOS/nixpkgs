@@ -1,0 +1,15 @@
+diff --git a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
+index eeb49e2afe34d..80b8158f43db9 100644
+--- a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
++++ b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
+@@ -11,6 +11,10 @@
+ 
+ // Before Solaris 11.4, <procfs.h> doesn't work in a largefile environment.
+ #undef _FILE_OFFSET_BITS
++
++// Avoid conflict between `_TIME_BITS` defined vs. `_FILE_OFFSET_BITS`
++// undefined in some Linux configurations.
++#undef _TIME_BITS
+ #include "sanitizer_platform.h"
+ #if SANITIZER_SOLARIS
+ #  include <fcntl.h>
