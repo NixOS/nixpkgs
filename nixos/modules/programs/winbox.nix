@@ -24,6 +24,14 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    networking.firewall.allowedUDPPorts = lib.optionals cfg.openFirewall [ 5678 ];
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedUDPPorts = [ 5678 ];
+      allowedUDPPortRanges = [
+        {
+          from = 40000;
+          to = 50000;
+        }
+      ];
+    };
   };
 }
