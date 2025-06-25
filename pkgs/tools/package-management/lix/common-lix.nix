@@ -87,6 +87,8 @@ assert lib.assertMsg (
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
+  pastaFod ? false,
+  passt,
 
   confDir,
   stateDir,
@@ -171,6 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       doxygen
     ]
     ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
+    ++ lib.optionals pastaFod [ passt ]
     ++ lib.optionals parseToYAML [ yq ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
