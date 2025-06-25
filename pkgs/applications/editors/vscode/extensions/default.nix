@@ -1150,8 +1150,8 @@ let
         mktplcRef = {
           name = "csharpier-vscode";
           publisher = "csharpier";
-          version = "2.0.6";
-          hash = "sha256-MWq+BhM6nL52tmsTWQwIqlAfXJspDpd6uypsZLqfSJE=";
+          version = "2.0.7";
+          hash = "sha256-2oWVszRYW3E+tHL0ylRDqWhNvkm0u0VxxTFHbosYdAM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/csharpier.csharpier-vscode/changelog";
