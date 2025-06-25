@@ -670,6 +670,12 @@ stdenvNoCC.mkDerivation {
       + optionalString (!isArocc) ''
         echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
       ''
+      # Hey, don’t merge this until Emily has written a really great
+      # comment here. It would be so embarrassing. Seriously, do you
+      # want this to end up in the Git log for all of eternity?
+      + optionalString (targetPlatform.libc == "glibc" && targetPlatform.is32bit) ''
+        echo '-D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64' >> $out/nix-support/libc-cflags
+      ''
       + optionalString (!(cc.langD or false)) ''
         echo "-${
           if isArocc then "I" else "idirafter"
