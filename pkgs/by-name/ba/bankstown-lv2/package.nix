@@ -30,7 +30,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/chadmed/bankstown";
     description = "Halfway-decent three-stage psychoacoustic bass approximation";
     license = licenses.mit;
-    maintainers = with maintainers; [ yuka ];
+    maintainers = with maintainers; [
+      normalcea
+      yuka
+    ];
     platforms = platforms.linux;
   };
 }
