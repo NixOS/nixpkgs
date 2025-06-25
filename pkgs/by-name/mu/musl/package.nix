@@ -190,6 +190,10 @@ stdenv.mkDerivation rec {
       "s390x-linux"
       "x86_64-linux"
     ];
+    badPlatforms = [
+      # On 64-bit POWER, musl is ELFv2-only
+      (lib.recursiveUpdate lib.systems.inspect.patterns.isPower64 lib.systems.inspect.patterns.isAbiElfv1)
+    ];
     maintainers = with lib.maintainers; [
       thoughtpolice
       dtzWill
