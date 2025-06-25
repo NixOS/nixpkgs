@@ -2,7 +2,7 @@
   stdenv,
   lib,
   rustPlatform,
-  fetchCrate,
+  fetchFromGitHub,
   pkg-config,
   alsa-lib,
   rust,
@@ -13,9 +13,11 @@ rustPlatform.buildRustPackage rec {
   pname = "speakersafetyd";
   version = "1.0.2";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-3DzBNebg1y/+psD2zOpDsnRJmabQLeO1UMxPq9M0CsU=";
+  src = fetchFromGitHub {
+    owner = "AsahiLinux";
+    repo = "speakersafetyd";
+    tag = version;
+    hash = "sha256-ULAGdYUfeMlPki6DT2vD+tvDqKMxJtG16o/+7+ERsv4=";
   };
   useFetchCargoVendor = true;
   cargoHash = "sha256-DnOnqi60JsRX8yqEM/5zZ3yX/rk85/ruwL3aW1FRXKg=";
