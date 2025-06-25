@@ -2,20 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
   lxml,
   lxml-html-clean,
   beautifulsoup4,
+
+  # tests
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "html-sanitizer";
   version = "2.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "matthiask";
@@ -24,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-6OWFLsuefeDzQ1uHnLmboKDgrbY/xJCwqsSQlDaJlRs=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lxml
     lxml-html-clean
     beautifulsoup4
@@ -40,15 +43,19 @@ buildPythonPackage rec {
     # Tests are sensitive to output
     "test_billion_laughs"
     "test_10_broken_html"
+
+    # Mismatch snapshot (AssertionError)
+    # https://github.com/matthiask/html-sanitizer/issues/53
+    "test_keep_typographic_whitespace"
   ];
 
   pythonImportsCheck = [ "html_sanitizer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allowlist-based and very opinionated HTML sanitizer";
     homepage = "https://github.com/matthiask/html-sanitizer";
     changelog = "https://github.com/matthiask/html-sanitizer/blob/${version}/CHANGELOG.rst";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
