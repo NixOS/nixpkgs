@@ -136,12 +136,9 @@ jobs:
                 const pull_number = item.number
                 const issue_number = item.number
 
-                // The search result is of a format that works for both issues and pull requests and thus
-                // does not have all fields of a full pull_request response. Notably, it is missing `head.sha`,
-                // which we need to fetch the workflow run below. This field is already available non-search sources.
-                // This API request is also important for the merge-conflict label, because it triggers the
+                // This API request is important for the merge-conflict label, because it triggers the
                 // creation of a new test merge commit. This is needed to actually determine the state of a PR.
-                const pull_request = item.head ? item : (await github.rest.pulls.get({
+                const pull_request = (await github.rest.pulls.get({
                   ...context.repo,
                   pull_number
                 })).data
