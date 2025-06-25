@@ -1,18 +1,15 @@
 rec {
   cat = {
     executable = pkgs: "cat";
-    ubootName = "none";
     extension = ".cpio";
   };
   gzip = {
     executable = pkgs: "${pkgs.gzip}/bin/gzip";
     defaultArgs = [ "-9n" ];
-    ubootName = "gzip";
     extension = ".gz";
   };
   bzip2 = {
     executable = pkgs: "${pkgs.bzip2}/bin/bzip2";
-    ubootName = "bzip2";
     extension = ".bz2";
   };
   xz = {
@@ -29,24 +26,20 @@ rec {
       "--check=crc32"
       "--lzma1=dict=512KiB"
     ];
-    ubootName = "lzma";
     extension = ".lzma";
   };
   lz4 = {
     executable = pkgs: "${pkgs.lz4}/bin/lz4";
     defaultArgs = [ "-l" ];
-    ubootName = "lz4";
     extension = ".lz4";
   };
   lzop = {
     executable = pkgs: "${pkgs.lzop}/bin/lzop";
-    ubootName = "lzo";
     extension = ".lzo";
   };
   zstd = {
     executable = pkgs: "${pkgs.zstd}/bin/zstd";
     defaultArgs = [ "-10" ];
-    ubootName = "zstd";
     extension = ".zst";
   };
   pigz = gzip // {
