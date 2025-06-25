@@ -1,15 +1,15 @@
 {
   stdenv,
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
   git,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gigalixir";
   version = "1.13.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -18,11 +18,15 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," "" \
-      --replace "cryptography==" "cryptography>="
+      --replace-fail "'pytest-runner'," "" \
+      --replace-fail "cryptography==" "cryptography>="
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     click
     pygments
     pyopenssl
@@ -32,15 +36,13 @@ python3.pkgs.buildPythonApplication rec {
     stripe
   ];
 
-  nativeCheckInputs =
-    [
-      git
-    ]
-    ++ (with python3.pkgs; [
-      httpretty
-      pytestCheckHook
-      sure
-    ]);
+  nativeCheckInputs = with python3Packages; [
+    git
+
+    httpretty
+    pytestCheckHook
+    sure
+  ];
 
   disabledTests = [
     # Test requires network access
@@ -57,11 +59,11 @@ python3.pkgs.buildPythonApplication rec {
     "gigalixir"
   ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Gigalixir Command-Line Interface";
     homepage = "https://github.com/gigalixir/gigalixir-cli";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "gigalixir";
   };
