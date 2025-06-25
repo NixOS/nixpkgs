@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer";
-  version = "1.0.2";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,14 +27,14 @@ buildPythonPackage rec {
     owner = "pyppeteer";
     repo = "pyppeteer";
     tag = version;
-    hash = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
+    hash = "sha256-LYyV4Wzz4faewSsGjNe0i/9BLbCHzzEns2ZL2MYkGWw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'pyee = "^8.1.0"' 'pyee = "*"' \
-      --replace 'urllib3 = "^1.25.8"' 'urllib3 = "*"' \
-      --replace 'websockets = "^10.0"' 'websockets = "*"'
+      --replace-fail 'pyee = "^11.0.0"' 'pyee = "*"' \
+      --replace-fail 'urllib3 = "^1.25.8"' 'urllib3 = "*"' \
+      --replace-fail 'websockets = "^10.0"' 'websockets = "*"'
   '';
 
   nativeBuildInputs = [ poetry-core ];
