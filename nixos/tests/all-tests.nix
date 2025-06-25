@@ -491,6 +491,10 @@ in
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-esr-128;
   };
+  firefox-esr-140 = runTest {
+    imports = [ ./firefox.nix ];
+    _module.args.firefoxPackage = pkgs.firefox-esr-140;
+  };
   firefoxpwa = handleTest ./firefoxpwa.nix { };
   firejail = handleTest ./firejail.nix { };
   firewall = handleTest ./firewall.nix { nftables = false; };
