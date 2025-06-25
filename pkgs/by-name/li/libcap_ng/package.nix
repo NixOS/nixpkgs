@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,10 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-python"
   ];
 
+  passthru = {
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
+  };
+
   meta = {
     changelog = "https://people.redhat.com/sgrubb/libcap-ng/ChangeLog";
     description = "Library for working with POSIX capabilities";
     homepage = "https://people.redhat.com/sgrubb/libcap-ng/";
+    pkgConfigModules = [ "libcap-ng" ];
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
   };
