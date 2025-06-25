@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   netbox,
-  pythonAtLeast,
+  python,
   napalm,
   django,
 }:
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.3.1";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
+  disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
