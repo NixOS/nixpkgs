@@ -36,12 +36,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "1.1.24";
+  version = "1.1.32";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-dTJ2YMNZwpZj3ZDWegjFr9aiaUtTpN8gY1wq5SAoVvs=";
+    hash = "sha256-uZrq4RM50NcQPHFFfqIRBJ/rq/I09D8WxKz3/xqpOEI=";
   };
 
   nativeBuildInputs = [
