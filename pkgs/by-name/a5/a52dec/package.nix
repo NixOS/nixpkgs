@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     domain = "git.adelielinux.org";
     owner = "community";
     repo = "a52dec";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Z4riiwetJkhQYa+AD8qOiwB1+cuLbOyN/g7D8HM8Pkw=";
   };
 

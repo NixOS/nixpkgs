@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication {
   src = fetchFromGitLab {
     owner = "franksh";
     repo = "amphetype";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pve2f+XMfFokMCtW3KdeOJ9Ey330Gwv/dk1+WBtrBEQ=";
   };
 
