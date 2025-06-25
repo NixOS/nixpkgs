@@ -91,13 +91,27 @@ let
   mkUnits =
     prefix: name: fs:
     let
-      mountUnit = "${utils.escapeSystemdPath (prefix + (lib.removeSuffix "/" fs.mountPoint))}.mount";
-      device = firstDevice fs;
+      parseTags =
+        device:
+        if lib.hasPrefix "LABEL=" device then
+          "/dev/disk/by-label/" + lib.removePrefix "LABEL=" device
+        else if lib.hasPrefix "UUID=" device then
+          "/dev/disk/by-uuid/" + lib.removePrefix "UUID=" device
+        else if lib.hasPrefix "PARTLABEL=" device then
+          "/dev/disk/by-partlabel/" + lib.removePrefix "PARTLABEL=" device
+        else if lib.hasPrefix "PARTUUID=" device then
+          "/dev/disk/by-partuuid/" + lib.removePrefix "PARTUUID=" device
+        else if lib.hasPrefix "ID=" device then
+          "/dev/disk/by-id/" + lib.removePrefix "ID=" device
+        else
+          device;
+      device = parseTags (firstDevice fs);
       mkDeviceUnit = device: "${utils.escapeSystemdPath device}.device";
+      mkMountUnit = path: "${utils.escapeSystemdPath (lib.removeSuffix "/" path)}.mount";
       deviceUnit = mkDeviceUnit device;
+      mountUnit = mkMountUnit (prefix + fs.mountPoint);
       extractProperty =
         prop: options: (map (lib.removePrefix "${prop}=") (builtins.filter (lib.hasPrefix prop) options));
-      mkMountUnit = path: "${utils.escapeSystemdPath path}.mount";
       normalizeUnits =
         unit:
         if lib.hasPrefix "/dev/" unit then
