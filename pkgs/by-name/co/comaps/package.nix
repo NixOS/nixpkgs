@@ -1,0 +1,90 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  fetchFromGitea,
+  cmake,
+  git,
+  boost,
+  qt6,
+  python3,
+  libXrandr,
+  libXinerama,
+  libXcursor,
+}:
+let
+  mapRev = 250602;
+
+  worldMap = fetchurl {
+    url = "https://cdn.comaps.app/maps/${toString mapRev}/World.mwm";
+    hash = "sha256-VhlY7XDvNsyP9dfAvprpjvHoIjmS82XNbCIFjlto1Ng=";
+  };
+
+  worldCoasts = fetchurl {
+    url = "https://cdn.comaps.app/maps/${toString mapRev}/WorldCoasts.mwm";
+    hash = "sha256-nlkeQpYje5LbD6exB1L72jYJnXEKBKho6sYgPxgorR8=";
+  };
+
+  worldFeedIntegrationTestsData = fetchFromGitHub {
+    owner = "organicmaps";
+    repo = "world_feed_integration_tests_data";
+    rev = "30ecb0b3fe694a582edfacc2a7425b6f01f9fec6";
+    hash = "sha256-1FF658OhKg8a5kKX/7TVmsxZ9amimn4lB6bX9i7pnI4=";
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "comaps";
+  version = "2025.06.22-5";
+
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "comaps";
+    repo = "comaps";
+    tag = "${finalAttrs.version}-android";
+    hash = "sha256-InYrOXpQaen6Th8jlmpVwMkf5G7knK7J781CRt5Jvz4=";
+    fetchSubmodules = true;
+  };
+
+  patches = [
+    # The world feed integration data is fetched externally, instead we fetch it ourselves.
+    ./local-world-feed-integration-tests-data.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    git
+    qt6.wrapQtAppsHook
+    python3
+  ];
+
+  buildInputs = [
+    boost
+    qt6.qtbase
+    qt6.qtpositioning
+    qt6.qtsvg
+    libXrandr
+    libXinerama
+    libXcursor
+  ];
+
+  preConfigure = ''
+    cp -r ${worldFeedIntegrationTestsData} data/test_data/world_feed_integration_tests_data
+  '';
+
+  postInstall = ''
+    install -Dm644 ${worldMap} $out/share/comaps/data/World.mwm
+    install -Dm644 ${worldCoasts} $out/share/comaps/data/WorldCoasts.mwm
+    mv $out/bin/CoMaps $out/bin/comaps
+  '';
+
+  meta = {
+    description = "A community-led fork of Organic Maps";
+    homepage = "https://comaps.app";
+    changelog = "https://codeberg.org/comaps/comaps/releases/tag/${finalAttrs.version}-android";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ryand56 ];
+    platforms = lib.platforms.linux;
+    mainProgram = "comaps";
+  };
+})
