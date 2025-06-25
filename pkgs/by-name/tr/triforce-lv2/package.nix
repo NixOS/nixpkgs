@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "triforce-lv2";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "chadmed";
     repo = "triforce";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-f4i0S6UaVfs1CUeQRqo22PRgMNwYDNoMunHidI1XzBk=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ yuka ];
     platforms = platforms.linux;
   };
-}
+})
