@@ -10,6 +10,7 @@
   python3,
   swig,
   pkgsCross,
+  libcap_ng,
 
   # Enabling python support while cross compiling would be possible, but the
   # configure script tries executing python to gather info instead of relying on
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash
+    libcap_ng
   ];
 
   configureFlags = [
@@ -86,6 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-zos-remote"
     "--with-arm"
     "--with-aarch64"
+    # capability dropping, currently mostly for plugins as those get spawned as root
+    # see auditd-plugins(5)
+    "--with-libcap-ng=yes"
     (if enablePython then "--with-python" else "--without-python")
   ];
 
