@@ -100,7 +100,7 @@
   _0x3f = {
 =======
   _0x17 = {
-    email = "nix@nerdbude.com";
+    email = "nixpkgs@nerdbude.com";
     matrix = "@0x17:kyb3r.space";
     name = "0x17";
     github = "nerdbude";
