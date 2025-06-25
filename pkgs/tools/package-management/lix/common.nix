@@ -13,6 +13,7 @@
   docCargoHash ? null,
   docCargoLock ? null,
   patches ? [ ],
+  knownVulnerabilities ? [ ],
   maintainers ? lib.teams.lix.members,
 }@args:
 assert (hash == null) -> (src != null);
@@ -304,7 +305,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://lix.systems";
     license = lib.licenses.lgpl21Plus;
-    inherit maintainers;
+    inherit maintainers knownVulnerabilities;
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";

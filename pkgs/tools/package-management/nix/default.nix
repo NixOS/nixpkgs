@@ -225,6 +225,7 @@ lib.makeExtensible (
       nix_2_24 = commonAutoconf {
         version = "2.24.14";
         hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
+        patches = [ ./patches/ghsa-g948-229j-48j3-2.24.patch ];
         self_attribute_name = "nix_2_24";
       };
 
@@ -247,6 +248,7 @@ lib.makeExtensible (
         patches = [
           # fixes user/system registries regression: https://github.com/NixOS/nix/issues/13050
           ./patches/0001-Revert-Actually-ignore-system-user-registries-during.patch
+          ./patches/ghsa-g948-229j-48j3-2.28.patch
         ];
       };
 

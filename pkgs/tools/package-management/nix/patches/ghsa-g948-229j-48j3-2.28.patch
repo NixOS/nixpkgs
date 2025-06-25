@@ -1,0 +1,454 @@
+From 24c1aa735a40d3bf5361755fa10ac0e577a55eed Mon Sep 17 00:00:00 2001
+From: Eelco Dolstra <edolstra@gmail.com>
+Date: Thu, 19 Jun 2025 16:20:34 +0200
+Subject: [PATCH] Fixes for GHSA-g948-229j-48j3
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Squashed commit of the following:
+
+commit 04fff3a637d455cbb1d75937a235950e43008db9
+Author: Eelco Dolstra <edolstra@gmail.com>
+Date:   Thu Jun 12 12:30:32 2025 +0200
+
+    Chown structured attr files safely
+
+commit 5417ad445e414c649d0cfc71a05661c7bf8f3ef5
+Author: Eelco Dolstra <edolstra@gmail.com>
+Date:   Thu Jun 12 12:14:04 2025 +0200
+
+    Replace 'bool sync' with an enum for clarity
+
+    And drop writeFileAndSync().
+
+commit 7ae0141f328d8e8e1094be24665789c05f974ba6
+Author: Eelco Dolstra <edolstra@gmail.com>
+Date:   Thu Jun 12 11:35:28 2025 +0200
+
+    Drop guessOrInventPathFromFD()
+
+    No need to do hacky stuff like that when we already know the original path.
+
+commit 45b05098bd019da7c57cd4227a89bfd0fa65bb08
+Author: Eelco Dolstra <edolstra@gmail.com>
+Date:   Thu Jun 12 11:15:58 2025 +0200
+
+    Tweak comment
+
+commit 0af15b31209d1b7ec8addfae9a1a6b60d8f35848
+Author: Raito Bezarius <raito@lix.systems>
+Date:   Thu Mar 27 12:22:26 2025 +0100
+
+    libstore: ensure that temporary directory is always 0o000 before deletion
+
+    In the case the deletion fails, we should ensure that the temporary
+    directory cannot be used for nefarious purposes.
+
+    Change-Id: I498a2dd0999a74195d13642f44a5de1e69d46120
+    Signed-off-by: Raito Bezarius <raito@lix.systems>
+
+commit 2c20fa37b15cfa03ac6a1a6a47cdb2ed66c0827e
+Author: Raito Bezarius <raito@lix.systems>
+Date:   Wed Mar 26 12:42:55 2025 +0100
+
+    libutil: ensure that `_deletePath` does NOT use absolute paths with dirfds
+
+    When calling `_deletePath` with a parent file descriptor, `openat` is
+    made effective by using relative paths to the directory file descriptor.
+
+    To avoid the problem, the signature is changed to resist misuse with an
+    assert in the prologue of the function.
+
+    Change-Id: I6b3fc766bad2afe54dc27d47d1df3873e188de96
+    Signed-off-by: Raito Bezarius <raito@lix.systems>
+
+commit d3c370bbcae48bb825ce19fd0f73bb4eefd2c9ea
+Author: Raito Bezarius <raito@lix.systems>
+Date:   Wed Mar 26 01:07:47 2025 +0100
+
+    libstore: ensure that `passAsFile` is created in the original temp dir
+
+    This ensures that `passAsFile` data is created inside the expected
+    temporary build directory by `openat()` from the parent directory file
+    descriptor.
+
+    This avoids a TOCTOU which is part of the attack chain of CVE-????.
+
+    Change-Id: Ie5273446c4a19403088d0389ae8e3f473af8879a
+    Signed-off-by: Raito Bezarius <raito@lix.systems>
+
+commit 45d3598724f932d024ef6bc2ffb00c1bb90e6018
+Author: Raito Bezarius <raito@lix.systems>
+Date:   Wed Mar 26 01:06:03 2025 +0100
+
+    libutil: writeFile variant for file descriptors
+
+    `writeFile` lose its `sync` boolean flag to make things simpler.
+
+    A new `writeFileAndSync` function is created and all call sites are
+    converted to it.
+
+    Change-Id: Ib871a5283a9c047db1e4fe48a241506e4aab9192
+    Signed-off-by: Raito Bezarius <raito@lix.systems>
+
+commit 732bd9b98cabf4aaf95a01fd318923de303f9996
+Author: Raito Bezarius <raito@lix.systems>
+Date:   Wed Mar 26 01:05:34 2025 +0100
+
+    libstore: chown to builder variant for file descriptors
+
+    We use it immediately for the build temporary directory.
+
+    Change-Id: I180193c63a2b98721f5fb8e542c4e39c099bb947
+    Signed-off-by: Raito Bezarius <raito@lix.systems>
+
+commit 962c65f8dcd5570dd92c72370a862c7b38942e0d
+Author: Raito Bezarius <raito@lix.systems>
+Date:   Wed Mar 26 01:04:59 2025 +0100
+
+    libstore: open build directory as a dirfd as well
+
+    We now keep around a proper AutoCloseFD around the temporary directory
+    which we plan to use for openat operations and avoiding the build
+    directory being swapped out while we are doing something else.
+
+    Change-Id: I18d387b0f123ebf2d20c6405cd47ebadc5505f2a
+    Signed-off-by: Raito Bezarius <raito@lix.systems>
+
+commit c9b42462b75b5a37ee6564c2b53cff186c8323da
+Author: Raito Bezarius <raito@lix.systems>
+Date:   Wed Mar 26 01:04:12 2025 +0100
+
+    libutil: guess or invent a path from file descriptors
+
+    This is useful for certain error recovery paths (no pun intended) that
+    does not thread through the original path name.
+
+    Change-Id: I2d800740cb4f9912e64c923120d3f977c58ccb7e
+    Signed-off-by: Raito Bezarius <raito@lix.systems>
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ src/libstore/local-store.cc                   |  4 +-
+ .../unix/build/local-derivation-goal.cc       | 46 ++++++++++++++----
+ .../nix/store/build/local-derivation-goal.hh  | 20 ++++++++
+ src/libutil/file-content-address.cc           |  2 +-
+ src/libutil/file-system.cc                    | 47 +++++++++++--------
+ src/libutil/include/nix/util/file-system.hh   | 14 ++++--
+ 6 files changed, 98 insertions(+), 35 deletions(-)
+
+diff --git a/src/libstore/local-store.cc b/src/libstore/local-store.cc
+index f3bee6953..eddc87ef9 100644
+--- a/src/libstore/local-store.cc
++++ b/src/libstore/local-store.cc
+@@ -249,7 +249,7 @@ LocalStore::LocalStore(
+     else if (curSchema == 0) { /* new store */
+         curSchema = nixSchemaVersion;
+         openDB(*state, true);
+-        writeFile(schemaPath, fmt("%1%", curSchema), 0666, true);
++        writeFile(schemaPath, fmt("%1%", curSchema), 0666, FsSync::Yes);
+     }
+ 
+     else if (curSchema < nixSchemaVersion) {
+@@ -300,7 +300,7 @@ LocalStore::LocalStore(
+             txn.commit();
+         }
+ 
+-        writeFile(schemaPath, fmt("%1%", nixSchemaVersion), 0666, true);
++        writeFile(schemaPath, fmt("%1%", nixSchemaVersion), 0666, FsSync::Yes);
+ 
+         lockFile(globalLock.get(), ltRead, true);
+     }
+diff --git a/src/libstore/unix/build/local-derivation-goal.cc b/src/libstore/unix/build/local-derivation-goal.cc
+index 9edb6fb0f..a0442d0b8 100644
+--- a/src/libstore/unix/build/local-derivation-goal.cc
++++ b/src/libstore/unix/build/local-derivation-goal.cc
+@@ -567,7 +567,14 @@ void LocalDerivationGoal::startBuilder()
+     } else {
+         tmpDir = topTmpDir;
+     }
+-    chownToBuilder(tmpDir);
++
++    /* The TOCTOU between the previous mkdir call and this open call is unavoidable due to
++       POSIX semantics.*/
++    tmpDirFd = AutoCloseFD{open(tmpDir.c_str(), O_RDONLY | O_NOFOLLOW | O_DIRECTORY)};
++    if (!tmpDirFd)
++        throw SysError("failed to open the build temporary directory descriptor '%1%'", tmpDir);
++
++    chownToBuilder(tmpDirFd.get(), tmpDir);
+ 
+     for (auto & [outputName, status] : initialOutputs) {
+         /* Set scratch path we'll actually use during the build.
+@@ -1159,9 +1166,7 @@ void LocalDerivationGoal::initTmpDir()
+             } else {
+                 auto hash = hashString(HashAlgorithm::SHA256, i.first);
+                 std::string fn = ".attr-" + hash.to_string(HashFormat::Nix32, false);
+-                Path p = tmpDir + "/" + fn;
+-                writeFile(p, rewriteStrings(i.second, inputRewrites));
+-                chownToBuilder(p);
++                writeBuilderFile(fn, rewriteStrings(i.second, inputRewrites));
+                 env[i.first + "Path"] = tmpDirInSandbox + "/" + fn;
+             }
+         }
+@@ -1266,11 +1271,9 @@ void LocalDerivationGoal::writeStructuredAttrs()
+ 
+         auto jsonSh = writeStructuredAttrsShell(json);
+ 
+-        writeFile(tmpDir + "/.attrs.sh", rewriteStrings(jsonSh, inputRewrites));
+-        chownToBuilder(tmpDir + "/.attrs.sh");
++        writeBuilderFile(".attrs.sh", rewriteStrings(jsonSh, inputRewrites));
+         env["NIX_ATTRS_SH_FILE"] = tmpDirInSandbox + "/.attrs.sh";
+-        writeFile(tmpDir + "/.attrs.json", rewriteStrings(json.dump(), inputRewrites));
+-        chownToBuilder(tmpDir + "/.attrs.json");
++        writeBuilderFile(".attrs.json", rewriteStrings(json.dump(), inputRewrites));
+         env["NIX_ATTRS_JSON_FILE"] = tmpDirInSandbox + "/.attrs.json";
+     }
+ }
+@@ -1781,6 +1784,24 @@ void setupSeccomp()
+ #endif
+ }
+ 
++void LocalDerivationGoal::chownToBuilder(int fd, const Path & path)
++{
++    if (!buildUser) return;
++    if (fchown(fd, buildUser->getUID(), buildUser->getGID()) == -1)
++        throw SysError("cannot change ownership of file '%1%'", path);
++}
++
++void LocalDerivationGoal::writeBuilderFile(
++    const std::string & name,
++    std::string_view contents)
++{
++    auto path = std::filesystem::path(tmpDir) / name;
++    AutoCloseFD fd{openat(tmpDirFd.get(), name.c_str(), O_WRONLY | O_TRUNC | O_CREAT | O_CLOEXEC | O_EXCL | O_NOFOLLOW, 0666)};
++    if (!fd)
++        throw SysError("creating file %s", path);
++    writeFile(fd, path, contents);
++    chownToBuilder(fd.get(), path);
++}
+ 
+ void LocalDerivationGoal::runChild()
+ {
+@@ -3000,6 +3021,15 @@ void LocalDerivationGoal::checkOutputs(const std::map<std::string, ValidPathInfo
+ void LocalDerivationGoal::deleteTmpDir(bool force)
+ {
+     if (topTmpDir != "") {
++        /* As an extra precaution, even in the event of `deletePath` failing to
++         * clean up, the `tmpDir` will be chowned as if we were to move
++         * it inside the Nix store.
++         *
++         * This hardens against an attack which smuggles a file descriptor
++         * to make use of the temporary directory.
++         */
++        chmod(topTmpDir.c_str(), 0000);
++
+         /* Don't keep temporary directories for builtins because they
+            might have privileged stuff (like a copy of netrc). */
+         if (settings.keepFailed && !force && !drv->isBuiltin()) {
+diff --git a/src/libstore/unix/include/nix/store/build/local-derivation-goal.hh b/src/libstore/unix/include/nix/store/build/local-derivation-goal.hh
+index 795286a01..fb62e3ca4 100644
+--- a/src/libstore/unix/include/nix/store/build/local-derivation-goal.hh
++++ b/src/libstore/unix/include/nix/store/build/local-derivation-goal.hh
+@@ -37,6 +37,11 @@ struct LocalDerivationGoal : public DerivationGoal
+      */
+     Path topTmpDir;
+ 
++    /**
++     * The file descriptor of the temporary directory.
++     */
++    AutoCloseFD tmpDirFd;
++
+     /**
+      * The path of the temporary directory in the sandbox.
+      */
+@@ -239,9 +244,24 @@ struct LocalDerivationGoal : public DerivationGoal
+ 
+     /**
+      * Make a file owned by the builder.
++     *
++     * SAFETY: this function is prone to TOCTOU as it receives a path and not a descriptor.
++     * It's only safe to call in a child of a directory only visible to the owner.
+      */
+     void chownToBuilder(const Path & path);
+ 
++    /**
++     * Make a file owned by the builder addressed by its file descriptor.
++     */
++    void chownToBuilder(int fd, const Path & path);
++
++    /**
++     * Create a file in `tmpDir` owned by the builder.
++     */
++    void writeBuilderFile(
++        const std::string & name,
++        std::string_view contents);
++
+     int getChildStatus() override;
+ 
+     /**
+diff --git a/src/libutil/file-content-address.cc b/src/libutil/file-content-address.cc
+index 142bc70d5..d95781691 100644
+--- a/src/libutil/file-content-address.cc
++++ b/src/libutil/file-content-address.cc
+@@ -93,7 +93,7 @@ void restorePath(
+ {
+     switch (method) {
+     case FileSerialisationMethod::Flat:
+-        writeFile(path, source, 0666, startFsync);
++        writeFile(path, source, 0666, startFsync ? FsSync::Yes : FsSync::No);
+         break;
+     case FileSerialisationMethod::NixArchive:
+         restorePath(path, source, startFsync);
+diff --git a/src/libutil/file-system.cc b/src/libutil/file-system.cc
+index 9ce3682f1..204a63c4e 100644
+--- a/src/libutil/file-system.cc
++++ b/src/libutil/file-system.cc
+@@ -298,7 +298,7 @@ void readFile(const Path & path, Sink & sink)
+ }
+ 
+ 
+-void writeFile(const Path & path, std::string_view s, mode_t mode, bool sync)
++void writeFile(const Path & path, std::string_view s, mode_t mode, FsSync sync)
+ {
+     AutoCloseFD fd = toDescriptor(open(path.c_str(), O_WRONLY | O_TRUNC | O_CREAT
+ // TODO
+@@ -308,22 +308,29 @@ void writeFile(const Path & path, std::string_view s, mode_t mode, bool sync)
+        , mode));
+     if (!fd)
+         throw SysError("opening file '%1%'", path);
++
++    writeFile(fd, path, s, mode, sync);
++
++    /* Close explicitly to propagate the exceptions. */
++    fd.close();
++}
++
++void writeFile(AutoCloseFD & fd, const Path & origPath, std::string_view s, mode_t mode, FsSync sync)
++{
++    assert(fd);
+     try {
+         writeFull(fd.get(), s);
++
++        if (sync == FsSync::Yes)
++            fd.fsync();
++
+     } catch (Error & e) {
+-        e.addTrace({}, "writing file '%1%'", path);
++        e.addTrace({}, "writing file '%1%'", origPath);
+         throw;
+     }
+-    if (sync)
+-        fd.fsync();
+-    // Explicitly close to make sure exceptions are propagated.
+-    fd.close();
+-    if (sync)
+-        syncParent(path);
+ }
+ 
+-
+-void writeFile(const Path & path, Source & source, mode_t mode, bool sync)
++void writeFile(const Path & path, Source & source, mode_t mode, FsSync sync)
+ {
+     AutoCloseFD fd = toDescriptor(open(path.c_str(), O_WRONLY | O_TRUNC | O_CREAT
+ // TODO
+@@ -347,11 +354,11 @@ void writeFile(const Path & path, Source & source, mode_t mode, bool sync)
+         e.addTrace({}, "writing file '%1%'", path);
+         throw;
+     }
+-    if (sync)
++    if (sync == FsSync::Yes)
+         fd.fsync();
+     // Explicitly close to make sure exceptions are propagated.
+     fd.close();
+-    if (sync)
++    if (sync == FsSync::Yes)
+         syncParent(path);
+ }
+ 
+@@ -414,7 +421,8 @@ static void _deletePath(Descriptor parentfd, const fs::path & path, uint64_t & b
+ #ifndef _WIN32
+     checkInterrupt();
+ 
+-    std::string name(baseNameOf(path.native()));
++    std::string name(path.filename());
++    assert(name != "." && name != ".." && !name.empty());
+ 
+     struct stat st;
+     if (fstatat(parentfd, name.c_str(), &st,
+@@ -455,7 +463,7 @@ static void _deletePath(Descriptor parentfd, const fs::path & path, uint64_t & b
+                 throw SysError("chmod %1%", path);
+         }
+ 
+-        int fd = openat(parentfd, path.c_str(), O_RDONLY);
++        int fd = openat(parentfd, name.c_str(), O_RDONLY | O_DIRECTORY | O_NOFOLLOW);
+         if (fd == -1)
+             throw SysError("opening directory %1%", path);
+         AutoCloseDir dir(fdopendir(fd));
+@@ -467,7 +475,7 @@ static void _deletePath(Descriptor parentfd, const fs::path & path, uint64_t & b
+             checkInterrupt();
+             std::string childName = dirent->d_name;
+             if (childName == "." || childName == "..") continue;
+-            _deletePath(dirfd(dir.get()), path + "/" + childName, bytesFreed);
++            _deletePath(dirfd(dir.get()), path / childName, bytesFreed);
+         }
+         if (errno) throw SysError("reading directory %1%", path);
+     }
+@@ -485,14 +493,13 @@ static void _deletePath(Descriptor parentfd, const fs::path & path, uint64_t & b
+ 
+ static void _deletePath(const fs::path & path, uint64_t & bytesFreed)
+ {
+-    Path dir = dirOf(path.string());
+-    if (dir == "")
+-        dir = "/";
++    assert(path.is_absolute());
++    assert(path.parent_path() != path);
+ 
+-    AutoCloseFD dirfd = toDescriptor(open(dir.c_str(), O_RDONLY));
++    AutoCloseFD dirfd = toDescriptor(open(path.parent_path().string().c_str(), O_RDONLY));
+     if (!dirfd) {
+         if (errno == ENOENT) return;
+-        throw SysError("opening directory '%1%'", path);
++        throw SysError("opening directory %s", path.parent_path());
+     }
+ 
+     _deletePath(dirfd.get(), path, bytesFreed);
+diff --git a/src/libutil/include/nix/util/file-system.hh b/src/libutil/include/nix/util/file-system.hh
+index e6b1cfef3..9a0057bbe 100644
+--- a/src/libutil/include/nix/util/file-system.hh
++++ b/src/libutil/include/nix/util/file-system.hh
+@@ -193,21 +193,27 @@ std::string readFile(const Path & path);
+ std::string readFile(const std::filesystem::path & path);
+ void readFile(const Path & path, Sink & sink);
+ 
++enum struct FsSync { Yes, No };
++
+ /**
+  * Write a string to a file.
+  */
+-void writeFile(const Path & path, std::string_view s, mode_t mode = 0666, bool sync = false);
+-static inline void writeFile(const std::filesystem::path & path, std::string_view s, mode_t mode = 0666, bool sync = false)
++void writeFile(const Path & path, std::string_view s, mode_t mode = 0666, FsSync sync = FsSync::No);
++
++static inline void writeFile(const std::filesystem::path & path, std::string_view s, mode_t mode = 0666, FsSync sync = FsSync::No)
+ {
+     return writeFile(path.string(), s, mode, sync);
+ }
+ 
+-void writeFile(const Path & path, Source & source, mode_t mode = 0666, bool sync = false);
+-static inline void writeFile(const std::filesystem::path & path, Source & source, mode_t mode = 0666, bool sync = false)
++void writeFile(const Path & path, Source & source, mode_t mode = 0666, FsSync sync = FsSync::No);
++
++static inline void writeFile(const std::filesystem::path & path, Source & source, mode_t mode = 0666, FsSync sync = FsSync::No)
+ {
+     return writeFile(path.string(), source, mode, sync);
+ }
+ 
++void writeFile(AutoCloseFD & fd, const Path & origPath, std::string_view s, mode_t mode = 0666, FsSync sync = FsSync::No);
++
+ /**
+  * Flush a path's parent directory to disk.
+  */
+-- 
+2.44.1
+
