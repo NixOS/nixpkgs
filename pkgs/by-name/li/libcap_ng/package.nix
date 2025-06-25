@@ -5,6 +5,7 @@
   autoreconfHook,
   swig,
   testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
+    updateScript = nix-update-script { };
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
