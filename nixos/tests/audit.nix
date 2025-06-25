@@ -12,7 +12,13 @@
             "-a always,exit -F exe=${lib.getExe pkgs.hello} -k nixos-test"
           ];
         };
-        security.auditd.enable = true;
+        security.auditd = {
+          enable = true;
+          plugins.af_unix.active = true;
+          plugins.syslog.active = true;
+          # plugins.remote.active = true; # needs configuring a remote server for logging
+          # plugins.filter.active = true; # needs configuring allowlist/denylist
+        };
 
         environment.systemPackages = [ pkgs.hello ];
       };
@@ -24,6 +30,9 @@
 
     with subtest("Audit subsystem gets enabled"):
       assert "enabled 1" in machine.succeed("auditctl -s")
+
+    with subtest("unix socket plugin activated"):
+      machine.succeed("stat /var/run/audispd_events")
 
     with subtest("Custom rule produces audit traces"):
       machine.succeed("hello")
