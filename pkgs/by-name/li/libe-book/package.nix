@@ -28,10 +28,13 @@ stdenv.mkDerivation rec {
       "TRUE, TRUE, &status)" \
       "true, true, &status)"
   '';
-  nativeBuildInputs = [ pkg-config ];
+
+  nativeBuildInputs = [
+    pkg-config
+    gperf
+  ];
 
   buildInputs = [
-    gperf
     librevenge
     libxml2
     boost
