@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "agate";
-  version = "1.11.0";
+  version = "1.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "wireservice";
     repo = "agate";
     tag = version;
-    hash = "sha256-JVBf21as4DNmGT84dSG+54RIU6PbRBoLPSsWj2FGXxc=";
+    hash = "sha256-jDeme5eOuX9aQ+4A/pLnH/SuCOztyZzKdSBYKVC63Bk=";
   };
 
   build-system = [ setuptools ];
@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "agate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python data analysis library that is optimized for humans instead of machines";
     homepage = "https://github.com/wireservice/agate";
     changelog = "https://github.com/wireservice/agate/blob/${version}/CHANGELOG.rst";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
 }

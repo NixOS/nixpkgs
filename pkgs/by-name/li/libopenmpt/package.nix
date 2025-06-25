@@ -1,24 +1,29 @@
-{ config
-, lib
-, stdenv
-, fetchurl
-, zlib
-, pkg-config
-, mpg123
-, libogg
-, libvorbis
-, portaudio
-, libsndfile
-, flac
-, usePulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux
-, libpulseaudio
+{
+  config,
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  pkg-config,
+  mpg123,
+  libogg,
+  libvorbis,
+  portaudio,
+  libsndfile,
+  flac,
+  usePulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libopenmpt";
   version = "0.7.13";
 
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
@@ -31,17 +36,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    zlib
-    mpg123
-    libogg
-    libvorbis
-    portaudio
-    libsndfile
-    flac
-  ] ++ lib.optionals usePulseAudio [
-    libpulseaudio
-  ];
+  buildInputs =
+    [
+      zlib
+      mpg123
+      libogg
+      libvorbis
+      portaudio
+      libsndfile
+      flac
+    ]
+    ++ lib.optionals usePulseAudio [
+      libpulseaudio
+    ];
 
   configureFlags = [
     (lib.strings.withFeature usePulseAudio "pulseaudio")

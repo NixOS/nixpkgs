@@ -1,6 +1,10 @@
 # This file was generated and will be overwritten by ./generate.sh
 
-{ stdenv, lib, fetchurl }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+}:
 
 stdenv.mkDerivation {
   pname = "python310-docs-pdf-letter";

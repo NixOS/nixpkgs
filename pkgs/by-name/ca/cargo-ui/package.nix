@@ -10,7 +10,6 @@
   fontconfig,
   libGL,
   xorg,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,9 +42,6 @@ rustPlatform.buildRustPackage rec {
       xorg.libXi
       xorg.libXrandr
       xorg.libxcb
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
     ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -62,17 +58,17 @@ rustPlatform.buildRustPackage rec {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GUI for Cargo";
     mainProgram = "cargo-ui";
     homepage = "https://github.com/slint-ui/cargo-ui";
     changelog = "https://github.com/slint-ui/cargo-ui/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
       gpl3Only
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       matthiasbeyer
     ];

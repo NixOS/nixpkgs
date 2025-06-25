@@ -1,5 +1,6 @@
 let
   validThemes = [
+    "alacritty"
     "bat"
     "bottom"
     "btop"
@@ -55,6 +56,14 @@ let
 
   selectedSources = map (themeName: builtins.getAttr themeName sources) themeList;
   sources = {
+    alacritty = fetchFromGitHub {
+      name = "alacritty";
+      owner = "catppuccin";
+      repo = "alacritty";
+      rev = "f6cb5a5c2b404cdaceaff193b9c52317f62c62f7";
+      hash = "sha256-H8bouVCS46h0DgQ+oYY8JitahQDj0V9p2cOoD4cQX+Q=";
+    };
+
     bat = fetchFromGitHub {
       name = "bat";
       owner = "catppuccin";
@@ -83,8 +92,8 @@ let
       name = "element";
       owner = "catppuccin";
       repo = "element";
-      rev = "ddced941a2014107918484263b63e030889777fe";
-      hash = "sha256-8EP/IQW3rdtomHBfnQNIjGbiD6OapPzXPFLjziNDcmc=";
+      rev = "70b7ee121dcef28c6c8191d60df2f88b23c89084";
+      hash = "sha256-iUSPlmEvwL9akbPobkbDWPr6TTHA/LdCK2Nty7Zslls=";
     };
 
     grub = fetchFromGitHub {
@@ -223,6 +232,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
         local capitalizedAccent=$(sed 's/^\(.\)/\U\1/' <<< "${accent}")
 
       ''
+      + lib.optionalString (lib.elem "alacritty" themeList) ''
+        mkdir -p "$out/alacritty"
+        cp "${sources.alacritty}/catppuccin-${variant}.toml" "$out/alacritty/"
+
+      ''
       + lib.optionalString (lib.elem "bat" themeList) ''
         mkdir -p "$out/bat"
         cp "${sources.bat}/themes/Catppuccin "$capitalizedVariant".tmTheme" "$out/bat/"
@@ -240,7 +254,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       ''
       + lib.optionalString (lib.elem "element" themeList) ''
         mkdir -p "$out/element"
-        cp -r "${sources.element}/themes/Catppuccin-${variant}.json" "$out/element/"
+        cp -r "${sources.element}/themes/${variant}/${accent}.json" "$out/element/"
 
       ''
       + lib.optionalString (lib.elem "grub" themeList) ''

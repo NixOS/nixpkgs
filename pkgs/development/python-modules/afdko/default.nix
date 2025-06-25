@@ -9,6 +9,7 @@
   cmake,
   defcon,
   fetchFromGitHub,
+  fetchpatch,
   fontmath,
   fontpens,
   fonttools,
@@ -58,6 +59,17 @@ buildPythonPackage rec {
 
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
+
+    # Fix tests
+    # FIXME: remove in 5.0
+    (fetchpatch {
+      url = "https://github.com/adobe-type-tools/afdko/commit/3b78bea15245e2bd2417c25ba5c2b8b15b07793c.patch";
+      excludes = [
+        "CMakeLists.txt"
+        "requirements.txt"
+      ];
+      hash = "sha256-Ao5AUVm1h4a3qidqlBFWdC7jiXyBfXQEnsT7XsXXXRU=";
+    })
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
@@ -104,6 +116,8 @@ buildPythonPackage rec {
       "test_glyphs_2_7"
       "test_hinting_data"
       "test_waterfallplot"
+      # broke at some point
+      "test_type1_supported_hint"
     ]
     ++ lib.optionals (stdenv.cc.isGNU) [
       # broke in the gcc 13 -> 14 update

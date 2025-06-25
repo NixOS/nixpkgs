@@ -62,14 +62,14 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "deid" ];
 
   meta = {
     description = "Best-effort anonymization for medical images";
     mainProgram = "deid";
-    changelog = "https://github.com/pydicom/deid/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pydicom/deid/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pydicom.github.io/deid";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];

@@ -12,28 +12,24 @@
   # Only required on Linux
   glew,
   libglut,
-  # Only required on Darwin
-  Carbon,
-  GLUT,
-  Cocoa,
   # Python bindings
   pythonBindings ? true, # Python bindings
   python3Packages,
   # Build apps
   buildApps ? true, # Utility applications
   lcms2,
-  openexr_3,
+  openexr,
 }:
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    hash = "sha256-Ytqvd4qSqO+6hId3v7X9cd+zrOElcqTBev5miJL/07M=";
+    hash = "sha256-+P7T8UZuQEVmsMykSWtUxg0vC7Sr4fQJpovCU5sKtsA=";
   };
 
   patches = [
@@ -63,18 +59,13 @@ stdenv.mkDerivation rec {
       glew
       libglut
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      GLUT
-      Cocoa
-    ]
     ++ lib.optionals pythonBindings [
       python3Packages.python
       python3Packages.pybind11
     ]
     ++ lib.optionals buildApps [
       lcms2
-      openexr_3
+      openexr
     ];
 
   cmakeFlags =

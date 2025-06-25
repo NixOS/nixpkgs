@@ -95,7 +95,6 @@ buildPythonPackage rec {
     homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
     maintainers = with maintainers; [
-      domenkozar
       lovek323
       madjar
       lsix

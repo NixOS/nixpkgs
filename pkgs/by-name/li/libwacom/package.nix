@@ -7,6 +7,7 @@
   glib,
   pkg-config,
   udev,
+  udevCheckHook,
   libevdev,
   libgudev,
   python3,
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     python3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -61,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests are in the `tests` pass-through derivation because one of them is flaky, frequently causing build failures.
   # See https://github.com/NixOS/nixpkgs/issues/328140
   doCheck = false;
+  doInstallCheck = true;
 
   nativeCheckInputs = [
     valgrind
@@ -80,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://linuxwacom.github.io/";
     changelog = "https://github.com/linuxwacom/libwacom/blob/${finalAttrs.src.rev}/NEWS";
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
-    maintainers = lib.teams.freedesktop.members;
+    teams = [ lib.teams.freedesktop ];
     license = lib.licenses.hpnd;
   };
 })

@@ -1,14 +1,27 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, asar, alsa-lib, gtk3, libxshmfence, libgbm, nss }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  electron,
+  asar,
+  alsa-lib,
+  gtk3,
+  libxshmfence,
+  libgbm,
+  nss,
+}:
 
 stdenv.mkDerivation rec {
   pname = "morgen";
-  version = "3.6.9";
+  version = "3.6.15";
 
   src = fetchurl {
     name = "morgen-${version}.deb";
     url = "https://dl.todesktop.com/210203cqcj00tw1/versions/${version}/linux/deb";
-    hash = "sha256-An3CfJQ89aqpxMOf20YG+cuEVDrhgMGAm/Scn4hMV8E=";
+    hash = "sha256-OannnO6kfJgtnC2/QALAJFj1Uj4fUaghYYisFJvNp70=";
   };
 
   nativeBuildInputs = [
@@ -18,7 +31,13 @@ stdenv.mkDerivation rec {
     asar
   ];
 
-  buildInputs = [ alsa-lib gtk3 libxshmfence libgbm nss ];
+  buildInputs = [
+    alsa-lib
+    gtk3
+    libxshmfence
+    libgbm
+    nss
+  ];
 
   installPhase = ''
     runHook preInstall

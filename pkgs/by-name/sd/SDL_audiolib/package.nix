@@ -5,17 +5,19 @@
   fetchFromGitHub,
   pkg-config,
   stdenv,
+  flac,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_audiolib";
-  version = "0-unstable-2022-04-17";
+  # don't update to latest master as it will break some sounds in devilutionx
+  version = "0-unstable-2022-07-13";
 
   src = fetchFromGitHub {
     owner = "realnc";
     repo = "SDL_audiolib";
-    rev = "908214606387ef8e49aeacf89ce848fb36f694fc";
-    hash = "sha256-11KkwIhG1rX7yDFSj92NJRO9L2e7XZGq2gOJ54+sN/A=";
+    rev = "cc1bb6af8d4cf5e200259072bde1edd1c8c5137e";
+    hash = "sha256-xP7qlwwOkqVeTlCEZLinnvmx8LbU2co5+t//cf4n190=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
+    flac
   ];
 
   strictDeps = true;
@@ -52,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Audio decoding, resampling and mixing library for SDL";
     homepage = "https://github.com/realnc/SDL_audiolib";
     license = lib.licenses.lgpl3Plus;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     inherit (SDL2.meta) platforms;
   };
 })

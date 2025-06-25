@@ -124,6 +124,13 @@ in
     '';
     license = licenses.gpl3;
     maintainers = with maintainers; [ ttuegel ];
+    mainProgram =
+      if monolithic then
+        "quassel"
+      else if buildClient then
+        "quasselclient"
+      else
+        "quasselcore";
     inherit (qtbase.meta) platforms;
   };
 }

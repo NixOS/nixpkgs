@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
-  version = "1.15.2";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "hifi";
-    repo = pname;
+    repo = "heisenbridge";
     tag = "v${version}";
-    sha256 = "sha256-7zOpjIRYm+F8my+Gk/SXFIpzXMublPuzo93GpD8SxvU=";
+    sha256 = "sha256-wH3IZcY4CtawEicKCkFMh055SM0chYHsPKxYess9II0=";
   };
 
   postPatch = ''

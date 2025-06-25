@@ -2,22 +2,22 @@
   lib,
   stdenv,
   callPackage,
-  version ? "0.3.11",
-  rev ? "1",
   ...
 }@args:
 let
   pname = "lmstudio";
+
+  version_aarch64-darwin = "0.3.16-8";
+  hash_aarch64-darwin = "sha256-iuC43czK26Yf4DM9BhUUBjgDilQeURq+ZdeN2BHPeVo=";
+  version_x86_64-linux = "0.3.16-8";
+  hash_x86_64-linux = "sha256-vouDzaSgkYN++FKz0tLn9ItHg0tQmnFk2U7RlQyAUWg=";
+
   meta = {
     description = "LM Studio is an easy to use desktop app for experimenting with local and open-source Large Language Models (LLMs)";
     homepage = "https://lmstudio.ai/";
     license = lib.licenses.unfree;
-    mainProgram = "lmstudio";
-    maintainers = with lib.maintainers; [
-      cig0
-      eeedean
-      crertel
-    ];
+    mainProgram = "lm-studio";
+    maintainers = with lib.maintainers; [ crertel ];
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"
@@ -28,25 +28,21 @@ let
 in
 if stdenv.hostPlatform.isDarwin then
   callPackage ./darwin.nix {
-    inherit
-      pname
-      version
-      meta
-      ;
+    inherit pname meta;
+    passthru.updateScript = ./update.sh;
+    version = version_aarch64-darwin;
     url =
       args.url
-        or "https://installers.lmstudio.ai/darwin/arm64/${version}-${rev}/LM-Studio-${version}-${rev}-arm64.dmg";
-    hash = args.hash or "sha256-kXH3tAazEtl019IBxuavEI9QUamEH3b6UFYRYAO3Fxs=";
+        or "https://installers.lmstudio.ai/darwin/arm64/${version_aarch64-darwin}/LM-Studio-${version_aarch64-darwin}-arm64.dmg";
+    hash = args.hash or hash_aarch64-darwin;
   }
 else
   callPackage ./linux.nix {
-    inherit
-      pname
-      version
-      meta
-      ;
+    inherit pname meta;
+    passthru.updateScript = ./update.sh;
+    version = version_x86_64-linux;
     url =
       args.url
-        or "https://installers.lmstudio.ai/linux/x64/${version}-${rev}/LM-Studio-${version}-${rev}-x64.AppImage";
-    hash = args.hash or "sha256-T8j0l2ZP53Zc0hgb2EyFeR0mH5YrNlz4UfzN0rO7bKU=";
+        or "https://installers.lmstudio.ai/linux/x64/${version_x86_64-linux}/LM-Studio-${version_x86_64-linux}-x64.AppImage";
+    hash = args.hash or hash_x86_64-linux;
   }

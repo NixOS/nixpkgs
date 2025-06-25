@@ -29,6 +29,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ pkg-config ];
+  patches = [ ./remove_const.patch ];
 
   buildInputs =
     [

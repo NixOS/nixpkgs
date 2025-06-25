@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "36.1.1";
+  version = "37.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fLK71MjwQOSjQK5AGemki2zx22pxvaTlph2NE7e+8o0=";
+    hash = "sha256-d7eeeiIo1XF1Ezrwu83SbcYj34HbOQ7lL1EE1GwBDy8=";
   };
 
   build-system = [ setuptools ];

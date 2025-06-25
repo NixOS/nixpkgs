@@ -446,8 +446,11 @@ let
         ./patches/cross-compile.patch
         # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
         ./patches/no-build-timestamps.patch
+      ]
+      ++ lib.optionals (!chromiumVersionAtLeast "136") [
         # Fix build with Pipewire 1.4
         # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
+        # Got merged, started shipping with M136+.
         ./patches/webrtc-pipewire-1.4.patch
       ]
       ++ lib.optionals (packageName == "chromium") [
@@ -487,7 +490,12 @@ let
         # allowing us to use our rustc and our clang.
         ./patches/chromium-129-rust.patch
       ]
-      ++ lib.optionals (!ungoogled) [
+      ++ lib.optionals (!ungoogled && !chromiumVersionAtLeast "136") [
+        # Note: We since use LLVM v19.1+ on unstable *and* release-24.11 for all version and as such
+        # no longer need this patch. We opt to arbitrarily limit it to versions prior to M136 just
+        # because that's when this revert stopped applying cleanly and defer fully dropping it for
+        # the next cleanup to bundle rebuilding all of chromium and electron.
+        #
         # Our rustc.llvmPackages is too old for std::hardware_destructive_interference_size
         # and std::hardware_constructive_interference_size.
         # So let's revert the change for now and hope that our rustc.llvmPackages and
@@ -521,13 +529,89 @@ let
           hash = "sha256-PuinMLhJ2W4KPXI5K0ujw85ENTB1wG7Hv785SZ55xnY=";
         })
       ]
-      ++ lib.optionals (chromiumVersionAtLeast "134" && lib.versionOlder rustcVersion "1.86") [
-        ./patches/chromium-134-rust-adler2.patch
+      ++ lib.optionals (!isElectron && !chromiumVersionAtLeast "137") [
+        # Backport "Add more CFI suppressions for inline PipeWire functions" from M137
+        # to fix SIGKILL (ud1) when screensharing with PipeWire 1.4+ and is_cfi = true.
+        # Our chromium builds set is_official_build = true, which in turn enables is_cfi.
+        # We don't apply this patch to electron, because we build electron with
+        # is_cfi = false and as such is not affected by this.
+        # https://chromium-review.googlesource.com/c/chromium/src/+/6421030
+        (fetchpatch {
+          name = "add-more-CFI-suppressions-for-inline-PipeWire-functions.patch";
+          url = "https://chromium.googlesource.com/chromium/src/+/0eebf40b9914bca8fe69bef8eea89522c1a5d4ce^!?format=TEXT";
+          decode = "base64 -d";
+          hash = "sha256-xMqGdu5Q8BGF/OIRdmMzPrrrMGDOSY2xElFfhRsJlDU=";
+        })
+      ]
+      ++ lib.optionals (!isElectron && !chromiumVersionAtLeast "136") [
+        # Backport "Only call format_message when needed" to fix print() crashing with is_cfi = true.
+        # We build electron is_cfi = false and as such electron is not affected by this.
+        # Started shipping with M136+.
+        # https://github.com/NixOS/nixpkgs/issues/401326
+        # https://gitlab.archlinux.org/archlinux/packaging/packages/chromium/-/issues/13
+        # https://skia-review.googlesource.com/c/skia/+/961356
+        (fetchpatch {
+          name = "only-call-format_message-when-needed.patch";
+          url = "https://skia.googlesource.com/skia/+/71685eda67178fa374d473ec1431fc459c83bb21^!?format=TEXT";
+          decode = "base64 -d";
+          stripLen = 1;
+          extraPrefix = "third_party/skia/";
+          hash = "sha256-aMqDjt/0cowqSm5DqcD3+zX+mtjydk396LD+B5F/3cs=";
+        })
+      ]
+      ++ lib.optionals (chromiumVersionAtLeast "136") [
+        # Modify the nodejs version check added in https://chromium-review.googlesource.com/c/chromium/src/+/6334038
+        # to look for the minimal version, not the exact version (major.minor.patch). The linked CL makes a case for
+        # preventing compilations of chromium with versions below their intended version, not about running the very
+        # exact version or even running a newer version.
+        ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
+      ]
+      ++ lib.optionals (versionRange "137" "138") [
+        (fetchpatch {
+          # Partial revert of upstream clang+llvm bump revert to fix the following error when building with LLVM < 21:
+          #  clang++: error: unknown argument: '-fextend-variable-liveness=none'
+          # https://chromium-review.googlesource.com/c/chromium/src/+/6514242
+          # Upstream relanded this in M138+ with <https://chromium-review.googlesource.com/c/chromium/src/+/6541127>.
+          name = "chromium-137-llvm-19.patch";
+          url = "https://chromium.googlesource.com/chromium/src/+/ddf8f8a465be2779bd826db57f1299ccd2f3aa25^!?format=TEXT";
+          includes = [ "build/config/compiler/BUILD.gn" ];
+          revert = true;
+          decode = "base64 -d";
+          hash = "sha256-wAR8E4WKMvdkW8DzdKpyNpp4dynIsYAbnJ2MqE8V2o8=";
+        })
+      ]
+      ++ lib.optionals (versionRange "137" "138") [
+        (fetchpatch {
+          # Backport "Fix build with system libpng" that fixes a typo in core/fxcodec/png/png_decoder.cpp that causes
+          # the build to fail at the final linking step.
+          # https://pdfium-review.googlesource.com/c/pdfium/+/132130
+          # Started shipping with M138+.
+          name = "pdfium-Fix-build-with-system-libpng.patch";
+          url = "https://pdfium.googlesource.com/pdfium.git/+/83f11d630aa1cb6d5ceb292364412f7b0585a201^!?format=TEXT";
+          extraPrefix = "third_party/pdfium/";
+          stripLen = 1;
+          decode = "base64 -d";
+          hash = "sha256-lDX0OLdxxTNLtViqEt0luJQ/H0mlvQfV0zbY1Ubqyq0=";
+        })
       ];
 
     postPatch =
-      lib.optionalString (!isElectron) ''
-        ln -s ${./files/gclient_args.gni} build/config/gclient_args.gni
+      lib.optionalString (!isElectron)
+        # TODO: reuse mkGnFlags for this
+        (
+          if (chromiumVersionAtLeast "136") then
+            ''
+              cp ${./files/gclient_args.gni} build/config/gclient_args.gni
+              chmod u+w build/config/gclient_args.gni
+              echo 'checkout_mutter = false' >> build/config/gclient_args.gni
+              echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
+            ''
+          else
+            ''
+              ln -s ${./files/gclient_args.gni} build/config/gclient_args.gni
+            ''
+        )
+      + lib.optionalString (!isElectron) ''
 
         echo 'LASTCHANGE=${upstream-info.DEPS."src".rev}-refs/tags/${version}@{#0}' > build/util/LASTCHANGE
         echo "$SOURCE_DATE_EPOCH" > build/util/LASTCHANGE.committime
@@ -740,6 +824,10 @@ let
             use_qt = false;
           }
       )
+      // lib.optionalAttrs (chromiumVersionAtLeast "136") {
+        # LLVM < v21 does not support --warning-suppression-mappings yet:
+        clang_warning_suppression_file = "";
+      }
       // {
         # To fix the build as we don't provide libffi_pic.a
         # (ld.lld: error: unable to find library -l:libffi_pic.a):
@@ -763,6 +851,11 @@ let
         proprietary_codecs = true;
         enable_hangout_services_extension = true;
         ffmpeg_branding = "Chrome";
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
+        # Enable v4l2 video decoder for hardware acceleratation on aarch64:
+        use_vaapi = false;
+        use_v4l2_codec = true;
       }
       // lib.optionalAttrs pulseSupport {
         use_pulseaudio = true;
@@ -802,10 +895,12 @@ let
       runHook postConfigure
     '';
 
-    # Don't spam warnings about unknown warning options. This is useful because
+    # Mute some warnings that are enabled by default. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
+    env.NIX_CFLAGS_COMPILE =
+      "-Wno-unknown-warning-option"
+      + lib.optionalString (chromiumVersionAtLeast "135") " -Wno-unused-command-line-argument -Wno-shadow";
     env.BUILD_CC = "$CC_FOR_BUILD";
     env.BUILD_CXX = "$CXX_FOR_BUILD";
     env.BUILD_AR = "$AR_FOR_BUILD";

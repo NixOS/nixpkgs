@@ -19,7 +19,7 @@ let
     { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
-      version = "3.0.0-M1";
+      version = "3.0.2";
 
       src = fetchurl {
         url = "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
@@ -92,14 +92,14 @@ in
 {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
-    sha256 = "sha256-SlweOVHudknbInM4rfEPJ9bLd3Z/EImLhVLzeKfjfMQ=";
+    sha256 = "sha256-wPVvLMuc8EjTqaHY4VcP1gd4DVJQhQm0uS2f+HFuTls=";
   };
   ammonite_2_13 = common {
     scalaVersion = "2.13";
-    sha256 = "sha256-2BydXmF6AkWDdG5rbRLD2I/6z3w3UD0dCd5Tp+3lU7c=";
+    sha256 = "sha256-OU3lAls2n4dMONIogg/qAFj5OhzqR6rBF3Hay4Onwxg=";
   };
   ammonite_3_3 = common {
     scalaVersion = "3.3";
-    sha256 = "sha256-EL8mTUmbcetVIVOHjd/JvO8NsXnb3EtYK2+itZwOsDI=";
+    sha256 = "sha256-M1Pg+HsWSkk60NUzNQXxOijnfFxX5ijao76Phaz7ykQ=";
   };
 }

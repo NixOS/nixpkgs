@@ -1,28 +1,37 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonApplication,
+  fetchFromGitHub,
   python-dateutil,
 }:
 
 buildPythonApplication rec {
   pname = "pdd";
-  version = "1.6";
+  version = "1.7";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "pdd";
     tag = "v${version}";
-    sha256 = "sha256-Z+jUFu4VvrgWUtkXMkjspcRJ/JG81X9gc2tnDoCdrsk=";
+    hash = "sha256-jQCjqQxvJU2oYLSWpFriJIfD0EbqBx59AvRX77pX0Cg=";
   };
 
-  format = "other";
+  postPatch = ''
+    patchShebangs auto-completion/zsh/zsh_completion.py
+  '';
 
-  propagatedBuildInputs = [ python-dateutil ];
+  preInstall = ''
+    mkdir -p $out/share/bash-completion/compilations
+    mkdir -p $out/share/zsh/site-functions
+    mkdir -p $out/share/fish/vendor_completions.d
+  '';
+
+  dependencies = [ python-dateutil ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jarun/pdd";
     description = "Tiny date, time diff calculator";
     longDescription = ''
@@ -34,7 +43,7 @@ buildPythonApplication rec {
       timezone.
     '';
     maintainers = [ ];
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "pdd";
   };
 }

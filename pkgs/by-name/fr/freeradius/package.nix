@@ -107,7 +107,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       sheenobu
-      willibutz
     ];
     platforms = with platforms; linux;
   };

@@ -15,14 +15,14 @@ in
 {
   options.services.eintopf = {
 
-    enable = mkEnableOption "Eintopf community event calendar web app";
+    enable = mkEnableOption "Lauti (Eintopf) community event calendar web app";
 
     settings = mkOption {
       type = types.attrsOf types.str;
       default = { };
       description = ''
         Settings to configure web service. See
-        <https://codeberg.org/Klasse-Methode/eintopf/src/branch/main/DEPLOYMENT.md>
+        <https://codeberg.org/Klasse-Methode/lauti/src/branch/main/DEPLOYMENT.md>
         for available options.
       '';
       example = literalExpression ''
@@ -54,7 +54,7 @@ in
       wants = [ "network-online.target" ];
       environment = cfg.settings;
       serviceConfig = {
-        ExecStart = "${pkgs.eintopf}/bin/eintopf";
+        ExecStart = lib.getExe pkgs.lauti;
         WorkingDirectory = "/var/lib/eintopf";
         StateDirectory = "eintopf";
         EnvironmentFile = [ cfg.secrets ];

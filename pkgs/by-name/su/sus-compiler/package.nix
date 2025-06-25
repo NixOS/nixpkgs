@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sus-compiler";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "pc2";
     repo = "sus-compiler";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0OZPBdilNknGCjWzXjyUAW57cpyyyV80EEo6pDlpG3g=";
+    hash = "sha256-dQef5TiOV33lnNl7XKl7TlCY0E2sEclehWOmy2uvISY=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
   meta = {
-    description = "A new Hardware Design Language that keeps you in the driver's seat";
+    description = "New Hardware Design Language that keeps you in the driver's seat";
     homepage = "https://github.com/pc2/sus-compiler";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pbsds ];

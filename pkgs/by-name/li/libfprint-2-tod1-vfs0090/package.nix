@@ -66,5 +66,8 @@ stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ valodim ];
+    # Does not compile against libfprint-tod, hasn't seen any maintenance
+    # since 2020.
+    broken = true;
   };
 }

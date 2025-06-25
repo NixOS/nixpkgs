@@ -42,13 +42,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.3.1957.0";
+  version = "3.3.2299.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
     tag = version;
-    hash = "sha256-lOfeGkImwRxua3dSmefb1WcgnviHhOYtYK1VaRW9C6A=";
+    hash = "sha256-8jqsAGnfn6+a+Zs9XfIyHzG/+jPO+UoSVsm0GHthq3E=";
   };
 
   vendorHash = null;
@@ -169,14 +169,13 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";
     changelog = "https://github.com/aws/amazon-ssm-agent/releases/tag/${version}";
     homepage = "https://github.com/aws/amazon-ssm-agent";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
-      copumpkin
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       manveru
       anthonyroussel
       arianvp

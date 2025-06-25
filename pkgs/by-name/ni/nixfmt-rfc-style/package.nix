@@ -13,7 +13,7 @@ let
 
     passthru.updateScript = ./update.sh;
 
-    maintainers = lib.teams.formatter.members;
+    teams = [ lib.teams.formatter ];
 
     preBuild = ''
       echo -n 'nixpkgs-${version}' > .version

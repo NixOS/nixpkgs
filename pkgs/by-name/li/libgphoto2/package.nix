@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, autoreconfHook
-, pkg-config
-, gettext
-, libusb1
-, libtool
-, libexif
-, libgphoto2
-, libjpeg
-, curl
-, libxml2
-, gd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  libusb1,
+  libtool,
+  libexif,
+  libgphoto2,
+  libjpeg,
+  curl,
+  libxml2,
+  gd,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,6 +45,8 @@ stdenv.mkDerivation rec {
     gd
   ];
 
+  doInstallCheck = true;
+
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];
 
@@ -56,10 +59,7 @@ stdenv.mkDerivation rec {
   postInstall =
     let
       executablePrefix =
-        if stdenv.buildPlatform == stdenv.hostPlatform then
-          "$out"
-        else
-          buildPackages.libgphoto2;
+        if stdenv.buildPlatform == stdenv.hostPlatform then "$out" else buildPackages.libgphoto2;
     in
     ''
       mkdir -p $out/lib/udev/{rules.d,hwdb.d}

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, python3
-, nix-update-script
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  python3,
+  nix-update-script,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-/BWbbDFLxa1da5ewrt3DG/+096dZ+s6p8VdcRGDiEiU=";
   };
 
-  nativeBuildInputs = [ meson ninja python3 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    python3
+  ];
 
   postPatch = ''
     # test-object: ../lib/test-object.c:129: main: Assertion `setlocale(LC_NUMERIC, "de_DE.UTF-8") != 0' failed.

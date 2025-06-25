@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch2,
   autoreconfHook,
   pkg-config,
   util-linux,
@@ -26,20 +25,12 @@
 
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "26.1.knots20240325";
+  version = "28.1.knots20250305";
 
   src = fetchurl {
-    url = "https://bitcoinknots.org/files/26.x/${version}/bitcoin-${version}.tar.gz";
-    hash = "sha256-PqpePDna2gpCzF2K43N4h6cV5Y9w/e5ZcUvaNEaFaIk=";
+    url = "https://bitcoinknots.org/files/28.x/${version}/bitcoin-${version}.tar.gz";
+    hash = "sha256-DKO3+43Tn/BTKQVrLrCkeMtzm8SfbaJD8rPlb6lDA8A=";
   };
-
-  patches = [
-    # upnp: add compatibility for miniupnpc 2.2.8
-    (fetchpatch2 {
-      url = "https://github.com/bitcoinknots/bitcoin/commit/643014424359a4783cf9c73bee3346ac2f04e713.patch?full_index=1";
-      hash = "sha256-FdLoNH3+ZZTbqrwRvhbAeJuGz4SgnIvoWUBzRxjfzs8=";
-    })
-  ];
 
   nativeBuildInputs =
     [
@@ -98,15 +89,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Derivative of Bitcoin Core with a collection of improvements";
     homepage = "https://bitcoinknots.org/";
     changelog = "https://github.com/bitcoinknots/bitcoin/blob/v${version}/doc/release-notes.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       prusnak
       mmahut
     ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

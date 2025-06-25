@@ -60,7 +60,7 @@ let
       targetPlatform,
 
       # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
-      # This is convient to have as a parameter so the stdenv "adapters" work better
+      # This is convenient to have as a parameter so the stdenv "adapters" work better
       mkDerivationFromStdenv ?
         stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation,
     }:
@@ -78,6 +78,7 @@ let
           ../../build-support/setup-hooks/move-sbin.sh
           ../../build-support/setup-hooks/move-systemd-user-units.sh
           ../../build-support/setup-hooks/multiple-outputs.sh
+          ../../build-support/setup-hooks/parallel.sh
           ../../build-support/setup-hooks/patch-shebangs.sh
           ../../build-support/setup-hooks/prune-libtool-files.sh
           ../../build-support/setup-hooks/reproducible-builds.sh

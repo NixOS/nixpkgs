@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "starboard";
-  version = "0.15.24";
+  version = "0.15.25";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
+    repo = "starboard";
     rev = "v${version}";
-    hash = "sha256-GZ+KOnQV/eXPt1QGaqWj4JAlPNhNKpVn7rlC7W4zfDo=";
+    hash = "sha256-mCYnJ1SFa3OuYQlPWTq9vWV9s/jtaQ6dOousV/UNR18=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -25,7 +25,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-5TeiEGu5B+5uNnkxdBlPqLu/g9FZ4VWrbZFfp/JsJiA=";
+  vendorHash = "sha256-qujObGBxUFGxtrdlJmTOTW6HUbDCjNSElPqhQfYqId4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -70,7 +70,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aquasecurity/starboard";
     changelog = "https://github.com/aquasecurity/starboard/releases/tag/v${version}";
     description = "Kubernetes-native security tool kit";
@@ -84,7 +84,7 @@ buildGoModule rec {
       plug-in that make security reports available through familiar Kubernetes
       tools.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

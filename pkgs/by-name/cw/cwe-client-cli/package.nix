@@ -9,12 +9,12 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cwe-client-cli";
-  version = "0.3.2";
+  version = "0.3.3";
   src = fetchFromGitHub {
     owner = "NotBalds";
     repo = "cwe-client-cli";
     rev = "v${version}";
-    hash = "sha256-7zzmYwuQ+Sg8hf1zuKtKUMgk0Is1YJB4WdOKdxtWRA0=";
+    hash = "sha256-3ehzERWV0/hV0Suy9LtCcp+xmaD13Chgu4a0gPT7cHs=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     openssl_3
   ];
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ctcsO7HRs3wWcOFW+ewQbKGCSEBlVzT/enAEjFIAaPU=";
+  cargoHash = "sha256-ml6anuAJru2zVIHNf/z4gdQjplRrXL4FO44cxfaDRns=";
 
   meta = {
     description = "Simple command line client for CWE";

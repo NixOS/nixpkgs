@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "flametree";
-  version = "0.1.12";
+  version = "0.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
     repo = "Flametree";
     tag = "v${version}";
-    hash = "sha256-oyiuhsYouGDKRssKc0aYIoG32H7GS6Bn4RtI7/9N158=";
+    hash = "sha256-4yU4u5OmVP3adz9DNsU0BtuQ7LZYqbOLxbuS48lksHM=";
   };
 
   nativeCheckInputs = [

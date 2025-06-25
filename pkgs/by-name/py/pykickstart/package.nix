@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pykickstart";
-  version = "3.62";
+  version = "3.65";
 
   src = fetchFromGitHub {
     owner = "pykickstart";
     repo = "pykickstart";
     tag = "r${version}";
-    hash = "sha256-QoMIr1nDGOMzAJ7pO2SdsZIcrSPFt/YEXJz201cXZQo=";
+    hash = "sha256-bRc+zFd7+FjQln710L6c0fZfq68lIb6orTM3EosS7aM=";
   };
 
   build-system = with python3Packages; [
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Python package to interact with Kickstart files commonly found in the RPM world";
     homepage = "https://github.com/pykickstart/pykickstart";
-    changelog = "https://github.com/pykickstart/pykickstart/releases/tag/r${version}";
+    changelog = "https://github.com/pykickstart/pykickstart/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       thefossguy

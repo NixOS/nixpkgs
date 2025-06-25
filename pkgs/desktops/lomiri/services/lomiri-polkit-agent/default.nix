@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-polkit-agent";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-polkit-agent";
     tag = finalAttrs.version;
-    hash = "sha256-U4NNPBuLhe+m5WvfOYq5ZFE70OYJ/mn69wyK+ALebRE=";
+    hash = "sha256-3x2gwKhRDXE6tuwM7pXIwsWg/8pQrKLJ1zds8Ljtk+I=";
   };
 
   strictDeps = true;
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

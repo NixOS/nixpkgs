@@ -44,7 +44,7 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # our version of buck2; this should be a git tag
-  version = "2025-01-02";
+  version = "2025-05-06";
 
   # map our platform name to the rust toolchain suffix
   # NOTE (aseipp): must be synchronized with update.sh!
@@ -82,7 +82,7 @@ let
   # tooling
   prelude-src =
     let
-      prelude-hash = "d11a72de049a37b9b218a3ab8db33d3f97b9413c";
+      prelude-hash = "48c249f8c7b99ff501d6e857754760315072b306";
       name = "buck2-prelude-${version}.tar.gz";
       hash = buildHashes."_prelude";
       url = "https://github.com/facebook/buck2-prelude/archive/${prelude-hash}.tar.gz";
@@ -140,16 +140,16 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, hermetic, multi-language build system";
     homepage = "https://buck2.build";
     changelog = "https://github.com/facebook/buck2/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
     mainProgram = "buck2";
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

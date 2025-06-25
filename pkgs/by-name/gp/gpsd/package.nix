@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sconstruct-env-fixes.patch
+    ./sconstrict-rundir-fixes.patch
 
     # fix build with Python 3.12
     (fetchpatch {
@@ -120,6 +121,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/udev/rules.d"
   '';
 
+  doInstallCheck = true;
+
   installTargets = [
     "install"
     "udev-install"
@@ -130,7 +133,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPS service daemon";
     longDescription = ''
       gpsd is a service daemon that monitors one or more GPSes or AIS
@@ -152,9 +155,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gpsd.gitlab.io/gpsd/index.html";
     changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${version}/NEWS";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bjornfor
       rasendubi
     ];

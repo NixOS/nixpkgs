@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   fetchFromGitHub,
   openssl,
   pkg-config,
@@ -11,29 +9,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-commander-rs";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander-rs";
     tag = "v${version}";
-    hash = "sha256-eEkSdr6qHLUBp4natvq7uMbcqxDOTJAE1vEPWLE3KKM=";
+    hash = "sha256-ljRFZYfTSyiIVgABgQAVLlwhOmeMumAyZe9tASPtMZA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-I7g3yNjq1i7YXv6S7PPZnOQ0Y5665dNayz7XEQl/WAE=";
+  cargoHash = "sha256-BMVxxCOAznAsqKUgGHJ9hPgdIksCyzMVUHeLa+om09U=";
 
   nativeBuildInputs = [
     pkg-config
     perl
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   meta = {
     description = "CLI-based Matrix client app for sending and receiving";

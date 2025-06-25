@@ -91,6 +91,6 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.jitsi.members;
+    teams = [ teams.jitsi ];
   };
 }

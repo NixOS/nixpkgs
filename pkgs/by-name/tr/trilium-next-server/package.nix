@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "0.91.6";
+  version = "0.95.0";
 
-  serverSource_x64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-linux-x64-v${version}.tar.xz";
-  serverSource_x64.sha256 = "0ji1i792afzklg2vn99krm74nvb617pdr1gz061r573vi7nn5rnx";
-  serverSource_arm64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-linux-arm64-v${version}.tar.xz";
-  serverSource_arm64.sha256 = "1lyzm7rwj7cbb36nlswnwiy8hn0yba4f7mbrgirvzyx03q4wv29z";
+  serverSource_x64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-Server-v${version}-linux-x64.tar.xz";
+  serverSource_x64.sha256 = "1rjl38i6l894kwpmc925amf9zbwyjlc4sqh3skm1f13vhv9pj9dx";
+  serverSource_arm64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-Server-v${version}-linux-arm64.tar.xz";
+  serverSource_arm64.sha256 = "1rpzc13vdp5b3iwwc1l6h78nb5iairlxbflwvjwhy1149lpqnn8m";
 
   serverSource =
     if stdenv.hostPlatform.isx86_64 then
@@ -27,11 +27,6 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl serverSource;
-
-  patches = [
-    # patch logger to use console instead of rolling files
-    ./0001-Use-console-logger-instead-of-rolling-files.patch
-  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -53,11 +48,7 @@ stdenv.mkDerivation {
 
     makeWrapper "$out/share/trilium-server/node/bin/node" "$out/bin/trilium-server" \
       --chdir "$out/share/trilium-server" \
-      --add-flags "src/main"
-
-    # Clean up broken symlinks and build tools.
-    rm "$out"/share/trilium-server/node/bin/{npm,npx}
-    rm -r "$out"/share/trilium-server/node_modules/{@npmcli,@rollup,@babel}
+      --add-flags "main.cjs"
 
     runHook postInstall
   '';

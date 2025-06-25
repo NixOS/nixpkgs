@@ -1,6 +1,7 @@
-{ callPackage
-, nixosTests
-, python3
+{
+  callPackage,
+  nixosTests,
+  python3,
 }:
 let
   python = python3;
@@ -9,7 +10,7 @@ let
 
   frontend = callPackage ./frontend.nix { };
 in
-python.pkgs.pythonPackages.buildPythonPackage {
+python.pkgs.buildPythonPackage {
   pname = "tandoor-recipes";
 
   inherit (common) version src;
@@ -21,6 +22,11 @@ python.pkgs.pythonPackages.buildPythonPackage {
   ];
 
   postPatch = ''
+    # high parallelism let the tests easily fail with concurrent errors
+    if (( $NIX_BUILD_CORES > 4)); then
+      NIX_BUILD_CORES=4
+    fi
+
     substituteInPlace pytest.ini --subst-var NIX_BUILD_CORES
   '';
 
@@ -30,12 +36,12 @@ python.pkgs.pythonPackages.buildPythonPackage {
     django-annoying
     django-cleanup
     django-crispy-forms
-    django-crispy-bootstrap4
     django-tables2
     djangorestframework
     drf-writable-nested
     django-oauth-toolkit
     bleach
+    crispy-bootstrap4
     gunicorn
     lxml
     markdown
@@ -70,6 +76,10 @@ python.pkgs.pythonPackages.buildPythonPackage {
     aiohttp
     inflection
     redis
+    requests-oauthlib
+    pyjwt
+    python3-openid
+    python3-saml
   ];
 
   configurePhase = ''
@@ -120,7 +130,7 @@ python.pkgs.pythonPackages.buildPythonPackage {
     mock
     pytestCheckHook
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-django
     pytest-factoryboy
     pytest-html

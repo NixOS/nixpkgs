@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nemtrif/utfcpp";
     changelog = "https://github.com/nemtrif/utfcpp/releases/tag/v${version}";
     description = "UTF-8 with C++ in a Portable Way";
-    license = licenses.boost;
-    maintainers = with maintainers; [ jobojeha ];
-    platforms = platforms.all;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ jobojeha ];
+    platforms = lib.platforms.all;
   };
 }

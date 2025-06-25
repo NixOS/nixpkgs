@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  boost,
+  boost183,
   libseccomp,
   flex,
   swig,
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    boost.all
+    boost183.all
     libseccomp
   ];
 

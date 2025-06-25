@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lunacy";
-  version = "11.1";
+  version = "11.4";
 
   src = fetchurl {
     url = "https://lcdn.icons8.com/setup/Lunacy_${finalAttrs.version}.deb";
-    hash = "sha256-bxJ5gvI0N55+RzFELfkr9HbB//GRiHSlLHTK7Ki0Z+c=";
+    hash = "sha256-YDKSaKYS98Y4FR+fU3++8A/PB3X9TtZhuSYqM250Ibo=";
   };
 
   buildInputs = [

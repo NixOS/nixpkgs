@@ -31,16 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/illiliti/libudev-zero";
     description = "Daemonless replacement for libudev";
-    changelog = "https://github.com/illiliti/libudev-zero/releases/tag/${version}";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/illiliti/libudev-zero/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
       qyliss
       shamilton
     ];
-    license = licenses.isc;
+    license = lib.licenses.isc;
     pkgConfigModules = [ "libudev" ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

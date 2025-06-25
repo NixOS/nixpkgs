@@ -5,10 +5,10 @@
 }:
 let
   pname = "heptabase";
-  version = "1.53.7";
+  version = "1.58.1";
   src = fetchurl {
     url = "https://github.com/heptameta/project-meta/releases/download/v${version}/Heptabase-${version}.AppImage";
-    hash = "sha256-wy69dT/Iyt1jZKMh8/yCGk7+Z/NQt8R2d8jHXOZSvgQ=";
+    hash = "sha256-U1fFFLXSjBuhiTUAPgqMzvWhtJg9Qc9B5m1uaGjwyEU=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -28,7 +28,7 @@ appimageTools.wrapType2 {
 
   meta = {
     changelog = "https://github.com/heptameta/project-meta/releases/tag/v${version}";
-    description = "A visual note-taking tool for learning complex topics";
+    description = "Visual note-taking tool for learning complex topics";
     homepage = "https://heptabase.com/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];

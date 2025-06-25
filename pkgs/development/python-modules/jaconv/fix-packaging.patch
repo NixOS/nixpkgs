@@ -1,0 +1,12 @@
+diff --git a/setup.py b/setup.py
+index 297357b..12b861f 100644
+--- a/setup.py
++++ b/setup.py
+@@ -39,7 +42,6 @@
+           'Programming Language :: Python :: 3.10',
+           'Programming Language :: Python :: 3.11', 'Topic :: Text Processing'
+       ],
+-      data_files=[('', ['README.rst', 'CHANGES.rst'])],
+       long_description='%s\n\n%s' %
+       (open('README.rst', encoding='utf8').read(),
+        open('CHANGES.rst', encoding='utf8').read()),

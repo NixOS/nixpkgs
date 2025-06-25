@@ -9,15 +9,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "diffedit3";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-zBdLz8O2WCR8SN0UXUAaEdIpmmL+LIaGt44STBw6nyU=";
+    hash = "sha256-o3Y3SQLkMxYMepGyvK6m/8aA5ZDwCAYdYUhGplkckjU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Ao2agqYChyrcrRVOjzKvPHYwmYGabQUVZAUaVBpAFJM=";
+  cargoHash = "sha256-XAtp5pCKFQRqyF9Y0udrcudgF5i3vWxk//kZ/hRsFaA=";
 
   passthru = {
     updateScript = nix-update-script { };

@@ -1,18 +1,18 @@
 {
-  fetchFromGitHub,
+  lib,
+  stdenv,
   buildDotnetModule,
+  fetchFromGitHub,
   dotnetCorePackages,
+  autoPatchelfHook,
+  copyDesktopItems,
+  makeDesktopItem,
   icu,
   zlib,
-  stdenv,
-  lib,
   fontconfig,
-  autoPatchelfHook,
   openssl,
   lttng-ust_2_12,
   krb5,
-  makeDesktopItem,
-  copyDesktopItems,
   bash,
   xorg,
   xdg-utils,
@@ -21,13 +21,13 @@
 
 buildDotnetModule rec {
   pname = "v2rayn";
-  version = "7.10.5";
+  version = "7.12.7";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = version;
-    hash = "sha256-5tLO7KVHj0DXQdJg02Jxs6fgRLJSfFWPbARg9dqKcSI=";
+    hash = "sha256-pYkUbctdN3qaGxI5DbreoOGmXyIVrpHqYlN3BFRCcZ8=";
     fetchSubmodules = true;
   };
 
@@ -36,12 +36,18 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
 
   postPatch = ''
+    chmod +x v2rayN/ServiceLib/Sample/proxy_set_linux_sh
+    patchShebangs v2rayN/ServiceLib/Sample/proxy_set_linux_sh
     substituteInPlace v2rayN/ServiceLib/Global.cs \
       --replace-fail "/bin/bash" "${bash}/bin/bash"
+    substituteInPlace v2rayN/ServiceLib/Handler/CoreAdminHandler.cs \
+      --replace-fail "/bin/sh" "${bash}/bin/bash"
     substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
       --replace-fail "Utils.GetExePath())" '"v2rayN")'
     substituteInPlace v2rayN/ServiceLib/ViewModels/MainWindowViewModel.cs \
       --replace-fail "nautilus" "${xdg-utils}/bin/xdg-open"
+    substituteInPlace v2rayN/ServiceLib/Handler/CoreHandler.cs \
+      --replace-fail 'Environment.GetEnvironmentVariable(Global.LocalAppData) == "1"' "false"
   '';
 
   dotnetBuildFlags = [ "-p:PublishReadyToRun=false" ];

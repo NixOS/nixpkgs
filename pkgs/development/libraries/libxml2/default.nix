@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitLab,
   pkg-config,
   autoreconfHook,
   libintl,
@@ -22,6 +22,8 @@
     ),
   icuSupport ? false,
   icu,
+  zlibSupport ? false,
+  zlib,
   enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic,
   enableStatic ? !enableShared,
   gnome,
@@ -31,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
-  version = "2.13.6";
+  version = "2.14.3";
 
   outputs =
     [
@@ -44,9 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor finalAttrs.version}/libxml2-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9FNIAwdSSWj3oE7GXmTyqDqCWXO80mCi52kb6CrnDJY=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "libxml2";
+    rev = "5133461b05f0f66e6c5b0fecd5f29dc5cd967302"; # some security- and bugfixes ahead of 2.14
+    hash = "sha256-xLRey6mRsRhgfASIQWOTofcQcLU0Daeg33pxGN0l66I=";
   };
 
   strictDeps = true;
@@ -68,6 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport && python ? isPy2 && python.isPy2) [
       libintl
+    ]
+    ++ lib.optionals zlibSupport [
+      zlib
     ];
 
   propagatedBuildInputs =
@@ -81,14 +89,18 @@ stdenv.mkDerivation (finalAttrs: {
       icu
     ];
 
-  configureFlags = [
-    "--exec-prefix=${placeholder "dev"}"
-    (lib.enableFeature enableStatic "static")
-    (lib.enableFeature enableShared "shared")
-    (lib.withFeature icuSupport "icu")
-    (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
-  ] ++ lib.optional enableHttp "--with-http";
+  configureFlags =
+    [
+      "--exec-prefix=${placeholder "dev"}"
+      (lib.enableFeature enableStatic "static")
+      (lib.enableFeature enableShared "shared")
+      (lib.withFeature icuSupport "icu")
+      (lib.withFeature pythonSupport "python")
+      (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
+    ]
+    # avoid rebuilds, can be merged into list in version bumps
+    ++ lib.optional enableHttp "--with-http"
+    ++ lib.optional zlibSupport "--with-zlib";
 
   installFlags = lib.optionals pythonSupport [
     "pythondir=\"${placeholder "py"}/${python.sitePackages}\""

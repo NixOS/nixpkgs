@@ -32,6 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/adwaita-fonts";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.qxrein ] ++ lib.teams.gnome.members;
+    maintainers = [ lib.maintainers.qxrein ];
+    teams = [ lib.teams.gnome ];
   };
 })

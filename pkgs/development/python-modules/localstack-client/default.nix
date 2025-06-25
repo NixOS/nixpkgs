@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "localstack-client";
-  version = "2.7";
+  version = "2.10";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "localstack_client";
     inherit version;
-    hash = "sha256-FJkxGZAaS8vvfDLYmbJPSliodaZ2VpPt8QZNZrimhAg=";
+    hash = "sha256-cyoH4j//1qWBrycUu+AGrW+ISsT4rJVSEaimMyHNxAk=";
   };
 
   propagatedBuildInputs = [ boto3 ];

@@ -22,7 +22,7 @@
 }:
 let
   pname = "positron-bin";
-  version = "2025.02.0-171";
+  version = "2025.06.0-146";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -30,13 +30,18 @@ stdenv.mkDerivation {
   src =
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
-        url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}.dmg";
-        hash = "sha256-b5o1+UXt5JAuHkm1K1jrMLV+7PHfKJTOff4aTk8xm2I=";
+        url = "https://cdn.posit.co/positron/dailies/mac/universal/Positron-${version}.dmg";
+        hash = "sha256-V9ADtOskxEbGZryXD/6aiUDeTvqPzoY372f/Vo5195s=";
+      }
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      fetchurl {
+        url = "https://cdn.posit.co/positron/dailies/deb/arm64/Positron-${version}-arm64.deb";
+        hash = "sha256-FiCTF5Bmfp4id9HXuB4luSGT9A7OoquaRW/QIh0A3ZY=";
       }
     else
       fetchurl {
-        url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}-x64.deb";
-        hash = "sha256-TjQc/Y4Sa2MlLslbygYVFbIk3raArMvYstSiSEYzfo0=";
+        url = "https://cdn.posit.co/positron/dailies/deb/x86_64/Positron-${version}-x64.deb";
+        hash = "sha256-FnNoLV9uqgUeumYpHtRJuHrFA6mL65KI4jru7Ebq0/o=";
       };
 
   buildInputs =
@@ -85,7 +90,8 @@ stdenv.mkDerivation {
 
         # Positron will use the system version of BLAS if we don't provide the nix version.
         wrapProgram "$out/Applications/Positron.app/Contents/Resources/app/bin/code" \
-          --prefix DYLD_INSERT_LIBRARIES : "${lib.makeLibraryPath [ blas ]}/libblas.dylib"
+          --prefix DYLD_INSERT_LIBRARIES : "${lib.makeLibraryPath [ blas ]}/libblas.dylib" \
+          --add-flags "--disable-updates"
 
         ln -s "$out/Applications/Positron.app/Contents/Resources/app/bin/code" "$out/bin/positron"
         runHook postInstall
@@ -112,7 +118,9 @@ stdenv.mkDerivation {
 
         # Fix libGL.so not found errors.
         wrapProgram "$out/share/positron/positron" \
-          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd ]}"
+          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd ]}" \
+          --add-flags "--disable-updates"
+
 
         mkdir -p "$out/bin"
         ln -s "$out/share/positron/positron" "$out/bin/positron"
@@ -130,6 +138,9 @@ stdenv.mkDerivation {
       detroyejr
     ];
     mainProgram = "positron";
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ] ++ platforms.darwin;
   };
 }

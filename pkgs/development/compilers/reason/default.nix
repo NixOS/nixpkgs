@@ -1,6 +1,17 @@
-{ lib, callPackage, buildDunePackage, fetchurl
-, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, cppo, ppx_derivers
-, dune-build-info
+{
+  lib,
+  callPackage,
+  buildDunePackage,
+  fetchurl,
+  fix,
+  menhir,
+  menhirLib,
+  menhirSdk,
+  merlin-extend,
+  ppxlib,
+  cppo,
+  ppx_derivers,
+  dune-build-info,
 }:
 
 buildDunePackage rec {

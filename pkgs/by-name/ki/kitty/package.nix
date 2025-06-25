@@ -28,11 +28,6 @@
   installShellFiles,
   dbus,
   sudo,
-  Libsystem,
-  Cocoa,
-  Kernel,
-  UniformTypeIdentifiers,
-  UserNotifications,
   libcanberra,
   libicns,
   wayland-scanner,
@@ -44,33 +39,32 @@
   zsh,
   fish,
   nixosTests,
-  go_1_23,
-  buildGo123Module,
+  go_1_24,
+  buildGo124Module,
   nix-update-script,
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
   cairo,
-  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.40.1";
+  version = "0.42.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-ta9MTbSkIkowkd5zBUbtauFNGVRDgxof1SSQXuEgFTQ=";
+    hash = "sha256-dW6WgIi+3GJE4OlwxrnY8SUMCQ37eG19UGNfAU4Ts1o=";
   };
 
   goModules =
-    (buildGo123Module {
+    (buildGo124Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-wr5R2X+lV8vVVWsDYLLSaz7HRNOB7Zzk/a7knsdDlXs=";
+      vendorHash = "sha256-gTzonKFXo1jhTU+bX3+4/5wvvLGDHE/ppUg1ImkVpAs=";
     }).goModules;
 
   buildInputs =
@@ -85,16 +79,9 @@ buildPythonApplication rec {
       xxHash
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      Kernel
-      UniformTypeIdentifiers
-      UserNotifications
       libpng
       python3
       zlib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      Libsystem
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       fontconfig
@@ -124,7 +111,7 @@ buildPythonApplication rec {
       sphinx-copybutton
       sphinxext-opengraph
       sphinx-inline-tabs
-      go_1_23
+      go_1_24
       fontconfig
       makeBinaryWrapper
     ]
@@ -147,9 +134,6 @@ buildPythonApplication rec {
   ];
 
   patches = [
-    # Gets `test_ssh_env_vars` to pass when `bzip2` is in the output of `env`.
-    ./fix-test_ssh_env_vars.patch
-
     # Needed on darwin
 
     # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
@@ -159,6 +143,7 @@ buildPythonApplication rec {
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
+
   ];
 
   hardeningDisable = [
@@ -231,9 +216,19 @@ buildPythonApplication rec {
 
   # skip failing tests due to darwin sandbox
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # can be re-enabled with the next kitty release, see https://github.com/kovidgoyal/kitty/pull/7939
+
     substituteInPlace kitty_tests/file_transmission.py \
       --replace test_transfer_send dont_test_transfer_send
+
+    substituteInPlace kitty_tests/ssh.py \
+      --replace test_ssh_connection_data no_test_ssh_connection_data \
+
+    substituteInPlace kitty_tests/shell_integration.py \
+      --replace test_fish_integration no_test_fish_integration
+
+    substituteInPlace kitty_tests/fonts.py \
+      --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
+
     # theme collection test starts an http server
     rm tools/themes/collection_test.go
     # passwd_test tries to exec /usr/bin/dscl
@@ -278,7 +273,7 @@ buildPythonApplication rec {
 
     # dereference the `kitty` symlink to make sure the actual executable
     # is wrapped on macOS as well (and not just the symlink)
-    wrapProgram $(realpath "$out/bin/kitty") --prefix PATH : "$out/bin:${
+    wrapProgram $(realpath "$out/bin/kitty") --suffix PATH : "$out/bin:${
       lib.makeBinPath [
         imagemagick
         ncurses.dev
@@ -317,7 +312,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";
-    description = "The fast, feature-rich, GPU based terminal emulator";
+    description = "Fast, feature-rich, GPU based terminal emulator";
     license = licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"

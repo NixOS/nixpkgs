@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-sensor-state-data";
-  version = "1.7.5";
+  version = "1.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-sensor-state-data";
     tag = "v${version}";
-    hash = "sha256-W+gU9YlxoCh5zRht44Ovq3Doms8UtCvUNLlSUpzsQwA=";
+    hash = "sha256-V7stHAID6zkLFYDX5HUVF38/8OHa4AZr48FPmSoDcAE=";
   };
 
   build-system = [ poetry-core ];

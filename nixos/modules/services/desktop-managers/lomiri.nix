@@ -62,9 +62,11 @@ in
         packages = (
           with pkgs;
           [
-            ayatana-indicator-datetime # Clock
             ayatana-indicator-session # Controls for shutting down etc
           ]
+          ++ (with lomiri; [
+            lomiri-indicator-datetime # Clock
+          ])
         );
       };
     })

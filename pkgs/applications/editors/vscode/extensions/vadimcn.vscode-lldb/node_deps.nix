@@ -13,7 +13,7 @@ buildNpmPackage {
   pname = "${pname}-node-deps";
   inherit version src;
 
-  npmDepsHash = "sha256-fMKGi+AJTMlWl7SQtZ21hUwOLgqlFYDhwLvEergQLfI=";
+  npmDepsHash = "sha256-Efeun7AFMAnoNXLbTGH7OWHaBHT2tO9CodfjKrIYw40=";
 
   nativeBuildInputs = [
     python3

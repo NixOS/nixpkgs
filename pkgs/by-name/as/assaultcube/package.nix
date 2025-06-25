@@ -10,6 +10,8 @@
   libvorbis,
   SDL2,
   SDL2_image,
+  libGL,
+  libX11,
   makeWrapper,
   zlib,
   file,
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
       openal
       SDL2
       SDL2_image
+      libGL
+      libX11
       libogg
       libvorbis
     ];

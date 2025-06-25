@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   runtimeShell,
+  udevCheckHook,
 }:
 
 buildGoModule rec {
@@ -15,6 +16,12 @@ buildGoModule rec {
     rev = "v${version}";
     hash = "sha256-LpZx+Km2qRywYK/eFLP3aCDku6K6HC4+MzEODH+8Gvs=";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   deleteVendor = true;
   vendorHash = "sha256-X/BI+ZhoqCGCmJfccyEBVgZc70aRTp3rL5j+rBWG5fE=";

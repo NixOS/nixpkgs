@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   # build-system
+  setuptools,
   cython,
   versioneer,
 
@@ -32,21 +33,21 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.28.3";
+  version = "2.31.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
     tag = "rel-${version}";
-    hash = "sha256-MtY0JbziboJNHKe8wXaPtOWgFnpv8yQZeg6hNirnSEI=";
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
+    '';
+    hash = "sha256-wHkEZqgnau8DaoOaSFg0Ma6EtjGLmc+y4fskNEyk7yg=";
   };
 
-  pythonRelaxDeps = [
-    "scipy"
-  ];
-
   build-system = [
+    setuptools
     cython
     versioneer
   ];
@@ -71,6 +72,8 @@ buildPythonPackage rec {
     tensorflow-probability
     writableTmpDirAsHomeHook
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "pytensor" ];
 
@@ -132,6 +135,7 @@ buildPythonPackage rec {
     "test_scan_err1"
     "test_scan_err2"
     "test_shared"
+    "test_size_implied_by_broadcasted_parameters"
     "test_solve_triangular_grad"
     "test_structured_add_s_v_grad"
     "test_structureddot_csc_grad"
@@ -163,7 +167,7 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/red-${version}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/rel-${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin

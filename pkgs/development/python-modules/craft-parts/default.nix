@@ -9,6 +9,7 @@
   pyyaml,
   requests,
   requests-unixsocket,
+  pyfakefs,
   pytestCheckHook,
   pytest-check,
   pytest-mock,
@@ -24,11 +25,12 @@
   ant,
   maven,
   jdk,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.6.2";
+  version = "2.12.0";
 
   pyproject = true;
 
@@ -36,7 +38,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-3NFbAxgY183RmZ+ats6M5WM07VO2amj7EdqMCLcKNvI=";
+    hash = "sha256-mm5s7lHbU9SJsS9wTkXkJpmVsGG0qVXIeaQ+TiGz/7o=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -67,6 +69,7 @@ buildPythonPackage rec {
     jdk
     jsonschema
     maven
+    pyfakefs
     pytest-check
     pytest-mock
     pytest-subprocess
@@ -74,13 +77,10 @@ buildPythonPackage rec {
     requests-mock
     socat
     squashfsTools
+    writableTmpDirAsHomeHook
   ];
 
   pytestFlagsArray = [ "tests/unit" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # Relies upon paths not present in Nix (like /bin/bash)
@@ -109,6 +109,8 @@ buildPythonPackage rec {
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "tests/unit/executor/test_environment.py"
       "tests/unit/features/overlay/test_executor_environment.py"
+      # Hard-coded assumptions about arguments relating to 'x86_64'
+      "tests/unit/plugins/test_dotnet_v2_plugin.py"
     ];
 
   passthru.updateScript = nix-update-script { };

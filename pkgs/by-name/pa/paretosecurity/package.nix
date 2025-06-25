@@ -5,36 +5,73 @@
   testers,
   paretosecurity,
   nixosTests,
+  pkg-config,
+  gtk3,
+  webkitgtk_4_1,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    gtk3
+    webkitgtk_4_1
+  ];
   pname = "paretosecurity";
-  version = "0.0.91";
+  version = "0.2.34";
 
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
-    rev = version;
-    hash = "sha256-/kGwV96Jp7U08jh/wPQMcoV48zQe9ixY7gpNdtFyOkk=";
+    rev = finalAttrs.version;
+    hash = "sha256-tTFdgLpu7RRWx2B2VMROqs1HgG0qMbfUOS5KNLQFHQw=";
   };
 
-  vendorHash = "sha256-kGrYoN0dGcSuQW47Y4LUFdHQYAoY74NOM1LLPdhmLhc=";
+  vendorHash = "sha256-RAKYaNi+MXUfNnEJmZF5g9jFBDOPIVBOZWtqZp2FwWY=";
   proxyVendor = true;
 
-  subPackages = [
-    "cmd/paretosecurity"
-  ];
+  # Skip building the Windows installer
+  preBuild = ''
+    rm -rf cmd/paretosecurity-installer
+  '';
 
   ldflags = [
     "-s"
-    "-X=github.com/ParetoSecurity/agent/shared.Version=${version}"
-    "-X=github.com/ParetoSecurity/agent/shared.Commit=${src.rev}"
+    "-X=github.com/ParetoSecurity/agent/shared.Version=${finalAttrs.version}"
+    "-X=github.com/ParetoSecurity/agent/shared.Commit=${finalAttrs.src.rev}"
     "-X=github.com/ParetoSecurity/agent/shared.Date=1970-01-01T00:00:00Z"
   ];
 
+  postInstall = ''
+    # Install global systemd files
+    install -Dm400 ${finalAttrs.src}/apt/paretosecurity.socket $out/lib/systemd/system/paretosecurity.socket
+    install -Dm400 ${finalAttrs.src}/apt/paretosecurity.service $out/lib/systemd/system/paretosecurity.service
+    substituteInPlace $out/lib/systemd/system/paretosecurity.service \
+        --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+
+    # Install user systemd files
+    install -Dm444 ${finalAttrs.src}/apt/paretosecurity-user.timer $out/lib/systemd/user/paretosecurity-user.timer
+    install -Dm444 ${finalAttrs.src}/apt/paretosecurity-user.service $out/lib/systemd/user/paretosecurity-user.service
+    substituteInPlace $out/lib/systemd/user/paretosecurity-user.service \
+        --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+    install -Dm444 ${finalAttrs.src}/apt/paretosecurity-trayicon.service $out/lib/systemd/user/paretosecurity-trayicon.service
+    substituteInPlace $out/lib/systemd/user/paretosecurity-trayicon.service \
+        --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+
+    # Install .desktop files
+    install -Dm444 ${finalAttrs.src}/apt/ParetoSecurity.desktop $out/share/applications/ParetoSecurity.desktop
+    substituteInPlace $out/share/applications/ParetoSecurity.desktop \
+        --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+    install -Dm444 ${finalAttrs.src}/apt/ParetoSecurityLink.desktop $out/share/applications/ParetoSecurityLink.desktop
+    substituteInPlace $out/share/applications/ParetoSecurityLink.desktop \
+        --replace-fail "/usr/bin/paretosecurity" "$out/bin/paretosecurity"
+
+    # Install icon
+    install -Dm444 ${finalAttrs.src}/assets/icon.png $out/share/icons/hicolor/512x512/apps/ParetoSecurity.png
+  '';
+
   passthru.tests = {
     version = testers.testVersion {
-      version = "${version}";
+      inherit (finalAttrs) version;
       package = paretosecurity;
     };
     integration_test = nixosTests.paretosecurity;
@@ -50,12 +87,14 @@ buildGoModule rec {
       settings such as if you have disk encryption and firewall enabled.
 
       If you use the `services.paretosecurity` NixOS module, you also get a
-      root helper, so that you can run the checker in userspace. Some checks
+      root helper that allows you to run the checker in userspace. Some checks
       require root permissions, and the checker asks the helper to run those.
 
-      Additionally, if you enable `services.paretosecurity.trayIcon`, you get a
-      little Vilfredo Pareto living in your systray showing your the current
-      status of checks.
+      Additionally, using the NixOS module gets you a little Vilfredo Pareto
+      living in your systray showing your the current status of checks. The
+      NixOS Module also installs a systemd timer to update the status of checks
+      once per hour. If you want to use just the CLI mode, set
+      `services.paretosecurity.trayIcon` to `false`.
 
       Finally, you can run `paretosecurity link` to configure the agent
       to send the status of checks to https://dash.paretosecurity.com to make
@@ -66,4 +105,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ zupo ];
     mainProgram = "paretosecurity";
   };
-}
+})

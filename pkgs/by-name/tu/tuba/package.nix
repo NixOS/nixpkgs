@@ -27,7 +27,7 @@
   webp-pixbuf-loader,
   icu,
   gst_all_1,
-  clapper,
+  clapper-unwrapped,
   # clapper support is still experimental and has bugs.
   # See https://github.com/GeopJr/Tuba/pull/931
   clapperSupport ? false,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       gst-plugins-bad
     ])
     ++ lib.optionals clapperSupport [
-      clapper
+      clapper-unwrapped
     ];
 
   mesonFlags = [
@@ -112,12 +112,10 @@ stdenv.mkDerivation rec {
     mainProgram = "dev.geopjr.Tuba";
     license = lib.licenses.gpl3Only;
     changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${version}";
-    maintainers =
-      with lib.maintainers;
-      [
-        chuangzhu
-        donovanglover
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      chuangzhu
+      donovanglover
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

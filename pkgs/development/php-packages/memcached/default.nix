@@ -37,6 +37,6 @@ buildPecl rec {
     description = "PHP extension for interfacing with memcached via libmemcached library";
     license = licenses.php301;
     homepage = "https://github.com/php-memcached-dev/php-memcached";
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
   };
 }

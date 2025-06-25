@@ -120,6 +120,9 @@ stdenv.mkDerivation rec {
       --replace "/bin/rm" "rm"
 
     # skip flaky tests
+    # https://bugs.openldap.org/show_bug.cgi?id=8623
+    rm -f tests/scripts/test022-ppolicy
+
     rm -f tests/scripts/test063-delta-multiprovider
 
     # https://bugs.openldap.org/show_bug.cgi?id=10009
@@ -158,7 +161,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.openldap.org/";
     description = "Open source implementation of the Lightweight Directory Access Protocol";
     license = licenses.openldap;
-    maintainers = with maintainers; [ hexa ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ hexa ];
+    teams = [ teams.helsinki-systems ];
     platforms = platforms.unix;
   };
 }

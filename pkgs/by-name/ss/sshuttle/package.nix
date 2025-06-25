@@ -15,17 +15,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sshuttle";
     repo = "sshuttle";
     tag = "v${version}";
-    hash = "sha256-6RNH2S4GXlAWBQSSmgHFcpYECYJoQtZVScrhLMM0gEk=";
+    hash = "sha256-/ThWsPtFuUo41+Xw23UigZup1fq6/SAzDpxIaT0Vhvg=";
   };
 
-  build-system = [ python3Packages.poetry-core ];
+  build-system = [ python3Packages.hatchling ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -73,7 +73,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/sshuttle/sshuttle/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
-      domenkozar
       carlosdagos
     ];
   };

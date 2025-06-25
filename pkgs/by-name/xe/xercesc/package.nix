@@ -1,7 +1,9 @@
-{ stdenv
-, lib
-, fetchurl
-, curl
+{
+  stdenv,
+  lib,
+  fetchurl,
+  curl,
+  icu,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,12 +17,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
+    icu
   ];
 
   configureFlags = [
     # Disable SSE2 extensions on platforms for which they are not enabled by default
     "--disable-sse2"
     "--enable-netaccessor-curl"
+    "--enable-transcoder-icu"
   ];
 
   enableParallelBuilding = true;

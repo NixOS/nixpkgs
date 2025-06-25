@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, perl
-, kdePackages
-, libtoxcore
-, libpthreadstubs
-, libXdmcp
-, libXScrnSaver
-, ffmpeg
-, filter-audio
-, libexif
-, libsodium
-, libopus
-, libvpx
-, openal
-, pcre
-, qrencode
-, qt6
-, sqlcipher
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  perl,
+  kdePackages,
+  libtoxcore,
+  libpthreadstubs,
+  libXdmcp,
+  libXScrnSaver,
+  ffmpeg,
+  filter-audio,
+  libexif,
+  libsodium,
+  libopus,
+  libvpx,
+  openal,
+  pcre,
+  qrencode,
+  qt6,
+  sqlcipher,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,8 +54,12 @@ stdenv.mkDerivation rec {
     sqlcipher
   ];
 
-  nativeBuildInputs = [ cmake pkg-config qt6.qttools qt6.wrapQtAppsHook ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ perl ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt6.qttools
+    qt6.wrapQtAppsHook
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ perl ];
 
   cmakeFlags = [
     "-DGIT_DESCRIBE=v${version}"
@@ -67,7 +72,10 @@ stdenv.mkDerivation rec {
     mainProgram = "qtox";
     homepage = "https://tox.chat";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ akaWolf peterhoeg ];
+    maintainers = with maintainers; [
+      akaWolf
+      peterhoeg
+    ];
     platforms = platforms.all;
   };
 }

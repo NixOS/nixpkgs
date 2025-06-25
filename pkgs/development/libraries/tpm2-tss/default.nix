@@ -137,6 +137,8 @@ stdenv.mkDerivation rec {
       # uchar.h required
       "--disable-fapi"
       "--disable-policy"
+      # uses fallocate
+      "--disable-tcti-libtpms"
     ];
 
   postInstall = ''

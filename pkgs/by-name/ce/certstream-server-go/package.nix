@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "certstream-server-go";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "d-Rickyy-b";
     repo = "certstream-server-go";
     tag = "v${version}";
-    hash = "sha256-iA4kwhGvAkRL0cMCfo0mdQYUZbWk3Y8xdb7jjjTaRFM=";
+    hash = "sha256-ashuwJjWrKjVtjPzBLmXX7EMFX0nlxs4B53pBP2G3Bo=";
   };
 
-  vendorHash = "sha256-S5uF+i5Qsgi3M7B7LbO7CDO2GkWXn4X8wK/hgSSedHo=";
+  vendorHash = "sha256-+7wL6JA5sNRNJQKelVkEVCZ5pqOlmn8o7Um2g6rsIlc=";
 
   ldflags = [
     "-s"

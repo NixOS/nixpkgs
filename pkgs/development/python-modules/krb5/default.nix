@@ -42,7 +42,7 @@ buildPythonPackage rec {
     description = "Kerberos API bindings for Python";
     homepage = "https://github.com/jborean93/pykrb5";
     license = licenses.mit;
-    maintainers = teams.deshaw.members;
+    teams = [ teams.deshaw ];
     broken = stdenv.hostPlatform.isDarwin; # TODO: figure out how to build on Darwin
   };
 }

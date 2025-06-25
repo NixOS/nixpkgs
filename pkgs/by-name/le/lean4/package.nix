@@ -8,29 +8,51 @@
   cadical,
   pkg-config,
   libuv,
+  enableMimalloc ? true,
   perl,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.17.0";
+  version = "4.20.0";
+
+  # Using a vendored version rather than nixpkgs' version to match the exact version required by
+  # Lean.  Apparently, even a slight version change can impact greatly the final performance.
+  mimalloc-src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "mimalloc";
+    tag = "v2.2.3";
+    hash = "sha256-B0gngv16WFLBtrtG5NqA2m5e95bYVcQraeITcOX9A74=";
+  };
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6oteAbCKhel0pRyFGqSDG03oDPQU5Y9dsPcujSG6sjo=";
+    hash = "sha256-1V3Uk96wdNJ3IP+hvXb5Hep8w8QK8GjqaeTVG+KUqXU=";
   };
 
-  postPatch = ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace-fail 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.tag}")'
+  postPatch =
+    let
+      pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
+    in
+    ''
+      substituteInPlace src/CMakeLists.txt \
+        --replace-fail 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.tag}")'
 
-    # Remove tests that fails in sandbox.
-    # It expects `sourceRoot` to be a git repository.
-    rm -rf src/lake/examples/git/
-  '';
+      # Remove tests that fails in sandbox.
+      # It expects `sourceRoot` to be a git repository.
+      rm -rf src/lake/examples/git/
+    ''
+    + (lib.optionalString enableMimalloc ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'MIMALLOC-SRC' '${finalAttrs.mimalloc-src}'
+      for file in stage0/src/CMakeLists.txt stage0/src/runtime/CMakeLists.txt src/CMakeLists.txt src/runtime/CMakeLists.txt; do
+        substituteInPlace "$file" \
+          --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
+      done
+    '');
 
   preConfigure = ''
     patchShebangs stage0/src/bin/ src/bin/
@@ -52,9 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
+  patches = [ ./mimalloc.patch ];
+
   cmakeFlags = [
     "-DUSE_GITHASH=OFF"
     "-DINSTALL_LICENSE=OFF"
+    "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
   ];
 
   passthru.tests = {

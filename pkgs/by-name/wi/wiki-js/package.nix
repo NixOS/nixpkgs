@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wiki-js";
-  version = "2.5.306";
+  version = "2.5.307";
 
   src = fetchurl {
     url = "https://github.com/Requarks/wiki/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-BYJTzPUfd+eYRzHuNVO/L3NvGej0pBnWL6+7AjiGJ/Q=";
+    sha256 = "sha256-wElXBEVLqrK+WtsCUw1IefWBqG6d6LP0eVylPb4qXY0=";
   };
 
   # Unpack the tarball into a subdir. All the contents are copied into `$out`.

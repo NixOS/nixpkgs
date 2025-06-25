@@ -16,13 +16,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wluma";
-  version = "4.9.0";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "wluma";
     tag = version;
-    hash = "sha256-K/AJP+2J+u83sCCbyXvCLh51Ip979nSnb0bjT22Y2+0=";
+    hash = "sha256-gO7l0VnOs6BoBxZKkkXyxiBP7JB+G8ScrfuADNveys4=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-+uJ9SytwucYiuzTwdKTAfHb81LyV9NZmGOlzm6Qjftw=";
+  cargoHash = "sha256-UFe+/qJ9jCJ0QtSeY9QFT8VPXQGWIG2tqay+WE2rhKU=";
 
   nativeBuildInputs = [
     makeWrapper

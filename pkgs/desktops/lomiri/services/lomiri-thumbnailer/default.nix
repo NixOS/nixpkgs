@@ -131,6 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
       gst-plugins-base
       gst-plugins-good
       gst-plugins-bad
+      # Something seems borked with bad's h264 decoder, add libav as a workaround
+      # https://github.com/NixOS/nixpkgs/issues/399599#issuecomment-2816268226
+      gst-libav
       # maybe add ugly to cover all kinds of formats?
     ]);
 
@@ -185,7 +188,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       # gallery app delegates to thumbnailer, tests various formats
-      gallery-app = nixosTests.lomiri-gallery-app;
+      inherit (nixosTests.lomiri-gallery-app)
+        format-mp4
+        format-gif
+        format-bmp
+        format-jpg
+        format-png
+        ;
 
       # music app relies on thumbnailer to extract embedded cover art
       music-app = nixosTests.lomiri-music-app;
@@ -204,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Only
       lgpl3Only
     ];
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-thumbnailer-qt"

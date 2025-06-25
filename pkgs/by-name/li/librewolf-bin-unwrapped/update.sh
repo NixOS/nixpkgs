@@ -3,7 +3,7 @@
 
 set -eou pipefail
 
-latestVersion=$(curl ${PRIVATE-TOKEN:+-u ":$PRIVATE-TOKEN"} -sL https://gitlab.com/api/v4/projects/44042130/releases | jq -r '.[0].tag_name')
+latestVersion=$(curl ${GITLAB_TOKEN:+-H "Private-Token: $GITLAB_TOKEN"} -sL https://gitlab.com/api/v4/projects/44042130/releases | jq -r '.[0].tag_name')
 currentVersion=$(nix-instantiate --eval -E "with import ./. {}; librewolf-bin-unwrapped.version or (lib.getVersion librewolf-bin-unwrapped)" | tr -d '"')
 
 echo "latest  version: $latestVersion"
@@ -19,6 +19,6 @@ for i in \
     "x86_64-linux linux-x86_64" \
     "aarch64-linux linux-arm64"; do
     set -- $i
-    hash=$(nix hash convert --to sri --hash-algo sha256 $(curl ${PRIVATE-TOKEN:+-u ":$PRIVATE-TOKEN"} -sL https://gitlab.com/api/v4/projects/44042130/packages/generic/librewolf/$latestVersion/librewolf-$latestVersion-$2-package.tar.xz.sha256sum))
+    hash=$(nix hash convert --to sri --hash-algo sha256 $(curl ${GITLAB_TOKEN:+-H "Private-Token: $GITLAB_TOKEN"} -sL https://gitlab.com/api/v4/projects/44042130/packages/generic/librewolf/$latestVersion/librewolf-$latestVersion-$2-package.tar.xz.sha256sum))
     update-source-version librewolf-bin-unwrapped $latestVersion $hash --system=$1 --ignore-same-version
 done

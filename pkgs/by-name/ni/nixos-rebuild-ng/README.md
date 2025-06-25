@@ -35,40 +35,6 @@ an attempt of the rewrite.
   currently depends on `jq` for JSON parsing, while Python has `json` in
   standard library
 
-## Do's and Don'ts
-
-- Do: be as much of a drop-in replacement as possible
-- Do: fix obvious bugs
-- Do: improvements that are non-breaking
-- Don't: change logic in breaking ways even if this would be an improvement
-
-## How to use
-
-If you want to use `nixos-rebuild-ng` without replacing `nixos-rebuild`, add the
-following to your NixOS configuration:
-
-```nix
-{ pkgs, ... }:
-{
-  environment.systemPackages = [ pkgs.nixos-rebuild-ng ];
-}
-```
-
-And use `nixos-rebuild-ng` instead of `nixos-rebuild`.
-
-If you want to completely replace `nixos-rebuild` with `nixos-rebuild-ng`, add
-the following to your NixOS configuration:
-
-```nix
-{ ... }:
-{
-  system.rebuild.enableNg = true;
-}
-```
-
-This will set `config.system.build.nixos-rebuild` to `nixos-rebuild-ng`, so
-all tools that expect it in that location should work.
-
 ## Development
 
 Run:
@@ -148,8 +114,6 @@ not possible to fix, please open an issue and we can discuss a solution.
 
 ## TODON'T
 
-- Reimplement `systemd-run` logic: will be moved to the new
-  [`apply`](https://github.com/NixOS/nixpkgs/pull/344407) script
 - Nix bootstrap: it is only used for non-Flake paths and it is basically
   useless nowadays. It was created at a time when Nix was changing frequently
   and there was a need to bootstrap a new version of Nix before evaluating the

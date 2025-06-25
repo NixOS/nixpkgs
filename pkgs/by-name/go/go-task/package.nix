@@ -8,18 +8,18 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-task";
-  version = "3.41.0";
+  version = "3.44.0";
 
   src = fetchFromGitHub {
     owner = "go-task";
     repo = "task";
-    tag = "v${version}";
-    hash = "sha256-yJ9XTCS0BK+pcQvcbGR2ixwPODJKdfQnHgB1QoTFhzA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hZi1BSVv3Z+OzJyNvruyDbxYjTgfERnssWZaK0HGQmc=";
   };
 
-  vendorHash = "sha256-DR9G+I6PYk8jrR0CZiPqtuULTMekATNSLjyHACOmlbk=";
+  vendorHash = "sha256-8OLWIAikKqmj3tXRO7Ro3VFItKDrhVh6n8pHbBM9Nrc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/go-task/task/v3/internal/version.version=${version}"
+    "-X=github.com/go-task/task/v3/internal/version.version=${finalAttrs.version}"
   ];
 
   env.CGO_ENABLED = 0;
@@ -49,15 +49,15 @@ buildGoModule rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/task";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://taskfile.dev/";
     description = "Task runner / simpler Make alternative written in Go";
-    changelog = "https://github.com/go-task/task/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/go-task/task/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ parasrah ];
   };
-}
+})

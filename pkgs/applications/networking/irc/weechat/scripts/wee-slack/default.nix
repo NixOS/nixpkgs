@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/wee-slack/wee-slack";
     license = licenses.mit;
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = [ ];
     description = ''
       A WeeChat plugin for Slack.com. Synchronizes read markers, provides typing notification, search, etc..
     '';

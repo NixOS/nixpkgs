@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     homepage = "https://github.com/catppuccin/whiskers";
-    description = "A templating tool to simplify the creation of Catppuccin ports";
+    description = "Templating tool to simplify the creation of Catppuccin ports";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Name ];
     mainProgram = "whiskers";

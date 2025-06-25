@@ -21,7 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-9ruhOLaYNESeKOwJs3IN6ct66fSq7My9DOyA7/cH3d0=";
   };
 
-  patches = [ ./use-pytest.patch ];
+  patches = [
+    ./fix-packaging.patch
+    ./use-pytest.patch
+  ];
 
   build-system = [ setuptools ];
 

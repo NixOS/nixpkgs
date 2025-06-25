@@ -7,7 +7,6 @@
   makeWrapper,
   pkg-config,
   openssl,
-  darwin,
   maa-assistant-arknights,
   android-tools,
   git,
@@ -15,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "maa-cli";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "maa-cli";
     rev = "v${version}";
-    hash = "sha256-KoKMfZrI3V73hbZGm0Xx8VxL7ENicSApropLm02B098=";
+    hash = "sha256-WOl/d4q7l6t5BZYOf2lih/eIBTiswRBYWALmXx5ffio=";
   };
 
   nativeBuildInputs = [
@@ -30,22 +29,14 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   # https://github.com/MaaAssistantArknights/maa-cli/pull/126
   buildNoDefaultFeatures = true;
   buildFeatures = [ "git2" ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EIN624QnrPvta8ZNb27vT6ZDO2YY0CKSrSIZqelSlJU=";
+  cargoHash = "sha256-1KTPvL5JdxN1TPfS0H6Rxi4o8dzMAolHSti9xUKChL8=";
 
   # maa-cli would only search libMaaCore.so and resources in itself's path
   # https://github.com/MaaAssistantArknights/maa-cli/issues/67

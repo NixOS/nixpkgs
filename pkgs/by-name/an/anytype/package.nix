@@ -1,48 +1,39 @@
 {
   lib,
-  callPackage,
-  runCommand,
   fetchFromGitHub,
   buildNpmPackage,
   pkg-config,
+  anytype-heart,
   libsecret,
   electron,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? "",
-  nix-update-script,
 }:
 
 let
-  anytype-heart = callPackage ./anytype-heart { };
   pname = "anytype";
-  version = "0.45.3";
+  version = "0.46.5";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${version}";
-    hash = "sha256-fwfxmNca75xAAHKeT2nddz+XZexDomzHbw188LXxZqA=";
+    hash = "sha256-gDlxyHxBLWVBLnaI6rFclfjwqkw9gneBEC7ssmWDKYU=";
   };
   description = "P2P note-taking tool";
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "687106c4e37297f86fab79f77ef83599b61ab65c";
-    hash = "sha256-Y0irD0jzqYobnjtD2M1+hTDRUUYnuygUx9+tE1gUoTw=";
+    rev = "1d7ca0073bdd02d0145b8da3b1b956ca0652a108";
+    hash = "sha256-aL79DOIFH3CocbcLW0SJ472mYPZJXrPJyRKy8zXiF4o=";
   };
-
-  electron-headers = runCommand "electron-headers" { } ''
-    mkdir -p $out
-    tar -C $out --strip-components=1 -xvf ${electron.headers}
-  '';
-
 in
 buildNpmPackage {
   inherit pname version src;
 
-  npmDepsHash = "sha256-9BI+rXzTYonlMhcH8uiWyyF18JGv8GL1U9hZ9Z6X3As=";
+  npmDepsHash = "sha256-WEw3RCi7dWs2eMYxLH7DcmWBrN4T8T6beIyplcXgJAA=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -56,7 +47,12 @@ buildNpmPackage {
 
   npmFlags = [
     # keytar needs to be built against electron's ABI
-    "--nodedir=${electron-headers}"
+    "--nodedir=${electron.headers}"
+  ];
+
+  patches = [
+    ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
+    ./0001-fix-single-instance-detection-when-not-packaged.patch
   ];
 
   buildPhase = ''
@@ -74,13 +70,20 @@ buildNpmPackage {
     runHook postBuild
   '';
 
+  # remove unnecessary files
+  preInstall = ''
+    npm prune --omit=dev
+    chmod u+w -R dist
+    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/node_modules/anytype
-    cp -r electron.js electron dist node_modules package.json $out/lib/node_modules/anytype/
+    mkdir -p $out/lib/anytype
+    cp -r electron.js electron dist node_modules package.json $out/lib/anytype/
 
-    for icon in $out/lib/node_modules/anytype/electron/img/icons/*.png; do
+    for icon in $out/lib/anytype/electron/img/icons/*.png; do
       mkdir -p "$out/share/icons/hicolor/$(basename $icon .png)/apps"
       ln -s "$icon" "$out/share/icons/hicolor/$(basename $icon .png)/apps/anytype.png"
     done
@@ -90,7 +93,7 @@ buildNpmPackage {
     makeWrapper '${lib.getExe electron}' $out/bin/anytype \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --add-flags $out/lib/node_modules/anytype/ \
+      --add-flags $out/lib/anytype/ \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
@@ -98,11 +101,12 @@ buildNpmPackage {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Anytype";
-      exec = "anytype";
+      name = "anytype";
+      exec = "anytype %U";
       icon = "anytype";
       desktopName = "Anytype";
       comment = description;
+      mimeTypes = [ "x-scheme-handler/anytype" ];
       categories = [
         "Utility"
         "Office"
@@ -113,25 +117,14 @@ buildNpmPackage {
     })
   ];
 
-  passthru.updateScript = nix-update-script {
-    # Prevent updating to versions with '-' in them.
-    # Necessary since Anytype uses Electron-based 'MAJOR.MINOR.PATCH(-{alpha,beta})?' versioning scheme where each
-    #  {alpha,beta} version increases the PATCH version, releasing a new full release version in GitHub instead of a
-    #  pre-release version.
-    extraArgs = [
-      "--version-regex"
-      "[^-]*"
-    ];
-  };
-
   meta = {
     inherit description;
     homepage = "https://anytype.io/";
     license = lib.licenses.unfreeRedistributable;
     mainProgram = "anytype";
     maintainers = with lib.maintainers; [
-      running-grass
       autrimpo
+      adda
     ];
     platforms = [
       "x86_64-linux"

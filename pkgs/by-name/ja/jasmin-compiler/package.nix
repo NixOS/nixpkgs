@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jasmin-compiler";
-  version = "2025.02.0";
+  version = "2025.06.0";
 
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${version}/jasmin-compiler-v${version}.tar.bz2";
-    hash = "sha256-xLTMdyFyZGlnhuZ1iOg8Tgm7aLijg5lceJxgLdEHw+Q=";
+    hash = "sha256-VjWNvg/aF+omobF8b4YpRwVYM5K/b0GLoe1P/83ilk8=";
   };
 
   nativeBuildInputs = with ocamlPackages; [

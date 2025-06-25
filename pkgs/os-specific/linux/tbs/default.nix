@@ -13,22 +13,22 @@ let
     name = repo;
     owner = "tbsdtv";
     repo = "linux_media";
-    rev = "cf8cf4c06090fe3c2dc2f665764abc580b8a1921";
-    hash = "sha256-YTITVsSktxAoWBsIN6jXZD11pxXaMrMl5N6VZYxfTi0=";
+    rev = "3f1faba3930568fd2d472a2fe8c57af8d7084672";
+    hash = "sha256-tq92yqJVJgAYy7PTY/nk0Q6sWJ0kdSrw38JEOOhfwGQ=";
   };
 
   build = fetchFromGitHub rec {
     name = repo;
     owner = "tbsdtv";
     repo = "media_build";
-    rev = "f362ab16cb88cc1d3599408c22e3abc52aebe1fc";
-    hash = "sha256-xsZdrOgf+dA5B/GVWSnWUw0FInswPd1Kzg/qWE2JmqM=";
+    rev = "bc02baf59046b02e3eb71653d8aa8d98e79dc4e1";
+    hash = "sha256-P0ASmWro3j3dk7LZQbUKXcGL+2c9fdjM7RgEfk0iDMs=";
   };
 
 in
 stdenv.mkDerivation {
   pname = "tbs";
-  version = "20241213-${kernel.version}";
+  version = "20250510-${kernel.version}";
 
   srcs = [
     media
@@ -80,6 +80,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ ck3d ];
     priority = -1;
-    broken = kernel.kernelOlder "4.14" || kernel.kernelAtLeast "6.13";
+    broken = kernel.kernelOlder "4.19" || kernel.kernelAtLeast "6.15";
   };
 }

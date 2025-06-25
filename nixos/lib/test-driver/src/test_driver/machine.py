@@ -19,6 +19,7 @@ from pathlib import Path
 from queue import Queue
 from typing import Any
 
+from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 
 from .qmp import QMPSession
@@ -129,7 +130,7 @@ def _preprocess_screenshot(screenshot_path: str, negate: bool = False) -> str:
     )
 
     if ret.returncode != 0:
-        raise Exception(
+        raise MachineError(
             f"Image processing failed with exit code {ret.returncode}, stdout: {ret.stdout.decode()}, stderr: {ret.stderr.decode()}"
         )
 
@@ -140,7 +141,7 @@ def _perform_ocr_on_screenshot(
     screenshot_path: str, model_ids: Iterable[int]
 ) -> list[str]:
     if shutil.which("tesseract") is None:
-        raise Exception("OCR requested but enableOCR is false")
+        raise MachineError("OCR requested but enableOCR is false")
 
     processed_image = _preprocess_screenshot(screenshot_path, negate=False)
     processed_negative = _preprocess_screenshot(screenshot_path, negate=True)
@@ -163,7 +164,7 @@ def _perform_ocr_on_screenshot(
                 capture_output=True,
             )
             if ret.returncode != 0:
-                raise Exception(f"OCR failed with exit code {ret.returncode}")
+                raise MachineError(f"OCR failed with exit code {ret.returncode}")
             model_results.append(ret.stdout.decode("utf-8"))
 
     return model_results
@@ -180,7 +181,9 @@ def retry(fn: Callable, timeout: int = 900) -> None:
         time.sleep(1)
 
     if not fn(True):
-        raise Exception(f"action timed out after {timeout} seconds")
+        raise RequestedAssertionFailed(
+            f"action timed out after {timeout} tries with one-second pause in-between"
+        )
 
 
 class StartCommand:
@@ -409,14 +412,14 @@ class Machine:
         def check_active(_last_try: bool) -> bool:
             state = self.get_unit_property(unit, "ActiveState", user)
             if state == "failed":
-                raise Exception(f'unit "{unit}" reached state "{state}"')
+                raise RequestedAssertionFailed(f'unit "{unit}" reached state "{state}"')
 
             if state == "inactive":
                 status, jobs = self.systemctl("list-jobs --full 2>&1", user)
                 if "No jobs" in jobs:
                     info = self.get_unit_info(unit, user)
                     if info["ActiveState"] == state:
-                        raise Exception(
+                        raise RequestedAssertionFailed(
                             f'unit "{unit}" is inactive and there are no pending jobs'
                         )
 
@@ -431,7 +434,7 @@ class Machine:
     def get_unit_info(self, unit: str, user: str | None = None) -> dict[str, str]:
         status, lines = self.systemctl(f'--no-pager show "{unit}"', user)
         if status != 0:
-            raise Exception(
+            raise RequestedAssertionFailed(
                 f'retrieving systemctl info for unit "{unit}"'
                 + ("" if user is None else f' under user "{user}"')
                 + f" failed with exit code {status}"
@@ -461,7 +464,7 @@ class Machine:
             user,
         )
         if status != 0:
-            raise Exception(
+            raise RequestedAssertionFailed(
                 f'retrieving systemctl property "{property}" for unit "{unit}"'
                 + ("" if user is None else f' under user "{user}"')
                 + f" failed with exit code {status}"
@@ -509,7 +512,7 @@ class Machine:
             info = self.get_unit_info(unit)
             state = info["ActiveState"]
             if state != require_state:
-                raise Exception(
+                raise RequestedAssertionFailed(
                     f"Expected unit '{unit}' to to be in state "
                     f"'{require_state}' but it is in state '{state}'"
                 )
@@ -663,7 +666,9 @@ class Machine:
                 (status, out) = self.execute(command, timeout=timeout)
                 if status != 0:
                     self.log(f"output: {out}")
-                    raise Exception(f"command `{command}` failed (exit code {status})")
+                    raise RequestedAssertionFailed(
+                        f"command `{command}` failed (exit code {status})"
+                    )
                 output += out
         return output
 
@@ -677,7 +682,9 @@ class Machine:
             with self.nested(f"must fail: {command}"):
                 (status, out) = self.execute(command, timeout=timeout)
                 if status == 0:
-                    raise Exception(f"command `{command}` unexpectedly succeeded")
+                    raise RequestedAssertionFailed(
+                        f"command `{command}` unexpectedly succeeded"
+                    )
                 output += out
         return output
 
@@ -922,7 +929,7 @@ class Machine:
             ret = subprocess.run(f"pnmtopng '{tmp}' > '{filename}'", shell=True)
             os.unlink(tmp)
             if ret.returncode != 0:
-                raise Exception("Cannot convert screenshot")
+                raise MachineError("Cannot convert screenshot")
 
     def copy_from_host_via_shell(self, source: str, target: str) -> None:
         """Copy a file from the host into the guest by piping it over the

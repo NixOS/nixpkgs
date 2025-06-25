@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.git;
@@ -19,27 +24,43 @@ in
           let
             gitini = attrsOf (attrsOf anything);
           in
-          either gitini (listOf gitini) // {
-            merge = loc: defs:
+          either gitini (listOf gitini)
+          // {
+            merge =
+              loc: defs:
               let
-                config = builtins.foldl'
-                  (acc: { value, ... }@x: acc // (if builtins.isList value then {
-                    ordered = acc.ordered ++ value;
-                  } else {
-                    unordered = acc.unordered ++ [ x ];
-                  }))
-                  {
-                    ordered = [ ];
-                    unordered = [ ];
-                  }
-                  defs;
+                config =
+                  builtins.foldl'
+                    (
+                      acc:
+                      { value, ... }@x:
+                      acc
+                      // (
+                        if builtins.isList value then
+                          {
+                            ordered = acc.ordered ++ value;
+                          }
+                        else
+                          {
+                            unordered = acc.unordered ++ [ x ];
+                          }
+                      )
+                    )
+                    {
+                      ordered = [ ];
+                      unordered = [ ];
+                    }
+                    defs;
               in
               [ (gitini.merge loc config.unordered) ] ++ config.ordered;
           };
         default = [ ];
         example = {
           init.defaultBranch = "main";
-          url."https://github.com/".insteadOf = [ "gh:" "github:" ];
+          url."https://github.com/".insteadOf = [
+            "gh:"
+            "github:"
+          ];
         };
         description = ''
           Configuration to write to /etc/gitconfig. A list can also be

@@ -5,7 +5,8 @@
   qt6Packages,
   cmake,
   makeWrapper,
-  botan2,
+  botan3,
+  libgit2,
   pkg-config,
   nixosTests,
   installShellFiles,
@@ -17,11 +18,11 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "25.3.3";
+  version = "25.6.4";
 
   src = fetchurl {
     url = "https://github.com/pbek/QOwnNotes/releases/download/v${finalAttrs.version}/qownnotes-${finalAttrs.version}.tar.xz";
-    hash = "sha256-waWFOPXxKgCb1h1dVSzXDVQwcKyFBKXuAwYXu63ofPo=";
+    hash = "sha256-CL/jrWdyBpE27MuyjMaSO7ofzrCihXie15xbuWVjS28=";
   };
 
   nativeBuildInputs =
@@ -40,12 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtdeclarative
     qt6Packages.qtsvg
     qt6Packages.qtwebsockets
-    botan2
+    botan3
+    libgit2
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ];
 
   cmakeFlags = [
     "-DQON_QT6_BUILD=ON"
     "-DBUILD_WITH_SYSTEM_BOTAN=ON"
+    "-DBUILD_WITH_LIBGIT2=ON"
   ];
 
   # Install shell completion on Linux (with xvfb-run)
@@ -59,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
         --fish <(xvfb-run $out/bin/${finalAttrs.appname} --completion fish)
     ''
     # Install shell completion on macOS
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       installShellCompletion --cmd ${finalAttrs.pname} \
         --bash <($out/bin/${finalAttrs.appname} --completion bash) \
         --fish <($out/bin/${finalAttrs.appname} --completion fish)
@@ -81,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

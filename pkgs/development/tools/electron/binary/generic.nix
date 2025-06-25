@@ -3,6 +3,7 @@
   stdenv,
   makeWrapper,
   fetchurl,
+  fetchzip,
   wrapGAppsHook3,
   glib,
   gtk3,
@@ -57,7 +58,7 @@ let
     ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = optional (versionOlder version "33.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "34.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =
@@ -69,7 +70,8 @@ let
 
   headersFetcher =
     vers: hash:
-    fetchurl {
+    fetchzip {
+      name = "electron-${vers}-headers";
       url = "https://artifacts.electronjs.org/headers/dist/v${vers}/node-v${vers}-headers.tar.gz";
       sha256 = hash;
     };

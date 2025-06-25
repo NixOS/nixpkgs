@@ -1,33 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
 
-  # for update script
-  langgraph-sdk,
+  # dependencies
+  click,
 
   # testing
   pytest-asyncio,
   pytestCheckHook,
   docker-compose,
 
-  pythonOlder,
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "0.1.74";
+  version = "0.2.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "cli==${version}";
-    hash = "sha256-9/lL2TyOPiRIy6PfWEcd2fBNjn3n3Rpg0/7DL/4+Qpc=";
+    hash = "sha256-gSiyFjk1lXiCv7JpX4J00WAPoMv4VsXDuCswbFhP2kY=";
   };
 
   sourceRoot = "${src.name}/libs/cli";
@@ -59,14 +59,13 @@ buildPythonPackage rec {
     "test_dockerfile_command_with_docker_compose"
   ];
 
-  passthru = {
-    inherit (langgraph-sdk) updateScript;
-    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "cli==";
   };
 
   meta = {
     description = "Official CLI for LangGraph API";
-    homepage = "https://github.com/langchain-ai/langgraph/libs/cli";
+    homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/cli";
     changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
     mainProgram = "langgraph";
     license = lib.licenses.mit;

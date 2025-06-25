@@ -2,7 +2,6 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchpatch2,
 }:
 let
   scx-common = rec {
@@ -13,18 +12,9 @@ let
     src = fetchFromGitHub {
       owner = "sched-ext";
       repo = "scx";
-      rev = "refs/tags/v${versionInfo.scx.version}";
+      tag = "v${versionInfo.scx.version}";
       inherit (versionInfo.scx) hash;
     };
-
-    patches = [
-      # Remove after new release
-      (fetchpatch2 {
-        name = "fix-builds-on-debug-fs-kernels";
-        url = "https://github.com/sched-ext/scx/commit/3c09e8c8c62efd701107f4c2071211db02341d62.patch?full_index=1";
-        hash = "sha256-jLMlCKBYQKS6sf5pZy5z19iSmX9bu9rlXHmGVaxTOho=";
-      })
-    ];
 
     meta = {
       homepage = "https://github.com/sched-ext/scx";
@@ -32,7 +22,10 @@ let
       license = lib.licenses.gpl2Only;
       platforms = lib.platforms.linux;
       badPlatforms = [ "aarch64-linux" ];
-      maintainers = with lib.maintainers; [ johnrtitor ];
+      maintainers = with lib.maintainers; [
+        johnrtitor
+        Gliczy
+      ];
     };
   };
 

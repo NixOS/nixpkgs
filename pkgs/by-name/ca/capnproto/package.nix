@@ -75,6 +75,6 @@ clangStdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = lib.teams.lix.members;
+    teams = [ lib.teams.lix ];
   };
 }

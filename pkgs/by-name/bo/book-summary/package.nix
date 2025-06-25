@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "book-summary";
     homepage = "https://github.com/dvogt23/book-summary";
     license = licenses.mit;
-    maintainers = with teams; iog.members;
+    teams = with teams; [ iog ];
   };
 }

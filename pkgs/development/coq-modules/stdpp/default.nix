@@ -13,36 +13,17 @@ mkCoqDerivation {
   owner = "iris";
   defaultVersion =
     with lib.versions;
-    lib.switch coq.coq-version [
-      {
-        case = range "8.19" "9.0";
-        out = "1.11.0";
+    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: case: { inherit case out; }) {
+        "1.11.0" = range "8.19" "9.0";
+        "1.10.0" = range "8.18" "8.19";
+        "1.9.0" = range "8.16" "8.18";
+        "1.8.0" = range "8.13" "8.17";
+        "1.6.0" = range "8.12" "8.14";
+        "1.5.0" = range "8.11" "8.13";
+        "1.4.0" = range "8.8" "8.10";
       }
-      {
-        case = range "8.18" "8.19";
-        out = "1.10.0";
-      }
-      {
-        case = range "8.16" "8.18";
-        out = "1.9.0";
-      }
-      {
-        case = range "8.13" "8.17";
-        out = "1.8.0";
-      }
-      {
-        case = range "8.12" "8.14";
-        out = "1.6.0";
-      }
-      {
-        case = range "8.11" "8.13";
-        out = "1.5.0";
-      }
-      {
-        case = range "8.8" "8.10";
-        out = "1.4.0";
-      }
-    ] null;
+    )) null;
   release."1.11.0".sha256 = "sha256-yqnkaA5gUdZBJZ3JnvPYh11vKQRl0BAnior1yGowG7k=";
   release."1.10.0".sha256 = "sha256-bfynevIKxAltvt76lsqVxBmifFkzEhyX8lRgTKxr21I=";
   release."1.9.0".sha256 = "sha256-OXeB+XhdyzWMp5Karsz8obp0rTeMKrtG7fu/tmc9aeI=";

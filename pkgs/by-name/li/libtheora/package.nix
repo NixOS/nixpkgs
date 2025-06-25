@@ -1,32 +1,32 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitHub,
   autoreconfHook,
   libogg,
   libvorbis,
   pkg-config,
+  perl,
   testers,
   validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtheora";
-  version = "1.1.1";
+  version = "1.2.0";
 
-  src = fetchurl {
-    url = "https://downloads.xiph.org/releases/theora/libtheora-${finalAttrs.version}.tar.gz";
-    hash = "sha256-QJUpVsR4EZKNHnkizaO8H0J+t1aAw8NySckelJBUkWs=";
+  src = fetchFromGitHub {
+    owner = "xiph";
+    repo = "theora";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kzZh4V6wZX9MetDutuqjRenmdpy4PHaRU9MgtIwPpiU=";
   };
 
-  patches = [
-    # fix error in autoconf scripts
-    (fetchpatch {
-      url = "https://github.com/xiph/theora/commit/28cc6dbd9b2a141df94f60993256a5fca368fa54.diff";
-      hash = "sha256-M/UULkiklvEay7LyOuCamxWCSvt37QSMzHOsAAnOWJo=";
-    })
-  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [ ./mingw-remove-export.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isMinGW [ ./mingw-remove-export.patch ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isArmv7 ''
+    patchShebangs lib/arm/arm2gnu.pl
+  '';
 
   configureFlags = [ "--disable-examples" ];
 
@@ -37,16 +37,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   outputDoc = "devdoc";
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    validatePkgConfig
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      pkg-config
+      validatePkgConfig
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isArmv7 [
+      # Needed to run lib/arm/arm2gnu.pl for ARM assembly optimizations
+      perl
+    ];
 
   propagatedBuildInputs = [
     libogg
     libvorbis
   ];
+
+  strictDeps = true;
 
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules {
@@ -60,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://gitlab.xiph.org/xiph/theora/-/releases/v${finalAttrs.version}";
     description = "Library for Theora, a free and open video compression format";
     homepage = "https://www.theora.org/";
     license = lib.licenses.bsd3;

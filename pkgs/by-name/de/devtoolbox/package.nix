@@ -20,14 +20,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "devtoolbox";
-  version = "1.2.3";
+  version = "1.2.5";
   pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "aleiepure";
     repo = "devtoolbox";
     tag = "v${version}";
-    hash = "sha256-Ns2utC/qiwzEJJkdqwpx320k3srj5OJi8K+u5fI1LwE=";
+    hash = "sha256-CgpSZvpwBKo2gzp2QbBPFBK0tPhqKFC/DxXdmTWVAwc=";
   };
 
   postPatch = ''

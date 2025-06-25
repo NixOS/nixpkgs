@@ -1,29 +1,23 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-d2";
-  version = "0.3.3";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "danieleades";
     repo = "mdbook-d2";
     rev = "v${version}";
-    hash = "sha256-PsPCbuSK8JlNZOqFbxCK0f8h+7EC4tNFtjBfJqiPi7Q=";
+    hash = "sha256-+WCtvZXU8/FzOrc7LkxZKs5BhSdhqpOruxRfv+YY8Es=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-emfO7D7JU/fQYdnaK7eWR8tCPx3ffvU/pTutSURZMBQ=";
+  cargoHash = "sha256-bTPqvWl41r1ilKjUpCJNKi3MsWeiix38xma5im/LLKQ=";
   doCheck = false;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
 
   meta = with lib; {
     description = "D2 diagram generator plugin for MdBook";

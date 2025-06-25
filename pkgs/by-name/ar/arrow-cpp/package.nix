@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   fixDarwinDylibNames,
+  apache-orc,
   autoconf,
   aws-sdk-cpp,
   aws-sdk-cpp-arrow ? aws-sdk-cpp.override {
@@ -51,9 +52,13 @@
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
-  enableJemalloc ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64,
+  # Disable also on RiscV
+  # configure: error: cannot determine number of significant virtual address bits
+  enableJemalloc ?
+    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isRiscV64,
   enableS3 ? true,
-  enableGcs ? !stdenv.hostPlatform.isDarwin,
+  # google-cloud-cpp fails to build on RiscV
+  enableGcs ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isRiscV64,
 }:
 
 let
@@ -61,19 +66,19 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "4d209492d514c2d3cb2d392681b9aa00e6d8da1c";
-    hash = "sha256-IkiCbuy0bWyClPZ4ZEdkEP7jFYLhM7RCuNLd6Lazd4o=";
+    rev = "d2a13712303498963395318a4eb42872e66aead7";
+    hash = "sha256-c8FL37kG0uo7o0Zp71WjCl7FD5BnVgqUCCXXX9gI0lg=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "c7cf1374cf284c0c73024cd1437becea75558bf8";
-    hash = "sha256-DThjyZ34LajHwXZy1IhYKUGUG/ejQ9WvBNuI8eUKmSs=";
+    rev = "18d17540097fca7c40be3d42c167e6bfad90763c";
+    hash = "sha256-gKEQc2RKpVp39RmuZbIeIXAwiAXDHGnLXF6VQuJtnRA=";
   };
 
-  version = "19.0.1";
+  version = "20.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -83,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-toHwUIOZRpgR0K7pQtT5nqWpO9G7AuHYTcvA6UVg9lA=";
+    hash = "sha256-JFPdKraCU+xRkBTAHyY4QGnBVlOjQ1P5+gq9uxyqJtk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
@@ -129,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
     [
+      apache-orc
       boost
       brotli
       bzip2
@@ -165,6 +171,12 @@ stdenv.mkDerivation (finalAttrs: {
       grpc
       nlohmann_json
     ];
+
+  # apache-orc looks for things in caps
+  env = {
+    LZ4_ROOT = lz4;
+    ZSTD_ROOT = zstd.dev;
+  };
 
   preConfigure = ''
     patchShebangs build-support/
@@ -210,6 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
       "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
       "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
+      "-DARROW_ORC=ON"
       # Parquet options:
       "-DARROW_PARQUET=ON"
       "-DPARQUET_BUILD_EXECUTABLES=ON"
@@ -274,6 +287,8 @@ stdenv.mkDerivation (finalAttrs: {
         # requires networking
         "arrow-gcsfs-test"
         "arrow-flight-integration-test"
+        # File already exists in database: orc_proto.proto
+        "arrow-orc-adapter-test"
       ];
     in
     ''

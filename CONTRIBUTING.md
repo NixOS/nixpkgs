@@ -313,7 +313,7 @@ Container system, boot system and library changes are some examples of the pull 
 
 To streamline automated updates, leverage the nixpkgs-merge-bot by simply commenting `@NixOS/nixpkgs-merge-bot merge`. The bot will verify if the following conditions are met, refusing to merge otherwise:
 
-- the PR author should be @r-ryantm;
+- the PR author should be @r-ryantm or a Nixpkgs committer;
 - the commenter that issued the command should be among the package maintainers;
 - the package should reside in `pkgs/by-name`.
 
@@ -345,7 +345,7 @@ See [Nix Channel Status](https://status.nixos.org/) for the current channels and
 Here's a brief overview of the main Git branches and what channels they're used for:
 
 - `master`: The main branch, used for the unstable channels such as `nixpkgs-unstable`, `nixos-unstable` and `nixos-unstable-small`.
-- `release-YY.MM` (e.g. `release-25.05`): The NixOS release branches, used for the stable channels such as `nixos-25.05`, `nixos-25.05-small` and `nixpkgs-25.05-darwin`.
+- `release-YY.MM` (e.g. `release-25.11`): The NixOS release branches, used for the stable channels such as `nixos-25.11`, `nixos-25.11-small` and `nixpkgs-25.11-darwin`.
 
 When a channel is updated, a corresponding Git branch is also updated to point to the corresponding commit.
 So e.g. the [`nixpkgs-unstable` branch](https://github.com/nixos/nixpkgs/tree/nixpkgs-unstable) corresponds to the Git commit from the [`nixpkgs-unstable` channel](https://channels.nixos.org/nixpkgs-unstable).
@@ -531,13 +531,30 @@ If you removed packages or made some major NixOS changes, write about it in the 
 
 Names of files and directories should be in lowercase, with dashes between words — not in camel case. For instance, it should be `all-packages.nix`, not `allPackages.nix` or `AllPackages.nix`.
 
+### Formatting
+
+CI [enforces](./.github/workflows/check-format.yml) all Nix files to be
+formatted using the [official Nix formatter](https://github.com/NixOS/nixfmt).
+
+You can ensure this locally using either of these commands:
+```
+nix-shell --run treefmt
+nix develop --command treefmt
+nix fmt
+```
+
+If you're starting your editor in `nix-shell` or `nix develop`,
+you can also set it up to automatically format the file with `treefmt` on save.
+
+If you have any problems with formatting, please ping the
+[formatting team](https://nixos.org/community/teams/formatting/) via
+[@NixOS/nix-formatting](https://github.com/orgs/NixOS/teams/nix-formatting).
+
 ### Syntax
 
 - Set up [editorconfig](https://editorconfig.org/) for your editor, such that [the settings](./.editorconfig) are automatically applied.
 
 - Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in [package naming](./pkgs/README.md#package-naming).
-
-- New files must be formatted by entering the `nix-shell` from the repository root and running `nixfmt`.
 
 - Functions should list their expected arguments as precisely as possible. That is, write
 

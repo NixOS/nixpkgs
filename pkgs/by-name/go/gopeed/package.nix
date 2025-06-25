@@ -8,13 +8,13 @@
 }:
 
 let
-  version = "1.6.11";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "GopeedLab";
     repo = "gopeed";
     tag = "v${version}";
-    hash = "sha256-ayPqLRWYSa0rSHqGFS4xp3wUVAl4tfsSPs/SQcUQD60=";
+    hash = "sha256-9xAArQhf1lAWL6mbx6wuGY3xhKAMigpWFrX8P6/olMY=";
   };
 
   metaCommon = {

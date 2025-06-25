@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "-v" ];
+  versionCheckProgramArg = "-v";
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

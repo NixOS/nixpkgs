@@ -10,8 +10,6 @@
   protobuf,
   protoc,
   pyarrow,
-  Security,
-  SystemConfiguration,
   typing-extensions,
   pythonOlder,
 }:
@@ -63,8 +61,6 @@ buildPythonPackage rec {
     [ protobuf ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Security
-      SystemConfiguration
     ];
 
   dependencies = [

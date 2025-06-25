@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "guile-goblins";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchurl {
     url = "https://spritely.institute/files/releases/guile-goblins/guile-goblins-${version}.tar.gz";
-    hash = "sha256-H4mBn0Fe32J99pybfa7jMfxBBvmTfffbAcchujuC3bc=";
+    hash = "sha256-2oPS6Ar0ee7BQBtjvhJCCQYXK2TLIiADiCwnDaHPGBc=";
   };
 
   strictDeps = true;

@@ -8,6 +8,8 @@
   which,
   rustPlatform,
   emscripten,
+  openssl,
+  pkg-config,
   callPackage,
   linkFarm,
   substitute,
@@ -26,10 +28,10 @@ let
   # to update:
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) Set NIXPKGS_GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
+  # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.25.1";
-  hash = "sha256-xnUhiIeRxD4ZKMUQ6pNEetDqiFqiJsa57BRM2zqNFro=";
+  version = "0.25.4";
+  hash = "sha256-6qE/LXAGzV68HHr4lB74vmSn6mGF9EV7enjWOyNQjDQ=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -41,7 +43,7 @@ let
 
   update-all-grammars = callPackage ./update.nix { };
 
-  fetchGrammar = (
+  fetchGrammar =
     v:
     fetchgit {
       inherit (v)
@@ -50,8 +52,7 @@ let
         sha256
         fetchSubmodules
         ;
-    }
-  );
+    };
 
   grammars = runCommand "grammars" { } (
     ''
@@ -59,7 +60,7 @@ let
     ''
     + (lib.concatStrings (
       lib.mapAttrsToList (
-        name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n"
+        name: grammar: "ln -s ${grammar.src or (fetchGrammar grammar)} $out/${name}\n"
       ) (import ./grammars { inherit lib; })
     ))
   );
@@ -132,7 +133,7 @@ let
           };
         };
     in
-    lib.mapAttrs build (grammars);
+    lib.mapAttrs build grammars;
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -171,10 +172,19 @@ rustPlatform.buildRustPackage {
   inherit src version;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-YaXeApg0U97Bm+kBdFdmfnkgg9GBxxYdaDzgCVN2sbY=";
+  cargoHash = "sha256-/KCvLsbb6DullLpRoSYbxtSsm/TMc6o0Y/QmK6BN748=";
 
-  buildInputs = [ installShellFiles ];
-  nativeBuildInputs = [ which ] ++ lib.optionals webUISupport [ emscripten ];
+  buildInputs =
+    [ installShellFiles ]
+    ++ lib.optionals webUISupport [
+      openssl
+    ];
+  nativeBuildInputs =
+    [ which ]
+    ++ lib.optionals webUISupport [
+      emscripten
+      pkg-config
+    ];
 
   patches = lib.optionals (!webUISupport) [
     (substitute {
@@ -193,7 +203,7 @@ rustPlatform.buildRustPackage {
   preBuild = lib.optionalString webUISupport ''
     mkdir -p .emscriptencache
     export EM_CACHE=$(pwd)/.emscriptencache
-    bash ./script/build-wasm --debug
+    cargo run --package xtask -- build-wasm --debug
   '';
 
   postInstall =
@@ -244,7 +254,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
-    changelog = "https://github.com/tree-sitter/tree-sitter/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${version}";
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.

@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   unixtools,
-  php82,
+  php,
   python3,
   makeWrapper,
   nixosTests,
@@ -23,20 +23,20 @@
 }:
 
 let
-  phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
+  phpPackage = php.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "25.3.0";
+  version = "25.5.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
-    repo = pname;
+    repo = "librenms";
     tag = version;
-    sha256 = "sha256-iCcBP/BDHdTxlzgDGZzBdT0tFL26oCvMI+q2UuEg5jw=";
+    sha256 = "sha256-I1bHEFWGgwHq1U8Ipbm9tu7t6ikfMG+EIPjCsLAP/tk=";
   };
 
-  vendorHash = "sha256-0YBXORA647IfR0Fes2q4lbJsgrkpcvRj1aIHJ/Te/zU=";
+  vendorHash = "sha256-bt7DXkQ3Jgab4L9fB8qInbHvlRxFfkzP+F8DVQ9qWJ4=";
 
   php = phpPackage;
 
@@ -127,7 +127,8 @@ phpPackage.buildComposerProject2 rec {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage = "https://www.librenms.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
+    maintainers = with maintainers; [ netali ];
+    teams = [ teams.wdz ];
     platforms = platforms.linux;
   };
 }

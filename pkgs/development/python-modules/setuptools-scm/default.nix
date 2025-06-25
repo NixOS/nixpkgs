@@ -19,14 +19,23 @@
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "8.2.0";
+  version = "8.3.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_scm";
     inherit version;
-    hash = "sha256-oYOWobwCGcl00adGErEfnc4NW9ix3FXGX2rH/WCejCg=";
+    hash = "sha256-PVVekrddrNA30yuv35T5evUeoprox7I0z5S3pb0kKmM=";
   };
+
+  postPatch =
+    if (pythonOlder "3.11") then
+      ''
+        substituteInPlace pyproject.toml \
+          --replace-fail 'tomli<=2.0.2' 'tomli'
+      ''
+    else
+      null;
 
   build-system = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 

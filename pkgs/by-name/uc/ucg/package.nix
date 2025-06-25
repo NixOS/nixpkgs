@@ -5,7 +5,7 @@
   autoreconfHook,
   callPackage,
   pkg-config,
-  pcre,
+  pcre2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    pcre
+    pcre2
   ];
 
   passthru.tests = {

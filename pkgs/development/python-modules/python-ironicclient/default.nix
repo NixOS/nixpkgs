@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   cliff,
   dogpile-cache,
   jsonschema,
@@ -25,12 +25,14 @@
 
 buildPythonPackage rec {
   pname = "python-ironicclient";
-  version = "5.10.0";
+  version = "5.10.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Eg2eakri5+1hPuKyq9+f4dL33il6G4LYLZvoWYfU4LY=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-ironicclient";
+    tag = version;
+    hash = "sha256-HqsOMvJ8SK8IEZgeClLd0TnQLBweBEru0Bw4WRSDG7s=";
   };
 
   build-system = [
@@ -63,6 +65,8 @@ buildPythonPackage rec {
     oslotest
   ];
 
+  env.PBR_VERSION = version;
+
   checkPhase = ''
     runHook preCheck
     stestr run -e <(echo "
@@ -85,6 +89,6 @@ buildPythonPackage rec {
     mainProgram = "baremetal";
     homepage = "https://github.com/openstack/python-ironicclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

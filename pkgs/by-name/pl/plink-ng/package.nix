@@ -5,7 +5,6 @@
   zlib,
   blas,
   lapack,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,16 +19,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ zlib ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        [ darwin.apple_sdk.frameworks.Accelerate ]
-      else
-        [
-          blas
-          lapack
-        ]
-    );
+    [
+      zlib
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      blas
+      lapack
+    ];
 
   preBuild = ''
     sed -i 's|zlib-1.2.8/zlib.h|zlib.h|g' *.c *.h

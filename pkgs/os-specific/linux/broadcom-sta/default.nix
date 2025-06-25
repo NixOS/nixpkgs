@@ -21,8 +21,8 @@ let
   rpmFusionPatches = fetchFromGitHub {
     owner = "rpmfusion";
     repo = "wl-kmod";
-    rev = "cb67598cbf5d8c5260b750d6f7e5c6a6599b7b85";
-    hash = "sha256-g/j/LIZHG2Jl6UwnDNAlZpsuvjCyVzv4Qweog/tviqE=";
+    rev = "9a5a0d7195e0f6b05ff97e948b97fb0b7427cbf2";
+    hash = "sha256-pOOkkOjc77KGqc9fWuRyRsymd90OpLEnbOvxBbeIdKQ=";
   };
   patchset = [
     "wl-kmod-001_wext_workaround.patch"
@@ -53,6 +53,8 @@ let
     "wl-kmod-026_kernel_6.10_fix_empty_body_in_if_warning.patch"
     "wl-kmod-027_wpa_supplicant-2.11_add_max_scan_ie_len.patch"
     "wl-kmod-028_kernel_6.12_adaptation.patch"
+    "wl-kmod-029_kernel_6.13_adaptation.patch"
+    "wl-kmod-030_kernel_6.14_adaptation.patch"
   ];
 in
 stdenv.mkDerivation {
@@ -68,13 +70,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  patches = map (patch: "${rpmFusionPatches}/${patch}") patchset ++ [
-    # Fix for Kernel 6.13
-    (fetchpatch2 {
-      url = "https://gist.githubusercontent.com/joanbm/72189c81ff67b39d36a660cf00483ccb/raw/17cae74c8d3ebb90e5bfcb84dc176c32f2519078/broadcom-wl-fix-linux-6.13.patch";
-      hash = "sha256-b4XE3Dys0d7finPmNhTtvQqxXBSX1CXEj2Krq7qGHAw=";
-    })
-  ];
+  patches = map (patch: "${rpmFusionPatches}/${patch}") patchset;
 
   makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
 

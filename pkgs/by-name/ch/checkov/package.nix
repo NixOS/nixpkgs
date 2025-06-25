@@ -25,17 +25,18 @@ with py.pkgs;
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.392";
+  version = "3.2.443";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     tag = version;
-    hash = "sha256-qCvDVfIhv01S2PV0eXijaVDqQCzRUJAH97gPg6rwjlg=";
+    hash = "sha256-qROzLxbeH3DeB5RzUPXJU4zyI4p7j96/vp/+iab2M6A=";
   };
 
   pythonRelaxDeps = [
+    "asteval"
     "bc-detect-secrets"
     "bc-python-hcl2"
     "boto3"
@@ -69,6 +70,7 @@ python3.pkgs.buildPythonApplication rec {
     aiohttp
     aiomultiprocess
     argcomplete
+    asteval
     bc-detect-secrets
     bc-jsonpath-ng
     bc-python-hcl2
@@ -177,7 +179,7 @@ python3.pkgs.buildPythonApplication rec {
     chmod +x $out/bin/checkov
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Static code analysis tool for infrastructure-as-code";
     homepage = "https://github.com/bridgecrewio/checkov";
     changelog = "https://github.com/bridgecrewio/checkov/releases/tag/${version}";
@@ -185,8 +187,8 @@ python3.pkgs.buildPythonApplication rec {
       Prevent cloud misconfigurations during build-time for Terraform, Cloudformation,
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       anhdle14
       fab
     ];

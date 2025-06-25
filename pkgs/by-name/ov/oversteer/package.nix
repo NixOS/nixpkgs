@@ -17,6 +17,7 @@
   gobject-introspection,
   bash,
   linuxConsoleTools,
+  udevCheckHook,
 }:
 
 let
@@ -60,6 +61,7 @@ stdenv.mkDerivation {
     gobject-introspection
     meson
     udev
+    udevCheckHook
     ninja
     appstream
     appstream-glib
@@ -93,15 +95,17 @@ stdenv.mkDerivation {
       --replace-fail /usr/bin/evdev-joystick ${linuxConsoleTools}/bin/evdev-joystick
   '';
 
+  doInstallCheck = true;
+
   patches = [ ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/berarma/oversteer";
     changelog = "https://github.com/berarma/oversteer/releases/tag/${version}";
     description = "Steering Wheel Manager for Linux";
     mainProgram = "oversteer";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.srounce ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.srounce ];
+    platforms = lib.platforms.unix;
   };
 }

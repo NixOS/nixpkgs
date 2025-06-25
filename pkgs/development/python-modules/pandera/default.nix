@@ -6,16 +6,15 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # dependencies
-  multimethod,
   numpy,
   packaging,
   pandas,
   pydantic,
   typeguard,
   typing-inspect,
-  wrapt,
 
   # optional-dependencies
   black,
@@ -39,27 +38,30 @@
 
 buildPythonPackage rec {
   pname = "pandera";
-  version = "0.22.1";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${version}";
-    hash = "sha256-QOks3L/ZebkoWXWbHMn/tV9SmYSbR+gZ8wpqWoydkPM=";
+    hash = "sha256-S5y717M3rGGO39TOh1X5yePvdcF6ct1Jk51/bbM6X6M=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dependencies = [
-    multimethod
     numpy
     packaging
     pandas
     pydantic
     typeguard
     typing-inspect
-    wrapt
   ];
 
   optional-dependencies =
@@ -114,9 +116,9 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/fastapi/test_app.py" # tries to access network
-    "tests/core/test_docs_setting_column_widths.py" # tests doc generation, requires sphinx
+    "tests/pandas/test_docs_setting_column_widths.py" # tests doc generation, requires sphinx
     "tests/modin" # requires modin, not in nixpkgs
-    "tests/mypy/test_static_type_checking.py" # some typing failures
+    "tests/mypy/test_pandas_static_type_checking.py" # some typing failures
     "tests/pyspark" # requires spark
   ];
 

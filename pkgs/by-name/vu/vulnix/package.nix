@@ -6,21 +6,18 @@
   ronn,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.10.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "vulnix";
-    rev = "9abfc80da0b4135e982332e448a3969f3b28785b";
-    hash = "sha256-gSgAGN7LlciW4uY3VS49CbZ9WuRUcduJ5V7JesA8OVo=";
+    tag = version;
+    hash = "sha256-bQjmAmTRP/ce25hSP1nTtuDmUtk46DxkKWtylJRoj3s=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--flake8" ""
-  '';
+  __darwinAllowLocalNetworking = true;
 
   outputs = [
     "out"
@@ -31,8 +28,8 @@ python3Packages.buildPythonApplication {
 
   nativeCheckInputs = with python3Packages; [
     freezegun
-    pytest
-    pytest-cov
+    pytestCheckHook
+    pytest-cov-stub
   ];
 
   propagatedBuildInputs =
@@ -51,7 +48,7 @@ python3Packages.buildPythonApplication {
 
   postBuild = "make -C doc";
 
-  checkPhase = "py.test src/vulnix";
+  pytestFlagsArray = [ "src/vulnix" ];
 
   postInstall = ''
     install -D -t $doc/share/doc/vulnix README.rst CHANGES.rst

@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     find . -type f -name "CMakeLists.txt" -exec sed -i "/BridgeSetup\\.cmake/d" {} \;
 
     # Use the available ICU version
-    sed -i "s/libicu\(i18n\|uc\|data\)\.so\.56/libicu\1.so/g" bridge-gui/DeployLinux.cmake
+    sed -i "s/libicu\(i18n\|uc\|data\)\.so\.[0-9][0-9]/libicu\1.so/g" bridge-gui/DeployLinux.cmake
 
     # Create a Desktop Entry that uses a `protonmail-bridge-gui` binary without upstream's launcher
     sed "s/^\(Icon\|Exec\)=.*$/\1=protonmail-bridge-gui/" ../../../dist/proton-bridge.desktop > proton-bridge-gui.desktop

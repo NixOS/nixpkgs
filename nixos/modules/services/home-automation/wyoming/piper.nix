@@ -96,6 +96,10 @@ in
                 apply = toString;
               };
 
+              streaming = mkEnableOption "audio streaming on sentence boundaries" // {
+                default = true;
+              };
+
               extraArgs = mkOption {
                 type = listOf str;
                 default = [ ];
@@ -158,13 +162,16 @@ in
                 "--noise-w"
                 options.noiseWidth
               ]
+              ++ lib.optionals options.streaming [
+                "--streaming"
+              ]
               ++ options.extraArgs
             );
             CapabilityBoundingSet = "";
             DeviceAllow = "";
             DevicePolicy = "closed";
             LockPersonality = true;
-            MemoryDenyWriteExecute = true;
+            MemoryDenyWriteExecute = false; # required for onnxruntime
             PrivateDevices = true;
             PrivateUsers = true;
             ProtectHome = true;

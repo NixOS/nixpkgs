@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool used to hunt down API key leaks in JS files and pages";
     homepage = "https://github.com/MrEmpy/Mantra";
     changelog = "https://github.com/MrEmpy/Mantra/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mantra";
   };
 }

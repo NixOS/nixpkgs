@@ -27,12 +27,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "fierce" ];
 
-  meta = with lib; {
+  meta = {
     description = "DNS reconnaissance tool for locating non-contiguous IP space";
     homepage = "https://github.com/mschwager/fierce";
     changelog = "https://github.com/mschwager/fierce/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ c0bw3b ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ c0bw3b ];
     mainProgram = "fierce";
   };
 }

@@ -13,8 +13,8 @@ let
   cfg = config.services.discourse;
   opt = options.services.discourse;
 
-  # Keep in sync with https://github.com/discourse/discourse_docker/blob/main/image/base/slim.Dockerfile#L5
-  upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_13;
+  # Keep in sync with https://github.com/discourse/discourse_docker/blob/main/image/base/Dockerfile PG_MAJOR
+  upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_15;
 
   postgresqlPackage =
     if config.services.postgresql.enable then config.services.postgresql.package else pkgs.postgresql;
@@ -676,6 +676,8 @@ in
       dns_query_timeout_secs = null;
       regex_timeout_seconds = 2;
       allow_impersonation = true;
+      log_line_max_chars = 160000;
+      yjit_enabled = false;
     };
 
     services.redis.servers.discourse =
@@ -901,6 +903,9 @@ in
                   extraConfig
                   + ''
                     proxy_set_header X-Request-Start "t=''${msec}";
+                    proxy_set_header X-Sendfile-Type "";
+                    proxy_set_header X-Accel-Mapping "";
+                    proxy_set_header Client-Ip "";
                   '';
               };
             cache = time: ''

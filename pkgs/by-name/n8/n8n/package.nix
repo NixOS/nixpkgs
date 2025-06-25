@@ -4,7 +4,7 @@
   nixosTests,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   python3,
   node-gyp,
   cctools,
@@ -17,23 +17,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.75.2";
+  version = "1.98.2";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-fIdwciI4QUNr2wNWiq7qT4c6aZeUnkaVhSkIgFO4Svw=";
+    hash = "sha256-V+8iTaTPld3Fr+n7xpXrI7bkBiS2HZkMkYzRocssc8g=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-rtXTAHZUeitQFTa1Tw6l4el+xWD2hLT+2wu2LXW80cE=";
+    hash = "sha256-WD5iLBbfXRDiGjc6h23AfOTwiEUb6cg1Q40dfHItQXc=";
   };
 
   nativeBuildInputs =
     [
-      pnpm_9.configHook
+      pnpm_10.configHook
       python3 # required to build sqlite3 bindings
       node-gyp # required to build sqlite3 bindings
       makeWrapper

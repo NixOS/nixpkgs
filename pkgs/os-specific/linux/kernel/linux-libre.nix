@@ -5,8 +5,8 @@
   linux,
   scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
-    rev = "19746";
-    sha256 = "07kzanf61ja2jw6rac8jd0w2bs4i41wqclr59m2h6c8j0dc7w4as";
+    rev = "19812";
+    sha256 = "1bhkc0r5p3d4mmmi26k5lsk56jgbc8hi46bfih313hxmrnsd07dy";
   },
   ...
 }@args:
@@ -43,7 +43,7 @@ linux.override {
       '';
     };
 
-    passthru.updateScript = ./update-libre.sh;
+    extraPassthru.updateScript = ./update-libre.sh;
 
     maintainers = with lib.maintainers; [ qyliss ];
   };

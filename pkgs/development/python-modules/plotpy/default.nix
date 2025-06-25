@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "plotpy";
-  version = "2.7.2";
+  version = "2.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "PlotPy";
     tag = "v${version}";
-    hash = "sha256-X7HLsT+EKSrCE50u4wbfYr1jwJoSMS0YbvbKofznBL4=";
+    hash = "sha256-FmSFcCAJZyzD9qRE+L2oxWtyh2spJSLRq+xtx4e1Rhg=";
   };
 
   build-system = [
@@ -85,26 +85,31 @@ buildPythonPackage rec {
 
   passthru = {
     tests = {
-      # Upstream doesn't officially supports all of them, although they use
-      # qtpy, see: https://github.com/PlotPyStack/PlotPy/issues/20 . When this
-      # package was created, all worked besides withPySide2, with which there
-      # was a peculiar segmentation fault during the tests. In anycase, PySide2
-      # shouldn't be used for modern applications.
       withPyQt6 = plotpy.override {
         pyqt6 = pyqt6;
-        qt6 = qt6;
-      };
-      withPySide6 = plotpy.override {
-        pyqt6 = pyside6;
         qt6 = qt6;
       };
       withPyQt5 = plotpy.override {
         pyqt6 = pyqt5;
         qt6 = qt5;
       };
+    };
+    # Upstream doesn't officially supports all of them, although they use
+    # qtpy, see: https://github.com/PlotPyStack/PlotPy/issues/20
+    knownFailingTests = {
+      # Was failing with a peculiar segmentation fault during the tests, since
+      # this package was added to Nixpkgs. This is not too bad as PySide2
+      # shouldn't be used for modern applications.
       withPySide2 = plotpy.override {
         pyqt6 = pyside2;
         qt6 = qt5;
+      };
+      # Has started failing too similarly to pyside2, ever since a certain
+      # version bump. See also:
+      # https://github.com/PlotPyStack/PlotPy/blob/v2.7.4/README.md?plain=1#L62
+      withPySide6 = plotpy.override {
+        pyqt6 = pyside6;
+        qt6 = qt6;
       };
     };
   };
@@ -112,7 +117,7 @@ buildPythonPackage rec {
   meta = {
     description = "Curve and image plotting tools for Python/Qt applications";
     homepage = "https://github.com/PlotPyStack/PlotPy";
-    changelog = "https://github.com/PlotPyStack/PlotPy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/PlotPyStack/PlotPy/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

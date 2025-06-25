@@ -162,10 +162,13 @@ let
       runHook postInstall
     '';
 
-    ${if stdenvNoCC.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null} = ''
-      mkdir -p "$out"/nix-support
-      cp "$src"/nix-support/manual-sdk-deps "$out"/nix-support/manual-sdk-deps
-    '';
+    ${
+      if stdenvNoCC.hostPlatform.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null
+    } =
+      ''
+        mkdir -p "$out"/nix-support
+        cp "$src"/nix-support/manual-sdk-deps "$out"/nix-support/manual-sdk-deps
+      '';
 
     passthru = {
       inherit (vmr) icu targetRid hasILCompiler;
@@ -227,7 +230,7 @@ let
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
-      cp -Tr "$src/aspnetcore-runtime-${version}-${targetRid}" "$out"/share/dotnet
+      cp -Tr "$src/aspnetcore-runtime-${version}-${targetRid}"/shared/Microsoft.AspNetCore.App "$out"/share/dotnet/shared/Microsoft.AspNetCore.App
       chmod +w "$out"/share/dotnet/shared
 
       runHook postInstall

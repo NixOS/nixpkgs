@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aiowebdav2";
-  version = "0.4.2";
+  version = "0.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aiowebdav2";
     tag = "v${version}";
-    hash = "sha256-ftz5FYY1mTVSI0dn1Oc0GfDv7rBnsl/sIn81YG9IARE=";
+    hash = "sha256-9/idSk6vao8vfTlPJ6Cwk7UeqwTAr7ebFLw4ka6mA6c=";
   };
 
   build-system = [ poetry-core ];

@@ -37,12 +37,12 @@ python3.pkgs.buildPythonApplication rec {
     "ec2stepshell"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AWS post-exploitation tool";
     mainProgram = "ec2stepshell";
     homepage = "https://github.com/saw-your-packet/EC2StepShell";
     changelog = "https://github.com/saw-your-packet/EC2StepShell/blob/${version}/CHANGELOG.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

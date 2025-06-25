@@ -31,12 +31,31 @@
   perl,
   pixman,
   vips,
+  buildPackages,
   sourcesJSON ? ./sources.json,
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
   sources = lib.importJSON sourcesJSON;
   inherit (sources) version;
+
+  esbuild' = buildPackages.esbuild.override {
+    buildGoModule =
+      args:
+      buildPackages.buildGoModule (
+        args
+        // rec {
+          version = "0.25.5";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            tag = "v${version}";
+            hash = "sha256-jemGZkWmN1x2+ZzJ5cLp3MoXO0oDKjtZTmZS9Be/TDw=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
+  };
 
   buildLock = {
     sources =
@@ -120,6 +139,16 @@ let
     sourceRoot = "${src.name}/web";
     inherit (sources.components.web) npmDepsHash;
 
+    # prePatch is needed because npmConfigHook is a postPatch
+    prePatch = ''
+      # some part of the build wants to use un-prefixed binaries. let them.
+      mkdir -p $TMP/bin
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}pkg-config)" $TMP/bin/pkg-config || true
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}c++filt)" $TMP/bin/c++filt || true
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}readelf)" $TMP/bin/readelf || true
+      export PATH="$TMP/bin:$PATH"
+    '';
+
     preBuild = ''
       rm node_modules/@immich/sdk
       ln -s ${openapi} node_modules/@immich/sdk
@@ -161,7 +190,8 @@ buildNpmPackage' {
   src = "${src}/server";
   inherit (sources.components.server) npmDepsHash;
 
-  postPatch = ''
+  # prePatch is needed because npmConfigHook is a postPatch
+  prePatch = ''
     # pg_dumpall fails without database root access
     # see https://github.com/immich-app/immich/issues/13971
     substituteInPlace src/services/backup.service.ts \
@@ -169,9 +199,9 @@ buildNpmPackage' {
 
     # some part of the build wants to use un-prefixed binaries. let them.
     mkdir -p $TMP/bin
-    ln -s "$(type -p ${stdenv.cc.targetPrefix}pkg-config)" $TMP/bin/pkg-config
-    ln -s "$(type -p ${stdenv.cc.targetPrefix}c++filt)" $TMP/bin/c++filt
-    ln -s "$(type -p ${stdenv.cc.targetPrefix}readelf)" $TMP/bin/readelf
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}pkg-config)" $TMP/bin/pkg-config || true
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}c++filt)" $TMP/bin/c++filt || true
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}readelf)" $TMP/bin/readelf || true
     export PATH="$TMP/bin:$PATH"
   '';
 
@@ -195,6 +225,7 @@ buildNpmPackage' {
   makeCacheWritable = true;
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
+  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
   preBuild = ''
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH

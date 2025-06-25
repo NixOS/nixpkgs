@@ -13,7 +13,6 @@
   pytest,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   testfixtures,
   typing-extensions,
@@ -21,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "14.3.1";
+  version = "14.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-cFxa+QNfMk8+5jC4cxhbUs09/0tHjOgdsaE8XfxG6yk=";
+    hash = "sha256-hoBT83p2PHZR5NtVChdWK5SMjLt8llj59K5ODaKtRhQ=";
   };
 
   build-system = [ setuptools ];
@@ -67,11 +64,11 @@ buildPythonPackage rec {
     "approvaltests.reporters.generic_diff_reporter_factory"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Assertion/verification library to aid testing";
     homepage = "https://github.com/approvals/ApprovalTests.Python";
-    changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -13,7 +13,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = pname;
+    repo = "csvs-to-sqlite";
     rev = version;
     hash = "sha256-wV6htULG3lg2IhG2bXmc/9vjcK8/+WA7jm3iJu4ZoOE=";
   };

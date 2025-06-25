@@ -125,7 +125,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Utility for sending notifications, on demand and when commands finish";
-    homepage = "https://ntfy.rtfd.org/";
+    homepage = "https://ntfy.readthedocs.io/en/latest/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kamilchm ];
     mainProgram = "ntfy";

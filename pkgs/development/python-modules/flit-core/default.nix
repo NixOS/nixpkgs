@@ -25,6 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/flit";
     changelog = "https://github.com/pypa/flit/blob/${src.rev}/doc/history.rst";
     license = licenses.bsd3;
-    maintainers = teams.python.members;
+    teams = [ teams.python ];
   };
 }

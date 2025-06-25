@@ -1,5 +1,6 @@
 {
   lib,
+  nixosTests,
   stdenv,
   fetchFromGitHub,
 }:
@@ -22,6 +23,10 @@ stdenv.mkDerivation rec {
 
     cp -ra feedly *.css $out
   '';
+
+  passthru = {
+    tests = { inherit (nixosTests) tt-rss; };
+  };
 
   meta = with lib; {
     description = "Feedly theme for Tiny Tiny RSS";

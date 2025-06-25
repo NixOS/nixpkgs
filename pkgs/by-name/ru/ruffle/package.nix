@@ -1,33 +1,68 @@
 {
-  alsa-lib,
-  fetchFromGitHub,
-  makeWrapper,
-  openssl,
-  pkg-config,
-  python3,
-  rustPlatform,
-  stdenvNoCC,
   lib,
+  stdenv,
+  rustPlatform,
+  withRuffleTools ? false,
+  fetchFromGitHub,
+  jre_minimal,
+  pkg-config,
+  autoPatchelfHook,
+  alsa-lib,
   wayland,
   xorg,
   vulkan-loader,
   udev,
-  jre_minimal,
-  cairo,
-  gtk3,
-  wrapGAppsHook3,
-  gsettings-desktop-schemas,
-  glib,
   libxkbcommon,
   openh264,
-  darwin,
+  writeShellApplication,
+  curl,
+  jq,
+  nix-update,
 }:
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "nightly-2025-01-25";
-  # TODO: Remove overridden derivation once ruffle accepts upstream openh264-2.5.0
+  version = "0-nightly-2025-06-21";
+
+  src = fetchFromGitHub {
+    owner = "ruffle-rs";
+    repo = "ruffle";
+    tag = lib.strings.removePrefix "0-" finalAttrs.version;
+    hash = "sha256-rlNDqdN+hPKndxABTCm4kv6QH5k4dMJ86ADQSxONawQ=";
+  };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-k3nDnLbB/9xx6uT8mNw7L5fMtDNZBrIPFBRsVCdVIc8=";
+  cargoBuildFlags = lib.optional withRuffleTools "--workspace";
+
+  env =
+    let
+      tag = lib.strings.removePrefix "0-" finalAttrs.version;
+      versionDate = lib.strings.removePrefix "0-nightly-" finalAttrs.version;
+    in
+    {
+      VERGEN_IDEMPOTENT = "1";
+      VERGEN_GIT_SHA = tag;
+      VERGEN_GIT_COMMIT_DATE = versionDate;
+      VERGEN_GIT_COMMIT_TIMESTAMP = "${versionDate}T00:00:00Z";
+    };
+
+  nativeBuildInputs =
+    [ jre_minimal ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pkg-config
+      autoPatchelfHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    udev
+    (lib.getLib stdenv.cc.cc)
+  ];
+
+  # Prevents ruffle from downloading openh264 at runtime for Linux
   openh264-241 =
-    if stdenvNoCC.hostPlatform.isLinux then
+    if stdenv.hostPlatform.isLinux then
       openh264.overrideAttrs (_: rec {
         version = "2.4.1";
         src = fetchFromGitHub {
@@ -36,69 +71,29 @@ let
           tag = "v${version}";
           hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
         };
-        postPatch = null;
       })
     else
       null;
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
-  src = fetchFromGitHub {
-    owner = "ruffle-rs";
-    repo = pname;
-    tag = version;
-    hash = "sha256-JLh0tatP70rYo2QXLKu6M9jJ1gFpY76sYaUJqW9U4E0=";
-  };
-
-  patches = [ ./remove-deterministic-feature.patch ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-PbNp/V+xmU6Lo24a6pd9XoT/LQmINztjOHKoikG9N4Y=";
-
-  nativeBuildInputs =
-    [ jre_minimal ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
-      glib
-      gsettings-desktop-schemas
-      makeWrapper
-      pkg-config
-      python3
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
-
-  buildInputs =
-    lib.optionals stdenvNoCC.hostPlatform.isLinux [
-      alsa-lib
-      cairo
-      gtk3
-      openssl
-      wayland
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libxcb
-      xorg.libXrender
-      vulkan-loader
-      udev
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
-
-  cargoBuildFlags = [ "--workspace" ];
+  runtimeDependencies = [
+    wayland
+    xorg.libXcursor
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libX11
+    xorg.libxcb
+    libxkbcommon
+    vulkan-loader
+    finalAttrs.openh264-241
+  ];
 
   postInstall =
     ''
-      # Namespace binaries with "ruffle_"
-      mv $out/bin/exporter $out/bin/ruffle_exporter
-      mv $out/bin/mocket $out/bin/ruffle_mocket
-      mv $out/bin/stub-report $out/bin/ruffle_stub-report
-      mv $out/bin/build_playerglobal $out/bin/ruffle_build_playerglobal
-
-      # This name is too specific
       mv $out/bin/ruffle_desktop $out/bin/ruffle
+      install -Dm644 LICENSE.md -t $out/share/doc/ruffle
+      install -Dm644 README.md -t $out/share/doc/ruffle
     ''
-    + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.desktop \
                      -t $out/share/applications/
 
@@ -107,32 +102,25 @@ rustPlatform.buildRustPackage {
 
       install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml \
                      -t $out/share/metainfo/
-
-      rm $out/bin/ruffle_web_safari
     '';
 
-  preFixup = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-    patchelf $out/bin/ruffle \
-      --add-needed libxkbcommon-x11.so \
-      --add-needed libwayland-client.so \
-      --add-needed libopenh264.so \
-      --add-rpath ${libxkbcommon}/lib:${wayland}/lib:${openh264-241}/lib
-  '';
-
-  dontWrapGApps = true;
-
-  postFixup = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-    vulkanWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
-    )
-
-    wrapProgram $out/bin/ruffle_exporter \
-      "''${vulkanWrapperArgs[@]}"
-
-    wrapProgram $out/bin/ruffle \
-      "''${vulkanWrapperArgs[@]}" \
-      "''${gappsWrapperArgs[@]}"
-  '';
+  passthru = {
+    updateScript = lib.getExe (writeShellApplication {
+      name = "ruffle-update";
+      runtimeInputs = [
+        curl
+        jq
+        nix-update
+      ];
+      text = ''
+        version="$( \
+          curl https://api.github.com/repos/ruffle-rs/ruffle/releases?per_page=1 | \
+          jq -r ".[0].tag_name" \
+        )"
+        exec nix-update --version "0-$version" ruffle
+      '';
+    });
+  };
 
   meta = {
     description = "Cross platform Adobe Flash Player emulator";
@@ -142,13 +130,13 @@ rustPlatform.buildRustPackage {
       and 3 programs with machine-native performance thanks to being
       written in the Rust programming language.
 
-      This package for ruffle also includes the `exporter` and
-      `scanner` utilities which allow for generating screenshots as
-      PNGs and parsing `.swf` files in bulk respectively.
+      Additionally, overriding the `withRuffleTools` input to
+      `true` will build all the available packages in the ruffle
+      project, including the `exporter` and `scanner` utilities.
     '';
     homepage = "https://ruffle.rs/";
     downloadPage = "https://ruffle.rs/downloads";
-    changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/${version}";
+    changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/${lib.strings.removePrefix "0-" finalAttrs.version}";
     license = [
       lib.licenses.mit
       lib.licenses.asl20
@@ -160,4 +148,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "ruffle";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

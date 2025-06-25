@@ -5,7 +5,6 @@
   pkg-config,
   openssl,
   rustPlatform,
-  darwin,
   testers,
   komac,
   dbus,
@@ -17,17 +16,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "komac";
-  version = "2.11.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "russellbanks";
     repo = "Komac";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X0lvr8GafJIP8kwnLTk3taq3WZAx50/jUt3zJIELJnc=";
+    hash = "sha256-G1oZQ4TgkmBlAfV1aLkA4qvZcBK4K8tvCxaTwPqi16M=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-utsLfvFGTBuD1Tywu9TfnPGDhvSWZSokvwW22USWWls=";
+  cargoHash = "sha256-3o53CJpgCBwjS8IkEHaOIBth6HlKJ0IJYh8qyL5wd1A=";
 
   nativeBuildInputs =
     [
@@ -37,17 +36,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellFiles
     ];
 
-  buildInputs =
-    [
-      dbus
-      openssl
-      zstd
-      bzip2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    dbus
+    openssl
+    zstd
+    bzip2
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -83,7 +77,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/russellbanks/Komac/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      kachick
       HeitorAugustoLN
     ];
     mainProgram = "komac";

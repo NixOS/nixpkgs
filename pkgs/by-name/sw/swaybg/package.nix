@@ -12,7 +12,7 @@
   gdk-pixbuf,
   wayland-scanner,
   wrapGAppsNoGuiHook,
-  librsvg
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,7 +60,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     mainProgram = "swaybg";
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [
+      primeos
+      ryan4yin
+    ];
     platforms = platforms.linux;
   };
 }

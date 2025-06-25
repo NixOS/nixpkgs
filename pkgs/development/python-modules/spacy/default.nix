@@ -2,61 +2,64 @@
   lib,
   stdenv,
   buildPythonPackage,
-  callPackage,
-  catalogue,
+  fetchFromGitHub,
+
+  # build-system
   cymem,
-  cython_0,
-  fetchPypi,
-  git,
-  hypothesis,
+  cython,
+  murmurhash,
+  numpy,
+  preshed,
+  thinc,
+
+  # dependencies
+  catalogue,
   jinja2,
   langcodes,
-  mock,
-  murmurhash,
-  nix-update,
-  nix,
-  numpy,
   packaging,
-  preshed,
   pydantic,
-  pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   spacy-legacy,
   spacy-loggers,
-  spacy-lookups-data,
-  spacy-transformers,
   srsly,
-  thinc,
   tqdm,
   typer,
   wasabi,
   weasel,
+
+  # optional-dependencies
+  spacy-transformers,
+  spacy-lookups-data,
+
+  # tests
+  pytestCheckHook,
+  hypothesis,
+  mock,
+
+  # passthru
   writeScript,
+  git,
+  nix,
+  nix-update,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.8.3";
+  version = "3.8.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-galn3D1qWgqaslBVlIP+IJIwZYKpGS+Yvnpjvc4nl/c=";
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "spaCy";
+    tag = "release-v${version}";
+    hash = "sha256-mRra5/4W3DFVI/KbReTg2Ey9mOC6eQQ31/QDt7Pw0fU=";
   };
-
-  postPatch = ''
-    # unpin numpy, cannot use pythonRelaxDeps because it's in build-system
-    substituteInPlace pyproject.toml setup.cfg \
-      --replace-fail ",<2.1.0" ""
-  '';
 
   build-system = [
     cymem
-    cython_0
+    cython
     murmurhash
     numpy
     preshed
@@ -87,16 +90,16 @@ buildPythonPackage rec {
     weasel
   ];
 
+  optional-dependencies = {
+    transformers = [ spacy-transformers ];
+    lookups = [ spacy-lookups-data ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
     mock
   ];
-
-  optional-dependencies = {
-    transformers = [ spacy-transformers ];
-    lookups = [ spacy-lookups-data ];
-  };
 
   # Fixes ModuleNotFoundError when running tests on Cythonized code. See #255262
   preCheck = ''
@@ -120,13 +123,13 @@ buildPythonPackage rec {
       set -eou pipefail
       PATH=${
         lib.makeBinPath [
-          nix
           git
+          nix
           nix-update
         ]
       }
 
-      nix-update python3Packages.spacy
+      nix-update python3Packages.spacy --version-regex 'release-v([0-9.]+)'
 
       # update spacy models as well
       echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy-models.en_core_web_sm
@@ -134,11 +137,11 @@ buildPythonPackage rec {
     tests.annotation = callPackage ./annotation-test { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
     changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "spacy";
   };

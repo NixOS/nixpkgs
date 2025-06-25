@@ -17,19 +17,30 @@ let
     self = python;
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix { };
+
+      paho-mqtt = super.paho-mqtt.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = "v${version}";
+          hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
+        };
+        build-system = with self; [ setuptools ];
+        doCheck = false;
+      });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.3.2";
+  version = "2025.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "esphome";
+    repo = "esphome";
     tag = version;
-    hash = "sha256-Wioi1k/Eo3rlh8qMnDDDIvRNQXWoxlmRRvjHLs01skY=";
+    hash = "sha256-iM9AbL8K7Ka2B50/slp/Cfgb4kWWmOhZcMe0Ph3WnP0=";
   };
 
   build-systems = with python.pkgs; [
@@ -50,11 +61,7 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==" "setuptools>=" \
-      --replace-fail "wheel~=" "wheel>="
-
-    # ensure component dependencies are available
-    cat requirements_optional.txt >> requirements.txt
+      --replace-fail "setuptools==80.9.0" "setuptools"
   '';
 
   # Remove esptool and platformio from requirements
@@ -129,7 +136,26 @@ python.pkgs.buildPythonApplication rec {
     # race condition, also visible in upstream tests
     # tests/dashboard/test_web_server.py:78: IndexError
     "test_devices_page"
+
+    # platformio builds; requires networking for dependency resolution
+    "test_api_message_size_batching"
+    "test_host_mode_basic"
+    "test_host_mode_batch_delay"
+    "test_host_mode_empty_string_options"
+    "test_host_mode_entity_fields"
+    "test_host_mode_fan_preset"
+    "test_host_mode_many_entities"
+    "test_host_mode_many_entities_multiple_connections"
+    "test_host_mode_noise_encryption"
+    "test_host_mode_noise_encryption_wrong_key"
+    "test_host_mode_reconnect"
+    "test_host_mode_with_sensor"
+    "test_large_message_batching"
   ];
+
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+  '';
 
   postCheck = ''
     $out/bin/esphome --help > /dev/null
@@ -152,16 +178,15 @@ python.pkgs.buildPythonApplication rec {
     tests = { inherit (nixosTests) esphome; };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [
-      globin
+    maintainers = with lib.maintainers; [
       hexa
     ];
     mainProgram = "esphome";

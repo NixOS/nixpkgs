@@ -1,16 +1,48 @@
 {
-  callPackage,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
   zlib,
   zstd,
 }:
 
-callPackage ./common.nix rec {
-  version = "0.11.1";
-  url = "https://www.prevanders.net/libdwarf-${version}.tar.xz";
-  hash = "sha512:d927b1d0e8dd1540c2f5da2a9d39b2914bb48225b2b9bdca94e7b36349358e1f537044eadc345f11d75de717fdda07ad99a8a7a5eb45e64fe4c79c37e165012f";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libdwarf";
+  version = "2.0.0";
+
+  src = fetchFromGitHub {
+    owner = "davea42";
+    repo = "libdwarf-code";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SsFg+7zGBEGxDSzfiIP5bxdttlBkhEiEQWaU12hINas=";
+  };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
+
   buildInputs = [
     zlib
     zstd
   ];
-  knownVulnerabilities = [ ];
-}
+
+  outputs = [
+    "bin"
+    "lib"
+    "dev"
+    "out"
+  ];
+
+  meta = {
+    description = "Library for reading DWARF2 and later DWARF";
+    mainProgram = "dwarfdump";
+    homepage = "https://github.com/davea42/libdwarf-code";
+    changelog = "https://github.com/davea42/libdwarf-code/releases/tag/v${finalAttrs.version}/CHANGELOG.md";
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.atry ];
+  };
+})

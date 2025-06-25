@@ -33,6 +33,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigstore_protobuf_specs" ];
 
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "Library for serializing and deserializing Sigstore messages";
     homepage = "https://pypi.org/project/sigstore-protobuf-specs/";

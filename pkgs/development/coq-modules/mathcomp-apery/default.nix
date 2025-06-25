@@ -18,18 +18,17 @@ mkCoqDerivation {
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch
-      [ coq.version mathcomp.version ]
-      [
-        {
-          cases = [
-            (range "8.13" "8.16")
-            (range "1.12.0" "1.17.0")
-          ];
-          out = "1.0.2";
-        }
-      ]
-      null;
+    let
+      cmc = c: mc: [
+        c
+        mc
+      ];
+    in
+    lib.switch [ coq.coq-version mathcomp.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: cases: { inherit cases out; }) {
+        "1.0.2" = cmc (range "8.13" "8.16") (range "1.12.0" "1.17.0");
+      }
+    )) null;
 
   release."1.0.2".sha256 = "sha256-llxyMKYvWUA7fyroG1S/jtpioAoArmarR1edi3cikcY=";
 

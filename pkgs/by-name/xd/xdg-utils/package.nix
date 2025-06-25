@@ -23,7 +23,6 @@
   gnused,
   jq,
   nettools,
-  procmail,
   procps,
   which,
   xdg-user-dirs,
@@ -206,28 +205,21 @@ let
     {
       scripts = [ "bin/xdg-screensaver" ];
       interpreter = "${bash}/bin/bash";
-      inputs =
-        commonDeps
-        ++ [
-          nettools
-          perl
-          procps
-        ]
-        # procmail's funky build system is currently broken in cross-build.
-        # xdg-screensaver will gracefully degrade if it's not available.
-        ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) procmail;
+      inputs = commonDeps ++ [
+        nettools
+        perl
+        procps
+      ];
       # These are desktop-specific, so we don't want xdg-utils to be able to
       # call them when in a different setup.
-      fake.external =
-        commonFakes
-        ++ [
-          "dcop" # KDE3
-          "mate-screensaver-command" # MATE
-          "xautolock" # Xautolock
-          "xscreensaver-command" # Xscreensaver
-          "xset" # generic-ish X
-        ]
-        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "lockfile"; # procmail
+      fake.external = commonFakes ++ [
+        "dcop" # KDE3
+        "lockfile"
+        "mate-screensaver-command" # MATE
+        "xautolock" # Xautolock
+        "xscreensaver-command" # Xscreensaver
+        "xset" # generic-ish X
+      ];
       keep = {
         "$MV" = true;
         "$XPROP" = true;

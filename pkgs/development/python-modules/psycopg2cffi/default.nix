@@ -31,8 +31,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [ libpq ];
-  # To find pg_config
-  nativeBuildInputs = [ libpq ];
+  nativeBuildInputs = [ libpq.pg_config ];
 
   build-system = [
     setuptools

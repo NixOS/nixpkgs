@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   qttools,
@@ -31,6 +32,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-mJw9yckbkFVYZlcakai/hH/gAD0xOQir5JqGMNnB/dE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-for-Qt-6_9.patch";
+      url = "https://github.com/KDAB/GammaRay/commit/750195c8172bc7c2e805cbf28d3993d65c17b5a0.patch";
+      hash = "sha256-HQLOOkNmrGMoBDAK5am/NePnAF3Jsa5F0WyUjaJ2tYw=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

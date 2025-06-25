@@ -40,6 +40,10 @@ In order to do so, add yourself to the
 [`maintainer-list.nix`](./maintainer-list.nix), and then to the desired
 package's `meta.maintainers` list, and send a PR with the changes.
 
+If you're adding yourself as a maintainer as part of another PR (in which
+you become a maintainer of a package, for example), make your change to
+`maintainer-list.nix` in a separate commit.
+
 ### How to lose maintainer status
 
 Maintainers who have become inactive on a given package can be removed. This
@@ -174,7 +178,7 @@ are available under `./scripts/`.  See its [README](./scripts/README.md)
 for further information.
 
 # nixpkgs-merge-bot
-To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in pkgs-by-name and the commenter is among the package maintainers. The bot ensures that all ofborg checks, except for darwin, are successfully completed before merging the pull request. Should the checks still be underway, the bot patiently waits for ofborg to finish before attempting the merge again.
+To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in pkgs-by-name, the commenter is among the package maintainers, and the pull request author is @r-ryantm or a Nixpkgs committer. The bot ensures that all ofborg checks, except for darwin, are successfully completed before merging the pull request. Should the checks still be underway, the bot patiently waits for ofborg to finish before attempting the merge again.
 
 # Guidelines for Committers
 

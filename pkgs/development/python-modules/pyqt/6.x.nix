@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchzip,
   pkg-config,
   dbus,
   lndir,
@@ -24,15 +24,19 @@
 
 buildPythonPackage rec {
   pname = "pyqt6";
-  version = "6.8.0";
+  version = "6.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    pname = "PyQt6";
-    inherit version;
-    hash = "sha256-bYYo3kwqBQ8LdEYuTJy5f4Ob9v+rvKkXEXIv+ygVcNk=";
+  # It looks like a stable release, but is it? Who knows.
+  # It's not on PyPI proper yet, at least, and the current
+  # actually-released version does not build with Qt 6.9,
+  # so we kinda have to use it.
+  # "ffs smdh fam" - K900
+  src = fetchzip {
+    url = "https://web.archive.org/web/20250406083944/https://www.riverbankcomputing.com/pypi/packages/PyQt6/pyqt6-6.9.0.tar.gz";
+    hash = "sha256-UZSbz6MqdNtl2r4N8uvgNjQ+28KCzNFb5yFqPcooT5E=";
   };
 
   patches = [
@@ -41,10 +45,6 @@ buildPythonPackage rec {
     ./pyqt6-fix-dbus-mainloop-support.patch
     # confirm license when installing via pyqt6_sip
     ./pyqt5-confirm-license.patch
-    # Fix build with Qt 6.8.2
-    # See: https://gitlab.archlinux.org/archlinux/packaging/packages/pyqt6/-/blob/main/qt-6.8.2.patch
-    # FIXME: remove when merged upstream
-    ./pyqt6-qt-6.8.2.patch
   ];
 
   build-system = [

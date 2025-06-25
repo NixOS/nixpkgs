@@ -33,6 +33,10 @@ stdenv.mkDerivation {
     openssl
   ];
 
+  nativeBuildInputs = [
+    libpq.pg_config
+  ];
+
   passthru.tests.sign-in = nixosTests.pgmanage;
 
   meta = with lib; {

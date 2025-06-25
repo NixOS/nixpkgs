@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, replaceVarsWith
-, coreutils
-, getopt
-, runtimeShell
-, modDirVersion ? ""
-, forPlatform ? stdenv.buildPlatform
+{
+  stdenv,
+  lib,
+  replaceVarsWith,
+  coreutils,
+  getopt,
+  runtimeShell,
+  modDirVersion ? "",
+  forPlatform ? stdenv.buildPlatform,
 }:
 
 replaceVarsWith {
@@ -28,13 +29,14 @@ replaceVarsWith {
     # https://stackoverflow.com/questions/61711186/where-does-host-operating-system-in-uname-c-comes-from
     # https://github.com/coreutils/gnulib/blob/master/m4/host-os.m4
     operatingSystem =
-      if forPlatform.isLinux
-      then "GNU/Linux"
-      else if forPlatform.isDarwin
-      then "Darwin" # darwin isn't in host-os.m4 so where does this come from?
-      else if forPlatform.isFreeBSD
-      then "FreeBSD"
-      else "unknown";
+      if forPlatform.isLinux then
+        "GNU/Linux"
+      else if forPlatform.isDarwin then
+        "Darwin" # darwin isn't in host-os.m4 so where does this come from?
+      else if forPlatform.isFreeBSD then
+        "FreeBSD"
+      else
+        "unknown";
 
     # in os-specific/linux module packages
     # --replace '$(shell uname -r)' "${kernel.modDirVersion}" \

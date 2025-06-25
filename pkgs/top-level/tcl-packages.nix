@@ -7,6 +7,7 @@ in
   newScope,
   tcl,
   tk,
+  pkgs,
 }:
 
 lib.makeScope newScope (
@@ -16,6 +17,10 @@ lib.makeScope newScope (
 
     critcl = self.callPackage ../development/tcl-modules/critcl {
       tcllib = self.tcllib.override { withCritcl = false; };
+    };
+
+    dbus = self.callPackage ../development/tcl-modules/dbus {
+      inherit (pkgs) dbus;
     };
   })
 )

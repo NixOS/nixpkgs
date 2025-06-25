@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wyoming-piper";
-  version = "1.5.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-piper";
     tag = "v${version}";
-    hash = "sha256-HxLs2NH5muYzVfOtfLlV09BQ3waIfZKBCTiK/Tha6r4=";
+    hash = "sha256-pVpCnrf/BnAeyfyf82i9Ga/2WQUs1qGceL9uJ99WddY=";
   };
 
   build-system = with python3Packages; [
@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   dependencies = with python3Packages; [
+    regex
     wyoming
   ];
 
@@ -35,7 +36,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    changelog = "https://github.com/rhasspy/wyoming-piper/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rhasspy/wyoming-piper/blob/${src.tag}/CHANGELOG.md";
     description = "Wyoming Server for Piper";
     mainProgram = "wyoming-piper";
     homepage = "https://github.com/rhasspy/wyoming-piper";

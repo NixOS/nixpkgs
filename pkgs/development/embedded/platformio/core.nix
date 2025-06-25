@@ -7,6 +7,8 @@
   git,
   spdx-license-list-data,
   replaceVars,
+  writableTmpDirAsHomeHook,
+  udevCheckHook,
 }:
 
 with python3Packages;
@@ -56,6 +58,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     installShellFiles
     setuptools
+    udevCheckHook
   ];
 
   pythonRelaxDeps = true;
@@ -88,13 +91,13 @@ buildPythonApplication rec {
     ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export PATH=$PATH:$out/bin
   '';
 
   nativeCheckInputs = [
     jsondiff
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   # Install udev rules into a separate output so all of platformio-core is not a dependency if

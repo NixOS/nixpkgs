@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "26.0.16";
+  version = "26.1.1";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-se3yxIzxeinOnfltv+fSflypwxRHvW/wxKJ43LPsiho=";
+    hash = "sha256-h9APkOtH7s31r89hqqH12zYqkVMrR2ZxMyc+Zwq21+A=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-AtrBaN6Pvi5rvncHN64RCHS/fLA0u9WTC+hXsMQe7tU=";
+    hash = "sha256-kmA0z/vmWH+yD2OQ6VVSE0yPxInTAGjjG+QfcoZHlQ0=";
   };
 
   nativeBuildInputs =
@@ -57,6 +57,9 @@ stdenv.mkDerivation rec {
     export HOME="$TMPDIR"
     yarn config --offline set yarn-offline-mirror "$offlineCache"
     fixup-yarn-lock yarn.lock
+    # Ensure that the node_modules folder is created by yarn install.
+    # See https://github.com/yarnpkg/yarn/issues/5500#issuecomment-1221456246
+    echo "nodeLinker: node-modules" > .yarnrc.yml
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -127,7 +130,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Desktop version of draw.io for creating diagrams";
     homepage = "https://about.draw.io/";
     license = with lib.licenses; [
@@ -138,8 +141,8 @@ stdenv.mkDerivation rec {
       unfreeRedistributable
     ];
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ darkonion0 ];
-    platforms = platforms.darwin ++ platforms.linux;
+    maintainers = with lib.maintainers; [ darkonion0 ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "drawio";
   };
 }

@@ -157,9 +157,18 @@ writeScript "update-dotnet-vmr.sh" ''
               "artifactsHash": $_2,
           }' > "${toOutputPath releaseInfoFile}"
 
-      ${lib.escapeShellArg (toOutputPath ./update.sh)} \
-          -o ${lib.escapeShellArg (toOutputPath bootstrapSdkFile)} --sdk "$sdkVersion"
+      updateSDK() {
+          ${lib.escapeShellArg (toOutputPath ./update.sh)} \
+              -o ${lib.escapeShellArg (toOutputPath bootstrapSdkFile)} --sdk "$1" >&2
+      }
 
-      $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link)
+      updateSDK "$sdkVersion" || if [[ $? == 2 ]]; then
+          >&2 echo "WARNING: bootstrap sdk missing, attempting to bootstrap with self"
+          updateSDK "$(jq -er .sdkVersion "$tmp"/release.json)"
+      else
+          exit 1
+      fi
+
+      $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link) >&2
   )
 ''

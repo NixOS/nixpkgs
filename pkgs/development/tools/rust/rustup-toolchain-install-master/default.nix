@@ -9,7 +9,6 @@
   pkg-config,
   openssl,
   xz,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,14 +46,10 @@ rustPlatform.buildRustPackage rec {
     lib.optionals stdenv.hostPlatform.isLinux [ patchelfPatch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      openssl
-      xz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ];
+  buildInputs = [
+    openssl
+    xz
+  ];
 
   # update Cargo.lock to work with openssl 3
   postPatch = ''
@@ -66,6 +61,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rustup-toolchain-install-master";
     homepage = "https://github.com/kennytm/rustup-toolchain-install-master";
     license = licenses.mit;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
   };
 }

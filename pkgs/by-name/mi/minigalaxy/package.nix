@@ -10,7 +10,7 @@
   steam-run,
   replaceVars,
   unzip,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
 }:
 
@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   pythonPath = [
     python3Packages.pygobject3
     python3Packages.requests
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   dontWrapGApps = true;
@@ -70,13 +70,13 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sharkwouter.github.io/minigalaxy/";
     changelog = "https://github.com/sharkwouter/minigalaxy/blob/${version}/CHANGELOG.md";
     downloadPage = "https://github.com/sharkwouter/minigalaxy/releases";
     description = "Simple GOG client for Linux";
-    license = licenses.gpl3;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

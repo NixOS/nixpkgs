@@ -21,7 +21,10 @@ To enable PostgreSQL, add the following to your {file}`configuration.nix`:
   services.postgresql.package = pkgs.postgresql_15;
 }
 ```
-Note that you are required to specify the desired version of PostgreSQL (e.g. `pkgs.postgresql_15`). Since upgrading your PostgreSQL version requires a database dump and reload (see below), NixOS cannot provide a default value for [](#opt-services.postgresql.package) such as the most recent release of PostgreSQL.
+
+The default PostgreSQL version is approximately the latest major version available on the NixOS release matching your [`system.stateVersion`](#opt-system.stateVersion).
+This is because PostgreSQL upgrades require a manual migration process (see below).
+Hence, upgrades must happen by setting [`services.postgresql.package`](#opt-services.postgresql.package) explicitly.
 
 <!--
 After running {command}`nixos-rebuild`, you can verify
@@ -170,6 +173,38 @@ are already created.
   }
 ```
 
+## Authentication {#module-services-postgres-authentication}
+
+Local connections are made through unix sockets by default and support [peer authentication](https://www.postgresql.org/docs/current/auth-peer.html).
+This allows system users to login with database roles of the same name.
+For example, the `postgres` system user is allowed to login with the database role `postgres`.
+
+System users and database roles might not always match.
+In this case, to allow access for a service, you can create a [user name map](https://www.postgresql.org/docs/current/auth-username-maps.html) between system roles and an existing database role.
+
+### User Mapping {#module-services-postgres-authentication-user-mapping}
+
+Assume that your app creates a role `admin` and you want the `root` user to be able to login with it.
+You can then use [](#opt-services.postgresql.identMap) to define the map and [](#opt-services.postgresql.authentication) to enable it:
+
+```nix
+services.postgresql = {
+  identMap = ''
+    admin root admin
+  '';
+  authentication = ''
+    local all admin peer map=admin
+  '';
+}
+```
+
+::: {.warning}
+To avoid conflicts with other modules, you should never apply a map to `all` roles.
+Because PostgreSQL will stop on the first matching line in `pg_hba.conf`, a line matching all roles would lock out other services.
+Each module should only manage user maps for the database roles that belong to this module.
+Best practice is to name the map after the database role it manages to avoid name conflicts.
+:::
+
 ## Upgrading {#module-services-postgres-upgrading}
 
 ::: {.note}
@@ -206,15 +241,15 @@ For an upgrade, a script like this can be used to simplify the process:
       export NEWBIN="${newPostgres}/bin"
 
       export OLDDATA="${cfg.dataDir}"
-      export OLDBIN="${cfg.package}/bin"
+      export OLDBIN="${cfg.finalPackage}/bin"
 
       install -d -m 0700 -o postgres -g postgres "$NEWDATA"
       cd "$NEWDATA"
-      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
+      sudo -u postgres "$NEWBIN/initdb" -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
 
-      sudo -u postgres $NEWBIN/pg_upgrade \
+      sudo -u postgres "$NEWBIN/pg_upgrade" \
         --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-        --old-bindir $OLDBIN --new-bindir $NEWBIN \
+        --old-bindir "$OLDBIN" --new-bindir "$NEWBIN" \
         "$@"
     '')
   ];
@@ -326,6 +361,37 @@ self: super: {
   };
 }
 ```
+
+## Procedural Languages {#module-services-postgres-pls}
+
+PostgreSQL ships the additional procedural languages PL/Perl, PL/Python and PL/Tcl as extensions.
+They are packaged as plugins and can be made available in the same way as external extensions:
+```nix
+{
+  services.postgresql.extensions = ps: with ps; [
+    plperl
+    plpython3
+    pltcl
+  ];
+}
+```
+
+Each procedural language plugin provides a `.withPackages` helper to make language specific packages available at run-time.
+
+For example, to make `python3Packages.base58` available:
+```nix
+{
+  services.postgresql.extensions = pgps: with pgps; [
+    (plpython3.withPackages (pyps: with pyps; [ base58 ]))
+  ];
+}
+```
+
+This currently works for:
+- `plperl` by re-using `perl.withPackages`
+- `plpython3` by re-using `python3.withPackages`
+- `plr` by exposing `rPackages`
+- `pltcl` by exposing `tclPackages`
 
 ## JIT (Just-In-Time compilation) {#module-services-postgres-jit}
 

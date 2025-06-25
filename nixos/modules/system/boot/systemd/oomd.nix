@@ -68,7 +68,7 @@ in
       ManagedOOMMemoryPressure = "kill";
       ManagedOOMMemoryPressureLimit = lib.mkDefault "80%";
     };
-    systemd.slices."user-".sliceConfig = lib.mkIf cfg.enableUserSlices {
+    systemd.slices."user".sliceConfig = lib.mkIf cfg.enableUserSlices {
       ManagedOOMMemoryPressure = "kill";
       ManagedOOMMemoryPressureLimit = lib.mkDefault "80%";
     };

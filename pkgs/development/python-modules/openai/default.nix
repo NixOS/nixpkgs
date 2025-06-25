@@ -19,6 +19,11 @@
   tqdm,
   typing-extensions,
 
+  # `httpx_aiohttp` not currently in `nixpkgs`
+  # optional-dependencies (aiohttp)
+  # aiohttp,
+  # httpx_aiohttp,
+
   # optional-dependencies (datalib)
   numpy,
   pandas,
@@ -37,6 +42,7 @@
   nest-asyncio,
   pytest-asyncio,
   pytest-mock,
+  pytest-xdist,
   respx,
 
   # optional-dependencies toggle
@@ -46,7 +52,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.68.2";
+  version = "1.91.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -55,7 +61,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-TA+gr6cFGFlbAUqfgSbLFsoKdSZktPwk6DUfeq99PsM=";
+    hash = "sha256-5thOFxXIStNowiEz9IacAkAC611zzXXs0ZB1tyuR+Go=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -71,10 +77,8 @@ buildPythonPackage rec {
       distro
       httpx
       jiter
-      numpy
       pydantic
       sniffio
-      sounddevice
       tqdm
       typing-extensions
     ]
@@ -82,6 +86,11 @@ buildPythonPackage rec {
     ++ lib.optionals withVoiceHelpers optional-dependencies.voice-helpers;
 
   optional-dependencies = {
+    # `httpx_aiohttp` not currently in `nixpkgs`
+    # aiohttp = [
+    #   aiohttp
+    #   httpx_aiohttp
+    # ];
     datalib = [
       numpy
       pandas
@@ -105,6 +114,7 @@ buildPythonPackage rec {
     nest-asyncio
     pytest-asyncio
     pytest-mock
+    pytest-xdist
     respx
   ];
 

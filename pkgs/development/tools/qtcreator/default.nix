@@ -27,15 +27,16 @@
   rustc-demangle,
   elfutils,
   perf,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "16.0.0";
+  version = "17.0.0";
 
   src = fetchurl {
     url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-GLQ1PmijHAYnEwCMBc5/fuiKqvVtWsDG3lebq/soN9o=";
+    hash = "sha256-YW3+pDphYrwajM9EDh32p0uXf8sCjXa3x3mh+43jnow=";
   };
 
   nativeBuildInputs = [
@@ -85,6 +86,7 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [
     "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
+    "--suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
   ];
 
   meta = with lib; {

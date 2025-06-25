@@ -2,7 +2,6 @@
   lib,
   SDL2,
   curl,
-  darwin,
   docbook_xml_dtd_45,
   docbook_xsl,
   fetchurl,
@@ -33,6 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/project/bochs/bochs/${finalAttrs.version}/bochs-${finalAttrs.version}.tar.gz";
     hash = "sha256-y29UK1HzWizJIGsqmA21YCt80bfPLk7U8Ras1VB3gao=";
   };
+  # Fix build on darwin, remove on next version
+  # https://sourceforge.net/p/bochs/bugs/1466/
+  patches = lib.optional stdenv.hostPlatform.isDarwin ./fix-darwin-build.patch;
 
   nativeBuildInputs = [
     docbook_xml_dtd_45
@@ -62,9 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       libGLU
       libX11
       libXpm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libobjc
     ];
 
   configureFlags =
@@ -85,11 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.enableFeature false "instrumentation")
 
       (lib.enableFeature false "docbook") # Broken - it requires docbook2html
-
-      # Dangerous options - they are marked as "incomplete/experimental" on Bochs documentation
-      (lib.enableFeature false "3dnow")
-      (lib.enableFeature false "monitor-mwait")
-      (lib.enableFeature false "raw-serial")
 
       # These are completely configurable, and they don't depend of external tools
       (lib.enableFeature true "a20-pin")
@@ -157,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ patrickdag ];
     platforms = lib.platforms.unix;
   };
 })

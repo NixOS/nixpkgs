@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "ultralytics";
-  version = "8.3.94";
+  version = "8.3.143";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ultralytics";
     repo = "ultralytics";
     tag = "v${version}";
-    hash = "sha256-pDUF/uqtMA9xMK7G9Ka2XSr55jEka7DhWX9d2S3n6KA=";
+    hash = "sha256-qpFQcGLTEQS7Bt9CvdXgv2JyNfOONS0Cf71dckCrlPw=";
   };
 
   build-system = [ setuptools ];
@@ -101,6 +101,8 @@ buildPythonPackage rec {
       "test_workflow"
       "test_yolo_world"
       "test_yolov10"
+      "test_yoloe"
+      "test_multichannel"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # Fatal Python error: Aborted

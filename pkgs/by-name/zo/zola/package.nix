@@ -5,7 +5,6 @@
   rustPlatform,
   pkg-config,
   oniguruma,
-  darwin,
   installShellFiles,
   zola,
   testers,
@@ -30,17 +29,9 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    oniguruma
+  ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
@@ -53,13 +44,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = zola; };
 
-  meta = with lib; {
+  meta = {
     description = "Fast static site generator with everything built-in";
     mainProgram = "zola";
     homepage = "https://www.getzola.org/";
     changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dandellion
       dywedir
       _0x4A6F

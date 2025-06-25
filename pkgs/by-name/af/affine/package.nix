@@ -4,9 +4,9 @@
   stdenvNoCC,
   fetchFromGitHub,
   rustPlatform,
-  electron_34,
+  electron_35,
   nodejs_22,
-  yarn-berry,
+  yarn-berry_4,
   cacert,
   writableTmpDirAsHomeHook,
   cargo,
@@ -17,6 +17,8 @@
   jq,
   copyDesktopItems,
   makeWrapper,
+  llvmPackages,
+  apple-sdk_15,
   makeDesktopItem,
   nix-update-script,
   buildType ? "stable",
@@ -32,32 +34,32 @@ let
     }
     .${hostPlatform.parsed.cpu.name}
       or (throw "affine(${buildType}): unsupported CPU family ${hostPlatform.parsed.cpu.name}");
-  electron = electron_34;
+  electron = electron_35;
   nodejs = nodejs_22;
-  yarn = yarn-berry.override { inherit nodejs; };
+  yarn-berry = yarn-berry_4.override { inherit nodejs; };
   productName = if buildType != "stable" then "AFFiNE-${buildType}" else "AFFiNE";
   binName = lib.toLower productName;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.20.5";
+  version = "0.22.4";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eMVHwjJe6u3A3Dxo6SurusRuMksp/moPmXAUv0FXBwc=";
+    hash = "sha256-IvVNnh8EDRSnIGeomLkO+I9fpbzrxC8jOStCh//RF8A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Ob+A7NMTFuJ2wmRkHmemHnqkEAiY7G8NyxXXrT7NTR8=";
+    hash = "sha256-kAhT2yXFbUuV34ukdUmLQbO00LSaYk7gpsp0nmO138o=";
   };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
     inherit (finalAttrs) src;
     nativeBuildInputs = [
-      yarn
+      yarn-berry
       cacert
       writableTmpDirAsHomeHook
     ];
@@ -96,12 +98,17 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-e5GNWgeYw4CcpOGDd/LNk+syBupqAuws0hz+wUbaFL4=";
+    outputHash = "sha256-6Co65RkzLnk4U9ibiN0cO0bWRvbUHECzd+GQ8pwIxBE=";
   };
+
+  buildInputs = lib.optionals hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
+
   nativeBuildInputs =
     [
       nodejs
-      yarn
+      yarn-berry
       cargo
       rustc
       findutils
@@ -113,10 +120,18 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals hostPlatform.isLinux [
       copyDesktopItems
       makeWrapper
+    ]
+    ++ lib.optionals hostPlatform.isDarwin [
+      # bindgenHook is needed to build `coreaudio-sys` on darwin
+      rustPlatform.bindgenHook
     ];
 
-  # force yarn install run in CI mode
-  env.CI = "1";
+  env = {
+    # force yarn install run in CI mode
+    CI = "1";
+    # `LIBCLANG_PATH` is needed to build `coreaudio-sys` on darwin
+    LIBCLANG_PATH = lib.optionalString hostPlatform.isDarwin "${lib.getLib llvmPackages.libclang}/lib";
+  };
 
   # Remove code under The AFFiNE Enterprise Edition (EE) license.
   # Keep file package.json for `yarn install --immutable` lockfile check.

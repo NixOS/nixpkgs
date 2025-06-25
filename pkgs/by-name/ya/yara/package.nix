@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  pcre,
   pkg-config,
   protobufc,
   withCrypto ? true,
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      pcre
       protobufc
     ]
     ++ lib.optionals withCrypto [ openssl ]
@@ -57,13 +55,13 @@ stdenv.mkDerivation rec {
 
   doCheck = enableStatic;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to perform pattern matching for malware-related tasks";
     homepage = "http://Virustotal.github.io/yara/";
     changelog = "https://github.com/VirusTotal/yara/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "yara";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

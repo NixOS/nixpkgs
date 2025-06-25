@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "traderepublic-portfolio-downloader";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "dhojayev";
     repo = "traderepublic-portfolio-downloader";
     tag = "v${version}";
-    hash = "sha256-U3cyQ449e7whFE5DnOlYL6qdOQgkpLPnd5ZxAG+WkRc=";
+    hash = "sha256-z+8VIN3rN1s8VFIGIJ6mwKbcajIcfN0TnB0Vfq5VXYM=";
   };
 
-  vendorHash = "sha256-VzBBY1mNbT6qHnsy1GE+jWXHZcUo3TNefQixVFF+HYA=";
+  vendorHash = "sha256-MapulF+ppRW3ClI9RlVV5TEp/nNQz3LD5WdwN5AL8sw=";
 
   postInstall = ''
     mv $out/bin/public $out/bin/traderepublic-portfolio-downloader

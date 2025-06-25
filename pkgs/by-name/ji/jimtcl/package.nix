@@ -10,8 +10,8 @@
 
   sqlite,
   readline,
-  SDL,
-  SDL_gfx,
+  SDL2,
+  SDL2_gfx,
   openssl,
 
   SDLSupport ? true,
@@ -41,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
       openssl
     ]
     ++ (lib.optionals SDLSupport [
-      SDL
-      SDL_gfx
+      SDL2
+      SDL2_gfx
     ]);
 
   configureFlags = [

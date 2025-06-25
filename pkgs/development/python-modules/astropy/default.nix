@@ -1,7 +1,6 @@
 {
   lib,
   fetchPypi,
-  fetchpatch,
   buildPythonPackage,
   pythonOlder,
 
@@ -53,20 +52,18 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "7.0.0";
+  version = "7.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6S18n+6G6z34cU5d1Bu/nxY9ND4aGD2Vv2vQnkMTyUA=";
+    hash = "sha256-OS/utEOyQ3zUwuBkGmXg8VunkeFI6bHl7X3n38s45GA=";
   };
+
   patches = [
-    (fetchpatch {
-      url = "https://github.com/astropy/astropy/commit/13b89edc9acd6d5f12eea75983084c57cb458130.patch";
-      hash = "sha256-2MgmW4kKBrZnTE1cjYYLOH5hStv5Q6tv4gN4sPSLBpM=";
-    })
+    ./test_z_at_value_numpyvectorize.patch
   ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {

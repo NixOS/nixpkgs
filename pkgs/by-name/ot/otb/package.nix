@@ -1,6 +1,5 @@
 {
   cmake,
-  callPackage,
   fetchFromGitHub,
   fetchpatch,
   makeWrapper,
@@ -27,12 +26,13 @@
   tinyxml,
 
   # otb modules
+  enableFFTW ? false,
   enableFeatureExtraction ? true,
   enableHyperspectral ? true,
   enableLearning ? true,
   enableMiscellaneous ? true,
   enableOpenMP ? false,
-  enablePython ? false,
+  enablePython ? true,
   extraPythonPackages ? ps: with ps; [ ],
   enableRemote ? true,
   enableShark ? true,
@@ -42,18 +42,36 @@
   enableThirdParty ? true,
 }:
 let
-  inherit (lib) optionalString optionals optional;
+  inherit (lib) optionals;
   pythonInputs =
     optionals enablePython (with python3.pkgs; [ numpy ]) ++ (extraPythonPackages python3.pkgs);
 
   # ITK configs for OTB requires 5.3.0 and
   # filter out gdcm, libminc from list of ITK deps as it's not needed for OTB
   itkVersion = "5.3.0";
-  itkDepsToRemove = [
-    "gdcm"
-    "libminc"
-  ];
+  itkMajorMinorVersion = lib.versions.majorMinor itkVersion;
+  itkDepsToRemove =
+    [
+      "gdcm"
+      "libminc"
+    ]
+    ++ optionals (!enableFFTW) [
+      # remove fftw to avoid GPL contamination
+      # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2454#note_112821
+      "fftw"
+    ];
   itkIsInDepsToRemove = dep: builtins.any (d: d == dep.name) itkDepsToRemove;
+
+  # remove after https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2451
+  otbSwig = swig.overrideAttrs (oldArgs: {
+    version = "4.2.1";
+    src = fetchFromGitHub {
+      owner = "swig";
+      repo = "swig";
+      tag = "v4.2.1";
+      hash = "sha256-VlUsiRZLScmbC7hZDzKqUr9481YXVwo0eXT/jy6Fda8=";
+    };
+  });
 
   # override the ITK version with OTB version
   # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/SuperBuild/CMake/External_itk.cmake?ref_type=heads#L145
@@ -77,6 +95,13 @@ let
         hash = "sha256-dDyqYOzo91afR8W7k2N64X6l7t6Ws1C9iuRkWHUe0fg=";
       })
     ];
+
+    # fix the CMake config files for ITK which contains double slashes
+    postInstall =
+      (oldArgs.postInstall or "")
+      + ''
+        sed -i 's|''${ITK_INSTALL_PREFIX}//nix/store|/nix/store|g' $out/lib/cmake/ITK-${itkMajorMinorVersion}/ITKConfig.cmake
+      '';
 
     cmakeFlags = oldArgs.cmakeFlags or [ ] ++ [
       (lib.cmakeBool "ITK_USE_SYSTEM_EIGEN" true)
@@ -177,8 +202,8 @@ let
 
     propagatedBuildInputs =
       lib.lists.filter (pkg: !(itkIsInDepsToRemove pkg)) oldArgs.propagatedBuildInputs or [ ]
-      ++ [
-        # the only missing dependency for OTB from itk propagated list
+      ++ lib.optionals enableFFTW [
+        # the only missing dependency for OTB from itk propagated list if FFTW option is enabled
         fftwFloat
       ];
 
@@ -189,13 +214,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "otb";
-  version = "10.0-unstable-2025-02-13";
+  version = "10.0-unstable-2025-04-03";
 
   src = fetchFromGitHub {
     owner = "orfeotoolbox";
     repo = "otb";
-    rev = "34c96ef53bb94985a1358d5c3de1a5ac6dfecf18";
-    hash = "sha256-QCLuUryVi+r8sQGxvrh9G91uLxuRju6l3LxVJO3VzXM=";
+    rev = "93649b68f54975a1a48a0acd49f2602a55fc8032";
+    hash = "sha256-S6yhV//qlKdWWcT9J1p64WuVS0QNepIYTr/t4JvyEwE=";
   };
 
   patches = [
@@ -205,12 +230,24 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/merge_requests/1056/diffs.patch";
       hash = "sha256-Zj/wkx0vxn5vqj0hszn7NxoYW1yf63G3HPVKbSdZIOY=";
     })
+    ./1-otb-swig-include-itk.diff
   ];
+
+  postPatch =
+    ''
+      substituteInPlace Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt \
+        --replace-fail ''\'''${ITK_INCLUDE_DIRS}' "${otb-itk}/include/ITK-${itkMajorMinorVersion}"
+    ''
+    # Add the header file "vcl_legacy_aliases.h", which defines the legacy vcl_* functions.
+    # This patch fixes the unreproducible build of OTB.
+    # See https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2484.
+    + ''
+      sed -i '/#include "vcl_compiler.h"/a #include "vcl_legacy_aliases.h"' Modules/Core/Mosaic/include/otbMosaicFunctors.h
+    '';
 
   nativeBuildInputs = [
     cmake
     makeWrapper
-    swig
     which
   ];
 
@@ -231,6 +268,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OTBGroup_ThirdParty" enableThirdParty)
     (lib.cmakeBool "OTB_WRAP_PYTHON" enablePython)
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.doInstallCheck)
+    (lib.cmakeBool "OTB_USE_FFTW" enableFFTW)
   ];
 
   propagatedBuildInputs =
@@ -244,13 +282,17 @@ stdenv.mkDerivation (finalAttrs: {
       muparserx
       opencv
       otb-itk
-      otb-shark
       perl
-      swig
       tinyxml
     ]
     ++ otb-itk.propagatedBuildInputs
-    ++ optionals enablePython ([ python3 ] ++ pythonInputs)
+    ++ optionals enablePython (
+      [
+        python3
+        otbSwig
+      ]
+      ++ pythonInputs
+    )
     ++ optionals enableShark [ otb-shark ];
 
   doInstallCheck = true;
@@ -266,6 +308,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.orfeo-toolbox.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
+    teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.linux;
   };
 })

@@ -7,7 +7,6 @@
   linkFarm,
   replaceVars,
   nixosTests,
-  ayatana-indicator-datetime,
   bash,
   biometryd,
   boost,
@@ -33,6 +32,7 @@
   lomiri-api,
   lomiri-app-launch,
   lomiri-download-manager,
+  lomiri-indicator-datetime,
   lomiri-indicator-network,
   lomiri-notifications,
   lomiri-settings-components,
@@ -61,30 +61,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri";
-    rev = finalAttrs.version;
-    hash = "sha256-Godl/SQ0+NkI6kwH85SXHPQ5GRlih3xvCyeYxwiqH/s=";
+    tag = finalAttrs.version;
+    hash = "sha256-5fwSLUTntVyV5FIVnPishrU/55tyTyx0Fzh6oitaWwo=";
   };
 
   patches = [
-    # Remove when version > 0.3.0
-    (fetchpatch {
-      name = "0001-lomiri-Fix-accountsservice-test.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/353153c4ebc40ffcc7702af42205d2075fc81503.patch";
-      hash = "sha256-J9ySZgWd7KR7aU1cCRu5iirq7bi3NdLR9SZs9Pd1I8w=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/lomiri/-/merge_requests/181 merged & in release
-    (fetchpatch {
-      name = "0101-lomiri-Fix-accountsservice-property-defaults.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/369c7aac242f1798ce46b1415ab6112ac5e9d095.patch";
-      hash = "sha256-ieJCA1F/ljmgwEfGXWCTQNG1A/bmiJhNH9uzzULpUEc=";
-    })
-
     # Fix greeter & related settings
     # These patches are seemingly not submitted upstream yet
     (fetchpatch {
@@ -99,14 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
     (fetchpatch {
       name = "1002-lomiri-Fix-Lomiri-greeter.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/ebbe0f3f568bd145bb58a2e47f7112442328a0a5/debian/patches/1008_lomiri-greeter-wayland.patch";
-      excludes = [ "data/lomiri-greeter.desktop.in.in" ]; # conflict with GNUInstallDirs patch
-      hash = "sha256-XSSxf06Su8PMoqYwqevN034b/li8G/cNXjrqOXyhTRg=";
-    })
-    (fetchpatch {
-      name = "1003-lomiri-Hide-launcher-in-greeter-mode.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/ebbe0f3f568bd145bb58a2e47f7112442328a0a5/debian/patches/0002_qml-shell-hide-and-disallow-launcher-in-greeter-only-mode.patch";
-      hash = "sha256-R0aMlb7N7XACCthML4SQSd0LvbadADfdQJqrYFhmujk=";
+      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/5f9d28fe6f0ba9ab7eed149b4da7f6b3f4eae55a/debian/patches/1008_lomiri-greeter-wayland.patch";
+      hash = "sha256-vuNTKWA50krtx/+XB2pMI271q57N+kqWlfq54gtf/HI=";
     })
     (fetchpatch {
       name = "1004-lomiri-Dont-reset-OSK-setting.patch";
@@ -122,11 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     ''
-      # Part of greeter fix, applies separately due to merge conflicts
-      substituteInPlace data/lomiri-greeter.desktop.in.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/lomiri-greeter-wrapper @CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' '@CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' \
-        --replace-fail 'X-LightDM-Session-Type=mir' 'X-LightDM-Session-Type=wayland'
-
       # Written with a different qtmir branch in mind, but different branch breaks compat with some patches
       substituteInPlace CMakeLists.txt \
         --replace-fail 'qt5mir2server' 'qtmirserver'
@@ -143,6 +118,10 @@ stdenv.mkDerivation (finalAttrs: {
       # fatal error: mirtest/mir/test/doubles/stub_surface.h: No such file or directory
       substituteInPlace tests/mocks/CMakeLists.txt \
         --replace-fail 'add_subdirectory(QtMir/Application)' ""
+
+      # This needs to launch the *lomiri* indicators, now that datetime is split into lomiri and non-lomiri variants
+      substituteInPlace data/lomiri-greeter-wrapper \
+        --replace-fail 'ayatana-indicators.target' 'lomiri-indicators.target'
 
       # NixOS-ify
 
@@ -168,7 +147,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ayatana-indicator-datetime
     bash
     boost
     cmake-extras
@@ -188,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-api
     lomiri-app-launch
     lomiri-download-manager
+    lomiri-indicator-datetime
     lomiri-indicator-network
     lomiri-schemas
     lomiri-system-settings-unwrapped
@@ -281,7 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Shell of the Lomiri Operating environment";
     longDescription = ''
       Shell of the Lomiri Operating environment optimized for touch based human-machine interaction, but also supporting
@@ -291,9 +270,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://lomiri.com/";
     changelog = "https://gitlab.com/ubports/development/core/lomiri/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "lomiri";
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
   };
 })

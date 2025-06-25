@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "certspotter";
-  version = "0.18.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "SSLMate";
     repo = "certspotter";
     rev = "v${version}";
-    hash = "sha256-nyeqpDMRZRuHjfl3cI/I00KpVg3udjr0B8MEBZcF7nY=";
+    hash = "sha256-CX0YchfX6EwIjH+m1FEHqfuXurg51JC4l+97BgXYXJg=";
   };
 
-  vendorHash = "sha256-6dV9FoPV8UfS0z5RuuopE99fHcT3RAWCdDi7jpHzVRE=";
+  vendorHash = "sha256-+6Gu3y708XXX7CHvZmEh7j3ILNBi/++8Mud34mOrtmA=";
 
   ldflags = [
     "-s"

@@ -2,18 +2,20 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "markuppy";
-  version = "1.14";
-  format = "setuptools";
+  version = "1.18";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "MarkupPy";
-    inherit version;
-    hash = "sha256-Gt7iwKVCrzeP6EVI/29rAWjzy39Ca0aWEDiivPqtDV8=";
+    inherit pname version;
+    hash = "sha256-VA8xuDUHYmAzk2iJCsT0TrOXHXX9vZe0n6H4tmhVE9M=";
   };
+
+  build-system = [ setuptools ];
 
   # has no tests
   doCheck = false;

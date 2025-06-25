@@ -40,7 +40,7 @@ buildGoModule rec {
     homepage = "https://dnstap.info";
     changelog = "https://github.com/dnstap/golang-dnstap/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = [ lib.maintainers.azahi ];
     mainProgram = "dnstap";
   };

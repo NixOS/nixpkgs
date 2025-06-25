@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://docs.pylonsproject.org/projects/pyramid_beaker/en/latest/";
     # idk, see https://github.com/Pylons/pyramid_beaker/blob/master/LICENSE.txt
     # license = licenses.mpl20;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,47 +1,47 @@
-{ lib
-, clangStdenv
-, fetchFromGitLab
-, rustPlatform
-, cargo
-, meson
-, ninja
-, pkg-config
-, rustc
-, glib
-, gtk4
-, libadwaita
-, zbar
-, sqlite
-, openssl
-, pipewire
-, gstreamer
-, gst-plugins-base
-, gst-plugins-bad
-, gst-plugins-good
-, gst-plugins-rs
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
-, glycin-loaders
-, nix-update-script
+{
+  lib,
+  clangStdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  glib,
+  gtk4,
+  libadwaita,
+  zbar,
+  sqlite,
+  openssl,
+  pipewire,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-plugins-good,
+  gst-plugins-rs,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
+  glycin-loaders,
+  nix-update-script,
 }:
 
 clangStdenv.mkDerivation rec {
   pname = "gnome-decoder";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "decoder";
     rev = version;
-    hash = "sha256-qSPuEVW+FwC9OJa+dseIy4/2bhVdTryJSJNSpes9tpY=";
+    hash = "sha256-lLZ8tll/R9cwk3t/MULmrR1KWZ1e+zneXL93035epPE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-xQlzSsvwDNK3Z8xnUQgCU6Q8+ls0Urks778pYwN2X1Y=";
+    inherit pname version src;
+    hash = "sha256-USfC7HSL1TtjP1SmBRTKkPyKE4DkSn6xeH4mzfIBQWg=";
   };
 
   preFixup = ''
@@ -91,6 +91,7 @@ clangStdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "decoder";
-    maintainers = with maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ zendo ];
+    teams = [ teams.gnome-circle ];
   };
 }

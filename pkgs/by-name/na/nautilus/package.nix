@@ -40,7 +40,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "47.2";
+  version = "48.2";
 
   outputs = [
     "out"
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fzIDR08uY3ShHGdU7zPzNg6vf1tehfXkd+igrg+nZNk=";
+    hash = "sha256-oDD2Fj+KaAZPrlqeieN/Gcuyk94uEqGd1eIQlW0N9LU=";
   };
 
   patches = [
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/Nautilus/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     mainProgram = "nautilus";
   };
 })

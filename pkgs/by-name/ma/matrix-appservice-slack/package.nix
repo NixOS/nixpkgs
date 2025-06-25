@@ -4,13 +4,13 @@
   fetchYarnDeps,
   makeWrapper,
   mkYarnPackage,
-  nodejs_18,
+  nodejs_20,
   callPackage,
 }:
 
 let
   data = lib.importJSON ./pin.json;
-  nodejs = nodejs_18;
+  nodejs = nodejs_20;
   matrix-sdk-crypto-nodejs = callPackage ./matrix-sdk-crypto-nodejs-0_1_0-beta_3/package.nix { };
 in
 mkYarnPackage rec {
@@ -59,5 +59,7 @@ mkYarnPackage rec {
       chvp
     ];
     license = licenses.asl20;
+    # Depends on nodejs_18 that has been removed.
+    broken = true;
   };
 }

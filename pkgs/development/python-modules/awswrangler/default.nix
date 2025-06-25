@@ -21,11 +21,12 @@
   pythonOlder,
   redshift-connector,
   requests-aws4auth,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.11.0";
+  version = "3.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,13 +35,15 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-sdk-pandas";
     tag = version;
-    hash = "sha256-dIdNrfhBrfrzXmspw25yd/y6MbXRrLfDveCQk+AERV0=";
+    hash = "sha256-BudK7pP7b8YJRyDCQAZv8FtxF5paA+AR/ZBt9UO3XjM=";
   };
 
-  pythonRelaxDeps = [ "packaging" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "pyarrow"
+  ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     boto3
@@ -55,6 +58,7 @@ buildPythonPackage rec {
     pymysql
     redshift-connector
     requests-aws4auth
+    setuptools
   ];
 
   optional-dependencies = {
@@ -82,7 +86,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pandas on AWS";
     homepage = "https://github.com/aws/aws-sdk-pandas";
-    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${version}";
+    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ mcwitt ];
   };

@@ -6,7 +6,6 @@
   pkg-config,
   libnfc,
   openssl,
-  darwin,
 }:
 
 stdenv.mkDerivation {
@@ -22,15 +21,10 @@ stdenv.mkDerivation {
     autoreconfHook
     pkg-config
   ];
-  buildInputs =
-    [
-      libnfc
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libobjc
-      darwin.apple_sdk
-    ];
+  buildInputs = [
+    libnfc
+    openssl
+  ];
 
   env = {
     NIX_CFLAGS_COMPILE = toString [

@@ -18,6 +18,8 @@ buildPythonPackage rec {
     hash = "sha256-RWjR12ns1+tLuDZfBO7G42TF9w7sezdl9UPa67E1/PU=";
   };
 
+  patches = [ ./fix-httpx-proxies.patch ];
+
   propagatedBuildInputs = [ httpx ];
 
   pythonImportsCheck = [ "youtubesearchpython" ];

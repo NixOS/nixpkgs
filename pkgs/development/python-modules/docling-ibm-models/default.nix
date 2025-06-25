@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "docling-ibm-models";
-  version = "3.4.1";
+  version = "3.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling-ibm-models";
     tag = "v${version}";
-    hash = "sha256-IgKP+4en0N6xLBjzwmddDk8z5P3J1vo+UMW+65a01Ww=";
+    hash = "sha256-a2y4vXgALPRtLhdH0Tqqht1gpdcfa1Gv4puthKDMk7U=";
   };
 
   build-system = [
@@ -81,12 +81,6 @@ buildPythonPackage rec {
     "test_layoutpredictor"
     "test_readingorder"
     "test_tf_predictor"
-  ];
-
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-    "tests/test_code_formula_predictor.py"
-    "tests/test_layout_predictor.py"
   ];
 
   meta = {

@@ -1,59 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  ecdsa,
-  rsa,
-  pyasn1,
-
-  # optional-dependencies
   cryptography,
+  ecdsa,
+  fetchFromGitHub,
+  pyasn1,
   pycrypto,
   pycryptodome,
-
-  # tests
   pytestCheckHook,
+  rsa,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-jose";
-  version = "3.3.0";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mpdavis";
-    repo = pname;
-    rev = version;
-    hash = "sha256-6VGC6M5oyGCOiXcYp6mpyhL+JlcYZKIqOQU9Sm/TkKM=";
+    repo = "python-jose";
+    tag = version;
+    hash = "sha256-8DQ0RBQ4ZgEIwcosgX3dzr928cYIQoH0obIOgk0+Ozs=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2024-33663.patch";
-      url = "https://build.opensuse.org/public/source/openSUSE:Factory/python-python-jose/CVE-2024-33663.patch?rev=36cd8815411620042f56a3b81599b341";
-      hash = "sha256-uxOCa7Lg82zY2nuHzw6CbcymCKUodITrFU3lLY1XMFU=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-33664.patch";
-      url = "https://build.opensuse.org/public/source/openSUSE:Factory/python-python-jose/CVE-2024-33664.patch?rev=36cd8815411620042f56a3b81599b341";
-      hash = "sha256-wx/U1T7t7TloP+dMXxGxEVB3bMC7e6epmN8RE8FKksM=";
-    })
+  pythonRelaxDeps = [
+    # https://github.com/mpdavis/python-jose/pull/376
+    "pyasn1"
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     ecdsa
     pyasn1
     rsa
@@ -65,21 +43,16 @@ buildPythonPackage rec {
     pycryptodome = [ pycryptodome ];
   };
 
-  pythonImportsCheck = [ "jose" ];
-
   nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = [
-    # https://github.com/mpdavis/python-jose/issues/348
-    "TestBackendEcdsaCompatibility"
-  ];
+  pythonImportsCheck = [ "jose" ];
 
   meta = with lib; {
-    changelog = "https://github.com/mpdavis/python-jose/releases/tag/${version}";
-    homepage = "https://github.com/mpdavis/python-jose";
     description = "JOSE implementation in Python";
+    homepage = "https://github.com/mpdavis/python-jose";
+    changelog = "https://github.com/mpdavis/python-jose/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = [ ];
   };

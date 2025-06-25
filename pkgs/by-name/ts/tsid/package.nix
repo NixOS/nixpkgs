@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsid";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "tsid";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-id6OCOX01o41Z5kqzwvjYa5uoQZtzhRaFBuOBhbLcTA=";
+    hash = "sha256-SS6JhU4fuZtTzv/EY31ixwwLOzmO/dN3H5HEMh/URTA=";
   };
 
   cmakeFlags = [

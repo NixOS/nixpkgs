@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-sdk";
-  version = "0.46.0";
+  version = "0.57.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
     tag = "v${version}";
-    hash = "sha256-bvtIeysj3FW4Kj2WZeKSGwkqKoWIxKIzJFiduNlaBWE=";
+    hash = "sha256-QdqbUq2kzrP614BWIMdWAIKsVdXIG89BmLlh+Po98zI=";
   };
 
   build-system = [
@@ -69,6 +69,12 @@ buildPythonPackage rec {
     "test_load_azure_tenant_id_happy_path"
     "test_load_azure_tenant_id_no_location_header"
     "test_load_azure_tenant_id_unparsable_location_header"
+    # Take an exceptionally long time when sandboxing is enabled due to retries
+    "test_multipart_upload"
+    "test_rewind_seekable_stream"
+    "test_resumable_upload"
+    # flaky -- ConnectionBroken under heavy load indicates a timing issue
+    "test_github_oidc_flow_works_with_azure"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -76,7 +82,7 @@ buildPythonPackage rec {
   meta = {
     description = "Databricks SDK for Python";
     homepage = "https://github.com/databricks/databricks-sdk-py";
-    changelog = "https://github.com/databricks/databricks-sdk-py/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/databricks/databricks-sdk-py/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

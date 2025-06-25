@@ -101,6 +101,14 @@ let
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
 
+    x86_64-windows = {
+      BINARY = 64;
+      TARGET = setTarget "ATHLON";
+      DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
+      USE_OPENMP = false;
+    };
+
     powerpc64le-linux = {
       BINARY = 64;
       TARGET = setTarget "POWER5";
@@ -116,8 +124,7 @@ let
     };
 
     loongarch64-linux = {
-      BINARY = 64;
-      TARGET = setTarget "LOONGSONGENERIC";
+      TARGET = setTarget "LA64_GENERIC";
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
@@ -280,6 +287,9 @@ stdenv.mkDerivation rec {
           done
 
           # Setup symlinks for blas / lapack
+    ''
+    + lib.optionalString stdenv.hostPlatform.isMinGW ''
+      ln -s $out/bin/*.dll $out/lib
     ''
     + lib.optionalString enableShared ''
       ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}

@@ -42,7 +42,7 @@ symlinkJoin {
       homepage
       license
       platforms
-      maintainers
+      teams
       ;
 
     description =

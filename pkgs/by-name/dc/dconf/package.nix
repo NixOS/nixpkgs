@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
       # Mandatory libdconfsettings shared library.
       lib.systems.inspect.platformPatterns.isStatic
     ];
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     mainProgram = "dconf";
   };
 }

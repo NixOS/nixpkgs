@@ -8,6 +8,7 @@
   libmpg123,
   libopus,
   libvorbis,
+  libX11,
   makeWrapper,
   meson,
   moltenvk,
@@ -22,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkquake";
-  version = "1.32.1";
+  version = "1.32.3";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     tag = finalAttrs.version;
-    hash = "sha256-yqoP24SNjq7YZ9QfkZQte6tsSeR16ScknXgZ5nQJerI=";
+    hash = "sha256-Nb3nTU0cJK5vNitfNBF7Usc0vTgMxZdQ3I3mjM1E9po=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmpg123
       libopus
       libvorbis
+      libX11
       opusfile
       vulkan-loader
     ]

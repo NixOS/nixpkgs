@@ -3,10 +3,21 @@
   suffix ? "",
   version,
   src,
-  docCargoDeps,
+  # For Lix versions >= 2.92, Rust sources are in the Lix repository root.
+  cargoDeps ? null,
+  # For previous versions, Rust sources are only in a subdirectory for
+  # `lix-doc`.
+  docCargoDeps ? null,
   patches ? [ ],
-  maintainers ? lib.teams.lix.members,
+  knownVulnerabilities ? [ ],
 }@args:
+
+assert lib.assertMsg (
+  lib.versionOlder version "2.92" -> docCargoDeps != null
+) "`lix-doc` `cargoDeps` must be set for Lix < 2.92";
+assert lib.assertMsg (
+  lib.versionAtLeast version "2.92" -> cargoDeps != null
+) "`cargoDeps` must be set for Lix ≥ 2.92";
 
 {
   stdenv,
@@ -18,6 +29,8 @@
   busybox-sandbox-shell,
   bzip2,
   callPackage,
+  capnproto,
+  cargo,
   curl,
   cmake,
   doxygen,
@@ -30,6 +43,8 @@
   libarchive,
   libcpuid,
   libsodium,
+  libsystemtap,
+  llvmPackages,
   lowdown,
   lowdown-unsandboxed,
   lsof,
@@ -39,16 +54,21 @@
   nlohmann_json,
   ninja,
   openssl,
+  rustc,
   toml11,
   pegtl,
   python3,
   pkg-config,
   rapidcheck,
-  Security,
   sqlite,
+  systemtap-sdt,
   util-linuxMinimal,
+  removeReferencesTo,
   xz,
+  yq,
   nixosTests,
+  rustPlatform,
+  # Only used for versions before 2.92.
   lix-doc ? callPackage ./doc {
     inherit src;
     version = "${version}${suffix}";
@@ -57,21 +77,35 @@
 
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
+  enableStrictLLVMChecks ? true,
   withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   aws-sdk-cpp,
+  # FIXME support Darwin once https://github.com/NixOS/nixpkgs/pull/392918 lands
+  withDtrace ?
+    lib.meta.availableOn stdenv.hostPlatform libsystemtap
+    && lib.meta.availableOn stdenv.buildPlatform systemtap-sdt,
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
+  pastaFod ? lib.meta.availableOn stdenv.hostPlatform passt,
+  passt,
 
   confDir,
   stateDir,
   storeDir,
 }:
-
 let
+  isLLVMOnly = lib.versionAtLeast version "2.92";
+  hasExternalLixDoc = lib.versionOlder version "2.92";
   isLegacyParser = lib.versionOlder version "2.91";
+  hasDtraceSupport = lib.versionAtLeast version "2.93";
+  parseToYAML = lib.versionAtLeast version "2.93";
 in
-stdenv.mkDerivation {
+# gcc miscompiles coroutines at least until 13.2, possibly longer
+# do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
+assert lib.assertMsg (enableStrictLLVMChecks && isLLVMOnly -> stdenv.cc.isClang)
+  "Lix upstream strongly discourage the usage of GCC to compile Lix as there's known miscompilations in important places. If you are a compiler developer, please get in touch with us.";
+stdenv.mkDerivation (finalAttrs: {
   pname = "lix";
 
   version = "${version}${suffix}";
@@ -91,9 +125,25 @@ stdenv.mkDerivation {
     ];
 
   strictDeps = true;
+  disallowedReferences = lib.optionals isLLVMOnly [
+    # We don't want the Clang.
+    stdenv.cc.cc
+    # We don't want the underlying GCC neither!
+    stdenv.cc.cc.stdenv.cc.cc
+  ];
+
+  # We only include CMake so that Meson can locate toml11, which only ships CMake dependency metadata.
+  dontUseCmakeConfigure = true;
 
   nativeBuildInputs =
     [
+      # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
+      (python3.pythonOnBuildForHost.withPackages (p: [
+        p.pytest
+        p.pytest-xdist
+        p.python-frontmatter
+        p.toml
+      ]))
       pkg-config
       flex
       jq
@@ -101,12 +151,19 @@ stdenv.mkDerivation {
       ninja
       cmake
       python3
+      # Required for libstd++ assertions that leaks inside of the final binary.
+      removeReferencesTo
 
       # Tests
       git
       mercurial
       jq
       lsof
+    ]
+    ++ lib.optionals isLLVMOnly [
+      rustc
+      cargo
+      rustPlatform.cargoSetupHook
     ]
     ++ lib.optionals isLegacyParser [ bison ]
     ++ lib.optionals enableDocumentation [
@@ -115,6 +172,9 @@ stdenv.mkDerivation {
       mdbook-linkcheck
       doxygen
     ]
+    ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
+    ++ lib.optionals pastaFod [ passt ]
+    ++ lib.optionals parseToYAML [ yq ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
   buildInputs =
@@ -123,6 +183,7 @@ stdenv.mkDerivation {
       brotli
       bzip2
       curl
+      capnproto
       editline
       libsodium
       openssl
@@ -133,13 +194,30 @@ stdenv.mkDerivation {
       lowdown
       rapidcheck
       toml11
-      lix-doc
     ]
+    ++ lib.optionals hasExternalLixDoc [ lix-doc ]
     ++ lib.optionals (!isLegacyParser) [ pegtl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ]
+    # NOTE(Raito): I'd have expected that the LLVM packaging would inject the
+    # libunwind library path directly in the wrappers, but it does inject
+    # -lunwind without injecting the library path...
+    ++ lib.optionals stdenv.hostPlatform.isStatic [ llvmPackages.libunwind ]
     ++ lib.optionals (stdenv.hostPlatform.isx86_64) [ libcpuid ]
     ++ lib.optionals withLibseccomp [ libseccomp ]
-    ++ lib.optionals withAWS [ aws-sdk-cpp ];
+    ++ lib.optionals withAWS [ aws-sdk-cpp ]
+    ++ lib.optionals (hasDtraceSupport && withDtrace) [ libsystemtap ];
+
+  inherit cargoDeps;
+
+  env = {
+    # Meson allows referencing a /usr/share/cargo/registry shaped thing for subproject sources.
+    # Turns out the Nix-generated Cargo dependencies are named the same as they
+    # would be in a Cargo registry cache.
+    MESON_PACKAGE_CACHE_DIR =
+      if finalAttrs.cargoDeps != null then
+        finalAttrs.cargoDeps
+      else
+        "lix: no `MESON_PACKAGE_CACHE_DIR`, set `cargoDeps`";
+  };
 
   propagatedBuildInputs = [
     boehmgc
@@ -179,8 +257,12 @@ stdenv.mkDerivation {
   mesonFlags =
     [
       # Enable LTO, since it improves eval performance a fair amount
-      # LTO is disabled on static due to strange linking errors
-      (lib.mesonBool "b_lto" (!stdenv.hostPlatform.isStatic && stdenv.cc.isGNU))
+      # LTO is disabled on:
+      # - static builds (strange linkage errors)
+      # - darwin builds (install test failures. see fj#568 & fj#832)
+      (lib.mesonBool "b_lto" (
+        !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isDarwin && (isLLVMOnly || stdenv.cc.isGNU)
+      ))
       (lib.mesonEnable "gc" true)
       (lib.mesonBool "enable-tests" true)
       (lib.mesonBool "enable-docs" enableDocumentation)
@@ -193,6 +275,9 @@ stdenv.mkDerivation {
       (lib.mesonOption "store-dir" storeDir)
       (lib.mesonOption "state-dir" stateDir)
       (lib.mesonOption "sysconfdir" confDir)
+    ]
+    ++ lib.optionals hasDtraceSupport [
+      (lib.mesonEnable "dtrace-probes" withDtrace)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
@@ -208,6 +293,11 @@ stdenv.mkDerivation {
       mkdir -p $devdoc/nix-support
       echo "devdoc internal-api $devdoc/share/doc/nix/internal-api" >> $devdoc/nix-support/hydra-build-products
     ''
+    + lib.optionalString (!hasExternalLixDoc) ''
+      # We do not need static archives.
+      # FIXME(Raito): why are they getting installed _at all_ ?
+      rm $out/lib/liblix_doc.a
+    ''
     + lib.optionalString stdenv.hostPlatform.isStatic ''
       mkdir -p $out/nix-support
       echo "file binary-dist $out/bin/nix" >> $out/nix-support/hydra-build-products
@@ -219,6 +309,10 @@ stdenv.mkDerivation {
           "$out/lib/libboost_context.dylib" \
           "$out/lib/$lib"
       done
+    ''
+    + ''
+      # Drop all references to libstd++ include files due to `__FILE__` leaking in libstd++ assertions.
+      find "$out" -type f -exec remove-references-to -t ${stdenv.cc.cc.stdenv.cc.cc} '{}' +
     '';
 
   # This needs to run after _multioutDocs moves the docs to $doc
@@ -276,7 +370,8 @@ stdenv.mkDerivation {
   passthru = {
     inherit aws-sdk-cpp boehmgc;
     tests = {
-      misc = nixosTests.nix-misc.lix;
+      misc = nixosTests.nix-misc.default.passthru.override { nixPackage = finalAttrs.finalPackage; };
+      installer = nixosTests.installer.simple.override { selectNixPackage = _: finalAttrs.finalPackage; };
     };
   };
 
@@ -294,9 +389,10 @@ stdenv.mkDerivation {
     '';
     homepage = "https://lix.systems";
     license = lib.licenses.lgpl21Plus;
-    inherit maintainers;
+    teams = [ lib.teams.lix ];
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
+    inherit knownVulnerabilities;
   };
-}
+})

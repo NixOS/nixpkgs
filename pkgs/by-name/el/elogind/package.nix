@@ -27,6 +27,7 @@
   docbook_xsl_ns,
   docbook_xml_dtd_42,
   docbook_xml_dtd_45,
+  udevCheckHook,
 
   # Defaulting to false because usually the rationale for using elogind is to
   # use it in situation where a systemd dependency does not work (especially
@@ -45,25 +46,30 @@ stdenv.mkDerivation rec {
     hash = "sha256-4KZr/NiiGVwzdDROhiX3GEQTUyIGva6ezb+xC2U3bkg=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    m4
-    pkg-config
-    gperf
-    getent
-    libcap
-    gettext
-    libxslt.bin # xsltproc
-    docbook5
-    docbook_xsl
-    docbook_xsl_ns
-    docbook_xml_dtd_42
-    docbook_xml_dtd_45 # needed for docbook without Internet
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      m4
+      pkg-config
+      gperf
+      getent
+      libcap
+      gettext
+      libxslt.bin # xsltproc
+      docbook5
+      docbook_xsl
+      docbook_xsl_ns
+      docbook_xml_dtd_42
+      docbook_xml_dtd_45 # needed for docbook without Internet
 
-    python3Packages.python
-    python3Packages.jinja2
-  ];
+      python3Packages.python
+      python3Packages.jinja2
+    ]
+    ++ lib.optionals enableSystemd [
+      # udevCheckHook introduces a dependency on systemdMinimal
+      udevCheckHook
+    ];
 
   buildInputs = [
     acl

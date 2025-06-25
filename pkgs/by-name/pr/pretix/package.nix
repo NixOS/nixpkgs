@@ -7,6 +7,7 @@
   python3,
   gettext,
   nixosTests,
+  pretix,
   plugins ? [ ],
 }:
 
@@ -25,16 +26,6 @@ let
         };
       });
 
-      geoip2 = super.geoip2.overridePythonAttrs rec {
-        version = "5.0.1";
-
-        src = fetchPypi {
-          pname = "geoip2";
-          inherit version;
-          hash = "sha256-kK+LbTaH877yUfJwitAXsw1ifRFEwAQOq8TJAXqAfYY=";
-        };
-      };
-
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
 
@@ -45,20 +36,19 @@ let
         };
       };
 
+      pretix = self.toPythonModule pretix;
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
-
-      sentry-sdk = super.sentry-sdk_2;
     };
   };
 
   pname = "pretix";
-  version = "2025.2.0";
+  version = "2025.5.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZVrdkIeVUAKb4617BCcfvs0HqFmctPb7zriDJplyUns=";
+    hash = "sha256-vu+7jKXIuNZ4BN2IamdDxGJkraj93eNYUT3sUU2LCAg=";
   };
 
   npmDeps = buildNpmPackage {
@@ -66,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-MOxOzaP6p6Q61ZuDVzbYJvMXpCQ1pzQx86Yl24yt4SQ=";
+    npmDepsHash = "sha256-NSBSL6+0ancoPHbvJu4fBxK8EVj06dbltjHqJi2yh5w=";
 
     dontBuild = true;
 
@@ -92,13 +82,16 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "beautifulsoup4"
+    "celery"
     "django-bootstrap3"
+    "django-localflavor"
     "django-phonenumber-field"
     "dnspython"
     "drf_ujson2"
     "importlib-metadata"
     "kombu"
     "markdown"
+    "phonenumberslite"
     "pillow"
     "protobuf"
     "pycryptodome"
@@ -208,7 +201,6 @@ python.pkgs.buildPythonApplication rec {
       requests
       sentry-sdk
       sepaxml
-      slimit
       stripe
       text-unidecode
       tlds
@@ -268,6 +260,11 @@ python.pkgs.buildPythonApplication rec {
     "test_same_day_spanish"
     "test_same_month_spanish"
     "test_same_year_spanish"
+
+    # broken with fakeredis>=2.27.0
+    "test_waitinglist_cache_separation"
+    "test_waitinglist_item_active"
+    "test_waitinglist_variation_active"
   ];
 
   preCheck = ''

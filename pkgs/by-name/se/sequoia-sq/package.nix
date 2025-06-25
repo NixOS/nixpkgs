@@ -1,8 +1,6 @@
 {
-  stdenv,
   fetchFromGitLab,
   lib,
-  darwin,
   nettle,
   nix-update-script,
   rustPlatform,
@@ -16,17 +14,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-sq";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1jssSlyjbrGgkxGC1gieZooVVI42Qvz0q+pIfcZRIj0=";
+    hash = "sha256-lM+j1KtH3U/lbPXnKALAP75YokDufbdz8s8bjb0VXUY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-tATxGaoF/+cUDywvlnW1N2sKo/FbKhJM7yUb74mxB5s=";
+  cargoHash = "sha256-3z1Qm/eeVlH0/x3C8PSSPIlQaRKk1U6mRlEiKk0AaVQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,19 +33,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-      nettle
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    openssl
+    sqlite
+    nettle
+  ];
 
   # Needed for tests to be able to create a ~/.local/share/sequoia directory
   # Needed for avoiding "OpenSSL error" since 1.2.0

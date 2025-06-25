@@ -8,16 +8,16 @@
 let
   fuseftp = buildGoModule rec {
     pname = "go-fuseftp";
-    version = "0.4.2";
+    version = "0.6.6";
 
     src = fetchFromGitHub {
       owner = "datawire";
       repo = "go-fuseftp";
       rev = "v${version}";
-      hash = "sha256-bkaC+EOqFPQA4fDkVhO6EqgGhOJy31yGwVbbPoRd+70=";
+      hash = "sha256-70VmT8F+RNiDk6fnrzDktdfNhZk20sXF+b3TBTAkNHo=";
     };
 
-    vendorHash = "sha256-Dk4wvg2lTGTw8vP42+XuvmMXeMluR0SPwlVHLEB8yCQ=";
+    vendorHash = "sha256-wp4jOmeVdfuRwdclCzBonNCkhgsNUBOBL6gxlrznC1A=";
 
     buildInputs = [ fuse ];
 
@@ -31,13 +31,13 @@ let
 in
 buildGoModule rec {
   pname = "telepresence2";
-  version = "2.22.0";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
     rev = "v${version}";
-    hash = "sha256-SSzZ54grTt9VJL3avugb3FiKkaF6I+42DUorpmHkhlE=";
+    hash = "sha256-YuZWse4Zjb04PVKNZtXGDqBojnrEuOFLEa6mSulH/Xg=";
   };
 
   propagatedBuildInputs = [
@@ -51,7 +51,7 @@ buildGoModule rec {
     export CGO_ENABLED=0
   '';
 
-  vendorHash = "sha256-THMWbN/wlBPphQeoZgeSlkI06dbA2/FmqxKn3LgtbPg=";
+  vendorHash = "sha256-5wUL80+yRiPWUZaafUk/4iQ2Jyuljm9hbi/OKaAmTno=";
 
   ldflags = [
     "-s"
@@ -68,6 +68,7 @@ buildGoModule rec {
     maintainers = with maintainers; [
       mausch
       vilsol
+      wrbbz
     ];
     mainProgram = "telepresence";
   };

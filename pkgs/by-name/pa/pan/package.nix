@@ -1,12 +1,11 @@
 {
-  spellChecking ? true,
   lib,
   stdenv,
   fetchFromGitLab,
-  autoreconfHook,
+  cmake,
   pkg-config,
   gtk3,
-  gtkspell3,
+  gspell,
   gmime3,
   gettext,
   intltool,
@@ -14,33 +13,34 @@
   libxml2,
   libnotify,
   gnutls,
-  makeWrapper,
+  wrapGAppsHook3,
   gnupg,
+  spellChecking ? true,
   gnomeSupport ? true,
   libsecret,
   gcr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pan";
-  version = "0.158";
+  version = "0.163";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "pan";
-    rev = "v${version}";
-    hash = "sha256-gcs3TsUzZAW8PhNPMzyOfwu+2SNynjRgfxdGIfAHrpA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zClHwIvrWqAn8l1hpcy3FgScRmVUUk8UPQkT0KD59hM=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    cmake
     pkg-config
     gettext
     intltool
     itstool
     libxml2
-    makeWrapper
+    wrapGAppsHook3
   ];
 
   buildInputs =
@@ -50,37 +50,37 @@ stdenv.mkDerivation rec {
       libnotify
       gnutls
     ]
-    ++ lib.optional spellChecking gtkspell3
+    ++ lib.optionals spellChecking [ gspell ]
     ++ lib.optionals gnomeSupport [
       libsecret
       gcr
     ];
 
-  configureFlags =
-    [
-      "--with-dbus"
-      "--with-gtk3"
-      "--with-gnutls"
-      "--enable-libnotify"
-    ]
-    ++ lib.optional spellChecking "--with-gtkspell"
-    ++ lib.optional gnomeSupport "--enable-gkr";
+  cmakeFlags = [
+    (lib.cmakeBool "WANT_GSPELL" spellChecking)
+    (lib.cmakeBool "WANT_GKR" gnomeSupport)
+    (lib.cmakeBool "ENABLE_MANUAL" true)
+    (lib.cmakeBool "WANT_GMIME_CRYPTO" true)
+    (lib.cmakeBool "WANT_WEBKIT" false) # We don't have webkitgtk_3_0
+    (lib.cmakeBool "WANT_NOTIFY" true)
+  ];
 
-  postInstall = ''
-    wrapProgram $out/bin/pan --suffix PATH : ${gnupg}/bin
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnupg ]})
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with lib; {
+  meta = {
     description = "GTK-based Usenet newsreader good at both text and binaries";
     mainProgram = "pan";
-    homepage = "http://pan.rebelbase.com/";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
-    license = with licenses; [
+    homepage = "http://pan.rebelbase.com";
+    maintainers = with lib.maintainers; [
+      aleksana
+      emaryn
+    ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       gpl2Only
       fdl11Only
     ];
   };
-}
+})

@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
       cc-by-nd-30
     ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

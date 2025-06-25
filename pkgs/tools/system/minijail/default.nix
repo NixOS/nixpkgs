@@ -3,6 +3,7 @@
   lib,
   fetchFromGitiles,
   libcap,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libcap ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   makeFlags = [
     "ECHO=echo"
@@ -40,6 +43,8 @@ stdenv.mkDerivation rec {
     cp -v *.pc $out/lib/pkgconfig
     cp -v libminijail.h scoped_minijail.h $out/include/chromeos
     cp -v minijail0 $out/bin
+
+    installManPage minijail0.1 minijail0.5
   '';
 
   enableParallelBuilding = true;

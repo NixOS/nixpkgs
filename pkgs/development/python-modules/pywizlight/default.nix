@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pywizlight";
-  version = "0.6.0";
+  version = "0.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sbidy";
-    repo = pname;
+    repo = "pywizlight";
     rev = "v${version}";
-    hash = "sha256-4z1PmVoRs7mql/PhSG9Ek6NRkGXIXAYxaV8nNDoJjeY=";
+    hash = "sha256-JT0Ud17U9etByaDVu9+hcadymze1rfj+mEK6nqksuWc=";
   };
 
   propagatedBuildInputs = [ click ];

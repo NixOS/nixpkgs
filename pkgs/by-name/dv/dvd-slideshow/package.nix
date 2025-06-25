@@ -10,7 +10,6 @@
   lame,
   mjpegtools,
   sox,
-  transcode,
   vorbis-tools,
   runtimeShell,
 }:
@@ -24,7 +23,6 @@ let
     lame
     mjpegtools
     sox
-    transcode
     vorbis-tools
   ];
 

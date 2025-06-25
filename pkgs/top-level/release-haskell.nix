@@ -10,7 +10,7 @@
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
 */
 {
-  supportedSystems ? import ../../ci/supportedSystems.nix,
+  supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
 }:
 
 let
@@ -65,9 +65,6 @@ let
   released = with compilerNames; [
     ghc8107
     ghc902
-    ghc925
-    ghc926
-    ghc927
     ghc928
     ghc947
     ghc948
@@ -75,12 +72,15 @@ let
     ghc964
     ghc965
     ghc966
+    ghc967
     ghc981
     ghc982
     ghc983
     ghc984
     ghc9101
-    ghc9121
+    ghc9102
+    # exclude ghc9121 due to severe miscompilation bug
+    ghc9122
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -310,7 +310,6 @@ let
         happy
         haskell-ci
         haskell-language-server
-        hasura-graphql-engine
         hci
         hercules-ci-agent
         hinit
@@ -455,6 +454,7 @@ let
                 cabal2nix
                 terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
+                postgrest
                 ;
             };
 
@@ -467,6 +467,7 @@ let
                 cabal2nix
                 terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
+                postgrest
                 ;
             };
 
@@ -501,6 +502,16 @@ let
                   ghc
                   hello
                   microlens
+                  ;
+              };
+
+              haskell.packages.ghc912 = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc912)
+                  ghc
+                  hello
+                  microlens
+                  miso
+                  reflex-dom
                   ;
               };
 
@@ -554,16 +565,17 @@ let
         # work with older compilers.
         compilerNames.ghc8107
         compilerNames.ghc902
-        compilerNames.ghc925
-        compilerNames.ghc926
-        compilerNames.ghc927
         compilerNames.ghc928
         compilerNames.ghc947
         compilerNames.ghc948
       ] released;
-      Cabal_3_10_3_0 = released;
+      Cabal_3_10_3_0 = lib.subtractLists [
+        # time < 1.13 conflicts with time == 1.14.*
+        compilerNames.ghc9121
+        compilerNames.ghc9122
+      ] released;
       Cabal_3_12_1_0 = released;
-      Cabal_3_14_1_0 = released;
+      Cabal_3_14_2_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
@@ -572,12 +584,15 @@ let
         compilerNames.ghc8107
         # Support ceased as of 2.5.0.0
         compilerNames.ghc902
+        # Support ceased as of 2.10.0.0
+        compilerNames.ghc928
       ] released;
       hoogle = released;
       hlint = lib.subtractLists [
         compilerNames.ghc902
         compilerNames.ghc9101
-        compilerNames.ghc9121
+        compilerNames.ghc9102
+        compilerNames.ghc9122
       ] released;
       hpack = released;
       hsdns = released;
@@ -596,16 +611,22 @@ let
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
       ghc-source-gen = lib.subtractLists [
-        compilerNames.ghc9121
+        compilerNames.ghc9122
       ] released;
       ghc-tags = lib.subtractLists [
-        compilerNames.ghc9121
+        compilerNames.ghc9122
       ] released;
       hashable = released;
       primitive = released;
+      semaphore-compat = [
+        # Compiler < 9.8 don't have the semaphore-compat core package, but
+        # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
+        compilerNames.ghc966
+      ];
       weeder = lib.subtractLists [
         compilerNames.ghc9101
-        compilerNames.ghc9121
+        compilerNames.ghc9102
+        compilerNames.ghc9122
       ] released;
     })
     {
@@ -616,7 +637,7 @@ let
             Critical haskell packages that should work at all times,
             serves as minimum requirement for an update merge
           '';
-          maintainers = lib.teams.haskell.members;
+          teams = [ lib.teams.haskell ];
         };
         constituents = accumulateDerivations [
           # haskell specific tests
@@ -652,7 +673,7 @@ let
         name = "maintained-haskell-packages";
         meta = {
           description = "Aggregate jobset of all haskell packages with a maintainer";
-          maintainers = lib.teams.haskell.members;
+          teams = [ lib.teams.haskell ];
         };
         constituents = accumulateDerivations (
           builtins.map (name: jobs.haskellPackages."${name}") (maintainedPkgNames pkgs.haskellPackages)
@@ -671,16 +692,10 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc8107Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc925
-          jobs.pkgsMusl.haskell.compiler.ghc926
-          jobs.pkgsMusl.haskell.compiler.ghc927
           jobs.pkgsMusl.haskell.compiler.ghc928
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc927
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc928
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];

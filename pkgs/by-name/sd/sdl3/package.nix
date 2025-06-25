@@ -7,9 +7,8 @@
   cmake,
   darwinMinVersionHook,
   dbus,
-  fcitx5,
   fetchFromGitHub,
-  ibus,
+  ibusMinimal,
   installShellFiles,
   libGL,
   libayatana-appindicator,
@@ -34,6 +33,11 @@
   wayland-scanner,
   xorg,
   zenity,
+  # for passthru.tests
+  SDL_compat,
+  sdl2-compat,
+  sdl3-image,
+  sdl3-ttf,
   alsaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   dbusSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   drmSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
@@ -47,39 +51,51 @@
   libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   sndioSupport ? false,
   testSupport ? true,
-  waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  traySupport ? true,
+  waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
 }:
 
 assert lib.assertMsg (
   waylandSupport -> openglSupport
 ) "SDL3 requires OpenGL support to enable Wayland";
+assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to enable ibus";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.8";
+  version = "3.2.16";
 
-  outputs = [
-    "lib"
-    "dev"
-    "out"
-  ];
+  outputs =
+    [
+      "lib"
+      "dev"
+      "out"
+    ]
+    ++ lib.optionals testSupport [
+      "installedTests"
+    ];
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-BpNo8t0st8v2cTV2iSrjvjCPiDa26NwkWXgMGKFkeAQ=";
+    hash = "sha256-xFWE/i4l3sU1KritwbqvN67kJ3/WUfNP3iScMfQUbwA=";
   };
 
   postPatch =
     # Tests timeout on Darwin
+    # `testtray` loads assets from a relative path, which we are patching to be absolute
     lib.optionalString testSupport ''
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
+
+      substituteInPlace test/testtray.c \
+        --replace-warn '../test/' '${placeholder "installedTests"}/share/assets/'
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/video/wayland/SDL_waylandmessagebox.c \
+        --replace-fail '"zenity"' '"${lib.getExe zenity}"'
+      substituteInPlace src/dialog/unix/SDL_zenitydialog.c \
         --replace-fail '"zenity"' '"${lib.getExe zenity}"'
     '';
 
@@ -100,8 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
       apple-sdk_11
     ]
     ++ lib.optionals ibusSupport [
-      fcitx5
-      ibus
+      # sdl3 only uses some constants of the ibus headers
+      # it never actually loads the library
+      # thus, it also does not have to care about gtk integration,
+      # so using ibusMinimal avoids an unnecessarily large closure here.
+      ibusMinimal
     ]
     ++ lib.optional waylandSupport zenity;
 
@@ -110,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       libusb1
     ]
     ++ lib.optional (
-      stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin
+      stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin && traySupport
     ) libayatana-appindicator
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional dbusSupport dbus
@@ -157,11 +176,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "SDL_SNDIO" sndioSupport)
     (lib.cmakeBool "SDL_TEST_LIBRARY" testSupport)
+    (lib.cmakeBool "SDL_TRAY_DUMMY" (!traySupport))
     (lib.cmakeBool "SDL_WAYLAND" waylandSupport)
     (lib.cmakeBool "SDL_WAYLAND_LIBDECOR" libdecorSupport)
     (lib.cmakeBool "SDL_X11" x11Support)
 
     (lib.cmakeBool "SDL_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "SDL_INSTALL_TESTS" testSupport)
   ];
 
   doCheck = testSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -176,6 +197,12 @@ stdenv.mkDerivation (finalAttrs: {
       stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so"
     ) "-rpath ${lib.makeLibraryPath (finalAttrs.dlopenBuildInputs)}";
   };
+
+  postInstall = lib.optionalString testSupport ''
+    moveToOutput "share/installed-tests" "$installedTests"
+    moveToOutput "libexec/installed-tests" "$installedTests"
+    install -Dm 444 -t $installedTests/share/assets test/*.bmp
+  '';
 
   passthru = {
     # Building this in its own derivation to make sure the rpath hack above propagate to users
@@ -206,7 +233,15 @@ stdenv.mkDerivation (finalAttrs: {
     });
 
     tests =
-      {
+      SDL_compat.tests
+      // sdl2-compat.tests
+      // {
+        inherit
+          SDL_compat
+          sdl2-compat
+          sdl3-image
+          sdl3-ttf
+          ;
         pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
         inherit (finalAttrs.passthru) debug-text-example;
       }
@@ -228,6 +263,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ getchoo ];
+    teams = [ lib.teams.sdl ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sdl3" ];
   };

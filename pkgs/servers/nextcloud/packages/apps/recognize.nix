@@ -10,7 +10,7 @@
   ffmpeg-headless,
 
   # Current derivation only supports linux-x86_64 (contributions welcome, without libTensorflow builtin webassembly can be used)
-  useLibTensorflow ? stdenv.isx86_64 && stdenv.isLinux,
+  useLibTensorflow ? stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux,
 
   ncVersion,
 }:
@@ -25,11 +25,6 @@ let
       version = "8.2.0";
       appHash = "sha256-CAORqBdxNQ0x+xIVY2zI07jvsKHaa7eH0jpVuP0eSW4=";
       modelHash = "sha256-s8MQOLU490/Vr/U4GaGlbdrykOAQOKeWE5+tCzn6Dew=";
-    };
-    "29" = {
-      version = "7.1.0";
-      appHash = "sha256-qR4SrTHFAc4YWiZAsL94XcH4VZqYtkRLa0y+NdiFZus=";
-      modelHash = "sha256-M/j5wVOBLR7xMVJQWDUWAzLajRUBYEzHSNBsRSBUgfM=";
     };
   };
   currentVersionInfo =
@@ -108,7 +103,7 @@ stdenv.mkDerivation rec {
     # Install tfjs dependency
     export CPPFLAGS="-I${lib.getDev nodejs}/include/node -Ideps/include"
     cd node_modules/@tensorflow/tfjs-node
-    node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node
+    node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}
     cd -
 
     # Test tfjs returns exit code 0

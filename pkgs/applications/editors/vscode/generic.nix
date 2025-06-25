@@ -23,6 +23,7 @@
   wayland,
   libglvnd,
   libkrb5,
+  openssl,
 
   # Populate passthru.tests
   tests,
@@ -51,6 +52,8 @@
   sourceExecutableName ? executableName,
   useVSCodeRipgrep ? false,
   ripgrep,
+  hasVsceSign ? false,
+  patchVSCodePath ? true,
 }:
 
 stdenv.mkDerivation (
@@ -141,6 +144,7 @@ stdenv.mkDerivation (
           longName
           tests
           updateScript
+          vscodeVersion
           ;
         fhs = fhs { };
         fhsWithPackages = f: fhs { additionalPkgs = f; };
@@ -233,6 +237,11 @@ stdenv.mkDerivation (
     dontConfigure = true;
     noDumpEnvVars = true;
 
+    stripExclude = lib.optional hasVsceSign [
+      # vsce-sign is a single executable application built with Node.js, and it becomes non-functional if stripped
+      "lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
+    ];
+
     installPhase =
       ''
         runHook preInstall
@@ -255,9 +264,13 @@ stdenv.mkDerivation (
             mkdir -p "$out/share/pixmaps"
             cp "$out/lib/${libraryName}/resources/app/resources/linux/code.png" "$out/share/pixmaps/${iconName}.png"
 
+          ''
+          + (lib.optionalString patchVSCodePath ''
             # Override the previously determined VSCODE_PATH with the one we know to be correct
             sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}"
             grep -q "VSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}" # check if sed succeeded
+          '')
+          + ''
 
             # Remove native encryption code, as it derives the key from the executable path which does not work for us.
             # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
@@ -324,13 +337,20 @@ stdenv.mkDerivation (
           ''
       );
 
-    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf \
-        --add-needed ${libglvnd}/lib/libGLESv2.so.2 \
-        --add-needed ${libglvnd}/lib/libGL.so.1 \
-        --add-needed ${libglvnd}/lib/libEGL.so.1 \
-        $out/lib/${libraryName}/${executableName}
-    '';
+    postFixup = lib.optionalString stdenv.hostPlatform.isLinux (
+      ''
+        patchelf \
+          --add-needed ${libglvnd}/lib/libGLESv2.so.2 \
+          --add-needed ${libglvnd}/lib/libGL.so.1 \
+          --add-needed ${libglvnd}/lib/libEGL.so.1 \
+          $out/lib/${libraryName}/${executableName}
+      ''
+      + (lib.optionalString hasVsceSign ''
+        patchelf \
+          --add-needed ${lib.getLib openssl}/lib/libssl.so \
+          $out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign
+      '')
+    );
 
     inherit meta;
   }

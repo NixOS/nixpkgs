@@ -103,7 +103,7 @@ let
         homepage = "https://www.un4seen.com/";
         license = licenses.unfreeRedistributable;
         platforms = builtins.attrNames bass.so;
-        maintainers = with maintainers; [ jacekpoz ];
+        maintainers = with maintainers; [ poz ];
       };
     };
 

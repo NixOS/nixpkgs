@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-# use gprbuild-boot since gprbuild proper depends
-# on this xmlada derivation.
-, gprbuild-boot
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gnat,
+  # use gprbuild-boot since gprbuild proper depends
+  # on this xmlada derivation.
+  gprbuild-boot,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,4 +33,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

@@ -11,8 +11,9 @@
   cython,
   ninja,
   meson-python,
+  pyproject-metadata,
+  nix-update-script,
 
-  AppKit,
   fontconfig,
   freetype,
   libjpeg,
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "pygame-ce";
-  version = "2.5.3";
+  version = "2.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +40,7 @@ buildPythonPackage rec {
     owner = "pygame-community";
     repo = "pygame-ce";
     tag = version;
-    hash = "sha256-Vl9UwCknbMHdsB1wwo/JqybWz3UbAMegIcO0GpiCxig=";
+    hash = "sha256-OWC063N7G8t2ai/Qyz8DwP76BrFve5ZCbLD/mQwVbi4=";
     # Unicode files cause different checksums on HFS+ vs. other filesystems
     postFetch = "rm -rf $out/docs/reST";
   };
@@ -60,14 +61,16 @@ buildPythonPackage rec {
         ]) buildInputs
       );
     })
-    # Skip tests that should be disabled without video driver
-    ./skip-surface-tests.patch
+    # https://github.com/libsdl-org/sdl2-compat/issues/476
+    ./skip-rle-tests.patch
   ];
 
   postPatch =
     ''
+      # "pyproject-metadata!=0.9.1" was pinned due to https://github.com/pygame-community/pygame-ce/pull/3395
       # cython was pinned to fix windows build hangs (pygame-community/pygame-ce/pull/3015)
       substituteInPlace pyproject.toml \
+        --replace-fail '"pyproject-metadata!=0.9.1",' '"pyproject-metadata",' \
         --replace-fail '"meson<=1.7.0",' '"meson",' \
         --replace-fail '"meson-python<=0.17.1",' '"meson-python",' \
         --replace-fail '"ninja<=1.12.1",' "" \
@@ -93,6 +96,7 @@ buildPythonPackage rec {
     setuptools
     ninja
     meson-python
+    pyproject-metadata
   ];
 
   buildInputs = [
@@ -102,10 +106,10 @@ buildPythonPackage rec {
     libpng
     portmidi
     SDL2
-    SDL2_image
+    (SDL2_image.override { enableSTB = false; })
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  ];
 
   nativeCheckInputs = [
     numpy
@@ -128,6 +132,8 @@ buildPythonPackage rec {
     # No audio or video device in test environment
     export SDL_VIDEODRIVER=dummy
     export SDL_AUDIODRIVER=disk
+    # traceback for segfaults
+    export PYTHONFAULTHANDLER=1
   '';
 
   checkPhase = ''
@@ -152,6 +158,8 @@ buildPythonPackage rec {
     "pygame.sysfont"
     "pygame.version"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.tests = {
     inherit pygame-gui;

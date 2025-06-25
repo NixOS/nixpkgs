@@ -2,25 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  fontconfig,
+
+  # nativeBuildInputs
   cmake,
   doxygen,
+  graphviz,
+  scipy,
+
+  # buildInputs
   boost,
+
+  # propagatedBuildInputs
   eigen,
   jrl-cmakemodules,
   numpy,
-  scipy,
+
 }:
 
 buildPythonPackage rec {
   pname = "eigenpy";
-  version = "3.10.3";
+  version = "3.11.0";
   pyproject = false; # Built with cmake
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "eigenpy";
     tag = "v${version}";
-    hash = "sha256-bO1SwBMEopJTKKLhuLQnoAs1X5RPmnyV7fbb11S2doo=";
+    hash = "sha256-BCsEW7eXlCnVILaB+1j0rFDuCkJ6Rs2HJMzTqNsMfzs=";
   };
 
   outputs = [
@@ -31,14 +41,22 @@ buildPythonPackage rec {
 
   cmakeFlags = [
     "-DINSTALL_DOCUMENTATION=ON"
+    "-DBUILD_TESTING=ON"
     "-DBUILD_TESTING_SCIPY=ON"
   ];
 
   strictDeps = true;
 
+  # Fontconfig error: No writable cache directories
+  preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
+
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+
   nativeBuildInputs = [
     cmake
     doxygen
+    graphviz
     scipy
   ];
 
@@ -49,6 +67,8 @@ buildPythonPackage rec {
     jrl-cmakemodules
     numpy
   ];
+
+  preInstallCheck = "make test";
 
   pythonImportsCheck = [ "eigenpy" ];
 

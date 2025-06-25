@@ -2,9 +2,9 @@
   lib,
   mkCoqDerivation,
   coq,
-  mathcomp-algebra,
-  mathcomp-ssreflect,
+  mathcomp-boot,
   mathcomp-fingroup,
+  mathcomp-algebra,
   stdlib,
   version ? null,
 }:
@@ -21,32 +21,19 @@ mkCoqDerivation {
 
   defaultVersion =
     with lib.versions;
-    lib.switch
-      [ coq.coq-version mathcomp-algebra.version ]
-      [
-        {
-          cases = [
-            (range "8.16" "9.0")
-            (isGe "2.0.0")
-          ];
-          out = "1.5.0+2.0+8.16";
-        }
-        {
-          cases = [
-            (range "8.13" "8.20")
-            (range "1.12" "1.19.0")
-          ];
-          out = "1.3.0+1.12+8.13";
-        }
-        {
-          cases = [
-            (range "8.13" "8.16")
-            (range "1.12" "1.17.0")
-          ];
-          out = "1.1.0+1.12+8.13";
-        }
-      ]
-      null;
+    let
+      cmc = c: mc: [
+        c
+        mc
+      ];
+    in
+    lib.switch [ coq.coq-version mathcomp-algebra.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: cases: { inherit cases out; }) {
+        "1.5.0+2.0+8.16" = cmc (range "8.16" "9.0") (isGe "2.0.0");
+        "1.3.0+1.12+8.13" = cmc (range "8.13" "8.20") (range "1.12" "1.19.0");
+        "1.1.0+1.12+8.13" = cmc (range "8.13" "8.16") (range "1.12" "1.17.0");
+      }
+    )) null;
 
   release."1.0.0+1.12+8.13".sha256 = "1j533vx6lacr89bj1bf15l1a0s7rvrx4l00wyjv99aczkfbz6h6k";
   release."1.1.0+1.12+8.13".sha256 = "1plf4v6q5j7wvmd5gsqlpiy0vwlw6hy5daq2x42gqny23w9mi2pr";
@@ -54,8 +41,8 @@ mkCoqDerivation {
   release."1.5.0+2.0+8.16".sha256 = "sha256-boBYGvXdGFc6aPnjgSZYSoW4kmN5khtNrSV3DUv9DqM=";
 
   propagatedBuildInputs = [
+    mathcomp-boot
     mathcomp-algebra
-    mathcomp-ssreflect
     mathcomp-fingroup
     stdlib
   ];

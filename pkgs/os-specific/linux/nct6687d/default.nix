@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "nct6687d";
-  version = "0-unstable-2024-11-05";
+  version = "0-unstable-2025-06-19";
 
   src = fetchFromGitHub {
     owner = "Fred78290";
     repo = "nct6687d";
-    rev = "2f1a27a29f71797922c74afda6a39ce368e80356";
-    hash = "sha256-fnSy3C6R8SHlu+xB+1ID8m4Eqfgb2+2y3DkDlp3blVo=";
+    rev = "cd6a28196ceb98531a045eb279eb6179176cdc82";
+    hash = "sha256-brJigUwQwzLsMIvJdY1CehOdYub+dsh3u3ALIn496VU=";
   };
 
   setSourceRoot = ''

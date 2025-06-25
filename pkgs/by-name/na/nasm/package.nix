@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +40,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nasm.us/";
     description = "80x86 and x86-64 assembler designed for portability and modularity";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub willibutz ];
+    maintainers = with maintainers; [
+      pSub
+    ];
     license = licenses.bsd2;
   };
 }

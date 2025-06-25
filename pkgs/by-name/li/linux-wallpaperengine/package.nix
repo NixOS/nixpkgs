@@ -8,12 +8,9 @@
   glew,
   glfw,
   glm,
-  libGL,
   libpulseaudio,
-  libX11,
   libXau,
   libXdmcp,
-  libXext,
   libXpm,
   libXrandr,
   libXxf86vm,
@@ -23,115 +20,30 @@
   SDL2,
   SDL2_mixer,
   zlib,
-  fetchzip,
   wayland,
   wayland-protocols,
   egl-wayland,
   libffi,
   wayland-scanner,
-  glib,
-  nss,
-  nspr,
-  atk,
-  at-spi2-atk,
-  libdrm,
-  expat,
-  libxcb,
-  libxkbcommon,
-  libXcomposite,
-  libXdamage,
-  libXfixes,
-  libgbm,
-  gtk3,
-  pango,
-  cairo,
-  alsa-lib,
-  dbus,
-  at-spi2-core,
-  cups,
-  libxshmfence,
-  udev,
-  systemd,
+  cef-binary,
   libdecor,
   autoPatchelfHook,
 }:
+
 let
-  rpath = lib.makeLibraryPath [
-    glib
-    nss
-    nspr
-    atk
-    at-spi2-atk
-    libdrm
-    libGL
-    expat
-    libxcb
-    libxkbcommon
-    libX11
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXrandr
-    libgbm
-    gtk3
-    pango
-    cairo
-    alsa-lib
-    dbus
-    at-spi2-core
-    cups
-    libxshmfence
-    udev
-    systemd
-  ];
-  buildType = "Release";
-  selectSystem =
-    attrs:
-    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  arch = selectSystem {
-    aarch64-linux = "arm64";
-    x86_64-linux = "x64";
-  };
-  cef-bin-name = "cef_binary_120.1.10+g3ce3184+chromium-120.0.6099.129_linux${arch}";
-  cef-bin = stdenv.mkDerivation {
-    pname = "cef-bin";
-    version = "120.0.6099.129";
+  cef = cef-binary.overrideAttrs (oldAttrs: {
+    version = "120.1.10";
+    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
+    gitRevision = "3ce3184";
+    chromiumVersion = "120.0.6099.129";
 
-    src = fetchzip {
-      url = "https://cef-builds.spotifycdn.com/${
-        builtins.replaceStrings [ "+" ] [ "%2B" ] cef-bin-name
-      }.tar.bz2";
-      hash = selectSystem {
-        aarch64-linux = "sha256-2mOh3GWdx0qxsLRKVYXOJnVY0eqz6B3z9/B9A9Xfs/A=";
-        x86_64-linux = "sha256-FFkFMMkTSseLZIDzESFl8+h7wRhv5QGi1Uy5MViYpX8=";
-      };
-    };
-
-    installPhase = ''
-      runHook preInstall
-
-      cp --recursive --no-preserve=mode . $out
-      patchelf $out/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
-      patchelf $out/${buildType}/libGLESv2.so --set-rpath "${rpath}" --add-needed libGL.so.1
-      patchelf $out/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
-      sed 's/-O0/-O2/' -i $out/cmake/cef_variables.cmake
-
-      runHook postInstall
-    '';
-
-    meta = {
-      description = "Simple framework for embedding Chromium-based browsers in other applications";
-      homepage = "https://cef-builds.spotifycdn.com/index.html";
-      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-      license = lib.licenses.bsd3;
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
-      hydraPlatforms = [ "x86_64-linux" ]; # Hydra "aarch64-linux" fails with "Output limit exceeded"
-    };
-  };
+    srcHash =
+      {
+        aarch64-linux = "sha256-l0PSW4ZeLhfEauf1bez1GoLfu9cwXZzEocDlGI9yFsQ=";
+        x86_64-linux = "sha256-OdIVEy77tiYRfDWXgyceSstFqCNeZHswzkpw06LSnP0=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+  });
 in
 stdenv.mkDerivation rec {
   pname = "linux-wallpaperengine";
@@ -176,13 +88,13 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${buildType}"
-    "-DCEF_ROOT=${cef-bin}"
+    "-DCMAKE_BUILD_TYPE=${cef.buildType}"
+    "-DCEF_ROOT=${cef}"
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/app/linux-wallpaperengine"
   ];
 
   preFixup = ''
-    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:${cef-bin}" $out/app/linux-wallpaperengine/linux-wallpaperengine
+    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:${cef}" $out/app/linux-wallpaperengine/linux-wallpaperengine
     chmod 755 $out/app/linux-wallpaperengine/linux-wallpaperengine
     mkdir $out/bin
     ln -s $out/app/linux-wallpaperengine/linux-wallpaperengine $out/bin/linux-wallpaperengine

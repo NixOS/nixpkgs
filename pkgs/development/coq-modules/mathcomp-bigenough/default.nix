@@ -1,7 +1,7 @@
 {
   coq,
   mkCoqDerivation,
-  mathcomp,
+  mathcomp-boot,
   lib,
   version ? null,
 }:
@@ -23,18 +23,14 @@ mkCoqDerivation {
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch coq.version [
-      {
-        case = range "8.10" "9.0";
-        out = "1.0.2";
+    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: case: { inherit case out; }) {
+        "1.0.2" = range "8.10" "9.0";
+        "1.0.0" = range "8.5" "8.14";
       }
-      {
-        case = range "8.5" "8.14";
-        out = "1.0.0";
-      }
-    ] null;
+    )) null;
 
-  propagatedBuildInputs = [ mathcomp.ssreflect ];
+  propagatedBuildInputs = [ mathcomp-boot ];
 
   meta = {
     description = "Small library to do epsilon - N reasonning";

@@ -188,6 +188,7 @@ let
                         [ "--docker-image ${service.dockerImage}" ]
                         ++ optional service.dockerDisableCache "--docker-disable-cache"
                         ++ optional service.dockerPrivileged "--docker-privileged"
+                        ++ optional (service.dockerPullPolicy != null) "--docker-pull-policy ${service.dockerPullPolicy}"
                         ++ map (v: "--docker-volumes ${escapeShellArg v}") service.dockerVolumes
                         ++ map (v: "--docker-extra-hosts ${escapeShellArg v}") service.dockerExtraHosts
                         ++ map (v: "--docker-allowed-images ${escapeShellArg v}") service.dockerAllowedImages
@@ -480,6 +481,19 @@ in
               default = null;
               description = ''
                 Docker image to be used.
+              '';
+            };
+            dockerPullPolicy = mkOption {
+              type = types.nullOr (
+                types.enum [
+                  "always"
+                  "never"
+                  "if-not-present"
+                ]
+              );
+              default = null;
+              description = ''
+                Default pull-policy for Docker images
               '';
             };
             dockerVolumes = mkOption {

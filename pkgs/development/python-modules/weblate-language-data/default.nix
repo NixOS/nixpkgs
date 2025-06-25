@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "weblate-language-data";
-  version = "2025.3";
+  version = "2025.7";
   pyproject = true;
 
   src = fetchPypi {
     pname = "weblate_language_data";
     inherit version;
-    hash = "sha256-1uZqqwJds+Q2yL2OP2dEEbp4sJmJN28gOYDDJ3fhBRA=";
+    hash = "sha256-eDefK2g4EwJJttFHCNurOYifC2OXQXjRcqRT36nfLOc=";
   };
 
   build-system = [ setuptools ];

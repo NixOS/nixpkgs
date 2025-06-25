@@ -1,24 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
-, which
-, python3
-, rsync
-, wrapQtAppsHook
-, qtbase
-, qtpositioning
-, qtsvg
-, qtwayland
-, libGLU
-, libGL
-, zlib
-, icu
-, freetype
-, pugixml
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  which,
+  python3,
+  rsync,
+  wrapQtAppsHook,
+  qtbase,
+  qtpositioning,
+  qtsvg,
+  qtwayland,
+  libGLU,
+  libGL,
+  zlib,
+  icu,
+  freetype,
+  pugixml,
+  xorg,
+  nix-update-script,
 }:
 
 let
@@ -28,15 +30,16 @@ let
     rev = "30ecb0b3fe694a582edfacc2a7425b6f01f9fec6";
     hash = "sha256-1FF658OhKg8a5kKX/7TVmsxZ9amimn4lB6bX9i7pnI4=";
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "organicmaps";
-  version = "2025.03.02-7";
+  version = "2025.06.12-3";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     tag = "${finalAttrs.version}-android";
-    hash = "sha256-5WX+YDgu8Ll5+rZWWxfbNW0pBFz+2XWkw/ahM14Ml08=";
+    hash = "sha256-hOSa3soCDvRHUMKg+IYtzBdzJ9S5X5z3+Ynd5JJgLTs=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +48,7 @@ in stdenv.mkDerivation (finalAttrs: {
     echo "exit 0" > tools/unix/check_cert.sh
 
     # crude fix for https://github.com/organicmaps/organicmaps/issues/1862
-    echo "echo ${lib.replaceStrings ["." "-"] ["" ""] finalAttrs.version}" > tools/unix/version.sh
+    echo "echo ${lib.replaceStrings [ "." "-" ] [ "" "" ] finalAttrs.version}" > tools/unix/version.sh
 
     # TODO use system boost instead, see https://github.com/organicmaps/organicmaps/issues/5345
     patchShebangs 3party/boost/tools/build/src/engine/build.sh
@@ -76,6 +79,9 @@ in stdenv.mkDerivation (finalAttrs: {
     icu
     freetype
     pugixml
+    xorg.libXrandr
+    xorg.libXinerama
+    xorg.libXcursor
   ];
 
   # Yes, this is PRE configure. The configure phase uses cmake
@@ -85,18 +91,21 @@ in stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "-vr" "(.*)-android" ];
+      extraArgs = [
+        "-vr"
+        "(.*)-android"
+      ];
     };
   };
 
-  meta = with lib; {
+  meta = {
     # darwin: "invalid application of 'sizeof' to a function type"
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://organicmaps.app/";
     description = "Detailed Offline Maps for Travellers, Tourists, Hikers and Cyclists";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     mainProgram = "OMaps";
   };
 })

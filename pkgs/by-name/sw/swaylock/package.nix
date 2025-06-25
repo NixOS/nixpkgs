@@ -14,7 +14,7 @@
   gdk-pixbuf,
   pam,
   wrapGAppsNoGuiHook,
-  librsvg
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {

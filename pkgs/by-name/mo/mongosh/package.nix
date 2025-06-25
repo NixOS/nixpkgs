@@ -1,38 +1,59 @@
 {
   lib,
   buildNpmPackage,
-  fetchurl,
+  fetchFromGitHub,
   testers,
-  mongosh,
+  nix-update-script,
+  fetchpatch,
 }:
 
-let
-  source = lib.importJSON ./source.json;
-in
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "mongosh";
-  inherit (source) version;
+  version = "2.5.2";
 
-  src = fetchurl {
-    url = "https://registry.npmjs.org/mongosh/-/${source.filename}";
-    hash = source.integrity;
+  src = fetchFromGitHub {
+    owner = "mongodb-js";
+    repo = "mongosh";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0rol41XNdpfVRGY8KXFmQ0GHg5QqgnCaF21ZFyxfKeQ=";
   };
 
-  postPatch = ''
-    ln -s ${./package-lock.json} package-lock.json
+  npmDepsHash = "sha256-J4/CU+gdT/qecM1JwafLBewQjYdaONq/k4ax3Jw34XY=";
+
+  patches = [
+    ./disable-telemetry.patch
+
+    # For tagged version 2.5.2
+    (fetchpatch {
+      url = "https://github.com/mongodb-js/mongosh/commit/8e775b58b95f1d7c0a3de9c677e957a40213da6a.patch";
+      hash = "sha256-Q80QuzC7JN6uqyjk7YuUljXm+365AwYRV5cct9TefUc=";
+    })
+  ];
+
+  npmFlags = [
+    "--omit=optional"
+    "--ignore-scripts"
+  ];
+  npmBuildScript = "compile";
+  dontNpmInstall = true;
+  installPhase = ''
+    runHook preInstall
+    npmWorkspace=packages/mongosh npmInstallHook
+    cp -r packages configs $out/lib/node_modules/mongosh/
+    rm $out/lib/node_modules/mongosh/node_modules/@mongosh/docker-build-scripts # dangling symlink
+    runHook postInstall
   '';
-
-  npmDepsHash = source.deps;
-
-  makeCacheWritable = true;
-  dontNpmBuild = true;
-  npmFlags = [ "--omit=optional" ];
 
   passthru = {
     tests.version = testers.testVersion {
-      package = mongosh;
+      package = finalAttrs.finalPackage;
     };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   meta = {
@@ -42,4 +63,4 @@ buildNpmPackage {
     license = lib.licenses.asl20;
     mainProgram = "mongosh";
   };
-}
+})

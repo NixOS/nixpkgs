@@ -14,13 +14,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raspberrypi-eeprom";
-  version = "2025.02.12-2712";
+  version = "2025.05.08-2712";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FuOBjS/9gPj775ELE3CKh6wQfBQtnaIJy5I22pAG99M=";
+    hash = "sha256-y3tBYKFyFz7ft82+zWGT6HUXR3hrq3mYMqJeUSsAKtQ=";
   };
 
   buildInputs = [ python3 ];

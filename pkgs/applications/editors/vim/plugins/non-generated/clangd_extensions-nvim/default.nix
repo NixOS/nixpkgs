@@ -6,13 +6,13 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "clangd_extensions.nvim";
-  version = "unstable-2024-10-05";
+  version = "0-unstable-2025-01-27";
 
   src = fetchFromSourcehut {
     owner = "~p00f";
     repo = "clangd_extensions.nvim";
-    rev = "8f7b72100883e0e34400d9518d40a03f21e4d0a6";
-    hash = "sha256-N2YPu2Oa5KBkL8GSp9Al+rxhtNgu7YtxtMuy5BIcnOY=";
+    rev = "db28f29be928d18cbfb86fbfb9f83f584f658feb";
+    hash = "sha256-XdA638W0Zb85v5uAUNpvUiiQXGKOM2xykD2ClLk8Qpo=";
   };
 
   passthru.updateScript = nix-update-script { };

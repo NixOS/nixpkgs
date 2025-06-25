@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    target="$out/lib/dotnet/${finalAttrs.pname}"
+    target="$out/lib/dotnet/keepass"
     mkdir -p "$target"
 
     cp -rv $outputFiles "$target"

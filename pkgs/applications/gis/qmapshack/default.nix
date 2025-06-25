@@ -50,15 +50,15 @@ stdenv.mkDerivation rec {
     }"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Consumer grade GIS software";
     homepage = "https://github.com/Maproom/qmapshack";
     changelog = "https://github.com/Maproom/qmapshack/blob/V_${version}/changelog.txt";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       dotlambda
       sikmir
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "http://libcec.pulse-eight.com";
     license = lib.licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

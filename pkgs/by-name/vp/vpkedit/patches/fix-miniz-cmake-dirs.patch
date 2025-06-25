@@ -1,0 +1,28 @@
+--- a/src/shared/thirdparty/sourcepp/ext/miniz/miniz.pc.in
++++ b/src/shared/thirdparty/sourcepp/ext/miniz/miniz.pc.in
+@@ -1,13 +1,12 @@
+-prefix=@CMAKE_INSTALL_PREFIX@
+-exec_prefix=${prefix}
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@PROJECT_NAME@
+-
+-Name: @PROJECT_NAME@
+-Description: @PROJECT_DESCRIPTION@
+-Version: @MINIZ_VERSION@
+-URL: @PROJECT_HOMEPAGE_URL@
+-
+-Requires:
+-Libs: -L${libdir} -lminiz
+-Cflags: -I${includedir}
++prefix=@CMAKE_INSTALL_PREFIX@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@PROJECT_NAME@
++
++Name: @PROJECT_NAME@
++Description: @PROJECT_DESCRIPTION@
++Version: @MINIZ_VERSION@
++URL: @PROJECT_HOMEPAGE_URL@
++
++Requires:
++Libs: -L${libdir} -lminiz
++Cflags: -I${includedir}

@@ -50,6 +50,6 @@ buildGoModule rec {
     mainProgram = "pg_tileserv";
     homepage = "https://github.com/CrunchyData/pg_tileserv";
     license = licenses.asl20;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
   };
 }

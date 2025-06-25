@@ -1,9 +1,16 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   cfg = config.services.nginx.sso;
   format = pkgs.formats.yaml { };
   configPath = "/var/lib/nginx-sso/config.yaml";
-in {
+in
+{
   options.services.nginx.sso = {
     enable = lib.mkEnableOption "nginx-sso service";
 
@@ -11,7 +18,7 @@ in {
 
     configuration = lib.mkOption {
       type = format.type;
-      default = {};
+      default = { };
       example = lib.literalExpression ''
         {
           listen = { addr = "127.0.0.1"; port = 8080; };

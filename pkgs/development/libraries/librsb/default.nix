@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "librsb";
-  version = "1.2.0.10";
+  version = "1.3.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7Enz94p8Q/yeEJdlk9EAqkmxhjMJ7Y+jzLt6rVLS97g=";
+    sha256 = "sha256-GMb8RD+hz9KoEQ99S4jVu8tJO56Fs6YgFLi7V6hI4E8=";
   };
 
   # The default configure flags are still present when building
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   ];
   checkTarget = "tests";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://librsb.sourceforge.net/";
     description = "Shared memory parallel sparse matrix and sparse BLAS library";
     longDescription = ''
@@ -94,10 +94,10 @@ stdenv.mkDerivation rec {
       Contains libraries and header files for developing applications that
       want to make use of librsb.
     '';
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ KarlJoad ];
-    platforms = platforms.all;
-    # ./rsb_common.h:56:10: fatal error: 'omp.h' file not found
-    broken = stdenv.hostPlatform.isDarwin;
+    license = with lib.licenses; [ lgpl3Plus ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
+    platforms = lib.platforms.all;
+    # linking errors such as 'undefined reference to `gzungetc'
+    broken = true;
   };
 }

@@ -42,9 +42,12 @@ way to test Fish plugins and scripts without having to alter the environment.
 
 ```nix
 wrapFish {
-  pluginPkgs = with fishPlugins; [ pure foreign-env ];
-  completionDirs = [];
-  functionDirs = [];
+  pluginPkgs = with fishPlugins; [
+    pure
+    foreign-env
+  ];
+  completionDirs = [ ];
+  functionDirs = [ ];
   confDirs = [ "/path/to/some/fish/init/dir/" ];
 }
 ```

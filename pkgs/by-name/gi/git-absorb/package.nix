@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-absorb";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "tummychow";
     repo = "git-absorb";
     tag = version;
-    hash = "sha256-fn4xeXlYl8xB/wjpt7By9tATzb5t58jcuwfqw0tNH7M=";
+    hash = "sha256-O9bJMYhIyCtztswvL0JQ4ZtsAAI9TlHzWDeGdTHEmP4=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-PC040PtMK0OUS4zlLoHPcSzgEw5H3kndnVuyME/jEz4=";
+  cargoHash = "sha256-QBZItmKH9b2KwHR88MotyIT2krZl5QQFLvUmPmbxl4U=";
 
   nativeCheckInputs = [
     gitMinimal
@@ -52,7 +52,6 @@ rustPlatform.buildRustPackage rec {
     description = "git commit --fixup, but automatic";
     license = [ licenses.bsd3 ];
     maintainers = with maintainers; [
-      tomfitzhenry
       matthiasbeyer
     ];
     mainProgram = "git-absorb";

@@ -86,7 +86,7 @@ in
 
       user = lib.mkOption {
         description = ''
-          The group under which attic runs.
+          The user under which attic runs.
         '';
         type = types.str;
         default = "atticd";
@@ -94,7 +94,7 @@ in
 
       group = lib.mkOption {
         description = ''
-          The user under which attic runs.
+          The group under which attic runs.
         '';
         type = types.str;
         default = "atticd";

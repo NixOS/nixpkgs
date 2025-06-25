@@ -6,8 +6,6 @@
   pkg-config,
   qtwayland,
   freerdp,
-  wayland,
-  wayland-protocols,
 }:
 mkKdeDerivation {
   pname = "krdp";
@@ -22,7 +20,5 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtwayland
     freerdp
-    wayland
-    wayland-protocols
   ];
 }

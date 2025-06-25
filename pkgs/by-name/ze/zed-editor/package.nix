@@ -43,6 +43,7 @@
 
   withGLES ? false,
   buildRemoteServer ? true,
+  zed-editor,
 }:
 
 assert withGLES -> stdenv.hostPlatform.isLinux;
@@ -98,7 +99,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.178.5";
+  version = "0.191.9";
 
   outputs =
     [ "out" ]
@@ -110,7 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YkoIOBoR5hMt99D1bJ1yWLv7C/rY6VKC5J/7c5SMUFs=";
+    hash = "sha256-QdRksW2T8gzyPhqd4jIUfuVmcXh3j7yIah5TGqHNxNM=";
   };
 
   patches = [
@@ -118,9 +119,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # but builds fine with our standard linker.
     # This patch removes their linker override from the cargo config.
     ./0001-linux-linker.patch
+  ];
 
-    # See https://github.com/zed-industries/zed/pull/21661#issuecomment-2524161840
-    "script/patches/use-cross-platform-livekit.patch"
+  cargoPatches = [
+    ./0002-fix-duplicate-reqwest.patch
   ];
 
   postPatch =
@@ -128,15 +130,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
       substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
         --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
-    ''
-    # nixpkgs ships cargo-about 0.7, which is a seamless upgrade from 0.6
-    + ''
-      substituteInPlace script/generate-licenses \
-        --replace-fail 'CARGO_ABOUT_VERSION="0.6"' 'CARGO_ABOUT_VERSION="0.7"'
+
+      # Zed team renamed the function but forgot to update its usage in this file
+      # We rename it ourselves for now, until upstream fixes the issue
+      substituteInPlace $cargoDepsCopy/reqwest-0.12*/src/blocking/client.rs \
+        --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
     '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xJaiHngsm74RdcEUXaDrc/Hwy4ywZrEiJt7JYTc/NpM=";
+  cargoHash = "sha256-Cvj2fit1nxgbxOLK7wUdqkLJpECVB5uwUKyWmjNFygU=";
 
   nativeBuildInputs =
     [
@@ -327,7 +329,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         };
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        withGles = finalAttrs.finalPackage.override { withGLES = true; };
+        withGles = zed-editor.override { withGLES = true; };
       };
   };
 

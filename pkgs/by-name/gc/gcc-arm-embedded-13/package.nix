@@ -3,9 +3,11 @@
   stdenv,
   fetchurl,
   ncurses5,
-  python39,
   libxcrypt-legacy,
-  runtimeShell,
+  xz,
+  zstd,
+  makeBinaryWrapper,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +36,17 @@ stdenv.mkDerivation rec {
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
+  patches = [
+    # fix double entry in share/info/porting.info
+    # https://github.com/NixOS/nixpkgs/issues/363902
+    ./info-fix.patch
+  ];
+
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    makeBinaryWrapper
+    darwin.sigtool
+  ];
+
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
@@ -42,34 +55,36 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -r * $out
+    # these binaries require ancient Python 3.8 not available in Nixpkgs
+    rm $out/bin/{arm-none-eabi-gdb-py,arm-none-eabi-gdb-add-index-py} || :
   '';
 
-  preFixup = ''
-    find $out -type f | while read f; do
-      patchelf "$f" > /dev/null 2>&1 || continue
-      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
-      patchelf --set-rpath ${
-        lib.makeLibraryPath [
-          "$out"
-          stdenv.cc.cc
-          ncurses5
-          python39
-          libxcrypt-legacy
-        ]
-      } "$f" || true
-    done
-  '';
-
-  postFixup = ''
-    mv $out/bin/arm-none-eabi-gdb $out/bin/arm-none-eabi-gdb-unwrapped
-    cat <<EOF > $out/bin/arm-none-eabi-gdb
-    #!${runtimeShell}
-    export PYTHONPATH=${python39}/lib/python3.9
-    export PYTHONHOME=${python39.interpreter}
-    exec $out/bin/arm-none-eabi-gdb-unwrapped "\$@"
-    EOF
-    chmod +x $out/bin/arm-none-eabi-gdb
-  '';
+  preFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      find $out -type f | while read f; do
+        patchelf "$f" > /dev/null 2>&1 || continue
+        patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
+        patchelf --set-rpath ${
+          lib.makeLibraryPath [
+            "$out"
+            stdenv.cc.cc
+            ncurses5
+            libxcrypt-legacy
+          ]
+        } "$f" || true
+      done
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+      find "$out" -executable -type f | while read executable; do
+        ( \
+          install_name_tool \
+            -change "/usr/local/opt/zstd/lib/libzstd.1.dylib" "${lib.getLib zstd}/lib/libzstd.1.dylib" \
+            -change "/usr/local/opt/xz/lib/liblzma.5.dylib" "${lib.getLib xz}/lib/liblzma.5.dylib" \
+            "$executable" \
+          && codesign -f -s - "$executable" \
+        ) || true
+      done
+    '';
 
   meta = with lib; {
     description = "Pre-built GNU toolchain from ARM Cortex-M & Cortex-R processors";

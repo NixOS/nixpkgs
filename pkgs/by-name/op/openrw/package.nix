@@ -16,6 +16,7 @@
   libGL,
   libGLU,
   libmad,
+  libX11,
   openal,
 
   unstableGitUpdater,
@@ -52,6 +53,7 @@ stdenv.mkDerivation {
     libGL
     libGLU
     libmad
+    libX11
     openal
   ];
 

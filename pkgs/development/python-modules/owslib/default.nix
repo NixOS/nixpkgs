@@ -4,6 +4,7 @@
   fetchFromGitHub,
   lxml,
   pytest-cov-stub,
+  pytest-httpserver,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.32.1";
+  version = "0.34.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "geopython";
     repo = "OWSLib";
     tag = version;
-    hash = "sha256-yQ/QDTTZLgBoTpa+ssvVPvDotBo6HXMvM2ZgTtbzOcA=";
+    hash = "sha256-eLSODYal9rcualQrM03/hwLBngty+9fIlPIJh1EZduA=";
   };
 
   postPatch = ''
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-cov-stub
+    pytest-httpserver
     pytestCheckHook
   ];
 
@@ -68,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://www.osgeo.org/projects/owslib/";
     changelog = "https://github.com/geopython/OWSLib/releases/tag/${src.tag}";
     license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
   };
 }

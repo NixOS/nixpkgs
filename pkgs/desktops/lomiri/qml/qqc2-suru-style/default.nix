@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Only
       cc-by-sa-30
     ];
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.unix;
   };
 })

@@ -3,7 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  darwin,
   git,
 }:
 
@@ -21,11 +20,6 @@ rustPlatform.buildRustPackage {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-tA0WjghBB2K71IlZ1u9K67tZWGe9VNFOfI2YdrqCUw0=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=tests::wait_if_index_lock_is_present"
@@ -48,7 +42,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = {
-    description = "A simple git wrapper that waits until index.lock file is removed when present before running the command";
+    description = "Simple git wrapper that waits until index.lock file is removed when present before running the command";
     homepage = "https://github.com/darshanparajuli/git-wait";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];

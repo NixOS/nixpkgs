@@ -1,0 +1,57 @@
+--- a/src/nerofs.cpp
++++ b/src/nerofs.cpp
+@@ -173,31 +173,19 @@
+ 
+ QString NeroFS::GetIcoextract()
+ {
+-    // TODO: this is for flexibility in sandboxed environments(?)
+-    // idk what the "good" path should be for Flatpak, so...
+-    if(QDir("/usr/bin").exists("icoextract")) {
+-        return "/usr/bin/icoextract";
+-    } else return "";
++    return QStandardPaths::findExecutable("icoextract");
+ }
+ 
+ 
+ QString NeroFS::GetIcoutils()
+ {
+-    // TODO: this is for flexibility in sandboxed environments(?)
+-    // idk what the "good" path should be for Flatpak, so...
+-    if(QDir("/usr/bin").exists("icotool")) {
+-        return "/usr/bin/icotool";
+-    } else return "";
++    return QStandardPaths::findExecutable("icotool");
+ }
+ 
+ 
+ QString NeroFS::GetUmU()
+ {
+-    // TODO: this is for flexibility in sandboxed environments(?)
+-    // idk what the "good" path should be for Flatpak, so...
+-    if(QDir("/usr/bin").exists("umu-run")) {
+-        return "/usr/bin/umu-run";
+-    } else return "";
++    return QStandardPaths::findExecutable("umu-run");
+ }
+ 
+ QString NeroFS::GetWinetricks(const QString &runner)
+@@ -207,17 +195,13 @@
+             return protonsPath.path() + '/' + runner + "/protonfixes/winetricks";
+         else {
+             // fall back to system winetricks
+-            if(QDir("/usr/bin").exists("winetricks"))
+-                return "/usr/bin/winetricks";
+-            else return "";
++            return QStandardPaths::findExecutable("winetricks");
+         }
+     } else if(QDir(protonsPath.path() + '/' + currentRunner + "/protonfixes").exists("winetricks"))
+         return protonsPath.path() + '/' + currentRunner + "/protonfixes/winetricks";
+     else {
+         // fall back to system winetricks
+-        if(QDir("/usr/bin").exists("winetricks"))
+-            return "/usr/bin/winetricks";
+-        else return "";
++        return QStandardPaths::findExecutable("winetricks");
+     }
+ }
+ 

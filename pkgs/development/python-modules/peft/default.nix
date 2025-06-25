@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   setuptools,
@@ -30,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "peft";
-  version = "0.15.0";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "peft";
     tag = "v${version}";
-    hash = "sha256-vR0FoBDsSMQiSGgqMegPqPvDgq00fqF7d+jKvqgeCAg=";
+    hash = "sha256-c9oHBQCdJpPAeI7xwePXx75Sp39I8QVjRZSxxSOm2PM=";
   };
 
   build-system = [ setuptools ];
@@ -68,6 +69,11 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [ "tests" ];
+
+  # These tests fail when MPS devices are detected
+  disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
+    "gpu"
+  ];
 
   disabledTestPaths = [
     # ValueError: Can't find 'adapter_config.json'
@@ -101,12 +107,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/huggingface/peft";
     description = "State-of-the art parameter-efficient fine tuning";
-    changelog = "https://github.com/huggingface/peft/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/peft/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
-    badPlatforms = [
-      # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

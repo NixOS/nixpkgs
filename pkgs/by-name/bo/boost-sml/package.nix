@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "boost-sml";
-  version = "1.1.11";
+  version = "1.1.12";
 
   src = fetchFromGitHub {
     owner = "boost-ext";
     repo = "sml";
     rev = "v${version}";
-    hash = "sha256-/eR/B8rE+mh5zDPjx1kS9nVJf1rCeHP04QDavh6z6fM=";
+    hash = "sha256-IvZwkhZe9pcyJhZdn4VkWMRUN6Ow8qs3zB6JtWb5pKk=";
   };
 
   buildInputs = [ boost ];

@@ -20,7 +20,7 @@
   defaultCrateOverrides ? pkgs.defaultCrateOverrides,
   # The features to enable for the root_crate or the workspace_members.
   rootFeatures ? [ "default" ],
-  # If true, throw errors instead of issueing deprecation warnings.
+  # If true, throw errors instead of issuing deprecation warnings.
   strictDeprecation ? false,
   # Used for conditional compilation based on CPU feature detection.
   targetFeatures ? [ ],
@@ -4485,9 +4485,9 @@ rec {
         runTests ? false,
         testCrateFlags ? [ ],
         testInputs ? [ ],
-        # Any command to run immediatelly before a test is executed.
+        # Any command to run immediately before a test is executed.
         testPreRun ? "",
-        # Any command run immediatelly after a test is executed.
+        # Any command run immediately after a test is executed.
         testPostRun ? "",
       }:
       lib.makeOverridable

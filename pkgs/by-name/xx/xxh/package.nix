@@ -12,8 +12,8 @@ python3.pkgs.buildPythonApplication rec {
   disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "xxh";
+    repo = "xxh";
     tag = version;
     hash = "sha256-Y1yTn0lZemQgWsW9wlW+aNndyTXGo46PCbCl0TGYspQ=";
   };

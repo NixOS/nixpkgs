@@ -1,9 +1,16 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  ...
+}:
 {
   name = "send";
 
   meta = {
-    maintainers = with lib.maintainers; [ moraxyc ];
+    maintainers = with lib.maintainers; [
+      moraxyc
+      MrSom3body
+    ];
   };
 
   nodes.machine =

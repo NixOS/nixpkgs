@@ -46,6 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tools for decoding digital ham communication";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = lib.teams.c3d2.members;
+    teams = [ lib.teams.c3d2 ];
   };
 })

@@ -19,7 +19,12 @@ lib.extendMkDerivation {
             foundMakefile=1
           fi
 
-          emacs -l package -f package-initialize -L . --batch -f batch-byte-compile *.el
+          emacs -l package -f package-initialize \
+            --eval "(setq byte-compile-debug ${if finalAttrs.ignoreCompilationError then "nil" else "t"})" \
+            --eval "(setq byte-compile-error-on-warn ${
+              if finalAttrs.turnCompilationWarningToError then "t" else "nil"
+            })" \
+            -L . --batch -f batch-byte-compile *.el
 
           runHook postBuild
         '';

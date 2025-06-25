@@ -13,15 +13,13 @@ if [[ $# -gt 1 || $1 == -* ]]; then
     exit 1
 fi
 
-set -x
-
 cd "$(dirname "$0")"
 version="$1"
 
 set -euo pipefail
 
 if [ -z "$version" ]; then
-    version="$(wget -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/woodpecker-ci/woodpecker/releases?per_page=1" | jq -r '.[0].tag_name')"
+    version="$(wget -q -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/woodpecker-ci/woodpecker/releases?per_page=1" | jq -r '.[0].tag_name')"
 fi
 
 # strip leading "v"

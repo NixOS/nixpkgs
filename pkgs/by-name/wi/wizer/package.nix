@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wizer";
-  version = "8.0.0";
+  version = "9.0.0";
 
   # the crate does not contain files which are necessary for the tests
   # see https://github.com/bytecodealliance/wizer/commit/3a95e27ce42f1fdaef07b52988e4699eaa221e04
@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
     owner = "bytecodealliance";
     repo = "wizer";
     tag = "v${version}";
-    hash = "sha256-NaYHrjm5CGPWT5Pa1EdXS9fswj5NDWQye2pBQk+PKuk=";
+    hash = "sha256-q7v5LH3dp7qtgQJ3Ovt0fPP5r82cHghX6925TLfmn3o=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-OI7/PLP0Au7FrQ9KUTBTSE9r8kJBA3gbcHe060KALHw=";
+  cargoHash = "sha256-5P8rkwKAVPEJnpk6M7lH6hBOPV1q4+aIghJBbjas4fE=";
 
   cargoBuildFlags = [
     "--bin"

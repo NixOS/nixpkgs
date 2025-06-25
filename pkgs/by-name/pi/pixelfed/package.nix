@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, php
-, nixosTests
-, nix-update-script
-, dataDir ? "/var/lib/pixelfed"
-, runtimeDir ? "/run/pixelfed"
+{
+  lib,
+  fetchFromGitHub,
+  php,
+  nixosTests,
+  nix-update-script,
+  dataDir ? "/var/lib/pixelfed",
+  runtimeDir ? "/run/pixelfed",
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -22,7 +23,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   postInstall = ''
     chmod -R u+w $out/share
-    mv "$out/share/php/${finalAttrs.pname}"/* $out
+    mv "$out/share/php/pixelfed"/* $out
     rm -R $out/bootstrap/cache
     # Move static contents for the NixOS module to pick it up, if needed.
     mv $out/bootstrap $out/bootstrap-static

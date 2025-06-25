@@ -10,13 +10,13 @@
   strip-nondeterminism,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wireworld";
   version = "unstable-2023-05-09";
 
   src = fetchFromGitLab {
     owner = "blinry";
-    repo = pname;
+    repo = "wireworld";
     rev = "03b82bf5d604d6d4ad3c07b224583de6c396fd17";
     hash = "sha256-8BshnGLuA8lmG9g7FU349DWKP/fZvlvjrQBau/LSJ4E=";
   };
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "Wireworld";
-      exec = pname;
+      exec = "wireworld";
       comment = "";
       desktopName = "Wireworld";
       genericName = "Wireworld";

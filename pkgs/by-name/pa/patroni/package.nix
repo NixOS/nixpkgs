@@ -5,17 +5,18 @@
   versionCheckHook,
   nixosTests,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "patroni";
-  version = "4.0.5";
+  version = "4.0.6";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = "patroni";
     tag = "v${version}";
-    sha256 = "sha256-1Afwdv1kX8/zc9TB4kbA2NakXycJlf/wUcYAYKWwITM=";
+    sha256 = "sha256-8EodiPVmdDekdsTbv+23ZLHZd8+BQ5v5sQf/SyM1b7Y=";
   };
 
   dependencies = with python3Packages; [
@@ -43,14 +44,12 @@ python3Packages.buildPythonApplication rec {
     flake8
     mock
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     requests
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = [ "--version" ];
-
-  # Fix tests by preventing them from writing to /homeless-shelter.
-  preCheck = "export HOME=$(mktemp -d)";
+  versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 
@@ -66,6 +65,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/patroni/patroni/blob/v${version}/docs/releases.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = lib.teams.deshaw.members;
+    teams = [ lib.teams.deshaw ];
   };
 }

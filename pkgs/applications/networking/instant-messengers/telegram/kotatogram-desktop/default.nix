@@ -60,18 +60,18 @@ telegram-desktop.override {
       })
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Kotatogram – experimental Telegram Desktop fork";
       longDescription = ''
         Unofficial desktop client for the Telegram messenger, based on Telegram Desktop.
 
         It contains some useful (or purely cosmetic) features, but they could be unstable. A detailed list is available here: https://kotatogram.github.io/changes
       '';
-      license = licenses.gpl3Only;
-      platforms = platforms.all;
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.all;
       homepage = "https://kotatogram.github.io";
       changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k${version}";
-      maintainers = with maintainers; [ ilya-fedin ];
+      maintainers = with lib.maintainers; [ ilya-fedin ];
       mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
     };
   };

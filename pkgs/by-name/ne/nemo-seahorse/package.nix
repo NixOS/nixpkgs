@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
           libcryptui
         ];
 
-        services.xserver.desktopManager.gnome.extraGSettingsOverridePackages = with pkgs; [
+        services.desktopManager.gnome.extraGSettingsOverridePackages = with pkgs; [
           nemo
           gcr
           libcryptui
@@ -85,6 +85,6 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.cinnamon.members;
+    teams = [ lib.teams.cinnamon ];
   };
 }

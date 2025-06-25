@@ -5,7 +5,6 @@
   postgresql,
   postgresqlBuildExtension,
   postgresqlTestExtension,
-  stdenv,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

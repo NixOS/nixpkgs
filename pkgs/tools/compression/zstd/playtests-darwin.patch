@@ -1,11 +1,10 @@
 --- a/tests/playTests.sh
 +++ b/tests/playTests.sh
-@@ -112,29 +112,19 @@ case "$OS" in
+@@ -119,16 +119,10 @@ case "$OS" in
  esac
  
  case "$UNAME" in
 -  Darwin) MD5SUM="md5 -r" ;;
--  FreeBSD) MD5SUM="gmd5sum" ;;
 -  NetBSD) MD5SUM="md5 -n" ;;
 -  OpenBSD) MD5SUM="md5" ;;
    *) MD5SUM="md5sum" ;;
@@ -18,9 +17,7 @@
  
  assertSameMTime() {
      MT1=$($MTIME "$1")
-     MT2=$($MTIME "$2")
-     echo MTIME $MT1 $MT2
-     [ "$MT1" = "$MT2" ] || die "mtime on $1 doesn't match mtime on $2 ($MT1 != $MT2)"
+@@ -138,9 +132,6 @@ assertSameMTime() {
  }
  
  GET_PERMS="stat -c %a"
@@ -30,7 +27,7 @@
  
  assertFilePermissions() {
      STAT1=$($GET_PERMS "$1")
-@@ -967,7 +957,6 @@ $MD5SUM dirTestDict/* > tmph1
+@@ -1155,7 +1146,6 @@ $MD5SUM dirTestDict/* > tmph1
  zstd -f --rm dirTestDict/* -D tmpDictC
  zstd -d --rm dirTestDict/*.zst -D tmpDictC  # note : use internal checksum by default
  case "$UNAME" in

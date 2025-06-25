@@ -197,7 +197,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
-  version = "257.3";
+  version = "257.6";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-GvRn55grHWR6M+tA86RMzqinuXNpPZzRB4ApuGN/ZvU=";
+    hash = "sha256-Myb/ra7NQTDzN7B9jn8svbhTrLSfiqWaSxREe/nDyYo=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -246,9 +246,14 @@ stdenv.mkDerivation (finalAttrs: {
       ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
       ./0017-meson.build-do-not-create-systemdstatedir.patch
       ./0018-Revert-bootctl-update-list-remove-all-instances-of-s.patch # https://github.com/systemd/systemd/issues/33392
+      # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
+      # if the install prefix is not /usr, but that does not work for us
+      # because we include the config snippet manually
+      ./0019-meson-Don-t-link-ssh-dropins.patch
+      ./0020-install-unit_file_exists_full-follow-symlinks.patch
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-      ./0019-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+      ./0021-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isMusl (
       let
@@ -331,11 +336,13 @@ stdenv.mkDerivation (finalAttrs: {
     [
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
       "trivialautovarinit"
-      # breaks clang -target bpf; should be fixed to filter target?
     ]
     ++ (lib.optionals withLibBPF [
+      # breaks clang -target bpf; should be fixed to not use
+      # a wrapped clang?
       "zerocallusedregs"
       "shadowstack"
+      "pacret"
     ]);
 
   nativeBuildInputs =
@@ -496,8 +503,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
 
       # SSH
-      # Disabled for now until someone makes this work.
-      (lib.mesonOption "sshconfdir" "no")
+      (lib.mesonOption "sshconfdir" "")
       (lib.mesonOption "sshdconfdir" "no")
 
       # Features
@@ -785,7 +791,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  doCheck = false; # fails a bunch of tests
+  doCheck = true;
 
   # trigger the test -n "$DESTDIR" || mutate in upstreams build system
   preInstall = ''
@@ -829,6 +835,20 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString withSysusers ''
       mv $out/lib/sysusers.d $out/example
     '';
+
+  doInstallCheck = true;
+
+  # check udev rules exposed by systemd
+  # can't use `udevCheckHook` here as that would introduce infinite recursion
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ${lib.optionalString (
+      !buildLibsOnly
+    ) "$out/bin/udevadm verify --resolve-names=never --no-style $out/lib/udev/rules.d"}
+
+    runHook postInstallCheck
+  '';
 
   # Avoid *.EFI binary stripping.
   # At least on aarch64-linux strip removes too much from PE32+ files:
@@ -1031,10 +1051,7 @@ stdenv.mkDerivation (finalAttrs: {
       ofl
       publicDomain
     ];
-    maintainers = with lib.maintainers; [
-      flokli
-      kloenk
-    ];
+    teams = [ lib.teams.systemd ];
     pkgConfigModules = [
       "libsystemd"
       "libudev"

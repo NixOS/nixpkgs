@@ -35,7 +35,7 @@ The following derivation will construct a flat-file binary cache containing the 
 ```nix
 { mkBinaryCache, hello }:
 mkBinaryCache {
-  rootPaths = [hello];
+  rootPaths = [ hello ];
 }
 ```
 

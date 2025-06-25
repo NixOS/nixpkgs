@@ -8,7 +8,6 @@
 
   # dependencies
   chex,
-  coveralls,
   equinox,
   jax,
   jaxtyping,
@@ -22,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "flowmc";
-  version = "0.4.0";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kazewong";
     repo = "flowMC";
     tag = "flowMC-${version}";
-    hash = "sha256-ambi2BMFjWAggeJ3PdlRpdKVmZeePe5LbvuKzCgNV/k=";
+    hash = "sha256-hyrsL8agY+bNcRcEmgEtv97cFROgeLFxxtKTfx0HoH8=";
   };
 
   build-system = [ hatchling ];
@@ -48,7 +47,6 @@ buildPythonPackage rec {
 
   dependencies = [
     chex
-    coveralls
     equinox
     jax
     jaxtyping

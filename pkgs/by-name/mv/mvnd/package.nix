@@ -1,5 +1,4 @@
 {
-  darwin,
   fetchFromGitHub,
   graalvmPackages,
   installShellFiles,
@@ -20,6 +19,7 @@ let
     x86_64-darwin = "darwin-amd64";
     x86_64-linux = "linux-amd64";
   };
+  inherit (platformMap.${stdenv.system}) os arch;
 in
 
 maven.buildMavenPackage rec {
@@ -31,16 +31,17 @@ maven.buildMavenPackage rec {
     rev = version;
     sha256 = "sha256-c1jD7m4cOdPWQEoaUMcNap2zvvX7H9VaWQv8JSgAnRU=";
   };
+  patches = [ ./patches/0001-update-groovy-for-compatibility-with-Java-24.patch ];
 
   # need graalvm at build-time for the `native-image` tool
   mvnJdk = graalvmPackages.graalvm-ce;
-  mvnHash = "sha256-Bx0XSnpHNxNX07uVPc18py9qbnG5b3b7J4vs44ty034=";
+  mvnHash = "sha256-/Ful6v3hfm+0aa0vBQhqMK6VE+93L3o7pwZ6wmeXzQY=";
 
   nativeBuildInputs = [
     graalvmPackages.graalvm-ce
     installShellFiles
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk_11_0.frameworks.Foundation ];
+  ];
 
   mvnDepsParameters = mvnParameters;
   mvnParameters = lib.concatStringsSep " " [
@@ -99,10 +100,10 @@ maven.buildMavenPackage rec {
     });
 
   meta = {
-    description = "The Apache Maven Daemon";
+    description = "Apache Maven Daemon";
     homepage = "https://maven.apache.org/";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    platforms = builtins.attrNames platformMap;
     maintainers = with lib.maintainers; [ nathanregner ];
     mainProgram = "mvnd";
   };

@@ -3,6 +3,9 @@
 # shellcheck shell=bash
 
 set -Eeuo pipefail
+shopt -s inherit_errexit
+
+trap 'exit 1' ERR
 
 rids=({linux-{,musl-}{arm,arm64,x64},osx-{arm64,x64},win-{arm64,x64,x86}})
 
@@ -25,7 +28,7 @@ release_platform_attr () {
     local platform="$2"
     local attr="$3"
 
-    jq -er '.[] | select((.rid == "'"$platform"'") and (.name | contains("composite") | not)) | ."'"$attr"'"' <<< "$release_files"
+    jq -r '.[] | select((.rid == "'"$platform"'") and (.name | contains("-composite-") or contains("-pack-") | not)) | ."'"$attr"'"' <<< "$release_files"
 }
 
 platform_sources () {
@@ -224,6 +227,11 @@ usage () {
     echo "Usage: $pname [[--sdk] [-o output] sem-version] ...
 Get updated dotnet src (platform - url & sha512) expressions for specified versions
 
+Exit codes:
+  0 Success
+  1 Failure
+  2 Release not found
+
 Examples:
   $pname 6.0.14 7.0.201    - specific x.y.z versions
   $pname 6.0 7.0           - latest x.y versions
@@ -246,7 +254,7 @@ update() {
         return 1
     fi
 
-    : ${output:="$(dirname "${BASH_SOURCE[0]}")"/versions/$sem_version.nix}
+    : ${output:="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"/versions/$sem_version.nix}
     echo "Generating $output"
 
     # Make sure the x.y version is properly passed to .NET release metadata url.
@@ -255,11 +263,13 @@ update() {
     major_minor=$(sed 's/^\([0-9]*\.[0-9]*\).*$/\1/' <<< "$sem_version")
     content=$(curl -fsSL https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/"$major_minor"/releases.json)
     if [[ -n $sdk ]]; then
+        trap '' ERR
         major_minor_patch=$(
             jq -er --arg version "$sem_version" '
                 .releases[] |
                 select(.sdks[].version == $version) |
-                ."release-version"' <<< "$content")
+                ."release-version"' <<< "$content" || if [[ $? == 4 ]]; then exit 2; else exit 1; fi)
+        trap 'exit 1' ERR
     else
         major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -er '."latest-release"' <<< "$content")
     fi

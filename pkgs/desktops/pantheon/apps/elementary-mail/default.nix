@@ -72,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/elementary/mail/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ethancedwards8 ] ++ lib.teams.pantheon.members;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.mail";
   };
 })

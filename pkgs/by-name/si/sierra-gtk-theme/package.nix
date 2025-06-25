@@ -37,7 +37,7 @@ lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVaria
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "sierra-gtk-theme";
       rev = "05899001c4fc2fec87c4d222cb3997c414e0affd";
       sha256 = "174l5mryc34ma1r42pk6572c6i9hmzr9vj1a6w06nqz5qcfm1hds";
     };

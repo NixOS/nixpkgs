@@ -7,6 +7,8 @@
   # nativeBuildInputs
   pkg-config,
   python3,
+  autoPatchelfHook,
+  autoAddDriverRunpath,
 
   # buildInputs
   oniguruma,
@@ -32,6 +34,8 @@
 }:
 
 let
+  inherit (stdenv) hostPlatform;
+
   accelIsValid = builtins.elem acceleration [
     null
     false
@@ -45,7 +49,7 @@ let
     (acceleration == "cuda") || (config.cudaSupport && acceleration == null);
 
   minRequiredCudaCapability = "6.1"; # build fails with 6.0
-  inherit (cudaPackages.cudaFlags) cudaCapabilities;
+  inherit (cudaPackages.flags) cudaCapabilities;
   cudaCapabilityString =
     if cudaCapability == null then
       (builtins.head (
@@ -56,7 +60,7 @@ let
       ))
     else
       cudaCapability;
-  cudaCapability' = lib.toInt (cudaPackages.cudaFlags.dropDot cudaCapabilityString);
+  cudaCapability' = lib.toInt (cudaPackages.flags.dropDots cudaCapabilityString);
 
   mklSupport =
     assert accelIsValid;
@@ -65,7 +69,7 @@ let
   metalSupport =
     assert accelIsValid;
     (acceleration == "metal")
-    || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && (acceleration == null));
+    || (hostPlatform.isDarwin && hostPlatform.isAarch64 && (acceleration == null));
 
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -86,10 +90,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-YGGtS8gJJQKIgXxMWjO05ikSVdfVNs+cORbJ+Wf88y4=";
 
-  nativeBuildInputs = [
-    pkg-config
-    python3
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals cudaSupport [
+      # WARNING: autoAddDriverRunpath must run AFTER autoPatchelfHook
+      # Otherwise, autoPatchelfHook removes driverLink from RUNPATH
+      autoPatchelfHook
+      autoAddDriverRunpath
+
+      cudaPackages.cuda_nvcc
+    ];
 
   buildInputs =
     [
@@ -97,6 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       openssl
     ]
     ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cccl
       cudaPackages.cuda_cudart
       cudaPackages.cuda_nvrtc
       cudaPackages.libcublas
@@ -107,7 +121,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures =
     lib.optionals cudaSupport [ "cuda" ]
     ++ lib.optionals mklSupport [ "mkl" ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && metalSupport) [ "metal" ];
+    ++ lib.optionals (hostPlatform.isDarwin && metalSupport) [ "metal" ];
 
   env =
     {
@@ -132,19 +146,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     // (lib.optionalAttrs cudaSupport {
       CUDA_COMPUTE_CAP = cudaCapability';
 
-      # Apparently, cudart is enough: No need to provide the entire cudaPackages.cudatoolkit derivation.
+      # We already list CUDA dependencies in buildInputs
+      # We only set CUDA_TOOLKIT_ROOT_DIR to satisfy some redundant checks from upstream
       CUDA_TOOLKIT_ROOT_DIR = lib.getDev cudaPackages.cuda_cudart;
     });
 
-  NVCC_PREPEND_FLAGS = lib.optionals cudaSupport [
-    "-I${lib.getDev cudaPackages.cuda_cudart}/include"
-    "-I${lib.getDev cudaPackages.cuda_cccl}/include"
+  appendRunpaths = lib.optionals cudaSupport [
+    (lib.makeLibraryPath [
+      cudaPackages.libcublas
+      cudaPackages.libcurand
+    ])
   ];
 
   # swagger-ui will once more be copied in the target directory during the check phase
+  # See https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-7.1.0/utoipa-swagger-ui/build.rs#L168
   # Not deleting the existing unpacked archive leads to a `PermissionDenied` error
   preCheck = ''
-    rm -rf target/${stdenv.hostPlatform.config}/release/build/
+    rm -rf target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/build/
   '';
 
   # Prevent checkFeatures from inheriting buildFeatures because
@@ -170,13 +188,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = {
       version = testers.testVersion { package = mistral-rs; };
 
-      withMkl = lib.optionalAttrs (stdenv.hostPlatform == "x86_64-linux") (
+      withMkl = lib.optionalAttrs (hostPlatform.isLinux && hostPlatform.isx86_64) (
         mistral-rs.override { acceleration = "mkl"; }
       );
-      withCuda = lib.optionalAttrs stdenv.hostPlatform.isLinux (
-        mistral-rs.override { acceleration = "cuda"; }
-      );
-      withMetal = lib.optionalAttrs (stdenv.hostPlatform == "aarch64-darwin") (
+      withCuda = lib.optionalAttrs hostPlatform.isLinux (mistral-rs.override { acceleration = "cuda"; });
+      withMetal = lib.optionalAttrs (hostPlatform.isDarwin && hostPlatform.isAarch64) (
         mistral-rs.override { acceleration = "metal"; }
       );
     };

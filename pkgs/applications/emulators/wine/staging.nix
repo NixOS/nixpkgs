@@ -13,12 +13,12 @@
 with callPackage ./util.nix { };
 
 let
-  patch = (callPackage ./sources.nix { }).staging;
+  patch = wineUnstable.src.staging;
   build-inputs = pkgNames: extra: (mkBuildInputs wineUnstable.pkgArches pkgNames) ++ extra;
 in
 assert lib.versions.majorMinor wineUnstable.version == lib.versions.majorMinor patch.version;
 
-(wineUnstable.override { wineRelease = "staging"; }).overrideAttrs (self: {
+wineUnstable.overrideAttrs (self: {
   buildInputs = build-inputs (
     [
       "perl"

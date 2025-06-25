@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.14.0";
+  version = "1.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
     tag = "hatch-v${version}";
-    hash = "sha256-JwFPNoFoNqAXkLCGhliLN98VAS+VCwRzo+JqWLIrxsw=";
+    hash = "sha256-101R5x4jAfMYrdE3OWWqGmkPWRI9rSMYr+Lye9NCbA4=";
   };
 
   patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
       darwin.ps
     ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pytestFlagsArray =
     [
@@ -129,6 +129,10 @@ python3Packages.buildPythonApplication rec {
       # Relies on FHS
       # Could not read ELF interpreter from any of the following paths: /bin/sh, /usr/bin/env, /bin/dash, /bin/ls
       "test_new_selected_python"
+
+      # https://github.com/pypa/hatch/issues/2006
+      "test_project_location_basic_set_first_project"
+      "test_project_location_complex_set_first_project"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # This test assumes it is running on macOS with a system shell on the PATH.

@@ -4,23 +4,38 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # Doesn't work with latest pydantic
+      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: rec {
+        dependencies = [
+          python3.pkgs.pydantic_1
+          python3.pkgs.cryptography
+          python3.pkgs.email-validator
+        ];
+      });
+    };
+  };
+in
+py.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "5.4.2";
+  version = "5.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = version;
-    hash = "sha256-VT28O67s69pzmy3e6F3teRKzsPFnRT1Z2b3ngjQg5Og=";
+    hash = "sha256-SC3C8JSe0n8aHwP8gelh+tDrLO6HiGN+7/Rcxhwr6Ec=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with py.pkgs; [ poetry-core ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with py.pkgs; [
     alive-progress
     awsipranges
     azure-identity
@@ -59,7 +74,8 @@ python3.pkgs.buildPythonApplication rec {
     numpy
     pandas
     py-ocsf-models
-    pydantic
+    pydantic_1
+    pygithub
     python-dateutil
     pytz
     schema

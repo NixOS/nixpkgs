@@ -12,22 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "matrix-sdk-crypto-nodejs";
-  version = "0.2.0-beta.1";
+  version = "0.3.0-beta.1-unstable-2025-02-11";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-rust-sdk-crypto-nodejs";
-    rev = "v${version}";
-    hash = "sha256-g86RPfhF9XHpbXhHRbyhl920VazCrQyRQrYV6tVCHy4=";
+    rev = "f74a37e9c8f5af005119464a3501346b8c22695f";
+    hash = "sha256-QHKFD9PPUXMb78GjSabk3vWnd5DIhTjtBZL8e/Tuw0g=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "matrix-sdk-base-0.7.0" = "sha256-nCiG4T/MB7gvGrmadKOEbh8+54081PHee9Bm8oY/nl0=";
-      "ruma-0.10.1" = "sha256-Yc5RKk4aRjNIoQsMl30fFehTDCkRO9VvenAvLoVHzXo=";
-      "vodozemac-0.6.0" = "sha256-jJgrJJ0SFcy2oRRZ3ubuKnM2pLO8Tx6NyXordWJjz8o=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-hKuFu8T7zCXlmiG7k3WJsLSDYhIu6vT5la+AZOmz8EM=";
   };
 
   nativeBuildInputs = [
@@ -68,5 +64,7 @@ stdenv.mkDerivation rec {
       dandellion
     ];
     inherit (nodejs.meta) platforms;
+    # napi_build doesn't handle most cross-compilation configurations
+    broken = (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) || stdenv.hostPlatform.isStatic;
   };
 }

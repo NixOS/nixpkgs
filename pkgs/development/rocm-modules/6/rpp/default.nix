@@ -29,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "6.0.2";
+  version = "6.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rpp";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-AquAVoEqlsBVxd41hG2sVo9UoSS+255eCQzIfGkC/Tk=";
+    hash = "sha256-METwagek17/DdZGaOTQqvyU6xGt7OBMLHk4YM4KmgtA=";
   };
 
   nativeBuildInputs =
@@ -55,16 +55,19 @@ stdenv.mkDerivation (finalAttrs: {
     boost
   ];
 
+  CFLAGS = "-I${openmp.dev}/include";
+  CXXFLAGS = "-I${openmp.dev}/include";
   cmakeFlags =
     [
+      "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
+      "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
+      "-DOpenMP_omp_LIBRARY=${openmp}/lib"
       "-DROCM_PATH=${clr}"
     ]
     ++ lib.optionals (gpuTargets != [ ]) [
       "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     ]
     ++ lib.optionals (!useOpenCL && !useCPU) [
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
       "-DBACKEND=HIP"
     ]
     ++ lib.optionals (useOpenCL && !useCPU) [
@@ -86,18 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
     description = "Comprehensive high-performance computer vision library for AMD processors";
     homepage = "https://github.com/ROCm/rpp";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+    broken = useOpenCL;
   };
 })

@@ -5,18 +5,20 @@
   patches ? [ ],
 }:
 let
-  version = "4.3.6";
+  version = "4.3.8";
 in
-(applyPatches {
+applyPatches {
   src = fetchFromGitHub {
     owner = "mastodon";
     repo = "mastodon";
     rev = "v${version}";
-    hash = "sha256-cTJmSrQ+xlDfrAyHKeiIvrUOgAh9DQT2NNizN8XT3P0=";
+    hash = "sha256-08AApylDOz8oExZ0cRaZTgNAuP+1wiLkx0SDhkO2fMM=";
+
+    passthru = {
+      inherit version;
+      yarnHash = "sha256-IC4d/skIHEzJPuKlq4rMAqV+ydqquA6toq4WWCfuDxo=";
+      yarnMissingHashes = null;
+    };
   };
   patches = patches ++ [ ];
-})
-// {
-  inherit version;
-  yarnHash = "sha256-e5c04M6XplAgaVyldU5HmYMYtY3MAWs+a8Z/BGSyGBg=";
 }

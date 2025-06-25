@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "i-pi";
-  version = "3.1.1";
+  version = "3.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
     tag = "v${version}";
-    hash = "sha256-Z9xTuRm4go/FGrM7norRHVHgjcOqssNgFQ8R/Mh1yXo=";
+    hash = "sha256-jXryhWC8IGdj33rM50KHxX9WONyJlqpUXbzi33VQdPA=";
   };
 
   build-system = [
@@ -65,7 +65,7 @@ buildPythonPackage rec {
       gpl3Only
       mit
     ];
-    homepage = "http://ipi-code.org/";
+    homepage = "https://ipi-code.org/";
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };

@@ -18,6 +18,8 @@ in
     services.mautrix-telegram = {
       enable = lib.mkEnableOption "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge";
 
+      package = lib.mkPackageOption pkgs "mautrix-telegram" { };
+
       settings = lib.mkOption rec {
         apply = lib.recursiveUpdate default;
         inherit (settingsFormat) type;
@@ -201,7 +203,7 @@ in
 
           # generate the appservice's registration file if absent
           if [ ! -f '${registrationFile}' ]; then
-            ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
+            ${cfg.package}/bin/mautrix-telegram \
               --generate-registration \
               --config='${settingsFile}' \
               --registration='${registrationFile}'
@@ -220,9 +222,9 @@ in
 
           umask $old_umask
         ''
-        + lib.optionalString (pkgs.mautrix-telegram ? alembic) ''
+        + lib.optionalString (cfg.package ? alembic) ''
           # run automatic database init and migration scripts
-          ${pkgs.mautrix-telegram.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
+          ${cfg.package.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
         '';
 
       serviceConfig = {
@@ -238,13 +240,13 @@ in
         ProtectControlGroups = true;
 
         PrivateTmp = true;
-        WorkingDirectory = pkgs.mautrix-telegram; # necessary for the database migration scripts to be found
+        WorkingDirectory = cfg.package; # necessary for the database migration scripts to be found
         StateDirectory = baseNameOf dataDir;
         UMask = "0027";
         EnvironmentFile = cfg.environmentFile;
 
         ExecStart = ''
-          ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
+          ${cfg.package}/bin/mautrix-telegram \
             --config='${settingsFile}'
         '';
       };

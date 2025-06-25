@@ -87,7 +87,8 @@ stdenv.mkDerivation rec {
       ConsoleKit/UPower or logind/systemd.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ obadz ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ obadz ];
+    teams = [ teams.pantheon ];
     platforms = platforms.linux;
   };
 }

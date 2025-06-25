@@ -37,6 +37,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Xfce's desktop manager";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

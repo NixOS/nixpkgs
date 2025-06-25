@@ -1,22 +1,21 @@
 {
   vimUtils,
   fetchFromGitHub,
-  nix-update-script,
 }:
-vimUtils.buildVimPlugin {
+vimUtils.buildVimPlugin rec {
   pname = "bitbake-vim";
-  version = "2025-03-24";
+  version = "2.10.4";
 
+  # The tags are very messy on the upstream repo. We prefer disabling automatic updates for this plugin.
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "openembedded";
     repo = "bitbake";
-    rev = "8cc976e2792fdde3900729f3b09dd18ab640b5e8";
-    sha256 = "12k48zhd9bh3b8xjpang2xj14nhyla2p55r1is3m25wkqys10p9c";
+    tag = version;
+    hash = "sha256-gdxPnRhd4Hj1PWgCU5A/+639ndJXlkdArOBZt6eiZWA=";
   };
 
   sourceRoot = "source/contrib/vim";
 
   meta.homepage = "https://github.com/openembedded/bitbake/";
-
-  passthru.updateScript = nix-update-script { };
 }

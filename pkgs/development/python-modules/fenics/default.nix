@@ -5,20 +5,22 @@
   fetchpatch,
   blas,
   boost186,
+  buildPythonPackage,
   cmake,
   doxygen,
   eigen,
   hdf5,
+  isPy27,
   lapack,
   mpi,
   mpi4py,
   numpy,
   pkg-config,
+  pkgconfig,
   ply,
   pybind11,
   pytest,
   python,
-  pythonPackages,
   scotch,
   setuptools,
   six,
@@ -33,7 +35,7 @@
 let
   version = "2019.1.0";
 
-  dijitso = pythonPackages.buildPythonPackage {
+  dijitso = buildPythonPackage {
     pname = "dijitso";
     inherit version;
     src = fetchurl {
@@ -61,7 +63,7 @@ let
     };
   };
 
-  fiat = pythonPackages.buildPythonPackage {
+  fiat = buildPythonPackage {
     pname = "fiat";
     inherit version;
     src = fetchurl {
@@ -101,7 +103,7 @@ let
     };
   };
 
-  ufl = pythonPackages.buildPythonPackage {
+  ufl = buildPythonPackage {
     pname = "ufl";
     inherit version;
     src = fetchurl {
@@ -126,7 +128,7 @@ let
     };
   };
 
-  ffc = pythonPackages.buildPythonPackage {
+  ffc = buildPythonPackage {
     pname = "ffc";
     inherit version;
     src = fetchurl {
@@ -257,10 +259,10 @@ let
       license = lib.licenses.lgpl3;
     };
   };
-  python-dolfin = pythonPackages.buildPythonPackage rec {
+  python-dolfin = buildPythonPackage rec {
     pname = "dolfin";
     inherit version;
-    disabled = pythonPackages.isPy27;
+    disabled = isPy27;
     src = dolfin.src;
     sourceRoot = "${pname}-${version}/python";
     nativeBuildInputs = [
@@ -286,8 +288,8 @@ let
       mpi4py
       numpy
       ufl
-      pythonPackages.pkgconfig
-      pythonPackages.pybind11
+      pkgconfig
+      pybind11
     ];
     doCheck = false; # Tries to orte_ess_init and call ssh to localhost
     passthru.tests = {

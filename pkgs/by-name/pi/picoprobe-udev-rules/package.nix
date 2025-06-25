@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  udevCheckHook,
 }:
 
 ## Usage
@@ -16,6 +17,12 @@ stdenv.mkDerivation {
     url = "https://raw.githubusercontent.com/probe-rs/webpage/1cba61acc6ecb5ff96f74641269844ad88ad8ad5/static/files/69-probe-rs.rules";
     sha256 = "sha256-vQMPX3Amttja0u03KWGnPDAVTGM9ekJ+IBTjW+xlJS0=";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   dontUnpack = true;
   dontBuild = true;

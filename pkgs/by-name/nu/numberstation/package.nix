@@ -60,12 +60,12 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://git.sr.ht/~martijnbraam/numberstation/refs/${version}";
     description = "TOTP Authentication application for mobile";
     mainProgram = "numberstation";
     homepage = "https://sr.ht/~martijnbraam/numberstation/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -6,6 +6,7 @@
   stdenvNoCC,
   curl, # Note that `curl' may be `null', in case of the native stdenvNoCC.
   cacert ? null,
+  rewriteURL,
 }:
 
 let
@@ -122,7 +123,7 @@ in
 }@args:
 
 let
-  urls_ =
+  preRewriteUrls =
     if urls != [ ] && url == "" then
       (
         if lib.isList urls then urls else throw "`urls` is not a list: ${lib.generators.toPretty { } urls}"
@@ -136,6 +137,12 @@ let
       )
     else
       throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}";
+
+  urls_ =
+    let
+      u = lib.lists.filter (url: lib.isString url) (map rewriteURL preRewriteUrls);
+    in
+    if u == [ ] then throw "urls is empty after rewriteURL (was ${toString preRewriteUrls})" else u;
 
   hash_ =
     if
@@ -222,7 +229,7 @@ stdenvNoCC.mkDerivation (
 
     # If set, prefer the content-addressable mirrors
     # (http://tarballs.nixos.org) over the original URLs.
-    preferHashedMirrors = true;
+    preferHashedMirrors = false;
 
     # New-style output content requirements.
     inherit (hash_) outputHashAlgo outputHash;

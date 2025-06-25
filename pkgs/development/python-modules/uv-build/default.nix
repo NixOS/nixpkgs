@@ -14,7 +14,6 @@ buildPythonPackage {
     version
     src
     cargoDeps
-    cargoBuildFlags
     ;
 
   nativeBuildInputs = [
@@ -37,7 +36,8 @@ buildPythonPackage {
 
   meta = {
     description = "A minimal build backend for uv";
-    inherit (pkgs.uv.meta) homepage changelog license;
+    homepage = "https://docs.astral.sh/uv/reference/settings/#build-backend";
+    inherit (pkgs.uv.meta) changelog license;
     maintainers = with lib.maintainers; [ bengsparks ];
   };
 }
