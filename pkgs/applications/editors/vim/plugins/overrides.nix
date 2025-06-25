@@ -23,6 +23,7 @@
   direnv,
   fzf,
   gawk,
+  helm-ls,
   himalaya,
   htop,
   jq,
@@ -118,6 +119,8 @@
   # typst-preview dependencies
   tinymist,
   websocat,
+  # lazydocker.nvim dependencies
+  lazydocker,
   # luau-lsp-nvim dependencies
   luau-lsp,
   # uv.nvim dependencies
@@ -1403,6 +1406,12 @@ in
     luaAttr = luaPackages.haskell-tools-nvim;
   };
 
+  helm-ls-nvim = super.helm-ls-nvim.overrideAttrs {
+    runtimeDeps = [
+      helm-ls
+    ];
+  };
+
   helpview-nvim = super.helpview-nvim.overrideAttrs {
     nvimSkipModules = [ "definitions.__vimdoc" ];
   };
@@ -1530,6 +1539,12 @@ in
     nvimSkipModules = [
       # Requires some extra work to get CLI working in nixpkgs
       "cli.kulala_cli"
+    ];
+  };
+
+  lazydocker-nvim = super.lazydocker-nvim.overrideAttrs {
+    runtimeDeps = [
+      lazydocker
     ];
   };
 
