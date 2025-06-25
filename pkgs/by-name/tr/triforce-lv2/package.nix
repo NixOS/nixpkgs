@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,6 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "DESTDIR=$(out)"
     "LIBDIR=lib"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/chadmed/triforce";
