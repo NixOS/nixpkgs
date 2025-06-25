@@ -19,6 +19,8 @@
   pytestCheckHook,
   responses,
   uvicorn,
+
+  withTui ? true,
 }:
 
 buildPythonPackage rec {
@@ -43,7 +45,7 @@ buildPythonPackage rec {
     setuptools # for pkg_resources
     toml
     websocket-client
-  ];
+  ] ++ lib.optionals withTui optional-dependencies.tui;
 
   optional-dependencies = {
     tui = [
