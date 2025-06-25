@@ -6,13 +6,13 @@
 }:
 buildFishPlugin {
   pname = "exercism-cli-fish-wrapper";
-  version = "0-unstable-2025-06-12";
+  version = "0-unstable-2025-06-23";
 
   src = fetchFromGitHub {
     owner = "glennj";
     repo = "exercism-cli-fish-wrapper";
-    rev = "fc00e992b73adc63596e1406a8554313d642204f";
-    hash = "sha256-w2aGakB/Kel0TMaZ44/WC6syhetohJzn5kgwgW7Kdqs=";
+    rev = "eaaa6f482a635a12b844794f173a692e69d89688";
+    hash = "sha256-9TKCiGlYhNCnAJ52BWOeuEPY2Cu/Z+CsBYM1IJ8/On0=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
