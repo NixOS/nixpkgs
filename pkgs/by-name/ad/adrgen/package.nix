@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "asiermarques";
     repo = "adrgen";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-2ZE/orsfwL59Io09c4yfXt2enVmpSM/QHlUMgyd9RYQ=";
   };
 
