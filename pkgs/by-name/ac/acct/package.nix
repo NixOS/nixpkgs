@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "GNU Accounting Utilities, login and process accounting utilities";
 
     longDescription = ''
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
       execution statistics.
     '';
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     homepage = "https://www.gnu.org/software/acct/";
 
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
 }

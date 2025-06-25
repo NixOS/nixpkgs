@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "slok";
     repo = "agebox";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/FTNvGV7PsJmpSU1dI/kjfiY5G7shomvLd3bvFqORfg=";
   };
 
