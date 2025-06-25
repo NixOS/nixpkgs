@@ -238,14 +238,14 @@ lib.makeExtensible (self: {
     attrName = "git";
 
     lix-args = rec {
-      version = "2.94.0-pre-20250621_${builtins.substring 0 12 src.rev}";
+      version = "2.94.0-pre-20250624_${builtins.substring 0 12 src.rev}";
 
       src = fetchFromGitea {
         domain = "git.lix.systems";
         owner = "lix-project";
         repo = "lix";
-        rev = "242a228124f77b57c2e3b3aedb259ffb7913cd3c";
-        hash = "sha256-hCbhc9P+UmIlYv81+vs6v3bDqviCUhwPH3XqClZdfSk=";
+        rev = "42e2bd045c9e51a59fdab038dc4e6f9e86c4922c";
+        hash = "sha256-BsY8kpwQML9/036g9C+No7lhzqmn4ZTlIsuo92SVSJk=";
       };
 
       cargoDeps = rustPlatform.fetchCargoVendor {
@@ -253,10 +253,6 @@ lib.makeExtensible (self: {
         inherit src;
         hash = "sha256-YMyNOXdlx0I30SkcmdW/6DU0BYc3ZOa2FMJSKMkr7I8=";
       };
-
-      patches = [
-        ./patches/LIX_HEAD_CVE-2025-46415_46416.patch
-      ];
     };
   };
 
