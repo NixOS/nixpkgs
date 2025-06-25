@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,16 +16,21 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-f4i0S6UaVfs1CUeQRqo22PRgMNwYDNoMunHidI1XzBk=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "target/release" \
+                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
+  '';
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-2FC6wlFJkQryA/bcjF0GjrMQVb8hlUY+muFqPqShWss=";
 
-  installPhase = ''
-    export LIBDIR=$out/lib
-    mkdir -p $LIBDIR
+  dontCargoInstall = true;
 
-    make
-    make install
-  '';
+  installFlags = [
+    "DESTDIR=$(out)"
+    "LIBDIR=lib"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/chadmed/triforce";
