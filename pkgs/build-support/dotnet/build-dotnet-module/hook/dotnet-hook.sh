@@ -384,6 +384,9 @@ dotnetInstallPhase() {
       local runtimeIdFlags=()
       if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
         runtimeIdFlags+=("--runtime" "$runtimeId")
+        # set RuntimeIdentifier because --runtime is broken:
+        # https://github.com/dotnet/sdk/issues/13983
+        runtimeIdFlags+=(-p:RuntimeIdentifier="$runtimeId")
       fi
 
       dotnet pack ${1+"$projectFile"} \
