@@ -1427,13 +1427,13 @@
     "vendorHash": "sha256-eCIJ2w8DjmUCGp0VbliLaQ6C29mJhl6Spya06Xyiqd4="
   },
   "venafi": {
-    "hash": "sha256-A3/uphCYgHtYgtCuHQUPIOeiUOJ23p9Oy6NkGUGPzXw=",
+    "hash": "sha256-699jmdrQHo2tbpRbxvsGWVx9wFwKKTrIr8ZJGo5RS2I=",
     "homepage": "https://registry.terraform.io/providers/Venafi/venafi",
     "owner": "Venafi",
     "repo": "terraform-provider-venafi",
-    "rev": "v0.22.2",
+    "rev": "v0.22.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-s6D5cWrPtPckFVbJkAA7WifpJY+mA4YvN55xUFdBb1I="
+    "vendorHash": "sha256-jlaqJxBQmyuCQeMW3k9Uo8SosUmRJnDHcE9+GEM7WQI="
   },
   "vinyldns": {
     "hash": "sha256-ow+o9fRw/t2i4N65zuVFbfPb68ZUcJfNB5ARYqRTsIs=",
