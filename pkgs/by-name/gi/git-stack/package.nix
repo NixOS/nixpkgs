@@ -21,18 +21,18 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-kjyJeKeFtETowTehQEjN58YoqYFUBt9yQlRIcNY0hso=";
 
+  buildInputs =
+    [ ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      zlib
+    ];
+
   # Many tests try to access the file system.
   doCheck = false;
 
   passthru.tests.version = testers.testVersion {
     package = git-stack;
   };
-
-  buildInputs =
-    [ ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ];
 
   meta = {
     description = "Stacked branch management for Git";
