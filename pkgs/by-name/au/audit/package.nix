@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Audit Library";
     changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ grimmauld ];
     platforms = lib.platforms.linux;
   };
 })
