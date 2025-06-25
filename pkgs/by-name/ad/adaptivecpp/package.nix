@@ -162,11 +162,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AdaptiveCpp/AdaptiveCpp";
     description = "Multi-backend implementation of SYCL for CPUs and GPUs";
     mainProgram = "acpp";
-    maintainers = with maintainers; [ yboettcher ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ yboettcher ];
+    license = lib.licenses.bsd2;
   };
 })
