@@ -47,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  # assumption: build machine runs linux kernel 5.0 or newer
+  # see https://github.com/stevegrubb/libcap-ng?tab=readme-ov-file#note-to-distributions
+  doCheck = true;
+
   meta = {
     changelog = "https://people.redhat.com/sgrubb/libcap-ng/ChangeLog";
     description = "Library for working with POSIX capabilities";
