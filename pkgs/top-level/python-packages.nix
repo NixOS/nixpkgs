@@ -14592,6 +14592,8 @@ self: super: with self; {
 
   python-songpal = callPackage ../development/python-modules/python-songpal { };
 
+  python-speech-features = callPackage ../development/python-modules/python-speech-features { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-status = callPackage ../development/python-modules/python-status { };
