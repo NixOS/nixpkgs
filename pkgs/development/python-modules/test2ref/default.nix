@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "test2ref";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbiotcloud";
     repo = "test2ref";
     tag = "v${version}";
-    hash = "sha256-m95undMr1W2GRcSELv7s9kpuXyu+HnGo+huc0Uh9rQI=";
+    hash = "sha256-Lo0rXKpiXGZle6X2f2Zofc/ihzAqruDyKNP4wp2jqv4=";
   };
 
   build-system = [

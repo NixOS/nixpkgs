@@ -72,6 +72,12 @@ buildPythonPackage rec {
       url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/9ea3bc1ab550ec46c426dab04292d9667ccd2518.patch?full_index=1";
       hash = "sha256-QjA3kjUDsSleUr+S/bQLb+QK723SNFvnmRPT+ojjgq8=";
     })
+    (fetchpatch {
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/3648
+      name = "propagate-dependencies-opengl.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/usd/-/raw/41469f20113d3550c5b42e67d1139dedc1062b8c/usd-find-dependency-OpenGL.patch?full_index=1";
+      hash = "sha256-aUWGKn365qov0ttGOq5GgNxYGIGZ4DfmeMJfakbOugQ=";
+    })
   ];
 
   env.OSL_LOCATION = "${osl}";
@@ -125,7 +131,6 @@ buildPythonPackage rec {
       tbb
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
       libX11
       libXt
     ]
@@ -141,6 +146,9 @@ buildPythonPackage rec {
       opensubdiv
       pyopengl
       distutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
     ]
     ++ lib.optionals (withTools || withUsdView) [
       pyside-tools-uic
