@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   bash,
   buildPackages,
@@ -25,6 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-SgMt1MmcH7r7O6bmJCetRg3IdoZXAXjVJyeu0HRfyf8=";
   };
+
+  patches = [
+    # nix configures most stuff by symlinks, e.g. in /etc
+    # thus, for plugins to be picked up, symlinks must be allowed
+    (fetchpatch {
+      url = "https://github.com/linux-audit/audit-userspace/pull/467.patch?full_index=1";
+      hash = "sha256-mbYctvE+9KSkeoxmO9iNxSuh5hsqi/5K/n9YCNl+ekw=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace bindings/swig/src/auditswig.i \
