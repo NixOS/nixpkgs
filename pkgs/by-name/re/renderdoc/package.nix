@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BUILD_VERSION_DIST_VER" finalAttrs.version)
     (lib.cmakeFeature "BUILD_VERSION_DIST_CONTACT" "https://github.com/NixOS/nixpkgs/")
     (lib.cmakeBool "BUILD_VERSION_STABLE" true)
-    (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
+    (lib.cmakeBool "ENABLE_UNSUPPORTED_EXPERIMENTAL_POSSIBLY_BROKEN_WAYLAND" waylandSupport)
   ];
 
   dontWrapQtApps = true;
@@ -117,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       wrapQtApp $out/bin/qrenderdoc \
+        --set QT_QPA_PLATFORM "wayland;xcb" \
         --suffix LD_LIBRARY_PATH : "$out/lib:${libPath}"
       wrapProgram $out/bin/renderdoccmd \
         --suffix LD_LIBRARY_PATH : "$out/lib:${libPath}"
