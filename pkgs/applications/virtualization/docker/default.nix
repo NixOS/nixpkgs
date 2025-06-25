@@ -367,17 +367,17 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_25 = callPackage dockerGen rec {
-    version = "25.0.8";
+    version = "25.0.10";
     # Upstream forgot to tag release
     # https://github.com/docker/cli/issues/5789
     cliRev = "43987fca488a535d810c429f75743d8c7b63bf4f";
     cliHash = "sha256-OwufdfuUPbPtgqfPeiKrQVkOOacU2g4ommHb770gV40=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-n7GdjQEceqyC7E2sPXQWyxpRThtH35eM/J20yLa5NSs=";
-    runcRev = "v1.2.4";
-    runcHash = "sha256-LdYCMxdqDP7rKo6Ek/B1DE6QvUFrltbSJVggkVkXQZo=";
-    containerdRev = "v1.7.25";
-    containerdHash = "sha256-T0F5bwxSCqa4Czs/W01NaAlJJFvgrzkBC1y/r+muivA=";
+    mobyHash = "sha256-57iXL+QYtbEz099yOTR4k/2Z7CT08OAkQ3kVJSmsa/U=";
+    runcRev = "v1.2.5";
+    runcHash = "sha256-J/QmOZxYnMPpzm87HhPTkYdt+fN+yeSUu2sv6aUeTY4=";
+    containerdRev = "v1.7.27";
+    containerdHash = "sha256-H94EHnfW2Z59KcHcbfJn+BipyZiNUvHe50G5EXbrIps=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
