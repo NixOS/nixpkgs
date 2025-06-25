@@ -1114,6 +1114,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  auto-fix-return-nvim = buildVimPlugin {
+    pname = "auto-fix-return.nvim";
+    version = "2025-06-23";
+    src = fetchFromGitHub {
+      owner = "Jay-Madden";
+      repo = "auto-fix-return.nvim";
+      rev = "01ccaa47e286f1627b730b9cc58e7ebb2a622fd1";
+      sha256 = "06as097zfdvrzx7ajdmib3czsbmh7r5l5szvlmj8lf8wfk7d35bq";
+    };
+    meta.homepage = "https://github.com/Jay-Madden/auto-fix-return.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   auto-git-diff = buildVimPlugin {
     pname = "auto-git-diff";
     version = "2022-10-29";
