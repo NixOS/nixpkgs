@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  gettextAutoreconfCompatHook,
   libassuan,
   libgpg-error,
   makeBinaryWrapper,
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [
     autoreconfHook
+    gettextAutoreconfCompatHook
     makeBinaryWrapper
     texinfo
   ];
