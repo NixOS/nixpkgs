@@ -96,7 +96,18 @@
     github = "0x120581f";
     githubId = 130835755;
   };
+<<<<<<< HEAD
   _0x3f = {
+=======
+  _0x17 = {
+    email = "nixpkgs@nerdbude.com";
+    matrix = "@0x17:kyb3r.space";
+    name = "0x17";
+    github = "nerdbude";
+    githubId = 55981615;
+  };
+ _0x3f = {
+>>>>>>> 926ca8ab1b58 (Add 0x17 to the maintainer list)
     name = "0x3f";
     github = "0x3fiona";
     githubId = 178507884;
