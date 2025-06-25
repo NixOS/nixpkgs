@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   bash,
   buildPackages,
@@ -25,6 +26,24 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-SgMt1MmcH7r7O6bmJCetRg3IdoZXAXjVJyeu0HRfyf8=";
   };
+
+  patches = [
+    # nix configures most stuff by symlinks, e.g. in /etc
+    # thus, for plugins to be picked up, symlinks must be allowed
+    # https://github.com/linux-audit/audit-userspace/pull/467
+    (fetchpatch {
+      url = "https://github.com/linux-audit/audit-userspace/pull/467/commits/dbefc642b3bd0cafe599fcd18c6c88cb672397ee.patch?full_index=1";
+      hash = "sha256-Ksn/qKBQYFAjvs1OVuWhgWCdf4Bdp9/a+MrhyJAT+Bw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/linux-audit/audit-userspace/pull/467/commits/50094f56fefc0b9033ef65e8c4f108ed52ef5de5.patch?full_index=1";
+      hash = "sha256-CJKDLdlpsCd+bG6j5agcnxY1+vMCImHwHGN6BXURa4c=";
+    })
+    (fetchpatch {
+      url = "https://github.com/linux-audit/audit-userspace/pull/467/commits/5e75091abd297807b71b3cfe54345c2ef223939a.patch?full_index=1";
+      hash = "sha256-LPpO4PH/3MyCJq2xhmhhcnFeK3yh7LK6Mjypuvhacu4=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace bindings/swig/src/auditswig.i \
