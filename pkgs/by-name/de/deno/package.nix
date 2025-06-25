@@ -3,7 +3,6 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   cmake,
   yq,
@@ -30,26 +29,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-l3cWnv2cEmoeecYj38eMIlgqlRjDbtQuc6Q3DmOJoqE=";
+    hash = "sha256-xrGEEtYOjQmKniDsPnWJSbiTRG0uBFqRbUbrvgrMyHg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-alvn+d7XTYrw8KXw+k+++J3CsBwAUbQQlh24/EOEzwY=";
-  cargoPatches = [
-    (fetchpatch {
-      name = "fix-sigsegv-on-x86_64-unknown-linux-gnu-targets";
-      url = "https://github.com/denoland/deno/commit/400a9565c335b51d78c8909f4dbf1dbd4fb5e5d8.patch";
-      hash = "sha256-dTIw7P6sB6Esf+lSe/gc3cX54GkzLWF5X55yxP/QYoo=";
-      includes = [ "cli/Cargo.toml" ];
-    })
-  ];
+  cargoHash = "sha256-1RhVg5fjzA9zKzpkjOyV1KITlTtW41VVqc2Cbe4pfdY=";
 
   patches = [
     ./tests-replace-hardcoded-paths.patch
