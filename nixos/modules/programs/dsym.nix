@@ -1,50 +1,68 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.dsym;
-in {
-  ###### OPTIONEN DEFINIEREN ######
-  options.programs.dsym = {
-    enable = mkEnableOption "Enable DSYM, a Python dotfile manager.";
+  iniFormat = pkgs.formats.ini { };
 
-    machineName = mkOption {
-      type = types.str;
+in
+{
+  options.programs.dsym = {
+    enable = lib.mkEnableOption "DSYM, a Python dotfile manager.";
+
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.dsym;
+      defaultText = lib.literalExpression "pkgs.dsym";
+      description = "The dsym package to use";
+    };
+
+    machineName = lib.mkOption {
+      type = lib.types.str;
       default = "my-machine";
       description = "A unique identifier for this machine.";
     };
 
-    dotfileRepo = mkOption {
-      type = types.str;
+    dotfileRepo = lib.mkOption {
+      type = lib.types.str;
       example = "https://github.com/username/dotfiles";
-      description = "The URL to your dotfile Git repository.";
+      description = "URL to your dotfile Git repository.";
     };
 
-    dotfilePath = mkOption {
-      type = types.path;
-      default = "/home/${config.users.users.${config.users.defaultUser}.name}/.config/";
+    dotfilePath = lib.mkOption {
+      type = lib.types.path;
+      default = { };
       description = "The local path to where your dotfiles are stored.";
     };
 
-    dsymPath = mkOption {
-      type = types.path;
-      default = "/home/${config.users.users.${config.users.defaultUser}.name}/dsym/";
+    dsymPath = lib.mkOption {
+      type = lib.types.path;
+      default = { };
       description = "The path where DSYM should operate or store data.";
     };
   };
 
-  ###### KONFIGURATION ERZEUGEN ######
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.dsym ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
 
-    environment.etc."dsym/config.ini".text = ''
-      [Settings]
-      machine_name = ${cfg.machineName}
-      dotfile_repo = ${cfg.dotfileRepo}
-      dotfile_path = ${cfg.dotfilePath}
-      dsym_path = ${cfg.dsymPath}
-    '';
+    environment.etc."dsym/config.ini".source = iniFormat.generate "dsym-config.ini" {
+      Settings = {
+      machine_name = cfg.machineName;
+      dotfile_repo = cfg.dotfileRepo;
+      dotfile_path = toString cfg.dotfilePath;
+      dsym_path = toString cfg.dsymPath;
+    };
   };
-}
+};
 
+meta.maintainers = with lib.maintainers; [
+
+  _0x17
+
+];
+
+}

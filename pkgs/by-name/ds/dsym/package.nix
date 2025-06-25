@@ -25,11 +25,13 @@ python3.pkgs.buildPythonApplication rec {
     "dsym"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Manage your dotfiles";
+    description = "Manage your dotfiles using git";
     homepage = "https://github.com/nerdbude/dsym";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ 0x17 ];
+    maintainers = with lib.maintainers; [ _0x17 ];
     mainProgram = "dsym";
   };
 }
