@@ -6173,6 +6173,8 @@ self: super: with self; {
 
   ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
 
+  fft-conv-pytorch = callPackage ../development/python-modules/fft-conv-pytorch { };
+
   fhirpy = callPackage ../development/python-modules/fhirpy { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
