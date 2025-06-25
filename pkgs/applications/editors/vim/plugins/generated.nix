@@ -6886,6 +6886,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  lazydocker-nvim = buildVimPlugin {
+    pname = "lazydocker.nvim";
+    version = "2025-06-05";
+    src = fetchFromGitHub {
+      owner = "crnvl96";
+      repo = "lazydocker.nvim";
+      rev = "d5878defd757a193fbd73f12ec54faee9a6b19e1";
+      sha256 = "0vwx3yvy4lqppjgwz5gkqxrbr5m6b6kplh5z0nh5s7i7xqahqm1r";
+    };
+    meta.homepage = "https://github.com/crnvl96/lazydocker.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   lazygit-nvim = buildVimPlugin {
     pname = "lazygit.nvim";
     version = "2025-06-13";
