@@ -9,8 +9,6 @@
 rec {
   pc = {
     linux-kernel = {
-      name = "pc";
-
       baseConfig = "defconfig";
       # Build whatever possible as a module, if not stated in the extra config.
       autoModules = true;
@@ -20,8 +18,6 @@ rec {
 
   powernv = {
     linux-kernel = {
-      name = "PowerNV";
-
       baseConfig = "powernv_defconfig";
       target = "vmlinux";
       autoModules = true;
@@ -42,8 +38,6 @@ rec {
 
   armv5tel-multiplatform = {
     linux-kernel = {
-      name = "armv5tel-multiplatform";
-
       baseConfig = "multi_v5_defconfig";
       DTB = true;
       autoModules = true;
@@ -57,8 +51,6 @@ rec {
 
   raspberrypi = {
     linux-kernel = {
-      name = "raspberrypi";
-
       baseConfig = "bcm2835_defconfig";
       DTB = true;
       autoModules = true;
@@ -99,7 +91,6 @@ rec {
 
   # https://developer.android.com/ndk/guides/abis#v7a
   armv7a-android = {
-    linux-kernel.name = "armeabi-v7a";
     gcc = {
       arch = "armv7-a";
       float-abi = "softfp";
@@ -109,7 +100,6 @@ rec {
 
   armv7l-hf-multiplatform = {
     linux-kernel = {
-      name = "armv7l-hf-multiplatform";
       baseConfig = "defconfig";
       DTB = true;
       autoModules = true;
@@ -141,7 +131,6 @@ rec {
 
   aarch64-multiplatform = {
     linux-kernel = {
-      name = "aarch64-multiplatform";
       baseConfig = "defconfig";
       DTB = true;
       autoModules = true;
@@ -170,9 +159,6 @@ rec {
   ##
 
   ben_nanonote = {
-    linux-kernel = {
-      name = "ben_nanonote";
-    };
     gcc = {
       arch = "mips32";
       float = "soft";
@@ -231,7 +217,6 @@ rec {
 
   riscv-multiplatform = {
     linux-kernel = {
-      name = "riscv-multiplatform";
       target = "Image";
       autoModules = true;
       preferBuiltin = true;
@@ -252,7 +237,6 @@ rec {
       cmodel = "medium";
     };
     linux-kernel = {
-      name = "loongarch-multiplatform";
       target = "vmlinuz.efi";
       autoModules = true;
       preferBuiltin = true;

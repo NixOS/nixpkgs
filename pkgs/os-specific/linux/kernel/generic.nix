@@ -64,11 +64,7 @@ let
       # symbolic name and `patch' is the actual patch.  The patch may
       # optionally be compressed with gzip or bzip2.
       kernelPatches ? [ ],
-      ignoreConfigErrors ?
-        !lib.elem stdenv.hostPlatform.linux-kernel.name [
-          "aarch64-multiplatform"
-          "pc"
-        ],
+      ignoreConfigErrors ? !(stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64),
       extraMeta ? { },
       extraPassthru ? { },
 
@@ -199,7 +195,6 @@ let
 
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
-        platformName = stdenv.hostPlatform.linux-kernel.name;
         # e.g. "defconfig"
         kernelBaseConfig =
           if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
