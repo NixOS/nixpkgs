@@ -688,6 +688,8 @@ def test_execute_nix_switch_build_target_host(
             call(
                 [
                     "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
                     "copy",
                     "--from",
                     "ssh://user@build-host",
