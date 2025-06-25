@@ -147,8 +147,6 @@ jobs:
                   ...context.repo,
                   workflow_id: 'pr.yml',
                   event: 'pull_request_target',
-                  // In pull_request contexts the workflow is still running.
-                  status: context.payload.pull_request ? undefined : 'success',
                   exclude_pull_requests: true,
                   head_sha: pull_request.head.sha
                 })).data.workflow_runs[0]?.id ??
