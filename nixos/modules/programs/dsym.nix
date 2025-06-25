@@ -51,18 +51,18 @@ in
 
     environment.etc."dsym/config.ini".source = iniFormat.generate "dsym-config.ini" {
       Settings = {
-      machine_name = cfg.machineName;
-      dotfile_repo = cfg.dotfileRepo;
-      dotfile_path = toString cfg.dotfilePath;
-      dsym_path = toString cfg.dsymPath;
+        machine_name = cfg.machineName;
+        dotfile_repo = cfg.dotfileRepo;
+        dotfile_path = toString cfg.dotfilePath;
+        dsym_path = toString cfg.dsymPath;
+      };
     };
   };
-};
 
-meta.maintainers = with lib.maintainers; [
+  meta.maintainers = with lib.maintainers; [
 
-  _0x17
+    _0x17
 
-];
+  ];
 
 }

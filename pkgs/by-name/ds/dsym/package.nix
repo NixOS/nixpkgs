@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
