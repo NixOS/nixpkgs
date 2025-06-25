@@ -306,7 +306,7 @@ rec {
     linux-kernel = {
       name = "armv7l-hf-multiplatform";
       Major = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
-      baseConfig = "multi_v7_defconfig";
+      baseConfig = "defconfig";
       DTB = true;
       autoModules = true;
       preferBuiltin = true;
