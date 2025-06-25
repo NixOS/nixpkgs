@@ -8799,7 +8799,7 @@ with pkgs;
   };
 
   sgx-psw = callPackage ../os-specific/linux/sgx/psw {
-    protobuf = protobuf_21;
+    protobuf = protobuf_33;
   };
 
   sinit = callPackage ../os-specific/linux/sinit {
