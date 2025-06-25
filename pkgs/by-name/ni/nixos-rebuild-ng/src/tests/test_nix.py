@@ -263,6 +263,8 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         mock_run.assert_called_with(
             [
                 "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
                 "copy",
                 "--copy-flag",
                 "--from",

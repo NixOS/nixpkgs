@@ -630,6 +630,7 @@ with lib.maintainers;
       leona
       theCapypara
       thiagokokada
+      jamesward
     ];
     shortName = "Jetbrains";
     scope = "Maintainers of the Jetbrains IDEs in nixpkgs";
