@@ -33,7 +33,17 @@ python3Packages.buildPythonApplication rec {
     "wyoming_piper"
   ];
 
-  doCheck = false;
+  nativeCheckInputs = with python3Packages; [
+    numpy
+    pytest-asyncio
+    pytestCheckHook
+    python-speech-features
+  ];
+
+  disabledTests = [
+    # network access
+    "test_piper"
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/rhasspy/wyoming-piper/blob/${src.tag}/CHANGELOG.md";
