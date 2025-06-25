@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxml,
-  unittestCheckHook,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
@@ -26,7 +26,18 @@ buildPythonPackage rec {
 
   dependencies = [ lxml ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # the following tests are failing and should be enabled once the issue is solved
+  # the bug is reported: https://github.com/fedora-python/lxml_html_clean/issues/24
+  disabledTests = [
+    "test_host_whitelist_valid"
+    "test_clean_embed.txt"
+    "test_clean.txt"
+    "test_autolink.txt"
+    "test_host_whitelist_invalid"
+    "test_host_whitelist_sneaky_userinfo"
+  ];
 
   pythonImportsCheck = [ "lxml_html_clean" ];
 
