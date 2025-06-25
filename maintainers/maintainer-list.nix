@@ -4293,6 +4293,13 @@
     githubId = 44584960;
     name = "Denis Khalmatov";
   };
+  ccicnce113424 = {
+    email = "ccicnce113424@gmail.com";
+    matrix = "@ccicnce113424:matrix.org";
+    github = "ccicnce113424";
+    githubId = 30774232;
+    name = "ccicnce113424";
+  };
   cdepillabout = {
     email = "cdep.illabout@gmail.com";
     matrix = "@cdepillabout:matrix.org";
