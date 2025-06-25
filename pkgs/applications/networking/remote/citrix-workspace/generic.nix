@@ -5,57 +5,59 @@
   makeWrapper,
   autoPatchelfHook,
   wrapGAppsHook3,
-  which,
-  more,
-  file,
-  atk,
   alsa-lib,
+  atk,
+  cacert,
   cairo,
+  dconf,
+  fetchurl,
+  file,
   fontconfig,
+  freetype,
   gdk-pixbuf,
   glib,
-  webkitgtk_4_0,
+  glib-networking,
+  gnome2,
+  gtk2,
   gtk2-x11,
   gtk3,
+  gtk_engines,
   heimdal,
   krb5,
+  libGL,
+  libappindicator-gtk3,
+  libcanberra-gtk3,
+  libcap,
+  libcxx,
+  libfaketime,
+  libgbm,
+  libinput,
+  libjpeg,
+  libjson,
+  libpng12,
+  libpulseaudio,
+  libredirect,
+  libsecret,
   libsoup_2_4,
   libvorbis,
-  speex,
-  openssl,
-  zlib,
-  xorg,
-  pango,
-  gtk2,
-  gnome2,
-  libgbm,
-  nss,
-  nspr,
-  gtk_engines,
-  freetype,
-  dconf,
-  libpng12,
   libxml2,
-  libjpeg,
-  libredirect,
-  tzdata,
-  cacert,
-  systemd,
-  libcxx,
-  symlinkJoin,
-  libpulseaudio,
-  pcsclite,
-  glib-networking,
   llvmPackages,
+  more,
+  nspr,
+  nss,
   opencv4,
-  libfaketime,
-  libinput,
-  libcap,
-  libjson,
-  libsecret,
-  libcanberra-gtk3,
+  openssl,
+  pango,
+  pcsclite,
   sane-backends,
-  fetchurl,
+  speex,
+  symlinkJoin,
+  systemd,
+  tzdata,
+  webkitgtk_4_0,
+  which,
+  xorg,
+  zlib,
 
   homepage,
   version,
@@ -131,11 +133,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     file
+    libfaketime
     makeWrapper
     more
     which
     wrapGAppsHook3
-    libfaketime
   ];
 
   buildInputs = [
@@ -146,18 +148,19 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     gdk-pixbuf
-    gnome2.gtkglext
     glib-networking
-    webkitgtk_4_0
+    gnome2.gtkglext
     gtk2
     gtk2-x11
     gtk3
     gtk_engines
     heimdal
     krb5
-    libcap
+    libGL
     libcanberra-gtk3
+    libcap
     libcxx
+    libgbm
     libinput
     libjpeg
     libjson
@@ -168,27 +171,29 @@ stdenv.mkDerivation rec {
     libvorbis
     libxml2'
     llvmPackages.libunwind
-    libgbm
     nspr
     nss
     opencv4'
     openssl'
     pango
     pcsclite
+    sane-backends
     speex
-    (lib.getLib systemd)
     stdenv.cc.cc
+    (lib.getLib systemd)
+    webkitgtk_4_0
+    xorg.libXScrnSaver
     xorg.libXaw
     xorg.libXmu
-    xorg.libXScrnSaver
     xorg.libXtst
     zlib
-    sane-backends
   ];
 
   runtimeDependencies = [
     glib
     glib-networking
+    libappindicator-gtk3
+    libGL
     pcsclite
 
     xorg.libX11
@@ -200,8 +205,8 @@ stdenv.mkDerivation rec {
     xorg.libXrender
     xorg.libXtst
     xorg.libxcb
-    xorg.xprop
     xorg.xdpyinfo
+    xorg.xprop
   ];
 
   installPhase =
@@ -218,6 +223,7 @@ stdenv.mkDerivation rec {
         wrapProgram $out/opt/citrix-icaclient/${program} \
           ${lib.optionalString (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''} \
           --set ICAROOT "$ICAInstDir" \
+          --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
           --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so" \
           --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"
