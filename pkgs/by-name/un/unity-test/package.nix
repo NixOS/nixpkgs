@@ -11,6 +11,7 @@
   ruby,
   rubyPackages,
   testers,
+  iniparser,
   validatePkgConfig,
   # Adds test groups and extra CLI flags.
   buildFixture ? false,
@@ -95,9 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-      versionCheck = true;
+    tests = {
+      inherit iniparser;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
     };
   };
 
