@@ -192,11 +192,6 @@ rec {
       DTB = true;
       autoModules = true;
       preferBuiltin = true;
-      extraConfig = ''
-        # Disable OABI to have seccomp_filter (required for systemd)
-        # https://github.com/raspberrypi/firmware/issues/651
-        OABI_COMPAT n
-      '';
       target = "zImage";
     };
     gcc = {
@@ -311,19 +306,6 @@ rec {
       preferBuiltin = true;
       target = "zImage";
       extraConfig = ''
-        # Serial port for Raspberry Pi 3. Wasn't included in ARMv7 defconfig
-        # until 4.17.
-        SERIAL_8250_BCM2835AUX y
-        SERIAL_8250_EXTENDED y
-        SERIAL_8250_SHARE_IRQ y
-
-        # Hangs ODROID-XU4
-        ARM_BIG_LITTLE_CPUIDLE n
-
-        # Disable OABI to have seccomp_filter (required for systemd)
-        # https://github.com/raspberrypi/firmware/issues/651
-        OABI_COMPAT n
-
         # >=5.12 fails with:
         # drivers/net/ethernet/micrel/ks8851_common.o: in function `ks8851_probe_common':
         # ks8851_common.c:(.text+0x179c): undefined reference to `__this_module'
@@ -362,22 +344,6 @@ rec {
       autoModules = true;
       preferBuiltin = true;
       extraConfig = ''
-        # Raspberry Pi 3 stuff. Not needed for   s >= 4.10.
-        ARCH_BCM2835 y
-        BCM2835_MBOX y
-        BCM2835_WDT y
-        RASPBERRYPI_FIRMWARE y
-        RASPBERRYPI_POWER y
-        SERIAL_8250_BCM2835AUX y
-        SERIAL_8250_EXTENDED y
-        SERIAL_8250_SHARE_IRQ y
-
-        # Cavium ThunderX stuff.
-        PCI_HOST_THUNDER_ECAM y
-
-        # Nvidia Tegra stuff.
-        PCI_TEGRA y
-
         # The default (=y) forces us to have the XHCI firmware available in initrd,
         # which our initrd builder can't currently do easily.
         USB_XHCI_TEGRA m
