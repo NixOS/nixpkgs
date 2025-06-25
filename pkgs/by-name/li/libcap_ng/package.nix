@@ -4,14 +4,17 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcap-ng";
   version = "0.8.5";
 
   src = fetchurl {
-    url = "https://people.redhat.com/sgrubb/libcap-ng/libcap-ng-${version}.tar.gz";
+    url = "https://people.redhat.com/sgrubb/libcap-ng/libcap-ng-${finalAttrs.version}.tar.gz";
     hash = "sha256-O6UpTRy9+pivqs+8ALavntK4PoohgXGF39hEzIx6xv8=";
   };
+
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   outputs = [
     "out"
@@ -23,10 +26,11 @@ stdenv.mkDerivation rec {
     "--without-python"
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://people.redhat.com/sgrubb/libcap-ng/ChangeLog";
     description = "Library for working with POSIX capabilities";
     homepage = "https://people.redhat.com/sgrubb/libcap-ng/";
-    platforms = platforms.linux;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21;
   };
-}
+})
