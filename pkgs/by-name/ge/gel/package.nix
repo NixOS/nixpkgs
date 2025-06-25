@@ -16,19 +16,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gel";
-  version = "7.3.0";
+  version = "7.7.0";
 
   src = fetchFromGitHub {
     owner = "geldata";
     repo = "gel-cli";
     tag = "v${version}";
-    hash = "sha256-tMbAU6tlyDcAzUQ8FK0Q0V+LgzHAazETtFuC050hObw=";
-    fetchSubmodules = true;
+    hash = "sha256-4dFajTGYczolQXnpcRBPWCD68EUiPVDRGIMwGh/K2UY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-IWGOh8VbE0rCIRtiAqGlFExd1u80HWyoluquWVRaQoo=";
+    hash = "sha256-4LLGg+f8Q7jskQr/wY0eCDkn9bC+zDpMvyF5D0A1oG4=";
   };
 
   nativeBuildInputs = [
