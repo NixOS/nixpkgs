@@ -24,7 +24,7 @@ resholve.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "krumpetpirate";
     repo = "aaxtomp3";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7a9ZVvobWH/gPxa3cFiPL+vlu8h1Dxtcq0trm3HzlQg=";
   };
 
