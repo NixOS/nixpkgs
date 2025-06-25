@@ -16,8 +16,8 @@ let
       inherit tiling_wm;
     };
   stableVersion = {
-    version = "2024.3.2.15"; # "Android Studio Meerkat Feature Drop | 2024.3.2 Patch 1"
-    sha256Hash = "sha256-L8s8l1/Q4AJEGvdzTLLu9sRZlkNyRDMQvK8moZXOeIE=";
+    version = "2025.1.1.13"; # "Android Studio Narwhal | 2025.1.1"
+    sha256Hash = "sha256-MEUqYZd/Ny2spzFqbZ40j2H4Tg6pHQGWqkpRrVtbwO8=";
   };
   betaVersion = {
     version = "2025.1.1.11"; # "Android Studio Narwhal | 2025.1.1 RC 1"
