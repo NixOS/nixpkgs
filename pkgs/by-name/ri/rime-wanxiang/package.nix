@@ -9,7 +9,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rime-wanxiang";
-  version = "7.1.1";
+  version = "8.1.4";
 
   src = fetchFromGitHub {
     owner = "amzxyz";
