@@ -42,8 +42,28 @@ python3Packages.buildPythonApplication rec {
     "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg "ffprobe"}"
   ];
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [
+    versionCheckHook
+    python3Packages.pytestCheckHook
+  ];
   versionCheckProgramArg = "--version";
+
+  env = {
+    YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg "ffmpeg"}";
+    YTDL_SUB_FFPROBE_PATH = "${lib.getExe' ffmpeg "ffprobe"}";
+  };
+
+  disabledTests = [
+    "test_logger_can_be_cleaned_during_execution"
+    "test_presets_run"
+    "test_thumbnail"
+  ];
+
+  pytestFlagsArray = [
+    # According to documentation, e2e tests can be flaky:
+    # "This checksum can be inaccurate for end-to-end tests"
+    "--ignore=tests/e2e"
+  ];
 
   passthru.updateScript = ./update.sh;
 

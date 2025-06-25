@@ -103,6 +103,8 @@ jobs:
     permissions:
       issues: write
       pull-requests: write
+    secrets:
+      NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
     with:
       headBranch: ${{ needs.prepare.outputs.headBranch }}
 
