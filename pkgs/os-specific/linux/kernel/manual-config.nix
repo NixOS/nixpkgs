@@ -21,7 +21,6 @@
   zlib,
   pahole,
   kmod,
-  ubootTools,
   fetchpatch,
   rustc,
   rust-bindgen,
@@ -109,31 +108,6 @@ lib.makeOverridable (
     drvAttrs =
       config_: kernelConf: kernelPatches: configfile:
       let
-        # Folding in `ubootTools` in the default nativeBuildInputs is problematic, as
-        # it makes updating U-Boot cumbersome, since it will go above the current
-        # threshold of rebuilds
-        #
-        # To prevent these needless rounds of staging for U-Boot builds, we can
-        # limit the inclusion of ubootTools to target platforms where uImage *may*
-        # be produced.
-        #
-        # This command lists those (kernel-named) platforms:
-        #     .../linux $ grep -l uImage ./arch/*/Makefile | cut -d'/' -f3 | sort
-        #
-        # This is still a guesstimation, but since none of our cached platforms
-        # coincide in that list, this gives us "perfect" decoupling here.
-        linuxPlatformsUsingUImage = [
-          "arc"
-          "arm"
-          "csky"
-          "mips"
-          "powerpc"
-          "sh"
-          "sparc"
-          "xtensa"
-        ];
-        needsUbootTools = lib.elem stdenv.hostPlatform.linuxArch linuxPlatformsUsingUImage;
-
         config =
           let
             attrName = attr: "CONFIG_" + attr;
@@ -226,7 +200,6 @@ lib.makeOverridable (
             kmod
             hexdump
           ]
-          ++ optional needsUbootTools ubootTools
           ++ optionals (lib.versionAtLeast version "5.2") [
             cpio
             pahole
@@ -406,12 +379,10 @@ lib.makeOverridable (
             export HOME=${installkernel}
           '';
 
-        # Some image types need special install targets (e.g. uImage is installed with make uinstall on arm)
+        # Some image types need special install targets
         installTargets = [
           (kernelConf.installTarget or (
-            if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
-              "uinstall"
-            else if
+            if
               (
                 kernelConf.target == "zImage"
                 || kernelConf.target == "Image.gz"
