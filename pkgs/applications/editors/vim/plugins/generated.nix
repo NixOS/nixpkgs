@@ -1114,6 +1114,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  auto-fix-return-nvim = buildVimPlugin {
+    pname = "auto-fix-return.nvim";
+    version = "2025-06-23";
+    src = fetchFromGitHub {
+      owner = "Jay-Madden";
+      repo = "auto-fix-return.nvim";
+      rev = "01ccaa47e286f1627b730b9cc58e7ebb2a622fd1";
+      sha256 = "06as097zfdvrzx7ajdmib3czsbmh7r5l5szvlmj8lf8wfk7d35bq";
+    };
+    meta.homepage = "https://github.com/Jay-Madden/auto-fix-return.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   auto-git-diff = buildVimPlugin {
     pname = "auto-git-diff";
     version = "2022-10-29";
@@ -5933,6 +5946,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  helm-ls-nvim = buildVimPlugin {
+    pname = "helm-ls.nvim";
+    version = "2025-06-07";
+    src = fetchFromGitHub {
+      owner = "qvalentin";
+      repo = "helm-ls.nvim";
+      rev = "2bf45466c26a24e05b5266f82a3abead13e32c16";
+      sha256 = "0h0mp3qf57s4byr37rg1ynbr3bha1wa9fswnv3ypb0n9n9igr5ys";
+    };
+    meta.homepage = "https://github.com/qvalentin/helm-ls.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   helpview-nvim = buildVimPlugin {
     pname = "helpview.nvim";
     version = "2025-04-26";
@@ -6883,6 +6909,19 @@ final: prev: {
       sha256 = "1v4m18j270rfbjrcn99fkbiwhlmmr9bm9lcbagp533kx4n57731f";
     };
     meta.homepage = "https://github.com/folke/lazydev.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  lazydocker-nvim = buildVimPlugin {
+    pname = "lazydocker.nvim";
+    version = "2025-06-05";
+    src = fetchFromGitHub {
+      owner = "crnvl96";
+      repo = "lazydocker.nvim";
+      rev = "d5878defd757a193fbd73f12ec54faee9a6b19e1";
+      sha256 = "0vwx3yvy4lqppjgwz5gkqxrbr5m6b6kplh5z0nh5s7i7xqahqm1r";
+    };
+    meta.homepage = "https://github.com/crnvl96/lazydocker.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

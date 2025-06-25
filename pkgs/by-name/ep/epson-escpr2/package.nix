@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.2.28";
+  version = "1.2.34";
 
   src = fetchurl {
     # To find the most recent version go to
     # https://support.epson.net/linux/Printer/LSB_distribution_pages/en/escpr2.php
     # and retrieve the download link for source package for arm CPU for the tar.gz (the x86 link targets to rpm source files)
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/80/15/8bd63ccd14a1966e9c3658d374686c5bb104bb04/epson-inkjet-printer-escpr2-1.2.28-1.tar.gz";
-    hash = "sha256-lv8Hgo7JzT4igY8ek7EXdyFO34l735dpMC+gWkO5rvY=";
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/17/17/88/53f956e8d0a0dfc9cb7d0c35907183deb028a8b7/epson-inkjet-printer-escpr2-1.2.34-1.tar.gz";
+    hash = "sha256-7EpK/EI9MHTX2z+JtMB2Urt/e893cwNX5DAGSbjDyj4=";
   };
 
   buildInputs = [ cups ];
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
     # Fixes "implicit declaration of function" errors
     # source of patch: https://aur.archlinux.org/packages/epson-inkjet-printer-escpr2
     (fetchurl {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/bug_x86_64.patch?h=epson-inkjet-printer-escpr2&id=575d1b959063044f233cca099caceec8e6d5c02f";
-      sha256 = "sha256-G6/3oj25FUT+xv9aJ7qP5PBZWLfy+V8MCHUYucDhtzM=";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/bug_x86_64.patch?h=epson-inkjet-printer-escpr2&id=8fbca325d6d39fa3ffe001f90a432380bdeacc2f";
+      sha256 = "sha256-V8ejK33qyHPX4x8EOgR+XWW44KR8DQwHx2w+O71gQwo=";
     })
   ];
 
