@@ -27,7 +27,8 @@
 buildPythonPackage rec {
   pname = "aria2p";
   version = "0.12.1";
-  format = "pyproject";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -82,13 +83,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aria2p" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pawamoy/aria2p";
     changelog = "https://github.com/pawamoy/aria2p/blob/${src.tag}/CHANGELOG.md";
     description = "Command-line tool and library to interact with an aria2c daemon process with JSON-RPC";
     mainProgram = "aria2p";
-    license = licenses.isc;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ koral ];
     badPlatforms = [
       lib.systems.inspect.patterns.isDarwin
     ];
