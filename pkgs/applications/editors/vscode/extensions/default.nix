@@ -1420,8 +1420,8 @@ let
         mktplcRef = {
           name = "profiler-php-vscode";
           publisher = "devsense";
-          version = "1.59.17478";
-          hash = "sha256-rFgB+gR9l/Y//6q1j6Wo6GAKoEwhR4QVljUKymOKdJ0=";
+          version = "1.59.17515";
+          hash = "sha256-Y2y1vpqKEOjg4eniG0myhaAkJLdEIAT1UdEdbr04MrA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.profiler-php-vscode/changelog";
@@ -4497,8 +4497,8 @@ let
         mktplcRef = {
           publisher = "sonarsource";
           name = "sonarlint-vscode";
-          version = "4.24.0";
-          hash = "sha256-ZOQmCy5JGLOOqqiOOt7rz0xAC0eObhO0KUz+Bb95tLY=";
+          version = "4.25.0";
+          hash = "sha256-ddLGzEWKFt9TVn994EIYEf8SVDlMnJEjqc6ELXG7vkA=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };

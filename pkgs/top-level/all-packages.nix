@@ -15604,9 +15604,8 @@ with pkgs;
     });
     stdenv = gccStdenv;
   };
-  cvc5 = callPackage ../applications/science/logic/cvc5 {
-    cadical = pkgs.cadical.override { version = "2.0.0"; };
-  };
+
+  cvc5 = callPackage ../applications/science/logic/cvc5 { };
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
     ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;

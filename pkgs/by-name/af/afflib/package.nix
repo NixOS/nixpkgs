@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sshock";
     repo = "AFFLIBv3";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-CBDkeUzHnRBkLUYl0JuQcVnQWap0l7dAca1deZVoNDM=";
   };
 
