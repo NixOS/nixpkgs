@@ -32,11 +32,27 @@ buildPythonPackage {
     name = "${drvPrefix}-source";
     paths = [
       (writeTextDir "${snakeCaseName}/__init__.py" ''
-        from ._binding import language
+        # AUTO-GENERATED DO NOT EDIT
 
+        # preload the parser object before importing c binding
+        # this way we can avoid dynamic linker kicking in when
+        # downstream code imports this python module
+        import ctypes
+        import sys
+        import os
+        parser = "${grammarDrv}/parser"
+        try:
+            ctypes.CDLL(parser, mode=ctypes.RTLD_GLOBAL) # cached
+        except OSError as e:
+            raise ImportError(f"cannot load tree-sitter parser object from {parser}: {e}")
+
+        # expose binding
+        from ._binding import language
         __all__ = ["language"]
       '')
       (writeTextDir "${snakeCaseName}/binding.c" ''
+        // AUTO-GENERATED DO NOT EDIT
+
         #include <Python.h>
 
         typedef struct TSLanguage TSLanguage;
@@ -66,6 +82,8 @@ buildPythonPackage {
         }
       '')
       (writeTextDir "setup.py" ''
+        # AUTO-GENERATED DO NOT EDIT
+
         from platform import system
         from setuptools import Extension, setup
 
@@ -86,6 +104,8 @@ buildPythonPackage {
         )
       '')
       (writeTextDir "pyproject.toml" ''
+        # AUTO-GENERATED DO NOT EDIT
+
         [build-system]
         requires = ["setuptools", "wheel"]
         build-backend = "setuptools.build_meta"
@@ -115,6 +135,8 @@ buildPythonPackage {
         build-frontend = "build"
       '')
       (writeTextDir "tests/test_language.py" ''
+        # AUTO-GENERATED DO NOT EDIT
+
         from ${snakeCaseName} import language
         from tree_sitter import Language, Parser
 
@@ -125,17 +147,12 @@ buildPythonPackage {
         def test_language():
           lang = Language(language())
           assert lang is not None
-          parser = Parser()
-          parser.language = lang
+          parser = Parser(lang)
           tree = parser.parse(bytes("", "utf-8"))
           assert tree is not None
       '')
     ];
   };
-
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export DYLD_LIBRARY_PATH="${grammarDrv}"
-  '';
 
   preCheck = ''
     # https://github.com/NixOS/nixpkgs/issues/255262
@@ -148,6 +165,7 @@ buildPythonPackage {
     tree-sitter
     pytestCheckHook
   ];
+
   pythonImportsCheck = [ snakeCaseName ];
 
   meta = {
