@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     cairo
   ];
 
+  mesonBuildType = "release";
+
   postPatch = ''
     substituteInPlace src/calc.c --replace-fail \
       "qalc_binary = \"qalc\"" \
