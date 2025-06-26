@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
 
   # nativeBuildInputs
   scons,
@@ -36,11 +35,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsd";
-  version = "3.25";
+  version = "3.26.1";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-s2i2owXj96Y4LSOgy/wdeJIwYLa39Uz3mHpzx7Spr8I=";
+    sha256 = "sha256-3H5GWWjBVA5hvFfHWG1qV6AEchKgFO/a00j5B7wuCZA=";
   };
 
   # TODO: render & install HTML documentation using asciidoctor
@@ -85,12 +84,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./sconstruct-env-fixes.patch
     ./sconstrict-rundir-fixes.patch
-
-    # fix build with Python 3.12
-    (fetchpatch {
-      url = "https://gitlab.com/gpsd/gpsd/-/commit/9157b1282d392b2cc220bafa44b656d6dac311df.patch";
-      hash = "sha256-kFMn4HgidQvHwHfcSNH/0g6i1mgvEnZfvAUDPU4gljg=";
-    })
   ];
 
   preBuild = ''

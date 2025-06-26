@@ -7185,6 +7185,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  lightswitch-nvim = buildVimPlugin {
+    pname = "lightswitch.nvim";
+    version = "2025-06-09";
+    src = fetchFromGitHub {
+      owner = "markgandolfo";
+      repo = "lightswitch.nvim";
+      rev = "304a1af454a65d5a77fcd1a8c36d886d72b8749a";
+      sha256 = "00mp8jv899nnszi7wamyjfvaqk5z4hwdvs98nsqp4i3135ympbr8";
+    };
+    meta.homepage = "https://github.com/markgandolfo/lightswitch.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   limelight-vim = buildVimPlugin {
     pname = "limelight.vim";
     version = "2024-09-12";
