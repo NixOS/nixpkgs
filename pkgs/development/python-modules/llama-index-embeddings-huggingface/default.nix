@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-huggingface";
-  version = "0.5.4";
+  version = "0.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_embeddings_huggingface";
     inherit version;
-    hash = "sha256-nFjFrPt38Heo5DZgsbA3RgEmqNGAwXVwP/MeidqxnT4=";
+    hash = "sha256-f26aAx2RRvI131l8DM1igM3pa5tDf5kFLOebty5frF4=";
   };
 
   build-system = [ hatchling ];
