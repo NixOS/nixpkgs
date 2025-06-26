@@ -7,6 +7,7 @@
   openssl,
   pam,
   openssh,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -65,6 +66,8 @@ rustPlatform.buildRustPackage rec {
     ssh-add $HOME/.ssh/id_ed25519
     ssh-add $HOME/.ssh/id_rsa
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "PAM module for authenticating via ssh-agent, written in Rust";
