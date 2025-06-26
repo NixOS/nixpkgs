@@ -30,6 +30,10 @@ buildNpmPackage (finalAttrs: {
 
   dontNpmBuild = true;
 
+  postInstall = ''
+    ln -s $out/bin/vscode-json-languageserver $out/bin/vscode-json-language-server
+  '';
+
   meta = {
     description = "JSON language server";
     homepage = "https://github.com/microsoft/vscode/tree/${finalAttrs.src.tag}/extensions/json-language-features/server";
