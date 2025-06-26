@@ -43,9 +43,9 @@ let
       }
     else if llvmMajor == "15" then
       rec {
-        version = "15.0.12";
+        version = "15.0.13";
         rev = "v${version}";
-        hash = "sha256-u3cy8Nk9Dvt5VeSP46glvmSv1sQp+lUl9rY6pPTqtmY=";
+        hash = "sha256-RnGbBHUUGjIBcakQJO4nAm3/oIrQ8nkx+BC8Evw6Jmc=";
       }
     else if llvmMajor == "14" then
       {
