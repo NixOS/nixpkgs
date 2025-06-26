@@ -19,7 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ (lib.cmakeBool "SDLSOUND_DECODER_MIDI" true) ];
+  cmakeFlags = [
+    (lib.cmakeBool "SDLSOUND_DECODER_MIDI" true)
+    (lib.cmakeBool "SDLSOUND_BUILD_SHARED" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "SDLSOUND_BUILD_STATIC" stdenv.hostPlatform.isStatic)
+  ];
 
   buildInputs = [ SDL2 ];
 
