@@ -6,6 +6,7 @@
   python3,
   perlPackages,
   makeWrapper,
+  versionCheckHook,
 }:
 
 let
@@ -57,6 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram "$f" --set PERL5LIB ${perlPackages.makeFullPerlPath perlDeps}
     done
   '';
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "--version";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Code coverage tool that enhances GNU gcov";
