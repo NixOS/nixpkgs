@@ -58,7 +58,10 @@ python3Packages.buildPythonApplication rec {
       cc0
     ];
     mainProgram = "calligraphy";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with lib.maintainers; [
+      aleksana
+      awwpotato
+    ];
     platforms = lib.platforms.linux;
   };
 }
