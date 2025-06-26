@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.cc.isClang [
       "-Wno-reserved-user-defined-literal"
+      "-Wno-register"
     ]
   );
 
