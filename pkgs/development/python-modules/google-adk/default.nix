@@ -48,7 +48,6 @@ buildPythonPackage rec {
   version = "1.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
 
   build-system = [
     flit-core
