@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pam_rssh";
-  version = "1.2.0-rc2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "z4yx";
     repo = "pam_rssh";
     rev = "v${version}";
-    hash = "sha256-sXTSICVYSmwr12kRWuhVcag8kY6VAFdCqbe6LtYs4hU=";
+    hash = "sha256-VxbaxqyIAwmjjbgfTajqwPQC3bp7g/JNVNx9yy/3tus=";
     fetchSubmodules = true;
   };
 
