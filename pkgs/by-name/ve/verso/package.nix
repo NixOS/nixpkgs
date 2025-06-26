@@ -26,7 +26,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-gjg7qs2ik1cJcE6OTGN4KdljqJDGokCo4JdR+KopMJw=";
   };
 
-  cargoHash = "sha256-TAKn7KaW89pyfKwt+REZ2I6pJKWBl6P9x2/yhpB5prk=";
+  depsExtraArgs = {
+    # The vendoring process copies subdirectories, but there are some files that
+    # try to read files from their parent directories during build time
+    # We avoid this issue by placing the used file into the subdirectory
+    postBuild = ''
+      pushd $out/git/*/components/net
+      cp ../../resources/rippy.png ./rippy.png
+      substituteInPlace image_cache.rs \
+        --replace-fail '../../resources/rippy.png' './rippy.png'
+      popd
+    '';
+  };
+
+  cargoHash = "sha256-dYsqr9c5n2lDt1K9EpAzkJXwmr2eJ+ExT53dlTEYraY=";
 
   env.LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
