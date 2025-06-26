@@ -98,7 +98,7 @@ let
         else
           dotnet-sdk.meta.platforms;
 
-      hook = callPackage ./hook { inherit dotnet-sdk dotnet-runtime; };
+      hook = callPackage ./hook { inherit dotnet-runtime; };
 
       inherit (dotnetCorePackages) systemToDotnetRid;
     in
