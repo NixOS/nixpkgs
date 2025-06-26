@@ -19,14 +19,14 @@ let
     perlPackages.PathTools
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perlPackages.MemoryProcess ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lcov";
   version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "linux-test-project";
     repo = "lcov";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-31318or9AQ7iyu9DNQEvf5jaDzrneOOqOXu0HF1eag4=";
   };
 
@@ -67,9 +67,10 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://github.com/linux-test-project/lcov";
+    changelog = "https://github.com/linux-test-project/lcov/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
 
     maintainers = with lib.maintainers; [ dezgeg ];
     platforms = lib.platforms.all;
   };
-}
+})
