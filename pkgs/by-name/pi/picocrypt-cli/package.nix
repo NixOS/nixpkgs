@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "CLI";
-    rev = version;
+    tag = version;
     hash = "sha256-A/04tuDwB2nAGWOWNEPt87lwAR/5Co/IjjV7xIcRxUo=";
   };
 
