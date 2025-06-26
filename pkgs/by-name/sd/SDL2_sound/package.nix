@@ -6,14 +6,14 @@
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_sound";
   version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "icculus";
     repo = "SDL_sound";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5t2ELm8d8IX+cIJqGl/8sffwXGj5Cm0kZI6+bmjvvPg=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sdl ];
     homepage = "https://www.icculus.org/SDL_sound/";
   };
-}
+})
