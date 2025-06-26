@@ -106,10 +106,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.adk" ];
 
-  meta = with lib; {
+  meta = {
     description = "An open-source, Python toolkit for building, evaluating, and deploying sophisticated AI agents.";
     homepage = "https://github.com/google/adk-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ RajwolChapagain ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ RajwolChapagain ];
   };
 }

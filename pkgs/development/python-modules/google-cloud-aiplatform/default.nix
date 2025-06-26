@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.aiplatform" ];
 
-  meta = with lib; {
+  meta = {
     description = "A Python SDK for Vertex AI, a fully managed, end-to-end platform for data science and machine learning.";
     homepage = "https://github.com/googleapis/python-aiplatform";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ RajwolChapagain ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ RajwolChapagain ];
   };
 }

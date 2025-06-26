@@ -36,10 +36,10 @@ buildPythonPackage rec {
     "opentelemetry.exporter.cloud_trace"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenTelemetry Python exporter for Google Cloud Trace";
     homepage = "https://github.com/GoogleCloudPlatform/opentelemetry-operations-python/tree/main/opentelemetry-exporter-gcp-trace";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ RajwolChapagain ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ RajwolChapagain ];
   };
 }

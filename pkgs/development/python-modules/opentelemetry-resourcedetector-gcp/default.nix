@@ -31,10 +31,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenTelemetry Python library for detecting GCP resources like GCE, GKE, etc.";
     homepage = "https://github.com/GoogleCloudPlatform/opentelemetry-operations-python/tree/main/opentelemetry-resourcedetector-gcp";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ RajwolChapagain ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ RajwolChapagain ];
   };
 }
