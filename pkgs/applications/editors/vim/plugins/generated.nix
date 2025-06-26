@@ -5100,6 +5100,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  freeze-nvim = buildVimPlugin {
+    pname = "freeze.nvim";
+    version = "2025-03-25";
+    src = fetchFromGitHub {
+      owner = "charm-and-friends";
+      repo = "freeze.nvim";
+      rev = "590fdb0d724485f578e4fee0e3ae2b32040dfb1a";
+      sha256 = "1641xxp7yq4z25xck3l9vfcm0dvxcjvagawzixs4mvag214ndlam";
+    };
+    meta.homepage = "https://github.com/charm-and-friends/freeze.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   friendly-snippets = buildVimPlugin {
     pname = "friendly-snippets";
     version = "2025-04-29";
