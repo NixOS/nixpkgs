@@ -186,6 +186,8 @@ stdenv.mkDerivation rec {
     + lib.optionalString isAppBundle ''
       mkdir -p $out/Applications
       mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
+
+      ln -s $out/Applications/Wireshark.app/Contents/MacOS/Wireshark $out/bin/wireshark
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       local flags=()
