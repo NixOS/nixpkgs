@@ -74,6 +74,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/z4yx/pam_rssh";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [
+      kranzes
+      xyenon
+    ];
   };
 }
