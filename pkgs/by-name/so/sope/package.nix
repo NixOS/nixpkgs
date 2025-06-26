@@ -14,13 +14,13 @@
 
 clangStdenv.mkDerivation rec {
   pname = "sope";
-  version = "5.12.1";
+  version = "5.12.2";
 
   src = fetchFromGitHub {
     owner = "Alinto";
     repo = "sope";
     rev = "SOPE-${version}";
-    hash = "sha256-a7uOFiPnZ++ACV1Ggwh+YtP+NQYS4datQdlPtG+qlg0=";
+    hash = "sha256-GeJ1o8Juw7jm3/pkfuMqVpfMxKewU6hQmBoPmb0HgTc=";
   };
 
   buildInputs =
