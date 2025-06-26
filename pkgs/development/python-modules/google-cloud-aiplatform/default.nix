@@ -22,8 +22,6 @@ buildPythonPackage rec {
   pname = "google-cloud-aiplatform";
   version = "1.98.0";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-aiplatform";

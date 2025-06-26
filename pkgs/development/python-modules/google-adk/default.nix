@@ -48,7 +48,6 @@ buildPythonPackage rec {
   version = "1.4.2";
   pyproject = true;
 
-
   build-system = [
     flit-core
     setuptools
@@ -107,10 +106,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.adk" ];
 
-  meta = {
+  meta = with lib; {
     description = "An open-source, Python toolkit for building, evaluating, and deploying sophisticated AI agents.";
     homepage = "https://github.com/google/adk-python";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ RajwolChapagain ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ RajwolChapagain ];
   };
 }

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   pname = "opentelemetry-resourcedetector-gcp";
   version = "1.9.0";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "opentelemetry-operations-python";
