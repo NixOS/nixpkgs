@@ -26,7 +26,11 @@ applyPatches (
       inherit url hash sha256;
       meta =
         {
-          license = lib.licenses.${license};
+          license =
+            if (builtins.isString license) then
+              lib.licenses.${license}
+            else
+              map (license: lib.licenses.${license}) license;
           longDescription = description;
           inherit homepage maintainers teams;
         }
