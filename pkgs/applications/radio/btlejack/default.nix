@@ -1,12 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  pyserial,
-  halo,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "btlejack";
   version = "2.1.1";
 
@@ -22,8 +20,8 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    pyserial
-    halo
+    python3Packages.pyserial
+    python3Packages.halo
   ];
 
   meta = with lib; {
