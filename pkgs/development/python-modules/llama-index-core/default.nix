@@ -12,6 +12,7 @@
   fsspec,
   hatchling,
   jsonpath-ng,
+  llama-index-workflows,
   llamaindex-py-client,
   nest-asyncio,
   networkx,
@@ -38,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.12.42";
+  version = "0.12.44";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,7 +48,7 @@ buildPythonPackage rec {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${version}";
-    hash = "sha256-mfeeN3/pXm52/QF0mAnfBOLcjA9yU0MgaVlPRtP1pSg=";
+    hash = "sha256-i/aH/PU2e03jy6dWYhrn2QhTrc4UMr7cRGqhkbMbqug=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -66,7 +67,10 @@ buildPythonPackage rec {
     cp -r ${nltk-data.punkt}/tokenizers/punkt/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
   '';
 
-  pythonRelaxDeps = [ "tenacity" ];
+  pythonRelaxDeps = [
+    "setuptools"
+    "tenacity"
+  ];
 
   build-system = [ hatchling ];
 
@@ -80,6 +84,7 @@ buildPythonPackage rec {
     filetype
     fsspec
     jsonpath-ng
+    llama-index-workflows
     llamaindex-py-client
     nest-asyncio
     networkx
