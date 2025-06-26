@@ -1961,8 +1961,6 @@ with pkgs;
 
   brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
 
-  btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
-
   bsh = fetchurl {
     url = "http://www.beanshell.org/bsh-2.0b5.jar";
     hash = "sha256-YjIZlWOAc1SzvLWs6z3BNlAvAixrDvdDmHqD9m/uWlw=";
