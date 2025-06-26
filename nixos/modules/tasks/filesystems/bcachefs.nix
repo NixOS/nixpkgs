@@ -93,19 +93,35 @@ let
     let
       mountUnit = "${utils.escapeSystemdPath (prefix + (lib.removeSuffix "/" fs.mountPoint))}.mount";
       device = firstDevice fs;
-      deviceUnit = "${utils.escapeSystemdPath device}.device";
+      mkDeviceUnit = device: "${utils.escapeSystemdPath device}.device";
+      deviceUnit = mkDeviceUnit device;
+      extractProperty =
+        prop: options: (map (lib.removePrefix "${prop}=") (builtins.filter (lib.hasPrefix prop) options));
+      mkMountUnit = path: "${utils.escapeSystemdPath path}.mount";
+      normalizeUnits =
+        unit:
+        if lib.hasPrefix "/dev/" unit then
+          mkDeviceUnit unit
+        else if lib.hasPrefix "/" unit then
+          mkMountUnit unit
+        else
+          unit;
+      requiredUnits = map normalizeUnits (extractProperty "x-systemd.requires" fs.options);
+      wantedUnits = map normalizeUnits (extractProperty "x-systemd.wants" fs.options);
     in
     {
       name = "unlock-bcachefs-${utils.escapeSystemdPath fs.mountPoint}";
       value = {
         description = "Unlock bcachefs for ${fs.mountPoint}";
         requiredBy = [ mountUnit ];
-        after = [ deviceUnit ];
+        after = [ deviceUnit ] ++ requiredUnits ++ wantedUnits;
         before = [
           mountUnit
           "shutdown.target"
         ];
         bindsTo = [ deviceUnit ];
+        requires = requiredUnits;
+        wants = wantedUnits;
         conflicts = [ "shutdown.target" ];
         unitConfig.DefaultDependencies = false;
         serviceConfig = {

@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     roms = fetchFromGitHub {
       owner = "86Box";
       repo = "roms";
-      rev = "v${finalAttrs.version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-p3djn950mTUIchFCEg56JbJtIsUuxmqRdYFRl50kI5Y=";
     };
     updateScript = ./update.sh;

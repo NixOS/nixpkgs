@@ -7655,6 +7655,8 @@ self: super: with self; {
 
   knx-frontend = callPackage ../development/python-modules/knx-frontend { };
 
+  kokoro = callPackage ../development/python-modules/kokoro { };
+
   kombu = callPackage ../development/python-modules/kombu { };
 
   konnected = callPackage ../development/python-modules/konnected { };
@@ -9107,6 +9109,8 @@ self: super: with self; {
 
   misaka = callPackage ../development/python-modules/misaka { };
 
+  misaki = callPackage ../development/python-modules/misaki { };
+
   misoc = callPackage ../development/python-modules/misoc { };
 
   miss-hit = callPackage ../development/python-modules/miss-hit { };
@@ -10283,6 +10287,8 @@ self: super: with self; {
   nominal-api = callPackage ../development/python-modules/nominal-api { };
 
   nominal-api-protos = callPackage ../development/python-modules/nominal-api-protos { };
+
+  nominatim-api = callPackage ../by-name/no/nominatim/nominatim-api.nix { };
 
   nonbloat-db = callPackage ../development/python-modules/nonbloat-db { };
 
@@ -14585,6 +14591,8 @@ self: super: with self; {
   python-socks = callPackage ../development/python-modules/python-socks { };
 
   python-songpal = callPackage ../development/python-modules/python-songpal { };
+
+  python-speech-features = callPackage ../development/python-modules/python-speech-features { };
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
@@ -19734,6 +19742,8 @@ self: super: with self; {
   zadnegoale = callPackage ../development/python-modules/zadnegoale { };
 
   zamg = callPackage ../development/python-modules/zamg { };
+
+  zammad-py = callPackage ../development/python-modules/zammad-py { };
 
   zarr = callPackage ../development/python-modules/zarr { };
 

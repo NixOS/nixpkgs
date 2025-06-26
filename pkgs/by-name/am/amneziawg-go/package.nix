@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-go";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Xw2maGmNnx0+GO3OWS1Gu77oB9wh2dv+WobypQotUMA=";
   };
 

@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alpinelinux";
     repo = "alpine-make-rootfs";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-sNqaMBtbklSBcKxsc3ROI30bE1PUzJJeZqLqC9p3H+U=";
   };
 
