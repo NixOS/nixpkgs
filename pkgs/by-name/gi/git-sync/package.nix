@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-sync";
-  version = "0-unstable-2024-11-30";
+  version = "0-unstable-2025-06-26";
 
   src = fetchFromGitHub {
     owner = "simonthum";
     repo = "git-sync";
-    rev = "7242291edf543ecc1bb9de8f47086bb69a5cb9f7";
-    hash = "sha256-t1NVgp+ELmTMK0N1fFFJCoKQd8mSYSMAIDG9+kNs3Ok=";
+    rev = "15af8a43cb4d8354f0b7e7c8d27e09587a9a3994";
+    hash = "sha256-7sCncPxVMiDGi1PSoFhA9emSY2Jit35/FaBbinCdS/A=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
