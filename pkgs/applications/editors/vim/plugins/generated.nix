@@ -13655,6 +13655,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  spellwarn-nvim = buildVimPlugin {
+    pname = "spellwarn.nvim";
+    version = "2024-11-03";
+    src = fetchFromGitHub {
+      owner = "ravibrock";
+      repo = "spellwarn.nvim";
+      rev = "12734b47b008d912b4925c0bc2c1248eb534409d";
+      sha256 = "1qrz65vrcarx88bi6vn4dm0y8x7dbprcdzjk1nk1gpp2py6dd20m";
+    };
+    meta.homepage = "https://github.com/ravibrock/spellwarn.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   sphinx-nvim = buildVimPlugin {
     pname = "sphinx.nvim";
     version = "2024-10-30";
