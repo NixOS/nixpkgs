@@ -146,11 +146,7 @@ in
         port = lib.mkOption {
           type = lib.types.port;
           default = if usePostgresql then pg.settings.port else 3306;
-          defaultText = literalExpression ''
-            if config.${opt.database.type} != "postgresql"
-            then 3306
-            else 5432
-          '';
+          defaultText = lib.literalExpression ''if config.${opt.database.type} != "postgresql" then 3306 else 5432'';
           description = "Database host port.";
         };
 
@@ -195,6 +191,7 @@ in
               "/run/mysqld/mysqld.sock"
             else
               null;
+          # TODO: actually represent logic
           defaultText = lib.literalExpression "null";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
@@ -513,7 +510,7 @@ in
                     "fcgi+unix"
                   ];
                   default = if cfg.configureNginx then "http+unix" else "http";
-                  defaultText = lib.literalExpression ''if config.services.gitea.configureNginx then "http+unix" else "http"'';
+                  defaultText = lib.literalExpression ''if config.${opt.configureNginx} then "http+unix" else "http"'';
                   description = ''Listen protocol. `+unix` means "over unix", not "in addition to."'';
                 };
 
@@ -521,7 +518,7 @@ in
                   type = lib.types.either lib.types.str lib.types.path;
                   default =
                     if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0";
-                  defaultText = lib.literalExpression ''if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0"'';
+                  defaultText = lib.literalExpression ''if lib.hasSuffix "+unix" config.${options.server.PROTOCOL} then "/run/gitea/gitea.sock" else "0.0.0.0"'';
                   description = "Listen address. Must be a path when using a unix socket.";
                 };
 
@@ -540,7 +537,7 @@ in
                 ROOT_URL = lib.mkOption {
                   type = lib.types.str;
                   default = "http://${cfg.settings.server.DOMAIN}:${toString cfg.settings.server.HTTP_PORT}/";
-                  defaultText = lib.literalExpression ''"http://''${config.services.gitea.settings.server.DOMAIN}:''${toString config.services.gitea.settings.server.HTTP_PORT}/"'';
+                  defaultText = lib.literalExpression ''"http://''${config.${options.server.DOMAIN}:''${toString config.${options.server.HTTP_PORT}/"'';
                   description = "Full public URL of gitea server.";
                 };
 
@@ -548,7 +545,7 @@ in
                   type = lib.types.either lib.types.str lib.types.path;
                   default =
                     if cfg.configureNginx then "${pkgs.compressDrvWeb cfg.package.data { }}" else "${cfg.package.data}";
-                  defaultText = lib.literalExpression ''if config.services.gitea.configureNginx then ''${pkgs.compressDrvWeb config.services.gitea.package.data {}} else config.services.gitea.package.data'';
+                  defaultText = lib.literalExpression ''if config.${opt.configureNginx} then ''${pkgs.compressDrvWeb config.${opt.package}.data { }} else "{config.${opt.package}.data}"'';
                   example = "/var/lib/gitea/data";
                   description = "Upper level of template and static files path.";
                 };
@@ -588,7 +585,7 @@ in
                   type = lib.types.bool;
                   default =
                     if cfg.configureNginx then nginx.virtualHosts.${cfg.settings.server.DOMAIN}.forceSSL else false;
-                  defaultText = lib.literalExpression ''if config.services.gitea.configureNginx then config.services.nginx.virtualHosts.''${cfg.settings.server.DOMAIN}.forceSSL else false'';
+                  defaultText = lib.literalExpression ''if config.${opt.configureNginx} then config.services.nginx.virtualHosts.''${cfg.settings.server.DOMAIN}.forceSSL else false'';
                   description = ''
                     Marks session cookies as "secure" as a hint for browsers to only send
                     them via HTTPS. This option is recommend, if gitea is being served over HTTPS.
@@ -1138,7 +1135,7 @@ in
 
     warnings =
       lib.optional (cfg.database.password != "")
-        "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead."
+        "config.${opt.database.password} will be stored as plaintext in the Nix store. Use database.passwordFile instead."
       ++ lib.optional (cfg.extraConfig != null) ''
         services.gitea.`extraConfig` is deprecated, please use services.gitea.`settings`.
       ''
