@@ -17,18 +17,18 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dsda-doom";
   version = "0.29.2";
 
   src = fetchFromGitHub {
     owner = "kraflab";
     repo = "dsda-doom";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KNF91ikLFJPjSSsoz01kwAG5aCoABFyIQ5ZzbshFlkI=";
   };
 
-  sourceRoot = "${src.name}/prboom2";
+  sourceRoot = "${finalAttrs.src.name}/prboom2";
 
   nativeBuildInputs = [ cmake ];
 
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/kraflab/dsda-doom";
-    changelog = "https://github.com/kraflab/dsda-doom/releases/tag/v${version}";
+    changelog = "https://github.com/kraflab/dsda-doom/releases/tag/v${finalAttrs.version}";
     description = "Advanced Doom source port with a focus on speedrunning, successor of PrBoom+";
     mainProgram = "dsda-doom";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Gliczy ];
   };
-}
+})
