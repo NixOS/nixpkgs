@@ -108,7 +108,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
 
     maintainers = with maintainers; [
-      bluescreen303
       atemu
     ];
     platforms = with platforms; linux ++ darwin;

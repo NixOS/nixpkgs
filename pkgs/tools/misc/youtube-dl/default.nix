@@ -104,7 +104,6 @@ buildPythonPackage rec {
     '';
     license = licenses.publicDomain;
     maintainers = with maintainers; [
-      bluescreen303
       fpletz
     ];
     platforms = with platforms; linux ++ darwin;

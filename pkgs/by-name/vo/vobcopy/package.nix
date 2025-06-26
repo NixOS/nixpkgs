@@ -37,8 +37,6 @@ stdenv.mkDerivation {
     description = "Copies DVD .vob files to harddisk, decrypting them on the way";
     homepage = "https://github.com/barak/vobcopy";
     license = lib.licenses.gpl2Plus;
-
-    maintainers = [ lib.maintainers.bluescreen303 ];
     platforms = lib.platforms.all;
     mainProgram = "vobcopy";
   };
