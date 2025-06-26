@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.12.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-iKLjYE4uT+luIRXjEuO7KjgkO+/jFpLjhCI5tO7TVMM=";
+    hash = "sha256-nxBZIs7s/v465iV3m//I7otYr9Fk/+YjtXFXcYnEpRw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-O/iat0JOvA90LD+ngAByLYQyd1VBeoa8yj7/NdEYprE=";
+  cargoHash = "sha256-DDlHSSZiVbAGnowiuewgG1KwfyhfL7wnMjhEsrVMvvY=";
 
   cargoBuildFlags = [
     "-p nickel-lang-cli"
