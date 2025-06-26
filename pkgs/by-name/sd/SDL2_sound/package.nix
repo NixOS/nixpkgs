@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   SDL2,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ SDL2 ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "SDL2 sound library";
