@@ -1,7 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
+  setuptools,
   pytestCheckHook,
   tree-sitter,
   symlinkJoin,
@@ -27,6 +27,8 @@ in
 buildPythonPackage {
   inherit version;
   pname = drvPrefix;
+  pyproject = true;
+  build-system = [ setuptools ];
 
   src = symlinkJoin {
     name = "${drvPrefix}-source";
@@ -118,13 +120,12 @@ buildPythonPackage {
         classifiers = [
           "Development Status :: 4 - Beta",
           "Intended Audience :: Developers",
-          "License :: OSI Approved :: MIT License",
           "Topic :: Software Development :: Compilers",
           "Topic :: Text Processing :: Linguistic",
         ]
 
         requires-python = ">=3.8"
-        license.text = "MIT"
+        license = "MIT"
         readme = "README.md"
 
         [project.optional-dependencies]
