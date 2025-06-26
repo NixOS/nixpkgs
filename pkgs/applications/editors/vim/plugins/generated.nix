@@ -6938,6 +6938,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  lazyjj-nvim = buildVimPlugin {
+    pname = "lazyjj.nvim";
+    version = "2024-11-28";
+    src = fetchFromGitHub {
+      owner = "swaits";
+      repo = "lazyjj.nvim";
+      rev = "bba66a1351ff1f1bd078c8a1b00b8d12b3ed0017";
+      sha256 = "0fcfqqc23ri9pw5h23bnryqp6cdd3djvxbivj05lllxharbdzpl7";
+    };
+    meta.homepage = "https://github.com/swaits/lazyjj.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   lean-nvim = buildVimPlugin {
     pname = "lean.nvim";
     version = "2025-06-23";
