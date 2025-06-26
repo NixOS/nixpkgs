@@ -1,13 +1,10 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
+  libsForQt5,
   fftw,
-  qtbase,
-  qtmultimedia,
-  qmake,
   itstool,
-  wrapQtAppsHook,
   alsaSupport ? true,
   alsa-lib ? null,
   jackSupport ? false,
@@ -20,7 +17,7 @@ assert alsaSupport -> alsa-lib != null;
 assert jackSupport -> libjack2 != null;
 assert portaudioSupport -> portaudio != null;
 
-mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fmit";
   version = "1.2.14";
 
@@ -32,15 +29,15 @@ mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    qmake
+    libsForQt5.qmake
     itstool
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs =
     [
       fftw
-      qtbase
-      qtmultimedia
+      libsForQt5.qtbase
+      libsForQt5.qtmultimedia
     ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals jackSupport [ libjack2 ]
