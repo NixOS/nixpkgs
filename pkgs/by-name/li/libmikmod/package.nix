@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mikmod.shlomifish.org/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [
-      astsmtl
       lovek323
     ];
     platforms = platforms.unix;
