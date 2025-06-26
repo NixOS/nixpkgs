@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   coreutils,
+  fswatch,
   git,
   gnugrep,
   gnused,
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
   wrapperPath = lib.makeBinPath (
     [
       coreutils
+      fswatch
       git
       gnugrep
       gnused
