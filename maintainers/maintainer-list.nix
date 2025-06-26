@@ -12628,6 +12628,12 @@
     github = "juliadin";
     githubId = 7837969;
   };
+  juliamertz = {
+    email = "info@juliamertz.nl";
+    name = "Julia Mertz";
+    github = "juliamertz";
+    githubId = 35079666;
+  };
   JulianFP = {
     name = "Julian Partanen";
     github = "JulianFP";
