@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "systembridgeconnector";
-  version = "4.1.5";
+  version = "4.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "system-bridge-connector";
     tag = version;
-    hash = "sha256-AzAN7reBAI4atEFutgFrdQHFy/Qc90PQxwSaHaftn5Q=";
+    hash = "sha256-E04ETXfrh+1OY8WsNNJEeYlnqQcHWR3CX/E7SOd7/24=";
   };
 
   postPatch = ''
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "--snapshot-warn-unused" ];
 
   meta = {
-    changelog = "https://github.com/timmo001/system-bridge-connector/releases/tag/${version}";
+    changelog = "https://github.com/timmo001/system-bridge-connector/releases/tag/${src.tag}";
     description = "This is the connector package for the System Bridge project";
     homepage = "https://github.com/timmo001/system-bridge-connector";
     license = lib.licenses.asl20;
