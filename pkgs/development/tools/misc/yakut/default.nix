@@ -18,12 +18,12 @@
 
 buildPythonApplication rec {
   pname = "yakut";
-  version = "0.14.0";
+  version = "0.14.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-58SYSbKJWFgxm8QAaLPIDfVowV+NEh2nMEDrwSSBDbI=";
+    hash = "sha256-wCchb0bSnwlEwgb/Oe0gHnkEU3F+cotlvv/WXAr72i8=";
   };
 
   buildInputs = [
