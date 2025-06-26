@@ -22,13 +22,13 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "linux-firmware";
-  version = "20250621"; # not a real tag, but the current stable tag breaks some AMD GPUs entirely
+  version = "20250624"; # not a real tag, but the current stable tag breaks some AMD GPUs entirely
 
   src = fetchFromGitLab {
     owner = "kernel-firmware";
     repo = "linux-firmware";
-    rev = "49c833a10ad96a61a218d28028aed20aeeac124c";
-    hash = "sha256-Pz/k/ol0NRIHv/AdridwoBPDLsd0rfDAj31Paq4mPpU=";
+    rev = "b05fabcd6f2a16d50b5f86c389dde7a33f00bb81";
+    hash = "sha256-AvSsyfKP57Uhb3qMrf6PpNHKbXhD9IvFT1kcz5J7khM=";
   };
 
   postUnpack = ''
