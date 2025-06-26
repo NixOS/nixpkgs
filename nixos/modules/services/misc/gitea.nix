@@ -786,7 +786,7 @@ in
         ];
       };
 
-    services.postgresql = lib.optionalAttrs (usePostgresql && cfg.database.createDatabase) {
+    services.postgresql = lib.mkIf (usePostgresql && cfg.database.createDatabase) {
       enable = lib.mkDefault true;
 
       ensureDatabases = [ cfg.database.name ];
@@ -798,7 +798,7 @@ in
       ];
     };
 
-    services.mysql = lib.optionalAttrs (useMysql && cfg.database.createDatabase) {
+    services.mysql = lib.mkIf (useMysql && cfg.database.createDatabase) {
       enable = lib.mkDefault true;
       package = lib.mkDefault pkgs.mariadb;
 
