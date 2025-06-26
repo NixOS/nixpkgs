@@ -20,14 +20,14 @@ assert alsaSupport -> alsa-lib != null;
 assert jackSupport -> libjack2 != null;
 assert portaudioSupport -> portaudio != null;
 
-mkDerivation rec {
+mkDerivation (finalAttrs: {
   pname = "fmit";
   version = "1.2.14";
 
   src = fetchFromGitHub {
     owner = "gillesdegottex";
     repo = "fmit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1q062pfwz2vr9hbfn29fv54ip3jqfd9r99nhpr8w7mn1csy38azx";
   };
 
@@ -47,7 +47,7 @@ mkDerivation rec {
     ++ lib.optionals portaudioSupport [ portaudio ];
 
   postPatch = ''
-    substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
+    substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${finalAttrs.version}'
   '';
 
   qmakeFlags =
@@ -75,4 +75,4 @@ mkDerivation rec {
     maintainers = with lib.maintainers; [ orivej ];
     platforms = lib.platforms.linux;
   };
-}
+})
