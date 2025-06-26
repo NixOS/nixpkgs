@@ -165,6 +165,14 @@ in
         serviceConfig = {
           ExecStartPre = "-${pkgs.sssd}/bin/sssd --genconf-section=kcm";
           ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm --uid 0 --gid 0";
+          CapabilityBoundingSet = [
+            "CAP_IPC_LOCK"
+            "CAP_CHOWN"
+            "CAP_DAC_READ_SEARCH"
+            "CAP_FOWNER"
+            "CAP_SETGID"
+            "CAP_SETUID"
+          ];
         };
         restartTriggers = [
           settingsFileUnsubstituted
