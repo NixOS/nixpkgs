@@ -16951,6 +16951,10 @@ self: super: with self; {
 
   sqlite-utils = callPackage ../development/python-modules/sqlite-utils { };
 
+  sqlite-vec = callPackage ../development/python-modules/sqlite-vec {
+    sqlite-vec-c = pkgs.sqlite-vec;
+  };
+
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
 
   sqliteschema = callPackage ../development/python-modules/sqliteschema { };

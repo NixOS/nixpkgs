@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "sqlite-vec"
+description = "SQLite extension for vector storage"
+
+[tool.setuptools_scm]
