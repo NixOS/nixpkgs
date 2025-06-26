@@ -60,7 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://alienarena.org";
     # Engine is under GPLv2, everything else is under
     license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };

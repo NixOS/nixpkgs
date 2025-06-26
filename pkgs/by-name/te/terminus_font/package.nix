@@ -56,6 +56,5 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://terminus-font.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ astsmtl ];
   };
 }
