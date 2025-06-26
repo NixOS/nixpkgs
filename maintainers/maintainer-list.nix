@@ -25194,12 +25194,6 @@
     githubId = 224674;
     name = "Thomas Pham";
   };
-  thrix = {
-    email = "mvadkert@redhat.com";
-    github = "thrix";
-    githubId = 633969;
-    name = "Miroslav Vadkerti";
-  };
   Thra11 = {
     email = "tahall256@protonmail.ch";
     github = "Thra11";
