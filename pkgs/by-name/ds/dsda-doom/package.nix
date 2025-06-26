@@ -8,7 +8,7 @@
   SDL2_image,
   fluidsynth,
   portmidi,
-  dumb,
+  libopenmpt,
   libvorbis,
   libmad,
   libGLU,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dsda-doom";
-  version = "0.29.0";
+  version = "0.29.2";
 
   src = fetchFromGitHub {
     owner = "kraflab";
     repo = "dsda-doom";
-    rev = "v${version}";
-    hash = "sha256-mcg3GAQ90Qg7d1+/ci/XlTTF2q0tB6j+pp+Fb1Mpcao=";
+    tag = "v${version}";
+    hash = "sha256-KNF91ikLFJPjSSsoz01kwAG5aCoABFyIQ5ZzbshFlkI=";
   };
 
   sourceRoot = "${src.name}/prboom2";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsa-lib
-    dumb
+    libopenmpt
     fluidsynth
     libGLU
     libmad
