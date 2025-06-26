@@ -1,8 +1,11 @@
+# shellcheck shell=bash
+
 dotnetConfigurePhase() {
   echo "Executing dotnetConfigureHook"
 
   runHook preConfigure
 
+  # shellcheck disable=2206
   if [[ -n $__structuredAttrs ]]; then
     local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
     local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
@@ -18,7 +21,7 @@ dotnetConfigurePhase() {
   fi
 
   if [[ -z ${enableParallelBuilding-} ]]; then
-    local -r parallelFlag="--disable-parallel"
+    dotnetRestoreFlagsArray+=(--disable-parallel)
   fi
 
   if [[ -v dotnetSelfContainedBuild ]]; then
@@ -37,7 +40,6 @@ dotnetConfigurePhase() {
              -p:Deterministic=true \
              -p:NuGetAudit=false \
              --runtime "$runtimeId" \
-             ${parallelFlag-} \
              "${dotnetRestoreFlagsArray[@]}" \
              "${dotnetFlagsArray[@]}"
     done
@@ -81,6 +83,7 @@ dotnetBuildPhase() {
 
   local -r dotnetBuildType="${dotnetBuildType-Release}"
 
+  # shellcheck disable=2206
   if [[ -n $__structuredAttrs ]]; then
     local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
     local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
@@ -173,6 +176,7 @@ dotnetCheckPhase() {
 
   local -r dotnetBuildType="${dotnetBuildType-Release}"
 
+  # shellcheck disable=2206
   if [[ -n $__structuredAttrs ]]; then
     local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
     local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
@@ -253,6 +257,7 @@ fi
 # array.
 # See https://github.com/NixOS/nixpkgs/blob/858f4db3048c5be3527e183470e93c1a72c5727c/pkgs/build-support/dotnet/build-dotnet-module/hooks/dotnet-fixup-hook.sh#L1-L3
 # and https://github.com/NixOS/nixpkgs/pull/313005#issuecomment-2175482920
+# shellcheck disable=2206
 if [[ -z $__structuredAttrs ]]; then
   makeWrapperArgs=( ${makeWrapperArgs-} )
 fi
@@ -263,6 +268,7 @@ wrapDotnetProgram() {
   local -r dotnetRuntime=@dotnetRuntime@
   local -r wrapperPath=@wrapperPath@
 
+  # shellcheck disable=2016
   local -r dotnetFromEnvScript='dotnetFromEnv() {
     local dotnetPath
     if command -v dotnet 2>&1 >/dev/null; then
@@ -274,6 +280,7 @@ wrapDotnetProgram() {
 }
 dotnetFromEnv'
 
+  # shellcheck disable=2206
   if [[ -n $__structuredAttrs ]]; then
     local -r dotnetRuntimeDepsArray=( "${dotnetRuntimeDeps[@]}" )
   else
@@ -304,13 +311,14 @@ dotnetFromEnv'
     fi
   fi
 
+  # shellcheck disable=2154
   makeWrapper "$1" "$2" \
               "${dotnetRuntimeDepsFlags[@]}" \
               "${dotnetRootFlagsArray[@]}" \
               "${gappsWrapperArgs[@]}" \
               "${makeWrapperArgs[@]}"
 
-  echo "installed wrapper to "$2""
+  echo "installed wrapper to $2"
 }
 
 dotnetFixupPhase() {
@@ -319,7 +327,9 @@ dotnetFixupPhase() {
   local executable executableBasename
 
   # check if dotnetExecutables is declared (including empty values, in which case we generate no executables)
+  # shellcheck disable=2154
   if declare -p dotnetExecutables &>/dev/null; then
+    # shellcheck disable=2206
     if [[ -n $__structuredAttrs ]]; then
       local dotnetExecutablesArray=( "${dotnetExecutables[@]}" )
     else
@@ -339,7 +349,7 @@ dotnetFixupPhase() {
       fi
     done
   else
-    while IFS= read -d '' executable; do
+    while IFS= read -r -d '' executable; do
       executableBasename=$(basename "$executable")
       wrapDotnetProgram "$executable" "$out/bin/$executableBasename" \;
     done < <(find "$dotnetInstallPath" ! -name "*.dll" -executable -type f -print0)
@@ -358,6 +368,7 @@ dotnetInstallPhase() {
   local -r dotnetInstallPath="${dotnetInstallPath-$out/lib/$pname}"
   local -r dotnetBuildType="${dotnetBuildType-Release}"
 
+  # shellcheck disable=2206
   if [[ -n $__structuredAttrs ]]; then
     local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
     local dotnetFlagsArray=( "${dotnetFlags[@]}" )
