@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       rm $out/bin/{Netgen1,startup.sh}
-      mkdir -p $out/Applications/netgen.app/Contents/{MacOS,Resouces}
+      mkdir -p $out/Applications/netgen.app/Contents/{MacOS,Resources}
       substituteInPlace $out/Info.plist --replace-fail "Netgen1" "netgen"
       mv $out/Info.plist $out/Applications/netgen.app/Contents
       mv $out/Netgen.icns $out/Applications/netgen.app/Contents/Resources
