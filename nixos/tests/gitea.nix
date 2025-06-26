@@ -34,8 +34,8 @@ let
     nameValuePair type (makeTest {
       name = "${giteaPackage.pname}-${type}";
       meta.maintainers = with maintainers; [
-        aanderse
-        kolaente
+        SuperSandro2000
+        techknowlogick
       ];
 
       nodes = {
