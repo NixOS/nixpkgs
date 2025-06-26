@@ -514,8 +514,6 @@ with pkgs;
     python3Packages = python311Packages;
   };
 
-  qdmr = libsForQt5.callPackage ../applications/radio/qdmr { };
-
   fetchbower = callPackage ../build-support/fetchbower { };
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
