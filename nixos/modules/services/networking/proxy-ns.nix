@@ -59,7 +59,7 @@ in
       source = "${cfg.package}/bin/proxy-ns";
       owner = "root";
       group = "root";
-      capabilities = "cap_net_bind_service,cap_fowner,cap_chown,cap_sys_chroot,cap_sys_admin,cap_net_admin=ep";
+      capabilities = "cap_sys_admin,cap_net_admin,cap_net_bind_service,cap_sys_chroot,cap_chown=ep";
     };
   };
 }

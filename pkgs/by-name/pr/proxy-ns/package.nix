@@ -7,7 +7,7 @@
 let
   proxyns = buildGoModule rec {
     name = "proxy-ns";
-    version = "2.2.2";
+    version = "2.2.3";
     vendorHash = null;
     src = fetchFromGitHub {
       owner = "OkamiW";
