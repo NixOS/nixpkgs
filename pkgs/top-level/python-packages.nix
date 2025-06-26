@@ -7530,6 +7530,8 @@ self: super: with self; {
 
   kalshi-python = callPackage ../development/python-modules/kalshi-python { };
 
+  kanalizer = callPackage ../development/python-modules/kanalizer { };
+
   kanidm = callPackage ../development/python-modules/kanidm { };
 
   kaptan = callPackage ../development/python-modules/kaptan { };
