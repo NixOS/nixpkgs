@@ -15712,6 +15712,12 @@
     githubId = 1377571;
     name = "Matthew S. Daiter";
   };
+  mdaniels5757 = {
+    email = "nix@mdaniels.me";
+    github = "mdaniels5757";
+    githubId = 8762511;
+    name = "Michael Daniels";
+  };
   mdarocha = {
     email = "marek@mdarocha.pl";
     github = "mdarocha";

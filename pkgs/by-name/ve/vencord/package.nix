@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.12.3";
+  version = "1.12.4";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fOZXgyA61G+D7otNNO8d89ghR/GiYPJ7vSZtj9TeGuU=";
+    hash = "sha256-x5tbLoNGBT3tS+QXn0piFMM8+uqoQt8gfQJap1TyLmQ=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {

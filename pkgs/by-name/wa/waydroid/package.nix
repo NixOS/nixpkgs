@@ -108,6 +108,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/waydroid/waydroid";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }
