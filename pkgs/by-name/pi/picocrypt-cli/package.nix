@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "picocrypt-cli";
   version = "1.48";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "CLI";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A/04tuDwB2nAGWOWNEPt87lwAR/5Co/IjjV7xIcRxUo=";
   };
 
-  sourceRoot = "${src.name}/picocrypt";
+  sourceRoot = "${finalAttrs.src.name}/picocrypt";
   vendorHash = "sha256-iVbfvV3BqK40uU9kQaqgIsHmX8i7w1M1MIxnknDP6AM=";
 
   ldflags = [
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ arthsmn ];
     mainProgram = "picocrypt";
   };
-}
+})
