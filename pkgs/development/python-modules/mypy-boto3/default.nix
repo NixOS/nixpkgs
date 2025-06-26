@@ -562,8 +562,8 @@ rec {
       "sha256-FDY4Pu4hnQITnr7ykyevqUbmqJhR28Pa6XScx0A045Y=";
 
   mypy-boto3-gamelift =
-    buildMypyBoto3Package "gamelift" "1.38.0"
-      "sha256-5b65h5uXhHrRjL8uuEntAePWyv5j2WMjxjRiMkNtgfo=";
+    buildMypyBoto3Package "gamelift" "1.38.43"
+      "sha256-/Tzetbmspbvi9Wxl3vEiJoZ1EsABdLWp2CcJjjWYkd0=";
 
   mypy-boto3-glacier =
     buildMypyBoto3Package "glacier" "1.38.0"
