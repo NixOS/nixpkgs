@@ -56,6 +56,8 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   disabledTests = [
     "test_get_data"
     "test_wait_for_response_timeout"
