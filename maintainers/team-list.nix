@@ -759,6 +759,20 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  loongarch64 = {
+    members = [
+      aleksana
+      Cryolitia
+      darkyzhou
+      dramforever
+      wegank
+    ];
+    githubTeams = [ "loongarch64" ];
+    scope = "Maintain LoongArch64 related packages and code";
+    shortName = "LoongArch64";
+    enableFeatureFreezePing = true;
+  };
+
   lumiguide = {
     # Verify additions by approval of an already existing member of the team.
     members = [

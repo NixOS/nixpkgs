@@ -1026,10 +1026,12 @@ let
         owner = "kaltura";
         repo = "nginx-vod-module";
         rev = "1.33";
-        hash = "sha256-xcdbaogJV/vSzFfP55uK2+zw3zF5j9AHaJI0QItTSss=";
+        hash = "sha256-pForXU1VBxa4F3F7xK+DJtMKC4wgcykJImlQjxz5GnE=";
         postFetch = ''
           substituteInPlace $out/vod/media_set.h \
             --replace "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
+          substituteInPlace $out/vod/subtitle/dfxp_format.c \
+            --replace-fail '(!ctxt->wellFormed && !ctxt->recovery))' '!ctxt->wellFormed)'
         '';
       };
 

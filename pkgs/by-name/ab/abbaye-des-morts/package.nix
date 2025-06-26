@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nevat";
     repo = "abbayedesmorts-gpl";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-IU7E1zmeif9CdoBxzmh7MG2jElGGnEZyKnK7eYFrjsQ=";
   };
 
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://locomalito.com/abbaye_des_morts.php";
     description = "Retro arcade video game";
     mainProgram = "abbayev2";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.marius851000 ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

@@ -313,7 +313,7 @@ Container system, boot system and library changes are some examples of the pull 
 
 To streamline automated updates, leverage the nixpkgs-merge-bot by simply commenting `@NixOS/nixpkgs-merge-bot merge`. The bot will verify if the following conditions are met, refusing to merge otherwise:
 
-- the PR author should be @r-ryantm;
+- the PR author should be @r-ryantm or a Nixpkgs committer;
 - the commenter that issued the command should be among the package maintainers;
 - the package should reside in `pkgs/by-name`.
 
