@@ -44,8 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     patchShebangs --build bin/{fix.pl,get_version.sh} tests/*/*
-    patchShebangs --host bin/{gen*,lcov,perl2lcov}
-    makeFlagsArray=(PREFIX=$out LCOV_PERL_PATH=${lib.getExe perl})
+    makeFlagsArray=(PREFIX=$out)
   '';
 
   postInstall = ''
