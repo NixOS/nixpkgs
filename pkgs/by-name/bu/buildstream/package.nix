@@ -34,26 +34,27 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  dependencies = with python3Packages; [
-    click
-    dulwich
-    grpcio
-    jinja2
-    markupsafe
-    packaging
-    pluginbase
-    protobuf
-    psutil
-    pyroaring
-    requests
-    ruamel-yaml
-    ruamel-yaml-clib
-    tomlkit
-    ujson
-  ];
+  dependencies =
+    [ buildbox ]
+    ++ (with python3Packages; [
+      click
+      dulwich
+      grpcio
+      jinja2
+      markupsafe
+      packaging
+      pluginbase
+      protobuf
+      psutil
+      pyroaring
+      requests
+      ruamel-yaml
+      ruamel-yaml-clib
+      tomlkit
+      ujson
+    ]);
 
   buildInputs = [
-    buildbox
     fuse3
     lzip
     patch
