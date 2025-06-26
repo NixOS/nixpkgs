@@ -12,7 +12,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "git-sync";
   version = "0-unstable-2025-06-26";
 
