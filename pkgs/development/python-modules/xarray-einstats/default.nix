@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "xarray-einstats";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "arviz-devs";
     repo = "xarray-einstats";
     tag = "v${version}";
-    hash = "sha256-0FhoiKagEwxdqLWJyucjiTjjHdYZB6RMIfy2xBFAm4I=";
+    hash = "sha256-CgyMc2Yvut+1LfH9F2FAd62HuLu+58Xr50txbWj4mYU=";
   };
 
   build-system = [ flit-core ];
