@@ -170,6 +170,7 @@ let
       "aarch64" = "AArch64";
     }
     .${llvmStdenv.targetPlatform.parsed.cpu.name}
+      or (throw "Unsupported CPU architecture: ${llvmStdenv.targetPlatform.parsed.cpu.name}")
   }";
   # -ffat-lto-objects = emit LTO object files that are compatible with non-LTO-supporting builds too
   # FatLTO objects are a special type of fat object file that contain LTO compatible IR in addition to generated object code,
