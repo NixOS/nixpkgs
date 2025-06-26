@@ -2346,12 +2346,6 @@
     githubId = 119769817;
     name = "goatastronaut0212";
   };
-  astsmtl = {
-    email = "astsmtl@yandex.ru";
-    github = "astsmtl";
-    githubId = 2093941;
-    name = "Alexander Tsamutali";
-  };
   asymmetric = {
     email = "lorenzo@mailbox.org";
     github = "asymmetric";

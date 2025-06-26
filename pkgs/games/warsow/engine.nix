@@ -87,7 +87,6 @@ stdenv.mkDerivation {
     homepage = "http://www.warsow.net";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      astsmtl
       abbradar
     ];
     platforms = platforms.linux;
