@@ -42,9 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  makeFlags = [
+    "PREFIX=$(out)"
+    "VERSION=${finalAttrs.version}"
+    "RELEASE=1"
+  ];
+
   preBuild = ''
     patchShebangs --build bin/{fix.pl,get_version.sh} tests/*/*
-    makeFlagsArray=(PREFIX=$out)
   '';
 
   postInstall = ''
