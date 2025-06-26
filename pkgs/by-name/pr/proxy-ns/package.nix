@@ -2,6 +2,7 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   lib,
 }:
 let
@@ -24,16 +25,13 @@ let
       #"-trimpath" added by default by buildGoModule
     ];
     env.CGO_ENABLED = 0;
-    /*
-      postInstall = ''
-        mkdir -p $out/etc/proxy-ns
-      '';
-    */
+    passthru.updateScript = nix-update-script { };
     meta = {
       description = "Linux-specific command-line tool that can force any program to use your SOCKS5 proxy server.";
       mainProgram = "proxy-ns";
       homepage = "https://github.com/OkamiW/proxy-ns";
       license = with lib.licenses; [ gpl3Plus ];
+      maintainers = with lib.maintainers; [ deng232 ];
     };
   };
 in
