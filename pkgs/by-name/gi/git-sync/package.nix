@@ -27,32 +27,40 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -a git-* $out/bin/
-    cp -a contrib/git-* $out/bin/
-  '';
+  installPhase =
+    let
+      wrapperPath = lib.makeBinPath (
+        [
+          coreutils
+          fswatch
+          git
+          gnugrep
+          gnused
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
+      );
 
-  wrapperPath = lib.makeBinPath (
-    [
-      coreutils
-      fswatch
-      git
-      gnugrep
-      gnused
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
-  );
+    in
+    ''
+      runHook preInstall
 
-  postFixup = ''
-    wrap_path="${wrapperPath}":$out/bin
+      for file in git-*; do
+        install -D -m 755 "$file" -t $out/bin
+      done
 
-    wrapProgram $out/bin/git-sync \
-      --prefix PATH : $wrap_path
+      for file in contrib/git-*; do
+        install -D -m 755 "$file" -t $out/bin
+      done
 
-    wrapProgram $out/bin/git-sync-on-inotify \
-      --prefix PATH : $wrap_path
-  '';
+      wrap_path="${wrapperPath}":$out/bin
+
+      for file in $out/bin/*; do
+        wrapProgram $file \
+          --prefix PATH : $wrap_path
+      done
+
+      runHook postInstall
+    '';
 
   passthru = {
     updateScript = nix-update-script { };
