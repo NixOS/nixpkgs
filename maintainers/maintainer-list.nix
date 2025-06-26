@@ -25827,6 +25827,11 @@
     githubId = 27609929;
     name = "Reinis Taukulis";
   };
+  ttschnz = {
+    github = "ttschnz";
+    githubId = 77488956;
+    name = "Timothy Tschnitzel";
+  };
   ttuegel = {
     email = "ttuegel@mailbox.org";
     github = "ttuegel";
