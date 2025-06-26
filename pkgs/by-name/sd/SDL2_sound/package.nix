@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   SDL2,
   flac,
@@ -13,23 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL2_sound";
-  version = "2.0.1";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "icculus";
     repo = "SDL_sound";
     rev = "v${version}";
-    hash = "sha256-N2znqy58tMHgYa07vEsSedWLRhoJzDoINcsUu0UYLnA=";
+    hash = "sha256-5t2ELm8d8IX+cIJqGl/8sffwXGj5Cm0kZI6+bmjvvPg=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/icculus/SDL_sound/pull/32 - fix build on darwin
-      # can be dropped on the next update
-      url = "https://github.com/icculus/SDL_sound/commit/c15d75b7720113b28639baad284f45f943846294.patch";
-      hash = "sha256-4GL8unsZ7eNkzjLXq9QdaxFQMzX2tdP0cBR1jTaRLc0=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
