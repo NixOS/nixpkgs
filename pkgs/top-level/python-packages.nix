@@ -8323,6 +8323,10 @@ self: super: with self; {
     callPackage ../development/python-modules/llama-index-indices-managed-llama-cloud
       { };
 
+  llama-index-instrumentation =
+    callPackage ../development/python-modules/llama-index-instrumentation
+      { };
+
   llama-index-legacy = callPackage ../development/python-modules/llama-index-legacy { };
 
   llama-index-llms-ollama = callPackage ../development/python-modules/llama-index-llms-ollama { };
