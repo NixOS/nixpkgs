@@ -1115,7 +1115,7 @@ let
             publisher = "Continue";
             version = "1.1.49";
           }
-          // sources.${stdenv.system};
+          // sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
         nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
         buildInputs = [ (lib.getLib stdenv.cc.cc) ];
         meta = {
@@ -1387,7 +1387,7 @@ let
             publisher = "devsense";
             version = "1.41.14332";
           }
-          // sources.${stdenv.system};
+          // sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
         nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -3334,7 +3334,7 @@ let
             publisher = "ms-dotnettools";
             version = "2.2.3";
           }
-          // sources.${stdenv.system};
+          // sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
         nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
         buildInputs = [
           (lib.getLib stdenv.cc.cc)
