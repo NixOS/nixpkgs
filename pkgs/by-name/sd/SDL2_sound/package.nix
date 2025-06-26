@@ -4,10 +4,6 @@
   fetchFromGitHub,
   cmake,
   SDL2,
-  flac,
-  libmikmod,
-  libvorbis,
-  timidity,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,13 +21,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSDLSOUND_DECODER_MIDI=1" ];
 
-  buildInputs = [
-    SDL2
-    flac
-    libmikmod
-    libvorbis
-    timidity
-  ];
+  buildInputs = [ SDL2 ];
 
   meta = with lib; {
     description = "SDL2 sound library";
