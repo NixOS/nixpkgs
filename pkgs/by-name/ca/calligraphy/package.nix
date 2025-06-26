@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "calligraphy";
-  version = "1.0.1";
+  version = "1.2.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitLab {
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     owner = "GeopJr";
     repo = "Calligraphy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vqbrt8zS2PL4Fhc421DY+IkjD4nuGqSNTLlE8IYSmcI=";
+    hash = "sha256-KDml96oxnmTygTC+3rZ//wKv7xDSjw37+UHu3a3zuO4=";
   };
 
   nativeBuildInputs = [
