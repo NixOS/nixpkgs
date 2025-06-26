@@ -19,6 +19,7 @@
   nugetPackageHook,
   xmlstarlet,
   pkgs,
+  recurseIntoAttrs,
 }:
 type: unwrapped:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -282,7 +283,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         };
       }
       // lib.optionalAttrs (type == "sdk") ({
-        buildDotnetModule =
+        buildDotnetModule = recurseIntoAttrs (
           (pkgs.appendOverlays [
             (self: super: {
               dotnet-sdk = finalAttrs.finalPackage;
@@ -290,7 +291,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             })
           ]).callPackage
             ../../../test/dotnet/default.nix
-            { };
+            { }
+        );
 
         console = lib.recurseIntoAttrs {
           # yes, older SDKs omit the comma
