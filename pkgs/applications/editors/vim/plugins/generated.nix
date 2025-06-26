@@ -14805,6 +14805,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  thanks-nvim = buildVimPlugin {
+    pname = "thanks.nvim";
+    version = "2025-03-08";
+    src = fetchFromGitHub {
+      owner = "jsongerber";
+      repo = "thanks.nvim";
+      rev = "ec5eedab29b734c31050b6618fc58d1107ce8b4c";
+      sha256 = "1haw16cilwgnwkl48yi7wcmirk03xbl7mnki7rcyhkzi552cfnnp";
+    };
+    meta.homepage = "https://github.com/jsongerber/thanks.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   themed-tabs-nvim = buildVimPlugin {
     pname = "themed-tabs.nvim";
     version = "2024-12-08";
