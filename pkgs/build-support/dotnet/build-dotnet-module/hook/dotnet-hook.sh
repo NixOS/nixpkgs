@@ -1,4 +1,4 @@
-dotnetConfigureHook() {
+dotnetConfigurePhase() {
     echo "Executing dotnetConfigureHook"
 
     runHook preConfigure
@@ -74,10 +74,10 @@ dotnetConfigureHook() {
 }
 
 if [[ -z "${dontDotnetConfigure-}" && -z "${configurePhase-}" ]]; then
-    configurePhase=dotnetConfigureHook
+    configurePhase=dotnetConfigurePhase
 fi
 
-dotnetBuildHook() {
+dotnetBuildPhase() {
     echo "Executing dotnetBuildHook"
 
     runHook preBuild
@@ -166,10 +166,10 @@ dotnetBuildHook() {
 }
 
 if [[ -z ${dontDotnetBuild-} && -z ${buildPhase-} ]]; then
-    buildPhase=dotnetBuildHook
+    buildPhase=dotnetBuildPhase
 fi
 
-dotnetCheckHook() {
+dotnetCheckPhase() {
     echo "Executing dotnetCheckHook"
 
     runHook preCheck
@@ -248,7 +248,7 @@ dotnetCheckHook() {
 }
 
 if [[ -z "${dontDotnetCheck-}" && -z "${checkPhase-}" ]]; then
-    checkPhase=dotnetCheckHook
+    checkPhase=dotnetCheckPhase
 fi
 
 # For compatibility, convert makeWrapperArgs to an array unless we are using
@@ -316,7 +316,7 @@ dotnetFromEnv'
     echo "installed wrapper to "$2""
 }
 
-dotnetFixupHook() {
+dotnetFixupPhase() {
     local -r dotnetInstallPath="${dotnetInstallPath-$out/lib/$pname}"
 
     local executable executableBasename
@@ -350,10 +350,10 @@ dotnetFixupHook() {
 }
 
 if [[ -z "${dontFixup-}" && -z "${dontDotnetFixup-}" ]]; then
-    appendToVar preFixupPhases dotnetFixupHook
+    appendToVar preFixupPhases dotnetFixupPhase
 fi
 
-dotnetInstallHook() {
+dotnetInstallPhase() {
     echo "Executing dotnetInstallHook"
 
     runHook preInstall
@@ -465,5 +465,5 @@ dotnetInstallHook() {
 }
 
 if [[ -z "${dontDotnetInstall-}" && -z "${installPhase-}" ]]; then
-    installPhase=dotnetInstallHook
+    installPhase=dotnetInstallPhase
 fi
