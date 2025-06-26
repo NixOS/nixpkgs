@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DSDLSOUND_DECODER_MIDI=1" ];
+  cmakeFlags = [ (lib.cmakeBool "SDLSOUND_DECODER_MIDI" true) ];
 
   buildInputs = [ SDL2 ];
 
@@ -27,7 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SDL2 sound library";
     mainProgram = "playsound";
     platforms = lib.platforms.unix;
-    license = lib.licenses.zlib;
+    license = with lib.licenses; [
+      zlib
+
+      # various vendored decoders
+      publicDomain
+
+      # timidity
+      artistic1
+      lgpl21Only
+    ];
     teams = [ lib.teams.sdl ];
     homepage = "https://www.icculus.org/SDL_sound/";
   };
