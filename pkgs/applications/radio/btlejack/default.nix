@@ -24,11 +24,11 @@ python3Packages.buildPythonApplication rec {
     python3Packages.halo
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/virtualabs/btlejack";
     description = "Bluetooth Low Energy Swiss-army knife";
     mainProgram = "btlejack";
-    license = licenses.mit;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }
