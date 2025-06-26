@@ -29,7 +29,7 @@
 }:
 
 let
-  version = "1.7.2.post1";
+  version = "1.7.2";
 
   libmathdx = stdenv.mkDerivation (finalAttrs: {
     pname = "libmathdx";
@@ -118,7 +118,7 @@ buildPythonPackage {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${version}";
-    hash = "sha256-cT0CrD71nNZnQMimGrmnSQl6RQx4MiUv2xBFPWNI/0s=";
+    hash = "sha256-9srETxYAFbBeLeoGMNyC+QITrJaIzyyc9e44aZoWjbI=";
   };
 
   patches =
