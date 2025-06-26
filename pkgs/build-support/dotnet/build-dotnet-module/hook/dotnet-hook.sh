@@ -5,43 +5,32 @@ dotnetConfigurePhase() {
 
   runHook preConfigure
 
-  # shellcheck disable=2206
-  if [[ -n $__structuredAttrs ]]; then
-    local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
-    local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
-    local dotnetFlagsArray=( "${dotnetFlags[@]}" )
-    local dotnetRestoreFlagsArray=( "${dotnetRestoreFlags[@]}" )
-    local dotnetRuntimeIdsArray=( "${dotnetRuntimeIds[@]}" )
-  else
-    local dotnetProjectFilesArray=($dotnetProjectFiles)
-    local dotnetTestProjectFilesArray=($dotnetTestProjectFiles)
-    local dotnetFlagsArray=($dotnetFlags)
-    local dotnetRestoreFlagsArray=($dotnetRestoreFlags)
-    local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
-  fi
+  local -a projectFiles flags runtimeIds
+  concatTo projectFiles dotnetProjectFiles dotnetTestProjectFiles
+  concatTo flags dotnetFlags dotnetRestoreFlags
+  concatTo runtimeIds dotnetRuntimeIds
 
   if [[ -z ${enableParallelBuilding-} ]]; then
-    dotnetRestoreFlagsArray+=(--disable-parallel)
+    flags+=(--disable-parallel)
   fi
 
   if [[ -v dotnetSelfContainedBuild ]]; then
     if [[ -n $dotnetSelfContainedBuild ]]; then
-      dotnetRestoreFlagsArray+=("-p:SelfContained=true")
+      flags+=("-p:SelfContained=true")
     else
-      dotnetRestoreFlagsArray+=("-p:SelfContained=false")
+      flags+=("-p:SelfContained=false")
     fi
   fi
 
   dotnetRestore() {
     local -r projectFile="${1-}"
-    for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
+    for runtimeId in "${runtimeIds[@]}"; do
       dotnet restore ${1+"$projectFile"} \
              -p:ContinuousIntegrationBuild=true \
              -p:Deterministic=true \
              -p:NuGetAudit=false \
              --runtime "$runtimeId" \
-             "${dotnetRestoreFlagsArray[@]}" \
-             "${dotnetFlagsArray[@]}"
+             "${flags[@]}"
     done
   }
 
@@ -57,12 +46,12 @@ dotnetConfigurePhase() {
   # arrays, so instead we just pass a variable to indicate that we don’t have
   # projects.
   if [[ -z ${dotnetGlobalTool-} ]]; then
-    if (( ${#dotnetProjectFilesArray[@]} == 0 )); then
+    if (( ${#projectFiles[@]} == 0 )); then
       dotnetRestore
     fi
 
     local projectFile
-    for projectFile in "${dotnetProjectFilesArray[@]}" "${dotnetTestProjectFilesArray[@]}"; do
+    for projectFile in "${projectFiles[@]}"; do
       dotnetRestore "$projectFile"
     done
   fi
@@ -83,20 +72,10 @@ dotnetBuildPhase() {
 
   local -r dotnetBuildType="${dotnetBuildType-Release}"
 
-  # shellcheck disable=2206
-  if [[ -n $__structuredAttrs ]]; then
-    local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
-    local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
-    local dotnetFlagsArray=( "${dotnetFlags[@]}" )
-    local dotnetBuildFlagsArray=( "${dotnetBuildFlags[@]}" )
-    local dotnetRuntimeIdsArray=( "${dotnetRuntimeIds[@]}" )
-  else
-    local dotnetProjectFilesArray=($dotnetProjectFiles)
-    local dotnetTestProjectFilesArray=($dotnetTestProjectFiles)
-    local dotnetFlagsArray=($dotnetFlags)
-    local dotnetBuildFlagsArray=($dotnetBuildFlags)
-    local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
-  fi
+  local -a projectFiles flags runtimeIds
+  concatTo projectFiles dotnetProjectFiles dotnetTestProjectFiles
+  concatTo flags dotnetFlags dotnetBuildFlags
+  concatTo runtimeIds dotnetRuntimeIds
 
   if [[ -n "${enableParallelBuilding-}" ]]; then
     local -r maxCpuFlag="$NIX_BUILD_CORES"
@@ -108,32 +87,31 @@ dotnetBuildPhase() {
 
   if [[ -v dotnetSelfContainedBuild ]]; then
     if [[ -n $dotnetSelfContainedBuild ]]; then
-      dotnetBuildFlagsArray+=("-p:SelfContained=true")
+      flags+=("-p:SelfContained=true")
     else
-      dotnetBuildFlagsArray+=("-p:SelfContained=false")
+      flags+=("-p:SelfContained=false")
     fi
   fi
 
   if [[ -n ${dotnetUseAppHost-} ]]; then
-    dotnetBuildFlagsArray+=("-p:UseAppHost=true")
+    flags+=("-p:UseAppHost=true")
   fi
 
-  local versionFlagsArray=()
   if [[ -n ${version-} ]]; then
-    versionFlagsArray+=("-p:InformationalVersion=$version")
+    flags+=("-p:InformationalVersion=$version")
   fi
 
   if [[ -n ${versionForDotnet-} ]]; then
-    versionFlagsArray+=("-p:Version=$versionForDotnet")
+    flags+=("-p:Version=$versionForDotnet")
   fi
 
   dotnetBuild() {
     local -r projectFile="${1-}"
 
-    for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
-      local runtimeIdFlagsArray=()
+    for runtimeId in "${runtimeIds[@]}"; do
+      local runtimeIdFlags=()
       if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
-        runtimeIdFlagsArray+=("--runtime" "$runtimeId")
+        runtimeIdFlags+=("--runtime" "$runtimeId")
       fi
 
       dotnet build ${1+"$projectFile"} \
@@ -144,19 +122,17 @@ dotnetBuildPhase() {
              -p:OverwriteReadOnlyFiles=true \
              --configuration "$dotnetBuildType" \
              --no-restore \
-             "${versionFlagsArray[@]}" \
-             "${runtimeIdFlagsArray[@]}" \
-             "${dotnetBuildFlagsArray[@]}" \
-             "${dotnetFlagsArray[@]}"
+             "${runtimeIdFlags[@]}" \
+             "${flags[@]}"
     done
   }
 
-  if (( ${#dotnetProjectFilesArray[@]} == 0 )); then
+  if (( ${#projectFiles[@]} == 0 )); then
     dotnetBuild
   fi
 
   local projectFile
-  for projectFile in "${dotnetProjectFilesArray[@]}" "${dotnetTestProjectFilesArray[@]}"; do
+  for projectFile in "${projectFiles[@]}"; do
     dotnetBuild "$projectFile"
   done
 
@@ -176,41 +152,31 @@ dotnetCheckPhase() {
 
   local -r dotnetBuildType="${dotnetBuildType-Release}"
 
-  # shellcheck disable=2206
-  if [[ -n $__structuredAttrs ]]; then
-    local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
-    local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
-    local dotnetTestFlagsArray=( "${dotnetTestFlags[@]}" )
-    local dotnetTestFiltersArray=( "${dotnetTestFilters[@]}" )
-    local dotnetDisabledTestsArray=( "${dotnetDisabledTests[@]}" )
-    local dotnetRuntimeDepsArray=( "${dotnetRuntimeDeps[@]}" )
-    local dotnetRuntimeIdsArray=( "${dotnetRuntimeIds[@]}" )
-  else
-    local dotnetProjectFilesArray=($dotnetProjectFiles)
-    local dotnetTestProjectFilesArray=($dotnetTestProjectFiles)
-    local dotnetTestFlagsArray=($dotnetTestFlags)
-    local dotnetTestFiltersArray=($dotnetTestFilters)
-    local dotnetDisabledTestsArray=($dotnetDisabledTests)
-    local dotnetRuntimeDepsArray=($dotnetRuntimeDeps)
-    local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
+  local -a projectFiles testProjectFiles testFilters disabledTests flags runtimeIds runtimeDeps
+  concatTo projectFiles dotnetProjectFiles
+  concatTo testProjectFiles dotnetTestProjectFiles
+  concatTo testFilters dotnetTestFilters
+  concatTo disabledTests dotnetDisabledTests
+  concatTo flags dotnetFlags dotnetTestFlags
+  concatTo runtimeIds dotnetRuntimeIds
+  concatTo runtimeDeps dotnetRuntimeDeps
+
+  if (( ${#disabledTests[@]} > 0 )); then
+    local disabledTestsFilters=("${disabledTests[@]/#/FullyQualifiedName!=}")
+    testFilters=( "${testFilters[@]}" "${disabledTestsFilters[@]//,/%2C}" )
   fi
 
-  if (( ${#dotnetDisabledTestsArray[@]} > 0 )); then
-    local disabledTestsFilters=("${dotnetDisabledTestsArray[@]/#/FullyQualifiedName!=}")
-    dotnetTestFiltersArray=( "${dotnetTestFiltersArray[@]}" "${disabledTestsFilters[@]//,/%2C}" )
-  fi
-
-  if (( ${#dotnetTestFiltersArray[@]} > 0 )); then
+  if (( ${#testFilters[@]} > 0 )); then
     local OLDIFS="$IFS" IFS='&'
-    dotnetTestFlagsArray+=("--filter:${dotnetTestFiltersArray[*]}")
+    flags+=("--filter:${testFilters[*]}")
     IFS="$OLDIFS"
   fi
 
   local libraryPath="${LD_LIBRARY_PATH-}"
-  if (( ${#dotnetRuntimeDepsArray[@]} > 0 )); then
-    local libraryPathArray=("${dotnetRuntimeDepsArray[@]/%//lib}")
+  if (( ${#runtimeDeps[@]} > 0 )); then
+    local libraryPaths=("${runtimeDeps[@]/%//lib}")
     local OLDIFS="$IFS" IFS=':'
-    libraryPath="${libraryPathArray[*]}${libraryPath:+':'}$libraryPath"
+    libraryPath="${libraryPaths[*]}${libraryPath:+':'}$libraryPath"
     IFS="$OLDIFS"
   fi
 
@@ -221,11 +187,11 @@ dotnetCheckPhase() {
   fi
 
   local projectFile runtimeId
-  for projectFile in "${dotnetTestProjectFilesArray[@]-${dotnetProjectFilesArray[@]}}"; do
-    for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
-      local runtimeIdFlagsArray=()
+  for projectFile in "${testProjectFiles[@]-${projectFiles[@]}}"; do
+    for runtimeId in "${runtimeIds[@]}"; do
+      local runtimeIdFlags=()
       if [[ $projectFile == *.csproj ]]; then
-        runtimeIdFlagsArray=("--runtime" "$runtimeId")
+        runtimeIdFlags=("--runtime" "$runtimeId")
       fi
 
       LD_LIBRARY_PATH=$libraryPath \
@@ -237,9 +203,8 @@ dotnetCheckPhase() {
         --no-restore \
         --no-build \
         --logger "console;verbosity=normal" \
-        "${runtimeIdFlagsArray[@]}" \
-        "${dotnetTestFlagsArray[@]}" \
-        "${dotnetFlagsArray[@]}"
+        "${runtimeIdFlags[@]}" \
+        "${flags[@]}"
     done
   done
 
@@ -281,40 +246,35 @@ wrapDotnetProgram() {
 dotnetFromEnv'
 
   # shellcheck disable=2206
-  if [[ -n $__structuredAttrs ]]; then
-    local -r dotnetRuntimeDepsArray=( "${dotnetRuntimeDeps[@]}" )
-  else
-    local -r dotnetRuntimeDepsArray=($dotnetRuntimeDeps)
-  fi
+  local -a runtimeDeps
+  concatTo runtimeDeps dotnetRuntimeDeps
 
-  local dotnetRuntimeDepsFlags=()
-  if (( ${#dotnetRuntimeDepsArray[@]} > 0 )); then
-    local libraryPathArray=("${dotnetRuntimeDepsArray[@]/%//lib}")
+  local wrapperFlags=()
+  if (( ${#runtimeDeps[@]} > 0 )); then
+    local libraryPath=("${dotnetRuntimeDeps[@]/%//lib}")
     local OLDIFS="$IFS" IFS=':'
-    dotnetRuntimeDepsFlags+=("--suffix" "LD_LIBRARY_PATH" ":" "${libraryPathArray[*]}")
+    wrapperFlags+=("--suffix" "LD_LIBRARY_PATH" ":" "${libraryPath[*]}")
     IFS="$OLDIFS"
   fi
 
-  local dotnetRootFlagsArray=()
   if [[ -z ${dotnetSelfContainedBuild-} ]]; then
     if [[ -n ${useDotnetFromEnv-} ]]; then
       # if dotnet CLI is available, set DOTNET_ROOT based on it. Otherwise set to default .NET runtime
-      dotnetRootFlagsArray+=("--suffix" "PATH" ":" "$wrapperPath")
-      dotnetRootFlagsArray+=("--run" "$dotnetFromEnvScript")
+      wrapperFlags+=("--suffix" "PATH" ":" "$wrapperPath")
+      wrapperFlags+=("--run" "$dotnetFromEnvScript")
       if [[ -n $dotnetRuntime ]]; then
-        dotnetRootFlagsArray+=("--set-default" "DOTNET_ROOT" "$dotnetRuntime/share/dotnet")
-        dotnetRootFlagsArray+=("--suffix" "PATH" ":" "$dotnetRuntime/bin")
+        wrapperFlags+=("--set-default" "DOTNET_ROOT" "$dotnetRuntime/share/dotnet")
+        wrapperFlags+=("--suffix" "PATH" ":" "$dotnetRuntime/bin")
       fi
     elif [[ -n $dotnetRuntime ]]; then
-      dotnetRootFlagsArray+=("--set" "DOTNET_ROOT" "$dotnetRuntime/share/dotnet")
-      dotnetRootFlagsArray+=("--prefix" "PATH" ":" "$dotnetRuntime/bin")
+      wrapperFlags+=("--set" "DOTNET_ROOT" "$dotnetRuntime/share/dotnet")
+      wrapperFlags+=("--prefix" "PATH" ":" "$dotnetRuntime/bin")
     fi
   fi
 
   # shellcheck disable=2154
   makeWrapper "$1" "$2" \
-              "${dotnetRuntimeDepsFlags[@]}" \
-              "${dotnetRootFlagsArray[@]}" \
+              "${wrapperFlags[@]}" \
               "${gappsWrapperArgs[@]}" \
               "${makeWrapperArgs[@]}"
 
@@ -330,12 +290,9 @@ dotnetFixupPhase() {
   # shellcheck disable=2154
   if declare -p dotnetExecutables &>/dev/null; then
     # shellcheck disable=2206
-    if [[ -n $__structuredAttrs ]]; then
-      local dotnetExecutablesArray=( "${dotnetExecutables[@]}" )
-    else
-      local dotnetExecutablesArray=($dotnetExecutables)
-    fi
-    for executable in "${dotnetExecutablesArray[@]}"; do
+    local -a executables
+    concatTo executables dotnetExecutables
+    for executable in "${executables[@]}"; do
       executableBasename=$(basename "$executable")
 
       local path="$dotnetInstallPath/$executable"
@@ -368,34 +325,26 @@ dotnetInstallPhase() {
   local -r dotnetInstallPath="${dotnetInstallPath-$out/lib/$pname}"
   local -r dotnetBuildType="${dotnetBuildType-Release}"
 
-  # shellcheck disable=2206
-  if [[ -n $__structuredAttrs ]]; then
-    local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
-    local dotnetFlagsArray=( "${dotnetFlags[@]}" )
-    local dotnetInstallFlagsArray=( "${dotnetInstallFlags[@]}" )
-    local dotnetPackFlagsArray=( "${dotnetPackFlags[@]}" )
-    local dotnetRuntimeIdsArray=( "${dotnetRuntimeIds[@]}" )
-  else
-    local dotnetProjectFilesArray=($dotnetProjectFiles)
-    local dotnetFlagsArray=($dotnetFlags)
-    local dotnetInstallFlagsArray=($dotnetInstallFlags)
-    local dotnetPackFlagsArray=($dotnetPackFlags)
-    local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
-  fi
+  local -a projectFiles flags installFlags packFlags runtimeIds
+  concatTo projectFiles dotnetProjectFiles
+  concatTo flags dotnetFlags
+  concatTo installFlags dotnetInstallFlags
+  concatTo packFlags dotnetPackFlags
+  concatTo runtimeIds dotnetRuntimeIds
 
   if [[ -v dotnetSelfContainedBuild ]]; then
     if [[ -n $dotnetSelfContainedBuild ]]; then
-      dotnetInstallFlagsArray+=("--self-contained")
+      installFlags+=("--self-contained")
     else
-      dotnetInstallFlagsArray+=("--no-self-contained")
+      installFlags+=("--no-self-contained")
       # https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trim-self-contained
       # Trimming is only available for self-contained build, so force disable it here
-      dotnetInstallFlagsArray+=("-p:PublishTrimmed=false")
+      installFlags+=("-p:PublishTrimmed=false")
     fi
   fi
 
   if [[ -n ${dotnetUseAppHost-} ]]; then
-    dotnetInstallFlagsArray+=("-p:UseAppHost=true")
+    installFlags+=("-p:UseAppHost=true")
   fi
 
   if [[ -n ${enableParallelBuilding-} ]]; then
@@ -407,10 +356,10 @@ dotnetInstallPhase() {
   dotnetPublish() {
     local -r projectFile="${1-}"
 
-    for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
-      runtimeIdFlagsArray=()
+    for runtimeId in "${runtimeIds[@]}"; do
+      runtimeIdFlags=()
       if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
-        runtimeIdFlagsArray+=("--runtime" "$runtimeId")
+        runtimeIdFlags+=("--runtime" "$runtimeId")
       fi
 
       dotnet publish ${1+"$projectFile"} \
@@ -422,16 +371,16 @@ dotnetInstallPhase() {
              --configuration "$dotnetBuildType" \
              --no-restore \
              --no-build \
-             "${runtimeIdFlagsArray[@]}" \
-             "${dotnetInstallFlagsArray[@]}" \
-             "${dotnetFlagsArray[@]}"
+             "${runtimeIdFlags[@]}" \
+             "${flags[@]}" \
+             "${installFlags[@]}"
     done
   }
 
   dotnetPack() {
     local -r projectFile="${1-}"
 
-    for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
+    for runtimeId in "${runtimeIds[@]}"; do
       dotnet pack ${1+"$projectFile"} \
              -maxcpucount:"$maxCpuFlag" \
              -p:ContinuousIntegrationBuild=true \
@@ -442,26 +391,26 @@ dotnetInstallPhase() {
              --no-restore \
              --no-build \
              --runtime "$runtimeId" \
-             "${dotnetPackFlagsArray[@]}" \
-             "${dotnetFlagsArray[@]}"
+             "${flags[@]}" \
+             "${packFlags[@]}"
     done
   }
 
-  if (( ${#dotnetProjectFilesArray[@]} == 0 )); then
+  if (( ${#projectFiles[@]} == 0 )); then
     dotnetPublish
   else
     local projectFile
-    for projectFile in "${dotnetProjectFilesArray[@]}"; do
+    for projectFile in "${projectFiles[@]}"; do
       dotnetPublish "$projectFile"
     done
   fi
 
   if [[ -n ${packNupkg-} ]]; then
-    if (( ${#dotnetProjectFilesArray[@]} == 0 )); then
+    if (( ${#projectFiles[@]} == 0 )); then
       dotnetPack
     else
       local projectFile
-      for projectFile in "${dotnetProjectFilesArray[@]}"; do
+      for projectFile in "${projectFiles[@]}"; do
         dotnetPack "$projectFile"
       done
     fi
