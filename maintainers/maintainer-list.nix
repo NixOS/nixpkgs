@@ -2601,6 +2601,12 @@
     githubId = 153538;
     name = "Alexander V. Nikolaev";
   };
+  avycado13 = {
+    email = "avycado13@icloud.com";
+    github = "avycado13";
+    githubId = 108358183;
+    name = "avycado13";
+  };
   aw = {
     email = "aw-nixos@meterriblecrew.net";
     github = "herrwiese";
