@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
-    maintainers = with maintainers; [ _4825764518 ];
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2Plus;
     mainProgram = "qalculate-qt";
     platforms = platforms.unix;
