@@ -4,9 +4,7 @@
   cmake,
   desktopToDarwinBundle,
   pkg-config,
-  qtbase,
-  qtsvg,
-  qtwayland,
+  qt6Packages,
   gnuradioMinimal,
   thrift,
   mpir,
@@ -14,7 +12,6 @@
   alsa-lib,
   libjack2,
   wrapGAppsHook3,
-  wrapQtAppsHook,
   # drivers (optional):
   rtl-sdr,
   hackrf,
@@ -44,7 +41,7 @@ gnuradioMinimal.pkgs.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     wrapGAppsHook3
   ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
@@ -55,15 +52,15 @@ gnuradioMinimal.pkgs.mkDerivation rec {
       fftwFloat
       libjack2
       gnuradioMinimal.unwrapped.boost
-      qtbase
-      qtsvg
+      qt6Packages.qtbase
+      qt6Packages.qtsvg
       gnuradioMinimal.pkgs.osmosdr
       rtl-sdr
       hackrf
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
-      qtwayland
+      qt6Packages.qtwayland
     ]
     ++ lib.optionals (gnuradioMinimal.hasFeature "gr-ctrlport") [
       thrift
