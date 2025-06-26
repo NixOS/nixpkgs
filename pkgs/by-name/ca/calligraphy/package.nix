@@ -9,6 +9,7 @@
   wrapGAppsHook4,
   desktop-file-utils,
   libadwaita,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -45,6 +46,8 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GTK tool turning text into ASCII banners";
