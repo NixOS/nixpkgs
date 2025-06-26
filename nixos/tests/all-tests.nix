@@ -785,7 +785,7 @@ in
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix { };
   marytts = handleTest ./marytts.nix { };
   mastodon = pkgs.recurseIntoAttrs (handleTest ./web-apps/mastodon { inherit handleTestOn; });
-  pixelfed = discoverTests (import ./web-apps/pixelfed { inherit handleTestOn; });
+  pixelfed = import ./web-apps/pixelfed { inherit runTestOn; };
   mate = handleTest ./mate.nix { };
   mate-wayland = handleTest ./mate-wayland.nix { };
   matter-server = handleTest ./matter-server.nix { };
