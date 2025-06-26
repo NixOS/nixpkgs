@@ -81,9 +81,6 @@ buildPythonPackage rec {
     mainProgram = "whisper";
     homepage = "https://github.com/openai/whisper";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      hexa
-      MayNiklas
-    ];
+    maintainers = with lib.maintainers; [ MayNiklas ];
   };
 }
