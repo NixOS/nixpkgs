@@ -377,6 +377,7 @@ package-maintainers:
     - warp-systemd
     - amazonka
   ncfavier:
+    - Agda
     - irc-client
     - lambdabot
     - shake
