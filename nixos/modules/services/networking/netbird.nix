@@ -12,6 +12,7 @@ let
     escapeShellArgs
     filterAttrs
     getExe
+    listToAttrs
     literalExpression
     maintainers
     makeBinPath
@@ -28,6 +29,7 @@ let
     optional
     optionalAttrs
     optionalString
+    optionals
     toShellVars
     versionAtLeast
     versionOlder
@@ -471,6 +473,16 @@ in
         toClientList (client: optional client.openFirewall client.port)
       );
 
+      # Ports opened on a specific
+      networking.firewall.interfaces = listToAttrs (
+        toClientList (client: {
+          name = client.interface;
+          value.allowedUDPPorts = optionals client.openFirewall [
+            5353 # required for the DNS forwarding/routing to work
+          ];
+        })
+      );
+
       systemd.network.networks = mkIf config.networking.useNetworkd (
         toClientAttrs (
           client:
@@ -504,7 +516,14 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
 
-          path = optional (!config.services.resolved.enable) pkgs.openresolv;
+          path =
+            optionals (!config.services.resolved.enable) [ pkgs.openresolv ]
+            # useful for `netbird debug` system info gathering
+            ++ optionals config.networking.nftables.enable [ pkgs.nftables ]
+            ++ optionals (!config.networking.nftables.enable) [
+              pkgs.iptables
+              pkgs.ipset
+            ];
 
           serviceConfig = {
             ExecStart = "${getExe client.wrapper} service run";

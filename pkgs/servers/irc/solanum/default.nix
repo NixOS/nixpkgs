@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "solanum";
-  version = "0-unstable-2025-05-21";
+  version = "0-unstable-2025-06-11";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
     repo = "solanum";
-    rev = "6ac284622813f4f64fa8e0bf905c4b35d244b343";
-    hash = "sha256-rUdxAjH1cvfCYQmt3DKWbxL4bctjhSn4pMl1TzLdL6g=";
+    rev = "70d491d8a4ad9fa02ce5394d9007baf5f23ca61c";
+    hash = "sha256-+AYEfG0MJE7LnoS1saA1zSSKNxAvxMppobYUK+sP4fw=";
   };
 
   patches = [
