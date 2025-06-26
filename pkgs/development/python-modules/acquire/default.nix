@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.18";
+  version = "3.19";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "acquire";
     tag = version;
-    hash = "sha256-kDoDPeMvpctNnB+e2LnCZ7fw9AP+AjPYDXwVqKedJ88=";
+    hash = "sha256-0aqngfv2ZyVw1ymotz1PmXKUZeTHUVL9ICL6cyEn/wk=";
   };
 
   build-system = [

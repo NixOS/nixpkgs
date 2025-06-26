@@ -3645,6 +3645,8 @@ self: super: with self; {
 
   dissect-ole = callPackage ../development/python-modules/dissect-ole { };
 
+  dissect-qnxfs = callPackage ../development/python-modules/dissect-qnxfs { };
+
   dissect-regf = callPackage ../development/python-modules/dissect-regf { };
 
   dissect-shellitem = callPackage ../development/python-modules/dissect-shellitem { };
