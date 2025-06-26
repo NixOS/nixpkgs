@@ -1350,8 +1350,8 @@ rec {
       "sha256-demumYyUtBHj8Gzmml5374UxOLyWVMa71rN3pq55hDc=";
 
   mypy-boto3-textract =
-    buildMypyBoto3Package "textract" "1.38.0"
-      "sha256-rfDZLT1heNBkjv4jrZSrhFV29TxEVfhOYmcZRzU4lx0=";
+    buildMypyBoto3Package "textract" "1.38.44"
+      "sha256-0ptHkOSITJbSVlDKmH7L0ov7VysxhQEwHS5tl7TMLEY=";
 
   mypy-boto3-timestream-query =
     buildMypyBoto3Package "timestream-query" "1.38.10"
