@@ -6,7 +6,7 @@
   git,
   gnugrep,
   gnused,
-  makeWrapper,
+  makeBinaryWrapper,
   inotify-tools,
   nix-update-script,
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-7sCncPxVMiDGi1PSoFhA9emSY2Jit35/FaBbinCdS/A=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   dontBuild = true;
 
