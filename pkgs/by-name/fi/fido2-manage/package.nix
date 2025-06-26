@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   fetchurl,
   pkg-config,
   cmake,
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
     rev = "4fc6a4e0d905dcc2a7bfee70232a0398e9e4b45d";
     hash = "sha256-olkEUHJ350FIMUlWG37wqSfO2wyYni4CYspwa4lAO5w=";
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   icon = fetchurl {
     url = "https://token2.net/img/icon/logo-white.png";
