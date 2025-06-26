@@ -1,30 +1,24 @@
 {
   lib,
-  asgiref,
   buildPythonPackage,
   certifi,
-  charset-normalizer,
   cvss,
   deepl,
   django,
   fetchFromGitHub,
   gql,
-  idna,
-  markdown-it-py,
-  mdurl,
-  pygments,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   rich,
   setuptools,
   sqlparse,
   termcolor,
-  tomli,
   tomli-w,
+  tomli,
   tomlkit,
   urllib3,
+  writableTmpDirAsHomeHook,
   xmltodict,
 }:
 
@@ -32,8 +26,6 @@ buildPythonPackage rec {
   pname = "reptor";
   version = "0.31";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Syslifters";
@@ -47,23 +39,16 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    asgiref
     certifi
-    charset-normalizer
     cvss
     django
-    idna
-    markdown-it-py
-    mdurl
-    pygments
     pyyaml
     requests
     rich
-    sqlparse
     termcolor
     tomli
-    tomlkit
     tomli-w
+    tomlkit
     urllib3
     xmltodict
   ];
@@ -78,7 +63,6 @@ buildPythonPackage rec {
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export PATH="$PATH:$out/bin";
   '';
 
