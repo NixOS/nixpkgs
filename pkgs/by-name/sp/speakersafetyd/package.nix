@@ -11,16 +11,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speakersafetyd";
-  version = "1.0.2";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "speakersafetyd";
     tag = finalAttrs.version;
-    hash = "sha256-ULAGdYUfeMlPki6DT2vD+tvDqKMxJtG16o/+7+ERsv4=";
+    hash = "sha256-sSGoF2c5HfPM2FBrBJwJ9NvExYijGx6JH1bJp3epfe0=";
   };
 
-  cargoHash = "sha256-DnOnqi60JsRX8yqEM/5zZ3yX/rk85/ruwL3aW1FRXKg=";
+  cargoHash = "sha256-9XbrIY1VwnHtqi/ZfS952SyjNjA/TJRdOqCsPReZI8o=";
+
+  patches = [
+    ./remove-install-paths.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -29,10 +33,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ alsa-lib ];
 
   postPatch = ''
-    substituteInPlace speakersafetyd.service --replace "/usr" "$out"
-    substituteInPlace Makefile --replace "target/release" "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
-    # creating files in /var does not make sense in a nix package
-    substituteInPlace Makefile --replace 'install -dDm0755 $(DESTDIR)/$(VARDIR)/lib/speakersafetyd/blackbox' ""
+    substituteInPlace speakersafetyd.service \
+      --replace-fail "/usr" \
+                     "$out"
+
+    substituteInPlace Makefile \
+      --replace-fail "target/release" \
+                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType" \
   '';
 
   installFlags = [
