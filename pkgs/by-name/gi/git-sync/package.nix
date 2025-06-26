@@ -4,7 +4,7 @@
   fetchFromGitHub,
   coreutils,
   fswatch,
-  git,
+  gitMinimal,
   gnugrep,
   gnused,
   makeBinaryWrapper,
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
         [
           coreutils
           fswatch
-          git
+          gitMinimal
           gnugrep
           gnused
         ]
