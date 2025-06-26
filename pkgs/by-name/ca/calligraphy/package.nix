@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GeopJr";
     repo = "Calligraphy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KDml96oxnmTygTC+3rZ//wKv7xDSjw37+UHu3a3zuO4=";
   };
 
