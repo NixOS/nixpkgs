@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    for f in "$out"/bin/{gen*,lcov,perl2lcov}; do
+    for f in "$out"/bin/{gen*,lcov,llvm2lcov,perl2lcov}; do
       wrapProgram "$f" --set PERL5LIB ${perlPackages.makeFullPerlPath perlDeps}
     done
   '';
