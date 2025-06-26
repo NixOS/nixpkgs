@@ -598,6 +598,10 @@ in
         );
       in
       {
+        camo = mkIf (cfg.camoHmacKeyFile != null) {
+          HMAC_KEY = "#hmackey#";
+        };
+
         "cron.update_checker".ENABLED = lib.mkDefault false;
 
         database = mkMerge [
@@ -622,6 +626,30 @@ in
           })
         ];
 
+        lfs = mkIf cfg.lfs.enable {
+          PATH = cfg.lfs.contentDir;
+        };
+
+        mailer = mkMerge [
+          (mkIf (cfg.mailerPasswordFile != null) {
+            PASSWD = "#mailerpass#";
+          })
+          (mkIf cfg.mailerUseSendmail {
+            PROTOCOL = "sendmail";
+            SENDMAIL_PATH = "/run/wrappers/bin/sendmail";
+          })
+        ];
+
+        metrics = mkIf (cfg.metricsTokenFile != null) {
+          TOKEN = "#metricstoken#";
+        };
+
+        oauth2 = {
+          JWT_SECRET = "#oauth2jwtsecret#";
+        };
+
+        packages.CHUNKED_UPLOAD_PATH = "${cfg.stateDir}/tmp/package-upload";
+
         repository = {
           ROOT = cfg.repositoryRoot;
         };
@@ -629,10 +657,6 @@ in
         server = mkIf cfg.lfs.enable {
           LFS_START_SERVER = true;
           LFS_JWT_SECRET = "#lfsjwtsecret#";
-        };
-
-        camo = mkIf (cfg.camoHmacKeyFile != null) {
-          HMAC_KEY = "#hmackey#";
         };
 
         session = {
@@ -662,30 +686,6 @@ in
             "${captchaPrefix}_URL" = cfg.captcha.url;
           })
         ]);
-
-        mailer = mkMerge [
-          (mkIf (cfg.mailerPasswordFile != null) {
-            PASSWD = "#mailerpass#";
-          })
-          (mkIf cfg.mailerUseSendmail {
-            PROTOCOL = "sendmail";
-            SENDMAIL_PATH = "/run/wrappers/bin/sendmail";
-          })
-        ];
-
-        metrics = mkIf (cfg.metricsTokenFile != null) {
-          TOKEN = "#metricstoken#";
-        };
-
-        oauth2 = {
-          JWT_SECRET = "#oauth2jwtsecret#";
-        };
-
-        lfs = mkIf cfg.lfs.enable {
-          PATH = cfg.lfs.contentDir;
-        };
-
-        packages.CHUNKED_UPLOAD_PATH = "${cfg.stateDir}/tmp/package-upload";
 
         storage = mkMerge [
           (mkIf (cfg.minioAccessKeyId != null) {
