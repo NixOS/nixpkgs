@@ -650,16 +650,16 @@ in
 
     services.gitea.settings =
       let
-        captchaPrefix = lib.optionalString cfg.captcha.enable (
-          {
-            image = "IMAGE";
-            recaptcha = "RECAPTCHA";
-            hcaptcha = "HCAPTCHA";
-            mcaptcha = "MCAPTCHA";
-            cfturnstile = "CF_TURNSTILE";
-          }
-          ."${cfg.captcha.type}"
-        );
+        captchaPrefix =
+          lib.optionalString cfg.captcha.enable
+            {
+              image = "IMAGE";
+              recaptcha = "RECAPTCHA";
+              hcaptcha = "HCAPTCHA";
+              mcaptcha = "MCAPTCHA";
+              cfturnstile = "CF_TURNSTILE";
+            }
+            ."${cfg.captcha.type}";
       in
       {
         camo = lib.mkIf (cfg.camoHmacKeyFile != null) {
