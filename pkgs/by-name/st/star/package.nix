@@ -2,18 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  xxd,
   zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "star";
-  version = "2.7.10b";
+  version = "2.7.11b";
 
   src = fetchFromGitHub {
     repo = "STAR";
     owner = "alexdobin";
     rev = version;
-    sha256 = "sha256-58Y4lzqXwBhRlXcionUg2IhAg5znNUuyr/FsuNZd+5Q=";
+    sha256 = "sha256-4EoS9NOKUwfr6TDdjAqr4wGS9cqVX5GYptiOCQpmg9c=";
   };
 
   sourceRoot = "${src.name}/source";
@@ -21,6 +22,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile --replace "/bin/rm" "rm"
   '';
+
+  nativeBuildInputs = [ xxd ];
 
   buildInputs = [ zlib ];
 
