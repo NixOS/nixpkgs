@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
+  gettextAutoreconfCompatHook,
   pkg-config,
   libiconv,
   gettext,
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    gettextAutoreconfCompatHook
     pkg-config
   ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
