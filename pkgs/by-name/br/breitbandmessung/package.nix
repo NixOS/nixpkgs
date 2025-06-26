@@ -4,7 +4,7 @@
   fetchurl,
   asar,
   dpkg,
-  electron,
+  electron_34,
   makeWrapper,
   nixosTests,
   undmg,
@@ -12,6 +12,8 @@
 
 let
   inherit (stdenv.hostPlatform) system;
+
+  electron = electron_34;
 
   sources = import ./sources.nix;
 
