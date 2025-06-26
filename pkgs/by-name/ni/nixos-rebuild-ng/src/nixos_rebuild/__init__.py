@@ -366,9 +366,9 @@ def execute(argv: list[str]) -> None:
 
         case Action.REPL:
             if flake:
-                nix.repl_flake("toplevel", flake, flake_build_flags)
+                nix.repl_flake(flake, flake_build_flags)
             else:
-                nix.repl("system", build_attr, build_flags)
+                nix.repl(build_attr, build_flags)
 
         case _:
             assert_never(action)
