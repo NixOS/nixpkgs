@@ -31,14 +31,6 @@ in
         dns_server = "9.9.9.9";
       };
     };
-    configFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
-      description = ''
-        path to your config.json
-        See <https://github.com/OkamiW/proxy-ns>.
-      '';
-      default = null;
-    };
     package = lib.mkPackageOption pkgs "proxy-ns" { };
   };
   config = lib.mkIf cfg.enable {
