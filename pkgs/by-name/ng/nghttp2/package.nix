@@ -46,11 +46,11 @@ assert enableJemalloc -> enableApp;
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.65.0";
+  version = "1.66.0";
 
   src = fetchurl {
-    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-C9u3jcIYcEhP1URJBnZXtg47G3Im4RdM9WQBbG0zB/U=";
+    url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
+    hash = "sha256-HUhK03NU35/KuXCBTpOl3KkaUyVug/T1jdcxGcYyEBc=";
   };
 
   outputs = [
@@ -113,9 +113,6 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString (enablePython) ''
       patchShebangs $out/share/nghttp2
-    ''
-    + lib.optionalString (!enablePython) ''
-      rm -r $out/share
     '';
 
   passthru.tests = {
