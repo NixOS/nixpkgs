@@ -7,7 +7,8 @@
 
 let
   cfg = config.programs.dsym;
-  iniFormat = pkgs.formats.ini {};
+  iniFormat = pkgs.formats.ini { };
+
 in
 {
   options.programs.dsym = {
@@ -29,18 +30,18 @@ in
     dotfileRepo = lib.mkOption {
       type = lib.types.str;
       example = "https://github.com/username/dotfiles";
-      description = "The URL to your dotfile Git repository.";
+      description = "URL to your dotfile Git repository.";
     };
 
     dotfilePath = lib.mkOption {
       type = lib.types.path;
-      default = "/home/${config.users.users.${config.users.defaultUser}.name}/.config/";
+      default = { };
       description = "The local path to where your dotfiles are stored.";
     };
 
     dsymPath = lib.mkOption {
       type = lib.types.path;
-      default = "/home/${config.users.users.${config.users.defaultUser}.name}/dsym/";
+      default = { };
       description = "The path where DSYM should operate or store data.";
     };
   };
