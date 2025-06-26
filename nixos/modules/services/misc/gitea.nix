@@ -997,7 +997,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    ma27
     techknowlogick
     SuperSandro2000
   ];
