@@ -12,6 +12,7 @@ let
     escapeShellArgs
     filterAttrs
     getExe
+    listToAttrs
     literalExpression
     maintainers
     makeBinPath
@@ -469,6 +470,16 @@ in
 
       networking.firewall.allowedUDPPorts = concatLists (
         toClientList (client: optional client.openFirewall client.port)
+      );
+
+      # Ports opened on a specific
+      networking.firewall.interfaces = listToAttrs (
+        toClientList (client: {
+          name = client.interface;
+          value.allowedUDPPorts = optionals client.openFirewall [
+            5353 # required for the DNS forwarding/routing to work
+          ];
+        })
       );
 
       systemd.network.networks = mkIf config.networking.useNetworkd (
