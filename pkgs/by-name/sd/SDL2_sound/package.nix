@@ -7,6 +7,8 @@
   nix-update-script,
 }:
 
+# As of 2025-06-27 this library has no dependents in nixpkgs (https://github.com/NixOS/nixpkgs/pull/420339) and is
+# considered for deletion.
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_sound";
   version = "2.0.4";
