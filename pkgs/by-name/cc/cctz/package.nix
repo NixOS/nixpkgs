@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-F4h8nT1karymV16FFHC0ldSbdOOx5AMstqi4Bc5m3UQ=";
   };
 
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation";
+
   makeFlags = [ "PREFIX=$(out)" ];
 
   installTargets =
