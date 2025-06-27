@@ -9,26 +9,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ulog-cpp";
-  version = "0-unstable-2025-03-18";
+  version = "0-unstable-2025-06-19";
 
   src = fetchFromGitHub {
     owner = "PX4";
     repo = "ulog_cpp";
-    rev = "eaac352b04501a49550fe6bcf02487b818c58f84";
-    hash = "sha256-KNnZNiEDvBGUWsxUEEJhqBvZ5BiwQshImHyOfETltuM=";
+    rev = "4153a324d0c3fba73a4b9a375b3bed29e9a208a2";
+    hash = "sha256-2YdhBcpDDu8XgL1PZudCYxt3nXNPpW/zu/crfdof4ow=";
   };
-
-  patches = [
-    ./build-overhaul.patch # https://github.com/PX4/ulog_cpp/pull/15
-  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ doctest ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "MAIN_PROJECT" true)
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-  ];
 
   passthru.updateScript = nix-update-script { };
 
