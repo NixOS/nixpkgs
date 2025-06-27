@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "nominal-api-protos";
-  version = "0.708.0";
+  version = "0.739.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "nominal_api_protos";
-    hash = "sha256-EYyBRmmCq4OA6xgf4JpajUtlJClkxxPn48Wmmy2mqN4=";
+    hash = "sha256-Ox28B5TJHHn2rUkndqyCPF+couLtb7pSDlCb4PpznwY=";
   };
 
   build-system = [ setuptools ];
