@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "4.3.0";
   pyproject = true;
 
-  disabled = python.pythonVersion != netbox.python.pythonVersion;
-
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-topology-views";
