@@ -7,7 +7,7 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "nushell_plugin_net";
+  pname = "nu_plugin_net";
   version = "1.10.0";
 
   src = fetchFromGitHub {

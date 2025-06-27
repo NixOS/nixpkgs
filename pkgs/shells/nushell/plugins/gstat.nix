@@ -9,7 +9,7 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "nushell_plugin_gstat";
+  pname = "nu_plugin_gstat";
   inherit (nushell) version src cargoHash;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];

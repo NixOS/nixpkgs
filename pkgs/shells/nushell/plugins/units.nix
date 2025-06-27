@@ -8,7 +8,7 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "nushell_plugin_units";
+  pname = "nu_plugin_units";
   version = "0.1.6";
 
   src = fetchFromGitHub {
