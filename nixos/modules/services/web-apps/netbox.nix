@@ -39,7 +39,14 @@ let
     (writeScriptBin "netbox-manage" ''
       #!${stdenv.shell}
       export PYTHONPATH=${pkg.pythonPath}
-      sudo -u netbox ${pkg}/bin/netbox "$@"
+      case "$(whoami)" in
+      "root")
+        ${util-linux}/bin/runuser -u netbox -- ${pkg}/bin/netbox "$@";;
+      "netbox")
+        ${pkg}/bin/netbox "$@";;
+      *)
+        echo "This must be run by either by root 'netbox' user"
+      esac
     '');
 
 in
