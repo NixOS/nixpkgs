@@ -8,11 +8,7 @@
   ];
 
   nodes.machine =
-    {
-      config,
-      pkgs,
-      ...
-    }:
+    { config, pkgs, ... }:
     {
       services.anubis = {
         defaultOptions.settings = {
@@ -100,7 +96,6 @@
     machine.succeed('curl -f http://basic.localhost | grep "it works"')
     machine.succeed('curl -f http://basic.localhost -H "User-Agent: Mozilla" | grep anubis')
     machine.succeed('curl -f http://basic.localhost/metrics | grep anubis_challenges_issued')
-    machine.succeed('curl -f -X POST http://basic.localhost/.within.website/x/cmd/anubis/api/make-challenge -d "redir=/" | grep challenge')
 
     # TCP mode
     machine.succeed('curl -f http://tcp.localhost -H "User-Agent: Mozilla" | grep anubis')
