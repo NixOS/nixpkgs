@@ -41,6 +41,7 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
     "-X github.com/AdguardTeam/AdGuardHome/internal/version.version=${finalAttrs.version}"
+    "-X github.com/AdguardTeam/AdGuardHome/internal/version.channel=release"
   ];
 
   passthru = {
