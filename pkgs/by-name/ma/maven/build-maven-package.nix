@@ -3,6 +3,7 @@
   stdenv,
   jdk,
   maven,
+  writers,
 }:
 
 {
@@ -28,6 +29,9 @@
 
 let
   mvnSkipTests = lib.optionalString (!doCheck) "-DskipTests";
+
+  writeProxySettings = writers.writePython3 "write-proxy-settings" { } ./maven-proxy.py;
+
   fetchedMavenDeps = stdenv.mkDerivation (
     {
       name = "${pname}-${version}-maven-deps";
@@ -44,14 +48,23 @@ let
       buildPhase =
         ''
           runHook preBuild
+
+          MAVEN_EXTRA_ARGS=""
+
+          # handle proxy
+          if [[ -n "''${HTTP_PROXY-}" ]] || [[ -n "''${HTTPS_PROXY-}" ]] || [[ -n "''${NO_PROXY-}" ]];then
+            mvnSettingsFile="$(mktemp -d)/settings.xml"
+            ${writeProxySettings} $mvnSettingsFile
+            MAVEN_EXTRA_ARGS="-s=$mvnSettingsFile"
+          fi
         ''
         + lib.optionalString buildOffline ''
-          mvn de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}
+          mvn $MAVEN_EXTRA_ARGS de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}
 
           for artifactId in ${builtins.toString manualMvnArtifacts}
           do
             echo "downloading manual $artifactId"
-            mvn dependency:get -Dartifact="$artifactId" -Dmaven.repo.local=$out/.m2
+            mvn $MAVEN_EXTRA_ARGS dependency:get -Dartifact="$artifactId" -Dmaven.repo.local=$out/.m2
           done
 
           for artifactId in ${builtins.toString manualMvnSources}
@@ -59,11 +72,11 @@ let
             group=$(echo $artifactId | cut -d':' -f1)
             artifact=$(echo $artifactId | cut -d':' -f2)
             echo "downloading manual sources $artifactId"
-            mvn dependency:sources -DincludeGroupIds="$group" -DincludeArtifactIds="$artifact" -Dmaven.repo.local=$out/.m2
+            mvn $MAVEN_EXTRA_ARGS dependency:sources -DincludeGroupIds="$group" -DincludeArtifactIds="$artifact" -Dmaven.repo.local=$out/.m2
           done
         ''
         + lib.optionalString (!buildOffline) ''
-          mvn package -Dmaven.repo.local=$out/.m2 ${mvnSkipTests} ${mvnParameters}
+          mvn $MAVEN_EXTRA_ARGS package -Dmaven.repo.local=$out/.m2 ${mvnSkipTests} ${mvnParameters}
         ''
         + ''
           runHook postBuild
