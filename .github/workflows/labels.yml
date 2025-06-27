@@ -65,6 +65,7 @@ jobs:
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
+          retries: 3
           script: |
             const Bottleneck = require('bottleneck')
             const path = require('node:path')
@@ -147,8 +148,6 @@ jobs:
                   ...context.repo,
                   workflow_id: 'pr.yml',
                   event: 'pull_request_target',
-                  // In pull_request contexts the workflow is still running.
-                  status: context.payload.pull_request ? undefined : 'success',
                   exclude_pull_requests: true,
                   head_sha: pull_request.head.sha
                 })).data.workflow_runs[0]?.id ??
@@ -247,6 +246,7 @@ jobs:
                   .sort((a,b) => b-a)
                   .at(0) ?? item.created_at
                 )
+                log('latest_event_at', latest_event_at.toISOString())
 
                 const stale_at = new Date(new Date().setDate(new Date().getDate() - 180))
 
@@ -390,7 +390,7 @@ jobs:
                   // so it should certainly be hit on the next iteration.
                   // TODO: Evaluate after a while, whether the above holds still true and potentially implement
                   // an overlap between runs.
-                  page: total_runs % Math.ceil(total_pulls / 100)
+                  page: (total_runs % Math.ceil(total_pulls / 100)) + 1
                 })).data
 
                 // Some items might be in both search results, so filtering out duplicates as well.
