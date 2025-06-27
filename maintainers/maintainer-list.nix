@@ -20752,6 +20752,13 @@
     github = "DaRacci";
     githubId = 90304606;
   };
+  RadxaYuntian = {
+    # This is the work account for @MakiseKurisu
+    name = "ZHANG Yuntian";
+    email = "yt@radxa.com";
+    github = "RadxaYuntian";
+    githubId = 95260730;
+  };
   raehik = {
     email = "thefirstmuffinman@gmail.com";
     github = "raehik";
