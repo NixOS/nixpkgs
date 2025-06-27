@@ -24,12 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-jLv62/3U89sbmcHAA2YYwVPLlLj85nMn4PRE565ppw4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     description = "Dissect module implementing a parser for Microsofts Extensible Storage Engine Database (ESEDB)";
     homepage = "https://github.com/fox-it/dissect.esedb";
     changelog = "https://github.com/fox-it/dissect.esedb/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }
