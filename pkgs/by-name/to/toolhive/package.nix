@@ -52,4 +52,4 @@ buildGo124Module (finalAttrs: {
     maintainers = with maintainers; [ thrix ];
     mainProgram = "thv";
   };
-}
+})
