@@ -6,12 +6,8 @@
   cmake,
   libxslt,
   docbook_xsl_ns,
-  wrapQtAppsHook,
+  libsForQt5,
   libusb1,
-  qtlocation,
-  qtserialport,
-  qttools,
-  qtbase,
   yaml-cpp,
 }:
 
@@ -33,16 +29,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     libxslt
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     installShellFiles
   ];
 
   buildInputs = [
     libusb1
-    qtlocation
-    qtserialport
-    qttools
-    qtbase
+    libsForQt5.qtlocation
+    libsForQt5.qtserialport
+    libsForQt5.qttools
+    libsForQt5.qtbase
     yaml-cpp
   ];
 

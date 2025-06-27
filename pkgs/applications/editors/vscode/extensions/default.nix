@@ -3948,8 +3948,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "6.10.0";
-          hash = "sha256-+oYDEbDMltGhyjtyCJcDaR074SzVWW48vzoOlxklojU=";
+          version = "6.10.1";
+          hash = "sha256-3Qx5HAkRnxByRHyX99PIRlHwI7FeenVcK8v9T+d5++4=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
@@ -4668,8 +4668,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "109.8.1";
-          hash = "sha256-ILZ7YA7LngwpU3U+qsgHPd+oxyqLNGRiKUCFC/OMBAo=";
+          version = "109.9.0";
+          hash = "sha256-OgcFFYoJOtFVlOM12gYBG0AkliniawG6GdRtrFsjDIg=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
