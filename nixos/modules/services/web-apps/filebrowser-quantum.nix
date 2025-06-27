@@ -10,69 +10,69 @@ let
   jsonFormat = pkgs.formats.json { };
 in
 {
-  options.services.filebrowser-quantum = with lib; {
-    enable = mkEnableOption "Filebrowser-quantum web file manager";
+  options.services.filebrowser-quantum = {
+    enable = lib.mkEnableOption "Filebrowser-quantum web file manager";
 
-    address = mkOption {
-      type = types.str;
+    address = lib.mkOption {
+      type = lib.types.str;
       default = "127.0.0.1";
       description = "Address to bind to.";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 80;
       description = "Port to bind to.";
     };
 
-    package = mkOption {
-      type = types.package;
+    package = lib.mkOption {
+      type = lib.types.package;
       default = pkgs.filebrowser-quantum;
       description = "The filebrowser-quantum package to use.";
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "filebrowser-quantum";
       description = "User account under which filebrowser-quantum runs.";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "filebrowser-quantum";
       description = "Group under which filebrowser-quantum runs.";
     };
 
-    home = mkOption {
-      type = types.str;
+    home = lib.mkOption {
+      type = lib.types.str;
       default = "/var/lib/filebrowser-quantum";
       description = "The home of the filebrowser-quantum user";
     };
 
-    files = mkOption {
-      type = types.str;
+    files = lib.mkOption {
+      type = lib.types.str;
       default = "${cfg.home}/files";
       description = "Root directory for file browsing.";
     };
 
-    database = mkOption {
-      type = types.str;
+    database = lib.mkOption {
+      type = lib.types.str;
       default = "${cfg.home}/database.db";
       description = "Path to the database file.";
     };
 
-    environmentVariables = mkOption {
-      type = types.attrsOf types.str;
+    environmentVariables = lib.mkOption {
+      type = with lib.types; attrsOf str;
       default = { };
       description = "Environment variables to set for the service. All availble variables can be found [here](https://github.com/gtsteffaniak/filebrowser/wiki/Environment-Variables)";
     };
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
       description = "Environment file to set for the service. All availble variables can be found [here](https://github.com/gtsteffaniak/filebrowser/wiki/Environment-Variables)";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = jsonFormat.type;
       default = {
         server = {
@@ -285,8 +285,8 @@ in
         '';
     };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Whether to open the firewall for the specified port.";
     };
