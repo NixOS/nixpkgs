@@ -15966,9 +15966,7 @@ with pkgs;
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
 
-  jack2 = callPackage ../misc/jackaudio {
-    libopus = libopus.override { withCustomModes = true; };
-  };
+  jack2 = callPackage ../misc/jackaudio { };
 
   libjack2 = jack2.override { prefix = "lib"; };
 
