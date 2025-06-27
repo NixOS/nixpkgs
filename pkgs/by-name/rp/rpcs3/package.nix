@@ -129,7 +129,7 @@ stdenv.mkDerivation {
       flatbuffers
       llvm_18
       libSM
-      opencv
+      opencv.cxxdev
     ]
     ++ cubeb.passthru.backendLibs
     ++ lib.optional faudioSupport faudio
