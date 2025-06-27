@@ -46,6 +46,7 @@ buildNpmPackage' rec {
   patches = [
     ./electron-builder-package-lock.patch
     ./dont-auto-setup-biometrics.patch
+    # The nixpkgs tooling trips over upstreams inconsistent lock files, so we fixed them by running npm install open@10.2.1 and cargo b
     ./fix-lock-files.diff
 
     # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
