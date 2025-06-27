@@ -9,28 +9,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ulog-cpp";
-  version = "0-unstable-2025-03-18";
+  version = "1.0.2-unstable-2026-09-22";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+  separateDebugInfo = true;
 
   src = fetchFromGitHub {
     owner = "PX4";
     repo = "ulog_cpp";
-    rev = "eaac352b04501a49550fe6bcf02487b818c58f84";
-    hash = "sha256-KNnZNiEDvBGUWsxUEEJhqBvZ5BiwQshImHyOfETltuM=";
+    rev = "5b18d22dbe9cc194ce4ff92d5f506659624423f5";
+    hash = "sha256-D2fsr/SmATk6AFGLP0uWpVm5lxMJglKwCjErpM2/TaU=";
   };
-
-  patches = [
-    ./build-overhaul.patch # https://github.com/PX4/ulog_cpp/pull/15
-  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ doctest ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "MAIN_PROJECT" true)
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-  ];
-
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "C++ library for reading and writing ULog files";
