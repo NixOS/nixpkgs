@@ -16,8 +16,9 @@
   makeWrapper,
   perl,
   pkg-config,
-  python3,
+  python311,
   taplo,
+  uv,
   which,
   yasm,
   zlib,
@@ -41,7 +42,8 @@
 }:
 
 let
-  customPython = python3.withPackages (
+  # match .python-version
+  customPython = python311.withPackages (
     ps: with ps; [
       packaging
     ]
@@ -61,13 +63,13 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "servo";
-  version = "0-unstable-2025-06-04";
+  version = "0-unstable-2025-06-26";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "e78c033b5bc36a9576530869b38eba88080342d1";
-    hash = "sha256-BG0zQRLEM9bghjkB+He5fqpfinowRcn1k1oqhODzaPI=";
+    rev = "cbb0407ae641c049dd6796275b4ba8572c06b798";
+    hash = "sha256-d0Z+dvnNm3NxvGe/W/zJsAsyeMvxF9HoA+wSclWeLgk=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -78,7 +80,7 @@ rustPlatform.buildRustPackage {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-7jbaJSmz7isAiOYVXJ3gXorA2lhDEiVpL+l8gkOnQuM=";
+  cargoHash = "sha256-j6cQalYbeHunI1t4VRQkbqGNylwWg0NBoItwloYTfAE=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -100,13 +102,15 @@ rustPlatform.buildRustPackage {
     makeWrapper
     perl
     pkg-config
-    python3
     rustPlatform.bindgenHook
     taplo
+    uv
     which
     yasm
     zlib
   ];
+
+  env.UV_PYTHON = customPython.interpreter;
 
   buildInputs =
     [
