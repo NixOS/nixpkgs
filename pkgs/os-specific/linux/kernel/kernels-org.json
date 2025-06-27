@@ -1,31 +1,31 @@
 {
     "testing": {
-        "version": "6.16-rc2",
-        "hash": "sha256:1hzkpp5161ss40d8j9nzvzyw6vljslx0pk5fin0klj884l5i8igh"
+        "version": "6.16-rc3",
+        "hash": "sha256:04inkd3aqpikjarxy3lxzw2v2f45mnfzlq82r8mdsm23lkn68glr"
     },
     "6.1": {
-        "version": "6.1.141",
-        "hash": "sha256:05n1561cbzaw9vcxp86bqzvhqz5wv7dajpy7cq34bw7myvx4ag5w"
+        "version": "6.1.142",
+        "hash": "sha256:1am31xw70sbxzdnvj70fx9l946nadcbrc7qk2yxxssy96nhnxlnw"
     },
     "5.15": {
-        "version": "5.15.185",
-        "hash": "sha256:1p0kjc09qqv361phscny1gqj38di9dpab9gxywljkwqhi5wyn0rx"
+        "version": "5.15.186",
+        "hash": "sha256:0anbf7v0m26da0c6d0z925im4x2kf8kswpbv056543amxvbzsklw"
     },
     "5.10": {
-        "version": "5.10.238",
-        "hash": "sha256:1dkblixa0as9h11m081dqq8vlz4dcjbzdz7phkz07p621na55j07"
+        "version": "5.10.239",
+        "hash": "sha256:1nzhl1y6avfl77fyqwjwy3qc6679gp92k0d3aarscrdydcml5yid"
     },
     "5.4": {
-        "version": "5.4.294",
-        "hash": "sha256:16bv0x4c9ssr66vrd6jnv2dw5na1y7hxfn4d67g0zaksh6xd0yf8"
+        "version": "5.4.295",
+        "hash": "sha256:1adn0pbk8y1zp1yrz83ch6h4wypm2qvbnx4xig3sls2nfgvmi0f4"
     },
     "6.6": {
-        "version": "6.6.94",
-        "hash": "sha256:0mncdsqbqrxii0hirnymi1kmg50jn9v0p26flimlf2xj4vm82fbi"
+        "version": "6.6.95",
+        "hash": "sha256:11gaczm68mqm72f3mfg656nkiqd9y66kf943hvwghln9lblhlr0q"
     },
     "6.12": {
-        "version": "6.12.34",
-        "hash": "sha256:0kf2f3r96npzs01kdq3q2ag7zg8l3avfyqwv5qbs9v373wwgxwx7"
+        "version": "6.12.35",
+        "hash": "sha256:0j577lqmzbzx45gxvxirx627pv6cbhq9slzb50rqqmyy3nqf1x05"
     },
     "6.13": {
         "version": "6.13.12",
@@ -36,7 +36,7 @@
         "hash": "sha256:06rvydmc2yfspidnsay5hin3i8p4fxy3bvzwnry7gjf9dl5cs71z"
     },
     "6.15": {
-        "version": "6.15.3",
-        "hash": "sha256:1c35ima9zklzi0hhmw2xmii6agj3kkycm845fg6xjf2lja4hrd8j"
+        "version": "6.15.4",
+        "hash": "sha256:05psir6p8x5a89d9kxkxlv5iifln67yf803xj5rqvx82nqkxdbqf"
     }
 }

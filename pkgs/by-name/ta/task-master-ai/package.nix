@@ -7,16 +7,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "task-master-ai";
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "eyaltoledano";
     repo = "claude-task-master";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1k17Eiwu+Fj45VCYVzf9Obj7MniyOuWerm76rNX4E8E=";
+    hash = "sha256-RnbquGcanpBH5A++MZOVNLXEdn7qVJIVWxUOZEBpF/o=";
   };
 
-  npmDepsHash = "sha256-0usq016nVWxhDx36ijk5O7oN1pkdTu38mgjfBPIBqss=";
+  npmDepsHash = "sha256-GjRxjafbJ5DqikvO3Z7YPtuUHaG5ezxdrQq9f7WDEi4=";
 
   dontNpmBuild = true;
 

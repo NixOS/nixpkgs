@@ -2020,7 +2020,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after =
         [ "networking.target" ]
-        ++ lib.optional usePostgresql "postgresql.service"
+        ++ lib.optional usePostgresql "postgresql.target"
         ++ lib.optional useMysql "mysql.service";
       script = ''
         set -o errexit -o pipefail -o nounset -o errtrace
