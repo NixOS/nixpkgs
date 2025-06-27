@@ -141,7 +141,7 @@ def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -
     mock_build.assert_has_calls(
         [
             call(
-                nr.NIXOS_REBUILD_ATTR,
+                nr.services.NIXOS_REBUILD_ATTR,
                 nr.models.BuildAttr(ANY, ANY),
                 {"build": True, "no_out_link": True},
             )
@@ -185,7 +185,7 @@ def test_reexec_flake(
 
     nr.reexec(argv, args, {"build": True}, {"flake": True})
     mock_build.assert_called_once_with(
-        nr.NIXOS_REBUILD_ATTR,
+        nr.services.NIXOS_REBUILD_ATTR,
         nr.models.Flake(ANY, ANY),
         {"flake": True, "no_link": True},
     )
@@ -536,7 +536,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
 )
 @patch("subprocess.run", autospec=True)
 @patch("uuid.uuid4", autospec=True)
-@patch(get_qualified_name(nr.cleanup_ssh), autospec=True)
+@patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 @pytest.mark.skipif(
     not WITH_NIX_2_18,
     reason="Tests internal logic based on the assumption that Nix >= 2.18",
@@ -755,7 +755,7 @@ def test_execute_nix_switch_build_target_host(
     clear=True,
 )
 @patch("subprocess.run", autospec=True)
-@patch(get_qualified_name(nr.cleanup_ssh), autospec=True)
+@patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 def test_execute_nix_switch_flake_target_host(
     mock_cleanup_ssh: Mock,
     mock_run: Mock,
@@ -862,7 +862,7 @@ def test_execute_nix_switch_flake_target_host(
     clear=True,
 )
 @patch("subprocess.run", autospec=True)
-@patch(get_qualified_name(nr.cleanup_ssh), autospec=True)
+@patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
 def test_execute_nix_switch_flake_build_host(
     mock_cleanup_ssh: Mock,
     mock_run: Mock,
