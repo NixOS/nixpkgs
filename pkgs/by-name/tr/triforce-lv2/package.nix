@@ -55,6 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       normalcea
       yuka
     ];
-    platforms = lib.platforms.linux;
+    platforms = [ "aarch64-linux" ];
   };
 })
