@@ -164,7 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [
-      astsmtl
       antono
     ];
     teams = [ teams.gnome ];
