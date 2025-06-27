@@ -132,7 +132,7 @@ def test_parse_args() -> None:
 @patch("os.execve", autospec=True)
 @patch(get_qualified_name(nr.nix.build), autospec=True)
 def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -> None:
-    monkeypatch.setattr(nr, "EXECUTABLE", "nixos-rebuild-ng")
+    monkeypatch.setattr(nr.services, "EXECUTABLE", "nixos-rebuild-ng")
     argv = ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"]
     args, _ = nr.parse_args(argv)
     mock_build.return_value = Path("/path")
@@ -178,7 +178,7 @@ def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -
 def test_reexec_flake(
     mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch
 ) -> None:
-    monkeypatch.setattr(nr, "EXECUTABLE", "nixos-rebuild-ng")
+    monkeypatch.setattr(nr.services, "EXECUTABLE", "nixos-rebuild-ng")
     argv = ["/path/bin/nixos-rebuild-ng", "switch", "--flake"]
     args, _ = nr.parse_args(argv)
     mock_build.return_value = Path("/path")
