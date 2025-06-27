@@ -24,7 +24,7 @@
 
 buildPythonPackage {
   pname = "cut-cross-entropy";
-  version = "25.3.1";
+  version = "25.5.1";
   pyproject = true;
 
   # The `ml-cross-entropy` Pypi comes from a third-party.
@@ -32,7 +32,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "apple";
     repo = "ml-cross-entropy";
-    rev = "24fbe4b5dab9a6c250a014573613c1890190536c"; # no tags
+    rev = "b616b222976b235647790a16d0388338b9e18941"; # no tags
     hash = "sha256-BVPon+T7chkpozX/IZU3KZMw1zRzlYVvF/22JWKjT2Y=";
   };
 

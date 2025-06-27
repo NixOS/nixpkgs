@@ -121,6 +121,8 @@
   websocat,
   # lazydocker.nvim dependencies
   lazydocker,
+  # lazyjj.nvim dependencies
+  lazyjj,
   # luau-lsp-nvim dependencies
   luau-lsp,
   # uv.nvim dependencies
@@ -1545,6 +1547,13 @@ in
   lazydocker-nvim = super.lazydocker-nvim.overrideAttrs {
     runtimeDeps = [
       lazydocker
+    ];
+  };
+
+  lazyjj-nvim = super.lazyjj-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    runtimeDeps = [
+      lazyjj
     ];
   };
 
