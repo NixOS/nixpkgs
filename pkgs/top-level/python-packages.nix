@@ -6355,6 +6355,10 @@ self: super: with self; {
 
   hatch-babel = callPackage ../development/python-modules/hatch-babel { };
 
+  hatch-docstring-description =
+    callPackage ../development/python-modules/hatch-docstring-description
+      { };
+
   hatch-fancy-pypi-readme = callPackage ../development/python-modules/hatch-fancy-pypi-readme { };
 
   hatch-jupyter-builder = callPackage ../development/python-modules/hatch-jupyter-builder { };
