@@ -9140,21 +9140,21 @@ with pkgs;
   opencolorio = callPackage ../development/libraries/opencolorio { };
   opencolorio_1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
 
-  openstackclient = with python312Packages; toPythonApplication python-openstackclient;
+  openstackclient = with python313Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.cli-plugins;
   });
-  barbicanclient = with python312Packages; toPythonApplication python-barbicanclient;
-  glanceclient = with python312Packages; toPythonApplication python-glanceclient;
-  heatclient = with python312Packages; toPythonApplication python-heatclient;
-  ironicclient = with python312Packages; toPythonApplication python-ironicclient;
-  magnumclient = with python312Packages; toPythonApplication python-magnumclient;
-  manilaclient = with python312Packages; toPythonApplication python-manilaclient;
-  mistralclient = with python312Packages; toPythonApplication python-mistralclient;
-  swiftclient = with python312Packages; toPythonApplication python-swiftclient;
-  troveclient = with python312Packages; toPythonApplication python-troveclient;
-  watcherclient = with python312Packages; toPythonApplication python-watcherclient;
-  zunclient = with python312Packages; toPythonApplication python-zunclient;
+  barbicanclient = with python313Packages; toPythonApplication python-barbicanclient;
+  glanceclient = with python313Packages; toPythonApplication python-glanceclient;
+  heatclient = with python313Packages; toPythonApplication python-heatclient;
+  ironicclient = with python313Packages; toPythonApplication python-ironicclient;
+  magnumclient = with python313Packages; toPythonApplication python-magnumclient;
+  manilaclient = with python313Packages; toPythonApplication python-manilaclient;
+  mistralclient = with python313Packages; toPythonApplication python-mistralclient;
+  swiftclient = with python313Packages; toPythonApplication python-swiftclient;
+  troveclient = with python313Packages; toPythonApplication python-troveclient;
+  watcherclient = with python313Packages; toPythonApplication python-watcherclient;
+  zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_6
