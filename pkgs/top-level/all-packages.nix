@@ -10268,7 +10268,7 @@ with pkgs;
   freshrss-extensions = recurseIntoAttrs (callPackage ../servers/web-apps/freshrss/extensions { });
 
   grafana = callPackage ../servers/monitoring/grafana { };
-  grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
+  grafanaPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/grafana/plugins { });
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
