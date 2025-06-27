@@ -73,7 +73,7 @@
           twey
           kovirobi
         ];
-        license = licenses.gpl2Plus;
+        license = lib.licenses.gpl2Plus;
       };
     }
   );
