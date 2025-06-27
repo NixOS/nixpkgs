@@ -108,7 +108,9 @@ in
       };
       description = # markdown
         ''
-          Configuration settings for filebrowser. The defaults are the default settings generated using `Filebrowser setup` All configuration settings with explaination can be found [here](https://github.com/gtsteffaniak/filebrowser/wiki/Full-Config-Example)
+          Configuration settings for filebrowser.
+          The defaults are the default settings generated using `Filebrowser setup` All configuration settings with explaination can be found [here](https://github.com/gtsteffaniak/filebrowser/wiki/Full-Config-Example).
+          If settings = { } then the config.yaml in the home directory will be used.
         '';
       example = # nix
         ''
@@ -321,9 +323,9 @@ in
           let
             config =
               if (cfg.settings == { }) then
-                "./config.yaml"
+                "${cfg.home}/config.yaml"
               else
-                pkgs.writers.writeJSON "config.yaml" cfg.settings;
+                pkgs.writers.writeJSON "filebrowswer-quantum-config.yaml" cfg.settings;
           in
           "${lib.getExe cfg.package} -c ${config}";
 
