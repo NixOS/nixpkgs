@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
+  dontWrapQtApps = true;
+
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace /usr "$out"
   '';
