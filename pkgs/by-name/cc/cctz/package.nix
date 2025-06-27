@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cctz";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cctz";
     rev = "v${version}";
-    sha256 = "sha256-F4h8nT1karymV16FFHC0ldSbdOOx5AMstqi4Bc5m3UQ=";
+    sha256 = "sha256-YCE0DXuOT5tCOfLlemMH7I2F8c7HEK1NEUJvtfqnCg8=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
