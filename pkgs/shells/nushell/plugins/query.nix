@@ -10,7 +10,7 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "nushell_plugin_query";
+  pname = "nu_plugin_query";
   inherit (nushell) version src cargoHash;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];

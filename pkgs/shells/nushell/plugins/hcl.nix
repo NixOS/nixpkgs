@@ -8,7 +8,7 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "nushell_plugin_hcl";
+  pname = "nu_plugin_hcl";
   version = "0.105.1";
 
   src = fetchFromGitHub {
