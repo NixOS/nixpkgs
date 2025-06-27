@@ -13,7 +13,7 @@
   nix-update-script,
   pcre,
   pkg-config,
-  python3Packages,
+  # python3Packages.shiboken2 is currently broken
   python312Packages,
   qt5,
   stdenv,
@@ -24,9 +24,6 @@
 }:
 
 let
-  pythonPackages' =
-    # lib.meta.availableOn does not respect meta.broken?
-    if python3Packages.shiboken2.meta.available then python3Packages else python312Packages;
   custom_swig = fetchFromGitHub {
     owner = "baldurk";
     repo = "swig";
@@ -55,9 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     [
       libXdmcp
       libpthreadstubs
-      pythonPackages'.pyside2
-      pythonPackages'.pyside2-tools
-      pythonPackages'.shiboken2
+      python312Packages.pyside2
+      python312Packages.pyside2-tools
+      python312Packages.shiboken2
       qt5.qtbase
       qt5.qtsvg
       vulkan-loader
@@ -75,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pcre
     pkg-config
-    pythonPackages'.python
+    python312Packages.python
     qt5.qtx11extras
     qt5.wrapQtAppsHook
   ];
