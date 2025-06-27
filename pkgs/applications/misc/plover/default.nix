@@ -73,6 +73,7 @@
         maintainers = with lib.maintainers; [
           twey
           kovirobi
+          pandapip1
         ];
         license = lib.licenses.gpl2Plus;
         platforms = lib.platforms.unix;
