@@ -623,7 +623,7 @@ in
 
         # prevent races with database creation
         "mysql.service"
-        "postgresql.service"
+        "postgresql.target"
       ];
       reloadTriggers =
         optionals (cfg.config != null) [ configFile ]
