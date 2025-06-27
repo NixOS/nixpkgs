@@ -6363,6 +6363,8 @@ self: super: with self; {
 
   hatch-jupyter-builder = callPackage ../development/python-modules/hatch-jupyter-builder { };
 
+  hatch-min-requirements = callPackage ../development/python-modules/hatch-min-requirements { };
+
   hatch-nodejs-version = callPackage ../development/python-modules/hatch-nodejs-version { };
 
   hatch-odoo = callPackage ../development/python-modules/hatch-odoo { };
