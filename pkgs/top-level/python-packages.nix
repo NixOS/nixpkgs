@@ -4882,6 +4882,8 @@ self: super: with self; {
 
   farama-notifications = callPackage ../development/python-modules/farama-notifications { };
 
+  fast-array-utils = callPackage ../development/python-modules/fast-array-utils { };
+
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fastai = callPackage ../development/python-modules/fastai { };
