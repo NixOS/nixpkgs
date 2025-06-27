@@ -92,5 +92,7 @@ stdenv.mkDerivation rec {
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
     platforms = platforms.linux;
     license = licenses.bsd3;
+    vendor = "linux-pam";
+    cpe = "cpe:2.3:a:${meta.vendor}:${pname}:${version}:*:*:*:*:*:*:*";
   };
 }

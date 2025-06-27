@@ -714,6 +714,7 @@ let
       cmakeFlags ? [ ],
       mesonFlags ? [ ],
 
+      preserveMetaFields ? [ "name" "pname" "version" "license" "vendor" "cpe" "mainProgram" ],
       meta ? { },
       passthru ? { },
       pos ? # position used in error messages and for meta.position
@@ -750,7 +751,13 @@ let
       env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
       envIsExportable = isAttrs env' && !isDerivation env';
 
-      derivationArg = makeDerivationArgument (
+      derivationArg = let
+        # Get attrSet containing key-value only if key exists, otherwise get empty attrSet.
+        optAttr = name: lib.optionalAttrs (builtins.hasAttr name attrs) { "${name}" = attrs."${name}"; };
+        # For convenience, include some useful attributes (if present) plus existing meta attrSet.
+        nonMetaAttributes = [ "name" "pname" "version" ];
+        meta = lib.foldl' (acc: x: acc // optAttr x) { } nonMetaAttributes // (attrs.meta or {});
+      in makeDerivationArgument (
         removeAttrs attrs (
           [
             "meta"
@@ -760,6 +767,9 @@ let
           ++ optional (__structuredAttrs || envIsExportable) "env"
         )
         // optionalAttrs __structuredAttrs { env = checkedEnv; }
+        // lib.optionalAttrs (preserveMetaFields != []) {
+          nixMetaJSON = builtins.toJSON (lib.filterAttrs (n: _: (lib.elem n preserveMetaFields)) meta);
+        }
         // {
           cmakeFlags = makeCMakeFlags attrs;
           mesonFlags = makeMesonFlags attrs;
