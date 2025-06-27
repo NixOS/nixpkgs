@@ -29,7 +29,7 @@
 
       systemd.services = {
         tandoor-recipes = {
-          after = [ "postgresql.service" ];
+          after = [ "postgresql.target" ];
         };
       };
     };

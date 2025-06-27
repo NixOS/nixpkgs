@@ -273,8 +273,8 @@ in
 
     systemd.services.roundcube-setup = lib.mkMerge [
       (lib.mkIf localDB {
-        requires = [ "postgresql.service" ];
-        after = [ "postgresql.service" ];
+        requires = [ "postgresql.target" ];
+        after = [ "postgresql.target" ];
       })
       {
         wants = [ "network-online.target" ];
