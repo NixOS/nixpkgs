@@ -7010,6 +7010,8 @@ self: super: with self; {
 
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
 
+  iplotx = callPackage ../development/python-modules/iplotx { };
+
   iptools = callPackage ../development/python-modules/iptools { };
 
   ipwhl = callPackage ../development/python-modules/ipwhl { };
@@ -10828,6 +10830,8 @@ self: super: with self; {
   optree = callPackage ../development/python-modules/optree { };
 
   optuna = callPackage ../development/python-modules/optuna { };
+
+  optype = callPackage ../development/python-modules/optype { };
 
   opuslib = callPackage ../development/python-modules/opuslib { };
 

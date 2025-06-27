@@ -545,14 +545,14 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         )
 
 
-def repl(attr: str, build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
+def repl(build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
     run_args = ["nix", "repl", "--file", build_attr.path]
     if build_attr.attr:
         run_args.append(build_attr.attr)
     run_wrapper([*run_args, *dict_to_flags(nix_flags)])
 
 
-def repl_flake(attr: str, flake: Flake, flake_flags: Args | None = None) -> None:
+def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
     expr = Template(
         files(__package__).joinpath(FLAKE_REPL_TEMPLATE).read_text()
     ).substitute(

@@ -2,7 +2,8 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  perl,
+  openssl,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,15 +17,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-DFIiVNYom3LvU9IFA9w9FvXwm9gqfACDs8KaFKQR9Qs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-/2i6GyBTKLf2oNFkizaBUHcLcCPgsy3g0p31D6cO+xg=";
 
-  nativeBuildInputs = [ perl ];
+  buildInputs = [ openssl ];
+  nativeBuildInputs = [ pkg-config ];
+
+  env.OPENSSL_NO_VENDOR = true;
 
   meta = {
     description = "Official launcher for AlterWare Call of Duty mods";
     longDescription = "Our clients are designed to restore missing features that have been removed by the developers, as well as enhance the capabilities of the games";
     homepage = "https://alterware.dev";
+    downloadPage = "https://github.com/alterware/alterware-launcher";
     changelog = "https://github.com/alterware/alterware-launcher/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ andrewfield ];

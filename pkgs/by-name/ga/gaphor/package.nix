@@ -64,8 +64,12 @@ python3Packages.buildPythonApplication rec {
     install -Dm644 data/logos/gaphor-24x24.png $out/share/icons/hicolor/24x24/apps/org.gaphor.Gaphor.png
     install -Dm644 data/logos/gaphor-48x48.png $out/share/icons/hicolor/48x48/apps/org.gaphor.Gaphor.png
 
-    install -Dm644 gaphor/ui/installschemas/org.gaphor.Gaphor.gschema.xml -t $out/share/glib-2.0/schemas/
-    glib-compile-schemas $out/share/glib-2.0/schemas/
+    GSCHEMA_PATH=$out/share/gsettings-schemas/$name/glib-2.0/schemas
+    install -Dm644 gaphor/ui/installschemas/org.gaphor.Gaphor.gschema.xml -t $GSCHEMA_PATH
+    glib-compile-schemas $GSCHEMA_PATH
+    substituteInPlace $out/${python3Packages.python.sitePackages}/gaphor/settings.py \
+      --replace-fail 'Gio.SettingsSchemaSource.get_default()' \
+        "Gio.SettingsSchemaSource.new_from_directory('$GSCHEMA_PATH', Gio.SettingsSchemaSource.get_default(), False)"
 
     install -Dm644 data/org.gaphor.Gaphor.service -t $out/share/dbus-1/services/
     substituteInPlace $out/share/dbus-1/services/org.gaphor.Gaphor.service \
