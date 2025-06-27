@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.5.3";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1qVe2s3MCmFm4hAwFwGn1jj6eVcBnvhvuK3OnNEuxQM=";
+    hash = "sha256-tHqWZyCR9s/dG5FpfpLCy5F9Mm+/ztzwA1Z3LY73Ams=";
   };
 
   bazelapi = fetchurl {
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     # Using fmt 10 because this is the same version upstream currently
     # uses for bundled builds
     # For future updates: The currently used version can be found in the file
-    # etc/repos.json: https://github.com/just-buildsystem/justbuild/blob/master/etc/repos.json
+    # etc/repos.in.json: https://github.com/just-buildsystem/justbuild/blob/master/etc/repos.in.json
     # under the key .repositories.fmt
     fmt_10
     microsoft-gsl
@@ -89,10 +89,10 @@ stdenv.mkDerivation rec {
     ''
       sed -i -e 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
       sed -i -e 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
-      jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf}"' etc/repos.json > etc/repos.json.patched
-      mv etc/repos.json.patched etc/repos.json
-      jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.json > etc/repos.json.patched
-      mv etc/repos.json.patched etc/repos.json
+      jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf}"' etc/repos.in.json > etc/repos.in.json.patched
+      mv etc/repos.in.json.patched etc/repos.in.json
+      jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.in.json > etc/repos.in.json.patched
+      mv etc/repos.in.json.patched etc/repos.in.json
       jq '.unknown.PATH = []' etc/toolchain/CC/TARGETS > etc/toolchain/CC/TARGETS.patched
       mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
     ''
