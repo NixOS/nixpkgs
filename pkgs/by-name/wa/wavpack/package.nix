@@ -19,9 +19,6 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libiconv ];
 
-  # autogen.sh:9
-  preAutoreconf = "cp ${gettext}/share/gettext/config.rpath .";
-
   src = fetchFromGitHub {
     owner = "dbry";
     repo = "WavPack";
