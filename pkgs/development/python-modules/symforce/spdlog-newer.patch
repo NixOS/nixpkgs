@@ -1,0 +1,13 @@
+diff --git a/symforce/opt/CMakeLists.txt b/symforce/opt/CMakeLists.txt
+index 2a42dbb8..7aa07633 100644
+--- a/symforce/opt/CMakeLists.txt
++++ b/symforce/opt/CMakeLists.txt
+@@ -34,7 +34,7 @@ endif()
+ # ------------------------------------------------------------------------------
+ # spdlog
+ 
+-find_package(spdlog 1.9...<1.11 QUIET)
++find_package(spdlog 1.9 QUIET)
+ if (NOT spdlog_FOUND)
+   message(STATUS "spdlog not found, adding with FetchContent")
+   function(add_spdlog)

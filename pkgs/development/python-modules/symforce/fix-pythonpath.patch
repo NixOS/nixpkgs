@@ -1,0 +1,13 @@
+diff --git a/third_party/skymarshal/cmake/skymarshal.cmake b/third_party/skymarshal/cmake/skymarshal.cmake
+index 0f797356..6ec073d6 100644
+--- a/third_party/skymarshal/cmake/skymarshal.cmake
++++ b/third_party/skymarshal/cmake/skymarshal.cmake
+@@ -88,7 +88,7 @@ function(add_skymarshal_bindings target_name bindings_dir lcmtypes_dir)
+   endif()
+ 
+   # NOTE(aaron):  Who knows if this'll work if there are spaces in the PYTHONPATH?  I don't
+-  set(SKYMARSHAL_PYTHON env PYTHONPATH=$ENV{PYTHONPATH}:${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../.. ${SYMFORCE_PYTHON})
++  set(SKYMARSHAL_PYTHON env PYTHONPATH=$ENV{PYTHONPATH}:${CMAKE_CURRENT_FUNCTION_LIST_DIR}/.. ${SYMFORCE_PYTHON})
+ 
+   execute_process(
+     COMMAND ${SKYMARSHAL_PYTHON} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/parse_types.py ${lcmtypes_dir}
