@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "src-cli";
-  version = "6.3.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
@@ -25,22 +25,16 @@ buildGoModule rec {
     "cmd/src"
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-  ];
-
   ldflags = [
     "-s"
     "-w"
     "-X=github.com/sourcegraph/src-cli/internal/version.BuildTag=${version}"
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   passthru.tests = {
     version = testers.testVersion {
       package = src-cli;
-      command = "src version || true";
+      command = "src version -client-only";
     };
   };
 
@@ -49,7 +43,10 @@ buildGoModule rec {
     homepage = "https://github.com/sourcegraph/src-cli";
     changelog = "https://github.com/sourcegraph/src-cli/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [
+      figsoda
+      keegancsmith
+    ];
     mainProgram = "src";
   };
 }
