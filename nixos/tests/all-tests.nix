@@ -1403,7 +1403,7 @@ in
   teleports = runTest ./teleports.nix;
   thelounge = handleTest ./thelounge.nix { };
   terminal-emulators = handleTest ./terminal-emulators.nix { };
-  thanos = handleTest ./thanos.nix { };
+  thanos = runTest ./thanos.nix;
   tiddlywiki = runTest ./tiddlywiki.nix;
   tigervnc = handleTest ./tigervnc.nix { };
   tika = runTest ./tika.nix;
