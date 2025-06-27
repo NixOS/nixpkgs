@@ -66,9 +66,11 @@ while read -r new_commit_sha ; do
   git rev-list --max-count=1 --format=medium "$new_commit_sha"
   echo "-------------------------------------------------"
 
+  # Using the last line with "cherry" + hash, because a chained backport
+  # can result in multiple of those lines. Only the last one counts.
   original_commit_sha=$(
     git rev-list --max-count=1 --format=format:%B "$new_commit_sha" \
-    | grep -Ei -m1 "cherry.*[0-9a-f]{40}" \
+    | grep -Ei "cherry.*[0-9a-f]{40}" | tail -n1 \
     | grep -Eoi -m1 '[0-9a-f]{40}' || true
   )
   if [ -z "$original_commit_sha" ] ; then
