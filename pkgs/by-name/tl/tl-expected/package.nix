@@ -23,6 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://tl.tartanllama.xyz/en/latest/api/expected.html";
     license = lib.licenses.cc0;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pandapip1 ];
   };
 })
