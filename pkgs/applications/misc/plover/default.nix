@@ -2,13 +2,36 @@
   lib,
   config,
   stdenv,
-  buildPythonPackage ? python3Packages.buildPythonPackage,
+  plover,
   fetchFromGitHub,
+  fetchpatch,
   versionCheckHook,
   python3Packages,
   libsForQt5,
 }:
 
+let
+  inherit (python3Packages)
+    buildPythonPackage
+    appdirs
+    babel
+    evdev
+    mock
+    pyqt5
+    pyserial
+    pytestCheckHook
+    pytest-qt
+    plover-stroke
+    rtf-tokenize
+    setuptools
+    wcwidth
+    wheel
+    xlib
+    ;
+  inherit (libsForQt5)
+    wrapQtAppsHook
+    ;
+in
 {
   dev = (
     buildPythonPackage rec {
@@ -27,13 +50,13 @@
         sed -i 's/,<77//g' pyproject.toml # pythonRelaxDepsHook doesn't work for this for some reason
       '';
 
-      build-system = with python3Packages; [
+      build-system = [
         babel
         setuptools
         pyqt5
         wheel
       ];
-      dependencies = with python3Packages; [
+      dependencies = [
         appdirs
         evdev
         pyqt5
@@ -44,11 +67,11 @@
         wcwidth
         xlib
       ];
-      nativeBuildInputs = with libsForQt5; [
+      nativeBuildInputs = [
         wrapQtAppsHook
       ];
 
-      nativeCheckInputs = with python3Packages; [
+      nativeCheckInputs = [
         pytestCheckHook
         versionCheckHook
         pytest-qt
