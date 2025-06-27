@@ -154,7 +154,6 @@
 , "vega-cli"
 , "vega-lite"
 , "vercel"
-, "vscode-json-languageserver"
 , "wavedrom-cli"
 , "webpack"
 , "wring"

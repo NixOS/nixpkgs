@@ -16,6 +16,7 @@
   mkYarnModules,
   python3,
   # Misc dependencies
+  charm-freeze,
   code-minimap,
   dailies,
   dasht,
@@ -1173,6 +1174,10 @@ in
 
   forms = super.forms.overrideAttrs {
     dependencies = [ self.self ];
+  };
+
+  freeze-nvim = super.freeze-nvim.overrideAttrs {
+    runtimeDeps = [ charm-freeze ];
   };
 
   fruzzy =

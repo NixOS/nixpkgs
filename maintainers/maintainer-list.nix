@@ -25915,6 +25915,12 @@
     github = "TyberiusPrime";
     githubId = 1257580;
   };
+  tye-exe = {
+    name = "Tye";
+    email = "nixpkgs-fr@tye-home.xyz";
+    github = "tye-exe";
+    githubId = 131195812;
+  };
   Tygo-van-den-Hurk = {
     name = "Tygo van den Hurk";
     github = "Tygo-van-den-Hurk";

@@ -154,7 +154,7 @@ class Flake:
             return cls(path, nixos_attr)
 
     @classmethod
-    def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:
+    def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:  # noqa: ANN401
         match flake_arg:
             case str(s):
                 return cls.parse(s, target_host)
