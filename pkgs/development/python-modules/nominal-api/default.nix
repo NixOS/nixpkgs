@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "nominal-api";
-  version = "0.708.0";
+  version = "0.739.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "nominal_api";
-    hash = "sha256-gaMQ4bLhdBkDTUoHP5Cb0vS5emNcYga5eTvV2TEWQiU=";
+    hash = "sha256-TjBLtxstazK+GJMvYnU4geLTcwb1Wic7eGG5344LCSA=";
   };
 
   build-system = [ setuptools ];
