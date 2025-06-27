@@ -1,27 +1,27 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   asciidoctor,
   installShellFiles,
   git,
-  testers,
-  git-lfs,
-  stdenv,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "git-lfs";
-  version = "3.5.1";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
-    rev = "v${version}";
-    hash = "sha256-xSLXbAvIoY3c341qi89pTrjBZdXh/bPrweJD2O2gkjY=";
+    tag = "v${version}";
+    hash = "sha256-zZ9VYWVV+8G3gojj1m74syvsYM1mX0YT4hKnpkdMAQk=";
   };
 
-  vendorHash = "sha256-N8HB2qwBxjzfNucftHxmX2W9srCx62pjmkCWzwiCj/I=";
+  vendorHash = "sha256-JT0r/hs7ZRtsYh4aXy+v8BjwiLvRJ10e4yRirqmWVW0=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -50,6 +50,37 @@ buildGoModule rec {
     unset subPackages
   '';
 
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin (
+    let
+      # Fail in the sandbox with network-related errors.
+      # Enabling __darwinAllowLocalNetworking is not enough.
+      skippedTests = [
+        "TestAPIBatch"
+        "TestAPIBatchOnlyBasic"
+        "TestAuthErrWithBody"
+        "TestAuthErrWithoutBody"
+        "TestCertFromSSLCAInfoConfig"
+        "TestCertFromSSLCAInfoEnv"
+        "TestCertFromSSLCAInfoEnvWithSchannelBackend"
+        "TestCertFromSSLCAPathConfig"
+        "TestCertFromSSLCAPathEnv"
+        "TestClientRedirect"
+        "TestClientRedirectReauthenticate"
+        "TestDoAPIRequestWithAuth"
+        "TestDoWithAuthApprove"
+        "TestDoWithAuthNoRetry"
+        "TestDoWithAuthReject"
+        "TestFatalWithBody"
+        "TestFatalWithoutBody"
+        "TestHttp2"
+        "TestHttpVersion"
+        "TestWithNonFatal500WithBody"
+        "TestWithNonFatal500WithoutBody"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ]
+  );
+
   postInstall =
     ''
       installManPage man/man*/*
@@ -61,16 +92,24 @@ buildGoModule rec {
         --zsh <($out/bin/git-lfs completion zsh)
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = git-lfs;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Git extension for versioning large files";
     homepage = "https://git-lfs.github.com/";
     changelog = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ twey ];
     mainProgram = "git-lfs";
   };
 }
