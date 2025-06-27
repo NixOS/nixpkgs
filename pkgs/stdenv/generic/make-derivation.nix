@@ -17,6 +17,7 @@ let
     elemAt
     extendDerivation
     filter
+    filterAttrs
     findFirst
     getDev
     head
@@ -809,19 +810,42 @@ let
       mainProgram = meta.mainProgram or null;
       env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
 
-      derivationArg = makeDerivationArgument (
-        removeAttrs attrs [
-          "meta"
-          "passthru"
-          "pos"
-          "env"
-        ]
-        // lib.optionalAttrs __structuredAttrs { env = checkedEnv; }
-        // {
-          cmakeFlags = makeCMakeFlags attrs;
-          mesonFlags = makeMesonFlags attrs;
-        }
-      );
+      derivationArg =
+        let
+          preserveMetaFields = [
+            "identifiers"
+            "license"
+            "mainProgram"
+            "vendor"
+          ];
+          # For convenience, include some useful attributes (if present) plus existing meta attrSet.
+          nixMetaJSON = builtins.toJSON (
+            filterAttrs (n: _: (elem n preserveMetaFields)) meta
+            // {
+              # If the name is set via `baseNameOf`, string context may be present.
+              name = builtins.unsafeDiscardStringContext (attrs.pname or attrs.name);
+              version = attrs.version or null;
+            }
+          );
+          nixMetaJSONContext = builtins.getContext nixMetaJSON;
+        in
+        assert assertMsg (
+          nixMetaJSONContext == { }
+        ) "String context not allowed in nixMeta of ${attrs.pname or attrs.name}-${attrs.version or "none"}: ${builtins.toJSON nixMetaJSONContext}";
+        makeDerivationArgument (
+          removeAttrs attrs [
+            "meta"
+            "passthru"
+            "pos"
+            "env"
+          ]
+          // optionalAttrs __structuredAttrs { env = checkedEnv; }
+          // {
+            inherit nixMetaJSON;
+            cmakeFlags = makeCMakeFlags attrs;
+            mesonFlags = makeMesonFlags attrs;
+          }
+        );
 
       meta = checkMeta.commonMeta {
         inherit validity attrs pos;
