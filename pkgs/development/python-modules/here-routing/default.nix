@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "here-routing";
-  version = "1.1.3";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "here_routing";
     tag = "v${version}";
-    hash = "sha256-56Sx8pbfsuCj7mqG15HK3QoGGiQDFFrbkOdNedV+HY4=";
+    hash = "sha256-h3y5hjaSHH6oIfSt5JTt1+pH7mFLOFiq1RuMZ1uYtTE=";
   };
 
   build-system = [ hatchling ];
