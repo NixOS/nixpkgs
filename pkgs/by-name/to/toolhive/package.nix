@@ -6,7 +6,7 @@
   toolhive,
 }:
 
-buildGo124Module rec {
+buildGo124Module (finalAttrs: {
   pname = "toolhive";
   version = "0.0.47";
 
