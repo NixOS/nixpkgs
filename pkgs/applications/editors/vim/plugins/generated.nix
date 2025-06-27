@@ -6938,6 +6938,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  lazyjj-nvim = buildVimPlugin {
+    pname = "lazyjj.nvim";
+    version = "2024-11-28";
+    src = fetchFromGitHub {
+      owner = "swaits";
+      repo = "lazyjj.nvim";
+      rev = "bba66a1351ff1f1bd078c8a1b00b8d12b3ed0017";
+      sha256 = "0fcfqqc23ri9pw5h23bnryqp6cdd3djvxbivj05lllxharbdzpl7";
+    };
+    meta.homepage = "https://github.com/swaits/lazyjj.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   lean-nvim = buildVimPlugin {
     pname = "lean.nvim";
     version = "2025-06-23";
@@ -13655,6 +13668,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  spellwarn-nvim = buildVimPlugin {
+    pname = "spellwarn.nvim";
+    version = "2024-11-03";
+    src = fetchFromGitHub {
+      owner = "ravibrock";
+      repo = "spellwarn.nvim";
+      rev = "12734b47b008d912b4925c0bc2c1248eb534409d";
+      sha256 = "1qrz65vrcarx88bi6vn4dm0y8x7dbprcdzjk1nk1gpp2py6dd20m";
+    };
+    meta.homepage = "https://github.com/ravibrock/spellwarn.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   sphinx-nvim = buildVimPlugin {
     pname = "sphinx.nvim";
     version = "2024-10-30";
@@ -14776,6 +14802,19 @@ final: prev: {
       sha256 = "0njcxdyn9x73s4axq01mrxi297xn1qldvnaws6wrbx1j4dyjx0yq";
     };
     meta.homepage = "https://github.com/johmsalas/text-case.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  thanks-nvim = buildVimPlugin {
+    pname = "thanks.nvim";
+    version = "2025-03-08";
+    src = fetchFromGitHub {
+      owner = "jsongerber";
+      repo = "thanks.nvim";
+      rev = "ec5eedab29b734c31050b6618fc58d1107ce8b4c";
+      sha256 = "1haw16cilwgnwkl48yi7wcmirk03xbl7mnki7rcyhkzi552cfnnp";
+    };
+    meta.homepage = "https://github.com/jsongerber/thanks.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
