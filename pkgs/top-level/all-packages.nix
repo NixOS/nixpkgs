@@ -12218,12 +12218,11 @@ with pkgs;
 
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
-  gqrx = qt6Packages.callPackage ../applications/radio/gqrx { };
-  gqrx-portaudio = qt6Packages.callPackage ../applications/radio/gqrx {
+  gqrx-portaudio = gqrx.override {
     portaudioSupport = true;
     pulseaudioSupport = false;
   };
-  gqrx-gr-audio = qt6Packages.callPackage ../applications/radio/gqrx {
+  gqrx-gr-audio = gqrx.override {
     portaudioSupport = false;
     pulseaudioSupport = false;
   };
