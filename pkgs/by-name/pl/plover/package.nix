@@ -3,7 +3,6 @@
   config,
   stdenv,
   plover,
-  buildPythonPackage ? python3Packages.buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
   versionCheckHook,
