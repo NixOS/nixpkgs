@@ -9,13 +9,13 @@
 buildKodiAddon rec {
   pname = "sendtokodi";
   namespace = "plugin.video.sendtokodi";
-  version = "0.9.557";
+  version = "0.9.924";
 
   src = fetchFromGitHub {
     owner = "firsttris";
     repo = "plugin.video.sendtokodi";
-    rev = "v${version}";
-    hash = "sha256-Ga+9Q7x8+sEmQmteHbSyCahZ/T/l28BAEM84w7bf7z8=";
+    tag = "v${version}";
+    hash = "sha256-ycp5/NbRX2rcRRpbpX6LlplyxdfoIwCw39EyQDcyzOU=";
   };
 
   patches = [
