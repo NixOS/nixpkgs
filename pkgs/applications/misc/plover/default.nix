@@ -66,14 +66,14 @@
 
       pythonImportsCheck = [ "plover" ];
 
-      meta = with lib; {
+      meta = {
         broken = stdenv.hostPlatform.isDarwin;
         description = "OpenSteno Plover stenography software";
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           twey
           kovirobi
         ];
-        license = licenses.gpl2Plus;
+        license = lib.licenses.gpl2Plus;
       };
     }
   );
