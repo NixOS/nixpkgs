@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iw4x-launcher";
-  version = "0.10.10";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "iw4x";
     repo = "launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VJxOkgk96DnmnlBh5jDFjKVDv7eMtx8RHg7qn0gQpaU=";
+    hash = "sha256-/7c1RlBq1BrHIGeykkAPWhPTsYRo4KtcNrY2lTtccCw=";
   };
 
-  cargoHash = "sha256-nAqT4lkn9H9Yh87Ud+GtRAwgoFbAZNhJtWq2GgrcFbk=";
+  cargoHash = "sha256-IqtWFsZckeN0r+mF5dw1cxKiJHUuXTDqBB1hu52lE+w=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
