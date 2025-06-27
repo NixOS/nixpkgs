@@ -1,13 +1,12 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index ec078d6..f9816d0 100644
+index ec078d6..ff06c08 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1,30 +1,84 @@
+@@ -1,30 +1,88 @@
  cmake_minimum_required(VERSION 3.16)
-+project(px4-gpsdrivers VERSION 1.0 LANGUAGES CXX)
- 
+-
 -project(gps-parser-test CXX)
-+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
++project(px4-gpsdrivers VERSION 1.0 LANGUAGES CXX)
  
  set(CMAKE_CXX_STANDARD 17)
  set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -28,11 +27,6 @@ index ec078d6..f9816d0 100644
 +    src/ubx.cpp
 +    src/unicore.cpp
  )
-+if(BUILD_SHARED_LIBS)
-+    add_library(gps SHARED ${GPS_SOURCES})
-+else()
-+    add_library(gps STATIC ${GPS_SOURCES})
-+endif()
  
 -target_compile_options(gps-parser-test
 -    PRIVATE
@@ -40,6 +34,8 @@ index ec078d6..f9816d0 100644
 -    -Wextra
 -    -Wconversion
 -    -Wpedantic
++add_library(gps ${GPS_SOURCES})
++
 +target_include_directories(gps
 +    PUBLIC
 +        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
@@ -49,6 +45,14 @@ index ec078d6..f9816d0 100644
 -target_include_directories(gps-parser-test
 -    PRIVATE
 -    src/
++# Use our own definitions.h unless a consumer vendoring these sources directly
++# (e.g. PX4-Autopilot) overrides GPS_DEFINITIONS_HEADER itself. PUBLIC: some
++# consumers (e.g. QGroundControl) don't just link this library, they also
++# directly #include <gps_helper.h>/the driver headers in their own
++# translation units, which need the exact same macro value we used to
++# compile this library with.
++target_compile_definitions(gps PUBLIC GPS_DEFINITIONS_HEADER="definitions.h")
++
 +set_target_properties(gps PROPERTIES POSITION_INDEPENDENT_CODE ON)
 +
 +add_library(${PROJECT_NAME}::gps ALIAS gps)
@@ -99,6 +103,7 @@ index ec078d6..f9816d0 100644
 +)
 +
 +target_link_libraries(gps-parser-test PRIVATE ${PROJECT_NAME}::gps)
++target_compile_definitions(gps-parser-test PRIVATE GPS_DEFINITIONS_HEADER="definitions.h")
  add_test(NAME GPSParserTest COMMAND gps-parser-test)
 diff --git a/cmake/px4-gpsdriversConfig.cmake.in b/cmake/px4-gpsdriversConfig.cmake.in
 new file mode 100644
@@ -108,4 +113,380 @@ index 0000000..1497c36
 @@ -0,0 +1,3 @@
 +@PACKAGE_INIT@
 +
-+include("${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}Targets.cmake")
++include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+diff --git a/src/sensor_gps.h b/src/sensor_gps.h
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/sensor_gps.h
+@@ -0,0 +1,122 @@
++/****************************************************************************
++ *
++ *   Copyright (c) 2024 PX4 Development Team. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ * 3. Neither the name PX4 nor the names of its contributors may be
++ *    used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
++ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ *
++ ****************************************************************************/
++
++/**
++ * @file sensor_gps.h
++ * Platform-independent definition of the GPS position report, matching the
++ * layout of PX4-Autopilot's generated uORB `sensor_gps_s` (msg/SensorGps.msg)
++ * so that consumers of this library can reinterpret the two interchangeably.
++ */
++
++#pragma once
++
++#include <cstdint>
++
++// Packing is pinned explicitly (rather than relying on the default ABI) since
++// this layout must match exactly between this library and any consumer that
++// links against it.
++#pragma pack(push, 1)
++
++struct sensor_gps_s {
++	uint64_t timestamp;
++	uint64_t timestamp_sample;
++
++	uint32_t device_id;
++
++	double latitude_deg;
++	double longitude_deg;
++	double altitude_msl_m;
++	double altitude_ellipsoid_m;
++
++	float s_variance_m_s;
++	float c_variance_rad;
++
++	static constexpr uint8_t FIX_TYPE_NONE = 1;
++	static constexpr uint8_t FIX_TYPE_2D = 2;
++	static constexpr uint8_t FIX_TYPE_3D = 3;
++	static constexpr uint8_t FIX_TYPE_RTCM_CODE_DIFFERENTIAL = 4;
++	static constexpr uint8_t FIX_TYPE_RTK_FLOAT = 5;
++	static constexpr uint8_t FIX_TYPE_RTK_FIXED = 6;
++	static constexpr uint8_t FIX_TYPE_EXTRAPOLATED = 8;
++	uint8_t fix_type;
++
++	float eph;
++	float epv;
++
++	float hdop;
++	float vdop;
++
++	int32_t noise_per_ms;
++	uint16_t automatic_gain_control;
++
++	static constexpr uint8_t JAMMING_STATE_UNKNOWN = 0;
++	static constexpr uint8_t JAMMING_STATE_OK = 1;
++	static constexpr uint8_t JAMMING_STATE_WARNING = 2;
++	static constexpr uint8_t JAMMING_STATE_CRITICAL = 3;
++	uint8_t jamming_state;
++	int32_t jamming_indicator;
++
++	static constexpr uint8_t SPOOFING_STATE_UNKNOWN = 0;
++	static constexpr uint8_t SPOOFING_STATE_NONE = 1;
++	static constexpr uint8_t SPOOFING_STATE_INDICATED = 2;
++	static constexpr uint8_t SPOOFING_STATE_MULTIPLE = 3;
++	uint8_t spoofing_state;
++
++	float vel_m_s;
++	float vel_n_m_s;
++	float vel_e_m_s;
++	float vel_d_m_s;
++	float cog_rad;
++	bool vel_ned_valid;
++
++	int32_t timestamp_time_relative;
++	uint64_t time_utc_usec;
++
++	uint8_t satellites_used;
++
++	float heading;
++	float heading_offset;
++	float heading_accuracy;
++
++	float rtcm_injection_rate;
++	uint8_t selected_rtcm_instance;
++
++	bool rtcm_crc_failed;
++
++	static constexpr uint8_t RTCM_MSG_USED_UNKNOWN = 0;
++	static constexpr uint8_t RTCM_MSG_USED_NOT_USED = 1;
++	static constexpr uint8_t RTCM_MSG_USED_USED = 2;
++	uint8_t rtcm_msg_used;
++};
++
++#pragma pack(pop)
+diff --git a/src/satellite_info.h b/src/satellite_info.h
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/satellite_info.h
+@@ -0,0 +1,62 @@
++/****************************************************************************
++ *
++ *   Copyright (c) 2024 PX4 Development Team. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ * 3. Neither the name PX4 nor the names of its contributors may be
++ *    used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
++ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ *
++ ****************************************************************************/
++
++/**
++ * @file satellite_info.h
++ * Platform-independent definition matching the layout of PX4-Autopilot's
++ * generated uORB `satellite_info_s` (msg/SatelliteInfo.msg).
++ */
++
++#pragma once
++
++#include <cstdint>
++
++// Packing is pinned explicitly (rather than relying on the default ABI) since
++// this layout must match exactly between this library and any consumer that
++// links against it.
++#pragma pack(push, 1)
++
++struct satellite_info_s {
++	uint64_t timestamp;
++	static constexpr uint8_t SAT_INFO_MAX_SATELLITES = 20;
++
++	uint8_t count;
++	uint8_t svid[SAT_INFO_MAX_SATELLITES];
++	uint8_t used[SAT_INFO_MAX_SATELLITES];
++	uint8_t elevation[SAT_INFO_MAX_SATELLITES];
++	uint8_t azimuth[SAT_INFO_MAX_SATELLITES];
++	uint8_t snr[SAT_INFO_MAX_SATELLITES];
++	uint8_t prn[SAT_INFO_MAX_SATELLITES];
++};
++
++#pragma pack(pop)
+diff --git a/src/sensor_gnss_relative.h b/src/sensor_gnss_relative.h
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/sensor_gnss_relative.h
+@@ -0,0 +1,80 @@
++/****************************************************************************
++ *
++ *   Copyright (c) 2024 PX4 Development Team. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ * 3. Neither the name PX4 nor the names of its contributors may be
++ *    used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
++ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ *
++ ****************************************************************************/
++
++/**
++ * @file sensor_gnss_relative.h
++ * Platform-independent definition matching the layout of PX4-Autopilot's
++ * generated uORB `sensor_gnss_relative_s` (msg/SensorGnssRelative.msg).
++ */
++
++#pragma once
++
++#include <cstdint>
++
++// Packing is pinned explicitly (rather than relying on the default ABI) since
++// this layout must match exactly between this library and any consumer that
++// links against it.
++#pragma pack(push, 1)
++
++struct sensor_gnss_relative_s {
++	uint64_t timestamp;
++	uint64_t timestamp_sample;
++
++	uint32_t device_id;
++
++	uint64_t time_utc_usec;
++
++	uint16_t reference_station_id;
++
++	float position[3];
++	float position_accuracy[3];
++
++	float heading;
++	float heading_accuracy;
++
++	float position_length;
++	float accuracy_length;
++
++	bool gnss_fix_ok;
++	bool differential_solution;
++	bool relative_position_valid;
++	bool carrier_solution_floating;
++	bool carrier_solution_fixed;
++	bool moving_base_mode;
++	bool reference_position_miss;
++	bool reference_observations_miss;
++	bool heading_valid;
++	bool relative_position_normalized;
++};
++
++#pragma pack(pop)
+diff --git a/src/definitions.h b/src/definitions.h
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/definitions.h
+@@ -0,0 +1,88 @@
++/****************************************************************************
++ *
++ *   Copyright (c) 2024 PX4 Development Team. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ * 3. Neither the name PX4 nor the names of its contributors may be
++ *    used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
++ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ *
++ ****************************************************************************/
++
++/**
++ * @file definitions.h
++ * Default, platform-independent `definitions.h` used when building this
++ * library standalone (i.e. not vendored into PX4-Autopilot or
++ * QGroundControl, which each provide their own `GPS_DEFINITIONS_HEADER`).
++ */
++
++#pragma once
++
++#include <chrono>
++#include <cstdint>
++#include <cstdio>
++#include <thread>
++
++#include "sensor_gps.h"
++#include "satellite_info.h"
++#include "sensor_gnss_relative.h"
++
++#ifndef M_DEG_TO_RAD
++#define M_DEG_TO_RAD (M_PI / 180.0)
++#endif
++#ifndef M_RAD_TO_DEG
++#define M_RAD_TO_DEG (180.0 / M_PI)
++#endif
++#ifndef M_DEG_TO_RAD_F
++#define M_DEG_TO_RAD_F 0.0174532925f
++#endif
++#ifndef M_RAD_TO_DEG_F
++#define M_RAD_TO_DEG_F 57.2957795f
++#endif
++#ifndef M_PI_2_F
++#define M_PI_2_F 1.57079632679489661923f
++#endif
++
++#ifndef GPS_INFO
++#define GPS_INFO(...) { std::fprintf(stderr, __VA_ARGS__); std::fprintf(stderr, "\n"); }
++#endif
++#ifndef GPS_WARN
++#define GPS_WARN(...) { std::fprintf(stderr, __VA_ARGS__); std::fprintf(stderr, "\n"); }
++#endif
++#ifndef GPS_ERR
++#define GPS_ERR(...) { std::fprintf(stderr, __VA_ARGS__); std::fprintf(stderr, "\n"); }
++#endif
++
++static inline void gps_usleep(unsigned long usecs)
++{
++	std::this_thread::sleep_for(std::chrono::microseconds(usecs));
++}
++
++typedef uint64_t gps_abstime;
++static inline gps_abstime gps_absolute_time()
++{
++	return static_cast<gps_abstime>(std::chrono::duration_cast<std::chrono::microseconds>(
++		std::chrono::steady_clock::now().time_since_epoch()).count());
++}

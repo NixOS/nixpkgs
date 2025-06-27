@@ -2,36 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qgroundcontrol,
   cmake,
   nix-update-script,
 }:
 
-# TODO: This seems QGC specific; need to perform another overhaul to make it build independently
 stdenv.mkDerivation (finalAttrs: {
   pname = "px4-gpsdrivers";
-  version = "0-unstable-2025-03-25";
+  version = "0-unstable-2026-10-20";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+  separateDebugInfo = true;
 
   src = fetchFromGitHub {
     owner = "PX4";
     repo = "PX4-GPSDrivers";
-    rev = "4cea5de87ce7e2a52e5289bd3639fd8eb770eafa";
-    hash = "sha256-4wqbfcbZvxBEaCPxA1hSxKTWE8tH/fkCJ+lcuPKCPsU=";
+    rev = "496f7d686f5d4c221ac39a5ce26230d667ffdad9";
+    hash = "sha256-Hwc6n/PpidaIt1sQ5rhzp4wgnB//f4lEoP5J0JXjtUI=";
   };
 
-  qgcSrc = (qgroundcontrol.override { px4-gpsdrivers = null; }).src;
-
+  # Adds a real CMake build (upstream is only consumable by vendoring its
+  # sources directly into a consumer's own build, see gps-parser-test in the
+  # original CMakeLists.txt) and a portable default `definitions.h`/struct
+  # trio (mirroring PX4-Autopilot's msg/{SensorGps,SatelliteInfo,SensorGnssRelative}.msg)
+  # so this can be a standalone, linkable library. TODO: Upstream.
   patches = [
-    ./build-overhaul.patch # TODO: Upstream
+    ./build-overhaul.patch
   ];
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-  ];
-
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Platform independent GPS drivers";
