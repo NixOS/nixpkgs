@@ -216,7 +216,7 @@ in
         };
 
         systemd.services.sftpgo = {
-          after = [ "postgresql.service" ];
+          after = [ "postgresql.target" ];
           environment = {
             # Update existing users
             SFTPGO_LOADDATA_MODE = "0";

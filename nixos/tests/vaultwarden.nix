@@ -138,7 +138,7 @@ let
 
                     services.vaultwarden.config.databaseUrl = "postgresql:///vaultwarden?host=/run/postgresql";
 
-                    systemd.services.vaultwarden.after = [ "postgresql.service" ];
+                    systemd.services.vaultwarden.after = [ "postgresql.target" ];
                   };
 
                   sqlite = {

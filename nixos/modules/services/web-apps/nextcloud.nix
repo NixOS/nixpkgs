@@ -1167,8 +1167,8 @@ in
             wantedBy = [ "multi-user.target" ];
             wants = [ "nextcloud-update-db.service" ];
             before = [ "phpfpm-nextcloud.service" ];
-            after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
-            requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+            after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
+            requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
             path = [ occ ];
             restartTriggers = [ overrideConfig ];
             script = ''

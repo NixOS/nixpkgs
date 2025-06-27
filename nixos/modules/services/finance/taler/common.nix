@@ -89,8 +89,8 @@ in
             Restart = "on-failure";
             RestartSec = "5s";
           };
-          requires = [ "postgresql.service" ];
-          after = [ "postgresql.service" ];
+          requires = [ "postgresql.target" ];
+          after = [ "postgresql.target" ];
         };
       }
     ];

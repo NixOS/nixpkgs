@@ -266,7 +266,7 @@ import ./make-test-python.nix (
     testScript =
       { nodes, ... }:
       ''
-        pleroma.wait_for_unit("postgresql.service")
+        pleroma.wait_for_unit("postgresql.target")
         pleroma.wait_until_succeeds("ls /var/lib/pleroma")
         pleroma.succeed("provision-db")
         pleroma.wait_for_file("/var/lib/pleroma")
