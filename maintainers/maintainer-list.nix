@@ -726,7 +726,7 @@
   afermg = {
     email = "afer.mg@gmail.com";
     github = "afermg";
-    githubID = "14353896";
+    githubId = "14353896";
     name = "Alan Munoz";
   };
   afh = {
