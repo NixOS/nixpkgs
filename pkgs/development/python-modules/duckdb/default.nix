@@ -11,6 +11,7 @@
   psutil,
   pybind11,
   setuptools-scm,
+  pytest-reraise,
   pytestCheckHook,
 }:
 
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     fsspec
     google-cloud-storage
     psutil
+    pytest-reraise
     pytestCheckHook
   ];
 
