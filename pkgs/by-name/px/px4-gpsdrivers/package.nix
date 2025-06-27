@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qgroundcontrol,
   cmake,
   nix-update-script,
 }:
@@ -19,17 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4wqbfcbZvxBEaCPxA1hSxKTWE8tH/fkCJ+lcuPKCPsU=";
   };
 
-  qgcSrc = (qgroundcontrol.override { px4-gpsdrivers = null; }).src;
-
   patches = [
     ./build-overhaul.patch # TODO: Upstream
   ];
 
   nativeBuildInputs = [ cmake ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-  ];
 
   passthru.updateScript = nix-update-script { };
 
