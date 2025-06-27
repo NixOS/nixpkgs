@@ -4,7 +4,7 @@ import ./make-test-python.nix (
 
     name = "etesync-dav";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ _3699n ];
+      maintainers = [ ];
     };
 
     nodes.machine =

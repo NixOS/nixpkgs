@@ -10264,6 +10264,8 @@ self: super: with self; {
 
   ohme = callPackage ../development/python-modules/ohme { };
 
+  oic = callPackage ../development/python-modules/oic { };
+
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
   okta = callPackage ../development/python-modules/okta { };
@@ -15411,6 +15413,8 @@ self: super: with self; {
 
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
 
+  rucio = callPackage ../development/python-modules/rucio { };
+
   ruff = callPackage ../development/python-modules/ruff { inherit (pkgs) ruff; };
 
   ruff-api = callPackage ../development/python-modules/ruff-api { };
@@ -16759,6 +16763,8 @@ self: super: with self; {
   stix2-validator = callPackage ../development/python-modules/stix2-validator { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
+
+  stomp-py = callPackage ../development/python-modules/stomp-py { };
 
   stone = callPackage ../development/python-modules/stone { };
 
