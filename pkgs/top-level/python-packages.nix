@@ -3645,6 +3645,8 @@ self: super: with self; {
 
   dissect-ole = callPackage ../development/python-modules/dissect-ole { };
 
+  dissect-qnxfs = callPackage ../development/python-modules/dissect-qnxfs { };
+
   dissect-regf = callPackage ../development/python-modules/dissect-regf { };
 
   dissect-shellitem = callPackage ../development/python-modules/dissect-shellitem { };
@@ -8321,6 +8323,10 @@ self: super: with self; {
     callPackage ../development/python-modules/llama-index-indices-managed-llama-cloud
       { };
 
+  llama-index-instrumentation =
+    callPackage ../development/python-modules/llama-index-instrumentation
+      { };
+
   llama-index-legacy = callPackage ../development/python-modules/llama-index-legacy { };
 
   llama-index-llms-ollama = callPackage ../development/python-modules/llama-index-llms-ollama { };
@@ -8382,6 +8388,8 @@ self: super: with self; {
   llama-index-vector-stores-qdrant =
     callPackage ../development/python-modules/llama-index-vector-stores-qdrant
       { };
+
+  llama-index-workflows = callPackage ../development/python-modules/llama-index-workflows { };
 
   llama-parse = callPackage ../development/python-modules/llama-parse { };
 

@@ -12628,6 +12628,12 @@
     github = "juliadin";
     githubId = 7837969;
   };
+  juliamertz = {
+    email = "info@juliamertz.nl";
+    name = "Julia Mertz";
+    github = "juliamertz";
+    githubId = 35079666;
+  };
   JulianFP = {
     name = "Julian Partanen";
     github = "JulianFP";
@@ -12754,6 +12760,7 @@
     github = "jwiegley";
     githubId = 8460;
     name = "John Wiegley";
+    keys = [ { fingerprint = "4710 CF98 AF9B 327B B80F  60E1 46C4 BD1A 7AC1 4BA2"; } ];
   };
   jwijenbergh = {
     email = "jeroenwijenbergh@protonmail.com";
