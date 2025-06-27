@@ -1,20 +1,70 @@
 {
   lib,
   config,
+  stdenv,
+  buildPythonPackage ? python3Packages.buildPythonPackage,
   fetchFromGitHub,
+  versionCheckHook,
   python3Packages,
-  wmctrl,
-  qtbase,
-  mkDerivationWith,
+  libsForQt5,
 }:
 
 {
-  dev =
-    with python3Packages;
-    mkDerivationWith buildPythonPackage rec {
+  dev = (
+    buildPythonPackage rec {
       pname = "plover";
       version = "4.0.2";
-      format = "setuptools";
+      pyproject = true;
+
+      src = fetchFromGitHub {
+        owner = "openstenoproject";
+        repo = "plover";
+        tag = "v${version}";
+        hash = "sha256-VpQT25bl8yPG4J9IwLkhSkBt31Y8BgPJdwa88WlreA8=";
+      };
+
+      postPatch = ''
+        sed -i 's/,<77//g' pyproject.toml # pythonRelaxDepsHook doesn't work for this for some reason
+      '';
+
+      build-system = with python3Packages; [
+        babel
+        setuptools
+        pyqt5
+        wheel
+      ];
+      dependencies = with python3Packages; [
+        appdirs
+        evdev
+        pyqt5
+        pyserial
+        plover-stroke
+        rtf-tokenize
+        setuptools
+        wcwidth
+        xlib
+      ];
+      nativeBuildInputs = with libsForQt5; [
+        wrapQtAppsHook
+      ];
+
+      nativeCheckInputs = with python3Packages; [
+        pytestCheckHook
+        versionCheckHook
+        pytest-qt
+        mock
+      ];
+
+      # Segfaults?!
+      disabledTestPaths = [ "test/gui_qt/test_dictionaries_widget.py" ];
+
+      preFixup = ''
+        makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+      '';
+
+      dontWrapQtApps = true;
+
+      pythonImportsCheck = [ "plover" ];
 
       meta = {
         broken = stdenv.hostPlatform.isDarwin;
@@ -25,38 +75,8 @@
         ];
         license = lib.licenses.gpl2;
       };
-
-      src = fetchFromGitHub {
-        owner = "openstenoproject";
-        repo = "plover";
-        tag = "v${version}";
-        sha256 = "sha256-VpQT25bl8yPG4J9IwLkhSkBt31Y8BgPJdwa88WlreA8=";
-      };
-
-      # I'm not sure why we don't find PyQt5 here but there's a similar
-      # sed on many of the platforms Plover builds for
-      postPatch = "sed -i /PyQt5/d setup.cfg";
-
-      nativeCheckInputs = [
-        pytest
-        mock
-      ];
-      propagatedBuildInputs = [
-        babel
-        pyqt5
-        xlib
-        pyserial
-        appdirs
-        wcwidth
-        setuptools
-      ];
-
-      dontWrapQtApps = true;
-
-      preFixup = ''
-        makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-      '';
-    };
+    }
+  );
 }
 // lib.optionalAttrs config.allowAliases {
   stable = throw "plover.stable was removed because it used Python 2. Use plover.dev instead."; # added 2022-06-05
