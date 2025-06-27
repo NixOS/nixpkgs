@@ -39,7 +39,7 @@ buildGo124Module (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Run any MCP server — securely, instantly, anywhere";
     longDescription = ''
       ToolHive is an open-source tool for deploying Model Context Protocol (MCP)
@@ -48,8 +48,8 @@ buildGo124Module (finalAttrs: {
       manage server configurations, and auto-configure clients like GitHub Copilot.
     '';
     homepage = "https://github.com/stacklok/toolhive";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thrix ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thrix ];
     mainProgram = "thv";
   };
 })
