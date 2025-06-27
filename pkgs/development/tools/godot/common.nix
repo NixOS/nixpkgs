@@ -444,8 +444,6 @@ let
                       [[ $message == "Project \`UnnamedProject.csproj\` added to the solution." ]]
                     '';
 
-                    exportTemplate = pkg.export-template;
-
                     buildPhase = ''
                       runHook preBuild
 
