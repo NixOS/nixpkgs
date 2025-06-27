@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://karypis.github.io/glaros/software/metis/overview.html";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pandapip1 ];
   };
 })
