@@ -16,6 +16,7 @@
   xcbutilkeysyms,
   xcbutilrenderutil,
   xcbutilwm,
+  libxml2
 }:
 stdenv.mkDerivation rec {
   pname = "binaryninja-free";
