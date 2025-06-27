@@ -33,9 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  # Without the change the build fails on Darwin as https://hydra.nixos.org/build/300264726/nixlog/3/tail:
-  #   clean-temp.c:235:14: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "format" ];
+  # Issue exists whenever NLS is disabled, and there's an upstream fix
+  # for GCC, but there's no good way to check whether NLS or GCC is in
+  # use.  (Checking stdenv.cc.isGNU causes infinite recursion.)
+  hardeningDisable = [ "format" ];
 
   doCheck = false;
 
