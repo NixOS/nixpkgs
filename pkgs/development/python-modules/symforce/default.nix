@@ -10,10 +10,17 @@
   argh,
   eigen,
   catch2_3,
+  ply,
+  numpy,
+  fmt_9,
+  spdlog,
 }:
 
 # TODO: This is WIP
 # TODO: Unvendor dependencies from third_party
+let
+  fmt = fmt_9;
+in
 buildPythonPackage rec {
   pname = "symforce";
   version = "0.10.1";
@@ -26,10 +33,15 @@ buildPythonPackage rec {
     hash = "sha256-WrOwEUJHk+xOAfccHY2D5pCMg44KJJMvWHAJ90DuOQo=";
   };
 
-  # A band-aid fix for their band-aid fix
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "FATAL_ERROR" "WARNING"
+  patches = [
+    ./latest-cmake.patch
+    ./fix-pythonpath.patch
+    ./fmt-9.patch
+    ./spdlog-newer.patch
+  ];
+
+  preConfigure = ''
+    export CMAKE_LIBRARY_PATH="${fmt.dev}/:$CMAKE_LIBRARY_PATH"
   '';
 
   build-system = [
@@ -43,6 +55,10 @@ buildPythonPackage rec {
     argh
     eigen
     catch2_3
+    ply
+    numpy
+    fmt
+    spdlog
   ];
 
   meta = {
