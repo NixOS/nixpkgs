@@ -13,7 +13,7 @@ buildGo124Module (finalAttrs: {
   src = fetchFromGitHub {
     owner = "stacklok";
     repo = "toolhive";
-    rev = "refs/tags/v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FXJUEEyCw7ChuzmSAzwXd2LoJXT6vpH+j3muXx5TjPI=";
   };
 
