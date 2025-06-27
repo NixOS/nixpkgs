@@ -40,6 +40,8 @@ let
 
       JAVA_HOME = mvnJdk;
 
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
       buildPhase = ''
         runHook preBuild
       ''
