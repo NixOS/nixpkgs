@@ -69,6 +69,16 @@
       "agpl"
     ]
   },
+  "dav_push": {
+    "hash": "sha256-+Ji6xYFudC5ds4YLJnzZ34v7Ct615CdtkZPyq8iTsdA=",
+    "url": "https://github.com/bitfireAT/nc_ext_dav_push/releases/download/v0.0.3/dav_push.tar.gz",
+    "version": "0.0.3",
+    "description": "**This extension is in a very early stage of development. It is for demonstration and testing purposes only. Don't use it on production systems!**\n\nIn proprietary environments, changes in events and contacts are nowadays usually pushed to other clients so that they can update their views almost in real-time.\n\nWebDAV however (and in this context, especially CalDAV and CardDAV) doesn't currently support push notifications of clients when a collection has changed. So clients have to periodically ask the server for changes. This causes unnecessary delays and battery usage.\n\nThe WebDAV-Push standard, which is currently in development, wants to solve this problem with an open protocol, too.\n\nThis is the server part of these efforts to draft a standard and provide a working implementation (server + client) in order to demonstrate it.\n\n\nThe current WebDAV-Push draft is provided by [@bitfireAT](https://github.com/bitfireAT).\n          \nThis Nextcloud extension has been developed by [@verdigado](https://github.com/verdigado).",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "deck": {
     "hash": "sha256-VUdHoLYyCg7DsNu2LYZelmcHM4B0cfkH8PwcTK844mo=",
     "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.15.1/deck-v1.15.1.tar.gz",
