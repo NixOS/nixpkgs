@@ -107,7 +107,7 @@ stdenv.mkDerivation (
       homepage = "https://github.com/qskkk/git-fleet";
       changelog = "https://github.com/qskkk/git-fleet/releases/tag/v${finalAttrs.version}";
       license = lib.licenses.gpl3Only;
-      maintainers = with lib.maintainers; [ ]; # Add your maintainer name here
+      maintainers = with lib.maintainers; [ qskkk ];
       mainProgram = "gf";
       platforms = [
         "x86_64-linux"
