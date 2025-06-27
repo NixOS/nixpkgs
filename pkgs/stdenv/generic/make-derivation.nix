@@ -17,7 +17,9 @@ let
     elemAt
     extendDerivation
     filter
+    filterAttrs
     findFirst
+    foldl'
     getDev
     head
     imap1
@@ -750,21 +752,43 @@ let
       env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
       envIsExportable = isAttrs env' && !isDerivation env';
 
-      derivationArg = makeDerivationArgument (
-        removeAttrs attrs (
-          [
-            "meta"
-            "passthru"
-            "pos"
-          ]
-          ++ optional (__structuredAttrs || envIsExportable) "env"
-        )
-        // optionalAttrs __structuredAttrs { env = checkedEnv; }
-        // {
-          cmakeFlags = makeCMakeFlags attrs;
-          mesonFlags = makeMesonFlags attrs;
-        }
-      );
+      derivationArg =
+        let
+          preserveMetaFields = [
+            "identifiers" # Pending PR#409797
+            "license"
+            "mainProgram"
+            "vendor"
+          ];
+          # For convenience, include some useful attributes (if present) plus existing meta attrSet.
+          nixMetaJSON = builtins.toJSON (
+            filterAttrs (n: _: (elem n preserveMetaFields)) (attrs.meta or { })
+            // {
+              name = attrs.pname or attrs.name;
+              version = attrs.version or null;
+            }
+          );
+          nixMetaJSONContext = builtins.getContext nixMetaJSON;
+        in
+        assert assertMsg (
+          nixMetaJSONContext == { }
+        ) "Context not allowed nixMetaJSON: ${builtins.toJSON nixMetaJSONContext}";
+        makeDerivationArgument (
+          removeAttrs attrs (
+            [
+              "meta"
+              "passthru"
+              "pos"
+            ]
+            ++ optional (__structuredAttrs || envIsExportable) "env"
+          )
+          // optionalAttrs __structuredAttrs { env = checkedEnv; }
+          // {
+            inherit nixMetaJSON;
+            cmakeFlags = makeCMakeFlags attrs;
+            mesonFlags = makeMesonFlags attrs;
+          }
+        );
 
       meta = checkMeta.commonMeta {
         inherit validity attrs pos;
