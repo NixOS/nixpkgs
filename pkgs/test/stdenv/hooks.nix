@@ -10,6 +10,7 @@
   no-broken-symlinks = lib.recurseIntoAttrs (
     import ./no-broken-symlinks.nix { inherit stdenv lib pkgs; }
   );
+  write-meta-json = lib.recurseIntoAttrs (import ./write-meta-json.nix { inherit lib pkgs; });
   # TODO: add audit-tmpdir
   compress-man-pages =
     let

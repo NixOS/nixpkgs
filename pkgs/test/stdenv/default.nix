@@ -229,6 +229,9 @@ in
     }
   );
 
+  # tests for hooks that require full stdenv.
+  late-hooks = lib.recurseIntoAttrs (pkgs.callPackage ../../build-support/setup-hooks/checks.nix { });
+
   outputs-no-out =
     runCommand "outputs-no-out-assert"
       {

@@ -69,6 +69,7 @@ let
       defaultNativeBuildInputs =
         extraNativeBuildInputs
         ++ [
+          ../../build-support/setup-hooks/write-meta-json.sh
           ../../build-support/setup-hooks/no-broken-symlinks.sh
           ../../build-support/setup-hooks/audit-tmpdir.sh
           ../../build-support/setup-hooks/compress-man-pages.sh
