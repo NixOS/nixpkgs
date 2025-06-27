@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "django-postgres-partition";
-  version = "0.1.1";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "django_postgres_partition";
-    hash = "sha256-KUrgnfUXWyRerW4dqtVZO9bu5jHYnHcVOIg97w695RU=";
+    hash = "sha256-vyO4fplpFkkQBhhu52EGgjgyekgd8Q1Y7DpBTW5Drx8=";
   };
 
   build-system = [ setuptools ];
