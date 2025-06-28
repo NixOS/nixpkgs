@@ -30,5 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/JosephTLyons/nu_plugin_units";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mgttlinger ];
+    # "Plugin `units` is compiled for nushell version 0.104.0, which is not
+    # compatible with version 0.105.1"
+    broken = true;
   };
 })
