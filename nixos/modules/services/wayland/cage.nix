@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  utils,
   ...
 }:
 
@@ -105,13 +106,45 @@ in
 
     security.polkit.enable = true;
 
-    security.pam.services.cage.text = ''
-      auth    required ${config.security.pam.package}/lib/security/pam_unix.so nullok
-      account required ${config.security.pam.package}/lib/security/pam_unix.so
-      session required ${config.security.pam.package}/lib/security/pam_unix.so
-      session required ${config.security.pam.package}/lib/security/pam_env.so conffile=/etc/pam/environment readenv=0
-      session required ${config.systemd.package}/lib/security/pam_systemd.so
-    '';
+    security.pam.services.cage = {
+      useDefaultRules = false;
+      rules = {
+        auth = utils.pam.autoOrderRules [
+          {
+            name = "unix";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+            settings.nullok = true;
+          }
+        ];
+        account = utils.pam.autoOrderRules [
+          {
+            name = "unix";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+          }
+        ];
+        session = utils.pam.autoOrderRules [
+          {
+            name = "unix";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+          }
+          {
+            name = "env";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
+            settings.conffile = "/etc/pam/environment";
+            settings.readenv = 0;
+          }
+          {
+            name = "systemd";
+            control = "required";
+            modulePath = "${config.systemd.package}/lib/security/pam_systemd.so";
+          }
+        ];
+      };
+    };
 
     hardware.graphics.enable = mkDefault true;
 
