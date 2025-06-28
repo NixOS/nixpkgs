@@ -197,7 +197,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
-  version = "257.6";
+  version = "257.7";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-Myb/ra7NQTDzN7B9jn8svbhTrLSfiqWaSxREe/nDyYo=";
+    hash = "sha256-9OnjeMrfV5DSAoX/aetI4r/QLPYITUd2aOY0DYfkTzQ=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -245,11 +245,17 @@ stdenv.mkDerivation (finalAttrs: {
       ./0015-tpm2_context_init-fix-driver-name-checking.patch
       ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
       ./0017-meson.build-do-not-create-systemdstatedir.patch
-      ./0018-Revert-bootctl-update-list-remove-all-instances-of-s.patch # https://github.com/systemd/systemd/issues/33392
+
+      # https://github.com/systemd/systemd/issues/33392
+      # This patch is a slightly modified version of this PR:
+      # https://github.com/systemd/systemd/pull/33400
+      ./0018-bootctl-do-not-try-to-update-the-same-file-multiple-.patch
+
       # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
       # if the install prefix is not /usr, but that does not work for us
       # because we include the config snippet manually
       ./0019-meson-Don-t-link-ssh-dropins.patch
+
       ./0020-install-unit_file_exists_full-follow-symlinks.patch
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
