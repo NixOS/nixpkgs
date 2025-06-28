@@ -4,6 +4,8 @@
   newScope,
   dbus,
   versionCheckHook,
+  nushell,
+  runCommand,
 }:
 
 lib.makeScope newScope (
@@ -12,10 +14,33 @@ lib.makeScope newScope (
   lib.mapAttrs
     (
       _n: p:
-      p.overrideAttrs {
-        doInstallCheck = true;
-        nativeInstallCheckInputs = [ versionCheckHook ];
-      }
+      let
+        # add two checks:
+        # - `versionCheckhook`, checks wether it's a binary that is able to
+        #   display its own version
+        # - A check which loads the plugin into the current version of nushell,
+        #   to detect incompatibilities (plugins are compiled for very specific
+        #   versions of nushell). If this fails, either update the plugin or mark
+        #   as broken.
+        withChecks = p.overrideAttrs (
+          final: _prev: {
+            doInstallCheck = true;
+            nativeInstallCheckInputs = [ versionCheckHook ];
+
+            passthru.tests.loadCheck =
+              let
+                nu = lib.getExe nushell;
+                plugin = lib.getExe withChecks;
+              in
+              runCommand "test-load-${final.pname}" { } ''
+                touch $out
+                ${nu} -n -c "plugin add --plugin-config $out ${plugin}"
+                ${nu} -n -c "plugin use --plugin-config $out ${plugin}"
+              '';
+          }
+        );
+      in
+      withChecks
     )
     (
       with self;
@@ -29,7 +54,6 @@ lib.makeScope newScope (
         highlight = callPackage ./highlight.nix { };
         dbus = callPackage ./dbus.nix {
           inherit dbus;
-          nushell_plugin_dbus = self.dbus;
         };
         skim = callPackage ./skim.nix { };
         semver = callPackage ./semver.nix { };
