@@ -9,7 +9,7 @@ from . import nix
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
 from .models import Action, BuildAttr, Flake, Profile
 from .process import Remote
-from .services import build_and_activate_system, list_generations, reexec
+from .services import build_and_activate_system, list_generations, reexec, repl
 from .utils import LogFormatter
 
 logger: Final = logging.getLogger(__name__)
@@ -348,13 +348,15 @@ def execute(argv: list[str]) -> None:
             raise AssertionError("DRY_RUN should be a DRY_BUILD alias")
 
         case Action.LIST_GENERATIONS:
-            list_generations(args, profile)
+            list_generations(args=args, profile=profile)
 
         case Action.REPL:
-            if flake:
-                nix.repl_flake(flake, flake_build_flags)
-            else:
-                nix.repl(build_attr, build_flags)
+            repl(
+                flake=flake,
+                build_attr=build_attr,
+                flake_build_flags=flake_build_flags,
+                build_flags=build_flags,
+            )
 
         case _:
             assert_never(action)
