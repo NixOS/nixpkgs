@@ -9,13 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "unicode";
-  version = "2.9";
+  version = "3.2-1"; # From `debian/changelog` in the repo
 
   src = fetchFromGitHub {
     owner = "garabik";
     repo = "unicode";
-    rev = "v${version}";
-    sha256 = "sha256-FHAlZ5HID/FE9+YR7Dmc3Uh7E16QKORoD8g9jgTeQdY=";
+    # TODO: Change back to "v${version}" after https://github.com/garabik/unicode/issues/27 is fixed.
+    rev = "fa4fa6118d68c693ee14b97df6bf12d2fdbb37df";
+    sha256 = "sha256-wgPJKzblwntRRD2062TPEth28KDycVqWheMTz0v5BVE=";
   };
 
   ucdtxt = fetchurl {
