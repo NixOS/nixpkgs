@@ -8,7 +8,6 @@
   ninja,
   gnome,
   desktop-file-utils,
-  appstream-glib,
   gettext,
   itstool,
   gtk4,
@@ -22,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghex";
-  version = "48.alpha";
+  version = "48.beta2";
 
   outputs = [
     "out"
@@ -32,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major finalAttrs.version}/ghex-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QP7kmZfZGhkmYmEXDEi7hy+zBupB+2WnIVBghow73+I=";
+    hash = "sha256-4vIgRVGNgWtG0wluCp075lTdggMBVGX8ck/okWrY70E=";
   };
 
   nativeBuildInputs = [
@@ -53,11 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     atk
     glib
-  ];
-
-  nativeCheckInputs = [
-    appstream-glib
-    desktop-file-utils
   ];
 
   mesonFlags =
