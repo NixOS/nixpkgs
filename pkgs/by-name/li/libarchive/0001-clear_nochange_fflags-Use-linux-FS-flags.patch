@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Will Fancher <elvishjerricco@gmail.com>
+Date: Fri, 27 Jun 2025 19:09:15 -0400
+Subject: [PATCH] clear_nochange_fflags: Use linux FS flags
+
+---
+ libarchive/archive_write_disk_posix.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/libarchive/archive_write_disk_posix.c b/libarchive/archive_write_disk_posix.c
+index f1533726..346cde11 100644
+--- a/libarchive/archive_write_disk_posix.c
++++ b/libarchive/archive_write_disk_posix.c
+@@ -3930,10 +3930,14 @@ clear_nochange_fflags(struct archive_write_disk *a)
+ #ifdef UF_APPEND
+ 	    | UF_APPEND
+ #endif
+-#ifdef EXT2_APPEND_FL
++#if defined(FS_APPEND_FL)
++	    | FS_APPEND_FL
++#elif defined(EXT2_APPEND_FL)
+ 	    | EXT2_APPEND_FL
+ #endif
+-#ifdef EXT2_IMMUTABLE_FL
++#if defined(FS_IMMUTABLE_FL)
++	    | FS_IMMUTABLE_FL
++#elif defined(EXT2_IMMUTABLE_FL)
+ 	    | EXT2_IMMUTABLE_FL
+ #endif
+ 	;

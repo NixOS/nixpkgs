@@ -6,7 +6,6 @@
   attr,
   autoreconfHook,
   bzip2,
-  e2fsprogs,
   glibcLocalesUtf8,
   lzo,
   openssl,
@@ -40,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-KN5SvQ+/g/OOa+hntMX3D8p5IEWO0smke5WK+DwrOH0=";
   };
+
+  patches = [
+    # https://github.com/libarchive/libarchive/pull/2689
+    ./0001-clear_nochange_fflags-Use-linux-FS-flags.patch
+  ];
 
   outputs = [
     "out"
@@ -95,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       acl
       attr
-      e2fsprogs
     ]
     ++ lib.optional xarSupport libxml2;
 
