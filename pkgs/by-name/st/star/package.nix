@@ -4,6 +4,10 @@
   fetchFromGitHub,
   xxd,
   zlib,
+  llvmPackages,
+  star,
+  testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,19 +24,25 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/source";
 
   postPatch = ''
-    substituteInPlace Makefile --replace "/bin/rm" "rm"
+    substituteInPlace Makefile --replace-fail "-std=c++11" "-std=c++14"
   '';
 
   nativeBuildInputs = [ xxd ];
 
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ];
+
+  enableParallelBuilding = true;
+
+  makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "CXXFLAGS_SIMD=" ];
+
+  preBuild = lib.optionalString stdenv.isDarwin ''
+    export CXXFLAGS="$CXXFLAGS -DSHM_NORESERVE=0"
+  '';
 
   buildFlags = [
     "STAR"
     "STARlong"
   ];
-
-  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
@@ -40,11 +50,22 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = star;
+    command = "STAR --version";
+  };
+
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Spliced Transcripts Alignment to a Reference";
+    longDescription = ''
+      STAR (Spliced Transcripts Alignment to a Reference) is a fast RNA-seq
+      read mapper, with support for splice-junction and fusion read detection.
+    '';
     homepage = "https://github.com/alexdobin/STAR";
     license = licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = [ maintainers.arcadio ];
   };
 }
