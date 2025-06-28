@@ -21094,6 +21094,12 @@
     githubId = 77415970;
     name = "Redhawk";
   };
+  redlonghead = {
+    email = "git@beardit.net";
+    github = "Redlonghead";
+    githubId = 52263558;
+    name = "Connor Beard";
+  };
   redvers = {
     email = "red@infect.me";
     github = "redvers";
