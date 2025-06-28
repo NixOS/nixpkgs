@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "apitrace";
-  version = "12.0";
+  version = "13.0";
 
   src = fetchFromGitHub {
     owner = "apitrace";
     repo = "apitrace";
     rev = version;
-    hash = "sha256-Y2ceE0F7q5tP64Mtvkc7JHOZQN30MDVCPHfiWDnfTSQ=";
+    hash = "sha256-ZZ2RL9nvwvHBEuKSDr1tgRhxBeg+XJKPUvSiHz6g/cg=";
     fetchSubmodules = true;
   };
 

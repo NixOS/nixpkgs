@@ -758,10 +758,10 @@ in
       description = "gitea";
       after =
         [ "network.target" ]
-        ++ optional usePostgresql "postgresql.service"
+        ++ optional usePostgresql "postgresql.target"
         ++ optional useMysql "mysql.service";
       requires =
-        optional (cfg.database.createDatabase && usePostgresql) "postgresql.service"
+        optional (cfg.database.createDatabase && usePostgresql) "postgresql.target"
         ++ optional (cfg.database.createDatabase && useMysql) "mysql.service";
       wantedBy = [ "multi-user.target" ];
       path = [

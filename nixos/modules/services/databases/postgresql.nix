@@ -751,11 +751,22 @@ in
       cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
     ) configFileCheck;
 
+    systemd.targets.postgresql = {
+      description = "PostgreSQL";
+      wantedBy = [ "multi-user.target" ];
+      bindsTo = [
+        "postgresql.service"
+        "postgresql-setup.service"
+      ];
+    };
+
     systemd.services.postgresql = {
       description = "PostgreSQL Server";
 
-      wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+
+      # To trigger the .target also on "systemctl start postgresql".
+      bindsTo = [ "postgresql.target" ];
 
       environment.PGDATA = cfg.dataDir;
 
@@ -775,49 +786,6 @@ in
 
         ln -sfn "${configFile}/postgresql.conf" "${cfg.dataDir}/postgresql.conf"
       '';
-
-      # Wait for PostgreSQL to be ready to accept connections.
-      postStart =
-        ''
-          PSQL="psql --port=${builtins.toString cfg.settings.port}"
-
-          while ! $PSQL -d postgres -c "" 2> /dev/null; do
-              if ! kill -0 "$MAINPID"; then exit 1; fi
-              sleep 0.1
-          done
-
-          if test -e "${cfg.dataDir}/.first_startup"; then
-            ${optionalString (cfg.initialScript != null) ''
-              $PSQL -f "${cfg.initialScript}" -d postgres
-            ''}
-            rm -f "${cfg.dataDir}/.first_startup"
-          fi
-        ''
-        + optionalString (cfg.ensureDatabases != [ ]) ''
-          ${concatMapStrings (database: ''
-            $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
-          '') cfg.ensureDatabases}
-        ''
-        + ''
-          ${concatMapStrings (
-            user:
-            let
-              dbOwnershipStmt = optionalString user.ensureDBOwnership ''$PSQL -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
-
-              filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
-
-              clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
-
-              userClauses = ''$PSQL -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
-            in
-            ''
-              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
-              ${userClauses}
-
-              ${dbOwnershipStmt}
-            ''
-          ) cfg.ensureUsers}
-        '';
 
       serviceConfig = mkMerge [
         {
@@ -891,11 +859,74 @@ in
 
       unitConfig.RequiresMountsFor = "${cfg.dataDir}";
     };
+
+    systemd.services.postgresql-setup = {
+      description = "PostgreSQL Setup Scripts";
+
+      requires = [ "postgresql.service" ];
+      after = [ "postgresql.service" ];
+
+      serviceConfig = {
+        User = "postgres";
+        Group = "postgres";
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+
+      path = [ cfg.finalPackage ];
+      environment.PGPORT = builtins.toString cfg.settings.port;
+
+      # Wait for PostgreSQL to be ready to accept connections.
+      script =
+        ''
+          check-connection() {
+            psql -d postgres -v ON_ERROR_STOP=1 <<-'  EOF'
+              SELECT pg_is_in_recovery() \gset
+              \if :pg_is_in_recovery
+              \i still-recovering
+              \endif
+            EOF
+          }
+          while ! check-connection 2> /dev/null; do
+              if ! systemctl is-active --quiet postgresql.service; then exit 1; fi
+              sleep 0.1
+          done
+
+          if test -e "${cfg.dataDir}/.first_startup"; then
+            ${optionalString (cfg.initialScript != null) ''
+              psql -f "${cfg.initialScript}" -d postgres
+            ''}
+            rm -f "${cfg.dataDir}/.first_startup"
+          fi
+        ''
+        + optionalString (cfg.ensureDatabases != [ ]) ''
+          ${concatMapStrings (database: ''
+            psql -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || psql -tAc 'CREATE DATABASE "${database}"'
+          '') cfg.ensureDatabases}
+        ''
+        + ''
+          ${concatMapStrings (
+            user:
+            let
+              dbOwnershipStmt = optionalString user.ensureDBOwnership ''psql -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
+
+              filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
+
+              clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
+
+              userClauses = ''psql -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
+            in
+            ''
+              psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || psql -tAc 'CREATE USER "${user.name}"'
+              ${userClauses}
+
+              ${dbOwnershipStmt}
+            ''
+          ) cfg.ensureUsers}
+        '';
+    };
   };
 
   meta.doc = ./postgresql.md;
-  meta.maintainers = with lib.maintainers; [
-    thoughtpolice
-    danbst
-  ];
+  meta.maintainers = pkgs.postgresql.meta.maintainers;
 }

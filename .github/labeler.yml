@@ -586,6 +586,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
+              - doc/release-notes/**/*
               - nixos/doc/manual/release-notes/**/*
 
 "8.has: maintainer-list (update)":
