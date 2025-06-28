@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libiio";
-  version = "0.24";
+  version = "0.26";
 
   outputs = [
     "out"
@@ -29,13 +29,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "analogdevicesinc";
     repo = "libiio";
-    rev = "v${version}";
-    sha256 = "sha256-c5HsxCdp1cv5BGTQ/8dc8J893zk9ntbfAudLpqoQ1ow=";
+    tag = "v${version}";
+    hash = "sha256-nrpGccj9Q3S9wYs0/dHC3YAy5ZvTiPiSUtPY6r5WlaE=";
   };
 
   # Revert after https://github.com/NixOS/nixpkgs/issues/125008 is
   # fixed properly
-  patches = [ ./cmake-fix-libxml2-find-package.patch ];
+  patches = [
+    ./cmake-fix-libxml2-find-package.patch
+  ];
 
   nativeBuildInputs =
     [
@@ -79,8 +81,7 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
-      substituteInPlace libiio.rules.cmakein \
-        --replace /bin/sh ${runtimeShell}
+      patchShebangs libiio.rules.cmakein
     ''
     + lib.optionalString pythonSupport ''
       # Hardcode path to the shared library into the bindings.
@@ -92,11 +93,18 @@ stdenv.mkDerivation rec {
     moveToOutput ${python3.sitePackages} "$python"
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = lib.optionals pythonSupport [
+    python3.pkgs.pythonImportsCheckHook
+  ];
+
+  pythonImportsCheck = [ "iio" ];
+
+  meta = {
+    changelog = "https://github.com/analogdevicesinc/libiio/releases/tag/${src.tag}";
     description = "API for interfacing with the Linux Industrial I/O Subsystem";
     homepage = "https://github.com/analogdevicesinc/libiio";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }
