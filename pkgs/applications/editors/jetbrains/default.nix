@@ -204,18 +204,11 @@ rec {
           (attrs.postFixup or "")
           + lib.optionalString (stdenv.hostPlatform.isLinux) ''
             (
-              cd $out/clion
-
-              # I think the included gdb has a couple of patches, so we patch it instead of replacing
-              ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
+              find $out -name '*.so' |
               xargs patchelf \
                 --replace-needed libssl.so.10 libssl.so \
-                --replace-needed libcrypto.so.10 libcrypto.so
-
-              ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
-              xargs patchelf \
-                --replace-needed libssl.so.10 libssl.so \
-                --replace-needed libcrypto.so.10 libcrypto.so
+                --replace-needed libcrypto.so.10 libcrypto.so \
+                ${lib.optionalString stdenv.hostPlatform.isAarch64 "--replace-needed libxml2.so.2 libxml2.so"}
             )
           '';
       });
@@ -350,11 +343,12 @@ rec {
             (
               cd $out/rider
 
-              ls -d $PWD/plugins/cidr-debugger-plugin/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
+              find . -name '*.so' |
               xargs patchelf \
                 --replace-needed libssl.so.10 libssl.so \
                 --replace-needed libcrypto.so.10 libcrypto.so \
-                --replace-needed libcrypt.so.1 libcrypt.so
+                --replace-needed libcrypt.so.1 libcrypt.so \
+                ${lib.optionalString stdenv.hostPlatform.isAarch64 "--replace-needed libxml2.so.2 libxml2.so"}
 
               for dir in lib/ReSharperHost/linux-*; do
                 rm -rf $dir/dotnet
@@ -394,18 +388,11 @@ rec {
           (attrs.postFixup or "")
           + lib.optionalString (stdenv.hostPlatform.isLinux) ''
             (
-              cd $out/rust-rover
-
-              # Copied over from clion (gdb seems to have a couple of patches)
-              ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
+              find $out -name '*.so' |
               xargs patchelf \
                 --replace-needed libssl.so.10 libssl.so \
-                --replace-needed libcrypto.so.10 libcrypto.so
-
-              ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
-              xargs patchelf \
-                --replace-needed libssl.so.10 libssl.so \
-                --replace-needed libcrypto.so.10 libcrypto.so
+                --replace-needed libcrypto.so.10 libcrypto.so \
+                ${lib.optionalString stdenv.hostPlatform.isAarch64 "--replace-needed libxml2.so.2 libxml2.so"}
             )
           '';
       });
