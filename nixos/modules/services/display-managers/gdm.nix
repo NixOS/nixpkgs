@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  utils,
   pkgs,
   ...
 }:
@@ -367,67 +368,280 @@ in
 
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {
-      gdm-launch-environment.text = ''
-        auth     required       ${config.security.pam.package}/lib/security/pam_succeed_if.so audit quiet_success user ingroup gdm
-        auth     optional       ${config.security.pam.package}/lib/security/pam_permit.so
+      gdm-launch-environment = {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "gdm-user";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+              settings.audit = true;
+              settings.quiet_success = true;
+              args = lib.mkAfter [
+                "user"
+                "ingroup"
+                "gdm"
+              ];
+            }
+            {
+              name = "permit";
+              control = "optional";
+              modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
+            }
+          ];
 
-        account  required       ${config.security.pam.package}/lib/security/pam_succeed_if.so audit quiet_success user ingroup gdm
-        account  sufficient     ${config.security.pam.package}/lib/security/pam_unix.so
+          account = utils.pam.autoOrderRules [
+            {
+              name = "gdm-user";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+              settings.audit = true;
+              settings.quiet_success = true;
+              args = lib.mkAfter [
+                "user"
+                "ingroup"
+                "gdm"
+              ];
+            }
+            {
+              name = "unix";
+              control = "sufficient";
+              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+            }
+          ];
 
-        password required       ${config.security.pam.package}/lib/security/pam_deny.so
+          password = utils.pam.autoOrderRules [
+            {
+              name = "deny";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_deny.so";
+            }
+          ];
 
-        session  required       ${config.security.pam.package}/lib/security/pam_succeed_if.so audit quiet_success user ingroup gdm
-        session  required       ${config.security.pam.package}/lib/security/pam_env.so conffile=/etc/pam/environment readenv=0
-        session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
-        session  optional       ${config.security.pam.package}/lib/security/pam_keyinit.so force revoke
-        session  optional       ${config.security.pam.package}/lib/security/pam_permit.so
-      '';
+          session = utils.pam.autoOrderRules [
+            {
+              name = "gdm-user";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+              settings.audit = true;
+              settings.quiet_success = true;
+              args = lib.mkAfter [
+                "user"
+                "ingroup"
+                "gdm"
+              ];
+            }
+            {
+              name = "env";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
+              settings.conffile = "/etc/pam/environment";
+              settings.readenv = 0;
+            }
+            {
+              name = "systemd";
+              control = "optional";
+              modulePath = "${config.systemd.package}/lib/security/pam_systemd.so";
+            }
+            {
+              name = "keyinit";
+              control = "optional";
+              modulePath = "${config.security.pam.package}/lib/security/pam_keyinit.so";
+              settings.force = true;
+              settings.revoke = true;
+            }
+            {
+              name = "permit";
+              control = "optional";
+              modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
+            }
+          ];
+        };
+      };
 
-      gdm-password.text = ''
-        auth      substack      login
-        account   include       login
-        password  substack      login
-        session   include       login
-      '';
+      gdm-password = {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "substack";
+              modulePath = "login";
+            }
+          ];
+          account = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+          password = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "substack";
+              modulePath = "login";
+            }
+          ];
+          session = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+        };
+      };
 
-      gdm-autologin.text = ''
-        auth      requisite     ${config.security.pam.package}/lib/security/pam_nologin.so
-        auth      required      ${config.security.pam.package}/lib/security/pam_succeed_if.so uid >= 1000 quiet
-        ${lib.optionalString (pamLogin.enable && pamLogin.enableGnomeKeyring) ''
-          auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
-          auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
-        ''}
-        auth      required      ${config.security.pam.package}/lib/security/pam_permit.so
+      gdm-autologin = {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "nologin";
+              control = "requisite";
+              modulePath = "${config.security.pam.package}/lib/security/pam_nologin.so";
+            }
+            {
+              name = "gdm-normal-user";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+              settings.quiet = true;
+              args = lib.mkBefore [
+                "uid"
+                ">="
+                "1000"
+              ];
+            }
+            {
+              name = "gdm";
+              enable = pamLogin.enable && pamLogin.enableGnomeKeyring;
+              control = "[success=ok default=1]";
+              modulePath = "${gdm}/lib/security/pam_gdm.so";
+            }
+            {
+              name = "gnome_keyring";
+              enable = pamLogin.enable && pamLogin.enableGnomeKeyring;
+              control = "optional";
+              modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+            }
+            {
+              name = "permit";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
+            }
+          ];
 
-        account   sufficient    ${config.security.pam.package}/lib/security/pam_unix.so
+          account = utils.pam.autoOrderRules [
+            {
+              name = "unix";
+              control = "sufficient";
+              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+            }
+          ];
 
-        password  requisite     ${config.security.pam.package}/lib/security/pam_unix.so nullok yescrypt
+          password = utils.pam.autoOrderRules [
+            {
+              name = "unix";
+              control = "requisite";
+              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+              settings.nullok = true;
+              settings.yescrypt = true;
+            }
+          ];
 
-        session   optional      ${config.security.pam.package}/lib/security/pam_keyinit.so revoke
-        session   include       login
-      '';
+          session = utils.pam.autoOrderRules [
+            {
+              name = "keyinit";
+              control = "optional";
+              modulePath = "${config.security.pam.package}/lib/security/pam_keyinit.so";
+              settings.revoke = true;
+            }
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+        };
+      };
 
       # This would block password prompt when included by gdm-password.
       # GDM will instead run gdm-fingerprint in parallel.
       login.fprintAuth = lib.mkIf config.services.fprintd.enable false;
 
-      gdm-fingerprint.text = lib.mkIf config.services.fprintd.enable ''
-        auth       required                    ${config.security.pam.package}/lib/security/pam_shells.so
-        auth       requisite                   ${config.security.pam.package}/lib/security/pam_nologin.so
-        auth       requisite                   ${config.security.pam.package}/lib/security/pam_faillock.so      preauth
-        auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
-        auth       required                    ${config.security.pam.package}/lib/security/pam_env.so conffile=/etc/pam/environment readenv=0
-        ${lib.optionalString (pamLogin.enable && pamLogin.enableGnomeKeyring) ''
-          auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
-          auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
-        ''}
+      gdm-fingerprint = lib.mkIf config.services.fprintd.enable {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "shells";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_shells.so";
+            }
+            {
+              name = "nologin";
+              control = "requisite";
+              modulePath = "${config.security.pam.package}/lib/security/pam_nologin.so";
+            }
+            {
+              name = "faillock";
+              control = "requisite";
+              modulePath = "${config.security.pam.package}/lib/security/pam_faillock.so";
+              settings.preauth = true;
+            }
+            {
+              name = "fprintd";
+              control = "required";
+              modulePath = "${pkgs.fprintd}/lib/security/pam_fprintd.so";
+            }
+            {
+              name = "env";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
+              settings.conffile = "/etc/pam/environment";
+              settings.readenv = 0;
+            }
+            {
+              name = "gdm";
+              enable = pamLogin.enable && pamLogin.enableGnomeKeyring;
+              control = "[success=ok default=1]";
+              modulePath = "${gdm}/lib/security/pam_gdm.so";
+            }
+            {
+              name = "gnome_keyring";
+              enable = pamLogin.enable && pamLogin.enableGnomeKeyring;
+              control = "optional";
+              modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+            }
+          ];
 
-        account    include                     login
+          account = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
 
-        password   required                    ${config.security.pam.package}/lib/security/pam_deny.so
+          password = utils.pam.autoOrderRules [
+            {
+              name = "deny";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_deny.so";
+            }
+          ];
 
-        session    include                     login
-      '';
+          session = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+        };
+      };
     };
 
   };

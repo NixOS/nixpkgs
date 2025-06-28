@@ -2400,16 +2400,30 @@ in
         };
 
     security.pam.services = {
-      other.text = ''
-        auth     required ${package}/lib/security/pam_warn.so
-        auth     required ${package}/lib/security/pam_deny.so
-        account  required ${package}/lib/security/pam_warn.so
-        account  required ${package}/lib/security/pam_deny.so
-        password required ${package}/lib/security/pam_warn.so
-        password required ${package}/lib/security/pam_deny.so
-        session  required ${package}/lib/security/pam_warn.so
-        session  required ${package}/lib/security/pam_deny.so
-      '';
+      other = {
+        useDefaultRules = false;
+        rules =
+          let
+            rules = utils.pam.autoOrderRules [
+              {
+                name = "warn";
+                control = "required";
+                modulePath = "${package}/lib/security/pam_warn.so";
+              }
+              {
+                name = "deny";
+                control = "required";
+                modulePath = "${package}/lib/security/pam_deny.so";
+              }
+            ];
+          in
+          {
+            auth = rules;
+            account = rules;
+            password = rules;
+            session = rules;
+          };
+      };
 
       # Most of these should be moved to specific modules.
       i3lock.enable = lib.mkDefault config.programs.i3lock.enable;
