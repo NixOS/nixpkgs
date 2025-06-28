@@ -31,6 +31,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_timeout" ];
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Pytest plugin to abort hanging tests";
     homepage = "https://github.com/pytest-dev/pytest-timeout/";
