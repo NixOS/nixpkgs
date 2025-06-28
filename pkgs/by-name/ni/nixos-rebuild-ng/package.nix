@@ -111,6 +111,10 @@ python3Packages.buildPythonApplication rec {
       };
 
       tests = {
+        with_reexec = nixos-rebuild-ng.override {
+          withReexec = true;
+          withNgSuffix = false;
+        };
         with_nix_latest = nixos-rebuild-ng.override {
           nix = nixVersions.latest;
         };
@@ -122,11 +126,9 @@ python3Packages.buildPythonApplication rec {
           nix = nixVersions.nix_2_3;
         };
         with_lix_latest = nixos-rebuild-ng.override {
-          # oldest / minimum supported version in nixpkgs
           nix = lixPackageSets.latest.lix;
         };
         with_lix_stable = nixos-rebuild-ng.override {
-          # oldest / minimum supported version in nixpkgs
           nix = lixPackageSets.stable.lix;
         };
 
