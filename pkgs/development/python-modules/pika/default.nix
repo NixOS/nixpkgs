@@ -47,9 +47,9 @@ buildPythonPackage rec {
     # don't run acceptance tests because they access the network
     # don't report test coverage
     substituteInPlace nose2.cfg \
-      --replace "stop = 1" "stop = 0" \
-      --replace "tests=tests/unit,tests/acceptance" "tests=tests/unit" \
-      --replace "with-coverage = 1" "with-coverage = 0"
+      --replace-fail "stop = 1" "stop = 0" \
+      --replace-fail "tests=tests/unit,tests/acceptance" "tests=tests/unit" \
+      --replace-fail "with-coverage = 1" "with-coverage = 0"
   '';
 
   doCheck = false; # tests require rabbitmq instance, unsure how to skip

@@ -20,9 +20,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace gnupg.py \
-      --replace "gpgbinary='gpg'" "gpgbinary='${gnupg}/bin/gpg'"
+      --replace-fail "gpgbinary='gpg'" "gpgbinary='${gnupg}/bin/gpg'"
     substituteInPlace test_gnupg.py \
-      --replace "os.environ.get('GPGBINARY', 'gpg')" "os.environ.get('GPGBINARY', '${gnupg}/bin/gpg')"
+      --replace-fail "os.environ.get('GPGBINARY', 'gpg')" "os.environ.get('GPGBINARY', '${gnupg}/bin/gpg')"
   '';
 
   nativeBuildInputs = [ setuptools ];

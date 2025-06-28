@@ -18,11 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-gixLZXXc0waR695lRUJbUcFOwbLlGfaE70sNBhaSEIg=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "/usr/bin/pkg-config" "${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
-  '';
-
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zstd ];
 

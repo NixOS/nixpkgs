@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'version=get_version(),' 'version="${version}",'
+      --replace-fail 'version=get_version(),' 'version="${version}",'
   '';
 
   propagatedBuildInputs = [ pydantic ] ++ pydantic.optional-dependencies.email;

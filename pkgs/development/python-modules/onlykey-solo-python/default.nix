@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "fido2 == 0.9.3" "fido2"
+      --replace-fail "fido2 == 0.9.3" "fido2"
   '';
 
   patches = [

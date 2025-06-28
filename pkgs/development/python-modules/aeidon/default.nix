@@ -22,7 +22,7 @@ buildPythonPackage rec {
   postPatch = ''
     mv setup.py setup_gaupol.py
     substituteInPlace setup-aeidon.py \
-      --replace "from setup import" "from setup_gaupol import"
+      --replace-fail "from setup import" "from setup_gaupol import"
     mv setup-aeidon.py setup.py
   '';
 

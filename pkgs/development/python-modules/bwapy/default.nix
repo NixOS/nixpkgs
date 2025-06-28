@@ -27,7 +27,7 @@ buildPythonPackage rec {
     cp ${bwa}/lib/*.a ${bwa}/include/*.h bwa/
 
     substituteInPlace setup.py \
-      --replace 'setuptools>=49.2.0' 'setuptools'
+      --replace-fail 'setuptools>=49.2.0' 'setuptools'
   '';
 
   buildInputs = [

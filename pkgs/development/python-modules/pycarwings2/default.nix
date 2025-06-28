@@ -35,9 +35,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'" ""
+      --replace-fail "'pytest-runner'" ""
     substituteInPlace setup.cfg \
-      --replace " --flake8 --cov=pycarwings2 --cache-clear --ignore=venv --verbose" ""
+      --replace-fail " --flake8 --cov=pycarwings2 --cache-clear --ignore=venv --verbose" ""
   '';
 
   disabledTests = [

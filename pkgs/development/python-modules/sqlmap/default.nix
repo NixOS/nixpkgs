@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace sqlmap/thirdparty/magic/magic.py --replace "ctypes.util.find_library('magic')" \
+    substituteInPlace sqlmap/thirdparty/magic/magic.py --replace-fail "ctypes.util.find_library('magic')" \
       "'${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
 
     # the check for the last update date does not work in Nix,

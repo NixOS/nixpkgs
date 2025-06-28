@@ -19,7 +19,7 @@ buildPythonPackage rec {
   prePatch = ''
     # TypeError: binary() got an unexpected keyword argument 'average_size'
     substituteInPlace tests/test_check.py \
-      --replace "average_size=512" ""
+      --replace-fail "average_size=512" ""
   '';
 
   propagatedBuildInputs = [ chardet ];

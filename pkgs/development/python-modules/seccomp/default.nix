@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace ./setup.py \
-      --replace 'extra_objects=["../.libs/libseccomp.a"]' \
+      --replace-fail 'extra_objects=["../.libs/libseccomp.a"]' \
                 'libraries=["seccomp"]'
   '';
 

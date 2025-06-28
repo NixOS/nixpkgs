@@ -22,8 +22,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--pep8 --cov" "" \
-      --replace "--cov-report html" ""
+      --replace-fail "--pep8 --cov" "" \
+      --replace-fail "--cov-report html" ""
   '';
 
   propagatedBuildInputs = [

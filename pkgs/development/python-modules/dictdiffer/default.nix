@@ -27,9 +27,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner>=2.7'," ""
+      --replace-fail "'pytest-runner>=2.7'," ""
     substituteInPlace pytest.ini \
-      --replace ' --isort --pydocstyle --pycodestyle --doctest-glob="*.rst" --doctest-modules --cov=dictdiffer --cov-report=term-missing' ""
+      --replace-fail ' --isort --pydocstyle --pycodestyle --doctest-glob="*.rst" --doctest-modules --cov=dictdiffer --cov-report=term-missing' ""
   '';
 
   pythonImportsCheck = [ "dictdiffer" ];

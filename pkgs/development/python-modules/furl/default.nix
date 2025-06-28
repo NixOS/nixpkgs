@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # https://github.com/gruns/furl/issues/164#issuecomment-1595637359
   postPatch = ''
     substituteInPlace tests/test_furl.py \
-      --replace '[0:0:0:0:0:0:0:1:1:1:1:1:1:1:1:9999999999999]' '[2001:db8::9999]'
+      --replace-fail '[0:0:0:0:0:0:0:1:1:1:1:1:1:1:1:9999999999999]' '[2001:db8::9999]'
   '';
 
   propagatedBuildInputs = [

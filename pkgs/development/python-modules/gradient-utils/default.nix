@@ -44,9 +44,9 @@ buildPythonPackage rec {
     # https://github.com/Paperspace/gradient-utils/issues/68
     # https://github.com/Paperspace/gradient-utils/issues/72
     substituteInPlace pyproject.toml \
-      --replace 'wheel = "^0.35.1"' 'wheel = "*"' \
-      --replace 'prometheus-client = ">=0.8,<0.10"' 'prometheus-client = "*"' \
-      --replace 'pymongo = "^3.11.0"' 'pymongo = ">=3.11.0"'
+      --replace-fail 'wheel = "^0.35.1"' 'wheel = "*"' \
+      --replace-fail 'prometheus-client = ">=0.8,<0.10"' 'prometheus-client = "*"' \
+      --replace-fail 'pymongo = "^3.11.0"' 'pymongo = ">=3.11.0"'
   '';
 
   preCheck = ''

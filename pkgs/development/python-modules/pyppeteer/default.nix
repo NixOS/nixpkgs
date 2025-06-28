@@ -32,9 +32,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'pyee = "^8.1.0"' 'pyee = "*"' \
-      --replace 'urllib3 = "^1.25.8"' 'urllib3 = "*"' \
-      --replace 'websockets = "^10.0"' 'websockets = "*"'
+      --replace-fail 'pyee = "^8.1.0"' 'pyee = "*"' \
+      --replace-fail 'urllib3 = "^1.25.8"' 'urllib3 = "*"' \
+      --replace-fail 'websockets = "^10.0"' 'websockets = "*"'
   '';
 
   nativeBuildInputs = [ poetry-core ];

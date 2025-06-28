@@ -41,9 +41,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
     substituteInPlace requirements-dev.txt \
-      --replace "asyncmock" ""
+      --replace-fail "asyncmock" ""
   '';
 
   disabledTestPaths = [ "tests/test_decorators.py" ];

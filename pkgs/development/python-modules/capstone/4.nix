@@ -26,7 +26,7 @@ buildPythonPackage {
   postPatch = ''
     ln -s ${capstone_4}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
     ln -s ${capstone_4}/lib/libcapstone${stdenv.targetPlatform.extensions.staticLibrary} prebuilt/
-    substituteInPlace setup.py --replace manylinux1 manylinux2014
+    substituteInPlace setup.py --replace-fail manylinux1 manylinux2014
   '';
 
   # aarch64 only available from MacOS SDK 11 onwards, so fix the version tag.

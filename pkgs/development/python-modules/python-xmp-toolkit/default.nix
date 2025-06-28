@@ -31,7 +31,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace libxmp/exempi.py \
-      --replace "ctypes.util.find_library('exempi')" "'${exempi}/lib/libexempi${stdenv.hostPlatform.extensions.sharedLibrary}'"
+      --replace-fail "ctypes.util.find_library('exempi')" "'${exempi}/lib/libexempi${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
   # hangs on darwin + sandbox

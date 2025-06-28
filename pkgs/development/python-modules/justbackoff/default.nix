@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner>=5.2" ""
+      --replace-fail "pytest-runner>=5.2" ""
   '';
 
   pythonImportsCheck = [ "justbackoff" ];

@@ -29,8 +29,6 @@ buildPythonPackage rec {
   patches = [ ./test-path.patch ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'charset_normalizer = "^2.0.0"' 'charset_normalizer = ">=2.0.0"'
     substituteInPlace tests/conftest.py \
       --subst-var-by docformatter $out/bin/docformatter
   '';

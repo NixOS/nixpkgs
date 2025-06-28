@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   # remove addops as they add test directory and coverage parameters to pytest
   postPatch = ''
-    substituteInPlace setup.cfg --replace 'addopts =' 'no-opts ='
+    substituteInPlace setup.cfg --replace-fail 'addopts =' 'no-opts ='
   '';
 
   propagatedBuildInputs = [

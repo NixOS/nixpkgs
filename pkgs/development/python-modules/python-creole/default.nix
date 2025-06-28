@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "/bin/bash" "${runtimeShell}"
+      --replace-fail "/bin/bash" "${runtimeShell}"
 
     sed -i "/-cov/d" pytest.ini
   '';

@@ -18,11 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-c3JG1B7gD/dLB7C9HwiIvjBNIDzmaOZCyGqmTt4w+Lc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'wheel>=0.32.0,<0.33.0'" ""
-  '';
-
   buildInputs = [ cython ];
 
   # No test

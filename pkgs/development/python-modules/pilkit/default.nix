@@ -34,11 +34,6 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  postPatch = ''
-    substituteInPlace pilkit/processors/resize.py \
-      --replace "Image.ANTIALIAS" "Image.Resampling.LANCZOS"
-  '';
-
   pythonImportsCheck = [ "pilkit" ];
 
   meta = with lib; {

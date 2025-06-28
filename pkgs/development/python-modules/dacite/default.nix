@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--benchmark-autosave --benchmark-json=benchmark.json" ""
+      --replace-fail "--benchmark-autosave --benchmark-json=benchmark.json" ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

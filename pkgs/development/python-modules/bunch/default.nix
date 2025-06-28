@@ -22,7 +22,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "rU" "r"
+      --replace-fail "rU" "r"
   '';
 
   # No real tests available

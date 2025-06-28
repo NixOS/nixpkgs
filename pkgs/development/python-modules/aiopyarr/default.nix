@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'version="master"' 'version="${version}"'
+      --replace-fail 'version="master"' 'version="${version}"'
   '';
 
   propagatedBuildInputs = [

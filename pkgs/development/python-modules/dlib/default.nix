@@ -27,12 +27,6 @@ buildPythonPackage {
     more-itertools
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "more-itertools<6.0.0" "more-itertools" \
-      --replace "pytest==3.8" "pytest"
-  '';
-
   # Pass CMake flags through to the build script
   preConfigure = ''
     for flag in $cmakeFlags; do

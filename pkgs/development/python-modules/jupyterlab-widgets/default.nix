@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # jupyterlab is required to build from source but we use the pre-build package
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"jupyterlab~=4.0"' ""
+      --replace-fail '"jupyterlab~=4.0"' ""
   '';
 
   nativeBuildInputs = [ jupyter-packaging ];

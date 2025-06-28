@@ -24,11 +24,11 @@ buildPythonPackage rec {
     ''
       # Fix find_library, can be removed after
       # https://github.com/NixOS/nixpkgs/issues/7307 is resolved.
-      substituteInPlace r2pipe/native.py --replace 'find_library("r_core")' "'${libr_core}'"
+      substituteInPlace r2pipe/native.py --replace-fail 'find_library("r_core")' "'${libr_core}'"
 
       # Fix the default r2 executable
-      substituteInPlace r2pipe/open_sync.py --replace 'r2e = "radare2"' "r2e = '${radare2}/bin/radare2'"
-      substituteInPlace r2pipe/open_base.py --replace 'which("radare2")' "'${radare2}/bin/radare2'"
+      substituteInPlace r2pipe/open_sync.py --replace-fail 'r2e = "radare2"' "r2e = '${radare2}/bin/radare2'"
+      substituteInPlace r2pipe/open_base.py --replace-fail 'which("radare2")' "'${radare2}/bin/radare2'"
     '';
 
   src = fetchPypi {
