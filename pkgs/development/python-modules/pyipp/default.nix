@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pyipp";
-  version = "0.17.1";
+  version = "0.17.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "ctalkington";
     repo = "python-ipp";
     tag = version;
-    hash = "sha256-V+hf3UgTUnRTBtFP83s2zPWzCpAamSsx9Lj1l9lcW6k=";
+    hash = "sha256-YlIc/FNM3SdYQj0DN0if3R7h0383V5CHGpD7FHErWhA=";
   };
 
   postPatch = ''
