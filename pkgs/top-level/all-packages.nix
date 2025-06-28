@@ -13726,8 +13726,7 @@ with pkgs;
 
   scantailor-universal = callPackage ../applications/graphics/scantailor/universal.nix { };
 
-  scribus_1_5 = libsForQt5.callPackage ../applications/office/scribus/default.nix { };
-  scribus = scribus_1_5;
+  scribus = callPackage ../applications/office/scribus/default.nix { };
 
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
