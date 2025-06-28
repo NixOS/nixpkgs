@@ -38,6 +38,7 @@ let
 
       bignums = callPackage ../development/rocq-modules/bignums { };
       hierarchy-builder = callPackage ../development/rocq-modules/hierarchy-builder { };
+      parseque = callPackage ../development/rocq-modules/parseque { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
 
