@@ -5,18 +5,10 @@ import sys
 from subprocess import CalledProcessError, run
 from typing import Final, assert_never
 
-from . import nix
+from . import nix, services
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
 from .models import Action, BuildAttr, Flake, Profile
 from .process import Remote
-from .services import (
-    build_and_activate_system,
-    edit,
-    list_generations,
-    reexec,
-    repl,
-    write_version_suffix,
-)
 from .utils import LogFormatter
 
 logger: Final = logging.getLogger(__name__)
@@ -307,7 +299,7 @@ def execute(argv: list[str]) -> None:
         and not args.no_reexec
         and not os.environ.get("_NIXOS_REBUILD_REEXEC")
     ):
-        reexec(argv, args, build_flags, flake_build_flags)
+        services.reexec(argv, args, build_flags, flake_build_flags)
 
     profile = Profile.from_arg(args.profile_name)
     target_host = Remote.from_arg(args.target_host, args.ask_sudo_password)
@@ -316,7 +308,7 @@ def execute(argv: list[str]) -> None:
     flake = Flake.from_arg(args.flake, target_host)
 
     if can_run and not flake:
-        write_version_suffix(build_flags)
+        services.write_version_suffix(build_flags)
 
     match action:
         case (
@@ -330,7 +322,7 @@ def execute(argv: list[str]) -> None:
             | Action.BUILD_VM
             | Action.BUILD_VM_WITH_BOOTLOADER
         ):
-            build_and_activate_system(
+            services.build_and_activate_system(
                 action=action,
                 args=args,
                 build_host=build_host,
@@ -346,16 +338,16 @@ def execute(argv: list[str]) -> None:
             )
 
         case Action.EDIT:
-            edit(flake=flake, flake_build_flags=flake_build_flags)
+            services.edit(flake=flake, flake_build_flags=flake_build_flags)
 
         case Action.DRY_RUN:
             raise AssertionError("DRY_RUN should be a DRY_BUILD alias")
 
         case Action.LIST_GENERATIONS:
-            list_generations(args=args, profile=profile)
+            services.list_generations(args=args, profile=profile)
 
         case Action.REPL:
-            repl(
+            services.repl(
                 flake=flake,
                 build_attr=build_attr,
                 flake_build_flags=flake_build_flags,
