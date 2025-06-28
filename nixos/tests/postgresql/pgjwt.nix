@@ -40,7 +40,7 @@ let
         in
         ''
           start_all()
-          master.wait_for_unit("postgresql")
+          master.wait_for_unit("postgresql.target")
           master.succeed(
               "${pkgs.sudo}/bin/sudo -u ${sqlSU} ${pgProve}/bin/pg_prove -d postgres -v -f ${pgjwt.src}/test.sql"
           )

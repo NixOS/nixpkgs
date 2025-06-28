@@ -16,6 +16,7 @@
   mkYarnModules,
   python3,
   # Misc dependencies
+  charm-freeze,
   code-minimap,
   dailies,
   dasht,
@@ -121,6 +122,8 @@
   websocat,
   # lazydocker.nvim dependencies
   lazydocker,
+  # lazyjj.nvim dependencies
+  lazyjj,
   # luau-lsp-nvim dependencies
   luau-lsp,
   # uv.nvim dependencies
@@ -1173,6 +1176,10 @@ in
     dependencies = [ self.self ];
   };
 
+  freeze-nvim = super.freeze-nvim.overrideAttrs {
+    runtimeDeps = [ charm-freeze ];
+  };
+
   fruzzy =
     let
       # until https://github.com/NixOS/nixpkgs/pull/67878 is merged, there's no better way to install nim libraries with nix
@@ -1545,6 +1552,13 @@ in
   lazydocker-nvim = super.lazydocker-nvim.overrideAttrs {
     runtimeDeps = [
       lazydocker
+    ];
+  };
+
+  lazyjj-nvim = super.lazyjj-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    runtimeDeps = [
+      lazyjj
     ];
   };
 

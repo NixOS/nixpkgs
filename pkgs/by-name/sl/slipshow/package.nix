@@ -54,6 +54,7 @@ ocamlPackages.buildDunePackage rec {
   meta = {
     description = "Engine for displaying slips, the next-gen version of slides";
     homepage = "https://slipshow.readthedocs.io/en/latest/index.html";
+    license = lib.licenses.gpl3Only;
     downloadPage = "https://github.com/panglesd/slipshow";
     maintainers = [ lib.maintainers.ethancedwards8 ];
     teams = [ lib.teams.ngi ];

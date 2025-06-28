@@ -4,8 +4,9 @@
   rustPlatform,
   testers,
   git-stack,
+  stdenv,
+  zlib,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "git-stack";
   version = "0.10.19";
@@ -19,6 +20,12 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-kjyJeKeFtETowTehQEjN58YoqYFUBt9yQlRIcNY0hso=";
+
+  buildInputs =
+    [ ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      zlib
+    ];
 
   # Many tests try to access the file system.
   doCheck = false;

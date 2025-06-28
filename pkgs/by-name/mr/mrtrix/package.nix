@@ -20,15 +20,15 @@
   withGui ? true,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mrtrix";
-  version = "3.0.4-unstable-2025-04-09";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "MRtrix3";
     repo = "mrtrix3";
-    rev = "7843bfc53a75f465901804ccf3fd6797d77531dd";
-    hash = "sha256-C4Io3VkX10eWia4djrYvN12fWmwm0j1G60I8lmFH49w=";
+    rev = finalAttrs.version;
+    hash = "sha256-5GcQVZaRV7A6aA/ES6qR0dNBrToJiUXt/LyLYmnpvlQ=";
     fetchSubmodules = true;
   };
 
@@ -134,4 +134,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     license = licenses.mpl20;
   };
-}
+})

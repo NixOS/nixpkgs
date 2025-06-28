@@ -4,6 +4,7 @@
   fetchurl,
   makeWrapper,
   jdk23_headless,
+  libwebp, # Fixes https://github.com/gotson/komga/issues/1294
   nixosTests,
 }:
 
@@ -21,7 +22,8 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   buildCommand = ''
-    makeWrapper ${jdk23_headless}/bin/java $out/bin/komga --add-flags "-jar $src"
+    makeWrapper ${jdk23_headless}/bin/java $out/bin/komga --add-flags "-jar $src" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libwebp ]}
   '';
 
   passthru.tests = {
