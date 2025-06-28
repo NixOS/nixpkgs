@@ -282,7 +282,7 @@ in
     mkIf (cfg.servers != { }) {
       assertions = mapAttrsToList (
         server: options: {
-          assertion = options.useTransformers -> options.initialPromt == null;
+          assertion = options.useTransformers -> options.initialPrompt == null;
           message = "wyoming-faster-whisper/${server}: Transformer models (`useTransformers`) do not currently support an `initialPrompt`.";
         }
       );
