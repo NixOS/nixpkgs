@@ -336,3 +336,15 @@ def list_generations(
             "current": "Current",
         }
         print(tabulate(generations, headers=headers))
+
+
+def repl(
+    flake: Flake | None,
+    build_attr: BuildAttr,
+    flake_build_flags: Args,
+    build_flags: Args,
+) -> None:
+    if flake:
+        nix.repl_flake(flake, flake_build_flags)
+    else:
+        nix.repl(build_attr, build_flags)
