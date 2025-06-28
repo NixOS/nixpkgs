@@ -1,4 +1,5 @@
 import argparse
+import json
 import logging
 import os
 import sys
@@ -10,7 +11,7 @@ from . import nix, tmpdir
 from .constants import EXECUTABLE
 from .models import Action, BuildAttr, Flake, ImageVariants, NixOSRebuildError, Profile
 from .process import Remote, cleanup_ssh
-from .utils import Args
+from .utils import Args, tabulate
 
 NIXOS_REBUILD_ATTR: Final = "config.system.build.nixos-rebuild"
 
@@ -315,3 +316,23 @@ def build_and_activate_system(
         common_flags=common_flags,
         flake_common_flags=flake_common_flags,
     )
+
+
+def list_generations(
+    args: argparse.Namespace,
+    profile: Profile,
+) -> None:
+    generations = nix.list_generations(profile)
+    if args.json:
+        print(json.dumps(generations, indent=2))
+    else:
+        headers = {
+            "generation": "Generation",
+            "date": "Build-date",
+            "nixosVersion": "NixOS version",
+            "kernelVersion": "Kernel",
+            "configurationRevision": "Configuration Revision",
+            "specialisations": "Specialisation",
+            "current": "Current",
+        }
+        print(tabulate(generations, headers=headers))
