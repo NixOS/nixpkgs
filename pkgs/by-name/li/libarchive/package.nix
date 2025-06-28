@@ -6,7 +6,7 @@
   attr,
   autoreconfHook,
   bzip2,
-  e2fsprogs,
+  fetchpatch,
   glibcLocalesUtf8,
   lzo,
   openssl,
@@ -40,6 +40,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-KN5SvQ+/g/OOa+hntMX3D8p5IEWO0smke5WK+DwrOH0=";
   };
+
+  patches = [
+    # https://github.com/libarchive/libarchive/pull/2689
+    # Remove after next release.
+    (fetchpatch {
+      url = "https://github.com/libarchive/libarchive/commit/489d0b8e2f1fafd3b7ebf98f389ca67462c34651.patch?full_index=1";
+      hash = "sha256-r+tSJ+WA0VKCjg+8MfS5/RqcB+aAMZ2dK0YUh+U1q78=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -96,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       acl
       attr
-      e2fsprogs
     ]
     ++ lib.optional xarSupport libxml2;
 
