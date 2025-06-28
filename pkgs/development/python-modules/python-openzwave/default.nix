@@ -47,7 +47,7 @@ buildPythonPackage rec {
   # /etc/openzwave if needed
   postPatch = ''
     substituteInPlace src-lib/libopenzwave/libopenzwave.pyx \
-      --replace /usr/local/etc/openzwave ${openzwave}/etc/openzwave
+      --replace-fail /usr/local/etc/openzwave ${openzwave}/etc/openzwave
   '';
 
   patches = [ ./cython.patch ];

@@ -63,8 +63,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace dolphin/mat2.desktop \
-      --replace "@mat2@" "$out/bin/mat2" \
-      --replace "@mat2svg@" "$out/share/icons/hicolor/scalable/apps/mat2.svg"
+      --replace-fail "@mat2@" "$out/bin/mat2" \
+      --replace-fail "@mat2svg@" "$out/share/icons/hicolor/scalable/apps/mat2.svg"
   '';
 
   build-system = [ setuptools ];

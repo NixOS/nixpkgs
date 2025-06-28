@@ -32,7 +32,7 @@ buildPythonPackage rec {
   # Test file has a `unittest.main()` at the bottom that fails the tests;
   # py.test can run the tests without it.
   postPatch = ''
-    substituteInPlace test/test_namedlist.py --replace "unittest.main()" ""
+    substituteInPlace test/test_namedlist.py --replace-fail "unittest.main()" ""
   '';
 
   pythonImportsCheck = [ "namedlist" ];

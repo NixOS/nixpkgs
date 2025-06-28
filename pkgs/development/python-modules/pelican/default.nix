@@ -54,11 +54,6 @@ buildPythonPackage rec {
     '';
   };
 
-  postPatch = ''
-    substituteInPlace pelican/tests/test_pelican.py \
-      --replace "'git'" "'${git}/bin/git'"
-  '';
-
   build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [ "pygments" ];

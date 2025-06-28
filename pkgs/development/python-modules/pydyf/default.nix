@@ -22,11 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-OU3d9hnMqdDFVxXjxV6hIam/nLx4DNwSAaJCeRe4a2Q=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--isort --flake8" ""
-  '';
-
   nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [

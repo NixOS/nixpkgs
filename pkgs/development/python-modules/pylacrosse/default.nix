@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version = version," "version = '${version}',"
+      --replace-fail "version = version," "version = '${version}',"
   '';
 
   propagatedBuildInputs = [ pyserial ];

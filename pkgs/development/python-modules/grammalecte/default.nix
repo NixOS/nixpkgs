@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   patchPhase = ''
     runHook prePatch
-    substituteInPlace grammalecte-server.py --replace sys.version_info.major sys.version_info
+    substituteInPlace grammalecte-server.py --replace-fail sys.version_info.major sys.version_info
     runHook postPatch
   '';
 

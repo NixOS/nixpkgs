@@ -19,11 +19,6 @@ buildPythonPackage rec {
     hash = "sha256-IvhUpfyrQrXduoAwoOS+UcqJrwJnlhyNbPqGOVWGxAc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "ruamel.yaml==0.17.4" "ruamel.yaml"
-  '';
-
   propagatedBuildInputs = [
     ruamel-yaml
     python-dateutil

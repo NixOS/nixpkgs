@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "rednose = 1" ""
+      --replace-fail "rednose = 1" ""
   '';
 
   build-system = [ setuptools ];

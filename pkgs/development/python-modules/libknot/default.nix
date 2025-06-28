@@ -22,8 +22,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace libknot/__init__.py \
-      --replace "libknot%s.dylib" "${lib.getLib knot-dns}/lib/libknot%s.dylib" \
-      --replace "libknot.so%s" "${lib.getLib knot-dns}/lib/libknot.so%s"
+      --replace-fail "libknot%s.dylib" "${lib.getLib knot-dns}/lib/libknot%s.dylib" \
+      --replace-fail "libknot.so%s" "${lib.getLib knot-dns}/lib/libknot.so%s"
   '';
 
   build-system = [ hatchling ];

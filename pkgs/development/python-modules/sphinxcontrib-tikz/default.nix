@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace sphinxcontrib/tikz.py \
-      --replace "config.latex_engine" "'${
+      --replace-fail "config.latex_engine" "'${
         texliveSmall.withPackages (
           ps: with ps; [
             standalone
@@ -27,7 +27,7 @@ buildPythonPackage rec {
           ]
         )
       }/bin/pdflatex'" \
-      --replace "system(['pdf2svg'" "system(['${pdf2svg}/bin/pdf2svg'"
+      --replace-fail "system(['pdf2svg'" "system(['${pdf2svg}/bin/pdf2svg'"
   '';
 
   propagatedBuildInputs = [ sphinx ];

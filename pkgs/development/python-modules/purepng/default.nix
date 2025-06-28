@@ -41,7 +41,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace code/test_png.py \
-      --replace numpy.bool bool
+      --replace-fail numpy.bool bool
   '';
 
   # checkPhase begins by deleting source dir to force test execution against installed version

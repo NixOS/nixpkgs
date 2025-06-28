@@ -17,12 +17,6 @@ buildPythonPackage rec {
     hash = "sha256-EBMwpE/e3oiFhvMBC9FFwOxIpIBrxWQp+lSHpndAIfg=";
   };
 
-  postPatch = ''
-    sed -i "s/==.*//g" requirements/test.txt
-
-    substituteInPlace requirements/base.txt --replace 'PyYAML>=3.13,<6' 'PyYAML>=3.13'
-  '';
-
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ pyyaml ];

@@ -52,9 +52,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace proton/vpn/backend/linux/networkmanager/killswitch/wireguard/killswitch_connection_handler.py \
-      --replace '/usr/sbin/ip' '${iproute2}/bin/ip'
+      --replace-fail '/usr/sbin/ip' '${iproute2}/bin/ip'
     substituteInPlace proton/vpn/backend/linux/networkmanager/killswitch/wireguard/wgkillswitch.py \
-      --replace '/usr/bin/apt' '${apt}/bin/apt'
+      --replace-fail '/usr/bin/apt' '${apt}/bin/apt'
   '';
 
   pythonImportsCheck = [

@@ -34,7 +34,7 @@ buildPythonPackage rec {
   preConfigure = ''
     # setup.py tries to execute a call to git in a subprocess, this avoids it.
     substituteInPlace setup.py \
-      --replace "version=version()," \
+      --replace-fail "version=version()," \
                 "version='${version}',"
   '';
 

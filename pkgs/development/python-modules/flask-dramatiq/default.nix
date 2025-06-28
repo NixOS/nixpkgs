@@ -32,8 +32,8 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'poetry>=0.12' 'poetry-core' \
-      --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
+      --replace-fail 'poetry>=0.12' 'poetry-core' \
+      --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
 
     patchShebangs --build ./example.py
   '';
@@ -57,7 +57,7 @@ buildPythonPackage {
 
   postgresqlTestSetupPost = ''
     substituteInPlace config.py \
-      --replace 'SQLALCHEMY_DATABASE_URI = f"postgresql://{PGUSER}:{PGPASSWORD}@{PGHOST}/{PGDATABASE}"' \
+      --replace-fail 'SQLALCHEMY_DATABASE_URI = f"postgresql://{PGUSER}:{PGPASSWORD}@{PGHOST}/{PGDATABASE}"' \
         "SQLALCHEMY_DATABASE_URI = \"postgresql://$PGUSER/$PGDATABASE?host=$PGHOST\""
     python3 ./example.py db upgrade
   '';

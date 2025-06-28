@@ -37,7 +37,7 @@ buildPythonPackage rec {
     sed -i '/pytest-runner/d' setup.cfg
 
     substituteInPlace setup.cfg \
-      --replace "multiset>=2.0,<3.0" "multiset"
+      --replace-fail "multiset>=2.0,<3.0" "multiset"
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

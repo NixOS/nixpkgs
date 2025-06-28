@@ -61,7 +61,7 @@ buildPythonPackage rec {
 
   prePatch = ''
     substituteInPlace src/python/CMakeLists.txt \
-      --replace '"''${GUDHI_PYTHON_PATH_ENV}"' ""
+      --replace-fail '"''${GUDHI_PYTHON_PATH_ENV}"' ""
   '';
 
   preBuild = ''

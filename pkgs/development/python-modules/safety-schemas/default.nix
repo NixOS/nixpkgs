@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace hatchling==1.26.3 hatchling
+      --replace-fail hatchling==1.26.3 hatchling
   '';
 
   build-system = [ hatchling ];

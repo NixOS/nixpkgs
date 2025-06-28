@@ -43,7 +43,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Path is hard-coded
     substituteInPlace pydeps/dot.py \
-      --replace "dot -Gstart=1" "${lib.makeBinPath [ graphviz ]}/dot -Gstart=1"
+      --replace-fail "dot -Gstart=1" "${lib.makeBinPath [ graphviz ]}/dot -Gstart=1"
   '';
 
   disabledTests = [

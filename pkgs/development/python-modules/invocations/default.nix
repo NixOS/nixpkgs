@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "semantic_version>=2.4,<2.7" "semantic_version"
+      --replace-fail "semantic_version>=2.4,<2.7" "semantic_version"
   '';
 
   propagatedBuildInputs = [

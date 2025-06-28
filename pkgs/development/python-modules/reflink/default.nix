@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
 
   # FIXME: These do not work, and I have been unable to figure out why.

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace "--mypy" ""
+      --replace-fail "--mypy" ""
   '';
 
   propagatedBuildInputs = [

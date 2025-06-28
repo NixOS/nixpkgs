@@ -34,8 +34,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace Makefile.in \
-      --replace "\$(DESTDIR)\$(PYTHON_SITE_PKG)" "$out/${python.sitePackages}" \
-      --replace "\$(LIBTOOL) --mode=install cp _unbound.la" "cp _unbound.la"
+      --replace-fail "\$(DESTDIR)\$(PYTHON_SITE_PKG)" "$out/${python.sitePackages}" \
+      --replace-fail "\$(LIBTOOL) --mode=install cp _unbound.la" "cp _unbound.la"
   '';
 
   preConfigure = "export PYTHON_VERSION=${python.pythonVersion}";
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     mkdir -p $out/${python.sitePackages} $out/etc/${pname}
     cp .libs/_unbound.so .libs/libunbound.so* $out/${python.sitePackages}
     substituteInPlace _unbound.la \
-      --replace "-L.libs $PWD/libunbound.la" "-L$out/${python.sitePackages}"
+      --replace-fail "-L.libs $PWD/libunbound.la" "-L$out/${python.sitePackages}"
   '';
 
   installFlags = [

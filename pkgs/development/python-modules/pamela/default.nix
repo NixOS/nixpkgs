@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   postUnpack = ''
-    substituteInPlace $sourceRoot/pamela.py --replace \
+    substituteInPlace $sourceRoot/pamela.py --replace-fail \
       'find_library("pam")' \
       '"${lib.getLib pkgs.pam}/lib/libpam.so"'
   '';

@@ -23,7 +23,7 @@ buildPythonPackage {
   # setup.py states version="dev", which is not a valid version string for setuptools
   # There has never been a formal stable release, so let's say 0.0 here.
   postPatch = ''
-    substituteInPlace ./setup.py --replace 'version="dev",' 'version="0.0",'
+    substituteInPlace ./setup.py --replace-fail 'version="dev",' 'version="0.0",'
   '';
 
   propagatedBuildInputs = [

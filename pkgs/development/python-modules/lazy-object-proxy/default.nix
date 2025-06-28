@@ -18,11 +18,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace ",<6.0" ""
-    substituteInPlace setup.cfg --replace ",<6.0" ""
-  '';
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Broken tests. Seem to be fixed upstream according to Travis.

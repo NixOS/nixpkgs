@@ -32,7 +32,7 @@ buildPythonPackage rec {
   #
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'jupyterlab>=3.0.0,<3.7' 'jupyterlab>=3.0.0'
+      --replace-fail 'jupyterlab>=3.0.0,<3.7' 'jupyterlab>=3.0.0'
   '';
 
   build-system = [

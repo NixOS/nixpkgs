@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'setup_requires=["pytest-runner"],' ""
+      --replace-fail 'setup_requires=["pytest-runner"],' ""
   '';
 
   nativeBuildInputs = [ setuptools ];

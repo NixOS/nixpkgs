@@ -24,11 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-ko9JzPlojbXyDNnkXEV4odAczKKa6qvwZvKsdqqIZmg=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'protobuf>=4.21.6' 'protobuf'
-  '';
-
   propagatedBuildInputs = [
     googleapis-common-protos
     grpcio

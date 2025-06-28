@@ -20,7 +20,7 @@ buildPythonPackage rec {
   prePatch = ''
     # Disable lib3to6, since we're only building this on 3.6+ anyway.
     substituteInPlace setup.py \
-      --replace 'if any(arg.startswith("bdist") for arg in sys.argv):' 'if False:'
+      --replace-fail 'if any(arg.startswith("bdist") for arg in sys.argv):' 'if False:'
   '';
 
   propagatedBuildInputs = [ click ];

@@ -27,8 +27,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "requires = [\"flit\"]" "requires = [\"flit_core\"]" \
-      --replace "build-backend = \"flit.buildapi\"" "build-backend = \"flit_core.buildapi\""
+      --replace-fail "requires = [\"flit\"]" "requires = [\"flit_core\"]" \
+      --replace-fail "build-backend = \"flit.buildapi\"" "build-backend = \"flit_core.buildapi\""
   '';
 
   nativeBuildInputs = [ flit-core ];

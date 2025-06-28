@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "[pytest]" "" \
-      --replace "python_classes = *TestCase" ""
+      --replace-fail "[pytest]" "" \
+      --replace-fail "python_classes = *TestCase" ""
     substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
+      --replace-fail "'pytest-runner'," ""
   '';
 
   propagatedBuildInputs = [

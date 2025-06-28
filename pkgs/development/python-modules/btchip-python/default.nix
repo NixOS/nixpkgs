@@ -20,7 +20,7 @@ buildPythonPackage rec {
   postPatch = ''
     # fix extra_requires validation
     substituteInPlace setup.py \
-      --replace "python-pyscard>=1.6.12-4build1" "python-pyscard>=1.6.12"
+      --replace-fail "python-pyscard>=1.6.12-4build1" "python-pyscard>=1.6.12"
   '';
 
   propagatedBuildInputs = [

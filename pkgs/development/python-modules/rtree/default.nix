@@ -26,7 +26,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace rtree/finder.py --replace \
+    substituteInPlace rtree/finder.py --replace-fail \
       'find_library("spatialindex_c")' '"${libspatialindex}/lib/libspatialindex_c${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 

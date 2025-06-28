@@ -24,11 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-Zdf9G07r+BD4RN595iWCVLMkgpbuQpvcs/dBvL97mMk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "cachelib >= 0.9.0, < 0.10.0" "cachelib"
-  '';
-
   propagatedBuildInputs = [
     cachelib
     flask

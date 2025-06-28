@@ -24,7 +24,7 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/thebabush/nampa/pull/13
     substituteInPlace setup.py \
-      --replace "0.1.1" "${version}"
+      --replace-fail "0.1.1" "${version}"
   '';
 
   build-system = [ setuptools ];

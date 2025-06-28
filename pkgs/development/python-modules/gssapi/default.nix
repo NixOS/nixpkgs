@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5-c}"'
+      --replace-fail 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5-c}"'
   '';
 
   env = lib.optionalAttrs (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) {

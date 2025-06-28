@@ -69,7 +69,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Allow newer cffi versions to be used
-    substituteInPlace pyproject.toml --replace "cffi==1.15.*" "cffi>=1.15"
+    substituteInPlace pyproject.toml --replace-fail "cffi==1.15.*" "cffi>=1.15"
   '';
 
   # Make MIP use the Gurobi solver, if configured to do so

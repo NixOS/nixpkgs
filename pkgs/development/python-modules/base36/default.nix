@@ -19,8 +19,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "[pytest]" "[tool:pytest]" \
-      --replace "--pep8 --cov" ""
+      --replace-fail "[pytest]" "[tool:pytest]" \
+      --replace-fail "--pep8 --cov" ""
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace effect/test_do.py \
-      --replace "py.test" "pytest"
+      --replace-fail "py.test" "pytest"
   '';
 
   propagatedBuildInputs = [

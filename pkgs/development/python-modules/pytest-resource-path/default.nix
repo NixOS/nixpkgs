@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
 
   buildInputs = [ pytest ];

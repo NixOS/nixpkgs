@@ -30,11 +30,6 @@ buildPythonPackage rec {
     hash = "sha256-U8jqJ5uLVX8zoeQwr14FPNdHACRA4HK65q2TAtRr5Xk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "cython==" "cython>="
-  '';
-
   nativeBuildInputs = [
     astropy-extension-helpers
     cython

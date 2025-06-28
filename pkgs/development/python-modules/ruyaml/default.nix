@@ -25,8 +25,8 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/pycontribs/ruyaml/pull/107
     substituteInPlace pyproject.toml \
-      --replace '"pip >= 19.3.1",' "" \
-      --replace '"setuptools_scm_git_archive >= 1.1",' ""
+      --replace-fail '"pip >= 19.3.1",' "" \
+      --replace-fail '"setuptools_scm_git_archive >= 1.1",' ""
   '';
 
   nativeBuildInputs = [ setuptools-scm ];

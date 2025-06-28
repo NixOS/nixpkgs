@@ -30,9 +30,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "import pip" ""
+      --replace-fail "import pip" ""
     substituteInPlace riscof/requirements.txt \
-      --replace "GitPython==3.1.17" "GitPython"
+      --replace-fail "GitPython==3.1.17" "GitPython"
   '';
 
   propagatedBuildInputs = [

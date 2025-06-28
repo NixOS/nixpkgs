@@ -23,13 +23,6 @@ buildPythonPackage rec {
     sympy
   ];
 
-  preConfigure = ''
-    substituteInPlace setup.py \
-      --replace "sympy==1.3" "sympy>=1.3" \
-      --replace "base58==2.1.0" "base58>=2.1.0" \
-      --replace "ecdsa==0.17.0" "ecdsa>=0.17.0"
-  '';
-
   # Project doesn't ship tests
   doCheck = false;
 

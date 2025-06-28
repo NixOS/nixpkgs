@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace \
+    substituteInPlace setup.py --replace-fail \
       "pytest-runner~=5.1" ""
   '';
 

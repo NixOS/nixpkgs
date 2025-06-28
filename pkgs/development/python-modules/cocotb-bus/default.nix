@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # remove circular dependency cocotb from setup.py
-    substituteInPlace setup.py --replace '"cocotb>=1.5.0.dev,<2.0"' ""
+    substituteInPlace setup.py --replace-fail '"cocotb>=1.5.0.dev,<2.0"' ""
   '';
 
   # tests require cocotb, disable for now to avoid circular dependency

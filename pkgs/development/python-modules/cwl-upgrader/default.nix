@@ -28,7 +28,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Version detection doesn't work for schema_salad
     substituteInPlace pyproject.toml \
-      --replace '"schema_salad",' ""
+      --replace-fail '"schema_salad",' ""
   '';
 
   nativeBuildInputs = [ setuptools ];

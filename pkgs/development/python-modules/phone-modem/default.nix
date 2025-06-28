@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "aioserial==1.3.0" "aioserial"
+      --replace-fail "aioserial==1.3.0" "aioserial"
   '';
 
   propagatedBuildInputs = [ aioserial ];

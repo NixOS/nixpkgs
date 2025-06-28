@@ -63,7 +63,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Use system OpenSSL, which gets security updates.
     substituteInPlace Cargo.toml \
-      --replace ', features = ["vendored"]' ""
+      --replace-fail ', features = ["vendored"]' ""
   '';
 
   pythonImportsCheck = [ "etebase" ];

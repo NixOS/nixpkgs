@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"setuptools>=75.8.0"' ""
+      --replace-fail '"setuptools>=75.8.0"' ""
   '';
 
   build-system = [ setuptools ];
