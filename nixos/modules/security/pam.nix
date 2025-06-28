@@ -172,6 +172,28 @@ let
           };
         };
 
+        useDefaultRules = lib.mkOption {
+          # This option is experimental and subject to breaking changes without notice.
+          visible = false;
+          default = true;
+          type = lib.types.bool;
+          description = ''
+            Whether to set up the default NixOS rule stack for this service.
+
+            Set this to `false` if you want to define the entire rule stack for this service.
+
+            ::: {.warning}
+            This option is experimental and subject to breaking changes without notice.
+
+            If you use this option in your system configuration, you will need to manually monitor this module for any changes. Otherwise, failure to adjust your configuration properly could lead to you being locked out of your system, or worse, your system could be left wide open to attackers.
+
+            If you share configuration examples that use this option, you MUST include this warning so that users are informed.
+
+            You may freely use this option within `nixpkgs`, and future changes will account for those use sites.
+            :::
+          '';
+        };
+
         unixAuth = lib.mkOption {
           default = true;
           type = lib.types.bool;
@@ -753,7 +775,7 @@ let
               lib.listToAttrs
             ];
           in
-          {
+          lib.optionalAttrs cfg.useDefaultRules {
             account = autoOrderRules [
               {
                 name = "ldap";
