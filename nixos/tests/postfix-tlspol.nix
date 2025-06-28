@@ -18,7 +18,7 @@
     import json
 
     machine.wait_for_unit("postfix-tlspol.service")
-    machine.succeed("systemctl show -P SupplementaryGroups postfix.service | grep postfix-tlspol")
+    machine.succeed("getent group postfix-tlspol | grep :postfix")
 
     with subtest("Interact with the service"):
       machine.succeed("postfix-tlspol -purge")
@@ -26,6 +26,8 @@
       response = json.loads((machine.succeed("postfix-tlspol -query localhost")))
       machine.log(json.dumps(response, indent=2))
 
+
+    machine.log(machine.execute("systemd-analyze security postfix-tlspol.service | grep -v ✓")[1])
   '';
 
 }
