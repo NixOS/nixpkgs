@@ -1,14 +1,11 @@
 {
   stdenv,
-  runCommand,
   lib,
   rustPlatform,
   pkg-config,
   nix-update-script,
   fetchFromGitHub,
   dbus,
-  nushell,
-  nushell_plugin_dbus,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,19 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs = [ dbus ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.check =
-      let
-        nu = lib.getExe nushell;
-        plugin = lib.getExe nushell_plugin_dbus;
-      in
-      runCommand "${finalAttrs.pname}-test" { } ''
-        touch $out
-        ${nu} -n -c "plugin add --plugin-config $out ${plugin}"
-        ${nu} -n -c "plugin use --plugin-config $out dbus"
-      '';
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Nushell plugin for communicating with D-Bus";

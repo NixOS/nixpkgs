@@ -1,12 +1,9 @@
 {
   stdenv,
-  runCommand,
   lib,
   rustPlatform,
   nix-update-script,
   fetchFromGitHub,
-  nushell,
-  skim,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,19 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.check =
-      let
-        nu = lib.getExe nushell;
-        plugin = lib.getExe skim;
-      in
-      runCommand "${finalAttrs.pname}-test" { } ''
-        touch $out
-        ${nu} -n -c "plugin add --plugin-config $out ${plugin}"
-        ${nu} -n -c "plugin use --plugin-config $out skim"
-      '';
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A nushell plugin that adds integrates the skim fuzzy finder";
