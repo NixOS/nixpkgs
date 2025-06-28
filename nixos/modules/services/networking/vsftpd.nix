@@ -334,8 +334,8 @@ in
     };
 
     security.pam.services.vsftpd.text = mkIf (cfg.enableVirtualUsers && cfg.userDbPath != null) ''
-      auth required pam_userdb.so db=${cfg.userDbPath}
-      account required pam_userdb.so db=${cfg.userDbPath}
+      auth required ${config.security.pam.package}/lib/security/pam_userdb.so db=${cfg.userDbPath}
+      account required ${config.security.pam.package}/lib/security/pam_userdb.so db=${cfg.userDbPath}
     '';
   };
 }
