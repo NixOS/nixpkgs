@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "4.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "azure_keyvault_administration";
