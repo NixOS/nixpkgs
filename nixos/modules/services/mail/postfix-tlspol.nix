@@ -19,6 +19,7 @@ let
   cfg = config.services.postfix-tlspol;
 
   format = pkgs.formats.yaml_1_2 { };
+  configFile = format.generate "postfix-tlspol.yaml" cfg.settings;
 in
 
 {
@@ -148,10 +149,15 @@ in
     })
 
     (mkIf cfg.enable {
-      environment.etc."postfix-tlspol/config.yaml".source =
-        format.generate "postfix-tlspol.yaml" cfg.settings;
+      environment.etc."postfix-tlspol/config.yaml".source = configFile;
 
       environment.systemPackages = [ cfg.package ];
+
+      users.users.postfix-tlspol = {
+        isSystemUser = true;
+        group = "postfix-tlspol";
+      };
+      users.groups.postfix-tlspol = { };
 
       systemd.services.postfix-tlspol = {
         after = [
@@ -167,6 +173,8 @@ in
         description = "Postfix DANE/MTA-STS TLS policy socketmap service";
         documentation = [ "https://github.com/Zuplu/postfix-tlspol" ];
 
+        reloadTriggers = [ configFile ];
+
         # https://github.com/Zuplu/postfix-tlspol/blob/main/init/postfix-tlspol.service
         serviceConfig = {
           ExecStart = toString [
@@ -178,7 +186,8 @@ in
           Restart = "always";
           RestartSec = 5;
 
-          DynamicUser = true;
+          User = "postfix-tlspol";
+          Group = "postfix-tlspol";
 
           CacheDirectory = "postfix-tlspol";
           CapabilityBoundingSet = [ "" ];
@@ -208,7 +217,7 @@ in
             ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
               "AF_UNIX"
             ];
-          RestrictNamespace = true;
+          RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
