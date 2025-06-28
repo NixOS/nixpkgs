@@ -29,14 +29,14 @@ let
   patchGoVersion = ''
     find . -name go.mod -not -path "./.bingo/*" -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.4" "go 1.24.4"
+        --replace-fail "go 1.24.4" "go 1.24.3"
     done
     find . -name go.work -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.4" "go 1.24.4"
+        --replace-fail "go 1.24.4" "go 1.24.3"
     done
     substituteInPlace Makefile \
-      --replace-fail "GO_VERSION = 1.24.4" "GO_VERSION = 1.24.4"
+      --replace-fail "GO_VERSION = 1.24.4" "GO_VERSION = 1.24.3"
   '';
 in
 buildGoModule rec {
