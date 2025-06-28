@@ -56,5 +56,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maikotan ];
     mainProgram = "gh-signoff";
+    inherit (gh.meta) platforms;
   };
 })
