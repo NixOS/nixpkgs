@@ -24,9 +24,7 @@
   ruby,
   zip,
 }:
-
 oldTlpdb:
-
 let
   tlpdbVersion = tlpdb."00texlive.config";
 
@@ -54,7 +52,6 @@ let
   );
 
   orig = removeFormatLinks (removeAttrs oldTlpdb [ "00texlive.config" ]);
-
 in
 lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb
@@ -431,22 +428,6 @@ lib.recursiveUpdate orig rec {
     sed -Ei 's/import sre/import re/; s/file\(/open(/g; s/\t/        /g; s/print +(.*)$/print(\1)/g' "$out"/bin/ebong
   '';
 
-  # readd functions moved to 'tools.pm' not shipped to CTAN
-  eolang.postUnpack =
-    let
-      patch = fetchpatch {
-        name = "eolang-without-tools-pm.patch";
-        url = "https://github.com/objectionary/eolang.sty/commit/2c3bf97dd85e1748b2028ffa056a75c0d9432f88.patch";
-        includes = [ "eolang.pl" ];
-        hash = "sha256-ZQtGjqzfhX5foRWuiWQaomN8nOOEj394HdCDrb2sdzA=";
-      };
-    in
-    ''
-      if [[ -d "$out"/scripts/eolang ]] ; then
-        patch -d "$out/scripts/eolang" -i "${patch}"
-      fi
-    '';
-
   # find files in script directory, not binary directory
   # add runtime dependencies to PATH
   epspdf.postFixup = ''
@@ -520,6 +501,10 @@ lib.recursiveUpdate orig rec {
   '';
 
   #### dependency changes
+
+  # Since 2025 OpTeX is based on luahbtex
+  optex.deps = orig.optex.deps ++ [ "luahbtex" ];
+
   # it seems to need it to transform fonts
   xdvi.deps = (orig.xdvi.deps or [ ]) ++ [ "metafont" ];
 
@@ -533,6 +518,14 @@ lib.recursiveUpdate orig rec {
   collection-plaingeneric.deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
 
   #### misc
+
+  # FIXME: remove when https://github.com/borisveytsman/crossrefware/pull/17 is merged and included on CTAN
+  # Typo introduced in https://github.com/borisveytsman/crossrefware/commit/1e67e9773b3d3be983be156e2200478bc263dd93
+  crossrefware.postUnpack = ''
+    if [[ -f "$out"/scripts/crossrefware/ltx2crossrefxml.pl ]] ; then
+      sed -i 's/use IO::file;/use IO::File;/' "$out"/scripts/crossrefware/ltx2crossrefxml.pl
+    fi
+  '';
 
   # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
   luajittex.binfiles = lib.optionals (
