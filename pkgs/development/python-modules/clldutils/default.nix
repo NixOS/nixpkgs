@@ -4,11 +4,11 @@
   buildPythonPackage,
   colorlog,
   fetchFromGitHub,
+  bibtexparser_2,
   git,
   lxml,
   markdown,
   markupsafe,
-  mock,
   postgresql,
   pylatexenc,
   pytest-cov-stub,
@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "clldutils";
-  version = "3.21.0";
+  version = "3.24.2";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -30,13 +30,14 @@ buildPythonPackage rec {
     owner = "clld";
     repo = "clldutils";
     rev = "v${version}";
-    hash = "sha256-OD+WJ9JuYZb/oXDgVqL4i5YlcVEt0+swq0SB3cutyRo=";
+    hash = "sha256-xIs6Lq9iDdcM3j51F27x408oUldvy5nlvVdbrAS5Jz0=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     attrs
+    bibtexparser_2
     colorlog
     lxml
     markdown
@@ -47,7 +48,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mock
     postgresql
     pytest-cov-stub
     pytest-mock
