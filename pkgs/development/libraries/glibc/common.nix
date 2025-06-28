@@ -162,6 +162,15 @@ stdenv.mkDerivation (
         -#define LIBIDN2_SONAME "libidn2.so.0"
         +#define LIBIDN2_SONAME "${lib.getLib libidn2}/lib/libidn2.so.0"
         EOF
+      ''
+      # For some reason, with gcc-15 build fails with the following error:
+      #
+      #     zic.c:3767:1: note: did you mean to specify it after ')' following function parameters?
+      #     zic.c:3781:1: error: standard 'reproducible' attribute can only be applied to function declarators or type specifiers with function type []
+      + ''
+        for path in timezone/zic.c timezone/zdump.c ; do
+          substituteInPlace $path  --replace-fail "ATTRIBUTE_REPRODUCIBLE" ""
+        done
       '';
 
     configureFlags =
