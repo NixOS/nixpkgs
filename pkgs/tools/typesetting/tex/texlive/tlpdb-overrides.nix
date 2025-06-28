@@ -456,6 +456,21 @@ lib.recursiveUpdate orig rec {
     substituteInPlace "$out"/bin/latexminted --replace-fail "__file__" "\"$scriptsFolder/latexminted.py\""
   '';
 
+  # find files in source container, fix incompatibilities with snobol4
+  texaccents.postFixup = ''
+    sed -i '1s!$! -I${tl.texaccents.texsource}/source/support/texaccents!' "$out"/bin/*
+  '';
+  texaccents.postUnpack = ''
+    if [[ -f "$out"/source/support/texaccents/grepl.inc ]] ; then
+      sed -i 's!^-include "repl.inc"!-include "repl.sno"!' "$out"/source/support/texaccents/grepl.inc
+    elif [[ -f "$out"/scripts/texaccents/texaccents.sno ]] ; then
+      sed -i -e 's!^-include "host.inc"!-include "host.sno"!' \
+        -e 's/host(2,2)/host(2,host(3))/g' \
+        -e 's/host(2,3)/host(2,host(3) + 1)/g' \
+        "$out"/scripts/texaccents/texaccents.sno
+    fi
+  '';
+
   # flag lua dependency
   texblend.scriptExts = [ "lua" ];
 
