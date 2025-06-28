@@ -8,9 +8,13 @@
 }:
 
 buildNimPackage (
-  finalAttrs: prevAttrs: {
+  finalAttrs: prevAttrs:
+  let
+    date = "2025-05-01";
+  in
+  {
     pname = "nitter";
-    version = "0-unstable-2025-05-01";
+    version = "0-unstable-${date}";
 
     src = fetchFromGitHub {
       owner = "zedeus";
@@ -23,8 +27,8 @@ buildNimPackage (
 
     patches = [
       (replaceVars ./nitter-version.patch {
-        inherit (finalAttrs) version;
-        inherit (finalAttrs.src) rev;
+        version = lib.replaceString "-" "." date;
+        rev = builtins.substring 0 7 finalAttrs.src.rev;
         url = builtins.replaceStrings [ "archive" ".tar.gz" ] [ "commit" "" ] finalAttrs.src.url;
       })
     ];
