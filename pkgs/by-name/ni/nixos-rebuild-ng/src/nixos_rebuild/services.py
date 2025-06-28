@@ -318,6 +318,13 @@ def build_and_activate_system(
     )
 
 
+def edit(flake: Flake | None, flake_flags: Args | None = None) -> None:
+    if flake:
+        nix.edit_flake(flake, flake_flags)
+    else:
+        nix.edit()
+
+
 def list_generations(
     args: argparse.Namespace,
     profile: Profile,
