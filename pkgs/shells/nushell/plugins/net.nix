@@ -21,6 +21,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
+  # there are no tests
+  doCheck = false;
+
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

@@ -23,6 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
 
+  # there are no tests
+  doCheck = false;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
