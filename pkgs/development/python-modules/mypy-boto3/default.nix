@@ -574,8 +574,8 @@ rec {
       "sha256-abALPaOoxM8dvwqd8j41mTT1Zmcn/sEVzlopSMc+fYM=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.38.42"
-      "sha256-w0lnzVTd1djYr8FGTqqEe2Qwwyt0JFWRmcWvPZAGtPE=";
+    buildMypyBoto3Package "glue" "1.38.46"
+      "sha256-8PxTydQM0s17Bf8hE+nDVC5da7S+Fc727d6rsWW5Fa8=";
 
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.38.0"
