@@ -4,6 +4,7 @@
   fetchFromGitHub,
   xxd,
   zlib,
+  llvmPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ xxd ];
 
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ];
 
   buildFlags = [
     "STAR"
