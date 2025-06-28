@@ -13,20 +13,19 @@
 
 buildPythonPackage rec {
   pname = "hcloud";
-  version = "2.5.2";
+  version = "2.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v1vnII5q1bOf/neiNOJPa+t03ma/cjLbxbabo2jQptQ=";
+    hash = "sha256-+9unvxFjf/ryqN6g4IKWX1viwgSfkgrX1prjXvBnbWs=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    future
     requests
     python-dateutil
   ];
