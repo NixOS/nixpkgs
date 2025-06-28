@@ -1,3 +1,5 @@
+{ ... }:
+
 let
   cert =
     pkgs:
@@ -29,7 +31,7 @@ let
       prosodyctl deluser azurediamond@example.com
     '';
 in
-import ../make-test-python.nix {
+{
   name = "prosody";
   nodes = {
     client-a =
