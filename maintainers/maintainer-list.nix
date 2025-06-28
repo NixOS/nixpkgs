@@ -15174,6 +15174,15 @@
     githubId = 59240843;
     name = "Mahyar Mirrashed";
   };
+  maikotan = {
+    email = "maiko.tan.coding@gmail.com";
+    github = "MaikoTan";
+    githubId = 19927330;
+    name = "Maiko Tan";
+    keys = [
+      { fingerprint = "9C68 989F ECF9 8993 3225  96DD 970A 6794 990C 52AE"; }
+    ];
+  };
   majesticmullet = {
     email = "hoccthomas@gmail.com.au";
     github = "MajesticMullet";
