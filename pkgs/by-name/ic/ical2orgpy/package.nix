@@ -21,12 +21,13 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     click
-    future
     icalendar
     pytz
     tzlocal
     recurring-ical-events
   ];
+
+  pythonRemoveDeps = [ "future" ];
 
   nativeCheckInputs = with python3Packages; [
     freezegun
