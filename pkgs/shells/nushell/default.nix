@@ -20,6 +20,9 @@
 }:
 
 let
+  # NOTE: when updating this to a new non-patch version, please also try to
+  # update the plugins. Plugins only work if they are compiled for the same
+  # major/minor version.
   version = "0.105.1";
 in
 rustPlatform.buildRustPackage {
