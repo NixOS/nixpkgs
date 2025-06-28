@@ -19,6 +19,7 @@ let
   cfg = config.services.postfix-tlspol;
 
   format = pkgs.formats.yaml_1_2 { };
+  configFile = format.generate "postfix-tlspol.yaml" cfg.settings;
 in
 
 {
@@ -148,8 +149,7 @@ in
     })
 
     (mkIf cfg.enable {
-      environment.etc."postfix-tlspol/config.yaml".source =
-        format.generate "postfix-tlspol.yaml" cfg.settings;
+      environment.etc."postfix-tlspol/config.yaml".source = configFile;
 
       environment.systemPackages = [ cfg.package ];
 
@@ -172,6 +172,8 @@ in
 
         description = "Postfix DANE/MTA-STS TLS policy socketmap service";
         documentation = [ "https://github.com/Zuplu/postfix-tlspol" ];
+
+        reloadTriggers = [ configFile ];
 
         # https://github.com/Zuplu/postfix-tlspol/blob/main/init/postfix-tlspol.service
         serviceConfig = {
