@@ -13,4 +13,10 @@ if [[ "@darwinMinVersion@" ]]; then
     # xcbuild needs `SDKROOT` to be the name of the SDK, which it sets in its own wrapper,
     # but compilers expect it to point to the absolute path.
     export SDKROOT="$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+
+    # The default Darwin SDK is typically a newer version than the minimum version. Ensure that missing
+    # availability checks do not allow newer features than the deployment target to be used.
+    if [[ "@isClang@" && "${allowUnguardedAvailability-}" = 1 ]]; then
+      NIX_CFLAGS_COMPILE_@suffixSalt@+=" -Werror=unguarded-availability -Werror=unguarded-availability-new"
+    fi
 fi
