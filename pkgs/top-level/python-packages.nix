@@ -6040,6 +6040,8 @@ self: super: with self; {
 
   gotify = callPackage ../development/python-modules/gotify { };
 
+  gotrue = callPackage ../development/python-modules/gotrue { };
+
   govee-ble = callPackage ../development/python-modules/govee-ble { };
 
   govee-led-wez = callPackage ../development/python-modules/govee-led-wez { };
@@ -11703,6 +11705,8 @@ self: super: with self; {
 
   posix-ipc = callPackage ../development/python-modules/posix-ipc { };
 
+  postgrest = callPackage ../development/python-modules/postgrest { };
+
   posthog = callPackage ../development/python-modules/posthog { };
 
   pot = callPackage ../development/python-modules/pot { };
@@ -15228,6 +15232,8 @@ self: super: with self; {
 
   readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
+  realtime = callPackage ../development/python-modules/realtime { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
@@ -17105,6 +17111,8 @@ self: super: with self; {
 
   stopit = callPackage ../development/python-modules/stopit { };
 
+  storage3 = callPackage ../development/python-modules/storage3 { };
+
   stp = toPythonModule (pkgs.stp.override { python3 = self.python; });
 
   stransi = callPackage ../development/python-modules/stransi { };
@@ -17224,6 +17232,14 @@ self: super: with self; {
   sunwatcher = callPackage ../development/python-modules/sunwatcher { };
 
   sunweg = callPackage ../development/python-modules/sunweg { };
+
+  supabase = callPackage ../development/python-modules/supabase { };
+
+  supabase-auth = callPackage ../development/python-modules/supabase-auth { };
+
+  supabase-functions = self.supafunc;
+
+  supafunc = callPackage ../development/python-modules/supafunc { };
 
   superqt = callPackage ../development/python-modules/superqt { };
 
