@@ -1,5 +1,4 @@
 import argparse
-import json
 import logging
 import os
 import sys
@@ -10,8 +9,8 @@ from . import nix
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
 from .models import Action, BuildAttr, Flake, Profile
 from .process import Remote
-from .services import build_and_activate_system, reexec
-from .utils import LogFormatter, tabulate
+from .services import build_and_activate_system, list_generations, reexec
+from .utils import LogFormatter
 
 logger: Final = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -349,20 +348,7 @@ def execute(argv: list[str]) -> None:
             raise AssertionError("DRY_RUN should be a DRY_BUILD alias")
 
         case Action.LIST_GENERATIONS:
-            generations = nix.list_generations(profile)
-            if args.json:
-                print(json.dumps(generations, indent=2))
-            else:
-                headers = {
-                    "generation": "Generation",
-                    "date": "Build-date",
-                    "nixosVersion": "NixOS version",
-                    "kernelVersion": "Kernel",
-                    "configurationRevision": "Configuration Revision",
-                    "specialisations": "Specialisation",
-                    "current": "Current",
-                }
-                print(tabulate(generations, headers=headers))
+            list_generations(args, profile)
 
         case Action.REPL:
             if flake:
