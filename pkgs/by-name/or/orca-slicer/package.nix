@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       webkitgtk_4_0
       wxGTK'
       xorg.libX11
-      opencv
+      opencv.cxxdev
       libnoise
     ]
     ++ lib.optionals withSystemd [ systemd ]

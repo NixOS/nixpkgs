@@ -26,6 +26,10 @@ appimageTools.wrapType2 rec {
   '';
 
   meta = {
+    knownVulnerabilities = [
+      "Uses electron 27 which is EOL and has multiple vulnerabilities"
+      "Has been dropped in Nixpkgs unstable and is unmaintained"
+    ];
     description = "Modified web browser that helps in responsive web development";
     mainProgram = "responsively-desktop";
     homepage = "https://responsively.app/";

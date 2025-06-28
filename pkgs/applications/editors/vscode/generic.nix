@@ -53,6 +53,7 @@
   useVSCodeRipgrep ? false,
   ripgrep,
   hasVsceSign ? false,
+  patchVSCodePath ? true,
 }:
 
 stdenv.mkDerivation (
@@ -262,9 +263,13 @@ stdenv.mkDerivation (
             mkdir -p "$out/share/pixmaps"
             cp "$out/lib/${libraryName}/resources/app/resources/linux/code.png" "$out/share/pixmaps/${iconName}.png"
 
+          ''
+          + (lib.optionalString patchVSCodePath ''
             # Override the previously determined VSCODE_PATH with the one we know to be correct
             sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}"
             grep -q "VSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}" # check if sed succeeded
+          '')
+          + ''
 
             # Remove native encryption code, as it derives the key from the executable path which does not work for us.
             # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
