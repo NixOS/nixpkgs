@@ -9,14 +9,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "unicode";
-  version = "2.9";
+  version = "3.2"; # From `debian/changelog` in the repo
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "garabik";
     repo = "unicode";
-    rev = "v${version}";
-    sha256 = "sha256-FHAlZ5HID/FE9+YR7Dmc3Uh7E16QKORoD8g9jgTeQdY=";
+    # TODO: Change back to "v${version}" after https://github.com/garabik/unicode/issues/27 is fixed.
+    rev = "fa4fa6118d68c693ee14b97df6bf12d2fdbb37df";
+    sha256 = "sha256-wgPJKzblwntRRD2062TPEth28KDycVqWheMTz0v5BVE=";
   };
 
   ucdtxt = fetchurl {
@@ -27,8 +28,11 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postFixup = ''
+    mkdir -p "$out/share/unicode"
+    ln -s "$ucdtxt" "$out/share/unicode/UnicodeData.txt"
+    # We want to keep /usr/share/unicode in the list for the Unihan files
     substituteInPlace "$out/bin/.unicode-wrapped" \
-      --replace "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
+      --replace-fail "'/usr/share/unicode', " "'$out/share/unicode', '/usr/share/unicode', "
   '';
 
   postInstall = ''
