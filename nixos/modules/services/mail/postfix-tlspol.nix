@@ -153,6 +153,12 @@ in
 
       environment.systemPackages = [ cfg.package ];
 
+      users.users.postfix-tlspol = {
+        isSystemUser = true;
+        group = "postfix-tlspol";
+      };
+      users.groups.postfix-tlspol = { };
+
       systemd.services.postfix-tlspol = {
         after = [
           "nss-lookup.target"
@@ -178,7 +184,8 @@ in
           Restart = "always";
           RestartSec = 5;
 
-          DynamicUser = true;
+          User = "postfix-tlspol";
+          Group = "postfix-tlspol";
 
           CacheDirectory = "postfix-tlspol";
           CapabilityBoundingSet = [ "" ];
@@ -208,7 +215,7 @@ in
             ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
               "AF_UNIX"
             ];
-          RestrictNamespace = true;
+          RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
