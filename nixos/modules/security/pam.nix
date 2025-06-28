@@ -2386,14 +2386,14 @@ in
 
     security.pam.services = {
       other.text = ''
-        auth     required pam_warn.so
-        auth     required pam_deny.so
-        account  required pam_warn.so
-        account  required pam_deny.so
-        password required pam_warn.so
-        password required pam_deny.so
-        session  required pam_warn.so
-        session  required pam_deny.so
+        auth     required ${package}/lib/security/pam_warn.so
+        auth     required ${package}/lib/security/pam_deny.so
+        account  required ${package}/lib/security/pam_warn.so
+        account  required ${package}/lib/security/pam_deny.so
+        password required ${package}/lib/security/pam_warn.so
+        password required ${package}/lib/security/pam_deny.so
+        session  required ${package}/lib/security/pam_warn.so
+        session  required ${package}/lib/security/pam_deny.so
       '';
 
       # Most of these should be moved to specific modules.
