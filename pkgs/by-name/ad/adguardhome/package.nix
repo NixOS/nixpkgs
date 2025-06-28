@@ -4,22 +4,23 @@
   buildGoModule,
   buildNpmPackage,
   nixosTests,
+  testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "adguardhome";
-  version = "0.107.62";
+  version = "0.107.63";
   src = fetchFromGitHub {
     owner = "AdguardTeam";
     repo = "AdGuardHome";
-    tag = "v${version}";
-    hash = "sha256-CqXf19DyDFgSnd/dziUq9Gl1d1V20OWE5MTQMi260Zc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yu+rw1is5Egs1O2mww8MGe48Cl74j7RULm4FB2JhQN4=";
   };
 
-  vendorHash = "sha256-lY24TtW4vpMRUzOZmeX3Ip9ikUc4z1HG49DpeECExdk=";
+  vendorHash = "sha256-9w2P3kNSf8I6tGq3K0ULoV+qeq3rUzrevDC+mktfsis=";
 
   dashboard = buildNpmPackage {
-    inherit src;
+    inherit (finalAttrs) src;
     name = "dashboard";
     postPatch = ''
       cd client
@@ -33,25 +34,34 @@ buildGoModule rec {
   };
 
   preBuild = ''
-    cp -r ${dashboard}/build/static build
+    cp -r ${finalAttrs.dashboard}/build/static build
   '';
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/AdguardTeam/AdGuardHome/internal/version.version=${finalAttrs.version}"
+  ];
 
   passthru = {
     updateScript = ./update.sh;
     schema_version = 29;
     tests.adguardhome = nixosTests.adguardhome;
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AdguardTeam/AdGuardHome";
     description = "Network-wide ads & trackers blocking DNS server";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       numkem
       iagoq
       rhoriguchi
       baksa
     ];
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "AdGuardHome";
   };
-}
+})
