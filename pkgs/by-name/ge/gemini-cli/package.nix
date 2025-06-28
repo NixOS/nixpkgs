@@ -57,7 +57,7 @@ buildNpmPackage (finalAttrs: {
     chmod +x "$out/bin/gemini"
   '';
 
-  passthru.updateScript = gitUpdater {};
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "AI agent that brings the power of Gemini directly into your terminal";
