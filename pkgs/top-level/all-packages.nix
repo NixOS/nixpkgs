@@ -10094,8 +10094,6 @@ with pkgs;
 
   ### SERVERS
 
-  adguardhome = callPackage ../servers/adguardhome { };
-
   alerta = callPackage ../servers/monitoring/alerta/client.nix { };
 
   alerta-server = callPackage ../servers/monitoring/alerta { };
