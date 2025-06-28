@@ -177,7 +177,7 @@ in
     };
 
     # Note: this is defined here to avoid the docs depending on `config`
-    services.kabbone_mautrix-whatsapp.settings.homeserver = optOneOf (
+    services.mautrix-whatsapp.settings.homeserver = optOneOf (
       with config.services;
       [
         (lib.mkIf matrix-synapse.enable (mkDefaults {
