@@ -318,9 +318,9 @@ def build_and_activate_system(
     )
 
 
-def edit(flake: Flake | None, flake_flags: Args | None = None) -> None:
+def edit(flake: Flake | None, flake_build_flags: Args | None = None) -> None:
     if flake:
-        nix.edit_flake(flake, flake_flags)
+        nix.edit_flake(flake, flake_build_flags)
     else:
         nix.edit()
 
@@ -355,3 +355,10 @@ def repl(
         nix.repl_flake(flake, flake_build_flags)
     else:
         nix.repl(build_attr, build_flags)
+
+
+def write_version_suffix(build_flags: Args) -> None:
+    nixpkgs_path = nix.find_file("nixpkgs", build_flags)
+    rev = nix.get_nixpkgs_rev(nixpkgs_path)
+    if nixpkgs_path and rev:
+        (nixpkgs_path / ".version-suffix").write_text(rev)
