@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  utils,
   pkgs,
   ...
 }:
@@ -333,9 +334,23 @@ in
       };
     };
 
-    security.pam.services.vsftpd.text = mkIf (cfg.enableVirtualUsers && cfg.userDbPath != null) ''
-      auth required ${config.security.pam.package}/lib/security/pam_userdb.so db=${cfg.userDbPath}
-      account required ${config.security.pam.package}/lib/security/pam_userdb.so db=${cfg.userDbPath}
-    '';
+    security.pam.services.vsftpd = mkIf (cfg.enableVirtualUsers && cfg.userDbPath != null) {
+      useDefaultRules = false;
+      rules =
+        let
+          rules = utils.pam.autoOrderRules [
+            {
+              name = "userdb";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_userdb.so";
+              settings.db = cfg.userDbPath;
+            }
+          ];
+        in
+        {
+          auth = rules;
+          account = rules;
+        };
+    };
   };
 }
