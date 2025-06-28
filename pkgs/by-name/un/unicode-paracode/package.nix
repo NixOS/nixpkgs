@@ -8,6 +8,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
+  # We want `pname = "unicode"` so that `nix run nixpkgs#unicode-paracode -- z` runs the `unicode` binary.
   pname = "unicode";
   version = "3.2"; # From `debian/changelog` in the repo
   pyproject = true;
@@ -39,6 +40,15 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     installManPage paracode.1 unicode.1
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    echo Testing: $out/bin/unicode --brief z
+    diff -u <(echo z U+007A LATIN SMALL LETTER Z) <($out/bin/unicode --brief z 2>&1) && echo Success
+
+    runHook postCheck
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
