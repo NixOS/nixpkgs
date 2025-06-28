@@ -1,22 +1,22 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
   stdenv,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "gcsfuse";
-  version = "2.5.1";
+  version = "2.12.2";
 
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
     rev = "v${version}";
-    hash = "sha256-4UzRg6fNKBrTSoimJ9jURW9oPRhUOAUDMG3JaM7f100=";
+    hash = "sha256-WuCrwL7iM9U4qXtLNntLeOxELe+tR7dsbsJyvdLHVaI=";
   };
 
-  vendorHash = "sha256-QrpILFzgUQwmrvjCdtrlgq1zSW7f82qMHsifI39WaB0=";
+  vendorHash = "sha256-aj3NvgKuaBiAfPNLYK9g7kzBcdeMkC4I6jjtvFHxsU8=";
 
   subPackages = [
     "."
