@@ -49,7 +49,10 @@ import ./make-test-python.nix (
   {
     name = "minio";
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ bachp ];
+      maintainers = [
+        bachp
+        ryan4yin
+      ];
     };
 
     nodes = {
