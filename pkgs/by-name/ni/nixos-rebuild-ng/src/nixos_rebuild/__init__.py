@@ -15,6 +15,7 @@ from .services import (
     list_generations,
     reexec,
     repl,
+    write_version_suffix,
 )
 from .utils import LogFormatter
 
@@ -315,10 +316,7 @@ def execute(argv: list[str]) -> None:
     flake = Flake.from_arg(args.flake, target_host)
 
     if can_run and not flake:
-        nixpkgs_path = nix.find_file("nixpkgs", build_flags)
-        rev = nix.get_nixpkgs_rev(nixpkgs_path)
-        if nixpkgs_path and rev:
-            (nixpkgs_path / ".version-suffix").write_text(rev)
+        write_version_suffix(build_flags)
 
     match action:
         case (
@@ -348,7 +346,7 @@ def execute(argv: list[str]) -> None:
             )
 
         case Action.EDIT:
-            edit(flake, flake_build_flags)
+            edit(flake=flake, flake_build_flags=flake_build_flags)
 
         case Action.DRY_RUN:
             raise AssertionError("DRY_RUN should be a DRY_BUILD alias")
