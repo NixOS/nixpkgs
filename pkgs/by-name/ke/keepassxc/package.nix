@@ -142,7 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXi
       libXtst
       libargon2
-      libsForQt5.kio
       libsForQt5.qtbase
       libsForQt5.qtsvg
       minizip
