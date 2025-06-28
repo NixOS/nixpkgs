@@ -24,18 +24,17 @@ buildPythonPackage rec {
   pname = "clldutils";
   version = "3.24.2";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "clld";
     repo = "clldutils";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-xIs6Lq9iDdcM3j51F27x408oUldvy5nlvVdbrAS5Jz0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     bibtexparser_2
     colorlog
@@ -55,11 +54,11 @@ buildPythonPackage rec {
     git
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/clld/clldutils/blob/${src.rev}/CHANGES.md";
+  meta = {
+    changelog = "https://github.com/clld/clldutils/blob/${src.tag}/CHANGES.md";
     description = "Utilities for clld apps without the overhead of requiring pyramid, rdflib et al";
     homepage = "https://github.com/clld/clldutils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ melling ];
   };
 }
