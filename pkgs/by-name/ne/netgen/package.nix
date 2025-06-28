@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "6.2.2501";
+  version = "6.2.2504";
 
   src = fetchFromGitHub {
     owner = "ngsolve";
     repo = "netgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IzYulT3bo7XZiEEy8vNCct0zqHCnbQaH+y4fHMorzZw=";
+    hash = "sha256-N4mmh2H2qvc+3Pa9CHm38arViI76Qvwp8fOVGZbMv1M=";
   };
 
   patches = [
@@ -100,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     imagemagick
     cmake
     python3Packages.pybind11-stubgen
+    python3Packages.pythonImportsCheckHook
   ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
@@ -163,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $out/Applications/${finalAttrs.pname}.app/Contents/{MacOS,Resouces}
       substituteInPlace $out/Info.plist --replace-fail "Netgen1" "netgen"
       mv $out/Info.plist $out/Applications/${finalAttrs.pname}.app/Contents
-      mv $out/Netgen.icns $out/Applications/${finalAttrs.pname}.app/Contents/Resouces
+      mv $out/Netgen.icns $out/Applications/${finalAttrs.pname}.app/Contents/Resources
       ln -s $out/bin/netgen $out/Applications/${finalAttrs.pname}.app/Contents/MacOS/netgen
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -194,7 +195,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pytest
     python3Packages.pytest-check
     python3Packages.pytest-mpi
-    python3Packages.pythonImportsCheckHook
     mpiCheckPhaseHook
   ];
 

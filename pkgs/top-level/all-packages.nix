@@ -3059,6 +3059,10 @@ with pkgs;
     garage_0_9_4
     garage_1_2_0
     garage_1_x
+    garage_1
+
+    garage_2_0_0
+    garage_2
     ;
 
   gauge-unwrapped = callPackage ../development/tools/gauge { };
@@ -14486,6 +14490,12 @@ with pkgs;
   vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
+
+  code-cursor = callPackage ../by-name/co/code-cursor/package.nix {
+    vscode-generic = ../applications/editors/vscode/generic.nix;
+  };
+  code-cursor-fhs = code-cursor.fhs;
+  code-cursor-fhsWithPackages = code-cursor.fhsWithPackages;
 
   windsurf = callPackage ../by-name/wi/windsurf/package.nix {
     vscode-generic = ../applications/editors/vscode/generic.nix;

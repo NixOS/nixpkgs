@@ -1459,7 +1459,7 @@ in
               # legacy support (i.e. static files and directories in cfg.package)
               rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[s${
                 optionalString (!ocmProviderIsNotAStaticDirAnymore) "m"
-              }]-provider\/.+|.+\/richdocumentscode\/proxy) /index.php$request_uri;
+              }]-provider\/.+|.+\/richdocumentscode(_arm64)?\/proxy) /index.php$request_uri;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
               fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
               set $path_info $fastcgi_path_info;
@@ -1475,7 +1475,7 @@ in
               fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
             '';
           };
-          "~ \\.(?:css|js|mjs|svg|gif|png|jpg|jpeg|ico|wasm|tflite|map|html|ttf|bcmap|mp4|webm|ogg|flac)$".extraConfig =
+          "~ \\.(?:css|js|mjs|svg|gif|ico|jpg|jpeg|png|webp|wasm|tflite|map|html|ttf|bcmap|mp4|webm|ogg|flac)$".extraConfig =
             ''
               try_files $uri /index.php$request_uri;
               expires 6M;
@@ -1513,7 +1513,6 @@ in
             add_header X-Content-Type-Options nosniff;
             add_header X-XSS-Protection "1; mode=block";
             add_header X-Robots-Tag "noindex, nofollow";
-            add_header X-Download-Options noopen;
             add_header X-Permitted-Cross-Domain-Policies none;
             add_header X-Frame-Options sameorigin;
             add_header Referrer-Policy no-referrer;
@@ -1529,7 +1528,7 @@ in
           gzip_comp_level 4;
           gzip_min_length 256;
           gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
-          gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
+          gzip_types application/atom+xml text/javascript application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/wasm application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
 
           ${optionalString cfg.webfinger ''
             rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
