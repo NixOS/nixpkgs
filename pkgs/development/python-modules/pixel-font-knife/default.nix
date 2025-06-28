@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "0.0.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.12";
 
   src = fetchPypi {
     pname = "pixel_font_knife";
