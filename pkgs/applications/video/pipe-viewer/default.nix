@@ -43,13 +43,13 @@ let
 in
 buildPerlModule rec {
   pname = "pipe-viewer";
-  version = "0.5.5";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "pipe-viewer";
     rev = version;
-    hash = "sha256-NVUZn02rBhOQyIfBp/BArbL2YY19TuDTwfiQH2pEWzk=";
+    hash = "sha256-ZcO07zDMXSFOWIC0XHqeqjgPJXzWWh8G2szTkvF8OjM=";
   };
 
   nativeBuildInputs = [ makeWrapper ] ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];

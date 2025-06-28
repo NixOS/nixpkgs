@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-AZp6Mbm9Fg+EVr31oJe6/Z8LIwapYhos8JpZzPMiwz0=";
 
-  meta = with lib; {
+  meta = {
     description = "Run Windows programs with Proton";
     changelog = "https://github.com/caverym/proton-caller/releases/tag/${version}";
     homepage = "https://github.com/caverym/proton-caller";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kho-dialga ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "proton-call";
   };
 }

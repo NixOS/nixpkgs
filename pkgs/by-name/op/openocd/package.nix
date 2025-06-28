@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
       "-Wno-error=cpp"
@@ -97,6 +99,5 @@ stdenv.mkDerivation rec {
       prusnak
     ];
     platforms = platforms.unix ++ platforms.windows;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

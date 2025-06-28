@@ -21,7 +21,7 @@ python3.pkgs.buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Stunkymonkey";
-    repo = pname;
+    repo = "nautilus-open-any-terminal";
     tag = version;
     hash = "sha256-oiyXDeunAgs3uCrqHKdTcOvXD4vmx8Z3uFutNYpGxtc=";
   };

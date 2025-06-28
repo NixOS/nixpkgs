@@ -30,7 +30,7 @@ buildNpmPackage rec {
   ];
 
   meta = {
-    description = "An open source Azure Storage API compatible server";
+    description = "Open source Azure Storage API compatible server";
     homepage = "https://github.com/Azure/Azurite";
     changelog = "https://github.com/Azure/Azurite/releases/tag/v${version}";
     license = lib.licenses.mit;

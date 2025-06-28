@@ -2,31 +2,40 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
   installShellFiles,
+  openssl,
+  cacert,
   stdenv,
   curl,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "miniserve";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
-    rev = "v${version}";
-    hash = "sha256-jrQnmIYap5eHVWPqoRsXVroB0VWLKxesi3rB/WylR0U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HHTNBqMYf7WrqJl5adPmH87xfrzV4TKJckpwTPiiw7w=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-SosRbtk5gBcOVropy+HVFFmLLexu29GjchC6zFweiYw=";
+  cargoHash = "sha256-Rjql9cyw7RS66HE50iUrjNvS5JRhR1HBaalOY9eDGH4=";
 
   nativeBuildInputs = [
+    pkg-config
     installShellFiles
   ];
 
+  buildInputs = [ openssl ];
+
   nativeCheckInputs = [
     curl
+    cacert
   ];
 
   checkFlags = [
@@ -49,12 +58,21 @@ rustPlatform.buildRustPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
-    changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/svenstaro/miniserve/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      defelo
+    ];
     mainProgram = "miniserve";
   };
-}
+})

@@ -31,18 +31,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "0.5.0-rc.5";
+  version = "0.5.0-rc.6";
 
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Oq2scBu3Ewao828BT1QGffqIqF5WoH9HMXEXKg1YU0o=";
+    hash = "sha256-xK/jTURQzFJ1FkF1E9cItTxXAgXgTwAiA9/8aE51FvU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bjjGR3++CaDEtlsQj9GgdViCEB5l72sI868uTFBtIwg=";
+  cargoHash = "sha256-+7k1dtrXdonFDXa2Z/qVo4n1hZRmMWEQKKlffki8+/k=";
 
   nativeBuildInputs = [
     pkg-config
@@ -71,6 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures =
     [
       "brotli_compression"
+      "direct_tls"
       "element_hacks"
       "gzip_compression"
       "media_thumbnail"
@@ -87,6 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ++ lib.optional enableLiburing "io_uring";
 
   passthru = {
+    rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
     updateScript = nix-update-script { };
     tests =
       {

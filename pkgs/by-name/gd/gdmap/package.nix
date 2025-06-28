@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://gitlab.com/sjohannes/gdmap";
-    description = "A tool to visualize disk space (GTK 3 port of Original)";
+    description = "Tool to visualize disk space (GTK 3 port of Original)";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

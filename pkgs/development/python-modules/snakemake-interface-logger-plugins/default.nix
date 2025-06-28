@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
+    repo = "snakemake-interface-logger-plugins";
     tag = "v${version}";
     hash = "sha256-VHbta+R2a/K2L03IRu/Ya7dJzshIAvyK9cNIRbx8QqM=";
   };

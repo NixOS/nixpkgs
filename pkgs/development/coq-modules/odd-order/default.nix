@@ -19,28 +19,15 @@ mkCoqDerivation {
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch mathcomp.character.version [
-      {
-        case = (range "2.2.0" "2.4.0");
-        out = "2.2.0";
+    lib.switch mathcomp.character.version (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: case: { inherit case out; }) {
+        "2.2.0" = (range "2.2.0" "2.4.0");
+        "2.1.0" = (range "2.1.0" "2.3.0");
+        "1.14.0" = (range "1.13.0" "1.15.0");
+        "1.13.0" = (range "1.12.0" "1.14.0");
+        "1.12.0" = (range "1.10.0" "1.12.0");
       }
-      {
-        case = (range "2.1.0" "2.3.0");
-        out = "2.1.0";
-      }
-      {
-        case = (range "1.13.0" "1.15.0");
-        out = "1.14.0";
-      }
-      {
-        case = (range "1.12.0" "1.14.0");
-        out = "1.13.0";
-      }
-      {
-        case = (range "1.10.0" "1.12.0");
-        out = "1.12.0";
-      }
-    ] null;
+    )) null;
 
   propagatedBuildInputs = [
     mathcomp.character

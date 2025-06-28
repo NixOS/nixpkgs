@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "nickgerace";
-    repo = pname;
+    repo = "gfold";
     rev = version;
     hash = "sha256-7PnqhS80Ozh5ZQNQ8iYgCiFT0JDLzhA09NV1HgrCOww=";
   };

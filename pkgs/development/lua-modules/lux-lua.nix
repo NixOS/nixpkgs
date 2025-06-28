@@ -1,5 +1,4 @@
 {
-  fetchFromGitHub,
   gnupg,
   gpgme,
   isLuaJIT,
@@ -7,6 +6,7 @@
   libgit2,
   libgpg-error,
   lua,
+  lux-cli,
   nix,
   openssl,
   pkg-config,
@@ -20,22 +20,16 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "lux-lua";
 
-  version = "0.1.5";
+  version = lux-cli.version;
 
-  src = fetchFromGitHub {
-    owner = "nvim-neorocks";
-    repo = "lux";
-    # NOTE: Lux's tags represent the lux-cli version, which may differ from the lux-lua version
-    tag = "v0.5.0";
-    hash = "sha256-maVnRaEuB8q7wUukDGwB4d+go+oerkoWsnb5swPagMY=";
-  };
+  src = lux-cli.src;
 
   buildAndTestSubdir = "lux-lua";
   buildNoDefaultFeatures = true;
   buildFeatures = [ luaFeature ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-CWPHE+j6RDtVrnYzakKecIM5dXuHuWaWK+T9xFEdmz8=";
+  cargoHash = lux-cli.cargoHash;
 
   nativeBuildInputs = [
     pkg-config

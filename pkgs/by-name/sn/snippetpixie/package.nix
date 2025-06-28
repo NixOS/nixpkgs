@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "bytepixie";
-    repo = pname;
+    repo = "snippetpixie";
     rev = version;
     sha256 = "0gs3d9hdywg4vcfbp4qfcagfjqalfgw9xpvywg4pw1cm3rzbdqmz";
   };

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   robotframework,
+  robotframework-assertion-engine,
   robotframework-excellib,
   pytestCheckHook,
 }:
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     robotframework
+    robotframework-assertion-engine
     robotframework-excellib
   ];
 

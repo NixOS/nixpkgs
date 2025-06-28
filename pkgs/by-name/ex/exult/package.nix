@@ -18,16 +18,16 @@
 
 stdenv.mkDerivation rec {
   pname = "exult";
-  version = "1.10.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "exult";
     repo = "exult";
     rev = "v${version}";
-    hash = "sha256-NlvtYtmJNYhOC1BtIxIij3NEQHWAGOeD4XgRq7evjzE=";
+    hash = "sha256-SZwYaqTTWESNRphXefa3JyH988y3WiaIr12yORhiFow=";
   };
 
-  # We can't use just DESTDIR because with it we'll have /nix/store/...-exult-1.10.1/nix/store/...-exult-1.10.1/bin
+  # We can't use just DESTDIR because with it we'll have /nix/store/...-exult-1.12.0/nix/store/...-exult-1.12.0/bin
   postPatch = ''
     substituteInPlace macosx/macosx.am \
       --replace-fail DESTDIR NIX_DESTDIR

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KejPi";
     repo = "AbracaDABra";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4M/LrM1Edu9isvpKPArir7UwPJ0u0Yjl4ttFtxcqYtM=";
   };
 
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     "-DSOAPYSDR=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DAB/DAB+ radio application";
     homepage = "https://github.com/KejPi/AbracaDABra";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ markuskowa ];
     mainProgram = "AbracaDABra";
   };
 }

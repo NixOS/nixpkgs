@@ -15,6 +15,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
   responses,
 }:
 
@@ -27,14 +28,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "p1c2u";
-    repo = pname;
+    repo = "jsonschema-spec";
     tag = version;
     hash = "sha256-rCepDnVAOEsokKjWCuqDYbGIq6/wn4rsQRx5dXTUsYo=";
   };
 
   postPatch = ''
-    sed -i "/^--cov/d" pyproject.toml
-
     substituteInPlace pyproject.toml \
       --replace 'referencing = ">=0.28.0,<0.30.0"' 'referencing = ">=0.28.0"'
   '';
@@ -54,6 +53,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     responses
   ];
 

@@ -91,7 +91,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.13.0";
+  version = "8.14.1";
 
   src = fetchurl {
     urls = [
@@ -100,13 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-Sgk5eaPC0C3i+8AFSaMncQB/LngDLG+qXs0vep4VICU=";
+    hash = "sha256-9GGaHiR0xLv+3IinwhkSCcgzS0j6H05T/VhMwS6RIN0=";
   };
-
-  patches = [
-    # Backport of https://github.com/curl/curl/commit/5fbd78eb2dc4afbd8884e8eed27147fc3d4318f6
-    ./0001-http2-fix-stream-window-size-after-unpausing.patch
-  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
@@ -138,6 +133,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
   ] ++ lib.optionals stdenv.hostPlatform.isOpenBSD [ autoreconfHook ];
+
+  nativeCheckInputs = [
+    # See https://github.com/curl/curl/pull/16928
+    openssl'
+  ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of

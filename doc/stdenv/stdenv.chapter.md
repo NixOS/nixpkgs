@@ -261,7 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
     util-linux
     qemu
   ];
-  checkPhase = ''[elided]'';
+  # `checkPhase` elided
 })
 ```
 
@@ -598,6 +598,8 @@ Additional file types can be supported by setting the `unpackCmd` variable (see 
 ##### `srcs` / `src` {#var-stdenv-src}
 
 The list of source files or directories to be unpacked or copied. One of these must be set. Note that if you use `srcs`, you should also set `sourceRoot` or `setSourceRoot`.
+
+These should ideally actually be sources and licensed under a FLOSS license.  If you have to use a binary upstream release or package non-free software, make sure you correctly mark your derivation as such in the [`sourceProvenance`](#var-meta-sourceProvenance) and [`license`](#sec-meta-license) fields of the [`meta`](#chap-meta) section.
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 
@@ -1619,6 +1621,22 @@ Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Execut
 
 Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
 If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
+
+#### `strictflexarrays1` {#strictflexarrays1}
+
+This flag adds the `-fstrict-flex-arrays=1` compiler option, which reduces the cases the compiler treats as "flexible arrays" to those declared with length `[1]`, `[0]` or (the correct) `[]`. This increases the coverage of fortify checks, because such arrays declared as the trailing element of a structure can normally not have their intended length determined by the compiler.
+
+Enabling this flag on packages that still use length declarations of flexible arrays >1 may cause the package to fail to compile citing accesses beyond the bounds of an array or even crash at runtime by detecting an array access as an "overrun". Few projects still use length declarations of flexible arrays >1.
+
+Disabling `strictflexarrays1` implies disablement of `strictflexarrays3`.
+
+#### `strictflexarrays3` {#strictflexarrays3}
+
+This flag adds the `-fstrict-flex-arrays=3` compiler option, which reduces the cases the compiler treats as "flexible arrays" to only those declared with length as (the correct) `[]`. This increases the coverage of fortify checks, because such arrays declared as the trailing element of a structure can normally not have their intended length determined by the compiler.
+
+Enabling this flag on packages that still use non-empty length declarations for flexible arrays may cause the package to fail to compile citing accesses beyond the bounds of an array or even crash at runtime by detecting an array access as an "overrun". Many projects still use such non-empty length declarations for flexible arrays.
+
+Enabling this flag implies enablement of `strictflexarrays1`. Disabling this flag does not imply disablement of `strictflexarrays1`.
 
 #### `shadowstack` {#shadowstack}
 

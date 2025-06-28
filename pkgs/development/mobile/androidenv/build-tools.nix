@@ -23,7 +23,7 @@ deployAndroidPackage {
       pkgs.ncurses5
       pkgs.libcxx
     ]
-    ++ lib.optionals (os == "linux" && stdenv.isx86_64) (
+    ++ lib.optionals (os == "linux" && stdenv.hostPlatform.isx86_64) (
       with pkgsi686Linux;
       [
         glibc

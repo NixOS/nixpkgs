@@ -2,10 +2,10 @@
   lib,
   stdenv,
   buildPackages,
+  pkgs,
   newScope,
   overrideCC,
   stdenvNoLibc,
-  libcCross,
 }:
 
 lib.makeScope newScope (
@@ -31,9 +31,9 @@ lib.makeScope newScope (
       else
         buildPackages.gccWithoutTargetLibc.override (old: {
           bintools = old.bintools.override {
-            libc = libcCross;
+            libc = pkgs.libc;
           };
-          libc = libcCross;
+          libc = pkgs.libc;
         })
     );
 

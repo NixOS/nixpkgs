@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   withLinuxHeaders ? true,
+  linuxHeaders ? null,
   profilingLibraries ? false,
   withGd ? false,
   enableCET ? if stdenv.hostPlatform.isx86_64 then "permissive" else false,
@@ -19,7 +20,7 @@ let
   ];
 in
 
-(callPackage ./common.nix { inherit stdenv; } {
+(callPackage ./common.nix { inherit stdenv linuxHeaders; } {
   inherit
     withLinuxHeaders
     withGd
@@ -64,6 +65,7 @@ in
       "fortify"
       "pie"
       "stackprotector"
+      "strictflexarrays3"
     ];
 
     env = (previousAttrs.env or { }) // {

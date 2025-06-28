@@ -6,6 +6,7 @@
   easyeffects,
   gjs,
   glib,
+  gnome-menus,
   nautilus,
   gobject-introspection,
   hddtemp,
@@ -47,6 +48,17 @@ in
 # the upstream repository's sources.
 super:
 lib.trivial.pipe super [
+  (patchExtension "apps-menu@gnome-shell-extensions.gcampax.github.com" (old: {
+    patches = [
+      (replaceVars
+        ./extensionOverridesPatches/apps-menu_at_gnome-shell-extensions.gcampax.github.com.patch
+        {
+          gmenu_path = "${gnome-menus}/lib/girepository-1.0";
+        }
+      )
+    ];
+  }))
+
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
   }))
@@ -130,7 +142,6 @@ lib.trivial.pipe super [
         xdg_utils = xdg-utils;
         gtk_update_icon_cache = "${gtk4.out}/bin/gtk4-update-icon-cache";
         update_desktop_database = "${desktop-file-utils.out}/bin/update-desktop-database";
-        xdg_user_dirs = lib.getExe xdg-user-dirs;
         nautilus_gsettings_path = glib.getSchemaPath nautilus;
       })
     ];
@@ -204,4 +215,18 @@ lib.trivial.pipe super [
         --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
     '';
   }))
+
+  (patchExtension "pwcalc@thilomaurer.de" {
+    postPatch = ''
+      # remove unused dangling symlink
+      rm settings-importexport.ui
+    '';
+  })
+
+  (patchExtension "TeaTimer@zener.sbg.at" {
+    postPatch = ''
+      # remove unused dangling symlink
+      rm utilities-teatime.svg
+    '';
+  })
 ]

@@ -69,13 +69,13 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/accerciser";
     changelog = "https://gitlab.gnome.org/GNOME/accerciser/-/blob/${version}/NEWS?ref_type=tags";
     description = "Interactive Python accessibility explorer";
     mainProgram = "accerciser";
-    teams = [ teams.gnome ];
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

@@ -4,7 +4,7 @@
   buildGhidraExtension,
 }:
 let
-  version = "3.0.5";
+  version = "3.0.6";
 in
 buildGhidraExtension {
   pname = "findcrypt";
@@ -14,7 +14,7 @@ buildGhidraExtension {
     owner = "antoniovazquezblanco";
     repo = "GhidraFindcrypt";
     rev = "v${version}";
-    hash = "sha256-gWVYy+PWpNXlcgD83jap4IFRv66qdhloOwvpQVU2TcI=";
+    hash = "sha256-VWi1MP72Vl4XCrbTvRA6qYPk2QyvRyVb9N8QQ/Zml0A=";
   };
 
   meta = {

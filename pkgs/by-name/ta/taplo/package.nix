@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "taplo";
-  version = "0.9.3";
+  version = "0.10.0";
 
   src = fetchCrate {
     inherit version;
     pname = "taplo-cli";
-    hash = "sha256-dNGQbaIfFmgXh2AOcaE74BTz7/jaiBgU7Y1pkg1rV7U=";
+    hash = "sha256-iKc4Nu7AZE1LSuqXffi3XERbOqZMOkI3PV+6HaJzh4c=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-7u7ZyS+5QIGfXKNVJZLzGXoMSI2DHSrD1AEtPttS22Q=";
+  cargoHash = "sha256-tvijtB5fwOzQnnK/ClIvTbjCcMeqZpXcRdWWKZPIulM=";
 
   nativeBuildInputs = [
     pkg-config

@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   version = "1.2.2";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "libsndfile";
+    repo = "libsndfile";
     rev = version;
     hash = "sha256-MOOX/O0UaoeMaQPW9PvvE0izVp+6IoE5VbtTx0RvMkI=";
   };
@@ -94,13 +94,13 @@ stdenv.mkDerivation rec {
     lame = (lame.override { sndfileFileIOSupport = true; });
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library for reading and writing files containing sampled sound";
     homepage = "https://libsndfile.github.io/libsndfile/";
     changelog = "https://github.com/libsndfile/libsndfile/releases/tag/${version}";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.all;
 
     longDescription = ''
       Libsndfile is a C library for reading and writing files containing

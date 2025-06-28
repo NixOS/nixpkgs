@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "albertogeniola";
-    repo = pname;
+    repo = "elmax-api";
     tag = "v${version}";
     hash = "sha256-BYVfP8B+p4J4gW+64xh9bT9sDcu/lk0R+MvLsYLwRfQ=";
   };

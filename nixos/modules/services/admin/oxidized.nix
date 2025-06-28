@@ -124,7 +124,7 @@ in
         };
 
         "${cfg.dataDir}/.config/oxidized/config" = {
-          L = {
+          "L+" = {
             argument = "${cfg.configFile}";
             user = cfg.user;
             group = cfg.group;
@@ -134,7 +134,7 @@ in
       }
       // lib.optionalAttrs (cfg.routerDB != null) {
         "${cfg.dataDir}/.config/oxidized/router.db" = {
-          L = {
+          "L+" = {
             argument = "${cfg.routerDB}";
             user = cfg.user;
             group = cfg.group;

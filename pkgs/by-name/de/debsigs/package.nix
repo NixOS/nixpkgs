@@ -1,4 +1,5 @@
 {
+  binutils,
   lib,
   perlPackages,
   fetchFromGitLab,
@@ -16,6 +17,11 @@ perlPackages.buildPerlPackage rec {
   };
 
   sourceRoot = "${src.name}/perl";
+
+  postPatch = ''
+    substituteInPlace arf.pm \
+      --replace-fail /usr/bin/ar ${binutils.bintools}/bin/ar
+  '';
 
   meta = {
     description = "Manipulate the cryptographic signatures stored inside a .deb file";

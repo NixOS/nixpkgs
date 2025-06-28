@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "pgscv";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "CHERTS";
     repo = "pgscv";
     tag = "v${version}";
-    hash = "sha256-6qhJZHyVtEI4+pqi0dgagDC2RaISV9g/ygrezJO57Sk=";
+    hash = "sha256-jUTHaZvJ6O3dVhBGO+ZFT9A7KmKieR2viGhZXwOv5S8=";
   };
 
-  vendorHash = "sha256-KahDpLwk+6KXaIfvjr7+nkFuEV4Dw3pyshkJ5XUEdUg=";
+  vendorHash = "sha256-v4Xi2R+q2jGD3Fy6xvKNRaf+P725acr+tvdDxod2KiI=";
 
   ldflags = [
     "-X=main.appName=pgscv"

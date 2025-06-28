@@ -17,19 +17,19 @@
   syrupy,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-ollama==${version}";
-    hash = "sha256-GRaWwUR26yZqjtO5f5p8abj/4KSrQE2uGAECGjeDxPY=";
+    hash = "sha256-YxcxVyiPEZPvO4NyeDp8nTVfbxlOCLClWCmAlL5PPi0=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain-core"
   ];
 
@@ -60,15 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_ollama" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-ollama==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-ollama==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-ollama==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Integration package connecting Ollama and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/ollama";
     license = lib.licenses.mit;

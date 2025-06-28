@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A CLI tool to convert clang-tidy diagnostics into SARIF";
+    description = "CLI tool to convert clang-tidy diagnostics into SARIF";
     homepage = "https://psastras.github.io/sarif-rs";
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "clang-tidy-sarif";

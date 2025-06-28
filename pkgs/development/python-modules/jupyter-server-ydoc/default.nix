@@ -41,7 +41,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  passthru.tests = jupyter-collaboration.tests;
+  passthru.tests = jupyter-collaboration;
 
   meta = {
     description = "Jupyter-server extension integrating collaborative shared models";

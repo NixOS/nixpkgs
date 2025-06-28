@@ -45,12 +45,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cast media files to UPnP/DLNA Media Renderers and Smart TVs";
     homepage = "https://github.com/alexballas/go2tv";
     changelog = "https://github.com/alexballas/go2tv/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gdamjan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gdamjan ];
     mainProgram = pname;
   };
 }

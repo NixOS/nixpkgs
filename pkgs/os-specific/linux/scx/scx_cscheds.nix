@@ -77,6 +77,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       pkg-config
       zstd
       protobuf
+      llvmPackages.libllvm
     ]
     ++ bpftools.buildInputs
     ++ bpftools.nativeBuildInputs;
@@ -125,8 +126,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  # Enable this when default kernel in nixpkgs is 6.12+
-  doCheck = false;
+  doCheck = true;
 
   meta = scx-common.meta // {
     description = "Sched-ext C userspace schedulers";

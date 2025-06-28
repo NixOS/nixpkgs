@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-ge-bin";
-  version = "GE-Proton10-1";
+  version = "GE-Proton10-4";
 
   src = fetchzip {
     url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
-    hash = "sha256-sGKmfdxZK2quI7QamIGRaW1/ElwS/gJPeE4Tvh6icUo=";
+    hash = "sha256-Si/CQ2PINfhmsC+uW3iFBUoSczZdkqwCZ8FAFuipu68=";
   };
 
   dontUnpack = true;
@@ -70,6 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/GloriousEggroll/proton-ge-custom";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      Gliczy
       NotAShelf
       Scrumplex
       shawn8901

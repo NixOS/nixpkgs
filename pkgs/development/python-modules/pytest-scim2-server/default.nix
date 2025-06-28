@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-scim2-server";
-  version = "0.1.3";
+  version = "0.1.5";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pytest_scim2_server";
     inherit version;
-    hash = "sha256-iZrKKUfbqAAhugSNhqiCy6mVBoXxa0yruiQzHg0pIDY=";
+    hash = "sha256-5jsjVtxiSF3cu9useDEmwQ45PqJAZmfw7OUIZkCi6gQ=";
   };
 
   build-system = [ hatchling ];

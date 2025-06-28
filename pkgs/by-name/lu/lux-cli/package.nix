@@ -1,11 +1,11 @@
 {
+  fetchFromGitHub,
   gnupg,
   gpgme,
   installShellFiles,
   lib,
   libgit2,
   libgpg-error,
-  luaPackages,
   luajit,
   makeWrapper,
   nix,
@@ -17,13 +17,18 @@
 rustPlatform.buildRustPackage rec {
   pname = "lux-cli";
 
-  version = "0.5.0";
+  version = "0.7.3";
 
-  src = luaPackages.lux-lua.src;
+  src = fetchFromGitHub {
+    owner = "nvim-neorocks";
+    repo = "lux";
+    tag = "v0.7.3";
+    hash = "sha256-d/WznA6BRduQJOFlE+ll1H7XtGXs9BPrhAKST09Lh0s=";
+  };
 
   buildAndTestSubdir = "lux-cli";
   useFetchCargoVendor = true;
-  cargoHash = luaPackages.lux-lua.cargoHash;
+  cargoHash = "sha256-B1Fu5KWLL/XuUvIROPh0huLw4/OHe/c+LC0/gRFpBnc=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -74,7 +79,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://nvim-neorocks.github.io/";
     changelog = "https://github.com/nvim-neorocks/lux/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mrcjkb
     ];

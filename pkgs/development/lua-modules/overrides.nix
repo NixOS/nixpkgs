@@ -39,6 +39,7 @@
   mariadb,
   mpfr,
   neovim-unwrapped,
+  oniguruma,
   openldap,
   openssl,
   pcre,
@@ -179,11 +180,11 @@ in
 
       # TODO: Figure out why 2 files extra
       substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---executable---1-+-args-{-\'fd\'-} \
-        --replace-fail "111" "113"
+        --replace-fail "112" "114"
 
       # TODO: Figure out why 2 files extra
       substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---preview-should-work-after-chdir-#1864 \
-        --replace-fail "110" "112"
+        --replace-fail "111" "113"
 
       make test
 
@@ -376,6 +377,15 @@ in
   lrexlib-gnu = prev.lrexlib-gnu.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       gnulib
+    ];
+  });
+
+  lrexlib-oniguruma = prev.lrexlib-oniguruma.overrideAttrs (oa: {
+    externalDeps = [
+      {
+        name = "ONIG";
+        dep = oniguruma;
+      }
     ];
   });
 
@@ -791,10 +801,12 @@ in
   });
 
   neorg = prev.neorg.overrideAttrs (oa: {
+    # Relax dependencies
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
-        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim',"
+        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim'," \
+        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim',"
     '';
   });
 
@@ -947,6 +959,20 @@ in
     })
   ) { };
 
+  rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs (oa: {
+
+    doCheck = true;
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+    ];
+    checkPhase = ''
+      runHook preCheck
+      busted spec
+      runHook postCheck
+    '';
+  });
+
   rtp-nvim = prev.rtp-nvim.overrideAttrs (oa: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
@@ -972,6 +998,18 @@ in
       runHook preCheck
       busted --lua=nlua
       runHook postCheck
+    '';
+  });
+
+  sofa = prev.sofa.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+      installShellFiles
+    ];
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd sofa \
+        --bash <($out/bin/sofa --completion bash) \
+        --fish <($out/bin/sofa --completion fish) \
+        --zsh <($out/bin/sofa --completion zsh)
     '';
   });
 

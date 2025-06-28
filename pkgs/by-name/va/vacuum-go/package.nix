@@ -7,17 +7,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "vacuum-go";
-  version = "0.16.8";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "daveshanley";
     repo = "vacuum";
     # using refs/tags because simple version gives: 'the given path has multiple possibilities' error
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I80nJ8RcC1nicMfi7tcMfyi63zZ9L5zaOCCu72j5G5A=";
+    hash = "sha256-IpJI+RD5TNsYaZhf3U/VD2CqW5ebutKvZRUOrwD2rGU=";
   };
 
-  vendorHash = "sha256-sy9BfD05KEMnRMYbgcmHqNeW/vDuk0FTVjhk14RH8+o=";
+  vendorHash = "sha256-4cYG8ilWSI+bSoEBpohN6Fr3kmsBUNmbz0iyHmiCDgw=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    description = "The world's fastest OpenAPI & Swagger linter";
+    description = "World's fastest OpenAPI & Swagger linter";
     homepage = "https://quobix.com/vacuum";
     changelog = "https://github.com/daveshanley/vacuum/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;

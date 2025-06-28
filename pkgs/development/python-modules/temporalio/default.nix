@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "temporalio";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,14 +28,18 @@ buildPythonPackage rec {
     owner = "temporalio";
     repo = "sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-942EmFOAYUWq58MW2rIVhDK9dHkzi62fUdOudYP94hU=";
+    hash = "sha256-u74zbzYNVxMi0sdiPlBoEU+wAa24JmMksz7hGvraDeM=";
     fetchSubmodules = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-9hP+zN6jcRmRhPmcZ4Zgp61IeS7gDPfsOvweAxKHnHM=";
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-OIapL1+g6gIgyVzdB68PuK2K2RIr01DSm/UbCdt9kNY=";
   };
 
   cargoRoot = "temporalio/bridge";

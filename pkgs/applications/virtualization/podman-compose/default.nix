@@ -9,7 +9,7 @@
 }:
 
 buildPythonApplication rec {
-  version = "1.3.0";
+  version = "1.4.1";
   pname = "podman-compose";
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonApplication rec {
     repo = "podman-compose";
     owner = "containers";
     tag = "v${version}";
-    hash = "sha256-0k+vJwWYEXQ6zxkcvjxBv9cq8nIBS15F7ul5VwqYtys=";
+    hash = "sha256-uTwupM1Kk/Dx95MjXhg9KLw9XiefL5j2K3hlKYHq5FM=";
   };
 
   build-system = [

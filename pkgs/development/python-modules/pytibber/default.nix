@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.31.2";
+  version = "0.31.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyTibber";
     tag = version;
-    hash = "sha256-/k9XnRgfaE59+Fi/5AhCJt4/jFLdYeDCNaoGCDYGWso=";
+    hash = "sha256-U6WMBX7p0dHQ7vEbw3lmFmysWEcoSbojG2dVZik9gA4=";
   };
 
   build-system = [ setuptools ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     description = "Python library to communicate with Tibber";
     homepage = "https://github.com/Danielhiversen/pyTibber";
     changelog = "https://github.com/Danielhiversen/pyTibber/releases/tag/${src.tag}";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

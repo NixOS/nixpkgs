@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/avian2/unidecode";
     changelog = "https://github.com/avian2/unidecode/blob/unidecode-${version}/ChangeLog";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
 }

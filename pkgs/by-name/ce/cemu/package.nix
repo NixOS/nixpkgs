@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup =
     let
-      libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
+      libs = [ vulkan-loader ];
     in
     ''
       gappsWrapperArgs+=(

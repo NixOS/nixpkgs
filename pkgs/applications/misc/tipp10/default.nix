@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tipp10";
-  version = "3.3.3";
+  version = "3.3.4";
 
   src = fetchFromGitLab {
     owner = "tipp10";
     repo = "tipp10";
     rev = "v${version}";
-    hash = "sha256-OiBtUizN6OjcAb5RLvzfod6tVQo/b8p8Ec4lgKYaifw=";
+    hash = "sha256-q5D+8Z9dNpCXgRQtVC+0RBHK2szv7M+dwlmW4H7j2qg=";
   };
 
   nativeBuildInputs = [

@@ -9,7 +9,7 @@
 
 buildGoModule rec {
   pname = "doctl";
-  version = "1.125.1";
+  version = "1.131.0";
 
   vendorHash = null;
 
@@ -41,15 +41,15 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "doctl";
-    rev = "v${version}";
-    sha256 = "sha256-9i8XtxCHnK+81JrjElv7lfS43vmzGBKoGAhsC/RHrz4=";
+    tag = "v${version}";
+    hash = "sha256-bZpYojpNm9TPJOulxBgXJ0l/JAVxNakA6JifGOhX3BU=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for DigitalOcean services";
     mainProgram = "doctl";
     homepage = "https://github.com/digitalocean/doctl";
-    license = licenses.asl20;
-    maintainers = [ maintainers.siddharthist ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.siddharthist ];
   };
 }

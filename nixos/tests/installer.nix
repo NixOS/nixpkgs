@@ -296,7 +296,7 @@ let
       with subtest("Test nixos-option"):
           kernel_modules = target.succeed("nixos-option boot.initrd.kernelModules")
           assert "virtio_console" in kernel_modules
-          assert "List of modules" in kernel_modules
+          assert "list of modules" in kernel_modules
           assert "qemu-guest.nix" in kernel_modules
 
       target.shutdown()
@@ -651,14 +651,11 @@ let
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or [ ]);
         # non-EFI tests can only run on x86
-        platforms =
-          if isEfi then
-            platforms.linux
-          else
-            [
-              "x86_64-linux"
-              "i686-linux"
-            ];
+        platforms = mkIf (!isEfi) [
+          "x86_64-linux"
+          "x86_64-darwin"
+          "i686-linux"
+        ];
       };
       nodes =
         let
@@ -725,6 +722,10 @@ let
                   libxml2.bin
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
+                  (nixos-rebuild-ng.override {
+                    withNgSuffix = false;
+                    withReexec = true;
+                  })
                   ntp
                   perlPackages.ConfigIniFiles
                   perlPackages.FileSlurp
@@ -1113,7 +1114,7 @@ in
   simple = makeInstallerTest "simple" (
     simple-test-config
     // {
-      passthru.override = args: makeInstallerTest "simple" simple-test-config // args;
+      passthru.override = args: makeInstallerTest "simple" (simple-test-config // args);
     }
   );
 

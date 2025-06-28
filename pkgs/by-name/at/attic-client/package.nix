@@ -10,15 +10,20 @@
   installShellFiles,
   crates ? [ "attic-client" ],
 }:
+let
+  # Only the attic-client crate builds against the Nix C++ libs
+  # This derivation is also used to build the server
+  needNixInclude = lib.elem "attic-client" crates;
+in
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2025-02-02";
+  version = "0-unstable-2025-05-29";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "ff8a897d1f4408ebbf4d45fa9049c06b3e1e3f4e";
-    hash = "sha256-hPYEJ4juK3ph7kbjbvv7PlU1D9pAkkhl+pwx8fZY53U=";
+    rev = "ce9373715fe3fac7a174a65a7e6d6baeba8cb4f9";
+    hash = "sha256-CvaKOUq8G10sghKpZhEB2UYjJoWhEkrDFggDgi7piUI=";
   };
 
   nativeBuildInputs = [
@@ -26,8 +31,7 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  buildInputs = [
-    nixVersions.nix_2_24
+  buildInputs = lib.optional needNixInclude nixVersions.nix_2_24 ++ [
     boost
   ];
 
@@ -35,8 +39,13 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-AbpWnYfBMrR6oOfy2LkQvIPYsClCWE89bJav+iHTtLM=";
   useFetchCargoVendor = true;
 
-  ATTIC_DISTRIBUTOR = "nixpkgs";
-  NIX_INCLUDE_PATH = "${lib.getDev nixVersions.nix_2_24}/include";
+  env =
+    {
+      ATTIC_DISTRIBUTOR = "nixpkgs";
+    }
+    // lib.optionalAttrs needNixInclude {
+      NIX_INCLUDE_PATH = "${lib.getDev nixVersions.nix_2_24}/include";
+    };
 
   # Attic interacts with Nix directly and its tests require trusted-user access
   # to nix-daemon to import NARs, which is not possible in the build sandbox.

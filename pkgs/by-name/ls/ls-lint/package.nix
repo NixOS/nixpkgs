@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "ls-lint";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "loeffel-io";
     repo = "ls-lint";
     rev = "v${version}";
-    sha256 = "sha256-QAUmQAa1gNS2LLyFmOsydOVKZoZMWzu9y7SgbIq1ESk=";
+    sha256 = "sha256-kwZvpZaiS58UFE+qncQ370E8bnEuzQACK0FOAYlJwV0=";
   };
 
-  vendorHash = "sha256-ZqQHxkeV+teL6+Be59GcDJTH9GhGTJnz+OHAeIC9I24=";
+  vendorHash = "sha256-XbYfHgpZCGv6w/55dGiFcYTQ36f0n3w8XwnC7wIUFro=";
 
   meta = with lib; {
     description = "Extremely fast file and directory name linter";

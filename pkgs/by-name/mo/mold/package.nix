@@ -7,7 +7,7 @@
   cmake,
   mimalloc,
   ninja,
-  tbb_2022_0,
+  tbb_2022,
   zlib,
   zstd,
 
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mold";
-  version = "2.39.1";
+  version = "2.40.1";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uC6oakFfF0tpSiBeps5IO41Khk7VyCMSZhVh2Gmwlyc=";
+    hash = "sha256-161ATZkgoipFMRcI4x4TNqxbyWxM75Cmo/rL4Hn1JFQ=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      tbb_2022_0
+      tbb_2022
       zlib
       zstd
     ]

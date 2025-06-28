@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
 
   buildNoDefaultFeatures = !robloxSupport;
 
-  meta = with lib; {
+  meta = {
     description = "Blazing-fast modern Lua linter written in Rust";
     mainProgram = "selene";
     homepage = "https://github.com/kampfkarren/selene";
     changelog = "https://github.com/kampfkarren/selene/blob/${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

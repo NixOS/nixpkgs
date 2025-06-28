@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
 
   # nativeBuildInputs
   scons,
@@ -36,11 +35,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsd";
-  version = "3.25";
+  version = "3.26.1";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-s2i2owXj96Y4LSOgy/wdeJIwYLa39Uz3mHpzx7Spr8I=";
+    sha256 = "sha256-3H5GWWjBVA5hvFfHWG1qV6AEchKgFO/a00j5B7wuCZA=";
   };
 
   # TODO: render & install HTML documentation using asciidoctor
@@ -85,12 +84,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./sconstruct-env-fixes.patch
     ./sconstrict-rundir-fixes.patch
-
-    # fix build with Python 3.12
-    (fetchpatch {
-      url = "https://gitlab.com/gpsd/gpsd/-/commit/9157b1282d392b2cc220bafa44b656d6dac311df.patch";
-      hash = "sha256-kFMn4HgidQvHwHfcSNH/0g6i1mgvEnZfvAUDPU4gljg=";
-    })
   ];
 
   preBuild = ''
@@ -121,6 +114,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/udev/rules.d"
   '';
 
+  doInstallCheck = true;
+
   installTargets = [
     "install"
     "udev-install"
@@ -131,7 +126,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPS service daemon";
     longDescription = ''
       gpsd is a service daemon that monitors one or more GPSes or AIS
@@ -153,9 +148,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gpsd.gitlab.io/gpsd/index.html";
     changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${version}/NEWS";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bjornfor
       rasendubi
     ];

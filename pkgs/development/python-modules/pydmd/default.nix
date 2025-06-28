@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "pydmd";
-  version = "2025.05.01";
+  version = "2025.06.01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyDMD";
     repo = "PyDMD";
     tag = version;
-    hash = "sha256-+ol103I4lrTVvANAK5k6bFfeUWj04YlkAqJUW8cw42Q=";
+    hash = "sha256-u8dW90FZSZaVbPNeILeZyOwAU0WOAeTAMCHpe7n4Bi4=";
   };
 
   postPatch = ''

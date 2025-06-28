@@ -38,6 +38,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "mypy[mypyc]==1.15.0" "mypy"
+    sed -i "/black>=/d" pyproject.toml
   '';
 
   build-system = [ setuptools-scm ];

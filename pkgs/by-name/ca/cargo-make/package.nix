@@ -42,12 +42,12 @@ rustPlatform.buildRustPackage rec {
   #   https://travis-ci.org/sagiegurari/cargo-make
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Rust task runner and build tool";
     homepage = "https://github.com/sagiegurari/cargo-make";
     changelog = "https://github.com/sagiegurari/cargo-make/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       figsoda
       xrelkd
     ];

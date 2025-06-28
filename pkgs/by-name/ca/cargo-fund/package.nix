@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "acfoltzer";
-    repo = pname;
+    repo = "cargo-fund";
     rev = version;
     hash = "sha256-8mnCwWwReNH9s/gbxIhe7XdJRIA6BSUKm5jzykU5qMU=";
   };

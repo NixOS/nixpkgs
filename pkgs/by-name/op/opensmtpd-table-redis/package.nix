@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.opensmtpd.org/";
-    description = "ldap table for the OpenSMTPD mail server";
+    description = "Redis tables for the OpenSMTPD mail server";
     changelog = "https://github.com/OpenSMTPD/table-redis/releases/tag/${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;

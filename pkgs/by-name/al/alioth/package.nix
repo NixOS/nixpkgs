@@ -6,20 +6,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alioth";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "alioth";
     tag = "v${version}";
-    hash = "sha256-xFNX2cxmaw2H8D21qs6mnTMuSidmJ0xJ/b4pxdLTvow=";
+    hash = "sha256-7mQmyWOMEHg374mmYGJL8xhVWlYk1zKplpjc74wLoKw=";
   };
 
   # Checks use `debug_assert_eq!`
   checkType = "debug";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-x2Abw/RVKpPx0EWyF3w0kywtd23A+NSNaHRVZ4oB1jI=";
+  cargoHash = "sha256-rAq3Ghg7zpiycQ8hNzn4Jz7cUCfwQ4aqtWxoVCg8MrE=";
 
   separateDebugInfo = true;
 

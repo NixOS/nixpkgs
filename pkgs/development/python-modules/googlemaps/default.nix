@@ -4,17 +4,15 @@
   fetchFromGitHub,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "googlemaps";
   version = "4.10.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlemaps";
@@ -23,7 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-8oGZEMKUGaDHKq4qIZy10cbLNMmVclJnQE/dx877pNQ=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    requests
+  ];
 
   nativeCheckInputs = [
     pytest-cov-stub
@@ -39,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "googlemaps" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for Google Maps API Web Services";
     homepage = "https://github.com/googlemaps/google-maps-services-python";
     changelog = "https://github.com/googlemaps/google-maps-services-python/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

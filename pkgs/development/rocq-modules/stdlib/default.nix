@@ -14,17 +14,11 @@ mkRocqDerivation {
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch rocq-core.version [
-      {
-        case = isEq "9.0";
-        out = "9.0.0";
+    lib.switch rocq-core.version (lib.lists.sort (x: y: isLe x.out y.out) (
+      lib.mapAttrsToList (out: case: { inherit case out; }) {
+        "9.0.0" = isEq "9.0";
       }
-      # the one below is artificial as stdlib was included in Coq before
-      {
-        case = isLt "9.0";
-        out = "9.0.0";
-      }
-    ] null;
+    )) null;
   releaseRev = v: "V${v}";
 
   release."9.0.0".sha256 = "sha256-2l7ak5Q/NbiNvUzIVXOniEneDXouBMNSSVFbD1Pf8cQ=";

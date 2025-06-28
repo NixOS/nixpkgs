@@ -29,6 +29,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
+  # Fix GCC 14 build.
+  # from incompatible pointer type [-Wincompatible-pointer-types
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   patches = [
     # make sure X11 and OpenGL can be found at runtime
     ./static-libs.patch

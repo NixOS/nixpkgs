@@ -137,13 +137,13 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = lib.optional (!withGUI) true;
 
-  meta = with lib; {
+  meta = {
     description = "Share one mouse and keyboard between multiple computers";
     homepage = "https://symless.com/synergy";
     changelog = "https://github.com/symless/synergy-core/blob/${version}/ChangeLog";
     mainProgram = lib.optionalString (!withGUI) "synergyc";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ talyz ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ talyz ];
+    platforms = lib.platforms.unix;
   };
 }

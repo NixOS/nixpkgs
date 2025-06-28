@@ -16,12 +16,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-W800jepxDv6OjbcxRKphAnDU2OuBGGGSLELe8gAfTr8=";
 
-  meta = with lib; {
+  meta = {
     description = "Cargo command to create the README.md from your crate's documentation";
     mainProgram = "cargo-rdme";
     homepage = "https://github.com/orium/cargo-rdme";
     changelog = "https://github.com/orium/cargo-rdme/blob/v${version}/release-notes.md";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ GoldsteinE ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ GoldsteinE ];
   };
 }

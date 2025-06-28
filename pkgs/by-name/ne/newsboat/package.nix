@@ -63,6 +63,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       gettext
     ];
 
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ];
+
   postBuild = ''
     make -j $NIX_BUILD_CORES prefix="$out"
   '';

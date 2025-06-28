@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "googlefonts";
-    repo = pname;
+    repo = "picosvg";
     tag = "v${version}";
     hash = "sha256-ocdHF0kYnfllpvul32itu1QtlDrqVeq5sT8Ecb5V1yk=";
   };

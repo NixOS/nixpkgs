@@ -56,12 +56,12 @@ let
     {
       aarch64-linux = {
         arch = "arm64";
-        sha256 = "sha256-/Qfd/xn+FwYLPSWssP5JFfjMdICz6HDg30edl/Fme5A=";
+        sha256 = "sha256-XOQam1W7YT0YDesDR51G/cH318DcxpnAEiJg2JZU3Q4=";
       };
 
       x86_64-linux = {
         arch = "64";
-        sha256 = "sha256-BbTYT0GHU+BmWFXG2TU8PL90eTpLcyLgnwSw9YyWT0g=";
+        sha256 = "sha256-TE/AMWkj80+22WaOG2BK6vt4NnMSpBq9hQMwSPiQ12A=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

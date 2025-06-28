@@ -8,13 +8,13 @@
 
 buildNpmPackage rec {
   pname = "better-commits";
-  version = "1.16.1";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "Everduin94";
     repo = "better-commits";
     tag = "v${version}";
-    hash = "sha256-70PEcktGGck7egDmaIteFEMCNpo6ZuWyIVPiOywr2tc=";
+    hash = "sha256-77wjS/BvJLDV+48xYE7XkC6A2GkCefWFydxOU53rXME=";
   };
 
   npmDepsHash = "sha256-g34UutgT5315BpsQSuGGLIU6Ga+hpEz74HNLKKOB+ec=";

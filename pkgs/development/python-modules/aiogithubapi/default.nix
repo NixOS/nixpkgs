@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiogithubapi";
-  version = "24.6.0";
+  version = "25.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = "aiogithubapi";
     tag = version;
-    hash = "sha256-z7l7Qx9Kg1FZ9nM0V2NzTyi3gbE2hakbc/GZ1CzDmKw=";
+    hash = "sha256-zl9QpFpkvSTs0BUDMBmwTeLY1YvNRSqbkIZ5LDUP3zw=";
   };
 
   __darwinAllowLocalNetworking = true;

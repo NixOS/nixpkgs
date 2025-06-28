@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.41";
+  version = "0.9.61";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sX/Er2G4V2jmIp5DAXR158nmAXqkVvEb9bMqP44z7P4=";
+    hash = "sha256-vtswHOG3/9oao+KrHWJi3NLsFghczmyLfT276kq5Llg=";
     fetchSubmodules = true;
   };
 
@@ -39,14 +39,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ozRDNXWqg0CZ1IgU33C6yJu4e05010jsHeTdIVhB72M=";
+    hash = "sha256-9YG0l/cIjk5imkoly/pNmTVN7N+K56tpWnD7HDFSqiw=";
   };
 
   pnpmRoot = "../..";
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-5DIagAKSq427kwZTH/QKY3vbb+TmFscKSANoSkEJMGg=";
+  cargoHash = "sha256-35REIeZy/D9UWzSI6yQZc1MRYwlAnjzsk5T7KOAhWVw=";
 
   cargoRoot = "../..";
 
@@ -60,7 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"Readest"' '"readest"'
     jq 'del(.plugins."deep-link")' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
     substituteInPlace src/services/constants.ts \
-      --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false"
+      --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
+      --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
   '';
 
   nativeBuildInputs = [

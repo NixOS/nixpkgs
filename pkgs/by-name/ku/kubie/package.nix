@@ -1,8 +1,10 @@
 {
   lib,
+  kubectl,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,13 +18,24 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-+sSooE0KJqvWFdR63qazOMmSS8dV7MirYZ+sk7BnGQ4=";
   };
 
+  buildNoDefaultFeatures = true;
   useFetchCargoVendor = true;
   cargoHash = "sha256-Yf8fAW65K7SLaRpvegjWBLVDV33sMGV+I1rqlWvx5Ss=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   postInstall = ''
-    installShellCompletion completion/kubie.bash
+    installShellCompletion completion/kubie.{bash,fish}
+
+    wrapProgram "$out/bin/kubie" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          kubectl
+        ]
+      }"
   '';
 
   meta = with lib; {

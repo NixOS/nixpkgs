@@ -30,11 +30,31 @@ Before adding a new package, please consider the following questions:
 
 * Is the package ready for general use? We don't want to include projects that are too immature or are going to be abandoned immediately. In case of doubt, check with upstream.
 * Does the project have a clear license statement? Remember that software is unfree by default (all rights reserved), and merely providing access to the source code does not imply its redistribution. In case of doubt, ask upstream.
-* How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
+* How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small. A good estimate is checking upstream issues and pull requests, or other software repositories. Library packages should have at least one dependent.
+* Is the software actively maintained upstream? Especially packages that are security-critical, rely on fast-moving dependencies, or affect data integrity should see regular maintenance.
 * Are you willing to maintain the package? You should care enough about the package to be willing to keep it up and running for at least one complete Nixpkgs' release life-cycle.
   * In case you are not able to maintain the package you wrote, you can seek someone to fill that role, effectively adopting the package.
 
 If any of these questions' answer is no, then you should probably not add the package.
+
+Special care has to be taken with security-critical software components. Because entries in the Nix store are inert and do nothing by themselves, packages should be considered by their intended use, e.g. when used together with a NixOS module.
+
+* Any package that immediately would need to be tagged with `meta.knownVulnerabilities` is unlikely to be fit for nixpkgs.
+* Any package depending on a known-vulnerable library should be considered carefully.
+* Packages typically used with untrusted data should have a maintained and responsible upstream. For example:
+  * Any package which does not follow upstream security policies should be considered vulnerable. In particular, packages that vendor or fork web engines like Blink, Gecko or Webkit need to keep up with the frequent updates of those projects.
+  * Any security-critical fast-moving package such as Chrome or Firefox (or their forks) must have at least one active committer among the maintainers. This ensures no critical fixes are delayed unnecessarily, endangering unsuspecting users.
+  * Services which typically work on web traffic are working on untrusted input.
+  * Data (such as archives or rich documents) commonly shared over untrusted channels (e.g. email) is untrusted.
+* Applications in the Unix authentication stack such as PAM/D-Bus modules or SUID binaries should be considered carefully, and should have a maintained and responsible upstream.
+* Encryption libraries should have a maintained and responsible upstream.
+* Security-critical components that are part of larger packages should be unvendored (=use the nixpkgs package as dependency, instead of vendored and pinned sources).
+* A "responsible upstream" includes various aspects, such as:
+  * channels to disclose security concerns
+  * being responsive to security concerns, providing fixes or workarounds
+  * transparent public disclosure of security issues when they are found or fixed
+  * These aspects are sometimes hard to verify, in which case an upstream that is not known to be irresponsible should be considered as responsible.
+* Source-available software should be built from source where possible. Binary blobs risk supply chain attacks and vendored outdated libraries.
 
 This section describes a general framework of understanding and exceptions might apply.
 
@@ -77,7 +97,7 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp`](development/libraries/gmp). Also done by the generic builder, but has a dependency on `m4`.
 
-   - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](./by-name/pa/pan/package.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
+   - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](./by-name/pa/pan/package.nix). Has an optional dependency on `gspell`, which is only built if `spellCheck` is `true`.
 
    - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](servers/http/apache-httpd/2.4.nix). A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
@@ -87,11 +107,13 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - XML::Simple, a Perl module: [`pkgs/top-level/perl-packages.nix`](top-level/perl-packages.nix) (search for the `XMLSimple` attribute). Most Perl modules are so simple to build that they are defined directly in `perl-packages.nix`; no need to make a separate file for them.
 
-   - Adobe Reader: [`pkgs/applications/misc/adobe-reader/default.nix`](applications/misc/adobe-reader/default.nix). Shows how binary-only packages can be supported. In particular the `postFixup` phase uses `patchelf` to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
+   - Discord Game SDK: [`pkgs/by-name/di/discord-gamesdk/package.nix`](./by-name/di/discord-gamesdk/package.nix). Shows how binary-only packages can be supported. In particular, the `autoPatchelfHook` is used to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
 
    Some notes:
 
    - Add yourself as the maintainer of the package.
+
+     - If this is your first time contributing (welcome!), [add yourself to the maintainers list](../maintainers/README.md#how-to-become-a-maintainer) in a separate commit.
 
    - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
@@ -499,6 +521,8 @@ When using the `patches` parameter to `mkDerivation`, make sure the patch name c
 >
 > See [Versioning](#versioning) for details on package versioning.
 
+The following describes two ways to include the patch. Regardless of how the patch is included, you _must_ ensure its purpose is clear and obvious. This enables other maintainers to more easily determine when old patches are no longer required. Typically, you can improve clarity with carefully considered filenames, attribute names, and/or comments; these should explain the patch's _intention_. Additionally, it may sometimes be helpful to clarify _how_ it resolves the issue. For example: _"fix gcc14 build by adding missing include"_.
+
 ### Fetching patches
 
 In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch2`:
@@ -507,13 +531,18 @@ In the interest of keeping our maintenance burden and the size of Nixpkgs to a m
 {
   patches = [
     (fetchpatch2 {
-      name = "fix-check-for-using-shared-freetype-lib.patch";
-      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/patch/?id=8f5d28536e4518716fdfe974e580194c8f57871d";
-      hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
+      name = "make-no-atomics-a-soft-failure.patch";
+      url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch?full_index=1";
+      hash = "sha256-9Goa0NTUdSOs1Vm+FnkoSFhw0o8ZLNOw6cLUqCVnF5Y=";
     })
   ];
 }
 ```
+
+> [!Warning]
+> If the patch file contains short commit hashes, use `fetchpatch` instead of `fetchpatch2` ([tracking issue](https://github.com/NixOS/nixpkgs/issues/257446)).
+> This is the case if the patch contains a line similar to `index 0c97fcc35..f533e464a 100644`.
+> Depending on the patch source it is possible to expand the commit hash, in which case using `fetchpatch2` is acceptable (e.g. GitHub supports appending `?full_index=1` to the URL, as seen above).
 
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch2`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
 
@@ -547,7 +576,7 @@ If you do need to do create this sort of patch file, one way to do so is with gi
 
     ```ShellSession
     $ git init
-    $ git add .
+    $ git add -A
     ```
 
 3. Edit some files to make whatever changes need to be included in the patch.
@@ -921,6 +950,14 @@ Reviewing process:
 - Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
   - License can change with version updates, so it should be checked to match the upstream license.
   - If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.
+- Verify any change of upstream.
+  - If switching from e.g. PyPi to GitHub, verify that the repo is the official one.
+  - If switching to a fork, check with external sources like other package repositories for community consensus.
+- Ensure any special packaging choices and required context are documented in i.e. the name of a patch or in a comment.
+  - If a special version of a package is pinned, document why, so others know if/when it can be unpinned.
+  - If any (especially opinionated) patch or `substituteInPlace` is applied, document why.
+  - If any non-default build flags are set, document why.
+  - If checks are partially or fully disabled, document why.
 - Ensure that the code contains no typos.
 - Build the package locally.
   - Pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
@@ -951,6 +988,8 @@ Sample template for a package update review is provided below.
 - [ ] package version fits guidelines
 - [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
+- [ ] any change of upstream are verified
+- [ ] the motives for any special packaging choices are documented
 - [ ] all depending packages build
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
 - [ ] patches that are remotely available are fetched rather than vendored
@@ -970,11 +1009,17 @@ Review process:
 - Ensure that the package name and version [fits the guidelines](#package-naming).
 - Ensure that the package versioning [fits the guidelines](#versioning).
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
+- Ensure that the source is fetched from an official location, one of our [trusted mirrors](./build-support/fetchurl/mirrors.nix), or a mirror trusted by the authors.
 - Ensure that the meta fields [fits the guidelines](#meta-attributes) and contain the correct information:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set. This can be the package submitter or a community member that accepts taking up maintainership of the package.
   - The `meta.mainProgram` must be set if a main executable exists.
+- Ensure any special packaging choices and required context are documented in i.e. the name of a patch or in a comment.
+  - If a special version of a package is pinned, document why, so others know if/when it can be unpinned.
+  - If any (especially opinionated) patch or `substituteInPlace` is applied, document why.
+  - If any non-default build flags are set, document why.
+  - If checks are partially or fully disabled, document why.
 - Report detected typos.
 - Ensure the package source:
   - Uses `mirror://` URLs when available.
@@ -998,7 +1043,9 @@ Sample template for a new package review is provided below.
 - [ ] `meta.maintainers` is set
 - [ ] `meta.mainProgram` is set, if applicable.
 - [ ] build time only dependencies are declared in `nativeBuildInputs`
+- [ ] source is fetched from an official or trusted location
 - [ ] source is fetched using the appropriate function
+- [ ] the motives for any special packaging choices are documented
 - [ ] the list of `phases` is not overridden
 - [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed

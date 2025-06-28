@@ -24,17 +24,18 @@
   nixosTests,
   installShellFiles,
   fuseSupport ? false,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.25.1";
+  version = "1.25.2";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P6h0n90akgGoFL292UpYTspq1QjcnBDjwvSGyO91xQg=";
+    hash = "sha256-4MscYFlUwGrFhjpQs1ifDMh5j+t9x7rokOtR2SmhCro=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.bindgenHook
     makeWrapper
     installShellFiles
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -83,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
+
+  doInstallCheck = true;
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -128,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       davidak
+      johnrtitor
       Madouura
     ];
     platforms = lib.platforms.linux;

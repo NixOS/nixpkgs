@@ -18,7 +18,7 @@
   pytestCheckHook,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -53,20 +53,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # AssertionError
-    "test_serde_jsonplus"
-  ];
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "checkpoint==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "checkpoint==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpoint==${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     description = "Library with base interfaces for LangGraph checkpoint savers";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint";
     license = lib.licenses.mit;

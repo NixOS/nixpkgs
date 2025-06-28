@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "capnproto";
-    repo = pname;
+    repo = "pycapnp";
     tag = "v${version}";
     sha256 = "sha256-SVeBRJMMR1Z8+S+QoiUKGRFGUPS/MlmWLi1qRcGcPoE=";
   };

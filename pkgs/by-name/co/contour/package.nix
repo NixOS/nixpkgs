@@ -85,19 +85,16 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir $out/Applications
-      installShellCompletion --zsh $out/contour.app/Contents/Resources/shell-integration/shell-integration.zsh
-      installShellCompletion --fish $out/contour.app/Contents/Resources/shell-integration/shell-integration.fish
       cp -r $out/contour.app/Contents/Resources/terminfo $terminfo/share
       mv $out/contour.app $out/Applications
       ln -s $out/bin $out/Applications/contour.app/Contents/MacOS
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       mv $out/share/terminfo $terminfo/share/
-      installShellCompletion --zsh $out/share/contour/shell-integration/shell-integration.zsh
-      installShellCompletion --fish $out/share/contour/shell-integration/shell-integration.fish
     ''
     + ''
       echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+      rm -r $out/share/contour
     '';
 
   passthru.tests.test = nixosTests.terminal-emulators.contour;

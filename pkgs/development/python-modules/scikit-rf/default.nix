@@ -21,6 +21,7 @@
   openpyxl,
   setuptools,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-mock,
 }:
 
@@ -37,11 +38,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-Ovrr1U7VuuGKDNSBSCyYSz3DNpaJrA57ccl4AFdzC5E=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=skrf" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -78,6 +74,7 @@ buildPythonPackage rec {
     openpyxl
     networkx
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   # test_calibration.py generates a divide by zero error on darwin

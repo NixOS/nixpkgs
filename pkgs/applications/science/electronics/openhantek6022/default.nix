@@ -41,6 +41,8 @@ mkDerivation rec {
     sed -i 's#/usr/share#share#g' CMakeLists.txt
   '';
 
+  doInstallCheck = true;
+
   meta = with lib; {
     description = "Free software for Hantek and compatible (Voltcraft/Darkwire/Protek/Acetech) USB digital signal oscilloscopes";
     mainProgram = "OpenHantek";

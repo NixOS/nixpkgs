@@ -14,7 +14,6 @@ buildPythonPackage {
     version
     src
     cargoDeps
-    cargoBuildFlags
     ;
 
   nativeBuildInputs = [

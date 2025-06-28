@@ -4,6 +4,8 @@
   treefmt,
   nixfmt-rfc-style,
   nixfmt-tree,
+  git,
+  writableTmpDirAsHomeHook,
 
   settings ? { },
   runtimeInputs ? [ ],
@@ -21,7 +23,7 @@ let
   treefmtWithConfig = treefmt.withConfig {
     name = "nixfmt-tree";
 
-    settings = [
+    settings = lib.mkMerge [
       # Default settings
       {
         _file = ./package.nix;
@@ -29,9 +31,6 @@ let
         # Log level for files treefmt won't format
         # The default is warn, which would be too annoying for people who just care about Nix
         on-unmatched = lib.mkOptionDefault "info";
-
-        # Assume the tree is a Git repository, will fail if it's not
-        tree-root-file = lib.mkOptionDefault ".git/index";
 
         # NOTE: The `mkIf` condition should not be needed once `runtimePackages` is removed.
         formatter.nixfmt = lib.mkIf (lib.any isNixfmt allRuntimeInputs) {
@@ -102,9 +101,6 @@ treefmtWithConfig.overrideAttrs {
           # Log level for files treefmt won't format
           on-unmatched = "info";
 
-          # Assume the tree is a Git repository, will fail if it's not
-          tree-root-file = ".git/index";
-
           # Configure nixfmt for .nix files
           formatter.nixfmt = {
             command = "nixfmt";
@@ -122,49 +118,63 @@ treefmtWithConfig.overrideAttrs {
     platforms = lib.platforms.all;
   };
 
-  passthru.tests.simple = runCommand "nixfmt-tree-test-simple" { } ''
-    export XDG_CACHE_HOME=$(mktemp -d)
-    cat > unformatted.nix <<EOF
-    let to = "be formatted"; in to
-    EOF
+  passthru.tests.simple =
+    runCommand "nixfmt-tree-test-simple"
+      {
+        nativeBuildInputs = [
+          git
+          nixfmt-tree
+          writableTmpDirAsHomeHook
+        ];
+      }
+      ''
+        git config --global user.email "nix-builder@nixos.org"
+        git config --global user.name "Nix Builder"
 
-    cat > formatted.nix <<EOF
-    let
-      to = "be formatted";
-    in
-    to
-    EOF
+        cat > unformatted.nix <<EOF
+        let to = "be formatted"; in to
+        EOF
 
-    mkdir -p repo
-    (
-      cd repo
-      mkdir .git dir
-      touch .git/index
-      cp ../unformatted.nix a.nix
-      cp ../unformatted.nix dir/b.nix
+        cat > formatted.nix <<EOF
+        let
+          to = "be formatted";
+        in
+        to
+        EOF
 
-      ${lib.getExe nixfmt-tree} dir
-      if [[ "$(<dir/b.nix)" != "$(<../formatted.nix)" ]]; then
-        echo "File dir/b.nix was not formatted properly after dir was requested to be formatted"
-        exit 1
-      elif [[ "$(<a.nix)" != "$(<../unformatted.nix)" ]]; then
-        echo "File a.nix was formatted when only dir was requested to be formatted"
-        exit 1
-      fi
+        mkdir -p repo
+        (
+          cd repo
+          mkdir dir
+          cp ../unformatted.nix a.nix
+          cp ../unformatted.nix dir/b.nix
 
-      (
-        cd dir
-        ${lib.getExe nixfmt-tree}
-      )
+          git init
+          git add .
+          git commit -m "Initial commit"
 
-      if [[ "$(<a.nix)" != "$(<../formatted.nix)" ]]; then
-        echo "File a.nix was not formatted properly after running treefmt without arguments in dir"
-        exit 1
-      fi
-    )
+          treefmt dir
+          if [[ "$(<dir/b.nix)" != "$(<../formatted.nix)" ]]; then
+            echo "File dir/b.nix was not formatted properly after dir was requested to be formatted"
+            exit 1
+          elif [[ "$(<a.nix)" != "$(<../unformatted.nix)" ]]; then
+            echo "File a.nix was formatted when only dir was requested to be formatted"
+            exit 1
+          fi
 
-    echo "Success!"
+          (
+            cd dir
+            treefmt
+          )
 
-    touch $out
-  '';
+          if [[ "$(<a.nix)" != "$(<../formatted.nix)" ]]; then
+            echo "File a.nix was not formatted properly after running treefmt without arguments in dir"
+            exit 1
+          fi
+        )
+
+        echo "Success!"
+
+        touch $out
+      '';
 }

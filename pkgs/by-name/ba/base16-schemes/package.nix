@@ -2,17 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  ...
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "base16-schemes";
-  version = "unstable-2025-04-18";
+  version = "0-unstable-2025-06-04";
 
   src = fetchFromGitHub {
     owner = "tinted-theming";
     repo = "schemes";
-    rev = "28c26a621123ad4ebd5bbfb34ab39421c0144bdd";
-    hash = "sha256-Fg+rdGs5FAgfkYNCs74lnl8vkQmiZVdBsziyPhVqrlY=";
+    rev = "de3eeb6add0a6051bfc717684e36c8c9a78a1812";
+    hash = "sha256-C8VZuwzaQfNYbQQcc0Fh4RS+1nqc6j+IOy80NGmV4IQ=";
   };
 
   installPhase = ''
@@ -24,10 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "All the color schemes for use in base16 packages";
-    homepage = finalAttrs.src.meta.homepage;
-    maintainers = [ maintainers.DamienCassou ];
-    license = licenses.mit;
+    homepage = "https://github.com/tinted-theming/schemes";
+    maintainers = [ lib.maintainers.DamienCassou ];
+    license = lib.licenses.mit;
   };
 })

@@ -14,16 +14,19 @@
 
   # runtime dependencies
   bzip2,
+  withExpat ? true,
   expat,
   libffi,
   libuuid,
   libxcrypt,
+  withMpdecimal ? true,
   mpdecimal,
   ncurses,
   openssl,
   sqlite,
   xz,
   zlib,
+  zstd,
 
   # platform-specific dependencies
   bashNonInteractive,
@@ -71,6 +74,7 @@
   enableFramework ? false,
   noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch",
   enableGIL ? true,
+  enableDebug ? false,
 
   # pgo (not reproducible) + -fno-semantic-interposition
   # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
@@ -91,6 +95,9 @@
 
   # tests
   testers,
+
+  # allow pythonMinimal to prevent accidental dependencies it doesn't want
+  allowedReferenceNames ? [ ],
 
 }@inputs:
 
@@ -196,6 +203,8 @@ let
     ++ optionals (!stdenv.hostPlatform.isDarwin) [
       autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
       autoreconfHook
+    ]
+    ++ optionals (!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") [
       pkg-config
     ]
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -216,16 +225,23 @@ let
   buildInputs = lib.filter (p: p != null) (
     [
       bzip2
-      expat
       libffi
       libuuid
       libxcrypt
-      mpdecimal
       ncurses
       openssl
       sqlite
       xz
       zlib
+    ]
+    ++ optionals (passthru.pythonAtLeast "3.14") [
+      zstd
+    ]
+    ++ optionals withMpdecimal [
+      mpdecimal
+    ]
+    ++ optionals withExpat [
+      expat
     ]
     ++ optionals bluezSupport [
       bluez
@@ -420,7 +436,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
     LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-    LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin) "-lcrypt"}";
+    LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin && libxcrypt != null) "-lcrypt"}";
     NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) (
       {
         "glibc" = "-lgcc_s";
@@ -436,7 +452,11 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags =
     [
       "--without-ensurepip"
+    ]
+    ++ optionals withExpat [
       "--with-system-expat"
+    ]
+    ++ optionals withMpdecimal [
       "--with-system-libmpdec"
     ]
     ++ optionals (openssl != null) [
@@ -462,6 +482,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals enableOptimizations [
       "--enable-optimizations"
+    ]
+    ++ optionals enableDebug [
+      "--with-pydebug"
     ]
     ++ optionals (sqlite != null) [
       "--enable-loadable-sqlite-extensions"
@@ -502,6 +525,7 @@ stdenv.mkDerivation (finalAttrs: {
       "ac_cv_func_lchmod=no"
     ]
     ++ optionals static [
+      "--disable-test-modules"
       "LDFLAGS=-static"
       "MODULE_BUILDTYPE=static"
     ]
@@ -593,7 +617,11 @@ stdenv.mkDerivation (finalAttrs: {
           echo $item
         fi
       done
+    ''
+    + lib.optionalString (!static) ''
       touch $out/lib/${libPrefix}/test/__init__.py
+    ''
+    + ''
 
       # Determinism: Windows installers were not deterministic.
       # We're also not interested in building Windows installers.
@@ -741,6 +769,19 @@ stdenv.mkDerivation (finalAttrs: {
       # These typically end up in shebangs.
       pythonOnBuildForHost
       buildPackages.bashNonInteractive
+    ];
+
+  # Optionally set allowedReferences to guarantee minimal dependencies
+  # Allows python3Minimal to stay minimal and not have deps added by accident
+  # Doesn't do anything if allowedReferenceNames is empty (was not set)
+  ${if allowedReferenceNames != [ ] then "allowedReferences" else null} =
+    # map allowed names to their derivations
+    (map (name: inputs.${name}) allowedReferenceNames) ++ [
+      # any version of python depends on libc and libgcc
+      stdenv.cc.cc.lib
+      stdenv.cc.libc
+      # allows python referring to its own store path
+      "out"
     ];
 
   separateDebugInfo = true;

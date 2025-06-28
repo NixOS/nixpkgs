@@ -13,18 +13,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openpgp-card-tools";
-  version = "0.11.8";
+  version = "0.11.9";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "openpgp-card";
     repo = "openpgp-card-tools";
     rev = "v${version}";
-    hash = "sha256-pE7AAgps8LlsmM97q/XIi7If1UwNP/0uJH9wOeZ6neM=";
+    hash = "sha256-kT/egkOBOomUX+fwT3OeRSZOnGeuFRLKKAXtW8nN4rw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-/OC/+eMRBF2MICVUtsJR0m62fWLP0lr10J/XkKGcPnA=";
+  cargoHash = "sha256-mZZ8veY3iqsgScfFAGYo496qxTew24R5NxYf3WjnHco=";
 
   nativeBuildInputs = [
     installShellFiles

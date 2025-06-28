@@ -16,13 +16,13 @@ a given nixpkgs maintainer, equivalent to `lib.maintainers.${x} // { handle = x;
 
 This allows looking up a maintainer's attrset (including GitHub and Matrix
 handles, email address etc.) based on any of their handles, more correctly and
-robustly than text search through `maintainers-list.nix`.
+robustly than text search through `maintainer-list.nix`.
 
 ```
 ❯ ./get-maintainer.sh nicoo
 {
   "email": "nicoo@debian.org",
-  "github": "nbraud",
+  "github": "nicoonoclaste",
   "githubId": 1155801,
   "keys": [
     {

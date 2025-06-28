@@ -8,10 +8,10 @@
 }:
 
 let
-  version = "2.5.1";
-  srcHash = "sha256-BuFylOWR30aK7d1eN+9getR5amtAtkkhHNAPfdfASHs=";
-  vendorHash = "sha256-2fThvz/5A1/EyS6VTUQQa5Unx1BzYfsVRE18xOHtLHE=";
-  manifestsHash = "sha256-bIIK8igtx0gUcn3hlBohE0MG9PMhyThz4a71pkonBpE=";
+  version = "2.6.3";
+  srcHash = "sha256-0VCeQ3duUzwyjgGIcx0DYXbaPFZXLgw199h9f0sYgCQ=";
+  vendorHash = "sha256-RUEl7o1vxzzkL8UAV9E+ozz+fXF6GaxL4ci2MBbEG0o=";
+  manifestsHash = "sha256-0rS7+yWHjyHmMBE5ZpIwV8wjqPhg3iw1zkX814mX2t8=";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
@@ -80,6 +80,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       bryanasdev000
       jlesquembre
+      ryan4yin
     ];
     mainProgram = "flux";
   };

@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "backtesting";
-  version = "0.6.3";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xryzvjKT+FRbF4pnniHvkRA98jrZVoCyYOmjYU93Ta4=";
+    hash = "sha256-8Xasb7VG39XXQ/A47lgkYk5Vo4pJPE3Vghcxt0yGeq4=";
   };
 
   build-system = [

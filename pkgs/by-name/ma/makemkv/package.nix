@@ -130,7 +130,7 @@ libsForQt5.mkDerivation {
       licenses.unfree
       licenses.lgpl21
     ];
-    homepage = "http://makemkv.com";
+    homepage = "https://makemkv.com";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jchw ];
   };

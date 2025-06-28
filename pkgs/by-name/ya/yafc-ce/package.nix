@@ -12,16 +12,19 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "yafc-ce";
-  version = "2.11.1";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "shpaass";
     repo = "yafc-ce";
     rev = finalAttrs.version;
-    hash = "sha256-n6twiCIQ1nMSidfmdl2py5wHvx4kk6skK0f8chXTCjQ=";
+    hash = "sha256-EbVPPSci4AziF+n/8pIa9M44WEUj+vvEOQqu3HJ6aNQ=";
   };
 
-  projectFile = [ "Yafc/Yafc.csproj" ];
+  projectFile = [
+    "Yafc.I18n.Generator/Yafc.I18n.Generator.csproj"
+    "Yafc/Yafc.csproj"
+  ];
   testProjectFile = [ "Yafc.Model.Tests/Yafc.Model.Tests.csproj" ];
   nugetDeps = ./deps.json;
 
@@ -35,6 +38,13 @@ buildDotnetModule (finalAttrs: {
     SDL2_ttf
     SDL2_image
   ];
+
+  postPatch = ''
+    # Yafc finds the root by looking for a `.git` directory, but `.git` is
+    # removed by Nix to ensure reproducibility. `.github` is not.
+    substituteInPlace Yafc.I18n.Generator/SourceGenerator.cs \
+      --replace-fail 'rootDirectory, ".git"' 'rootDirectory, ".github"'
+  '';
 
   meta = {
     description = "Powerful Factorio calculator/analyser that works with mods, Community Edition";

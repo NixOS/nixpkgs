@@ -21,14 +21,14 @@ let
 in
 buildPythonPackage rec {
   pname = "yaramod";
-  version = "4.3.1";
+  version = "4.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "avast";
     repo = "yaramod";
     tag = "v${version}";
-    hash = "sha256-NAKQxKY3FdlSDbDBwiBricvMOwwlhtMNz9RPEaB6NOw=";
+    hash = "sha256-b0IdhnKlOPkjq/oZtEHbOzEjp5gUhX+NqDid61ubovc=";
   };
 
   postPatch = ''

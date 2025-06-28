@@ -33,6 +33,7 @@ rec {
       homepage = "https://www.rust-lang.org/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       description = "Safe, concurrent, practical language";
+      mainProgram = "rustc";
       maintainers = with maintainers; [ qknight ];
       license = [
         licenses.mit

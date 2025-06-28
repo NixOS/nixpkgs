@@ -11,6 +11,7 @@ leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
 fetchSubmodules=
 fetchLFS=
 builder=
+fetchTags=
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
 # ENV params
@@ -56,6 +57,7 @@ Options:
       --leave-dotGit  Keep the .git directories.
       --fetch-lfs     Fetch git Large File Storage (LFS) files.
       --fetch-submodules Fetch submodules.
+      --fetch-tags    Fetch all tags (useful for git describe).
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
       --quiet         Only print the final json summary.
 "
@@ -86,6 +88,7 @@ for arg; do
             --leave-dotGit) leaveDotGit=true;;
             --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
+            --fetch-tags) fetchTags=true;;
             --builder) builder=true;;
             -h|--help) usage; exit;;
             *)
@@ -233,6 +236,12 @@ clone(){
         echo 1>&2 "Unable to checkout $hash$ref from $url."
         exit 1
     )
+
+    # Fetch all tags if requested
+    if test -n "$fetchTags"; then
+        echo "fetching all tags..." >&2
+        clean_git fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
+    fi
 
     # Checkout linked sources.
     if test -n "$fetchSubmodules"; then
@@ -403,6 +412,7 @@ print_results() {
   "fetchLFS": $([[ -n "$fetchLFS" ]] && echo true || echo false),
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
+  "fetchTags": $([[ -n "$fetchTags" ]] && echo true || echo false),
   "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false)
 }
 EOF

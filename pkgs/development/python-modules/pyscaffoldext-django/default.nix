@@ -10,7 +10,7 @@
   configupdater,
   pre-commit,
   pytest,
-  pytest-cov-stub,
+  pytest-cov,
   pytest-xdist,
   tox,
   virtualenv,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
       configupdater
       pre-commit
       pytest
-      pytest-cov-stub
+      pytest-cov
       pytest-xdist
       setuptools-scm
       tox

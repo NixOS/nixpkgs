@@ -4,7 +4,7 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
-  tbb_2021_11,
+  tbb_2021,
 
   useTBB ? true,
 }:
@@ -12,6 +12,11 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblake3";
   version = "1.8.2";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "BLAKE3-team";
@@ -41,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = lib.optionals useTBB [
     # 2022.0 crashes on macOS at the moment
-    tbb_2021_11
+    tbb_2021
   ];
 
   cmakeFlags = [

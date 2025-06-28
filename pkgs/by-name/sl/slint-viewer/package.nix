@@ -9,15 +9,15 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-viewer";
-  version = "1.11.0";
+  version = "1.12.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-Yez8GbER6ylkozQP5oQ0m0u+x/T5qQVPRt0S/NRFT60=";
+    hash = "sha256-xto9oj4ObRxXT29Qi+6HMnVvu0qK+RkTgTm7xlHOk3w=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-vWTj6cJgvg10NaLw9WfHXmiG8hg7mUIH/Gj3JVvWCuA=";
+  cargoHash = "sha256-xcWVkZu4AMTnp6E3JqquDVJ+/gKr7T2Csq5KDHN64nA=";
 
   buildInputs = [
     qt6.qtbase
@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Viewer for .slint files from the Slint Project";
     mainProgram = "slint-viewer";
     homepage = "https://crates.io/crates/slint-viewer";
+    changelog = "https://github.com/slint-ui/slint/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ dtomvan ];

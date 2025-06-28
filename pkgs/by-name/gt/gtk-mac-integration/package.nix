@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "gtk-mac-integration";
+    rev = "gtk-mac-integration-${version}";
     sha256 = "0sc0m3p8r5xfh5i4d7dg72kfixx9yi4f800y43bszyr88y52jkga";
   };
 

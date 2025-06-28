@@ -39,12 +39,12 @@ buildGoModule rec {
     podman = nixosTests.podman-tls-ghostunnel;
   };
 
-  meta = with lib; {
+  meta = {
     description = "TLS proxy with mutual authentication support for securing non-TLS backend applications";
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     changelog = "https://github.com/ghostunnel/ghostunnel/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       roberth
       mjm
     ];

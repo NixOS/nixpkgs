@@ -15,14 +15,14 @@
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2505";
+  version = "2506";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
 
-    hash = "sha256-H/BE+x/lwpED10UrbukWHiKJo0L75/KDV2T5q/J0NiM=";
+    hash = "sha256-wzUAyNCfMlABBd3yzFZkPUiy7spuHrekTqVoyUB9jxI=";
 
     leaveDotGit = true;
     postFetch = ''

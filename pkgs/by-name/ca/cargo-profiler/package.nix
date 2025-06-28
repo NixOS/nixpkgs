@@ -17,12 +17,12 @@ let
 
   inherit (rustPlatform) buildRustPackage;
 in
-buildRustPackage rec {
+buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     inherit owner rev hash;
-    repo = pname;
+    repo = "cargo-profiler";
   };
 
   useFetchCargoVendor = true;

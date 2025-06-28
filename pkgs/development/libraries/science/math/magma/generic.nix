@@ -94,7 +94,7 @@ let
   minArch =
     let
       # E.g. [ "80" "86" "90" ]
-      cudaArchitectures = (builtins.map flags.dropDot flags.cudaCapabilities);
+      cudaArchitectures = (builtins.map flags.dropDots flags.cudaCapabilities);
       minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
     in
     # "75" -> "750"  Cf. https://github.com/icl-utk-edu/magma/blob/v2.9.0/CMakeLists.txt#L200-L201

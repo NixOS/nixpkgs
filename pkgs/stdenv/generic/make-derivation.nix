@@ -33,9 +33,11 @@ let
     optionalAttrs
     optionalString
     optionals
+    pipe
     remove
     splitString
     subtractLists
+    toFunction
     unique
     zipAttrsWith
     ;
@@ -61,12 +63,7 @@ let
     Most arguments are also passed through to the underlying call of [`builtins.derivation`](https://nixos.org/manual/nix/stable/language/derivations).
     :::
   */
-  mkDerivation =
-    fnOrAttrs:
-    if builtins.isFunction fnOrAttrs then
-      makeDerivationExtensible fnOrAttrs
-    else
-      makeDerivationExtensibleConst fnOrAttrs;
+  mkDerivation = fnOrAttrs: makeDerivationExtensible (toFunction fnOrAttrs);
 
   checkMeta = import ./check-meta.nix {
     inherit lib config;
@@ -99,6 +96,10 @@ let
                 thisOverlay = overlay final prev;
                 warnForBadVersionOverride = (
                   thisOverlay ? version
+                  && prev ? version
+                  # We could check that the version is actually distinct, but that
+                  # would probably just delay the inevitable, or preserve tech debt.
+                  # && prev.version != thisOverlay.version
                   && !(thisOverlay ? src)
                   && !(thisOverlay.__intentionallyOverridingVersion or false)
                 );
@@ -135,30 +136,13 @@ let
     in
     finalPackage;
 
-  #makeDerivationExtensibleConst = attrs: makeDerivationExtensible (_: attrs);
-  # but pre-evaluated for a slight improvement in performance.
-  makeDerivationExtensibleConst =
-    attrs:
-    mkDerivationSimple (
-      f0:
-      let
-        f =
-          self: super:
-          let
-            x = f0 super;
-          in
-          if builtins.isFunction x then f0 self super else x;
-      in
-      makeDerivationExtensible (
-        self: attrs // (if builtins.isFunction f0 || f0 ? __functor then f self attrs else f0)
-      )
-    ) attrs;
-
   knownHardeningFlags = [
     "bindnow"
     "format"
     "fortify"
     "fortify3"
+    "strictflexarrays1"
+    "strictflexarrays3"
     "shadowstack"
     "nostrictaliasing"
     "pacret"
@@ -356,14 +340,18 @@ let
         ) == 0;
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
 
-      hardeningDisable' =
-        if
-          any (x: x == "fortify") hardeningDisable
-        # disabling fortify implies fortify3 should also be disabled
-        then
-          unique (hardeningDisable ++ [ "fortify3" ])
-        else
-          hardeningDisable;
+      concretizeFlagImplications =
+        flag: impliesFlags: list:
+        if any (x: x == flag) list then (list ++ impliesFlags) else list;
+
+      hardeningDisable' = unique (
+        pipe hardeningDisable [
+          # disabling fortify implies fortify3 should also be disabled
+          (concretizeFlagImplications "fortify" [ "fortify3" ])
+          # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
+          (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
+        ]
+      );
       defaultHardeningFlags =
         (if stdenv.hasCC then stdenv.cc else { }).defaultHardeningFlags or
         # fallback safe-ish set of flags
@@ -570,11 +558,29 @@ let
           // optionalAttrs (hardeningDisable != [ ] || hardeningEnable != [ ] || stdenv.hostPlatform.isMusl) {
             NIX_HARDENING_ENABLE = builtins.concatStringsSep " " enabledHardeningOptions;
           }
-          // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
-            requiredSystemFeatures = attrs.requiredSystemFeatures or [ ] ++ [
-              "gccarch-${stdenv.hostPlatform.gcc.arch}"
-            ];
-          }
+          //
+            # TODO: remove platform condition
+            # Enabling this check could be a breaking change as it requires to edit nix.conf
+            # NixOS module already sets gccarch, unsure of nix installers and other distributions
+            optionalAttrs
+              (
+                stdenv.buildPlatform ? gcc.arch
+                && !(
+                  stdenv.buildPlatform.isAarch64
+                  && (
+                    # `aarch64-darwin` sets `{gcc.arch = "armv8.3-a+crypto+sha2+...";}`
+                    stdenv.buildPlatform.isDarwin
+                    ||
+                      # `aarch64-linux` has `{ gcc.arch = "armv8-a"; }` set by default
+                      stdenv.buildPlatform.gcc.arch == "armv8-a"
+                  )
+                )
+              )
+              {
+                requiredSystemFeatures = attrs.requiredSystemFeatures or [ ] ++ [
+                  "gccarch-${stdenv.buildPlatform.gcc.arch}"
+                ];
+              }
           // optionalAttrs (stdenv.buildPlatform.isDarwin) (
             let
               allDependencies = concatLists (concatLists dependencies);

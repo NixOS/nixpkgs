@@ -1,6 +1,6 @@
 {
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitLab,
   lib,
   python3,
   rdfind,
@@ -22,11 +22,13 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "linux-firmware";
-  version = "20250509";
+  version = "20250624"; # not a real tag, but the current stable tag breaks some AMD GPUs entirely
 
-  src = fetchzip {
-    url = "https://cdn.kernel.org/pub/linux/kernel/firmware/linux-firmware-${version}.tar.xz ";
-    hash = "sha256-0FrhgJQyCeRCa3s0vu8UOoN0ZgVCahTQsSH0o6G6hhY=";
+  src = fetchFromGitLab {
+    owner = "kernel-firmware";
+    repo = "linux-firmware";
+    rev = "b05fabcd6f2a16d50b5f86c389dde7a33f00bb81";
+    hash = "sha256-AvSsyfKP57Uhb3qMrf6PpNHKbXhD9IvFT1kcz5J7khM=";
   };
 
   postUnpack = ''
@@ -57,5 +59,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     priority = 6; # give precedence to kernel firmware
   };
-  passthru.updateScript = ./update.sh;
 }

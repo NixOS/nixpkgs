@@ -9,6 +9,7 @@
   # `lix-doc`.
   docCargoDeps ? null,
   patches ? [ ],
+  knownVulnerabilities ? [ ],
 }@args:
 
 assert lib.assertMsg (
@@ -86,6 +87,8 @@ assert lib.assertMsg (
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
+  pastaFod ? lib.meta.availableOn stdenv.hostPlatform passt,
+  passt,
 
   confDir,
   stateDir,
@@ -139,6 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
         p.pytest
         p.pytest-xdist
         p.python-frontmatter
+        p.toml
       ]))
       pkg-config
       flex
@@ -169,6 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       doxygen
     ]
     ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
+    ++ lib.optionals pastaFod [ passt ]
     ++ lib.optionals parseToYAML [ yq ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
@@ -254,7 +259,10 @@ stdenv.mkDerivation (finalAttrs: {
       # Enable LTO, since it improves eval performance a fair amount
       # LTO is disabled on:
       # - static builds (strange linkage errors)
-      (lib.mesonBool "b_lto" (!stdenv.hostPlatform.isStatic && (isLLVMOnly || stdenv.cc.isGNU)))
+      # - darwin builds (install test failures. see fj#568 & fj#832)
+      (lib.mesonBool "b_lto" (
+        !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isDarwin && (isLLVMOnly || stdenv.cc.isGNU)
+      ))
       (lib.mesonEnable "gc" true)
       (lib.mesonBool "enable-tests" true)
       (lib.mesonBool "enable-docs" enableDocumentation)
@@ -385,5 +393,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
+    inherit knownVulnerabilities;
   };
 })

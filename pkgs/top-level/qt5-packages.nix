@@ -326,8 +326,6 @@ makeScopeWithSplicing' {
         xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
 
         xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
-
-        yuview = callPackage ../applications/video/yuview { };
       }
     ))
   );

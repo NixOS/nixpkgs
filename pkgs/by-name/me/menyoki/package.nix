@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "orhun";
-    repo = pname;
+    repo = "menyoki";
     rev = "v${version}";
     sha256 = "sha256-owP3G1Rygraifdc4iPURQ1Es0msNhYZIlfrtj0CSU6Y=";
   };
@@ -50,12 +50,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion completions/menyoki.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Screen{shot,cast} and perform ImageOps on the command line";
     homepage = "https://menyoki.cli.rs/";
     changelog = "https://github.com/orhun/menyoki/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "menyoki";
   };
 }

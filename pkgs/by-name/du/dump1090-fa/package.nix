@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dump1090";
-  version = "10.0.1";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "dump1090";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-un2AK5RNkdQSWNbgbrn5K4eZXQdDOgUEzkcoLUVZ+sY=";
+    hash = "sha256-8J17fqNrn5Mqqv4lFHEp4zjc/zeyMUb+fWdk+ssPBwU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     "showconfig"
     "dump1090"
     "view1090"
+    "faup1090"
   ];
 
   doCheck = true;
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin $out/share
-    cp -v dump1090 view1090 $out/bin
+    cp -v dump1090 view1090 faup1090 $out/bin
     cp -vr public_html $out/share/dump1090
 
     runHook postInstall

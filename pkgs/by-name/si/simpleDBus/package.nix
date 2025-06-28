@@ -10,13 +10,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "simpleDBus";
 
-  version = "0.9.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "OpenBluetoothToolbox";
     repo = "SimpleBLE";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VaaDk+pLRUlVjGKFzi22QhYxk1b2bo6rX9TVeJsJdh8=";
+    hash = "sha256-Qi78o3WJ28Gp1OsCyFHhd/7F4/jWLzGjPRwT5qSqqtM=";
   };
 
   outputs = [

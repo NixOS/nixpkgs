@@ -57,17 +57,18 @@ stdenv.mkDerivation (
     gpuTargets' = lib.concatStringsSep ";" gpuTargets;
     compiler = "amdclang++";
     cFlags = "-O3 -DNDEBUG";
+    cxxFlags = "${cFlags} -Wno-c++11-narrowing";
     triton-llvm' = triton-llvm;
   in
   {
     pname = "aotriton";
-    version = "0.8.2b";
+    version = "0.9.2b";
 
     src = fetchFromGitHub {
       owner = "ROCm";
       repo = "aotriton";
       rev = "${finalAttrs.version}";
-      hash = "sha256-gSzGYWfyUNLyzqpu3BM8rjFFL7cRVZ+w9L5pnh9QGz4=";
+      hash = "sha256-1Cf0olD3zRg9JESD6s/WaGifm3kfD12VUvjTZHpmGAE=";
       fetchSubmodules = true;
     };
     env.CXX = compiler;
@@ -152,10 +153,13 @@ stdenv.mkDerivation (
       substituteInPlace third_party/triton/python/setup.py \
         --replace-fail "from distutils.command.clean import clean" "import setuptools;from distutils.command.clean import clean" \
         --replace-fail 'system == "Linux"' 'False'
+      # Fix 'ld: error: unable to insert .comment after .comment'
+      substituteInPlace v2python/ld_script.py \
+        --replace-fail 'INSERT AFTER .comment;' ""
 
       cmakeFlagsArray+=(
         '-DCMAKE_C_FLAGS_RELEASE=${cFlags}'
-        '-DCMAKE_CXX_FLAGS_RELEASE=${cFlags}'
+        '-DCMAKE_CXX_FLAGS_RELEASE=${cxxFlags}'
       )
       prependToVar cmakeFlags "-GNinja"
       mkdir -p /build/tmp-home

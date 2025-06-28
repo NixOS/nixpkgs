@@ -28,7 +28,7 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "matcha-gtk-theme";
       rev = version;
       sha256 = "sha256-vPAGEa3anWAynEg2AYme4qpHJdLDKk2CmL5iQ1mBYgM=";
     };
@@ -60,8 +60,8 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
         ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
         --dest $out/share/themes
 
-      mkdir -p $out/share/doc/${pname}
-      cp -a src/extra/firefox $out/share/doc/${pname}
+      mkdir -p $out/share/doc/matcha-gtk-theme
+      cp -a src/extra/firefox $out/share/doc/matcha-gtk-theme
 
       jdupes --quiet --link-soft --recurse $out/share
 

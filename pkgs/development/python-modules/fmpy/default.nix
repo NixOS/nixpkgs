@@ -119,7 +119,7 @@ buildPythonPackage rec {
       cmakeConfigurePhase
       cmake --build native/src/build --config Release
     ''
-    + lib.optionalString (enableRemoting && stdenv.isLinux) ''
+    + lib.optionalString (enableRemoting && stdenv.hostPlatform.isLinux) ''
       # reimplementation of native/build_remoting.py
       cmakeFlags="-S native/remoting -B remoting/linux64 -D RPCLIB=${rpclib}"
       cmakeConfigurePhase
@@ -178,7 +178,7 @@ buildPythonPackage rec {
           };
 
         # FMPy searches for sundials without the "lib"-prefix; strip it
-        # and symlink the so-files into existance.
+        # and symlink the so-files into existence.
         postFixup = ''
           pushd $out/lib
           for so in *.so; do

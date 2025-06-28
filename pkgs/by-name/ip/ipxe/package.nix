@@ -48,7 +48,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipxe";
-  version = "1.21.1-unstable-2025-05-07";
+  version = "1.21.1-unstable-2025-06-17";
 
   nativeBuildInputs = [
     mtools
@@ -65,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "12dee2dab2ea6bc619603c2036e6512889813c4c";
-    hash = "sha256-um0CAxIY7FFGAzM1vCL8uurFY3DieK46Y9JA12s5fVw=";
+    rev = "60e167c00b138fdb162e7b2192e9cbb196ed3cbd";
+    hash = "sha256-RaYu3gvqAxA+vEJdLOLMbCRtrt+PyrRd/Wqyj2hXYZU=";
   };
 
   # Calling syslinux on a FAT image isn't going to work on Aarch64.

@@ -95,6 +95,8 @@ mkDerivation {
     cp installer-assets/udev/42-flipperzero.rules $out/etc/udev/rules.d/
   '';
 
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

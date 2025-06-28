@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hatchling,
   llama-cloud,
   llama-index-core,
   pythonOlder,
@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-indices-managed-llama-cloud";
-  version = "0.6.11";
+  version = "0.7.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,10 +18,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_indices_managed_llama_cloud";
     inherit version;
-    hash = "sha256-klUy92DNLrsllIKNoxGtrD1UzSyuPf8pCEke67K4vQ8=";
+    hash = "sha256-f9cwopZ9wg60Iq4vpAKLTPcCMRSlz621IyNVE3dUGG8=";
   };
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [ "llama-cloud" ];
+
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-cloud

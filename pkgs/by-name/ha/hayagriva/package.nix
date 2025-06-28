@@ -27,15 +27,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=csl::tests::test_csl"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Work with references: Literature database management, storage, and citation formatting";
     homepage = "https://github.com/typst/hayagriva";
     changelog = "https://github.com/typst/hayagriva/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "hayagriva";
   };
 }

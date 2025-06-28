@@ -87,7 +87,7 @@ in
       default = { };
       example = lib.literalExpression ''
         {
-          root = {
+          "-" = {
             spec = "LABEL=root";
             hashTableSizeMB = 2048;
             verbosity = "crit";

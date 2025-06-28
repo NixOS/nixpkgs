@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
-    repo = pname;
+    repo = "routinator";
     rev = "v${version}";
     hash = "sha256-itD9d+EqEdJ2bTJEpHxJCFFS8Mpc7AFQ1JgkNQxncV0=";
   };
@@ -19,12 +19,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-58EnGouq8iKkgsvyHqARoQ0u4QXjw0m6pv4Am4J9wlU=";
 
-  meta = with lib; {
+  meta = {
     description = "RPKI Validator written in Rust";
     homepage = "https://github.com/NLnetLabs/routinator";
     changelog = "https://github.com/NLnetLabs/routinator/blob/v${version}/Changelog.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ _0x4A6F ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     mainProgram = "routinator";
   };
 

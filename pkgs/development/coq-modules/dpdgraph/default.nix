@@ -15,64 +15,24 @@ mkCoqDerivation {
   owner = "Karmaki";
   repo = "coq-dpdgraph";
   inherit version;
-  defaultVersion = lib.switch coq.coq-version [
-    {
-      case = "8.20";
-      out = "1.0+8.20";
+  defaultVersion = lib.switch coq.coq-version (lib.lists.sort (x: y: lib.versions.isLe x.out y.out) (
+    lib.mapAttrsToList (out: case: { inherit case out; }) {
+      "1.0+8.20" = "8.20";
+      "1.0+8.19" = "8.19";
+      "1.0+8.18" = "8.18";
+      "1.0+8.17" = "8.17";
+      "1.0+8.16" = "8.16";
+      "1.0+8.15" = "8.15";
+      "1.0+8.14" = "8.14";
+      "1.0+8.13" = "8.13";
+      "0.6.8" = "8.12";
+      "0.6.7" = "8.11";
+      "0.6.6" = "8.10";
+      "0.6.5" = "8.9";
+      "0.6.3" = "8.8";
+      "0.6.2" = "8.7";
     }
-    {
-      case = "8.19";
-      out = "1.0+8.19";
-    }
-    {
-      case = "8.18";
-      out = "1.0+8.18";
-    }
-    {
-      case = "8.17";
-      out = "1.0+8.17";
-    }
-    {
-      case = "8.16";
-      out = "1.0+8.16";
-    }
-    {
-      case = "8.15";
-      out = "1.0+8.15";
-    }
-    {
-      case = "8.14";
-      out = "1.0+8.14";
-    }
-    {
-      case = "8.13";
-      out = "1.0+8.13";
-    }
-    {
-      case = "8.12";
-      out = "0.6.8";
-    }
-    {
-      case = "8.11";
-      out = "0.6.7";
-    }
-    {
-      case = "8.10";
-      out = "0.6.6";
-    }
-    {
-      case = "8.9";
-      out = "0.6.5";
-    }
-    {
-      case = "8.8";
-      out = "0.6.3";
-    }
-    {
-      case = "8.7";
-      out = "0.6.2";
-    }
-  ] null;
+  )) null;
 
   release."1.0+8.20".sha256 = "sha256-szfH/OksCH3SCbcFjwEvLwHE5avmHp1vYiJM6KAXFqs=";
   release."1.0+8.19".sha256 = "sha256-L1vjEydYiwDFTXES3sgfdaO/D50AbTJKBXUKUCgbpto=";

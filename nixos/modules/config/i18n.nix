@@ -5,15 +5,21 @@
   ...
 }:
 let
+  sanitizeUTF8Capitalization =
+    lang: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] lang);
   aggregatedLocales =
-    (builtins.map
-      (l: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8")
-      (
-        [ config.i18n.defaultLocale ]
-        ++ (lib.optionals (builtins.isList config.i18n.extraLocales) config.i18n.extraLocales)
-        ++ (lib.attrValues (lib.filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
-      )
-    )
+    [
+      "${config.i18n.defaultLocale}/${config.i18n.defaultCharset}"
+    ]
+    ++ lib.pipe config.i18n.extraLocaleSettings [
+      # See description of extraLocaleSettings for why is this ignored here.
+      (lib.filterAttrs (n: v: n != "LANGUAGE"))
+      (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
+      (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
+    ]
+    ++ (builtins.map sanitizeUTF8Capitalization (
+      lib.optionals (builtins.isList config.i18n.extraLocales) config.i18n.extraLocales
+    ))
     ++ (lib.optional (builtins.isString config.i18n.extraLocales) config.i18n.extraLocales);
 in
 {
@@ -48,16 +54,24 @@ in
         default = "en_US.UTF-8";
         example = "nl_NL.UTF-8";
         description = ''
-          The default locale.  It determines the language for program
-          messages, the format for dates and times, sort order, and so on.
-          It also determines the character set, such as UTF-8.
+          The default locale. It determines the language for program messages,
+          the format for dates and times, sort order, and so on. Setting the
+          default character set is done via {option}`i18n.defaultCharset`.
+        '';
+      };
+      defaultCharset = lib.mkOption {
+        type = lib.types.str;
+        default = "UTF-8";
+        example = "ISO-8859-8";
+        description = ''
+          The default locale character set.
         '';
       };
 
       extraLocales = lib.mkOption {
         type = lib.types.either (lib.types.listOf lib.types.str) (lib.types.enum [ "all" ]);
         default = [ ];
-        example = [ "nl_NL.UTF-8" ];
+        example = [ "nl_NL.UTF-8/UTF-8" ];
         description = ''
           Additional locales that the system should support, besides the ones
           configured with {option}`i18n.defaultLocale` and
@@ -74,9 +88,30 @@ in
           LC_TIME = "de_DE.UTF-8";
         };
         description = ''
-          A set of additional system-wide locale settings other than
-          `LANG` which can be configured with
-          {option}`i18n.defaultLocale`.
+          A set of additional system-wide locale settings other than `LANG`
+          which can be configured with {option}`i18n.defaultLocale`. Note that
+          the `/UTF-8` suffix used in {option}`i18n.extraLocales` indicates a
+          character set, and it must not be added manually here. To use a
+          non-`UTF-8` character set such as ISO-XXXX-8, the
+          {option}`i18n.localeCharsets` can be used.
+
+          Note that if the [`LANGUAGE`
+          key](https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html)
+          is used in this option, it is ignored when computing the locales
+          required to be installed, because the possible values of this key are
+          more diverse and flexible then the others.
+        '';
+      };
+      localeCharsets = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = { };
+        example = {
+          LC_MESSAGES = "ISO-8859-15";
+          LC_TIME = "ISO-8859-1";
+        };
+        description = ''
+          Per each {option}`i18n.extraLocaleSettings`, choose the character set
+          to use for it. Essentially defaults to UTF-8 for all of them.
         '';
       };
 

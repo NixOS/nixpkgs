@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskflow";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "taskflow";
     repo = "taskflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-omon02xgf4vV7JzpLFtHgf2MXxR6JowI+pDyAswXMUY=";
+    hash = "sha256-s0A8zJoq0VfmAks9h4v63J7tPX5JnlNTzJJMilzc5yM=";
   };
 
   patches = [

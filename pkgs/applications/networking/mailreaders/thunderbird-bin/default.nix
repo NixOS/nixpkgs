@@ -104,7 +104,6 @@ stdenv.mkDerivation {
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
     inherit
       pname
-      lib
       writeScript
       xidel
       coreutils
@@ -116,7 +115,6 @@ stdenv.mkDerivation {
       versionSuffix
       ;
     baseName = "thunderbird";
-    channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
   };
@@ -128,13 +126,13 @@ stdenv.mkDerivation {
     gtk3 = gtk3;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = "http://www.mozilla.org/thunderbird/";
     mainProgram = "thunderbird";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mpl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ lovesegfault ];
     platforms = builtins.attrNames mozillaPlatforms;
     hydraPlatforms = [ ];

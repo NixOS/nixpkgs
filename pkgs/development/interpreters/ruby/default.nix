@@ -207,7 +207,7 @@ let
               # When using a baseruby, ruby always sets "libdir" to the build
               # directory, which nix rejects due to a reference in to /build/ in
               # the final product. Removing this reference doesn't seem to break
-              # anything and fixes cross compliation.
+              # anything and fixes cross compilation.
               ./dont-refer-to-build-dir.patch
             ];
 
@@ -216,8 +216,7 @@ let
           cargoDeps =
             if yjitSupport then
               rustPlatform.fetchCargoVendor {
-                inherit (finalAttrs) src;
-                sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
+                inherit (finalAttrs) src cargoRoot;
                 hash =
                   assert cargoHash != null;
                   cargoHash;
@@ -435,8 +434,8 @@ in
   };
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "3" "";
-    hash = "sha256-VaTNHcvlyifPZeiak1pILCuyKEgyk5JmVRwOxotDf0Y=";
+    version = rubyVersion "3" "4" "4" "";
+    hash = "sha256-oFl7/fMS4BDv0e/6qNfx14MxRv3BeVDKqBWP+j3L+oU=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
 }

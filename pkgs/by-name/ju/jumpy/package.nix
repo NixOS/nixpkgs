@@ -74,15 +74,15 @@ rustPlatform.buildRustPackage rec {
       --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tactical 2D shooter played by up to 4 players online or on a shared screen";
     mainProgram = "jumpy";
     homepage = "https://fishfight.org/";
     changelog = "https://github.com/fishfolk/jumpy/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

@@ -46,13 +46,17 @@
         "overlay"
       ];
 
+      system.requiredKernelConfig = with config.lib.kernelConfig; [
+        (isEnabled "EROFS_FS")
+      ];
+
       boot.initrd.systemd = {
         mounts = [
           {
             where = "/run/nixos-etc-metadata";
             what = "/etc-metadata-image";
             type = "erofs";
-            options = "loop,ro";
+            options = "loop,ro,nodev,nosuid";
             unitConfig = {
               # Since this unit depends on the nix store being mounted, it cannot
               # be a dependency of local-fs.target, because if it did, we'd have
@@ -81,6 +85,8 @@
             type = "overlay";
             options = lib.concatStringsSep "," (
               [
+                "nodev"
+                "nosuid"
                 "relatime"
                 "redirect_dir=on"
                 "metacopy=on"

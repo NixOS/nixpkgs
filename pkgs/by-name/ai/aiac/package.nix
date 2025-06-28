@@ -11,8 +11,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "gofireflyio";
-    repo = pname;
-    rev = "v${version}";
+    repo = "aiac";
+    tag = "v${version}";
     hash = "sha256-Lk3Bmzg1owkIWzz7jgq1YpdPyRzyZ7aNoWPIU5aWzu0=";
   };
 

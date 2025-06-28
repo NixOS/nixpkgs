@@ -44,37 +44,40 @@ let
         url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
         inherit sha512;
       };
-      extraPatches = [
-        # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
-        ./no-buildconfig.patch
-        # clang-19 fixes for char_traits build issue
-        # https://github.com/rnpgp/rnp/pull/2242/commits/e0790a2c4ff8e09d52522785cec1c9db23d304ac
-        # https://github.com/rnpgp/sexpp/pull/54/commits/46744a14ffc235330bb99cebfaf294829c31bba4
-        # Remove when upstream bumps bundled rnp version: https://bugzilla.mozilla.org/show_bug.cgi?id=1893950
-        ./0001-Removed-lookup-against-basic_string-uint8_t.patch
-        ./0001-Implemented-char_traits-for-SEXP-octet_t.patch
-      ];
+      extraPatches =
+        [
+          # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
+          ./no-buildconfig.patch
+        ]
+        ++ lib.optionals (lib.versionOlder version "139") [
+          # clang-19 fixes for char_traits build issue
+          # https://github.com/rnpgp/rnp/pull/2242/commits/e0790a2c4ff8e09d52522785cec1c9db23d304ac
+          # https://github.com/rnpgp/sexpp/pull/54/commits/46744a14ffc235330bb99cebfaf294829c31bba4
+          # Remove when upstream bumps bundled rnp version: https://bugzilla.mozilla.org/show_bug.cgi?id=1893950
+          ./0001-Removed-lookup-against-basic_string-uint8_t.patch
+          ./0001-Implemented-char_traits-for-SEXP-octet_t.patch
+        ];
 
       extraPassthru = {
         icu73 = icu73';
         icu77 = icu77';
       };
 
-      meta = with lib; {
+      meta = {
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
         description = "Full-featured e-mail client";
         homepage = "https://thunderbird.net/";
         mainProgram = "thunderbird";
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           lovesegfault
           pierron
           vcunat
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
         broken = stdenv.buildPlatform.is32bit;
         # since Firefox 60, build on 32-bit platforms fails with "out of memory".
         # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
-        license = licenses.mpl20;
+        license = lib.licenses.mpl20;
       };
     }).override
       {
@@ -92,8 +95,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "138.0";
-    sha512 = "923d76cf0a14f29146e5dcfc75dd9522d465512f6c604de6e0acc0812d4240331c170913a821fc0aa03d5945019577f996053498c9a7c691b21a2678a622ac02";
+    version = "139.0.2";
+    sha512 = "edb20c692674dc5c3ba70673f7dd03710bf7ac0ce2be614a7a4b3d2b40b20b4974aab2a621dd5b43720c412a590c08f8b78abeb9b61f288f3217c6a04cc1e8ff";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -106,8 +109,8 @@ rec {
   thunderbird-128 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "128.10.0esr";
-    sha512 = "b02582ea4fa0297a06d30eda1555bbf3ed79ae7a35a8993f2a70b0ec84af28a4d084cd7ebe1c73676e689ff9366e779cc5ef67a197638949bf232a40b740d1b6";
+    version = "128.11.1esr";
+    sha512 = "8fd99f68895b543bdc5bba38d7720f0e48e2a82c9fe5e8ca15534e3918cc40b5b2911666dbbbda0a7911783a03a0d8f7371ea353fd67416baca1e1dffdd25c44";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  fetchurl,
   cmake,
   pkg-config,
   kdePackages,
@@ -52,6 +53,14 @@ let
       vendorHash = "sha256-zArdGj5yeRxU0X4jNgT5YBI9SJUyrANDaqNPAPH3d5M=";
     }
   );
+
+  amneziaPremiumConfig = fetchurl {
+    url = "https://raw.githubusercontent.com/amnezia-vpn/amnezia-client-lite/f45d6b242c1ac635208a72914e8df76ccb3aa44c/macos-signed-build.sh";
+    hash = "sha256-PnaPVPlyglUphhknWwP7ziuwRz+WOz0k9WRw6Q0nG2c=";
+    postFetch = ''
+      sed -nri '/PROD_AGW_PUBLIC_KEY|PROD_S3_ENDPOINT/p' $out
+    '';
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
@@ -123,6 +132,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qttools
   ];
+
+  preConfigure = ''
+    source ${amneziaPremiumConfig}
+  '';
 
   installPhase = ''
     runHook preInstall

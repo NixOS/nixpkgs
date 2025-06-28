@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   pname = "pastebinit";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pastebinit";
+    repo = "pastebinit";
     rev = version;
     hash = "sha256-vuAWkHlQM6QTWarThpSbY0qrxzej0GvLU0jT2JOS/qc=";
   };

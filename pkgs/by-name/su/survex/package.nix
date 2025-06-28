@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   doCheck = (!stdenv.hostPlatform.isDarwin); # times out
   enableParallelChecking = false;
 
-  meta = with lib; {
+  meta = {
     description = "Free Software/Open Source software package for mapping caves";
     longDescription = ''
       Survex is a Free Software/Open Source software package for mapping caves,
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://survex.com/";
     changelog = "https://github.com/ojwb/survex/raw/v${version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.matthewcroughan ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.matthewcroughan ];
+    platforms = lib.platforms.all;
   };
 }

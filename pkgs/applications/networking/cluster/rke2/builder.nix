@@ -150,17 +150,17 @@ buildGoModule (finalAttrs: {
       // moduleTests;
   } // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rancher/rke2";
     description = "RKE2, also known as RKE Government, is Rancher's next-generation Kubernetes distribution";
-    changelog = "https://github.com/rancher/rke2/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/rancher/rke2/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rorosen
       zimbatm
       zygot
     ];
     mainProgram = "rke2";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

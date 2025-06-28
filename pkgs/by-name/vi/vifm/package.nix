@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if isFullPackage then "vifm-full" else "vifm";
-  version = "0.14.2";
+  version = "0.14.3";
 
   src = fetchurl {
     url = "https://github.com/vifm/vifm/releases/download/v${version}/vifm-${version}.tar.bz2";
-    hash = "sha256-zRsF0lQ832gp1gsjvCJcb94T0+98EAj4IbkgmDfx4rA=";
+    hash = "sha256-Fqm+EQjWpaCen5R/clY3XlGbpB6+lHNlmyBzn9vzRA4=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     patchShebangs --build src/helpztags
   '';
 
+  enableParallelBuilding = true;
+
   postFixup =
     let
       path = lib.makeBinPath [
@@ -67,12 +69,12 @@ stdenv.mkDerivation rec {
     ignoredVersions = "beta";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Vi-like file manager${lib.optionalString isFullPackage "; Includes support for optional features"}";
     mainProgram = "vifm";
-    maintainers = with maintainers; [ raskin ];
-    platforms = if mediaSupport then platforms.linux else platforms.unix;
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = if mediaSupport then lib.platforms.linux else lib.platforms.unix;
+    license = lib.licenses.gpl2;
     downloadPage = "https://vifm.info/downloads.shtml";
     homepage = "https://vifm.info/";
     changelog = "https://github.com/vifm/vifm/blob/v${version}/ChangeLog";

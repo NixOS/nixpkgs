@@ -23,6 +23,7 @@ let
       PAPERLESS_THUMBNAIL_FONT_NAME = defaultFont;
       GRANIAN_HOST = cfg.address;
       GRANIAN_PORT = toString cfg.port;
+      GRANIAN_WORKERS_KILL_TIMEOUT = "60";
     }
     // lib.optionalAttrs (config.time.timeZone != null) {
       PAPERLESS_TIME_ZONE = config.time.timeZone;
@@ -366,11 +367,21 @@ in
         Whether to configure Tika and Gotenberg to process Office and e-mail files with OCR.
       '';
     };
+
+    manage = lib.mkOption {
+      type = lib.types.package;
+      readOnly = true;
+      description = ''
+        The package derivation for the `paperless-manage` wrapper script.
+        Useful for other modules that need to add this specific script to a service's PATH.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        services.paperless.manage = manage;
         environment.systemPackages = [ manage ];
 
         services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
@@ -480,18 +491,18 @@ in
               fi
             fi
           '';
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after =
             lib.optional enableRedis "redis-paperless.service"
-            ++ lib.optional cfg.database.createLocally "postgresql.service";
+            ++ lib.optional cfg.database.createLocally "postgresql.target";
         };
 
         systemd.services.paperless-task-queue = {
           description = "Paperless Celery Workers";
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after = [
             "paperless-scheduler.service"
-          ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          ] ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
             ExecStart = "${cfg.package}/bin/celery --app paperless worker --loglevel INFO";
@@ -509,10 +520,10 @@ in
           # Bind to `paperless-scheduler` so that the consumer never runs
           # during migrations
           bindsTo = [ "paperless-scheduler.service" ];
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after = [
             "paperless-scheduler.service"
-          ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          ] ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
             ExecStart = "${cfg.package}/bin/paperless-ngx document_consumer";
@@ -530,10 +541,10 @@ in
           # Bind to `paperless-scheduler` so that the web server never runs
           # during migrations
           bindsTo = [ "paperless-scheduler.service" ];
-          requires = lib.optional cfg.database.createLocally "postgresql.service";
+          requires = lib.optional cfg.database.createLocally "postgresql.target";
           after = [
             "paperless-scheduler.service"
-          ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          ] ++ lib.optional cfg.database.createLocally "postgresql.target";
           # Setup PAPERLESS_SECRET_KEY.
           # If this environment variable is left unset, paperless-ngx defaults
           # to a well-known value, which is insecure.

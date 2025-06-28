@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nschloe";
-    repo = pname;
+    repo = "perfplot";
     tag = "v${version}";
     hash = "sha256-bu6eYQukhLE8sLkS3PbqTgXOqJFXJYXTcXAhmjaq48g=";
   };

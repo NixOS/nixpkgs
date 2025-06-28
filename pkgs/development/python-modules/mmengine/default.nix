@@ -52,6 +52,23 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch =
+    # Fails in python >= 3.13
+    # exec(compile(f.read(), version_file, "exec")) does not populate the locals() namesp
+    # In python 3.13, the locals() dictionary in a function does not automatically update with
+    # changes made by exec().
+    # https://peps.python.org/pep-0558/
+    ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          "return locals()['__version__']" \
+          "return '${version}'"
+    ''
+    + ''
+      substituteInPlace tests/test_config/test_lazy.py \
+        --replace-fail "import numpy.compat" ""
+    '';
+
   build-system = [ setuptools ];
 
   dependencies = [

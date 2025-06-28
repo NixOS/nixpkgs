@@ -19,13 +19,13 @@
 let
   arch = if stdenv.hostPlatform.isx86_64 then "x64" else stdenv.hostPlatform.parsed.cpu.name;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "Quake3e";
   version = "2024-09-02-dev";
 
   src = fetchFromGitHub {
     owner = "ec-";
-    repo = pname;
+    repo = "Quake3e";
     rev = "b6e7ce4f78711e1c9d2924044a9a9d8a9db7020f";
     sha256 = "sha256-tQgrHiP+QhBzcUnHRwzaDe38Th0uDt450fra8O3Vjqc=";
   };

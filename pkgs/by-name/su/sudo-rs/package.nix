@@ -75,7 +75,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
+      ];
+    };
     tests = nixosTests.sudo-rs;
   };
 

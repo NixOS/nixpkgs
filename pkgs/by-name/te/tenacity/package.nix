@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "tenacityteam";
-    repo = pname;
+    repo = "tenacity";
     fetchSubmodules = true;
     rev = "v${version}";
     hash = "sha256-2gndOwgEJK2zDSbjcZigbhEpGv301/ygrf+EQhKp8PI=";

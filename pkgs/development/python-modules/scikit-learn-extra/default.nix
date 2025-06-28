@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
-    repo = pname;
+    repo = "scikit-learn-extra";
     tag = "v${version}";
     sha256 = "sha256-dHOwo6NIuhcvIehpuJQ621JEg5O3mnXycAhpTZKaxns=";
   };

@@ -99,14 +99,6 @@ let
   };
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
-  # Determine the set of modules that we need to mount the root FS.
-  modulesClosure = pkgs.makeModulesClosure {
-    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
-    kernel = config.system.modulesTree;
-    firmware = config.hardware.firmware;
-    allowMissing = false;
-    inherit (config.boot.initrd) extraFirmwarePaths;
-  };
 
   initrdBinEnv = pkgs.buildEnv {
     name = "initrd-bin-env";
@@ -133,7 +125,9 @@ let
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
 
-    contents = lib.filter ({ source, ... }: !lib.elem source cfg.suppressedStorePaths) cfg.storePaths;
+    contents = lib.filter (
+      { source, enable, ... }: (!lib.elem source cfg.suppressedStorePaths) && enable
+    ) cfg.storePaths;
   };
 
 in
@@ -266,6 +260,8 @@ in
 
         Can also be set to a hashed super user password to allow
         authenticated access to the emergency mode.
+
+        For emergency access after initrd, use `${options.systemd.enableEmergencyMode}` instead.
       '';
       default = false;
     };
@@ -471,7 +467,7 @@ in
             }
           '';
 
-          "/lib".source = "${modulesClosure}/lib";
+          "/lib".source = "${config.system.build.modulesClosure}/lib";
 
           "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 
@@ -640,7 +636,7 @@ in
         {
           where = "/sysroot/run";
           what = "/run";
-          options = "bind";
+          options = "rbind";
           unitConfig = {
             # See the comment on the mount unit for /run/etc-metadata
             DefaultDependencies = false;

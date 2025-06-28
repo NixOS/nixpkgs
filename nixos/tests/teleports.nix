@@ -36,7 +36,7 @@
     with subtest("teleports launches"):
         machine.succeed("teleports >&2 &")
         machine.wait_for_console_text("authorizationStateWaitPhoneNumber")
-        machine.send_key("alt-f10")
+        # Not fullscreening, because main app colour makes OCR stuck
         machine.sleep(2)
         machine.wait_for_text(r"(TELEports|Phone Number)")
         machine.screenshot("teleports_open")
@@ -46,7 +46,7 @@
     with subtest("teleports localisation works"):
         machine.succeed("env LANG=de_DE.UTF-8 teleports >&2 &")
         machine.wait_for_console_text("authorizationStateWaitPhoneNumber")
-        machine.send_key("alt-f10")
+        # Not fullscreening, because main app colour makes OCR stuck
         machine.sleep(2)
         machine.wait_for_text("Telefonnummer")
         machine.screenshot("teleports_localised")

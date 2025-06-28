@@ -73,8 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem rec {
       name = "Sonic Robo Blast 2 Kart";
-      exec = finalAttrs.pname;
-      icon = finalAttrs.pname;
+      exec = "srb2kart";
+      icon = "srb2kart";
       comment = "Kart racing mod based on SRB2";
       desktopName = name;
       genericName = name;

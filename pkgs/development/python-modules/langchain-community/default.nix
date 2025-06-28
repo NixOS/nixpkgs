@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -23,6 +22,8 @@
 
   # tests
   blockbuster,
+  duckdb,
+  duckdb-engine,
   httpx,
   langchain-tests,
   lark,
@@ -34,18 +35,21 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.22";
+  version = "0.3.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
-    repo = "langchain";
-    tag = "langchain-community==${version}";
-    hash = "sha256-fotu3vUCWnAVyjFjsIUjk1If81yQ3/YLj26PksmnvGE=";
+    repo = "langchain-community";
+    tag = "libs/community/v${version}";
+    hash = "sha256-mAh5vq6Yi+ey9Yai0Hx2tHGE7OhVV98EuJfyhxrN9Fk=";
   };
 
   sourceRoot = "${src.name}/libs/community";
@@ -54,12 +58,16 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest langchain and -core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain"
     "langchain-core"
     "numpy"
     "pydantic-settings"
     "tenacity"
+  ];
+
+  pythonRemoveDeps = [
+    "bs4"
   ];
 
   dependencies = [
@@ -76,10 +84,13 @@ buildPythonPackage rec {
     sqlalchemy
     tenacity
   ];
+
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
     blockbuster
+    duckdb
+    duckdb-engine
     httpx
     langchain-tests
     lark
@@ -93,44 +104,33 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  pytestFlagsArray = [
+    "tests/unit_tests"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
-    # Test require network access
-    "test_ovhcloud_embed_documents"
-    "test_yandex"
-    "test_table_info"
-    "test_sql_database_run"
-    # pydantic.errors.PydanticUserError: `SQLDatabaseToolkit` is not fully defined; you should define `BaseCache`, then call `SQLDatabaseToolkit.model_rebuild()`.
-    "test_create_sql_agent"
-    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
-    "test_proper_inputs"
-    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
-    "test_variable_key_naming"
-    # Tests against magic values in dict
-    "test_serializable_mapping"
+    # requires bs4, aka BeautifulSoup
+    "test_importable_all"
+    # flaky
+    "test_llm_caching"
+    "test_llm_caching_async"
   ];
 
   disabledTestPaths = [
-    # ValueError: Received unsupported arguments {'strict': None}
-    "tests/unit_tests/chat_models/test_cloudflare_workersai.py"
     # depends on Pydantic v1 notations, will not load
     "tests/unit_tests/document_loaders/test_gitbook.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-community==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "libs/community/v";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-community==${version}";
     description = "Community contributed LangChain integrations";
-    homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
+    homepage = "https://github.com/langchain-ai/langchain-community";
+    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

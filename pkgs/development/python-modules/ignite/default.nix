@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pytorch";
-    repo = pname;
+    repo = "ignite";
     tag = "v${version}";
     hash = "sha256-aWm+rj/9A7oNBW5jkMg/BRuEw2gQUJ88At1wB75FgNQ=";
   };

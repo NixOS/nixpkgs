@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "slackdump";
-  version = "3.1.1";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "rusq";
     repo = "slackdump";
     tag = "v${version}";
-    hash = "sha256-DBIBOHoQIUp2WXj50w2ixhB9W8qBzdrBmNCKSuAJMGk=";
+    hash = "sha256-unJe3hTIYmQMAvyY0N1S2JiyTtOSaKaJSqE2C9LqDh0=";
   };
 
   nativeCheckInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.IOKitTools;
@@ -32,7 +32,7 @@ buildGoModule rec {
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
     ];
 
-  vendorHash = "sha256-TEeYHT2jvU0ioMb3h/xjUg1fISsi5oHY5xKEcHwhC0Y=";
+  vendorHash = "sha256-Uy/l3eZSWqVeFKFr6Sc+0h8UVzLGmRXVF6sbX6tnXWA=";
 
   __darwinAllowLocalNetworking = true;
 

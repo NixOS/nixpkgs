@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+  testers,
   nodejs,
   node-gyp,
   inter,
@@ -15,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.24.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eiDTNMB/CipAR3FkUqPUGYdTAC6lSxT9gRXPQJLx5YE=";
+    hash = "sha256-eAiRvesUZIwTaj7CSxtI4rkGlTkgVjbzzwjYaXlhSuo=";
   };
 
   patches = [
@@ -51,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
-    hash = "sha256-2n61uKdT9Q1fobpHunRhC3Eql3fqsV+DcyaEGjYDOyY=";
+    hash = "sha256-yf8A0oZ0Y4A5k7gfinIU02Lbqp/ygyvIBlldS0pv5+0=";
   };
   buildPhase = ''
     runHook preBuild
@@ -123,6 +125,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove broken symlinks
     find $out -type l ! -exec test -e {} \; -delete
   '';
+
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        # remove hardcoded version if upstream syncs general version with cli
+        # version
+        version = "0.23.0";
+      };
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://karakeep.app/";

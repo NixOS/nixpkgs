@@ -1,6 +1,6 @@
 {
   lib,
-  flutter329,
+  flutter332,
   fetchFromGitHub,
   gst_all_1,
   libunwind,
@@ -15,21 +15,23 @@
   gitUpdater,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "saber";
-  version = "0.25.6";
+  version = "0.25.9";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-OknqEbWAYLlxSTDWcggM6GP2V8cdKIAksbm7TmKzjKY=";
+    hash = "sha256-l1TPk6JiT/o0Pl67Vqv4NE2n/FrZKy/SqwhW58A3c6w=";
   };
 
   gitHashes = {
     receive_sharing_intent = "sha256-8D5ZENARPZ7FGrdIErxOoV3Ao35/XoQ2tleegI42ZUY=";
-    json2yaml = "sha256-Vb0Bt11OHGX5+lDf8KqYZEGoXleGi5iHXVS2k7CEmDw=";
-    workmanager = "sha256-fpB8CwNIn+HCQujyIXciq7Y9yd78Ie0IjkSewv3u5iw=";
+    flutter_secure_storage_linux = "sha256-cFNHW7dAaX8BV7arwbn68GgkkBeiAgPfhMOAFSJWlyY=";
+    irondash_engine_context = "sha256-/ohreOZDsVqfPoJ6wK7ylTQAgWw23v0b31bDQw5L2Hw=";
+    super_native_extensions = "sha256-0WZ5+imtLJE8GhbAgLyCC502vvlDl5QG3xtG2nCAnQI=";
+    yaru = "sha256-j0aPyHx79kzT/eLf0Y3cq4qQkQ4c76GdpjLaVNp8MuI=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

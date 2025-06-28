@@ -23,13 +23,13 @@ let
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.31.0";
+  version = "2.31.1";
   sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-l42h6mGqcb7Wy1ryXM0gxnt2fUUDr8+4nc9qIG0nDgc=" "zip";
-    i686-linux = fetch "linux_386" "sha256-3oxBu0SAbWNgHZxirmKXm0Mk/uRZRPX/qCfYvkANTfM=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-hlktdQCGMtTIbd2j9x0aHKCIoIAydDj/caKaIWJfJTI=" "zip";
+    aarch64-linux = fetch "linux_arm64" "sha256-cFGIzB1452XVSkajHbD45Pxp8Hfu10q68nMnbE9dtzg=" "zip";
+    i686-linux = fetch "linux_386" "sha256-EckUFVr5MQ75XW4eHCxWt9vtcqzAFHLUDlmr//pcmf8=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-jPZxqaLrtBC42bGVOByKuORyl2YFicILlQDHkNuuJuc=" "zip";
     aarch64-darwin =
-      fetch "apple_universal" "sha256-PahPWQ4HpaOvEC1zda8X1Bft+8l/0qGWSJUEcfuWlxg="
+      fetch "apple_universal" "sha256-B71apQ2JPyyVHhavMziKNtLNs+WfCDdUEtvfwGFkE+Y="
         "pkg";
     x86_64-darwin = aarch64-darwin;
   };
@@ -86,16 +86,16 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "1Password command-line tool";
     homepage = "https://developer.1password.com/docs/cli/";
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI2";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       joelburget
       khaneliman
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     inherit mainProgram platforms;
   };
 }

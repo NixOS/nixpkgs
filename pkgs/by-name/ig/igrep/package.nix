@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Interactive Grep";
     homepage = "https://github.com/konradsz/igrep";
     changelog = "https://github.com/konradsz/igrep/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _0x4A6F ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     mainProgram = "ig";
   };
 }

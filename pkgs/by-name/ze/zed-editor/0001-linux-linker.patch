@@ -1,5 +1,5 @@
 diff --git a/.cargo/config.toml b/.cargo/config.toml
-index 07cbc23195..b3c4d43e0f 100644
+index 717c5e1..0bb7b6c 100644
 --- a/.cargo/config.toml
 +++ b/.cargo/config.toml
 @@ -5,14 +5,6 @@ rustflags = ["-C", "symbol-mangling-version=v0", "--cfg", "tokio_unstable"]
@@ -14,6 +14,6 @@ index 07cbc23195..b3c4d43e0f 100644
 -linker = "clang"
 -rustflags = ["-C", "link-arg=-fuse-ld=mold"]
 -
- [target.aarch64-apple-darwin]
- rustflags = ["-C", "link-args=-Objc -all_load"]
- 
+ [target.'cfg(target_os = "windows")']
+ rustflags = [
+     "--cfg",

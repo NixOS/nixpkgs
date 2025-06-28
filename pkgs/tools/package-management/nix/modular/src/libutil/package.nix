@@ -27,9 +27,7 @@ mkMesonLibrary (finalAttrs: {
     [
       brotli
     ]
-    ++ lib.optional (lib.versionAtLeast version "2.27") [
-      libblake3
-    ]
+    ++ lib.optional (lib.versionAtLeast version "2.27") libblake3
     ++ [
       libsodium
       openssl
@@ -45,13 +43,6 @@ mkMesonLibrary (finalAttrs: {
   mesonFlags = [
     (lib.mesonEnable "cpuid" stdenv.hostPlatform.isx86_64)
   ];
-
-  env = lib.optionalAttrs (!lib.versionAtLeast version "2.27") {
-    # Needed for Meson to find Boost.
-    # https://github.com/NixOS/nixpkgs/issues/86131.
-    BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-    BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
-  };
 
   meta = {
     platforms = lib.platforms.unix ++ lib.platforms.windows;

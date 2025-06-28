@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "opencontainers";
-  version = "0.0.14";
+  version = "0.0.15";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/eO4CZtWtclWQV34kz4iJ+GRToBaJ3uETy+eUjQXOPI=";
+    hash = "sha256-o6QBJMxo7aVse0xauSTxi1UEW4RYrKlhH1v6g/fvrv4=";
   };
 
   postPatch = ''

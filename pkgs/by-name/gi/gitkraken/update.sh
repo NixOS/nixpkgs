@@ -9,13 +9,13 @@ nixpkgs=$(realpath "$scriptDir"/../../../..)
 # All architectures are released together, therefore we get the latest version from the linux release
 # NOTE: for some reason, the darwin RELEASES (ie. /darwin/RELEASES) file returns a frozen version...
 echo >&2 "=== Obtaining version data from release.axocdn.com..."
-version=$(curl -fsSL https://release.axocdn.com/linux/RELEASES | jq -r '.name')
+version=$(curl -fsSL https://api.gitkraken.dev/releases/production/linux/x64/RELEASES | jq -r '.name')
 
 # Hardcoded URLs to compute hashes
 declare -A tarballs=(
-  ["x86_64-linux"]="https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz"
-  ["x86_64-darwin"]="https://release.axocdn.com/darwin/GitKraken-v${version}.zip"
-  ["aarch64-darwin"]="https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip"
+  ["x86_64-linux"]="https://api.gitkraken.dev/releases/production/linux/x64/${version}/gitkraken-amd64.tar.gz"
+  ["x86_64-darwin"]="https://api.gitkraken.dev/releases/production/darwin/x64/${version}/GitKraken-v${version}.zip"
+  ["aarch64-darwin"]="https://api.gitkraken.dev/releases/production/darwin/arm64/${version}/GitKraken-v${version}.zip"
 )
 
 for arch in "${!tarballs[@]}"; do

@@ -6,18 +6,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "flutter_rust_bridge_codegen";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "fzyzcjy";
     repo = "flutter_rust_bridge";
     rev = "v${version}";
-    hash = "sha256-pvKCiv7hUgetTXXp+NCs04Qo9xWaLUE2T1yHENhTGl4=";
+    hash = "sha256-ReJmS8cfsWCD/wFEpZ+EJBFGMOQZE/zzlOYOk74UCfQ=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-efMA8VJaQlqClAmjJ3zIYLUfnuj62vEIBKsz0l3CWxA=";
+  cargoHash = "sha256-6HVpETMnhL5gdIls46IdSkTxvJibvfiiPa6l/2GJy7k=";
   cargoBuildFlags = "--package flutter_rust_bridge_codegen";
   cargoTestFlags = "--package flutter_rust_bridge_codegen";
 

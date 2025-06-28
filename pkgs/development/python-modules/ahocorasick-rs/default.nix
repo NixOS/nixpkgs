@@ -24,8 +24,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-uB3r6+Ewpi4dVke/TsCZltfc+ZABYLOLKuNxw+Jfu/M=";
   };
 
@@ -42,6 +41,8 @@ buildPythonPackage rec {
     pyahocorasick
     hypothesis
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "ahocorasick_rs" ];
 

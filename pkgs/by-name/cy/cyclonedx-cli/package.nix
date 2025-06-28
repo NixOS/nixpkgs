@@ -29,14 +29,14 @@ buildDotnetModule rec {
       --replace-fail 'net6.0' 'net8.0'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CycloneDX CLI tool for SBOM analysis, merging, diffs and format conversions";
     homepage = "https://github.com/CycloneDX/cyclonedx-cli";
     changelog = "https://github.com/CycloneDX/cyclonedx-cli/releases/tag/v${version}";
-    maintainers = with maintainers; [ thillux ];
-    teams = [ teams.cyberus ];
-    license = licenses.asl20;
-    platforms = with platforms; (linux ++ darwin);
+    maintainers = with lib.maintainers; [ thillux ];
+    teams = [ lib.teams.cyberus ];
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; (linux ++ darwin);
     mainProgram = "cyclonedx";
   };
 }

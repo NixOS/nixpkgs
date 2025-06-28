@@ -5,13 +5,13 @@
   fetchpatch,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "plecost";
   version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "iniqua";
-    repo = pname;
+    repo = "plecost";
     # Release is untagged
     rev = "aa40e504bee95cf731f0cc9f228bcf5fdfbe6194";
     sha256 = "K8ESI2EOqH9zBDfSKgVcTKjCMdRhBiwltIbXDt1vF+M=";

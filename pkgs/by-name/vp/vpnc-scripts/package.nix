@@ -10,6 +10,7 @@
   nettools,
   openresolv,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation {
@@ -36,7 +37,10 @@ stdenv.mkDerivation {
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace $out/bin/vpnc-script \
-        --replace "/sbin/resolvconf" "${openresolv}/bin/resolvconf" \
+        --replace "/sbin/resolvconf" "${openresolv}/bin/resolvconf"
+    ''
+    + lib.optionalString withSystemd ''
+      substituteInPlace $out/bin/vpnc-script \
         --replace "/usr/bin/resolvectl" "${systemd}/bin/resolvectl"
     ''
     + ''

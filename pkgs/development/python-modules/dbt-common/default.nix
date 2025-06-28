@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
+    repo = "dbt-common";
     rev = "03e09c01f20573975e8e17776a4b7c9088b3f212"; # They don't tag releases
     hash = "sha256-KqnwlFZZRYuWRflMzjrqCPBnzY9q/pPhceM2DGqz5bw=";
   };

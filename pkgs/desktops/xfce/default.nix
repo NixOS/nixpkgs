@@ -119,8 +119,6 @@ makeScopeWithSplicing' {
 
       xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin { };
 
-      xfce4-datetime-plugin = callPackage ./panel-plugins/xfce4-datetime-plugin { };
-
       xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin { };
 
       xfce4-docklike-plugin = callPackage ./panel-plugins/xfce4-docklike-plugin { };
@@ -172,6 +170,11 @@ makeScopeWithSplicing' {
       xinitrc = self.xfce4-session.xinitrc; # added 2019-11-04
 
       thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
+
+      xfce4-datetime-plugin = throw ''
+        xfce4-datetime-plugin has been removed: this plugin has been merged into the xfce4-panel's built-in clock
+        plugin and thus no longer maintained upstream, see https://gitlab.xfce.org/xfce/xfce4-panel/-/issues/563.
+      ''; # Added 2025-05-20
 
       xfce4-embed-plugin = throw "xfce4-embed-plugin has been removed, as it was broken"; # Added 2024-07-15
 

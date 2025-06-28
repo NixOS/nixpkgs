@@ -17,6 +17,7 @@
   lark,
   pandas,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pytest-mock,
   pytest-socket,
@@ -26,33 +27,28 @@
   toml,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.16";
+  version = "0.3.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-e8y5rL+OUFOAPfXTC+XHn/wVfsecPInsS8hBxm1USAw=";
+    hash = "sha256-o/DDHV2niEDp0kFJ+XuUXH7TSL/cBXwrI4lYLyD2SHc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
-
-  preConfigure = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=langchain_openai" ""
-  '';
 
   build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain-core"
   ];
 
@@ -68,6 +64,7 @@ buildPythonPackage rec {
     lark
     pandas
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     pytest-mock
     pytest-socket
@@ -99,15 +96,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-openai==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-openai==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Integration package connecting OpenAI and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai";
     license = lib.licenses.mit;

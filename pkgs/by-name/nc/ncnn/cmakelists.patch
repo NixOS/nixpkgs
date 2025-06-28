@@ -2,17 +2,17 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 785e2cd..459024d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -589,7 +589,8 @@ endif()
- if(NCNN_VULKAN)
-     if(NCNN_SYSTEM_GLSLANG)
+@@ -762,7 +762,8 @@
          find_package(Threads)
+         find_package(SPIRV-Tools QUIET)
+         find_package(SPIRV-Tools-opt QUIET)
 -        find_package(glslang QUIET)
 +        find_package(SPIRV-Tools-opt REQUIRED)
 +        find_package(glslang REQUIRED)
          if(glslang_FOUND)
              add_library(glslang ALIAS glslang::glslang)
              add_library(SPIRV ALIAS glslang::SPIRV)
-@@ -601,7 +602,6 @@ if(NCNN_VULKAN)
+@@ -774,7 +775,6 @@
                  set(NCNN_SYSTEM_GLSLANG OFF)
              else()
                  include("${GLSLANG_TARGET_DIR}/OSDependentTargets.cmake")

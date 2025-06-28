@@ -14,13 +14,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hyprprop";
-  version = "0.1-unstable-2025-05-12";
+  version = "0.1-unstable-2025-06-19";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "contrib";
-    rev = "8e6c02ac3dfbff878ef300266598737ee9cedf94";
-    hash = "sha256-VKs/GtedyOrcWiEOf9JPPX6ZgKzngXTVMUlqsL60G/c=";
+    rev = "189f32f56285aae9646bf1292976392beba5a2e2";
+    hash = "sha256-LPwgPRBTfnA76rHUr7KYvwq2pNt5IfxymNAZUJFvn/M=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/hyprprop";
@@ -62,7 +62,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   meta = {
-    description = "An xprop replacement for Hyprland";
+    description = "Xprop replacement for Hyprland";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.hyprland ];

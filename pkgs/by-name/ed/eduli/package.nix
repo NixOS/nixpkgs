@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "The MOE Li Font, a clerical Chinese font by the Ministry of Education, ROC (Taiwan)";
+    description = "MOE Li Font, a clerical Chinese font by the Ministry of Education, ROC (Taiwan)";
     longDescription = ''
       The MOE Li Font is a li (clerical srcipt) font
       provided by

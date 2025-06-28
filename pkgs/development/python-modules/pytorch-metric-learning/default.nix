@@ -1,10 +1,9 @@
 {
-  stdenv,
   lib,
+  stdenv,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
-  config,
 
   # build-system
   setuptools,
@@ -20,9 +19,11 @@
   tensorboard,
 
   # tests
-  cudaSupport ? config.cudaSupport,
   pytestCheckHook,
   torchvision,
+  writableTmpDirAsHomeHook,
+
+  cudaSupport ? config.cudaSupport,
 }:
 
 buildPythonPackage rec {
@@ -30,11 +31,9 @@ buildPythonPackage rec {
   version = "2.8.1";
   pyproject = true;
 
-  disabled = isPy27;
-
   src = fetchFromGitHub {
     owner = "KevinMusgrave";
-    repo = pname;
+    repo = "pytorch-metric-learning";
     tag = "v${version}";
     hash = "sha256-WO/gv8rKkxY3pR627WrEPVyvZnvUZIKMzOierIW8bJA=";
   };
@@ -64,7 +63,6 @@ buildPythonPackage rec {
   };
 
   preCheck = ''
-    export HOME=$TMP
     export TEST_DEVICE=cpu
     export TEST_DTYPES=float32,float64  # half-precision tests fail on CPU
   '';
@@ -73,6 +71,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     torchvision
+    writableTmpDirAsHomeHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests =
@@ -99,6 +98,12 @@ buildPythonPackage rec {
       "test_tied_distances"
       "test_with_same_parent_label_tester"
     ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Segmentation fault
+    "tests/testers/"
+    "tests/utils/"
+  ];
 
   meta = {
     description = "Metric learning library for PyTorch";

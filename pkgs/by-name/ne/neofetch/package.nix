@@ -5,7 +5,7 @@
   bash,
   makeWrapper,
   pciutils,
-  x11Support ? !stdenvNoCC.isOpenBSD,
+  x11Support ? !stdenvNoCC.hostPlatform.isOpenBSD,
   ueberzug,
   fetchpatch,
 }:
@@ -56,7 +56,9 @@ stdenvNoCC.mkDerivation {
   postInstall = ''
     wrapProgram $out/bin/neofetch \
       --prefix PATH : ${
-        lib.makeBinPath (lib.optional (!stdenvNoCC.isOpenBSD) pciutils ++ lib.optional x11Support ueberzug)
+        lib.makeBinPath (
+          lib.optional (!stdenvNoCC.hostPlatform.isOpenBSD) pciutils ++ lib.optional x11Support ueberzug
+        )
       }
   '';
 

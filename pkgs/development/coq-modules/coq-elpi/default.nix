@@ -14,52 +14,20 @@ let
     if elpi-version != null then
       elpi-version
     else
-      (lib.switch coq.coq-version [
-        {
-          case = "8.11";
-          out = "1.11.4";
-        }
-        {
-          case = "8.12";
-          out = "1.12.0";
-        }
-        {
-          case = "8.13";
-          out = "1.13.7";
-        }
-        {
-          case = "8.14";
-          out = "1.13.7";
-        }
-        {
-          case = "8.15";
-          out = "1.15.0";
-        }
-        {
-          case = "8.16";
-          out = "1.17.0";
-        }
-        {
-          case = "8.17";
-          out = "1.17.0";
-        }
-        {
-          case = "8.18";
-          out = "1.18.1";
-        }
-        {
-          case = "8.19";
-          out = "1.18.1";
-        }
-        {
-          case = "8.20";
-          out = "2.0.7";
-        }
-        {
-          case = "9.0";
-          out = "2.0.7";
-        }
-      ] { });
+      (
+        with lib.versions;
+        lib.switch coq.coq-version (lib.lists.sort (x: y: lib.versions.isLe x.out y.out) (
+          lib.mapAttrsToList (out: case: { inherit case out; }) {
+            "1.11.4" = "8.11";
+            "1.12.0" = "8.12";
+            "1.13.7" = range "8.13" "8.14";
+            "1.15.0" = "8.15";
+            "1.17.0" = range "8.16" "8.17";
+            "1.18.1" = range "8.18" "8.19";
+            "2.0.7" = range "8.20" "9.0";
+          }
+        )) { }
+      );
   elpi = coq.ocamlPackages.elpi.override { version = default-elpi-version; };
   propagatedBuildInputs_wo_elpi = [
     coq.ocamlPackages.findlib
@@ -69,52 +37,22 @@ let
     repo = "coq-elpi";
     owner = "LPCIC";
     inherit version;
-    defaultVersion = lib.switch coq.coq-version [
-      {
-        case = "9.0";
-        out = "2.5.2";
-      }
-      {
-        case = "8.20";
-        out = "2.5.2";
-      }
-      {
-        case = "8.19";
-        out = "2.0.1";
-      }
-      {
-        case = "8.18";
-        out = "2.0.0";
-      }
-      {
-        case = "8.17";
-        out = "1.18.0";
-      }
-      {
-        case = "8.16";
-        out = "1.15.6";
-      }
-      {
-        case = "8.15";
-        out = "1.14.0";
-      }
-      {
-        case = "8.14";
-        out = "1.11.2";
-      }
-      {
-        case = "8.13";
-        out = "1.11.1";
-      }
-      {
-        case = "8.12";
-        out = "1.8.3_8.12";
-      }
-      {
-        case = "8.11";
-        out = "1.6.3_8.11";
-      }
-    ] null;
+    defaultVersion =
+      with lib.versions;
+      lib.switch coq.coq-version (lib.lists.sort (x: y: lib.versions.isLe x.out y.out) (
+        lib.mapAttrsToList (out: case: { inherit case out; }) {
+          "2.5.2" = range "8.20" "9.0";
+          "2.0.1" = "8.19";
+          "2.0.0" = "8.18";
+          "1.18.0" = "8.17";
+          "1.15.6" = "8.16";
+          "1.14.0" = "8.15";
+          "1.11.2" = "8.14";
+          "1.11.1" = "8.13";
+          "1.8.3_8.12" = "8.12";
+          "1.6.3_8.11" = "8.11";
+        }
+      )) null;
     release."2.5.2".sha256 = "sha256-lLzjPrbVB3rrqox528YiheUb0u89R84Xmrgkn0oplOs=";
     release."2.5.0".sha256 = "sha256-Z5xjO83X/ZoTQlWnVupGXPH3HuJefr57Kv128I0dltg=";
     release."2.4.0".sha256 = "sha256-W2+vVGExLLux8e0nSZESSoMVvrLxhL6dmXkb+JuKiqc=";

@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://quesoglc.sourceforge.net/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.linux;
   };
 })

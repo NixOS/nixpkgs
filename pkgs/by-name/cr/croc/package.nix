@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "schollz";
-    repo = pname;
+    repo = "croc";
     rev = "v${version}";
     hash = "sha256-tRWkokgs2SZglkgzK+UxwzbTk99GcPgDBcgJkMURNJ8=";
   };
@@ -47,6 +47,7 @@ buildGoModule rec {
     maintainers = with maintainers; [
       equirosa
       SuperSandro2000
+      ryan4yin
     ];
     mainProgram = "croc";
   };

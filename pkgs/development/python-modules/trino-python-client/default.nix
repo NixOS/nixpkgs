@@ -23,7 +23,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "trino-python-client";
     owner = "trinodb";
     tag = version;
     hash = "sha256-Nr7p7x5cxxuPv2NUh1uMth97OQ+H2KBlu0SHVJ7Zu1M=";

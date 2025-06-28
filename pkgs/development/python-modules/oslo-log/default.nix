@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -35,6 +36,14 @@ buildPythonPackage rec {
     hash = "sha256-ybWrNwP9L7iOzft10TgRFxA4mCRDVozVC2ZAopgITqo=";
   };
 
+  patches = [
+    # remove removed alias from tests
+    (fetchpatch {
+      url = "https://github.com/openstack/oslo.log/commit/69a285a8c830712b4b8aafc8ecd4e2d7654e1ffe.patch";
+      hash = "sha256-e0kRSHJPHITP/XgPHhY5kGzCupE00oBnCJYiUCs3Yks=";
+    })
+  ];
+
   # Manually set version because prb wants to get it from the git upstream repository (and we are
   # installing from tarball instead)
   PBR_VERSION = version;
@@ -60,8 +69,9 @@ buildPythonPackage rec {
   disabledTests = [
     # not compatible with sandbox
     "test_logging_handle_error"
-    # File which is used doesn't seem not to be present
-    "test_log_config_append_invalid"
+    # Incompatible Exception Representation, displaying natively
+    "test_rate_limit"
+    "test_rate_limit_except_level"
   ];
 
   pythonImportsCheck = [ "oslo_log" ];

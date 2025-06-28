@@ -32,8 +32,6 @@
   python3,
   swig,
   qt ? null,
-  enableSDL1 ? stdenv.hostPlatform.isLinux,
-  SDL,
   enableSDL2 ? true,
   SDL2,
   gitUpdater,
@@ -103,10 +101,6 @@ stdenv.mkDerivation rec {
       qt.qtsvg
       (qt.qt5compat or null)
       libarchive
-    ]
-    ++ lib.optionals enableSDL1 [
-      SDL
-      libX11
     ]
     ++ lib.optionals enableSDL2 [
       SDL2

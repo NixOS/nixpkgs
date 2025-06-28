@@ -39,7 +39,7 @@ buildPythonPackage rec {
     flask-sqlalchemy-lite
   ];
 
-  pythonImportChecks = [ "flask_alembic" ];
+  pythonImportsCheck = [ "flask_alembic" ];
 
   meta = with lib; {
     # https://github.com/pallets-eco/flask-alembic/issues/47

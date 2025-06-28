@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "2.3.7";
   src = fetchFromGitHub {
     owner = "kubemq-io";
-    repo = pname;
+    repo = "kubemq-community";
     rev = "v${version}";
     sha256 = "sha256-oAo/O3T3wtfCumT2kjoyXKfCFHijVzSmxhslaKaeF3Y=";
   };

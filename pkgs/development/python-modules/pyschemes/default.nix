@@ -6,14 +6,14 @@
   fetchpatch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyschemes";
   version = "unstable-2017-11-08";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "spy16";
-    repo = pname;
+    repo = "pyschemes";
     rev = "ca6483d13159ba65ba6fc2f77b90421c40f2bbf2";
     hash = "sha256-PssucudvlE8mztwVme70+h+2hRW/ri9oV9IZayiZhdU=";
   };

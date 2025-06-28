@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "gitlab-container-registry";
-  version = "4.21.0";
+  version = "4.23.1";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -14,10 +14,10 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-EUJRXN/xOxNG6pIvsZ/MvVU7arSphOWdpJK0Qo8JcTY=";
+    hash = "sha256-eCuSuQXtzd2jLJf9G8DO1KGXdT8bYGe9tcKw6BZNiiI=";
   };
 
-  vendorHash = "sha256-rAY0lG1ELGO8f6SciEr7F3LL8+fTzlXvUrn4p00v0TI=";
+  vendorHash = "sha256-OrdlQp+USRf+Yc7UDjIncDpbuRu5ui6TUoYY2MMc8Ro=";
 
   checkFlags =
     let
@@ -31,6 +31,8 @@ buildGoModule rec {
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "GitLab Docker toolset to pack, ship, store, and deliver content";

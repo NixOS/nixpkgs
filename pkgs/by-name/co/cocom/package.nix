@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "LamdaLamdaLamda";
-    repo = pname;
+    repo = "cocom";
     rev = "v${version}";
     sha256 = "0sl4ivn95sr5pgw2z877gmhyfc4mk9xr457i5g2i4wqnf2jmy14j";
   };

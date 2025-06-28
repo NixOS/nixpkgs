@@ -46,7 +46,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "An open source calendar for events, groups and places";
+    description = "Open source calendar for events, groups and places";
     homepage = "https://lauti.org";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ onny ];

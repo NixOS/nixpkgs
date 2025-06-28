@@ -24,12 +24,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.10.2";
+  version = "0.12.3";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-L75nmxjymPfuu6CM5QRE1jInElNrD2OuAXMR8+c2tGQ=";
+    hash = "sha256-X0zF0zqWwuCt7oWXwfzDtu+7KZ3yMQwQqP45rlfGm/o=";
     fetchSubmodules = true;
   };
 
@@ -64,6 +64,10 @@ buildDotnetModule (finalAttrs: {
   postPatch = ''
     # for some reason these tests fail (intermittently?) with a zero timestamp
     touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+
+    # Assertion assumes version is set to 0.0.1
+    substituteInPlace tests/NexusMods.Telemetry.Tests/TrackingDataSenderTests.cs \
+      --replace-fail 'cra_ct=v0.0.1' 'cra_ct=v${finalAttrs.version}'
   '';
 
   makeWrapperArgs = [

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pinocchio";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "pinocchio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2DLK0mDZ7nQZO8L4dDV4+xvlN+eRdmN82ncfdMJm0Pc=";
+    hash = "sha256-MykHbHSXY/eJ1+8v0hptiXeVmglU9/wImimiuByw0tE=";
   };
 
   outputs = [

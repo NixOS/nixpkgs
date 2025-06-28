@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 ../util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
   '';
 
+  doInstallCheck = true;
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
     allowedVersions = "^[0-9\\.]+$";
@@ -66,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
+    changelog = "https://flashprog.org/wiki/Flashprog/v${finalAttrs.version}";
     license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [
       felixsinger

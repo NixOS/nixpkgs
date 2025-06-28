@@ -57,6 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/pyside6";
 
+  # Qt Designer plugin moved to a separate output to reduce closure size
+  # for downstream things
+  outputs = [
+    "out"
+    "devtools"
+  ];
+
   # cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS
   # reside in the same directory as QtCore.framework, which is not true for Nix.
   # We therefore symLink all required and optional Qt modules in one directory tree ("qt_linked").
@@ -109,6 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
     cd ../../..
     ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=pyside6
     cp -r PySide6.egg-info $out/${python.sitePackages}/
+
+    mkdir -p "$devtools"
+    moveToOutput "${python.pkgs.qt6.qtbase.qtPluginPrefix}/designer" "$devtools"
   '';
 
   pythonImportsCheck = [ "PySide6" ];

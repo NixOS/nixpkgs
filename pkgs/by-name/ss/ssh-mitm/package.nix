@@ -68,11 +68,11 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "sshmitm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for SSH security audits";
     homepage = "https://github.com/ssh-mitm/ssh-mitm";
     changelog = "https://github.com/ssh-mitm/ssh-mitm/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

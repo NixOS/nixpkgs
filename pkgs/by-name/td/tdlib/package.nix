@@ -11,6 +11,8 @@
   common-updater-scripts,
   jq,
   buildPackages,
+
+  tde2eOnly ? false,
 }:
 
 let
@@ -35,8 +37,8 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "tdlib";
-  version = "1.8.47";
+  pname = if tde2eOnly then "tde2e" else "tdlib";
+  version = "1.8.49";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -45,8 +47,8 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "a03a90470d6fca9a5a3db747ba3f3e4a465b5fe7";
-    hash = "sha256-RS7N+MMie/gNtcvPT4yjE2ymhZCsByS96O9nhiJ/bNY=";
+    rev = "51743dfd01dff6179e2d8f7095729caa4e2222e9";
+    hash = "sha256-duD8a/fppkmaKrvkHnbSxRnCLS60aNVcgaYyCoHzKgE=";
   };
 
   buildInputs = [
@@ -72,6 +74,10 @@ stdenv.mkDerivation {
       -DTD_GENERATE_SOURCE_FILES=ON .
     cmake --build native-build -j $NIX_BUILD_CORES
   '';
+
+  cmakeFlags = [
+    (lib.cmakeBool "TD_E2E_ONLY" tde2eOnly)
+  ];
 
   # https://github.com/tdlib/td/issues/1974
   postPatch =

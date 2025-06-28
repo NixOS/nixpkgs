@@ -30,8 +30,8 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.25.3";
-  hash = "sha256-xafeni6Z6QgPiKzvhCT2SyfPn0agLHo47y+6ExQXkzE=";
+  version = "0.25.4";
+  hash = "sha256-6qE/LXAGzV68HHr4lB74vmSn6mGF9EV7enjWOyNQjDQ=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -172,7 +172,7 @@ rustPlatform.buildRustPackage {
   inherit src version;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rjUn8F6WSxLQGrFzK23q4ClLePSpcMN2+i7rC02Fisk=";
+  cargoHash = "sha256-/KCvLsbb6DullLpRoSYbxtSsm/TMc6o0Y/QmK6BN748=";
 
   buildInputs =
     [ installShellFiles ]
@@ -254,7 +254,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
-    changelog = "https://github.com/tree-sitter/tree-sitter/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${version}";
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.

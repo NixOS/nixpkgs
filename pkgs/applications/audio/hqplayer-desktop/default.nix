@@ -22,15 +22,15 @@
 }:
 
 let
-  version = "5.8.2-25";
+  version = "5.13.0-35";
   srcs = {
     aarch64-linux = fetchurl {
       url = "https://signalyst.com/bins/bookworm/hqplayer5desktop_${version}_arm64.deb";
-      hash = "sha256-t3aiEkxl5fP5yup2l/iuLqZhltIjo4Ahe8EUg52lOLQ=";
+      hash = "sha256-ofS+EDNHKv94GSi9DrZPUhosAZsjSuP8rQghldKZmkU=";
     };
     x86_64-linux = fetchurl {
       url = "https://signalyst.com/bins/noble/hqplayer5desktop_${version}_amd64.deb";
-      hash = "sha256-kDNVR8HkMogbdk5+eRszpyLeuE+vO3ynDS+TmCWYZ2Y=";
+      hash = "sha256-ej4H7SuDMkihlJsHcvPIFSGghyqCvVY/7LbCdq6lky4=";
     };
   };
 in

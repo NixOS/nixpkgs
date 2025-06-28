@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "aiken-lang";
     repo = "aiken";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bEsBLihMqYHJa5913Q434xKVufxTrcaxwcANPV9u37U=";
   };
 

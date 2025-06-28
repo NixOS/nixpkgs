@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapper-enhancers";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "Rafostar";
     repo = "clapper-enhancers";
     tag = finalAttrs.version;
-    hash = "sha256-CUfTz+YvliJXiv/nsdrpDVFSblqoSW7js8vAtJ9u5vM=";
+    hash = "sha256-uj0ZZrS2Y896EDWeBsU3Q3S2kFdEg5FQkBOcI97FFWc=";
   };
 
   nativeBuildInputs = [

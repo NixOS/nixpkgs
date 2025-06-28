@@ -13,8 +13,11 @@
   nixosTests,
   glib,
   withDocumentation ?
-    stdenv.buildPlatform.canExecute stdenv.hostPlatform
-    || stdenv.hostPlatform.emulatorAvailable buildPackages,
+    (
+      stdenv.buildPlatform.canExecute stdenv.hostPlatform
+      || stdenv.hostPlatform.emulatorAvailable buildPackages
+    )
+    && !stdenv.hostPlatform.isStatic,
   gtk-doc,
   docbook_xsl,
   docbook_xml_dtd_43,

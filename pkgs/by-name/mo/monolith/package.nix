@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Y2Z";
-    repo = pname;
+    repo = "monolith";
     rev = "v${version}";
     hash = "sha256-7D/r9/uY1JcShKgfNUGVTn8P5kUAwUIa/xBbhpReeNw=";
   };

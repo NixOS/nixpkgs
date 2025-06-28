@@ -20,7 +20,7 @@
   nlohmann_json,
   msgpack,
   sqlite,
-  oneDNN_2,
+  oneDNN,
   blaze,
   texliveSmall,
   doxygen,
@@ -51,6 +51,15 @@ let
       ]
     )
   );
+  oneDNN' = oneDNN.overrideAttrs rec {
+    version = "2.7.5";
+    src = fetchFromGitHub {
+      owner = "oneapi-src";
+      repo = "oneDNN";
+      tag = "v${version}";
+      hash = "sha256-oMPBORAdL2rk2ewyUrInYVHYBRvuvNX4p4rwykO3Rhs=";
+    };
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
@@ -105,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
     msgpack
     sqlite
-    oneDNN_2
+    oneDNN'
     blaze
     python3Packages.pybind11
     python3Packages.onnx

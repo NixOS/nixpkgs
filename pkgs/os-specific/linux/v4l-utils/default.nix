@@ -7,6 +7,7 @@
   argp-standalone,
   libjpeg,
   udev,
+  udevCheckHook,
   withUtils ? true,
   withGUI ? true,
   alsa-lib,
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     perl
+    udevCheckHook
   ] ++ lib.optional withQt wrapQtAppsHook;
 
   buildInputs =
@@ -73,6 +75,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";

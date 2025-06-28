@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
+  fetchpatch,
 
   # build-system
   hatchling,
@@ -16,21 +17,27 @@
   psutil,
   pytestCheckHook,
   redisTestHook,
-  sentry-sdk,
   versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "2.3.2";
+  version = "2.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
     tag = "v${version}";
-    hash = "sha256-odO4DSuLNyGndj+n++DupAyOUywYJtnmkO0lUM1xS2I=";
+    hash = "sha256-NUs544J/pC2QNyR2aIlac2P06so7JmB2P6FB/gmR7wI=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/rq/rq/commit/18c0f30c6aa0de2c55fba64105b1cb0495d728cf.patch";
+      hash = "sha256-woWW8SkKXrMyDW+tY+ItxO/tuHHuuZhW+OJxwTTZucI=";
+    })
+  ];
 
   build-system = [ hatchling ];
 
@@ -44,7 +51,6 @@ buildPythonPackage rec {
     psutil
     pytestCheckHook
     redisTestHook
-    sentry-sdk
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";

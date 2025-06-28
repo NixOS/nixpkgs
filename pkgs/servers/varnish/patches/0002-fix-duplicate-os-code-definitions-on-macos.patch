@@ -1,0 +1,43 @@
+From f56b314408d22252bf62d6cd2e098cf8139bd048 Mon Sep 17 00:00:00 2001
+From: Sander <hey@sandydoo.me>
+Date: Fri, 13 Jun 2025 01:12:59 +0200
+Subject: [PATCH] build: fix duplicate OS_CODE definitions on macOS
+
+`TARGET_OS_MAC` and `__APPLE__` are both true on macOS, which results in
+duplicate definitions for `OS_CODE`.
+
+Upstream removed the check for `TARGET_OS_MAC`, as well as the ancient
+compat code, in
+https://github.com/madler/zlib/commit/4bd9a71f3539b5ce47f0c67ab5e01f3196dc8ef9.
+
+This was fixed in varnish >= 7.6 as part of https://github.com/varnishcache/varnish-cache/commit/86df12b6c1ad8208899ea353fdcbea227356fcf8.
+---
+ lib/libvgz/zutil.h | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/lib/libvgz/zutil.h b/lib/libvgz/zutil.h
+index 1c80e3842..294ea2b2d 100644
+--- a/lib/libvgz/zutil.h
++++ b/lib/libvgz/zutil.h
+@@ -137,17 +137,8 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
+ #  endif
+ #endif
+ 
+-#if defined(MACOS) || defined(TARGET_OS_MAC)
++#if defined(MACOS)
+ #  define OS_CODE  7
+-#  ifndef Z_SOLO
+-#    if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
+-#      include <unix.h> /* for fdopen */
+-#    else
+-#      ifndef fdopen
+-#        define fdopen(fd,mode) NULL /* No fdopen() */
+-#      endif
+-#    endif
+-#  endif
+ #endif
+ 
+ #ifdef __acorn
+-- 
+2.49.0
+

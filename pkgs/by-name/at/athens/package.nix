@@ -35,16 +35,16 @@ buildGoModule (finalAttrs: {
     tests.version = testers.testVersion { package = athens; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Go module datastore and proxy";
     homepage = "https://github.com/gomods/athens";
-    changelog = "https://github.com/gomods/athens/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/gomods/athens/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     mainProgram = "athens";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       katexochen
       malt3
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

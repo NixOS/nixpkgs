@@ -126,7 +126,7 @@ runTest (
 
         with subtest("Check if file is in S3"):
             nextcloud.succeed(
-                "mc config host add minio https://acme.test ${accessKey} ${secretKey} --api s3v4"
+                "mc alias set minio https://acme.test ${accessKey} ${secretKey} --api s3v4"
             )
             files = nextcloud.succeed('mc ls minio/nextcloud|sort').strip().split('\n')
 

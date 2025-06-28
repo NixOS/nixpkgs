@@ -7,6 +7,7 @@
   dbus,
   xorg,
   pkg-config,
+  protobuf,
   writableTmpDirAsHomeHook,
   nix-update-script,
   llvmPackages,
@@ -26,19 +27,22 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.0.23";
+  version = "1.0.29";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jdoopa4pbW3MSgbNmNSp47iiXZF8H2GEgyhpkV1cB4A=";
+    hash = "sha256-R4hMGW9YKsvWEvSzZKkq5JTzBXGK2rXyOPB6vzMKbs0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-We2v/U9pK4O7JVXyVDvHwyrujPLp9jL1m4SKcMg/Hvc=";
+  cargoHash = "sha256-EEivL+6XQyC9FkGnXwOYviwpY8lk7iaEJ1vbQMk2Rao=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+  ];
 
   buildInputs = [ dbus ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libxcb ];
 
@@ -66,8 +70,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # Lazy instance has previously been poisoned
       "--skip=jetbrains::tests::test_capabilities"
       "--skip=jetbrains::tests::test_router_creation"
+      "--skip=logging::tests::test_log_file_name::with_session_name_and_error_capture"
       "--skip=logging::tests::test_log_file_name::with_session_name_without_error_capture"
       "--skip=logging::tests::test_log_file_name::without_session_name"
+      "--skip=developer::tests::test_text_editor_str_replace"
+      # need API keys
+      "--skip=providers::factory::tests::test_create_lead_worker_provider"
+      "--skip=providers::factory::tests::test_create_regular_provider_without_lead_config"
+      "--skip=providers::factory::tests::test_lead_model_env_vars_with_defaults"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--skip=providers::gcpauth::tests::test_load_from_metadata_server"

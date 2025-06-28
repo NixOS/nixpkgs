@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
       --set-default SUPERTUXKART_DATADIR "$out/share/supertuxkart" \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free 3D kart racing game";
     mainProgram = "supertuxkart";
     longDescription = ''
@@ -156,11 +156,11 @@ stdenv.mkDerivation rec {
       Kart.
     '';
     homepage = "https://supertuxkart.net/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       peterhoeg
     ];
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
     changelog = "https://github.com/supertuxkart/stk-code/blob/${version}/CHANGELOG.md";
   };
 }

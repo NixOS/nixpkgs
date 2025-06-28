@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     # Copy docs
-    install -dm755 "$out/share/doc/${finalAttrs.pname}"
-    install -m644 "ChangeLog-${finalAttrs.version}" README "$out/share/doc/${finalAttrs.pname}"
+    install -dm755 "$out/share/doc/ttaenc"
+    install -m644 "ChangeLog-${finalAttrs.version}" README "$out/share/doc/ttaenc"
   '';
 
   meta = {

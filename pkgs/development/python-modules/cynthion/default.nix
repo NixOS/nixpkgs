@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -28,15 +27,14 @@
 }:
 buildPythonPackage rec {
   pname = "cynthion";
-  version = "0.1.8";
+  version = "0.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "cynthion";
     tag = version;
-    hash = "sha256-twkCv47Goob2cO7FeHegvab3asf8fqbY9qg97Vw4ZCo=";
+    hash = "sha256-rbvw2eieZwTxStwCRuvIx/f4vdPsOFnV/U80Ga+fNPA=";
   };
 
   sourceRoot = "${src.name}/cynthion/python";
@@ -75,11 +73,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cynthion" ];
 
   meta = {
-    changelog = "https://github.com/greatscottgadgets/cynthion/releases/tag/${version}";
+    changelog = "https://github.com/greatscottgadgets/cynthion/releases/tag/${src.tag}";
     description = "Python package and utilities for the Great Scott Gadgets Cynthion USB Test Instrument";
     homepage = "https://github.com/greatscottgadgets/cynthion";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ carlossless ];
-    broken = lib.versionAtLeast amaranth.version "0.5";
   };
 }

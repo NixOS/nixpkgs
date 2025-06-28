@@ -2,11 +2,11 @@
   callPackage,
   stdenv,
   lib,
+  fetchurl,
 }:
 
-callPackage ./generic.nix {
+callPackage ./generic.nix rec {
   version = "4.8.1.0";
-  sha256 = "1vyvp2g28ihcgxgxr8nhzyzdmzicsh5djzk8dk1hj5p5f2k3ijqq";
   enableParallelBuilding = false; # #32386, https://hydra.nixos.org/build/65600645
   extraPatches = lib.optionals stdenv.hostPlatform.isLinux [ ./mono4-glibc.patch ];
   env.NIX_CFLAGS_COMPILE = toString [
@@ -16,4 +16,8 @@ callPackage ./generic.nix {
     "-Wno-error=int-conversion"
     "-Wno-error=return-mismatch"
   ];
+  src = fetchurl {
+    url = "https://download.mono-project.com/sources/mono/mono-${version}.tar.bz2";
+    sha256 = "1vyvp2g28ihcgxgxr8nhzyzdmzicsh5djzk8dk1hj5p5f2k3ijqq";
+  };
 }

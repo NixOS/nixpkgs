@@ -152,6 +152,7 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
+      services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gvfs.enable = true;
       services.gnome.rygel.enable = mkDefault true;
       services.udisks2.enable = true;

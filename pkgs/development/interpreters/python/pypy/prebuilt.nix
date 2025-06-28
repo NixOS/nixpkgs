@@ -176,6 +176,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
+    mainProgram = "pypy";
     license = licenses.mit;
     platforms = lib.mapAttrsToList (arch: _: arch) downloadUrls;
   };
