@@ -75,7 +75,7 @@ index 29afb08ebc..398ff340cd 100644
                  return -EINVAL;
          if (!timezone_is_valid(e, LOG_DEBUG))
 diff --git a/src/firstboot/firstboot.c b/src/firstboot/firstboot.c
-index 9be62b8df3..2044e9f8d0 100644
+index a389eeae10..c817e91991 100644
 --- a/src/firstboot/firstboot.c
 +++ b/src/firstboot/firstboot.c
 @@ -598,7 +598,7 @@ static int process_timezone(int rfd) {
@@ -88,7 +88,7 @@ index 9be62b8df3..2044e9f8d0 100644
          r = symlinkat_atomic_full(e, pfd, f, /* make_relative= */ false);
          if (r < 0)
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 2b735e4df4..7a21f34edd 100644
+index 74b2a237d3..cf9eabf0f2 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
 @@ -1851,8 +1851,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid

@@ -30,7 +30,7 @@ are written into `$XDG_CONFIG_HOME/systemd/user`.
  1 file changed, 3 insertions(+)
 
 diff --git a/src/systemctl/systemctl-edit.c b/src/systemctl/systemctl-edit.c
-index c42a31153d..154dbf0402 100644
+index 7165fa1cf7..7498cf9f4c 100644
 --- a/src/systemctl/systemctl-edit.c
 +++ b/src/systemctl/systemctl-edit.c
 @@ -323,6 +323,9 @@ int verb_edit(int argc, char *argv[], void *userdata) {
