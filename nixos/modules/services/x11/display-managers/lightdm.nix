@@ -286,36 +286,36 @@ in
     # https://github.com/elementary/switchboard-plug-parental-controls/blob/8.0.1/src/daemon/Server.vala#L325
     # Must specify conffile since pam_time defaults to ${linux-pam}/etc/security/time.conf.
     + lib.optionalString config.services.pantheon.parental-controls.enable ''
-      account   required      pam_time.so conffile=/etc/security/time.conf
+      account   required      ${config.security.pam.package}/lib/security/pam_time.so conffile=/etc/security/time.conf
     '';
 
     security.pam.services.lightdm-greeter.text = ''
-      auth     required       pam_succeed_if.so audit quiet_success user = lightdm
-      auth     optional       pam_permit.so
+      auth     required       ${config.security.pam.package}/lib/security/pam_succeed_if.so audit quiet_success user = lightdm
+      auth     optional       ${config.security.pam.package}/lib/security/pam_permit.so
 
-      account  required       pam_succeed_if.so audit quiet_success user = lightdm
-      account  sufficient     pam_unix.so
+      account  required       ${config.security.pam.package}/lib/security/pam_succeed_if.so audit quiet_success user = lightdm
+      account  sufficient     ${config.security.pam.package}/lib/security/pam_unix.so
 
-      password required       pam_deny.so
+      password required       ${config.security.pam.package}/lib/security/pam_deny.so
 
-      session  required       pam_succeed_if.so audit quiet_success user = lightdm
-      session  required       pam_env.so conffile=/etc/pam/environment readenv=0
+      session  required       ${config.security.pam.package}/lib/security/pam_succeed_if.so audit quiet_success user = lightdm
+      session  required       ${config.security.pam.package}/lib/security/pam_env.so conffile=/etc/pam/environment readenv=0
       session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
-      session  optional       pam_keyinit.so force revoke
-      session  optional       pam_permit.so
+      session  optional       ${config.security.pam.package}/lib/security/pam_keyinit.so force revoke
+      session  optional       ${config.security.pam.package}/lib/security/pam_permit.so
     '';
 
     security.pam.services.lightdm-autologin.text = ''
-      auth      requisite     pam_nologin.so
+      auth      requisite     ${config.security.pam.package}/lib/security/pam_nologin.so
 
-      auth      required      pam_succeed_if.so uid >= 1000 quiet
-      auth      required      pam_permit.so
+      auth      required      ${config.security.pam.package}/lib/security/pam_succeed_if.so uid >= 1000 quiet
+      auth      required      ${config.security.pam.package}/lib/security/pam_permit.so
 
-      account   sufficient    pam_unix.so
+      account   sufficient    ${config.security.pam.package}/lib/security/pam_unix.so
 
-      password  requisite     pam_unix.so nullok yescrypt
+      password  requisite     ${config.security.pam.package}/lib/security/pam_unix.so nullok yescrypt
 
-      session   optional      pam_keyinit.so revoke
+      session   optional      ${config.security.pam.package}/lib/security/pam_keyinit.so revoke
       session   include       login
     '';
 

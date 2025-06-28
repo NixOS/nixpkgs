@@ -368,19 +368,19 @@ in
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {
       gdm-launch-environment.text = ''
-        auth     required       pam_succeed_if.so audit quiet_success user ingroup gdm
-        auth     optional       pam_permit.so
+        auth     required       ${config.security.pam.package}/lib/security/pam_succeed_if.so audit quiet_success user ingroup gdm
+        auth     optional       ${config.security.pam.package}/lib/security/pam_permit.so
 
-        account  required       pam_succeed_if.so audit quiet_success user ingroup gdm
-        account  sufficient     pam_unix.so
+        account  required       ${config.security.pam.package}/lib/security/pam_succeed_if.so audit quiet_success user ingroup gdm
+        account  sufficient     ${config.security.pam.package}/lib/security/pam_unix.so
 
-        password required       pam_deny.so
+        password required       ${config.security.pam.package}/lib/security/pam_deny.so
 
-        session  required       pam_succeed_if.so audit quiet_success user ingroup gdm
-        session  required       pam_env.so conffile=/etc/pam/environment readenv=0
+        session  required       ${config.security.pam.package}/lib/security/pam_succeed_if.so audit quiet_success user ingroup gdm
+        session  required       ${config.security.pam.package}/lib/security/pam_env.so conffile=/etc/pam/environment readenv=0
         session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
-        session  optional       pam_keyinit.so force revoke
-        session  optional       pam_permit.so
+        session  optional       ${config.security.pam.package}/lib/security/pam_keyinit.so force revoke
+        session  optional       ${config.security.pam.package}/lib/security/pam_permit.so
       '';
 
       gdm-password.text = ''
@@ -391,19 +391,19 @@ in
       '';
 
       gdm-autologin.text = ''
-        auth      requisite     pam_nologin.so
-        auth      required      pam_succeed_if.so uid >= 1000 quiet
+        auth      requisite     ${config.security.pam.package}/lib/security/pam_nologin.so
+        auth      required      ${config.security.pam.package}/lib/security/pam_succeed_if.so uid >= 1000 quiet
         ${lib.optionalString (pamLogin.enable && pamLogin.enableGnomeKeyring) ''
           auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
           auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
         ''}
-        auth      required      pam_permit.so
+        auth      required      ${config.security.pam.package}/lib/security/pam_permit.so
 
-        account   sufficient    pam_unix.so
+        account   sufficient    ${config.security.pam.package}/lib/security/pam_unix.so
 
-        password  requisite     pam_unix.so nullok yescrypt
+        password  requisite     ${config.security.pam.package}/lib/security/pam_unix.so nullok yescrypt
 
-        session   optional      pam_keyinit.so revoke
+        session   optional      ${config.security.pam.package}/lib/security/pam_keyinit.so revoke
         session   include       login
       '';
 
@@ -412,11 +412,11 @@ in
       login.fprintAuth = lib.mkIf config.services.fprintd.enable false;
 
       gdm-fingerprint.text = lib.mkIf config.services.fprintd.enable ''
-        auth       required                    pam_shells.so
-        auth       requisite                   pam_nologin.so
-        auth       requisite                   pam_faillock.so      preauth
+        auth       required                    ${config.security.pam.package}/lib/security/pam_shells.so
+        auth       requisite                   ${config.security.pam.package}/lib/security/pam_nologin.so
+        auth       requisite                   ${config.security.pam.package}/lib/security/pam_faillock.so      preauth
         auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
-        auth       required                    pam_env.so conffile=/etc/pam/environment readenv=0
+        auth       required                    ${config.security.pam.package}/lib/security/pam_env.so conffile=/etc/pam/environment readenv=0
         ${lib.optionalString (pamLogin.enable && pamLogin.enableGnomeKeyring) ''
           auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
           auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
@@ -424,7 +424,7 @@ in
 
         account    include                     login
 
-        password   required                    pam_deny.so
+        password   required                    ${config.security.pam.package}/lib/security/pam_deny.so
 
         session    include                     login
       '';
