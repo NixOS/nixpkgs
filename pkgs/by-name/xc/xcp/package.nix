@@ -4,6 +4,7 @@
   lib,
   acl,
   nix-update-script,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-9cNu0cgoo0/41daJwy/uWIXa2wFhYkcPhJfA/69DVx0=";
 
-  checkInputs = [ acl ];
+  checkInputs = lib.optional stdenv.hostPlatform.isLinux acl;
 
   # disable tests depending on special filesystem features
   checkNoDefaultFeatures = true;
@@ -31,6 +32,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "test_no_acl"
     "test_no_xattr"
     "test_no_perms"
+  ];
+  checkFlags = lib.optional stdenv.hostPlatform.isDarwin [
+    # These tests fail on Darwin with "Socket copy not supported by this OS"
+    "--skip=test_sockets_dir::test_with_parallel_file_driver"
+    "--skip=test_socket_file::test_with_parallel_file_driver"
   ];
 
   passthru.updateScript = nix-update-script { };
