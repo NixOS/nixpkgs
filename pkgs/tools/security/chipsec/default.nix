@@ -11,15 +11,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.10.6";
+  version = "1.13.0";
 
   disabled = !stdenv.hostPlatform.isLinux;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
-    rev = version;
-    hash = "sha256-+pbFG1SmSO/cnt1e+kel7ereC0I1OCJKKsS0KaJDWdc=";
+    tag = version;
+    hash = "sha256-JQP2vvr+JqBLpot01KNTHeGdkQkMBlmvExbx1ttU0os=";
   };
 
   patches = lib.optionals withDriver [
