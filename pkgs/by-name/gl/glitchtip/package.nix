@@ -102,14 +102,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "5.0.4";
+  version = "5.0.5";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ihefyunZc191w9cn7iSqblNA4V4hELi9jwxfFrjPvu0=";
+    hash = "sha256-7ulmrFOy14/Y/8LmKrmBzqrMPuwfdWOGMuhhhYI7+f4=";
   };
 
   propagatedBuildInputs = pythonPackages;
