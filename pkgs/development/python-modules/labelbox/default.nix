@@ -29,14 +29,14 @@
 }:
 
 let
-  version = "6.10.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    tag = "v.${version}";
-    hash = "sha256-EstHsY9yFeUhQAx3pgvKk/o3EMkr3JeHDDg/p6meDIE=";
+    tag = "v${version}";
+    hash = "sha256-mAnStFWPiMKocNmaUeW+KYbBnvMHITx6YVDahstaxQg=";
   };
 
   lbox-clients = buildPythonPackage {
