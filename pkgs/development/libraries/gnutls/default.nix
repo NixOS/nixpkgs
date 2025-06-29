@@ -25,6 +25,8 @@
   libunistring,
   withP11-kit ? !stdenv.hostPlatform.isStatic,
   p11-kit,
+  withLeancrypto ? true,
+  leancrypto,
   # certificate compression - only zlib now, more possible: zstd, brotli
 
   # for passthru.tests
@@ -117,6 +119,7 @@ stdenv.mkDerivation rec {
       "--enable-fast-install"
       "--with-unbound-root-key-file=${dns-root-data}/root.key"
       (lib.withFeature withP11-kit "p11-kit")
+      (lib.withFeature withLeancrypto "leancrypto")
       (lib.enableFeature cxxBindings "cxx")
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -149,6 +152,7 @@ stdenv.mkDerivation rec {
       libiconv
     ]
     ++ lib.optional withP11-kit p11-kit
+    ++ lib.optional withLeancrypto leancrypto
     ++ lib.optional (tpmSupport && stdenv.hostPlatform.isLinux) trousers;
 
   nativeBuildInputs =
