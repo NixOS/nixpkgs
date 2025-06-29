@@ -43,14 +43,36 @@ lib.makeOverridable (
     );
     baseUrl = "https://${githubBase}/${owner}/${repo}";
     newMeta =
-      meta
-      // {
-        homepage = meta.homepage or baseUrl;
-      }
-      // lib.optionalAttrs (position != null) {
-        # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
-        position = "${position.file}:${toString position.line}";
-      };
+      lib.recursiveUpdate
+        (
+          meta
+          // {
+            homepage = meta.homepage or baseUrl;
+          }
+          // lib.optionalAttrs (position != null) {
+            # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
+            position = "${position.file}:${toString position.line}";
+          }
+        )
+
+        (
+          {
+            identifiers.purlParts =
+              if githubBase == "github.com" then
+                {
+                  type = "github";
+                  # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
+                  spec = "${owner}/${repo}@${(lib.revOrTag rev tag)}";
+                }
+              else
+                {
+                  type = "generic";
+                  # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
+                  spec = "${repo}?vcs_url=https://${githubBase}/${owner}/${repo}@${(lib.revOrTag rev tag)}";
+                };
+          }
+        );
+
     passthruAttrs = removeAttrs args [
       "owner"
       "repo"
@@ -153,12 +175,15 @@ lib.makeOverridable (
       // passthruAttrs
       // {
         inherit name;
+      }
+      # fetchurl / fetchzip is not a function, but fetchurlBoot is - ensure that the parameter is accepted and passed through
+      // lib.optionalAttrs (!builtins.isFunction fetcher || (builtins.functionArgs fetcher) ? meta) {
+        meta = newMeta;
       };
   in
 
   fetcher fetcherArgs
   // {
-    meta = newMeta;
     inherit owner repo tag;
     rev = revWithTag;
   }
