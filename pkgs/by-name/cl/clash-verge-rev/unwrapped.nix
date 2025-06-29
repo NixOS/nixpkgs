@@ -49,10 +49,10 @@ rustPlatform.buildRustPackage {
     # If you need a newer version, you can override the mihomo input of the wrapped package
     sed -i -e '/Mihomo Alpha/d' ./src/components/setting/mods/clash-core-viewer.tsx
 
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
-    substituteInPlace $cargoDepsCopy/sysproxy-*/src/linux.rs \
+    substituteInPlace $cargoDepsCopy/*/sysproxy-*/src/linux.rs \
       --replace-fail '"gsettings"' '"${glib.bin}/bin/gsettings"' \
       --replace-fail '"kreadconfig5"' '"${libsForQt5.kconfig}/bin/kreadconfig5"' \
       --replace-fail '"kreadconfig6"' '"${kdePackages.kconfig}/bin/kreadconfig6"' \

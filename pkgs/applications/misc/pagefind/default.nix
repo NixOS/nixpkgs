@@ -87,9 +87,9 @@ rustPlatform.buildRustPackage rec {
 
     # patch a build-time dependency download
     (
-      patch -d $cargoDepsCopy/lindera-assets-*/ -p1 < ${./lindera-assets-support-file-paths.patch}
+      patch -d $cargoDepsCopy/*/lindera-assets-*/ -p1 < ${./lindera-assets-support-file-paths.patch}
 
-      substituteInPlace $cargoDepsCopy/lindera-unidic-*/build.rs --replace-fail \
+      substituteInPlace $cargoDepsCopy/*/lindera-unidic-*/build.rs --replace-fail \
           "${lindera-unidic-src.url}" \
           "file://${lindera-unidic-src}"
     )
