@@ -11,7 +11,6 @@
   llvmSharedForHost,
   llvmSharedForTarget,
   llvmPackages,
-  runCommandLocal,
   fetchurl,
   file,
   python3,
@@ -381,14 +380,8 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
     ]
     ++ optional (!withBundledLLVM) llvmShared.lib
-    ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
+    ++ optionals (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
       llvmPackages.libunwind
-      # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
-      (runCommandLocal "libunwind-libgcc" { } ''
-        mkdir -p $out/lib
-        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
-        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so.1
-      '')
     ];
 
   outputs = [
@@ -450,10 +443,13 @@ stdenv.mkDerivation (finalAttrs: {
     # If rustc can't target a platform, we also can't build rustc for
     # that platform.
     badPlatforms = rustc.badTargetPlatforms;
-    # Builds, but can't actually compile anything
+    # `-gnu` ABI targets do not support partial GNU userlands like `pkgsLLVM`, only `-musl` ABI targets do
+    # https://github.com/rust-lang/rust/issues/119504#issuecomment-1873544519
+    #
+    # It *can* still build, but it won't actually compile anything
     # https://github.com/NixOS/nixpkgs/issues/311930
     # https://github.com/rust-lang/rust/issues/55120
     # https://github.com/rust-lang/rust/issues/82521
-    broken = stdenv.hostPlatform.useLLVM;
+    broken = stdenv.targetPlatform.useLLVM && stdenv.targetPlatform.libc != "musl";
   };
 })
