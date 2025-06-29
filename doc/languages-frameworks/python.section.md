@@ -2209,8 +2209,21 @@ The following rules are desired to be respected:
 * Non-python runtime dependencies should be added via explicit wrapping or
   patching (using e.g. `substituteInPlace`), rather than through propagation via
   `dependencies`/`propagatedBuildInputs`, to reduce clutter in `$PATH`.
+* The list of [dependencies to avoid or replace](#python-dependencies-avoid-replace) is respected.
 
 This list is useful for reviewers as well as for self-checking when submitting packages.
+
+### Dependencies to avoid or replace {#python-dependencies-avoid-replace}
+
+Some dependencies do not make sense inside a nix build and should be completely avoided or replaced by a stub.
+Below you find a listing of the most common ones.
+
+| Package | Replacement | Reason |
+|---------|-------------|--------|
+| cmake | `python3Packages.cmake` (stub) | The package normally downloads cmake from the internet. The stub provides our cmake with the usual setup hook. |
+| ninja | `python3Packages.ninja` (stub) | The package normally downloads ninja from the internet. The stub provides our ninja with the usual setup hook. |
+| pytest-cov | `python3Packages.pytest-cov-stub` | coverage is mainly useful for development not distribution. |
+| pytest-runner | - | Dependencies cannot be downloaded and should be provided through nativeCheckInputs. |
 
 ## Package set maintenance {#python-package-set-maintenance}
 
