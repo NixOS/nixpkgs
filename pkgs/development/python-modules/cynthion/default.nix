@@ -9,7 +9,6 @@
   # dependencies
   amaranth,
   apollo-fpga,
-  future,
   libusb1,
   luna-soc,
   luna-usb,
@@ -49,10 +48,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRemoveDeps = [ "future" ];
+
   dependencies = [
     amaranth
     apollo-fpga
-    future
     libusb1
     luna-soc
     luna-usb
@@ -73,9 +73,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cynthion" ];
 
   meta = {
-    changelog = "https://github.com/greatscottgadgets/cynthion/releases/tag/${src.tag}";
     description = "Python package and utilities for the Great Scott Gadgets Cynthion USB Test Instrument";
     homepage = "https://github.com/greatscottgadgets/cynthion";
+    changelog = "https://github.com/greatscottgadgets/cynthion/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ carlossless ];
   };
