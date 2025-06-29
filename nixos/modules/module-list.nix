@@ -1639,6 +1639,7 @@
   ./services/web-apps/photoprism.nix
   ./services/web-apps/phylactery.nix
   ./services/web-apps/pict-rs.nix
+  ./services/web-apps/pigallery2.nix
   ./services/web-apps/pihole-web.nix
   ./services/web-apps/pingvin-share.nix
   ./services/web-apps/pixelfed.nix
