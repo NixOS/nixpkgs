@@ -156,7 +156,10 @@ in
           )
           ++ (
             with pkgs.lomiri;
-            [ lomiri-telephony-service ]
+            [
+              lomiri-indicator-transfer
+              lomiri-telephony-service
+            ]
             ++ lib.optionals config.networking.networkmanager.enable [ lomiri-indicator-network ]
           );
       };
