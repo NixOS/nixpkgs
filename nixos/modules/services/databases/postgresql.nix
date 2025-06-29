@@ -242,6 +242,15 @@ in
           By default, syscall groups (i.e. attribute names starting with `@`) are added
           _before_ negated groups (i.e. `~@` as prefix) _before_ syscall names
           and negations.
+          '';
+        };
+
+      upgradeFrom = mkOption {
+        type = types.nullOr types.package;
+        default = null;
+        example = literalExpression "pkgs.postgresql_11";
+        description = ''
+          PostgreSQL package that you're upgrading from (this will automatically call pg_upgrade)
         '';
       };
 
@@ -780,6 +789,15 @@ in
           # Initialise the database.
           initdb -U ${cfg.superUser} ${escapeShellArgs cfg.initdbArgs}
 
+          ${optionalString (cfg.upgradeFrom != null) ''
+            if [ -e "/var/lib/postgresql/${cfg.upgradeFrom.psqlSchema}" ]; then
+              mkdir -p /tmp/pg_upgrade
+              pushd /tmp/pg_upgrade
+              pg_upgrade -b "${cfg.upgradeFrom}/bin" -d "/var/lib/postgresql/${cfg.upgradeFrom.psqlSchema}/" -D "${cfg.dataDir}"
+              popd
+            fi
+          ''}
+
           # See postStart!
           touch "${cfg.dataDir}/.first_startup"
         fi
@@ -803,6 +821,7 @@ in
           # Give Postgres a decent amount of time to clean up after
           # receiving systemd's SIGINT.
           TimeoutSec = 120;
+          TimeoutStartSec = 3600;
 
           ExecStart = "${cfg.finalPackage}/bin/postgres";
 
