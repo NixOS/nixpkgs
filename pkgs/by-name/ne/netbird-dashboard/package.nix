@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "netbird-dashboard";
-  version = "2.12.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "dashboard";
     rev = "v${version}";
-    hash = "sha256-AZ8vrDtpVADW8NMq/MBpYd6VSMcuFzk67UXoXdPeiPk=";
+    hash = "sha256-uJfXBRN8rr51nmXhpqW/P/fj+hr2yIxamL36JH7vTQI=";
   };
 
-  npmDepsHash = "sha256-XNAphh1zNi4enf0Mz9TUgWyZHezTuctMPTBswKO4eW8=";
+  npmDepsHash = "sha256-5a2OXxTjamRpm1PBrJWYtrvAT1c9qfAOja7gpkt2stI=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   installPhase = ''
