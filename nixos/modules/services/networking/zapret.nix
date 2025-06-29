@@ -191,25 +191,52 @@ in
       }
 
       # Route system traffic via service for specified ports.
-      (lib.mkIf cfg.configureFirewall {
-        networking.firewall.extraCommands =
-          let
-            httpParams = lib.optionalString (
-              cfg.httpMode == "first"
-            ) "-m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6";
-
-            udpPorts = lib.concatStringsSep "," cfg.udpPorts;
-          in
-          ''
-            ip46tables -t mangle -I POSTROUTING -p tcp --dport 443 -m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6 -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
-          ''
-          + lib.optionalString (cfg.httpSupport) ''
-            ip46tables -t mangle -I POSTROUTING -p tcp --dport 80 ${httpParams} -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
-          ''
-          + lib.optionalString (cfg.udpSupport) ''
-            ip46tables -t mangle -A POSTROUTING -p udp -m multiport --dports ${udpPorts} -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
-          '';
-      })
+      (lib.mkIf cfg.configureFirewall (
+        let
+          udpPorts = lib.concatStringsSep "," cfg.udpPorts;
+        in
+        lib.mkMerge [
+          (lib.mkIf config.networking.nftables.enable {
+            networking.nftables.tables.zapret = {
+              content =
+                let
+                  httpParams = lib.optionalString (cfg.httpMode == "first") "ct original packets 1-6";
+                in
+                ''
+                  chain POSTROUTING {
+                    type filter hook postrouting priority mangle;
+                    tcp dport 443 ct original packets 1-6 meta mark and 0x40000000 != 0x40000000 counter queue num ${qnum} bypass
+                ''
+                + lib.optionalString (cfg.httpSupport) ''
+                  tcp dport 80 ${httpParams} meta mark and 0x40000000 != 0x40000000 counter queue num ${qnum} bypass
+                ''
+                + lib.optionalString (cfg.udpSupport) ''
+                  udp dport { ${udpPorts} } meta mark and 0x40000000 != 0x40000000 counter queue num ${qnum} bypass
+                ''
+                + ''
+                  }
+                '';
+            };
+          })
+          (lib.mkIf (!config.networking.nftables.enable) {
+            networking.firewall.extraCommands =
+              let
+                httpParams = lib.optionalString (
+                  cfg.httpMode == "first"
+                ) "-m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6";
+              in
+              ''
+                ip46tables -t mangle -I POSTROUTING -p tcp --dport 443 -m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6 -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
+              ''
+              + lib.optionalString (cfg.httpSupport) ''
+                ip46tables -t mangle -I POSTROUTING -p tcp --dport 80 ${httpParams} -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
+              ''
+              + lib.optionalString (cfg.udpSupport) ''
+                ip46tables -t mangle -A POSTROUTING -p udp -m multiport --dports ${udpPorts} -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${qnum} --queue-bypass
+              '';
+          })
+        ]
+      ))
     ]
   );
 
