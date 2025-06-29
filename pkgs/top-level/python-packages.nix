@@ -783,6 +783,8 @@ self: super: with self; {
 
   apollo-fpga = callPackage ../development/python-modules/apollo-fpga { };
 
+  appengine-python-standard = callPackage ../development/python-modules/appengine-python-standard { };
+
   app-model = callPackage ../development/python-modules/app-model { };
 
   appdirs = callPackage ../development/python-modules/appdirs { };
