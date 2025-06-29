@@ -648,6 +648,27 @@ in
     buildInputs = [ libidn ];
   };
 
+  # Clean up vendor binaries for other platforms
+  image_optim_pack = attrs:
+    let
+      vendor_path = "$out/${ruby.gemPath}/gems/image_optim_pack-${attrs.version}/vendor";
+    in if stdenv.system == "x86_64-linux" then {
+      postInstall = ''
+        rm -rf ${vendor_path}/darwin-x86_64
+        rm -rf ${vendor_path}/linux-i686
+      '';
+    } else if stdenv.system == "i686-linux" then {
+      postInstall = ''
+        rm -rf ${vendor_path}/darwin-x86_64
+        rm -rf ${vendor_path}/linux-x86_64
+      '';
+    } else if stdenv.system == "x86_64-darwin" then {
+      postInstall = ''
+        rm -rf ${vendor_path}/linux-x86_64
+        rm -rf ${vendor_path}/linux-i686
+      '';
+    } else { };
+
   # disable bundle install as it can't install anything in addition to what is
   # specified in pkgs/applications/misc/jekyll/Gemfile anyway. Also do chmod_R
   # to compensate for read-only files in site_template in nix store.
