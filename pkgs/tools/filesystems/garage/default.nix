@@ -102,6 +102,7 @@ let
         homepage = "https://garagehq.deuxfleurs.fr";
         license = lib.licenses.agpl3Only;
         maintainers = with lib.maintainers; [
+          adamcstephens
           nickcao
           _0x4A6F
           teutat3s
@@ -113,24 +114,12 @@ let
     };
 in
 rec {
-  # Until Garage hits 1.0, 0.7.3 is equivalent to 7.3.0 for now, therefore
-  # we have to keep all the numbers in the version to handle major/minor/patch level.
-  # for <1.0.
-  # Please add new versions to nixos/tests/garage/default.nix as well.
-
-  garage_0_8_7 = generic {
-    version = "0.8.7";
-    hash = "sha256-2QGbR6YvMQeMxN3n1MMJ5qfBcEJ5hjXARUOfEn+m4Jc=";
-    cargoHash = "sha256-NmeAkm35Su4o5JEn75pZmxhVHh+VMwKwULKY0eCVlYo=";
-    cargoPatches = [ ./update-time-0.8.patch ];
-    broken = stdenv.hostPlatform.isDarwin;
-  };
-
   garage_0_9_4 = generic {
     version = "0.9.4";
     hash = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
     cargoHash = "sha256-ittesFz1GUGipQecsmMA+GEaVoUY+C9DtEvsO0HFNCc=";
     cargoPatches = [ ./update-time.patch ];
+    eol = true;
   };
 
   garage_1_2_0 = generic {
@@ -145,14 +134,11 @@ rec {
     cargoHash = "sha256-6VM/EesrUIaQOeDGqzb0kOqMz4hW7zBJUnaRQ9C3cqc=";
   };
 
-  garage_0_8 = garage_0_8_7;
-
   garage_0_9 = garage_0_9_4;
 
-  garage_1_x = garage_1_2_0;
-  garage_1 = garage_1_x;
+  garage_1 = garage_1_2_0;
 
   garage_2 = garage_2_0_0;
 
-  garage = garage_1_x;
+  garage = garage_1;
 }

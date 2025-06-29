@@ -130,8 +130,6 @@ extra-packages:
 
 # keep-sorted start skip_lines=1 case=no
 package-maintainers:
-  abbradar:
-    - Agda
   alexfmpe:
     - aeson-gadt-th
     - android-activity
@@ -380,6 +378,7 @@ package-maintainers:
     - warp-systemd
     - amazonka
   ncfavier:
+    - Agda
     - irc-client
     - lambdabot
     - shake
