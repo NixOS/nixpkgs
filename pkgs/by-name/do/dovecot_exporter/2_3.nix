@@ -1,7 +1,7 @@
 {
   callPackage,
-  dovecot,
+  dovecot_2_3,
 }:
 callPackage ./generic.nix { } {
-  inherit dovecot;
+  dovecot = dovecot_2_3;
 }
