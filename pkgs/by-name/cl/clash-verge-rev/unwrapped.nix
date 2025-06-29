@@ -49,6 +49,10 @@ rustPlatform.buildRustPackage {
     # If you need a newer version, you can override the mihomo input of the wrapped package
     sed -i -e '/Mihomo Alpha/d' ./src/components/setting/mods/clash-core-viewer.tsx
 
+    # See service.nix for reasons
+    substituteInPlace src-tauri/src/core/service_ipc.rs \
+      --replace-fail "/tmp/clash-verge-service.sock" "/run/clash-verge-rev/service.sock"
+
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
