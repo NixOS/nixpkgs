@@ -2,24 +2,28 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  autoconf-archive,
   autoreconfHook,
+  bison,
   gettext,
   libiconv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "html2text";
-  version = "2.2.3";
+  version = "2.3.0";
 
   src = fetchFromGitLab {
     owner = "grobian";
     repo = "html2text";
     rev = "v${version}";
-    hash = "sha256-7Ch51nJ5BeRqs4PEIPnjCGk+Nm2ydgJQCtkcpihXun8=";
+    hash = "sha256-e/KWyc7lOdWhtFC7ZAD7sYgCsO3JzGkLUThVI7edqIQ=";
   };
 
   nativeBuildInputs = [
+    autoconf-archive
     autoreconfHook
+    bison
     gettext
   ];
 
