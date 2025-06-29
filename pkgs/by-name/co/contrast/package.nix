@@ -19,7 +19,7 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "contrast";
   version = "0.0.11";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "design";
     repo = "contrast";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-8A1qX1H0cET5AUvMoHC1/VyIQiaTysEY5RJRrVYvGng=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     mainProgram = "contrast";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -7,7 +7,7 @@
   android-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adbfs-rootless";
   version = "unstable-2023-03-21";
 
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    homepage = "https://github.com/spion/adbfs-rootless";
     description = "Mount Android phones on Linux with adb, no root required";
     mainProgram = "adbfs";
-    inherit (src.meta) homepage;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -14,14 +14,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.8";
   pname = "acsccid";
 
   src = fetchFromGitHub {
     owner = "acshk";
     repo = "acsccid";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "12aahrvsk21qgpjwcrr01s742ixs44nmjkvcvqyzhqb307x1rrn3";
   };
 
@@ -79,9 +79,9 @@ stdenv.mkDerivation rec {
         services.pcscd.enable = true;
         services.pcscd.plugins = [ pkgs.acsccid ];
     '';
-    homepage = src.meta.homepage;
+    homepage = "https://github.com/acshk/acsccid";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

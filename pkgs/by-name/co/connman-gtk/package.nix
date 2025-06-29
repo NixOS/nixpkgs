@@ -13,14 +13,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "connman-gtk";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "jgke";
     repo = "connman-gtk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2bfoGXzy4wXRALLXEEa7vPWbsBNUhE31nn7dDkuHYCY=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };
-}
+})

@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "6tunnel";
   version = "0.13";
 
   src = fetchFromGitHub {
     owner = "wojtekka";
     repo = "6tunnel";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0zsx9d6xz5w8zvrqsm8r625gpbqqhjzvjdzc3z8yix668yg8ff8h";
   };
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     description = "Tunnelling for application that don't speak IPv6";
     mainProgram = "6tunnel";
     homepage = "https://github.com/wojtekka/6tunnel";
-    changelog = "https://github.com/wojtekka/6tunnel/blob/${version}/ChangeLog";
+    changelog = "https://github.com/wojtekka/6tunnel/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ Br1ght0ne ];
     platforms = lib.platforms.unix;
   };
-}
+})

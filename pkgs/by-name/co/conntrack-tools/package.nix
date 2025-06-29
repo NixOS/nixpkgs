@@ -16,12 +16,12 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "conntrack-tools";
   version = "1.4.8";
 
   src = fetchurl {
-    url = "https://www.netfilter.org/projects/conntrack-tools/files/${pname}-${version}.tar.xz";
+    url = "https://www.netfilter.org/projects/conntrack-tools/files/conntrack-tools-${finalAttrs.version}.tar.xz";
     hash = "sha256-BnZ39MX2VkgZ547TqdSomAk16pJz86uyKkIOowq13tY=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fpletz ];
   };
-}
+})

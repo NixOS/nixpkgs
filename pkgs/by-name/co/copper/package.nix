@@ -4,11 +4,11 @@
   fetchurl,
   libffi,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "copper";
   version = "4.6";
   src = fetchurl {
-    url = "https://tibleiz.net/download/copper-${version}-src.tar.gz";
+    url = "https://tibleiz.net/download/copper-${finalAttrs.version}-src.tar.gz";
     sha256 = "sha256-tyxAMJp4H50eBz8gjt2O3zj5fq6nOIXKX47wql8aUUg=";
   };
   buildInputs = [
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.x86_64;
     broken = true;
   };
-}
+})

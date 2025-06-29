@@ -12,12 +12,12 @@
   libpaper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "a2ps";
   version = "4.15.6";
 
   src = fetchurl {
-    url = "mirror://gnu/a2ps/a2ps-${version}.tar.gz";
+    url = "mirror://gnu/a2ps/a2ps-${finalAttrs.version}.tar.gz";
     hash = "sha256-h/+dgByxGWkYHVuM+LZeZeWyS7DHahuCXoCY8pBvvfQ=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bennofs ];
     platforms = lib.platforms.unix;
   };
-}
+})

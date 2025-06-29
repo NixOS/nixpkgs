@@ -13,7 +13,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "a2jmidid";
   version = "12";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "gitea.ladish.org";
     owner = "LADI";
     repo = "a2jmidid";
-    rev = "refs/tags/${version}";
+    rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-PZKGhHmPMf0AucPruOLB9DniM5A3BKdghFCrd5pTzeM=";
   };
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

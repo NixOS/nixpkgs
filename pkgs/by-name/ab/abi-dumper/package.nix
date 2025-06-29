@@ -8,14 +8,14 @@
   vtable-dumper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abi-dumper";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "abi-dumper";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-BefDMeKHx4MNU6SyX5UpQnwdI+zqap7zunsgdWG/2xc=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bhipple ];
     platforms = lib.platforms.all;
   };
-}
+})

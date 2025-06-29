@@ -8,14 +8,14 @@
   abi-dumper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abi-compliance-checker";
   version = "2.3";
 
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "abi-compliance-checker";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1f1f9j2nf9j83sfl2ljadch99v6ha8rq8xm7ax5akc05hjpyckij";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bhipple ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -7,14 +7,14 @@
   gmp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "4ti2";
   version = "1.6.12";
 
   src = fetchFromGitHub {
     owner = "4ti2";
     repo = "4ti2";
-    rev = "Release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "Release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-B01KfZUlG50qCjVLy8+nql8AR+exNMLDWHGhTDhOpg0=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
-}
+})
