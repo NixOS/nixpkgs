@@ -7010,6 +7010,13 @@
     githubId = 757125;
     name = "Dzmitry Lahoda";
   };
+  e-v-o-l-v-e = {
+    email = "megninpreiss.ivanoe@gmail.com";
+    matrix = "@evolve:matrix.imp-network.com";
+    github = "e-v-o-l-v-e";
+    githubId = 84813895;
+    name = "Ivanoe Megnin-Preiss";
+  };
   e1mo = {
     email = "nixpkgs@e1mo.de";
     matrix = "@e1mo:chaos.jetzt";
