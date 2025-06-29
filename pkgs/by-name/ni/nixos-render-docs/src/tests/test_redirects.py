@@ -15,8 +15,10 @@ class TestRedirects(unittest.TestCase):
                 indexHTML.append(f"```{{=include=}} appendix html:into-file=//{outpath}\n{path}\n```")
             infile.write("\n".join(indexHTML))
 
-        for filename, content in sources.items():
-            with open(Path(__file__).parent / filename, 'w') as infile:
+        for filepath, content in sources.items():
+            full_path = Path(__file__).parent / filepath
+            full_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(full_path, 'w') as infile:
                 infile.write(content)
 
         redirects = Redirects({"redirects-test-suite": ["index.html#redirects-test-suite"]} | raw_redirects, '')
@@ -226,6 +228,34 @@ class TestRedirects(unittest.TestCase):
 
         client_redirects = md._redirects.get_client_redirects("bar.html")
         expected_redirects = {'foo': 'foo.html#foo', 'another-section': 'bar.html#bar'}
+        self.assertEqual(client_redirects, expected_redirects)
+
+    def test_redirects_across_depths(self):
+        """Test client-side redirects for identifiers that moved across different directory depths"""
+        md = self.setup_test(
+            sources={
+                "docs/foo.md": "# Foo {#foo}",
+                "bar.md": "# Bar {#bar}",
+                "nested/deep/baz.md": "# Baz {#baz}"
+            },
+            raw_redirects={
+                'foo': ['docs/foo.html#foo', 'bar.html#foo', 'nested/deep/baz.html#foo'],
+                'bar': ['bar.html#bar', 'docs/foo.html#bar'],
+                'baz': ['nested/deep/baz.html#baz', 'bar.html#baz', 'docs/foo.html#baz']
+            },
+        )
+        self.run_test(md)
+
+        client_redirects = md._redirects.get_client_redirects("docs/foo.html")
+        expected_redirects = {'bar': 'bar.html#bar', 'baz': 'nested/deep/baz.html#baz'}
+        self.assertEqual(client_redirects, expected_redirects)
+
+        client_redirects = md._redirects.get_client_redirects("bar.html")
+        expected_redirects = {'foo': 'docs/foo.html#foo', 'baz': 'nested/deep/baz.html#baz'}
+        self.assertEqual(client_redirects, expected_redirects)
+
+        client_redirects = md._redirects.get_client_redirects("nested/deep/baz.html")
+        expected_redirects = {'foo': 'docs/foo.html#foo'}
         self.assertEqual(client_redirects, expected_redirects)
 
     def test_server_redirects(self):
