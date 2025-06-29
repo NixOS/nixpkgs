@@ -13,22 +13,26 @@
 
   inherit version;
   defaultVersion =
-    with lib.versions;
     let
-      cmc = c: mc: [
-        c
-        mc
-      ];
+      case = coq: mc: out: {
+        case = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
     in
-    lib.switch [ coq.coq-version mathcomp-boot.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
-      lib.mapAttrsToList (out: cases: { inherit cases out; }) {
-        "0.5.0" = cmc (range "8.17" "9.0") (range "2.0.0" "2.4.0");
-        "0.4.0" = cmc (range "8.17" "8.20") (range "2.0.0" "2.3.0");
-        "0.3.1" = cmc (range "8.11" "8.20") (range "1.12.0" "1.19.0");
-        "0.3.0" = cmc (range "8.11" "8.14") (isLe "1.12.0");
-        "0.2.2" = cmc (range "8.10" "8.12") (isLe "1.12.0");
-      }
-    )) null;
+    with lib.versions;
+    lib.switch
+      [ coq.coq-version mathcomp-boot.version ]
+      [
+        (case (range "8.17" "9.0") (range "2.0.0" "2.4.0") "0.5.0")
+        (case (range "8.17" "8.20") (range "2.0.0" "2.3.0") "0.4.0")
+        (case (range "8.11" "8.20") (range "1.12.0" "1.19.0") "0.3.1")
+        (case (range "8.11" "8.14") (isLe "1.12.0") "0.3.0")
+        (case (range "8.10" "8.12") (isLe "1.12.0") "0.2.2")
+      ]
+      null;
 
   releaseRev = v: "v${v}";
 
