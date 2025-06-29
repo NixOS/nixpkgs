@@ -2839,6 +2839,15 @@ self: super:
   # The hackage source is somehow missing a file present in the repo (tests/ListStat.hs).
   sym = dontCheck super.sym;
 
+  # 2024-01-24: https://github.com/haskellari/tree-diff/issues/79
+  # exprParser fails to parse pretty printed structure correctly when the randomizer uses newlines (?)
+  tree-diff = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "!/parsec-ansi-wl-pprint/"
+    ];
+  }) super.tree-diff;
+
   # base <4.19
   # https://github.com/well-typed/large-records/issues/168
   large-generics = doJailbreak super.large-generics;
