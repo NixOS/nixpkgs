@@ -1,6 +1,6 @@
 {
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitLab,
   lib,
   python3,
   rdfind,
