@@ -98,7 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optional (stdenv.cc.libcxx != null) "-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    # MoltenVK does its own checks for availability by probing the version at runtime and checking the MSL version.
+    [ "-Wno-error=unguarded-availability" ]
+    ++ lib.optional (
+      stdenv.cc.libcxx != null
+    ) "-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
     ++ [
       "-I${lib.getDev spirv-cross}/include/spirv_cross"
       "-I${lib.getDev spirv-headers}/include/spirv/unified1"
