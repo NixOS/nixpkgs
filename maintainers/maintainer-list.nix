@@ -27285,6 +27285,13 @@
     github = "x3rAx";
     githubId = 2268851;
   };
+  x71c9 = {
+    email = "mail@x71c9.com";
+    github = "x71c9";
+    githubId = 108585118;
+    matrix = "@x71c9:matrix.org";
+    name = "Andrea Reni";
+  };
   x807x = {
     name = "x807x";
     email = "s10855168@gmail.com";
