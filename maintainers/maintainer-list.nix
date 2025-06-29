@@ -1298,6 +1298,12 @@
       { fingerprint = "DF68 C500 4024 23CC F9C5  E6CA 3D17 C832 4696 FE70"; }
     ];
   };
+  alsvartr = {
+    email = "nazarov.pn@gmail.com";
+    github = "alsvartr";
+    githubId = 205880;
+    name = "Pavel Nazarov";
+  };
   alternateved = {
     email = "alternateved@pm.me";
     github = "alternateved";
