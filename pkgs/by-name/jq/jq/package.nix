@@ -30,15 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  # tortured syntax to avoid rebuilds
-  # needed because epoch conversion test here is right at the end of 32 bit integer space
-  # See also: https://github.com/jqlang/jq/blob/859a8073ee8a21f2133154eea7c2bd5e0d60837f/tests/optional.test#L15-L18
-  # "-D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64" would be preferrable, but breaks with dynamic linking,
-  # unless done globally in stdenv for all of 32 bit.
-  ${if stdenv.hostPlatform.is32bit then "patches" else null} = [
-    ./disable-end-of-epoch-conversion-test.patch
-  ];
-
   # https://github.com/jqlang/jq/issues/2871
   postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
     substituteInPlace Makefile.am --replace-fail "tests/mantest" "" --replace-fail "tests/optionaltest" ""
