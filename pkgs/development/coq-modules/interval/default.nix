@@ -21,6 +21,7 @@ mkCoqDerivation rec {
     with lib.versions;
     lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
       lib.mapAttrsToList (out: case: { inherit case out; }) {
+        "4.11.2" = range "8.13" "9.0";
         "4.11.1" = range "8.13" "8.20";
         "4.10.0" = range "8.12" "8.19";
         "4.9.0" = range "8.12" "8.18";
@@ -32,6 +33,7 @@ mkCoqDerivation rec {
         "3.3.0" = range "8.5" "8.6";
       }
     )) null;
+  release."4.11.2".sha256 = "sha256-ouhjHtlxcqt06+Pt+UZAzwp83bVYPh3N+8jnsVvapSU=";
   release."4.11.1".sha256 = "sha256-QWZvU468rOhK796xCCEawW6rhCRTPnE0iLll9ynKflo=";
   release."4.11.0".sha256 = "sha256-vPwa4zSjyvxHLGDoNaBnHV2pb77dnQFbC50BL80fcvE=";
   release."4.10.0".sha256 = "sha256-MZJVoKGLXjDabdv9BuUSK1L9z1cubzC9cqVuWevKIXQ=";
