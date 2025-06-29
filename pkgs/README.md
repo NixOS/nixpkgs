@@ -31,6 +31,7 @@ Before adding a new package, please consider the following questions:
 * Is the package ready for general use? We don't want to include projects that are too immature or are going to be abandoned immediately. In case of doubt, check with upstream.
 * Does the project have a clear license statement? Remember that software is unfree by default (all rights reserved), and merely providing access to the source code does not imply its redistribution. In case of doubt, ask upstream.
 * How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small. A good estimate is checking upstream issues and pull requests, or other software repositories. Library packages should have at least one dependent.
+  * We warmly welcome upstream authors to package and maintain their own projects. However, please note that submitted projects should still have a noticeable number of users. Submitting newly created projects right after they are written is also generally discouraged. Nixpkgs is not an advertising platform for newly launched projects.
 * Is the software actively maintained upstream? Especially packages that are security-critical, rely on fast-moving dependencies, or affect data integrity should see regular maintenance.
 * Are you willing to maintain the package? You should care enough about the package to be willing to keep it up and running for at least one complete Nixpkgs' release life-cycle.
   * In case you are not able to maintain the package you wrote, you can seek someone to fill that role, effectively adopting the package.
@@ -58,7 +59,7 @@ Special care has to be taken with security-critical software components. Because
 
 This section describes a general framework of understanding and exceptions might apply.
 
-Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project.
+If the package you'd like to submit doesn't meet the criteria above, you can still maintain and distribute it to Nix users in other ways, such as by including a `flake.nix` (or `default.nix` if you prefer not to use flakes) in the project's repository, or by submitting your package to the [Nix User Repository](https://github.com/nix-community/nur).
 
 ---
 
