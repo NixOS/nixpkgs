@@ -1099,9 +1099,11 @@ with haskellLib;
               }
               sed -i ${name}.cabal \
                 -e 's/\(bytestring\) .*/\1/w c1' \
-                -e 's/\(text\) .*/\1/w c2'
+                -e 's/\(text\) .*/\1/w c2' \
+                -e 's/\(aeson\) .*/\1/w c3'
               check_sed c1 'bytestring .*'
               check_sed c2 'text .*'
+              ${lib.optionalString (name == "selda-json") "check_sed c3 'aeson .*'"}
             '';
           }) super.${name};
       in
