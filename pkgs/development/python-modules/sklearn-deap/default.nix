@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rsteca/sklearn-deap";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
+    broken = true; # incompatible with scikit-learn >= 1.6
   };
 }
