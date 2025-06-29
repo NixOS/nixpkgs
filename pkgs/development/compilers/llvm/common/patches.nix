@@ -79,6 +79,12 @@
       path = ../14;
     }
   ];
+  "llvm/llvm-exegesis-timeout.patch" = [
+    {
+      after = "17";
+      path = ../17;
+    }
+  ];
   "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" = [
     {
       before = "17";

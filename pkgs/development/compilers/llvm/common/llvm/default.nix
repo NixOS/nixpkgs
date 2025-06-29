@@ -141,6 +141,10 @@ stdenv.mkDerivation (
           stripLen = 1;
         })
       ]
+      # Fix tests nondeterministically hanging: https://github.com/llvm/llvm-project/pull/132861
+      ++ lib.optional (lib.versionAtLeast release_version "17") (
+        getVersionFile "llvm/llvm-exegesis-timeout.patch"
+      )
       # Support custom installation dirs
       # Originally based off https://reviews.llvm.org/D99484
       # Latest state: https://github.com/llvm/llvm-project/pull/125376
