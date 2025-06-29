@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=format-truncation"
     "-Wno-error=format-overflow"
+    "-Wno-error=deprecated-declarations"
   ];
 
   strictDeps = true;
