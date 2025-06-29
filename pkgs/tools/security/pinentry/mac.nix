@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Pinentry for GPG on Mac";
     license = lib.licenses.gpl2Plus;
-    homepage = "https://github.com/GPGTools/pinentry-mac";
+    homepage = "https://github.com/GPGTools/pinentry";
     platforms = lib.platforms.darwin;
     mainProgram = "pinentry-mac";
   };
