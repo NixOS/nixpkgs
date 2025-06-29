@@ -194,7 +194,41 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = false; # tries to access the net
+  enableParallelChecking = false;
+  doCheck = true;
+  preCheck = ''
+    export SKIP_KNOWN_BUGS=1
+    export SKIP_INTERNET_TESTS=1
+
+    # tests rely on external tools we'd rather not depend on
+    rm testsuite/unzip.tests \
+      testsuite/hostname/hostname-works\
+      testsuite/hostname/hostname-s-works
+
+    # trips up on SIGPIPE issues from https://github.com/NixOS/nix/issues/2803
+    # resulting in a never-terminating `yes`
+    rm testsuite/md5sum.tests testsuite/sha*sum.tests
+
+    # build environment won't have /usr/bin and won't be able
+    # to create suid files
+    sed -i -e '/cpio -p with absolute paths/iSKIP=1;' \
+      -e '/cpio restores suid/iSKIP=1;' \
+      testsuite/cpio.tests
+
+    # won't work when our coreutils is also a multi-call-binary
+    sed -i '/start-stop-daemon with both -x and -a/iSKIP=1;' \
+      testsuite/start-stop-daemon.tests
+
+    # build environment won't have `ls` in the "default path" but
+    # should have `sh`
+    sed -i 's/\bls\b/sh/g' testsuite/which/which-uses-default-path
+
+    # help tests find tools in non-standard locations
+    substituteInPlace testsuite/date/date-works-1 \
+      --replace '/bin/date' "$(type -P date)"
+    substituteInPlace testsuite/pwd/pwd-prints-working-directory \
+      --replace '`which pwd`' "$(type -P pwd)"
+  '';
 
   passthru.shellPath = "/bin/ash";
 
