@@ -19,12 +19,6 @@ buildGoModule rec {
     hash = "sha256-9vIReA29dWf3QwUYEW8JhzF9o74JZqG4zGobgI+gIWE=";
   };
 
-  # With `allowGoReference = true;`, `buildGoModule` adds the `-trimpath`
-  # argument for Go builds which apparently breaks the UI like this:
-  #
-  #   server[780]: stat /var/lib/private/ui/build/index.html: no such file or directory
-  allowGoReference = true;
-
   vendorHash = "sha256-rs6EfnJT6Jgif2TR5u5Tp5/Ozn+4uhSapksyKFnQiCo=";
 
   doCheck = false;
