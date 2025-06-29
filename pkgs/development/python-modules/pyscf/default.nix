@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "2.9.0-unstable-2025-06-16";
+  version = "2.9.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = "pyscf";
-    rev = "142756584ed3963728cc1f6823286f4605811a6c";
-    hash = "sha256-1uXJOzvGpB+LxtXhLMWB6MSgzKgCSX5+0JpAMhsZinE=";
+    tag = "v${version}";
+    hash = "sha256-UTeZXlNuSWDOcBRVbUUWJ3mQnZZQr17aTw6rRA5DRNI=";
   };
 
   patches = [
