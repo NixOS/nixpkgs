@@ -6,6 +6,7 @@
   nix-eval-jobs,
   nix-output-monitor,
   nix-update-script,
+  bashInteractive,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -28,6 +29,7 @@ python3Packages.buildPythonApplication rec {
         [
           nix-eval-jobs
           nix-eval-jobs.nix
+          bashInteractive
         ]
         ++ lib.optional (lib.meta.availableOn stdenv.buildPlatform nix-output-monitor.compiler) nix-output-monitor
       )
