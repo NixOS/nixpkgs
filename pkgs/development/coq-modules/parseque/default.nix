@@ -3,6 +3,7 @@
   mkCoqDerivation,
   which,
   coq,
+  stdlib,
   version ? null,
 }:
 
@@ -19,7 +20,7 @@ mkCoqDerivation {
       [ coq.coq-version ]
       [
         {
-          cases = [ (range "8.16" "8.20") ];
+          cases = [ (range "8.16" "9.0") ];
           out = "0.2.2";
         }
       ]
@@ -29,8 +30,10 @@ mkCoqDerivation {
 
   releaseRev = v: "v${v}";
 
+  propagatedBuildInputs = [ stdlib ];
+
   meta = {
-    description = "Total parser combinators in Rocq";
+    description = "Total parser combinators in Coq/Rocq";
     maintainers = with maintainers; [ womeier ];
     license = licenses.mit;
   };
