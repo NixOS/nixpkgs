@@ -52,7 +52,7 @@ because the specified keys are restricted to running borg serve and can only
 access this single repository. You need the output of the generate pub file.
 
 ```ShellSession
-# sudo ssh-keygen -N '' -t ed25519 -f /run/keys/id_ed25519_my_borg_repo
+# ssh-keygen -N '' -t ed25519 -f /run/keys/id_ed25519_my_borg_repo
 # cat /run/keys/id_ed25519_my_borg_repo
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/ root@nixos
 ```
