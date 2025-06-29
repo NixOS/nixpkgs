@@ -768,16 +768,18 @@ in
             source: builtins.isPath source || (builtins.isString source && hasPrefix builtins.storeDir source)
           ) (attrValues config.boot.initrd.secrets);
         message = ''
-          boot.loader.initrd.secrets values must be unquoted paths when
-          using a bootloader that doesn't natively support initrd
-          secrets, e.g.:
+          boot.loader.initrd.secrets values must be unquoted paths
+          when using a bootloader that doesn't natively support initrd secrets, e.g.:
 
             boot.initrd.secrets = {
               "/etc/secret" = /path/to/secret;
             };
 
-          Note that this will result in all secrets being stored
-          world-readable in the Nix store!
+          Note that this will result in all secrets being stored  world-readable in the Nix store!
+
+          If you are receiving this error by running `nixos-rebuild build-vm`,
+          you want to use `nixos-rebuild build-vm-with-bootloader` instead
+          to build a vm with a bootloader that supports initrd secrets.
         '';
       }
     ];
