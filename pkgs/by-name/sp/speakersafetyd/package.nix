@@ -34,6 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace speakersafetyd.service \
+      --replace-fail "User=speakersafetyd" \
+                     "" \
       --replace-fail "/usr" \
                      "$out"
 
