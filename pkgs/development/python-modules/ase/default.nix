@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchPypi,
+  fetchFromGitLab,
   buildPythonPackage,
   isPy27,
   pythonAtLeast,
@@ -23,11 +23,12 @@ buildPythonPackage rec {
   version = "3.25.0";
   pyproject = true;
 
-  disabled = isPy27;
-
-  src = fetchPypi {
+  src = fetchFromGitLab {
     inherit pname version;
-    hash = "sha256-N0z4yp/liPBdboVto8nBfvJi3JaAJ7Ix1EkzQUDJYsI=";
+    owner = "ase";
+    repo = "ase";
+    tag = version;
+    hash = "sha256-yYFmbZoDemtu0whnExHJ9t+cK7ObWEj3XXijh+/Fx74=";
   };
 
   build-system = [ setuptools ];
@@ -51,6 +52,10 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
+  pytestFlagsArray = [
+    ''-m "not slow"'' # skip slow tests
+  ];
+
   disabledTests = [
     "test_fundamental_params"
     "test_ase_bandstructure"
@@ -62,18 +67,21 @@ buildPythonPackage rec {
     "test_pw_input_write_nested_flat" # Did not raise DeprecationWarning
     "test_fix_scaled" # Did not raise UserWarning
     "test_ipi_protocol" # flaky
+    "test_long" # fails in sandbox (issue loading Matlib)
   ] ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
 
   preCheck = ''
     export PATH="$out/bin:$PATH"
+    export MPLCONFIGDIR=$(mktemp -d)
   '';
 
   pythonImportsCheck = [ "ase" ];
 
-  meta = with lib; {
+  meta = {
     description = "Atomic Simulation Environment";
     homepage = "https://wiki.fysik.dtu.dk/ase/";
-    license = licenses.lgpl21Plus;
+    changelog = "https://wiki.fysik.dtu.dk/ase/releasenotes.html";
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }
