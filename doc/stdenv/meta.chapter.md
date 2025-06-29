@@ -296,3 +296,18 @@ For many packages it should be enough to specify only `meta.identifiers.cpeParts
 #### `meta.identifiers.cpe` {#var-meta-identifiers-cpe}
 
 A readonly attribute that concatenates all CPE parts in one string.
+
+### Package URL {#sec-meta-identifiers-purl}
+
+[Package URL](https://github.com/package-url/purl-spec) (pURL) is a specification to reliably identify and locate software packages.
+
+#### `meta.identifiers.purlParts` {#var-meta-identifiers-purlParts}
+
+This attribute contains an attribute set of all parts of the pURL for this package.
+
+* `type` mandatory [type](https://github.com/package-url/purl-spec/blob/main/PURL-TYPES.rst) which needs to be provided
+* `spec` specify the pURL in accordance with the [purl-spec](https://github.com/package-url/purl-spec/blob/main/PURL-SPECIFICATION.rst)
+
+#### `meta.identifiers.purl` {#var-meta-identifiers-purl}
+
+A readonly attribute which is built based on purlParts.

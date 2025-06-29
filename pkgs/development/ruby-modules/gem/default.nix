@@ -295,11 +295,23 @@ lib.makeOverridable (
       passthru = passthru // {
         isRubyGem = true;
       };
-      meta = {
-        # default to Ruby's platforms
-        platforms = ruby.meta.platforms;
-        mainProgram = gemName;
-      } // meta;
+      meta =
+        {
+          # default to Ruby's platforms
+          platforms = ruby.meta.platforms;
+          mainProgram = gemName;
+        }
+        // lib.optionalAttrs (type == "gem") {
+          identifiers.purlParts = {
+            type = "gem";
+            # https://github.com/package-url/purl-spec/blob/main/PURL-TYPES.rst#gem
+            spec = "${gemName}@${version}?platform=${platform}";
+          };
+        }
+        // lib.optionalAttrs (type == "git") {
+          identifiers.purlParts = src.meta.identifiers.purlParts or { };
+        }
+        // meta;
     }
   )
 

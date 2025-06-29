@@ -670,7 +670,23 @@ let
                   "cpe:2.3:a:${cpeParts.vendor}:${cpeParts.product}:${cpeParts.version}.${cpeParts.update}:*:${cpeParts.edition}:${cpeParts.sw_edition}:${cpeParts.target_sw}:${cpeParts.target_hw}:${cpeParts.language}:${cpeParts.other}"
             else
               [ ];
-          v1 = { inherit cpeParts cpe; };
+          purlParts = {
+            type = null;
+            spec = null;
+          } // attrs.meta.identifiers.purlParts or { };
+          purl =
+            if all (x: !isNull x) (attrValues purlParts) then
+              "pkg:${purlParts.type}/${purlParts.spec}"
+            else
+              null;
+          v1 = {
+            inherit
+              cpeParts
+              cpe
+              purlParts
+              purl
+              ;
+          };
         in
         v1
         // {

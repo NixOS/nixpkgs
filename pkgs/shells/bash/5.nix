@@ -185,6 +185,7 @@ lib.warnIf (withDocs != null)
       maintainers = [ ];
       mainProgram = "bash";
       identifiers.cpeParts.vendor = "gnu";
+      # pname bash-interactive should still match to bash
       identifiers.cpeParts.product = "bash";
     };
   }
