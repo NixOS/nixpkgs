@@ -86,6 +86,7 @@ let
     id
     isDerivation
     optionals
+    recursiveUpdate
     ;
 
   inherit (release-lib.lib.attrsets) unionOfDisjoint;
@@ -111,7 +112,20 @@ let
 
     manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
-    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+    lib-tests = import ../../lib/tests/release.nix {
+      pkgs = import nixpkgs (
+        recursiveUpdate
+          (recursiveUpdate {
+            inherit system;
+            config.allowUnsupportedSystem = true;
+          } nixpkgsArgs)
+          {
+            config.permittedInsecurePackages = nixpkgsArgs.config.permittedInsecurePackages or [ ] ++ [
+              "nix-2.3.18"
+            ];
+          }
+      );
+    };
     pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
     darwin-tested =
