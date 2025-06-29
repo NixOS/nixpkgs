@@ -95,6 +95,8 @@ buildGoModule {
 
   inherit frontend;
 
+  hardeningDisable = [ "pie" ];
+
   prePatch = ''
     cp -r ${frontend} frontend/dist
   '';

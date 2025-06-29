@@ -23,6 +23,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-JT0r/hs7ZRtsYh4aXy+v8BjwiLvRJ10e4yRirqmWVW0=";
 
+  hardeningDisable = [ "pie" ];
+
   nativeBuildInputs = [
     asciidoctor
     installShellFiles

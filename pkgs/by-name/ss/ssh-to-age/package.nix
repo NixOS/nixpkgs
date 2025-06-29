@@ -19,7 +19,7 @@ buildGoModule rec {
 
   checkPhase = ''
     runHook preCheck
-    go test ./...
+    buildGoDir test ./...
     runHook postCheck
   '';
 

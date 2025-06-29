@@ -70,6 +70,8 @@ buildGoModule rec {
   doCheck = (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   inherit tinygoTests;
 
+  hardeningDisable = [ "pie" ];
+
   allowGoReference = true;
   ldflags = [
     "-X github.com/tinygo-org/tinygo/goenv.TINYGOROOT=${placeholder "out"}/share/tinygo"
