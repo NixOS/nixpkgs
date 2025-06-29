@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   python,
+  callPackage,
 
   # gateware
   makeSetupHook,
@@ -33,6 +34,13 @@
   pytestCheckHook,
 }:
 let
+  version = "0.2.3";
+  src = fetchFromGitHub {
+    owner = "greatscottgadgets";
+    repo = "cynthion";
+    tag = version;
+    hash = "sha256-NAsELeOnWgMa6iWCJ0+hpbHIO3BsZBv0N/nK1XP+IpU=";
+  };
   build-gateware-hook = makeSetupHook {
     name = "build-gateware-hook";
     substitutions = {
@@ -45,18 +53,14 @@ let
       yosys
     ];
   } ./build-gateware.sh;
+  moondancer = (callPackage ./moondancer.nix { inherit src version; });
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "cynthion";
-  version = "0.2.2";
-  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "greatscottgadgets";
-    repo = "cynthion";
-    tag = version;
-    hash = "sha256-xL1/ckX+xKUQpugQkLB3SlZeNcBEaTMascTgoQ4C+hA=";
-  };
+  inherit version src;
+
+  pyproject = true;
 
   sourceRoot = "${src.name}/cynthion/python";
 
@@ -91,6 +95,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     build-gateware-hook
   ];
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -98,6 +103,10 @@ buildPythonPackage rec {
   enableParallelBuilding = true;
 
   pythonImportsCheck = [ "cynthion" ];
+
+  postInstall = ''
+    install -Dm444 ${moondancer}/bin/moondancer $out/${python.sitePackages}/cynthion/assets/moondancer.bin
+  '';
 
   meta = {
     description = "Python package and utilities for the Great Scott Gadgets Cynthion USB Test Instrument";
