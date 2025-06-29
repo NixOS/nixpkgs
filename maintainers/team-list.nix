@@ -693,7 +693,6 @@ with lib.maintainers;
       kazenyuk
       minijackson
       peterhoeg
-      sephalon
     ];
     scope = "Maintain Kodi and related packages.";
     shortName = "Kodi";
