@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "textlint-rule-stop-words";
-  version = "5.0.0";
+  version = "5.1.2";
 
   src = fetchFromGitHub {
     owner = "sapegin";
     repo = "textlint-rule-stop-words";
     tag = "v${version}";
-    hash = "sha256-e9jTbDULOs0DwtT9UZp7k5+RR5Ab/x/sizIvs1MrmZs=";
+    hash = "sha256-BCex7YeYiZSch8zjdL0chSng4ezisMcFm/T1J81q2h4=";
   };
 
-  npmDepsHash = "sha256-t9PPHFIiY4vw0ocw6nMuaeYuYWxbc1Pzo0R6bqIsHeI=";
+  npmDepsHash = "sha256-GPR7zLpaTiBqG06ckMWnEsVuejVeAv9V9oV6ENRQDR8=";
 
   dontNpmBuild = true;
 
