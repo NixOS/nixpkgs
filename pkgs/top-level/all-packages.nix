@@ -4474,6 +4474,8 @@ with pkgs;
 
   subzerod = with python3Packages; toPythonApplication subzerod;
 
+  sunsama = callPackage ../by-name/su/sunsama/package.nix { };
+
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     autoreconfHook = buildPackages.autoreconfHook269;
     libxml2 = libxml2Python;

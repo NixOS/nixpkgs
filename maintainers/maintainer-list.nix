@@ -5494,6 +5494,12 @@
     githubId = 217543;
     name = "Damien Cassou";
   };
+  dan-kc = {
+    email = "daniel@keone.dev";
+    github = "dan-kc";
+    githubId = 63171098;
+    name = "Daniel Cox";
+  };
   dan-theriault = {
     email = "nix@theriault.codes";
     github = "Dan-Theriault";
