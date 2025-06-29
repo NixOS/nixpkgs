@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       khaneliman
       rmcgibbo
+      ryan4yin
     ];
     mainProgram = "btop";
   };

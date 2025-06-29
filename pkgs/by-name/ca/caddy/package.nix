@@ -91,6 +91,7 @@ buildGoModule {
       Br1ght0ne
       stepbrobd
       techknowlogick
+      ryan4yin
     ];
   };
 }
