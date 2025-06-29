@@ -12,22 +12,20 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  syrupy,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "demetriek";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-demetriek";
     tag = "v${version}";
-    hash = "sha256-KqLkct4Kd8wa5eKYJJq1y/5z5PbO0XaK0aGzs3bm8fs=";
+    hash = "sha256-6vzQaifvQ24LpSQFwPMvEvb1wuyv0iRpLCFHFO9V7sc=";
   };
 
   postPatch = ''
@@ -36,11 +34,7 @@ buildPythonPackage rec {
       --replace-fail "0.0.0" "${version}"
   '';
 
-  pythonRelaxDeps = [ "pydantic" ];
-
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
@@ -56,6 +50,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [ "demetriek" ];
