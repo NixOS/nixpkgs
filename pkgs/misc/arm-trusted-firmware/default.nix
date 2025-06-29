@@ -153,6 +153,13 @@ in
     extraMeta.platforms = [ "aarch64-linux" ];
     filesToInstall = [ "build/${platform}/release/bl31.bin" ];
   };
+  
+  armTrustedFirmwareJ784S4 = buildArmTrustedFirmware rec {
+    extraMakeFlags = ["bl31" "TARGET_BOARD=j784s4" "K3_USART=0x8"];
+    platform = "k3";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = [ "build/${platform}/j784s4/release/bl31.bin"];
+  };
 
   armTrustedFirmwareQemu = buildArmTrustedFirmware rec {
     platform = "qemu";
