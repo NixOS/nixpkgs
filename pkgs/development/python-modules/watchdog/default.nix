@@ -44,20 +44,6 @@ buildPythonPackage rec {
       # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
       "--deselect=tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # fails to stop process in teardown
-      "--deselect=tests/test_0_watchmedo.py::test_auto_restart_subprocess_termination"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # FileCreationEvent != FileDeletionEvent
-      "--deselect=tests/test_emitter.py::test_separate_consecutive_moves"
-      "--deselect=tests/test_observers_polling.py::test___init__"
-      # segfaults
-      "--deselect=tests/test_delayed_queue.py::test_delayed_get"
-      "--deselect=tests/test_emitter.py::test_delete"
-      # AttributeError: '_thread.RLock' object has no attribute 'key'"
-      "--deselect=tests/test_skip_repeats_queue.py::test_eventlet_monkey_patching"
-    ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # segfaults
       "--deselect=tests/test_delayed_queue.py::test_delayed_get"
@@ -87,6 +73,10 @@ buildPythonPackage rec {
       # unsupported on x86_64-darwin
       "tests/test_fsevents.py"
     ];
+
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.FSEvents"))
+  '';
 
   pythonImportsCheck = [ "watchdog" ];
 
