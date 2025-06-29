@@ -95,6 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
       # which assumes that your openbsd is from the 90s, leading to a truly awful compiler/linker configuration.
       # No, autoreconfHook doesn't work.
       "--host=${stdenv.hostPlatform.config}${stdenv.cc.libc.version}"
+    ]
+    ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "15.0") [
+      "cf_cv_type_of_bool=bool"
     ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
