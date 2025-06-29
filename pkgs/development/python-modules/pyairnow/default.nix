@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyairnow";
-  version = "1.2.2";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "asymworks";
     repo = "pyairnow";
     tag = "v${version}";
-    hash = "sha256-KjOu9V92n2rq8iOkgutlK7EMRvirFAEK8oxseI+dr2s=";
+    hash = "sha256-BGTtDMq5SnYrk1qT6OkGa1tkxYH5umbMC5Udmffyf+g=";
   };
 
   build-system = [ poetry-core ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for EPA AirNow Air Quality API";
     homepage = "https://github.com/asymworks/pyairnow";
-    changelog = "https://github.com/asymworks/pyairnow/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/asymworks/pyairnow/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
