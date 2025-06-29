@@ -27962,6 +27962,11 @@
     githubId = 250877;
     name = "Elmar Athmer";
   };
+  zax71 = {
+    github = "zax71";
+    githubId = 67716263;
+    name = "Zax71";
+  };
   zazedd = {
     name = "Leonardo Santos";
     email = "leomendesantos@gmail.com";
