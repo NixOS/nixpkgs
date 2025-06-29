@@ -97,52 +97,73 @@ checks should be performed:
 - If the user has specified a GPG key, verify that the commit is
   signed by their key.
 
-  First, validate that the commit adding the maintainer is signed by
-  the key the maintainer listed. Check out the pull request and
-  compare its signing key with the listed key in the commit.
+  For example, with an entry as follows:
+
+  ```nix
+    SomeMaintainer = {
+      name = "Some Maintainer";
+      email = "some.maintainer@example.com";
+      github = "some-maintainer";
+      githubId = 1234567890;
+      keys = [{
+        fingerprint = "21E5 9F74 B993 9CAE 09E1  156A C894 8ADE 4250 5525";
+      }];
+    };
+  ```
+
+  First, import the users key into `gpg` based on their `lib.maintainers` entry:
+  - If they [added the GPG to their GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account),
+    you can fetch it directly from GitHub based on their username:
+    ```
+    gpg --fetch-keys https://github.com/some-maintainer.gpg
+    ```
+  - If the user uploaded their key to a key server,
+    you can search for it by the fingerprint:
+    ```
+    gpg --recv-keys 21E59F74B9939CAE09E1156AC8948ADE42505525
+    ```
+  - If the key is available using [WKD](https://wiki.gnupg.org/WKD),
+    you can request it using their email:
+    ```
+    gpg --locate-key some.maintainer@example.com
+    ```
+
+  If successful, it should look like this:
+  ```
+  gpg: key C8948ADE42505525: public key "Some Maintainer <some.maintainer@example.com>" imported
+  gpg: Total number processed: 1
+  gpg:               imported: 1
+  ```
+
+  Then check that the commits signature is valid and matches the key:
+
+  ```
+  git log -1 --show-signature
+  ```
+  ```
+  commit 5c67405e028f747b92664fe467b3b31bd3ec4110
+  gpg: Signature made Fri 19 Apr 2024 07:16:32 AM CEST
+  gpg:                using EDDSA key 21E59F74B9939CAE09E1156AC8948ADE42505525
+  gpg: Good signature from "Some Maintainer <some.maintainer@example.com>" [unknown]
+  Primary key fingerprint: 21E5 9F74 B993 9CAE 09E1  156A C894 8ADE 4250 5525
+  Author: Some Maintainer <some.maintainer@example.com>
+  Date:   Fri Apr 19 07:16:22 2024 +0200
+
+      maintainers: add SomeMaintainer
+  ```
+
+  Note the `Good signature` and that the `Primary key fingerprint` matches the one from the maintainer entry.
+
+  Alternatively if the user added the GPG to their GitHub account, GitHub also [verifies the signature](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification):
+
+  ![](https://docs.github.com/assets/cb-17614/mw-1440/images/help/commits/verified-commit.webp)
+
+  However, GitHub does not display the user's full key fingerprint,
+  and should therefore not be used for validating the key matches.
 
   If the commit is not signed or it is signed by a different user, ask
   them to either recommit using that key or to remove their key
   information.
-
-  Given a maintainer entry like this:
-
-  ``` nix
-  {
-    example = {
-      email = "user@example.com";
-      name = "Example User";
-      keys = [{
-        fingerprint = "0000 0000 2A70 6423 0AED  3C11 F04F 7A19 AAA6 3AFE";
-      }];
-    };
-  }
-  ```
-
-  First receive their key from a keyserver:
-
-      $ gpg --recv-keys 0xF04F7A19AAA63AFE
-      gpg: key 0xF04F7A19AAA63AFE: public key "Example <user@example.com>" imported
-      gpg: Total number processed: 1
-      gpg:               imported: 1
-
-  Then check the commit is signed by that key:
-
-      $ git log --show-signature
-      commit b87862a4f7d32319b1de428adb6cdbdd3a960153
-      gpg: Signature made Wed Mar 12 13:32:24 2003 +0000
-      gpg:                using RSA key 000000002A7064230AED3C11F04F7A19AAA63AFE
-      gpg: Good signature from "Example User <user@example.com>
-      Author: Example User <user@example.com>
-      Date:   Wed Mar 12 13:32:24 2003 +0000
-
-          maintainers: adding example
-
-  and validate that there is a `Good signature` and the printed key
-  matches the user's submitted key.
-
-  Note: GitHub's "Verified" label does not display the user's full key
-  fingerprint, and should not be used for validating the key matches.
 
 - If the user has specified a `github` account name, ensure they have
   also specified a `githubId` and verify the two match.
