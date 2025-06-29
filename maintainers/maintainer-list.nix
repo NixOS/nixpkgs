@@ -3614,6 +3614,12 @@
     githubId = 115711;
     name = "bpaulin";
   };
+  bpavuk = {
+    name = "Bohdan Pavuk";
+    email = "boulderobscura@gmail.com";
+    github = "bpavuk";
+    githubId = 75901693;
+  };
   bpeetz = {
     name = "Benedikt Peetz";
     email = "benedikt.peetz@b-peetz.de";
