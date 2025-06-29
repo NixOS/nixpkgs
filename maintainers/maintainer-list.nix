@@ -12419,6 +12419,12 @@
     githubId = 3170771;
     name = "Jo Vandeginste";
   };
+  joyfulcat = {
+    email = "joyfulcatovich@gmail.com";
+    github = "joyfulcat";
+    githubId = 121145249;
+    name = "joyfulcat";
+  };
   jpagex = {
     name = "Jérémy Pagé";
     email = "contact@jeremypage.me";
