@@ -1475,6 +1475,12 @@
     github = "an-empty-string";
     githubId = 681716;
   };
+  ananthb = {
+    email = "nixos-maint@devhuman.net";
+    github = "ananthb";
+    githubId = 3133350;
+    name = "Ananth Bhaskararaman";
+  };
   anas = {
     email = "anas.elgarhy.dev@gmail.com";
     github = "0x61nas";
