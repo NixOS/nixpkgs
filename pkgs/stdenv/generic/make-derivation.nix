@@ -714,6 +714,7 @@ let
       cmakeFlags ? [ ],
       mesonFlags ? [ ],
 
+      preserveMetaFields ? [ "license" "vendor" "cpe" ],
       meta ? { },
       passthru ? { },
       pos ? # position used in error messages and for meta.position
@@ -760,6 +761,9 @@ let
           ++ optional (__structuredAttrs || envIsExportable) "env"
         )
         // optionalAttrs __structuredAttrs { env = checkedEnv; }
+        // (lib.optionalAttrs (preserveMetaFields != [] && attrs ? "meta")) {
+          metaJSON = builtins.toJSON (lib.filterAttrs (n: _: (lib.elem n preserveMetaFields)) attrs.meta);
+        }
         // {
           cmakeFlags = makeCMakeFlags attrs;
           mesonFlags = makeMesonFlags attrs;
