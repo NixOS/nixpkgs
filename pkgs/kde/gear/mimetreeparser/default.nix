@@ -3,6 +3,8 @@
   qt5compat,
   qtdeclarative,
   qgpgme,
+  kirigami,
+  qtwebengine,
 }:
 mkKdeDerivation {
   pname = "mimetreeparser";
@@ -11,5 +13,10 @@ mkKdeDerivation {
     qt5compat
     qtdeclarative
     qgpgme
+  ];
+
+  extraPropagatedBuildInputs = [
+    kirigami
+    qtwebengine
   ];
 }
