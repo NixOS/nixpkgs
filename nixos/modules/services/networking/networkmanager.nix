@@ -225,30 +225,37 @@ in
         type =
           let
             networkManagerPluginPackage = types.package // {
-              description = "NetworkManager plug-in";
+              description = "NetworkManager plugin package";
               check =
                 p:
                 lib.assertMsg
                   (types.package.check p && p ? networkManagerPlugin && lib.isString p.networkManagerPlugin)
                   ''
-                    Package ‘${p.name}’, is not a NetworkManager plug-in.
+                    Package ‘${p.name}’, is not a NetworkManager plugin.
                     Those need to have a ‘networkManagerPlugin’ attribute.
                   '';
             };
           in
           types.listOf networkManagerPluginPackage;
         default = [ ];
-        description = ''
-          List of NetworkManager plug-ins to enable.
-          Some plug-ins are enabled by the NetworkManager module by default.
+        example = literalExpression ''
+          [
+            networkmanager-fortisslvpn
+            networkmanager-iodine
+            networkmanager-l2tp
+            networkmanager-openconnect
+            networkmanager-openvpn
+            networkmanager-sstp
+            networkmanager-strongswan
+            networkmanager-vpnc
+          ]
         '';
-      };
-
-      enableDefaultPlugins = mkOption {
-        type = types.bool;
-        default = true;
         description = ''
-          Enable a set of recommended plugins.
+          List of plugin packages to install.
+
+          See <https://search.nixos.org/packages?query=networkmanager-> for available plugin packages.
+          and <https://networkmanager.dev/docs/vpn/> for an overview over builtin and external plugins
+          and their support status.
         '';
       };
 
@@ -520,6 +527,11 @@ in
       "networkmanager"
       "enableStrongSwan"
     ] "Pass `pkgs.networkmanager_strongswan` into `networking.networkmanager.plugins` instead.")
+    (mkRemovedOptionModule [
+      "networking"
+      "networkmanager"
+      "enableDefaultPlugins"
+    ] "Configure the required plugins explicitly in `networking.networkmanager.plugins`.")
   ];
 
   ###### implementation
@@ -661,18 +673,6 @@ in
     networking = mkMerge [
       (mkIf (!delegateWireless) {
         useDHCP = false;
-      })
-
-      (mkIf cfg.enableDefaultPlugins {
-        networkmanager.plugins = with pkgs; [
-          networkmanager-fortisslvpn
-          networkmanager-iodine
-          networkmanager-l2tp
-          networkmanager-openconnect
-          networkmanager-openvpn
-          networkmanager-vpnc
-          networkmanager-sstp
-        ];
       })
 
       (mkIf enableIwd {
