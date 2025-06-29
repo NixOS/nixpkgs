@@ -14,13 +14,14 @@
 
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
-    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
-      lib.mapAttrsToList (out: case: { inherit case out; }) {
-        "9.0.0" = isLe "9.0";
-        # the < 9.0 above is artificial as stdlib was included in Coq before
-      }
-    )) null;
+    lib.switch coq.coq-version [
+      (case (isLe "9.0") "9.0.0")
+      # the < 9.0 above is artificial as stdlib was included in Coq before
+    ] null;
   releaseRev = v: "V${v}";
 
   release."9.0.0".sha256 = "sha256-2l7ak5Q/NbiNvUzIVXOniEneDXouBMNSSVFbD1Pf8cQ=";

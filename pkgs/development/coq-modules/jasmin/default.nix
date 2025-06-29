@@ -14,19 +14,23 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
-    with lib.versions;
     let
-      cmc = c: mc: [
-        c
-        mc
-      ];
+      case = coq: mc: out: {
+        case = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
     in
-    lib.switch [ coq.coq-version mathcomp.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
-      lib.mapAttrsToList (out: cases: { inherit cases out; }) {
-        "2025.02.0" = cmc (range "8.19" "9.0") (range "2.2" "2.4");
-        "2024.07.2" = cmc (isEq "8.18") (isEq "2.2");
-      }
-    )) null;
+    with lib.versions;
+    lib.switch
+      [ coq.coq-version mathcomp.version ]
+      [
+        (case (range "8.19" "9.0") (range "2.2" "2.4") "2025.02.0")
+        (case (isEq "8.18") (isEq "2.2") "2024.07.2")
+      ]
+      null;
   releaseRev = v: "v${v}";
 
   release."2025.02.0".sha256 = "sha256-Jlf0+VPuYWXdWyKHKHSp7h/HuCCp4VkcrgDAmh7pi5s=";
