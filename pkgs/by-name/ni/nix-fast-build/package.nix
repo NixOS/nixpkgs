@@ -6,6 +6,7 @@
   nix-eval-jobs,
   nix-output-monitor,
   nix-update-script,
+  bashInteractive,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -21,6 +22,8 @@ python3Packages.buildPythonApplication rec {
   };
 
   build-system = [ python3Packages.setuptools ];
+
+  propagatedBuildInputs = [ bashInteractive ];
 
   makeWrapperArgs = [
     "--prefix PATH : ${
