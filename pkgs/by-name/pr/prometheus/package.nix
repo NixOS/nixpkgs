@@ -33,7 +33,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "prometheus";
-  version = "3.4.1";
+  version = "3.4.2";
 
   outputs = [
     "out"
@@ -45,14 +45,14 @@ buildGoModule (finalAttrs: {
     owner = "prometheus";
     repo = "prometheus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qF4yXBNAdcndwbXEmDPIhG16agvhqKUVB9ajOsvpgrg=";
+    hash = "sha256-/JeT8+I/jNE7O2YT9qfu7RF3xculPyR3rRrFQIG4YV4=";
   };
 
   vendorHash = "sha256-edR9vvSNexRR8EGEiSCIIYl3ndGckS8XuIWojPrq60U=";
 
   webUiStatic = fetchurl {
     url = "https://github.com/prometheus/prometheus/releases/download/v${finalAttrs.version}/prometheus-web-ui-${finalAttrs.version}.tar.gz";
-    hash = "sha256-GBKjrmlQi+DHtbKICc3pO8IMVdu3IUXh/DTwvd/ArWE=";
+    hash = "sha256-3aXP79aeA/qe99sVsJn0nNRggrzFWTmaRO3dBzOR6UU=";
   };
 
   excludedPackages = [

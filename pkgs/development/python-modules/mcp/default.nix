@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.9.3";
+  version = "1.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-3r7NG2AnxxKgAAd3n+tjjPTz4WJRmc7isfh3p21hUa0=";
+    hash = "sha256-VXbu/wHbXGS+cISJVUgCVEpTmZc0VfckNRoMj3GDi/A=";
   };
 
   postPatch = ''
