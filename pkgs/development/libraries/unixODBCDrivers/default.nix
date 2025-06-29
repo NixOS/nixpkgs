@@ -17,6 +17,7 @@
   fixDarwinDylibNames,
   fetchFromGitHub,
   psqlodbc,
+  mdbtools,
 }:
 
 # Each of these ODBC drivers can be configured in your odbcinst.ini file using
@@ -375,5 +376,10 @@
       platforms = platforms.linux;
       maintainers = with maintainers; [ sir4ur0n ];
     };
+  };
+
+  mdb = mdbtools.override {
+    withUnixODBC = true;
+    withLibiodbc = false;
   };
 }
