@@ -1,0 +1,18 @@
+diff --git a/data/json/external_tileset/README.md b/data/json/external_tileset/README.md
+deleted file mode 120000
+index f3a135e..0000000
+--- a/data/json/external_tileset/README.md
++++ /dev/null
+@@ -1,1 +0,0 @@
+-../../../doc/src/content/docs/en/mod/json/reference/graphics/external_tileset.md
+\ No newline at end of file
+
+diff --git a/data/json/mapgen/lab/README.md b/data/json/mapgen/lab/README.md
+deleted file mode 120000
+index f3f0718..0000000
+--- a/data/json/mapgen/lab/README.md
++++ /dev/null
+@@ -1 +0,0 @@
+-../../../../doc/src/content/docs/en/mod/json/guides/map/lab.md
+\ No newline at end of file
+
