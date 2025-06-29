@@ -316,6 +316,18 @@ in
 
       packages.pages = mkPackageOption pkgs "gitlab-pages" { };
 
+      packages.gitlab-rails = mkOption {
+        type = types.package;
+        default = gitlab-rails;
+        description = "The gitlab-rails package to use.";
+      };
+
+      packages.gitlab-rake = mkOption {
+        type = types.package;
+        default = gitlab-rake;
+        description = "The gitlab-rake package to use.";
+      };
+
       statePath = mkOption {
         type = types.str;
         default = "/var/gitlab/state";
