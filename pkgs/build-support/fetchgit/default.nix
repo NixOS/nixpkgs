@@ -160,7 +160,15 @@ lib.makeOverridable (
             "SOCKS_SERVER"
           ];
 
-        inherit preferLocalBuild meta allowedRequisites;
+        inherit preferLocalBuild allowedRequisites;
+
+        meta = {
+          identifiers.purlParts = {
+            type = "generic";
+            # https://github.com/package-url/purl-spec/blob/main/PURL-TYPES.rst#generic
+            spec = "${name}?vcs_url=${url}@${(lib.revOrTag rev tag)}";
+          };
+        } // meta;
 
         passthru = {
           gitRepoUrl = url;
