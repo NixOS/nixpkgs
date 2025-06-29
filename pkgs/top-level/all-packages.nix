@@ -11906,6 +11906,8 @@ with pkgs;
 
   cdparanoia = cdparanoiaIII;
 
+  cdxj-indexer = with python3Packages; toPythonApplication cdxj-indexer;
+
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
   chuck = callPackage ../applications/audio/chuck {
@@ -16333,6 +16335,8 @@ with pkgs;
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen {
     ffmpeg = ffmpeg-full;
   };
+
+  py-wacz = with python3Packages; toPythonApplication wacz;
 
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
