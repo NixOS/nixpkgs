@@ -38,6 +38,21 @@ self: super: {
     };
   };
 
+  pkgsLLVMLibc = nixpkgsFun {
+    overlays = [
+      (self': super': {
+        pkgsLLVMLibc = super';
+      })
+    ] ++ overlays;
+    # Bootstrap a cross stdenv using LLVM libc.
+    # This is currently not possible when compiling natively,
+    # so we don't need to check hostPlatform != buildPlatform.
+    crossSystem = stdenv.hostPlatform // {
+      config = lib.systems.parse.tripleFromSystem (makeLLVMParsedPlatform stdenv.hostPlatform.parsed);
+      libc = "llvm";
+    };
+  };
+
   pkgsArocc = nixpkgsFun {
     overlays = [
       (self': super': {
