@@ -1,17 +1,15 @@
 import argparse
-import json
 import logging
 import os
 import sys
 from subprocess import CalledProcessError, run
 from typing import Final, assert_never
 
-from . import nix
+from . import nix, services
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
 from .models import Action, BuildAttr, Flake, Profile
 from .process import Remote
-from .services import build_and_activate_system, reexec
-from .utils import LogFormatter, tabulate
+from .utils import LogFormatter
 
 logger: Final = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -301,7 +299,7 @@ def execute(argv: list[str]) -> None:
         and not args.no_reexec
         and not os.environ.get("_NIXOS_REBUILD_REEXEC")
     ):
-        reexec(argv, args, build_flags, flake_build_flags)
+        services.reexec(argv, args, build_flags, flake_build_flags)
 
     profile = Profile.from_arg(args.profile_name)
     target_host = Remote.from_arg(args.target_host, args.ask_sudo_password)
@@ -310,10 +308,7 @@ def execute(argv: list[str]) -> None:
     flake = Flake.from_arg(args.flake, target_host)
 
     if can_run and not flake:
-        nixpkgs_path = nix.find_file("nixpkgs", build_flags)
-        rev = nix.get_nixpkgs_rev(nixpkgs_path)
-        if nixpkgs_path and rev:
-            (nixpkgs_path / ".version-suffix").write_text(rev)
+        services.write_version_suffix(build_flags)
 
     match action:
         case (
@@ -327,7 +322,7 @@ def execute(argv: list[str]) -> None:
             | Action.BUILD_VM
             | Action.BUILD_VM_WITH_BOOTLOADER
         ):
-            build_and_activate_system(
+            services.build_and_activate_system(
                 action=action,
                 args=args,
                 build_host=build_host,
@@ -343,32 +338,21 @@ def execute(argv: list[str]) -> None:
             )
 
         case Action.EDIT:
-            nix.edit(flake, flake_build_flags)
+            services.edit(flake=flake, flake_build_flags=flake_build_flags)
 
         case Action.DRY_RUN:
             raise AssertionError("DRY_RUN should be a DRY_BUILD alias")
 
         case Action.LIST_GENERATIONS:
-            generations = nix.list_generations(profile)
-            if args.json:
-                print(json.dumps(generations, indent=2))
-            else:
-                headers = {
-                    "generation": "Generation",
-                    "date": "Build-date",
-                    "nixosVersion": "NixOS version",
-                    "kernelVersion": "Kernel",
-                    "configurationRevision": "Configuration Revision",
-                    "specialisations": "Specialisation",
-                    "current": "Current",
-                }
-                print(tabulate(generations, headers=headers))
+            services.list_generations(args=args, profile=profile)
 
         case Action.REPL:
-            if flake:
-                nix.repl_flake(flake, flake_build_flags)
-            else:
-                nix.repl(build_attr, build_flags)
+            services.repl(
+                flake=flake,
+                build_attr=build_attr,
+                flake_build_flags=flake_build_flags,
+                build_flags=build_flags,
+            )
 
         case _:
             assert_never(action)
