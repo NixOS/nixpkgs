@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ghome-foyer-api";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KapJI";
     repo = "ghome-foyer-api";
     tag = "v${version}";
-    hash = "sha256-Y8TfQ0cvmKyLw0UOoLbkXk2vSj+Qb11fCVfNrC1iYao=";
+    hash = "sha256-hIprnkfAUbKoAp++sxu+T7MuGqLKOM1N1hqGBDOSo3k=";
   };
 
   buildInputs = [
