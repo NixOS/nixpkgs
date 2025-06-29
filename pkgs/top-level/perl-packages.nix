@@ -6749,6 +6749,22 @@ with self;
     };
   };
 
+  CPANMetaRequirements = buildPerlPackage {
+    # CPAN::Meta::Requirements is part of core, but CPAN::Requirements::Dynamic
+    # 0.001 needs newer than what's in perl-5.38
+    pname = "CPAN-Meta-Requirements";
+    version = "2.143";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Meta-Requirements-2.143.tar.gz";
+      hash = "sha256-bsfkaXu1qM6g7jyL1dSyDOCGFoqAhHeNbnpMNzVv34s=";
+    };
+    meta = {
+      homepage = "https://github.com/Perl-Toolchain-Gang/CPAN-Meta-Requirements";
+      description = "A set of version requirements for a CPAN dist";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CPANPerlReleases = buildPerlPackage {
     pname = "CPAN-Perl-Releases";
     version = "5.20230920";
@@ -6791,6 +6807,22 @@ with self;
     };
   };
 
+  CPANRequirementsDynamic = buildPerlPackage {
+    pname = "CPAN-Requirements-Dynamic";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/CPAN-Requirements-Dynamic-0.001.tar.gz";
+      hash = "sha256-S1kOcSuaymgMNjGFXuFqULhPoCJ8Ni4TsjenWgFInvU=";
+    };
+    propagatedBuildInputs = [ ExtUtilsConfig ExtUtilsHasCompiler
+                              CPANMetaRequirements # needs never than in core
+                            ];
+    meta = {
+      description = "Dynamic prerequisites in meta files";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CPANUploader = buildPerlPackage {
     pname = "CPAN-Uploader";
     version = "0.103018";
@@ -6817,12 +6849,13 @@ with self;
 
   CryptArgon2 = buildPerlModule {
     pname = "Crypt-Argon2";
-    version = "0.019";
+    version = "0.029";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Argon2-0.019.tar.gz";
-      hash = "sha256-+Fm+6NL2tAf11EZFwiOu4hL+AFkd/YLlBlrhvnio5Dg=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Argon2-0.029.tar.gz";
+      hash = "sha256-Zx7qYwyp3l5ejNjQi+HiVfilTHz8We8CBZU+rqvzlyQ=";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
+    buildInputs = [ DistBuild ];
     meta = {
       description = "Perl interface to the Argon2 key derivation functions";
       license = with lib.licenses; [ cc0 ];
@@ -10901,6 +10934,21 @@ with self;
     };
   };
 
+  DistBuild = buildPerlModule {
+    pname = "Dist-Build";
+    version = "0.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Dist-Build-0.010.tar.gz";
+      hash = "sha256-fz9ku/Hb4S2s53Cs8UtS4a0lII/0bdlP+j7/lw3x1fo=";
+    };
+    buildInputs = [ ExtUtilsHasCompiler ];
+    propagatedBuildInputs = [ CPANRequirementsDynamic ExtUtilsBuilder ExtUtilsBuilderCompiler ExtUtilsConfig ExtUtilsHelpers ExtUtilsInstallPaths ];
+    meta = {
+      description = "A modern module builder, author tools not included!";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DistCheckConflicts = buildPerlPackage {
     pname = "Dist-CheckConflicts";
     version = "0.11";
@@ -12446,6 +12494,34 @@ with self;
     };
   };
 
+  ExtUtilsBuilder = buildPerlPackage {
+    pname = "ExtUtils-Builder";
+    version = "0.011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Builder-0.011.tar.gz";
+      hash = "sha256-65wQUBLjGdqM5tL51+JyrMnaSF6miyL91VfWhTr87IM=";
+    };
+    propagatedBuildInputs = [ ExtUtilsConfig ];
+    meta = {
+      description = "An overview of the foundations of the ExtUtils::Builder Plan framework";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ExtUtilsBuilderCompiler = buildPerlPackage {
+    pname = "ExtUtils-Builder-Compiler";
+    version = "0.019";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Builder-Compiler-0.019.tar.gz";
+      hash = "sha256-BFqJXAyZ+awShkHyLmTH0rPeeZWcJZOYWZMTx1uK5E4=";
+    };
+    propagatedBuildInputs = [ ExtUtilsBuilder ExtUtilsConfig ExtUtilsHelpers ];
+    meta = {
+      description = "An interface around different compilers";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ExtUtilsCChecker = buildPerlModule {
     pname = "ExtUtils-CChecker";
     version = "0.11";
@@ -12465,10 +12541,10 @@ with self;
 
   ExtUtilsConfig = buildPerlPackage {
     pname = "ExtUtils-Config";
-    version = "0.008";
+    version = "0.009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Config-0.008.tar.gz";
-      hash = "sha256-rlEE9jRlDc6KebftE/tZ1no5whOmd2z9qj7nSeYvGow=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Config-0.009.tar.gz";
+      hash = "sha256-TvhOc6rVCjvjMohdKjsS88qxseC60k6IKXoSO085884=";
     };
     meta = {
       description = "Wrapper for perl's configuration";
@@ -12554,12 +12630,25 @@ with self;
     };
   };
 
+  ExtUtilsHasCompiler = buildPerlPackage {
+    pname = "ExtUtils-HasCompiler";
+    version = "0.025";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-HasCompiler-0.025.tar.gz";
+      hash = "sha256-AuHnJ13wBoLTyo6hwnowWR1t0Is+OGXAlYr66RFjWmY=";
+    };
+    meta = {
+      description = "Check for the presence of a compiler";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ExtUtilsHelpers = buildPerlPackage {
     pname = "ExtUtils-Helpers";
-    version = "0.026";
+    version = "0.027";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Helpers-0.026.tar.gz";
-      hash = "sha256-3pAbZ5CkVXz07JCBSeA1eDsSW/EV65ZA/rG8HCTDNBY=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Helpers-0.027.tar.gz";
+      hash = "sha256-nVkhMdxYRahtwovpFD92TnPLYtsG/t9QqJW+EyS2zsU=";
     };
     meta = {
       description = "Various portability utilities for module builders";
@@ -39306,7 +39395,7 @@ with self;
   AttributeHandlers = null; # part of Perl 5.26
   base = null; # part of Perl 5.26
   CPANMeta = null; # part of Perl 5.26
-  CPANMetaRequirements = null; # part of Perl 5.26
+  # CPANMetaRequirements = null; # part of Perl 5.26
   CPANMetaYAML = null; # part of Perl 5.26
   DigestMD5 = null; # part of Perl 5.26
   LocaleMaketext = null; # part of Perl 5.26
