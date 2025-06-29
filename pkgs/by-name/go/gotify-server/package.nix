@@ -28,20 +28,20 @@ buildGoModule (finalAttrs: {
     sqlite
   ];
 
-  ui = callPackage ./ui.nix { };
+  ui = callPackage ./ui.nix { inherit (finalAttrs) src version; };
 
-  preBuild = ''
-    if [ -n "$ui" ] # to make the preBuild a no-op inside the goModules fixed-output derivation, where it would fail
-    then
-      cp -r $ui ui/build
-    fi
+  # Use preConfigure instead of preBuild to keep goModules independent from ui
+  preConfigure = ''
+    cp -r ${finalAttrs.ui} ui/build
   '';
 
   passthru = {
-    # For nix-update to detect the location of this attribute from this
-    # derivation.
-    inherit (finalAttrs.ui) offlineCache;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "ui"
+      ];
+    };
     tests = {
       nixos = nixosTests.gotify-server;
     };
