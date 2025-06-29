@@ -2777,6 +2777,8 @@ self: super: with self; {
 
   colour = callPackage ../development/python-modules/colour { };
 
+  colour-science = callPackage ../development/python-modules/colour-science { };
+
   colout = callPackage ../development/python-modules/colout { };
 
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
