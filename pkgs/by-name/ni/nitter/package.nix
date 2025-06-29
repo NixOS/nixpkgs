@@ -6,7 +6,7 @@
   replaceVars,
   unstableGitUpdater,
 }:
-buildNimPackage (finalAttrs: prevAttrs: rec {
+buildNimPackage (finalAttrs: rec {
   date = "2025-05-01";
 
   pname = "nitter";
