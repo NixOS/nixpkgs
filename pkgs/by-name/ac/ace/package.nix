@@ -2,18 +2,18 @@
   lib,
   stdenv,
   fetchurl,
-  pkg-config,
   libtool,
+  pkg-config,
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ace";
-  version = "7.0.11";
+  version = "8.0.4";
 
   src = fetchurl {
-    url = "https://download.dre.vanderbilt.edu/previous_versions/ACE-${version}.tar.bz2";
-    sha256 = "sha256-r+LRiu/u1qMcbrjkSr8ErnemX6zvhgvc5cLWu8AQhww=";
+    url = "https://download.dre.vanderbilt.edu/previous_versions/ACE-src-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-OkNYxVuZCA8Nxpjv+Nsz/0r/JalhrycTXqxSlIr7dZU=";
   };
 
   enableParallelBuilding = true;
@@ -30,8 +30,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./MPC/prj_install.pl
+    patchShebangs ./bin/mwc.pl
   '';
 
+  # ACE.mwc: Built a select subset of components in the ACE release
   preConfigure = ''
     export INSTALL_PREFIX=$out
     export ACE_ROOT=$(pwd)
@@ -39,6 +41,32 @@ stdenv.mkDerivation rec {
     echo '#include "ace/config-linux.h"' > ace/config.h
     echo 'include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU'\
     > include/makeinclude/platform_macros.GNU
+    cat <<EOF > "$ACE_ROOT/ACE.mwc"
+    workspace {
+        exclude {
+            apps/gperf/tests
+            apps/Gateway
+            apps/JAWS
+            apps/JAWS2
+            apps/JAWS3
+            apps/drwho
+            apps/mkcsregdb
+            apps/soreduce
+
+            ACEXML/tests
+            Kokyu/tests
+            ACEXML/examples
+            netsvcs/clients
+            protocols/examples
+
+            ASNMP
+            examples
+            performance-tests
+            websvcs
+        }
+    }
+    EOF
+    ./bin/mwc.pl -type gnuace ACE.mwc
   '';
 
   meta = {
@@ -49,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nico202 ];
     platforms = lib.platforms.linux;
   };
-}
+})
