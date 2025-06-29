@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20250607.2";
+  version = "20250622.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zr1d6kCwAyhjeV2tQ+n9y9x80yD/Atb6TJq7AnRz+PQ=";
+    hash = "sha256-6ljysH9T1rRnxikmGzgJFIxUmjo4Z3CNZoxQc+IY0yw=";
   };
 
   build-system = [ setuptools ];
