@@ -411,6 +411,8 @@ in
   docling-serve = runTest ./docling-serve.nix;
   documize = runTest ./documize.nix;
   documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit nixosLib; };
+  docuseal-psql = runTest ./docuseal-postgres.nix;
+  docuseal-sqlite = runTest ./docuseal-sqlite.nix;
   doh-proxy-rust = runTest ./doh-proxy-rust.nix;
   dokuwiki = runTest ./dokuwiki.nix;
   dolibarr = runTest ./dolibarr.nix;
