@@ -95,8 +95,15 @@ let
     "aarch64"
   ] (arch: elem "${arch}-darwin" supportedSystems);
 
-  nonPackageJobs = {
-    tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
+  nonPackageJobs = rec {
+    tarball = import ./make-tarball.nix {
+      inherit
+        pkgs
+        lib-tests
+        nixpkgs
+        officialRelease
+        ;
+    };
 
     release-checks = import ./nixpkgs-basic-release-checks.nix {
       inherit pkgs nixpkgs supportedSystems;
