@@ -12,13 +12,13 @@ index af28077..e746147 100644
  
  bin_PROGRAMS = html2text
 diff --git a/configure.ac b/configure.ac
-index af3ce8e..a80d1fd 100644
+index 999c6fe..30c2536 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -15,8 +15,11 @@
  
  AC_PREREQ([2.71])
- AC_INIT([html2text], [2.2.3], [BUG-REPORT-ADDRESS])
+ AC_INIT([html2text], [2.3.0], [BUG-REPORT-ADDRESS])
 +AC_CONFIG_MACRO_DIRS([m4])
  AM_INIT_AUTOMAKE
  AM_MAINTAINER_MODE([disable])
