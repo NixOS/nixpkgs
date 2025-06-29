@@ -23,14 +23,14 @@
 let
   inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtkd";
   version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "gtkd-developers";
     repo = "GtkD";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UpPoskHtnI4nUOKdLorK89grgUUPrCvO4zrAl9LfjHA=";
   };
 
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=${placeholder "out"}"
     "PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config"
-    "GTKD_VERSION=${version}"
+    "GTKD_VERSION=${finalAttrs.version}"
   ];
 
   # The .pc files does not declare an `includedir=`, so the multiple
@@ -172,4 +172,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})
