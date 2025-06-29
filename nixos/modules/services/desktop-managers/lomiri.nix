@@ -83,36 +83,41 @@ in
             libayatana-common
             ubports-click
           ])
-          ++ (with pkgs.lomiri; [
-            hfd-service
-            libusermetrics
-            lomiri
-            lomiri-calculator-app
-            lomiri-calendar-app
-            lomiri-camera-app
-            lomiri-clock-app
-            lomiri-content-hub
-            lomiri-docviewer-app
-            lomiri-download-manager
-            lomiri-filemanager-app
-            lomiri-gallery-app
-            lomiri-history-service
-            lomiri-mediaplayer-app
-            lomiri-music-app
-            lomiri-polkit-agent
-            lomiri-schemas # exposes some required dbus interfaces
-            lomiri-session # wrappers to properly launch the session
-            lomiri-sounds
-            lomiri-system-settings
-            lomiri-telephony-service
-            lomiri-terminal-app
-            lomiri-thumbnailer
-            lomiri-url-dispatcher
-            mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
-            morph-browser
-            qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
-            teleports
-          ]);
+          ++ (
+            with pkgs.lomiri;
+            [
+              hfd-service
+              libusermetrics
+              lomiri
+              lomiri-calculator-app
+              lomiri-calendar-app
+              lomiri-camera-app
+              lomiri-clock-app
+              lomiri-content-hub
+              lomiri-docviewer-app
+              lomiri-download-manager
+              lomiri-filemanager-app
+              lomiri-gallery-app
+              lomiri-history-service
+              lomiri-mediaplayer-app
+              lomiri-music-app
+              lomiri-polkit-agent
+              lomiri-schemas # exposes some required dbus interfaces
+              lomiri-session # wrappers to properly launch the session
+              lomiri-sounds
+              lomiri-system-settings
+              lomiri-telephony-service
+              lomiri-terminal-app
+              lomiri-thumbnailer
+              lomiri-url-dispatcher
+              mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
+              morph-browser
+              qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
+              teleports
+            ]
+            # Weather app requires network indicator to be running, which in turn requires NM
+            ++ lib.optionals config.networking.networkmanager.enable [ lomiri-weather-app ]
+          );
       };
 
       hardware = {
