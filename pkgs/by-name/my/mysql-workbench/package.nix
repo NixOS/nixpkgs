@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   replaceVars,
 
   cmake,
@@ -73,6 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't try to override the ANTLR_JAR_PATH specified in cmakeFlags
     ./dont-search-for-antlr-jar.patch
+
+    # fixes the build with python 3.13
+    (fetchpatch {
+      name = "python3.13.patch";
+      url = "https://git.pld-linux.org/?p=packages/mysql-workbench.git;a=blob_plain;f=python-3.13.patch;h=d1425a93c41fb421603cda6edbb0514389cdc6a8;hb=bb09cb858f3b9c28df699d3b98530a6c590b5b7a";
+      hash = "sha256-hLfPqZSNf3ls2WThF1SBRjV33zTUymfgDmdZVpgO22Q=";
+    })
   ];
 
   postPatch = ''

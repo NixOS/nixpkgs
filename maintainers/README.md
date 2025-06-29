@@ -42,7 +42,7 @@ package's `meta.maintainers` list, and send a PR with the changes.
 
 If you're adding yourself as a maintainer as part of another PR (in which
 you become a maintainer of a package, for example), make your change to
-`maintainer-list.nix` in a separate commit.
+`maintainer-list.nix` in a separate commit titled `maintainers: add <name>`.
 
 ### How to lose maintainer status
 
@@ -58,10 +58,34 @@ person as a reviewer, and then waiting a week for a reaction.
 
 The maintainer is welcome to come back at any time.
 
-### Tools for maintainers
+## Tools for maintainers
 
-When a pull request is made against a package, OfBorg will notify the
-appropriate maintainer(s).
+When a pull request is made against a package, nixpkgs CI will notify the appropriate
+maintainer(s) by trying to correlate the files the PR touches with the packages that need rebuilding.
+
+Maintainers can also invoke the [nixpkgs-merge-bot](https://github.com/nixos/nixpkgs-merge-bot)
+to merge pull requests targeting packages they are the maintainer of, which satisfy the current
+security [constraints](https://github.com/NixOS/nixpkgs-merge-bot/blob/main/README.md#constraints).
+Examples: [#397273](https://github.com/NixOS/nixpkgs/pull/397273#issuecomment-2789382120) and [#377027](https://github.com/NixOS/nixpkgs/pull/377027#issuecomment-2614510869)
+
+New maintainers will automatically get invited to join the [NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) GitHub team.
+By joining, you will get some triaging rights in the nixpkgs repository, like the ability to close and reopen issues made by others, and managing labels.
+However, the GitHub team invite is usually only sent by email, and is only valid for one week!
+Should it expire, please ask for a re-invite in the [GitHub org owners help desk Matrix channel](https://matrix.to/#/#org_owners:nixos.org).
+
+### Unofficial maintainer tooling
+
+[zh.fail](https://zh.fail/failed/overview.html) tracks all package build failures on `master` grouped by maintainer.
+
+[asymmetric/nixpkgs-update-notifier](https://github.com/asymmetric/nixpkgs-update-notifier) is a matrix
+bot that scrapes the [nixpkgs-update logs](https://nixpkgs-update-logs.nix-community.org/) and notifies
+you if nixpkgs-update/@r-ryantm fails to update any of the packages you've subscribed to.
+
+[repology.org](https://repology.org) tracks and compares the versions of packages between various package repositories, letting you know what packages may be out of date or insecure.
+You can view which packages a specific maintainer maintains and subscribe to updates with atom/rss. Example: [repology.org/maintainer/pbsds](https://repology.org/maintainer/pbsds%40hotmail.com).
+
+[nixpk.gs/pr-tracker](https://nixpk.gs/pr-tracker.html) and [nixpkgs-tracker.ocfox.me](https://nixpkgs-tracker.ocfox.me/)
+can visualize the release status of any nixpkgs pull request.
 
 ## Reviewing contributions
 
@@ -178,7 +202,7 @@ are available under `./scripts/`.  See its [README](./scripts/README.md)
 for further information.
 
 # nixpkgs-merge-bot
-To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in pkgs-by-name and the commenter is among the package maintainers. The bot ensures that all ofborg checks, except for darwin, are successfully completed before merging the pull request. Should the checks still be underway, the bot patiently waits for ofborg to finish before attempting the merge again.
+To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in pkgs-by-name, the commenter is among the package maintainers, and the pull request author is @r-ryantm or a Nixpkgs committer. The bot ensures that all ofborg checks, except for darwin, are successfully completed before merging the pull request. Should the checks still be underway, the bot patiently waits for ofborg to finish before attempting the merge again.
 
 # Guidelines for Committers
 

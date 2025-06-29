@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "marko";
-  version = "2.1.3";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frostming";
     repo = "marko";
     tag = "v${version}";
-    hash = "sha256-rYWBVcDUH0vNPDxSIwiRSWFfPZ7ahe4Z+Sl96tNMDN8=";
+    hash = "sha256-syHuGAYA/s8jtlxBUt3aVPe55s2bdpzidBf1JvsI604=";
   };
 
   build-system = [

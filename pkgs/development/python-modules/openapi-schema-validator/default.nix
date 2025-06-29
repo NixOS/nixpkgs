@@ -14,6 +14,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -30,10 +31,6 @@ buildPythonPackage rec {
     hash = "sha256-1Y049W4TbqvKZRwnvPVwyLq6CH6NQDrEfJknuMn8dGo=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-  '';
-
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
@@ -42,7 +39,10 @@ buildPythonPackage rec {
     rfc3339-validator
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   disabledTests = [
     # https://github.com/python-openapi/openapi-schema-validator/issues/153

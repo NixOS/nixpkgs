@@ -92,7 +92,6 @@ let
         pycrypto
         # Currently marked as broken.
         # pydrive2
-        future
       ]
       ++ paramiko.optional-dependencies.invoke;
 

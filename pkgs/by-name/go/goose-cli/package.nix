@@ -27,17 +27,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.0.27";
+  version = "1.0.29";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+HNAOw/BJVNHiDHeEBKoAAs66IXCdYhm1VzVFIzk4m8=";
+    hash = "sha256-R4hMGW9YKsvWEvSzZKkq5JTzBXGK2rXyOPB6vzMKbs0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-v+UQFbFpkwX+7oNFvKf2v2u3OSkPdgOWntXLW6XJibE=";
+  cargoHash = "sha256-EEivL+6XQyC9FkGnXwOYviwpY8lk7iaEJ1vbQMk2Rao=";
 
   nativeBuildInputs = [
     pkg-config

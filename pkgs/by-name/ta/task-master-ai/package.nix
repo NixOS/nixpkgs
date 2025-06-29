@@ -2,22 +2,25 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs,
   nix-update-script,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "task-master-ai";
-  version = "0.16.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "eyaltoledano";
     repo = "claude-task-master";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u9gLwYGRNwkyIOS8zf0nSJfrUDs7ib3Vbm0awtskpSg=";
+    hash = "sha256-RnbquGcanpBH5A++MZOVNLXEdn7qVJIVWxUOZEBpF/o=";
   };
 
-  npmDepsHash = "sha256-PjnyCqYKj1alnm1gOMSnIeGtg3pJcZ5A8ThxOQZMSF4=";
+  npmDepsHash = "sha256-GjRxjafbJ5DqikvO3Z7YPtuUHaG5ezxdrQq9f7WDEi4=";
 
   dontNpmBuild = true;
+
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ nodejs ]}" ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -65,9 +65,10 @@ buildGoModule rec {
     description = "Backup program that is fast, efficient and secure";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;
-    maintainers = [
-      maintainers.mbrgm
-      maintainers.dotlambda
+    maintainers = with maintainers; [
+      mbrgm
+      dotlambda
+      ryan4yin
     ];
     mainProgram = "restic";
   };

@@ -3,6 +3,7 @@
   stdenv,
   python,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
   fetchpatch,
   symlinkJoin,
@@ -67,6 +68,7 @@
   opentelemetry-exporter-otlp,
   bitsandbytes,
   flashinfer,
+  py-libnuma,
 
   # internal dependency - for overriding in overlays
   vllm-flash-attn ? null,
@@ -246,8 +248,11 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.9.0.1";
+  version = "0.9.1";
   pyproject = true;
+
+  # https://github.com/vllm-project/vllm/issues/12083
+  disabled = pythonAtLeast "3.13";
 
   stdenv = torch.stdenv;
 
@@ -255,7 +260,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-gNe/kdsDQno8Fd6mo29feWmbyC0c2+kljlVxY4v7R9U=";
+    hash = "sha256-sp7rDpewTPXTVRBJHJMj+8pJDS6wAu0/OTJZwbPPqKc=";
   };
 
   patches = [
@@ -264,34 +269,34 @@ buildPythonPackage rec {
       url = "https://github.com/vllm-project/vllm/commit/6a5d7e45f52c3a13de43b8b4fa9033e3b342ebd2.patch";
       hash = "sha256-KYthqu+6XwsYYd80PtfrMMjuRV9+ionccr7EbjE4jJE=";
     })
+    (fetchpatch {
+      name = "fall-back-to-gloo-when-nccl-unavailable.patch";
+      url = "https://github.com/vllm-project/vllm/commit/aa131a94410683b0a02e74fed2ce95e6c2b6b030.patch";
+      hash = "sha256-jNlQZQ8xiW85JWyBjsPZ6FoRQsiG1J8bwzmQjnaWFBg=";
+    })
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
     ./0004-drop-lsmod.patch
     ./0005-drop-intel-reqs.patch
   ];
 
-  postPatch =
-    ''
-      # pythonRelaxDeps does not cover build-system
-      substituteInPlace pyproject.toml \
-        --replace-fail "torch ==" "torch >="
+  postPatch = ''
+    # pythonRelaxDeps does not cover build-system
+    substituteInPlace pyproject.toml \
+      --replace-fail "torch ==" "torch >=" \
+      --replace-fail "setuptools>=77.0.3,<80.0.0" "setuptools"
 
-      # Ignore the python version check because it hard-codes minor versions and
-      # lags behind `ray`'s python interpreter support
-      substituteInPlace CMakeLists.txt \
-        --replace-fail \
-          'set(PYTHON_SUPPORTED_VERSIONS' \
-          'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
+    # Ignore the python version check because it hard-codes minor versions and
+    # lags behind `ray`'s python interpreter support
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'set(PYTHON_SUPPORTED_VERSIONS' \
+        'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
 
-      # Pass build environment PYTHONPATH to vLLM's Python configuration scripts
-      substituteInPlace CMakeLists.txt \
-        --replace-fail '$PYTHONPATH' '$ENV{PYTHONPATH}'
-    ''
-    + lib.optionalString (nccl == null) ''
-      # On platforms where NCCL is not supported (e.g. Jetson), substitute Gloo (provided by Torch)
-      substituteInPlace vllm/distributed/parallel_state.py \
-        --replace-fail '"nccl"' '"gloo"'
-    '';
+    # Pass build environment PYTHONPATH to vLLM's Python configuration scripts
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '$PYTHONPATH' '$ENV{PYTHONPATH}'
+  '';
 
   nativeBuildInputs =
     [
@@ -362,7 +367,6 @@ buildPythonPackage rec {
       outlines
       pandas
       prometheus-fastapi-instrumentator
-      psutil
       py-cpuinfo
       pyarrow
       pydantic
@@ -392,9 +396,15 @@ buildPythonPackage rec {
       opentelemetry-api
       opentelemetry-exporter-otlp
       bitsandbytes
+      # vLLM needs Torch's compiler to be present in order to use torch.compile
+      torch.stdenv.cc
     ]
     ++ uvicorn.optional-dependencies.standard
     ++ aioprometheus.optional-dependencies.starlette
+    ++ lib.optionals stdenv.targetPlatform.isLinux [
+      py-libnuma
+      psutil
+    ]
     ++ lib.optionals cudaSupport [
       cupy
       pynvml
@@ -404,11 +414,11 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
   cmakeFlags =
     [
+    ]
+    ++ lib.optionals cudaSupport [
       (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
       (lib.cmakeFeature "FLASH_MLA_SRC_DIR" "${lib.getDev flashmla}")
       (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" "${lib.getDev vllm-flash-attn'}")
-    ]
-    ++ lib.optionals cudaSupport [
       (lib.cmakeFeature "TORCH_CUDA_ARCH_LIST" "${gpuTargetString}")
       (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.flags.cmakeCudaArchitecturesString}")
       (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${symlinkJoin {

@@ -59,7 +59,7 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.2.5";
+  version = "2.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-qcDZlGgM2ZGxy3cuiylzQAhUZqb+lkvJ1OgPXi9DwpE=";
+    hash = "sha256-WB+H+enp2yy6IUFADhYOndZE7iSHiNb5BjbuuP2SYKY=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -122,6 +122,8 @@ buildPythonPackage rec {
 
   preCheck = ''
     pushd $out
+    # For numpy-config executable to be available during tests
+    export PATH=$PATH:$out/bin
   '';
 
   postCheck = ''

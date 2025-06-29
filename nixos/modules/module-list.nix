@@ -754,6 +754,7 @@
   ./services/mail/spamassassin.nix
   ./services/mail/stalwart-mail.nix
   ./services/mail/sympa.nix
+  ./services/mail/tlsrpt.nix
   ./services/mail/zeyple.nix
   ./services/matrix/appservice-discord.nix
   ./services/matrix/appservice-irc.nix
@@ -766,6 +767,7 @@
   ./services/matrix/lk-jwt-service.nix
   ./services/matrix/matrix-alertmanager.nix
   ./services/matrix/maubot.nix
+  ./services/matrix/mautrix-discord.nix
   ./services/matrix/mautrix-meta.nix
   ./services/matrix/mautrix-signal.nix
   ./services/matrix/mautrix-telegram.nix
@@ -1195,6 +1197,7 @@
   ./services/networking/lambdabot.nix
   ./services/networking/legit.nix
   ./services/networking/libreswan.nix
+  ./services/networking/livekit-ingress.nix
   ./services/networking/livekit.nix
   ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
@@ -1543,6 +1546,7 @@
   ./services/web-apps/eintopf.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ethercalc.nix
+  ./services/web-apps/fediwall.nix
   ./services/web-apps/fider.nix
   ./services/web-apps/filebrowser.nix
   ./services/web-apps/filesender.nix
@@ -1615,6 +1619,7 @@
   ./services/web-apps/nextjs-ollama-llm-ui.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/nifi.nix
+  ./services/web-apps/nipap.nix
   ./services/web-apps/node-red.nix
   ./services/web-apps/nostr-rs-relay.nix
   ./services/web-apps/ocis.nix

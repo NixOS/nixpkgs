@@ -14,13 +14,13 @@
 
 flutter332.buildFlutterApplication rec {
   pname = "chatmcp";
-  version = "0.0.62";
+  version = "0.0.69";
 
   src = fetchFromGitHub {
     owner = "daodao97";
     repo = "chatmcp";
     tag = "v${version}";
-    hash = "sha256-DEq1LECqlvl3P4ib3RyHK3VLbcTh8PXJtbWwK/0R5dA=";
+    hash = "sha256-TA3ncOatmkX7GcaqxJ8yhdpnou2e9cQNweO+AR98Gto=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

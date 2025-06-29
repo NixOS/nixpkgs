@@ -1,0 +1,26 @@
+diff --git a/src/Gui/PreferencePages/DlgSettingsEditor.cpp b/src/Gui/PreferencePages/DlgSettingsEditor.cpp
+index 0dda987..01568f1 100755
+--- a/src/Gui/PreferencePages/DlgSettingsEditor.cpp
++++ b/src/Gui/PreferencePages/DlgSettingsEditor.cpp
+@@ -288,7 +288,9 @@ void DlgSettingsEditor::loadSettings()
+     QStringList fixedFamilyNames;
+     for (const auto& name : familyNames) {
+         if (QFontDatabase().isFixedPitch(name)) {
+-            if (name.compare(QLatin1String("8514oem"), Qt::CaseInsensitive) != 0) {
++            if (name.compare(QLatin1String("8514oem"), Qt::CaseInsensitive) != 0
++                && name.compare(QLatin1String("cursor.pcf"), Qt::CaseInsensitive) != 0)
++              {
+                 fixedFamilyNames.append(name);
+             }
+         }
+@@ -298,7 +300,9 @@ void DlgSettingsEditor::loadSettings()
+     QStringList fixedFamilyNames;
+     for (const auto& name : familyNames) {
+         if (QFontDatabase::isFixedPitch(name)) {
+-            if (name.compare(QLatin1String("8514oem"), Qt::CaseInsensitive) != 0) {
++            if (name.compare(QLatin1String("8514oem"), Qt::CaseInsensitive) != 0
++                && name.compare(QLatin1String("cursor.pcf"), Qt::CaseInsensitive) != 0)
++              {
+                 fixedFamilyNames.append(name);
+             }
+         }

@@ -104,7 +104,7 @@ in
     systemd.services.sogo = {
       description = "SOGo groupware";
       after = [
-        "postgresql.service"
+        "postgresql.target"
         "mysql.service"
         "memcached.service"
         "openldap.service"
@@ -191,7 +191,7 @@ in
       description = "SOGo email alarms";
 
       after = [
-        "postgresql.service"
+        "postgresql.target"
         "mysqld.service"
         "memcached.service"
         "openldap.service"

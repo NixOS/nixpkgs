@@ -10,6 +10,7 @@
   home-assistant-bluetooth,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -33,8 +34,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'transitions = "^0.8.11"' 'transitions = ">=0.8.11"' \
-      --replace 'Events = "^0.4"' 'Events = ">=0.4"' \
-      --replace " --cov=pysnooz --cov-report=term-missing:skip-covered" ""
+      --replace 'Events = "^0.4"' 'Events = ">=0.4"'
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];

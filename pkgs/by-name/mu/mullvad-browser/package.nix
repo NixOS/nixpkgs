@@ -97,7 +97,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "14.5.3";
+  version = "14.5.4";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-W005Lkgw96sYseB8LBE76b7+RxMC5vNb1+3KrDp8IE0=";
+      hash = "sha256-DJEc+2GJHxG49euVpwH8h/yLoR6DVn0a0ZUFS429XaA=";
     };
   };
 

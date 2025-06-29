@@ -196,6 +196,8 @@ let
 
         caqti-dynload = callPackage ../development/ocaml-modules/caqti/dynload.nix { };
 
+        caqti-eio = callPackage ../development/ocaml-modules/caqti/eio.nix { };
+
         caqti-lwt = callPackage ../development/ocaml-modules/caqti/lwt.nix { };
 
         caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
@@ -916,80 +918,6 @@ let
             import ../development/ocaml-modules/janestreet {
             };
 
-        janeStreet_0_15 =
-          (lib.makeScope self.newScope (
-            self': with self'; {
-
-              # ocamlPackages that janestreet v0.15 packages depend on.
-              jsDeps =
-                let
-                  uri-sexp = self.uri-sexp.override { inherit (self') ppx_sexp_conv sexplib0; };
-                  cohttp = self.cohttp.override {
-                    inherit (self') ppx_sexp_conv;
-                    inherit uri-sexp;
-                  };
-                  ipaddr-sexp = self.ipaddr-sexp.override { inherit (self') ppx_sexp_conv; };
-                  conduit = self.conduit.override {
-                    inherit (self') ppx_sexp_conv sexplib;
-                    inherit ipaddr-sexp;
-                  };
-                  conduit-async = self.conduit-async.override {
-                    inherit (self')
-                      async
-                      ppx_sexp_conv
-                      ppx_here
-                      core
-                      sexplib
-                      async_ssl
-                      ;
-                    inherit conduit ipaddr-sexp;
-                  };
-                in
-                {
-                  inherit (self)
-                    dune-configurator
-                    alcotest
-                    re
-                    num
-                    octavius
-                    uutf
-                    ounit
-                    ctypes
-                    ctypes-foreign
-                    ;
-                  ppxlib = self.ppxlib.override { inherit (self') stdio; };
-                  cohttp-async = self.cohttp-async.override {
-                    inherit (self')
-                      ppx_sexp_conv
-                      base
-                      async
-                      async_kernel
-                      async_unix
-                      core_unix
-                      sexplib0
-                      core
-                      ;
-                    inherit uri-sexp cohttp conduit-async;
-                  };
-                  janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage_0_15.nix { };
-                };
-
-              janeStreet = import ../development/ocaml-modules/janestreet/0.15.nix {
-                self = self' // jsDeps;
-                inherit ocaml;
-                inherit (pkgs)
-                  bash
-                  fetchpatch
-                  fzf
-                  lib
-                  openssl
-                  zstd
-                  ;
-              };
-            }
-          )).overrideScope
-            liftJaneStreet;
-
         javalib = callPackage ../development/ocaml-modules/javalib { };
 
         jingoo = callPackage ../development/ocaml-modules/jingoo { };
@@ -1113,6 +1041,8 @@ let
         linksem = callPackage ../development/ocaml-modules/linksem { };
 
         linol = callPackage ../development/ocaml-modules/linol { };
+
+        linol-eio = callPackage ../development/ocaml-modules/linol/eio.nix { };
 
         linol-lwt = callPackage ../development/ocaml-modules/linol/lwt.nix { };
 
@@ -1921,6 +1851,8 @@ let
 
         sawja = callPackage ../development/ocaml-modules/sawja { };
 
+        scfg = callPackage ../development/ocaml-modules/scfg { };
+
         secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
           inherit (pkgs) secp256k1;
         };
@@ -1952,6 +1884,10 @@ let
         simple-diff = callPackage ../development/ocaml-modules/simple-diff { };
 
         slug = callPackage ../development/ocaml-modules/slug { };
+
+        smtml = callPackage ../development/ocaml-modules/smtml {
+          mdx = mdx.override { inherit logs; };
+        };
 
         sodium = callPackage ../development/ocaml-modules/sodium { };
 

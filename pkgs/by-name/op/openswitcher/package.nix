@@ -11,6 +11,7 @@
   pkg-config,
   scdoc,
   wrapGAppsHook3,
+  udevCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -43,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     scdoc
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   dontWrapGApps = true;

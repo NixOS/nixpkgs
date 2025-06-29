@@ -15,6 +15,7 @@
   testers,
   runCommand,
   fetchurl,
+  fetchpatch2,
   # Main build tools
   pkg-config,
   autoconf,
@@ -182,6 +183,15 @@ let
   self = stdenv.mkDerivation rec {
     pname = "handbrake";
     inherit version src;
+
+    patches = [
+      (fetchpatch2 {
+        # fixes build against ffmpeg 7.1.1+; remove for handbrake > 1.9.2.
+        # https://github.com/HandBrake/HandBrake/pull/6657
+        url = "https://github.com/HandBrake/HandBrake/commit/75f9c84c140c8841cfe1324ef59452025899ad8b.patch?full_index=1";
+        hash = "sha256-glUyCttS2S/G+bSgIAB4nggECe0iEJIsUyr0RkAKEbE=";
+      })
+    ];
 
     postPatch =
       ''

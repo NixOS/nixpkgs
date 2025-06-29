@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "qlementine-icons";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "oclero";
     repo = "qlementine-icons";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b6krWtDCQjJRzzkFNYLt33iSSQHm1UZ3AedXrzRrDTs=";
+    hash = "sha256-Ef4WTay44rMp6A39p0DCc2fXc2y/wGZZaKyj7+wpMJc=";
   };
 
   nativeBuildInputs = [ cmake ];

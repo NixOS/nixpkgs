@@ -42,6 +42,8 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [ "packaging" ];
+
   dependencies = [
     altair
     blinker

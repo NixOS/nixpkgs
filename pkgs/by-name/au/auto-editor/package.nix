@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "auto-editor";
-  version = "28.0.1";
+  version = "28.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-n+9qesm2LCTXJ+X/hDaFQ5EjN+xfnLdl6G8+Qna/cyM=";
+    hash = "sha256-ozw5ZPvKP7aTBBItQKNx85hZ1T4IxX9NYCcNHC5UuuM=";
   };
 
   postPatch = ''

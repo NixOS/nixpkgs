@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "hut";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromSourcehut {
     owner = "~xenrox";
     repo = "hut";
     rev = "v${version}";
-    sha256 = "sha256-wfnuGnO1aiK0D8P5nMCqD38DJ3RpcsK//02KaE5SkZE=";
+    sha256 = "sha256-pc6E3ORDmaMhoNe8GQeYZrxhe5ySQqsMPe/iUbclnGk=";
   };
 
-  vendorHash = "sha256-6dIqcjtacxlmadnPzRlOJYoyOaO4zdjzrjO64KS2Bq0=";
+  vendorHash = "sha256-/51cv/EvcBCyCOf91vJ5M75p0bkAQqVoRUp+C+i70Os=";
 
   nativeBuildInputs = [
     scdoc

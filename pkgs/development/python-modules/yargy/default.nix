@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Rule-based facts extraction for Russian language";
-    homepage = "https://github.com/natasha/yargu";
+    homepage = "https://github.com/natasha/yargy";
     license = licenses.mit;
     maintainers = with maintainers; [ npatsakula ];
   };

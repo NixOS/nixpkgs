@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
     flake8
     mock
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     requests
     versionCheckHook
     writableTmpDirAsHomeHook

@@ -12,8 +12,9 @@
 let
   inherit (pkgs) symlinkJoin callPackage nodePackages;
 
-  python3 = pkgs.python3 // {
-    pkgs = pkgs.python3.pkgs.overrideScope (
+  # TODO: unpin python when #416039 reaches master
+  python3 = pkgs.python312 // {
+    pkgs = pkgs.python312.pkgs.overrideScope (
       self: super: {
         # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
         sagelib = self.callPackage ./sagelib.nix {

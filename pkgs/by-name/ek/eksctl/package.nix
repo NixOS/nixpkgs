@@ -51,6 +51,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       xrelkd
       Chili-Man
+      ryan4yin
     ];
     mainProgram = "eksctl";
   };

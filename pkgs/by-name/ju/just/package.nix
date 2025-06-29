@@ -116,6 +116,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       xrelkd
       jk
+      ryan4yin
     ];
     mainProgram = "just";
   };

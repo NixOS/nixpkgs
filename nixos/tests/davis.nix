@@ -55,7 +55,7 @@
   testScript = ''
     start_all()
 
-    machine1.wait_for_unit("postgresql.service")
+    machine1.wait_for_unit("postgresql.target")
     machine1.wait_for_unit("davis-env-setup.service")
     machine1.wait_for_unit("davis-db-migrate.service")
     machine1.wait_for_unit("phpfpm-davis.service")

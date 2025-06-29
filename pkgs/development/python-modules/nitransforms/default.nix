@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "nitransforms";
-  version = "24.1.1";
+  version = "24.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U2lWxYDuA+PpMEMgjanq/JILWTTH5+DEx9dZ/KCWNjM=";
+    hash = "sha256-JKlKM9bd3pTTBp/xVj9Ywd/+Ok7lxo05AF01eeOBeoE=";
   };
 
   build-system = [

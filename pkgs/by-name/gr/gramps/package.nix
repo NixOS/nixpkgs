@@ -23,7 +23,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  version = "6.0.1";
+  version = "6.0.3";
   pname = "gramps";
   pyproject = true;
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     owner = "gramps-project";
     repo = "gramps";
     tag = "v${version}";
-    hash = "sha256-EKiC7zFIAXwKXun8jixanVmBI5XyQlxBcN5rxbqdq9k=";
+    hash = "sha256-dmokrAN6ZC7guMYHifNifL9rXqZPW+Z5LudQhIUxMs8=";
   };
 
   patches = [

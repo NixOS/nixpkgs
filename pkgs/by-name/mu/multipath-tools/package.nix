@@ -13,6 +13,7 @@
   lvm2,
   readline,
   systemd,
+  udevCheckHook,
   util-linuxMinimal,
 
   cmocka,
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -64,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/Makefile --replace-fail ' devt ' ' '
   '';
   checkInputs = [ cmocka ];
+
+  doInstallCheck = true;
 
   passthru.tests = { inherit (nixosTests) iscsi-multipath-root; };
 

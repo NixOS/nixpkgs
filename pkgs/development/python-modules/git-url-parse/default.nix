@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pbr,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -18,11 +19,6 @@ buildPythonPackage rec {
     hash = "sha256-+0V/C3wE02ppdDGn7iqdvmgsUwTR7THUakUilvkzoYg=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace " --cov giturlparse --cov-report term-missing" ""
-  '';
-
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
   env.PBR_VERSION = version;
@@ -31,7 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "giturlparse" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   meta = with lib; {
     description = "Simple GIT URL parser";

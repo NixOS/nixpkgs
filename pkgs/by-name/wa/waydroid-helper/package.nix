@@ -16,6 +16,7 @@
   dbus,
   systemd,
   bash,
+  fakeroot,
   gobject-introspection,
 }:
 
@@ -41,8 +42,6 @@ python3Packages.buildPythonApplication rec {
     # com.jaoushingan.WaydroidHelper.desktop: component-name-missing, description-first-para-too-short
     # url-homepage-missing, desktop-app-launchable-omitted, content-rating-missing, developer-info-missing
     sed -i '/test(/{N;/Validate appstream file/!b;:a;N;/)/!ba;d}' data/meson.build
-    substituteInPlace waydroid_helper/waydroid-cli.in \
-      --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
   nativeBuildInputs = [
@@ -61,6 +60,7 @@ python3Packages.buildPythonApplication rec {
     libxml2
     libadwaita
     dbus
+    bash
     systemd
   ];
 
@@ -78,7 +78,10 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+    "--prefix PATH : ${lib.makeBinPath [ fakeroot ]}"
+  ];
 
   postInstallCheck = ''
     mesonCheckPhase

@@ -6,7 +6,7 @@
 
 let
   pname = "postman";
-  version = "11.46.6";
+  version = "11.50.5";
   meta = with lib; {
     homepage = "https://www.getpostman.com";
     changelog = "https://www.postman.com/release-notes/postman-app/#${

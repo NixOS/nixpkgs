@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "meteor-git";
-  version = "0.27.0";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "stefanlogue";
     repo = "meteor";
     rev = "v${version}";
-    hash = "sha256-OH4WQNSbTMaysaHoKcy3S9V7BWu93Djr8toWtQ7Xj/w=";
+    hash = "sha256-2BosD88B3ZnLniNhKn4VJjHM5tCfbiTBjLqpU8RHMBI=";
   };
 
   vendorHash = "sha256-jKd/eJwp5SZvTrP3RN7xT7ibAB0PQondGR3RT+HQXIo=";

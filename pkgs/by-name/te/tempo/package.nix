@@ -7,14 +7,14 @@
 
 buildGoModule rec {
   pname = "tempo";
-  version = "2.7.2";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tempo";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-JBbECknhqYKzFlxAOVinuUCf/2xuUdh2ryK9c35YZ9o=";
+    hash = "sha256-RzDOx2ZyA0ZntFD1ryfipsgPsxVmsdOusZ37RCnQQnM=";
   };
 
   vendorHash = null;
@@ -22,7 +22,6 @@ buildGoModule rec {
   subPackages = [
     "cmd/tempo-cli"
     "cmd/tempo-query"
-    "cmd/tempo-serverless"
     "cmd/tempo-vulture"
     "cmd/tempo"
   ];

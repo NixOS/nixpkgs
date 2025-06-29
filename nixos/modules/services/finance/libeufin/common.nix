@@ -96,7 +96,9 @@ libeufinComponent:
             };
           in
           {
-            path = [ config.services.postgresql.package ];
+            path = [
+              (if cfg.createLocalDatabase then config.services.postgresql.package else pkgs.postgresql)
+            ];
             serviceConfig = {
               Type = "oneshot";
               DynamicUser = true;
@@ -121,8 +123,8 @@ libeufinComponent:
                   echo "Bank initialisation complete"
                 fi
               '';
-            requires = lib.optionals cfg.createLocalDatabase [ "postgresql.service" ];
-            after = [ "network.target" ] ++ lib.optionals cfg.createLocalDatabase [ "postgresql.service" ];
+            requires = lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
+            after = [ "network.target" ] ++ lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
           };
       };
 

@@ -13,7 +13,7 @@
   # tests
   langchain-tests,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     langchain-tests
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];

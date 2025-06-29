@@ -76,6 +76,7 @@ buildGoModule rec {
       bryanasdev000
       qjoly
       devusb
+      ryan4yin
     ];
   };
 }

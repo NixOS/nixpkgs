@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "namespace-cli";
-  version = "0.0.421";
+  version = "0.0.425";
 
   src = fetchFromGitHub {
     owner = "namespacelabs";
     repo = "foundation";
     rev = "v${version}";
-    hash = "sha256-4Gsj4BlPCjSRY/b6UeSaTwTFw9xFTvK1u08cIwPjPaY=";
+    hash = "sha256-HO6aSZg6M0OE5OLzKOIJLtDEz9Ow16xlw+dQfsFm/Qs=";
   };
 
-  vendorHash = "sha256-hPZmNH4bhIds+Ps0pQCjYPfvVBaX8e3Bq/onq91Fzq8=";
+  vendorHash = "sha256-Xmd8OTW/1MfRWItcx/a13BV993aVWnsvkcTwr/ROS4w=";
 
   subPackages = [
     "cmd/nsc"

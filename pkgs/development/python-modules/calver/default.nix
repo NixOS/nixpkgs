@@ -10,14 +10,14 @@
 let
   self = buildPythonPackage rec {
     pname = "calver";
-    version = "2025.04.01";
+    version = "2025.04.17";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "di";
       repo = "calver";
-      rev = version;
-      hash = "sha256-F7OnhwlwCw6cZeigmzyyIkttQMfxFoC2ynpxw0FGYMo=";
+      tag = version;
+      hash = "sha256-C0l/SThDhA1DnOeMJfuh3d8R606nzyQag+cg7QqvYWY=";
     };
 
     postPatch = ''
@@ -34,16 +34,12 @@ let
       pytestCheckHook
     ];
 
-    preCheck = ''
-      unset SOURCE_DATE_EPOCH
-    '';
-
     pythonImportsCheck = [ "calver" ];
 
     passthru.tests.calver = self.overridePythonAttrs { doCheck = true; };
 
     meta = {
-      changelog = "https://github.com/di/calver/releases/tag/${src.rev}";
+      changelog = "https://github.com/di/calver/releases/tag/${src.tag}";
       description = "Setuptools extension for CalVer package versions";
       homepage = "https://github.com/di/calver";
       license = lib.licenses.asl20;

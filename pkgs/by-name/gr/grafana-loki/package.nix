@@ -82,6 +82,7 @@ buildGoModule rec {
       globin
       mmahut
       emilylange
+      ryan4yin
     ];
   };
 }

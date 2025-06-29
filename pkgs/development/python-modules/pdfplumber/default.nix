@@ -11,7 +11,7 @@
   pdfminer-six,
   pillow,
   pypdfium2,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-parallel,
   pytestCheckHook,
   types-pillow,
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     nbexec
     pandas
     pandas-stubs
-    pytest-cov
+    pytest-cov-stub
     pytest-parallel
     pytestCheckHook
     types-pillow

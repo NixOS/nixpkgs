@@ -6,6 +6,7 @@
   markupsafe,
   jinja2,
   pytestCheckHook,
+  pytest-cov-stub,
   zope-deprecation,
   pyramid,
   pythonOlder,
@@ -34,12 +35,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     webtest
     pytestCheckHook
+    pytest-cov-stub
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov" ""
-  '';
 
   pythonImportsCheck = [ "pyramid_jinja2" ];
 

@@ -19,17 +19,18 @@
   matio,
   pugixml,
   protobuf,
+  enableOsmosdr ? true,
 }:
 
 gnuradio.pkgs.mkDerivation rec {
   pname = "gnss-sdr";
-  version = "0.0.19.1";
+  version = "0.0.20";
 
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
     rev = "v${version}";
-    sha256 = "sha256-IbkYdw1pwI+FMnZMChsxMz241Kv4EzMcBb0mm6/jq1k=";
+    hash = "sha256-kQv8I4dcWeRuAfYtD5EAAMwvfnOTi+QWDogUZb4M/qQ=";
   };
 
   patches = [
@@ -81,6 +82,9 @@ gnuradio.pkgs.mkDerivation rec {
     ]
     ++ lib.optionals (gnuradio.hasFeature "gr-pdu") [
       gnuradio.unwrapped.libad9361
+    ]
+    ++ lib.optionals (enableOsmosdr) [
+      gnuradio.pkgs.osmosdr
     ];
 
   cmakeFlags = [
@@ -98,8 +102,12 @@ gnuradio.pkgs.mkDerivation rec {
     (lib.cmakeBool "ENABLE_UHD" (gnuradio.hasFeature "gr-uhd"))
     (lib.cmakeBool "ENABLE_FMCOMMS2" (gnuradio.hasFeature "gr-iio" && gnuradio.hasFeature "gr-pdu"))
     (lib.cmakeBool "ENABLE_PLUTOSDR" (gnuradio.hasFeature "gr-iio"))
-    (lib.cmakeBool "ENABLE_AD9361" (gnuradio.hasFeature "gr-pdu"))
+    (lib.cmakeBool "ENABLE_OSMOSDR" enableOsmosdr)
     (lib.cmakeBool "ENABLE_UNIT_TESTING" false)
+
+    # Requires unpackaged gnsstk
+    # Only relevant if you want to run gnss-sdr on FPGA SoCs like Zynq
+    # (lib.cmakeBool "ENABLE_AD9361" (gnuradio.hasFeature "gr-pdu"))
 
     # gnss-sdr doesn't truly depend on BLAS or LAPACK, as long as
     # armadillo is built using both, so skip checking for them.

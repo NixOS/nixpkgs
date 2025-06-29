@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.18.3";
+  version = "1.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "yarl";
     tag = "v${version}";
-    hash = "sha256-j2z6YAFbQe26YUQGLBwLr9ztUoxMDJJGS9qYeVqSob0=";
+    hash = "sha256-O1ImUy+F+Ekj+Sij4XKC1cguTbbOPQbD2V5DpwDSxto=";
   };
 
   build-system = [

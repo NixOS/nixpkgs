@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   buildAndTestSubdir = "src-tauri";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-dFTdbMX355klZ2wY160bYcgMiOiOGplEU7/e6Btv5JI=";
+  cargoHash = "sha256-PfpbzawgwkqykG4u2G05rgZwksuxWJUcv6asnJvZJvU=";
 
   npmDeps = fetchNpmDeps {
     name = "squirreldisk-${version}-npm-deps";
@@ -49,6 +49,13 @@ rustPlatform.buildRustPackage rec {
     # Update field names to work with pdu versions >=0.10.0
     # https://github.com/adileo/squirreldisk/pull/47
     ./update-pdu-json-format.patch
+  ];
+
+  cargoPatches = [
+    # Remove dependency on parallel-disk-usage crate. The version is outdated and
+    # does not compile anymore with Rust 1.87.0.
+    # https://github.com/adileo/squirreldisk/pull/49
+    ./remove-pdu-crate.patch
   ];
 
   postPatch = ''

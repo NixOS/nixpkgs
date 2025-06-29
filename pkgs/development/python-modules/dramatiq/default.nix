@@ -9,6 +9,7 @@
   prometheus-client,
   pylibmc,
   pytestCheckHook,
+  pytest-cov-stub,
   redis,
   setuptools,
   watchdog,
@@ -54,6 +55,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pika
     redis
     pylibmc
@@ -61,8 +63,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i ./setup.cfg \
-      -e 's:--cov dramatiq::' \
-      -e 's:--cov-report html::' \
       -e 's:--benchmark-autosave::' \
       -e 's:--benchmark-compare::' \
   '';

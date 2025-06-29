@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ libusb1 ];
 
+  doInstallCheck = true;
+
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
     cp drivers/*.rules $out/etc/udev/rules.d

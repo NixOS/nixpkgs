@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "bottle";
-  version = "0.13.2";
+  version = "0.13.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5TgDudKYx9ND0Aun0nsAWUFfBLn29AuNWLW/kUup00g=";
+    hash = "sha256-HCOuswqooT85xgwNpJRTDd1d49ojW8QxuBilDZmd5J8=";
   };
 
   nativeBuildInputs = [ setuptools ];

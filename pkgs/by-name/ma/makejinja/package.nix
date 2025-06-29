@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "makejinja";
-  version = "2.7.2";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mirkolenz";
     repo = "makejinja";
     tag = "v${version}";
-    hash = "sha256-WyTv4eTsEPn3pCCXUB0YUfv9SyR/6Ml4UU4zt1k5z2c=";
+    hash = "sha256-Y6R+nVwIuviYhvLp5Aqb+BUCaAD6fF+GH8zmJrWNxFc=";
   };
 
   build-system = with python3Packages; [ setuptools ];

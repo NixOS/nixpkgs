@@ -73,6 +73,7 @@ let
   makeNeovimConfig =
     {
       customRC ? "",
+      customLuaRC ? "",
       # the function you would have passed to lua.withPackages
       extraLuaPackages ? (_: [ ]),
       ...
@@ -83,6 +84,7 @@ let
     attrs
     // {
       neovimRcContent = customRC;
+      luaRcContent = customLuaRC;
       wrapperArgs = lib.optionals (luaEnv != null) [
         "--prefix"
         "LUA_PATH"
@@ -145,6 +147,7 @@ let
           vimAlias
           ;
         customRC = configure.customRC or "";
+        customLuaRC = configure.customLuaRC or "";
         inherit plugins;
         inherit extraName;
       };
@@ -227,12 +230,9 @@ let
       ) vimPlugins.nvim-treesitter.grammarPlugins;
       isNvimGrammar = x: builtins.elem x nvimGrammars;
 
-      toNvimTreesitterGrammar = callPackage (
-        { }:
-        makeSetupHook {
-          name = "to-nvim-treesitter-grammar";
-        } ./to-nvim-treesitter-grammar.sh
-      ) { };
+      toNvimTreesitterGrammar = makeSetupHook {
+        name = "to-nvim-treesitter-grammar";
+      } ./to-nvim-treesitter-grammar.sh;
     in
 
     (toVimPlugin (

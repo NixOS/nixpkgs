@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication rec {
       ujson
       uvicorn
       websockets
+      whenever
       uv
     ]
     ++ sqlalchemy.optional-dependencies.asyncio

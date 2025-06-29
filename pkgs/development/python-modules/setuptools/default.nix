@@ -9,19 +9,24 @@
 
 buildPythonPackage rec {
   pname = "setuptools";
-  version = "78.1.0";
+  version = "80.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
     tag = "v${version}";
-    hash = "sha256-6vJ7nzpbm34cpso21Pnh9Ej9AhJa+4/K22XrwuF0R3k=";
+    hash = "sha256-lOGvJoVwFxASI7e5fJkeS7iGOIPklGRYmmMfclqn0H4=";
   };
 
   patches = [
     ./tag-date.patch
   ];
+
+  # Drop dependency on coherent.license, which in turn requires coherent.build
+  postPatch = ''
+    sed -i "/coherent.licensed/d" pyproject.toml
+  '';
 
   preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0

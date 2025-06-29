@@ -439,9 +439,9 @@ in
       description = "Initialization database for PeerTube daemon";
       after = [
         "network.target"
-        "postgresql.service"
+        "postgresql.target"
       ];
-      requires = [ "postgresql.service" ];
+      requires = [ "postgresql.target" ];
 
       script =
         let
@@ -475,13 +475,13 @@ in
         [ "network.target" ]
         ++ lib.optional cfg.redis.createLocally "redis-peertube.service"
         ++ lib.optionals cfg.database.createLocally [
-          "postgresql.service"
+          "postgresql.target"
           "peertube-init-db.service"
         ];
       requires =
         lib.optional cfg.redis.createLocally "redis-peertube.service"
         ++ lib.optionals cfg.database.createLocally [
-          "postgresql.service"
+          "postgresql.target"
           "peertube-init-db.service"
         ];
       wantedBy = [ "multi-user.target" ];

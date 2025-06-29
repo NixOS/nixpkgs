@@ -42,13 +42,13 @@ let
   };
 
   pname = "pretix";
-  version = "2025.5.0";
+  version = "2025.6.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vu+7jKXIuNZ4BN2IamdDxGJkraj93eNYUT3sUU2LCAg=";
+    hash = "sha256-bDE4ygTCX7hynWjoni9ZWMGujKvPk0TKaG42SQ6w9Rk=";
   };
 
   npmDeps = buildNpmPackage {
@@ -56,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-NSBSL6+0ancoPHbvJu4fBxK8EVj06dbltjHqJi2yh5w=";
+    npmDepsHash = "sha256-LQPbOC9SaolD/fyiFoObndx7pcS7iaYVytz6y+bQZqQ=";
 
     dontBuild = true;
 
@@ -91,6 +91,7 @@ python.pkgs.buildPythonApplication rec {
     "importlib-metadata"
     "kombu"
     "markdown"
+    "oauthlib"
     "phonenumberslite"
     "pillow"
     "protobuf"
@@ -260,6 +261,11 @@ python.pkgs.buildPythonApplication rec {
     "test_same_day_spanish"
     "test_same_month_spanish"
     "test_same_year_spanish"
+
+    # broken with fakeredis>=2.27.0
+    "test_waitinglist_cache_separation"
+    "test_waitinglist_item_active"
+    "test_waitinglist_variation_active"
   ];
 
   preCheck = ''

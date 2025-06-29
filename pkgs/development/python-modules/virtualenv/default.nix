@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.30.0";
+  version = "20.31.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gAhjFivKpUUKbk1yEElzDn8trgdyDgkCsOQEC9b5rag=";
+    hash = "sha256-4QwKnQKDXlklIb5IszK2yu5oh/MywRGqeaCbnnnvwq8=";
   };
 
   nativeBuildInputs = [

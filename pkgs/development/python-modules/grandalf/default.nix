@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyparsing,
-  future,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -24,7 +23,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyparsing
-    future
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

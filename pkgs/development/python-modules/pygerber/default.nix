@@ -26,7 +26,6 @@
   dulwich,
   tzlocal,
   pytest-xdist,
-  pytest-cov,
   pytest-lsp,
   pytest-asyncio,
   pytest-mock,
@@ -77,7 +76,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-cov
     pytest-xdist
     pytest-lsp
     pytest-mock
@@ -93,6 +91,8 @@ buildPythonPackage rec {
     "test/gerberx3/test_assets.py"
     "test/gerberx3/test_language_server/tests.py"
   ];
+
+  pytestFlagsArray = [ "--override-ini required_plugins=''" ];
 
   pythonImportsCheck = [ "pygerber" ];
 

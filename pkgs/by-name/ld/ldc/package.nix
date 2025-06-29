@@ -32,29 +32,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldc";
-  version = "1.40.1";
+  version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "ldc-developers";
     repo = "ldc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WdnwdH25A5oMNNY3uWG2hxnaAT+S1hNuP7LElH3uuuk=";
+    hash = "sha256-6LcpY3LSFK4KgEiGrFp/LONu5Vr+/+vI04wEEpF3s+s=";
     fetchSubmodules = true;
   };
 
   # https://issues.dlang.org/show_bug.cgi?id=19553
   hardeningDisable = [ "fortify" ];
-
-  # Fix output programs segfaulting on macOS Sequoia 15.4 - see:
-  # https://github.com/NixOS/nixpkgs/issues/398443
-  # https://github.com/ldc-developers/ldc/issues/4899
-  # TODO: Remove this when upgrading to a fixed version (>= 1.41.0-beta2)
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ldc-developers/ldc/commit/60079c3b596053b1a70f9f2e0cf38a287089df56.patch";
-      hash = "sha256-Y/5+zt5ou9rzU7rLJq2OqUxMDvC7aSFS6AsPeDxNATQ=";
-    })
-  ];
 
   postPatch =
     ''

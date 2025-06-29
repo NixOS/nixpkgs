@@ -186,7 +186,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "keepassxc";
     maintainers = with lib.maintainers; [
-      blankparticle
       sigmasquadron
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

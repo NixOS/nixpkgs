@@ -37,6 +37,7 @@
   udev,
   util-linux,
   xmlsec,
+  udevCheckHook,
   withX ? true,
 }:
 let
@@ -51,13 +52,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open-vm-tools";
-  version = "12.5.2";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "open-vm-tools";
     tag = "stable-${finalAttrs.version}";
-    hash = "sha256-gKtPyLsmTrbA3aG/Jiod/oAl5aMpVm3enuCe+b7jsY4=";
+    hash = "sha256-1ZW1edwKW3okKNdWw6rBgfeOt9afESbhe1L1TNp0+Kc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/open-vm-tools";
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     makeWrapper
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs =
@@ -139,6 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optional (!withX) "--without-x";
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
 
   preConfigure = ''
     mkdir -p ${placeholder "out"}/lib/udev/rules.d

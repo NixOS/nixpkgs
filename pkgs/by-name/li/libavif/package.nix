@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   libaom,
   cmake,
   pkg-config,
@@ -32,28 +31,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libavif";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = "libavif";
     rev = "v${version}";
-    hash = "sha256-cT8Q/VEJ+r971cbuZX92Gf6UX2kMOyZd4Cs2xMxS0Tw=";
+    hash = "sha256-0J56wpXa2AVh9JUp5UY2kzWijNE3i253RKhpG5oDFJE=";
   };
-
-  # Adjust some tests to pass on aarch64
-  # FIXME: remove in next update
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/AOMediaCodec/libavif/commit/1e9ef51f32fa23bd7a94d8c01d5205334bc9c52f.patch";
-      hash = "sha256-4V7NpuJ+YNm103RMO47TIZaApTm3S6c5RKsjLZFNwYw=";
-    })
-
-    (fetchpatch {
-      url = "https://github.com/AOMediaCodec/libavif/commit/0f1618a25c5eba41b6fec947207d0a32ae3cc6c5.patch";
-      hash = "sha256-ORNhD4QtHmBcOYSajnZn7QMfRC3MF4rgUin/Vw+2ztA=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace contrib/gdk-pixbuf/avif.thumbnailer.in \

@@ -12,6 +12,7 @@
   sqlite,
   testers,
   zlib,
+  python3Packages,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -39,12 +40,17 @@ clangStdenv.mkDerivation (finalAttrs: {
       readline
       sqlite
       zlib
+      python3Packages.sphinxHook
     ]
     ++ lib.optionals clangStdenv.hostPlatform.isLinux [
       pam
     ];
 
   hardeningDisable = [ "format" ];
+
+  sphinxBuilders = [
+    "man"
+  ];
 
   installPhase = ''
     runHook preInstall

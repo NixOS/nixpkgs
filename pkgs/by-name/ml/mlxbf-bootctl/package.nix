@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Mellanox";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "mlxbf-bootctl";
+    rev = "mlxbf-bootctl-${version}";
     hash = "sha256-F49ZZtty+NARXA/doAFLhsQn4XkPW6GWLXGy4waIaM0=";
   };
 

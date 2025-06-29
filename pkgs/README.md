@@ -521,6 +521,8 @@ When using the `patches` parameter to `mkDerivation`, make sure the patch name c
 >
 > See [Versioning](#versioning) for details on package versioning.
 
+The following describes two ways to include the patch. Regardless of how the patch is included, you _must_ ensure its purpose is clear and obvious. This enables other maintainers to more easily determine when old patches are no longer required. Typically, you can improve clarity with carefully considered filenames, attribute names, and/or comments; these should explain the patch's _intention_. Additionally, it may sometimes be helpful to clarify _how_ it resolves the issue. For example: _"fix gcc14 build by adding missing include"_.
+
 ### Fetching patches
 
 In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch2`:
@@ -574,7 +576,7 @@ If you do need to do create this sort of patch file, one way to do so is with gi
 
     ```ShellSession
     $ git init
-    $ git add .
+    $ git add -A
     ```
 
 3. Edit some files to make whatever changes need to be included in the patch.
@@ -951,6 +953,11 @@ Reviewing process:
 - Verify any change of upstream.
   - If switching from e.g. PyPi to GitHub, verify that the repo is the official one.
   - If switching to a fork, check with external sources like other package repositories for community consensus.
+- Ensure any special packaging choices and required context are documented in i.e. the name of a patch or in a comment.
+  - If a special version of a package is pinned, document why, so others know if/when it can be unpinned.
+  - If any (especially opinionated) patch or `substituteInPlace` is applied, document why.
+  - If any non-default build flags are set, document why.
+  - If checks are partially or fully disabled, document why.
 - Ensure that the code contains no typos.
 - Build the package locally.
   - Pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
@@ -982,6 +989,7 @@ Sample template for a package update review is provided below.
 - [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
 - [ ] any change of upstream are verified
+- [ ] the motives for any special packaging choices are documented
 - [ ] all depending packages build
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
 - [ ] patches that are remotely available are fetched rather than vendored
@@ -1007,6 +1015,11 @@ Review process:
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set. This can be the package submitter or a community member that accepts taking up maintainership of the package.
   - The `meta.mainProgram` must be set if a main executable exists.
+- Ensure any special packaging choices and required context are documented in i.e. the name of a patch or in a comment.
+  - If a special version of a package is pinned, document why, so others know if/when it can be unpinned.
+  - If any (especially opinionated) patch or `substituteInPlace` is applied, document why.
+  - If any non-default build flags are set, document why.
+  - If checks are partially or fully disabled, document why.
 - Report detected typos.
 - Ensure the package source:
   - Uses `mirror://` URLs when available.
@@ -1032,6 +1045,7 @@ Sample template for a new package review is provided below.
 - [ ] build time only dependencies are declared in `nativeBuildInputs`
 - [ ] source is fetched from an official or trusted location
 - [ ] source is fetched using the appropriate function
+- [ ] the motives for any special packaging choices are documented
 - [ ] the list of `phases` is not overridden
 - [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed

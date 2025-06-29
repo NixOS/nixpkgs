@@ -169,32 +169,32 @@ lib.makeExtensible (
           };
 
       nix_2_24 = commonAutoconf {
-        version = "2.24.14";
+        version = "2.24.15";
         hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
         self_attribute_name = "nix_2_24";
       };
 
       nix_2_26 = commonMeson {
-        version = "2.26.3";
-        hash = "sha256-5ZV8YqU8mfFmoAMiUEuBqNwk0T3vUR//x1D12BiYCeY=";
+        version = "2.26.4";
+        hash = "sha256-WmGMiwwC9RLomNtpDeRoe5bqBAH84A6pLcqi1MbcQi4=";
         self_attribute_name = "nix_2_26";
       };
 
       nix_2_28 = commonMeson {
-        version = "2.28.3";
-        hash = "sha256-TjZp5ITSUvNRAzNznmkZRQxNRzMLiSAplz4bV2T8cbs=";
+        version = "2.28.4";
+        hash = "sha256-V1tPrBkPteqF8VWUgpotNFYJ2Xm6WmB3aMPexuEHl9I=";
         self_attribute_name = "nix_2_28";
       };
 
-      nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.29.0";
+      nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix {
+        version = "2.29.1";
         inherit (self.nix_2_24.meta) maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = version;
-          hash = "sha256-fkbE3RCIUPFjS9A6SoEJbgMW3Rs98cs0ZZV/eTtJjaU=";
+          rev = "2.29.1";
+          hash = "sha256-rCL3l4t20jtMeNjCq6fMaTzWvBKgj+qw1zglLrniRfY=";
         };
       };
 

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "bloodyad";
-  version = "2.1.18";
+  version = "2.1.20";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "CravateRouge";
     repo = "bloodyAD";
     tag = "v${version}";
-    hash = "sha256-4/5cAYt3IhRxbd8bSXlyvCOCMLIJjWxWnke0vslyD2Y=";
+    hash = "sha256-mPomYeGuTbj5cKR+/null7EIjuSVsNbKqnPIqAOkZQY=";
   };
 
   pythonRelaxDeps = [ "cryptography" ];
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for Active Directory Privilege Escalations";
     homepage = "https://github.com/CravateRouge/bloodyAD";
-    changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/v${version}";
+    changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

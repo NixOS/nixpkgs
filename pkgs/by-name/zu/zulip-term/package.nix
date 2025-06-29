@@ -67,7 +67,7 @@ buildPythonApplication rec {
     ]
     ++ (with python3.pkgs; [
       pytestCheckHook
-      pytest-cov
+      pytest-cov-stub
       pytest-mock
     ]);
 

@@ -7,23 +7,24 @@
 
 python3Packages.buildPythonApplication {
   pname = "memtree";
-  version = "0-unstable-2025-06-06";
+  version = "0-unstable-2025-06-10";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nbraud";
+    owner = "nicoonoclaste";
     repo = "memtree";
-    rev = "279f1fa0a811de86c278ce74830bd8aa1b00db58";
-    hash = "sha256-gUULox3QSx68x8lb1ytanY36cw/I9L4HdpR8OPOsxuc=";
+    rev = "ad1a7d1e4fa5f195c2aa1012101d01ab580a05e8";
+    hash = "sha256-stIRBXhaLqYsN2WMQnu46z39ssantzM8M6T3kCOoZKc=";
+
+    # Remove irrelevant content, avoid src hash change on flake.lock updates etc.
+    postFetch = "rm -r $out/.* $out/flake.* $out/bors.toml";
   };
 
-  pythonRelaxDeps = [ "rich" ];
-
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     rich
   ];
 

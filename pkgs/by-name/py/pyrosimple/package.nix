@@ -68,9 +68,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://kannibalox.github.io/pyrosimple/";
     changelog = "https://github.com/kannibalox/pyrosimple/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      ne9z
-      vamega
-    ];
+    maintainers = with lib.maintainers; [ vamega ];
   };
 }

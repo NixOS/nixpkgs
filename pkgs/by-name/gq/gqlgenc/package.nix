@@ -1,6 +1,7 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch2,
   lib,
   versionCheckHook,
 }:
@@ -17,7 +18,11 @@ buildGoModule (finalAttrs: {
   };
 
   patches = [
-    ./fix-version.patch
+    (fetchpatch2 {
+      name = "fix-version.patch";
+      url = "https://github.com/Yamashou/gqlgenc/commit/aad0599a70780696a9530a7adffebfff53538695.patch?full_index=1";
+      hash = "sha256-moidhkkO/5It8kH1VlwbV+YLlMOTXKH3RyLKGCA2chw=";
+    })
   ];
 
   excludedPackages = [ "example" ];

@@ -255,7 +255,7 @@ in
           log.webserver = "${cfg.logDirectory}/webserver.log";
         };
 
-        webserver.tls = "${cfg.stateDirectory}/tls.pem";
+        webserver.tls.cert = "${cfg.stateDirectory}/tls.pem";
       }
 
       (lib.optionalAttrs cfg.useDnsmasqConfig {

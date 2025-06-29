@@ -4,6 +4,8 @@
   buildFHSEnv,
   copyDesktopItems,
   dpkg,
+  fetchurl,
+  libxml2,
   lndir,
   makeDesktopItem,
   makeWrapper,
@@ -48,6 +50,14 @@ let
     ];
   };
 
+  libxml2' = libxml2.overrideAttrs rec {
+    version = "2.13.8";
+    src = fetchurl {
+      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+      hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
+    };
+  };
+
   fhs = buildFHSEnv {
     pname = "packettracer7";
     inherit version;
@@ -64,7 +74,7 @@ let
         libpulseaudio
         libudev0-shim
         libxkbcommon
-        libxml2
+        libxml2'
         libxslt
         nspr
         nss

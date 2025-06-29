@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "c-stdaux";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "c-util";
     repo = "c-stdaux";
     tag = "v${version}";
-    hash = "sha256-MsnuEyVCmOIr/q6I1qyPsNXp48jxIEcXoYLHbOAZtW0=";
+    hash = "sha256-/15lop+WUkTW9v9h7BBdwRSpJgcBXaJNtMM7LXgcQE4=";
   };
 
   nativeBuildInputs = [
@@ -22,9 +22,7 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  # Assertion failed: (false && "!__builtin_constant_p(c_align_to(16, non_constant_expr ? 8 : 16))"),
-  # function test_basic_gnuc, file ../src/test-basic.c, line 548.
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
 
   meta = {
     homepage = "https://github.com/c-util/c-stdaux";

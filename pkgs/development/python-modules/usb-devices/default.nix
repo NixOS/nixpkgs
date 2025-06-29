@@ -4,6 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
 }:
 
@@ -21,14 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-Nfdl5oRIdOfAo5PFAJJpadRyu2zeEkmYzxDQxbvpt6c=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=usb_devices --cov-report=term-missing:skip-covered" ""
-  '';
-
   nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "usb_devices" ];
 

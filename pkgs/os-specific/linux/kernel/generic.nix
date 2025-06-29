@@ -1,5 +1,6 @@
 {
   buildPackages,
+  pkgsBuildBuild,
   callPackage,
   perl,
   bison ? null,
@@ -83,6 +84,7 @@ let
 
       stdenv ? args'.stdenv,
       buildPackages ? args'.buildPackages,
+      pkgsBuildBuild ? args'.pkgsBuildBuild,
 
       ...
     }@args:
@@ -317,9 +319,9 @@ let
             # Adds dependencies needed to edit the config:
             # nix-shell '<nixpkgs>' -A linux.configEnv --command 'make nconfig'
             configEnv = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
-              nativeBuildInputs =
-                previousAttrs.nativeBuildInputs or [ ]
-                ++ (with buildPackages; [
+              depsBuildBuild =
+                previousAttrs.depsBuildBuild or [ ]
+                ++ (with pkgsBuildBuild; [
                   pkg-config
                   ncurses
                 ]);

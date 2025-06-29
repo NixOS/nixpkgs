@@ -69,6 +69,16 @@
       "agpl"
     ]
   },
+  "dav_push": {
+    "hash": "sha256-+Ji6xYFudC5ds4YLJnzZ34v7Ct615CdtkZPyq8iTsdA=",
+    "url": "https://github.com/bitfireAT/nc_ext_dav_push/releases/download/v0.0.3/dav_push.tar.gz",
+    "version": "0.0.3",
+    "description": "**This extension is in a very early stage of development. It is for demonstration and testing purposes only. Don't use it on production systems!**\n\nIn proprietary environments, changes in events and contacts are nowadays usually pushed to other clients so that they can update their views almost in real-time.\n\nWebDAV however (and in this context, especially CalDAV and CardDAV) doesn't currently support push notifications of clients when a collection has changed. So clients have to periodically ask the server for changes. This causes unnecessary delays and battery usage.\n\nThe WebDAV-Push standard, which is currently in development, wants to solve this problem with an open protocol, too.\n\nThis is the server part of these efforts to draft a standard and provide a working implementation (server + client) in order to demonstrate it.\n\n\nThe current WebDAV-Push draft is provided by [@bitfireAT](https://github.com/bitfireAT).\n          \nThis Nextcloud extension has been developed by [@verdigado](https://github.com/verdigado).",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "deck": {
     "hash": "sha256-A2n68T7x4la4VrMwsBMIWk6LWM4nge9FtQhl5eLp8jQ=",
     "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.14.5/deck-v1.14.5.tar.gz",
@@ -235,6 +245,16 @@
     "version": "26.0.1",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "nextpod": {
+    "hash": "sha256-yQD4e5R6ZfBQkEsPVpddGMLDVOlV6HSVZjttgUjEdro=",
+    "url": "https://github.com/pbek/nextcloud-nextpod/releases/download/v0.7.7/nextpod-nc.tar.gz",
+    "version": "0.7.7",
+    "description": "This Nextcloud app lets you visualize your podcast subscriptions and episode downloads from\n[GPodderSync](https://apps.nextcloud.com/apps/gpoddersync), which acts as a basic gpodder.net\napi to sync podcast consumer apps (podcatchers) like AntennaPod.\n\nYou need to have [GPodderSync](https://apps.nextcloud.com/apps/gpoddersync) installed to use this app!",
+    "homepage": "https://github.com/pbek/nextcloud-nextpod",
     "licenses": [
       "agpl"
     ]

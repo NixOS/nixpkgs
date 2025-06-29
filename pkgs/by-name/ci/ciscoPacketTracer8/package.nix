@@ -7,6 +7,7 @@
   alsa-lib,
   dbus,
   expat,
+  fetchurl,
   fontconfig,
   glib,
   libdrm,
@@ -40,6 +41,14 @@ let
     "8.2.2" = "CiscoPacketTracer822_amd64_signed.deb";
   };
 
+  libxml2' = libxml2.overrideAttrs rec {
+    version = "2.13.8";
+    src = fetchurl {
+      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+      hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
+    };
+  };
+
   unwrapped = stdenvNoCC.mkDerivation {
     name = "ciscoPacketTracer8-unwrapped";
     inherit version;
@@ -68,7 +77,7 @@ let
         libpulseaudio
         libudev0-shim
         libxkbcommon
-        libxml2
+        libxml2'
         libxslt
         nspr
         nss
