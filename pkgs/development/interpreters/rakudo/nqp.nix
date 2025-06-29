@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nqp";
-  version = "2025.05";
+  version = "2025.06";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "raku";
     repo = "nqp";
     rev = version;
-    hash = "sha256-CNanRrK9ReK1OoM82ytCRh/tZfnvAs4vCyy5BRYIwCU=";
+    hash = "sha256-zI/Br2GwZuhX7X+vnRDPERVmx5hW64+t79P1oFIeVnI=";
     fetchSubmodules = true;
   };
 
