@@ -2,34 +2,34 @@
   lib,
   buildDunePackage,
   fetchFromGitHub,
-  ezjsonm,
   menhir,
   menhirLib,
   ounit,
+  ezjsonm,
+  mustache-cli,
 }:
-
-buildDunePackage rec {
-  pname = "mustache";
-  version = "3.1.0";
-  duneVersion = "3";
-  src = fetchFromGitHub {
-    owner = "rgrinberg";
-    repo = "ocaml-mustache";
-    rev = "v${version}";
-    sha256 = "19v8rk8d8lkfm2rmhdawfgadji6wa267ir5dprh4w9l1sfj8a1py";
-  };
-
-  nativeBuildInputs = [ menhir ];
-  buildInputs = [ ezjsonm ];
-  propagatedBuildInputs = [ menhirLib ];
-
+import ./base.nix {
+  inherit
+    buildDunePackage
+    fetchFromGitHub
+    menhirLib
+    ezjsonm
+    ounit
+    ;
   doCheck = true;
-  checkInputs = [ ounit ];
-
+  nativeBuildInputs = [
+    menhir
+    mustache-cli
+  ];
+}
+// {
   meta = {
     description = "Mustache logic-less templates in OCaml";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    maintainers = with lib.maintainers; [
+      vbgl
+      momeemt
+    ];
+    homepage = "https://github.com/rgrinberg/ocaml-mustache";
   };
 }
