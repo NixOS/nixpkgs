@@ -2465,7 +2465,6 @@ broken-packages:
   - haskoin # failure in job https://hydra.nixos.org/build/233201668 at 2023-09-02
   - haskoin-util # failure in job https://hydra.nixos.org/build/233222171 at 2023-09-02
   - haskoin-wallet # failure in job https://hydra.nixos.org/build/233206922 at 2023-09-02
-  - haskore # failure in job https://hydra.nixos.org/build/233238668 at 2023-09-02
   - haskore-vintage # failure in job https://hydra.nixos.org/build/233230742 at 2023-09-02
   - HaskRel # failure in job https://hydra.nixos.org/build/295090970 at 2025-04-22
   - hasktorch-codegen # failure in job https://hydra.nixos.org/build/233232876 at 2023-09-02
