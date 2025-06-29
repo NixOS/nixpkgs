@@ -242,33 +242,33 @@ def copy_closure(
                 nix_copy_closure(to_host, to=True)
 
 
-def edit(flake: Flake | None, flake_flags: Args | None = None) -> None:
+def edit() -> None:
     "Try to find and open NixOS configuration file in editor."
-    if flake:
-        run_wrapper(
-            [
-                "nix",
-                *FLAKE_FLAGS,
-                "edit",
-                *dict_to_flags(flake_flags),
-                "--",
-                str(flake),
-            ],
-            check=False,
-        )
-    else:
-        if flake_flags:
-            raise NixOSRebuildError("'edit' does not support extra Nix flags")
-        nixos_config = Path(
-            os.getenv("NIXOS_CONFIG") or find_file("nixos-config") or "/etc/nixos"
-        )
-        if nixos_config.is_dir():
-            nixos_config /= "default.nix"
+    nixos_config = Path(
+        os.getenv("NIXOS_CONFIG") or find_file("nixos-config") or "/etc/nixos"
+    )
+    if nixos_config.is_dir():
+        nixos_config /= "default.nix"
 
-        if nixos_config.exists():
-            run_wrapper([os.getenv("EDITOR", "nano"), nixos_config], check=False)
-        else:
-            raise NixOSRebuildError("cannot find NixOS config file")
+    if nixos_config.exists():
+        run_wrapper([os.getenv("EDITOR", "nano"), nixos_config], check=False)
+    else:
+        raise NixOSRebuildError("cannot find NixOS config file")
+
+
+def edit_flake(flake: Flake | None, flake_flags: Args | None = None) -> None:
+    "Try to find and open NixOS configuration file in editor for Flake config."
+    run_wrapper(
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "edit",
+            *dict_to_flags(flake_flags),
+            "--",
+            str(flake),
+        ],
+        check=False,
+    )
 
 
 def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
