@@ -34,7 +34,7 @@ buildPythonPackage rec {
   #
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"jupyterlab==4.*",' ""
+      --replace-fail '"jupyterlab==4.*",' ""
   '';
 
   build-system = [ hatchling ];

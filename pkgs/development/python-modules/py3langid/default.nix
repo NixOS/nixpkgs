@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   # nixify path to the courlan binary in the test suite
   postPatch = ''
-    substituteInPlace tests/test_langid.py --replace "'langid'" "'$out/bin/langid'"
+    substituteInPlace tests/test_langid.py --replace-fail "'langid'" "'$out/bin/langid'"
     substituteInPlace pyproject.toml --replace-fail \
       'numpy >= 2.0.0' numpy
   '';

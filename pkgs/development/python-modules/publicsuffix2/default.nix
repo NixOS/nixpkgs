@@ -26,7 +26,7 @@ buildPythonPackage {
   postPatch = ''
     # only used to update the interal publicsuffix list
     substituteInPlace setup.py \
-      --replace "'requests >= 2.7.0'," ""
+      --replace-fail "'requests >= 2.7.0'," ""
   '';
 
   pythonImportsCheck = [ "publicsuffix2" ];

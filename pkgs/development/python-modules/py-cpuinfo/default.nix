@@ -27,8 +27,8 @@ buildPythonPackage rec {
   # On Darwin sysctl is used to read CPU information.
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cpuinfo/cpuinfo.py \
-      --replace "len(_program_paths('sysctl')) > 0" "True" \
-      --replace "_run_and_get_stdout(['sysctl'" "_run_and_get_stdout(['${sysctl}/bin/sysctl'"
+      --replace-fail "len(_program_paths('sysctl')) > 0" "True" \
+      --replace-fail "_run_and_get_stdout(['sysctl'" "_run_and_get_stdout(['${sysctl}/bin/sysctl'"
   '';
 
   pythonImportsCheck = [ "cpuinfo" ];

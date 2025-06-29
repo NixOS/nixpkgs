@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # Update location for run with pytest
   preCheck = ''
     substituteInPlace tests/test_load.py \
-      --replace '"xbefiles"' '"tests/xbefiles"'
+      --replace-fail '"xbefiles"' '"tests/xbefiles"'
   '';
 
   pythonImportsCheck = [ "xbe" ];

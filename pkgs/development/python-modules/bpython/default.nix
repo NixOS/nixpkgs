@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   postInstall = ''
     substituteInPlace "$out/share/applications/org.bpython-interpreter.bpython.desktop" \
-      --replace "Exec=/usr/bin/bpython" "Exec=bpython"
+      --replace-fail "Exec=/usr/bin/bpython" "Exec=bpython"
   '';
 
   nativeCheckInputs = [

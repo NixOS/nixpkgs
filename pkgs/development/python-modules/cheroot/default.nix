@@ -30,17 +30,6 @@ buildPythonPackage rec {
     hash = "sha256-4LgveXZY0muGE+yOtWPDsI5r1qeSHp1Qib0Rda0bF0A=";
   };
 
-  # remove setuptools-scm-git-archive dependency
-  # https://github.com/cherrypy/cheroot/commit/f0c51af263e20f332c6f675aa90ec6705ae4f5d1
-  # there is a difference between the github source and the pypi tarball source,
-  # and it is not easy to apply patches.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"setuptools_scm_git_archive>=1.1",' ""
-    substituteInPlace setup.cfg \
-      --replace "setuptools_scm_git_archive>=1.0" ""
-  '';
-
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [

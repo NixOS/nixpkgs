@@ -42,7 +42,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "PySpice" ];
 
   postPatch = ''
-    substituteInPlace PySpice/Spice/NgSpice/Shared.py --replace \
+    substituteInPlace PySpice/Spice/NgSpice/Shared.py --replace-fail \
         "ffi.dlopen(self.library_path)" \
         "ffi.dlopen('${libngspice}/lib/libngspice${stdenv.hostPlatform.extensions.sharedLibrary}')"
   '';

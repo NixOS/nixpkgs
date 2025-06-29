@@ -26,15 +26,6 @@ buildPythonPackage rec {
     pytz
   ];
 
-  postPatch = ''
-    # Remove with next release
-    substituteInPlace setup.py \
-      --replace "async_timeout>=3.0.1,<4.0" "async_timeout>=3.0.1"
-    # https://github.com/bollewolle/pydelijn/pull/11
-    substituteInPlace pydelijn/common.py \
-      --replace ", loop=self.loop" ""
-  '';
-
   # Project has no tests
   doCheck = false;
 

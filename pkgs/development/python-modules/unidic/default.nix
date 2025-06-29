@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "wasabi>=0.6.0,<1.0.0" "wasabi"
+      --replace-fail "wasabi>=0.6.0,<1.0.0" "wasabi"
   '';
 
   # no tests

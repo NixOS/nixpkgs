@@ -20,7 +20,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "ipdb == 0.13.9" "ipdb"
+      --replace-fail "ipdb == 0.13.9" "ipdb"
   '';
 
   propagatedBuildInputs = [ ipdb ];

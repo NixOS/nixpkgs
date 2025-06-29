@@ -35,7 +35,7 @@ buildPythonPackage rec {
   postPatch = ''
     # pin does not apply because our ldap3 contains a patch to fix pyasn1 compability
     substituteInPlace setup.py \
-      --replace "pyasn1==0.4.8" "pyasn1"
+      --replace-fail "pyasn1==0.4.8" "pyasn1"
   '';
 
   nativeBuildInputs = [ setuptools ];

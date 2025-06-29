@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["urls", "version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["urls", "version"]' 'version = "${version}"'
   '';
 
   build-system = [

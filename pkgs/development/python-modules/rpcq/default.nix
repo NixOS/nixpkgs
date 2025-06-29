@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "msgpack>=0.6,<1.0" "msgpack"
+      --replace-fail "msgpack>=0.6,<1.0" "msgpack"
   '';
 
   nativeBuildInputs = [ setuptools ];
