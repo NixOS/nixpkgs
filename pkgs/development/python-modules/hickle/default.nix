@@ -34,6 +34,9 @@ buildPythonPackage rec {
       url = "https://github.com/cjwatson/hickle/commit/246d8e82c805e2e49ea0abd39abc9b2d800bde59.patch";
       hash = "sha256-IEVw2K7S1nCkzgn9q0xghm4brfXcallNjzXpt2cRq1M=";
     })
+    # fixes test failing with numpy 2.3 as ndarray.tostring was deleted
+    # FIXME: delete once https://github.com/telegraphic/hickle/pull/187 is merged
+    ./numpy-2.3-ndarray-tostring.patch
   ];
 
   build-system = [ setuptools ];
