@@ -6,7 +6,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "2048-in-terminal";
   version = "unstable-2022-06-13";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/alewmoose/2048-in-terminal";
     description = "Animated console version of the 2048 game";
     mainProgram = "2048-in-terminal";
     license = lib.licenses.mit;
