@@ -492,6 +492,10 @@ let
       orga = "crystal-lang-tools";
       repo = "tree-sitter-crystal";
     };
+    "tree-sitter-qmljs" = {
+      orga = "yuja";
+      repo = "tree-sitter-qmljs";
+    };
   };
 
   allGrammars =
