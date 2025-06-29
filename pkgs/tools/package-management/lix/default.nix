@@ -154,13 +154,13 @@ lib.makeExtensible (self: {
     attrName = "lix_2_91";
 
     lix-args = rec {
-      version = "2.91.2";
+      version = "2.91.3";
 
       src = fetchFromGitHub {
         owner = "lix-project";
         repo = "lix";
         rev = version;
-        hash = "sha256-TkRjskDnxMPugdLQE/LqIh59RYQFJLYpIuL8YZva2lM=";
+        hash = "sha256-b5d+HnPcyHz0ZJW1+LZl4qm4LGTB/TiaDFQVlVL2xpE=";
       };
 
       docCargoDeps = rustPlatform.fetchCargoVendor {
