@@ -2616,6 +2616,10 @@ self: super: with self; {
 
   clikit = callPackage ../development/python-modules/clikit { };
 
+  clingo = callPackage ../development/python-modules/clingo {
+    inherit (pkgs) clingo;
+  };
+
   clint = callPackage ../development/python-modules/clint { };
 
   clintermission = callPackage ../development/python-modules/clintermission { };
