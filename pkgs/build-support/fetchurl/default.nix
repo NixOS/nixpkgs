@@ -206,80 +206,83 @@ assert
       curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];'' true;
 
 stdenvNoCC.mkDerivation (
+  finalAttrs:
   (
-    if (pname != "" && version != "") then
-      { inherit pname version; }
-    else
-      {
-        name =
-          if showURLs then
-            "urls"
-          else if name != "" then
-            name
-          else
-            baseNameOf (toString (builtins.head urls_));
-      }
+    (
+      if (pname != "" && version != "") then
+        { inherit pname version; }
+      else
+        {
+          name =
+            if showURLs then
+              "urls"
+            else if name != "" then
+              name
+            else
+              baseNameOf (toString (builtins.head urls_));
+        }
+    )
+    // {
+      builder = ./builder.sh;
+
+      nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
+
+      urls = urls_;
+
+      # If set, prefer the content-addressable mirrors
+      # (http://tarballs.nixos.org) over the original URLs.
+      preferHashedMirrors = false;
+
+      # New-style output content requirements.
+      inherit (hash_) outputHashAlgo outputHash;
+
+      # Disable TLS verification only when we know the hash and no credentials are
+      # needed to access the resource
+      SSL_CERT_FILE =
+        if
+          (
+            finalAttrs.outputHash == ""
+            || finalAttrs.outputHash == lib.fakeSha256
+            || finalAttrs.outputHash == lib.fakeSha512
+            || finalAttrs.outputHash == lib.fakeHash
+            || netrcPhase != null
+          )
+        then
+          "${cacert}/etc/ssl/certs/ca-bundle.crt"
+        else
+          "/no-cert-file.crt";
+
+      outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
+
+      inherit curlOpts;
+      curlOptsList = lib.escapeShellArgs curlOptsList;
+      inherit
+        showURLs
+        mirrorsFile
+        postFetch
+        downloadToTemp
+        executable
+        ;
+
+      impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
+
+      nixpkgsVersion = lib.trivial.release;
+
+      inherit preferLocalBuild;
+
+      postHook =
+        if netrcPhase == null then
+          null
+        else
+          ''
+            ${netrcPhase}
+            curlOpts="$curlOpts --netrc-file $PWD/netrc"
+          '';
+
+      inherit meta;
+      passthru = {
+        inherit url;
+      } // passthru;
+    }
   )
-  // {
-    builder = ./builder.sh;
-
-    nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
-
-    urls = urls_;
-
-    # If set, prefer the content-addressable mirrors
-    # (http://tarballs.nixos.org) over the original URLs.
-    preferHashedMirrors = false;
-
-    # New-style output content requirements.
-    inherit (hash_) outputHashAlgo outputHash;
-
-    # Disable TLS verification only when we know the hash and no credentials are
-    # needed to access the resource
-    SSL_CERT_FILE =
-      if
-        (
-          hash_.outputHash == ""
-          || hash_.outputHash == lib.fakeSha256
-          || hash_.outputHash == lib.fakeSha512
-          || hash_.outputHash == lib.fakeHash
-          || netrcPhase != null
-        )
-      then
-        "${cacert}/etc/ssl/certs/ca-bundle.crt"
-      else
-        "/no-cert-file.crt";
-
-    outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
-
-    inherit curlOpts;
-    curlOptsList = lib.escapeShellArgs curlOptsList;
-    inherit
-      showURLs
-      mirrorsFile
-      postFetch
-      downloadToTemp
-      executable
-      ;
-
-    impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
-
-    nixpkgsVersion = lib.trivial.release;
-
-    inherit preferLocalBuild;
-
-    postHook =
-      if netrcPhase == null then
-        null
-      else
-        ''
-          ${netrcPhase}
-          curlOpts="$curlOpts --netrc-file $PWD/netrc"
-        '';
-
-    inherit meta;
-    passthru = {
-      inherit url;
-    } // passthru;
-  }
 )
