@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   setOutputFlags = false; # some aren't supported
 
+  postPatch = ''
+    sed -i '1i #include <stdbool.h>' include/curses.h.in
+  '';
+
   # see other isOpenBSD clause below
   configurePlatforms =
     if stdenv.hostPlatform.isOpenBSD then
@@ -95,6 +99,22 @@ stdenv.mkDerivation (finalAttrs: {
       # which assumes that your openbsd is from the 90s, leading to a truly awful compiler/linker configuration.
       # No, autoreconfHook doesn't work.
       "--host=${stdenv.hostPlatform.config}${stdenv.cc.libc.version}"
+    ]
+    # Without this override, the upstream configure system results in
+    #
+    #     typedef unsigned char NCURSES_BOOL;
+    #     #define bool NCURSES_BOOL;
+    #
+    # Which breaks C++ bindings:
+    #
+    #      > /nix/store/[...]-gcc-15.1.0/include/c++/15.1.0/cstddef:81:21: error: redefinition of 'struct std::__byte_operand<unsigned char>'
+    #      >    81 |   template<> struct __byte_operand<unsigned char> { using __type = byte; };
+    #      >       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #      > /nix/store/[...]-gcc-15.1.0/include/c++/15.1.0/cstddef:78:21: note: previous definition of 'struct std::__byte_operand<unsigned char>'
+    #      >    78 |   template<> struct __byte_operand<bool> { using __type = byte; };
+    #
+    ++ [
+      "cf_cv_type_of_bool=bool"
     ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
