@@ -34,15 +34,18 @@ doQmlLint() {
 qmlLintCheck() {
     echo "Running qmlLintCheck"
 
-    find "$out" -name '*.qml' | while IFS= read -r i; do
-        # qmllint has no "disable all lints" option, so disable them one by one
-        if [ -n "$(doQmlLint "$i" --json - | @jq@ '.files[] | .warnings[] | select(.id == "import") | select(.message | startswith("Failed to import"))')" ]; then
-            echo "qmllint failed for file $i:"
+    # intentionally scoped to the default QML prefix, as things in $out/share etc
+    # can be used in random weird contexts and will cause spurious errors
+    if [ -d "$out/$qtQmlPrefix" ]; then
+      find "$out/$qtQmlPrefix" -name '*.qml' | while IFS= read -r i; do
+          if [ -n "$(doQmlLint "$i" --json - | @jq@ '.files[] | .warnings[] | select(.id == "import") | select(.message | startswith("Failed to import"))')" ]; then
+              echo "qmllint failed for file $i:"
 
-            doQmlLint "$i"
-            exit 1
-        fi
-    done
+              doQmlLint "$i"
+              exit 1
+          fi
+      done
+    fi
 }
 
 if [ -z "${dontQmlLint-}" ]; then
