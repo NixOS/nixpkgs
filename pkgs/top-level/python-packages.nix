@@ -2438,6 +2438,8 @@ self: super: with self; {
 
   channels-redis = callPackage ../development/python-modules/channels-redis { };
 
+  charachorderpy = callPackage ../development/python-modules/charachorderpy { };
+
   character-encoding-utils = callPackage ../development/python-modules/character-encoding-utils { };
 
   characteristic = callPackage ../development/python-modules/characteristic { };
