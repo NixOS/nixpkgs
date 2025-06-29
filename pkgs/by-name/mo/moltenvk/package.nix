@@ -110,6 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional enablePrivateAPIUsage "-DMVK_USE_METAL_PRIVATE_API=1"
   );
 
+  # MoltenVK does its own checks for availability by probing the version at runtime and checking the MSL version.
+  allowUnguardedAvailability = true;
+
   env.NIX_LDFLAGS = toString [
     "-lglslang"
     "-lSPIRV"
