@@ -189,6 +189,7 @@ in
     _module.args.confined = true;
   };
   alice-lg = runTest ./alice-lg.nix;
+  alist = runTest ./alist.nix;
   alloy = runTest ./alloy.nix;
   allTerminfo = runTest ./all-terminfo.nix;
   alps = runTest ./alps.nix;
