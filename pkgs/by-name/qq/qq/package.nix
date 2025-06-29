@@ -54,6 +54,7 @@ let
       bot-wxt1221
       fee1-dead
       prince213
+      ryan4yin
     ];
   };
 in

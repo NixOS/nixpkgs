@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       pSub
       rodrgz
       defelo
+      ryan4yin
     ];
     inherit (zig_0_14.meta) platforms;
     mainProgram = "ncdu";

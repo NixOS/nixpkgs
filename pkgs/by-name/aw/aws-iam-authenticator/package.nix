@@ -37,6 +37,9 @@ buildGoModule rec {
     mainProgram = "aws-iam-authenticator";
     changelog = "https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ srhb ];
+    maintainers = with maintainers; [
+      srhb
+      ryan4yin
+    ];
   };
 }
