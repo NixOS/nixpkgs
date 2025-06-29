@@ -48,6 +48,12 @@ let
     configureFlags =
       [
         "--with-pic"
+        # gcc-15 have c23 standard by default, where "void foo()" now means "void foo(void)".
+        #
+        # The "configure" script relies on c17 and below semantics for "long long
+        # reliability test 1" (defined in aclocal.m4)
+        "CFLAGS=-std=c99"
+
         (lib.enableFeature cxx "cxx")
         # Build a "fat binary", with routines for several sub-architectures
         # (x86), except on Solaris where some tests crash with "Memory fault".
