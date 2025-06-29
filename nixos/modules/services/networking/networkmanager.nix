@@ -526,7 +526,7 @@ in
       "networking"
       "networkmanager"
       "enableStrongSwan"
-    ] "Pass `pkgs.networkmanager_strongswan` into `networking.networkmanager.plugins` instead.")
+    ] "Pass `pkgs.networkmanager-strongswan` into `networking.networkmanager.plugins` instead.")
     (mkRemovedOptionModule [
       "networking"
       "networkmanager"
