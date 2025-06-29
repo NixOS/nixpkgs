@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -19,13 +19,13 @@
   dotnet-runtime_7,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
-  version = "1.20.11";
+  version = "1.20.12";
 
-  src = fetchurl {
-    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-    hash = "sha256-IOreg6j/jLhOK8jm2AgSnYQrql5R6QxsshvPs8OUcQA=";
+  src = fetchzip {
+    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
+    hash = "sha256-GlxBpnQBk1yZfh/uPK83ODrwn/VoORA3gGkvcXy+nV8=";
   };
 
   nativeBuildInputs = [
@@ -33,9 +33,7 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [ dotnet-runtime_7 ];
-
-  runtimeLibs = lib.makeLibraryPath (
+  env.runtimeLibs = lib.makeLibraryPath (
     [
       gtk2
       sqlite
@@ -74,33 +72,45 @@ stdenv.mkDerivation rec {
     cp $out/share/vintagestory/assets/gameicon.xpm $out/share/pixmaps/vintagestory.xpm
     cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
 
+    rm -rvf $out/share/vintagestory/{install,run,server}.sh
+
     runHook postInstall
   '';
 
   preFixup =
+    let
+      wrapperFlags = lib.trim ''
+        --prefix LD_LIBRARY_PATH : "''${runtimeLibs[@]}" \
+        --set-default mesa_glthread true
+      '';
+    in
     ''
-      makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      makeWrapper ${lib.getExe dotnet-runtime_7} $out/bin/vintagestory \
+        ${wrapperFlags} \
         --add-flags $out/share/vintagestory/Vintagestory.dll
-      makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+
+      makeWrapper ${lib.getExe dotnet-runtime_7} $out/bin/vintagestory-server \
+        ${wrapperFlags} \
         --add-flags $out/share/vintagestory/VintagestoryServer.dll
-    ''
-    + ''
+
       find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
         local filename="$(basename -- "$file")"
         ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
       done
     '';
 
-  meta = with lib; {
+  meta = {
     description = "In-development indie sandbox game about innovation and exploration";
     homepage = "https://www.vintagestory.at/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       artturin
       gigglesquid
       niraethm
+      dtomvan
     ];
+    mainProgram = "vintagestory";
   };
-}
+})
