@@ -135,6 +135,18 @@ in
           `"all"` means that all locales supported by
           Glibc will be installed.  A full list of supported locales
           can be found at <https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED>.
+
+          `i18n.defaultLocale` and `i18n.extraLocaleSettings` are added to
+          `supportedLocales` by default. To add other locales to this list
+          without repeating the default expression, use this expression:
+
+          ```nix
+          i18n.supportedLocales = options.i18n.supportedLocales.default ++ [
+            "en_US.UTF-8/UTF-8"
+            "nl_NL.UTF-8/UTF-8"
+            "nl_NL/ISO-8859-1"
+          ]
+          ```
         '';
       };
 
