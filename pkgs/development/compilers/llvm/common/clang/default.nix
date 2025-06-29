@@ -158,6 +158,9 @@ stdenv.mkDerivation (
         (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
         (lib.cmakeFeature "CLANG_TABLEGEN" "${buildLlvmTools.tblgen}/bin/clang-tblgen")
       ]
+      ++ lib.optionals (lib.versionAtLeast release_version "21") [
+        (lib.cmakeFeature "CLANG_RESOURCE_DIR" "${placeholder "lib"}/lib/clang/${lib.versions.major release_version}")
+      ]
       ++ lib.optionals (lib.versionAtLeast release_version "17") [
         (lib.cmakeBool "LLVM_INCLUDE_TESTS" false)
       ]
@@ -190,6 +193,11 @@ stdenv.mkDerivation (
           --replace-fail 'StringRef P = llvm::sys::path::parent_path(D.Dir);' 'StringRef P = "${lib.getLib libllvm}";'
         (cd tools && ln -s ../../clang-tools-extra extra)
       ''
+      + lib.optionalString (lib.versionAtLeast release_version "21") ''
+        # This patch needs to be applied to the parent of the clang directory.
+        chmod -R +w ../cmake
+        (cd .. && patch -p1 < ${./resource-dir.diff})
+      ''
       + lib.optionalString stdenv.hostPlatform.isMusl ''
         sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
       '';
@@ -211,7 +219,7 @@ stdenv.mkDerivation (
         mkdir -p $lib/lib/clang
         mv $lib/lib/17 $lib/lib/clang/17
       '')
-      + (lib.optionalString (lib.versionAtLeast release_version "19") ''
+      + (lib.optionalString ((lib.versionAtLeast release_version "19") && !(lib.versionAtLeast release_version "21")) ''
         mv $out/lib/clang $lib/lib/clang
       '')
       + ''
