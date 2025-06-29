@@ -325,6 +325,7 @@
   ./programs/traceroute.nix
   ./programs/trippy.nix
   ./programs/tsm-client.nix
+  ./programs/uboot-fwenv.nix
   ./programs/turbovnc.nix
   ./programs/udevil.nix
   ./programs/usbtop.nix
