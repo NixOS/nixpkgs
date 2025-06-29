@@ -495,6 +495,7 @@
   ./services/continuous-integration/hercules-ci-agent/default.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/jenkins/default.nix
+  ./services/continuous-integration/jenkins/credentials.nix
   ./services/continuous-integration/jenkins/job-builder.nix
   ./services/continuous-integration/jenkins/slave.nix
   ./services/continuous-integration/woodpecker/agents.nix
