@@ -39,7 +39,7 @@ appimageTools.wrapType2 {
     install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
   '';
 
-  buildInputs = [
+  extraLibraries = [
     xorg.libxshmfence
   ];
 
