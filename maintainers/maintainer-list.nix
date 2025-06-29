@@ -10552,6 +10552,11 @@
     github = "id3v1669";
     githubId = 57532211;
   };
+  idabzo = {
+    github = "idabzo";
+    githubId = 12761234;
+    name = "Ida Bzowska";
+  };
   idlip = {
     name = "Dilip";
     email = "igoldlip@gmail.com";
