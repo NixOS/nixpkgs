@@ -466,6 +466,15 @@ in
       '';
     };
 
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      example = literalExpression "[ pkgs.ffmpeg ]";
+      description = ''
+        Extra packages to make available to nextcloud's PATH.
+        Add `pkgs.ffmpeg` here to enable video thumbnail generation.
+      '';
+    };
+
     phpExtraExtensions = mkOption {
       type = with types; functionTo (listOf package);
       default = all: [ ];
@@ -1323,7 +1332,16 @@ in
           phpEnv = {
             CREDENTIALS_DIRECTORY = "/run/phpfpm-nextcloud/credentials/";
             NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
-            PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
+            PATH = lib.makeBinPath (
+              [
+                "/run/wrappers"
+                "/nix/var/nix/profiles/default"
+                "/run/current-system/sw"
+                "/usr"
+                "" # adds "/bin" to PATH
+              ]
+              ++ cfg.extraPackages
+            );
           };
           settings =
             mapAttrs (name: mkDefault) {
