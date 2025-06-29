@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   autoreconfHook,
+  gettext,
   libiconv,
 }:
 
@@ -17,7 +18,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-7Ch51nJ5BeRqs4PEIPnjCGk+Nm2ydgJQCtkcpihXun8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gettext
+  ];
+
+  # These changes have all been made in HEAD, across several commits
+  # amongst other changes.
+  # See https://gitlab.com/grobian/html2text/-/merge_requests/57
+  patches = [ ./gettext-0.25.patch ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
