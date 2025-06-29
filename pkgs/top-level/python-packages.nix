@@ -1817,6 +1817,8 @@ self: super: with self; {
 
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
+  bibtexparser_2 = callPackage ../development/python-modules/bibtexparser/2.nix { };
+
   bidict = callPackage ../development/python-modules/bidict { };
 
   bids-validator = callPackage ../development/python-modules/bids-validator { };
@@ -6372,6 +6374,8 @@ self: super: with self; {
   haversine = callPackage ../development/python-modules/haversine { };
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
+
+  hawkmoth = callPackage ../development/python-modules/hawkmoth { };
 
   haystack-ai = callPackage ../development/python-modules/haystack-ai { };
 
