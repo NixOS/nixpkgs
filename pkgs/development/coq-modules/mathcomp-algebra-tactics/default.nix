@@ -19,22 +19,26 @@ mkCoqDerivation {
   inherit version;
 
   defaultVersion =
-    with lib.versions;
     let
-      cmc = c: mc: [
-        c
-        mc
-      ];
+      case = coq: mc: out: {
+        case = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
     in
-    lib.switch [ coq.coq-version mathcomp-algebra.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
-      lib.mapAttrsToList (out: cases: { inherit cases out; }) {
-        "1.2.5" = cmc (range "8.20" "9.0") (isGe "2.4");
-        "1.2.4" = cmc (range "8.16" "9.0") (isGe "2.0");
-        "1.2.2" = cmc (range "8.16" "8.18") (isGe "2.0");
-        "1.1.1" = cmc (range "8.16" "8.19") (isGe "1.15");
-        "1.0.0" = cmc (range "8.13" "8.16") (isGe "1.12");
-      }
-    )) null;
+    with lib.versions;
+    lib.switch
+      [ coq.coq-version mathcomp-algebra.version ]
+      [
+        (case (range "8.20" "9.0") (isGe "2.4") "1.2.5")
+        (case (range "8.16" "9.0") (isGe "2.0") "1.2.4")
+        (case (range "8.16" "8.18") (isGe "2.0") "1.2.2")
+        (case (range "8.16" "8.19") (isGe "1.15") "1.1.1")
+        (case (range "8.13" "8.16") (isGe "1.12") "1.0.0")
+      ]
+      null;
 
   release."1.0.0".sha256 = "sha256-kszARPBizWbxSQ/Iqpf2vLbxYc6AjpUCLnSNlPcNfls=";
   release."1.1.1".sha256 = "sha256-5wItMeeTRoJlRBH3zBNc2VUZn6pkDde60YAvXTx+J3U=";
