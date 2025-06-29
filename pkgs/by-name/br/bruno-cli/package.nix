@@ -30,6 +30,11 @@ buildNpmPackage {
     pango
   ];
 
+  postConfigure = ''
+    # sh: line 1: /build/source/packages/bruno-converters/node_modules/.bin/rimraf: cannot execute: required file not found
+    patchShebangs packages/*/node_modules
+  '';
+
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   buildPhase = ''
@@ -37,6 +42,7 @@ buildNpmPackage {
 
     npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
+    npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-query
     npm run build --workspace=packages/bruno-requests
 
@@ -59,7 +65,7 @@ buildNpmPackage {
     rm node_modules/@usebruno/{app,tests,toml,schema}
 
     # heavy dependencies that seem to be unused
-    rm -rf node_modules/{@tabler,pdfjs-dist,*redux*,*babel*,prettier,@types*,*react*,*graphiql*}
+    rm -rf node_modules/{@tabler,pdfjs-dist,*redux*,prettier,@types*,*react*,*graphiql*}
     rm -r node_modules/.bin
 
     # unused file types
