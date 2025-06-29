@@ -277,7 +277,6 @@ dont-distribute-packages:
  - bitcoin-api-extra
  - bitcoin-block
  - bitcoin-tx
- - bitcoin-types
  - bitcoind-regtest
  - Bitly
  - bitly-cli
@@ -2205,7 +2204,6 @@ dont-distribute-packages:
  - MFlow
  - Mhailist
  - Michelangelo
- - micro-gateway
  - microformats2-types
  - MicroHs
  - MicrosoftTranslator
@@ -3148,7 +3146,6 @@ dont-distribute-packages:
  - sibe
  - sigma-ij
  - signals
- - signature
  - signify-hs
  - silvi
  - simgi
