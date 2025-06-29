@@ -127,15 +127,20 @@ let
     '';
   };
 
+  concatPluginAttrs = attr: lib.concatMap (plugin: plugin.${attr} or [ ]) cfg.plugins;
+  pluginRuntimeDeps = concatPluginAttrs "networkManagerRuntimeDeps";
+  pluginDbusDeps = concatPluginAttrs "networkManagerDbusDeps";
+  pluginTmpfilesRules = concatPluginAttrs "networkManagerTmpfilesRules";
+
   packages =
     [
       cfg.package
     ]
     ++ cfg.plugins
+    ++ pluginRuntimeDeps
     ++ lib.optionals (!delegateWireless && !enableIwd) [
       pkgs.wpa_supplicant
     ];
-
 in
 {
 
@@ -390,19 +395,6 @@ in
         '';
       };
 
-      enableStrongSwan = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the StrongSwan plugin.
-
-          If you enable this option the
-          `networkmanager_strongswan` plugin will be added to
-          the {option}`networking.networkmanager.plugins` option
-          so you don't need to do that yourself.
-        '';
-      };
-
       ensureProfiles = {
         profiles =
           with lib.types;
@@ -523,6 +515,11 @@ in
       [ "networking" "networkmanager" "fccUnlockScripts" ]
       [ "networking" "modemmanager" "fccUnlockScripts" ]
     )
+    (mkRemovedOptionModule [
+      "networking"
+      "networkmanager"
+      "enableStrongSwan"
+    ] "Pass `pkgs.networkmanager_strongswan` into `networking.networkmanager.plugins` instead.")
   ];
 
   ###### implementation
@@ -597,13 +594,10 @@ in
 
     systemd.tmpfiles.rules = [
       "d /etc/NetworkManager/system-connections 0700 root root -"
-      "d /etc/ipsec.d 0700 root root -"
-      "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
-
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
       # ppp isn't able to mkdir that directory at runtime
       "d /run/pppd/lock 0700 root root -"
-    ];
+    ] ++ pluginTmpfilesRules;
 
     systemd.services.NetworkManager = {
       wantedBy = [ "multi-user.target" ];
@@ -642,6 +636,7 @@ in
       wantedBy = [ "multi-user.target" ];
       before = [ "network-online.target" ];
       after = [ "NetworkManager.service" ];
+      path = pluginRuntimeDeps;
       script =
         let
           path = id: "/run/NetworkManager/system-connections/${id}.nmconnection";
@@ -680,10 +675,6 @@ in
         ];
       })
 
-      (mkIf cfg.enableStrongSwan {
-        networkmanager.plugins = [ pkgs.networkmanager_strongswan ];
-      })
-
       (mkIf enableIwd {
         wireless.iwd.enable = true;
       })
@@ -710,11 +701,10 @@ in
     security.polkit.enable = true;
     security.polkit.extraConfig = polkitConf;
 
-    services.dbus.packages =
-      packages
-      ++ optional cfg.enableStrongSwan pkgs.strongswanNM
-      ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
+    services.dbus.packages = packages ++ pluginDbusDeps ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
 
     services.udev.packages = packages;
+
+    systemd.services.NetworkManager.path = pluginRuntimeDeps;
   };
 }
