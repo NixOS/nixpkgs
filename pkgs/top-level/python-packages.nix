@@ -1817,6 +1817,8 @@ self: super: with self; {
 
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
+  bibtexparser_2 = callPackage ../development/python-modules/bibtexparser/2.nix { };
+
   bidict = callPackage ../development/python-modules/bidict { };
 
   bids-validator = callPackage ../development/python-modules/bids-validator { };
