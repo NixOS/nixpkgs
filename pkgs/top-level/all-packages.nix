@@ -9737,6 +9737,8 @@ with pkgs;
 
   zigStdenv = if stdenv.cc.isZig then stdenv else lowPrio zig.passthru.stdenv;
 
+  libzint = zint-qt.override { withGUI = false; };
+
   aroccPackages = recurseIntoAttrs (callPackage ../development/compilers/arocc { });
   arocc = aroccPackages.latest;
 
