@@ -14,6 +14,8 @@
   numpy,
   fmt_9,
   spdlog,
+  tl-optional,
+  metis,
 }:
 
 # TODO: This is WIP
@@ -32,6 +34,16 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-mEIszv14bHY/kCafIcXmG1h4sXQXTwVf5HhObDtm/SI=";
   };
+
+  postPatch = ''
+    substituteInPlace symforce/opt/CMakeLists.txt \
+      --replace-fail 'function(add_metis)' \
+      'function(add_metis)
+        find_package(METIS REQUIRED)
+        target_link_libraries(''${TARGET} PRIVATE METIS::METIS)
+      endfunction()
+      function(hacky_mchackface)'
+  '';
 
   patches = [
     ./latest-cmake.patch
@@ -59,9 +71,15 @@ buildPythonPackage rec {
     numpy
     fmt
     spdlog
+    tl-optional
+    metis
   ];
 
   meta = {
+    description = "Fast symbolic computation, code generation, and nonlinear optimization for robotics";
+    homepage = "https://github.com/symforce-org/symforce";
+    changelog = "https://github.com/symforce-org/symforce/releases/tag/v${version}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pandapip1 ];
   };
 }
