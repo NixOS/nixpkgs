@@ -1,0 +1,59 @@
+{
+  "name": "awk-language-server",
+  "description": "AWK Language Server",
+  "version": "0.10.6",
+  "author": "Stanislav Chernov <ch-e-st@yandex.ru>",
+  "publisher": "beaglefoot",
+  "license": "MIT",
+  "keywords": [
+    "language-server",
+    "language-server-protocol",
+    "lsp",
+    "awk",
+    "gawk"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "bin": "./server/out/cli.js",
+  "main": "./server/out/server.js",
+  "typings": "./server/out/server.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Beaglefoot/awk-language-server"
+  },
+  "dependencies": {
+    "minimist": "1.2.6",
+    "tree-sitter-awk": "0.7.2",
+    "vscode-languageserver": "^7.0.0",
+    "vscode-languageserver-textdocument": "^1.0.1",
+    "web-tree-sitter": "0.22.1"
+  },
+  "devDependencies": {
+    "@types/minimist": "1.2.2",
+    "@types/jest": "27.0.1",
+    "@types/node": "^12.12.0",
+    "jest": "27.1.1",
+    "prettier": "2.3.2",
+    "ts-jest": "27.0.5",
+    "typescript": "^4.3.2"
+  },
+  "scripts": {
+    "build:completion": "man gawk | gawk -f scripts/build_completion_list.awk > docs.json",
+    "prepublishOnly": "cd .. && yarn build:server:force",
+    "clean:client": "rm -rfv client/out/*",
+    "clean:server": "rm -rfv server/out/*",
+    "build": "yarn build:server && yarn build:client",
+    "build:client": "tsc -b client/tsconfig.json",
+    "build:client:force": "yarn clean:client && yarn build:client --verbose --force",
+    "build:server": "tsc -b server/tsconfig.json",
+    "build:server:force": "yarn clean:server && yarn build:server --verbose --force",
+    "postinstall": "cd client && yarn && cd ../server && yarn && cd ..",
+    "test": "jest",
+    "test:server": "jest server/tests",
+    "test:ci": "jest --runInBand",
+    "check:types": "tsc --noEmit -p server/tsconfig.json",
+    "check:style": "prettier --check **/*.ts"
+  },
+  "private": true
+}

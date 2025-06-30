@@ -1,0 +1,14 @@
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -67,11 +67,6 @@ console_scripts =
+ SCons.Tool.docbook = *.*
+ 
+ 
+-[options.data_files]
+-. = scons.1
+-    scons-time.1
+-    sconsign.1
+-
+ [sdist]
+     dist_dir=build/dist
+ 

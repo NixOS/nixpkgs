@@ -1,0 +1,43 @@
+diff --git a/cmake/Packages.cmake b/cmake/Packages.cmake
+index 07c60eb..c736b3e 100644
+--- a/amd/device-libs/cmake/Packages.cmake
++++ b/amd/device-libs/cmake/Packages.cmake
+@@ -12,24 +12,29 @@ set_target_properties(${target} PROPERTIES
+   IMPORTED_LOCATION \"${target_path}\")")
+ endforeach()
+ configure_file(AMDDeviceLibsConfig.cmake.in
+-  ${PACKAGE_PREFIX}/AMDDeviceLibsConfig.cmake
++  lib/cmake/AMDDeviceLibs/AMDDeviceLibsConfig.cmake
+   @ONLY)
+ 
+ 
+ set(install_path_suffix "amdgcn/bitcode")
+ 
+ # Generate the install-tree package.
+-# We do not know the absolute path to the intall tree until we are installed,
+-# so we calculate it dynamically in AMD_DEVICE_LIBS_PREFIX_CODE and use
+-# relative paths in the target imports in AMD_DEVICE_LIBS_TARGET_CODE.
+-set(AMD_DEVICE_LIBS_PREFIX_CODE "
++if(IS_ABSOLUTE "${CMAKE_INSTALL_PREFIX}")
++  set(AMD_DEVICE_LIBS_PREFIX_CODE "set(AMD_DEVICE_LIBS_PREFIX \"${CMAKE_INSTALL_PREFIX}\")")
++else()
++  # We do not know the absolute path to the install tree until we are installed,
++  # so we calculate it dynamically in AMD_DEVICE_LIBS_PREFIX_CODE and use
++  # relative paths in the target imports in AMD_DEVICE_LIBS_TARGET_CODE.
++  set(AMD_DEVICE_LIBS_PREFIX_CODE "
+ # Derive absolute install prefix from config file path.
+ get_filename_component(AMD_DEVICE_LIBS_PREFIX \"\${CMAKE_CURRENT_LIST_FILE}\" PATH)")
+-string(REGEX REPLACE "/" ";" count "${PACKAGE_PREFIX}")
+-foreach(p ${count})
+-  set(AMD_DEVICE_LIBS_PREFIX_CODE "${AMD_DEVICE_LIBS_PREFIX_CODE}
++  string(REGEX REPLACE "/" ";" count "${PACKAGE_PREFIX}")
++  foreach(p ${count})
++    set(AMD_DEVICE_LIBS_PREFIX_CODE "${AMD_DEVICE_LIBS_PREFIX_CODE}
+ get_filename_component(AMD_DEVICE_LIBS_PREFIX \"\${AMD_DEVICE_LIBS_PREFIX}\" PATH)")
+-endforeach()
++  endforeach()
++endif()
++
+ set(AMD_DEVICE_LIBS_TARGET_CODE)
+ foreach(target ${AMDGCN_LIB_LIST})
+   get_target_property(target_name ${target} ARCHIVE_OUTPUT_NAME)

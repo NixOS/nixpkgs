@@ -1,0 +1,67 @@
+diff -Naur --no-dereference ctx-source-old/configure.sh ctx-source-new/configure.sh
+--- ctx-source-old/configure.sh	1969-12-31 21:00:01.000000000 -0300
++++ ctx-source-new/configure.sh	2023-09-27 19:26:05.403569888 -0300
+@@ -42,15 +42,18 @@
+ ENABLE_SWITCH_DISPATCH=1
+ 
+ pkg-config sdl2    && HAVE_SDL=1
+-pkg-config babl    && HAVE_BABL=1
++
++pkg-config babl-0.1 && { HAVE_BABL=1; BABL_NAME=babl-0.1; }
++if [ $HAVE_BABL  != 1 ]; then
++    pkg-config babl && { HAVE_BABL=1; BABL_NAME=babl; }
++fi
++
+ pkg-config libcurl && HAVE_LIBCURL=1
+ pkg-config alsa    && HAVE_ALSA=1
+ pkg-config libdrm  && HAVE_KMS=1
+ #pkg-config harfbuzz && HAVE_HARFBUZZ=1
+ 
+-
+-
+-ARCH=`uname -m`
++: "${ARCH:="$(uname -m)"}"
+ 
+ case "$ARCH" in
+    "x86_64")  HAVE_SIMD=1 ;;
+@@ -224,8 +227,8 @@
+ if [ $HAVE_BABL  = 1 ];then
+   echo "#define CTX_BABL 1 " >> local.conf
+   echo "#define CTX_ENABLE_CM 1 " >> local.conf
+-  echo "CTX_CFLAGS+= `pkg-config babl  --cflags`" >> build.conf
+-  echo "CTX_LIBS+= `pkg-config babl  --libs` " >> build.conf
++  echo "CTX_CFLAGS+= `pkg-config "${BABL_NAME}" --cflags`" >> build.conf
++  echo "CTX_LIBS+= `pkg-config "${BABL_NAME}" --libs` " >> build.conf
+ else
+   echo "#define CTX_BABL 0 " >> local.conf
+   echo "#define CTX_ENABLE_CM 0 " >> local.conf
+@@ -335,7 +338,7 @@
+ #echo "Generating build.deps"
+ #make build.deps 2>/dev/null
+ 
+-echo -n "configuration summary, architecture $(arch)"
++echo -n "configuration summary, architecture $ARCH"
+ [ $HAVE_SIMD = 1 ]  && echo " SIMD multi-pass"
+ echo ""
+ echo "Backends:"
+diff -Naur --no-dereference ctx-source-old/Makefile ctx-source-new/Makefile
+--- ctx-source-old/Makefile	1969-12-31 21:00:01.000000000 -0300
++++ ctx-source-new/Makefile	2023-09-27 19:37:23.779830320 -0300
+@@ -206,8 +206,8 @@
+ libctx.a: itk.o deps.o $(CTX_OBJS) build.conf Makefile
+ 	$(AR) rcs $@ $(CTX_OBJS) deps.o itk.o
+ libctx.so: $(CTX_OBJS) deps.o itk.o build.conf Makefile
+-	$(LD) -shared $(LIBS) $(CTX_OBJS) deps.o itk.o $(CTX_LIBS) -o $@
+-	#$(LD) --retain-symbols-file=symbols -shared $(LIBS) $? $(CTX_LIBS)  -o $@
++	$(CCC) -shared $(LIBS) $(CTX_OBJS) deps.o itk.o $(CTX_LIBS) -o $@
++	#$(CCC) --retain-symbols-file=symbols -shared $(LIBS) $? $(CTX_LIBS)  -o $@
+ 
+ ctx: main.c ctx.h  build.conf Makefile $(TERMINAL_OBJS) $(MEDIA_HANDLERS_OBJS) libctx.a
+ 	$(CCC) main.c $(TERMINAL_OBJS) $(MEDIA_HANDLERS_OBJS) -o $@ $(CFLAGS) libctx.a $(LIBS) $(CTX_CFLAGS)  $(OFLAGS_LIGHT) -lpthread  $(CTX_LIBS)
+@@ -277,5 +277,5 @@
+ 	for a in `cat itk/css.h | tr ';' ' ' | tr ',' ' ' | tr ')' ' '|tr ':' ' ' | tr '{' ' ' | tr ' ' '\n' | grep 'SQZ_[a-z][0-9a-zA-Z_]*'| sort | uniq`;do b=`echo $$a|tail -c+5|tr '_' '-'`;echo "#define $$a `./squoze/squoze -33 $$b`u // \"$$b\"";done \
+ 		>> $@
+ 	echo '#endif' >> $@
+-static.inc: static/* static/*/* tools/gen_fs.sh
++static.inc: static/* tools/gen_fs.sh
+ 	./tools/gen_fs.sh static > $@

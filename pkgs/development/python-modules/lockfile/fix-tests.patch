@@ -1,0 +1,28 @@
+diff --git a/test/compliancetest.py b/test/compliancetest.py
+index bf4e59c..f55e258 100644
+--- a/test/compliancetest.py
++++ b/test/compliancetest.py
+@@ -6,18 +6,19 @@ import lockfile
+ 
+ 
+ class ComplianceTest(object):
+-    def __init__(self):
+-        self.saved_class = lockfile.LockFile
++    @classmethod
++    def setup_class(cls):
++        cls.saved_class = lockfile.LockFile
+ 
+     def _testfile(self):
+         """Return platform-appropriate file.  Helper for tests."""
+         import tempfile
+         return os.path.join(tempfile.gettempdir(), 'trash-%s' % os.getpid())
+ 
+-    def setup(self):
++    def setup_method(self):
+         lockfile.LockFile = self.class_to_test
+ 
+-    def teardown(self):
++    def teardown_method(self):
+         try:
+             tf = self._testfile()
+             if os.path.isdir(tf):

@@ -1,0 +1,23 @@
+From 9d3f6e9ff5e66af90a5d187d902f7893fb91c24b Mon Sep 17 00:00:00 2001
+From: "Kirill A. Korinsky" <kirill@korins.ky>
+Date: Fri, 1 Jul 2022 12:23:37 +0200
+Subject: [PATCH] Always check for pkg-config
+
+---
+ build/moz.configure/pkg.configure | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/build/moz.configure/pkg.configure b/build/moz.configure/pkg.configure
+index 6b460ae174eed..0056ecd7ae2d8 100644
+--- a/build/moz.configure/pkg.configure
++++ b/build/moz.configure/pkg.configure
+@@ -15,8 +15,7 @@ pkg_config = check_prog(
+     pkg_config,
+     bootstrap=depends(when=target_sysroot.bootstrapped)(lambda: "pkgconf"),
+     allow_missing=True,
+-    when=compile_environment
+-    & depends(target.os)(lambda os: os not in ("WINNT", "OSX", "Android")),
++    when=compile_environment,
+ )
+ 
+ 

@@ -1,0 +1,13 @@
+diff --git a/kitty_tests/ssh.py b/kitty_tests/ssh.py
+index 1f424146..d3cc191b 100644
+--- a/kitty_tests/ssh.py
++++ b/kitty_tests/ssh.py
+@@ -166,7 +166,7 @@ def test_ssh_bootstrap_with_different_launchers(self):
+             for sh in self.all_possible_sh:
+                 if sh == 'sh' or 'python' in sh:
+                     q = shutil.which(launcher)
+-                    if q:
++                    if q and not 'zsh' in q:
+                         with tempfile.TemporaryDirectory() as tdir:
+                             self.check_bootstrap(sh, tdir, test_script='env; exit 0', SHELL_INTEGRATION_VALUE='', launcher=q)
+ 

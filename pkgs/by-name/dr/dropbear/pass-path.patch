@@ -1,0 +1,39 @@
+diff --git a/src/svr-chansession.c b/src/svr-chansession.c
+index 9ae2e60..2db7598 100644
+--- a/src/svr-chansession.c
++++ b/src/svr-chansession.c
+@@ -948,6 +948,8 @@ static void addchildpid(struct ChanSess *chansess, pid_t pid) {
+ static void execchild(const void *user_data) {
+ 	const struct ChanSess *chansess = user_data;
+ 	char *usershell = NULL;
++	const char *path = (getuid() == 0) ? DEFAULT_ROOT_PATH : DEFAULT_PATH;
++	const char *ldpath = NULL;
+ 	char *cp = NULL;
+ 	char *envcp = getenv("LANG");
+ 	if (envcp != NULL) {
+@@ -965,6 +967,11 @@ static void execchild(const void *user_data) {
+ 	seedrandom();
+ #endif
+ 
++	if (getenv("PATH")) {
++		path = getenv("PATH");
++	}
++	ldpath = getenv("LD_LIBRARY_PATH");
++
+ 	/* clear environment if -e was not set */
+ 	/* if we're debugging using valgrind etc, we need to keep the LD_PRELOAD
+ 	 * etc. This is hazardous, so should only be used for debugging. */
+@@ -1012,10 +1019,9 @@ static void execchild(const void *user_data) {
+ 	addnewvar("LOGNAME", ses.authstate.pw_name);
+ 	addnewvar("HOME", ses.authstate.pw_dir);
+ 	addnewvar("SHELL", get_user_shell());
+-	if (getuid() == 0) {
+-		addnewvar("PATH", DEFAULT_ROOT_PATH);
+-	} else {
+-		addnewvar("PATH", DEFAULT_PATH);
++	addnewvar("PATH", path);
++	if (ldpath != NULL) {
++		addnewvar("LD_LIBRARY_PATH", ldpath);
+ 	}
+ 	if (cp != NULL) {
+ 		addnewvar("LANG", cp);

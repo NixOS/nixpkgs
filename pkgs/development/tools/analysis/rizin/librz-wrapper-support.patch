@@ -1,0 +1,13 @@
+diff --git a/librz/util/path.c b/librz/util/path.c
+index 8ea3d67..f4a8918 100644
+--- a/librz/util/path.c
++++ b/librz/util/path.c
+@@ -35,6 +35,8 @@ static void fini_portable_prefix(void) {
+ }
+ 
+ static char *set_portable_prefix(void) {
++	return rz_sys_getenv("NIX_RZ_PREFIX");
++
+ 	char *pid_to_path = rz_sys_pid_to_path(rz_sys_getpid());
+ 	if (!pid_to_path) {
+ 		return NULL;

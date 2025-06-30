@@ -1,0 +1,77 @@
+[
+  {
+    "pname": "BouncyCastle.Cryptography",
+    "version": "2.4.0",
+    "hash": "sha256-DoDZNWtYM+0OLIclOEZ+tjcGXymGlXvdvq2ZMPmiAJA="
+  },
+  {
+    "pname": "CsvHelper",
+    "version": "30.0.1",
+    "hash": "sha256-lCfo0ZQUJFXABIi18fy/alC1YGwkwM+lGy2zL47RAWw="
+  },
+  {
+    "pname": "LiteDB",
+    "version": "5.0.17",
+    "hash": "sha256-ltZUyxeqaTX/2ppdUMTTzVO0npZuRw43boZZUNAD0Ig="
+  },
+  {
+    "pname": "MailKit",
+    "version": "4.8.0",
+    "hash": "sha256-ONvrVOwjxyNrIQM8FMzT5mLzlU56Kc8oOwkzegNAiXM="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "8.0.0",
+    "hash": "sha256-75KzEGWjbRELczJpCiJub+ltNUMMbz5A/1KQU+5dgP8="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging.Abstractions",
+    "version": "8.0.0",
+    "hash": "sha256-Jmddjeg8U5S+iBTwRlVAVLeIHxc4yrrNgqVMOB7EjM4="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Abstractions",
+    "version": "7.3.1",
+    "hash": "sha256-lbZKfnulWcM4Mxbz6Hkrp/lM41hsOfCnsHLEb+u2czc="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.JsonWebTokens",
+    "version": "7.3.1",
+    "hash": "sha256-C7uySnKBB0e5Wf6z8YNtjbtBbhalJMdqx0EWVcYy7Q4="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Logging",
+    "version": "7.3.1",
+    "hash": "sha256-6OHGsItAXicCSlW0ghCy5szNi6HwhlCmbykbN1O5yAw="
+  },
+  {
+    "pname": "Microsoft.IdentityModel.Tokens",
+    "version": "7.3.1",
+    "hash": "sha256-qfTNU0g9QA8kV42VTAez1pSTmfFRJBbeTbGn/nfGFUU="
+  },
+  {
+    "pname": "MimeKit",
+    "version": "4.8.0",
+    "hash": "sha256-4EB54ktBXuq5QRID9i8E7FzU7YZTE4wwH+2yr7ivi/Q="
+  },
+  {
+    "pname": "Npgsql",
+    "version": "8.0.5",
+    "hash": "sha256-vGIznPqwfhg8wY9bt5XlinyNWMr5kJ2jJZHDXc73uhI="
+  },
+  {
+    "pname": "System.Formats.Asn1",
+    "version": "8.0.1",
+    "hash": "sha256-may/Wg+esmm1N14kQTG4ESMBi+GQKPp0ZrrBo/o6OXM="
+  },
+  {
+    "pname": "System.IdentityModel.Tokens.Jwt",
+    "version": "7.3.1",
+    "hash": "sha256-Si60aDtJSjvXvY5ZkVQKF3JzxAkmkAKOw5D/q8CwuyQ="
+  },
+  {
+    "pname": "System.Security.Cryptography.Pkcs",
+    "version": "8.0.0",
+    "hash": "sha256-yqfIIeZchsII2KdcxJyApZNzxM/VKknjs25gDWlweBI="
+  }
+]

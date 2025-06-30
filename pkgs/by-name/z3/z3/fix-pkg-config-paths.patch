@@ -1,0 +1,21 @@
+diff --git a/z3.pc.cmake.in b/z3.pc.cmake.in
+index 436dd6208..dd1e179c7 100644
+--- a/z3.pc.cmake.in
++++ b/z3.pc.cmake.in
+@@ -1,13 +1,10 @@
+-prefix=@CMAKE_INSTALL_PREFIX@
+-exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-sharedlibdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: z3
+ Description: The Z3 Theorem Prover
+ Version: @Z3_VERSION@
+ 
+ Requires:
+-Libs: -L${libdir} -L${sharedlibdir} -lz3
++Libs: -L${libdir} -lz3
+ Cflags: -I${includedir}

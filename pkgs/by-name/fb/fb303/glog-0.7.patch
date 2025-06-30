@@ -1,0 +1,29 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 477b8d6a55..cfeae9ab3f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -56,7 +56,7 @@
+ 
+ find_package(Gflags REQUIRED)
+ 
+-find_package(Glog MODULE REQUIRED)
++find_package(Glog CONFIG REQUIRED)
+ 
+ find_package(folly CONFIG REQUIRED)
+ 
+@@ -88,7 +88,6 @@
+ 
+ target_include_directories(fb303 PUBLIC
+   ${GFLAGS_INCLUDE_DIR}
+-  ${GLOG_INCLUDE_DIR}
+   ${DOUBLE_CONVERSION_INCLUDE_DIR}
+   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
+   $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>
+@@ -98,6 +97,7 @@
+   fb303_thrift_cpp
+   Folly::folly
+   FBThrift::thrift
++  glog::glog
+ )
+ 
+ install(
