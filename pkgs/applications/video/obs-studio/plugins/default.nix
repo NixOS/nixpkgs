@@ -26,6 +26,8 @@
 
   obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
 
+  obs-browser-transition = callPackage ./obs-browser-transition.nix { };
+
   obs-color-monitor = qt6Packages.callPackage ./obs-color-monitor.nix { };
 
   obs-command-source = callPackage ./obs-command-source.nix { };
