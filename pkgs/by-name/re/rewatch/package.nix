@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rewatch";
-  version = "1.0.12";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "rescript-lang";
     repo = "rewatch";
     tag = "v${version}";
-    hash = "sha256-UoUL3zeyrs3FdQVyAo0FsuNiPtiITbuNDdEXxWg3yiY=";
+    hash = "sha256-HP4GwRGtt3iUS/B8ouwZKlr5YQgWy5tRJi38MXe20xM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-scm2Uv68jN249RH2Fr8ofFjLTOv04wtDKZ5prDl4REU=";
+  cargoHash = "sha256-h2u53asRmRMHo1uVlR2uy2UwJyJyjSHX2182F8DqYfE=";
 
   doCheck = true;
 
