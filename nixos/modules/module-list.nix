@@ -193,6 +193,7 @@
   ./programs/digitalbitbox/default.nix
   ./programs/direnv.nix
   ./programs/dmrconfig.nix
+  ./programs/dotool.nix
   ./programs/droidcam.nix
   ./programs/dublin-traceroute.nix
   ./programs/ecryptfs.nix
