@@ -20,9 +20,11 @@ let
       darwin,
       freebsd,
       glibc,
+      liburing,
       libuuid,
       libxml2,
       lz4,
+      numactl,
       openssl,
       readline,
       tzdata,
@@ -51,6 +53,10 @@ let
 
       # bonjour
       bonjourSupport ? false,
+
+      # Curl
+      curlSupport ? true,
+      curl,
 
       # GSSAPI
       gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
@@ -135,6 +141,9 @@ let
       olderThan = lib.versionOlder version;
       lz4Enabled = atLeast "14";
       zstdEnabled = atLeast "15";
+      libcurlEnabled = atLeast "18" && curlSupport;
+      libnumaEnabled = atLeast "18" && stdenv'.hostPlatform.isLinux;
+      liburingEnabled = atLeast "18" && stdenv'.hostPlatform.isLinux;
 
       dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
 
@@ -249,6 +258,9 @@ let
         ++ lib.optionals jitSupport [ llvmPackages.llvm ]
         ++ lib.optionals lz4Enabled [ lz4 ]
         ++ lib.optionals zstdEnabled [ zstd ]
+        ++ lib.optionals libcurlEnabled [ curl ]
+        ++ lib.optionals liburingEnabled [ liburing ]
+        ++ lib.optionals libnumaEnabled [ numactl ]
         ++ lib.optionals systemdSupport [ systemdLibs ]
         ++ lib.optionals gssSupport [ libkrb5 ]
         ++ lib.optionals pamSupport [ linux-pam ]
@@ -320,6 +332,9 @@ let
         ]
         ++ lib.optionals lz4Enabled [ "--with-lz4" ]
         ++ lib.optionals zstdEnabled [ "--with-zstd" ]
+        ++ lib.optionals libcurlEnabled [ "--with-libcurl" ]
+        ++ lib.optionals libnumaEnabled [ "--with-libnuma" ]
+        ++ lib.optionals liburingEnabled [ "--with-liburing" ]
         ++ lib.optionals gssSupport [ "--with-gssapi" ]
         ++ lib.optionals pythonSupport [ "--with-python" ]
         ++ lib.optionals jitSupport [ "--with-llvm" ]
