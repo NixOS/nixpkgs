@@ -36,6 +36,10 @@ buildXenPackage.override { inherit python3Packages; } {
       url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-07.patch";
       hash = "sha256-9S85nkQ9Nn0cMzyRe4KGrFUaLggVxXBeKhoFF4R0y78=";
     })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa470.patch";
+      hash = "sha256-zhMZ6pCZtt0ocgsMFVqthMaof46lMMTaYmlepMXVJqM=";
+    })
   ];
   rev = "f3362182e028119e5ca2ab37e5628b9fa6d21254";
   hash = "sha256-c6LXYJ61umJb/r5/utwBWLAfy+tIvpK7QLjI3zKfr6Y=";
