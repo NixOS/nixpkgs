@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ruamel-yaml";
-  version = "0.18.10";
+  version = "0.18.14";
   pyproject = true;
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/ruamel-yaml/code";
     # tag = version;
     rev = version;
-    hash = "sha256-bO+UMnIKZHz1+cPrrnhyzowUCLFsWV/OHaGmfipYt7c=";
+    hash = "sha256-HDkPPp1xI3uoGYlS9mwPp1ZjG2gKvx6vog0Blj6tBuI=";
   };
 
   patches = [
