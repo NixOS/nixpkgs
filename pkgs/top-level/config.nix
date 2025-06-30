@@ -159,6 +159,23 @@ let
       '';
     };
 
+    allowUnfreePackages = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      example = [ "ut1999" ];
+      description = ''
+        Allows specific unfree packages to be used.
+
+        This option overrides `nixpkgs.config.allowUnfreePredicate` with a function that permits the listed package names.
+
+        Unlike `nixpkgs.config.allowUnfreePredicate`, this option merges additively, similar to `environment.systemPackages`.
+        This enables defining allowed unfree packages in multiple modules, close to where they are used.
+
+        This avoids the need to centralize all unfree package declarations or globally enable unfree packages via
+        `nixpkgs.config.allowUnfree = true`.
+      '';
+    };
+
     allowBroken = mkOption {
       type = types.bool;
       default = false;
