@@ -4,6 +4,11 @@
   pkgs,
   ...
 }:
+
+let
+  cfg = config.services.pfix-srsd;
+in
+
 {
 
   ###### interface
@@ -32,6 +37,14 @@
         type = lib.types.path;
         default = "/var/lib/pfix-srsd/secrets";
       };
+
+      configurePostfix = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to configure the local Postfix instance to use pfix-srsd.
+        '';
+      };
     };
   };
 
@@ -40,6 +53,13 @@
   config = lib.mkIf config.services.pfix-srsd.enable {
     environment = {
       systemPackages = [ pkgs.pfixtools ];
+    };
+
+    services.postfix.config = lib.mkIf (config.services.postfix.enable && cfg.configurePostfix) {
+      sender_canonical_maps = [ "tcp:127.0.0.1:10001" ];
+      sender_canonical_classes = [ "envelope_sender" ];
+      recipient_canonical_maps = [ "tcp:127.0.0.1:10002" ];
+      recipient_canonical_classes = [ "envelope_recipient" ];
     };
 
     systemd.services.pfix-srsd = {
