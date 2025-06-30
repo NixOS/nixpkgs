@@ -7308,6 +7308,8 @@ self: super: with self; {
 
   json-api-doc = callPackage ../development/python-modules/json-api-doc { };
 
+  json-flatten = callPackage ../development/python-modules/json-flatten { };
+
   json-home-client = callPackage ../development/python-modules/json-home-client { };
 
   json-logging = callPackage ../development/python-modules/json-logging { };
