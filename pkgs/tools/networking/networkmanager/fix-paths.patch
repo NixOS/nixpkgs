@@ -11,10 +11,10 @@ index 148acade5c..6395fbfbe5 100644
  
  LABEL="nm_drivers_end"
 diff --git a/src/core/devices/nm-device.c b/src/core/devices/nm-device.c
-index f3441508ab..7cde8d7d39 100644
+index e310a9c680..ed8d838e43 100644
 --- a/src/core/devices/nm-device.c
 +++ b/src/core/devices/nm-device.c
-@@ -14839,14 +14839,14 @@ nm_device_start_ip_check(NMDevice *self)
+@@ -15239,14 +15239,14 @@ nm_device_start_ip_check(NMDevice *self)
              gw = nm_l3_config_data_get_best_default_route(l3cd, AF_INET);
              if (gw) {
                  nm_inet4_ntop(NMP_OBJECT_CAST_IP4_ROUTE(gw)->gateway, buf);
@@ -32,7 +32,7 @@ index f3441508ab..7cde8d7d39 100644
              }
          }
 diff --git a/src/libnmc-base/nm-vpn-helpers.c b/src/libnmc-base/nm-vpn-helpers.c
-index cbe76f5f1c..8515f94994 100644
+index cbe76f5f1c..6ec684f9fe 100644
 --- a/src/libnmc-base/nm-vpn-helpers.c
 +++ b/src/libnmc-base/nm-vpn-helpers.c
 @@ -284,15 +284,6 @@ nm_vpn_openconnect_authenticate_helper(NMSettingVpn *s_vpn, GPtrArray *secrets,
@@ -51,7 +51,7 @@ index cbe76f5f1c..8515f94994 100644
      const char *oc_argv[(12 + 2 * G_N_ELEMENTS(oc_property_args))];
      const char *gw;
      int         port;
-@@ -311,15 +302,7 @@ nm_vpn_openconnect_authenticate_helper(NMSettingVpn *s_vpn, GPtrArray *secrets,
+@@ -311,13 +302,8 @@ nm_vpn_openconnect_authenticate_helper(NMSettingVpn *s_vpn, GPtrArray *secrets,
  
      port = extract_url_port(gw);
  
@@ -62,9 +62,8 @@ index cbe76f5f1c..8515f94994 100644
 -                                         NULL,
 -                                         NULL,
 -                                         error);
--    if (!path)
--        return FALSE;
-+    path = "@openconnect@/bin/openconnect";
++    path = g_find_program_in_path("openconnect");
++
+     if (!path)
+         return FALSE;
  
-     oc_argv[oc_argc++] = path;
-     oc_argv[oc_argc++] = "--authenticate";
