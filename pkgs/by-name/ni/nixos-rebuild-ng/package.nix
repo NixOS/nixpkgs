@@ -133,7 +133,8 @@ python3Packages.buildPythonApplication rec {
         };
 
         inherit (nixosTests)
-          nixos-rebuild-install-bootloader-ng
+          # FIXME: this test is disabled since it times out in @ofborg
+          # nixos-rebuild-install-bootloader-ng
           nixos-rebuild-specialisations-ng
           nixos-rebuild-target-host-ng
           ;

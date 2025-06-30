@@ -10546,6 +10546,11 @@
     github = "id3v1669";
     githubId = 57532211;
   };
+  idabzo = {
+    github = "idabzo";
+    githubId = 12761234;
+    name = "Ida Bzowska";
+  };
   idlip = {
     name = "Dilip";
     email = "igoldlip@gmail.com";
@@ -16209,6 +16214,13 @@
     github = "mhaselsteiner";
     githubId = 20536514;
     name = "Magdalena Haselsteiner";
+  };
+  mhemeryck = {
+    email = "martijn.hemeryck@gmail.com";
+    github = "mhemeryck";
+    githubId = 5445250;
+    name = "Martijn Hemeryck";
+    keys = [ { fingerprint = "1B47 7ADA 04B4 7A5C E61A  EDE0 1AA3 6833 BC86 F0F1"; } ];
   };
   mi-ael = {
     email = "miael.oss.1970@gmail.com";
@@ -24348,6 +24360,12 @@
     github = "SyedAhkam";
     githubId = 52673095;
     name = "Syed Ahkam";
+  };
+  sylonin = {
+    email = "syl@sperg.net";
+    github = "Sylonin";
+    githubId = 89575562;
+    name = "Sylonin";
   };
   symphorien = {
     email = "symphorien_nixpkgs@xlumurb.eu";

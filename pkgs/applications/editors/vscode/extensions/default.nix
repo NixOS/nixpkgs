@@ -3245,6 +3245,8 @@ let
         };
       };
 
+      mkhl.shfmt = callPackage ./mkhl.shfmt { };
+
       mongodb.mongodb-vscode = callPackage ./mongodb.mongodb-vscode { };
 
       moshfeu.compare-folders = buildVscodeMarketplaceExtension {
@@ -3897,21 +3899,7 @@ let
         };
       };
 
-      pkief.material-icon-theme = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "material-icon-theme";
-          publisher = "PKief";
-          version = "5.23.0";
-          hash = "sha256-numOqtLBqPKhlHXpdKtzg423vijR0p0a8f9niR2WrCc=";
-        };
-        meta = {
-          description = "Material Design Icons for Visual Studio Code";
-          downloadPage = "https://marketplace.visualstudio.com/items/?itemName=PKief.material-icon-theme";
-          homepage = "https://github.com/material-extensions/vscode-material-icon-theme/blob/main/README.md";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.therobot2105 ];
-        };
-      };
+      pkief.material-icon-theme = callPackage ./pkief.material-icon-theme { };
 
       pkief.material-product-icons = buildVscodeMarketplaceExtension {
         mktplcRef = {

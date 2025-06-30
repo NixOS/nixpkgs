@@ -92,7 +92,7 @@ in
         default =
           config.environment.memoryAllocator.provider != "graphene-hardened"
           && config.environment.memoryAllocator.provider != "graphene-hardened-light";
-        defaultText = ''config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light"'';
+        defaultText = lib.literalExpression ''config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light"'';
         description = ''
           Whether to add the `-m` flag to lock memory.
         '';
