@@ -252,3 +252,47 @@ Code to be executed on a peripheral device or embedded controller, built by a th
 ### `lib.sourceTypes.binaryBytecode` {#lib.sourceTypes.binaryBytecode}
 
 Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files from another source.
+
+## Software identifiers {#sec-meta-identifiers}
+
+Package's `meta.identifiers` attribute specifies information about software identifiers associated with this package. Software identifiers are used, for example:
+* to generate Software Bill of Materials (SBOM) that lists all components used to build the software, which can later be used to perform vulnerability or license analysis of the resulting software;
+* to lookup software in different vulnerability databases or report new vulnerabilities to them.
+
+`meta.identifiers` contains `v1` attribute which is an attribute set that guarantees backward compatibility of its constituents. Right now it contains copies of all other attributes in `meta.identifiers`.
+
+### CPE {#sec-meta-identifiers-cpe}
+
+Common Platform Enumeration (CPE) is a specification maintained by NIST as part of the Security Content Automation Protocol (SCAP). It is used to identify software in National Vulnerabilities Database (NVD, https://nvd.nist.gov) and other vulnerability databases.
+
+Current version of CPE 2.3 consists of 13 parts:
+
+```
+cpe:2.3:a:<vendor>:<product>:<version>:<update>:<edition>:<language>:<sw_edition>:<target_sw>:<target_hw>:<other>
+```
+
+Some of them are as follows:
+
+* *CPE version* - current version of CPE is `2.3`
+* *part* - usually in Nixpkgs `a` for "application"
+* *vendor* - can point to the source of the package, or to Nixpkgs itself
+* *product* - name of the package
+* *version* - version of the package
+* *update* - name of the latest update, can be a patch version for semanticly versioned packages
+* *edition* - any additional specification about the version
+
+For example, for glibc 2.40.1 CPE would be `cpe:2.3:a:gnu:glibc:2.40:1::::::`.
+
+#### `meta.identifiers.cpeParts` {#var-meta-identifiers-cpeParts}
+
+This attribute contains an attribute set of all parts of the CPE for this package. Most of the parts default to an empty string, with some exceptions:
+
+* `vendor` cannot be deduced from other sources, so it must be specified by the package author
+* `product` defaults to provided derivation's `pname` attribute and must be provided explicitly if `pname` is missing
+* `version` and `update` default to `X.Y` and `Z` if derivation's `version` attribute matches `X.Y.Z` where all parts are numerical, and must be explicitly provided otherwise
+
+For many packages it should be enough to specify only `meta.identifiers.cpeParts.vendor = ...` to make CPE available.
+
+#### `meta.identifiers.cpe` {#var-meta-identifiers-cpe}
+
+A readonly attribute that concatenates all CPE parts in one string.
