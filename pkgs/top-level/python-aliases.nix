@@ -560,6 +560,7 @@ mapAliases ({
   pyhiveapi = pyhive-integration; # Added 2025-02-22
   pyhs100 = throw "pyhs100 has been removed in favor of python-kasa."; # added 2024-01-05
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
+  pyliblo = throw "pyliblo is unmaintained upstreamed, and removed from nixpkgs"; # added 2025-06-21
   PyLD = pyld; # added 2022-06-22
   pylti = throw "pylti has been removed because it is unmaintained since 2019"; # added 2024-05-21
   pymaging = throw "pymaging has been removed because it has not been maintained for 10 years and has been archived."; # added 2023-11-04
@@ -678,6 +679,7 @@ mapAliases ({
   radio_beam = radio-beam; # added 2023-11-04
   ratelimiter = throw "ratelimiter has been removed, since it is unmaintained and broken"; # added 2023-10-21
   rauth = throw "rauth has beed removed, since it is unmaintained upstream"; # added 2024-07-27
+  raysession = throw "raysession has beed removed, since it has an unmaintained dependency"; # added 2025-06-21
   rdflib-jsonld = throw "rdflib-jsonld is not compatible with rdflib 6"; # added 2021-11-05
   readme_renderer = readme-renderer; # added 2024-01-07
   recaptcha_client = throw "recaptcha_client has been removed since it is no longer maintained"; # added 2023-10-20
