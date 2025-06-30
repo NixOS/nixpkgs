@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchhg,
   setuptools,
   ruamel-base,
   ruamel-yaml-clib,
@@ -13,10 +13,11 @@ buildPythonPackage rec {
   version = "0.18.10";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "ruamel.yaml";
-    inherit version;
-    hash = "sha256-IMhqsprCFT+ApCjhJUqK32htM4PfBEkFFMo7eaNi21g=";
+  src = fetchhg {
+    url = "http://hg.code.sf.net/p/ruamel-yaml/code";
+    # tag = version;
+    rev = version;
+    hash = "sha256-bO+UMnIKZHz1+cPrrnhyzowUCLFsWV/OHaGmfipYt7c=";
   };
 
   patches = [
