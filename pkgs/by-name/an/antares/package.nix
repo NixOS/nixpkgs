@@ -11,16 +11,16 @@
 
 buildNpmPackage rec {
   pname = "antares";
-  version = "0.7.29";
+  version = "0.7.34";
 
   src = fetchFromGitHub {
     owner = "antares-sql";
     repo = "antares";
     tag = "v${version}";
-    hash = "sha256-3zgr3Eefx3WDUW9/1NOaneUbFy3GTnJ3tGgivtW1K/g=";
+    hash = "sha256-lYTRl5hpQof2NSEh2ZojcQnxVJH22iCocGLw5Bu7L0Y=";
   };
 
-  npmDepsHash = "sha256-WJ5HVVa4rEOsvr52L/OGk+vlxRiKLJTxWmUnpN1FnbY=";
+  npmDepsHash = "sha256-zK6gi2iKozsr8QK4uKLz0EgwlfaozdFYo9H3xB+3tjI=";
 
   patches = [
     # Since version 0.7.28, package-lock is not updated properly so this patch update it to be able to build the package
