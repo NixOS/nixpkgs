@@ -17,11 +17,6 @@ in
       which is only available in the `radeon` driver
     '';
 
-    initrd.enable = lib.mkEnableOption ''
-      loading `amdgpu` kernelModule in stage 1.
-      Can fix lower resolution in boot screen during initramfs phase
-    '';
-
     overdrive = {
       enable = lib.mkEnableOption ''`amdgpu` overdrive mode for overclocking'';
 
@@ -39,9 +34,57 @@ in
       };
     };
 
+    kernelModule = {
+      inInitrd = lib.mkEnableOption ''
+        installing the `amdgpu` kernelModule into the initrd; making it
+        available in stage 1 of the boot process.
+
+        This allows for an earlier modeset to apply the preferred resolution in
+        the beginning of the initramfs phase rather than after it.
+      '';
+
+      patches = lib.mkOption {
+        type = with lib.types; listOf path;
+        default = [ ];
+        description = ''
+          Patches to apply to the kernel for the `amdgpu` kernel module build.
+
+          This is intended for applying small patches concerning only the
+          `amdgpu` module's internals without needing to rebuild the entire
+          kernel.
+
+          The patches are applied to the entire kernel tree but only the
+          `amdgpu` module will actually be built and used. You should therefore
+          not touch anything outside of `drivers/gpu/drm/amd/amdgpu` using the
+          patches as those modifications will not be present in the actual
+          kernel you will be running which might cause undefined and likely
+          erroneous behaviour.
+          Use {option}`boot.kernelPatches` instead for such cases.
+
+          A reboot is required for the patched module to be loaded.
+        '';
+        example = lib.literalExpression ''
+          [
+            (pkgs.fetchpatch2 {
+              url = "https://lore.kernel.org/lkml/20240610-amdgpu-min-backlight-quirk-v1-1-8459895a5b2a@weissschuh.net/raw";
+              hash = "";
+            })
+          ]
+        '';
+      };
+    };
+
     opencl.enable = lib.mkEnableOption ''OpenCL support using ROCM runtime library'';
     # cfg.amdvlk option is defined in ./amdvlk.nix module
   };
+
+  imports = [
+    # This can be removed post 24.11; it was only ever in unstable
+    (lib.mkRenamedOptionModule
+      [ "hardware" "amdgpu" "initrd" "enable" ]
+      [ "hardware" "amdgpu" "kernelModule" "inInitrd" ]
+    )
+  ];
 
   config = {
     boot.kernelParams =
@@ -55,7 +98,14 @@ in
         "amdgpu.ppfeaturemask=${cfg.overdrive.ppfeaturemask}"
       ];
 
-    boot.initrd.kernelModules = lib.optionals cfg.initrd.enable [ "amdgpu" ];
+    boot.initrd.kernelModules = lib.optionals cfg.kernelModule.inInitrd [ "amdgpu" ];
+
+    boot.extraModulePackages = lib.mkIf (cfg.kernelModule.patches != [ ]) [
+      (pkgs.callPackage ./amdgpu-kernel-module.nix {
+        inherit (config.boot.kernelPackages) kernel;
+        inherit (cfg.kernelModule) patches;
+      })
+    ];
 
     hardware.graphics = lib.mkIf cfg.opencl.enable {
       enable = lib.mkDefault true;
@@ -67,6 +117,9 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ johnrtitor ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+      Scrumplex
+    ];
   };
 }
