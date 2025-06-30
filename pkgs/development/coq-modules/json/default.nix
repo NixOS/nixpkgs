@@ -15,14 +15,13 @@
 
   defaultVersion =
     let
-      inherit (lib.versions) isLe range;
+      case = case: out: { inherit case out; };
+      inherit (lib.versions) range;
     in
-    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
-      lib.mapAttrsToList (out: case: { inherit case out; }) {
-        "0.2.0" = range "8.14" "9.0";
-        "0.1.3" = range "8.14" "8.20";
-      }
-    )) null;
+    lib.switch coq.coq-version [
+      (case (range "8.14" "9.0") "0.2.0")
+      (case (range "8.14" "8.20") "0.1.3")
+    ] null;
   release = {
     "0.2.0".sha256 = "sha256-qDRTgWLUvu4x3/d3BDcqo2I4W5ZmLyRiwuY/Tm/FuKA=";
     "0.1.3".sha256 = "sha256-lElAzW4IuX+BB6ngDjlyKn0MytLRfbhQanB+Lct/WR0=";

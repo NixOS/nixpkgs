@@ -22,19 +22,20 @@
   release."8.13+no".sha256 = "sha256-gXoxtLcHPoyjJkt7WqvzfCMCQlh6kL2KtCGe3N6RC/A=";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
-    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
-      lib.mapAttrsToList (out: case: { inherit case out; }) {
-        "8.20.0" = isEq "8.20";
-        "8.19.0" = isEq "8.19";
-        "8.18.0" = isEq "8.18";
-        "8.17.0" = isEq "8.17";
-        "8.16.0" = isEq "8.16";
-        "8.15.0" = isEq "8.15";
-        "8.14.0" = isEq "8.14";
-        "8.13+no" = isEq "8.13";
-      }
-    )) null;
+    lib.switch coq.coq-version [
+      (case (isEq "8.20") "8.20.0")
+      (case (isEq "8.19") "8.19.0")
+      (case (isEq "8.18") "8.18.0")
+      (case (isEq "8.17") "8.17.0")
+      (case (isEq "8.16") "8.16.0")
+      (case (isEq "8.15") "8.15.0")
+      (case (isEq "8.14") "8.14.0")
+      (case (isEq "8.13") "8.13+no")
+    ] null;
 
   mlPlugin = true;
   nativeBuildInputs = (with coq.ocamlPackages; [ ocamlbuild ]);

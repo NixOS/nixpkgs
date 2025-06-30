@@ -13,14 +13,15 @@
   repo = "coq-simple-io";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
-    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
-      lib.mapAttrsToList (out: case: { inherit case out; }) {
-        "1.10.0" = range "8.17" "9.0";
-        "1.8.0" = range "8.11" "8.19";
-        "1.3.0" = range "8.7" "8.13";
-      }
-    )) null;
+    lib.switch coq.coq-version [
+      (case (range "8.17" "9.0") "1.10.0")
+      (case (range "8.11" "8.19") "1.8.0")
+      (case (range "8.7" "8.13") "1.3.0")
+    ] null;
   release."1.10.0".sha256 = "sha256-67cBhLvRMWLWBL7NXK1zZTQC4PtSKu9qtesU4SqKkOw=";
   release."1.8.0".sha256 = "sha256-3ADNeXrBIpYRlfUW+LkLHUWV1w1HFrVc/TZISMuwvRY=";
   release."1.7.0".sha256 = "sha256:1a1q9x2abx71hqvjdai3n12jxzd49mhf3nqqh3ya2ssl2lj609ci";

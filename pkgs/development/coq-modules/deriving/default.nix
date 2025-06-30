@@ -13,21 +13,25 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
-    with lib.versions;
     let
-      cmc = c: mc: [
-        c
-        mc
-      ];
+      case = coq: mc: out: {
+        case = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
     in
-    lib.switch [ coq.coq-version ssreflect.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
-      lib.mapAttrsToList (out: cases: { inherit cases out; }) {
-        "0.2.2" = cmc (range "8.17" "9.0") (range "2.0.0" "2.4.0");
-        "0.2.1" = cmc (range "8.17" "9.0") (range "2.0.0" "2.3.0");
-        "0.2.0" = cmc (range "8.17" "8.20") (range "2.0.0" "2.2.0");
-        "0.1.1" = cmc (range "8.11" "8.20") (isLe "2.0.0");
-      }
-    )) null;
+    with lib.versions;
+    lib.switch
+      [ coq.coq-version ssreflect.version ]
+      [
+        (case (range "8.17" "9.0") (range "2.0.0" "2.4.0") "0.2.2")
+        (case (range "8.17" "9.0") (range "2.0.0" "2.3.0") "0.2.1")
+        (case (range "8.17" "8.20") (range "2.0.0" "2.2.0") "0.2.0")
+        (case (range "8.11" "8.20") (isLe "2.0.0") "0.1.1")
+      ]
+      null;
 
   releaseRev = v: "v${v}";
 
