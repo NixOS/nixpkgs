@@ -1,14 +1,14 @@
 {
   lib,
-  mkCoqDerivation,
+  mkRocqDerivation,
   which,
-  coq,
   stdlib,
+  rocq-core,
   version ? null,
 }:
 
 with lib;
-mkCoqDerivation {
+mkRocqDerivation {
   pname = "parseque";
   repo = "parseque";
   owner = "rocq-community";
@@ -17,23 +17,23 @@ mkCoqDerivation {
   defaultVersion =
     with versions;
     switch
-      [ coq.coq-version ]
+      [ rocq-core.rocq-version ]
       [
         {
-          cases = [ (range "8.16" "9.0") ];
-          out = "0.2.2";
+          cases = [ (range "9.0" "9.0") ];
+          out = "0.3.0";
         }
       ]
       null;
 
-  release."0.2.2".sha256 = "sha256-O50Rs7Yf1H4wgwb7ltRxW+7IF0b04zpfs+mR83rxT+E=";
-
-  releaseRev = v: "v${v}";
+  release."0.3.0".sha256 = "sha256-W2eenv5Q421eVn2ubbninFmmdT875f3w/Zs7yGHUKP4=";
 
   propagatedBuildInputs = [ stdlib ];
 
+  releaseRev = v: "v${v}";
+
   meta = {
-    description = "Total parser combinators in Coq/Rocq";
+    description = "Total parser combinators in Rocq";
     maintainers = with maintainers; [ womeier ];
     license = licenses.mit;
   };
