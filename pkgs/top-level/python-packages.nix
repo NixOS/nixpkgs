@@ -15628,6 +15628,8 @@ self: super: with self; {
 
   realtime = callPackage ../development/python-modules/realtime { };
 
+  rebiber = callPackage ../development/python-modules/rebiber { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
