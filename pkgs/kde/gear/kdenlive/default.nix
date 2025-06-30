@@ -1,6 +1,7 @@
 {
   mkKdeDerivation,
   replaceVars,
+  lib,
   mediainfo,
   mlt,
   glaxnimate,
@@ -14,6 +15,8 @@
   libv4l,
   open-timeline-io,
   frei0r,
+  rnnoise-plugin,
+  enablePlugins ? true,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
@@ -47,8 +50,9 @@ mkKdeDerivation {
     open-timeline-io
   ];
 
-  qtWrapperArgs = [
+  qtWrapperArgs = lib.optionals enablePlugins [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
+    "--prefix LADSPA_PATH : ${rnnoise-plugin}/lib/ladspa"
   ];
 
   meta.mainProgram = "kdenlive";
