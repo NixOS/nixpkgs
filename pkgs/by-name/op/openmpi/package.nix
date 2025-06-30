@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   removeReferencesTo,
+  pkg-config,
   gfortran,
   perl,
   libnl,
@@ -41,21 +42,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
-  version = "5.0.6";
+  version = "5.0.7";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/openmpi-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-vUGD/LxDR3wlR5m0Kd8abldsBC50otL4s31Tey/5gVc=";
+    sha256 = "sha256-EZ8gCZNqQDM00N88DXTVWVoy2ZSX+bHUHpABn+4vwt0=";
   };
 
   patches = [
-    # This patch can be removed with the next openmpi update (>5.0.6)
-    # See https://github.com/open-mpi/ompi/issues/12784 and https://github.com/open-mpi/ompi/pull/13003
-    # Fixes issue where the shared memory backing file cannot be created because directory trees are never created
+    # Fixes a compilation error, see:
+    # https://github.com/open-mpi/ompi/issues/13103, and:
+    # https://github.com/open-mpi/ompi/pull/13106
     (fetchpatch {
       name = "fix-singletons-session-dir";
-      url = "https://github.com/open-mpi/ompi/commit/4d4f7212decd0d0ca719688b15dc9b3ee7553a52.patch";
-      hash = "sha256-Mb8qXtAUhAQ90v0SdL24BoTASsKRq2Gu8nYqoeSc9DI=";
+      url = "https://github.com/open-mpi/ompi/commit/beee36956b7bd4e6b4672f73015d9df3ae6ce44a.patch";
+      hash = "sha256-G3krkhZAH2xhs1KNPYon8faW6KfsAc+4dsh0qmZSt7Q=";
     })
   ];
 
@@ -117,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       perl
+      pkg-config
       removeReferencesTo
       makeWrapper
     ]
@@ -127,8 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature cudaSupport "mca-dso")
     (lib.enableFeature fortranSupport "mpi-fortran")
     (lib.withFeatureAs stdenv.hostPlatform.isLinux "libnl" (lib.getDev libnl))
-    "--with-pmix=${lib.getDev pmix}"
-    "--with-pmix-libdir=${lib.getLib pmix}/lib"
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
     (lib.withFeatureAs true "prrte" (lib.getBin prrte))
     (lib.withFeature enableSGE "sge")
