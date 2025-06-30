@@ -19,12 +19,19 @@ buildPythonPackage rec {
     hash = "sha256-IMhqsprCFT+ApCjhJUqK32htM4PfBEkFFMo7eaNi21g=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  patches = [
+    # TODO: Upstream
+    ./automagic-detect.patch
+  ];
+
+  build-system = [ setuptools ];
+  dependencies = [
+    setuptools # pkg_resources
+    ruamel-base
+  ] ++ lib.optionals (!isPyPy) [ ruamel-yaml-clib ];
 
   # Tests use relative paths
   doCheck = false;
-
-  propagatedBuildInputs = [ ruamel-base ] ++ lib.optional (!isPyPy) ruamel-yaml-clib;
 
   pythonImportsCheck = [ "ruamel.yaml" ];
 
