@@ -1,46 +1,48 @@
 # Contributing to Nixpkgs
 
-This document is for people wanting to contribute to the implementation of Nixpkgs.
-This involves interacting with implementation changes that are proposed using [GitHub](https://github.com/) [pull requests](https://docs.github.com/pull-requests) to the [Nixpkgs](https://github.com/nixos/nixpkgs/) repository (which you're in right now).
+This document is for people wanting to contribute to Nixpkgs.
+This involves changes that are proposed using [GitHub](https://github.com) [pull requests](https://docs.github.com/pull-requests) to the [Nixpkgs repository](https://github.com/nixos/nixpkgs).
 
-As such, a GitHub account is recommended, which you can sign up for [here](https://github.com/signup).
+A GitHub account is recommended, which you can sign up for [here](https://github.com/signup).
 See [here](https://discourse.nixos.org/t/about-the-patches-category/477) for how to contribute without a GitHub account.
 
-Additionally this document assumes that you already know how to use GitHub and Git.
-If that's not the case, we recommend learning about it first [here](https://docs.github.com/en/get-started/quickstart/hello-world).
+This document assumes that you already know how to use GitHub and Git.
+If that's not the case, we recommend learning about it [here](https://docs.github.com/en/get-started/quickstart/hello-world).
 
 ## Overview
 [overview]: #overview
 
-This file contains general contributing information, but individual parts also have more specific information to them in their respective `README.md` files, linked here:
+This file contains general contributing information.
+More specific information about individual parts of Nixpkgs can be found here:
+- [`doc`](./doc/README.md): Sources and infrastructure for the [Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable)
 - [`lib`](./lib/README.md): Sources and documentation of the [library functions](https://nixos.org/manual/nixpkgs/stable/#chap-functions)
 - [`maintainers`](./maintainers/README.md): Nixpkgs maintainer and team listings, maintainer scripts
+- [`nixos`](./nixos/README.md): Implementation of [NixOS](https://nixos.org/manual/nixos/stable)
 - [`pkgs`](./pkgs/README.md): Package and [builder](https://nixos.org/manual/nixpkgs/stable/#part-builders) definitions
-- [`doc`](./doc/README.md): Sources and infrastructure for the [Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/)
-- [`nixos`](./nixos/README.md): Implementation of [NixOS](https://nixos.org/manual/nixos/stable/)
 
 # How to's
 
 ## How to create pull requests
 [pr-create]: #how-to-create-pull-requests
 
-This section describes in some detail how changes can be made and proposed with pull requests.
+This section describes how changes can be proposed with pull requests (PR).
 
 > [!Note]
 > Be aware that contributing implies licensing those contributions under the terms of [COPYING](./COPYING), an MIT-like license.
 
-0. Set up a local version of Nixpkgs to work with using GitHub and Git
-   1. [Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository) the [Nixpkgs repository](https://github.com/nixos/nixpkgs/).
+0. Set up a local version of Nixpkgs to work with:
+   1. [Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository) the [Nixpkgs repository](https://github.com/nixos/nixpkgs).
    1. [Clone the forked repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo#cloning-your-forked-repository) into a local `nixpkgs` directory.
    1. [Configure the upstream Nixpkgs repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo#configuring-git-to-sync-your-fork-with-the-upstream-repository).
 
-1. Figure out the branch that should be used for this change by going through [this section][branch].
-   If in doubt use `master`, that's where most changes should go.
+1. Figure out the **base branch** for this change in [this section][branch].
+   If in doubt, use `master`.
    This can be changed later by [rebasing][rebase].
 
-2. Create and switch to a new Git branch, ideally such that:
-   - The name of the branch hints at the change you'd like to implement, e.g. `update-hello`.
-   - The base of the branch includes the most recent changes on the base branch from step 1, we'll assume `master` here.
+2. Create a new Git branch, ideally such that:
+   - The name of the branch hints at your change, e.g. `update-hello`.
+   - The branch contains the most recent base branch.
+     We'll assume `master` here.
 
    ```bash
    # Make sure you have the latest changes from upstream Nixpkgs
@@ -50,99 +52,102 @@ This section describes in some detail how changes can be made and proposed with 
    git switch --create update-hello upstream/master
    ```
 
-   To avoid having to download and build potentially many derivations, at the expense of using a potentially outdated version, you can base the branch off a specific [Git commit](https://www.git-scm.com/docs/gitglossary#def_commit) instead:
+   To avoid potentially having to download and build many derivations, but at the expense of using an outdated version, you can base off a specific [Git commit](https://www.git-scm.com/docs/gitglossary#def_commit) instead:
    - The commit of the latest `nixpkgs-unstable` channel, available [here](https://channels.nixos.org/nixpkgs-unstable/git-revision).
    - The commit of a local Nixpkgs downloaded using [nix-channel](https://nixos.org/manual/nix/stable/command-ref/nix-channel), available using `nix-instantiate --eval --expr '(import <nixpkgs/lib>).trivial.revisionWithDefault null'`
    - If you're using NixOS, the commit of your NixOS installation, available with `nixos-version --revision`.
 
-   Once you have an appropriate commit you can use it instead of `upstream/master` in the above command:
+   You can use this commit instead of `upstream/master` in the above command:
    ```bash
    git switch --create update-hello <the desired base commit>
    ```
 
-3. Make the desired changes in the local Nixpkgs repository using an editor of your choice.
-   Make sure to:
-   - Adhere to both the [general code conventions][code-conventions], and the code conventions specific to the part you're making changes to.
-     See the [overview section][overview] for more specific information.
+3. Make your changes in the local Nixpkgs repository and:
+   - Adhere to both the [general code conventions][code-conventions], and the relevant [specific code conventions][overview].
    - Test the changes.
-     See the [overview section][overview] for more specific information.
-   - If necessary, document the change.
-     See the [overview section][overview] for more specific information.
+   - If necessary, document the changes.
+
+   See the [overview section][overview] for more specific information.
 
 4. Commit your changes using `git commit`.
    Make sure to adhere to the [commit conventions](#commit-conventions).
 
    Repeat the steps 3-4 as many times as necessary.
-   Advance to the next step if all the commits (viewable with `git log`) make sense together.
+   Advance to the next step once all the commits make sense together.
+   You can view your commits with `git log`.
 
-5. Push your commits to your fork of Nixpkgs.
+5. Push your commits to your fork of Nixpkgs:
    ```
    git push --set-upstream origin HEAD
    ```
 
-   The above command will output a link that allows you to directly quickly do the next step:
+   The above command will output a link to directly do the next step:
    ```
    remote: Create a pull request for 'update-hello' on GitHub by visiting:
    remote:      https://github.com/myUser/nixpkgs/pull/new/update-hello
    ```
 
 6. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) from the new branch in your Nixpkgs fork to the upstream Nixpkgs repository.
-   Use the branch from step 2 as the pull requests base branch.
-   Go through the [pull request template](#pull-request-template) in the pre-filled default description.
+   Use the branch from step 1 as the PR's base branch.
+   Go through the [pull request template](#pull-request-template).
 
-7. Respond to review comments, potential CI failures and potential merge conflicts by updating the pull request.
-   Always keep the pull request in a mergeable state.
+7. Respond to review comments and potentially to CI failures and merge conflicts by updating the PR.
+   Always keep it in a mergeable state.
 
-   This process is covered in more detail from the non-technical side in [I opened a PR, how do I get it merged?](#i-opened-a-pr-how-do-i-get-it-merged).
+   The non-technical side of this process is covered in [I opened a PR, how do I get it merged?](#i-opened-a-pr-how-do-i-get-it-merged).
 
-   The custom [OfBorg](https://github.com/NixOS/ofborg) CI system will perform various checks to help ensure code quality, whose results you can see at the bottom of the pull request.
+   The [OfBorg](https://github.com/NixOS/ofborg) CI system will perform checks to ensure code quality.
+   You can see the results at the bottom of the PR.
    See [the OfBorg Readme](https://github.com/NixOS/ofborg#readme) for more details.
 
-   - To add new commits, repeat steps 3-4 and push the result using
+   - To add new commits, repeat steps 3-4 and push the result:
      ```
      git push
      ```
 
-   - To change existing commits you will have to [rewrite Git history](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
-     Useful Git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`.
-     With a rewritten history you need to force-push the commits using
+   - To change existing commits, [rewrite the Git history](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
+     Useful Git commands for this are `git commit --patch --amend` and `git rebase --interactive`.
+     With a rewritten history you need to force-push the commits:
      ```
      git push --force-with-lease
      ```
 
-   - In case of merge conflicts you will also have to [rebase the branch](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) on top of current `master`.
-     Sometimes this can be done [on GitHub directly](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch#updating-your-pull-request-branch), but if not you will have to rebase locally using
+   - In case of merge conflicts, you will have to [rebase the branch](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) on top of the current **base branch**.
+     Sometimes this can be done [on GitHub directly](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch#updating-your-pull-request-branch).
+     To rebase locally:
      ```
      git fetch upstream
      git rebase upstream/master
      git push --force-with-lease
      ```
 
-   - If you need to change the base branch of the pull request, you can do so by [rebasing][rebase].
+     Use the base branch from step 1 instead of `upstream/master`.
 
-8. If your pull request is merged and [acceptable for releases][release-acceptable] you may [backport][pr-backport] the pull request.
+   - If you need to change the base branch, [rebase][rebase].
+
+8. If your PR is merged and [acceptable for releases][release-acceptable], you may [backport][pr-backport] it.
 
 ### Pull request template
 [pr-template]: #pull-request-template
 
-The pull request template helps determine what steps have been made for a contribution so far, and will help guide maintainers on the status of a change.
-The motivation section of the PR should include any extra details the title does not address and link any existing issues related to the pull request.
+The pull request template helps to determine which steps have been taken so far.
+The motivation section should include details the title does not address and link existing related issues.
 
-When a PR is created, it will be pre-populated with some checkboxes detailed below:
+When a PR is created, it will be pre-populated with these checkboxes:
 
 #### Tested using sandboxing
 
 When sandbox builds are enabled, Nix will set up an isolated environment for each build process.
-It is used to remove further hidden dependencies set by the build environment to improve reproducibility.
+It is used to remove further hidden dependencies set by the build environment, to improve reproducibility.
 This includes access to the network during the build outside of `fetch*` functions and files outside the Nix store.
-Depending on the operating system, access to other resources is blocked as well (e.g., inter-process communication is isolated on Linux); see [sandbox](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-sandbox) in the Nix manual for details.
+Depending on the operating system, access to other resources is blocked as well; see [sandbox](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-sandbox) in the Nix manual for details.
 
-In pull requests for [nixpkgs](https://github.com/NixOS/nixpkgs/) people are asked to test builds with sandboxing enabled (see `Tested using sandboxing` in the pull request template) because in [Hydra](https://nixos.org/hydra/) sandboxing is also used.
+Please test builds with sandboxing enabled, because it is also used in [Hydra](https://nixos.org/hydra).
 
 If you are on Linux, sandboxing is enabled by default.
 On other platforms, sandboxing is disabled by default due to a small performance hit on each build.
 
-Please enable sandboxing **before** building the package by adding the following to: `/etc/nix/nix.conf`:
+Please enable sandboxing **before** building the package by adding the following to `/etc/nix/nix.conf`:
 
   ```ini
   sandbox = true
@@ -151,21 +156,21 @@ Please enable sandboxing **before** building the package by adding the following
 #### Built on platform(s)
 
 Many Nix packages are designed to run on multiple platforms.
-As such, it’s important to let the maintainer know which platforms your changes have been tested on.
-It’s not always practical to test a change on all platforms, and is not required for a pull request to be merged.
-Only check the systems you tested the build on in this section.
+It’s important to let the maintainer know which platforms you have tested on.
+It’s not always practical to test on all platforms, and it’s not required for a pull request to be merged.
+Only check the platforms you tested the build on in this section.
 
 #### Tested via one or more NixOS test(s) if existing and applicable for the change (look inside nixos/tests)
 
-Packages with automated tests are much more likely to be merged in a timely fashion because it doesn’t require as much manual testing by the maintainer to verify the functionality of the package.
-If there are existing tests for the package, they should be run to verify your changes do not break the tests.
-Tests can only be run on Linux.
+Packages with automated tests are likely merged quicker, because they don’t require as much manual testing.
+If there are existing tests for the package, they should be run.
+Tests can mostly be only run on Linux.
 For more details on writing and running tests, see the [section in the NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests).
 
 #### Tested compilation of all pkgs that depend on this change using `nixpkgs-review`
 
-If you are modifying a package, you can use `nixpkgs-review` to make sure all packages that depend on the updated package still compile correctly.
-The `nixpkgs-review` utility can look for and build all dependencies either based on uncommitted changes with the `wip` option or specifying a GitHub pull request number.
+If you are modifying a package, you can use `nixpkgs-review` to make sure all reverse dependencies still build.
+It can work on uncommitted changes with the `wip` option or on a specified GitHub pull request number.
 
 Review changes from pull request number 12345:
 
@@ -185,7 +190,7 @@ Review uncommitted changes:
 nix-shell -p nixpkgs-review --run "nixpkgs-review wip"
 ```
 
-Review changes from last commit:
+Review changes from the last commit:
 
 ```ShellSession
 nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"
@@ -193,23 +198,24 @@ nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"
 
 #### Tested execution of all binary files (usually in `./result/bin/`)
 
-It’s important to test any executables generated by a build when you change or create a package in nixpkgs.
-This can be done by looking in `./result/bin` and running any files in there, or at a minimum, the main executable for the package.
-For example, if you make a change to texlive, you probably would only check the binaries associated with the change you made rather than testing all of them.
+It’s important to test generated executables.
+Look into `./result/bin` and run all files in there, or at a minimum, the main executable.
+For example, if you make a change to `texlive`, you probably would only check the binaries associated with the change you made, rather than testing all of them.
 
 #### Meets Nixpkgs contribution standards
 
 The last checkbox is about whether it fits the guidelines in this `CONTRIBUTING.md` file.
-This document has detailed information on standards the Nix community has for commit messages, reviews, licensing of contributions you make to the project, etc...
-Everyone should read and understand the standards the community has for contributing before submitting a pull request.
+This document has detailed information on standards for commit messages, reviews, licensing of contributions, etc...
+Everyone should read and understand these standards before submitting a pull request.
 
 ### Rebasing between branches (i.e. from master to staging)
 [rebase]: #rebasing-between-branches-ie-from-master-to-staging
 
-From time to time, changes between branches must be rebased, for example, if the number of new rebuilds they would cause is too large for the target branch.
+Sometimes, changes must be rebased between branches.
+One example is, if the number of rebuilds is too large for the target branch.
 
-In the following example, we assume that the current branch, called `feature`, is based on `master`, and we rebase it onto the merge base between `master` and `staging` so that the PR can be retargeted to `staging`.
-The example uses `upstream` as the remote for `NixOS/nixpkgs.git` while `origin` is the remote you are pushing to.
+In the following, the current `feature` branch is based on `master`, and we rebase it to have the PR target `staging`.
+We rebase on the merge base between `master` and `staging` to avoid too many local rebuilds.
 
 
 ```console
@@ -221,8 +227,8 @@ git push origin feature --force-with-lease
 
 The syntax `upstream/staging...` is equivalent to `upstream/staging...HEAD` and stands for the merge base between `upstream/staging` and `HEAD` (hence between `upstream/staging` and `upstream/master`).
 
-Then change the base branch in the GitHub PR using the *Edit* button in the upper right corner, and switch from `master` to `staging`.
-*After* the PR has been retargeted it might be necessary to do a final rebase onto the target branch, to resolve any outstanding merge conflicts.
+Then use the *Edit* button in the upper right corner of the GitHub PR, and switch the base branch from `master` to `staging`.
+*After* the PR has been retargeted, a final rebase onto the target branch might be needed to resolve merge conflicts.
 
 ```console
 # Rebase onto target branch
@@ -236,38 +242,38 @@ git push origin feature --force-with-lease
 ## How to backport pull requests
 [pr-backport]: #how-to-backport-pull-requests
 
-Once a pull request has been merged into `master`, a backport pull request to the corresponding `release-YY.MM` branch can be created either automatically or manually.
+Once a PR has been merged, a backport to the corresponding `release-YY.MM` branch can be created.
 
 ### Automatically backporting changes
 
 > [!Note]
 > You have to be a [Nixpkgs maintainer](./maintainers) to automatically create a backport pull request.
 
-Add the [`backport release-YY.MM` label](https://github.com/NixOS/nixpkgs/labels?q=backport) to the pull request on the `master` branch.
-This will cause [a GitHub Action](.github/workflows/backport.yml) to open a pull request to the `release-YY.MM` branch a few minutes later.
+Add the [`backport release-YY.MM` label](https://github.com/NixOS/nixpkgs/labels?q=backport) to the PR on the `master` branch.
+This will cause [a GitHub Action](.github/workflows/backport.yml) to open a new PR to the `release-YY.MM` branch a few minutes later.
 This can be done on both open or already merged pull requests.
 
 ### Manually backporting changes
 
-To manually create a backport pull request, follow [the standard pull request process][pr-create], with these notable differences:
+To manually create a backport, follow [the standard pull request process][pr-create], but:
 
 - Use `release-YY.MM` for the base branch, both for the local branch and the pull request.
 
 > [!Warning]
-> Do not use the `nixos-YY.MM` branch, that is a branch pointing to the tested release channel commit
+> Do not use the `nixos-YY.MM` branch, which is pointing to the tested release channel commit.
 
-- Instead of manually making and committing the changes, use [`git cherry-pick -x`](https://git-scm.com/docs/git-cherry-pick) for each commit from the pull request you'd like to backport.
-  Either `git cherry-pick -x <commit>` when the reason for the backport is obvious (such as minor versions, fixes, etc.), otherwise use `git cherry-pick -xe <commit>` to add a reason for the backport to the commit message.
-  Here is [an example](https://github.com/nixos/nixpkgs/commit/5688c39af5a6c5f3d646343443683da880eaefb8) of this.
+- Instead of manually making and committing the changes, use [`git cherry-pick -x`](https://git-scm.com/docs/git-cherry-pick) for each commit.
+  Either `git cherry-pick -x <commit>` when the reason is obvious (such as minor versions, fixes, etc.), otherwise use `git cherry-pick -xe <commit>` to add a reason for the backport.
+  Here is [an example](https://github.com/nixos/nixpkgs/commit/5688c39af5a6c5f3d646343443683da880eaefb8).
 
 > [!Warning]
-> Ensure the commits exists on the master branch.
+> Ensure the commits exist on the master branch.
 > In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
 
 - In the pull request description, link to the original pull request to `master`.
   The pull request title should include `[YY.MM]` matching the release you're backporting to.
 
-- When the backport pull request is merged and you have the necessary privileges you can also replace the label `9.needs: port to stable` with `8.has: port to stable` on the original pull request.
+- When the backport is merged and you have the necessary privileges you can also replace the label `9.needs: port to stable` with `8.has: port to stable` on the original pull request.
   This way maintainers can keep track of missing backports easier.
 
 ## How to review pull requests
@@ -303,7 +309,7 @@ If you find anything related that could be improved but is not immediately requi
 
 For example, follow-up changes could involve refactoring code in the affected files.
 
-But please remember not to make such additional considerations a blocker, and communicate that to the contributor, for example by following the [conventional comments](https://conventionalcomments.org/) pattern.
+But please remember not to make such additional considerations a blocker, and communicate that to the contributor, for example by following the [conventional comments](https://conventionalcomments.org) pattern.
 If the related change is essential for the contribution at hand, make clear why you think it is important to address that first.
 
 Pull request reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.
@@ -351,9 +357,9 @@ In a case a contributor definitively leaves the Nix community, they should creat
 
 # Flow of merged pull requests
 
-After a pull request is merged, it eventually makes it to the [official Hydra CI](https://hydra.nixos.org/).
-Hydra regularly evaluates and builds Nixpkgs, updating [the official channels](https://channels.nixos.org/) when specific Hydra jobs succeeded.
-See [Nix Channel Status](https://status.nixos.org/) for the current channels and their state.
+After a pull request is merged, it eventually makes it to the [official Hydra CI](https://hydra.nixos.org).
+Hydra regularly evaluates and builds Nixpkgs, updating [the official channels](https://channels.nixos.org) when specific Hydra jobs succeeded.
+See [Nix Channel Status](https://status.nixos.org) for the current channels and their state.
 Here's a brief overview of the main Git branches and what channels they're used for:
 
 - `master`: The main branch, used for the unstable channels such as `nixpkgs-unstable`, `nixos-unstable` and `nixos-unstable-small`.
@@ -362,7 +368,7 @@ Here's a brief overview of the main Git branches and what channels they're used 
 When a channel is updated, a corresponding Git branch is also updated to point to the corresponding commit.
 So e.g. the [`nixpkgs-unstable` branch](https://github.com/nixos/nixpkgs/tree/nixpkgs-unstable) corresponds to the Git commit from the [`nixpkgs-unstable` channel](https://channels.nixos.org/nixpkgs-unstable).
 
-Nixpkgs in its entirety is tied to the NixOS release process, which is documented in the [NixOS Release Wiki](https://nixos.github.io/release-wiki/).
+Nixpkgs in its entirety is tied to the NixOS release process, which is documented in the [NixOS Release Wiki](https://nixos.github.io/release-wiki).
 
 See [this section][branch] to know when to use the release branches.
 
@@ -560,11 +566,11 @@ nix fmt
 
 If you're starting your editor in `nix-shell` or `nix develop`, you can also set it up to automatically format the file with `treefmt` on save.
 
-If you have any problems with formatting, please ping the [formatting team](https://nixos.org/community/teams/formatting/) via [@NixOS/nix-formatting](https://github.com/orgs/NixOS/teams/nix-formatting).
+If you have any problems with formatting, please ping the [formatting team](https://nixos.org/community/teams/formatting) via [@NixOS/nix-formatting](https://github.com/orgs/NixOS/teams/nix-formatting).
 
 ### Syntax
 
-- Set up [editorconfig](https://editorconfig.org/) for your editor, such that [the settings](./.editorconfig) are automatically applied.
+- Set up [editorconfig](https://editorconfig.org) for your editor, such that [the settings](./.editorconfig) are automatically applied.
 
 - Use `lowerCamelCase` for variable names, not `UpperCamelCase`.
   Note, this rule does not apply to package attribute names, which instead follow the rules in [package naming](./pkgs/README.md#package-naming).
@@ -714,7 +720,7 @@ There isn't a good generic solution to this but there are some ways easing the c
   This isn't something you can do on your first few PRs touching a component but listed maintainers generally receive more trust when it comes to changes to their maintained components and committers may opt to merge changes without deeper review when they see they're done by their respective maintainer.
 
 Even if you adhere to all of these recommendations, it is still quite possible for your PR to be forgotten or abandoned by any given committer.
-Please remain mindful of the fact that they are doing this on their own volition and unpaid in their free time and therefore [owe you nothing](https://mikemcquaid.com/open-source-maintainers-owe-you-nothing/).
+Please remain mindful of the fact that they are doing this on their own volition and unpaid in their free time and therefore [owe you nothing](https://mikemcquaid.com/open-source-maintainers-owe-you-nothing).
 Causing a stink in such a situation is a surefire way to get any other potential committer to not want to look at your PR either.
 Ask them nicely whether they still intend to review your PR and find yourself another committer to look at your PR if not.
 
@@ -726,7 +732,7 @@ Ask them nicely whether they still intend to review your PR and find yourself an
   Reviewers frequently browse open PRs and may happen to run across yours and take a look.
 - Get non-committers to review/approve.
   Many committers filter open PRs for low-hanging fruit that are already been reviewed.
-- [@-mention](https://github.blog/news-insights/mention-somebody-they-re-notified/) someone and ask them nicely
+- [@-mention](https://github.blog/news-insights/mention-somebody-they-re-notified) someone and ask them nicely
 - Post in one of the channels made for this purpose if there has been no activity for at least one week
   - The current "PRs ready for review" or "PRs already reviewed" threads in the [NixOS Discourse](https://discourse.nixos.org/c/dev/14) (of course choose the one that applies to your situation)
   - The [Nixpkgs Review Requests Matrix room](https://matrix.to/#/#review-requests:nixos.org).
@@ -791,7 +797,7 @@ Through their experience, they may also take notice of a seemingly insignificant
 Sometimes however, they can also get a bit carried away and become too perfectionistic.
 If you feel some of the requests are unreasonable, out of scope, or merely a matter of personal preference, try to nicely remind the reviewers that you may not intend this code to be 100% perfect or that you have different taste in some regards and press them on whether they think that these requests are *critical* to the PR's success.
 
-While we do have a set of [official standards for the Nix community](https://github.com/NixOS/rfcs/), we don't have standards for everything and there are often multiple valid ways to achieve the same goal.
+While we do have a set of [official standards for the Nix community](https://github.com/NixOS/rfcs), we don't have standards for everything and there are often multiple valid ways to achieve the same goal.
 Unless there are standards forbidding the patterns used in your code or there are serious technical, maintainability or readability issues with your code, you can insist to keep the code the way you made it and disregard the requests.
 Please communicate this clearly though; a simple "I prefer it this way and see no major issue with it" can save you a lot of arguing.
 
@@ -827,7 +833,7 @@ They will likely not immediately state that fact however, so please ask for clar
 
 If you followed these guidelines but still got no results or if you feel that you have been wronged in some way, please explicitly reach out to the greater community via its communication channels.
 
-The [NixOS Discourse](https://discourse.nixos.org/) is a great place to do this as it has historically been the asynchronous medium with the greatest concentration of committers and other people who are significantly involved in Nixpkgs.
+The [NixOS Discourse](https://discourse.nixos.org) is a great place to do this as it has historically been the asynchronous medium with the greatest concentration of committers and other people who are significantly involved in Nixpkgs.
 There is a dedicated discourse thread [PRs in distress](https://discourse.nixos.org/t/prs-in-distress/3604) where you can link your PR if everything else fails.
 The [Nixpkgs / NixOS contributions Matrix channel](https://matrix.to/#/#dev:nixos.org) is the best synchronous channel with the same qualities.
 
