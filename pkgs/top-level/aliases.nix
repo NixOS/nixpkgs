@@ -1510,6 +1510,8 @@ mapAliases {
 
   ### P ###
 
+  p4est-sc = lib.warnOnInstantiate "'p4est-sc' has been renamed to 'libsc'" libsc; # Added 2025-06-10
+  p4est-sc-dbg = lib.warnOnInstantiate "'p4est-sc-dbg' has been renamed to 'libsc-dbg'" libsc-dbg; # Added 2025-06-10
   pax-rs = throw "'pax-rs' has been removed because upstream has disappeared"; # Added 2025-01-25
   PageEdit = pageedit; # Added 2024-01-21
   passky-desktop = throw "passky-desktop has been removed, as it was unmaintained and blocking the Electron 29 removal."; # Added 2025-02-24
