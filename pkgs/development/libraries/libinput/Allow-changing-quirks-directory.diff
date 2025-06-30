@@ -1,0 +1,43 @@
+diff --git a/meson.build b/meson.build
+index 68fb91ee..f12f96c4 100644
+--- a/meson.build
++++ b/meson.build
+@@ -25,6 +25,11 @@ endif
+ dir_udev_callouts = dir_udev
+ dir_udev_rules    = dir_udev / 'rules.d'
+ 
++dir_quirks = get_option('quirks-dir')
++if dir_quirks == ''
++	dir_quirks = dir_data
++endif
++
+ # Collection of man pages, we'll append to that
+ src_man = files()
+ 
+@@ -335,9 +340,9 @@ libfilter = static_library('filter', src_libfilter,
+ dep_libfilter = declare_dependency(link_with : libfilter)
+ 
+ ############ libquirks.a #############
+-libinput_data_path = dir_data
++libinput_data_path = dir_quirks
+ libinput_data_override_path = dir_overrides / 'local-overrides.quirks'
+-config_h.set_quoted('LIBINPUT_QUIRKS_DIR', dir_data)
++config_h.set_quoted('LIBINPUT_QUIRKS_DIR', dir_quirks)
+ config_h.set_quoted('LIBINPUT_QUIRKS_OVERRIDE_FILE', libinput_data_override_path)
+ 
+ config_h.set_quoted('LIBINPUT_QUIRKS_SRCDIR', dir_src_quirks)
+diff --git a/meson_options.txt b/meson_options.txt
+index 047647f7..7d4c0d7d 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -2,6 +2,10 @@ option('udev-dir',
+        type: 'string',
+        value: '',
+        description: 'udev base directory [default=$prefix/lib/udev]')
++option('quirks-dir',
++       type: 'string',
++       value: '',
++       description: 'directory to load quirks from [default=$prefix/$datadir/libinput]')
+ option('epoll-dir',
+        type: 'string',
+        value: '',
