@@ -176,6 +176,29 @@ with haskellLib;
     guardian
     ;
 
+  # Expected test output for these accidentally checks the absolute location of the source directory
+  # https://github.com/dan-t/cabal-cargs/issues/9
+  cabal-cargs = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "!/FindCabalFilePure withoutSandbox/"
+      "-p"
+      "!/FromCabalFilePure withoutSandbox/"
+      "-p"
+      "!/FromLibSrcPure withoutSandbox/"
+      "-p"
+      "!/FromExeSrcFilePure withoutSandbox/"
+      "-p"
+      "!/FindCabalFilePure withSandbox/"
+      "-p"
+      "!/FromCabalFilePure withSandbox/"
+      "-p"
+      "!/FromLibSrcPure withSandbox/"
+      "-p"
+      "!/FromExeSrcFilePure withSandbox/"
+    ];
+  }) super.cabal-cargs;
+
   # Extensions wants the latest version of Cabal for its list of Haskell
   # language extensions.
   # 2025-02-10: jailbreak to allow hspec-hedgehog 0.3.0.0 and hedgehog 1.5
