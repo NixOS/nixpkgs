@@ -18648,6 +18648,8 @@ self: super: with self; {
 
   tsplib95 = callPackage ../development/python-modules/tsplib95 { };
 
+  tsv = callPackage ../development/python-modules/tsv { };
+
   ttach = callPackage ../development/python-modules/ttach { };
 
   ttfautohint-py = callPackage ../development/python-modules/ttfautohint-py { };
