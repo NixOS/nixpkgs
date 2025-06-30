@@ -1,0 +1,27 @@
+[
+  {
+    "name": "arch-wiki",
+    "url": "https://github.com/filiparag/wikiman/releases/download/2.14.1/arch-wiki_20250519.source.tar.xz",
+    "hash": "sha256-uqE6fUVFPCo7WRmU+s1DIcS+vknF8SBFVZv6WsWMnMQ="
+  },
+  {
+    "name": "devdocs",
+    "url": "https://github.com/filiparag/wikiman/releases/download/2.14.1/devdocs_20250519.source.tar.xz",
+    "hash": "sha256-e8uqArqdr6Ubuebk/fQtZSwX8Jzj0Xpbp3Ho2FxJsUg="
+  },
+  {
+    "name": "freebsd-docs",
+    "url": "https://github.com/filiparag/wikiman/releases/download/2.14.1/freebsd-docs_20250519.source.tar.xz",
+    "hash": "sha256-HrCRvZSJawnhF09CaBCJywm9i0sFMpzt7A90aD0BAKc="
+  },
+  {
+    "name": "gentoo-wiki",
+    "url": "https://github.com/filiparag/wikiman/releases/download/2.14.1/gentoo-wiki_20250520.source.tar.xz",
+    "hash": "sha256-8Js31Kbev3X2WxCTc7/uNyP7JHvoOaa5squ1C4Ca6lw="
+  },
+  {
+    "name": "tldr-pages",
+    "url": "https://github.com/filiparag/wikiman/releases/download/2.14.1/tldr-pages_20250519.source.tar.xz",
+    "hash": "sha256-J72X7VBxeNcnuTxRrzg3ydRNxCV5kspVrxPXxEXuG4o="
+  }
+]
