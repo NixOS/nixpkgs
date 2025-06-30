@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtdeclarative
     qt6.qtwayland
     qt6.qtsvg
+    qt6.qtimageformats
     cli11
     wayland
     wayland-protocols
