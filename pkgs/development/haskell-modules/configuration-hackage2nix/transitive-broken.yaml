@@ -681,6 +681,7 @@ dont-distribute-packages:
  - ddc-tools
  - ddc-war
  - ddci-core
+ - dde
  - debug
  - decimal-arithmetic
  - dedukti
@@ -1025,6 +1026,7 @@ dont-distribute-packages:
  - frpnow-gtk
  - frpnow-gtk3
  - frpnow-vty
+ - fs-sim
  - ftdi
  - ftp-client-conduit
  - FTPLine
@@ -1374,7 +1376,6 @@ dont-distribute-packages:
  - haskoon
  - haskoon-httpspec
  - haskoon-salvia
- - haskore-realtime
  - haskore-supercollider
  - haskore-synthesizer
  - hasktorch-ffi-thc
