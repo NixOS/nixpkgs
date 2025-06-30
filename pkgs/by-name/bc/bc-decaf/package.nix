@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "bc-decaf";
-  version = "unstable-2022-07-20";
+  version = "linphone-5.2.6";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
     group = "BC";
     owner = "public/external";
     repo = "decaf";
-    rev = "876ddb4d465c94f97beba1be450e8538d866cc5d";
-    sha256 = "sha256-QFOAgLiPbG2ZdwKoCOrVD5/sPq9IH4rtAWnnk/rZWcs=";
+    rev = "63ad363f92eb50bc09ed3be8574f84650ed377a9";
+    sha256 = "sha256-KgjRSif/aG5AITXgH4aDsFdJ0moj/mT9z9d2iEVoioI=";
   };
 
   # Do not build static libraries and do not enable -Werror
