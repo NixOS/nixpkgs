@@ -2897,6 +2897,8 @@ self: super: with self; {
 
   controku = callPackage ../development/python-modules/controku { };
 
+  control = callPackage ../development/python-modules/control { };
+
   convertdate = callPackage ../development/python-modules/convertdate { };
 
   convertertools = callPackage ../development/python-modules/convertertools { };
