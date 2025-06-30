@@ -106,6 +106,8 @@ rec {
     "no"
   ];
 
+  boolToYesNo = val: if val then "yes" else "no";
+
   digits = map toString (range 0 9);
 
   isByteFormat =
