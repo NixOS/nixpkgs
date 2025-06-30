@@ -1,13 +1,13 @@
 {
   buildFHSEnv,
-  electron_33,
+  electron_35, # upstream uses electron_33 (as of 0.36.5), but it's EOL. Hopefully newer version don't break the package
   fetchFromGitHub,
   fetchYarnDeps,
   fetchurl,
   git,
   lib,
   makeDesktopItem,
-  nodejs_20,
+  nodejs,
   stdenvNoCC,
   util-linux,
   yarnBuildHook,
@@ -18,8 +18,6 @@
 let
   pname = "electron-fiddle";
   version = "0.36.5";
-  electron = electron_33;
-  nodejs = nodejs_20;
 
   src = fetchFromGitHub {
     owner = "electron";
@@ -27,6 +25,8 @@ let
     tag = "v${version}";
     hash = "sha256-Fo7rXnufJ26WijnplWswdeCGJitkvTDboOggUfrz1Hw=";
   };
+
+  electron = electron_35;
 
   # As of https://github.com/electron/fiddle/pull/1316 this is fetched
   # from the network and has no stable hash.  Grab an old version from
