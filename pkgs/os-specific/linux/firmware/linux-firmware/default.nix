@@ -1,6 +1,6 @@
 {
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitLab,
   lib,
   python3,
   rdfind,
@@ -22,11 +22,13 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "linux-firmware";
-  version = "20250509";
+  version = "20250627";
 
-  src = fetchzip {
-    url = "https://cdn.kernel.org/pub/linux/kernel/firmware/linux-firmware-${version}.tar.xz ";
-    hash = "sha256-0FrhgJQyCeRCa3s0vu8UOoN0ZgVCahTQsSH0o6G6hhY=";
+  src = fetchFromGitLab {
+    owner = "kernel-firmware";
+    repo = "linux-firmware";
+    tag = version;
+    hash = "sha256-mNjCl+HtvvFxyLjlBFsyfyu2TAf6D/9lbRiouKC/vVY=";
   };
 
   postUnpack = ''
