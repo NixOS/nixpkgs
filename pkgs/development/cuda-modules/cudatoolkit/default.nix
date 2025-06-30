@@ -1,5 +1,5 @@
 {
-  cudaVersion,
+  cudaMajorMinorVersion,
   runPatches ? [ ],
   autoPatchelfHook,
   autoAddDriverRunpath,
@@ -16,17 +16,21 @@
   gst_all_1,
   gtk2,
   lib,
+  libxcrypt-legacy,
   libxkbcommon,
   libkrb5,
   krb5,
   makeWrapper,
   markForCudatoolkitRootHook,
   ncurses5,
+  ncurses6,
   numactl,
   nss,
   patchelf,
   perl,
   python3, # FIXME: CUDAToolkit 10 may still need python27
+  python310,
+  python311,
   pulseaudio,
   setupCudaHook,
   stdenv,
@@ -50,7 +54,7 @@
 let
   # Version info for the classic cudatoolkit packages that contain everything that is in redist.
   releases = builtins.import ./releases.nix;
-  release = releases.${cudaVersion};
+  release = releases.${cudaMajorMinorVersion};
 in
 
 backendStdenv.mkDerivation rec {
@@ -145,7 +149,14 @@ backendStdenv.mkDerivation rec {
         qtwebchannel
         qtwebengine
       ])
-    ));
+    ))
+    ++ lib.optionals (lib.versionAtLeast version "12.6") [
+      # libcrypt.so.1
+      libxcrypt-legacy
+      ncurses6
+      python310
+      python311
+    ];
 
   # Prepended to runpaths by autoPatchelf.
   # The order inherited from older rpath preFixup code
@@ -285,6 +296,11 @@ backendStdenv.mkDerivation rec {
     + lib.optionalString (lib.versions.majorMinor version == "11.8") ''
       rm $out/include/include
     ''
+    # Python 3.8 is not in nixpkgs anymore, delete Python 3.8 cuda-gdb support
+    # to avoid autopatchelf failing to find libpython3.8.so.
+    + lib.optionalString (lib.versionAtLeast version "12.6") ''
+      find $out -name '*python3.8*' -delete
+    ''
     + ''
       runHook postInstall
     '';
@@ -340,6 +356,6 @@ backendStdenv.mkDerivation rec {
     homepage = "https://developer.nvidia.com/cuda-toolkit";
     platforms = [ "x86_64-linux" ];
     license = licenses.nvidiaCuda;
-    maintainers = teams.cuda.members;
+    teams = [ teams.cuda ];
   };
 }

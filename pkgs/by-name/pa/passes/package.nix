@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/model/meson.build \
-      --replace-fail /app/lib ${zint}/lib
+      --replace-fail /app/lib ${lib.getLib zint}/lib
   '';
 
   strictDeps = true;

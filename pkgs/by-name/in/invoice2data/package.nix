@@ -4,7 +4,7 @@
   fetchpatch,
   ghostscript,
   imagemagick,
-  poppler_utils,
+  poppler-utils,
   python3,
   tesseract5,
 }:
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "invoice-x";
-    repo = pname;
+    repo = "invoice2data";
     rev = "v${version}";
     hash = "sha256-pAvkp8xkHYi/7ymbxaT7/Jhu44j2P8emm8GyXC6IBnI=";
   };
@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
       ghostscript
       imagemagick
       tesseract5
-      poppler_utils
+      poppler-utils
     ])
   ];
 

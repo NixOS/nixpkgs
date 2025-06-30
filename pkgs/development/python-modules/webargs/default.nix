@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "webargs";
-  version = "8.6.0";
+  version = "8.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uNCYq5K9dMZZ7KcFr6MdaBR18hjLFcHlcnH6IQPAVHo=";
+    hash = "sha256-DGF97BntTx/2skfNc4VelJ2HBS1xkAk4tx8Mr9kvGRs=";
   };
 
   build-system = [ flit-core ];

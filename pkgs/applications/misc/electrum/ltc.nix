@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
-    sha256 = "sha256-7F28cve+HD5JDK5igfkGD/NvTCfA33g+DmQJ5mwPM9Q=";
+    hash = "sha256-7F28cve+HD5JDK5igfkGD/NvTCfA33g+DmQJ5mwPM9Q=";
   };
 
   postUnpack = ''
@@ -85,6 +85,7 @@ python3.pkgs.buildPythonApplication {
       ckcc-protocol
       keepkey
       trezor
+      distutils
     ]
     ++ lib.optionals enableQt [
       pyqt5

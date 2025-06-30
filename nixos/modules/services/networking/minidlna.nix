@@ -1,25 +1,34 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.minidlna;
   format = pkgs.formats.keyValue { listsAsDuplicateKeys = true; };
   cfgfile = format.generate "minidlna.conf" cfg.settings;
 
-in {
+in
+{
   options.services.minidlna.enable = lib.mkEnableOption "MiniDLNA, a simple DLNA server. Consider adding `openFirewall = true` into your config";
   options.services.minidlna.openFirewall = lib.mkEnableOption "opening HTTP (TCP) and SSDP (UDP) ports in the firewall";
-  options.services.minidlna.package = lib.mkPackageOption pkgs "minidlna" {};
+  options.services.minidlna.package = lib.mkPackageOption pkgs "minidlna" { };
 
   options.services.minidlna.settings = lib.mkOption {
-    default = {};
+    default = { };
     description = "Configuration for {manpage}`minidlna.conf(5)`.";
     type = lib.types.submodule {
       freeformType = format.type;
 
       options.media_dir = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
-        example = [ "/data/media" "V,/home/alice/video" ];
+        default = [ ];
+        example = [
+          "/data/media"
+          "V,/home/alice/video"
+        ];
         description = ''
           Directories to be scanned for media files.
           The `A,` `V,` `P,` prefixes restrict a directory to audio, video or image files.
@@ -67,22 +76,34 @@ in {
         description = "Defines the type of messages that should be logged and down to which level of importance.";
       };
       options.enable_subtitles = lib.mkOption {
-        type = lib.types.enum [ "yes" "no" ];
+        type = lib.types.enum [
+          "yes"
+          "no"
+        ];
         default = "yes";
         description = "Enable subtitle support on unknown clients.";
       };
       options.inotify = lib.mkOption {
-        type = lib.types.enum [ "yes" "no" ];
+        type = lib.types.enum [
+          "yes"
+          "no"
+        ];
         default = "no";
         description = "Whether to enable inotify monitoring to automatically discover new files.";
       };
       options.enable_tivo = lib.mkOption {
-        type = lib.types.enum [ "yes" "no" ];
+        type = lib.types.enum [
+          "yes"
+          "no"
+        ];
         default = "no";
         description = "Support for streaming .jpg and .mp3 files to a TiVo supporting HMO.";
       };
       options.wide_links = lib.mkOption {
-        type = lib.types.enum [ "yes" "no" ];
+        type = lib.types.enum [
+          "yes"
+          "no"
+        ];
         default = "no";
         description = "Set this to yes to allow symlinks that point outside user-defined `media_dir`.";
       };

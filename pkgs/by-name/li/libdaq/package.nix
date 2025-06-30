@@ -5,17 +5,18 @@
   autoreconfHook,
   pkg-config,
   libpcap,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdaq";
-  version = "3.0.18";
+  version = "3.0.19";
 
   src = fetchFromGitHub {
     owner = "snort3";
     repo = "libdaq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PMb8q8QcfUXxEf0s2UdaZogmxzqUCw0wRdzfT1xio/E=";
+    hash = "sha256-ma+M/rIbChqL0pjhE0a1UfJLm/r7I7IvIuSwcnQWvAQ=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Data AcQuisition library (libDAQ), for snort packet I/O";
     homepage = "https://www.snort.org";
@@ -53,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       aycanirican
       brianmcgillion
     ];
+    changelog = "https://github.com/snort3/libdaq/releases/tag/v${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2;
     outputsToInstall = [
       "lib"

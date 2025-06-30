@@ -105,11 +105,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "34dfd656652c24da31b89c39d0885f284722eeaa";
+  rev = "7a7b9383b3bf39c850feb0d103c6b829e2f48a6b";
   # This is the commit number
-  # Currently from the branch: https://github.com/JetBrains/jcef/tree/242
+  # Currently from the branch: https://github.com/JetBrains/jcef/tree/251
   # Run `git rev-list --count HEAD`
-  version = "867";
+  version = "1014";
 
   nativeBuildInputs = [
     cmake
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-JlTGKqvgdBpBs2xtFMTVJ/ZksT1uME/8a2g7niH2sq8=";
+    hash = "sha256-ZMxx5mwmsBiUneULHFUDOrJQ8yKuK9bfPz89vN31ql4=";
   };
   cef-bin =
     let
@@ -215,8 +215,6 @@ stdenv.mkDerivation rec {
       runHook preInstall
 
       export JCEF_ROOT_DIR=$(realpath ..)
-      export THRIFT_DIR="$JCEF_ROOT_DIR"/third_party/thrift
-      export THRIFT_JAR=libthrift-0.19.0.jar
       export OUT_NATIVE_DIR=$JCEF_ROOT_DIR/jcef_build/native/${buildType}
       export JB_TOOLS_DIR=$(realpath ../jb/tools)
       export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/linux
@@ -278,11 +276,6 @@ stdenv.mkDerivation rec {
     + ''
 
       cd ../jcef
-      cp "$THRIFT_DIR"/"$THRIFT_JAR" .
-      cp "$JB_TOOLS_DIR"/common/thrift-module-info.java module-info.java
-      javac --patch-module org.apache.thrift=$THRIFT_JAR module-info.java
-      jar uf $THRIFT_JAR module-info.class
-      rm module-info.class module-info.java
       cp "$OUT_CLS_DIR"/jcef.jar .
       mkdir lib
       cp -R "$OUT_NATIVE_DIR"/* lib
@@ -303,7 +296,6 @@ stdenv.mkDerivation rec {
     jmod create --module-path . --class-path jogl-all.jar --libs lib $out/jmods/jogl.all.jmod
     cd ../jcef
     jmod create --module-path . --class-path jcef.jar --libs lib $out/jmods/jcef.jmod
-    jmod create --module-path . --class-path $THRIFT_JAR $out/jmods/org.apache.thrift.jmod
 
     # stripJavaArchivesHook gets rid of jar file timestamps, but not of jmod file timestamps
     # We have to manually call strip-nondeterminism to do this for jmod files too

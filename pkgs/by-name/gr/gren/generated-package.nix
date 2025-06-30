@@ -95,7 +95,7 @@ mkDerivation {
   testToolDepends = [ hspec-discover ];
   jailbreak = true;
   homepage = "https://gren-lang.org";
-  description = "The `gren` command line interface";
+  description = "`gren` command line interface";
   license = lib.licenses.bsd3;
   mainProgram = "gren";
 }

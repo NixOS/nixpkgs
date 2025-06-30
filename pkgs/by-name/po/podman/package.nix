@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   pkg-config,
   installShellFiles,
   buildGoModule,
@@ -75,13 +74,13 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.4.0";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-iEO4njjNByLkhXFLgZ8tO8M8RkwT+Lb0zyfedQDHcNc=";
+    hash = "sha256-iLpJQC1v+jPeQNCjgtx3pPKsa6wLcrqtQkeG7qF3rWo=";
   };
 
   patches = [
@@ -182,7 +181,7 @@ buildGoModule rec {
       oci-containers-podman = nixosTests.oci-containers.podman;
     };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://podman.io/";
     description = "Program for managing pods, containers and container images";
     longDescription = ''
@@ -191,8 +190,8 @@ buildGoModule rec {
       To install on NixOS, please use the option `virtualisation.podman.enable = true`.
     '';
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
     mainProgram = "podman";
   };
 }

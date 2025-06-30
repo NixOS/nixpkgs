@@ -7,7 +7,7 @@
   version ? null,
 }:
 
-(mkCoqDerivation rec {
+(mkCoqDerivation {
   pname = "itauto";
   owner = "fbesson";
   domain = "gitlab.inria.fr";
@@ -22,40 +22,19 @@
   release."8.13+no".sha256 = "sha256-gXoxtLcHPoyjJkt7WqvzfCMCQlh6kL2KtCGe3N6RC/A=";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = isEq "8.20";
-        out = "8.20.0";
-      }
-      {
-        case = isEq "8.19";
-        out = "8.19.0";
-      }
-      {
-        case = isEq "8.18";
-        out = "8.18.0";
-      }
-      {
-        case = isEq "8.17";
-        out = "8.17.0";
-      }
-      {
-        case = isEq "8.16";
-        out = "8.16.0";
-      }
-      {
-        case = isEq "8.15";
-        out = "8.15.0";
-      }
-      {
-        case = isEq "8.14";
-        out = "8.14.0";
-      }
-      {
-        case = isEq "8.13";
-        out = "8.13+no";
-      }
+      (case (isEq "8.20") "8.20.0")
+      (case (isEq "8.19") "8.19.0")
+      (case (isEq "8.18") "8.18.0")
+      (case (isEq "8.17") "8.17.0")
+      (case (isEq "8.16") "8.16.0")
+      (case (isEq "8.15") "8.15.0")
+      (case (isEq "8.14") "8.14.0")
+      (case (isEq "8.13") "8.13+no")
     ] null;
 
   mlPlugin = true;

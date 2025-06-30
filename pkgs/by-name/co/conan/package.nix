@@ -5,27 +5,27 @@
   git,
   pkg-config,
   xcbuild,
-  python3,
+  python3Packages,
   zlib,
+  cmake,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "conan";
-  version = "2.9.1";
-  format = "setuptools";
+  version = "2.16.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     tag = version;
-    hash = "sha256-1KKXOvoSAemzafWvBoYFtxqgSObHcXe3GVPgG25VNm0=";
+    hash = "sha256-b+GVFy195wwQyWaiEMg1vVcWnkTB01IbQQsOHhQY6pY=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
-  propagatedBuildInputs =
-    with python3.pkgs;
+  dependencies =
+    with python3Packages;
     [
       bottle
       colorama
@@ -49,28 +49,32 @@ python3.pkgs.buildPythonApplication rec {
       pyopenssl
     ];
 
+  pythonRelaxDeps = [
+    "urllib3"
+    "distro"
+  ];
+
   nativeCheckInputs =
     [
       git
       pkg-config
       zlib
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      xcbuild.xcrun
-    ]
-    ++ (with python3.pkgs; [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ xcbuild.xcrun ]
+    ++ (with python3Packages; [
       mock
       parameterized
       pytest-xdist
       pytestCheckHook
       webtest
+      cmake
     ]);
+
+  dontUseCmakeConfigure = true;
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "conan"
-  ];
+  pythonImportsCheck = [ "conan" ];
 
   disabledTests =
     [
@@ -78,6 +82,10 @@ python3.pkgs.buildPythonApplication rec {
       "TestFTP"
       # Unstable test
       "test_shared_windows_find_libraries"
+      # 'cmake' tool version 'Any' is not available
+      "test_build"
+      # 'cmake' tool version '3.27' is not available
+      "test_metabuild"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Rejects paths containing nix
@@ -107,18 +115,17 @@ python3.pkgs.buildPythonApplication rec {
     "test/functional/tools/system/package_manager_test.py"
     "test/functional/tools_versions_test.py"
     "test/functional/util/test_cmd_args_to_string.py"
-    "test/integration/command/user_test.py"
-    "test/integration/command_v2/list_test.py"
     "test/performance/test_large_graph.py"
     "test/unittests/tools/env/test_env_files.py"
+    "test/integration/ui/exit_with_code_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Decentralized and portable C/C++ package manager";
     mainProgram = "conan";
     homepage = "https://conan.io";
-    changelog = "https://github.com/conan-io/conan/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ HaoZeke ];
+    changelog = "https://github.com/conan-io/conan/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ HaoZeke ];
   };
 }

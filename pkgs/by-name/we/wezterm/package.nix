@@ -29,31 +29,38 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-02-10";
+  version = "0-unstable-2025-05-18";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = "52c1ca749552af4d8a2f18ec10fe8f14b6622519";
+    rev = "5663e749948df3ed3c2d8ee0bfea6c85226310d9";
     fetchSubmodules = true;
-    hash = "sha256-4dIu0WczmjfCfYe2/fZybMWfgYd4XezIHUUPVb3ou28=";
+    hash = "sha256-SQ1H16jy6GVjM8tEKZZC7AGIADLR1NyGfOT/6pFcFA0=";
   };
 
-  postPatch = ''
-    echo ${version} > .tag
+  postPatch =
+    ''
+      echo ${version} > .tag
 
-    # tests are failing with: Unable to exchange encryption keys
-    rm -r wezterm-ssh/tests
+      # hash does not work well with NixOS
+      substituteInPlace assets/shell-integration/wezterm.sh \
+        --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
+        --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
+        --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
+        --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # many tests fail with: No such file or directory
+      rm -r wezterm-ssh/tests
+    '';
 
-    # hash does not work well with NixOS
-    substituteInPlace assets/shell-integration/wezterm.sh \
-      --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
-      --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
-      --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
-      --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
-  '';
+  # dep: syntax causes build failures in rare cases
+  # https://github.com/rust-secure-code/cargo-auditable/issues/124
+  # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
+  auditable = false;
 
-  cargoHash = "sha256-2PJBd3nouxK0iIDOKIS9rrXbbts6zTYdrzxxokSiNwo=";
+  cargoHash = "sha256-9pdkXpkIbe5HeVGvgusRaI4A6ZjDGssO5k0ULVnO6k8=";
   useFetchCargoVendor = true;
 
   nativeBuildInputs = [
@@ -66,13 +73,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [
       fontconfig
+      openssl
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libX11
       libxcb
       libxkbcommon
-      openssl
       wayland
       xcbutil
       xcbutilimage
@@ -112,7 +119,12 @@ rustPlatform.buildRustPackage rec {
       cp -r assets/macos/WezTerm.app "$OUT_APP"
       rm $OUT_APP/*.dylib
       cp -r assets/shell-integration/* "$OUT_APP"
-      ln -s $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
+      # https://github.com/wezterm/wezterm/pull/6886
+      # macOS will only recognize our application bundle
+      # if the binaries are inside of it. Move them there
+      # and create symbolic links for them in bin/.
+      mv $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
+      ln -s "$OUT_APP"/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$out/bin"
     '';
 
   passthru = {

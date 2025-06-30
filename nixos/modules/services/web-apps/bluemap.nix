@@ -18,10 +18,6 @@ let
     ) cfg.maps
   );
 
-  addonsFolder = pkgs.linkFarm "addons" (
-    lib.attrsets.mapAttrs' (name: value: lib.nameValuePair "${name}.jar" value) cfg.addons
-  );
-
   storageFolder = pkgs.linkFarm "storage" (
     lib.attrsets.mapAttrs' (
       name: value: lib.nameValuePair "${name}.conf" (format.generate "${name}.conf" value)
@@ -34,8 +30,7 @@ let
     "core.conf" = coreConfig;
     "webapp.conf" = webappConfig;
     "webserver.conf" = webserverConfig;
-    "packs" = pkgs.linkFarm "packs" cfg.resourcepacks;
-    "addons" = addonsFolder;
+    "packs" = pkgs.linkFarm "packs" cfg.packs;
   };
 
   inherit (lib) mkOption;
@@ -46,6 +41,7 @@ in
       [ "services" "bluemap" "resourcepacks" ]
       [ "services" "bluemap" "packs" ]
     )
+    (lib.mkRenamedOptionModule [ "services" "bluemap" "addons" ] [ "services" "bluemap" "packs" ])
   ];
 
   options.services.bluemap = {
@@ -236,26 +232,6 @@ in
         If you define anything here you must define everything yourself.
         See the default for an example with good options for the different world types.
         For valid values [consult upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/BlueMapCommon/src/main/resources/de/bluecolored/bluemap/config/maps/map.conf).
-      '';
-    };
-
-    addons = mkOption {
-      type = lib.types.attrsOf lib.types.pathInStore;
-      default = { };
-      description = ''
-        A set of jar addons to be loaded.
-
-        See <https://bluemap.bluecolored.de/3rdPartySupport.html> for a list of officially recognized addons.
-      '';
-
-      example = lib.literalExpression ''
-        {
-          blueBridge = ./blueBridge.jar;
-          blueBorder = pkgs.fetchurl {
-            url = "https://github.com/pop4959/BlueBorder/releases/download/1.1.1/BlueBorder-1.1.1.jar";
-            hash = "...";
-          };
-        }
       '';
     };
 

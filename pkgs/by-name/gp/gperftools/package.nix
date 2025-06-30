@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   version = "2.15";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "${pname}-${version}";
+    owner = "gperftools";
+    repo = "gperftools";
+    rev = "gperftools-${version}";
     sha256 = "sha256-3ibr8AHzo7txX1U+9oOWA60qeeJs/OGeevv+sgBwQa0=";
   };
 

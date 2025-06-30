@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sslmate.com";
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     description = "Easy to buy, deploy, and manage your SSL certs";
     mainProgram = "sslmate";
     platforms = platforms.unix;

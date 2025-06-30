@@ -5,7 +5,7 @@
   yojson,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "atdgen-runtime";
   inherit (atdgen-codec-runtime) version src;
 

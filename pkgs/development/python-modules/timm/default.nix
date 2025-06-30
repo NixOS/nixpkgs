@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -13,7 +14,7 @@
   torch,
   torchvision,
 
-  # checks
+  # tests
   expecttest,
   pytestCheckHook,
   pytest-timeout,
@@ -21,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "1.0.14";
+  version = "1.0.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "pytorch-image-models";
     tag = "v${version}";
-    hash = "sha256-mQd4xsKuAKj77lG6r14iHrkaBclRmBwICXuHs7pQoGI=";
+    hash = "sha256-8z23KQvb+wAlM/IXDC9j6OV8ioZE1dx0xhITSzdHoeY=";
   };
 
   build-system = [ pdm-backend ];
@@ -49,14 +50,16 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests" ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+    # CppCompileError: C++ compile error
+    # OpenMP support not found.
+    "test_kron"
+  ];
+
   disabledTestPaths = [
     # Takes too long and also tries to download models
     "tests/test_models.py"
-  ];
-
-  disabledTests = [
-    # AttributeError: 'Lookahead' object has no attribute '_optimizer_step_pre...
-    "test_lookahead"
   ];
 
   pythonImportsCheck = [

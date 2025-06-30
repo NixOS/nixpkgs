@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "24.10.0";
+  version = "25.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hG6mTJev47xne3YXh5k75JkYEOzHpKk3gW3Wvd7cSHU=";
+    hash = "sha256-M0ltXNEiKtczkTUrSujaFSU8Xeibk6gLPiyNmhnsJmY=";
   };
 
   nativeBuildInputs = [
@@ -95,6 +95,9 @@ buildPythonPackage rec {
     [
       # requires network access
       "test_gen_check_output"
+      # broken on Python 3.13.4
+      # FIXME: remove this when fixed upstream
+      "test_simple_format[pep_701]"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # fails on darwin

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.zram-generator;
   settingsFormat = pkgs.formats.ini { };
@@ -33,6 +38,7 @@ in
     systemd.packages = [ cfg.package ];
     systemd.services."systemd-zram-setup@".path = [ pkgs.util-linux ]; # for mkswap
 
-    environment.etc."systemd/zram-generator.conf".source = settingsFormat.generate "zram-generator.conf" cfg.settings;
+    environment.etc."systemd/zram-generator.conf".source =
+      settingsFormat.generate "zram-generator.conf" cfg.settings;
   };
 }

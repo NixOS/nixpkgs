@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rqlite";
-  version = "8.36.11";
+  version = "8.38.2";
 
   src = fetchFromGitHub {
     owner = "rqlite";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-LL2nfRFrfDtttDexLUarFb7AyoLTFf3WeoWm4cqmBtM=";
+    repo = "rqlite";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZdfChx4K2YnKsFO1N8RQSremP0Yz3guq66XCw/Mrxoc=";
   };
 
-  vendorHash = "sha256-BUZaRSDbzHVzP3A0Q4LnKfzp0lzEJ3x7Vag+7sn4MSM=";
+  vendorHash = "sha256-qzg55fVF7GJlwqRgfLzVIWS95BfiWuty7stw+loR6/o=";
 
   subPackages = [
     "cmd/rqlite"
@@ -24,20 +24,21 @@ buildGoModule rec {
   ];
 
   # Leaving other flags from https://github.com/rqlite/rqlite/blob/master/package.sh
-  # since automatically retriving those is nontrivial and inessential
+  # since automatically retrieving those is nontrivial and inessential
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/rqlite/rqlite/cmd.Version=${src.rev}"
+    "-X github.com/rqlite/rqlite/cmd.Version=${finalAttrs.version}"
   ];
 
   # Tests are in a different subPackage which fails trying to access the network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, distributed relational database built on SQLite";
     homepage = "https://github.com/rqlite/rqlite";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    changelog = "https://github.com/rqlite/rqlite/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Sphinx actdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-actdiag";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
   };
 }

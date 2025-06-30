@@ -12,7 +12,6 @@
   desktop-file-utils,
   libadwaita,
   gst_all_1,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,10 +52,7 @@ stdenv.mkDerivation rec {
       gst-plugins-base
       gst-plugins-bad
       gst-plugins-good
-    ])
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+    ]);
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114

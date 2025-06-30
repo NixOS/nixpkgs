@@ -9,7 +9,7 @@
   popt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sd-mux-ctrl-unstable";
   version = "2020-02-17";
 

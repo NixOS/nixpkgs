@@ -1,24 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kyverno }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  kyverno,
+}:
 
 buildGoModule rec {
   pname = "kyverno";
-  version = "1.13.3";
+  version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "kyverno";
     rev = "v${version}";
-    hash = "sha256-sRfVxNSUMjTszeKjPu6YlED3L7lzZEaPHxC4f0ztiMM=";
+    hash = "sha256-WKVzx88k9D6unZWNfJesy/Ucmm5u5hJUpEETuOLiF18=";
   };
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/kyverno/kyverno/pkg/version.BuildVersion=v${version}"
     "-X github.com/kyverno/kyverno/pkg/version.BuildHash=${version}"
     "-X github.com/kyverno/kyverno/pkg/version.BuildTime=1970-01-01_00:00:00"
   ];
 
-  vendorHash = "sha256-U53CYkQlf2Ejmpe2XltZUA+zsXcKZl7e8A5X/M1E1so=";
+  vendorHash = "sha256-HdHK70AELKdeVSyP1S2yHZad3vooRDDdxAOnzN6s0nQ=";
 
   subPackages = [ "cmd/cli/kubectl-kyverno" ];
 
@@ -39,12 +47,12 @@ buildGoModule rec {
     version = "v${version}"; # needed because testVersion uses grep -Fw
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes Native Policy Management";
     mainProgram = "kyverno";
     homepage = "https://kyverno.io/";
     changelog = "https://github.com/kyverno/kyverno/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bryanasdev000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bryanasdev000 ];
   };
 }

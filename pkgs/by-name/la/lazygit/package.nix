@@ -4,16 +4,17 @@
   fetchFromGitHub,
   lazygit,
   testers,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "lazygit";
-  version = "0.46.0";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
-    repo = pname;
+    repo = "lazygit";
     tag = "v${version}";
-    hash = "sha256-KUJ6+GPtQ5wNbbmCnOopifdxHTo67Y9kW3zwm6f9bXc=";
+    hash = "sha256-tbFRovaB0f+0VyX34DEXvWYjV3fipc5kbRNhm7rVMlo=";
   };
 
   vendorHash = null;
@@ -24,7 +25,16 @@ buildGoModule rec {
     "-X main.buildSource=nix"
   ];
 
-  passthru.tests.version = testers.testVersion { package = lazygit; };
+  passthru = {
+    tests.version = testers.testVersion { package = lazygit; };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v([0-9.]+)$"
+      ];
+    };
+  };
 
   meta = {
     description = "Simple terminal UI for git commands";

@@ -9,20 +9,20 @@
 }:
 
 let
-  version = "2025.1.1";
+  version = "2025.6.1";
 
   product =
     if proEdition then
       {
         productName = "pro";
         productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-17COQ9deYkzmaXBbg1arD3BQY7l3WZ9FakLXzTxgmr8=";
+        hash = "sha256-At3+tScMbNrZI2qF+kwt41khou8aP5Qn33v6IT7n9HI=";
       }
     else
       {
         productName = "community";
         productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-VnDVv492suHIjDqermH79Rcz4hb3bmgazIiBvbwV3Zc=";
+        hash = "sha256-1reZGan6hmXTg7RUjaian6Q5VAsR5iuye4kGWkpREM4=";
       };
 
   src = fetchurl {
@@ -36,7 +36,7 @@ let
   };
 
   pname = "burpsuite";
-  description = "An integrated platform for performing security testing of web applications";
+  description = "Integrated platform for performing security testing of web applications";
   desktopItem = makeDesktopItem {
     name = "burpsuite";
     exec = pname;
@@ -91,6 +91,8 @@ buildFHSEnv {
     cp -r ${desktopItem}/share/applications $out/share
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     inherit description;
     longDescription = ''
@@ -109,7 +111,9 @@ buildFHSEnv {
     hydraPlatforms = [ ];
     maintainers = with maintainers; [
       bennofs
+      blackzeshi
       fab
+      yechielw
     ];
     mainProgram = "burpsuite";
   };

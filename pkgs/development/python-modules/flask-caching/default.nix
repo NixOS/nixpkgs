@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "flask-caching";
-  version = "2.3.0";
+  version = "2.3.1";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "flask_caching";
     inherit version;
-    hash = "sha256-1+TKZKM7Sf6zOfzdF+a6JfXgEWjPiF5TeQ6IX4Ok0s8=";
+    hash = "sha256-Zdf9G07r+BD4RN595iWCVLMkgpbuQpvcs/dBvL97mMk=";
   };
 
   postPatch = ''

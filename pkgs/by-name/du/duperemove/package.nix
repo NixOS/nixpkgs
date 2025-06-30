@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "duperemove";
-  version = "0.15";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
     rev = "v${version}";
-    hash = "sha256-m89e7ewda4+TNemoXG/9dG7HI9xHmsqVfMIFg5Ft2YM=";
+    hash = "sha256-Y3HIqq61bLfZi4XR2RtSyuCPmcWrTxeWvqpTh+3hUjc=";
   };
 
   postPatch = ''
@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/markfasheh/duperemove";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
-      bluescreen303
       thoughtpolice
     ];
     platforms = platforms.linux;

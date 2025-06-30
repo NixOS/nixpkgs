@@ -7,15 +7,15 @@
   distribution,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "distribution";
-  version = "3.0.0-rc.3";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "distribution";
     repo = "distribution";
-    tag = "v${version}";
-    hash = "sha256-GcgEYYBljhRyKiEex6FL4FScg+v0k7Qe7Tq6IsgXVhM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-myezQTEdH7kkpCoAeZMf5OBxT4Bz8Qx6vCnwim230RY=";
   };
 
   vendorHash = null;
@@ -30,12 +30,12 @@ buildGoModule rec {
   passthru = {
     tests.version = testers.testVersion {
       package = distribution;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit to pack, ship, store, and deliver container content";
     longDescription = ''
       Distribution is a Open Source Registry implementation for storing and distributing container
@@ -44,10 +44,10 @@ buildGoModule rec {
       or running a simple private registry.
     '';
     homepage = "https://distribution.github.io/distribution/";
-    changelog = "https://github.com/distribution/distribution/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/distribution/distribution/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "registry";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

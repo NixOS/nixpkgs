@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
+  curl,
   libevent,
   libiconv,
   openssl,
@@ -31,14 +32,6 @@ assert sqliteSupport -> !mysqlSupport && !postgresqlSupport;
 let
   inherit (lib) optional optionalString;
 
-  fake_pg_config = buildPackages.writeShellScript "pg_config" ''
-    if [[ "$1" == "--version" ]]; then
-      $PKG_CONFIG libpq --modversion
-    else
-      $PKG_CONFIG libpq --variable="''${1//--/}"
-    fi
-  '';
-
   fake_mysql_config = buildPackages.writeShellScript "mysql_config" ''
     if [[ "$1" == "--version" ]]; then
       $PKG_CONFIG mysqlclient --modversion
@@ -59,9 +52,12 @@ import ./versions.nix (
       inherit hash;
     };
 
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [
+      pkg-config
+    ] ++ optional postgresqlSupport libpq.pg_config;
     buildInputs =
       [
+        curl
         libevent
         libiconv
         openssl
@@ -80,6 +76,7 @@ import ./versions.nix (
         "--enable-ipv6"
         "--enable-proxy"
         "--with-iconv"
+        "--with-libcurl"
         "--with-libevent"
         "--with-libpcre"
         "--with-openssl=${openssl.dev}"
@@ -90,7 +87,7 @@ import ./versions.nix (
       ++ optional sqliteSupport "--with-sqlite3=${sqlite.dev}"
       ++ optional sshSupport "--with-ssh2=${libssh2.dev}"
       ++ optional mysqlSupport "--with-mysql=${fake_mysql_config}"
-      ++ optional postgresqlSupport "--with-postgresql=${fake_pg_config}";
+      ++ optional postgresqlSupport "--with-postgresql";
 
     prePatch = ''
       find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +
@@ -123,7 +120,10 @@ import ./versions.nix (
       homepage = "https://www.zabbix.com/";
       license =
         if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [ mmahut ];
+      maintainers = with lib.maintainers; [
+        bstanderline
+        mmahut
+      ];
       platforms = lib.platforms.linux;
     };
   }

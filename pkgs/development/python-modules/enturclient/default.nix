@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "hfurubotten";
-    repo = pname;
+    repo = "enturclient";
     rev = "v${version}";
     hash = "sha256-Y2sBPikCAxumylP1LUy8XgjBRCWaNryn5XHSrRjJIIo=";
   };

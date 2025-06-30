@@ -10,23 +10,25 @@
   wrapGAppsHook4,
   desktop-file-utils,
   libadwaita,
+  ffmpeg,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "varia";
-  version = "2025.1.24";
+  version = "2025.5.14";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "giantpinkrobots";
     repo = "varia";
     tag = "v${version}";
-    hash = "sha256-bsSAPKs5iD1CMQ+t0i09odglZre137TOSyvJqE5lqN4=";
+    hash = "sha256-x2612aq/8YwDT3UYKW2P3PCVjhKhZJxH3JbY3A4IGq8=";
   };
 
   postPatch = ''
     substituteInPlace src/varia-py.in \
-      --replace-fail 'aria2cexec = sys.argv[1]' 'aria2cexec = "${lib.getExe aria2}"'
+      --replace-fail 'aria2cexec = sys.argv[1]' 'aria2cexec = "${lib.getExe aria2}"' \
+      --replace-fail 'ffmpegexec = sys.argv[2]' 'ffmpegexec = "${lib.getExe ffmpeg}"'
   '';
 
   nativeBuildInputs = [
@@ -45,6 +47,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     pygobject3
     aria2p
+    yt-dlp
   ];
 
   postInstall = ''

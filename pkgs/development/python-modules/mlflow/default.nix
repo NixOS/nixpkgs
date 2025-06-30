@@ -71,14 +71,14 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.20.1";
+  version = "2.20.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${version}";
-    hash = "sha256-672lKzYkWpUuUB2hiVtOqMhQltzRMGhoff2ZimLWJC8=";
+    hash = "sha256-kgohENAx5PpLQ9pBfl/zSq65l/DqJfufBf0gWR1WJHY=";
   };
 
   pythonRelaxDeps = [
@@ -193,7 +193,7 @@ buildPythonPackage rec {
     description = "Open source platform for the machine learning lifecycle";
     mainProgram = "mlflow";
     homepage = "https://github.com/mlflow/mlflow";
-    changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/mlflow/mlflow/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tbenst ];
   };

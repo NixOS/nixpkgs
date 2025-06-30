@@ -10,7 +10,7 @@ let
   cfg = config.systemd.repart;
   initrdCfg = config.boot.initrd.systemd.repart;
 
-  format = pkgs.formats.ini { };
+  format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
 
   definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
     lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions
@@ -56,6 +56,35 @@ in
         default = null;
         example = "/dev/vda";
       };
+
+      empty = lib.mkOption {
+        type = lib.types.enum [
+          "refuse"
+          "allow"
+          "require"
+          "force"
+          "create"
+        ];
+        description = ''
+          Controls how to operate on empty devices that contain no partition table yet.
+          See {manpage}`systemd-repart(8)` for details.
+        '';
+        example = "require";
+        default = "refuse";
+      };
+
+      discard = lib.mkOption {
+        type = lib.types.bool;
+        description = ''
+          Controls whether to issue the BLKDISCARD I/O control command on the
+          space taken up by any added partitions or on the space in between them.
+          Usually, it's a good idea to issue this request since it tells the underlying
+          hardware that the covered blocks shall be considered empty, improving performance.
+
+          See {manpage}`systemd-repart(8)` for details.
+        '';
+        default = true;
+      };
     };
 
     systemd.repart = {
@@ -77,6 +106,7 @@ in
               str
               int
               bool
+              (listOf str)
             ])
           );
         default = { };
@@ -93,8 +123,7 @@ in
         description = ''
           Specify partitions as a set of the names of the definition files as the
           key and the partition configuration as its value. The partition
-          configuration can use all upstream options. See <link
-          xlink:href="https://www.freedesktop.org/software/systemd/man/repart.d.html"/>
+          configuration can use all upstream options. See {manpage}`repart.d(5)`
           for all available options.
         '';
       };
@@ -145,7 +174,10 @@ in
               ''
                 ${config.boot.initrd.systemd.package}/bin/systemd-repart \
                                   --definitions=/etc/repart.d \
-                                  --dry-run=no ${lib.optionalString (initrdCfg.device != null) initrdCfg.device}
+                                  --dry-run=no \
+                                  --empty=${initrdCfg.empty} \
+                                  --discard=${lib.boolToString initrdCfg.discard} \
+                                  ${lib.optionalString (initrdCfg.device != null) initrdCfg.device}
               ''
             ];
           };

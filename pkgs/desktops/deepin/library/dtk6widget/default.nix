@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   doxygen,
@@ -13,18 +14,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6widget";
-  version = "6.0.24";
+  version = "6.0.33";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6widget";
     rev = finalAttrs.version;
-    hash = "sha256-aDuLybIEzF8ATzH6vkN2SS/yn1eAc2WooNZxeQyH2QM=";
+    hash = "sha256-CSsN/6Geban/l6Rp5NuxIUomgTlqXyvttafTbjZIwSc=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
+    (fetchpatch {
+      name = "resolve-compilation-issues-on-Qt-6_9.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dtk6widget/-/raw/ce8f89bbed6ebd4659c7f964f158857ebfdee01c/qt-6.9.patch";
+      hash = "sha256-LlFBXuoPxuszO9bkXK1Cy6zMTSnlh33UnmlKMJk3QH0=";
+    })
   ];
 
   postPatch = ''
@@ -84,6 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linuxdeepin/dtk6widget";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 })

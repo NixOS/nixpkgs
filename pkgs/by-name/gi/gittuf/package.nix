@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "gittuf";
-  version = "0.8.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "gittuf";
-    repo = pname;
+    repo = "gittuf";
     rev = "v${version}";
-    hash = "sha256-0HxjCHwYhJkDfMt+8kzOAfZVhlprXcKpJSpWIQreTK4=";
+    hash = "sha256-atC9YsffhXvWAQzrIVwOCpcP73HhGa5x19mXm4+yLuU=";
   };
 
-  vendorHash = "sha256-fXDbXyMKTiw2PugW3WPzyMupfXCgObm9MkJfix0mKaM=";
+  vendorHash = "sha256-SqXwxt6TWPyuwx7gDnEUk5487z3mlYtQ+Cho+lUcN+M=";
 
   ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${version}" ];
 
@@ -32,12 +32,12 @@ buildGoModule rec {
 
   postInstall = "rm $out/bin/cli"; # remove gendoc cli binary
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/gittuf/gittuf/blob/v${version}/CHANGELOG.md";
     description = "Security layer for Git repositories";
     homepage = "https://gittuf.dev";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "gittuf";
-    maintainers = with maintainers; [ flandweber ];
+    maintainers = with lib.maintainers; [ flandweber ];
   };
 }

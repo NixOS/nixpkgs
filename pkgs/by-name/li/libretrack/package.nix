@@ -5,7 +5,7 @@
   libappindicator,
 }:
 
-flutterPackages-source.stable.buildFlutterApplication rec {
+flutterPackages-source.v3_29.buildFlutterApplication rec {
   pname = "libretrack";
   version = "1.7.0";
 

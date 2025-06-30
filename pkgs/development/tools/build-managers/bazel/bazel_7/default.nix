@@ -5,7 +5,7 @@
   fetchurl,
   makeWrapper,
   writeTextFile,
-  substituteAll,
+  replaceVars,
   writeShellApplication,
   makeBinaryWrapper,
   autoPatchelfHook,
@@ -34,7 +34,6 @@
   python3,
   # Apple dependencies
   cctools,
-  libcxx,
   libtool,
   sigtool,
   # Allow to independently override the jdks used to build and run respectively
@@ -44,7 +43,7 @@
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
   enableNixHacks ? false,
-  version ? "7.4.1",
+  version ? "7.6.0",
 }:
 
 let
@@ -52,7 +51,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-gzhmGLxIn02jYmbvJiDsZKUmxobPBwQTMsr/fJU6+vU=";
+    hash = "sha256-eQKNB38G8ziDuorzoj5Rne/DZQL22meVLrdK0z7B2FI=";
   };
 
   defaultShellUtils =
@@ -324,11 +323,11 @@ stdenv.mkDerivation rec {
       # --{,tool_}java_runtime_version=local_jdk and rely on the fact no java
       # toolchain registered by default uses the local_jdk, making the selection
       # unambiguous.
-      # This toolchain has the advantage that it can use any ambiant java jdk,
+      # This toolchain has the advantage that it can use any ambient java jdk,
       # not only a given, fixed version. It allows bazel to work correctly in any
       # environment where JAVA_HOME is set to the right java version, like inside
       # nix derivations.
-      # However, this patch breaks bazel hermeticity, by picking the ambiant java
+      # However, this patch breaks bazel hermeticity, by picking the ambient java
       # version instead of the more hermetic remote_jdk prebuilt binaries that
       # rules_java provide by default. It also requires the user to have a
       # JAVA_HOME set to the exact version required by the project.
@@ -348,7 +347,7 @@ stdenv.mkDerivation rec {
       # guarantee that it will always run in any nix context.
       #
       # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
-      # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
+      # NIX_BUILD_TOP env var to conditionally disable sleep features inside the
       # sandbox.
       #
       # If you want to investigate the sandbox profile path,
@@ -377,15 +376,13 @@ stdenv.mkDerivation rec {
       # This is non hermetic on non-nixos systems. On NixOS, bazel cannot find the required binaries.
       # So we are replacing this bazel paths by defaultShellPath,
       # improving hermeticity and making it work in nixos.
-      (substituteAll {
-        src = ../strict_action_env.patch;
+      (replaceVars ../strict_action_env.patch {
         strictActionEnvPatch = defaultShellPath;
       })
 
       # bazel reads its system bazelrc in /etc
       # override this path to a builtin one
-      (substituteAll {
-        src = ../bazel_rc.patch;
+      (replaceVars ../bazel_rc.patch {
         bazelSystemBazelRCPath = bazelRC;
       })
     ]
@@ -408,7 +405,7 @@ stdenv.mkDerivation rec {
 
         # libcxx includes aren't added by libcxx hook
         # https://github.com/NixOS/nixpkgs/pull/41589
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
         # for CLang 16 compatibility in external/upb dependency
         export NIX_CFLAGS_COMPILE+=" -Wno-gnu-offsetof-extensions"
 
@@ -529,7 +526,8 @@ stdenv.mkDerivation rec {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.asl20;
-    maintainers = lib.teams.bazel.members;
+    teams = [ lib.teams.bazel ];
+    mainProgram = "bazel";
     inherit platforms;
   };
 
@@ -555,7 +553,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       cctools
-      libcxx
     ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.

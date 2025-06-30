@@ -22,14 +22,15 @@
 
 buildPythonPackage rec {
   pname = "python-novaclient";
-  version = "18.8.0";
+  version = "18.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZtDYHe5pvcaTfMo7h4Jh8YNJWcYHiRUnp4knoBzqiAA=";
+    pname = "python_novaclient";
+    inherit version;
+    hash = "sha256-z2pLjwHsVD1adcAcIYR0upsGO9n9N0OCH+3GioRcq04=";
   };
 
   nativeBuildInputs = [
@@ -77,6 +78,6 @@ buildPythonPackage rec {
     mainProgram = "nova";
     homepage = "https://github.com/openstack/python-novaclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

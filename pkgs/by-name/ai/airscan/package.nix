@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-I5JRGaff6OIwx4q7BjpFwvJiQe4kw03V8+McYPcJhho=";
 
-  meta = with lib; {
+  meta = {
     description = "Package to scan paper documents using the Apple AirScan (eSCL) protocol";
     mainProgram = "airscan1";
     homepage = "https://github.com/stapelberg/airscan";
     changelog = "https://github.com/stapelberg/airscan/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ johannwagner ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ johannwagner ];
   };
 }

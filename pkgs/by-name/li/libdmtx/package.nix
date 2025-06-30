@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdmtx";
-  version = "0.7.7";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "dmtx";
     repo = "libdmtx";
     rev = "v${version}";
-    sha256 = "sha256-UQy8iFfl8BNT5cBUMVF1tIScFPfHekSofaebtel9JWk=";
+    sha256 = "sha256-/sV+t7RAr5dTwfUsGz0KEZYgm0DzQWRdiwrbbEbC1OY=";
   };
 
   nativeBuildInputs = [

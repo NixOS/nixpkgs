@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "esp-generate";
-  version = "0.2.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "esp-generate";
     rev = "v${version}";
-    hash = "sha256-qDlEI9cav2RSsYinIlW4VqmCtUW+vAgFJOE2miFAVVo=";
+    hash = "sha256-4RF0XcDpUcMQ0u2FTRBnZdQDM7DlaI7pl5HukMbbbBE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-fBTJBHlbIvj1JYJBrtZdaIU1ztB3yE3LF6GxTfGXWTM=";
+  cargoHash = "sha256-c/BYf6SXOdI/K4t3fT4ycuILkIYCiSbHafLprSMvK8E=";
 
   meta = {
     description = "Template generation tool to create no_std applications targeting Espressif's chips";

@@ -3,7 +3,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   gtest,
   doCheck ? true,
@@ -49,24 +48,15 @@ effectiveStdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "2.0.3";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-LWco3A6zwdnAf8blU4qjW7PFEeZaTcJlVTwVrs7nwWM=";
+    hash = "sha256-8mj8uw7bbwhRaL0JZf9L9//a+Re2AwbL0e7Oiw/BqIA=";
   };
-
-  patches = lib.optionals (cudaSupport && cudaPackages.cudaMajorMinorVersion == "12.4") [
-    (fetchpatch {
-      # https://github.com/dmlc/xgboost/pull/10123
-      name = "Fix compilation with the ctk 12.4.";
-      url = "https://github.com/dmlc/xgboost/commit/c760f85db0bc7bd6379901fbfb67ceccc2b37700.patch";
-      hash = "sha256-iP9mll9pg8T2ztCR7dBPnLP17/x3ImJFrr5G3e2dqHo=";
-    })
-  ];
 
   nativeBuildInputs =
     [ cmake ]
@@ -77,6 +67,7 @@ effectiveStdenv.mkDerivation rec {
   buildInputs =
     [ gtest ]
     ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+    ++ lib.optional cudaSupport cudaPackages.cuda_cudart
     ++ lib.optional ncclSupport cudaPackages.nccl;
 
   propagatedBuildInputs = lib.optionals rLibrary [
@@ -97,6 +88,9 @@ effectiveStdenv.mkDerivation rec {
     ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
     ++ lib.optionals rLibrary [ "-DR_LIB=ON" ];
 
+  # on Darwin, cmake uses find_library to locate R instead of using the PATH
+  env.NIX_LDFLAGS = "-L${R}/lib/R/lib";
+
   preConfigure = lib.optionals rLibrary ''
     substituteInPlace cmake/RPackageInstall.cmake.in --replace "CMD INSTALL" "CMD INSTALL -l $out/library"
     export R_LIBS_SITE="$R_LIBS_SITE''${R_LIBS_SITE:+:}$out/library"
@@ -115,12 +109,65 @@ effectiveStdenv.mkDerivation rec {
   GTEST_FILTER =
     let
       # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
-      filteredTests = lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+      xsimdTests = lib.optionals effectiveStdenv.hostPlatform.isDarwin [
         "ThreadGroup.TimerThread"
         "ThreadGroup.TimerThreadSimple"
       ];
+      networkingTest = [
+        "AllgatherTest.Basic"
+        "AllgatherTest.VAlgo"
+        "AllgatherTest.VBasic"
+        "AllgatherTest.VRing"
+        "AllreduceGlobal.Basic"
+        "AllreduceGlobal.Small"
+        "AllreduceTest.Basic"
+        "AllreduceTest.BitOr"
+        "AllreduceTest.Restricted"
+        "AllreduceTest.Sum"
+        "Approx.PartitionerColumnSplit"
+        "BroadcastTest.Basic"
+        "CPUHistogram.BuildHistColSplit"
+        "CPUHistogram.BuildHistColumnSplit"
+        "CPUPredictor.CategoricalPredictLeafColumnSplit"
+        "CPUPredictor.CategoricalPredictionColumnSplit"
+        "ColumnSplit/ColumnSplitTrainingTest*"
+        "ColumnSplit/TestApproxColumnSplit*"
+        "ColumnSplit/TestHistColumnSplit*"
+        "ColumnSplitObjective/TestColumnSplit*"
+        "Cpu/ColumnSplitTrainingTest*"
+        "CommGroupTest.Basic"
+        "CommTest.Channel"
+        "CpuPredictor.BasicColumnSplit"
+        "CpuPredictor.IterationRangeColmnSplit"
+        "CpuPredictor.LesserFeaturesColumnSplit"
+        "CpuPredictor.SparseColumnSplit"
+        "DistributedMetric/TestDistributedMetric.BinaryAUCRowSplit/Dist_*"
+        "InitEstimation.FitStumpColumnSplit"
+        "MetaInfo.GetSetFeatureColumnSplit"
+        "Quantile.ColumnSplit"
+        "Quantile.ColumnSplitBasic"
+        "Quantile.ColumnSplitSorted"
+        "Quantile.ColumnSplitSortedBasic"
+        "Quantile.Distributed"
+        "Quantile.DistributedBasic"
+        "Quantile.SameOnAllWorkers"
+        "Quantile.SortedDistributed"
+        "Quantile.SortedDistributedBasic"
+        "QuantileHist.MultiPartitionerColumnSplit"
+        "QuantileHist.PartitionerColumnSplit"
+        "Stats.SampleMean"
+        "Stats.WeightedSampleMean"
+        "SimpleDMatrix.ColumnSplit"
+        "TrackerAPITest.CAPI"
+        "TrackerTest.AfterShutdown"
+        "TrackerTest.Bootstrap"
+        "TrackerTest.GetHostAddress"
+        "TrackerTest.Print"
+        "VectorAllgatherV.Basic"
+      ];
+      excludedTests = xsimdTests ++ networkingTest;
     in
-    "-${builtins.concatStringsSep ":" filteredTests}";
+    "-${builtins.concatStringsSep ":" excludedTests}";
 
   installPhase =
     ''
@@ -134,7 +181,6 @@ effectiveStdenv.mkDerivation rec {
     ''
     + ''
       cmake --install .
-      cp -r ../rabit/include/rabit $out/include
       runHook postInstall
     '';
 

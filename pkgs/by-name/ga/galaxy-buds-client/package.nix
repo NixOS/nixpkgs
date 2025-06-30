@@ -1,15 +1,17 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, fontconfig
-, glib
-, libglvnd
-, xorg
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  fontconfig,
+  glib,
+  libglvnd,
+  xorg,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
@@ -19,7 +21,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "ThePBone";
     repo = "GalaxyBudsClient";
-    rev = version;
+    tag = version;
     hash = "sha256-ygxrtRapduvK7qAHZzdHnCijm8mcqOviMl2ddf9ge+Y=";
   };
 
@@ -31,9 +33,15 @@ buildDotnetModule rec {
     lib.optionals stdenv.hostPlatform.isx86_64 [ "-p:Runtimeidentifier=linux-x64" ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "-p:Runtimeidentifier=linux-arm64" ];
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
-  buildInputs = [ (lib.getLib stdenv.cc.cc) fontconfig ];
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    fontconfig
+  ];
 
   runtimeDeps = [
     libglvnd
@@ -64,12 +72,16 @@ buildDotnetModule rec {
     })
   ];
 
-  meta = with lib; {
-    mainProgram = "GalaxyBudsClient";
-    description = "Unofficial Galaxy Buds Manager for Windows and Linux";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Unofficial Galaxy Buds Manager";
     homepage = "https://github.com/ThePBone/GalaxyBudsClient";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.icy-thought ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ icy-thought ];
+    platforms = lib.platforms.linux;
+    mainProgram = "GalaxyBudsClient";
   };
 }

@@ -14,20 +14,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iniparser";
-  version = "4.2.4";
+  version = "4.2.6";
 
   src = fetchFromGitLab {
     owner = "iniparser";
     repo = "iniparser";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R069LuOmjCFj7dHXiMjuK7WUupk5+dVd8IDKY/wBn2o=";
+    hash = "sha256-z10S9ODLprd7CbL5Ecgh7H4eOwTetYwFXiWBUm6fIr4=";
   };
 
   patches = lib.optionals finalAttrs.finalPackage.doCheck [
     (replaceVars ./remove-fetchcontent-usage.patch {
       # Do not let cmake's fetchContent download unity
       unitySrc = symlinkJoin {
-        name = "unity-with-iniparser-config";
         paths = [
           (fetchFromGitHub {
             owner = "throwtheswitch";

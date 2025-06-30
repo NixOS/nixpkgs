@@ -11,12 +11,12 @@
 
 let
   pname = "elixir-ls";
-  version = "0.26.4";
+  version = "0.28.1";
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    hash = "sha256-wS1pquRe+VyCSbsnKjjdvm/59TCrbQjBJJrlHUd+xiE=";
+    hash = "sha256-r4P+3MPniDNdF3SG2jfBbzHsoxn826eYd2tsv6bJBoI=";
   };
 in
 mixRelease {
@@ -32,7 +32,7 @@ mixRelease {
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    hash = "sha256-2P4CDy8W0Rbfm2/PpoZIaOe6eEZG7XKyCeybbX+dVZ4=";
+    hash = "sha256-8zs+99jwf+YX5SwD65FCPmfrYhTCx4AQGCGsDeCKxKc=";
   };
 
   # elixir-ls is an umbrella app
@@ -89,7 +89,7 @@ mixRelease {
     license = licenses.asl20;
     platforms = platforms.unix;
     mainProgram = "elixir-ls";
-    maintainers = teams.beam.members;
+    teams = [ teams.beam ];
   };
   passthru.updateScript = nix-update-script { };
 }

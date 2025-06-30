@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "norminette";
-  version = "3.3.55";
+  version = "3.3.58";
 
   src = fetchFromGitHub {
     owner = "42School";
-    repo = pname;
+    repo = "norminette";
     tag = version;
-    hash = "sha256-SaXOUpYEbc2QhZ8aKS+JeJ22MSXZ8HZuRmVQ9fWk7tM=";
+    hash = "sha256-6hBBbfW2PQFb8rcDihvtWK0df7WcvOk0il1E82GOxaU=";
   };
 
   nativeCheckInputs = with python3Packages; [

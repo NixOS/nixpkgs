@@ -1,36 +1,26 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
-  darwin,
 }:
 
 buildGoModule rec {
   pname = "node_exporter";
-  version = "1.8.2";
+  version = "1.9.1";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    hash = "sha256-b2uior67RcCCpUE+qx55G1eWiT2wWDVsnosSH9fd3/I=";
+    hash = "sha256-il0wf00pUSHUrqz0Y1lr++yywlhr+Ww2pGKBeGAEnPc=";
   };
 
-  vendorHash = "sha256-sly8AJk+jNZG8ijTBF1Pd5AOOUJJxIG8jHwBUdlt8fM=";
+  vendorHash = "sha256-ujW5dH3ItIaML+LlaTXT0BK/T1ZGZq/cKnLOqNPBhWc=";
 
   # FIXME: tests fail due to read-only nix store
   doCheck = false;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      CoreFoundation
-      IOKit
-    ]
-  );
 
   excludedPackages = [ "docs/node-mixin" ];
 
@@ -46,13 +36,13 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) node; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for machine metrics";
     mainProgram = "node_exporter";
     homepage = "https://github.com/prometheus/node_exporter";
     changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       benley
       fpletz
       globin

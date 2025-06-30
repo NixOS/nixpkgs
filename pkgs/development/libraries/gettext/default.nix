@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   libiconv,
-  bash,
+  bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
       oldFilesDir=$(mktemp -d)
       for oldFile in "''${oldFiles[@]}"; do
         mkdir -p "$oldFilesDir/$(dirname "$oldFile")"
-        cp gettext-tools/gnulib-m4/extern-inline.m4 "$oldFilesDir/$oldFile"
+        cp -a gettext-tools/gnulib-m4/extern-inline.m4 "$oldFilesDir/$oldFile"
       done
-      tar uf gettext-tools/misc/archive.dir.tar -C "$oldFilesDir" "''${oldFiles[@]}"
+      tar uf gettext-tools/misc/archive.dir.tar --owner=0 --group=0 --numeric-owner -C "$oldFilesDir" "''${oldFiles[@]}"
 
       substituteAllInPlace gettext-runtime/src/gettext.sh.in
       substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs =
     lib.optionals (!stdenv.hostPlatform.isMinGW) [
-      bash
+      bashNonInteractive
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isCygwin) [
       # HACK, see #10874 (and 14664)

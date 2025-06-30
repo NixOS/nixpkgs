@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     homepage = "https://gitlab.com/mojo42/Jirafeau";
     platforms = platforms.all;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
   };
 }

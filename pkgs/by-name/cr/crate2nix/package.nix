@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, cargo
-, nix
-, nix-prefetch-git
-, installShellFiles
-,
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  cargo,
+  nix,
+  nix-prefetch-git,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/crate2nix \
-      --prefix PATH ":" ${
+      --suffix PATH ":" ${
         lib.makeBinPath [
           cargo
           nix

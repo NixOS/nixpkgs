@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/popcorn-official/popcorn-desktop";
-    description = "An application that streams movies and TV shows from torrents";
+    description = "Application that streams movies and TV shows from torrents";
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3;

@@ -34,6 +34,8 @@ self: super: {
             # Allow transformers-compat >= 0.7
             optparse-applicative = doJailbreak self.optparse-applicative_0_15_1_0;
             ansi-wl-pprint = self.ansi-wl-pprint_0_6_9;
+            ansi-terminal = self.ansi-terminal_1_0_2;
+            ansi-terminal-types = self.ansi-terminal-types_0_11_5;
           }
         )
       );

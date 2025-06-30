@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     homepage = "https://extundelete.sourceforge.net/";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     mainProgram = "extundelete";
   };
 }

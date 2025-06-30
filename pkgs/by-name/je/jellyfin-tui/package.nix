@@ -6,22 +6,23 @@
   openssl,
   mpv,
   nix-update-script,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jellyfin-tui";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "dhonus";
     repo = "jellyfin-tui";
     tag = "v${version}";
-    hash = "sha256-k8hN6MfY/agg5Janq4s65te7uOmfEpXXzogaS3jNAC8=";
+    hash = "sha256-9TSg7J5Pbb2cpL9fEMs5ZJjmA70o8TEmbDkYIK2inTc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Ca43CPjjUhNBclkJTt2xFWNRacEvRkKdHosnWSjfN2I=";
+  cargoHash = "sha256-dFUUJovJcf5pzH9nta7G+E7hcZTZONLPgQ1HAX4RYrY=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -30,9 +31,14 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+  preInstallCheck = ''
+    mkdir -p $HOME/.local/share
+  '';
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

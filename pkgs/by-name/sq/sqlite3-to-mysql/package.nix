@@ -10,16 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
-  version = "2.3.2";
+  version = "2.4.0";
   format = "pyproject";
-
-  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "techouse";
     repo = "sqlite3-to-mysql";
     tag = "v${version}";
-    hash = "sha256-2zylVnPlptPCxUFwU9j9g//T5fzPJgXc3hQc6iMoLLE=";
+    hash = "sha256-1XYDCHR1GitMr6wgpj+roCzf5q4tMr6eGLMWzZgzpBY=";
   };
 
   build-system = with python3Packages; [

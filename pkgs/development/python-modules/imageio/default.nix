@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   isPyPy,
-  substituteAll,
+  replaceVars,
 
   # build-system
   setuptools,
@@ -42,8 +42,7 @@ buildPythonPackage rec {
   };
 
   patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    (substituteAll {
-      src = ./libgl-path.patch;
+    (replaceVars ./libgl-path.patch {
       libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

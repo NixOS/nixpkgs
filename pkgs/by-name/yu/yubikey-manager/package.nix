@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.5.1";
+  version = "5.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
-    rev = version;
-    hash = "sha256-m/B5G83XZROoCNq/ZT0U0MUth2IC99e3LWc8FcOq1ig=";
+    tag = version;
+    hash = "sha256-dgOi9gJ7jO3+EjZQjHfx+KDsBtj6b4JWR3Bp9xWM6FI=";
   };
 
   postPatch = ''
@@ -57,7 +57,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = {
     homepage = "https://developers.yubico.com/yubikey-manager";
-    changelog = "https://github.com/Yubico/yubikey-manager/releases/tag/${version}";
+    changelog = "https://github.com/Yubico/yubikey-manager/releases/tag/${src.tag}";
     description = "Command line tool for configuring any YubiKey over all USB transports";
 
     license = lib.licenses.bsd2;

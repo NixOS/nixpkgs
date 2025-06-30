@@ -20,18 +20,18 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "noto-fonts${suffix}";
-  version = "2025.02.01";
+  version = "2025.06.01";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notofonts.github.io";
     rev = "noto-monthly-release-${version}";
-    hash = "sha256-IXQmHBG7yvngifLTVLwkL+10lfqofgERtNmgZSvgrt8=";
+    hash = "sha256-6lbNJjkf6lnPPZzHO3vtsXEuPQs6ewslgnQIeDhF2yk=";
   };
 
   outputs = [
     "out"
-    "megamerge" # Experimental fonts created by mergeing regular notofonts
+    "megamerge" # Experimental fonts created by merging regular notofonts
   ];
 
   _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;

@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "wcmatch";
-  version = "10.0";
+  version = "10.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5y8N4Ju6agTg3nCTewzwblXzbzez3rQi36+FS4Z7hAo=";
+    hash = "sha256-8R+UIIyMhIShb09IY4qF13HZUT9Ks/N1lZeIAcuUZa8=";
   };
 
   nativeBuildInputs = [ hatchling ];

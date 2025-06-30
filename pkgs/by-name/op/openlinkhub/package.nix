@@ -9,18 +9,18 @@
 
 buildGoModule rec {
   pname = "openlinkhub";
-  version = "0.5.0";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "jurkovic-nikola";
     repo = "OpenLinkHub";
     tag = version;
-    hash = "sha256-2dsdswtpKXHEiPOdGS1gIyx8r3xx3Bjr2i4WyX4hmVY=";
+    hash = "sha256-PThcqTHjVgUDUCA0uvkDr6vNoCKa96bF0UaHz2drAsQ=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-nDE3GUZl5OBSlhRpJBixUbWhhFMeieidNrSIzOOB/9g=";
+  vendorHash = "sha256-xpIaQzl2jrWRIUe/1woODKLlwxQrdlCLkIk0qmWs7m0=";
 
   buildInputs = [
     udev

@@ -8,7 +8,7 @@
   makeDesktopItem,
   copyDesktopItems,
 }:
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "sieve-editor-gui";
   version = "0.6.1-unstable-2024-01-06";
   nodejs = nodejs_20;

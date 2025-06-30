@@ -1107,7 +1107,7 @@ rec {
       ''
         # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
         awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
-        gixy $out
+        gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 
   /**
@@ -1194,7 +1194,12 @@ rec {
       // {
         interpreter =
           if pythonPackages != pkgs.pypy2Packages || pythonPackages != pkgs.pypy3Packages then
-            if libraries == [ ] then python.interpreter else (python.withPackages (ps: libraries)).interpreter
+            if libraries == [ ] then
+              python.interpreter
+            else if (lib.isFunction libraries) then
+              (python.withPackages libraries).interpreter
+            else
+              (python.withPackages (ps: libraries)).interpreter
           else
             python.interpreter;
         check = optionalString (python.isPy3k && doCheck) (

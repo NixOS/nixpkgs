@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "NkHU/WadHhgYrv88+f+3iH/Fw2eFC3jCjHdeukq2pVU=";
   };
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    # https://gitlab.gnome.org/Archive/gdl/-/issues/9
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   nativeBuildInputs = [
     pkg-config
     intltool
@@ -36,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Gnome docking library";
     homepage = "https://developer.gnome.org/gdl/";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

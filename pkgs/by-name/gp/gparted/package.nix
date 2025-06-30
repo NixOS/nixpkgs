@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  # Doesn't get installed automaticallly if PREFIX != /usr
+  # Doesn't get installed automatically if PREFIX != /usr
   postInstall = ''
     install -D -m0644 org.gnome.gparted.policy \
       $out/share/polkit-1/actions/org.gnome.gparted.policy

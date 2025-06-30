@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "ava-labs";
-    repo = pname;
+    repo = "coreth";
     rev = "v${version}";
     hash = "sha256-YUqrbTjye0eNNuf9hGQXtMidRq6y3m3pSKzIRVECy9E=";
   };
@@ -35,11 +35,11 @@ buildGoModule rec {
 
   postInstall = "mv $out/bin/{plugin,evm}";
 
-  meta = with lib; {
+  meta = {
     description = "Code and wrapper to extract Ethereum blockchain functionalities without network/consensus, for building custom blockchain services";
     homepage = "https://github.com/ava-labs/coreth";
     changelog = "https://github.com/ava-labs/coreth/releases/tag/v${version}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ urandom ];
   };
 }

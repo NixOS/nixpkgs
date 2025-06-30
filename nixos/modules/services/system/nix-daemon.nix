@@ -16,7 +16,9 @@ let
 
   nixPackage = cfg.package.out;
 
-  isNixAtLeast = lib.versionAtLeast (lib.getVersion nixPackage);
+  # nixVersion is an attribute which defines the implementation version.
+  # This is useful for Nix implementations which don't follow Nix's versioning.
+  isNixAtLeast = lib.versionAtLeast (nixPackage.nixVersion or (lib.getVersion nixPackage));
 
   makeNixBuildUser = nr: {
     name = "nixbld${toString nr}";
@@ -216,7 +218,7 @@ in
       environment =
         cfg.envVars
         // {
-          CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
+          CURL_CA_BUNDLE = config.security.pki.caBundle;
         }
         // config.networking.proxy.envVars;
 
@@ -228,6 +230,7 @@ in
         IOSchedulingPriority = cfg.daemonIOSchedPriority;
         LimitNOFILE = 1048576;
         Delegate = "yes";
+        DelegateSubgroup = "supervisor";
       };
 
       restartTriggers = [ config.environment.etc."nix/nix.conf".source ];

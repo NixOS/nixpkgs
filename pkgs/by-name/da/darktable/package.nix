@@ -47,15 +47,15 @@
   libpng,
   librsvg,
   libsecret,
-  libsoup_2_4,
   libsysprof-capture,
   libthai,
   libtiff,
   libwebp,
+  libxml2,
   libxslt,
   lua,
   util-linux,
-  openexr_3,
+  openexr,
   openjpeg,
   osm-gps-map,
   pcre2,
@@ -80,12 +80,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.1";
+  version = "5.2.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-SpGNCU67qYPvZ6EMxxXD1+jKc4AJkgqf9l0zQXtt2YQ=";
+    hash = "sha256-U6Rs1G73EYSFxKv0q0B8GBY5u4Y0JD7A7R98HoKZvsY=";
   };
 
   nativeBuildInputs = [
@@ -133,14 +133,14 @@ stdenv.mkDerivation rec {
       libpng
       librsvg
       libsecret
-      libsoup_2_4
       libsysprof-capture
       libthai
       libtiff
       libwebp
+      libxml2
       libxslt
       lua
-      openexr_3
+      openexr
       openjpeg
       osm-gps-map
       pcre2
@@ -193,10 +193,14 @@ stdenv.mkDerivation rec {
       )
     '';
 
+  postPatch = ''
+    patchShebangs ./tools/generate_styles_string.sh
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {

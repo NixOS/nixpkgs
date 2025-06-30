@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.24.0";
+  version = "2.24.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "googleapis";
     repo = "python-api-core";
     tag = "v${version}";
-    hash = "sha256-6U5rNhF4AYWae50pNIqDdlMzRhW4iV9vPlMPXN11DqQ=";
+    hash = "sha256-7/9oU8KqwvL7DIDKDIUlGxfJZp7kGp1W6/tsEp6zcuc=";
   };
 
   build-system = [ setuptools ];

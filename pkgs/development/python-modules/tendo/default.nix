@@ -19,6 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-ZOozMGxAKcEtmUEzHCFSojKc+9Ha+T2MOTmMvdMqNuQ=";
   };
 
+  patches = [
+    ./fix-python-313-build.patch
+  ];
+
   postPatch = ''
     # marken broken and not required
     sed -i '/setuptools_scm_git_archive/d' pyproject.toml

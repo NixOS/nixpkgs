@@ -11,21 +11,21 @@
 }:
 let
   pname = "homebox";
-  version = "0.17.0";
+  version = "0.19.0";
   src = fetchFromGitHub {
     owner = "sysadminsmedia";
     repo = "homebox";
     rev = "v${version}";
-    hash = "sha256-XzO/aJcLGu+ZHt9fDUhUzBbUS9VpChFVOH0cgvYK6kc=";
+    hash = "sha256-98V2JnxHnMkW8YD8QekNgKeh9aPp0mcosmGh07GAFaU=";
   };
 in
 buildGo123Module {
   inherit pname version src;
 
-  vendorHash = "sha256-Zo/yI1mNeN0O9gZsHux6aOzBlv72h17s7QNO+MaG2/g=";
+  vendorHash = "sha256-SkfYNOyRlcUSfga0g8o7yIvxgdL9SMxgVgRjIcPru0A=";
   modRoot = "backend";
   # the goModules derivation inherits our buildInputs and buildPhases
-  # Since we do pnpm thing in those it fails if we don't explicitely remove them
+  # Since we do pnpm thing in those it fails if we don't explicitly remove them
   overrideModAttrs = _: {
     nativeBuildInputs = [
       go_1_23
@@ -38,7 +38,7 @@ buildGo123Module {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version;
     src = "${src}/frontend";
-    hash = "sha256-nbZxCUXgXoaxIiJsB57OZ7YUkD7Njccj6nFkaHBbctw=";
+    hash = "sha256-6Q+tIY5dl5jCQyv1F8btLdJg0oEUGs0Wyu/joVdVhf8=";
   };
   pnpmRoot = "../frontend";
 
@@ -71,6 +71,14 @@ buildGo123Module {
     "-X main.version=${version}"
     "-X main.commit=${version}"
   ];
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    cp -r $GOPATH/bin/api $out/bin/
+
+    runHook postInstall
+  '';
 
   passthru = {
     tests = {

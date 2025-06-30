@@ -25,20 +25,19 @@
 
 let
   pname = "vector";
-  version = "0.44.0";
+  version = "0.47.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
-    repo = pname;
+    repo = "vector";
     rev = "v${version}";
-    hash = "sha256-dYjZRTJ0/jb/GsADMy7CkTpFrevSAZz5IMj1mLm22Es=";
+    hash = "sha256-09CjhSckptXbbTzBneo5aQ76YwLPSacRlsMpexsw54c=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-easBpuypi9wCtfMaeMQg8EVlHhBBWUof3eDRkv0THPM=";
+  cargoHash = "sha256-9cCqdi65C4JCMP743nhrNmBlJsIFiNPGguyVEEJpGww=";
 
   nativeBuildInputs =
     [

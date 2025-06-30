@@ -3,20 +3,24 @@
   lib,
   fetchurl,
   unzip,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "loopwm";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://github.com/MrKai77/Loop/releases/download/${finalAttrs.version}/Loop.zip";
-    hash = "sha256-eF8B4rmkyTtT0vWTcjdaNaWCHWSlPfS4uVV29L+wXiM=";
+    hash = "sha256-MofFucp/GUquU7Bx4gePIWSSrAqFUf0q59IM8MgJIPs=";
   };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   dontPatch = true;
   dontConfigure = true;
@@ -24,8 +28,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/Applications
+    mkdir -p $out/{Applications,bin}
     cp -r Loop.app $out/Applications
+    makeWrapper $out/Applications/Loop.app/Contents/MacOS/Loop $out/bin/loopwm \
+      --set LOOP_SKIP_UPDATE_CHECK 1
     runHook postInstall
   '';
 
@@ -38,6 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/MrKai77/Loop";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ matteopacini ];
+    mainProgram = "loopwm";
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   godot3-headless,
+  godot3-export-templates,
   libglvnd,
   libX11,
   libXcursor,
@@ -45,6 +46,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     export HOME=$TMPDIR
+
+    # Link the export-templates to the expected location. The --export commands
+    # expects the template-file at .../templates/{godot-version}.stable/linux_x11_64_release
+    mkdir -p $HOME/.local/share/godot
+    ln -s ${godot3-export-templates}/share/godot/templates $HOME/.local/share/godot
+
+    # Don't use the included export template, which might use a mismatched version of godot.
+    rm ./material_maker/misc/linux/godot.x11.opt.64
+    substituteInPlace ./export_presets.cfg \
+      --replace-fail '"material_maker/misc/linux/godot.x11.opt.64"' '""'
 
     mkdir -vp build
     godot3-headless -v --export 'Linux/X11' build/material-maker

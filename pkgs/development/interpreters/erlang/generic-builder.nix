@@ -9,27 +9,21 @@
   libxml2,
   libxslt,
   ncurses,
+  nix-update-script,
   openssl,
   perl,
   runtimeShell,
-  autoconf,
   openjdk11 ? null, # javacSupport
   unixODBC ? null, # odbcSupport
   libGL ? null,
   libGLU ? null,
   wxGTK ? null,
   xorg ? null,
-  ex_doc ? null,
   parallelBuild ? false,
   systemd,
   wxSupport ? true,
-  ex_docSupport ? false,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, # systemd support in epmd
-  # updateScript deps
-  writeScript,
-  common-updater-scripts,
-  coreutils,
-  git,
+  # systemd support for epmd
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   wrapGAppsHook3,
   zlib,
 }:
@@ -76,14 +70,6 @@
   installPhase ? "",
   preInstall ? "",
   postInstall ? "",
-  installTargets ?
-    if ((lib.versionOlder version "27.0") || ex_docSupport) then
-      [
-        "install"
-        "install-docs"
-      ]
-    else
-      [ "install" ],
   checkPhase ? "",
   preCheck ? "",
   postCheck ? "",
@@ -104,7 +90,6 @@ assert
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk11 != null;
-assert ex_docSupport -> ex_doc != null;
 
 let
   inherit (lib)
@@ -115,6 +100,7 @@ let
     ;
   wxPackages2 = if stdenv.hostPlatform.isDarwin then [ wxGTK ] else wxPackages;
 
+  major = builtins.head (builtins.splitVersion version);
 in
 stdenv.mkDerivation (
   {
@@ -132,13 +118,17 @@ stdenv.mkDerivation (
     LANG = "C.UTF-8";
 
     nativeBuildInputs = [
-      autoconf
       makeWrapper
       perl
       gnum4
       libxslt
       libxml2
     ];
+
+    env = {
+      # only build man pages and shell/IDE docs
+      DOC_TARGETS = "man chunks";
+    };
 
     buildInputs =
       [
@@ -167,25 +157,6 @@ stdenv.mkDerivation (
           --replace-fail '"sh ' '"${runtimeShell} '
       '';
 
-    # For OTP 27+ we need ex_doc to build the documentation
-    # When ex_docSupport is enabled, grab the raw ex_doc executable from the ex_doc
-    # derivation. Next, patch the first line to use the escript that will be
-    # built during the build phase of this derivation. Finally, building the
-    # documentation requires the erlang-logo.png asset.
-    preConfigure =
-      ''
-        ./otp_build autoconf
-      ''
-      + optionalString ex_docSupport ''
-        mkdir -p $out/bin
-        cp ${ex_doc}/bin/.ex_doc-wrapped $out/bin/ex_doc
-        sed -i "1 s:^.*$:#!$out/bin/escript:" $out/bin/ex_doc
-        export EX_DOC=$out/bin/ex_doc
-
-        mkdir -p $out/lib/erlang/system/doc/assets
-        cp $src/system/doc/assets/erlang-logo.png $out/lib/erlang/system/doc/assets
-      '';
-
     configureFlags =
       [ "--with-ssl=${lib.getOutput "out" opensslPackage}" ]
       ++ [ "--with-ssl-incl=${lib.getDev opensslPackage}" ] # This flag was introduced in R24
@@ -204,6 +175,10 @@ stdenv.mkDerivation (
 
     # install-docs will generate and install manpages and html docs
     # (PDFs are generated only when fop is available).
+    installTargets = [
+      "install"
+      "install-docs"
+    ];
 
     postInstall = ''
       ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
@@ -223,30 +198,14 @@ stdenv.mkDerivation (
     '';
 
     passthru = {
-      updateScript =
-        let
-          major = builtins.head (builtins.splitVersion version);
-        in
-        writeScript "update.sh" ''
-          #!${stdenv.shell}
-          set -ox errexit
-          PATH=${
-            lib.makeBinPath [
-              common-updater-scripts
-              coreutils
-              git
-              gnused
-            ]
-          }
-          latest=$(list-git-tags --url=https://github.com/erlang/otp.git | sed -n 's/^OTP-${major}/${major}/p' | sort -V | tail -1)
-          if [ "$latest" != "${version}" ]; then
-            nixpkgs="$(git rev-parse --show-toplevel)"
-            nix_file="$nixpkgs/pkgs/development/interpreters/erlang/${major}.nix"
-            update-source-version ${baseName}_${major} "$latest" --version-key=version --print-changes --file="$nix_file"
-          else
-            echo "${baseName}R${major} is already up-to-date"
-          fi
-        '';
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "OTP-(${major}.*)"
+          "--override-filename"
+          "pkgs/development/interpreters/erlang/${major}.nix"
+        ];
+      };
     };
 
     meta =
@@ -267,7 +226,7 @@ stdenv.mkDerivation (
           '';
 
           platforms = platforms.unix;
-          maintainers = teams.beam.members;
+          teams = [ teams.beam ];
           license = licenses.asl20;
         }
         // meta
@@ -288,7 +247,6 @@ stdenv.mkDerivation (
   // optionalAttrs (preCheck != "") { inherit preCheck; }
   // optionalAttrs (postCheck != "") { inherit postCheck; }
   // optionalAttrs (installPhase != "") { inherit installPhase; }
-  // optionalAttrs (installTargets != [ ]) { inherit installTargets; }
   // optionalAttrs (preInstall != "") { inherit preInstall; }
   // optionalAttrs (fixupPhase != "") { inherit fixupPhase; }
   // optionalAttrs (preFixup != "") { inherit preFixup; }

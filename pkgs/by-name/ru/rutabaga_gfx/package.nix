@@ -92,6 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
     description = "cross-platform abstraction for GPU and display virtualization";
     license = licenses.bsd3;
     maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = [
+      # src/generated/virgl_debug_callback_bindings.rs
+      "aarch64-darwin"
+      "aarch64-linux"
+      "armv5tel-linux"
+      "armv6l-linux"
+      "armv7a-linux"
+      "armv7l-linux"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
   };
 })

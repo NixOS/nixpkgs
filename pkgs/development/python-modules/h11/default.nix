@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "h11";
-  version = "0.14.0";
+  version = "0.16.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jxn7vpnnJCD/NcALJ6NMuZN+kCqLgQ4siDAMbwo7aZ0=";
+    hash = "sha256-TjW5Vs9FeS5MqliF5p+6AL28b/r7+gIDAOVJsgjuX/E=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

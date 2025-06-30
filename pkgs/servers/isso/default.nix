@@ -66,13 +66,9 @@ buildPythonApplication rec {
   '';
 
   nativeCheckInputs = [
-    pytest
-    pytest-cov
+    pytestCheckHook
+    pytest-cov-stub
   ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   passthru.tests = { inherit (nixosTests) isso; };
 

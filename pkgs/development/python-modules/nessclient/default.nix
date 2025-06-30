@@ -4,7 +4,7 @@
   click,
   fetchFromGitHub,
   justbackoff,
-  pyserial-asyncio,
+  pyserial-asyncio-fast,
   pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "nessclient";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "nickw444";
     repo = "nessclient";
     tag = version;
-    hash = "sha256-STDEIY7D02MlH+R6uLAKl6ghSQjhG1OEQWj71DrZP30=";
+    hash = "sha256-AKZwKEwICuwKyCjIFxx4Zb2r9EriC0+3evBsBE9Btak=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   dependencies = [
     justbackoff
-    pyserial-asyncio
+    pyserial-asyncio-fast
   ];
 
   optional-dependencies = {

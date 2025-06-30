@@ -16,8 +16,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     domain = "gitlab.nic.cz";
     owner = "packaging";
-    repo = pname;
-    rev = "v${version}";
+    repo = "apkg";
+    tag = "v${version}";
     hash = "sha256-VQNUzbWIDo/cbCdtx8JxN5UUMBW3mQ2B42In4b3AA+A=";
   };
 

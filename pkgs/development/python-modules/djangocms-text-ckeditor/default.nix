@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "djangocms-text-ckeditor";
-  version = "5.1.6";
+  version = "5.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "djangocms_text_ckeditor";
-    hash = "sha256-ow2S4FJkO037QUkAf3FheVl2O4BaLw1PSSCVRBhlRX0=";
+    hash = "sha256-xyl2TMXzyFaRGyBDku8fu++DE0G72cYv8AstPwcVnIM=";
   };
 
   build-system = [ setuptools ];

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   alsa-topology-conf,
   alsa-ucm-conf,
   testers,
@@ -65,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       "alsa"
       "alsa-topology"
     ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.freebsd;
     maintainers = with maintainers; [ l-as ];
   };
 })

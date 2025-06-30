@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epiphany";
-  version = "47.2";
+  version = "48.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NNr9g2OgmLRNR24umCO0y+puZq+tM7uhDtehP/GpZPE=";
+    hash = "sha256-D2ZVKtZZPHlSo93uW/UVZWyMQ0hxB22fGpGnr5NGsbQ=";
   };
 
   nativeBuildInputs = [
@@ -107,7 +107,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/Epiphany/";
     description = "WebKit based web browser for GNOME";
     mainProgram = "epiphany";
-    maintainers = teams.gnome.members ++ teams.pantheon.members;
+    teams = [
+      teams.gnome
+      teams.pantheon
+    ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

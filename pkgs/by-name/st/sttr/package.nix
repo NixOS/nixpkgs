@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "sttr";
-  version = "0.2.24";
+  version = "0.2.25";
 
   src = fetchFromGitHub {
     owner = "abhimanyu003";
     repo = "sttr";
     rev = "v${version}";
-    hash = "sha256-9p4h30iM3SZDCAn08KQjJLJGbQND13gbWK5rhW+Knok=";
+    hash = "sha256-FVjdlheKt3WoFQnb9qrYQATSkJmuXCVrigBbnKUHUR0=";
   };
 
-  vendorHash = "sha256-GJtnwnT+dJAjnAlGcoealsiKcLu0bBBHOE8xRjJQaVs=";
+  vendorHash = "sha256-OQxp52v8TEgB09obp3UKOReRWB79Cwa6zbSE1V/s+JY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,12 +33,12 @@ buildGoModule rec {
       --zsh <($out/bin/sttr completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform cli tool to perform various operations on string";
     homepage = "https://github.com/abhimanyu003/sttr";
     changelog = "https://github.com/abhimanyu003/sttr/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Ligthiago ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Ligthiago ];
     mainProgram = "sttr";
   };
 }

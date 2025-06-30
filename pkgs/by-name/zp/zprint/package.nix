@@ -3,16 +3,15 @@
   buildGraalvmNativeImage,
   fetchurl,
   testers,
-  zprint,
 }:
 
-buildGraalvmNativeImage rec {
+buildGraalvmNativeImage (finalAttrs: {
   pname = "zprint";
-  version = "1.2.9";
+  version = "1.3.0";
 
   src = fetchurl {
-    url = "https://github.com/kkinnear/${pname}/releases/download/${version}/${pname}-filter-${version}";
-    sha256 = "sha256-4gSGD7Jiu1mqyPMoQrrPT60EFXs7ySfjpT9wSyhp3ig=";
+    url = "https://github.com/kkinnear/zprint/releases/download/${finalAttrs.version}/zprint-filter-${finalAttrs.version}";
+    sha256 = "sha256-0ogZkC8j+ja0aWvFgNhygof4GZ78aqQA75lRxYfu6do=";
   };
 
   extraNativeImageBuildArgs = [
@@ -25,12 +24,12 @@ buildGraalvmNativeImage rec {
   ];
 
   passthru.tests.version = testers.testVersion {
-    inherit version;
-    package = zprint;
+    inherit (finalAttrs) version;
+    package = finalAttrs.finalPackage;
     command = "zprint --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Clojure/EDN source code formatter and pretty printer";
     longDescription = ''
       Library and command line tool providing a variety of pretty printing capabilities
@@ -38,8 +37,8 @@ buildGraalvmNativeImage rec {
       As such, it supports a number of major source code formatting approaches
     '';
     homepage = "https://github.com/kkinnear/zprint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ stelcodes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stelcodes ];
     mainProgram = "zprint";
   };
-}
+})

@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "2.0.3";
+  version = "2.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bayesian-optimization";
     repo = "BayesianOptimization";
     tag = "v${version}";
-    hash = "sha256-vT8MlfAdzIKj6uyQedYngP6rCkIZwS8EdtKs4+8l9CA=";
+    hash = "sha256-F1+M5znfI7lHGJRRTgmQxrLTYZmLc90Q0TCvpRoSVTU=";
   };
 
   build-system = [ poetry-core ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of global optimization with gaussian processes";
     homepage = "https://github.com/bayesian-optimization/BayesianOptimization";
-    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/v${version}";
+    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.juliendehos ];
   };

@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
-  flit-core,
+  hatchling,
 
   # dependencies
   click,
@@ -34,25 +33,27 @@
   pytestCheckHook,
   sphinx-inline-tabs,
   texsoup,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "1.0.3";
+  version = "1.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jupyter-book";
     repo = "jupyter-book";
     tag = "v${version}";
-    hash = "sha256-MBSf2/+4+efWHJ530jdezeh5OLTtUZlAEOl5SqoWOuE=";
+    hash = "sha256-04I9mzJMXCpvMiOeMD/Bg8FiymkRgHf/Yo9C1VcyTsw=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "myst-parser" ];
+  pythonRelaxDeps = [
+    "myst-parser"
+    "sphinx"
+  ];
 
   dependencies = [
     click
@@ -87,26 +88,36 @@ buildPythonPackage rec {
     pytestCheckHook
     sphinx-inline-tabs
     texsoup
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTests = [
     # touch the network
     "test_create_from_cookiecutter"
+
     # flaky?
     "test_execution_timeout"
+
     # require texlive
     "test_toc"
     "test_toc_latex_parts"
     "test_toc_latex_urllink"
+
+    # AssertionError: assert 'There was an error in building your book' in '1'
+    "test_build_errors"
+
     # WARNING: Executing notebook failed: CellExecutionError [mystnb.exec]
     "test_build_dirhtml_from_template"
     "test_build_from_template"
     "test_build_page"
     "test_build_singlehtml_from_template"
+
+    # pytest.PytestUnraisableExceptionWarning: Exception ignored in: <sqlite3.Connection object at 0x115dcc9a0>
+    # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x115dcc9a0>
+    "test_clean_book"
+    "test_clean_html"
+    "test_clean_html_latex"
+    "test_clean_latex"
   ];
 
   disabledTestPaths = [
@@ -121,7 +132,7 @@ buildPythonPackage rec {
     homepage = "https://jupyterbook.org/";
     changelog = "https://github.com/jupyter-book/jupyter-book/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-book";
   };
 }

@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "mdtraj";
-  version = "1.10.2";
+  version = "1.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdtraj";
     repo = "mdtraj";
     tag = version;
-    hash = "sha256-0hSMKrY3p29IUmMuLsNUK4s/AM5zCzAh6Udg/xbeky0=";
+    hash = "sha256-xmxVPF6GhZpyuTxdmxB7mkfrDb1FIh9Z3obgUOdQmrw=";
   };
 
   patches = [

@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib";
     description = "Qualcomm IPC Router protocol helper library";
-    maintainers = teams.freedesktop.members;
+    teams = [ teams.freedesktop ];
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
   };

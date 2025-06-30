@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "sstadick";
-    repo = pname;
+    repo = "crabz";
     rev = "v${version}";
     sha256 = "sha256-GJHxo4WD/XMudwxOHdNwY1M+b/DFJMpU0uD3sOvO5YU=";
   };
@@ -21,15 +21,15 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform, fast, compression and decompression tool";
     homepage = "https://github.com/sstadick/crabz";
     changelog = "https://github.com/sstadick/crabz/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       unlicense # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "crabz";
   };
 }

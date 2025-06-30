@@ -13,14 +13,14 @@ The following is an example expression using `buildGoModule`:
 
 ```nix
 {
-  pet = buildGoModule rec {
+  pet = buildGoModule (finalAttrs: {
     pname = "pet";
     version = "0.3.4";
 
     src = fetchFromGitHub {
       owner = "knqyf263";
       repo = "pet";
-      rev = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
     };
 
@@ -32,7 +32,7 @@ The following is an example expression using `buildGoModule`:
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ kalbasit ];
     };
-  };
+  });
 }
 ```
 
@@ -188,6 +188,28 @@ Whether the build result should be allowed to contain references to the Go tool 
 
 Defaults to `false`
 
+### `goSum` {#var-go-goSum}
+
+Specifies the contents of the `go.sum` file and triggers rebuilds when it changes. This helps combat inconsistent dependency errors on `go.sum` changes.
+
+Defaults to `null`
+
+
+## Versioned toolchains and builders {#ssec-go-toolchain-versions}
+
+Beside `buildGoModule`, there are also versioned builders available that pin a specific Go version, like `buildGo124Module` for Go 1.24.
+Similar, versioned toolchains are available, like `go_1_24` for Go 1.24.
+Both builder and toolchain of a certain version will be removed as soon as the Go version reaches end of life.
+
+As toolchain updates in nixpkgs cause mass rebuilds and must go through the staging cycle, it can take a while until a new Go minor version is available to consumers of nixpkgs.
+If you want quicker access to the latest minor, use `go_latest` toolchain and `buildGoLatestModule` builder.
+To learn more about the Go maintenance and upgrade procedure in nixpkgs, check out the [Go toolchain/builder upgrade policy](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/go/README.md#go-toolchainbuilder-upgrade-policy).
+
+::: {.warning}
+The use of `go_latest` and `buildGoLatestModule` is restricted within nixpkgs.
+The [Go toolchain/builder upgrade policy](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/go/README.md#go-toolchainbuilder-upgrade-policy) must be followed.
+:::
+
 ## Overriding `goModules` {#buildGoModule-goModules-override}
 
 Overriding `<pkg>.goModules` by calling `goModules.overrideAttrs` is unsupported. Still, it is possible to override the `vendorHash` (`goModules`'s `outputHash`) and the `pre`/`post` hooks for both the build and patch phases of the primary and `goModules` derivation.
@@ -304,4 +326,4 @@ In case a project doesn't have external dependencies or dependencies are vendore
 - Run `go mod init <module name>` in `postPatch`
 
 In case the package has external dependencies that aren't vendored or the build setup is more complex the upstream source might need to be patched.
-Examples for the migration can be found in the [issue tracking migration withing nixpkgs](https://github.com/NixOS/nixpkgs/issues/318069).
+Examples for the migration can be found in the [issue tracking migration within nixpkgs](https://github.com/NixOS/nixpkgs/issues/318069).

@@ -9,6 +9,34 @@
 let
   versions = [
     {
+      version = "14.2.1";
+      lang = "en";
+      language = "English";
+      sha256 = "sha256-WNLuq9RviYF3Mj8uOALhmvcxGGHVq/TAGFMTGWoYBcc=";
+      installer = "Wolfram_14.2.1_LIN.sh";
+    }
+    {
+      version = "14.2.1";
+      lang = "en";
+      language = "English";
+      sha256 = "sha256-DcZbetr5wO3i/DkchgpsW3RGHfa1PslA4fK+bRQ68Bg=";
+      installer = "Wolfram_14.2.1_LIN_Bndl.sh";
+    }
+    {
+      version = "14.2.0";
+      lang = "en";
+      language = "English";
+      sha256 = "sha256-wIuyWufKuchPl7phCxVM9vIIkjUHfRxIECfDyGJliqs=";
+      installer = "Wolfram_14.2.0_LIN.sh";
+    }
+    {
+      version = "14.2.0";
+      lang = "en";
+      language = "English";
+      sha256 = "sha256-wY6acGoUc7y22enSi7RrcRFLvvPGaeYTta4yWExlXho=";
+      installer = "Wolfram_14.2.0_LIN_Bndl.sh";
+    }
+    {
       version = "14.1.0";
       lang = "en";
       language = "English";

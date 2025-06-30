@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
-    repo = pname;
+    repo = "karton-config-extractor";
     tag = "v${version}";
     hash = "sha256-a9wSw25q0blgAkR2s3brW7jGHJSLjx1yXjMmhMJNUFk=";
   };
@@ -26,10 +26,7 @@ buildPythonPackage rec {
     malduck
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "malduck==4.1.0" "malduck"
-  '';
+  pythonRelaxDeps = [ "malduck" ];
 
   # Project has no tests
   doCheck = false;

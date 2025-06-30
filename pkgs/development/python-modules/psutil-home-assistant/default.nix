@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Wrapper of psutil that removes reliance on globals";
     homepage = "https://github.com/home-assistant-libs/psutil-home-assistant";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

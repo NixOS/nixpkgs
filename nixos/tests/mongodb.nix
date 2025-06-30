@@ -12,7 +12,6 @@ in
 {
   name = "mongodb";
   meta.maintainers = with pkgs.lib.maintainers; [
-    bluescreen303
     offline
     phile314
     niklaskorz

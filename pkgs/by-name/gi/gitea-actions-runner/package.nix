@@ -31,10 +31,10 @@ buildGo123Module rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "act_runner";
-    maintainers = with maintainers; [ techknowlogick ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ techknowlogick ];
+    license = lib.licenses.mit;
     changelog = "https://gitea.com/gitea/act_runner/releases/tag/v${version}";
     homepage = "https://gitea.com/gitea/act_runner";
     description = "Runner for Gitea based on act";

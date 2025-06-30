@@ -1,12 +1,13 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonPackages,
+  requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "mkdocs-linkcheck";
   version = "unstable-2021-08-24";
   format = "setuptools";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-z59F7zUKZKIQSiTlE6wGbGDecPMeruNgltWUYfDf8jY=";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = [
     aiohttp
     requests
   ];

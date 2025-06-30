@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   autoreconfHook,
   callPackage,
   guile,
@@ -33,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     guile-reader
   ];
 
-  # Test suite is non-determinisitic in later versions
+  # Test suite is non-deterministic in later versions
   doCheck = false;
 
   postInstall = ''

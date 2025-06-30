@@ -1,14 +1,15 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  replaceVars,
+  bashInteractive,
   flit-core,
   filetype,
   ipykernel,
-  python,
   pexpect,
-  bashInteractive,
-  substituteAll,
+  writableTmpDirAsHomeHook,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -16,15 +17,15 @@ buildPythonPackage rec {
   version = "0.10.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "bash_kernel";
-    inherit version;
-    hash = "sha256-LtWgpBbEGNHXUecVBb1siJ4SFXREtQxCh6aF2ndcKMo=";
+  src = fetchFromGitHub {
+    owner = "takluyver";
+    repo = "bash_kernel";
+    tag = version;
+    hash = "sha256-ugFMcQx1B1nKoO9rhb6PMllRcoZi0O4B9um8dOu5DU4=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./bash-path.patch;
+    (replaceVars ./bash-path.patch {
       bash = lib.getExe bashInteractive;
     })
   ];
@@ -37,9 +38,9 @@ buildPythonPackage rec {
     pexpect
   ];
 
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   postInstall = ''
     ${python.pythonOnBuildForHost.interpreter} -m bash_kernel.install --prefix $out
@@ -59,6 +60,8 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Bash Kernel for Jupyter";

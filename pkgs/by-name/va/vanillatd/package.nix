@@ -66,10 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "BUILD_VANILLATD" (if appName == "vanillatd" then "ON" else "OFF"))
-    (lib.cmakeFeature "BUILD_VANILLARA" (if appName == "vanillara" then "ON" else "OFF"))
-    (lib.cmakeFeature "BUILD_REMASTERTD" (if appName == "remastertd" then "ON" else "OFF"))
-    (lib.cmakeFeature "BUILD_REMASTERRA" (if appName == "remasterra" then "ON" else "OFF"))
+    (lib.cmakeBool "BUILD_VANILLATD" (appName == "vanillatd"))
+    (lib.cmakeBool "BUILD_VANILLARA" (appName == "vanillara"))
+    (lib.cmakeBool "BUILD_REMASTERTD" (appName == "remastertd"))
+    (lib.cmakeBool "BUILD_REMASTERRA" (appName == "remasterra"))
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" CMAKE_BUILD_TYPE)
   ];
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       ''
         runHook preInstall
 
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
           buildPhase =
             let
               Default_Data_Path =
-                if stdenv.isDarwin then
+                if stdenv.hostPlatform.isDarwin then
                   "$out/Applications/${appName}.app/Contents/share/${appName}"
                 else
                   "$out/share/${appName}";

@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "1.2.1";
+  version = "1.3.0";
 in
 buildPecl {
   inherit version;
@@ -16,7 +16,7 @@ buildPecl {
     owner = "php";
     repo = "pecl-networking-uuid";
     tag = "v${version}";
-    hash = "sha256-C4SoSKkCTQOLKM1h47vbBgiHTG+ChocDB9tzhWfKUsw=";
+    hash = "sha256-00zJ//O1xqKTedRYThzeXOuL25wKLMZXjJWm/eXLkC4=";
   };
 
   buildInputs = [ libuuid ];
@@ -30,7 +30,7 @@ buildPecl {
     description = "A wrapper around Universally Unique IDentifier library (libuuid).";
     license = lib.licenses.php301;
     homepage = "https://github.com/php/pecl-networking-uuid";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
     platforms = lib.platforms.linux;
   };
 }

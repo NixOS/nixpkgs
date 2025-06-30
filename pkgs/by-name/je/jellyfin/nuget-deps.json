@@ -121,8 +121,8 @@
   },
   {
     "pname": "LrcParser",
-    "version": "2024.728.2",
-    "hash": "sha256-fv0OkCfXEcXJqZcl70Ch3PduuomghPC2LscHU7nFtnc="
+    "version": "2025.228.1",
+    "hash": "sha256-1p471WX25rYpb0P/q3sEj35vLLa8QvokAbLO47D7wTM="
   },
   {
     "pname": "MetaBrainz.Common",
@@ -1246,8 +1246,8 @@
   },
   {
     "pname": "z440.atl.core",
-    "version": "6.11.0",
-    "hash": "sha256-V1r1ftZ/Ud0pw/qwnqpJodRaGi9FyG3uIy3ykJUvxjg="
+    "version": "6.20.0",
+    "hash": "sha256-8LdLU2wgdR21bEXTBw7+RdbLYBM0vHRZhKv2ZpiVL44="
   },
   {
     "pname": "zlib.net-mutliplatform",

@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "mautrix-discord";
-  version = "0.7.2";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "discord";
     rev = "v${version}";
-    hash = "sha256-KRfbxPblOL4JznnGx9Jj5XXEWEKzan5xWvAwYmP7yGc=";
+    hash = "sha256-ygnFZ1I8sPgpKwLK+Zr6ZUStGAH2egVDxS/pXmRqXYI=";
   };
 
-  vendorHash = "sha256-8SW2q4Svfe8X9qwzYBa5HhHyQZDsPJqig/V1/Wp+avo=";
+  vendorHash = "sha256-S3MWJi77TXs7gjPt6O2ruSIUHpsrLPIHQz3rQam1Wsg=";
 
   ldflags = [
     "-s"

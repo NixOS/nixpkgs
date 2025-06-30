@@ -2,12 +2,11 @@
   lib,
   buildGoModule,
   fetchFromGitLab,
-  fetchpatch,
 }:
 
 buildGoModule rec {
   pname = "gitlab-container-registry";
-  version = "4.15.2";
+  version = "4.23.1";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -15,46 +14,33 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-nsWOCKHoryRcVT79/nbWXa0wnIflEeDLro3l21D6bzc=";
+    hash = "sha256-eCuSuQXtzd2jLJf9G8DO1KGXdT8bYGe9tcKw6BZNiiI=";
   };
 
-  vendorHash = "sha256-aKE/yr2Sh+4yw4TmpaVF84rJOI6cjs0DKY326+aXO1o=";
+  vendorHash = "sha256-OrdlQp+USRf+Yc7UDjIncDpbuRu5ui6TUoYY2MMc8Ro=";
 
-  env = {
-    # required for multiple azure tests
-    # https://gitlab.com/gitlab-org/container-registry/-/issues/1494
-    AZURE_DRIVER_VERSION = "azure_v2";
-  };
+  checkFlags =
+    let
+      skippedTests = [
+        # requires internet
+        "TestHTTPChecker"
+        # requires s3 credentials/urls
+        "TestS3DriverPathStyle"
+        # flaky
+        "TestPurgeAll"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  patches = [
-    # remove with >= 4.15.3
-    (fetchpatch {
-      url = "https://gitlab.com/gitlab-org/container-registry/-/commit/268689a2f30880b7d122469a4260ca46cbc55ccd.patch";
-      hash = "sha256-RslK4qvcqCaG7ju2LgN/tI9cImrTj3Nry+mCv3zoWiA=";
-    })
-  ];
-
-  postPatch = ''
-    # Disable flaky inmemory storage driver test
-    rm registry/storage/driver/inmemory/driver_test.go
-
-    substituteInPlace health/checks/checks_test.go \
-      --replace-fail \
-        'func TestHTTPChecker(t *testing.T) {' \
-        'func TestHTTPChecker(t *testing.T) { t.Skip("Test requires network connection")'
-
-    # Add workaround for failing test due to function type mismatch (args vs return) by upstream
-    # https://gitlab.com/gitlab-org/container-registry/-/issues/1495
-    substituteInPlace registry/storage/driver/base/regulator_test.go \
-      --replace-fail \
-        'require.Equal(t, limit, r.available, "r.available")' \
-        'require.Equal(t, limit, int(r.available), "r.available")'
-  '';
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "GitLab Docker toolset to pack, ship, store, and deliver content";
     license = licenses.asl20;
-    maintainers = with maintainers; [ yayayayaka ] ++ teams.cyberus.members;
+    teams = with teams; [
+      gitlab
+      cyberus
+    ];
     platforms = platforms.unix;
   };
 }

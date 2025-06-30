@@ -90,10 +90,18 @@ let
       }
     );
 
+  baseRelease =
+    {
+      staging = "unstable";
+      yabridge = "yabridge";
+    }
+    .${wineRelease} or null;
 in
-if wineRelease == "staging" then
+if baseRelease != null then
   callPackage ./staging.nix {
-    wineUnstable = wine-build wineBuild "unstable";
+    wineUnstable = (wine-build wineBuild baseRelease).override {
+      inherit wineRelease;
+    };
   }
 else
   wine-build wineBuild wineRelease

@@ -6,7 +6,6 @@
   rustPlatform,
   pkg-config,
   openssl,
-  darwin,
   vale,
 }:
 
@@ -27,16 +26,9 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    openssl
+  ];
 
   checkFlags =
     [
@@ -56,7 +48,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/vale-ls \
-      --prefix PATH : ${lib.makeBinPath [ vale ]}
+      --suffix PATH : ${lib.makeBinPath [ vale ]}
   '';
 
   meta = with lib; {

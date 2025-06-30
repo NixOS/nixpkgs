@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpuinfo";
-  version = "0-unstable-2025-02-03";
+  version = "0-unstable-2025-03-27";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "cpuinfo";
-    rev = "aaac07ee499895770c89163ce0920ef8bb41ed23";
-    hash = "sha256-A86nAbKs7trVwwa1HFUNbV//6O1minvlHTpZR3vabrU=";
+    rev = "39ea79a3c132f4e678695c579ea9353d2bd29968";
+    hash = "sha256-uochXC0AtOw8N/ycyVJdiRw4pibCW2ENrFMT3jtxDSg=";
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # The tests check what CPU the host has and makes sure it can query information.
-  # not all build environments may have this information availaible. And, cpuinfo may
+  # not all build environments may have this information available. And, cpuinfo may
   # not understand all CPUs (causing test failures such as https://github.com/pytorch/cpuinfo/issues/132)
   # Instead, allow building in any environment.
   doCheck = false;

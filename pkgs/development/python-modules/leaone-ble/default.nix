@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "leaone-ble";
-  version = "0.1.0";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = "leaone-ble";
     tag = "v${version}";
-    hash = "sha256-usFjI0zU89dEAbmx9mVemoxlYS8mmLTKIMhH26Rvkeg=";
+    hash = "sha256-96TOjjz4EkHAnzL53BIR+PifkyrEig/0r+mIfnwc0hE=";
   };
 
   build-system = [ poetry-core ];

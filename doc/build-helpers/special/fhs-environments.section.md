@@ -36,22 +36,29 @@ Accepted arguments are:
 You can create a simple environment using a `shell.nix` like this:
 
 ```nix
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 (pkgs.buildFHSEnv {
   name = "simple-x11-env";
-  targetPkgs = pkgs: (with pkgs; [
-    udev
-    alsa-lib
-  ]) ++ (with pkgs.xorg; [
-    libX11
-    libXcursor
-    libXrandr
-  ]);
-  multiPkgs = pkgs: (with pkgs; [
-    udev
-    alsa-lib
-  ]);
+  targetPkgs =
+    pkgs:
+    (with pkgs; [
+      udev
+      alsa-lib
+    ])
+    ++ (with pkgs.xorg; [
+      libX11
+      libXcursor
+      libXrandr
+    ]);
+  multiPkgs =
+    pkgs:
+    (with pkgs; [
+      udev
+      alsa-lib
+    ]);
   runScript = "bash";
 }).env
 ```

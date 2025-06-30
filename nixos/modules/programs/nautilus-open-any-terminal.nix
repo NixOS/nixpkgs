@@ -28,7 +28,7 @@ in
       nautilus-open-any-terminal
     ];
 
-    environment.sessionVariables = lib.mkIf (!config.services.xserver.desktopManager.gnome.enable) {
+    environment.sessionVariables = lib.mkIf (!config.services.desktopManager.gnome.enable) {
       NAUTILUS_4_EXTENSION_DIR = "${pkgs.nautilus-python}/lib/nautilus/extensions-4";
     };
 

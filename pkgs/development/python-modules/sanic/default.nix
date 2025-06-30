@@ -5,7 +5,6 @@
   aioquic,
   beautifulsoup4,
   buildPythonPackage,
-  cacert,
   fetchFromGitHub,
   gunicorn,
   html5tagger,
@@ -14,6 +13,7 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  sanic-ext,
   sanic-routing,
   sanic-testing,
   setuptools,
@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "24.12.0";
+  version = "25.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = "sanic";
     tag = "v${version}";
-    hash = "sha256-17Nr0iNeZC1sHm0JETIufdMVqrhORts1WxCh8cukCKg=";
+    hash = "sha256-tucLXWYPpALQrPYf+aiovKHYf2iouu6jezvNdukEu9w=";
   };
 
   build-system = [ setuptools ];
@@ -55,9 +55,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    ext = [
-      # TODO: sanic-ext
-    ];
+    ext = [ sanic-ext ];
     http3 = [ aioquic ];
   };
 
@@ -76,9 +74,6 @@ buildPythonPackage rec {
     # Some tests depends on sanic on PATH
     PATH="$out/bin:$PATH"
     PYTHONPATH=$PWD:$PYTHONPATH
-
-    # httpx since 0.28.0+ depends on SSL_CERT_FILE
-    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
     # needed for relative paths for some packages
     cd tests
@@ -117,7 +112,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/sanic-org/sanic/";
     changelog = "https://github.com/sanic-org/sanic/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ p0lyw0lf ];
     mainProgram = "sanic";
   };
 }

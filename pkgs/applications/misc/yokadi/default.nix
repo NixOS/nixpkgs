@@ -6,31 +6,34 @@
   sqlalchemy,
   setproctitle,
   icalendar,
+  colorama,
 }:
 
 buildPythonApplication rec {
   pname = "yokadi";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://yokadi.github.io/download/${pname}-${version}.tar.gz";
-    sha256 = "681c8aa52b2e4b5255e1311e76b4b81dcb63ee7f6ca3a47178e684c06baf330f";
+    hash = "sha256-zF2ffHeU+i7wzu1u4DhQ5zJXr8AjXboiyFAisXNX6TM=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     sqlalchemy
     setproctitle
     icalendar
+    colorama
   ];
 
   # Yokadi doesn't have any tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command line oriented, sqlite powered, todo-list";
     homepage = "https://yokadi.github.io/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.nkpvk ];
+    mainProgram = "yokadi";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.nkpvk ];
   };
 }

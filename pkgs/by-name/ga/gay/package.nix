@@ -1,17 +1,19 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
 }:
-
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gay";
-  version = "1.2.9";
+  version = "1.3.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x+RVVgQvJwV5j7DLYS7AnXb4OMJ4v+l0awUuonQIgzY=";
+    hash = "sha256-pSxRrXnv4tfu7awVnOsQwC2ZOS4qsfCphFR/fpTNdPc=";
   };
+
+  build-system = [ python3Packages.setuptools ];
 
   meta = with lib; {
     homepage = "https://github.com/ms-jpq/gay";

@@ -16,21 +16,19 @@
 
 buildPythonPackage rec {
   pname = "mistral-common";
-  version = "1.5.2";
+  version = "1.5.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mistral_common";
     inherit version;
-    hash = "sha256-nRFXsTdsSdNav8dD2+AITyyjezpavQPnQSdqG8ZshS8=";
+    hash = "sha256-TauSQwaEMhFKFfLEb/SRagViCnIrDfjetJ3POD+34r8=";
   };
 
-  # relax dependencies
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'pillow = "^10.3.0"' 'pillow = ">=10.3.0"' \
-      --replace-fail 'tiktoken = "^0.7.0"' 'tiktoken = ">=0.7.0"' \
-  '';
+  pythonRelaxDeps = [
+    "pillow"
+    "tiktoken"
+  ];
 
   build-system = [ poetry-core ];
 

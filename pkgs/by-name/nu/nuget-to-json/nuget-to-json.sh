@@ -37,7 +37,7 @@ for index in "${sources[@]}"; do
     remote_sources+=("$index")
 
     base_address=$(
-        curl --compressed --netrc -fsL "$index" |
+        curl --compressed --netrc-optional -fsSL "$index" |
             jq -r '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"'
     )
     if [[ ! "$base_address" == */ ]]; then
@@ -62,7 +62,8 @@ done
             fi
 
             # packages in the nix store should have an empty metadata file
-            used_source="$(jq -r 'if has("source") then .source else "" end' "$version"/.nupkg.metadata)"
+            # packages installed with 'dotnet tool' may be missing 'source'
+            used_source="$(jq -r 'if has("source") then .source elif has("contentHash") then "__unknown" else "" end' "$version"/.nupkg.metadata)"
             found=false
 
             if [[ -z "$used_source" || -d "$used_source" ]]; then

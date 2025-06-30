@@ -23,7 +23,6 @@
   libuv,
   libsolv,
   libcouchbase,
-  darwin,
 }:
 let
   pythonEnv = python3.withPackages (ps: [ ps.tkinter ]);
@@ -69,8 +68,6 @@ stdenv.mkDerivation rec {
       libuv
       libsolv
       libcouchbase
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.PCSC
     ];
 
   cmakeFlags = [ "-USE_PCSC=ON" ];

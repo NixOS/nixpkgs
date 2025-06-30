@@ -5,7 +5,7 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   ffmpeg,
   libopus,
   aiohttp,
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "nextcord";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -30,12 +30,11 @@ buildPythonPackage rec {
     owner = "nextcord";
     repo = "nextcord";
     tag = "v${version}";
-    hash = "sha256-zrxseQT98nNJHIA1It1JtOU8PFna/2zuIMIL7B1Ym+A=";
+    hash = "sha256-E8vRKH2Xgva7W5qW9kJBWzVfCuSiRyoAyO72mcGvkpg=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       ffmpeg = "${ffmpeg}/bin/ffmpeg";
       libopus = "${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}";
     })

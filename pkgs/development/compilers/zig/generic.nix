@@ -7,6 +7,7 @@
   xcbuild,
   targetPackages,
   libxml2,
+  ninja,
   zlib,
   coreutils,
   callPackage,
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       cmake
       (lib.getDev llvmPackages.llvm.dev)
+      ninja
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # provides xcode-select, which is required for SDK detection
@@ -66,9 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  # strictDeps breaks zig when clang is being used.
-  # https://github.com/NixOS/nixpkgs/issues/317055#issuecomment-2148438395
-  strictDeps = !stdenv.cc.isClang;
+  strictDeps = true;
 
   # On Darwin, Zig calls std.zig.system.darwin.macos.detect during the build,
   # which parses /System/Library/CoreServices/SystemVersion.plist and
@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
   # OSVersionDetectionFail when the sandbox is enabled.
   __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
     "/System/Library/CoreServices/.SystemVersionPlatform.plist"
-    "/System/Library/CoreServices/SystemVersion.plist"
   ];
 
   preBuild = ''
@@ -111,7 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   postBuild =
-    if lib.versionAtLeast finalAttrs.version "0.13" then
+    if lib.versionAtLeast finalAttrs.version "0.14" then
+      ''
+        stage3/bin/zig build langref --zig-lib-dir $(pwd)/stage3/lib/zig
+      ''
+    else if lib.versionAtLeast finalAttrs.version "0.13" then
       ''
         stage3/bin/zig build langref
       ''
@@ -139,27 +142,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru = {
-    hook = callPackage ./hook.nix { zig = finalAttrs.finalPackage; };
-
-    bintools-unwrapped = callPackage ./bintools.nix { zig = finalAttrs.finalPackage; };
-    bintools = wrapBintoolsWith { bintools = finalAttrs.finalPackage.bintools-unwrapped; };
-
-    cc-unwrapped = callPackage ./cc.nix { zig = finalAttrs.finalPackage; };
-    cc = wrapCCWith {
-      cc = finalAttrs.finalPackage.cc-unwrapped;
-      bintools = finalAttrs.finalPackage.bintools;
-      nixSupport.cc-cflags =
-        [
-          "-target"
-          "${stdenv.targetPlatform.parsed.cpu.name}-${stdenv.targetPlatform.parsed.kernel.name}-${stdenv.targetPlatform.parsed.abi.name}"
-        ]
-        ++ lib.optional (
-          stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
-        ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
-    };
-
-    stdenv = overrideCC stdenv finalAttrs.finalPackage.cc;
+  passthru = import ./passthru.nix {
+    inherit
+      lib
+      stdenv
+      callPackage
+      wrapCCWith
+      wrapBintoolsWith
+      overrideCC
+      targetPackages
+      ;
+    zig = finalAttrs.finalPackage;
   };
 
   meta = {
@@ -167,7 +160,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ziglang.org/";
     changelog = "https://ziglang.org/download/${finalAttrs.version}/release-notes.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ andrewrk ] ++ lib.teams.zig.members;
+    maintainers = with lib.maintainers; [ andrewrk ];
+    teams = [ lib.teams.zig ];
     mainProgram = "zig";
     platforms = lib.platforms.unix;
   };

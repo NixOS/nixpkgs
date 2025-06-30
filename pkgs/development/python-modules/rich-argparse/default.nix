@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "rich-argparse";
-  version = "1.6.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "hamdanal";
     repo = "rich-argparse";
     tag = "v${version}";
-    hash = "sha256-ae++npgZ8jZazwARwlPw73uhpQ8IT+7OekNl2vfu4Z0=";
+    hash = "sha256-gLXFiWgGMDOUbTyoSgTr0XfotVfDxwMqPdsfE4KHzXM=";
   };
 
   build-system = [ hatchling ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Format argparse help output using rich";
     homepage = "https://github.com/hamdanal/rich-argparse";
-    changelog = "https://github.com/hamdanal/rich-argparse/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/hamdanal/rich-argparse/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ graham33 ];
   };

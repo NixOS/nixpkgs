@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "1.1.2";
+  version = "1.1.3";
 in
 buildPecl rec {
   inherit version;
@@ -15,7 +15,7 @@ buildPecl rec {
     owner = "open-telemetry";
     repo = "opentelemetry-php-instrumentation";
     rev = version;
-    hash = "sha256-frFnL49tF74cDKdlTJorOOrs8rNgFMZdMdVmqsyO3cI=";
+    hash = "sha256-Vrmutn2A83DuXH5E+jPGPLW0brb7gKGfPGUKQHxvz5U=";
   };
 
   sourceRoot = "${src.name}/ext";

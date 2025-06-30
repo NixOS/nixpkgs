@@ -10,8 +10,6 @@
   withPulse ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   withCoreAudio ? stdenv.hostPlatform.isDarwin,
-  AudioUnit,
-  AudioToolbox,
   withJack ? stdenv.hostPlatform.isUnix,
   jack,
   withConplay ? !stdenv.hostPlatform.isWindows,
@@ -45,8 +43,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withAlsa [ alsa-lib ]
     ++ lib.optionals withPulse [ libpulseaudio ]
     ++ lib.optionals withCoreAudio [
-      AudioUnit
-      AudioToolbox
     ]
     ++ lib.optionals withJack [ jack ]
   );

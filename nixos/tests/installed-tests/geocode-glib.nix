@@ -11,5 +11,5 @@ makeInstalledTest {
     ];
   };
 
-  tested = pkgs.geocode-glib;
+  tested = pkgs.geocode-glib_2;
 }

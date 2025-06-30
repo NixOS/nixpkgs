@@ -25,11 +25,11 @@ buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pycampers/ampy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Utility to interact with a MicroPython board over a serial connection";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "ampy";
   };
 }

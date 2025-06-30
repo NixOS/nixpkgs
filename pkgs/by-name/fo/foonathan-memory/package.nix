@@ -2,28 +2,25 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   doctest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "foonathan-memory";
-  version = "0.7-3";
+  version = "0.7-4";
 
   src = fetchFromGitHub {
     owner = "foonathan";
     repo = "memory";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nLBnxPbPKiLCFF2TJgD/eJKJJfzktVBW3SRW2m3WK/s=";
+    hash = "sha256-qGbI7SL6lDbJzn2hkqaYw35QAyvSPxcZTb0ltDkPUSo=";
   };
 
   patches = [
     # do not download doctest, use the system doctest instead
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/f/foonathan-memory/0.7.3-2/debian/patches/0001-Use-system-doctest.patch";
-      hash = "sha256-/MuDeeIh+7osz11VfsAsQzm9HMZuifff+MDU3bDDxRE=";
-    })
+    # originally from: https://sources.debian.org/data/main/f/foonathan-memory/0.7.3-2/debian/patches/0001-Use-system-doctest.patch
+    ./0001-Use-system-doctest.patch.patch
   ];
 
   outputs = [
@@ -44,12 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # fix a circular dependency between "out" and "dev" outputs
   postInstall = ''
-    mkdir -p $dev/lib
-    mv $out/lib/foonathan_memory $dev/lib/
+    mkdir -p $out/lib/cmake
+    mv $out/lib/foonathan_memory/cmake $out/lib/cmake/foonathan_memory
+    rmdir $out/lib/foonathan_memory
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/foonathan/memory";
+    homepage = "https://memory.foonathan.net/";
     changelog = "https://github.com/foonathan/memory/releases/tag/${finalAttrs.src.rev}";
     description = "STL compatible C++ memory allocator library";
     mainProgram = "nodesize_dbg";

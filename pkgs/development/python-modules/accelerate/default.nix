@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "1.3.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
     tag = "v${version}";
-    hash = "sha256-HcbvQL8nASsZcfjAoPbQKNoEkSLp5Vmus2MEa3Dv6Po=";
+    hash = "sha256-nZoa2Uwd8cHl0H4LM8swHjce7HktpGdcD+6ykfoQ90M=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = lib.optionalString config.cudaSupport ''
-    export TRITON_PTXAS_PATH="${cudatoolkit}/bin/ptxas"
+    export TRITON_PTXAS_PATH="${lib.getExe' cudatoolkit "ptxas"}"
   '';
   pytestFlagsArray = [ "tests" ];
   disabledTests =
@@ -85,6 +85,9 @@ buildPythonPackage rec {
       "test_no_split_modules"
       "test_remote_code"
       "test_transformers_model"
+      "test_extract_model_keep_torch_compile"
+      "test_extract_model_remove_torch_compile"
+      "test_regions_are_compiled"
 
       # nondeterministic, tests GC behaviour by thresholding global ram usage
       "test_free_memory_dereferences_prepared_components"
@@ -92,8 +95,9 @@ buildPythonPackage rec {
       # set the environment variable, CC, which conflicts with standard environment
       "test_patch_environment_key_exists"
     ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
+    ++ lib.optionals ((pythonAtLeast "3.13") || (torch.rocmSupport or false)) [
       # RuntimeError: Dynamo is not supported on Python 3.13+
+      # OR torch.compile tests broken on torch 2.5 + rocm
       "test_can_unwrap_distributed_compiled_model_keep_torch_compile"
       "test_can_unwrap_distributed_compiled_model_remove_torch_compile"
       "test_convert_to_fp32"

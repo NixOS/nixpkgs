@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "codesnap";
-  version = "0.10.5";
+  version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "mistricky";
     repo = "CodeSnap";
     tag = "v${version}";
-    hash = "sha256-g2Xu/PKRSYrHKDJ5/MZRUkDQeYuxvNWPTuymhI8Iu5Q=";
+    hash = "sha256-EtMEUtLSgYrb0izPPCh432uX2p/8Ykf2caAR+8ZdxhU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bQT+tpoSZ54yppyNJxbOEqQoIKqYZAnRo0j42Ti+EJo=";
+  cargoHash = "sha256-atvSygt1Xi+rPxcJb0zdRBnL6SpSkyCcGxs1z2hWXGA=";
 
   cargoBuildFlags = [
     "-p"
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

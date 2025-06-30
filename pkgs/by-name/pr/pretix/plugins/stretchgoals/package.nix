@@ -7,15 +7,15 @@
 }:
 
 buildPythonPackage {
-  pname = "pretix-avgchart";
-  version = "unstable-2023-11-27";
+  pname = "pretix-stretchgoals";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rixx";
-    repo = "pretix-avgchart";
-    rev = "219816c7ec523a5c23778523b2616ac0c835cb3a";
-    hash = "sha256-1V/0PUvStgQeBQ0v6GoofAgyPmWs3RD+v5ekmAO9vFU=";
+    repo = "pretix-stretchgoals";
+    rev = "177238920a863f71cf03f174e2841f5b630574e9";
+    hash = "sha256-Sbbxg6viRdALjZwqEmN2Js/qbMShe5xMg00jUccnhsA=";
   };
 
   build-system = [
@@ -31,7 +31,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Display the average ticket sales price over time";
-    homepage = "https://github.com/rixx/pretix-avgchart";
+    homepage = "https://github.com/rixx/pretix-stretchgoals";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
   };

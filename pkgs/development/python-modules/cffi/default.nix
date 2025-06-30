@@ -30,7 +30,7 @@ if isPyPy then
       description = "Foreign Function Interface for Python calling C code (bundled with PyPy, placeholder package)";
       homepage = "https://cffi.readthedocs.org/";
       license = lib.licenses.mit;
-      maintainers = lib.teams.python.members;
+      teams = [ lib.teams.python ];
     };
   }
 else
@@ -43,20 +43,6 @@ else
       inherit pname version;
       hash = "sha256-HDnGAWwyvEjdVFYZUOvWg24WcPKuRhKPZ89J54nFKCQ=";
     };
-
-    patches = [
-      #
-      # Trusts the libffi library inside of nixpkgs on Apple devices.
-      #
-      # Based on some analysis I did:
-      #
-      #   https://groups.google.com/g/python-cffi/c/xU0Usa8dvhk
-      #
-      # I believe that libffi already contains the code from Apple's fork that is
-      # deemed safe to trust in cffi.
-      #
-      ./darwin-use-libffi-closures.diff
-    ];
 
     nativeBuildInputs = [ pkg-config ];
 
@@ -84,6 +70,6 @@ else
       downloadPage = "https://github.com/python-cffi/cffi";
       homepage = "https://cffi.readthedocs.org/";
       license = licenses.mit;
-      maintainers = teams.python.members;
+      teams = [ teams.python ];
     };
   }

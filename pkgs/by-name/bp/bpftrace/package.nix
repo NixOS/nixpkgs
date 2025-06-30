@@ -16,19 +16,18 @@
   flex,
   bison,
   util-linux,
-  fetchpatch,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.22.1";
+  version = "0.23.5";
 
   src = fetchFromGitHub {
     owner = "bpftrace";
     repo = "bpftrace";
     rev = "v${version}";
-    hash = "sha256-3qtErf3+T73DE40d6F8vFK1TdHcM/56AYFGGzxpRIug=";
+    hash = "sha256-Shtf4PSXxUV0Bd7ORYyP06lbWf3LE6BQi7WfTIGDOfk=";
   };
 
   buildInputs = with llvmPackages; [
@@ -76,19 +75,19 @@ stdenv.mkDerivation rec {
     bpf = nixosTests.bpf;
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-level tracing language for Linux eBPF";
     homepage = "https://github.com/bpftrace/bpftrace";
     changelog = "https://github.com/bpftrace/bpftrace/releases/tag/v${version}";
     mainProgram = "bpftrace";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rvl
       thoughtpolice
       martinetd
       mfrw
       illustris
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

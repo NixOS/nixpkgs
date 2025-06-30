@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pwlf";
-  version = "2.4.0";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cjekel";
     repo = "piecewise_linear_fit_py";
     tag = "v${version}";
-    hash = "sha256-TamFg+bX8QPRjY0HdrYviJRP8VwM7ucDFE2eZz5xNr0=";
+    hash = "sha256-tUJSVMhnUdqpbiKzrpznCEgaGHGOLylFm6DzNTnvnQQ=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pwlf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fit piecewise linear data for a specified number of line segments";
     homepage = "https://jekel.me/piecewise_linear_fit_py/";
     changelog = "https://github.com/cjekel/piecewise_linear_fit_py/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

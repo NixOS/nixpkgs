@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchurl,
-  tcp_wrappers,
   flex,
   bison,
   perl,
   libnsl,
+  # --with-libwrap=yes is currently broken, TODO unbreak
+  withLibWrap ? false,
+  tcp_wrappers,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,10 +24,17 @@ stdenv.mkDerivation rec {
     flex
     bison
   ];
-  buildInputs = [
-    tcp_wrappers
-    perl
-    libnsl
+  buildInputs =
+    [
+      perl
+      libnsl
+    ]
+    ++ lib.optionals withLibWrap [
+      tcp_wrappers
+    ];
+
+  configureFlags = lib.optionals (!withLibWrap) [
+    "--with-libwrap=no"
   ];
 
   meta = with lib; {

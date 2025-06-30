@@ -10,6 +10,7 @@
   pillow,
   pyjwt,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   requests,
   requests-futures,
@@ -23,24 +24,24 @@
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "3.9.4";
+  version = "3.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pycontribs";
-    repo = pname;
+    repo = "jira";
     tag = version;
-    hash = "sha256-P3dbrBKpHvLNIA+JBeSXEQl4QVZ0FdKkNIU8oPHWw6k=";
+    hash = "sha256-y8b+hHx/5mtFbA2jWyA1AI2Ez+VnUtqLZALM4DVAgLM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
     packaging
     requests
@@ -67,13 +68,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flaky
     pytestCheckHook
+    pytest-cov-stub
     requests-mock
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov-report=xml --cov jira" ""
-  '';
 
   pythonImportsCheck = [ "jira" ];
 

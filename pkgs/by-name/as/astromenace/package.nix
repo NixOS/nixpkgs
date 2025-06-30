@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "astromenace";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "viewizard";
     repo = "astromenace";
     rev = "v${version}";
-    hash = "sha256-VFFFYHsBxkURHqOBeuRuIxRKsy8baw2izOZ/qXUkiW8=";
+    hash = "sha256-W6d+8iw7/r2qJbE75U7egxqvK2HXaKzk+GtnspZRAxk=";
   };
 
   patches = [

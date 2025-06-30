@@ -6,17 +6,17 @@
 buildNimPackage (
   final: prev: rec {
     pname = "nimlangserver";
-    version = "1.8.1";
+    version = "1.12.0";
 
     # nix build ".#nimlangserver.src"
-    # nix run "github:daylinmorgan/nnl" -- result/nimble.lock -o:pkgs/by-name/ni/nimlangserver/lock.json --prefetch-git:bearssl,zlib
+    # nix run "github:daylinmorgan/nnl" -- result/nimble.lock -o:pkgs/by-name/ni/nimlangserver/lock.json --git,=,bearssl,zlib
     lockFile = ./lock.json;
 
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "langserver";
       rev = "v${version}";
-      hash = "sha256-j5YnTGPtt0WhRvNfpgO9tjAqZJA5Kt1FE1Mjqn0/DNY=";
+      hash = "sha256-yf3oiKwsJoQxRPhbEBMJN+TR7j58t6ggjq51DJ3ypGQ=";
     };
 
     doCheck = false;

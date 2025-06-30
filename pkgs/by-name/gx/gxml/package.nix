@@ -54,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail ">=0" ">= 0"
   '';
 
-  doCheck = true;
+  # https://github.com/NixOS/nixpkgs/issues/407969
+  doCheck = false;
 
   passthru.updateScript = gitUpdater { };
 
@@ -64,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/gxml/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jmarmstrong1207 ] ++ teams.gnome.members;
+    maintainers = with maintainers; [ jmarmstrong1207 ];
+    teams = [ teams.gnome ];
   };
 })

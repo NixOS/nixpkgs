@@ -9,17 +9,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "chirpstack-udp-forwarder";
-  version = "4.1.8";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-udp-forwarder";
     rev = "v${version}";
-    hash = "sha256-Snj5nKyFsq8WJJNw1d8O/YX/dZ/tCTVBw5R8kXJvsa4=";
+    hash = "sha256-7xB85IOwOZ6cifw2TFWzNGNMPl8Pc9seqpSJdWdzStM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ntY0Ze9MlbdRnmzA5AJN4Hjlhv18Iboj83gba8A4xHw=";
+  cargoHash = "sha256-ECq6Gfn52ZjS48h479XgTQnZHYSjnJK/T9j5NTlcxz4=";
 
   nativeBuildInputs = [ protobuf ];
 

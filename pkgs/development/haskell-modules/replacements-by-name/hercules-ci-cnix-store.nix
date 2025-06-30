@@ -24,8 +24,8 @@
 }:
 mkDerivation {
   pname = "hercules-ci-cnix-store";
-  version = "0.3.6.1";
-  sha256 = "35e3d21f9bbc1c83187af22a2532d227fc42a5cf3cf683a86be7bb7180f10d5e";
+  version = "0.3.7.0";
+  sha256 = "6feba2a6e1a267bc69b67962ed6eaa3510b1ae31c411fdb4e6670763d175d3b1";
   setupHaskellDepends = [
     base
     Cabal

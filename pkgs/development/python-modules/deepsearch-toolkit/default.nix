@@ -57,6 +57,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "certifi"
     "urllib3"
   ];
 

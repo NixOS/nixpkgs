@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -14,32 +15,32 @@
   c-blosc2,
 
   # dependencies
-  httpx,
   msgpack,
   ndindex,
   numexpr,
   numpy,
+  platformdirs,
   py-cpuinfo,
+  requests,
 
   # tests
   psutil,
   pytestCheckHook,
   torch,
+  runTorchTests ? lib.meta.availableOn stdenv.hostPlatform torch,
 }:
 
 buildPythonPackage rec {
   pname = "blosc2";
-  version = "3.0.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "python-blosc2";
     tag = "v${version}";
-    hash = "sha256-em03vwTPURkyZfGdlgpoy8QUzbib9SlcR73vYznlsYA=";
+    hash = "sha256-dCTASj3jNY4tQdllis9F95yNRD/KwctBxiS4MjkxeX0=";
   };
-
-  pythonRelaxDeps = [ "numpy" ];
 
   nativeBuildInputs = [
     cmake
@@ -52,33 +53,26 @@ buildPythonPackage rec {
 
   build-system = [
     cython
+    numpy
     scikit-build-core
   ];
 
   buildInputs = [ c-blosc2 ];
 
   dependencies = [
-    httpx
     msgpack
     ndindex
     numexpr
     numpy
+    platformdirs
     py-cpuinfo
+    requests
   ];
 
   nativeCheckInputs = [
     psutil
     pytestCheckHook
-    torch
-  ];
-
-  disabledTests = [
-    # RuntimeError: Error while getting the slice
-    "test_lazyexpr"
-    "test_eval_item"
-    # RuntimeError: Error while creating the NDArray
-    "test_lossy"
-  ];
+  ] ++ lib.optionals runTorchTests [ torch ];
 
   passthru.c-blosc2 = c-blosc2;
 

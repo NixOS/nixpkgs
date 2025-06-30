@@ -6,12 +6,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hellwal";
-  version = "1.0.2";
+  version = "1.0.4";
   src = fetchFromGitHub {
     owner = "danihek";
     repo = "hellwal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TrqXInoz6OEtS12YmXUILV41IkZW0B4XAAESiU2yMMU=";
+    hash = "sha256-M+b49KhbzvwpMvnfiNe4yy50aUjrGXEajLMmiXEOCgE=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''

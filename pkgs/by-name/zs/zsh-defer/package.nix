@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zsh-defer";
   version = "unstable-2022-06-13";
 
   src = fetchFromGitHub {
     owner = "romkatv";
-    repo = pname;
+    repo = "zsh-defer";
     rev = "57a6650ff262f577278275ddf11139673e01e471";
     sha256 = "sha256-/rcIS2AbTyGw2HjsLPkHtt50c2CrtAFDnLuV5wsHcLc=";
   };

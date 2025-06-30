@@ -7,7 +7,6 @@
   libxslt,
   perl,
   curl,
-  pcre,
   libxml2,
   librdf_rasqal,
   gmp,
@@ -33,14 +32,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     pkg-config
-  ];
+  ] ++ lib.optional withPostgresql libpq.pg_config;
 
   buildInputs =
     [
       openssl
       libxslt
       curl
-      pcre
       libxml2
       gmp
     ]

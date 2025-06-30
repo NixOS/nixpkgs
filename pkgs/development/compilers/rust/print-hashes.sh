@@ -20,6 +20,8 @@ PLATFORMS=(
   powerpc64le-unknown-linux-gnu
   riscv64gc-unknown-linux-gnu
   s390x-unknown-linux-gnu
+  loongarch64-unknown-linux-gnu
+  loongarch64-unknown-linux-musl
   x86_64-unknown-freebsd
 )
 BASEURL=https://static.rust-lang.org/dist

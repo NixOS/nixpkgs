@@ -2,7 +2,8 @@
   stdenv,
   lib,
   fetchurl,
-  flint,
+  fetchpatch,
+  flint3,
   gmp,
 }:
 
@@ -16,8 +17,17 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    flint
+    flint3
     gmp
+  ];
+
+  patches = [
+    # https://github.com/ezaffanella/PPLite/pull/1
+    (fetchpatch {
+      name = "flint-3_2.patch";
+      url = "https://github.com/ezaffanella/PPLite/commit/96fd1e50131f70bb78efdd60985525e970c9df06.patch";
+      hash = "sha256-8FNyL8h/rBm2Hegib2l08vqEmFDU0PhMCV8Ui2G4xHQ=";
+    })
   ];
 
   meta = {

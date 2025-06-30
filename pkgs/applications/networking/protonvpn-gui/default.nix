@@ -5,6 +5,7 @@
   gobject-introspection,
   setuptools,
   wrapGAppsHook3,
+  libnotify,
   dbus-python,
   packaging,
   proton-core,
@@ -21,14 +22,14 @@
 
 buildPythonApplication rec {
   pname = "protonvpn-gui";
-  version = "4.8.2";
+  version = "4.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-gtk-app";
-    tag = "v${version}";
-    hash = "sha256-kNWwrNpXCkAPvXXqv8HwOx0msYEVsO0JgrtG3wUVmQ4=";
+    tag = "${version}";
+    hash = "sha256-Undf3qSClcRa1e9f6B/1hLPIjc2KPG745AXxYHQA0nE=";
   };
 
   nativeBuildInputs = [
@@ -37,12 +38,16 @@ buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = lib.optionals withIndicator [
-    # Adds AppIndicator3 namespace
-    libappindicator-gtk3
-    # Adds AyatanaAppIndicator3 namespace
-    libayatana-appindicator
-  ];
+  buildInputs =
+    [
+      libnotify # gir typelib is used
+    ]
+    ++ lib.optionals withIndicator [
+      # Adds AppIndicator3 namespace
+      libappindicator-gtk3
+      # Adds AyatanaAppIndicator3 namespace
+      libayatana-appindicator
+    ];
 
   build-system = [
     setuptools

@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "music-assistant-models";
-  version = "1.1.3"; # Must be compatible with music-assistant-client package
+  version = "1.1.43"; # Must be compatible with music-assistant-client package
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "models";
-    tag = "v${version}";
-    hash = "sha256-FbnwUfAwCwwBKqEUtb2ZBxHehFwJdr9YkuWKox018BY=";
+    tag = version;
+    hash = "sha256-0SBNxpiBAKlAQe7eJTp+BwGNY52OTt37TksKrp9nfz4=";
   };
 
   postPatch = ''

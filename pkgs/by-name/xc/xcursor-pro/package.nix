@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       lactose
-      midirhee12
+      midischwarz12
     ];
   };
 })

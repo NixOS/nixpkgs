@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   # TODO: drop it once 6.x branch releases.
   hardeningDisable = [ "fortify3" ];
 
-  # Fails the build occasionally due to missing buid depends:
+  # Fails the build occasionally due to missing build depends:
   #   ./../sys/unix/unixmain.c:9:10: fatal error: date.h: No such file or directory
   # TODO: remove once upstream issue is fixed:
   #   https://github.com/UnNetHack/UnNetHack/issues/56

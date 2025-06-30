@@ -1,54 +1,55 @@
 {
   lib,
   stdenv,
-  attrs,
-  autoray ? null,
   buildPythonPackage,
-  duet,
   fetchFromGitHub,
-  freezegun,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  attrs,
+  duet,
   matplotlib,
   networkx,
   numpy,
-  opt-einsum,
   pandas,
-  ply,
-  pylatex ? null,
-  pyquil ? null,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  quimb ? null,
   requests,
   scipy,
-  setuptools,
   sortedcontainers,
   sympy,
   tqdm,
   typing-extensions,
+  autoray ? null,
+  opt-einsum,
+  ply,
+  pylatex ? null,
+  pyquil ? null,
+  quimb ? null,
+
+  # tests
+  freezegun,
+  pytest-asyncio,
+  pytestCheckHook,
+
   withContribRequires ? false,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.4.1-unstable-2024-09-21";
+  version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
-    rev = "3fefe2984a1203c0bf647c1ea84f4882b05f8477";
-    hash = "sha256-/WDKVxNJ8pewTLAFTyAZ/nnYcJSLubEJcn7qoJslZ3U=";
+    tag = "v${version}";
+    hash = "sha256-4FgXX4ox7BkjmLecxsvg0/JpcrHPn6hlFw5rk4bn9Cc=";
   };
 
   sourceRoot = "${src.name}/${pname}";
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace-fail "matplotlib~=3.0" "matplotlib"
-  '';
+  pythonRelaxDeps = [ "matplotlib" ];
 
   build-system = [ setuptools ];
 
@@ -77,9 +78,9 @@ buildPythonPackage rec {
     ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
     freezegun
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   disabledTestPaths = lib.optionals (!withContribRequires) [
@@ -97,14 +98,18 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # https://github.com/quantumlib/Cirq/issues/5924
       "test_prepare_two_qubit_state_using_sqrt_iswap"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # test_scalar_division[scalar9-terms9-terms_expected9] result differs in the final digit
+      "test_scalar_division"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";
     homepage = "https://github.com/quantumlib/cirq";
     changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       drewrisinger
       fab
     ];

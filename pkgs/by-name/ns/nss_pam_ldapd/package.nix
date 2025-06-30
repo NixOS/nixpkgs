@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nss-pam-ldapd";
-  version = "0.9.12";
+  version = "0.9.13";
 
   src = fetchurl {
     url = "https://arthurdejong.org/nss-pam-ldapd/${pname}-${version}.tar.gz";
-    sha256 = "sha256-xtZh50aTy/Uxp5BjHKk7c/KR+yPMOUZbCd642iv7DhQ=";
+    sha256 = "sha256-4BeE4Xy1M7tmvQYB4gXnhSY0RcPC33pvkCMqtBMccW0=";
   };
 
   nativeBuildInputs = [

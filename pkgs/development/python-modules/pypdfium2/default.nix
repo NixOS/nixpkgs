@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   pkgs,
   buildPythonPackage,
@@ -9,6 +10,9 @@
   numpy,
   pillow,
   pytestCheckHook,
+  removeReferencesTo,
+  python,
+  replaceVars,
 }:
 
 let
@@ -17,8 +21,8 @@ let
   headers = fetchgit {
     url = "https://pdfium.googlesource.com/pdfium";
     # The latest revision on the chromium/${pdfiumVersion} branch
-    rev = "f6da7d235728aeaff6586d2190badfb4290a9979";
-    hash = "sha256-xUylu//APbwpI+k6cQ7OrPCwDXp9qw0ZVaCba/d5zVg=";
+    rev = "9232d7c94a0007377a8034222f47683fe391d474";
+    hash = "sha256-dI3jTyVYc0EmMLHTiVjGSf3C2noS9Ru5WijEJFtiSFk=";
     sparseCheckout = [
       "public"
     ];
@@ -36,6 +40,12 @@ let
       rev = "848e9fbb1374f7f58a7ebf5e5da5c33292480b30";
       hash = "sha256-3JA7cW/xaEj/DxMHEypROwrKGo7EwUEcipRqALTvydw=";
     };
+
+    patches = [
+      (replaceVars ./fix-cc-detection.patch {
+        cc = "${stdenv.cc.targetPrefix}cc";
+      })
+    ];
 
     build-system = [
       setuptools-scm
@@ -60,6 +70,10 @@ buildPythonPackage rec {
   build-system = [
     ctypesgen
     setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    removeReferencesTo
   ];
 
   propagatedBuildInputs = [
@@ -103,6 +117,11 @@ buildPythonPackage rec {
                        '{"major": 133, "minor": 0, "build": ${pdfiumVersion}, "patch": 1}'
     '';
   env.PDFIUM_PLATFORM = "system:${pdfiumVersion}";
+
+  # Remove references to stdenv in comments.
+  postInstall = ''
+    remove-references-to -t ${stdenv.cc.cc} $out/${python.sitePackages}/pypdfium2_raw/bindings.py
+  '';
 
   nativeCheckInputs = [
     numpy

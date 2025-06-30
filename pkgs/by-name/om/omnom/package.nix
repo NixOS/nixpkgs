@@ -2,28 +2,30 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   makeWrapper,
+  nixosTests,
 
   # for addons
   buildNpmPackage,
   zip,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "omnom";
-  version = "0-unstable-2024-11-20";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "omnom";
-    rev = "dbf40c9c50b74335286faea7c5070bba11dced83";
-    hash = "sha256-dl0jfFwn+Fd8/aQNhXFNEoDIMgMia2MHZntp0EKhimg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xspzTRIYUJSdI2Z/FAS2ecLpEEmEVGIwlhjrS5Yxh2c=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-dsS5w8JXIwkneWScOFzLSDiXq+clgK+RdYiMw0+FnvY=";
+  vendorHash = "sha256-qOl6f83k91K7YNF7lBbL66lXb/XWbGHyXeN7ZTchsI8=";
 
-  patches = [ ./0001-fix-minimal-go-version.patch ];
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -36,13 +38,19 @@ buildGoModule rec {
     let
       omnom-addons = buildNpmPackage {
         pname = "omnom-addons";
-        inherit version src;
+        inherit (finalAttrs) version src;
 
         npmDepsHash = "sha256-sUn5IvcHWJ/yaqeGz9SGvGx9HHAlrcnS0lJxIxUVS6M=";
-        sourceRoot = "${src.name}/ext";
+        sourceRoot = "${finalAttrs.src.name}/ext";
         npmPackFlags = [ "--ignore-scripts" ];
 
         nativeBuildInputs = [ zip ];
+
+        # Fix path for the `static` directory
+        postConfigure = ''
+          substituteInPlace webpack.config.js \
+          --replace-fail '"..", ".."' '".."'
+        '';
 
         postBuild = ''
           mkdir -p $out
@@ -74,11 +82,13 @@ buildGoModule rec {
     cp config.yml_sample $out/share/examples/config.yml
   '';
 
+  passthru.tests = nixosTests.omnom;
+
   meta = {
-    description = "A webpage bookmarking and snapshotting service";
+    description = "Webpage bookmarking and snapshotting service";
     homepage = "https://github.com/asciimoo/omnom";
     license = lib.licenses.agpl3Only;
-    maintainers = lib.teams.ngi.members;
+    teams = [ lib.teams.ngi ];
     mainProgram = "omnom";
   };
-}
+})

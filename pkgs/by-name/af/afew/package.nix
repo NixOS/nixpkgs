@@ -60,11 +60,11 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/afewmail/afew";
     description = "Initial tagging script for notmuch mail";
     mainProgram = "afew";
-    license = licenses.isc;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

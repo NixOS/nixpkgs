@@ -38,8 +38,12 @@ stdenv.mkDerivation (
       (lib.warnIf (args ? qtInputs) "qt6.qtModule's qtInputs argument is deprecated" args.qtInputs or [ ])
       ++ (args.propagatedBuildInputs or [ ]);
 
-    cmakeFlags = args.cmakeFlags or [ ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin "-DQT_NO_XCODE_MIN_VERSION_CHECK=ON";
+    cmakeFlags =
+      # don't leak OS version into the final output
+      # https://bugreports.qt.io/browse/QTBUG-136060
+      [ "-DCMAKE_SYSTEM_VERSION=" ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin "-DQT_NO_XCODE_MIN_VERSION_CHECK=ON"
+      ++ args.cmakeFlags or [ ];
 
     moveToDev = false;
 

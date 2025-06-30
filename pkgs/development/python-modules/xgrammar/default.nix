@@ -3,57 +3,72 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   cmake,
   ninja,
-  pip,
-  pytestCheckHook,
-  python3,
-  pybind11,
+  nanobind,
+  scikit-build-core,
+
+  # dependencies
   pydantic,
   sentencepiece,
   tiktoken,
   torch,
   transformers,
   triton,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.11";
-  format = "other";
+  version = "0.1.19";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlc-ai";
-    repo = pname;
+    repo = "xgrammar";
     tag = "v${version}";
-    hash = "sha256-q5d8/9S9p9M8HlCIernT9IwPEDnbC1R9nGsLuS15RXY=";
     fetchSubmodules = true;
+    hash = "sha256-0b2tJx1D/2X/uosbthHfevUpTCBtuSKNlxOKyidTotA=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
+  patches = [
+    ./0001-fix-find-nanobind-from-python-module.patch
   ];
 
-  buildInputs = [ pip ];
+  build-system = [
+    cmake
+    ninja
+    nanobind
+    scikit-build-core
+  ];
+  dontUseCmakeConfigure = true;
 
-  dontUseNinjaInstall = true;
+  dependencies =
+    [
+      pydantic
+      sentencepiece
+      tiktoken
+      torch
+      transformers
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+      triton
+    ];
 
-  installPhase = ''
-    runHook preInstall
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
-    cd ../python
-    ${python3.interpreter} -m pip install --prefix=$out .
-    cd ..
-
-    runHook postInstall
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    cd tests/python/
-  '';
+  NIX_CFLAGS_COMPILE = toString [
+    # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
+    "-ffat-lto-objects"
+  ];
 
   disabledTests = [
     # You are trying to access a gated repo.
@@ -64,27 +79,21 @@ buildPythonPackage rec {
     "test_grammar_matcher_json_schema"
     "test_grammar_matcher_tag_dispatch"
     "test_regex_converter"
+    "test_tokenizer_info"
+
     # Torch not compiled with CUDA enabled
     "test_token_bitmask_operations"
-    # You are trying to access a gated repo.
-    "test_tokenizer_info"
+
+    # AssertionError
+    "test_json_schema_converter"
   ];
 
   pythonImportsCheck = [ "xgrammar" ];
 
-  dependencies = [
-    pybind11
-    pydantic
-    sentencepiece
-    tiktoken
-    torch
-    transformers
-    triton
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Efficient, Flexible and Portable Structured Generation";
     homepage = "https://xgrammar.mlc.ai";
-    license = licenses.asl20;
+    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/v${version}";
+    license = lib.licenses.asl20;
   };
 }

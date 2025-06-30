@@ -11,7 +11,7 @@
   json-glib,
   desktop-file-utils,
   python3,
-  gtk,
+  gtk3,
   girara,
   gettext,
   gnome,
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      gtk
+      gtk3
       girara
       libintl
       sqlite

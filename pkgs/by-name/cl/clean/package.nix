@@ -1,49 +1,59 @@
 {
-  lib,
-  stdenv,
+  binutils,
   fetchurl,
+  gcc,
+  lib,
+  runCommand,
+  stdenv,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clean";
-  version = "3.0";
+  version = "3.1";
 
   src =
     if stdenv.hostPlatform.system == "i686-linux" then
       (fetchurl {
-        url = "https://ftp.cs.ru.nl/Clean/Clean30/linux/clean3.0_32_boot.tar.gz";
-        sha256 = "0cjxv3vqrg6pz3aicwfdz1zyhk0q650464j3qyl0wzaikh750010";
+        url = "https://ftp.cs.ru.nl/Clean/Clean31/linux/clean3.1_32_boot.tar.gz";
+        sha256 = "Ls0IKf+o7yhRLhtSV61jzmnYukfh5x5fogHaP5ke/Ck=";
       })
     else if stdenv.hostPlatform.system == "x86_64-linux" then
       (fetchurl {
-        url = "https://ftp.cs.ru.nl/Clean/Clean30/linux/clean3.0_64_boot.tar.gz";
-        sha256 = "06k283y9adbi28f78k3m5ssg6py73qqkz3sm8dgxc89drv4krl2i";
+        url = "https://ftp.cs.ru.nl/Clean/Clean31/linux/clean3.1_64_boot.tar.gz";
+        sha256 = "Gg5CVZjrwDBtV7Vuw21Xj6Rn+qN1Mf6B3ls6r/16oBc=";
       })
     else
       throw "Architecture not supported";
 
-  hardeningDisable = [
-    "format"
-    "pic"
+  hardeningDisable = [ "pic" ];
+
+  patches = [
+    ./chroot-build-support-do-not-rebuild-equal-timestamps.patch
+    ./declare-functions-explicitly-for-gcc14.patch
   ];
 
-  # clm uses timestamps of dcl, icl, abc and o files to decide what must be rebuild
-  # and for chroot builds all of the library files will have equal timestamps.  This
-  # makes clm try to rebuild the library modules (and fail due to absence of write permission
-  # on the Nix store) every time any file is compiled.
-  patches = [ ./chroot-build-support-do-not-rebuild-equal-timestamps.patch ];
-
-  preBuild = ''
-    substituteInPlace Makefile --replace 'INSTALL_DIR = $(CURRENTDIR)' 'INSTALL_DIR = '$out
-
-    substituteInPlace src/tools/clm/clm.c --replace '/usr/bin/gcc' $(type -p gcc)
-    substituteInPlace src/tools/clm/clm.c --replace '/usr/bin/as' $(type -p as)
-
-    cd src
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail 'INSTALL_DIR = $(CURRENTDIR)' "INSTALL_DIR = $out"
+    substituteInPlace src/clm/clm.c \
+      --replace-fail /usr/bin/as ${binutils}/bin/as \
+      --replace-fail /usr/bin/gcc ${gcc}/bin/gcc
   '';
 
-  postBuild = ''
-    cd ..
+  buildFlags = [ "-C src/" ];
+
+  # do not strip libraries and executables since all symbols since they are
+  # required as is for compilation. Especially the labels of unused section need
+  # to be kept.
+  dontStrip = true;
+
+  passthru.tests.compile-hello-world = runCommand "compile-hello-world" { } ''
+    cat >HelloWorld.icl <<EOF
+    module HelloWorld
+    Start = "Hello, world!"
+    EOF
+    ${finalAttrs.finalPackage}/bin/clm HelloWorld -o hello-world
+    touch $out
   '';
 
   meta = {
@@ -57,10 +67,14 @@ stdenv.mkDerivation {
 
     homepage = "http://wiki.clean.cs.ru.nl/Clean";
     license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.erin ];
+    maintainers = with lib.maintainers; [
+      bmrips
+      erin
+    ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
+    mainProgram = "clean";
   };
-}
+})

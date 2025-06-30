@@ -49,6 +49,12 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
+  pytestFlagsArray = [
+    # DeprecationWarning: JAXopt is no longer maintained
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     "tests/test_benchmarks.py"
 

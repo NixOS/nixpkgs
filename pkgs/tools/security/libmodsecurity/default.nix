@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmodsecurity";
-  version = "3.0.13";
+  version = "3.0.14";
 
   src = fetchFromGitHub {
     owner = "owasp-modsecurity";
     repo = "ModSecurity";
     rev = "v${version}";
-    hash = "sha256-+z31t007NLCAFG/Lsj5j/AbBDPkI2wjbH5yM5vipH04=";
+    hash = "sha256-SaeBO3+WvPhHiJoiOmijB0G3/QYxjAdxgeCVqESS+4U=";
     fetchSubmodules = true;
   };
 

@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index aaac4e38..fe4e9932 100644
+index 3cab120d..abc526b1 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -120,7 +120,7 @@ target_link_libraries(
+@@ -128,7 +128,7 @@ target_link_libraries(
            lodepng
            qhullstatic_r
            tinyobjloader
@@ -12,7 +12,7 @@ index aaac4e38..fe4e9932 100644
  
  set_target_properties(
 diff --git a/cmake/MujocoDependencies.cmake b/cmake/MujocoDependencies.cmake
-index 23e4e71e..33081e00 100644
+index 78522705..7c64e22a 100644
 --- a/cmake/MujocoDependencies.cmake
 +++ b/cmake/MujocoDependencies.cmake
 @@ -93,28 +93,36 @@ set(BUILD_SHARED_LIBS
@@ -292,17 +292,7 @@ index 23e4e71e..33081e00 100644
      TARGETS
      absl::core_headers
      EXCLUDE_FROM_ALL
-@@ -268,6 +310,9 @@ if(MUJOCO_BUILD_TESTS)
-       CACHE BOOL "Build tests." FORCE
-   )
- 
-+  option(MUJOCO_USE_SYSTEM_gtest "Use installed gtest version." OFF)
-+  mark_as_advanced(MUJOCO_USE_SYSTEM_gtest)
-+
-   # Avoid linking errors on Windows by dynamically linking to the C runtime.
-   set(gtest_force_shared_crt
-       ON
-@@ -276,22 +321,20 @@ if(MUJOCO_BUILD_TESTS)
+@@ -276,22 +318,20 @@ if(MUJOCO_BUILD_TESTS)
  
    findorfetch(
      USE_SYSTEM_PACKAGE
@@ -331,7 +321,7 @@ index 23e4e71e..33081e00 100644
    set(BENCHMARK_EXTRA_FETCH_ARGS "")
    if(WIN32 AND NOT MSVC)
      set(BENCHMARK_EXTRA_FETCH_ARGS
-@@ -310,15 +353,11 @@ if(MUJOCO_BUILD_TESTS)
+@@ -310,15 +350,11 @@ if(MUJOCO_BUILD_TESTS)
  
    findorfetch(
      USE_SYSTEM_PACKAGE
@@ -348,7 +338,7 @@ index 23e4e71e..33081e00 100644
      TARGETS
      benchmark::benchmark
      benchmark::benchmark_main
-@@ -328,15 +367,18 @@ if(MUJOCO_BUILD_TESTS)
+@@ -328,15 +364,18 @@ if(MUJOCO_BUILD_TESTS)
  endif()
  
  if(MUJOCO_TEST_PYTHON_UTIL)
@@ -372,7 +362,7 @@ index 23e4e71e..33081e00 100644
      )
  
      FetchContent_GetProperties(Eigen3)
-@@ -348,6 +390,19 @@ if(MUJOCO_TEST_PYTHON_UTIL)
+@@ -348,6 +387,19 @@ if(MUJOCO_TEST_PYTHON_UTIL)
        set_target_properties(
          Eigen3::Eigen PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${eigen3_SOURCE_DIR}"
        )
@@ -393,17 +383,17 @@ index 23e4e71e..33081e00 100644
    endif()
  endif()
 diff --git a/plugin/sdf/CMakeLists.txt b/plugin/sdf/CMakeLists.txt
-index 3e216fc4..e7e3a1eb 100644
+index 8b834971..25021fa1 100644
 --- a/plugin/sdf/CMakeLists.txt
 +++ b/plugin/sdf/CMakeLists.txt
 @@ -37,7 +37,7 @@ set(MUJOCO_SDF_SRCS
- add_library(sdf SHARED)
- target_sources(sdf PRIVATE ${MUJOCO_SDF_SRCS})
- target_include_directories(sdf PRIVATE ${MUJOCO_SDF_INCLUDE})
--target_link_libraries(sdf PRIVATE mujoco SdfLib)
-+target_link_libraries(sdf PRIVATE mujoco SdfLib::SdfLib)
+ add_library(sdf_plugin SHARED)
+ target_sources(sdf_plugin PRIVATE ${MUJOCO_SDF_SRCS})
+ target_include_directories(sdf_plugin PRIVATE ${MUJOCO_SDF_INCLUDE})
+-target_link_libraries(sdf_plugin PRIVATE mujoco SdfLib)
++target_link_libraries(sdf_plugin PRIVATE mujoco SdfLib::SdfLib)
  target_compile_options(
-   sdf
+   sdf_plugin
    PRIVATE ${AVX_COMPILE_OPTIONS}
 diff --git a/python/mujoco/util/CMakeLists.txt b/python/mujoco/util/CMakeLists.txt
 index 666a3725..d89bb499 100644
@@ -469,7 +459,7 @@ index 5141406c..75ff7884 100644
    glfw
    EXCLUDE_FROM_ALL
 diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
-index 0f92803d..da9dce4c 100644
+index a286a1c6..982f2e68 100644
 --- a/test/CMakeLists.txt
 +++ b/test/CMakeLists.txt
 @@ -81,8 +81,8 @@ target_link_libraries(

@@ -8,9 +8,9 @@ mkDiscoursePlugin {
   name = "discourse-voting";
   src = fetchFromGitHub {
     owner = "discourse";
-    repo = "discourse-voting";
-    rev = "4ebcd1187b59290b79db8c61c89df9f72bf1363c";
-    sha256 = "sha256-aDJKy7Qpsj1n+HrumoORUo+R9HF3gQ0juJBKXj7GHsY=";
+    repo = "discourse-topic-voting";
+    rev = "d779202749e56aaee2d548b538796fb5db1b9b7c";
+    sha256 = "sha256-8YF7W5SXhI7TGJNZkx5or7bxI0MKiDtx10TE2ekBMuM=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-voting";

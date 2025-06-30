@@ -228,6 +228,7 @@ class Renderer:
     def dd_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
     def myst_role(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        # NixOS-specific roles are documented at <nixpkgs>/doc/README.md (with reverse reference)
         raise RuntimeError("md token not supported", token)
     def attr_span_begin(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)

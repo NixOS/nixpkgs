@@ -5,8 +5,8 @@
   dash,
   php,
   phpCfg ? null,
-  withPgsql ? true, # “strongly recommended” according to docs
-  withMysql ? false,
+  withPostgreSQL ? true, # “strongly recommended” according to docs
+  withMariaDB ? false,
   minifyStaticFiles ? false, # default files are often not minified
   esbuild,
   lightningcss,
@@ -44,13 +44,13 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
-  version = "0.29.1";
+  version = "0.30.1";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8YbRqlppD4tWqCki6v3F1cP8BcG66kAa3njEdPIRPhs=";
+    hash = "sha256-MjP1rLyWJWrUAHrOKAwGN3A0wIq4iPaXlaUbtPs3F6U=";
   };
 
   php = php.buildEnv (
@@ -58,30 +58,24 @@ php.buildComposerProject2 (finalAttrs: {
       extensions = (
         { all, enabled }:
         enabled
-        ++ (with all; [
-          curl
-          dom
-          gd
-          imagick
-          mbstring
-          pdo
-          simplexml
-        ])
-        ++ lib.optionals withPgsql (
-          with all;
-          [
-            pdo_pgsql
-            pgsql
-          ]
-        )
-        ++ lib.optionals withMysql (
-          with all;
-          [
-            mysqli
-            mysqlnd
-            pdo_mysql
-          ]
-        )
+        ++ [
+          all.curl
+          all.dom
+          all.gd
+          all.imagick
+          all.mbstring
+          all.pdo
+          all.simplexml
+        ]
+        ++ lib.optionals withPostgreSQL [
+          all.pdo_pgsql
+          all.pgsql
+        ]
+        ++ lib.optionals withMariaDB [
+          all.mysqli
+          all.mysqlnd
+          all.pdo_mysql
+        ]
       );
     }
     // lib.optionalAttrs (phpCfg != null) {
@@ -94,11 +88,7 @@ php.buildComposerProject2 (finalAttrs: {
     ++ lib.optional minify.style.enable lightningcss
     ++ lib.optional minify.svg.enable scour;
 
-  # no listed license
-  # pinned commonmark
-  composerStrictValidation = false;
-
-  vendorHash = "sha256-Y1H7jvO/P4R+Rb4V87pha3Icd2Iy7VyzwVDPX72aMqA=";
+  vendorHash = "sha256-7jb4/UgnMcXtLCihwk4rr0HLw99FgiYeYJVATGxM/D4=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
@@ -164,7 +154,7 @@ php.buildComposerProject2 (finalAttrs: {
     mkdir -p $out/bin
     cat << EOF > $out/bin/movim
     #!${lib.getExe dash}
-    ${lib.getExe finalAttrs.php} $out/share/php/${finalAttrs.pname}/daemon.php "\$@"
+    ${lib.getExe finalAttrs.php} $out/share/php/movim/daemon.php "\$@"
     EOF
     chmod +x $out/bin/movim
 

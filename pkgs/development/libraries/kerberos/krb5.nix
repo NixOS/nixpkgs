@@ -4,7 +4,6 @@
   fetchurl,
   bootstrap_cmds,
   byacc, # can also use bison, but byacc has fewer dependencies
-  darwin,
   keyutils,
   openssl,
   perl,
@@ -94,14 +93,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withLdap [ openldap ]
     ++ lib.optionals withLibedit [ libedit ]
     ++ lib.optionals withVerto [ libverto ];
-
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk;
-    [
-      libs.xpc
-      frameworks.Kerberos
-    ]
-  );
 
   sourceRoot = "krb5-${version}/src";
 

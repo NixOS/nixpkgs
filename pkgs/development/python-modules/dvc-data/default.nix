@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-data";
-  version = "3.16.9";
+  version = "3.16.10";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc-data";
     tag = version;
-    hash = "sha256-S2lZ92EmuWyhf2xmXnxxK0I74VMOx0IpROW6gRDzFLE=";
+    hash = "sha256-kYPgEsLrcSYf6YAjFENf2HZKdQ4391pFxaZDIFOubkY=";
   };
 
   build-system = [ setuptools-scm ];

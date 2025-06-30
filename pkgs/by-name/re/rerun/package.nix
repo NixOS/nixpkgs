@@ -28,20 +28,19 @@
   # More information can be found in there README:
   # https://raw.githubusercontent.com/rerun-io/rerun/5a9794990c4903c088ad77174e65eb2573162d97/crates/utils/re_analytics/README.md
   buildWebViewerFeatures ? [
-    "grpc"
     "map_view"
   ],
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.21.0";
+  version = "0.23.4";
 
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
-    tag = version;
-    hash = "sha256-U+Q8u1XKBD9c49eXAgc5vASKytgyAEYyYv8XNfftlZU=";
+    tag = finalAttrs.version;
+    hash = "sha256-4+vx4BMGJpdN6k+UxAx2unO4maxoUd9uP9Q3mYjpyF4=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -51,7 +50,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-IHsHvr50rhS4CH+27613OVBFC2oI37xvhKLjZY36oo8=";
+  cargoHash = "sha256-lmIe/QH8+/2LgaObbEvRgThP82AAnmGzf2SPfHExHks=";
 
   cargoBuildFlags = [ "--package rerun-cli" ];
   cargoTestFlags = [ "--package rerun-cli" ];
@@ -140,7 +139,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -153,7 +152,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Visualize streams of multimodal data. Fast, easy to use, and simple to integrate.  Built in Rust using egui";
     homepage = "https://github.com/rerun-io/rerun";
-    changelog = "https://github.com/rerun-io/rerun/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/rerun-io/rerun/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -164,4 +163,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "rerun";
   };
-}
+})

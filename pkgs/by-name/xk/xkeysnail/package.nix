@@ -1,22 +1,28 @@
 {
   lib,
   fetchFromGitHub,
-  makeWrapper,
   python3Packages,
+  fetchpatch,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "xkeysnail";
-  version = "0.4.0";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "mooz";
-    repo = pname;
+    repo = "xkeysnail";
     rev = "bf3c93b4fe6efd42893db4e6588e5ef1c4909cfb";
-    sha256 = "0plcpb4ndzfsd5hj32m0g32swnhyph9sd759cdhhzmjvlq3j8q6p";
+    hash = "sha256-12AkB6Zb1g9hY6mcphO8HlquxXigiiFhadr9Zsm6jF4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mooz/xkeysnail/commit/457ab424fb32c4bfc6e6ea307752a2ce5d77853b.patch";
+      hash = "sha256-yqsAfn3SibRW2clbtVwVZi1dJ8pAiXoYpittpz7S/wU=";
+    })
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     evdev
     xlib
@@ -24,24 +30,18 @@ python3Packages.buildPythonApplication rec {
     appdirs
   ];
 
-  doCheck = false;
-
   postInstall = ''
-    mkdir -p $out/share
-    cp ./example/config.py $out/share/example.py
-    cp ${./browser-emacs-bindings.py} $out/share/browser.py
+    install -Dm444 ${./emacs.py} $out/share/browser.py
 
-    makeWrapper $out/bin/xkeysnail $out/bin/xkeysnail-example \
-      --add-flags "-q" --add-flags "$out/share/example.py"
     makeWrapper $out/bin/xkeysnail $out/bin/xkeysnail-browser \
       --add-flags "-q" --add-flags "$out/share/browser.py"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Yet another keyboard remapping tool for X environment";
     homepage = "https://github.com/mooz/xkeysnail";
-    platforms = platforms.linux;
-    license = licenses.gpl1Only;
-    maintainers = with maintainers; [ bb2020 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl1Only;
+    maintainers = with lib.maintainers; [ bb2020 ];
   };
 }

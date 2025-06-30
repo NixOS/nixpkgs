@@ -1,6 +1,6 @@
 {
   lib,
-  boost,
+  boost186,
   fetchFromGitHub,
   qt5,
   stdenv,
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    boost186
   ];
 
   strictDeps = true;

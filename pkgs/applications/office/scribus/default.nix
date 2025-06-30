@@ -14,7 +14,7 @@
   libxml2,
   pixman,
   pkg-config,
-  podofo,
+  podofo_0_10,
   poppler,
   poppler_data,
   python3,
@@ -32,11 +32,11 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "scribus";
 
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/scribus/scribus-devel/scribus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CuWM7UEBAegmVeO0wgoHDPF2cUWtojPc73wguLpr1Ic=";
+    hash = "sha256-UzvnrwOs+qc27F96P8JWKr0gD+9coqfN7gK19E1hgp4=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libxml2
     pixman
-    podofo
+    podofo_0_10
     poppler
     poppler_data
     pythonEnv

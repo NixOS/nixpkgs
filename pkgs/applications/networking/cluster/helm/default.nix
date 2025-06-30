@@ -1,30 +1,30 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   testers,
-  kubernetes-helm,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubernetes-helm";
-  version = "3.17.1";
+  version = "3.18.3";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
-    rev = "v${version}";
-    sha256 = "sha256-wGORNOlfnBt8iApAP5s5tvy4Zfk87fOTpLSY5XYnzQM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-V5gWzgsinT0hGFDocPlljH1ls8Z0j5cz37oPrB6LI9Y=";
   };
-  vendorHash = "sha256-dZN1rOcGDIvhqXi35904kTBQ8RPeS1PFgspzn/j1ZQU=";
+  vendorHash = "sha256-r9DLYgEjxapUOAz+FCgYXqdE6APhGKO/YnshbLRmdrU=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
     "-w"
     "-s"
-    "-X helm.sh/helm/v3/internal/version.version=v${version}"
-    "-X helm.sh/helm/v3/internal/version.gitCommit=${src.rev}"
+    "-X helm.sh/helm/v3/internal/version.version=v${finalAttrs.version}"
+    "-X helm.sh/helm/v3/internal/version.gitCommit=${finalAttrs.src.rev}"
   ];
 
   preBuild = ''
@@ -57,7 +57,7 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/helm completion bash > helm.bash
     $out/bin/helm completion zsh > helm.zsh
     $out/bin/helm completion fish > helm.fish
@@ -65,13 +65,13 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = kubernetes-helm;
+    package = finalAttrs.finalPackage;
     command = "helm version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = with lib; {
-    homepage = "https://github.com/kubernetes/helm";
+    homepage = "https://github.com/helm/helm";
     description = "Package manager for kubernetes";
     mainProgram = "helm";
     license = licenses.asl20;
@@ -84,4 +84,4 @@ buildGoModule rec {
       techknowlogick
     ];
   };
-}
+})

@@ -48,9 +48,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     # https://www.riverbankcomputing.com/pipermail/pyqt/2023-January/045094.html
-    # the import check for "sip" will fail, as it segfaults as the interperter is shutting down.
+    # the import check for "sip" will fail, as it segfaults as the interpreter is shutting down.
     # This is an upstream bug with sip4 on python3.12, and happens in the ubuntu packages version as well.
-    # As the pacakge works fine until exit, just remove the import check for now.
+    # As the package works fine until exit, just remove the import check for now.
     # See discussion at https://github.com/NixOS/nixpkgs/pull/327976#discussion_r1706488319
     (lib.optional (pythonOlder "3.12") sip-module)
 

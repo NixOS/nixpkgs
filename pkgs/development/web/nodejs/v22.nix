@@ -1,4 +1,13 @@
-{ callPackage, fetchpatch2, openssl, python3, enableNpm ? true }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  callPackage,
+  fetchpatch2,
+  openssl,
+  python3,
+  enableNpm ? true,
+}:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
@@ -8,32 +17,46 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.13.1";
-  sha256 = "cfce282119390f7e0c2220410924428e90dadcb2df1744c0c4a0e7baae387cc2";
-  patches = [
-    ./configure-emulator.patch
-    ./configure-armv6-vfpv2.patch
-    ./disable-darwin-v8-system-instrumentation-node19.patch
-    ./bypass-darwin-xcrun-node16.patch
-    ./node-npm-build-npm-package-logic.patch
-    ./use-correct-env-in-tests.patch
-    ./bin-sh-node-run-v22.patch
+  version = "22.16.0";
+  sha256 = "720894f323e5c1ac24968eb2676660c90730d715cb7f090be71a668662a17c37";
+  patches =
+    (
+      if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
+        [
+          ./configure-emulator.patch
+        ]
+      else
+        [
+          (fetchpatch2 {
+            url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
+            hash = "sha256-3g4aS+NmmUYNOYRNc6UMJKYoaTlpP5Knt9UHegx+o0Y=";
+          })
+        ]
+    )
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
+      # This patch is concerning.
+      # https://github.com/nodejs/node/issues/54576
+      # It is only supposed to affect clang >= 17, but I'm seeing it on clang 19.
+      # I'm keeping the predicate for this patch pretty strict out of caution,
+      # so if you see the error it's supposed to prevent, feel free to loosen it.
+      (fetchpatch2 {
+        url = "https://raw.githubusercontent.com/rubyjs/libv8-node/62476a398d4c9c1a670240a3b070d69544be3761/patch/v8-no-assert-trivially-copyable.patch";
+        hash = "sha256-hSTLljmVzYmc3WAVeRq9EPYluXGXFeWVXkykufGQPVw=";
+      })
+    ]
+    ++ [
+      ./configure-armv6-vfpv2.patch
+      ./disable-darwin-v8-system-instrumentation-node19.patch
+      ./bypass-darwin-xcrun-node16.patch
+      ./node-npm-build-npm-package-logic.patch
+      ./use-correct-env-in-tests.patch
+      ./bin-sh-node-run-v22.patch
 
-    # FIXME: remove after a minor point release
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/49acdc8748fe9fe83bc1b444e24c456dff00ecc5.patch?full_index=1";
-      hash = "sha256-iK7bj4KswTeQ9I3jJ22ZPTsvCU8xeGGXEOo43dxg3Mk=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/d0ff34f4b690ad49c86b6df8fd424f39d183e1a6.patch?full_index=1";
-      hash = "sha256-ezcCrg7UwK091pqYxXJn4ay9smQwsrYeMO/NBE7VaM8=";
-    })
-    # test-icu-env is failing on ICU 74.2
-    # FIXME: remove once https://github.com/nodejs/node/pull/56661 is included in a next release
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/a364ec1d1cbbd5a6d20ee54d4f8648dd7592ebcd.patch?full_index=1";
-      hash = "sha256-EL1NgCBzz5O1spwHgocLm5mkORAiqGFst0N6pc3JvFg=";
-      revert = true;
-    })
-  ];
+      # Can be removed after https://github.com/NixOS/nixpkgs/pull/403958.
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/9aa57bf8dab2dbfb8b6974fe71d5dbe6daf66244.patch?full_index=1";
+        hash = "sha256-k3h8mPgvaIYGAkGmaL+ix7kUnyLw4/PF7wXMAWrPMXo=";
+        revert = true;
+      })
+    ];
 }

@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
   ];
 
+  patches = [
+    ./cve-2025-3155.patch
+  ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "yelp";
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://apps.gnome.org/Yelp/";
     description = "Help viewer in Gnome";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

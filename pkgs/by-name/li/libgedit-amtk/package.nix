@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libgedit-amtk";
-  version = "5.9.0";
+  version = "5.9.1";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "gedit";
     repo = "libgedit-amtk";
     rev = version;
-    hash = "sha256-D6jZmadUHDtxedw/tCsKHzcWXobs6Vb7dyhbVKqu2Zc=";
+    hash = "sha256-myKpZtqtf40UByBUKVF0jv521kGAUA6KDmbDJy/Q1q8=";
   };
 
   strictDeps = true;
@@ -73,15 +73,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-amtk";
     changelog = "https://gitlab.gnome.org/World/gedit/libgedit-amtk/-/blob/${version}/NEWS?ref_type=tags";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       manveru
       bobby285271
     ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "scrapy-deltafetch";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E/eWi9D/rhM+Kh3t4hXmg7jJUoXwRiYGA6XD4l8tV7A=";
+    hash = "sha256-ZtvB10g6j/JNcpyLZJS4R+8DC7TYg0MWQMvM0ncaJxM=";
   };
 
   dependencies = [ scrapy ];
@@ -25,6 +25,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "scrapy_deltafetch" ];
 
   meta = {
+    # https://github.com/scrapy-plugins/scrapy-deltafetch/pull/50
+    broken = lib.versionAtLeast scrapy.version "2.12";
     description = "Scrapy spider middleware to ignore requests to pages containing items seen in previous crawls";
     homepage = "https://github.com/scrapy-plugins/scrapy-deltafetch";
     license = lib.licenses.bsd3;

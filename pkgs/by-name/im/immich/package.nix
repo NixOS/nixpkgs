@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch2,
   python3,
   nodejs,
   node-gyp,
@@ -17,18 +17,45 @@
   cacert,
   unzip,
   # runtime deps
+  cairo,
   exiftool,
+  giflib,
   jellyfin-ffmpeg, # Immich depends on the jellyfin customizations, see https://github.com/NixOS/nixpkgs/issues/351943
   imagemagick,
+  libjpeg,
+  libpng,
   libraw,
   libheif,
+  librsvg,
+  pango,
   perl,
+  pixman,
   vips,
+  buildPackages,
+  sourcesJSON ? ./sources.json,
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
-  sources = lib.importJSON ./sources.json;
+  sources = lib.importJSON sourcesJSON;
   inherit (sources) version;
+
+  esbuild' = buildPackages.esbuild.override {
+    buildGoModule =
+      args:
+      buildPackages.buildGoModule (
+        args
+        // rec {
+          version = "0.25.5";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            tag = "v${version}";
+            hash = "sha256-jemGZkWmN1x2+ZzJ5cLp3MoXO0oDKjtZTmZS9Be/TDw=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
+  };
 
   buildLock = {
     sources =
@@ -112,10 +139,37 @@ let
     sourceRoot = "${src.name}/web";
     inherit (sources.components.web) npmDepsHash;
 
+    # prePatch is needed because npmConfigHook is a postPatch
+    prePatch = ''
+      # some part of the build wants to use un-prefixed binaries. let them.
+      mkdir -p $TMP/bin
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}pkg-config)" $TMP/bin/pkg-config || true
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}c++filt)" $TMP/bin/c++filt || true
+      ln -s "$(type -p ${stdenv.cc.targetPrefix}readelf)" $TMP/bin/readelf || true
+      export PATH="$TMP/bin:$PATH"
+    '';
+
     preBuild = ''
       rm node_modules/@immich/sdk
       ln -s ${openapi} node_modules/@immich/sdk
     '';
+
+    env.npm_config_build_from_source = "true";
+
+    nativeBuildInputs = [
+      pkg-config
+    ];
+
+    buildInputs = [
+      # https://github.com/Automattic/node-canvas/blob/master/Readme.md#compiling
+      cairo
+      giflib
+      libjpeg
+      libpng
+      librsvg
+      pango
+      pixman
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -136,11 +190,19 @@ buildNpmPackage' {
   src = "${src}/server";
   inherit (sources.components.server) npmDepsHash;
 
-  postPatch = ''
+  # prePatch is needed because npmConfigHook is a postPatch
+  prePatch = ''
     # pg_dumpall fails without database root access
     # see https://github.com/immich-app/immich/issues/13971
     substituteInPlace src/services/backup.service.ts \
       --replace-fail '`/usr/lib/postgresql/''${databaseMajorVersion}/bin/pg_dumpall`' '`pg_dump`'
+
+    # some part of the build wants to use un-prefixed binaries. let them.
+    mkdir -p $TMP/bin
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}pkg-config)" $TMP/bin/pkg-config || true
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}c++filt)" $TMP/bin/c++filt || true
+    ln -s "$(type -p ${stdenv.cc.targetPrefix}readelf)" $TMP/bin/readelf || true
+    export PATH="$TMP/bin:$PATH"
   '';
 
   nativeBuildInputs = [
@@ -163,6 +225,7 @@ buildNpmPackage' {
   makeCacheWritable = true;
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
+  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
   preBuild = ''
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
@@ -229,7 +292,7 @@ buildNpmPackage' {
       Scrumplex
       titaniumtown
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     mainProgram = "server";
   };
 }

@@ -3,8 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  httpx,
   pytestCheckHook,
-  requests,
+  pytest-asyncio,
 }:
 buildPythonPackage rec {
   pname = "biothings-client";
@@ -19,15 +20,24 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-  dependencies = [ requests ];
+  dependencies = [ httpx ];
   pythonImportsCheck = [ "biothings_client" ];
-  nativeCheckInputs = [ pytestCheckHook ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   pytestFlagsArray = [
     # All other tests make network requests to exercise the API
-    "tests/gene.py::TestGeneClient::test_http"
-    "tests/test.py::TestBiothingsClient::test_generate_settings_from_url"
-    "tests/variant.py::TestVariantClient::test_format_hgvs"
+    "tests/test_async.py::test_generate_async_settings"
+    "tests/test_async.py::test_url_protocol"
+    "tests/test_async.py::test_async_client_proxy_discovery"
+    "tests/test_async_variant.py::test_format_hgvs"
+    "tests/test_sync.py::test_generate_settings"
+    "tests/test_sync.py::test_url_protocol"
+    "tests/test_sync.py::test_client_proxy_discovery"
+    "tests/test_variant.py::test_format_hgvs"
   ];
 
   meta = {

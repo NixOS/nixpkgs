@@ -10,17 +10,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "libetebase";
-  version = "0.5.6";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "libetebase";
     rev = "v${version}";
-    hash = "sha256-cXuOKfyMdk+YzDi0G8i44dyBRf4Ez5+AlCKG43BTSSU=";
+    hash = "sha256-B+MfnYbxIbgMHFWWOYhap1MEbV3/NNYuR9goJDTNn9A=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-XPXjWhJlWW5ukZ8uN72fxW5r0gyS405puXiBtXUpqsM=";
+  cargoHash = "sha256-ZLQFERi38+0SUxWaYAL4AepgVuAQKo9pxjcMkzA55BM=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.pkgs-config = testers.testMetaPkgConfig libetebase;
 
   meta = with lib; {
-    description = "A C library for Etebase";
+    description = "C library for Etebase";
     homepage = "https://www.etebase.com/";
     license = licenses.bsd3;
     broken = stdenv.hostPlatform.isDarwin;

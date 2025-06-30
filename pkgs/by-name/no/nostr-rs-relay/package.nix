@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, pkg-config
-, libiconv
-, darwin
-, protobuf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  libiconv,
+  protobuf,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,23 +22,22 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-hrq9EEUot9painlXVGjIh+NMlrH4iRQ28U3PLGnvYsw=";
 
-  buildInputs = [ openssl.dev ]
+  buildInputs =
+    [ openssl.dev ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+      libiconv
+    ];
 
   nativeBuildInputs = [
     pkg-config # for openssl
     protobuf
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Nostr relay written in Rust";
     homepage = "https://sr.ht/~gheartsfield/nostr-rs-relay/";
     changelog = "https://github.com/scsibug/nostr-rs-relay/releases/tag/${version}";
-    maintainers = with maintainers; [ jurraca ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ jurraca ];
+    license = lib.licenses.mit;
   };
 }

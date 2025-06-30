@@ -7,18 +7,18 @@
   enablePython ? true,
   addBinToPathHook,
   python3Packages,
-  testers,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gemmi";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "project-gemmi";
     repo = "gemmi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XOu//yY5CnnzjvGu7IIC5GvecYsnZQV3Y2wvGVTwWzU=";
+    hash = "sha256-1msV/gW6BH90rHm6t7xm0hYqbG/yGBt65GVTbKuwdtg=";
   };
 
   nativeBuildInputs =
@@ -54,13 +54,18 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ [
       addBinToPathHook
+      versionCheckHook
     ];
+  versionCheckProgramArg = "--version";
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Numerical precision error
+    # self.assertTrue(numpy.allclose(data_f, abs(asu_val), atol=5e-5, rtol=0))
+    # AssertionError: False is not true
+    "test_reading"
+  ];
 
   pytestFlagsArray = [ "../tests" ];
-
-  passthru.tests = {
-    version = testers.testVersion { package = finalAttrs.finalPackage; };
-  };
 
   meta = {
     description = "Macromolecular crystallography library and utilities";

@@ -11,6 +11,7 @@
   setuptools,
   six,
   wsgiprox,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -47,13 +48,12 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
     wsgiprox
+    pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "--offline" ];
-
-  disabledTests = [
-    # Tests require network access, see above
-    "test_get_cache_to_file"
+  pytestFlagsArray = [
+    "--offline"
+    "--ignore=test/test_capture_http_proxy.py"
   ];
 
   pythonImportsCheck = [ "warcio" ];

@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://github.com/mapbox/protozero/releases/tag/v${finalAttrs.version}"
       "https://github.com/mapbox/protozero/blob/v${finalAttrs.version}/CHANGELOG.md"
     ];
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ das-g ]);
+    maintainers = with lib.maintainers; [ das-g ];
+    teams = [ lib.teams.geospatial ];
   };
 })

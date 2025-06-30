@@ -15,13 +15,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-displays";
-  version = "0.3.22";
+  version = "0.3.25";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-displays";
     tag = "v${version}";
-    hash = "sha256-lTFei4NR8eu5/5V9MEc/k6qQYRRZkQ5m6B7Bx9xIS6c=";
+    hash = "sha256-Om5kz3mtrQPd5aHZwf/9BBDnPfSzMhyRp05MqX+7XzQ=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication rec {
     description = "Output management utility for Sway and Hyprland";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ qf0xb ];
     mainProgram = "nwg-displays";
   };
 }

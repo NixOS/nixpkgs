@@ -10,6 +10,7 @@
   rfc3986,
   uritemplate,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-mock,
 }:
 
@@ -37,13 +38,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-mock
   ];
-
-  patchPhase = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov" ""
-  '';
 
   disabledTests =
     [

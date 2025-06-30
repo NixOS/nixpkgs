@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = pname;
+    repo = "datasette";
     tag = version;
     hash = "sha256-kVtldBuDy19DmyxEQLtAjs1qiNIjaT8+rnHlFfGNHec=";
   };

@@ -33,8 +33,8 @@ stdenv.mkDerivation {
     hash = "sha256-U+8TUE1ULt6MNxnvw9kFjCAVBecUy2Sarof6H9+kR7Q=";
   };
 
-  # Required for the PDF plugin when building with clang.
-  CXXFLAGS = "-std=c++17";
+  # Required for the PDF plugin
+  CXXFLAGS = "-std=c++20";
 
   preConfigure = ''
     patchShebangs .
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     [
       graphene
       gtk3
-      libxml2
+      (libxml2.override { zlibSupport = true; })
       python3
       poppler
     ]

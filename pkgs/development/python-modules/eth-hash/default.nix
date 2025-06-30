@@ -35,7 +35,7 @@ buildPythonPackage rec {
     # safe-pysha3 is not available on pypy
     ++ lib.optional (!isPyPy) optional-dependencies.pysha3;
 
-  # Backends need to be tested separatly and can not use hook
+  # Backends need to be tested separately and can not use hook
   checkPhase =
     ''
       runHook preCheck

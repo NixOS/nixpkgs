@@ -9,7 +9,7 @@
   restic,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "restique";
   version = "unstable-2022-11-29";
 

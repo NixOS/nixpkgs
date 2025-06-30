@@ -29,14 +29,13 @@ index f2b4064..cb4e9e8 100644
      @override
      def get_build_environment(self) -> dict[str, str]:
 diff --git a/craft_parts/plugins/validator.py b/craft_parts/plugins/validator.py
-index 5b4c735..8ff30c2 100644
+index 5b4c735..d7a446e 100644
 --- a/craft_parts/plugins/validator.py
 +++ b/craft_parts/plugins/validator.py
-@@ -141,9 +141,9 @@ class PluginEnvironmentValidator:
-             print(self._env, file=env_file)
+@@ -142,8 +142,9 @@ class PluginEnvironmentValidator:
              print(cmd, file=env_file)
              env_file.flush()
--
+ 
 +            import shutil
              proc = subprocess.run(
 -                ["/bin/bash", env_file.name],
@@ -45,7 +44,7 @@ index 5b4c735..8ff30c2 100644
                  capture_output=True,
                  text=True,
 diff --git a/tests/unit/executor/test_step_handler.py b/tests/unit/executor/test_step_handler.py
-index 4e73c2b..b762fb8 100644
+index 4e73c2b..a5f9374 100644
 --- a/tests/unit/executor/test_step_handler.py
 +++ b/tests/unit/executor/test_step_handler.py
 @@ -209,9 +209,10 @@ class TestStepHandlerBuiltins:
@@ -56,21 +55,21 @@ index 4e73c2b..b762fb8 100644
              assert file.read() == dedent(
                  f"""\
 -                #!/bin/bash
-+                #!{shutil.which('bash')}
++                #!{shutil.which("bash")}
                  set -euo pipefail
                  source {environment_script_path}
                  set -x
 diff --git a/tests/unit/utils/test_process.py b/tests/unit/utils/test_process.py
-index 84b29ad..dc2d772 100644
+index a025494..a76cfa2 100644
 --- a/tests/unit/utils/test_process.py
 +++ b/tests/unit/utils/test_process.py
 @@ -33,7 +33,8 @@ _RUN_TEST_CASES = [
  
  @pytest.mark.parametrize(("out", "err"), _RUN_TEST_CASES)
  def test_run(out, err):
--    result = process.run(["/usr/bin/sh", "-c", f"echo {out};sleep 0;echo {err} >&2"])
+-    result = process.run(["/usr/bin/sh", "-c", f"echo {out};sleep 0.1;echo {err} >&2"])
 +    import shutil
-+    result = process.run([shutil.which("sh"), "-c", f"echo {out};sleep 0;echo {err} >&2"])
++    result = process.run([shutil.which("sh"), "-c", f"echo {out};sleep 0.1;echo {err} >&2"])
      assert result.returncode == 0
      assert result.stdout == (out + "\n").encode()
      assert result.stderr == (err + "\n").encode()
@@ -95,5 +94,5 @@ index 84b29ad..dc2d772 100644
 -            "/usr/bin/sh",
 +            shutil.which("sh"),
              "-c",
-             f"echo {out};sleep 0;echo {err} >&2; echo -n {out}|socat - UNIX-CONNECT:{new_dir}/test.socket",
+             f"echo {out};sleep 0.1;echo {err} >&2; echo -n {out}|socat - UNIX-CONNECT:{new_dir}/test.socket",
          ],

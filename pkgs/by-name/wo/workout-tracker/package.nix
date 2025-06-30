@@ -9,19 +9,19 @@
 }:
 let
   pname = "workout-tracker";
-  version = "2.0.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "jovandeginste";
     repo = "workout-tracker";
     tag = "v${version}";
-    hash = "sha256-DJOYjKujb6mmqJcYhzPLv1uYgAIWW4hdH/gILlqkJXQ=";
+    hash = "sha256-dhuAa0gq++PluglLiU9A4Cve8WCvFz3JDWyhvjMdi0A=";
   };
 
   assets = buildNpmPackage {
     pname = "${pname}-assets";
     inherit version src;
-    npmDepsHash = "sha256-/OBIRiLwUtXVmmg44FYqV0BptxQTg8bDuNMTj8IYwG0=";
+    npmDepsHash = "sha256-te7A8RRBOM/Ft0wdeBI0rng2IB9Zs6KzI3OK4bfBRRE=";
     dontNpmBuild = true;
     makeCacheWritable = true;
     postPatch = ''

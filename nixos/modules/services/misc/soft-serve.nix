@@ -59,6 +59,8 @@ in
 
       environment.SOFT_SERVE_DATA_PATH = stateDir;
 
+      restartTriggers = [ configFile ];
+
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;

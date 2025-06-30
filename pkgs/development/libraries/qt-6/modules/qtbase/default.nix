@@ -12,7 +12,6 @@
   which,
   cmake,
   ninja,
-  xmlstarlet,
   libproxy,
   xorg,
   zstd,
@@ -51,7 +50,6 @@
   libxml2,
   libxslt,
   openssl,
-  pcre,
   pcre2,
   sqlite,
   udev,
@@ -64,7 +62,9 @@
   at-spi2-core,
   unixODBC,
   unixODBCDrivers,
+  libGL,
   # darwin
+  moltenvk,
   moveBuildTree,
   darwinVersionInputs,
   xcbuild,
@@ -79,10 +79,7 @@
   withLibinput ? false,
   libinput,
   # options
-  libGLSupported ? stdenv.hostPlatform.isLinux,
-  libGL,
   qttranslations ? null,
-  fetchpatch,
 }:
 
 let
@@ -100,6 +97,9 @@ stdenv.mkDerivation rec {
       openssl
       sqlite
       zlib
+      libGL
+      vulkan-headers
+      vulkan-loader
       # Text rendering
       harfbuzz
       icu
@@ -107,7 +107,6 @@ stdenv.mkDerivation rec {
       libjpeg
       libpng
       pcre2
-      pcre
       zstd
       libb2
       md4c
@@ -133,8 +132,6 @@ stdenv.mkDerivation rec {
       libselinux
       libsepol
       lttng-ust
-      vulkan-headers
-      vulkan-loader
       libthai
       libdrm
       libdatrie
@@ -160,20 +157,13 @@ stdenv.mkDerivation rec {
       xorg.xcbutilcursor
       libepoxy
     ]
-    ++ lib.optionals libGLSupported [
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      vulkan-headers
-      vulkan-loader
-    ]
     ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
 
   buildInputs =
     lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
       at-spi2-core
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin darwinVersionInputs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (darwinVersionInputs ++ [ moltenvk ])
     ++ lib.optional withGtk3 gtk3
     ++ lib.optional withLibinput libinput
     ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
@@ -188,7 +178,6 @@ stdenv.mkDerivation rec {
     pkg-config
     which
     cmake
-    xmlstarlet
     ninja
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
@@ -227,20 +216,6 @@ stdenv.mkDerivation rec {
     ./qmlimportscanner-import-path.patch
     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
     ./skip-missing-qml-directory.patch
-
-    # FIXME: 6.8.3 backports recommended by KDE
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtbase/-/commit/12d4bf1ab52748cb84894f50d437064b439e0b7d.patch";
-      hash = "sha256-HBwmQyAyaJh+in50Kd+mMa/6t+GZC3UmQWSe7Ugvn2Y=";
-    })
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtbase/-/commit/2ef615228bba9a8eb282437bfb7472f925610e89.patch";
-      hash = "sha256-pkKA7o7er9n5mu8EfJsjs8NeEq/SlKpEoRZwsDor1+c=";
-    })
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtbase/-/commit/a43c7e58046604796aa69974ea1c5d3e2648c755.patch";
-      hash = "sha256-4KJn7RTpSi8IFUElt3LEoMsuJmkYSf+bp2/Jmf42Ygs=";
-    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -282,11 +257,14 @@ stdenv.mkDerivation rec {
       "-DQT_FEATURE_libproxy=ON"
       "-DQT_FEATURE_system_sqlite=ON"
       "-DQT_FEATURE_openssl_linked=ON"
+      "-DQT_FEATURE_vulkan=ON"
+      # don't leak OS version into the final output
+      # https://bugreports.qt.io/browse/QTBUG-136060
+      "-DCMAKE_SYSTEM_VERSION="
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       "-DQT_FEATURE_sctp=ON"
       "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
-      "-DQT_FEATURE_vulkan=ON"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DQT_FEATURE_rpath=OFF"
@@ -317,9 +295,9 @@ stdenv.mkDerivation rec {
       fixQtBuiltinPaths "$out" '*.pr?'
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-
       # FIXME: not sure why this isn't added automatically?
       patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
+      patchelf --add-rpath "${vulkan-loader}/lib" --add-needed "libvulkan.so" $out/lib/libQt6Gui.so
     '';
 
   dontWrapQtApps = true;

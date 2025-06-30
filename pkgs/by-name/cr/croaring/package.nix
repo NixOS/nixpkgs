@@ -3,17 +3,18 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  cmocka,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "croaring";
-  version = "2.0.3";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "RoaringBitmap";
     repo = "CRoaring";
-    rev = "v${version}";
-    hash = "sha256-WaFyJ/6zstJ05e3vfrwhaZKQsjRAEvVTs688Hw0fr94=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c4o8AMCtDGLChXxJKJyxkWhuYu7axqLb2ce8IOGk920=";
   };
 
   # roaring.pc.in cannot handle absolute CMAKE_INSTALL_*DIRs, nor
@@ -22,6 +23,8 @@ stdenv.mkDerivation rec {
   patches = [ ./fix-pkg-config.patch ];
 
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ cmocka ];
 
   doCheck = true;
 
@@ -37,14 +40,16 @@ stdenv.mkDerivation rec {
     } dependencies/.cache/cmocka
   '';
 
-  meta = with lib; {
+  cmakeFlags = [ (lib.cmakeBool "ROARING_USE_CPM" false) ];
+
+  meta = {
     description = "Compressed bitset library for C and C++";
-    homepage = "https://roaringbitmap.org/";
-    license = with licenses; [
+    homepage = "https://roaringbitmap.org";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = [ maintainers.orivej ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.orivej ];
+    platforms = lib.platforms.all;
   };
-}
+})

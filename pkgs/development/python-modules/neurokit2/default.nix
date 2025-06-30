@@ -1,22 +1,26 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   setuptools,
-  pytest,
-  scipy,
-  scikit-learn,
-  pandas,
+
+  # dependencies
   matplotlib,
+  numpy,
+  pandas,
   requests,
-  cvxopt,
-  biosppy,
-  pytest-cov-stub,
-  mock,
-  plotly,
+  scikit-learn,
+  scipy,
+
+  # tests
   astropy,
   coverage,
+  mock,
+  plotly,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -34,22 +38,20 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail '"pytest-runner"' '"pytest"'
+      --replace-fail '"pytest-runner", ' ""
   '';
 
   build-system = [
     setuptools
-    pytest
   ];
 
   dependencies = [
-    scipy
-    scikit-learn
-    pandas
     matplotlib
+    numpy
+    pandas
     requests
-    cvxopt
-    biosppy
+    scikit-learn
+    scipy
   ];
 
   nativeCheckInputs = [
@@ -68,23 +70,31 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Required dependencies not available in nixpkgs
-    "tests/tests_complexity.py"
-    "tests/tests_eeg.py"
-    "tests/tests_eog.py"
-    "tests/tests_ecg.py"
     "tests/tests_bio.py"
+    "tests/tests_complexity.py"
     "tests/tests_data.py"
-    "tests/tests_epochs.py"
+    "tests/tests_ecg.py"
+    "tests/tests_ecg_delineate.py"
     "tests/tests_ecg_findpeaks.py"
     "tests/tests_eda.py"
+    "tests/tests_eeg.py"
     "tests/tests_emg.py"
+    "tests/tests_eog.py"
+    "tests/tests_epochs.py"
     "tests/tests_hrv.py"
-    "tests/tests_rsp.py"
     "tests/tests_ppg.py"
+    "tests/tests_rsp.py"
     "tests/tests_signal.py"
 
     # Dependency is broken `mne-python`
     "tests/tests_microstates.py"
+  ];
+
+  pytestFlagsArray = [
+    # Otherwise, test collection fails with:
+    # AttributeError: module 'scipy.ndimage._delegators' has no attribute '@py_builtins_signature'. Did you mean: 'grey_dilation_signature'?
+    # https://github.com/scipy/scipy/issues/22236
+    "--assert=plain"
   ];
 
   pythonImportsCheck = [

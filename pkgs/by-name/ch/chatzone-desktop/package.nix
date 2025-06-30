@@ -10,10 +10,10 @@
 
 let
   pname = "chatzone-desktop";
-  version = "5.2.4";
+  version = "5.3.2";
   src = fetchurl {
-    url = "https://cdn1.ozone.ru/s3/chatzone-clients/ci/v5.2.4/506/chatzone-desktop-linux-5.2.4.AppImage";
-    hash = "sha256-sd648wMCVYq5fpL4Ws9/fN4+ArqmsAIgY67a+AoFi8E=";
+    url = "https://cdn1.ozone.ru/s3/chatzone-clients/ci/5.3.2/787/chatzone-desktop-linux-5.3.2.AppImage";
+    hash = "sha256-+GzrLNFhdzB+mOmSOiZP+W9sCSF2Mfdxu6Xkgmz1Fuo=";
   };
   appimageContents = appimageTools.extract { inherit pname version src; };
 in
@@ -35,12 +35,13 @@ stdenvNoCC.mkDerivation {
       terminal = false;
       desktopName = "Chatzone";
       genericName = "Ozon corporate messenger";
-      comment = "Mattermost Desktop application for Linux";
+      comment = "Chatzone Desktop application for Linux";
       categories = [
         "Network"
         "InstantMessaging"
         "Chat"
       ];
+      startupWMClass = "Chatzone";
       mimeTypes = [ "x-scheme-handler/mattermost" ];
     })
   ];

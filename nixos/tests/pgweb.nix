@@ -19,7 +19,7 @@
           ExecStart = "${pkgs.pgweb}/bin/pgweb --url postgresql://postgres@localhost:5432/postgres";
         };
         path = [ pkgs.getent ];
-        after = [ "postgresql.service" ];
+        after = [ "postgresql.target" ];
         wantedBy = [ "multi-user.target" ];
       };
     };

@@ -1,28 +1,29 @@
-From da8a4b9c1094a568f443c525ca1ce11f686be1bc Mon Sep 17 00:00:00 2001
-From: timor <timor.dd@googlemail.com>
-Date: Thu, 8 Aug 2019 14:13:09 +0200
-Subject: [PATCH] adjust unit test for finding executables in path for NixOS
-
----
- basis/io/standard-paths/unix/unix-tests.factor | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/basis/io/standard-paths/unix/unix-tests.factor b/basis/io/standard-paths/unix/unix-tests.factor
-index acd5029..870537f 100644
---- a/basis/io/standard-paths/unix/unix-tests.factor
-+++ b/basis/io/standard-paths/unix/unix-tests.factor
-@@ -5,13 +5,13 @@ sequences tools.test ;
-
+diff -ur factor.orig/basis/io/standard-paths/unix/unix-tests.factor factor/basis/io/standard-paths/unix/unix-tests.factor
+--- factor.orig/basis/io/standard-paths/unix/unix-tests.factor	2024-02-09 14:38:33.932439180 +0100
++++ factor/basis/io/standard-paths/unix/unix-tests.factor	2024-02-09 15:41:18.529141569 +0100
+@@ -1,21 +1,21 @@
+ ! Copyright (C) 2011 Doug Coleman.
+ ! See https://factorcode.org/license.txt for BSD license.
+ USING: environment io.standard-paths io.standard-paths.unix
+-sequences tools.test ;
++kernel sequences tools.test ;
+ 
  { f } [ "" find-in-path ] unit-test
  { t } [
 -    "ls" find-in-path { "/bin/ls" "/usr/bin/ls" } member?
 +    "ls" find-in-path not not
  ] unit-test
-
+ 
  { t } [
      "/sbin:" "PATH" os-env append "PATH" [
          "ps" find-in-path
 -        { "/bin/ps" "/sbin/ps" "/usr/bin/ps" } member?
 +        not not
      ] with-os-env
+ ] unit-test
+ 
+ { t } [
+     "ls" find-in-standard-login-path 
+-    { "/bin/ls" "/usr/bin/ls" } member?
++    not not
  ] unit-test

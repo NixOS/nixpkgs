@@ -25,7 +25,7 @@ let
       zeroconf
       preprocess-cancellation
       jinja2
-      dbus-next
+      dbus-fast
       apprise
       python-periphery
       ldap3
@@ -35,13 +35,13 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "moonraker";
-  version = "0.9.3-unstable-2024-11-17";
+  version = "0.9.3-unstable-2025-06-12";
 
   src = fetchFromGitHub {
     owner = "Arksine";
     repo = "moonraker";
-    rev = "ccfe32f2368a5ff6c2497478319909daeeeb8edf";
-    sha256 = "sha256-aCYE3EmflMRIHnGnkZ/0+zScVA5liHSbavScQ7XRf/4=";
+    rev = "ccbfd6498941cb4d8b49d192c8dd34feacfbe84a";
+    sha256 = "sha256-SCexS9dRbdwNSy5bTrGaEfP9EmkO3c/IL2+OIG7/K24=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

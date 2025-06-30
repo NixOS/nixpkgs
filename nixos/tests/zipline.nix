@@ -1,48 +1,58 @@
-import ./make-test-python.nix (
-  { lib, ... }:
-  {
-    name = "zipline";
-    meta.maintainers = with lib.maintainers; [ defelo ];
+{ lib, pkgs, ... }:
 
-    nodes.machine = {
-      services.zipline = {
-        enable = true;
-        settings = {
-          CORE_HOST = "127.0.0.1";
-          CORE_PORT = 8000;
-        };
-        environmentFiles = [
-          (builtins.toFile "zipline.env" ''
-            CORE_SECRET=testsecret
-          '')
-        ];
+{
+  name = "zipline";
+  meta.maintainers = with lib.maintainers; [ defelo ];
+
+  nodes.machine = {
+    # On x86, testing with a CPU without SSE 4.2 support
+    # to ensure native libvips is used
+    virtualisation.qemu.options = lib.mkIf pkgs.stdenv.hostPlatform.isx86 [ "-cpu core2duo" ];
+    services.zipline = {
+      enable = true;
+      settings = {
+        CORE_HOSTNAME = "127.0.0.1";
+        CORE_PORT = 8000;
       };
-
-      networking.hosts."127.0.0.1" = [ "zipline.local" ];
+      environmentFiles = [
+        (builtins.toFile "zipline.env" ''
+          CORE_SECRET=DMlouex3W0QLRbVwkUafNnNws5jpgRDX
+        '')
+      ];
     };
 
-    testScript = ''
-      import json
-      import re
+    networking.hosts."127.0.0.1" = [ "zipline.local" ];
+  };
 
-      machine.wait_for_unit("zipline.service")
-      machine.wait_for_open_port(8000)
+  interactive.nodes.machine = {
+    services.zipline.settings.CORE_HOSTNAME = lib.mkForce "0.0.0.0";
+    networking.firewall.allowedTCPPorts = [ 8000 ];
+    virtualisation.forwardPorts = [
+      {
+        from = "host";
+        host.port = 8000;
+        guest.port = 8000;
+      }
+    ];
+  };
 
-      resp = machine.succeed("curl zipline.local:8000/api/auth/login -v -X POST -H 'Content-Type: application/json' -d '{\"username\": \"administrator\", \"password\": \"password\"}' 2>&1")
-      assert json.loads(resp.splitlines()[-1]) == {"success": True}
+  testScript = ''
+    import json
+    import re
 
-      assert (cookie := re.search(r"(?m)^< Set-Cookie: ([^;]*)", resp))
-      resp = machine.succeed(f"curl zipline.local:8000/api/user/token -H 'Cookie: {cookie[1]}' -X PATCH")
-      token = json.loads(resp)["success"]
+    machine.wait_for_unit("zipline.service")
+    machine.wait_for_open_port(8000, timeout=300)
 
-      resp = machine.succeed(f"curl zipline.local:8000/api/shorten -H 'Authorization: {token}' -X POST -H 'Content-Type: application/json' -d '{{\"url\": \"https://nixos.org/\", \"vanity\": \"nixos\"}}'")
-      url = json.loads(resp)["url"]
-      assert url == "http://zipline.local:8000/go/nixos"
+    resp = machine.succeed("curl zipline.local:8000/api/setup -v -X POST -H 'Content-Type: application/json' -d '{\"username\": \"administrator\", \"password\": \"password\"}' 2>&1")
+    data = json.loads(resp.splitlines()[-1])
+    assert data["firstSetup"] is True
+    assert data["user"]["username"] == "administrator"
+    assert data["user"]["role"] == "SUPERADMIN"
 
-      resp = machine.succeed(f"curl -I {url}")
-      assert re.search(r"(?m)^HTTP/1.1 302 Found\r?$", resp)
-      assert (location := re.search(r"(?mi)^location: (.+?)\r?$", resp))
-      assert location[1] == "https://nixos.org/"
-    '';
-  }
-)
+    resp = machine.succeed("curl zipline.local:8000/api/auth/login -v -X POST -H 'Content-Type: application/json' -d '{\"username\": \"administrator\", \"password\": \"password\"}' 2>&1")
+
+    assert (cookie := re.search(r"(?m)^< set-cookie: ([^;]*)", resp))
+    resp = machine.succeed(f"curl zipline.local:8000/api/user -H 'Cookie: {cookie[1]}'")
+    assert json.loads(resp)["user"]["id"] == data["user"]["id"]
+  '';
+}

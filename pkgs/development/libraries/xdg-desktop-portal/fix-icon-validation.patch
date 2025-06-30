@@ -1,0 +1,31 @@
+--- a/src/validate-icon.c
++++ b/src/validate-icon.c
+@@ -254,7 +254,7 @@ flatpak_get_bwrap (void)
+ static int
+ rerun_in_sandbox (int input_fd)
+ {
+-  const char * const usrmerged_dirs[] = { "bin", "lib32", "lib64", "lib", "sbin" };
++  const char * const usrmerged_dirs[] = { };
+   g_autoptr(GPtrArray) args = g_ptr_array_new_with_free_func (g_free);
+   g_autofree char* arg_input_fd = NULL;
+   char validate_icon[PATH_MAX + 1];
+@@ -276,8 +276,7 @@ rerun_in_sandbox (int input_fd)
+             "--tmpfs", "/tmp",
+             "--proc", "/proc",
+             "--dev", "/dev",
+-            "--ro-bind", "/usr", "/usr",
+-            "--ro-bind-try", "/etc/ld.so.cache", "/etc/ld.so.cache",
++            "--ro-bind", "@storeDir@", "@storeDir@",
+             "--ro-bind", validate_icon, validate_icon,
+             NULL);
+ 
+@@ -320,6 +319,9 @@ rerun_in_sandbox (int input_fd)
+   if (g_getenv ("G_MESSAGES_PREFIXED"))
+     add_args (args, "--setenv", "G_MESSAGES_PREFIXED", g_getenv ("G_MESSAGES_PREFIXED"), NULL);
+ 
++  if (g_getenv ("GDK_PIXBUF_MODULE_FILE"))
++    add_args (args, "--setenv", "GDK_PIXBUF_MODULE_FILE", g_getenv ("GDK_PIXBUF_MODULE_FILE"), NULL);
++
+   arg_input_fd = g_strdup_printf ("%d", input_fd);
+   add_args (args,
+             validate_icon,

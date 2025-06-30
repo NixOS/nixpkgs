@@ -9,17 +9,17 @@
 
 buildGoModule rec {
   pname = "museum";
-  version = "0.9.81";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "server" ];
     rev = "photos-v${version}";
-    hash = "sha256-4vX3UWbYYCjNxtSNUAE9hg9NokeJFPTjLvHYTkQlB0w=";
+    hash = "sha256-1LG8JcZxG4zWSQ9qQCRQwuXfL5HY9rOQKK2n5erq/kU=";
   };
 
-  vendorHash = "sha256-Vz9AodHoClSmo51ExdOS4bWH13i1Sug++LQMIsZY2xY=";
+  vendorHash = "sha256-px4pMqeH73Fe06va4+n6hklIUDMbPmAQNKKRIhwv6ec=";
 
   sourceRoot = "${src.name}/server";
 
@@ -38,6 +38,7 @@ buildGoModule rec {
     cp -R configurations \
       migrations \
       mail-templates \
+      web-templates \
       $out/share/museum
   '';
 
@@ -53,7 +54,6 @@ buildGoModule rec {
     homepage = "https://github.com/ente-io/ente/tree/main/server";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      surfaceflinger
       pinpox
     ];
     mainProgram = "museum";

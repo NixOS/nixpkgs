@@ -11,7 +11,7 @@
   libXxf86vm,
 }:
 let
-  version = "4.15.8";
+  version = "4.16.5";
 
   desktopItem = makeDesktopItem {
     name = "unciv";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-Ytov2n7XieMQtc0C0uvMzpamLHhhTEtkKSfoU88Mlaw=";
+    hash = "sha256-CMyZlQ5zXHxUExH7aMIJ4nreEPz8Y0eeJ5nnt267SqU=";
   };
 
   dontUnpack = true;

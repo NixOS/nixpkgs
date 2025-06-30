@@ -253,6 +253,7 @@ class ManpageRenderer(Renderer):
         self._leave_block()
         return ".RE"
     def myst_role(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        # NixOS-specific roles are documented at <nixpkgs>/doc/README.md (with reverse reference)
         if token.meta['name'] in [ 'command', 'env', 'option' ]:
             return f'\\fB{man_escape(token.content)}\\fP'
         elif token.meta['name'] in [ 'file', 'var' ]:

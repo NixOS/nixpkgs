@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ucscGenomeBrowser";
-    repo = pname;
+    repo = "kent";
     rev = "v${version}_base";
     hash = "sha256-OM/noraW2X8WV5wqWEFiI5/JPOBmsp0fTeDdcZoXxAA=";
   };
@@ -85,12 +85,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "UCSC Genome Bioinformatics Group's suite of biological analysis tools, i.e. the kent utilities";
     homepage = "http://genome.ucsc.edu";
     changelog = "https://github.com/ucscGenomeBrowser/kent/releases/tag/v${version}_base";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ scalavision ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ scalavision ];
+    platforms = lib.platforms.linux;
   };
 }

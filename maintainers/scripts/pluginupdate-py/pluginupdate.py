@@ -558,7 +558,16 @@ class Editor:
         }
 
         for plugin_desc, plugin, redirect in fetched:
-            result[plugin.normalized_name] = (plugin_desc, plugin, redirect)
+            # Check if plugin is a Plugin object and has normalized_name attribute
+            if isinstance(plugin, Plugin) and hasattr(plugin, 'normalized_name'):
+                result[plugin.normalized_name] = (plugin_desc, plugin, redirect)
+            elif isinstance(plugin, Exception):
+                # For exceptions, we can't determine the normalized_name
+                # Just log the error and continue
+                log.error(f"Error fetching plugin {plugin_desc.name}: {plugin!r}")
+            else:
+                # For unexpected types, log the issue
+                log.error(f"Unexpected plugin type for {plugin_desc.name}: {type(plugin)}")
 
         return list(result.values())
 
@@ -615,9 +624,9 @@ class Editor:
             "--github-token",
             "-t",
             type=str,
-            default=os.getenv("GITHUB_API_TOKEN"),
+            default=os.getenv("GITHUB_TOKEN"),
             help="""Allows to set --proc to higher values.
-            Uses GITHUB_API_TOKEN environment variables as the default value.""",
+            Uses GITHUB_TOKEN environment variables as the default value.""",
         )
         common.add_argument(
             "--no-commit",

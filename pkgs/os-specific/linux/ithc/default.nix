@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ aacebedo ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "5.9";
+    broken = kernel.kernelOlder "5.9" || kernel.kernelAtLeast "6.10";
   };
 }

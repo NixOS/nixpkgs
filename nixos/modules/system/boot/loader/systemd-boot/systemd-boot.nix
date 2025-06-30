@@ -47,7 +47,7 @@ let
 
       systemd = config.systemd.package;
 
-      bootspecTools = pkgs.bootspec;
+      bootspecTools = config.boot.bootspec.package;
 
       nix = config.nix.package.out;
 

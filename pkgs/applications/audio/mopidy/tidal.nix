@@ -1,20 +1,25 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
   mopidy,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Tidal";
-  version = "0.3.2";
+  version = "0.3.9";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ekqhzKyU2WqTOeRR1ZSZA9yW3UXsLBsC2Bk6FZrQgmc=";
+  src = fetchFromGitHub {
+    owner = "tehkillerbee";
+    repo = "mopidy-tidal";
+    rev = "v${version}";
+    hash = "sha256-RFhuxsb6nQPYxkaeAEABQdCwjbmnOw5pnmYnx6gNCcg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ python3Packages.poetry-core ];
+
+  dependencies = [
     mopidy
     python3Packages.tidalapi
   ];
@@ -26,10 +31,11 @@ python3Packages.buildPythonApplication rec {
 
   pytestFlagsArray = [ "tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mopidy extension for playing music from Tidal";
     homepage = "https://github.com/tehkillerbee/mopidy-tidal";
-    license = licenses.mit;
+    changelog = "https://github.com/tehkillerbee/mopidy-tidal/releases/tag/v${version}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

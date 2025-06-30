@@ -12,20 +12,19 @@
   libssh2,
   openssl,
   zlib,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "16.1.0";
+  version = "16.3.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-bdIFenNMW5iDQaKS2+lMYVVfc0zpbYNOHQqczpjBNC4=";
+    hash = "sha256-VKXEbgm3Oc4rq/F2p/kuhhhiyKvLU6KHnKnQMBX17XU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-KujJB9o5+yHu6mEQOvzGUcBS6/fh/jcnt7/FbUPLefg=";
+  cargoHash = "sha256-AXYcDxKQ9p4deolcZFO5SmfwnQGxl1I03RK6tSTbjlo=";
 
   nativeBuildInputs =
     [
@@ -47,7 +46,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      darwin.apple_sdk.frameworks.Security
     ];
 
   postBuild = ''
@@ -65,12 +63,12 @@ rustPlatform.buildRustPackage rec {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       gerschtli
       Br1ght0ne
       johntitor

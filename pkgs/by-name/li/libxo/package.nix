@@ -1,7 +1,7 @@
 {
   lib,
   autoreconfHook,
-  bash,
+  bashNonInteractive,
   libtool,
   fetchFromGitHub,
   nix-update-script,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     autoreconfHook
     # For patchShebangs in postInstall
-    bash
+    bashNonInteractive
     perl
   ];
 

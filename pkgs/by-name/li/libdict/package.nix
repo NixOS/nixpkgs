@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, cunit
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  cunit,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/rtbrick/libdict/releases/tag/${finalAttrs.version}";
     description = "C library of key-value data structures";
     license = licenses.bsd2;
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
   };
 })

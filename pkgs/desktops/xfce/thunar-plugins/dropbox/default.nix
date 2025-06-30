@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thunar-dropbox";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "Jeinzi";
     repo = "thunar-dropbox";
     rev = version;
-    sha256 = "sha256-q7tw/1JgEn9SyjH1KBZl0tintWJjd3ctUs4JUuCWULs=";
+    sha256 = "sha256-uYqO87ftEtnSRn/yMSF1jVGleYXR3hVj2Jb1/kAd64Y=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "Plugin that adds context-menu items for Dropbox to Thunar";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

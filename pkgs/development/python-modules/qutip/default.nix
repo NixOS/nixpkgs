@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  cython_0,
+  cython,
   oldest-supported-numpy,
   setuptools,
 
@@ -29,25 +29,25 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "5.1.1";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qutip";
     repo = "qutip";
     tag = "v${version}";
-    hash = "sha256-5j47Wqt9i6vC3uwRzQ9+8pk+ENl5w6PvnP+830RLCls=";
+    hash = "sha256-jH/kpiR0cTIJraMU/ddZe7xX3CMYIV93oyfHfaKxif4=";
   };
 
   postPatch =
-    # build-time constriant, used to ensure forward and backward compat
+    # build-time constraint, used to ensure forward and backward compat
     ''
       substituteInPlace pyproject.toml setup.cfg \
         --replace-fail "numpy>=2.0.0" "numpy"
     '';
 
   build-system = [
-    cython_0
+    cython
     oldest-supported-numpy
     setuptools
   ];

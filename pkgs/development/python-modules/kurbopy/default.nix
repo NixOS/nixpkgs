@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "kurbopy";
-  version = "0.11.0";
+  version = "0.11.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0TIVx0YH5L8l6at1fcWkj2UZYK0aF1fahTu9/+7MWMI=";
+    hash = "sha256-05ezUpcHxCxo/4oyPKogq4/vdfpNnEBhtv+lYBjKdvg=";
   };
 
   propagatedBuildInputs = [ fonttools ];
@@ -24,9 +24,8 @@ buildPythonPackage rec {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-EPSaMIZqXrFzXAwNr1AtvmntkCLePXwAVzGMj8dWbTQ=";
+    inherit pname version src;
+    hash = "sha256-51qJAcJvolYCW3XWeymc2xd2QHiKLd7MdRdDedEH8QY=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

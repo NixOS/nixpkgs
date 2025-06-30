@@ -8,7 +8,6 @@
   openssl,
   stdenv,
   curl,
-  darwin,
 }:
 
 {
@@ -17,7 +16,7 @@
   cargoDeps,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "wasm-bindgen-cli";
 
   inherit version src cargoDeps;
@@ -28,7 +27,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      darwin.apple_sdk.frameworks.Security
     ];
 
   nativeCheckInputs = [ nodejs_latest ];

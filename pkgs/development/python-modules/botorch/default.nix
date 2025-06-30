@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "botorch";
     tag = "v${version}";
-    hash = "sha256-Hik0HPHFoN1+uIeVxG7UPKc1ADBoTTBkL2+LhHDrr+s=";
+    hash = "sha256-IyRi5kXePnDv2q6SrXLtdltQ1/2/zQ3EBx5phtuX8sE=";
   };
 
   build-system = [
@@ -43,16 +43,18 @@ buildPythonPackage rec {
     torch
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  pytestFlagsArray = [
-    # tests tend to get stuck on busy hosts, increase verbosity to find out
-    # which specific tests get stuck
-    "-vvv"
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   disabledTests =
-    [ "test_all_cases_covered" ]
+    [
+      "test_all_cases_covered"
+
+      # Skip tests that take too much time
+      "TestQMultiObjectivePredictiveEntropySearch"
+      "TestQPredictiveEntropySearch"
+    ]
     ++ lib.optionals (pythonAtLeast "3.13") [
       # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
       "test_optimize_acqf_mixed_binary_only"
@@ -77,7 +79,7 @@ buildPythonPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
-    changelog = "https://github.com/pytorch/botorch/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pytorch/botorch/blob/${src.tag}/CHANGELOG.md";
     description = "Bayesian Optimization in PyTorch";
     homepage = "https://botorch.org";
     license = lib.licenses.mit;

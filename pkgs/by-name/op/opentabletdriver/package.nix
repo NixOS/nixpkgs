@@ -17,6 +17,8 @@
   udev,
   wrapGAppsHook3,
   versionCheckHook,
+  nix-update-script,
+  udevCheckHook,
 }:
 
 buildDotnetModule (finalAttrs: {
@@ -48,6 +50,7 @@ buildDotnetModule (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     wrapGAppsHook3
+    udevCheckHook
     # Dependency of generate-rules.sh
     jq
   ];
@@ -122,7 +125,7 @@ buildDotnetModule (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/otd-daemon";
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
     tests = {
       otd-runs = nixosTests.opentabletdriver;
     };

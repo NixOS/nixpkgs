@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage {
   pname = "gladtex";
   version = "unstable-2023-01-22";
 
@@ -21,6 +21,6 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://humenda.github.io/GladTeX";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ alyaeanyx ];
+    maintainers = with maintainers; [ pentane ];
   };
 }

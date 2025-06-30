@@ -3,7 +3,7 @@
   buildFishPlugin,
   fetchFromGitHub,
 }:
-buildFishPlugin rec {
+buildFishPlugin {
   pname = "fish-git-abbr";
   version = "0.2.1-unstable-2023-06-19";
 

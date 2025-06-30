@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "dm-control";
-  version = "1.0.26";
+  version = "1.0.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "dm_control";
     tag = version;
-    hash = "sha256-CKBgBs0hLTvExkcGYtOZ+h+/Hh4HEgF9wT/jzRe0bV0=";
+    hash = "sha256-myrOrbKjBz+qN61WX54CqIaHsidUUBhgHezsdZvQFJA=";
   };
 
   build-system = [
@@ -81,7 +81,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/google-deepmind/dm_control/releases/tag/${version}";
+    changelog = "https://github.com/google-deepmind/dm_control/releases/tag/${src.tag}";
     description = "Google DeepMind's software stack for physics-based simulation and Reinforcement Learning environments, using MuJoCo";
     homepage = "https://github.com/google-deepmind/dm_control";
     license = lib.licenses.asl20;

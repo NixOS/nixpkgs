@@ -14,15 +14,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-jUS/it2N5o5D7Jon0fKHWEt3f0wdtVgNIkqSNc7u830=";
+    hash = "sha256-wuIJq+UN1q5qYW4TXivq93C9kZiPHwBW5Ty2Vpik2oY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-izvo092FGZmci1cXLo+qhGlBh8W3A1TeBHrYXcjE6HU=";
+  cargoHash = "sha256-L9r/nJj0Rz41mg952dOgKxbDS5u4zGEjSA3EhUHfGIk=";
   cargoPatches = [
     # TODO: Remove once https://github.com/DioxusLabs/dioxus/issues/3659 is fixed upstream.
     ./fix-wasm-opt-target-dir.patch

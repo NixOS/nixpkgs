@@ -14,9 +14,9 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpanel";
-  version = "1.8.1";
+  version = "1.10.0";
 
   outputs = [
     "out"
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libpanel/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-uHuPqbeXaMxwQkN5PwFYoECh5G03uYiRiFRaf33Kpvs=";
+    url = "mirror://gnome/sources/libpanel/${lib.versions.majorMinor finalAttrs.version}/libpanel-${finalAttrs.version}.tar.xz";
+    hash = "sha256-V4zlEieP8rte7rtVCZOSxSU3pavZvQYpVn8QJTKziyU=";
   };
 
   strictDeps = true;
@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
-  mesonFlags = [ (lib.mesonBool "install-examples" true) ];
+  mesonFlags = [
+    (lib.mesonBool "install-examples" true)
+  ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -59,7 +61,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = pname; };
+    updateScript = gnome.updateScript {
+      packageName = "libpanel";
+      versionPolicy = "odd-unstable";
+    };
   };
 
   meta = with lib; {
@@ -67,7 +72,7 @@ stdenv.mkDerivation rec {
     mainProgram = "libpanel-example";
     homepage = "https://gitlab.gnome.org/GNOME/libpanel";
     license = licenses.lgpl3Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
-}
+})

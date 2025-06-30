@@ -58,8 +58,9 @@ in
 
   ###### implementation
 
+  meta.maintainers = with lib.maintainers; [ thoughtpolice ];
+
   config = mkIf cfg.enable {
-    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
     services.timesyncd.enable = mkForce false;
 
     # Add ntpctl to the environment for status checking

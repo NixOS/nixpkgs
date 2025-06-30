@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "djrobstep";
-    repo = pname;
+    repo = "migra";
     rev = version;
     hash = "sha256-LSCJA5Ym1LuV3EZl6gnl9jTHGc8A1LXmR1fj0ZZc+po=";
   };
@@ -54,6 +54,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Like diff but for PostgreSQL schemas";
     homepage = "https://github.com/djrobstep/migra";
     license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ soispha ];
+    maintainers = with maintainers; [ bpeetz ];
   };
 }

@@ -6,8 +6,6 @@
   libGLU,
   libGL,
   libglut,
-  Cocoa,
-  OpenGL,
 }:
 
 stdenv.mkDerivation {
@@ -26,23 +24,13 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libGLU
-      libGL
-      libglut
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      OpenGL
-    ];
+  buildInputs = [
+    libGLU
+    libGL
+    libglut
+  ];
 
   patches = [ ./gwen-narrowing.patch ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt
-    sed -i 's/FIND_LIBRARY(COCOA_LIBRARY Cocoa)//' CMakeLists.txt
-  '';
 
   cmakeFlags =
     [
@@ -51,11 +39,6 @@ stdenv.mkDerivation {
       "-DINSTALL_EXTRA_LIBS=ON"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DOPENGL_FOUND=true"
-      "-DOPENGL_LIBRARIES=${OpenGL}/Library/Frameworks/OpenGL.framework"
-      "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks/OpenGL.framework"
-      "-DOPENGL_gl_LIBRARY=${OpenGL}/Library/Frameworks/OpenGL.framework"
-      "-DCOCOA_LIBRARY=${Cocoa}/Library/Frameworks/Cocoa.framework"
       "-DBUILD_BULLET2_DEMOS=OFF"
       "-DBUILD_UNIT_TESTS=OFF"
     ];

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "django-stubs";
-  version = "5.1.2";
+  version = "5.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "django_stubs";
     inherit version;
-    hash = "sha256-oPyzZZurRqbYNcwtm/8/wpw2zOpBoQ6LGTBCe8D58N8=";
+    hash = "sha256-B+JcLTy/9b5UAif/N3GcyJ8hXfqqpesDinWwG7+7JyI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<79.0.0" setuptools
+  '';
 
   build-system = [ setuptools ];
 

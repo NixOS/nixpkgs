@@ -70,6 +70,6 @@ buildPythonApplication {
     description = "Mute your microphone while typing";
     mainProgram = "hushboard";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sersorrel ];
+    maintainers = with maintainers; [ keysmashes ];
   };
 }

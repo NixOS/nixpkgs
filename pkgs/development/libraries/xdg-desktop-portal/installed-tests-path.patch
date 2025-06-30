@@ -1,8 +1,8 @@
 diff --git a/meson.build b/meson.build
-index b25f9ef..7975f85 100644
+index 4238adb..d3f89fd 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -40,8 +40,8 @@ if dataroot_dir == ''
+@@ -43,8 +43,8 @@ if dataroot_dir == ''
      dataroot_dir = datadir
  endif
  
@@ -14,17 +14,14 @@ index b25f9ef..7975f85 100644
  
  summary({
 diff --git a/meson_options.txt b/meson_options.txt
-index fccada3..ca87600 100644
+index ed8c311..0a2bf7e 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -38,6 +38,10 @@ option('installed-tests',
-         type: 'boolean',
-         value: false,
-         description: 'Enable installation of some test cases')
+@@ -54,3 +54,7 @@ option('sandboxed-sound-validation',
+        type: 'feature',
+        value: 'enabled',
+        description: 'Use Bubblewrap to sandbox sound validation. Disabling this option may lead to security vulnerabilities.')
 +option('installed_test_prefix',
-+        type: 'string',
-+        value: '',
-+        description: 'Prefix for installed tests')
- option('pytest',
-         type: 'feature',
-         value: 'auto',
++       type: 'string',
++       value: '',
++       description: 'Prefix for installed tests')

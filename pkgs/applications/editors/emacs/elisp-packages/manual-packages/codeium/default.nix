@@ -30,7 +30,7 @@ melpaBuild {
     description = "Free, ultrafast Copilot alternative for Emacs";
     homepage = "https://github.com/Exafunction/codeium.el";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.running-grass ];
+    maintainers = [ ];
     inherit (codeium.meta) platforms;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };

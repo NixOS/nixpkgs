@@ -9,27 +9,23 @@
 
 stdenv.mkDerivation rec {
   pname = "rpiboot";
-  version = "20250129-123632";
+  version = "20250227-132106";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "usbboot";
     rev = version;
-    hash = "sha256-nUwero1BLSx+JORqJVWIXi2ElnN17al1jA+I4Cqe9hM=";
+    hash = "sha256-WccnaIUF5M080M4vg5NzBCLpLVcE7ts/oJJE8CLRi8A=";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ libusb1 ];
   nativeBuildInputs = [ pkg-config ];
 
-  patchPhase = ''
-    sed -i "s@/usr/@$out/@g" main.c
-  '';
+  makeFlags = [ "INSTALL_PREFIX=$(out)" ];
 
-  installPhase = ''
+  preInstall = ''
     mkdir -p $out/bin
-    mkdir -p $out/share/rpiboot
-    cp rpiboot $out/bin
-    cp -r msd firmware eeprom-erase mass-storage-gadget* recovery* secure-boot* rpi-imager-embedded $out/share/rpiboot
   '';
 
   passthru.updateScript = gitUpdater { };

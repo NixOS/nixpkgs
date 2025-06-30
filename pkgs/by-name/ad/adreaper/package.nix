@@ -22,14 +22,14 @@ buildGoModule rec {
     mv $out/bin/ADReaper $out/bin/$pname
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enumeration tool for Windows Active Directories";
     homepage = "https://github.com/AidenPearce369/ADReaper";
     changelog = "https://github.com/AidenPearce369/ADReaper/releases/tag/ADReaperv${version}";
     # Upstream doesn't have a license yet
     # https://github.com/AidenPearce369/ADReaper/issues/2
-    license = with licenses; [ unfree ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ unfree ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ADReaper";
   };
 }

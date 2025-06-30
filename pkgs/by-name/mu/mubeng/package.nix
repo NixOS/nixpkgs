@@ -23,12 +23,12 @@ buildGoModule rec {
     "-X=ktbs.dev/mubeng/common.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Proxy checker and IP rotator";
     homepage = "https://github.com/kitabisa/mubeng";
     changelog = "https://github.com/kitabisa/mubeng/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mubeng";
   };
 }

@@ -11,7 +11,6 @@
   wrapGAppsHook3,
   webkitgtk_4_0,
   dbus,
-  darwin,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
@@ -46,17 +45,10 @@ rustPlatform.buildRustPackage rec {
       wrapGAppsHook3
     ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      webkitgtk_4_0
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        WebKit
-      ]
-    );
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_0
+    dbus
+  ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = cargoRoot;
@@ -69,7 +61,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A GUI to browse and restore restic backup repositories";
+    description = "GUI to browse and restore restic backup repositories";
     homepage = "https://github.com/emuell/restic-browser";
     changelog = "https://github.com/emuell/restic-browser/releases/tag/v${version}";
     license = lib.licenses.mit;

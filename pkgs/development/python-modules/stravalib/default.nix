@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "stravalib";
-  version = "2.2";
+  version = "2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "stravalib";
     repo = "stravalib";
     tag = "v${version}";
-    hash = "sha256-4T5/Sqni9DCE/sIyNCZA8FzFo7lRAsrF+2JP8ydSGqw=";
+    hash = "sha256-RMvahoUOy4RnSu0O7dBpYylaQ8nPfMiivx8k1XBeEGA=";
   };
 
   build-system = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with Strava v3 REST API";
     homepage = "https://github.com/stravalib/stravalib";
-    changelog = "https://github.com/stravalib/stravalib/releases/tag/v${version}";
+    changelog = "https://github.com/stravalib/stravalib/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sikmir ];
   };

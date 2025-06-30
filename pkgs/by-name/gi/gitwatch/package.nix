@@ -13,12 +13,12 @@
 }:
 runCommand "gitwatch"
   rec {
-    version = "0.2";
+    version = "0.3";
     src = fetchFromGitHub {
       owner = "gitwatch";
       repo = "gitwatch";
       rev = "v${version}";
-      hash = "sha256-KuWD2FAMi2vZ/7e4fIg97DGuAPEV9b9iOuF8NIGFVpE=";
+      hash = "sha256-dKXKuqUQhFUXMwPs7Uilzn2yKH6DIlBTOFztKo+PqVU=";
     };
     nativeBuildInputs = [ makeWrapper ];
 

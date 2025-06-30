@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -22,7 +21,7 @@
   # optional-dependencies
   matplotlib,
 
-  # dependencies
+  # tests
   cloudpickle,
   keras,
   einops,
@@ -39,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.10.3";
+  version = "0.10.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     tag = "v${version}";
-    hash = "sha256-PRKdtltiBVX9p6Sjw4sCDghqxYRxq4L9TLle1vy5dkk=";
+    hash = "sha256-HhepJp7y2YN05XcZhB/L08g+yOfTJPRzd2m4ALQJGvw=";
   };
 
   build-system = [
@@ -84,6 +83,13 @@ buildPythonPackage rec {
     tensorflow
   ];
 
+  pytestFlagsArray = [
+    "-W"
+    # DeprecationWarning: Triggering of __jax_array__() during abstractification is deprecated.
+    # To avoid this error, either explicitly convert your object using jax.numpy.array(), or register your object as a pytree.
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"
@@ -95,15 +101,11 @@ buildPythonPackage rec {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
-
-    # See https://github.com/google/flax/issues/3232.
-    "tests/jax_utils_test.py"
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-    "test_ref_changed"
-    "test_structure_changed"
+  disabledTests = [
+    # AssertionError: [Chex] Function 'add' is traced > 1 times!
+    "PadShardUnpadTest"
   ];
 
   passthru = {

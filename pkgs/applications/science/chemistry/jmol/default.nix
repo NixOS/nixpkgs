@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, unzip
-, makeDesktopItem
-, jre
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  makeDesktopItem,
+  jre,
 }:
 
 let
@@ -21,19 +22,26 @@ let
       "chemical/x-xyz"
       "chemical/x-mdl-sdf"
     ];
-    categories = [ "Graphics" "Education" "Science" "Chemistry" ];
+    categories = [
+      "Graphics"
+      "Education"
+      "Science"
+      "Chemistry"
+    ];
   };
 in
 stdenv.mkDerivation rec {
-  version = "16.3.7";
+  version = "16.3.27";
   pname = "jmol";
 
-  src = let
-    baseVersion = "${lib.versions.major version}.${lib.versions.minor version}";
-  in fetchurl {
-    url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${version}/Jmol-${version}-binary.tar.gz";
-    hash = "sha256-SQuIjwafPipQy9C2yJQ2CIFV/lSAnHkp1jYnPK1BWcQ=";
-  };
+  src =
+    let
+      baseVersion = "${lib.versions.major version}.${lib.versions.minor version}";
+    in
+    fetchurl {
+      url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${version}/Jmol-${version}-binary.tar.gz";
+      hash = "sha256-VRyMMkSwdXX80DudS+4uCZBnxypgmR/75PyK/vEJyrs=";
+    };
 
   patchPhase = ''
     sed -i -e "4s:.*:command=${jre}/bin/java:" -e "10s:.*:jarpath=$out/share/jmol/Jmol.jar:" -e "11,21d" jmol
@@ -52,12 +60,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-     description = "Java 3D viewer for chemical structures";
-     mainProgram = "jmol";
-     homepage = "https://sourceforge.net/projects/jmol";
-     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-     license = licenses.lgpl2;
-     platforms = platforms.all;
-     maintainers = with maintainers; [ mounium ] ++ teams.sage.members;
+    description = "Java 3D viewer for chemical structures";
+    mainProgram = "jmol";
+    homepage = "https://sourceforge.net/projects/jmol";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.lgpl2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ mounium ];
+    teams = [ teams.sage ];
   };
 }

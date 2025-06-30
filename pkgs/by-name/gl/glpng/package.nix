@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "glpng";
-  version = "1.46";
+  version = "1.47";
 
   src = fetchFromRepoOrCz {
     repo = "glpng";
     rev = "v${version}";
-    hash = "sha256-C7EHaBN0PE/HJB6zcIaYU63+o7/MEz4WU1xr/kIOanM=";
+    hash = "sha256-mwh0E8OZKBf6UcRScAeco8dfQ4LJ+7TG0IPuRi3Mzfc=";
   };
 
   nativeBuildInputs = [

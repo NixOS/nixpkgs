@@ -5,7 +5,7 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libamplsolver";
   version = "20211109";
 

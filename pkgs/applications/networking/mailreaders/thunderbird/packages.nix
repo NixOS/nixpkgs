@@ -5,70 +5,79 @@
   callPackage,
   fetchurl,
   icu73,
+  icu77,
   fetchpatch2,
   config,
 }:
 
 let
-  icu73' = icu73.overrideAttrs (attrs: {
-    # standardize vtzone output
-    # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
-    patches = attrs.patches ++ [
-      (fetchpatch2 {
-        url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
-        stripLen = 3;
-        hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
-      })
-    ];
-  });
+  patchICU =
+    icu:
+    icu.overrideAttrs (attrs: {
+      # standardize vtzone output
+      # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
+      patches = attrs.patches ++ [
+        (fetchpatch2 {
+          url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
+          stripLen = 3;
+          hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
+        })
+      ];
+    });
+  icu73' = patchICU icu73;
+  icu77' = patchICU icu77;
 
   common =
     {
       version,
       sha512,
       updateScript,
+      applicationName ? "Thunderbird",
     }:
     (buildMozillaMach rec {
       pname = "thunderbird";
-      inherit version updateScript;
+      inherit version updateScript applicationName;
       application = "comm/mail";
-      applicationName = "Mozilla Thunderbird";
       binaryName = pname;
       src = fetchurl {
         url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
         inherit sha512;
       };
-      extraPatches = [
-        # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
-        ./no-buildconfig.patch
-        # clang-19 fixes for char_traits build issue
-        # https://github.com/rnpgp/rnp/pull/2242/commits/e0790a2c4ff8e09d52522785cec1c9db23d304ac
-        # https://github.com/rnpgp/sexpp/pull/54/commits/46744a14ffc235330bb99cebfaf294829c31bba4
-        # Remove when upstream bumps bundled rnp version: https://bugzilla.mozilla.org/show_bug.cgi?id=1893950
-        ./0001-Removed-lookup-against-basic_string-uint8_t.patch
-        ./0001-Implemented-char_traits-for-SEXP-octet_t.patch
-      ];
+      extraPatches =
+        [
+          # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
+          ./no-buildconfig.patch
+        ]
+        ++ lib.optionals (lib.versionOlder version "139") [
+          # clang-19 fixes for char_traits build issue
+          # https://github.com/rnpgp/rnp/pull/2242/commits/e0790a2c4ff8e09d52522785cec1c9db23d304ac
+          # https://github.com/rnpgp/sexpp/pull/54/commits/46744a14ffc235330bb99cebfaf294829c31bba4
+          # Remove when upstream bumps bundled rnp version: https://bugzilla.mozilla.org/show_bug.cgi?id=1893950
+          ./0001-Removed-lookup-against-basic_string-uint8_t.patch
+          ./0001-Implemented-char_traits-for-SEXP-octet_t.patch
+        ];
 
       extraPassthru = {
         icu73 = icu73';
+        icu77 = icu77';
       };
 
-      meta = with lib; {
+      meta = {
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
         description = "Full-featured e-mail client";
         homepage = "https://thunderbird.net/";
         mainProgram = "thunderbird";
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           lovesegfault
           pierron
           vcunat
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
         broken = stdenv.buildPlatform.is32bit;
         # since Firefox 60, build on 32-bit platforms fails with "out of memory".
         # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
-        license = licenses.mpl20;
+        license = lib.licenses.mpl20;
       };
     }).override
       {
@@ -78,16 +87,16 @@ let
         pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
 
         icu73 = icu73';
+        icu77 = icu77';
       };
 
 in
 rec {
-  # Upstream claims -latest is "for testing purposes only". Stick to -esr until this changes.
-  thunderbird = thunderbird-esr;
+  thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "133.0";
-    sha512 = "8cf8973964cabdc7fafe83d1dfd4f9fbfd340638b1f3d396a98059c00650549b0f4a7bfc486a294b2966136266d4524d6c825a6ee344cd753ac2f7ab412cbc96";
+    version = "139.0.2";
+    sha512 = "edb20c692674dc5c3ba70673f7dd03710bf7ac0ce2be614a7a4b3d2b40b20b4974aab2a621dd5b43720c412a590c08f8b78abeb9b61f288f3217c6a04cc1e8ff";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -98,8 +107,10 @@ rec {
   thunderbird-esr = thunderbird-128;
 
   thunderbird-128 = common {
-    version = "128.6.1esr";
-    sha512 = "f41936b90aaefde5c6a31a03d1f7ed4b6560729584061d82d032efde3df0836eede807a318d4a403de4a3cd5d6a6f7eace483e08fcc284699176f1b3ad01437a";
+    applicationName = "Thunderbird ESR";
+
+    version = "128.11.1esr";
+    sha512 = "8fd99f68895b543bdc5bba38d7720f0e48e2a82c9fe5e8ca15534e3918cc40b5b2911666dbbbda0a7911783a03a0d8f7371ea353fd67416baca1e1dffdd25c44";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";

@@ -43,16 +43,25 @@ let
   );
 
   forceRust = features.rust or false;
-  kernelSupportsRust = lib.versionAtLeast version "6.7";
+  # Architecture support collected from HAVE_RUST Kconfig definitions and the following table:
+  # https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/rust/arch-support.rst
+  rustByDefault = (
+    lib.versionAtLeast version "6.12"
+    && (
+      stdenv.hostPlatform.isx86_64
+      || stdenv.hostPlatform.isLoongArch64
+      || stdenv.hostPlatform.isAarch64
+      || (stdenv.hostPlatform.isRiscV64 && !stdenv.cc.isGNU)
+    )
+  );
 
-  # Currently only enabling Rust by default on kernel 6.12+,
-  # which actually has features that use Rust that we want.
-  defaultRust = lib.versionAtLeast version "6.12" && rustAvailable;
   withRust =
-    assert lib.assertMsg (!(forceRust && !kernelSupportsRust)) ''
-      Kernels below 6.7 (the kernel being built is ${version}) don't support Rust.
-    '';
-    (forceRust || defaultRust) && kernelSupportsRust;
+    lib.warnIfNot (forceRust -> rustAvailable)
+      "force-enabling Rust for Linux without an available rustc"
+      lib.warnIfNot
+      (forceRust -> rustByDefault)
+      "force-enabling Rust for Linux on an unsupported kernel version, host platform or compiler"
+      (forceRust || (rustAvailable && rustByDefault));
 
   options = {
 
@@ -80,7 +89,7 @@ let
       # Easier debugging of NFS issues.
       SUNRPC_DEBUG = yes;
       # Provide access to tunables like sched_migration_cost_ns
-      SCHED_DEBUG = yes;
+      SCHED_DEBUG = whenOlder "6.15" yes;
 
       # Count IRQ and steal CPU time separately
       IRQ_TIME_ACCOUNTING = yes;
@@ -102,6 +111,10 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
+
+      # Track memory leaks and performance issues related to allocations.
+      MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
+      MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT = whenAtLeast "6.10" yes;
     };
 
     power-management =
@@ -120,6 +133,12 @@ let
         ACPI_APEI = (option yes);
         # APEI Generic Hardware Error Source
         ACPI_APEI_GHES = (option yes);
+
+        # Without this, on some hardware the kernel fails at some
+        # point after the EFI stub has executed but before a console
+        # is set up. Regardless, it's good to have the extra debug
+        # anyway.
+        ACPI_DEBUG = yes;
 
         # Enable lazy RCUs for power savings:
         # https://lore.kernel.org/rcu/20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1/
@@ -269,7 +288,7 @@ let
         IP_VS_PROTO_ESP = yes;
         IP_VS_PROTO_AH = yes;
         IP_VS_IPV6 = yes;
-        IP_DCCP_CCID3 = no; # experimental
+        IP_DCCP_CCID3 = whenOlder "6.16" no; # experimental
         CLS_U32_PERF = yes;
         CLS_U32_MARK = yes;
         BPF_JIT = whenPlatformHasEBPFJit yes;
@@ -379,6 +398,10 @@ let
         # Enable debugfs for wireless drivers
         CFG80211_DEBUGFS = yes;
         MAC80211_DEBUGFS = yes;
+
+        # HAM radio
+        HAMRADIO = yes;
+        AX25 = module;
       }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
         # Not enabled by default, hides modules behind it
@@ -859,6 +882,7 @@ let
       CGROUP_HUGETLB = yes;
       CGROUP_PERF = yes;
       CGROUP_RDMA = yes;
+      CGROUP_DMEM = whenAtLeast "6.14" yes;
 
       MEMCG = yes;
       MEMCG_SWAP = whenOlder "6.1" yes;
@@ -1054,7 +1078,7 @@ let
         HIDRAW = yes;
 
         # Enable loading HID fixups as eBPF from userspace
-        HID_BPF = whenAtLeast "6.3" yes;
+        HID_BPF = whenAtLeast "6.3" (whenPlatformHasEBPFJit yes);
 
         HID_ACRUX_FF = yes;
         DRAGONRISE_FF = yes;
@@ -1085,6 +1109,13 @@ let
         UNIX = yes; # Unix domain sockets.
 
         MD = yes; # Device mapper (RAID, LVM, etc.)
+
+        # enable support for device trees and overlays
+        OF = option yes;
+        # OF_OVERLAY breaks v5.10 on x86_64, see https://github.com/NixOS/nixpkgs/issues/403985
+        OF_OVERLAY = lib.mkIf (!(lib.versionOlder version "5.15" && stdenv.hostPlatform.isx86_64)) (
+          option yes
+        );
 
         # Enable initrd support.
         BLK_DEV_INITRD = yes;
@@ -1147,6 +1178,7 @@ let
 
         DVB_DYNAMIC_MINORS = option yes; # we use udev
 
+        EFI = lib.mkIf stdenv.hostPlatform.isEfi yes;
         EFI_STUB = yes; # EFI bootloader in the bzImage itself
         EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER = whenOlder "6.2" (whenAtLeast "5.8" yes); # initrd kernel parameter for EFI
 
@@ -1281,7 +1313,7 @@ let
         LIRC = yes;
 
         SCHED_CORE = whenAtLeast "5.14" yes;
-        SCHED_CLASS_EXT = whenAtLeast "6.12" yes;
+        SCHED_CLASS_EXT = whenAtLeast "6.12" (whenPlatformHasEBPFJit yes);
 
         LRU_GEN = whenAtLeast "6.1" yes;
         LRU_GEN_ENABLED = whenAtLeast "6.1" yes;

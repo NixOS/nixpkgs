@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyrympro";
-  version = "0.0.8";
+  version = "0.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "OnFreund";
     repo = "pyrympro";
     tag = "v${version}";
-    hash = "sha256-mRvKLPgtBgmFDTHqra7GslxsgsJpQ2w/DE0Zgz5jujk=";
+    hash = "sha256-+KgYdiVuX8Ycw0Odte/EXsoWiMaLmTU6zTeJCw9jwvs=";
   };
 
   build-system = [ setuptools ];

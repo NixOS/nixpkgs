@@ -24,6 +24,7 @@
   pytestCheckHook,
   requests,
   tiktoken,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -45,6 +46,10 @@ let
     "bert-base-uncased-vocab.txt" = fetchurl {
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt";
       hash = "sha256-B+ztN1zsFE0nyQAkHz4zlHjeyVj5L928VR8pXJkgOKM=";
+    };
+    "tokenizer-llama3.json" = fetchurl {
+      url = "https://huggingface.co/Narsil/llama-tokenizer/resolve/main/tokenizer.json";
+      hash = "sha256-eePlImNfMXEwCRO7QhRkqH3mIiGCoFcLmyzLoqlksrQ=";
     };
     "big.txt" = fetchurl {
       url = "https://norvig.com/big.txt";
@@ -70,25 +75,40 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.21.0";
+  version = "0.21.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     tag = "v${version}";
-    hash = "sha256-G65XiVlvJXOC9zqcVr9vWamUnpC0aa4kyYkE2v1K2iY=";
+    hash = "sha256-HO7Zg/yLY6yxjOo5Jf6Iu2zCreCyv7IaNrWtBKrspqQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
-      pname
-      version
-      src
-      sourceRoot
-      ;
-    hash = "sha256-jj5nuwxlfJm1ugYd5zW+wjyczOZHWCmRGYpmiMDqFlk=";
+  # Cargo.lock shipped with 0.21.2 is invalid:
+  # error: no matching package found
+  # searched package name: `ahash`
+  # perhaps you meant:      wasi
+  # location searched: directory source `/build/tokenizers-0.21.2-vendor` (which is replacing registry `crates-io`)
+  # required by package `tokenizers-python v0.21.2 (/build/source/bindings/python)`
+  #
+  # Hence, I (@GaetanLepage) re-generated the lockfile and embedded it here for now.
+  # TODO: Try to switch back to `rustPlatform.fetchCargoVendor` at the next release.
+  postPatch = ''
+    ln -sf '${./Cargo.lock}' Cargo.lock
+  '';
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
+  # cargoDeps = rustPlatform.fetchCargoVendor {
+  #   inherit
+  #     pname
+  #     version
+  #     src
+  #     sourceRoot
+  #     ;
+  #   hash = "sha256-EKiHjcXUjU8CWe2CB2EgAQlRcZebwe4EpD7P8lWbCjw=";
+  # };
 
   sourceRoot = "${src.name}/bindings/python";
 
@@ -115,17 +135,15 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
     tiktoken
+    writableTmpDirAsHomeHook
   ];
 
-  postUnpack = ''
+  postUnpack =
     # Add data files for tests, otherwise tests attempt network access
-    mkdir $sourceRoot/tests/data
-    ln -s ${test-data}/* $sourceRoot/tests/data/
-  '';
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+    ''
+      mkdir $sourceRoot/tests/data
+      ln -s ${test-data}/* $sourceRoot/tests/data/
+    '';
 
   pythonImportsCheck = [ "tokenizers" ];
 

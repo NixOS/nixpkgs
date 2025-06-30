@@ -17,12 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/src/catppuccinifier-cli";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "catppuccinifier-rs-0.1.0" = "sha256-/lwc5cqLuCvGwcCiEHlYkbQZlS13z40OFVl26tpjsTQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-oFY07E31ZFy4AphqDCqL6BAhUNQtakHmLwER1RsAE7o=";
 
   meta = {
     description = "Apply catppuccin flavors to your wallpapers";

@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = false;
 
   meta = {
-    homepage = "http://galculator.sourceforge.net/";
+    homepage = "https://galculator.sourceforge.net/";
     description = "GTK algebraic and RPN calculator";
     longDescription = ''
       galculator is a GTK-based calculator. Its main features include:

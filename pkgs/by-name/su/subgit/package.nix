@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, jre }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  jre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "subgit";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
   };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   installPhase = ''
     mkdir $out;

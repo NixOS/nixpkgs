@@ -6,7 +6,6 @@
   gmp,
   zlib,
   libiconv,
-  darwin,
   installShellFiles,
 }:
 
@@ -52,7 +51,6 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool \
-        -change /usr/lib/libSystem.B.dylib ${darwin.Libsystem}/lib/libSystem.B.dylib \
         -change /usr/lib/libiconv.2.dylib ${libiconv}/libiconv.2.dylib \
         $PSC_PACKAGE
     ''

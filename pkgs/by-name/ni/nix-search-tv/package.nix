@@ -5,18 +5,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nix-search-tv";
-  version = "2.0.0";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "3timeslazy";
     repo = "nix-search-tv";
-    tag = "v${version}";
-    hash = "sha256-C8RTUwTkMgROipLgoDrm3L5aTBwOJ+cVr38xx1+sJCQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TyniXPYrSy7m3+WxHKN/pXWVpG4UqwwC/RUMSLaQYRU=";
   };
 
-  vendorHash = "sha256-0spLr6Qn2eQZC5Wwe6d+0o6B3r9CIgJt2X5/E/UMvg8=";
+  vendorHash = "sha256-hBkro++bjYGrhnq8rmSuKTgnkicagOHTkfRYluSBUX8=";
 
   subPackages = [ "cmd/nix-search-tv" ];
 
@@ -30,11 +30,11 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "Nixpkgs channel for television";
+    description = "Fuzzy search for Nix packages";
     homepage = "https://github.com/3timeslazy/nix-search-tv";
-    changelog = "https://github.com/3timeslazy/nix-search-tv/releases/tag/v${version}";
+    changelog = "https://github.com/3timeslazy/nix-search-tv/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "nix-search-tv";
   };
-}
+})

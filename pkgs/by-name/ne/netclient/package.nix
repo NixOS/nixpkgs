@@ -8,27 +8,27 @@
 
 buildGoModule rec {
   pname = "netclient";
-  version = "0.30.0";
+  version = "0.99.0";
 
   src = fetchFromGitHub {
     owner = "gravitl";
     repo = "netclient";
     rev = "v${version}";
-    hash = "sha256-F9hyTjRk2gqS9Jf+2/ZVYsvltr+lohK1loCAlJGyPEk=";
+    hash = "sha256-hSylhELMfiYNFHt03bJN1gTfy3EXSHJOj+ayUeU3+4w=";
   };
 
-  vendorHash = "sha256-ccTN1/LmbriQBia/zi+66+Sd7TUs7Qdr4Cwvsp3Wv30=";
+  vendorHash = "sha256-bpXGXK97ohepYoAyJFZE49vo48ch3gAsVyax1+uLIfE=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux libX11;
 
   hardeningEnabled = [ "pie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated WireGuard® Management Client";
     mainProgram = "netclient";
     homepage = "https://netmaker.io";
     changelog = "https://github.com/gravitl/netclient/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ wexder ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ wexder ];
   };
 }

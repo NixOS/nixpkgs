@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webull-desktop";
-  version = "8.2.0";
+  version = "8.9.0";
 
   src = fetchurl {
-    url = "https://u1sweb.webullfintech.com/us/Webull%20Desktop_8.2.0_800200_global_x64signed.deb";
-    hash = "sha256-/KVY6I9gYWWZSJhsTW5GECCeOsx+6XAVIRpghlJUK4k=";
+    url = "https://u1sweb.webullfintech.com/us/Webull%20Desktop_8.9.0_80009000_global_x64signed.deb";
+    hash = "sha256-brt5EXUE9g72vN2Kx9/jf4P/lkVfWLsbzJIf13phgdI=";
   };
 
   nativeBuildInputs = [

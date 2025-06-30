@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/inflect";
     changelog = "https://github.com/jaraco/inflect/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
-    maintainers = lib.teams.tts.members;
+    teams = [ lib.teams.tts ];
   };
 }

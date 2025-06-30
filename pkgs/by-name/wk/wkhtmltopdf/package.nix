@@ -90,7 +90,7 @@ let
 in
 stdenv.mkDerivation (
   {
-    pname = "wkhtmltopdf";
+    name = "wkhtmltopdf";
 
     dontStrip = true;
 

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "dnsvalidator";
   version = "0.1-unstable-2023-01-17";
   pyproject = true;

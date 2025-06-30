@@ -12,6 +12,7 @@
   gtest,
   dfu-util,
   avrdude,
+  udevCheckHook,
 }:
 
 mkDerivation rec {
@@ -30,6 +31,7 @@ mkDerivation rec {
     gcc-arm-embedded
     python3Packages.pillow
     qttools
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -53,6 +55,8 @@ mkDerivation rec {
     # file RPATH_CHANGE could not write new RPATH
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "OpenTX Companion transmitter support software";

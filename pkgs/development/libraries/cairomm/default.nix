@@ -3,7 +3,6 @@
   stdenv,
   lib,
   pkg-config,
-  darwin,
   boost,
   cairo,
   fontconfig,
@@ -32,17 +31,10 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      boost # for tests
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        ApplicationServices
-      ]
-    );
+  buildInputs = [
+    boost # for tests
+    fontconfig
+  ];
 
   propagatedBuildInputs = [
     cairo

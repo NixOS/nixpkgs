@@ -1,8 +1,8 @@
 diff --git a/models/download-ggml-model.sh b/models/download-ggml-model.sh
-index 1f1075b..7476c8e 100755
+index ef9c90da..a7e2a17c 100755
 --- a/models/download-ggml-model.sh
 +++ b/models/download-ggml-model.sh
-@@ -12,18 +12,6 @@ pfx="resolve/main/ggml"
+@@ -12,15 +12,6 @@ pfx="resolve/main/ggml"
  BOLD="\033[1m"
  RESET='\033[0m'
  
@@ -15,39 +15,43 @@ index 1f1075b..7476c8e 100755
 -        echo "$_ret"
 -    fi
 -}
--
--models_path="${2:-$(get_script_path)}"
--
+ 
+ script_path="$(get_script_path)"
+ 
+@@ -30,7 +21,6 @@ case "$script_path" in
+     *) default_download_path="$script_path" ;;  # Otherwise, use script directory
+ esac
+ 
+-models_path="${2:-$default_download_path}"
+ 
  # Whisper models
  models="tiny
- tiny.en
-@@ -64,8 +52,8 @@ list_models() {
+@@ -80,8 +70,8 @@ list_models() {
      printf "\n\n"
  }
  
 -if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
 -    printf "Usage: %s <model> [models_path]\n" "$0"
-+if [ "$#" -ne 1 ]; then
++if [ "$#" -lt 1 ]; then
 +    printf "Usage: %s <model>\n" "$0"
      list_models
      printf "___________________________________________________________\n"
      printf "${BOLD}.en${RESET} = english-only ${BOLD}-q5_[01]${RESET} = quantized ${BOLD}-tdrz${RESET} = tinydiarize\n"
-@@ -94,8 +82,6 @@ echo "$model" | grep -q '^"tdrz"*$'
+@@ -110,7 +100,6 @@ echo "$model" | grep -q '^"tdrz"*$'
  
  printf "Downloading ggml model %s from '%s' ...\n" "$model" "$src"
  
 -cd "$models_path" || exit
--
+ 
  if [ -f "ggml-$model.bin" ]; then
      printf "Model %s already exists. Skipping download.\n" "$model"
-     exit 0
-@@ -116,7 +102,7 @@ if [ $? -ne 0 ]; then
-     exit 1
+@@ -143,7 +132,7 @@ else
+     whisper_cmd="./build/bin/whisper-cli"
  fi
  
 -printf "Done! Model '%s' saved in '%s/ggml-%s.bin'\n" "$model" "$models_path" "$model"
 +printf "Done! Model '%s' saved in 'ggml-%s.bin'\n" "$model" "$model"
  printf "You can now use it like this:\n\n"
--printf "  $ ./main -m %s/ggml-%s.bin -f samples/jfk.wav\n" "$models_path" "$model"
-+printf "  $ whisper-cpp -m ggml-%s.bin -f samples/jfk.wav\n" "$model"
+-printf "  $ %s -m %s/ggml-%s.bin -f samples/jfk.wav\n" "$whisper_cmd" "$models_path" "$model"
++printf "  $ %s -m /ggml-%s.bin -f samples/jfk.wav\n" "$whisper_cmd" "$model"
  printf "\n"

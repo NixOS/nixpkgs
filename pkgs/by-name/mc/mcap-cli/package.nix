@@ -1,7 +1,10 @@
 {
+  stdenv,
   lib,
   buildGoModule,
+  buildPackages,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
 }:
 let
@@ -22,6 +25,10 @@ buildGoModule {
 
   vendorHash = "sha256-ofJYarmnOHONu2lZ76GvSua0ViP1gr6968xAuQ/VRNk=";
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   modRoot = "go/cli/mcap";
 
   env.GOWORK = "off";
@@ -39,6 +46,17 @@ buildGoModule {
     "-skip=TestCat|TestInfo"
   ];
 
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd mcap \
+        --bash <(${emulator} $out/bin/mcap completion bash) \
+        --fish <(${emulator} $out/bin/mcap completion fish) \
+        --zsh <(${emulator} $out/bin/mcap completion zsh)
+    ''
+  );
   passthru = {
     updateScript = nix-update-script { };
   };

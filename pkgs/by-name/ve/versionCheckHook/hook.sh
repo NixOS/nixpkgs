@@ -1,10 +1,20 @@
 _handleCmdOutput(){
+    local command=("$1" "$2")
     local versionOutput
+
+    local envArgs=()
+    if [[ "$3" != "*" ]]; then
+      envArgs+=("--ignore-environment")
+      for var in $3; do
+        envArgs+=("$var=${!var}")
+      done
+    fi
+
     versionOutput="$(env \
         --chdir=/ \
-        --argv0="$(basename "$1")" \
-        --ignore-environment \
-        "$@" 2>&1 \
+        --argv0="$(basename "${command[0]}")" \
+        "${envArgs[@]}" \
+        "${command[@]}" 2>&1 \
         | sed -e 's|@storeDir@/[^/ ]*/|{{storeDir}}/|g' \
         || true)"
     if [[ "$versionOutput" =~ "$version" ]]; then
@@ -17,12 +27,15 @@ _handleCmdOutput(){
     # And in anycase we want these to be printed in the build log, useful for
     # debugging, so we print these to stderr.
     echo "$echoPrefix" find version "$version" in the output of the command \
-        "$@" >&2
+        "${command[@]}" >&2
     echo "$versionOutput" >&2
 }
 versionCheckHook(){
     runHook preVersionCheck
     echo Executing versionCheckPhase
+
+    # Don't keep any environment variables by default
+    : "${versionCheckKeepEnvironment:=}"
 
     local cmdProgram cmdArg echoPrefix
     if [[ -z "${versionCheckProgram-}" ]]; then
@@ -43,14 +56,14 @@ versionCheckHook(){
     fi
     if [[ -z "${versionCheckProgramArg}" ]]; then
         for cmdArg in "--help" "--version"; do
-            echoPrefix="$(_handleCmdOutput "$cmdProgram" "$cmdArg")"
+            echoPrefix="$(_handleCmdOutput "$cmdProgram" "$cmdArg" "$versionCheckKeepEnvironment")"
             if [[ "$echoPrefix" == "Successfully managed to" ]]; then
                 break
             fi
         done
     else
         cmdArg="$versionCheckProgramArg"
-        echoPrefix="$(_handleCmdOutput "$cmdProgram" "$cmdArg")"
+        echoPrefix="$(_handleCmdOutput "$cmdProgram" "$cmdArg" "$versionCheckKeepEnvironment")"
     fi
     if [[ "$echoPrefix" == "Did not" ]]; then
         exit 2

@@ -6,12 +6,11 @@
   pkg-config,
   rustPlatform,
   libiconv,
-  fetchpatch,
   nixosTests,
 }:
 
 let
-  libflux_version = "0.194.5";
+  libflux_version = "0.196.1";
 
   # This is copied from influxdb2 with the required flux version
   flux = rustPlatform.buildRustPackage rec {
@@ -21,21 +20,11 @@ let
       owner = "influxdata";
       repo = "flux";
       tag = "v${libflux_version}";
-      hash = "sha256-XHT/+JMu5q1cPjZT2x/OKEPgxFJcnjrQKqn8w9/Mb3s=";
+      hash = "sha256-935aN2SxfNZvpG90rXuqZ2OTpSGLgiBDbZsBoG0WUvU=";
     };
     patches = [
-      # Fix build on Rust 1.78 (included after v0.195.0)
-      (fetchpatch {
-        name = "fix-build-on-rust-1.78.patch";
-        url = "https://github.com/influxdata/flux/commit/68c831c40b396f0274f6a9f97d77707c39970b02.patch";
-        stripLen = 2;
-        extraPrefix = "";
-        excludes = [ ];
-        hash = "sha256-6LOTgbOCfETNTmshyXgtDZf9y4t/2iqRuVPkz9dYPHc=";
-      })
+      # https://github.com/influxdata/flux/pull/5542
       ../influxdb2/fix-unsigned-char.patch
-      # https://github.com/influxdata/flux/pull/5516
-      ../influxdb2/rust_lifetime.patch
     ];
     # Don't fail on missing code documentation
     postPatch = ''
@@ -44,7 +33,7 @@ let
     '';
     sourceRoot = "${src.name}/libflux";
     useFetchCargoVendor = true;
-    cargoHash = "sha256-wJVvpjaBUae3FK3lQaQov4t0UEsH86tB8B8bsSFGGBU=";
+    cargoHash = "sha256-A6j/lb47Ob+Po8r1yvqBXDVP0Hf7cNz8WFZqiVUJj+Y=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
     pkgcfg = ''
@@ -60,7 +49,7 @@ let
         mkdir -p $out/include $out/pkgconfig
         cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
         substitute $pkgcfgPath $out/pkgconfig/flux.pc \
-          --replace /out $out
+          --replace-fail /out $out
       ''
       + lib.optionalString stdenv.hostPlatform.isDarwin ''
         install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
@@ -69,16 +58,16 @@ let
 in
 buildGoModule rec {
   pname = "influxdb";
-  version = "1.10.7";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "influxdata";
-    repo = pname;
+    repo = "influxdb";
     rev = "v${version}";
-    hash = "sha256-Aibu3yG/D1501Hr2F2qsGvjig14tbEAI+MBfqbxlpg8=";
+    hash = "sha256-jSv3zzU/jIqALF9mb4gV7zyQvm8pIwJU6Y4ADBlpVOE=";
   };
 
-  vendorHash = "sha256-AA6uj7PgXjC+IK2ZSwRnYpHS4MFScOROO1BpP+s33IU=";
+  vendorHash = "sha256-tPw/1vkUTwmRHrnENDG3NJTV6RplI4pCP6GueRT8dbc=";
 
   nativeBuildInputs = [ pkg-config ];
 

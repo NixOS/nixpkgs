@@ -10,7 +10,6 @@
   glibmm_2_68,
   cairomm_1_16,
   gnome,
-  ApplicationServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,16 +26,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-U59apg6b3GuVW7RI4qYswUVidE32kCWAQPu3S/iFdV0=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      meson
-      ninja
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    python3
+  ];
 
   propagatedBuildInputs = [
     pango
@@ -65,12 +60,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.pango.org/";
     license = licenses.lgpl21Plus;
-    maintainers =
-      teams.gnome.members
-      ++ (with maintainers; [
-        lovek323
-        raskin
-      ]);
+    maintainers = with maintainers; [
+      lovek323
+      raskin
+    ];
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

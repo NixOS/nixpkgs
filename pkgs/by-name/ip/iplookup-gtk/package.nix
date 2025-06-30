@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "iplookup-gtk";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Bytezz";
     repo = "IPLookup-gtk";
     tag = "v${version}";
-    hash = "sha256-pO05WDNb9AMKXm8OqzOnk77T5sLBdURV90FgQKL9oAw=";
+    hash = "sha256-WXLT7ThuD4/alb44mkGNLJjZPiWgNmSUqsRiO+cjdPk=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "Find info about an IP address";
     homepage = "https://github.com/Bytezz/IPLookup-gtk";
-    changelog = "https://github.com/Bytezz/IPLookup-gtk/releases/tag/${src.rev}";
+    changelog = "https://github.com/Bytezz/IPLookup-gtk/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "iplookup";
     maintainers = with lib.maintainers; [ aleksana ];

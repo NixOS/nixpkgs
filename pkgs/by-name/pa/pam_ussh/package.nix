@@ -6,7 +6,7 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "pam_ussh";
   version = "unstable-20210615";
 

@@ -27,19 +27,13 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.9.1";
+  version = "5.11.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+wxm2ELVuWR1ImT/8gs7Src2ENZtm40g0Nz3lroJ3EM=";
+    hash = "sha256-gG8SxJt/SyytP1pGD3vdgeQkfIG2BCWWp/6oV19lkfM=";
   };
-
-  postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-  '';
 
   build-system = [ setuptools ];
 
@@ -90,6 +84,6 @@ buildPythonPackage rec {
     description = "Authentication Library for OpenStack Identity";
     homepage = "https://github.com/openstack/keystoneauth";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

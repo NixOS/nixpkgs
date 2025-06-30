@@ -27,6 +27,6 @@ buildKodiAddon rec {
     homepage = "https://urllib3.readthedocs.io/en/latest/";
     description = "HTTP library with thread-safe connection pooling, file post, and more";
     license = licenses.mit;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

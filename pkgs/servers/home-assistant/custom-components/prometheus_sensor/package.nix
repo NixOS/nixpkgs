@@ -16,8 +16,6 @@ buildHomeAssistantComponent rec {
     hash = "sha256-+28mMvzNKVInknnDh++YolXR+/b1wsve1VEn4olR7Fs=";
   };
 
-  dontBuild = true;
-
   meta = with lib; {
     changelog = "https://github.com/mweinelt/ha-prometheus-sensor/blob/${version}/CHANGELOG.md";
     description = "Import prometheus query results into Home Assistant";

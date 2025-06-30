@@ -8,7 +8,7 @@
   flex,
   makeWrapper,
   perl,
-  substituteAll,
+  replaceVars,
   cudd,
   nix-update-script,
   fetchpatch,
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.4.1";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-O8aZTW+Eylshl9bmm9GzbljWB0+cj2liZHs2uScERkM=";
+    hash = "sha256-ot0vVBgiSVru/RE7KeyTsXzDfs0CSa5vaFsON+PCZZo=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -47,17 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./0001-Do-not-download-sources-in-cmake.patch;
-      inherit cudd;
+    (replaceVars ./0001-Do-not-download-sources-in-cmake.patch {
+      cudd = cudd.src;
     })
     ./0002-Do-not-download-sources-in-cmake.patch
-    # Fixes build with libc++ >= 19 due to the removal of std::char_traits<unsigned>.
-    # Remove for versions > 6.4.1.
-    (fetchpatch {
-      url = "https://github.com/diffblue/cbmc/commit/684bf4221c8737952e6469304f5a360dc3d5439d.patch";
-      hash = "sha256-3hHu6FcyHjfeFjNxhyhxxk7I/SK98BXT+xy7NgtEt50=";
-    })
   ];
 
   postPatch =

@@ -283,7 +283,7 @@ in
     systemd.services.canaille-install = {
       # We want this on boot, not on socket activation
       wantedBy = [ "multi-user.target" ];
-      after = optional createLocalPostgresqlDb "postgresql.service";
+      after = optional createLocalPostgresqlDb "postgresql.target";
       serviceConfig = commonServiceConfig // {
         Type = "oneshot";
         ExecStart = "${getExe finalPackage} install";
@@ -296,7 +296,7 @@ in
       after = [
         "network.target"
         "canaille-install.service"
-      ] ++ optional createLocalPostgresqlDb "postgresql.service";
+      ] ++ optional createLocalPostgresqlDb "postgresql.target";
       requires = [
         "canaille-install.service"
         "canaille.socket"

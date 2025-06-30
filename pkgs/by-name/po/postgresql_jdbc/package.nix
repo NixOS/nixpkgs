@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jdbc.postgresql.org/";
     changelog = "https://github.com/pgjdbc/pgjdbc/releases/tag/REL${version}";
     description = "JDBC driver for PostgreSQL allowing Java programs to connect to a PostgreSQL database";
-    license = licenses.bsd2;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.unix;
   };
 }

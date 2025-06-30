@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.132.0";
+  version = "1.135.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
     tag = "v${version}";
-    hash = "sha256-5h+uACzc4bAIgHoaZw2U/FCPA1ls8JTLqJd608J2uTU=";
+    hash = "sha256-ccYpEznuU6d7gDyrDiuUmvdCJutXI7SAH2PH9Vdq8Fs=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -151,13 +151,13 @@ python3.pkgs.buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for local development and testing of Serverless applications";
     homepage = "https://github.com/aws/aws-sam-cli";
     changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "sam";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lo1tuma
       anthonyroussel
     ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "PCMSolver";
-    repo = pname;
+    repo = "pcmsolver";
     rev = "v${version}";
     sha256 = "0jrxr8z21hjy7ik999hna9rdqy221kbkl3qkb06xw7g80rc9x9yr";
   };

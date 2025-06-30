@@ -5,14 +5,15 @@
   meta,
   pname,
   version,
-  rev,
+  url,
+  hash,
+  passthru,
 }:
 stdenv.mkDerivation {
   inherit meta pname version;
 
   src = fetchurl {
-    url = "https://installers.lmstudio.ai/darwin/arm64/${version}-${rev}/LM-Studio-${version}-${rev}-arm64.dmg";
-    hash = "sha256-x4IRT1PjBz9eafmwNRyLVq+4/Rkptz6RVWDFdRrGnGY=";
+    inherit url hash;
   };
 
   nativeBuildInputs = [ undmg ];
@@ -47,4 +48,6 @@ stdenv.mkDerivation {
     echo 'Copying extracted content into "sourceRoot"'
     cp -a $mnt/LM\ Studio.app $PWD/
   '';
+
+  inherit passthru;
 }

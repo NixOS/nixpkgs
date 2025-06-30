@@ -22,12 +22,12 @@ python3.pkgs.buildPythonApplication {
     python-dateutil
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python34 program that implements a command line tool for accessing the Redfish API";
     homepage = "https://github.com/DMTF/Redfishtool";
     changelog = "https://github.com/DMTF/Redfishtool/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jfvillablanca ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
     mainProgram = "redfishtool";
   };
 }

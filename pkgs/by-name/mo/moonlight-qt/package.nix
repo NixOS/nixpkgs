@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      (SDL2.override { drmSupport = stdenv.hostPlatform.isLinux; })
+      SDL2
       SDL2_ttf
       ffmpeg
       libopus

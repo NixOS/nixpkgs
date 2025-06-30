@@ -142,7 +142,7 @@ import ../make-test-python.nix (
     testScript = ''
       start_all()
 
-      database.wait_for_unit("postgresql.service")
+      database.wait_for_unit("postgresql.target")
       database.wait_for_unit("redis-peertube.service")
 
       database.wait_for_open_port(5432)

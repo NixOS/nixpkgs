@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   zope-event,
   zope-interface,
@@ -12,14 +12,20 @@
 
 buildPythonPackage rec {
   pname = "zope-lifecycleevent";
-  version = "5.0";
+  version = "5.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "zope.lifecycleevent";
-    inherit version;
-    hash = "sha256-6tP7SW52FPm1adFtrUt4BSsKwhh1utjWbKNQNS2bb50=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.lifecycleevent";
+    tag = version;
+    hash = "sha256-vTonbZSeQxnLA6y1wAnBpobEKAs+gaAYN25dx5Fla9k=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools <= 75.6.0" setuptools
+  '';
 
   build-system = [ setuptools ];
 
@@ -46,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/zopefoundation/zope.lifecycleevent";
     description = "Object life-cycle events";
-    changelog = "https://github.com/zopefoundation/zope.lifecycleevent/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.lifecycleevent/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };

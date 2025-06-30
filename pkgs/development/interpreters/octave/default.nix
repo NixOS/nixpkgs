@@ -56,7 +56,6 @@
   enableQt ? false,
   libsForQt5,
   libiconv,
-  darwin,
 }:
 
 let
@@ -98,12 +97,12 @@ let
   allPkgs = pkgs;
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "9.4.0";
+  version = "10.2.0";
   pname = "octave";
 
   src = fetchurl {
     url = "mirror://gnu/octave/octave-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-2pSBIFv6cXZgt9ShZzLYstWKrc6rSZPUEkKo4oSOpsE=";
+    sha256 = "sha256-B/ttkznS81BzXJFnG+jodNFgAYzGtoj579nVWNI39p8=";
   };
 
   postPatch = ''
@@ -155,8 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.Accelerate
-      darwin.apple_sdk.frameworks.Cocoa
     ];
   nativeBuildInputs =
     [

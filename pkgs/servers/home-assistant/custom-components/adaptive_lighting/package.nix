@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "basnijholt";
   domain = "adaptive_lighting";
-  version = "1.23.0";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "basnijholt";
     repo = "adaptive-lighting";
-    tag = version;
-    hash = "sha256-Yq8mKk2j2CHyHvwyej0GeFQhuy1MFXwt0o+lDOGwrBU=";
+    tag = "v${version}";
+    hash = "sha256-ykliUi/gnJB9hMNI72RCofcGzS7799lVTAXZyrho/Ng=";
   };
 
   dependencies = [

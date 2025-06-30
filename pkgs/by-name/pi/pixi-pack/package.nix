@@ -8,19 +8,19 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pixi-pack";
-  version = "0.3.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "Quantco";
     repo = "pixi-pack";
-    tag = "v${version}";
-    hash = "sha256-gzP/01pck14cMN0PopoCO27dxncWz4yIZFAzXU+4IQ0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JY/8otWV0pclai9DTC17YmxbUNFsV2/u/EPcB/gOxM8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-dTpwlE/o7YzLWfJSEOgHfI64l9XNLt3gC1GE4IhL66o=";
+  cargoHash = "sha256-AhAEz3NFImEY6bPRfPKznKw9cFV/vBPF1uzd0wOrZSY=";
 
   buildInputs = [ openssl ];
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -43,11 +43,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Pack and unpack conda environments created with pixi";
     homepage = "https://github.com/Quantco/pixi-pack";
-    changelog = "https://github.com/Quantco/pixi-pack/releases/tag/v${version}";
+    changelog = "https://github.com/Quantco/pixi-pack/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
     ];
     mainProgram = "pixi-pack";
   };
-}
+})

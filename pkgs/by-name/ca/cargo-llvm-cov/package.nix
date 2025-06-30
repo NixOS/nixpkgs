@@ -45,21 +45,21 @@ let
   };
 in
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   inherit pname version;
 
   # Use `fetchFromGitHub` instead of `fetchCrate` because the latter does not
   # pull in fixtures needed for the test suite
   src = fetchFromGitHub {
     inherit owner;
-    repo = pname;
+    repo = "cargo-llvm-cov";
     rev = "v${version}";
     sha256 = "sha256-iJrnNDSMich5OzEbPgnQWLVz6Zj/MUIzEsaBzqVdoDg=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
   postUnpack = ''
-    cp ${cargoLock} source/Cargo.lock
+    cp ${cargoLock} ${finalAttrs.src.name}/Cargo.lock
   '';
 
   useFetchCargoVendor = true;
@@ -103,4 +103,4 @@ rustPlatform.buildRustPackage {
     # The profiler runtime is (currently) disabled on non-Linux platforms
     broken = !(stdenv.hostPlatform.isLinux && !stdenv.targetPlatform.isRedox);
   };
-}
+})

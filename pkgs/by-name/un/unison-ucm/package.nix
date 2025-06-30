@@ -14,21 +14,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  version = "0.5.33";
+  version = "0.5.41";
 
   src =
     {
       aarch64-darwin = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-arm64.tar.gz";
-        hash = "sha256-DXqQMv1pEEFSHDsY8BICFfKAD4zaishRIDo1hwCVj54=";
+        hash = "sha256-0Zz8lc1s46y2JC6DAbJjahap+hsz1QuLRl4nGryhSxA=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-x64.tar.gz";
-        hash = "sha256-ffHbkujs3UMChPM2uL3tBcxInKEOHwRUMrIeh+k5ghY=";
+        hash = "sha256-O9H62uhWnOPQp7s4yUhnUXFyk0vNS4BAddaCru4n1GU=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-x64.tar.gz";
-        hash = "sha256-+kBuQn73P8yxa8l6/R3NGj61LB6kKwa2lfNKZmhI5Dk=";
+        hash = "sha256-ul5PCDqjfpsMiZZaZaH04Mrv29U9uS/ik8KwFNmXbgg=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");

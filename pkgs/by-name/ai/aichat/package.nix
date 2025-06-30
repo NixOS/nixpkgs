@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "aichat";
-  version = "0.27.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "aichat";
     tag = "v${version}";
-    hash = "sha256-rKvnbauJpyZnJuLtGSjJKwe9wy/y/KLPyorH5u9t0H8=";
+    hash = "sha256-5fXZfRrHBAtjUa1VzzsdoFvXQSPQ8YUNJ7yhZlp58tM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-WtEV+JkSaegshF8VB/OfuvnnKX5hDshCC/v5B2McA6M=";
+  cargoHash = "sha256-YK2mps9DUs4HNFmYHtZHTJREuImlQ24y64ykGr8ovTs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

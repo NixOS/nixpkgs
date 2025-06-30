@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   which,
   zip,
@@ -18,14 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.62.1";
+  version = "0.63.0";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
-    repo = pname;
-    rev = version;
-    hash = "sha256-RlYpg3aon1d25n8K/bbHGVLn5/iOOUSlvjT8U0fp9hA=";
+    repo = "rehex";
+    tag = version;
+    hash = "sha256-wFVAytrcRu3Ezy/VcbmXwl+X96QMa5KimjUoP07hmFg=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/solemnwarning/rehex/commit/0cfe145e034019952383ad28a431f552a5567f89.patch";
+      hash = "sha256-PmqvjAXjqZM1BuqHHyQC5qXubTDYlE3VR1DiCCx3aeU=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -63,7 +71,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Reverse Engineers' Hex Editor";
     longDescription = ''
       A cross-platform (Windows, Linux, Mac) hex editor for reverse
@@ -71,12 +79,12 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/solemnwarning/rehex";
     changelog = "https://github.com/solemnwarning/rehex/raw/${version}/CHANGES.txt";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       markus1189
       wegank
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "rehex";
   };
 }

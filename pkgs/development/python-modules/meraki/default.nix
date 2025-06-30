@@ -3,6 +3,9 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  jinja2,
+  poetry-core,
+  pytest,
   pythonOlder,
   requests,
   setuptools,
@@ -10,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "meraki";
-  version = "1.54.0";
+  version = "2.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,16 +22,22 @@ buildPythonPackage rec {
     owner = "meraki";
     repo = "dashboard-api-python";
     tag = version;
-    hash = "sha256-eRGVC0M8PtK3UUuECXUXrD5rGnAK04f+3/xVl+2rjAM=";
+    hash = "sha256-dAy295DB213TotVkVGvLYIzzHk1M9PycMNgyX+wD7ms=";
   };
 
-  build-system = [
-    setuptools
+  pythonRelaxDeps = [
+    "pytest"
+    "setuptools"
   ];
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
+    jinja2
+    pytest
     requests
+    setuptools
   ];
 
   # All tests require an API key
@@ -39,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "Cisco Meraki cloud-managed platform dashboard API python library";
     homepage = "https://github.com/meraki/dashboard-api-python";
-    changelog = "https://github.com/meraki/dashboard-api-python/releases/tag/${version}";
+    changelog = "https://github.com/meraki/dashboard-api-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dylanmtaylor ];
   };

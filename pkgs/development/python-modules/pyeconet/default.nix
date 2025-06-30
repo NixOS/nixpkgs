@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyeconet";
-  version = "0.1.27";
+  version = "0.1.28";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "w1ll1am23";
     repo = "pyeconet";
     tag = "v${version}";
-    hash = "sha256-oGQwwzNOPMdlpdSZld4vA9bDMOzTH247LTNN5ywOBX8=";
+    hash = "sha256-xGjQlOiA2SzSuhdD/jUYYtL8EiYj4jaIp85JqcGiaUI=";
   };
 
   build-system = [ setuptools ];

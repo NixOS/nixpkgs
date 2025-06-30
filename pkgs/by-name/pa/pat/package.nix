@@ -5,30 +5,20 @@
   fetchFromGitHub,
   libax25,
   installShellFiles,
-  fetchpatch,
 }:
 
 buildGoModule rec {
   pname = "pat";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "la5nta";
     repo = "pat";
     rev = "v${version}";
-    hash = "sha256-JlqYdsAXs3pS5i59tiel+gxQsTrn5mUs0qLzjHxGZU0=";
+    hash = "sha256-2CQQKZ9ZnabMhvmbFeYBZ2iv9WJo6QR5IqROUXy7sck=";
   };
 
-  # Remove upon next release since upstream is fixed
-  # https://github.com/la5nta/pat/pull/449
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/la5nta/pat/commit/5604eac8853216d96d49d7d9947bdc514e195538.patch";
-      sha256 = "sha256-Z9uoZLlhdCslULUxGkc4ao4ptC4ImWzSrfabSA5S/PE=";
-    })
-  ];
-
-  vendorHash = "sha256-Z6p0wiOY5l++nch64BJWGXleBgUNecTDm+yVCnmXvtU=";
+  vendorHash = "sha256-ajkRUnfYHCrFBxZsJLd6ypRl9+gYz+q4C/asOJZrVYg=";
 
   ldflags = [
     "-s"

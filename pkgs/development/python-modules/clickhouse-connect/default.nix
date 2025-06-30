@@ -24,7 +24,7 @@
 }:
 buildPythonPackage rec {
   pname = "clickhouse-connect";
-  version = "0.8.14";
+  version = "0.8.17";
 
   format = "setuptools";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     repo = "clickhouse-connect";
     owner = "ClickHouse";
     tag = "v${version}";
-    hash = "sha256-srUNIjoov2kIzfvFkyyktKjn5UNfxS5aqRlmgeJvljw=";
+    hash = "sha256-UFsAKROnzaaAyUDHHARZIO8zZP3knUYoBdGSf9ZGjXo=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -61,7 +61,6 @@ buildPythonPackage rec {
   # these tests require a running clickhouse instance
   disabledTestPaths = [
     "tests/integration_tests"
-    "tests/tls"
   ];
 
   pythonImportsCheck = [

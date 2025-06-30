@@ -1,32 +1,42 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
   # dependencies
-  torch,
-  torchvision,
-  transformers,
+  docling-core,
   huggingface-hub,
   jsonlines,
   numpy,
   opencv-python-headless,
   pillow,
-  tqdm,
+  pydantic,
   safetensors,
+  torch,
+  torchvision,
+  tqdm,
+  transformers,
+
+  # tests
+  datasets,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "docling-ibm-models";
-  version = "3.3.0";
+  version = "3.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling-ibm-models";
     tag = "v${version}";
-    hash = "sha256-wxkHd+TCBibOTWO09JOsjX6oBtUxZ/9IOmyLdeptzeQ=";
+    hash = "sha256-a2y4vXgALPRtLhdH0Tqqht1gpdcfa1Gv4puthKDMk7U=";
   };
 
   build-system = [
@@ -34,23 +44,24 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    docling-core
+    huggingface-hub
+    jsonlines
+    numpy
+    opencv-python-headless
+    pillow
+    pydantic
+    safetensors
     torch
     torchvision
-    transformers
-    numpy
-    jsonlines
-    pillow
     tqdm
-    opencv-python-headless
-    huggingface-hub
-    safetensors
+    transformers
   ];
 
   pythonRelaxDeps = [
-    "pillow"
-    "torchvision"
-    "transformers"
+    "jsonlines"
     "numpy"
+    "transformers"
   ];
 
   pythonImportsCheck = [
@@ -58,19 +69,18 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    datasets
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME="$TEMPDIR"
-  '';
 
   disabledTests = [
     # Requires network access
-    "test_layoutpredictor"
-    "test_tf_predictor"
     "test_code_formula_predictor" # huggingface_hub.errors.LocalEntryNotFoundError
     "test_figure_classifier" # huggingface_hub.errors.LocalEntryNotFoundError
+    "test_layoutpredictor"
+    "test_readingorder"
+    "test_tf_predictor"
   ];
 
   meta = {

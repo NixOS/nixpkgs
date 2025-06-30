@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "orhun";
-    repo = pname;
+    repo = "kmon";
     rev = "v${version}";
     sha256 = "sha256-DzbbeVZifuxgmIu3yNv6EI7Jyh8MA0/oSaR5IEPNUN8=";
   };
@@ -30,13 +30,13 @@ rustPlatform.buildRustPackage rec {
       --zsh $releaseDir/../completions/_kmon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux Kernel Manager and Activity Monitor";
     homepage = "https://github.com/orhun/kmon";
     changelog = "https://github.com/orhun/kmon/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       figsoda
       matthiasbeyer
     ];

@@ -39,7 +39,7 @@ toKodiAddon (
         "-DOVERRIDE_PATHS=1"
       ] ++ extraCMakeFlags;
 
-      # kodi checks for addon .so libs existance in the addon folder (share/...)
+      # kodi checks for addon .so libs existence in the addon folder (share/...)
       # and the non-wrapped kodi lib/... folder before even trying to dlopen
       # them. Symlinking .so, as setting LD_LIBRARY_PATH is of no use
       installPhase =

@@ -12,8 +12,6 @@
   pytestCheckHook,
   cctools,
   xcodebuild,
-  ApplicationServices,
-  OpenGL,
 }:
 
 buildPythonPackage rec {
@@ -68,11 +66,6 @@ buildPythonPackage rec {
       cctools.libtool
       xcodebuild
     ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    ApplicationServices
-    OpenGL
-  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

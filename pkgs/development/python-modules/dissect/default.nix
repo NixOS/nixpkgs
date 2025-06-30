@@ -14,10 +14,12 @@
   dissect-extfs,
   dissect-fat,
   dissect-ffs,
+  dissect-fve,
   dissect-hypervisor,
   dissect-jffs,
   dissect-ntfs,
   dissect-ole,
+  dissect-qnxfs,
   dissect-regf,
   dissect-shellitem,
   dissect-sql,
@@ -35,16 +37,16 @@
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.17.1";
+  version = "3.19";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect";
     tag = version;
-    hash = "sha256-sD3NeZxc6VKo/tn16YVWZYk3hlOVtSf/xtzEuhXW5vs=";
+    hash = "sha256-eEiWKblhJPkZuxJvwJnHtxwvJ9uhXIkS56CeRtmEfkU=";
   };
 
   pythonRelaxDeps = true;
@@ -68,10 +70,12 @@ buildPythonPackage rec {
     dissect-extfs
     dissect-fat
     dissect-ffs
+    dissect-fve
     dissect-hypervisor
     dissect-jffs
     dissect-ntfs
     dissect-ole
+    dissect-qnxfs
     dissect-regf
     dissect-shellitem
     dissect-sql

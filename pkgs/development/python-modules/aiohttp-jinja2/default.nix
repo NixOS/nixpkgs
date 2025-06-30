@@ -5,6 +5,7 @@
   fetchPypi,
   jinja2,
   pytest-aiohttp,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -31,13 +32,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail "--cov=aiohttp_jinja2/ --cov=tests/ --cov-report term" ""
-  '';
+  __darwinAllowLocalNetworking = true;
 
   pytestFlagsArray = [
     "-W"

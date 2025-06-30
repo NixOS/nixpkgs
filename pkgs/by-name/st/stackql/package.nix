@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "stackql";
-  version = "0.6.65";
+  version = "0.8.141";
 
   src = fetchFromGitHub {
     owner = "stackql";
     repo = "stackql";
     rev = "v${version}";
-    hash = "sha256-BOjk5Tb9Tii73oGNE4sEnXySPYQIsi3fnJTZYr73Yh4=";
+    hash = "sha256-KHuSgmampUcYUFGu4mVgN52Go8nsBmzKtetdJRbh3Bo=";
   };
 
-  vendorHash = "sha256-j0tmL3UJE56BR21pRynSGr7Fc7AuTJR9gPVzw+cFbf0=";
+  vendorHash = "sha256-9hTxP7udG5pGBk/qDqh0YBuJ+qsJJwiEV5Ze4tB9iww=";
 
   ldflags = [
     "-s"

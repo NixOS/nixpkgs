@@ -12,11 +12,13 @@ compatible are available as well. For example, there can be a
 
 To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA is optional
 ```nix
-{ config
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
-, ...
-}: {}
+{
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
+  ...
+}:
+{ }
 ```
 
 When using `callPackage`, you can choose to pass in a different variant, e.g.
@@ -32,11 +34,15 @@ package set to make it the default. This guarantees you get a consistent package
 set.
 ```nix
 {
-  mypkg = let
-    cudaPackages = cudaPackages_11_5.overrideScope (final: prev: {
-      cudnn = prev.cudnn_8_3;
-    });
-  in callPackage { inherit cudaPackages; };
+  mypkg =
+    let
+      cudaPackages = cudaPackages_11_5.overrideScope (
+        final: prev: {
+          cudnn = prev.cudnn_8_3;
+        }
+      );
+    in
+    callPackage { inherit cudaPackages; };
 }
 ```
 
@@ -109,8 +115,8 @@ All new projects should use the CUDA redistributables available in [`cudaPackage
 
 ### Updating supported compilers and GPUs {#updating-supported-compilers-and-gpus}
 
-1. Update `nvcc-compatibilities.nix` in `pkgs/development/cuda-modules/` to include the newest release of NVCC, as well as any newly supported host compilers.
-2. Update `gpus.nix` in `pkgs/development/cuda-modules/` to include any new GPUs supported by the new release of CUDA.
+1. Update `nvccCompatibilities` in `pkgs/development/cuda-modules/_cuda/db/bootstrap/nvcc.nix` to include the newest release of NVCC, as well as any newly supported host compilers.
+2. Update `cudaCapabilityToInfo` in `pkgs/development/cuda-modules/_cuda/db/bootstrap/cuda.nix` to include any new GPUs supported by the new release of CUDA.
 
 ### Updating the CUDA Toolkit runfile installer {#updating-the-cuda-toolkit}
 

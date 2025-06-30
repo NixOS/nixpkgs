@@ -6,7 +6,7 @@
   babl,
   dbus,
   desktop-file-utils,
-  dleyna-renderer,
+  dleyna,
   gdk-pixbuf,
   gegl,
   geocode-glib_2,
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     babl
     dbus
-    dleyna-renderer
+    dleyna
     gdk-pixbuf
     gegl
     geocode-glib_2
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     mainProgram = "gnome-photos";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-photos";
     license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 }

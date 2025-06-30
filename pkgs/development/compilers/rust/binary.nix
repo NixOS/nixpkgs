@@ -5,7 +5,6 @@
   wrapRustc,
   bash,
   curl,
-  darwin,
   zlib,
   autoPatchelfHook,
   gcc,
@@ -17,7 +16,6 @@
 
 let
   inherit (lib) optionalString;
-  inherit (darwin.apple_sdk.frameworks) Security;
 
   bootstrapping = versionType == "bootstrap";
 
@@ -35,6 +33,7 @@ rec {
       homepage = "https://www.rust-lang.org/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       description = "Safe, concurrent, practical language";
+      mainProgram = "rustc";
       maintainers = with maintainers; [ qknight ];
       license = [
         licenses.mit
@@ -46,23 +45,27 @@ rec {
     buildInputs =
       [ bash ]
       ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib
-      ++ lib.optional (!stdenv.hostPlatform.isDarwin) zlib
-      ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+      ++ lib.optional (!stdenv.hostPlatform.isDarwin) zlib;
 
     postPatch = ''
       patchShebangs .
     '';
 
-    installPhase = ''
-      ./install.sh --prefix=$out \
-        --components=${installComponents}
+    installPhase =
+      ''
+        ./install.sh --prefix=$out \
+          --components=${installComponents}
 
-      # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
-      # (or similar) here. It causes strange effects where rustc loads
-      # the wrong libraries in a bootstrap-build causing failures that
-      # are very hard to track down. For details, see
-      # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
-    '';
+        # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
+        # (or similar) here. It causes strange effects where rustc loads
+        # the wrong libraries in a bootstrap-build causing failures that
+        # are very hard to track down. For details, see
+        # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        install_name_tool -change "/usr/lib/libcurl.4.dylib" \
+        "${lib.getLib curl}/lib/libcurl.4.dylib" "$out/bin/cargo"
+      '';
 
     # The strip tool in cctools 973.0.1 and up appears to break rlibs in the
     # binaries. The lib.rmeta object inside the ar archive should contain an
@@ -77,7 +80,6 @@ rec {
         # Platforms with host tools from
         # https://doc.rust-lang.org/nightly/rustc/platform-support.html
         "x86_64-darwin"
-        "i686-darwin"
         "aarch64-darwin"
         "i686-freebsd"
         "x86_64-freebsd"
@@ -105,7 +107,6 @@ rec {
       targetPlatforms = tier1TargetPlatforms ++ [
         # Platforms without host tools from
         # https://doc.rust-lang.org/nightly/rustc/platform-support.html
-        "armv7a-darwin"
         "armv5tel-linux"
         "armv7a-linux"
         "m68k-linux"
@@ -149,10 +150,9 @@ rec {
     nativeBuildInputs = [
       makeWrapper
     ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
-    buildInputs =
-      [ bash ]
-      ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib
-      ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+    buildInputs = [
+      bash
+    ] ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib;
 
     postPatch = ''
       patchShebangs .
@@ -166,7 +166,7 @@ rec {
       ''
       + lib.optionalString stdenv.hostPlatform.isDarwin ''
         install_name_tool -change "/usr/lib/libcurl.4.dylib" \
-          "${curl.out}/lib/libcurl.4.dylib" "$out/bin/cargo"
+          "${lib.getLib curl}/lib/libcurl.4.dylib" "$out/bin/cargo"
       ''
       + ''
         wrapProgram "$out/bin/cargo" \

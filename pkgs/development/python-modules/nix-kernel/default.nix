@@ -9,7 +9,7 @@
   nix,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "nix-kernel";
   version = "unstable-2020-04-26";
   pyproject = true;

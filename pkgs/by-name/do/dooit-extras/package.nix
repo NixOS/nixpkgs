@@ -1,23 +1,20 @@
 {
   lib,
   fetchFromGitHub,
-  python311,
+  python3,
   dooit,
   nix-update-script,
 }:
-let
-  python3 = python311;
-in
 python3.pkgs.buildPythonPackage rec {
   pname = "dooit-extras";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dooit-org";
     repo = "dooit-extras";
     tag = "v${version}";
-    hash = "sha256-ZBzzH8k4oC3ovLF9+9rzzFZaDDoOvcbX5NCh1WBedK4=";
+    hash = "sha256-h29lN32Qca8edF1aLhLxnV97MMEapX3Docc+CIEF6I4=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];

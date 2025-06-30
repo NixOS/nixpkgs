@@ -1,44 +1,58 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
+  pybind11,
   setuptools,
-  torch,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  cmake,
+  ninja,
 
   # dependencies
   cloudpickle,
+  importlib-metadata,
   numpy,
   orjson,
   packaging,
+  torch,
 
-  # checks
+  # tests
   h5py,
   pytestCheckHook,
-
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.7.0";
+  version = "0.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-KbCNBFewMx4kaWMoV+zREj6XTZiwmR4/I3zpf55wuOQ=";
+    hash = "sha256-d/6JKGFcFLXY9pxsnP27uwnAnIQ9EKvfTS30DCwQrCM=";
   };
 
   build-system = [
+    pybind11
     setuptools
-    torch
+    setuptools-scm
   ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+  dontUseCmakeConfigure = true;
 
   dependencies = [
     cloudpickle
+    importlib-metadata
     numpy
     orjson
     packaging
@@ -63,28 +77,16 @@ buildPythonPackage rec {
       "test_tensorclass_instance_methods"
       "test_tensorclass_stub_methods"
 
-      # Hangs forever
-      "test_copy_onto"
-
-      # EOFError (MPI related)
-      # AssertionError: assert tensor(False)
-      # +  where tensor(False) = <built-in method all of Tensor object at 0x7ffe49bf87d0>()
-      "test_mp"
-
-      # torch._dynamo.exc.InternalTorchDynamoError: RuntimeError: to_module requires TORCHDYNAMO_INLINE_INBUILT_NN_MODULES to be set.
-      "test_functional"
-
       # hangs forever on some CPUs
       "test_map_iter_interrupt_early"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      # RuntimeError: internal error
-      "test_add_scale_sequence"
-      "test_modules"
-      "test_setattr"
-
-      # _queue.Empty errors in multiprocessing tests
-      "test_isend"
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Hangs due to the use of a pool
+      "test_chunksize_num_chunks"
+      "test_index_with_generator"
+      "test_map_exception"
+      "test_map"
+      "test_multiprocessing"
     ];
 
   disabledTestPaths =
@@ -93,8 +95,11 @@ buildPythonPackage rec {
       "test/test_compile.py"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+      # Hangs forever
       "test/test_distributed.py"
+      # Hangs after testing due to pool usage
+      "test/test_h5.py"
+      "test/test_memmap.py"
     ];
 
   meta = {

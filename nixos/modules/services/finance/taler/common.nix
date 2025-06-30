@@ -51,7 +51,7 @@ in
       (lib.genAttrs (map (n: "taler-${talerComponent}-${n}") services) (name: {
         serviceConfig = {
           DynamicUser = true;
-          User = name;
+          User = dbName;
           Group = groupName;
           ExecStart = toString [
             (lib.getExe' cfg.package name)
@@ -68,20 +68,29 @@ in
         requires = [ "taler-${talerComponent}-dbinit.service" ];
         after = [ "taler-${talerComponent}-dbinit.service" ];
         wantedBy = [ "multi-user.target" ]; # TODO slice?
+        documentation = [
+          "man:taler-${talerComponent}-${name}(1)"
+          "info:taler-${talerComponent}"
+        ];
       }))
       # Database Initialisation
       {
         "taler-${talerComponent}-dbinit" = {
           path = [ config.services.postgresql.package ];
+          documentation = [
+            "man:taler-${talerComponent}-dbinit(1)"
+            "info:taler-${talerComponent}"
+          ];
           serviceConfig = {
             Type = "oneshot";
             DynamicUser = true;
             User = dbName;
+            Group = groupName;
             Restart = "on-failure";
             RestartSec = "5s";
           };
-          requires = [ "postgresql.service" ];
-          after = [ "postgresql.service" ];
+          requires = [ "postgresql.target" ];
+          after = [ "postgresql.target" ];
         };
       }
     ];
@@ -108,7 +117,7 @@ in
     services.postgresql = {
       enable = true;
       ensureDatabases = [ dbName ];
-      ensureUsers = map (service: { name = "taler-${talerComponent}-${service}"; }) servicesDB ++ [
+      ensureUsers = [
         {
           name = dbName;
           ensureDBOwnership = true;

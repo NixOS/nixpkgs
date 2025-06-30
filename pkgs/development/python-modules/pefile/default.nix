@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  # Test data contains properitary executables and malware, and is therefore encrypted
+  # Test data contains proprietary executables and malware, and is therefore encrypted
   doCheck = false;
 
   pythonImportsCheck = [ "pefile" ];

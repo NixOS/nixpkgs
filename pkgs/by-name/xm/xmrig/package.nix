@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, libuv
-, libmicrohttpd
-, openssl
-, hwloc
-, donateLevel ? 0
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libuv,
+  libmicrohttpd,
+  openssl,
+  hwloc,
+  donateLevel ? 0,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xmrig";
-  version = "6.22.2";
+  version = "6.24.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
-    hash = "sha256-/1pSGbKBfin7xqoILacKp2//65NNiBXZxzhO39FOOjY=";
+    hash = "sha256-AbiTInOMHZ/YOUyl8IMU62ETZtbSTUqaP4vCJKAOCYM=";
   };
 
   patches = [

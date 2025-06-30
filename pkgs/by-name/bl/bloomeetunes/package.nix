@@ -10,16 +10,20 @@
 
 flutter324.buildFlutterApplication rec {
   pname = "bloomeetunes";
-  version = "2.10.14";
+  version = "2.11.6";
 
   src = fetchFromGitHub {
     owner = "HemantKArya";
     repo = "BloomeeTunes";
-    tag = "v${version}+161";
-    hash = "sha256-Cj4NfWEIEYTNAdb6CunA7ExTebK89OlHvZx9n853eHI=";
+    tag = "v${version}+171";
+    hash = "sha256-gSAe5S5rdcNLP4v7NTchQj3UJ/h6msLax9H77w+JJnk=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  gitHashes = {
+    youtube_explode_dart = "sha256-ctUSoXLUJCu23hvEzYy5EoTCv7gG79rEiMFX7i1RGX0=";
+  };
 
   nativeBuildInputs = [
     autoPatchelfHook

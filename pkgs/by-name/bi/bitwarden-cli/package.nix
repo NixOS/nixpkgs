@@ -13,13 +13,13 @@
 
 buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2025.1.2";
+  version = "2025.5.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "cli-v${version}";
-    hash = "sha256-Ibf25+aaEKFUCp5uiqmHySfdZq2JPAu2nBzfiS4Sc/k=";
+    tag = "cli-v${version}";
+    hash = "sha256-8jVKwqKhTfhur226SER4sb1i4dY+TjJRYmOY8YtO6CY=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ buildNpmPackage rec {
 
   nodejs = nodejs_20;
 
-  npmDepsHash = "sha256-+LpF5zxC4TG5tF+RNgimLyEmGYyUfFDXHqs2RH9oQLY=";
+  npmDepsHash = "sha256-0IoBPRGdtkMeTrT5cqZLHB/WrUCONtsJ6YHh0y4K5Ls=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -50,11 +50,8 @@ buildNpmPackage rec {
 
   npmFlags = [ "--legacy-peer-deps" ];
 
-  # FIXME temporarily disable the symlink check as there are symlink after the build in the `node_modules/@bitwarden` directory linking to `../../`.
-  dontCheckForBrokenSymlinks = true;
-
   npmRebuildFlags = [
-    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    # we'll run npm rebuild manually later
     "--ignore-scripts"
   ];
 
@@ -63,6 +60,11 @@ buildNpmPackage rec {
     shopt -s globstar
     rm -r node_modules/**/prebuilds
     shopt -u globstar
+
+    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    rm -r node_modules/esbuild node_modules/vite/node_modules/esbuild
+
+    npm rebuild --verbose
   '';
 
   postBuild = ''
@@ -72,25 +74,37 @@ buildNpmPackage rec {
     shopt -u globstar
   '';
 
+  postInstall =
+    ''
+      # The @bitwarden modules are actually npm workspaces inside the source tree, which
+      # leave dangling symlinks behind. They can be safely removed, because their source is
+      # bundled via webpack and thus not needed at run-time.
+      rm -rf $out/lib/node_modules/@bitwarden/clients/node_modules/{@bitwarden,.bin}
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd bw --zsh <($out/bin/bw completion --shell zsh)
+    '';
+
   passthru = {
     tests = {
       vaultwarden = nixosTests.vaultwarden.sqlite;
     };
     updateScript = nix-update-script {
       extraArgs = [
-        "--commit"
         "--version=stable"
         "--version-regex=^cli-v(.*)$"
       ];
     };
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
+  meta = {
+    # https://github.com/NixOS/nixpkgs/issues/339576
+    broken = stdenv.hostPlatform.isDarwin;
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.tag}";
     description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3Only;
     mainProgram = "bw";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

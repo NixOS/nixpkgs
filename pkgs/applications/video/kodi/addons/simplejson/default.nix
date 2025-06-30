@@ -27,6 +27,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/simplejson/simplejson";
     description = "Simple, fast, extensible JSON encoder/decoder for Python";
     license = licenses.mit;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

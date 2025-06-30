@@ -1,8 +1,10 @@
---- a/raylib/build.py	2024-05-18 18:36:26.911488056 +0200
-+++ b/raylib/build.py	2024-05-18 18:40:04.770587090 +0200
-@@ -32,8 +32,8 @@
-     return subprocess.run(['pkg-config', '--exists', 'raylib'], text=True, stdout=subprocess.PIPE).returncode == 0
- 
+diff --git a/raylib/build.py b/raylib/build.py
+index 81fa11a..943c34e 100644
+--- a/raylib/build.py
++++ b/raylib/build.py
+@@ -33,8 +33,8 @@ def check_raylib_installed():
+ def check_SDL_installed():
+     return subprocess.run(['pkg-config', '--exists', 'sdl2'], text=True, stdout=subprocess.PIPE).returncode == 0
  
 -def get_the_include_path():
 -    return subprocess.run(['pkg-config', '--variable=includedir', 'raylib'], text=True,
@@ -11,9 +13,9 @@
                            stdout=subprocess.PIPE).stdout.strip()
  
  
-@@ -106,9 +106,9 @@
-     if not check_raylib_installed():
-         raise Exception("ERROR: raylib not found by pkg-config.  Please install pkg-config and Raylib.")
+@@ -110,9 +110,9 @@ def build_unix():
+     if RAYLIB_PLATFORM=="SDL" and not check_SDL_installed():
+         raise Exception("ERROR: SDL2 not found by pkg-config.  Please install pkg-config and SDL2.")
  
 -    raylib_h = get_the_include_path() + "/raylib.h"
 -    rlgl_h = get_the_include_path() + "/rlgl.h"
@@ -24,13 +26,13 @@
  
      if not os.path.isfile(raylib_h):
          raise Exception("ERROR: " + raylib_h + " not found.  Please install Raylib.")
-@@ -125,13 +125,13 @@
+@@ -129,13 +129,13 @@ def build_unix():
      #include "raymath.h"
      """
  
 -    glfw3_h = get_the_include_path() + "/GLFW/glfw3.h"
 +    glfw3_h = get_the_include_path("glfw3") + "/GLFW/glfw3.h"
-     if check_header_exists(glfw3_h):
+     if RAYLIB_PLATFORM=="Desktop" and check_header_exists(glfw3_h):
          ffi_includes += """
          #include "GLFW/glfw3.h"
          """
@@ -40,7 +42,7 @@
      if check_header_exists(raygui_h):
          ffi_includes += """
          #define RAYGUI_IMPLEMENTATION
-@@ -139,7 +139,7 @@
+@@ -143,7 +143,7 @@ def build_unix():
          #include "raygui.h"
          """
  
@@ -49,13 +51,12 @@
      if check_header_exists(physac_h):
          ffi_includes += """
          #define PHYSAC_IMPLEMENTATION
-@@ -172,7 +172,7 @@
- 
+@@ -192,7 +192,7 @@ def build_unix():
      ffibuilder.set_source("raylib._raylib_cffi",
                            ffi_includes,
+                           py_limited_api=False,
 -                          include_dirs=[get_the_include_path()],
 +                          include_dirs=[get_the_include_path("libffi")],
                            extra_link_args=extra_link_args,
                            extra_compile_args=extra_compile_args,
                            libraries=libraries)
-

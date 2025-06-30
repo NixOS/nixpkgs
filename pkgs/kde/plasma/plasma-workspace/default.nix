@@ -1,13 +1,14 @@
 {
   lib,
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
   dbus,
   fontconfig,
   xorg,
   lsof,
   pkg-config,
   spirv-tools,
+  qtlocation,
   qtpositioning,
   qtsvg,
   qtwayland,
@@ -22,14 +23,15 @@ mkKdeDerivation {
   pname = "plasma-workspace";
 
   patches = [
-    (substituteAll {
-      src = ./dependency-paths.patch;
+    (replaceVars ./dependency-paths.patch {
       dbusSend = lib.getExe' dbus "dbus-send";
       fcMatch = lib.getExe' fontconfig "fc-match";
       lsof = lib.getExe lsof;
       qdbus = lib.getExe' qttools "qdbus";
       xmessage = lib.getExe xorg.xmessage;
       xrdb = lib.getExe xorg.xrdb;
+      # @QtBinariesDir@ only appears in the *removed* lines of the diff
+      QtBinariesDir = null;
     })
   ];
 
@@ -43,6 +45,7 @@ mkKdeDerivation {
     spirv-tools
   ];
   extraBuildInputs = [
+    qtlocation
     qtpositioning
     qtsvg
     qtwayland
@@ -60,6 +63,8 @@ mkKdeDerivation {
 
     gpsd
   ];
+
+  qtWrapperArgs = [ "--inherit-argv0" ];
 
   # Hardcoded as QStrings, which are UTF-16 so Nix can't pick these up automatically
   postFixup = ''

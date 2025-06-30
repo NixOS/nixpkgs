@@ -5,12 +5,11 @@
   randomconv,
   mirage-crypto,
   mirage-crypto-rng,
-  sexplib0,
   zarith,
   gmp,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "mirage-crypto-pk";
 
   inherit (mirage-crypto) version src;
@@ -20,7 +19,6 @@ buildDunePackage rec {
     mirage-crypto
     mirage-crypto-rng
     zarith
-    sexplib0
   ];
 
   doCheck = true;

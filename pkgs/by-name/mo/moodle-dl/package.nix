@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchFromGitHub, gitUpdater }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  gitUpdater,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";

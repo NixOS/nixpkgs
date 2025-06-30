@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-appearance";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

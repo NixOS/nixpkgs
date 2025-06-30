@@ -33,6 +33,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/maxbambi/plugin.video.raitv/";
     description = "Live radio and TV channels, latest 7 days of programming, broadcast archive, news";
     license = licenses.gpl3Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

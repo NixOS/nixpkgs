@@ -85,12 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
     SOURCE_DATE_EPOCH = "0";
   };
 
-  outputs =
-    [ "out" ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "man"
-      "dev"
-    ];
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
 
   buildInputs =
     [
@@ -152,14 +151,16 @@ stdenv.mkDerivation (finalAttrs: {
       # The file names we need to iterate are a combination of ${p}${s}, and there
       # are 7x3 such options. We use lib.mapCartesianProduct to iterate them all.
       fileNamesToIterate = {
-        p = [
-          "mpi"
-          "shmem"
-          "osh"
-        ];
+        p =
+          [
+            "mpi"
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            "shmem"
+            "osh"
+          ];
         s =
           [
-            "CC"
             "c++"
             "cxx"
             "cc"
@@ -168,7 +169,8 @@ stdenv.mkDerivation (finalAttrs: {
             "f77"
             "f90"
             "fort"
-          ];
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ "CC" ];
       };
       wrapperDataSubstitutions =
         {
@@ -176,12 +178,16 @@ stdenv.mkDerivation (finalAttrs: {
           # compiler=_ line that should be replaced by a compiler=#2 string, where
           # #2 is the 2nd value in the list.
           "cc" = [
-            "gcc"
-            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc"
+            # "$CC" is expanded by the executing shell in the substituteInPlace
+            # commands to the name of the compiler ("clang" for Darwin and
+            # "gcc" for Linux)
+            "$CC"
+            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CC"
           ];
           "c++" = [
-            "g++"
-            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++"
+            # Same as with $CC
+            "$CXX"
+            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CXX"
           ];
         }
         // lib.optionalAttrs fortranSupport {
@@ -198,8 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
       wrapperDataFileNames = {
         part1 = [
           "mpi"
-          "shmem"
-        ];
+        ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "shmem" ];
         part2 = builtins.attrNames wrapperDataSubstitutions;
       };
     in
@@ -226,12 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.pipe wrapperDataFileNames [
         (lib.mapCartesianProduct (
           { part1, part2 }:
-          # From some reason the Darwin build doesn't include some of these
-          # wrapperDataSubstitutions strings and even some of the files. Hence
-          # we currently don't perform these substitutions on other platforms,
-          # until a Darwin user will care enough about this cross platform
-          # related substitution.
-          lib.optionalString stdenv.hostPlatform.isLinux ''
+          ''
             substituteInPlace "''${!outputDev}/share/openmpi/${part1}${part2}-wrapper-data.txt" \
               --replace-fail \
                 compiler=${lib.elemAt wrapperDataSubstitutions.${part2} 0} \
@@ -250,19 +250,16 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
-  postFixup =
-    lib.optionalString (lib.elem "man" finalAttrs.outputs) ''
-      remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
-    ''
-    + lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
-      remove-references-to -t "''${!outputDev}" $out/bin/mpirun
-      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
+  postFixup = ''
+    remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
+    remove-references-to -t "''${!outputDev}" $out/bin/mpirun
+    remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
 
-      # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
-      wrapProgram "''${!outputDev}/bin/opal_wrapper" \
-        --set OPAL_INCLUDEDIR "''${!outputDev}/include" \
-        --set OPAL_PKGDATADIR "''${!outputDev}/share/openmpi"
-    '';
+    # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
+    wrapProgram "''${!outputDev}/bin/opal_wrapper" \
+      --set OPAL_INCLUDEDIR "''${!outputDev}/include" \
+      --set OPAL_PKGDATADIR "''${!outputDev}/share/openmpi"
+  '';
 
   doCheck = true;
 

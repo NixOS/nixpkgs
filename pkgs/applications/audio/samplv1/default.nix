@@ -1,6 +1,6 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchurl,
   pkg-config,
   libjack2,
@@ -11,20 +11,25 @@
   qtbase,
   qttools,
   rubberband,
+  wrapQtAppsHook,
+  cmake,
+  qtsvg,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "samplv1";
-  version = "0.9.23";
+  version = "1.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/samplv1/${pname}-${version}.tar.gz";
-    sha256 = "sha256-eJA6ixH20Wv+cD2CKGomncyfJ4tfpOL3UrTeCkb5/q0=";
+    url = "mirror://sourceforge/samplv1/samplv1-${version}.tar.gz";
+    hash = "sha256-YCxt9RAP02uAigddA6HjBt2ryM6MyOtI3L2eLg0AhFg=";
   };
 
   nativeBuildInputs = [
     qttools
     pkg-config
+    wrapQtAppsHook
+    cmake
   ];
 
   buildInputs = [
@@ -35,14 +40,15 @@ mkDerivation rec {
     lv2
     qtbase
     rubberband
+    qtsvg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Old-school all-digital polyphonic sampler synthesizer with stereo fx";
     mainProgram = "samplv1_jack";
     homepage = "http://samplv1.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

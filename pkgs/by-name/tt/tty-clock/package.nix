@@ -7,7 +7,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tty-clock";
   version = "2.3+unstable=2021-04-07";
 

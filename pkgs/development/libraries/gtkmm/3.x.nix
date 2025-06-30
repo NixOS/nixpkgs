@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "3.24.9";
+  version = "3.24.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "MNW/5ARXHOVmqOk4yLrBdXZCDrUI8eJXg32mPxStRM4=";
+    sha256 = "erfiJmgIcW4mw5kkrOH7RtqGwX7znZiWJMQjFLMrWnY=";
   };
 
   outputs = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       tutorial.
     '';
 
-    homepage = "https://gtkmm.org/";
+    homepage = "https://gtkmm.gnome.org/";
 
     license = licenses.lgpl2Plus;
 

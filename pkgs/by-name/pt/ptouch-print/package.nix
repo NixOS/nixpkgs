@@ -13,7 +13,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ptouch-print";
   version = "1.5-unstable-2024-02-11";
 
@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     mainProgram = "ptouch-print";
     maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

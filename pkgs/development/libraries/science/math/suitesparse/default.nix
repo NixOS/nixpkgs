@@ -93,11 +93,17 @@ effectiveStdenv.mkDerivation rec {
       "LAPACK=-llapack"
     ];
 
-  env = lib.optionalAttrs effectiveStdenv.hostPlatform.isDarwin {
-    # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
-    # update the install names of the output dylibs.
-    NIX_LDFLAGS = "-headerpad_max_install_names";
-  };
+  env =
+    {
+      # in GCC14 these two warnings were promoted to error
+      # let's make them warnings again to fix the build failure
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types";
+    }
+    // lib.optionalAttrs effectiveStdenv.hostPlatform.isDarwin {
+      # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
+      # update the install names of the output dylibs.
+      NIX_LDFLAGS = "-headerpad_max_install_names";
+    };
 
   buildFlags = [
     # Build individual shared libraries, not demos

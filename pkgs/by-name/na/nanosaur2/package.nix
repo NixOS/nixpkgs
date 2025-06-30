@@ -3,18 +3,19 @@
   stdenv,
   fetchFromGitHub,
   SDL2,
+  libGL,
   cmake,
   makeWrapper,
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nanosaur2";
   version = "2.1.0-unstable-2023-05-21";
 
   src = fetchFromGitHub {
     owner = "jorio";
-    repo = pname;
+    repo = "nanosaur2";
     rev = "72d93ed08148d81aa89bab511a9650d7b929d4c7";
     hash = "sha256-1AvM2KTQB9aUYB0e/7Y6h18yQvzsxMOgGkF9zPgTzFo=";
     fetchSubmodules = true;
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     SDL2
+    libGL
   ];
 
   installPhase = ''

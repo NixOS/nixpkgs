@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "astropy-healpix";
-  version = "1.1.0";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = lib.replaceStrings [ "-" ] [ "_" ] pname;
-    hash = "sha256-0YFlh6YEkYjiqi6fABJZ3j+LoVjwS5O1BruEcmQAf24=";
+    hash = "sha256-A2cd8So27Ds1fCRNUVS2eGNi/12AdwZ1x7JIFRAQZuQ=";
   };
 
   nativeBuildInputs = [

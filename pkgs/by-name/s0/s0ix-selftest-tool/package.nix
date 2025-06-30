@@ -19,7 +19,7 @@
 }:
 
 let
-  deps = [
+  deps = lib.makeBinPath [
     acpica-tools
     bc
     coreutils
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   # don't use the bundled turbostat binary
   postPatch = ''
-    substituteInPlace s0ix-selftest-tool.sh --replace '"$DIR"/turbostat' 'turbostat'
+    substituteInPlace s0ix-selftest-tool.sh --replace-fail '"$DIR"/turbostat' 'turbostat'
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     install -Dm555 s0ix-selftest-tool.sh "$out/bin/s0ix-selftest-tool"
-    wrapProgram "$out/bin/s0ix-selftest-tool" --prefix PATH : ${lib.escapeShellArg deps}
+    wrapProgram "$out/bin/s0ix-selftest-tool" --prefix PATH : ${deps}
     runHook postInstall
   '';
 

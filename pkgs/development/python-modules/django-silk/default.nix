@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "5.3.1";
+  version = "5.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-silk";
     tag = version;
-    hash = "sha256-Rm3iyEFphhDYGC7fQy+RUrbAOQQSOSiu+bOcp7TozN0=";
+    hash = "sha256-+JOUpjKR0rx+4+hU/5gSov5nW2aj7HR+HYr5FPbUkSA=";
   };
 
   # "test_time_taken" tests aren't suitable for reproducible execution, but Django's

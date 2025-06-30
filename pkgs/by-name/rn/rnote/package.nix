@@ -27,21 +27,18 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
-    rev = "v${version}";
-    hash = "sha256-RbuEgmly6Mjmx58zOV+tg6Mv5ghCNy/dE5FXYrEXtdg=";
+    tag = "v${version}";
+    hash = "sha256-uEYamKIZIjR7c2LB+GydLmxy+EhcKrcxV+9vsveqGVk=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ink-stroke-modeler-rs-0.1.0" = "sha256-B6lT6qSOIHxqBpKTE4nO2+Xs9KF7JLVRUHOkYp8Sl+M=";
-      "piet-0.6.2" = "sha256-3juXzuKwoLuxia6MoVwbcBJ3jXBQ9QRNVoxo3yFp2Iw=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-bzB4yjBcMsOqbq1UCgPFErzVOXs55qy+CYBUinGEbg4=";
   };
 
   nativeBuildInputs = [
@@ -90,16 +87,16 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/flxzt/rnote";
-    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
+    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.tag}";
     description = "Simple drawing application to create handwritten notes";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       dotlambda
       gepbird
       yrd
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -163,6 +163,7 @@ with self;
     pname = "async_ssl";
     hash = "0ykys3ckpsx5crfgj26v2q3gy6wf684aq0bfb4q8p92ivwznvlzy";
     meta.description = "Async wrappers for SSL";
+    meta.broken = true;
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [
       async
@@ -909,6 +910,7 @@ with self;
     ];
     patches = ./sexp.patch;
     meta.description = "S-expression swiss knife";
+    meta.broken = true; # Does not build with GCC 14
   };
 
   sexp_diff_kernel = janePackage {
@@ -976,6 +978,7 @@ with self;
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
     checkInputs = [ ounit ];
+    doCheck = false; # Does not build with GCC 14
   };
 
   shexp = janePackage {

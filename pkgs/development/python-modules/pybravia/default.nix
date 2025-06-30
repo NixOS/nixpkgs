@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Drafteed";
-    repo = pname;
+    repo = "pybravia";
     tag = "v${version}";
     hash = "sha256-1LfYEVclRneU3eD52kvzjLYyGdzYSWVDQ5EADOviglw=";
   };

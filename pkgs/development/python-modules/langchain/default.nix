@@ -2,28 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # buildInputs
   bash,
 
   # dependencies
   aiohttp,
+  async-timeout,
   langchain-core,
   langchain-text-splitters,
   langsmith,
+  numpy,
   pydantic,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
 
-  # optional-dependencies
-  numpy,
-
   # tests
+  blockbuster,
   freezegun,
   httpx,
   lark,
@@ -36,27 +37,33 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.15";
+  version = "0.3.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-lANGoMABH1f9Tl/GgMMr7eTCji9q3uqD+Mwjr4nd2Dg=";
+    hash = "sha256-xxkayOtC2GtgtF3tPkTGKOS9VQ/y2gRPopvKq48/Kq0=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   buildInputs = [ bash ];
 
   pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individual components.
+    "langchain-core"
     "numpy"
     "tenacity"
   ];
@@ -66,18 +73,20 @@ buildPythonPackage rec {
     langchain-core
     langchain-text-splitters
     langsmith
+    numpy
     pydantic
     pyyaml
     requests
     sqlalchemy
     tenacity
-  ];
+  ] ++ lib.optional (pythonOlder "3.11") async-timeout;
 
   optional-dependencies = {
     numpy = [ numpy ];
   };
 
   nativeCheckInputs = [
+    blockbuster
     freezegun
     httpx
     lark
@@ -134,16 +143,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain==";
   };
 
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

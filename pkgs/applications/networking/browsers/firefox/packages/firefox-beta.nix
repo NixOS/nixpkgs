@@ -9,11 +9,12 @@
 
 buildMozillaMach rec {
   pname = "firefox-beta";
-  version = "135.0b9";
-  applicationName = "Mozilla Firefox Beta";
+  binaryName = pname;
+  version = "141.0b2";
+  applicationName = "Firefox Beta";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "3007c2a8743e4444226e66f0c11f53f01255c09702deda7de83bbe134a19c324b8b49de78d3211b20bb82c7b2040127145d2e39ed8aa81c653ac4397c46476f6";
+    sha512 = "edbdc261c1c2cb3bcbe85cec81ec064da10955766dabb1580a38b5d07c5cf11904614ca61b5b09a176e9c618387d70eb41fbfd6deb178753b38c296f41a42431";
   };
 
   meta = {
@@ -27,7 +28,7 @@ buildMozillaMach rec {
     # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
-    mainProgram = "firefox";
+    mainProgram = binaryName;
   };
   tests = {
     inherit (nixosTests) firefox-beta;

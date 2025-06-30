@@ -15,7 +15,7 @@
   gcc,
 
   dfVersion,
-  df-hashes,
+  dfVersions,
 }:
 
 let
@@ -35,15 +35,9 @@ let
     ;
 
   # Map Dwarf Fortress platform names to Nixpkgs platform names.
-  # Other srcs are avilable like 32-bit mac & win, but I have only
-  # included the ones most likely to be needed by Nixpkgs users.
   platforms = {
     x86_64-linux = "linux";
-    i686-linux = "linux32";
-    x86_64-darwin = "osx";
-    i686-darwin = "osx32";
-    x86_64-cygwin = "win";
-    i686-cygwin = "win32";
+    x86_64-darwin = "darwin";
   };
 
   dfVersionTuple = splitVersion dfVersion;
@@ -62,8 +56,8 @@ let
     && (dwarf-fortress-unfuck.dfVersion or null) == dfVersion;
 
   game =
-    if hasAttr dfVersion df-hashes then
-      getAttr dfVersion df-hashes
+    if hasAttr dfVersion dfVersions.game.versions then
+      (getAttr dfVersion dfVersions.game.versions).df
     else
       throw "Unknown Dwarf Fortress version: ${dfVersion}";
   dfPlatform =
@@ -71,9 +65,9 @@ let
       getAttr stdenv.hostPlatform.system platforms
     else
       throw "Unsupported system: ${stdenv.hostPlatform.system}";
-  sha256 =
-    if hasAttr dfPlatform game then
-      getAttr dfPlatform game
+  url =
+    if hasAttr dfPlatform game.urls then
+      getAttr dfPlatform game.urls
     else
       throw "Unsupported dfPlatform: ${dfPlatform}";
   exe =
@@ -88,8 +82,8 @@ stdenv.mkDerivation {
   version = dfVersion;
 
   src = fetchurl {
-    url = "https://www.bay12games.com/dwarves/df_${toString baseVersion}_${toString patchVersion}_${dfPlatform}.tar.bz2";
-    inherit sha256;
+    inherit (url) url;
+    hash = url.outputHash;
   };
 
   sourceRoot = ".";
@@ -185,7 +179,11 @@ stdenv.mkDerivation {
       dfVersion
       exe
       ;
-    updateScript = ./update.sh;
+    updateScript = {
+      command = [ ./update.rb ];
+      attrPath = "dwarf-fortress-packages";
+      supportedFeatures = [ "commit" ];
+    };
   };
 
   meta = {

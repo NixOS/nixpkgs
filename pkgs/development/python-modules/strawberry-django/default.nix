@@ -10,7 +10,6 @@
   # dependencies
   asgiref,
   django,
-  django-tree-queries,
   strawberry-graphql,
 
   # optional-dependencies
@@ -20,8 +19,10 @@
   # check inputs
   pytestCheckHook,
   django-guardian,
+  django-model-utils,
   django-mptt,
   django-polymorphic,
+  django-tree-queries,
   factory-boy,
   pillow,
   psycopg2,
@@ -33,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "strawberry-django";
-  version = "0.55.0";
+  version = "0.60.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry-django";
     tag = "v${version}";
-    hash = "sha256-Em6GEYSdVEFkoVa+qI+xN369FOLH9hpEXeMKn9xUCac=";
+    hash = "sha256-mMI/tPdt9XK6Lz7VmI3uDxcCjIuidUeGHjG+6AQLoeQ=";
   };
 
   build-system = [
@@ -49,9 +50,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    asgiref
     django
-    django-tree-queries
+    asgiref
     strawberry-graphql
   ];
 
@@ -60,21 +60,25 @@ buildPythonPackage rec {
     enum = [ django-choices-field ];
   };
 
+  nativeCheckInputs =
+    [
+      pytestCheckHook
 
-  nativeCheckInputs = [
-    pytestCheckHook
-
-    django-guardian
-    django-mptt
-    django-polymorphic
-    factory-boy
-    pillow
-    psycopg2
-    pytest-cov-stub
-    pytest-django
-    pytest-mock
-    pytest-snapshot
-  ] ++ optional-dependencies.debug-toolbar ++ optional-dependencies.enum;
+      django-guardian
+      django-model-utils
+      django-mptt
+      django-polymorphic
+      django-tree-queries
+      factory-boy
+      pillow
+      psycopg2
+      pytest-cov-stub
+      pytest-django
+      pytest-mock
+      pytest-snapshot
+    ]
+    ++ optional-dependencies.debug-toolbar
+    ++ optional-dependencies.enum;
 
   pythonImportsCheck = [ "strawberry_django" ];
 

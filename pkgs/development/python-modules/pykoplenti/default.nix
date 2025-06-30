@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pykoplenti";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "stegm";
     repo = "pykoplenti";
     tag = "v${version}";
-    hash = "sha256-6edlcjQvV+6q3/ytn9KR/IovduVREEQt8foE2lfsBko=";
+    hash = "sha256-vsqbjNj5x7X0VGbTq+CdZ9rPXVDypBkgaCI6MImloLo=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];

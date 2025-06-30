@@ -2,8 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  setuptools,
-  setuptools-scm,
+  hatchling,
   text-unidecode,
   charset-normalizer,
   chardet,
@@ -13,20 +12,17 @@
 }:
 buildPythonPackage rec {
   pname = "normality";
-  version = "2.5.0";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pudo";
     repo = "normality";
     rev = version;
-    hash = "sha256-cGQpNhUqlT2B9wKDoDeDmyCNQLwWR7rTCLxnPHhMR0w=";
+    hash = "sha256-RsZP/GkEuPKGZK2+/57kvMwm9vk0FTKN2/XtOmfoZxA=";
   };
 
-  buildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  buildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     charset-normalizer

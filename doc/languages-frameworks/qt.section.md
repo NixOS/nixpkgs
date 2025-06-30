@@ -64,14 +64,18 @@ and then create wrappers manually in `fixupPhase`, using `wrapQtApp`, which itse
 The `makeWrapper` arguments required for Qt are also exposed in the environment as `$qtWrapperArgs`.
 
 ```nix
-{ stdenv, lib, wrapQtAppsHook }:
+{
+  stdenv,
+  lib,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation {
   # ...
   nativeBuildInputs = [ wrapQtAppsHook ];
   dontWrapQtApps = true;
   preFixup = ''
-      wrapQtApp "$out/bin/myapp" --prefix PATH : /path/to/bin
+    wrapQtApp "$out/bin/myapp" --prefix PATH : /path/to/bin
   '';
 }
 ```

@@ -3,6 +3,7 @@
   python3,
   fetchFromGitHub,
   nixosTests,
+  unstableGitUpdater,
 }:
 let
   python = python3.override {
@@ -37,13 +38,13 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-02-09";
+    version = "0-unstable-2025-06-28";
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "a1e2b254677a22f1f8968a06564661ac6203c162";
-      hash = "sha256-DrSj1wQUWq9xVuQqt0BZ79JgyRS9qJqg1cdYTIBb1A8=";
+      rev = "df76647c52b56101f152c5dec7c1d08f1732ceb7";
+      hash = "sha256-8Rh42DFLyQz+4cWA8x5wpFO41DusMuTo8NAloprw5w0=";
     };
 
     postPatch = ''
@@ -112,6 +113,7 @@ python.pkgs.toPythonModule (
       tests = {
         searxng = nixosTests.searx;
       };
+      updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     };
 
     meta = with lib; {

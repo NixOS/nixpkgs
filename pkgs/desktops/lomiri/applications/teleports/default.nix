@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Only # components
     ];
     mainProgram = "teleports";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

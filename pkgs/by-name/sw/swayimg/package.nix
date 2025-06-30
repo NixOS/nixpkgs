@@ -22,7 +22,8 @@
   libexif,
   libavif,
   libsixel,
-  openexr_3,
+  libraw,
+  openexr,
   bash-completion,
   testers,
   nix-update-script,
@@ -30,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "3.8";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nPmVUJy5hlWk6Q+s6rRBEzlJvpDKLStKTRjLwj7iA/c=";
+    hash = "sha256-0MiIJVX1GKyvoGw1+DGVE1gJq/6sJiA79L16YF4USiQ=";
   };
 
   strictDeps = true;
@@ -74,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     libexif
     libavif
     libsixel
-    openexr_3
+    libraw
+    openexr
   ];
 
   passthru = {

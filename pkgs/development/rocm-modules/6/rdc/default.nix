@@ -4,9 +4,11 @@
   fetchFromGitHub,
   rocmUpdateScript,
   cmake,
+  amdsmi,
   rocm-smi,
   rocm-runtime,
   libcap,
+  libdrm,
   grpc,
   protobuf,
   openssl,
@@ -46,7 +48,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
-  version = "6.0.2";
+  version = "6.3.3";
 
   outputs =
     [
@@ -63,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rdc";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-QugcajxILmDeQiWG5uAUO41Wut45irg2Ynufgn1bmps=";
+    hash = "sha256-s/31b8/Kn5l1QJ941UMSB8SCzpvODsPfOLMmEBUYYmY=";
   };
 
   nativeBuildInputs =
@@ -79,15 +81,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
+      amdsmi
       rocm-smi
       rocm-runtime
       libcap
+      libdrm
       grpc
       openssl
     ]
     ++ lib.optionals buildTests [
       gtest
     ];
+
+  CXXFLAGS = "-I${libcap.dev}/include";
 
   cmakeFlags =
     [
@@ -126,17 +132,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
     description = "Simplifies administration and addresses infrastructure challenges in cluster and datacenter environments";
     homepage = "https://github.com/ROCm/rdc";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    # broken = versions.minor finalAttrs.version != versions.minor rocm-smi.version || versionAtLeast finalAttrs.version "7.0.0";
-    broken = true; # Too many errors, unsure how to fix
   };
 })

@@ -5,29 +5,29 @@
   pkg-config,
 }:
 
-rustPackages.rustPlatform.buildRustPackage rec {
+rustPackages.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hawkeye";
-  version = "6.0.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "korandoru";
     repo = "hawkeye";
-    tag = "v${version}";
-    hash = "sha256-VfJWj9BwNVR7RVUW+CjFuaniyiEath1U0F/7QJcA3r4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-F+6zbVr3oUD/HMpTa5nDR9Tv/k9v+R644IFhVNfKwuU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-SJEl5QsO4KYRv+5xDPHy1Q53qcL89IJ9JTXtzubO5fk=";
+  cargoHash = "sha256-BPSA0Z6Bk05xvztv1btkErC4+WDUcIWs7aFV2eVySwQ=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   meta = {
-    homepage = "https://github.com/korandoro/hawkeye";
+    homepage = "https://github.com/korandoru/hawkeye";
     description = "Simple license header checker and formatter, in multiple distribution forms";
     license = lib.licenses.asl20;
     mainProgram = "hawkeye";
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

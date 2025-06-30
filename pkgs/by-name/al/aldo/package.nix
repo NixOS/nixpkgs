@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "git://git.savannah.gnu.org/${pname}.git";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0swvdq0pw1msy40qkpn1ar9kacqjyrw2azvf2fy38y0svyac8z2i";
   };
 

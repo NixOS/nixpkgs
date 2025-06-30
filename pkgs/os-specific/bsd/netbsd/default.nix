@@ -5,7 +5,6 @@
   makeScopeWithSplicing',
   generateSplicesForMkScope,
   buildPackages,
-  fetchcvs,
 }:
 
 let

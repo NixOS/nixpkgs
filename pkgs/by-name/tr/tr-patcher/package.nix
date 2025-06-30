@@ -13,7 +13,7 @@ let
     sha256 = "136zd2s73b4n1w2n34wxi656bm448748nn3y7a64fd89ysg9n7n8";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tr-patcher";
   version = "1.0.5";
 

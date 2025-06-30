@@ -228,7 +228,7 @@ in
       }
       {
         assertion = cfg.role == "agent" -> !(cfg.agentTokenFile != null || cfg.agentToken != "");
-        message = "agentToken or agentTokenFile should be set if role is 'agent'";
+        message = "agentToken or agentTokenFile should NOT be set if role is 'agent'";
       }
       {
         assertion = cfg.role == "agent" -> !(cfg.disable != [ ]);

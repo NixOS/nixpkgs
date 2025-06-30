@@ -20,17 +20,18 @@
   libGL,
   libglvnd,
   systemd,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-talk-desktop";
-  version = "1.0.1";
+  version = "1.2.3";
 
   # Building from source would require building also building Server and Talk components
   # See https://github.com/nextcloud/talk-desktop?tab=readme-ov-file#%EF%B8%8F-prerequisites
   src = fetchzip {
     url = "https://github.com/nextcloud-releases/talk-desktop/releases/download/v${finalAttrs.version}/Nextcloud.Talk-linux-x64.zip";
-    hash = "sha256-ZSNeuKZ+oi6tHO61RshtJ6ndtxvUJbY4gyhDwKpHXZI=";
+    hash = "sha256-St0frZpSjAHnF6MJWMRm4Md0TxNnNSAbLf+Sz9EDgS4=";
     stripRoot = false;
   };
 
@@ -101,6 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Nextcloud Talk Desktop Client";

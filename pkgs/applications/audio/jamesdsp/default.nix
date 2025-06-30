@@ -1,6 +1,7 @@
 {
   copyDesktopItems,
   fetchFromGitHub,
+  fetchpatch,
   glibmm,
   gst_all_1,
   lib,
@@ -40,6 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     copyDesktopItems
     wrapQtAppsHook
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Audio4Linux/JDSP4Linux/pull/241.patch";
+      hash = "sha256-RtVKlw2ca8An4FodeD0RN95z9yHDHBgAxsEwLAmW7co=";
+      name = "fix-build-with-new-pipewire.patch";
+    })
+    ./fix-build-on-qt6_9.diff
   ];
 
   buildInputs =

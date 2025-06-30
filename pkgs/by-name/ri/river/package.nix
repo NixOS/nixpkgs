@@ -15,16 +15,16 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots_0_18,
+  wlroots_0_19,
   xwayland,
-  zig_0_13,
+  zig_0_14,
   withManpages ? true,
   xwaylandSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.7";
+  version = "0.3.10";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -32,9 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "river";
     repo = "river";
-    rev = "refs/tags/v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-4ac0LGQtLldHyXJ2GIRMHV+VZfUrRFdBYLiAHX5lWcw=";
+    hash = "sha256-mTS62HT/v/5af/PTsNcDIrl7GUczP55+VCumQIii6y4=";
+    tag = "v${finalAttrs.version}";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
@@ -43,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     xwayland
-    zig_0_13.hook
+    zig_0_14.hook
   ] ++ lib.optional withManpages scdoc;
 
   buildInputs = [
@@ -55,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     wayland
     wayland-protocols
-    wlroots_0_18
+    wlroots_0_19
   ] ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;

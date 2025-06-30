@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-storage-plugin-fs";
-  version = "1.0.6";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
+    repo = "snakemake-storage-plugin-fs";
     tag = "v${version}";
-    hash = "sha256-9A2W+V0d9K1Ei4WXqIZfIcOYsWgpGVP7P/ANy8jOGu0=";
+    hash = "sha256-bTkT1D2GJGS+zWvK/BUGLGE8ArZQikHHcdQjREJhldg=";
   };
 
   build-system = [ poetry-core ];

@@ -13,16 +13,16 @@
 
 let
   pname = "nwg-drawer";
-  version = "0.6.3";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-drawer";
     rev = "v${version}";
-    hash = "sha256-LFxugvLRUyx6uNc8dzn7tB4cZp87hcI7Fi2/9hVBJx0=";
+    hash = "sha256-vORjD6nMy0h2Udo6Sy6aD0td+sLBUusDRiuT6jssais=";
   };
 
-  vendorHash = "sha256-3QSq4zdsQu2bvKH0oA4Sapd247jYy+GV69roy9x8WK0=";
+  vendorHash = "sha256-ftE8u0m1KGyEdLVbmpFKCeuDFnBcY3AyqmWNGPST27k=";
 in
 buildGoModule {
   inherit
@@ -63,7 +63,7 @@ buildGoModule {
     description = "Application drawer for sway Wayland compositor";
     homepage = "https://github.com/nwg-piotr/nwg-drawer";
     changelog = "https://github.com/nwg-piotr/nwg-drawer/releases/tag/${src.rev}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; [ agpl3Plus ];
     mainProgram = "nwg-drawer";
     maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; linux;

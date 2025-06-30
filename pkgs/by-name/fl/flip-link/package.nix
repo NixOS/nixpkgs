@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "knurling-rs";
-    repo = pname;
+    repo = "flip-link";
     rev = "v${version}";
     hash = "sha256-Nw43I8EIlNGPptsLVxFBapFp6qdFoUOEicHc9FTcm2g=";
   };
@@ -29,16 +29,16 @@ rustPlatform.buildRustPackage rec {
     "--skip should_verify_memory_layout"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Adds zero-cost stack overflow protection to your embedded programs";
     mainProgram = "flip-link";
     homepage = "https://github.com/knurling-rs/flip-link";
     changelog = "https://github.com/knurling-rs/flip-link/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       FlorianFranzen
       newam
     ];

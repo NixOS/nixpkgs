@@ -18,14 +18,14 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "4447c7562e3bc702ade25105912dce503f0c4010";
-      hash = "sha256-51jpDhdZ0n+KLmxh8KVaTz53pZAB0dHjmILFX+OLud4=";
+      rev = "bc257a88f7c1939f24e0379f14a3589e926c950c";
+      hash = "sha256-Tuw1Py+LQdXS+bizXsduPjjEU5YIAVFvL+iJ+w8JoSU=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "24e0bd827a8bec8121b128b0634cb34402fb3259";
-      hash = "sha256-h3QllJC/tiUzl5UlGCTIoDuDcKG6J538MCY2Pqe2IOE=";
+      rev = "049f6e79cc3e8636cec21bbd94ed185b4a5f2653";
+      hash = "sha256-VmSKKCsBvmvXSnFbw6GJRgiGjlne8rw22+RCLBV/kD4=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -36,26 +36,26 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "7f2377859377da6f22152015c28b12c04752af77";
-      hash = "sha256-SmyvY/WlU9jryD9ZpSw73dQEc9jI4ySQPRnplg/BC4w=";
+      rev = "d0b490ee091629068e0c11953419eb089f9e6bb2";
+      hash = "sha256-EmpuOQxshAFa0d6Ddzz6dy21nxHhSn+6Aiz18/o8VUU=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
       repo = "googletest";
-      rev = "b514bdc898e2951020cbdca1304b75f5950d1f59";
-      hash = "sha256-1OJ2SeSscRBNr7zZ/a8bJGIqAnhkg45re0j3DtPfcXM=";
+      rev = "52eb8108c5bdec04579160ae17225d66034bd723";
+      hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
     };
     lodepng = fetchFromGitHub {
       owner = "lvandeve";
       repo = "lodepng";
-      rev = "b4ed2cd7ecf61d29076169b49199371456d4f90b";
-      hash = "sha256-5cCkdj/izP4e99BKfs/Mnwu9aatYXjlyxzzYiMD/y1M=";
+      rev = "17d08dd26cac4d63f43af217ebd70318bfb8189c";
+      hash = "sha256-vnw52G0lY68471dzH7NXc++bTbLRsITSxGYXOTicA5w=";
     };
     qhull = fetchFromGitHub {
       owner = "qhull";
       repo = "qhull";
-      rev = "0c8fc90d2037588024d9964515c1e684f6007ecc";
-      hash = "sha256-Ptzxad3ewmKJbbcmrBT+os4b4SR976zlCG9F0nq0x94=";
+      rev = "c7bee59d068a69f427b1273e71cdc5bc455a5bdd";
+      hash = "sha256-RnuaRrWMQ1rFfb/nxE0ukIoBf2AMG5pRyFmKmvsJ/U8=";
     };
     tinyobjloader = fetchFromGitHub {
       owner = "tinyobjloader";
@@ -76,28 +76,28 @@ let
       hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
 
-    tmd = stdenv.mkDerivation rec {
+    tmd = stdenv.mkDerivation {
       name = "TriangleMeshDistance";
 
       src = fetchFromGitHub {
         owner = "InteractiveComputerGraphics";
-        repo = name;
+        repo = "TriangleMeshDistance";
         rev = "e55a15c20551f36242fd6368df099a99de71d43a";
         hash = "sha256-vj6TMMT8mp7ciLa5nzVAhMWPcAHXq+ZwHlWsRA3uCmg=";
       };
 
       installPhase = ''
         mkdir -p $out/include/tmd
-        cp ${name}/include/tmd/${name}.h $out/include/tmd/
+        cp TriangleMeshDistance/include/tmd/TriangleMeshDistance.h $out/include/tmd/
       '';
     };
 
-    sdflib = stdenv.mkDerivation rec {
+    sdflib = stdenv.mkDerivation {
       name = "SdfLib";
 
       src = fetchFromGitHub {
         owner = "UPC-ViRVIG";
-        repo = name;
+        repo = "SdfLib";
         rev = "1927bee6bb8225258a39c8cbf14e18a4d50409ae";
         hash = "sha256-+SFUOdZ6pGZvnQa0mT+yfbTMHWe2CTOlroXcuVBHdOE=";
       };
@@ -105,20 +105,20 @@ let
       patches = [ ./sdflib-system-deps.patch ];
 
       cmakeFlags = [
-        "-DSDFLIB_USE_ASSIMP=OFF"
-        "-DSDFLIB_USE_OPENMP=OFF"
-        "-DSDFLIB_USE_ENOKI=OFF"
-        "-DSDFLIB_USE_SYSTEM_GLM=ON"
-        "-DSDFLIB_USE_SYSTEM_SPDLOG=ON"
-        "-DSDFLIB_USE_SYSTEM_CEREAL=ON"
-        "-DSDFLIB_USE_SYSTEM_TRIANGLEMESHDISTANCE=ON"
+        (lib.cmakeBool "SDFLIB_USE_ASSIMP" false)
+        (lib.cmakeBool "SDFLIB_USE_OPENMP" false)
+        (lib.cmakeBool "SDFLIB_USE_ENOKI" false)
+        (lib.cmakeBool "SDFLIB_USE_SYSTEM_GLM" true)
+        (lib.cmakeBool "SDFLIB_USE_SYSTEM_SPDLOG" true)
+        (lib.cmakeBool "SDFLIB_USE_SYSTEM_CEREAL" true)
+        (lib.cmakeBool "SDFLIB_USE_SYSTEM_TRIANGLEMESHDISTANCE" true)
       ];
 
       nativeBuildInputs = [ cmake ];
       buildInputs = [
         pin.tmd
 
-        # Mainline. The otherwise pinned glm realease from 2018 does
+        # Mainline. The otherwise pinned glm release from 2018 does
         # not build due to test failures and missing files.
         glm
 
@@ -130,17 +130,17 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.2.7";
+  version = "3.3.3";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "mujoco";
-    tag = version;
-    hash = "sha256-TAhgu3h7tCflIMscVS+jYuUfMmIYcCcI3JFxUlj8g9E=";
+    tag = finalAttrs.version;
+    hash = "sha256-yU3ckVtgGqLPyu7Jd3L6ZiHELKbGe9AUdCcmXLAxtpo=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -158,9 +158,9 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DMUJOCO_USE_SYSTEM_sdflib=ON"
-    "-DMUJOCO_SIMULATE_USE_SYSTEM_GLFW=ON"
-    "-DMUJOCO_SAMPLES_USE_SYSTEM_GLFW=ON"
+    (lib.cmakeBool "MUJOCO_USE_SYSTEM_sdflib" true)
+    (lib.cmakeBool "MUJOCO_SIMULATE_USE_SYSTEM_GLFW" true)
+    (lib.cmakeBool "MUJOCO_SAMPLES_USE_SYSTEM_GLFW" true)
   ];
 
   # Move things into place so that cmake doesn't try downloading dependencies.
@@ -184,13 +184,14 @@ stdenv.mkDerivation rec {
     };
     tests = {
       pythonMujoco = python3Packages.mujoco;
+      pythonMujocoMjx = python3Packages.mujoco-mjx;
     };
   };
 
   meta = {
     description = "Multi-Joint dynamics with Contact. A general purpose physics simulator";
     homepage = "https://mujoco.org/";
-    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
+    changelog = "https://mujoco.readthedocs.io/en/${finalAttrs.version}/changelog.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
@@ -199,4 +200,4 @@ stdenv.mkDerivation rec {
     ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

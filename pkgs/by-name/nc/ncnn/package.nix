@@ -10,20 +10,18 @@
   protobuf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncnn";
-  version = "20241226";
+  version = "20250503";
 
   src = fetchFromGitHub {
     owner = "Tencent";
-    repo = pname;
-    rev = version;
-    hash = "sha256-XmIuXR/uxJbXaB0G+tS9I47Pke20qj8jI1vqnDDgrpE=";
+    repo = "ncnn";
+    tag = finalAttrs.version;
+    hash = "sha256-7wktoeei16QaPdcxVVS25sZYPhTQMEq9PjaHBwm5Eas=";
   };
 
-  patches = [
-    ./cmakelists.patch
-  ];
+  patches = [ ./cmakelists.patch ];
 
   cmakeFlags =
     [
@@ -40,6 +38,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DVulkan_LIBRARY=-lvulkan" ];
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     vulkan-headers
     vulkan-loader
@@ -48,11 +47,11 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
-  meta = with lib; {
-    description = "ncnn is a high-performance neural network inference framework optimized for the mobile platform";
+  meta = {
+    description = "Neural network inference framework";
     homepage = "https://github.com/Tencent/ncnn";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tilcreator ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ tilcreator ];
+    platforms = lib.platforms.all;
   };
-}
+})

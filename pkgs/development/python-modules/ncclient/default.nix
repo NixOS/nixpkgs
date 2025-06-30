@@ -4,30 +4,33 @@
   fetchFromGitHub,
   lxml,
   paramiko,
+  setuptools,
   pytestCheckHook,
   pythonOlder,
-  six,
 }:
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.16";
-  format = "setuptools";
+  version = "0.6.19";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "ncclient";
+    repo = "ncclient";
     tag = "v${version}";
-    hash = "sha256-IMCMlGt5/G4PRz525ZomsovU55vBnGhHndBtC7ym6lc=";
+    hash = "sha256-ZAZMazf1PB54MbHyhSuSpg0IWSSqinE2DvHD+L8GKu8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     paramiko
     lxml
-    six
-  ] ++ paramiko.optional-dependencies.ed25519;
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -36,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for NETCONF clients";
     homepage = "https://github.com/ncclient/ncclient";
-    changelog = "https://github.com/ncclient/ncclient/releases/tag/v${version}";
+    changelog = "https://github.com/ncclient/ncclient/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];
   };

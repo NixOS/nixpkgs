@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
       # CLI tools
       gpl2Plus
     ];
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

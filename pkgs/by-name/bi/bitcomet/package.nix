@@ -1,16 +1,18 @@
 {
   lib,
-  fetchurl,
   appimageTools,
-  webkitgtk_4_0,
+  fetchurl,
 }:
+
 let
   pname = "bitcomet";
-  version = "2.12.1";
+  version = "2.13.2";
+
   src = fetchurl {
     url = "https://download.bitcomet.com/linux/x86_64/BitComet-${version}-x86_64.AppImage";
-    hash = "sha256-iaUPf9gSTd2m641Ja9/5v4wkO3H4+R08YXohLCeFuTQ=";
+    hash = "sha256-T66hmWmjt7ZZj03IxTSYtNUBoFHgwOoAIOHMyJSAmbU=";
   };
+
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
 appimageTools.wrapType2 {
@@ -24,16 +26,15 @@ appimageTools.wrapType2 {
     ];
 
   extraInstallCommands = ''
-    mkdir -p $out/share/applications
-    install -m 444 ${appimageContents}/com.bitcomet.linux.desktop $out/share/applications/bitcomet.desktop
+    install -Dm644 ${appimageContents}/com.bitcomet.linux.desktop $out/share/applications/bitcomet.desktop
     substituteInPlace $out/share/applications/bitcomet.desktop \
-      --replace-fail 'Exec=usr/bin/BitComet' 'Exec=bitcomet'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+      --replace-fail "Exec=usr/bin/BitComet" "Exec=bitcomet"
+    cp -r ${appimageContents}/usr/share/icons $out/share/icons
   '';
 
   meta = {
     homepage = "https://www.bitcomet.com";
-    description = "Free BitTorrent download client";
+    description = "BitTorrent download client";
     mainProgram = "bitcomet";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;

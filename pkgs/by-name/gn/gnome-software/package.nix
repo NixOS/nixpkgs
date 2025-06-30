@@ -48,11 +48,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "47.4";
+  version = "48.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
-    hash = "sha256-coHFS5t0jWai55LrjgMxyJec44+vrfct482ZnYDpe08=";
+    hash = "sha256-q/0wZDqGxl9IhrZ2XrO7YhXJ6gmBfWvRZcUAVokIIsk=";
   };
 
   patches = [
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gnome-software";
     homepage = "https://apps.gnome.org/Software/";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

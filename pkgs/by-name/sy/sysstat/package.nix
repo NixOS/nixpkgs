@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "12.7.4";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "sysstat";
+    repo = "sysstat";
     tag = "v${version}";
     hash = "sha256-ELmSzWnJ8vGwGPwY/5MFp/2gQhMXMjNG4bHtCplfQSc=";
   };

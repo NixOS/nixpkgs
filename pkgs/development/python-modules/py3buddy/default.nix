@@ -4,6 +4,7 @@
   fetchFromGitHub,
   python,
   pyusb,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,8 @@ buildPythonPackage rec {
   };
 
   dependencies = [ pyusb ];
+
+  nativeBuildInputs = [ udevCheckHook ];
 
   dontConfigure = true;
   dontBuild = true;

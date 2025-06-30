@@ -41,10 +41,10 @@ buildOctavePackage rec {
     blas
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gnu-octave.github.io/packages/control/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Computer-Aided Control System Design (CACSD) Tools for GNU Octave, based on the proven SLICOT Library";
   };
 }

@@ -16,7 +16,7 @@ let
   env = {
     NODE_CONFIG_DIR = "/var/lib/peertube/config";
     NODE_ENV = "production";
-    NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
+    NODE_EXTRA_CA_CERTS = config.security.pki.caBundle;
     NPM_CONFIG_CACHE = "/var/cache/peertube/.npm";
     NPM_CONFIG_PREFIX = cfg.package;
     HOME = cfg.package;
@@ -439,9 +439,9 @@ in
       description = "Initialization database for PeerTube daemon";
       after = [
         "network.target"
-        "postgresql.service"
+        "postgresql.target"
       ];
-      requires = [ "postgresql.service" ];
+      requires = [ "postgresql.target" ];
 
       script =
         let
@@ -475,13 +475,13 @@ in
         [ "network.target" ]
         ++ lib.optional cfg.redis.createLocally "redis-peertube.service"
         ++ lib.optionals cfg.database.createLocally [
-          "postgresql.service"
+          "postgresql.target"
           "peertube-init-db.service"
         ];
       requires =
         lib.optional cfg.redis.createLocally "redis-peertube.service"
         ++ lib.optionals cfg.database.createLocally [
-          "postgresql.service"
+          "postgresql.target"
           "peertube-init-db.service"
         ];
       wantedBy = [ "multi-user.target" ];
@@ -489,7 +489,7 @@ in
       environment = env;
 
       path = with pkgs; [
-        nodejs_18
+        nodejs_20
         yarn
         ffmpeg-headless
         openssl
@@ -945,7 +945,7 @@ in
       })
       (lib.attrsets.setAttrByPath
         [ cfg.user "packages" ]
-        [ peertubeEnv pkgs.nodejs_18 pkgs.yarn pkgs.ffmpeg-headless ]
+        [ peertubeEnv pkgs.nodejs_20 pkgs.yarn pkgs.ffmpeg-headless ]
       )
       (lib.mkIf cfg.redis.enableUnixSocket {
         ${config.services.peertube.user}.extraGroups = [ "redis-peertube" ];

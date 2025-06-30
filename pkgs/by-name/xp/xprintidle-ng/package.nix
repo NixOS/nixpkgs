@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "taktoa";
-    repo = pname;
+    repo = "xprintidle-ng";
     rev = "9083ba284d9222541ce7da8dc87d5a27ef5cc592";
     sha256 = "0a5024vimpfrpj6w60j1ad8qvjkrmxiy8w1yijxfwk917ag9rkpq";
   };

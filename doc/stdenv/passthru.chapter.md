@@ -18,7 +18,9 @@ Its value can be accessed as if it was set inside a derivation.
 let
   hello = stdenv.mkDerivation {
     pname = "hello";
-    src = fetchGit { /* ... */ };
+    src = fetchGit {
+      # ...
+    };
 
     passthru = {
       foo = "bar";

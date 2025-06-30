@@ -37,7 +37,7 @@ let
 
       buildCommand = ''
         jar=$out/share/alloy/${pname}.jar
-        install -Dm644 ${src} $jar
+        install -Dm644 $src $jar
 
         mkdir -p $out/bin
         makeWrapper ${jre}/bin/java $out/bin/${pname} --add-flags \
@@ -58,8 +58,8 @@ let
           finds structures that satisfy them. Structures are displayed graphically,
           and their appearance can be customized for the domain at hand.
         '';
-        homepage = "http://alloytools.org/";
-        downloadPage = "http://alloytools.org/download.html";
+        homepage = "https://alloytools.org/";
+        downloadPage = "https://alloytools.org/download.html";
         sourceProvenance = with sourceTypes; [ binaryBytecode ];
         license = licenses.mit;
         platforms = platforms.unix;
@@ -69,14 +69,14 @@ let
 
 in
 rec {
-  alloy5 = generic rec {
+  alloy5 = generic {
     version = "5.1.0";
-    sha256 = "02k9khs4k5nc86x9pp5k3vcb0kiwdgcin46mlap4fycnr673xd53";
+    sha256 = "sha256-o7Q+jsmWeUeuotUQG9lrPE6w2B6z3Ju6QcyWSTScaQo=";
   };
 
-  alloy6 = generic rec {
-    version = "6.0.0";
-    sha256 = "sha256-rA7mNxcu0DWkykMyfV4JwFmQqg0HOIcwjjD4jCRxNww=";
+  alloy6 = generic {
+    version = "6.2.0";
+    sha256 = "sha256-a4wctbyTvt/HxhQ1xOGrbmiKJC3HAqOUYo2amAHtt40=";
   };
 
   alloy = alloy5;

@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "doyensec";
-    repo = pname;
+    repo = "inql";
     tag = "v${version}";
     hash = "sha256-DFGJHqdrCmOZn8GdY5SZ1PrOhuIsMLoK+2Fry9WkRiY=";
   };
@@ -32,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
     "inql"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Security testing tool for GraphQL";
     mainProgram = "inql";
     homepage = "https://github.com/doyensec/inql";
     changelog = "https://github.com/doyensec/inql/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

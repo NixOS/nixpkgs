@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "urn-timer";
-  version = "0-unstable-2025-02-02";
+  version = "0-unstable-2025-04-17";
 
   src = fetchFromGitHub {
     owner = "paoloose";
     repo = "urn";
-    rev = "124b411301f20d62b69832bbe1f7e6af2df85e9f";
-    hash = "sha256-7mSuu2eebKWlMPOQAHBTYRxEEkpygrfKK7C1Ts8py6U=";
+    rev = "5eea3f9efb03758bfafcd029406797d34e4c875b";
+    hash = "sha256-rlUFZiA2fMa5QkKqKBRkiM8o2nioD0MPn6eJTJSJq3M=";
   };
 
   nativeBuildInputs = [
