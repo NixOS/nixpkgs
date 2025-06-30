@@ -11,6 +11,7 @@
     inherit hash;
   },
   patches ? [ ],
+  knownVulnerabilities ? [ ],
   maintainers ? [
     lib.maintainers.lovesegfault
     lib.maintainers.artturin
@@ -335,7 +336,7 @@ let
       '';
       homepage = "https://nixos.org/";
       license = licenses.lgpl21Plus;
-      inherit maintainers teams;
+      inherit knownVulnerabilities maintainers teams;
       platforms = platforms.unix;
       outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
       mainProgram = "nix";
