@@ -108,6 +108,7 @@ self: super: {
               "shadowstack"
               "nostrictaliasing"
               "pacret"
+              "glibcxxassertions"
               "trivialautovarinit"
             ]
           ) super'.stdenv;
