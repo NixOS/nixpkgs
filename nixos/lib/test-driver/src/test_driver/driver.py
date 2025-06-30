@@ -34,22 +34,29 @@ class AssertionTester(TestCase):
     failureException = RequestedAssertionFailed
 
 
-def get_tmp_dir() -> Path:
-    """Returns a temporary directory that is defined by TMPDIR, TEMP, TMP or CWD
-    Raises an exception in case the retrieved temporary directory is not writeable
-    See https://docs.python.org/3/library/tempfile.html#tempfile.gettempdir
+def in_sandbox() -> bool:
+    return "NIX_BUILD_TOP" in os.environ and "IN_NIX_SHELL" not in os.environ
+
+
+def get_work_dir() -> Path:
     """
-    tmp_dir = Path(tempfile.gettempdir())
-    tmp_dir.mkdir(mode=0o700, exist_ok=True)
-    if not tmp_dir.is_dir():
+    When inside the sandbox, return the temporary directory as defined
+    by TMPDIR, TEMP, TMP or CWD.
+    When running interactively use `./.nixos-test-driver`.
+    """
+    work_dir = (
+        Path(tempfile.gettempdir()) if in_sandbox() else Path() / ".nixos-test-driver"
+    ).absolute()
+    work_dir.mkdir(mode=0o700, exist_ok=True)
+    if not work_dir.is_dir():
         raise NotADirectoryError(
-            f"The directory defined by TMPDIR, TEMP, TMP or CWD: {tmp_dir} is not a directory"
+            f"The chosen working directory '{work_dir}' is not a directory"
         )
-    if not os.access(tmp_dir, os.W_OK):
+    if not os.access(work_dir, os.W_OK):
         raise PermissionError(
-            f"The directory defined by TMPDIR, TEMP, TMP, or CWD: {tmp_dir} is not writeable"
+            f"The chosen working directory '{work_dir}' is not writable"
         )
-    return tmp_dir
+    return work_dir
 
 
 def pythonize_name(name: str) -> str:
@@ -84,7 +91,7 @@ class Driver:
         self.race_timer = threading.Timer(global_timeout, self.terminate_test)
         self.logger = logger
 
-        tmp_dir = get_tmp_dir()
+        tmp_dir = get_work_dir()
 
         with self.logger.nested("start all VLans"):
             vlans = list(set(vlans))
@@ -270,7 +277,7 @@ class Driver:
         name: str | None = None,
         keep_vm_state: bool = False,
     ) -> Machine:
-        tmp_dir = get_tmp_dir()
+        tmp_dir = get_work_dir()
 
         cmd = NixStartScript(start_command)
         name = name or cmd.machine_name
