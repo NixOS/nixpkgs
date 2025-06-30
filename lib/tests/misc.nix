@@ -61,6 +61,7 @@ let
     genList
     getExe
     getExe'
+    getFirstOutput
     getLicenseFromSpdxIdOr
     groupBy
     groupBy'
@@ -144,6 +145,16 @@ let
       expr = builtins.seq drv.drvPath drv.name;
       inherit expected;
     };
+
+  basicTestDerivation = lib.extendDerivation true { } (derivation {
+    name = "test";
+    builder = "builder";
+    system = "system";
+    outputs = [
+      "first"
+      "second"
+    ];
+  });
 
 in
 
@@ -2029,6 +2040,41 @@ runTests {
       valuesNotNeeded = 3;
       trivialAcc = 121;
     };
+  };
+
+  testGetFirstOutputFirst = {
+    expr = getFirstOutput [ "out" "first" ] basicTestDerivation;
+    expected = basicTestDerivation.first;
+  };
+
+  testGetFirstOutputSecond = {
+    expr = getFirstOutput [ "out" "second" ] basicTestDerivation;
+    expected = basicTestDerivation.second;
+  };
+
+  testGetFirstOutputEmpty = {
+    expr = getFirstOutput [ ] basicTestDerivation;
+    expected = basicTestDerivation;
+  };
+
+  testGetFirstOutputNonExisting = {
+    expr = getFirstOutput [ "out" "third" ] basicTestDerivation;
+    expected = basicTestDerivation;
+  };
+
+  testGetFirstOutputWithOutputSpecified = {
+    expr = getFirstOutput [ "out" "first" ] basicTestDerivation.second;
+    expected = basicTestDerivation.second;
+  };
+
+  testGetFirstOutputWithPath = {
+    expr = getFirstOutput [ "out" "first" ] ./misc.nix;
+    expected = ./misc.nix;
+  };
+
+  testGetFirstOutputWithString = {
+    expr = getFirstOutput [ "out" "first" ] "./misc.nix";
+    expected = "./misc.nix";
   };
 
   testMergeAttrsListExample1 = {
