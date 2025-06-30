@@ -1,12 +1,14 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
+  fetchpatch2,
   atk,
   cairo,
-  dcompiler,
+  dcompiler ? ldc,
   gdk-pixbuf,
   gst_all_1,
+  ldc,
   librsvg,
   glib,
   gtk3,
@@ -21,14 +23,15 @@
 let
   inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtkd";
-  version = "3.10.0";
+  version = "3.11.0";
 
-  src = fetchzip {
-    url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
-    sha256 = "DEKVDexGyg/T3SdnnvRjaHq1LbDo8ekNslxKROpMCCE=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "gtkd-developers";
+    repo = "GtkD";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UpPoskHtnI4nUOKdLorK89grgUUPrCvO4zrAl9LfjHA=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +52,13 @@ stdenv.mkDerivation rec {
     librsvg
     pango
     vte
+  ];
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/gtkd-developers/GtkD/commit/1e41b2da35c7dc2d18b118c632cb07137d048c2b.patch?full_index=1";
+      hash = "sha256-8vQntjVrQH1+qHBBkB5PxcgLvucosEEPi43uqlnHe4g=";
+    })
   ];
 
   postPatch = ''
@@ -140,6 +150,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=${placeholder "out"}"
     "PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config"
+    "GTKD_VERSION=${finalAttrs.version}"
   ];
 
   # The .pc files does not declare an `includedir=`, so the multiple
@@ -155,10 +166,10 @@ stdenv.mkDerivation rec {
     inherit dcompiler;
   };
 
-  meta = with lib; {
+  meta = {
     description = "D binding and OO wrapper for GTK";
     homepage = "https://gtkd.org";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.lgpl3Plus;
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})
