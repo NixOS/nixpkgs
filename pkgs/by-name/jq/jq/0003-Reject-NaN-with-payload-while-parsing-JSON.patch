@@ -1,0 +1,75 @@
+From dfd25612454deacb6df47329787844795bf59821 Mon Sep 17 00:00:00 2001
+From: itchyny <itchyny@cybozu.co.jp>
+Date: Wed, 5 Mar 2025 07:43:54 +0900
+Subject: [PATCH 3/5] Reject NaN with payload while parsing JSON
+
+This commit drops support for parsing NaN with payload in JSON like
+`NaN123` and fixes CVE-2024-53427. Other JSON extensions like `NaN` and
+`Infinity` are still supported. Fixes #3023, fixes #3196, fixes #3246.
+---
+ src/jv.c      |  5 +++++
+ tests/jq.test | 14 ++++++++++----
+ tests/shtest  |  5 -----
+ 3 files changed, 15 insertions(+), 9 deletions(-)
+
+diff --git a/src/jv.c b/src/jv.c
+index 418d57d..6147775 100644
+--- a/src/jv.c
++++ b/src/jv.c
+@@ -587,6 +587,11 @@ static jv jvp_literal_number_new(const char * literal) {
+     return JV_INVALID;
+   }
+   if (decNumberIsNaN(&n->num_decimal)) {
++    // Reject NaN with payload.
++    if (n->num_decimal.digits > 1 || *n->num_decimal.lsu != 0) {
++      jv_mem_free(n);
++      return JV_INVALID;
++    }
+     jv_mem_free(n);
+     return jv_number(NAN);
+   }
+diff --git a/tests/jq.test b/tests/jq.test
+index e82cf84..97835f2 100644
+--- a/tests/jq.test
++++ b/tests/jq.test
+@@ -1950,11 +1950,17 @@ tojson | fromjson
+ {"a":nan}
+ {"a":null}
+ 
+-# also "nan with payload" #2985
+-fromjson | isnan
+-"nan1234"
++# NaN with payload is not parsed
++.[] | try (fromjson | isnan) catch .
++["NaN","-NaN","NaN1","NaN10","NaN100","NaN1000","NaN10000","NaN100000"]
+ true
+-
++true
++"Invalid numeric literal at EOF at line 1, column 4 (while parsing 'NaN1')"
++"Invalid numeric literal at EOF at line 1, column 5 (while parsing 'NaN10')"
++"Invalid numeric literal at EOF at line 1, column 6 (while parsing 'NaN100')"
++"Invalid numeric literal at EOF at line 1, column 7 (while parsing 'NaN1000')"
++"Invalid numeric literal at EOF at line 1, column 8 (while parsing 'NaN10000')"
++"Invalid numeric literal at EOF at line 1, column 9 (while parsing 'NaN100000')"
+ 
+ # calling input/0, or debug/0 in a test doesn't crash jq
+ 
+diff --git a/tests/shtest b/tests/shtest
+index 14aafbf..a471889 100755
+--- a/tests/shtest
++++ b/tests/shtest
+@@ -594,11 +594,6 @@ if ! x=$($JQ -n "1 # foo$cr + 2") || [ "$x" != 1 ]; then
+   exit 1
+ fi
+ 
+-# CVE-2023-50268: No stack overflow comparing a nan with a large payload
+-$VALGRIND $Q $JQ '1 != .' <<\EOF >/dev/null
+-Nan4000
+-EOF
+-
+ # Allow passing the inline jq script before -- #2919
+ if ! r=$($JQ --args -rn -- '$ARGS.positional[0]' bar) || [ "$r" != bar ]; then
+     echo "passing the inline script after -- didn't work"
+-- 
+2.49.0
+
