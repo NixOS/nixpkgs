@@ -291,10 +291,17 @@ in
       );
       thinkfan.serviceConfig = {
         Restart = "on-failure";
-        RestartSec = "30s";
+        RestartSec = "2s"; # slow restart is a problem if not exit cleanly
 
         # Hardening
         PrivateNetwork = true;
+
+        # Run this process with near-realtime priority.
+        # <https://github.com/vmatare/thinkfan/pull/198>
+        CPUSchedulingPolicy = "fifo";
+        CPUSchedulingPriority = 20; # high, but not the highest
+        OOMScoreAdjust = -1000; # never kill this unit if out of memory
+        MemorySwapMax = 0; # never swap
       };
 
       # must be added manually, see issue #81138
