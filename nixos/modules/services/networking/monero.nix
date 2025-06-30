@@ -45,6 +45,11 @@ let
       ${listToConf "add-priority-node" priorityNodes}
       ${listToConf "add-exclusive-node" exclusiveNodes}
 
+      ${lib.optionalString prune ''
+        prune-blockchain=1
+        sync-pruned-blocks=1
+      ''}
+
       ${extraConfig}
     '';
 
@@ -209,6 +214,15 @@ in
         description = ''
           List of peer IP addresses to connect to *only*.
           If given the other peer options will be ignored.
+        '';
+      };
+
+      prune = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to prune the blockchain.
+          https://www.getmonero.org/resources/moneropedia/pruning.html
         '';
       };
 
