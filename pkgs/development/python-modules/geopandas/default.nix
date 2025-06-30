@@ -29,16 +29,16 @@
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
     tag = "v${version}";
-    hash = "sha256-SZizjwkx8dsnaobDYpeQm9jeXZ4PlzYyjIScnQrH63Q=";
+    hash = "sha256-P8vg5T28LXirwX8d6XKa2t4QNnMM60VHnFb2LZ+dM3Q=";
   };
 
   patches = [
@@ -103,7 +103,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
-    changelog = "https://github.com/geopandas/geopandas/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/geopandas/geopandas/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     teams = [ teams.geospatial ];
   };
