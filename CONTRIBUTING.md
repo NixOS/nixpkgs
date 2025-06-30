@@ -273,9 +273,6 @@ To manually create a backport pull request, follow [the standard pull request pr
 ## How to review pull requests
 [pr-review]: #how-to-review-pull-requests
 
-> [!Warning]
-> The following section is a draft, and the policy for reviewing is still being discussed in issues such as [#11166](https://github.com/NixOS/nixpkgs/issues/11166) and [#20836](https://github.com/NixOS/nixpkgs/issues/20836).
-
 The Nixpkgs project receives a fairly high number of contributions via GitHub pull requests.
 Reviewing and approving these is an important task and a way to contribute to the project.
 
