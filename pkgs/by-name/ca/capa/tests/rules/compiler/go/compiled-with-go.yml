@@ -1,0 +1,20 @@
+rule:
+  meta:
+    name: compiled with Go
+    namespace: compiler/go
+    authors:
+      - michael.hunhoff@mandiant.com
+    scopes:
+      static: file
+      dynamic: file
+    examples:
+      - 49a34cfbeed733c24392c9217ef46bb6
+  features:
+    - or:
+      - string: /^Go build ID:/
+      - substring: "go.buildid"
+      - string: /^Go buildinf:/
+      - string: /\bgo1\.\d/
+      - substring: "runtime.main"
+      - substring: "main.main"
+      - substring: "runtime.gcWork"
