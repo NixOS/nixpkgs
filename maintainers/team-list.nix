@@ -257,6 +257,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  cosmic-utils = {
+    members = [
+      HeitorAugustoLN
+      GaetanLepage
+      pluiedev
+    ];
+    shortName = "cosmic-utils";
+    scope = "Maintain third-party COSMIC DE applications from cosmic-utils organization";
+  };
+
   cuda = {
     members = [
       connorbaker
