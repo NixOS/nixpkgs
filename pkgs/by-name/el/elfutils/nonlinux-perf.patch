@@ -1,0 +1,53 @@
+diff --git a/libdwfl_stacktrace/dwflst_perf_frame.c b/libdwfl_stacktrace/dwflst_perf_frame.c
+index dc274e8e..9776bee8 100644
+--- a/libdwfl_stacktrace/dwflst_perf_frame.c
++++ b/libdwfl_stacktrace/dwflst_perf_frame.c
+@@ -120,6 +120,7 @@ sample_getthread (Dwfl *dwfl __attribute__ ((unused)), pid_t tid,
+   else \
+     memcpy ((result), (d), sizeof (uint32_t));
+ 
++#if defined(__linux__)
+ #define copy_word(result, d, abi) \
+   if ((abi) == PERF_SAMPLE_REGS_ABI_64)	\
+     { copy_word_64((result), (d)); } \
+@@ -127,6 +128,12 @@ sample_getthread (Dwfl *dwfl __attribute__ ((unused)), pid_t tid,
+     { copy_word_32((result), (d)); } \
+   else \
+     *(result) = 0;
++#else
++#define copy_word(result, d, abi) \
++  (void)d; \
++  (void)abi; \
++  *(result) = 0;
++#endif
+ 
+ static bool
+ elf_memory_read (Dwfl *dwfl, Dwarf_Addr addr, Dwarf_Word *result, void *arg)
+@@ -167,6 +174,7 @@ sample_memory_read (Dwfl *dwfl, Dwarf_Addr addr, Dwarf_Word *result, void *arg)
+   return true;
+ }
+ 
++#if defined(__linux__)
+ static bool
+ sample_set_initial_registers (Dwfl_Thread *thread, void *arg)
+ {
+@@ -180,6 +188,7 @@ sample_set_initial_registers (Dwfl_Thread *thread, void *arg)
+      sample_arg->perf_regs_mask, sample_arg->abi,
+      __libdwfl_set_initial_registers_thread, thread);
+ }
++#endif
+ 
+ static void
+ sample_detach (Dwfl *dwfl __attribute__ ((unused)), void *dwfl_arg)
+@@ -194,7 +203,11 @@ static const Dwfl_Thread_Callbacks sample_thread_callbacks =
+     sample_next_thread,
+     sample_getthread,
+     sample_memory_read,
++#if defined(__linux__)
+     sample_set_initial_registers,
++#else
++    NULL,
++#endif
+     sample_detach,
+     NULL, /* sample_thread_detach */
+   };
