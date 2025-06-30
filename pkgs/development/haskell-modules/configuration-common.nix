@@ -362,6 +362,26 @@ with haskellLib;
   # 2023-07-17: Outdated base bound https://github.com/srid/lvar/issues/5
   lvar = doJailbreak super.lvar;
 
+  # Don't call setEnv in parallel in the test suite (which leads to flaky failures)
+  env-extra =
+    appendPatches
+      [
+        (pkgs.fetchpatch {
+          name = "env-extra-no-parallel-setenv.patch";
+          url = "https://github.com/d12frosted/env-extra/commit/4fcbc031b210e71e4243fcfe7c48d381e2f51d78.patch";
+          sha256 = "sha256-EbXk+VOmxMJAMCMTXpTiW8fkbNI9za7f1alzCeaJaV4=";
+          excludes = [ "package.yaml" ];
+        })
+      ]
+      (
+        overrideCabal (drv: {
+          prePatch = ''
+            ${drv.prePatch or ""}
+            ${lib.getExe' pkgs.buildPackages.dos2unix "dos2unix"} *.cabal
+          '';
+        }) super.env-extra
+      );
+
   # This used to be a core package provided by GHC, but then the compiler
   # dropped it. We define the name here to make sure that old packages which
   # depend on this library still evaluate (even though they won't compile
