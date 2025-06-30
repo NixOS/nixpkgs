@@ -1,0 +1,19 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    logger (1.6.1)
+    msgpack (1.7.5)
+    multi_json (1.15.0)
+    neovim (0.10.0)
+      msgpack (~> 1.1)
+      multi_json (~> 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  logger
+  neovim
+
+BUNDLED WITH
+   2.5.16

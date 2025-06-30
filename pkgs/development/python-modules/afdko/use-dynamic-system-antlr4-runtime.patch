@@ -1,0 +1,53 @@
+commit 3560653d5d52bf30a52ce971ecfe262b1a09d7a3
+Author: sternenseemann <sternenseemann@systemli.org>
+Date:   Tue Oct 5 18:16:10 2021 +0200
+
+    Link against system antlr4 runtime, dynamically
+    
+    Instead of cloning a antlr4 version from git, use the system one. Also
+    don't link it statically, but dynamically by default (the library is
+    called antlr4-runtime, not antlr4_static).
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 88e9cfd0..3df902b4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,11 +36,10 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ # https://www.antlr.org/download/antlr4-cpp-runtime-4.9.3-source.zip
+ # set(ANTLR4_ZIP_REPOSITORY "/path_to_antlr4_archive/a4.zip")
+ 
+-add_definitions(-DANTLR4CPP_STATIC)
+ set(ANTLR4_WITH_STATIC_CRT OFF)
+-# 4.9.3 is the latest ANTLR4 version
+ set(ANTLR4_TAG tags/4.13.2)
+-include(ExternalAntlr4Cpp)
++find_path(ANTLR4_HEADER antlr4-runtime.h PATH_SUFFIXES antlr4-runtime)
++set(ANTLR4_INCLUDE_DIRS ${ANTLR4_HEADER})
+ 
+ 
+ if (DEFINED ENV{FORCE_BUILD_LIBXML2})
+diff --git a/c/makeotf/lib/cffread/CMakeLists.txt b/c/makeotf/lib/cffread/CMakeLists.txt
+index 2990035f..fab25a77 100644
+--- a/c/makeotf/lib/cffread/CMakeLists.txt
++++ b/c/makeotf/lib/cffread/CMakeLists.txt
+@@ -8,6 +8,6 @@ if (${NEED_LIBXML2_DEPEND})
+     add_dependencies(makeotf_cffread ${LIBXML2_TARGET})
+ endif()
+ 
+-target_link_libraries(makeotf_cffread PUBLIC antlr4_static)
++target_link_libraries(makeotf_cffread PUBLIC antlr4-runtime)
+ 
+ target_compile_definitions(makeotf_cffread PRIVATE $<$<CONFIG:Debug>:CFF_DEBUG=1> CFF_T13_SUPPORT=0)
+diff --git a/c/makeotf/lib/hotconv/CMakeLists.txt b/c/makeotf/lib/hotconv/CMakeLists.txt
+index 60e49458..ada728c0 100644
+--- a/c/makeotf/lib/hotconv/CMakeLists.txt
++++ b/c/makeotf/lib/hotconv/CMakeLists.txt
+@@ -70,7 +70,7 @@ add_library(hotconv STATIC
+ set_property(TARGET hotconv PROPERTY C_STANDARD 99)
+ set_property(TARGET hotconv PROPERTY CXX_STANDARD 17)
+ target_include_directories(hotconv PRIVATE AFTER $<$<COMPILE_LANGUAGE:CXX>:${ANTLR4_INCLUDE_DIRS}>)
+-target_link_libraries(hotconv PUBLIC antlr4_static)
++target_link_libraries(hotconv PUBLIC antlr4-runtime)
+ 
+ target_link_libraries(hotconv PUBLIC ${CHOSEN_LIBXML2_LIBRARY})
+ 

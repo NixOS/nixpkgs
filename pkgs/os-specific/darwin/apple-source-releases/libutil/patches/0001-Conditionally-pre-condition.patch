@@ -1,0 +1,26 @@
+From ca796729722da704e8a9c64c7a201cbe0a9cb9be Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Mon, 5 Aug 2024 22:21:47 -0400
+Subject: [PATCH] Conditionally pre-condition
+
+---
+ wipefs.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/wipefs.cpp b/wipefs.cpp
+index d8e6339..6cb7963 100644
+--- a/wipefs.cpp
++++ b/wipefs.cpp
+@@ -391,7 +391,9 @@ wipefs_wipe(wipefs_ctx handle)
+     // Since we always issue a a single extent, set the kIOStorageUnmapOptionWhole
+     // option flag for drive pre-conditioning.
+     //
+-    unmap.options = kIOStorageUnmapOptionWhole;
++    if (__builtin_available(macOS 14.0, *)) {
++        unmap.options = kIOStorageUnmapOptionWhole;
++    }
+ 
+ 	//
+ 	// Don't bother to check the return value since this is mostly
+-- 
+2.44.1

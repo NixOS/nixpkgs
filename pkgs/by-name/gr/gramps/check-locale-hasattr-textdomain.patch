@@ -1,0 +1,19 @@
+diff --git a/gramps/gen/utils/grampslocale.py b/gramps/gen/utils/grampslocale.py
+index f25030e..59c1c90 100644
+--- a/gramps/gen/utils/grampslocale.py
++++ b/gramps/gen/utils/grampslocale.py
+@@ -370,8 +370,12 @@ class GrampsLocale:
+                 )
+             else:
+                 # bug12278, _build_popup_ui() under linux and macOS
+-                locale.textdomain(self.localedomain)
+-                locale.bindtextdomain(self.localedomain, self.localedir)
++                if hasattr(locale, 'textdomain'):
++                    locale.textdomain(self.localedomain)
++                    locale.bindtextdomain(self.localedomain, self.localedir)
++                else:
++                    gettext.textdomain(self.localedomain)
++                    gettext.bindtextdomain(self.localedomain, self.localedir)
+ 
+         self.rtl_locale = False
+         if self.language[0] in _RTL_LOCALES:

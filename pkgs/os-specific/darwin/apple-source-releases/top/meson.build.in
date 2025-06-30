@@ -1,0 +1,80 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/top/blob/main/top.xcodeproj/project.pbxproj
+
+# Project settings
+project('top', 'c', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+libutil = cc.find_library('util', has_headers : 'libutil.h')
+ncurses = [
+    dependency('ncurses'),
+    dependency('form'),
+    dependency('panel'),
+]
+sdk_frameworks = dependency('appleframeworks', modules : ['CoreFoundation', 'IOKit'])
+
+
+# Libraries
+libtop = static_library(
+    'top',
+    sources : [
+        'libtop.c',
+    ],
+)
+install_headers(
+    'libtop.h',
+)
+
+# Binaries
+top = executable(
+    'top',
+    dependencies : [libutil, ncurses, sdk_frameworks],
+    install : true,
+    link_with : libtop,
+    sources : [
+        'command.c',
+        'cpu.c',
+        'csw.c',
+        'faults.c',
+        'generic.c',
+        'globalstats.c',
+        'layout.c',
+        'log.c',
+        'logging.c',
+        'main.c',
+        'memstats.c',
+        'messages.c',
+        'options.c',
+        'pgrp.c',
+        'pid.c',
+        'ports.c',
+        'power.c',
+        'ppid.c',
+        'preferences.c',
+        'pstate.c',
+        'sig.c',
+        'statistic.c',
+        'syscalls.c',
+        'threads.c',
+        'timestat.c',
+        'top.c',
+        'uid.c',
+        'uinteger.c',
+        'user.c',
+        'userinput.c',
+        'userinput_help.c',
+        'userinput_mode.c',
+        'userinput_order.c',
+        'userinput_secondary_order.c',
+        'userinput_signal.c',
+        'userinput_sleep.c',
+        'userinput_user.c',
+        'workqueue.c',
+    ],
+)
+install_man(
+    'top.1',
+)

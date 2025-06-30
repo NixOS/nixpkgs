@@ -1,0 +1,70 @@
+diff --git a/redisinsight/api/package.json b/redisinsight/api/package.json
+index 4a24ac8..fab339c 100644
+--- a/redisinsight/api/package.json
++++ b/redisinsight/api/package.json
+@@ -49,7 +49,6 @@
+     "@nestjs/platform-socket.io/socket.io": "^4.8.0",
+     "@nestjs/cli/**/braces": "^3.0.3",
+     "**/semver": "^7.5.2",
+-    "**/cpu-features": "file:./stubs/cpu-features",
+     "**/cross-spawn": "^7.0.5",
+     "**/redis-parser": "3.0.0",
+     "winston-daily-rotate-file/**/file-stream-rotator": "^1.0.0"
+diff --git a/redisinsight/api/yarn.lock b/redisinsight/api/yarn.lock
+index e0e8495..dfed1ae 100644
+--- a/redisinsight/api/yarn.lock
++++ b/redisinsight/api/yarn.lock
+@@ -3223,9 +3223,6 @@ cosmiconfig@^8.2.0:
+     parse-json "^5.2.0"
+     path-type "^4.0.0"
+ 
+-"cpu-features@file:./stubs/cpu-features", cpu-features@~0.0.9:
+-  version "1.0.0"
+-
+ create-jest@^29.7.0:
+   version "29.7.0"
+   resolved "https://registry.yarnpkg.com/create-jest/-/create-jest-29.7.0.tgz#a355c5b3cb1e1af02ba177fe7afd7feee49a5320"
+@@ -7969,7 +7966,6 @@ ssh2@^1.15.0:
+     asn1 "^0.2.6"
+     bcrypt-pbkdf "^1.0.2"
+   optionalDependencies:
+-    cpu-features "~0.0.9"
+     nan "^2.18.0"
+ 
+ ssri@^8.0.0, ssri@^8.0.1:
+diff --git a/redisinsight/package.json b/redisinsight/package.json
+index 8649be7..354ed42 100644
+--- a/redisinsight/package.json
++++ b/redisinsight/package.json
+@@ -16,8 +16,7 @@
+   },
+   "resolutions": {
+     "**/semver": "^7.5.2",
+-    "sqlite3/**/tar": "^6.2.1",
+-    "**/cpu-features": "file:./api/stubs/cpu-features"
++    "sqlite3/**/tar": "^6.2.1"
+   },
+   "dependencies": {
+     "keytar": "^7.9.0",
+diff --git a/redisinsight/yarn.lock b/redisinsight/yarn.lock
+index 7a063ce..22f37a7 100644
+--- a/redisinsight/yarn.lock
++++ b/redisinsight/yarn.lock
+@@ -183,9 +183,6 @@ console-control-strings@^1.1.0:
+   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
+   integrity sha512-ty/fTekppD2fIwRvnZAVdeOiGd1c7YXEixbgJTNzqcxJWKQnjJ/V1bNEEE6hygpM3WjwHFUVK6HTjWSzV4a8sQ==
+ 
+-"cpu-features@file:./api/stubs/cpu-features", cpu-features@~0.0.10:
+-  version "1.0.0"
+-
+ debug@4, debug@^4.3.3:
+   version "4.3.4"
+   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
+@@ -807,7 +804,6 @@ ssh2@^1.15.0:
+     asn1 "^0.2.6"
+     bcrypt-pbkdf "^1.0.2"
+   optionalDependencies:
+-    cpu-features "~0.0.10"
+     nan "^2.20.0"
+ 
+ ssri@^8.0.0, ssri@^8.0.1:

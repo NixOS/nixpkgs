@@ -1,0 +1,59 @@
+diff --git a/bin/quarto.js b/bin/quarto.js
+@@ -97360,6 +97360,7 @@
+ class SAXParser extends ParserBase {
+     _listeners = {};
+     _controller;
++    _encoding;
+     fireListeners(event) {
+         const [name, ...args] = event;
+         const list = this._listeners[name] || [];
+@@ -97395,33 +97396,23 @@
+     write(chunk, controller) {
+         try {
+             this._controller = controller;
+-            this.chunk = new TextDecoder().decode(chunk);
++            this.chunk = new TextDecoder(this._encoding).decode(chunk);
+             this.run();
+         } finally{
+             this._controller = undefined;
+         }
+     }
+-    getStream() {
+-        return new WritableStream(this);
+-    }
+-    getWriter() {
+-        const streamWriter = this.getStream().getWriter();
+-        return {
+-            async write (p) {
+-                await streamWriter.ready;
+-                await streamWriter.write(p);
+-                return p.length;
+-            }
+-        };
+-    }
+-    async parse(source) {
++    async parse(source, encoding) {
++        this._encoding = encoding;
+         if (typeof source === 'string') {
+             this.chunk = source;
+             this.run();
+         } else if (source instanceof Uint8Array) {
+             this.write(source);
+         } else {
+-            await Deno.copy(source, this.getWriter());
++            await source.pipeThrough(new TextDecoderStream(this._encoding)).pipeTo(new WritableStream({
++                write: (str)=>this.parse(str, encoding)
++            }));
+         }
+     }
+     on(event, listener) {
+@@ -97532,8 +97523,7 @@
+         }
+     });
+     const reader = await Deno.open(sitemapPath);
+-    await parser.parse(reader);
+-    reader.close();
++    await parser.parse(reader.readable);
+     return urlset;
+ }
+ function writeSitemap(sitemapPath, urlset, draftMode) {

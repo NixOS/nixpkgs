@@ -1,0 +1,96 @@
+diff --git a/actexec/CMakeLists.txt b/actexec/CMakeLists.txt
+index 49d8128..e8bfa16 100644
+--- a/actexec/CMakeLists.txt
++++ b/actexec/CMakeLists.txt
+@@ -40,7 +40,7 @@ endif()
+ 
+ setup_target(${PROJECT})
+ 
+-find_package(Qt6 ${ACT_MINIMUM_QT_VERSION} COMPONENTS Qml Network Widgets Core5Compat Multimedia TextToSpeech REQUIRED)
++find_package(Qt6 ${ACT_MINIMUM_QT_VERSION} COMPONENTS Qml Network Widgets Core5Compat Multimedia REQUIRED)
+ 
+ target_link_directories(${PROJECT}
+     PRIVATE
+@@ -75,7 +75,6 @@ target_link_libraries(
+     Qt6::Widgets
+     Qt6::Core5Compat
+     Qt6::Multimedia
+-    Qt6::TextToSpeech
+     ${LIBNOTIFY_LIBRARIES}
+ )
+ 
+diff --git a/actiona/CMakeLists.txt b/actiona/CMakeLists.txt
+index d03d650..222b2f9 100644
+--- a/actiona/CMakeLists.txt
++++ b/actiona/CMakeLists.txt
+@@ -125,7 +125,7 @@ endif()
+ 
+ setup_target(${PROJECT})
+ 
+-find_package(Qt6 ${ACT_MINIMUM_QT_VERSION} COMPONENTS Qml Network Widgets Core5Compat Multimedia TextToSpeech REQUIRED)
++find_package(Qt6 ${ACT_MINIMUM_QT_VERSION} COMPONENTS Qml Network Widgets Core5Compat Multimedia REQUIRED)
+ 
+ target_link_directories(${PROJECT}
+     PRIVATE
+@@ -162,7 +162,6 @@ target_link_libraries(
+     Qt6::Widgets
+     Qt6::Core5Compat
+     Qt6::Multimedia
+-    Qt6::TextToSpeech
+     ${LIBNOTIFY_LIBRARIES}
+     ${LIBX11_LIBRARIES}
+     $<$<PLATFORM_ID:Windows>:shlwapi>
+diff --git a/actions/system/CMakeLists.txt b/actions/system/CMakeLists.txt
+index a3019b1..6d9430c 100644
+--- a/actions/system/CMakeLists.txt
++++ b/actions/system/CMakeLists.txt
+@@ -67,8 +67,6 @@ set(HEADERS
+     ${HEADERS_PREFIX}/actions/playsoundinstance.hpp
+     ${HEADERS_PREFIX}/actions/systemdefinition.hpp
+     ${HEADERS_PREFIX}/actions/systeminstance.hpp
+-    ${HEADERS_PREFIX}/actions/texttospeechdefinition.hpp
+-    ${HEADERS_PREFIX}/actions/texttospeechinstance.hpp
+     ${HEADERS_PREFIX}/code/mediaplaylist.hpp
+     ${HEADERS_PREFIX}/code/notify.hpp
+     ${HEADERS_PREFIX}/code/process.hpp
+@@ -140,7 +138,6 @@ find_package(Qt6 ${ACT_MINIMUM_QT_VERSION} COMPONENTS
+     DBus
+     Multimedia
+     MultimediaWidgets
+-    TextToSpeech
+ REQUIRED)
+ 
+ target_link_directories(${PROJECT}
+@@ -167,7 +164,6 @@ target_link_libraries(${PROJECT}
+     Qt6::DBus
+     Qt6::Multimedia
+     Qt6::MultimediaWidgets
+-    Qt6::TextToSpeech
+     ${LIBNOTIFY_LIBRARIES}
+     ${BLUEZ_LIBRARIES}
+     $<$<PLATFORM_ID:Windows>:Bthprops>
+diff --git a/actions/system/src/actionpacksystem.hpp b/actions/system/src/actionpacksystem.hpp
+index ea045e3..a5af35a 100644
+--- a/actions/system/src/actionpacksystem.hpp
++++ b/actions/system/src/actionpacksystem.hpp
+@@ -32,10 +32,6 @@
+ #include "actions/playsounddefinition.hpp"
+ #include "actions/findimagedefinition.hpp"
+ 
+-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+-#include "actions/texttospeechdefinition.hpp"
+-#endif
+-
+ #include "code/system.hpp"
+ #include "code/mediaplaylist.hpp"
+ #include "code/notify.hpp"
+@@ -64,9 +60,6 @@ public:
+ 		addActionDefinition(new Actions::DetachedCommandDefinition(this));
+ 		addActionDefinition(new Actions::PlaySoundDefinition(this));
+ 		addActionDefinition(new Actions::FindImageDefinition(this));
+-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+-        addActionDefinition(new Actions::TextToSpeechDefinition(this));
+-#endif
+ 	}
+ 
+ 	QString id() const override							{ return QStringLiteral("system"); }

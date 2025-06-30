@@ -1,0 +1,8 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+# gem "rails"
+gem 'pyu-ruby-sasl', '0.0.3.3', require: false
+gem 'rubyntlm', '0.3.4', require: false
+gem 'net-ldap', '0.18.0'

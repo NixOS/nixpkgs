@@ -1,0 +1,13 @@
+--- /Makefile	1970-01-01 01:00:01.000000000 +0100
++++ /Makefile	1970-01-01 01:00:01.000000000 +0100
+@@ -9,8 +9,8 @@
+ endif
+ 
+ # Uncomment the following lines to enable parallelization with OpenMP
+-# CFLAGS += -fopenmp
+-# SHARED_LIB_FLAG += -fopenmp
++CFLAGS += -fopenmp
++SHARED_LIB_FLAG += -fopenmp
+ 
+ all: svm-train svm-predict svm-scale
+ 

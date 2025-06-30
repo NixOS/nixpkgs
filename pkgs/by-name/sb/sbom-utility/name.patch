@@ -1,0 +1,13 @@
+diff --git a/cmd/root.go b/cmd/root.go
+index 5ef5d46..e99b245 100644
+--- a/cmd/root.go
++++ b/cmd/root.go
+@@ -139,7 +139,7 @@ const (
+ )
+ 
+ var rootCmd = &cobra.Command{
+-	Use:           fmt.Sprintf("%s [command] [flags]", utils.GlobalFlags.Project),
++	Use:           fmt.Sprintf("sbom-utility [command] [flags]"),
+ 	SilenceErrors: false,
+ 	SilenceUsage:  false,
+ 	Short:         MSG_APP_NAME,

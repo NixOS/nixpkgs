@@ -1,0 +1,22 @@
+diff --git a/odoo/http.py b/odoo/http.py
+index f26dd52db235c..9689fc894b2b1 100644
+--- a/odoo/http.py
++++ b/odoo/http.py
+@@ -117,6 +117,7 @@
+ import glob
+ import hashlib
+ import hmac
++import importlib.metadata
+ import inspect
+ import json
+ import logging
+@@ -256,7 +257,7 @@ def get_default_session():
+     'alias', 'host', 'methods',
+ }
+ 
+-if parse_version(werkzeug.__version__) >= parse_version('2.0.2'):
++if parse_version(importlib.metadata.version('werkzeug')) >= parse_version('2.0.2'):
+     # Werkzeug 2.0.2 adds the websocket option. If a websocket request
+     # (ws/wss) is trying to access an HTTP route, a WebsocketMismatch
+     # exception is raised. On the other hand, Werkzeug 0.16 does not
+

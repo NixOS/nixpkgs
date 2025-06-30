@@ -1,0 +1,11 @@
+--- a/main.h
++++ b/main.h
+@@ -68,7 +68,7 @@ memset(VAR,0,SIZE * sizeof(TYPE));
+ 
+ 
+ 
+-#ifdef __GLIBC__
++#if defined(__GLIBC__) || defined (__APPLE__)
+ extern char *__progname;
+ #else
+ char *__progname;

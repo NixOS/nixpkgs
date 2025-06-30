@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 079cb01..c5e71b8 100644
+--- a/setup.py
++++ b/setup.py
+@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
+     long_description = fh.read()
+ 
+ # determine the version, then write it out into the bridge.py file
+-version = subprocess.check_output("git describe --tags", shell=True).decode("utf-8").strip()
++version = "@version@"
+ # check if this is a non-tag release and remark it as a dev release
+ if "-" in version:
+     ver, commits, hash = version.split("-")

@@ -1,0 +1,39 @@
+{
+  "name": "multiple-entity-row",
+  "version": "4.5.1",
+  "description": "Show multiple entity states, attributes and icons on entity rows in Home Assistant's Lovelace UI",
+  "keywords": [
+    "home-assistant",
+    "homeassistant",
+    "lovelace",
+    "custom-cards",
+    "multiple",
+    "entity",
+    "row"
+  ],
+  "module": "multiple-entity-row.js",
+  "repository": "https://github.com/benct/lovelace-multiple-entity-row.git",
+  "author": "benct <ben@tomlin.no>",
+  "license": "MIT",
+  "dependencies": {
+    "custom-card-helpers": "1.8.0",
+    "lit": "^2.7.4",
+    "memoize-one": "^6.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.1",
+    "@babel/preset-env": "^7.22.4",
+    "babel-loader": "^9.1.2",
+    "eslint": "^8.41.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.8",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1"
+  },
+  "scripts": {
+    "lint": "eslint src/**/*.js",
+    "dev": "webpack -c webpack.config.js",
+    "build": "yarn lint && webpack -c webpack.config.js"
+  }
+}

@@ -1,0 +1,85 @@
+From 53d5aaaad09b479cd8c0e148c9428baa33204024 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 18 Jan 2025 22:10:41 +0000
+Subject: [PATCH 3/4] cmake: install samples and tests when built
+
+---
+ CMakeLists.txt                        | 12 +++++++++++-
+ samples/cpp/CMakeLists.txt            |  2 ++
+ samples/legacy_samples/CMakeLists.txt |  2 ++
+ test/cpp/CMakeLists.txt               |  2 ++
+ 4 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9b1bfba..f6af111 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -70,11 +70,21 @@ include(GNUInstallDirs)
+ # See https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html#example-generating-package-files
+ include(CMakePackageConfigHelpers)
+ 
+-# Install and export the header files
++# Install the components
+ install(
+     TARGETS cudnn_frontend
+     EXPORT cudnn_frontend_targets FILE_SET HEADERS
+ )
++
++if (CUDNN_FRONTEND_BUILD_SAMPLES)
++    install(TARGETS legacy_samples samples RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++endif()
++
++if (CUDNN_FRONTEND_BUILD_TESTS)
++    install(TARGETS tests RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++endif()
++
++# Export the targets
+ export(
+     EXPORT cudnn_frontend_targets
+     FILE "${CMAKE_CURRENT_BINARY_DIR}/cudnn_frontend/cudnn_frontend-targets.cmake"
+diff --git a/samples/cpp/CMakeLists.txt b/samples/cpp/CMakeLists.txt
+index 9b8a5eb..01b09bb 100644
+--- a/samples/cpp/CMakeLists.txt
++++ b/samples/cpp/CMakeLists.txt
+@@ -69,8 +69,10 @@ target_link_libraries(
+     _cudnn_frontend_pch
+     CUDNN::cudnn
+ 
++    CUDA::cublasLt
+     CUDA::cudart
+     CUDA::cuda_driver # Needed as calls all CUDA calls will eventually move to driver
++    CUDA::nvrtc
+ )
+ 
+ # target cmake properties
+diff --git a/samples/legacy_samples/CMakeLists.txt b/samples/legacy_samples/CMakeLists.txt
+index 019f17c..3b56329 100644
+--- a/samples/legacy_samples/CMakeLists.txt
++++ b/samples/legacy_samples/CMakeLists.txt
+@@ -44,7 +44,9 @@ target_link_libraries(
+     _cudnn_frontend_pch
+     CUDNN::cudnn
+ 
++    CUDA::cublasLt
+     CUDA::cudart
++    CUDA::nvrtc
+ )
+ 
+ # target cmake properties
+diff --git a/test/cpp/CMakeLists.txt b/test/cpp/CMakeLists.txt
+index e244cd0..2750294 100644
+--- a/test/cpp/CMakeLists.txt
++++ b/test/cpp/CMakeLists.txt
+@@ -55,7 +55,9 @@ target_link_libraries(
+ 
+     CUDNN::cudnn
+ 
++    CUDA::cublasLt
+     CUDA::cudart
++    CUDA::nvrtc
+ )
+ 
+ # cuDNN dlopen's its libraries
+-- 
+2.47.0
+

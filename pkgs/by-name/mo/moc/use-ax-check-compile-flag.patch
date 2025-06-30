@@ -1,0 +1,43 @@
+diff --git a/configure.in b/configure.in
+index eb71bdf0b0...342baf10c5 100644
+--- a/configure.in
++++ b/configure.in
+@@ -102,16 +102,16 @@
+ 
+ AC_C_CONST
+ AC_TYPE_INTPTR_T
+-AX_CFLAGS_GCC_OPTION(-Wall)
+-AX_CFLAGS_GCC_OPTION(-Wextra)
++AX_CHECK_COMPILE_FLAG(-Wall)
++AX_CHECK_COMPILE_FLAG(-Wextra)
+ 
+ dnl Overly-enthusiastic warning suppression.
+ save_CFLAGS="$CFLAGS"
+-AX_CFLAGS_GCC_OPTION([-Wgnu-zero-variadic-macro-arguments], ,
++AX_CHECK_COMPILE_FLAG([-Wgnu-zero-variadic-macro-arguments],
+                      AC_DEFINE([HAVE_VARIADIC_MACRO_WARNING], 1,
+                                [Define if compiler recognises warning option]))
+-AX_CFLAGS_GCC_OPTION([-Werror=unknown-warning-option])
+-AX_CFLAGS_GCC_OPTION([-Wformat-truncation], ,
++AX_CHECK_COMPILE_FLAG([-Werror=unknown-warning-option])
++AX_CHECK_COMPILE_FLAG([-Wformat-truncation],
+                      AC_DEFINE([HAVE_FORMAT_TRUNCATION_WARNING], 1,
+                                [Define if compiler recognises warning option]))
+ CFLAGS="$save_CFLAGS"
+@@ -242,13 +242,13 @@
+ else
+ 	if test "x$enable_debug" = "xgdb"
+ 	then
+-		AX_CFLAGS_GCC_OPTION([-ggdb])
+-		AX_CFLAGS_GCC_OPTION([-O0])
++		AX_CHECK_COMPILE_FLAG([-ggdb])
++		AX_CHECK_COMPILE_FLAG([-O0])
+ 		COMPILE_DEBUG='gdb'
+ 	fi
+ 	if test "x$ac_cv_cflags_gcc_option__ggdb" = "x"
+ 	then
+-		AX_CFLAGS_GCC_OPTION([-g])
++		AX_CHECK_COMPILE_FLAG([-g])
+ 		COMPILE_DEBUG='yes'
+ 	fi
+ 	EXTRA_OBJS="$EXTRA_OBJS null_out.o md5.o"

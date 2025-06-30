@@ -1,0 +1,28 @@
+Prevent swank from attempting write into storeDir
+--- a/swank-loader.lisp
++++ b/swank-loader.lisp
+@@ -162,7 +162,7 @@
+                  ,(unique-dir-name)))
+    (user-homedir-pathname)))
+ 
+-(defvar *fasl-directory* (default-fasl-dir)
++(defvar *fasl-directory* #P"@out@/fasl/"
+   "The directory where fasl files should be placed.")
+ 
+ (defun binary-pathname (src-pathname binary-dir)
+@@ -284,12 +284,7 @@
+                  (contrib-dir src-dir))))
+ 
+ (defun delete-stale-contrib-fasl-files (swank-files contrib-files fasl-dir)
+-  (let ((newest (reduce #'max (mapcar #'file-write-date swank-files))))
+-    (dolist (src contrib-files)
+-      (let ((fasl (binary-pathname src fasl-dir)))
+-        (when (and (probe-file fasl)
+-                   (<= (file-write-date fasl) newest))
+-          (delete-file fasl))))))
++  (declare (ignore swank-files contrib-files fasl-dir)))
+ 
+ (defun compile-contribs (&key (src-dir (contrib-dir *source-directory*))
+                            (fasl-dir (contrib-dir *fasl-directory*))
+
+Diff finished.  Sat Jan 22 23:57:27 2022

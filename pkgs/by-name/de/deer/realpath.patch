@@ -1,0 +1,28 @@
+From ceadb2f11119143af4f590ea6b05a531483219b5 Mon Sep 17 00:00:00 2001
+From: xd1le <elisp.vim@gmail.com>
+Date: Wed, 30 Aug 2017 17:27:20 +1000
+Subject: [PATCH] use realpath instead of python to calculate relative path
+
+---
+ deer | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/deer b/deer
+index 3d89dea..804a871 100644
+--- a/deer
++++ b/deer
+@@ -259,10 +259,7 @@ deer-get-relative()
+ {
+     local TMP
+     TMP=${1:-${DEER_DIRNAME%/}/$DEER_BASENAME[$DEER_DIRNAME]}
+-    TMP="`python -c '
+-import sys, os
+-print(os.path.relpath(sys.argv[1], sys.argv[2]))
+-' $TMP ${DEER_STARTDIR:-$PWD}`"
++    TMP="`realpath --relative-to=${DEER_STARTDIR:-$PWD} $TMP`"
+     print -R $TMP:q
+ }
+ 
+-- 
+2.14.1
+

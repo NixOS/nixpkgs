@@ -1,0 +1,31 @@
+{
+  "pins": {
+    "nixpkgs": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixpkgs"
+      },
+      "branch": "nixpkgs-unstable",
+      "submodules": false,
+      "revision": "6afe187897bef7933475e6af374c893f4c84a293",
+      "url": "https://github.com/NixOS/nixpkgs/archive/6afe187897bef7933475e6af374c893f4c84a293.tar.gz",
+      "hash": "1x3yas2aingswrw7hpn43d9anlb08bpyk42dqg6v8f3p3yk83p1b"
+    },
+    "treefmt-nix": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "numtide",
+        "repo": "treefmt-nix"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "a05be418a1af1198ca0f63facb13c985db4cb3c5",
+      "url": "https://github.com/numtide/treefmt-nix/archive/a05be418a1af1198ca0f63facb13c985db4cb3c5.tar.gz",
+      "hash": "1yadm9disc59an4a6c1zidq82530rd7i7idzzsirv6dlwirbqk3q"
+    }
+  },
+  "version": 5
+}

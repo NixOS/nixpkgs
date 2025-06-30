@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5c4863c..f731775 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -46,7 +46,6 @@ set_package_properties(LibXml2 PROPERTIES
+                       )
+ 
+ 
+-find_package(DocBookXML4 "4.5")
+ 
+ set_package_properties(DocBookXML4 PROPERTIES
+                        TYPE REQUIRED

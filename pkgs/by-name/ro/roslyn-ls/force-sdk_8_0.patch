@@ -1,0 +1,46 @@
+diff --git a/eng/targets/TargetFrameworks.props b/eng/targets/TargetFrameworks.props
+index 58f90114f4d..8eb23c25067 100644
+--- a/eng/targets/TargetFrameworks.props
++++ b/eng/targets/TargetFrameworks.props
+@@ -17,7 +17,7 @@
+     <NetVS>net8.0</NetVS>
+     <NetVSCode>net8.0</NetVSCode>
+     <NetVSShared>net8.0</NetVSShared>
+-    <NetRoslynBuildHostNetCoreVersion>net6.0</NetRoslynBuildHostNetCoreVersion>
++    <NetRoslynBuildHostNetCoreVersion>net8.0</NetRoslynBuildHostNetCoreVersion>
+     <NetRoslynNext>net9.0</NetRoslynNext>
+   </PropertyGroup>
+ 
+diff --git a/src/Workspaces/MSBuild/BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj b/src/Workspaces/MSBuild/BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj
+index 8101f56b8be..1733955dc3d 100644
+--- a/src/Workspaces/MSBuild/BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj
++++ b/src/Workspaces/MSBuild/BuildHost/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.csproj
+@@ -28,6 +28,12 @@
+     -->
+     <_MsbuildVersion>17.3.4</_MsbuildVersion>
+   </PropertyGroup>
++  <PropertyGroup>
++    <_MsbuildFramework>$(TargetFramework)</_MsbuildFramework>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0'">
++    <_MsbuildFramework>net6.0</_MsbuildFramework>
++  </PropertyGroup>
+   <ItemGroup Condition="'$(DotNetBuildSourceOnly)' == 'true'">
+     <PackageReference Include="Microsoft.Build" VersionOverride="$(_MsbuildVersion)" ExcludeAssets="Runtime" PrivateAssets="All" />
+     <PackageReference Include="Microsoft.Build.Framework" VersionOverride="$(_MsbuildVersion)" ExcludeAssets="Runtime" />
+@@ -36,10 +42,10 @@
+   </ItemGroup>
+   <ItemGroup Condition="'$(DotNetBuildSourceOnly)' != 'true'">
+     <!-- Reference MSBuild directly to avoid redistributing its package closure and including the dependencies in deps.json file. -->
+-    <PackageDownloadAndReference Include="Microsoft.Build" Version="$(_MsbuildVersion)" Folder="ref/$(TargetFramework)" />
+-    <PackageDownloadAndReference Include="Microsoft.Build.Framework" Version="$(_MsbuildVersion)" Folder="ref/$(TargetFramework)" />
+-    <PackageDownloadAndReference Include="Microsoft.Build.Tasks.Core" Version="$(_MsbuildVersion)" Folder="ref/$(TargetFramework)" />
+-    <PackageDownloadAndReference Include="Microsoft.Build.Utilities.Core" Version="$(_MsbuildVersion)" Folder="ref/$(TargetFramework)" />
++    <PackageDownloadAndReference Include="Microsoft.Build" Version="$(_MsbuildVersion)" Folder="ref/$(_MsbuildFramework)" />
++    <PackageDownloadAndReference Include="Microsoft.Build.Framework" Version="$(_MsbuildVersion)" Folder="ref/$(_MsbuildFramework)" />
++    <PackageDownloadAndReference Include="Microsoft.Build.Tasks.Core" Version="$(_MsbuildVersion)" Folder="ref/$(_MsbuildFramework)" />
++    <PackageDownloadAndReference Include="Microsoft.Build.Utilities.Core" Version="$(_MsbuildVersion)" Folder="ref/$(_MsbuildFramework)" />
+   </ItemGroup>
+   <ItemGroup>
+     <PackageReference Include="Microsoft.Build.Locator" PrivateAssets="All" />
+
