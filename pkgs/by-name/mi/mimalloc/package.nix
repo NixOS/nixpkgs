@@ -35,7 +35,12 @@ stdenv.mkDerivation rec {
     ninja
   ];
   cmakeFlags =
-    [ "-DMI_INSTALL_TOPLEVEL=ON" ]
+    [
+      "-DMI_INSTALL_TOPLEVEL=ON"
+      # MI_OPT_ARCH is inaccurate (e.g. it assumes aarch64 == armv8.1-a).
+      # Nixpkgs's native platform configuration does a better job.
+      (lib.cmakeBool "MI_NO_OPT_ARCH" true)
+    ]
     ++ lib.optionals secureBuild [ "-DMI_SECURE=ON" ]
     ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DMI_BUILD_SHARED=OFF" ]
     ++ lib.optionals (!doCheck) [ "-DMI_BUILD_TESTS=OFF" ];
