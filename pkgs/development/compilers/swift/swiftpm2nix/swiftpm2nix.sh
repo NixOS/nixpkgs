@@ -13,7 +13,7 @@ if [[ ! -f "$stateFile" ]]; then
 fi
 
 stateVersion="$(jq .version $stateFile)"
-if [[ $stateVersion -lt 5 || $stateVersion -gt 6 ]]; then
+if [[ $stateVersion -lt 5 || $stateVersion -gt 7 ]]; then
   echo >&2 "Unsupported $stateFile version"
   exit 1
 fi
