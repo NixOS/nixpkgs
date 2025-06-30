@@ -372,11 +372,11 @@
     "vendorHash": null
   },
   "dme": {
-    "hash": "sha256-u7mCQtz6Z7X34nbYKaRNPrbD7IuDe1tH67noAeTWH6Q=",
+    "hash": "sha256-JH9YcM9Fvd1x0BJpLUZCm6a9hZZxySrkFVLP89FO3fU=",
     "homepage": "https://registry.terraform.io/providers/DNSMadeEasy/dme",
     "owner": "DNSMadeEasy",
     "repo": "terraform-provider-dme",
-    "rev": "v1.0.7",
+    "rev": "v1.0.8",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
