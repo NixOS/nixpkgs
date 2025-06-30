@@ -7944,19 +7944,7 @@ self: super: with self; {
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 
-  libcomps = lib.pipe pkgs.libcomps [
-    toPythonModule
-    (
-      p:
-      p.overrideAttrs (super: {
-        meta = super.meta // {
-          outputsToInstall = [ "py" ];
-        };
-      })
-    )
-    (p: p.override { python3 = python; })
-    (p: p.py)
-  ];
+  libcomps = toPythonModule (pkgs.libcomps.override { python3 = python; }).py;
 
   libcst = callPackage ../development/python-modules/libcst { };
 
