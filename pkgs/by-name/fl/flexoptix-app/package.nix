@@ -3,25 +3,30 @@
   appimageTools,
   fetchurl,
   asar,
+  python3,
 }:
 let
   pname = "flexoptix-app";
-  version = "5.21.2-latest";
+  version = "5.43.0-latest";
 
   src = fetchurl {
     name = "${pname}-${version}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    hash = "sha256-BnNRwD09CE1EZDg3Hn3khN4FZ8Hj5LLAunk+NKU5BJo=";
+    hash = "sha256-DWVk+gtz6bym3ngiToO04VFIMeJWKUcaNjAY3a9xa5M=";
   };
 
   udevRules = fetchurl {
     url = "https://www.flexoptix.net/static/frontend/Flexoptix/default/en_US/files/99-tprogrammer.rules";
-    hash = "sha256-faowRYdrk88WUpOpaEfedzybBgxVRZhvAaYP9HAuzAE=";
+    hash = "sha256-/1ZtJT+1IMyYqw3N0bVJ/T3vbmex169lzx+SlY5WsnA=";
   };
 
   appimageContents = (appimageTools.extract { inherit pname version src; }).overrideAttrs (oA: {
     buildCommand = ''
       ${oA.buildCommand}
+
+      # Remove left-over node-gyp executable symlinks
+      # https://github.com/nodejs/node-gyp/issues/2713
+      find $out/ -type l -name python3 -exec ln -sf ${python3.interpreter} {} \;
 
       # Get rid of the autoupdater
       ${asar}/bin/asar extract $out/resources/app.asar app
