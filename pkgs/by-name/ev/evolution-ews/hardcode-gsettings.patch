@@ -1,5 +1,5 @@
 diff --git a/src/EWS/camel/camel-ews-utils.c b/src/EWS/camel/camel-ews-utils.c
-index 32817df..da65217 100644
+index 32817df..c8b3f2e 100644
 --- a/src/EWS/camel/camel-ews-utils.c
 +++ b/src/EWS/camel/camel-ews-utils.c
 @@ -1550,7 +1550,7 @@ ews_utils_save_category_changes (GHashTable *old_categories, /* gchar *guid ~> C
@@ -32,7 +32,7 @@ index 32817df..da65217 100644
  
  	for (ii = 0; strv && strv[ii]; ii++) {
 diff --git a/src/Microsoft365/camel/camel-m365-store.c b/src/Microsoft365/camel/camel-m365-store.c
-index 7374c36..7da2023 100644
+index 7374c36..dbf9099 100644
 --- a/src/Microsoft365/camel/camel-m365-store.c
 +++ b/src/Microsoft365/camel/camel-m365-store.c
 @@ -305,7 +305,7 @@ m365_store_save_category_changes (GHashTable *old_categories, /* gchar *id ~> Ca
@@ -65,7 +65,7 @@ index 7374c36..7da2023 100644
  
  	for (ii = 0; strv && strv[ii]; ii++) {
 diff --git a/src/Microsoft365/common/e-m365-tz-utils.c b/src/Microsoft365/common/e-m365-tz-utils.c
-index cec5417..2e744a0 100644
+index cec5417..38f1a87 100644
 --- a/src/Microsoft365/common/e-m365-tz-utils.c
 +++ b/src/Microsoft365/common/e-m365-tz-utils.c
 @@ -192,10 +192,21 @@ e_m365_tz_utils_get_user_timezone (void)
@@ -93,7 +93,7 @@ index cec5417..2e744a0 100644
  		if (g_settings_get_boolean (settings, "use-system-timezone"))
  			location = e_cal_util_get_system_timezone_location ();
 diff --git a/src/common/e-ews-common-utils.c b/src/common/e-ews-common-utils.c
-index 3458c10..7d21784 100644
+index f388e3b..ed57213 100644
 --- a/src/common/e-ews-common-utils.c
 +++ b/src/common/e-ews-common-utils.c
 @@ -208,10 +208,21 @@ e_ews_common_utils_get_configured_icaltimezone (void)
