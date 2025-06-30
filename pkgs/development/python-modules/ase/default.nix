@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchPypi,
+  fetchFromGitLab,
   buildPythonPackage,
   isPy27,
   pythonAtLeast,
@@ -20,14 +20,16 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.25.0";
+  version = "3.25.0-unstable-2025-06-24";
   pyproject = true;
 
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-N0z4yp/liPBdboVto8nBfvJi3JaAJ7Ix1EkzQUDJYsI=";
+  src = fetchFromGitLab {
+    owner = "ase";
+    repo = "ase";
+    rev = "4e22dabfbe7ae2329e50260ca1b6f08a83527ac3";
+    hash = "sha256-ehMyVtPxfTxT8T418VyLGnUEyYip4LPTTaGL0va7qgM=";
   };
 
   build-system = [ setuptools ];
