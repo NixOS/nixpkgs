@@ -25,7 +25,7 @@ function pytestCheckPhase() {
     runHook preCheck
 
     # Compose arguments
-    local -a flagsArray=(-m pytest)
+    local -a flagsArray=()
 
     local -a _pathsArray
     local path
@@ -88,7 +88,7 @@ EOF
 
     concatTo flagsArray pytestFlags
     echoCmd 'pytest flags' "${flagsArray[@]}"
-    @pythonCheckInterpreter@ "${flagsArray[@]}"
+    pytest "${flagsArray[@]}"
 
     runHook postCheck
     echo "Finished executing pytestCheckPhase"
