@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "3.26.1";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "marshmallow";
     tag = version;
-    hash = "sha256-l5pEhv8D6jRlU24SlsGQEkXda/b7KUdP9mAqrZCbl38=";
+    hash = "sha256-oG+TW+K8bSPLntCIP1L696q4XPZgdVdoJA1WMQ1cEUI=";
   };
 
   nativeBuildInputs = [ flit-core ];
