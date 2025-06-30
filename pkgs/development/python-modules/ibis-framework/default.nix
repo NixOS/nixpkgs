@@ -171,6 +171,12 @@ buildPythonPackage rec {
 
     # AssertionError: value does not match the expected value in snapshot ibis/backends/tests/snapshots/test_sql/test_rewrite_context/sqlite/out.sql
     "test_rewrite_context"
+
+    # Assertion error comparing a calculated version string with the actual (during nixpkgs-review)
+    "test_builtin_scalar_noargs"
+
+    # duckdb ParserError: syntax error at or near "AT"
+    "test_90"
   ];
 
   # patch out tests that check formatting with black
