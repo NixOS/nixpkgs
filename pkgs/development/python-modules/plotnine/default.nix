@@ -19,6 +19,7 @@
   pytestCheckHook,
   pytest-cov-stub,
   scikit-misc,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
+  pythonRelaxDeps = [
+    "mizani"
+  ];
+
   dependencies = [
     matplotlib
     mizani
@@ -49,11 +54,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     scikit-misc
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "plotnine" ];
 
