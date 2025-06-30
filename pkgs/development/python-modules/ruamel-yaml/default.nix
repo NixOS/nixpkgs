@@ -5,6 +5,7 @@
   setuptools,
   ruamel-base,
   ruamel-yaml-clib,
+  nix-update-script,
   isPyPy,
 }:
 
@@ -35,6 +36,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "ruamel.yaml" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
