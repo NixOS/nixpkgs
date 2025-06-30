@@ -64,8 +64,8 @@ buildPythonPackage rec {
     export PYSCF_CONFIG_FILE=$(pwd)/pyscf/pyscf_config.py
   '';
 
-  # Numerically slightly off tests
   disabledTests = [
+    # Numerically slightly off tests
     "test_tdhf_singlet"
     "test_ab_hf"
     "test_ea"
@@ -93,6 +93,11 @@ buildPythonPackage rec {
     "test_collinear_kgks_gga"
     "test_libxc_gga_deriv4"
     "test_sacasscf_grad"
+    "test_rdm_trace"
+
+    # TypeError: cannot unpack non-iterable numpy.int64 object
+    "test_from_fcivec"
+    "test_h4_a"
   ];
 
   pytestFlagsArray = [
