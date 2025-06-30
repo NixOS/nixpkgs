@@ -1,0 +1,121 @@
+From 88952b6d4e6bea810aaa4c063bdaf5b8252acb1c Mon Sep 17 00:00:00 2001
+From: Gavin Zhao <git@gzgz.dev>
+Date: Fri, 17 Jan 2025 09:21:11 -0500
+Subject: [PATCH] Even more RDNA1 changes
+
+Signed-off-by: Gavin Zhao <git@gzgz.dev>
+---
+ .../gpu/device/impl/device_batched_gemm_multiple_d_dl.hpp       | 2 +-
+ .../gpu/device/impl/device_gemm_multiple_d_dl.hpp               | 2 +-
+ .../gpu/device/impl/device_grouped_conv_bwd_weight_dl.hpp       | 2 +-
+ .../device_grouped_conv_fwd_dl_multiple_d_nhwc_kyxc_nhwk.hpp    | 2 +-
+ .../device/impl/device_grouped_conv_fwd_dl_nhwc_kyxc_nhwk.hpp   | 2 +-
+ .../gpu/device/impl/device_grouped_gemm_multiple_d_dl.hpp       | 2 +-
+ include/ck/tensor_operation/gpu/grid/gridwise_gemm_dpp.hpp      | 2 +-
+ .../ck/tensor_operation/gpu/grid/gridwise_tensor_rearrange.hpp  | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_multiple_d_dl.hpp b/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_multiple_d_dl.hpp
+index 1b487502f4..c63ff27bf9 100644
+--- a/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_multiple_d_dl.hpp
++++ b/include/ck/tensor_operation/gpu/device/impl/device_batched_gemm_multiple_d_dl.hpp
+@@ -71,7 +71,7 @@ __global__ void
+             const Block2CTileMap block_2_ctile_map)
+ {
+ #if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx906__) || defined(__gfx908__) ||         \
+-    defined(__gfx90a__) || defined(__gfx94__) || defined(__gfx103__) || defined(__gfx11__) || \
++    defined(__gfx90a__) || defined(__gfx94__) || defined(__gfx101__) || defined(__gfx103__) || defined(__gfx11__) || \
+     defined(__gfx12__))
+ 
+     const index_t num_blocks_per_batch =
+diff --git a/include/ck/tensor_operation/gpu/device/impl/device_gemm_multiple_d_dl.hpp b/include/ck/tensor_operation/gpu/device/impl/device_gemm_multiple_d_dl.hpp
+index 811f1ae939..1d3a5d8342 100644
+--- a/include/ck/tensor_operation/gpu/device/impl/device_gemm_multiple_d_dl.hpp
++++ b/include/ck/tensor_operation/gpu/device/impl/device_gemm_multiple_d_dl.hpp
+@@ -51,7 +51,7 @@ __global__ void
+             const Block2CTileMap block_2_ctile_map)
+ {
+ #if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx906__) || defined(__gfx908__) ||         \
+-    defined(__gfx90a__) || defined(__gfx94__) || defined(__gfx103__) || defined(__gfx11__) || \
++    defined(__gfx90a__) || defined(__gfx94__) || defined(__gfx101__) || defined(__gfx103__) || defined(__gfx11__) || \
+     defined(__gfx12__))
+ 
+     constexpr index_t shared_block_size =
+diff --git a/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_bwd_weight_dl.hpp b/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_bwd_weight_dl.hpp
+index 0b3f1a0255..3dd6b2f09e 100644
+--- a/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_bwd_weight_dl.hpp
++++ b/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_bwd_weight_dl.hpp
+@@ -48,7 +48,7 @@ __global__ void
+             const Block2CTileMap block_2_ctile_map,
+             const ComputePtrOffsetOfBatch compute_ptr_offset_of_batch)
+ {
+-#if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx906__) || defined(__gfx103__) ||         \
++#if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx906__) || defined(__gfx101__) || defined(__gfx103__) ||         \
+     defined(__gfx90a__) || defined(__gfx908__) || defined(__gfx94__) || defined(__gfx11__) || \
+     defined(__gfx12__))
+     const index_t num_blocks_per_batch =
+diff --git a/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_fwd_dl_multiple_d_nhwc_kyxc_nhwk.hpp b/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_fwd_dl_multiple_d_nhwc_kyxc_nhwk.hpp
+index 65b7b6cb7a..e29699185d 100644
+--- a/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_fwd_dl_multiple_d_nhwc_kyxc_nhwk.hpp
++++ b/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_fwd_dl_multiple_d_nhwc_kyxc_nhwk.hpp
+@@ -90,7 +90,7 @@ __global__ void
+             const Block2CTileMap block_2_ctile_map,
+             const ComputePtrOffsetOfBatch compute_ptr_offset_of_batch)
+ {
+-#if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx906__) || defined(__gfx103__) ||         \
++#if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx906__) || defined(__gfx101__) || defined(__gfx103__) ||         \
+     defined(__gfx90a__) || defined(__gfx908__) || defined(__gfx94__) || defined(__gfx11__) || \
+     defined(__gfx12__))
+     // offset base pointer for each work-group
+diff --git a/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_fwd_dl_nhwc_kyxc_nhwk.hpp b/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_fwd_dl_nhwc_kyxc_nhwk.hpp
+index 50e171e503..6467d5c878 100644
+--- a/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_fwd_dl_nhwc_kyxc_nhwk.hpp
++++ b/include/ck/tensor_operation/gpu/device/impl/device_grouped_conv_fwd_dl_nhwc_kyxc_nhwk.hpp
+@@ -106,7 +106,7 @@ __global__ void
+             const Block2CTileMap block_2_ctile_map,
+             const ComputePtrOffsetOfBatch compute_ptr_offset_of_batch)
+ {
+-#if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx906__) || defined(__gfx103__) || \
++#if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx906__) || defined(__gfx101__) || defined(__gfx103__) || \
+     defined(__gfx11__) || defined(__gfx12__))
+     // offset base pointer for each work-group
+     const index_t num_blocks_per_batch =
+diff --git a/include/ck/tensor_operation/gpu/device/impl/device_grouped_gemm_multiple_d_dl.hpp b/include/ck/tensor_operation/gpu/device/impl/device_grouped_gemm_multiple_d_dl.hpp
+index 060a16d1e2..ea58de2f29 100644
+--- a/include/ck/tensor_operation/gpu/device/impl/device_grouped_gemm_multiple_d_dl.hpp
++++ b/include/ck/tensor_operation/gpu/device/impl/device_grouped_gemm_multiple_d_dl.hpp
+@@ -40,7 +40,7 @@ __global__ void
+                                           const CDEElementwiseOperation cde_element_op)
+ {
+ #if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx906__) || defined(__gfx908__) ||         \
+-    defined(__gfx90a__) || defined(__gfx103__) || defined(__gfx11__) || defined(__gfx94__) || \
++    defined(__gfx90a__) || defined(__gfx101__) || defined(__gfx103__) || defined(__gfx11__) || defined(__gfx94__) || \
+     defined(__gfx12__))
+     __shared__ char p_shared[GridwiseGemm::GetSharedMemoryNumberOfByte()];
+ 
+diff --git a/include/ck/tensor_operation/gpu/grid/gridwise_gemm_dpp.hpp b/include/ck/tensor_operation/gpu/grid/gridwise_gemm_dpp.hpp
+index b473d7cbf2..e92158222c 100644
+--- a/include/ck/tensor_operation/gpu/grid/gridwise_gemm_dpp.hpp
++++ b/include/ck/tensor_operation/gpu/grid/gridwise_gemm_dpp.hpp
+@@ -28,7 +28,7 @@ __global__ void
+ #endif
+         kernel_gemm_dpp(const typename GridwiseGemm::Argument karg)
+ {
+-#if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx103__) || defined(__gfx11__))
++#if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx101__) || defined(__gfx103__) || defined(__gfx11__))
+     __shared__ char p_shared[GridwiseGemm::GetSharedMemoryNumberOfByte()];
+ 
+     const auto a_grid_desc_ak0_m_ak1 = amd_wave_read_first_lane(
+diff --git a/include/ck/tensor_operation/gpu/grid/gridwise_tensor_rearrange.hpp b/include/ck/tensor_operation/gpu/grid/gridwise_tensor_rearrange.hpp
+index 1740749907..7a8faec2ce 100644
+--- a/include/ck/tensor_operation/gpu/grid/gridwise_tensor_rearrange.hpp
++++ b/include/ck/tensor_operation/gpu/grid/gridwise_tensor_rearrange.hpp
+@@ -36,7 +36,7 @@ __global__ void
+                                 const ComputePtrOffsetOfStridedBatch compute_ptr_offset_of_batch)
+ {
+ #if(!defined(__HIP_DEVICE_COMPILE__) || defined(__gfx906__) || defined(__gfx908__) ||         \
+-    defined(__gfx90a__) || defined(__gfx94__) || defined(__gfx103__) || defined(__gfx11__) || \
++    defined(__gfx90a__) || defined(__gfx94__) || defined(__gfx101__) || defined(__gfx103__) || defined(__gfx11__) || \
+     defined(__gfx12__))
+     GridwiseTensorRearrangeKernel::Run(in_grid_desc,
+                                        p_in_global,
