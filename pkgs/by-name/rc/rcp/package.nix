@@ -22,8 +22,12 @@ rustPlatform.buildRustPackage rec {
   RUSTFLAGS = "--cfg tokio_unstable";
 
   checkFlags = [
-    # this test also sets setuid permissions on a test file (3oXXX) which doesn't work in a sandbox
+    # these tests set setuid permissions on a test file (3oXXX) which doesn't work in a sandbox
     "--skip=copy::copy_tests::check_default_mode"
+    "--skip=test_weird_permissions"
+    "--skip=test_edge_case_special_permissions"
+    # these tests require network access to determine local IP address
+    "--skip=test_remote"
   ];
 
   meta = {
