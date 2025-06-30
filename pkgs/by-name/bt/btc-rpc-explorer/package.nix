@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "btc-rpc-explorer";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "janoside";
     repo = "btc-rpc-explorer";
     rev = "v${version}";
-    hash = "sha256-ZGg3jwSl1XyzS9hMa2YqwExhHSNgrsUmSscZtfF2h54=";
+    hash = "sha256-Ue6/eh1Y9VkTRumhaedkxmqbrZSc9lnfbqlhpkHpbgE=";
   };
 
-  npmDepsHash = "sha256-9pVjydGaEaHytZqwXv0/kaJAVqlE7zzuTvubBFTkuBg=";
+  npmDepsHash = "sha256-eYA2joO4wcV10xJeYLqCbvM2szWlqofmugoHHD9D30U=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
