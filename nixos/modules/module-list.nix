@@ -1545,6 +1545,7 @@
   ./services/web-apps/echoip.nix
   ./services/web-apps/eintopf.nix
   ./services/web-apps/engelsystem.nix
+  ./services/web-apps/ente.nix
   ./services/web-apps/ethercalc.nix
   ./services/web-apps/fediwall.nix
   ./services/web-apps/fider.nix

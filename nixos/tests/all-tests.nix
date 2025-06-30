@@ -440,6 +440,7 @@ in
   endlessh-go = runTest ./endlessh-go.nix;
   engelsystem = runTest ./engelsystem.nix;
   enlightenment = runTest ./enlightenment.nix;
+  ente = runTest ./ente;
   env = runTest ./env.nix;
   envfs = runTest ./envfs.nix;
   envoy = runTest {
