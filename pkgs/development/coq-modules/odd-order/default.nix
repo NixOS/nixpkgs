@@ -19,7 +19,7 @@ mkCoqDerivation {
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch mathcomp.character.version (lib.lists.sort (x: y: isLe x.out y.out) (
+    lib.switch mathcomp.character.version (lib.lists.sort (x: y: isLt x.out y.out) (
       lib.mapAttrsToList (out: case: { inherit case out; }) {
         "2.2.0" = (range "2.2.0" "2.4.0");
         "2.1.0" = (range "2.1.0" "2.3.0");

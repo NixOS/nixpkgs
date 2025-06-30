@@ -29,7 +29,7 @@ mkCoqDerivation {
         mc
       ];
     in
-    lib.switch [ coq.coq-version mathcomp.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
+    lib.switch [ coq.coq-version mathcomp.version ] (lib.lists.sort (x: y: isLt x.out y.out) (
       lib.mapAttrsToList (out: cases: { inherit cases out; }) {
         "1.4.1" = cmc (isGe "8.16") (isGe "2.0");
         "1.3.0" = cmc (isGe "8.16") "2.0.0";

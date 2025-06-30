@@ -28,7 +28,7 @@ mkCoqDerivation {
   inherit version;
   defaultVersion =
     with lib.versions;
-    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
+    lib.switch coq.coq-version (lib.lists.sort (x: y: isLt x.out y.out) (
       lib.mapAttrsToList (out: case: { inherit case out; }) {
         "1.7.11" = isEq "8.20";
         "1.7.10" = range "8.18" "8.19";

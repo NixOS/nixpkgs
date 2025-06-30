@@ -15,7 +15,7 @@ mkCoqDerivation {
   owner = "Karmaki";
   repo = "coq-dpdgraph";
   inherit version;
-  defaultVersion = lib.switch coq.coq-version (lib.lists.sort (x: y: lib.versions.isLe x.out y.out) (
+  defaultVersion = lib.switch coq.coq-version (lib.lists.sort (x: y: lib.versions.isLt x.out y.out) (
     lib.mapAttrsToList (out: case: { inherit case out; }) {
       "1.0+8.20" = "8.20";
       "1.0+8.19" = "8.19";

@@ -25,7 +25,7 @@ mkCoqDerivation {
         mc
       ];
     in
-    lib.switch [ coq.coq-version mathcomp.version ] (lib.lists.sort (x: y: isLe x.out y.out) (
+    lib.switch [ coq.coq-version mathcomp.version ] (lib.lists.sort (x: y: isLt x.out y.out) (
       lib.mapAttrsToList (out: cases: { inherit cases out; }) {
         "1.2.1" = cmc (range "8.10" "8.16") (range "1.12.0" "1.15.0");
         "1.2.0" = cmc (range "8.10" "8.15") (range "1.12.0" "1.14.0");

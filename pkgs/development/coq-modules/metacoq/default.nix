@@ -10,7 +10,7 @@
 let
   repo = "metacoq";
   owner = "MetaCoq";
-  defaultVersion = lib.switch coq.coq-version (lib.lists.sort (x: y: lib.versions.isLe x.out y.out) (
+  defaultVersion = lib.switch coq.coq-version (lib.lists.sort (x: y: lib.versions.isLt x.out y.out) (
     lib.mapAttrsToList (out: case: { inherit case out; }) {
       "1.0-beta2-8.11" = "8.11";
       "1.0-beta2-8.12" = "8.12";

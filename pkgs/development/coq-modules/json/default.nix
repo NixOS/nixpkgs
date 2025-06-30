@@ -15,9 +15,9 @@
 
   defaultVersion =
     let
-      inherit (lib.versions) isLe range;
+      inherit (lib.versions) isLt range;
     in
-    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
+    lib.switch coq.coq-version (lib.lists.sort (x: y: isLt x.out y.out) (
       lib.mapAttrsToList (out: case: { inherit case out; }) {
         "0.2.0" = range "8.14" "9.0";
         "0.1.3" = range "8.14" "8.20";
