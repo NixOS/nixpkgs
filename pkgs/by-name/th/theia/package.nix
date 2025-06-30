@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eclipse-theia";
     repo = "theia-ide";  # Do NOT use pname here.
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-hjg+UEu+c4Mt7M34KZGxoYcHVR6hzs38/vZzOYPttJs=";
   };
   # src = ./.;
