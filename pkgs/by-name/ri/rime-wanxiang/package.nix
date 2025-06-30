@@ -5,8 +5,14 @@
   librime,
   rime-data,
   nix-update-script,
+  callPackage,
+  useDataUpdater ? false,
 }:
 
+let
+  dataUpdater = callPackage ./data-updater.nix {};
+
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rime-wanxiang";
   version = "8.1.4";
@@ -22,6 +28,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     librime
     rime-data
   ];
+
+  buildInputs = lib.optional useDataUpdater dataUpdater;
 
   dontConfigure = true;
 
@@ -52,6 +60,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -pr -t $dst *
 
     runHook postInstall
+  '';
+
+  postInstall = lib.optionalString useDataUpdater ''
+    bin=$out/bin
+    mkdir -p $bin
+    ln -s ${dataUpdater}/bin/* $bin
   '';
 
   passthru.updateScript = nix-update-script { };
