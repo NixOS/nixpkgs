@@ -184,5 +184,6 @@ lib.warnIf (withDocs != null)
       badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
       maintainers = [ ];
       mainProgram = "bash";
+      identifiers.cpeParts.vendor = "gnu";
     };
   }

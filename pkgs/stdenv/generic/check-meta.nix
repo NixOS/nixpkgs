@@ -632,7 +632,7 @@ let
       identifiers =
         let
           # we have to call toString here in case version is an attrset with __toString attribute
-          versionMatch = builtins.match "([0-9]+\.[0-9]+)\.([0-9]+)" (toString attrs.version);
+          versionMatch = builtins.match "([0-9]+\.[0-9]+)(\.|p)([0-9]+)" (toString attrs.version);
           versionParts =
             if !attrs ? version then
               {
@@ -642,29 +642,34 @@ let
             else if versionMatch == null then
               {
                 version = attrs.version or null;
-                update = "";
+                update = "*";
               }
             else
               {
                 version = elemAt versionMatch 0;
-                update = elemAt versionMatch 1;
+                update = elemAt versionMatch 2;
               };
           cpeParts = {
             vendor = null;
             product = attrs.pname or null;
             inherit (versionParts) version update;
-            edition = "";
-            sw_edition = "";
-            target_sw = "";
-            target_hw = "";
-            language = "";
-            other = "";
+            edition = "*";
+            sw_edition = "*";
+            target_sw = "*";
+            target_hw = "*";
+            language = "*";
+            other = "*";
           } // attrs.meta.identifiers.cpeParts or { };
           cpe =
             if all (x: !isNull x) (attrValues cpeParts) then
-              "cpe:2.3:a:${cpeParts.vendor}:${cpeParts.product}:${cpeParts.version}:${cpeParts.update}:${cpeParts.edition}:${cpeParts.sw_edition}:${cpeParts.target_sw}:${cpeParts.target_hw}:${cpeParts.language}:${cpeParts.other}"
+              [
+                "cpe:2.3:a:${cpeParts.vendor}:${cpeParts.product}:${cpeParts.version}:${cpeParts.update}:${cpeParts.edition}:${cpeParts.sw_edition}:${cpeParts.target_sw}:${cpeParts.target_hw}:${cpeParts.language}:${cpeParts.other}"
+              ]
+              ++
+                optional (cpeParts.update != null && cpeParts.update != "*")
+                  "cpe:2.3:a:${cpeParts.vendor}:${cpeParts.product}:${cpeParts.version}.${cpeParts.update}:*:${cpeParts.edition}:${cpeParts.sw_edition}:${cpeParts.target_sw}:${cpeParts.target_hw}:${cpeParts.language}:${cpeParts.other}"
             else
-              null;
+              [ ];
           v1 = { inherit cpeParts cpe; };
         in
         v1
