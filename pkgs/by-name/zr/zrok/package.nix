@@ -13,6 +13,8 @@ let
       x86_64-linux = "linux_amd64";
       aarch64-linux = "linux_arm64";
       armv7l-linux = "linux_armv7";
+      x86_64-darwin = "darwin_amd64";
+      aarch64-darwin = "darwin_arm64";
     }
     .${system} or throwSystem;
 
@@ -21,6 +23,8 @@ let
       x86_64-linux = "sha256-Ewez2QUsIAmxyjxR8wvt7UJpXVHjIb8s6gGF1YNgrec=";
       aarch64-linux = "sha256-5hZaOqnTYWeUJXGObzUZMqE62ZgNvJ9Wi8shVng10l8=";
       armv7l-linux = "sha256-MOM0OS2/mhYaxowsBVnZH0poR+wXsbjsJKldU/nAfjU=";
+      x86_64-darwin = "sha256-DlB24u4CPK5NqrX+vlDJWqjtcz04X0UQurYY0hZtZ0Q=";
+      aarch64-darwin = "sha256-HS7xMpJUFm2PYEe4aXMJ5THGklDTAuziCtcCgf7sX9Q=";
     }
     .${system} or throwSystem;
 in
@@ -61,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
       "armv7l-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
