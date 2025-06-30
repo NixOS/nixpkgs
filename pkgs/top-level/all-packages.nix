@@ -9157,7 +9157,7 @@ with pkgs;
     libressl_4_1
     ;
 
-  libressl = libressl_4_0;
+  libressl = libressl_4_1;
 
   openssl = openssl_3_4;
 
