@@ -438,9 +438,8 @@ in
       initrdBin = [
         pkgs.bashInteractive
         pkgs.coreutils
-        cfg.package.kmod
         cfg.package
-      ];
+      ] ++ lib.optional (config.system.build.kernel.config.isYes "MODULES") cfg.package.kmod;
       extraBin = {
         less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
@@ -467,10 +466,6 @@ in
             }
           '';
 
-          "/lib".source = "${config.system.build.modulesClosure}/lib";
-
-          "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
-
           # We can use either ! or * to lock the root account in the
           # console, but some software like OpenSSH won't even allow you
           # to log in with an SSH key if you use ! so we use * instead
@@ -485,10 +480,6 @@ in
           "/bin".source = "${initrdBinEnv}/bin";
           "/sbin".source = "${initrdBinEnv}/sbin";
 
-          "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
-          "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
-          "/etc/modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-          "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
 
           "/etc/os-release".source = config.boot.initrd.osRelease;
           "/etc/initrd-release".source = config.boot.initrd.osRelease;
@@ -499,6 +490,16 @@ in
         }
         // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
           "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;
+        }
+        // optionalAttrs (with config.system.build.kernel.config; isSet "MODULES" -> isYes "MODULES") {
+          "/lib".source = "${config.system.build.modulesClosure}/lib";
+
+          "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
+
+          "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
+          "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
+          "/etc/modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+          "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
         };
 
       storePaths =
