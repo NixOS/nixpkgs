@@ -21,19 +21,17 @@
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
-  version = "1.20.11";
+  version = "1.20.12";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-    hash = "sha256-IOreg6j/jLhOK8jm2AgSnYQrql5R6QxsshvPs8OUcQA=";
+    hash = "sha256-h6YXEZoVVV9IuKkgtK9Z3NTvJogVNHmXdAcKxwfvqcE=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
-
-  buildInputs = [ dotnet-runtime_7 ];
 
   runtimeLibs = lib.makeLibraryPath (
     [
@@ -77,30 +75,35 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup =
-    ''
-      makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-        --add-flags $out/share/vintagestory/Vintagestory.dll
-      makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-        --add-flags $out/share/vintagestory/VintagestoryServer.dll
-    ''
-    + ''
-      find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
-        local filename="$(basename -- "$file")"
-        ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
-      done
-    '';
+  preFixup = ''
+    makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
+      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --set-default mesa_glthread true \
+      --add-flags $out/share/vintagestory/Vintagestory.dll
 
-  meta = with lib; {
+    makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
+      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --set-default mesa_glthread true \
+      --add-flags $out/share/vintagestory/VintagestoryServer.dll
+
+    find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
+      local filename="$(basename -- "$file")"
+      ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
+    done
+  '';
+
+  meta = {
     description = "In-development indie sandbox game about innovation and exploration";
     homepage = "https://www.vintagestory.at/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       artturin
       gigglesquid
       niraethm
+      dtomvan
     ];
+    mainProgram = "vintagestory";
   };
 }
