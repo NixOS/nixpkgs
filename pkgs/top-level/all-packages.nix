@@ -9330,6 +9330,7 @@ with pkgs;
     libressl_3_8
     libressl_3_9
     libressl_4_0
+    libressl_4_1
     ;
 
   libressl = libressl_4_0;
