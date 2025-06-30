@@ -730,4 +730,148 @@ rec {
       libraryPkgconfigDepends = propagatedPlainBuildInputs old.libraryPkgconfigDepends or [ ];
       testPkgconfigDepends = propagatedPlainBuildInputs old.testPkgconfigDepends or [ ];
     });
+
+  /*
+    Get the combined build inputs for a list of Haskell packages.
+
+    This combines all of the build input attributes of the packages
+    (`buildDepends`, `libraryHaskellDepends`, etc.) while being careful to
+    filter out packages from the arguments from the result.
+
+    This returns an attribute set where each key corresponds to a
+    `haskellPackages.mkDerivation` argument accepting a list of build inputs.
+
+    This logic is used by `haskellPackages.shellFor` to determine the packages
+    which are needed to build a particular set of packages.
+
+    ```
+    > combineInputs { packages = [haskellPackages.lens haskellPackages.aeson]; }
+    {
+      buildTools = [ ];
+      # ...
+      libraryHaskellDepends = [
+        «derivation /nix/store/pha8fwh6lc05nm2vvg1sivhyb5nmnkic-assoc-1.1.1.drv»
+        «derivation /nix/store/9j5w6q1hmf50r9jydj9n7vcplknw4fvv-base-orphans-0.9.3.drv»
+        # ...
+        «derivation /nix/store/r28dlymqid6q31dh5a46k36bag60ca52-witherable-0.5.drv»
+      ];
+      # ...
+      testHaskellDepends = [
+        «derivation /nix/store/rl0kfrl05z94in9f2fk8hl44r9pfyh44-HUnit-1.6.2.0.drv»
+        «derivation /nix/store/0dbqnww1fb3ml9f4s21phkw901yszd48-QuickCheck-2.14.3.drv»
+        # ...
+        «derivation /nix/store/0dml0xsw6s1v1d2qqhyk3qjyl4lw2fi4-vector-0.13.2.0.drv»
+      ];
+    }
+    ```
+  */
+  combineInputs =
+    {
+      # A list of packages to get the transitive inputs for.
+      #
+      # Note that while the `packages` parameter to `haskellPackages.shellFor`
+      # is a function from the Haskell package set to a list of packages, this
+      # function takes the list of packages directly.
+      packages,
+
+      # Extra dependencies, in the form of `haskellPackages.mkDerivation` build
+      # attributes.
+      #
+      # An example use case is when you have Haskell scripts that use
+      # libraries that don't occur in the dependencies of `packages`.
+      #
+      # Example:
+      #
+      #   extraDependencies = p: {
+      #     libraryHaskellDepends = [ p.releaser ];
+      #   };
+      extraDependencies ? { },
+
+      ...
+    }:
+    let
+      # This is a list of attribute sets, where each attribute set
+      # corresponds to the build inputs of one of the packages input to shellFor.
+      #
+      # Each attribute has keys like buildDepends, executableHaskellDepends,
+      # testPkgconfigDepends, etc.  The values for the keys of the attribute
+      # set are lists of dependencies.
+      #
+      # Example:
+      #   cabalDepsForSelected
+      #   => [
+      #        # This may be the attribute set corresponding to the `backend`
+      #        # package in the example above.
+      #        { buildDepends = [ gcc ... ];
+      #          libraryHaskellDepends = [ lens conduit ... ];
+      #          ...
+      #        }
+      #        # This may be the attribute set corresponding to the `common`
+      #        # package in the example above.
+      #        { testHaskellDepends = [ tasty hspec ... ];
+      #          libraryHaskellDepends = [ lens aeson ];
+      #          benchmarkHaskellDepends = [ criterion ... ];
+      #          ...
+      #        }
+      #        ...
+      #      ]
+      cabalDepsForSelected = builtins.map (p: p.getCabalDeps) (builtins.filter (p: p != null) packages);
+
+      # A predicate that takes a derivation as input, and tests whether it is
+      # the same as any of the `packages`.
+      #
+      # Returns true if the input derivation is not in the list of `packages`.
+      #
+      # isNotSelected :: Derivation -> Bool
+      #
+      # Example:
+      #
+      #   isNotSelected common [ frontend backend common ]
+      #   => false
+      #
+      #   isNotSelected lens [ frontend backend common ]
+      #   => true
+      isNotSelected = input: pkgs.lib.all (p: input.outPath or null != p.outPath) packages;
+
+      # A function that takes a list of list of derivations, filters out all
+      # the `packages` from each list, and concats the results.
+      #
+      #   zipperCombinedPkgs :: [[Derivation]] -> [Derivation]
+      #
+      # Example:
+      #   zipperCombinedPkgs [ [ lens conduit ] [ aeson frontend ] ]
+      #   => [ lens conduit aeson ]
+      #
+      # Note: The reason this isn't just the function `pkgs.lib.concat` is
+      # that we need to be careful to remove dependencies that are in the
+      # `packages` list.
+      #
+      # For instance, in the above example, if `common` is a dependency of
+      # `backend`, then zipperCombinedPkgs needs to be careful to filter out
+      # `common`, because cabal will end up ignoring that built version,
+      # assuming new-style commands.
+      zipperCombinedPkgs = vals: pkgs.lib.concatMap (drvList: pkgs.lib.filter isNotSelected drvList) vals;
+
+      # Zip `cabalDepsForSelected` into a single attribute list, combining
+      # the derivations in all the individual attributes.
+      #
+      # Example:
+      #   packageInputs
+      #   => # Assuming the value of cabalDepsForSelected is the same as
+      #      # the example in cabalDepsForSelected:
+      #      { buildDepends = [ gcc ... ];
+      #        libraryHaskellDepends = [ lens conduit aeson ... ];
+      #        testHaskellDepends = [ tasty hspec ... ];
+      #        benchmarkHaskellDepends = [ criterion ... ];
+      #        ...
+      #      }
+      #
+      # See the Note in `zipperCombinedPkgs` for what gets filtered out from
+      # each of these dependency lists.
+      packageInputs = pkgs.lib.zipAttrsWith (_name: zipperCombinedPkgs) (
+        cabalDepsForSelected ++ [ extraDependencies ]
+      );
+    in
+    packageInputs;
+
 }

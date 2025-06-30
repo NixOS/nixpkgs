@@ -5,6 +5,7 @@ lib.recurseIntoAttrs {
   documentationTarball = callPackage ./documentationTarball { };
   ghcWithPackages = callPackage ./ghcWithPackages { };
   incremental = callPackage ./incremental { };
+  lib = callPackage ./lib { };
   setBuildTarget = callPackage ./setBuildTarget { };
   shellFor = callPackage ./shellFor { };
   upstreamStackHpackVersion = callPackage ./upstreamStackHpackVersion { };
