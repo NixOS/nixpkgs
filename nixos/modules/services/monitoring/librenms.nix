@@ -354,7 +354,7 @@ in
       description = ''
         Attrset of the LibreNMS configuration.
         See <https://docs.librenms.org/Support/Configuration/> for reference.
-        All possible options are listed [here](https://github.com/librenms/librenms/blob/master/misc/config_definitions.json).
+        All possible options are listed [here](https://github.com/librenms/librenms/blob/master/resources/definitions/config_definitions.json).
         See <https://docs.librenms.org/Extensions/Authentication/> for setting other authentication methods.
       '';
       default = { };
