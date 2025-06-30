@@ -18,8 +18,8 @@ in
       package = mkPackageOption pkgs "audiobookshelf" { };
 
       dataDir = mkOption {
-        description = "Path to Audiobookshelf config and metadata inside of /var/lib.";
-        default = "audiobookshelf";
+        description = "Path to Audiobookshelf config and metadata.";
+        default = "/var/lib/audiobookshelf";
         type = types.str;
       };
 
@@ -68,7 +68,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = cfg.dataDir;
-        WorkingDirectory = "/var/lib/${cfg.dataDir}";
+        WorkingDirectory = cfg.dataDir;
         ExecStart = "${cfg.package}/bin/audiobookshelf --host ${cfg.host} --port ${toString cfg.port}";
         Restart = "on-failure";
       };
