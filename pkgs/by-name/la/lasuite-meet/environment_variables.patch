@@ -1,0 +1,102 @@
+From eda0ba42dc89f065565f25eefffefa7e5050d946 Mon Sep 17 00:00:00 2001
+From: soyouzpanda <soyouzpanda@soyouzpanda.fr>
+Date: Fri, 16 May 2025 23:46:36 +0200
+Subject: [PATCH] =?UTF-8?q?=F0=9F=94=A7(backend)=20support=20`=5FFILE`=20f?=
+ =?UTF-8?q?or=20secret=20environment=20variables?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Allow configuration variables that handles secrets, like
+`DJANGO_SECRET_KEY` to be able to read from a file which is given
+through an environment file.
+
+For example, if `DJANGO_SECRET_KEY_FILE` is set to
+`/var/lib/meet/django-secret-key`, the value of `DJANGO_SECRET_KEY` will
+be the content of `/var/lib/meet/django-secret-key`.
+---
+ meet/settings.py | 19 ++++++++++---------
+ pyproject.toml   |  2 +-
+ 2 files changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/meet/settings.py b/meet/settings.py
+index 1b4ed9c..58de93a 100755
+--- a/meet/settings.py
++++ b/meet/settings.py
+@@ -18,6 +18,7 @@ from django.utils.translation import gettext_lazy as _
+ 
+ import sentry_sdk
+ from configurations import Configuration, values
++from lasuite.configuration.values import SecretFileValue
+ from sentry_sdk.integrations.django import DjangoIntegration
+ from sentry_sdk.integrations.logging import ignore_logger
+ 
+@@ -73,7 +74,7 @@ class Base(Configuration):
+ 
+     # Security
+     ALLOWED_HOSTS = values.ListValue([])
+-    SECRET_KEY = values.Value(None)
++    SECRET_KEY = SecretFileValue(None)
+     SILENCED_SYSTEM_CHECKS = values.ListValue([])
+     ALLOW_UNSECURE_USER_LISTING = values.BooleanValue(
+         False, environ_name="ALLOW_UNSECURE_USER_LISTING", environ_prefix=None
+@@ -93,7 +94,7 @@ class Base(Configuration):
+             ),
+             "NAME": values.Value("meet", environ_name="DB_NAME", environ_prefix=None),
+             "USER": values.Value("dinum", environ_name="DB_USER", environ_prefix=None),
+-            "PASSWORD": values.Value(
++            "PASSWORD": SecretFileValue(
+                 "pass", environ_name="DB_PASSWORD", environ_prefix=None
+             ),
+             "HOST": values.Value(
+@@ -128,10 +129,10 @@ class Base(Configuration):
+     AWS_S3_ENDPOINT_URL = values.Value(
+         environ_name="AWS_S3_ENDPOINT_URL", environ_prefix=None
+     )
+-    AWS_S3_ACCESS_KEY_ID = values.Value(
++    AWS_S3_ACCESS_KEY_ID = SecretFileValue(
+         environ_name="AWS_S3_ACCESS_KEY_ID", environ_prefix=None
+     )
+-    AWS_S3_SECRET_ACCESS_KEY = values.Value(
++    AWS_S3_SECRET_ACCESS_KEY = SecretFileValue(
+         environ_name="AWS_S3_SECRET_ACCESS_KEY", environ_prefix=None
+     )
+     AWS_S3_REGION_NAME = values.Value(
+@@ -325,7 +326,7 @@ class Base(Configuration):
+     EMAIL_BACKEND = values.Value("django.core.mail.backends.smtp.EmailBackend")
+     EMAIL_HOST = values.Value(None)
+     EMAIL_HOST_USER = values.Value(None)
+-    EMAIL_HOST_PASSWORD = values.Value(None)
++    EMAIL_HOST_PASSWORD = SecretFileValue(None)
+     EMAIL_PORT = values.PositiveIntegerValue(None)
+     EMAIL_USE_TLS = values.BooleanValue(False)
+     EMAIL_USE_SSL = values.BooleanValue(False)
+@@ -383,7 +384,7 @@ class Base(Configuration):
+     OIDC_RP_CLIENT_ID = values.Value(
+         "meet", environ_name="OIDC_RP_CLIENT_ID", environ_prefix=None
+     )
+-    OIDC_RP_CLIENT_SECRET = values.Value(
++    OIDC_RP_CLIENT_SECRET = SecretFileValue(
+         None,
+         environ_name="OIDC_RP_CLIENT_SECRET",
+         environ_prefix=None,
+@@ -457,8 +458,8 @@ class Base(Configuration):
+ 
+     # Video conference configuration
+     LIVEKIT_CONFIGURATION = {
+-        "api_key": values.Value(environ_name="LIVEKIT_API_KEY", environ_prefix=None),
+-        "api_secret": values.Value(
++        "api_key": SecretFileValue(environ_name="LIVEKIT_API_KEY", environ_prefix=None),
++        "api_secret": SecretFileValue(
+             environ_name="LIVEKIT_API_SECRET", environ_prefix=None
+         ),
+         "url": values.Value(environ_name="LIVEKIT_API_URL", environ_prefix=None),
+@@ -528,7 +529,7 @@ class Base(Configuration):
+         environ_name="MARKETING_SERVICE_CLASS",
+         environ_prefix=None,
+     )
+-    BREVO_API_KEY = values.Value(
++    BREVO_API_KEY = SecretFileValue(
+         None, environ_name="BREVO_API_KEY", environ_prefix=None
+     )
+     BREVO_API_CONTACT_LIST_IDS = values.ListValue(
