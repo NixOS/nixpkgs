@@ -601,6 +601,7 @@ let
               "no-write-workqueue"
             ]
             ++ optional (v.header != null) "header=${v.header}"
+            ++ optional (v.tpm2Device != null) "tpm2-device=${v.tpm2Device}"
             ++ optional (v.keyFileOffset != null) "keyfile-offset=${toString v.keyFileOffset}"
             ++ optional (v.keyFileSize != null) "keyfile-size=${toString v.keyFileSize}"
             ++ optional (v.keyFileTimeout != null) "keyfile-timeout=${builtins.toString v.keyFileTimeout}s"
@@ -818,6 +819,16 @@ in
                     Whether to fallback to interactive passphrase prompt if the keyfile
                     cannot be found. This will prevent unattended boot should the keyfile
                     go missing.
+                  '';
+                };
+
+                tpm2Device = mkOption {
+                  default = "auto";
+                  example = "/dev/tpmrm0";
+                  type = types.nullOr types.str;
+                  description = ''
+                    Takes either the special value "auto" or the path to a device node (e.g. /dev/tpmrm0) referring to a TPM2 security chip.
+                    null will remove the option from crypttab.
                   '';
                 };
 
