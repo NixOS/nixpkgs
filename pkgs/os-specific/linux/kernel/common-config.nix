@@ -650,6 +650,10 @@ let
       # default to dual role mode
       USB_DWC2_DUAL_ROLE = yes;
       USB_DWC3_DUAL_ROLE = yes;
+
+      # The default (=y) forces us to have the XHCI firmware available in initrd,
+      # which our initrd builder can't currently do easily.
+      USB_XHCI_TEGRA = lib.mkIf stdenv.hostPlatform.isAarch64 module;
     };
 
     usb-serial = {
@@ -746,6 +750,7 @@ let
 
       # Native Language Support modules, needed by some filesystems
       NLS = yes;
+
       NLS_DEFAULT = freeform "utf8";
       NLS_UTF8 = module;
       NLS_CODEPAGE_437 = module; # VFAT default for the codepage= mount option
@@ -973,6 +978,9 @@ let
 
       # Enable device detection on virtio-mmio hypervisors
       VIRTIO_MMIO_CMDLINE_DEVICES = yes;
+
+      # Disabled by default on PowerNV.
+      VIRTIO_MENU = yes;
     };
 
     media = {
@@ -1064,7 +1072,7 @@ let
         useZstd = stdenv.buildPlatform.is64bit && lib.versionAtLeast version "5.9";
       in
       {
-        # stdenv.hostPlatform.linux-kernel.target assumes uncompressed on RISC-V.
+        # The default target assumes uncompressed on RISC-V.
         KERNEL_UNCOMPRESSED = lib.mkIf stdenv.hostPlatform.isRiscV yes;
         KERNEL_XZ = lib.mkIf (!stdenv.hostPlatform.isRiscV && !useZstd) yes;
         KERNEL_ZSTD = lib.mkIf (
@@ -1364,6 +1372,9 @@ let
         # Enable generic kernel watch queues
         # See https://docs.kernel.org/core-api/watch_queue.html
         WATCH_QUEUE = whenAtLeast "5.8" yes;
+
+        # Disabled by default on PowerNV.
+        ATA_SFF = yes;
       }
       //
         lib.optionalAttrs
@@ -1468,6 +1479,11 @@ let
 
         # Enable Intel Turbo Boost Max 3.0
         INTEL_TURBO_MAX_3 = yes;
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le) {
+        # avoid driver/FS trouble arising from unusual page size
+        PPC_64K_PAGES = no;
+        PPC_4K_PAGES = yes;
       };
 
     accel = {

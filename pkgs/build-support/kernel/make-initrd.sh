@@ -40,10 +40,4 @@ done
 (cd root && find * .[^.*] -exec touch -h -d '@1' '{}' +)
 (cd root && find * .[^.*] -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null | eval -- $compress >> "$out/initrd")
 
-if [ -n "$makeUInitrd" ]; then
-    mkimage -A "$uInitrdArch" -O linux -T ramdisk -C "$uInitrdCompression" -d "$out/initrd" $out/initrd.img
-    # Compatibility symlink
-    ln -sf "initrd.img" "$out/initrd"
-else
-    ln -s "initrd" "$out/initrd$extension"
-fi
+ln -s "initrd" "$out/initrd$extension"

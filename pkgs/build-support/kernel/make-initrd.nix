@@ -10,18 +10,16 @@
 # of algorithms.
 let
   # Some metadata on various compression programs, relevant to naming
-  # the initramfs file and, if applicable, generating a u-boot image
-  # from it.
+  # the initramfs file and.
   compressors = import ./initrd-compressor-meta.nix;
   # Get the basename of the actual compression program from the whole
-  # compression command, for the purpose of guessing the u-boot
-  # compression type and filename extension.
+  # compression command, for the purpose of guessing the compression
+  # type and filename extension.
   compressorName = fullCommand: builtins.elemAt (builtins.match "([^ ]*/)?([^ ]+).*" fullCommand) 1;
 in
 {
   stdenvNoCC,
   cpio,
-  ubootTools,
   lib,
   pkgsBuildHost,
   # Name of the derivation (not of the resulting file!)
@@ -65,63 +63,47 @@ in
   # symlinks to store paths.
   prepend ? [ ],
 
-  # Whether to wrap the initramfs in a u-boot image.
-  makeUInitrd ? stdenvNoCC.hostPlatform.linux-kernel.target or "dummy" == "uImage",
-
-  # If generating a u-boot image, the architecture to use. The default
-  # guess may not align with u-boot's nomenclature correctly, so it can
-  # be overridden.
-  # See https://gitlab.denx.de/u-boot/u-boot/-/blob/9bfb567e5f1bfe7de8eb41f8c6d00f49d2b9a426/common/image.c#L81-106 for a list.
-  uInitrdArch ? stdenvNoCC.hostPlatform.linuxArch,
-
-  # The name of the compression, as recognised by u-boot.
-  # See https://gitlab.denx.de/u-boot/u-boot/-/blob/9bfb567e5f1bfe7de8eb41f8c6d00f49d2b9a426/common/image.c#L195-204 for a list.
-  # If this isn't guessed, you may want to complete the metadata above and send a PR :)
-  uInitrdCompression ?
-    _compressorMeta.ubootName
-      or (throw "Unrecognised compressor ${_compressorName}, please specify uInitrdCompression"),
+  # Deprecated; remove in 26.05.
+  makeUInitrd ? null,
+  uInitrdArch ? null,
+  uInitrdCompression ? null,
 }:
+assert lib.assertMsg (makeUInitrd == null && uInitrdArch == null && uInitrdCompression == null)
+  "makeInitrd: U‐Boot legacy image support has been removed as it is deprecated upstream and ARMv5 kernels no longer default to uImage";
 let
   # !!! Move this into a public lib function, it is probably useful for others
   toValidStoreName =
     x: with builtins; lib.concatStringsSep "-" (filter (x: !(isList x)) (split "[^a-zA-Z0-9_=.?-]+" x));
 
 in
-stdenvNoCC.mkDerivation (
-  rec {
-    inherit
-      name
-      makeUInitrd
-      extension
-      uInitrdArch
-      prepend
-      ;
+stdenvNoCC.mkDerivation rec {
+  inherit
+    name
+    extension
+    prepend
+    ;
 
-    builder = ./make-initrd.sh;
+  builder = ./make-initrd.sh;
 
-    nativeBuildInputs = [
-      cpio
-    ] ++ lib.optional makeUInitrd ubootTools;
+  nativeBuildInputs = [
+    cpio
+  ];
 
-    compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
+  compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
 
-    # Pass the function through, for reuse in append-initrd-secrets. The
-    # function is used instead of the string, in order to support
-    # cross-compilation (append-initrd-secrets running on a different
-    # architecture than what the main initramfs is built on).
-    passthru = {
-      compressorExecutableFunction = _compressorFunction;
-      compressorArgs = _compressorArgsReal;
-    };
+  # Pass the function through, for reuse in append-initrd-secrets. The
+  # function is used instead of the string, in order to support
+  # cross-compilation (append-initrd-secrets running on a different
+  # architecture than what the main initramfs is built on).
+  passthru = {
+    compressorExecutableFunction = _compressorFunction;
+    compressorArgs = _compressorArgsReal;
+  };
 
-    # !!! should use XML.
-    objects = map (x: x.object) contents;
-    symlinks = map (x: x.symlink) contents;
-    suffices = map (x: if x ? suffix then x.suffix else "none") contents;
+  # !!! should use XML.
+  objects = map (x: x.object) contents;
+  symlinks = map (x: x.symlink) contents;
+  suffices = map (x: if x ? suffix then x.suffix else "none") contents;
 
-    closureInfo = "${pkgsBuildHost.closureInfo { rootPaths = objects; }}";
-  }
-  // lib.optionalAttrs makeUInitrd {
-    uInitrdCompression = uInitrdCompression;
-  }
-)
+  closureInfo = "${pkgsBuildHost.closureInfo { rootPaths = objects; }}";
+}

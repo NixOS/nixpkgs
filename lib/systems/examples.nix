@@ -35,9 +35,9 @@ rec {
     };
   };
 
-  sheevaplug = {
+  armv5tel-multiplatform = {
     config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.sheevaplug;
+  };
 
   raspberryPi = {
     config = "armv6l-unknown-linux-gnueabihf";
@@ -88,10 +88,6 @@ rec {
     useLLVM = true;
   };
 
-  pogoplug4 = {
-    config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.pogoplug4;
-
   ben-nanonote = {
     config = "mipsel-unknown-linux-uclibc";
   } // platforms.ben_nanonote;
@@ -135,7 +131,6 @@ rec {
   gnu64 = {
     config = "x86_64-unknown-linux-gnu";
   };
-  gnu64_simplekernel = gnu64 // platforms.pc_simplekernel; # see test/cross/default.nix
   gnu32 = {
     config = "i686-unknown-linux-gnu";
   };
