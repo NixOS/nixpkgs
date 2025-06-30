@@ -50,6 +50,12 @@ let
     concatStringsSep
     ;
   useLLVM = stdenv.targetPlatform.useLLVM or false;
+  rustFlagsFor =
+    platform:
+    # Set this here because bootstrap doesn't use cargoSetupHook
+    lib.optional (!platform.isx86_32) "-Cforce-frame-pointers=yes"
+    # Increase codegen units to introduce parallelism within the compiler.
+    ++ [ "-Ccodegen-units=10" ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${targetPackages.stdenv.cc.targetPrefix}rustc";
@@ -105,8 +111,20 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional stdenv.hostPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib"
   );
 
-  # Increase codegen units to introduce parallelism within the compiler.
-  RUSTFLAGS = "-Ccodegen-units=10";
+  # We can't set RUSTFLAGS for the same target twice, so assume that if the
+  # rustc target name is the same, the flags are the same
+
+  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
+    rustFlagsFor stdenv.hostPlatform;
+
+  ${
+    if stdenv.hostPlatform.rust.cargoEnvVarTarget != stdenv.targetPlatform.rust.cargoEnvVarTarget then
+      "CARGO_TARGET_${stdenv.targetPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS"
+    else
+      null
+  } =
+    rustFlagsFor stdenv.targetPlatform;
+
   RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
