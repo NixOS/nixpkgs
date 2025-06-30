@@ -34,11 +34,9 @@ body:
 
         If you are using an older version, please update to the latest stable version and check if the issue persists before continuing this bug report.
       options:
-        - "Please select a version."
-        - "- Unstable (25.11)"
-        - "- Stable (25.05)"
-        - "- Previous Stable (24.11)"
-      default: 0
+        - "Unstable (25.11)"
+        - "Stable (25.05)"
+        - "Previous Stable (24.11)"
     validations:
       required: true
   - type: "textarea"
@@ -46,6 +44,7 @@ body:
     attributes:
       label: "Describe the bug"
       description: "Please include a clear and concise description of what the issue is."
+      placeholder: "I get ... error when I ..."
     validations:
       required: true
   - type: "textarea"
@@ -53,6 +52,10 @@ body:
     attributes:
       label: "Steps to reproduce"
       description: "Please include a step-by-step guide for reproducing this issue. Consider writing in concise, numbered bullet points to ensure that Nixpkgs developers can retrace your steps."
+      placeholder: |
+        1. First step...
+        2. Second step...
+        3. See error...
     validations:
       required: true
   - type: "input"
@@ -60,6 +63,7 @@ body:
     attributes:
       label: "Expected behaviour"
       description: "Please write a concise description of what was supposed to happen."
+      placeholder: "I expected the package to do X, but it did Y"
     validations:
       required: true
   - type: "textarea"
@@ -69,6 +73,7 @@ body:
       description: |
         If applicable, add screenshots to help explain your problem.
         If you need help uploading images to GitHub, please review the [relevant documentation](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#uploading-assets).
+      placeholder: "Drag and drop screenshots here or paste them"
     validations:
       required: false
   - type: "textarea"
@@ -79,6 +84,7 @@ body:
         If applicable, copy and paste any relevant log output.
         This will be automatically formatted into code, so no need for backticks.
       render: "console"
+      placeholder: "Paste relevant log output here"
     validations:
       required: false
   - type: "textarea"
@@ -93,6 +99,7 @@ body:
     attributes:
       label: "System metadata"
       description: "Please run `nix-shell -p nix-info --run \"nix-info -m\"` on a terminal and paste the output of that command here."
+      placeholder: "Output of: nix-shell -p nix-info --run \"nix-info -m\""
     validations:
       required: true
   - type: "dropdown"
@@ -112,7 +119,7 @@ body:
     attributes:
       label: "Notify maintainers"
       description: |
-        Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
+        Please mention the people who are in the **Maintainers** list of the offending package. This is done by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
 
         If this issue is related to the Darwin packaging architecture as a whole, or is related to the core Darwin frameworks, consider mentioning the `@NixOS/darwin-core` team.
       value: |2
@@ -132,7 +139,7 @@ body:
       options:
         - label: "I assert that this is a bug and not a support request."
           required: true
-        - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aopen+is%3Aissue+label%3A%220.kind%3A+bug%22+label%3A%226.topic%3A+darwin%22). "
+        - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aopen+is%3Aissue+label%3A%220.kind%3A+bug%22+label%3A%226.topic%3A+darwin%22)."
           required: true
         - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
           required: true
