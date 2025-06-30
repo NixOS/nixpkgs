@@ -1,5 +1,6 @@
 {
   lib,
+  fetchFromGitHub,
   buildPythonPackage,
   fetchPypi,
   hatchling,
@@ -13,6 +14,18 @@
   jupyter-collaboration,
 }:
 
+let
+  # pycrdt-websocket got breaking changes in 0.16.0 which break this package.
+  pycrdt-websocket' = pycrdt-websocket.overridePythonAttrs (rec {
+    version = "0.15.5";
+    src = fetchFromGitHub {
+      owner = "y-crdt";
+      repo = "pycrdt-websocket";
+      tag = "v${version}";
+      hash = "sha256-piNd85X5YsTAOC9frYQRDyb/DPfzZicIPJ+bEVzgOsU=";
+    };
+  });
+in
 buildPythonPackage rec {
   pname = "jupyter-server-ydoc";
   version = "2.0.2";
@@ -33,7 +46,7 @@ buildPythonPackage rec {
     jupyter-server-fileid
     jupyter-ydoc
     pycrdt
-    pycrdt-websocket
+    pycrdt-websocket'
   ];
 
   pythonImportsCheck = [ "jupyter_server_ydoc" ];
