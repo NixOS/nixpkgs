@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   # without further configuration).
   configureFlags = [
     "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
-    ''--with-udevrule="OWNER=\"root\", GROUP=\"myusergroup\", MODE=\"0660\""''
+    ''--with-udevrule=OWNER="root",GROUP="myusergroup",MODE="0660"''
   ];
 
   meta = with lib; {
