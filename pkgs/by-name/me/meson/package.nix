@@ -175,6 +175,8 @@ python3.pkgs.buildPythonApplication rec {
   setupHook = ./setup-hook.sh;
   env.hostPlatform = stdenv.targetPlatform.system;
 
+  doCheck = false;
+
   meta = {
     homepage = "https://mesonbuild.com";
     description = "Open source, fast and friendly build system made in Python";

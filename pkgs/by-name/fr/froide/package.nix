@@ -52,7 +52,6 @@ python.pkgs.buildPythonApplication rec {
     celery
     celery-singleton
     channels
-    coreapi
     dj-database-url
     django
     django-celery-beat
@@ -114,7 +113,7 @@ python.pkgs.buildPythonApplication rec {
   postInstall = ''
     cp -r build manage.py $out/${python.sitePackages}/froide/
     makeWrapper $out/${python.sitePackages}/froide/manage.py $out/bin/froide \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}" \
       --set GDAL_LIBRARY_PATH "${gdal}/lib/libgdal.so" \
       --set GEOS_LIBRARY_PATH "${geos}/lib/libgeos_c.so"
   '';
