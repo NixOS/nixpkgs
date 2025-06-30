@@ -4,17 +4,17 @@
   callPackage,
 }:
 let
-  pname = "miru";
-  version = "5.5.10";
+  pname = "hayase";
+  version = "6.3.9";
   meta = {
     description = "Stream anime torrents, real-time with no waiting for downloads";
     homepage = "https://miru.watch";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [
       d4ilyrun
       matteopacini
     ];
-    mainProgram = "miru";
+    mainProgram = "hayase";
 
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

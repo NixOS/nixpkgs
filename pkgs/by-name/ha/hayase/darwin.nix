@@ -1,7 +1,7 @@
 {
   stdenvNoCC,
   fetchurl,
-  unzip,
+  _7zz,
   makeWrapper,
 
   pname,
@@ -18,22 +18,22 @@ stdenvNoCC.mkDerivation rec {
     ;
 
   src = fetchurl {
-    url = "https://github.com/ThaUnknown/miru/releases/download/v${version}/mac-Miru-${version}-mac.zip";
-    hash = "sha256-V4Vo9fuQ0X7Q6CBM7Akh3+MrgQOBgCuC41khFatYWi4=";
+    url = "https://github.com/ThaUnknown/miru/releases/download/v${version}/mac-hayase-${version}-mac.dmg";
+    hash = "sha256-kaaDifxN2Zrkf93tcIkirMD7KlJ6qsaciLfASiUS+U0=";
   };
 
   sourceRoot = ".";
 
   nativeBuildInputs = [
-    unzip
+    _7zz
     makeWrapper
   ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,Applications}
-    cp -r Miru.app $out/Applications/
-    makeWrapper $out/Applications/Miru.app/Contents/MacOS/Miru $out/bin/miru
+    cp -r Hayase.app $out/Applications/
+    makeWrapper $out/Applications/Hayase.app/Contents/MacOS/Hayase $out/bin/hayase
     runHook postInstall
   '';
 }
