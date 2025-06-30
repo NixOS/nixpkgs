@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "4.0.8";
+  version = "4.0.10";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-fGlBtXsYOQ5V4/PRPPIpL3nxb+hUAuj9q7Jw0kL7ph0=";
+    npmDepsHash = "sha256-kObMqg7hyy7E3F+wbdZoeDy5GOgpE2iNTuDVkFvq5ig=";
 
     dontBuild = true;
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-xiqi3SMmlfV7NaA61QZAW7BFHu9xOVN9QMWwwDInBeE=";
+    hash = "sha256-b+7NYKRm0IsZ2cK2Vqz8zKhqYlxjlhVSdpdFq0LaUPU=";
     rev = version;
   };
 
@@ -60,17 +60,6 @@ stdenv.mkDerivation rec {
   patches = [
     (replaceVars ./0001-emulate-clang-sysroot-include-logic.patch {
       resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
-    })
-    # The following patches work around a bug where EM_CACHE is not copied with
-    # the correct permissions; the bug will be fixed in the next release (probably 4.0.10).
-    # See also: https://github.com/emscripten-core/emscripten/issues/24404
-    (fetchpatch {
-      url = "https://github.com/emscripten-core/emscripten/commit/99c6e41154f701e423074e33a4fdaf5eea49d073.patch";
-      hash = "sha256-/wkhz08NhbgxsrXd7YFfdCGX6LrS2Ncct8dcwxBMsjY=";
-    })
-    (fetchpatch {
-      url = "https://github.com/emscripten-core/emscripten/commit/f4d358d740a238b67a1d6935e71638519d25afa0.patch";
-      hash = "sha256-hib5ZAN/R2dH+rTv3nYF37+xKZmeboKxnS+5mkht2lM=";
     })
   ];
 
