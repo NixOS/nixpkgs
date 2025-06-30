@@ -148,6 +148,32 @@ buildDotnetModule (finalAttrs: {
       "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
     ];
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    desktop-file-utils
+  ];
+
+  # Upstream use ${...} templates in the desktop entry, so assert that we haven't missed any
+  # See https://github.com/NixOS/nixpkgs/issues/421241
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo 'Checking for issues in $out/share/applications/com.nexusmods.app.desktop'
+    (
+      cd $out/share/applications
+      desktop-file-validate com.nexusmods.app.desktop
+      if grep '\$' com.nexusmods.app.desktop \
+        --with-filename --line-number
+      then
+        echo 'error: unexpected "$"'
+        exit 1
+      fi
+    ) &>/dev/stderr
+
+    runHook postInstallCheck
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
