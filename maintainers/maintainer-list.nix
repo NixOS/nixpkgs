@@ -5482,6 +5482,12 @@
     github = "d4rkstar";
     githubId = 4957015;
   };
+  D7TUN6 = {
+    email = "d7tun6@gmail.com";
+    github = "D7TUN6";
+    githubId = 207599818;
+    name = "D7TUN6";
+  };
   da-luce = {
     email = "daltonluce42@gmail.com";
     github = "da-luce";

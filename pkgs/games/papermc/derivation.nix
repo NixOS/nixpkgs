@@ -58,6 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       aaronjanse
       neonfuz
       MayNiklas
+      D7TUN6
     ];
     mainProgram = "minecraft-server";
   };
