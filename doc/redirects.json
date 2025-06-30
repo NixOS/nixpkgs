@@ -138,6 +138,15 @@
   "sec-language-cosmic": [
     "index.html#sec-language-cosmic"
   ],
+  "sec-meta-identifiers": [
+    "index.html#sec-meta-identifiers"
+  ],
+  "sec-meta-identifiers-cpe": [
+    "index.html#sec-meta-identifiers-cpe"
+  ],
+  "sec-meta-identifiers-purl": [
+    "index.html#sec-meta-identifiers-purl"
+  ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
   ],
@@ -531,6 +540,18 @@
   ],
   "typst-package-scope-and-usage": [
     "index.html#typst-package-scope-and-usage"
+  ],
+  "var-meta-identifiers-cpe": [
+    "index.html#var-meta-identifiers-cpe"
+  ],
+  "var-meta-identifiers-cpeParts": [
+    "index.html#var-meta-identifiers-cpeParts"
+  ],
+  "var-meta-identifiers-purl": [
+    "index.html#var-meta-identifiers-purl"
+  ],
+  "var-meta-identifiers-purlParts": [
+    "index.html#var-meta-identifiers-purlParts"
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
