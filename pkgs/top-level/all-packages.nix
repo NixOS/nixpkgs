@@ -16657,4 +16657,5 @@ with pkgs;
   davis = callPackage ../by-name/da/davis/package.nix {
     php = php83; # https://github.com/tchapi/davis/issues/195
   };
+  weather-fetch = callPackage ../tools/misc/weather-fetch { };
 }
