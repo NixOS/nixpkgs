@@ -17,44 +17,54 @@ let
   # Add filecontents from files of useTheseDefaultConfFiles to confFiles, do not override
   defaultConfFiles = lib.subtractLists (lib.attrNames cfg.confFiles) cfg.useTheseDefaultConfFiles;
   allConfFiles =
-    {
-      # Default asterisk.conf file
-      "asterisk.conf".text = ''
-        [directories]
-        astetcdir => /etc/asterisk
-        astmoddir => ${cfg.package}/lib/asterisk/modules
-        astvarlibdir => /var/lib/asterisk
-        astdbdir => /var/lib/asterisk
-        astkeydir => /var/lib/asterisk
-        astdatadir => /var/lib/asterisk
-        astagidir => /var/lib/asterisk/agi-bin
-        astspooldir => /var/spool/asterisk
-        astrundir => /run/asterisk
-        astlogdir => /var/log/asterisk
-        astsbindir => ${cfg.package}/sbin
-        ${cfg.extraConfig}
-      '';
+    lib.mapAttrs
+      (
+        name: conf:
+        pkgs.writeTextFile {
+          name = name;
+          text = conf.text;
+        }
+      )
+      (
+        {
+          # Default asterisk.conf file
+          "asterisk.conf".text = ''
+            [directories]
+            astetcdir => /etc/asterisk
+            astmoddir => ${cfg.package}/lib/asterisk/modules
+            astvarlibdir => /var/lib/asterisk
+            astdbdir => /var/lib/asterisk
+            astkeydir => /var/lib/asterisk
+            astdatadir => /var/lib/asterisk
+            astagidir => /var/lib/asterisk/agi-bin
+            astspooldir => /var/spool/asterisk
+            astrundir => /run/asterisk
+            astlogdir => /var/log/asterisk
+            astsbindir => ${cfg.package}/sbin
+            ${cfg.extraConfig}
+          '';
 
-      # Loading all modules by default is considered sensible by the authors of
-      # "Asterisk: The Definitive Guide". Secure sites will likely want to
-      # specify their own "modules.conf" in the confFiles option.
-      "modules.conf".text = ''
-        [modules]
-        autoload=yes
-      '';
+          # Loading all modules by default is considered sensible by the authors of
+          # "Asterisk: The Definitive Guide". Secure sites will likely want to
+          # specify their own "modules.conf" in the confFiles option.
+          "modules.conf".text = ''
+            [modules]
+            autoload=yes
+          '';
 
-      # Use syslog for logging so logs can be viewed with journalctl
-      "logger.conf".text = ''
-        [general]
+          # Use syslog for logging so logs can be viewed with journalctl
+          "logger.conf".text = ''
+            [general]
 
-        [logfiles]
-        syslog.local0 => notice,warning,error
-      '';
-    }
-    // lib.mapAttrs (name: text: { inherit text; }) cfg.confFiles
-    // lib.listToAttrs (
-      map (x: lib.nameValuePair x { source = cfg.package + "/etc/asterisk/" + x; }) defaultConfFiles
-    );
+            [logfiles]
+            syslog.local0 => notice,warning,error
+          '';
+        }
+        // lib.mapAttrs (name: text: { inherit text; }) cfg.confFiles
+        // lib.listToAttrs (
+          map (x: lib.nameValuePair x { source = cfg.package + "/etc/asterisk/" + x; }) defaultConfFiles
+        )
+      );
 
 in
 
@@ -201,6 +211,20 @@ in
           Additional command line arguments to pass to Asterisk.
         '';
       };
+
+      restartOnConfigChange = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether the Asterisk service should be automatically restarted
+          when its configuration changes.
+
+          Set this to `true` if configuration changes should take effect
+          immediately via a restart. Otherwise, manual intervention is required
+          to avoid interrupting ongoing calls.
+        '';
+      };
+
       package = lib.mkPackageOption pkgs "asterisk" { };
     };
   };
@@ -209,7 +233,7 @@ in
     environment.systemPackages = [ cfg.package ];
 
     environment.etc = lib.mapAttrs' (
-      name: value: lib.nameValuePair "asterisk/${name}" value
+      name: storePath: lib.nameValuePair "asterisk/${name}" { source = storePath; }
     ) allConfFiles;
 
     users.users.asterisk = {
@@ -232,8 +256,8 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      # Do not restart, to avoid disruption of running calls. Restart unit by yourself!
-      restartIfChanged = false;
+      restartIfChanged = cfg.restartOnConfigChange;
+      restartTriggers = lib.mkIf cfg.restartOnConfigChange (builtins.attrValues allConfFiles);
 
       preStart = ''
         # Copy skeleton directory tree to /var
