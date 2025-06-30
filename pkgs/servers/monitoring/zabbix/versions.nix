@@ -1,7 +1,7 @@
 generic: {
   v72 = generic {
-    version = "7.2.5";
-    hash = "sha256-DQGzk90isqYLNvs3qY/PEIHGg62Ygyot3YeUOhIAg54=";
+    version = "7.2.9";
+    hash = "sha256-qjzjUtpNLaqlQt4+Hc0G+6gt+afcxw5IIaCVPy8dAOc=";
   };
   v70 = generic {
     version = "7.0.14";
