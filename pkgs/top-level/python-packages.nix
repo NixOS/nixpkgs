@@ -15792,6 +15792,8 @@ self: super: with self; {
 
   ruamel-yaml-clib = callPackage ../development/python-modules/ruamel-yaml-clib { };
 
+  ruamel-yaml-jinja2 = callPackage ../development/python-modules/ruamel-yaml-jinja2 { };
+
   ruamel-yaml-string = callPackage ../development/python-modules/ruamel-yaml-string { };
 
   rubicon-objc = callPackage ../development/python-modules/rubicon-objc { };
