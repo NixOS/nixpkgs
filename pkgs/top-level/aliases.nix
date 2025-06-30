@@ -1852,6 +1852,7 @@ mapAliases {
   source-han-serif-simplified-chinese = source-han-serif;
   source-han-serif-traditional-chinese = source-han-serif;
 
+  sourcehut = throw "'sourcehut.*' has been removed due to being broken and unmaintained"; # Added 2025-06-15
   solana-validator = throw "'solana-validator' is obsoleted by solana-cli, which also includes the validator binary"; # Added 2024-12-20
   spectral = throw "'spectral' has been renamed to/replaced by 'neochat'"; # Converted to throw 2024-10-17
   # spidermonkey is not ABI upwards-compatible, so only allow this for nix-shell
@@ -1974,6 +1975,7 @@ mapAliases {
   tokyo-night-gtk = tokyonight-gtk-theme; # Added 2024-01-28
   tomcat_connectors = apacheHttpdPackages.mod_jk; # Added 2024-06-07
   ton = throw "'ton' has been removed as there were insufficient maintainer resources to keep up with updates"; # Added 2025-04-27
+  tooling-language-server = deputy; # Added 2025-06-22
   tor-browser-bundle-bin = tor-browser; # Added 2023-09-23
   torrenttools = throw "torrenttools has been removed due to lack of maintanance upstream"; # Added 2025-04-06
   torq = throw "torq has been removed because the project went closed source"; # Added 2024-11-24
