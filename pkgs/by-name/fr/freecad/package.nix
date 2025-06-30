@@ -151,7 +151,6 @@ freecad-utils.makeCustomizable (
 
     cmakeFlags = [
       "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
-      "-DBUILD_FLAT_MESH:BOOL=ON"
       "-DBUILD_DRAWING=ON"
       "-DBUILD_FLAT_MESH:BOOL=ON"
       "-DINSTALL_TO_SITEPACKAGES=OFF"
