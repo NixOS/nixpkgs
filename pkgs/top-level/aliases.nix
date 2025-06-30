@@ -29,10 +29,6 @@ let
     else
       alias;
 
-  # Disabling distribution prevents top-level aliases for non-recursed package
-  # sets from building on Hydra.
-  removeDistribute = alias: if lib.isDerivation alias then lib.dontDistribute alias else alias;
-
   transmission3Warning =
     {
       prefix ? "",
@@ -212,10 +208,7 @@ let
     if builtins.hasAttr n super then throw "Alias ${n} is still in all-packages.nix" else alias;
 
   mapAliases =
-    aliases:
-    lib.mapAttrs (
-      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
-    ) aliases;
+    aliases: lib.mapAttrs (n: alias: removeRecurseForDerivations (checkInPkgs n alias)) aliases;
 in
 
 mapAliases {
