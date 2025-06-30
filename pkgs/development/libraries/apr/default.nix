@@ -6,12 +6,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apr";
   version = "1.7.6";
 
   src = fetchurl {
-    url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
+    url = "mirror://apache/apr/apr-${finalAttrs.version}.tar.bz2";
     hash = "sha256-SQMNktJXXac1eRtJbcMi885c/5SUd5uozCjH9Gxd6zI=";
   };
 
@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fix lib.getExe
+
   meta = with lib; {
     homepage = "https://apr.apache.org/";
     description = "Apache Portable Runtime library";
@@ -82,4 +84,4 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ ];
   };
-}
+})
