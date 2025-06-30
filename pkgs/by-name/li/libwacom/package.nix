@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "bin"
+    "lib"
     "dev"
   ];
 
