@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4cd1296..82bd294 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -24,6 +24,7 @@ option (PBRT_NVML "Use NVML for GPU performance measurement" OFF)
+ option (PBRT_USE_PREGENERATED_RGB_TO_SPECTRUM_TABLES "Use pregenerated rgbspectrum_*.cpp files rather than running rgb2spec_opt to generate them at build time" OFF)
+ set (PBRT_OPTIX_PATH $ENV{PBRT_OPTIX_PATH} CACHE PATH "Path to OptiX SDK")
+ set (PBRT_GPU_SHADER_MODEL "" CACHE STRING "")
++set (PBRT_CUDA_LIB "" CACHE STRING "")
+ 
+ 
+ 
+@@ -280,7 +281,6 @@ of CUDA installed, please update your PATH.")
+             string (APPEND CMAKE_CUDA_FLAGS " --gpu-architecture=${ARCH}")
+         endif ()
+ 
+-        set (PBRT_CUDA_LIB cuda)
+         # optix
+         # FIXME
+         include_directories (${PBRT_OPTIX_PATH}/include)
