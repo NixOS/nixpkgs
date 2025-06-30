@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  fetchpatch,
 
   # build-system
   hatchling,
@@ -22,22 +21,15 @@
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "2.3.3";
+  version = "2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
     tag = "v${version}";
-    hash = "sha256-NUs544J/pC2QNyR2aIlac2P06so7JmB2P6FB/gmR7wI=";
+    hash = "sha256-7aq9JeyM+IjlRPgh4gs1DmkF0hU5EasgTuUPPlf8960=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/rq/rq/commit/18c0f30c6aa0de2c55fba64105b1cb0495d728cf.patch";
-      hash = "sha256-woWW8SkKXrMyDW+tY+ItxO/tuHHuuZhW+OJxwTTZucI=";
-    })
-  ];
 
   build-system = [ hatchling ];
 
