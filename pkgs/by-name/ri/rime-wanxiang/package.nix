@@ -98,14 +98,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       package. Same goes for dictionary releases.
 
       To make it easier updating grammar model and dictionaries, users can
-      run the helper script `update-rime-wanxiang-data` shipped with this
-      package.
+      run the helper script `rime-wanxiang-data-updater` shipped with this
+      package.  It is disabled by default.  Use override to enable it.
+
+      ```nix
+      pkgs.rime-wanxiang.override { useDataUpdater = true; }
+      ```
     '';
     homepage = "https://github.com/amzxyz/rime_wanxiang";
     downloadPage = "https://github.com/amzxyz/rime_wanxiang/releases";
     changelog = "https://github.com/amzxyz/rime_wanxiang/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc-by-40;
-    maintainers = with lib.maintainers; [ rc-zb ];
+    maintainers = with lib.maintainers; [ rc-zb peromage];
     platforms = lib.platforms.all;
   };
 })
