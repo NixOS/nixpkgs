@@ -110,7 +110,7 @@
         # While split sections are now enabled by default in ghc 8.8 for windows,
         # they seem to lead to `too many sections` errors when building base for
         # profiling.
-        ++ lib.optionals (!stdenv.targetPlatform.isWindows) [ "split_sections" ];
+        ++ (if stdenv.targetPlatform.isWindows then [ "no_split_sections" ] else [ "split_sections" ]);
     in
     baseFlavour + lib.concatMapStrings (t: "+${t}") transformers,
 
@@ -247,6 +247,14 @@
           else
             ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch
         )
+      ]
+      ++ lib.optionals stdenv.targetPlatform.isWindows [
+        # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
+        (fetchpatch {
+          name = "include-modern-utimbuf.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/7e75928ed0f1c4654de6ddd13d0b00bf4b5c6411.patch";
+          hash = "sha256-sb+AHdkGkCu8MW0xoQIpD5kEc0zYX8udAMDoC+TWc0Q=";
+        })
       ]
       # Prevents passing --hyperlinked-source to haddock. Note that this can
       # be configured via a user defined flavour now. Unfortunately, it is
@@ -405,6 +413,8 @@ let
 
           ld = cc.bintools;
           "ld.gold" = cc.bintools;
+
+          windres = cc.bintools;
 
           otool = cc.bintools.bintools;
 
@@ -823,6 +833,10 @@ stdenv.mkDerivation (
             else
               "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
           }"
+      ''
+      + lib.optionalString stdenv.targetPlatform.isWindows ''
+        ghc-settings-edit "$settingsFile" \
+        "windres command" "${toolPath "windres" installCC}"
       ''
       + ''
 
