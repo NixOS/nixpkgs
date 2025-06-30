@@ -1,5 +1,6 @@
+{ runTest }:
+
 let
-  makeTest = import ./make-test-python.nix;
   galeneTestGroupsDir = "/var/lib/galene/groups";
   galeneTestGroupFile = "galene-test-config.json";
   galenePort = 8443;
@@ -7,7 +8,7 @@ let
   galeneTestGroupAdminPassword = "1234";
 in
 {
-  basic = makeTest (
+  basic = runTest (
     { pkgs, lib, ... }:
     {
       name = "galene-works";
@@ -56,10 +57,7 @@ in
         with subtest("galene starts"):
             # Starts?
             machine.wait_for_unit("galene")
-
-            # Keeps running after startup?
-            machine.sleep(10)
-            machine.wait_for_unit("galene")
+            machine.wait_for_open_port(${builtins.toString galenePort})
 
             # Reponds fine?
             machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${builtins.toString galenePort}' >&2")
@@ -93,7 +91,7 @@ in
     }
   );
 
-  file-transfer = makeTest (
+  file-transfer = runTest (
     { pkgs, lib, ... }:
     {
       name = "galene-file-transfer-works";
@@ -143,10 +141,7 @@ in
         with subtest("galene starts"):
             # Starts?
             machine.wait_for_unit("galene")
-
-            # Keeps running after startup?
-            machine.sleep(10)
-            machine.wait_for_unit("galene")
+            machine.wait_for_open_port(${builtins.toString galenePort})
 
             # Reponds fine?
             machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${builtins.toString galenePort}' >&2")
@@ -209,7 +204,7 @@ in
     }
   );
 
-  stream = makeTest (
+  stream = runTest (
     { pkgs, lib, ... }:
     let
       galeneTestGroupBotName = "bot";
@@ -281,10 +276,7 @@ in
         with subtest("galene starts"):
             # Starts?
             machine.wait_for_unit("galene")
-
-            # Keeps running after startup?
-            machine.sleep(10)
-            machine.wait_for_unit("galene")
+            machine.wait_for_open_port(${builtins.toString galenePort})
 
             # Reponds fine?
             machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${builtins.toString galenePort}' >&2")
