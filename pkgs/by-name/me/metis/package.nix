@@ -12,7 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "KarypisLab";
     repo = "METIS";
-    tag = finalAttrs.version;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eddLR6DvZ+2LeR0DkknN6zzRvnW+hLN2qeI+ETUPcac=";
   };
 
   cmakeFlags = [
