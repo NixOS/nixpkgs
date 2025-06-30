@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 1b3ded6..0b78e69 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -358,6 +358,8 @@ if test "$pinentry_tty" = "yes"; then
+            [The TTY version of Pinentry is to be build])
+ fi
+ 
++AM_GNU_GETTEXT_VERSION([0.21])
++AM_GNU_GETTEXT([external])
+ 
+ dnl
+ dnl Additional checks pinentry Curses.
