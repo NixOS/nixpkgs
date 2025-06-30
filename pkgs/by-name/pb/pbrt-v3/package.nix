@@ -12,6 +12,9 @@ stdenv.mkDerivation {
   version = "2023-09-03";
   pname = "pbrt-v3";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     rev = "13d871faae88233b327d04cda24022b8bb0093ee";
     owner = "mmp";
