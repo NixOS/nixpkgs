@@ -115,15 +115,15 @@ stdenv.mkDerivation rec {
     gtk3  # libgtk-3
     pango
     cairo
-    xorg.libX11  # DONE ABOVE
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
+    libX11  # DONE ABOVE
+    libXcomposite
+    libXdamage
+    libXext
+    libXfixes
+    libXrandr
     libgbm
     expat
-    xorg.libxcb  # DONE ABOVE
+    libxcb  # DONE ABOVE
     libxkbcommon
 
     alsa-lib  # libasound
