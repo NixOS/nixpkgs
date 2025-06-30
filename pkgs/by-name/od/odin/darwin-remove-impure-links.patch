@@ -1,12 +1,12 @@
 diff --git a/src/linker.cpp b/src/linker.cpp
-index ec165ef7d..91a28b8fc 100644
+index 2210c13..803b654 100644
 --- a/src/linker.cpp
 +++ b/src/linker.cpp
-@@ -769,18 +769,6 @@ try_cross_linking:;
- 			gbString platform_lib_str = gb_string_make(heap_allocator(), "");
- 			defer (gb_string_free(platform_lib_str));
- 			if (build_context.metrics.os == TargetOs_darwin) {
--				platform_lib_str = gb_string_appendc(platform_lib_str, "-Wl,-syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -L/usr/local/lib ");
+@@ -779,18 +779,6 @@ try_cross_linking:;
+ 				}
+ 				platform_lib_str = gb_string_append_fmt(platform_lib_str, "--sysroot %s ", darwin_sdk_path);
+ 
+-				platform_lib_str = gb_string_appendc(platform_lib_str, "-L/usr/local/lib ");
 -
 -				// Homebrew's default library path, checking if it exists to avoid linking warnings.
 -				if (gb_file_exists("/opt/homebrew/lib")) {
