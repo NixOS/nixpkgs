@@ -25,7 +25,7 @@
   _cuda,
   cudaMajorMinorVersion,
   lib,
-  newScope,
+  pkgs,
   stdenv,
   runCommand,
 }:
@@ -51,6 +51,36 @@ let
     lib.intersectLists jetsonCudaCapabilities (config.cudaCapabilities or [ ]) != [ ];
   redistSystem = _cuda.lib.getRedistSystem hasJetsonCudaCapability stdenv.hostPlatform.system;
 
+  # We must use an instance of Nixpkgs where the CUDA package set we're building is the default; if we do not, members
+  # of the versioned, non-default package sets may rely on (transitively) members of the default, unversioned CUDA
+  # package set.
+  # See `Using cudaPackages.pkgs` in doc/languages-frameworks/cuda.section.md for more information.
+  pkgs' =
+    let
+      cudaPackagesUnversionedName = "cudaPackages";
+      cudaPackagesMajorVersionName = cudaLib.mkVersionedName cudaPackagesUnversionedName (
+        versions.major cudaMajorMinorVersion
+      );
+      cudaPackagesMajorMinorVersionName = cudaLib.mkVersionedName cudaPackagesUnversionedName cudaMajorMinorVersion;
+    in
+    # If the CUDA version of pkgs matches our CUDA version, we are constructing the default package set and can use
+    # pkgs without modification.
+    if pkgs.cudaPackages.cudaMajorMinorVersion == cudaMajorMinorVersion then
+      pkgs
+    else
+      pkgs.extend (
+        final: _: {
+          __attrsFailEvaluation = true;
+          recurseForDerivations = false;
+          # The CUDA package set will be available as cudaPackages_x_y, so we need only update the aliases for the
+          # minor-versioned and unversioned package sets.
+          # cudaPackages_x = cudaPackages_x_y
+          ${cudaPackagesMajorVersionName} = final.${cudaPackagesMajorMinorVersionName};
+          # cudaPackages = cudaPackages_x
+          ${cudaPackagesUnversionedName} = final.${cudaPackagesMajorVersionName};
+        }
+      );
+
   passthruFunction = final: {
     # NOTE:
     # It is important that _cuda is not part of the package set fixed-point. As described by
@@ -64,21 +94,13 @@ let
 
     inherit cudaMajorMinorVersion;
 
+    pkgs = pkgs';
+
     cudaNamePrefix = "cuda${cudaMajorMinorVersion}";
 
     cudaMajorVersion = versions.major cudaMajorMinorVersion;
     cudaOlder = strings.versionOlder cudaMajorMinorVersion;
     cudaAtLeast = strings.versionAtLeast cudaMajorMinorVersion;
-
-    # Maintain a reference to the final cudaPackages.
-    # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an
-    # argument, it's provided with `cudaPackages` from the top-level scope, which is not what we
-    # want. We want to provide the `cudaPackages` from the final scope -- that is, the *current*
-    # scope. However, we also want to prevent `pkgs/top-level/release-attrpaths-superset.nix` from
-    # recursing more than one level here.
-    cudaPackages = final // {
-      __attrsFailEvaluation = true;
-    };
 
     flags =
       cudaLib.formatCapabilities {
@@ -209,9 +231,10 @@ let
     ++ lib.optionals config.allowAliases [
       (import ../development/cuda-modules/aliases.nix { inherit lib; })
     ]
+    ++ _cuda.extensions
   );
 
-  cudaPackages = customisation.makeScope newScope (
+  cudaPackages = customisation.makeScope pkgs'.newScope (
     fixedPoints.extends composedExtension passthruFunction
   );
 in
