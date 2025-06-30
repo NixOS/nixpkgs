@@ -38,6 +38,11 @@ let
           makeWrapper '${ghidra}/bin/ghidra-analyzeHeadless' "$out/bin/ghidra-analyzeHeadless" \
             --set NIX_GHIDRAHOME "$out/lib/ghidra/Ghidra"
           ln -s ${ghidra}/share $out/share
+          mkdir -p $out/lib/ghidra/Ghidra
+          shopt -s extglob
+          ln -s ${ghidra}/lib/ghidra/Ghidra/!(Extensions) $out/lib/ghidra/Ghidra/
+          shopt -u extglob
+          ln -s ${ghidra}/lib/ghidra/Ghidra/Extensions/* $out/lib/ghidra/Ghidra/Extensions
         ''
         + lib.optionalString stdenv.hostPlatform.isDarwin ''
           convertDesktopFiles $prefix
