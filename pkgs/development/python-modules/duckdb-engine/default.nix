@@ -77,6 +77,12 @@ buildPythonPackage rec {
     # user agent not available in nixpkgs
     "test_user_agent"
     "test_user_agent_with_custom_user_agent"
+
+    # Fail under nixpkgs-review in the sandbox due to "missing tables"
+    "test_get_columns"
+    "test_get_foreign_keys"
+    "test_get_check_constraints"
+    "test_get_unique_constraints"
   ];
 
   pythonImportsCheck = [ "duckdb_engine" ];
