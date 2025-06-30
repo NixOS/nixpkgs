@@ -3124,6 +3124,8 @@ self: super: with self; {
 
   curvefitgui = callPackage ../development/python-modules/curvefitgui { };
 
+  custom-json-diff = callPackage ../development/python-modules/custom-json-diff { };
+
   customtkinter = callPackage ../development/python-modules/customtkinter { };
 
   cut-cross-entropy = callPackage ../development/python-modules/cut-cross-entropy { };
