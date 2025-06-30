@@ -23688,6 +23688,11 @@
     githubId = 20756843;
     name = "Sofi";
   };
+  Soveu = {
+    name = "Soveu";
+    github = "Soveu";
+    githubId = 34382234;
+  };
   soyouzpanda = {
     name = "soyouzpanda";
     email = "soyouzpanda@soyouzpanda.fr";

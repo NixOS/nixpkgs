@@ -1,285 +1,134 @@
 {
+  stdenv,
   lib,
-  stdenvNoCC,
   fetchurl,
-  makeWrapper,
-  patchelf,
-  bintools,
   dpkg,
+  autoPatchelfHook,
+  makeWrapper,
 
-  # Linked dynamic libraries.
+  # Mandatory to run
   alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
   atk,
   cairo,
-  cups,
-  dbus,
-  expat,
-  fontconfig,
-  freetype,
-  gcc-unwrapped,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  gtk4,
-  libdrm,
-  libglvnd,
-  libkrb5,
-  libX11,
-  libxcb,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libxkbcommon,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
-  libxshmfence,
-  libXtst,
-  libgbm,
-  nspr,
   nss,
   pango,
-  pipewire,
+  qt6,
   vulkan-loader,
-  wayland, # ozone/wayland
+  xorg,
+  libgcc,
+  libgbm,
+  libsecret,
+  libGL,
+  libxml2,
 
-  # Command line programs
-  coreutils,
-
-  # command line arguments which are always set e.g "--disable-gpu"
-  commandLineArgs ? "",
-
-  # Will crash without.
-  systemd,
-
-  # Loaded at runtime.
-  libexif,
-  pciutils,
-
-  # Additional dependencies according to other distros.
-  ## Ubuntu
-  curl,
-  liberation_ttf,
-  util-linux,
+  # Can start without those, they mostly come from
+  # dependencies in the debian package
+  cups,
+  curlWithGnuTls,
+  dbus,
+  nspr,
+  libuuid,
   wget,
   xdg-utils,
-  ## Arch Linux.
-  flac,
-  harfbuzz,
-  icu,
-  libopus,
-  libpng,
-  snappy,
-  speechd-minimal,
-  ## Gentoo
-  bzip2,
-  libcap,
-
-  # Necessary for USB audio devices.
-  libpulseaudio,
-  pulseSupport ? true,
-
-  adwaita-icon-theme,
-  gsettings-desktop-schemas,
-
-  # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
-  libva,
-  libvaSupport ? true,
-
-  # For Vulkan support (--enable-features=Vulkan)
-  addDriverRunpath,
-
-  # For QT support
-  qt6,
-
-  # Edge AAD sync
-  cacert,
-  libsecret,
-
-  # Edge Specific
-  libuuid,
+  libxkbcommon,
 }:
-
 let
+  baseLink = "https://packages.microsoft.com/repos/edge/pool/main";
 
-  opusWithCustomModes = libopus.override { withCustomModes = true; };
-
-  deps =
-    [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      bzip2
-      cacert
-      cairo
-      coreutils
-      cups
-      curl
-      dbus
-      expat
-      flac
-      fontconfig
-      freetype
-      gcc-unwrapped.lib
-      gdk-pixbuf
-      glib
-      harfbuzz
-      icu
-      libcap
-      libdrm
-      liberation_ttf
-      libexif
-      libglvnd
-      libkrb5
-      libpng
-      libX11
-      libxcb
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libxkbcommon
-      libXrandr
-      libXrender
-      libXScrnSaver
-      libxshmfence
-      libXtst
-      libgbm
-      nspr
-      nss
-      opusWithCustomModes
-      pango
-      pciutils
-      pipewire
-      snappy
-      speechd-minimal
-      systemd
-      util-linux
-      vulkan-loader
-      wayland
-      wget
-      libsecret
-      libuuid
-      gtk3
-      gtk4
-      qt6.qtbase
-      qt6.qtwayland
-    ]
-    ++ lib.optionals pulseSupport [ libpulseaudio ]
-    ++ lib.optionals libvaSupport [ libva ];
+  # https://gitlab.gnome.org/GNOME/libxml2/-/commit/d9ea76505dff800d89b430b5231f508bf4128c72
+  # https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2993452568
+  # https://github.com/NixOS/nixpkgs/pull/418543
+  # https://github.com/NixOS/nixpkgs/pull/418679
+  # https://github.com/NixOS/nixpkgs/pull/420487
+  older-libxml2 = libxml2.overrideAttrs rec {
+    version = "2.13.8";
+    src = fetchurl {
+      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+      hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
+    };
+  };
 in
-
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "microsoft-edge";
-  version = "137.0.3296.93";
+  version = "138.0.3351.55-1";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-SC8h6UQ/ee5ZlQWAZsmC1Co5Ky4kaXuoMpvVZtTIMHQ=";
+    url = "${baseLink}/m/microsoft-edge-stable/microsoft-edge-stable_${version}_amd64.deb";
+    hash = "sha256-SZCtAjhzY8BqwM9IMS2081RWxRT+4gQgrjve7avM7Bo=";
   };
 
-  # With strictDeps on, some shebangs were not being patched correctly
-  # ie, $out/share/microsoft/msedge/microsoft-edge
-  strictDeps = false;
-
   nativeBuildInputs = [
-    makeWrapper
-    patchelf
     dpkg
+    makeWrapper
+    autoPatchelfHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    # needed for XDG_ICON_DIRS
-    adwaita-icon-theme
-    glib
-    gtk3
-    gtk4
-    # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas
+    stdenv.cc.cc
+    libgcc
+    qt6.qtbase
+    xorg.libXrandr
+    xorg.libXdamage
+    nss
+    alsa-lib
+    atk
+    cairo
+    pango
+    libgbm
+    libsecret
+    older-libxml2
   ];
 
-  rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
-  binpath = lib.makeBinPath deps;
+  runtimeDependencies = [
+    libGL
+    vulkan-loader
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXext
+    xorg.libXfixes
+    libxkbcommon
+    libuuid
+
+    wget
+    xdg-utils
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    appname=msedge
-    dist=stable
+    # Qt5 is only used as a fallback and we can't
+    # combine both qt5.base and qt6.base.
+    rm opt/microsoft/msedge/libqt5_shim.so
 
-    exe=$out/bin/microsoft-edge
+    # Not needed
+    rm opt/microsoft/msedge/microsoft-edge
+    rm opt/microsoft/msedge/xdg-mime
+    rm opt/microsoft/msedge/xdg-settings
+    rm opt/microsoft/msedge/libvulkan.so.1
 
-    mkdir -p $out/bin
-    cp -v -a usr/share $out/share
-    cp -v -a opt/microsoft $out/share/microsoft
+    mkdir $out
+    cp -r opt/microsoft/msedge/ $out/bin
+    cp -r usr/share/ $out/share
 
-    # replace bundled vulkan-loader
-    rm -v $out/share/microsoft/$appname/libvulkan.so.1
-    ln -v -s -t "$out/share/microsoft/$appname" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+    # runtimeDependencies doesn't work properly?
+    makeWrapper $out/bin/msedge $out/bin/msedge-wrapped \
+      --prefix PATH : ${lib.makeBinPath runtimeDependencies} \
+      --set LD_LIBRARY_PATH '${lib.makeLibraryPath runtimeDependencies}' \
+      --set CHROME_WRAPPER "$out/bin/msedge-wrapper" \
+      --set CHROME_VERSION_EXTRA 'stable' \
+      --set GNOME_DISABLE_CRASH_DIALOG 'SET_BY_GOOGLE_CHROME' \
+      --set SSL_CERT_FILE '/etc/ssl/certs/ca-bundle.crt'
 
-    substituteInPlace $out/share/microsoft/$appname/microsoft-edge \
-      --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
-    substituteInPlace $out/share/applications/microsoft-edge.desktop \
-      --replace-fail /usr/bin/microsoft-edge-$dist $exe
-    substituteInPlace $out/share/applications/com.microsoft.Edge.desktop \
-      --replace-fail /usr/bin/microsoft-edge-$dist $exe
-    substituteInPlace $out/share/gnome-control-center/default-apps/microsoft-edge.xml \
-      --replace-fail /opt/microsoft/msedge $exe
-    substituteInPlace $out/share/menu/microsoft-edge.menu \
-      --replace-fail /opt $out/share \
-      --replace-fail $out/share/microsoft/$appname/microsoft-edge $exe
-
-    for icon_file in $out/share/microsoft/msedge/product_logo_[0-9]*.png; do
-      num_and_suffix="''${icon_file##*logo_}"
-      if [ $dist = "stable" ]; then
-        icon_size="''${num_and_suffix%.*}"
-      else
-        icon_size="''${num_and_suffix%_*}"
-      fi
-      logo_output_prefix="$out/share/icons/hicolor"
-      logo_output_path="$logo_output_prefix/''${icon_size}x''${icon_size}/apps"
-      mkdir -p "$logo_output_path"
-      mv "$icon_file" "$logo_output_path/microsoft-edge.png"
-    done
-
-    # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
-    makeWrapper "$out/share/microsoft/$appname/microsoft-edge" "$exe" \
-      --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
-      --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
-      --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
-      --prefix LD_LIBRARY_PATH : "$rpath" \
-      --prefix PATH            : "$binpath" \
-      --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
-      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
-      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      --set CHROME_WRAPPER  "microsoft-edge-$dist" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
-      --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
-      --add-flags ${lib.escapeShellArg commandLineArgs}
-
-    # Make sure that libGL and libvulkan are found by ANGLE libGLESv2.so
-    patchelf --set-rpath $rpath $out/share/microsoft/$appname/lib*GL*
-
-    # Edge specific set liboneauth
-    patchelf --set-rpath $rpath $out/share/microsoft/$appname/liboneauth.so
-
-    for elf in $out/share/microsoft/$appname/{msedge,msedge-sandbox,msedge_crashpad_handler}; do
-      patchelf --set-rpath $rpath $elf
-      patchelf --set-interpreter ${bintools.dynamicLinker} $elf
-    done
+    substituteInPlace \
+      $out/share/applications/microsoft-edge.desktop \
+      $out/share/applications/com.microsoft.Edge.desktop \
+      --replace-fail \
+        'Exec=/usr/bin/microsoft-edge-stable' \
+        "Exec=$out/bin/msedge-wrapped"
 
     runHook postInstall
   '';
-
-  passthru.updateScript = ./update.py;
 
   meta = {
     changelog = "https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel";
@@ -287,14 +136,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.microsoft.com/en-us/edge";
     license = lib.licenses.unfree;
     mainProgram = "microsoft-edge";
-    maintainers = with lib.maintainers; [
-      cholli
-      ulrikstrid
-      maeve-oake
-      leleuvilela
-      bricklou
-    ];
+    maintainers = with lib.maintainers; [ Soveu ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-})
+}
