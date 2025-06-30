@@ -13322,6 +13322,12 @@
     github = "kjeremy";
     githubId = 4325700;
   };
+  kkflt = {
+    name = "kkflt";
+    email = "kukufleto@gmail.com";
+    github = "kkflt";
+    githubId = 112418704;
+  };
   kkharji = {
     name = "kkharji";
     email = "kkharji@protonmail.com";
