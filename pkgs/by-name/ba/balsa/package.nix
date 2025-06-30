@@ -84,6 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "balsa";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ romildo ];
+    maintainers = with lib.maintainers; [ timon ];
   };
 })
