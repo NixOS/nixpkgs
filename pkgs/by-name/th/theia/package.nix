@@ -86,8 +86,8 @@ stdenv.mkDerivation rec {
   };
 
   env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     # DEBUG = "electron-rebuild";
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     npm_config_tarball = "${nodeHeaders}";
   };
 
