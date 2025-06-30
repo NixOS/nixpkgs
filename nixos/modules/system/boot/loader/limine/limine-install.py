@@ -129,11 +129,127 @@ def get_kernel_uri(kernel_path: str) -> str:
 def bootjson_to_bootspec(bootjson: dict) -> BootSpec:
     specialisations = bootjson['org.nixos.specialisation.v1']
     specialisations = {k: bootjson_to_bootspec(v) for k, v in specialisations.items()}
+    xen = None
+    if 'org.xenproject.bootspec.v2' in bootjson:
+        xen = bootjson['org.xenproject.bootspec.v2']
     return BootSpec(
         **bootjson['org.nixos.bootspec.v1'],
         specialisations=specialisations,
+        xen=xen,
     )
 
+def generate_xen_efi_files(
+        bootspec: BootSpec,
+        gen: str
+        ) -> str:
+    """Generate a Xen EFI xen.cfg file, and copy required files in place.
+
+    Assumes the bootspec has already been validated as having the requried
+    Xen keys.
+
+    Arguments:
+    bootspec -- the NixOS BootSpec requiring Xen EFI configuration
+    gen -- The system generation requiring Xen EFI configuration
+
+    Returns the path to the Xen EFI binary
+    """
+
+    xen_efi_boot_path = get_copied_path_uri(bootspec.xen['efiPath'], f'xen/{gen}')
+    xen_efi_path = get_dest_path(bootspec.xen['efiPath'], f'xen/{gen}')
+
+    xen_efi_cfg_dir = os.path.dirname(xen_efi_path)
+    xen_efi_cfg_path = xen_efi_path[:-4] + '.cfg'
+
+    if not os.path.exists(xen_efi_cfg_dir):
+        os.makedirs(xen_efi_cfg_dir)
+
+    xen_efi_cfg = (
+        f'default=nixos{gen}\n\n' +
+        f'[nixos{gen}]\n'
+        )
+    # set xen dom0 parameters
+    if 'params' in bootspec.xen and len(bootspec.xen['params']) > 0:
+        xen_efi_cfg += 'options=' + ' '.join(bootspec.xen['params']).strip() + '\n'
+
+    # set kernel and copy in-place
+    xen_efi_kernel_path = get_dest_path(bootspec.kernel, f'xen/{gen}')
+    copy_file(bootspec.kernel, xen_efi_kernel_path)
+    xen_efi_cfg += (
+        'kernel=' + os.path.basename(xen_efi_kernel_path) + ' '
+        + ' '.join(['init=' + bootspec.init] + bootspec.kernelParams).strip()
+        + '\n'
+    )
+
+    # set ramdisk and copy initrd in-place
+    if bootspec.initrd:
+        xen_efi_initrd_path = get_dest_path(bootspec.initrd, f'xen/{gen}')
+        copy_file(bootspec.initrd, xen_efi_initrd_path)
+        xen_efi_cfg += 'ramdisk=' + os.path.basename(xen_efi_initrd_path) + '\n'
+
+    with open(xen_efi_cfg_path, 'w') as xen_efi_cfg_file:
+        xen_efi_cfg_file.write(xen_efi_cfg)
+
+    return xen_efi_boot_path
+
+def xen_config_entry(
+    levels: int, bootspec: BootSpec, xenVersion: str, gen: str, time: str, efi: bool
+) -> str:
+    """Generate EFI and BIOS entries for Xen dom0 kernels.
+
+    Arguments:
+    levels -- The number of Limine menu levels for entries
+    bootspec -- The NixOS BootSpec used for generating this Limine configuration
+    xenVersion -- The version of Xen the entry is generated for, from the boot extension
+    gen -- The system generation these entries are generated for
+    time -- The build time for the configuration
+    efi -- True if EFI protocol should be used for this entry
+    """
+    # generate Xen menu label for the current generation
+    entry = '/' * levels + f'Generation {gen} with Xen {xenVersion}' + (' EFI\n' if efi else '\n')
+    entry += f'comment: Xen {xenVersion} {bootspec.label}, built on {time}\n'
+    # load Xen dom0 as the executable, using multiboot for EFI & BIOS
+    if efi:
+        # Use the EFI protocol and generate Xen EFI configuration
+        # files and directories which are loaded by Xen's EFI binary
+        # directly.
+        # Ideally both EFI and BIOS booting would use multiboot2,
+        # however Limine's multiboot2 module has trouble finding
+        # an entry-point in Xen's multiboot binary, and multiboot1
+        # doesn't work under EFI.
+        # Upstream Limine issue #482
+        entry += 'protocol: efi\n'
+        entry += (
+            'path: ' + generate_xen_efi_files(bootspec, gen) + '\n'
+        )
+    else:
+        # Use multiboot1 if not generating an EFI entry, as multiboot2
+        # doesn't work under Limine for booting Xen.
+        # Upstream Limine issue #483
+        entry += 'protocol: multiboot\n'
+        entry += (
+            'path: ' + get_copied_path_uri(bootspec.xen['multibootPath'], f'xen/{gen}') + '\n'
+        )
+        # set params as the multiboot executable's parameters
+        if 'params' in bootspec.xen and len(bootspec.xen['params']) > 0:
+            # TODO: Understand why the first argument is ignored below?
+            # --- to work around first argument being ignored
+            entry += (
+                'cmdline: -- ' + ' '.join(bootspec.xen['params']).strip() + '\n'
+            )
+        # load the linux kernel as the second module
+        entry += 'module_path: ' + get_kernel_uri(bootspec.kernel) + '\n'
+        # set kernel parameters as the parameters to the first module
+        # TODO: Understand why the first argument is ignored below?
+        # --- to work around first argument being ignored
+        entry += (
+            'module_string: -- '
+            + ' '.join(['init=' + bootspec.init] + bootspec.kernelParams).strip()
+            + '\n'
+        )
+        if bootspec.initrd:
+            # the final module is the initrd
+            entry += 'module_path: ' + get_kernel_uri(bootspec.initrd) + '\n'
+    return entry
 
 def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
     entry = '/' * levels + label + '\n'
@@ -173,6 +289,13 @@ def generate_config_entry(profile: str, gen: str, special: bool) -> str:
     depth = 2
     entry = ""
 
+    # Xen, if configured, should be listed first for each generation
+    if boot_spec.xen and 'version' in boot_spec.xen:
+        xen_version = boot_spec.xen['version']
+        if config('efiSupport'):
+            entry += xen_config_entry(2, boot_spec, xen_version, gen, time, True)
+        entry += xen_config_entry(2, boot_spec, xen_version, gen, time, False)
+
     if len(specialisation_list) > 0:
         depth += 1
         entry += '/' * (depth-1)
@@ -187,6 +310,7 @@ def generate_config_entry(profile: str, gen: str, special: bool) -> str:
 
     for spec, spec_boot_spec in specialisation_list:
         entry += config_entry(depth, spec_boot_spec, f'{spec}', str(time))
+
     return entry
 
 
@@ -270,6 +394,13 @@ def install_bootloader() -> None:
         for dir, dirs, files in os.walk(limine_install_dir, topdown=True):
             for file in files:
                 paths[os.path.join(dir, file)] = False
+
+    limine_xen_dir = os.path.join(limine_install_dir, 'xen')
+    if os.path.exists(limine_xen_dir):
+        print(f'cleaning {limine_xen_dir}')
+        shutil.rmtree(limine_xen_dir)
+
+    os.makedirs(limine_xen_dir)
 
     profiles = [('system', get_gens())]
 
