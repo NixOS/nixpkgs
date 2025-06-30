@@ -65,10 +65,10 @@ vimUtils.buildVimPlugin {
     in
     ''
       mkdir -p $out/build
-      ln -s ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/build/avante_html2md${ext}
+      ln -s ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/lua/avante_repo_map${ext}
+      ln -s ${avante-nvim-lib}/lib/libavante_templates${ext} $out/lua/avante_templates${ext}
+      ln -s ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/lua/avante_tokenizers${ext}
+      ln -s ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/lua/avante_html2md${ext}
     '';
 
   passthru = {
