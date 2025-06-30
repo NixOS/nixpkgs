@@ -158,6 +158,9 @@ builtins.intersectAttrs super {
 
   threadscope = enableSeparateBinOutput super.threadscope;
 
+  # Binary may be used separately for e.g. editor integrations
+  cabal-cargs = enableSeparateBinOutput super.cabal-cargs;
+
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
   mysql = dontCheck super.mysql;
