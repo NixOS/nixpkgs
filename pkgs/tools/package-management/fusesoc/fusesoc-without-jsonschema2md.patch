@@ -1,0 +1,12 @@
+diff --git i/pyproject.toml w/pyproject.toml
+index 5c80b63..d216fd4 100644
+--- i/pyproject.toml
++++ w/pyproject.toml
+@@ -30,7 +30,6 @@ dependencies = [
+   "pyyaml>=6.0",
+   "simplesat>=0.9.1",
+   "fastjsonschema",
+-  "jsonschema2md",
+   "argcomplete",
+ ]
+ requires-python = ">=3.6, <4"
