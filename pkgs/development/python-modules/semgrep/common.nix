@@ -1,9 +1,9 @@
 { lib }:
 
 rec {
-  version = "1.104.0";
+  version = "1.126.0";
 
-  srcHash = "sha256-rVBnjG+g7OaOQ8LYCurqNC2dYY/Dm4hdocgotc4lADg=";
+  srcHash = "sha256-BoFtuBq28KkU8juzWv0lx63HsDHexxeyq/RfvwIKTzE=";
 
   # submodule dependencies
   # these are fetched so we:
