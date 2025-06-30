@@ -297,6 +297,7 @@
   ./programs/rush.nix
   ./programs/rust-motd.nix
   ./programs/ryzen-monitor-ng.nix
+  ./programs/sbctl.nix
   ./programs/schroot.nix
   ./programs/screen.nix
   ./programs/seahorse.nix
