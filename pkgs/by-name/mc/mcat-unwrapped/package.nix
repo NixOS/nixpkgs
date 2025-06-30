@@ -2,20 +2,42 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  buildPackages,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mcat-unwrapped";
-  version = "0.3.0";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "Skardyy";
     repo = "mcat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+uq2mqUpdpO5lStf4dj6nYpOff3LOL45fXB338mnlZ8=";
+    hash = "sha256-PMUY9omBAgfOzo4FAVZZ/pHavEWH5Ik9x1zwDBsg4ok=";
   };
 
-  cargoHash = "sha256-m1TJ255jwQOEGqz22t5CmrW0zRyGqgQls84yGK5taWU=";
+  cargoHash = "sha256-h4uCHQX/HZ8o0iYkInfmBN6iMzeZARg9lhO+n0wxXNw=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall =
+    let
+      mcat =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.mcat-unwrapped;
+    in
+    ''
+      installShellCompletion --cmd mcat \
+        --bash <(${mcat}/bin/mcat --generate bash) \
+        --fish <(${mcat}/bin/mcat --generate fish) \
+        --zsh <(${mcat}/bin/mcat --generate zsh)
+    '';
 
   passthru = {
     updateScript = nix-update-script { };
