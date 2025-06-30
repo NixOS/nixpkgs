@@ -9,7 +9,6 @@
   package ? null,
   maintainer ? null,
   predicate ? null,
-  get-script ? pkg: pkg.updateScript or null,
   path ? null,
   max-workers ? null,
   include-overlays ? false,
@@ -35,6 +34,8 @@ let
   );
 
   inherit (pkgs) lib;
+
+  get-script = pkg: pkg.updateScript or (pkgs.nix-update-script { });
 
   # Remove duplicate elements from the list based on some extracted value. O(n^2) complexity.
   nubOn =
@@ -110,11 +111,11 @@ let
   # Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
   packagesWith = packagesWithPath [ ];
 
-  # Recursively find all packages in `pkgs` with updateScript matching given predicate.
+  # Recursively find all packages in `pkgs` matching given predicate.
   packagesWithUpdateScriptMatchingPredicate =
     cond: packagesWith (path: pkg: (get-script pkg != null) && cond path pkg);
 
-  # Recursively find all packages in `pkgs` with updateScript by given maintainer.
+  # Recursively find all packages in `pkgs` by given maintainer.
   packagesWithUpdateScriptAndMaintainer =
     maintainer':
     let
@@ -185,8 +186,7 @@ let
 
         % nix-shell maintainers/scripts/update.nix --argstr maintainer garbas
 
-    to run all update scripts for all packages that lists \`garbas\` as a maintainer
-    and have \`updateScript\` defined, or:
+    to run all update scripts for all packages that lists \`garbas\` as a maintainer, or:
 
         % nix-shell maintainers/scripts/update.nix --argstr package nautilus
 
