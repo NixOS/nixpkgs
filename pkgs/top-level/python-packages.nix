@@ -837,6 +837,8 @@ self: super: with self; {
 
   arcam-fmj = callPackage ../development/python-modules/arcam-fmj { };
 
+  arch = callPackage ../development/python-modules/arch { };
+
   archinfo = callPackage ../development/python-modules/archinfo { };
 
   archspec = callPackage ../development/python-modules/archspec { };
