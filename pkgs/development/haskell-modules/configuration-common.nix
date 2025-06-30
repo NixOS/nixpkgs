@@ -2033,6 +2033,10 @@ with haskellLib;
   # https://github.com/mpickering/hs-speedscope/issues/16
   hs-speedscope = doJailbreak super.hs-speedscope;
 
+  # Missing test files in sdist tarball:
+  # https://gitlab.com/dpwiz/geomancy-layout/-/issues/1
+  geomancy-layout = dontCheck super.geomancy-layout;
+
   # 2025-02-11: Too strict bounds on base < 4.19, bytestring < 0.12, tasty < 1.5, tasty-quickcheck < 0.11
   blake2 = doJailbreak super.blake2;
 
