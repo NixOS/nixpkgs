@@ -258,9 +258,7 @@ lib.makeExtensible (self: {
 
   latest = self.lix_2_93;
 
-  # Note: This is not yet 2.92 because of a non-deterministic `curl` error.
-  # See: https://git.lix.systems/lix-project/lix/issues/662
-  stable = self.lix_2_91;
+  stable = self.lix_2_92;
 
   # Previously, `nix-eval-jobs` was not packaged here, so we export an
   # attribute with the previously-expected structure for compatibility. This
