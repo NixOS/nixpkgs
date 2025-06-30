@@ -28,6 +28,7 @@ buildPythonPackage rec {
     "test_eofSyntaxError"
     "test_misencodedFileUTF8"
     "test_multilineSyntaxError"
+    "test_misencodedFileUTF16"
   ];
 
   pythonImportsCheck = [ "pyflakes" ];
