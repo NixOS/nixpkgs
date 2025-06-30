@@ -6,21 +6,21 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "tl-expected";
+  pname = "tl-optional";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "TartanLlama";
-    repo = "expected";
+    repo = "optional";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AuRU8VI5l7Th9fJ5jIc/6mPm0Vqbbt6rY8QCCNDOU50=";
+    hash = "sha256-WPTXTQmzJjAIJI1zM6svZZTO8gP/jt5xDHHRCCu9cmI=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   meta = {
-    description = "C++11/14/17 std::expected with functional-style extensions";
-    homepage = "https://tl.tartanllama.xyz/en/latest/api/expected.html";
+    description = " C++11/14/17 std::optional with functional-style extensions and reference support";
+    homepage = "https://tl.tartanllama.xyz/en/latest/api/optional.html";
     license = lib.licenses.cc0;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pandapip1 ];
