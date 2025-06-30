@@ -102,13 +102,15 @@ let
   #qmakeFlags = [ "CONFIG+=debug" ];
   qmakeFlags = [ ];
   dontStrip = false;
-  core-rev = "d257c68d5fdd71a33776a291914f2c856426c259";
+
+  # Revisions that correspond to onlyoffice-documentserver 8.3.3
+  core-rev = "fa65a546dad35b08615d616bbef92717ccb4bb32";
   core = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core";
     # rev that the 'core' submodule in documentserver points at
     rev = core-rev;
-    hash = "sha256-EXeqG8MJWS1asjFihnuMnDSHeKt2x+Ui+8MYK50AnSY=";
+    hash = "sha256-fpWZqzenkSG5kB3CKdmdw6dBQOoUTryrHE0mG9zBi90=";
   };
   web-apps = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-core-webapps";
@@ -119,8 +121,8 @@ let
       owner = "ONLYOFFICE";
       repo = "web-apps";
       # rev that the 'web-apps' submodule in documentserver points at
-      rev = "5255c27b1af64f6edf08d1aba20a23b8149e338c";
-      hash = "sha256-49v2h+ILQ0X/gNHny6LQcj94A6h7nS99liUAnLRNxzw=";
+      rev = "64a59dd53ca2e83c9cb34ecd75dbacb2f7a5bf4d";
+      hash = "sha256-7+XddOPDsWpxg29HkJNvp/K1LJGctej5hLIAmBHWe/o=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
@@ -159,8 +161,8 @@ let
       owner = "ONLYOFFICE";
       repo = "sdkjs";
       # rev that the 'sdkjs' submodule in documentserver points at
-      rev = "0e50652cb08c7753a9ab72d0558560ada5d43046";
-      hash = "sha256-fApr34aT0X8ffPwbsUEWnA3SK8pT5RKNan3YxzhvtAU=";
+      rev = "3377e3fd5cb6de4aa833dead7c37124dc83efd96";
+      hash = "sha256-qa1gm1lPJS4f1iLZLE8gjwkm+5KoMsDm2BnJPTlyLxo=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
@@ -648,8 +650,8 @@ let
   core-fonts = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core-fonts";
-    rev = "d5d80e6ae15800ccf31e1c4dbb1ae3385992e0c2";
-    hash = "sha256-daJG/4tcdRVVmlMCUW4iuoUkEEfY7sx5icYWMva4o+c=";
+    rev = "7030c6681fb5bbed560675cb42422f91df15d5c9";
+    hash = "sha256-yNUDyIJ09Ejbyt/kMrOpDbT15QTDOe7GTQChRU5+QY4=";
   };
   allfonts = runCommand "allfonts" { } ''
     mkdir -p $out/web
