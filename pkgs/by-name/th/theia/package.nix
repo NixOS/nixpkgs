@@ -20,7 +20,8 @@
   ## Needed for Compiling the native modules
   pkg-config,
   libsecret,
-  xorg,
+  libX11,
+  libxkbfile,
 
   ## Needed for Distribution
   makeWrapper,
@@ -39,6 +40,14 @@
   gtk3,
   pango,
   cairo,
+  # xorg one's
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXrandr,
+  libxcb,
+
   libgbm,
   expat,
   libxkbcommon,
@@ -100,8 +109,8 @@ stdenv.mkDerivation rec {
     ## Needed for Compiling the native modules
     pkg-config
     libsecret
-    xorg.libxkbfile
-    xorg.libX11
+    libxkbfile
+    libX11
   ];
 
   buildInputs = [
@@ -116,6 +125,7 @@ stdenv.mkDerivation rec {
     pango
     cairo
     libX11  # DONE ABOVE
+    libxcb  # DONE ABOVE
     libXcomposite
     libXdamage
     libXext
@@ -123,7 +133,6 @@ stdenv.mkDerivation rec {
     libXrandr
     libgbm
     expat
-    libxcb  # DONE ABOVE
     libxkbcommon
 
     alsa-lib  # libasound
