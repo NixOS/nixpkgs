@@ -19,10 +19,6 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/source";
 
-  postPatch = ''
-    substituteInPlace Makefile --replace "/bin/rm" "rm"
-  '';
-
   nativeBuildInputs = [ xxd ];
 
   buildInputs = [ zlib ];
@@ -44,7 +40,10 @@ stdenv.mkDerivation rec {
     description = "Spliced Transcripts Alignment to a Reference";
     homepage = "https://github.com/alexdobin/STAR";
     license = licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = [ maintainers.arcadio ];
   };
 }
