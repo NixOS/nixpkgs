@@ -1669,6 +1669,7 @@
   ./services/web-apps/pretix.nix
   ./services/web-apps/privatebin.nix
   ./services/web-apps/prosody-filer.nix
+  ./services/web-apps/reactive-resume.nix
   ./services/web-apps/readeck.nix
   ./services/web-apps/reposilite.nix
   ./services/web-apps/rimgo.nix
