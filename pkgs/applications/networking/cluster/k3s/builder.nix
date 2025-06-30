@@ -415,6 +415,8 @@ buildGoModule rec {
     k3sBundle
   ];
 
+  hardeningDisable = [ "pie" ];
+
   # We override most of buildPhase due to peculiarities in k3s's build.
   # Specifically, it has a 'go generate' which runs part of the package. See
   # this comment:
