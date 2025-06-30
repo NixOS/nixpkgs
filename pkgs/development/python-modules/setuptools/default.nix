@@ -21,6 +21,7 @@ buildPythonPackage rec {
 
   patches = [
     ./tag-date.patch
+    ./CVE-2025-47273.patch
   ];
 
   preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
