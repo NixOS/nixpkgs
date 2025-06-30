@@ -9308,6 +9308,12 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
+  globule655 = {
+    email = "globule655@gmail.com";
+    github = "globule655";
+    githubId = 47015416;
+    name = "globule655";
+  };
   gm6k = {
     email = "nix@quidecco.pl";
     name = "Isidor Zeuner";
