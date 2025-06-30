@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl wget jq common-updater-scripts yarn-berry_3 yarn-berry_3.yarn-berry-fetcher
+#!nix-shell -i bash -p curl wget jq common-updater-scripts yarn-berry_4 yarn-berry_4.yarn-berry-fetcher
 
 set -eu -o pipefail
 
