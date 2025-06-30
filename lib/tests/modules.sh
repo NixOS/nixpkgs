@@ -310,6 +310,12 @@ checkConfigOutput '^true$' config.enable ./alias-with-priority.nix
 checkConfigOutput '^true$' config.enableAlias ./alias-with-priority.nix
 checkConfigOutput '^false$' config.enable ./alias-with-priority-can-override.nix
 checkConfigOutput '^false$' config.enableAlias ./alias-with-priority-can-override.nix
+checkConfigOutput '^"main-defs"$' options.lines.definitionsWithLocations.0.file ./alias-with-location.nix
+checkConfigOutput '^"alias-defs"$' options.lines.definitionsWithLocations.1.file ./alias-with-location.nix
+checkConfigOutput '^"alias-defs"$' options.linesAlias.definitionsWithLocations.0.file ./alias-with-location.nix
+checkConfigOutput '^"hello"$' options.lines.definitions.0 ./alias-with-location.nix
+checkConfigOutput '^"world"$' options.lines.definitions.1 ./alias-with-location.nix
+checkConfigOutput '^"world"$' options.linesAlias.definitions.0 ./alias-with-location.nix
 
 # Check mkPackageOption
 checkConfigOutput '^"hello"$' config.package.pname ./declare-mkPackageOption.nix
