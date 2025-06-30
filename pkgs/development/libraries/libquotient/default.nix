@@ -63,7 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://quotient-im.github.io/libQuotient/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [
-      colemickens
       matthiasbeyer
     ];
   };
