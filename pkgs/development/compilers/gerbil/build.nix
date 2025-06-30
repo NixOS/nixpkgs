@@ -37,23 +37,26 @@ stdenv.mkDerivation rec {
 
   buildInputs = buildInputs_libraries;
 
-  postPatch = ''
-    patchShebangs . ;
-    grep -Fl '#!/usr/bin/env' `find . -type f -executable` | while read f ; do
-      substituteInPlace "$f" --replace '#!/usr/bin/env' '#!${coreutils}/bin/env' ;
-    done ;
-    cat > MANIFEST <<EOF
-    gerbil_stamp_version=v${git-version}
-    gambit_stamp_version=v${gambit-git-version}
-    gambit_stamp_ymd=${gambit-stampYmd}
-    gambit_stamp_hms=${gambit-stampHms}
-    EOF
-    for f in src/bootstrap/gerbil/compiler/driver__0.scm \
-             src/build/build-libgerbil.ss \
-             src/gerbil/compiler/driver.ss ; do
-      substituteInPlace "$f" --replace '"gcc"' '"${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"' ;
-    done
-  '';
+  postPatch =
+    ''
+      patchShebangs . ;
+      grep -Fl '#!/usr/bin/env' `find . -type f -executable` | while read f ; do
+        substituteInPlace "$f" --replace '#!/usr/bin/env' '#!${coreutils}/bin/env' ;
+      done ;
+      cat > MANIFEST <<EOF
+      gerbil_stamp_version=v${git-version}
+      gambit_stamp_version=v${gambit-git-version}
+      gambit_stamp_ymd=${gambit-stampYmd}
+      gambit_stamp_hms=${gambit-stampHms}
+      EOF
+    ''
+    + lib.optionalString (!(lib.hasPrefix "unstable" version)) ''
+      for f in src/bootstrap/gerbil/compiler/driver__0.scm \
+               src/build/build-libgerbil.ss \
+               src/gerbil/compiler/driver.ss ; do
+        substituteInPlace "$f" --replace '"gcc"' '"${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"' ;
+      done
+    '';
 
   ## TODO: make static compilation work.
   ## For that, get all the packages below to somehow expose static libraries,
@@ -91,28 +94,31 @@ stdenv.mkDerivation rec {
     "-L${sqlite.out}/lib"
   ];
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    ''
+      runHook preBuild
 
-    # gxprof testing uses $HOME/.cache/gerbil/gxc
-    export HOME=$PWD
-    export GERBIL_BUILD_CORES=$NIX_BUILD_CORES
-    export GERBIL_GXC=$PWD/bin/gxc
-    export GERBIL_BASE=$PWD
-    export GERBIL_PREFIX=$PWD
-    export GERBIL_PATH=$PWD/lib
-    export PATH=$PWD/bin:$PATH
-    ${gambit-support.export-gambopt gambit-params}
+      # gxprof testing uses $HOME/.cache/gerbil/gxc
+      export HOME=$PWD
+      export GERBIL_BUILD_CORES=$NIX_BUILD_CORES
+      export GERBIL_GXC=$PWD/bin/gxc
+      export GERBIL_BASE=$PWD
+      export GERBIL_PREFIX=$PWD
+      export GERBIL_PATH=$PWD/lib
+      export PATH=$PWD/bin:$PATH
+      ${gambit-support.export-gambopt gambit-params}
 
-    # Build, replacing make by build.sh
-    ( cd src && sh build.sh )
-
-    f=build/lib/libgerbil.so.ldd ; [ -f $f ] && :
-    substituteInPlace "$f" --replace '(' \
-      '(${lib.strings.concatStrings (map (x: "\"${x}\" ") extraLdOptions)}'
-
-    runHook postBuild
-  '';
+      # Build, replacing make by build.sh
+      ( cd src && sh build.sh )
+    ''
+    + lib.optionalString (!(lib.hasPrefix "unstable" version)) ''
+      f=build/lib/libgerbil.so.ldd ; [ -f $f ] && :
+      substituteInPlace "$f" --replace '(' \
+        '(${lib.strings.concatStrings (map (x: "\"${x}\" ") extraLdOptions)}'
+    ''
+    + ''
+      runHook postBuild
+    '';
 
   installPhase =
     ''
