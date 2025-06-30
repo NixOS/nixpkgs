@@ -28,18 +28,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guacamole-server";
-  version = "1.6.0-unstable-2025-05-16";
+  version = "1.6.0-unstable-2025-06-29";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "guacamole-server";
-    rev = "acb69735359d4d4a08f65d6eb0bde2a0da08f751";
-    hash = "sha256-rqGSQD9EYlK1E6y/3EzynRmBWJOZBrC324zVvt7c2vM=";
+    rev = "f3f5b9d76649ccc24f551cb166c81078f4b5e236";
+    hash = "sha256-OjTwAQzKUuXfwZXLsL9XjrJc/0be38CmAGG+CoCeNwk=";
   };
 
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=format-truncation"
     "-Wno-error=format-overflow"
+    "-Wno-error=deprecated-declarations"
   ];
 
   strictDeps = true;
