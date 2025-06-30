@@ -413,8 +413,6 @@ with pkgs;
 
   inherit (gridlock) nyarr;
 
-  inspec = callPackage ../tools/misc/inspec { };
-
   lshw-gui = lshw.override { withGUI = true; };
 
   kdePackages = callPackage ../kde { };
