@@ -24557,6 +24557,12 @@
     githubId = 1901799;
     name = "Nathan van Doorn";
   };
+  tanja = {
+    email = "nix@blahaj.jetzt";
+    github = "Tanja-4732";
+    githubId = 18219148;
+    name = "Tanja";
+  };
   tanya1866 = {
     email = "tanyaarora@tutamail.com";
     matrix = "@tanya1866:matrix.org";
