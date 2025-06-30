@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
 
   withLibei ? true,
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "input-leap";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "input-leap";
     repo = "input-leap";
     rev = "v${version}";
-    hash = "sha256-YkBHvwN573qqQWe/p0n4C2NlyNQHSZNz2jyMKGPITF4=";
+    hash = "sha256-zSaeeMlhpWIX3y4OmZ7eHXCu1HPP7NU5HFkME/JZjuQ=";
     fetchSubmodules = true;
   };
 
@@ -65,14 +64,6 @@ stdenv.mkDerivation rec {
       libportal
     ];
 
-  patches = [
-    (fetchpatch2 {
-      # Upstream fix for crash on qt6.8 https://github.com/input-leap/input-leap/issues/2067
-      url = "https://github.com/input-leap/input-leap/commit/2641bc502e16b1fb7372b43e94d4b894cbc71279.patch?full_index=1";
-      hash = "sha256-LV09ITcE0ihKMByM5wiRetGwKbPrJbVY6HjZLqa8Dcs=";
-    })
-  ];
-
   cmakeFlags = [
     "-DINPUTLEAP_REVISION=${builtins.substring 0 8 src.rev}"
   ] ++ lib.optional withLibei "-DINPUTLEAP_BUILD_LIBEI=ON";
@@ -83,11 +74,6 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
         --prefix PATH : "${lib.makeBinPath [ openssl ]}"
     )
-  '';
-
-  postFixup = ''
-    substituteInPlace $out/share/applications/io.github.input_leap.InputLeap.desktop \
-      --replace "Exec=input-leap" "Exec=$out/bin/input-leap"
   '';
 
   meta = {
