@@ -9149,9 +9149,6 @@ with pkgs;
   zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_3_6
-    libressl_3_7
-    libressl_3_8
     libressl_3_9
     libressl_4_0
     ;
