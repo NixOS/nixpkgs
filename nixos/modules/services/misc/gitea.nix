@@ -464,7 +464,7 @@ in
                 };
 
                 SENDMAIL_PATH = lib.mkOption {
-                  type = lib.types.path;
+                  type = lib.types.str;
                   # somewhat duplicated with useSendmail but cannot be deduped because of infinite recursion
                   default =
                     if config.mailer.ENABLED && config.mailer.PROTOCOL == "sendmail" then
