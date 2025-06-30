@@ -3,45 +3,52 @@
   stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
+  makeDesktopItem,
+
+  copyDesktopItems,
+  cctools,
+  makeWrapper,
+  nodejs,
   yarnConfigHook,
   yarnBuildHook,
-  nodejs,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
   wrapGAppsHook3,
+  xcbuild,
+
   electron,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "1.7.4";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "troyeguo";
     repo = "koodo-reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rLW5FS8xM7Z49AaLq0KzBCoRgAVxwTDCHQFdIaEyygA=";
+    hash = "sha256-BGzFJTtSCejTZYr61KNTwxr/S1YIox1iRwb8s9TH3OI=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-58mxYt2wD6SGzhvo9c44CPmdX+/tLnbJCMPafo4txbY=";
+    inherit (finalAttrs) src;
+    hash = "sha256-fvsoh7wGfDYg3JVjhMPaI13ChXi45w0jc9g9fNthJgg=";
   };
 
   nativeBuildInputs =
     [
       makeWrapper
+      nodejs
+      (nodejs.python.withPackages (ps: [ ps.setuptools ]))
       yarnConfigHook
       yarnBuildHook
-      nodejs
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       copyDesktopItems
       wrapGAppsHook3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+      xcbuild
     ];
-
-  dontWrapGApps = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -51,6 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
   postBuild = ''
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
+
+    # this is just the cpu-features install script without the node-gyp rebuild part
+    # we cannot rebuild yet, because we haven't fixed the nan headers (see below)
+    node node_modules/cpu-features/buildcheck.js > node_modules/cpu-features/buildcheck.gypi
+
+    export npm_config_nodedir=${electron.headers}
+    yarn --offline postinstall # fixup nan headers to work with electron and rebuild native libs
+
     yarn --offline run electron-builder --dir \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
@@ -75,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  dontWrapGApps = true;
 
   # we use makeShellWrapper instead of the makeBinaryWrapper provided by wrapGAppsHook for proper shell variable expansion
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
