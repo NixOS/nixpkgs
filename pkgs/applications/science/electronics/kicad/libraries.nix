@@ -6,6 +6,8 @@
   stepreduce,
   parallel,
   zip,
+  with3d,
+  with3dCompressed,
 }:
 let
   mkLib =
@@ -24,9 +26,16 @@ let
           zip
         ];
 
-      postInstall = lib.optional (name == "packages3d") ''
-        find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
-      '';
+      postInstall = lib.optionalString (name == "packages3d") (
+        lib.concatStringsSep "\n" (
+          lib.optional (with3dCompressed && !with3d) ''
+            find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
+          ''
+          ++ lib.optional (with3dCompressed && with3d) ''
+            find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {}'
+          ''
+        )
+      );
 
       meta = {
         license = lib.licenses.cc-by-sa-40;
