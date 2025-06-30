@@ -81,13 +81,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "31.0.3";
+  version = "31.0.4";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-i1wkGlafPvfMTsQr5Ww5iwmUu+23cr0YmN10llJfohA=";
+    hash = "sha256-YxBPVXin8oJlo++oJogY1WMamIJmRqtSmKZDBsIZPU4=";
     fetchSubmodules = true;
   };
 

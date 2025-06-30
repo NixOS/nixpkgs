@@ -9308,6 +9308,12 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
+  globule655 = {
+    email = "globule655@gmail.com";
+    github = "globule655";
+    githubId = 47015416;
+    name = "globule655";
+  };
   gm6k = {
     email = "nix@quidecco.pl";
     name = "Isidor Zeuner";
@@ -22911,7 +22917,10 @@
     github = "ShadowRZ";
     githubId = 23130178;
     name = "夜坂雅";
-    keys = [ { fingerprint = "3237 D49E 8F81 5A45 2133  64EA 4FF3 5790 F405 53A9"; } ];
+    keys = [
+      { fingerprint = "3237 D49E 8F81 5A45 2133  64EA 4FF3 5790 F405 53A9"; }
+      { fingerprint = "AC59 7AD3 89D1 CC56 18AD  1ED9 B712 3A2B 6B0A E434"; }
+    ];
   };
   shadows_withal = {
     email = "shadows@with.al";
