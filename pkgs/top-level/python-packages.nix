@@ -4884,6 +4884,8 @@ self: super: with self; {
 
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
+  fast-simplification = callPackage ../development/python-modules/fast-simplification { };
+
   fastai = callPackage ../development/python-modules/fastai { };
 
   fastapi = callPackage ../development/python-modules/fastapi { };
