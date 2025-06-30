@@ -105,11 +105,13 @@ let
             gnuabi64 = lib.systems.parse.abis.muslabi64;
             gnuabielfv2 = lib.systems.parse.abis.musl;
             gnuabielfv1 = lib.systems.parse.abis.musl;
+            gnux32 = lib.systems.parse.abis.muslx32;
             # The following two entries ensure that this function is idempotent.
             musleabi = lib.systems.parse.abis.musleabi;
             musleabihf = lib.systems.parse.abis.musleabihf;
             muslabin32 = lib.systems.parse.abis.muslabin32;
             muslabi64 = lib.systems.parse.abis.muslabi64;
+            muslx32 = lib.systems.parse.abis.muslx32;
           }
           .${parsed.abi.name} or lib.systems.parse.abis.musl;
       }
