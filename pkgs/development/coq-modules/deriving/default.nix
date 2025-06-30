@@ -15,7 +15,7 @@ mkCoqDerivation {
   defaultVersion =
     let
       case = coq: mc: out: {
-        case = [
+        cases = [
           coq
           mc
         ];

@@ -23,11 +23,11 @@ mkCoqDerivation {
     in
     with lib.versions;
     lib.switch mathcomp.character.version [
-      (case ((range "2.2.0" "2.4.0")) "2.2.0")
-      (case ((range "2.1.0" "2.3.0")) "2.1.0")
-      (case ((range "1.13.0" "1.15.0")) "1.14.0")
-      (case ((range "1.12.0" "1.14.0")) "1.13.0")
-      (case ((range "1.10.0" "1.12.0")) "1.12.0")
+      (case (range "2.2.0" "2.4.0") "2.2.0")
+      (case (range "2.1.0" "2.3.0") "2.1.0")
+      (case (range "1.13.0" "1.15.0") "1.14.0")
+      (case (range "1.12.0" "1.14.0") "1.13.0")
+      (case (range "1.10.0" "1.12.0") "1.12.0")
     ] null;
 
   propagatedBuildInputs = [
