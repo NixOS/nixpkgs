@@ -46,6 +46,9 @@
     done
   '';
 
+  # Provide networkmanager for easy network configuration.
+  networking.networkmanager.enable = true;
+
   environment.defaultPackages = with pkgs; [
     rsync
   ];
