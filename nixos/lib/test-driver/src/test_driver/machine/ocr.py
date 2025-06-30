@@ -1,4 +1,3 @@
-import itertools
 import multiprocessing
 import os
 import shutil
@@ -29,14 +28,6 @@ def perform_ocr_variants_on_screenshot(
     if shutil.which("tesseract") is None:
         raise MachineError("OCR requested but `tesseract` is not available")
 
-    # tesseract --help-oem
-    # OCR Engine modes (OEM):
-    #  0|tesseract_only          Legacy engine only.
-    #  1|lstm_only               Neural nets LSTM engine only.
-    #  2|tesseract_lstm_combined Legacy + LSTM engines.
-    #  3|default                 Default, based on what is available.
-    model_ids: list[int] = [0, 1] if variants else [2]
-
     # Tesseract runs parallel on up to 4 cores.
     # Docs suggest to run it with OMP_THREAD_LIMIT=1 for hundreds of parallel
     # runs. Our average test run is somewhere inbetween.
@@ -51,17 +42,25 @@ def perform_ocr_variants_on_screenshot(
                     [(screenshot_path, False), (screenshot_path, True)],
                 )
             )
-        return pool.starmap(_run_tesseract, itertools.product(image_paths, model_ids))
+        return pool.map(_run_tesseract, image_paths)
 
 
-def _run_tesseract(image: str, model_id: int) -> str:
+def _run_tesseract(image: str) -> str:
+    # tesseract --help-oem
+    # OCR Engine modes (OEM):
+    #  0|tesseract_only          Legacy engine only.
+    #  1|lstm_only               Neural nets LSTM engine only.
+    #  2|tesseract_lstm_combined Legacy + LSTM engines.
+    #  3|default                 Default, based on what is available.
+    ocr_engine_mode = 2
+
     ret = subprocess.run(
         [
             "tesseract",
             image,
             "-",
             "--oem",
-            str(model_id),
+            str(ocr_engine_mode),
             "-c",
             "debug_file=/dev/null",
             "--psm",
