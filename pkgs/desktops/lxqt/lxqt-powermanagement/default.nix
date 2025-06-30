@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-powermanagement";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-NVyt9HcGRCLIVJFlkiiZ3OOTzGEfo3boDQlTmWythGk=";
+    hash = "sha256-Awk/NlYd8HldmEL0G/LUgj101Y1BTQBrDJfG56Y/aX4=";
   };
 
   nativeBuildInputs = [
