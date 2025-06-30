@@ -664,6 +664,9 @@ mapAliases ({
   pyxb = throw "pyxb has been removed, its last release was in 2017 and it has finally been archived in April 2023."; # added 2024-01-05
   pyzufall = throw "pyzufall was removed, because it is no longer maintained"; # added 2024-05-14
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
+  qiskit-ibmq-provider = throw "qiskit-ibmq-provider is no longer maintained sinse Jul 24, 2024. It is now read-only.";
+  qiskit-ignis = throw "qiskit-ignis github repository doesn't exist anymore";
+  qiskit-terra = throw "qiskit-terra github repository doesn't exist anymore";
   qds-sdk = throw "qds-sdk was removed as it is unmaintained upstream and depends on the removed boto package"; # Added 2024-09-22
   qds_sdk = qds-sdk; # added 2023-10-21
   qmk-dotty-dict = throw "qmk-dotty-dict has been removed. It is no longer needed since the fixes have been merged into dotty-dict."; # added 2025-01-01
