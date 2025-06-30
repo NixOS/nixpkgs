@@ -2,7 +2,6 @@
   _7zz,
   avalonia,
   buildDotnetModule,
-  copyDesktopItems,
   desktop-file-utils,
   dotnetCorePackages,
   fetchgit,
@@ -51,7 +50,6 @@ buildDotnetModule (finalAttrs: {
   nativeCheckInputs = [ _7zz ];
 
   nativeBuildInputs = [
-    copyDesktopItems
     imagemagick # For resizing SVG icon in postInstall
   ];
 
