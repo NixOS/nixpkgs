@@ -1475,6 +1475,12 @@
     github = "an-empty-string";
     githubId = 681716;
   };
+  ananthb = {
+    email = "nixos-maint@devhuman.net";
+    github = "ananthb";
+    githubId = 3133350;
+    name = "Ananth Bhaskararaman";
+  };
   anas = {
     email = "anas.elgarhy.dev@gmail.com";
     github = "0x61nas";
@@ -9308,12 +9314,6 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
-  globule655 = {
-    email = "globule655@gmail.com";
-    github = "globule655";
-    githubId = 47015416;
-    name = "globule655";
-  };
   gm6k = {
     email = "nix@quidecco.pl";
     name = "Isidor Zeuner";
@@ -10551,11 +10551,6 @@
     email = "id3v1669@gmail.com";
     github = "id3v1669";
     githubId = 57532211;
-  };
-  idabzo = {
-    github = "idabzo";
-    githubId = 12761234;
-    name = "Ida Bzowska";
   };
   idlip = {
     name = "Dilip";
@@ -22917,10 +22912,7 @@
     github = "ShadowRZ";
     githubId = 23130178;
     name = "夜坂雅";
-    keys = [
-      { fingerprint = "3237 D49E 8F81 5A45 2133  64EA 4FF3 5790 F405 53A9"; }
-      { fingerprint = "AC59 7AD3 89D1 CC56 18AD  1ED9 B712 3A2B 6B0A E434"; }
-    ];
+    keys = [ { fingerprint = "3237 D49E 8F81 5A45 2133  64EA 4FF3 5790 F405 53A9"; } ];
   };
   shadows_withal = {
     email = "shadows@with.al";
