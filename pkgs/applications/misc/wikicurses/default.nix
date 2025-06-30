@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   pythonPackages,
+  installShellFiles,
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -20,6 +21,10 @@ pythonPackages.buildPythonApplication rec {
     "man"
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   propagatedBuildInputs = with pythonPackages; [
     urwid
     beautifulsoup4
@@ -27,9 +32,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    mkdir -p $man/share/man/man{1,5}
-    cp wikicurses.1 $man/share/man/man1/
-    cp wikicurses.conf.5 $man/share/man/man5/
+    installManPage wikicurses.1 wikicurses.conf.5
   '';
 
   doCheck = false;
