@@ -76,13 +76,15 @@ buildDotnetModule (finalAttrs: {
     ${lib.strings.toShellVars {
       inherit (finalAttrs.meta) mainProgram;
       INSTALL_EXEC = "\${INSTALL_EXEC}";
+      INSTALL_TRYEXEC = "\${INSTALL_TRYEXEC}";
     }}
 
     # Desktop entry
     # As per #308324, use mainProgram from PATH, instead of $out/bin/NexusMods.App
     install -D -m 444 -t $out/share/applications src/NexusMods.App/com.nexusmods.app.desktop
     substituteInPlace $out/share/applications/com.nexusmods.app.desktop \
-      --replace-fail "$INSTALL_EXEC" "$mainProgram"
+      --replace-fail "$INSTALL_EXEC" "$mainProgram" \
+      --replace-fail "$INSTALL_TRYEXEC" "$mainProgram"
 
     # AppStream metadata
     install -D -m 444 -t $out/share/metainfo src/NexusMods.App/com.nexusmods.app.metainfo.xml
