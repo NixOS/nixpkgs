@@ -18,6 +18,9 @@
   symlinkJoin,
   bison,
   nixosTests,
+  ngtcp2,
+  quictls,
+  fetchpatch,
   #
   # By default unbound will not be built with systemd support. Unbound is a very
   # common dependency. The transitive dependency closure of systemd also
@@ -31,6 +34,8 @@
   systemd ? null,
   # optionally support DNS-over-HTTPS as a server
   withDoH ? false,
+  # optionally support DNS-over-QUIC as a server (RFC 9250)
+  withDoQ ? false,
   withECS ? false,
   withDNSCrypt ? false,
   withDNSTAP ? false,
@@ -64,7 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "release-${finalAttrs.version}";
     hash = "sha256-a9WNUVDy7ORB40VFUhkUxEaBho+HVNJ105AqdGDr+tI=";
   };
-
+  patches = lib.optionals withDoQ [ (fetchpatch {
+    name = "ngtcp2 version bump";
+    url = "https://github.com/NLnetLabs/unbound/compare/release-1.23.0...a1d68cdc963857f23896dbd92720802efbbc7f04.patch";
+    hash = "sha256-WdUKxDkbhzBOVAdwUPTjMCjZX4u1hGw+sKUsprJ74B0=";
+    excludes = ["doc/"];
+  }) ];
   outputs = [
     "out"
     "lib"
@@ -83,20 +93,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      openssl
+      (if withDoQ then quictls else openssl)
       nettle
       expat
       libevent
     ]
     ++ lib.optionals withSystemd [ systemd ]
     ++ lib.optionals withDoH [ libnghttp2 ]
-    ++ lib.optionals withPythonModule [ python ];
+    ++ lib.optionals withPythonModule [ python ]
+    ++ lib.optionals withDoQ [ ngtcp2 ];
 
   enableParallelBuilding = true;
 
   configureFlags =
     [
-      "--with-ssl=${openssl.dev}"
+      "--with-ssl=${if withDoQ then quictls.dev else openssl.dev}"
       "--with-libexpat=${expat.dev}"
       "--with-libevent=${libevent.dev}"
       "--localstatedir=/var"
@@ -120,6 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withDoH [
       "--with-libnghttp2=${libnghttp2.dev}"
+    ]
+    ++ lib.optionals withDoQ [
+      "--with-libngtcp2=${ngtcp2.dev}"
     ]
     ++ lib.optionals withECS [
       "--enable-subnet"
