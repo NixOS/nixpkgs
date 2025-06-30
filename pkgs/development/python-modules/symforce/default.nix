@@ -14,6 +14,8 @@
   numpy,
   fmt_9,
   spdlog,
+  tl-optional,
+  metis,
 }:
 
 # TODO: This is WIP
@@ -32,6 +34,16 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-WrOwEUJHk+xOAfccHY2D5pCMg44KJJMvWHAJ90DuOQo=";
   };
+
+  postPatch = ''
+    substituteInPlace symforce/opt/CMakeLists.txt \
+      --replace-fail 'function(add_metis)' \
+      'function(add_metis)
+        find_package(METIS REQUIRED)
+        target_link_libraries(''${TARGET} PRIVATE METIS::METIS)
+      endfunction()
+      function(hacky_mchackface)'
+  '';
 
   patches = [
     ./latest-cmake.patch
@@ -59,6 +71,8 @@ buildPythonPackage rec {
     numpy
     fmt
     spdlog
+    tl-optional
+    metis
   ];
 
   meta = {
