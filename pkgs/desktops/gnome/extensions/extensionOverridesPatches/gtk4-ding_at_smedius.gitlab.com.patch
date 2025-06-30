@@ -26,28 +26,6 @@ index 42cb878c..929ddce2 100755
                      `${GLib.path_get_dirname(appDesktopFile)}`
                  );
  
-diff --git a/app/adwPreferencesWindow.js b/app/adwPreferencesWindow.js
-index 93d53554..8f5bb8fe 100644
---- a/app/adwPreferencesWindow.js
-+++ b/app/adwPreferencesWindow.js
-@@ -540,7 +540,7 @@ const AdwPreferencesWindow = class {
-     }
- 
-     setDesktopFolder(path) {
--        const command = 'xdg-user-dirs-update --set DESKTOP';
-+        const command = '@xdg_user_dirs@/bin/xdg-user-dirs-update --set DESKTOP';
- 
-         try {
-             GLib.spawn_command_line_async(
-@@ -564,7 +564,7 @@ const AdwPreferencesWindow = class {
-     }
- 
-     getCurrentDesktopFolder() {
--        const command = 'xdg-user-dir DESKTOP';
-+        const command = '@xdg_user_dirs@/bin/xdg-user-dir DESKTOP';
-         const decoder = new TextDecoder();
-         const [, out,, status] = GLib.spawn_command_line_sync(command);
- 
 diff --git a/app/enums.js b/app/enums.js
 index 5434fa7a..e36d3670 100644
 --- a/app/enums.js
