@@ -39,7 +39,11 @@ buildGoModule rec {
     homepage = "https://github.com/fosrl/newt";
     changelog = "https://github.com/fosrl/newt/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      jackr
+      sigmasquadron
+    ];
     mainProgram = "newt";
   };
 }
