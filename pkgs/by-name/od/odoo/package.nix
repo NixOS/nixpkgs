@@ -15,7 +15,7 @@ let
   };
 in
 python.pkgs.buildPythonApplication rec {
-  pname = "odoo";
+  pname = "odoo18";
   version = "${odoo_version}.${odoo_release}";
 
   format = "setuptools";
