@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rakshasa-libtorrent";
-  version = "0.15.4";
+  version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EtT1g8fo2XRVO7pGUThoEklxpYKPI7OWwCZ2vVV73k4=";
+    hash = "sha256-iFndmET8bQUg3iZ6c6WDCzSS2tx6sYJt+fEkPAaNm18=";
   };
 
   nativeBuildInputs = [
