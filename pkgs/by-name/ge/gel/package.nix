@@ -16,13 +16,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gel";
-  version = "7.3.0";
+  version = "7.7.0";
 
   src = fetchFromGitHub {
     owner = "geldata";
     repo = "gel-cli";
     tag = "v${version}";
-    hash = "sha256-tMbAU6tlyDcAzUQ8FK0Q0V+LgzHAazETtFuC050hObw=";
+    hash = "sha256-A4pKkWC3x+n7PXEZlvc9wL4pa/BG7kBk1vJnyTnVyek=";
     fetchSubmodules = true;
   };
 
