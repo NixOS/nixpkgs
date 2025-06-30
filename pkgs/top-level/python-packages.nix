@@ -7985,20 +7985,7 @@ self: super: with self; {
 
   libmambapy = callPackage ../development/python-modules/libmambapy { };
 
-  libmodulemd = lib.pipe pkgs.libmodulemd [
-    toPythonModule
-    (
-      p:
-      p.overrideAttrs (super: {
-        meta = super.meta // {
-          outputsToInstall = [ "py" ]; # The package always builds python3 bindings
-          broken = (super.meta.broken or false) || !isPy3k;
-        };
-      })
-    )
-    (p: p.override { python3 = python; })
-    (p: p.py)
-  ];
+  libmodulemd = toPythonModule (pkgs.libmodulemd.override { python3 = python; }).py;
 
   libmr = callPackage ../development/python-modules/libmr { };
 
