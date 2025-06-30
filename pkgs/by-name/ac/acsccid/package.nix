@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "acsccid";
 
   src = fetchurl {
-    url = "https://downloads.sourceforge.net/acsccid/acsccid-${finalAttrs.version}.tar.bz2";
+    url = "mirror://sourceforge/acsccid/acsccid-${finalAttrs.version}.tar.bz2";
     hash = "sha256-L82m7R9dLwfiArUfmmAKYcg+GnOpb1HtD55PeBycEoI=";
   };
 
