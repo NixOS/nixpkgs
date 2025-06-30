@@ -46,6 +46,7 @@
   hotdoc,
   directoryListingUpdater,
   apple-sdk_gstreamer,
+  gst-plugins-base,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -191,9 +192,12 @@ stdenv.mkDerivation (finalAttrs: {
     waylandEnabled = enableWayland;
 
     updateScript = directoryListingUpdater { };
-  };
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      gst-plugins-base-nox = gst-plugins-base.override { enableX11 = false; };
+    };
+  };
 
   meta = with lib; {
     description = "Base GStreamer plug-ins and helper libraries";
