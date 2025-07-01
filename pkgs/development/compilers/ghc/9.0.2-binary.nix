@@ -136,6 +136,7 @@ let
             fileToCheckFor = null;
           }
         ];
+        isHadrian = true;
       };
       aarch64-darwin = {
         variantSuffix = "";
@@ -158,6 +159,7 @@ let
             fileToCheckFor = null;
           }
         ];
+        isHadrian = true;
       };
     };
     # Binary distributions for the musl libc for the respective system.
@@ -179,6 +181,7 @@ let
             fileToCheckFor = "libncursesw.so.6";
           }
         ];
+        isHadrian = true;
       };
     };
   };
