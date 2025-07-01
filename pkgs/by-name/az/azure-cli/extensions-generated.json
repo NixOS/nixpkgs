@@ -279,6 +279,13 @@
     "hash": "sha256-4Ou6/8XRwH5c1hXZy54hJE7fxEeyjLAYcTmhGNyIkrc=",
     "description": "Microsoft Azure Command-Line Tools Customlocation Extension"
   },
+  "data-transfer": {
+    "pname": "data-transfer",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/data_transfer-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-dnF7ZpUcGP7d3uywoXZdMmr/INH5y46glKuJwrlenfU=",
+    "description": "Microsoft Azure Command-Line Tools DataTransfer Extension"
+  },
   "databox": {
     "pname": "databox",
     "version": "1.2.0",
