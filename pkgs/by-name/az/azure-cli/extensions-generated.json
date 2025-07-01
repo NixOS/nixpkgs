@@ -972,13 +972,6 @@
     "hash": "sha256-qxkULJouBhkLbawnLYzynhecnig/ll+OOk0pJ1uEfOU=",
     "description": "Microsoft Azure Command-Line Tools SiteRecovery Extension"
   },
-  "spring-cloud": {
-    "pname": "spring-cloud",
-    "version": "3.1.9",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/spring_cloud-3.1.9-py3-none-any.whl",
-    "hash": "sha256-ySMrn4B/ff7cLESAZJUFrR5AajwTbAYeC0hd3ypJivU=",
-    "description": "Microsoft Azure Command-Line Tools spring-cloud Extension"
-  },
   "stack-hci": {
     "pname": "stack-hci",
     "version": "1.1.0",
