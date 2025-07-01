@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   autoPatchelfHook,
+  libxcrypt,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     };
 
   nativeBuildInputs = [ autoPatchelfHook ];
+  buildInputs = [ libxcrypt ];
 
   installPhase = ''
     mkdir -p $out/bin
