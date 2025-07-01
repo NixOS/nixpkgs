@@ -75,8 +75,8 @@ in {
 
     package = mkOption {
       type = types.package;
-      default = pkgs.ocis_7-bin;
-      defaultText = literalExpression "pkgs.ocis_7-bin";
+      default = pkgs.ocis_5-bin;
+      defaultText = literalExpression "pkgs.ocis_5-bin";
       description = ''
         The ocis package to use for the service.
         This allows you to specify a custom package or override the default.
