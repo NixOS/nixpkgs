@@ -1016,9 +1016,9 @@
   },
   "storage-actions": {
     "pname": "storage-actions",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/storage_actions-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-B8W+JW7bviyB2DnkxtPZF6Vrk5IVFQKM+WI5PhF2Mxs=",
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/storage_actions-1.0.0-py3-none-any.whl",
+    "hash": "sha256-OzMuN2blvmoj9GuzU1X3O2PJ0Yr8rsnFXYzypAJlF58=",
     "description": "Microsoft Azure Command-Line Tools StorageActions Extension"
   },
   "storage-blob-preview": {
