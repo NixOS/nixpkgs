@@ -7354,6 +7354,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  live-rename-nvim = buildVimPlugin {
+    pname = "live-rename.nvim";
+    version = "2025-06-23";
+    src = fetchFromGitHub {
+      owner = "saecki";
+      repo = "live-rename.nvim";
+      rev = "78fcdb4072c6b1a8e909872f9a971b2f2b642d1e";
+      sha256 = "0g0yirjvlzjy7v6lpzwphn87h3mgs33l3pa3sw9np36lhk9ww6g4";
+    };
+    meta.homepage = "https://github.com/saecki/live-rename.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   live-share-nvim = buildVimPlugin {
     pname = "live-share.nvim";
     version = "2025-05-03";
