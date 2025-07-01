@@ -923,13 +923,6 @@
     "hash": "sha256-p+Ug4CXDyrokp4JTY3cEjxdJqZzrVPAJ8zOS/JZDVw8=",
     "description": "Microsoft Azure Command-Line Tools ResourceMoverServiceAPI Extension"
   },
-  "sap-hana": {
-    "pname": "sap-hana",
-    "version": "0.6.5",
-    "url": "https://github.com/Azure/azure-hanaonazure-cli-extension/releases/download/0.6.5/sap_hana-0.6.5-py2.py3-none-any.whl",
-    "hash": "sha256-tFVMEl86DrXIkc7DludwX26R1NgXiazvIOPE0XL6RUM=",
-    "description": "Additional commands for working with SAP HanaOnAzure instances"
-  },
   "scenario-guide": {
     "pname": "scenario-guide",
     "version": "0.1.1",
