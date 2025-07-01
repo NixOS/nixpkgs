@@ -442,9 +442,9 @@
   },
   "elastic-san": {
     "pname": "elastic-san",
-    "version": "1.3.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/elastic_san-1.3.0-py3-none-any.whl",
-    "hash": "sha256-Y1XlsJaX3nixL9AeENaVufA2rFwLTIwowGc7pt1OoOw=",
+    "version": "1.3.1b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/elastic_san-1.3.1b1-py3-none-any.whl",
+    "hash": "sha256-L0ps/X+laOJO2aj3kqE7PVntTPxuY30BYeCmN/VWC44=",
     "description": "Microsoft Azure Command-Line Tools ElasticSan Extension"
   },
   "eventgrid": {
