@@ -834,13 +834,13 @@ class Machine:
             self.connected = True
 
     @contextmanager
-    def _managed_screenshot(self) -> Generator[str]:
+    def _managed_screenshot(self) -> Generator[Path]:
         """
         Take a screenshot and yield the screenshot filepath.
         The file will be deleted when leaving the generator.
         """
         with tempfile.TemporaryDirectory() as tmpdir:
-            screenshot_path: str = os.path.join(tmpdir, "ppm")
+            screenshot_path: Path = Path(tmpdir) / "ppm"
             self.send_monitor_command(f"screendump {screenshot_path}")
             yield screenshot_path
 

@@ -2,11 +2,12 @@ import multiprocessing
 import os
 import shutil
 import subprocess
+from pathlib import Path
 
 from test_driver.errors import MachineError
 
 
-def perform_ocr_on_screenshot(screenshot_path: str) -> str:
+def perform_ocr_on_screenshot(screenshot_path: Path) -> str:
     """
     Perform OCR on a screenshot that contains text.
     Returns a string with all words that could be found.
@@ -18,7 +19,7 @@ def perform_ocr_on_screenshot(screenshot_path: str) -> str:
 
 
 def perform_ocr_variants_on_screenshot(
-    screenshot_path: str, variants: bool = True
+    screenshot_path: Path, variants: bool = True
 ) -> list[str]:
     """
     Same as perform_ocr_on_screenshot but will create variants of the images
@@ -34,7 +35,7 @@ def perform_ocr_variants_on_screenshot(
     # https://github.com/tesseract-ocr/tesseract/issues/3109
     processes = max(1, int(os.process_cpu_count() / 4))
     with multiprocessing.Pool(processes=processes) as pool:
-        image_paths: list[str] = [screenshot_path]
+        image_paths: list[Path] = [screenshot_path]
         if variants:
             image_paths.extend(
                 pool.starmap(
@@ -45,7 +46,7 @@ def perform_ocr_variants_on_screenshot(
         return pool.map(_run_tesseract, image_paths)
 
 
-def _run_tesseract(image: str) -> str:
+def _run_tesseract(image: Path) -> str:
     # tesseract --help-oem
     # OCR Engine modes (OEM):
     #  0|tesseract_only          Legacy engine only.
@@ -73,7 +74,7 @@ def _run_tesseract(image: str) -> str:
     return ret.stdout.decode("utf-8")
 
 
-def _preprocess_screenshot(screenshot_path: str, negate: bool = False) -> str:
+def _preprocess_screenshot(screenshot_path: Path, negate: bool = False) -> Path:
     if shutil.which("magick") is None:
         raise MachineError("OCR requested but `magick` is not available")
 
@@ -98,7 +99,7 @@ def _preprocess_screenshot(screenshot_path: str, negate: bool = False) -> str:
 
     if negate:
         magick_args.append("-negate")
-        out_file += ".negative"
+        out_file = out_file.with_suffix(".negative")
 
     magick_args += [
         "-gamma",
@@ -106,7 +107,7 @@ def _preprocess_screenshot(screenshot_path: str, negate: bool = False) -> str:
         "-blur",
         "1x65535",
     ]
-    out_file += ".png"
+    out_file = out_file.with_suffix(".png")
 
     ret = subprocess.run(
         ["magick", "convert"] + magick_args + [screenshot_path, out_file],
