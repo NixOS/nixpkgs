@@ -44,7 +44,7 @@
   "ai-examples": {
     "pname": "ai-examples",
     "version": "0.2.5",
-    "url": "https://azurecliprod.blob.core.windows.net/cli-extensions/ai_examples-0.2.5-py2.py3-none-any.whl",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/ai_examples-0.2.5-py2.py3-none-any.whl",
     "hash": "sha256-utvfX8LgtKhcQSTT/JKFm1gq348w9XJ0QM6BlCFACZo=",
     "description": "Add AI powered examples to help content"
   },
