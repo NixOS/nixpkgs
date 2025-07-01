@@ -15,7 +15,6 @@
   libwebp,
   llvmPackages,
   lz4,
-  makeWrapper,
   pkg-config,
   qt6,
   shaderc,
@@ -132,14 +131,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
-  # https://github.com/PCSX2/pcsx2/pull/10200
-  # Can't avoid the double wrapping, the binary wrapper from qtWrapperArgs doesn't support --run
-  postFixup = ''
-    source "${makeWrapper}/nix-support/setup-hook"
-    wrapProgram $out/bin/pcsx2-qt \
-      --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
   '';
 
   passthru = {
