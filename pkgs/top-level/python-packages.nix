@@ -2233,6 +2233,8 @@ self: super: with self; {
 
   calmjs-types = callPackage ../development/python-modules/calmjs-types { };
 
+  calmsize = callPackage ../development/python-modules/calmsize { };
+
   calver = callPackage ../development/python-modules/calver { };
 
   calysto = callPackage ../development/python-modules/calysto { };
