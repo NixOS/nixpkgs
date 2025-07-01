@@ -17358,6 +17358,8 @@ self: super: with self; {
 
   svglib = callPackage ../development/python-modules/svglib { };
 
+  svgpathtools = callPackage ../development/python-modules/svgpathtools { };
+
   svgutils = callPackage ../development/python-modules/svgutils { };
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
