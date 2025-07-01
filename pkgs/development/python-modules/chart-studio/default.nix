@@ -49,6 +49,6 @@ buildPythonPackage {
     description = "Utilities for interfacing with Plotly's Chart Studio service";
     homepage = "https://github.com/plotly/chart-studio";
     license = with lib.licenses; [ mit ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }
