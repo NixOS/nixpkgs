@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://salsa.debian.org/debian/logcheck";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.bluescreen303 ];
   };
 }

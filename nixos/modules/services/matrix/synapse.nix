@@ -1439,7 +1439,7 @@ in
     systemd.targets.matrix-synapse = lib.mkIf hasWorkers {
       description = "Synapse Matrix parent target";
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+      after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.target";
       wantedBy = [ "multi-user.target" ];
     };
 
@@ -1451,13 +1451,13 @@ in
               partOf = [ "matrix-synapse.target" ];
               wantedBy = [ "matrix-synapse.target" ];
               unitConfig.ReloadPropagatedFrom = "matrix-synapse.target";
-              requires = optional hasLocalPostgresDB "postgresql.service";
+              requires = optional hasLocalPostgresDB "postgresql.target";
             }
           else
             {
               wants = [ "network-online.target" ];
-              after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
-              requires = optional hasLocalPostgresDB "postgresql.service";
+              after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.target";
+              requires = optional hasLocalPostgresDB "postgresql.target";
               wantedBy = [ "multi-user.target" ];
             };
         baseServiceConfig = {

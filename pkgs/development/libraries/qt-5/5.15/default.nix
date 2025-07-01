@@ -202,15 +202,6 @@ let
         # See: https://bugreports.qt.io/browse/QTBUG-124375
         # Backport of: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=a766045f65f934df3b5f1aa63bc86fbb3e003a09
         ./qtwebengine-ninja-1.12.patch
-        # 5.15.17: Fixes 'converts to incompatible function type [-Werror,-Wcast-function-type-strict]'
-        # in chromium harfbuzz dependency. This may be removed again if harfbuzz is updated
-        # to include the upstream fixes: https://github.com/harfbuzz/harfbuzz/commit/d88269c827895b38f99f7cf741fa60210d4d5169
-        # See https://trac.macports.org/ticket/70850
-        (fetchpatch {
-          url = "https://github.com/macports/macports-ports/raw/dd7bc40d8de48c762bf9757ce0a0672840c5d8c2/aqua/qt5/files/patch-qtwebengine_hb-ft.cc_error.diff";
-          sha256 = "sha256-8/CYjGM5n2eJ6sG+ODTa8fPaxZSDVyKuInpc3IlZuyc=";
-          extraPrefix = "";
-        })
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         ./qtwebengine-darwin-no-platform-check.patch

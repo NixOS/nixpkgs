@@ -8,19 +8,19 @@
   gitMinimal,
 }:
 let
-  version = "1.3.1";
+  version = "1.4.1";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-ZMq7zXXP3QL73zNfgDNi7xipmrbNwBoFPzK4K0dr6Zs=";
+    hash = "sha256-0RmX/uANgU/di3Iu0V6Oe3jZj4ikzeegW/XQUZhPgRc=";
   };
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-IDoDugtNWQovfSstbVMkKHLBXKa06lxRWmywu4zyS3M=";
+    cargoHash = "sha256-/8eiZyJEwPXAviwVMFTr+NKSwMwxdraKtrlXNU0cBM4=";
 
     nativeBuildInputs = [ gitMinimal ];
 

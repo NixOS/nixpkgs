@@ -15,7 +15,7 @@ mkYaziPlugin {
   };
 
   meta = {
-    description = "Previewing archive contents with no-status";
+    description = "Remove the status bar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

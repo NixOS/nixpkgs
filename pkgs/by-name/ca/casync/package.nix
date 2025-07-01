@@ -19,6 +19,7 @@
   udevSupport ? true,
   glibcLocales,
   rsync,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -49,10 +50,14 @@ stdenv.mkDerivation {
     python3
     sphinx
   ];
-  nativeCheckInputs = [
-    glibcLocales
-    rsync
-  ];
+  nativeCheckInputs =
+    [
+      glibcLocales
+      rsync
+    ]
+    ++ lib.optionals udevSupport [
+      udevCheckHook
+    ];
 
   postPatch = ''
     for f in test/test-*.sh.in; do
@@ -71,6 +76,8 @@ stdenv.mkDerivation {
   preCheck = ''
     export LC_ALL="en_US.utf-8"
   '';
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Content-Addressable Data Synchronizer";

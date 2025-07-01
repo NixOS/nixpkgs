@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "biliup-rs";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "biliup";
     repo = "biliup-rs";
     tag = "v${version}";
-    hash = "sha256-Wpi5ONOzWL/NUUuIR4jaDcJFq7ZIYi7gkIxFIU3SLVY=";
+    hash = "sha256-Gr2veeFDNHisqin4MQl/RcZN51BUHwTn7zUplP+VODo=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4SH7ux15Sm7NJDY79x9O7oahvbjS4kZzzY/9UsLDq0U=";
+  cargoHash = "sha256-7LiwKBsDAIc3zZvKFzgnIjup8lA70g7r7TtBCJ5VgL8=";
 
   passthru.updateScript = nix-update-script { };
 

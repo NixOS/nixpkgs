@@ -3,12 +3,14 @@
   stdenv,
   bash,
   fetchFromGitHub,
+  fetchpatch,
   SDL2,
   alsa-lib,
   catch2_3,
   fftw,
   glib,
   gobject-introspection,
+  gpsd,
   gtk-layer-shell,
   gtkmm3,
   howard-hinnant-date,
@@ -49,6 +51,7 @@
   enableManpages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   evdevSupport ? true,
   experimentalPatches ? true,
+  gpsSupport ? true,
   inputSupport ? true,
   jackSupport ? true,
   mpdSupport ? true,
@@ -71,21 +74,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     tag = finalAttrs.version;
-    hash = "sha256-VpT3ePqmo75Ni6/02KFGV6ltnpiV70/ovG/p1f2wKkU=";
+    hash = "sha256-KfWjYDqJf2jNmYAnmV7EQHweMObEBreUc2G7/LpvvC0=";
   };
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.3
+    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.4
     patchShebangs .
     popd
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "waybar-default-icon.patch";
+      url = "https://github.com/Alexays/Waybar/commit/c336bc5466c858ac41dc9afd84f04a5ffec9e292.patch";
+      hash = "sha256-RRGy/aeFX95fW0pT6mXhww2RdEtoOnaT3+dc7iB3bAY=";
+    })
+  ];
 
   nativeBuildInputs =
     [
@@ -124,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
       portaudio
     ]
     ++ lib.optional evdevSupport libevdev
+    ++ lib.optional gpsSupport gpsd
     ++ lib.optional inputSupport libinput
     ++ lib.optional jackSupport libjack2
     ++ lib.optional mpdSupport libmpdclient
@@ -146,6 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mapAttrsToList lib.mesonEnable {
       "cava" = cavaSupport && lib.asserts.assertMsg sndioSupport "Sndio support is required for Cava";
       "dbusmenu-gtk" = traySupport;
+      "gps" = gpsSupport;
       "jack" = jackSupport;
       "libevdev" = evdevSupport;
       "libinput" = inputSupport;
@@ -188,6 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";
+
   doInstallCheck = true;
 
   passthru = {

@@ -34,13 +34,13 @@ assert lib.assertOneOf "uiPlatform" uiPlatform [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parabolic";
-  version = "2025.5.5";
+  version = "2025.6.0";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Parabolic";
     tag = finalAttrs.version;
-    hash = "sha256-OcWpOC4QZUAGSsK6YXAO+24pY1d8a1AK3BzQKBu/obc=";
+    hash = "sha256-Osfj/GaD4t85ZYnlFDqgHhLJLA8VvgqtHEJN8bn0SxI=";
   };
 
   # Patches desktop file/dbus service bypassing wrapped executable

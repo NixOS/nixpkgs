@@ -16,7 +16,7 @@ let
       rtp = "${derivation}/${path}/${rtpFilePath}";
     }
     // {
-      overrideAttrs = f: mkTmuxPlugin (attrs // f attrs);
+      overrideAttrs = f: mkTmuxPlugin (attrs // (if lib.isFunction f then f attrs else f));
     };
 
   mkTmuxPlugin =

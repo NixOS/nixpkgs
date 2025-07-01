@@ -1,24 +1,19 @@
 name: Eval
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/eval.yml
-      - .github/workflows/reviewers.yml # needs eval results from the same event type
-  pull_request_target:
-  push:
-    # Keep this synced with ci/request-reviews/dev-branches.txt
-    branches:
-      - master
-      - staging
-      - release-*
-      - staging-*
-      - haskell-updates
-      - python-updates
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
+  workflow_call:
+    inputs:
+      mergedSha:
+        required: true
+        type: string
+      targetSha:
+        type: string
+      systems:
+        required: true
+        type: string
+    secrets:
+      OWNER_APP_PRIVATE_KEY:
+        required: false
 
 permissions: {}
 
@@ -27,36 +22,15 @@ defaults:
     shell: bash
 
 jobs:
-  prepare:
-    name: Prepare
+  eval:
     runs-on: ubuntu-24.04-arm
-    outputs:
-      mergedSha: ${{ steps.get-merge-commit.outputs.mergedSha }}
-      targetSha: ${{ steps.get-merge-commit.outputs.targetSha }}
-      systems: ${{ steps.systems.outputs.systems }}
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          sparse-checkout: |
-            .github/actions
-            ci/supportedSystems.json
-      - name: Check if the PR can be merged and get the test merge commit
-        uses: ./.github/actions/get-merge-commit
-        id: get-merge-commit
-
-      - name: Load supported systems
-        id: systems
-        run: |
-          echo "systems=$(jq -c <ci/supportedSystems.json)" >> "$GITHUB_OUTPUT"
-
-  outpaths:
-    name: Outpaths
-    runs-on: ubuntu-24.04-arm
-    needs: [ prepare ]
     strategy:
       fail-fast: false
       matrix:
-        system: ${{ fromJSON(needs.prepare.outputs.systems) }}
+        system: ${{ fromJSON(inputs.systems) }}
+    name: ${{ matrix.system }}
+    outputs:
+      targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
     steps:
       - name: Enable swap
         run: |
@@ -68,11 +42,11 @@ jobs:
       - name: Check out the PR at the test merge commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ needs.prepare.outputs.mergedSha }}
+          ref: ${{ inputs.mergedSha }}
           path: untrusted
 
       - name: Install Nix
-        uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
+        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -92,13 +66,18 @@ jobs:
           name: merged-${{ matrix.system }}
           path: merged/*
 
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
       - name: Get target run id
-        if: needs.prepare.outputs.targetSha
+        if: inputs.targetSha
         id: targetRunId
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
-          TARGET_SHA: ${{ needs.prepare.outputs.targetSha }}
+          TARGET_SHA: ${{ inputs.targetSha }}
         with:
           script: |
             const system = process.env.MATRIX_SYSTEM
@@ -107,31 +86,37 @@ jobs:
             let run_id
             try {
               run_id = (await github.rest.actions.listWorkflowRuns({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                workflow_id: 'eval.yml',
+                ...context.repo,
+                workflow_id: 'push.yml',
                 event: 'push',
                 head_sha: targetSha
               })).data.workflow_runs[0].id
             } catch {
-              throw new Error(`Could not find an eval.yml workflow run for ${targetSha}.`)
+              throw new Error(`Could not find a push.yml workflow run for ${targetSha}.`)
             }
-
-            core.setOutput('targetRunId', run_id)
 
             // Waiting 120 * 5 sec = 10 min. max.
             // Eval takes max 5-6 minutes, normally.
             for (let i = 0; i < 120; i++) {
               const result = await github.rest.actions.listWorkflowRunArtifacts({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                ...context.repo,
                 run_id,
                 name: `merged-${system}`
               })
-              if (result.data.total_count > 0) return
+              if (result.data.total_count > 0) {
+                core.setOutput('targetRunId', run_id)
+                return
+              }
               await new Promise(resolve => setTimeout(resolve, 5000))
             }
-            throw new Error(`No merged-${system} artifact found.`)
+            // No artifact found at this stage. This usually means that Eval failed on the target branch.
+            // This should only happen when Eval is broken on the target branch and this PR fixes it.
+            // Continue without targetRunId to skip the remaining steps, but pass the job.
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
 
       - uses: actions/download-artifact@v4
         if: steps.targetRunId.outputs.targetRunId
@@ -161,13 +146,10 @@ jobs:
           path: diff/*
 
   compare:
-    name: Comparison
     runs-on: ubuntu-24.04-arm
-    needs: [ prepare, outpaths ]
-    if: needs.prepare.outputs.targetSha
+    needs: [eval]
+    if: needs.eval.outputs.targetRunId
     permissions:
-      issues: write # needed to create *new* labels
-      pull-requests: write
       statuses: write
     steps:
       - name: Download output paths and eval stats for all systems
@@ -180,11 +162,11 @@ jobs:
       - name: Check out the PR at the target commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ needs.prepare.outputs.targetSha }}
+          ref: ${{ inputs.targetSha }}
           path: trusted
 
       - name: Install Nix
-        uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
+        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -198,8 +180,8 @@ jobs:
         env:
           AUTHOR_ID: ${{ github.event.pull_request.user.id }}
         run: |
-          git -C trusted fetch --depth 1 origin ${{ needs.prepare.outputs.mergedSha }}
-          git -C trusted diff --name-only ${{ needs.prepare.outputs.mergedSha }} \
+          git -C trusted fetch --depth 1 origin ${{ inputs.mergedSha }}
+          git -C trusted diff --name-only ${{ inputs.mergedSha }} \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
           # Use the target branch to get accurate maintainer info
@@ -216,46 +198,6 @@ jobs:
         with:
           name: comparison
           path: comparison/*
-
-      - name: Labelling pull request
-        if: ${{ github.event_name == 'pull_request_target' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        with:
-          script: |
-            const { readFile } = require('node:fs/promises')
-
-            const pr = {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number
-            }
-
-            // Get all currently set labels that we manage
-            const before =
-              (await github.paginate(github.rest.issues.listLabelsOnIssue, pr))
-              .map(({ name }) => name)
-              .filter(name => name.startsWith('10.rebuild') || name == '11.by: package-maintainer')
-
-            // And the labels that should be there
-            const after = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8')).labels
-
-            // Remove the ones not needed anymore
-            await Promise.all(
-              before.filter(name => !after.includes(name))
-              .map(name => github.rest.issues.removeLabel({
-                ...pr,
-                name
-              }))
-            )
-
-            // And add the ones that aren't set already
-            const added = after.filter(name => !before.includes(name))
-            if (added.length > 0) {
-              await github.rest.issues.addLabels({
-                ...pr,
-                labels: added
-              })
-            }
 
       - name: Add eval summary to commit statuses
         if: ${{ github.event_name == 'pull_request_target' }}
@@ -280,23 +222,34 @@ jobs:
               `${serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${runId}?pr=${payload.pull_request.number}`
 
             await github.rest.repos.createCommitStatus({
-              owner: repo.owner,
-              repo: repo.repo,
+              ...repo,
               sha: payload.pull_request.head.sha,
-              context: 'Eval / Summary',
+              context: 'Eval Summary',
               state: 'success',
               description,
               target_url
             })
 
-  reviewers:
-    name: Reviewers
-    # No dependency on "compare", so that it can start at the same time.
-    # We only wait for the "comparison" artifact to be available, which makes the start-to-finish time
-    # for the eval workflow considerably faster.
-    needs: [ prepare, outpaths ]
-    if: needs.prepare.outputs.targetSha
-    uses: ./.github/workflows/reviewers.yml
-    secrets: inherit
-    with:
-      caller: ${{ github.workflow }}
+  misc:
+    if: ${{ github.event_name != 'push' }}
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          sparse-checkout: .github/actions
+      - name: Check if the PR can be merged and checkout the merge commit
+        uses: ./.github/actions/get-merge-commit
+        with:
+          merged-as-untrusted: true
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
+        with:
+          extra_nix_config: sandbox = true
+
+      - name: Ensure flake outputs on all systems still evaluate
+        run: nix flake check --all-systems --no-build ./untrusted
+
+      - name: Query nixpkgs with aliases enabled to check for basic syntax errors
+        run: |
+          time nix-env -I ./untrusted -f ./untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null

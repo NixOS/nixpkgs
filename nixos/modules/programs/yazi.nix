@@ -118,6 +118,9 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ linsui ];
+    maintainers = with lib.maintainers; [
+      linsui
+      ryan4yin
+    ];
   };
 }

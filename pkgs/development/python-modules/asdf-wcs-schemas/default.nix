@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "asdf-wcs-schemas";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "asdf-format";
     repo = "asdf-wcs-schemas";
     tag = version;
-    hash = "sha256-4CxKLMYXdNkNwkfFRX3YKkS4e+Z3wQgmz8ogbC4Z1vI=";
+    hash = "sha256-S9SAQzy+FQ2idNDydYnexb3QJfd6vG/JKYg5z0tjkNo=";
   };
 
   build-system = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "World Coordinate System (WCS) ASDF schemas";
     homepage = "https://github.com/asdf-format/asdf-wcs-schemas";
-    changelog = "https://github.com/asdf-format/asdf-wcs-schemas/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/asdf-format/asdf-wcs-schemas/blob/${src.tag}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

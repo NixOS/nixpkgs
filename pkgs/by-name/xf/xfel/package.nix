@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=/"
   ];
 
+  doInstallCheck = true;
+
   meta = {
     description = "Tooling for working with the FEL mode on Allwinner SoCs";
     homepage = "https://github.com/xboot/xfel";

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.19.2";
+  version = "2.19.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_tasks";
     inherit version;
-    hash = "sha256-J2tH6F9IJZI6d41UP8BzXkskvkX3P6fZZK0WVUAtB9w=";
+    hash = "sha256-6dpTTzeT4N43+aOzSsNkdCCGXKcmwKxyFIxPchxIlNY=";
   };
 
   build-system = [ setuptools ];

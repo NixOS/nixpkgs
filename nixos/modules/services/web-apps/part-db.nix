@@ -195,8 +195,8 @@ in
       services = {
         part-db-migrate = {
           before = [ "phpfpm-part-db.service" ];
-          after = [ "postgresql.service" ];
-          requires = [ "postgresql.service" ];
+          after = [ "postgresql.target" ];
+          requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             Type = "oneshot";
@@ -216,7 +216,7 @@ in
           after = [ "part-db-migrate.service" ];
           requires = [
             "part-db-migrate.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           # ensure nginx can access the php-fpm socket
           postStart = ''

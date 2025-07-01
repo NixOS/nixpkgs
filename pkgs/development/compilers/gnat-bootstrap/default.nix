@@ -185,6 +185,10 @@ stdenv.mkDerivation (
       # other bytes.
       + ''
         sed -i "s,/usr/bin/sed,sed\x00\x00\x00\x00\x00\x00\x00\x00\x00," libexec/gcc/${upstreamTriplet}/${gccVersion}/install-tools/fixincl
+      ''
+      # Make sure that collect2 finds binutils-wrapper instead of the included ld binary.
+      + ''
+        rm -f bin/ld ${upstreamTriplet}/bin/ld
       '';
 
     installPhase =

@@ -12,6 +12,7 @@
   pythonOlder,
   typer,
   webcolors,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+    udevCheckHook
   ];
 
   disabledTestPaths = [ "tests/test_pydantic_models.py" ];

@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch2,
   fetchurl,
   autoreconfHook,
   libdvdread,
@@ -23,6 +24,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-MCCpLen3jrNvSLbyLVoAHEcQeCZjSnhaYt/NCA9hLrc=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      # remove after next release: "Use pkg-config to find FreeType"
+      url = "https://github.com/ldo/dvdauthor/commit/d5bb0bdd542c33214855a7062fcc485f8977934e.patch?full_index=1";
+      hash = "sha256-cCj1Wkc6dZvUpjentpK68Q92tb7h+OXwrqdhJ2KYMvU=";
+    })
+    (fetchpatch2 {
+      # remove after next release: "fix to build with GraphicsMagick" (required for subsequent patches to apply)
+      url = "https://github.com/ldo/dvdauthor/commit/84d971def13b7e6317eae44369f49fd709b01030.patch?full_index=1";
+      hash = "sha256-SWgbaS4cdvrXJ4H5KDM0S46H57rji7CX4Fkfa/RSSPA=";
+    })
+    (fetchpatch2 {
+      # remove after next release: "Use PKG_CHECK_MODULES to detect the libxml2 library"
+      url = "https://github.com/ldo/dvdauthor/commit/45705ece5ec5d7d6b9ab3e7a68194796a398e855.patch?full_index=1";
+      hash = "sha256-tykCr2Axc1qhUvjlGyXQ6X+HwzuFTm5Va2gjGlOlSH0=";
+    })
+  ];
+
   buildInputs = [
     libpng
     freetype
@@ -37,14 +56,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-    libxml2 # xml2-config (only checked for, not used)
   ];
 
-  # set *-config for cross builds
-  configureFlags = [
-    "FREETYPECONFIG=${lib.getExe' (lib.getDev freetype) "freetype-config"}"
-    "XML2_CONFIG=${lib.getExe' (lib.getDev libxml2) "xml2-config"}"
-  ];
+  strictDeps = true;
 
   meta = with lib; {
     description = "Tools for generating DVD files to be played on standalone DVD players";

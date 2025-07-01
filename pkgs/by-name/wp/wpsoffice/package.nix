@@ -21,6 +21,7 @@
   coreutils,
   cacert,
   libjpeg,
+  libxml2,
 }:
 let
   pkgVersion = "11.1.0.11723";
@@ -119,6 +120,10 @@ stdenv.mkDerivation rec {
     patchelf --add-needed libjpeg.so $out/opt/kingsoft/wps-office/office6/libwpsmain.so
     # dlopen dependency
     patchelf --add-needed libudev.so.1 $out/opt/kingsoft/wps-office/office6/addons/cef/libcef.so
+
+    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
+    mkdir -p "$out/lib"
+    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
   '';
 
   meta = with lib; {

@@ -23,11 +23,11 @@ let
             "test_check_link_response_only" # fails on hydra https://hydra.nixos.org/build/242624087/nixlog/1
           ];
         });
-        python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: {
+        python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
           version = "2.8.2";
           pyproject = null;
           src = prev.src.override {
-            version = "2.8.2";
+            inherit version;
             hash = "sha256-ASPKzBYnrhnd88J6XeW9Z+5FhvvdZEDZdI+Ku0g9PoY=";
           };
           patches = [
@@ -40,16 +40,16 @@ let
           ];
           postPatch = null;
         });
-        ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
+        ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: rec {
+          version = "0.17.21";
           src = prev.src.override {
-            version = "0.17.21";
+            inherit version;
             hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
           };
         });
         urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
-          pyproject = true;
           version = "1.26.18";
-          nativeBuildInputs = with final; [
+          build-system = with final; [
             setuptools
           ];
           src = prev.src.override {
@@ -64,21 +64,20 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.27.2"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.27.31"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-rdgjA6t5L4mNKnyRyNdIyzX6fjMUgbD0YCjresK94Dg=";
+    hash = "sha256-0d7VdlX3xZkw1SVjbKErFhhoC2owI/JfBQOJ/GfIWyg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'flit_core>=3.7.1,<3.9.1' 'flit_core>=3.7.1' \
-      --replace-fail 'awscrt==0.25.4' 'awscrt>=0.25.4' \
-      --replace-fail 'cryptography>=40.0.0,<43.0.2' 'cryptography>=43.0.0' \
+      --replace-fail 'awscrt==' 'awscrt>=' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
       --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24' \
@@ -103,19 +102,14 @@ py.pkgs.buildPythonApplication rec {
 
   dependencies = with py.pkgs; [
     awscrt
-    bcdoc
-    botocore
     colorama
-    cryptography
     distro
     docutils
     jmespath
     prompt-toolkit
     python-dateutil
-    pyyaml
     ruamel-yaml
     urllib3
-    zipp
   ];
 
   propagatedBuildInputs = [

@@ -11,6 +11,7 @@
   libgudev,
   systemd,
   polkit,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,12 +45,15 @@ stdenv.mkDerivation rec {
     libxml2
     ninja
     pkg-config
+    udevCheckHook
   ];
 
   mesonFlags = [
     (lib.mesonOption "udevrulesdir" "${placeholder "out"}/lib/udev/rules.d")
     (lib.mesonOption "systemdsystemunitdir" "${placeholder "out"}/lib/systemd/system")
   ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Proxy for sending IIO sensor data to D-Bus";

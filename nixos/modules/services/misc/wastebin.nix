@@ -107,7 +107,7 @@ in
           };
 
           WASTEBIN_MAX_BODY_SIZE = mkOption {
-            default = 1024;
+            default = 1048576;
             type = types.int;
             description = "Number of bytes to accept for POST requests";
           };

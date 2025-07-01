@@ -13,13 +13,13 @@
 
 buildPythonApplication rec {
   pname = "meraki-cli";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "meraki_cli";
     inherit version;
-    hash = "sha256-YOyeovqRqt6ZMXgLnIxRvPkcW259K8NIBGdb3PwjkMg=";
+    hash = "sha256-FHcKgppclc0L6yuCkpVYfr+jq8hNkt7Hq/44mpHMR20=";
   };
 
   disabledTests = [

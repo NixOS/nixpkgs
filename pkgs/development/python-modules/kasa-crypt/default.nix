@@ -5,6 +5,7 @@
   cython,
   poetry-core,
   pytestCheckHook,
+  pytest-cov-stub,
   setuptools,
   pythonOlder,
 }:
@@ -23,18 +24,16 @@ buildPythonPackage rec {
     hash = "sha256-PQycv0JHXKIEzuKVnXoyuU/BfKG19r3eDE4rYDiYYaY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=kasa_crypt --cov-report=term-missing:skip-covered" ""
-  '';
-
   build-system = [
     cython
     poetry-core
     setuptools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "kasa_crypt" ];
 

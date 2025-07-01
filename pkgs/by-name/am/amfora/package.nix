@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "makeworld-the-better-one";
     repo = "amfora";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KOuKgxH3n4rdF+oj/TwEcRqX1sn4A9e23FNwQMhMVO4=";
   };
 

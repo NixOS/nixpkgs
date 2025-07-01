@@ -25,14 +25,14 @@ let
   # From https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L54
   cliVersionPackage = "github.com/NVIDIA/nvidia-container-toolkit/internal/info";
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nvidia-container-toolkit";
   version = "1.17.8";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-container-toolkit";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-B17cPxdrQ8qMNgFh4XcDwwKryukMrn0GV2LNPHM7kBo=";
 
   };
@@ -76,13 +76,10 @@ buildGoModule rec {
   ldflags = [
     "-extldflags=-Wl,-z,lazy" # May be redunandant, cf. `man ld`: "Lazy binding is the default".
     "-s" # "disable symbol table"
-    "-w" # "disable DWARF generation"
 
     # "-X name=value"
-    "-X"
-    "${cliVersionPackage}.version=${version}"
-    "-X"
-    "github.com/NVIDIA/nvidia-container-toolkit/internal/info.gitCommit=${src.rev}"
+    "-X ${cliVersionPackage}.version=${finalAttrs.version}"
+    "-X ${cliVersionPackage}.gitCommit=${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = [
@@ -98,10 +95,7 @@ buildGoModule rec {
         "TestDuplicateHook"
       ];
     in
-    [
-      "-skip"
-      "${builtins.concatStringsSep "|" skippedTests}"
-    ];
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall =
     ''
@@ -122,14 +116,14 @@ buildGoModule rec {
         --subst-var-by glibcbin ${lib.getBin glibc}
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/nvidia/container-toolkit/container-toolkit";
     description = "NVIDIA Container Toolkit";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       cpcloud
       christoph-heiss
     ];
   };
-}
+})

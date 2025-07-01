@@ -7,6 +7,7 @@
   hatch-regex-commit,
   hatchling,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   python-dotenv,
   pythonOlder,
@@ -26,11 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-DkYbQB91KYskfm2yDVmR0/MJiixC2C5miHpTq7RpVBU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=src/pyloadapi/ --cov-report=term-missing" ""
-  '';
-
   build-system = [
     hatch-regex-commit
     hatchling
@@ -41,6 +37,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     python-dotenv
   ];

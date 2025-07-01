@@ -106,16 +106,6 @@ let
     "doInstallCheck"
     "pyproject"
     "format"
-    "disabledTestMarks"
-    "disabledTestPaths"
-    "disabledTests"
-    "enabledTestMarks"
-    "enabledTestPaths"
-    "enabledTests"
-    "pytestFlags"
-    "pytestFlagsArray"
-    "unittestFlags"
-    "unittestFlagsArray"
     "outputs"
     "stdenv"
     "dependencies"
@@ -441,32 +431,21 @@ let
       # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
       installCheckPhase = attrs.checkPhase;
     }
-    // optionalAttrs (attrs.doCheck or true) (
-      getOptionalAttrs [
-        "disabledTestMarks"
-        "disabledTestPaths"
-        "disabledTests"
-        "pytestFlags"
-        "pytestFlagsArray"
-        "unittestFlags"
-        "unittestFlagsArray"
-      ] attrs
-      //
-        lib.mapAttrs
-          (
-            name: value:
-            lib.throwIf (
-              attrs.${name} == [ ]
-            ) "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list." attrs.${name}
-          )
-          (
-            getOptionalAttrs [
-              "enabledTestMarks"
-              "enabledTestPaths"
-              "enabledTests"
-            ] attrs
-          )
-    )
+    //
+      lib.mapAttrs
+        (
+          name: value:
+          lib.throwIf (
+            attrs.${name} == [ ]
+          ) "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list." attrs.${name}
+        )
+        (
+          getOptionalAttrs [
+            "enabledTestMarks"
+            "enabledTestPaths"
+            "enabledTests"
+          ] attrs
+        )
   );
 
   # This derivation transformation function must be independent to `attrs`

@@ -31,6 +31,7 @@
   docutils,
   git,
   pytestCheckHook,
+  pytest-cov-stub,
   sphinx,
   sphinx-click,
 }:
@@ -70,17 +71,13 @@ buildPythonPackage rec {
     stevedore
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=papis" ""
-  '';
-
   pythonImportsCheck = [ "papis" ];
 
   nativeCheckInputs = [
     docutils
     git
     pytestCheckHook
+    pytest-cov-stub
     sphinx
     sphinx-click
   ];

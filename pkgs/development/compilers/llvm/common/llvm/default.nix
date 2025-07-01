@@ -208,16 +208,16 @@ stdenv.mkDerivation (
               stripLen = 1;
             }
           )
-      ++
-        lib.optional (lib.versionOlder release_version "16")
-          # Fix musl build.
-          (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
-              relative = "llvm";
-              hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
-            }
-          )
+      ++ lib.optionals (lib.versionOlder release_version "16") [
+        # Fix musl build.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+          relative = "llvm";
+          hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+        })
+        # Fix for Python 3.13
+        (getVersionFile "llvm/no-pipes.patch")
+      ]
       ++ lib.optionals (lib.versionOlder release_version "14") [
         # Backport gcc-13 fixes with missing includes.
         (fetchpatch {
@@ -294,17 +294,7 @@ stdenv.mkDerivation (
       ++
         lib.optional (lib.versionAtLeast release_version "15")
           # Just like the `llvm-lit-cfg` patch, but for `polly`.
-          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
-      ++
-        lib.optional (lib.versions.major release_version == "20")
-          # https://github.com/llvm/llvm-project/pull/139822 adds a commit which didn't get backported but is necessary for tests.
-          (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/ff2e8f93f6090965e82d799af43f6dfef52baa66.patch";
-              stripLen = 1;
-              hash = "sha256-CZBTZKzi4cYkZhgTB5oXIo1UdEAArg9I4vR/m0upSRk=";
-            }
-          );
+          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch");
 
     nativeBuildInputs =
       [
@@ -526,6 +516,8 @@ stdenv.mkDerivation (
         optionalString stdenv.hostPlatform.isFreeBSD ''
           rm test/tools/llvm-libtool-darwin/L-and-l.test
           rm test/ExecutionEngine/Interpreter/intrinsics.ll
+          # Fails in sandbox
+          substituteInPlace unittests/Support/LockFileManagerTest.cpp --replace-fail "Basic" "DISABLED_Basic"
         ''
       + ''
         patchShebangs test/BugPoint/compile-custom.ll.py

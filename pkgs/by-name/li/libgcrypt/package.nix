@@ -32,10 +32,16 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
-  # The CPU Jitter random number generator must not be compiled with
-  # optimizations and the optimize -O0 pragma only works for gcc.
-  # The build enables -O2 by default for everything else.
-  hardeningDisable = lib.optional stdenv.cc.isClang "fortify";
+  hardeningDisable =
+    [
+      "strictflexarrays3"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      # The CPU Jitter random number generator must not be compiled with
+      # optimizations and the optimize -O0 pragma only works for gcc.
+      # The build enables -O2 by default for everything else.
+      "fortify"
+    ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -89,7 +95,7 @@ stdenv.mkDerivation rec {
 
   # TODO: figure out why this is even necessary and why the missing dylib only crashes
   # random instead of every test
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) ''
     mkdir -p $lib/lib
     cp src/.libs/libgcrypt.20.dylib $lib/lib
   '';

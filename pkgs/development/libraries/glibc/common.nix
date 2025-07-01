@@ -124,10 +124,16 @@ stdenv.mkDerivation (
           isAarch64 = stdenv.buildPlatform.isAarch64 || stdenv.hostPlatform.isAarch64;
           isLinux = stdenv.buildPlatform.isLinux || stdenv.hostPlatform.isLinux;
         in
+        # Remove certain defines when __CUDACC__ is defined (i.e. we're building with a CUDA compiler)
         lib.optional (isAarch64 && isLinux) ./0001-aarch64-math-vector.h-add-NVCC-include-guard.patch
       )
+      # Modify certain defines to be compatible with musl
       ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
+      # Enable cross-compilation of glibc on Darwin (build=Darwin, host=Linux)
       ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
+      # Reverts this patch: https://sourceware.org/git/?p=glibc.git;a=commit;h=55d63e731253de82e96ed4ddca2e294076cd0bc5
+      # This revert enables [CET] (Control-flow Enforcement Technology) by default
+      # [CET]: https://en.wikipedia.org/wiki/Control-flow_integrity#Intel_Control-flow_Enforcement_Technology
       ++ lib.optional enableCETRuntimeDefault ./2.39-revert-cet-default-disable.patch;
 
     postPatch =

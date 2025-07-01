@@ -11,6 +11,7 @@
     inherit hash;
   },
   patches ? [ ],
+  knownVulnerabilities ? [ ],
   maintainers ? [
     lib.maintainers.lovesegfault
     lib.maintainers.artturin
@@ -111,7 +112,7 @@ let
       "shadowstack"
     ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-    nativeInstallCheckInputs = lib.optional atLeast224 [
+    nativeInstallCheckInputs = lib.optionals atLeast224 [
       git
       man
     ];
@@ -335,7 +336,7 @@ let
       '';
       homepage = "https://nixos.org/";
       license = licenses.lgpl21Plus;
-      inherit maintainers teams;
+      inherit knownVulnerabilities maintainers teams;
       platforms = platforms.unix;
       outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
       mainProgram = "nix";

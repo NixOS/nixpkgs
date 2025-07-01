@@ -27,6 +27,12 @@ pkgs.haskell.packages.ghc96.override {
               --prefix PATH ':' ${lib.makeBinPath [ nodejs ]}
           '';
 
+          patches = [
+            # Fix TLS compatibility issues with package.elm-lang.org
+            # see: https://github.com/elm/compiler/pull/2325
+            ./tls-compatibility.patch
+          ];
+
           description = "Delightful language for reliable webapps";
           homepage = "https://elm-lang.org/";
           license = lib.licenses.bsd3;
@@ -37,10 +43,6 @@ pkgs.haskell.packages.ghc96.override {
 
         inherit fetchElmDeps;
         elmVersion = elmPkgs.elm.version;
-
-        # Fix TLS issues
-        # see https://github.com/elm/compiler/pull/2325
-        tls = self.callPackage ./tls-1.9.0.nix { };
       };
     in
     elmPkgs

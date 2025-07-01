@@ -17,14 +17,14 @@
 
 python313Packages.buildPythonApplication rec {
   pname = "high-tide";
-  version = "0.1.5";
+  version = "0.1.7";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "high-tide";
     tag = "v${version}";
-    hash = "sha256-HoPyqsLPLfqyQbrhoPzr3n81yX1MHZVUVmq5RKDN5pI=";
+    hash = "sha256-QFa9K/iSPe3cIx90PzPCkJszrygON9ijukv4px3Rob8=";
   };
 
   nativeBuildInputs = [
@@ -45,8 +45,6 @@ python313Packages.buildPythonApplication rec {
       gstreamer
       gst-plugins-base
       gst-plugins-good
-      gst-plugins-ugly
-      gst-plugins-bad
       libsecret
     ]);
 
@@ -55,6 +53,7 @@ python313Packages.buildPythonApplication rec {
     tidalapi
     requests
     mpd2
+    pypresence
   ];
 
   dontWrapGApps = true;

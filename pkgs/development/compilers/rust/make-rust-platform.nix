@@ -56,9 +56,6 @@
         (callPackages ../../../build-support/rust/hooks {
           inherit
             stdenv
-            cargo
-            rustc
-            callPackage
             ;
         })
         cargoBuildHook

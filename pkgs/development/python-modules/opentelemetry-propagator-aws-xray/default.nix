@@ -26,12 +26,11 @@ buildPythonPackage {
   nativeCheckInputs = [
     opentelemetry-test-utils
     pytestCheckHook
-  ];
-
-  checkInputs = [
     pytest-benchmark
     requests
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "opentelemetry.propagators.aws" ];
 

@@ -11,7 +11,7 @@
   pdfminer-six,
   pillow,
   pypdfium2,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-parallel,
   pytestCheckHook,
   types-pillow,
@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pdfplumber";
-  version = "0.11.6";
+  version = "0.11.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsvine";
     repo = "pdfplumber";
     tag = "v${version}";
-    hash = "sha256-ljoM252w0oOqTUgYT6jtAW+jElPU9a49K6Atwdv5Dvo=";
+    hash = "sha256-6oCHFf/lNQidP69l0lVcvIQ0ldO3djRDnxLwcZ+VDVk=";
   };
 
   build-system = [ setuptools ];
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     nbexec
     pandas
     pandas-stubs
-    pytest-cov
+    pytest-cov-stub
     pytest-parallel
     pytestCheckHook
     types-pillow
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     description = "Plumb a PDF for detailed information about each char, rectangle, line, et cetera — and easily extract text and tables";
     mainProgram = "pdfplumber";
     homepage = "https://github.com/jsvine/pdfplumber";
-    changelog = "https://github.com/jsvine/pdfplumber/releases/tag/v${version}";
+    changelog = "https://github.com/jsvine/pdfplumber/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };

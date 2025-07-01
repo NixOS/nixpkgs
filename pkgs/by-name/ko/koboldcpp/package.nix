@@ -23,8 +23,9 @@
   clblast,
   ocl-icd,
 
-  vulkanSupport ? (!stdenv.hostPlatform.isDarwin),
+  vulkanSupport ? true,
   vulkan-loader,
+  shaderc,
   metalSupport ? stdenv.hostPlatform.isDarwin,
   nix-update-script,
 }:
@@ -40,13 +41,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.86.2";
+  version = "1.94";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zB/X4tfygpf3ZrQ9FtQCd3sxN11Ewlxz1+YCiw7iUZU=";
+    hash = "sha256-qWH8yGjDTkMPLHjfMopfQKyBA5T1HHgllEH9Joceq3s=";
   };
 
   enableParallelBuilding = true;
@@ -72,7 +73,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       clblast
       ocl-icd
     ]
-    ++ lib.optionals vulkanSupport [ vulkan-loader ];
+    ++ lib.optionals vulkanSupport [
+      vulkan-loader
+      shaderc
+    ];
 
   pythonPath = finalAttrs.pythonInputs;
 

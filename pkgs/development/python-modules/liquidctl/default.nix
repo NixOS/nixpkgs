@@ -16,6 +16,7 @@
   colorlog,
   crcmod,
   pillow,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     wheel
+    udevCheckHook
   ];
 
   propagatedBuildInputs = [

@@ -171,10 +171,10 @@ buildPythonPackage rec {
 
   # Disable on aarch64-linux due to broken onnxruntime
   # https://github.com/microsoft/onnxruntime/issues/10038
-  pythonImportsCheck = lib.optionals (stdenv.hostPlatform.system != "aarch64-linux") [ "chromadb" ];
+  pythonImportsCheck = lib.optionals doCheck [ "chromadb" ];
 
   # Test collection breaks on aarch64-linux
-  doCheck = stdenv.hostPlatform.system != "aarch64-linux";
+  doCheck = with stdenv.buildPlatform; !(isAarch && isLinux);
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -255,7 +255,7 @@ buildPythonPackage rec {
       # we have to update both the python hash and the cargo one,
       # so use nix-update-script
       extraArgs = [
-        "--versionRegex"
+        "--version-regex"
         "([0-9].+)"
       ];
     };

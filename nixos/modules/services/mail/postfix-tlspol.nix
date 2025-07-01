@@ -10,6 +10,7 @@ let
     hasPrefix
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
     mkPackageOption
     types
@@ -18,6 +19,7 @@ let
   cfg = config.services.postfix-tlspol;
 
   format = pkgs.formats.yaml_1_2 { };
+  configFile = format.generate "postfix-tlspol.yaml" cfg.settings;
 in
 
 {
@@ -121,100 +123,119 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.etc."postfix-tlspol/config.yaml".source =
-      format.generate "postfix-tlspol.yaml" cfg.settings;
-
-    environment.systemPackages = [ cfg.package ];
-
-    # https://github.com/Zuplu/postfix-tlspol#postfix-configuration
-    services.postfix.config = mkIf (config.services.postfix.enable && cfg.configurePostfix) {
-      smtp_dns_support_level = "dnssec";
-      smtp_tls_security_level = "dane";
-      smtp_tls_policy_maps =
-        let
-          address =
-            if (hasPrefix "unix:" cfg.settings.server.address) then
-              cfg.settings.server.address
-            else
-              "inet:${cfg.settings.server.address}";
-        in
-        [ "socketmap:${address}:QUERYwithTLSRPT" ];
-    };
-
-    systemd.services.postfix-tlspol = {
-      after = [
-        "nss-lookup.target"
-        "network-online.target"
-      ];
-      wants = [
-        "nss-lookup.target"
-        "network-online.target"
-      ];
-      wantedBy = [ "multi-user.target" ];
-
-      description = "Postfix DANE/MTA-STS TLS policy socketmap service";
-      documentation = [ "https://github.com/Zuplu/postfix-tlspol" ];
-
-      # https://github.com/Zuplu/postfix-tlspol/blob/main/init/postfix-tlspol.service
-      serviceConfig = {
-        ExecStart = toString [
-          (lib.getExe cfg.package)
-          "-config"
-          "/etc/postfix-tlspol/config.yaml"
-        ];
-        ExecReload = "${lib.getExe' pkgs.util-linux "kill"} -HUP $MAINPID";
-        Restart = "always";
-        RestartSec = 5;
-
-        DynamicUser = true;
-
-        CacheDirectory = "postfix-tlspol";
-        CapabilityBoundingSet = [ "" ];
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        PrivateDevices = true;
-        PrivateTmp = true;
-        PrivateUsers = true;
-        ProcSubset = "pid";
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProtectSystem = "strict";
-        ReadOnlyPaths = [ "/etc/postfix-tlspol/config.yaml" ];
-        RemoveIPC = true;
-        RestrictAddressFamilies =
-          [
-            "AF_INET"
-            "AF_INET6"
-          ]
-          ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
-            "AF_UNIX"
-          ];
-        RestrictNamespace = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged @resources"
-        ];
-        SystemCallErrorNumber = "EPERM";
-        SecureBits = [
-          "noroot"
-          "noroot-locked"
-        ];
-        RuntimeDirectory = "postfix-tlspol";
-        RuntimeDirectoryMode = "1750";
-        WorkingDirectory = "/var/cache/postfix-tlspol";
-        UMask = "0117";
+  config = mkMerge [
+    (mkIf (cfg.enable && config.services.postfix.enable && cfg.configurePostfix) {
+      # https://github.com/Zuplu/postfix-tlspol#postfix-configuration
+      services.postfix.config = {
+        smtp_dns_support_level = "dnssec";
+        smtp_tls_security_level = "dane";
+        smtp_tls_policy_maps =
+          let
+            address =
+              if (hasPrefix "unix:" cfg.settings.server.address) then
+                cfg.settings.server.address
+              else
+                "inet:${cfg.settings.server.address}";
+          in
+          [ "socketmap:${address}:QUERYwithTLSRPT" ];
       };
-    };
-  };
+
+      systemd.services.postfix = {
+        wants = [ "postfix-tlspol.service" ];
+        after = [ "postfix-tlspol.service" ];
+      };
+
+      users.users.postfix.extraGroups = [ "postfix-tlspol" ];
+    })
+
+    (mkIf cfg.enable {
+      environment.etc."postfix-tlspol/config.yaml".source = configFile;
+
+      environment.systemPackages = [ cfg.package ];
+
+      users.users.postfix-tlspol = {
+        isSystemUser = true;
+        group = "postfix-tlspol";
+      };
+      users.groups.postfix-tlspol = { };
+
+      systemd.services.postfix-tlspol = {
+        after = [
+          "nss-lookup.target"
+          "network-online.target"
+        ];
+        wants = [
+          "nss-lookup.target"
+          "network-online.target"
+        ];
+        wantedBy = [ "multi-user.target" ];
+
+        description = "Postfix DANE/MTA-STS TLS policy socketmap service";
+        documentation = [ "https://github.com/Zuplu/postfix-tlspol" ];
+
+        reloadTriggers = [ configFile ];
+
+        # https://github.com/Zuplu/postfix-tlspol/blob/main/init/postfix-tlspol.service
+        serviceConfig = {
+          ExecStart = toString [
+            (lib.getExe cfg.package)
+            "-config"
+            "/etc/postfix-tlspol/config.yaml"
+          ];
+          ExecReload = "${lib.getExe' pkgs.util-linux "kill"} -HUP $MAINPID";
+          Restart = "always";
+          RestartSec = 5;
+
+          User = "postfix-tlspol";
+          Group = "postfix-tlspol";
+
+          CacheDirectory = "postfix-tlspol";
+          CapabilityBoundingSet = [ "" ];
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          ReadOnlyPaths = [ "/etc/postfix-tlspol/config.yaml" ];
+          RemoveIPC = true;
+          RestrictAddressFamilies =
+            [
+              "AF_INET"
+              "AF_INET6"
+            ]
+            ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
+              "AF_UNIX"
+            ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged @resources"
+          ];
+          SystemCallErrorNumber = "EPERM";
+          SecureBits = [
+            "noroot"
+            "noroot-locked"
+          ];
+          RuntimeDirectory = "postfix-tlspol";
+          RuntimeDirectoryMode = "1750";
+          WorkingDirectory = "/var/cache/postfix-tlspol";
+          UMask = "0117";
+        };
+      };
+    })
+  ];
 }

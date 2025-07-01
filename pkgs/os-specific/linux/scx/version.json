@@ -1,8 +1,8 @@
 {
   "scx": {
-    "version": "1.0.12",
-    "hash": "sha256-ti4SPx66Ykwqsel7l8Rb0WEBypFbQKoDd0foMAtEmlE=",
-    "cargoHash": "sha256-nD+RalFCJLqQGMVtaJm/NLCrY8Iq5/eAsW+ydABvw2o="
+    "version": "1.0.13",
+    "hash": "sha256-uSYkAsDZEWJ7sB6jd7PZrwYepeLlTdiTi4kAgSDeVsU=",
+    "cargoHash": "sha256-+JDe7l4wX2balOUD11M9z60JSaRyMaIO7Pw1NrjnE30="
   },
   "bpftool": {
     "rev": "183e7010387d1fc9f08051426e9a9fbd5f8d409e",

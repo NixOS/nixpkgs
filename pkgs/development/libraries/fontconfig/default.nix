@@ -10,12 +10,14 @@
   gperf,
   dejavu_fonts,
   autoreconfHook,
+  versionCheckHook,
   testers,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fontconfig";
-  version = "2.16.0";
+  version = "2.16.2";
 
   outputs = [
     "bin"
@@ -24,11 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ]; # $out contains all the config
 
+  # GitLab repositrory does not include pre-generated man pages.
+  # ref: https://github.com/NixOS/nixpkgs/pull/401037#discussion_r2055430206
   src = fetchurl {
-    url =
-      with finalAttrs;
-      "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
-    hash = "sha256-ajPcVVzJuosQyvdpWHjvE07rNtCvNmBB9jmx2ptu0iA=";
+    url = "https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/${finalAttrs.version}/fontconfig-${finalAttrs.version}.tar.xz";
+    hash = "sha256-FluP0qEZhkyHRksjOYbEobwJ77CcZd4cpAzB6F/7d+I=";
   };
 
   nativeBuildInputs = [
@@ -91,9 +93,32 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r $bin/share/man/man3
   '';
 
-  passthru.tests = {
-    pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "bin"}/bin/fc-list";
+  versionCheckProgramArg = "--version";
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    [ -d "$bin/share/man/man1" ]
+    [ -d "$bin/share/man/man5" ]
+    echo "man pages exist"
+
+    runHook postInstallCheck
+  '';
+
+  passthru = {
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
+
+    updateScript = gitUpdater {
+      url = "https://gitlab.freedesktop.org/fontconfig/fontconfig.git";
     };
   };
 

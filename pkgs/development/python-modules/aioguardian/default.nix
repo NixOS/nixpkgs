@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "asyncio_dgram"
+    "frozenlist"
     "typing-extensions"
   ];
 

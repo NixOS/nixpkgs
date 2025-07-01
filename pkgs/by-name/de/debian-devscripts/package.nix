@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   fetchpatch,
   xz,
   dpkg,
@@ -29,11 +29,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "debian-devscripts";
-  version = "2.25.14";
+  version = "2.25.15";
 
-  src = fetchurl {
-    url = "mirror://debian/pool/main/d/devscripts/devscripts_${finalAttrs.version}.tar.xz";
-    hash = "sha256-z95BOgGNYFvleqCv8e6B7Tl91xPzgQHkcxIg55maXvQ=";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
+    repo = "devscripts";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s2QSfJyHsFr1eiia/yFj3jsS5k38xNewEe/g5PFpqag=";
   };
 
   patches = [

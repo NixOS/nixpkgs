@@ -13,11 +13,14 @@
   makeDesktopItem,
   nettools,
   protobuf,
-  python3Packages,
+  python312Packages,
   system-config-printer,
   wget,
 }:
 
+let
+  python3Packages = python312Packages;
+in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
   version = "4.0.24";

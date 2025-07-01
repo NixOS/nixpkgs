@@ -1062,7 +1062,7 @@ rec {
         // (optionalAttrs (extraPassthru != { } || src ? passthru) {
           passthru = extraPassthru // src.passthru or { };
         })
-        # Forward any additional arguments to the derviation
+        # Forward any additional arguments to the derivation
         // (removeAttrs args [
           "src"
           "name"

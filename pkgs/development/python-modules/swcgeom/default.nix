@@ -22,7 +22,7 @@
   lmdb,
   requests,
   urllib3,
-  pytest,
+  pytestCheckHook,
 }:
 
 let
@@ -72,13 +72,18 @@ buildPythonPackage {
     ];
   };
 
-  nativeCheckInputs = [
-    pytest
-  ];
-
   pythonImportsCheck = [
     "swcgeom"
   ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    # make sure import the built version, not the source one
+    rm -r swcgeom
+  '';
 
   meta = {
     description = "Neuron geometry library for swc format";

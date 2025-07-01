@@ -19,20 +19,20 @@
             oldAttrs.postPatch or ""
             + ''
               substituteInPlace team/report.go \
-                --replace-warn 'const reportURL = "https://dash.paretosecurity.com"' \
-                               'const reportURL = "http://dashboard"'
+                --replace-warn 'const reportURL = "https://cloud.paretosecurity.com"' \
+                               'const reportURL = "http://cloud"'
             '';
         });
       };
 
     };
 
-  nodes.dashboard = {
+  nodes.cloud = {
     networking.firewall.allowedTCPPorts = [ 80 ];
 
     services.nginx = {
       enable = true;
-      virtualHosts."dashboard" = {
+      virtualHosts."cloud" = {
         locations."/api/v1/team/".extraConfig = ''
           add_header Content-Type application/json;
           return 200 '{"message": "Linked device."}';
@@ -72,7 +72,7 @@
   testScript = ''
     # Test setup
     terminal.succeed("su - alice -c 'mkdir -p /home/alice/.config'")
-    for m in [terminal, dashboard]:
+    for m in [terminal, cloud]:
       m.systemctl("start network-online.target")
       m.wait_for_unit("network-online.target")
 

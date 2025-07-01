@@ -22,6 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rwTa9owtnkyI9OpUKLk6V7WbAkqlYucpGzPnHHvKW/A=";
   };
 
+  patches = [
+    # fix libuv changes. review removal in > 1.15.8
+    # https://github.com/cowsql/cowsql/pull/37
+    ./37.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

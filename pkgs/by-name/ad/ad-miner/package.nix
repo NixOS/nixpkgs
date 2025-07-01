@@ -33,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ad_miner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Active Directory audit tool that leverages cypher queries to crunch data from Bloodhound";
     homepage = "https://github.com/Mazars-Tech/AD_Miner";
     changelog = "https://github.com/Mazars-Tech/AD_Miner/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "AD-miner";
   };
 }

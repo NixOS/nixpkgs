@@ -14,9 +14,9 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mihomo-party";
-  version = "1.7.4";
+  version = "1.7.6";
 
   src =
     let
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
       };
     in
     fetchurl {
-      url = "https://github.com/mihomo-party-org/mihomo-party/releases/download/v${version}/mihomo-party-linux-${version}-${arch}.deb";
+      url = "https://github.com/mihomo-party-org/mihomo-party/releases/download/v${finalAttrs.version}/mihomo-party-linux-${finalAttrs.version}-${arch}.deb";
       hash = selectSystem {
-        x86_64-linux = "sha256-pQcDW9ztCTIS5dbmPuvig32cXWfzYiHksa3Jv/O5J7E=";
-        aarch64-linux = "sha256-YHLHJ05sdMj/Wz/WAEianbDIUz9X+AER2wm9T/QHRXI=";
+        x86_64-linux = "sha256-83RajPreGieOYBAkoR6FsFREnOGDDuMK6+Qg+R/koac=";
+        aarch64-linux = "sha256-oWOXLUYWRKRgPtNv9ZvM1ODd44dhymVTKHJBK/xxOOs=";
       };
     };
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ ];
   };
-}
+})

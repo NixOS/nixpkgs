@@ -18,7 +18,9 @@ let
 
   pkgs = import nixpkgs' {
     inherit system;
-    config = { };
+    config = {
+      permittedInsecurePackages = [ "nix-2.3.18" ];
+    };
     overlays = [ ];
   };
 
@@ -51,6 +53,21 @@ let
         # the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
         programs.nixfmt.enable = true;
+
+        programs.yamlfmt = {
+          enable = true;
+          settings.formatter = {
+            retain_line_breaks = true;
+          };
+        };
+        settings.formatter.yamlfmt.excludes = [
+          # Breaks helm templating
+          "nixos/tests/k3s/k3s-test-chart/templates/*"
+          # Aligns comments with whitespace
+          "pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml"
+          # TODO: Fix formatting for auto-generated file
+          "pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml"
+        ];
 
         settings.formatter.editorconfig-checker = {
           command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";

@@ -26,14 +26,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lokinet";
-  version = "0.9.11";
+  version = "0.9.13";
 
   src = fetchFromGitHub {
     owner = "oxen-io";
     repo = "lokinet";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-aVFLDGTbRUOw2XWDpl+ojwHBG7c0miGeoKMLwMpqVtg=";
+    hash = "sha256-6TVMuT4O8zJj97873BTsR1PJU8NaBgYr/nBkc/EfQuQ=";
   };
 
   patches = [

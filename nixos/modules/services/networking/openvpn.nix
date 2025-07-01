@@ -53,12 +53,15 @@ let
         ${optionalString (
           cfg.down != "" || cfg.updateResolvConf
         ) "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}"}
-        ${optionalString (cfg.authUserPass != null)
-          "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
-            ${cfg.authUserPass.username}
-            ${cfg.authUserPass.password}
-          ''}"
-        }
+        ${optionalString (cfg.authUserPass != null) (
+          if isAttrs cfg.authUserPass then
+            "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
+              ${cfg.authUserPass.username}
+              ${cfg.authUserPass.password}
+            ''}"
+          else
+            "auth-user-pass ${cfg.authUserPass}"
+        )}
       '';
 
     in
@@ -202,23 +205,28 @@ in
                 This option can be used to store the username / password credentials
                 with the "auth-user-pass" authentication method.
 
-                WARNING: Using this option will put the credentials WORLD-READABLE in the Nix store!
+                You can either provide an attribute set of `username` and `password`,
+                or the path to a file containing the credentials on two lines.
+
+                WARNING: If you use an attribute set, this option will put the credentials WORLD-READABLE into the Nix store!
               '';
               type = types.nullOr (
-                types.submodule {
+                types.oneOf [
+                  types.singleLineStr
+                  (types.submodule {
+                    options = {
+                      username = mkOption {
+                        description = "The username to store inside the credentials file.";
+                        type = types.str;
+                      };
 
-                  options = {
-                    username = mkOption {
-                      description = "The username to store inside the credentials file.";
-                      type = types.str;
+                      password = mkOption {
+                        description = "The password to store inside the credentials file.";
+                        type = types.str;
+                      };
                     };
-
-                    password = mkOption {
-                      description = "The password to store inside the credentials file.";
-                      type = types.str;
-                    };
-                  };
-                }
+                  })
+                ]
               );
             };
           };

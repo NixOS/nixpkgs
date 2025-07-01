@@ -116,7 +116,7 @@ python3.pkgs.buildPythonApplication rec {
     with python3.pkgs;
     [
       pytestCheckHook
-      pytest-cov
+      pytest-cov # cannot use stub
       versionCheckHook
     ]
     ++ runtimeDeps;

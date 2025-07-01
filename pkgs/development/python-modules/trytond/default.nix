@@ -20,21 +20,24 @@
   weasyprint,
   gevent,
   pillow,
+  pwdlib,
+  simpleeval,
   withPostgresql ? true,
   psycopg2,
   unittestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.4.10";
+  version = "7.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kzoZDcHNPjmsNxrQ11MAksK+24nI1YNmONQd21s3weA=";
+    hash = "sha256-KD9gZ0ForX1iYQMYlsle2fJ+zlmQOymDf71p17aCr1k=";
   };
 
   build-system = [ setuptools ];
@@ -58,16 +61,23 @@ buildPythonPackage rec {
       weasyprint
       gevent
       pillow
+      pwdlib
+      simpleeval
     ]
     ++ relatorio.optional-dependencies.fodt
     ++ passlib.optional-dependencies.bcrypt
     ++ passlib.optional-dependencies.argon2
     ++ lib.optional withPostgresql psycopg2;
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  doCheck = false;
+
+  nativeCheckInputs = [
+    unittestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export TRYTOND_DATABASE_URI="sqlite://"
     export DB_NAME=":memory:";
   '';
@@ -77,7 +87,7 @@ buildPythonPackage rec {
     "trytond.tests"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Server of the Tryton application platform";
     longDescription = ''
       The server for Tryton, a three-tier high-level general purpose
@@ -89,9 +99,9 @@ buildPythonPackage rec {
     '';
     homepage = "http://www.tryton.org/";
     changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       udono
       johbo
     ];

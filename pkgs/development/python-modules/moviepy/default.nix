@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "moviepy";
-  version = "2.1.2";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Zulko";
     repo = "moviepy";
     tag = "v${version}";
-    hash = "sha256-dha+rPBkcEyqQ7EfnFg81GDq0Lc2uoQ3meCTjdajaBM=";
+    hash = "sha256-3vt/EyEOv6yNPgewkgcWcjM0TbQ6IfkR6nytS/WpRyg=";
   };
 
   build-system = [ setuptools ];
@@ -108,7 +108,7 @@ buildPythonPackage rec {
   meta = {
     description = "Video editing with Python";
     homepage = "https://zulko.github.io/moviepy/";
-    changelog = "https://github.com/Zulko/moviepy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Zulko/moviepy/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

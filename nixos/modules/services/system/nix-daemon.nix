@@ -230,6 +230,7 @@ in
         IOSchedulingPriority = cfg.daemonIOSchedPriority;
         LimitNOFILE = 1048576;
         Delegate = "yes";
+        DelegateSubgroup = "supervisor";
       };
 
       restartTriggers = [ config.environment.etc."nix/nix.conf".source ];

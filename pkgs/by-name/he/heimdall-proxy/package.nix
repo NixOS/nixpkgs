@@ -4,7 +4,7 @@
   lib,
 }:
 let
-  version = "0.16.2";
+  version = "0.16.4";
 in
 buildGoModule {
   pname = "heimdall-proxy";
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "dadrus";
     repo = "heimdall";
     tag = "v${version}";
-    hash = "sha256-RzRjcg9GocqXpBh8C34LrSLbSrJWd9y4+YEWJaAD8d0=";
+    hash = "sha256-stjdNzyL/YyCTH0omqAr1e7agK2SHwku6/Hc3337DJ8=";
   };
 
-  vendorHash = "sha256-GVUO5a6m85C7JRJ9WBTB7JDHRaiU2Nq3clWQUedKp98=";
+  vendorHash = "sha256-Oh3esrbm2bvN/n6TvrR2+odBb1oQlhE/mYtBD5dH3ic=";
 
   tags = [ "sqlite" ];
 

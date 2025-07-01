@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "starlette-admin";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "starlette-admin";
     tag = version;
-    hash = "sha256-R9ZRrJaBp1joT3DtymvS+Ac0MzEUFYFovgxMW0njsT0=";
+    hash = "sha256-yPePxdKrg41kycXl1fDKf1jWx0YD+K26w8z2LmQV0g0=";
   };
 
   build-system = [ hatchling ];
@@ -122,7 +122,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast, beautiful and extensible administrative interface framework for Starlette & FastApi applications";
     homepage = "https://github.com/jowilf/starlette-admin";
-    changelog = "https://github.com/jowilf/starlette-admin/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://jowilf.github.io/starlette-admin/changelog/";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
   };

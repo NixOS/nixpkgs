@@ -61,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     cat <($out/bin/uuu -udev) > $out/lib/udev/rules.d/70-uuu.rules
   '';
 
+  doInstallCheck = true;
+
   meta = with lib; {
     description = "Freescale/NXP I.MX Chip image deploy tools";
     homepage = "https://github.com/nxp-imx/mfgtools";

@@ -197,7 +197,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
-  version = "257.5";
+  version = "257.6";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-mn/JB/nrOz2TOobu2d+XBH2dVH3vn/HPvWN4Zz6s+SM=";
+    hash = "sha256-Myb/ra7NQTDzN7B9jn8svbhTrLSfiqWaSxREe/nDyYo=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -791,7 +791,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  doCheck = false; # fails a bunch of tests
+  doCheck = true;
 
   # trigger the test -n "$DESTDIR" || mutate in upstreams build system
   preInstall = ''
@@ -835,6 +835,20 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString withSysusers ''
       mv $out/lib/sysusers.d $out/example
     '';
+
+  doInstallCheck = true;
+
+  # check udev rules exposed by systemd
+  # can't use `udevCheckHook` here as that would introduce infinite recursion
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ${lib.optionalString (
+      !buildLibsOnly
+    ) "$out/bin/udevadm verify --resolve-names=never --no-style $out/lib/udev/rules.d"}
+
+    runHook postInstallCheck
+  '';
 
   # Avoid *.EFI binary stripping.
   # At least on aarch64-linux strip removes too much from PE32+ files:

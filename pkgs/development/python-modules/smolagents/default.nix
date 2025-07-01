@@ -1,47 +1,65 @@
 {
   lib,
   stdenv,
-  accelerate,
   buildPythonPackage,
-  boto3,
-  docker,
-  duckduckgo-search,
   fetchFromGitHub,
-  gradio,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   huggingface-hub,
   jinja2,
-  ipython,
-  litellm,
-  markdownify,
-  mcp,
-  mcpadapt,
-  openai,
-  pandas,
   pillow,
-  pytest-datadir,
-  pytestCheckHook,
   python-dotenv,
   requests,
   rich,
-  setuptools,
+
+  # optional-dependencies
+  # audio
   soundfile,
+  # bedrock
+  boto3,
+  # docker
+  docker,
+  websocket-client,
+  # gradio
+  gradio,
+  # litellm
+  litellm,
+  # mcp
+  mcp,
+  mcpadapt,
+  # openai
+  openai,
+  # toolkit
+  duckduckgo-search,
+  markdownify,
+  # torch
+  numpy,
   torch,
   torchvision,
+  # transformers
+  accelerate,
   transformers,
-  websocket-client,
+
+  # tests
+  ipython,
+  pytest-datadir,
+  pytestCheckHook,
   wikipedia-api,
 }:
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.17.0";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-BMyLN8eNGBhywpN/EEE8hFf4Wb5EDpZvqBbX0ojRYec=";
+    hash = "sha256-pRpogmVes8ZX19GZff+HmGdykvMnBJ7hGsoYsUGVOSY=";
   };
 
   build-system = [ setuptools ];
@@ -49,19 +67,16 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pillow" ];
 
   dependencies = [
-    duckduckgo-search
     huggingface-hub
     jinja2
-    markdownify
-    pandas
     pillow
     python-dotenv
     requests
     rich
   ];
 
-  optional-dependencies = {
-    audio = [ soundfile ];
+  optional-dependencies = lib.fix (self: {
+    audio = [ soundfile ] ++ self.torch;
     bedrock = [ boto3 ];
     docker = [
       docker
@@ -85,14 +100,19 @@ buildPythonPackage rec {
     #   opentelemetry-exporter-otlp
     #   opentelemetry-sdk
     # ];
+    toolkit = [
+      duckduckgo-search
+      markdownify
+    ];
     torch = [
+      numpy
       torch
       torchvision
     ];
     transformers = [
       accelerate
       transformers
-    ];
+    ] ++ self.torch;
     # vision = [
     #   helium
     #   selenium
@@ -101,7 +121,7 @@ buildPythonPackage rec {
     #   torch
     #   vllm
     # ];
-  };
+  });
 
   nativeCheckInputs = [
     ipython

@@ -14,44 +14,20 @@ let
     owner = "math-comp";
     inherit version;
     defaultVersion =
+      let
+        case = case: out: { inherit case out; };
+      in
       with lib.versions;
       lib.switch coq.coq-version [
-        {
-          case = range "8.20" "9.0";
-          out = "1.9.1";
-        }
-        {
-          case = range "8.19" "8.20";
-          out = "1.8.0";
-        }
-        {
-          case = range "8.18" "8.20";
-          out = "1.7.1";
-        }
-        {
-          case = range "8.16" "8.18";
-          out = "1.6.0";
-        }
-        {
-          case = range "8.15" "8.18";
-          out = "1.5.0";
-        }
-        {
-          case = range "8.15" "8.17";
-          out = "1.4.0";
-        }
-        {
-          case = range "8.13" "8.14";
-          out = "1.2.0";
-        }
-        {
-          case = range "8.12" "8.13";
-          out = "1.1.0";
-        }
-        {
-          case = isEq "8.11";
-          out = "0.10.0";
-        }
+        (case (range "8.20" "9.0") "1.9.1")
+        (case (range "8.19" "8.20") "1.8.0")
+        (case (range "8.18" "8.20") "1.7.1")
+        (case (range "8.16" "8.18") "1.6.0")
+        (case (range "8.15" "8.18") "1.5.0")
+        (case (range "8.15" "8.17") "1.4.0")
+        (case (range "8.13" "8.14") "1.2.0")
+        (case (range "8.12" "8.13") "1.1.0")
+        (case (isEq "8.11") "0.10.0")
       ] null;
     release."1.9.1".sha256 = "sha256-AiS0ezMyfIYlXnuNsVLz1GlKQZzJX+ilkrKkbo0GrF0=";
     release."1.8.1".sha256 = "sha256-Z0WAHDyycqgL+Le/zNfEAoLWzFb7WIL+3G3vEBExlb4=";

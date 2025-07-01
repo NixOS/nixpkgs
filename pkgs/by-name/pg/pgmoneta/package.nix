@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pgmoneta";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "pgmoneta";
     repo = "pgmoneta";
     rev = version;
-    hash = "sha256-5yatgiNl9szTnZbn6nKaGKgfnm2bOG4gvXGN5SqtbJI=";
+    hash = "sha256-d0F+gbYZ9qWRvbOXdKRQS0Rkcvsa5zzu2kiqwLiXpxw=";
   };
 
   nativeBuildInputs = [

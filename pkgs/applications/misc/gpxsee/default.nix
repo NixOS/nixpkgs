@@ -11,6 +11,7 @@
   qtserialport,
   qtsvg,
   wrapQtAppsHook,
+  wrapGAppsHook3,
 }:
 
 let
@@ -18,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "13.43";
+  version = "13.44";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     tag = finalAttrs.version;
-    hash = "sha256-IP5l8YUsCNm9rixgpQqbyyhfcBNQgrZha1MNjetug2c=";
+    hash = "sha256-eFANrUMESQVsZwTfz20VW2Qf7hiSgtkeKszCiJ8i/jk=";
   };
 
   buildInputs =
@@ -48,7 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     qmake
     qttools
     wrapQtAppsHook
+    wrapGAppsHook3
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=(''${gappsWrapperArgs[@]})
+  '';
 
   preConfigure = ''
     lrelease gpxsee.pro

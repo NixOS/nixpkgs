@@ -801,8 +801,27 @@ stdenvNoCC.mkDerivation {
       export hardening_unsupported_flags="${concatStringsSep " " ccHardeningUnsupportedFlags}"
     ''
 
+    # Do not prevent omission of framepointers on x86 32bit due to the small
+    # number of general purpose registers. Keeping EBP available provides
+    # non-trivial performance benefits.
+    + (
+      let
+        enable_fp = !targetPlatform.isx86_32;
+        enable_leaf_fp =
+          enable_fp
+          && (
+            targetPlatform.isx86_64
+            || targetPlatform.isAarch64
+            || (targetPlatform.isRiscV && (!isGNU || versionAtLeast ccVersion "15.1"))
+          );
+      in
+      optionalString enable_fp ''
+        echo " -fno-omit-frame-pointer ${optionalString enable_leaf_fp "-mno-omit-leaf-frame-pointer "}" >> $out/nix-support/cc-cflags-before
+      ''
+    )
+
     # For clang, this is handled in add-clang-cc-cflags-before.sh
-    + lib.optionalString (!isClang && machineFlags != [ ]) ''
+    + optionalString (!isClang && machineFlags != [ ]) ''
       printf "%s\n" ${lib.escapeShellArgs machineFlags} >> $out/nix-support/cc-cflags-before
     ''
 
@@ -906,7 +925,6 @@ stdenvNoCC.mkDerivation {
       cc = optionalString (!nativeTools) cc;
       wrapperName = "CC_WRAPPER";
       inherit suffixSalt coreutils_bin bintools;
-      bintools_targetPrefix = bintools.targetPrefix;
       inherit libc_bin libc_dev libc_lib;
       inherit darwinPlatformForCC;
       default_hardening_flags_str = builtins.toString defaultHardeningFlags;

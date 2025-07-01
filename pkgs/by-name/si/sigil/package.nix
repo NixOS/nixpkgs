@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sigil";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     repo = "Sigil";
     owner = "Sigil-Ebook";
     tag = version;
-    hash = "sha256-1Z+OosEZJEHiUz+62wYuNeAyQXARh14WAtqBVjq1FZw=";
+    hash = "sha256-nMPBkAAah4qbatvtfkCJqdo6BVL0NuxFZEHhSiB4uXY=";
   };
 
   pythonPath = with python3Packages; [ lxml ];

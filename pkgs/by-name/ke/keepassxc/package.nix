@@ -142,7 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXi
       libXtst
       libargon2
-      libsForQt5.kio
       libsForQt5.qtbase
       libsForQt5.qtsvg
       minizip
@@ -187,7 +186,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "keepassxc";
     maintainers = with lib.maintainers; [
-      blankparticle
       sigmasquadron
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

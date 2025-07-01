@@ -7,6 +7,7 @@
   cacert,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  stdenv,
 }:
 let
   version = "4.10.0";
@@ -26,13 +27,24 @@ let
           substituteInPlace pyproject.toml --replace-fail "setuptools==75.8.0" "setuptools"
           substituteInPlace craft_application/git/_git_repo.py --replace-fail "/snap/core22/current/etc/ssl/certs" "${cacert}/etc/ssl/certs"
         '';
+
+        disabledTestPaths = [
+          # These tests assert outputs of commands that assume Ubuntu-related output.
+          "tests/unit/services/test_lifecycle.py"
+        ];
+
+        disabledTests =
+          old.disabledTests
+          ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+            "test_process_grammar_full"
+          ];
       });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.5.0";
+  version = "3.5.1";
 
   pyproject = true;
 
@@ -40,7 +52,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     tag = version;
-    hash = "sha256-NIOfjd4r9mDP0x1IpIVJlU+Aza0a17bc3jDxtInrf4A=";
+    hash = "sha256-4zlUHttny6nIRhx/5aDz2sh1Va0+nN+7cezBGtt5Img=";
   };
 
   postPatch = ''

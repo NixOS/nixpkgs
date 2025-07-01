@@ -36,6 +36,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-z4viQZLgC2bIJ3VrzQnR+q2F3gAOEQpU1H5xHtX/2fs=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   postPatch = ''
     patchShebangs resources/niri-session
     substituteInPlace resources/niri.service \
@@ -78,6 +83,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall =
     ''
+      install -Dm0644 README.md resources/default-config.kdl -t $doc/share/doc/niri
+      mv wiki $doc/share/doc/niri/wiki
+
       install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
     ''
     + lib.optionalString withDbus ''
@@ -110,6 +118,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "-Wl,--pop-state"
       ]
     );
+
+    # Upstream recommends setting the commit hash manually when in a
+    # build environment where the Git repository is unavailable.
+    # See https://github.com/YaLTeR/niri/wiki/Packaging-niri#version-string
+    NIRI_BUILD_COMMIT = "Nixpkgs";
   };
 
   nativeInstallCheckInputs = [ versionCheckHook ];

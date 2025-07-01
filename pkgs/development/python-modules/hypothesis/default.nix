@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.130.12";
+  version = "6.131.17";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    hash = "sha256-6p7OCjeZKZJ+3MDfdi+9XffET95pXGC6nzhTiMiEVQA=";
+    hash = "sha256-bNaDC2n0VaI7L4/FdD8eQ4cqn5ewquy89wV/pQn9uo0=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws

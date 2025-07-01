@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sane-backends";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "sane-project";
     repo = "backends";
     rev = "refs/tags/${version}";
-    hash = "sha256-4mwPGeRsyzngDxBQ8/48mK+VR9LYV6082xr8lTrUZrk=";
+    hash = "sha256-e7Wjda+CobYatblvVCGkMAO2aWrdSCp7q+qIEGnGDCY=";
   };
 
   postPatch = ''
@@ -177,6 +177,8 @@ stdenv.mkDerivation rec {
   # parallel install creates a bad symlink at $out/lib/sane/libsane.so.1 which prevents finding plugins
   # https://github.com/NixOS/nixpkgs/issues/224569
   enableParallelInstalling = false;
+
+  doInstallCheck = true;
 
   passthru.tests = {
     inherit (nixosTests) sane;

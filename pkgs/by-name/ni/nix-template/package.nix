@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "jonringer";
-    repo = pname;
+    repo = "nix-template";
     rev = "v${version}";
     sha256 = "sha256-42u5FmTIKHpfQ2zZQXIrFkAN2/XvU0wWnCRrQkQzcNI=";
   };

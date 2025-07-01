@@ -153,4 +153,6 @@ stdenv.mkDerivation {
       # https://1password.community/discussion/comment/624011/#Comment_624011
       #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
+
+  passthru.updateScript = ./update.sh;
 }

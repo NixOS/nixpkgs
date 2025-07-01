@@ -4,6 +4,7 @@
   fetchCrate,
   docutils,
   installShellFiles,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +27,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     docutils
     installShellFiles
+    udevCheckHook
   ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     ln -s mdevctl $out/bin/lsmdev

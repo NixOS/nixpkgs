@@ -1,12 +1,11 @@
 {
   lib,
-  stdenv,
+  fetchFromGitHub,
   aiohttp,
   aioresponses,
   buildPythonPackage,
   cachetools,
   cryptography,
-  fetchPypi,
   flask,
   freezegun,
   grpcio,
@@ -17,7 +16,6 @@
   pytest-asyncio,
   pytest-localserver,
   pytestCheckHook,
-  pythonOlder,
   pyu2f,
   requests,
   responses,
@@ -27,15 +25,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.38.0";
+  version = "2.40.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "google_auth";
-    inherit version;
-    hash = "sha256-goURNgfTuAo/FUO3WWJEe6ign+hXg0MqeE/e72rAlMQ=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-auth-library-python";
+    tag = "v${version}";
+    hash = "sha256-jO6brNdTH8BitLKKP/nwrlUo5hfQnThT/bPbzefvRbM=";
   };
 
   build-system = [ setuptools ];
@@ -79,6 +76,13 @@ buildPythonPackage rec {
     responses
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
+  disabledTestPaths = [
+    "samples/"
+    "system_tests/"
+    # Requires a running aiohttp event loop
+    "tests_async/"
+  ];
+
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
@@ -91,7 +95,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Google Auth Python Library";
     longDescription = ''
       This library simplifies using Google's various server-to-server
@@ -99,7 +103,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/googleapis/google-auth-library-python";
     changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "gliner";
-  version = "0.2.20";
+  version = "0.2.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "urchade";
     repo = "GLiNER";
-    tag = "v${version}";
-    hash = "sha256-aWBDnaiq9Z30YT4sszEVk1WAyU4aH8SFD6ESOBkT2ds=";
+    tag = version;
+    hash = "sha256-v8Q/+et9yWeVSWt1K9Ahg3I4dz5/Ft+o1ueNOSaGEOU=";
   };
 
   build-system = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "Generalist and Lightweight Model for Named Entity Recognition";
     homepage = "https://github.com/urchade/GLiNER";
-    changelog = "https://github.com/urchade/GLiNER/releases/tag/v${version}";
+    changelog = "https://github.com/urchade/GLiNER/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     badPlatforms = [

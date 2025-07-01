@@ -43,12 +43,12 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.22.3";
+  version = "0.22.4";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LTNJsW7ETIca3uADuoa0ROOOMQT8+LN8+B8VVUyDZSY=";
+    hash = "sha256-IvVNnh8EDRSnIGeomLkO+I9fpbzrxC8jOStCh//RF8A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-fwvv3OXDorcyikixEoOMnu3dv24ClGBS6h3oWAk0uas=";
+    outputHash = "sha256-6Co65RkzLnk4U9ibiN0cO0bWRvbUHECzd+GQ8pwIxBE=";
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [

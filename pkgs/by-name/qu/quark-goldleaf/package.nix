@@ -9,6 +9,7 @@
   imagemagick,
   wrapGAppsHook3,
   gtk3,
+  udevCheckHook,
 }:
 
 let
@@ -48,12 +49,15 @@ maven.buildMavenPackage rec {
     imagemagick # for icon conversion
     copyDesktopItems
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [ gtk3 ];
 
   # don't double-wrap
   dontWrapGApps = true;
+
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall

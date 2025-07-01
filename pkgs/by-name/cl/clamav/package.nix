@@ -26,17 +26,16 @@
 
 stdenv.mkDerivation rec {
   pname = "clamav";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
-    hash = "sha256-jJL4reKo8snWaI0dY+5X9sr5ZddNzgbQlxxnCcjmwEw=";
+    hash = "sha256-2HTKvz1HZbNbUY71NWWKHm7HSAIAah1hP58SSqE0MhA=";
   };
 
   patches = [
-    # Flaky test, remove this when https://github.com/Cisco-Talos/clamav/issues/343 is fixed
-    ./remove-freshclam-test.patch
-    ./sample-cofiguration-file-install-location.patch
+    ./sample-configuration-file-install-location.patch
+    ./use-non-existent-file-with-proper-permissions.patch
   ];
 
   enableParallelBuilding = true;
@@ -69,7 +68,9 @@ stdenv.mkDerivation rec {
     "-DAPP_CONFIG_DIRECTORY=/etc/clamav"
   ];
 
-  doCheck = true;
+  # Seems to only fail on x86_64-darwin with sandboxing
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+  __darwinAllowLocalNetworking = true;
 
   checkInputs = [
     python3.pkgs.pytest

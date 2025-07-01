@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/caverym/proton-caller/releases/tag/${version}";
     homepage = "https://github.com/caverym/proton-caller";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kho-dialga ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "proton-call";
   };
 }

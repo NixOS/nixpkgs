@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "droidcam-obs";
-  version = "2.3.4";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "dev47apps";
     repo = "droidcam-obs-plugin";
     tag = finalAttrs.version;
-    sha256 = "sha256-KWMLhddK561xA+EjvoG4tXRW4xoLil31JcTTfppblmA=";
+    sha256 = "sha256-rA+EMtAeM2LSUqtiYJt0hHZ85aZ+5bvVUUjIG2LC3pc=";
   };
 
   preBuild = ''

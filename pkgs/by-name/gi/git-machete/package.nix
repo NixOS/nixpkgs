@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "virtuslab";
-    repo = pname;
+    repo = "git-machete";
     rev = "v${version}";
     hash = "sha256-iSuOiQC+dKqcDCS4nTPMrNFpo3ipPUQhfoofM11UInI=";
   };

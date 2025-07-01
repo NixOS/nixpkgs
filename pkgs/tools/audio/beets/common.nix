@@ -145,7 +145,7 @@ python3Packages.buildPythonApplication {
     with python3Packages;
     [
       pytestCheckHook
-      pytest-cov
+      pytest-cov-stub
       mock
       rarfile
       responses

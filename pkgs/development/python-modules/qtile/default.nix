@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.31.0";
+  version = "0.32.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     tag = "v${version}";
-    hash = "sha256-aBVIkyR906+vSLDNxvkmWu6DBujZHErSi+aZPVMRuCI=";
+    hash = "sha256-UF4gRmcevtH9WNA7g/pwcciJcDariXcMNpqya68mQ38=";
   };
 
   patches = [

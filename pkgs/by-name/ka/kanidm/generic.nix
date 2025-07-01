@@ -43,8 +43,8 @@ rustPlatform.buildRustPackage rec {
   cargoDepsName = "kanidm";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "kanidm";
+    repo = "kanidm";
     rev = "refs/tags/v${version}";
     inherit hash;
   };

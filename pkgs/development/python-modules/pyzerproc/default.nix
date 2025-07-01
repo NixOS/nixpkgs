@@ -7,6 +7,7 @@
   pytest-asyncio,
   pytest-mock,
   pythonAtLeast,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -25,10 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-vS0sk/KjDhWispZvCuGlmVLLfeFymHqxwNzNqNRhg6k=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
-
   propagatedBuildInputs = [
     bleak
     click
@@ -37,6 +34,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
+    pytest-cov-stub
     pytestCheckHook
   ];
 

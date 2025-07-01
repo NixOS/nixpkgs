@@ -21,6 +21,7 @@
   pkg-config,
   sqlite,
   udev,
+  udevCheckHook,
   installShellFiles,
   nix-update-script,
   nixosTests,
@@ -85,6 +86,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
     pkg-config
     docsPython
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -128,6 +130,8 @@ buildGoModule (finalAttrs: {
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     installShellCompletion --cmd incus \

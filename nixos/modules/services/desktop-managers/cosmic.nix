@@ -13,6 +13,7 @@
 
 let
   cfg = config.services.desktopManager.cosmic;
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.cosmic.excludePackages;
   excludedCorePkgs = lib.lists.intersectLists corePkgs config.environment.cosmic.excludePackages;
   # **ONLY ADD PACKAGES WITHOUT WHICH COSMIC CRASHES, NOTHING ELSE**
   corePkgs =
@@ -140,12 +141,20 @@ in
     security.rtkit.enable = true;
     services.accounts-daemon.enable = true;
     services.displayManager.sessionPackages = [ pkgs.cosmic-session ];
-    services.geoclue2.enable = true;
-    services.geoclue2.enableDemoAgent = false;
     services.libinput.enable = true;
     services.upower.enable = true;
     # Required for screen locker
     security.pam.services.cosmic-greeter = { };
+
+    # geoclue2 stuff
+    services.geoclue2.enable = true;
+    # We _do_ use the demo agent in the `cosmic-settings-daemon` package,
+    # but this option also creates a systemd service that conflicts with the
+    # `cosmic-settings-daemon` package's geoclue2 agent. Therefore, disable it.
+    services.geoclue2.enableDemoAgent = false;
+    # As mentioned above, we do use the demo agent. And it needs to be
+    # whitelisted, otherwise it doesn't run.
+    services.geoclue2.whitelistedAgents = [ "geoclue-demo-agent" ]; # whitelist our own geoclue2 agent o
 
     # Good to have defaults
     hardware.bluetooth.enable = lib.mkDefault true;
@@ -154,6 +163,7 @@ in
     services.avahi.enable = lib.mkDefault true;
     services.gnome.gnome-keyring.enable = lib.mkDefault true;
     services.gvfs.enable = lib.mkDefault true;
+    services.orca.enable = lib.mkDefault (notExcluded pkgs.orca);
     services.power-profiles-daemon.enable = lib.mkDefault (
       !config.hardware.system76.power-daemon.enable
     );

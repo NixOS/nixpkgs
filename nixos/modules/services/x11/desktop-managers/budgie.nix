@@ -130,17 +130,25 @@ in
 
     services.xserver.desktopManager.budgie.sessionPath = [ pkgs.budgie-desktop-view ];
 
-    environment.extraInit = ''
-      ${concatMapStrings (p: ''
-        if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
-          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+    environment.extraInit =
+      ''
+        ${concatMapStrings (p: ''
+          if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+            export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+          fi
+          if [ -d "${p}/lib/girepository-1.0" ]; then
+            export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+            export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+          fi
+        '') cfg.sessionPath}
+      ''
+      + lib.optionalString config.services.gnome.gcr-ssh-agent.enable ''
+        # Hack: https://bugzilla.redhat.com/show_bug.cgi?id=2250704 still
+        # applies to sessions not managed by systemd.
+        if [ -z "$SSH_AUTH_SOCK" ] && [ -n "$XDG_RUNTIME_DIR" ]; then
+          export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
         fi
-        if [ -d "${p}/lib/girepository-1.0" ]; then
-          export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
-        fi
-      '') cfg.sessionPath}
-    '';
+      '';
 
     environment.systemPackages =
       with pkgs;
@@ -253,6 +261,7 @@ in
     services.gnome.evolution-data-server.enable = mkDefault true;
     services.gnome.glib-networking.enable = mkDefault true;
     services.gnome.gnome-keyring.enable = mkDefault true;
+    services.gnome.gcr-ssh-agent.enable = mkDefault true;
     services.gnome.gnome-settings-daemon.enable = mkDefault true;
     services.gvfs.enable = mkDefault true;
 

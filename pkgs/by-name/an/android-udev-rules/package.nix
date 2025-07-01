@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  udevCheckHook,
 }:
 
 ## Usage
@@ -24,6 +25,11 @@ stdenv.mkDerivation rec {
     install -D 51-android.rules $out/lib/udev/rules.d/51-android.rules
     runHook postInstall
   '';
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/M0Rf30/android-udev-rules";

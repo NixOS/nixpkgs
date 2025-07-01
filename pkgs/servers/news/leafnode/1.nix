@@ -25,6 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Implementation of a store & forward NNTP proxy, stable release";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.ne9z ];
+    maintainers = [ ];
   };
 })

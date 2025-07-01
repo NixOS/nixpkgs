@@ -7,7 +7,7 @@
   # build-system
   cmake,
   ninja,
-  pybind11,
+  nanobind,
   scikit-build-core,
 
   # dependencies
@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.14";
+  version = "0.1.19";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -33,13 +33,17 @@ buildPythonPackage rec {
     repo = "xgrammar";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ohsoc3g5XUp9vSXxyOGj20wXzCXZC02ktHYVQjDqNeM=";
+    hash = "sha256-0b2tJx1D/2X/uosbthHfevUpTCBtuSKNlxOKyidTotA=";
   };
+
+  patches = [
+    ./0001-fix-find-nanobind-from-python-module.patch
+  ];
 
   build-system = [
     cmake
     ninja
-    pybind11
+    nanobind
     scikit-build-core
   ];
   dontUseCmakeConfigure = true;
@@ -59,6 +63,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     writableTmpDirAsHomeHook
+  ];
+
+  NIX_CFLAGS_COMPILE = toString [
+    # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
+    "-ffat-lto-objects"
   ];
 
   disabledTests = [

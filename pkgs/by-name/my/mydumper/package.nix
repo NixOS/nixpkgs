@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.18.1-1";
+  version = "0.19.3-1";
 
   src = fetchFromGitHub {
     owner = "mydumper";
     repo = "mydumper";
     tag = "v${version}";
-    hash = "sha256-7CnNcaZ2jLlLx211DA5Zk3uf724yCMpt/0zgjvZl3fM=";
+    hash = "sha256-96AFq6wEALRRqD6+n/XMOAus3v9GX/eZOVZQdgUtf+w=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
   };
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = (
     if stdenv.hostPlatform.isDarwin then
       toString [
-        "-Wno-error=deprecated-non-prototype"
         "-Wno-error=format"
+        "-Wno-error=sometimes-uninitialized"
       ]
     else
       "-Wno-error=maybe-uninitialized"

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-logging";
-  version = "1.6.2";
+  version = "1.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_bigquery_logging";
     inherit version;
-    hash = "sha256-sVWeTqq4drPOmlUXd6R2O44PpNfcbsglhXeh6umYMZI=";
+    hash = "sha256-55xND/MHByzkQEmjeOnTEDEASqUR5zB/OvDHFsAEt8U=";
   };
 
   build-system = [ setuptools ];

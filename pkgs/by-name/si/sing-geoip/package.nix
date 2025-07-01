@@ -13,7 +13,7 @@ let
 
     src = fetchFromGitHub {
       owner = "SagerNet";
-      repo = pname;
+      repo = "sing-geoip";
       rev = "refs/tags/${version}";
       hash = "sha256-nIrbiECK25GyuPEFqMvPdZUShC2JC1NI60Y10SsoWyY=";
     };

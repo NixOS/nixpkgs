@@ -15,22 +15,23 @@
   libxkbcommon,
   glib,
   pipewire,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-luminous";
-  version = "0.1.8";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "waycrate";
     repo = "xdg-desktop-portal-luminous";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7i6+arKWubziDmy07FocDDiJdOWAszhO7yOOI1iPfds=";
+    hash = "sha256-qdR4wuRqq+PgJPbAtG8xvgWC7NwAeWGJiBXTWWdfyCY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-fatlvc+MoAJZGW/5alnDu1PQyK6mnE0aNQAhrMg7Hio=";
+    hash = "sha256-MIbhNlB2Mv5gOHlVoB93aQczbq9qo+WP/Rz6pWEoxWU=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     libxkbcommon
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "xdg-desktop-portal backend for wlroots based compositors, providing screenshot and screencast";

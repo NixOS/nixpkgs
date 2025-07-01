@@ -32,7 +32,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ms-jpq/sad";
     changelog = "https://github.com/ms-jpq/sad/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      ryan4yin
+    ];
     mainProgram = "sad";
   };
 }

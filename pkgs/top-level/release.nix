@@ -37,13 +37,15 @@
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
+      allowAliases = false;
       allowUnfree = false;
       inHydra = true;
       # Exceptional unsafe packages that we still build and distribute,
       # so users choosing to allow don't have to rebuild them every time.
       permittedInsecurePackages = [
         "olm-3.2.16" # see PR #347899
-        "kanidm_1_4-1.4.6"
+        "kanidm_1_5-1.5.0"
+        "kanidmWithSecretProvisioning_1_5-1.5.0"
       ];
     };
 
@@ -85,6 +87,7 @@ let
     id
     isDerivation
     optionals
+    recursiveUpdate
     ;
 
   inherit (release-lib.lib.attrsets) unionOfDisjoint;
@@ -94,8 +97,15 @@ let
     "aarch64"
   ] (arch: elem "${arch}-darwin" supportedSystems);
 
-  nonPackageJobs = {
-    tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
+  nonPackageJobs = rec {
+    tarball = import ./make-tarball.nix {
+      inherit
+        pkgs
+        lib-tests
+        nixpkgs
+        officialRelease
+        ;
+    };
 
     release-checks = import ./nixpkgs-basic-release-checks.nix {
       inherit pkgs nixpkgs supportedSystems;
@@ -103,7 +113,20 @@ let
 
     manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
-    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+    lib-tests = import ../../lib/tests/release.nix {
+      pkgs = import nixpkgs (
+        recursiveUpdate
+          (recursiveUpdate {
+            inherit system;
+            config.allowUnsupportedSystem = true;
+          } nixpkgsArgs)
+          {
+            config.permittedInsecurePackages = nixpkgsArgs.config.permittedInsecurePackages or [ ] ++ [
+              "nix-2.3.18"
+            ];
+          }
+      );
+    };
     pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
     darwin-tested =

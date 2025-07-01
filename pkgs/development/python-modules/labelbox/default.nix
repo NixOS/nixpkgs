@@ -48,11 +48,6 @@ let
 
     build-system = [ hatchling ];
 
-    postPatch = ''
-      substituteInPlace pyproject.toml \
-        --replace "--durations=20 --cov=lbox.example" "--durations=20"
-    '';
-
     dependencies = [
       google-api-core
       requests
@@ -60,6 +55,7 @@ let
 
     nativeCheckInputs = [
       pytestCheckHook
+      pytest-cov-stub
     ];
 
     doCheck = true;

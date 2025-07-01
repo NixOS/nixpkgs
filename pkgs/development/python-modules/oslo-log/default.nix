@@ -69,8 +69,9 @@ buildPythonPackage rec {
   disabledTests = [
     # not compatible with sandbox
     "test_logging_handle_error"
-    # File which is used doesn't seem not to be present
-    "test_log_config_append_invalid"
+    # Incompatible Exception Representation, displaying natively
+    "test_rate_limit"
+    "test_rate_limit_except_level"
   ];
 
   pythonImportsCheck = [ "oslo_log" ];

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "bagit";
-  version = "1.9b2";
+  version = "1.9.0";
   pyproject = true;
   build-system = [
     setuptools
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LibraryOfCongress";
     repo = "bagit-python";
-    rev = "v${version}";
-    hash = "sha256-IkRMsCrtX8nS0nrxs5B9csMq1YrI75QLDuT8eTPILkw=";
+    tag = "v${version}";
+    hash = "sha256-gHilCG07BXL28vBOaqvKhEQw+9l/AkzZRQxucBTEDos=";
   };
 
   nativeBuildInputs = [

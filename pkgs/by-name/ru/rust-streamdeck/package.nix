@@ -5,6 +5,7 @@
   pkg-config,
   lib,
   udev,
+  udevCheckHook,
   nix-update-script,
   versionCheckHook,
 }:
@@ -29,7 +30,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-OiXpG45jwWydbpRHnbIlECOaa75CzUOmdWxZ3WE5+hY=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ udev ];
 
   doInstallCheck = true;

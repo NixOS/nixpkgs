@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "vmware-modules";
-  version = "workstation-17.6.3-${kernel.version}";
+  version = "workstation-17.6.3-20250608-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "philipl";
     repo = "vmware-host-modules";
-    tag = "w17.6.3";
-    hash = "sha256-n9aLpHcO7m51eRtcWWBfTpze0JIWvne+UcYACoA5afc=";
+    rev = "e08764f84df3bd14407291e02346b7c5c54d0bf6";
+    hash = "sha256-RDVKropC+VOv1uJijOGlLt6iqZI8Cm9aWlbmvZj2CSk=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -41,13 +41,13 @@ stdenv.mkDerivation {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/misc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kernel modules needed for VMware hypervisor";
     homepage = "https://github.com/mkubecek/vmware-host-modules";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
     broken = (kernel.kernelOlder "5.5" && kernel.isHardened);
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       deinferno
       vifino
     ];

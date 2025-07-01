@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.3.22";
+  version = "0.3.45";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-6KHiRwz3lR0+w1DHn1HgYK93MP9hvYFgoUvXtEogskA=";
+    hash = "sha256-uR3Uukt8LwoBKBcgyX2srK0C6O04IEECe/cFhBQFO2s=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -85,13 +85,12 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # due to circular import
-    "tests/integration_tests/test_client.py"
-    "tests/integration_tests/test_prompts.py"
+    # Circular import
+    "tests/integration_tests/"
     "tests/unit_tests/test_client.py"
     "tests/unit_tests/evaluation/test_runner.py"
     "tests/unit_tests/evaluation/test_runner.py"
-    # Tests require a Langsmith API key
+    # Require a Langsmith API key
     "tests/evaluation/test_evaluation.py"
     "tests/external/test_instructor_evals.py"
     # Marked as flaky in source

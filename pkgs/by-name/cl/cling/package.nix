@@ -1,4 +1,5 @@
 {
+  apple-sdk,
   cmake,
   fetchFromGitHub,
   git,
@@ -10,7 +11,7 @@
   python3,
   zlib,
 
-  # *NOT* from LLVM 9!
+  # *NOT* from LLVM 13!
   # The compiler used to compile Cling may affect the runtime include and lib
   # directories it expects to be run with. Cling builds against (a fork of) Clang,
   # so we prefer to use Clang as the compiler as well for consistency.
@@ -131,25 +132,6 @@ let
     };
   };
 
-  # Runtime flags for the C++ standard library
-  cxxFlags =
-    if useLLVMLibcxx then
-      [
-        "-I"
-        "${lib.getDev llvmPackages_13.libcxx}/include/c++/v1"
-        "-L"
-        "${llvmPackages_13.libcxx}/lib"
-        "-l"
-        "${llvmPackages_13.libcxx}/lib/libc++${stdenv.hostPlatform.extensions.sharedLibrary}"
-      ]
-    else
-      [
-        "-I"
-        "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
-        "-I"
-        "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/${stdenv.hostPlatform.config}"
-      ];
-
   # The flags passed to the wrapped cling should
   # a) prevent it from searching for system include files and libs, and
   # b) provide it with the include files and libs it needs (C and C++ standard library plus
@@ -172,15 +154,35 @@ let
       "-isystem"
       "${lib.getLib unwrapped}/lib/clang/${llvmPackages_13.clang.version}/include"
     ]
-    ++ cxxFlags
+    ++ lib.optionals useLLVMLibcxx [
+      "-I"
+      "${lib.getDev llvmPackages_13.libcxx}/include/c++/v1"
+      "-L"
+      "${llvmPackages_13.libcxx}/lib"
+      "-l"
+      "${llvmPackages_13.libcxx}/lib/libc++${stdenv.hostPlatform.extensions.sharedLibrary}"
+    ]
+    ++ lib.optionals (!useLLVMLibcxx) [
+      "-I"
+      "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
+      "-I"
+      "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/${stdenv.hostPlatform.config}"
+    ]
     ++ [
-      # System libc
+      # System libc on Linux
+      # On Darwin, this is an empty directory, so we need a separate include with
+      # apple-sdk (see below)
       "-isystem"
       "${lib.getDev stdenv.cc.libc}/include"
 
       # cling includes
       "-isystem"
       "${lib.getDev unwrapped}/include"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # On Darwin, we need the system includes
+      "-isystem"
+      "${apple-sdk}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include"
     ];
 
 in

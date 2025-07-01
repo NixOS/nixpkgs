@@ -16,6 +16,7 @@
   mkYarnModules,
   python3,
   # Misc dependencies
+  charm-freeze,
   code-minimap,
   dailies,
   dasht,
@@ -23,6 +24,7 @@
   direnv,
   fzf,
   gawk,
+  helm-ls,
   himalaya,
   htop,
   jq,
@@ -118,12 +120,19 @@
   # typst-preview dependencies
   tinymist,
   websocat,
+  # lazydocker.nvim dependencies
+  lazydocker,
+  # lazyjj.nvim dependencies
+  lazyjj,
   # luau-lsp-nvim dependencies
   luau-lsp,
   # uv.nvim dependencies
   uv,
   # nvim-vstsl dependencies
   vtsls,
+  # search-and-replace.nvim dependencies
+  fd,
+  sad,
 }:
 self: super:
 let
@@ -1167,6 +1176,10 @@ in
     dependencies = [ self.self ];
   };
 
+  freeze-nvim = super.freeze-nvim.overrideAttrs {
+    runtimeDeps = [ charm-freeze ];
+  };
+
   fruzzy =
     let
       # until https://github.com/NixOS/nixpkgs/pull/67878 is merged, there's no better way to install nim libraries with nix
@@ -1400,6 +1413,12 @@ in
     luaAttr = luaPackages.haskell-tools-nvim;
   };
 
+  helm-ls-nvim = super.helm-ls-nvim.overrideAttrs {
+    runtimeDeps = [
+      helm-ls
+    ];
+  };
+
   helpview-nvim = super.helpview-nvim.overrideAttrs {
     nvimSkipModules = [ "definitions.__vimdoc" ];
   };
@@ -1527,6 +1546,19 @@ in
     nvimSkipModules = [
       # Requires some extra work to get CLI working in nixpkgs
       "cli.kulala_cli"
+    ];
+  };
+
+  lazydocker-nvim = super.lazydocker-nvim.overrideAttrs {
+    runtimeDeps = [
+      lazydocker
+    ];
+  };
+
+  lazyjj-nvim = super.lazyjj-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    runtimeDeps = [
+      lazyjj
     ];
   };
 
@@ -1669,6 +1701,10 @@ in
   lightline-bufferline = super.lightline-bufferline.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
     checkInputs = [ self.nvim-web-devicons ];
+  };
+
+  lightswitch-nvim = super.lightswitch-nvim.overrideAttrs {
+    dependencies = [ self.nui-nvim ];
   };
 
   lir-nvim = super.lir-nvim.overrideAttrs {
@@ -3022,6 +3058,13 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
+  search-and-replace-nvim = super.search-and-replace-nvim.overrideAttrs {
+    runtimeDeps = [
+      fd
+      sad
+    ];
+  };
+
   skim = buildVimPlugin {
     pname = "skim";
     inherit (skim) version;
@@ -3899,7 +3942,7 @@ in
 
   vim-textobj-entire = super.vim-textobj-entire.overrideAttrs {
     dependencies = [ self.vim-textobj-user ];
-    meta.maintainers = with lib.maintainers; [ farlion ];
+    meta.maintainers = with lib.maintainers; [ workflow ];
   };
 
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {

@@ -9,6 +9,7 @@
   makeDesktopItem,
   copyDesktopItems,
   libgcc,
+  cairo,
   dbus,
   xorg_sys_opengl,
   systemd,
@@ -17,6 +18,7 @@
   pulseaudio,
   libsndfile,
   flac,
+  glib,
   libvorbis,
   libopus,
   mpg123,
@@ -24,26 +26,28 @@
   libGL,
   vulkan-loader,
   libasyncns,
+  pango,
   xorg,
+  wayland,
 }:
 
 let
   pname = "legends-of-equestria";
-  version = "2024.06.02";
+  version = "2025.02.001";
   description = "Free-to-play MMORPG";
 
   srcOptions = {
     x86_64-linux = {
-      url = "https://mega.nz/file/Z3oAGYDa#01EfQICR4k5BK56hWFckYKsfgdV36KoU91TvSBwKgxY";
-      outputHash = "vpVIaRPrZih+ydWszsBF/JgO0AXh2rF/yOpBuI+V0m4=";
+      url = "https://mega.nz/file/w6pxUQJS#5r_oxsCqLyIUya8fbIATPtKAbsacXkD-bVArjjOBu3w";
+      outputHash = "k5kASgZwCoKVtHDEFjegAl31KZlrkNse4Baph1l/SUc=";
     };
     x86_64-darwin = {
-      url = "https://mega.nz/file/p6JQUDYC#lBRUK7lmxMHh4OvEyKjfl0W1mOL2VVzAH9rXL5ViiN0";
-      outputHash = "bvFg4wjltiilCP1oKfgUWThcEq8tzCIP3W/eAd3SxFo=";
+      url = "https://mega.nz/file/wyoHSZTK#ig1laiSWijTxnN_tS2m5di1Mdly8zDHP1euLVFqG_ug";
+      outputHash = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
     };
     aarch64-darwin = {
-      url = "https://mega.nz/file/cvxSzZ4b#eJHLvVHz_zxBiRxGMCBcsl1gV6M6ebQf2tQbNpEqCvk";
-      outputHash = "1aZGuOgXTLFxwF2FcYEwKA/LRT26uiXupBoqmzq9pFM=";
+      url = "https://mega.nz/file/EihRWKgb#KDtmmzLWVKW5uxkKkBEVE0yJioYPkOqutWwwMLhbedA";
+      outputHash = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
     };
   };
 
@@ -106,9 +110,17 @@ stdenv.mkDerivation {
       '';
 
   dontBuild = true;
-  buildInputs = [
-    libgcc
-  ];
+  buildInputs =
+    [
+      libgcc
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      cairo
+      dbus
+      glib
+      pango
+      wayland
+    ];
   nativeBuildInputs =
     [
       makeWrapper
@@ -125,8 +137,9 @@ stdenv.mkDerivation {
 
         loeHome=$out/lib/${pname}
         mkdir -p $loeHome
-        cp -r Linux/* $loeHome
+        cp -r LoE/* $loeHome
 
+        chmod +x $loeHome/LoE.x86_64
         makeWrapper $loeHome/LoE.x86_64 $out/bin/LoE \
           --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
 

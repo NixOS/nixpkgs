@@ -48,6 +48,7 @@ buildPythonPackage rec {
     peewee
     pg8000
     psycopg
+    psycopg.pool
     psycopg2
     psycopg-pool
     (postgresql.withPackages (p: with p; [ pgvector ]))
@@ -63,6 +64,7 @@ buildPythonPackage rec {
     PGDATABASE = "pgvector_python_test";
     postgresqlEnableTCP = 1;
     postgresqlTestUserOptions = "LOGIN SUPERUSER";
+    USER = "test_user";
   };
 
   disabledTestPaths = [

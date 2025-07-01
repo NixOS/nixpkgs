@@ -190,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
       PLUG=$vim/share/vim-plugins/notmuch/plugin/notmuch.vim
       cat >> $PLUG << EOF
         let \$GEM_PATH=\$GEM_PATH . ":${finalAttrs.passthru.gemEnv}/${ruby.gemPath}"
-        let \$RUBYLIB=\$RUBYLIB . ":$vim/${ruby.libPath}/${ruby.system}"
+        let \$RUBYLIB=\$RUBYLIB . ":$out/${ruby.libPath}/${ruby.system}"
         if has('nvim')
       EOF
       for gem in ${finalAttrs.passthru.gemEnv}/${ruby.gemPath}/gems/*/lib; do
