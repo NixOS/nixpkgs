@@ -1633,6 +1633,7 @@ dont-distribute-packages:
  - hsdev
  - hsec-core
  - Hsed
+ - hsendxmpp
  - hsfacter
  - HSGEP
  - HSHHelpers
@@ -2205,6 +2206,7 @@ dont-distribute-packages:
  - MFlow
  - Mhailist
  - Michelangelo
+ - micro-gateway
  - microformats2-types
  - MicroHs
  - MicrosoftTranslator

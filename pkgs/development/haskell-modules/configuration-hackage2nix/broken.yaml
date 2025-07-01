@@ -2472,6 +2472,7 @@ broken-packages:
   - haskoin-store # failure in job https://hydra.nixos.org/build/299138382 at 2025-06-23
   - haskoin-util # failure in job https://hydra.nixos.org/build/233222171 at 2023-09-02
   - haskoin-wallet # failure in job https://hydra.nixos.org/build/233206922 at 2023-09-02
+  - haskore-realtime # failure in job https://hydra.nixos.org/build/301391170 at 2025-07-01
   - haskore-vintage # failure in job https://hydra.nixos.org/build/233230742 at 2023-09-02
   - HaskRel # failure in job https://hydra.nixos.org/build/295090970 at 2025-04-22
   - hasktorch-codegen # failure in job https://hydra.nixos.org/build/233232876 at 2023-09-02
@@ -4733,6 +4734,7 @@ broken-packages:
   - pomohoro # failure in job https://hydra.nixos.org/build/233244601 at 2023-09-02
   - ponder # failure in job https://hydra.nixos.org/build/233223646 at 2023-09-02
   - pong-server # failure in job https://hydra.nixos.org/build/233194974 at 2023-09-02
+  - pontarius-xmpp-extras # failure in job https://hydra.nixos.org/build/301059892 at 2025-07-01
   - pontarius-xpmn # failure in job https://hydra.nixos.org/build/233217546 at 2023-09-02
   - pool # failure in job https://hydra.nixos.org/build/233205364 at 2023-09-02
   - pool-conduit # failure in job https://hydra.nixos.org/build/233246643 at 2023-09-02
@@ -5520,6 +5522,7 @@ broken-packages:
   - signable # failure in job https://hydra.nixos.org/build/259979871 at 2024-05-19
   - signable-haskell-protoc # failure in job https://hydra.nixos.org/build/252734188 at 2024-03-16
   - signal-messaging-dbus # failure in job https://hydra.nixos.org/build/252723131 at 2024-03-16
+  - signature # failure in job https://hydra.nixos.org/build/301391178 at 2025-07-01
   - significant-figures # failure in job https://hydra.nixos.org/build/295097004 at 2025-04-22
   - silero-vad # failure in job https://hydra.nixos.org/build/295096978 at 2025-04-22
   - simd # failure in job https://hydra.nixos.org/build/233206642 at 2023-09-02
