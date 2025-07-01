@@ -485,7 +485,7 @@
   "footprint": {
     "pname": "footprint",
     "version": "1.0.0",
-    "url": "https://azurecliprod.blob.core.windows.net/cli-extensions/footprint-1.0.0-py3-none-any.whl",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/footprint-1.0.0-py3-none-any.whl",
     "hash": "sha256-SqWSiL9Gz9aFGfH39j0+M68W2AYyuEwoPMcVISkmCyw=",
     "description": "Microsoft Azure Command-Line Tools FootprintMonitoringManagementClient Extension"
   },
