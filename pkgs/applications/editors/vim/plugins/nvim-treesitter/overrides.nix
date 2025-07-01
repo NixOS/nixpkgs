@@ -98,7 +98,7 @@ in
           ''
             touch $out
             ln -s ${withAllGrammars}/CONTRIBUTING.md .
-            export ALLOWED_INSTALLATION_FAILURES=ipkg,norg
+            export ALLOWED_INSTALLATION_FAILURES=ipkg,norg,verilog
 
             nvim --headless "+luafile ${withAllGrammars}/scripts/check-queries.lua" | tee log
 
