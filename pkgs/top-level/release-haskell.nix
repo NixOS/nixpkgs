@@ -345,7 +345,6 @@ let
         nix-output-monitor
         nix-script
         nix-tree
-        nixfmt
         nixfmt-classic
         nixfmt-rfc-style
         nota
