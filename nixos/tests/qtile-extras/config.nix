@@ -1,6 +1,9 @@
-{ stdenvNoCC, fetchurl }:
+{
+  stdenvNoCC,
+  fetchurl,
+}:
 stdenvNoCC.mkDerivation {
-  name = "qtile-config";
+  name = "qtile-extras-config";
   version = "0.0.1";
 
   src = fetchurl {

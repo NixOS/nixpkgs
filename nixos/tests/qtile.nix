@@ -3,30 +3,26 @@
   name = "qtile";
 
   meta = {
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [
+      sigmanificient
+      gurjaka
+    ];
   };
 
   nodes.machine =
-    { pkgs, lib, ... }:
-    let
-      # We create a custom Qtile configuration file that adds a widget from
-      # qtile-extras to the bar. This ensure that the qtile-extras package
-      # also works, and that extraPackages behave as expected.
-
-      config-deriv = pkgs.callPackage ./config.nix { };
-    in
+    {
+      pkgs,
+      lib,
+      ...
+    }:
     {
       imports = [
-        ../common/x11.nix
-        ../common/user-account.nix
+        ./common/x11.nix
+        ./common/user-account.nix
       ];
       test-support.displayManager.auto.user = "alice";
 
-      services.xserver.windowManager.qtile = {
-        enable = true;
-        configFile = "${config-deriv}/config.py";
-        extraPackages = ps: [ ps.qtile-extras ];
-      };
+      services.xserver.windowManager.qtile.enable = true;
 
       services.displayManager.defaultSession = lib.mkForce "qtile";
 
@@ -43,10 +39,8 @@
         machine.succeed("qtile --version")
 
     with subtest("ensure we can open a new terminal"):
-        machine.sleep(2)
         machine.send_key("meta_l-ret")
         machine.wait_for_window(r"alice.*?machine")
-        machine.sleep(2)
         machine.screenshot("terminal")
   '';
 }
