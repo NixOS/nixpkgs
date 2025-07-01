@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -D waf "$out"/bin/waf
-    wrapProgram "$out"/bin/waf --set PYTHONPATH "$out"/${python3.sitePackages}
+    wrapProgram "$out"/bin/waf --prefix PYTHONPATH : "$out"/${python3.sitePackages}
     mkdir -p "$out"/${python3.sitePackages}/
     cp -r waflib "$out"/${python3.sitePackages}/
     runHook postInstall

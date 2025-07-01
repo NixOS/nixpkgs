@@ -20,7 +20,9 @@
   opencvSupport ? false,
   opencv4,
   faad2,
-  lcevcdecSupport ? lib.meta.availableOn stdenv.hostPlatform lcevcdec,
+  # Enabling lcevcdecoder currently causes issues when attempting to decode regular h264 data
+  # warning: No decoder available for type 'video/x-h264, stream-format=(string)avc, [...], lcevc=(boolean)false, [...]
+  lcevcdecSupport ? false,
   lcevcdec,
   ldacbt,
   liblc3,
