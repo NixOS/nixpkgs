@@ -17354,6 +17354,8 @@ self: super: with self; {
 
   svg2tikz = callPackage ../development/python-modules/svg2tikz { };
 
+  svgdigitizer = callPackage ../development/python-modules/svgdigitizer { };
+
   svgelements = callPackage ../development/python-modules/svgelements { };
 
   svglib = callPackage ../development/python-modules/svglib { };
