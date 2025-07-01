@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
 
   src =
     let
-      selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
       arch = selectSystem {
         x86_64-linux = "linux-x64";
         aarch64-linux = "linux-arm64";
-        x86_64-darwin = "osx-x86";
-        aarch64-darwin = "osx-arm64";
       };
     in
     fetchurl {
@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
       sha256 = selectSystem {
         aarch64-linux = "1vai84yqk34rkbddczvfr3m1g8d7hhcdigm4rk6zff4zhq133k4r";
         x86_64-linux = "101504x7lc98kfmzfp7mna48qcsf5df77f5y28asgnwysb1jjvq1";
-        x86_64-darwin = "1340ni7c7gd7vix3s7pwv6spggvj603alqi3zsm5r97qb32qk41i";
-        aarch64-darwin = "1c6pnbxvgn84i724c4812rfqsnk0skmn0v395mmbz5w8qlixll8s";
       };
     };
 
@@ -44,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "PostgreSQL tools service is a backend service for PostgreSQL server tools, offering features such as connection management, query execution with result set handling, and language service support via the VS Code protocol.";
     changelog = "https://github.com/microsoft/pgsql-tools/releases";
     license = with licenses; [ mit ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.linux;
     maintainers = with maintainers; [ rutgerdj ];
     mainProgram = "ossdbtoolsservice_main";
   };

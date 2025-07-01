@@ -8,8 +8,6 @@ BASE_URL="https://github.com/microsoft/pgsql-tools/releases/download/v${VERSION}
 declare -A ARCHES=(
   ["x86_64-linux"]="linux-x64"
   ["aarch64-linux"]="linux-arm64"
-  ["x86_64-darwin"]="osx-x86"
-  ["aarch64-darwin"]="osx-arm64"
 )
 
 declare -A HASHES
