@@ -1,0 +1,40 @@
+From 47b21acea0789b22ce28410bd7ea11b615105730 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Wed, 2 Jul 2025 01:07:07 +0800
+Subject: [PATCH 2/4] Replace version with placeholder in daemon
+
+---
+ daemon/src/service/version.ts | 17 +----------------
+ 1 file changed, 1 insertion(+), 16 deletions(-)
+
+diff --git a/daemon/src/service/version.ts b/daemon/src/service/version.ts
+index 7da8b633..150feb06 100755
+--- a/daemon/src/service/version.ts
++++ b/daemon/src/service/version.ts
+@@ -1,22 +1,7 @@
+-import { $t } from "../i18n";
+-import * as fs from "fs-extra";
+ import { GlobalVariable } from "mcsmanager-common";
+-import logger from "./log";
+-
+-const PACKAGE_JSON = "package.json";
+ 
+ export function initVersionManager() {
+-  try {
+-    GlobalVariable.set("version", "Unknown");
+-    if (fs.existsSync(PACKAGE_JSON)) {
+-      const data: any = JSON.parse(fs.readFileSync(PACKAGE_JSON, { encoding: "utf-8" }));
+-      if (data.version) {
+-        GlobalVariable.set("version", data.version);
+-      }
+-    }
+-  } catch (error: any) {
+-    logger.error($t("TXT_CODE_version.versionDetectErr"), error);
+-  }
++  GlobalVariable.set("version", "@daemonVersion@");
+ }
+ 
+ export function getVersion() {
+-- 
+2.49.0
+
