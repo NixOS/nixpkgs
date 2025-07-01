@@ -145,4 +145,44 @@ rec {
       operations.${constraint.__operation} (map (evalConstraints platform) constraint.value)
     else
       platformMatch platform constraint;
+
+  prettyPrinters =
+    let
+      getStandardConstraintNames =
+        v:
+        lib.pipe constraints [
+          (lib.filterAttrs (_: it: it == v))
+          lib.attrNames
+        ];
+    in
+    {
+      operation = {
+        check = v: lib.isAttrs v && v ? __operation;
+        print =
+          {
+            indent,
+            v,
+            go,
+            ...
+          }:
+          "${v.__operation} ${go indent v.value}";
+      };
+      constraint = {
+        check =
+          v:
+          let
+            standardConstraintNames = getStandardConstraintNames v;
+          in
+          lib.length standardConstraintNames >= 1;
+        print =
+          {
+            v,
+            ...
+          }:
+          let
+            standardConstraintNames = getStandardConstraintNames v;
+          in
+          lib.head standardConstraintNames;
+      };
+    };
 }
