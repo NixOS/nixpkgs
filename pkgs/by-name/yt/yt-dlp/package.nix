@@ -9,7 +9,7 @@
   ffmpegSupport ? true,
   rtmpSupport ? true,
   withAlias ? false, # Provides bin/youtube-dl for backcompat
-  update-python-libraries,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -80,10 +80,7 @@ python3Packages.buildPythonApplication rec {
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
-  passthru.updateScript = [
-    update-python-libraries
-    (toString ./.)
-  ];
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/yt-dlp/yt-dlp/";
