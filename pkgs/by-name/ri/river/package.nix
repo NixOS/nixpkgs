@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.10";
+  version = "0.3.11";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "river";
     repo = "river";
-    hash = "sha256-mTS62HT/v/5af/PTsNcDIrl7GUczP55+VCumQIii6y4=";
+    hash = "sha256-7LC5nxan9jmjjt29afkps9H/sfhfIqpvBxvCKb0zvNM=";
     tag = "v${finalAttrs.version}";
   };
 
