@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
   ffmpeg-headless,
   rtmpdump,
   atomicparsley,
@@ -17,13 +17,14 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2025.6.30";
+  version = "2025.06.30";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "yt_dlp";
-    hash = "sha256-bQroVcClW/zCjf+6gE7IUlublV00pBGRoVYaTOwD2L0=";
+  src = fetchFromGitHub {
+    owner = "yt-dlp";
+    repo = "yt-dlp";
+    tag = version;
+    hash = "sha256-dwBe6oXh7G67kfiI6BqiC0ZHzleR7QlfMiTVXWYW85I=";
   };
 
   build-system = with python3Packages; [
@@ -95,7 +96,7 @@ python3Packages.buildPythonApplication rec {
       youtube-dl is released to the public domain, which means
       you can modify it, redistribute it or use it however you like.
     '';
-    changelog = "https://github.com/yt-dlp/yt-dlp/blob/HEAD/Changelog.md";
+    changelog = "https://github.com/yt-dlp/yt-dlp/blob/${version}/Changelog.md";
     license = licenses.unlicense;
     maintainers = with maintainers; [
       SuperSandro2000
