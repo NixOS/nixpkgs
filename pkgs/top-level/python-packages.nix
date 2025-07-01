@@ -19984,6 +19984,8 @@ self: super: with self; {
 
   youless-api = callPackage ../development/python-modules/youless-api { };
 
+  yourdfpy = callPackage ../development/python-modules/yourdfpy { };
+
   youseedee = callPackage ../development/python-modules/youseedee { };
 
   youtokentome = callPackage ../development/python-modules/youtokentome { };
