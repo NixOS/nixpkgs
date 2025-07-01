@@ -400,9 +400,9 @@
   },
   "dns-resolver": {
     "pname": "dns-resolver",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dns_resolver-1.0.0-py3-none-any.whl",
-    "hash": "sha256-DdTqcuNTVT8gVFyv8lePy3YqniY3pFamM1ERCOLsAOM=",
+    "version": "1.1.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dns_resolver-1.1.0-py3-none-any.whl",
+    "hash": "sha256-xRmWnmsEcHW/TXuR2RsWCz7W3JDLrqPCxx19H8rZ2JE=",
     "description": "Microsoft Azure Command-Line Tools DnsResolverManagementClient Extension"
   },
   "durabletask": {
