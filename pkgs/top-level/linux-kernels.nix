@@ -624,6 +624,8 @@ in
 
         tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
+        tt-kmd = callPackage ../os-specific/linux/tt-kmd { };
+
         turbostat = callPackage ../os-specific/linux/turbostat { };
 
         corefreq = callPackage ../os-specific/linux/corefreq { };
