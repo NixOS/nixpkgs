@@ -1,23 +1,20 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   picosat,
 }:
 
 stdenv.mkDerivation rec {
   pname = "aiger";
-  version = "1.9.9";
+  version = "1.9.20";
 
-  src = fetchurl {
-    url = "https://fmv.jku.at/aiger/${pname}-${version}.tar.gz";
-    sha256 = "1ish0dw0nf9gyghxsdhpy1jjiy5wp54c993swp85xp7m6vdx6l0y";
+  src = fetchFromGitHub {
+    owner = "arminbiere";
+    repo = "aiger";
+    tag = "rel-${version}";
+    hash = "sha256-ggkxITuD8phq3VF6tGc/JWQGBhTfPxBdnRobKswYVa4=";
   };
-
-  patches = [
-    # Fix implicit declaration of `isatty`, which is an error with newer versions of clang.
-    ./fix-missing-header.patch
-  ];
 
   enableParallelBuilding = true;
 
@@ -30,27 +27,13 @@ stdenv.mkDerivation rec {
     ./configure.sh
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin $dev/include $lib/lib
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
+  postInstall = ''
+    # test that installing picosat in configurePhase suceeded
+    test -f $out/bin/aigbmc
 
-    # Do the installation manually, as the Makefile has odd
-    # cyrillic characters, and this is easier than adding
-    # a whole .patch file.
-    BINS=( \
-      aigand aigdd aigflip aigfuzz aiginfo aigjoin   \
-      aigmiter aigmove aignm aigor aigreset aigsim   \
-      aigsplit aigstrip aigtoaig aigtoblif aigtocnf  \
-      aigtodot aigtosmv aigunconstraint aigunroll    \
-      andtoaig bliftoaig smvtoaig soltostim wrapstim \
-      aigbmc aigdep
-    )
-
-    for x in ''${BINS[*]}; do
-      install -m 755 -s $x $out/bin/$x
-    done
-
-    cp -v aiger.o $lib/lib
-    cp -v aiger.h $dev/include
+    install -m 440 -Dt $lib/lib aiger.o
+    install -m 440 -Dt $dev/include aiger.h
   '';
 
   outputs = [
