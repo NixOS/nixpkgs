@@ -342,6 +342,13 @@
     "hash": "sha256-8agBvQw46y6/nC+04LQ6mEcK57QLvNBesqpZbWlXnJ4=",
     "description": "Microsoft Azure Command-Line Tools DataShareManagementClient Extension"
   },
+  "dependency-map": {
+    "pname": "dependency-map",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/dependency_map-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-/iqgYB47nWSUwT5AJ+1CnlVDX5+fw1DRew53AHRdVng=",
+    "description": "Microsoft Azure Command-Line Tools DependencyMap Extension"
+  },
   "deploy-to-azure": {
     "pname": "deploy-to-azure",
     "version": "0.2.0",
