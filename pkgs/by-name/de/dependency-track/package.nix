@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nodejs_20,
   jre_headless,
-  protobuf,
+  protobuf_30,
   cyclonedx-cli,
   makeWrapper,
   maven,
@@ -61,7 +61,7 @@ maven.buildMavenPackage rec {
   postPatch = ''
     substituteInPlace pom.xml \
       --replace-fail '<protocArtifact>''${tool.protoc.version}</protocArtifact>' \
-      "<protocCommand>${protobuf}/bin/protoc</protocCommand>"
+      "<protocCommand>${protobuf_30}/bin/protoc</protocCommand>"
   '';
 
   mvnJdk = jre_headless;
