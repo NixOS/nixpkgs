@@ -70,6 +70,7 @@ buildGoModule (finalAttrs: {
 
         pushd build
           zip "$out/omnom_ext_chrome.zip" ./* icons/* -x manifest_ff.json
+          cp manifest_ff.json manifest.json
           zip "$out/omnom_ext_firefox.zip" ./* icons/* -x manifest_ff.json
         popd
       '';
