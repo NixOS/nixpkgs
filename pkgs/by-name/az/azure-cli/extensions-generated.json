@@ -232,9 +232,9 @@
   },
   "confluent": {
     "pname": "confluent",
-    "version": "0.6.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/confluent-0.6.0-py3-none-any.whl",
-    "hash": "sha256-eYfSLg6craKAh6kAv6U0hlUxlB8rv+ln60bJCy4KEr4=",
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/confluent-1.0.0-py3-none-any.whl",
+    "hash": "sha256-CmHPSaZdVmhow/CwCb45gua03Dw2m+nP1Cu35agO7xk=",
     "description": "Microsoft Azure Command-Line Tools ConfluentManagementClient Extension"
   },
   "connectedmachine": {
