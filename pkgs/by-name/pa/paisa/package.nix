@@ -3,11 +3,10 @@
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
-  # nodejs_22,
   nodejs_20,
   versionCheckHook,
   node-gyp,
-  python311,
+  python3,
   pkg-config,
   cairo,
   giflib,
@@ -59,11 +58,7 @@ buildGoModule (finalAttrs: {
     ];
 
     nativeBuildInputs = [
-      # building node-canvas with node-gyp will fail if using a newer python
-      # version:
-      # File "/build/source/node_modules/node-gyp/gyp/gyp_main.py", line 42, in
-      # <module> npm error ModuleNotFoundError: No module named 'distutils'
-      python311
+      (python3.withPackages (ps: with ps; [ distutils ]))
       pkg-config
       node-gyp
     ];
@@ -84,13 +79,16 @@ buildGoModule (finalAttrs: {
   ];
   versionCheckProgramArg = "version";
 
-  passthru.tests = {
-    inherit (nixosTests) paisa;
-  };
-
   preBuild = ''
     cp -r ${finalAttrs.frontend}/web/static ./web
   '';
+
+  passthru = {
+    inherit (finalAttrs) frontend;
+    tests = {
+      inherit (nixosTests) paisa;
+    };
+  };
 
   meta = {
     homepage = "https://paisa.fyi/";

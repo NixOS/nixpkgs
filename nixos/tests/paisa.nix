@@ -2,12 +2,12 @@
 {
   name = "paisa";
   nodes.machine =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
     {
       systemd.services.paisa = {
         description = "Paisa";
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.ExecStart = "${pkgs.paisa}/bin/paisa serve";
+        serviceConfig.ExecStart = "${lib.getExe pkgs.paisa} serve";
       };
     };
   testScript = ''
