@@ -3,6 +3,7 @@
   isPy3k,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   zope-interface,
   twisted,
 }:
@@ -27,6 +28,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "application" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "release-";
+  };
 
   meta = with lib; {
     description = "Collection of modules that are useful when building python applications";
