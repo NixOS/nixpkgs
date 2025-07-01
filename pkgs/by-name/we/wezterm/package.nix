@@ -16,7 +16,6 @@
   python3,
   runCommand,
   rustPlatform,
-  unstableGitUpdater,
   vulkan-loader,
   wayland,
   wezterm,
@@ -154,10 +153,7 @@ rustPlatform.buildRustPackage rec {
       #terminal-emulators = nixosTests.terminal-emulators.wezterm;
     };
 
-    # upstream tags are composed with timestamp+commit, e.g.:
-    # 20240203-110809-5046fc22
-    # doesn't make much sense if we are following unstable
-    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {
