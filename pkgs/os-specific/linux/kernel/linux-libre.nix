@@ -30,16 +30,30 @@ linux.override {
     src = stdenv.mkDerivation {
       name = "${linux.name}-libre-src";
       src = linux.src;
+
       buildPhase = ''
+        runHook preBuild
+
         # --force flag to skip empty files after deblobbing
-        ${scripts}/${majorMinor}/deblob-${majorMinor} --force \
-            ${major} ${minor} ${patch}
+        ${scripts}/${majorMinor}/deblob-${majorMinor} --force ${major} ${minor} ${patch}
+
+        runHook postBuild
       '';
+
       checkPhase = ''
+        runHook preCheck
+
         ${scripts}/deblob-check
+
+        runHook postCheck
       '';
+
       installPhase = ''
+        runHook preInstall
+
         cp -r . "$out"
+
+        runHook postInstall
       '';
     };
 
