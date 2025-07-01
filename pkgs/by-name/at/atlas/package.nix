@@ -8,19 +8,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "atlas";
-  version = "0.34.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "ariga";
     repo = "atlas";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-7s03YrZw7J2LRCHibMqzBBtVUBSPVEf+TMqtKoWSkkM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-USA3PiZcOF39LK45Xu0Oq/GJi3URMxJpBrUXxIsEkCY=";
   };
 
   modRoot = "cmd/atlas";
 
   proxyVendor = true;
-  vendorHash = "sha256-K94zOisolCplE/cFrWmv4/MWl5DD27lRekPTl+o4Jwk=";
+  vendorHash = "sha256-G78KpERRAP4lVsy3ur2ejT6jA6K5T257FHLb7afC/7c=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -46,7 +46,7 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    description = "Modern tool for managing database schemas";
+    description = "Manage your database schema as code";
     homepage = "https://atlasgo.io/";
     changelog = "https://github.com/ariga/atlas/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
