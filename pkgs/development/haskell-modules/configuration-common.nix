@@ -1315,6 +1315,21 @@ self: super:
   VulkanMemoryAllocator = addExtraLibrary pkgs.vulkan-headers super.VulkanMemoryAllocator;
   vulkan-utils = addExtraLibrary pkgs.vulkan-headers super.vulkan-utils;
 
+  # Support for vulkan-headers 1.4.313.0
+  # https://github.com/YoshikuniJujo/gpu-vulkan-middle/issues/10
+  gpu-vulkan-middle = overrideCabal (drv: {
+    version =
+      let
+        fixed = "0.1.0.76";
+      in
+      lib.warnIf (lib.versionAtLeast drv.version fixed)
+        "haskellPackages.gpu-vulkan-middle: default version ${drv.version} >= ${fixed}, consider dropping override"
+        fixed;
+    sha256 = "sha256-VQAVo/84qPBFkQSmY3pT4WXOK9zrFMpK7WN9/UdED6E=";
+    revision = null;
+    editedCabalFile = null;
+  }) super.gpu-vulkan-middle;
+
   # Generate cli completions for dhall.
   dhall = self.generateOptparseApplicativeCompletions [ "dhall" ] super.dhall;
   # 2025-01-27: allow aeson >= 2.2, 9.8 versions of text and bytestring

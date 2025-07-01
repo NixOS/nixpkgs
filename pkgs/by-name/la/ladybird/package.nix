@@ -35,17 +35,17 @@
 
 let
   # Note: The cacert version is synthetic and must match the version in the package's CMake
-  cacert_version = "2023-12-12";
+  cacert_version = "2025-05-20";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-06-18";
+  version = "0-unstable-2025-06-27";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "86c8dbbf902d5c84bdc90cd35d19cc167d5848bd";
-    hash = "sha256-CUVKrbpwPDMHPMHQfNSOQLQmRv7Fy4H/xsglZJaPZlI=";
+    rev = "831ba5d6550fd9dfaf90153876ff42396f7165ac";
+    hash = "sha256-7feXPFKExjuOGbitlAkSEEzYNEZb6hGSDUZW1EJGIW8=";
   };
 
   postPatch = ''
@@ -201,5 +201,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
     ];
     mainProgram = "Ladybird";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
