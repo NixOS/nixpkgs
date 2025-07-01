@@ -1301,6 +1301,9 @@
   "module-services-postgres-authentication-user-mapping": [
     "index.html#module-services-postgres-authentication-user-mapping"
   ],
+  "module-services-postgres-pg_config": [
+    "index.html#module-services-postgres-pg_config"
+  ],
   "module-services-postgres-upgrading": [
     "index.html#module-services-postgres-upgrading"
   ],
