@@ -34,14 +34,12 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  postBuild = ''
+  postInstall = ''
     mkdir -p $out/share/addons
 
     # Copy Firefox and Chrome addons
     cp -r ${finalAttrs.passthru.omnom-addons}/*.zip $out/share/addons
-  '';
 
-  postInstall = ''
     mkdir -p $out/share/examples
 
     cp -r static templates $out/share
