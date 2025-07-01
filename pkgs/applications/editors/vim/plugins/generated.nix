@@ -6558,6 +6558,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  jdd-nvim = buildVimPlugin {
+    pname = "jdd.nvim";
+    version = "2025-07-02";
+    src = fetchFromGitHub {
+      owner = "mahyarmirrashed";
+      repo = "jdd.nvim";
+      rev = "8d369b0e01a81abc89f52b54fc598c1de67f1454";
+      sha256 = "0p6jwzqvszq0q98pljnwdcck5h3y9ambpk201wdzmgcxkkcly1mp";
+    };
+    meta.homepage = "https://github.com/mahyarmirrashed/jdd.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   jedi-vim = buildVimPlugin {
     pname = "jedi-vim";
     version = "2024-12-27";
