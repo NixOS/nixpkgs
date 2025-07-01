@@ -209,6 +209,13 @@
     "hash": "sha256-nqYWLTf8M5C+Tc5kywXFxYgHAQTz6SpwGrR1RzVlqKk=",
     "description": "Translate ARM template to executable Azure CLI scripts"
   },
+  "cloudhsm": {
+    "pname": "cloudhsm",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/cloudhsm-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-GOcr3wcJ+FE/UUcvaoB90bWmdthmYZpDznaAtLr48LU=",
+    "description": "Microsoft Azure Command-Line Tools Cloudhsm Extension"
+  },
   "computeschedule": {
     "pname": "computeschedule",
     "version": "1.0.0b1",
