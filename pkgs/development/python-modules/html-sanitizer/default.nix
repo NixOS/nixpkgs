@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "html-sanitizer";
-  version = "2.4.4";
+  version = "2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = "html-sanitizer";
     tag = version;
-    hash = "sha256-6OWFLsuefeDzQ1uHnLmboKDgrbY/xJCwqsSQlDaJlRs=";
+    hash = "sha256-egBGhv7vudH32jwh9rAXuXfMzPDxJ60S5WKbc4kzCTU=";
   };
 
   build-system = [ hatchling ];
@@ -43,10 +43,6 @@ buildPythonPackage rec {
     # Tests are sensitive to output
     "test_billion_laughs"
     "test_10_broken_html"
-
-    # Mismatch snapshot (AssertionError)
-    # https://github.com/matthiask/html-sanitizer/issues/53
-    "test_keep_typographic_whitespace"
   ];
 
   pythonImportsCheck = [ "html_sanitizer" ];
