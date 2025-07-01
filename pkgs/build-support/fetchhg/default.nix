@@ -3,6 +3,12 @@
   stdenvNoCC,
   mercurial,
 }:
+
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
+
+  extendDrvArgs =
+    finalAttrs:
 {
   name ? null,
   url,
@@ -12,9 +18,8 @@
   fetchSubrepos ? false,
   preferLocalBuild ? true,
 }:
-
   # TODO: statically check if mercurial as the https support if the url starts with https.
-  stdenvNoCC.mkDerivation {
+  {
     name = "hg-archive" + (lib.optionalString (name != null) "-${name}");
     builder = ./builder.sh;
     nativeBuildInputs = [ mercurial ];
@@ -40,4 +45,8 @@
 
     inherit url rev;
     inherit preferLocalBuild;
-  }
+  };
+
+  # No ellipsis
+  inheritFunctionArgs = false;
+}
