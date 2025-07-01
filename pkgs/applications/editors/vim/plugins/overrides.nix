@@ -758,14 +758,12 @@ in
   command-t = super.command-t.overrideAttrs {
     nativeBuildInputs = [
       getconf
-      ruby
     ];
     buildPhase = ''
       substituteInPlace lua/wincent/commandt/lib/Makefile \
         --replace-fail '/bin/bash' 'bash' \
         --replace-fail xcrun ""
       make build
-      rm ruby/command-t/ext/command-t/*.o
     '';
   };
 
@@ -1632,6 +1630,7 @@ in
   };
 
   leetcode-nvim = super.leetcode-nvim.overrideAttrs {
+    checkInputs = [ self.snacks-nvim ];
     dependencies = with self; [
       nui-nvim
       plenary-nvim
@@ -1654,6 +1653,7 @@ in
       "leetcode.picker.language.fzf"
       "leetcode.picker.question.fzf"
       "leetcode.picker.question.init"
+      "leetcode.picker.question.snacks"
       "leetcode.picker.question.telescope"
       "leetcode.picker.tabs.fzf"
       "leetcode.runner.init"
