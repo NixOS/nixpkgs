@@ -169,9 +169,9 @@
   },
   "bastion": {
     "pname": "bastion",
-    "version": "1.4.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/bastion-1.4.0-py3-none-any.whl",
-    "hash": "sha256-G3kYIjI8MiRLO9ug2F6DjzL/V+I13xhIDTDhuq0t3jQ=",
+    "version": "1.4.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/bastion-1.4.1-py3-none-any.whl",
+    "hash": "sha256-Zx50jU9Vmt8vNe/50g8jWaxjeuXlHlMYVNG/v8exRmU=",
     "description": "Microsoft Azure Command-Line Tools Bastion Extension"
   },
   "billing-benefits": {
