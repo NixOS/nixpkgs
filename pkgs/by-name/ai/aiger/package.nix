@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  copyPkgconfigItems,
+  makePkgconfigItem,
   picosat,
 }:
 
@@ -18,6 +20,31 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ copyPkgconfigItems ];
+
+  pkgconfigItems = [
+    (makePkgconfigItem {
+      name = "aiger";
+      inherit version;
+      cflags = [ "-I\${includedir}" ];
+      libs = [
+        "-L\${libdir}"
+        "-laiger"
+      ];
+      variables = {
+        includedir = "@includedir@";
+        libdir = "@libdir@";
+      };
+      inherit (meta) description;
+    })
+  ];
+
+  env = {
+    # copyPkgconfigItems will substitute these in the pkg-config file
+    includedir = "${placeholder "dev"}/include";
+    libdir = "${placeholder "lib"}/lib";
+  };
+
   configurePhase = ''
     # Set up picosat, so we can build 'aigbmc'
     mkdir ../picosat
@@ -27,13 +54,17 @@ stdenv.mkDerivation rec {
     ./configure.sh
   '';
 
+  postBuild = ''
+    $AR rcs libaiger.a aiger.o
+  '';
+
   installFlags = [ "PREFIX=${placeholder "out"}" ];
   postInstall = ''
     # test that installing picosat in configurePhase suceeded
     test -f $out/bin/aigbmc
 
-    install -m 440 -Dt $lib/lib aiger.o
-    install -m 440 -Dt $dev/include aiger.h
+    install -m 444 -Dt $lib/lib libaiger.a
+    install -m 444 -Dt $dev/include aiger.h
   '';
 
   outputs = [
