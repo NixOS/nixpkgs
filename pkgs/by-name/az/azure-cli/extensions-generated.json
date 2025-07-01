@@ -205,7 +205,7 @@
   "cli-translator": {
     "pname": "cli-translator",
     "version": "0.3.0",
-    "url": "https://azurecliprod.blob.core.windows.net/cli-extensions/cli_translator-0.3.0-py3-none-any.whl",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/cli_translator-0.3.0-py3-none-any.whl",
     "hash": "sha256-nqYWLTf8M5C+Tc5kywXFxYgHAQTz6SpwGrR1RzVlqKk=",
     "description": "Translate ARM template to executable Azure CLI scripts"
   },
