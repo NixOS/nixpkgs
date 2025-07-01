@@ -2,7 +2,6 @@
   ## Helpers to Nix packaging
   fetchFromGitHub,
   fetchYarnDeps,
-  fetchurl,
   lib,
 
   ## Nix packaging tooling
@@ -80,16 +79,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-/EdYMau3I+xgmbU6IuKRa6cNDyvqJLPVgHkPn0yS46I=";
   };
 
-  nodeHeaders = fetchurl {
-    url = "https://www.electronjs.org/headers/v30.1.2/node-v30.1.2-headers.tar.gz";
-    # TODO: Programatise the version used:  ~~~^         ~~~^
-    hash = "sha256-YtDOBBC6rn60rWDRXKBFa1U+p5VUyeYZpijiPBACYdw=";
-  };
-
   env = {
     # DEBUG = "electron-rebuild";
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-    npm_config_tarball = "${nodeHeaders}";
+    npm_config_nodedir = "${nodejs}";
   };
 
   nativeBuildInputs = [
