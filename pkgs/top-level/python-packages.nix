@@ -8616,6 +8616,8 @@ self: super: with self; {
 
   lxml-stubs = callPackage ../development/python-modules/lxml-stubs { };
 
+  lxst = callPackage ../development/python-modules/lxst { };
+
   lyricwikia = callPackage ../development/python-modules/lyricwikia { };
 
   lz4 = callPackage ../development/python-modules/lz4 { };
