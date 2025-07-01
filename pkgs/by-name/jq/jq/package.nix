@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jq";
-  version = "1.8.0";
+  version = "1.8.1";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = fetchurl {
     url = "https://github.com/jqlang/jq/releases/download/jq-${finalAttrs.version}/jq-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kYEVd/kdmmGV/1DCv/7JtyyEKdwF7D6gIv2VwG0rMZw=";
+    hash = "sha256-K+ZOcSnOyxHVkGKQ66EK9pT7nj5/n8IIoxHcM8qDfrA=";
   };
 
   outputs = [
@@ -123,14 +123,15 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/jqlang/jq/releases/tag/jq-${finalAttrs.version}";
     description = "Lightweight and flexible command-line JSON processor";
     homepage = "https://jqlang.github.io/jq/";
+    downloadPage = "https://jqlang.github.io/jq/download/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       raskin
       artturin
       ncfavier
+      jk
     ];
     platforms = lib.platforms.unix;
-    downloadPage = "https://jqlang.github.io/jq/download/";
     mainProgram = "jq";
   };
 })
