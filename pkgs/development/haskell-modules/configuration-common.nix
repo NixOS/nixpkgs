@@ -449,6 +449,7 @@ with haskellLib;
 
   # Missing test file https://gitlab.com/dpwiz/hs-jpeg-turbo/-/issues/1
   jpeg-turbo = dontCheck super.jpeg-turbo;
+  JuicyPixels-jpeg-turbo = dontCheck super.JuicyPixels-jpeg-turbo;
 
   # Fixes compilation for basement on i686 for GHC >= 9.4
   # https://github.com/haskell-foundation/foundation/pull/573
