@@ -75,6 +75,13 @@ let
     rev = "8ef8c171ebe3c5daebdce80ee422cf7bb96aa3bc";
     hash = "sha256-Bv/smZFmZn4PEAcOlXD2Z4k96CK7A7YGDHFDsqZpuiE=";
   };
+  # core/Common/3dParty/md/fetch.py
+  md4c-src = fetchFromGitHub {
+    owner = "mity";
+    repo = "md4c";
+    rev = "481fbfbdf72daab2912380d62bb5f2187d438408";
+    hash = "sha256-zhInM3R0CJUqnzh6wRxMwlUdErovplbZQ5IwXe9XzZ4=";
+  };
   mdds-src = fetchFromGitHub {
     owner = "kohei-us";
     repo = "mdds";
@@ -103,14 +110,14 @@ let
   qmakeFlags = [ ];
   dontStrip = false;
 
-  # Revisions that correspond to onlyoffice-documentserver 8.3.3
-  core-rev = "fa65a546dad35b08615d616bbef92717ccb4bb32";
+  # Revisions that correspond to onlyoffice-documentserver 9.0.2
+  core-rev = "bcc5f67ec89602fe41941f11c7f9eb801f2a3c89";
   core = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core";
     # rev that the 'core' submodule in documentserver points at
     rev = core-rev;
-    hash = "sha256-fpWZqzenkSG5kB3CKdmdw6dBQOoUTryrHE0mG9zBi90=";
+    hash = "sha256-KzY/5fwZfgdEYmPsNkV3AGGYw23mEAhtGfyko3sYeTo=";
   };
   web-apps = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-core-webapps";
@@ -121,8 +128,8 @@ let
       owner = "ONLYOFFICE";
       repo = "web-apps";
       # rev that the 'web-apps' submodule in documentserver points at
-      rev = "64a59dd53ca2e83c9cb34ecd75dbacb2f7a5bf4d";
-      hash = "sha256-7+XddOPDsWpxg29HkJNvp/K1LJGctej5hLIAmBHWe/o=";
+      rev = "06bc5a77e9997c1766ba8088c255ba0b14e4fca3";
+      hash = "sha256-QSVCPnqL2mdK7irVCNna08dJAtrDVwe77k31Cof4L18=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
@@ -161,12 +168,16 @@ let
       owner = "ONLYOFFICE";
       repo = "sdkjs";
       # rev that the 'sdkjs' submodule in documentserver points at
-      rev = "3377e3fd5cb6de4aa833dead7c37124dc83efd96";
-      hash = "sha256-qa1gm1lPJS4f1iLZLE8gjwkm+5KoMsDm2BnJPTlyLxo=";
+      rev = "649a4b57ba25a204cc7b31299652c0de8ff0e42c";
+      hash = "sha256-acKoLQemAyFGCrVRsUUbl/iAQsh/ouSW+fX/hLgT3x8=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
-    npmDepsHash = "sha256-Hpf+z3RGqZ1LTdow6xP00hNmWf4xs+KnVBj4NbPW4uM=";
+    postPatch = ''
+      cp npm-shrinkwrap.json package-lock.json
+    '';
+
+    npmDepsHash = "sha256-C+qp5d4wYmlrEGjIeBsjRhpivy6wKBppJWbcj1z9fbM=";
 
     dontNpmBuild = true;
 
@@ -195,8 +206,8 @@ let
   dictionaries = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "dictionaries";
-    tag = "v8.2.0.103";
-    hash = "sha256-3BwWAvnw0RCD6fxTCRstJSrF5QgfVNVBe8rN1hHhCoU=";
+    tag = "v9.0.3.7";
+    hash = "sha256-7hvztNYnYjyOl3ynGP0vqtx9jLPp09XVDNIow1RYuWM=";
   };
   buildCoreComponent =
     rootdir: attrs:
@@ -451,6 +462,28 @@ let
       graphics
     ];
   };
+  ofdfile = buildCoreComponent "OFDFile" {
+    buildInputs = [
+      boost
+      unicodeConverter
+      graphics
+      kernel
+      pdffile
+    ];
+    passthru.tests = buildCoreTests "OFDFile/test" {
+      buildInputs = [
+        unicodeConverter
+        ofdfile
+        graphics
+        kernel
+      ];
+      patches = [ ./ofdfile-test.patch ];
+      qmakeFlags = qmakeFlags ++ icuQmakeFlags;
+      preConfigure = ''
+        source ${fixIcu}
+      '';
+    };
+  };
   pdffile = buildCoreComponent "PdfFile" {
     buildInputs = [
       graphics
@@ -466,6 +499,13 @@ let
       kernel
       graphics
       pdffile
+    ];
+  };
+  textcommandrenderer = buildCoreComponent "DocxRenderer/test/TextCommandRenderer" {
+    buildInputs = [
+      unicodeConverter
+      kernel
+      graphics
     ];
   };
   docxrenderer = buildCoreComponent "DocxRenderer" {
@@ -484,6 +524,7 @@ let
         djvufile
         xpsfile
         docxrenderer
+        textcommandrenderer
       ];
       preConfigure = ''
         # (not as patch because of line endings)
@@ -517,6 +558,7 @@ let
       # https://github.com/ONLYOFFICE/core/pull/1631
       ./doctrenderer-format-security.patch
       ./doctrenderer-config-dir.patch
+      ./doctrenderer-v8-iterator.patch
       ./fontengine-format-security.patch
       ./v8_updates.patch
       ./common-v8-no-compress-pointers.patch
@@ -571,6 +613,7 @@ let
     passthru.tests = lib.attrsets.genAttrs [ "embed/external" "embed/internal" "js_internal" "json" ] (
       test:
       buildCoreTests "DesktopEditor/doctrenderer/test/${test}" {
+        patches = [ ./doctrenderer-v8-test.patch ];
         buildInputs = [ doctrenderer ];
         preConfigure = ''
           ln -s ${googletest-src} $BUILDRT/Common/3dParty/googletest/googletest
@@ -589,6 +632,7 @@ let
     preConfigure = ''
       ln -s ${katana-parser-src} $BUILDRT/Common/3dParty/html/katana-parser
       ln -s ${gumbo-parser-src} $BUILDRT/Common/3dParty/html/gumbo-parser
+      ln -s ${md4c-src} $BUILDRT/Common/3dParty/md/md4c
     '';
   };
   epubfile = buildCoreComponent "EpubFile" {
@@ -671,7 +715,7 @@ buildCoreComponent "X2tConverter/build/Qt" {
   pname = "x2t";
   # x2t is not 'directly' versioned, so we version it after the version
   # of documentserver it's pulled into as a submodule
-  version = "8.3.2";
+  version = "9.0.2";
 
   buildInputs = [
     unicodeConverter
@@ -700,6 +744,7 @@ buildCoreComponent "X2tConverter/build/Qt" {
     docxrenderer
     iworkfile
     hwpfile
+    ofdfile
     vbaformatlib
     odfformatlib
   ];
@@ -742,6 +787,7 @@ buildCoreComponent "X2tConverter/build/Qt" {
     iworkfile = iworkfile.tests;
     docxrenderer = docxrenderer.tests;
     doctrenderer = doctrenderer.tests;
+    ofdfile = ofdfile.tests;
     x2t = runCommand "x2t-test" { } ''
       (${x2t}/bin/x2t || true) | grep "OOX/binary file converter." && mkdir -p $out
     '';
