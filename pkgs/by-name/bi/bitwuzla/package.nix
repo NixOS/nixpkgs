@@ -17,6 +17,7 @@
   zlib,
   pkg-config,
   cmake,
+  aiger,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     zlib
     kissat
+    aiger
   ];
 
   mesonFlags = [
@@ -77,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddefault_library=shared"
     "-Dcryptominisat=true"
     "-Dkissat=true"
+    "-Daiger=true"
 
     (lib.strings.mesonEnable "testing" finalAttrs.finalPackage.doCheck)
   ];
