@@ -869,9 +869,9 @@
   },
   "providerhub": {
     "pname": "providerhub",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/providerhub-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-e5PLfssfo6UgkJ1F5uZZfIun2qxPvBomw95mBDZ43Q0=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/providerhub-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-mqrXcCKvAEqWOzQZrBDSM4IO81Jduen2+fx5fhqFmtY=",
     "description": "Microsoft Azure Command-Line Tools ProviderHub Extension"
   },
   "purview": {
