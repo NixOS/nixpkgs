@@ -433,6 +433,7 @@ in
   fscrypt = runTest ./fscrypt.nix;
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
   lauti = runTest ./lauti.nix;
+  easytier = handleTest ./easytier.nix { };
   ejabberd = runTest ./xmpp/ejabberd.nix;
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
   emacs-daemon = runTest ./emacs-daemon.nix;
@@ -1272,7 +1273,6 @@ in
   solanum = runTest ./solanum.nix;
   sonarr = runTest ./sonarr.nix;
   sonic-server = runTest ./sonic-server.nix;
-  sourcehut = handleTest ./sourcehut { };
   spacecookie = runTest ./spacecookie.nix;
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark { };
   spiped = runTest ./spiped.nix;

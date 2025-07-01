@@ -1883,10 +1883,6 @@ with pkgs;
 
   asmrepl = callPackage ../development/interpreters/asmrepl { };
 
-  atlas = callPackage ../by-name/at/atlas/package.nix {
-    buildGoModule = buildGo123Module;
-  };
-
   avahi = callPackage ../development/libraries/avahi { };
 
   avahi-compat = callPackage ../development/libraries/avahi {
@@ -4396,8 +4392,6 @@ with pkgs;
 
   splot = haskell.lib.compose.justStaticExecutables haskellPackages.splot;
 
-  sourcehut = callPackage ../applications/version-management/sourcehut { };
-
   sshfs = sshfs-fuse; # added 2017-08-14
 
   inherit (callPackages ../tools/misc/sshx { })
@@ -6835,6 +6829,7 @@ with pkgs;
     electron_34-bin
     electron_35-bin
     electron_36-bin
+    electron_37-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
@@ -6842,14 +6837,11 @@ with pkgs;
     electron-chromedriver_34
     electron-chromedriver_35
     electron-chromedriver_36
+    electron-chromedriver_37
     ;
 
   electron_33 = electron_33-bin;
-  electron_34 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_34 then
-      electron-source.electron_34
-    else
-      electron_34-bin;
+  electron_34 = electron_34-bin;
   electron_35 =
     if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_35 then
       electron-source.electron_35
@@ -6860,6 +6852,11 @@ with pkgs;
       electron-source.electron_36
     else
       electron_36-bin;
+  electron_37 =
+    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_37 then
+      electron-source.electron_37
+    else
+      electron_37-bin;
   electron = electron_35;
   electron-bin = electron_35-bin;
   electron-chromedriver = electron-chromedriver_35;
@@ -9148,9 +9145,6 @@ with pkgs;
   zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_3_6
-    libressl_3_7
-    libressl_3_8
     libressl_3_9
     libressl_4_0
     ;
@@ -14273,7 +14267,7 @@ with pkgs;
 
   webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_36; };
 
-  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_34; };
+  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_36; };
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {
     stdenv = if stdenv.cc.isClang then gccStdenv else stdenv;

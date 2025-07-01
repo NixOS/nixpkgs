@@ -1085,18 +1085,6 @@
   "module-services-taskserver-manual-ca-management": [
     "index.html#module-services-taskserver-manual-ca-management"
   ],
-  "module-services-sourcehut": [
-    "index.html#module-services-sourcehut"
-  ],
-  "module-services-sourcehut-basic-usage": [
-    "index.html#module-services-sourcehut-basic-usage"
-  ],
-  "module-services-sourcehut-configuration": [
-    "index.html#module-services-sourcehut-configuration"
-  ],
-  "module-services-sourcehut-httpd": [
-    "index.html#module-services-sourcehut-httpd"
-  ],
   "module-services-gitlab": [
     "index.html#module-services-gitlab"
   ],
@@ -2048,6 +2036,13 @@
   ],
   "sec-release-25.11-incompatibilities": [
     "release-notes.html#sec-release-25.11-incompatibilities"
+  ],
+  "sec-release-25.11-incompatibilities-sourcehut-removed": [
+    "release-notes.html#sec-release-25.11-incompatibilities-sourcehut-removed",
+    "index.html#module-services-sourcehut",
+    "index.html#module-services-sourcehut-basic-usage",
+    "index.html#module-services-sourcehut-configuration",
+    "index.html#module-services-sourcehut-httpd"
   ],
   "sec-release-25.11-notable-changes": [
     "release-notes.html#sec-release-25.11-notable-changes"
