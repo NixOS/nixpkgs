@@ -17,7 +17,7 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.16.0";
+  version = "22.17.0";
   sha256 = "720894f323e5c1ac24968eb2676660c90730d715cb7f090be71a668662a17c37";
   patches =
     (
