@@ -153,13 +153,6 @@
     "hash": "sha256-b+5Hi9kZkioFMlc/3qO1Qikl03S6ZknqAV1NM5QegZo=",
     "description": "Microsoft Azure Command-Line Tools Azurelargeinstance Extension"
   },
-  "azurestackhci": {
-    "pname": "azurestackhci",
-    "version": "0.2.9",
-    "url": "https://hybridaksstorage.z13.web.core.windows.net/SelfServiceVM/CLI/azurestackhci-0.2.9-py3-none-any.whl",
-    "hash": "sha256-JVey/j+i+VGieUupZ1VbpUwuk+t1U4FS8hqy+1aP7xY=",
-    "description": "Microsoft Azure Command-Line Tools AzureStackHCI Extension"
-  },
   "baremetal-infrastructure": {
     "pname": "baremetal-infrastructure",
     "version": "3.0.0b2",
