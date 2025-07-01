@@ -187,7 +187,8 @@ stdenv.mkDerivation rec {
   #   |> (data: map (item: data.base // item) data.item-list)
   #   |> map makeDesktopItem;
 
-  # lib.pipe takes 2 arguments: initial-data & list-of-funnctions
+  # https://noogle.dev/f/lib/pipe
+  # lib.pipe :: value [functions]
   desktopItems = lib.pipe
 
     # Abstracted attrset of names
@@ -247,6 +248,9 @@ stdenv.mkDerivation rec {
         } ];
 
       })
+
+      # https://nix.dev/manual/nix/2.28/nix-2.28.html#builtins-map
+      # map :: function [items]
 
       # Merge/update item attrsets into `base` to get complete items
       (data: map (item: data.base // item) data.item-list)
