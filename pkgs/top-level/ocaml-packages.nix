@@ -46,6 +46,8 @@ let
 
         apron = callPackage ../development/ocaml-modules/apron { };
 
+        argon2 = callPackage ../development/ocaml-modules/argon2 { };
+
         arg-complete = callPackage ../development/ocaml-modules/arg-complete { };
 
         arp = callPackage ../development/ocaml-modules/arp { };

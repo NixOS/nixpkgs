@@ -6,6 +6,12 @@
 }:
 let
   cfg = config.services.duplicati;
+
+  parametersFile =
+    if cfg.parametersFile != null then
+      cfg.parametersFile
+    else
+      pkgs.writeText "duplicati-parameters" cfg.parameters;
 in
 {
   options = {
@@ -53,11 +59,47 @@ in
           Run as root with special care.
         '';
       };
+
+      parameters = lib.mkOption {
+        default = "";
+        type = lib.types.lines;
+        example = ''
+          --webservice-allowedhostnames=*
+        '';
+        description = ''
+          This option can be used to store some or all of the options given to the
+          commandline client.
+          Each line in this option should be of the format --option=value.
+          The options in this file take precedence over the options provided
+          through command line arguments.
+          <link xlink:href="https://duplicati.readthedocs.io/en/latest/06-advanced-options/#parameters-file">Duplicati docs: parameters-file</link>
+        '';
+      };
+
+      parametersFile = lib.mkOption {
+        default = null;
+        type = lib.types.nullOr lib.types.path;
+        description = ''
+          This file can be used to store some or all of the options given to the
+          commandline client.
+          Each line in the file option should be of the format --option=value.
+          The options in this file take precedence over the options provided
+          through command line arguments.
+          <link xlink:href="https://duplicati.readthedocs.io/en/latest/06-advanced-options/#parameters-file">Duplicati docs: parameters-file</link>
+        '';
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
+
+    assertions = [
+      {
+        assertion = !(cfg.parametersFile != null && cfg.parameters != "");
+        message = "cannot set both services.duplicati.parameters and services.duplicati.parametersFile at the same time";
+      }
+    ];
 
     systemd.services.duplicati = {
       description = "Duplicati backup";
@@ -67,7 +109,7 @@ in
         {
           User = cfg.user;
           Group = "duplicati";
-          ExecStart = "${cfg.package}/bin/duplicati-server --webservice-interface=${cfg.interface} --webservice-port=${toString cfg.port} --server-datafolder=${cfg.dataDir}";
+          ExecStart = "${cfg.package}/bin/duplicati-server --webservice-interface=${cfg.interface} --webservice-port=${toString cfg.port} --server-datafolder=${cfg.dataDir} --parameters-file=${parametersFile}";
           Restart = "on-failure";
         }
         (lib.mkIf (cfg.dataDir == "/var/lib/duplicati") {
