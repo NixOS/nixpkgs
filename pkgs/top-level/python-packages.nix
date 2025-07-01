@@ -13703,6 +13703,8 @@ self: super: with self; {
 
   pycocotools = callPackage ../development/python-modules/pycocotools { };
 
+  pycodec2 = callPackage ../development/python-modules/pycodec2 { };
+
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
   pycognito = callPackage ../development/python-modules/pycognito { };
