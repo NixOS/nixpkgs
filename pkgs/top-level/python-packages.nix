@@ -3927,6 +3927,8 @@ self: super: with self; {
 
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
+  django-pgtrigger = callPackage ../development/python-modules/django-pgtrigger { };
+
   django-phonenumber-field = callPackage ../development/python-modules/django-phonenumber-field { };
 
   django-picklefield = callPackage ../development/python-modules/django-picklefield { };
