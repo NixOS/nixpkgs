@@ -15,6 +15,7 @@ let
         tag = "v${packages.libxml2_13.version}";
         hash = "sha256-acemyYs1yRSTSLH7YCGxnQzrEDm8YPTK4HtisC36LsY=";
       };
+      freezeUpdateScript = true;
       extraMeta = {
         knownVulnerabilities = [
           "CVE-2025-6021"

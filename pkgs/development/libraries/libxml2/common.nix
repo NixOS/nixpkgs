@@ -31,6 +31,7 @@
   version,
   src,
   extraMeta ? { },
+  freezeUpdateScript ? false,
 }:
 
 let
@@ -141,6 +142,7 @@ stdenv'.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript {
       packageName = "libxml2";
       versionPolicy = "none";
+      freeze = freezeUpdateScript;
     };
     tests = {
       pkg-config = testers.hasPkgConfigModules {
