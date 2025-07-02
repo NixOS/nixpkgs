@@ -39,6 +39,9 @@ buildPythonPackage rec {
     description = "Python package for support of the Virtual Instrument Software Architecture (VISA)";
     homepage = "https://github.com/pyvisa/pyvisa";
     license = licenses.mit;
-    maintainers = with maintainers; [ mvnetbiz xeniagda ];
+    maintainers = with maintainers; [
+      mvnetbiz
+      xeniagda
+    ];
   };
 }

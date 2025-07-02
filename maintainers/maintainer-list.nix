@@ -27367,12 +27367,6 @@
     githubId = 21125058;
     name = "xeals";
   };
-  xeniagda = {
-    name = "Xenia Agda";
-    email = "xenia.agda@gmail.com";
-    github = "xeniagda";
-    githubId = 8290983;
-  };
   xeji = {
     email = "xeji@cat3.de";
     github = "xeji";
@@ -27384,6 +27378,12 @@
     github = "Xelden";
     githubId = 117323435;
     name = "Andrés Pico";
+  };
+  xeniagda = {
+    name = "Xenia Agda";
+    email = "xenia.agda@gmail.com";
+    github = "xeniagda";
+    githubId = 8290983;
   };
   xfnw = {
     email = "xfnw+nixos@riseup.net";
