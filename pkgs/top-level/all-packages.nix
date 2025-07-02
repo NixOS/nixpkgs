@@ -6151,7 +6151,6 @@ with pkgs;
   zulu11 = callPackage ../development/compilers/zulu/11.nix { };
   zulu17 = callPackage ../development/compilers/zulu/17.nix { };
   zulu21 = callPackage ../development/compilers/zulu/21.nix { };
-  zulu23 = callPackage ../development/compilers/zulu/23.nix { };
   zulu24 = callPackage ../development/compilers/zulu/24.nix { };
   zulu = zulu21;
 
