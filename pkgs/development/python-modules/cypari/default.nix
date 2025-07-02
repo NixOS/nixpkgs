@@ -54,6 +54,9 @@ buildPythonPackage rec {
     # final character is stripped from PARI error messages for some reason
     substituteInPlace ./cypari/handle_error.pyx \
       --replace-fail "not a function in function call" "not a function in function cal"
+  '';
+
+  preBuild = ''
     ln -s ${pariSrc} ${pariSrc.name}
     ln -s ${gmpSrc} ${gmpSrc.name}
   '';
