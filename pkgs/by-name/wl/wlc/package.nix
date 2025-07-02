@@ -9,6 +9,7 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "wlc";
   version = "1.15";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

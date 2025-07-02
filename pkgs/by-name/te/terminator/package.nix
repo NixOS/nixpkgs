@@ -17,6 +17,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "terminator";
   version = "2.1.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gnome-terminator";

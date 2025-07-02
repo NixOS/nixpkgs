@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "cppheaderparser";
   version = "2.7.4";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "CppHeaderParser";

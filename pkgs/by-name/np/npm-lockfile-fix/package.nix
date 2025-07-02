@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "npm-lockfile-fix";
   version = "0.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jeslie0";

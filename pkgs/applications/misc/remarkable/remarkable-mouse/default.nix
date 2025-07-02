@@ -11,6 +11,7 @@
 buildPythonApplication rec {
   pname = "remarkable-mouse";
   version = "7.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

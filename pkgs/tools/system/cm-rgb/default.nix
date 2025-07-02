@@ -16,6 +16,7 @@
 buildPythonApplication rec {
   pname = "cm-rgb";
   version = "0.3.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gfduszynski";

@@ -52,6 +52,7 @@
 buildPythonApplication rec {
   pname = "visidata";
   version = "3.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "saulpw";

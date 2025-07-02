@@ -50,6 +50,7 @@ in
 buildPythonPackage rec {
   pname = "polars";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pola-rs";

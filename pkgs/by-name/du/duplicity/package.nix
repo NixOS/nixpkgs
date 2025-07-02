@@ -23,6 +23,7 @@ let
   self = python3.pkgs.buildPythonApplication rec {
     pname = "duplicity";
     version = "3.0.5.1";
+    format = "setuptools";
 
     src = fetchFromGitLab {
       owner = "duplicity";

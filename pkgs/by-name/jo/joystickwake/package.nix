@@ -6,6 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "joystickwake";
   version = "0.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "foresto";

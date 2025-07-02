@@ -25,6 +25,7 @@ in
 buildPythonApplication rec {
   pname = "sonata";
   version = "1.7.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "multani";

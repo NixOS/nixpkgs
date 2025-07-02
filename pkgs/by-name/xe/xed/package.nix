@@ -13,6 +13,7 @@ let
   mbuild = python3Packages.buildPythonPackage rec {
     pname = "mbuild";
     version = "2024.11.04";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "intelxed";

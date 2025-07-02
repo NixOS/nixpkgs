@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "konsave";
   version = "2.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

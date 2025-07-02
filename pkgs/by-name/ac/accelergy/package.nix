@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "accelergy";
   version = "unstable-2022-05-03";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Accelergy-Project";
