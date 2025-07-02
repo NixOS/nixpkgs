@@ -1,7 +1,11 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
+  nixosTests,
+  nix-update-script,
+  php,
+  ...
 }:
 
 # Point the environment variable $WALLABAG_DATA to a data directory
@@ -18,7 +22,7 @@ let
   pname = "wallabag";
   version = "2.6.13";
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   inherit pname version;
 
   # Release tarball includes vendored files
@@ -42,6 +46,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+    test = {
+      inherit (nixosTests) wallabag;
+    };
+  };
+
   meta = {
     description = "wallabag is a self hostable application for saving web pages";
     longDescription = ''
@@ -53,6 +64,6 @@ stdenv.mkDerivation {
     homepage = "https://wallabag.org";
     changelog = "https://github.com/wallabag/wallabag/releases/tag/${version}";
     maintainers = with lib.maintainers; [ schneefux ];
-    platforms = lib.platforms.all;
+    inherit (php.meta) platforms;
   };
 }
