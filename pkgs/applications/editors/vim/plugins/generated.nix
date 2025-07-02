@@ -12338,6 +12338,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  plantuml-nvim = buildVimPlugin {
+    pname = "plantuml.nvim";
+    version = "2025-06-16";
+    src = fetchFromGitHub {
+      owner = "goropikari";
+      repo = "plantuml.nvim";
+      rev = "66d4dca1b8607be646ed532521ba0f04095361c4";
+      sha256 = "0b39pmf8wkpi29va6qc2zhj1d0wc8wp6zcmn731xw649r2ysyd6n";
+    };
+    meta.homepage = "https://github.com/goropikari/plantuml.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   plantuml-previewer-vim = buildVimPlugin {
     pname = "plantuml-previewer.vim";
     version = "2024-10-28";
