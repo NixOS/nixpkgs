@@ -2908,6 +2908,10 @@ in
     '';
   };
 
+  plantuml-nvim = super.plantuml-nvim.overrideAttrs {
+    dependencies = [ self.LibDeflate-nvim ];
+  };
+
   playground = super.playground.overrideAttrs {
     dependencies = with self; [
       # we need the 'query' grammar to make
