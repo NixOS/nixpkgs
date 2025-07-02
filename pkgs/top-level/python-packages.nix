@@ -8440,6 +8440,8 @@ self: super: with self; {
 
   linear-operator = callPackage ../development/python-modules/linear-operator { };
 
+  linearmodels = callPackage ../development/python-modules/linearmodels { };
+
   lineax = callPackage ../development/python-modules/lineax { };
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
