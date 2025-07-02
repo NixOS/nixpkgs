@@ -365,8 +365,8 @@ in
   };
 
   openssl_3 = common {
-    version = "3.0.16";
-    hash = "sha256-V+A8UP6rXTGxUq8rdk8QN5rs2O6S8WyYWYPOSpn374Y=";
+    version = "3.0.17";
+    hash = "sha256-39135OobV/86bb3msL3D8x21rJnn/dTq+eH7tuwtuM4=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -388,8 +388,8 @@ in
   };
 
   openssl_3_5 = common {
-    version = "3.5.0";
-    hash = "sha256-NE0KefGpsIApsHROLMQBpD+ckKzRBE0JpTC0iFqOn8A=";
+    version = "3.5.1";
+    hash = "sha256-UpBDsVz/pfNgd6TQr4Pz3jmYBxgdYHRB1zQZbYibZB8=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -404,12 +404,6 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
-
-      # can be dropped again with 3.5.1, see: https://github.com/openssl/openssl/issues/27282
-      ./3.5/quic_accept.patch
-
-      # can be dropped again with 3.5.1
-      ./3.5/CVE-2025-4575.patch
     ];
 
     withDocs = true;
