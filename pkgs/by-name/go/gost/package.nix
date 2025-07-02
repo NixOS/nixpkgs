@@ -20,6 +20,12 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-lzyr6Q8yXsuer6dRUlwHEeBewjwGxDslueuvIiZUW70=";
 
+  # Based on ldflags in upstream's .goreleaser.yaml
+  ldflags = [
+    "-s"
+    "-X main.version=v${finalAttrs.version}"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   # i/o timeout
