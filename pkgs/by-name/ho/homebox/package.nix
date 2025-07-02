@@ -73,8 +73,8 @@ buildGoModule {
     "-s"
     "-w"
     "-extldflags=-static"
-    "-X main.version=${version}"
-    "-X main.commit=${version}"
+    "-X main.version=${src.tag}"
+    "-X main.commit=${src.tag}"
   ];
   installPhase = ''
     runHook preInstall
