@@ -13,17 +13,9 @@
   shared ? !stdenv.hostPlatform.isStatic,
   e2fsprogs,
   runCommand,
-  withLibarchive ? true,
   libarchive,
 }:
 
-let
-  # Break the cyclic dependency with libarchive; will disable ext2 things during config.
-  # Remove when https://github.com/NixOS/nixpkgs/pull/420658 is merged.
-  libarchive' = libarchive.override {
-    e2fsprogs = null;
-  };
-in
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
   version = "1.47.2";
@@ -34,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   # 2025-05-31: Fix libarchive, from https://github.com/tytso/e2fsprogs/pull/230
-  patches = lib.optionals withLibarchive [
+  patches = [
     (fetchpatch {
       name = "0001-create_inode_libarchive.c-define-libarchive-dylib-for-darwin.patch";
       url = "https://github.com/tytso/e2fsprogs/commit/e86c65bc7ee276cd9ca920d96e18ed0cddab3412.patch";
@@ -61,16 +53,17 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ];
-  buildInputs =
-    [
-      libuuid
-      gettext
-    ]
-    ++ lib.optionals withFuse [ fuse3 ]
-    ++ lib.optionals withLibarchive [ libarchive' ];
+  buildInputs = [
+    libuuid
+    gettext
+    libarchive
+  ] ++ lib.optionals withFuse [ fuse3 ];
 
   configureFlags =
-    lib.optionals stdenv.hostPlatform.isLinux [
+    [
+      "--with-libarchive=direct"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       # It seems that the e2fsprogs is one of the few packages that cannot be
       # build with shared and static libs.
       (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
@@ -86,9 +79,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
       "--enable-libuuid"
       "--disable-e2initrd-helper"
-    ]
-    ++ lib.optionals withLibarchive [
-      "--with-libarchive=direct"
     ];
 
   nativeCheckInputs = [ buildPackages.perl ];
