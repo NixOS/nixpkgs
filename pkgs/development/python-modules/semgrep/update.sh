@@ -52,7 +52,7 @@ fetchgithub() {
 fetch_arch() {
   VERSION=$1
   PLATFORM=$2
-  nix-prefetch "{ fetchPypi }:
+  nix-prefetch --extra-experimental-features nix-command --extra-experimental-features flakes "{ fetchPypi }:
 fetchPypi rec {
   pname = \"semgrep\";
   version = \"$VERSION\";
