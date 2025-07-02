@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "eclipse-theia";
-    repo = "theia-ide";  # Do NOT use pname here.
+    repo = "theia-ide"; # Do NOT use pname here.
     tag = "v${version}";
     hash = "sha256-hjg+UEu+c4Mt7M34KZGxoYcHVR6hzs38/vZzOYPttJs=";
   };
@@ -111,17 +111,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ## Needed for autoPatchelf / patchelf --print-needed ${electron}.bin
-    nss  # lib{nss3,nssutil3,smime3}
+    nss # lib{nss3,nssutil3,smime3}
     nspr
     dbus
-    atk  # libat{k,kbridge,spi}
+    atk # libat{k,kbridge,spi}
     cups
     libdrm
-    gtk3  # libgtk-3
+    gtk3 # libgtk-3
     pango
     cairo
-    libX11  # DONE ABOVE
-    libxcb  # DONE ABOVE
+    libX11 # DONE ABOVE
+    libxcb # DONE ABOVE
     libXcomposite
     libXdamage
     libXext
@@ -131,8 +131,8 @@ stdenv.mkDerivation rec {
     expat
     libxkbcommon
 
-    alsa-lib  # libasound
-    pulseaudio  # libpulse
+    alsa-lib # libasound
+    pulseaudio # libpulse
     flac
     libxslt
 
@@ -191,76 +191,79 @@ stdenv.mkDerivation rec {
 
   # https://noogle.dev/f/lib/pipe
   # lib.pipe :: value [functions]
-  desktopItems = lib.pipe
+  desktopItems =
+    lib.pipe
 
-    # Abstracted attrset of names
-    {
-      exec = "theia-ide";
-      # pname is specified for icon in installPhase, hence same here
-      icon = "${pname}";
-      long = "Theia IDE";
-      short = "theia-ide";
-    }
+      # Abstracted attrset of names
+      {
+        exec = "theia-ide";
+        # pname is specified for icon in installPhase, hence same here
+        icon = "${pname}";
+        long = "Theia IDE";
+        short = "theia-ide";
+      }
 
-    [
-      # Specify DRY parts of desktopItems as nix attribute sets (attrsets)
-      (names: {
+      [
+        # Specify DRY parts of desktopItems as nix attribute sets (attrsets)
+        (names: {
 
-        # Common part in both items
-        base = {
-          icon = names.icon;
-          genericName = "IDE";
-          comment = meta.description;
-          startupNotify = true;
-          # TODO: Confirm this startupWMClass from artifact / upstream
-          startupWMClass = names.short;
-          categories = [
-            # Theia-IDE / vscode / vscodium are NOT "small Utility applications"
-            # "Utility"
-            "Development"
-            "IDE"
-            "TextEditor"
-          ];
-          keywords = [
-            "eclipse"
-            "vscode"
-            "text editor"
-          ];
-        };
-
-        # 'name': basename-no-ext of .desktop file; desktopName: 'Name' field
-        item-list = [{
-          # Item 1: main launcher
-          name = names.exec;
-          exec = "${names.exec} %F";
-          desktopName = names.long;
-          actions.new-empty-window = {
-            name = "New Empty Window";
-            exec = "${names.exec} --new-window %F";
+          # Common part in both items
+          base = {
             icon = names.icon;
+            genericName = "IDE";
+            comment = meta.description;
+            startupNotify = true;
+            # TODO: Confirm this startupWMClass from artifact / upstream
+            startupWMClass = names.short;
+            categories = [
+              # Theia-IDE / vscode / vscodium are NOT "small Utility applications"
+              # "Utility"
+              "Development"
+              "IDE"
+              "TextEditor"
+            ];
+            keywords = [
+              "eclipse"
+              "vscode"
+              "text editor"
+            ];
           };
-        } {
-          # Item 2: URL handler
-          name = "${names.exec}-url-handler";
-          exec = "${names.exec} --open-url %U";
-          desktopName = "${names.long} - URL Handler";
-          # TODO: Confirm this mimeTypes from artifact / upstream
-          mimeTypes = [ "x-scheme-handler/${names.icon}" ];
-          noDisplay = true;
-        } ];
 
-      })
+          # 'name': basename-no-ext of .desktop file; desktopName: 'Name' field
+          item-list = [
+            {
+              # Item 1: main launcher
+              name = names.exec;
+              exec = "${names.exec} %F";
+              desktopName = names.long;
+              actions.new-empty-window = {
+                name = "New Empty Window";
+                exec = "${names.exec} --new-window %F";
+                icon = names.icon;
+              };
+            }
+            {
+              # Item 2: URL handler
+              name = "${names.exec}-url-handler";
+              exec = "${names.exec} --open-url %U";
+              desktopName = "${names.long} - URL Handler";
+              # TODO: Confirm this mimeTypes from artifact / upstream
+              mimeTypes = [ "x-scheme-handler/${names.icon}" ];
+              noDisplay = true;
+            }
+          ];
 
-      # https://nix.dev/manual/nix/2.28/nix-2.28.html#builtins-map
-      # map :: function [items]
+        })
 
-      # Merge/update item attrsets into `base` to get complete items
-      (data: map (item: data.base // item) data.item-list)
+        # https://nix.dev/manual/nix/2.28/nix-2.28.html#builtins-map
+        # map :: function [items]
 
-      # Make ${name}.desktop files from both items of the list
-      (map makeDesktopItem)
-    ]
-  ;
+        # Merge/update item attrsets into `base` to get complete items
+        (data: map (item: data.base // item) data.item-list)
+
+        # Make ${name}.desktop files from both items of the list
+        (map makeDesktopItem)
+      ];
 
   # [Long] Description summarised manually from following 3 pages:
   # https://eclipsesource.com/blogs/2018/06/20/welcome-at-eclipse-theia/
@@ -268,9 +271,7 @@ stdenv.mkDerivation rec {
   # https://eclipsesource.com/blogs/2023/09/08/eclipse-theia-vs-code-oss/
 
   meta = {
-    description =
-      "Open source, vendor neutral IDE for cloud & desktop, built on Theia Platform"
-    ;
+    description = "Open source, vendor neutral IDE for cloud & desktop, built on Theia Platform";
     longDescription = ''
       An IDE built on the Eclipse Theia platform (hereafter, Theia),
       combining flexibility with modern web technologies (TypeScript, HTML,
@@ -296,7 +297,11 @@ stdenv.mkDerivation rec {
     downloadPage = "https://theia-ide.org/#theiaidedownload";
 
     # https://github.com/eclipse-theia/theia-ide/issues/389#issuecomment-2939298127
-    license = with lib.licenses; [ mit gpl2Only epl20 ];
+    license = with lib.licenses; [
+      mit
+      gpl2Only
+      epl20
+    ];
     maintainers = with lib.maintainers; [ goyalyashpal ];
 
     ## Build-related meta information
