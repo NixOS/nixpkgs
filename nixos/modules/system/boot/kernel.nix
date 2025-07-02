@@ -545,6 +545,19 @@ in
         ]
         ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
 
+      boot.kernelPatches = lib.lists.optionals (config.boot.kernelModuleSigning.enable) [
+        {
+          name = "nixos_module_signing";
+          patch = null;
+          extraStructuredConfig = with lib.kernel; {
+            MODULE_SIG = yes;
+            MODULE_SIG_ALL = no;
+            MODULE_SIG_FORCE = yes;
+            SYSTEM_TRUSTED_KEYS = freeform "${config.boot.kernelModuleSigning.publicKeyPath}";
+          };
+        }
+      ];
+
       # nixpkgs kernels are assumed to have all required features
       assertions =
         if config.boot.kernelPackages.kernel ? features then

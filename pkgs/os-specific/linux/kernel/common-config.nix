@@ -795,10 +795,10 @@ let
         RANDOM_TRUST_CPU = whenOlder "6.2" yes; # allow RDRAND to seed the RNG
         RANDOM_TRUST_BOOTLOADER = whenOlder "6.2" yes; # allow the bootloader to seed the RNG
 
-        MODULE_SIG = no; # r13y, generates a random key during build and bakes it in
+        MODULE_SIG = lib.mkDefault no; # r13y, generates a random key during build and bakes it in
         # Depends on MODULE_SIG and only really helps when you sign your modules
         # and enforce signatures which we don't do by default.
-        SECURITY_LOCKDOWN_LSM = no;
+        SECURITY_LOCKDOWN_LSM = lib.mkDefault no;
 
         # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
         PERSISTENT_KEYRINGS = yes;
