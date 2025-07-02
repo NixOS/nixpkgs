@@ -12,7 +12,7 @@
   autoPatchelfHook,
 
   ## Needed for Executing package.json scripts
-  nodejs_20,
+  nodejs_22,
   python3,
   electron,
 
@@ -57,7 +57,7 @@
 }:
 
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
 in
 
 stdenv.mkDerivation rec {
