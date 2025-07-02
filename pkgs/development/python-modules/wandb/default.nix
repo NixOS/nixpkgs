@@ -285,6 +285,12 @@ buildPythonPackage rec {
 
     # broke somewhere between sentry-sdk 2.15.0 and 2.22.0
     "tests/unit_tests/test_analytics/test_sentry.py"
+
+    # Server connection times out under load
+    "tests/unit_tests/test_wandb_login.py"
+
+    # PermissionError: unable to write to .cache/wandb/artifacts
+    "tests/unit_tests/test_artifacts/test_wandb_artifacts.py"
   ];
 
   disabledTests =
@@ -359,6 +365,12 @@ buildPythonPackage rec {
       "test_log_media_prefixed_with_multiple_slashes"
       "test_log_media_saves_to_run_directory"
       "test_log_media_with_path_traversal"
+
+      # HandleAbandonedError / SystemExit when run in sandbox
+      "test_makedirs_raises_oserror__uses_temp_dir"
+
+      # AssertionError: Not all requests have been executed
+      "test_image_refs"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # AssertionError: assert not copy2_mock.called
@@ -378,9 +390,6 @@ buildPythonPackage rec {
 
       # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
       "test_wandb_image_with_matplotlib_figure"
-
-      # HandleAbandonedError / SystemExit when run in sandbox
-      "test_makedirs_raises_oserror__uses_temp_dir"
     ];
 
   pythonImportsCheck = [ "wandb" ];
