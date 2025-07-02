@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   pnpm_9,
   nodejs,
@@ -11,15 +11,15 @@
 }:
 let
   pname = "homebox";
-  version = "0.20.1";
+  version = "0.20.2";
   src = fetchFromGitHub {
     owner = "sysadminsmedia";
     repo = "homebox";
-    rev = "v${version}";
-    hash = "sha256-QP9Tp9/ooRDVuP228cOqR8LAaSkrr9dumrw7Y9wZ51s=";
+    tag = "v${version}";
+    hash = "sha256-6AJYC5SIITLBgYOq8TdwxAvRcyg8MOoA7WUDar9jSxM=";
   };
 in
-buildGo124Module {
+buildGoModule {
   inherit pname version src;
 
   vendorHash = "sha256-GTSFpfql0ebXtZC3LeIZo8VbCZdsbemNK5EarDTRAf0=";
