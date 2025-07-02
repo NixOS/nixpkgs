@@ -42,8 +42,119 @@ in
         services.clickhouse.enable = true;
       };
 
+    knot =
+      {
+        config,
+        nodes,
+        pkgs,
+        ...
+      }:
+      let
+        exampleZone = pkgs.writeTextDir "example.com.zone" ''
+          @ SOA ns.example.com. noc.example.com. 2019031301 86400 7200 3600000 172800
+          @       NS      ns1
+          @       NS      ns2
+          ns1     A       192.168.0.1
+          ns1     AAAA    fd00::1
+          ns2     A       192.168.0.2
+          ns2     AAAA    fd00::2
+          www     A       192.0.2.1
+          www     AAAA    2001:DB8::1
+          sub     NS      ns.example.com.
+        '';
+
+        knotZonesEnv = pkgs.buildEnv {
+          name = "knot-zones";
+          paths = [
+            exampleZone
+          ];
+        };
+      in
+      {
+        networking.firewall.allowedUDPPorts = [ 53 ];
+
+        services.vector = {
+          enable = true;
+
+          settings = {
+            sources = {
+              dnstap = {
+                type = "dnstap";
+                multithreaded = true;
+                mode = "unix";
+                lowercase_hostnames = true;
+                socket_file_mode = 504;
+                socket_path = "${dnstapSocket}";
+              };
+            };
+
+            sinks = {
+              vector_dnstap_sink = {
+                type = "vector";
+                inputs = [ "dnstap" ];
+                address = "clickhouse:6000";
+              };
+            };
+          };
+        };
+
+        systemd.services.vector.serviceConfig = {
+          RuntimeDirectory = "vector";
+          RuntimeDirectoryMode = "0770";
+        };
+
+        services.knot = {
+          enable = true;
+          settings = {
+            server = {
+              listen = [
+                "0.0.0.0@53"
+                "::@53"
+              ];
+              automatic-acl = true;
+            };
+            template.default = {
+              storage = knotZonesEnv;
+              dnssec-signing = false;
+              # Input-only zone files
+              # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-3
+              # prevents modification of the zonefiles, since the zonefiles are immutable
+              zonefile-sync = -1;
+              zonefile-load = "difference";
+              journal-content = "changes";
+              global-module = "mod-dnstap/capture_all";
+            };
+            zone = {
+              "example.com".file = "example.com.zone";
+            };
+
+            mod-dnstap = [
+              {
+                id = "capture_all";
+                sink = "unix:${dnstapSocket}";
+              }
+            ];
+          };
+        };
+
+        systemd.services.knot = {
+          after = [ "vector.service" ];
+          wants = [ "vector.service" ];
+          serviceConfig = {
+            # DNSTAP access
+            ReadWritePaths = [ "/var/run/vector" ];
+            SupplementaryGroups = [ "vector" ];
+          };
+        };
+      };
+
     unbound =
-      { config, pkgs, ... }:
+      {
+        config,
+        nodes,
+        pkgs,
+        ...
+      }:
       {
         networking.firewall.allowedUDPPorts = [ 53 ];
 
@@ -110,6 +221,16 @@ in
               ];
             };
 
+            forward-zone = [
+              {
+                name = "example.com.";
+                forward-addr = [
+                  nodes.knot.networking.primaryIPv6Address
+                  nodes.knot.networking.primaryIPAddress
+                ];
+              }
+            ];
+
             dnstap = {
               dnstap-enable = "yes";
               dnstap-socket-path = "${dnstapSocket}";
@@ -175,7 +296,7 @@ in
         )
         ENGINE = MergeTree()
         PARTITION BY toYYYYMM(timestamp)
-        ORDER BY (serverId, timestamp)
+        ORDER BY (serverId, toStartOfHour(timestamp), domain, timestamp)
         POPULATE AS
         SELECT
           timestamp,
@@ -186,12 +307,19 @@ in
         WHERE messageTypeId = 5 # ClientQuery
       '';
 
-      selectQuery = pkgs.writeText "select.sql" ''
+      selectDomainCountQuery = pkgs.writeText "select-domain-count.sql" ''
         SELECT
           domain,
           count(domain)
         FROM dnstap.domains_view
         GROUP BY domain
+      '';
+
+      selectAuthResponseQuery = pkgs.writeText "select-auth-response.sql" ''
+        SELECT
+          *
+        FROM dnstap.records
+        WHERE messageType = 'AuthResponse'
       '';
     in
     ''
@@ -205,23 +333,27 @@ in
         "cat ${tableView} | clickhouse-client",
       )
 
+      knot.wait_for_unit("knot")
       unbound.wait_for_unit("unbound")
-      unbound.wait_for_unit("vector")
 
-      unbound.wait_until_succeeds(
-        "journalctl -o cat -u vector.service | grep 'Socket permissions updated to 0o770'"
-      )
-      unbound.wait_until_succeeds(
-        "journalctl -o cat -u vector.service | grep 'component_type=dnstap' | grep 'Listening... path=\"${dnstapSocket}\"'"
-      )
+      for machine in knot, unbound:
+        machine.wait_for_unit("vector")
 
-      unbound.wait_for_file("${dnstapSocket}")
-      unbound.succeed("test 770 -eq $(stat -c '%a' ${dnstapSocket})")
+        machine.wait_until_succeeds(
+          "journalctl -o cat -u vector.service | grep 'Socket permissions updated to 0o770'"
+        )
+        machine.wait_until_succeeds(
+          "journalctl -o cat -u vector.service | grep 'component_type=dnstap' | grep 'Listening... path=\"${dnstapSocket}\"'"
+        )
+
+        machine.wait_for_file("${dnstapSocket}")
+        machine.succeed("test 770 -eq $(stat -c '%a' ${dnstapSocket})")
 
       dnsclient.systemctl("start network-online.target")
       dnsclient.wait_for_unit("network-online.target")
       dnsclient.succeed(
-        "dig @unbound test.local"
+        "dig @unbound test.local",
+        "dig @unbound www.example.com"
       )
 
       unbound.wait_for_file("/var/lib/vector/logs.log")
@@ -234,7 +366,15 @@ in
       )
 
       clickhouse.log(clickhouse.wait_until_succeeds(
-        "cat ${selectQuery} | clickhouse-client | grep 'test.local.'"
+        "cat ${selectDomainCountQuery} | clickhouse-client | grep 'test.local.'"
+      ))
+
+      clickhouse.log(clickhouse.wait_until_succeeds(
+        "cat ${selectDomainCountQuery} | clickhouse-client | grep 'www.example.com.'"
+      ))
+
+      clickhouse.log(clickhouse.wait_until_succeeds(
+        "cat ${selectAuthResponseQuery} | clickhouse-client | grep 'Knot DNS ${pkgs.knot-dns.version}'"
       ))
     '';
 }

@@ -389,6 +389,20 @@ rec {
         url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=lua_fixed_hash.patch;msg=45";
         sha256 = "sha256-FTu1eRd3AUU7IRs2/7e7uwHuvZsrzTBPypbcEZkU7y4=";
       })
+      # The original LuaJIT version number used here is 2.1.1736781742.
+      # The patch number in this is the unix epoch timestamp of the commit used.
+      # TexLive already truncates the patch number to the last 5 digits (81742
+      # in this case), however, this number will roll over every 1.1 days (1e5
+      # seconds), making it non-monotonic.
+      # Furthermore, the nix-darwin linker requires version numbers to be <=
+      # 1023.
+      # We therefore opt to choose a 3-digit sequence from the unix epoch that
+      # gives a good tradeoff between when it will roll over, and how often it
+      # will actually change: digits 9-7 (counting from the right, i.e., 736 in
+      # this case) yields a number that changes every 11.6 days (1e6 seconds,
+      # it is unlikely texlive will be updated on a shorter interval), and will
+      # stay stable for 31.7 years (1e9 seconds).
+      ./truncate-luajit-version-number.patch
     ];
 
     hardeningDisable = [ "format" ];
