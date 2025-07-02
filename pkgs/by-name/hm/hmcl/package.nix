@@ -26,6 +26,7 @@
   vulkan-loader,
   libpulseaudio,
   gobject-introspection,
+  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -112,6 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
 
       runHook postFixup
     '';
+
+  passthru.updateScript = lib.getExe (callPackage ./update.nix { });
 
   meta = {
     homepage = "https://hmcl.huangyuhui.net";
