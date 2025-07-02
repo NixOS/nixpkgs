@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   installShellFiles,
-  udev,
   stdenv,
   nix-update-script,
   openssl,
@@ -27,13 +26,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-    ];
+  buildInputs = [ openssl ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-O/rZU0fflF0Sa44mO2dUFOeW7uQdNzzGaMeyaYHaFiI=";
