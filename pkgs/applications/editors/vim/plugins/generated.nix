@@ -228,6 +228,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  LibDeflate-nvim = buildVimPlugin {
+    pname = "LibDeflate.nvim";
+    version = "2025-06-16";
+    src = fetchFromGitHub {
+      owner = "goropikari";
+      repo = "LibDeflate.nvim";
+      rev = "c51cd94acf5bc7d3b75b1e202cf5fdac011fee46";
+      sha256 = "00007arhm8lvjxl2yz03i00czc010p6qf35xhnwjp3h9bylnzdjl";
+    };
+    meta.homepage = "https://github.com/goropikari/LibDeflate.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   LuaSnip-snippets-nvim = buildVimPlugin {
     pname = "LuaSnip-snippets.nvim";
     version = "2022-03-17";
