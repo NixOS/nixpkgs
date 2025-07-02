@@ -33,7 +33,10 @@ def perform_ocr_variants_on_screenshot(
     # Docs suggest to run it with OMP_THREAD_LIMIT=1 for hundreds of parallel
     # runs. Our average test run is somewhere inbetween.
     # https://github.com/tesseract-ocr/tesseract/issues/3109
-    workers = max(1, int(os.process_cpu_count() / 4))
+    nix_cores: str | None = os.environ.get("NIX_BUILD_CORES")
+    cores: int = os.cpu_count() or 1 if nix_cores is None else int(nix_cores)
+    workers: int = max(1, int(cores / 4))
+
     with ThreadPoolExecutor(max_workers=workers) as e:
         # The idea here is to let the first tesseract call run on the raw image
         # while the other two are preprocessed + tesseracted in parallel
