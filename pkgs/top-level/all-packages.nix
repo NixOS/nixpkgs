@@ -13091,7 +13091,7 @@ with pkgs;
 
   mixxx = qt6Packages.callPackage ../applications/audio/mixxx { };
 
-  midisnoop = callPackage ../applications/audio/midisnoop {};
+  midisnoop = callPackage ../applications/audio/midisnoop { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
