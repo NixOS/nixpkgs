@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: rec {
+buildGoModule (finalAttrs: {
   pname = "jdd";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "mahyarmirrashed";
     repo = "jdd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uyccIqQL3uZaq0t/tEZbSf67Hr6KxcGCljE33GTs/fI=";
   };
 
@@ -20,11 +20,11 @@ buildGoModule (finalAttrs: rec {
 
   subPackages = [ "cmd/daemon" ];
 
-  ldflags = [ "-X=main.version=${version}" ];
+  ldflags = [ "-X=main.version=${finalAttrs.version}" ];
 
+  doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
-  doInstallCheck = true;
 
   postInstall = ''
     install -Dm755 $out/bin/daemon $out/bin/jdd
