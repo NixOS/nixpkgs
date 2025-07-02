@@ -62,7 +62,7 @@ for (dirpath, dirnames, filenames) in os.walk(build_path):
         # early continue for non-modules
         if filename.find(".ko") == -1:
             continue
-        
+
         jobs.append((dirpath, filename))
 
 num_cores = multiprocessing.cpu_count()
