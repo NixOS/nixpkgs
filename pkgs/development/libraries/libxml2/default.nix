@@ -13,6 +13,7 @@ let
         url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor packages.libxml2_2_13.version}/libxml2-${packages.libxml2_2_13.version}.tar.xz";
         hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
       };
+      freezeUpdateScript = true;
       extraMeta = {
         knownVulnerabilities = [
           "CVE-2025-6021"
