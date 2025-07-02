@@ -47,7 +47,7 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tenacity";
   version = "1.3.4";
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     owner = "tenacityteam";
     repo = "tenacity";
     fetchSubmodules = true;
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2gndOwgEJK2zDSbjcZigbhEpGv301/ygrf+EQhKp8PI=";
   };
 
@@ -151,12 +151,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sound editor with graphical UI";
     mainProgram = "tenacity";
     homepage = "https://tenacityaudio.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ irenes ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ irenes ];
+    platforms = lib.platforms.linux;
   };
-}
+})
