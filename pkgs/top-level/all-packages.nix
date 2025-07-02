@@ -306,7 +306,7 @@ with pkgs;
 
   cve = with python3Packages; toPythonApplication cvelib;
 
-  apko = callPackage ../development/tools/apko {
+  apko = callPackage ../by-name/ap/apko/package.nix {
     buildGoModule = buildGo123Module;
   };
 
