@@ -40,6 +40,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       pmy
       ramblurr
+      moraxyc
     ];
     mainProgram = "gost";
   };
