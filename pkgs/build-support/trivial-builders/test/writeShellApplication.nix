@@ -8,6 +8,7 @@
   linkFarm,
   diffutils,
   hello,
+  ksh,
 }:
 let
   checkShellApplication =
@@ -143,4 +144,15 @@ linkFarm "writeShellApplication-tests" {
     expected = "";
   };
 
+  test-shell-ksh = checkShellApplication rec {
+    name = "test-bash-options-nounset";
+    text = ''
+      head -n1 "$0"
+    '';
+    shell = lib.getExe' ksh "ksh";
+    bashOptions = [ ];
+    expected = ''
+      #!${shell}
+    '';
+  };
 }
