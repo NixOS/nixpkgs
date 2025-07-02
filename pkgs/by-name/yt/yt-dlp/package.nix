@@ -5,6 +5,8 @@
   ffmpeg-headless,
   rtmpdump,
   atomicparsley,
+  pandoc,
+  installShellFiles,
   atomicparsleySupport ? true,
   ffmpegSupport ? true,
   rtmpSupport ? true,
@@ -27,8 +29,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-dwBe6oXh7G67kfiI6BqiC0ZHzleR7QlfMiTVXWYW85I=";
   };
 
-  build-system = with python3Packages; [
-    hatchling
+  build-system = with python3Packages; [ hatchling ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    pandoc
   ];
 
   # expose optional-dependencies, but provide all features
@@ -53,6 +58,21 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "websockets" ];
 
+  preBuild = ''
+    python devscripts/make_lazy_extractors.py
+  '';
+
+  postBuild = ''
+    python devscripts/prepare_manpage.py yt-dlp.1.temp.md
+    pandoc -s -f markdown-smart -t man yt-dlp.1.temp.md -o yt-dlp.1
+    rm yt-dlp.1.temp.md
+
+    mkdir -p completions/{bash,fish,zsh}
+    python devscripts/bash-completion.py completions/bash/yt-dlp
+    python devscripts/zsh-completion.py completions/zsh/_yt-dlp
+    python devscripts/fish-completion.py completions/fish/yt-dlp.fish
+  '';
+
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
   # - rtmpdump: download files over RTMP
@@ -69,16 +89,23 @@ python3Packages.buildPythonApplication rec {
       ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''
     ];
 
-  setupPyBuildFlags = [
-    "build_lazy_extractors"
-  ];
-
   # Requires network
   doCheck = false;
 
-  postInstall = lib.optionalString withAlias ''
-    ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
-  '';
+  postInstall =
+    ''
+      installManPage yt-dlp.1
+
+      installShellCompletion \
+        --bash completions/bash/yt-dlp \
+        --fish completions/fish/yt-dlp.fish \
+        --zsh completions/zsh/_yt-dlp
+
+      install -Dm644 Changelog.md README.md -t "$out/share/doc/yt_dlp"
+    ''
+    + lib.optionalString withAlias ''
+      ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
+    '';
 
   passthru.updateScript = nix-update-script { };
 
