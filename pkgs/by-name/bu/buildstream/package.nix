@@ -8,6 +8,7 @@
   fuse3,
   lzip,
   patch,
+  protobuf_27,
 
   # tests
   addBinToPathHook,
@@ -20,14 +21,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "buildstream";
-  version = "2.4.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "buildstream";
     tag = version;
-    hash = "sha256-6a0VzYO5yj7EHvAb0xa4xZ0dgBKjFcwKv2F4o93oahY=";
+    hash = "sha256-/kGmAHx10//iVeqLXwcIWNI9FGIi0LlNJW+s6v0yU3Q=";
   };
 
   build-system = with python3Packages; [
@@ -71,7 +72,9 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     addBinToPathHook
-    buildbox
+    (buildbox.override {
+      protobuf = protobuf_27;
+    })
     gitMinimal
     python3Packages.pexpect
     python3Packages.pyftpdlib
