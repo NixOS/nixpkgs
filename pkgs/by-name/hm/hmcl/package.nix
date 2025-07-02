@@ -41,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   icon = fetchurl {
-    url = "https://github.com/huanghongxun/HMCL/raw/release-${finalAttrs.version}/HMCLauncher/HMCL/HMCL.ico";
-    hash = "sha256-+EYL33VAzKHOMp9iXoJaSGZfv+ymDDYIx6i/1o47Dmc=";
+    url = "https://github.com/huanghongxun/HMCL/raw/release-${finalAttrs.version}/HMCL/src/main/resources/assets/img/icon@8x.png";
+    hash = "sha256-1OVq4ujA2ZHboB7zEk7004kYgl9YcoM4qLq154MZMGo=";
   };
 
   dontUnpack = true;
@@ -72,8 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/hmcl}
     cp $src $out/lib/hmcl/hmcl.jar
-    magick ${finalAttrs.icon} hmcl.png
-    install -Dm644 hmcl-1.png $out/share/icons/hicolor/32x32/apps/hmcl.png
+
+    for n in 16 32 48 64 96 128 256
+    do
+      size=$n"x"$n
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      magick ${finalAttrs.icon} -resize $size $out/share/icons/hicolor/$size/apps/hmcl.png
+    done
 
     runHook postInstall
   '';
