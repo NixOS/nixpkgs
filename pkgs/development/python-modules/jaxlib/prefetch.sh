@@ -6,7 +6,7 @@ prefetch() {
     url=$(NIX_PATH=.. nix-instantiate --eval -E "$expr" | jq -r)
     echo "$url"
     sha256=$(nix-prefetch-url "$url")
-    nix hash convert --to sri --hash-algo sha256 "$sha256"
+    nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$sha256"
     echo
 }
 
