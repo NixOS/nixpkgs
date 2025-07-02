@@ -6,14 +6,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gost";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "go-gost";
     repo = "gost";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ep3ZjD+eVKl3PuooDuYeur8xDAcyy6ww2I7f3cYG03o=";
   };
 
@@ -40,4 +40,4 @@ buildGoModule rec {
     ];
     mainProgram = "gost";
   };
-}
+})
