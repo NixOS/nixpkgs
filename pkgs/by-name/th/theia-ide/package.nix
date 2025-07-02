@@ -82,6 +82,8 @@ stdenv.mkDerivation rec {
   env = {
     # DEBUG = "electron-rebuild";
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+    # `gyp verb get node dir` requires node headers
     npm_config_nodedir = "${nodejs}";
   };
 
