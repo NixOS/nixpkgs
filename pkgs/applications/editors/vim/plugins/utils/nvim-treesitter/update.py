@@ -119,7 +119,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     generated = update_grammars()
-    output_path = Path(__file__).parent.parent / "nvim-treesitter/generated.nix"
+    output_path = Path(__file__).parent.parent.parent / "nvim-treesitter/generated.nix"
     log.info("Writing output to %s", output_path)
     with open(output_path, "w") as f:
         f.write(generated)
