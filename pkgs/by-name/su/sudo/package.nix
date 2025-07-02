@@ -17,13 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sudo";
   # be sure to check if nixos/modules/security/sudo.nix needs updating when bumping
   # e.g. links to man pages, value constraints etc.
-  version = "1.9.17";
+  version = "1.9.17p1";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/sudo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-PyEsadU01YIrSS0JmrsCpZP5HKmfWv3ly5vT4dza0Gk=";
+    hash = "sha256-/2B+pxcHIZdzinj3eGks1t+afj5ARWX1HeBjyidFXTI=";
   };
 
   prePatch = ''
