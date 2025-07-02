@@ -37,6 +37,7 @@ in
   libX11,
 
   vmopts ? null,
+  forceWayland ? false,
 }:
 
 let
@@ -82,10 +83,14 @@ let
       inherit
         pname
         jdk
-        extraWrapperArgs
         extraBuildInputs
         ;
-      extraLdPath = extraLdPath ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libGL ];
+      extraWrapperArgs =
+        extraWrapperArgs
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && forceWayland) [
+          ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
+        ];
+      extraLdPath = extraLdPath ++ lib.optionals stdenv.hostPlatform.isLinux [ libGL ];
       src =
         if fromSource then
           communitySources."${pname}"
@@ -151,6 +156,18 @@ let
       }
     );
 
+  patchSharedLibs = lib.optionalString stdenv.hostPlatform.isLinux ''
+    ls -d \
+      $out/*/bin/*/linux/*/lib/liblldb.so \
+      $out/*/bin/*/linux/*/lib/python3.8/lib-dynload/* \
+      $out/*/plugins/*/bin/*/linux/*/lib/liblldb.so \
+      $out/*/plugins/*/bin/*/linux/*/lib/python3.8/lib-dynload/* |
+    xargs patchelf \
+      --replace-needed libssl.so.10 libssl.so \
+      --replace-needed libcrypto.so.10 libcrypto.so \
+      --replace-needed libcrypt.so.1 libcrypt.so \
+      ${lib.optionalString stdenv.hostPlatform.isAarch "--replace-needed libxml2.so.2 libxml2.so"}
+  '';
 in
 rec {
   # Sorted alphabetically
@@ -167,7 +184,7 @@ rec {
     (mkJetBrainsProduct {
       pname = "clion";
       extraBuildInputs =
-        lib.optionals (stdenv.hostPlatform.isLinux) [
+        lib.optionals stdenv.hostPlatform.isLinux [
           fontconfig
           python3
           stdenv.cc.cc
@@ -176,7 +193,7 @@ rec {
           lttng-ust_2_12
           musl
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
           expat
           libxml2
           xz
@@ -185,35 +202,17 @@ rec {
       (attrs: {
         postInstall =
           (attrs.postInstall or "")
-          + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-            (
-              cd $out/clion
-
-              for dir in plugins/clion-radler/DotFiles/linux-*; do
-                rm -rf $dir/dotnet
-                ln -s ${dotnet-sdk}/share/dotnet $dir/dotnet
-              done
-            )
+          + lib.optionalString stdenv.hostPlatform.isLinux ''
+            for dir in $out/clion/plugins/clion-radler/DotFiles/linux-*; do
+              rm -rf $dir/dotnet
+              ln -s ${dotnet-sdk}/share/dotnet $dir/dotnet
+            done
           '';
 
-        postFixup =
-          (attrs.postFixup or "")
-          + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-            (
-              cd $out/clion
-
-              # I think the included gdb has a couple of patches, so we patch it instead of replacing
-              ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
-              xargs patchelf \
-                --replace-needed libssl.so.10 libssl.so \
-                --replace-needed libcrypto.so.10 libcrypto.so
-
-              ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
-              xargs patchelf \
-                --replace-needed libssl.so.10 libssl.so \
-                --replace-needed libcrypto.so.10 libcrypto.so
-            )
-          '';
+        postFixup = ''
+          ${attrs.postFixup or ""}
+          ${patchSharedLibs}
+        '';
       });
 
   datagrip = mkJetBrainsProduct {
@@ -326,7 +325,7 @@ rec {
         lttng-ust_2_12
         musl
       ]
-      ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
         expat
         libxml2
         xz
@@ -341,21 +340,13 @@ rec {
       (attrs: {
         postInstall =
           (attrs.postInstall or "")
-          + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-            (
-              cd $out/rider
+          + lib.optionalString stdenv.hostPlatform.isLinux ''
+            ${patchSharedLibs}
 
-              ls -d $PWD/plugins/cidr-debugger-plugin/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
-              xargs patchelf \
-                --replace-needed libssl.so.10 libssl.so \
-                --replace-needed libcrypto.so.10 libcrypto.so \
-                --replace-needed libcrypt.so.1 libcrypt.so
-
-              for dir in lib/ReSharperHost/linux-*; do
-                rm -rf $dir/dotnet
-                ln -s ${dotnet-sdk}/share/dotnet $dir/dotnet
-              done
-            )
+            for dir in $out/rider/lib/ReSharperHost/linux-*; do
+              rm -rf $dir/dotnet
+              ln -s ${dotnet-sdk}/share/dotnet $dir/dotnet
+            done
           '';
       });
 
@@ -371,38 +362,24 @@ rec {
     (mkJetBrainsProduct {
       pname = "rust-rover";
       extraBuildInputs =
-        lib.optionals (stdenv.hostPlatform.isLinux) [
+        lib.optionals stdenv.hostPlatform.isLinux [
           python3
           openssl
           libxcrypt-legacy
           fontconfig
           xorg.libX11
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
           expat
           libxml2
           xz
         ];
     }).overrideAttrs
       (attrs: {
-        postFixup =
-          (attrs.postFixup or "")
-          + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-            (
-              cd $out/rust-rover
-
-              # Copied over from clion (gdb seems to have a couple of patches)
-              ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
-              xargs patchelf \
-                --replace-needed libssl.so.10 libssl.so \
-                --replace-needed libcrypto.so.10 libcrypto.so
-
-              ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
-              xargs patchelf \
-                --replace-needed libssl.so.10 libssl.so \
-                --replace-needed libcrypto.so.10 libcrypto.so
-            )
-          '';
+        postFixup = ''
+          ${attrs.postFixup or ""}
+          ${patchSharedLibs}
+        '';
       });
 
   webstorm = mkJetBrainsProduct {
