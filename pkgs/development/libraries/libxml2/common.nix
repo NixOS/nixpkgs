@@ -4,9 +4,7 @@
   lib,
   pkg-config,
   autoreconfHook,
-  libintl,
   python3,
-  gettext,
   ncurses,
   findXMLCatalogs,
   libiconv,
@@ -36,7 +34,6 @@
 }:
 
 let
-  python = python3;
   # libxml2 is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
   # that does not propagate xcrun.
   stdenv' = if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
@@ -78,16 +75,8 @@ stdenv'.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optionals pythonSupport [
-      python
-    ]
-    ++ lib.optionals (pythonSupport && python ? isPy2 && python.isPy2) [
-      gettext
-    ]
-    ++ lib.optionals (pythonSupport && python ? isPy3 && python.isPy3) [
       ncurses
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport && python ? isPy2 && python.isPy2) [
-      libintl
+      python3
     ]
     ++ lib.optionals zlibSupport [
       zlib
@@ -111,15 +100,15 @@ stdenv'.mkDerivation (finalAttrs: {
       (lib.enableFeature enableShared "shared")
       (lib.withFeature icuSupport "icu")
       (lib.withFeature pythonSupport "python")
-      (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
+      (lib.optionalString pythonSupport "PYTHON=${python3.pythonOnBuildForHost.interpreter}")
     ]
     # avoid rebuilds, can be merged into list in version bumps
     ++ lib.optional enableHttp "--with-http"
     ++ lib.optional zlibSupport "--with-zlib";
 
   installFlags = lib.optionals pythonSupport [
-    "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
-    "pyexecdir=\"${placeholder "py"}/${python.sitePackages}\""
+    "pythondir=\"${placeholder "py"}/${python3.sitePackages}\""
+    "pyexecdir=\"${placeholder "py"}/${python3.sitePackages}\""
   ];
 
   enableParallelBuilding = true;
@@ -134,7 +123,7 @@ stdenv'.mkDerivation (finalAttrs: {
   '';
 
   preInstall = lib.optionalString pythonSupport ''
-    substituteInPlace python/libxml2mod.la --replace-fail "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
+    substituteInPlace python/libxml2mod.la --replace-fail "$dev/${python3.sitePackages}" "$py/${python3.sitePackages}"
   '';
 
   postFixup =
