@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "neko";
-  version = "2.4.1";
+  version = "2-4-1";
 
   src = fetchFromGitHub {
     owner = "HaxeFoundation";
