@@ -8966,6 +8966,7 @@
     github = "gavinrogers";
     githubId = 2430469;
     name = "Gavin Rogers";
+  };
   gax = {
     email = "mail@maxgenson.de";
     github = "backtail";
