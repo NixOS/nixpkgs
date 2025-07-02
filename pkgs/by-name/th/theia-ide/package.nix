@@ -296,7 +296,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://theia-ide.org/#theiaidedownload";
 
     # https://github.com/eclipse-theia/theia-ide/issues/389#issuecomment-2939298127
-    licence = with lib.licenses; [ mit gpl2Only epl20 ];
+    license = with lib.licenses; [ mit gpl2Only epl20 ];
     maintainers = with lib.maintainers; [ goyalyashpal ];
 
     ## Build-related meta information
