@@ -123,8 +123,10 @@ stdenv.mkDerivation rec {
   # it is not possible to use substituteAll
   postPatch =
     ''
-      substituteInPlace src/emu/emuopts.cpp \
-        --subst-var-by mamePath "$out/opt/mame"
+      for file in src/emu/emuopts.cpp src/osd/modules/lib/osdobj_common.cpp; do
+        substituteInPlace "$file" \
+          --subst-var-by mamePath "$out/opt/mame"
+      done
     ''
     # MAME's build system uses `sw_vers` to test whether it needs to link with
     # the Metal framework or not. However:
