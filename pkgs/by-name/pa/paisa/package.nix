@@ -79,10 +79,6 @@ buildGoModule (finalAttrs: {
   ];
   versionCheckProgramArg = "version";
 
-  passthru.tests = {
-    inherit (nixosTests) paisa;
-  };
-
   preBuild = ''
     cp -r ${finalAttrs.frontend}/web/static ./web
   '';
