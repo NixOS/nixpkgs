@@ -324,7 +324,8 @@ in
       listenStreams = [ "/run/avahi-daemon/socket" ];
       wantedBy = [ "sockets.target" ];
       after = [
-        # Ensure that `/run/avahi-daemon` owned by `avahi` is created by `systemd.tmpfiles.rules` before the `avahi-daemon.socket`, otherwise `avahi-daemon.socket` will automatically create it owned by `root`, which will cause `avahi-daemon.service` to fail.
+        # Ensure that `/run/avahi-daemon` owned by `avahi` is created by `systemd.tmpfiles.rules` before the `avahi-daemon.socket`,
+        # otherwise `avahi-daemon.socket` will automatically create it owned by `root`, which will cause `avahi-daemon.service` to fail.
         "systemd-tmpfiles-setup.service"
       ];
     };
