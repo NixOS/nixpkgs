@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lttng-ust";
-  version = "2.13.9";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "lttng";
     repo = "lttng-ust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iwMhXUH569ey16C8F4HzU1ebZbn1oyDWOGpSIIokuGA=";
+    hash = "sha256-9WZDjOGfflEc6BUUO3W70KeLcZnTaePkF8eg8Ns/lQc=";
   };
 
   outputs = [
