@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "25.01.25";
+  version = "25.08.16";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YrnmhxD7Yf2LgdEaBU4mmRdvZdO6VQ6IAb4s+V9QvLM=";
+    hash = "sha256-PpMfiqUwG11H+7sLkp3sLzDWjco1OxYqGyfMAFojSPU=";
   };
 
   nativeBuildInputs = [
