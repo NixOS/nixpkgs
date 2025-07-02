@@ -11598,6 +11598,12 @@
     githubId = 17029738;
     name = "Jean-Charles Quillet";
   };
+  jed-richards = {
+    name = "Jed Richards";
+    email = "jed22richards+nixpkgs@gmail.com";
+    github = "jed-richards";
+    githubId = 123339450;
+  };
   jedsek = {
     email = "jedsek@qq.com";
     github = "Jedsek";
@@ -15200,6 +15206,15 @@
     github = "mahyarmirrashed";
     githubId = 59240843;
     name = "Mahyar Mirrashed";
+  };
+  maikotan = {
+    email = "maiko.tan.coding@gmail.com";
+    github = "MaikoTan";
+    githubId = 19927330;
+    name = "Maiko Tan";
+    keys = [
+      { fingerprint = "9C68 989F ECF9 8993 3225  96DD 970A 6794 990C 52AE"; }
+    ];
   };
   majesticmullet = {
     email = "hoccthomas@gmail.com.au";
@@ -19497,6 +19512,11 @@
     email = "pete.perickson@gmail.com";
     github = "petee";
     githubId = 89916;
+  };
+  Peter3579 = {
+    github = "Peter3579";
+    githubId = 170885528;
+    name = "Peter3579";
   };
   peterhoeg = {
     email = "peter@hoeg.com";

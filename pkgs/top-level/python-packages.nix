@@ -2897,6 +2897,8 @@ self: super: with self; {
 
   controku = callPackage ../development/python-modules/controku { };
 
+  control = callPackage ../development/python-modules/control { };
+
   convertdate = callPackage ../development/python-modules/convertdate { };
 
   convertertools = callPackage ../development/python-modules/convertertools { };
@@ -4882,6 +4884,8 @@ self: super: with self; {
 
   farama-notifications = callPackage ../development/python-modules/farama-notifications { };
 
+  fast-array-utils = callPackage ../development/python-modules/fast-array-utils { };
+
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fastai = callPackage ../development/python-modules/fastai { };
@@ -6357,9 +6361,15 @@ self: super: with self; {
 
   hatch-babel = callPackage ../development/python-modules/hatch-babel { };
 
+  hatch-docstring-description =
+    callPackage ../development/python-modules/hatch-docstring-description
+      { };
+
   hatch-fancy-pypi-readme = callPackage ../development/python-modules/hatch-fancy-pypi-readme { };
 
   hatch-jupyter-builder = callPackage ../development/python-modules/hatch-jupyter-builder { };
+
+  hatch-min-requirements = callPackage ../development/python-modules/hatch-min-requirements { };
 
   hatch-nodejs-version = callPackage ../development/python-modules/hatch-nodejs-version { };
 
@@ -8454,6 +8464,8 @@ self: super: with self; {
   llm-openrouter = callPackage ../development/python-modules/llm-openrouter { };
 
   llm-pdf-to-images = callPackage ../development/python-modules/llm-pdf-to-images { };
+
+  llm-perplexity = callPackage ../development/python-modules/llm-perplexity { };
 
   llm-sentence-transformers = callPackage ../development/python-modules/llm-sentence-transformers { };
 
