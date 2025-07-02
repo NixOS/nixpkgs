@@ -11,6 +11,7 @@
   scipy,
   setuptools-scm,
   setuptools,
+  slycot,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,8 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    # slycot is not in nixpkgs
-    # slycot = [ slycot ];
     cvxopt = [ cvxopt ];
+    slycot = [ slycot ];
   };
 
   nativeCheckInputs = [
