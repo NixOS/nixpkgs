@@ -32,6 +32,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "pytrainer";
   version = "2.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pytrainer";

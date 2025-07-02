@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "git-crecord";
   version = "20230226.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "andrewshadura";

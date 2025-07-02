@@ -25,6 +25,7 @@ let
         });
         python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
           version = "2.8.2";
+          format = "setuptools";
           pyproject = null;
           src = prev.src.override {
             inherit version;

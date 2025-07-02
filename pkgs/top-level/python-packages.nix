@@ -7348,7 +7348,10 @@ self: super: with self; {
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
-  jsonnet = buildPythonPackage { inherit (pkgs.jsonnet) name src; };
+  jsonnet = buildPythonPackage {
+    inherit (pkgs.jsonnet) name src;
+    format = "setuptools";
+  };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 

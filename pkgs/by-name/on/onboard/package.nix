@@ -40,6 +40,7 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "onboard";
   version = "${majorVersion}.1";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://launchpad.net/onboard/${majorVersion}/${version}/+download/${pname}-${version}.tar.gz";

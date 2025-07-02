@@ -8,6 +8,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   version = "0.19.1";
+  format = "setuptools";
   pname = "khard";
 
   src = fetchPypi {

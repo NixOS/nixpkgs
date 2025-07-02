@@ -11,6 +11,7 @@ with python3.pkgs;
 buildPythonApplication rec {
   pname = "watson";
   version = "2.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jazzband";

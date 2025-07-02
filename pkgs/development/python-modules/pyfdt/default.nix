@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyfdt";
   version = "0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

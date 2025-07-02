@@ -18,6 +18,7 @@ in
 python3Packages.buildPythonPackage rec {
   pname = "present";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

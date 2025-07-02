@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mutmut";
   version = "3.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "mutmut";

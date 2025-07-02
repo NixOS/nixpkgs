@@ -16,6 +16,7 @@ in
 buildPythonApplication rec {
   pname = "lesspass-cli";
   version = "9.1.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = repo;

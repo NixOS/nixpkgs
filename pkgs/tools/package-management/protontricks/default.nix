@@ -20,6 +20,7 @@
 buildPythonApplication rec {
   pname = "protontricks";
   version = "1.12.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Matoking";

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pyahocorasick";
   version = "2.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "WojciechMula";

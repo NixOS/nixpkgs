@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "jnitrace";
   version = "3.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

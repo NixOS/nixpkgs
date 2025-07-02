@@ -24,6 +24,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nwg-panel";
   version = "0.10.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
