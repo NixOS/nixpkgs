@@ -10,7 +10,7 @@
   persistencedSha256 ? null,
   persistencedVersion ? null,
   fabricmanagerSha256 ? null,
-  fabricmanagerVersion ? version,
+  fabricmanagerVersion ? null,
   useGLVND ? true,
   useProfiles ? true,
   preferGtk2 ? false,
@@ -313,6 +313,8 @@ stdenv.mkDerivation (finalAttrs: {
       settingsVersion = if settingsVersion != null then settingsVersion else finalAttrs.version;
       persistencedVersion =
         if persistencedVersion != null then persistencedVersion else finalAttrs.version;
+      fabricmanagerVersion =
+        if fabricmanagerVersion != null then fabricmanagerVersion else finalAttrs.version;
       compressFirmware = false;
       ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
     }
