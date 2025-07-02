@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "apko";
   version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
-    repo = pname;
-    tag = "v${version}";
+    repo = "apko";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PRT29c7WqjkWR4hqzzz8ek5IytsS3ntDlPQ/tzpARCk=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -32,7 +32,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${finalAttrs.version}"
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
@@ -69,7 +69,7 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/apko --help
-    $out/bin/apko version 2>&1 | grep "v${version}"
+    $out/bin/apko version 2>&1 | grep "v${finalAttrs.version}"
 
     runHook postInstallCheck
   '';
@@ -86,4 +86,4 @@ buildGoModule rec {
       emilylange
     ];
   };
-}
+})
