@@ -6,6 +6,7 @@
   writableTmpDirAsHomeHook,
   installShellFiles,
   versionCheckHook,
+  buildPackages,
 }:
 
 buildGoModule (finalAttrs: {
@@ -63,12 +64,20 @@ buildGoModule (finalAttrs: {
     "-skip=TestInitDB_ChainguardDiscovery"
   ];
 
-  postInstall = ''
-    installShellCompletion --cmd apko \
-      --bash <($out/bin/apko completion bash) \
-      --fish <($out/bin/apko completion fish) \
-      --zsh <($out/bin/apko completion zsh)
-  '';
+  postInstall =
+    let
+      apko =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.apko;
+    in
+    ''
+      installShellCompletion --cmd apko \
+        --bash <(${apko}/bin/apko completion bash) \
+        --fish <(${apko}/bin/apko completion fish) \
+        --zsh <(${apko}/bin/apko completion zsh)
+    '';
 
   nativeCheckInstallInputs = [ versionCheckHook ];
   doInstallCheck = true;
