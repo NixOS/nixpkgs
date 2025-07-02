@@ -1,11 +1,12 @@
 {
   stdenv,
+  darwin,
   lib,
   fetchFromGitLab,
   pkg-config,
   autoreconfHook,
   libintl,
-  python,
+  python3,
   gettext,
   ncurses,
   findXMLCatalogs,
@@ -31,7 +32,13 @@
   enableHttp ? false,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  python = python3;
+  # libxml2 is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
+  # that does not propagate xcrun.
+  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "libxml2";
   version = "2.14.5";
 
