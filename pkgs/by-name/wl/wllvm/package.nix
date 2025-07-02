@@ -6,6 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   version = "1.3.1";
+  format = "setuptools";
   pname = "wllvm";
 
   src = fetchPypi {

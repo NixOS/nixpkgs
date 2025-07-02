@@ -9,6 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "cvehound";
   version = "1.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "evdenis";

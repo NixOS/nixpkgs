@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "parsley";
   version = "1.3";
+  format = "setuptools";
   src = fetchPypi {
     pname = "Parsley";
     inherit version;

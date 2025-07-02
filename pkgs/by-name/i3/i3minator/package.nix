@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "i3minator";
   version = "0.0.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "carlesso";

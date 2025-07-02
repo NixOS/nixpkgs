@@ -8,6 +8,7 @@ let
   pgdbconn = python3Packages.buildPythonPackage rec {
     pname = "pgdbconn";
     version = "0.8.0";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "perseas";
@@ -29,6 +30,7 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "pyrseas";
   version = "0.9.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "perseas";

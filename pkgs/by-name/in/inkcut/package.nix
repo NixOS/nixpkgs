@@ -10,6 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "inkcut";
   version = "2.1.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "inkcut";

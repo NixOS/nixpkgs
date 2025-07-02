@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "gh2md";
   version = "2.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

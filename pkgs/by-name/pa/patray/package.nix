@@ -8,6 +8,7 @@
 python312.pkgs.buildPythonApplication rec {
   pname = "patray";
   version = "0.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version pname;

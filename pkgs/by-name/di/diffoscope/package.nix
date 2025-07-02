@@ -107,6 +107,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
   version = "300";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
