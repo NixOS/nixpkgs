@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyhdfe" ];
 
   meta = {
-    description = "PyHDFE is a Python 3 implementation of algorithms for absorbing high dimensional fixed effects.";
+    description = "Python 3 implementation of algorithms for absorbing high dimensional fixed effects";
     homepage = "https://github.com/jeffgortmaker/pyhdfe";
     changelog = "https://github.com/jeffgortmaker/pyhdfe/releases/tag/v${version}";
     license = lib.licenses.mit;
