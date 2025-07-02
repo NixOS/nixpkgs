@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "gomp";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

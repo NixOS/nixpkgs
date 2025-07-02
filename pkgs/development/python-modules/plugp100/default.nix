@@ -19,6 +19,7 @@
 buildPythonPackage rec {
   pname = "plugp100";
   version = "5.1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "petretiandrea";

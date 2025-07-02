@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "urlwatch";
   version = "2.29";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thp";

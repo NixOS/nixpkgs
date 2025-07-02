@@ -11,6 +11,7 @@
 python3Packages.buildPythonPackage {
   pname = "pick-colour-picker";
   version = "unstable-2022-05-08";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";

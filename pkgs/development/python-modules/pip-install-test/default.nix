@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pip-install-test";
   version = "0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -36,6 +36,7 @@ with py.pkgs;
 buildPythonApplication rec {
   pname = "haxor-news";
   version = "unstable-2020-10-20";
+  format = "setuptools";
 
   # haven't done a stable release in 3+ years, but actively developed
   src = fetchFromGitHub {

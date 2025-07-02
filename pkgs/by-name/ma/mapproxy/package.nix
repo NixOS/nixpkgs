@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mapproxy";
   version = "4.1.2";
+  format = "setuptools";
   disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {

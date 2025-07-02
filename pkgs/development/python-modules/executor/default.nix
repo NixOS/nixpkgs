@@ -18,6 +18,7 @@
 buildPythonPackage rec {
   pname = "executor";
   version = "23.2";
+  format = "setuptools";
 
   # pipes is removed in python 3.13
   disabled = isPy27 || pythonAtLeast "3.13";
