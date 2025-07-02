@@ -23,7 +23,7 @@ for system in \
     aarch64-darwin; do
     tmp=$(mktemp -d)
     curl -fsSL -o $tmp/ibmcloud-cli $(nix-instantiate --eval -E "with import ./. {}; ibmcloud-cli.src.url" --system "$system" | tr -d '"')
-    hash=$(nix hash file $tmp/ibmcloud-cli)
+    hash=$(nix --extra-experimental-features nix-command hash file $tmp/ibmcloud-cli)
     update-source-version ibmcloud-cli $latestVersion $hash --system=$system --ignore-same-version
     rm -rf $tmp
 done

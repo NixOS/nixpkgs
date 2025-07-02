@@ -18,7 +18,7 @@ let
     "aarch64-linux" = "linux-arm64";
   };
   _platform = _supportedPlatforms."${stdenv.hostPlatform.system}";
-  # nix hash convert --to sri "sha256:`nix-prefetch-url --unpack https://updates.duplicati.com/stable/duplicati-2.1.0.5_stable_2025-03-04-linux-arm64-cli.zip`"
+  # nix --extra-experimental-features nix-command hash convert --to sri "sha256:`nix-prefetch-url --unpack https://updates.duplicati.com/stable/duplicati-2.1.0.5_stable_2025-03-04-linux-arm64-cli.zip`"
   _fileHashForSystem = {
     "armv7l-linux" = "sha256-FQQ07M0rwvxNkHPW6iK5WBTKgFrZ4LOP4vgINfmtq4k=";
     "x86_64-linux" = "sha256-1QspF/A3hOtqd8bVbSqClJIHUN9gBrd18J5qvZJLkQE=";
