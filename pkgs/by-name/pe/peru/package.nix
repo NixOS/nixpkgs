@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "peru";
   version = "1.3.3";
+  format = "setuptools";
 
   disabled = python3Packages.pythonOlder "3.5";
 

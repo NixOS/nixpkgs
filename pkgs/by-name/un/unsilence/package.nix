@@ -7,6 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "unsilence";
   version = "1.0.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lagmoellertim";

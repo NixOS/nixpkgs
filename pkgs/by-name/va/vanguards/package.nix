@@ -6,6 +6,7 @@
 python312Packages.buildPythonApplication {
   pname = "vanguards";
   version = "0.3.1-unstable-2023-10-31";
+  format = "setuptools";
 
   dependencies = [ python312Packages.stem ];
   #tries to access the network during the tests, which fails

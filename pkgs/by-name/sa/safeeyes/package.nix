@@ -19,6 +19,7 @@ with python3.pkgs;
 buildPythonApplication rec {
   pname = "safeeyes";
   version = "2.2.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

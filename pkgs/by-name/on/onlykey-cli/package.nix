@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-cli";
   version = "1.2.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

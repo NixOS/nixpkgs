@@ -6,6 +6,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dpt-rp1-py";
   version = "0.1.16";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "janten";

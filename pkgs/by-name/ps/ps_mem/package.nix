@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "ps_mem";
   version = "3.14";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pixelb";

@@ -24,6 +24,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dtrx";
   version = "8.5.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dtrx-py";

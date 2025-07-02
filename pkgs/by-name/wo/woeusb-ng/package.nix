@@ -13,6 +13,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "woeusb-ng";
   version = "0.2.12";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "WoeUSB";

@@ -9,6 +9,7 @@
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Moped";
   version = "0.7.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

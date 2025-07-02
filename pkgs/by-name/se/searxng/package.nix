@@ -39,6 +39,7 @@ python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
     version = "0-unstable-2025-06-28";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "searxng";

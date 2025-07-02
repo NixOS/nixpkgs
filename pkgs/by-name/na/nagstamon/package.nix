@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nagstamon";
   version = "3.16.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "HenriWahl";

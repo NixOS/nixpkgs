@@ -10,6 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "lxd-image-server";
   version = "0.0.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Avature";

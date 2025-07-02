@@ -6,6 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "seventeenlands";
   version = "0.1.43";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

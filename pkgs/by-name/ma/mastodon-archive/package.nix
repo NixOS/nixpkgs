@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mastodon-archive";
   version = "1.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kensanata";
