@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,21 +11,22 @@ let
   cfg = config.services.ocis;
 
   # Generate environment file content only if environment variables are defined
-  envFile = if cfg.environment != null then
-    pkgs.writeText "ocis.env" (concatStringsSep "\n"
-      (mapAttrsToList (name: value: "${name}=${toString value}")
-        cfg.environment))
-  else
-    null;
+  envFile =
+    if cfg.environment != null then
+      pkgs.writeText "ocis.env" (
+        concatStringsSep "\n" (mapAttrsToList (name: value: "${name}=${toString value}") cfg.environment)
+      )
+    else
+      null;
 
   # Setup script that runs once after package installation
   setupScript = pkgs.writeShellScript "ocis-setup" ''
     set -euo pipefail
 
     echo "Setting up ocis..."
-    # doesnt run if the config file has already been initialized 
-    if [[ -f "${cfg.stateDir}/config/ocis.yaml" ]]; then
-      echo "Config file ${cfg.stateDir}/config/ocis.yaml already exists, skipping setup"
+    # doesnt run if the config file has already been initialized
+    if [[ -f "${cfg.configDir}/ocis.yaml" ]]; then
+      echo "Config file ${cfg.configDir}/ocis.yaml already exists, skipping setup"
       exit 0
     fi
 
@@ -38,9 +44,7 @@ let
       export PROXY_TRANSPORT_TLS_CERT="${
         config.security.acme.certs.${cfg.useACMEHost}.directory
       }/fullchain.pem"
-      export PROXY_TRANSPORT_TLS_KEY="${
-        config.security.acme.certs.${cfg.useACMEHost}.directory
-      }/key.pem"
+      export PROXY_TRANSPORT_TLS_KEY="${config.security.acme.certs.${cfg.useACMEHost}.directory}/key.pem"
     ''}
 
     # Source user environment variables if provided
@@ -62,14 +66,13 @@ let
     ''}
 
     # Run the ocis binary with environment variables
-    ${cfg.package}/bin/ocis init --insecure ${
-      if cfg.insecure then "true" else "false"
-    }
+    ${cfg.package}/bin/ocis init --insecure ${if cfg.insecure then "true" else "false"}
 
     echo "ocis setup completed successfully"
   '';
 
-in {
+in
+{
   options.services.ocis = {
     enable = mkEnableOption "ocis service";
 
@@ -125,7 +128,7 @@ in {
       description = ''
         Environment variables to pass to the ocis service.
         These will be written to an environment file and sourced by the service.
-        Do not include secrets or sensitive values here - use environmentFile instead.     
+        Do not include secrets or sensitive values here - use environmentFile instead.
           {
             CS3_ALLOW_INSECURE = "true";
             GATEWAY_STORAGE_USERS_MOUNT_ID = "123";
@@ -200,7 +203,7 @@ in {
 
     configDir = mkOption {
       type = types.nullOr types.path;
-      default = "${cfg.stateDir}/config";
+      default = "/etc/ocis/config";
       description = ''
         Directory where ocis configuration files are stored.
         If specified, will be set as OCIS_CONFIG_DIR environment variable.
@@ -211,12 +214,12 @@ in {
 
   config = mkIf cfg.enable {
     # Ensure ACME certificates are available if useACMEHost is set
-    assertions = [{
-      assertion = cfg.useACMEHost == null || config.security.acme.certs
-        ? ${cfg.useACMEHost};
-      message =
-        "ACME certificate for host '${cfg.useACMEHost}' is not configured.";
-    }];
+    assertions = [
+      {
+        assertion = cfg.useACMEHost == null || config.security.acme.certs ? ${cfg.useACMEHost};
+        message = "ACME certificate for host '${cfg.useACMEHost}' is not configured.";
+      }
+    ];
 
     # Create user and group
     users.users.${cfg.user} = {
@@ -225,26 +228,27 @@ in {
       home = cfg.stateDir;
       createHome = true;
       description = "ocis service user";
-      extraGroups = optional (cfg.useACMEHost != null)
-        config.security.acme.certs.${cfg.useACMEHost}.group;
+      extraGroups = optional (
+        cfg.useACMEHost != null
+      ) config.security.acme.certs.${cfg.useACMEHost}.group;
     };
 
     users.groups.${cfg.group} = { };
 
     # Create necessary directories
-    systemd.tmpfiles.rules =
-      [ "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -" ]
-      ++ optional (cfg.configDir != null)
-      "d '${cfg.configDir}' 0750 ${cfg.user} ${cfg.group} - -";
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.configDir}' 0750 ${cfg.user} ${cfg.group} - -"
+    ];
 
     # Setup service that runs once
     systemd.services.ocis-setup = {
       description = "ocis Initial Setup";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ]
-        ++ optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
-      wants =
-        optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
+      after = [
+        "network.target"
+      ] ++ optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
+      wants = optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
 
       serviceConfig = {
         Type = "oneshot";
@@ -259,8 +263,7 @@ in {
         PrivateTmp = true;
         ProtectHome = true;
         ProtectSystem = "strict";
-        ReadWritePaths = [ cfg.stateDir ]
-          ++ optional (cfg.configDir != null) cfg.configDir;
+        ReadWritePaths = [ cfg.stateDir ] ++ optional (cfg.configDir != null) cfg.configDir;
       };
     };
 
@@ -268,10 +271,13 @@ in {
     systemd.services.ocis = {
       description = "ocis Server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "ocis-setup.service" ]
-        ++ optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
-      wants = [ "ocis-setup.service" ]
-        ++ optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
+      after = [
+        "network.target"
+        "ocis-setup.service"
+      ] ++ optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
+      wants = [
+        "ocis-setup.service"
+      ] ++ optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
       requires = [ "ocis-setup.service" ];
 
       serviceConfig = {
@@ -281,22 +287,20 @@ in {
         WorkingDirectory = cfg.stateDir;
 
         # Set built-in environment variables directly
-        Environment = [
-          "OCIS_URL=${cfg.url}"
-          "PROXY_HTTP_ADDR=${cfg.address}:${toString cfg.port}"
-        ] ++ optional (cfg.configDir != null)
-          [ "OCIS_CONFIG_DIR=${cfg.configDir}" ]
+        Environment =
+          [
+            "OCIS_URL=${cfg.url}"
+            "PROXY_HTTP_ADDR=${cfg.address}:${toString cfg.port}"
+          ]
+          ++ optional (cfg.configDir != null) [ "OCIS_CONFIG_DIR=${cfg.configDir}" ]
           ++ optional (cfg.useACMEHost != null) [
-            "PROXY_TRANSPORT_TLS_CERT=${
-              config.security.acme.certs.${cfg.useACMEHost}.directory
-            }/fullchain.pem"
-            "PROXY_TRANSPORT_TLS_KEY=${
-              config.security.acme.certs.${cfg.useACMEHost}.directory
-            }/key.pem"
+            "PROXY_TRANSPORT_TLS_CERT=${config.security.acme.certs.${cfg.useACMEHost}.directory}/fullchain.pem"
+            "PROXY_TRANSPORT_TLS_KEY=${config.security.acme.certs.${cfg.useACMEHost}.directory}/key.pem"
           ];
 
         # Load user-defined environment files
-        EnvironmentFile = optional (envFile != null) envFile
+        EnvironmentFile =
+          optional (envFile != null) envFile
           ++ optional (cfg.environmentFile != null) cfg.environmentFile;
 
         ExecStart = "${cfg.package}/bin/ocis server";
@@ -308,8 +312,7 @@ in {
         PrivateTmp = true;
         ProtectHome = true;
         ProtectSystem = "strict";
-        ReadWritePaths = [ cfg.stateDir ]
-          ++ optional (cfg.configDir != null) cfg.configDir;
+        ReadWritePaths = [ cfg.stateDir ] ++ optional (cfg.configDir != null) cfg.configDir;
 
         # Additional hardening
         ProtectKernelTunables = true;
@@ -323,6 +326,10 @@ in {
     };
 
   };
-  meta.maintainers = with lib.maintainers; [ bhankas danth ramblurr ];
+  meta.maintainers = with lib.maintainers; [
+    bhankas
+    danth
+    ramblurr
+  ];
 
 }

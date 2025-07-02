@@ -33,17 +33,17 @@ A very basic configuration may look like this:
 
 This will start the oCIS server and make it available at `https://0.0.0.0:9200`
 
-The oCIS will automatically initialize the oCIS server and generate a temporary admin 
+The oCIS will automatically initialize the oCIS server and generate a temporary admin
 password on first use, the password will be displayed in the journal for the service.
 
 `$ systemctl status ocis-setup` or `$ journalctl -u ocis-setup`
 
-the initialization routine will not run as long as the ocis.yaml exists in the 
+the initialization routine will not run as long as the ocis.yaml exists in the
 `services.ocis.configDir` to re-initialize oCIS simply remove the ocis.yaml file from that folder.
 
 You may need to pass `--insecure true` or provide the `OCIS_INSECURE = true;` to
 [`services.ocis.environment`][mod-envFile], if TLS certificates are generated
-and managed externally (e.g. if you are using oCIS behind reverse proxy). 
+and managed externally (e.g. if you are using oCIS behind reverse proxy).
 
 support for ACME Certificates is available via `ocis.useACMEHost = 'your.host.name';`
 
@@ -108,8 +108,8 @@ Configuration in (`services.ocis.environment`)[mod-env] overrides those from
 [`services.ocis.environmentFile`][mod-envFile] and will have highest
 precedence
 
-the `services.ocis.insecure` value will always override any value set since it is passed directly 
-as a CLI argument to the oCIS binary 
+the `services.ocis.insecure` value will always override any value set since it is passed directly
+as a CLI argument to the oCIS binary
 
 [mod-env]: #opt-services.ocis.environment
 [mod-envFile]: #opt-services.ocis.environmentFile
