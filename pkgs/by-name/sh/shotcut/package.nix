@@ -7,11 +7,11 @@
   frei0r,
   ladspaPlugins,
   gettext,
-  mlt,
   jack1,
   pkg-config,
   fftw,
   qt6,
+  qt6Packages,
   cmake,
   gitUpdater,
   ffmpeg,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     frei0r
     ladspaPlugins
     gettext
-    mlt
+    qt6Packages.mlt
     fftw
     qt6.qtbase
     qt6.qttools
@@ -54,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-mlt-ffmpeg-path.patch {
-      inherit mlt ffmpeg;
+      inherit ffmpeg;
+      mlt = qt6Packages.mlt;
     })
   ];
 
