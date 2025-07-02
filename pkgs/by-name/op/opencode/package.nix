@@ -10,12 +10,12 @@
 }:
 
 let
-  version = "0.1.169";
+  version = "0.1.176";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${version}";
-    hash = "sha256-XCtO89yj+ov+f1Quof4hCWxL8l4xcFkqRWFW808GiUs=";
+    hash = "sha256-AKC8nAOa+33nOGSNzlQdbw2ESy+fg0j1h0k29qCCzd8=";
   };
 
   opencode-tui = buildGoModule {
@@ -24,7 +24,7 @@ let
 
     sourceRoot = "source/packages/tui";
 
-    vendorHash = "sha256-jUxBlBP8eKyDXVvYIZhcrSMfUvGb8/mTPZiPxlCfwLs=";
+    vendorHash = "sha256-gkaxjMGoJfDX6QjDCn6SSyyO7/mRqYrh+IRhWeBzj48=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -38,10 +38,10 @@ let
   };
 
   opencode-node-modules-hash = {
-    "aarch64-darwin" = "sha256-5Y9bfzYaO1iwSgpkCwPuUCDRtG8uXwgKm98sq78HisI=";
-    "aarch64-linux" = "sha256-t7dcyPsWeqYJv4/DPP15bvVurVPGCXWXVPUfpk1+l1Q=";
-    "x86_64-darwin" = "sha256-qYljdz4iyl3aZBhVU+uIVx4ZsvY9ubTTLNxJ94TUkBo=";
-    "x86_64-linux" = "sha256-TYjcA7MTfOKkvTwGSK1SotMDIH9xag79dikf6hMF8us=";
+    "aarch64-darwin" = "sha256-ZI4wJvBeSejhHjyRsYqpfUvJ959WU01JCW+2HIBs3Cg=";
+    "aarch64-linux" = "sha256-g/IyhBxVyU39rh2R9SfmHwBi4oMS12bo60Apbay06v0=";
+    "x86_64-darwin" = "sha256-ckWsqrwJEpL1ejrOSp5wTGwQYsDapLH3imNnSOEHQSw=";
+    "x86_64-linux" = "sha256-Q3zlrS7kuyKJReuIFqsqG5yfDuwLwBoCm0hUpJo9hSU=";
   };
   node_modules = stdenv.mkDerivation {
     name = "opencode-${version}-node-modules";
@@ -57,11 +57,15 @@ let
     dontConfigure = true;
 
     buildPhase = ''
+
+      export HOME=$(mktemp -d)
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+
       bun install \
-        --no-cache \
-        --no-progress \
+        --filter=opencode \
+        --force \
         --frozen-lockfile \
-        --filter=opencode
+        --no-progress
     '';
 
     installPhase = ''
@@ -80,7 +84,7 @@ let
 
   modelsDevData = fetchurl {
     url = "https://models.dev/api.json";
-    sha256 = "sha256-+VpQjvOOtuoltE3n9MZn8d0srYDacOh6B4wM0RqBmBM=";
+    sha256 = "sha256-igxQOC+Hz2FnXIW/S4Px9WhRuBhcIQIHO+7U8jHU1TQ=";
   };
   bun-target = {
     "aarch64-darwin" = "bun-darwin-arm64";
