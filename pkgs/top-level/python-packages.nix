@@ -17277,6 +17277,8 @@ self: super: with self; {
 
   sly = callPackage ../development/python-modules/sly { };
 
+  slycot = callPackage ../development/python-modules/slycot { };
+
   smart-meter-texas = callPackage ../development/python-modules/smart-meter-texas { };
 
   smart-open = callPackage ../development/python-modules/smart-open { };
