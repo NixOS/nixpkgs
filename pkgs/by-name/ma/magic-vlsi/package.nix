@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  git,
   python3,
   m4,
   cairo,
@@ -15,14 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "magic-vlsi";
-  version = "8.3.529";
+  version = "8.3.530";
 
-  src = fetchurl {
-    url = "http://opencircuitdesign.com/magic/archive/magic-${version}.tgz";
-    sha256 = "sha256-O5NauR2TYRS2bzEVQlhCqkshlojIGqM1Y3KLN00YP40=";
+  src = fetchFromGitHub {
+    owner = "RTimothyEdwards";
+    repo = "magic";
+    tag = "${version}";
+    sha256 = "sha256-OQPOEDcU0BuGdI7+saOTntosa8+mQcGbZuwzIlvRBSk=";
+    leaveDotGit = true;
   };
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [
+    python3
+    git
+  ];
+
   buildInputs = [
     cairo
     libX11
@@ -44,6 +52,25 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs scripts/*
+  '';
+
+  postInstall = ''
+    # Fix necessary files missing in sys directory
+    mkdir -p $out/lib/magic/sys
+
+    shopt -s nullglob
+
+    for techfile in scmos/*.tech; do
+      install -Dm644 "$techfile" $out/lib/magic/sys/$(basename "$techfile")
+    done
+
+    for dstylefile in scmos/*.dstyle; do
+      install -Dm644 "$dstylefile" $out/lib/magic/sys/$(basename "$dstylefile")
+    done
+
+    for cmapfile in scmos/*.cmap; do
+      install -Dm644 "$cmapfile" $out/lib/magic/sys/$(basename "$cmapfile")
+    done
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
