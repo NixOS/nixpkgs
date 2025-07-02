@@ -11171,9 +11171,13 @@ with pkgs;
     callPackage ../os-specific/linux/kmod/signer.nix {
       inherit (buildPackages) kmod;
       inherit (buildPackages.linuxPackages) module-signing;
-      inherit (args) modules pubKeyPath privKeyPathOrUri hashAlgorithm;
-    }
-  ;
+      inherit (args)
+        modules
+        pubKeyPath
+        privKeyPathOrUri
+        hashAlgorithm
+        ;
+    };
 
   nushell = callPackage ../shells/nushell { };
 

@@ -332,18 +332,20 @@ in
       apply =
         let
           kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
-          modulesUnsigned = modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
+          modulesUnsigned =
+            modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
         in
         if config.boot.kernelModuleSigning.enable then
-          modules: (pkgs.signModules {
+          modules:
+          (pkgs.signModules {
             modules = modulesUnsigned modules;
             pubKeyPath = config.boot.kernelModuleSigning.publicKeyPath;
             privKeyPathOrUri = config.boot.kernelModuleSigning.privateKeyPathOrUri;
             hashAlgorithm = config.boot.kernelModuleSigning.hashAlgorithm;
-          }).override { name = kernel-name + "-modules-signed"; }
+          }).override
+            { name = kernel-name + "-modules-signed"; }
         else
-          modulesUnsigned
-      ;
+          modulesUnsigned;
     };
 
     system.requiredKernelConfig = mkOption {

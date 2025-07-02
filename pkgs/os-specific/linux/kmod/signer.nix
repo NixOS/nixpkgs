@@ -19,7 +19,13 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ python3 gzip xz zstd module-signing ];
+  nativeBuildInputs = [
+    python3
+    gzip
+    xz
+    zstd
+    module-signing
+  ];
 
   # this is based on aggregator, but has to make changes and therefore copies
   # instead of symlinks
