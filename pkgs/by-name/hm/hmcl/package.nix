@@ -28,20 +28,18 @@
   gobject-introspection,
 }:
 
-let
-  version = "3.6.12";
-  icon = fetchurl {
-    url = "https://github.com/huanghongxun/HMCL/raw/release-${version}/HMCLauncher/HMCL/HMCL.ico";
-    hash = "sha256-+EYL33VAzKHOMp9iXoJaSGZfv+ymDDYIx6i/1o47Dmc=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  inherit version;
+  version = "3.6.12";
 
   src = fetchurl {
-    url = "https://github.com/huanghongxun/HMCL/releases/download/release-${version}/HMCL-${version}.jar";
+    url = "https://github.com/huanghongxun/HMCL/releases/download/release-${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
     hash = "sha256-ofrG7CVZIODJoHE6owR9P7viBlChamYF5PEpFeeOH4E=";
+  };
+
+  icon = fetchurl {
+    url = "https://github.com/huanghongxun/HMCL/raw/release-${finalAttrs.version}/HMCLauncher/HMCL/HMCL.ico";
+    hash = "sha256-+EYL33VAzKHOMp9iXoJaSGZfv+ymDDYIx6i/1o47Dmc=";
   };
 
   dontUnpack = true;
@@ -71,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/hmcl}
     cp $src $out/lib/hmcl/hmcl.jar
-    magick ${icon} hmcl.png
+    magick ${finalAttrs.icon} hmcl.png
     install -Dm644 hmcl-1.png $out/share/icons/hicolor/32x32/apps/hmcl.png
 
     runHook postInstall
