@@ -186,7 +186,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tenacity";
     homepage = "https://tenacityaudio.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ irenes ];
+    maintainers = with lib.maintainers; [
+      irenes
+      niklaskorz
+    ];
     platforms = lib.platforms.unix;
   };
 })
