@@ -1,7 +1,7 @@
-import multiprocessing
 import os
 import shutil
 import subprocess
+from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
 
 from test_driver.errors import MachineError
@@ -33,17 +33,19 @@ def perform_ocr_variants_on_screenshot(
     # Docs suggest to run it with OMP_THREAD_LIMIT=1 for hundreds of parallel
     # runs. Our average test run is somewhere inbetween.
     # https://github.com/tesseract-ocr/tesseract/issues/3109
-    processes = max(1, int(os.process_cpu_count() / 4))
-    with multiprocessing.Pool(processes=processes) as pool:
-        image_paths: list[Path] = [screenshot_path]
+    workers = max(1, int(os.process_cpu_count() / 4))
+    with ThreadPoolExecutor(max_workers=workers) as e:
+        # The idea here is to let the first tesseract call run on the raw image
+        # while the other two are preprocessed + tesseracted in parallel
+        future_results: list[Future] = [e.submit(_run_tesseract, screenshot_path)]
         if variants:
-            image_paths.extend(
-                pool.starmap(
-                    _preprocess_screenshot,
-                    [(screenshot_path, False), (screenshot_path, True)],
-                )
-            )
-        return pool.map(_run_tesseract, image_paths)
+
+            def tesseract_processed(inverted: bool) -> str:
+                return _run_tesseract(_preprocess_screenshot(screenshot_path, inverted))
+
+            future_results.append(e.submit(tesseract_processed, False))
+            future_results.append(e.submit(tesseract_processed, True))
+        return [future.result() for future in future_results]
 
 
 def _run_tesseract(image: Path) -> str:
