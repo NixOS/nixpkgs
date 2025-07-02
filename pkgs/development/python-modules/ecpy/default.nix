@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "ecpy";
   version = "1.2.5";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "ECPy";

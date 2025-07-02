@@ -12,6 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "kcc";
   version = "7.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ciromattia";

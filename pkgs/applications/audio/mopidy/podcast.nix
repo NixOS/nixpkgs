@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-podcast";
   version = "3.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

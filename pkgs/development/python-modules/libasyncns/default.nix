@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "libasyncns-python";
   version = "0.7.1";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://launchpad.net/libasyncns-python/trunk/${version}/+download/libasyncns-python-${version}.tar.bz2";

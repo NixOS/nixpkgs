@@ -8,6 +8,7 @@
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-musicbox-webclient";
   version = "3.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pimusicbox";

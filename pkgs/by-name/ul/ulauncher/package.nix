@@ -23,6 +23,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
   version = "5.15.7";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";

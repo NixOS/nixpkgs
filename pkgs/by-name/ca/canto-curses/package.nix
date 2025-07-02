@@ -10,6 +10,7 @@
 
 python3Packages.buildPythonApplication rec {
   version = "0.9.9";
+  format = "setuptools";
   pname = "canto-curses";
 
   src = fetchFromGitHub {

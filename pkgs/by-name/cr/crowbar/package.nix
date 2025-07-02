@@ -11,6 +11,7 @@
 python3Packages.buildPythonApplication {
   pname = "crowbar";
   version = "unstable-2020-04-23";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "galkan";

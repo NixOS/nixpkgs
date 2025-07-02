@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "rofi-mpd";
   version = "2.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";

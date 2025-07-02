@@ -10,6 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "git-machete";
   version = "3.36.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "virtuslab";

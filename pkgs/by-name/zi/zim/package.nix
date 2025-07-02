@@ -19,6 +19,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "zim";
   version = "0.76.3";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://zim-wiki.org/downloads/zim-${version}.tar.gz";

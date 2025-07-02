@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "eddy";
   version = "3.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "obdasystems";
