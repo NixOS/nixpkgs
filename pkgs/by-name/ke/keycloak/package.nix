@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
       ngerstle
       talyz
       nickcao
+      leona
     ];
   };
 
