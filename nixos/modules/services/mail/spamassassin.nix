@@ -183,6 +183,11 @@ in
         "sa-update.service"
       ];
 
+      reloadTriggers = [
+        config.environment.etc."mail/spamassassin/init.pre".source
+        config.environment.etc."mail/spamassassin/local.cf".source
+      ];
+
       serviceConfig = {
         User = "spamd";
         Group = "spamd";
