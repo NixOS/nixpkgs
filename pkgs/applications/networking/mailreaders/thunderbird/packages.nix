@@ -109,8 +109,8 @@ rec {
   thunderbird-128 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "128.11.1esr";
-    sha512 = "8fd99f68895b543bdc5bba38d7720f0e48e2a82c9fe5e8ca15534e3918cc40b5b2911666dbbbda0a7911783a03a0d8f7371ea353fd67416baca1e1dffdd25c44";
+    version = "128.12.0esr";
+    sha512 = "4566ae8347e959612a288524753416f5b730757f10a067b6eb11139055cc1fc5d63d49636e798e9b77588896c8dbc0f2acc189ebd29d95a5166e7bc8f2c35e30";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";
