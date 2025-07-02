@@ -67,7 +67,7 @@ jobs:
             const Bottleneck = require('bottleneck')
             const path = require('node:path')
             const { DefaultArtifactClient } = require('@actions/artifact')
-            const { readFile } = require('node:fs/promises')
+            const { readFile, writeFile } = require('node:fs/promises')
 
             const artifactClient = new DefaultArtifactClient()
 
@@ -339,19 +339,19 @@ jobs:
               if (context.payload.pull_request) {
                 await handle(context.payload.pull_request)
               } else {
-                const workflowData = (await github.rest.actions.listWorkflowRuns({
+                const lastRun = (await github.rest.actions.listWorkflowRuns({
                   ...context.repo,
                   workflow_id: 'labels.yml',
                   event: 'schedule',
                   status: 'success',
                   exclude_pull_requests: true,
                   per_page: 1
-                })).data
+                })).data.workflow_runs[0]
 
                 // Go back as far as the last successful run of this workflow to make sure
                 // we are not leaving anyone behind on GHA failures.
                 // Defaults to go back 1 hour on the first run.
-                const cutoff = new Date(workflowData.workflow_runs[0]?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000)
+                const cutoff = new Date(lastRun?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000)
                 core.info('cutoff timestamp: ' + cutoff.toISOString())
 
                 const updatedItems = await github.paginate(
@@ -367,46 +367,73 @@ jobs:
                   }
                 )
 
-                // The search endpoint only allows fetching the first 1000 records, but the
-                // list endpoints do not support counting the total number of results.
-                // Thus, we use /search for counting and /issues for reading the response.
-                const { total_count: total_items } = (await github.rest.search.issuesAndPullRequests({
-                  q: [
-                    `repo:"${process.env.GITHUB_REPOSITORY}"`,
-                    'is:open'
-                  ].join(' AND '),
-                  sort: 'created',
-                  direction: 'asc',
-                  // TODO: Remove in 2025-10, when it becomes the default.
-                  advanced_search: true,
-                  per_page: 1
-                })).data
-                const { total_count: total_runs } = workflowData
+                let cursor
+
+                // No workflow run available the first time.
+                if (lastRun) {
+                  // The cursor to iterate through the full list of issues and pull requests
+                  // is passed between jobs as an artifact.
+                  const artifact = (await github.rest.actions.listWorkflowRunArtifacts({
+                    ...context.repo,
+                    run_id: lastRun.id,
+                    name: 'pagination-cursor'
+                  })).data.artifacts[0]
+
+                  // If the artifact is not available, the next iteration starts at the beginning.
+                  if (artifact) {
+                    stats.artifacts++
+
+                    const { downloadPath } = await artifactClient.downloadArtifact(artifact.id, {
+                      findBy: {
+                        repositoryName: context.repo.repo,
+                        repositoryOwner: context.repo.owner,
+                        token: core.getInput('github-token')
+                      },
+                      expectedHash: artifact.digest
+                    })
+
+                    cursor = await readFile(path.resolve(downloadPath, 'cursor'), 'utf-8')
+                  }
+                }
 
                 // From GitHub's API docs:
                 //   GitHub's REST API considers every pull request an issue, but not every issue is a pull request.
                 //   For this reason, "Issues" endpoints may return both issues and pull requests in the response.
                 //   You can identify pull requests by the pull_request key.
-                const allItems = (await github.rest.issues.listForRepo({
+                const allItems = await github.rest.issues.listForRepo({
                   ...context.repo,
                   state: 'open',
                   sort: 'created',
                   direction: 'asc',
                   per_page: 100,
-                  // We iterate through pages of 100 items across scheduled runs. With currently ~7000 open PRs,
-                  // 10000 open Issues and up to 6*24=144 scheduled runs per day, we hit every items a little less
-                  // than once a day.
-                  // We might not hit every item on one iteration, because the pages will shift slightly when
-                  // items are closed or merged. We assume this to be OK on the bigger scale, because an item which was
-                  // missed once, would have to move through the whole page to be missed again. This is very unlikely,
-                  // so it should certainly be hit on the next iteration.
-                  // TODO: Evaluate after a while, whether the above holds still true and potentially implement
-                  // an overlap between runs.
-                  page: (total_runs % Math.ceil(total_items / 100)) + 1
-                })).data
+                  after: cursor
+                })
+
+                // Regex taken and comment adjusted from:
+                // https://github.com/octokit/plugin-paginate-rest.js/blob/8e5da25f975d2f31dda6b8b588d71f2c768a8df2/src/iterator.ts#L36-L41
+                // `allItems.headers.link` format:
+                //   <https://api.github.com/repositories/4542716/issues?page=3&per_page=100&after=Y3Vyc29yOnYyOpLPAAABl8qNnYDOvnSJxA%3D%3D>; rel="next",
+                //   <https://api.github.com/repositories/4542716/issues?page=1&per_page=100&before=Y3Vyc29yOnYyOpLPAAABl8xFV9DOvoouJg%3D%3D>; rel="prev"
+                // Sets `next` to undefined if "next" URL is not present or `link` header is not set.
+                const next = ((allItems.headers.link ?? '').match(/<([^<>]+)>;\s*rel="next"/) ?? [])[1]
+                if (next) {
+                  cursor = new URL(next).searchParams.get('after')
+                  const uploadPath = path.resolve('cursor')
+                  await writeFile(uploadPath, cursor, 'utf-8')
+                  // No stats.artifacts++, because this does not allow passing a custom token.
+                  // Thus, the upload will not happen with the app token, but the default github.token.
+                  await artifactClient.uploadArtifact(
+                    'pagination-cursor',
+                    [uploadPath],
+                    path.resolve('.'),
+                    {
+                      retentionDays: 1
+                    }
+                  )
+                }
 
                 // Some items might be in both search results, so filtering out duplicates as well.
-                const items = [].concat(updatedItems, allItems)
+                const items = [].concat(updatedItems, allItems.data)
                   .filter((thisItem, idx, arr) => idx == arr.findIndex(firstItem => firstItem.number == thisItem.number))
 
                 ;(await Promise.allSettled(items.map(handle)))
