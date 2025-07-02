@@ -228,6 +228,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  LibDeflate-nvim = buildVimPlugin {
+    pname = "LibDeflate.nvim";
+    version = "2025-06-16";
+    src = fetchFromGitHub {
+      owner = "goropikari";
+      repo = "LibDeflate.nvim";
+      rev = "c51cd94acf5bc7d3b75b1e202cf5fdac011fee46";
+      sha256 = "00007arhm8lvjxl2yz03i00czc010p6qf35xhnwjp3h9bylnzdjl";
+    };
+    meta.homepage = "https://github.com/goropikari/LibDeflate.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   LuaSnip-snippets-nvim = buildVimPlugin {
     pname = "LuaSnip-snippets.nvim";
     version = "2022-03-17";
@@ -12348,6 +12361,19 @@ final: prev: {
       sha256 = "0az48a3slpzljb69d60cpahkshmdbss0snc8lmvf4yrc1gx8yncv";
     };
     meta.homepage = "https://github.com/motus/pig.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  plantuml-nvim = buildVimPlugin {
+    pname = "plantuml.nvim";
+    version = "2025-06-16";
+    src = fetchFromGitHub {
+      owner = "goropikari";
+      repo = "plantuml.nvim";
+      rev = "66d4dca1b8607be646ed532521ba0f04095361c4";
+      sha256 = "0b39pmf8wkpi29va6qc2zhj1d0wc8wp6zcmn731xw649r2ysyd6n";
+    };
+    meta.homepage = "https://github.com/goropikari/plantuml.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
