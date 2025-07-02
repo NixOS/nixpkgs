@@ -26,13 +26,13 @@
   xorg,
 }:
 let
-  version = "2.16.3";
+  version = "2.17.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-mtzr/rRzcYcZl9tUkhxEKoFQWm1QTToOYZJXhynwDmk=";
+    hash = "sha256-6FvP/HgomsPxqCtKrZFxMlD2fFyT2e/JII2L7ANiOao=";
   };
 
   python = python3.override {
@@ -69,7 +69,7 @@ let
 
       pnpmDeps = pnpm.fetchDeps {
         inherit pname version src;
-        hash = "sha256-Z7c+AstVnxbPnEhc51qSqOYhRXqNJVwTvgHFcFp+pYg=";
+        hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
       };
 
       nativeBuildInputs =

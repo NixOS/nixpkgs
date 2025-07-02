@@ -6,13 +6,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-lsp";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "supabase-community";
     repo = "postgres-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-H97FC4GmUktLFhLjrgHHwmX+qu014nIw2ccVIc54GiQ=";
+    hash = "sha256-ckD2IoG4jHd+IppCpl6VJN8Z3Dj2iiR7Uv9uBTy823s=";
     fetchSubmodules = true;
   };
 

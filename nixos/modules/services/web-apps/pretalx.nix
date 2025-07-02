@@ -434,7 +434,7 @@ in
               "redis-pretalx.service"
             ]
             ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
-              "postgresql.service"
+              "postgresql.target"
             ]
             ++ lib.optionals (cfg.settings.database.backend == "mysql") [
               "mysql.service"
@@ -484,7 +484,7 @@ in
                 "redis-pretalx.service"
               ]
               ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
-                "postgresql.service"
+                "postgresql.target"
               ]
               ++ lib.optionals (cfg.settings.database.backend == "mysql") [
                 "mysql.service"

@@ -169,8 +169,8 @@ in
 
     systemd.services.atticd = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ] ++ lib.optionals hasLocalPostgresDB [ "postgresql.service" ];
-      requires = lib.optionals hasLocalPostgresDB [ "postgresql.service" ];
+      after = [ "network-online.target" ] ++ lib.optionals hasLocalPostgresDB [ "postgresql.target" ];
+      requires = lib.optionals hasLocalPostgresDB [ "postgresql.target" ];
       wants = [ "network-online.target" ];
 
       serviceConfig = {

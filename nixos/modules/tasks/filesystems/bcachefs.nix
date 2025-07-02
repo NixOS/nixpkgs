@@ -93,19 +93,35 @@ let
     let
       mountUnit = "${utils.escapeSystemdPath (prefix + (lib.removeSuffix "/" fs.mountPoint))}.mount";
       device = firstDevice fs;
-      deviceUnit = "${utils.escapeSystemdPath device}.device";
+      mkDeviceUnit = device: "${utils.escapeSystemdPath device}.device";
+      deviceUnit = mkDeviceUnit device;
+      extractProperty =
+        prop: options: (map (lib.removePrefix "${prop}=") (builtins.filter (lib.hasPrefix prop) options));
+      mkMountUnit = path: "${utils.escapeSystemdPath path}.mount";
+      normalizeUnits =
+        unit:
+        if lib.hasPrefix "/dev/" unit then
+          mkDeviceUnit unit
+        else if lib.hasPrefix "/" unit then
+          mkMountUnit unit
+        else
+          unit;
+      requiredUnits = map normalizeUnits (extractProperty "x-systemd.requires" fs.options);
+      wantedUnits = map normalizeUnits (extractProperty "x-systemd.wants" fs.options);
     in
     {
       name = "unlock-bcachefs-${utils.escapeSystemdPath fs.mountPoint}";
       value = {
         description = "Unlock bcachefs for ${fs.mountPoint}";
         requiredBy = [ mountUnit ];
-        after = [ deviceUnit ];
+        after = [ deviceUnit ] ++ requiredUnits ++ wantedUnits;
         before = [
           mountUnit
           "shutdown.target"
         ];
         bindsTo = [ deviceUnit ];
+        requires = requiredUnits;
+        wants = wantedUnits;
         conflicts = [ "shutdown.target" ];
         unitConfig.DefaultDependencies = false;
         serviceConfig = {
@@ -206,13 +222,18 @@ in
 
       (lib.mkIf ((config.boot.initrd.supportedFilesystems.bcachefs or false) || (bootFs != { })) {
         inherit assertions;
-        # chacha20 and poly1305 are required only for decryption attempts
-        boot.initrd.availableKernelModules = [
-          "bcachefs"
-          "sha256"
-          "chacha20"
-          "poly1305"
-        ];
+        boot.initrd.availableKernelModules =
+          [
+            "bcachefs"
+            "sha256"
+          ]
+          ++ lib.optionals (config.boot.kernelPackages.kernel.kernelOlder "6.15") [
+            # chacha20 and poly1305 are required only for decryption attempts
+            # kernel 6.15 uses kernel api libraries for poly1305/chacha20: 4bf4b5046de0ef7f9dc50f3a9ef8a6dcda178a6d
+            # kernel 6.16 removes poly1305: ceef731b0e22df80a13d67773ae9afd55a971f9e
+            "poly1305"
+            "chacha20"
+          ];
         boot.initrd.systemd.extraBin = {
           # do we need this? boot/systemd.nix:566 & boot/systemd/initrd.nix:357
           "bcachefs" = "${pkgs.bcachefs-tools}/bin/bcachefs";

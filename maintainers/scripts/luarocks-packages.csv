@@ -45,6 +45,7 @@ lpeg,,,,,,vyp
 lpeg_patterns,,,,,,
 lpeglabel,,,,1.6.0,,
 lrexlib-gnu,,,,,,
+lrexlib-oniguruma,,,,,,junestepp
 lrexlib-pcre,,,,,,vyp
 lrexlib-posix,,,,,,
 lsp-progress.nvim,,,,,,gepbird

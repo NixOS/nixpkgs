@@ -263,6 +263,8 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         mock_run.assert_called_with(
             [
                 "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
                 "copy",
                 "--copy-flag",
                 "--from",
@@ -293,9 +295,21 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_edit(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
-    # Flake
+    with monkeypatch.context() as mp:
+        default_nix = tmpdir / "default.nix"
+        default_nix.write_text("{}", encoding="utf-8")
+
+        mp.setenv("NIXOS_CONFIG", str(tmpdir))
+        mp.setenv("EDITOR", "editor")
+
+        n.edit()
+        mock_run.assert_called_with(["editor", default_nix], check=False)
+
+
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_editd_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
     flake = m.Flake.parse(f"{tmpdir}#attr")
-    n.edit(flake, {"commit_lock_file": True})
+    n.edit_flake(flake, {"commit_lock_file": True})
     mock_run.assert_called_with(
         [
             "nix",
@@ -308,17 +322,6 @@ def test_edit(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
         ],
         check=False,
     )
-
-    # Classic
-    with monkeypatch.context() as mp:
-        default_nix = tmpdir / "default.nix"
-        default_nix.write_text("{}", encoding="utf-8")
-
-        mp.setenv("NIXOS_CONFIG", str(tmpdir))
-        mp.setenv("EDITOR", "editor")
-
-        n.edit(None)
-        mock_run.assert_called_with(["editor", default_nix], check=False)
 
 
 @patch(
@@ -577,18 +580,18 @@ def test_list_generations(mock_get_generations: Mock, tmp_path: Path) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_repl(mock_run: Mock) -> None:
-    n.repl("attr", m.BuildAttr("<nixpkgs/nixos>", None), {"nix_flag": True})
+    n.repl(m.BuildAttr("<nixpkgs/nixos>", None), {"nix_flag": True})
     mock_run.assert_called_with(
         ["nix", "repl", "--file", "<nixpkgs/nixos>", "--nix-flag"]
     )
 
-    n.repl("attr", m.BuildAttr(Path("file.nix"), "myAttr"))
+    n.repl(m.BuildAttr(Path("file.nix"), "myAttr"))
     mock_run.assert_called_with(["nix", "repl", "--file", Path("file.nix"), "myAttr"])
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_repl_flake(mock_run: Mock) -> None:
-    n.repl_flake("attr", m.Flake(Path("flake.nix"), "myAttr"), {"nix_flag": True})
+    n.repl_flake(m.Flake(Path("flake.nix"), "myAttr"), {"nix_flag": True})
     # See nixos-rebuild-ng.tests.repl for a better test,
     # this is mostly for sanity check
     assert mock_run.call_count == 1

@@ -4,22 +4,24 @@
   fetchFromGitHub,
   pkg-config,
   wrapGAppsHook4,
+  gtk4,
   gtk4-layer-shell,
+  hyprland,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprshell";
-  version = "4.2.13";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "H3rmt";
     repo = "hyprshell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OgIeNlD2YcW5lWAQvqMvOphIxbIpGOL2WNQmtAGCsbQ=";
+    hash = "sha256-AfOG2MCHRp/p894mJhCRRGTLd+DpWKAp3Epf5dR7S/E=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-/f1AzpuzhVLeSbemgpXkh/ag33bsRMg3lrRPKVGOcK8=";
+  cargoHash = "sha256-+yjqbTPmfqXGJ85J2+Muhe2/mL1UyBi2XdafY9Mp+Os=";
 
   nativeBuildInputs = [
     wrapGAppsHook4
@@ -27,15 +29,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    gtk4
     gtk4-layer-shell
   ];
 
   meta = {
-    description = "CLI/GUI that allows switching between windows in Hyprland";
+    description = "Modern GTK4-based window switcher and application launcher for Hyprland";
     mainProgram = "hyprshell";
     homepage = "https://github.com/H3rmt/hyprshell";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = hyprland.meta.platforms;
     maintainers = with lib.maintainers; [ arminius-smh ];
   };
 })

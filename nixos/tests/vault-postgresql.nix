@@ -25,7 +25,7 @@
 
       systemd.services.vault = {
         after = [
-          "postgresql.service"
+          "postgresql.target"
         ];
         # Try for about 10 minutes rather than the default of 5 attempts.
         serviceConfig.RestartSec = 1;

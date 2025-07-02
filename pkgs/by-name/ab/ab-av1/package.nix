@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "alexheretic";
     repo = "ab-av1";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-uW5BXUNzk94bqSWQSaCiuSO8Angwt0eo4ZmvGRr/4S8=";
   };
 
@@ -29,12 +29,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/ab-av1 print-completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "AV1 re-encoding using ffmpeg, svt-av1 & vmaf";
     homepage = "https://github.com/alexheretic/ab-av1";
     changelog = "https://github.com/alexheretic/ab-av1/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "ab-av1";
   };
 }

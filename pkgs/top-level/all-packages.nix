@@ -340,10 +340,6 @@ with pkgs;
     ];
   } ../build-support/setup-hooks/gog-unpack.sh;
 
-  buf = callPackage ../by-name/bu/buf/package.nix {
-    buildGoModule = buildGo123Module;
-  };
-
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSEnv = buildFHSEnvBubblewrap;
@@ -513,8 +509,6 @@ with pkgs;
   dupeguru = callPackage ../applications/misc/dupeguru {
     python3Packages = python311Packages;
   };
-
-  qdmr = libsForQt5.callPackage ../applications/radio/qdmr { };
 
   fetchbower = callPackage ../build-support/fetchbower { };
 
@@ -1235,10 +1229,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  breitbandmessung = callPackage ../applications/networking/breitbandmessung {
-    electron = electron_34;
-  };
-
   ### APPLICATIONS/VERSION-MANAGEMENT
 
   git = callPackage ../applications/version-management/git {
@@ -1893,10 +1883,6 @@ with pkgs;
 
   asmrepl = callPackage ../development/interpreters/asmrepl { };
 
-  atlas = callPackage ../by-name/at/atlas/package.nix {
-    buildGoModule = buildGo123Module;
-  };
-
   avahi = callPackage ../development/libraries/avahi { };
 
   avahi-compat = callPackage ../development/libraries/avahi {
@@ -1964,8 +1950,6 @@ with pkgs;
   brasero-unwrapped = callPackage ../tools/cd-dvd/brasero { };
 
   brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
-
-  btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
 
   bsh = fetchurl {
     url = "http://www.beanshell.org/bsh-2.0b5.jar";
@@ -2548,15 +2532,15 @@ with pkgs;
   circus = with python310Packages; toPythonApplication circus;
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
-    citrix_workspace_23_09_0
     citrix_workspace_23_11_0
     citrix_workspace_24_02_0
     citrix_workspace_24_05_0
     citrix_workspace_24_08_0
     citrix_workspace_24_11_0
     citrix_workspace_25_03_0
+    citrix_workspace_25_05_0
     ;
-  citrix_workspace = citrix_workspace_25_03_0;
+  citrix_workspace = citrix_workspace_25_05_0;
 
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
@@ -2877,8 +2861,6 @@ with pkgs;
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
 
-  vorta = qt6Packages.callPackage ../applications/backup/vorta { };
-
   xkcdpass = with python3Packages; toPythonApplication xkcdpass;
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
@@ -3021,16 +3003,16 @@ with pkgs;
 
   gandi-cli = python3Packages.callPackage ../tools/networking/gandi-cli { };
 
-  gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
-
   inherit (callPackages ../tools/filesystems/garage { })
     garage
-    garage_0_8
     garage_0_9
-    garage_0_8_7
     garage_0_9_4
+
     garage_1_2_0
-    garage_1_x
+    garage_1
+
+    garage_2_0_0
+    garage_2
     ;
 
   gaugePlugins = recurseIntoAttrs (callPackage ../by-name/ga/gauge/plugins { });
@@ -3062,8 +3044,6 @@ with pkgs;
 
   gitlab-workhorse = callPackage ../by-name/gi/gitlab/gitlab-workhorse { };
 
-  gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
-
   glogg = libsForQt5.callPackage ../tools/text/glogg { };
 
   gmrender-resurrect = callPackage ../tools/networking/gmrender-resurrect {
@@ -3075,16 +3055,6 @@ with pkgs;
       gst-plugins-ugly
       gst-libav
       ;
-  };
-
-  gnome-decoder = callPackage ../applications/graphics/gnome-decoder {
-    inherit (gst_all_1)
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-rs
-      ;
-    gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
   };
 
   gnome-panel-with-modules = callPackage ../by-name/gn/gnome-panel/wrapper.nix { };
@@ -3229,8 +3199,6 @@ with pkgs;
   gssdp_1_6 = callPackage ../development/libraries/gssdp/1.6.nix { };
 
   gssdp-tools = callPackage ../development/libraries/gssdp/tools.nix { };
-
-  gtkd = callPackage ../development/libraries/gtkd { dcompiler = ldc; };
 
   gup = callPackage ../development/tools/build-managers/gup { };
 
@@ -3733,10 +3701,6 @@ with pkgs;
     libtool = if stdenv.hostPlatform.isDarwin then cctools else libtool;
   };
 
-  mailutils = callPackage ../tools/networking/mailutils {
-    sasl = gsasl;
-  };
-
   man = man-db;
 
   mangohud = callPackage ../tools/graphics/mangohud {
@@ -3822,7 +3786,7 @@ with pkgs;
   };
 
   # Not in aliases because it wouldn't get picked up by callPackage
-  netbox = netbox_4_2;
+  netbox = netbox_4_3;
 
   netcap-nodpi = callPackage ../by-name/ne/netcap/package.nix {
     withDpi = false;
@@ -4427,8 +4391,6 @@ with pkgs;
   solc-select = with python3Packages; toPythonApplication solc-select;
 
   splot = haskell.lib.compose.justStaticExecutables haskellPackages.splot;
-
-  sourcehut = callPackage ../applications/version-management/sourcehut { };
 
   sshfs = sshfs-fuse; # added 2017-08-14
 
@@ -6867,6 +6829,7 @@ with pkgs;
     electron_34-bin
     electron_35-bin
     electron_36-bin
+    electron_37-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
@@ -6874,14 +6837,11 @@ with pkgs;
     electron-chromedriver_34
     electron-chromedriver_35
     electron-chromedriver_36
+    electron-chromedriver_37
     ;
 
   electron_33 = electron_33-bin;
-  electron_34 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_34 then
-      electron-source.electron_34
-    else
-      electron_34-bin;
+  electron_34 = electron_34-bin;
   electron_35 =
     if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_35 then
       electron-source.electron_35
@@ -6892,6 +6852,11 @@ with pkgs;
       electron-source.electron_36
     else
       electron_36-bin;
+  electron_37 =
+    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_37 then
+      electron-source.electron_37
+    else
+      electron_37-bin;
   electron = electron_35;
   electron-bin = electron_35-bin;
   electron-chromedriver = electron-chromedriver_35;
@@ -8417,15 +8382,17 @@ with pkgs;
 
   hspellDicts = callPackage ../development/libraries/hspell/dicts.nix { };
 
-  hunspellDicts = recurseIntoAttrs (
-    callPackages ../development/libraries/hunspell/dictionaries.nix { }
-  );
+  hunspellDicts = recurseIntoAttrs (callPackages ../by-name/hu/hunspell/dictionaries.nix { });
 
   hunspellDictsChromium = recurseIntoAttrs (
-    callPackages ../development/libraries/hunspell/dictionaries-chromium.nix { }
+    callPackages ../by-name/hu/hunspell/dictionaries-chromium.nix { }
   );
 
-  hunspellWithDicts = dicts: callPackage ../by-name/hu/hunspell/wrapper.nix { inherit dicts; };
+  hunspellWithDicts =
+    dicts:
+    lib.warn "hunspellWithDicts is deprecated, please use hunspell.withDicts instead."
+      hunspell.withDicts
+      (_: dicts);
 
   hydra = callPackage ../by-name/hy/hydra/package.nix { nix = nixVersions.nix_2_29; };
 
@@ -9161,26 +9128,23 @@ with pkgs;
   opencolorio = callPackage ../development/libraries/opencolorio { };
   opencolorio_1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
 
-  openstackclient = with python312Packages; toPythonApplication python-openstackclient;
+  openstackclient = with python313Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.cli-plugins;
   });
-  barbicanclient = with python312Packages; toPythonApplication python-barbicanclient;
-  glanceclient = with python312Packages; toPythonApplication python-glanceclient;
-  heatclient = with python312Packages; toPythonApplication python-heatclient;
-  ironicclient = with python312Packages; toPythonApplication python-ironicclient;
-  magnumclient = with python312Packages; toPythonApplication python-magnumclient;
-  manilaclient = with python312Packages; toPythonApplication python-manilaclient;
-  mistralclient = with python312Packages; toPythonApplication python-mistralclient;
-  swiftclient = with python312Packages; toPythonApplication python-swiftclient;
-  troveclient = with python312Packages; toPythonApplication python-troveclient;
-  watcherclient = with python312Packages; toPythonApplication python-watcherclient;
-  zunclient = with python312Packages; toPythonApplication python-zunclient;
+  barbicanclient = with python313Packages; toPythonApplication python-barbicanclient;
+  glanceclient = with python313Packages; toPythonApplication python-glanceclient;
+  heatclient = with python313Packages; toPythonApplication python-heatclient;
+  ironicclient = with python313Packages; toPythonApplication python-ironicclient;
+  magnumclient = with python313Packages; toPythonApplication python-magnumclient;
+  manilaclient = with python313Packages; toPythonApplication python-manilaclient;
+  mistralclient = with python313Packages; toPythonApplication python-mistralclient;
+  swiftclient = with python313Packages; toPythonApplication python-swiftclient;
+  troveclient = with python313Packages; toPythonApplication python-troveclient;
+  watcherclient = with python313Packages; toPythonApplication python-watcherclient;
+  zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_3_6
-    libressl_3_7
-    libressl_3_8
     libressl_3_9
     libressl_4_0
     ;
@@ -9268,7 +9232,6 @@ with pkgs;
       protobuf_30 = callPackage ../development/libraries/protobuf/30.nix { };
       protobuf_29 = callPackage ../development/libraries/protobuf/29.nix { };
       protobuf_27 = callPackage ../development/libraries/protobuf/27.nix { };
-      protobuf_26 = callPackage ../development/libraries/protobuf/26.nix { };
       protobuf_25 = callPackage ../development/libraries/protobuf/25.nix { };
       protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
       protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
@@ -9279,7 +9242,6 @@ with pkgs;
     protobuf_30
     protobuf_29
     protobuf_27
-    protobuf_26
     protobuf_25
     protobuf_24
     protobuf_21
@@ -9674,7 +9636,9 @@ with pkgs;
     hdf5 = hdf5.override { usev110Api = true; };
   };
 
-  vllm = with python3Packages; toPythonApplication vllm;
+  # Temporarily use python 3.12
+  # See: https://github.com/vllm-project/vllm/issues/12083
+  vllm = with python312Packages; toPythonApplication vllm;
 
   vte-gtk4 = vte.override {
     gtkVersion = "4";
@@ -10117,8 +10081,6 @@ with pkgs;
     };
 
   ### SERVERS
-
-  adguardhome = callPackage ../servers/adguardhome { };
 
   alerta = callPackage ../servers/monitoring/alerta/client.nix { };
 
@@ -10567,10 +10529,6 @@ with pkgs;
 
   mssql_jdbc = callPackage ../servers/sql/mssql/jdbc { };
   jtds_jdbc = callPackage ../servers/sql/mssql/jdbc/jtds.nix { };
-
-  miniflux = callPackage ../by-name/mi/miniflux/package.nix {
-    buildGoModule = buildGo123Module;
-  };
 
   inherit (callPackage ../servers/mir { })
     mir
@@ -11094,10 +11052,6 @@ with pkgs;
   linuxPackages-rt_latest = linuxKernel.packageAliases.linux_rt_latest;
   linux-rt = linuxPackages-rt.kernel;
   linux-rt_latest = linuxPackages-rt_latest.kernel;
-
-  # Amateur Radio kernel
-  linuxPackages_ham = linuxKernel.packages.linux_ham;
-  linux_ham = linuxPackages_ham.kernel;
 
   # hardened kernels
   linuxPackages_hardened = linuxKernel.packages.linux_hardened;
@@ -12235,12 +12189,11 @@ with pkgs;
 
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
-  gqrx = qt6Packages.callPackage ../applications/radio/gqrx { };
-  gqrx-portaudio = qt6Packages.callPackage ../applications/radio/gqrx {
+  gqrx-portaudio = gqrx.override {
     portaudioSupport = true;
     pulseaudioSupport = false;
   };
-  gqrx-gr-audio = qt6Packages.callPackage ../applications/radio/gqrx {
+  gqrx-gr-audio = gqrx.override {
     portaudioSupport = false;
     pulseaudioSupport = false;
   };
@@ -12323,6 +12276,18 @@ with pkgs;
           buildMozillaMach
           ;
       };
+  firefox-esr-140-unwrapped =
+    import ../applications/networking/browsers/firefox/packages/firefox-esr-140.nix
+      {
+        inherit
+          stdenv
+          lib
+          callPackage
+          fetchurl
+          nixosTests
+          buildMozillaMach
+          ;
+      };
   firefox-esr-unwrapped = firefox-esr-128-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
@@ -12332,6 +12297,11 @@ with pkgs;
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr-128 = wrapFirefox firefox-esr-128-unwrapped {
+    nameSuffix = "-esr";
+    wmClass = "firefox-esr";
+    icon = "firefox-esr";
+  };
+  firefox-esr-140 = wrapFirefox firefox-esr-140-unwrapped {
     nameSuffix = "-esr";
     wmClass = "firefox-esr";
     icon = "firefox-esr";
@@ -14297,7 +14267,7 @@ with pkgs;
 
   webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_36; };
 
-  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_34; };
+  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_36; };
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {
     stdenv = if stdenv.cc.isClang then gccStdenv else stdenv;
@@ -14333,7 +14303,7 @@ with pkgs;
   wgnord = callPackage ../applications/networking/wgnord/default.nix { };
 
   whalebird = callPackage ../applications/misc/whalebird {
-    electron = electron_34;
+    electron = electron_36;
   };
 
   inherit (windowmaker) dockapps;
@@ -14352,7 +14322,7 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
-  x2goclient = libsForQt5.callPackage ../applications/networking/remote/x2goclient { };
+  x2goclient = callPackage ../applications/networking/remote/x2goclient { };
 
   x2gokdriveclient = libsForQt5.callPackage ../applications/networking/remote/x2gokdriveclient { };
 
@@ -15606,9 +15576,8 @@ with pkgs;
     });
     stdenv = gccStdenv;
   };
-  cvc5 = callPackage ../applications/science/logic/cvc5 {
-    cadical = pkgs.cadical.override { version = "2.0.0"; };
-  };
+
+  cvc5 = callPackage ../applications/science/logic/cvc5 { };
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
     ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
@@ -16632,10 +16601,6 @@ with pkgs;
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
 
   inherit (callPackage ../applications/misc/zettlr { }) zettlr;
-
-  zrythm = callPackage ../applications/audio/zrythm {
-    inherit (plasma5Packages) breeze-icons;
-  };
 
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
 

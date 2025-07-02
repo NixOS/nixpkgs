@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
   cryptography,
   freezegun,
   pytestCheckHook,
@@ -11,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "jwt";
-  version = "1.3.1";
-  format = "setuptools";
+  version = "1.4.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    inherit version;
     owner = "GehirnInc";
     repo = "python-jwt";
-    rev = "v${version}";
-    hash = "sha256-N1J8yBVX/O+92cRp+q2gA2cFsd+C7JjUR9jo0VGoINg=";
+    tag = "v${version}";
+    hash = "sha256-Cv64SmhkETm8mx1Kj5u0WZpCPjPNvC+KS6/XaMzxCho=";
   };
 
   postPatch = ''
@@ -28,7 +29,9 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--flake8" ""
   '';
 
-  propagatedBuildInputs = [ cryptography ];
+  build-system = [ setuptools ];
+
+  dependencies = [ cryptography ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -38,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jwt" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON Web Token library for Python 3";
     homepage = "https://github.com/GehirnInc/python-jwt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thornycrackers ];
   };
 }

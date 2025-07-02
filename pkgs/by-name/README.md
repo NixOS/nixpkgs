@@ -140,8 +140,6 @@ You can locally emulate the CI check using
 $ ./ci/nixpkgs-vet.sh master
 ```
 
-See [here](../../.github/workflows/nixpkgs-vet.yml) for more info.
-
 ## Recommendation for new packages with multiple versions
 
 These checks of the `pkgs/by-name` structure can cause problems in combination:

@@ -254,7 +254,7 @@ in
         search_path = "\"$user\", public, vectors";
       };
     };
-    systemd.services.postgresql.serviceConfig.ExecStartPost =
+    systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
       let
         sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
           CREATE EXTENSION IF NOT EXISTS unaccent;

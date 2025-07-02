@@ -4,7 +4,6 @@
   cargo,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
   go,
   lib,
   libcap,
@@ -23,36 +22,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.27.0";
+  version = "2.29.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-TfiEc5Lptr0ntp4buEEWbQTvNkVjZbdMWDv8CEZa6IM=";
+    hash = "sha256-Oh3qV5/fQNLjv3qnhRrgRV0d+homlGmEpTSeou3lZfE=";
   };
-  patches = [
-    # Provide default args for LottieStatus::changed so moc can call it (#10420)
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/e5abe5714a5b506e398c088d21672f00d6f93240.patch";
-      hash = "sha256-DU5wQ1DDF8DbmMIlohoEIDJ7/9+9GVwrvsr51T9bGx8=";
-    })
-    # Remove Qt.labls.qmlmodels usage (#10422)
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/4497972b1bf7b7f215dc6c1227d76d6825f5b958.patch";
-      hash = "sha256-RPRdARM/jXSHmTGGjiOrfJ7KVejp3JmUfsN5pmKYPuY=";
-    })
-    # Qt compat: Make sure to include what we use
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/0909d43447a7ddbc6ec20d108637524552848bd6.patch";
-      hash = "sha256-Hpn69hQxa269XH+Ku/MYD2GwdFhfCX4yoVRCEDfIOKc=";
-    })
-    # Use QDesktopUnixServices after qt 6.9.0
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/10424/commits/81e66044388459ffe2b08804ab5a326586ac7113.patch";
-      hash = "sha256-+v3NoTAdkjKEyBPbbJZQ2d11hJMyE3E4B9uYUerVa7c=";
-    })
-  ];
+  patches = [ ];
 
   netfilter = buildGoModule {
     pname = "${finalAttrs.pname}-netfilter";
@@ -67,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-SGC+YT5ATV/ZaP/wrm3c31OQBw6Pk8ZSXjxEPFdP2f8=";
+    hash = "sha256-Flsa93Nko/sHr9z+YW7xDFMVLOzJE4oJFAl841gpPpw=";
   };
 
   buildInputs = [

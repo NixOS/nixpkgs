@@ -3,7 +3,6 @@
   cinnamon-desktop,
   cinnamon-settings-daemon,
   cinnamon-translations,
-  dbus-glib,
   glib,
   gsettings-desktop-schemas,
   gtk3,
@@ -43,10 +42,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-4uTKcmwfEytoAy4CFiOedYJqmPtBFBHk0P1gEGgm6pU=";
   };
 
-  patches = [
-    ./0001-Use-dbus_glib-instead-of-elogind.patch
-  ];
-
   buildInputs = [
     # meson.build
     cinnamon-desktop
@@ -68,8 +63,6 @@ stdenv.mkDerivation rec {
 
     # other (not meson.build)
     cinnamon-settings-daemon
-    dbus-glib
-    glib
     gsettings-desktop-schemas
     pythonEnv # for cinnamon-session-quit
   ];

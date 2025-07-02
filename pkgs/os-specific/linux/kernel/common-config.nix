@@ -398,6 +398,10 @@ let
         # Enable debugfs for wireless drivers
         CFG80211_DEBUGFS = yes;
         MAC80211_DEBUGFS = yes;
+
+        # HAM radio
+        HAMRADIO = yes;
+        AX25 = module;
       }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
         # Not enabled by default, hides modules behind it

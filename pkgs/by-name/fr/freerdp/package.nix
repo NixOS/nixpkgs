@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   writableTmpDirAsHomeHook,
   docbook-xsl-nons,
@@ -64,23 +63,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.15.0-unstable-2025-05-16";
+  version = "3.16.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-xz1vP58hElXe/jLVrJOSpXcbqShBV7LHRpzqPLa2fDU=";
+    hash = "sha256-HF4Is3ak2nYD2Fq6HGHwyM5OTBVqYqbB22otOprzfiQ=";
   };
-
-  patches = [
-    # Patch from https://github.com/FreeRDP/FreeRDP/pull/11439
-    # To be removed at the next release
-    (fetchpatch2 {
-      url = "https://github.com/FreeRDP/FreeRDP/commit/67fabc34dce7aa3543e152f78cb4ea88ac9d1244.patch";
-      hash = "sha256-kYCEjH1kXZJbg2sN6YNhh+y19HTTCaC7neof8DTKZ/8=";
-    })
-  ];
 
   postPatch =
     ''

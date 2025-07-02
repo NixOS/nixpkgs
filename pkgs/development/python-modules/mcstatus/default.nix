@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "mcstatus";
-  version = "12.0.1";
+  version = "12.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-mine";
     repo = "mcstatus";
     tag = "v${version}";
-    hash = "sha256-FSXELbEQYUUu2maWBFb5Fj7Y3zXqwmFQRAu+nNco0lQ=";
+    hash = "sha256-DWIpN7oBbb/F5aER0v0qhcQsDoa/EfizjHgy/BE2P6E=";
   };
 
   build-system = [ hatchling ];
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     description = "Python library for checking the status of Minecraft servers";
     mainProgram = "mcstatus";
     homepage = "https://github.com/py-mine/mcstatus";
-    changelog = "https://github.com/py-mine/mcstatus/releases/tag/v${version}";
+    changelog = "https://github.com/py-mine/mcstatus/releases/tag/${src.tag}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [
       fab

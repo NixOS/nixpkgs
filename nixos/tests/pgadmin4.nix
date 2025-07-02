@@ -55,7 +55,7 @@
 
   testScript = ''
     with subtest("Check pgadmin module"):
-      machine.wait_for_unit("postgresql")
+      machine.wait_for_unit("postgresql.target")
       machine.wait_for_unit("pgadmin")
       machine.wait_until_succeeds("curl -sS localhost:5051")
       machine.wait_until_succeeds("curl -sS localhost:5051/login | grep \"<title>pgAdmin 4</title>\" > /dev/null")
@@ -80,7 +80,7 @@
       machine.succeed("wget -nv --level=1 --spider --recursive localhost:5050/browser")
 
     with subtest("Check pgadmin minimum password length"):
-      machine2.wait_for_unit("postgresql")
+      machine2.wait_for_unit("postgresql.target")
       machine2.wait_for_console_text("Password must be at least 12 characters long")
   '';
 }

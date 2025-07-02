@@ -7,36 +7,32 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "nushell_plugin_highlight";
-  version = "1.4.5+0.104.0";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "nu_plugin_highlight";
+  version = "1.4.7+0.105.1";
 
   src = fetchFromGitHub {
-    repo = "nu-plugin-highlight";
     owner = "cptpiepmatz";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-B2CkdftlxczA6KHJsNmbPH7Grzq4MG7r6CRMvVTMkzQ=";
+    repo = "nu-plugin-highlight";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0jU0c2v3q3RXX/zZlwTBwAdO8HEaROFNV/F4GBFaMt0=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3bLATtK9r4iVpxdbg5eCvzeGpIqWMl/GTDGCORuQfgY=";
+  cargoHash = "sha256-UD1IzegajAG13iAOERymDa10JbuhvORVZ8gHy9d6buE=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  cargoBuildFlags = [ "--package nu_plugin_highlight" ];
 
-  checkPhase = ''
-    cargo test
-  '';
+  # there are no tests
+  doCheck = false;
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "A nushell plugin for syntax highlighting.";
     mainProgram = "nu_plugin_highlight";
     homepage = "https://github.com/cptpiepmatz/nu-plugin-highlight";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mgttlinger ];
-    platforms = with platforms; all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mgttlinger ];
   };
-}
+})

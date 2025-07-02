@@ -11,6 +11,7 @@
   harfbuzz,
   glib,
   ninja,
+  plutosvg,
   fixDarwinDylibNames,
 }:
 
@@ -39,13 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     harfbuzz
     glib
+    plutosvg
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "SDLTTF_STRICT" true)
     (lib.cmakeBool "SDLTTF_HARFBUZZ" true)
-    # disable plutosvg (not in nixpkgs)
-    (lib.cmakeBool "SDLTTF_PLUTOSVG" false)
+    (lib.cmakeBool "SDLTTF_PLUTOSVG" true)
   ];
 
   passthru = {

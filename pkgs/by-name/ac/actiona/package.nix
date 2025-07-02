@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Jmgr";
     repo = "actiona";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sJlzrrpmo2CbzChCtiyxqDtjoN58BN4Ptjm4sH83zAw=";
     fetchSubmodules = true;
   };

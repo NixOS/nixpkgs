@@ -11,13 +11,13 @@
 buildKodiBinaryAddon rec {
   pname = "inputstream-ffmpegdirect";
   namespace = "inputstream.ffmpegdirect";
-  version = "21.3.7";
+  version = "21.3.8";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.ffmpegdirect";
     rev = "${version}-${rel}";
-    sha256 = "sha256-s1Owbj95DT+RR8eBRwMuUHrJwr6JR05efx5M11vH8cQ=";
+    sha256 = "sha256-IgCSEJzu3a2un7FdiZCEVs/boxvIhSNleTPpOCljCZo=";
   };
 
   extraBuildInputs = [

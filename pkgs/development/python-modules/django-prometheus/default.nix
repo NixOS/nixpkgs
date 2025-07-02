@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-prometheus";
-  version = "2.4.0";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-commons";
     repo = "django-prometheus";
     tag = "v${version}";
-    hash = "sha256-cKkpsV3w2SUvQuSBm0MlTsomdrU4h7CS5L+nKFvrKA8=";
+    hash = "sha256-Bf1JSh9ibiPOa252IPld1FvHTPbCsB/amtlQdRQwoWY=";
   };
 
   postPatch = ''

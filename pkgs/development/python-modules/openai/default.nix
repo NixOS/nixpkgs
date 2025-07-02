@@ -19,6 +19,11 @@
   tqdm,
   typing-extensions,
 
+  # `httpx_aiohttp` not currently in `nixpkgs`
+  # optional-dependencies (aiohttp)
+  # aiohttp,
+  # httpx_aiohttp,
+
   # optional-dependencies (datalib)
   numpy,
   pandas,
@@ -47,7 +52,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.87.0";
+  version = "1.91.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -56,7 +61,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-KXvtAxkALZd/T5mVLkDemO7qQ7E2CLVmRpAg1+cRcdU=";
+    hash = "sha256-5thOFxXIStNowiEz9IacAkAC611zzXXs0ZB1tyuR+Go=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -81,6 +86,11 @@ buildPythonPackage rec {
     ++ lib.optionals withVoiceHelpers optional-dependencies.voice-helpers;
 
   optional-dependencies = {
+    # `httpx_aiohttp` not currently in `nixpkgs`
+    # aiohttp = [
+    #   aiohttp
+    #   httpx_aiohttp
+    # ];
     datalib = [
       numpy
       pandas

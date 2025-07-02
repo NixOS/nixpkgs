@@ -1,15 +1,13 @@
 {
   lib,
   fetchFromGitLab,
+  stdenv,
   glib,
-  gtk3,
+  gobject-introspection,
   meson,
   ninja,
   pkg-config,
-  gobject-introspection,
   vala,
-  stdenv,
-  wrapGAppsHook3,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "appmenu-glib-translator";
@@ -19,7 +17,6 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vala-panel-project";
     repo = "vala-panel-appmenu";
     tag = finalAttrs.version;
-    fetchSubmodules = true;
     hash = "sha256-v5J3nwViNiSKRPdJr+lhNUdKaPG82fShPDlnmix5tlY=";
   };
 
@@ -30,19 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
 
     pkg-config
-    wrapGAppsHook3
+    gobject-introspection
     vala
   ];
 
-  buildInputs = [
-    glib
-    gobject-introspection
-    gtk3
-  ];
+  propagatedBuildInputs = [ glib ];
 
   meta = {
-    description = "GTK module that strips menus from all GTK programs, converts to MenuModel and sends to AppMenu";
-    homepage = "https://gitlab.com/vala-panel-project/vala-panel-appmenu/-/tree/${finalAttrs.version}/subprojects/appmenu-gtk-module";
+    description = "Library for translating from DBusMenu to GMenuModel";
+    homepage = "https://gitlab.com/vala-panel-project/vala-panel-appmenu/-/tree/${finalAttrs.version}/subprojects/appmenu-glib-translator";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ perchun ];
     platforms = lib.platforms.linux;

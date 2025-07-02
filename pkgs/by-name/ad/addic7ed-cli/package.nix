@@ -22,12 +22,12 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "addic7ed_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Commandline access to addic7ed subtitles";
     homepage = "https://github.com/BenoitZugmeyer/addic7ed-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aethelz ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aethelz ];
+    platforms = lib.platforms.unix;
     mainProgram = "addic7ed";
   };
 }

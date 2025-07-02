@@ -27,9 +27,7 @@ mkMesonLibrary (finalAttrs: {
     [
       brotli
     ]
-    ++ lib.optional (lib.versionAtLeast version "2.27") [
-      libblake3
-    ]
+    ++ lib.optional (lib.versionAtLeast version "2.27") libblake3
     ++ [
       libsodium
       openssl

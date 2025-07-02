@@ -535,9 +535,9 @@ in
     };
 
     systemd.services.dependency-track-postgresql-init = lib.mkIf cfg.database.createLocally {
-      after = [ "postgresql.service" ];
+      after = [ "postgresql.target" ];
       before = [ "dependency-track.service" ];
-      bindsTo = [ "postgresql.service" ];
+      bindsTo = [ "postgresql.target" ];
       path = [ config.services.postgresql.package ];
       serviceConfig = {
         Type = "oneshot";
@@ -572,7 +572,7 @@ in
           if cfg.database.createLocally then
             [
               "dependency-track-postgresql-init.service"
-              "postgresql.service"
+              "postgresql.target"
             ]
           else
             [ ];

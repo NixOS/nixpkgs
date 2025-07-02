@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "djoser";
   version = "2.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sunscrapers";
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-xPhf7FiJSq5bHfAU5RKbobgnsRh/6cLcXP6vfrLdzJA=";
   };
 
-  buildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     django
     djangorestframework-simplejwt
     social-auth-app-django
-  ];
-
-  pyproject = true;
-
-  build-system = [
-    poetry-core
   ];
 
   # djet isn't packaged yet

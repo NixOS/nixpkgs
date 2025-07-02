@@ -8,13 +8,13 @@
 
 buildGoModule {
   pname = "alertmanager-ntfy";
-  version = "0-unstable-2025-05-31";
+  version = "0-unstable-2025-06-27";
 
   src = fetchFromGitHub {
     owner = "alexbakker";
     repo = "alertmanager-ntfy";
-    rev = "76d5f772f70d6915c89da00414c20009b03cc361";
-    hash = "sha256-newJ1fCMEE3gsZncWU899Q6cS6llPNwJlHT7HdLQZf8=";
+    rev = "dc4ef93f7db7f046a775ef3e4a2a462b2afcec6c";
+    hash = "sha256-J+T3Mt+40vhL3DVBKKH86l45AKSlkT7h+TrfhsWwMac=";
   };
 
   vendorHash = "sha256-e1JAoDNm2+xB/bZcEGr5l4+va8GIg1R8pdj3d+/Y+UY=";

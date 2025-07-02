@@ -4,9 +4,9 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  testers,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
   nix-update-script,
-  dprint,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -62,16 +62,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --fish <($out/bin/dprint completions fish)
     '';
 
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/dprint";
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+
   passthru = {
-    tests.version = testers.testVersion {
-      inherit (finalAttrs) version;
-
-      package = dprint;
-      command = ''
-        DPRINT_CACHE_DIR="$(mktemp --directory)" dprint --version
-      '';
-    };
-
     updateScript = nix-update-script { };
   };
 

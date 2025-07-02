@@ -15,7 +15,6 @@
   gtk3,
   hunspell,
   hunspellDicts,
-  hunspellWithDicts,
   intltool,
   isocodes,
   libappindicator-gtk3,
@@ -33,14 +32,11 @@
 
 let
 
-  customHunspell = hunspellWithDicts [
-    hunspellDicts.en-us
-  ];
+  customHunspell = hunspell.withDicts (di: [ di.en-us ]);
 
   majorVersion = "1.4";
 
 in
-
 python3.pkgs.buildPythonApplication rec {
   pname = "onboard";
   version = "${majorVersion}.1";
@@ -51,9 +47,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   patches = [
-    (replaceVars ./fix-paths.patch {
-      inherit mousetweaks;
-    })
+    (replaceVars ./fix-paths.patch { inherit mousetweaks; })
     # Allow loading hunspell dictionaries installed in NixOS system path
     ./hunspell-use-xdg-datadirs.patch
 
@@ -110,9 +104,7 @@ python3.pkgs.buildPythonApplication rec {
     systemd
   ];
 
-  propagatedUserEnvPkgs = [
-    dconf
-  ];
+  propagatedUserEnvPkgs = [ dconf ];
 
   nativeCheckInputs = [
     # for Onboard.SpellChecker.aspell_cmd doctests

@@ -22,10 +22,10 @@ python3Packages.buildPythonApplication {
     setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Architecture-level energy/area estimator for accelerator designs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://accelergy.mit.edu/";
-    maintainers = with maintainers; [ gdinh ];
+    maintainers = with lib.maintainers; [ gdinh ];
   };
 }

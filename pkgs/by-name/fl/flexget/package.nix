@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.16.5";
+  version = "3.16.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${version}";
-    hash = "sha256-tmxVk74eqN4qIe7cJF5IIWe7aXIH3Q2vi1galTF+FbI=";
+    hash = "sha256-LXlv/nZhZtkyUYg7UknXIyYsjqtYEeHVSzfwgNnwgwY=";
   };
 
   pythonRelaxDeps = true;

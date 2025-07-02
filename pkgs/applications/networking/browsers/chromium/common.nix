@@ -566,11 +566,12 @@ let
         # exact version or even running a newer version.
         ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
       ]
-      ++ lib.optionals (chromiumVersionAtLeast "137") [
+      ++ lib.optionals (versionRange "137" "138") [
         (fetchpatch {
           # Partial revert of upstream clang+llvm bump revert to fix the following error when building with LLVM < 21:
           #  clang++: error: unknown argument: '-fextend-variable-liveness=none'
           # https://chromium-review.googlesource.com/c/chromium/src/+/6514242
+          # Upstream relanded this in M138+ with <https://chromium-review.googlesource.com/c/chromium/src/+/6541127>.
           name = "chromium-137-llvm-19.patch";
           url = "https://chromium.googlesource.com/chromium/src/+/ddf8f8a465be2779bd826db57f1299ccd2f3aa25^!?format=TEXT";
           includes = [ "build/config/compiler/BUILD.gn" ];
@@ -579,11 +580,12 @@ let
           hash = "sha256-wAR8E4WKMvdkW8DzdKpyNpp4dynIsYAbnJ2MqE8V2o8=";
         })
       ]
-      ++ lib.optionals (chromiumVersionAtLeast "137") [
+      ++ lib.optionals (versionRange "137" "138") [
         (fetchpatch {
           # Backport "Fix build with system libpng" that fixes a typo in core/fxcodec/png/png_decoder.cpp that causes
           # the build to fail at the final linking step.
           # https://pdfium-review.googlesource.com/c/pdfium/+/132130
+          # Started shipping with M138+.
           name = "pdfium-Fix-build-with-system-libpng.patch";
           url = "https://pdfium.googlesource.com/pdfium.git/+/83f11d630aa1cb6d5ceb292364412f7b0585a201^!?format=TEXT";
           extraPrefix = "third_party/pdfium/";

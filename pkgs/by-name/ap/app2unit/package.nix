@@ -6,13 +6,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "app2unit";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "app2unit";
     tag = "v${version}";
-    sha256 = "fw6Vh3Jyop95TQdOFrpspbauSfqMpd0BZkZVc1k6+K0=";
+    sha256 = "sha256-CwiB/Co75BbVXem2XD2i7kccgjcDk8a0lXCOoz0QVIc=";
   };
 
   installPhase = ''

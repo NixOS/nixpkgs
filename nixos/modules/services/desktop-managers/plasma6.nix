@@ -166,6 +166,7 @@ in
             gwenview
             okular
             kate
+            ktexteditor # provides elevated actions for kate
             khelpcenter
             dolphin
             baloo-widgets # baloo information in Dolphin

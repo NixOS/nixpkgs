@@ -52,11 +52,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2122";
+  version = "2122.1";
 
   src = fetchzip {
     url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-isohwigDgqwPJxinBju1biAXC3CX3JrNJiQ1NY+NjRo=";
+    hash = "sha256-RQ8dgD09cWyVWGSLzHz1oJOKia1OKr2jHqYwKaVGfxE=";
   };
 
   nativeBuildInputs = [

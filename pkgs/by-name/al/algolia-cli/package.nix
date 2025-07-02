@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "algolia";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-j8OCN+iV5sMjgYTMGCc72JPImuFFvehKw4S99l+YWhs=";
   };
 

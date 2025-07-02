@@ -51,13 +51,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "0.25";
+  version = "25.6.1";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dDf+BW0AZMWRlWl0ye5s3Muurz+CiM3U5+bYgaFIT7M=";
+    hash = "sha256-DqgayLXI+RPIb8tLzJoHi+Z12px4pdzU50C0UBSa2u4=";
   };
 
   monado = applyPatches {
@@ -65,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "2a6932d46dad9aa957205e8a47ec2baa33041076";
-      hash = "sha256-Bus9GTNC4+nOSwN8pUsMaFsiXjlpHYioQfBLxbQEF+0=";
+      rev = "bb9bcee2a3be75592de819d9e3fb2c8ed27bb7dc";
+      hash = "sha256-+PiWxnvMXaSFc+67r17GBRXo7kbjikSElawNMJCydrk=";
     };
 
     postPatch = ''
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Let's make sure our monado source revision matches what is used by WiVRn upstream
   postUnpack = ''
     ourMonadoRev="${finalAttrs.monado.src.rev}"
-    theirMonadoRev=$(sed -n '/FetchContent_Declare(monado/,/)/p' ${finalAttrs.src.name}/CMakeLists.txt | grep "GIT_TAG" | awk '{print $2}')
+    theirMonadoRev=$(cat ${finalAttrs.src.name}/monado-rev)
     if [ ! "$theirMonadoRev" == "$ourMonadoRev" ]; then
       echo "Our Monado source revision doesn't match CMakeLists.txt." >&2
       echo "  theirs: $theirMonadoRev" >&2

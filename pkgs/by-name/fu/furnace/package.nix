@@ -29,14 +29,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "furnace";
-  version = "0.6.8.2";
+  version = "0.6.8.3";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-lhtuNYZySq5MHJiNIMNmUmGLjwE8696tpNyUoAvY94E=";
+    hash = "sha256-miS0CMeb0KNIsFtGBDM73U/mZyDhT6hQ6o4Vc0gVNM4=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''

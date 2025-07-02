@@ -2,7 +2,7 @@
   coreutils,
   fetchFromGitHub,
   lib,
-  python3,
+  python312,
   bash,
   openssl,
   nixosTests,
@@ -10,7 +10,7 @@
 }:
 
 let
-  python = python3;
+  python = python312;
 
 in
 python.pkgs.buildPythonApplication rec {

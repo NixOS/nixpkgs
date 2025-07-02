@@ -6,45 +6,41 @@
 
 buildXenPackage.override { inherit python3Packages; } {
   pname = "xen";
-  version = "4.19.1";
+  version = "4.20.0";
   patches = [
     (fetchpatch {
-      url = "https://lore.kernel.org/xen-devel/e2caa6648a0b6c429349a9826d8fbc4338222482.1733766758.git.andrii.sultanov@cloud.com/raw";
-      hash = "sha256-JC1ueXuC1Jdi2gtUsjOHmTeEx56zjotMMLde5vBonxc=";
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.20-01.patch";
+      hash = "sha256-go743oBhYDuxsK0Xc6nK/WxutQQwc2ERtLKhCU9Dnng=";
     })
     (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa467.patch";
-      hash = "sha256-O2IwfRo6BnXAO04xjKmOyrV6J6Q1mAVLHWNCxqIEQGU=";
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.20-02.patch";
+      hash = "sha256-FTtEGAPFYxsun38hLhVMKJ1TFJOsTMK3WWPkO0R/OHg=sha256-FTtEGAPFYxsun38hLhVMKJ1TFJOsTMK3WWPkO0R/OHg=";
     })
     (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-01.patch";
-      hash = "sha256-YUcp9QI49RM/7WCxYzpzppv+vKtyl/NvLy6rIX5hVMw=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-02.patch";
-      hash = "sha256-FTtEGAPFYxsun38hLhVMKJ1TFJOsTMK3WWPkO0R/OHg=";
-    })
-    (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-03.patch";
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.20-03.patch";
       hash = "sha256-UkYMSpUgFvr4GJPXLgQsCyppGkNbeiFMyCZORK5tfmA=";
     })
     (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-04.patch";
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.20-04.patch";
       hash = "sha256-lpiDPSHi+v2VfaWE9kp4+hveZKTzojD1F+RHsOtKE3A=";
     })
     (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-05.patch";
-      hash = "sha256-EKo9a5STX0mTRopoThe3+6gCWat+3XbguLr9QgMheZs=";
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.20-05.patch";
+      hash = "sha256-N+WR8S5w9dLISlOhMI71TOH8jvCgVAR8xm310k3ZA/M=";
     })
     (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-06.patch";
-      hash = "sha256-HU+4apyTZNIFZ9cySOEtNh0JBJDG3LjDLwMvQYq0src=";
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.20-06.patch";
+      hash = "sha256-ePuyB3VP9NfQbW36BP3jjMMHKJWFJGeTYUYZqy+IlHQ=";
     })
     (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.19-07.patch";
-      hash = "sha256-9S85nkQ9Nn0cMzyRe4KGrFUaLggVxXBeKhoFF4R0y78=";
+      url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.20-07.patch";
+      hash = "sha256-+BsCJa01R2lrbu7tEluGrYSAqu2jJcrpFNUoLMY466c=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa470.patch";
+      hash = "sha256-zhMZ6pCZtt0ocgsMFVqthMaof46lMMTaYmlepMXVJqM=";
     })
   ];
-  rev = "ccf400846780289ae779c62ef0c94757ff43bb60";
-  hash = "sha256-s0eCBCd6ybl+kLtXCC6E1sk++w7txXn/B/Cg5acQFfY=";
+  rev = "3ad5d648cda5add395f49fc3704b2552aae734f7";
+  hash = "sha256-v2DRJv+1bym8zAgU74lo1HQ/9rUcyK3qc4Eec4RpcEY=";
 }

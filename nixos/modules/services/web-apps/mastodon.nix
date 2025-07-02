@@ -126,10 +126,10 @@ let
     SystemCallArchitectures = "native";
   };
 
-  # Services that all Mastodon units After= and Requires= on
-  commonServices =
+  # Units that all Mastodon units After= and Requires= on
+  commonUnits =
     lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-    ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+    ++ lib.optional databaseActuallyCreateLocally "postgresql.target"
     ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
 
   envFile = pkgs.writeText "mastodon.env" (
@@ -170,8 +170,8 @@ let
         after = [
           "network.target"
           "mastodon-init-dirs.service"
-        ] ++ commonServices;
-        requires = [ "mastodon-init-dirs.service" ] ++ commonServices;
+        ] ++ commonUnits;
+        requires = [ "mastodon-init-dirs.service" ] ++ commonUnits;
         description = "Mastodon sidekiq${jobClassLabel}";
         wantedBy = [ "mastodon.target" ];
         environment = env // {
@@ -209,8 +209,8 @@ let
         after = [
           "network.target"
           "mastodon-init-dirs.service"
-        ] ++ commonServices;
-        requires = [ "mastodon-init-dirs.service" ] ++ commonServices;
+        ] ++ commonUnits;
+        requires = [ "mastodon-init-dirs.service" ] ++ commonUnits;
         wantedBy = [
           "mastodon.target"
           "mastodon-streaming.target"
@@ -998,18 +998,18 @@ in
           after = [
             "network.target"
             "mastodon-init-dirs.service"
-          ] ++ lib.optional databaseActuallyCreateLocally "postgresql.service";
+          ] ++ lib.optional databaseActuallyCreateLocally "postgresql.target";
           requires = [
             "mastodon-init-dirs.service"
-          ] ++ lib.optional databaseActuallyCreateLocally "postgresql.service";
+          ] ++ lib.optional databaseActuallyCreateLocally "postgresql.target";
         };
 
         systemd.services.mastodon-web = {
           after = [
             "network.target"
             "mastodon-init-dirs.service"
-          ] ++ commonServices;
-          requires = [ "mastodon-init-dirs.service" ] ++ commonServices;
+          ] ++ commonUnits;
+          requires = [ "mastodon-init-dirs.service" ] ++ commonUnits;
           wantedBy = [ "mastodon.target" ];
           description = "Mastodon web";
           environment =

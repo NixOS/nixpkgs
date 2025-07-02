@@ -602,9 +602,9 @@ in
         ];
 
       systemd.services.keycloakPostgreSQLInit = mkIf createLocalPostgreSQL {
-        after = [ "postgresql.service" ];
+        after = [ "postgresql.target" ];
         before = [ "keycloak.service" ];
-        bindsTo = [ "postgresql.service" ];
+        bindsTo = [ "postgresql.target" ];
         path = [ config.services.postgresql.package ];
         serviceConfig = {
           Type = "oneshot";
@@ -690,7 +690,7 @@ in
             if createLocalPostgreSQL then
               [
                 "keycloakPostgreSQLInit.service"
-                "postgresql.service"
+                "postgresql.target"
               ]
             else if createLocalMySQL then
               [

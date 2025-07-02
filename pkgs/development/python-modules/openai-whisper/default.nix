@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "20240930-unstable-2025-01-04";
+  version = "20250625";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "whisper";
-    rev = "517a43ecd132a2089d85f4ebc044728a71d49f6e";
-    hash = "sha256-RYcQC70E27gtW4gzoPJU132Dm7CnSg8d2/GEfyUyXU4=";
+    rev = "v${version}";
+    hash = "sha256-Zn2HUCor1eCJBP7q0vpffqhw5SNguz8zCGoPgdt6P+c=";
   };
 
   patches = [
@@ -81,9 +81,6 @@ buildPythonPackage rec {
     mainProgram = "whisper";
     homepage = "https://github.com/openai/whisper";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      hexa
-      MayNiklas
-    ];
+    maintainers = with lib.maintainers; [ MayNiklas ];
   };
 }

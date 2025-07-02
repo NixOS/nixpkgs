@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation {
   pname = "heroku";
-  version = "10.10.0";
+  version = "10.10.1";
 
   src = fetchzip {
-    url = "https://cli-assets.heroku.com/versions/10.10.0/552ceae/heroku-v10.10.0-552ceae-linux-x64.tar.xz";
-    hash = "sha256-D1Bjyry7Yumxe9cl7KSoBrqEUP9EQsbsa9cd5muSr/Q=";
+    url = "https://cli-assets.heroku.com/versions/10.10.1/4856ed8/heroku-v10.10.1-4856ed8-linux-x64.tar.xz";
+    hash = "sha256-oavGeVFRJBWDIYh05C3pS48tPR9WYX1uIj3yQlQVzQE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

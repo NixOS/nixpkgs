@@ -73,6 +73,7 @@ let
   makeNeovimConfig =
     {
       customRC ? "",
+      customLuaRC ? "",
       # the function you would have passed to lua.withPackages
       extraLuaPackages ? (_: [ ]),
       ...
@@ -83,6 +84,11 @@ let
     attrs
     // {
       neovimRcContent = customRC;
+      luaRcContent =
+        if attrs ? luaRcContent then
+          lib.warn "makeNeovimConfig: luaRcContent parameter is deprecated. Please use customLuaRC instead." attrs.luaRcContent
+        else
+          customLuaRC;
       wrapperArgs = lib.optionals (luaEnv != null) [
         "--prefix"
         "LUA_PATH"
@@ -145,6 +151,7 @@ let
           vimAlias
           ;
         customRC = configure.customRC or "";
+        customLuaRC = configure.customLuaRC or "";
         inherit plugins;
         inherit extraName;
       };

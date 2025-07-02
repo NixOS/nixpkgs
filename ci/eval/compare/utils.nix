@@ -176,7 +176,7 @@ rec {
       lib.mapAttrsToList (
         kernel: rebuildCount:
         let
-          range = from: to: from <= rebuildCount && (rebuildCount <= to || to == null);
+          range = from: to: from <= rebuildCount && (to == null || rebuildCount <= to);
         in
         lib.mapAttrs' (number: lib.nameValuePair "10.rebuild-${kernel}: ${number}") {
           "0" = range 0 0;

@@ -17,8 +17,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "24.2.0";
-  sha256 = "40143d43efbdeeb9537995f532126c494d63a31da332acb5022f76f00afc62ab";
+  version = "24.3.0";
+  sha256 = "eb688ef8a63fda9ebc0b5f907609a46e26db6d9aceefc0832009a98371e992ed";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -51,6 +51,13 @@ buildNodejs {
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
+
+      # Fix for flaky test
+      # TODO: remove when included in a release
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/cd685fe3b6b18d2a1433f2635470513896faebe6.patch?full_index=1";
+        hash = "sha256-KA7WBFnLXCKx+QVDGxFixsbj3Y7uJkAKEUTeLShI1Xo=";
+      })
     ]
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
       # test-icu-env is failing without the reverts

@@ -156,7 +156,7 @@ in
       wants = [ "network-online.target" ];
       after = [
         "network-online.target"
-        "postgresql.service"
+        "postgresql.target"
       ];
 
       environment =

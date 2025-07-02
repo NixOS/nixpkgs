@@ -967,6 +967,7 @@ let
       cargo
       rustc
     ];
+    gglinedensity = [ pkgs.cargo ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
     Rsymphony = [ pkgs.pkg-config ];
@@ -1084,6 +1085,7 @@ let
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
     chebpol = [ pkgs.pkg-config ];
+    baseline = [ pkgs.lapack ];
     eds = [ pkgs.zlib.dev ];
     pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
@@ -1567,6 +1569,7 @@ let
     "PCRA"
     "PSCBS"
     "iemisc"
+    "red"
     "repmis"
     "R_cache"
     "R_filesets"
@@ -1577,11 +1580,13 @@ let
     "SpatialDecon"
     "stepR"
     "styler"
+    "tabs"
     "teal_code"
     "TreeTools"
     "TreeSearch"
     "ACNE"
     "APAlyzer"
+    "BAT"
     "EstMix"
     "Patterns"
     "PECA"
@@ -1762,6 +1767,14 @@ let
       enableParallelBuilding = false;
     });
 
+    orbweaver = old.orbweaver.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
+    });
+
     xml2 = old.xml2.overrideAttrs (attrs: {
       preConfigure = ''
         export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
@@ -1939,6 +1952,10 @@ let
     });
 
     purrr = old.purrr.overrideAttrs (attrs: {
+      patchPhase = "patchShebangs configure";
+    });
+
+    tergo = old.tergo.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
 
@@ -2719,6 +2736,7 @@ let
       preConfigure = ''
         patchShebangs configure
         patchShebangs src/library/curl/configure
+        patchShebangs src/library/keyring/configure
         patchShebangs src/library/pkgdepends/configure
         patchShebangs src/library/ps/configure
       '';

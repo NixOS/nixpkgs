@@ -22,46 +22,23 @@ assert (x11Support && usesX11) -> xclip != null || xsel != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "ffsend";
-  version = "0.2.76";
+  version = "0.2.77";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
-    rev = "v${version}";
-    hash = "sha256-L1j1lXPxy9nWMeED9uzQHV5y7XTE6+DB57rDnXa4kMo=";
+    tag = "v${version}";
+    hash = "sha256-qq1nLNe4ddcsFJZaGfNQbNtqchz6tPh1kpEH/oDW3jk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Gv70H3SLgiO7SWKYfCKzBhgAHxhjx3Gv7ZPLrGeQ+HY=";
+  cargoHash = "sha256-DQcuyp61r0y9fi8AV33qxN2cOrl0M8q4/VoXuV47gxQ=";
 
   cargoPatches = [
-
-    # Update dependencies (needed for the below patch to merge cleanly)
+    # https://gitlab.com/timvisee/ffsend/-/merge_requests/44
     (fetchpatch {
-      name = "Update-dependencies-1";
-      url = "https://github.com/timvisee/ffsend/commit/afb004680b9ed672c7e87ff23f16bb2c51fea06e.patch";
-      hash = "sha256-eDcbyi05aOq+muVWdLmlLzLXUKcrv/9Y0R+0aHgL4+s=";
-    })
-
-    # Disable unused features in prettytable-rs crate (needed for the below patch to merge cleanly)
-    (fetchpatch {
-      name = "Disable-unused-features";
-      url = "https://github.com/timvisee/ffsend/commit/9b8dee12ea839f911ed207ff9602d929cab5d34b.patch";
-      hash = "sha256-6LK1Fqov+zEbPZ4+B6JCLXtXmgSad9vr9YO2oYodBSM=";
-    })
-
-    # Update dependencies (needed for the below patch to merge cleanly)
-    (fetchpatch {
-      name = "Update-dependencies-2";
-      url = "https://github.com/timvisee/ffsend/commit/fd5b38f9ab9cbc5f962d1024f4809eb36ba8986c.patch";
-      hash = "sha256-BDZKrVtQHpOewmB2Lb6kUfy02swcNK+CYZ3lj3kwFV4=";
-    })
-
-    # Fix seg fault
-    (fetchpatch {
-      name = "Fix-segfault";
-      url = "https://github.com/timvisee/ffsend/commit/3c1c2dc28ca1d88c45f87496a7a96052f5c37858.patch";
-      hash = "sha256-2hWlFXDopNy26Df74nJoB1J8qzPEOpf61wEOEtxOVx8=";
+      name = "rust-1.87.0-compat.patch";
+      url = "https://gitlab.com/timvisee/ffsend/-/commit/29eb167d4367929a2546c20b3f2bbf890b63c631.patch";
+      hash = "sha256-BxJ+0QJP2fzQT1X3BZG1Yy9V+csIEk8xocUKSBgdG9M=";
     })
   ];
 
@@ -86,7 +63,7 @@ rustPlatform.buildRustPackage rec {
   '';
   # There's also .elv and .ps1 completion files but I don't know where to install those
 
-  meta = with lib; {
+  meta = {
     description = "Easily and securely share files from the command line. A fully featured Firefox Send client";
     longDescription = ''
       Easily and securely share files and directories from the command line through a safe, private
@@ -95,9 +72,9 @@ rustPlatform.buildRustPackage rec {
       web browser.
     '';
     homepage = "https://gitlab.com/timvisee/ffsend";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ equirosa ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ equirosa ];
+    platforms = lib.platforms.unix;
     mainProgram = "ffsend";
   };
 }

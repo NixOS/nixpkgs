@@ -19,6 +19,7 @@
   # check inputs
   pytestCheckHook,
   django-guardian,
+  django-model-utils,
   django-mptt,
   django-polymorphic,
   django-tree-queries,
@@ -33,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "strawberry-django";
-  version = "0.57.1";
+  version = "0.60.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry-django";
     tag = "v${version}";
-    hash = "sha256-nwqb9AVNQNIRdjYcutTaI3YfwuMDLP4mUirSXFq+WnI=";
+    hash = "sha256-mMI/tPdt9XK6Lz7VmI3uDxcCjIuidUeGHjG+6AQLoeQ=";
   };
 
   build-system = [
@@ -64,6 +65,7 @@ buildPythonPackage rec {
       pytestCheckHook
 
       django-guardian
+      django-model-utils
       django-mptt
       django-polymorphic
       django-tree-queries

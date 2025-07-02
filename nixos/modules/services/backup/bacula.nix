@@ -720,7 +720,7 @@ in
     systemd.services.bacula-dir = mkIf dir_cfg.enable {
       after = [
         "network.target"
-        "postgresql.service"
+        "postgresql.target"
       ];
       description = "Bacula Director Daemon";
       wantedBy = [ "multi-user.target" ];

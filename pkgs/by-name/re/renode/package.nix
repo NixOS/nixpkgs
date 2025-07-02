@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch,
   autoPatchelfHook,
   makeWrapper,
   nix-update-script,
@@ -37,6 +38,14 @@ let
           rev = "v6.1";
           hash = "sha256-l1VupBKi52UWqJMisT2CVnXph3fGxB63mBVvYdM1NWE=";
         };
+        patches = (oldAttrs.patches or [ ]) ++ [
+          (fetchpatch {
+            # utest: Improve filtering of output sugar for Python 3.13+
+            name = "python3.13-support.patch";
+            url = "https://github.com/robotframework/robotframework/commit/921e352556dc8538b72de1e693e2a244d420a26d.patch";
+            hash = "sha256-aSaror26x4kVkLVetPEbrJG4H1zstHsNWqmwqOys3zo=";
+          })
+        ];
       }))
     ];
 in

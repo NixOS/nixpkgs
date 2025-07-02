@@ -542,7 +542,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    greizgh
     schmittlauch
   ];
 }
