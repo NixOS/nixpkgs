@@ -23,6 +23,7 @@ let
     # Binary GHCs
     "ghc865Binary"
     "ghc8107Binary"
+    "ghc902Binary"
     "ghc924Binary"
     "ghc963Binary"
     "ghc984Binary"
@@ -91,6 +92,10 @@ in
         llvmPackages = pkgs.llvmPackages_12;
       };
 
+      ghc902Binary = callPackage ../development/compilers/ghc/9.0.2-binary.nix {
+        llvmPackages = pkgs.llvmPackages_12;
+      };
+
       ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix {
         llvmPackages = pkgs.llvmPackages_12;
       };
@@ -155,17 +160,12 @@ in
         bootPkgs =
           # Building with 9.2 is broken due to
           # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
-          # Use 8.10 as a workaround where possible to keep bootstrap path short.
 
-          # On ARM text won't build with GHC 8.10.*
-          if stdenv.buildPlatform.isAarch then
-            # TODO(@sternenseemann): package bindist
-            bb.packages.ghc902
           # No suitable bindists for powerpc64le
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc902
           else
-            bb.packages.ghc8107Binary;
+            bb.packages.ghc902Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -179,17 +179,12 @@ in
         bootPkgs =
           # Building with 9.2 is broken due to
           # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
-          # Use 8.10 as a workaround where possible to keep bootstrap path short.
 
-          # On ARM text won't build with GHC 8.10.*
-          if stdenv.buildPlatform.isAarch then
-            # TODO(@sternenseemann): package bindist
-            bb.packages.ghc902
           # No suitable bindists for powerpc64le
-          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
             bb.packages.ghc902
           else
-            bb.packages.ghc8107Binary;
+            bb.packages.ghc902Binary;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -519,6 +514,12 @@ in
         buildHaskellPackages = bh.packages.ghc8107Binary;
         ghc = bh.compiler.ghc8107Binary;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+      ghc902Binary = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc902Binary;
+        ghc = bh.compiler.ghc902Binary;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
       ghc924Binary = callPackage ../development/haskell-modules {

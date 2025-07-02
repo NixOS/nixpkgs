@@ -366,16 +366,37 @@ def main() -> None:
     try:
         execute(sys.argv)
     except CalledProcessError as ex:
-        if logger.level == logging.DEBUG:
-            import traceback
-
-            traceback.print_exc()
-        else:
-            print(str(ex), file=sys.stderr)
-        # Exit with the error code of the process that failed
-        sys.exit(ex.returncode)
+        _handle_called_process_error(ex)
     except (Exception, KeyboardInterrupt) as ex:
-        if logger.level == logging.DEBUG:
+        if logger.isEnabledFor(logging.DEBUG):
             raise
         else:
             sys.exit(str(ex))
+
+
+def _handle_called_process_error(ex: CalledProcessError) -> None:
+    if logger.isEnabledFor(logging.DEBUG):
+        import traceback
+
+        traceback.print_exception(ex)
+    else:
+        import shlex
+
+        # If cmd is a list, stringify any Paths and join in a single string
+        # This will show much nicer in the error (e.g., as something that
+        # the user can simple copy-paste in terminal to debug)
+        cmd = (
+            shlex.join([str(cmd) for cmd in ex.cmd])
+            if isinstance(ex.cmd, list)
+            else ex.cmd
+        )
+        ex = CalledProcessError(
+            returncode=ex.returncode,
+            cmd=cmd,
+            output=ex.output,
+            stderr=ex.stderr,
+        )
+        print(str(ex), file=sys.stderr)
+
+    # Exit with the error code of the process that failed
+    sys.exit(ex.returncode)
