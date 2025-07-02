@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "datalad";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
     tag = version;
-    hash = "sha256-jLbtx6gNuMdZ34LVC7PY79k2w3B9aJ0ijCh9HhALQQc=";
+    hash = "sha256-tiyeCF74Ru5zPdj7UdEFixLdV2J79J5PY6Usn0bbVFI=";
   };
 
   postPatch = ''
