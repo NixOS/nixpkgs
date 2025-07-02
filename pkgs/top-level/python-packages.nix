@@ -14231,6 +14231,8 @@ self: super: with self; {
 
   pytest-twisted = callPackage ../development/python-modules/pytest-twisted { };
 
+  pytest-unmagic = callPackage ../development/python-modules/pytest-unmagic { };
+
   pytest-unordered = callPackage ../development/python-modules/pytest-unordered { };
 
   pytest-variables = callPackage ../development/python-modules/pytest-variables { };
