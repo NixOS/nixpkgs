@@ -364,7 +364,7 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  claude-usage-monitor = callPackage ../by-name/cl/claude-usage-monitor { };
+  claude-usage-monitor = callPackage ../by-name/cl/claude-usage-monitor/package.nix { };
 
   cope = callPackage ../by-name/co/cope/package.nix {
     perl = perl538;
