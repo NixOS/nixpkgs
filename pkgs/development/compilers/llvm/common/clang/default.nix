@@ -158,6 +158,9 @@ stdenv.mkDerivation (
         (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
         (lib.cmakeFeature "CLANG_TABLEGEN" "${buildLlvmTools.tblgen}/bin/clang-tblgen")
       ]
+      ++ lib.optionals (lib.versionAtLeast release_version "21") [
+        (lib.cmakeFeature "CLANG_RESOURCE_DIR" "${placeholder "lib"}/lib/clang/${lib.versions.major release_version}")
+      ]
       ++ lib.optionals (lib.versionAtLeast release_version "17") [
         (lib.cmakeBool "LLVM_INCLUDE_TESTS" false)
       ]
@@ -211,9 +214,12 @@ stdenv.mkDerivation (
         mkdir -p $lib/lib/clang
         mv $lib/lib/17 $lib/lib/clang/17
       '')
-      + (lib.optionalString (lib.versionAtLeast release_version "19") ''
-        mv $out/lib/clang $lib/lib/clang
-      '')
+      + (lib.optionalString
+        ((lib.versionAtLeast release_version "19") && !(lib.versionAtLeast release_version "21"))
+        ''
+          mv $out/lib/clang $lib/lib/clang
+        ''
+      )
       + ''
 
         # Move libclang to 'lib' output

@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "sftpman";
   version = "1.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "spantaleev";

@@ -10,6 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "udocker";
   version = "1.3.17";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "indigo-dc";

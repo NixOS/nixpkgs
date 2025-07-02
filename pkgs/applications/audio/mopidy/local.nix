@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Local";
   version = "3.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

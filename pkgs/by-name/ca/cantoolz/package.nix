@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "cantoolz";
   version = "3.7.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "CANToolz";

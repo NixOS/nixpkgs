@@ -7,6 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "rivalcfg";
   version = "4.15.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "flozz";

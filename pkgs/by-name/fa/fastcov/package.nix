@@ -10,6 +10,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "fastcov";
   version = "1.16";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "RPGillespie6";

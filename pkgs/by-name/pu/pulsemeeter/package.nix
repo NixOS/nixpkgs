@@ -12,6 +12,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pulsemeeter";
   version = "1.2.14";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "theRealCarneiro";

@@ -10,6 +10,7 @@ in
 buildPythonPackage {
   pname = "django-mdeditor";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pylixm";
