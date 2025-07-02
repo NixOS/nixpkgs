@@ -141,6 +141,18 @@ let
         fi
       '';
 
+    doInstallCheck = true;
+    installCheckPhase = ''
+      echo "Checking 'java -version' output contains ${dist.jdkVersion}, 'OpenJDK', and 'Zulu'"
+      output=`$out/bin/java -version 2>&1`
+      # Our Zulu 23 package is a special case (and should be deleted as it is End-of-Life)
+      expected_version=$(if [[ "${dist.jdkVersion}" == 23* ]]; then echo 23; else echo "${dist.jdkVersion}"; fi)
+      echo "Output is: $output"
+      echo "$output" | grep -q "$expected_version"
+      echo "$output" | grep -q "OpenJDK"
+      echo "$output" | grep -q "Zulu"
+    '';
+
     preFixup =
       ''
         # Propagate the setJavaClassPath setup hook from the ${if isJdk8 then "JRE" else "JDK"} so that
