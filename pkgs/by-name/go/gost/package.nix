@@ -4,6 +4,7 @@
   fetchFromGitHub,
   buildGoModule,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -29,6 +30,8 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   versionCheckProgramArg = "-V";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple tunnel written in golang";
