@@ -40,18 +40,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alvr";
-  version = "20.13.0";
+  version = "20.14.0";
 
   src = fetchFromGitHub {
     owner = "alvr-org";
     repo = "ALVR";
     tag = "v${version}";
     fetchSubmodules = true; # TODO devendor openvr
-    hash = "sha256-h7/fuuolxbNkjUbqXZ7NTb1AEaDMFaGv/S05faO2HIc=";
+    hash = "sha256-K1E8zeSjaUtJ17C9G+aKNw9bzKUzeezUunZc0MM1Rj4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-A0ADPMhsREH1C/xpSxW4W2u4ziDrKRrQyY5kBDn//gQ=";
+  cargoHash = "sha256-GeI6YlpTa89W6dYmK/1Hq73R0QX67va9zL1UIyfwcv0=";
 
   patches = [
     (replaceVars ./fix-finding-libs.patch {
