@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then
 
         revision=$(jq -r .revision <<<"$data")
-        hash=$(nix hash to-sri "sha512:$(jq -r .download_sha512 <<<"$data")")
+        hash=$(nix --extra-experimental-features nix-command hash to-sri "sha512:$(jq -r .download_sha512 <<<"$data")")
 
         update-source-version "$UPDATE_NIX_ATTR_PATH" "$version" "$hash"
         update-source-version --ignore-same-hash --version-key=revision "$UPDATE_NIX_ATTR_PATH" "$revision" "$hash"

@@ -29,7 +29,7 @@ cd $TMPDIR
 
 curl https://raw.githubusercontent.com/the-draupnir-project/Draupnir/v$latestVersion/yarn.lock -o yarn.lock
 TMP_PREFETCH_HASH=`prefetch-yarn-deps yarn.lock`
-NEW_YARN_OFFLINE_HASH=`nix hash to-sri --type sha256 $TMP_PREFETCH_HASH`
+NEW_YARN_OFFLINE_HASH=`nix --extra-experimental-features nix-command hash to-sri --type sha256 $TMP_PREFETCH_HASH`
 
 cd -
 echo "New yarn offline hash: $NEW_YARN_OFFLINE_HASH"

@@ -17,6 +17,6 @@ for system in \
     aarch64-linux \
     x86_64-darwin \
     aarch64-darwin; do
-    hash=$(nix hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix-instantiate --eval -E "with import ./. {}; dbgate.src.url" --system "$system" | tr -d '"')))
+    hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix-instantiate --eval -E "with import ./. {}; dbgate.src.url" --system "$system" | tr -d '"')))
     update-source-version dbgate $latestVersion $hash --system=$system --ignore-same-version
 done

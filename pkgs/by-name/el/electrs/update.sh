@@ -32,7 +32,7 @@ echo "Verifying commit"
 git -C $repo verify-tag v${version}
 
 rm -rf $repo/.git
-hash=$(nix hash path $repo)
+hash=$(nix --extra-experimental-features nix-command hash path $repo)
 
 (cd "$nixpkgs" && update-source-version electrs "$version" "$hash" && update-source-version electrs --ignore-same-version --source-key=cargoDeps)
 echo

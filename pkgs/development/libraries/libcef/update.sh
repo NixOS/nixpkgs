@@ -38,6 +38,6 @@ declare -a platforms=(
 for platform in "${platforms[@]}"; do
     read -r system arch <<< "$platform"
     url="https://cef-builds.spotifycdn.com/cef_binary_${cef_version}+g${git_revision}+chromium-${chromium_version}_linux${arch}_minimal.tar.bz2"
-    hash=$(nix hash convert --to sri --hash-algo sha256 "$(nix-prefetch-url --quiet "$url")")
+    hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$(nix-prefetch-url --quiet "$url")")
     update-source-version libcef "$cef_version" "$hash" --system="$system" --ignore-same-version
 done

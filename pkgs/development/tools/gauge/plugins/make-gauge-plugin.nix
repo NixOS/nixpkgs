@@ -91,7 +91,7 @@ stdenvNoCC.mkDerivation (
 
             echo "Fetching hash for $system"
             hash=$(nix-prefetch-url --type sha256 $url --unpack)
-            sriHash="$(nix hash to-sri --type sha256 $hash)"
+            sriHash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $hash)"
 
             yq -iPoj ". + { \"$system\": { \"url\": \"$url\", \"hash\": \"$sriHash\" } }" "$tempfile"
         }
@@ -101,7 +101,7 @@ stdenvNoCC.mkDerivation (
 
             echo "Fetching hash"
             hash=$(nix-prefetch-url --type sha256 $url --unpack)
-            sriHash="$(nix hash to-sri --type sha256 $hash)"
+            sriHash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $hash)"
 
             yq -iPoj ". + { \"url\": \"$url\", \"hash\": \"$sriHash\" }" "$tempfile"
         }

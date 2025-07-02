@@ -23,7 +23,7 @@ for entry in "${linux_systems[@]}"; do
     arch="${entry%%:*}"
     suffix="${entry#*:}"
     prefetch=$(nix-prefetch-url --unpack "https://download.jetbrains.com/toolbox/jetbrains-toolbox-$latestVersion$suffix.tar.gz")
-    hash=$(nix hash convert --hash-algo sha256 --to sri $prefetch)
+    hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $prefetch)
     update-source-version jetbrains-toolbox $latestVersion $hash --system=$arch --ignore-same-version
 done
 
@@ -36,6 +36,6 @@ for entry in "${darwin_systems[@]}"; do
     arch="${entry%%:*}"
     suffix="${entry#*:}"
     prefetch=$(nix-prefetch-url "https://download.jetbrains.com/toolbox/jetbrains-toolbox-$latestVersion$suffix.dmg")
-    hash=$(nix hash convert --hash-algo sha256 --to sri $prefetch)
+    hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $prefetch)
     update-source-version jetbrains-toolbox $latestVersion $hash --system=$arch --ignore-same-version
 done
