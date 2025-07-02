@@ -16,6 +16,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
   version = "1.8.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cimbali";

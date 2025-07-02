@@ -31,6 +31,7 @@ let
 
 in
 buildPythonPackage {
+  format = "setuptools";
   inherit pname version;
 
   src = fetchFromGitHub {

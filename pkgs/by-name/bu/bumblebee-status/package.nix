@@ -22,6 +22,7 @@ in
 python3.pkgs.buildPythonPackage {
   pname = "bumblebee-status";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tobi-wan-kenobi";

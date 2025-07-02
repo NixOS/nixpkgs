@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pykickstart";
   version = "3.65";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pykickstart";

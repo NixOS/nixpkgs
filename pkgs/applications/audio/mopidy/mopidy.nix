@@ -14,6 +14,7 @@
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy";
   version = "3.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mopidy";

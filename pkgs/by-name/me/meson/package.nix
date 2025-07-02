@@ -17,6 +17,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
   version = "1.8.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";

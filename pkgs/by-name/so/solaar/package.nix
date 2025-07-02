@@ -17,6 +17,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
   version = "1.1.14";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";

@@ -11,6 +11,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "s-tui";
   version = "1.1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

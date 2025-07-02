@@ -6,6 +6,7 @@ import ../make-test-python.nix {
     let
       testLib = pkgs.python3Packages.buildPythonPackage {
         name = "confinement-testlib";
+        format = "setuptools";
         unpackPhase = ''
           cat > setup.py <<EOF
           from setuptools import setup

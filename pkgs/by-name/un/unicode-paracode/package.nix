@@ -10,6 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "unicode";
   version = "2.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "garabik";

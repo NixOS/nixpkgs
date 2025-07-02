@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "logging-tree";
   version = "1.10";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "brandon-rhodes";

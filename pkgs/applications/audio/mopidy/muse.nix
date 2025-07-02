@@ -8,6 +8,7 @@
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-muse";
   version = "0.0.33";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

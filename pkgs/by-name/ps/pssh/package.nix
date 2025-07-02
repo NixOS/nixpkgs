@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pssh";
   version = "2.3.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lilydjwg";

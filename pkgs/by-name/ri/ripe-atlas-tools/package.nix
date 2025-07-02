@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ripe-atlas-tools";
   version = "3.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";

@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "addic7ed-cli";
   version = "1.4.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

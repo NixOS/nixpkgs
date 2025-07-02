@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
   version = "0.24.5.26";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";

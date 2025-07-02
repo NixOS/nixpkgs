@@ -34,6 +34,7 @@ in
 python3.pkgs.buildPythonApplication {
   pname = "electrum-grs";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";

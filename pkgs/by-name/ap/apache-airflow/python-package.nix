@@ -147,6 +147,7 @@ in
 buildPythonPackage rec {
   pname = "apache-airflow";
   inherit version;
+  format = "setuptools";
   src = airflow-src;
 
   disabled = pythonOlder "3.7";

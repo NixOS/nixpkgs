@@ -10,6 +10,7 @@ with python3.pkgs;
 buildPythonApplication rec {
   pname = "neovim-remote";
   version = "2.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mhinz";

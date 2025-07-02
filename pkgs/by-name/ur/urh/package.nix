@@ -21,6 +21,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "urh";
   version = "2.9.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jopohl";
