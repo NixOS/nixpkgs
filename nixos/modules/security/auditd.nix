@@ -16,6 +16,73 @@ let
       int
     ]);
 
+  plugin_conf = lib.types.submodule {
+    options = {
+      active = lib.mkEnableOption "Whether to enable this plugin";
+      direction = lib.mkOption {
+        type = lib.types.enum [
+          "in"
+          "out"
+        ];
+        default = "out";
+        description = ''
+          The option is dictated by the plugin. In or out are the only choices.
+          You cannot make a plugin operate in a way it wasn't  designed just by
+          changing this option. This option is to give a clue to the event dispatcher
+          about which direction events flow.
+
+          ::: {.note}
+          Inbound events are not supported yet.
+          :::
+        '';
+      };
+      path = lib.mkOption {
+        type = lib.types.path;
+        description = "This is the absolute path to the plugin executable.";
+      };
+      type = lib.mkOption {
+        type = lib.types.enum [ "always" ];
+        readOnly = true;
+        default = "always";
+        description = ''
+          This tells the dispatcher how the plugin wants to be run. There is only
+          one valid option, `always`, which means the plugin is external and should
+          always be run. The default is `always` since there are no more builtin plugins.
+        '';
+      };
+      args = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.nonEmptyStr);
+        default = null;
+        description = ''
+          This allows you to pass arguments to the child program.
+          Generally plugins do not take arguments and have their own
+          config file that instructs them how they should be configured.
+        '';
+      };
+      format = lib.mkOption {
+        type = lib.types.enum [
+          "binary"
+          "string"
+        ];
+        default = "string";
+        description = ''
+          Binary passes the data exactly as the audit event dispatcher gets it from
+          the audit daemon. The string option tells the dispatcher to completely change
+          the event into a string suitable for parsing with the audit parsing library.
+        '';
+      };
+      config = lib.mkOption {
+        type = lib.types.nullOr (
+          lib.types.submodule {
+            freeformType = lib.types.attrsOf audit_config_type;
+          }
+        );
+        default = null;
+        description = "Plugin-specific config file to link to /etc/audit/<plugin>.conf";
+      };
+    };
+  };
+
   prepareConfigValue =
     v:
     if lib.isBool v then
@@ -72,6 +139,12 @@ in
       default = { };
       description = "auditd configuration file contents. See {auditd.conf} for supported values.";
     };
+
+    plugins = lib.mkOption {
+      type = lib.types.attrsOf plugin_conf;
+      default = { };
+      description = "Plugin definitions to register with auditd";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -100,9 +173,25 @@ in
 
     environment.systemPackages = [ pkgs.audit ];
 
-    environment.etc = {
-      "audit/auditd.conf".text = prepareConfigText cfg.config;
-    };
+    # setting this to anything other than /etc/audit/plugins.d will break, so we pin it here
+    security.auditd.config.plugin_dir = "/etc/audit/plugins.d";
+
+    environment.etc =
+      {
+        "audit/auditd.conf".text = prepareConfigText cfg.config;
+      }
+      // (lib.mapAttrs' (
+        plugin_name: plugin_definition_config_value:
+        lib.nameValuePair "audit/plugins.d/${plugin_name}.conf" {
+          text = prepareConfigText (lib.removeAttrs plugin_definition_config_value [ "config" ]);
+        }
+      ) cfg.plugins)
+      // (lib.mapAttrs' (
+        plugin_name: plugin_specific_config_value:
+        lib.nameValuePair "audit/audisp-${plugin_name}.conf" {
+          text = prepareConfigText plugin_specific_config_value.config;
+        }
+      ) (lib.filterAttrs (_: v: v.config != null) cfg.plugins));
 
     systemd.services.auditd = {
       description = "Linux Audit daemon";
