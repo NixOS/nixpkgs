@@ -7,11 +7,13 @@
   m4,
   cairo,
   libX11,
+  mesa,
   mesa_glu,
   ncurses,
   tcl,
   tcsh,
   tk,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,15 +28,20 @@ stdenv.mkDerivation rec {
     leaveDotGit = true;
   };
 
-  nativeBuildInputs = [
-    python3
-    git
-  ];
+  nativeBuildInputs =
+    [
+      python3
+      git
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
 
   buildInputs = [
     cairo
     libX11
     m4
+    mesa
     mesa_glu
     ncurses
     tcl
@@ -73,7 +80,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Fix dylib paths on macOS
+    install_name_tool -add_rpath ${mesa.out}/lib $out/lib/magic/tcl/tclmagic.dylib
+    install_name_tool -add_rpath ${mesa_glu.out}/lib $out/lib/magic/tcl/tclmagic.dylib
+    install_name_tool -add_rpath ${mesa.out}/lib $out/lib/magic/tcl/magicexec
+    install_name_tool -add_rpath ${mesa_glu.out}/lib $out/lib/magic/tcl/magicexec
+  '';
+
   env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
   meta = with lib; {
     description = "VLSI layout tool written in Tcl";
