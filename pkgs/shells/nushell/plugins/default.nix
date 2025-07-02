@@ -2,10 +2,10 @@
   lib,
   config,
   newScope,
-  dbus,
-  versionCheckHook,
-  nushell,
   runCommand,
+  nushell,
+  testers,
+  dbus,
 }:
 
 lib.makeScope newScope (
@@ -13,34 +13,36 @@ lib.makeScope newScope (
 
   lib.mapAttrs
     (
-      _n: p:
-      let
-        # add two checks:
-        # - `versionCheckhook`, checks wether it's a binary that is able to
-        #   display its own version
-        # - A check which loads the plugin into the current version of nushell,
-        #   to detect incompatibilities (plugins are compiled for very specific
-        #   versions of nushell). If this fails, either update the plugin or mark
-        #   as broken.
-        withChecks = p.overrideAttrs (
-          final: _prev: {
-            doInstallCheck = true;
-            nativeInstallCheckInputs = [ versionCheckHook ];
+      _n: package:
 
-            passthru.tests.loadCheck =
+      # add two checks:
+      # - A check which loads the plugin into the current version of nushell,
+      #   to detect incompatibilities (plugins are compiled for very specific
+      #   versions of nushell). If this fails, either update the plugin or mark
+      #   as broken.
+      # - `versionCheck`, checks wether it's a binary that is able to
+      #   display its own version. Suffix `-unstable-*` is ignored.
+      package.overrideAttrs (
+        final: _prev: {
+          passthru.tests = {
+            loadCheck =
               let
                 nu = lib.getExe nushell;
-                plugin = lib.getExe withChecks;
+                plugin = lib.getExe package;
               in
               runCommand "test-load-${final.pname}" { } ''
                 touch $out
                 ${nu} -n -c "plugin add --plugin-config $out ${plugin}"
                 ${nu} -n -c "plugin use --plugin-config $out ${plugin}"
               '';
-          }
-        );
-      in
-      withChecks
+            versionCheck = testers.testVersion {
+              inherit package;
+              command = "${lib.getExe package} --help";
+              version = lib.head (lib.splitString "-unstable" final.version);
+            };
+          };
+        }
+      )
     )
     (
       with self;
