@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/calc.c --replace-fail \
       "qalc_binary = \"qalc\"" \
-      "qalc_binary = \"${libqalculate}/bin/qalc\""
+      "qalc_binary = \"${lib.getExe libqalculate}\""
 
     substituteInPlace src/meson.build --replace-fail \
       "rofi.get_variable('pluginsdir')" \
