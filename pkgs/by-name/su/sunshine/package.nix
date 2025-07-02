@@ -57,13 +57,13 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "2025.122.141614";
+  version = "2025.628.4510";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${version}";
-    hash = "sha256-rHf+lj5dycXA//fu3RPuimYz2hrJnoVt7GA2xuHGXJk=";
+    hash = "sha256-xNWFo6a4YrJ+tBFTSReoAEi1oZ4DSguBEusizWeWKYY=";
     fetchSubmodules = true;
   };
 
@@ -71,7 +71,7 @@ stdenv'.mkDerivation rec {
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-sWCmx1dMEyRyuYeeuqAjHZLVnckskgQO4saFM64s4Y4=";
+    npmDepsHash = "sha256-kUixeLf8prsWQolg1v+vJ5rvwKZOsU+88+0hVOgTZ0A=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -194,7 +194,7 @@ stdenv'.mkDerivation rec {
     substituteInPlace cmake/targets/common.cmake \
       --replace-fail 'find_program(NPM npm REQUIRED)' ""
 
-    substituteInPlace packaging/linux/sunshine.desktop \
+    substituteInPlace packaging/linux/dev.lizardbyte.app.Sunshine.desktop \
       --subst-var-by PROJECT_NAME 'Sunshine' \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
       --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
@@ -230,7 +230,7 @@ stdenv'.mkDerivation rec {
   '';
 
   postInstall = ''
-    install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
+    install -Dm644 ../packaging/linux/dev.lizardbyte.app.Sunshine.desktop $out/share/applications/dev.lizardbyte.app.Sunshine.desktop
   '';
 
   doInstallCheck = true;
