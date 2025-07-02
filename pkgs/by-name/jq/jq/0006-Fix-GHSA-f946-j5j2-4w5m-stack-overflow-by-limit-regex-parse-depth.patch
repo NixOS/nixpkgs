@@ -1,0 +1,45 @@
+From 5e159b34b179417e3e0404108190a2ac7d65611c Mon Sep 17 00:00:00 2001
+From: Mattias Wadman <mattias.wadman@gmail.com>
+Date: Tue, 24 Jun 2025 15:39:40 +0200
+Subject: [PATCH] Fix GHSA-f946-j5j2-4w5m stack-overflow by limit regex parse
+ depth
+
+Was detect by AFL build but it's unsure if possible to trigger in non-fuzz build.
+
+Oniguruma has a default limit of 4096 but this is not be low enough to
+protect from stack-overflows in some builds like with AFL where it seems
+to use more stack space. A limit of 1024 should be enough usage-wise
+and also give more margin.
+---
+ src/main.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/src/main.c b/src/main.c
+index a316f63c0c..90f5f2afdb 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -21,6 +21,10 @@
+ extern void jv_tsd_dtoa_ctx_init();
+ #endif
+ 
++#ifdef HAVE_LIBONIG
++#include <oniguruma.h>
++#endif
++
+ #if !defined(HAVE_ISATTY) && defined(HAVE__ISATTY)
+ #undef isatty
+ #define isatty _isatty
+@@ -298,6 +302,13 @@ int main(int argc, char* argv[]) {
+   (void) setlocale(LC_ALL, "");
+ #endif
+ 
++#ifdef HAVE_LIBONIG
++  // use a lower regex parse depth limit than the default (4096) to protect
++  // from stack-overflows
++  // https://github.com/jqlang/jq/security/advisories/GHSA-f946-j5j2-4w5m
++  onig_set_parse_depth_limit(1024);
++#endif
++
+ #ifdef __OpenBSD__
+   if (pledge("stdio rpath", NULL) == -1) {
+     perror("pledge");
