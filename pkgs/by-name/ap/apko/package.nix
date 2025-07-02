@@ -5,6 +5,7 @@
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -69,15 +70,9 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/apko completion zsh)
   '';
 
+  nativeCheckInstallInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/apko --help
-    $out/bin/apko version 2>&1 | grep "v${finalAttrs.version}"
-
-    runHook postInstallCheck
-  '';
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     homepage = "https://apko.dev/";
