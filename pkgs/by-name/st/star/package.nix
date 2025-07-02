@@ -4,7 +4,9 @@
   fetchFromGitHub,
   xxd,
   zlib,
-  llvmPackages
+  llvmPackages,
+  star,
+  testers,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,16 +22,29 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/source";
 
+  postPatch = ''
+    substituteInPlace Makefile --replace "-std=c++11" "-std=c++14"
+  '';
+
   nativeBuildInputs = [ xxd ];
 
   buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ];
+
+  enableParallelBuilding = true;
+
+  makeFlags =
+    lib.optionals stdenv.hostPlatform.isAarch64 [
+      "CXXFLAGS_SIMD="
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "CPPFLAGS=-DSHM_NORESERVE=0"
+      "CXXFLAGS_EXTRA=-DSHM_NORESERVE=0"
+    ];
 
   buildFlags = [
     "STAR"
     "STARlong"
   ];
-
-  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
@@ -37,14 +52,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = star;
+    command = "STAR --version";
+  };
+
   meta = with lib; {
     description = "Spliced Transcripts Alignment to a Reference";
     homepage = "https://github.com/alexdobin/STAR";
     license = licenses.gpl3Plus;
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-    ];
+    platforms = platforms.unix;
     maintainers = [ maintainers.arcadio ];
   };
 }
