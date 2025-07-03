@@ -36,24 +36,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.5.2";
+  version = "4.5.2-unstable-2025-07-03";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9jafh9zyf+tuC+WU6nQIMBVm+Gqqcig8jS2R1h/YnIo=";
+    rev = "0ff2476af4e16286ee9f7cf2322715273a0117e0";
+    sha256 = "sha256-0ixQfAyAyRmuIrlPosCV/VucKJYYvxjL2o4pkVb5Sd8=";
   };
-
-  # Backport + additional patch to fix build on Qt 6.9
-  # FIXME: remove when no longer required
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/musescore/MuseScore/commit/05056ed19520060c3912a09a3adfa0927057f956.patch";
-      hash = "sha256-50Hytuu2lQRbAI2JEwlKeMUmJxTUtfqgwru6U760hAY=";
-    })
-    ./qt-6.9.patch
-  ];
 
   cmakeFlags = [
     "-DMUSE_APP_BUILD_MODE=release"
