@@ -13832,8 +13832,6 @@ with pkgs;
 
   qtbitcointrader = libsForQt5.callPackage ../applications/misc/qtbitcointrader { };
 
-  qtchan = libsForQt5.callPackage ../applications/networking/browsers/qtchan { };
-
   qtemu = libsForQt5.callPackage ../applications/virtualization/qtemu { };
 
   qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
