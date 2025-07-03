@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
@@ -37,7 +38,9 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
   preInstallCheck = ''
-    mkdir -p $HOME/.local/share
+    mkdir -p "$HOME/${
+      if stdenv.buildPlatform.isDarwin then "Library/Application Support" else ".local/share"
+    }"
   '';
   doInstallCheck = true;
 
