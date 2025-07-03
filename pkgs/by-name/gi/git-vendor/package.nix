@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "brettlangdon";
     repo = "git-vendor";
     rev = "v${version}";
-    inherit sha256;
+    inherit hash;
   };
 
   outputs = [

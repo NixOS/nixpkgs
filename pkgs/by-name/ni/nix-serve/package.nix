@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "edolstra";
     repo = "nix-serve";
-    inherit rev sha256;
+    inherit rev hash;
   };
 
   patches = [

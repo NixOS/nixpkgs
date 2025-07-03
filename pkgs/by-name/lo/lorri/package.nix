@@ -25,7 +25,7 @@ in
     owner = "nix-community";
     repo = "lorri";
     rev = version;
-    inherit sha256;
+    inherit hash;
   };
 
   outputs = [

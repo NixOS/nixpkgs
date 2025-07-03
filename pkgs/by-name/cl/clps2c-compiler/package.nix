@@ -17,7 +17,7 @@ let
       inherit owner;
       repo = "keystone";
       rev = keystone-rev;
-      sha256 = keystone-sha256;
+      hash = keystone-hash;
     }
   );
   keystone-override = keystone.overrideAttrs (old: {

@@ -16,7 +16,7 @@ let
     owner = "SpyHoodle";
     repo = "pridefetch";
     rev = "v" + version;
-    inherit sha256;
+    inherit hash;
   };
 in
 
