@@ -53,16 +53,19 @@ in
       ];
       description = "The path of the Backrest config file";
       default = "${cfg.rootDirectory}/config.json";
+      defaultText = "\"\${cfg.rootDirectory}/config.json\"";
     };
     dataDirectory = mkOption {
       type = types.str;
       description = "The path of the Backrest data directory. This is not to be confused with the target repository location.";
       default = "${cfg.rootDirectory}/data";
+      defaultText = "\"\${cfg.rootDirectory}/data\"";
     };
     cacheDirectory = mkOption {
       type = types.str;
       description = "The path of the Backrest cache directory";
       default = "${cfg.rootDirectory}/cache";
+      defaultText = "\"\${cfg.rootDirectory}/cache\"";
     };
   };
 
