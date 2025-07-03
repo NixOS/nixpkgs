@@ -5,7 +5,6 @@
   fetchFromGitHub,
   boost,
   cmake,
-  git,
   vectorscan,
   openssl,
   pkg-config,
@@ -27,10 +26,6 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-hVBHIm/12WU6g45QMxxuGk41B0kwThk7A84fOxArvno=";
 
-  nativeCheckInputs = [
-    git
-  ];
-
   checkFlags = [
     # These tests expect access to network to clone and use GitHub API
     "--skip=github::github_repos_list_multiple_user_dedupe_jsonl_format"
@@ -44,6 +39,11 @@ rustPlatform.buildRustPackage rec {
 
     # This caused a flaky result. See https://github.com/NixOS/nixpkgs/pull/422012#issuecomment-3031728181
     "--skip=scan::git_url::git_binary_missing"
+
+    # Also skips all tests which depend on external git command to prevent unstable tests similar to git_binary_missing
+    # See https://github.com/NixOS/nixpkgs/pull/422012#discussion_r2182551619
+    "--skip=scan::git_url::https_nonexistent"
+    "--skip=scan::basic::scan_git_emptyrepo"
   ];
 
   nativeBuildInputs = [
