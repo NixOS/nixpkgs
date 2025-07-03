@@ -16,14 +16,14 @@
 
 assert lib.xor withLibiodbc withUnixODBC;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "psqlodbc";
-  version = "${builtins.replaceStrings [ "_" ] [ "." ] (lib.strings.removePrefix "REL-" src.tag)}";
+  version = "17.00.0006";
 
   src = fetchFromGitHub {
     owner = "postgresql-interfaces";
     repo = "psqlodbc";
-    tag = "REL-17_00_0006";
+    tag = "REL-${lib.replaceString "." "_" finalAttrs.version}";
     hash = "sha256-iu1PWkfOyWtMmy7/8W+acu8v+e8nUPkCIHtVNZ8HzRg=";
   };
 
@@ -48,7 +48,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^REL-(\\d+)_(\\d+)_(\\d+)$" ];
+    };
   }
   // lib.optionalAttrs withUnixODBC {
     fancyName = "PostgreSQL";
@@ -62,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = libpq.meta.teams;
   };
-}
+})
