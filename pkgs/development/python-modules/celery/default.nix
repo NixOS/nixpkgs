@@ -118,10 +118,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "celery" ];
 
-  passthru.tests = {
-    inherit (nixosTests) sourcehut;
-  };
-
   meta = with lib; {
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
