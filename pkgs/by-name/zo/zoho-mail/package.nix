@@ -55,8 +55,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin/
-    dpkg -x $src $out/bin/
-    cd $out
+    dpkg -x $src $out/
+    ln -s "$out/opt/Zoho Mail - Desktop/zoho-mail-desktop" $out/bin/zoho-mail-desktop
+    mv $out/usr/share $out/
+    rmdir $out/usr
+    substituteInPlace $out/share/zoho-mail-desktop.desktop \
+      --replace-fail 'Exec="/opt/Zoho Mail - Desktop/zoho-mail-desktop" %U' 'Exec=zoho-mail-desktop %U'
     runHook postInstall
   '';
 
