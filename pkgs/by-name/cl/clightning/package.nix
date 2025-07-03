@@ -19,6 +19,7 @@
   sqlite,
   zlib,
   jq,
+  postgresql
 }:
 let
   py3 = python3.withPackages (p: [
@@ -62,12 +63,20 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
     jq
+    postgresql
   ];
 
   # this causes some python trouble on a darwin host so we skip this step.
   # also we have to tell libwally-core to use sed instead of gsed.
-  postPatch =
-    if !stdenv.hostPlatform.isDarwin then
+  postPatch = ''
+      # Force PostgreSQL detection in configure script
+    sed -i configure \
+      -e '/We need a database, but neither sqlite3 nor postgres found/c\echo "PostgreSQL forced via Nix build"' \
+      -e 's/^HAVE_POSTGRES=.*/HAVE_POSTGRES=1/' \
+      -e "s|^POSTGRES_INCLUDE=.*|POSTGRES_INCLUDE=\"-I${postgresql.dev}/include\"|" \
+      -e "s|^POSTGRES_LDLIBS=.*|POSTGRES_LDLIBS=\"-L${postgresql.lib}/lib -lpq\"|"
+  '' +
+    (if !stdenv.hostPlatform.isDarwin then
       ''
         patchShebangs \
           tools/generate-wire.py \
@@ -80,7 +89,7 @@ stdenv.mkDerivation rec {
       ''
         substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
         substituteInPlace external/libwally-core/configure.ac --replace gsed sed
-      '';
+      '');
 
   configureFlags = [ "--disable-valgrind" ];
 
@@ -107,6 +116,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       jb55
       prusnak
+      jjacke13
     ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
