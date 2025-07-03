@@ -29,7 +29,7 @@
         ];
         # Try for about 10 minutes rather than the default of 5 attempts.
         serviceConfig.RestartSec = 1;
-        serviceConfig.StartLimitBurst = 600;
+        unitConfig.StartLimitBurst = 600;
       };
       # systemd.services.vault.unitConfig.RequiresMountsFor = "/run/keys/";
 
