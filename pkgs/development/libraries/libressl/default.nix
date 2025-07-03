@@ -148,4 +148,9 @@ in
       })
     ];
   };
+
+  libressl_4_1 = generic {
+    version = "4.1.0";
+    hash = "sha256-D3HBa9NL2qzNy5al2UpJIb+2EuxuDrp6gNiFTu/Yu2E=";
+  };
 }

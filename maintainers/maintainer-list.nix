@@ -4279,6 +4279,13 @@
     githubId = 44584960;
     name = "Denis Khalmatov";
   };
+  ccicnce113424 = {
+    email = "ccicnce113424@gmail.com";
+    matrix = "@ccicnce113424:matrix.org";
+    github = "ccicnce113424";
+    githubId = 30774232;
+    name = "ccicnce113424";
+  };
   cdepillabout = {
     email = "cdep.illabout@gmail.com";
     matrix = "@cdepillabout:matrix.org";
@@ -12322,6 +12329,13 @@
     github = "jonboh";
     githubId = 31407988;
     name = "Jon Bosque";
+  };
+  jonhermansen = {
+    name = "Jon Hermansen";
+    email = "jon@jh86.org";
+    matrix = "@jonhermansen:matrix.org";
+    github = "jonhermansen";
+    githubId = 660911;
   };
   jonnybolton = {
     email = "jonnybolton@gmail.com";
@@ -21137,6 +21151,12 @@
     github = "Redhawk18";
     githubId = 77415970;
     name = "Redhawk";
+  };
+  redlonghead = {
+    email = "git@beardit.net";
+    github = "Redlonghead";
+    githubId = 52263558;
+    name = "Connor Beard";
   };
   redvers = {
     email = "red@infect.me";
