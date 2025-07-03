@@ -27,6 +27,10 @@ vimUtils.buildVimPlugin {
     cp -r ../lua .
   '';
 
+  checkInputs = [
+    vimPlugins.codecompanion-nvim
+  ];
+
   meta = {
     description = "Index and navigate your code repository using vectorcode";
     homepage = "https://github.com/Davidyz/VectorCode/blob/main/docs/neovim.md";

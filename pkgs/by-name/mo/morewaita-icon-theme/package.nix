@@ -8,26 +8,17 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "morewaita-icon-theme";
-  version = "48.2";
+  version = "48.3";
 
   src = fetchFromGitHub {
     owner = "somepaulo";
     repo = "MoreWaita";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eCMU5RNlqHN6tImGd2ur+rSC+kR5xQ8Zh4BaRgjBHVc=";
+    hash = "sha256-ywZSRNXVxjs5l5UO4yvNZ7q7PRlaLNi/2+HSNhe8e5w=";
   };
-
-  patches = [
-    # Avoiding "ERROR: noBrokenSymlinks". ref: https://github.com/somepaulo/MoreWaita/pull/335
-    ./fix-broken-symlinks.patch
-  ];
 
   postPatch = ''
     patchShebangs install.sh
-
-    # Replace this workaround if https://github.com/somepaulo/MoreWaita/pull/339 is merged
-    substituteInPlace install.sh \
-      --replace-fail '"''${HOME}/.local/share/' '"$out/share/'
   '';
 
   nativeBuildInputs = [
@@ -38,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ./install.sh
+    THEMEDIR="$out/share/icons/MoreWaita" ./install.sh
 
     runHook postInstall
   '';

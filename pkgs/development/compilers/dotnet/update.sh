@@ -43,7 +43,7 @@ platform_sources () {
 
         [[ -z "$url" || -z "$hash" ]] && continue
 
-        hash=$(nix hash convert --to sri --hash-algo sha512 "$hash")
+        hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha512 "$hash")
 
         echo "      $rid = {
         url = \"$url\";
@@ -73,7 +73,7 @@ generate_package_list() {
         if hash=$(curl -s --head "$url" -o /dev/null -w '%header{x-ms-meta-sha512}') && [[ -n "$hash" ]]; then
             # Undocumented fast path for nuget.org
             # https://github.com/NuGet/NuGetGallery/issues/9433#issuecomment-1472286080
-            hash=$(nix hash convert --to sri --hash-algo sha512 "$hash")
+            hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha512 "$hash")
         elif {
             catalog_url=$(curl -sL --compressed "${nuget_registration_base_url}${pkg,,}/${version,,}.json" | jq -r ".catalogEntry") && [[ -n "$catalog_url" ]] &&
             catalog=$(curl -sL "$catalog_url") && [[ -n "$catalog" ]] &&
@@ -81,11 +81,11 @@ generate_package_list() {
             hash=$(jq -er '.packageHash' <<<"$catalog") && [[ -n "$hash" ]]
         }; then
             # Documented but slower path (requires 2 requests)
-            hash=$(nix hash convert --to sri --hash-algo "${hash_algorithm,,}" "$hash")
+            hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo "${hash_algorithm,,}" "$hash")
         elif hash=$(nix-prefetch-url "$url" --type sha512); then
             # Fallback to downloading and hashing locally
             echo "Failed to fetch hash from nuget for $url, falling back to downloading locally" >&2
-            hash=$(nix hash convert --to sri --hash-algo sha512 "$hash")
+            hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha512 "$hash")
         else
             echo "Failed to fetch hash for $url" >&2
             exit 1
