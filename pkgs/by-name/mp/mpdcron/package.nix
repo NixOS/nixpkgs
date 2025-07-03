@@ -18,12 +18,6 @@
   bundlerUpdateScript,
 }:
 
-let
-  gemEnv = bundlerEnv {
-    name = "mpdcron-bundle";
-    gemdir = ./.;
-  };
-in
 stdenv.mkDerivation {
   pname = "mpdcron";
   version = "20161228";
@@ -32,7 +26,7 @@ stdenv.mkDerivation {
     owner = "alip";
     repo = "mpdcron";
     rev = "e49e6049b8693d31887c538ddc7b19f5e8ca476b";
-    sha256 = "0vdksf6lcgmizqr5mqp0bbci259k0dj7gpmhx32md41jlmw5skaw";
+    hash = "sha256-XE1deKUykFbF6LDed2QDMxUR2Vrg4loy/rE+Ro3Ts20=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +41,10 @@ stdenv.mkDerivation {
     libmpdclient
     curl
     sqlite
-    gemEnv.wrappedRuby
+    (bundlerEnv {
+      name = "mpdcron-bundle";
+      gemdir = ./.;
+    }).wrappedRuby
     libnotify
   ];
 
