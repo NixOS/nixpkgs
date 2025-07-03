@@ -10420,6 +10420,10 @@ self: super: with self; {
 
   nvdlib = callPackage ../development/python-modules/nvdlib { };
 
+  nvidia-dlprof-pytorch-nvtx =
+    callPackage ../development/python-modules/nvidia-dlprof-pytorch-nvtx
+      { };
+
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
