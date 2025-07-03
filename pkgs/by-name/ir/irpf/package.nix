@@ -65,7 +65,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # make xdg-open overrideable at runtime
     makeWrapper ${jdk11}/bin/java $out/bin/irpf \
-      --add-flags "-Dawt.useSystemAAFontSettings=on" \
+      --add-flags "-Dawt.useSystemAAFontSettings=gasp" \
       --add-flags "-Dswing.aatext=true" \
       --add-flags "-jar $BASEDIR/irpf.jar" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
