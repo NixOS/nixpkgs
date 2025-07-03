@@ -109,8 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
           "test/sql/copy/csv/test_sniff_httpfs.test"
           "test/sql/httpfs/internal_issue_2490.test"
           # fails with incorrect result
-          # Upstream issue https://github.com/duckdb/duckdb/issues/14294
-          "test/sql/copy/file_size_bytes.test"
+          "test/issues/general/test_17757.test"
         ]
         ++ lib.optionals stdenv.hostPlatform.isAarch64 [
           "test/sql/aggregate/aggregates/test_kurtosis.test"

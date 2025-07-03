@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p cacert jq git moreutils nix nix-prefetch-github
+#!nix-shell -i bash -p cacert jq git moreutils nix nix-prefetch-github gh
 # shellcheck shell=bash
 
 set -euo pipefail
