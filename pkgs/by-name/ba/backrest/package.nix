@@ -8,6 +8,7 @@
   restic,
   stdenv,
   util-linux,
+  makeBinaryWrapper,
 }:
 let
   pname = "backrest";
@@ -53,9 +54,19 @@ in
 buildGoModule {
   inherit pname src version;
 
+  postPatch = ''
+    sed -i -e \
+      '/func installRestic(targetPath string) error {/a\
+        return fmt.Errorf("installing restic from an external source is prohibited by nixpkgs")' \
+      internal/resticinstaller/resticinstaller.go
+  '';
+
   vendorHash = "sha256-AINnBkP+e9C/f/C3t6NK+6PYSVB4NON0C71S6SwUXbE=";
 
-  nativeBuildInputs = [ gzip ];
+  nativeBuildInputs = [
+    gzip
+    makeBinaryWrapper
+  ];
 
   preBuild = ''
     mkdir -p ./webui/dist
@@ -85,6 +96,11 @@ buildGoModule {
     # Use restic from nixpkgs, otherwise download fails in sandbox
     export BACKREST_RESTIC_COMMAND="${restic}/bin/restic"
     export HOME=$(pwd)
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/backrest \
+      --set-default BACKREST_RESTIC_COMMAND "${lib.getExe restic}"
   '';
 
   meta = {
