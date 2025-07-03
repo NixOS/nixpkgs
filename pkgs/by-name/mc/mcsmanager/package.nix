@@ -135,6 +135,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    # Glob will match all subdirs.
+    shopt -s globstar
+
     mkdir -p $out/share/{daemon,web}
 
     cp -r ${finalAttrs.daemon}/{production/app.js{,.map},node_modules,package{,-lock}.json} $out/share/daemon
@@ -142,11 +145,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     for p in daemon web
     do
+      # Prune
       pushd $out/share/$p
-      chmod -R +w node_modules
-      npm prune --omit=dev --no-save
-      rm package{,-lock}.json
+        chmod -R +w node_modules
+        npm prune --omit=dev --no-save
+        # Remove build artifacts that bloat the closure
+        rm -rf \
+          package{,-lock}.json \
+          node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
       popd
+
       makeWrapper ${lib.getExe finalAttrs.nodejs} $out/bin/mcsm-$p \
         --set NODE_PATH "$out/share/$p/node_modules" \
         --add-flags $out/share/$p/app.js
