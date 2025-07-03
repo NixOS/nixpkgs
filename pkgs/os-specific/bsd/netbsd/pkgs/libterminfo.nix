@@ -1,4 +1,5 @@
 {
+  lib,
   mkDerivation,
   bsdSetupHook,
   netbsdSetupHook,
@@ -41,4 +42,6 @@ mkDerivation {
     make -C $BSDSRCDIR/share/terminfo $makeFlags BINDIR=$out/share install
   '';
   extraPaths = [ "share/terminfo" ];
+
+  meta.platforms = lib.platforms.unix;
 }

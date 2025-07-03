@@ -1,4 +1,5 @@
 {
+  lib,
   mkDerivation,
   bsdSetupHook,
   netbsdSetupHook,
@@ -24,4 +25,6 @@ mkDerivation {
   ];
   buildInputs = compatIfNeeded;
   extraPaths = [ cksum.path ];
+
+  meta.platforms = lib.platforms.unix;
 }
