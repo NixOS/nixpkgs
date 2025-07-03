@@ -121,5 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zipline";
+    platforms = lib.platforms.linux;
   };
 })
