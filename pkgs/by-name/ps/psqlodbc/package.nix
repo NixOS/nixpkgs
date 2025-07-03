@@ -1,13 +1,15 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
   autoreconfHook,
+  fetchFromGitHub,
+  lib,
   libpq,
+  nix-update-script,
   openssl,
+  stdenv,
+
   withLibiodbc ? false,
   libiodbc,
+
   withUnixODBC ? true,
   unixODBC,
 }:
@@ -38,6 +40,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  configureFlags = [
+    "CPPFLAGS=-DSQLCOLATTRIBUTE_SQLLEN" # needed for cross
+    "--with-libpq=${lib.getDev libpq}"
+  ]
+  ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
+  ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
+
   passthru = {
     updateScript = nix-update-script { };
   }
@@ -46,18 +55,11 @@ stdenv.mkDerivation rec {
     driver = "lib/psqlodbcw.so";
   };
 
-  configureFlags = [
-    "CPPFLAGS=-DSQLCOLATTRIBUTE_SQLLEN" # needed for cross
-    "--with-libpq=${lib.getDev libpq}"
-  ]
-  ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
-  ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
-
-  meta = with lib; {
+  meta = {
     homepage = "https://odbc.postgresql.org/";
     description = "ODBC driver for PostgreSQL";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
     teams = libpq.meta.teams;
   };
 }
