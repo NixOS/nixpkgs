@@ -41,6 +41,9 @@ rustPlatform.buildRustPackage rec {
     "--skip=github::github_repos_list_user_jsonl_format"
     "--skip=github::github_repos_list_user_repo_filter"
     "--skip=scan::appmaker::scan_workflow_from_git_url"
+
+    # This caused a flaky result. See https://github.com/NixOS/nixpkgs/pull/422012#issuecomment-3031728181
+    "--skip=scan::git_url::git_binary_missing"
   ];
 
   nativeBuildInputs = [
