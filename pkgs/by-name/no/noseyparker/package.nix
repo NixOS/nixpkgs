@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   boost,
@@ -8,6 +9,7 @@
   vectorscan,
   openssl,
   pkg-config,
+  installShellFiles,
   versionCheckHook,
 }:
 
@@ -44,6 +46,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    installShellFiles
   ];
   buildInputs = [
     boost
@@ -52,6 +55,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   OPENSSL_NO_VENDOR = 1;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd noseyparker-cli \
+      --bash <("$out/bin/noseyparker-cli" generate shell-completions --shell bash) \
+      --zsh <("$out/bin/noseyparker-cli" generate shell-completions --shell zsh) \
+      --fish <("$out/bin/noseyparker-cli" generate shell-completions --shell fish)
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
