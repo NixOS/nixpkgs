@@ -133,7 +133,6 @@ stdenv.mkDerivation rec {
       mpl20
     ];
     maintainers = with maintainers; [
-      afranchuk
       rnhmjoj
     ];
     mainProgram = "ipsec";
