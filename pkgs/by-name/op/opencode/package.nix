@@ -25,12 +25,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.1.182";
+  version = "0.1.185";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XTVh/lq9Ma6FATH1SPuLveig8MD/uJ/34EQzfuPAnxI=";
+    hash = "sha256-UCYfme9l7F3oBt+3sQE37+PwsmeTbnUFarbqVlb1f0I=";
   };
 
   tui = buildGoModule {
@@ -49,6 +49,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "-w"
       "-X=main.Version=${finalAttrs.version}"
     ];
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm755 $GOPATH/bin/opencode $out/bin/tui
+
+      runHook postInstall
+    '';
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -77,9 +85,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
 
     installPhase = ''
-      mkdir -p $out/node_modules
+      runHook preInstall
 
+      mkdir -p $out/node_modules
       cp -R ./node_modules $out
+
+      runHook postInstall
     '';
 
     # Required else we get errors that our fixed-output derivation references store paths
@@ -118,7 +129,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --target=${bun-target.${stdenvNoCC.hostPlatform.system}} \
       --outfile=opencode \
       ./packages/opencode/src/index.ts \
-      ${finalAttrs.tui}/bin/opencode
+      ${finalAttrs.tui}/bin/tui
 
     runHook postBuild
   '';
@@ -129,7 +140,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp opencode $out/bin/opencode
+    install -Dm755 opencode $out/bin/opencode
 
     runHook postInstall
   '';
