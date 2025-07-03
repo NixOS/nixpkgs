@@ -2,7 +2,7 @@
   lib,
   python3Packages,
   edition ? "ac",
-  fetchFromGitHub,
+  fetchurl,
 }:
 
 let
@@ -42,11 +42,9 @@ python3Packages.buildPythonApplication rec {
   version = "1.18.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "9001";
-    repo = "copyparty";
-    rev = "v1.18.0";
-    hash = "sha256-uxhSQR+QjzmtagWLTeVcGgv2l1R5/y3juUr1aftHwL8=";
+  src = fetchurl {
+    url = "https://github.com/9001/copyparty/releases/download/v${version}/copyparty-${version}.tar.gz";
+    hash = "sha256-accMlrmsSgnEfMxR95MKboL1LtcnAwN0hCaBUzr8Eow=";    
   };
 
   build-system = with python3Packages; [
