@@ -70,7 +70,10 @@ stdenv.mkDerivation rec {
     description = "Protect a computer network from getting infected";
     homepage = "http://www.xbill.org/";
     license = lib.licenses.gpl1Only;
-    maintainers = with lib.maintainers; [ aw ];
+    maintainers = with lib.maintainers; [
+      aw
+      jonhermansen
+    ];
     longDescription = ''
       Ever get the feeling that nothing is going right? You're a sysadmin,
       and someone's trying to destroy your computers. The little people
