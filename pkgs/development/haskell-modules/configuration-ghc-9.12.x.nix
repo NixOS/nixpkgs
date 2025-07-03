@@ -175,5 +175,5 @@ with haskellLib;
   };
 
   # Allow Cabal 3.14
-  hpack = doDistribute self.hpack_0_38_0;
+  hpack = doDistribute self.hpack_0_38_1;
 }
