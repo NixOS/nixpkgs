@@ -35,6 +35,65 @@ let
 
 */
 
+/*
+im:
+RUN     apk --no-cache add !pyc \
+            tzdata wget mimalloc2 mimalloc2-insecure \
+            py3-jinja2 py3-argon2-cffi py3-pillow py3-mutagen
+*/
+
+/*
+ac:
+RUN     apk --no-cache add !pyc \
+            tzdata wget mimalloc2 mimalloc2-insecure \
+            py3-jinja2 py3-argon2-cffi py3-pyzmq py3-pillow \
+            ffmpeg
+*/
+
+/*
+iv:
+RUN     apk add -U !pyc \
+            tzdata wget mimalloc2 mimalloc2-insecure \
+            py3-jinja2 py3-argon2-cffi py3-pyzmq py3-pillow \
+            py3-pip py3-cffi \
+            ffmpeg \
+            py3-magic \
+            vips-jxl vips-heif vips-poppler vips-magick \
+        && apk add -t .bd \
+            bash wget gcc g++ make cmake patchelf \
+            python3-dev py3-wheel libffi-dev \
+        && rm -f /usr/lib/python3* /EXTERNALLY-MANAGED \
+        && python3 -m pip install pyvips \
+        && apk del py3-pip .bd
+*/
+
+/*
+dj:
+COPY    i/bin/mtag/install-deps.sh ./
+COPY    i/bin/mtag/audio-bpm.py /mtag/
+COPY    i/bin/mtag/audio-key.py /mtag/
+RUN     apk add -U !pyc \
+            tzdata wget mimalloc2 mimalloc2-insecure \
+            py3-jinja2 py3-argon2-cffi py3-pyzmq py3-pillow \
+            py3-pip py3-cffi \
+            ffmpeg \
+            py3-magic \
+            vips-jxl vips-heif vips-poppler vips-magick \
+            py3-numpy fftw libsndfile \
+            vamp-sdk vamp-sdk-libs \
+        && apk add -t .bd \
+            bash wget gcc g++ make cmake patchelf \
+            python3-dev ffmpeg-dev fftw-dev libsndfile-dev \
+            py3-wheel py3-numpy-dev libffi-dev \
+            vamp-sdk-dev \
+        && rm -f /usr/lib/python3* /EXTERNALLY-MANAGED \
+        && python3 -m pip install pyvips \
+        && bash install-deps.sh \
+        && apk del py3-pip .bd \
+        && chmod 777 /root \
+        && ln -s /root/vamp /root/.local /
+*/
+
 in
 
 python3Packages.buildPythonApplication rec {
@@ -53,7 +112,9 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; ([
     jinja2
-  ] ++ (optionalsEd "ac" [
+  ] ++ (optionalsEd "im" [
+    mutagen
+  ]) ++ (optionalsEd "ac" [
     argon2-cffi
     pyzmq
     pillow
