@@ -57,6 +57,10 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = 1;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    mkdir -p manpages
+    "$out/bin/noseyparker-cli" generate manpages
+    installManPage manpages/*
+
     installShellCompletion --cmd noseyparker-cli \
       --bash <("$out/bin/noseyparker-cli" generate shell-completions --shell bash) \
       --zsh <("$out/bin/noseyparker-cli" generate shell-completions --shell zsh) \
