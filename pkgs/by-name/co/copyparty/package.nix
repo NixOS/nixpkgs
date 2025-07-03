@@ -3,6 +3,9 @@
   python3Packages,
   edition ? "ac",
   fetchurl,
+  withCfssl ? true,
+  cfssl,
+  ffmpeg,
 }:
 
 let
@@ -119,6 +122,11 @@ python3Packages.buildPythonApplication rec {
     pyzmq
     pillow
   ]));
+
+  extraPath = (lib.optionals withCfssl [ cfssl ])
+    ++ (optionalsEd "ac" [ ffmpeg ]);
+
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath extraPath}" ];
 
   meta = {
     description = "turn almost any device into a file server";
