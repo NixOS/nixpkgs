@@ -156,12 +156,31 @@ stdenv.mkDerivation (finalAttrs: {
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
-    lib.optionalString withPixbufLoader ''
-      # Merge gdkpixbuf and librsvg loaders
-      GDK_PIXBUF=$out/${gdk-pixbuf.binaryDir}
-      cat ${lib.getLib gdk-pixbuf}/${gdk-pixbuf.binaryDir}/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
-      mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
-    ''
+    lib.optionalString withPixbufLoader (
+      lib.optionalString stdenv.hostPlatform.isDarwin ''
+        # meson installs the SVG loader as a .dylib with a stale @rpath/build-dir
+        # install_name, and gdk-pixbuf-query-loaders only scans *.so — so the
+        # generated cache silently has no SVG entry on Darwin. Mirror the
+        # workaround in gdk-pixbuf's package.nix: patch the binary, rename it
+        # to .so, then regenerate librsvg's cache before merging it.
+        for f in $out/${gdk-pixbuf.binaryDir}/loaders/*.dylib; do
+          install_name_tool \
+            -id $f \
+            -change @rpath/librsvg-2.2.dylib $out/lib/librsvg-2.2.dylib \
+            $f
+          mv $f ''${f%.dylib}.so
+        done
+        GDK_PIXBUF_MODULEDIR=$out/${gdk-pixbuf.binaryDir}/loaders \
+          ${emulator} ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders \
+          > $out/${gdk-pixbuf.binaryDir}/loaders.cache
+      ''
+      + ''
+        # Merge gdkpixbuf and librsvg loaders
+        GDK_PIXBUF=$out/${gdk-pixbuf.binaryDir}
+        cat ${lib.getLib gdk-pixbuf}/${gdk-pixbuf.binaryDir}/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
+        mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
+      ''
+    )
     + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
       installShellCompletion --cmd rsvg-convert \
         --bash <(${emulator} $out/bin/rsvg-convert --completion bash) \
