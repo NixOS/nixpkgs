@@ -8082,6 +8082,8 @@ self: super: with self; {
 
   libpyfoscam = callPackage ../development/python-modules/libpyfoscam { };
 
+  libpyfoscamcgi = callPackage ../development/python-modules/libpyfoscamcgi { };
+
   libpysal = callPackage ../development/python-modules/libpysal { };
 
   libpyvivotek = callPackage ../development/python-modules/libpyvivotek { };
