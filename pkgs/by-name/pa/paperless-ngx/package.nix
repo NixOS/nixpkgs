@@ -294,6 +294,9 @@ python.pkgs.buildPythonApplication rec {
     "test_rtl_language_detection"
     # django.core.exceptions.FieldDoesNotExist: Document has no field named 'transaction_id'
     "test_convert"
+    # Favicon tests fail due to static file handling in the test environment
+    "test_favicon_view"
+    "test_favicon_view_missing_file"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
