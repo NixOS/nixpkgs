@@ -129,6 +129,8 @@ python3Packages.buildPythonApplication rec {
   ]) ++ (optionalsEd "ac" [
     pyzmq
     pillow
+    pillow-heif
+    pillow-avif-plugin
   ]) ++ (optionalsEd "iv" [
     cffi
     magic
