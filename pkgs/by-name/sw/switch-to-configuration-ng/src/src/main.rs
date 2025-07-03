@@ -634,7 +634,7 @@ fn handle_modified_unit(
                     };
 
                     if sockets.is_empty() {
-                        sockets.push(format!("{}.socket", base_name));
+                        sockets.push(format!("{base_name}.socket"));
                     }
 
                     for socket in &sockets {
@@ -809,7 +809,7 @@ fn path_to_unit_name(bin_path: &Path, path: &str) -> String {
         .arg(path)
         .output()
     else {
-        eprintln!("Unable to escape {}!", path);
+        eprintln!("Unable to escape {path}!");
         die();
     };
 
@@ -974,14 +974,13 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
 
 fn usage(argv0: &str) -> ! {
     eprintln!(
-        r#"Usage: {} [check|switch|boot|test|dry-activate]
+        r#"Usage: {argv0} [check|switch|boot|test|dry-activate]
 check:        run pre-switch checks and exit
 switch:       make the configuration the boot default and activate now
 boot:         make the configuration the boot default
 test:         activate the configuration, but don't make it the boot default
 dry-activate: show what would be done if this configuration were activated
-"#,
-        argv0
+"#
     );
     std::process::exit(1);
 }
@@ -1009,7 +1008,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
 
     let os_release = parse_os_release().context("Failed to parse os-release")?;
 
-    let distro_id_re = Regex::new(format!("^\"?{}\"?$", distro_id).as_str())
+    let distro_id_re = Regex::new(format!("^\"?{distro_id}\"?$").as_str())
         .context("Invalid regex for distro ID")?;
 
     // This is a NixOS installation if it has /etc/NIXOS or a proper /etc/os-release.
@@ -1181,7 +1180,7 @@ won't take effect until you reboot the system.
             })
         {
             if !current_unit_file.exists() && !new_unit_file.exists() {
-                base_unit = format!("{}@.{}", template_name, template_instance);
+                base_unit = format!("{template_name}@.{template_instance}");
                 current_base_unit_file = Path::new("/etc/systemd/system").join(&base_unit);
                 new_base_unit_file = toplevel.join("etc/systemd/system").join(&base_unit);
             }
@@ -1414,7 +1413,7 @@ won't take effect until you reboot the system.
                 })
             {
                 if !current_unit_file.exists() && !new_unit_file.exists() {
-                    base_unit = format!("{}@.{}", template_name, template_instance);
+                    base_unit = format!("{template_name}@.{template_instance}");
                     new_base_unit_file = toplevel.join("etc/systemd/system").join(&base_unit);
                 }
             }
@@ -1450,7 +1449,7 @@ won't take effect until you reboot the system.
         }
 
         remove_file_if_exists(DRY_RESTART_BY_ACTIVATION_LIST_FILE)
-            .with_context(|| format!("Failed to remove {}", DRY_RESTART_BY_ACTIVATION_LIST_FILE))?;
+            .with_context(|| format!("Failed to remove {DRY_RESTART_BY_ACTIVATION_LIST_FILE}"))?;
 
         for unit in std::fs::read_to_string(DRY_RELOAD_BY_ACTIVATION_LIST_FILE)
             .unwrap_or_default()
@@ -1466,7 +1465,7 @@ won't take effect until you reboot the system.
         }
 
         remove_file_if_exists(DRY_RELOAD_BY_ACTIVATION_LIST_FILE)
-            .with_context(|| format!("Failed to remove {}", DRY_RELOAD_BY_ACTIVATION_LIST_FILE))?;
+            .with_context(|| format!("Failed to remove {DRY_RELOAD_BY_ACTIVATION_LIST_FILE}"))?;
 
         if restart_systemd {
             eprintln!("would restart systemd");
@@ -1578,7 +1577,7 @@ won't take effect until you reboot the system.
             })
         {
             if !new_unit_file.exists() {
-                base_unit = format!("{}@.{}", template_name, template_instance);
+                base_unit = format!("{template_name}@.{template_instance}");
                 new_base_unit_file = toplevel.join("etc/systemd/system").join(&base_unit);
             }
         }
@@ -1616,7 +1615,7 @@ won't take effect until you reboot the system.
 
     // We can remove the file now because it has been propagated to the other restart/reload files
     remove_file_if_exists(RESTART_BY_ACTIVATION_LIST_FILE)
-        .with_context(|| format!("Failed to remove {}", RESTART_BY_ACTIVATION_LIST_FILE))?;
+        .with_context(|| format!("Failed to remove {RESTART_BY_ACTIVATION_LIST_FILE}"))?;
 
     for unit in std::fs::read_to_string(RELOAD_BY_ACTIVATION_LIST_FILE)
         .unwrap_or_default()
@@ -1633,7 +1632,7 @@ won't take effect until you reboot the system.
 
     // We can remove the file now because it has been propagated to the other reload file
     remove_file_if_exists(RELOAD_BY_ACTIVATION_LIST_FILE)
-        .with_context(|| format!("Failed to remove {}", RELOAD_BY_ACTIVATION_LIST_FILE))?;
+        .with_context(|| format!("Failed to remove {RELOAD_BY_ACTIVATION_LIST_FILE}"))?;
 
     // Restart systemd if necessary. Note that this is done using the current version of systemd,
     // just in case the new one has trouble communicating with the running pid 1.
@@ -1686,7 +1685,7 @@ won't take effect until you reboot the system.
                     .get("org.freedesktop.login1.User", "RuntimePath")
                     .with_context(|| format!("Failed to get runtime directory for {name}"))?;
 
-                eprintln!("reloading user units for {}...", name);
+                eprintln!("reloading user units for {name}...");
                 let myself = Path::new("/proc/self/exe")
                     .canonicalize()
                     .context("Failed to get full path to /proc/self/exe")?;
@@ -1776,7 +1775,7 @@ won't take effect until you reboot the system.
         block_on_jobs(&dbus_conn, &submitted_jobs);
 
         remove_file_if_exists(RELOAD_LIST_FILE)
-            .with_context(|| format!("Failed to remove {}", RELOAD_LIST_FILE))?;
+            .with_context(|| format!("Failed to remove {RELOAD_LIST_FILE}"))?;
     }
 
     // Restart changed services (those that have to be restarted rather than stopped and started).
@@ -1804,7 +1803,7 @@ won't take effect until you reboot the system.
         block_on_jobs(&dbus_conn, &submitted_jobs);
 
         remove_file_if_exists(RESTART_LIST_FILE)
-            .with_context(|| format!("Failed to remove {}", RESTART_LIST_FILE))?;
+            .with_context(|| format!("Failed to remove {RESTART_LIST_FILE}"))?;
     }
 
     // Start all active targets, as well as changed units we stopped above. The latter is necessary
@@ -1837,12 +1836,12 @@ won't take effect until you reboot the system.
     block_on_jobs(&dbus_conn, &submitted_jobs);
 
     remove_file_if_exists(START_LIST_FILE)
-        .with_context(|| format!("Failed to remove {}", START_LIST_FILE))?;
+        .with_context(|| format!("Failed to remove {START_LIST_FILE}"))?;
 
     for (unit, job, result) in finished_jobs.borrow().values() {
         match result.as_str() {
             "timeout" | "failed" | "dependency" => {
-                eprintln!("Failed to {} {}", job, unit);
+                eprintln!("Failed to {job} {unit}");
                 exit_code = 4;
             }
             _ => {}
