@@ -437,6 +437,7 @@
   ./services/audio/ympd.nix
   ./services/autotierfs.nix
   ./services/backup/automysqlbackup.nix
+  ./services/backup/backrest.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
   ./services/backup/borgmatic.nix
