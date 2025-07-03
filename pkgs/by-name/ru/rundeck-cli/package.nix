@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  makeWrapper,
+  makeBinaryWrapper,
   jre11_minimal,
   jdk11_headless,
   versionCheckHook,
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-c6QAgwyRCtoOlS7DEmjyK3BwHV122bilL6H+Hzrv2dQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
   buildInputs = [ jre11_minimal_headless ];
 
   dontUnpack = true;
