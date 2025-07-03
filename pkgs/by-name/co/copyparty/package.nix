@@ -6,6 +6,8 @@
   withCfssl ? true,
   cfssl,
   ffmpeg,
+  vips,
+  fftw,
 }:
 
 let
@@ -36,6 +38,12 @@ let
 
 [`ac` is recommended](https://hub.docker.com/r/copyparty/ac) since the additional features available in `iv` and `dj` are rarely useful
 
+*/
+
+/*
+min:
+RUN     apk --no-cache add !pyc \
+            py3-jinja2
 */
 
 /*
@@ -116,15 +124,22 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; ([
     jinja2
   ] ++ (optionalsEd "im" [
+    argon2-cffi
     mutagen
   ]) ++ (optionalsEd "ac" [
-    argon2-cffi
     pyzmq
     pillow
+  ]) ++ (optionalsEd "iv" [
+    cffi
+    magic
+  ]) ++ (optionalsEd "dj" [
+    numpy
   ]));
 
   extraPath = (lib.optionals withCfssl [ cfssl ])
-    ++ (optionalsEd "ac" [ ffmpeg ]);
+    ++ (optionalsEd "ac" [ ffmpeg ])
+    ++ (optionalsEd "iv" [ vips /* vips-jxl vips-heif vips-poppler vips-magick */ ])
+    ++ (optionalsEd "dj" [ fftw ]);
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath extraPath}" ];
 
@@ -137,4 +152,3 @@ python3Packages.buildPythonApplication rec {
     ];
   };
 }
-
