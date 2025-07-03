@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   buildGoModule,
   bun,
   fetchFromGitHub,
@@ -10,21 +10,35 @@
 }:
 
 let
-  version = "0.1.176";
+  opencode-node-modules-hash = {
+    "aarch64-darwin" = "sha256-ZI4wJvBeSejhHjyRsYqpfUvJ959WU01JCW+2HIBs3Cg=";
+    "aarch64-linux" = "sha256-g/IyhBxVyU39rh2R9SfmHwBi4oMS12bo60Apbay06v0=";
+    "x86_64-darwin" = "sha256-ckWsqrwJEpL1ejrOSp5wTGwQYsDapLH3imNnSOEHQSw=";
+    "x86_64-linux" = "sha256-Q3zlrS7kuyKJReuIFqsqG5yfDuwLwBoCm0hUpJo9hSU=";
+  };
+  bun-target = {
+    "aarch64-darwin" = "bun-darwin-arm64";
+    "aarch64-linux" = "bun-linux-arm64";
+    "x86_64-darwin" = "bun-darwin-x64";
+    "x86_64-linux" = "bun-linux-x64";
+  };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "opencode";
+  version = "0.1.181";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
-    tag = "v${version}";
-    hash = "sha256-AKC8nAOa+33nOGSNzlQdbw2ESy+fg0j1h0k29qCCzd8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hANFrs0ihOwVbrFS0PyHyexLawpH+VzfwjG4FrOuYac=";
   };
 
-  opencode-tui = buildGoModule {
+  tui = buildGoModule {
     pname = "opencode-tui";
-    inherit version src;
+    inherit (finalAttrs) version;
+    src = "${finalAttrs.src}/packages/tui";
 
-    sourceRoot = "source/packages/tui";
-
-    vendorHash = "sha256-gkaxjMGoJfDX6QjDCn6SSyyO7/mRqYrh+IRhWeBzj48=";
+    vendorHash = "sha256-/gDzGBCRapDBpEV9x1pB3QsOX9yua2RFY3i4OAjaIqc=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -33,19 +47,13 @@ let
     ldflags = [
       "-s"
       "-w"
-      "-X=main.Version=${version}"
+      "-X=main.Version=${finalAttrs.version}"
     ];
   };
 
-  opencode-node-modules-hash = {
-    "aarch64-darwin" = "sha256-ZI4wJvBeSejhHjyRsYqpfUvJ959WU01JCW+2HIBs3Cg=";
-    "aarch64-linux" = "sha256-g/IyhBxVyU39rh2R9SfmHwBi4oMS12bo60Apbay06v0=";
-    "x86_64-darwin" = "sha256-ckWsqrwJEpL1ejrOSp5wTGwQYsDapLH3imNnSOEHQSw=";
-    "x86_64-linux" = "sha256-Q3zlrS7kuyKJReuIFqsqG5yfDuwLwBoCm0hUpJo9hSU=";
-  };
-  node_modules = stdenv.mkDerivation {
-    name = "opencode-${version}-node-modules";
-    inherit version src;
+  node_modules = stdenvNoCC.mkDerivation {
+    pname = "opencode-node_modules";
+    inherit (finalAttrs) version src;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -77,25 +85,15 @@ let
     # Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = opencode-node-modules-hash.${stdenv.hostPlatform.system};
+    outputHash = opencode-node-modules-hash.${stdenvNoCC.hostPlatform.system};
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
 
-  modelsDevData = fetchurl {
+  models-dev-data = fetchurl {
     url = "https://models.dev/api.json";
     sha256 = "sha256-igxQOC+Hz2FnXIW/S4Px9WhRuBhcIQIHO+7U8jHU1TQ=";
   };
-  bun-target = {
-    "aarch64-darwin" = "bun-darwin-arm64";
-    "aarch64-linux" = "bun-linux-arm64";
-    "x86_64-darwin" = "bun-darwin-x64";
-    "x86_64-linux" = "bun-linux-x64";
-  };
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "opencode";
-  inherit version src;
 
   nativeBuildInputs = [ bun ];
 
@@ -104,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${node_modules}/node_modules .
+    cp -R ${finalAttrs.node_modules}/node_modules .
 
     runHook postConfigure
   '';
@@ -112,15 +110,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    export MODELS_JSON="$(cat ${modelsDevData})"
+    export MODELS_JSON="$(cat ${finalAttrs.models-dev-data})"
     bun build \
-      --define OPENCODE_VERSION="'${version}'" \
+      --define OPENCODE_VERSION="'${finalAttrs.version}'" \
       --compile \
       --minify \
-      --target=${bun-target.${stdenv.hostPlatform.system}} \
+      --target=${bun-target.${stdenvNoCC.hostPlatform.system}} \
       --outfile=opencode \
       ./packages/opencode/src/index.ts \
-      ${opencode-tui}/bin/opencode
+      ${finalAttrs.tui}/bin/opencode
 
     runHook postBuild
   '';
@@ -137,8 +135,21 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "HOME=$(mktemp -d) opencode --version";
+      inherit (finalAttrs) version;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "tui"
+        "--subpackage"
+        "node_modules"
+        "--subpackage"
+        "models-dev-data"
+      ];
+    };
   };
 
   meta = {
