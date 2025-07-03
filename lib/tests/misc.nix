@@ -4255,4 +4255,50 @@ runTests {
         };
       };
     };
+
+  testFilesystemResolveDefaultNixFile1 = {
+    expr = lib.filesystem.resolveDefaultNix ./foo.nix;
+    expected = ./foo.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile2 = {
+    expr = lib.filesystem.resolveDefaultNix ./default.nix;
+    expected = ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1 = {
+    expr = lib.filesystem.resolveDefaultNix ./.;
+    expected = ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile1_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./foo.nix);
+    expected = toString ./foo.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile2_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./default.nix);
+    expected = toString ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./.);
+    expected = toString ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1_toString2 = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./.);
+    expected = toString ./. + "/default.nix";
+  };
+
+  testFilesystemResolveDefaultNixNonExistent = {
+    expr = lib.filesystem.resolveDefaultNix "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs";
+    expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs";
+  };
+
+  testFilesystemResolveDefaultNixNonExistentDir = {
+    expr = lib.filesystem.resolveDefaultNix "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/";
+    expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/default.nix";
+  };
+
 }
