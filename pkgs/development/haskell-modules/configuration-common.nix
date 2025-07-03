@@ -104,6 +104,9 @@ with haskellLib;
         cabalInstallOverlay = cself: csuper: {
           Cabal = cself.Cabal_3_14_2_0;
           Cabal-syntax = cself.Cabal-syntax_3_14_2_0;
+
+          # Only needed for cabal2nix, hpack < 0.37 forbids Cabal >= 3.14
+          hpack = cself.hpack_0_38_1;
         };
       in
       {
@@ -169,11 +172,14 @@ with haskellLib;
           # May as well…
           (self.generateOptparseApplicativeCompletions [ "guardian" ])
         ];
+
+        cabal2nix-unstable = super.cabal2nix-unstable.overrideScope cabalInstallOverlay;
       }
     )
     cabal-install
     cabal-install-solver
     guardian
+    cabal2nix-unstable
     ;
 
   # Expected test output for these accidentally checks the absolute location of the source directory
