@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   abseil-cpp,
   meson,
   ninja,
@@ -20,6 +21,18 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-YR4ELukJgHMbfe80H+r8OiaZUCAqefGXmVOaTVVgOqA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "missing-include.patch";
+      url = "https://webrtc.googlesource.com/src/+/168090b0748301239627959e2d831fb05eba65f6%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      extraPrefix = "webrtc/";
+      includes = [ "webrtc/rtc_base/trace_event.h" ];
+      stripLen = 1;
+      hash = "sha256-4KZxr18QGS1Zz0CuE2MRk+ftIqSNDPxaIMX95HIFySE=";
+    })
+  ];
 
   outputs = [
     "out"
