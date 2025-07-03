@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   getopt,
   util-linuxMinimal,
   which,
@@ -20,6 +21,14 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Remove when version > 2.6.0
+    # Fixes test failures on big-endian archs
+    (fetchpatch {
+      name = "0001-libseccomp-remove-fuzzer-from-test-62-sim-arch_transactions.patch";
+      url = "https://github.com/seccomp/libseccomp/commit/2f0f3b0e9121720108431c5d054164016f476230.patch";
+      hash = "sha256-AKAQyALJlLgxnS23OEoqfyDswp0kU2vmja5ohgvFojw=";
+    })
+
     ./oob-read.patch
   ];
 
