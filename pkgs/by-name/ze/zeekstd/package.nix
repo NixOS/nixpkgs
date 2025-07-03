@@ -5,17 +5,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeekstd";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "rorosen";
     repo = "zeekstd";
     tag = "v${finalAttrs.version}-cli";
-    hash = "sha256-9sUo3RptvCtxmtV49+X09TrOH2t+zB/PCYmeYLWNeGU=";
+    hash = "sha256-ulbmqkayIyzt4Wcb5Qfm2jamuTFkqxt6jAvLedLn0k8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ggEXjfv4PxVfD7poeFXeACMIMh0A7ar2sm2epY5TO1Y=";
+  cargoHash = "sha256-d4h2oAd+Posk8TzwNZVB6cSDN/wCIjPTanV9+8tf2iY=";
 
   meta = {
     description = "CLI tool that works with the zstd seekable format";
