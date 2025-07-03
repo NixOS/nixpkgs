@@ -92,14 +92,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.6.12";
+  version = "0.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-7RI5F7r4yX3wqAuakdBvZOvDRWn8IHntU0fyTPIXjT4=";
+    hash = "sha256-N74XBQahUIj0rKJI0emtNvGlG9uYkeHqweppp8fUSLU=";
   };
 
   build-system = with python.pkgs; [
@@ -167,12 +167,6 @@ python.pkgs.buildPythonApplication rec {
       };
   '';
 
-  # Test collection breaks on aarch64-linux, because the transitive onnxruntime
-  # tries to read /sys/devices/system/cpu, which does not exist in the sandbox.
-  #
-  # We inherit the issue from chromadb, so inherit its `doCheck` attribute.
-  inherit (python.pkgs.chromadb) doCheck;
-
   pythonImportsCheck = [ "vectorcode" ];
 
   nativeCheckInputs =
@@ -207,5 +201,16 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "vectorcode";
+    badPlatforms = [
+      # Error in cpuinfo: failed to parse the list of possible processors in /sys/devices/system/cpu/possible
+      # Error in cpuinfo: failed to parse the list of present processors in /sys/devices/system/cpu/present
+      # Error in cpuinfo: failed to parse both lists of possible and present processors
+      # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+      #   what():  /build/source/include/onnxruntime/core/common/logging/logging.h:371 static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger() Attempt to use DefaultLogger but none has been registered.
+      #
+      # Since 0.7.4, disabling `pythonImportsCheck` and `pytestCheckPhase` is not enough anymore.
+      # The error above happens at the end of `pypaInstallPhase`.
+      "aarch64-linux"
+    ];
   };
 }

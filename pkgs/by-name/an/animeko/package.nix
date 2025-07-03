@@ -209,6 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
     "libFLAC.so.12"
     "libtheoradec.so.1"
     "libtheoraenc.so.1"
+    "libxml2.so.2"
   ];
 
   dontWrapQtApps = true;

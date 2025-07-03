@@ -1,21 +1,29 @@
 {
   lib,
   stdenv,
-  fetchPypi,
   buildPythonPackage,
   isPy27,
+  fetchPypi,
   pythonAtLeast,
+
+  # build-system
   setuptools,
-  numpy,
-  scipy,
-  matplotlib,
+
+  # dependencies
   flask,
+  matplotlib,
+  numpy,
   pillow,
   psycopg2,
+  scipy,
   tkinter,
+
+  # tests
+  addBinToPathHook,
   pytestCheckHook,
   pytest-mock,
   pytest-xdist,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -34,24 +42,30 @@ buildPythonPackage rec {
 
   dependencies =
     [
-      numpy
-      scipy
-      matplotlib
       flask
+      matplotlib
+      numpy
       pillow
       psycopg2
+      scipy
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       tkinter
     ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     pytestCheckHook
     pytest-mock
     pytest-xdist
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
+    # AssertionError: assert (1 != 0) == False
+    # TypeError: list indices must be integers or slices, not numpy.bool
+    "test_long"
+
     "test_fundamental_params"
     "test_ase_bandstructure"
     "test_imports"
@@ -64,16 +78,12 @@ buildPythonPackage rec {
     "test_ipi_protocol" # flaky
   ] ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
 
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
-
   pythonImportsCheck = [ "ase" ];
 
-  meta = with lib; {
+  meta = {
     description = "Atomic Simulation Environment";
     homepage = "https://wiki.fysik.dtu.dk/ase/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

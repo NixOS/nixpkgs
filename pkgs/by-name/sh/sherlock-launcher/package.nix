@@ -17,13 +17,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sherlock-launcher";
-  version = "0.1.13-hotfix-1";
+  version = "0.1.13-hotfix-2";
 
   src = fetchFromGitHub {
     owner = "Skxxtz";
     repo = "sherlock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h8/72EipLTssik2I4GSfBRSc34ecAm0L39wA9hnGrR4=";
+    hash = "sha256-5ERCusCDf+GCwmJc5BrEK8Kn5ClMOILBStv17vyS7MQ=";
   };
 
   nativeBuildInputs = [

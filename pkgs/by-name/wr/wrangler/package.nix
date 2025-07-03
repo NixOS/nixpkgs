@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.20.5";
+  version = "4.22.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-jf4HZVLNqwl8IcS/Po2PKPCd1iMvBuFybhz0z3b0stM=";
+    hash = "sha256-4uE1Jv70aDqAUk7GWmFr65SNXLnDDIZiFN87DQxluKg=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
