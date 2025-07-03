@@ -3,8 +3,11 @@
   fetchFromGitHub,
   gzip,
   lib,
+  makeBinaryWrapper,
   nodejs,
+  openssh,
   pnpm_9,
+  rclone,
   restic,
   stdenv,
   util-linux,
@@ -55,7 +58,10 @@ buildGoModule {
 
   vendorHash = "sha256-AINnBkP+e9C/f/C3t6NK+6PYSVB4NON0C71S6SwUXbE=";
 
-  nativeBuildInputs = [ gzip ];
+  nativeBuildInputs = [
+    gzip
+    makeBinaryWrapper
+  ];
 
   preBuild = ''
     mkdir -p ./webui/dist
@@ -85,6 +91,15 @@ buildGoModule {
     # Use restic from nixpkgs, otherwise download fails in sandbox
     export BACKREST_RESTIC_COMMAND="${restic}/bin/restic"
     export HOME=$(pwd)
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/backrest --prefix PATH : ${
+      lib.makeBinPath [
+        openssh
+        rclone
+      ]
+    }
   '';
 
   meta = {
