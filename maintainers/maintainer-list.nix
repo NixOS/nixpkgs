@@ -11895,6 +11895,11 @@
     githubId = 51518420;
     name = "jitwit";
   };
+  jjacke13 = {
+    email = "jjacke@proton.me";
+    github = "jjacke13";
+    githubId = 156372486;
+    name = "Vaios K";
   jjjollyjim = {
     email = "jamie@kwiius.com";
     github = "JJJollyjim";
