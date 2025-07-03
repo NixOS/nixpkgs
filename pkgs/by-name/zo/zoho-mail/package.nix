@@ -11,7 +11,7 @@
   nss,
   xdg-utils,
   nspr,
-  mesa,
+  libgbm,
   systemd,
   libglvnd,
   libGL,
@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zoho-mail";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchurl {
     url = "https://downloads.zohocdn.com/zmail-desktop/linux/zoho-mail-desktop-lite-installer-x64-v${version}.deb";
-    hash = "sha256-Rt2lPHzxdbf6jjMmCnTg7Fyo/shc7CESisdRYm+HSg4=";
+    hash = "sha256-iZJZqJ2f5YfiDvmp+H3e7bH/LcJtfZndqcdjVCzBAXw=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   buildInputs = [
-    ffmpeg-full
+    ffmpeg
     glib
     gtk3
     nss
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     ln -s "$out/opt/Zoho Mail - Desktop/zoho-mail-desktop" $out/bin/zoho-mail-desktop
     mv $out/usr/share $out/
     rmdir $out/usr
-    substituteInPlace $out/share/zoho-mail-desktop.desktop \
+    substituteInPlace $out/share/applications/zoho-mail-desktop.desktop \
       --replace-fail 'Exec="/opt/Zoho Mail - Desktop/zoho-mail-desktop" %U' 'Exec=zoho-mail-desktop %U'
     runHook postInstall
   '';
