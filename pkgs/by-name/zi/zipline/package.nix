@@ -32,18 +32,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.1.2";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xxe64tGxZ2Udr+p21CKTZCHJ19ZOsdgPLlil+v+j5j4=";
+    hash = "sha256-zm2xNhWghg/Pa9LhLzV+AG/tfiSjAiSnGs8OMnC0Tpw=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-O8RLaKff4Dj/JDeUOyf7GtcFcOu/aOuclyaZmVqVi5s=";
+    hash = "sha256-kIneqtLPZ29PzluKUGO4XbQYHbNddu0kTfoP4C22k7U=";
   };
 
   buildInputs = [
@@ -121,5 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zipline";
+    platforms = lib.platforms.linux;
   };
 })
