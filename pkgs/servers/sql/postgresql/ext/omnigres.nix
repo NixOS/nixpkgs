@@ -20,13 +20,13 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  version = "0-unstable-2025-06-03";
+  version = "0-unstable-2025-06-27";
 
   src = fetchFromGitHub {
     owner = "omnigres";
     repo = "omnigres";
-    rev = "d347be5ae1d79645ac277d19080eacba7b229cf8";
-    hash = "sha256-LKsH+aeLg7v2RfK80D3mgXdPB8jMIv5uFdf+3c5Z0vA=";
+    rev = "f1b35e623b2583d1124c593f0d9c8466d8fa3a56";
+    hash = "sha256-FiZuXvY+1qyLTnxZ9Y5MP9SxM4wncX4L4rDJEa6O7NE=";
   };
 
   strictDeps = true;
