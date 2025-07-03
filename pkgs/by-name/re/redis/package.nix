@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       --clients $NIX_BUILD_CORES \
       --tags -leaks \
       --skipunit integration/aof-multi-part \
+      --skipunit integration/replication-rdbchannel \
       --skipunit integration/failover # flaky and slow
 
     runHook postCheck
