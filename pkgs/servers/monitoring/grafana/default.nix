@@ -19,24 +19,23 @@
 let
   # Grafana seems to just set it to the latest version available
   # nowadays.
-  # NOTE: sometimes, this is a no-op (i.e. `--replace-fail "X" "X"`).
-  # This is because Grafana raises the Go version above the patch-level we have
-  # on master if a security fix landed in Go (and our go may go through staging first).
+  # NOTE: I(Ma27) leave this in, even if it's technically dead code because
+  # it doesn't make sense to pull this out of the history on every other release.
   #
-  # I(Ma27) decided to leave the code a no-op if this is not the case because
-  # pulling it out of the Git history every few months and checking which files
-  # we need to update now is slightly annoying.
+  # Please make sure to always set a Go version to `.0`: it may happen that
+  # stable is on an older patch-release of Go and then the build would fail
+  # after a backport.
   patchGoVersion = ''
     find . -name go.mod -not -path "./.bingo/*" -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.4" "go 1.24.4"
+        --replace-fail "go 1.24.4" "go 1.24.0"
     done
     find . -name go.work -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.4" "go 1.24.4"
+        --replace-fail "go 1.24.4" "go 1.24.0"
     done
     substituteInPlace Makefile \
-      --replace-fail "GO_VERSION = 1.24.4" "GO_VERSION = 1.24.4"
+      --replace-fail "GO_VERSION = 1.24.4" "GO_VERSION = 1.24.0"
   '';
 in
 buildGoModule rec {
