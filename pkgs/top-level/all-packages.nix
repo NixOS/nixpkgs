@@ -5632,17 +5632,59 @@ with pkgs;
   openjdk11_headless = javaPackages.compiler.openjdk11.headless;
   jdk11 = openjdk11;
   jdk11_headless = openjdk11_headless;
+  jre11 = callPackage ../development/compilers/openjdk/jre.nix {
+    jdk = jdk11;
+    jdkOnBuild = jdk11;
+    modules = [
+      "java.se"
+      "jdk.charsets"
+      "jdk.localedata"
+      "jdk.crypto.ec"
+      "jdk.crypto.cryptoki"
+      "jdk.security.auth"
+      "jdk.unsupported"
+      "jdk.zipfs"
+    ];
+  };
 
   openjdk17-bootstrap = javaPackages.compiler.openjdk17-bootstrap;
   openjdk17 = javaPackages.compiler.openjdk17;
   openjdk17_headless = javaPackages.compiler.openjdk17.headless;
   jdk17 = openjdk17;
   jdk17_headless = openjdk17_headless;
+  jre17 = callPackage ../development/compilers/openjdk/jre.nix {
+    jdk = jdk17;
+    jdkOnBuild = jdk17;
+    modules = [
+      "java.se"
+      "jdk.charsets"
+      "jdk.localedata"
+      "jdk.crypto.ec"
+      "jdk.crypto.cryptoki"
+      "jdk.security.auth"
+      "jdk.unsupported"
+      "jdk.zipfs"
+    ];
+  };
 
   openjdk21 = javaPackages.compiler.openjdk21;
   openjdk21_headless = javaPackages.compiler.openjdk21.headless;
   jdk21 = openjdk21;
   jdk21_headless = openjdk21_headless;
+  jre21 = callPackage ../development/compilers/openjdk/jre.nix {
+    jdk = jdk21;
+    jdkOnBuild = jdk21;
+    modules = [
+      "java.se"
+      "jdk.charsets"
+      "jdk.localedata"
+      "jdk.crypto.ec"
+      "jdk.crypto.cryptoki"
+      "jdk.security.auth"
+      "jdk.unsupported"
+      "jdk.zipfs"
+    ];
+  };
 
   openjdk23 = javaPackages.compiler.openjdk23;
   openjdk23_headless = javaPackages.compiler.openjdk23.headless;
