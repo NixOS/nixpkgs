@@ -82,5 +82,6 @@ stdenv.mkDerivation rec {
       operating system.
     '';
     mainProgram = "xbill";
+    platforms = lib.platforms.unix;
   };
 }
