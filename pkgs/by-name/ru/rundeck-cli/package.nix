@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  makeWrapper,
+  makeBinaryWrapper,
   jre11_minimal,
   jdk11_headless,
   versionCheckHook,
@@ -15,14 +15,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rundeck-cli";
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchurl {
     url = "https://github.com/rundeck/rundeck-cli/releases/download/v${finalAttrs.version}/rundeck-cli-${finalAttrs.version}-all.jar";
-    hash = "sha256-mpy4oS7zCUdt4Q+KQPrGGbw6Gzmh1Msygl+NXDmFhDw=";
+    hash = "sha256-c6QAgwyRCtoOlS7DEmjyK3BwHV122bilL6H+Hzrv2dQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
   buildInputs = [ jre11_minimal_headless ];
 
   dontUnpack = true;
