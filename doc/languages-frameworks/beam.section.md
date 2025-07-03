@@ -295,6 +295,8 @@ in
       '';
       Restart = "on-failure";
       RestartSec = 5;
+    };
+    unitConfig = {
       StartLimitBurst = 3;
       StartLimitInterval = 10;
     };
