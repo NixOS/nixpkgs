@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   abseil-cpp,
   meson,
   ninja,
@@ -20,6 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-YR4ELukJgHMbfe80H+r8OiaZUCAqefGXmVOaTVVgOqA=";
   };
+
+  patches = [
+    # Fix the build against gcc-15:
+    #   https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/merge_requests/58
+    # TODO: drop with a next release.
+    (fetchpatch {
+      name = "gcc-15.patch";
+      url = "https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/commit/e9c78dc4712fa6362b0c839ad57b6b46dce1ba83.patch";
+      hash = "sha256-QXOtya7RA0UTV9VK4qpql5D8QcOKAn6qURZvPpWT+vg=";
+    })
+  ];
 
   outputs = [
     "out"
