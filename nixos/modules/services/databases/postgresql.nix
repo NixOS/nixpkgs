@@ -637,6 +637,20 @@ in
 
   config = mkIf cfg.enable {
 
+    warnings = (
+      let
+        unstableState =
+          if lib.hasInfix "beta" cfg.package.version then
+            "in beta"
+          else if lib.hasInfix "rc" cfg.package.version then
+            "a release candidate"
+          else
+            null;
+      in
+      lib.optional (unstableState != null)
+        "PostgreSQL ${lib.versions.major cfg.package.version} is currently ${unstableState}, and is not advised for use in production environments."
+    );
+
     assertions = map (
       { name, ensureDBOwnership, ... }:
       {
