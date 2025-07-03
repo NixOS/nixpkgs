@@ -21,9 +21,9 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace-fail "['pyscaffold>=3.0a0,<3.1a0'] + " "" \
       --replace-fail "use_pyscaffold=True"  ""
-    substituteInPlace src/bkyml/skeleton.py --replace-fail \
-        "from bkyml import __version__" \
-        "__version__ = \"${version}\""
+    substituteInPlace src/bkyml/__init__.py \
+      --replace-fail "from pkg_resources" "# from pkg_resources" \
+      --replace-fail "get_distribution(dist_name).version" '"${version}"'
   '';
 
   build-system = with python3.pkgs; [
@@ -32,7 +32,6 @@ python3.pkgs.buildPythonApplication rec {
 
   dependencies = with python3.pkgs; [
     ruamel-yaml
-    setuptools
   ];
 
   # Don't run tests because they are broken when run within
