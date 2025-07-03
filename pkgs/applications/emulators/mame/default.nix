@@ -37,14 +37,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.277";
+  version = "0.278";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-mGKTZ8/gvGQv9oXK4pgbJk580GAAXUS16hRQu4uHhdA=";
+    hash = "sha256-YJt+in9QV7a0tQZnfqFP3Iu6XQD0sryjud4FcgokYFg=";
   };
 
   outputs = [

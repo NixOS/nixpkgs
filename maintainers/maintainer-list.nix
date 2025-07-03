@@ -17075,6 +17075,13 @@
     githubId = 30654959;
     name = "Michele Sciabarra";
   };
+  msgilligan = {
+    email = "sean@msgilligan.com";
+    github = "msgilligan";
+    githubId = 61612;
+    name = "Sean Gilligan";
+    keys = [ { fingerprint = "3B66 ACFA D10F 02AA B1D5  2CB1 8DD0 D81D 7D1F C61A"; } ];
+  };
   msiedlarek = {
     email = "mikolaj@siedlarek.pl";
     github = "msiedlarek";
@@ -26452,6 +26459,12 @@
     github = "vidbina";
     githubId = 335406;
     name = "David Asabina";
+  };
+  videl = {
+    email = "thibaut.smith@mailbox.org";
+    github = "videl";
+    githubId = 123554;
+    name = "Thibaut Smith";
   };
   vidister = {
     email = "v@vidister.de";
