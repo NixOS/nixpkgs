@@ -815,6 +815,8 @@ self: super: with self; {
 
   apsw = callPackage ../development/python-modules/apsw { };
 
+  apswutils = callPackage ../development/python-modules/apswutils { };
+
   apsystems-ez1 = callPackage ../development/python-modules/apsystems-ez1 { };
 
   apt-repo = callPackage ../development/python-modules/apt-repo { };
