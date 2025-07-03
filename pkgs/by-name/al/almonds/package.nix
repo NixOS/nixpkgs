@@ -9,6 +9,7 @@ with python3.pkgs;
 buildPythonApplication rec {
   pname = "almonds";
   version = "1.25b";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Tenchi2xh";

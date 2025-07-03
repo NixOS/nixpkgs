@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "zfs-autobackup";
   version = "3.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

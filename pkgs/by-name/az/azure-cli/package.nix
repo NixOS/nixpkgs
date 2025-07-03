@@ -142,6 +142,7 @@ py.pkgs.toPythonApplication (
   py.pkgs.buildAzureCliPackage rec {
     pname = "azure-cli";
     inherit version src;
+    format = "setuptools";
 
     sourceRoot = "${src.name}/src/azure-cli";
 

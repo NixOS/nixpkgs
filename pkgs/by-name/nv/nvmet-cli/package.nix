@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nvmet-cli";
   version = "0.7";
+  format = "setuptools";
 
   src = fetchurl {
     url = "ftp://ftp.infradead.org/pub/nvmetcli/nvmetcli-${version}.tar.gz";

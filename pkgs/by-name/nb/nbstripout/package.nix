@@ -10,6 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   version = "0.8.1";
+  format = "setuptools";
   pname = "nbstripout";
 
   src = fetchPypi {

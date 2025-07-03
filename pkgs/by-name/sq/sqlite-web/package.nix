@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "sqlite-web";
   version = "0.6.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

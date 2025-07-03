@@ -9,6 +9,7 @@ with python3.pkgs;
 buildPythonApplication rec {
   pname = "adafruit-ampy";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -15,6 +15,7 @@ python3.pkgs.buildPythonApplication {
   # seemingly abandoned D-Bus package pydbus and started using maintained
   # dbus-next. So let's use latest from GitHub.
   version = "0-unstable-2023-12-16";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mdellweg";

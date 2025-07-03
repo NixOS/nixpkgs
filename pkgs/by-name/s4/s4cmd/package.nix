@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "s4cmd";
   version = "2.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

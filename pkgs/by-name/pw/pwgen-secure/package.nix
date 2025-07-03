@@ -11,6 +11,7 @@ in
 buildPythonApplication rec {
   pname = "pwgen-secure";
   version = "0.9.1";
+  format = "setuptools";
 
   # it needs `secrets` which was introduced in 3.6
   disabled = pythonOlder "3.6";
