@@ -4,7 +4,7 @@
   fetchurl,
   autoPatchelfHook,
   dpkg,
-  ffmpeg-full,
+  ffmpeg,
   glib,
   gtk3,
   wrapGAppsHook3,
@@ -30,19 +30,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     wrapGAppsHook3
+    dpkg
   ];
 
   dontWrapGApps = true;
 
   buildInputs = [
-    dpkg
     ffmpeg-full
     glib
     gtk3
     nss
     xdg-utils
     nspr
-    mesa
+    libgbm
     libglvnd
     libGL
     libGLU
@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ pahofmann ];
+    mainProgram = "zoho-mail-desktop";
     platforms = [ "x86_64-linux" ];
   };
 }
