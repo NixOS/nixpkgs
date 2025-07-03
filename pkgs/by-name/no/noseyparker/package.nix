@@ -8,6 +8,7 @@
   vectorscan,
   openssl,
   pkg-config,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -51,6 +52,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   OPENSSL_NO_VENDOR = 1;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/noseyparker-cli";
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Find secrets and sensitive information in textual data";
