@@ -3,6 +3,7 @@
   aresponses,
   attrs,
   buildPythonPackage,
+  cryptography,
   fetchFromGitHub,
   lib,
   poetry-core,
@@ -12,21 +13,24 @@
 
 buildPythonPackage rec {
   pname = "pyseventeentrack";
-  version = "1.0.2";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shaiu";
     repo = "pyseventeentrack";
     tag = "v${version}";
-    hash = "sha256-B/p+7wuXMtdOlIOySGQdtiiErcVD8DaVJPvSX4lPnos=";
+    hash = "sha256-XFn9yZbUrvERBQW1PumwtAPHhcyRX9L+JKxE/NZjZys=";
   };
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "cryptography" ];
+
   dependencies = [
     aiohttp
     attrs
+    cryptography
     pytz
   ];
 
