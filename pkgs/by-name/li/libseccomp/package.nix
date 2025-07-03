@@ -29,7 +29,13 @@ stdenv.mkDerivation rec {
       hash = "sha256-AKAQyALJlLgxnS23OEoqfyDswp0kU2vmja5ohgvFojw=";
     })
 
-    ./oob-read.patch
+    # Remove when version > 2.6.0
+    # Fixes OOB reads & tests on musl
+    (fetchpatch {
+      name = "0002-libseccomp-fix-seccomp_export_bpf_mem-out-of-bounds-read.patch";
+      url = "https://github.com/seccomp/libseccomp/commit/dd759e8c4f5685b526638fba9ec4fc24c37c9aec.patch";
+      hash = "sha256-TdfQ5T8FrGE6+P24MIi9rKSC3fQu/Jlr4bsFiJd4yVY=";
+    })
   ];
 
   outputs = [
