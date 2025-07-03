@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "craft-store";
-  version = "3.2.2";
+  version = "3.3.0";
 
   pyproject = true;
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-store";
     tag = version;
-    hash = "sha256-ODchOdEzzR8LXdPgPVXp0mWIu2rr5yzrfUDbOVW1xXc=";
+    hash = "sha256-ige4R5nwlfeSDyhzw0TDQMMIcExIJQuFAFvbNEpreSs=";
   };
 
   postPatch = ''
