@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "nextdns";
     repo = "nextdns";
     rev = "v${version}";
-    sha256 = "sha256-CvFzDfDij4AYuytlPNrY2L0mov8MionUd06kf7aZQAo=";
+    hash = "sha256-CvFzDfDij4AYuytlPNrY2L0mov8MionUd06kf7aZQAo=";
   };
 
   vendorHash = "sha256-DKYWuCnpoJXJHBd6G9DFFzAPbekO+vaCPuBc4UTuxHg=";

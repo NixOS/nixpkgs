@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "mviereck";
     repo = "x11docker";
     rev = "cb29a996597839239e482409b895353b1097ce3b";
-    sha256 = "sha256-NYMr2XZ4m6uvuIGO+nzX2ksxtVLJL4zy/JebxeAvqD4=";
+    hash = "sha256-NYMr2XZ4m6uvuIGO+nzX2ksxtVLJL4zy/JebxeAvqD4=";
   };
   nativeBuildInputs = [ makeWrapper ];
 

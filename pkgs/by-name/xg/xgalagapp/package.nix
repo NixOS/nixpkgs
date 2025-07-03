@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.9";
   src = fetchurl {
     url = "https://marc.mongenet.ch/OSS/XGalaga/xgalaga++_${version}.tar.gz";
-    sha256 = "sha256-yNtLuYCMHLvQAVM7CDGPardrh3q27TE9l31qhUbMf8k=";
+    hash = "sha256-yNtLuYCMHLvQAVM7CDGPardrh3q27TE9l31qhUbMf8k=";
   };
 
   buildInputs = [

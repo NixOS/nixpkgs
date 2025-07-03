@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "linbox-team";
     repo = "givaro";
     tag = "v${version}";
-    sha256 = "sha256-KR0WJc0CSvaBnPRott4hQJhWNBb/Wi6MIhcTExtVobQ=";
+    hash = "sha256-KR0WJc0CSvaBnPRott4hQJhWNBb/Wi6MIhcTExtVobQ=";
   };
 
   patches = [

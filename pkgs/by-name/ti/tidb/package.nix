@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "pingcap";
     repo = "tidb";
     rev = "v${version}";
-    sha256 = "sha256-6fXkNG+cQh4HCZj3ApmLUA+n5ViSVOyABoCwx0K8Ja4=";
+    hash = "sha256-6fXkNG+cQh4HCZj3ApmLUA+n5ViSVOyABoCwx0K8Ja4=";
   };
 
   vendorHash = "sha256-TLNa4ykczRronsKITPwVFOls8ql7xWXJvOibqYulC/Q=";

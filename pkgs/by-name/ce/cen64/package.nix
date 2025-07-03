@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "n64dev";
     repo = "cen64";
     rev = "1c1118462bd9d9b8ceb4c556a647718072477aab";
-    sha256 = "sha256-vFk29KESATcEY0eRNbS+mHLD9T1phJiG1fqjOlI19/w=";
+    hash = "sha256-vFk29KESATcEY0eRNbS+mHLD9T1phJiG1fqjOlI19/w=";
   };
 
   patches = [

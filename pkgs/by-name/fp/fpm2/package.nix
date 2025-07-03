@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://als.regnet.cz/fpm2/download/fpm2-${version}.tar.xz";
-    sha256 = "sha256-G6PF5wlEc19jtqOxBTp/10dQiFYPDO/W6v9Oyzz1lZA=";
+    hash = "sha256-G6PF5wlEc19jtqOxBTp/10dQiFYPDO/W6v9Oyzz1lZA=";
   };
 
   nativeBuildInputs = [

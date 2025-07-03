@@ -9,7 +9,7 @@
 
 let
   version = "1.1.0";
-  sha256 = "sha256-563xOz63vto19yuaHtReV1dSw6BgNf+CLtS3lrPnaoc=";
+  hash = "sha256-563xOz63vto19yuaHtReV1dSw6BgNf+CLtS3lrPnaoc=";
 
   pname = "pridefetch";
   src = fetchFromGitHub {

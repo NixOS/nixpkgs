@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "rauc";
     repo = "rauc";
     rev = "v${version}";
-    sha256 = "sha256-tpynDSCQ8E5DE82BvIJ2lEmwFQQpyYkV9UqjKKlArpw=";
+    hash = "sha256-tpynDSCQ8E5DE82BvIJ2lEmwFQQpyYkV9UqjKKlArpw=";
   };
 
   passthru = {

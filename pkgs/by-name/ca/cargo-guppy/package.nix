@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage {
     owner = "guppy-rs";
     repo = "guppy";
     rev = "837d0ae762b9ae79cc8ca5d629842e5ca34293b4";
-    sha256 = "sha256-LWU1yAD/f9w5m522vcKP9D2JusGkwzvfGSGstvFGUpk=";
+    hash = "sha256-LWU1yAD/f9w5m522vcKP9D2JusGkwzvfGSGstvFGUpk=";
   };
 
   useFetchCargoVendor = true;

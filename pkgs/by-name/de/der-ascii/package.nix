@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "google";
     repo = "der-ascii";
     rev = "v${version}";
-    sha256 = "sha256-xGzxq5AHvzLUOp9VUcI9JMwrCpVIrpDvenWUOEBP6pA=";
+    hash = "sha256-xGzxq5AHvzLUOp9VUcI9JMwrCpVIrpDvenWUOEBP6pA=";
   };
   vendorHash = null;
 

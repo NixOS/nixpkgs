@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "arp242";
     repo = "find-cursor";
     rev = "v${version}";
-    sha256 = "sha256-/Dw4bOTCnpCbeI0YJ5DJ9Q2AGBognylUk7xYGn0KIA8=";
+    hash = "sha256-/Dw4bOTCnpCbeI0YJ5DJ9Q2AGBognylUk7xYGn0KIA8=";
   };
 
   nativeBuildInputs = [

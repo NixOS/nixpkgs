@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "buildkite";
     repo = "lifecycled";
     rev = "v${version}";
-    sha256 = "sha256-zskN2T0+1xZPjppggeGpPFuQ8/AgPNyN77F33rDoghc=";
+    hash = "sha256-zskN2T0+1xZPjppggeGpPFuQ8/AgPNyN77F33rDoghc=";
   };
 
   vendorHash = "sha256-q5wYKSLHRzL+UGn29kr8+mUupOPR1zohTscbzjMRCS0=";

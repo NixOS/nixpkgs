@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "x42";
     repo = "xjadeo";
     rev = "v${version}";
-    sha256 = "sha256-GTg0W3D0BRSxsmeVsB4On3MfwncScEGFJGVJK7wflCM=";
+    hash = "sha256-GTg0W3D0BRSxsmeVsB4On3MfwncScEGFJGVJK7wflCM=";
   };
 
   nativeBuildInputs = [

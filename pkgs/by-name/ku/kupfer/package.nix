@@ -26,7 +26,7 @@ buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://github.com/kupferlauncher/kupfer/releases/download/v${version}/kupfer-v${version}.tar.xz";
-    sha256 = "sha256-F5ScSfD/LwpSOAAqTN0WX5yFhoz23DYfeCC+KuvixYM=";
+    hash = "sha256-F5ScSfD/LwpSOAAqTN0WX5yFhoz23DYfeCC+KuvixYM=";
   };
 
   nativeBuildInputs = [

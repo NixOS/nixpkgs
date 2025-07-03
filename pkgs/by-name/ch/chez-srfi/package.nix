@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "fedeinthemix";
     repo = "chez-srfi";
     rev = "v${version}";
-    sha256 = "sha256-yBhRNfoEt1LOn3/zd/yOWwfErN/qG/tQZnDRqEf8j/0=";
+    hash = "sha256-yBhRNfoEt1LOn3/zd/yOWwfErN/qG/tQZnDRqEf8j/0=";
   };
 
   buildInputs = [ chez ];

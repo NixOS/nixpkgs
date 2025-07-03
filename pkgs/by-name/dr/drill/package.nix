@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "fcsonline";
     repo = "drill";
     rev = version;
-    sha256 = "sha256-4y5gpkQB0U6Yq92O6DDD5eq/i/36l/VfeyiE//pcZOk=";
+    hash = "sha256-4y5gpkQB0U6Yq92O6DDD5eq/i/36l/VfeyiE//pcZOk=";
   };
 
   useFetchCargoVendor = true;

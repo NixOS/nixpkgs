@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "LuRsT";
     repo = "hr";
     rev = version;
-    sha256 = "sha256-05num4v8C3n+uieKQJVLOzu9OOMBsUMPqq08Ou6gmYQ=";
+    hash = "sha256-05num4v8C3n+uieKQJVLOzu9OOMBsUMPqq08Ou6gmYQ=";
   };
 
   dontBuild = true;

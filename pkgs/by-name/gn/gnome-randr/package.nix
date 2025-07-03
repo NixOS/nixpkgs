@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
     owner = "maxwellainatchi";
     repo = "gnome-randr-rust";
     rev = "v" + version;
-    sha256 = "sha256-mciHgBEOCFjRA4MSoEdP7bIag0KE+zRbk4wOkB2PAn0=";
+    hash = "sha256-mciHgBEOCFjRA4MSoEdP7bIag0KE+zRbk4wOkB2PAn0=";
   };
 
   useFetchCargoVendor = true;

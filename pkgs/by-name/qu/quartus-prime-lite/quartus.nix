@@ -62,12 +62,12 @@ let
     [
       {
         name = "QuartusLiteSetup-${version}-linux.run";
-        sha256 = "sha256-OCp2hZrfrfp1nASuVNWgg8/ODRrl67SJ+c6IWq5eWvY=";
+        hash = "sha256-OCp2hZrfrfp1nASuVNWgg8/ODRrl67SJ+c6IWq5eWvY=";
       }
     ]
     ++ lib.optional withQuesta {
       name = "QuestaSetup-${version}-linux.run";
-      sha256 = "sha256-Dne4MLFSGXUVLMd+JgiS/d5RX9t5gs6PEvexTssLdF4=";
+      hash = "sha256-Dne4MLFSGXUVLMd+JgiS/d5RX9t5gs6PEvexTssLdF4=";
     }
   );
   components = map (

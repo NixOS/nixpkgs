@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchbzr {
     url = "lp:dbus-test-runner";
     rev = "109";
-    sha256 = "sha256-4yH19X98SVqpviCBIWzIX6FYHWxCbREpuKCNjQuTFDk=";
+    hash = "sha256-4yH19X98SVqpviCBIWzIX6FYHWxCbREpuKCNjQuTFDk=";
   };
 
   postPatch = ''

@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     repo = "marble";
     # the same used on flatpak
     rev = "f240b2ec7d5cdacb8fdcc553703420dc5101ffdb";
-    sha256 = "sha256-obtz7zOyEZPgi/NNjtLr6aFm/1UVTzjTdJpN3JQfpUs=";
+    hash = "sha256-obtz7zOyEZPgi/NNjtLr6aFm/1UVTzjTdJpN3JQfpUs=";
   };
 
   nativeBuildInputs = [

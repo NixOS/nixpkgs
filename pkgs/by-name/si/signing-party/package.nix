@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     owner = "signing-party-team";
     repo = "signing-party";
     rev = "v${version}";
-    sha256 = "sha256-hUlMClx/TRmnC2Ah6MIsNGpZGI/KmgWt2z4XzbIAnag=";
+    hash = "sha256-hUlMClx/TRmnC2Ah6MIsNGpZGI/KmgWt2z4XzbIAnag=";
   };
 
   # TODO: Get this patch upstream...

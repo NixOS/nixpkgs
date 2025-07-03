@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "neetly";
     repo = "figma-agent-linux";
     tag = version;
-    sha256 = "sha256-iXLQOc8gomOik+HIIoviw19II5MD6FM0W5DT3aqtIcM=";
+    hash = "sha256-iXLQOc8gomOik+HIIoviw19II5MD6FM0W5DT3aqtIcM=";
   };
 
   cargoPatches = [

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "funtoo";
     repo = "keychain";
     rev = version;
-    sha256 = "sha256-mKYDSCaDYXUIiDi9EGkAu8gW4sEcUtR8mJ2LW4FFycQ=";
+    hash = "sha256-mKYDSCaDYXUIiDi9EGkAu8gW4sEcUtR8mJ2LW4FFycQ=";
   };
 
   nativeBuildInputs = [

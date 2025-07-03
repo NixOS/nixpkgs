@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "jceb";
     repo = "srandrd";
     rev = "v${version}";
-    sha256 = "sha256-Wf+tVqDaNAiH6UHN8fFv2wM+LEch6wKlZOkqWEqLLkw=";
+    hash = "sha256-Wf+tVqDaNAiH6UHN8fFv2wM+LEch6wKlZOkqWEqLLkw=";
   };
 
   buildInputs = [

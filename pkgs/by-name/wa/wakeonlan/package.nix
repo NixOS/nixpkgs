@@ -15,7 +15,7 @@ perlPackages.buildPerlPackage rec {
     owner = "jpoliv";
     repo = "wakeonlan";
     rev = "v${version}";
-    sha256 = "sha256-zCOpp5iNrWwh2knBGWhiEyG9IPAnFRwH5jJLEVLBISM=";
+    hash = "sha256-zCOpp5iNrWwh2knBGWhiEyG9IPAnFRwH5jJLEVLBISM=";
   };
 
   outputs = [ "out" ];

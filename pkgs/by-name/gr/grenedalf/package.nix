@@ -20,7 +20,7 @@ let
     name = "${oldAttrs.pname}-nocurl-${version}";
     src = fetchurl {
       url = "https://github.com/samtools/htslib/releases/download/${version}/htslib-${version}.tar.bz2";
-      sha256 = "sha256-YGt8ev9zc0zwM+zRVvQFKfpXkvVFJJUqKJOMoIkNeSQ=";
+      hash = "sha256-YGt8ev9zc0zwM+zRVvQFKfpXkvVFJJUqKJOMoIkNeSQ=";
     };
     configureFlags = [
       "--disable-libcurl"

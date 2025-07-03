@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "pop-os";
     repo = "system76-firmware";
     rev = version;
-    sha256 = "sha256-z4n1olvOSiJfHnEixUaWfz86519SntHfECOtWSeI4vk=";
+    hash = "sha256-z4n1olvOSiJfHnEixUaWfz86519SntHfECOtWSeI4vk=";
   };
 
   nativeBuildInputs = [

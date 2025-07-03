@@ -14,7 +14,7 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "helmfile";
     repo = "vals";
-    sha256 = "sha256-cwyEg+5vysVaW+pe77e+CUJpYLJ6BediJZTaz/eZRAA=";
+    hash = "sha256-cwyEg+5vysVaW+pe77e+CUJpYLJ6BediJZTaz/eZRAA=";
   };
 
   vendorHash = "sha256-VOKvXovE/aagZOBFtF2o6/RhJMZhoZAHlVNqXD5Y7L4=";

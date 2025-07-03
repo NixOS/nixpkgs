@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "wfeldt";
     repo = "libx86emu";
     rev = version;
-    sha256 = "sha256-ilAmGlkMeuG0FlygMdE3NreFPJJF6g/26C8C5grvjrk=";
+    hash = "sha256-ilAmGlkMeuG0FlygMdE3NreFPJJF6g/26C8C5grvjrk=";
   };
 
   nativeBuildInputs = [ perl ];

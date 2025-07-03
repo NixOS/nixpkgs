@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://cdn.jb55.com/tarballs/datefmt/datefmt-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-HgW/vOGVEmAbm8k3oIwIa+cogq7qmX7MfTmHqxv9lhY=";
+    hash = "sha256-HgW/vOGVEmAbm8k3oIwIa+cogq7qmX7MfTmHqxv9lhY=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

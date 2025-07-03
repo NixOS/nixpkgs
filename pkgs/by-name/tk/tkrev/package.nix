@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/tkcvs/tkrev_${version}.tar.gz";
-    sha256 = "sha256-WHDZPShEB9Q+Bjbb37mogJLUZk2GuWoO8bz+Zydc7i4=";
+    hash = "sha256-WHDZPShEB9Q+Bjbb37mogJLUZk2GuWoO8bz+Zydc7i4=";
   };
 
   buildInputs = [

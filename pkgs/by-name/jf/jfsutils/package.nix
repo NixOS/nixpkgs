@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "musl-fix-includes.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/jfsutils/musl-fix-includes.patch?id=567823dca7dc1f8ce919efbe99762d2d5c020124";
-      sha256 = "sha256-FjdUOI+y+MdSWxTR+csH41uR0P+PWWTfIMPwQjBfQtQ=";
+      hash = "sha256-FjdUOI+y+MdSWxTR+csH41uR0P+PWWTfIMPwQjBfQtQ=";
     })
   ];
 

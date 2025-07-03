@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/${version}/fabric-installer-${version}.jar";
-    sha256 = "sha256-OKqCqx74KbeqPyFD/Mk7unBqjhiDW+cx0P3yMdJ0sH8=";
+    hash = "sha256-OKqCqx74KbeqPyFD/Mk7unBqjhiDW+cx0P3yMdJ0sH8=";
   };
 
   dontUnpack = true;

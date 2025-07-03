@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   droidSansFallback = fetchurl {
     url = "https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/2d8961d99f3aa559dbd4b78b716ab36c456b43e1/data/fonts/DroidSansFallbackFull.ttf";
-    sha256 = "sha256-I5IBVTBDi6/Ejt/ErubZ3iOH9iemE02Ks9/MmdIcgkA=";
+    hash = "sha256-I5IBVTBDi6/Ejt/ErubZ3iOH9iemE02Ks9/MmdIcgkA=";
   };
 
   nativeBuildInputs = [

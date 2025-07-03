@@ -12,7 +12,7 @@ qt5.mkDerivation rec {
 
   src = fetchurl {
     url = "https://global.download.synology.com/download/Utility/SynologyCloudSyncDecryptionTool/${version}/Linux/x86_64/SynologyCloudSyncDecryptionTool-${version}_x64.tar.gz";
-    sha256 = "sha256-EWxADvkfhnMwHIauJj3pH6SvSkkrc4cwAhsf1pWOOWQ=";
+    hash = "sha256-EWxADvkfhnMwHIauJj3pH6SvSkkrc4cwAhsf1pWOOWQ=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];

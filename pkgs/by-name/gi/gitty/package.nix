@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "muesli";
     repo = "gitty";
     rev = "v${version}";
-    sha256 = "sha256-g0D6nJiHY7cz72DSmdQZsj9Vgv/VOp0exTcLsaypGiU=";
+    hash = "sha256-g0D6nJiHY7cz72DSmdQZsj9Vgv/VOp0exTcLsaypGiU=";
   };
 
   vendorHash = "sha256-qrLECQkjXH0aTHmysq64jnXj9jgbunpVtBAIXJOEYIY=";

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "CopernicaMarketingSoftware";
     repo = "AMQP-CPP";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-iaOXdDIJOBXHyjE07CvU4ApTh71lmtMCyU46AV+MGXQ=";
+    hash = "sha256-iaOXdDIJOBXHyjE07CvU4ApTh71lmtMCyU46AV+MGXQ=";
   };
 
   nativeBuildInputs = [ cmake ];

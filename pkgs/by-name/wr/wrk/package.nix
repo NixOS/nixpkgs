@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "wg";
     repo = "wrk";
     rev = version;
-    sha256 = "sha256-nCfA444p7krXOB3qRtDKWxWj9tsrDZsGf03ThtE1dXM=";
+    hash = "sha256-nCfA444p7krXOB3qRtDKWxWj9tsrDZsGf03ThtE1dXM=";
   };
 
   buildInputs = [

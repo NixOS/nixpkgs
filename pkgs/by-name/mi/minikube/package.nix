@@ -25,7 +25,7 @@ buildGoModule rec {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${version}";
-    sha256 = "sha256-We5EyEWvrQ/k27920kE1XMijQWSYvLle7N3KUOsTfbc=";
+    hash = "sha256-We5EyEWvrQ/k27920kE1XMijQWSYvLle7N3KUOsTfbc=";
   };
   postPatch =
     ''

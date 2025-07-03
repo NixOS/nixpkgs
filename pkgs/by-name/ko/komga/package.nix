@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/gotson/${pname}/releases/download/${version}/${pname}-${version}.jar";
-    sha256 = "sha256-buc79CIADeZjQycEymTmskRD2+aY6nQecf0QqVDEgV8=";
+    hash = "sha256-buc79CIADeZjQycEymTmskRD2+aY6nQecf0QqVDEgV8=";
   };
 
   nativeBuildInputs = [

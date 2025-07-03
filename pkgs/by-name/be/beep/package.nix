@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "spkr-beep";
     repo = "beep";
     rev = "v${version}";
-    sha256 = "sha256-gDgGI9F+wW2cN89IwP93PkMv6vixJA2JckF78nxZ+TU=";
+    hash = "sha256-gDgGI9F+wW2cN89IwP93PkMv6vixJA2JckF78nxZ+TU=";
   };
 
   makeFlags = [ "prefix=${placeholder "out"}" ];

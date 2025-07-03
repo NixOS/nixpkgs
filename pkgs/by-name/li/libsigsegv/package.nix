@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/libsigsegv/libsigsegv-${version}.tar.gz";
-    sha256 = "sha256-A2hVZgIlyzgXoZD8AOZ2TOeDYFG6y0jTXiZES4wXKdk=";
+    hash = "sha256-A2hVZgIlyzgXoZD8AOZ2TOeDYFG6y0jTXiZES4wXKdk=";
   };
 
   patches = if enableSigbusFix then [ ./sigbus_fix.patch ] else null;

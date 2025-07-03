@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://alexschroeder.ch/cgit/bitlbee-mastodon";
     rev = "v${version}";
-    sha256 = "sha256-8vmq/YstuBYUxe00P4NrxD/eMYI++R9uvn1sCcMTr7I=";
+    hash = "sha256-8vmq/YstuBYUxe00P4NrxD/eMYI++R9uvn1sCcMTr7I=";
   };
 
   nativeBuildInputs = [

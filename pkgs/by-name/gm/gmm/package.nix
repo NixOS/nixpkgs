@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/getfem/stable/${pname}-${version}.tar.gz";
-    sha256 = "sha256-UgbnMmQ/aTQQkCiy8XNmDywu3LDuJpIo1pSsym4iyIo=";
+    hash = "sha256-UgbnMmQ/aTQQkCiy8XNmDywu3LDuJpIo1pSsym4iyIo=";
   };
 
   meta = with lib; {

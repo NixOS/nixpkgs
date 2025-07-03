@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
     rev = version;
-    sha256 = "sha256-TWQ2mVzosB6sGNUXI2D9GGqgaRZcmiL9GSGrrusck5Q=";
+    hash = "sha256-TWQ2mVzosB6sGNUXI2D9GGqgaRZcmiL9GSGrrusck5Q=";
   };
 
   postPatch = ''

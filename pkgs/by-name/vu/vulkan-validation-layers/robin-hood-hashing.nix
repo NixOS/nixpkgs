@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "martinus";
     repo = "robin-hood-hashing";
     rev = version; # pin
-    sha256 = "sha256-J4u9Q6cXF0SLHbomP42AAn5LSKBYeVgTooOhqxOIpuM=";
+    hash = "sha256-J4u9Q6cXF0SLHbomP42AAn5LSKBYeVgTooOhqxOIpuM=";
   };
 
   nativeBuildInputs = [

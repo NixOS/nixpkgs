@@ -22,132 +22,132 @@ let
   q3Pack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/Q3Pack/trunk";
     rev = 144;
-    sha256 = "sha256-U1GtMv775JEOAJ1W2kSaRNPDCnW39W+KqVDTTG2yISY=";
+    hash = "sha256-U1GtMv775JEOAJ1W2kSaRNPDCnW39W+KqVDTTG2yISY=";
   };
   urtPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/UrTPack/trunk";
     rev = 144;
-    sha256 = "sha256-DQjENyQa1kEieU3ZWyMt2e4oEN0X2K3lxP79sBI91iI=";
+    hash = "sha256-DQjENyQa1kEieU3ZWyMt2e4oEN0X2K3lxP79sBI91iI=";
   };
   etPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/ETPack/trunk";
     rev = 144;
-    sha256 = "sha256-mqaWOYfF/F6ABh7nKA36YvsywZIdwJ9IitFi2Xp5rgk=";
+    hash = "sha256-mqaWOYfF/F6ABh7nKA36YvsywZIdwJ9IitFi2Xp5rgk=";
   };
   qlPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/QLPack/trunk";
     rev = 144;
-    sha256 = "sha256-lrn4nu3JI7j+t9jYd+UFE55GOCbc6+Sh2fZfVlEr1WM=";
+    hash = "sha256-lrn4nu3JI7j+t9jYd+UFE55GOCbc6+Sh2fZfVlEr1WM=";
   };
   q2Pack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/Q2Pack/trunk";
     rev = 144;
-    sha256 = "sha256-ad8dRV+28Zz5yQsJU7hvteSIn9wWpehuqxMspw3yvvU=";
+    hash = "sha256-ad8dRV+28Zz5yQsJU7hvteSIn9wWpehuqxMspw3yvvU=";
   };
   quetooPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/QuetooPack/trunk";
     rev = 144;
-    sha256 = "sha256-SOblPJgdVEZrTYtvDlcF7paIm3UitSVFQ9+RahXkO64=";
+    hash = "sha256-SOblPJgdVEZrTYtvDlcF7paIm3UitSVFQ9+RahXkO64=";
   };
   jaPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/JAPack/trunk";
     rev = 144;
-    sha256 = "sha256-P6lI+nNrPwoWJl5ThUHIA3Iw1nWVo2djaaWHAF5HuDo=";
+    hash = "sha256-P6lI+nNrPwoWJl5ThUHIA3Iw1nWVo2djaaWHAF5HuDo=";
   };
   stvefPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/STVEFPack/trunk";
     rev = 144;
-    sha256 = "sha256-quNyVC6fg1FIBsLWx0LzRK2JfxKMNJeUEIkWGhGJHhI=";
+    hash = "sha256-quNyVC6fg1FIBsLWx0LzRK2JfxKMNJeUEIkWGhGJHhI=";
   };
   wolfPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/WolfPack/trunk";
     rev = 144;
-    sha256 = "sha256-693k6KiIchQddVGBhRJf7ikv6ut5L9rcLt0FTZ7pSvw=";
+    hash = "sha256-693k6KiIchQddVGBhRJf7ikv6ut5L9rcLt0FTZ7pSvw=";
   };
   unvanquishedPack = fetchsvn {
     url = "https://github.com/Unvanquished/unvanquished-mapeditor-support.git/trunk/build/gtkradiant/";
     rev = 212;
-    sha256 = "sha256-weBlnSBezPppbhsMOT66vubioTxpDC+AcKIOC2Xitdo=";
+    hash = "sha256-weBlnSBezPppbhsMOT66vubioTxpDC+AcKIOC2Xitdo=";
   };
   q1Pack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/Q1Pack/trunk";
     rev = 144;
-    sha256 = "sha256-JfmDIUoDY7dYdMgwwUMgcwNhWxuxsdkv1taw8DXhPY4=";
+    hash = "sha256-JfmDIUoDY7dYdMgwwUMgcwNhWxuxsdkv1taw8DXhPY4=";
   };
   darkPlacesPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/DarkPlacesPack/trunk";
     rev = 57;
-    sha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+    hash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
   };
   doom3Pack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/Doom3Pack/trunk";
     rev = 56;
-    sha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+    hash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
   };
   halfLifePack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/HalfLifePack/trunk";
     rev = 1;
-    sha256 = "sha256-CrbN3iOG89j71y4ZJ4gNZEA5CYxphLLGbZwv6Tbjui0=";
+    hash = "sha256-CrbN3iOG89j71y4ZJ4gNZEA5CYxphLLGbZwv6Tbjui0=";
   };
   her2Pack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/Her2Pack/trunk";
     rev = 55;
-    sha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+    hash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
   };
   jk2Pack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/JK2Pack/trunk";
     rev = 77;
-    sha256 = "sha256-3g/p9OC0j2va9CXXtsQf0lP6VJ1WyI5k2W9xNRwYjS8=";
+    hash = "sha256-3g/p9OC0j2va9CXXtsQf0lP6VJ1WyI5k2W9xNRwYjS8=";
   };
   nexuizPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/NexuizPack/trunk";
     rev = 49;
-    sha256 = "sha256-nAV7rZKDgAxlEmu2RfBFNsHv9Xgas1IlDgioligvY+c=";
+    hash = "sha256-nAV7rZKDgAxlEmu2RfBFNsHv9Xgas1IlDgioligvY+c=";
   };
   preyPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/PreyPack/trunk";
     rev = 19;
-    sha256 = "sha256-wbKEnSaFO40HxhMsbYKy76MxXDvY9O1lTcr3M7fXxW0=";
+    hash = "sha256-wbKEnSaFO40HxhMsbYKy76MxXDvY9O1lTcr3M7fXxW0=";
   };
   q2wPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/Q2WPack/trunk";
     rev = 126;
-    sha256 = "sha256-Q6IyL2qUr+6ktP34oYkFqN5MeFxCXOkcjrPg5J95ftg=";
+    hash = "sha256-Q6IyL2qUr+6ktP34oYkFqN5MeFxCXOkcjrPg5J95ftg=";
   };
   q4Pack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/Q4Pack/trunk";
     rev = 54;
-    sha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+    hash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
   };
   ravenPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/RavenPack/trunk";
     rev = 1;
-    sha256 = "sha256-bYRjCkdaznaO7+WDB6cgL3szTB+MXwt3IKH3L2rGjLs=";
+    hash = "sha256-bYRjCkdaznaO7+WDB6cgL3szTB+MXwt3IKH3L2rGjLs=";
   };
   reactionPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/ReactionPack/trunk";
     rev = 69;
-    sha256 = "sha256-aXSM0ubyhgamLBzfNZ6RzRSdzKwfHWLt/6OS/i9mMVo=";
+    hash = "sha256-aXSM0ubyhgamLBzfNZ6RzRSdzKwfHWLt/6OS/i9mMVo=";
   };
   sof2Pack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/Sof2Pack/trunk";
     rev = 1;
-    sha256 = "sha256-EnGhYghXe6hU5vvdF+Z9geTiHDukBEr1+CQgunxxGic=";
+    hash = "sha256-EnGhYghXe6hU5vvdF+Z9geTiHDukBEr1+CQgunxxGic=";
   };
   tremulousPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/TremulousPack/trunk";
     rev = 46;
-    sha256 = "sha256-NU+ynpqydFxdZSkh7Szm6DTqyMYVS+PU70Mp98ZjdOs=";
+    hash = "sha256-NU+ynpqydFxdZSkh7Szm6DTqyMYVS+PU70Mp98ZjdOs=";
   };
   ufoaiPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/UFOAIPack/trunk";
     rev = 69;
-    sha256 = "sha256-nAd7fFZJJ82rDPVlTiZkkTGXi5tw7BSKk+akFBXSWvY=";
+    hash = "sha256-nAd7fFZJJ82rDPVlTiZkkTGXi5tw7BSKk+akFBXSWvY=";
   };
   warsowPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/WarsowPack/trunk";
     rev = 53;
-    sha256 = "sha256-IQ12fEKnq0cJxef+ddvTXcwM8lQ8nlUoMJy81XJ7ANY=";
+    hash = "sha256-IQ12fEKnq0cJxef+ddvTXcwM8lQ8nlUoMJy81XJ7ANY=";
   };
   packs = runCommand "gtkradiant-packs" { } ''
     mkdir -p $out
@@ -189,7 +189,7 @@ stdenv.mkDerivation rec {
     owner = "TTimo";
     repo = "GtkRadiant";
     rev = "ddbaf03d723a633d53fa442c2f802f7ad164dd6c";
-    sha256 = "sha256-qI+KGx73AbM5PLFR2JDXKDbiqmU0gS/43rhjRKm/Gms=";
+    hash = "sha256-qI+KGx73AbM5PLFR2JDXKDbiqmU0gS/43rhjRKm/Gms=";
   };
 
   nativeBuildInputs =

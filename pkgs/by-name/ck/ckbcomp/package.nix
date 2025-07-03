@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "installer-team";
     repo = "console-setup";
     rev = version;
-    sha256 = "sha256-xNZsbTOXlrLveHr7LRK3/j0jYXtuBw08kng3yl9s7AU=";
+    hash = "sha256-xNZsbTOXlrLveHr7LRK3/j0jYXtuBw08kng3yl9s7AU=";
   };
 
   buildInputs = [ perl ];

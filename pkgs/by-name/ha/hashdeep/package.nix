@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
       # Search for "DR 1512" in <https://gcc.gnu.org/gcc-11/changes.html>
       name = "fix-cpp-defect-report-1512.patch";
       url = "https://github.com/jessek/hashdeep/commit/6ef69a26126ee4e69a25392fd456b8a66c51dffd.patch";
-      sha256 = "sha256-IrqcnrKINeoh56FR25FzSM1YJMkM2yFd/GwOeWGRLFo=";
+      hash = "sha256-IrqcnrKINeoh56FR25FzSM1YJMkM2yFd/GwOeWGRLFo=";
     })
     (fetchpatch {
       # Fix the spacing between the string literals and macros, see https://github.com/jessek/hashdeep/pull/385
       name = "string-literal-spacing.patch";
       url = "https://github.com/jessek/hashdeep/commit/18a6b5d57f7a648d2b7dcc6e50ff00a1e4b05fcc.patch";
-      sha256 = "sha256-S6hzC8jPtG3ozsvVq5JfAUMwqKxytLGwBAtNYNr6RJ0=";
+      hash = "sha256-S6hzC8jPtG3ozsvVq5JfAUMwqKxytLGwBAtNYNr6RJ0=";
     })
   ];
 

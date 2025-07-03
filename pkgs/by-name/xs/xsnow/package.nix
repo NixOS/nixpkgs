@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ratrabbit.nl/downloads/xsnow/xsnow-${version}.tar.gz";
-    sha256 = "sha256-NkoD/oMxdJwnx9QCBM8dwFOTPg7YzOZLnNiEOQt36cU=";
+    hash = "sha256-NkoD/oMxdJwnx9QCBM8dwFOTPg7YzOZLnNiEOQt36cU=";
   };
 
   nativeBuildInputs = [

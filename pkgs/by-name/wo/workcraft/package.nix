@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/workcraft/workcraft/releases/download/v${version}/workcraft-v${version}-linux.tar.gz";
-    sha256 = "sha256-/Qax8cSO9j77OXNTYoZoAk5H5teWuNuR+9ubQuFq6qc=";
+    hash = "sha256-/Qax8cSO9j77OXNTYoZoAk5H5teWuNuR+9ubQuFq6qc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

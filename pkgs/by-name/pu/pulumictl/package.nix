@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "pulumi";
     repo = "pulumictl";
     rev = "v${version}";
-    sha256 = "sha256-VEfDKkavZWWxfE1J2Cy/lnPyHiOJWOtwwcYpeb1pkkM=";
+    hash = "sha256-VEfDKkavZWWxfE1J2Cy/lnPyHiOJWOtwwcYpeb1pkkM=";
   };
 
   vendorHash = "sha256-IqJdbeayUcTTEiPAar1goqubAjTavJNYOzCyKXGd0Q8=";

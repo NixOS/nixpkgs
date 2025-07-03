@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "virtualsquare";
     repo = "vde-2";
     rev = "v${version}";
-    sha256 = "sha256-Yf6QB7j5lYld2XtqhYspK4037lTtimoFc7nCavCP+mU=";
+    hash = "sha256-Yf6QB7j5lYld2XtqhYspK4037lTtimoFc7nCavCP+mU=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [

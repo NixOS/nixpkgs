@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "maaslalani";
     repo = "slides";
     rev = "v${version}";
-    sha256 = "sha256-K8VsqaNUPxh3/Yddy6DFiOyjRuZ6r6bU456Pm31A1og=";
+    hash = "sha256-K8VsqaNUPxh3/Yddy6DFiOyjRuZ6r6bU456Pm31A1og=";
   };
 
   nativeCheckInputs = [

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     # Fix glibc-2.34 build
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/catch1/raw/23276476148a657e7a45ade547f858cbf965a33a/f/catch1-sigstksz.patch";
-      sha256 = "sha256-XSsI3iDEZCUSbozlYWC0y/LZ7qr/5zwACpn1jHKD0yU=";
+      hash = "sha256-XSsI3iDEZCUSbozlYWC0y/LZ7qr/5zwACpn1jHKD0yU=";
     })
   ];
 

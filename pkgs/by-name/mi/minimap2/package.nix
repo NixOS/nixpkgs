@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     repo = "minimap2";
     owner = "lh3";
     rev = "v${version}";
-    sha256 = "sha256-TnJ/h04QdTdL56yyh+3Po19UAzrAkictu5Q6OiCQ2DY=";
+    hash = "sha256-TnJ/h04QdTdL56yyh+3Po19UAzrAkictu5Q6OiCQ2DY=";
   };
 
   buildInputs = [ zlib ];

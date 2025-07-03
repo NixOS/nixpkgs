@@ -28,7 +28,7 @@ buildRubyGem rec {
   pname = gemName;
   version = "0.1.1";
 
-  source.sha256 = "sha256-n1qPiZoUwaD+dMuJKI8k3cR71dg6yIrIAj0ZsFbstQ8=";
+  source.hash = "sha256-n1qPiZoUwaD+dMuJKI8k3cR71dg6yIrIAj0ZsFbstQ8=";
   propagatedBuildInputs = [ deps ];
 
   passthru.updateScript = bundlerUpdateScript "${pname}";

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/srm/srm/trunk/";
     rev = "268";
-    sha256 = "sha256-bY8p6IS5zeByoe/uTmvBAaBN4Wu7J19dVSpbtqx4OeQ=";
+    hash = "sha256-bY8p6IS5zeByoe/uTmvBAaBN4Wu7J19dVSpbtqx4OeQ=";
   };
 
   patches = [ ./fix-output-in-verbose-mode.patch ];

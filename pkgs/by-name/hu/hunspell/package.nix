@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hunspell";
     repo = "hunspell";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-x2FXxnVIqsf5/UEQcvchAndXBv/3mW8Z55djQAFgNA8=";
+    hash = "sha256-x2FXxnVIqsf5/UEQcvchAndXBv/3mW8Z55djQAFgNA8=";
   };
 
   patches = [ ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch ];

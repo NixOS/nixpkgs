@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     # there is also a branch for this version number, so we need to be explicit
     tag = version;
 
-    sha256 = "sha256-VjvHCiWjsx5Y7xxqck/O9gSNrL8mxCTosLwLqC85ywY=";
+    hash = "sha256-VjvHCiWjsx5Y7xxqck/O9gSNrL8mxCTosLwLqC85ywY=";
   };
 
   useFetchCargoVendor = true;

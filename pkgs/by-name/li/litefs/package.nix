@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "superfly";
     repo = "litefs";
     rev = "v${version}";
-    sha256 = "sha256-URwHnOvvz/UnrxoFIuUYpw10uPHgxQf9LPO1xECixDE=";
+    hash = "sha256-URwHnOvvz/UnrxoFIuUYpw10uPHgxQf9LPO1xECixDE=";
   };
 
   vendorHash = "sha256-i0gYhPwcs3dfWy6GANlUl1Nc+dXD8KuAT71FATwxpDo=";

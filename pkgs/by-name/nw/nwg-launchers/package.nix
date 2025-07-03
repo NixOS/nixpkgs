@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "nwg-piotr";
     repo = "nwg-launchers";
     rev = "v${version}";
-    sha256 = "sha256-+waoJHU/QrVH7o9qfwdvFTFJzTGLcV9CeYPn3XHEAkM=";
+    hash = "sha256-+waoJHU/QrVH7o9qfwdvFTFJzTGLcV9CeYPn3XHEAkM=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "shuttle-hq";
     repo = "synth";
     rev = "v${version}";
-    sha256 = "sha256-/z2VEfeCCuffxlMh4WOpYkMSAgmh+sbx3ajcD5d4DdE=";
+    hash = "sha256-/z2VEfeCCuffxlMh4WOpYkMSAgmh+sbx3ajcD5d4DdE=";
   };
 
   useFetchCargoVendor = true;

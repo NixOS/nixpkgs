@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "t6x";
     repo = "reaver-wps-fork-t6x";
     rev = "v${version}";
-    sha256 = "sha256-7g4ZRkyu0TIOUw68dSPP4RyIRyeq1GgUMYFVSQB8/1I=";
+    hash = "sha256-7g4ZRkyu0TIOUw68dSPP4RyIRyeq1GgUMYFVSQB8/1I=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "KnightOS";
     repo = "mkrom";
     rev = version;
-    sha256 = "sha256-YFrh0tOGiM90uvU9ZWopW1+9buHDQtetuOtPDSYYaXw=";
+    hash = "sha256-YFrh0tOGiM90uvU9ZWopW1+9buHDQtetuOtPDSYYaXw=";
   };
 
   strictDeps = true;

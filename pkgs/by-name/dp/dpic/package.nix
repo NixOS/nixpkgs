@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ece.uwaterloo.ca/~aplevich/dpic/${pname}-${version}.tar.gz";
-    sha256 = "sha256-FhkBrJr4bXMFUSuhtWSUBPtMgDoPqwYmJ8w8WJWthy8=";
+    hash = "sha256-FhkBrJr4bXMFUSuhtWSUBPtMgDoPqwYmJ8w8WJWthy8=";
   };
 
   # The prefix passed to configure is not used.

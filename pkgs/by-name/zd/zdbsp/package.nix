@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://zdoom.org/files/utils/zdbsp/zdbsp-${version}-src.zip";
-    sha256 = "sha256-DTj0jMNurvwRwMbo0L4+IeNlbfIwUbqcG1LKd68C08g=";
+    hash = "sha256-DTj0jMNurvwRwMbo0L4+IeNlbfIwUbqcG1LKd68C08g=";
     stripRoot = false;
   };
 

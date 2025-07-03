@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-rYVX7OJnk9pD0m3lZePWjOLua/uNARO3zH3+B/a/xrY=";
+    hash = "sha256-rYVX7OJnk9pD0m3lZePWjOLua/uNARO3zH3+B/a/xrY=";
   };
 
   outputs = [

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/ec2-downloads/${pname}-${version}.zip";
-    sha256 = "sha256-vdpElL6n1V3/+ZVFndRwWpU/M2W7xp8DQwx5a1zB3X8=";
+    hash = "sha256-vdpElL6n1V3/+ZVFndRwWpU/M2W7xp8DQwx5a1zB3X8=";
   };
 
   # Amazon EC2 requires that disk images are writable.  If they're

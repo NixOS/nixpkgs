@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "yamashou";
     repo = "gqlgenc";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-AGbE+R3502Igl4/HaN8yvFVJBsKQ6iVff8IEvddJLEo=";
+    hash = "sha256-AGbE+R3502Igl4/HaN8yvFVJBsKQ6iVff8IEvddJLEo=";
   };
 
   patches = [

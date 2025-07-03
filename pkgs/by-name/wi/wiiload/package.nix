@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "devkitPro";
     repo = "wiiload";
     rev = "v${version}";
-    sha256 = "sha256-pZdZzCAPfAVucuiV/q/ROY3cz/wxQWep6dCTGNn2fSo=";
+    hash = "sha256-pZdZzCAPfAVucuiV/q/ROY3cz/wxQWep6dCTGNn2fSo=";
   };
 
   preConfigure = "./autogen.sh";

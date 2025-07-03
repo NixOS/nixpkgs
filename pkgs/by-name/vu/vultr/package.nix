@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "JamesClonk";
     repo = "vultr";
     rev = "v${version}";
-    sha256 = "sha256-kyB6gUbc32NsSDqDy1zVT4HXn0pWxHdBOEBOSaI0Xro=";
+    hash = "sha256-kyB6gUbc32NsSDqDy1zVT4HXn0pWxHdBOEBOSaI0Xro=";
   };
 
   vendorHash = null;

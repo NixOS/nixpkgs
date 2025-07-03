@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.libdivecomputer.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-J17M55I2RO1YH6q53LTxpprSUbzrByHE5fhftjFheg4=";
+    hash = "sha256-J17M55I2RO1YH6q53LTxpprSUbzrByHE5fhftjFheg4=";
   };
 
   enableParallelBuilding = true;

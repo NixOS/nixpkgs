@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "elisescu";
     repo = "tty-share";
     rev = "v${version}";
-    sha256 = "sha256-+Bh39WtzReOmHcvpGbNfEdBqw7ZL9Vhxu5d337CMc/M=";
+    hash = "sha256-+Bh39WtzReOmHcvpGbNfEdBqw7ZL9Vhxu5d337CMc/M=";
   };
 
   # Upstream has a `./vendor` directory with all deps which we rely upon.

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "williamh";
     repo = "dotconf";
     rev = "v${version}";
-    sha256 = "sha256-6Du26Ffz08DLGg6uIiPi8Sgjf691MM2kn0qXe3oFeTw=";
+    hash = "sha256-6Du26Ffz08DLGg6uIiPi8Sgjf691MM2kn0qXe3oFeTw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

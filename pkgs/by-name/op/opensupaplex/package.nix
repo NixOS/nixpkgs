@@ -15,7 +15,7 @@ let
   # Doesn't seem to be included in tagged releases, but does exist on master.
   icon = fetchurl {
     url = "https://raw.githubusercontent.com/sergiou87/open-supaplex/b102548699cf16910b59559f689ecfad88d2a7d2/open-supaplex.svg";
-    sha256 = "sha256-nKeSBUGjSulbEP7xxc6smsfCRjyc/xsLykH0o3Rq5wo=";
+    hash = "sha256-nKeSBUGjSulbEP7xxc6smsfCRjyc/xsLykH0o3Rq5wo=";
   };
 in
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "sergiou87";
     repo = "open-supaplex";
     rev = "v${version}";
-    sha256 = "sha256-hP8dJlLXE5J/oxPhRkrrBl1Y5e9MYbJKi8OApFM3+GU=";
+    hash = "sha256-hP8dJlLXE5J/oxPhRkrrBl1Y5e9MYbJKi8OApFM3+GU=";
   };
 
   nativeBuildInputs = [

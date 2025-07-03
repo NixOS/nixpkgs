@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/glpk/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ShAT7rtQ9yj8YBvdgzsLKHAzPDs+WoFu66kh2VvsbxU=";
+    hash = "sha256-ShAT7rtQ9yj8YBvdgzsLKHAzPDs+WoFu66kh2VvsbxU=";
   };
 
   buildInputs =
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "error_recovery.patch";
       url = "https://raw.githubusercontent.com/sagemath/sage/d3c1f607e32f964bf0cab877a63767c86fd00266/build/pkgs/glpk/patches/error_recovery.patch";
-      sha256 = "sha256-2hNtUEoGTFt3JgUvLH3tPWnz+DZcXNhjXzS+/V89toA=";
+      hash = "sha256-2hNtUEoGTFt3JgUvLH3tPWnz+DZcXNhjXzS+/V89toA=";
     })
   ];
 

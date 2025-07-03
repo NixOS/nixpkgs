@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "KNawm";
     repo = "speed-cloudflare-cli";
     rev = "dd301195e7def359a39cceeba16b1c0bedac8f5d";
-    sha256 = "sha256-kxLeQUdJbkmApf5Af3Mgd3WvS3GhXXOIvA4gNB55TGM=";
+    hash = "sha256-kxLeQUdJbkmApf5Af3Mgd3WvS3GhXXOIvA4gNB55TGM=";
   };
 
   nativeBuildInputs = [ nodejs ];

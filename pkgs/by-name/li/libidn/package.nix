@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/libidn/libidn-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-vcZiwS0EGyU50OY486bnQRMM2zOmRO80lpY6RDSC0WQ=";
+    hash = "sha256-vcZiwS0EGyU50OY486bnQRMM2zOmRO80lpY6RDSC0WQ=";
   };
 
   outputs = [

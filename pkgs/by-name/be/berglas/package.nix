@@ -41,7 +41,7 @@ buildGoModule rec {
     owner = "GoogleCloudPlatform";
     repo = "berglas";
     rev = "v${version}";
-    sha256 = "sha256-gBZY/xj/T7UYQ5mnN6udpBKViE/RYz9tmbmYN+JqsBk=";
+    hash = "sha256-gBZY/xj/T7UYQ5mnN6udpBKViE/RYz9tmbmYN+JqsBk=";
   };
 
   vendorHash = "sha256-NR4YoaJ5ztc7eokRexNzDBtAH7JM4vZH13K550KWFNM=";

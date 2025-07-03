@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "sha256-0hZ4VnscnKYBrXy58IjeoeDxja1oNq0mNaQGPmej5BA=";
+    hash = "sha256-0hZ4VnscnKYBrXy58IjeoeDxja1oNq0mNaQGPmej5BA=";
   };
 
   nativeBuildInputs = [

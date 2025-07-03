@@ -31,7 +31,7 @@ buildPythonApplication rec {
     owner = "multani";
     repo = "sonata";
     tag = "v${version}";
-    sha256 = "sha256-80F2dVaRawnI0E+GzaxRUudaLWWHGUjICCEbXHVGy+E=";
+    hash = "sha256-80F2dVaRawnI0E+GzaxRUudaLWWHGUjICCEbXHVGy+E=";
   };
 
   disabled = !isPy3k;

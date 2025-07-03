@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "roehling";
     repo = "postsrsd";
     rev = version;
-    sha256 = "sha256-Q7tXCd2Mz3WIGnIrbb8mfgT7fcmtVS4EtF0ztYmEsmM=";
+    hash = "sha256-Q7tXCd2Mz3WIGnIrbb8mfgT7fcmtVS4EtF0ztYmEsmM=";
   };
 
   cmakeFlags = [

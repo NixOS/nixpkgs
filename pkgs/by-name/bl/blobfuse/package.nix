@@ -14,7 +14,7 @@ let
     owner = "Azure";
     repo = "azure-storage-fuse";
     rev = "blobfuse2-${version}";
-    sha256 = "sha256-bpMX7flbb/QYZUtq1I1s2lAvrBhW7esPwxN/JupryDo=";
+    hash = "sha256-bpMX7flbb/QYZUtq1I1s2lAvrBhW7esPwxN/JupryDo=";
   };
 in
 buildGoModule {

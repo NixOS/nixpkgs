@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "bdd";
     repo = "runitor";
     rev = "v${version}";
-    sha256 = "sha256-y4wIfal8aiVD5ZoRF6GnYUGRssBLMOPSWa40+3OU4y0=";
+    hash = "sha256-y4wIfal8aiVD5ZoRF6GnYUGRssBLMOPSWa40+3OU4y0=";
   };
 
   ldflags = [

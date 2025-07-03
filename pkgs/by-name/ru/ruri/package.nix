@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "ruri";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    sha256 = "sha256-gf+WJPGeLbMntBk8ryTSsV9L4J3N4Goh9eWBIBj5FA4=";
+    hash = "sha256-gf+WJPGeLbMntBk8ryTSsV9L4J3N4Goh9eWBIBj5FA4=";
   };
 
   buildInputs = [

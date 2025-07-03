@@ -20,7 +20,7 @@ buildGoModule rec {
     # update dependencies to fix darwin build - remove in next release
     (fetchpatch {
       url = "https://github.com/stefanoj3/dirstalk/commit/79aef14c5c048f3a3a8374f42c7a0d52fc9f7b50.patch";
-      sha256 = "sha256-2rSrMowfYdKV69Yg2QBzam3WOwGrSHQB+3uVi1Z2oJ8=";
+      hash = "sha256-2rSrMowfYdKV69Yg2QBzam3WOwGrSHQB+3uVi1Z2oJ8=";
     })
   ];
 

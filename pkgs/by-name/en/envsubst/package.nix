@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "a8m";
     repo = "envsubst";
     rev = "v${version}";
-    sha256 = "sha256-eByxrLf/F8Ih8v+0TunghF4m42TLPeRRFnqN3Ib6e14=";
+    hash = "sha256-eByxrLf/F8Ih8v+0TunghF4m42TLPeRRFnqN3Ib6e14=";
   };
 
   vendorHash = null;

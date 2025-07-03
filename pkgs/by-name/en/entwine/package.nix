@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "connormanning";
     repo = "entwine";
     rev = version;
-    sha256 = "sha256-1dy5NafKX0E4MwFIggnr7bQIeB1KvqnNaQQUUAs6Bq8=";
+    hash = "sha256-1dy5NafKX0E4MwFIggnr7bQIeB1KvqnNaQQUUAs6Bq8=";
   };
 
   buildInputs = [

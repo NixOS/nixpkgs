@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "rootless-containers";
     repo = "slirp4netns";
     rev = "v${version}";
-    sha256 = "sha256-dPhUr9GdujTpUsnfvZDp8eOBQwlzqwtwziII2QWD4JA=";
+    hash = "sha256-dPhUr9GdujTpUsnfvZDp8eOBQwlzqwtwziII2QWD4JA=";
   };
 
   nativeBuildInputs = [

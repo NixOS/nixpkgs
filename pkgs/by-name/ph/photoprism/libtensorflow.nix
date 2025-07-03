@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     # Upstream tensorflow tarball (with .h's photoprism's tarball is missing)
     (fetchurl {
       url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-1.15.0.tar.gz";
-      sha256 = "sha256-3sv9WnCeztNSP1XM+iOTN6h+GrPgAO/aNhfbeeEDTe0=";
+      hash = "sha256-3sv9WnCeztNSP1XM+iOTN6h+GrPgAO/aNhfbeeEDTe0=";
     })
   ];
 

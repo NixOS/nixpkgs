@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "AltraMayor";
     repo = "f3";
     rev = "v${version}";
-    sha256 = "sha256-ZajlFGXJcYUVe/wUFfdPYVW8stOo1Aqe8uD2Bm9KIk0=";
+    hash = "sha256-ZajlFGXJcYUVe/wUFfdPYVW8stOo1Aqe8uD2Bm9KIk0=";
   };
 
   postPatch = ''

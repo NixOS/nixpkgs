@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "LibOFX";
     repo = "libofx";
     rev = version;
-    sha256 = "sha256-KOQrEAt1jHrOpPQ7QbGUADe0i7sQXNH2fblPRzT0EIg=";
+    hash = "sha256-KOQrEAt1jHrOpPQ7QbGUADe0i7sQXNH2fblPRzT0EIg=";
   };
 
   preConfigure = "./autogen.sh";

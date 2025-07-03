@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "jarun";
     repo = "bcal";
     rev = "v${version}";
-    sha256 = "sha256-PleWU2yyJzkUAZEvEYoCGdpEXqOgRvZK9zXTYrxRtQU=";
+    hash = "sha256-PleWU2yyJzkUAZEvEYoCGdpEXqOgRvZK9zXTYrxRtQU=";
   };
 
   buildInputs = [ readline ];

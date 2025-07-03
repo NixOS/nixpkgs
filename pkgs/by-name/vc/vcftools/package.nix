@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     repo = "vcftools";
     owner = "vcftools";
     rev = "v${version}";
-    sha256 = "sha256-IiePgDpaL/6XOpQsOn90clB6ST7F/37sztmHrC7Ysbw=";
+    hash = "sha256-IiePgDpaL/6XOpQsOn90clB6ST7F/37sztmHrC7Ysbw=";
   };
 
   nativeBuildInputs = [

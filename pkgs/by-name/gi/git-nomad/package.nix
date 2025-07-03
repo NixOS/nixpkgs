@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "rraval";
     repo = "git-nomad";
     rev = "v${version}";
-    sha256 = "sha256-G/i+mCKZSe8tPMuCLzymkU9SGyFNHY74cGhcC4ru0/k=";
+    hash = "sha256-G/i+mCKZSe8tPMuCLzymkU9SGyFNHY74cGhcC4ru0/k=";
   };
 
   useFetchCargoVendor = true;

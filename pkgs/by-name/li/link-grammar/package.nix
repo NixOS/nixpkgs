@@ -26,7 +26,7 @@ let
 
     src = fetchurl {
       url = "http://www.abisource.com/downloads/${pname}/${version}/${pname}-${version}.tar.gz";
-      sha256 = "sha256-MkcQzYEyl1/5zLU1CXMvdVhHOxwZ8XiSAAo97bhhiu0=";
+      hash = "sha256-MkcQzYEyl1/5zLU1CXMvdVhHOxwZ8XiSAAo97bhhiu0=";
     };
 
     nativeBuildInputs = [

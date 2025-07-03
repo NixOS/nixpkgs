@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "jfrimmel";
     repo = "cargo-valgrind";
     tag = version;
-    sha256 = "sha256-gr/s2dYCFmhwfXT3tqWPFpXQK2QaAhL7Aqnn1A3KjJI=";
+    hash = "sha256-gr/s2dYCFmhwfXT3tqWPFpXQK2QaAhL7Aqnn1A3KjJI=";
   };
 
   useFetchCargoVendor = true;

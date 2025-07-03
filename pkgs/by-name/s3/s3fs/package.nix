@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "s3fs-fuse";
     repo = "s3fs-fuse";
     rev = "v${version}";
-    sha256 = "sha256-wHszw3S+fuZRwTvJy+FkxQTR2BAvr8H924Wd4/C5heE=";
+    hash = "sha256-wHszw3S+fuZRwTvJy+FkxQTR2BAvr8H924Wd4/C5heE=";
   };
 
   buildInputs = [

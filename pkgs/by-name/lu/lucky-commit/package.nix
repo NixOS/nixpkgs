@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "not-an-aardvark";
     repo = "lucky-commit";
     rev = "v${version}";
-    sha256 = "sha256-pghc2lTI81/z1bPJ6P2bFPyZkM8pko0V7lqv9rUUxWM=";
+    hash = "sha256-pghc2lTI81/z1bPJ6P2bFPyZkM8pko0V7lqv9rUUxWM=";
   };
 
   useFetchCargoVendor = true;

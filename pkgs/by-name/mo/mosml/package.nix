@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "kfl";
     repo = "mosml";
     rev = "ver-${version}";
-    sha256 = "sha256-GK39WvM7NNhoC5f0Wjy4/5VWT+Rbh2qo+W71hWrbPso=";
+    hash = "sha256-GK39WvM7NNhoC5f0Wjy4/5VWT+Rbh2qo+W71hWrbPso=";
   };
 
   setSourceRoot = ''export sourceRoot="$(echo */src)"'';

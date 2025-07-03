@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "uael";
     repo = "sv";
     rev = "v${version}";
-    sha256 = "sha256-sc7WTRY8XTm5+J+zlS7tGa2f+2d7apj+XHyBafZXXeE=";
+    hash = "sha256-sc7WTRY8XTm5+J+zlS7tGa2f+2d7apj+XHyBafZXXeE=";
   };
 
   nativeBuildInputs = [ cmake ];

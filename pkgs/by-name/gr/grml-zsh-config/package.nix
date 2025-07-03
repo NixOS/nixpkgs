@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "grml";
     repo = "grml-etc-core";
     rev = "v${version}";
-    sha256 = "sha256-OazsDuIMFnyJrmd4Idt6ciV0huC9QmtcqBxEVD4nf6g=";
+    hash = "sha256-OazsDuIMFnyJrmd4Idt6ciV0huC9QmtcqBxEVD4nf6g=";
   };
 
   strictDeps = true;

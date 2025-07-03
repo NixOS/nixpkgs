@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gitlab.nic.cz/datovka/libdatovka/-/archive/v${version}/libdatovka-v${version}.tar.gz";
-    sha256 = "sha256-qVbSxPLYe+PjGwRH2U/V2Ku2X1fRPbDOUjFamCsYVgY=";
+    hash = "sha256-qVbSxPLYe+PjGwRH2U/V2Ku2X1fRPbDOUjFamCsYVgY=";
   };
 
   patches = [

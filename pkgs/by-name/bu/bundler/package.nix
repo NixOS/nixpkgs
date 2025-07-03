@@ -14,7 +14,7 @@ buildRubyGem rec {
   name = "${gemName}-${version}";
   gemName = "bundler";
   version = "2.6.9";
-  source.sha256 = "sha256-olZ1/70FWuEYZ2bMHhILTPYliOiKu1m5nFfiKxxVyes=";
+  source.hash = "sha256-olZ1/70FWuEYZ2bMHhILTPYliOiKu1m5nFfiKxxVyes=";
   dontPatchShebangs = true;
 
   postFixup = ''

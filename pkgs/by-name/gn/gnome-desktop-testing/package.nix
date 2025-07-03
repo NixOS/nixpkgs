@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gnome-desktop-testing";
     rev = "v${version}";
-    sha256 = "sha256-PWn4eEZskY0YgMpf6O2dgXNSu8b8T311vFHREv2HE/Q=";
+    hash = "sha256-PWn4eEZskY0YgMpf6O2dgXNSu8b8T311vFHREv2HE/Q=";
   };
 
   nativeBuildInputs = [

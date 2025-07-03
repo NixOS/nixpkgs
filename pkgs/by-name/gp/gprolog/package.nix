@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
       "mirror://gnu/gprolog/gprolog-${version}.tar.gz"
       "http://www.gprolog.org/gprolog-${version}.tar.gz"
     ];
-    sha256 = "sha256-ZwZCtDwPqifr1olh77F+vnB2iPkbaAlWbd1gYTlRLAE=";
+    hash = "sha256-ZwZCtDwPqifr1olh77F+vnB2iPkbaAlWbd1gYTlRLAE=";
   };
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isi686 "pic";

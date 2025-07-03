@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "fleaz";
     repo = "r53-ddns";
     rev = "v${version}";
-    sha256 = "sha256-KJAPhSGaC3upWLfo2eeSD3Vit9Blmbol7s8y3f849N4=";
+    hash = "sha256-KJAPhSGaC3upWLfo2eeSD3Vit9Blmbol7s8y3f849N4=";
   };
 
   vendorHash = "sha256-KkyMd94cejWkgg/RJudy1lm/M3lsEJXFGqVTzGIX3qM=";

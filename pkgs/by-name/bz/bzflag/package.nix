@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.bzflag.org/bzflag/source/${finalAttrs.version}/bzflag-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-u3i3UOe856p8Eb01kGuwikmsx8UL8pYprzgO7NFTiU0=";
+    hash = "sha256-u3i3UOe856p8Eb01kGuwikmsx8UL8pYprzgO7NFTiU0=";
   };
 
   nativeBuildInputs = [ pkg-config ];

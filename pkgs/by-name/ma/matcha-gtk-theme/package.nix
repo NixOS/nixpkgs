@@ -30,7 +30,7 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
       owner = "vinceliuice";
       repo = "matcha-gtk-theme";
       rev = version;
-      sha256 = "sha256-vPAGEa3anWAynEg2AYme4qpHJdLDKk2CmL5iQ1mBYgM=";
+      hash = "sha256-vPAGEa3anWAynEg2AYme4qpHJdLDKk2CmL5iQ1mBYgM=";
     };
 
     nativeBuildInputs = [

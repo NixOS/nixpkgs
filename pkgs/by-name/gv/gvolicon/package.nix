@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "Unia";
     repo = "gvolicon";
     rev = "0d65a396ba11f519d5785c37fec3e9a816217a07";
-    sha256 = "sha256-lm5OfryV1/1T1RgsVDdp0Jg5rh8AND8M3ighfrznKes=";
+    hash = "sha256-lm5OfryV1/1T1RgsVDdp0Jg5rh8AND8M3ighfrznKes=";
   };
 
   nativeBuildInputs = [

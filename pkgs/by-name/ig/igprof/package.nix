@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "igprof";
     repo = "igprof";
     rev = "v${version}";
-    sha256 = "sha256-UTrAaH8C79km78Z/7NxvQ6dnl4u4Ki80nORf4bsoSNw=";
+    hash = "sha256-UTrAaH8C79km78Z/7NxvQ6dnl4u4Ki80nORf4bsoSNw=";
   };
 
   postPatch = ''

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "kcat";
     repo = "openal-soft";
     rev = version;
-    sha256 = "sha256-ECrIkxMACPsWehtJWwTmoYj6hGcsdxwVuTiQywG36Y8=";
+    hash = "sha256-ECrIkxMACPsWehtJWwTmoYj6hGcsdxwVuTiQywG36Y8=";
   };
 
   strictDeps = true;

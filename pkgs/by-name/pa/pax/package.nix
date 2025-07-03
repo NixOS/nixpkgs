@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.mirbsd.org/MirOS/dist/mir/cpio/paxmirabilis-${version}.tgz";
-    sha256 = "sha256-6VXV06+Xrt4KP0Y6mlm4Po0Qg6rxQutvOIxUmn0YLms=";
+    hash = "sha256-6VXV06+Xrt4KP0Y6mlm4Po0Qg6rxQutvOIxUmn0YLms=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isMusl musl-fts;

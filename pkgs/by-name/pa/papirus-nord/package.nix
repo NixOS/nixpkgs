@@ -43,7 +43,7 @@ lib.checkListOfEnum "${pname}: accent colors" validAccents [ accent ]
       owner = "adapta-projects";
       repo = "papirus-nord";
       rev = version;
-      sha256 = "sha256-KwwTDGJQ4zN9XH/pKFQDQ+EgyuSCFhN2PQAI35G+3YM=";
+      hash = "sha256-KwwTDGJQ4zN9XH/pKFQDQ+EgyuSCFhN2PQAI35G+3YM=";
     };
 
     nativeBuildInputs = [

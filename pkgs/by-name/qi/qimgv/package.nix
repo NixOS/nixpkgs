@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "easymodo";
     repo = pname;
     rev = "a4d475fae07847be7c106cb628fb97dad51ab920";
-    sha256 = "sha256-iURUJiPe8hbCnpaf6lk8OVSzVqrJKGab889yOic5yLI=";
+    hash = "sha256-iURUJiPe8hbCnpaf6lk8OVSzVqrJKGab889yOic5yLI=";
   };
 
   nativeBuildInputs = [

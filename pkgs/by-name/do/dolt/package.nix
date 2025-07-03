@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "dolthub";
     repo = "dolt";
     rev = "v${version}";
-    sha256 = "sha256-smBb3QNsCipAKzR45bJk9GZZK02YiAkknC7YJBa02Mg=";
+    hash = "sha256-smBb3QNsCipAKzR45bJk9GZZK02YiAkknC7YJBa02Mg=";
   };
 
   modRoot = "./go";

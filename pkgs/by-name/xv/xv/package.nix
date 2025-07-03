@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "jasper-software";
     repo = "xv";
     rev = "v${version}";
-    sha256 = "sha256-508P88Kac1W0xwjNblOjkYJri36ReZkjzrNzrrSBZjg=";
+    hash = "sha256-508P88Kac1W0xwjNblOjkYJri36ReZkjzrNzrrSBZjg=";
   };
 
   nativeBuildInputs = [ cmake ];

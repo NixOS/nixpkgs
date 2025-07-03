@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "Versent";
     repo = "saml2aws";
     rev = "v${version}";
-    sha256 = "sha256-5g7mbjBkjNl1xvMMJXcITOZTNWXE7m2WhzzvLuULcuo=";
+    hash = "sha256-5g7mbjBkjNl1xvMMJXcITOZTNWXE7m2WhzzvLuULcuo=";
   };
 
   vendorHash = "sha256-oCYtEMx3+wK1TyS18iYgRwH3NopWY63xsguvanNDSEo=";

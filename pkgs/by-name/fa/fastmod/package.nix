@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "facebookincubator";
     repo = "fastmod";
     rev = "v${version}";
-    sha256 = "sha256-A/3vzfwaStoQ9gdNM8yjmL2J/pQjj6yb68WThiTF+1E=";
+    hash = "sha256-A/3vzfwaStoQ9gdNM8yjmL2J/pQjj6yb68WThiTF+1E=";
   };
 
   useFetchCargoVendor = true;

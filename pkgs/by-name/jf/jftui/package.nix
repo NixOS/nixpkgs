@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "Aanok";
     repo = "jftui";
     rev = "v${version}";
-    sha256 = "sha256-Tgiwhdo87uqVwpOvNXRdvFTfkbf9dfSNQDlGx29S2II=";
+    hash = "sha256-Tgiwhdo87uqVwpOvNXRdvFTfkbf9dfSNQDlGx29S2II=";
   };
 
   nativeBuildInputs = [

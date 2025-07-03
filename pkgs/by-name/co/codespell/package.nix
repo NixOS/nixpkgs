@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "codespell-project";
     repo = "codespell";
     tag = "v${version}";
-    sha256 = "sha256-9hr/QZcBESLukujzNKNjWGG3nXx+wkvQvoUYmYgtXv0=";
+    hash = "sha256-9hr/QZcBESLukujzNKNjWGG3nXx+wkvQvoUYmYgtXv0=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

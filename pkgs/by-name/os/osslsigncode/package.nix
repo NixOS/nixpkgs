@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "mtrojnar";
     repo = "osslsigncode";
     rev = version;
-    sha256 = "sha256-UjjNXcHpPbyUz5CPsW+uVhZP0X9XGM3//IVv9VhmP7o=";
+    hash = "sha256-UjjNXcHpPbyUz5CPsW+uVhZP0X9XGM3//IVv9VhmP7o=";
   };
 
   nativeBuildInputs = [

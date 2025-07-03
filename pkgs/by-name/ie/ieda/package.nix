@@ -30,7 +30,7 @@ let
       owner = "google";
       repo = "glog";
       rev = "v${version}";
-      sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
+      hash = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
     };
   });
   rootSrc = stdenv.mkDerivation {
@@ -39,7 +39,7 @@ let
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
       rev = "3096147fcea491c381da2928be6fb5a12c2d97b7";
-      sha256 = "sha256-rPkcE+QFMlEuwwJ/QBgyLTXP5lWLQPj5SOlZysJ6WTI=";
+      hash = "sha256-rPkcE+QFMlEuwwJ/QBgyLTXP5lWLQPj5SOlZysJ6WTI=";
     };
 
     patches = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "f4exb";
     repo = "serialdv";
     rev = "v${version}";
-    sha256 = "sha256-uswddoIpTXqsvjM2/ygdud9jZHTemLn9Dlv9FBXXKow=";
+    hash = "sha256-uswddoIpTXqsvjM2/ygdud9jZHTemLn9Dlv9FBXXKow=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -57,7 +57,7 @@ let
     src = fetchHex {
       pkg = "provider_asn1";
       version = "0.4.1";
-      sha256 = "sha256-HqR6IyJyJinvbPJJlhJE14yEiBbNmTGOmR0hqonrOR0=";
+      hash = "sha256-HqR6IyJyJinvbPJJlhJE14yEiBbNmTGOmR0hqonrOR0=";
     };
     beamDeps = [ ];
   };
@@ -67,7 +67,7 @@ let
     src = fetchHex {
       pkg = "rebar3_hex";
       version = "7.0.8";
-      sha256 = "sha256-aEY0EEZwRHp6AAuE1pSfm5RjBjU+PaaJuKp7fvXRiBc=";
+      hash = "sha256-aEY0EEZwRHp6AAuE1pSfm5RjBjU+PaaJuKp7fvXRiBc=";
     };
     beamDeps = [ ];
   };

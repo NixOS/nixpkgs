@@ -13,7 +13,7 @@ buildDotnetModule rec {
     owner = "Pryaxis";
     repo = "TShock";
     rev = "v${version}";
-    sha256 = "sha256-1EtHpBZ7bbwVbl+tMfwpjgPuxu98XKvxlZ2+SbUlWV4=";
+    hash = "sha256-1EtHpBZ7bbwVbl+tMfwpjgPuxu98XKvxlZ2+SbUlWV4=";
     fetchSubmodules = true;
   };
 

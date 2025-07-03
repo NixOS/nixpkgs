@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Neargye";
     repo = "semver";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-0HOp+xzo8xcCUUgtSh87N9DXP5P0odBaYXhcDzOiiXE=";
+    hash = "sha256-0HOp+xzo8xcCUUgtSh87N9DXP5P0odBaYXhcDzOiiXE=";
   };
 
   nativeBuildInputs = [

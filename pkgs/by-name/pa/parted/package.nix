@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/parted/parted-${version}.tar.xz";
-    sha256 = "sha256-O0Pb4zzKD5oYYB66tWt4UrEo7Bo986mzDM3l5zNZ5hI=";
+    hash = "sha256-O0Pb4zzKD5oYYB66tWt4UrEo7Bo986mzDM3l5zNZ5hI=";
   };
 
   patches = [

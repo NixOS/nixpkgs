@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     owner = "andir";
     repo = "npins";
     tag = version;
-    sha256 = "sha256-PPk9Ve1pM3X7NfGeGb8Jiq4YDEwAjErP4xzGwLaakTU=";
+    hash = "sha256-PPk9Ve1pM3X7NfGeGb8Jiq4YDEwAjErP4xzGwLaakTU=";
   };
 
   useFetchCargoVendor = true;

@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "kubernetes";
     repo = "node-problem-detector";
     rev = "v${version}";
-    sha256 = "sha256-byxj6EXKAmesFOBtBt0URcT0h1pYdrW8ewtITuEPFcs=";
+    hash = "sha256-byxj6EXKAmesFOBtBt0URcT0h1pYdrW8ewtITuEPFcs=";
   };
 
   vendorHash = null;

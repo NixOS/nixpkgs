@@ -35,7 +35,7 @@ resholve.mkDerivation rec {
     (fetchpatch {
       name = "fix-function-invocation-typo.patch";
       url = "https://github.com/git-ftp/git-ftp/commit/cddf7cbba80e710758f6aac0ec0d77552ea8cd75.patch";
-      sha256 = "sha256-2B0QaMJi78Bg3bA1jp41aiyql1/LCryoaDs7+xmS1HY=";
+      hash = "sha256-2B0QaMJi78Bg3bA1jp41aiyql1/LCryoaDs7+xmS1HY=";
     })
   ];
 

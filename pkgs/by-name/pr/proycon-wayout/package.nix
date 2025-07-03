@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "~proycon";
     repo = "wayout";
     rev = version;
-    sha256 = "sha256-pxHz8y63xX9I425OG0jPvQVx4mAbTYHxVMMkfjZpURo=";
+    hash = "sha256-pxHz8y63xX9I425OG0jPvQVx4mAbTYHxVMMkfjZpURo=";
   };
 
   postPatch = ''

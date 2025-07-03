@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     owner = "hartwork";
     repo = "git-delete-merged-branches";
     tag = version;
-    sha256 = "sha256-2MSdUpToOiurtiL0Ws2dLEWqd6wj4nQ2RsEepBytgAk=";
+    hash = "sha256-2MSdUpToOiurtiL0Ws2dLEWqd6wj4nQ2RsEepBytgAk=";
   };
 
   build-system = with python3Packages; [ setuptools ];

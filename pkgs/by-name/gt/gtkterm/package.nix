@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "wvdakker";
     repo = "gtkterm";
     rev = version;
-    sha256 = "sha256-oGqOXIu5P3KfdV6Unm7Nz+BRhb5Z6rne0+e0wZ2EcAI=";
+    hash = "sha256-oGqOXIu5P3KfdV6Unm7Nz+BRhb5Z6rne0+e0wZ2EcAI=";
   };
 
   nativeBuildInputs = [

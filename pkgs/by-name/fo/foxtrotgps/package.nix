@@ -23,7 +23,7 @@ let
     foxtrot = fetchbzr {
       url = "lp:foxtrotgps";
       rev = "331";
-      sha256 = "sha256-/kJv6a3MzAzzwIl98Mqi7jrUJC1kDvouigf9kGtv868=";
+      hash = "sha256-/kJv6a3MzAzzwIl98Mqi7jrUJC1kDvouigf9kGtv868=";
     };
     screenshots = fetchbzr {
       url = "lp:foxtrotgps/screenshots";

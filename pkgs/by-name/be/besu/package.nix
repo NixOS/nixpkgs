@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://hyperledger.jfrog.io/artifactory/besu-binaries/besu/${finalAttrs.version}/besu-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-CC24z0+2dSeqDddX5dJUs7SX9QJ8Iyh/nAp0pqdDvwg=";
+    hash = "sha256-CC24z0+2dSeqDddX5dJUs7SX9QJ8Iyh/nAp0pqdDvwg=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ jemalloc ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gtk-gnutella";
     repo = "gtk-gnutella";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-LbSUdU+a9G8qL7gCZVJQ6UQMATpOMtktY6FeOkUuaYI=";
+    hash = "sha256-LbSUdU+a9G8qL7gCZVJQ6UQMATpOMtktY6FeOkUuaYI=";
   };
 
   nativeBuildInputs = [

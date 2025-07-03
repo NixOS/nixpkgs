@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.chkrootkit.org/pub/seg/pac/${pname}-${version}.tar.gz";
-    sha256 = "sha256-de0qzoHw+j6cP7ZNqw6IV+1ZJH6nVfWJhBb+ssZoB7k=";
+    hash = "sha256-de0qzoHw+j6cP7ZNqw6IV+1ZJH6nVfWJhBb+ssZoB7k=";
   };
 
   # TODO: a lazy work-around for linux build failure ...

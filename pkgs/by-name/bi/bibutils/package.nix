@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/bibutils/bibutils_${version}_src.tgz";
-    sha256 = "sha256-bgKK7x6Kaz5azvCYWEp7tocI81z+dAEbNBwR/qXktcM=";
+    hash = "sha256-bgKK7x6Kaz5azvCYWEp7tocI81z+dAEbNBwR/qXktcM=";
   };
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "chfast";
     repo = "ethash";
     rev = "v${version}";
-    sha256 = "sha256-sLa+lXC+UvqFEoC/ZfoRlotkNhUaqhLtDKHtbH2xa/k=";
+    hash = "sha256-sLa+lXC+UvqFEoC/ZfoRlotkNhUaqhLtDKHtbH2xa/k=";
   };
 
   nativeBuildInputs = [

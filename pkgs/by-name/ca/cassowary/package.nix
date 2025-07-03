@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "rogerwelin";
     repo = "cassowary";
     rev = "v${version}";
-    sha256 = "sha256-27sEexOGLQ42qWY+vCiPTt5XR66TSUvKsuGgtkbMgE4=";
+    hash = "sha256-27sEexOGLQ42qWY+vCiPTt5XR66TSUvKsuGgtkbMgE4=";
   };
 
   vendorHash = "sha256-YP9q9lL2A9ERhzbJBIFKsYsgvy5xYeUO3ekyQdh97f8=";

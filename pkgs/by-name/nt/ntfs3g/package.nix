@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "tuxera";
     repo = "ntfs-3g";
     rev = version;
-    sha256 = "sha256-nuFTsGkm3zmSzpwmhyY7Ke0VZfZU0jHOzEWaLBbglQk=";
+    hash = "sha256-nuFTsGkm3zmSzpwmhyY7Ke0VZfZU0jHOzEWaLBbglQk=";
   };
 
   buildInputs =

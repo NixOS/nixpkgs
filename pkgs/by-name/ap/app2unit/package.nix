@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "Vladimir-csp";
     repo = "app2unit";
     tag = "v${version}";
-    sha256 = "sha256-CwiB/Co75BbVXem2XD2i7kccgjcDk8a0lXCOoz0QVIc=";
+    hash = "sha256-CwiB/Co75BbVXem2XD2i7kccgjcDk8a0lXCOoz0QVIc=";
   };
 
   installPhase = ''

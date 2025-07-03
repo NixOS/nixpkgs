@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "Azure";
     repo = "kubelogin";
     rev = "v${version}";
-    sha256 = "sha256-5qIGUI7hw4Yvpb0Pub3P2lYMnTuMfu7I2x8Xq0Gsuag=";
+    hash = "sha256-5qIGUI7hw4Yvpb0Pub3P2lYMnTuMfu7I2x8Xq0Gsuag=";
   };
 
   vendorHash = "sha256-fILOPZnSsEX9f1nWxC1jTN2wNGmlz15fFmeVvXMA25w=";

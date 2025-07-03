@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://phoronix-test-suite.com/releases/phoronix-test-suite-${version}.tar.gz";
-    sha256 = "sha256-HyCS1TbAoxk+/FPkpQ887mXA7xp40x5UBPHGY//3t/Q=";
+    hash = "sha256-HyCS1TbAoxk+/FPkpQ887mXA7xp40x5UBPHGY//3t/Q=";
   };
 
   buildInputs = [ php ];

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     # rev = version;
     rev = if version == "1.5.4" then "feab26bc54529417af983950ddbffb3a4c334d4f" else version;
 
-    sha256 = "sha256-aj/QmJ38ifsW36JFQcbp55aIQRvOpiqLHwEh/aFXsgo=";
+    hash = "sha256-aj/QmJ38ifsW36JFQcbp55aIQRvOpiqLHwEh/aFXsgo=";
   };
 
   sourceRoot = "${src.name}/mpfi";

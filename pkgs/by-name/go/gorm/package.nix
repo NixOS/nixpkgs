@@ -12,7 +12,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "ftp://ftp.gnustep.org/pub/gnustep/dev-apps/gorm-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-B7NNRA3qA2PFbb03m58EBBONuIciLf6eU+YSR0qvaCo=";
+    hash = "sha256-B7NNRA3qA2PFbb03m58EBBONuIciLf6eU+YSR0qvaCo=";
   };
 
   nativeBuildInputs = [ wrapGNUstepAppsHook ];

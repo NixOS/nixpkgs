@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "gruntwork-io";
     repo = "kubergrunt";
     rev = "v${version}";
-    sha256 = "sha256-9ZF2O4/5n5uL+FA50Rfiq9gStQwNDWIhtz2GvJVu+u4=";
+    hash = "sha256-9ZF2O4/5n5uL+FA50Rfiq9gStQwNDWIhtz2GvJVu+u4=";
   };
 
   vendorHash = "sha256-6dFIW2wwu6HHvoMo0+MhvKOtAJNVhg7JyVlBPqLQerw=";

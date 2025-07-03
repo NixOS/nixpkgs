@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "intel-cmt-cat";
     rev = "v${version}";
-    sha256 = "sha256-Sbxfa9F+TSv2A8nilrB0PD312v1qN++k8Pezd7wd0PA=";
+    hash = "sha256-Sbxfa9F+TSv2A8nilrB0PD312v1qN++k8Pezd7wd0PA=";
   };
 
   enableParallelBuilding = true;

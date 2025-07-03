@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Martchus";
     repo = "cpp-utilities";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-EtKcvkNpqEzpJj+hTJsQaDQad4SO0h1TLUbJ8leNTdk=";
+    hash = "sha256-EtKcvkNpqEzpJj+hTJsQaDQad4SO0h1TLUbJ8leNTdk=";
   };
 
   nativeBuildInputs = [ cmake ];

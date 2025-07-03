@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "majewsky";
     repo = "portunus";
     rev = "v${version}";
-    sha256 = "sha256-nLFwfH1K6vsgNATwAxyq/q6HTtfLK8gsQhei7eJ86Kc=";
+    hash = "sha256-nLFwfH1K6vsgNATwAxyq/q6HTtfLK8gsQhei7eJ86Kc=";
   };
 
   buildInputs = [ libxcrypt ];

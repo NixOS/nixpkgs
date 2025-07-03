@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     repo = "trimal";
     owner = "scapella";
     rev = "v${version}";
-    sha256 = "sha256-6GXirih7nY0eD2XS8aplLcYf53EeLuae+ewdUgBiKQQ=";
+    hash = "sha256-6GXirih7nY0eD2XS8aplLcYf53EeLuae+ewdUgBiKQQ=";
   };
 
   postUnpack = ''

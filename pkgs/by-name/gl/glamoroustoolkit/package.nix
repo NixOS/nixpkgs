@@ -31,7 +31,7 @@
 let
   gkIcon = fetchurl {
     url = "https://gist.githubusercontent.com/qbit/cb52e6cd193c410e0b0aee8a216f6574/raw/2b042bde1dc4cbd30457f14c9d18c889444bf3d0/glamoroustoolkit.svg";
-    sha256 = "sha256-Trfo8P01anLq9yTFzwqIfsyidLGyuZDg48YQPrGBkgs=";
+    hash = "sha256-Trfo8P01anLq9yTFzwqIfsyidLGyuZDg48YQPrGBkgs=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {

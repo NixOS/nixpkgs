@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "felixguendling";
     repo = "cista";
     rev = "v${version}";
-    sha256 = "sha256-+DcxnckoXVSc+gXt21fxKkx4J1khLsQPuxYH9CBRrfE=";
+    hash = "sha256-+DcxnckoXVSc+gXt21fxKkx4J1khLsQPuxYH9CBRrfE=";
   };
 
   nativeBuildInputs = [ cmake ];

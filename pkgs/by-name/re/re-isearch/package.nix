@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttr: {
     owner = "re-Isearch";
     repo = "re-Isearch";
     rev = "56e0dfbe7468881b3958ca8e630f41a5354e9873";
-    sha256 = "sha256-tI75D02/sFEkHDQX/BpDlu24WNP6Qh9G0MIfEvs8npM=";
+    hash = "sha256-tI75D02/sFEkHDQX/BpDlu24WNP6Qh9G0MIfEvs8npM=";
   };
 
   # Upstream issue: https://github.com/re-Isearch/re-Isearch/issues/11

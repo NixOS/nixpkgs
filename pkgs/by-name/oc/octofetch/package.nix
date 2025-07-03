@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "azur1s";
     repo = "octofetch";
     rev = version;
-    sha256 = "sha256-/AXE1e02NfxQzJZd0QX6gJDjmFFmuUTOndulZElgIMI=";
+    hash = "sha256-/AXE1e02NfxQzJZd0QX6gJDjmFFmuUTOndulZElgIMI=";
   };
 
   useFetchCargoVendor = true;

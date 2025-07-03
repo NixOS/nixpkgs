@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchMavenArtifact {
     artifactId = "liquibase-redshift";
     groupId = "org.liquibase.ext";
-    sha256 = "sha256-jZdDKAC4Cvmkih8VH84Z3Q8BzsqGO55Uefr8vOlbDAk=";
+    hash = "sha256-jZdDKAC4Cvmkih8VH84Z3Q8BzsqGO55Uefr8vOlbDAk=";
     inherit version;
   };
 

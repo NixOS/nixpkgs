@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "tox-rs";
     repo = "tox";
     rev = "v${version}";
-    sha256 = "sha256-3ZRpri3WxwHjMq88TxRJAaTXMui8N1uLek+q8g5PGD4=";
+    hash = "sha256-3ZRpri3WxwHjMq88TxRJAaTXMui8N1uLek+q8g5PGD4=";
   };
 
   buildAndTestSubdir = "tox_node";

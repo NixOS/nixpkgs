@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "phase1geo";
     repo = "minder";
     rev = version;
-    sha256 = "sha256-LZm2TLUugW/lSHp+y3Sz9IacQCEFQloVnZ9MoBjqHvI=";
+    hash = "sha256-LZm2TLUugW/lSHp+y3Sz9IacQCEFQloVnZ9MoBjqHvI=";
   };
 
   nativeBuildInputs = [

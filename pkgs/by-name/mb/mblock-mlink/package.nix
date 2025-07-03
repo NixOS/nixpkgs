@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dl.makeblock.com/mblock5/linux/mLink-${version}-amd64.deb";
-    sha256 = "sha256-KLxj81ZjbEvhhaz0seNB4WXX5ybeZ7/WcT1dGfdWle0=";
+    hash = "sha256-KLxj81ZjbEvhhaz0seNB4WXX5ybeZ7/WcT1dGfdWle0=";
   };
 
   unpackPhase = ''

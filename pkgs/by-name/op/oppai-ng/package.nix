@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "Francesco149";
     repo = "oppai-ng";
     rev = version;
-    sha256 = "sha256-L9eraLOWm1tMImS8bLB9T4Md4VdTSxqI9Bt4r8eqxqs=";
+    hash = "sha256-L9eraLOWm1tMImS8bLB9T4Md4VdTSxqI9Bt4r8eqxqs=";
   };
 
   buildPhase = ''

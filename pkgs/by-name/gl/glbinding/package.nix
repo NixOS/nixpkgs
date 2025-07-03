@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "cginternals";
     repo = "glbinding";
     rev = "v${version}";
-    sha256 = "sha256-oLtOsiXfl/18rY/89vl9JDDWpPmEELOFKAHuClveU0c=";
+    hash = "sha256-oLtOsiXfl/18rY/89vl9JDDWpPmEELOFKAHuClveU0c=";
   };
 
   nativeBuildInputs = [ cmake ];

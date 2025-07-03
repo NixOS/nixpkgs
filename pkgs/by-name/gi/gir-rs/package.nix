@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
     owner = "gtk-rs";
     repo = "gir";
     rev = version;
-    sha256 = "sha256-GAAK4ej16e5/sjnPOVWs4ul1H9sqa+tDE8ky9tbB9No=";
+    hash = "sha256-GAAK4ej16e5/sjnPOVWs4ul1H9sqa+tDE8ky9tbB9No=";
   };
 
   useFetchCargoVendor = true;

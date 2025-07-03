@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = "nomad-pack";
     rev = "v${version}";
-    sha256 = "sha256-QtpTnChLB9OfzLSJXr19geHzxmOeL5DQ0G4fgcqCdbc=";
+    hash = "sha256-QtpTnChLB9OfzLSJXr19geHzxmOeL5DQ0G4fgcqCdbc=";
   };
 
   vendorHash = "sha256-lygNUHerj9bMJk2+PTUeAJIdTPK9nUYXaByZpzh7uLY=";

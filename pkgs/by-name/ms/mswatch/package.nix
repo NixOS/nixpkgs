@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/mswatch/code/trunk";
     rev = "369";
-    sha256 = "sha256-czwwhchTizfgVmeknQGLijYgaFSP/45pD2yhDKj5BKw=";
+    hash = "sha256-czwwhchTizfgVmeknQGLijYgaFSP/45pD2yhDKj5BKw=";
   };
   nativeBuildInputs = [
     pkg-config

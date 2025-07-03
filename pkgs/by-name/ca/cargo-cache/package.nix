@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "matthiaskrgr";
     repo = "cargo-cache";
     rev = version;
-    sha256 = "sha256-q9tYKXK8RqiqbDZ/lTxUI1Dm/h28/yZR8rTQuq+roZs=";
+    hash = "sha256-q9tYKXK8RqiqbDZ/lTxUI1Dm/h28/yZR8rTQuq+roZs=";
   };
 
   useFetchCargoVendor = true;

@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ltex-plus/ltex-ls-plus/releases/download/${version}/ltex-ls-plus-${version}.tar.gz";
-    sha256 = "sha256-kSs/0Hi9G5l632+dqxGhlvMJCizzKFY/dq7UyAr3uss=";
+    hash = "sha256-kSs/0Hi9G5l632+dqxGhlvMJCizzKFY/dq7UyAr3uss=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

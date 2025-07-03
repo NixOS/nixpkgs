@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     (fetchpatch {
       name = "bombono-dvd-1.2.4-scons3.patch";
       url = "https://svnweb.mageia.org/packages/cauldron/bombono-dvd/current/SOURCES/bombono-dvd-1.2.4-scons-python3.patch?revision=1447925&view=co&pathrev=1484457";
-      sha256 = "sha256-5OKBWrRZvHem2MTdAObfdw76ig3Z4ZdDFtq4CJoJISA=";
+      hash = "sha256-5OKBWrRZvHem2MTdAObfdw76ig3Z4ZdDFtq4CJoJISA=";
     })
 
     # Fix compilation errors having ffmpeg 2:5.1

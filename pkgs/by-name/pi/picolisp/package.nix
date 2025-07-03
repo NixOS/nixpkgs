@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   version = "24.3.30";
   src = fetchurl {
     url = "https://www.software-lab.de/picoLisp-24.3.tgz";
-    sha256 = "sha256-FB43DAjHBFgxdysoLzBXLxii52a2CCh1skZP/RTzfdc=";
+    hash = "sha256-FB43DAjHBFgxdysoLzBXLxii52a2CCh1skZP/RTzfdc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

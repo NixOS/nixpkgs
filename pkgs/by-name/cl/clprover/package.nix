@@ -12,7 +12,7 @@ stdenv.mkDerivation (self: {
     owner = "PaulGainer";
     repo = "CLProverPlusPlus";
     rev = "66bf6dc19d77094cc06eac3f30a3630ba830ac86";
-    sha256 = "sha256-UZ5e11wGuKyVrG+7hZJY6OmN6Y1mg43xPuvXPRVNKNw=";
+    hash = "sha256-UZ5e11wGuKyVrG+7hZJY6OmN6Y1mg43xPuvXPRVNKNw=";
   };
 
   postPatch = ''

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "lesovsky";
     repo = "pgcenter";
     rev = "v${version}";
-    sha256 = "sha256-xaY01T12/5Peww9scRgfc5yHj7QA8BEwOK5l6OedziY=";
+    hash = "sha256-xaY01T12/5Peww9scRgfc5yHj7QA8BEwOK5l6OedziY=";
   };
 
   vendorHash = "sha256-9hYiyZ34atmSL7JvuXyiGU7HR4E6qN7bGZlyU+hP+FU=";

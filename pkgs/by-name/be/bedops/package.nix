@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "bedops";
     repo = "bedops";
     rev = "v${version}";
-    sha256 = "sha256-IF2MWGpdnP8PKwLRboe5bxu8N+gV4qZ82BemJE/JCU0=";
+    hash = "sha256-IF2MWGpdnP8PKwLRboe5bxu8N+gV4qZ82BemJE/JCU0=";
   };
 
   buildInputs = [

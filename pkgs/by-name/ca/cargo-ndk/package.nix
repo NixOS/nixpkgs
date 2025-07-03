@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "bbqsrc";
     repo = "cargo-ndk";
     rev = "v${version}";
-    sha256 = "sha256-tzjiq1jjluWqTl+8MhzFs47VRp3jIRJ7EOLhUP8ydbM=";
+    hash = "sha256-tzjiq1jjluWqTl+8MhzFs47VRp3jIRJ7EOLhUP8ydbM=";
   };
 
   useFetchCargoVendor = true;

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "AlisterH";
     repo = "gwc";
     rev = version;
-    sha256 = "sha256-hRwy++gZiW/olIIeiVTpdIjPLIHgvgVUGEaUX9tpFbY=";
+    hash = "sha256-hRwy++gZiW/olIIeiVTpdIjPLIHgvgVUGEaUX9tpFbY=";
   };
 
   nativeBuildInputs = [

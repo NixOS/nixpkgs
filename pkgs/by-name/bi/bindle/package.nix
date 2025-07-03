@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "deislabs";
     repo = "bindle";
     rev = "v${version}";
-    sha256 = "sha256-xehn74fqP0tEtP4Qy9TRGv+P2QoHZLxRHzGoY5cQuv0=";
+    hash = "sha256-xehn74fqP0tEtP4Qy9TRGv+P2QoHZLxRHzGoY5cQuv0=";
   };
 
   postPatch = ''

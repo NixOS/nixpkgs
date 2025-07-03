@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "mongodb";
     repo = "mongodb-cli";
     tag = "mongocli/v${version}";
-    sha256 = "sha256-vhx8dxTNngDBy+34e+Er7uqIAGJImJiPmwxZX+EwIG0=";
+    hash = "sha256-vhx8dxTNngDBy+34e+Er7uqIAGJImJiPmwxZX+EwIG0=";
   };
 
   vendorHash = "sha256-825S3jMwgZC3aInuahg6/jg4A9u/bKeie30MB9HexJY=";

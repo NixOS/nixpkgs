@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "ckolivas";
     repo = "lrzip";
     rev = "v${version}";
-    sha256 = "sha256-Mb324ojtLV0S10KhL7Vjf3DhSOtCy1pFMTzvLkTnpXM=";
+    hash = "sha256-Mb324ojtLV0S10KhL7Vjf3DhSOtCy1pFMTzvLkTnpXM=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

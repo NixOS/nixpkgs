@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "troglobit";
     repo = "inadyn";
     rev = "v${version}";
-    sha256 = "sha256-aQHJtnMDaHF1XY9lwQVR6f78Zk2UI7OC3Oxt1r1KMak=";
+    hash = "sha256-aQHJtnMDaHF1XY9lwQVR6f78Zk2UI7OC3Oxt1r1KMak=";
   };
 
   nativeBuildInputs = [

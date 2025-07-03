@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/cern-fts/davix/releases/download/R_${
       lib.replaceStrings [ "." ] [ "_" ] version
     }/davix-${version}.tar.gz";
-    sha256 = "sha256-eMJOFO3X5OVgOS1nFH7IZYwqoNNkBBW99rxROvz2leY=";
+    hash = "sha256-eMJOFO3X5OVgOS1nFH7IZYwqoNNkBBW99rxROvz2leY=";
   };
 
   preConfigure = ''

@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     owner = "lkl";
     repo = "linux";
     rev = "fd33ab3d21a99a31683ebada5bd3db3a54a58800";
-    sha256 = "sha256-3uPkOyL/hoA/H2gKrEEDsuJvwOE2x27vxY5Y2DyNNxU=";
+    hash = "sha256-3uPkOyL/hoA/H2gKrEEDsuJvwOE2x27vxY5Y2DyNNxU=";
   };
 
   nativeBuildInputs = [

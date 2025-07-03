@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "coelckers";
     repo = "prboom-plus";
     rev = "v${version}";
-    sha256 = "sha256-moU/bZ2mS1QfKPP6HaAwWP1nRNZ4Ue5DFl9zBBrJiHw=";
+    hash = "sha256-moU/bZ2mS1QfKPP6HaAwWP1nRNZ4Ue5DFl9zBBrJiHw=";
   };
 
   sourceRoot = "${src.name}/prboom2";

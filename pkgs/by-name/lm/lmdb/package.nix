@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "openldap";
     repo = "openldap";
     rev = "LMDB_${version}";
-    sha256 = "sha256-5IBoJ3jaNXao5zVzb0LDM8RGid4s8DGQpjVqrVPLpXQ=";
+    hash = "sha256-5IBoJ3jaNXao5zVzb0LDM8RGid4s8DGQpjVqrVPLpXQ=";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";

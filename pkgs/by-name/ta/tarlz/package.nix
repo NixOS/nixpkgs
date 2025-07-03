@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/tarlz/tarlz-${finalAttrs.version}.tar.lz";
-    sha256 = "sha256-6kE/UanxWMuqqidFGiA10ukyInXarPI39/aENHwJ8ik=";
+    hash = "sha256-6kE/UanxWMuqqidFGiA10ukyInXarPI39/aENHwJ8ik=";
   };
 
   enableParallelBuilding = true;

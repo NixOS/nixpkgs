@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Michael-F-Bryan";
     repo = "mdbook-linkcheck";
     rev = "v${version}";
-    sha256 = "sha256-ZbraChBHuKAcUA62EVHZ1RygIotNEEGv24nhSPAEj00=";
+    hash = "sha256-ZbraChBHuKAcUA62EVHZ1RygIotNEEGv24nhSPAEj00=";
   };
 
   useFetchCargoVendor = true;

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/x42/libltc/releases/download/v${version}/libltc-${version}.tar.gz";
-    sha256 = "sha256-Cm1CzWwh6SWif6Vg3EWsgAV9J18jNCECglkJwC07Ekk=";
+    hash = "sha256-Cm1CzWwh6SWif6Vg3EWsgAV9J18jNCECglkJwC07Ekk=";
   };
 
   meta = with lib; {

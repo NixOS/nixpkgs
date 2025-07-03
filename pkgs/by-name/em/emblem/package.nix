@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "design";
     repo = "emblem";
     rev = version;
-    sha256 = "sha256-knq8OKoc8Xv7lOr0ub9+2JfeQE84UlTHR1q4SFFF8Ug=";
+    hash = "sha256-knq8OKoc8Xv7lOr0ub9+2JfeQE84UlTHR1q4SFFF8Ug=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

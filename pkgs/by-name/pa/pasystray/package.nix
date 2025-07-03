@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "christophgysin";
     repo = "pasystray";
     rev = version;
-    sha256 = "sha256-QaTQ8yUviJaFEQaQm2vYAUngqHliKe8TDYqfWt1Nx/0=";
+    hash = "sha256-QaTQ8yUviJaFEQaQm2vYAUngqHliKe8TDYqfWt1Nx/0=";
   };
 
   patches = [
@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
     # https://github.com/christophgysin/pasystray/issues/98
     (fetchpatch {
       url = "https://sources.debian.org/data/main/p/pasystray/0.8.1-1/debian/patches/0001-Build-against-ayatana-appindicator.patch";
-      sha256 = "sha256-/HKPqVARfHr/3Vyls6a1n8ejxqW9Ztu4+8KK4jK8MkI=";
+      hash = "sha256-/HKPqVARfHr/3Vyls6a1n8ejxqW9Ztu4+8KK4jK8MkI=";
     })
     # Require X11 backend
     # https://github.com/christophgysin/pasystray/issues/90#issuecomment-361881076
     (fetchpatch {
       url = "https://sources.debian.org/data/main/p/pasystray/0.8.1-1/debian/patches/0002-Require-X11-backend.patch";
-      sha256 = "sha256-6njC3vqBPWFS1xAsa1katQ4C0KJdVkHAP1MCPiZ6ELM=";
+      hash = "sha256-6njC3vqBPWFS1xAsa1katQ4C0KJdVkHAP1MCPiZ6ELM=";
     })
   ];
 

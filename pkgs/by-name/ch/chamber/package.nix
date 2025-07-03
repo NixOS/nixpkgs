@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "segmentio";
     repo = "chamber";
     rev = "v${version}";
-    sha256 = "sha256-9+I/zH4sHlLQkEn+fCboI3vCjYjlk+hdYnWuxq47r5I=";
+    hash = "sha256-9+I/zH4sHlLQkEn+fCboI3vCjYjlk+hdYnWuxq47r5I=";
   };
 
   env.CGO_ENABLED = 0;

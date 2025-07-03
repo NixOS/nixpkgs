@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "ispc";
     repo = "ispc";
     rev = "v${version}";
-    sha256 = "sha256-nNiAlQ+MLkOV0/xLafsUNPV5HKCIqWCD2Fo8ChgFJMk=";
+    hash = "sha256-nNiAlQ+MLkOV0/xLafsUNPV5HKCIqWCD2Fo8ChgFJMk=";
   };
 
   nativeBuildInputs = [

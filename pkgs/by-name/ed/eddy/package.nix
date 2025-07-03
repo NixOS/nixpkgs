@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     owner = "obdasystems";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-ywAxlXuKoTXfJSzSsvVXxhycVEklIPQfUogs8QJ8DGQ=";
+    hash = "sha256-ywAxlXuKoTXfJSzSsvVXxhycVEklIPQfUogs8QJ8DGQ=";
   };
 
   propagatedBuildInputs = [

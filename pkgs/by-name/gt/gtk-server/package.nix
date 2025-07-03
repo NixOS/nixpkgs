@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.gtk-server.org/stable/gtk-server-${version}.tar.gz";
-    sha256 = "sha256-sFL3y068oXDKgkEUcNnGVsNSPBdI1NzpsqdYJfmOQoA=";
+    hash = "sha256-sFL3y068oXDKgkEUcNnGVsNSPBdI1NzpsqdYJfmOQoA=";
   };
 
   preConfigure = ''

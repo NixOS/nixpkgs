@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "elizagamedev";
     repo = "mujmap";
     rev = "v${version}";
-    sha256 = "sha256-Qb9fEPQrdn+Ek9bdOMfaPIxlGGpQ9RfQZOeeqoOf17E=";
+    hash = "sha256-Qb9fEPQrdn+Ek9bdOMfaPIxlGGpQ9RfQZOeeqoOf17E=";
   };
 
   useFetchCargoVendor = true;

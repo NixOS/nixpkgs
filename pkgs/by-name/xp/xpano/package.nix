@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "krupkat";
     repo = "xpano";
     rev = "v${version}";
-    sha256 = "sha256-f2qoBpZ5lPBocPas8KMsY5bSYL20gO+ZHLz2R66qSig=";
+    hash = "sha256-f2qoBpZ5lPBocPas8KMsY5bSYL20gO+ZHLz2R66qSig=";
     fetchSubmodules = true;
   };
 

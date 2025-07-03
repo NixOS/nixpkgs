@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt-modplug/libopenmpt-modplug-${version}.tar.gz";
-    sha256 = "sha256-7M4aDuz9sLWCTKuJwnDc5ZWWKVosF8KwQyFez018T/c=";
+    hash = "sha256-7M4aDuz9sLWCTKuJwnDc5ZWWKVosF8KwQyFez018T/c=";
   };
 
   enableParallelBuilding = true;

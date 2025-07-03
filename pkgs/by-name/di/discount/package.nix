@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "Orc";
     repo = "discount";
     rev = "v${version}";
-    sha256 = "sha256-fFSlW9qnH3NL9civ793LrScOJSuRe9i377BgpNzOXa0=";
+    hash = "sha256-fFSlW9qnH3NL9civ793LrScOJSuRe9i377BgpNzOXa0=";
   };
 
   patches = [ ./fix-configure-path.patch ];

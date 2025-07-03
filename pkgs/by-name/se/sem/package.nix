@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "semaphoreci";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-w9j7Lv8aSTWqH75ttazHjop+B1JbcgSuUIIGbJpR2vc=";
+    hash = "sha256-w9j7Lv8aSTWqH75ttazHjop+B1JbcgSuUIIGbJpR2vc=";
   };
 
   vendorHash = "sha256-p8+M+pRp12P7tYlFpXjU94JcJOugQpD8rFdowhonh74=";

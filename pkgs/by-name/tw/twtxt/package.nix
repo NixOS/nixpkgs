@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "buckket";
     repo = "twtxt";
     tag = "v${version}";
-    sha256 = "sha256-CbFh1o2Ijinfb8X+h1GP3Tp+8D0D3/Czt/Uatd1B4cw=";
+    hash = "sha256-CbFh1o2Ijinfb8X+h1GP3Tp+8D0D3/Czt/Uatd1B4cw=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

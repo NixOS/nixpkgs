@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/mikmod/libmikmod-${version}.tar.gz";
-    sha256 = "sha256-n8F5n36mqVx8WILemL6F/H0gugpKb8rK4RyMazgrsgc=";
+    hash = "sha256-n8F5n36mqVx8WILemL6F/H0gugpKb8rK4RyMazgrsgc=";
   };
 
   buildInputs = [ texinfo ] ++ optional stdenv.hostPlatform.isLinux alsa-lib;

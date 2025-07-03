@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "psanford";
     repo = "wormhole-william";
     rev = "v${version}";
-    sha256 = "sha256-KGJfz3nd03vcdrIsX8UUfdw96XwyU9PRzwK8O4/I8JQ=";
+    hash = "sha256-KGJfz3nd03vcdrIsX8UUfdw96XwyU9PRzwK8O4/I8JQ=";
   };
 
   vendorHash = "sha256-7KOeG0orp7pLlk9VlPwHW/SWKgRe3/kmT3JXBgOCcTg=";

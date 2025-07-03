@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "rime";
     repo = "librime";
     rev = version;
-    sha256 = "sha256-pv1I/YFzPLOmBDcT4HcrJWSikPEErEB5UzGrGqfJBvg=";
+    hash = "sha256-pv1I/YFzPLOmBDcT4HcrJWSikPEErEB5UzGrGqfJBvg=";
   };
 
   nativeBuildInputs = [

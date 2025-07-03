@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://clients.catonetworks.com/linux/${version}/cato-client-install.deb";
-    sha256 = "sha256-3RyiDgfWL4vA/pUyOigmuK+SV1Q96Y65HVERPeadWWY=";
+    hash = "sha256-3RyiDgfWL4vA/pUyOigmuK+SV1Q96Y65HVERPeadWWY=";
   };
 
   passthru.updateScript = writeScript "update-cato-client" ''

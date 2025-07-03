@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "potassco";
     repo = "clingo";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-VhfWGAcrq4aN5Tgz84v7vLOWexsA89vRaang58SXVyI=";
+    hash = "sha256-VhfWGAcrq4aN5Tgz84v7vLOWexsA89vRaang58SXVyI=";
   };
 
   nativeBuildInputs = [ cmake ];

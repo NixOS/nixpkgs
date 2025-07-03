@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "enzo1982";
     repo = "smooth";
     rev = "v${version}";
-    sha256 = "sha256-J2Do1iAbE1GBC8co/4nxOzeGJQiPRc+21fgMDpzKX+A=";
+    hash = "sha256-J2Do1iAbE1GBC8co/4nxOzeGJQiPRc+21fgMDpzKX+A=";
   };
 
   nativeBuildInputs = [

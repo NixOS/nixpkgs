@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     url = "https://pallini.di.uniroma1.it/nauty${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }.tar.gz";
-    sha256 = "sha256-yXq0K/SHlqhqWYvOPpJpBHyisywU/CPgcgiiRP5SxO4=";
+    hash = "sha256-yXq0K/SHlqhqWYvOPpJpBHyisywU/CPgcgiiRP5SxO4=";
   };
 
   outputs = [

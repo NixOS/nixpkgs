@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rlancaste";
     repo = "stellarsolver";
     rev = finalAttrs.version;
-    sha256 = "sha256-tASjV5MZ1ClumZqu/R61b6XE9CGTuVFfpxyC89fwN9o=";
+    hash = "sha256-tASjV5MZ1ClumZqu/R61b6XE9CGTuVFfpxyC89fwN9o=";
   };
 
   nativeBuildInputs = [ cmake ];

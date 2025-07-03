@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "FlyGoat";
     repo = "RyzenAdj";
     rev = "v${version}";
-    sha256 = "sha256-28ld8htm3DewTSV3WTG4dFOcX4JAEUMK9rq4AAm1/zY=";
+    hash = "sha256-28ld8htm3DewTSV3WTG4dFOcX4JAEUMK9rq4AAm1/zY=";
   };
 
   nativeBuildInputs = [

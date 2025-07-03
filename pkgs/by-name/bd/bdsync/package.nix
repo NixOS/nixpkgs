@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "rolffokkens";
     repo = "bdsync";
     rev = "v${version}";
-    sha256 = "sha256-uvP26gdyIPC+IHxO5CYVuabfT4mnoWDOyaLTplYCW0I=";
+    hash = "sha256-uvP26gdyIPC+IHxO5CYVuabfT4mnoWDOyaLTplYCW0I=";
   };
 
   nativeBuildInputs = [

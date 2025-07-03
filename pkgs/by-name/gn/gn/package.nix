@@ -6,5 +6,5 @@ callPackage ./generic.nix args {
   rev = "85cc21e94af590a267c1c7a47020d9b420f8a033";
   revNum = "2233"; # git describe $rev --match initial-commit | cut -d- -f3
   version = "2025-04-28";
-  sha256 = "sha256-+nKP2hBUKIqdNfDz1vGggXSdCuttOt0GwyGUQ3Z1ZHI=";
+  hash = "sha256-+nKP2hBUKIqdNfDz1vGggXSdCuttOt0GwyGUQ3Z1ZHI=";
 }

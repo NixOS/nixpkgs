@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "Thomas-Tsai";
     repo = "partclone";
     rev = version;
-    sha256 = "sha256-VqPCj2DjWux17vgLb13AJd0EAHkqRGdIL0aPxkT3JlY=";
+    hash = "sha256-VqPCj2DjWux17vgLb13AJd0EAHkqRGdIL0aPxkT3JlY=";
   };
 
   nativeBuildInputs = [

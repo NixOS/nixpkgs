@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     owner = "nick92";
     repo = "Enso-OS";
     rev = "ed48330bfd986072bd82ac542ed8f8a7365c6427";
-    sha256 = "sha256-v79J5KyjeJ99ifN7nK/B+J7f292qDAEHsmsHLAMKVYY=";
+    hash = "sha256-v79J5KyjeJ99ifN7nK/B+J7f292qDAEHsmsHLAMKVYY=";
   };
 
   patches = [

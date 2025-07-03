@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "ElKowar";
     repo = "pipr";
     rev = "v${version}";
-    sha256 = "sha256-6jtUNhib6iveuZ7qUKK7AllyMKFpZ8OUUaIieFqseY8=";
+    hash = "sha256-6jtUNhib6iveuZ7qUKK7AllyMKFpZ8OUUaIieFqseY8=";
   };
 
   useFetchCargoVendor = true;

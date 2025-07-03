@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "abbradar";
     repo = "yaml-merge";
     rev = "2f0174fe92fc283dd38063a3a14f7fe71db4d9ec";
-    sha256 = "sha256-S2eZw+FOZvOn0XupZDRNcolUPd4PhvU1ziu+kx2AwnY=";
+    hash = "sha256-S2eZw+FOZvOn0XupZDRNcolUPd4PhvU1ziu+kx2AwnY=";
   };
 
   pythonPath = with python3Packages; [ pyyaml ];

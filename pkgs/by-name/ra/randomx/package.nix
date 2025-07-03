@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "tevador";
     repo = "randomX";
     rev = "v${version}";
-    sha256 = "sha256-dfImzwbEfJQcaPZCoWypHiI6dishVRdqS/r+n3tfjvM=";
+    hash = "sha256-dfImzwbEfJQcaPZCoWypHiI6dishVRdqS/r+n3tfjvM=";
   };
 
   meta = with lib; {

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "fanzeyi";
     repo = "cargo-play";
     rev = version;
-    sha256 = "sha256-Z5zcLQYfQeGybsnt2U+4Z+peRHxNPbDriPMKWhJ+PeA=";
+    hash = "sha256-Z5zcLQYfQeGybsnt2U+4Z+peRHxNPbDriPMKWhJ+PeA=";
   };
 
   useFetchCargoVendor = true;

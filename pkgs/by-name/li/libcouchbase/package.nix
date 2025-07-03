@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "couchbase";
     repo = "libcouchbase";
     rev = version;
-    sha256 = "sha256-YHPfdjt8ME9nkgv6wF9IyEQoT4PpanbAbvcqqWOU+GY=";
+    hash = "sha256-YHPfdjt8ME9nkgv6wF9IyEQoT4PpanbAbvcqqWOU+GY=";
   };
 
   cmakeFlags = [ "-DLCB_NO_MOCK=ON" ];

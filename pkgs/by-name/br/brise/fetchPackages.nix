@@ -6,7 +6,7 @@ fetchFromGitHub:
       owner = "rime";
       repo = "rime-array";
       rev = "d10f2f8b2aec7c7e736ace01e8a399e5ae5e7c3a";
-      sha256 = "sha256-4t6+gh2V57SueDp9Tn6vTuxQCZNGzjLdJEhzIEqRjdI=";
+      hash = "sha256-4t6+gh2V57SueDp9Tn6vTuxQCZNGzjLdJEhzIEqRjdI=";
     }
   } array
   ln -sv ${

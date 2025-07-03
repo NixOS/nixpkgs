@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "usbarmory";
     repo = "interlock";
     rev = "v${version}";
-    sha256 = "sha256-YXa4vErt3YnomTKAXCv8yUVhcc0ST47n9waW5E8QZzY=";
+    hash = "sha256-YXa4vErt3YnomTKAXCv8yUVhcc0ST47n9waW5E8QZzY=";
   };
 
   vendorHash = "sha256-OL6I95IpyTIc8wCwD9nWxVUTrmZH6COhsd/YwNTyvN0=";

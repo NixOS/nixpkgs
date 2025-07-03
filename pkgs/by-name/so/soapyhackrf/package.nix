@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapyHackRF";
     rev = "soapy-hackrf-${version}";
-    sha256 = "sha256-fzPYHJAPX8FkFxPXpLlUagTd/NoamRX0YnxHwkbV1nI=";
+    hash = "sha256-fzPYHJAPX8FkFxPXpLlUagTd/NoamRX0YnxHwkbV1nI=";
   };
 
   nativeBuildInputs = [

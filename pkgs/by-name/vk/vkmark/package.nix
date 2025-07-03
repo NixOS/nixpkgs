@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vkmark";
     repo = "vkmark";
     rev = finalAttrs.version;
-    sha256 = "sha256-Rjpjqe7htwlhDdwELm74MvSzHzXLhRD/P8IES7nz/VY=";
+    hash = "sha256-Rjpjqe7htwlhDdwELm74MvSzHzXLhRD/P8IES7nz/VY=";
   };
 
   postPatch = ''

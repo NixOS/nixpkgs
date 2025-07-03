@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     owner = "google";
     repo = "jsonnet";
-    sha256 = "sha256-QHp0DOu/pqcgN7di219cHzfFb7fWtdGGE6J1ZXgbOGQ=";
+    hash = "sha256-QHp0DOu/pqcgN7di219cHzfFb7fWtdGGE6J1ZXgbOGQ=";
   };
 
   nativeBuildInputs = [

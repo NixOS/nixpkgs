@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "donadigo";
     repo = "appeditor";
     rev = version;
-    sha256 = "sha256-A0YasHw5osGrgUPiUPuRBnv1MR/Pth6jVHGEx/klOGY=";
+    hash = "sha256-A0YasHw5osGrgUPiUPuRBnv1MR/Pth6jVHGEx/klOGY=";
   };
 
   nativeBuildInputs = [

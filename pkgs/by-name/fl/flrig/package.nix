@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Rls6w9DWaepmJrppH2j+gVF2C3bSirnlBHcFMrGA9e8=";
+    hash = "sha256-Rls6w9DWaepmJrppH2j+gVF2C3bSirnlBHcFMrGA9e8=";
   };
 
   buildInputs = [

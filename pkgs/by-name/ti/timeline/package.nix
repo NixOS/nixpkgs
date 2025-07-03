@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/thetimelineproj/${pname}-${version}.zip";
-    sha256 = "sha256-xUWIIpnOohcpD/1esjHQTUxndo4j91hyyAXTmV3Eo0k=";
+    hash = "sha256-xUWIIpnOohcpD/1esjHQTUxndo4j91hyyAXTmV3Eo0k=";
   };
 
   nativeBuildInputs = [

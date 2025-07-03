@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "h2o";
     repo = "h2o";
     rev = "87e2aa634f2c0d9f3d9429f7a3cf273f98db0058";
-    sha256 = "sha256-/9YnaOqvYmFme4/mFq8Sx78FMDyGwnErEW45qPVELjU=";
+    hash = "sha256-/9YnaOqvYmFme4/mFq8Sx78FMDyGwnErEW45qPVELjU=";
   };
 
   outputs = [

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "kazu-yamamoto";
     repo = "pgpdump";
     rev = "v${version}";
-    sha256 = "sha256-JKedgHCTDnvLyLR3nGl4XFAaxXDU1TgHrxPMlRFwtBo=";
+    hash = "sha256-JKedgHCTDnvLyLR3nGl4XFAaxXDU1TgHrxPMlRFwtBo=";
   };
 
   buildInputs = lib.optionals supportCompressedPackets [

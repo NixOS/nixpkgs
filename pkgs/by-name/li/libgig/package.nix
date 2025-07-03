@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-CHnSi5tjktpZhYJtvdjZyVeyoDKi8QGQUGrvLiLzxUo=";
+    hash = "sha256-CHnSi5tjktpZhYJtvdjZyVeyoDKi8QGQUGrvLiLzxUo=";
   };
 
   nativeBuildInputs = [

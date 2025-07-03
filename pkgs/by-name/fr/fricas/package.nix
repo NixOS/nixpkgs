@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "fricas";
     repo = "fricas";
     rev = version;
-    sha256 = "sha256-GUGJR65K1bPC0D36l4Yyj3GOsWtUrSKLu6JnlfjHzDc=";
+    hash = "sha256-GUGJR65K1bPC0D36l4Yyj3GOsWtUrSKLu6JnlfjHzDc=";
   };
 
   buildInputs = [

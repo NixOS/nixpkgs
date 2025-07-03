@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "babelouest";
     repo = "orcania";
     rev = "v${version}";
-    sha256 = "sha256-Cz3IE5UrfoWjMxQ/+iR1bLsYxf5DVN+7aJqLBcPjduA=";
+    hash = "sha256-Cz3IE5UrfoWjMxQ/+iR1bLsYxf5DVN+7aJqLBcPjduA=";
   };
 
   nativeBuildInputs = [ cmake ];

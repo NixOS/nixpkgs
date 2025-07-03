@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage {
     owner = "H-M-H";
     repo = "weylus";
     rev = "5202806798ccca67c24da52ba51ee50b973b7089";
-    sha256 = "sha256-lx1ZVp5DkQiL9/vw6PAZ34Lge+K8dfEVh6vLnCUNf7M=";
+    hash = "sha256-lx1ZVp5DkQiL9/vw6PAZ34Lge+K8dfEVh6vLnCUNf7M=";
   };
 
   buildInputs =

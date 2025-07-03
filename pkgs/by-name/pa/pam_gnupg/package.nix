@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "cruegge";
     repo = "pam-gnupg";
     rev = "v${version}";
-    sha256 = "sha256-6I9a841qohA42lhOgZf/hharnjkthuB8lRptPDxUgMI=";
+    hash = "sha256-6I9a841qohA42lhOgZf/hharnjkthuB8lRptPDxUgMI=";
   };
 
   configureFlags = [

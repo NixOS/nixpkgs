@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "documize";
     repo = "community";
     rev = "v${version}";
-    sha256 = "sha256-Kv4BsFB08rkGRkePFIkjjuhK1TnLPS4m+PUlgKG5cTQ=";
+    hash = "sha256-Kv4BsFB08rkGRkePFIkjjuhK1TnLPS4m+PUlgKG5cTQ=";
   };
 
   vendorHash = null;

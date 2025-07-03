@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
-    sha256 = "sha256-zI79iuRXb5S0Y87KfdG+HKc0XVNQOAcBR7Zt/OdaBP4=";
+    hash = "sha256-zI79iuRXb5S0Y87KfdG+HKc0XVNQOAcBR7Zt/OdaBP4=";
   };
 
   nativeBuildInputs = with python3Packages; [ pyqtwebengine.wrapQtAppsHook ];

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
     owner = "finalfusion";
     repo = "finalfrontier";
     rev = "2461fb1dde13b73039926aa66606e470907a1b59";
-    sha256 = "sha256-bnRzXIYairlBjv2JxU16UXYc5BB3VeKZNiJ4+XDzub4=";
+    hash = "sha256-bnRzXIYairlBjv2JxU16UXYc5BB3VeKZNiJ4+XDzub4=";
   };
 
   useFetchCargoVendor = true;

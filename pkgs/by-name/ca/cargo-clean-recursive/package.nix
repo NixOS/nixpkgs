@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "IgaguriMK";
     repo = "cargo-clean-recursive";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-9+FqRvd0s9N7mQwIf+f3+vBhaa0YQWUR0j0lv4CBOkM=";
+    hash = "sha256-9+FqRvd0s9N7mQwIf+f3+vBhaa0YQWUR0j0lv4CBOkM=";
   };
 
   useFetchCargoVendor = true;

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "devinr528";
     repo = "cargo-sort";
     rev = "v${version}";
-    sha256 = "sha256-OFDEM/qYIaWsjHKZhf/kmJo7drY+649gpe4VSE18sXc=";
+    hash = "sha256-OFDEM/qYIaWsjHKZhf/kmJo7drY+649gpe4VSE18sXc=";
   };
 
   useFetchCargoVendor = true;

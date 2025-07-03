@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://deb.debian.org/debian/pool/main/h/hostname/hostname_${version}.tar.gz";
-    sha256 = "sha256-vG0ZVLIoSYaf+LKmAuOfCLFwL2htS1jdeSfN61tIdu8=";
+    hash = "sha256-vG0ZVLIoSYaf+LKmAuOfCLFwL2htS1jdeSfN61tIdu8=";
   };
 
   postPatch = ''

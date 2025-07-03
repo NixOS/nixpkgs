@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "~tsdh";
     repo = "swayr";
     rev = "swayrbar-${version}";
-    sha256 = "sha256-qfk4yqJkqTiFKFZXCVPPZM0g0/+A8d8fDeat9ZsfokI=";
+    hash = "sha256-qfk4yqJkqTiFKFZXCVPPZM0g0/+A8d8fDeat9ZsfokI=";
   };
 
   useFetchCargoVendor = true;

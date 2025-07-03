@@ -18,7 +18,7 @@ let
     let
       src = fetchzip {
         url = "https://android.googlesource.com/platform/external/zlib/+archive/61174f4fd262c6075f88768465f308aae95a2f04.tar.gz";
-        sha256 = "sha256-EMzKAHcEWOUugcHKH2Fj3ZaIHC9UlgO4ULKe3RvgxvI=";
+        hash = "sha256-EMzKAHcEWOUugcHKH2Fj3ZaIHC9UlgO4ULKe3RvgxvI=";
         stripRoot = false;
       };
     in
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     # Upstream replaces minor versions, so use archived URL.
     url = "https://web.archive.org/web/20240526153453id_/https://ftp.perforce.com/perforce/r24.1/bin.tools/p4source.tgz";
-    sha256 = "sha256-6+DOJPeVzP4x0UsN9MlZRAyusapBTICX0BuyvVBQBC8=";
+    hash = "sha256-6+DOJPeVzP4x0UsN9MlZRAyusapBTICX0BuyvVBQBC8=";
   };
 
   postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''

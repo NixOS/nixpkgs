@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "slurdge";
     repo = "goeland";
     rev = "v${version}";
-    sha256 = "sha256-5MKkjUOAXz6R7PdChuJA4ybc07gHdO9BF68CpI7OExA=";
+    hash = "sha256-5MKkjUOAXz6R7PdChuJA4ybc07gHdO9BF68CpI7OExA=";
   };
 
   vendorHash = "sha256-Jnui1toAV4VvPs6T7UqgAUarFjuik/OnLUrF5VqI+EU=";

@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "openrdap";
     repo = "rdap";
     rev = "v${version}";
-    sha256 = "sha256-FiaUyhiwKXZ3xnFPmdxb8bpbm5eRRFNDL3duOGDnc/A=";
+    hash = "sha256-FiaUyhiwKXZ3xnFPmdxb8bpbm5eRRFNDL3duOGDnc/A=";
   };
 
   doCheck = false;

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "CrunchyData";
     repo = "pg_featureserv";
     rev = "v${version}";
-    sha256 = "sha256-GsloUZFgrOrJc23vKv+8iSeyIEKblaukPSCpZGRtSL4=";
+    hash = "sha256-GsloUZFgrOrJc23vKv+8iSeyIEKblaukPSCpZGRtSL4=";
   };
 
   vendorHash = "sha256-BHiEVyi3FXPovYy3iDP8q+y+LgfI4ElDPVZexd7nnuo=";

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/aide/aide/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5/ugIUvgEpnXY1m/8pdSM+0kEzLkz8//Wc0baomrpeQ=";
+    hash = "sha256-5/ugIUvgEpnXY1m/8pdSM+0kEzLkz8//Wc0baomrpeQ=";
   };
 
   buildInputs = [

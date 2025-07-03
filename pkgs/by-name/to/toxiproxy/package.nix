@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "Shopify";
     repo = "toxiproxy";
     rev = "v${version}";
-    sha256 = "sha256-CqJr3h2n+fzN6Ves38H7fYXd5vlpDVfF3kg4Tr8ThPc=";
+    hash = "sha256-CqJr3h2n+fzN6Ves38H7fYXd5vlpDVfF3kg4Tr8ThPc=";
   };
 
   vendorHash = "sha256-4nKWTjB9aV5ILgHVceV76Ip0byBxlEY5TTAQwNLvL2s=";

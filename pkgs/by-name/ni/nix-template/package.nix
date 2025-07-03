@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     owner = "jonringer";
     repo = "nix-template";
     rev = "v${version}";
-    sha256 = "sha256-42u5FmTIKHpfQ2zZQXIrFkAN2/XvU0wWnCRrQkQzcNI=";
+    hash = "sha256-42u5FmTIKHpfQ2zZQXIrFkAN2/XvU0wWnCRrQkQzcNI=";
   };
 
   useFetchCargoVendor = true;

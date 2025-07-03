@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "hugsy";
     repo = "gef";
     rev = version;
-    sha256 = "sha256-JM9zH1wWEdjpBafnxMIFtePjXWf3UOXhBSWZCXEOzKw=";
+    hash = "sha256-JM9zH1wWEdjpBafnxMIFtePjXWf3UOXhBSWZCXEOzKw=";
   };
 
   dontBuild = true;

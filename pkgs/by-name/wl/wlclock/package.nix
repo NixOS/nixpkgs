@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "~leon_plickat";
     repo = "wlclock";
     rev = "v${version}";
-    sha256 = "sha256-aHA4kXHYH+KvAJSep5X3DqsiK6WFpXr3rGQl/KNiUcY=";
+    hash = "sha256-aHA4kXHYH+KvAJSep5X3DqsiK6WFpXr3rGQl/KNiUcY=";
   };
 
   depsBuildBuild = [

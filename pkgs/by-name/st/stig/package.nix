@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
     owner = "rndusr";
     repo = "stig";
     rev = "v${version}";
-    sha256 = "sha256-lSFI4/DxWl17KFgLXZ7c5nW/e5IUGN7s8Gm6wTM5ZWg=";
+    hash = "sha256-lSFI4/DxWl17KFgLXZ7c5nW/e5IUGN7s8Gm6wTM5ZWg=";
   };
 
   build-system = with python3Packages; [

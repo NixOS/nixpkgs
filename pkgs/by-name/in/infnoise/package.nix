@@ -16,14 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leetronics";
     repo = "infnoise";
     rev = "19bb69894724d87b32b7b9b86022bb4b26c919f8";
-    sha256 = "sha256-O2P4uOwO7wKLYLufdW3KQeyuFBoQPdSepnTUeq0CSJY=";
+    hash = "sha256-O2P4uOwO7wKLYLufdW3KQeyuFBoQPdSepnTUeq0CSJY=";
   };
 
   patches = [
     # Patch providing version info at compile time
     (fetchpatch {
       url = "https://github.com/leetronics/infnoise/commit/04d52a975bf78d2aff2bb4c176c286715e1948ba.patch";
-      sha256 = "sha256-vtPAR6gCyny9UP+U6/7X8CPEUuMDl7RIyICIwiaWyfc=";
+      hash = "sha256-vtPAR6gCyny9UP+U6/7X8CPEUuMDl7RIyICIwiaWyfc=";
     })
   ];
 

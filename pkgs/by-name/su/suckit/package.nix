@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "skallwar";
     repo = "suckit";
     rev = "v${version}";
-    sha256 = "sha256-M4/vD1sVny7hAf4h56Z2xy7yuCqH/H3qHYod6haZOs0=";
+    hash = "sha256-M4/vD1sVny7hAf4h56Z2xy7yuCqH/H3qHYod6haZOs0=";
   };
 
   useFetchCargoVendor = true;

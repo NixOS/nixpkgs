@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "Gargaj";
     repo = "bonzomatic";
     rev = version;
-    sha256 = "sha256-hwK3C+p1hRwnuY2/vBrA0QsJGIcJatqq+U5/hzVCXEg=";
+    hash = "sha256-hwK3C+p1hRwnuY2/vBrA0QsJGIcJatqq+U5/hzVCXEg=";
   };
 
   nativeBuildInputs = [

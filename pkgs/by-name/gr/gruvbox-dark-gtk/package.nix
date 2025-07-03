@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "jmattheis";
     repo = "gruvbox-dark-gtk";
     rev = "v${version}";
-    sha256 = "sha256-C681o89MTGNp1l3DLQsRpH9HQdmdCXZzk0F0rNhcyL4=";
+    hash = "sha256-C681o89MTGNp1l3DLQsRpH9HQdmdCXZzk0F0rNhcyL4=";
   };
 
   installPhase = ''

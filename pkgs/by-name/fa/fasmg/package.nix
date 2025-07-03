@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://flatassembler.net/fasmg.${version}.zip";
-    sha256 = "sha256-z/2SeN6FgRvLg8hA+lle/f2qEkce1GF1cC0uSnXExhg=";
+    hash = "sha256-z/2SeN6FgRvLg8hA+lle/f2qEkce1GF1cC0uSnXExhg=";
     stripRoot = false;
   };
 

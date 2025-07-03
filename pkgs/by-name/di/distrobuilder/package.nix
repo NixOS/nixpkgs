@@ -44,7 +44,7 @@ buildGoModule rec {
     owner = "lxc";
     repo = "distrobuilder";
     tag = "distrobuilder-${version}";
-    sha256 = "sha256-aDCx2WGAKdTNf0uMzwxG0AUmbuuWBFPYzNyycKklYOY=";
+    hash = "sha256-aDCx2WGAKdTNf0uMzwxG0AUmbuuWBFPYzNyycKklYOY=";
   };
 
   buildInputs = bins;

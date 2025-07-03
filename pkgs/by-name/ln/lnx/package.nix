@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
     owner = "lnx-search";
     repo = "lnx";
     rev = "2cb80f344c558bfe37f21ccfb83265bf351419d9";
-    sha256 = "sha256-iwoZ6xRzEDArmhWYxIrbIXRTQjOizyTsXCvMdnUrs2g=";
+    hash = "sha256-iwoZ6xRzEDArmhWYxIrbIXRTQjOizyTsXCvMdnUrs2g=";
   };
 
   useFetchCargoVendor = true;

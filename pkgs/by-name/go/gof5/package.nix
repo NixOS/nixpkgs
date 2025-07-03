@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "kayrus";
     repo = "gof5";
     rev = "v${version}";
-    sha256 = "sha256-tvahwd/UBKGYOXIgGwN98P4udcf6Bqrsy9mZ/3YVkvM=";
+    hash = "sha256-tvahwd/UBKGYOXIgGwN98P4udcf6Bqrsy9mZ/3YVkvM=";
   };
 
   vendorHash = "sha256-kTdAjNYp/qQnUhHaCD6Hn1MlMpUsWaRxTSHWSUf6Uz8=";

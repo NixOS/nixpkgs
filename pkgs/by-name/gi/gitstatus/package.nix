@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "romkatv";
     repo = "gitstatus";
     rev = "v${version}";
-    sha256 = "sha256-b+9bwJ87VV6rbOPobkwMkDXGH34STjYPlt8wCRR5tEc=";
+    hash = "sha256-b+9bwJ87VV6rbOPobkwMkDXGH34STjYPlt8wCRR5tEc=";
   };
 
   env.NIX_LDFLAGS = toString (

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "honggfuzz";
     rev = version;
-    sha256 = "sha256-/ra6g0qjjC8Lo8/n2XEbwnZ95yDHcGhYd5+TTvQ6FAc=";
+    hash = "sha256-/ra6g0qjjC8Lo8/n2XEbwnZ95yDHcGhYd5+TTvQ6FAc=";
   };
 
   postPatch = ''

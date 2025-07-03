@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "danielpaulus";
     repo = "go-ios";
     rev = "v${version}";
-    sha256 = "sha256-X9CtiG2kl32ErWyNwzr5WjUl2DnweKiegy0GXyLL81E=";
+    hash = "sha256-X9CtiG2kl32ErWyNwzr5WjUl2DnweKiegy0GXyLL81E=";
   };
 
   proxyVendor = true;

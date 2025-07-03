@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-dKBik3D2v2CHOTfkOc1ZZZ+9eoTyTBCVvAgtoMhAaWk=";
+    hash = "sha256-dKBik3D2v2CHOTfkOc1ZZZ+9eoTyTBCVvAgtoMhAaWk=";
   };
 
   configureFlags = [

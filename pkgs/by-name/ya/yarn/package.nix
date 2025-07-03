@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://github.com/yarnpkg/yarn/releases/download/v${finalAttrs.version}/yarn-v${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-kFa+kmnBerTB7fY/IvfAFy/4LWvrl9lrRHMOUdOZ+Wg=";
+    hash = "sha256-kFa+kmnBerTB7fY/IvfAFy/4LWvrl9lrRHMOUdOZ+Wg=";
   };
 
   buildInputs = lib.optionals withNode [ nodejs ];

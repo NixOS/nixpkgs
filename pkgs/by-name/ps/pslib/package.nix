@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     name = "${pname}-snixource-${version}.tar.gz";
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-gaWNvBLuUUy0o+HWCOyG6KmzxDrYCY6PV3WbA/jjH64=";
+    hash = "sha256-gaWNvBLuUUy0o+HWCOyG6KmzxDrYCY6PV3WbA/jjH64=";
   };
 
   nativeBuildInputs = [

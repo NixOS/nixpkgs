@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = "krew";
     rev = "v${version}";
-    sha256 = "sha256-3GoC2HEp9XJe853/JYvX9kAAcFf7XxglVEeU9oQ/5Ms=";
+    hash = "sha256-3GoC2HEp9XJe853/JYvX9kAAcFf7XxglVEeU9oQ/5Ms=";
   };
 
   vendorHash = "sha256-r4Dywm0+YxWWD59oaKodkldE2uq8hlt9MwOMYDaj6Gc=";

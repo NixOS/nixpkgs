@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-ust/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-1O+Y2rmjetT1JMyv39UK9PJmA5tSjdWvq8545JAk2Tc=";
+    hash = "sha256-1O+Y2rmjetT1JMyv39UK9PJmA5tSjdWvq8545JAk2Tc=";
   };
 
   outputs = [

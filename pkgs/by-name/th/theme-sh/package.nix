@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "lemnos";
     repo = "theme.sh";
     rev = "v${version}";
-    sha256 = "sha256-zDw8WGBzO4/HRCgN7yoUxT49ibTz+QkRa5WpBQbl1nI=";
+    hash = "sha256-zDw8WGBzO4/HRCgN7yoUxT49ibTz+QkRa5WpBQbl1nI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

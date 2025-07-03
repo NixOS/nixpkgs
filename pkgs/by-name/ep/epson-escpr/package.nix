@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
       "https://web.archive.org/web/https://download3.ebz.epson.net/dsc/f/03/00/16/21/81/74d098a47c3a616713079c9cd5904b468bb33dea/epson-inkjet-printer-escpr-${version}.tar.gz"
     ];
-    sha256 = "sha256-hVbX4OXPe4y37Szju3uVdXlVdjX4DFSN/A2Emz3eCcQ=";
+    hash = "sha256-hVbX4OXPe4y37Szju3uVdXlVdjX4DFSN/A2Emz3eCcQ=";
   };
   # the patches above are expecting unix line endings, but one of the files
   # being patched has dos line endings in the source tarball

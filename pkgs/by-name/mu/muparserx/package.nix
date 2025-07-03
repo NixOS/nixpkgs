@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "beltoforion";
     repo = "muparserx";
     rev = "v${version}";
-    sha256 = "sha256-rekPXmncNdVX6LvPQP1M2Pzs3pyiCCcLPLnPFiyWJ4s=";
+    hash = "sha256-rekPXmncNdVX6LvPQP1M2Pzs3pyiCCcLPLnPFiyWJ4s=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxquota/quota-${version}.tar.gz";
-    sha256 = "sha256-oEoMr8opwVvotqxmDgYYi8y4AsGe/i58Ge1/PWZ+z14=";
+    hash = "sha256-oEoMr8opwVvotqxmDgYYi8y4AsGe/i58Ge1/PWZ+z14=";
   };
 
   outputs = [

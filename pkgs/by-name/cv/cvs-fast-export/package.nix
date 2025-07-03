@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/cvs-fast-export/cvs-fast-export-${version}.tar.gz";
-    sha256 = "sha256-YZF2QebWbvn/N9pLpccudZsFHzocJp/3M0Gx9p7fQ5Y=";
+    hash = "sha256-YZF2QebWbvn/N9pLpccudZsFHzocJp/3M0Gx9p7fQ5Y=";
   };
 
   strictDeps = true;

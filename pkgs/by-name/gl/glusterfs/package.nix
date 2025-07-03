@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     owner = "gluster";
     repo = "glusterfs";
     rev = "v${version}";
-    sha256 = "sha256-MGTntR9SVmejgpAkZnhJOaIkZeCMNBGaQSorLOStdjo=";
+    hash = "sha256-MGTntR9SVmejgpAkZnhJOaIkZeCMNBGaQSorLOStdjo=";
   };
   inherit buildInputs propagatedBuildInputs;
 

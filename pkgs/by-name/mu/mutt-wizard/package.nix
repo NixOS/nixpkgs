@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "LukeSmithxyz";
     repo = "mutt-wizard";
     rev = "v${version}";
-    sha256 = "sha256-1/+awwoAqD8Xm3hULcbpeTaLOHVuYRA4PPr3cq5Gy20=";
+    hash = "sha256-1/+awwoAqD8Xm3hULcbpeTaLOHVuYRA4PPr3cq5Gy20=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

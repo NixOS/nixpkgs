@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "itchyny";
     repo = "mmv";
     rev = "v${version}";
-    sha256 = "sha256-DNLiW0QX7WrBslwVCbvydLnE6JAcfcRALYqwsK/J5x0=";
+    hash = "sha256-DNLiW0QX7WrBslwVCbvydLnE6JAcfcRALYqwsK/J5x0=";
   };
 
   vendorHash = "sha256-HHGiMSBu3nrIChSYaEu9i22nwhLKgVQkPvbTMHBWwAE=";

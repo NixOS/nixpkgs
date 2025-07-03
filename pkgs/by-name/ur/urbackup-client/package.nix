@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://hndl.urbackup.org/Client/${version}/urbackup-client-${version}.tar.gz";
-    sha256 = "sha256-+xm2mBcTLMvrstCq2sLgJiU3zbFCassKvln3SMmRH9s=";
+    hash = "sha256-+xm2mBcTLMvrstCq2sLgJiU3zbFCassKvln3SMmRH9s=";
   };
 
   postPatch = ''

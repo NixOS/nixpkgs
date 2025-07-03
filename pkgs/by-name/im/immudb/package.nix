@@ -10,7 +10,7 @@ let
   webconsoleVersion = "1.0.18";
   webconsoleDist = fetchzip {
     url = "https://github.com/codenotary/immudb-webconsole/releases/download/v${webconsoleVersion}/immudb-webconsole.tar.gz";
-    sha256 = "sha256-4BhTK+gKO8HW1CelGa30THpfkqfqFthK+b7p9QWl4Pw=";
+    hash = "sha256-4BhTK+gKO8HW1CelGa30THpfkqfqFthK+b7p9QWl4Pw=";
   };
 in
 buildGoModule rec {
@@ -21,7 +21,7 @@ buildGoModule rec {
     owner = "codenotary";
     repo = "immudb";
     rev = "v${version}";
-    sha256 = "sha256-tYQYQyYhHMn0+PQWDEb4zY9EbDt1pVzZIcP0Gnsplrk=";
+    hash = "sha256-tYQYQyYhHMn0+PQWDEb4zY9EbDt1pVzZIcP0Gnsplrk=";
   };
 
   postPatch = ''

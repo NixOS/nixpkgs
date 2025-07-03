@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "ianw";
     repo = "libiptcdata";
     rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-ZjokepDAHiSEwXrkvM9qUAPcpIiRQoOsv7REle7roPU=";
+    hash = "sha256-ZjokepDAHiSEwXrkvM9qUAPcpIiRQoOsv7REle7roPU=";
   };
 
   postPatch = ''

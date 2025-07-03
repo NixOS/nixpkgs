@@ -77,25 +77,25 @@ stdenv.mkDerivation rec {
     owner = "arrayfire";
     repo = "clfft";
     rev = "760096b37dcc4f18ccd1aac53f3501a83b83449c";
-    sha256 = "sha256-vJo1YfC2AJIbbRj/zTfcOUmi0Oj9v64NfA9MfK8ecoY=";
+    hash = "sha256-vJo1YfC2AJIbbRj/zTfcOUmi0Oj9v64NfA9MfK8ecoY=";
   };
   glad = fetchFromGitHub {
     owner = "arrayfire";
     repo = "glad";
     rev = "ef8c5508e72456b714820c98e034d9a55b970650";
-    sha256 = "sha256-u9Vec7XLhE3xW9vzM7uuf+b18wZsh/VMtGbB6nMVlno=";
+    hash = "sha256-u9Vec7XLhE3xW9vzM7uuf+b18wZsh/VMtGbB6nMVlno=";
   };
   threads = fetchFromGitHub {
     owner = "arrayfire";
     repo = "threads";
     rev = "4d4a4f0384d1ac2f25b2c4fc1d57b9e25f4d6818";
-    sha256 = "sha256-qqsT9woJDtQvzuV323OYXm68pExygYs/+zZNmg2sN34=";
+    hash = "sha256-qqsT9woJDtQvzuV323OYXm68pExygYs/+zZNmg2sN34=";
   };
   test-data = fetchFromGitHub {
     owner = "arrayfire";
     repo = "arrayfire-data";
     rev = "a5f533d7b864a4d8f0dd7c9aaad5ff06018c4867";
-    sha256 = "sha256-AWzhsrDXyZrQN2bd0Ng/XlE8v02x7QWTiFTyaAuRXSw=";
+    hash = "sha256-AWzhsrDXyZrQN2bd0Ng/XlE8v02x7QWTiFTyaAuRXSw=";
   };
   # ArrayFire fails to compile with newer versions of spdlog, so we can't use
   # the one in Nixpkgs. Once they upgrade, we can switch to using spdlog from

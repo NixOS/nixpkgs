@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "google";
     repo = "evcxr";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vntXHKP3fk5+26fPHKUy3gqr1Bt9o/ypxyyvXOfdt3I=";
+    hash = "sha256-vntXHKP3fk5+26fPHKUy3gqr1Bt9o/ypxyyvXOfdt3I=";
   };
 
   useFetchCargoVendor = true;

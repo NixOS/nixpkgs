@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
     owner = "x42";
     repo = "meters.lv2";
     rev = "v${version}";
-    sha256 = "sha256-eGXTbE83bJEDqTBltL6ZX9qa/OotCFmUxpE/aLqGELU=";
+    hash = "sha256-eGXTbE83bJEDqTBltL6ZX9qa/OotCFmUxpE/aLqGELU=";
   };
 
   robtkSrc = fetchFromGitHub {
     owner = "x42";
     repo = "robtk";
     rev = "v${robtkVersion}";
-    sha256 = "sha256-L1meipOco8esZl+Pgqgi/oYVbhimgh9n8p9Iqj3dZr0=";
+    hash = "sha256-L1meipOco8esZl+Pgqgi/oYVbhimgh9n8p9Iqj3dZr0=";
   };
 
   postUnpack = ''

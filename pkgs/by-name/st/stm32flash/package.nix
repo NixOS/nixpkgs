@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-xMnNi+x52mOxEdFXE+9cws2UfeykEdNdbjBl4ifcQUo=";
+    hash = "sha256-xMnNi+x52mOxEdFXE+9cws2UfeykEdNdbjBl4ifcQUo=";
   };
 
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

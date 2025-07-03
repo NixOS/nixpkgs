@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://meme-suite.org/meme-software/${version}/meme-${version}.tar.gz";
-    sha256 = "sha256-G0oXU3lcCbHUbebEo/BLM8G8w+QbvPTm4UIg6K12dDs=";
+    hash = "sha256-G0oXU3lcCbHUbebEo/BLM8G8w+QbvPTm4UIg6K12dDs=";
   };
 
   buildInputs = [ zlib ];
