@@ -26460,6 +26460,12 @@
     githubId = 335406;
     name = "David Asabina";
   };
+  videl = {
+    email = "thibaut.smith@mailbox.org";
+    github = "videl";
+    githubId = 123554;
+    name = "Thibaut Smith";
+  };
   vidister = {
     email = "v@vidister.de";
     github = "vidister";
