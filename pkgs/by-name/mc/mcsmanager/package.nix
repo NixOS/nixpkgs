@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs,
+  nodejs_24,
   jq,
   mcsmanager-zip-tools,
   mcsmanager-pty,
@@ -15,6 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "mcsmanager";
   version = "10.6.1";
 
+  # Can be removed after https://github.com/NixOS/nixpkgs/pull/416077
+  nodejs = nodejs_24;
+
   src = fetchFromGitHub {
     owner = "MCSManager";
     repo = "MCSManager";
@@ -24,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   common = buildNpmPackage (subFinalAttrs: {
     pname = "${finalAttrs.pname}-common";
-    inherit (finalAttrs) version src;
+    inherit (finalAttrs) version src nodejs;
 
     sourceRoot = "${subFinalAttrs.src.name}/common";
 
@@ -33,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   frontend = buildNpmPackage (subFinalAttrs: {
     pname = "${finalAttrs.pname}-frontend";
-    inherit (finalAttrs) version src;
+    inherit (finalAttrs) version src nodejs;
 
     sourceRoot = "${subFinalAttrs.src.name}/frontend";
 
@@ -50,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   daemon = buildNpmPackage (subFinalAttrs: {
     pname = "${finalAttrs.pname}-daemon";
-    inherit (finalAttrs) version src;
+    inherit (finalAttrs) version src nodejs;
 
     patches = [
       # Remove runtime chmod for modules like mcsmanager-pty and mcsmanager-zip-tools
@@ -86,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   panel = buildNpmPackage (subFinalAttrs: {
     pname = "${finalAttrs.pname}-panel";
-    inherit (finalAttrs) version src;
+    inherit (finalAttrs) version src nodejs;
 
     # These patches are required because mcsm-web assumes it runs under the same directory as app.js
     patches = [
@@ -124,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    nodejs
+    finalAttrs.nodejs
   ];
 
   dontBuild = true;
@@ -144,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
       npm prune --omit=dev --no-save
       rm package{,-lock}.json
       popd
-      makeWrapper ${lib.getExe nodejs} $out/bin/mcsm-$p \
+      makeWrapper ${lib.getExe finalAttrs.nodejs} $out/bin/mcsm-$p \
         --set NODE_PATH "$out/share/$p/node_modules" \
         --add-flags $out/share/$p/app.js
     done
