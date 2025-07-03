@@ -123,6 +123,7 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; ([
     jinja2
+    pyftpdlib
   ] ++ (optionalsEd "im" [
     argon2-cffi
     mutagen
