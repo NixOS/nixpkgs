@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       donteatoreo
       FlafyDev
+      Gliczy
       NotAShelf
       Scrumplex
     ];
