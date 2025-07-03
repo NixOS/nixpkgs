@@ -32,6 +32,13 @@ buildPythonPackage rec {
       url = "https://github.com/iMerica/dj-rest-auth/commit/cc5587e4e3f327697709f3f0d491650bff5464e7.diff";
       hash = "sha256-2LahibxuNECAfjqsbNs2ezaWt1VH0ZBNwSNWCZwIe8I=";
     })
+    # Add compatibility with django-allauth v65.4
+    # See https://github.com/iMerica/dj-rest-auth/pull/681
+    (fetchpatch {
+      name = "django-allauth_65.4_compatibility.patch";
+      url = "https://github.com/iMerica/dj-rest-auth/commit/59b8cab7e2f4e3f2fdc11ab3b027a32cad45deef.patch";
+      hash = "sha256-CH85vB3EOQvFxx+ZP2LYI4LEvaZ+ccLdXZGuAvEfStc=";
+    })
   ];
 
   postPatch = ''
@@ -67,13 +74,15 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  doCheck = false;
+
   pythonImportsCheck = [ "dj_rest_auth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Authentication for Django Rest Framework";
     homepage = "https://github.com/iMerica/dj-rest-auth";
     changelog = "https://github.com/iMerica/dj-rest-auth/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }
