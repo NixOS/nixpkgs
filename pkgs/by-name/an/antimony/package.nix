@@ -6,8 +6,7 @@
   python3,
   libGLU,
   libGL,
-  qtbase,
-  wrapQtAppsHook,
+  libsForQt5,
   ncurses,
   cmake,
   flex,
@@ -51,7 +50,7 @@ stdenv.mkDerivation {
     python3.pkgs.boost
     libGLU
     libGL
-    qtbase
+    libsForQt5.qtbase
     ncurses
   ];
 
@@ -59,7 +58,7 @@ stdenv.mkDerivation {
     cmake
     flex
     lemon
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     copyDesktopItems
   ];
 
@@ -90,12 +89,12 @@ stdenv.mkDerivation {
     "-DGITBRANCH=${gitBranch}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Computer-aided design (CAD) tool from a parallel universe";
     mainProgram = "antimony";
     homepage = "https://github.com/mkeeter/antimony";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.linux;
   };
 }
