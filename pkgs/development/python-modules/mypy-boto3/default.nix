@@ -662,8 +662,8 @@ rec {
       "sha256-rYqJJC55Eh8uQ+tQyGt1fY+BCSRyA9mdpyHTc4MmQ38=";
 
   mypy-boto3-iotevents =
-    buildMypyBoto3Package "iotevents" "1.38.0"
-      "sha256-etL5deyRFtlpPO451sLVOuKo8xmZkivSAupduSkWw0Y=";
+    buildMypyBoto3Package "iotevents" "1.39.0"
+      "sha256-SxLb2ILFZsbh962PMu64UeYL4M/z1WgMI+zrkqB/mM4=";
 
   mypy-boto3-iotevents-data =
     buildMypyBoto3Package "iotevents-data" "1.38.0"
