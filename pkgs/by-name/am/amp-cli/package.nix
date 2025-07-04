@@ -36,6 +36,6 @@ writeShellApplication {
       owickstrom
       ghuntley
     ];
-    mainProgram = "amp-cli";
+    mainProgram = "amp";
   };
 }
