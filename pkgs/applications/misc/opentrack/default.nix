@@ -20,6 +20,7 @@
   fetchurl,
   fetchpatch,
   wineWowPackages,
+  onnxruntime,
 }:
 let
   version = "2023.3.0";
@@ -66,6 +67,7 @@ mkDerivation {
     libXdmcp
     libevdev
     aruco
+    onnxruntime
   ] ++ lib.optionals pkgs.stdenv.targetPlatform.isx86_64 [ wineWowPackages.stable ];
 
   env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Wpedantic -ffast-math -O3";
