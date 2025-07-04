@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  callPackage,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -34,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     rank-bm25
     toml
     mcp
+    (callPackage ../../op/openai-agents/package.nix {})
   ];
 
   # Disable runtime dependencies check due to missing openai-agents package
