@@ -20,13 +20,13 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2025.6.9";
+  version = "2025.6.30";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "yt_dlp";
-    hash = "sha256-dR9To7YTU1Ir+AX6MLvL0WZmEmU345cG6rT4w2jxEaw=";
+    hash = "sha256-bQroVcClW/zCjf+6gE7IUlublV00pBGRoVYaTOwD2L0=";
   };
 
   build-system = with python3Packages; [
@@ -49,24 +49,24 @@ python3Packages.buildPythonApplication rec {
     curl-cffi = [
       (python3Packages.buildPythonPackage rec {
         pname = "curl-cffi";
-        version = "0.11.3";
+        version = "0.12.0b1";
         src =
           {
             x86_64-linux = fetchurl {
               url = "https://github.com/lexiforest/curl_cffi/releases/download/v${version}/curl_cffi-${version}-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
-              hash = "sha256-6DBlvIm2clpNcrr688vd31a7TwFLxjvnP4fxs5A/0K4=";
+              hash = "sha256-4lyjd35DYWKYoZBmJXINqSLbhbG2huusK2VEj4Sd7Ok=";
             };
             aarch64-linux = fetchurl {
               url = "https://github.com/lexiforest/curl_cffi/releases/download/v${version}/curl_cffi-${version}-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl";
-              hash = "sha256-4DWSoS4ozEPYGAcTsmuPv/4IydJqzp2qKHpQBZDUKVs=";
+              hash = "sha256-FW1d8i3+o3SVtSSXkVnaUhyu0diupCws35VtrC7fVKE=";
             };
             x86_64-darwin = fetchurl {
               url = "https://github.com/lexiforest/curl_cffi/releases/download/v${version}/curl_cffi-${version}-cp39-abi3-macosx_10_9_x86_64.whl";
-              hash = "sha256-+1vewabDcXq0lFv6lahNGSOa6Uy34dE4in5usvsuMO4=";
+              hash = "sha256-buBMS17U5Pvos0SIRfsBl9wMqEJK9AGW79iH7Y/u9GY=";
             };
             aarch64-darwin = fetchurl {
               url = "https://github.com/lexiforest/curl_cffi/releases/download/v${version}/curl_cffi-${version}-cp39-abi3-macosx_11_0_arm64.whl";
-              hash = "sha256-C6M89UhqAY/6EIJNTZQfdse9kP4oDgHBTxVqLuDs+Nw=";
+              hash = "sha256-FLoTFXqa7WTf4s5r7SqVfjcfmZm87YHTFTZo1aIT+yU=";
             };
           }
           ."${stdenv.hostPlatform.system}"
