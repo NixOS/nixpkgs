@@ -1054,8 +1054,8 @@ rec {
       "sha256-3MoTYkhWWNDVMHsQvfFNPv2Gax6MGfDirAJMjJEukCY=";
 
   mypy-boto3-pricing =
-    buildMypyBoto3Package "pricing" "1.38.0"
-      "sha256-JNXmI8uVkxUdOzu1PvNhDEVh07EaLcv1tj227LPnkX0=";
+    buildMypyBoto3Package "pricing" "1.39.0"
+      "sha256-/rtNFPFGyuCf/dvmWnYVIl3TKEjG7tBDIgCSGiWuO2c=";
 
   mypy-boto3-privatenetworks =
     buildMypyBoto3Package "privatenetworks" "1.38.0"
