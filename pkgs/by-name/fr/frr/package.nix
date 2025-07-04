@@ -34,7 +34,7 @@
   zeromq,
 
   # tests
-  nettools,
+  net-tools,
   nixosTests,
 
   # general options
@@ -218,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeCheckInputs = [
-    nettools
+    net-tools
     python3.pkgs.pytest
   ];
 

@@ -505,4 +505,8 @@ outer
     "gfx1101"
     "gfx1102"
   ];
+  gfx12 = scopeForArches [
+    "gfx1200"
+    "gfx1201"
+  ];
 }

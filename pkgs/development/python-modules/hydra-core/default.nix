@@ -72,9 +72,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::UserWarning"
+  pytestFlags = [
+    "-Wignore::UserWarning"
   ];
 
   # Test environment setup broken under Nix for a few tests:

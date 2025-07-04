@@ -104,7 +104,7 @@ buildPythonPackage rec {
     rm onnx/__init__.py
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "onnx/test"
     "examples"
   ];

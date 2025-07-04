@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncinotify" ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   meta = with lib; {
     badPlatforms = [

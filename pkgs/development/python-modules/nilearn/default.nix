@@ -66,7 +66,7 @@ buildPythonPackage rec {
   ];
 
   # do subset of tests which don't fetch resources
-  pytestFlagsArray = [ "nilearn/connectome/tests" ];
+  enabledTestPaths = [ "nilearn/connectome/tests" ];
 
   meta = {
     description = "Module for statistical learning on neuroimaging data";

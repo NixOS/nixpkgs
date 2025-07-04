@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
   ];
-  pytestFlagsArray = [ "i18n/tests/run_tests.py" ];
+  enabledTestPaths = [ "i18n/tests/run_tests.py" ];
   pythonImportsCheck = [ "i18n" ];
 
   meta = with lib; {

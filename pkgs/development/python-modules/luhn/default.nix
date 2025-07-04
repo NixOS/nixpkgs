@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   pythonImportsCheck = [ "luhn" ];
 

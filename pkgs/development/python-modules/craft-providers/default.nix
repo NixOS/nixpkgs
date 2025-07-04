@@ -79,7 +79,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTestPaths = [
     # Relies upon "logassert" python package which isn't in nixpkgs

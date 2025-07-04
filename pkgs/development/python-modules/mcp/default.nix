@@ -96,9 +96,8 @@ buildPythonPackage rec {
     requests
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+  pytestFlags = [
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince211"
   ];
 
   disabledTests =

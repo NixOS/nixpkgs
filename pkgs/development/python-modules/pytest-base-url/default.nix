@@ -43,7 +43,7 @@ buildPythonPackage rec {
     pytest-metadata
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # should be xfail? or mocking doesn't work

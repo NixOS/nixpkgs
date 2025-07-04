@@ -42,7 +42,7 @@ buildPythonPackage rec {
     })
   ];
 
-  pytestFlagsArray = [ "test/test_pydot.py" ];
+  enabledTestPaths = [ "test/test_pydot.py" ];
 
   pythonImportsCheck = [ "pydot" ];
 

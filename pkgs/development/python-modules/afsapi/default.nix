@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "async_tests.py" ];
+  enabledTestPaths = [ "async_tests.py" ];
 
   pythonImportsCheck = [ "afsapi" ];
 

@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
     inherit hash;
   };
 
-  preAutoreconf = "touch config.rpath";
-
   patches =
     lib.optional (!isFuse3 && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64))
       (fetchpatch {
@@ -52,6 +50,7 @@ stdenv.mkDerivation rec {
             url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/fuse/files/fuse-2.9.9-closefrom-glibc-2-34.patch?id=8a970396fca7aca2d5a761b8e7a8242f1eef14c9";
             sha256 = "sha256-ELYBW/wxRcSMssv7ejCObrpsJHtOPJcGq33B9yHQII4=";
           })
+          ./fuse2-gettext-0.25.patch
         ]
     );
 
@@ -76,17 +75,12 @@ stdenv.mkDerivation rec {
     "man"
   ] ++ lib.optional isFuse3 "udev";
 
-  mesonFlags = lib.optionals isFuse3 (
-    [
-      "-Dudevrulesdir=/udev/rules.d"
-      "-Duseroot=false"
-      "-Dinitscriptdir="
-    ]
-    # examples fail to build on musl
-    # error: ‘RENAME_NOREPLACE’ was not declared in this scope
-    # lib.optionals instead of lib.mesonBool to avoid rebuilds
-    ++ lib.optionals (stdenv.hostPlatform.isMusl) [ "-Dexamples=false" ]
-  );
+  mesonFlags = lib.optionals isFuse3 [
+    "-Dudevrulesdir=/udev/rules.d"
+    "-Duseroot=false"
+    "-Dinitscriptdir="
+    "-Dexamples=false" # examples fail on musl and are just generally useless
+  ];
 
   # Ensure that FUSE calls the setuid wrapper, not
   # $out/bin/fusermount. It falls back to calling fusermount in
@@ -112,9 +106,6 @@ stdenv.mkDerivation rec {
       # No need to use the SUID wrapper.
       substituteInPlace util/mount.fuse.c \
         --replace-fail '"su"' '"${lib.getBin shadow.su}/bin/su"'
-      substituteInPlace makeconf.sh \
-        --replace-fail 'CONFIG_RPATH=/usr/share/gettext/config.rpath' 'CONFIG_RPATH=${lib.getLib gettext}/share/gettext/config.rpath'
-      ./makeconf.sh
     '';
 
   # v2: no tests, v3: all tests get skipped in a sandbox

@@ -48,7 +48,7 @@ buildPythonPackage rec {
     scipy
     pytest-xdist
   ];
-  pytestFlagsArray = [ "python/test" ];
+  enabledTestPaths = [ "python/test" ];
   pythonImportsCheck = [ "ducc0" ];
 
   postInstall = ''

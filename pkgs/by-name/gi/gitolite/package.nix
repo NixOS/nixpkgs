@@ -5,7 +5,7 @@
   git,
   lib,
   makeWrapper,
-  nettools,
+  net-tools,
   perl,
   nixosTests,
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    nettools
+    net-tools
     perl
   ];
   nativeBuildInputs = [ makeWrapper ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/lib/Gitolite/Hooks/Update.pm \
       --replace /usr/bin/perl "${perl}/bin/perl"
     substituteInPlace src/lib/Gitolite/Setup.pm \
-      --replace hostname "${nettools}/bin/hostname"
+      --replace hostname "${net-tools}/bin/hostname"
     substituteInPlace src/commands/sskm \
       --replace /bin/rm "${coreutils}/bin/rm"
   '';

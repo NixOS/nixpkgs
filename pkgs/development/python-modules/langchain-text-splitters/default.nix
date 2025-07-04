@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "langchain-text-splitters==";

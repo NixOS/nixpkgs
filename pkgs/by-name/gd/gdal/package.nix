@@ -268,7 +268,7 @@ stdenv.mkDerivation (finalAttrs: {
     filelock
     lxml
   ];
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-disable"
   ];
   disabledTestPaths = [

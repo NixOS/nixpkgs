@@ -1,13 +1,22 @@
 { pkgs, haskellLib }:
 
+self: super:
+
 with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
   inherit (pkgs) lib;
+
+  warnAfterVersion =
+    ver: pkg:
+    lib.warnIf (lib.versionOlder ver
+      super.${pkg.pname}.version
+    ) "override for haskell.packages.ghc912.${pkg.pname} may no longer be needed" pkg;
+
 in
 
-self: super: {
+{
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
@@ -88,12 +97,12 @@ self: super: {
 
   # 2025-04-21: "flavor" for GHC 9.8.5 is missing a fix introduced for 9.8.4. See:
   # https://github.com/digital-asset/ghc-lib/pull/571#discussion_r2052684630
-  ghc-lib-parser =
-    assert super.ghc-lib-parser.version == "9.8.5.20250214";
+  ghc-lib-parser = warnAfterVersion "9.8.5.20250214" (
     overrideCabal {
       postPatch = ''
         substituteInPlace compiler/cbits/genSym.c \
           --replace-fail "HsWord64 u = atomic_inc64" "HsWord64 u = atomic_inc"
       '';
-    } super.ghc-lib-parser;
+    } super.ghc-lib-parser
+  );
 }
