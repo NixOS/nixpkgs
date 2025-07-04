@@ -32,7 +32,7 @@ buildPythonPackage {
     owner = "gentlegiantJGC";
     repo = "PyMCTranslate";
     tag = version;
-    hash = "sha256-9EKaDEg9IK6ozZEyx/MY3KdE0i5YOr7Oi7N1QSET6Rs=";
+    hash = "sha256-RNVR56fv36NvSztVC7TPdr8Z0XMtuMCwbpKPDyNuXgs=";
   };
 
   disabled = pythonOlder "3.9";

@@ -1,4 +1,5 @@
 {
+  pkgs,
   lib,
   fetchFromGitHub,
   python3,
@@ -6,7 +7,8 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  version = "0.10.42";
+  version = "0.10.44";
+  python3 = pkgs.python312;
 in
 python3.pkgs.buildPythonApplication {
   pname = "amulet-map-editor";
@@ -17,20 +19,26 @@ python3.pkgs.buildPythonApplication {
     owner = "Amulet-Team";
     repo = "Amulet-Map-Editor";
     tag = version;
-    hash = "sha256-rMLRNE+DwZXpB9tNPHwQo53HLGnRtAy0kt6subMF778=";
+    hash = "sha256-+6u7Ou+zyDkuyHZXH5J/pX3ygKJx2AsXJK+KmaIMSh0=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-    wheel
-    cython
-    versioneer
-    numpy_1
+  nativeBuildInputs = with pkgs; [
+    (python3.pkgs.setuptools)
+    (python3.pkgs.wheel)
+    (python3.pkgs.cython)
+    (python3.pkgs.versioneer)
+    (python3.pkgs.numpy_1)
+    wrapGAppsHook3
+  ];
+
+  buildInputs = with pkgs; [
+    gsettings-desktop-schemas
+    adwaita-icon-theme
+    xdg-desktop-portal-gtk
   ];
 
   dependencies = with python3.pkgs; [
     pillow
-    # need wxpython to use "numpy_1" instead of latest version
     (wxpython.overridePythonAttrs (_: {
       propagatedBuildInputs = [
         numpy_1
@@ -58,7 +66,6 @@ python3.pkgs.buildPythonApplication {
     ];
   };
 
-  # "requirements.py" is asking for older versions
   pythonRelaxDeps = [ "platformdirs" ];
 
   pythonImportsCheck = [ "amulet_map_editor" ];
@@ -74,6 +81,9 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://github.com/Amulet-Team/Amulet-Map-Editor";
     changelog = "https://github.com/Amulet-Team/Amulet-Map-Editor/releases/tag/${version}";
     license = with lib.licenses; [ amulet ];
-    maintainers = with lib.maintainers; [ tibso ];
+    maintainers = with lib.maintainers; [
+      tibso
+      erkin
+    ];
   };
 }

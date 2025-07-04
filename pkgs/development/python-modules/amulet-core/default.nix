@@ -39,7 +39,7 @@ buildPythonPackage {
     owner = "Amulet-Team";
     repo = "Amulet-Core";
     tag = version;
-    hash = "sha256-nEtOSL8uZ9rTEjts2sLTy5mRltumlKvxj4+5ifL1WXY=";
+    hash = "sha256-wAqju95s5HD61lvaxbYLUi0AdGKejvzDkUlXt2QtY5k=";
   };
 
   disabled = pythonOlder "3.9";

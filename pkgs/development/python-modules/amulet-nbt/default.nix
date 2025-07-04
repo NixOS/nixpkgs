@@ -31,7 +31,7 @@ buildPythonPackage {
     owner = "Amulet-Team";
     repo = "Amulet-NBT";
     tag = version;
-    hash = "sha256-bpGaNEk5i5bqAgFbRGQYsFmMIntHx3sV0iPZD/HXqGQ=";
+    hash = "sha256-sxA/kijsDoql5jWuY7rzVjAmeVNFP0YNGCeb8wkztwY=";
   };
 
   build-system = [
