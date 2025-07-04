@@ -822,7 +822,7 @@ lib.makeScope pkgs.newScope (
               ];
             }
           ]
-          ++ lib.optionals (lib.versionOlder php.version "8.3") [
+          ++ lib.optionals (lib.versionOlder php.version "8.4") [
             # Using version from PECL on new PHP versions.
             {
               name = "imap";
