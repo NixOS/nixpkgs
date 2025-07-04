@@ -64,7 +64,11 @@ stdenv.mkDerivation rec {
     make oldconfig
   '';
 
-  makeFlags = [ "PREFIX=$(out)/bin" ] ++ optionals enableStatic [ "LDFLAGS=--static" ];
+  makeFlags =
+    [ "PREFIX=$(out)/bin" ]
+    ++ optionals (enableStatic && !stdenv.hostPlatform.isDarwin) [
+      "LDFLAGS=--static"
+    ];
 
   installTargets = [ "install_flat" ];
 
