@@ -21,13 +21,18 @@
   unshield,
   wrapQtAppsHook,
   yaml-cpp,
+
+  withGL ? "GLVND",
 }:
 
-let
-  GL = "GLVND"; # or "LEGACY";
+assert lib.assertOneOf "withGL" withGL [
+  "GLVND"
+  "LEGACY"
+];
 
-  osg' = (openscenegraph.override { colladaSupport = true; }).overrideDerivation (old: {
-    patches = [
+let
+  osg' = (openscenegraph.override { colladaSupport = true; }).overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or [ ]) ++ [
       (fetchpatch {
         # Darwin: Without this patch, OSG won't build osgdb_png.so, which is required by OpenMW.
         name = "darwin-osg-plugins-fix.patch";
@@ -36,14 +41,14 @@ let
       })
     ];
     cmakeFlags =
-      (old.cmakeFlags or [ ])
+      (oldAttrs.cmakeFlags or [ ])
       ++ [
         "-Wno-dev"
-        "-DOpenGL_GL_PREFERENCE=${GL}"
-        "-DBUILD_OSG_PLUGINS_BY_DEFAULT=0"
-        "-DBUILD_OSG_DEPRECATED_SERIALIZERS=0"
+        (lib.cmakeFeature "OpenGL_GL_PREFERENCE" withGL)
+        (lib.cmakeBool "BUILD_OSG_PLUGINS_BY_DEFAULT" false)
+        (lib.cmakeBool "BUILD_OSG_DEPRECATED_SERIALIZERS" false)
       ]
-      ++ (map (e: "-DBUILD_OSG_PLUGIN_${e}=1") [
+      ++ (map (plugin: lib.cmakeBool "BUILD_OSG_PLUGIN_${plugin}" true) [
         "BMP"
         "DAE"
         "DDS"
@@ -55,24 +60,24 @@ let
       ]);
   });
 
-  bullet' = bullet.overrideDerivation (old: {
-    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+  bullet' = bullet.overrideAttrs (oldAttrs: {
+    cmakeFlags = (oldAttrs.cmakeFlags or [ ]) ++ [
       "-Wno-dev"
-      "-DOpenGL_GL_PREFERENCE=${GL}"
-      "-DUSE_DOUBLE_PRECISION=ON"
-      "-DBULLET2_MULTITHREADING=ON"
+      (lib.cmakeFeature "OpenGL_GL_PREFERENCE" withGL)
+      (lib.cmakeBool "USE_DOUBLE_PRECISION" true)
+      (lib.cmakeBool "BULLET2_MULTITHREADING" true)
     ];
   });
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openmw";
   version = "0.49.0";
 
   src = fetchFromGitLab {
     owner = "OpenMW";
     repo = "openmw";
-    rev = "${pname}-${version}";
+    tag = "openmw-${finalAttrs.version}";
     hash = "sha256-Eyjn3jPpo0d7XENg0Ea/3MN60lZBSUAMkz1UtTiIP80=";
   };
 
@@ -111,23 +116,21 @@ stdenv.mkDerivation rec {
     yaml-cpp
   ];
 
-  cmakeFlags =
-    [
-      "-DOpenGL_GL_PREFERENCE=${GL}"
-      "-DOPENMW_USE_SYSTEM_RECASTNAVIGATION=1"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DOPENMW_OSX_DEPLOYMENT=ON"
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "OpenGL_GL_PREFERENCE" withGL)
+    (lib.cmakeBool "OPENMW_USE_SYSTEM_RECASTNAVIGATION" true)
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeBool "OPENMW_OSX_DEPLOYMENT" true);
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial open source engine reimplementation of the game Morrowind";
+    changelog = "https://gitlab.com/OpenMW/openmw/-/blob/openmw-${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://openmw.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       abbradar
       marius851000
+      sigmasquadron
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = with lib.platforms; (linux ++ darwin);
   };
-}
+})
