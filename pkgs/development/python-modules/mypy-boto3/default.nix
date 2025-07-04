@@ -166,8 +166,8 @@ rec {
       "sha256-thoMZE5unC2SsMvRGiCytIuXUMy195RiKqWqaWE2FiE=";
 
   mypy-boto3-batch =
-    buildMypyBoto3Package "batch" "1.38.43"
-      "sha256-4uuQaVXfCnEyE7ZE3QqtvR13/+lNC5EXWhS/WKtxdWk=";
+    buildMypyBoto3Package "batch" "1.39.0"
+      "sha256-chgUvwO3pGIZweFagSOhqrwGgHMLrX9jxiynmF2/dlA=";
 
   mypy-boto3-billingconductor =
     buildMypyBoto3Package "billingconductor" "1.38.0"
