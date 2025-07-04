@@ -238,8 +238,8 @@ rec {
       "sha256-PVBdGMk0fOflb0WSC1KQyl3wPm1SVgZTslKMcc0HN4E=";
 
   mypy-boto3-cloudhsmv2 =
-    buildMypyBoto3Package "cloudhsmv2" "1.38.0"
-      "sha256-mtbsRBR8ouk7Jr2KDgbGWkMhagS1nynRpivhfPPRSQQ=";
+    buildMypyBoto3Package "cloudhsmv2" "1.39.0"
+      "sha256-APsIJ5mCLjVHsE23qVnE3BT/ylu2rkfnHt3tfEVs9o4=";
 
   mypy-boto3-cloudsearch =
     buildMypyBoto3Package "cloudsearch" "1.38.0"
