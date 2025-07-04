@@ -3,39 +3,44 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libsForQt5,
+  qt6,
+  qt6Packages,
+  alglib,
   gdal,
   proj,
   routino,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qmapshack";
-  version = "1.17.1";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "Maproom";
     repo = "qmapshack";
-    rev = "V_${version}";
-    hash = "sha256-wqztKmaUxY3qd7IgPM7kV7x0BsrTMTX3DbcdM+lsarI=";
+    tag = "V_${finalAttrs.version}";
+    hash = "sha256-+M76EZeZOsBQ7RXtVplsrbrDgU0plRAht4/jz/GpIhM=";
   };
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    libsForQt5.qtscript
-    libsForQt5.qtwebengine
+    alglib
     gdal
     proj
     routino
-    libsForQt5.quazip
+    qt6.qtwebengine
+    qt6Packages.quazip
   ];
 
   cmakeFlags = [
-    "-DROUTINO_XML_PATH=${routino}/share/routino"
+    (lib.cmakeFeature "ALGLIB_INCLUDE_DIRS" "${alglib}/include/alglib")
+    (lib.cmakeFeature "ALGLIB_LIBRARIES" "alglib3")
+    (lib.cmakeFeature "ROUTINO_XML_PATH" "${routino}/share/routino")
   ];
 
   qtWrapperArgs = [
@@ -50,12 +55,12 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Consumer grade GIS software";
     homepage = "https://github.com/Maproom/qmapshack";
-    changelog = "https://github.com/Maproom/qmapshack/blob/V_${version}/changelog.txt";
+    changelog = "https://github.com/Maproom/qmapshack/blob/V_${finalAttrs.version}/changelog.txt";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       dotlambda
       sikmir
     ];
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
