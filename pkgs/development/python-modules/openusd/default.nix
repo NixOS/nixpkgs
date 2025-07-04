@@ -4,11 +4,12 @@
   boost,
   buildPythonPackage,
   cmake,
-  darwin,
+  distutils,
   doxygen,
   draco,
   embree,
   fetchFromGitHub,
+  fetchpatch,
   flex,
   git,
   graphviz-nox,
@@ -17,6 +18,8 @@
   lib,
   libGL,
   libX11,
+  libXt,
+  materialx,
   ninja,
   numpy,
   opencolorio,
@@ -48,20 +51,36 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "24.03";
+  version = "25.05.01";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-EYf8GhXhsAx0Wxz9ibDZEV4E5scL3GPiu3Nje7N5C/I=";
+    tag = "v${version}";
+    hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
   };
 
-  stdenv = if python.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
+  stdenv = python.stdenv;
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
-  format = "other";
+  patches = [
+    (fetchpatch {
+      name = "port-to-embree-4.patch";
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/9ea3bc1ab550ec46c426dab04292d9667ccd2518.patch?full_index=1";
+      hash = "sha256-QjA3kjUDsSleUr+S/bQLb+QK723SNFvnmRPT+ojjgq8=";
+    })
+    (fetchpatch {
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/3648
+      name = "propagate-dependencies-opengl.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/usd/-/raw/41469f20113d3550c5b42e67d1139dedc1062b8c/usd-find-dependency-OpenGL.patch?full_index=1";
+      hash = "sha256-aUWGKn365qov0ttGOq5GgNxYGIGZ4DfmeMJfakbOugQ=";
+    })
+  ];
+
+  env.OSL_LOCATION = "${osl}";
 
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
@@ -73,11 +92,13 @@ buildPythonPackage rec {
     "-DPXR_BUILD_TESTS=OFF"
     "-DPXR_BUILD_TUTORIALS=OFF"
     "-DPXR_BUILD_USD_IMAGING=ON"
+    "-DPYSIDE_BIN_DIR=${pyside-tools-uic}/bin"
     (lib.cmakeBool "PXR_BUILD_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_USDVIEW" withUsdView)
     (lib.cmakeBool "PXR_BUILD_USD_TOOLS" withTools)
-    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.isDarwin && withOsl))
+    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" true)
+    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.hostPlatform.isDarwin && withOsl))
   ];
 
   nativeBuildInputs =
@@ -85,6 +106,8 @@ buildPythonPackage rec {
       cmake
       ninja
       setuptools
+      opensubdiv.dev
+      opensubdiv.static
     ]
     ++ lib.optionals withDocs [
       git
@@ -97,35 +120,35 @@ buildPythonPackage rec {
     [
       alembic.dev
       bison
-      boost
       draco
       embree
       flex
       imath
+      materialx
       opencolorio
       openimageio
-      opensubdiv
       ptex
       tbb
     ]
-    ++ lib.optionals stdenv.isLinux [
-      libGL
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libX11
+      libXt
     ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Cocoa ])
     ++ lib.optionals withOsl [ osl ]
     ++ lib.optionals withUsdView [ qt6.qtbase ]
-    ++ lib.optionals (withUsdView && stdenv.isLinux) [
-      qt6.qtbase
-      qt6.qtwayland
-    ];
+    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 
   propagatedBuildInputs =
     [
       boost
       jinja2
       numpy
+      opensubdiv
       pyopengl
+      distutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
     ]
     ++ lib.optionals (withTools || withUsdView) [
       pyside-tools-uic
@@ -157,7 +180,11 @@ buildPythonPackage rec {
       for interchange between graphics applications.
     '';
     homepage = "https://openusd.org/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ shaddydc ];
+    changelog = "https://github.com/PixarAnimationStudios/OpenUSD/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.tost;
+    maintainers = with lib.maintainers; [
+      shaddydc
+      gador
+    ];
   };
 }

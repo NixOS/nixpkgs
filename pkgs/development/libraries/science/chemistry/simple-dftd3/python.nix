@@ -1,18 +1,23 @@
-{ buildPythonPackage
-, pkg-config
-, meson
-, simple-dftd3
-, cffi
-, numpy
-, toml
-, qcengine
-, pyscf
-, ase
-, pytestCheckHook
+{
+  buildPythonPackage,
+  simple-dftd3,
+  cffi,
+  numpy,
+  toml,
+  qcengine,
+  pyscf,
+  ase,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
-  inherit (simple-dftd3) pname version src meta;
+  format = "setuptools";
+  inherit (simple-dftd3)
+    pname
+    version
+    src
+    meta
+    ;
 
   # pytest is also required for installation, not only testing
   nativeBuildInputs = [ pytestCheckHook ];

@@ -1,55 +1,52 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, rustPlatform
-, libiconv
-, darwin
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  rustPlatform,
+  nixosTests,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.2.0";
+  version = "18.6.1";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
-    rev = "v${version}";
-    hash = "sha256-TTQ2XLqng7TMLnRsLDb/50yyHYuMSPZJ4H+7CEFWQQ0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aRaUiGH2CTPtmbfrtLlNfoQzQWG817eazWctqwRlOCE=";
   };
 
-  # TODO: unify this to one hash because updater do not support this
-  cargoHash =
-    if stdenv.isLinux
-    then "sha256-KMH19Op7uyb3Z/cjT6bdmO+JEp1o2n6rWRNYmn1+0hE="
-    else "sha256-mBOyo6bKipMfmsowQujeUpog12jXAiqx5CtkwCxquRU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-umagQYzOMr3Jh1RewjT0aX5FpYxs9N/70NZXoGaAfi4=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
   buildFeatures = [
-    "client" "sync" "server" "clipboard"
+    "client"
+    "sync"
+    "server"
+    "clipboard"
+    "daemon"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-    darwin.apple_sdk_11_0.frameworks.AppKit
-    darwin.apple_sdk_11_0.frameworks.Security
-    darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-  ];
-
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd atuin \
       --bash <($out/bin/atuin gen-completions -s bash) \
       --fish <($out/bin/atuin gen-completions -s fish) \
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) atuin;
+  passthru = {
+    tests = {
+      inherit (nixosTests) atuin;
+    };
+    updateScript = nix-update-script { };
   };
 
   checkFlags = [
@@ -60,15 +57,20 @@ rustPlatform.buildRustPackage rec {
     # PermissionDenied (Operation not permitted)
     "--skip=change_password"
     "--skip=multi_user_test"
+    "--skip=store::var::tests::build_vars"
     # Tries to touch files
     "--skip=build_aliases"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
     homepage = "https://github.com/atuinsh/atuin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 sciencentistguy _0x4A6F ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      sciencentistguy
+      _0x4A6F
+    ];
     mainProgram = "atuin";
   };
-}
+})

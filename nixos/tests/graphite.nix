@@ -1,9 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ... } :
+{ pkgs, ... }:
 {
   name = "graphite";
   nodes = {
     one =
-      { ... }: {
+      { ... }:
+      {
         time.timeZone = "UTC";
         services.graphite = {
           web = {
@@ -13,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ... } :
             '';
           };
           carbon.enableCache = true;
-          seyren.enable = false;  # Implicitly requires openssl-1.0.2u which is marked insecure
+          seyren.enable = false; # Implicitly requires openssl-1.0.2u which is marked insecure
         };
       };
   };
@@ -33,4 +34,4 @@ import ./make-test-python.nix ({ pkgs, ... } :
         "curl 'http://localhost:8080/metrics/find/?query=foo&format=treejson' --silent | grep foo >&2"
     )
   '';
-})
+}

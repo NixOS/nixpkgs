@@ -1,31 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, parse
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  parse,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "parse-type";
-  version = "0.6.2";
-  format = "setuptools";
+  version = "0.6.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jenisys";
     repo = "parse_type";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dunvcSi+nN5VruvRUPIEpkyUsmeS+kIYDfS8ibDR96s=";
+    tag = "v${version}";
+    hash = "sha256-R0HMrZaKjv0KITfHnQBjuXhs3RUgSJzkDXiehRICUUM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     parse
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pytest.ini \

@@ -1,10 +1,11 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 let
   hashes = pkgs.writeText "hashes" ''
     b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c  /project/bar
   '';
-in {
+in
+{
   name = "gitdaemon";
 
   meta = with pkgs.lib.maintainers; {
@@ -13,14 +14,15 @@ in {
 
   nodes = {
     server =
-      { config, ... }: {
+      { config, ... }:
+      {
         networking.firewall.allowedTCPPorts = [ config.services.gitDaemon.port ];
 
         environment.systemPackages = [ pkgs.git ];
 
         systemd.tmpfiles.rules = [
           # type path mode user group age arg
-          " d    /git 0755 root root  -   -"
+          " d    /git 0755 git  git   -   -"
         ];
 
         services.gitDaemon = {
@@ -30,7 +32,8 @@ in {
       };
 
     client =
-      { pkgs, ... }: {
+      { pkgs, ... }:
+      {
         environment.systemPackages = [ pkgs.git ];
       };
   };
@@ -56,6 +59,10 @@ in {
             "rm -r /project",
         )
 
+    # Change user/group to default daemon user/group from module
+    # to avoid "fatal: detected dubious ownership in repository at '/git/project.git'"
+    server.succeed("chown git:git -R /git/project.git")
+
     with subtest("git daemon starts"):
         server.wait_for_unit("git-daemon.service")
 
@@ -71,4 +78,4 @@ in {
             "sha256sum -c ${hashes}",
         )
   '';
-})
+}

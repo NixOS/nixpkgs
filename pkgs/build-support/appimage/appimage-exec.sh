@@ -1,4 +1,4 @@
-#!@shell@
+#!@runtimeShell@
 # shellcheck shell=bash
 
 if [ -n "$DEBUG" ] ; then
@@ -10,6 +10,7 @@ apprun_opt=true
 OWD=$(readlink -f .)
 # can be read by appimages: https://docs.appimage.org/packaging-guide/environment-variables.html
 export OWD
+export APPIMAGE
 
 # src : AppImage
 # dest : let's unpack() create the directory

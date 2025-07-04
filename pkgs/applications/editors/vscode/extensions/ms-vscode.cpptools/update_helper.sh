@@ -58,7 +58,7 @@ make_trapped_tmpdir
 unzip -q -d "$tmpDir" "$cpptoolsZipStorePath"
 
 cpptoolsStorePath="$(nix add-to-store -n "$extStoreName" "$tmpDir")"
-cpptoolsSha256="$(nix hash-path --base32 --type sha512 "$cpptoolsStorePath")"
+cpptoolsSha256="$(nix --extra-experimental-features nix-command hash path --base32 --type sha512 "$cpptoolsStorePath")"
 echo "cpptoolsStorePath='$cpptoolsStorePath'"
 echo "cpptoolsSha256='$cpptoolsSha256'"
 
@@ -121,8 +121,6 @@ make_trapped_tmpdir
 find "$monoRuntimeBinaries_storePath" -mindepth 1 -maxdepth 1 | xargs -d '\n' cp -rp -t "$tmpDir"
 chmod -R a+rwx "$tmpDir"
 
-ls -la "$tmpDir/debugAdapters"
-
 patchelf_mono "$tmpDir/debugAdapters/mono.linux-x86_64"
 
 chmod a+x "$tmpDir/debugAdapters/mono.linux-x86_64"
@@ -140,8 +138,6 @@ echo "------------- Runtime dep clang ---------------"
 make_trapped_tmpdir
 find "$clanFormatBinaries_storePath" -mindepth 1 -maxdepth 1 | xargs -d '\n' cp -rp -t "$tmpDir"
 chmod -R a+rwx "$tmpDir"
-
-ls -la "$tmpDir/bin"
 
 patchelf_clangformat "$tmpDir/bin/clang-format"
 

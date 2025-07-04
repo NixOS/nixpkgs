@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, brotlipy
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  brotlipy,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "garminconnect_aio"
-  ];
+  pythonImportsCheck = [ "garminconnect_aio" ];
 
   meta = with lib; {
     description = "Python module to interact with Garmin Connect";

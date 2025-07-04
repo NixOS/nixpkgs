@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.miriway;
-in {
+in
+{
   options.programs.miriway = {
     enable = lib.mkEnableOption ''
       Miriway, a Mir based Wayland compositor. You can manually launch Miriway by
@@ -59,19 +65,29 @@ in {
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = [ pkgs.miriway ];
+      systemPackages = with pkgs; [
+        miriway
+        vanilla-dmz
+      ];
       etc = {
         "xdg/xdg-miriway/miriway-shell.config".text = cfg.config;
       };
     };
 
-    hardware.opengl.enable = lib.mkDefault true;
+    hardware.graphics.enable = lib.mkDefault true;
     fonts.enableDefaultPackages = lib.mkDefault true;
     programs.dconf.enable = lib.mkDefault true;
     programs.xwayland.enable = lib.mkDefault true;
 
     # To make the Miriway session available if a display manager like SDDM is enabled:
     services.displayManager.sessionPackages = [ pkgs.miriway ];
+
+    xdg.icons.enable = true;
+    xdg.icons.fallbackCursorThemes = lib.mkDefault [
+      # Miriway looks for "default" theme, fails to start if not present
+      # Mir normally looks for DMZ-White theme if none specified, so make that present as the default
+      "DMZ-White"
+    ];
   };
 
   meta.maintainers = with lib.maintainers; [ OPNA2608 ];

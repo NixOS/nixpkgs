@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
   setuptools,
   versioneer,
@@ -18,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "warner";
     repo = "python-ed25519";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AwnhB5UGycQliNndbqd0JlI4vKSehCSy0qHv2EiB+jA=";
   };
 
@@ -31,9 +30,7 @@ buildPythonPackage rec {
     versioneer
   ];
 
-  pythonImportsCheck = [
-    "ed25519"
-  ];
+  pythonImportsCheck = [ "ed25519" ];
 
   meta = with lib; {
     description = "Ed25519 public-key signatures";

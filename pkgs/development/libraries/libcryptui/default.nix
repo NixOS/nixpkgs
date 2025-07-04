@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, intltool, glib, gnome, gtk3, gnupg, gpgme, dbus-glib, libgnome-keyring }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  intltool,
+  glib,
+  gnome,
+  gtk3,
+  gnupg,
+  gpgme,
+  dbus-glib,
+  libgnome-keyring,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcryptui";
@@ -15,9 +29,25 @@ stdenv.mkDerivation rec {
     ./fix-latest-gnupg.patch
   ];
 
-  nativeBuildInputs = [ pkg-config intltool autoreconfHook ];
-  buildInputs = [ glib gtk3 gnupg gpgme dbus-glib libgnome-keyring ];
+  nativeBuildInputs = [
+    pkg-config
+    dbus-glib # dbus-binding-tool
+    gtk3 # AM_GLIB_GNU_GETTEXT
+    intltool
+    autoreconfHook
+  ];
+  buildInputs = [
+    glib
+    gtk3
+    gnupg
+    gpgme
+    dbus-glib
+    libgnome-keyring
+  ];
   propagatedBuildInputs = [ dbus-glib ];
+
+  env.GNUPG = lib.getExe gnupg;
+  env.GPGME_CONFIG = lib.getExe' (lib.getDev gpgme) "gpgme-config";
 
   enableParallelBuilding = true;
 
@@ -34,5 +64,8 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/libcryptui";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
+    # ImportError: lib/gobject-introspection/giscanner/_giscanner.cpython-312-x86_64-linux-gnu.so
+    # cannot open shared object file: No such file or directory
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

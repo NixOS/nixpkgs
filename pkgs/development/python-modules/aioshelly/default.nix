@@ -1,34 +1,36 @@
-{ lib
-, aiohttp
-, bluetooth-data-tools
-, buildPythonPackage
-, fetchFromGitHub
-, habluetooth
-, orjson
-, pythonOlder
-, setuptools
-, yarl
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  bluetooth-data-tools,
+  buildPythonPackage,
+  fetchFromGitHub,
+  habluetooth,
+  orjson,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aioshelly";
-  version = "8.2.0";
+  version = "13.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-ZJ6lb3pd8DhNagaVq1uFwadtviuHCg44YZkh29ipu5U=";
+    repo = "aioshelly";
+    tag = version;
+    hash = "sha256-cJKo/UITcvpGbrtOqXLReWghEXL0AKFve1s6Ncde0gc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     bluetooth-data-tools
     habluetooth
@@ -36,18 +38,19 @@ buildPythonPackage rec {
     yarl
   ];
 
-  # Project has no test
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "aioshelly"
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "aioshelly" ];
 
   meta = with lib; {
     description = "Python library to control Shelly";
     homepage = "https://github.com/home-assistant-libs/aioshelly";
-    changelog = "https://github.com/home-assistant-libs/aioshelly/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/home-assistant-libs/aioshelly/releases/tag/${src.tag}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

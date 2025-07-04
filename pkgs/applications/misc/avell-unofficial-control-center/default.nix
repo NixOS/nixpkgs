@@ -1,8 +1,13 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "avell-unofficial-control-center";
   version = "1.0.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rodgomesc";
@@ -15,7 +20,10 @@ python3Packages.buildPythonApplication rec {
   # No tests included
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [ pyusb elevate ];
+  propagatedBuildInputs = with python3Packages; [
+    pyusb
+    elevate
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/rodgomesc/avell-unofficial-control-center";

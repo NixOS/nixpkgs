@@ -1,11 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-django
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-cov-stub,
+  pytest-django,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,17 +25,14 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-django
     pytest-xdist
     pytestCheckHook
   ];
 
-  postPatch = ''
-    sed -i "/--cov/d" tox.ini
-  '';
-
   # Darwin sandbox causes most tests to fail
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Very time sensitive, can fail on over subscribed machines
@@ -47,14 +46,12 @@ buildPythonPackage rec {
     "test_cache_write_unpicklable_object"
   ];
 
-  pythonImportsCheck = [
-    "diskcache"
-  ];
+  pythonImportsCheck = [ "diskcache" ];
 
   meta = with lib; {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

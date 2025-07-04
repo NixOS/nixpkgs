@@ -1,19 +1,24 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "nodered";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ matthewcroughan ];
   };
 
   nodes = {
-    client = { config, pkgs, ... }: {
-      environment.systemPackages = [ pkgs.curl ];
-    };
-    nodered = { config, pkgs, ... }: {
-      services.node-red = {
-        enable = true;
-        openFirewall = true;
+    client =
+      { config, pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.curl ];
       };
-    };
+    nodered =
+      { config, pkgs, ... }:
+      {
+        services.node-red = {
+          enable = true;
+          openFirewall = true;
+        };
+      };
   };
 
   testScript = ''
@@ -28,4 +33,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "curl -sSf http:/nodered:1880/ | grep title"
         )
   '';
-})
+}

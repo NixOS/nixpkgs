@@ -1,11 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests, k3s }:
+{
+  lib,
+  buildGo123Module,
+  fetchFromGitHub,
+  symlinkJoin,
+  nixosTests,
+  k3s,
+}:
 
 let
-  version = "3.5.13";
-  etcdSrcHash = "sha256-6dQXgM6VEWwv5CfHvxxPxdhMwNjFsinwhsbSqvQoDxI=";
-  etcdServerVendorHash = "sha256-PB4gACfeYhdOXYs0xbcq2CmSMJnf/ifX2U2DN6zfJ1o=";
-  etcdUtlVendorHash = "sha256-f23mn4zE6beM8yPSbs9gEEEifyF2D+CVKdlYwQtzAkQ=";
-  etcdCtlVendorHash = "sha256-gSlyhmLKarDwc+MhYuTeTqwj0wLiN6+k2bHEVVTkyPc=";
+  version = "3.5.21";
+  etcdSrcHash = "sha256-0L/lA9/9SNKMz74R6UPF1I7gj03/e91EpNr4LxKoisw=";
+  etcdServerVendorHash = "sha256-JMxkcDibRcXhU+T7BQMAz95O7xDKefu1YPZK0GU7osk=";
+  etcdUtlVendorHash = "sha256-901QcnEQ8PWnkliqwL4CrbCD+0ja8vJlDke0P4ya8cA=";
+  etcdCtlVendorHash = "sha256-BJ924wRPQTqbqtNtXL3l/OSdQv1UmU1y6Zqu//EWTHI=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
@@ -14,20 +21,27 @@ let
     hash = etcdSrcHash;
   };
 
-  CGO_ENABLED = 0;
+  env = {
+    CGO_ENABLED = 0;
+  };
 
   meta = with lib; {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [ endocrimes offline superherointj ];
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.darwin ++ platforms.linux;
   };
 
-  etcdserver = buildGoModule rec {
+  etcdserver = buildGo123Module {
     pname = "etcdserver";
 
-    inherit CGO_ENABLED meta src version;
+    inherit
+      env
+      meta
+      src
+      version
+      ;
 
     vendorHash = etcdServerVendorHash;
 
@@ -44,20 +58,30 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
   };
 
-  etcdutl = buildGoModule rec {
+  etcdutl = buildGo123Module rec {
     pname = "etcdutl";
 
-    inherit CGO_ENABLED meta src version;
+    inherit
+      env
+      meta
+      src
+      version
+      ;
 
     vendorHash = etcdUtlVendorHash;
 
     modRoot = "./etcdutl";
   };
 
-  etcdctl = buildGoModule rec {
+  etcdctl = buildGo123Module rec {
     pname = "etcdctl";
 
-    inherit CGO_ENABLED meta src version;
+    inherit
+      env
+      meta
+      src
+      version
+      ;
 
     vendorHash = etcdCtlVendorHash;
 

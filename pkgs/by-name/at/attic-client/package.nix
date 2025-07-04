@@ -1,23 +1,29 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix
-, boost
-, pkg-config
-, stdenv
-, installShellFiles
-, darwin
-, crates ? [ "attic-client" ]
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nixVersions,
+  nixosTests,
+  boost,
+  pkg-config,
+  stdenv,
+  installShellFiles,
+  crates ? [ "attic-client" ],
 }:
+let
+  # Only the attic-client crate builds against the Nix C++ libs
+  # This derivation is also used to build the server
+  needNixInclude = lib.elem "attic-client" crates;
+in
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0.1.0";
+  version = "0-unstable-2025-05-29";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "6eabc3f02fae3683bffab483e614bebfcd476b21";
-    hash = "sha256-wSZjK+rOXn+UQiP1NbdNn5/UW6UcBxjvlqr2wh++MbM=";
+    rev = "ce9373715fe3fac7a174a65a7e6d6baeba8cb4f9";
+    hash = "sha256-CvaKOUq8G10sghKpZhEB2UYjJoWhEkrDFggDgi7piUI=";
   };
 
   nativeBuildInputs = [
@@ -25,28 +31,27 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  buildInputs = [
-    nix
+  buildInputs = lib.optional needNixInclude nixVersions.nix_2_24 ++ [
     boost
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    SystemConfiguration
-  ]);
+  ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "nix-base32-0.1.2-alpha.0" = "sha256-wtPWGOamy3+ViEzCxMSwBcoR4HMMD0t8eyLwXfCDFdo=";
-    };
-  };
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
+  cargoHash = "sha256-AbpWnYfBMrR6oOfy2LkQvIPYsClCWE89bJav+iHTtLM=";
+  useFetchCargoVendor = true;
 
-  ATTIC_DISTRIBUTOR = "attic";
+  env =
+    {
+      ATTIC_DISTRIBUTOR = "nixpkgs";
+    }
+    // lib.optionalAttrs needNixInclude {
+      NIX_INCLUDE_PATH = "${lib.getDev nixVersions.nix_2_24}/include";
+    };
 
   # Attic interacts with Nix directly and its tests require trusted-user access
   # to nix-daemon to import NARs, which is not possible in the build sandbox.
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     if [[ -f $out/bin/attic ]]; then
       installShellCompletion --cmd attic \
         --bash <($out/bin/attic gen-completions bash) \
@@ -55,11 +60,22 @@ rustPlatform.buildRustPackage {
     fi
   '';
 
+  passthru = {
+    tests = {
+      inherit (nixosTests) atticd;
+    };
+
+    updateScript = ./update.sh;
+  };
+
   meta = with lib; {
     description = "Multi-tenant Nix Binary Cache";
     homepage = "https://github.com/zhaofengli/attic";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zhaofengli aciceri ];
+    maintainers = with maintainers; [
+      zhaofengli
+      aciceri
+    ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "attic";
   };

@@ -1,15 +1,26 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 let
   port = 5678;
   webhookUrl = "http://example.com";
 in
 {
   name = "n8n";
-  meta.maintainers = with lib.maintainers; [ freezeboy k900 ];
+  meta.maintainers = with lib.maintainers; [
+    freezeboy
+    k900
+  ];
+
+  node.pkgsReadOnly = false;
 
   nodes.machine =
-    { pkgs, ... }:
+    { ... }:
     {
+      nixpkgs.config.allowUnfreePredicate =
+        pkg:
+        builtins.elem (lib.getName pkg) [
+          "n8n"
+        ];
+
       services.n8n = {
         enable = true;
         webhookUrl = webhookUrl;
@@ -22,4 +33,4 @@ in
     machine.succeed("curl --fail -vvv http://localhost:${toString port}/")
     machine.succeed("grep -qF ${webhookUrl} /etc/systemd/system/n8n.service")
   '';
-})
+}

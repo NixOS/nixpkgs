@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, bison
-, flex
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  bison,
+  flex,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

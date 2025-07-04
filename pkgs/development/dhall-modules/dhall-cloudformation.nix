@@ -3,7 +3,8 @@
 let
   version = "0.9.64";
 
-in buildDhallGitHubPackage {
+in
+buildDhallGitHubPackage {
   name = "cloudformation";
   owner = "jcouyang";
   repo = "dhall-aws-cloudformation";

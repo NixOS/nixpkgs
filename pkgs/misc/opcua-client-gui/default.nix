@@ -1,16 +1,18 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, desktopToDarwinBundle
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  desktopToDarwinBundle,
+  wrapQtAppsHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "opcua-client-gui";
   version = "0.8.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
@@ -19,8 +21,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-0BH1Txr3z4a7iFcsfnovmBUreXMvIX2zpZa8QivQVx8=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems wrapQtAppsHook ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapQtAppsHook
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   makeWrapperArgs = [
     "\${qtWrapperArgs[@]}"
@@ -55,7 +59,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/FreeOpcUa/opcua-client-gui";
     platforms = platforms.unix;
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ janik ];
+    maintainers = [ ];
     mainProgram = "opcua-client";
   };
 }

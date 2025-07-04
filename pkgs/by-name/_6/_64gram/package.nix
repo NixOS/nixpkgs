@@ -1,33 +1,49 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, telegram-desktop
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  telegram-desktop,
+  withWebkit ? true,
 }:
 
-telegram-desktop.overrideAttrs (old: rec {
+telegram-desktop.override {
   pname = "64gram";
-  version = "1.1.17";
+  inherit withWebkit;
+  unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: rec {
+    pname = "64gram-unwrapped";
+    version = "1.1.58";
 
-  src = fetchFromGitHub {
-    owner = "TDesktop-x64";
-    repo = "tdesktop";
-    rev = "v${version}";
+    src = fetchFromGitHub {
+      owner = "TDesktop-x64";
+      repo = "tdesktop";
+      tag = "v${version}";
+      hash = "sha256-RHybrvm5p8BUt5StT/NuR76f2y1CCICirTMjdeRLtkY=";
+      fetchSubmodules = true;
+    };
 
-    fetchSubmodules = true;
-    hash = "sha256-QWHC1NAAKpH9zU7cplCW2rNYckY87bpU7MEZ1ytSi58=";
-  };
+    patches = [
+      (fetchpatch {
+        # https://github.com/desktop-app/lib_base/pull/268
+        url = "https://github.com/desktop-app/lib_base/commit/c952da37294b958e896b27528e7834f0892faa0a.patch";
+        extraPrefix = "Telegram/lib_base/";
+        stripLen = 1;
+        hash = "sha256-xiq8WLAiSZwpvdyK5JbRAdQ9us93+9oMmeMBqVb1TbI=";
+      })
+    ];
 
-  passthru.updateScript = nix-update-script {};
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      (lib.cmakeBool "DESKTOP_APP_DISABLE_AUTOUPDATE" true)
+    ];
 
-  meta = with lib; {
-    description = "An unofficial Telegram Desktop providing Windows 64bit build and extra features";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    homepage = "https://github.com/TDesktop-x64/tdesktop";
-    changelog = "https://github.com/TDesktop-x64/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ clot27 ];
-    mainProgram = "telegram-desktop";
-    broken = stdenv.isDarwin;
-  };
-})
+    meta = {
+      description = "Unofficial Telegram Desktop providing Windows 64bit build and extra features";
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.all;
+      homepage = "https://github.com/TDesktop-x64/tdesktop";
+      changelog = "https://github.com/TDesktop-x64/tdesktop/releases/tag/v${version}";
+      maintainers = with lib.maintainers; [ clot27 ];
+      mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
+    };
+  });
+}

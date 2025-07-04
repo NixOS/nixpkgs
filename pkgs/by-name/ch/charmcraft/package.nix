@@ -1,39 +1,78 @@
 {
   lib,
-  git,
-  python3Packages,
+  gitMinimal,
+  python3,
   fetchFromGitHub,
   nix-update-script,
+  cacert,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  stdenv,
 }:
+let
+  version = "4.10.0";
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      craft-application = super.craft-application.overridePythonAttrs (old: {
+        inherit version;
+        src = fetchFromGitHub {
+          owner = "canonical";
+          repo = "craft-application";
+          tag = version;
+          hash = "sha256-9M49/XQuWwKuQqseleTeZYcrwd/S16lNCljvlVsoXbs=";
+        };
 
-python3Packages.buildPythonApplication rec {
+        postPatch = ''
+          substituteInPlace pyproject.toml --replace-fail "setuptools==75.8.0" "setuptools"
+          substituteInPlace craft_application/git/_git_repo.py --replace-fail "/snap/core22/current/etc/ssl/certs" "${cacert}/etc/ssl/certs"
+        '';
+
+        disabledTestPaths = [
+          # These tests assert outputs of commands that assume Ubuntu-related output.
+          "tests/unit/services/test_lifecycle.py"
+        ];
+
+        disabledTests =
+          old.disabledTests
+          ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+            "test_process_grammar_full"
+          ];
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "2.6.0";
+  version = "3.5.2";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "charmcraft";
-    rev = "refs/tags/${version}";
-    hash = "sha256-B0ZcOORW6yaSIpisPLnq5/S/CcqqvHNTXcfP1sKW2KQ=";
+    tag = version;
+    hash = "sha256-WpiLi8raY1f6+Jjlamp+eDh429gjSwSufNfoPOcGIgU=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'version=determine_version()' 'version="${version}"'
+    substituteInPlace charmcraft/__init__.py --replace-fail "dev" "${version}"
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python.pkgs; [
+    craft-application
     craft-cli
     craft-parts
+    craft-platforms
     craft-providers
     craft-store
     distro
+    docker
     humanize
     jinja2
     jsonschema
-    pydantic_1
+    pip
+    pydantic
     python-dateutil
     pyyaml
     requests
@@ -44,35 +83,46 @@ python3Packages.buildPythonApplication rec {
     urllib3
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = with python.pkgs; [ setuptools-scm ];
 
   pythonRelaxDeps = [
     "urllib3"
+    "craft-application"
+    "pip"
+    "pydantic"
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pyfakefs
-    pytest-check
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-    responses
-  ] ++ [ git ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      freezegun
+      hypothesis
+      pyfakefs
+      pytest-check
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+      responses
+      setuptools
+    ]
+    ++ [
+      cacert
+      gitMinimal
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ];
 
   pytestFlagsArray = [ "tests/unit" ];
 
   disabledTests = [
     # Relies upon the `charm` tool being installed
     "test_validate_missing_charm"
+    "test_read_charm_from_yaml_file_self_contained_success[full-bases.yaml]"
+    "test_read_charm_from_yaml_file_self_contained_success[full-platforms.yaml]"
   ];
+
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "SSL_CERT_FILE" ];
 
   passthru.updateScript = nix-update-script { };
 

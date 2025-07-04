@@ -1,8 +1,9 @@
-{ config
-, lib
-, options
-, pkgs
-, ...
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
 }:
 let
   inherit (lib)
@@ -71,7 +72,10 @@ in
             };
 
             verbosity = mkOption {
-              type = enum [ "Verbose" "Quiet" ];
+              type = enum [
+                "Verbose"
+                "Quiet"
+              ];
               default = "Quiet";
               description = "Verbosity of output produced by the service.";
             };
@@ -130,8 +134,8 @@ in
             relevant = config.systemd.network.enable;
             root = config.systemd.network.netdevs;
             peer = (x: x.wireguardPeers);
-            key = (x: if x.wireguardPeerConfig ? PublicKey then x.wireguardPeerConfig.PublicKey else null);
-            description = "${options.systemd.network.netdevs}.\"<name>\".wireguardPeers.*.wireguardPeerConfig.PublicKey";
+            key = x: x.PublicKey or null;
+            description = "${options.systemd.network.netdevs}.\"<name>\".wireguardPeers.*.PublicKey";
           }
           {
             relevant = config.networking.wireguard.enable;
@@ -149,7 +153,13 @@ in
           }
         ];
         relevantExtractions = filter (x: x.relevant) extractions;
-        extract = { root, peer, key, ... }:
+        extract =
+          {
+            root,
+            peer,
+            key,
+            ...
+          }:
           filter (x: x != null) (flatten (concatMap (x: (map key (peer x))) (attrValues root)));
         configuredKeys = flatten (map extract relevantExtractions);
         itemize = xs: concatLines (map (x: " - ${x}") xs);
@@ -167,22 +177,24 @@ in
         ${itemize (descriptions relevantExtractions)}
         ${unusual}
       '')
-      ++
-      optional (relevantExtractions == [ ]) ''
+      ++ optional (relevantExtractions == [ ]) ''
         You have configured Rosenpass, but you have not configured Wireguard via any of:
         ${itemize (descriptions extractions)}
         ${unusual}
       '';
 
-    environment.systemPackages = [ cfg.package pkgs.wireguard-tools ];
+    environment.systemPackages = [
+      cfg.package
+      pkgs.wireguard-tools
+    ];
 
     systemd.services.rosenpass =
       let
         filterNonNull = filterAttrsRecursive (_: v: v != null);
         config = settingsFormat.generate "config.toml" (
-          filterNonNull (cfg.settings
-            //
-            (
+          filterNonNull (
+            cfg.settings
+            // (
               let
                 credentialPath = id: "$CREDENTIALS_DIRECTORY/${id}";
                 # NOTE: We would like to remove all `null` values inside `cfg.settings`
@@ -208,7 +220,10 @@ in
         wantedBy = [ "multi-user.target" ];
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
-        path = [ cfg.package pkgs.wireguard-tools ];
+        path = [
+          cfg.package
+          pkgs.wireguard-tools
+        ];
 
         serviceConfig = {
           User = "rosenpass";
@@ -225,8 +240,10 @@ in
         # See <https://www.freedesktop.org/software/systemd/man/systemd.unit.html#Specifiers>
         environment.CONFIG = "%t/${serviceConfig.RuntimeDirectory}/config.toml";
 
-        preStart = "${getExe pkgs.envsubst} -i ${config} -o \"$CONFIG\"";
-        script = "rosenpass exchange-config \"$CONFIG\"";
+        script = ''
+          ${getExe pkgs.envsubst} -i ${config} -o "$CONFIG"
+          rosenpass exchange-config "$CONFIG"
+        '';
       };
   };
 }

@@ -1,0 +1,35 @@
+diff --git a/tests/examples_test.py b/tests/examples_test.py
+index 77204fd..9784389 100644
+--- a/tests/examples_test.py
++++ b/tests/examples_test.py
+@@ -48,14 +48,19 @@ class ExamplesTest(unittest.TestCase):
+             subprocess.check_call(["python3", f.as_posix()])
+             # copy generated scad file to examples_scad/
+             copyWithRelativeIncludes(f.with_suffix(".scad"), test_scad_file)
+-            # call git diff test/examples_scad/{f}.scad
+-            diff = subprocess.check_output(["git", "diff",
+-                                            test_scad_file.as_posix()])
+-            # make sure there's no diff
+-            self.assertEqual(diff.decode(), "")
+-            # render with openscad
+-            subprocess.check_call([get_openscad_executable(), "-o",
+-                                   test_scad_file.with_suffix(".png"),
+-                                   "--preview", "-",
+-                                   test_scad_file],
+-                                   stderr=subprocess.DEVNULL)
++            subprocess.check_call(
++                [
++                    "sed",
++                    "-i",
++                    f"s#^include <.*/solid2#include <../../solid2#g",
++                    test_scad_file.as_posix(),
++                ]
++            )
++            nixsrc = os.getenv("src")
++            subprocess.check_call(
++                [
++                    "diff",
++                    f"{nixsrc}/tests/examples_scad/{f.with_suffix('.scad').name}",
++                    test_scad_file.as_posix(),
++                ]
++            )

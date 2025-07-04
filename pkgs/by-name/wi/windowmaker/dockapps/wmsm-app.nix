@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, dockapps-sources
-, libX11
-, libXpm
-, libXext
-, libdockapp
+{
+  lib,
+  stdenv,
+  dockapps-sources,
+  libX11,
+  libXpm,
+  libXext,
+  libdockapp,
 }:
 
-stdenv.mkDerivation  (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wmsm.app";
 
   inherit (dockapps-sources) version src;

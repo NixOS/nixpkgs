@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, parameterized
-, pip
-, pyelftools
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  parameterized,
+  pip,
+  pyelftools,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.48.0";
+  version = "1.53.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-lambda-builders";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-g1f0OL41lvs8OLyLcBk6XJk9wZO/oWluUj5sUcXlUIE=";
+    tag = "v${version}";
+    hash = "sha256-4OiXri1u4co1cuDm7bLyw8XfMg2S3sKrkPWF2tD8zg8=";
   };
 
   postPatch = ''
@@ -30,13 +31,9 @@ buildPythonPackage rec {
       --replace-fail "version=read_version()," 'version="${version}",'
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    six
-  ];
+  dependencies = [ six ];
 
   nativeCheckInputs = [
     mock
@@ -73,9 +70,7 @@ buildPythonPackage rec {
     "tests/integration/workflows/dotnet_clipackage/test_dotnet.py"
   ];
 
-  pythonImportsCheck = [
-    "aws_lambda_builders"
-  ];
+  pythonImportsCheck = [ "aws_lambda_builders" ];
 
   meta = with lib; {
     description = "Tool to compile, build and package AWS Lambda functions";

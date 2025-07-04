@@ -1,21 +1,22 @@
-{ lib
-, bitbox02
-, buildPythonPackage
-, cbor
-, ecdsa
-, fetchFromGitHub
-, hidapi
-, libusb1
-, mnemonic
-, pyaes
-, pyserial
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  bitbox02,
+  buildPythonPackage,
+  cbor,
+  ecdsa,
+  fetchFromGitHub,
+  hidapi,
+  libusb1,
+  mnemonic,
+  pyaes,
+  pyserial,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "hwi";
-  version = "3.0.0";
+  version = "3.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "HWI";
-    rev = "refs/tags/${version}";
-    hash = "sha256-hpMH3Zy3/TTBYUukJQZw63f0KuE3O9G2aYcGdL6Q3eM=";
+    tag = version;
+    hash = "sha256-sQqft+5M+X+91bFqpUrbDRrFzpe/l1+w+pnIHwqezR8=";
   };
 
   propagatedBuildInputs = [
@@ -42,9 +43,7 @@ buildPythonPackage rec {
   # Tests require to clone quite a few firmwares
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hwilib"
-  ];
+  pythonImportsCheck = [ "hwilib" ];
 
   meta = with lib; {
     description = "Bitcoin Hardware Wallet Interface";

@@ -1,10 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "kustomize";
-  version = "5.3.0";
+  version = "5.7.0";
 
-  ldflags = let t = "sigs.k8s.io/kustomize/api/provenance"; in
+  ldflags =
+    let
+      t = "sigs.k8s.io/kustomize/api/provenance";
+    in
     [
       "-s"
       "-X ${t}.version=${version}"
@@ -15,13 +23,13 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "kustomize/v${version}";
-    hash = "sha256-TleO28Q6JaOz1OAJKbvLhN99a841FEhHL15NTMhS1Oc=";
+    hash = "sha256-O8avyJ1secafVP+Edr7PCTKjcmUFFbB1Dx74qoLxD0M=";
   };
 
   # avoid finding test and development commands
   modRoot = "kustomize";
   proxyVendor = true;
-  vendorHash = "sha256-inCBDIVdvkEdDJEwX7vdoWANk+f01VxhBGPKxrjR6Ao=";
+  vendorHash = "sha256-Qo2KmNbj9OYThOrt/dk6U0CnK8awUOAagYQ2iX5szVQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -42,6 +50,13 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/kubernetes-sigs/kustomize";
     license = licenses.asl20;
-    maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime Chili-Man saschagrunert ];
+    maintainers = with maintainers; [
+      carlosdagos
+      vdemeester
+      periklis
+      zaninime
+      Chili-Man
+      saschagrunert
+    ];
   };
 }

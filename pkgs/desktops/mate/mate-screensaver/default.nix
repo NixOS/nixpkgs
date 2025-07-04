@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, gtk3
-, dbus-glib
-, libXScrnSaver
-, libnotify
-, libxml2
-, mate-desktop
-, mate-menus
-, mate-panel
-, pam
-, systemd
-, wrapGAppsHook
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk3,
+  dbus-glib,
+  libXScrnSaver,
+  libnotify,
+  libxml2,
+  mate-desktop,
+  mate-menus,
+  mate-panel,
+  pam,
+  systemd,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     libxml2 # provides xmllint
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -56,8 +57,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Screen saver and locker for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

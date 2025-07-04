@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.dragonflydb;
   dragonflydb = pkgs.dragonflydb;
@@ -11,13 +13,13 @@ let
       port = cfg.port;
       dir = "/var/lib/dragonflydb";
       keys_output_limit = cfg.keysOutputLimit;
-    } //
-    (lib.optionalAttrs (cfg.bind != null) { bind = cfg.bind; }) //
-    (lib.optionalAttrs (cfg.requirePass != null) { requirepass = cfg.requirePass; }) //
-    (lib.optionalAttrs (cfg.maxMemory != null) { maxmemory = cfg.maxMemory; }) //
-    (lib.optionalAttrs (cfg.memcachePort != null) { memcache_port = cfg.memcachePort; }) //
-    (lib.optionalAttrs (cfg.dbNum != null) { dbnum = cfg.dbNum; }) //
-    (lib.optionalAttrs (cfg.cacheMode != null) { cache_mode = cfg.cacheMode; });
+    }
+    // (lib.optionalAttrs (cfg.bind != null) { bind = cfg.bind; })
+    // (lib.optionalAttrs (cfg.requirePass != null) { requirepass = cfg.requirePass; })
+    // (lib.optionalAttrs (cfg.maxMemory != null) { maxmemory = cfg.maxMemory; })
+    // (lib.optionalAttrs (cfg.memcachePort != null) { memcache_port = cfg.memcachePort; })
+    // (lib.optionalAttrs (cfg.dbNum != null) { dbnum = cfg.dbNum; })
+    // (lib.optionalAttrs (cfg.cacheMode != null) { cache_mode = cfg.cacheMode; });
 in
 {
 
@@ -25,22 +27,22 @@ in
 
   options = {
     services.dragonflydb = {
-      enable = mkEnableOption "DragonflyDB";
+      enable = lib.mkEnableOption "DragonflyDB";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "dragonfly";
         description = "The user to run DragonflyDB as";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 6379;
         description = "The TCP port to accept connections.";
       };
 
-      bind = mkOption {
-        type = with types; nullOr str;
+      bind = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = "127.0.0.1";
         description = ''
           The IP interface to bind to.
@@ -48,15 +50,15 @@ in
         '';
       };
 
-      requirePass = mkOption {
-        type = with types; nullOr str;
+      requirePass = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         description = "Password for database";
         example = "letmein!";
       };
 
-      maxMemory = mkOption {
-        type = with types; nullOr ints.unsigned;
+      maxMemory = lib.mkOption {
+        type = with lib.types; nullOr ints.unsigned;
         default = null;
         description = ''
           The maximum amount of memory to use for storage (in bytes).
@@ -64,8 +66,8 @@ in
         '';
       };
 
-      memcachePort = mkOption {
-        type = with types; nullOr port;
+      memcachePort = lib.mkOption {
+        type = with lib.types; nullOr port;
         default = null;
         description = ''
           To enable memcached compatible API on this port.
@@ -73,8 +75,8 @@ in
         '';
       };
 
-      keysOutputLimit = mkOption {
-        type = types.ints.unsigned;
+      keysOutputLimit = lib.mkOption {
+        type = lib.types.ints.unsigned;
         default = 8192;
         description = ''
           Maximum number of returned keys in keys command.
@@ -83,14 +85,14 @@ in
         '';
       };
 
-      dbNum = mkOption {
-        type = with types; nullOr ints.unsigned;
+      dbNum = lib.mkOption {
+        type = with lib.types; nullOr ints.unsigned;
         default = null;
         description = "Maximum number of supported databases for `select`";
       };
 
-      cacheMode = mkOption {
-        type = with types; nullOr bool;
+      cacheMode = lib.mkOption {
+        type = with lib.types; nullOr bool;
         default = null;
         description = ''
           Once this mode is on, Dragonfly will evict items least likely to be stumbled
@@ -102,14 +104,14 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.dragonflydb.enable {
+  config = lib.mkIf config.services.dragonflydb.enable {
 
-    users.users = optionalAttrs (cfg.user == "dragonfly") {
+    users.users = lib.optionalAttrs (cfg.user == "dragonfly") {
       dragonfly.description = "DragonflyDB server user";
       dragonfly.isSystemUser = true;
       dragonfly.group = "dragonfly";
     };
-    users.groups = optionalAttrs (cfg.user == "dragonfly") { dragonfly = { }; };
+    users.groups = lib.optionalAttrs (cfg.user == "dragonfly") { dragonfly = { }; };
 
     environment.systemPackages = [ dragonflydb ];
 
@@ -120,7 +122,9 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${dragonflydb}/bin/dragonfly --alsologtostderr ${builtins.concatStringsSep " " (attrsets.mapAttrsToList (n: v: "--${n} ${strings.escapeShellArg v}") settings)}";
+        ExecStart = "${dragonflydb}/bin/dragonfly --alsologtostderr ${
+          lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "--${n} ${lib.escapeShellArg v}") settings)
+        }";
 
         User = cfg.user;
 
@@ -142,7 +146,10 @@ in
         ProtectKernelModules = true;
         ProtectControlGroups = true;
         LockPersonality = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictRealtime = true;
         PrivateMounts = true;
         MemoryDenyWriteExecute = true;

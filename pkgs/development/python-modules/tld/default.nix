@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, factory-boy
-, faker
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  factory-boy,
+  faker,
+  fetchPypi,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,12 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-k93l4cBL3xhEl26uRAcGN50h9KsjW3PAXXSD4HT7Vik=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pytest.ini
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   checkInputs = [
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     echo > src/tld/tests/test_commands.py
   '';
 
-  pythonImportsCheck = [
-    "tld"
-  ];
+  pythonImportsCheck = [ "tld" ];
 
   meta = with lib; {
     description = "Extracts the top level domain (TLD) from the URL given";
@@ -50,7 +47,11 @@ buildPythonPackage rec {
     changelog = "https://github.com/barseghyanartur/tld/blob/${version}/CHANGELOG.rst";
     # https://github.com/barseghyanartur/tld/blob/master/README.rst#license
     # MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-or-later
-    license = with licenses; [ lgpl21Plus mpl11 gpl2Only ];
+    license = with licenses; [
+      lgpl21Plus
+      mpl11
+      gpl2Only
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

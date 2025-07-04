@@ -1,8 +1,12 @@
-{ lib, buildDunePackage
-, ipaddr, ipaddr-cstruct, ounit2, ppx_sexp_conv
+{
+  buildDunePackage,
+  ipaddr,
+  ipaddr-cstruct,
+  ounit2,
+  ppx_sexp_conv,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "ipaddr-sexp";
 
   inherit (ipaddr) version src;
@@ -11,10 +15,14 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ipaddr ];
 
-  checkInputs = [ ipaddr-cstruct ounit2 ppx_sexp_conv ];
+  checkInputs = [
+    ipaddr-cstruct
+    ounit2
+    ppx_sexp_conv
+  ];
   doCheck = true;
 
   meta = ipaddr.meta // {
-    description = "A library for manipulation of IP address representations usnig sexp";
+    description = "Library for manipulation of IP address representations usnig sexp";
   };
 }

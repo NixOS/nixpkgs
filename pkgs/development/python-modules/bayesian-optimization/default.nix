@@ -1,46 +1,64 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, scikit-learn
-, scipy
-, colorama
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  scikit-learn,
+  numpy,
+  scipy,
+  colorama,
+
+  # tests
+  jupyter,
+  matplotlib,
+  nbconvert,
+  nbformat,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "1.4.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bayesian-optimization";
     repo = "BayesianOptimization";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Bp/ZhVSW5lTGwnsd/doOXu++Gxw/51owCfMm96Qmgd4=";
+    tag = "v${version}";
+    hash = "sha256-F1+M5znfI7lHGJRRTgmQxrLTYZmLc90Q0TCvpRoSVTU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     scikit-learn
+    numpy
     scipy
     colorama
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    jupyter
+    matplotlib
+    nbconvert
+    nbformat
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bayes_opt" ];
 
-  meta = with lib; {
-    broken = stdenv.isLinux && stdenv.isAarch64;
-    description = ''
-      A Python implementation of global optimization with gaussian processes
-    '';
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    description = "Python implementation of global optimization with gaussian processes";
     homepage = "https://github.com/bayesian-optimization/BayesianOptimization";
-    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.juliendehos ];
+    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.juliendehos ];
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rabix";
     repo = "cwl-format";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FI8hUgb/KglTkubZ+StzptoSsYal71ITyyFNg7j48yk=";
   };
 
@@ -30,17 +31,11 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    ruamel-yaml
-  ];
+  propagatedBuildInputs = [ ruamel-yaml ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "cwlformat"
-  ];
+  pythonImportsCheck = [ "cwlformat" ];
 
   meta = with lib; {
     description = "Code formatter for CWL";

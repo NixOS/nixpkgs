@@ -1,58 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
-
-# build-system
-, setuptools
-
-# optionals
-, cbor2
-, cbor-diag
-, cryptography
-, filelock
-, ge25519
-, dtlssocket
-, websockets
-, termcolor
-, pygments
-
-# tests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cbor-diag,
+  cbor2,
+  cryptography,
+  dtlssocket,
+  fetchFromGitHub,
+  filelock,
+  ge25519,
+  pygments,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  termcolor,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4.7";
+  version = "0.4.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "chrysn";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-4iwoPfmIwk+PlWUp60aqA5qZgzyj34pnZHf9uH5UhnY=";
+    repo = "aiocoap";
+    tag = version;
+    hash = "sha256-v0OzRWHlGaBKqqcIyAlVafd/siXVwaTAZqw+Sstju3s=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     oscore = [
       cbor2
       cryptography
       filelock
       ge25519
     ];
-    tinydtls = [
-      dtlssocket
-    ];
-    ws = [
-      websockets
-    ];
+    tinydtls = [ dtlssocket ];
+    ws = [ websockets ];
     prettyprint = [
       termcolor
       cbor2
@@ -61,26 +50,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/chrysn/aiocoap/issues/339
-    "--deselect=tests/test_server.py::TestServerTCP::test_big_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_empty_accept"
-    "--deselect=tests/test_server.py::TestServerTCP::test_error_resources"
-    "--deselect=tests/test_server.py::TestServerTCP::test_fast_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_js_accept"
-    "--deselect=tests/test_server.py::TestServerTCP::test_manualbig_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_nonexisting_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_replacing_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_root_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_slow_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_slowbig_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_spurious_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_unacceptable_accept"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Don't test the plugins
@@ -92,17 +62,19 @@ buildPythonPackage rec {
   disabledTests = [
     # Communication is not properly mocked
     "test_uri_parser"
+    # Doctest
+    "test_001"
+    # CLI test
+    "test_help"
   ];
 
-  pythonImportsCheck = [
-    "aiocoap"
-  ];
+  pythonImportsCheck = [ "aiocoap" ];
 
   meta = with lib; {
     description = "Python CoAP library";
     homepage = "https://aiocoap.readthedocs.io/";
     changelog = "https://github.com/chrysn/aiocoap/blob/${version}/NEWS";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

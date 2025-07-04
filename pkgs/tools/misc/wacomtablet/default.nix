@@ -1,12 +1,20 @@
-{ lib, mkDerivation, fetchurl, fetchpatch, extra-cmake-modules, qtx11extras,
-  plasma-workspace, libwacom, xf86_input_wacom
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  fetchpatch,
+  extra-cmake-modules,
+  qtx11extras,
+  plasma-workspace,
+  libwacom,
+  xf86_input_wacom,
 }:
 
 mkDerivation rec {
   pname = "wacomtablet";
   version = "3.2.0";
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    url = "mirror://kde/stable/wacomtablet/${version}/wacomtablet-${version}.tar.xz";
     sha256 = "197pwpl87gqlnza36bp68jvw8ww25znk08acmi8bpz7n84xfc368";
   };
   patches = [
@@ -18,8 +26,10 @@ mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    qtx11extras plasma-workspace
-    libwacom xf86_input_wacom
+    qtx11extras
+    plasma-workspace
+    libwacom
+    xf86_input_wacom
   ];
 
   meta = {
@@ -30,7 +40,7 @@ mkDerivation rec {
       with profile support to handle different button / pen layouts per profile.
     '';
     homepage = "https://invent.kde.org/system/wacomtablet";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.Thra11 ];
     platforms = lib.platforms.linux;
   };

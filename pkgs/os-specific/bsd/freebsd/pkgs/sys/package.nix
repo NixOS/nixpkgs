@@ -1,26 +1,103 @@
-{ lib, stdenv, mkDerivation, freebsd-lib
-, buildPackages
-, bsdSetupHook, freebsdSetupHook
-, makeMinimal, install, mandoc, groff
-, config, rpcgen, file2c, gawk, uudecode, xargs-j #, ctfconvert
+{
+  lib,
+  mkDerivation,
+  writeText,
+  stdenv,
+  buildPackages,
+  freebsd-lib,
+  patchesRoot,
+  filterSource,
+  applyPatches,
+  baseConfig ? "GENERIC",
+  extraConfig ? null,
+  extraFlags ? { },
+  bsdSetupHook,
+  mandoc,
+  groff,
+  gawk,
+  freebsdSetupHook,
+  makeMinimal,
+  install,
+  config,
+  rpcgen,
+  file2c,
+  bintrans,
+  xargs-j,
+  kldxref,
 }:
+let
+  baseConfigFile =
+    if (extraConfig == null) then
+      null
+    else if (lib.isDerivation extraConfig) || (lib.isPath extraConfig) then
+      extraConfig
+    else
+      writeText "extraConfig" extraConfig;
+  hostArchBsd = freebsd-lib.mkBsdArch stdenv;
+  filteredSource = filterSource {
+    pname = "sys";
+    path = "sys";
+    extraPaths = [ "include" ];
+  };
+  patchedSource = applyPatches {
+    src = filteredSource;
+    patches = freebsd-lib.filterPatches patchesRoot [
+      "sys"
+      "include"
+    ];
+    postPatch =
+      ''
+        for f in sys/conf/kmod.mk sys/contrib/dev/acpica/acpica_prep.sh; do
+          substituteInPlace "$f" --replace-warn 'xargs -J' 'xargs-j '
+        done
 
-mkDerivation (let
-  cfg = "MINIMAL";
-in rec {
+        for f in sys/conf/*.mk; do
+          substituteInPlace "$f" --replace-quiet 'KERN_DEBUGDIR}''${' 'KERN_DEBUGDIR_'
+        done
+
+        sed -i sys/${hostArchBsd}/conf/${baseConfig} \
+          -e 's/WITH_CTF=1/WITH_CTF=0/' \
+          -e '/KDTRACE/d'
+      ''
+      + lib.optionalString (baseConfigFile != null) ''
+        cat ${baseConfigFile} >>sys/${hostArchBsd}/conf/${baseConfig}
+      '';
+  };
+
+  # Kernel modules need this for kern.opts.mk
+  env =
+    {
+      MK_CTF = "no";
+    }
+    // (lib.flip lib.mapAttrs' extraFlags (
+      name: value: {
+        name = "MK_${lib.toUpper name}";
+        value = if value then "yes" else "no";
+      }
+    ));
+in
+mkDerivation rec {
+  pname = "sys";
+
+  # Patch source outside of this derivation so out-of-tree modules can use it
+  src = patchedSource;
   path = "sys";
+  autoPickPatches = false;
 
   nativeBuildInputs = [
-    bsdSetupHook freebsdSetupHook
-    makeMinimal install mandoc groff
-
-    config rpcgen file2c gawk uudecode xargs-j
-    #ctfconvert
-  ];
-
-  patches = [
-    ./sys-gnu-date.patch
-    ./sys-no-explicit-intrinsics-dep.patch
+    bsdSetupHook
+    mandoc
+    groff
+    gawk
+    freebsdSetupHook
+    makeMinimal
+    install
+    config
+    rpcgen
+    file2c
+    bintrans
+    xargs-j
+    kldxref
   ];
 
   # --dynamic-linker /red/herring is used when building the kernel.
@@ -30,13 +107,25 @@ in rec {
 
   CWARNEXTRA = "-Wno-error=shift-negative-value -Wno-address-of-packed-member";
 
-  MK_CTF = "no";
+  hardeningDisable = [
+    "pic" # generates relocations the linker can't handle
+    "stackprotector" # generates stack protection for the function generating the stack canary
+  ];
+
+  # hardeningDisable = stackprotector doesn't seem to be enough, put it in cflags too
+  NIX_CFLAGS_COMPILE = [
+    "-fno-stack-protector"
+    "-Wno-unneeded-internal-declaration" # some openzfs code trips this
+  ];
+
+  inherit env;
+  passthru.env = env;
 
   KODIR = "${builtins.placeholder "out"}/kernel";
   KMODDIR = "${builtins.placeholder "out"}/kernel";
-  DTBDIR = "${builtins.placeholder"out"}/dbt";
+  DTBDIR = "${builtins.placeholder "out"}/dbt";
 
-  KERN_DEBUGDIR = "${builtins.placeholder "out"}/debug";
+  KERN_DEBUGDIR = "${builtins.placeholder "debug"}/lib/debug";
   KERN_DEBUGDIR_KODIR = "${KERN_DEBUGDIR}/kernel";
   KERN_DEBUGDIR_KMODDIR = "${KERN_DEBUGDIR}/kernel";
 
@@ -45,23 +134,22 @@ in rec {
   configurePhase = ''
     runHook preConfigure
 
-    for f in conf/kmod.mk contrib/dev/acpica/acpica_prep.sh; do
-      substituteInPlace "$f" --replace 'xargs -J' 'xargs-j '
-    done
-
-    for f in conf/*.mk; do
-      substituteInPlace "$f" --replace 'KERN_DEBUGDIR}''${' 'KERN_DEBUGDIR_'
-    done
-
-    cd ${freebsd-lib.mkBsdArch stdenv}/conf
-    sed -i ${cfg} \
-      -e 's/WITH_CTF=1/WITH_CTF=0/' \
-      -e '/KDTRACE/d'
-    config ${cfg}
+    cd ${hostArchBsd}/conf
+    config ${baseConfig}
 
     runHook postConfigure
   '';
   preBuild = ''
-    cd ../compile/${cfg}
+    cd ../compile/${baseConfig}
   '';
-})
+
+  outputs = [
+    "out"
+    "debug"
+  ];
+
+  meta = {
+    description = "FreeBSD kernel and modules";
+    platforms = lib.platforms.freebsd;
+  };
+}

@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pipewire
-, wireplumber
-, makeWrapper
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pipewire,
+  wireplumber,
+  makeWrapper,
 }:
 let
-  version = "1.0.4";
+  version = "2.3.0";
 in
 rustPlatform.buildRustPackage {
   pname = "sink-rotate";
@@ -16,12 +17,13 @@ rustPlatform.buildRustPackage {
     owner = "mightyiam";
     repo = "sink-rotate";
     rev = "v${version}";
-    hash = "sha256-q20uUr+7yLJlZc5YgEkY125YrZ2cuJrPv5IgWXaYRlo=";
+    hash = "sha256-gGmnji7KqmCxUaeXOGMnHMI6b8AJ6Np+xVjibqgGSKM=";
   };
 
-  cargoHash = "sha256-MPeyPTkxpi6iw/BT5m4S7jVBD0c2zG2rsv+UZWQxpUU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7/EyDBWANoL5m9mx93LKMKD8hgcc3VgvrcLD6oTBXN8=";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postFixup = ''
     wrapProgram $out/bin/sink-rotate \
@@ -30,7 +32,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "Command that rotates default between two PipeWire audio sinks.";
+    description = "Command that rotates the default PipeWire audio sink";
     homepage = "https://github.com/mightyiam/sink-rotate";
     license = licenses.mit;
     maintainers = with maintainers; [ mightyiam ];
@@ -38,4 +40,3 @@ rustPlatform.buildRustPackage {
     platforms = platforms.linux;
   };
 }
-

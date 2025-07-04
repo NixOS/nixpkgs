@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "py-serializable";
-  version = "1.0.3";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,11 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "madpah";
     repo = "serializable";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oVjb7/9RWvQd5L6xQBrspfblPzMaRvnZHDuojTuq+zE=";
+    tag = "v${version}";
+    hash = "sha256-2A+QjokZ7gtgstclZ7PFSPymYjQYKsLVXy9xbFOfxLo=";
   };
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "defusedxml" ];
 
   dependencies = [ defusedxml ];
 

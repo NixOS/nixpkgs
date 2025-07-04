@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitLab
-, poetry-core
-, dramatiq
-, flask
-, requests
-, pytestCheckHook
-, flask-migrate
-, periodiq
-, postgresql
-, postgresqlTestHook
-, psycopg2
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitLab,
+  poetry-core,
+  dramatiq,
+  flask,
+  requests,
+  pytestCheckHook,
+  pytest-cov-stub,
+  flask-migrate,
+  periodiq,
+  postgresql,
+  postgresqlTestHook,
+  psycopg2,
 }:
 
 buildPythonPackage {
@@ -34,22 +36,15 @@ buildPythonPackage {
       --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
 
     patchShebangs --build ./example.py
-
-    sed -i ./tests/unit/pytest.ini \
-      -e 's:--cov=flask_dramatiq::' \
-      -e 's:--cov-report=term-missing::'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    dramatiq
-  ];
+  propagatedBuildInputs = [ dramatiq ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     flask
     requests
     flask-migrate
@@ -66,7 +61,11 @@ buildPythonPackage {
     python3 ./example.py db upgrade
   '';
 
-  pytestFlagsArray = [ "-x" "tests/func/" "tests/unit"];
+  pytestFlagsArray = [
+    "-x"
+    "tests/func/"
+    "tests/unit"
+  ];
 
   pythonImportsCheck = [ "flask_dramatiq" ];
 

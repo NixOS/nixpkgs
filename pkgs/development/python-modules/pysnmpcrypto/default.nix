@@ -1,57 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  poetry-core,
 
-# dependencies
-, cryptography
-, pycryptodomex
+  # dependencies
+  cryptography,
+  pycryptodomex,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pysnmpcrypto";
-  version = "0.0.4";
+  version = "0.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tjX7Ox7GY3uaADP1BQYhThbrhFdLHSWrAnu95MqlUSk=";
+  src = fetchFromGitHub {
+    owner = "lextudio";
+    repo = "pysnmpcrypto";
+    tag = "v${version}";
+    hash = "sha256-gNRD8mSWVVLXwJjb3nT7IKnjTdwTutFDnQybgZTY2b0=";
   };
 
-  postPatch = ''
-    # ValueError: invalid literal for int() with base 10: 'post0' in File "<string>", line 104, in <listcomp>
-    substituteInPlace setup.py --replace \
-      "observed_version = [int(x) for x in setuptools.__version__.split('.')]" \
-      "observed_version = [36, 2, 0]"
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     pycryptodomex
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pysnmpcrypto"
-  ];
+  pythonImportsCheck = [ "pysnmpcrypto" ];
 
   meta = with lib; {
     description = "Strong crypto support for Python SNMP library";
-    homepage = "https://github.com/etingof/pysnmpcrypto";
-    changelog = "https://github.com/etingof/pysnmpcrypto/blob/${version}/CHANGES.txt";
+    homepage = "https://github.com/lextudio/pysnmpcrypto";
+    changelog = "https://github.com/lextudio/pysnmpcrypto/blob/${version}/CHANGES.txt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -2,6 +2,7 @@
   lib,
   aioconsole,
   aiohttp,
+  aioresponses,
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
@@ -15,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "whirlpool-sixth-sense";
-  version = "0.18.8";
+  version = "0.20.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "whirlpool-sixth-sense";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Nmjw6b1k5M4H23tJxUPPJ3JIkuK5ylqEeFp18cGz9pA=";
+    tag = version;
+    hash = "sha256-Sl8Y1sVZolk8KLS3bKGQNFXTVntcPusrf2A0zdixq8A=";
   };
 
   build-system = [ setuptools ];
@@ -37,13 +38,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
-
-  # https://github.com/abmantis/whirlpool-sixth-sense/issues/15
-  doCheck = false;
 
   pythonImportsCheck = [ "whirlpool" ];
 

@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildNpmPackage
-, stdenv
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  buildNpmPackage,
+  stdenv,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -25,6 +26,6 @@ buildNpmPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ h7x4 ];
     mainProgram = "syntax-cli";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

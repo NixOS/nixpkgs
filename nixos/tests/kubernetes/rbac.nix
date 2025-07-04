@@ -1,80 +1,111 @@
-{ system ? builtins.currentSystem, pkgs ? import ../../.. { inherit system; } }:
+{
+  system ? builtins.currentSystem,
+  pkgs ? import ../../.. { inherit system; },
+}:
 with import ./base.nix { inherit system; };
 let
 
-  roServiceAccount = pkgs.writeText "ro-service-account.json" (builtins.toJSON {
-    kind = "ServiceAccount";
-    apiVersion = "v1";
-    metadata = {
-      name = "read-only";
-      namespace = "default";
-    };
-  });
-
-  roRoleBinding = pkgs.writeText "ro-role-binding.json" (builtins.toJSON {
-    apiVersion = "rbac.authorization.k8s.io/v1";
-    kind = "RoleBinding";
-    metadata = {
-      name = "read-pods";
-      namespace = "default";
-    };
-    roleRef = {
-      apiGroup = "rbac.authorization.k8s.io";
-      kind = "Role";
-      name = "pod-reader";
-    };
-    subjects = [{
+  roServiceAccount = pkgs.writeText "ro-service-account.json" (
+    builtins.toJSON {
       kind = "ServiceAccount";
-      name = "read-only";
-      namespace = "default";
-    }];
-  });
+      apiVersion = "v1";
+      metadata = {
+        name = "read-only";
+        namespace = "default";
+      };
+    }
+  );
 
-  roRole = pkgs.writeText "ro-role.json" (builtins.toJSON {
-    apiVersion = "rbac.authorization.k8s.io/v1";
-    kind = "Role";
-    metadata = {
-      name = "pod-reader";
-      namespace = "default";
-    };
-    rules = [{
-      apiGroups = [""];
-      resources = ["pods"];
-      verbs = ["get" "list" "watch"];
-    }];
-  });
+  roRoleBinding = pkgs.writeText "ro-role-binding.json" (
+    builtins.toJSON {
+      apiVersion = "rbac.authorization.k8s.io/v1";
+      kind = "RoleBinding";
+      metadata = {
+        name = "read-pods";
+        namespace = "default";
+      };
+      roleRef = {
+        apiGroup = "rbac.authorization.k8s.io";
+        kind = "Role";
+        name = "pod-reader";
+      };
+      subjects = [
+        {
+          kind = "ServiceAccount";
+          name = "read-only";
+          namespace = "default";
+        }
+      ];
+    }
+  );
 
-  kubectlPod = pkgs.writeText "kubectl-pod.json" (builtins.toJSON {
-    kind = "Pod";
-    apiVersion = "v1";
-    metadata.name = "kubectl";
-    metadata.namespace = "default";
-    metadata.labels.name = "kubectl";
-    spec.serviceAccountName = "read-only";
-    spec.containers = [{
-      name = "kubectl";
-      image = "kubectl:latest";
-      command = ["/bin/tail" "-f"];
-      imagePullPolicy = "Never";
-      tty = true;
-    }];
-  });
+  roRole = pkgs.writeText "ro-role.json" (
+    builtins.toJSON {
+      apiVersion = "rbac.authorization.k8s.io/v1";
+      kind = "Role";
+      metadata = {
+        name = "pod-reader";
+        namespace = "default";
+      };
+      rules = [
+        {
+          apiGroups = [ "" ];
+          resources = [ "pods" ];
+          verbs = [
+            "get"
+            "list"
+            "watch"
+          ];
+        }
+      ];
+    }
+  );
 
-  kubectlPod2 = pkgs.writeTextDir "kubectl-pod-2.json" (builtins.toJSON {
-    kind = "Pod";
-    apiVersion = "v1";
-    metadata.name = "kubectl-2";
-    metadata.namespace = "default";
-    metadata.labels.name = "kubectl-2";
-    spec.serviceAccountName = "read-only";
-    spec.containers = [{
-      name = "kubectl-2";
-      image = "kubectl:latest";
-      command = ["/bin/tail" "-f"];
-      imagePullPolicy = "Never";
-      tty = true;
-    }];
-  });
+  kubectlPod = pkgs.writeText "kubectl-pod.json" (
+    builtins.toJSON {
+      kind = "Pod";
+      apiVersion = "v1";
+      metadata.name = "kubectl";
+      metadata.namespace = "default";
+      metadata.labels.name = "kubectl";
+      spec.serviceAccountName = "read-only";
+      spec.containers = [
+        {
+          name = "kubectl";
+          image = "kubectl:latest";
+          command = [
+            "/bin/tail"
+            "-f"
+          ];
+          imagePullPolicy = "Never";
+          tty = true;
+        }
+      ];
+    }
+  );
+
+  kubectlPod2 = pkgs.writeTextDir "kubectl-pod-2.json" (
+    builtins.toJSON {
+      kind = "Pod";
+      apiVersion = "v1";
+      metadata.name = "kubectl-2";
+      metadata.namespace = "default";
+      metadata.labels.name = "kubectl-2";
+      spec.serviceAccountName = "read-only";
+      spec.containers = [
+        {
+          name = "kubectl-2";
+          image = "kubectl:latest";
+          command = [
+            "/bin/tail"
+            "-f"
+          ];
+          imagePullPolicy = "Never";
+          tty = true;
+        }
+      ];
+    }
+  );
 
   copyKubectl = pkgs.runCommand "copy-kubectl" { } ''
     mkdir -p $out/bin
@@ -87,9 +118,13 @@ let
     copyToRoot = pkgs.buildEnv {
       name = "image-root";
       pathsToLink = [ "/bin" ];
-      paths = [ copyKubectl pkgs.busybox kubectlPod2 ];
+      paths = [
+        copyKubectl
+        pkgs.busybox
+        kubectlPod2
+      ];
     };
-    config.Entrypoint = ["/bin/sh"];
+    config.Entrypoint = [ "/bin/sh" ];
   };
 
   base = {
@@ -162,7 +197,8 @@ let
     '';
   };
 
-in {
+in
+{
   singlenode = mkKubernetesSingleNodeTest singlenode;
   multinode = mkKubernetesMultiNodeTest multinode;
 }

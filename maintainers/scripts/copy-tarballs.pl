@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp perlPackages.JSON perlPackages.LWPProtocolHttps nixUnstable nixUnstable.perl-bindings
+#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp perlPackages.JSON perlPackages.LWPProtocolHttps nix nix.perl-bindings
 
 # This command uploads tarballs to tarballs.nixos.org, the
 # content-addressed cache used by fetchurl as a fallback for when
@@ -176,7 +176,7 @@ elsif (defined $expr) {
 
         if ($hash =~ /^([a-z0-9]+)-([A-Za-z0-9+\/=]+)$/) {
             $algo = $1;
-            $hash = `nix hash to-base16 $hash` or die;
+            $hash = `nix --extra-experimental-features nix-command hash to-base16 $hash` or die;
             chomp $hash;
         }
 
@@ -184,7 +184,7 @@ elsif (defined $expr) {
 
         # Convert non-SRI base-64 to base-16.
         if ($hash =~ /^[A-Za-z0-9+\/=]+$/) {
-            $hash = `nix hash to-base16 --type '$algo' $hash` or die;
+            $hash = `nix --extra-experimental-features nix-command hash to-base16 --type '$algo' $hash` or die;
             chomp $hash;
         }
 

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 myrescue -t $out/bin
+    install -Dm755 myrescue myrescue-bitmap2ppm myrescue-stat -t $out/bin
     installManPage ../doc/myrescue.1
     runHook postInstall
   '';

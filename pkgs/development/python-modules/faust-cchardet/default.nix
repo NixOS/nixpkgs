@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, pkgconfig
-, setuptools
-, wheel
-, pytestCheckHook
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  pkgconfig,
+  setuptools,
+  wheel,
+  pytestCheckHook,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "faust-streaming";
     repo = "cChardet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-yY6YEhXC4S47rxnkKAta4m16IVGn7gkHSt056bYOYJ4=";
   };
@@ -36,13 +36,9 @@ buildPythonPackage rec {
     ln -s $out/${python.sitePackages}/{faust_,}cchardet-${version}.dist-info
   '';
 
-  pythonImportsCheck = [
-    "cchardet"
-  ];
+  pythonImportsCheck = [ "cchardet" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/faust-streaming/cChardet/blob/${src.rev}/CHANGES.rst";
@@ -50,6 +46,9 @@ buildPythonPackage rec {
     mainProgram = "cchardetect";
     homepage = "https://github.com/faust-streaming/cChardet";
     license = lib.licenses.mpl11;
-    maintainers = with lib.maintainers; [ dotlambda ivan ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      ivan
+    ];
   };
 }

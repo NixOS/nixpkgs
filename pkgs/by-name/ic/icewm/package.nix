@@ -1,59 +1,62 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, expat
-, flac
-, fontconfig
-, freetype
-, fribidi
-, gdk-pixbuf
-, gdk-pixbuf-xlib
-, gettext
-, giflib
-, glib
-, imlib2
-, libICE
-, libSM
-, libX11
-, libXcomposite
-, libXdamage
-, libXdmcp
-, libXext
-, libXfixes
-, libXft
-, libXinerama
-, libXpm
-, libXrandr
-, libjpeg
-, libogg
-, libpng
-, libpthreadstubs
-, libsndfile
-, libtiff
-, libxcb
-, mkfontdir
-, pcre2
-, perl
-, pkg-config
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  flac,
+  fontconfig,
+  freetype,
+  fribidi,
+  gdk-pixbuf,
+  gdk-pixbuf-xlib,
+  gettext,
+  giflib,
+  glib,
+  imlib2,
+  libICE,
+  libSM,
+  libX11,
+  libXcomposite,
+  libXdamage,
+  libXdmcp,
+  libXext,
+  libXfixes,
+  libXft,
+  libXinerama,
+  libXpm,
+  libXrandr,
+  libjpeg,
+  libogg,
+  libpng,
+  libpthreadstubs,
+  libsndfile,
+  libtiff,
+  libxcb,
+  mkfontdir,
+  pcre2,
+  perl,
+  pkg-config,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.4.7";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
-    rev = finalAttrs.version;
-    hash = "sha256-p7qbmR8NcE8mgmlTtkHxVRo4DDUHPMiAUhdF3zm9IEc=";
+    tag = finalAttrs.version;
+    hash = "sha256-PHbBjwGxFxHnecuXXX2nT8SwmgJD0DzThiFEwKKDASU=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     perl
     pkg-config
+    gettext # msgmerge
   ];
 
   buildInputs = [
@@ -96,15 +99,17 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCFGDIR=/etc/icewm"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString gccStdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
+
   # install legacy themes
   postInstall = ''
     cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} \
       $out/share/icewm/themes/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ice-wm.org/";
-    description = "A simple, lightweight X window manager";
+    description = "Simple, lightweight X window manager";
     longDescription = ''
       IceWM is a window manager for the X Window System. The goal of IceWM is
       speed, simplicity, and not getting in the user’s way. It comes with a
@@ -118,8 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
       optional external background wallpaper manager with transparency support,
       a simple session manager and a system tray.
     '';
-    license = licenses.lgpl2Only;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Only;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })

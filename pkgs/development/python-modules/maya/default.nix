@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, freezegun
-, humanize
-, pendulum
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pytz
-, setuptools
-, snaptime
-, tzlocal
+{
+  lib,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  freezegun,
+  humanize,
+  pendulum,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  setuptools,
+  snaptime,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timofurrer";
     repo = "maya";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4fUyUqVQk/AcQL3xMnU1cQlF5yiD/N9NPAsUPuDTTNY=";
   };
 
@@ -34,9 +35,7 @@ buildPythonPackage rec {
       --replace-fail "humanize.time.abs_timedelta" "humanize.time._abs_timedelta"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     dateparser
@@ -53,9 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "maya"
-  ];
+  pythonImportsCheck = [ "maya" ];
 
   disabledTests = [
     # https://github.com/timofurrer/maya/issues/202
@@ -67,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/timofurrer/maya";
     changelog = "https://github.com/timofurrer/maya/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

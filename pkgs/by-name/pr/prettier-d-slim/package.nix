@@ -1,6 +1,7 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
@@ -23,6 +24,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/mikew/prettier_d_slim";
     license = lib.licenses.mit;
     mainProgram = "prettier_d_slim";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

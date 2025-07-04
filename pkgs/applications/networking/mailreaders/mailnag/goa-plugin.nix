@@ -1,13 +1,15 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, gobject-introspection
-, gnome-online-accounts
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gobject-introspection,
+  gnome-online-accounts,
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "mailnag-goa-plugin";
   version = "2.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pulb";
@@ -25,7 +27,7 @@ python3Packages.buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Mailnag GNOME Online Accounts plugin.";
+    description = "Mailnag GNOME Online Accounts plugin";
     homepage = "https://github.com/pulb/mailnag-goa-plugin";
     license = licenses.gpl2;
     platforms = platforms.linux;

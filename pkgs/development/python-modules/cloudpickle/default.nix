@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, flit-core
+  # build-system
+  flit-core,
 
-# tests
-, psutil
-, pytestCheckHook
+  # tests
+  psutil,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "3.0.0";
+  version = "3.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -21,22 +22,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cloudpipe";
     repo = "cloudpickle";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UeKVwzT0m4fhEVnG7TvQsFR99JsmwwoXmr+rWnTCeJU=";
+    tag = "v${version}";
+    hash = "sha256-e8kEznjuIrdjNsXwXJO3lcEEpiCR+UQzXnGrTarUb5E=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
     psutil
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cloudpickle"
-  ];
+  pythonImportsCheck = [ "cloudpickle" ];
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'psutil'
@@ -44,10 +41,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/cloudpipe/cloudpickle/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/cloudpipe/cloudpickle/blob/${src.tag}/CHANGES.md";
     description = "Extended pickling support for Python objects";
     homepage = "https://github.com/cloudpipe/cloudpickle";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, flask
+  # dependencies
+  flask,
 
-# tests
-, markdown
-, pytestCheckHook
+  # tests
+  markdown,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flask-api";
     repo = "flask-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nHgeI5FLKkDp4uWO+0eaT4YSOMkeQ0wE3ffyJF+WzTM=";
   };
 
@@ -37,13 +38,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    flask
-  ];
+  propagatedBuildInputs = [ flask ];
 
   nativeCheckInputs = [
     markdown

@@ -1,39 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, braceexpand
-, inform
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  braceexpand,
+  inform,
 }:
 
 buildPythonPackage rec {
   pname = "shlib";
-  version = "1.6";
-  format = "setuptools";
+  version = "1.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "shlib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-f2jJgpjybutCpYnIT+RihtoA1YlXdhTs+MvV8bViSMQ=";
+    tag = "v${version}";
+    hash = "sha256-clhiTuU5vvZSzdGPA3CISiBTnAahvv1SOKAfMpb6lYU=";
   };
 
-  pythonImportsCheck = [ "shlib" ];
   postPatch = ''
     patchShebangs .
   '';
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-  propagatedBuildInputs = [
+
+  build-system = [ flit-core ];
+
+  dependencies = [
     braceexpand
     inform
   ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "shlib" ];
+
   meta = with lib; {
     description = "shell library";
     homepage = "https://github.com/KenKundert/shlib";
-    changelog = "https://github.com/KenKundert/shlib/releases/tag/v${version}";
+    changelog = "https://github.com/KenKundert/shlib/releases/tag/${src.tag}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jpetrucciani ];
   };

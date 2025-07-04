@@ -7,6 +7,7 @@
   certifi,
   ecs-logging,
   fetchFromGitHub,
+  fetchpatch,
   httpx,
   jinja2,
   jsonschema,
@@ -19,7 +20,6 @@
   pytest-random-order,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   sanic,
   sanic-testing,
   setuptools,
@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.22.0";
+  version = "6.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,15 +41,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VuVx+QUiV4M/ebyv2uF/YZwfvcaPDJAEi55fXfoIttU=";
+    tag = "v${version}";
+    hash = "sha256-S1Ebo9AWN+Mf3OFwxNTiR/AZtje3gNiYkZnVqGb7D4c=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-tests-with-latest-starlette-and-sanic.patch";
+      url = "https://github.com/elastic/apm-agent-python/commit/80d167f54b6bf1db8b6e7ee52e2ac6803bc64f54.patch";
+      hash = "sha256-VtA7+SyEZiL3aqpikyYJQ4tmdmsUpIdkSx6RtC1AzqY=";
+    })
+  ];
 
   pythonRelaxDeps = [ "wrapt" ];
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     aiohttp
@@ -80,14 +86,17 @@ buildPythonPackage rec {
     webob
   ];
 
-  disabledTests = [ "elasticapm_client" ];
+  disabledTests = [
+    "elasticapm_client"
+    "test_get_name_from_func_partialmethod_unbound"
+  ];
 
   disabledTestPaths =
     [
       # Exclude tornado tests
       "tests/contrib/asyncio/tornado/tornado_tests.py"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Flaky tests on Darwin
       "tests/utils/threading_tests.py"
     ];

@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, lsprotocol
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, typeguard
-, websockets
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lsprotocol,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  typeguard,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openlawlibrary";
     repo = "pygls";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AvrGoQ0Be1xKZhFn9XXYJpt5w+ITbDbj6NFZpaDPKao=";
   };
 
@@ -33,7 +33,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -41,10 +40,8 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  passthru.optional-dependencies = {
-    ws = [
-      websockets
-    ];
+  optional-dependencies = {
+    ws = [ websockets ];
   };
 
   nativeCheckInputs = [
@@ -55,14 +52,12 @@ buildPythonPackage rec {
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Darwin issue: OSError: [Errno 24] Too many open files
     ulimit -n 1024
   '';
 
-  pythonImportsCheck = [
-    "pygls"
-  ];
+  pythonImportsCheck = [ "pygls" ];
 
   meta = with lib; {
     description = "Pythonic generic implementation of the Language Server Protocol";

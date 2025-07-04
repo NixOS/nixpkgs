@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, boost
-, buildPythonPackage
-, exiv2
-, fetchPypi
-, libcxx
-, pythonOlder
+{
+  lib,
+  stdenv,
+  boost,
+  buildPythonPackage,
+  exiv2,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,23 +20,26 @@ buildPythonPackage rec {
     hash = "sha256-crI+X3YMRzPPmpGNsI2U+9bZgwcR0qTowJuPNFY/Ooo=";
   };
 
+  # py3exiv2 only checks in `/usr/local/lib` for Boost, which is obviously wrong in nixpkgs.
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace setup.py \
+      --replace-fail /usr/local/lib/ ${lib.escapeShellArg (lib.getLib boost)}/lib/
+  '';
+
   buildInputs = [
     boost
     exiv2
   ];
 
   # Work around Python distutils compiling C++ with $CC (see issue #26709)
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
-  pythonImportsCheck = [
-    "pyexiv2"
-  ];
+  pythonImportsCheck = [ "pyexiv2" ];
 
   # Tests are not shipped
   doCheck = false;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Python binding to the library exiv2";
     homepage = "https://launchpad.net/py3exiv2";
     license = licenses.gpl3Plus;

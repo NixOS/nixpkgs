@@ -2,20 +2,25 @@
   lib,
   mkKdeDerivation,
   fetchurl,
+  fetchpatch,
   qtspeech,
   qttools,
   kxmlgui,
 }:
 mkKdeDerivation rec {
   pname = "ktextaddons";
-  version = "1.5.3";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/ktextaddons/ktextaddons-${version}.tar.xz";
-    hash = "sha256-ilLbir+oqdaNLSkfsPi+IGWf14mZh7Tcr98kaNsJF9w=";
+    hash = "sha256-2YRlBaUvl72mTq0ZMDK8KVc+wxSB9HO+PFhvW4Mh7Nw=";
   };
 
-  extraBuildInputs = [qtspeech qttools kxmlgui];
+  extraBuildInputs = [
+    qtspeech
+    qttools
+    kxmlgui
+  ];
 
   meta.license = with lib.licenses; [
     bsd3

@@ -1,45 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-
-# build-system
-, setuptools
-
-# dependencies
-, importlib-metadata
-, platformdirs
-, tomli
-
-# tests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  importlib-metadata,
+  platformdirs,
+  tomli,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "yapf";
-  version = "0.40.2";
+  version = "0.43.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TauKXtcTTibVfBZHx0g6+z8TaHi1eQYreGyboWuUY3s=";
+    hash = "sha256-ANOqJL/t/5QgsuDV2fWrbZ1CaOcq+/Wbs/pUJ4HVIY4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     importlib-metadata
     platformdirs
     tomli
   ];
 
-  # nose is unavailable on pypy
-  #doCheck = !isPyPy;
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/google/yapf/blob/v${version}/CHANGELOG.md";
@@ -66,6 +57,9 @@ buildPythonPackage rec {
       takes away some of the drudgery of maintaining your code.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ AndersonTorres siddharthist ];
+    mainProgram = "yapf";
+    maintainers = with lib.maintainers; [
+      siddharthist
+    ];
   };
 }

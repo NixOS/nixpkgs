@@ -1,39 +1,51 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "keep-sorted";
-  version = "0.4.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "keep-sorted";
-    rev = "v${version}";
-    hash = "sha256-yeps+StUA7h12Jlra24Po2zNzjIPNIQCOyWLazC8F8M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N/fJ0qj7/kQ9Q7ULpQpyhWAWFlnLkTjyNNKg8VhLvi0=";
   };
 
-  vendorHash = "sha256-tPTWWvr+/8wWUnQcI4Ycco2OEgA2mDQt15OGCk/ZjrQ=";
+  vendorHash = "sha256-HTE9vfjRmi5GpMue7lUfd0jmssPgSOljbfPbya4uGsc=";
 
-  CGO_ENABLED = "0";
+  # Inject version string instead of reading version from buildinfo.
+  postPatch = ''
+    substituteInPlace main.go \
+      --replace-fail 'readVersion())' '"v${finalAttrs.version}")'
+  '';
 
-  ldfags = [ "-s" "-w" ];
+  env.CGO_ENABLED = "0";
 
-  checkFlags = [
-    # Test tries to find files using git
-    "-skip=^TestGoldens"
-  ];
+  ldflags = [ "-s" ];
+
+  preCheck = ''
+    # Test tries to find files using git in init func.
+    rm goldens/*_test.go
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/google/keep-sorted/releases/tag/v${version}";
+    changelog = "https://github.com/google/keep-sorted/releases/tag/v${finalAttrs.version}";
     description = "Language-agnostic formatter that sorts lines between two markers in a larger file";
     homepage = "https://github.com/google/keep-sorted";
     license = lib.licenses.asl20;
     mainProgram = "keep-sorted";
     maintainers = with lib.maintainers; [ katexochen ];
   };
-}
+})

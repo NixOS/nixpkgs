@@ -1,15 +1,21 @@
-import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }:
+{
+  lib,
+  pkgs,
+  firefoxPackage,
+  ...
+}:
 {
   name = firefoxPackage.pname;
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco shlevy ];
+    maintainers = [ shlevy ];
   };
 
   nodes.machine =
     { pkgs, ... }:
 
-    { imports = [ ./common/x11.nix ];
+    {
+      imports = [ ./common/x11.nix ];
       environment.systemPackages = [ pkgs.xdotool ];
 
       programs.firefox = {
@@ -18,45 +24,24 @@ import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }:
         package = firefoxPackage;
       };
 
-      # Create a virtual sound device, with mixing
-      # and all, for recording audio.
-      boot.kernelModules = [ "snd-aloop" ];
-      sound.enable = true;
-      sound.extraConfig = ''
-        pcm.!default {
-          type plug
-          slave.pcm pcm.dmixer
-        }
-        pcm.dmixer {
-          type dmix
-          ipc_key 1
-          slave {
-            pcm "hw:Loopback,0,0"
-            rate 48000
-            periods 128
-            period_time 0
-            period_size 1024
-            buffer_size 8192
-          }
-        }
-        pcm.recorder {
-          type hw
-          card "Loopback"
-          device 1
-          subdevice 0
-        }
-      '';
+      hardware.alsa = {
+        enable = true;
+        enableRecorder = true;
+        defaultDevice.playback = "pcm.recorder";
+      };
 
       systemd.services.audio-recorder = {
         description = "Record NixOS test audio to /tmp/record.wav";
-        script = "${pkgs.alsa-utils}/bin/arecord -D recorder -f S16_LE -r48000 /tmp/record.wav";
+        script = "${pkgs.alsa-utils}/bin/arecord -Drecorder -fS16_LE -r48000 -c2 /tmp/record.wav";
       };
 
     };
 
-  testScript = let
-    exe = firefoxPackage.unwrapped.binaryName;
-  in ''
+  testScript =
+    let
+      exe = lib.getExe firefoxPackage;
+    in
+    ''
       from contextlib import contextmanager
 
 
@@ -120,4 +105,4 @@ import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }:
           machine.screenshot("screen")
     '';
 
-})
+}

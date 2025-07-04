@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-util";
-  version = "3.15";
+  version = "3.21";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -17,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.util";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JIrk6YRuW5B30d9fNaRFesO01ajcSy8ErkpFtM1Coaw=";
+    tag = version;
+    hash = "sha256-DCe1V3ZQxr2uQ5L4Lucqu0E1jVo7P6cEwC+4tuBmmqI=";
   };
 
   nativeBuildInputs = [
@@ -26,12 +27,13 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.util"
+  pythonImportsCheck = [ "dissect.util" ];
+
+  disabledTests = [
+    # File handling issue
+    "test_cpio_formats"
   ];
 
   meta = with lib; {

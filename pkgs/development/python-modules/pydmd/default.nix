@@ -1,69 +1,70 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, future
-, matplotlib
-, numpy
-, pytestCheckHook
-, pytest-mock
-, pythonOlder
-, scipy
-, ezyrb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-git-versioning,
+
+  # dependencies
+  ezyrb,
+  future,
+  h5netcdf,
+  matplotlib,
+  numpy,
+  scipy,
+  xarray,
+
+  # tests
+  pytest-mock,
+  pytestCheckHook,
 }:
 
-let
-  self = buildPythonPackage rec {
-    pname = "pydmd";
-    version = "1.0.0";
-    pyproject = true;
+buildPythonPackage rec {
+  pname = "pydmd";
+  version = "2025.06.01";
+  pyproject = true;
 
-    disabled = pythonOlder "3.6";
+  src = fetchFromGitHub {
+    owner = "PyDMD";
+    repo = "PyDMD";
+    tag = version;
+    hash = "sha256-u8dW90FZSZaVbPNeILeZyOwAU0WOAeTAMCHpe7n4Bi4=";
+  };
 
-    src = fetchFromGitHub {
-      owner = "PyDMD";
-      repo = "PyDMD";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-vprvq3sl/eNtu4cqg0A4XV96dzUt0nOtPmfwEv0h+PI=";
-    };
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-git-versioning>=2.0,<3" "setuptools-git-versioning"
+  '';
 
-    build-system = [
-      setuptools
+  build-system = [
+    setuptools
+    setuptools-git-versioning
   ];
 
-    propagatedBuildInputs = [
-      future
-      matplotlib
-      numpy
-      scipy
-      ezyrb
-    ];
+  dependencies = [
+    ezyrb
+    future
+    h5netcdf
+    matplotlib
+    numpy
+    scipy
+    xarray
+  ];
 
-    nativeCheckInputs = [
-      pytestCheckHook
-      pytest-mock
-    ];
+  pythonImportsCheck = [ "pydmd" ];
 
-    pytestFlagsArray = [
-      "tests/test_dmdbase.py"
-    ];
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
 
-    pythonImportsCheck = [
-      "pydmd"
-    ];
-
-    passthru.tests = self.overrideAttrs (old: {
-      pytestFlagsArray = [];
-    });
-
-    meta = with lib; {
-      description = "Python Dynamic Mode Decomposition";
-      homepage = "https://pydmd.github.io/PyDMD/";
-      changelog = "https://github.com/PyDMD/PyDMD/releases/tag/v${version}";
-      license = licenses.mit;
-      maintainers = with maintainers; [ yl3dy ];
-      broken = stdenv.hostPlatform.isAarch64;
-    };
+  meta = {
+    description = "Python Dynamic Mode Decomposition";
+    homepage = "https://pydmd.github.io/PyDMD/";
+    changelog = "https://github.com/PyDMD/PyDMD/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yl3dy ];
   };
-in self
+}

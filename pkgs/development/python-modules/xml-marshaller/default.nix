@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, lxml
-, six
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  lxml,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -16,12 +17,15 @@ buildPythonPackage rec {
     hash = "sha256-QvBALLDD8o5nZQ5Z4bembhadK6jcydWKQpJaSmGqqJM=";
   };
 
-  propagatedBuildInputs = [ lxml six ];
+  propagatedBuildInputs = [
+    lxml
+    six
+  ];
 
   pythonImportsCheck = [ "xml_marshaller" ];
 
   meta = with lib; {
-    description = "This module allows one to marshal simple Python data types into a custom XML format.";
+    description = "This module allows one to marshal simple Python data types into a custom XML format";
     homepage = "https://www.python.org/community/sigs/current/xml-sig/";
     license = licenses.psfl;
     maintainers = with maintainers; [ mazurel ];

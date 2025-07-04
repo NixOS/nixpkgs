@@ -10,6 +10,7 @@
   claripy,
   cle,
   cppheaderparser,
+  cxxheaderparser,
   dpkt,
   fetchFromGitHub,
   gitpython,
@@ -22,8 +23,8 @@
   psutil,
   pycparser,
   pyformlang,
+  pydemumble,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyvex,
   rich,
   rpyc,
@@ -31,13 +32,13 @@
   sortedcontainers,
   sqlalchemy,
   sympy,
-  unicorn,
+  unicorn-angr,
   unique-log-filter,
 }:
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.99";
+  version = "9.2.154";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -45,16 +46,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-R23sMjx7SjwNXGS2DQKoZS6vayuHp7/97uCgKM8yejA=";
+    tag = "v${version}";
+    hash = "sha256-aOgZXHk6GTWZAEraZQahEXUYs8LWAWv1n9GfX+2XTPU=";
   };
 
   pythonRelaxDeps = [ "capstone" ];
 
-  build-system = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     ailment
@@ -65,6 +63,7 @@ buildPythonPackage rec {
     claripy
     cle
     cppheaderparser
+    cxxheaderparser
     dpkt
     gitpython
     itanium-demangler
@@ -76,21 +75,21 @@ buildPythonPackage rec {
     psutil
     pycparser
     pyformlang
+    pydemumble
     pyvex
     rich
     rpyc
     sortedcontainers
-    sqlalchemy
     sympy
-    unicorn
     unique-log-filter
   ];
 
-  passthru.optional-dependencies = {
-    AngrDB = [ sqlalchemy ];
+  optional-dependencies = {
+    angrdb = [ sqlalchemy ];
+    unicorn = [ unicorn-angr ];
   };
 
-  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+  setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "--plat-name"
     "linux"
   ];
@@ -110,7 +109,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
-    license = with licenses; [ bsd2 ];
+    license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };
 }

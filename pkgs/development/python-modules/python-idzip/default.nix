@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
 
-, pythonOlder
+  pythonOlder,
 
-, setuptools
+  setuptools,
 
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bauman";
     repo = "python-idzip";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ChzwC/Afn0qeo5anq4anIu2eI9i6XDnSvB7jAwY7rSw=";
   };
 
@@ -34,13 +35,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # need third-party files

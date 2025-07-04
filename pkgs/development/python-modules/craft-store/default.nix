@@ -6,56 +6,67 @@
   setuptools,
   setuptools-scm,
   pytest-check,
+  pytest-httpx,
   pytest-mock,
-  pydantic_1,
   pyyaml,
   pytestCheckHook,
+  annotated-types,
+  httpx,
+  jaraco-classes,
   keyring,
   macaroonbakery,
   overrides,
+  pydantic,
   pyxdg,
   requests,
   requests-toolbelt,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "craft-store";
-  version = "2.6.0";
+  version = "3.3.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-store";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VtKOe3IrvGcNWfp1/tg1cO94xtfkP7AbIHh0WTdlfbQ=";
+    tag = version;
+    hash = "sha256-ige4R5nwlfeSDyhzw0TDQMMIcExIJQuFAFvbNEpreSs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==67.7.2" "setuptools"
+      --replace-fail "setuptools==75.8.0" "setuptools"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "httpx" ];
+
+  dependencies = [
+    annotated-types
+    httpx
+    jaraco-classes
     keyring
     macaroonbakery
     overrides
-    pydantic_1
+    pydantic
     pyxdg
     requests
     requests-toolbelt
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "craft_store" ];
 
   nativeCheckInputs = [
-    pydantic_1
     pytest-check
+    pytest-httpx
     pytest-mock
     pytestCheckHook
     pyyaml

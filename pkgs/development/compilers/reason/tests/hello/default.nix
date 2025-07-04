@@ -1,17 +1,28 @@
-{ buildDunePackage, ppxlib, reason }:
+{
+  lib,
+  buildDunePackage,
+  reason,
+}:
 
 buildDunePackage rec {
   pname = "helloreason";
   version = "0.0.1";
 
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./helloreason.opam
+      ./helloreason.re
+      ./dune-project
+      ./dune
+    ];
+  };
 
   nativeBuildInputs = [
     reason
   ];
 
   buildInputs = [
-    ppxlib
     reason
   ];
 

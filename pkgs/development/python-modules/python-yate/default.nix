@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eventphone";
     repo = "python-yate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AdnlNsEOFuzuGTBmfV9zKyv2iFHEJ4eLMrC6SHHf7m0=";
   };
 
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     async-timeout
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "yate"
-  ];
+  pythonImportsCheck = [ "yate" ];
 
   meta = with lib; {
     description = "Python library for the yate telephony engine";

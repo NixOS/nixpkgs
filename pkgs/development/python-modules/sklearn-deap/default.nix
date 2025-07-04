@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, deap
-, numpy
-, scikit-learn
-, scipy
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  deap,
+  numpy,
+  scikit-learn,
+  scipy,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,11 +35,14 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ numpy scipy deap scikit-learn ];
-
-  nativeCheckInputs = [
-    unittestCheckHook
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    deap
+    scikit-learn
   ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "evolutionary_search" ];
 
@@ -47,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rsteca/sklearn-deap";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
+    broken = true; # incompatible with scikit-learn >= 1.6
   };
 }
-

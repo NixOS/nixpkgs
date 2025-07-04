@@ -1,44 +1,44 @@
-{ lib
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
-, libX11
-, libgdiplus
-, ffmpeg
-, openal
-, libsoundio
-, sndio
-, pulseaudio
-, vulkan-loader
-, libICE
-, libSM
-, libXi
-, libXcursor
-, libXext
-, libXrandr
-, fontconfig
-, glew
-, libGL
-, udev
-, SDL2
-, SDL2_mixer
+{
+  lib,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchzip,
+  libX11,
+  libgdiplus,
+  ffmpeg,
+  openal,
+  libsoundio,
+  sndio,
+  pulseaudio,
+  vulkan-loader,
+  glew,
+  libGL,
+  libICE,
+  libSM,
+  libXcursor,
+  libXext,
+  libXi,
+  libXrandr,
+  udev,
+  SDL2,
+  SDL2_mixer,
 }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.1281"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.1401"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
-  src = fetchFromGitHub {
-    owner = "Ryujinx";
-    repo = "Ryujinx";
-    rev = "8884d1fd732c9ba788f0ab711e6a9f507d934ac8";
-    sha256 = "0g4x10whiybckvx8hhpdrpa8mbypwmpq1av6cjk53zc7iwkhvigw";
+  src = fetchzip {
+    url = "https://archive.org/download/ryujinx-5dbba-07e-33e-83c-9047dcbb-701c-9655edbbe-89086.tar/Ryujinx-5dbba07e33e83c9047dcbb701c9655edbbe89086.tar.gz";
+    hash = "sha256-UeJ3KE5e5H9crqroAxjmxYTf/Z4cbj41a6/1HW2nLcA=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  enableParallelBuilding = false;
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx-bin;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   runtimeDeps = [
     libX11
@@ -53,14 +53,13 @@ buildDotnetModule rec {
     udev
 
     # Avalonia UI
+    glew
     libICE
     libSM
-    libXi
     libXcursor
     libXext
+    libXi
     libXrandr
-    fontconfig
-    glew
 
     # Headless executable
     libGL
@@ -100,15 +99,10 @@ buildDotnetModule rec {
     install -D ./mime/Ryujinx.xml $out/share/mime/packages/Ryujinx.xml
     install -D ../misc/Logo.svg $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
 
-    substituteInPlace $out/share/applications/Ryujinx.desktop \
-      --replace "Ryujinx.sh %f" "$out/bin/Ryujinx.sh %f"
-
     ln -s $out/bin/Ryujinx $out/bin/ryujinx
 
     popd
   '';
-
-  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     homepage = "https://ryujinx.org/";
@@ -122,8 +116,14 @@ buildDotnetModule rec {
       2017.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ivar jk artemist ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      jk
+      artemist
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "Ryujinx";
   };
 }

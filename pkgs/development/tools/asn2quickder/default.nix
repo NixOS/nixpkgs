@@ -1,23 +1,25 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitLab
-, makeWrapper
-, cmake
-, six
-, pyparsing
-, asn1ate
-, colored
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitLab,
+  makeWrapper,
+  cmake,
+  six,
+  pyparsing,
+  asn1ate,
+  colored,
 }:
 
 buildPythonApplication rec {
   pname = "asn2quickder";
   version = "1.7.1";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "quick-der";
     rev = "v${version}";
-    sha256 = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
+    hash = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
   };
 
   postPatch = ''
@@ -29,14 +31,22 @@ buildPythonApplication rec {
 
   dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [ makeWrapper cmake ];
+  nativeBuildInputs = [
+    makeWrapper
+    cmake
+  ];
 
-  propagatedBuildInputs = [ pyparsing asn1ate six colored ];
+  propagatedBuildInputs = [
+    pyparsing
+    asn1ate
+    six
+    colored
+  ];
 
   doCheck = false; # Flaky tests
 
   meta = with lib; {
-    description = "An ASN.1 compiler with a backend for Quick DER";
+    description = "ASN.1 compiler with a backend for Quick DER";
     homepage = "https://gitlab.com/arpa2/quick-der";
     license = licenses.bsd3;
     platforms = platforms.linux;

@@ -1,19 +1,18 @@
-{ lib
-, stdenv
-, boost
-, cmake
-, gettext
-, libdrm
-, meson
-, ninja
-, openssl
-, pkg-config
-, python3
-, tuxclocker
+{
+  stdenv,
+  boost,
+  gettext,
+  libdrm,
+  meson,
+  ninja,
+  openssl,
+  pkg-config,
+  python3,
+  tuxclocker,
 }:
 
 stdenv.mkDerivation {
-  inherit (tuxclocker) src version meta BOOST_INCLUDEDIR BOOST_LIBRARYDIR;
+  inherit (tuxclocker) src version meta;
 
   pname = "tuxclocker-plugins";
 
@@ -22,7 +21,7 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
-    (python3.withPackages(p: [ p.hwdata ]))
+    (python3.withPackages (p: [ p.hwdata ]))
   ];
 
   buildInputs = [

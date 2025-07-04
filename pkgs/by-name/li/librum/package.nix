@@ -1,11 +1,12 @@
-{ lib
-, mupdf
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, cmake
-, qt6
-, desktopToDarwinBundle
+{
+  lib,
+  mupdf,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  cmake,
+  qt6,
+  desktopToDarwinBundle,
 }:
 
 let
@@ -24,30 +25,33 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./use_mupdf_in_nixpkgs.patch;
+    (replaceVars ./use_mupdf_in_nixpkgs.patch {
       nixMupdfLibPath = "${mupdf-cxx.out}/lib";
       nixMupdfIncludePath = "${mupdf-cxx.dev}/include";
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    qt6.qttools
-    qt6.wrapQtAppsHook
-  ] ++ lib.optionals stdenv.isDarwin [
-    desktopToDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      qt6.qttools
+      qt6.wrapQtAppsHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      desktopToDarwinBundle
+    ];
 
-  buildInputs = [
-    qt6.qtbase
-    qt6.qtsvg
-  ] ++ lib.optionals stdenv.isLinux [
-    qt6.qtwayland
-  ];
+  buildInputs =
+    [
+      qt6.qtbase
+      qt6.qtsvg
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qt6.qtwayland
+    ];
 
   meta = with lib; {
-    description = "An application designed to make reading enjoyable and straightforward";
+    description = "Application designed to make reading enjoyable and straightforward";
     longDescription = ''
       Librum is an application designed to make reading enjoyable
       and straightforward for everyone. It's not just an e-book
@@ -60,9 +64,13 @@ stdenv.mkDerivation rec {
       completely open source.
     '';
     homepage = "https://librumreader.com";
+    changelog = "https://github.com/Librum-Reader/Librum/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
     mainProgram = "librum";
-    maintainers = with maintainers; [ aleksana oluceps ];
+    maintainers = with maintainers; [
+      aleksana
+      oluceps
+    ];
     platforms = platforms.unix;
   };
 }

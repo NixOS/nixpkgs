@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, flex, bison }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  flex,
+  bison,
+}:
 
 buildDunePackage rec {
   pname = "teyjus";
@@ -7,20 +13,23 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "teyjus";
     repo = "teyjus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N4XKDd0NFr501PYUdb7PM2sWh0uD1/SUFXoMr10f064=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
 
   hardeningDisable = [ "format" ];
 
   doCheck = true;
 
   meta = with lib; {
-    description = "An efficient implementation of the Lambda Prolog language";
+    description = "Efficient implementation of the Lambda Prolog language";
     homepage = "https://github.com/teyjus/teyjus";
     changelog = "https://github.com/teyjus/teyjus/releases/tag/v${version}";
     license = lib.licenses.gpl3;

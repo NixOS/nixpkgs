@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gjs
-, gobject-introspection
-, blueprint-compiler
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
-, libgda6
-, gsound
-, gst_all_1
-, libportal-gtk4
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gjs,
+  gobject-introspection,
+  blueprint-compiler,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
+  libgda6,
+  gsound,
+  gst_all_1,
+  libportal-gtk4,
 }:
 
 stdenv.mkDerivation {
@@ -53,7 +54,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "A simple and intuitive timer application (also named Planytimer)";
+    description = "Simple and intuitive timer application (also named Planytimer)";
     homepage = "https://gitlab.com/idevecore/pomodoro";
     license = lib.licenses.gpl3Plus;
     mainProgram = "pomodoro";

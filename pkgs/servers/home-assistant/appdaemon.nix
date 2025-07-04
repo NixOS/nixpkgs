@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,7 +19,6 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -55,6 +55,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/AppDaemon/appdaemon";
     changelog = "https://github.com/AppDaemon/appdaemon/blob/${version}/docs/HISTORY.md";
     license = licenses.mit;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

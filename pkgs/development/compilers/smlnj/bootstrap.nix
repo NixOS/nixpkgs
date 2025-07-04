@@ -2,7 +2,15 @@
 # and is preserved only for pre-existing direct usage. New use cases should
 # just use the regular smlnj derivation.
 
-{ lib, stdenv, fetchurl, cpio, rsync, xar, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cpio,
+  rsync,
+  xar,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smlnj-bootstrap";
@@ -15,7 +23,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cpio rsync ];
+  buildInputs = [
+    cpio
+    rsync
+  ];
 
   unpackPhase = ''
     ${xar}/bin/xar -xf $src
@@ -40,9 +51,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Compiler for the Standard ML '97 programming language";
-    homepage    = "http://www.smlnj.org";
-    license     = lib.licenses.free;
-    platforms   = lib.platforms.darwin;
+    homepage = "http://www.smlnj.org";
+    license = lib.licenses.free;
+    platforms = lib.platforms.darwin;
     maintainers = [ lib.maintainers.jwiegley ];
     mainProgram = "sml";
   };

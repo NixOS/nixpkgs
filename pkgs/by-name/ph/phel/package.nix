@@ -1,29 +1,30 @@
-{ lib
-, fetchFromGitHub
-, php
+{
+  lib,
+  fetchFromGitHub,
+  php,
+  versionCheckHook,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phel";
-  version = "0.12.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "phel-lang";
     repo = "phel-lang";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-5PMd87Xp7i3Q1ryKQWJBmNbU5TGo2LQ6uvIFP3T36vk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YwmDTj1uc71rpp5Iq/7cDq0gLLy8Bh96bu0RaYqi5J0=";
   };
 
-  vendorHash = "sha256-83GX/dxHa6w1E34wnJshg7yxlVyRkDT5jmAPCCqPdtA=";
+  vendorHash = "sha256-zZK4v9IncoOurf2yUeFqwmAkqsMBlLfuZTUm9cWQBCA=";
 
   doInstallCheck = true;
-  postInstallCheck = ''
-    $out/bin/phel --version
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/phel-lang/phel-lang/releases/tag/v${finalAttrs.version}";
-    description = "Phel is a functional programming language that compiles to PHP. A Lisp dialect inspired by Clojure and Janet.";
+    description = "Phel is a functional programming language that compiles to PHP. A Lisp dialect inspired by Clojure and Janet";
     homepage = "https://github.com/phel-lang/phel-lang";
     license = lib.licenses.mit;
     mainProgram = "phel";

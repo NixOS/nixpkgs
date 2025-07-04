@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pyannotate
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyannotate,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -16,13 +16,9 @@ buildPythonPackage rec {
     hash = "sha256-CSaTIPjSGHKCR0Nvet6W8zzz/oWEC0BjIULZ+JaMH9A=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    pyannotate
-  ];
+  propagatedBuildInputs = [ pyannotate ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -32,15 +28,12 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytest_annotate"
-  ];
+  pythonImportsCheck = [ "pytest_annotate" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Generate PyAnnotate annotations from your pytest tests";
     homepage = "https://github.com/kensho-technologies/pytest-annotate";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

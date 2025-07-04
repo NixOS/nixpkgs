@@ -1,25 +1,26 @@
-{ stdenv
-, buildFHSEnv
-, writeShellScriptBin
-, fetchurl
-, callPackage
-, makeDesktopItem
-, copyDesktopItems
-, ffmpeg
-, glibc
-, gnome
-, jq
-, lib
-, libmediainfo
-, libsForQt5
-, libusb1
-, ocl-icd
-, p7zip
-, patchelf
-, socat
-, vapoursynth
-, xdg-utils
-, xorg
+{
+  stdenv,
+  buildFHSEnv,
+  writeShellScriptBin,
+  fetchurl,
+  callPackage,
+  makeDesktopItem,
+  copyDesktopItems,
+  ffmpeg,
+  glibc,
+  jq,
+  lib,
+  libmediainfo,
+  libsForQt5,
+  libusb1,
+  ocl-icd,
+  p7zip,
+  patchelf,
+  socat,
+  vapoursynth,
+  xdg-utils,
+  xorg,
+  zenity,
 }:
 let
   mpvForSVP = callPackage ./mpv.nix { };
@@ -42,7 +43,7 @@ let
     fakeLsof
     ffmpeg.bin
     glibc
-    gnome.zenity
+    zenity
     libmediainfo
     libsForQt5.qtbase
     libsForQt5.qtwayland
@@ -52,7 +53,7 @@ let
     libusb1
     mpvForSVP
     ocl-icd
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     vapoursynth
     xdg-utils
     xorg.libX11
@@ -60,13 +61,16 @@ let
 
   svp-dist = stdenv.mkDerivation rec {
     pname = "svp-dist";
-    version = "4.5.210-2";
+    version = "4.6.263";
     src = fetchurl {
       url = "https://www.svp-team.com/files/svp4-linux.${version}.tar.bz2";
-      hash = "sha256-dY9uQ9jzTHiN2XSnOrXtHD11IIJW6t9BUzGGQFfZ+yg=";
+      sha256 = "sha256-HyRDVFHVmTan/Si3QjGQpC3za30way10d0Hk79oXG98=";
     };
 
-    nativeBuildInputs = [ p7zip patchelf ];
+    nativeBuildInputs = [
+      p7zip
+      patchelf
+    ];
     dontFixup = true;
 
     unpackPhase = ''
@@ -95,7 +99,8 @@ let
   };
 
   fhs = buildFHSEnv {
-    name = "SVPManager";
+    pname = "SVPManager";
+    inherit (svp-dist) version;
     targetPkgs = pkgs: libraries;
     runScript = "${svp-dist}/opt/SVPManager";
     unshareUser = false;
@@ -129,15 +134,26 @@ stdenv.mkDerivation {
       desktopName = "SVP 4 Linux";
       genericName = "Real time frame interpolation";
       icon = "svp-manager4";
-      categories = [ "AudioVideo" "Player" "Video" ];
-      mimeTypes = [ "video/x-msvideo" "video/x-matroska" "video/webm" "video/mpeg" "video/mp4" ];
+      categories = [
+        "AudioVideo"
+        "Player"
+        "Video"
+      ];
+      mimeTypes = [
+        "video/x-msvideo"
+        "video/x-matroska"
+        "video/webm"
+        "video/mpeg"
+        "video/mp4"
+      ];
       terminal = false;
       startupNotify = true;
     })
   ];
 
   meta = with lib; {
-    description = "SmoothVideo Project 4 (SVP4) converts any video to 60 fps (and even higher) and performs this in real time right in your favorite video player.";
+    mainProgram = "SVPManager";
+    description = "SmoothVideo Project 4 (SVP4) converts any video to 60 fps (and even higher) and performs this in real time right in your favorite video player";
     homepage = "https://www.svp-team.com/wiki/SVP:Linux";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;

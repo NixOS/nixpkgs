@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ipdb
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ipdb,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
@@ -33,6 +34,6 @@ buildPythonPackage {
     mainProgram = "cliche";
     homepage = "https://github.com/kootenpv/cliche";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

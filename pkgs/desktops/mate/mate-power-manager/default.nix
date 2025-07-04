@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, glib
-, itstool
-, libxml2
-, mate-desktop
-, mate-panel
-, libnotify
-, libcanberra-gtk3
-, libsecret
-, dbus-glib
-, upower
-, gtk3
-, libtool
-, polkit
-, wrapGAppsHook
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  glib,
+  itstool,
+  libxml2,
+  mate-desktop,
+  mate-panel,
+  libnotify,
+  libcanberra-gtk3,
+  libsecret,
+  dbus-glib,
+  upower,
+  gtk3,
+  libtool,
+  polkit,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     libtool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -58,10 +59,14 @@ stdenv.mkDerivation rec {
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
-    description = "The MATE Power Manager";
+    description = "MATE Power Manager";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus fdl11Plus ];
+    license = with licenses; [
+      gpl2Plus
+      fdl11Plus
+    ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members ++ (with maintainers; [ chpatrick ]);
+    maintainers = with maintainers; [ chpatrick ];
+    teams = [ teams.mate ];
   };
 }

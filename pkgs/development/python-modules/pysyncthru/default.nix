@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, aiohttp
-, demjson3
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  aiohttp,
+  demjson3,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,22 +20,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nielstron";
     repo = "pysyncthru";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Zije1WzfgIU9pT0H7T/Mx+5gEBCsRgMLkfsa/KB0YtI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
     demjson3
   ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "pysyncthru" ];
 

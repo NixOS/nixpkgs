@@ -5,7 +5,12 @@
 # `virtualisation.fileSystems."/".autoFormat = true;`
 # instead.
 
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   rootDevice = config.virtualisation.rootDevice;

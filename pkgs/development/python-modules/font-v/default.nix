@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fonttools
-, git
-, gitpython
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fonttools,
+  gitMinimal,
+  gitpython,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,8 @@ buildPythonPackage rec {
     gitpython
   ];
 
-  doCheck = true;
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
   ];
   preCheck = ''
@@ -52,4 +52,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

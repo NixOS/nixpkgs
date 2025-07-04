@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, boost
-, fetchFromGitHub
-, git
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, python3
-, qtbase
-, qtcharts
-, tuxclocker-plugins
-, tuxclocker-without-unfree
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  boost,
+  fetchFromGitHub,
+  git,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  qtbase,
+  qtcharts,
+  tuxclocker-plugins,
+  tuxclocker-without-unfree,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,10 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-QLKLqTCpVMWxlDINa8Bo1vgCDcjwovoaXUs/PdMnxv0=";
   };
-
-  # Meson doesn't find boost without these
-  BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-  BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
 
   nativeBuildInputs = [
     git

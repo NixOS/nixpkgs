@@ -1,6 +1,11 @@
 import ../make-test-python.nix (
 
-  { pkgs, lib, ... }:
+  {
+    pkgs,
+    lib,
+    lts ? true,
+    ...
+  }:
 
   let
     releases = import ../../release.nix { configuration.documentation.enable = lib.mkForce false; };
@@ -16,7 +21,7 @@ import ../make-test-python.nix (
     };
 
     nodes.machine =
-      { lib, ... }:
+      { ... }:
       {
         virtualisation = {
           diskSize = 6144;
@@ -65,7 +70,10 @@ import ../make-test-python.nix (
             ];
           };
 
-          incus.enable = true;
+          incus = {
+            enable = true;
+            package = if lts then pkgs.incus-lts else pkgs.incus;
+          };
         };
         networking.nftables.enable = true;
       };

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.deconz;
@@ -14,7 +19,7 @@ in
 {
   options.services.deconz = {
 
-    enable = lib.mkEnableOption "deCONZ, a Zigbee gateway for use with ConBee hardware (https://phoscon.de/en/conbee2)";
+    enable = lib.mkEnableOption "deCONZ, a Zigbee gateway for use with ConBee/RaspBee hardware (https://phoscon.de/)";
 
     package = lib.mkOption {
       type = lib.types.package;
@@ -71,7 +76,7 @@ in
       ];
       description = ''
         Extra command line arguments for deCONZ, see
-        https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/deCONZ-command-line-parameters.
+        <https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/deCONZ-command-line-parameters>.
       '';
     };
   };
@@ -95,7 +100,7 @@ in
       '';
       postStart = ''
         # Delay signalling service readiness until it's actually up.
-        while ! "${lib.getExe pkgs.curl}" -sSfl -o /dev/null "http://${cfg.listenAddress}:${toString cfg.httpPort}"; do
+        while ! "${lib.getExe pkgs.curl}" -sSfL -o /dev/null "http://${cfg.listenAddress}:${toString cfg.httpPort}"; do
             echo "Waiting for TCP port ${toString cfg.httpPort} to be open..."
             sleep 1
         done
@@ -113,7 +118,8 @@ in
           + " --ws-port=${toString cfg.wsPort}"
           + " --auto-connect=1"
           + (lib.optionalString (cfg.device != null) " --dev=${cfg.device}")
-          + " " + (lib.escapeShellArgs cfg.extraArgs);
+          + " "
+          + (lib.escapeShellArgs cfg.extraArgs);
         Restart = "on-failure";
         AmbientCapabilities = capabilities;
         CapabilityBoundingSet = capabilities;
@@ -122,6 +128,7 @@ in
         RuntimeDirectory = name;
         RuntimeDirectoryMode = "0700";
         StateDirectory = name;
+        SuccessExitStatus = [ 143 ];
         WorkingDirectory = stateDir;
         # For access to /dev/ttyACM0 (ConBee).
         SupplementaryGroups = [ "dialout" ];

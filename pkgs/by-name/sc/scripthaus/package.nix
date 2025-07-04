@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -17,16 +18,22 @@ buildGoModule rec {
 
   vendorHash = "sha256-GUZNPLBgqN1zBzCcPl7TB9/4/Yk4e7K6I20nVaM6ank=";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/scripthaus
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "^(v[0-9.]+)$" ];
+    extraArgs = [
+      "--version-regex"
+      "^(v[0-9.]+)$"
+    ];
   };
 
   meta = with lib; {

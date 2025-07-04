@@ -1,24 +1,24 @@
-{ lib
-, azure-storage-blob
-, boto
-, buildPythonPackage
-, fetchpatch
-, fetchFromGitHub
-, flask
-, flask-mongoengine
-, flask-sqlalchemy
-, geoalchemy2
-, mongoengine
-, pillow
-, psycopg2
-, pymongo
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, shapely
-, sqlalchemy
-, wtf-peewee
-, wtforms
+{
+  lib,
+  azure-storage-blob,
+  buildPythonPackage,
+  fetchpatch,
+  fetchFromGitHub,
+  flask,
+  flask-mongoengine,
+  flask-sqlalchemy,
+  geoalchemy2,
+  mongoengine,
+  pillow,
+  psycopg2,
+  pymongo,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  shapely,
+  sqlalchemy,
+  wtf-peewee,
+  wtforms,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flask-admin";
     repo = "flask-admin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-L8Q9uPpoen6ZvuF2bithCMSgc6X5khD1EqH2FJPspZc=";
   };
 
@@ -44,9 +44,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     flask
@@ -54,7 +52,6 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    aws = [ boto ];
     azure = [ azure-storage-blob ];
   };
 
@@ -91,9 +88,7 @@ buildPythonPackage rec {
     "flask_admin/tests/peeweemodel/test_basic.py"
   ];
 
-  pythonImportsCheck = [
-    "flask_admin"
-  ];
+  pythonImportsCheck = [ "flask_admin" ];
 
   meta = with lib; {
     description = "Admin interface framework for Flask";

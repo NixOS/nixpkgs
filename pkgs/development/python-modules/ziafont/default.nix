@@ -1,46 +1,54 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, nbval
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  nbval,
+  writableTmpDirAsHomeHook,
+  fetchurl,
 }:
-
 buildPythonPackage rec {
   pname = "ziafont";
-  version = "0.7";
+  version = "0.10";
+  pyproject = true;
 
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdelker";
-    repo = pname;
-    rev = version;
-    hash = "sha256-DQEVWYOgiGSP3WlmZzEweyRa0UY7fxjjpbued+5EH5I=";
+    repo = "ziafont";
+    tag = version;
+    hash = "sha256-tDwl+2EChzBDCFcZW71r4eSKyazlJSv7tRX6soPNSuY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
     nbval
   ];
 
-  preCheck = "rm test/manyfonts.ipynb";  # Tries to download fonts
+  preCheck =
+    let
+      # The test notebooks try to download font files, unless they already exist in the test directory,
+      # so we prepare them in advance.
+      checkFonts = lib.map fetchurl (import ./checkfonts.nix);
+      copyFontCmd = font: "cp ${font} test/${lib.last (lib.splitString "/" font.url)}\n";
+    in
+    lib.concatMapStrings copyFontCmd checkFonts;
 
   pytestFlagsArray = [ "--nbval-lax" ];
 
   pythonImportsCheck = [ "ziafont" ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert TTF/OTF font glyphs to SVG paths";
     homepage = "https://ziafont.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    changelog = "https://github.com/cdelker/ziafont/blob/main/CHANGES.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sfrijters ];
   };
 }

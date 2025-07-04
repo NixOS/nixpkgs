@@ -1,44 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# optional-dependencies
-, lxml
-, matplotlib
-, numpy
-, pandas
-, pydot
-, pygraphviz
-, scipy
-, sympy
+  # optional-dependencies
+  lxml,
+  matplotlib,
+  numpy,
+  pandas,
+  pydot,
+  pygraphviz,
+  scipy,
+  sympy,
 
-# tests
-, pytest-xdist
-, pytestCheckHook
+  # tests
+  pytest-xdist,
+  pytestCheckHook,
+
+  # reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
   pname = "networkx";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "3.2.1";
+  version = "3.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nxu1zzQJvzJOCnIsIL20wg7jm/HDDOiuSZyFArC14MY=";
+    hash = "sha256-MHw2aUKMU2KqsnyKEmCqj0fE6R04kfSL4BQXONjQU+E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  # backport patch to fix tests with Python 3.13.4
+  # FIXME: remove in next update
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/networkx/networkx/commit/d85b04a8b9619580d8901f35400414f612c83113.patch";
+      includes = [ "networkx/generators/lattice.py" ];
+      hash = "sha256-6y/aJBDgNkUzmQ6o52CGVVzqoQgkCEXA4iAXhv1cS0c=";
+    })
   ];
 
-  passthru.optional-dependencies = {
+  nativeBuildInputs = [ setuptools ];
+
+  optional-dependencies = {
     default = [
       numpy
       scipy
@@ -51,6 +64,10 @@ buildPythonPackage rec {
       pydot
       sympy
     ];
+  };
+
+  passthru.tests = {
+    inherit sage;
   };
 
   nativeCheckInputs = [

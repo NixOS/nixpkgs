@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -16,15 +18,10 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "frederickjansen";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "polyline";
+    tag = "v${version}";
     hash = "sha256-fbGGfZdme4OiIGNlXG1uVl1xP+rPVI9l5hjHM0gwAsE=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=polyline --cov-report term-missing" ""
-  '';
 
   nativeBuildInputs = [
     setuptools
@@ -33,11 +30,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  pythonImportsCheck = [
-    "polyline"
-  ];
+  pythonImportsCheck = [ "polyline" ];
 
   meta = with lib; {
     description = "Python implementation of Google's Encoded Polyline Algorithm Format";

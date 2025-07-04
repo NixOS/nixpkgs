@@ -1,19 +1,20 @@
-{ lib
-, angr
-, buildPythonPackage
-, cmd2
-, coreutils
-, fetchFromGitHub
-, pygments
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, stdenv
+{
+  lib,
+  angr,
+  buildPythonPackage,
+  cmd2,
+  coreutils,
+  fetchFromGitHub,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "angrcli";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fmagin";
     repo = "angr-cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-a5ajUBQwt3xUNkeSOeGOAFf47wd4UVk+LcuAHGqbq4s=";
+    tag = "v${version}";
+    hash = "sha256-egu7jlEk8/i36qQMHztGr959sBt9d5crW8mj6+sKaHI=";
   };
 
   postPatch = ''
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace-fail "/bin/ls" "${coreutils}/bin/ls"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     angr
@@ -52,9 +51,7 @@ buildPythonPackage rec {
     "test_max_depth"
   ];
 
-  pythonImportsCheck = [
-    "angrcli"
-  ];
+  pythonImportsCheck = [ "angrcli" ];
 
   meta = with lib; {
     description = "Python modules to allow easier interactive use of angr";

@@ -1,21 +1,22 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  lib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cutechess";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "cutechess";
     repo = "cutechess";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-P44Twbw2MGz+oTzPwMFCe73zPxAex6uYjSTtaUypfHw=";
+    hash = "sha256-vhS3Eenxcq7D8E5WVON5C5hCTytcEVbYUeuCkfB0apA=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GUI, CLI, and library for playing chess";
     homepage = "https://cutechess.com/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ eclairevoyant ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; (linux ++ windows);
     mainProgram = "cutechess";
   };

@@ -2,8 +2,7 @@
 
 shopt -s nullglob
 
-export PATH=/empty
-for i in @path@; do PATH=$PATH:$i/bin; done
+export PATH=/empty:@path@
 
 default=$1
 if test -z "$1"; then

@@ -1,20 +1,21 @@
-{ lib
-, nix-update-script
-, python3
-, oelint-adv
-, fetchFromGitHub
+{
+  lib,
+  nix-update-script,
+  python3,
+  oelint-adv,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "bitbake-language-server";
-  version = "0.0.14";
+  version = "0.0.15";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Freed-Wu";
-    repo = pname;
+    repo = "bitbake-language-server";
     rev = version;
-    hash = "sha256-aGj9lW420A+iTQWSCdIITAJj3p89VUkPvdhQ/0M6uXo=";
+    hash = "sha256-NLDQ2P5peweugkoNYskpCyCEgBwVFA7RTs8+NvH8fj8=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -22,9 +23,12 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-generate
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pygls
-  ] ++ [ oelint-adv ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      pygls
+    ]
+    ++ [ oelint-adv ];
 
   passthru.updateScript = nix-update-script { };
 

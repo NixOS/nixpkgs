@@ -1,24 +1,27 @@
-{ lib
-, stdenv
-, fetchpatch
-, fetchFromGitHub
-, buildPythonApplication
-, click
-, pydantic
-, toml
-, watchdog
-, pytestCheckHook
-, rsync
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  buildPythonApplication,
+  click,
+  pydantic,
+  toml,
+  watchdog,
+  pytestCheckHook,
+  pytest-cov-stub,
+  rsync,
 }:
 
 buildPythonApplication rec {
   pname = "remote-exec";
   version = "1.13.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "remote-cli";
     repo = "remote";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rsboHJLOHXnpXtsVsvsfKsav8mSbloaq2lzZnU2pw6c=";
   };
 
@@ -34,20 +37,15 @@ buildPythonApplication rec {
   # remove legacy endpoints, we use --multi now
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"mremote' '#"mremote'
+      --replace-fail '"mremote' '#"mremote'
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     pydantic
     toml
     watchdog
   ];
-
-  # disable pytest --cov
-  preCheck = ''
-    rm setup.cfg
-  '';
 
   doCheck = true;
 
@@ -57,9 +55,10 @@ buildPythonApplication rec {
 
   checkInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # `watchdog` dependency does not correctly detect fsevents on darwin.
     # this only affects `remote --stream-changes`
     "test/test_file_changes.py"

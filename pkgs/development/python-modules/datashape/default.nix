@@ -1,51 +1,69 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, mock
-, numpy
-, multipledispatch
-, python-dateutil
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  versioneer,
+
+  # dependencies
+  multipledispatch,
+  numpy,
+  python-dateutil,
+
+  # tests
+  pytestCheckHook,
 }:
 
-let
-  # Fetcher function looks similar to fetchPypi.
-  # Allows for easier overriding, without having to know
-  # how the source is actually fetched.
-  fetcher = {pname, version, sha256}: fetchFromGitHub {
-    owner = "blaze";
-    repo = pname;
-    rev = version;
-    inherit sha256;
-  };
-
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "datashape";
   version = "0.5.4";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetcher {
-    inherit pname version;
-    sha256 = "0rhlj2kjj1vx5m73wnc5518rd6cs1zsbgpsvzk893n516k69shcf";
+  src = fetchFromGitHub {
+    owner = "blaze";
+    repo = "datashape";
+    tag = version;
+    hash = "sha256-jkGdzDSh2JHQ/Fvft/QPmpmWUSiFWT5OLX0HKaeQFGY=";
   };
 
-  nativeCheckInputs = [ pytest mock ];
-  propagatedBuildInputs = [ numpy multipledispatch python-dateutil ];
-
-  # Disable several tests
-  # https://github.com/blaze/datashape/issues/232
-  checkPhase = ''
-    pytest --ignore datashape/tests/test_str.py \
-           --ignore datashape/tests/test_user.py
+  postPatch = ''
+    # Remove vendorized versioneer.py
+    rm versioneer.py
   '';
 
-  # https://github.com/blaze/datashape/issues/238
-  PYTEST_ADDOPTS = "-k 'not test_record and not test_tuple'";
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
+  dependencies = [
+    multipledispatch
+    numpy
+    python-dateutil
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AttributeError: `np.unicode_` was removed in the NumPy 2.0 release. Use `np.str_` instead.
+    "test_from_numpy_dtype_fails"
+    "test_string_from_CType_classmethod"
+  ];
+
+  disabledTestPaths = [
+    # numpy incompatibilities
+    # https://github.com/blaze/datashape/issues/232
+    "datashape/tests/test_str.py"
+    "datashape/tests/test_user.py"
+  ];
   meta = {
+    description = "Data description language";
     homepage = "https://github.com/ContinuumIO/datashape";
-    description = "A data description language";
+    changelog = "https://github.com/blaze/datashape/releases/tag/${version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

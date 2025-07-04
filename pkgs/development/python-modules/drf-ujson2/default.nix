@@ -1,39 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# dependencies
-, django
-, djangorestframework
-, ujson
+  # build-system
+  setuptools,
 
-# tests
-, pytest-django
-, pytest-mock
-, pytestCheckHook
+  # dependencies
+  django,
+  djangorestframework,
+  ujson,
+
+  # tests
+  pytest-cov-stub,
+  pytest-django,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "drf-ujson2";
-  version = "1.7.2";
-  format = "setuptools";
+  version = "1.8.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Amertz08";
     repo = "drf_ujson2";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kbpZN1zOXHvRPcn+Sjbelq74cWgvCUeMXZy1eFSa6rA=";
+    tag = "v${version}";
+    hash = "sha256-NtloZWsEmRbPl7pdxPQqpzIzTyyOEFO9KtZ60F7VuUQ=";
   };
 
-  postPatch = ''
-    sed -i '/--cov/d' setup.cfg
-  '';
+  build-system = [ setuptools ];
 
-  buildInputs = [
+  dependencies = [
     django
-  ];
-
-  propagatedBuildInputs = [
     djangorestframework
     ujson
   ];
@@ -41,6 +44,7 @@ buildPythonPackage rec {
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-django
     pytest-mock
     pytestCheckHook
@@ -50,6 +54,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Amertz08/drf_ujson2/releases/tag/v${version}";
     description = "JSON parser and renderer using ujson for Django Rest Framework";
     homepage = "https://github.com/Amertz08/drf_ujson2";
+    license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
 }

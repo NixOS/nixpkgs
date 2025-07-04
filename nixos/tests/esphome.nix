@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 let
   testPort = 6052;
@@ -9,7 +9,8 @@ in
   meta.maintainers = with lib.maintainers; [ oddlama ];
 
   nodes = {
-    esphomeTcp = { ... }:
+    esphomeTcp =
+      { ... }:
       {
         services.esphome = {
           enable = true;
@@ -19,7 +20,8 @@ in
         };
       };
 
-    esphomeUnix = { ... }:
+    esphomeUnix =
+      { ... }:
       {
         services.esphome = {
           enable = true;
@@ -37,4 +39,4 @@ in
     esphomeUnix.wait_for_file("${unixSocket}")
     esphomeUnix.succeed("curl --fail --unix-socket ${unixSocket} http://localhost/")
   '';
-})
+}

@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, testers
-, files-cli
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  testers,
+  files-cli,
 }:
 
 buildGoModule rec {
   pname = "files-cli";
-  version = "2.13.2";
+  version = "2.15.38";
 
   src = fetchFromGitHub {
     repo = "files-cli";
     owner = "files-com";
     rev = "v${version}";
-    hash = "sha256-xlsM3WVnhZlEwnPNpUaB8IIwsoqt1C0XVsbqm9G1vuU=";
+    hash = "sha256-bf87pCosw41yqnPeQ38t++jedRYKEn22wwuTSrmPvCo=";
   };
 
-  vendorHash = "sha256-7KL73P7oKrK2Sfgk/74D3cmQGXoDau+3gBThn+37pb8=";
+  vendorHash = "sha256-p5Fcs7xVsDBfJQLNbEqsJY2jwgoKrBRCi6Qadwr1azY=";
 
   ldflags = [
     "-s"
@@ -43,7 +44,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "Files.com Command Line App for Windows, Linux, and macOS.";
+    description = "Files.com Command Line App for Windows, Linux, and macOS";
     homepage = "https://developers.files.com";
     license = licenses.mit;
     maintainers = with maintainers; [ kashw2 ];

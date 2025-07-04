@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, hicolor-icon-theme
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  hicolor-icon-theme,
 }:
 stdenvNoCC.mkDerivation {
   pname = "kanagawa-icon-theme";
@@ -38,7 +39,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An icon theme for the Kanagawa colour palette";
+    description = "Icon theme for the Kanagawa colour palette";
     homepage = "https://github.com/Fausto-Korpsvart/Kanagawa-GKT-Theme";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ iynaix ];

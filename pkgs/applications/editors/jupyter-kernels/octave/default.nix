@@ -1,10 +1,11 @@
-{ stdenv
-, callPackage
-, runCommand
-, makeWrapper
-, octave
-, imagemagick
-, python3
+{
+  stdenv,
+  callPackage,
+  runCommand,
+  makeWrapper,
+  octave,
+  imagemagick,
+  python3,
 }:
 
 # Jupyter console:
@@ -21,33 +22,44 @@ let
 in
 
 rec {
-  launcher = runCommand "octave-kernel-launcher" {
-    inherit octave;
-    python = python3.withPackages (ps: [ ps.traitlets ps.jupyter-core ps.ipykernel ps.metakernel kernel ]);
-    nativeBuildInputs = [ makeWrapper ];
-  } ''
-    mkdir -p $out/bin
+  launcher =
+    runCommand "octave-kernel-launcher"
+      {
+        inherit octave;
+        python = python3.withPackages (ps: [
+          ps.traitlets
+          ps.jupyter-core
+          ps.ipykernel
+          ps.metakernel
+          kernel
+        ]);
+        nativeBuildInputs = [ makeWrapper ];
+      }
+      ''
+        mkdir -p $out/bin
 
-    makeWrapper $python/bin/python $out/bin/octave-kernel \
-      --add-flags "-m octave_kernel" \
-      --suffix PATH : $octave/bin
-  '';
+        makeWrapper $python/bin/python $out/bin/octave-kernel \
+          --add-flags "-m octave_kernel" \
+          --suffix PATH : $octave/bin
+      '';
 
-  sizedLogo = size: stdenv.mkDerivation {
-    pname = "octave-logo-${size}x${size}.png";
-    inherit (octave) version;
+  sizedLogo =
+    size:
+    stdenv.mkDerivation {
+      pname = "octave-logo-${size}x${size}.png";
+      inherit (octave) version;
 
-    src = octave.src;
+      src = octave.src;
 
-    buildInputs = [ imagemagick ];
+      buildInputs = [ imagemagick ];
 
-    dontConfigure = true;
-    dontInstall = true;
+      dontConfigure = true;
+      dontInstall = true;
 
-    buildPhase = ''
-      convert ./libgui/src/icons/octave/128x128/logo.png -resize ${size}x${size} $out
-    '';
-  };
+      buildPhase = ''
+        convert ./libgui/src/icons/octave/128x128/logo.png -resize ${size}x${size} $out
+      '';
+    };
 
   definition = {
     displayName = "Octave";

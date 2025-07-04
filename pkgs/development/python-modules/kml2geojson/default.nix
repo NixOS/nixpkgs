@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, poetry-core
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, click
+{
+  lib,
+  buildPythonPackage,
+  poetry-core,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  click,
 }:
 
 buildPythonPackage rec {
@@ -16,26 +17,18 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mrcagney";
-    repo = pname;
+    repo = "kml2geojson";
     rev = version;
     hash = "sha256-iJEcXpvy+Y3MkxAF2Q1Tkcx8GxUVjeVzv6gl134zdiI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "kml2geojson"
-  ];
+  pythonImportsCheck = [ "kml2geojson" ];
 
   meta = with lib; {
     description = "Library to convert KML to GeoJSON";

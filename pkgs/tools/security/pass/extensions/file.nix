@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pass-file";
@@ -14,7 +18,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A pass extension that allows to add files to password-store";
+    description = "Pass extension that allows to add files to password-store";
     homepage = "https://github.com/dvogt23/pass-file";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ taranarmo ];

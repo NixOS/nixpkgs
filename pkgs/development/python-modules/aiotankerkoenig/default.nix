@@ -1,21 +1,23 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, mashumaro
-, orjson
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, syrupy
-, yarl
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiotankerkoenig";
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,20 +25,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aiotankerkoenig";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BB1Cy4Aji5m06LlNj03as4CWF8RcYKAYy4oxPomOP68=";
+    tag = "v${version}";
+    hash = "sha256-5rxK6K10kUWEq3RMN8ojQhoy+w7NNbh/9+v8Jl7w4Ak=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     mashumaro
     orjson
@@ -46,13 +46,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "aiotankerkoenig"
-  ];
+  pythonImportsCheck = [ "aiotankerkoenig" ];
 
   meta = with lib; {
     description = "Python module for interacting with tankerkoenig.de";

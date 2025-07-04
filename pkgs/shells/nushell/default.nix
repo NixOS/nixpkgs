@@ -1,32 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, zlib
-, zstd
-, pkg-config
-, python3
-, xorg
-, Libsystem
-, AppKit
-, Security
-, nghttp2
-, libgit2
-# string interpolation dependends on a date that is erroring out
-# this will be fixed in releases after 0.90.1
-, doCheck ? false
-, withDefaultFeatures ? true
-, additionalFeatures ? (p: p)
-, testers
-, nushell
-, nix-update-script
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  zlib,
+  zstd,
+  pkg-config,
+  python3,
+  xorg,
+  nghttp2,
+  libgit2,
+  withDefaultFeatures ? true,
+  additionalFeatures ? (p: p),
+  testers,
+  nushell,
+  nix-update-script,
+  curlMinimal,
 }:
 
 let
-  version = "0.92.1";
+  # NOTE: when updating this to a new non-patch version, please also try to
+  # update the plugins. Plugins only work if they are compiled for the same
+  # major/minor version.
+  version = "0.105.1";
 in
-
 rustPlatform.buildRustPackage {
   pname = "nushell";
   inherit version;
@@ -34,32 +32,49 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
-    rev = version;
-    hash = "sha256-itr/n8fodi9EvED6j4UMGFUaF42UVhgkGws8A5JqBA8=";
+    tag = version;
+    hash = "sha256-UcIcCzfe2C7qFJKLo3WxwXyGI1rBBrhQHtrglKNp6ck=";
   };
 
-  cargoHash = "sha256-s2O/6g3+fAkiqZwq3PUDpaFtG+uj/3pSs3eZbCbAcuQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-v3BtcEd1eMtHlDLsu0Y4i6CWA47G0CMOyVlMchj7EJo=";
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
-    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
+  nativeBuildInputs =
+    [ pkg-config ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ python3 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs = [ openssl zstd ]
-    ++ lib.optionals stdenv.isDarwin [ zlib Libsystem Security ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
+  buildInputs =
+    [ zstd ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
+      nghttp2
+      libgit2
+    ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
 
-  inherit doCheck;
-
   checkPhase = ''
     runHook preCheck
-    echo "Running cargo test"
-    HOME=$(mktemp -d) cargo test
+    (
+      # The skipped tests all fail in the sandbox because in the nushell test playground,
+      # the tmp $HOME is not set, so nu falls back to looking up the passwd dir of the build
+      # user (/var/empty). The assertions however do respect the set $HOME.
+      set -x
+      HOME=$(mktemp -d) cargo test -j $NIX_BUILD_CORES --offline -- \
+        --test-threads=$NIX_BUILD_CORES \
+        --skip=repl::test_config_path::test_default_config_path \
+        --skip=repl::test_config_path::test_xdg_config_bad \
+        --skip=repl::test_config_path::test_xdg_config_empty
+    )
     runHook postCheck
   '';
+
+  checkInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [ curlMinimal ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   passthru = {
     shellPath = "/bin/nu";
@@ -70,10 +85,15 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "A modern shell written in Rust";
+    description = "Modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor marsam joaquintrinanes ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      johntitor
+      joaquintrinanes
+      ryan4yin
+    ];
     mainProgram = "nu";
   };
 }

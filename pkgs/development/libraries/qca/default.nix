@@ -1,18 +1,35 @@
-{ lib, stdenv, fetchurl, cmake, openssl, pkg-config, qtbase, qt5compat ? null }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  openssl,
+  pkg-config,
+  qtbase,
+  qt5compat ? null,
+}:
 
 let
   isQt6 = lib.versions.major qtbase.version == "6";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "qca";
-  version = "2.3.8";
+  version = "2.3.10";
 
   src = fetchurl {
     url = "mirror://kde/stable/qca/${version}/qca-${version}.tar.xz";
-    sha256 = "sha256-SHWcqGoCAkYdkIumYTQ4DMO7fSD+08AxufwCiXlqgmQ=";
+    sha256 = "sha256-HFtyLak9VZNlcZImuxIccm7DwNxMZ96jTx5Q5ODRSgI=";
   };
 
-  buildInputs = [ openssl qtbase qt5compat ];
-  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    openssl
+    qtbase
+    qt5compat
+  ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   dontWrapQtApps = true;
 

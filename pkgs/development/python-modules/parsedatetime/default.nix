@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "parsedatetime";
   version = "2.6";
-  format = "setuptools";
-  disabled = isPy27; # no longer compatible with icu package
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4cb368fbb18a0b7231f4d76119165451c8d2e35951455dfee97c62a87b04d455";
+    hash = "sha256-TLNo+7GKC3Ix9NdhGRZUUcjS41lRRV3+6XxiqHsE1FU=";
   };
 
-  propagatedBuildInputs = [ future ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Parse human-readable date/time text";
     homepage = "https://github.com/bear/parsedatetime";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

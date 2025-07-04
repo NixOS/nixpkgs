@@ -1,14 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.neovim;
 in
 {
   options.programs.neovim = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       example = true;
       description = ''
@@ -21,8 +24,8 @@ in
       '';
     };
 
-    defaultEditor = mkOption {
-      type = types.bool;
+    defaultEditor = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         When enabled, installs neovim and configures neovim to be the default editor
@@ -30,47 +33,50 @@ in
       '';
     };
 
-    viAlias = mkOption {
-      type = types.bool;
+    viAlias = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Symlink {command}`vi` to {command}`nvim` binary.
       '';
     };
 
-    vimAlias = mkOption {
-      type = types.bool;
+    vimAlias = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Symlink {command}`vim` to {command}`nvim` binary.
       '';
     };
 
-    withRuby = mkOption {
-      type = types.bool;
+    withRuby = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Ruby provider.";
     };
 
-    withPython3 = mkOption {
-      type = types.bool;
+    withPython3 = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Python 3 provider.";
     };
 
-    withNodeJs = mkOption {
-      type = types.bool;
+    withNodeJs = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Enable Node provider.";
     };
 
-    configure = mkOption {
-      type = types.attrs;
+    configure = lib.mkOption {
+      type = lib.types.attrs;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           customRC = '''
-            " here your custom configuration goes!
+            " here your custom VimScript configuration goes!
+          ''';
+          customLuaRC = '''
+            -- here your custom Lua configuration goes!
           ''';
           packages.myVimPackage = with pkgs.vimPlugins; {
             # loaded on launch
@@ -86,86 +92,104 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "neovim-unwrapped" { };
+    package = lib.mkPackageOption pkgs "neovim-unwrapped" { };
 
-    finalPackage = mkOption {
-      type = types.package;
+    finalPackage = lib.mkOption {
+      type = lib.types.package;
       visible = false;
       readOnly = true;
       description = "Resulting customized neovim package.";
     };
 
-    runtime = mkOption {
+    runtime = lib.mkOption {
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { "ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc"; }
       '';
       description = ''
         Set of files that have to be linked in {file}`runtime`.
       '';
 
-      type = with types; attrsOf (submodule (
-        { name, config, ... }:
-        {
-          options = {
+      type =
+        with lib.types;
+        attrsOf (
+          submodule (
+            { name, config, ... }:
+            {
+              options = {
 
-            enable = mkOption {
-              type = types.bool;
-              default = true;
-              description = ''
-                Whether this runtime directory should be generated.  This
-                option allows specific runtime files to be disabled.
-              '';
-            };
+                enable = lib.mkOption {
+                  type = lib.types.bool;
+                  default = true;
+                  description = ''
+                    Whether this runtime directory should be generated.  This
+                    option allows specific runtime files to be disabled.
+                  '';
+                };
 
-            target = mkOption {
-              type = types.str;
-              description = ''
-                Name of symlink.  Defaults to the attribute
-                name.
-              '';
-            };
+                target = lib.mkOption {
+                  type = lib.types.str;
+                  description = ''
+                    Name of symlink.  Defaults to the attribute
+                    name.
+                  '';
+                };
 
-            text = mkOption {
-              default = null;
-              type = types.nullOr types.lines;
-              description = "Text of the file.";
-            };
+                text = lib.mkOption {
+                  default = null;
+                  type = lib.types.nullOr lib.types.lines;
+                  description = "Text of the file.";
+                };
 
-            source = mkOption {
-              default = null;
-              type = types.nullOr types.path;
-              description = "Path of the source file.";
-            };
+                source = lib.mkOption {
+                  default = null;
+                  type = lib.types.nullOr lib.types.path;
+                  description = "Path of the source file.";
+                };
 
-          };
+              };
 
-          config.target = mkDefault name;
-        }
-      ));
+              config.target = lib.mkDefault name;
+            }
+          )
+        );
 
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       cfg.finalPackage
     ];
-    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "nvim");
+    environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "nvim");
+    # On most NixOS configurations /share is already included, so it includes
+    # this directory as well. But  This makes sure that /share/nvim/site paths
+    # from other packages will be used by neovim.
+    environment.pathsToLink = [ "/share/nvim" ];
 
-    environment.etc = listToAttrs (attrValues (mapAttrs
-      (name: value: {
-        name = "xdg/nvim/${name}";
-        value = removeAttrs
-          (value // {
-            target = "xdg/nvim/${value.target}";
-          })
-          (optionals (isNull value.source) [ "source" ]);
-      })
-      cfg.runtime));
+    environment.etc = builtins.listToAttrs (
+      builtins.attrValues (
+        builtins.mapAttrs (name: value: {
+          name = "xdg/nvim/${name}";
+          value = builtins.removeAttrs (
+            value
+            // {
+              target = "xdg/nvim/${value.target}";
+            }
+          ) (lib.optionals (builtins.isNull value.source) [ "source" ]);
+        }) cfg.runtime
+      )
+    );
 
     programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
-      inherit (cfg) viAlias vimAlias withPython3 withNodeJs withRuby configure;
+      inherit (cfg)
+        viAlias
+        vimAlias
+        withPython3
+        withNodeJs
+        withRuby
+        configure
+        ;
     };
   };
 }

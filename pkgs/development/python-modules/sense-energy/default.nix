@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, aiohttp
-, ciso8601
-, async-timeout
-, kasa-crypt
-, orjson
-, pythonOlder
-, requests
-, websocket-client
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  aiohttp,
+  ciso8601,
+  async-timeout,
+  kasa-crypt,
+  orjson,
+  pythonOlder,
+  requests,
+  websocket-client,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "sense-energy";
-  version = "0.12.3";
+  version = "0.13.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "scottbonline";
     repo = "sense";
-    rev = "refs/tags/${version}";
-    hash = "sha256-aAPDYg5ttOAkKF5c1ft2apIQoReh4t22+78PtmLZNlI=";
+    tag = version;
+    hash = "sha256-hIE7wjKP+JcXQZ1lGbKCaKKK2ZlCF5BbJu3H7gqrsKU=";
   };
 
   postPatch = ''
@@ -32,11 +33,9 @@ buildPythonPackage rec {
       --replace-fail "{{VERSION_PLACEHOLDER}}" "${version}"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     kasa-crypt
@@ -50,14 +49,12 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sense_energy"
-  ];
+  pythonImportsCheck = [ "sense_energy" ];
 
   meta = with lib; {
     description = "API for the Sense Energy Monitor";
     homepage = "https://github.com/scottbonline/sense";
-    changelog = "https://github.com/scottbonline/sense/releases/tag/${version}";
+    changelog = "https://github.com/scottbonline/sense/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

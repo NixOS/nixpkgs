@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "lxd-ui";
-  version = "0.8";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd-ui";
-    rev = "refs/tags/${version}";
-    hash = "sha256-oD/GPm84oFXHcZ8vTUzNgQinrHwNuvpeVjsrp8ibIZY=";
+    tag = version;
+    hash = "sha256-JVozXgAu0rTjO9aNzKMzzoGYL09lRzNI5qcjDfRaMnE=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-hRZ0vbksxnUv4XMrbhP2PI94UYYzwrydJHSx+uf+MbI=";
+    hash = "sha256-Z/C0QgqxBWob6KIWuU8PACkTKuAhTrJzod9WNXTO8Zs=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/canonical/lxd-ui";
     changelog = "https://github.com/canonical/lxd-ui/releases/tag/${version}";
     license = lib.licenses.gpl3;
-    maintainers = lib.teams.lxc.members;
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

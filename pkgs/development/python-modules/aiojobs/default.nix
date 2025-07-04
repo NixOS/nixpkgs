@@ -1,17 +1,19 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiojobs";
-  version = "1.2.1";
+  version = "1.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,37 +21,25 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiojobs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LwFXb/SHP6bbqPg1tqYwE03FKHf4Mv1PPOxnPdESH0I=";
+    tag = "v${version}";
+    hash = "sha256-MgGUmDG0b0V/k+mCeiVRnBxa+ChK3URnGv6P8QP7RzQ=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov=aiojobs/ --cov=tests/ --cov-report term" ""
-  '';
+  nativeBuildInputs = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
-
-  passthru.optional-dependencies = {
-    aiohttp = [
-      aiohttp
-    ];
+  optional-dependencies = {
+    aiohttp = [ aiohttp ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-aiohttp
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    pytest-cov-stub
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "aiojobs"
-  ];
+  pythonImportsCheck = [ "aiojobs" ];
 
   disabledTests = [
     # RuntimeWarning: coroutine 'Scheduler._wait_failed' was never awaited
@@ -58,11 +48,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Jobs scheduler for managing background task (asyncio)";
     homepage = "https://github.com/aio-libs/aiojobs";
-    changelog = "https://github.com/aio-libs/aiojobs/blob/v${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    changelog = "https://github.com/aio-libs/aiojobs/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
 }

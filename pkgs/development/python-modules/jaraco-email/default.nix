@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, aiosmtpd
-, jaraco-text
-, jaraco-collections
-, keyring
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  aiosmtpd,
+  jaraco-text,
+  jaraco-collections,
+  keyring,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.email";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2dU+tbrP86Oy8ej1Xa0+fNRB83tGBTUsOWbZyQsMKu8=";
   };
 
@@ -40,9 +41,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.email" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/jaraco/jaraco.email/blob/${src.rev}/CHANGES.rst";

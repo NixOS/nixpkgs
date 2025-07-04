@@ -1,10 +1,12 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "cursewords";
   version = "1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thisisparker";
@@ -29,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     description = "Graphical command line program for solving crossword puzzles in the terminal";
     mainProgram = "cursewords";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ danderson ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

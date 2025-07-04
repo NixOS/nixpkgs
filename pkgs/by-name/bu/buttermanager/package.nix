@@ -1,20 +1,21 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, wrapGAppsHook
-, qt5
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  wrapGAppsHook3,
+  qt5,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "buttermanager";
-  version = "2.5.1";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "egara";
     repo = "buttermanager";
     rev = version;
-    hash = "sha256-MLYJt7OMYlTFk8FCAlZJ1RGlFFXKfeAthWGp4JN+PfY=";
+    hash = "sha256-/U5IVJvYCw/YzBWjQ949YP9uoxsTNRJ5FO7rrI6Cvhs=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -25,13 +26,16 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     qt5.wrapQtAppsHook
   ];
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" "\${gappsWrapperArgs[@]}"];
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
+    "\${gappsWrapperArgs[@]}"
+  ];
 
   postInstall = ''
     substituteInPlace packaging/buttermanager.desktop \

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -12,22 +13,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "whwright";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "click-command-tree";
+    tag = version;
     hash = "sha256-oshAHCGe8p5BQ0W21bXSxrTCEFgIxZ6BmUEiWB1xAoI=";
   };
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
   pythonImportsCheck = [ "click_command_tree" ];
 

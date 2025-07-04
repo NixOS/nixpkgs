@@ -1,14 +1,23 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk3, breeze-icons, pantheon, gnome-icon-theme, hicolor-icon-theme }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  breeze-icons,
+  pantheon,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+}:
 
-stdenvNoCC.mkDerivation rec  {
+stdenvNoCC.mkDerivation rec {
   pname = "flat-remix-icon-theme";
-  version = "20220525";
+  version = "20240201";
 
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = "flat-remix";
     rev = version;
-    sha256 = "sha256-JpUa2nxZxrLTd80qdiGpob4Trq41ONthsPA4zFj/6nk=";
+    sha256 = "sha256-3TkBRgoT2AW0Sb0CrXdxh53/jYARAMFC/TIj/r/zruo=";
   };
 
   nativeBuildInputs = [
@@ -22,6 +31,7 @@ stdenvNoCC.mkDerivation rec  {
     hicolor-icon-theme
   ];
 
+  dontFixup = true;
   dontDropIconThemeCache = true;
 
   installPhase = ''
@@ -31,6 +41,8 @@ stdenvNoCC.mkDerivation rec  {
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
+    symlinkParentIconThemes
+    recordPropagatedDependencies
   '';
 
   meta = with lib; {
@@ -39,6 +51,6 @@ stdenvNoCC.mkDerivation rec  {
     license = with licenses; [ gpl3Only ];
     # breeze-icons and pantheon.elementary-icon-theme dependencies are restricted to linux
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

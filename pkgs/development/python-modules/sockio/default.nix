@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,15 +17,13 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "sockio";
+    tag = "v${version}";
     hash = "sha256-NSGd7/k1Yr408dipMNBSPRSwQ+wId7VLxgqMM/UmN/Q=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov-config=.coveragerc --cov sockio" "" \
-      --replace "--cov-report html --cov-report term" "" \
       --replace "--durations=2 --verbose" ""
   '';
 
@@ -31,12 +31,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "sockio"
-  ];
+  pythonImportsCheck = [ "sockio" ];
 
   disabledTests = [
     # Tests require network access

@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4";
   src = fetchFromGitHub {
     owner = "stripydog";
-    repo =  "kplex";
+    repo = "kplex";
     rev = "v${finalAttrs.version}";
     hash = "sha256-sps9l238hGLJ673kewFH8fOJw0HphEkZbJ+VUIzxC+o=";
   };
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A multiplexer for various nmea 0183 interfaces";
+    description = "Multiplexer for various nmea 0183 interfaces";
     homepage = "https://www.stripydog.com/kplex/";
     changelog = "https://www.stripydog.com/kplex/changes.html";
     license = licenses.gpl3Plus;

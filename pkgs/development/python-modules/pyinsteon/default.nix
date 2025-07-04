@@ -1,23 +1,24 @@
-{ lib
-, aiofiles
-, aiohttp
-, async-timeout
-, async-generator
-, buildPythonPackage
-, fetchFromGitHub
-, pypubsub
-, pyserial
-, pyserial-asyncio
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, voluptuous
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  async-timeout,
+  async-generator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pypubsub,
+  pyserial,
+  pyserial-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.5.3";
+  version = "1.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,13 +26,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyinsteon";
     repo = "pyinsteon";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9d6QbekUv63sjKdK+ZogYOkGfFXVW+JB6ITHnehLwtM=";
+    tag = version;
+    hash = "sha256-SyhPM3NS7iJX8jwTJ4YWZ72eYLn9JT6eESekPf5eCKI=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiofiles
@@ -48,14 +47,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # RuntimeError: BUG: Dead Listener called, still subscribed!
+    "test_linking_with_i1_device"
+  ];
+
   disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
     # Tests are blocking or failing
     "tests/test_handlers/"
   ];
 
-  pythonImportsCheck = [
-    "pyinsteon"
-  ];
+  pythonImportsCheck = [ "pyinsteon" ];
 
   meta = with lib; {
     description = "Python library to support Insteon home automation projects";

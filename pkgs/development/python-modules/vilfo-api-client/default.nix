@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, getmac
-, requests
-, semver
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  getmac,
+  requests,
+  semver,
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ManneW";
     repo = "vilfo-api-client-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZlmriBd+M+54ux/UNYa355mkz808/NxSz7IzmWouA0c=";
   };
 
@@ -26,9 +27,7 @@ buildPythonPackage rec {
       --replace "get-mac" "getmac"
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     getmac

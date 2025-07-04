@@ -1,9 +1,9 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "grafana-polystat-panel";
-  version = "2.1.4";
-  zipHash = "sha256-15mi5NzbbWXJ/69VEwUS058atQ+z2g4C3T9/b+/Exwk=";
+  version = "2.1.14";
+  zipHash = "sha256-W6qx3b8rmIQV6Sm2rUsCDKrWi69N2S31hbmuqjYt25M=";
   meta = with lib; {
     description = "Hexagonal multi-stat panel for Grafana";
     license = licenses.asl20;

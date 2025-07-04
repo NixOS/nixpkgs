@@ -1,91 +1,111 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  python,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, django
-, python3-openid
-, requests
-, requests-oauthlib
-, pyjwt
+  # build-time dependencies
+  gettext,
 
-# optional-dependencies
-, python3-saml
-, qrcode
+  # dependencies
+  asgiref,
+  django,
 
-# tests
-, pillow
-, pytestCheckHook
-, pytest-django
+  # optional-dependencies
+  fido2,
+  python3-openid,
+  python3-saml,
+  requests,
+  requests-oauthlib,
+  pyjwt,
+  qrcode,
 
-# passthru tests
-, dj-rest-auth
+  # tests
+  django-ninja,
+  djangorestframework,
+  pillow,
+  psycopg2,
+  pytest-asyncio,
+  pytest-django,
+  pytestCheckHook,
+  pyyaml,
+
+  # passthru tests
+  dj-rest-auth,
 }:
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.61.1";
+  version = "65.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pennersr";
     repo = "django-allauth";
-    rev = "refs/tags/${version}";
-    hash = "sha256-C9SYlL1yMnSb+Zpi2opvDw1stxAHuI9/XKHyvkM36Cg=";
+    tag = version;
+    hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  nativeBuildInputs = [ gettext ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    asgiref
+    django
   ];
 
-  propagatedBuildInputs = [
-    django
-    pyjwt
-    python3-openid
-    requests
-    requests-oauthlib
-  ] ++ pyjwt.optional-dependencies.crypto;
+  preBuild = ''
+    ${python.pythonOnBuildForHost.interpreter} -m django compilemessages
+  '';
 
-  passthru.optional-dependencies = {
-    saml = [
-      python3-saml
-    ];
+  optional-dependencies = {
     mfa = [
+      fido2
       qrcode
     ];
+    openid = [ python3-openid ];
+    saml = [ python3-saml ];
+    socialaccount = [
+      requests
+      requests-oauthlib
+      pyjwt
+    ] ++ pyjwt.optional-dependencies.crypto;
+    steam = [ python3-openid ];
   };
 
-  pythonImportsCheck = [
-    "allauth"
-  ];
+  pythonImportsCheck = [ "allauth" ];
 
   nativeCheckInputs = [
+    django-ninja
+    djangorestframework
     pillow
-    pytestCheckHook
+    psycopg2
+    pytest-asyncio
     pytest-django
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    pytestCheckHook
+    pyyaml
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # Tests require network access
     "test_login"
   ];
 
-  passthru.tests = {
-    inherit dj-rest-auth;
-  };
+  passthru.tests = { inherit dj-rest-auth; };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pennersr/django-allauth/blob/${version}/ChangeLog.rst";
     description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication";
     downloadPage = "https://github.com/pennersr/django-allauth";
     homepage = "https://www.intenct.nl/projects/django-allauth";
-    license = licenses.mit;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

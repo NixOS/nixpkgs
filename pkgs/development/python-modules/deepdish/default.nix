@@ -1,30 +1,43 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, numpy
-, scipy
-, tables
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  numpy,
+  scipy,
+  tables,
 }:
 
 buildPythonPackage rec {
   pname = "deepdish";
   version = "0.3.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wqzwh3y0mjdyba5kfbvlamn561d3afz50zi712c7klkysz3mzva";
+    hash = "sha256-av86vvaTzsNEOPGD8p0aLZhiq6J7uVnU8k1W4AfkH/M=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace deepdish/core.py \
+      --replace-fail "np.ComplexWarning" "np.exceptions.ComplexWarning"
+  '';
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     numpy
     scipy
     tables
   ];
 
-  pythonImportsCheck = [
-    "deepdish"
-  ];
+  pythonImportsCheck = [ "deepdish" ];
 
   # nativeCheckInputs = [
   #   pandas
@@ -33,11 +46,11 @@ buildPythonPackage rec {
   # The tests are broken: `ModuleNotFoundError: No module named 'deepdish.six.conf'`
   doCheck = false;
 
-  meta = with lib; {
-    description = "Flexible HDF5 saving/loading and other data science tools from the University of Chicago.";
+  meta = {
+    description = "Flexible HDF5 saving/loading and other data science tools from the University of Chicago";
     mainProgram = "ddls";
     homepage = "https://github.com/uchicago-cs/deepdish";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }

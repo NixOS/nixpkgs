@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "contextlib2";
   version = "0.6.0.post1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

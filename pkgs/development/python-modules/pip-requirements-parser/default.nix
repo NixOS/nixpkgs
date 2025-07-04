@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -17,29 +18,23 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nexB";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pip-requirements-parser";
+    tag = "v${version}";
     hash = "sha256-UMrwDXxk+sD3P2jk7s95y4OX6DRBjWWZZ8IhkR6tnZ4=";
   };
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     packaging
     pyparsing
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pip_requirements_parser"
-  ];
+  pythonImportsCheck = [ "pip_requirements_parser" ];
 
   disabledTests = [
     "test_RequirementsFile_to_dict"

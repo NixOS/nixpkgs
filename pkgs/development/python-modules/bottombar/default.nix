@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
 }:
 
 buildPythonPackage rec {
@@ -12,20 +13,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "evalf";
     repo = "bottombar";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-W+Cbcgb664nVT/nsFdDruT688JWG2NZnF5hDDezTgnw=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   # The package only has some "interactive" tests where a user must check for
   # the correct output and hit enter after every check
   doCheck = false;
-  pythonImportsCheck = [
-    "bottombar"
-  ];
+  pythonImportsCheck = [ "bottombar" ];
 
   meta = with lib; {
     description = "Context manager that prints a status line at the bottom of a terminal window";

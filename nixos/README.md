@@ -1,12 +1,12 @@
 # NixOS
 
-NixOS is a Linux distribution based on the purely functional package
-management system Nix.  More information can be found at
-https://nixos.org/nixos and in the manual in doc/manual.
+NixOS is a Linux distribution based on the purely functional package management system Nix.
+More information can be found at https://nixos.org/nixos and in the manual in doc/manual.
 
 ## Testing changes
 
-You can add new module to your NixOS configuration file (usually it’s `/etc/nixos/configuration.nix`). And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.
+You can add new module to your NixOS configuration file (usually it’s `/etc/nixos/configuration.nix`).
+And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.
 
 ## Commit conventions
 
@@ -31,16 +31,19 @@ You can add new module to your NixOS configuration file (usually it’s `/etc/ni
 
 ## Reviewing contributions
 
-When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
+When changing the bootloader installation process, extra care must be taken.
+Grub installations cannot be rolled back, hence changes may break people’s installations forever.
+For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
 
 ### Module updates
 
-Module updates are submissions changing modules in some ways. These often contains changes to the options or introduce new options.
+Module updates are submissions changing modules in some ways.
+These often contains changes to the options or introduce new options.
 
 Reviewing process:
 
 - Ensure that the module maintainers are notified.
-  - [CODEOWNERS](https://help.github.com/articles/about-codeowners/) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
+  - The continuous integration system will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
 - Ensure that the module tests, if any, are succeeding.
   - You may invoke OfBorg with `@ofborg test <module>` to build `nixosTests.<module>`
 - Ensure that the introduced options are correct.
@@ -48,7 +51,7 @@ Reviewing process:
   - Description, default and example should be provided.
 - Ensure that option changes are backward compatible.
   - `mkRenamedOptionModuleWith` provides a way to make renamed option backward compatible.
-  - Use `lib.versionAtLeast config.system.stateVersion "23.11"` on backward incompatible changes which may corrupt, change or update the state stored on existing setups.
+  - Use `lib.versionAtLeast config.system.stateVersion "24.05"` on backward incompatible changes which may corrupt, change or update the state stored on existing setups.
 - Ensure that removed options are declared with `mkRemovedOptionModule`.
 - Ensure that changes that are not backward compatible are mentioned in release notes.
 - Ensure that documentations affected by the change is updated.
@@ -80,9 +83,13 @@ Reviewing process:
 
 - Ensure that all file paths [fit the guidelines](../CONTRIBUTING.md#file-naming-and-organisation).
 - Ensure that the module tests, if any, are succeeding.
+- Ensure that new module tests are added to the package `passthru.tests`.
 - Ensure that the introduced options are correct.
   - Type should be appropriate (string related types differs in their merging capabilities, `loaOf` and `string` types are deprecated).
   - Description, default and example should be provided.
+    - Defaults may only be omitted if both:
+      1. The user is required to set the default in order to properly use the service.
+      2. The lack of a default does not break evaluation when the module is not enabled.
 - Ensure that module `meta` field is present
   - Maintainers should be declared in `meta.maintainers`.
   - Module documentation should be declared with `meta.doc`.
@@ -95,7 +102,8 @@ Sample template for a new module review is provided below.
 ##### Reviewed points
 
 - [ ] module path fits the guidelines
-- [ ] module tests succeed on ARCHITECTURE
+- [ ] module tests, if any, succeed on ARCHITECTURE
+- [ ] module tests, if any, are added to package `passthru.tests`
 - [ ] options have appropriate types
 - [ ] options have default
 - [ ] options have example

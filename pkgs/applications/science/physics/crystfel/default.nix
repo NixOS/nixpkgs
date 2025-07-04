@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, fetchpatch
-, fetchzip
-, cmake
-, lz4
-, bzip2
-, m4
-, hdf5
-, gsl
-, unzip
-, makeWrapper
-, meson
-, git
-, ninja
-, eigen
-, pkg-config
-, wrapGAppsHook
-, flex
-, bison
-, doxygen
-, opencl-headers
-, ncurses
-, msgpack
-, fftw
-, zeromq
-, ocl-icd
-, gtk3
-, gdk-pixbuf
-, argp-standalone
-, memorymappingHook
-, withGui ? true
-, withBitshuffle ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchzip,
+  cmake,
+  lz4,
+  gfortran,
+  bzip2,
+  hdf5,
+  gsl,
+  unzip,
+  makeWrapper,
+  zlib,
+  meson,
+  ninja,
+  pandoc,
+  eigen,
+  pkg-config,
+  wrapGAppsHook3,
+  flex,
+  bison,
+  doxygen,
+  opencl-headers,
+  ncurses,
+  msgpack,
+  fftw,
+  zeromq,
+  ocl-icd,
+  gtk3,
+  gdk-pixbuf,
+  argp-standalone,
+  withGui ? true,
+  withBitshuffle ? true,
 }:
 
 let
@@ -40,11 +41,17 @@ let
     pname = "libccp4";
     version = "8.0.0";
     src = fetchurl {
-      url = "https://ftp.ccp4.ac.uk/opensource/${pname}-${version}.tar.gz";
+      url = "https://ftp.ccp4.ac.uk/opensource/libccp4-${version}.tar.gz";
       hash = "sha256-y4E66GYSoIZjKd6rfO6W6sVz2BvlskA0HUD5rVMi/y0=";
     };
-    nativeBuildInputs = [ meson ninja ];
-    buildInputs = [ hdf5 gsl ];
+    nativeBuildInputs = [
+      meson
+      ninja
+    ];
+    buildInputs = [
+      hdf5
+      gsl
+    ];
 
     configureFlags = [ "FFLAGS=-fallow-argument-mismatch" ];
 
@@ -74,27 +81,33 @@ let
     let
       version = "7.4.0";
       src =
-        if stdenv.isDarwin then
-          fetchurl
-            {
-              url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${builtins.replaceStrings [ "." ] [ "" ] version}/pre-built/mosflm-osx-64-noX11.zip";
-              sha256 = "1da5wimv3kl8bccp49j69vh8gi28cn7axg59lrmb38s68c618h7j";
-            }
+        if stdenv.hostPlatform.isDarwin then
+          fetchurl {
+            url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${
+              builtins.replaceStrings [ "." ] [ "" ] version
+            }/pre-built/mosflm-osx-64-noX11.zip";
+            sha256 = "1da5wimv3kl8bccp49j69vh8gi28cn7axg59lrmb38s68c618h7j";
+          }
         else
           fetchurl {
-            url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${builtins.replaceStrings [ "." ] [ "" ] version}/pre-built/mosflm-linux-64-noX11.zip";
+            url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${
+              builtins.replaceStrings [ "." ] [ "" ] version
+            }/pre-built/mosflm-linux-64-noX11.zip";
             hash = "sha256:1f2qins5kaz5v6mkaclncqpirx3mlz177ywm13py9p6s9mk99g32";
           };
-      mosflmBinary = if stdenv.isDarwin then "bin/mosflm" else "mosflm-linux-64-noX11";
+      mosflmBinary = if stdenv.hostPlatform.isDarwin then "bin/mosflm" else "mosflm-linux-64-noX11";
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "mosflm";
 
       inherit version src;
 
       dontBuild = true;
 
-      nativeBuildInputs = [ unzip makeWrapper ];
+      nativeBuildInputs = [
+        unzip
+        makeWrapper
+      ];
 
       sourceRoot = ".";
 
@@ -111,23 +124,31 @@ let
     pname = "xgandalf";
     version = "c6c5003ff1086e8c0fb5313660b4f02f3a3aab7b";
     src = fetchurl {
-      url = "https://gitlab.desy.de/thomas.white/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
+      url = "https://gitlab.desy.de/thomas.white/xgandalf/-/archive/${version}/xgandalf-${version}.tar.gz";
       hash = "sha256-/uZlBwAINSoYqgLQFTMz8rS1Rpadu79JkO6Bu/+Nx9E=";
     };
 
-    nativeBuildInputs = [ meson pkg-config ninja ];
+    nativeBuildInputs = [
+      meson
+      pkg-config
+      ninja
+    ];
     buildInputs = [ eigen ];
   };
 
   pinkIndexer = stdenv.mkDerivation rec {
     pname = "pinkindexer";
-    version = "5d4e016941eb2a9e50a10df96ded7ff1e2464503";
+    version = "15caa21191e27e989b750b29566e4379bc5cd21a";
     src = fetchurl {
       url = "https://gitlab.desy.de/thomas.white/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-      hash = "sha256-VnJOJJ247dNoBlos4Fu3GQBlAnTk9el+yZDRiicJtu0=";
+      hash = "sha256-v/SCJiHAV05Lc905y/dE8uBXlW+lLX9wau4XORYdbQg=";
     };
 
-    nativeBuildInputs = [ meson pkg-config ninja ];
+    nativeBuildInputs = [
+      meson
+      pkg-config
+      ninja
+    ];
     buildInputs = [ eigen ];
   };
 
@@ -139,7 +160,11 @@ let
       hash = "sha256-EaihnW7p//ecgMn+KKlfmBeXrnAqs+HdhN+ovuSrtiQ=";
     };
 
-    nativeBuildInputs = [ meson ninja pkg-config ];
+    nativeBuildInputs = [
+      meson
+      ninja
+      pkg-config
+    ];
     buildInputs = [ eigen ];
   };
 
@@ -161,7 +186,11 @@ let
     ];
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ hdf5 lz4 bzip2 ];
+    buildInputs = [
+      hdf5
+      lz4
+      bzip2
+    ];
 
     cmakeFlags = [
       "-DENABLE_BITSHUFFLE_PLUGIN=yes"
@@ -169,44 +198,67 @@ let
       "-DENABLE_BZIP2_PLUGIN=yes"
     ];
   };
+
+  millepede-ii = stdenv.mkDerivation rec {
+    pname = "millepede-ii";
+    version = "04-13-06";
+    src = fetchurl {
+      url = "https://gitlab.desy.de/claus.kleinwort/millepede-ii/-/archive/V${version}/millepede-ii-V${version}.tar.gz";
+      hash = "sha256-aFoo8AGBsUEN2u3AmnSpTqJ6JeNV6j9vkAFTZ34I+sI=";
+    };
+
+    nativeBuildInputs = [ gfortran ];
+    buildInputs = [ zlib ];
+
+    makeFlags = [ "PREFIX=$(out)" ];
+  };
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "0.10.2";
+  version = "0.11.1";
   src = fetchurl {
-    url = "https://www.desy.de/~twhite/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-nCO9ndDKS54bVN9IhFBiCVNzqk7BsCljXFrOmlx+sP4=";
+    url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
+    sha256 = "sha256-vZuN9dYnowySC/OX0EZB0mbhoBOyRiOWfX9d6sl1lKQ=";
   };
-  nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers makeWrapper ]
-    ++ lib.optionals withGui [ wrapGAppsHook ];
-  buildInputs = [
-    hdf5
-    gsl
-    ncurses
-    msgpack
-    fftw
-    fdip
-    zeromq
-    ocl-icd
-    libccp4
-    mosflm
-    pinkIndexer
-    xgandalf
-  ] ++ lib.optionals withGui [ gtk3 gdk-pixbuf ]
-  ++ lib.optionals stdenv.isDarwin [
-    argp-standalone
-  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
-    memorymappingHook
-  ]
-  ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    flex
+    bison
+    doxygen
+    opencl-headers
+    makeWrapper
+  ] ++ lib.optionals withGui [ wrapGAppsHook3 ];
+  buildInputs =
+    [
+      hdf5
+      gsl
+      ncurses
+      msgpack
+      fftw
+      fdip
+      zeromq
+      ocl-icd
+      libccp4
+      mosflm
+      pinkIndexer
+      xgandalf
+      pandoc
+    ]
+    ++ lib.optionals withGui [
+      gtk3
+      gdk-pixbuf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      argp-standalone
+    ]
+    ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
 
   patches = [
+    # on darwin at least, we need to link to a separate argp library;
+    # this patch adds a test for this and the necessary linker options
     ./link-to-argp-standalone-if-needed.patch
-    ./disable-fmemopen-on-aarch64-darwin.patch
-    (fetchpatch {
-      url = "https://gitlab.desy.de/thomas.white/crystfel/-/commit/3c54d59e1c13aaae716845fed2585770c3ca9d14.diff";
-      hash = "sha256-oaJNBQQn0c+z4p1pnW4osRJA2KdKiz4hWu7uzoKY7wc=";
-    })
   ];
 
   # CrystFEL calls mosflm by searching PATH for it. We could've create a wrapper script that sets the PATH, but
@@ -218,7 +270,9 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString withBitshuffle ''
     for file in $out/bin/*; do
-      wrapProgram $file --set HDF5_PLUGIN_PATH ${hdf5-external-filter-plugins}/lib/plugins
+      wrapProgram $file \
+        --set HDF5_PLUGIN_PATH ${hdf5-external-filter-plugins}/lib/plugins \
+        --prefix PATH ":" ${lib.makeBinPath [ millepede-ii ]}
     done
   '';
 

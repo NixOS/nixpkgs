@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, beautifulsoup4
-, lxml
-, cssutils
-, nltk
-, pytest-lazy-fixture
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  beautifulsoup4,
+  lxml,
+  cssutils,
+  nltk,
+  pytest-lazy-fixture,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pycaption";
-  version = "2.2.6";
+  version = "2.2.16";
 
   disabled = pythonOlder "3.8";
 
@@ -22,21 +23,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pbs";
     repo = "pycaption";
-    rev = "refs/tags/${version}";
-    hash = "sha256-XN83L6WsRyl9G0ia4uz3SCVcwwUNUyfNMB64RfZh+PA=";
+    tag = version;
+    hash = "sha256-w617mOxvL1alj7jauH4TVsYO0wxMHIFjevdhb4+542s=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     lxml
     cssutils
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     transcript = [ nltk ];
   };
 

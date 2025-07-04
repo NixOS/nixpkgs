@@ -6,11 +6,12 @@
   fetchFromGitHub,
   prompt-toolkit,
   pygments,
+  pymodbus-repl,
   pyserial,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   redis,
   setuptools,
   sqlalchemy,
@@ -20,44 +21,33 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.6.8";
+  version = "3.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6Rt5fbuaeAgbW5KKse1zZIJyq/p2P2MjXGwA7q0C7wA=";
+    tag = "v${version}";
+    hash = "sha256-nzaIE8ZBIwo6ZChYBzQzMndCM/hOwCVKepkUACn8e80=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov-report html " ""
-  '';
 
   build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
-    repl = [
-      aiohttp
-      typer
-      prompt-toolkit
-      pygments
-      click
-    ] ++ typer.optional-dependencies.all;
+  optional-dependencies = {
+    repl = [ pymodbus-repl ];
     serial = [ pyserial ];
+    simulator = [ aiohttp ];
   };
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
     redis
     sqlalchemy
     twisted
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     pushd test

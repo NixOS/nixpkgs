@@ -1,21 +1,41 @@
-{ lib, fetchFromGitHub, python3Packages, wrapGAppsHook
-, glibcLocales, gobject-introspection, gtk3, libsoup_3, libsecret
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  wrapGAppsHook3,
+  glibcLocales,
+  gobject-introspection,
+  gtk3,
+  libsoup_3,
+  libsecret,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gtimelog";
-  version = "unstable-2023-10-05";
-  format = "setuptools";
+  version = "0.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "ba606cbe8eef0e3dc098c6ab3bcbe381bf7ef410";
-    hash = "sha256-+iBHfbUJtAtI/vcHj0Y8f9OxAp1SnhQyMqedVzSYPZQ=";
+    owner = "gtimelog";
+    repo = "gtimelog";
+    tag = version;
+    hash = "sha256-NlKAgAnZWodXF4eybcNOSxexjhegRgQEWoAPd+KWzsw=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
-  buildInputs = [ glibcLocales gtk3 libsoup_3 libsecret ];
+  build-system = with python3Packages; [
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+  ];
+  buildInputs = [
+    glibcLocales
+    gtk3
+    libsoup_3
+    libsecret
+  ];
   propagatedBuildInputs = with python3Packages; [
     pygobject3
   ];
@@ -44,7 +64,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A time tracking app";
+    description = "Time tracking app";
     mainProgram = "gtimelog";
     longDescription = ''
       GTimeLog is a small time tracking application for GNOME.

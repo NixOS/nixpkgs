@@ -1,37 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pybalboa";
-  version = "1.0.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "1.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garbled1";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-7vjdRGnEnMf32pZwoKRxX16hxkyf0CXlncpbBJMQtfI=";
+    repo = "pybalboa";
+    # missing tag: https://github.com/garbled1/pybalboa/issues/100
+    rev = "6aa7e3c401ab03b93c083acdf430afb708e20e9b";
+    hash = "sha256-xOMbMmTTDDbd0WL0LFJ6lztsQMdI/r9MLhV9DmB6m3I=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+    poetry-dynamic-versioning
   ];
 
-  # Project has no tests
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "pybalboa"
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "pybalboa" ];
 
   meta = with lib; {
-    description = " Python module to interface with a Balboa Spa";
+    description = "Module to communicate with a Balboa spa wifi adapter";
     homepage = "https://github.com/garbled1/pybalboa";
     changelog = "https://github.com/garbled1/pybalboa/releases/tag/${version}";
     license = licenses.asl20;

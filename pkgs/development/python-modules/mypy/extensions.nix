@@ -1,47 +1,42 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, typing
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  flit-core,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "mypy-extensions";
-  version = "1.0.0";
+  version = "1.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy_extensions";
-    rev = version;
-    hash = "sha256-gOfHC6dUeBE7SsWItpUHHIxW3wzhPM5SuGW1U8P7DD0=";
+    tag = version;
+    hash = "sha256-HNAFsWX4tU9hfZkKxLNJn1J+H3uTesQflbRPlo3GQ4k=";
   };
 
-  propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
+  dependencies = [ flit-core ];
 
   # make the testsuite run with pytest, so we can disable individual tests
-  nativeCheckInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "tests/testextensions.py" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/python/mypy_extensions/issues/65
+    "test_py36_class_syntax_usage"
   ];
 
-  pytestFlagsArray = [
-    "tests/testextensions.py"
-  ];
+  pythonImportsCheck = [ "mypy_extensions" ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    # https://github.com/python/mypy_extensions/issues/24
-    "test_typeddict_errors"
-  ];
-
-  pythonImportsCheck = [
-    "mypy_extensions"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Experimental type system extensions for programs checked with the mypy typechecker";
     homepage = "https://www.mypy-lang.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lnl7 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lnl7 ];
   };
 }

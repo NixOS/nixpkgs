@@ -1,30 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "defusedcsv";
-  version =  "2.0.0";
+  version = "2.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "defusedcsv";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-y8qLVfdkxRrDjtrTOLK5Zvi/1Vyv8eOnCueUkaRp4sQ=";
   };
 
-  pythonImportsCheck = [
-    "defusedcsv.csv"
-  ];
+  pythonImportsCheck = [ "defusedcsv.csv" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python library to protect your users from Excel injections in CSV-format exports, drop-in replacement for standard library's csv module";

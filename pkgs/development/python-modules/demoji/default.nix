@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pythonOlder
-, pytestCheckHook
-, ujson
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
+  pytestCheckHook,
+  ujson,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bsolomon1124";
     repo = "demoji";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ojy4JiM6xvP9J40Z5uFCMUZvZtLZ1le2p/2/NfAUAtk=";
   };
 
@@ -26,23 +27,15 @@ buildPythonPackage rec {
       --replace-fail "pytest-runner" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
-    ujson = [
-      ujson
-    ];
+  optional-dependencies = {
+    ujson = [ ujson ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "demoji"
-  ];
+  pythonImportsCheck = [ "demoji" ];
 
   meta = with lib; {
     description = "Module to find/replace/remove emojis in text strings";

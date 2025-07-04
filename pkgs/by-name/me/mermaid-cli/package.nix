@@ -1,73 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, makeWrapper
-, nodejs
-, fixup-yarn-lock
-, yarn
-, chromium
+{
+  buildNpmPackage,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  chromium,
+  nix-update-script,
 }:
-
-stdenv.mkDerivation rec {
+let
+  version = "11.6.0";
+in
+buildNpmPackage {
   pname = "mermaid-cli";
-  version = "10.8.0";
+  version = version;
 
   src = fetchFromGitHub {
     owner = "mermaid-js";
     repo = "mermaid-cli";
     rev = version;
-    hash = "sha256-nCLLv8QXx9N4WiUFw3WB+Rpfd4H4oCFa1ac01al+ovY=";
+    hash = "sha256-9Ozi5mAeFVdwGMjvlLG4hMWnCGi552SsT5RuvRiF9ww=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-thZxaa7S3vlS1Ws+G5dklun+ISCV908p1Ov7qb8fP3c=";
-  };
-
-  nativeBuildInputs  = [
-    makeWrapper
-    nodejs
-    fixup-yarn-lock
-    yarn
+  patches = [
+    ./remove-puppeteer-from-dev-deps.patch # https://github.com/mermaid-js/mermaid-cli/issues/830
   ];
 
-  configurePhase = ''
-    runHook preConfigure
+  npmDepsHash = "sha256-SHGYv/IwrCB02M8w5HsEsB7BwWVRFYNDYJFRDgG3a14=";
 
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror "$offlineCache"
-    fixup-yarn-lock yarn.lock
-    yarn --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive install
-    patchShebangs node_modules
+  env = {
+    PUPPETEER_SKIP_DOWNLOAD = true;
+  };
 
-    runHook postConfigure
-  '';
+  npmBuildScript = "prepare";
 
-  buildPhase = ''
-    runHook preBuild
+  makeWrapperArgs = lib.lists.optional (lib.meta.availableOn stdenv.hostPlatform chromium) "--set PUPPETEER_EXECUTABLE_PATH '${lib.getExe chromium}'";
 
-    yarn --offline prepare
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    yarn --offline --production install
-
-    mkdir -p "$out/lib/node_modules/@mermaid-js/mermaid-cli"
-    cp -r . "$out/lib/node_modules/@mermaid-js/mermaid-cli"
-
-    makeWrapper "${nodejs}/bin/node" "$out/bin/mmdc" \
-  '' + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform chromium) ''
-      --set PUPPETEER_EXECUTABLE_PATH '${lib.getExe chromium}' \
-  '' + ''
-      --add-flags "$out/lib/node_modules/@mermaid-js/mermaid-cli/src/cli.js"
-
-    runHook postInstall
-  '';
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Generation of diagrams from text in a similar manner as markdown";

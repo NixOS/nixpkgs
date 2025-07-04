@@ -1,57 +1,52 @@
-{ lib
-, olefile
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, cryptography
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  olefile,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  cryptography,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "msoffcrypto-tool";
-  version = "5.3.1";
-  format = "pyproject";
+  version = "5.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nolze";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aQtEJyG0JGe4eSIRI4OUjJZNDBni6FFyJXXkbeiotSY=";
+    repo = "msoffcrypto-tool";
+    tag = "v${version}";
+    hash = "sha256-nwCjgcZqD0hptHC0WqIodHC5m/JHYyUdfEngIoXzNqA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     olefile
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Test fails with AssertionError
     "test_cli"
   ];
 
-  pythonImportsCheck = [
-    "msoffcrypto"
-  ];
+  pythonImportsCheck = [ "msoffcrypto" ];
 
   meta = with lib; {
     description = "Python tool and library for decrypting MS Office files with passwords or other keys";
-    mainProgram = "msoffcrypto-tool";
     homepage = "https://github.com/nolze/msoffcrypto-tool";
     changelog = "https://github.com/nolze/msoffcrypto-tool/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "msoffcrypto-tool";
   };
 }

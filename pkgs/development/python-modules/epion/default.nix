@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, pythonOlder
-, pytz
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "devenzo-com";
     repo = "epion_python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9tE/SqR+GHZXeE+bOtXkLu+4jy1vO8WoiLjb6MJazxQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     docopt
@@ -35,9 +34,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "epion"
-  ];
+  pythonImportsCheck = [ "epion" ];
 
   meta = with lib; {
     description = "Module to access Epion sensor data";

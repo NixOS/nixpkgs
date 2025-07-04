@@ -1,33 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gflanguages
-, num2words
-, protobuf
-, pytestCheckHook
-, pyyaml
-, setuptools
-, setuptools-scm
-, strictyaml
-, termcolor
-, ufo2ft
-, vharfbuzz
-, youseedee
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gflanguages,
+  num2words,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools-scm,
+  setuptools,
+  strictyaml,
+  termcolor,
+  ufo2ft,
+  vharfbuzz,
+  youseedee,
 }:
 
 buildPythonPackage rec {
   pname = "shaperglot";
-  version = "0.5.0";
+  version = "0.6.4";
+  pyproject = true;
 
-  # PyPI source tarballs omit tests, fetch from Github instead
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "shaperglot";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jmYB1tsMMpFs0X/FW3z9el2nFr8De2jR1dO658w7U4Q=";
+    tag = "v${version}";
+    hash = "sha256-O6z7TJpC54QkqX5/G1HKSvaDYty7B9BnCQ4FpsLsEMs=";
   };
 
-  pyproject = true;
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=75.0.0" "setuptools"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     gflanguages
@@ -40,21 +54,17 @@ buildPythonPackage rec {
     vharfbuzz
     youseedee
   ];
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
 
-  doCheck = true;
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "shaperglot" ];
 
   meta = with lib; {
     description = "Tool to test OpenType fonts for language support";
-    mainProgram = "shaperglot";
     homepage = "https://github.com/googlefonts/shaperglot";
+    changelog = "https://github.com/googlefonts/shaperglot/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ danc86 ];
+    mainProgram = "shaperglot";
   };
 }

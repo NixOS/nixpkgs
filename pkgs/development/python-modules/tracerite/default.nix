@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, html5tagger
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  html5tagger,
+  setuptools,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tracerite";
-  version = "1.1.1";
+  version = "1.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,15 +19,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "tracerite";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rI1MNdYl/P64tUHyB3qV9gfLbGbCVOXnEFoqFTkaqgg=";
+    tag = "v${version}";
+    hash = "sha256-T210vRXFWlTs5ke13DVvZEVsonXiT+g6xSI63+DxLXc=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     html5tagger
   ];
 
@@ -36,15 +36,13 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tracerite"
-  ];
+  pythonImportsCheck = [ "tracerite" ];
 
   meta = with lib; {
     description = "Tracebacks for Humans in Jupyter notebooks";
     homepage = "https://github.com/sanic-org/tracerite";
-    changelog = "https://github.com/sanic-org/tracerite/releases/tag/v${version}";
+    changelog = "https://github.com/sanic-org/tracerite/releases/tag/${src.tag}";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ p0lyw0lf ];
   };
 }

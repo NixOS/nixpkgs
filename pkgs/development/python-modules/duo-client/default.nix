@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, mock
-, pytestCheckHook
-, pythonOlder
-, pytz
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "duo-client";
-  version = "5.3.0";
+  version = "5.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "duosecurity";
     repo = "duo_client_python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-7cifxNSBHbX7QZ52Sy1hm5xzZYcLZOkloT6q9P7TO6A=";
+    tag = version;
+    hash = "sha256-5ZPs2099G9oBbDpComNDP3c4B0NjWirBMZY4orO9YfA=";
   };
 
   postPatch = ''
@@ -30,13 +31,9 @@ buildPythonPackage rec {
       --replace-fail "flake8" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    six
-  ];
+  dependencies = [ six ];
 
   nativeCheckInputs = [
     freezegun
@@ -45,9 +42,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pythonImportsCheck = [
-    "duo_client"
-  ];
+  pythonImportsCheck = [ "duo_client" ];
 
   disabledTests = [
     # Tests require network access
@@ -63,8 +58,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with the Duo Auth, Admin, and Accounts APIs";
     homepage = "https://github.com/duosecurity/duo_client_python";
-    changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${version}";
+    changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${src.tag}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

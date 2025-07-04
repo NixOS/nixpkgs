@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wayfire
-, eudev
-, libinput
-, libxkbcommon
-, librsvg
-, libGL
-, xcbutilwm
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wayfire,
+  eudev,
+  libinput,
+  libxkbcommon,
+  librsvg,
+  libGL,
+  xcbutilwm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://gitlab.com/wayfireplugins/windecor";
-    description = "A window decoration plugin for wayfire";
+    description = "Window decoration plugin for wayfire";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rewine ];
     inherit (wayfire.meta) platforms;

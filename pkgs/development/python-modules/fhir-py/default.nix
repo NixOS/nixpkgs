@@ -1,19 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, flit-core
-, aiohttp
-, pytz
-, requests
-, pytestCheckHook
-, pytest-asyncio
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  flit-core,
+  aiohttp,
+  pytz,
+  requests,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pydantic,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "fhir-py";
-  version = "1.4.2";
+  version = "2.0.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,21 +24,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "beda-software";
     repo = "fhir-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kYqoRso1ypN5novRxMMzz1h2NGNybbw5lK4+HErG79I=";
+    tag = "v${version}";
+    hash = "sha256-XZC3cLjAy1VZfMsHy/QmwJXKiW/WxVous1LrbkGOeRs=";
   };
 
-  preBuild = ''
-    substituteInPlace pyproject.toml  \
-      --replace "--cov=fhirpy" ""  \
-      --replace "--cov-report=xml" ""
-  '';
+  build-system = [ flit-core ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     pytz
     requests
@@ -44,6 +39,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
+    pydantic
     responses
   ];
 
@@ -56,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Async/sync API for FHIR resources";
     homepage = "https://github.com/beda-software/fhir-py";
-    changelog = "https://github.com/beda-software/fhir-py/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/beda-software/fhir-py/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

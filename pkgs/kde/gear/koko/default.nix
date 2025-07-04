@@ -6,9 +6,8 @@
   qtpositioning,
   qtsvg,
   exiv2,
-  kirigami-addons,
-  kquickimageeditor,
-}: let
+}:
+let
   # URLs snapshotted through
   # https://web.archive.org/save/$url
   # Update when stale enough I guess?
@@ -25,23 +24,25 @@
     sha256 = "0cwbfff8gzci5zrahh6d53b9b3bfv1cbwlv0k6076531i1c7md9p";
   };
 in
-  mkKdeDerivation {
-    pname = "koko";
+mkKdeDerivation {
+  pname = "koko";
 
-    prePatch = ''
-      ln -s ${admin1}     src/admin1CodesASCII.txt
-      ln -s ${admin2}     src/admin2Codes.txt
-      ln -s ${cities1000} src/cities1000.zip
-    '';
+  prePatch = ''
+    ln -s ${admin1}     src/admin1CodesASCII.txt
+    ln -s ${admin2}     src/admin2Codes.txt
+    ln -s ${cities1000} src/cities1000.zip
+  '';
 
-    extraNativeBuildInputs = [pkg-config];
-    extraBuildInputs = [
-      qtmultimedia
-      qtpositioning
-      qtsvg
-      exiv2
-      kirigami-addons
-      kquickimageeditor
-    ];
-    meta.mainProgram = "koko";
-  }
+  patches = [
+    ./optional-runtime-dependencies.patch
+  ];
+
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [
+    qtmultimedia
+    qtpositioning
+    qtsvg
+    exiv2
+  ];
+  meta.mainProgram = "koko";
+}

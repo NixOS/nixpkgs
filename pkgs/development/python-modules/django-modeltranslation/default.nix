@@ -1,45 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, django
-, pytestCheckHook
-, pytest-django
-, parameterized
+{
+  lib,
+  buildPythonPackage,
+  django-stubs,
+  django,
+  fetchFromGitHub,
+  parameterized,
+  pytest-cov-stub,
+  pytest-django,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
-let
-  # 0.18.12 was yanked from PyPI, it refers to this issue:
-  # https://github.com/deschler/django-modeltranslation/issues/701
-  version = "0.18.12";
-in
-buildPythonPackage {
+
+buildPythonPackage rec {
   pname = "django-modeltranslation";
-  inherit version;
+  version = "0.19.14";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "deschler";
     repo = "django-modeltranslation";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6rAAu3Fd4D93rX8kvkcqhykzBu/lDByQ6zpjWq7J8mg=";
+    tag = "v${version}";
+    hash = "sha256-jvVzSltq4wkSmndyyOGxldXJVpydmCCrHMGTGiMUNA0=";
   };
 
-  # Remove all references to pytest-cov
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--no-cov-on-fail" "" \
-      --replace "--cov-report=\"\"" "" \
-      --replace "--cov modeltranslation" ""
-  '';
+  build-system = [ setuptools ];
 
-  disabled = pythonOlder "3.6";
+  dependencies = [ django ];
 
-  propagatedBuildInputs = [ django ];
+  nativeCheckInputs = [
+    django-stubs
+    pytestCheckHook
+    pytest-cov-stub
+    pytest-django
+    parameterized
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-django parameterized ];
+  pythonImportsCheck = [ "modeltranslation" ];
 
   meta = with lib; {
     description = "Translates Django models using a registration approach";
     homepage = "https://github.com/deschler/django-modeltranslation";
+    changelog = "https://github.com/deschler/django-modeltranslation/blob/v${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ augustebaum ];
   };

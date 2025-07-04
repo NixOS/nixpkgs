@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mypy-extensions
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, schema-salad
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mypy-extensions,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  schema-salad,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cwl-upgrader";
-  version = "1.2.11";
+  version = "1.2.12";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwl-upgrader";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-P8607Io/KIJqAnrValM+rRK59tQITcC/jyGwkge8qN0=";
+    tag = "v${version}";
+    hash = "sha256-cfEd1XAu31u+NO27d3RNA5lhCpRpYK8NeaCxhQ/1GNU=";
   };
 
   postPatch = ''
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace '"schema_salad",' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     mypy-extensions
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cwlupgrader"
-  ];
+  pythonImportsCheck = [ "cwlupgrader" ];
 
   meta = with lib; {
     description = "Library to upgrade CWL syntax to a newer version";

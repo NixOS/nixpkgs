@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation {
   pname = "ryzen-monitor-ng";
@@ -11,28 +16,24 @@ stdenv.mkDerivation {
     owner = "plasmin";
     repo = "ryzen_monitor_ng";
     rev = "8b7854791d78de731a45ce7d30dd17983228b7b1";
-    hash = "sha256-fcW2fEsCFliRnMFnboR0jchzVIlCYbr2AE6AS06cb6o=";
+    hash = "sha256-xdYNtXCbNy3/y5OAHZEi9KgPtwr1LTtLWAZC5DDCfmE=";
+    # Upstream repo contains pre-compiled binaries and object files
+    # that are out of date.
+    # These need to be removed before build stage.
+    postFetch = ''
+      rm "$out/src/ryzen_monitor"
+      make -C "$out" clean
+    '';
   };
 
-  ## Remove binaries committed into upstream repo
-  preBuild = ''
-    rm src/ryzen_monitor
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  makeTargets = [ "clean" "install" ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    mv ./src/ryzen_monitor $out/bin
-
-    runHook postInstall
-  '';
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Access Ryzen SMU information exposed by the ryzen_smu driver";
-    homepage = "https://github.com/mann1x/ryzen_monitor_ng";
+    homepage = "https://github.com/plasmin/ryzen_monitor_ng";
+    changelog = "https://github.com/plasmin/ryzen_monitor_ng/blob/master/CHANGELOG.md";
     license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ phdyellow ];

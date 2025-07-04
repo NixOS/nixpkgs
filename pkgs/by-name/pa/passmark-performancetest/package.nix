@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, curl
-, unzip
-, ncurses5
-, dmidecode
-, coreutils
-, util-linux
-, autoPatchelfHook
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  unzip,
+  ncurses5,
+  dmidecode,
+  coreutils,
+  util-linux,
+  autoPatchelfHook,
+  makeWrapper,
 }:
 let
   sources = {
@@ -22,19 +23,25 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "11.0.1002";
   pname = "passmark-performancetest";
 
-  src = fetchurl (sources.${stdenv.system} or (throw "Unsupported system for PassMark performance test"));
+  src = fetchurl (
+    sources.${stdenv.system} or (throw "Unsupported system for PassMark performance test")
+  );
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ unzip autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     curl
     ncurses5
   ];
@@ -48,15 +55,17 @@ stdenv.mkDerivation rec {
   # Prefix since program will call sudo
   postFixup = ''
     wrapProgram $out/bin/performancetest \
-        --prefix PATH ":" ${lib.makeBinPath [
-          dmidecode
-          coreutils
-          util-linux
-        ]}
+        --prefix PATH ":" ${
+          lib.makeBinPath [
+            dmidecode
+            coreutils
+            util-linux
+          ]
+        }
   '';
 
   meta = with lib; {
-    description = "A software tool that allows everybody to quickly assess the performance of their computer and compare it to a number of standard 'baseline' computer systems.";
+    description = "Software tool that allows everybody to quickly assess the performance of their computer and compare it to a number of standard 'baseline' computer systems";
     homepage = "https://www.passmark.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;

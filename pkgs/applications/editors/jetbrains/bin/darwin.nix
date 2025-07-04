@@ -1,26 +1,38 @@
-{ lib
-, stdenvNoCC
-, undmg
-, ...
+{
+  lib,
+  stdenvNoCC,
+  undmg,
+  ...
 }:
 
-{ meta
-, pname
-, product
-, productShort ? product
-, src
-, version
-, plugins ? [ ]
-, buildNumber
-, ...
-}:
+{
+  meta,
+  pname,
+  product,
+  productShort ? product,
+  src,
+  version,
+  plugins ? [ ],
+  buildNumber,
+  ...
+}@args:
 
 let
   loname = lib.toLower productShort;
 in
 stdenvNoCC.mkDerivation {
-  inherit pname meta src version plugins;
+  inherit
+    pname
+    src
+    version
+    plugins
+    ;
   passthru.buildNumber = buildNumber;
+  passthru.product = product;
+  passthru.tests = args.passthru.tests;
+  meta = meta // {
+    mainProgram = loname;
+  };
   desktopName = product;
   dontFixup = true;
   installPhase = ''

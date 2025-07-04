@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, easyprocess
-, path
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  easyprocess,
+  path,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "entrypoint2"
-  ];
+  pythonImportsCheck = [ "entrypoint2" ];
 
   meta = with lib; {
     description = "Easy to use command-line interface for python modules";

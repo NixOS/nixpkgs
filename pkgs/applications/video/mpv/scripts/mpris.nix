@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, gitUpdater, pkg-config, glib, mpv-unwrapped, ffmpeg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  pkg-config,
+  glib,
+  mpv-unwrapped,
+  ffmpeg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mpv-mpris";
@@ -10,14 +19,18 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-vZIO6ILatIWa9nJYOp4AMKwvaZLahqYWRLMDOizyBI0=";
   };
-  passthru.updateScript = gitUpdater {};
+  passthru.updateScript = gitUpdater { };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ glib mpv-unwrapped ffmpeg ];
+  buildInputs = [
+    glib
+    mpv-unwrapped
+    ffmpeg
+  ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+    substituteInPlace Makefile --replace-fail 'PKG_CONFIG =' 'PKG_CONFIG ?='
   '';
 
   installFlags = [ "SCRIPTS_DIR=${placeholder "out"}/share/mpv/scripts" ];
@@ -27,12 +40,12 @@ stdenv.mkDerivation rec {
   stripDebugList = [ "share/mpv/scripts" ];
   passthru.scriptName = "mpris.so";
 
-  meta = with lib; {
+  meta = {
     description = "MPRIS plugin for mpv";
     homepage = "https://github.com/hoyon/mpv-mpris";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ajs124 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ajs124 ];
     changelog = "https://github.com/hoyon/mpv-mpris/releases/tag/${version}";
   };
 }

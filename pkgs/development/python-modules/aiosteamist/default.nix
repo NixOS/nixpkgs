@@ -1,52 +1,48 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, xmltodict
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "aiosteamist";
-  version = "0.3.2";
-  format = "pyproject";
+  version = "1.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
-    rev = version;
-    hash = "sha256-IKrAJ4QDcYJRO4hcomL9FRs8hJ3k7SgRgK4H1b8SxIM=";
+    repo = "aiosteamist";
+    tag = "v${version}";
+    hash = "sha256-e7Nt/o2A1qn2nSpWv6ZsZHn/WpcXKzol+f+JNJaSb4w=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     xmltodict
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=aiosteamist" "" \
-      --replace 'xmltodict = "^0.12.0"' 'xmltodict = "*"'
-  '';
-
-  pythonImportsCheck = [
-    "aiosteamist"
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
   ];
 
-  # Modules doesn't have test suite
-  doCheck = false;
+  pythonImportsCheck = [ "aiosteamist" ];
 
   meta = with lib; {
     description = "Module to control Steamist steam systems";
     homepage = "https://github.com/bdraco/aiosteamist";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/bdraco/aiosteamist/releases/tag/v${version}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

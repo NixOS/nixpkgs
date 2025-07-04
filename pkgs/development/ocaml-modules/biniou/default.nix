@@ -1,4 +1,10 @@
-{ lib, fetchurl, buildDunePackage, camlp-streams, easy-format }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  camlp-streams,
+  easy-format,
+}:
 
 buildDunePackage rec {
   pname = "biniou";
@@ -9,7 +15,10 @@ buildDunePackage rec {
     hash = "sha256-i/P/F80Oyy1rbR2UywjvCJ1Eyu+W6brmvmg51Cj6MY8=";
   };
 
-  propagatedBuildInputs = [ camlp-streams easy-format ];
+  propagatedBuildInputs = [
+    camlp-streams
+    easy-format
+  ];
 
   meta = {
     description = "Binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";

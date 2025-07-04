@@ -1,28 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flake8
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  flake8,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pep8-naming";
-  version = "0.13.3";
-  format = "setuptools";
+  version = "0.15.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
-    rev = version;
-    hash = "sha256-l7zZUOMWyTxnTbkFkzfABY/eVMKnv0kNJ0UPzJo0W1Y=";
+    repo = "pep8-naming";
+    tag = version;
+    hash = "sha256-swSaMOrgd6R4i92LodJVsquls9wp5ZFyzK0LNqwODoc=";
   };
 
-  propagatedBuildInputs = [
-    flake8
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ flake8 ];
 
   checkPhase = ''
     runHook preCheck
@@ -30,14 +32,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "pep8ext_naming"
-  ];
+  pythonImportsCheck = [ "pep8ext_naming" ];
 
   meta = with lib; {
     description = "Check PEP-8 naming conventions, plugin for flake8";
     homepage = "https://github.com/PyCQA/pep8-naming";
-    changelog = "https://github.com/PyCQA/pep8-naming/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/PyCQA/pep8-naming/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ eadwu ];
   };

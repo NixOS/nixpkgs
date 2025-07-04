@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, coreutils
-, fetchFromGitHub
-, mtools
-, p7zip
-, wrapQtAppsHook
-, qtbase
-, qttools
-, qmake
-, syslinux
-, util-linux
-, which
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchFromGitHub,
+  mtools,
+  p7zip,
+  wrapQtAppsHook,
+  qtbase,
+  qttools,
+  qmake,
+  syslinux,
+  util-linux,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -70,12 +71,18 @@ stdenv.mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ mtools p7zip which ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        mtools
+        p7zip
+        which
+      ]
+    }"
     "--set QT_X11_NO_MITSHM 1"
   ];
 
   meta = with lib; {
-    description = "A tool to create bootable live USB drives from ISO images";
+    description = "Tool to create bootable live USB drives from ISO images";
     homepage = "https://unetbootin.github.io/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ebzzry ];

@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "integresql";
@@ -31,7 +35,7 @@ buildGoModule rec {
     homepage = "https://github.com/allaboutapps/integresql";
     changelog = "https://github.com/allaboutapps/integresql/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "integresql";
   };
 }

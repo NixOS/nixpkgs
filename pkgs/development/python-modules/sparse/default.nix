@@ -1,32 +1,34 @@
-{ lib
-, buildPythonPackage
-, dask
-, fetchPypi
-, numba
-, numpy
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  numba,
+  numpy,
+  scipy,
+
+  # tests
+  dask,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sparse";
-  version = "0.15.1";
+  version = "0.17.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lzrcuIqNuOPYBHlTMx4m0/ZKVlf5tGprhZxHZjw+75k=";
+  src = fetchFromGitHub {
+    owner = "pydata";
+    repo = "sparse";
+    tag = version;
+    hash = "sha256-LYJ7YnR7WtzamK6py1NRPBe+h28L7JT+52wmourAc/c=";
   };
-
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail "--cov-report term-missing --cov-report html --cov-report=xml --cov-report=term --cov sparse --cov-config .coveragerc --junitxml=junit/test-results.xml" ""
-  '';
 
   build-system = [
     setuptools
@@ -41,24 +43,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dask
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "sparse"
-  ];
+  pythonImportsCheck = [ "sparse" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pytest.PytestRemovedIn8Warning"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Sparse n-dimensional arrays computations";
     homepage = "https://sparse.pydata.org/";
     changelog = "https://sparse.pydata.org/en/stable/changelog.html";
     downloadPage = "https://github.com/pydata/sparse/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, setuptools-scm
-, httpagentparser
-, cherrypy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  httpagentparser,
+  cherrypy,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "cherrypy-cors";
@@ -32,9 +33,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cherrypy_cors" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "CORS support for CherryPy";

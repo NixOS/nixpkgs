@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/NiklasRosenstein/py-localimport";
     description = "Isolated import of Python modules";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 }

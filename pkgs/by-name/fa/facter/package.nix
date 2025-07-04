@@ -35,7 +35,7 @@ bundlerApp {
           procps
           util-linux
         ]
-        ++ lib.optionals stdenv.isLinux [
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
           iproute2
           virt-what
           zfs
@@ -56,11 +56,14 @@ bundlerApp {
 
   meta = {
     changelog = "https://www.puppet.com/docs/puppet/latest/release_notes_facter.html";
-    description = "A system inventory tool";
+    description = "System inventory tool";
     homepage = "https://github.com/puppetlabs/facter";
     license = lib.licenses.asl20;
     mainProgram = "facter";
-    maintainers = with lib.maintainers; [ womfoo anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      womfoo
+      anthonyroussel
+    ];
     platforms = lib.platforms.unix;
   };
 }

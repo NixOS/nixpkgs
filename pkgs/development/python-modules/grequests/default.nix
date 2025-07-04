@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, gevent
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  gevent,
 }:
 
 buildPythonPackage rec {
@@ -12,13 +13,16 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XDPxQmjfW4+hEH2FN4Fb5v67rW7FYFJNakBLd3jPa6Y=";
+    hash = "sha256-XDPxQmjfW4+hEH2FN4Fb5v67rW7FYFJNakBLd3jPa6Y=";
   };
 
   # No tests in archive
   doCheck = false;
 
-  propagatedBuildInputs = [ requests gevent ];
+  propagatedBuildInputs = [
+    requests
+    gevent
+  ];
 
   meta = with lib; {
     description = "Asynchronous HTTP requests";
@@ -26,5 +30,4 @@ buildPythonPackage rec {
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ matejc ];
   };
-
 }

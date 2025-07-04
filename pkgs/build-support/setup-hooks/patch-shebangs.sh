@@ -24,7 +24,7 @@ fixupOutputHooks+=(patchShebangsAuto)
 
 patchShebangs() {
     local pathName
-    local update
+    local update=false
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -89,9 +89,9 @@ patchShebangs() {
         if [[ "$oldPath" == *"/bin/env" ]]; then
             if [[ $arg0 == "-S" ]]; then
                 arg0=${args%% *}
-                args=${args#* }
-                newPath="$(PATH="${!pathName}" command -v "env" || true)"
-                args="-S $(PATH="${!pathName}" command -v "$arg0" || true) $args"
+                [[ "$args" == *" "* ]] && args=${args#* } || args=
+                newPath="$(PATH="${!pathName}" type -P "env" || true)"
+                args="-S $(PATH="${!pathName}" type -P "$arg0" || true) $args"
 
             # Check for unsupported 'env' functionality:
             # - options: something starting with a '-' besides '-S'
@@ -100,7 +100,7 @@ patchShebangs() {
                 echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)" >&2
                 exit 1
             else
-                newPath="$(PATH="${!pathName}" command -v "$arg0" || true)"
+                newPath="$(PATH="${!pathName}" type -P "$arg0" || true)"
             fi
         else
             if [[ -z $oldPath ]]; then
@@ -109,7 +109,7 @@ patchShebangs() {
                 oldPath="/bin/sh"
             fi
 
-            newPath="$(PATH="${!pathName}" command -v "$(basename "$oldPath")" || true)"
+            newPath="$(PATH="${!pathName}" type -P "$(basename "$oldPath")" || true)"
 
             args="$arg0 $args"
         fi

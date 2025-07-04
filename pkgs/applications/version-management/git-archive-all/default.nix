@@ -1,14 +1,17 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, git
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  git,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-mock,
 }:
 
 buildPythonApplication rec {
   pname = "git-archive-all";
   version = "1.23.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Kentzo";
@@ -28,7 +31,6 @@ buildPythonApplication rec {
       --replace pytest==5.2.2 pytest \
       --replace pytest-cov==2.8.1 "" \
       --replace pytest-mock==1.11.2 pytest-mock \
-      --replace "--cov=git_archive_all --cov-report=term --cov-branch" "" \
       --replace "filterwarnings = error" ""
     substituteInPlace test_git_archive_all.py \
       --replace "import pycodestyle" ""
@@ -40,6 +42,7 @@ buildPythonApplication rec {
 
   checkInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-mock
   ];
 

@@ -1,8 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, ipython
-, ipywidgets
-, numpy
-, pyqt5
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  ipython,
+  ipywidgets,
+  numpy,
+  pyqt5,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "portugueslab";
-    repo = pname;
+    repo = "lightparam";
     rev = "v${version}";
     sha256 = "13hlkvjcyz2lhvlfqyavja64jccbidshhs39sl4fibrn9iq34s3i";
   };

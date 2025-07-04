@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "libkdcraw";
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [libraw];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [ libraw ];
 }

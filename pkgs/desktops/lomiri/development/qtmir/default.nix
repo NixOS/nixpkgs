@@ -1,48 +1,49 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, testers
-, cmake
-, cmake-extras
-, pkg-config
-, wrapQtAppsHook
-, gsettings-qt
-, gtest
-, libqtdbustest
-, libqtdbusmock
-, libuuid
-, lomiri-api
-, lomiri-app-launch
-, lomiri-url-dispatcher
-, lttng-ust
-, mir
-, process-cpp
-, qtbase
-, qtdeclarative
-, qtsensors
-, valgrind
-, protobuf
-, glm
-, boost
-, properties-cpp
-, glib
-, validatePkgConfig
-, wayland
-, xwayland
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  testers,
+  cmake,
+  cmake-extras,
+  pkg-config,
+  wrapQtAppsHook,
+  gsettings-qt,
+  gtest,
+  libqtdbustest,
+  libqtdbusmock,
+  libuuid,
+  lomiri-api,
+  lomiri-app-launch,
+  lomiri-url-dispatcher,
+  lttng-ust,
+  mir_2_15,
+  process-cpp,
+  qtbase,
+  qtdeclarative,
+  qtsensors,
+  valgrind,
+  protobuf,
+  glm,
+  boost,
+  properties-cpp,
+  glib,
+  validatePkgConfig,
+  wayland,
+  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   # Not regular qtmir, experimental support for Mir 2.x
-  # Currently following https://gitlab.com/ubports/development/core/qtmir/-/tree/personal/mariogrip/desktop-development
-  pname = "qtmir-mir2";
-  version = "0.7.2-unstable-2024-01-08";
+  # Currently following https://gitlab.com/ubports/development/core/qtmir/-/tree/personal/sunweaver/debian-upstream
+  pname = "qtmir-debian-upstream";
+  version = "0.8.0-unstable-2024-03-06";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/qtmir";
-    rev = "ae0d87415d5c9ed2c4fd2284ba0807d23d564bb0";
-    hash = "sha256-fE8ttCC0FNavs91pASGGG7k7nKVg2lD3JK0WTmCA3gM=";
+    rev = "de639c3a482ac6c59b9be02abb839a8c96158041";
+    hash = "sha256-AKSzkGl6bAoR4I2lolNRUp67VS/PiZnrPpCYtTlKWKc=";
   };
 
   outputs = [
@@ -82,12 +83,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # 10s timeout for Mir startup is too tight for VM tests on weaker hardwre (aarch64)
+    substituteInPlace src/platforms/mirserver/qmirserver_p.cpp \
+      --replace-fail 'const int timeout = RUNNING_ON_VALGRIND ? 100 : 10' 'const int timeout = RUNNING_ON_VALGRIND ? 900 : 90' \
+      --replace-fail 'const int timeout = 10' 'const int timeout = 90'
+
     substituteInPlace CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
-      --replace "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/plugins/platforms" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}/platforms" \
+      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
+      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/plugins/platforms" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}/platforms" \
 
     substituteInPlace data/xwayland.qtmir.desktop \
-      --replace '/usr/bin/Xwayland' 'Xwayland'
+      --replace-fail '/usr/bin/Xwayland' 'Xwayland'
   '';
 
   strictDeps = true;
@@ -95,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     glib # glib-compile-schemas
+    lttng-ust
     pkg-config
     validatePkgConfig
     wrapQtAppsHook
@@ -109,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-app-launch
     lomiri-url-dispatcher
     lttng-ust
-    mir
+    mir_2_15
     process-cpp
     protobuf
     qtbase
@@ -151,10 +158,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "QPA plugin to make Qt a Mir server";
     homepage = "https://gitlab.com/ubports/development/core/qtmir";
     license = licenses.lgpl3Only;
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.linux;
-    pkgConfigModules = [
-      "qtmirserver"
-    ];
+    pkgConfigModules = [ "qtmirserver" ];
   };
 })

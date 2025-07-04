@@ -1,13 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.cpupower-gui;
-in {
+in
+{
   options = {
     services.cpupower-gui = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
         example = true;
@@ -20,7 +23,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.cpupower-gui ];
     services.dbus.packages = [ pkgs.cpupower-gui ];
     systemd.user = {

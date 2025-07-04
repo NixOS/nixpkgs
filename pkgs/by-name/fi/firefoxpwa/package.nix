@@ -1,53 +1,59 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, installShellFiles
-, firefox-unwrapped
-, openssl
-, stdenv
-, udev
-, libva
-, mesa
-, libnotify
-, xorg
-, cups
-, pciutils
-, libcanberra-gtk3
-, extraLibs ? [ ]
-, nixosTests
+{
+  extraLibs ? [ ],
+
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  rustPlatform,
+
+  cups,
+  ffmpeg,
+  firefox-unwrapped,
+  libcanberra-gtk3,
+  libglvnd,
+  libnotify,
+  libpulseaudio,
+  libva,
+  libgbm,
+  nixosTests,
+  openssl,
+  pciutils,
+  pipewire,
+  pkg-config,
+  stdenv,
+  udev,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.11.1";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-ZD/bTziVmHtQVKejzj+fUXVazCm2PaulS2NZjTribSk=";
+    hash = "sha256-yYvQxz+lAxKXpAWeLiBnepGuwYfNLyIhu4vQ8NdH3pc=";
   };
 
   sourceRoot = "${src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "mime-0.4.0-a.0" = "sha256-LjM7LH6rL3moCKxVsA+RUL9lfnvY31IrqHa9pDIAZNE=";
-      "web_app_manifest-0.0.0" = "sha256-G+kRN8AEmAY1TxykhLmgoX8TG8y2lrv7SCRJlNy0QzA=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-elVthXdjlI9DSQgaIRzu3M72dgGNXGgMiUXEICaBJCQ=";
 
   preConfigure = ''
     sed -i 's;version = "0.0.0";version = "${version}";' Cargo.toml
     sed -zi 's;name = "firefoxpwa"\nversion = "0.0.0";name = "firefoxpwa"\nversion = "${version}";' Cargo.lock
-    sed -i $'s;DISTRIBUTION_VERSION = \'0.0.0\';DISTRIBUTION_VERSION = \'${version}\';' userchrome/profile/chrome/pwa/chrome.jsm
+    sed -i $'s;DISTRIBUTION_VERSION = \'0.0.0\';DISTRIBUTION_VERSION = \'${version}\';' userchrome/profile/chrome/pwa/chrome.sys.mjs
   '';
 
-  nativeBuildInputs = [ makeWrapper pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    pkg-config
+  ];
   buildInputs = [ openssl ];
 
   FFPWA_EXECUTABLES = ""; # .desktop entries generated without any store path references
@@ -55,7 +61,26 @@ rustPlatform.buildRustPackage rec {
   completions = "target/${stdenv.targetPlatform.config}/release/completions";
 
   gtk_modules = map (x: x + x.gtkModule) [ libcanberra-gtk3 ];
-  libs = let libs = lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ] ++ gtk_modules ++ extraLibs; in lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
+  libs =
+    let
+      libs =
+        lib.optionals stdenv.hostPlatform.isLinux [
+          cups
+          ffmpeg
+          libglvnd
+          libnotify
+          libpulseaudio
+          libva
+          libgbm
+          pciutils
+          pipewire
+          udev
+          xorg.libXScrnSaver
+        ]
+        ++ gtk_modules
+        ++ extraLibs;
+    in
+    lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
 
   postInstall = ''
     # Runtime
@@ -95,8 +120,8 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.firefoxpwa = nixosTests.firefoxpwa;
 
-  meta = with lib; {
-    description = "A tool to install, manage and use Progressive Web Apps (PWAs) in Mozilla Firefox (native component)";
+  meta = {
+    description = "Tool to install, manage and use Progressive Web Apps (PWAs) in Mozilla Firefox (native component)";
     longDescription = ''
       Progressive Web Apps (PWAs) are web apps that use web APIs and features along
       with progressive enhancement strategy to bring a native app-like user experience
@@ -125,9 +150,12 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://pwasforfirefox.filips.si/";
     changelog = "https://github.com/filips123/PWAsForFirefox/releases/tag/v${version}";
-    license = licenses.mpl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ camillemndn pasqui23 ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      camillemndn
+      pasqui23
+    ];
     mainProgram = "firefoxpwa";
   };
 }

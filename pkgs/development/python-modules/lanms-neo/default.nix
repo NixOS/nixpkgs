@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, pythonOlder
-, pybind11
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  pythonOlder,
+  pybind11,
+  numpy,
 }:
 let
   pname = "lanms-neo";
@@ -18,7 +19,7 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "gen-ko";
-    repo = pname;
+    repo = "lanms-neo";
     rev = "6510e19e731a1e105d42b2fbda64de41c169ce2e";
     hash = "sha256-0fs4RNN1ptiir7GfR9B8HK0VqTkk5PbVJxgKiDId3po=";
   };

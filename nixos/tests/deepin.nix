@@ -1,29 +1,33 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "deepin";
 
   meta.maintainers = lib.teams.deepin.members;
 
-  nodes.machine = { ... }: {
-    imports = [
-      ./common/user-account.nix
-    ];
+  nodes.machine =
+    { ... }:
+    {
+      imports = [
+        ./common/user-account.nix
+      ];
 
-    virtualisation.memorySize = 2048;
+      virtualisation.memorySize = 2048;
 
-    services.xserver.enable = true;
+      services.xserver.enable = true;
 
-    services.xserver.displayManager = {
-      lightdm.enable = true;
-      autoLogin = {
-        enable = true;
-        user = "alice";
+      services.xserver.displayManager = {
+        lightdm.enable = true;
+        autoLogin = {
+          enable = true;
+          user = "alice";
+        };
       };
+
+      services.xserver.desktopManager.deepin.enable = true;
     };
 
-    services.xserver.desktopManager.deepin.enable = true;
-  };
-
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
     in
@@ -48,4 +52,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.sleep(20)
           machine.screenshot("screen")
     '';
-})
+}

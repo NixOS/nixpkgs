@@ -1,60 +1,77 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchpatch
-, fetchPypi
-, axisregistry
-, babelfont
-, beautifulsoup4
-, beziers
-, cmarkgfm
-, collidoscope
-, defcon
-, dehinter
-, fonttools
-, font-v
-, freetype-py
-, gflanguages
-, gfsubsets
-, git
-, glyphsets
-, lxml
-, installShellFiles
-, jinja2
-, munkres
-, opentypespec
-, ots-python
-, packaging
-, pip-api
-, protobuf
-, pytestCheckHook
-, pytest-xdist
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, requests-mock
-, rich
-, setuptools
-, setuptools-scm
-, shaperglot
-, stringbrewer
-, toml
-, unicodedata2
-, ufo2ft
-, ufolint
-, vharfbuzz
+{
+  lib,
+  axisregistry,
+  babelfont,
+  beautifulsoup4,
+  beziers,
+  buildPythonPackage,
+  callPackage,
+  cmarkgfm,
+  collidoscope,
+  defcon,
+  dehinter,
+  fetchPypi,
+  font-v,
+  fonttools,
+  freetype-py,
+  gflanguages,
+  gfsubsets,
+  gitMinimal,
+  glyphsets,
+  installShellFiles,
+  jinja2,
+  lxml,
+  munkres,
+  opentypespec,
+  ots-python,
+  packaging,
+  pip-api,
+  protobuf,
+  pytest-xdist,
+  pytestCheckHook,
+  pyyaml,
+  requests-mock,
+  requests,
+  rich,
+  setuptools-scm,
+  setuptools,
+  shaperglot,
+  stringbrewer,
+  toml,
+  ufo2ft,
+  ufolint,
+  ufomerge,
+  unicodedata2,
+  vharfbuzz,
 }:
 
 buildPythonPackage rec {
   pname = "fontbakery";
-  version = "0.11.2";
+  version = "0.13.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-61EXlf+d5kJeUF41OEnGNLaOcSvFWUDFgarVvHQZYmw=";
+    hash = "sha256-/wyrBoSUVjdKIIlK3HoDeHQ3yhMPT/0G05llWzDoE50=";
   };
 
-  pyproject = true;
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+
+  pythonRelaxDeps = [
+    "collidoscope"
+    "freetype-py"
+    "protobuf"
+    "vharfbuzz"
+  ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   dependencies = [
     axisregistry
@@ -65,17 +82,17 @@ buildPythonPackage rec {
     collidoscope
     defcon
     dehinter
-    fonttools
     font-v
+    fonttools
     freetype-py
     gflanguages
     gfsubsets
     glyphsets
-    lxml
     jinja2
+    lxml
     munkres
-    ots-python
     opentypespec
+    ots-python
     packaging
     pip-api
     protobuf
@@ -85,34 +102,21 @@ buildPythonPackage rec {
     shaperglot
     stringbrewer
     toml
+    ufo2ft
     ufolint
+    ufomerge
     unicodedata2
     vharfbuzz
-    ufo2ft
-  ];
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
-  nativeBuildInputs = [
-    installShellFiles
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "collidoscope"
-    "protobuf"
-    "vharfbuzz"
-  ];
-
-  doCheck = true;
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
     pytest-xdist
     requests-mock
     ufolint
   ];
+
   preCheck = ''
     # Let the tests invoke 'fontbakery' command.
     export PATH="$out/bin:$PATH"
@@ -123,8 +127,10 @@ buildPythonPackage rec {
     git config user.name Test
     git commit --allow-empty --message 'Dummy commit for tests'
   '';
+
   disabledTests = [
-    # These require network access:
+    # These require network access
+    "test_check_axes_match"
     "test_check_description_broken_links"
     "test_check_description_family_update"
     "test_check_metadata_designer_profiles"
@@ -135,6 +141,17 @@ buildPythonPackage rec {
     "test_check_cjk_vertical_metrics"
     "test_check_cjk_vertical_metrics_regressions"
     "test_check_fontbakery_version_live_apis"
+    "test_command_check_googlefonts"
+    # AssertionError
+    "test_check_shape_languages"
+    "test_command_config_file"
+    "test_config_override"
+  ];
+
+  disabledTestPaths = [
+    # ValueError: Check 'googlefonts/glyphsets/shape_languages' not found
+    "tests/test_checks_filesize.py"
+    "tests/test_checks_googlefonts_overrides.py"
   ];
 
   postInstall = ''
@@ -147,8 +164,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool for checking the quality of font projects";
     homepage = "https://github.com/googlefonts/fontbakery";
+    changelog = "https://github.com/fonttools/fontbakery/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+    mainProgram = "fontbakery";
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

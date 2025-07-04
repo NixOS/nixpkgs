@@ -1,4 +1,13 @@
-{ mkDerivation, lib, fetchgit, cmake, extra-cmake-modules, qtbase, boost, gpgme }:
+{
+  mkDerivation,
+  lib,
+  fetchgit,
+  cmake,
+  extra-cmake-modules,
+  qtbase,
+  boost,
+  gpgme,
+}:
 
 mkDerivation {
   pname = "kf5gpgmepp";
@@ -10,10 +19,16 @@ mkDerivation {
     sha256 = "02ck2l3s8s7xh44blqaqnc5k49ccicdnzvhiwa67a3zgicz5i0vh";
   };
 
-  buildInputs = [ extra-cmake-modules qtbase boost ];
+  buildInputs = [
+    qtbase
+    boost
+  ];
   propagatedBuildInputs = [ gpgme ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
   meta = with lib; {
     license = [ licenses.lgpl2 ];

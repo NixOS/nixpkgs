@@ -1,28 +1,35 @@
-{ lib
-, azure-common
-, azure-mgmt-core
-, buildPythonPackage
-, fetchPypi
-, isodate
-, pythonOlder
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-web";
-  version = "7.2.0";
-  format = "setuptools";
+  version = "9.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-78/m9/Ug7Qq8/oZRfhyM8CpxL3N6PbDbfLRsbWR5ge0=";
+    pname = "azure_mgmt_web";
+    inherit version;
+    hash = "sha256-RFXs07SYV3CFwZBObRcTklTjWLoH/mxINaiRu697BsI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
+    typing-extensions
   ];
 
   # has no tests

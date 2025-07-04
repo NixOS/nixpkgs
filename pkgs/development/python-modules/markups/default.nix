@@ -1,58 +1,52 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchPypi
-, importlib-metadata
-, markdown
-, pygments
-, pytestCheckHook
-, python-markdown-math
-, pythonOlder
-, pyyaml
-, setuptools
-, textile
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  importlib-metadata,
+  markdown,
+  pygments,
+  pytestCheckHook,
+  python-markdown-math,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  textile,
 }:
 
 buildPythonPackage rec {
   pname = "markups";
-  version = "4.0.0";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "Markups";
-    inherit version;
-    hash = "sha256-Pdua+xxV0M/4EuM5LKM/RoSYwHB6T6iy4F0LoNMsAZ4=";
+  src = fetchFromGitHub {
+    owner = "retext-project";
+    repo = "pymarkups";
+    tag = version;
+    hash = "sha256-7/pXCSbVhLeX7PhacMQYwYMT7Og/tZplPPCvWDxJFck=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     markdown
     pygments
     python-markdown-math
     pyyaml
     textile
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # AssertionError: '.selector .ch { color: #408080' not found in 'pre...
     "test_get_pygments_stylesheet"
   ];
 
-  pythonImportsCheck = [
-    "markups"
-  ];
+  pythonImportsCheck = [ "markups" ];
 
   meta = with lib; {
     description = "Wrapper around various text markup languages";

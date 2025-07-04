@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sphinx
-, requests
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinx,
+  requests,
+  flit-core,
 }:
 
 buildPythonPackage rec {
@@ -16,11 +17,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "youtube";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XuOfZ77tg9akmgTuMQN20OhgkFbn/6YzT46vpTsXxC8=";
   };
 
-  propagatedBuildInputs = [ sphinx requests ];
+  propagatedBuildInputs = [
+    sphinx
+    requests
+  ];
 
   # tests require internet access
   doCheck = false;

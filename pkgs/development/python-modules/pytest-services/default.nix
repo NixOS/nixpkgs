@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, psutil
-, pylibmc
-, pytest
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
-, setuptools-scm
-, toml
-, mysqlclient
-, zc-lockfile
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  psutil,
+  pylibmc,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools-scm,
+  toml,
+  mysqlclient,
+  zc-lockfile,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-services";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-E/VcKcAb1ekypm5jP4lsSz1LYJTcTSed6i5OY5ihP30=";
   };
 
@@ -57,16 +57,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pytest_services"
-  ];
+  pythonImportsCheck = [ "pytest_services" ];
 
   disabledTests = [
     # Tests require binaries and additional parts
     "test_memcached"
     "test_mysql"
-    "test_xvfb "
+    "test_xvfb"
   ];
+
+  # Tests use sockets
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Services plugin for pytest testing framework";

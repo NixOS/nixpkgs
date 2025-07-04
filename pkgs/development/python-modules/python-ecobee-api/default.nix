@@ -1,22 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-ecobee-api";
-  version = "0.2.17";
-  format = "setuptools";
+  version = "0.3.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lJCbNOQJ8xmMa4V+tSFZx4QasK8ZLfsFavMP9Zge4K4=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "nkgilley";
+    repo = "python-ecobee-api";
+    tag = version;
+    hash = "sha256-dJ7dVceYfmJHvk2OEXtRW/U8h2jFDc2aC58WmqhyP+k=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # no tests implemented
   doCheck = false;
@@ -26,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for talking to Ecobee thermostats";
     homepage = "https://github.com/nkgilley/python-ecobee-api";
+    changelog = "https://github.com/nkgilley/python-ecobee-api/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyparsing
-, future
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,27 +16,20 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bdcht";
-    repo = pname;
+    repo = "grandalf";
     rev = "v${version}";
     hash = "sha256-j2SvpQvDMfwoj2PAQSxzEIyIzzJ61Eb9wgetKyni6A4=";
   };
 
   propagatedBuildInputs = [
     pyparsing
-    future
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  patches = [
-    ./no-setup-requires-pytestrunner.patch
-  ];
+  patches = [ ./no-setup-requires-pytestrunner.patch ];
 
-  pythonImportsCheck = [
-    "grandalf"
-  ];
+  pythonImportsCheck = [ "grandalf" ];
 
   meta = with lib; {
     description = "Module for experimentations with graphs and drawing algorithms";

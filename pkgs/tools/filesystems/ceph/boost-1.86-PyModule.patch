@@ -1,0 +1,20 @@
+Excerpted from <https://aur.archlinux.org/cgit/aur.git/commit/?h=ceph&id=8c5cc7d8deec002f7596b6d0860859a0a718f12b>.
+
+Original author: Bazaah <github@luxolus.com>
+
+diff --git a/src/mgr/PyModule.cc b/src/mgr/PyModule.cc
+index 084cf3ffc1e..010a1177a88 100644
+--- a/src/mgr/PyModule.cc
++++ b/src/mgr/PyModule.cc
+@@ -36,6 +36,11 @@ std::string PyModule::mgr_store_prefix = "mgr/";
+ 
+ // Courtesy of http://stackoverflow.com/questions/1418015/how-to-get-python-exception-text
+ #define BOOST_BIND_GLOBAL_PLACEHOLDERS
++// Fix instances of "'BOOST_PP_ITERATION_02' was not declared in this scope; did you mean 'BOOST_PP_ITERATION_05'"
++// and related macro error bullshit that spans 300 lines of errors
++//
++// Apparently you can't include boost/python stuff _and_ have this header defined
++#undef BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
+ // Boost apparently can't be bothered to fix its own usage of its own
+ // deprecated features.
+ #include <boost/python/extract.hpp>

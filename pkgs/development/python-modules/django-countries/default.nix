@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, asgiref
-, typing-extensions
+  # dependencies
+  asgiref,
+  typing-extensions,
 
-# tests
-, django
-, djangorestframework
-, graphene-django
-, pytestCheckHook
-, pytest-django
+  # tests
+  django,
+  djangorestframework,
+  graphene-django,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +26,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SmileyChris";
     repo = "django-countries";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IR9cJbDVkZrcF3Ti70mV8VeXINQDK8OpwUTWVjD4Zn0=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     asgiref

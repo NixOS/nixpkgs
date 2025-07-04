@@ -17,7 +17,7 @@
   cairo,
   pango,
   makeWrapper,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   writeShellScript,
   common-updater-scripts,
   curl,
@@ -48,21 +48,22 @@ let
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
   versionFile = builtins.toString ./packages.nix;
 
-  neededLibraries = [
-    xorg.libX11
-    xorg.libXtst
-    glib
-    libglvnd
-    openssl_1_1
-    gtk3
-    cairo
-    pango
-    curl
-  ] ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
-    sqlite
-  ];
-in
-let
+  neededLibraries =
+    [
+      xorg.libX11
+      xorg.libXtst
+      glib
+      libglvnd
+      openssl_1_1
+      gtk3
+      cairo
+      pango
+      curl
+    ]
+    ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
+      sqlite
+    ];
+
   binaryPackage = stdenv.mkDerivation rec {
     pname = "${pnameBase}-bin";
     version = buildVersion;
@@ -80,7 +81,7 @@ let
 
     nativeBuildInputs = [
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildPhase = ''
@@ -89,7 +90,7 @@ let
       for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${lib.makeLibraryPath neededLibraries}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${lib.getLib stdenv.cc.cc}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"} \
           $binary
       done
 
@@ -192,10 +193,7 @@ stdenv.mkDerivation (rec {
           fi
 
           for platform in ${lib.escapeShellArgs meta.platforms}; do
-              # The script will not perform an update when the version attribute is up to date from previous platform run
-              # We need to clear it before each run
-              update-source-version "${packageAttribute}.${primaryBinary}" 0 "${lib.fakeSha256}" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
-              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
+              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
           done
         '';
       in

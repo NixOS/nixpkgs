@@ -1,12 +1,23 @@
 {
   lib,
+  argcomplete,
   bleak,
   buildPythonPackage,
+  dash-bootstrap-components,
+  dash,
   dotmap,
   fetchFromGitHub,
-  pexpect,
+  hypothesis,
+  packaging,
+  pandas-stubs,
+  pandas,
+  parse,
+  platformdirs,
+  poetry-core,
+  ppk2-api,
+  print-color,
   protobuf,
-  pygatt,
+  pyarrow,
   pypubsub,
   pyqrcode,
   pyserial,
@@ -15,57 +26,85 @@
   pythonOlder,
   pyyaml,
   requests,
+  riden,
   setuptools,
   tabulate,
-  timeago,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.3.4";
+  version = "2.6.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "meshtastic";
-    repo = "Meshtastic-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-WxiddF1n9lyxKkZk1MU40NzLh6goLVs81mbJZ3F33R8=";
+    repo = "python";
+    tag = version;
+    hash = "sha256-pbDWxnYrUFEJ3XHwoQZnGc/USbOKAzJtJ6nHkTv/e6Y=";
   };
 
-  build-system = [ setuptools ];
+  pythonRelaxDeps = [
+    "bleak"
+    "packaging"
+    "protobuf"
+  ];
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     bleak
-    dotmap
-    pexpect
+    packaging
     protobuf
-    pygatt
     pypubsub
-    pyqrcode
     pyserial
     pyyaml
     requests
     setuptools
     tabulate
-    timeago
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
+    analysis = [
+      dash
+      dash-bootstrap-components
+      pandas
+      pandas-stubs
+    ];
+    cli = [
+      argcomplete
+      dotmap
+      print-color
+      pyqrcode
+      wcwidth
+    ];
+    powermon = [
+      parse
+      platformdirs
+      ppk2-api
+      pyarrow
+      riden
+    ];
     tunnel = [ pytap2 ];
   };
 
   nativeCheckInputs = [
-    pytap2
+    hypothesis
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
   '';
 
   pythonImportsCheck = [ "meshtastic" ];
+
+  disabledTestPaths = [
+    # Circular import with dash-bootstrap-components
+    "meshtastic/tests/test_analysis.py"
+  ];
 
   disabledTests = [
     # TypeError
@@ -77,6 +116,7 @@ buildPythonPackage rec {
     "test_main_support"
     "test_MeshInterface"
     "test_message_to_json_shows_all"
+    "test_node"
     "test_SerialInterface_single_port"
     "test_support_info"
     "test_TCPInterface"
@@ -84,9 +124,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API for talking to Meshtastic devices";
-    homepage = "https://github.com/meshtastic/Meshtastic-python";
+    homepage = "https://github.com/meshtastic/python";
     changelog = "https://github.com/meshtastic/python/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 let
   inherit (lib) optionals;
@@ -22,19 +26,26 @@ stdenv.mkDerivation {
     cd armstubs
   '';
 
-  makeFlags = [
-    "CC8=${stdenv.cc.targetPrefix}cc"
-    "LD8=${stdenv.cc.targetPrefix}ld"
-    "OBJCOPY8=${stdenv.cc.targetPrefix}objcopy"
-    "OBJDUMP8=${stdenv.cc.targetPrefix}objdump"
-    "CC7=${stdenv.cc.targetPrefix}cc"
-    "LD7=${stdenv.cc.targetPrefix}ld"
-    "OBJCOPY7=${stdenv.cc.targetPrefix}objcopy"
-    "OBJDUMP7=${stdenv.cc.targetPrefix}objdump"
-  ]
-  ++ optionals (stdenv.isAarch64) [ "armstub8.bin" "armstub8-gic.bin" ]
-  ++ optionals (stdenv.isAarch32) [ "armstub7.bin" "armstub8-32.bin" "armstub8-32-gic.bin" ]
-  ;
+  makeFlags =
+    [
+      "CC8=${stdenv.cc.targetPrefix}cc"
+      "LD8=${stdenv.cc.targetPrefix}ld"
+      "OBJCOPY8=${stdenv.cc.targetPrefix}objcopy"
+      "OBJDUMP8=${stdenv.cc.targetPrefix}objdump"
+      "CC7=${stdenv.cc.targetPrefix}cc"
+      "LD7=${stdenv.cc.targetPrefix}ld"
+      "OBJCOPY7=${stdenv.cc.targetPrefix}objcopy"
+      "OBJDUMP7=${stdenv.cc.targetPrefix}objdump"
+    ]
+    ++ optionals (stdenv.hostPlatform.isAarch64) [
+      "armstub8.bin"
+      "armstub8-gic.bin"
+    ]
+    ++ optionals (stdenv.hostPlatform.isAarch32) [
+      "armstub7.bin"
+      "armstub8-32.bin"
+      "armstub8-32-gic.bin"
+    ];
 
   installPhase = ''
     runHook preInstall
@@ -47,7 +58,11 @@ stdenv.mkDerivation {
     description = "Firmware related ARM stubs for the Raspberry Pi";
     homepage = "https://github.com/raspberrypi/tools";
     license = licenses.bsd3;
-    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ samueldr ];
+    platforms = [
+      "armv6l-linux"
+      "armv7l-linux"
+      "aarch64-linux"
+    ];
+    maintainers = [ ];
   };
 }

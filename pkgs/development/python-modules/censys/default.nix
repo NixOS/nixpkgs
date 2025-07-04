@@ -1,24 +1,25 @@
-{ lib
-, argcomplete
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, parameterized
-, poetry-core
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, requests-mock
-, responses
-, rich
+{
+  lib,
+  argcomplete,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  parameterized,
+  poetry-core,
+  pytest-mock,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  responses,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.2.12";
+  version = "2.2.17";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,19 +27,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Gw3JbAdg/ObWdD6vl8Wuct6VCcP4GAZbiesXSSnW1Mg=";
+    tag = "v${version}";
+    hash = "sha256-1V7IeaV7Ro1q5UyD2DDetunaRO2L4UbF1VODg5ktqKs=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail "--cov" ""
-  '';
-
-  build-system = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     argcomplete
@@ -51,6 +44,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     parameterized
     pytest-mock
+    pytest-cov-stub
     pytestCheckHook
     requests-mock
     responses
@@ -68,9 +62,7 @@ buildPythonPackage rec {
     mkdir -p $HOME
   '';
 
-  pythonImportsCheck = [
-    "censys"
-  ];
+  pythonImportsCheck = [ "censys" ];
 
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";

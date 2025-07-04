@@ -1,36 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "backports-strenum";
-  version = "1.2.8";
+  version = "1.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "clbarnes";
     repo = "backports.strenum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jbMR9VAGsMAJTP2VQyRr+RPYwWwk8hGAYs4KoZEWa7U=";
+    hash = "sha256-j5tALFrLeZ8k+GwAaq0ocmcQWvdWkRUHbOVq5Du4mu0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "backports.strenum"
-  ];
+  pythonImportsCheck = [ "backports.strenum" ];
 
   meta = with lib; {
     description = "Base class for creating enumerated constants that are also subclasses of str";

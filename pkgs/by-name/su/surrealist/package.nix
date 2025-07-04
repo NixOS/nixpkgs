@@ -1,183 +1,123 @@
-{ buildGoModule
-, cacert
-, cairo
-, cargo
-, cargo-tauri
-, esbuild
-, fetchFromGitHub
-, gdk-pixbuf
-, gobject-introspection
-, jq
-, lib
-, libsoup
-, llvmPackages_15
-, makeBinaryWrapper
-, moreutils
-, nodePackages
-, pango
-, pkg-config
-, rustc
-, rustPlatform
-, stdenv
-, stdenvNoCC
-, wasm-bindgen-cli
-, webkitgtk
+{
+  buildGoModule,
+  cairo,
+  cargo-tauri,
+  cargo,
+  esbuild,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  glib-networking,
+  gobject-introspection,
+  jq,
+  lib,
+  libsoup_3,
+  makeBinaryWrapper,
+  moreutils,
+  nodejs,
+  openssl,
+  pango,
+  pkg-config,
+  pnpm_9,
+  rustc,
+  rustPlatform,
+  stdenv,
+  webkitgtk_4_1,
 }:
 
+let
+  esbuild_21-5 =
+    let
+      version = "0.21.5";
+    in
+    esbuild.override {
+      buildGoModule =
+        args:
+        buildGoModule (
+          args
+          // {
+            inherit version;
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              rev = "v${version}";
+              hash = "sha256-FpvXWIlt67G8w3pBKZo/mcp57LunxDmRUaCU/Ne89B8=";
+            };
+            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+          }
+        );
+    };
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
-  version = "1.11.5";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
-    owner = "StarlaneStudios";
-    repo = "Surrealist";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9hm45bTvOhDHYYFUs7nTdOkHOsDJUiqDv8F6wQqEdFs=";
+    owner = "surrealdb";
+    repo = "surrealist";
+    rev = "surrealist-v${finalAttrs.version}";
+    hash = "sha256-FWNGC0QoEUu1h3e3sfgWmbvqcNNvfWXU7PEjTXxu9Qo=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src-tauri";
-
-  embed = stdenv.mkDerivation {
-    inherit (finalAttrs) src version;
-    pname = "${finalAttrs.pname}-embed";
-    sourceRoot = "${finalAttrs.src.name}/src-embed";
-    auditable = false;
-    dontInstall = true;
-
-    cargoDeps = rustPlatform.fetchCargoTarball {
-      inherit (finalAttrs) src;
-      sourceRoot = "${finalAttrs.src.name}/src-embed";
-      hash = "sha256-sf1sn3lOKvUu5MXxdMohS1DJ8jP9icZGftJKhrWA/JE=";
-    };
-
-    nativeBuildInputs = [
-      cargo
-      rustc
-      llvmPackages_15.clangNoLibc
-      llvmPackages_15.lld
-      rustPlatform.cargoSetupHook
-      wasm-bindgen-cli
-    ];
-
-    postBuild = ''
-      CC=clang CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER=lld cargo build \
-        --target wasm32-unknown-unknown \
-        --release
-
-      wasm-bindgen \
-        target/wasm32-unknown-unknown/release/surrealist_embed.wasm \
-        --out-dir $out \
-        --out-name surrealist-embed \
-        --target web
-    '';
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src cargoRoot;
+    hash = "sha256-Su9ZOPIskV5poeS8pgtri+sZANBpdgnuCsQqE4WKFdA=";
   };
 
-  pnpm-deps = stdenvNoCC.mkDerivation {
-    inherit (finalAttrs) src version;
-    pname = "${finalAttrs.pname}-pnpm-deps";
-    dontFixup = true;
-
-    nativeBuildInputs = [ cacert jq moreutils nodePackages.pnpm ];
-
-    postInstall = ''
-      export HOME=$(mktemp -d)
-      pnpm config set store-dir $out
-      # use --ignore-script and --no-optional to avoid downloading binaries
-      # use --frozen-lockfile to avoid checking git deps
-      pnpm install --frozen-lockfile --no-optional --ignore-script
-
-      # Remove timestamp and sort the json files
-      rm -rf $out/v3/tmp
-      for f in $(find $out -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . $f | sponge $f
-      done
-    '';
-
-    outputHashMode = "recursive";
-    outputHash = "sha256-jT0Bw0xiusOw/5o6EUaEV3/GqkD/l6jkwXmOqc3a/nc=";
-  };
-
-  ui = stdenvNoCC.mkDerivation {
-    inherit (finalAttrs) src version;
-    pname = "${finalAttrs.pname}-ui";
-    dontFixup = true;
-
-    ESBUILD_BINARY_PATH = let version = "0.18.20";
-    in "${lib.getExe (esbuild.override {
-      buildGoModule = args:
-        buildGoModule (args // {
-          inherit version;
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        });
-    })}";
-
-    nativeBuildInputs = [ nodePackages.pnpm ];
-
-    postPatch = ''
-      ln -s ${finalAttrs.embed} src/generated
-    '';
-
-    postBuild = ''
-      export HOME=$(mktemp -d)
-      pnpm config set store-dir ${finalAttrs.pnpm-deps}
-      pnpm install --offline --frozen-lockfile --no-optional --ignore-script
-      pnpm build
-    '';
-
-    postInstall = ''
-      cp -r dist $out
-    '';
-  };
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-localhost-0.1.0" =
-        "sha256-7PJgz6t/jPEwX/2xaOe0SYawfPSZw/F1QtOrc6iPiP0=";
-    };
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-oreeV9g16/F7JGLApi0Uq+vTqNhIg7Lg1Z4k00RUOYI=";
   };
 
   nativeBuildInputs = [
     cargo
-    cargo-tauri
+    cargo-tauri.hook
+    gobject-introspection
+    jq
     makeBinaryWrapper
+    moreutils
+    nodejs
     pkg-config
+    pnpm_9.configHook
     rustc
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs =
-    [ cairo gdk-pixbuf gobject-introspection libsoup pango webkitgtk ];
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    libsoup_3
+    openssl
+    pango
+    webkitgtk_4_1
+  ];
 
+  env = {
+    ESBUILD_BINARY_PATH = lib.getExe esbuild_21-5;
+    OPENSSL_NO_VENDOR = 1;
+  };
+
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  # Deactivate the upstream update mechanism
   postPatch = ''
-    substituteInPlace ./tauri.conf.json \
-      --replace '"distDir": "../dist",' '"distDir": "${finalAttrs.ui}",' \
-      --replace '"beforeBuildCommand": "pnpm build",' '"beforeBuildCommand": "",'
-  '';
-
-  postBuild = ''
-    cargo tauri build --bundles deb
-  '';
-
-  postInstall = ''
-    install -Dm555 target/release/bundle/deb/surrealist_${finalAttrs.version}_*/data/usr/bin/surrealist -t $out/bin
-    cp -r target/release/bundle/deb/surrealist_${finalAttrs.version}_*/data/usr/share $out
+    jq '
+      .bundle.createUpdaterArtifacts = false |
+      .plugins.updater = {"active": false, "pubkey": "", "endpoints": []}
+    ' \
+    src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
   '';
 
   postFixup = ''
-    wrapProgram "$out/bin/surrealist" --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+    wrapProgram "$out/bin/surrealist" \
+      --set GIO_EXTRA_MODULES ${glib-networking}/lib/gio/modules \
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
   '';
 
   meta = with lib; {
-    description = "Powerful graphical SurrealDB query playground and database explorer for Browser and Desktop";
-    homepage = "https://surrealist.starlane.studio";
+    description = "Surrealist is the ultimate way to visually manage your SurrealDB database";
+    homepage = "https://surrealdb.com/surrealist";
     license = licenses.mit;
     mainProgram = "surrealist";
     maintainers = with maintainers; [ frankp ];

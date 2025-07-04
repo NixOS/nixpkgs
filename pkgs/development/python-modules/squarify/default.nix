@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pytestCheckHook
-, matplotlib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pytestCheckHook,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
@@ -12,8 +13,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "laserson";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "squarify";
+    tag = "v${version}";
     hash = "sha256-zSv+6xT9H4WyShRnwjjcNMjY19AFlQ6bw9Mh9p2rL08=";
   };
 

@@ -1,23 +1,28 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pybind11
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pybind11,
 }:
 
 buildPythonPackage rec {
   pname = "fasttext-predict";
-  version = "0.9.2.2";
+  version = "0.9.2.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rMbf09pCHvVYI9g/aq74+PcsuU2LezpmDz4b/w9vRyc=";
+    pname = "fasttext_predict";
+    inherit version;
+    hash = "sha256-GKb7DXTH35KA2x+Wy3XZkL/QBPqdZpST6j3T1U+E28c=";
   };
 
-  nativeBuildInputs = [
-    pybind11
-  ];
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace setup.py \
+      --replace-fail "-flto" ""
+  '';
+
+  nativeBuildInputs = [ pybind11 ];
 
   # tests are removed from fork
   doCheck = false;
@@ -29,7 +34,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/searxng/fasttext-predict/";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    # ImportError: dynamic module does not define module export function (PyInit_fasttext_pybind)
-    broken = stdenv.isDarwin;
   };
 }

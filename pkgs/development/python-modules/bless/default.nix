@@ -1,14 +1,15 @@
-{ lib
-, aioconsole
-, bleak
-, buildPythonPackage
-, dbus-next
-, fetchFromGitHub
-, numpy
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  aioconsole,
+  bleak,
+  buildPythonPackage,
+  dbus-next,
+  fetchFromGitHub,
+  numpy,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kevincar";
     repo = "bless";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dAdA+d75iE6v6t4mfgvwhRsIARLW+IqCGmaMABaDlZg=";
   };
 
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     sed -i "/pysetupdi/d" setup.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     bleak
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "bless"
-  ];
+  pythonImportsCheck = [ "bless" ];
 
   meta = with lib; {
     description = "Library for creating a BLE Generic Attribute Profile (GATT) server";

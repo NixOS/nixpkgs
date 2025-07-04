@@ -1,19 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub, go, prometheus-sql-exporter, testers }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go,
+  prometheus-sql-exporter,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "sql_exporter";
-  version = "0.5.4";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "justwatchcom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ADfJxo9/CcWi9LgX31a7GYAdigFYRbkFy4PYzecG50Y=";
+    sha256 = "sha256-6aJ1vBhRgHmWFoEB1pd+mCqeb1y7G91HshcZ7ehf35w=";
   };
 
   vendorHash = null;
 
-  ldflags = let t = "github.com/prometheus/common/version"; in
+  ldflags =
+    let
+      t = "github.com/prometheus/common/version";
+    in
     [
       "-X ${t}.Version=${version}"
       "-X ${t}.Revision=${src.rev}"

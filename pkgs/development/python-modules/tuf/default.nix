@@ -1,61 +1,66 @@
-{ lib
-, buildPythonPackage
-, ed25519
-, fetchFromGitHub
-, hatchling
-, pytestCheckHook
-, pythonOlder
-, requests
-, securesystemslib
+{
+  lib,
+  buildPythonPackage,
+  ed25519,
+  freezegun,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
+  flit-core,
+  requests,
+  securesystemslib,
 }:
 
 buildPythonPackage rec {
   pname = "tuf";
-  version = "3.1.1";
+  version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "theupdateframework";
     repo = "python-tuf";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HiF/b6aOhDhhQqYx/bjMXHABxmAJY4vkLlTheiL8zEo=";
+    tag = "v${version}";
+    hash = "sha256-CPbZOpUYi7MWKLMj7kwTsmEkxLCf4wU7IOCcbzMkPlU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==" "hatchling>="
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
+    flit-core
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    requests
-    securesystemslib
-  ] ++ securesystemslib.optional-dependencies.pynacl
-  ++ securesystemslib.optional-dependencies.crypto;
+  dependencies =
+    [
+      requests
+      securesystemslib
+    ]
+    ++ securesystemslib.optional-dependencies.pynacl
+    ++ securesystemslib.optional-dependencies.crypto;
+
+  __darwinAllowLocalNetworking = true;
+
+  checkInputs = [
+    freezegun
+  ];
 
   nativeCheckInputs = [
     ed25519
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "tuf"
-  ];
+  pythonImportsCheck = [ "tuf" ];
 
   preCheck = ''
     cd tests
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python reference implementation of The Update Framework (TUF)";
     homepage = "https://github.com/theupdateframework/python-tuf";
     changelog = "https://github.com/theupdateframework/python-tuf/blob/v${version}/docs/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

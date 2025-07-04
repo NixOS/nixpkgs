@@ -1,15 +1,16 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
-, fetchpatch
-, fetchpatch2
-, cmake
-, pkg-config
-, qtbase
-, qttools
-, qpdf
-, podofo
-, imagemagick
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
+  fetchpatch,
+  fetchpatch2,
+  cmake,
+  pkg-config,
+  qtbase,
+  qttools,
+  qpdf,
+  podofo,
+  imagemagick,
 }:
 
 mkDerivation rec {
@@ -50,11 +51,10 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An application to split, merge, rotate and mix PDF files";
+    description = "Application to split, merge, rotate and mix PDF files";
     mainProgram = "pdfmixtool";
     homepage = "https://gitlab.com/scarpetta/pdfmixtool";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ onny ];
   };
 }
-

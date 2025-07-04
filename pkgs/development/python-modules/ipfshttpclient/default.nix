@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pythonOlder
-, python
-, py-multiaddr
-, requests
-, pytestCheckHook
-, pytest-cov
-, pytest-dependency
-, pytest-localserver
-, pytest-mock
-, pytest-order
-, pytest-cid
-, mock
-, kubo
-, httpx
-, httpcore
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pythonOlder,
+  python,
+  py-multiaddr,
+  requests,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-dependency,
+  pytest-localserver,
+  pytest-mock,
+  pytest-order,
+  pytest-cid,
+  mock,
+  kubo,
+  httpx,
+  httpcore,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-OmC67pN2BbuGwM43xNDKlsLhwVeUbpvfOazyIDvoMEA=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     py-multiaddr
@@ -43,7 +42,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-dependency
     pytest-localserver
     pytest-mock
@@ -72,8 +71,6 @@ buildPythonPackage rec {
     substituteInPlace test/functional/test_other.py \
       --replace 'import ipfshttpclient' 'import ipfshttpclient; import pytest' \
       --replace 'assert ipfs_is_available' 'pytest.skip("Unknown test failure with IPFS >=0.11.0"); assert ipfs_is_available'
-    substituteInPlace test/run-tests.py \
-      --replace '--cov-fail-under=90' '--cov-fail-under=75'
   '';
 
   checkPhase = ''
@@ -89,9 +86,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ipfshttpclient" ];
 
   meta = with lib; {
-    description = "A python client library for the IPFS API";
+    description = "Python client library for the IPFS API";
     homepage = "https://github.com/ipfs-shipyard/py-ipfs-http-client";
     license = licenses.mit;
-    maintainers = with maintainers; [ mguentner Luflosi ];
+    maintainers = with maintainers; [
+      mguentner
+      Luflosi
+    ];
   };
 }

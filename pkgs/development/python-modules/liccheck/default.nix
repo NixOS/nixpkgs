@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, configparser
-, fetchFromGitHub
-, pip
-, pytest-mock
-, pytestCheckHook
-, python3-openid
-, pythonOlder
-, semantic-version
-, toml
+{
+  lib,
+  buildPythonPackage,
+  configparser,
+  fetchFromGitHub,
+  pip,
+  pytest-mock,
+  pytestCheckHook,
+  python3-openid,
+  pythonOlder,
+  semantic-version,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dhatim";
     repo = "python-license-check";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2WJw5TVMjOr+GX4YV0nssOtQeYvDHBLnlWquJQWPL9I=";
   };
 
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     python3-openid
   ];
 
-  pythonImportsCheck = [
-    "liccheck"
-  ];
+  pythonImportsCheck = [ "liccheck" ];
 
   meta = with lib; {
     description = "Check python packages from requirement.txt and report issues";

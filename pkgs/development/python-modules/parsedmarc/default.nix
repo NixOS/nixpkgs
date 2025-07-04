@@ -1,35 +1,43 @@
-{ lib
-, azure-identity
-, azure-monitor-ingestion
-, boto3
-, buildPythonPackage
-, dateparser
-, dnspython
-, elastic-transport
-, elasticsearch
-, elasticsearch-dsl
-, expiringdict
-, fetchPypi
-, fetchurl
-, geoip2
-, google-api-core
-, google-api-python-client
-, google-auth
-, google-auth-httplib2
-, google-auth-oauthlib
-, hatchling
-, imapclient
-, kafka-python
-, lxml
-, mailsuite
-, msgraph-core
-, nixosTests
-, publicsuffixlist
-, pythonOlder
-, requests
-, tqdm
-, urllib3
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchurl,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  azure-identity,
+  azure-monitor-ingestion,
+  boto3,
+  dateparser,
+  dnspython,
+  elastic-transport,
+  elasticsearch-dsl,
+  elasticsearch,
+  expiringdict,
+  geoip2,
+  google-api-core,
+  google-api-python-client,
+  google-auth-httplib2,
+  google-auth-oauthlib,
+  google-auth,
+  imapclient,
+  kafka-python-ng,
+  lxml,
+  mailsuite,
+  msgraph-core,
+  nixosTests,
+  opensearch-py,
+  publicsuffixlist,
+  pygelf,
+  requests,
+  tqdm,
+  xmltodict,
+
+  # test
+  unittestCheckHook,
 }:
 
 let
@@ -40,27 +48,26 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.8.0";
+  version = "8.18.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tK/cxOw50awcDAGRDTQ+Nxb9aJl2+zLZHuJq88xNmXM=";
+  src = fetchFromGitHub {
+    owner = "domainaware";
+    repo = "parsedmarc";
+    tag = version;
+    hash = "sha256-y8wFR9UN1u/IDYiKB+8PrN8c0YCgagxUr7CeAbQWdtg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "elasticsearch<7.14.0" "elasticsearch" \
-      --replace "elasticsearch-dsl==7.4.0" "elasticsearch-dsl"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "elasticsearch"
+    "elasticsearch-dsl"
+  ];
+
+  dependencies = [
     azure-identity
     azure-monitor-ingestion
     boto3
@@ -77,36 +84,37 @@ buildPythonPackage rec {
     google-auth-httplib2
     google-auth-oauthlib
     imapclient
-    kafka-python
+    kafka-python-ng
     lxml
     mailsuite
     msgraph-core
+    opensearch-py
     publicsuffixlist
+    pygelf
     requests
     tqdm
-    urllib3
     xmltodict
   ];
 
-  # no tests on PyPI, no tags on GitHub
-  # https://github.com/domainaware/parsedmarc/issues/426
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "parsedmarc"
+  nativeCheckInputs = [
+    unittestCheckHook
   ];
+
+  pythonImportsCheck = [ "parsedmarc" ];
 
   passthru = {
     inherit dashboard;
     tests = nixosTests.parsedmarc;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${lib.replaceStrings [ "." ] [ "" ] version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ talyz ];
+    changelog = "https://github.com/domainaware/parsedmarc/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ talyz ];
     mainProgram = "parsedmarc";
+    # https://github.com/domainaware/parsedmarc/issues/464
+    broken = lib.versionAtLeast msgraph-core.version "1.0.0";
   };
 }

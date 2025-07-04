@@ -1,19 +1,20 @@
-{ bctoolbox
-, belcard
-, belle-sip
-, belr
-, cmake
-, fetchFromGitLab
-, lib
-, liblinphone
-, mediastreamer
-, mediastreamer-openh264
-, minizip-ng
-, mkDerivation
-, qtgraphicaleffects
-, qtmultimedia
-, qtquickcontrols2
-, qttools
+{
+  bctoolbox,
+  belcard,
+  belle-sip,
+  belr,
+  cmake,
+  fetchFromGitLab,
+  lib,
+  liblinphone,
+  mediastreamer,
+  mediastreamer-openh264,
+  minizip-ng,
+  mkDerivation,
+  qtgraphicaleffects,
+  qtmultimedia,
+  qtquickcontrols2,
+  qttools,
 }:
 
 # How to update Linphone? (The Qt desktop app)
@@ -125,6 +126,7 @@ mkDerivation rec {
 
     mkdir -p $out/share/belr/grammars
     ln -s ${liblinphone}/share/belr/grammars/* $out/share/belr/grammars/
+    ln -s ${liblinphone}/share/sounds/linphone/* $out/share/sounds/linphone/
     ln -s ${belle-sip}/share/belr/grammars/* $out/share/belr/grammars/
 
     wrapProgram $out/bin/linphone \

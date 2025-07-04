@@ -4,18 +4,20 @@
   fetchurl,
   qtdeclarative,
   qt5compat,
+  qttools,
 }:
 mkKdeDerivation rec {
   pname = "kirigami-addons";
-  version = "1.1.0";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/kirigami-addons/kirigami-addons-${version}.tar.xz";
-    hash = "sha256-jvNSSZE5YWsxQqbXqSqyN0nFaEA+zo2FTwZKlB0IVTY=";
+    hash = "sha256-AAKK5N+Z4lBRg0XqKNnN9J1wDprKxIJzS7UThNoR+UU=";
   };
 
-  extraBuildInputs = [qtdeclarative];
-  extraPropagatedBuildInputs = [qt5compat];
+  extraNativeBuildInputs = [ qttools ];
+  extraBuildInputs = [ qtdeclarative ];
+  extraPropagatedBuildInputs = [ qt5compat ];
 
   meta.license = with lib.licenses; [
     bsd2

@@ -1,33 +1,36 @@
-{ lib
-, fetchFromGitHub
-, perl
-, rustPlatform
-, darwin
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  rustPlatform,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rover";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-c1Tnb9ACyV6RZmYnLL+KnybGgy8kwGi0JyWYcoH1J6M=";
+    sha256 = "sha256-uyeePAHBDCzXzwIWrKcc9LHClwSI7DMBYod/o4LfK+Y=";
   };
 
-  cargoSha256 = "sha256-wTvQ4QBysppMgwv9pjQckVjMoBzLiDReOt6sJImqKFY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uR5XvkHUmZzCHZITKgScmzqjLOIvbPyrih/0B1OpsAc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  buildInputs = [
+    openssl
   ];
 
   nativeBuildInputs = [
-    perl
+    pkg-config
   ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   # This test checks whether the plugins specified in the plugins json file are
   # valid by making a network call to the repo that houses their binaries; but, the
@@ -46,10 +49,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A CLI for interacting with ApolloGraphQL's developer tooling, including managing self-hosted and GraphOS graphs.";
+    description = "CLI for interacting with ApolloGraphQL's developer tooling, including managing self-hosted and GraphOS graphs";
     mainProgram = "rover";
     homepage = "https://www.apollographql.com/docs/rover";
     license = licenses.mit;
-    maintainers = [ maintainers.ivanbrennan maintainers.aaronarinder ];
+    maintainers = [
+      maintainers.ivanbrennan
+      maintainers.aaronarinder
+    ];
   };
 }

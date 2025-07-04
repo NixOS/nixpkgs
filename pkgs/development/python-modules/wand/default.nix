@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, imagemagickBig
-, py
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  imagemagickBig,
+  py,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

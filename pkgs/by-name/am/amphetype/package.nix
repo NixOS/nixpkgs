@@ -1,21 +1,32 @@
-{ copyDesktopItems, fetchFromGitLab, lib, makeDesktopItem, python3Packages, qt5
+{
+  copyDesktopItems,
+  fetchFromGitLab,
+  lib,
+  makeDesktopItem,
+  python3Packages,
+  qt5,
 }:
 
 let
   pname = "amphetype";
   version = "1.0.0";
-  description = "An advanced typing practice program";
-in python3Packages.buildPythonApplication {
+  description = "Advanced typing practice program";
+in
+python3Packages.buildPythonApplication {
+  format = "setuptools";
   inherit pname version;
 
   src = fetchFromGitLab {
     owner = "franksh";
-    repo = pname;
-    rev = "v${version}";
+    repo = "amphetype";
+    tag = "v${version}";
     hash = "sha256-pve2f+XMfFokMCtW3KdeOJ9Ey330Gwv/dk1+WBtrBEQ=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    qt5.wrapQtAppsHook
+  ];
 
   buildInputs = [
     qt5.qtbase
@@ -38,11 +49,14 @@ in python3Packages.buildPythonApplication {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = "amphetype";
       desktopName = "Amphetype";
       genericName = "Typing Practice";
-      categories = [ "Education" "Qt" ];
-      exec = pname;
+      categories = [
+        "Education"
+        "Qt"
+      ];
+      exec = "amphetype";
       comment = description;
     })
   ];

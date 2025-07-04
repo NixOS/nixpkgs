@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, gtk-engine-murrine }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk-engine-murrine,
+}:
 
 let
   themeName = "Ant";
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A flat and light theme with a modern look";
+    description = "Flat and light theme with a modern look";
     homepage = "https://github.com/EliverLara/${themeName}";
     license = licenses.gpl3;
     platforms = platforms.all;

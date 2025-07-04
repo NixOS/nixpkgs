@@ -1,38 +1,37 @@
-{ lib
-, buildPythonPackage
-, emoji
-, fetchFromGitHub
-, freezegun
-, tzdata
-, pyparsing
-, pydantic
-, pytest-benchmark
-, pytestCheckHook
-, pythonOlder
-, python-dateutil
-, setuptools
-, syrupy
+{
+  lib,
+  buildPythonPackage,
+  emoji,
+  fetchFromGitHub,
+  freezegun,
+  tzdata,
+  pyparsing,
+  pydantic,
+  pytest-benchmark,
+  pytestCheckHook,
+  pythonOlder,
+  python-dateutil,
+  setuptools,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "7.0.3";
+  version = "10.0.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "ical";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RiwWnRSe0HdeGVo592A+Rk+IvA1Lfp6mY+/ZEyqJBDU=";
+    tag = version;
+    hash = "sha256-T58A2oBDD97C5Jz5WlbAJYOnoJzP+jAryKb5Oim4TuU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     tzdata
     pydantic
@@ -47,15 +46,15 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "ical"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "ical" ];
+
+  meta = {
     description = "Library for handling iCalendar";
     homepage = "https://github.com/allenporter/ical";
-    changelog = "https://github.com/allenporter/ical/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/allenporter/ical/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

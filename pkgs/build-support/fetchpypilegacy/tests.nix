@@ -1,4 +1,5 @@
-{ testers, fetchPypiLegacy, ... }: {
+{ testers, fetchPypiLegacy, ... }:
+{
   # Tests that we can send custom headers with spaces in them
   fetchSimple = testers.invalidateFetcherByDrvHash fetchPypiLegacy {
     pname = "requests";

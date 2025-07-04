@@ -1,42 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, graphviz
-, graphvizPkgs
-, isPyPy
-, python
-, pythonOlder
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  graphviz,
+  graphvizPkgs,
+  isPyPy,
+  python,
+  pythonOlder,
+  replaceVars,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "objgraph";
-  version = "3.6.1";
-  format = "setuptools";
+  version = "3.6.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7" || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/pbHQUe7yq6GZbOW5TiL3MMZfe67pOY4HwUgLuW0U6c=";
+    hash = "sha256-ALny9A90IuPH9FphxNr9r4HwP/BknW6uyGbwEDDlGtg=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-graphviz-path.patch;
+    (replaceVars ./hardcode-graphviz-path.patch {
       graphviz = graphvizPkgs;
     })
   ];
 
-  passthru.optional-dependencies = {
-    ipython = [
-      graphviz
-    ];
+  build-system = [
+    setuptools
+  ];
+
+  optional-dependencies = {
+    ipython = [ graphviz ];
   };
 
-  pythonImportsCheck = [
-    "objgraph"
-  ];
+  pythonImportsCheck = [ "objgraph" ];
 
   checkPhase = ''
     runHook preCheck

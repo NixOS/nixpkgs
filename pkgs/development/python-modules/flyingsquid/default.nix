@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pgmpy
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pgmpy,
+  torch,
 }:
 let
   pname = "flyingsquid";
@@ -17,7 +18,7 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "HazyResearch";
-    repo = pname;
+    repo = "flyingsquid";
     rev = "28a713a9ac501b7597c2489468ae189943d00685";
     hash = "sha256-DPHTSxDD4EW3nrNk2fk0pKJI/8+pQ7Awywd8nxhBruo=";
   };

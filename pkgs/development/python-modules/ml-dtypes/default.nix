@@ -1,25 +1,29 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, numpy
-, pytestCheckHook
-, absl-py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  numpy,
+
+  # tests
+  absl-py,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ml-dtypes";
-  version = "0.3.2";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jax-ml";
     repo = "ml_dtypes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-epWunA5FULmCuTABl3uckFuNaSEpqJxtp0n0loCb6Q0=";
+    tag = "v${version}";
+    hash = "sha256-XRvqyWyi5smaLh5ese5QY2aIOkVliXGc7ngwT5CRsmc=";
     # Since this upstream patch (https://github.com/jax-ml/ml_dtypes/commit/1bfd097e794413b0d465fa34f2eff0f3828ff521),
     # the attempts to use the nixpkgs packaged eigen dependency have failed.
     # Hence, we rely on the bundled eigen library.
@@ -28,23 +32,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "numpy~=1.21.2" "numpy" \
-      --replace "numpy~=1.23.3" "numpy" \
-      --replace "numpy~=1.26.0" "numpy" \
-      --replace "setuptools~=68.1.0" "setuptools"
+      --replace-fail "setuptools~=75.7.0" "setuptools"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     absl-py
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -53,15 +50,16 @@ buildPythonPackage rec {
     rm -rf ./ml_dtypes
   '';
 
-  pythonImportsCheck = [
-    "ml_dtypes"
-  ];
+  pythonImportsCheck = [ "ml_dtypes" ];
 
-  meta = with lib; {
-    description = "A stand-alone implementation of several NumPy dtype extensions used in machine learning libraries";
+  meta = {
+    description = "Stand-alone implementation of several NumPy dtype extensions used in machine learning libraries";
     homepage = "https://github.com/jax-ml/ml_dtypes";
     changelog = "https://github.com/jax-ml/ml_dtypes/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage samuela ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      samuela
+    ];
   };
 }

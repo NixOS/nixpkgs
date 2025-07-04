@@ -1,17 +1,23 @@
 # Systemd services for lxd.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.virtualisation.lxd;
-  preseedFormat = pkgs.formats.yaml {};
-in {
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
-
+  preseedFormat = pkgs.formats.yaml { };
+in
+{
   imports = [
-    (lib.mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
+    (lib.mkRemovedOptionModule [
+      "virtualisation"
+      "lxd"
+      "zfsPackage"
+    ] "Override zfs in an overlay instead to override it globally")
   ];
 
   options = {
@@ -35,10 +41,11 @@ in {
 
       package = lib.mkPackageOption pkgs "lxd-lts" { };
 
-      lxcPackage = lib.mkPackageOption pkgs "lxc" {
-        extraDescription = ''
-          Required for AppArmor profiles.
-        '';
+      lxcPackage = lib.mkOption {
+        type = lib.types.package;
+        default = config.virtualisation.lxc.package;
+        defaultText = lib.literalExpression "config.virtualisation.lxc.package";
+        description = "The lxc package to use.";
       };
 
       zfsSupport = lib.mkOption {
@@ -67,9 +74,11 @@ in {
       };
 
       preseed = lib.mkOption {
-        type = lib.types.nullOr (lib.types.submodule {
-          freeformType = preseedFormat.type;
-        });
+        type = lib.types.nullOr (
+          lib.types.submodule {
+            freeformType = preseedFormat.type;
+          }
+        );
 
         default = null;
 
@@ -165,10 +174,6 @@ in {
       };
     };
 
-    # TODO: remove once LXD gets proper support for cgroupsv2
-    # (currently most of the e.g. CPU accounting stuff doesn't work)
-    systemd.enableUnifiedCgroupHierarchy = false;
-
     systemd.sockets.lxd = {
       description = "LXD UNIX socket";
       wantedBy = [ "sockets.target" ];
@@ -196,8 +201,7 @@ in {
       ];
       documentation = [ "man:lxd(1)" ];
 
-      path = [ pkgs.util-linux ]
-        ++ lib.optional cfg.zfsSupport config.boot.zfs.package;
+      path = [ pkgs.util-linux ] ++ lib.optional cfg.zfsSupport config.boot.zfs.package;
 
       environment = lib.mkIf (cfg.ui.enable) {
         "LXD_UI" = cfg.ui.package;
@@ -213,12 +217,12 @@ in {
         LimitNOFILE = "1048576";
         LimitNPROC = "infinity";
         TasksMax = "infinity";
+        Delegate = true; # LXD needs to manage cgroups in its subtree
 
         # By default, `lxd` loads configuration files from hard-coded
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to
         # explicitly tell it where the actual configuration files are
-        Environment = lib.mkIf (config.virtualisation.lxc.lxcfs.enable)
-          "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
+        Environment = lib.mkIf (config.virtualisation.lxc.lxcfs.enable) "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
       };
 
       unitConfig.ConditionPathExists = "!/var/lib/incus/.migrated-from-lxd";
@@ -226,9 +230,9 @@ in {
 
     systemd.services.lxd-preseed = lib.mkIf (cfg.preseed != null) {
       description = "LXD initialization with preseed file";
-      wantedBy = ["multi-user.target"];
-      requires = ["lxd.service"];
-      after = ["lxd.service"];
+      wantedBy = [ "multi-user.target" ];
+      requires = [ "lxd.service" ];
+      after = [ "lxd.service" ];
 
       script = ''
         ${pkgs.coreutils}/bin/cat ${preseedFormat.generate "lxd-preseed.yaml" cfg.preseed} | ${cfg.package}/bin/lxd init --preseed
@@ -239,11 +243,21 @@ in {
       };
     };
 
-    users.groups.lxd = {};
+    users.groups.lxd = { };
 
     users.users.root = {
-      subUidRanges = [ { startUid = 1000000; count = 65536; } ];
-      subGidRanges = [ { startGid = 1000000; count = 65536; } ];
+      subUidRanges = [
+        {
+          startUid = 1000000;
+          count = 65536;
+        }
+      ];
+      subGidRanges = [
+        {
+          startGid = 1000000;
+          count = 65536;
+        }
+      ];
     };
 
     boot.kernel.sysctl = lib.mkIf cfg.recommendedSysctlSettings {
@@ -257,7 +271,12 @@ in {
       "kernel.keys.maxkeys" = 2000;
     };
 
-    boot.kernelModules = [ "veth" "xt_comment" "xt_CHECKSUM" "xt_MASQUERADE" "vhost_vsock" ]
-      ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+    boot.kernelModules = [
+      "veth"
+      "xt_comment"
+      "xt_CHECKSUM"
+      "xt_MASQUERADE"
+      "vhost_vsock"
+    ] ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
   };
 }

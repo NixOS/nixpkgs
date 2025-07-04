@@ -1,26 +1,20 @@
-{ lib
-, ocamlPackages
-, stdenv
-, overrideSDK
-, fetchFromGitHub
-, python3
-, dune_3
-, makeWrapper
-, pandoc
-, poppler_utils
-, testers
-, docfd
+{
+  lib,
+  ocamlPackages,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  dune_3,
+  makeWrapper,
+  pandoc,
+  poppler-utils,
+  testers,
+  docfd,
 }:
 
-let
-  # Needed for x86_64-darwin
-  buildDunePackage' = ocamlPackages.buildDunePackage.override {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in
-buildDunePackage' rec {
+ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "4.0.0";
+  version = "11.0.1";
 
   minimalOCamlVersion = "5.1";
 
@@ -28,33 +22,48 @@ buildDunePackage' rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-fgwUXRZ6k5i3XLxXpjbrl0TJZMT+NkGXf7KNwRgi+q8=";
+    hash = "sha256-uRC2QBn4gAfS9u85YaNH2Mm2C0reP8FnDHbyloY+OC8=";
   };
 
-  nativeBuildInputs = [ python3 dune_3 makeWrapper ];
+  nativeBuildInputs = [
+    python3
+    dune_3
+    makeWrapper
+  ];
+
   buildInputs = with ocamlPackages; [
     cmdliner
     containers-data
+    decompress
+    diet
     digestif
-    domainslib
     eio_main
     lwd
     nottui
     notty
+    ocaml_sqlite3
     ocolor
     oseq
+    ppx_deriving
+    ppxlib
+    progress
+    re
     spelll
     timedesc
+    uuseg
     yojson
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/docfd --prefix PATH : "${lib.makeBinPath [ pandoc poppler_utils ]}"
+    wrapProgram $out/bin/docfd --prefix PATH : "${
+      lib.makeBinPath [
+        pandoc
+        poppler-utils
+      ]
+    }"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = docfd;
-  };
+  passthru.tests.version = testers.testVersion { package = docfd; };
 
   meta = with lib; {
     description = "TUI multiline fuzzy document finder";

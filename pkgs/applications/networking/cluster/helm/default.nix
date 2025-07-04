@@ -1,23 +1,30 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kubernetes-helm }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+}:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubernetes-helm";
-  version = "3.14.4";
+  version = "3.18.3";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
-    rev = "v${version}";
-    sha256 = "sha256-Wt5ovKa2CHrD0VSxvReYAwoC4SsuZHAhi/P6Kn1H7So=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-V5gWzgsinT0hGFDocPlljH1ls8Z0j5cz37oPrB6LI9Y=";
   };
-  vendorHash = "sha256-b25LUyr4B4fF/WF4Q+zzrDo78kuSTEPBklKkA4o+DBo=";
+  vendorHash = "sha256-r9DLYgEjxapUOAz+FCgYXqdE6APhGKO/YnshbLRmdrU=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
     "-w"
     "-s"
-    "-X helm.sh/helm/v3/internal/version.version=v${version}"
-    "-X helm.sh/helm/v3/internal/version.gitCommit=${src.rev}"
+    "-X helm.sh/helm/v3/internal/version.version=v${finalAttrs.version}"
+    "-X helm.sh/helm/v3/internal/version.gitCommit=${finalAttrs.src.rev}"
   ];
 
   preBuild = ''
@@ -50,7 +57,7 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/helm completion bash > helm.bash
     $out/bin/helm completion zsh > helm.zsh
     $out/bin/helm completion fish > helm.fish
@@ -58,16 +65,23 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = kubernetes-helm;
+    package = finalAttrs.finalPackage;
     command = "helm version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = with lib; {
-    homepage = "https://github.com/kubernetes/helm";
-    description = "A package manager for kubernetes";
+    homepage = "https://github.com/helm/helm";
+    description = "Package manager for kubernetes";
     mainProgram = "helm";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rlupton20 edude03 saschagrunert Frostman Chili-Man techknowlogick ];
+    maintainers = with maintainers; [
+      rlupton20
+      edude03
+      saschagrunert
+      Frostman
+      Chili-Man
+      techknowlogick
+    ];
   };
-}
+})

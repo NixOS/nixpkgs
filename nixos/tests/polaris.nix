@@ -1,11 +1,12 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 
 {
   name = "polaris";
   meta.maintainers = with lib.maintainers; [ pbsds ];
 
   nodes.machine =
-    { pkgs, ... }: {
+    { pkgs, ... }:
+    {
       environment.systemPackages = [ pkgs.jq ];
       services.polaris = {
         enable = true;
@@ -26,4 +27,4 @@ import ./make-test-python.nix ({ lib, ... }:
     machine.succeed("curl http://localhost:5050/api/version")
     machine.succeed("curl -X GET http://localhost:5050/api/initial_setup -H  'accept: application/json' | jq -e '.has_any_users == true'")
   '';
-})
+}

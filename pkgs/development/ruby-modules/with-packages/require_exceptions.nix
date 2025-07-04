@@ -3,7 +3,8 @@ let
     require "cocoapods"
     require "#{Gem::Specification.find_by_name(%(${name})).gem_dir}/lib/cocoapods_plugin"
   '';
-in {
+in
+{
   actioncable = [ "action_cable" ];
   actionmailer = [ "action_mailer" ];
   actionpack = [ "action_pack" ];
@@ -15,9 +16,15 @@ in {
   activesupport = [ "active_support" ];
   atk = [ "atk" ];
   CFPropertyList = [ "cfpropertylist" ];
-  cocoapods-acknowledgements = [ "cocoapods" "cocoapods_acknowledgements" ];
+  cocoapods-acknowledgements = [
+    "cocoapods"
+    "cocoapods_acknowledgements"
+  ];
   cocoapods-art = [ "cocoapods_art" ];
-  cocoapods-browser = [ "cocoapods" "cocoapods_plugin" ];
+  cocoapods-browser = [
+    "cocoapods"
+    "cocoapods_plugin"
+  ];
   cocoapods-bugsnag = cocoapod-plugin "cocoapods-bugsnag";
   cocoapods-clean = [ "cocoapods_clean" ];
   cocoapods-coverage = [ "cocoapods_coverage" ];
@@ -26,8 +33,11 @@ in {
   cocoapods-deploy = cocoapod-plugin "cocoapods-deploy";
   cocoapods-generate = cocoapod-plugin "cocoapods-generate";
   cocoapods-git_url_rewriter = cocoapod-plugin "cocoapods-git_url_rewriter";
-  cocoapods-keys = []; # osx only cocoapod-plugin "cocoapods-keys";
-  cocoapods-open = [ "cocoapods" "cocoapods_plugin" ];
+  cocoapods-keys = [ ]; # osx only cocoapod-plugin "cocoapods-keys";
+  cocoapods-open = [
+    "cocoapods"
+    "cocoapods_plugin"
+  ];
   cocoapods-packager = [ "cocoapods_packager" ];
   cocoapods-packager-pro = [ ]; # requires osx
   cocoapods-plugins = [ "cocoapods_plugins" ];
@@ -50,7 +60,7 @@ in {
   gobject-introspection = [ "gobject-introspection" ];
   gtk2 = [ ]; # requires display
   idn-ruby = [ "idn" ];
-  jekyll-sass-converter = []; # tested through jekyll
+  jekyll-sass-converter = [ ]; # tested through jekyll
   libxml-ruby = [ "libxml" ];
   multipart-post = [ "multipart_post" ];
   unicode-display_width = [ "unicode/display_width" ];
@@ -73,7 +83,12 @@ in {
   ruby-macho = [ "macho" ];
   ruby-terminfo = [ "terminfo" ];
   rubyzip = [ "zip" ];
-  sequel_pg = [ "pg" "sequel" "sequel/adapters/postgresql" "sequel_pg" ];
+  sequel_pg = [
+    "pg"
+    "sequel"
+    "sequel/adapters/postgresql"
+    "sequel_pg"
+  ];
   simplecov-html = [ ]; # tested through simplecov
   sinatra = [ "sinatra/base" ];
   sprockets-rails = [ "sprockets/rails" ];

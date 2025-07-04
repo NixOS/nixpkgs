@@ -1,28 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, regex
-, pytestCheckHook
-, pythonOlder
-, js2py
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  regex,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lark";
-  version = "1.1.9";
+  version = "1.2.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
-    rev = "refs/tags/${version}";
-    hash = "sha256-pWLKjELy10VNumpBHjBYCO2TltKsZx1GhQcGMHsYJNk=";
+    tag = version;
+    hash = "sha256-02NX/2bHTYSVTDLLudJmEU2DcQNn0Ke+5ayilKLlwqA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Optional import, but fixes some re known bugs & allows advanced regex features
   propagatedBuildInputs = [ regex ];
@@ -34,19 +30,14 @@ buildPythonPackage rec {
     "lark.grammars"
   ];
 
-  # Js2py is not supported on 3.12
-  doCheck = pythonOlder "3.12";
-
-  nativeCheckInputs = [
-    js2py
-    pytestCheckHook
-  ];
+  # Js2py is needed for tests but it's unmaintained and insecure
+  doCheck = false;
 
   meta = with lib; {
-    description = "A modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
+    description = "Modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
     homepage = "https://lark-parser.readthedocs.io/";
     changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fridh drewrisinger ];
+    maintainers = with maintainers; [ drewrisinger ];
   };
 }

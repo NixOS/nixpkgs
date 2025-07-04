@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, fetchurl
-, python3
-, qtbase
-, qtwayland
-, wrapQtAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  python3,
+  qtbase,
+  qtwayland,
+  wrapQtAppsHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "puddletag";
     repo = "puddletag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-oScT8YcQoDf2qZ+J7xKm22Sbfym3tkVUrWT5D2LU5e8=";
   };
 
@@ -45,7 +46,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    python3.pkgs.pythonRelaxDepsHook
     wrapQtAppsHook
   ];
 
@@ -74,11 +74,14 @@ python3.pkgs.buildPythonApplication rec {
   dontStrip = true; # we are not generating any binaries
 
   meta = with lib; {
-    description = "An audio tag editor similar to the Windows program, Mp3tag";
+    description = "Audio tag editor similar to the Windows program, Mp3tag";
     mainProgram = "puddletag";
     homepage = "https://docs.puddletag.net";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ peterhoeg dschrempf ];
+    maintainers = with maintainers; [
+      peterhoeg
+      dschrempf
+    ];
     platforms = platforms.linux;
   };
 }

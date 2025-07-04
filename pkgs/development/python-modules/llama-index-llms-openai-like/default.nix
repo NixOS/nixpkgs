@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, llama-index-llms-openai
-, poetry-core
-, pythonOlder
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  llama-index-core,
+  llama-index-llms-openai,
+  pythonOlder,
+  transformers,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-llms-openai-like";
-  version = "0.1.3";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,12 +19,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_llms_openai_like";
     inherit version;
-    hash = "sha256-w0EjJQd8dSY+N9YNUBMUub3HcPEtiisW51bn2ayPnj8=";
+    hash = "sha256-Fa4cFrAboL+oItU5APA+NcGf/ke1KJWCNL8ZQqkfWHw=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core
@@ -34,9 +33,7 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.llms.openai_like"
-  ];
+  pythonImportsCheck = [ "llama_index.llms.openai_like" ];
 
   meta = with lib; {
     description = "LlamaIndex LLMS Integration for OpenAI like";

@@ -1,29 +1,33 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, packaging
-, pytest
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  packaging,
+  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
-  version = "13.0";
-  format = "pyproject";
+  version = "15.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4TLb5CC8R29US5bnA27dCmlwdXQgm2Z3JjyVDRmwkZk=";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-rerunfailures";
+    tag = version;
+    hash = "sha256-ab3n61zCf9ok2PWvKTwmaeoeGuMxl0sYE25djk/NDLk=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ packaging ];
+
+  dependencies = [ packaging ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

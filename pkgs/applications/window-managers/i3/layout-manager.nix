@@ -1,7 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, vim, makeWrapper, jq, rofi, xrandr, xdotool, i3, gawk, libnotify }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  vim,
+  makeWrapper,
+  jq,
+  rofi,
+  xrandr,
+  xdotool,
+  i3,
+  gawk,
+  libnotify,
+}:
 
 let
-  path = lib.makeBinPath [ vim jq rofi xrandr xdotool i3 gawk libnotify ];
+  path = lib.makeBinPath [
+    vim
+    jq
+    rofi
+    xrandr
+    xdotool
+    i3
+    gawk
+    libnotify
+  ];
 in
 
 stdenv.mkDerivation rec {
@@ -35,6 +57,6 @@ stdenv.mkDerivation rec {
     mainProgram = "layout_manager";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

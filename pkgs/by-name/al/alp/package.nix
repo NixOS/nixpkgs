@@ -1,22 +1,22 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, runCommand
-, alp
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  runCommand,
+  alp,
 }:
 
 buildGoModule rec {
   pname = "alp";
-  version = "1.1.17";
+  version = "1.1.18";
 
   src = fetchFromGitHub {
     owner = "gernotfeichter";
     repo = "alp";
     rev = version;
-    hash = "sha256-7lyWu1bVn7UwLb/Em6VBbg3FrMyxGjebxt5gJhm/xpI=";
+    hash = "sha256-tE8qKNXLKvFcnDULVkJJ/EJyEsvATCk/3YFkZCmpHSo=";
   };
-  vendorHash = "sha256-a2CQZKN/rPWh/Pn9gXfSArTCcGST472tsz1Kqm7M4vM=";
+  vendorHash = "sha256-AHPVhtm6La7HWuxJfpxTsS5wFTUZUJoVyebLGYhNKTg=";
 
   sourceRoot = "${src.name}/linux";
 
@@ -34,20 +34,20 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
 
-    go build -o $GOPATH/bin/${pname} main.go
+    go build -o $GOPATH/bin/alp main.go
 
     runHook postBuild
   '';
 
   passthru.tests = {
-    test-version = runCommand "${pname}-test" {} ''
+    test-version = runCommand "${pname}-test" { } ''
       ${alp}/bin/alp version > $out
       cat $out | grep '${version}'
     '';
   };
 
   meta = with lib; {
-    description = "A convenient authentication method that lets you use your android device as a key for your Linux machine";
+    description = "Convenient authentication method that lets you use your android device as a key for your Linux machine";
     homepage = "https://github.com/gernotfeichter/alp";
     license = licenses.gpl2Only;
     mainProgram = "alp";

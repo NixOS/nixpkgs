@@ -1,31 +1,39 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-}: buildNpmPackage rec {
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
+buildNpmPackage rec {
   pname = "arrpc";
-  version = "3.3.1";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "OpenAsar";
     repo = "arrpc";
-    # Release commits are not tagged
-    # release: 3.3.0
-    rev = "b4796fffe3bf1b1361cc4781024349f7a4f9400e";
-    hash = "sha256-iEfV85tRl2KyjodoaSxVHiqweBpLeiCAYWc8+afl/sA=";
+    tag = version;
+    hash = "sha256-3xkqWcLhmSIH6Al2SvM9qBpdcLzEqUmUCgwYBPAgVpo=";
   };
 
-  npmDepsHash = "sha256-YlSUGncpY0MyTiCfZcPsfcNx3fR+SCtkOFWbjOPLUzk=";
+  npmDepsHash = "sha256-lw6pngFC2Pnk+I8818TOTwN4r+8IsjvdMYIyTsTi49g=";
 
   dontNpmBuild = true;
 
+  postInstall = ''
+    mkdir -p $out/lib/systemd/user
+    substitute ${./arrpc.service} $out/lib/systemd/user/arrpc.service \
+      --subst-var-by arrpc $out/bin/arrpc
+  '';
+
   meta = {
-    # ideally we would do blob/${version}/changelog.md here
-    # upstream does not tag releases
-    changelog = "https://github.com/OpenAsar/arrpc/blob/${src.rev}/changelog.md";
+    changelog = "https://github.com/OpenAsar/arrpc/blob/${version}/changelog.md";
     description = "Open Discord RPC server for atypical setups";
     homepage = "https://arrpc.openasar.dev/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ anomalocaris NotAShelf ];
+    maintainers = with lib.maintainers; [
+      anomalocaris
+      NotAShelf
+      ulysseszhan
+    ];
     mainProgram = "arrpc";
   };
 }

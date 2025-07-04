@@ -1,8 +1,9 @@
-{ fetchCrate
-, go-md2man
-, installShellFiles
-, lib
-, rustPlatform
+{
+  fetchCrate,
+  go-md2man,
+  installShellFiles,
+  lib,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,9 +15,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-rSMvx/zUZqRRgj48TVVG7RwQT8e70m0kertRJysDY4Y=";
   };
 
-  cargoHash = "sha256-pE5loMwNMdHL3GODiw3kVVHj374hf3+vIDEYTqvx5WI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-i62vUvR/iX0zKD29WsIvlcn49lcFvv2uN05oTexvPMc=";
 
-  nativeBuildInputs = [ go-md2man installShellFiles ];
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+  ];
 
   postBuild = ''
     sed -i '$ a # Source and further info' README.md
@@ -30,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/aeosynth/bk";
-    description = "A terminal epub reader written in rust";
+    description = "Terminal epub reader written in rust";
     license = licenses.mit;
     maintainers = with maintainers; [ vuimuich ];
     mainProgram = "bk";

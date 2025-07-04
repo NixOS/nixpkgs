@@ -1,30 +1,43 @@
-{ lib, buildPackages, fetchFromGitHub, makeRustPlatform, installShellFiles, stdenv }:
+{
+  lib,
+  buildPackages,
+  fetchFromGitHub,
+  makeRustPlatform,
+  installShellFiles,
+  stdenv,
+}:
 
 let
   args = rec {
     pname = "cargo-auditable";
-    version = "0.6.2";
+    version = "0.6.5";
 
     src = fetchFromGitHub {
       owner = "rust-secure-code";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-ERIzx9Fveanq7/aWcB2sviTxIahvSu0sTwgpGf/aYE8=";
+      sha256 = "sha256-zjv2/qZM0vRyz45DeKRtPHaamv2iLtjpSedVTEXeDr8=";
     };
 
-    cargoHash = "sha256-4o3ctun/8VcBRuj+j0Yaawdkyn6Z6LPp+FTyhPxQWU8=";
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit pname version src;
+      hash = "sha256-oTPGmoGlNfPVZ6qha/oXyPJp94fT2cNlVggbIGHf2bc=";
+    };
 
-    # Cargo.lock is outdated
-    preConfigure = ''
-      cargo update --offline
-    '';
+    checkFlags = [
+      # requires wasm32-unknown-unknown target
+      "--skip=test_wasm"
+    ];
 
     meta = with lib; {
-      description = "A tool to make production Rust binaries auditable";
+      description = "Tool to make production Rust binaries auditable";
       mainProgram = "cargo-auditable";
       homepage = "https://github.com/rust-secure-code/cargo-auditable";
       changelog = "https://github.com/rust-secure-code/cargo-auditable/blob/v${version}/cargo-auditable/CHANGELOG.md";
-      license = with licenses; [ mit /* or */ asl20 ];
+      license = with licenses; [
+        mit # or
+        asl20
+      ];
       maintainers = with maintainers; [ figsoda ];
       broken = stdenv.hostPlatform != stdenv.buildPlatform;
     };
@@ -37,21 +50,27 @@ let
     };
   };
 
-  bootstrap = rustPlatform.buildRustPackage (args // {
-    auditable = false;
-  });
+  bootstrap = rustPlatform.buildRustPackage (
+    args
+    // {
+      auditable = false;
+    }
+  );
 in
 
-rustPlatform.buildRustPackage.override { cargo-auditable = bootstrap; } (args // {
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+rustPlatform.buildRustPackage.override { cargo-auditable = bootstrap; } (
+  args
+  // {
+    nativeBuildInputs = [
+      installShellFiles
+    ];
 
-  postInstall = ''
-    installManPage cargo-auditable/cargo-auditable.1
-  '';
+    postInstall = ''
+      installManPage cargo-auditable/cargo-auditable.1
+    '';
 
-  passthru = {
-    inherit bootstrap;
-  };
-})
+    passthru = {
+      inherit bootstrap;
+    };
+  }
+)

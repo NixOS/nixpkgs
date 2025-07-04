@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, ply
-, poetry-core
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  ply,
+  poetry-core,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysnmp";
     repo = "pysmi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dK02y8HXhwq1W6NOYsycjTpIMxoQY4qNT4n8TEycmWM=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     ply
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Circular dependency with pysnmplib
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pysmi"
-  ];
+  pythonImportsCheck = [ "pysmi" ];
 
   meta = with lib; {
     description = "SNMP MIB parser";

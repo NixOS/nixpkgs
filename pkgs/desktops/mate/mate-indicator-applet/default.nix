@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, gtk3
-, libayatana-indicator
-, mate-panel
-, hicolor-icon-theme
-, wrapGAppsHook
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk3,
+  libayatana-indicator,
+  mate-panel,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -59,8 +60,11 @@ stdenv.mkDerivation rec {
       Existing indicators include the Message Menu, Battery Menu and Sound
       menu.
     '';
-    license = with licenses; [ gpl3Plus lgpl2Plus ];
+    license = with licenses; [
+      gpl3Plus
+      lgpl2Plus
+    ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

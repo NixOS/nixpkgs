@@ -1,16 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, matplotlib
-, pytest-xdist
-, pytestCheckHook
-, numpy
-, pandas
-, pythonOlder
-, scipy
-, statsmodels
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  flit-core,
+  matplotlib,
+  pytest-xdist,
+  pytestCheckHook,
+  numpy,
+  pandas,
+  pythonOlder,
+  scipy,
+  statsmodels,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +25,26 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwaskom";
     repo = "seaborn";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aGIVcdG/XN999nYBHh3lJqGa3QVt0j8kmzaxdkULznY=";
   };
 
-  nativeBuildInputs = [
-    flit-core
+  patches = [
+    # https://github.com/mwaskom/seaborn/pull/3685
+    (fetchpatch2 {
+      name = "numpy_2-compatibility.patch";
+      url = "https://github.com/mwaskom/seaborn/commit/58f170fe799ef496adae19925d7d4f0f14f8da95.patch";
+      hash = "sha256-/a3G+kNIRv8Oa4a0jPGnL2Wvx/9umMoiq1BXcXpehAg=";
+    })
+    # https://github.com/mwaskom/seaborn/pull/3802
+    (fetchpatch2 {
+      name = "matplotlib_3_10-compatibility.patch";
+      url = "https://github.com/mwaskom/seaborn/commit/385e54676ca16d0132434bc9df6bc41ea8b2a0d4.patch";
+      hash = "sha256-nwGwTkP7W9QzgbbAVdb2rASgsMxqFnylMk8GnTE445w=";
+    })
   ];
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     matplotlib
@@ -37,7 +52,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     stats = [
       scipy
       statsmodels
@@ -49,27 +64,26 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # requires internet connection
-    "test_load_dataset_string_error"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isx86) [
-    # overly strict float tolerances
-    "TestDendrogram"
-  ];
+  disabledTests =
+    [
+      # requires internet connection
+      "test_load_dataset_string_error"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+      # overly strict float tolerances
+      "TestDendrogram"
+    ];
 
   # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
   # backends (leads to crashes on macOS).
-  env.MPLBACKEND="Agg";
+  env.MPLBACKEND = "Agg";
 
-  pythonImportsCheck = [
-    "seaborn"
-  ];
+  pythonImportsCheck = [ "seaborn" ];
 
   meta = with lib; {
     description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
     changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fridh ];
   };
 }

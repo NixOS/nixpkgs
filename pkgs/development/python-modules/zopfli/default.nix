@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, zopfli, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  zopfli,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "zopfli";
@@ -8,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-28mEG+3XNgQeteaYLNktqTvuFFdF9UIvN5X28ljNxu8=";
+    hash = "sha256-28mEG+3XNgQeteaYLNktqTvuFFdF9UIvN5X28ljNxu8=";
     extension = "zip";
   };
 

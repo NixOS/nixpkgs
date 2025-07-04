@@ -1,65 +1,83 @@
-{ lib
-, fetchFromGitHub
-, pythonOlder
-, buildPythonPackage
-, poetry-core
-, backports-zoneinfo
-, tzdata
-, pytestCheckHook
-, pytest-mypy-plugins
-, hypothesis
-, freezegun
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pythonOlder,
+  rustPlatform,
+  cargo,
+  rustc,
+  libiconv,
+  buildPythonPackage,
+  setuptools,
+  setuptools-rust,
+  pytestCheckHook,
+  pytest-mypy-plugins,
+  hypothesis,
+  freezegun,
+  time-machine,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "whenever";
-  version = "0.5.1";
+  version = "0.8.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ariebovenberg";
     repo = "whenever";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RH2614M91zYULNTQsr6JoKfxlnGyAJsCkB7oeiz7urs=";
+    tag = version;
+    hash = "sha256-33h89pEEhfKE0P9VKRo/l9tisMa2c8Dy9oUai3OKtPA=";
   };
 
-  postPatch = ''
-    # unrecognized arguments since we don't use pytest-benchmark in nixpkgs
-    substituteInPlace pytest.ini \
-      --replace-fail '--benchmark-disable' '#--benchmark-disable'
-  '';
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    hash = "sha256-qIIi1yKHaVz7NegOunzzdoQbeAavbdXPM4MBupLebDs=";
+  };
 
   build-system = [
-    poetry-core
+    setuptools
+    setuptools-rust
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
   ];
 
-  dependencies = [
-    tzdata
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mypy-plugins
+    # pytest-benchmark # developer sanity check, should not block distribution
     hypothesis
     freezegun
+    time-machine
   ];
 
-  pythonImportsCheck = [
-    "whenever"
+  disabledTestPaths = [
+    # benchmarks
+    "benchmarks/python/test_date.py"
+    "benchmarks/python/test_instant.py"
+    "benchmarks/python/test_local_datetime.py"
+    "benchmarks/python/test_zoned_datetime.py"
   ];
 
-  # early TDD, many tests are failing
+  pythonImportsCheck = [ "whenever" ];
+
+  # a bunch of failures, including an assumption of what the timezone on the host is
   # TODO: try enabling on bump
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Strict, predictable, and typed datetimes";
     homepage = "https://github.com/ariebovenberg/whenever";
-    changelog = "https://github.com/ariebovenberg/whenever/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/ariebovenberg/whenever/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
   };

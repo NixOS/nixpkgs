@@ -1,8 +1,14 @@
-{ lib, fetchFromGitHub, pythonPackages, mopidy }:
+{
+  lib,
+  fetchFromGitHub,
+  pythonPackages,
+  mopidy,
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-soundcloud";
   version = "3.0.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mopidy";

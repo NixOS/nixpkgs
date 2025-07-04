@@ -1,20 +1,45 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, rosa, nix-update-script }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  rosa,
+  nix-update-script,
+}:
 
 buildGoModule rec {
   pname = "rosa";
-  version = "1.2.36";
+  version = "1.2.53";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "rosa";
     rev = "v${version}";
-    hash = "sha256-jdLMQLbk446QJ+8+HjTCTjtlCuLlZZsLUBInRg4UMH0=";
+    hash = "sha256-t8hJscLk0tRi7CC6maE478CEbOkJtVkbXA0Ag1DxFB4=";
   };
   vendorHash = null;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   __darwinAllowLocalNetworking = true;
+
+  # skip e2e tests package
+  excludedPackages = [ "tests/e2e" ];
+
+  # skip tests that require network access
+  checkFlags =
+    let
+      skippedTests = [
+        "TestCluster"
+        "TestRhRegionCommand"
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestCache" ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''

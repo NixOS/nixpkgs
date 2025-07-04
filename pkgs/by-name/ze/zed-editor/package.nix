@@ -2,11 +2,12 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cmake,
   copyDesktopItems,
   curl,
+  perl,
   pkg-config,
   protobuf,
-  xcbuild,
   fontconfig,
   freetype,
   libgit2,
@@ -17,72 +18,143 @@
   alsa-lib,
   libxkbcommon,
   wayland,
+  libglvnd,
   xorg,
   stdenv,
-  darwin,
   makeFontsConf,
   vulkan-loader,
-  makeDesktopItem,
+  envsubst,
+  nix-update-script,
+  cargo-about,
+  versionCheckHook,
+  buildFHSEnv,
+  cargo-bundle,
+  git,
+  apple-sdk_15,
+  darwinMinVersionHook,
+  makeBinaryWrapper,
+  nodejs,
+  libGL,
+  libX11,
+  libXext,
+  livekit-libwebrtc,
+  testers,
+  writableTmpDirAsHomeHook,
+
+  withGLES ? false,
+  buildRemoteServer ? true,
+  zed-editor,
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "zed";
-  version = "0.130.7";
+assert withGLES -> stdenv.hostPlatform.isLinux;
+
+let
+  executableName = "zeditor";
+  # Based on vscode.fhs
+  # Zed allows for users to download and use extensions
+  # which often include the usage of pre-built binaries.
+  # See #309662
+  #
+  # buildFHSEnv allows for users to use the existing Zed
+  # extension tooling without significant pain.
+  fhs =
+    {
+      zed-editor,
+      additionalPkgs ? pkgs: [ ],
+    }:
+    buildFHSEnv {
+      # also determines the name of the wrapped command
+      name = executableName;
+
+      # additional libraries which are commonly needed for extensions
+      targetPkgs =
+        pkgs:
+        (with pkgs; [
+          # ld-linux-x86-64-linux.so.2 and others
+          glibc
+        ])
+        ++ additionalPkgs pkgs;
+
+      # symlink shared assets, including icons and desktop entries
+      extraInstallCommands = ''
+        ln -s "${zed-editor}/share" "$out/"
+      '';
+
+      runScript = "${zed-editor}/bin/${executableName}";
+
+      passthru = {
+        inherit executableName;
+        inherit (zed-editor) pname version;
+      };
+
+      meta = zed-editor.meta // {
+        description = ''
+          Wrapped variant of ${zed-editor.pname} which launches in a FHS compatible environment.
+          Should allow for easy usage of extensions without nix-specific modifications.
+        '';
+      };
+    };
+
+  gpu-lib = if withGLES then libglvnd else vulkan-loader;
+in
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "zed-editor";
+  version = "0.193.3";
+
+  outputs =
+    [ "out" ]
+    ++ lib.optionals buildRemoteServer [
+      "remote_server"
+    ];
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nGE4RjquH5tEz6vHR1f5F44TX4GtPwiPP3V3lWPpmxk=";
-    fetchSubmodules = true;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6/WRuO0UgQFtV0nK8/u3mZPYfAqVzemi3LzuCprOSgY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
-      "blade-graphics-0.3.0" = "sha256-0TmunFnq9MBxm4TrAkI0PxB58qJEf7oWLWhHq5cVsQ8=";
-      "bromberg_sl2-0.6.0" = "sha256-+bwdnk3EgYEAxQSP4KpEPicCfO+r2er1DRZjvfF4jSM=";
-      "font-kit-0.11.0" = "sha256-+4zMzjFyMS60HfLMEXGfXqKn6P+pOngLA45udV09DM8=";
-      "lsp-types-0.94.1" = "sha256-kplgPsafrgZFMI1D9pQCwmg+FKMn5HNWLbcgdXHUFVU=";
-      "nvim-rs-0.6.0-pre" = "sha256-bdWWuCsBv01mnPA5e5zRpq48BgOqaqIcAu+b7y1NnM8=";
-      "pathfinder_simd-0.5.3" = "sha256-bakBcAQZJdHQPXybe0zoMzE49aOHENQY7/ZWZUMt+pM=";
-      "taffy-0.3.11" = "sha256-0hXOEj6IjSW8e1t+rvxBFX6V9XRum3QO2Des1XlHJEw=";
-      "tree-sitter-0.20.100" = "sha256-k8au4++UJyaOCNo0cqokaQ5Is3BmIiCBSxiUkbrzhFQ=";
-      "tree-sitter-bash-0.20.4" = "sha256-VP7rJfE/k8KV1XN1w5f0YKjCnDMYU1go/up0zj1mabM=";
-      "tree-sitter-cpp-0.20.0" = "sha256-2QYEFkpwcRmh2kf4qEAL2a5lGSa316CetOhF73e7rEM=";
-      "tree-sitter-css-0.19.0" = "sha256-5Qti/bFac2A1PJxqZEOuSLK3GGKYwPDKAp3OOassBxU=";
-      "tree-sitter-dart-0.0.1" = "sha256-FE6zXy0lAUWWayrM3urZFnQaEYBcnmaVANcUUnvw1q4=";
-      "tree-sitter-elixir-0.1.0" = "sha256-hBHqQ3eBjknRPJjP+lQJU6NPFhUMtiv4FbKsTw28Bog=";
-      "tree-sitter-elm-5.6.4" = "sha256-0LpuyebOB5ew9fULBcaw8aUbF7HM5sXQpv+Jroz4tXg=";
-      "tree-sitter-glsl-0.1.4" = "sha256-TRuiT3ndCeDCsCFokAN8cosNKccB0NjWVRiBJuBJXZw=";
-      "tree-sitter-go-0.19.1" = "sha256-5+L5QqVjZyeh+sKfxKZWrjIBFE5xM9KZlHcLiHzJCIA=";
-      "tree-sitter-gomod-1.0.2" = "sha256-OPtqXe6OMC9c5dgFH8Msj+6DU01LvLKVbCzGLj0PnLI=";
-      "tree-sitter-gowork-0.0.1" = "sha256-lM4L4Ap/c8uCr4xUw9+l/vaGb3FxxnuZI0+xKYFDPVg=";
-      "tree-sitter-hcl-0.0.1" = "sha256-saVKSYUJY7OuIuNm9EpQnhFO/vQGKxCXuv3EKYOJzfs=";
-      "tree-sitter-heex-0.0.1" = "sha256-6LREyZhdTDt3YHVRPDyqCaDXqcsPlHOoMFDb2B3+3xM=";
-      "tree-sitter-jsdoc-0.20.0" = "sha256-fKscFhgZ/BQnYnE5EwurFZgiE//O0WagRIHVtDyes/Y=";
-      "tree-sitter-json-0.20.0" = "sha256-fZNftzNavJQPQE4S1VLhRyGQRoJgbWA5xTPa8ZI5UX4=";
-      "tree-sitter-markdown-0.0.1" = "sha256-F8VVd7yYa4nCrj/HEC13BTC7lkV3XSb2Z3BNi/VfSbs=";
-      "tree-sitter-nix-0.0.1" = "sha256-+o+f1TlhcrcCB3TNw1RyCjVZ+37e11nL+GWBPo0Mxxg=";
-      "tree-sitter-nu-0.0.1" = "sha256-V6EZfba5e0NdOG4n3DNI25luNXfcCN3+/vNYuz9llUk=";
-      "tree-sitter-ocaml-0.20.4" = "sha256-ycmjIKfrsVSVHmPP3HCxfk5wcBIF/JFH8OnU8mY1Cc8=";
-      "tree-sitter-proto-0.0.2" = "sha256-W0diP2ByAXYrc7Mu/sbqST6lgVIyHeSBmH7/y/X3NhU=";
-      "tree-sitter-racket-0.0.1" = "sha256-ie64no94TtAWsSYaBXmic4oyRAA01fMl97+JWcFU1E8=";
-      "tree-sitter-scheme-0.2.0" = "sha256-K3+zmykjq2DpCnk17Ko9LOyGQTBZb1/dgVXIVynCYd4=";
-      "tree-sitter-typescript-0.20.2" = "sha256-cpOAtfvlffS57BrXaoa2xa9NUYw0AsHxVI8PrcpgZCQ=";
-      "tree-sitter-vue-0.0.1" = "sha256-8v2e03A/Uj6zCJTH4j6TPwDQcNFeze1jepMADT6UVis=";
-      "tree-sitter-yaml-0.0.1" = "sha256-S59jLlipBI2kwFuZDMmpv0TOZpGyXpbAizN3yC6wJ5I=";
-    };
-  };
+  patches = [
+    # Upstream delegates linking on Linux to clang to make use of mold,
+    # but builds fine with our standard linker.
+    # This patch removes their linker override from the cargo config.
+    ./0001-linux-linker.patch
+  ];
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    curl
-    pkg-config
-    protobuf
-    rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ];
+  cargoPatches = [
+    ./0002-fix-duplicate-reqwest.patch
+  ];
+
+  postPatch =
+    # Dynamically link WebRTC instead of static
+    ''
+      substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
+        --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
+
+      # Zed team renamed the function but forgot to update its usage in this file
+      # We rename it ourselves for now, until upstream fixes the issue
+      substituteInPlace $cargoDepsCopy/reqwest-0.12*/src/blocking/client.rs \
+        --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
+    '';
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FG2JFnruGqUbIbCeBCqhuzrT/pwDv1tqpAYRMnmvxHk=";
+
+  nativeBuildInputs =
+    [
+      cmake
+      copyDesktopItems
+      curl
+      perl
+      pkg-config
+      protobuf
+      rustPlatform.bindgenHook
+      cargo-about
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cargo-bundle ];
+
+  dontUseCmakeConfigure = true;
 
   buildInputs =
     [
@@ -95,114 +167,182 @@ rustPlatform.buildRustPackage rec {
       zlib
       zstd
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libxkbcommon
       wayland
       xorg.libxcb
+      # required by livekit:
+      libGL
+      libX11
+      libXext
     ]
-    ++ lib.optionals stdenv.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreAudio
-        CoreFoundation
-        CoreGraphics
-        CoreMedia
-        CoreServices
-        CoreText
-        Foundation
-        IOKit
-        Metal
-        Security
-        SystemConfiguration
-        VideoToolbox
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_15
+      # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
+      # https://developer.apple.com/documentation/screencapturekit
+      (darwinMinVersionHook "12.3")
+    ];
 
-  buildFeatures = [ "gpui/runtime_shaders" ];
+  cargoBuildFlags = [
+    "--package=zed"
+    "--package=cli"
+  ] ++ lib.optionals buildRemoteServer [ "--package=remote_server" ];
+
+  # Required on darwin because we don't have access to the
+  # proprietary Metal shader compiler.
+  buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui/runtime_shaders" ];
 
   env = {
+    ALLOW_MISSING_LICENSES = true;
     ZSTD_SYS_USE_PKG_CONFIG = true;
     FONTCONFIG_FILE = makeFontsConf {
       fontDirectories = [
-        "${src}/assets/fonts/zed-mono"
-        "${src}/assets/fonts/zed-sans"
+        "${finalAttrs.src}/assets/fonts/plex-mono"
+        "${finalAttrs.src}/assets/fonts/plex-sans"
       ];
     };
+    # Setting this environment variable allows to disable auto-updates
+    # https://zed.dev/docs/development/linux#notes-for-packaging-zed
+    ZED_UPDATE_EXPLANATION = "Zed has been installed using Nix. Auto-updates have thus been disabled.";
+    # Used by `zed --version`
+    RELEASE_VERSION = finalAttrs.version;
+    LK_CUSTOM_WEBRTC = livekit-libwebrtc;
   };
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --add-rpath ${vulkan-loader}/lib $out/bin/*
-    patchelf --add-rpath ${wayland}/lib $out/bin/*
+  RUSTFLAGS = lib.optionalString withGLES "--cfg gles";
+
+  preBuild = ''
+    bash script/generate-licenses
   '';
 
-  checkFlags = lib.optionals stdenv.hostPlatform.isLinux [
-    # Fails with "On 2823 Failed to find test1:A"
-    "--skip=test_base_keymap"
-    # Fails with "called `Result::unwrap()` on an `Err` value: Invalid keystroke `cmd-k`"
-    # https://github.com/zed-industries/zed/issues/10427
-    "--skip=test_disabled_keymap_binding"
-  ];
-
-  postInstall = ''
-    mv $out/bin/Zed $out/bin/zed
-    install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/Zed.png
-    install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/Zed.png
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
+    patchelf --add-rpath ${wayland}/lib $out/libexec/*
+    wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "dev.zed.Zed";
-      exec = "zed %F";
-      tryExec = "zed";
-      icon = "Zed";
-      comment = meta.description;
-      desktopName = "Zed";
-      genericName = "Text Editor";
-      categories = [
-        "Utility"
-        "TextEditor"
-        "Development"
-      ];
-      keywords = [
-        "Text"
-        "Editor"
-      ];
-      terminal = false;
-      type = "Application";
-      mimeTypes = [
-        "inode/directory"
-        "text/plain"
-        "text/x-makefile"
-        "text/x-c++hdr"
-        "text/x-c++src"
-        "text/x-chdr"
-        "text/x-csrc"
-        "text/x-java"
-        "text/x-moc"
-        "text/x-pascal"
-        "text/x-tcl"
-        "text/x-tex"
-        "application/x-shellscript"
-        "text/x-c"
-        "text/x-c++"
-      ];
-    })
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
   ];
 
-  meta = with lib; {
+  checkFlags =
+    [
+      # Flaky: unreliably fails on certain hosts (including Hydra)
+      "--skip=zed::tests::test_window_edit_state_restoring_enabled"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # Fails on certain hosts (including Hydra) for unclear reason
+      "--skip=test_open_paths_action"
+    ];
+
+  installPhase =
+    ''
+      runHook preInstall
+
+      release_target="target/${stdenv.hostPlatform.rust.cargoShortTarget}/release"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # cargo-bundle expects the binary in target/release
+      mv $release_target/zed target/release/zed
+
+      pushd crates/zed
+
+      # Note that this is GNU sed, while Zed's bundle-mac uses BSD sed
+      sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
+      export CARGO_BUNDLE_SKIP_BUILD=true
+      app_path=$(cargo bundle --release | xargs)
+
+      # We're not using Zed's fork of cargo-bundle, so we must manually append their plist extensions
+      # Remove closing tags from Info.plist (last two lines)
+      head -n -2 $app_path/Contents/Info.plist > Info.plist
+      # Append extensions
+      cat resources/info/*.plist >> Info.plist
+      # Add closing tags
+      printf "</dict>\n</plist>\n" >> Info.plist
+      mv Info.plist $app_path/Contents/Info.plist
+
+      popd
+
+      mkdir -p $out/Applications $out/bin
+      # Zed expects git next to its own binary
+      ln -s ${lib.getExe git} $app_path/Contents/MacOS/git
+      mv $release_target/cli $app_path/Contents/MacOS/cli
+      mv $app_path $out/Applications/
+
+      # Physical location of the CLI must be inside the app bundle as this is used
+      # to determine which app to start
+      ln -s $out/Applications/Zed.app/Contents/MacOS/cli $out/bin/zeditor
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm755 $release_target/zed $out/libexec/zed-editor
+      install -Dm755 $release_target/cli $out/bin/zeditor
+
+      install -Dm644 $src/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
+      install -Dm644 $src/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
+
+      # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
+      # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
+      (
+        export DO_STARTUP_NOTIFY="true"
+        export APP_CLI="zeditor"
+        export APP_ICON="zed"
+        export APP_NAME="Zed"
+        export APP_ARGS="%U"
+        mkdir -p "$out/share/applications"
+        ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
+      )
+    ''
+    + lib.optionalString buildRemoteServer ''
+      install -Dm755 $release_target/remote_server $remote_server/bin/zed-remote-server-stable-$version
+    ''
+    + ''
+      runHook postInstall
+    '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/zeditor";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(?!.*(?:-pre|0\.999999\.0|0\.9999-temporary)$)(.+)$"
+      ];
+    };
+    fhs = fhs { zed-editor = finalAttrs.finalPackage; };
+    fhsWithPackages =
+      f:
+      fhs {
+        zed-editor = finalAttrs.finalPackage;
+        additionalPkgs = f;
+      };
+    tests =
+      {
+        remoteServerVersion = testers.testVersion {
+          package = finalAttrs.finalPackage.remote_server;
+          command = "zed-remote-server-stable-${finalAttrs.version} version";
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        withGles = zed-editor.override { withGLES = true; };
+      };
+  };
+
+  meta = {
     description = "High-performance, multiplayer code editor from the creators of Atom and Tree-sitter";
     homepage = "https://zed.dev";
-    changelog = "https://github.com/zed-industries/zed/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/zed-industries/zed/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       GaetanLepage
       niklaskorz
     ];
-    mainProgram = "zed";
-    platforms = platforms.all;
-    # Currently broken on darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
-    broken = stdenv.isDarwin;
+    mainProgram = "zeditor";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

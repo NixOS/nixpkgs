@@ -1,38 +1,44 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.heapster;
-in {
+in
+{
   options.services.heapster = {
-    enable = mkEnableOption "Heapster monitoring";
+    enable = lib.mkEnableOption "Heapster monitoring";
 
-    source = mkOption {
+    source = lib.mkOption {
       description = "Heapster metric source";
       example = "kubernetes:https://kubernetes.default";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    sink = mkOption {
+    sink = lib.mkOption {
       description = "Heapster metic sink";
       example = "influxdb:http://localhost:8086";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    extraOpts = mkOption {
+    extraOpts = lib.mkOption {
       description = "Heapster extra options";
       default = "";
-      type = types.separatedString " ";
+      type = lib.types.separatedString " ";
     };
 
-    package = mkPackageOption pkgs "heapster" { };
+    package = lib.mkPackageOption pkgs "heapster" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.heapster = {
-      wantedBy = ["multi-user.target"];
-      after = ["cadvisor.service" "kube-apiserver.service"];
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "cadvisor.service"
+        "kube-apiserver.service"
+      ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/heapster --source=${cfg.source} --sink=${cfg.sink} ${cfg.extraOpts}";
@@ -45,6 +51,6 @@ in {
       group = "heapster";
       description = "Heapster user";
     };
-    users.groups.heapster = {};
+    users.groups.heapster = { };
   };
 }

@@ -1,20 +1,23 @@
 # Fusion Inventory daemon.
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.fusionInventory;
 
   configFile = pkgs.writeText "fusion_inventory.conf" ''
-    server = ${concatStringsSep ", " cfg.servers}
+    server = ${lib.concatStringsSep ", " cfg.servers}
 
     logger = stderr
 
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
 
   ###### interface
 
@@ -22,18 +25,18 @@ in {
 
     services.fusionInventory = {
 
-      enable = mkEnableOption "Fusion Inventory Agent";
+      enable = lib.mkEnableOption "Fusion Inventory Agent";
 
-      servers = mkOption {
-        type = types.listOf types.str;
+      servers = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = ''
           The urls of the OCS/GLPI servers to connect to.
         '';
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Configuration that is injected verbatim into the configuration file.
         '';
@@ -41,10 +44,9 @@ in {
     };
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.fusion-inventory = {
       description = "FusionInventory user";

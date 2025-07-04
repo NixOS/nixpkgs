@@ -1,43 +1,45 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, glib
-, gnome
-, gtk-layer-shell
-, gtk3
-, libmateweather
-, libwnck
-, librsvg
-, libxml2
-, dconf
-, mate-desktop
-, mate-menus
-, hicolor-icon-theme
-, wayland
-, gobject-introspection
-, wrapGAppsHook
-, marco
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  glib,
+  gtk-layer-shell,
+  gtk3,
+  libmateweather,
+  libwnck,
+  librsvg,
+  libxml2,
+  dconf,
+  dconf-editor,
+  mate-desktop,
+  mate-menus,
+  hicolor-icon-theme,
+  wayland,
+  gobject-introspection,
+  wrapGAppsHook3,
+  marco,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.28.1";
+  version = "1.28.4";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "UTPGT1lpro7uvm6LukUN6nkssL4G2a4cNuhWnS+FJLo=";
+    hash = "sha256-AvCesDFMKsGXtvCJlQpXHNujm/0D1sOguP13JSqWiHQ=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
     gettext
     itstool
+    libxml2 # xmllint
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -45,7 +47,6 @@ stdenv.mkDerivation rec {
     libmateweather
     libwnck
     librsvg
-    libxml2
     dconf
     mate-desktop
     mate-menus
@@ -56,9 +57,9 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     glib
     gtk3
-    # See https://github.com/mate-desktop/mate-panel/issues/1402
-    # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook
-    gnome.dconf-editor
+    # Optionally for the ca.desrt.dconf-editor.Settings schema
+    # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook3
+    dconf-editor
   ];
 
   # Needed for Wayland support.
@@ -83,10 +84,14 @@ stdenv.mkDerivation rec {
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
-    description = "The MATE panel";
+    description = "MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
-    license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+      fdl11Plus
+    ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

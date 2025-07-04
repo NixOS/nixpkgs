@@ -1,52 +1,54 @@
-{ lib
-, babel
-, buildPythonPackage
-, fetchFromGitLab
-, pythonRelaxDepsHook
-, html2text
-, lxml
-, packaging
-, pillow
-, prettytable
-, pycountry
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pyyaml
-, requests
-, rich
-, setuptools
-, testers
-, unidecode
-, woob
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  babel,
+  html2text,
+  lxml,
+  packaging,
+  pillow,
+  prettytable,
+  pycountry,
+  pytestCheckHook,
+  python-dateutil,
+  python-jose,
+  pythonOlder,
+  pyyaml,
+  requests,
+  rich,
+  setuptools,
+  testers,
+  unidecode,
+  termcolor,
+  responses,
+  woob,
 }:
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.6";
+  version = "3.7";
   pyproject = true;
-
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "woob";
     repo = "woob";
-    rev = version;
-    hash = "sha256-M9AjV954H1w64YGCVxDEGGSnoEbmocG3zwltob6IW04=";
+    tag = version;
+    hash = "sha256-EZHzw+/BIIvmDXG4fF367wsdUTVTHWYb0d0U56ZXwOs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    pythonRelaxDepsHook
-  ];
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     "packaging"
+    "rich"
+    "requests"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     babel
     python-dateutil
+    python-jose
     html2text
     lxml
     packaging
@@ -57,10 +59,12 @@ buildPythonPackage rec {
     requests
     rich
     unidecode
+    termcolor
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    responses
   ];
 
   disabledTests = [
@@ -69,21 +73,19 @@ buildPythonPackage rec {
     "test_verify"
   ];
 
-  pythonImportsCheck = [
-    "woob"
-  ];
+  pythonImportsCheck = [ "woob" ];
 
   passthru.tests.version = testers.testVersion {
     package = woob;
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.com/woob/woob/-/blob/${src.rev}/ChangeLog";
     description = "Collection of applications and APIs to interact with websites";
     mainProgram = "woob";
     homepage = "https://woob.tech";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ DamienCassou ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ DamienCassou ];
   };
 }

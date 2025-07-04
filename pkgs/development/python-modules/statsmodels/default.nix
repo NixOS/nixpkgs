@@ -1,40 +1,45 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, numpy
-, oldest-supported-numpy
-, packaging
-, pandas
-, patsy
-, pythonAtLeast
-, pythonOlder
-, scipy
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  numpy,
+  packaging,
+  pandas,
+  patsy,
+  pythonOlder,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.14.1";
+  version = "0.14.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ImDv3B74nznGcKC9gVGx0IQ1Z3gbyv7GzaBTTrR6lPY=";
+    hash = "sha256-XWng85Bg3HLAZ/m7boAzttzNsLrhAddqfvC8yU6Ji2c=";
   };
 
   build-system = [
     cython
-    oldest-supported-numpy
+    numpy
     scipy
     setuptools
     setuptools-scm
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    numpy
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+    ];
+  };
 
   dependencies = [
     numpy
@@ -47,15 +52,12 @@ buildPythonPackage rec {
   # Huge test suites with several test failures
   doCheck = false;
 
-  pythonImportsCheck = [
-    "statsmodels"
-  ];
+  pythonImportsCheck = [ "statsmodels" ];
 
   meta = with lib; {
     description = "Statistical computations and models for use with SciPy";
     homepage = "https://www.github.com/statsmodels/statsmodels";
     changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
   };
 }

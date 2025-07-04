@@ -1,10 +1,11 @@
-{ substituteAll
-, callPackage
+{
+  replaceVars,
+  callPackage,
 }:
 let
-  sigtool = callPackage ./sigtool.nix {};
+  sigtool = callPackage ./sigtool.nix { };
 
-in substituteAll {
-  src = ./sign-apphost.proj;
+in
+replaceVars ./sign-apphost.proj {
   codesign = "${sigtool}/bin/codesign";
 }

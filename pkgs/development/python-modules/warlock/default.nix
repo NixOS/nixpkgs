@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, jsonpatch
-, jsonschema
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  jsonpatch,
+  jsonschema,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -18,18 +19,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bcwaldon";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "warlock";
+    tag = version;
     hash = "sha256-HOCLzFYmOL/tCXT+NO/tCZuVXVowNEPP3g33ZYg4+6Q=";
   };
 
-  postPatch = ''
-    sed -i '/--cov/d' pytest.ini
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     jsonpatch
@@ -38,6 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   disabledTests = [
@@ -45,14 +41,12 @@ buildPythonPackage rec {
     "test_recursive_models"
   ];
 
-  pythonImportsCheck = [
-    "warlock"
-  ];
+  pythonImportsCheck = [ "warlock" ];
 
   meta = with lib; {
     description = "Python object model built on JSON schema and JSON patch";
     homepage = "https://github.com/bcwaldon/warlock";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

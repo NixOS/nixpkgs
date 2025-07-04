@@ -4,7 +4,8 @@ let
   containerIp2 = "192.168.1.254";
 in
 
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "containers-macvlans";
   meta = {
     maintainers = with lib.maintainers; [ montag451 ];
@@ -23,9 +24,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           interface = "eth1";
           mode = "bridge";
         };
-        networking.interfaces.eth1.ipv4.addresses = lib.mkForce [];
+        networking.interfaces.eth1.ipv4.addresses = lib.mkForce [ ];
         networking.interfaces.mv-eth1-host = {
-          ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
+          ipv4.addresses = [
+            {
+              address = "192.168.1.1";
+              prefixLength = 24;
+            }
+          ];
         };
 
         containers.test1 = {
@@ -34,7 +40,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
           config = {
             networking.interfaces.mv-eth1 = {
-              ipv4.addresses = [ { address = containerIp1; prefixLength = 24; } ];
+              ipv4.addresses = [
+                {
+                  address = containerIp1;
+                  prefixLength = 24;
+                }
+              ];
             };
           };
         };
@@ -45,7 +56,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
           config = {
             networking.interfaces.mv-eth1 = {
-              ipv4.addresses = [ { address = containerIp2; prefixLength = 24; } ];
+              ipv4.addresses = [
+                {
+                  address = containerIp2;
+                  prefixLength = 24;
+                }
+              ];
             };
           };
         };
@@ -79,4 +95,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         machine2.succeed("ping -n -c 1 ${containerIp1}")
         machine2.succeed("ping -n -c 1 ${containerIp2}")
   '';
-})
+}

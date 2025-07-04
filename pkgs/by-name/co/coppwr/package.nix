@@ -1,33 +1,29 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libxkbcommon
-, pipewire
-, stdenv
-, libGL
-, wayland
-, xorg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libxkbcommon,
+  pipewire,
+  vulkan-loader,
+  wayland,
+  libGL,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "coppwr";
-  version = "1.5.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = "coppwr";
     rev = version;
-    hash = "sha256-azho/SVGEdHXt/t6VSA0NVVfhxK9bxy4Ud68faFh5zo=";
+    hash = "sha256-Wit0adP9M8vlCXF6WJx2tZnR6LrwcvoTNx1KC1HfN8w=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "egui_node_graph-0.4.0" = "sha256-VJvALtPP/vPZQ4KLWu8diFar9vuVkbeD65Em6rod8ww=";
-      "libspa-0.7.2" = "sha256-0TGhxHL1mkktE263ln3jnPZRkXS6+C3aPUBg86J25oM=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tgvSOwZmboe4DzEqJOCYWwIbAStGV1F6ZAzlwCd7Uo4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,11 +33,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libxkbcommon
     pipewire
-    libGL
+    vulkan-loader
     wayland
+    libGL
     xorg.libXcursor
     xorg.libXi
-    xorg.libXrandr
     xorg.libX11
   ];
 
@@ -62,16 +58,22 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = ''
-    patchelf $out/bin/${pname} \
-      --add-rpath ${lib.makeLibraryPath [ libGL libxkbcommon wayland ]}
+    patchelf $out/bin/coppwr \
+      --add-rpath ${
+        lib.makeLibraryPath [
+          libGL
+          libxkbcommon
+          wayland
+        ]
+      }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Low level control GUI for the PipeWire multimedia server";
     homepage = "https://github.com/dimtpap/coppwr";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ravenz46 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ravenz46 ];
     mainProgram = "coppwr";
+    platforms = lib.platforms.linux;
   };
 }

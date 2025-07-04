@@ -1,19 +1,27 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, libopus
-, xorg
-, pname
-, releaseFile ? pname
-, buildFlags
-, buildInputs
-, nativeBuildInputs ? []
-, postFixup ? ""
-, description
-, ... }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  libopus,
+  xorg,
+  pname,
+  releaseFile ? pname,
+  buildFlags,
+  buildInputs,
+  nativeBuildInputs ? [ ],
+  postFixup ? "",
+  description,
+  ...
+}:
 
 stdenv.mkDerivation {
-  inherit pname buildFlags buildInputs nativeBuildInputs postFixup;
+  inherit
+    pname
+    buildFlags
+    buildInputs
+    nativeBuildInputs
+    postFixup
+    ;
   version = "0-unstable-2024-04-13";
 
   src = fetchFromGitHub {
@@ -25,7 +33,8 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "PKGCONFIG=$(PKG_CONFIG)"
-    "-C" "engine"
+    "-C"
+    "engine"
   ];
 
   enableParallelBuilding = true;

@@ -1,27 +1,29 @@
-{ mkDerivation
-, lib
-, autoreconfHook
-, curl
-, fetchFromGitHub
-, git
-, libevent
-, libtool
-, qrencode
-, udev
-, libusb1
-, makeWrapper
-, pkg-config
-, qtbase
-, qttools
-, qtwebsockets
-, qtmultimedia
-, udevRule51 ? ''
-,   SUBSYSTEM=="usb", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbb%n", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402"
-, ''
-, udevRule52 ? ''
-,   KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbbf%n"
-, ''
-, writeText
+{
+  mkDerivation,
+  lib,
+  autoreconfHook,
+  curl,
+  fetchFromGitHub,
+  git,
+  libevent,
+  libtool,
+  qrencode,
+  udev,
+  libusb1,
+  makeWrapper,
+  pkg-config,
+  qtbase,
+  qttools,
+  qtwebsockets,
+  qtmultimedia,
+  udevRule51 ? ''
+    SUBSYSTEM=="usb", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbb%n", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402"
+  '',
+  udevRule52 ? ''
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbbf%n"
+  '',
+  udevCheckHook,
+  writeText,
 }:
 
 # Enabling the digitalbitbox program
@@ -45,9 +47,9 @@
 
 # See https://digitalbitbox.com/start_linux for more information.
 let
-  copyUdevRuleToOutput = name: rule:
-    "cp ${writeText name rule} $out/etc/udev/rules.d/${name}";
-in mkDerivation rec {
+  copyUdevRuleToOutput = name: rule: "cp ${writeText name rule} $out/etc/udev/rules.d/${name}";
+in
+mkDerivation rec {
   pname = "digitalbitbox";
   version = "3.0.0";
 
@@ -58,13 +60,14 @@ in mkDerivation rec {
     sha256 = "ig3+TdYv277D9GVnkRSX6nc6D6qruUOw/IQdQCK6FoA=";
   };
 
-  nativeBuildInputs = with lib; [
+  nativeBuildInputs = [
     autoreconfHook
     curl
     git
     makeWrapper
     pkg-config
     qttools
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -79,12 +82,12 @@ in mkDerivation rec {
     qtmultimedia
   ];
 
-  LUPDATE="${qttools.dev}/bin/lupdate";
-  LRELEASE="${qttools.dev}/bin/lrelease";
-  MOC="${qtbase.dev}/bin/moc";
-  QTDIR=qtbase.dev;
-  RCC="${qtbase.dev}/bin/rcc";
-  UIC="${qtbase.dev}/bin/uic";
+  LUPDATE = "${qttools.dev}/bin/lupdate";
+  LRELEASE = "${qttools.dev}/bin/lrelease";
+  MOC = "${qtbase.dev}/bin/moc";
+  QTDIR = qtbase.dev;
+  RCC = "${qtbase.dev}/bin/rcc";
+  UIC = "${qtbase.dev}/bin/uic";
 
   configureFlags = [
     "--enable-libusb"
@@ -120,8 +123,10 @@ in mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+
   meta = with lib; {
-    description = "A QT based application for the Digital Bitbox hardware wallet";
+    description = "QT based application for the Digital Bitbox hardware wallet";
     longDescription = ''
       Digital Bitbox provides dbb-app, a GUI tool, and dbb-cli, a CLI tool, to manage Digital Bitbox devices.
 

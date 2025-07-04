@@ -1,39 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-scm
-, pytestCheckHook
-, pythonOlder
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-scm,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.2.0";
-  format = "pyproject";
+  version = "1.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "exceptiongroup";
-    rev = version;
-    hash = "sha256-iGeaRVJeFAWfJpwr7N4kST7d8YxpX3WgDqQemlR0cLU=";
+    tag = version;
+    hash = "sha256-b3Z1NsYKp0CecUq8kaC/j3xR/ZZHDIw4MhUeadizz88=";
   };
 
-  nativeBuildInputs = [
-    flit-scm
-  ];
+  build-system = [ flit-scm ];
+
+  dependencies = lib.optionals (pythonOlder "3.13") [ typing-extensions ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "exceptiongroup"
-  ];
+  pythonImportsCheck = [ "exceptiongroup" ];
 
   meta = with lib; {
     description = "Backport of PEP 654 (exception groups)";

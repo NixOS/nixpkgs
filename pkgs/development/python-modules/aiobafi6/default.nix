@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jfroy";
     repo = "aiobafi6";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-QxjrspvNrcMcGChjj1B4QF/SnWCsGmPxnI2bWAL6BiI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     protobuf
@@ -37,9 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiobafi6"
-  ];
+  pythonImportsCheck = [ "aiobafi6" ];
 
   meta = with lib; {
     description = "Library for communication with the Big Ass Fans i6 firmware";

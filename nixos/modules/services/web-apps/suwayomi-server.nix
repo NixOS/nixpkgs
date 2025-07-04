@@ -1,17 +1,27 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.suwayomi-server;
-  inherit (lib) mkOption mkEnableOption mkIf types;
+  inherit (lib)
+    mkOption
+    mkEnableOption
+    mkIf
+    types
+    ;
 
   format = pkgs.formats.hocon { };
 in
 {
   options = {
     services.suwayomi-server = {
-      enable = mkEnableOption "Suwayomi, a free and open source manga reader server that runs extensions built for Tachiyomi.";
+      enable = mkEnableOption "Suwayomi, a free and open source manga reader server that runs extensions built for Tachiyomi";
 
-      package = lib.mkPackageOptionMD pkgs "suwayomi-server" { };
+      package = lib.mkPackageOption pkgs "suwayomi-server" { };
 
       dataDir = mkOption {
         type = types.path;
@@ -72,7 +82,7 @@ in
               };
 
               basicAuthEnabled = mkEnableOption ''
-                Add basic access authentication to Suwayomi-Server.
+                basic access authentication for Suwayomi-Server.
                 Enabling this option is useful when hosting on a public network/the Internet
               '';
 
@@ -104,7 +114,7 @@ in
 
               extensionRepos = mkOption {
                 type = types.listOf types.str;
-                default = [];
+                default = [ ];
                 example = [
                   "https://raw.githubusercontent.com/MY_ACCOUNT/MY_REPO/repo/index.min.json"
                 ];
@@ -149,12 +159,16 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [{
-      assertion = with cfg.settings.server; basicAuthEnabled -> (basicAuthUsername != null && basicAuthPasswordFile != null);
-      message = ''
-        [suwayomi-server]: the username and the password file cannot be null when the basic auth is enabled
-      '';
-    }];
+    assertions = [
+      {
+        assertion =
+          with cfg.settings.server;
+          basicAuthEnabled -> (basicAuthUsername != null && basicAuthPasswordFile != null);
+        message = ''
+          [suwayomi-server]: the username and the password file cannot be null when the basic auth is enabled
+        '';
+      }
+    ];
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.server.port ];
 
@@ -181,16 +195,19 @@ in
 
     systemd.services.suwayomi-server =
       let
-        configFile = format.generate "server.conf" (lib.pipe cfg.settings [
-          (settings: lib.recursiveUpdate settings {
-            server.basicAuthPasswordFile = null;
-            server.basicAuthPassword =
-              if settings.server.basicAuthEnabled
-              then "$TACHIDESK_SERVER_BASIC_AUTH_PASSWORD"
-              else null;
-          })
-          (lib.filterAttrsRecursive (_: x: x != null))
-        ]);
+        configFile = format.generate "server.conf" (
+          lib.pipe cfg.settings [
+            (
+              settings:
+              lib.recursiveUpdate settings {
+                server.basicAuthPasswordFile = null;
+                server.basicAuthPassword =
+                  if settings.server.basicAuthEnabled then "$TACHIDESK_SERVER_BASIC_AUTH_PASSWORD" else null;
+              }
+            )
+            (lib.filterAttrsRecursive (_: x: x != null))
+          ]
+        );
       in
       {
         description = "A free and open source manga reader server that runs extensions built for Tachiyomi.";

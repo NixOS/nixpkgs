@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "btest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-D01hAKcE52eKJRUh1/x5DGxRQpWgA2J0nutshpKrtRU=";
   };
 
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Generic Driver for Powerful System Tests";
+    description = "Generic Driver for Powerful System Tests";
     homepage = "https://github.com/zeek/btest";
     changelog = "https://github.com/zeek/btest/blob/${version}/CHANGES";
     license = licenses.bsd3;

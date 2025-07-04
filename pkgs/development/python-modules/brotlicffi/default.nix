@@ -1,42 +1,50 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, cffi
-, brotli
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  cffi,
+  # overridden as pkgs.brotli
+  brotli,
+  setuptools,
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "brotlicffi";
   version = "1.1.0.0";
-  format = "setuptools";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-hyper";
-    repo = pname;
+    repo = "brotlicffi";
     rev = "v${version}";
     sha256 = "sha256-oW4y1WBJ7+4XwNwwSSR0qUqN03cZYXUYQ6EAwce9dzI=";
   };
 
-  buildInputs = [
-    brotli
-  ];
+  build-system = [ setuptools ];
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  buildInputs = [ brotli ];
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
+
+  dependencies = [ cffi ];
 
   preBuild = ''
     export USE_SHARED_BROTLI=1
   '';
 
-  # Test data is not available, only when using libbrotli git checkout
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
+
+  # Test data is only available from libbrotli git checkout, not brotli.src
   doCheck = false;
+
+  pytestFlagsArray = [ "test/" ];
 
   pythonImportsCheck = [ "brotlicffi" ];
 

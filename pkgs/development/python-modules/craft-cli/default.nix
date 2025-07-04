@@ -1,57 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, platformdirs
-, pydantic_1
-, pyyaml
-, setuptools
-, setuptools-scm
-, pytest-check
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  platformdirs,
+  jinja2,
+  overrides,
+  pyyaml,
+  setuptools-scm,
+  pytest-check,
+  pytest-mock,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-cli";
-  version = "2.5.1";
+  version = "3.0.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-cli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yEKF04OPu4paRrghAP78r9hu6cqkUy6z/V7cHNys82I=";
+    tag = version;
+    hash = "sha256-RAnvx5519iXZnJm8jtY635e0DEL7jnIgZtTCindqMTY=";
   };
 
   postPatch = ''
-    substituteInPlace craft_cli/__init__.py \
-      --replace-fail "dev" "${version}"
-
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==67.7.2" "setuptools"
+      --replace-fail "setuptools==75.2.0" "setuptools"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    jinja2
+    overrides
     platformdirs
-    pydantic_1
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "craft_cli"
-  ];
+  pythonImportsCheck = [ "craft_cli" ];
 
   nativeCheckInputs = [
     pytest-check
     pytest-mock
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pytestFlagsArray = [ "tests/unit" ];
@@ -59,7 +55,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A CLI builder for Canonical's CLI Guidelines";
+    description = "CLI builder for Canonical's CLI Guidelines";
     homepage = "https://github.com/canonical/craft-cli";
     changelog = "https://github.com/canonical/craft-cli/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;

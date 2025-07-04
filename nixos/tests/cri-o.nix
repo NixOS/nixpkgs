@@ -1,12 +1,10 @@
-# This test runs CRI-O and verifies via critest
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ lib, ... }:
+{
   name = "cri-o";
-  meta.maintainers = with pkgs.lib; teams.podman.members;
+  meta.maintainers = lib.teams.podman.members;
 
-  nodes = {
-    crio = {
-      virtualisation.cri-o.enable = true;
-    };
+  nodes.crio = {
+    virtualisation.cri-o.enable = true;
   };
 
   testScript = ''
@@ -16,4 +14,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         "critest --ginkgo.focus='Runtime info' --runtime-endpoint unix:///var/run/crio/crio.sock"
     )
   '';
-})
+}

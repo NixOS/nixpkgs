@@ -1,29 +1,41 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, guile-fibers
-, guile-gcrypt
-, guile-gnutls
-, texinfo
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guile,
+  guile-fibers,
+  guile-gcrypt,
+  guile-gnutls,
+  guile-websocket,
+  texinfo,
+  pkg-config,
 }:
 stdenv.mkDerivation rec {
   pname = "guile-goblins";
-  version = "0.12.0";
+  version = "0.15.1";
 
   src = fetchurl {
     url = "https://spritely.institute/files/releases/guile-goblins/guile-goblins-${version}.tar.gz";
-    hash = "sha256-P5WKKv5i5Lrs4en+IWL40AkYAD+bgTyFdsQqE4FxPfA=";
+    hash = "sha256-2oPS6Ar0ee7BQBtjvhJCCQYXK2TLIiADiCwnDaHPGBc=";
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ guile pkg-config texinfo ];
-  buildInputs = [ guile guile-fibers guile-gcrypt guile-gnutls ];
+  nativeBuildInputs = [
+    guile
+    pkg-config
+    texinfo
+  ];
+  buildInputs = [
+    guile
+    guile-fibers
+    guile-gcrypt
+    guile-gnutls
+    guile-websocket
+  ];
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   # tests hang on darwin, and fail randomly on aarch64-linux on ofborg
-  doCheck = !stdenv.isDarwin && !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64;
 
   meta = with lib; {
     description = "Spritely Goblins for Guile";

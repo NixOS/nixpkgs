@@ -1,20 +1,35 @@
-{ config
-, lib
-, pkgs
-, options
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
 }:
-
-with lib;
 
 let
   cfg = config.services.prometheus.exporters.unbound;
+  inherit (lib)
+    mkOption
+    types
+    mkRemovedOptionModule
+    optionalAttrs
+    optionalString
+    mkMerge
+    mkIf
+    ;
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "controlInterface" ] "This option was removed, use the `unbound.host` option instead.")
-    (mkRemovedOptionModule [ "fetchType" ] "This option was removed, use the `unbound.host` option instead.")
-    ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    (mkRemovedOptionModule [
+      "controlInterface"
+    ] "This option was removed, use the `unbound.host` option instead.")
+    (mkRemovedOptionModule [
+      "fetchType"
+    ] "This option was removed, use the `unbound.host` option instead.")
+    ({
+      options.warnings = options.warnings;
+      options.assertions = options.assertions;
+    })
   ];
 
   port = 9167;
@@ -66,31 +81,38 @@ in
     };
   };
 
-  serviceOpts = mkMerge ([{
-    serviceConfig = {
-      User = "unbound"; # to access the unbound_control.key
-      ExecStart = ''
-        ${pkgs.prometheus-unbound-exporter}/bin/unbound_exporter \
-          --unbound.host "${cfg.unbound.host}" \
-          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-          --web.telemetry-path ${cfg.telemetryPath} \
-          ${optionalString (cfg.unbound.ca != null) "--unbound.ca ${cfg.unbound.ca}"} \
-          ${optionalString (cfg.unbound.certificate != null) "--unbound.cert ${cfg.unbound.certificate}"} \
-          ${optionalString (cfg.unbound.key != null) "--unbound.key ${cfg.unbound.key}"} \
-          ${toString cfg.extraFlags}
-      '';
-      RestrictAddressFamilies = [
-        "AF_UNIX"
-        "AF_INET"
-        "AF_INET6"
-      ];
-    } // optionalAttrs (!config.services.unbound.enable) {
-      DynamicUser = true;
-    };
-  }] ++ [
-    (mkIf config.services.unbound.enable {
-      after = [ "unbound.service" ];
-      requires = [ "unbound.service" ];
-    })
-  ]);
+  serviceOpts = mkMerge (
+    [
+      {
+        serviceConfig =
+          {
+            User = "unbound"; # to access the unbound_control.key
+            ExecStart = ''
+              ${pkgs.prometheus-unbound-exporter}/bin/unbound_exporter \
+                --unbound.host "${cfg.unbound.host}" \
+                --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+                --web.telemetry-path ${cfg.telemetryPath} \
+                ${optionalString (cfg.unbound.ca != null) "--unbound.ca ${cfg.unbound.ca}"} \
+                ${optionalString (cfg.unbound.certificate != null) "--unbound.cert ${cfg.unbound.certificate}"} \
+                ${optionalString (cfg.unbound.key != null) "--unbound.key ${cfg.unbound.key}"} \
+                ${toString cfg.extraFlags}
+            '';
+            RestrictAddressFamilies = [
+              "AF_UNIX"
+              "AF_INET"
+              "AF_INET6"
+            ];
+          }
+          // optionalAttrs (!config.services.unbound.enable) {
+            DynamicUser = true;
+          };
+      }
+    ]
+    ++ [
+      (mkIf config.services.unbound.enable {
+        after = [ "unbound.service" ];
+        requires = [ "unbound.service" ];
+      })
+    ]
+  );
 }

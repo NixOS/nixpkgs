@@ -1,17 +1,18 @@
-{ lib
-, aiofiles
-, aiohttp
-, backoff
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  backoff,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyprosegur";
-  version = "0.0.10";
+  version = "0.0.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,15 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dgomes";
     repo = "pyprosegur";
-    rev = "refs/tags/${version}";
-    hash = "sha256-OHFJhufymD181FODHlIu+O5xh9dfKwEIVQX/zTOC6ks=";
+    tag = version;
+    hash = "sha256-FMkz5zZ5+607gfmw4KRmCgfR+TJF2JGLRVEUzZAjTrc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
     backoff
@@ -37,9 +36,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyprosegur"
-  ];
+  pythonImportsCheck = [ "pyprosegur" ];
 
   meta = with lib; {
     description = "Python module to communicate with Prosegur Residential Alarms";

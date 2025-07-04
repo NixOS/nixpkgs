@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "anuko-time-tracker";
   meta = {
     maintainers = with pkgs.lib.maintainers; [ michaelshmitty ];
@@ -14,4 +15,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_open_port(80);
     machine.wait_until_succeeds("curl -s --fail -L http://localhost/time.php | grep 'Anuko Time Tracker'")
   '';
-})
+}

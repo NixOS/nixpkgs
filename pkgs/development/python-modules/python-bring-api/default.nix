@@ -1,12 +1,13 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-bring-api";
   version = "3.0.0-unstable-2024-02-03";
   pyproject = true;
@@ -21,20 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-VCGCm9N6pMhEYT9WuWh7qKacZEf6bcIpEsILfCC6his=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "python_bring_api"
-  ];
+  pythonImportsCheck = [ "python_bring_api" ];
 
   meta = with lib; {
     description = "Module to access the Bring! shopping lists API";

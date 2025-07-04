@@ -1,31 +1,28 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, openssl
-, xz
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  openssl,
+  nix-update-script,
+  versionCheckHook,
+  callPackage,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst";
-  version = "0.11.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
-    rev = "v${version}";
-    hash = "sha256-RbkirnVrhYT/OuZSdJWMOvQXAeBmsFICsCrezyT6ukA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vbBwIQt4xWZaKpXgFwDsRQIQ0mmsQPRR39m8iZnnuj0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-dev-assets-0.11.0" = "sha256-wTmux3GsUIU+PX6SO9rrQHr3korPFBeP/Z8byC97KUI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4kVj2BODEFjLcrh5sxfcgsdLF2Zd3K1GnhA4DEz1Nl4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -34,17 +31,20 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-    xz
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Security
   ];
 
   env = {
     GEN_ARTIFACTS = "artifacts";
     OPENSSL_NO_VENDOR = true;
+    # to not have "unknown hash" in help output
+    TYPST_VERSION = finalAttrs.version;
   };
+
+  # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
+  postPatch = ''
+    substituteInPlace tests/src/tests.rs --replace-fail 'ARGS.num_threads' 'ARGS.test_threads'
+    substituteInPlace tests/src/args.rs --replace-fail 'num_threads' 'test_threads'
+  '';
 
   postInstall = ''
     installManPage crates/typst-cli/artifacts/*.1
@@ -53,12 +53,29 @@ rustPlatform.buildRustPackage rec {
       --zsh crates/typst-cli/artifacts/_typst
   '';
 
+  cargoTestFlags = [ "--workspace" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru = {
+    updateScript = nix-update-script { };
+    packages = callPackage ./typst-packages.nix { };
+    withPackages = callPackage ./with-packages.nix { };
+  };
+
   meta = {
-    changelog = "https://github.com/typst/typst/releases/tag/${src.rev}";
-    description = "A new markup-based typesetting system that is powerful and easy to learn";
+    changelog = "https://github.com/typst/typst/releases/tag/v${finalAttrs.version}";
+    description = "New markup-based typesetting system that is powerful and easy to learn";
     homepage = "https://github.com/typst/typst";
     license = lib.licenses.asl20;
     mainProgram = "typst";
-    maintainers = with lib.maintainers; [ drupol figsoda kanashimia ];
+    maintainers = with lib.maintainers; [
+      drupol
+      figsoda
+      kanashimia
+      RossSmyth
+    ];
   };
-}
+})

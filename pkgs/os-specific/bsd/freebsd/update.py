@@ -11,11 +11,13 @@ import pandas
 import re
 import subprocess
 import sys
+import tarfile
 import tempfile
 import typing
 import urllib.request
 
 _QUERY_VERSION_PATTERN = re.compile('^([A-Z]+)="(.+)"$')
+_RELEASE_PATCH_PATTERN = re.compile("^RELEASE-p([0-9]+)$")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MIN_VERSION = packaging.version.Version("13.0.0")
 MAIN_BRANCH = "main"
@@ -31,7 +33,7 @@ BRANCH_PATTERN = re.compile(
 
 def request_supported_refs() -> list[str]:
     # Looks pretty shady but I think this should work with every version of the page in the last 20 years
-    r = re.compile("^h\d$", re.IGNORECASE)
+    r = re.compile(r"^h\d$", re.IGNORECASE)
     soup = bs4.BeautifulSoup(
         urllib.request.urlopen("https://www.freebsd.org/security"), features="lxml"
     )
@@ -44,11 +46,11 @@ def request_supported_refs() -> list[str]:
     return list(df["Branch"])
 
 
-def query_version(repo: git.Repo) -> dict[str, typing.Any]:
+def query_version(work_dir: str) -> dict[str, typing.Any]:
     # This only works on FreeBSD 13 and later
     text = (
         subprocess.check_output(
-            ["bash", os.path.join(repo.working_dir, "sys", "conf", "newvers.sh"), "-v"]
+            ["bash", os.path.join(work_dir, "sys", "conf", "newvers.sh"), "-v"]
         )
         .decode("utf-8")
         .strip()
@@ -60,7 +62,16 @@ def query_version(repo: git.Repo) -> dict[str, typing.Any]:
             continue
         fields[m[1].lower()] = m[2]
 
-    fields["major"] = packaging.version.parse(fields["revision"]).major
+    parsed = packaging.version.parse(fields["revision"])
+    fields["major"] = parsed.major
+    fields["minor"] = parsed.minor
+
+    # Extract the patch number from `RELAESE-p<patch>`, which is used
+    # e.g. in the "releng" branches.
+    m = _RELEASE_PATCH_PATTERN.match(fields["branch"])
+    if m is not None:
+        fields["patch"] = m[1]
+
     return fields
 
 
@@ -76,18 +87,23 @@ def handle_commit(
         print(f"{ref_name}: revision still {rev.hexsha}, skipping")
         return old_versions[ref_name]
 
-    repo.git.checkout(rev)
-    print(f"{ref_name}: checked out {rev.hexsha}")
+    tar_content = io.BytesIO()
+    repo.archive(tar_content, rev, format="tar")
+    tar_content.seek(0)
 
-    full_hash = (
-        subprocess.check_output(["nix", "hash", "path", "--sri", repo.working_dir])
-        .decode("utf-8")
-        .strip()
-    )
-    print(f"{ref_name}: hash is {full_hash}")
+    with tempfile.TemporaryDirectory(dir="/tmp") as work_dir:
+        file = tarfile.TarFile(fileobj=tar_content)
+        file.extractall(path=work_dir, filter="data")
 
-    version = query_version(repo)
-    print(f"{ref_name}: version is {version['version']}")
+        full_hash = (
+            subprocess.check_output(["nix", "hash", "path", "--sri", work_dir])
+            .decode("utf-8")
+            .strip()
+        )
+        print(f"{ref_name}: hash is {full_hash}")
+
+        version = query_version(work_dir)
+        print(f"{ref_name}: version is {version['version']}")
 
     return {
         "rev": rev.hexsha,
@@ -95,7 +111,7 @@ def handle_commit(
         "ref": ref_name,
         "refType": ref_type,
         "supported": ref_name in supported_refs,
-        "version": query_version(repo),
+        "version": version,
     }
 
 
@@ -105,30 +121,19 @@ def main() -> None:
     print(f"Selected temporary directory {temp_dir.name}")
 
     if len(sys.argv) >= 2:
-        orig_repo = git.Repo(sys.argv[1])
-        print(f"Fetching updates on {orig_repo.git_dir}")
-        orig_repo.remote("origin").fetch()
+        repo = git.Repo(sys.argv[1])
+        print(f"Fetching updates on {repo.git_dir}")
+        repo.remote("origin").fetch()
     else:
         print("Cloning source repo")
-        orig_repo = git.Repo.clone_from(
-            "https://git.FreeBSD.org/src.git", to_path=os.path.join(temp_dir.name, "orig")
+        repo = git.Repo.clone_from(
+            "https://git.FreeBSD.org/src.git", to_path=temp_dir.name
         )
 
     supported_refs = request_supported_refs()
     print(f"Supported refs are: {' '.join(supported_refs)}")
 
-    print("Doing git crimes, do not run `git worktree prune` until after script finishes!")
-    workdir = os.path.join(temp_dir.name, "work")
-    git.cmd.Git(orig_repo.git_dir).worktree("add", "--orphan", workdir)
-
-    # Have to create object before removing .git otherwise it will complain
-    repo = git.Repo(workdir)
-    repo.git.set_persistent_git_options(git_dir=repo.git_dir)
-    # Remove so that nix hash doesn't see the file
-    os.remove(os.path.join(workdir, ".git"))
-
-    print(f"Working in directory {repo.working_dir} with git directory {repo.git_dir}")
-
+    print(f"git directory {repo.git_dir}")
 
     try:
         with open(os.path.join(BASE_DIR, "versions.json"), "r") as f:
@@ -151,6 +156,14 @@ def main() -> None:
         result = handle_commit(
             repo, tag.commit, tag.name, "tag", supported_refs, old_versions
         )
+
+        # Hack in the patch version from parsing the tag, if we didn't
+        # get one from the "branch" field (from newvers). This is
+        # probably 0.
+        versionObj = result["version"]
+        if "patch" not in versionObj:
+            versionObj["patch"] = version.micro
+
         versions[tag.name] = result
 
     for branch in repo.remote("origin").refs:
@@ -173,10 +186,10 @@ def main() -> None:
         )
         versions[fullname] = result
 
-
     with open(os.path.join(BASE_DIR, "versions.json"), "w") as out:
         json.dump(versions, out, sort_keys=True, indent=2)
         out.write("\n")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

@@ -1,40 +1,44 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
 
-# build-system
-, cython_3
-, setuptools
+  # build-system
+  cython,
+  setuptools,
 
-# native dependencies
-, libxml2
-, libxslt
-, zlib
-, xcodebuild
+  # native dependencies
+  libxml2,
+  libxslt,
+  zlib,
+  xcodebuild,
 }:
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "5.1.0";
+  version = "5.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lxml";
     repo = "lxml";
-    rev = "refs/tags/lxml-${version}";
-    hash = "sha256-eWLYzZWatYDmhuBTZynsdytlNFKKmtWQ1XIyzVD8sDY=";
+    tag = "lxml-${version}";
+    hash = "sha256-yp0Sb/0Em3HX1XpDNFpmkvW/aXwffB4D1sDYEakwKeY=";
   };
 
-  # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs
+  build-system = [
+    cython
+    setuptools
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+
+  # required for build time dependency check
   nativeBuildInputs = [
     libxml2.dev
     libxslt.dev
-    cython_3
-    setuptools
-   ] ++ lib.optionals stdenv.isDarwin [
-    xcodebuild
   ];
+
   buildInputs = [
     libxml2
     libxslt
@@ -58,6 +62,6 @@ buildPythonPackage rec {
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

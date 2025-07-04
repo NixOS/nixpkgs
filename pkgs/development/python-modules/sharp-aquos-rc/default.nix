@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmoore987";
     repo = "sharp_aquos_rc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-w/XA58iT/pmNCy9up5fayjxBsevzgr8ImKgPiNtYHAM=";
   };
 

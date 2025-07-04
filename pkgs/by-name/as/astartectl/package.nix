@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 buildGoModule rec {
   pname = "astartectl";
-  version = "23.5.0";
+  version = "24.5.2";
 
   src = fetchFromGitHub {
     owner = "astarte-platform";
     repo = "astartectl";
     rev = "v${version}";
-    hash = "sha256-4NgDVuYEeJI5Arq+/+xdyUOBWdCLALM3EKVLSFimJlI=";
+    hash = "sha256-T4/lkeipE7GWq1zTxkoV3MfADlduFKtGuB/dsI4YZZw=";
   };
 
-  vendorHash = "sha256-Syod7SUsjiM3cdHPZgjH/3qdsiowa0enyV9DN8k13Ws=";
+  vendorHash = "sha256-kVI1DigDlTvrYLVRUYoW+AAkd31d9EehjRJxrqo8OB4=";
 
   nativeBuildInputs = [ installShellFiles ];
 

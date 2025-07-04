@@ -1,52 +1,55 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, libxfce4util
-, xfce4-panel
-, libxfce4ui
-, xfconf
-, glib
-, gtk3
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  libxfce4util,
+  xfce4-panel,
+  libxfce4ui,
+  glib,
+  gtk3,
+  gitUpdater,
 }:
 
-let
-  category = "panel-plugins";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-fsguard-plugin";
-  version = "1.1.3";
+  version = "1.2.0";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-hO+LtHUiktZMDvEBut97FESHkL+gqF3mRNv6Iphuwlg=";
+    url = "mirror://xfce/src/panel-plugins/xfce4-fsguard-plugin/${lib.versions.majorMinor finalAttrs.version}/xfce4-fsguard-plugin-${finalAttrs.version}.tar.xz";
+    hash = "sha256-nkDPPOezThwn1rRC86BniGw1FUtdDE1kSiOQOGEdpk8=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
+    gettext
+    meson
+    ninja
     pkg-config
-    intltool
   ];
 
   buildInputs = [
     libxfce4util
     libxfce4ui
     xfce4-panel
-    xfconf
     glib
     gtk3
   ];
 
   passthru.updateScript = gitUpdater {
-    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
-    rev-prefix = "${pname}-";
+    url = "https://gitlab.xfce.org/panel-plugins/xfce4-fsguard-plugin";
+    rev-prefix = "xfce4-fsguard-plugin-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-fsguard-plugin";
     description = "Filesystem usage monitor plugin for the Xfce panel";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
   };
-}
+})

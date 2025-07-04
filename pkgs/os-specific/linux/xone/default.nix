@@ -1,14 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, kernel, fetchurl, fetchpatch }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xone";
-  version = "0.3-unstable-2024-03-16";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
-    owner = "medusalix";
+    owner = "dlundqvist";
     repo = "xone";
-    rev = "948d2302acdd6333295eaba4da06d96677290ad3";
-    hash = "sha256-srAEw1ai5KT0rmVUL3Dut9R2mNb00AAZVCcINikh2sM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sX+oN7H0Okl+3yYwbIFoHU8q2pOcMHQcRqQkmnMXSps=";
   };
 
   setSourceRoot = ''
@@ -24,16 +28,20 @@ stdenv.mkDerivation (finalAttrs: {
     "VERSION=${finalAttrs.version}"
   ];
 
+  enableParallelBuilding = true;
   buildFlags = [ "modules" ];
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
 
   meta = with lib; {
     description = "Linux kernel driver for Xbox One and Xbox Series X|S accessories";
-    homepage = "https://github.com/medusalix/xone";
-    license = licenses.gpl2;
-    maintainers = with lib.maintainers; [ rhysmdnz ];
+    homepage = "https://github.com/dlundqvist/xone";
+    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      rhysmdnz
+      fazzi
+    ];
     platforms = platforms.linux;
+    broken = kernel.kernelOlder "6";
   };
-}
-)
+})

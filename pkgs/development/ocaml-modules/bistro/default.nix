@@ -1,35 +1,30 @@
-{ lib
-, ocaml
-, fetchpatch
-, fetchFromGitHub
-, buildDunePackage
-, base64
-, bos
-, core
-, core_kernel
-, core_unix ? null
-, lwt_react
-, ocamlgraph
-, ppx_sexp_conv
-, rresult
-, sexplib
-, tyxml
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  base64,
+  bos,
+  core,
+  core_kernel,
+  core_unix ? null,
+  lwt_react,
+  ocamlgraph,
+  ppx_sexp_conv,
+  rresult,
+  sexplib,
+  tyxml,
 }:
 
 buildDunePackage rec {
   pname = "bistro";
-  version = "unstable-2022-05-07";
-
-  duneVersion = "3";
+  version = "unstable-2024-05-17";
 
   src = fetchFromGitHub {
     owner = "pveber";
     repo = pname;
-    rev = "d363bd2d8257babbcb6db15bd83fd6465df7c268";
-    sha256 = "0g11324j1s2631zzf7zxc8s0nqd4fwvcni0kbvfpfxg96gy2wwfm";
+    rev = "d44c44b52148e58ca3842c3efedf3115e376d800";
+    sha256 = "sha256-naoCEVBfydqSeGGbXYBXfg0PP+Fzk05jFoul7XAz/tM=";
   };
-
-  patches = [ ./janestreet-0.16.patch ];
 
   propagatedBuildInputs = [
     base64
@@ -45,7 +40,7 @@ buildDunePackage rec {
     tyxml
   ];
 
-  minimalOCamlVersion = "4.12";
+  minimalOCamlVersion = "4.14";
 
   meta = {
     inherit (src.meta) homepage;

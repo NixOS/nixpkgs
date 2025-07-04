@@ -1,48 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, pytestCheckHook
-, hatchling
-, argostranslate
-, flask
-, flask-swagger
-, flask-swagger-ui
-, flask-limiter
-, flask-babel
-, flask-session
-, waitress
-, expiringdict
-, langdetect
-, lexilang
-, ltpycld2
-, morfessor
-, appdirs
-, apscheduler
-, translatehtml
-, argos-translate-files
-, requests
-, redis
-, prometheus-client
-, polib
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  hatchling,
+  argostranslate,
+  flask,
+  flask-swagger,
+  flask-swagger-ui,
+  flask-limiter,
+  flask-babel,
+  flask-session,
+  waitress,
+  expiringdict,
+  langdetect,
+  lexilang,
+  ltpycld2,
+  morfessor,
+  appdirs,
+  apscheduler,
+  translatehtml,
+  argos-translate-files,
+  requests,
+  redis,
+  prometheus-client,
+  polib,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.5.6";
+  version = "1.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-43VnxgtapMRKyXxqsvBgSMUxvpbLI+iOfW3FA0/POpE=";
+    tag = "v${version}";
+    hash = "sha256-fzBVEJnj7sCkfNIIFZXHB0VQt94z0U9lbtW6+abAMpA=";
   };
 
   build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
@@ -79,9 +78,7 @@ buildPythonPackage rec {
 
   doCheck = false; # needs network access
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # required for import check to work (argostranslate)
   env.HOME = "/tmp";
@@ -91,7 +88,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Free and Open Source Machine Translation API. Self-hosted, no limits, no ties to proprietary services";
     homepage = "https://libretranslate.com";
-    changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/v${version}";
+    changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ misuzu ];
   };

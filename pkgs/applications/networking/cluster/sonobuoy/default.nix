@@ -1,16 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, sonobuoy }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  sonobuoy,
+}:
 
 # SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.
 # The update script can update this automatically, the comment is used to find the line.
-let rev = "6f9e27f1795f10475c9f6f5decdff692e1e228da"; # update-commit-sha
+let
+  rev = "a988242e8bbded3ef4602eda48addcfac24a1a91"; # update-commit-sha
 in
 buildGoModule rec {
   pname = "sonobuoy";
-  version = "0.57.1"; # Do not forget to update `rev` above
+  version = "0.57.3"; # Do not forget to update `rev` above
 
   ldflags =
-    let t = "github.com/vmware-tanzu/sonobuoy";
-    in [
+    let
+      t = "github.com/vmware-tanzu/sonobuoy";
+    in
+    [
       "-s"
       "-X ${t}/pkg/buildinfo.Version=v${version}"
       "-X ${t}/pkg/buildinfo.GitSHA=${rev}"
@@ -21,10 +30,10 @@ buildGoModule rec {
     owner = "vmware-tanzu";
     repo = "sonobuoy";
     rev = "v${version}";
-    hash = "sha256-e9C5ZwKqT3Fiko2HqrIpONVvjhT8KBBO7rQc3BJhl+A=";
+    hash = "sha256-YFItnwU08g4pVo4OOHscRmPRVXyr+R9YWYTxhSzd7iI=";
   };
 
-  vendorHash = "sha256-HE53eIEyhOI9ksEx1EKmv/txaTa7KDrNUMEVRMi4Wuo=";
+  vendorHash = "sha256-QjVnC6CZXuw6qLNyX9ut2g1Ws1cYO1JuT043aqqeF0Q=";
 
   subPackages = [ "." ];
 
@@ -37,7 +46,7 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Diagnostic tool that makes it easier to understand the state of a Kubernetes cluster";
     longDescription = ''
       Sonobuoy is a diagnostic tool that makes it easier to understand the state of
@@ -47,8 +56,12 @@ buildGoModule rec {
 
     homepage = "https://sonobuoy.io";
     changelog = "https://github.com/vmware-tanzu/sonobuoy/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "sonobuoy";
-    maintainers = with maintainers; [ carlosdagos saschagrunert wilsonehusin ];
+    maintainers = with lib.maintainers; [
+      carlosdagos
+      saschagrunert
+      wilsonehusin
+    ];
   };
 }

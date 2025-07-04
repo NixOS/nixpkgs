@@ -1,38 +1,61 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, filelock
-, fsspec
-, packaging
-, pyyaml
-, requests
-, tqdm
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  filelock,
+  fsspec,
+  hf-xet,
+  packaging,
+  pyyaml,
+  requests,
+  tqdm,
+  typing-extensions,
+
+  # optional-dependencies
+  # cli
+  inquirerpy,
+  # inference
+  aiohttp,
+  # torch
+  torch,
+  safetensors,
+  # hf_transfer
+  hf-transfer,
+  # fastai
+  toml,
+  fastai,
+  fastcore,
+  # tensorflow
+  tensorflow,
+  pydot,
+  graphviz,
+  # tensorflow-testing
+  keras,
 }:
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.22.2";
+  version = "0.33.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Y/oUF+d6Oo45x9cufZxjaJCQpoY0acPhetbyAt8M3pQ=";
+    tag = "v${version}";
+    hash = "sha256-rrOmmYHH8Rz6OhJPbRfdwC/AATdYrPTTuPvCPe0G3Do=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     filelock
     fsspec
+    hf-xet
     packaging
     pyyaml
     requests
@@ -40,19 +63,53 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    all = [
+
+    ];
+    cli = [
+      inquirerpy
+    ];
+    inference = [
+      aiohttp
+    ];
+    torch = [
+      torch
+      safetensors
+    ] ++ safetensors.optional-dependencies.torch;
+    hf_transfer = [
+      hf-transfer
+    ];
+    fastai = [
+      toml
+      fastai
+      fastcore
+    ];
+    tensorflow = [
+      tensorflow
+      pydot
+      graphviz
+    ];
+    tensorflow-testing = [
+      tensorflow
+      keras
+    ];
+    hf_xet = [
+      hf-xet
+    ];
+  };
+
   # Tests require network access.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "huggingface_hub"
-  ];
+  pythonImportsCheck = [ "huggingface_hub" ];
 
-  meta = with lib; {
+  meta = {
     description = "Download and publish models and other files on the huggingface.co hub";
     mainProgram = "huggingface-cli";
     homepage = "https://github.com/huggingface/huggingface_hub";
     changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

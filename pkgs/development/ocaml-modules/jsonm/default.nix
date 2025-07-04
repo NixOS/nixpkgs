@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  uutf,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-jsonm";
@@ -9,7 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-6ikjn+tAUyAd8+Hm0nws4SOIKsRljhyL6plYvhGKe9Y=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
   buildInputs = [ topkg ];
   propagatedBuildInputs = [ uutf ];
 
@@ -18,7 +32,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) buildPhase installPhase;
 
   meta = {
-    description = "An OCaml non-blocking streaming codec to decode and encode the JSON data format";
+    description = "OCaml non-blocking streaming codec to decode and encode the JSON data format";
     homepage = "https://erratique.ch/software/jsonm";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ vbgl ];

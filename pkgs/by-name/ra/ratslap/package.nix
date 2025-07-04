@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libusb1
-, pkg-config
-, installShellFiles
-, git
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libusb1,
+  pkg-config,
+  installShellFiles,
+  git,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ratslap";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "krayon";
     repo = "ratslap";
-    rev = version;
-    sha256 = "sha256-PO/79tTiO4TBtojrEtkSf5W6zuG+Ml2iJGAtYHDwHEY=";
+    rev = finalAttrs.version;
+    hash = "sha256-PO/79tTiO4TBtojrEtkSf5W6zuG+Ml2iJGAtYHDwHEY=";
     leaveDotGit = true;
   };
 
@@ -33,9 +34,9 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=(
       "-W gitup"
       "VDIRTY="
-      "MAJVER=${version}"
+      "MAJVER=${finalAttrs.version}"
       "APPBRANCH=main"
-      "BINNAME=${pname}"
+      "BINNAME=ratslap"
       "MARKDOWN_GEN="
       "BUILD_DATE=$(git show -s --date=format:'%Y-%m-%d %H:%M:%S%z' --format=%cd)"
       "BUILD_MONTH=$(git show -s --date=format:'%B' --format=%cd)"
@@ -49,8 +50,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ratslap $out/bin
 
-    mv manpage.1 ${pname}.1
-    installManPage ${pname}.1
+    mv manpage.1 ratslap.1
+    installManPage ratslap.1
 
     runHook postInstall
   '';
@@ -62,9 +63,9 @@ stdenv.mkDerivation rec {
       all buttons and configuring modes, DPI settings and the LED.
     '';
     homepage = "https://github.com/krayon/ratslap";
-    changelog = "https://github.com/krayon/ratslap/releases/tag/${version}";
+    changelog = "https://github.com/krayon/ratslap/releases/tag/${finalAttrs.version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ zebreus ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
-}
+})

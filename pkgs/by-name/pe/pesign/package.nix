@@ -1,25 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, nss
-, efivar
-, util-linux
-, popt
-, nspr
-, mandoc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  pkg-config,
+  nss,
+  efivar,
+  util-linux,
+  popt,
+  nspr,
+  mandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pesign";
   version = "116";
 
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = "pesign";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-cuOSD/ZHkilgguDFJviIZCG8kceRWw2JgssQuWN02Do=";
   };
+
+  patches = [
+    # fix build with gcc14
+    # https://github.com/rhboot/pesign/pull/119
+    (fetchpatch2 {
+      url = "https://github.com/rhboot/pesign/commit/1f9e2fa0b4d872fdd01ca3ba81b04dfb1211a187.patch?full_index=1";
+      hash = "sha256-viVM4Z0jAEAWC3EdJVHcWe21aQskH5XE85lOd6Xd/qU=";
+    })
+  ];
 
   # nss-util is missing because it is already contained in nss
   # Red Hat seems to be shipping a separate nss-util:
@@ -27,7 +38,14 @@ stdenv.mkDerivation rec {
   # containing things we already have in `nss`.
   # We can ignore all the errors pertaining to a missing
   # nss-util.pc I suppose.
-  buildInputs = [ efivar util-linux nss popt nspr mandoc ];
+  buildInputs = [
+    efivar
+    util-linux
+    nss
+    popt
+    nspr
+    mandoc
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   makeFlags = [ "INSTALLROOT=$(out)" ];
@@ -41,12 +59,12 @@ stdenv.mkDerivation rec {
     rm -rf $out/run
   '';
 
-  meta = with lib; {
-    description = "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications.";
+  meta = {
+    description = "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications";
     homepage = "https://github.com/rhboot/pesign";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ raitobezarius ];
     # efivar is currently Linux-only.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

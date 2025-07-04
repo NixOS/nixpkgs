@@ -1,38 +1,46 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, cryptography
-, jinja2
-, mako
-, passlib
-, pytest
-, pyyaml
-, requests
-, rtoml
-, setuptools
-, tomlkit
-, librouteros
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  cryptography,
+  jinja2,
+  mako,
+  passlib,
+  pyyaml,
+  requests,
+  rtoml,
+  setuptools,
+  tomlkit,
+  librouteros,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bundlewrap";
-  version = "4.18.0";
-  format = "setuptools";
+  version = "4.22.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bundlewrap";
     repo = "bundlewrap";
-    rev = "refs/tags/${version}";
-    hash = "sha256-7jBFeJem+0vZot+BknKmCxozmoHCBCAZqDbfQQG3/Vw=";
+    tag = version;
+    hash = "sha256-F3Ipoep9ZmAqkh8mFLXpaEcYb4dpV9Dt/VgMa9X24Hw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-  propagatedBuildInputs = [
-    setuptools cryptography jinja2 mako passlib pyyaml requests tomlkit librouteros
+  build-system = [ setuptools ];
+  dependencies = [
+    setuptools
+    cryptography
+    jinja2
+    mako
+    passlib
+    pyyaml
+    requests
+    tomlkit
+    librouteros
   ] ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
 
   pythonImportsCheck = [ "bundlewrap" ];
@@ -48,7 +56,7 @@ buildPythonPackage rec {
     homepage = "https://bundlewrap.org/";
     description = "Easy, Concise and Decentralized Config management with Python";
     mainProgram = "bw";
-    license = [ licenses.gpl3 ] ;
+    license = [ licenses.gpl3 ];
     maintainers = with maintainers; [ wamserma ];
   };
 }

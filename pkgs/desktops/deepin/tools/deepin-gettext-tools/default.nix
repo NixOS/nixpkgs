@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gettext
-, python3Packages
-, perlPackages
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gettext,
+  python3Packages,
+  perlPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,9 +31,7 @@ stdenv.mkDerivation rec {
     perlPackages.XMLLibXML
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postFixup = ''
     wrapPythonPrograms
@@ -45,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-gettext-tools";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

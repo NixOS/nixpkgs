@@ -1,4 +1,5 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
 
   options.value = lib.mkOption {
     type = lib.types.anything;
@@ -6,10 +7,10 @@
 
   config = lib.mkMerge [
     {
-      value = [ null ];
+      value = [ "a value" ];
     }
     {
-      value = [ null ];
+      value = [ "another value" ];
     }
   ];
 

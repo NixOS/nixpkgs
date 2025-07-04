@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, pkg-config
-, libsecret
-, cmake
-, ninja
-, qt6
-, grpc
-, protobuf
-, zlib
-, gtest
-, sentry-native
-, protonmail-bridge
+{
+  lib,
+  stdenv,
+  pkg-config,
+  libsecret,
+  cmake,
+  ninja,
+  qt6,
+  grpc,
+  protobuf,
+  zlib,
+  gtest,
+  sentry-native,
+  protonmail-bridge,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     find . -type f -name "CMakeLists.txt" -exec sed -i "/BridgeSetup\\.cmake/d" {} \;
 
     # Use the available ICU version
-    sed -i "s/libicu\(i18n\|uc\|data\)\.so\.56/libicu\1.so/g" bridge-gui/DeployLinux.cmake
+    sed -i "s/libicu\(i18n\|uc\|data\)\.so\.[0-9][0-9]/libicu\1.so/g" bridge-gui/DeployLinux.cmake
 
     # Create a Desktop Entry that uses a `protonmail-bridge-gui` binary without upstream's launcher
     sed "s/^\(Icon\|Exec\)=.*$/\1=protonmail-bridge-gui/" ../../../dist/proton-bridge.desktop > proton-bridge-gui.desktop
@@ -62,17 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/add_subdirectory(bridge-gui-tester)/d" CMakeLists.txt
   '';
 
-  preConfigure = ''
-    cmakeFlagsArray+=(
-      "-DCMAKE_BUILD_TYPE=Release"
-      "-DBRIDGE_APP_FULL_NAME=Proton Mail Bridge"
-      "-DBRIDGE_VENDOR=Proton AG"
-      "-DBRIDGE_REVISION=${finalAttrs.src.rev}"
-      "-DBRIDGE_TAG=${finalAttrs.version}"
-      "-DBRIDGE_BUILD_ENV=Nix"
-      "-DBRIDGE_APP_VERSION=${finalAttrs.version}"
-    )
-  '';
+  cmakeFlags = [
+    "-DBRIDGE_APP_FULL_NAME=Proton Mail Bridge"
+    "-DBRIDGE_VENDOR=Proton AG"
+    "-DBRIDGE_REVISION=${finalAttrs.src.rev}"
+    "-DBRIDGE_TAG=${finalAttrs.version}"
+    "-DBRIDGE_BUILD_ENV=Nix"
+    "-DBRIDGE_APP_VERSION=${finalAttrs.version}"
+  ];
 
   installPhase = ''
     runHook preInstall

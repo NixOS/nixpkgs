@@ -1,19 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, cmake
-, pkg-config
-, ffmpeg
-, libGLU
-, alsa-lib
-, libX11
-, libXrandr
-, sndio
-, qtbase
-, qtsvg
-, qttools
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  gitUpdater,
+  cmake,
+  pkg-config,
+  ffmpeg,
+  libGLU,
+  alsa-lib,
+  libX11,
+  libXrandr,
+  sndio,
+  qtbase,
+  qtsvg,
+  qttools,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +29,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TIXjYkInWV3yVnvXrdHcmeWYeps5TcvkG2Xjg4roIds=";
   };
 
+  patches = [
+    # Fix FTBFS with Qt 6.7.1
+    # Remove when version > 0.111
+    (fetchpatch {
+      name = "0001-punes-Fix-compatibility-with-Qt-6.7.1.patch";
+      url = "https://github.com/punesemu/puNES/commit/6e51b1a6107ad3de97edd40ae4ec2d41b32d804f.patch";
+      hash = "sha256-xRalKIOb1qWgqJsFLcm7uUOblEfHDYbkukmcr4/+4Qc=";
+    })
+
+    # Fix FTBFS with Qt 6.9
+    # Remove when version > 0.111
+    (fetchpatch {
+      name = "0002-punes-Updated-code-for-Qt-6.9.0-compatibility.patch";
+      url = "https://github.com/punesemu/puNES/commit/ff906e0a79eeac9a2d16783e0accf65748bb275e.patch";
+      hash = "sha256-+s7AdaUBgCseQs6Mxat/cDmQ77s6K6J0fUfyihP82jM=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -34,18 +54,21 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    ffmpeg
-    libGLU
-    qtbase
-    qtsvg
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libX11
-    libXrandr
-  ] ++ lib.optionals stdenv.hostPlatform.isBSD [
-    sndio
-  ];
+  buildInputs =
+    [
+      ffmpeg
+      libGLU
+      qtbase
+      qtsvg
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libX11
+      libXrandr
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isBSD [
+      sndio
+    ];
 
   cmakeFlags = [
     "-DENABLE_GIT_INFO=OFF"

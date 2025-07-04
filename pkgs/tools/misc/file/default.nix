@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, file, zlib, libgnurx
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  file,
+  zlib,
+  libgnurx,
+  updateAutotoolsGnuConfigScriptsHook,
+  testers,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -13,26 +20,39 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     urls = [
-      "https://astron.com/pub/file/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
-      "https://distfiles.macports.org/file/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
+      "https://astron.com/pub/file/file-${finalAttrs.version}.tar.gz"
+      "https://distfiles.macports.org/file/file-${finalAttrs.version}.tar.gz"
     ];
     hash = "sha256-/Jf1ECm7DiyfTjv/79r2ePDgOe6HK53lwAKm0Jx4TYI=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   patches = [
     # Upstream patch to fix 32-bit tests.
-    # Will be included in 5.46+ releases.
+    #
+    # It is included in 5.46+, but we are not updating to it or a later version until:
+    #
+    # https://bugs.astron.com/view.php?id=622
+    # https://bugs.astron.com/view.php?id=638
+    #
+    # are resolved. See also description of the 1st bug here:
+    #
+    # https://github.com/NixOS/nixpkgs/pull/402318#issuecomment-2881163359
     ./32-bit-time_t.patch
   ];
 
   strictDeps = true;
   enableParallelBuilding = true;
 
-  nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
-  buildInputs = [ zlib ]
-    ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
+  nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
+  buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   # https://bugs.astron.com/view.php?id=382
   doCheck = !stdenv.buildPlatform.isMusl;
@@ -43,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://darwinsys.com/file";
-    description = "A program that shows the type of files";
+    description = "Program that shows the type of files";
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.bsd2;
     pkgConfigModules = [ "libmagic" ];

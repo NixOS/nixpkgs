@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchurl
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, extra-cmake-modules
-, kcoreaddons
-, kpeople
-, kcontacts
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  extra-cmake-modules,
+  kcoreaddons,
+  kpeople,
+  kcontacts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,9 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Pulseaudio bindings for Qt";
-    homepage    = "https://github.com/KDE/kpeoplevcard";
-    license     = with licenses; [ lgpl2 ];
+    homepage = "https://github.com/KDE/kpeoplevcard";
+    license = with licenses; [ lgpl2 ];
     maintainers = with maintainers; [ doronbehar ];
   };
 })
-

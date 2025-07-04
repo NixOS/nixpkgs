@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, colorama
-, hypothesis
-, poetry-core
-, setuptools
-, pylama
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  colorama,
+  hatchling,
+  hatch-vcs,
+  hypothesis,
+  pylama,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "5.13.2";
+  version = "6.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/1iKYmtNRw9u59zzJDwV7b9+EPxFJDHvhjTioGt5LLU=";
+    tag = version;
+    hash = "sha256-+O6bIbIpEMRUhzGUOQtBlHB//DaXaaOTjqMBTFvYnLk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    setuptools
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
   nativeCheckInputs = [
@@ -52,8 +53,6 @@ buildPythonPackage rec {
     "--ignore=tests/benchmark/" # requires pytest-benchmark
     "--ignore=tests/integration/" # pulls in 10 other packages
     "--ignore=tests/unit/profiles/test_black.py" # causes infinite recursion to include black
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = [
@@ -74,10 +73,12 @@ buildPythonPackage rec {
     "test_value_assignment_list"
     # profiles not available
     "test_isort_supports_shared_profiles_issue_970"
+    # https://github.com/PyCQA/isort/issues/2234
+    "test_isort_should_warn_on_empty_custom_config_issue_1433"
   ];
 
   meta = with lib; {
-    description = "A Python utility / library to sort Python imports";
+    description = "Python utility / library to sort Python imports";
     homepage = "https://github.com/PyCQA/isort";
     license = licenses.mit;
     maintainers = with maintainers; [ couchemar ];

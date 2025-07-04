@@ -1,133 +1,101 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, isPyPy
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPyPy,
+  replaceVars,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# native dependencies
-, libGL
+  # native dependencies
+  libGL,
 
-# dependencies
-, numpy
-, pillow
+  # dependencies
+  numpy,
+  pillow,
 
-# optional-dependencies
-, astropy
-, av
-, imageio-ffmpeg
-, pillow-heif
-, psutil
-, tifffile
+  # optional-dependencies
+  astropy,
+  av,
+  imageio-ffmpeg,
+  pillow-heif,
+  psutil,
+  tifffile,
 
-# tests
-, pytestCheckHook
-, fsspec
+  # tests
+  pytestCheckHook,
+  fsspec,
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.34.0";
+  version = "2.37.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+I5KmKSLi8ARbDH06em71LWhmqziAaDfaBp4hU67/jg=";
+    tag = "v${version}";
+    hash = "sha256-/nxJxZrTYX7F2grafIWwx9SyfR47ZXyaUwPHMEOdKkI=";
   };
 
-  patches = lib.optionals (!stdenv.isDarwin) [
-    (substituteAll {
-      src = ./libgl-path.patch;
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    (replaceVars ./libgl-path.patch {
       libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     pillow
   ];
 
-  passthru.optional-dependencies = {
-    bsdf = [];
-    dicom = [];
-    feisem = [];
+  optional-dependencies = {
+    bsdf = [ ];
+    dicom = [ ];
+    feisem = [ ];
     ffmpeg = [
       imageio-ffmpeg
       psutil
     ];
-    fits = lib.optionals (!isPyPy) [
-      astropy
-    ];
-    freeimage = [];
-    lytro = [];
-    numpy = [];
-    pillow = [];
-    simpleitk = [];
-    spe = [];
-    swf = [];
-    tifffile = [
-      tifffile
-    ];
-    pyav = [
-      av
-    ];
-    heif = [
-      pillow-heif
-    ];
+    fits = lib.optionals (!isPyPy) [ astropy ];
+    freeimage = [ ];
+    lytro = [ ];
+    numpy = [ ];
+    pillow = [ ];
+    simpleitk = [ ];
+    spe = [ ];
+    swf = [ ];
+    tifffile = [ tifffile ];
+    pyav = [ av ];
+    heif = [ pillow-heif ];
   };
 
-  nativeCheckInputs = [
-    fsspec
-    psutil
-    pytestCheckHook
-  ]
-  ++ fsspec.optional-dependencies.github
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      fsspec
+      psutil
+      pytestCheckHook
+    ]
+    ++ fsspec.optional-dependencies.github
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "-m 'not needs_internet'"
-  ];
+  pytestFlagsArray = [ "-m 'not needs_internet'" ];
 
   preCheck = ''
-    export IMAGEIO_USERDIR="$TMP"
-    export HOME=$TMPDIR
+    export IMAGEIO_USERDIR=$(mktemp -d)
+    export HOME=$(mktemp -d)
   '';
 
-  disabledTestPaths = [
-    # tries to fetch fixtures over the network
-    "tests/test_freeimage.py"
-    "tests/test_pillow.py"
-    "tests/test_spe.py"
-    "tests/test_swf.py"
-  ];
-
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # Segmentation fault
-    "test_bayer_write"
-    # RuntimeError: No valid H.264 encoder was found with the ffmpeg installation
-    "test_writer_file_properly_closed"
-    "test_writer_pixelformat_size_verbose"
-    "test_writer_ffmpeg_params"
-    "test_reverse_read"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
     homepage = "https://imageio.readthedocs.io";
-    changelog = "https://github.com/imageio/imageio/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ Luflosi ];
+    changelog = "https://github.com/imageio/imageio/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

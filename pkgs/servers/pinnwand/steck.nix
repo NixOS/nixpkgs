@@ -1,13 +1,15 @@
-{ lib
-, pkgs
-, python3Packages
-, fetchPypi
-, nixosTests
+{
+  lib,
+  pkgs,
+  python3Packages,
+  fetchPypi,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "steck";
   version = "0.7.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -48,4 +50,3 @@ python3Packages.buildPythonApplication rec {
     maintainers = with maintainers; [ hexa ];
   };
 }
-

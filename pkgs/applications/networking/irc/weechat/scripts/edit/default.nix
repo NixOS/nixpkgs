@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, weechat }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  weechat,
+}:
 
 stdenv.mkDerivation rec {
   pname = "edit-weechat";
@@ -23,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (weechat.meta) platforms;
-    description = "This simple weechat plugin allows you to compose messages in your $EDITOR.";
+    description = "This simple weechat plugin allows you to compose messages in your $EDITOR";
     license = licenses.mit;
     maintainers = with maintainers; [ eraserhd ];
   };

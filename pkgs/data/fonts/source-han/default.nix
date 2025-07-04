@@ -1,22 +1,22 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
 }:
 
 let
   makeSuperOTC =
-    { family
-    , description
-    , rev
-    , hash
-    , zip ? ""
-    , prefix ? ""
+    {
+      family,
+      description,
+      rev,
+      hash,
+      zip ? "",
+      prefix ? "",
     }:
     let
-      Family =
-        lib.toUpper (lib.substring 0 1 family) +
-        lib.substring 1 (lib.stringLength family) family;
+      Family = lib.toUpper (lib.substring 0 1 family) + lib.substring 1 (lib.stringLength family) family;
     in
     stdenvNoCC.mkDerivation rec {
       pname = "source-han-${family}";
@@ -29,11 +29,13 @@ let
 
       nativeBuildInputs = lib.optionals (zip == ".zip") [ unzip ];
 
-      unpackPhase = lib.optionalString (zip == "") ''
-        cp $src SourceHan${Family}.ttc${zip}
-      '' + lib.optionalString (zip == ".zip") ''
-        unzip $src
-      '';
+      unpackPhase =
+        lib.optionalString (zip == "") ''
+          cp $src SourceHan${Family}.ttc${zip}
+        ''
+        + lib.optionalString (zip == ".zip") ''
+          unzip $src
+        '';
 
       installPhase = ''
         runHook preInstall
@@ -44,23 +46,25 @@ let
       '';
 
       meta = {
-        description = "An open source Pan-CJK ${description} typeface";
+        description = "Open source Pan-CJK ${description} typeface";
         homepage = "https://github.com/adobe-fonts/source-han-${family}";
         license = lib.licenses.ofl;
-        maintainers = with lib.maintainers; [ taku0 emily ];
+        maintainers = with lib.maintainers; [
+          taku0
+          emily
+        ];
       };
     };
 
   makeVariable =
-    { family
-    , version
-    , hash
-    , format
+    {
+      family,
+      version,
+      hash,
+      format,
     }:
     let
-      Family =
-        lib.toUpper (lib.substring 0 1 family) +
-        lib.substring 1 (lib.stringLength family) family;
+      Family = lib.toUpper (lib.substring 0 1 family) + lib.substring 1 (lib.stringLength family) family;
     in
     fetchurl {
       pname = "source-han-${family}-vf-${format}";
@@ -71,10 +75,13 @@ let
       postFetch = "install -Dm444 $downloadedFile $out/share/fonts/variable/SourceHan${Family}-VF.${format}.ttc";
 
       meta = {
-        description = "An open source Pan-CJK ${Family} typeface";
+        description = "Open source Pan-CJK ${Family} typeface";
         homepage = "https://github.com/adobe-fonts/source-han-${family}";
         license = lib.licenses.ofl;
-        maintainers = with lib.maintainers; [ taku0 emily ];
+        maintainers = with lib.maintainers; [
+          taku0
+          emily
+        ];
       };
     };
 in
@@ -90,8 +97,8 @@ in
   serif = makeSuperOTC {
     family = "serif";
     description = "serif";
-    rev = "2.001R";
-    hash = "sha256-ULdrtPLtzsgfZEHWkr4ebC/FSROHBWJJVD+PzdIJ6Og=";
+    rev = "2.003R";
+    hash = "sha256-buaJq1eJSuNa9gSnPpXDcr2gMGYQ/6F5pHCOjNR6eV8=";
     zip = ".zip";
     prefix = "01_";
   };
@@ -119,15 +126,15 @@ in
 
   serif-vf-otf = makeVariable {
     family = "serif";
-    version = "2.002";
-    hash = "sha256-8sD4bU6w7HBm4vBuPAjcjpxN2rtEJugAw+X0bAOcmjA=";
+    version = "2.003";
+    hash = "sha256-a6295Ukha9QY5ByMr2FUy13j5gZ1itnezvfJWmJjqt0=";
     format = "otf";
   };
 
   serif-vf-ttf = makeVariable {
     family = "serif";
-    version = "2.002";
-    hash = "sha256-dmTZFRsD55WCOg2+sqd8bkmTSnSNn5xUYf0PgzIvzww=";
+    version = "2.003";
+    hash = "sha256-F+FUQunfyAEBVV10lZxC3dzGTWhHgHzpTO8CjC3n4WY=";
     format = "ttf";
   };
 }

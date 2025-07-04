@@ -1,33 +1,34 @@
-{ lib
-, adlfs
-, appdirs
-, buildPythonPackage
-, fastparquet
-, fetchFromGitHub
-, fsspec
-, gcsfs
-, humanize
-, importlib-metadata
-, importlib-resources
-, jinja2
-, joblib
-, pandas
-, pyarrow
-, pytest-cases
-, pytest-parallel
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, s3fs
-, setuptools
-, setuptools-scm
-, xxhash
+{
+  lib,
+  adlfs,
+  appdirs,
+  buildPythonPackage,
+  fastparquet,
+  fetchFromGitHub,
+  fsspec,
+  gcsfs,
+  humanize,
+  importlib-metadata,
+  importlib-resources,
+  jinja2,
+  joblib,
+  pandas,
+  pyarrow,
+  pytest-cases,
+  pytest-parallel,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  s3fs,
+  setuptools,
+  setuptools-scm,
+  xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "pins";
-  version = "0.8.4";
+  version = "0.8.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,16 +36,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "pins-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rNIjHwFELHoxDxC/T5vPzHA6Ifjz01rJpTK6kjUxOIM=";
+    tag = "v${version}";
+    hash = "sha256-79TVAfr872Twc7D2iej51jiKNwZ9ESOa66ItNDmyfFM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     fsspec
     humanize
@@ -58,16 +59,10 @@ buildPythonPackage rec {
     xxhash
   ];
 
-  passthru.optional-dependencies = {
-    aws = [
-      s3fs
-    ];
-    azure = [
-      adlfs
-    ];
-    gcs = [
-      gcsfs
-    ];
+  optional-dependencies = {
+    aws = [ s3fs ];
+    azure = [ adlfs ];
+    gcs = [ gcsfs ];
   };
 
   nativeCheckInputs = [
@@ -76,15 +71,11 @@ buildPythonPackage rec {
     pytest-cases
     pytest-parallel
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "pins"
-  ];
+  pythonImportsCheck = [ "pins" ];
 
-  pytestFlagsArray = [
-    "pins/tests/"
-  ];
+  pytestFlagsArray = [ "pins/tests/" ];
 
   disabledTestPaths = [
     # Tests require network access

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, asn1crypto
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, openssl
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  asn1crypto,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  openssl,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "wbond";
-    repo = pname;
+    repo = "oscrypto";
     rev = version;
     hash = "sha256-CmDypmlc/kb6ONCUggjT1Iqd29xNSLRaGh5Hz36dvOw=";
   };
@@ -41,19 +42,13 @@ buildPythonPackage rec {
     done
   '';
 
-  propagatedBuildInputs = [
-    asn1crypto
-  ];
+  propagatedBuildInputs = [ asn1crypto ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "oscrypto"
-  ];
+  pythonImportsCheck = [ "oscrypto" ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Tests require network access
@@ -65,6 +60,6 @@ buildPythonPackage rec {
     description = "Encryption library for Python";
     homepage = "https://github.com/wbond/oscrypto";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

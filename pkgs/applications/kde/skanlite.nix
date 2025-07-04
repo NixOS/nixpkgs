@@ -1,8 +1,11 @@
 {
-  mkDerivation, lib,
-  wrapGAppsHook,
-  extra-cmake-modules, kdoctools,
-  kio, libksane
+  mkDerivation,
+  lib,
+  wrapGAppsHook3,
+  extra-cmake-modules,
+  kdoctools,
+  kio,
+  libksane,
 }:
 
 mkDerivation {
@@ -10,11 +13,18 @@ mkDerivation {
   meta = with lib; {
     description = "KDE simple image scanning application";
     mainProgram = "skanlite";
-    homepage    = "https://apps.kde.org/skanlite";
-    license     = licenses.gpl2Plus;
+    homepage = "https://apps.kde.org/skanlite";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ polendri ];
   };
 
-  nativeBuildInputs = [ wrapGAppsHook extra-cmake-modules kdoctools ];
-  buildInputs = [ kio libksane ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    extra-cmake-modules
+    kdoctools
+  ];
+  buildInputs = [
+    kio
+    libksane
+  ];
 }

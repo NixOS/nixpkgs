@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, decorator
-, entrypoints
-, fetchPypi
-, hatchling
-, ipykernel
-, ipython
-, jupyter-client
-, psutil
-, python-dateutil
-, pythonOlder
-, pyzmq
-, tornado
-, tqdm
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchPypi,
+  hatchling,
+  importlib-metadata,
+  ipykernel,
+  ipython,
+  jupyter-client,
+  psutil,
+  python-dateutil,
+  pythonOlder,
+  pyzmq,
+  tornado,
+  tqdm,
+  traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "ipyparallel";
-  version = "8.8.0";
+  version = "9.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JATVn4ajqqO9J79rV993e/9cE2PBxuYEA3WdFu1C3Hs=";
+    hash = "sha256-LlksrSIAxalPu/9jm/825uyRIvNLNrL8a01njZ6Y8pw=";
   };
 
   # We do not need the jupyterlab build dependency, because we do not need to
@@ -36,13 +37,10 @@ buildPythonPackage rec {
       --replace '"jupyterlab==4.*",' ""
   '';
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     decorator
-    entrypoints
     ipykernel
     ipython
     jupyter-client
@@ -52,20 +50,17 @@ buildPythonPackage rec {
     tornado
     tqdm
     traitlets
-  ];
+  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
   # Requires access to cluster
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ipyparallel"
-  ];
+  pythonImportsCheck = [ "ipyparallel" ];
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Interactive Parallel Computing with IPython";
     homepage = "https://ipyparallel.readthedocs.io/";
     changelog = "https://github.com/ipython/ipyparallel/blob/${version}/docs/source/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
   };
 }

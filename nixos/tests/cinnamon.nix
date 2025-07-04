@@ -1,24 +1,33 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "cinnamon";
 
   meta.maintainers = lib.teams.cinnamon.members;
 
-  nodes.machine = { ... }: {
-    imports = [ ./common/user-account.nix ];
-    services.xserver.enable = true;
-    services.xserver.desktopManager.cinnamon.enable = true;
+  nodes.machine =
+    { ... }:
+    {
+      imports = [ ./common/user-account.nix ];
+      services.xserver.enable = true;
+      services.xserver.desktopManager.cinnamon.enable = true;
 
-    # We don't ship gnome-text-editor in Cinnamon module, we add this line mainly
-    # to catch eval issues related to this option.
-    environment.cinnamon.excludePackages = [ pkgs.gnome-text-editor ];
+      # We don't ship gnome-text-editor in Cinnamon module, we add this line mainly
+      # to catch eval issues related to this option.
+      environment.cinnamon.excludePackages = [ pkgs.gnome-text-editor ];
 
-    # For the sessionPath subtest.
-    services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gnome.gpaste ];
-  };
+      # For the sessionPath subtest.
+      services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
+
+      # For OCR test.
+      services.xserver.displayManager.lightdm.greeters.slick.extraConfig = ''
+        enable-hidpi = on
+      '';
+    };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
       env = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus DISPLAY=:0";
@@ -27,7 +36,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       # Call javascript in cinnamon (the shell), returns a tuple (success, output),
       # where `success` is true if the dbus call was successful and `output` is what
       # the javascript evaluates to.
-      eval = name: su "gdbus call --session -d org.Cinnamon -o /org/Cinnamon -m org.Cinnamon.Eval ${name}";
+      eval =
+        name: su "gdbus call --session -d org.Cinnamon -o /org/Cinnamon -m org.Cinnamon.Eval ${name}";
     in
     ''
       machine.wait_for_unit("display-manager.service")
@@ -59,6 +69,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       with subtest("Check if sessionPath option actually works"):
           machine.succeed("${eval "imports.gi.GIRepository.Repository.get_search_path\\(\\)"} | grep gpaste")
 
+      with subtest("Check if various environment variables are set"):
+          cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/nemo-desktop)/environ"
+          machine.succeed(f"{cmd} | grep 'XDG_SESSION_TYPE' | grep 'x11'")
+          machine.succeed(f"{cmd} | grep '__NIXOS_SET_ENVIRONMENT_DONE' | grep '1'")
+          # From the nixos/cinnamon module
+          machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
+
       with subtest("Open Cinnamon Settings"):
           machine.succeed("${su "cinnamon-settings themes >&2 &"}")
           machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'cinnamon-settings'")
@@ -89,4 +106,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       with subtest("Check if Cinnamon has ever coredumped"):
           machine.fail("coredumpctl --json=short | grep -E 'cinnamon|nemo'")
     '';
-})
+}

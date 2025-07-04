@@ -1,21 +1,17 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 {
   name = "chrony-ptp";
 
-  meta = {
-    maintainers = with lib.maintainers; [ gkleen ];
-  };
+  meta.maintainers = with lib.maintainers; [ gkleen ];
 
-  nodes = {
-    qemuGuest = { lib, ... }: {
-      boot.kernelModules = [ "ptp_kvm" ];
+  nodes.qemuGuest = {
+    boot.kernelModules = [ "ptp_kvm" ];
 
-      services.chrony = {
-        enable = true;
-        extraConfig = ''
-          refclock PHC /dev/ptp_kvm poll 2 dpoll -2 offset 0 stratum 3
-        '';
-      };
+    services.chrony = {
+      enable = true;
+      extraConfig = ''
+        refclock PHC /dev/ptp_kvm poll 2 dpoll -2 offset 0 stratum 3
+      '';
     };
   };
 
@@ -25,4 +21,4 @@ import ./make-test-python.nix ({ lib, ... }:
     qemuGuest.wait_for_unit('multi-user.target')
     qemuGuest.succeed('systemctl is-active chronyd.service')
   '';
-})
+}

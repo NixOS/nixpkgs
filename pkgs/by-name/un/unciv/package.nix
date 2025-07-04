@@ -1,42 +1,56 @@
-{ stdenv
-, lib
-, fetchurl
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, jre
-, libGL
-, libpulseaudio
-, libXxf86vm
+{
+  stdenv,
+  lib,
+  fetchurl,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  jre,
+  libGL,
+  libpulseaudio,
+  libXxf86vm,
 }:
 let
+  version = "4.16.5";
+
   desktopItem = makeDesktopItem {
     name = "unciv";
     exec = "unciv";
     comment = "An open-source Android/Desktop remake of Civ V";
     desktopName = "Unciv";
+    icon = "unciv";
     categories = [ "Game" ];
   };
 
-  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.isLinux [
-    libGL
-    libpulseaudio
-    libXxf86vm
-  ]);
+  desktopIcon = fetchurl {
+    url = "https://github.com/yairm210/Unciv/blob/${version}/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
+    hash = "sha256-Zuz+HGfxjGviGBKTiHdIFXF8UMRLEIfM8f+LIB/xonk=";
+  };
+
+  envLibPath = lib.makeLibraryPath (
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      libpulseaudio
+      libXxf86vm
+    ]
+  );
 
 in
 stdenv.mkDerivation rec {
   pname = "unciv";
-  version = "4.11.4";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-QqnM1kTXHHpf8l99J8ydIjTkl/LetijzIJgLYt6OaRA=";
+    hash = "sha256-CMyZlQ5zXHxUExH7aMIJ4nreEPz8Y0eeJ5nnt267SqU=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -46,13 +60,15 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
       --add-flags "-jar ${src}"
 
+    install -Dm444 ${desktopIcon} $out/share/icons/hicolor/512x512/apps/unciv.png
+
     runHook postInstall
   '';
 
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
-    description = "An open-source Android/Desktop remake of Civ V";
+    description = "Open-source Android/Desktop remake of Civ V";
     mainProgram = "unciv";
     homepage = "https://github.com/yairm210/Unciv";
     maintainers = with maintainers; [ tex ];

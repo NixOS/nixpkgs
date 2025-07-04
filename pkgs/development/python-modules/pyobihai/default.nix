@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -16,8 +17,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ejpenney";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pyobihai";
+    tag = version;
     hash = "sha256-tDPu/ceH7+7AnxokADDfl+G56B0+ri8RxXxXEyWa61Q=";
   };
 
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyobihai"
-  ];
+  pythonImportsCheck = [ "pyobihai" ];
 
   meta = with lib; {
     description = "Module to interact with Obihai devices";

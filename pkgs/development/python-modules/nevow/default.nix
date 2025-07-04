@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, twisted }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  twisted,
+}:
 
 buildPythonPackage rec {
   pname = "nevow";
   version = "0.14.5";
+  format = "setuptools";
   disabled = isPy3k;
 
   src = fetchPypi {

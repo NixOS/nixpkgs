@@ -1,11 +1,13 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
   pname = "pymorphy3-dicts-uk";
   version = "2.4.1.1.1663094765";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

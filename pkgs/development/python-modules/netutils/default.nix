@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   jinja2,
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.8.0";
+  version = "1.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,15 +22,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "netutils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Eqs/YkU2XrjD7x2WgvvR89/Pdi9AW9vhw3alJ8kIDgc=";
+    tag = "v${version}";
+    hash = "sha256-lUtxTzL3nkdICvTKozdnyx1wtwE4xwY7mcUqv3Wgw3Y=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [ jsonschema ];
 
-  passthru.optional-dependencies.optionals = [
+  optional-dependencies.optionals = [
     jsonschema
     napalm
   ];
@@ -66,6 +65,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/networktocode/netutils/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
   };
 }

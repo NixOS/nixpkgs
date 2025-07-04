@@ -1,8 +1,14 @@
-{ buildPecl, lib, rabbitmq-c, fetchFromGitHub }:
+{
+  buildPecl,
+  lib,
+  rabbitmq-c,
+  fetchFromGitHub,
+}:
 
 let
   version = "2.1.2";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "amqp";
 
@@ -22,6 +28,6 @@ in buildPecl {
     description = "PHP extension to communicate with any AMQP compliant server";
     license = licenses.php301;
     homepage = "https://github.com/php-amqp/php-amqp";
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
   };
 }

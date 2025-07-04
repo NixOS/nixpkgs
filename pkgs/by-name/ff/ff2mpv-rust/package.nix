@@ -1,37 +1,63 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
+
+let
+  firefoxPaths = [
+    "lib/mozilla/native-messaging-hosts"
+
+    # wrapFirefox only links lib/mozilla path, so this is ineffective
+    # Still the above path works, despite documentation stating otherwise
+    # See: https://librewolf.net/docs/faq/#how-do-i-get-native-messaging-to-work
+    # "lib/librewolf/native-messaging-hosts"
+  ];
+
+  chromiumPaths = [
+    "etc/chromium/native-messaging-hosts"
+    "etc/opt/vivaldi/native-messaging-hosts"
+    "etc/opt/chrome/native-messaging-hosts"
+    "etc/opt/edge/native-messaging-hosts"
+  ];
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "ff2mpv-rust";
-  version = "1.1.1";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "ryze312";
     repo = "ff2mpv-rust";
     rev = version;
-    hash = "sha256-sofv5uRLNbMT+w+ZDGjtKqBjYJk+UDzUDQrOiWvl5Hs=";
+    hash = "sha256-kJpKcwwwGjFYE7R4ZhkEGK44QqxsUEB/Scj0RoySta4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-O8OAynSdZdtqNS+wAQ1oAs2HjueC41O8RFqESRHr+6o=";
 
   postInstall = ''
-    mkdir -p $out/lib/mozilla/native-messaging-hosts/
-    $out/bin/ff2mpv-rust manifest > $out/lib/mozilla/native-messaging-hosts/ff2mpv.json
+    $out/bin/ff2mpv-rust manifest > manifest.json
+    $out/bin/ff2mpv-rust manifest_chromium > manifest_chromium.json
+
+    for path in ${toString firefoxPaths}
+    do
+        mkdir -p "$out/$path"
+        cp manifest.json "$out/$path/ff2mpv.json"
+    done
+
+    for path in ${toString chromiumPaths}
+    do
+        mkdir -p "$out/$path"
+        cp manifest_chromium.json "$out/$path/ff2mpv.json"
+    done
   '';
 
   meta = with lib; {
     description = "Native messaging host for ff2mpv written in Rust";
     homepage = "https://github.com/ryze312/ff2mpv-rust";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ arthsmn ];
+    maintainers = with maintainers; [ ryze ];
     mainProgram = "ff2mpv-rust";
   };
 }

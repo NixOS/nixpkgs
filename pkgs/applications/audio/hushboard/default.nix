@@ -1,21 +1,23 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, libappindicator
-, libpulseaudio
-, librsvg
-, pycairo
-, pygobject3
-, six
-, wrapGAppsHook
-, xlib
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  libappindicator,
+  libpulseaudio,
+  librsvg,
+  pycairo,
+  pygobject3,
+  six,
+  wrapGAppsHook3,
+  xlib,
 }:
 
 buildPythonApplication {
   pname = "hushboard";
   version = "unstable-2021-03-17";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";
@@ -25,7 +27,7 @@ buildPythonApplication {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -69,6 +71,6 @@ buildPythonApplication {
     description = "Mute your microphone while typing";
     mainProgram = "hushboard";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sersorrel ];
+    maintainers = with maintainers; [ keysmashes ];
   };
 }

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, supervise
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  supervise,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,20 +23,14 @@ buildPythonPackage rec {
       --replace 'which("supervise")' '"${supervise}/bin/supervise"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "supervise_api"
-  ];
+  pythonImportsCheck = [ "supervise_api" ];
 
   meta = {
-    description = "An API for running processes safely and securely";
+    description = "API for running processes safely and securely";
     homepage = "https://github.com/catern/supervise";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

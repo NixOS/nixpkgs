@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-openai";
-  version = "0.1.7";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -16,23 +17,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_embeddings_openai";
     inherit version;
-    hash = "sha256-xxzJggaAxM7fyYRdyHuU9oUdHMzh5Ib8kSmPj6jZ8n0=";
+    hash = "sha256-E2iq084ky67SPVrSUTQ87x63tKBtZWPWYG1ZyzR/7yA=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    llama-index-core
-  ];
+  dependencies = [ llama-index-core ];
 
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.embeddings.openai"
-  ];
+  pythonImportsCheck = [ "llama_index.embeddings.openai" ];
 
   meta = with lib; {
     description = "LlamaIndex Embeddings Integration for OpenAI";

@@ -1,8 +1,14 @@
-{ lib, python3Packages, fetchPypi, mopidy }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  mopidy,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-tunein";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
@@ -20,6 +26,6 @@ python3Packages.buildPythonApplication rec {
     description = "Mopidy extension for playing music from tunein";
     homepage = "https://github.com/kingosticks/mopidy-tunein";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

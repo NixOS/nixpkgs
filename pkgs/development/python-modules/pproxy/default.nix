@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodome
-, uvloop
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodome,
+  uvloop,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +22,14 @@ buildPythonPackage rec {
     sha256 = "sha256-bOqDdNiaZ5MRi/UeF0hJwMs+rfQBKRsTmXrZ6ieIguo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pycryptodome
     uvloop
   ];
 
-  pythonImportsCheck = [
-    "pproxy"
-  ];
+  pythonImportsCheck = [ "pproxy" ];
 
   disabledTests = [
     # Tests try to connect to outside Internet, so disabled

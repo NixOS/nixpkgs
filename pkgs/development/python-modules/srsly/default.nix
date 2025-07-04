@@ -1,38 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cython
-, catalogue
-, mock
-, numpy
-, psutil
-, pytest
-, ruamel-yaml
-, setuptools
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  cython,
+  catalogue,
+  mock,
+  numpy,
+  psutil,
+  pytest,
+  ruamel-yaml,
+  setuptools,
+  tornado,
 }:
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "2.4.8";
+  version = "2.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sk2VplAJwkR+C0nNoEOsU/7PTwnjWNh6V0RkWPkbipE=";
+    hash = "sha256-qxtL9s8+Kdoj2uBJPdFRf7eHB1IGUSNRQhuJtPwnx34=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    catalogue
-  ];
+  dependencies = [ catalogue ];
 
   nativeCheckInputs = [
     mock
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  pythonImportsCheck = [
-    "srsly"
-  ];
+  pythonImportsCheck = [ "srsly" ];
 
   meta = with lib; {
     changelog = "https://github.com/explosion/srsly/releases/tag/v${version}";

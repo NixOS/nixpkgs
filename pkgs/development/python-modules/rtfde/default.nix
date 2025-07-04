@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lark
-, lxml
-, oletools
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lark,
+  lxml,
+  oletools,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rtfde";
-  version = "0.1.1";
+  version = "0.1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,19 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "seamustuohy";
     repo = "RTFDE";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ai9JQ3gphY/IievBNdHiblIpc0IPS9wp7CVvBIRzG/4=";
+    tag = version;
+    hash = "sha256-dtPWgtOYpGaNRmIE7WNGJd/GWB2hQXsFJDDSHIcIjY4=";
   };
 
-  postPatch = ''
-    # https://github.com/seamustuohy/RTFDE/issues/31
-    substituteInPlace setup.py \
-      --replace-fail "==" ">="
-  '';
+  build-system = [ setuptools ];
 
-  build-system = [
-    setuptools
-  ];
+  pythonRelaxDeps = [ "lark" ];
 
   dependencies = [
     lark
@@ -43,15 +38,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "RTFDE"
+  pythonImportsCheck = [ "RTFDE" ];
+
+  disabledTests = [
+    # Malformed encapsulated RTF discovered
+    "test_encoded_bytes_stay_encoded_character"
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/seamustuohy/RTFDE/releases/tag/${src.tag}";
     description = "Library for extracting encapsulated HTML and plain text content from the RTF bodies";
     homepage = "https://github.com/seamustuohy/RTFDE";
-    changelog = "https://github.com/seamustuohy/RTFDE/releases/tag/${version}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

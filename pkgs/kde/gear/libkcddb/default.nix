@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "libkcddb";
 
-  extraBuildInputs = [libmusicbrainz5];
+  extraBuildInputs = [ libmusicbrainz5 ];
 }

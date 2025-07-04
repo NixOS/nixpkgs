@@ -1,8 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
-let cfg = config.services.networking.websockify; in {
+let
+  cfg = config.services.networking.websockify;
+in
+{
   options = {
     services.networking.websockify = {
       enable = mkOption {
@@ -27,7 +35,7 @@ let cfg = config.services.networking.websockify; in {
 
       portMap = mkOption {
         description = "Ports to map by default.";
-        default = {};
+        default = { };
         type = types.attrsOf types.int;
       };
     };

@@ -1,22 +1,23 @@
-{ lib
-, copyDesktopItems
-, fetchurl
-, ffmpeg
-, gitUpdater
-, jre
-, libarchive
-, makeDesktopItem
-, openjfx
-, stdenvNoCC
-, wrapGAppsHook
+{
+  lib,
+  copyDesktopItems,
+  fetchurl,
+  ffmpeg,
+  gitUpdater,
+  jre,
+  libarchive,
+  makeDesktopItem,
+  openjfx,
+  stdenvNoCC,
+  wrapGAppsHook3,
 }:
 let
   pname = "maptool";
-  version = "1.14.3";
+  version = "1.17.0";
   repoBase = "https://github.com/RPTools/maptool";
   src = fetchurl {
     url = "${repoBase}/releases/download/${version}/maptool-${version}-x86_64.pkg.tar.zst";
-    hash = "sha256-KjP6zugQw9r1hvdxqOgTrt4hYMYg+lgjkgkj3tfb38s=";
+    hash = "sha256-EyzHRc3k7mAh5C9AM4L5/ItrxeCUWuWeW1SuJrOh4Xo=";
   };
 
   meta = with lib; {
@@ -32,7 +33,15 @@ let
     platforms = [ "x86_64-linux" ];
   };
 
-  javafxModules = [ "base" "controls" "media" "swing" "web" "fxml" "graphics" ];
+  javafxModules = [
+    "base"
+    "controls"
+    "media"
+    "swing"
+    "web"
+    "fxml"
+    "graphics"
+  ];
 
   appClasspath = "share/${pname}";
 
@@ -41,11 +50,12 @@ let
       "${openjfx}/modules_src/javafx.${mod}/module-info.java"
       "${openjfx}/modules/javafx.${mod}"
       "${openjfx}/modules_libs/javafx.${mod}"
-    ]) javafxModules ++
-    [ "$out/${appClasspath}/*" ];
+    ]) javafxModules
+    ++ [ "$out/${appClasspath}/*" ];
 
   jvmArgs = [
-    "-cp" (lib.concatStringsSep ":" classpath)
+    "-cp"
+    (lib.concatStringsSep ":" classpath)
     "-Xss8M"
     "-Dsun.java2d.d3d=false"
     "-Dfile.encoding=UTF-8"
@@ -72,7 +82,12 @@ let
   rdnsName = "net.rptools.maptool";
 in
 stdenvNoCC.mkDerivation {
-  inherit pname version src meta;
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -82,7 +97,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     copyDesktopItems
     libarchive
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   desktopItems = [

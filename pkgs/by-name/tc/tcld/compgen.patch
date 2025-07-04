@@ -1,0 +1,15 @@
+diff --git a/app/app.go b/app/app.go
+index 57a9b36fdb..96acf94dc1 100644
+--- a/app/app.go
++++ b/app/app.go
+@@ -28,6 +28,7 @@
+ 			EnableDebugLogsFlag,
+ 		},
+ 		Commands: params.Commands,
++		EnableBashCompletion: true,
+ 	}
+ 
+ 	return app, nil
+diff --git a/compgen.patch b/compgen.patch
+new file mode 100644
+index 0000000000..e69de29bb2

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clzip";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchurl {
     url = "mirror://savannah/lzip/clzip/clzip-${finalAttrs.version}.tar.gz";
-    hash = "sha256-9j/hJFuDL+B/9nnpubhofpN5q2E6Jr+wrKN1TIsWLXM=";
+    hash = "sha256-KH6FFSaP+NFiRIeODi4tczwD2S3SsrhJFdde9N5sJh8=";
   };
 
   meta = with lib; {
@@ -17,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C language version of lzip";
     mainProgram = "clzip";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 })

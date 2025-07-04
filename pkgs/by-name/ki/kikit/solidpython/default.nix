@@ -1,18 +1,14 @@
 # SolidPython is an unmaintained library with old dependencies.
-{ buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, fetchFromGitLab
-, fetchpatch
-, lib
-, pythonRelaxDepsHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 
-, poetry-core
-, prettytable
-, pypng
-, ply
-, setuptools
-, euclid3
+  poetry-core,
+  prettytable,
+  ply,
+  setuptools,
+  euclid3,
 }:
 buildPythonPackage rec {
   pname = "solidpython";
@@ -28,7 +24,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -56,11 +51,11 @@ buildPythonPackage rec {
     "solid"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to the OpenSCAD declarative geometry language";
     homepage = "https://github.com/SolidCode/SolidPython";
     changelog = "https://github.com/SolidCode/SolidPython/releases/tag/v${version}";
-    maintainers = with maintainers; [ jfly ];
-    license = licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ jfly ];
+    license = lib.licenses.lgpl21Plus;
   };
 }

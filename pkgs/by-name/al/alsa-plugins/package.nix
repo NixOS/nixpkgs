@@ -1,21 +1,35 @@
-{ stdenv, fetchurl, lib, pkg-config, alsa-lib, libogg, libpulseaudio ? null, libjack2 ? null }:
+{
+  stdenv,
+  fetchurl,
+  lib,
+  pkg-config,
+  alsa-lib,
+  ffmpeg,
+  libjack2,
+  libogg,
+  libpulseaudio,
+  speexdsp,
+}:
 
 stdenv.mkDerivation rec {
   pname = "alsa-plugins";
-  version = "1.2.7.1";
+  version = "1.2.12";
 
   src = fetchurl {
-    url = "mirror://alsa/plugins/${pname}-${version}.tar.bz2";
-    hash = "sha256-jDN4FJVLt8FnRWczpgRhQqKTHxLsy6PsKkrmGKNDJRE=";
+    url = "mirror://alsa/plugins/alsa-plugins-${version}.tar.bz2";
+    hash = "sha256-e9ioPTBOji2GoliV2Nyw7wJFqN8y4nGVnNvcavObZvI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  # ToDo: a52, etc.?
-  buildInputs =
-    [ alsa-lib libogg ]
-    ++ lib.optional (libpulseaudio != null) libpulseaudio
-    ++ lib.optional (libjack2 != null) libjack2;
+  buildInputs = [
+    alsa-lib
+    ffmpeg
+    libjack2
+    libogg
+    libpulseaudio
+    speexdsp
+  ];
 
   meta = with lib; {
     description = "Various plugins for ALSA";

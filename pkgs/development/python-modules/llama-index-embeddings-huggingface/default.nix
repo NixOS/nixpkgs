@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, poetry-core
-, pythonOlder
-, sentence-transformers
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  hatchling,
+  pythonOlder,
+  sentence-transformers,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-huggingface";
-  version = "0.2.0";
+  version = "0.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,12 +18,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_embeddings_huggingface";
     inherit version;
-    hash = "sha256-3PCplFXzfE4aL91c1lyd0aRRu4aMP4DDNcTQybadAHE=";
+    hash = "sha256-f26aAx2RRvI131l8DM1igM3pa5tDf5kFLOebty5frF4=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core
@@ -32,9 +31,7 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.embeddings.huggingface"
-  ];
+  pythonImportsCheck = [ "llama_index.embeddings.huggingface" ];
 
   meta = with lib; {
     description = "LlamaIndex Embeddings Integration for Huggingface";

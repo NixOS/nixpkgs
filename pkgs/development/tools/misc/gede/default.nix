@@ -1,17 +1,34 @@
-{ mkDerivation, lib, fetchurl, makeWrapper, python3, qmake, ctags, gdb }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  qtbase,
+  qmake,
+  qtserialport,
+  ctags,
+  gdb,
+}:
 
 mkDerivation rec {
   pname = "gede";
-  version = "2.18.3";
+  version = "2.22.1";
 
-  src = fetchurl {
-    url = "http://gede.dexar.se/uploads/source/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RUl60iPa4XSlUilpYKaYQbRmLqthKHAvYonnhufjPsE=";
+  src = fetchFromGitHub {
+    owner = "jhn98032";
+    repo = "gede";
+    tag = "v${version}";
+    hash = "sha256-6YSrqLDuV4G/uvtYy4vzbwqrMFftMvZdp3kr3R436rs=";
   };
 
-  nativeBuildInputs = [ qmake makeWrapper python3 ];
-
-  buildInputs = [ ctags ];
+  nativeBuildInputs = [
+    ctags
+    makeWrapper
+    python3
+    qmake
+    qtserialport
+  ];
 
   strictDeps = true;
 
@@ -22,7 +39,13 @@ mkDerivation rec {
   installPhase = ''
     python build.py install --verbose --prefix="$out"
     wrapProgram $out/bin/gede \
-      --prefix PATH : ${lib.makeBinPath [ ctags gdb ]}
+      --prefix QT_PLUGIN_PATH : ${qtbase}/${qtbase.qtPluginPrefix} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ctags
+          gdb
+        ]
+      }
   '';
 
   meta = with lib; {

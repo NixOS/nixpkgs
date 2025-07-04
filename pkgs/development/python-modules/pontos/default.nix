@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, colorful
-, fetchFromGitHub
-, git
-, httpx
-, lxml
-, packaging
-, poetry-core
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, semver
-, shtab
-, rich
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  colorful,
+  fetchFromGitHub,
+  git,
+  httpx,
+  lxml,
+  packaging,
+  poetry-core,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  semver,
+  shtab,
+  rich,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "24.3.2";
+  version = "25.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,15 +27,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DXZDXipYBClqSdlTJsaPWaKr3qTiJ3osm3hHPp/MPow=";
+    tag = "v${version}";
+    hash = "sha256-WRK+KxMUT2kk86KV8gGb8RvrtSvann4W/TkH3U9o+QI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     colorful
     httpx
     lxml
@@ -73,14 +72,12 @@ buildPythonPackage rec {
     "test_verify_version_does_not_match"
   ];
 
-  pythonImportsCheck = [
-    "pontos"
-  ];
+  pythonImportsCheck = [ "pontos" ];
 
   meta = with lib; {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
-    changelog = "https://github.com/greenbone/pontos/releases/tag/v${version}";
+    changelog = "https://github.com/greenbone/pontos/releases/tag/${src.tag}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

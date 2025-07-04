@@ -1,13 +1,15 @@
-{ buildPythonPackage
-, fetchPypi
-, pillow
-, torchvision
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+  torchvision,
+  lib,
 }:
 
 buildPythonPackage rec {
   pname = "facenet-pytorch";
   version = "2.5.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,9 +18,12 @@ buildPythonPackage rec {
 
   doCheck = false; # pypi version doesn't ship with tests
 
-  pythonImportsCheck = ["facenet_pytorch"];
+  pythonImportsCheck = [ "facenet_pytorch" ];
 
-  propagatedBuildInputs = [ pillow torchvision ];
+  propagatedBuildInputs = [
+    pillow
+    torchvision
+  ];
 
   meta = {
     description = "Pretrained Pytorch face detection (MTCNN) and facial recognition (InceptionResnet) models";

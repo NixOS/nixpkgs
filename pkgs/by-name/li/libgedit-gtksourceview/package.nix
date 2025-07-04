@@ -1,30 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, docbook-xsl-nons
-, gobject-introspection
-, gtk-doc
-, meson
-, ninja
-, pkg-config
-, libxml2
-, glib
-, gtk3
-, shared-mime-info
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  docbook-xsl-nons,
+  gobject-introspection,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  libxml2,
+  glib,
+  gtk3,
+  shared-mime-info,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gtksourceview";
-  version = "299.0.5";
+  version = "299.5.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
-  src = fetchFromGitHub {
-    owner = "gedit-technology";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "gedit";
     repo = "libgedit-gtksourceview";
     rev = finalAttrs.version;
-    hash = "sha256-PQ7cpul9h1JzywDWm9YyD95B1ONSdUUk0EQJMEGoRN0=";
+    hash = "sha256-3HnlYLa1Zy1GRpX5fjEoXUzfB9X6nydpVjZTzJyhvIs=";
   };
 
   patches = [
@@ -55,13 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     shared-mime-info
   ];
 
-  passthru.updateScript = gitUpdater {
-    odd-unstable = true;
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Source code editing widget for GTK";
-    homepage = "https://github.com/gedit-technology/libgedit-gtksourceview";
+    homepage = "https://gitlab.gnome.org/World/gedit/libgedit-gtksourceview";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ bobby285271 ];
     platforms = platforms.linux;

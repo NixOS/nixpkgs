@@ -1,31 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "immutables";
-  version = "0.20";
-  format = "setuptools";
+  version = "0.21";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "MagicStack";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fEECtP6WQVzwSzBYX+CbhQtzkB/1WC3OYKXk2XY//xA=";
+    repo = "immutables";
+    tag = "v${version}";
+    hash = "sha256-wZuCZEVXzycqA/h27RIe59e2QQALem8mfb3EdjwQr9w=";
   };
 
   postPatch = ''
     rm tests/conftest.py
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Version mismatch
@@ -37,12 +39,10 @@ buildPythonPackage rec {
     "tests/test_mypy.py"
   ];
 
-  pythonImportsCheck = [
-    "immutables"
-  ];
+  pythonImportsCheck = [ "immutables" ];
 
   meta = with lib; {
-    description = "An immutable mapping type";
+    description = "Immutable mapping type";
     homepage = "https://github.com/MagicStack/immutables";
     changelog = "https://github.com/MagicStack/immutables/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

@@ -1,7 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, iter
-, containers
-, mdx
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  iter,
+  containers,
+  mdx,
 }:
 
 buildDunePackage rec {
@@ -28,7 +31,7 @@ buildDunePackage rec {
   nativeCheckInputs = [ mdx.bin ];
 
   meta = {
-    description = "A modular sat/smt solver with proof output.";
+    description = "Modular sat/smt solver with proof output";
     homepage = "https://gbury.github.io/mSAT/";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.vbgl ];

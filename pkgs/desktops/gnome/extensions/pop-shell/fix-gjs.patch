@@ -24,3 +24,15 @@ index fbcafbf..ef409ee 100644
          if (!resp) {
              return null;
          }
+diff --git a/src/color_dialog/src/main.ts b/src/color_dialog/src/main.ts
+index a9637e5..5cb86ce 100644
+--- a/src/color_dialog/src/main.ts
++++ b/src/color_dialog/src/main.ts
+@@ -6,6 +6,7 @@ import Gtk from 'gi://Gtk?version=3.0';
+ import Gdk from 'gi://Gdk';
+ 
+ const EXT_PATH_DEFAULTS = [
++    '/run/current-system/sw/share/gnome-shell/extensions/',
+     GLib.get_home_dir() + '/.local/share/gnome-shell/extensions/',
+     '/usr/share/gnome-shell/extensions/',
+ ];

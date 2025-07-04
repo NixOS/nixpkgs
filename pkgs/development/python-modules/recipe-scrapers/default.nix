@@ -1,42 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, extruct
-, language-tags
-, regex
-, requests
-, pytestCheckHook
-, responses
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  extruct,
+  isodate,
+  language-tags,
+  regex,
+  requests,
+  pytestCheckHook,
+  responses,
+  setuptools,
+  pythonOlder,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "14.55.0";
+  version = "15.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-HjR4Lwlcrpeqv6BXI+aYCL9e7ZTaTa522z0lSW03wW0=";
+    tag = version;
+    hash = "sha256-G2FKv4HZ6Kf4u/EDflkYqiY1uelWBuIE+UrqeCp2XL8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     extruct
+    isodate
     language-tags
     regex
-    requests
   ];
+
+  optional-dependencies = {
+    online = [ requests ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -48,14 +53,18 @@ buildPythonPackage rec {
     "test_instructions"
   ];
 
-  pythonImportsCheck = [
-    "recipe_scrapers"
-  ];
+  pythonImportsCheck = [ "recipe_scrapers" ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) mealie tandoor-recipes;
+    };
+  };
 
   meta = with lib; {
     description = "Python package for scraping recipes data";
     homepage = "https://github.com/hhursev/recipe-scrapers";
-    changelog = "https://github.com/hhursev/recipe-scrapers/releases/tag/${version}";
+    changelog = "https://github.com/hhursev/recipe-scrapers/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ ambroisie ];
   };

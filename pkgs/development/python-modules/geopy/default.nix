@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, geographiclib
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  geographiclib,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -16,15 +17,13 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
+    owner = "geopy";
+    repo = "geopy";
+    tag = version;
     hash = "sha256-mlOXDEtYry1IUAZWrP2FuY/CGliUnCPYLULnLNN0n4Y=";
   };
 
-  propagatedBuildInputs = [
-    geographiclib
-  ];
+  propagatedBuildInputs = [ geographiclib ];
 
   nativeCheckInputs = [
     docutils
@@ -37,9 +36,7 @@ buildPythonPackage rec {
     "test_user_agent_default"
   ];
 
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
-    "test/test_init.py"
-  ];
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [ "test/test_init.py" ];
 
   pytestFlagsArray = [ "--skip-tests-requiring-internet" ];
 

@@ -1,30 +1,79 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pytestCheckHook
-, pythonOlder
-, numpy
-, lxml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
+  numpy,
+  lxml,
+  trimesh,
+
+  # optional deps
+  colorlog,
+  manifold3d,
+  charset-normalizer,
+  jsonschema,
+  networkx,
+  svg-path,
+  pycollada,
+  shapely,
+  xxhash,
+  rtree,
+  httpx,
+  scipy,
+  pillow,
+  mapbox-earcut,
+  embreex,
 }:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.3.0";
-  format = "pyproject";
+  version = "4.6.12";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-kUXi26NhFGS3liGaGHfm0HTRWXlnaIa80lxgLQ/0FyM=";
+  src = fetchFromGitHub {
+    owner = "mikedh";
+    repo = "trimesh";
+    tag = version;
+    hash = "sha256-GjwAtbijzIp2Lec+oCYah3+e2bgscHpZrXJXjqC5x9Y=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
-  nativeCheckInputs = [ lxml pytestCheckHook ];
+  optional-dependencies = {
+    easy =
+      [
+        colorlog
+        manifold3d
+        charset-normalizer
+        lxml
+        jsonschema
+        networkx
+        svg-path
+        pycollada
+        shapely
+        xxhash
+        rtree
+        httpx
+        scipy
+        pillow
+        # vhacdx # not packaged
+        mapbox-earcut
+      ]
+      ++ lib.optionals embreex.meta.available [
+        embreex
+      ];
+  };
+
+  nativeCheckInputs = [
+    lxml
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # requires loading models which aren't part of the Pypi tarball
@@ -33,13 +82,28 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/test_minimal.py" ];
 
-  pythonImportsCheck = [ "trimesh" ];
+  pythonImportsCheck = [
+    "trimesh"
+    "trimesh.ray"
+    "trimesh.path"
+    "trimesh.path.exchange"
+    "trimesh.scene"
+    "trimesh.voxel"
+    "trimesh.visual"
+    "trimesh.viewer"
+    "trimesh.exchange"
+    "trimesh.resources"
+    "trimesh.interfaces"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for loading and using triangular meshes";
-    homepage = "https://trimsh.org/";
-    changelog = "https://github.com/mikedh/trimesh/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gebner pbsds ];
+    homepage = "https://trimesh.org/";
+    changelog = "https://github.com/mikedh/trimesh/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    mainProgram = "trimesh";
+    maintainers = with lib.maintainers; [
+      pbsds
+    ];
   };
 }

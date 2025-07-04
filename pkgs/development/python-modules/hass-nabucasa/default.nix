@@ -14,32 +14,33 @@
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   snitun,
   syrupy,
+  webrtc-models,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.80.0";
+  version = "0.101.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = "hass-nabucasa";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8KxnS6LTK077/hr81JOiOj8GaNWBXO8XlvpYBm/sZbI=";
+    tag = version;
+    hash = "sha256-AxkLvSXGCs31rDcoo0PWqG8p/CC2/oj4XzZ2j882Ma4=";
   };
 
-  pythonRelaxDeps = [ "acme" ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "acme"
+    "josepy"
+  ];
 
   dependencies = [
     acme
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     pycognito
     pyjwt
     snitun
+    webrtc-models
   ];
 
   nativeCheckInputs = [
@@ -66,7 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for the Home Assistant cloud integration";
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
-    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${version}";
+    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${src.tag}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

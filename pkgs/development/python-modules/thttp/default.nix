@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,20 +16,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sesh";
     repo = "thttp";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-e15QMRMpTcWo8TfH3tk23ybSlXFb8F4B/eqAp9oyK8g=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "thttp"
-  ];
+  pythonImportsCheck = [ "thttp" ];
 
   meta = with lib; {
-    description = "A lightweight wrapper around urllib";
+    description = "Lightweight wrapper around urllib";
     homepage = "https://github.com/sesh/thttp";
     changelog = "https://github.com/sesh/thttp/releases/tag/${version}";
     license = licenses.mit;

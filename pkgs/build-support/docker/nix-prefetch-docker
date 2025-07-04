@@ -121,7 +121,9 @@ fi
 
 sourceUrl="docker://$imageName@$imageDigest"
 
-tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/skopeo-copy-tmp-XXXXXXXX")"
+# nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+# to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+tmpPath="$(realpath "$(mktemp -d --tmpdir skopeo-copy-tmp-XXXXXXXX)")"
 trap "rm -rf \"$tmpPath\"" EXIT
 
 tmpFile="$tmpPath/$(get_name $finalImageName $finalImageTag)"
@@ -133,7 +135,7 @@ else
 fi
 
 # Compute the hash.
-imageHash=$(nix-hash --flat --type $hashType --base32 "$tmpFile")
+imageHash=$(nix-hash --flat --type $hashType --sri "$tmpFile")
 
 # Add the downloaded file to Nix store.
 finalPath=$(nix-store --add-fixed "$hashType" "$tmpFile")
@@ -152,7 +154,7 @@ cat <<EOF
 {
   imageName = "$imageName";
   imageDigest = "$imageDigest";
-  sha256 = "$imageHash";
+  hash = "$imageHash";
   finalImageName = "$finalImageName";
   finalImageTag = "$finalImageTag";
 }
@@ -164,7 +166,7 @@ cat <<EOF
 {
   "imageName": "$imageName",
   "imageDigest": "$imageDigest",
-  "sha256": "$imageHash",
+  "hash": "$imageHash",
   "finalImageName": "$finalImageName",
   "finalImageTag": "$finalImageTag"
 }

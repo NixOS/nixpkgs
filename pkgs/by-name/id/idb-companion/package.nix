@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A powerful command line tool for automating iOS simulators and devices";
+    description = "Powerful command line tool for automating iOS simulators and devices";
     homepage = "https://github.com/facebook/idb";
     license = licenses.mit;
     platforms = platforms.darwin;

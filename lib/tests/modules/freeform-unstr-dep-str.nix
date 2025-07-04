@@ -1,4 +1,5 @@
-{ lib, config, ... }: {
+{ lib, config, ... }:
+{
   options.value = lib.mkOption {
     type = lib.types.nullOr lib.types.str;
     default = null;

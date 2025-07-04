@@ -1,67 +1,63 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-# install dependencies
-, pytest
-, vcrpy
-# test dependencies
-, hatchling
-, pytestCheckHook
-, pytest-httpbin
-, pytest-mock
-, requests
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # install dependencies
+  pytest,
+  vcrpy,
+  # test dependencies
+  hatchling,
+  pytestCheckHook,
+  pytest-httpbin,
+  pytest-mock,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-recording";
-  version = "0.13.1";
-  format = "pyproject";
+  version = "0.13.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kiwicom";
     repo = "pytest-recording";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HyV1wWYS/8p45mZxgA1XSChLCTYq5iOzBRqKXyZpwgo=";
+    tag = "v${version}";
+    hash = "sha256-S++MnI0GgpQxS6kFkt05kcE4JMW7jyFjJ3o7DhfYoVA=";
   };
 
+  build-system = [ hatchling ];
+
   buildInputs = [
-    hatchling
     pytest
   ];
 
-  propagatedBuildInputs = [
-    vcrpy
-  ];
+  dependencies = [ vcrpy ];
 
   __darwinAllowLocalNetworking = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-httpbin
     pytest-mock
     requests
   ];
 
-  disabledTests = [
-    "test_block_network_with_allowed_hosts"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Missing socket.AF_NETLINK
-    "test_other_socket"
-  ];
+  disabledTests =
+    [ "test_block_network_with_allowed_hosts" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Missing socket.AF_NETLINK
+      "test_other_socket"
+    ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
-  pythonImportsCheck = [
-    "pytest_recording"
-  ];
+  pythonImportsCheck = [ "pytest_recording" ];
 
-  meta = with lib; {
-    description = "A pytest plugin that allows you recording of network interactions via VCR.py";
+  meta = {
+    description = "Pytest plugin that allows you recording of network interactions via VCR.py";
     homepage = "https://github.com/kiwicom/pytest-recording";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jbgosselin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jbgosselin ];
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, razdel
-, navec
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  razdel,
+  navec,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-AtIle9ybnMHSQr007iyGHGSPcIPveJj+FGirzDge95k=";
   };
 
-  propagatedBuildInputs = [ numpy navec razdel ];
+  propagatedBuildInputs = [
+    numpy
+    navec
+    razdel
+  ];
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests/" ];
   disabledTestPaths = [

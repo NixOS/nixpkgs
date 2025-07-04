@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, qtbase
-, qttools
-, wrapQtAppsHook
-, syntax-highlighting
-, cmake
-, ninja
-, python3
-, runtimeShell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+  syntax-highlighting,
+  cmake,
+  ninja,
+  python3,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,15 +25,26 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config wrapQtAppsHook python3 ];
-  buildInputs = [ qtbase qttools syntax-highlighting ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    wrapQtAppsHook
+    python3
+  ];
+  buildInputs = [
+    qtbase
+    qttools
+    syntax-highlighting
+  ];
 
   postPatch = ''
     substituteInPlace src/Core/Runner.cpp --replace-fail "/bin/bash" "${runtimeShell}"
+    substituteInPlace dist/linux/cpeditor.desktop --replace-fail 'Exec=/usr/bin/cpeditor' "Exec=cpeditor"
   '';
 
   meta = with lib; {
-    description = "An IDE specially designed for competitive programming";
+    description = "IDE specially designed for competitive programming";
     homepage = "https://cpeditor.org";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

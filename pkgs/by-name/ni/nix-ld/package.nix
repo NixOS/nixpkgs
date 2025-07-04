@@ -1,35 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, nixosTests
+{
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  rustPlatform,
+  lib,
 }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "nix-ld";
-  version = "1.2.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
-    owner = "mic92";
+    owner = "nix-community";
     repo = "nix-ld";
     rev = version;
-    hash = "sha256-h+odOVyiGmEERMECoFOj5P7FPiMR8IPRzroFA4sKivg=";
+    hash = "sha256-ULoitJD5bMu0pFvh35cY5EEYywxj4e2fYOpqZwKB1lk=";
   };
 
-  doCheck = true;
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cDbszVjZcomag0HZvXM+17SjDiGS07iPj78zgsXstHc=";
 
-  nativeBuildInputs = [ meson ninja ];
+  hardeningDisable = [ "stackprotector" ];
 
-  mesonFlags = [
-    "-Dnix-system=${stdenv.system}"
-  ];
+  NIX_SYSTEM = stdenv.system;
+  RUSTC_BOOTSTRAP = "1";
 
-  hardeningDisable = [
-    "stackprotector"
-  ];
+  preCheck = ''
+    export NIX_LD=${stdenv.cc.bintools.dynamicLinker}
+  '';
 
   postInstall = ''
+    mkdir -p $out/libexec
+    ln -s $out/bin/nix-ld $out/libexec/nix-ld
+
     mkdir -p $out/nix-support
 
     ldpath=/${stdenv.hostPlatform.libDir}/$(basename ${stdenv.cc.bintools.dynamicLinker})
@@ -42,11 +45,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.nix-ld;
 
-  meta = with lib; {
+  meta = {
     description = "Run unpatched dynamic binaries on NixOS";
-    homepage = "https://github.com/Mic92/nix-ld";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/nix-community/nix-ld";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,24 +23,26 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    beautifulsoup4
-    publicsuffix2
-    redis
-    tornado
-  ] ++ redis.optional-dependencies.hiredis;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      beautifulsoup4
+      publicsuffix2
+      redis
+      tornado
+    ]
+    ++ redis.optional-dependencies.hiredis;
 
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Universal WHOIS proxy server";
     homepage = "https://github.com/Lookyloo/uwhoisd";
     changelog = "https://github.com/Lookyloo/uwhoisd/blob/${version}/ChangeLog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "should-dsl";
@@ -16,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Should assertions in Python as clear and readable as possible";
-    homepage = "http://www.should-dsl.info/";
+    homepage = "https://github.com/nsi-iff/should-dsl";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
   };

@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, asttokens
-, colorama
-, executing
-, pygments
+  # dependencies
+  asttokens,
+  colorama,
+  executing,
+  pygments,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "icecream";
-  version = "2.1.3";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CqSnwzdOw2FTodCPgeMIDoPYrB7v2X0vT+lUTo+bSd4=";
+    hash = "sha256-WHVeWDl9U1CnbyWXbe57YH9f67PG4c3f5rGVGJbpFXM=";
   };
 
   postPatch = ''
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace assertRegexpMatches assertRegex
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     asttokens
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     pygments
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # icecream.icecream.NoSourceAvailableError
@@ -53,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A little library for sweet and creamy print debugging";
+    description = "Little library for sweet and creamy print debugging";
     homepage = "https://github.com/gruns/icecream";
     license = licenses.mit;
     maintainers = with maintainers; [ renatoGarcia ];

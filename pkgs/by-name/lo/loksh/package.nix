@@ -1,25 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ncurses
-, ninja
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ncurses,
+  ninja,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loksh";
-  version = "7.5";
+  version = "7.7";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "loksh";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-4cBO1FXUnN/swwEeM2lq5RJJGmLKInMLZkz942EKy6k=";
+    hash = "sha256-BxQ7SZwRP9PlD2MV7DqG7tQ2lqzlkTwmaKwbgC7NYrc=";
   };
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -59,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       systems.
     '';
     license = with lib.licenses; [ publicDomain ];
-    maintainers = with lib.maintainers; [ AndersonTorres cameronnemo ];
+    maintainers = with lib.maintainers; [ cameronnemo ];
     platforms = lib.platforms.linux;
   };
 })

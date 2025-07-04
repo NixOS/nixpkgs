@@ -1,36 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, backports-zoneinfo
-, python-dateutil
-, pytz
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  replaceVars,
+  hatch-vcs,
+  hatchling,
+  python-dateutil,
+  tzdata,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "5.0.12";
+  version = "6.3.1";
   pname = "icalendar";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collective";
     repo = "icalendar";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-313NcknY2zad4lI+/P0szDVjEQ8VatnSiBiaG/Ta1Bw=";
+    tag = "v${version}";
+    hash = "sha256-lLcMuwKFdZbjscrp4dW5ybPHwcx9RHf44RH3BWwO6ng=";
   };
 
+  patches = [
+    (replaceVars ./no-dynamic-version.patch {
+      inherit version;
+    })
+  ];
+
   build-system = [
-    setuptools
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
     python-dateutil
-    pytz
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
+    tzdata
   ];
 
   nativeCheckInputs = [
@@ -38,15 +44,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # AssertionError: assert {'Atlantic/Jan_Mayen'} == {'Arctic/Longyearbyen'}
+    "test_dateutil_timezone_is_matched_with_tzname"
+    "test_docstring_of_python_file"
+  ];
+
   pytestFlagsArray = [ "src/icalendar" ];
 
   meta = with lib; {
-    changelog = "https://github.com/collective/icalendar/blob/v${version}/CHANGES.rst";
-    description = "A parser/generator of iCalendar files";
+    changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";
+    description = "Parser/generator of iCalendar files";
     mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";
     license = licenses.bsd2;
     maintainers = with maintainers; [ olcai ];
   };
-
 }

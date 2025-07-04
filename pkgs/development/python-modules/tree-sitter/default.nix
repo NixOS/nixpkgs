@@ -1,57 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tree-sitter-python,
+  tree-sitter-rust,
+  tree-sitter-html,
+  tree-sitter-javascript,
+  tree-sitter-json,
 }:
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.21.1";
+  version = "0.24.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-U4ZdU0lxjZO/y0q20bG5CLKipnfpaxzV3AFR6fGS7m4=";
+    tag = "v${version}";
+    hash = "sha256-ZDt/8suteaAjGdk71l8eej7jDkkVpVDBIZS63SA8tsU=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    #  Replace distutils with setuptools, https://github.com/tree-sitter/py-tree-sitter/pull/214
-    (fetchpatch {
-      name = "replace-distutils.patch";
-      url = "https://github.com/tree-sitter/py-tree-sitter/commit/80d3cae493c4a47e49cc1d2ebab0a8eaf7617825.patch";
-      hash = "sha256-00coI8/COpYMiSflAECwh6yJCMJj/ucFEn18Npj2g+Q=";
-    })
+  # see https://github.com/tree-sitter/py-tree-sitter/issues/330#issuecomment-2629403946
+  patches = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    ./segfault-patch.diff
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    tree-sitter-python
+    tree-sitter-rust
+    tree-sitter-html
+    tree-sitter-javascript
+    tree-sitter-json
   ];
 
-  pythonImportsCheck = [
-    "tree_sitter"
-  ];
+  pythonImportsCheck = [ "tree_sitter" ];
 
   preCheck = ''
+    # https://github.com/NixOS/nixpkgs/issues/255262#issuecomment-1721265871
     rm -r tree_sitter
   '';
 
-  meta = with lib; {
+  disabledTests = [
+    # test fails in nix sandbox
+    "test_dot_graphs"
+  ];
+
+  meta = {
     description = "Python bindings to the Tree-sitter parsing library";
     homepage = "https://github.com/tree-sitter/py-tree-sitter";
-    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

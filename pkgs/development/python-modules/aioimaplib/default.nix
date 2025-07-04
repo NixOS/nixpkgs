@@ -1,63 +1,59 @@
-{ lib
-, pythonOlder
-, pythonAtLeast
-, asynctest
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, imaplib2
-, mock
-, nose
-, pyopenssl
-, pytestCheckHook
-, pytz
-, tzlocal
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  imaplib2,
+  mock,
+  poetry-core,
+  pyopenssl,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "1.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.5";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bamthomas";
-    repo = pname;
-    rev = version;
-    hash = "sha256-7Ta0BhtQSm228vvUa5z+pzM3UC7+BskgBNjxsbEb9P0=";
+    owner = "iroco-co";
+    repo = "aioimaplib";
+    tag = version;
+    hash = "sha256-njzSpKPis033eLoRKXL538ljyMOB43chslio1wodrKU=";
   };
 
-  # https://github.com/bamthomas/aioimaplib/issues/54
-  doCheck = pythonOlder "3.11";
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
-    asynctest
-    docutils
     imaplib2
     mock
-    nose
     pyopenssl
+    pytest-asyncio
     pytestCheckHook
     pytz
-    tzlocal
   ];
 
-  disabledTests = [
-    # https://github.com/bamthomas/aioimaplib/issues/77
-    "test_get_quotaroot"
-    # asyncio.exceptions.TimeoutError
-    "test_idle"
-  ];
+  disabledTests =
+    [
+      # TimeoutError
+      "test_idle_start__exits_queue_get_without_timeout_error"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Comparison to magic strings
+      "test_idle_loop"
+    ];
 
-  pythonImportsCheck = [
-    "aioimaplib"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "aioimaplib" ];
+
+  meta = {
     description = "Python asyncio IMAP4rev1 client library";
-    homepage = "https://github.com/bamthomas/aioimaplib";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    homepage = "https://github.com/iroco-co/aioimaplib";
+    changelog = "https://github.com/iroco-co/aioimaplib/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.dotlambda ];
   };
 }

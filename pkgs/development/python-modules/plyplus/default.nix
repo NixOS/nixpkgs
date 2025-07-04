@@ -1,7 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, ply, isPy3k }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  ply,
+  isPy3k,
+}:
 buildPythonPackage rec {
   pname = "plyplus";
   version = "0.7.5";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PlyPlus";
@@ -15,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/erezsh/plyplus";
-    description = "A general-purpose parser built on top of PLY";
+    description = "General-purpose parser built on top of PLY";
     maintainers = with lib.maintainers; [ twey ];
     license = lib.licenses.mit;
   };

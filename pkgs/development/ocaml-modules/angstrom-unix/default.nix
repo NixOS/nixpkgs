@@ -1,6 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, angstrom }:
+{
+  lib,
+  buildDunePackage,
+  angstrom,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "angstrom-unix";
 
   inherit (angstrom) version src;

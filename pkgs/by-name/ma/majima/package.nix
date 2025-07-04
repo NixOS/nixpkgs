@@ -1,16 +1,21 @@
-{ lib, fetchFromGitLab, rustPlatform }:
-rustPlatform.buildRustPackage rec {
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+}:
+rustPlatform.buildRustPackage {
   pname = "majima";
-  version = "0.4.0";
+  version = "0.5.1";
 
-  src = fetchFromGitLab {
-    owner = "gumball-overall";
+  src = fetchFromSourcehut {
+    owner = "~wq";
     repo = "majima";
-    rev = version;
-    hash = "sha256-S62DQfvZFg8C26YG+fIVJj5cJ6mz73JXSgdu5yoK0Yo=";
+    rev = "630427fcd158ccbaafe8bc3f7368fa8577b03548";
+    hash = "sha256-znlJY/U7H+BvBM7n4IqE5x9ek1/QVxYkptsAnODz/Q0=";
   };
 
-  cargoHash = "sha256-zMQO6McnnGbp52A9n/h6yZTU9VH7vak2TSP0HLqDlKw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-I0txA41rmTZ3AHllRVsJzmZXbrm5+GSdd08EatxKCzk=";
 
   meta = {
     description = "Generate random usernames quickly and in various formats";

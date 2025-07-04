@@ -1,6 +1,6 @@
 {
   runCommand,
-  git,
+  gitMinimal,
   coccinelle,
   python3,
 }:
@@ -18,7 +18,6 @@
   It will end up in the generated patch as `@EVOLUTION@` placeholder, which should be replaced at build time
   with a path to the directory containing a `gschemas.compiled` file that includes the schema.
 
-
   Arguments:
   - `src`: source to generate the patch for.
 
@@ -27,6 +26,10 @@
 
     For example, `{ "org.gnome.evolution" = "EVOLUTION_SCHEMA_PATH"; }`
     hardcodes looking for `org.gnome.evolution` into `@EVOLUTION_SCHEMA_PATH@`.
+
+  - `schemaExistsFunction`: name of the function that is used for checking
+    if optional schema exists. Its invocation will be replaced with TRUE
+    for known schemas.
 
   - `patches`: A list of patches to apply before generating the patch.
 
@@ -55,14 +58,14 @@
   src,
   patches ? [ ],
   schemaIdToVariableMapping,
+  schemaExistsFunction ? null,
 }:
 
-runCommand
-  "hardcode-gsettings.patch"
+runCommand "hardcode-gsettings.patch"
   {
     inherit src patches;
     nativeBuildInputs = [
-      git
+      gitMinimal
       coccinelle
       python3 # For patch script
     ];
@@ -73,6 +76,7 @@ runCommand
     patchPhase
     set -x
     cp ${builtins.toFile "glib-schema-to-var.json" (builtins.toJSON schemaIdToVariableMapping)} ./glib-schema-to-var.json
+    cp ${builtins.toFile "glib-schema-exists-function.json" (builtins.toJSON schemaExistsFunction)} ./glib-schema-exists-function.json
     git init
     git add -A
     spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place

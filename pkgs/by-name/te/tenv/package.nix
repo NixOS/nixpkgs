@@ -1,29 +1,40 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib, tenv, testers }:
+{
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  tenv,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "tenv";
-  version = "1.7.1";
+  version = "4.7.6";
 
   src = fetchFromGitHub {
     owner = "tofuutils";
     repo = "tenv";
-    rev = "v${version}";
-    hash = "sha256-Iq1yv80qiQxISS0r1ShjJOXVtp/ryodgih1m3ykI8+0=";
+    tag = "v${version}";
+    hash = "sha256-zgkHE1Vvm2pLBXvpRJyWHHEDL32PDS9Xy8hy48BrO7o=";
   };
 
-  vendorHash = "sha256-NMkR90+kJ3VsuhF45l5K68uOqenPfINZDEE0GfjULro=";
+  vendorHash = "sha256-acJNxu7M3YOBcQ3KY9qL9vpBoaYIZRUtIDuvkLgATTc=";
+
+  excludedPackages = [ "tools" ];
 
   # Tests disabled for requiring network access to release.hashicorp.com
   doCheck = false;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=v${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tenv \
       --zsh <($out/bin/tenv completion zsh) \
       --bash <($out/bin/tenv completion bash) \
@@ -38,9 +49,13 @@ buildGoModule rec {
 
   meta = {
     changelog = "https://github.com/tofuutils/tenv/releases/tag/v${version}";
-    description = "A version manager for OpenTofu, Terraform and Terragrunt written in Go";
-    homepage = "https://github.com/tofuutils/tenv";
+    description = "OpenTofu, Terraform, Terragrunt and Atmos version manager written in Go";
+    homepage = "https://tofuutils.github.io/tenv";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ rmgpinto ];
+    maintainers = with lib.maintainers; [
+      rmgpinto
+      nmishin
+      kvendingoldo
+    ];
   };
 }

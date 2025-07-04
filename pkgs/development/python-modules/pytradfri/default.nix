@@ -1,54 +1,46 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiocoap
-, dtlssocket
-, pydantic
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  aiocoap,
+  dtlssocket,
+  pydantic,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytradfri";
-  version = "13.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.9";
+  version = "14.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pytradfri";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CWv3ebDulZuiFP+nJ2Xr7U/HTDFTqA9VYC0USLkpWR0=";
+    tag = version;
+    hash = "sha256-oYYi1P0Zu9PLsacUW//BlJlLmeOVvHgb/lR52KwZ7N8=";
   };
 
-  propagatedBuildInputs = [
-    pydantic
-  ];
+  build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  dependencies = [ pydantic ];
+
+  optional-dependencies = {
     async = [
       aiocoap
       dtlssocket
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.async;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.async;
 
-  pythonImportsCheck = [
-    "pytradfri"
-  ];
+  pythonImportsCheck = [ "pytradfri" ];
 
   meta = with lib; {
     description = "Python package to communicate with the IKEA Trådfri ZigBee Gateway";
     homepage = "https://github.com/home-assistant-libs/pytradfri";
-    changelog = "https://github.com/home-assistant-libs/pytradfri/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-libs/pytradfri/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
-    # https://github.com/home-assistant-libs/pytradfri/issues/720
-    broken = versionAtLeast pydantic.version "2";
   };
 }

@@ -1,7 +1,18 @@
-{ lib, mkDerivation, fetchFromGitHub
-, cmake, gcc-arm-embedded, python3Packages
-, qtbase, qtmultimedia, qttools, SDL, gtest
-, dfu-util, avrdude
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  gcc-arm-embedded,
+  python3Packages,
+  qtbase,
+  qtmultimedia,
+  qttools,
+  SDL,
+  gtest,
+  dfu-util,
+  avrdude,
+  udevCheckHook,
 }:
 
 mkDerivation rec {
@@ -15,9 +26,19 @@ mkDerivation rec {
     sha256 = "sha256-F3zykJhKuIpLQSTjn7mcdjEmgRAlwCZpkTaKQR9ve3g=";
   };
 
-  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow qttools ];
+  nativeBuildInputs = [
+    cmake
+    gcc-arm-embedded
+    python3Packages.pillow
+    qttools
+    udevCheckHook
+  ];
 
-  buildInputs = [ qtbase qtmultimedia SDL ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+    SDL
+  ];
 
   postPatch = ''
     sed -i companion/src/burnconfigdialog.cpp \
@@ -35,6 +56,8 @@ mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
+  doInstallCheck = true;
+
   meta = with lib; {
     description = "OpenTX Companion transmitter support software";
     longDescription = ''
@@ -42,10 +65,18 @@ mkDerivation rec {
       firmware to the radio, backing up model settings, editing settings and
       running radio simulators.
     '';
+    mainProgram = "companion" + lib.concatStrings (lib.take 2 (lib.splitVersion version));
     homepage = "https://www.open-tx.org/";
     license = licenses.gpl2Only;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ elitak lopsided98 ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      elitak
+      lopsided98
+    ];
   };
 
 }

@@ -1,33 +1,34 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, nixosTests
-, cmake
-, dbus
-, glib
-, gnome
-, gsettings-desktop-schemas
-, gtest
-, intltool
-, libayatana-common
-, librda
-, lomiri
-, mate
-, pkg-config
-, systemd
-, wrapGAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  nixosTests,
+  cmake,
+  dbus,
+  glib,
+  gnome-settings-daemon,
+  gsettings-desktop-schemas,
+  gtest,
+  intltool,
+  libayatana-common,
+  librda,
+  lomiri,
+  mate,
+  pkg-config,
+  systemd,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-session";
-  version = "24.2.0";
+  version = "24.5.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-session";
-    rev = finalAttrs.version;
-    hash = "sha256-XHJhzL7B+4FnUHbsJVywELoY7xxG19RRryaPYZVao1I=";
+    tag = finalAttrs.version;
+    hash = "sha256-jqcgQTsC4VBit3wwtKKTdEG71CUPJpeMtpzikE4IGhE=";
   };
 
   postPatch = ''
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -57,17 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO these bloat the closure size alot, just so the indicator doesn't have the potential to crash.
     # is there a better way to give it access to DE-specific schemas as needed?
     # https://github.com/AyatanaIndicators/ayatana-indicator-session/blob/88846bad7ee0aa8e0bb122816d06f9bc887eb464/src/service.c#L1387-L1413
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     mate.mate-settings-daemon
   ];
 
-  nativeCheckInputs = [
-    dbus
-  ];
+  nativeCheckInputs = [ dbus ];
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
@@ -81,12 +78,20 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelChecking = false;
 
   passthru = {
-    ayatana-indicators = [ "ayatana-indicator-session" ];
-    tests.vm = nixosTests.ayatana-indicators;
+    ayatana-indicators = {
+      ayatana-indicator-session = [
+        "ayatana"
+        "lomiri"
+      ];
+    };
+    tests = {
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-session;
+    };
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Indicator showing session management, status and user switching";
     longDescription = ''
       This Ayatana Indicator is designed to be placed on the right side of a
@@ -98,8 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-session";
     changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-session/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
   };
 })

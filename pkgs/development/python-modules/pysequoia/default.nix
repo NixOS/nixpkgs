@@ -1,64 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkg-config
-, rustPlatform
-, cargo
-, rustc
-, bzip2
-, nettle
-, openssl
-, pcsclite
-, stdenv
-, darwin
-, libiconv
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  rustPlatform,
+  cargo,
 }:
 
 buildPythonPackage rec {
   pname = "pysequoia";
-  version = "0.1.20";
+  version = "0.1.28";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KavsLp17e4ckX11B0pefiQ1Hma/O9x0VY/uVPiJm4Fs=";
+    hash = "sha256-ixTszL2IN50SDYTDZqzlMI1nY6yNkEUnK5VxCoAG0jk=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-7Lw6gR6o2HJ/zyG4b0wz4nmU2AIIAhyK9zaQ6w+/RgE=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-cq55j3wNcV8CRbnqZPV8zrRzvUud5RXJDX1oh7WZoiU=";
   };
 
   nativeBuildInputs = [
-    pkg-config
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     cargo
-    rustc
-  ];
-
-  buildInputs = [
-    bzip2
-    nettle
-    openssl
-    pcsclite
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    libiconv
   ];
 
   pythonImportsCheck = [ "pysequoia" ];
 
-  meta = with lib; {
+  meta = {
     description = "This library provides OpenPGP facilities in Python through the Sequoia PGP library";
-    downloadPage = "https://codeberg.org/wiktor/pysequoia";
-    homepage = "https://sequoia-pgp.gitlab.io/pysequoia";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar ];
-    # Broken since the 0.1.20 update according to ofborg. The errors are not clear...
-    broken = stdenv.isDarwin;
+    downloadPage = "https://github.com/wiktor-k/pysequoia";
+    homepage = "https://github.com/wiktor-k/pysequoia";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

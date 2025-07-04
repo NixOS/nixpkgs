@@ -1,16 +1,17 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, kconfig
-, kcoreaddons
-, ki18n
-, kirigami2
-, mauikit
-, mauikit-filebrowsing
-, mauikit-terminal
-, qmltermwidget
-, qtmultimedia
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  kconfig,
+  kcoreaddons,
+  ki18n,
+  kirigami2,
+  mauikit,
+  mauikit-filebrowsing,
+  mauikit-terminal,
+  qmltermwidget,
+  qtmultimedia,
 }:
 
 mkDerivation {

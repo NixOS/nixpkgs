@@ -1,13 +1,15 @@
-{ lib
-, bleak
-, click
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-mock
-, pythonAtLeast
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  bleak,
+  click,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-mock,
+  pythonAtLeast,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,14 +21,10 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "emlove";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pyzerproc";
+    tag = version;
     hash = "sha256-vS0sk/KjDhWispZvCuGlmVLLfeFymHqxwNzNqNRhg6k=";
   };
-
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
 
   propagatedBuildInputs = [
     bleak
@@ -36,6 +34,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -44,9 +43,7 @@ buildPythonPackage rec {
     "tests/test_light.py"
   ];
 
-  pythonImportsCheck = [
-    "pyzerproc"
-  ];
+  pythonImportsCheck = [ "pyzerproc" ];
 
   meta = with lib; {
     description = "Python library to control Zerproc Bluetooth LED smart string lights";

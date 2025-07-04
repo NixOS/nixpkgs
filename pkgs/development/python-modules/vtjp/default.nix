@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, setuptools
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  setuptools,
+  tabulate,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Miicroo";
     repo = "python-vasttrafik";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3/toHY2PkG87J5bIMNJZHF/4mUvWaeHamMzPa1St7Xo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     requests
@@ -33,16 +32,14 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "vasttrafik"
-  ];
+  pythonImportsCheck = [ "vasttrafik" ];
 
   meta = with lib; {
-    description = "A Python wrapper and cli for Västtrafik public API";
+    description = "Python wrapper and cli for Västtrafik public API";
     mainProgram = "vtjp";
     homepage = "https://github.com/Miicroo/python-vasttrafik";
     changelog = "https://github.com/Miicroo/python-vasttrafik/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

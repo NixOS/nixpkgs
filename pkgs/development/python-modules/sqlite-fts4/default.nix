@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,18 +15,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "sqlite-fts4";
+    tag = version;
     hash = "sha256-Ibiows3DSnzjIUv7U9tYNVnDaecBBxjXzDqxbIlNhhU=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "sqlite_fts4"
-  ];
+  pythonImportsCheck = [ "sqlite_fts4" ];
 
   meta = with lib; {
     description = "Custom Python functions for working with SQLite FTS4";

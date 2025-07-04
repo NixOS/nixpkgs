@@ -4,7 +4,7 @@
 
 The end result of running Bower is a `bower_components` directory which can be included in the web app's build process.
 
-Bower can be run interactively, by installing `nodePackages.bower`. More interestingly, the Bower components can be declared in a Nix derivation, with the help of `nodePackages.bower2nix`.
+Bower can be run interactively, by installing `nodePackages.bower`. More interestingly, the Bower components can be declared in a Nix derivation, with the help of `bower2nix`.
 
 ## bower2nix usage {#ssec-bower2nix-usage}
 
@@ -24,11 +24,15 @@ Running `bower2nix` will produce something like the following output:
 
 ```nix
 { fetchbower, buildEnv }:
-buildEnv { name = "bower-env"; ignoreCollisions = true; paths = [
-  (fetchbower "angular" "1.5.3" "~1.5.0" "1749xb0firxdra4rzadm4q9x90v6pzkbd7xmcyjk6qfza09ykk9y")
-  (fetchbower "bootstrap" "3.3.6" "~3.3.6" "1vvqlpbfcy0k5pncfjaiskj3y6scwifxygfqnw393sjfxiviwmbv")
-  (fetchbower "jquery" "2.2.2" "1.9.1 - 2" "10sp5h98sqwk90y4k6hbdviwqzvzwqf47r3r51pakch5ii2y7js1")
-]; }
+buildEnv {
+  name = "bower-env";
+  ignoreCollisions = true;
+  paths = [
+    (fetchbower "angular" "1.5.3" "~1.5.0" "1749xb0firxdra4rzadm4q9x90v6pzkbd7xmcyjk6qfza09ykk9y")
+    (fetchbower "bootstrap" "3.3.6" "~3.3.6" "1vvqlpbfcy0k5pncfjaiskj3y6scwifxygfqnw393sjfxiviwmbv")
+    (fetchbower "jquery" "2.2.2" "1.9.1 - 2" "10sp5h98sqwk90y4k6hbdviwqzvzwqf47r3r51pakch5ii2y7js1")
+  ];
+}
 ```
 
 Using the `bower2nix` command line arguments, the output can be redirected to a file. A name like `bower-packages.nix` would be fine.
@@ -80,8 +84,12 @@ gulp.task('build', [], function () {
 ### Example Full example — default.nix {#ex-buildBowerComponentsDefaultNix}
 
 ```nix
-{ myWebApp ? { outPath = ./.; name = "myWebApp"; }
-, pkgs ? import <nixpkgs> {}
+{
+  myWebApp ? {
+    outPath = ./.;
+    name = "myWebApp";
+  },
+  pkgs ? import <nixpkgs> { },
 }:
 
 pkgs.stdenv.mkDerivation {
@@ -90,19 +98,33 @@ pkgs.stdenv.mkDerivation {
 
   buildInputs = [ pkgs.nodePackages.gulp ];
 
-  bowerComponents = pkgs.buildBowerComponents { # note 1
+  bowerComponents = pkgs.buildBowerComponents {
+    # note 1
     name = "my-web-app";
     generated = ./bower-packages.nix;
     src = myWebApp;
   };
 
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook # note 3
+  ];
+
   buildPhase = ''
+    runHook preBuild
+
     cp --reflink=auto --no-preserve=mode -R $bowerComponents/bower_components . # note 2
-    export HOME=$PWD # note 3
     ${pkgs.nodePackages.gulp}/bin/gulp build # note 4
+
+    runHook postBuild
   '';
 
-  installPhase = "mv gulpdist $out";
+  installPhase = ''
+    runHook preInstall
+
+    mv gulpdist $out
+
+    runHook postInstall
+  '';
 }
 ```
 

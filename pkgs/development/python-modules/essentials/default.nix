@@ -3,7 +3,7 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonImportsCheckHook,
+  stdenv,
   lib,
 }:
 buildPythonPackage rec {
@@ -20,19 +20,24 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # time.sleep(0.01) can be up to 0.05s on darwin
+    "test_stopwatch"
+    "test_stopwatch_with_context_manager"
   ];
 
-  pythonImportsCheck = [
-    "essentials"
-  ];
+  pythonImportsCheck = [ "essentials" ];
 
   meta = with lib; {
     homepage = "https://github.com/Neoteroi/essentials";
     description = "General purpose classes and functions";
     changelog = "https://github.com/Neoteroi/essentials/releases/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [aldoborrero zimbatm];
+    maintainers = with maintainers; [
+      aldoborrero
+      zimbatm
+    ];
   };
 }

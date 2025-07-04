@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, cmake, yaml-cpp,
-  libevdev, udev, boost }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  cmake,
+  yaml-cpp,
+  libevdev,
+  udev,
+  boost,
+}:
 
 stdenv.mkDerivation rec {
   pname = "interception-tools";
@@ -8,15 +17,24 @@ stdenv.mkDerivation rec {
     owner = "interception/linux";
     repo = "tools";
     rev = "v${version}";
-    sha256 = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
+    hash = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libevdev udev yaml-cpp boost ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    libevdev
+    udev
+    yaml-cpp
+    boost
+  ];
 
   meta = {
-    description = "A minimal composable infrastructure on top of libudev and libevdev";
+    description = "Minimal composable infrastructure on top of libudev and libevdev";
     homepage = "https://gitlab.com/interception/linux/tools";
+    changelog = "https://gitlab.com/interception/linux/tools/-/tags/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.vyp ];
     platforms = lib.platforms.linux;

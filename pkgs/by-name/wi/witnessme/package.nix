@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "witnessme";
   version = "0-unstable-2023-12-06";
   pyproject = true;
@@ -27,10 +28,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = true;
-
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
 
   build-system = with python3.pkgs; [
     poetry-core

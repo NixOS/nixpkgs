@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, scikit-build
-, cmake
-, ush
-, requests
-, six
-, numpy
-, cffi
-, openfst
-, substituteAll
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  scikit-build,
+  cmake,
+  ush,
+  requests,
+  six,
+  numpy,
+  cffi,
+  openfst,
+  replaceVars,
+  callPackage,
 }:
 
 #
@@ -28,7 +29,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "daanzu";
-    repo = pname;
+    repo = "kaldi-active-grammar";
     rev = "v${version}";
     sha256 = "0lilk6yjzcy31avy2z36bl9lr60gzwhmyqwqn8akq11qc3mbffsk";
   };
@@ -42,8 +43,7 @@ buildPythonPackage rec {
     # Uses the dependencies' binaries from $PATH instead of a specific directory
     ./0002-exec-path.patch
     # Makes it dynamically link to the correct Kaldi library
-    (substituteAll {
-      src = ./0003-ffi-path.patch;
+    (replaceVars ./0003-ffi-path.patch {
       kaldiFork = "${kaldi}/lib";
     })
   ];
@@ -53,17 +53,29 @@ buildPythonPackage rec {
     cd ..
   '';
 
-  buildInputs = [ openfst kaldi ];
-  nativeBuildInputs = [ scikit-build cmake ];
-  propagatedBuildInputs = [ ush requests numpy cffi six ];
+  buildInputs = [
+    openfst
+    kaldi
+  ];
+  nativeBuildInputs = [
+    scikit-build
+    cmake
+  ];
+  propagatedBuildInputs = [
+    ush
+    requests
+    numpy
+    cffi
+    six
+  ];
 
-  doCheck = false;  # no tests exist
+  doCheck = false; # no tests exist
 
   meta = with lib; {
     description = "Python Kaldi speech recognition";
     homepage = "https://github.com/daanzu/kaldi-active-grammar";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
     # Other platforms are supported upstream.
     platforms = platforms.linux;
   };

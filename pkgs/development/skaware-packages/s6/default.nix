@@ -1,14 +1,19 @@
-{ lib, skawarePackages, skalibs, execline }:
+{
+  lib,
+  skawarePackages,
+  skalibs,
+  execline,
+}:
 
 skawarePackages.buildPackage {
   pname = "s6";
-  version = "2.12.0.3";
-  sha256 = "gA0xIm9sJc3T7AtlJA+AtWzl7BNzQdCo0VTndjjlgQM=";
+  version = "2.13.2.0";
+  sha256 = "sha256-xRFLgEJxa7cGkUBpMayw4nltg7Qcv7XIBo3OegL5mkU=";
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-man-pages";
-    version = "2.12.0.2.1";
-    sha256 = "sha256-fFU+cRwXb4SwHsI/r0ghuzCf6hEK/muPPp2XMvD8VtQ=";
+    version = "2.13.1.0.1";
+    sha256 = "sha256-SChxod/W/KxxSic4ttXigwgRWMWLl9Z66i2t7H1nn/s=";
     description = "Port of the documentation for the s6 supervision suite to mdoc";
     maintainers = [ lib.maintainers.sternenseemann ];
   };
@@ -18,7 +23,12 @@ skawarePackages.buildPackage {
   # NOTE lib: cannot split lib from bin at the moment,
   # since some parts of lib depend on executables in bin.
   # (the `*_startf` functions in `libs6`)
-  outputs = [ /*"bin" "lib"*/ "out" "dev" "doc" ];
+  outputs = [
+    # "bin" "lib"
+    "out"
+    "dev"
+    "doc"
+  ];
 
   # TODO: nsss support
   configureFlags = [

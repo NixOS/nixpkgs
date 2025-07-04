@@ -1,9 +1,19 @@
-{ config, lib, pkgs, options, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.nextcloud;
+  inherit (lib)
+    mkOption
+    types
+    escapeShellArg
+    concatStringsSep
+    ;
 in
 {
   port = 9205;
@@ -60,12 +70,17 @@ in
           --addr ${cfg.listenAddress}:${toString cfg.port} \
           --timeout ${cfg.timeout} \
           --server ${cfg.url} \
-          ${if cfg.passwordFile != null then ''
-            --username ${cfg.username} \
-            --password ${escapeShellArg "@${cfg.passwordFile}"} \
-          '' else ''
-            --auth-token ${escapeShellArg "@${cfg.tokenFile}"} \
-          ''} \
+          ${
+            if cfg.passwordFile != null then
+              ''
+                --username ${cfg.username} \
+                --password ${escapeShellArg "@${cfg.passwordFile}"} \
+              ''
+            else
+              ''
+                --auth-token ${escapeShellArg "@${cfg.tokenFile}"} \
+              ''
+          } \
           ${concatStringsSep " \\\n  " cfg.extraFlags}'';
     };
   };

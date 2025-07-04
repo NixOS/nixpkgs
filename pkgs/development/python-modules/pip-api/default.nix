@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pip
-, pretend
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pip,
+  pretend,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "pip-api";
-  version = "0.0.33";
+  version = "0.0.34";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,17 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "di";
     repo = "pip-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-bDM31YpVB0pZMqeGTCbnINSmJc03N0HuU8hcc8nnHgw=";
+    tag = version;
+    hash = "sha256-nmCP4hp+BsD80OBjerOu+QTBBExGHvn/v19od4V3ncI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pip
-  ];
+  propagatedBuildInputs = [ pip ];
 
   nativeCheckInputs = [
     pretend
@@ -37,9 +34,7 @@ buildPythonPackage rec {
     virtualenv
   ];
 
-  pythonImportsCheck = [
-    "pip_api"
-  ];
+  pythonImportsCheck = [ "pip_api" ];
 
   disabledTests = [
     "test_hash"

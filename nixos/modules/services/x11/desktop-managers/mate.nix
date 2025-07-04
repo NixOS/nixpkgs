@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
@@ -39,7 +45,7 @@ in
     };
 
     environment.mate.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.mate.mate-terminal pkgs.mate.pluma ]";
       type = types.listOf types.package;
       description = "Which MATE packages to exclude from the default environment";
@@ -53,13 +59,21 @@ in
         pkgs.mate.mate-session-manager
       ];
 
+      environment.extraInit = lib.optionalString config.services.gnome.gcr-ssh-agent.enable ''
+        # Hack: https://bugzilla.redhat.com/show_bug.cgi?id=2250704 still
+        # applies to sessions not managed by systemd.
+        if [ -z "$SSH_AUTH_SOCK" ] && [ -n "$XDG_RUNTIME_DIR" ]; then
+          export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
+        fi
+      '';
+
       # Debugging
       environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
 
-      environment.systemPackages = utils.removePackagesByName
-        (pkgs.mate.basePackages ++
-        pkgs.mate.extraPackages ++
-        [
+      environment.systemPackages = utils.removePackagesByName (
+        pkgs.mate.basePackages
+        ++ pkgs.mate.extraPackages
+        ++ [
           (pkgs.mate.caja-with-extensions.override {
             extensions = cfg.extraCajaExtensions;
           })
@@ -72,8 +86,8 @@ in
           pkgs.shared-mime-info
           pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           pkgs.yelp # for 'Contents' in 'Help' menus
-        ])
-        config.environment.mate.excludePackages;
+        ]
+      ) config.environment.mate.excludePackages;
 
       programs.dconf.enable = true;
       # Shell integration for VTE terminals
@@ -84,11 +98,13 @@ in
       programs.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
 
       services.gnome.at-spi2-core.enable = true;
+      services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
+      services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
       services.gvfs.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.xserver.libinput.enable = mkDefault true;
+      services.libinput.enable = mkDefault true;
 
       security.pam.services.mate-screensaver.unixAuth = true;
 

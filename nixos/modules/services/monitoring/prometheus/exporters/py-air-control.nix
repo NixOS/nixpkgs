@@ -1,9 +1,14 @@
-{ config, lib, pkgs, options, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.py-air-control;
+  inherit (lib) mkOption types;
 
   workingDir = "/var/lib/${cfg.stateDir}";
 

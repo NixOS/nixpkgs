@@ -1,25 +1,35 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, pythonOlder
-, setuptools
-, nasm
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  nasm,
 }:
 
 buildPythonPackage rec {
   pname = "rapidgzip";
-  version = "0.13.1";
+  version = "0.14.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t6mfOsCg0FoV7N4GfTIs1KwxeGIOORuxbEIEJN52nRw=";
+    hash = "sha256-fTXwrxZXtAUakMPAwsDSQz886Dnbkw/b7T1lFt4qXfE=";
   };
 
-  nativeBuildInputs = [ cython nasm setuptools ];
+  prePatch = ''
+    # pythonRelaxDeps doesn't work here
+    substituteInPlace pyproject.toml --replace-fail "setuptools >= 61.2, < 72" "setuptools"
+  '';
+
+  nativeBuildInputs = [
+    cython
+    nasm
+    setuptools
+  ];
 
   # has no tests
   doCheck = false;

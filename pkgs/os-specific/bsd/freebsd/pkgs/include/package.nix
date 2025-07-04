@@ -1,32 +1,26 @@
-{ lib, mkDerivation
-, buildPackages
-, bsdSetupHook, freebsdSetupHook
-, makeMinimal
-, install
-, mandoc, groff, rsync /*, nbperf*/, rpcgen
+{
+  lib,
+  mkDerivation,
+  buildPackages,
+  rpcgen,
+  mtree,
 }:
 
 mkDerivation {
+  noLibc = true;
   path = "include";
 
   extraPaths = [
     "contrib/libc-vis"
     "etc/mtree/BSD.include.dist"
     "sys"
+    # Used for aarch64-freebsd
+    "lib/msun/arm"
   ];
 
-  nativeBuildInputs =  [
-    bsdSetupHook freebsdSetupHook
-    makeMinimal
-    install
-    mandoc groff rsync /*nbperf*/ rpcgen
-
-    # HACK use NetBSD's for now
-    buildPackages.netbsd.mtree
-  ];
-
-  patches = [
-    ./no-perms-BSD.include.dist.patch
+  extraNativeBuildInputs = [
+    rpcgen
+    mtree
   ];
 
   # The makefiles define INCSDIR per subdirectory, so we have to set
@@ -37,11 +31,10 @@ mkDerivation {
       sed -i -E \
         -e 's_/usr/include_''${INCSDIR0}_' \
         {} \;
+    sed -E -i -e "/_PATH_LOGIN/d" $BSDSRCDIR/include/paths.h
   '';
 
-  makeFlags = [
-    "RPCGEN_CPP=${buildPackages.stdenv.cc.cc}/bin/cpp"
-  ];
+  makeFlags = [ "RPCGEN_CPP=${buildPackages.stdenv.cc.cc}/bin/cpp" ];
 
   # multiple header dirs, see above
   postConfigure = ''

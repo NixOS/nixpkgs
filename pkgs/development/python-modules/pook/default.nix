@@ -1,22 +1,21 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, furl
-, hatchling
-, jsonschema
-, pytest-asyncio
-, pytest-httpbin
-, pytestCheckHook
-, pytest_7
-, pythonOlder
-, requests
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  furl,
+  hatchling,
+  jsonschema,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest-pook,
+  pytestCheckHook,
+  pythonOlder,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "1.4.3";
+  version = "2.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,30 +23,30 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "h2non";
     repo = "pook";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-sdfkMvPSlVK7EoDUEuJbiuocOjGJygqiCiftrsjnDhU=";
+    tag = "v${version}";
+    hash = "sha256-DDHaKsye28gxyorILulrLRBy/B9zV673jeVZ85uPZAo=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
-    aiohttp
     furl
     jsonschema
-    requests
     xmltodict
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-httpbin
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest-pook
+    pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pook"
+  pythonImportsCheck = [ "pook" ];
+
+  disabledTests = [
+    # furl compat issue
+    "test_headers_not_matching"
   ];
 
   disabledTestPaths = [
@@ -56,6 +55,9 @@ buildPythonPackage rec {
     # Tests require network access
     "tests/unit/interceptors/"
   ];
+
+  # Tests use sockets
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "HTTP traffic mocking and testing";

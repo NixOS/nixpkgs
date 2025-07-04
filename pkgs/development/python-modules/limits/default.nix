@@ -1,48 +1,56 @@
-{ lib
-, aetcd
-, buildPythonPackage
-, coredis
-, deprecated
-, etcd3
-, fetchFromGitHub
-, hiro
-, importlib-resources
-, motor
-, packaging
-, pymemcache
-, pymongo
-, pytest-asyncio
-, pytest-lazy-fixture
-, pytestCheckHook
-, pythonOlder
-, redis
-, setuptools
-, typing-extensions
+{
+  lib,
+  aetcd,
+  buildPythonPackage,
+  coredis,
+  deprecated,
+  etcd3,
+  fetchFromGitHub,
+  flaky,
+  hiro,
+  importlib-resources,
+  motor,
+  packaging,
+  pymemcache,
+  pymongo,
+  pytest-asyncio,
+  pytest-benchmark,
+  pytest-cov-stub,
+  pytest-lazy-fixtures,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  setuptools,
+  typing-extensions,
+  valkey,
 }:
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.10.1";
+  version = "5.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "limits";
-    rev = "refs/tags/${version}";
+    tag = version;
     # Upstream uses versioneer, which relies on git attributes substitution.
     # This leads to non-reproducible archives on github. Remove the substituted
     # file here, and recreate it later based on our version info.
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-Ax0P9rYTPOrhtOw7FLElSNTGQ3WWCboM3FodTOGZWu8=";
+    hash = "sha256-0D44XaSZtebMnn9mqXbaE7FB7usdu/eZ/4UE3Ye0oyA=";
   };
+
+  patches = [
+    ./only-test-in-memory.patch
+  ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace-fail "--cov=limits" "" \
       --replace-fail "-K" ""
 
     substituteInPlace setup.py \
@@ -52,70 +60,57 @@ buildPythonPackage rec {
     echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecated
     importlib-resources
     packaging
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
-    redis = [
-      redis
-    ];
-    rediscluster = [
-      redis
-    ];
-    memcached = [
-      pymemcache
-    ];
-    mongodb = [
-      pymongo
-    ];
-    etcd = [
-      etcd3
-    ];
-    async-redis = [
-      coredis
-    ];
+  optional-dependencies = {
+    redis = [ redis ];
+    rediscluster = [ redis ];
+    memcached = [ pymemcache ];
+    mongodb = [ pymongo ];
+    etcd = [ etcd3 ];
+    async-redis = [ coredis ];
     # async-memcached = [
     #   emcache  # Missing module
     # ];
-    async-mongodb = [
-      motor
-    ];
-    async-etcd = [
-      aetcd
-    ];
+    async-mongodb = [ motor ];
+    async-etcd = [ aetcd ];
+    valkey = [ valkey ];
+  };
+
+  env = {
+    # make protobuf compatible with old versions
+    # https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
+    PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
   };
 
   nativeCheckInputs = [
+    flaky
     hiro
     pytest-asyncio
-    pytest-lazy-fixture
+    pytest-benchmark
+    pytest-cov-stub
+    pytest-lazy-fixtures
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "limits"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
-  pytestFlagsArray = [
-    # All other tests require a running Docker instance
-    "tests/test_limits.py"
-    "tests/test_ratelimit_parser.py"
-    "tests/test_limit_granularities.py"
-  ];
+  disabledTests = [ "test_moving_window_memcached" ];
+
+  pythonImportsCheck = [ "limits" ];
 
   meta = with lib; {
     description = "Rate limiting using various strategies and storage backends such as redis & memcached";
     homepage = "https://github.com/alisaifee/limits";
-    changelog = "https://github.com/alisaifee/limits/releases/tag/${version}";
+    changelog = "https://github.com/alisaifee/limits/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

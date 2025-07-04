@@ -1,22 +1,25 @@
-{ lib
-, buildDotnetModule
-, writeShellScript
-, glibc
-, gtk3
-, libappindicator
-, webkitgtk
-, e2fsprogs
-, libnotify
-, libgit2
-, openssl
-, xdelta
-, file
-, busybox
-, openjdk
-, patchelf
-, fetchFromGitHub
-, buildFHSEnv
-, glib-networking
+{
+  lib,
+  buildDotnetModule,
+  writeShellScript,
+  glibc,
+  gtk3,
+  libappindicator,
+  webkitgtk_4_0,
+  e2fsprogs,
+  libnotify,
+  libgit2,
+  openssl,
+  xdelta,
+  file,
+  openjdk,
+  patchelf,
+  fetchFromGitHub,
+  buildFHSEnv,
+  glib-networking,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
+  dotnetCorePackages,
 }:
 let
   am2r-run = buildFHSEnv {
@@ -24,8 +27,9 @@ let
 
     multiArch = true;
 
-    multiPkgs = pkgs: with pkgs; [
-        stdenv.cc.cc.lib
+    multiPkgs =
+      pkgs: with pkgs; [
+        (lib.getLib stdenv.cc.cc)
         xorg.libX11
         xorg.libXext
         xorg.libXrandr
@@ -50,36 +54,59 @@ buildDotnetModule {
     owner = "AM2R-Community-Developers";
     repo = "AM2RLauncher";
     rev = "5d8b7d9b3de68e6215c10b9fd223b7f1d5e40dea";
-    sha256 = "sha256-/nHqo8jh3sOUngbpqdfiQjUWO/8Uzpc5jtW7Ep4q6Wg=";
+    hash = "sha256-/nHqo8jh3sOUngbpqdfiQjUWO/8Uzpc5jtW7Ep4q6Wg=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   projectFile = "AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = "AM2RLauncher.Gtk";
 
   runtimeDeps = [
     glibc
     gtk3
     libappindicator
-    webkitgtk
+    webkitgtk_4_0
     e2fsprogs
     libnotify
     libgit2
     openssl
   ];
 
-  buildInputs = [ gtk3 ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
-  patches = [ ./am2r-run-binary.patch ];
+  buildInputs = [
+    gtk3
+    gsettings-desktop-schemas
+    glib-networking
+  ];
 
-  dotnetFlags = [ ''-p:DefineConstants="NOAPPIMAGE;NOAUTOUPDATE;PATCHOPENSSL"'' ];
+  patches = [
+    ./am2r-run-binary.patch
+    ./dotnet-8-upgrade.patch
+  ];
+
+  dotnetFlags = [
+    ''-p:DefineConstants="NOAPPIMAGE;NOAUTOUPDATE;PATCHOPENSSL"''
+  ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.escapeShellArg (
+      lib.makeBinPath [
+        am2r-run
+        xdelta
+        file
+        openjdk
+        patchelf
+      ]
+    ))
+  ];
 
   postFixup = ''
-    wrapProgram $out/bin/AM2RLauncher.Gtk \
-      --prefix PATH : ${lib.makeBinPath [ am2r-run xdelta file openjdk patchelf ]} \
-      --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules
-
     mkdir -p $out/share/icons
     install -Dm644 $src/AM2RLauncher/distribution/linux/AM2RLauncher.png $out/share/icons/AM2RLauncher.png
     install -Dm644 $src/AM2RLauncher/distribution/linux/AM2RLauncher.desktop $out/share/applications/AM2RLauncher.desktop
@@ -90,7 +117,7 @@ buildDotnetModule {
 
   meta = with lib; {
     homepage = "https://github.com/AM2R-Community-Developers/AM2RLauncher";
-    description = "A front-end for dealing with AM2R updates and mods";
+    description = "Front-end for dealing with AM2R updates and mods";
     longDescription = ''
       A front-end application that simplifies installing the latest
       AM2R-Community-Updates, creating APKs for Android use, as well as Mods for

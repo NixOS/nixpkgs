@@ -166,7 +166,8 @@ Meanwhile `intersection ./foo ./bar` returns the empty file set without a base p
 
 Arguments:
 - Alternative: Use the common prefix of all base paths as the resulting base path
-  - (-) This is unnecessarily strict, because the purpose of the base path is to track the directory under which files _could_ be in the file set. It should be as long as possible.
+  - (-) This is unnecessarily strict, because the purpose of the base path is to track the directory under which files _could_ be in the file set.
+    It should be as long as possible.
     All files contained in `intersection ./foo ./foo/bar` will be under `./foo/bar` (never just under `./foo`), and `intersection ./foo ./bar` will never contain any files (never under `./.`).
     This would lead to `toSource` having to unexpectedly throw errors for cases such as `toSource { root = ./foo; fileset = intersect ./foo base; }`, where `base` may be `./bar` or `./.`.
   - (-) There is no benefit to the user, since base path is not directly exposed in the interface
@@ -236,7 +237,7 @@ File sets cannot add single files to the store, they can only import files under
 Arguments:
 - (+) There's no point in using this library for a single file, since you can't do anything other than add it to the store or not.
   And it would be unclear how the library should behave if the one file wouldn't be added to the store:
-  `toSource { root = ./file.nix; fileset = <empty>; }` has no reasonable result because returing an empty store path wouldn't match the file type, and there's no way to have an empty file store path, whatever that would mean.
+  `toSource { root = ./file.nix; fileset = <empty>; }` has no reasonable result because returning an empty store path wouldn't match the file type, and there's no way to have an empty file store path, whatever that would mean.
 
 ### `fileFilter` takes a path
 
@@ -263,5 +264,6 @@ Coercing paths that don't exist to file sets always gives an error.
   - (+) This is dangerous, because you wouldn't be protected against typos anymore.
     E.g. when trying to prevent `./secret` from being imported, a typo like `difference ./. ./sercet` would import it regardless.
   - (+) `difference ./. (maybeMissing ./does-not-exist)` can be used to do this more explicitly.
-  - (+) `difference ./. (difference ./foo ./foo/bar)` should report an error when `./foo/bar` does not exist ("double negation"). Unfortunately, the current internal representation does not lend itself to a behavior where both `difference x ./does-not-exists` and double negation are handled and checked correctly.
+  - (+) `difference ./. (difference ./foo ./foo/bar)` should report an error when `./foo/bar` does not exist ("double negation").
+    Unfortunately, the current internal representation does not lend itself to a behavior where both `difference x ./does-not-exists` and double negation are handled and checked correctly.
     This could be fixed, but would require significant changes to the internal representation that are not worth the effort and the risk of introducing implicit behavior.

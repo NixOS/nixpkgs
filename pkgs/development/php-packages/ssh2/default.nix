@@ -1,4 +1,8 @@
-{ buildPecl, lib, libssh2 }:
+{
+  buildPecl,
+  lib,
+  libssh2,
+}:
 
 buildPecl rec {
   version = "1.3.1";
@@ -14,6 +18,7 @@ buildPecl rec {
     description = "PHP bindings for the libssh2 library";
     license = licenses.php301;
     homepage = "https://github.com/php/pecl-networking-ssh2";
-    maintainers = teams.php.members ++ [ maintainers.ostrolucky ];
+    maintainers = [ maintainers.ostrolucky ];
+    teams = [ teams.php ];
   };
 }

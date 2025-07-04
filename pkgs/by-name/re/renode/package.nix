@@ -1,41 +1,61 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchurl
-, autoPatchelfHook
-, makeWrapper
-, nix-update-script
-, glibcLocales
-, python3Packages
-, gtk-sharp-2_0
-, gtk2-x11
-, screen
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
+  autoPatchelfHook,
+  makeWrapper,
+  nix-update-script,
+  glibcLocales,
+  python3Packages,
+  dotnetCorePackages,
+  gtk-sharp-3_0,
+  gtk3-x11,
+  dconf,
 }:
 
 let
-  pythonLibs = with python3Packages; makePythonPath [
-    construct
-    psutil
-    pyyaml
-    requests
+  pythonLibs =
+    with python3Packages;
+    makePythonPath [
+      construct
+      psutil
+      pyyaml
+      requests
+      tkinter
 
-    (robotframework.overrideDerivation (oldAttrs: {
-      src = fetchFromGitHub {
-        owner = "robotframework";
-        repo = "robotframework";
-        rev = "v6.0.2";
-        hash = "sha256-c7pPcDgqyqWQtiMbLQbQd0nAgx4TIFUFHrlBVDNdr8M=";
-      };
-    }))
-  ];
+      # from tools/csv2resd/requirements.txt
+      construct
+
+      # from tools/execution_tracer/requirements.txt
+      pyelftools
+
+      (robotframework.overrideDerivation (oldAttrs: {
+        src = fetchFromGitHub {
+          owner = "robotframework";
+          repo = "robotframework";
+          rev = "v6.1";
+          hash = "sha256-l1VupBKi52UWqJMisT2CVnXph3fGxB63mBVvYdM1NWE=";
+        };
+        patches = (oldAttrs.patches or [ ]) ++ [
+          (fetchpatch {
+            # utest: Improve filtering of output sugar for Python 3.13+
+            name = "python3.13-support.patch";
+            url = "https://github.com/robotframework/robotframework/commit/921e352556dc8538b72de1e693e2a244d420a26d.patch";
+            hash = "sha256-aSaror26x4kVkLVetPEbrJG4H1zstHsNWqmwqOys3zo=";
+          })
+        ];
+      }))
+    ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renode";
-  version = "1.15.0";
+  version = "1.15.3";
 
   src = fetchurl {
-    url = "https://github.com/renode/renode/releases/download/v${finalAttrs.version}/renode-${finalAttrs.version}.linux-portable.tar.gz";
-    hash = "sha256-w3HKYctW1LmiAse/27Y1Gmz9hDprQ1CK7+TXIexCrkg=";
+    url = "https://github.com/renode/renode/releases/download/v${finalAttrs.version}/renode-${finalAttrs.version}.linux-dotnet.tar.gz";
+    hash = "sha256-0CZWIwIG85nT7uSHhmBkH21S5mTx2womYWV0HG+g8Mk=";
   };
 
   nativeBuildInputs = [
@@ -44,9 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    gtk2-x11
-    gtk-sharp-2_0
-    screen
+    gtk-sharp-3_0
   ];
 
   strictDeps = true;
@@ -58,17 +76,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     mv * $out/libexec/renode
     mv .renode-root $out/libexec/renode
-    chmod +x $out/libexec/renode/*.so
 
     makeWrapper "$out/libexec/renode/renode" "$out/bin/renode" \
-      --prefix PATH : "$out/libexec/renode" \
-      --suffix LD_LIBRARY_PATH : "${gtk2-x11}/lib" \
-      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
-
-    makeWrapper "$out/libexec/renode/renode-test" "$out/bin/renode-test" \
-      --prefix PATH : "$out/libexec/renode" \
+      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_8_0 ]}" \
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
+      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
       --prefix PYTHONPATH : "${pythonLibs}" \
-      --suffix LD_LIBRARY_PATH : "${gtk2-x11}/lib" \
+      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
+    makeWrapper "$out/libexec/renode/renode-test" "$out/bin/renode-test" \
+      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_8_0 ]}" \
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
+      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
+      --prefix PYTHONPATH : "${pythonLibs}" \
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
 
     substituteInPlace "$out/libexec/renode/renode-test" \

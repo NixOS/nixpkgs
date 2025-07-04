@@ -1,4 +1,11 @@
-import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, nftables ? false, ... }:
+import ../make-test-python.nix (
+  {
+    pkgs,
+    lib,
+    kernelPackages ? null,
+    nftables ? false,
+    ...
+  }:
   let
     wg-snakeoil-keys = import ./snakeoil-keys.nix;
     peer = import ./make-peer.nix { inherit lib; };
@@ -24,18 +31,28 @@ import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, nftables ? f
           {
             networking.firewall.allowedUDPPorts = [ 23542 ];
             networking.wg-quick.interfaces.wg0 = {
-              address = [ "10.23.42.1/32" "fc00::1/128" ];
+              address = [
+                "10.23.42.1/32"
+                "fc00::1/128"
+              ];
               listenPort = 23542;
 
               inherit (wg-snakeoil-keys.peer0) privateKey;
 
               peers = lib.singleton {
-                allowedIPs = [ "10.23.42.2/32" "fc00::2/128" ];
+                allowedIPs = [
+                  "10.23.42.2/32"
+                  "fc00::2/128"
+                ];
 
                 inherit (wg-snakeoil-keys.peer1) publicKey;
               };
 
-              dns = [ "10.23.42.2" "fc00::2" "wg0" ];
+              dns = [
+                "10.23.42.2"
+                "fc00::2"
+                "wg0"
+              ];
             };
           }
         ];
@@ -49,18 +66,28 @@ import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, nftables ? f
           {
             networking.useNetworkd = true;
             networking.wg-quick.interfaces.wg0 = {
-              address = [ "10.23.42.2/32" "fc00::2/128" ];
+              address = [
+                "10.23.42.2/32"
+                "fc00::2/128"
+              ];
               inherit (wg-snakeoil-keys.peer1) privateKey;
 
               peers = lib.singleton {
-                allowedIPs = [ "0.0.0.0/0" "::/0" ];
+                allowedIPs = [
+                  "0.0.0.0/0"
+                  "::/0"
+                ];
                 endpoint = "192.168.0.1:23542";
                 persistentKeepalive = 25;
 
                 inherit (wg-snakeoil-keys.peer0) publicKey;
               };
 
-              dns = [ "10.23.42.1" "fc00::1" "wg0" ];
+              dns = [
+                "10.23.42.1"
+                "fc00::1"
+                "wg0"
+              ];
             };
           }
         ];

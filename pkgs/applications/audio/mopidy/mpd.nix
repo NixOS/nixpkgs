@@ -1,12 +1,18 @@
-{ lib, python3Packages, fetchPypi, mopidy }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  mopidy,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-MPD";
   version = "3.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CeLMRqj9cwBvQrOx7XHVV8MjDjwOosONVlsN2o+vTVM=";
+    hash = "sha256-CeLMRqj9cwBvQrOx7XHVV8MjDjwOosONVlsN2o+vTVM=";
   };
 
   propagatedBuildInputs = [ mopidy ];

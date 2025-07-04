@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, plumbum
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  plumbum,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rpyc";
-  version = "6.0.0";
+  version = "6.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,21 +19,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "rpyc";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BvXEXZlVbOmKBwnSBCDksUkbT7JPcMX48KZe/Gd5Y8Q=";
+    tag = version;
+    hash = "sha256-ZYGOwg2IJtVVxHV2hC3inliTLP4BBFOnOz7VPhRpcgg=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    plumbum
-  ];
+  dependencies = [ plumbum ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    export PYTHONPATH=$(pwd)/tests:$PYTHONPATH
+  '';
 
   disabledTests = [
     # Disable tests that requires network access
@@ -58,11 +57,9 @@ buildPythonPackage rec {
     "tests/test_magic.py"
   ];
 
-  pythonImportsCheck = [
-    "rpyc"
-  ];
+  pythonImportsCheck = [ "rpyc" ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";

@@ -1,17 +1,29 @@
-{ lib, addonDir, buildKodiAddon, fetchFromGitHub, kodi, requests, dateutil, six, kodi-six, signals, websocket }:
+{
+  lib,
+  addonDir,
+  buildKodiAddon,
+  fetchFromGitHub,
+  kodi,
+  requests,
+  dateutil,
+  six,
+  kodi-six,
+  signals,
+  websocket,
+}:
 let
   python = kodi.pythonPackages.python.withPackages (p: with p; [ pyyaml ]);
 in
 buildKodiAddon rec {
   pname = "jellycon";
   namespace = "plugin.video.jellycon";
-  version = "0.8.0";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-60my7Y60KV5WWALQiamnmAJZJi82cV21rIGYPiV7T+A=";
+    sha256 = "sha256-dCPbPuUtiMhcECd3Aebs3ZGIM6jn6mmCd0rXS+1TQLs=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +41,7 @@ buildKodiAddon rec {
   '';
 
   postInstall = ''
-    mv /build/source/addon.xml $out${addonDir}/${namespace}/
+    cp -v addon.xml $out${addonDir}/$namespace/
   '';
 
   propagatedBuildInputs = [
@@ -43,13 +55,13 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://github.com/jellyfin/jellycon";
-    description = "A lightweight Kodi add-on for Jellyfin";
+    description = "Lightweight Kodi add-on for Jellyfin";
     longDescription = ''
       JellyCon is a lightweight Kodi add-on that lets you browse and play media
       files directly from your Jellyfin server within the Kodi interface. It can
       easily switch between multiple user accounts at will.
     '';
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

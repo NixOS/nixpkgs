@@ -1,11 +1,11 @@
-{ lib
-, blockdiag
-, buildPythonPackage
-, fetchFromGitHub
-, pynose
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  blockdiag,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,30 +18,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "seqdiag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Dh9JMx50Nexi0q39rYr9MpkKmQRAfT7lzsNOXoTuphg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    blockdiag
-  ];
+  dependencies = [ blockdiag ];
 
-  nativeCheckInputs = [
-    pynose
-    pytestCheckHook
-  ];
+  patches = [ ./fix_test_generate.patch ];
 
-  pytestFlagsArray = [
-    "src/seqdiag/tests/"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "src/seqdiag/tests/" ];
 
-  pythonImportsCheck = [
-    "seqdiag"
-  ];
+  pythonImportsCheck = [ "seqdiag" ];
 
   meta = with lib; {
     description = "Generate sequence-diagram image from spec-text file (similar to Graphviz)";

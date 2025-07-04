@@ -1,14 +1,22 @@
-{ lib, python3, fetchFromGitHub, gtk3, gobject-introspection, gtk-layer-shell, wrapGAppsHook }:
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  gtk3,
+  gobject-introspection,
+  gtk-layer-shell,
+  wrapGAppsHook3,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "discover-overlay";
-  version = "0.7.0";
+  version = "0.7.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trigg";
     repo = "Discover";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-//QW6N87Uhm2aH0RSuykHG3+EfzYSHOcSNLSn1y0rFw=";
+    tag = "v${version}";
+    hash = "sha256-0b0uZDa9Q3pQ6X65C+E31dMpdTPt4vvHDEqFEtRoedg=";
   };
 
   buildInputs = [
@@ -16,16 +24,20 @@ python3.pkgs.buildPythonApplication rec {
     gtk-layer-shell
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" "--set DISPLAY ':0.0'" ];
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+    "--set DISPLAY ':0.0'"
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    pulsectl-asyncio
     pycairo
     pygobject3
     websocket-client

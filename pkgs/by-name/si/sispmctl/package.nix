@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, libusb-compat-0_1
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libusb-compat-0_1,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sispmctl";
-  version = "4.11";
+  version = "4.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/sispmctl/sispmctl-${version}.tar.gz";
-    hash = "sha256-dLlKNxAEaxUHDHMR8MrLgVVMhrQidxnMJzPLlscFJXg=";
+    hash = "sha256-51eGOkg42m4cpypXrcWspvxH/73ccqaQUtir10PVcII=";
   };
 
   nativeBuildInputs = [

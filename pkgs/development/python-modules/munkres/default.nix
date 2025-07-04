@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, isPy3k
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  isPy3k,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +34,6 @@ buildPythonPackage rec {
     homepage = "http://bmc.github.com/munkres/";
     description = "Munkres algorithm for the Assignment Problem";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
-
 }

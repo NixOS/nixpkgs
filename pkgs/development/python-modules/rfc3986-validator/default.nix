@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, rfc3987
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  rfc3987,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,6 @@ buildPythonPackage rec {
     description = "Pure python rfc3986 validator";
     homepage = "https://github.com/naimetti/rfc3986-validator";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

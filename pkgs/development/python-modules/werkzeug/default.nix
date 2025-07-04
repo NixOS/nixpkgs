@@ -1,80 +1,68 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch2
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
 
-# build-system
-, flit-core
+  # build-system
+  flit-core,
 
-# dependencies
-, markupsafe
+  # dependencies
+  markupsafe,
 
-# optional-dependencies
-, watchdog
+  # optional-dependencies
+  watchdog,
 
-# tests
-, cryptography
-, ephemeral-port-reserve
-, greenlet
-, pytest-timeout
-, pytest-xprocess
-, pytestCheckHook
+  # tests
+  cffi,
+  cryptography,
+  ephemeral-port-reserve,
+  pytest-timeout,
+  pytestCheckHook,
 
-# reverse dependencies
-, moto
-, sentry-sdk
+  # reverse dependencies
+  moto,
+  sentry-sdk,
 }:
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "3.0.1";
-  format = "pyproject";
+  version = "3.1.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UH6BHs6nKxikBJR63tSzOQ4duPgmtJTXZVDvRbs7Hcw=";
+    hash = "sha256-YHI86UXBkyhnl5DjKCzHWKpKYEDkuzMPU9MPpUbUR0Y=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "werkzeug-pytest8-compat.patch";
-      url = "https://github.com/pallets/werkzeug/commit/4e5bdca7f8227d10cae828f8064fb98190ace4aa.patch";
-      hash = "sha256-lVknzvC+HIM6TagpyIOhnb+7tx0UXuGw0tINjsujISI=";
-    })
-  ];
+  build-system = [ flit-core ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  dependencies = [ markupsafe ];
 
-  propagatedBuildInputs = [
-    markupsafe
-  ];
-
-  passthru.optional-dependencies = {
-    watchdog = lib.optionals (!stdenv.isDarwin) [
-      # watchdog requires macos-sdk 10.13
-      watchdog
-    ];
+  optional-dependencies = {
+    watchdog = [ watchdog ];
   };
 
   nativeCheckInputs = [
+    cffi
     cryptography
     ephemeral-port-reserve
     pytest-timeout
-    pytest-xprocess
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    greenlet
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_get_machine_id"
-  ];
+  pythonImportsCheck = [ "werkzeug" ];
+
+  disabledTests = [
+    # ConnectionRefusedError: [Errno 111] Connection refused
+    "test_http_proxy"
+    # ResourceWarning: subprocess 309 is still running
+    "test_basic"
+    "test_long_build"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_get_machine_id" ];
 
   disabledTestPaths = [
     # ConnectionRefusedError: [Errno 111] Connection refused
@@ -91,17 +79,19 @@ buildPythonPackage rec {
     inherit moto sentry-sdk;
   };
 
-  meta = with lib; {
-    changelog = "https://werkzeug.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${replaceStrings [ "." ] [ "-" ] version}";
+  meta = {
+    changelog = "https://werkzeug.palletsprojects.com/en/${lib.versions.majorMinor version}.x/changes/#version-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }";
     homepage = "https://palletsprojects.com/p/werkzeug/";
-    description = "The comprehensive WSGI web application library";
+    description = "Comprehensive WSGI web application library";
     longDescription = ''
       Werkzeug is a comprehensive WSGI web application library. It
       began as a simple collection of various utilities for WSGI
       applications and has become one of the most advanced WSGI
       utility libraries.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

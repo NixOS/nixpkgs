@@ -1,13 +1,26 @@
-{ lib, buildGoModule, minikube }:
+{
+  lib,
+  buildGoModule,
+  minikube,
+}:
 
 buildGoModule rec {
-  inherit (minikube) version src nativeBuildInputs buildInputs vendorHash doCheck;
+  inherit (minikube)
+    version
+    src
+    nativeBuildInputs
+    buildInputs
+    vendorHash
+    doCheck
+    ;
 
   pname = "docker-machine-kvm2";
 
-  postPatch = ''
-    sed -i '/GOARCH=$*/d' Makefile
-  '';
+  postPatch =
+    minikube.postPatch
+    + ''
+      sed -i '/GOARCH=$*/d' Makefile
+    '';
 
   buildPhase = ''
     make docker-machine-driver-kvm2 COMMIT=${src.rev}
@@ -22,7 +35,10 @@ buildGoModule rec {
     description = "KVM2 driver for docker-machine";
     mainProgram = "docker-machine-driver-kvm2";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tadfisher atkinschang ];
+    maintainers = with maintainers; [
+      tadfisher
+      atkinschang
+    ];
     platforms = platforms.linux;
   };
 }

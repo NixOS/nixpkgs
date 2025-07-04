@@ -1,41 +1,63 @@
-{ lib
-, python3Packages
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  distro,
+  fetchPypi,
+  fixtures,
+  libredirect,
+  packaging,
+  parsley,
+  pbr,
+  pytestCheckHook,
+  testtools,
 }:
-python3Packages.buildPythonPackage rec {
+
+buildPythonPackage rec {
   pname = "bindep";
-  version = "2.11.0";
-  format = "pyproject";
+  version = "2.13.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rLLyWbzh/RUIhzR5YJu95bmq5Qg3hHamjWtqGQAufi8=";
+    hash = "sha256-33VkdT5YMDO7ETM4FQ13JUAUW00YmkgB7FaiW17eUFA=";
   };
 
-  buildInputs = with python3Packages; [
-    distro
+  env.PBR_VERSION = version;
+
+  build-system = [
     pbr
-    setuptools
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = [
     parsley
     pbr
     packaging
     distro
   ];
 
-  patchPhase = ''
-    # Setting the pbr version will skip any version checking logic
-    # This is required because pbr thinks it gets it's own version from git tags
-    # See https://docs.openstack.org/pbr/latest/user/packagers.html
-    export PBR_VERSION=5.11.1
+  nativeCheckInputs = [
+    fixtures
+    libredirect.hook
+    pytestCheckHook
+    testtools
+  ];
+
+  preCheck = ''
+    echo "ID=nixos
+    " > os-release
+    export NIX_REDIRECTS=/etc/os-release=$(realpath os-release)
+    export PATH=$PATH:$out/bin
   '';
+
+  pytestFlagsArray = [ "-s" ];
+
+  pythonImportsCheck = [ "bindep" ];
 
   meta = with lib; {
     description = "Bindep is a tool for checking the presence of binary packages needed to use an application / library";
-    homepage = "https://docs.opendev.org/opendev/bindep/latest/";
+    homepage = "https://opendev.org/opendev/bindep";
     license = licenses.asl20;
-    maintainers = with maintainers; [ melkor333 ];
+    mainProgram = "bindep";
+    teams = [ teams.openstack ];
   };
 }

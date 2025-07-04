@@ -1,25 +1,36 @@
 {
   lib,
-  stdenv,
+  buildPythonPackage,
   fetchFromGitHub,
+
+  fontconfig,
+
+  # nativeBuildInputs
   cmake,
   doxygen,
+  graphviz,
+  scipy,
+
+  # buildInputs
   boost,
+
+  # propagatedBuildInputs
   eigen,
   jrl-cmakemodules,
   numpy,
-  scipy,
+
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPythonPackage rec {
   pname = "eigenpy";
-  version = "3.5.0";
+  version = "3.11.0";
+  pyproject = false; # Built with cmake
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "eigenpy";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ar7KmlvWD2qoOonaH8YhVssZhpbTdHNvxY7rzvmhzc0=";
+    tag = "v${version}";
+    hash = "sha256-BCsEW7eXlCnVILaB+1j0rFDuCkJ6Rs2HJMzTqNsMfzs=";
   };
 
   outputs = [
@@ -30,14 +41,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DINSTALL_DOCUMENTATION=ON"
+    "-DBUILD_TESTING=ON"
     "-DBUILD_TESTING_SCIPY=ON"
   ];
 
   strictDeps = true;
 
+  # Fontconfig error: No writable cache directories
+  preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
+
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+
   nativeBuildInputs = [
     cmake
     doxygen
+    graphviz
     scipy
   ];
 
@@ -49,13 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
     numpy
   ];
 
-  doCheck = true;
+  preInstallCheck = "make test";
+
   pythonImportsCheck = [ "eigenpy" ];
 
   meta = with lib; {
     description = "Bindings between Numpy and Eigen using Boost.Python";
     homepage = "https://github.com/stack-of-tasks/eigenpy";
-    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/${src.tag}";
     license = licenses.bsd2;
     maintainers = with maintainers; [
       nim65s
@@ -63,4 +83,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = platforms.unix;
   };
-})
+}

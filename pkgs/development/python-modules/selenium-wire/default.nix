@@ -1,24 +1,25 @@
-{ lib
-, blinker
-, brotli
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, h2
-, hyperframe
-, kaitaistruct
-, pyasn1
-, httpbin
-, pyopenssl
-, pyparsing
-, pysocks
-, gunicorn
-, pytestCheckHook
-, pythonOlder
-, selenium
-, setuptools
-, wsproto
-, zstandard
+{
+  lib,
+  blinker,
+  brotli,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  h2,
+  hyperframe,
+  kaitaistruct,
+  pyasn1,
+  httpbin,
+  pyopenssl,
+  pyparsing,
+  pysocks,
+  gunicorn,
+  pytestCheckHook,
+  pythonOlder,
+  selenium,
+  setuptools,
+  wsproto,
+  zstandard,
 }:
 
 buildPythonPackage rec {
@@ -31,15 +32,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wkeeling";
     repo = "selenium-wire";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-KgaDxHS0dAK6CT53L1qqx1aORMmkeaiXAUtGC82hiIQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     blinker
     brotli
     certifi
@@ -61,9 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "seleniumwire"
-  ];
+  pythonImportsCheck = [ "seleniumwire" ];
 
   disabledTestPaths = [
     # Don't run End2End tests
@@ -76,5 +73,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/wkeeling/selenium-wire/blob/${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    broken = versionAtLeast blinker.version "1.8";
   };
 }

@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, alsa-lib
-, dssi
-, fluidsynth
-, ladspaH
-, lash
-, libinstpatch
-, libjack2
-, liblo
-, libsamplerate
-, libsndfile
-, lilv
-, lrdf
-, lv2
-, qtsvg
-, rtaudio
-, rubberband
-, sord
-, serd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  alsa-lib,
+  dssi,
+  fluidsynth,
+  ladspaH,
+  lash,
+  libinstpatch,
+  libjack2,
+  liblo,
+  libsamplerate,
+  libsndfile,
+  lilv,
+  lrdf,
+  lv2,
+  qtsvg,
+  rtaudio,
+  rubberband,
+  sord,
+  serd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -81,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       it is published under the GNU General Public License.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant orivej ];
+    maintainers = with lib.maintainers; [ orivej ];
     platforms = lib.platforms.linux;
     mainProgram = "muse4";
   };

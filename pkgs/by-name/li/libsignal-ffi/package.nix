@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, runCommand, xcodebuild, protobuf, boringssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  runCommand,
+  xcodebuild,
+  protobuf,
+  boringssl,
+}:
 let
   # boring-sys expects the static libraries in build/ instead of lib/
   boringssl-wrapper = runCommand "boringssl-wrapper" { } ''
@@ -12,35 +21,36 @@ rustPlatform.buildRustPackage rec {
   pname = "libsignal-ffi";
   # must match the version used in mautrix-signal
   # see https://github.com/mautrix/signal/issues/401
-  version = "0.41.0";
+  version = "0.74.1";
 
   src = fetchFromGitHub {
+    fetchSubmodules = true;
     owner = "signalapp";
     repo = "libsignal";
-    rev = "v${version}";
-    hash = "sha256-U/Wy7nzRQJLdc/dGmYR418Nt1KV70HbcgnDHmYxKytg=";
+    tag = "v${version}";
+    hash = "sha256-ZMi+/d051CS7TcWVZnVItNpok0ac+vAvvZL/buNrtL0=";
   };
 
-  nativeBuildInputs = [ protobuf ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
-  buildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    protobuf
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
+  env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 
-  # The Cargo.lock contains git dependencies
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "boring-3.1.0" = "sha256-R6hh4K57mgV10nuVcMZETvxlQsMsmGapgCQ7pjuognk=";
-      "curve25519-dalek-4.1.1" = "sha256-p9Vx0lAaYILypsI4/RVsHZLOqZKaa4Wvf7DanLA38pc=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pRMFWJSRjhZYfX7dmOQXK3BjhJKzPR1Pg+TZzTfPnd4=";
 
-  cargoBuildFlags = [ "-p" "libsignal-ffi" ];
+  cargoBuildFlags = [
+    "-p"
+    "libsignal-ffi"
+  ];
 
   meta = with lib; {
-    description = "A C ABI library which exposes Signal protocol logic";
+    description = "C ABI library which exposes Signal protocol logic";
     homepage = "https://github.com/signalapp/libsignal";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ niklaskorz ];
+    maintainers = with maintainers; [ pentane ];
   };
 }

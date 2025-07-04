@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, libbsd
-, libressl
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libbsd,
+  libressl,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,4 +38,3 @@ stdenv.mkDerivation rec {
     mainProgram = "acme-client";
   };
 }
-

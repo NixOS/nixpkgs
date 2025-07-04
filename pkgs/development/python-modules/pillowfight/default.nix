@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
 }:
 
 buildPythonPackage rec {
@@ -21,5 +22,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/beanbaginc/pillowfight";
     license = licenses.mit;
   };
-
 }

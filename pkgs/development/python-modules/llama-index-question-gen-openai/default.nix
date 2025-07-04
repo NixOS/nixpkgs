@@ -1,29 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, llama-index-llms-openai
-, llama-index-program-openai
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  llama-index-core,
+  llama-index-llms-openai,
+  llama-index-program-openai,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-question-gen-openai";
-  version = "0.1.3";
+  version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_question_gen_openai";
     inherit version;
-    hash = "sha256-RIYZgRekVFfS4DauYLk69YBSiTzH14+ptvR91HuB4uE=";
+    hash = "sha256-XpMRtDPMJYH/ilMfoZ+zqiGBW6/3WqrN7xF2CslSKqk=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core
@@ -34,9 +30,7 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.question_gen.openai"
-  ];
+  pythonImportsCheck = [ "llama_index.question_gen.openai" ];
 
   meta = with lib; {
     description = "LlamaIndex Question Gen Integration for Openai Generator";

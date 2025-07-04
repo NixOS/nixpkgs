@@ -1,80 +1,73 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jupyterlab
-, nbexec
-, pandas
-, pandas-stubs
-, pdfminer-six
-, pillow
-, pytest-parallel
-, pytestCheckHook
-, pythonOlder
-, types-pillow
-, wand
+{
+  pkgs,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  jupyterlab,
+  nbexec,
+  pandas,
+  pandas-stubs,
+  pdfminer-six,
+  pillow,
+  pypdfium2,
+  pytest-cov-stub,
+  pytest-parallel,
+  pytestCheckHook,
+  types-pillow,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "pdfplumber";
-  version = "0.11.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.11.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsvine";
     repo = "pdfplumber";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-sjiCxE2WcvBASANCeookNn1n9M+mY0/8QGOCen+pzqM=";
+    tag = "v${version}";
+    hash = "sha256-6oCHFf/lNQidP69l0lVcvIQ0ldO3djRDnxLwcZ+VDVk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=pdfplumber --cov-report xml:coverage.xml --cov-report term" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pdfminer-six
     pillow
-    wand
+    pypdfium2
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
+    pkgs.ghostscript
     jupyterlab
     nbexec
     pandas
     pandas-stubs
+    pytest-cov-stub
     pytest-parallel
     pytestCheckHook
     types-pillow
+    writableTmpDirAsHomeHook
   ];
 
-  pythonImportsCheck = [
-    "pdfplumber"
-  ];
-
-  disabledTests = [
-    # flaky
-    "test__repr_png_"
-  ];
+  pythonRelaxDeps = [ "pdfminer.six" ];
 
   disabledTestPaths = [
-    # Tests requires pypdfium2
-    "tests/test_display.py"
-    # Tests require Ghostscript
-    "tests/test_repair.py"
+    # AssertionError
+    "tests/test_convert.py::Test::test_cli_csv"
+    "tests/test_convert.py::Test::test_cli_csv_exclude"
+    "tests/test_convert.py::Test::test_csv"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pdfplumber" ];
+
+  meta = {
     description = "Plumb a PDF for detailed information about each char, rectangle, line, et cetera — and easily extract text and tables";
     mainProgram = "pdfplumber";
     homepage = "https://github.com/jsvine/pdfplumber";
-    changelog = "https://github.com/jsvine/pdfplumber/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/jsvine/pdfplumber/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

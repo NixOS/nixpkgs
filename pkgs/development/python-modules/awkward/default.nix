@@ -1,56 +1,49 @@
-{ lib
-, fsspec
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatch-fancy-pypi-readme
-, hatchling
-, awkward-cpp
-, importlib-metadata
-, numpy
-, packaging
-, typing-extensions
-, jax
-, jaxlib
-, numba
-, setuptools
-, numexpr
-, pandas
-, pyarrow
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-fancy-pypi-readme,
+  hatchling,
+
+  # dependencies
+  awkward-cpp,
+  fsspec,
+  numpy,
+  packaging,
+
+  # tests
+  numba,
+  numexpr,
+  pandas,
+  pyarrow,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.6.3";
+  version = "2.8.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zII5TZ0bzVEo5hTrLr45N7oL3lYhkCyNfZif+0vkEo4=";
+    tag = "v${version}";
+    hash = "sha256-btW4y3lSwHRgoM7B7KVzJ2h8CQdZYNUwqSRIYZfK0Hg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awkward-cpp
     fsspec
-    importlib-metadata
     numpy
     packaging
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.12") [
-    importlib-metadata
   ];
 
   dontUseCmakeConfigure = true;
@@ -60,28 +53,23 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fsspec
     numba
-    setuptools
     numexpr
     pandas
     pyarrow
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # no support for darwin
-    jax
-    jaxlib
   ];
 
-  # The following tests have been disabled because they need to be run on a GPU platform.
   disabledTestPaths = [
+    # Need to be run on a GPU platform.
     "tests-cuda"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
-    changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-hep/awkward/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

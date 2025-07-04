@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, odpic }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  odpic,
+}:
 
 buildPythonPackage rec {
   pname = "cx-oracle";
   version = "8.3.0";
+  format = "setuptools";
 
   buildInputs = [ odpic ];
 

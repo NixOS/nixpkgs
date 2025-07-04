@@ -1,33 +1,45 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
+{ pkgs, lib, ... }:
 
 let
   addrShared = "192.168.0.1";
   addrHostA = "192.168.0.10";
   addrHostB = "192.168.0.11";
 
-  mkUcarpHost = addr: { config, pkgs, lib, ... }: {
-    networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
-      { address = addr; prefixLength = 24; }
-    ];
+  mkUcarpHost =
+    addr:
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
+    {
+      networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
+        {
+          address = addr;
+          prefixLength = 24;
+        }
+      ];
 
-    networking.ucarp = {
-      enable = true;
-      interface = "eth1";
-      srcIp = addr;
-      vhId = 1;
-      passwordFile = "${pkgs.writeText "ucarp-pass" "secure"}";
-      addr = addrShared;
-      upscript = pkgs.writeScript "upscript" ''
-        #!/bin/sh
-        ${pkgs.iproute2}/bin/ip addr add "$2"/24 dev "$1"
-      '';
-      downscript = pkgs.writeScript "downscript" ''
-        #!/bin/sh
-        ${pkgs.iproute2}/bin/ip addr del "$2"/24 dev "$1"
-      '';
+      networking.ucarp = {
+        enable = true;
+        interface = "eth1";
+        srcIp = addr;
+        vhId = 1;
+        passwordFile = "${pkgs.writeText "ucarp-pass" "secure"}";
+        addr = addrShared;
+        upscript = pkgs.writeScript "upscript" ''
+          #!/bin/sh
+          ${pkgs.iproute2}/bin/ip addr add "$2"/24 dev "$1"
+        '';
+        downscript = pkgs.writeScript "downscript" ''
+          #!/bin/sh
+          ${pkgs.iproute2}/bin/ip addr del "$2"/24 dev "$1"
+        '';
+      };
     };
-  };
-in {
+in
+{
   name = "ucarp";
   meta.maintainers = with lib.maintainers; [ oxzi ];
 
@@ -63,4 +75,4 @@ in {
     backup_host.sleep(5)
     assert is_master(backup_host), "backup did not take over"
   '';
-})
+}

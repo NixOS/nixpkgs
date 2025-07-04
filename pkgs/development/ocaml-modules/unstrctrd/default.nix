@@ -1,27 +1,26 @@
-{ alcotest
-, angstrom
-, bigstringaf
-, buildDunePackage
-, crowbar
-, fetchzip
-, fmt
-, hxd
-, ke
-, lib
-, rresult
-, uutf
+{
+  alcotest,
+  angstrom,
+  bigstringaf,
+  buildDunePackage,
+  crowbar,
+  fetchzip,
+  fmt,
+  hxd,
+  ke,
+  lib,
+  rresult,
+  uutf,
 }:
 
 buildDunePackage rec {
   pname = "unstrctrd";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchzip {
-    url = "https://github.com/dinosaure/unstrctrd/releases/download/v${version}/unstrctrd-v${version}.tbz";
-    sha256 = "0mjm4v7kk75iwwsfnpmxc3bsl8aisz53y7z21sykdp60f4rxnah7";
+    url = "https://github.com/dinosaure/unstrctrd/releases/download/v${version}/unstrctrd-${version}.tbz";
+    hash = "sha256-CGcDqEr+VDTbDYkjxeYB6IFWiTkOTLJJl/Y2bHtv19g=";
   };
-
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     angstrom
@@ -40,9 +39,9 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    description = "A library for parsing email headers";
+    description = "Library for parsing email headers";
     homepage = "https://github.com/dinosaure/unstrctrd";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

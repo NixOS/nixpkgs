@@ -1,26 +1,26 @@
-{ lib
-, aioredis
-, aiosmtplib
-, blinker
-, buildPythonPackage
-, email-validator
-, fakeredis
-, fastapi
-, fetchFromGitHub
-, httpx
-, jinja2
-, poetry-core
-, pydantic
-, pydantic-settings
-, pytest-asyncio
-, pytestCheckHook
-, python-multipart
-, pythonOlder
+{
+  lib,
+  aiosmtplib,
+  blinker,
+  buildPythonPackage,
+  email-validator,
+  fakeredis,
+  fetchFromGitHub,
+  httpx,
+  jinja2,
+  poetry-core,
+  pydantic-settings,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  starlette,
 }:
 
 buildPythonPackage rec {
   pname = "fastapi-mail";
-  version = "1.4.1";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,34 +28,32 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sabuhish";
     repo = "fastapi-mail";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2iTZqZIxlt1GKhElasTcnys18UbNNDwHoZziHBOIGBo=";
+    tag = version;
+    hash = "sha256-v8cf4GlYAdl5+iD7hJHW+FuDN/I/VygWaaZLEotDNCU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "1.2.5"' 'version = "${version}"' \
-      --replace 'aiosmtplib = "^2.0"' 'aiosmtplib = "*"' \
-      --replace 'pydantic = "^2.0"' 'pydantic = "*"' \
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "aiosmtplib"
+    "pydantic"
   ];
 
-  propagatedBuildInputs = [
-    aioredis
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiosmtplib
     blinker
     email-validator
     fakeredis
-    fastapi
-    httpx
     jinja2
     pydantic
     pydantic-settings
-    python-multipart
+    starlette
   ];
+
+  optional-dependencies = {
+    httpx = [ httpx ];
+    redis = [ redis ];
+  };
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -66,17 +64,16 @@ buildPythonPackage rec {
     # Tests require access to /etc/resolv.conf
     "test_default_checker"
     "test_redis_checker"
+    "test_local_hostname_resolving"
   ];
 
-  pythonImportsCheck = [
-    "fastapi_mail"
-  ];
+  pythonImportsCheck = [ "fastapi_mail" ];
 
   meta = with lib; {
     description = "Module for sending emails and attachments";
     homepage = "https://github.com/sabuhish/fastapi-mail";
     changelog = "https://github.com/sabuhish/fastapi-mail/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

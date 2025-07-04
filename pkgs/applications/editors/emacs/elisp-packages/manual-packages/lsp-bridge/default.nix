@@ -1,49 +1,50 @@
-{ lib
-, python3
-, melpaBuild
-, fetchFromGitHub
-, substituteAll
-, acm
-, markdown-mode
-, git
-, go
-, gopls
-, pyright
-, ruff
-, tempel
-, writeText
-, unstableGitUpdater
+{
+  lib,
+  python3,
+  melpaBuild,
+  fetchFromGitHub,
+  replaceVars,
+  acm,
+  markdown-mode,
+  basedpyright,
+  git,
+  go,
+  gopls,
+  tempel,
+  unstableGitUpdater,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  rev = "0b30d95c6de95b150d93ecee325b95e04ff09e46";
-  python = python3.withPackages (ps: with ps; [
-    epc
-    orjson
-    paramiko
-    rapidfuzz
-    sexpdata
-    six
-  ]);
+  python = python3.withPackages (
+    ps: with ps; [
+      epc
+      orjson
+      packaging
+      paramiko
+      rapidfuzz
+      setuptools
+      sexpdata
+      six
+      watchdog
+    ]
+  );
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "20231021.309"; # 3:09 UTC
+  version = "0-unstable-2025-02-10";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
-    inherit rev;
-    hash = "sha256-hR7bZh0ElJ8F9ToJ4dkazF19T8PE01MTcxKrjeaEp4o=";
+    rev = "4401d1396dce89d1fc5dc5414565818dd1c30ae0";
+    hash = "sha256-lWbFbYwJoy4UAezKUK7rnjQlDcnszHQwK5I7fuHfE8Y=";
   };
-
-  commit = rev;
 
   patches = [
     # Hardcode the python dependencies needed for lsp-bridge, so users
     # don't have to modify their global environment
-    (substituteAll {
-      src = ./hardcode-dependencies.patch;
+    (replaceVars ./hardcode-dependencies.patch {
       python = python.interpreter;
     })
   ];
@@ -54,46 +55,51 @@ melpaBuild {
   ];
 
   checkInputs = [
-    git
-    go
-    gopls
-    pyright
-    python
-    ruff
+    # Emacs packages
     tempel
   ];
 
-  recipe = writeText "recipe" ''
-    (lsp-bridge
-      :repo "manateelazycat/lsp-bridge"
-      :fetcher github
-      :files
-      ("*.el"
-       "lsp_bridge.py"
-       "core"
-       "langserver"
-       "multiserver"
-       "resources"))
+  nativeCheckInputs = [
+    # Executables
+    basedpyright
+    git
+    go
+    gopls
+    python
+    writableTmpDirAsHomeHook
+  ];
+
+  files = ''
+    ("*.el"
+     "lsp_bridge.py"
+     "core"
+     "langserver"
+     "multiserver"
+     "resources")
   '';
 
   doCheck = true;
   checkPhase = ''
     runHook preCheck
 
-    cd "$sourceRoot"
     mkfifo test.log
     cat < test.log &
-    HOME=$(mktemp -d) python -m test.test
+    python -m test.test
 
     runHook postCheck
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
-    description = "A blazingly fast LSP client for Emacs";
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+
+  meta = {
+    description = "Blazingly fast LSP client for Emacs";
     homepage = "https://github.com/manateelazycat/lsp-bridge";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fxttr kira-bruneau ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      fxttr
+      kira-bruneau
+    ];
   };
 }

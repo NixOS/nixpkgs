@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitLab
-, cmake
-, extra-cmake-modules
-, gtk3
-, plasma-framework
-, kwindowsystem
-, hicolor-icon-theme
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  extra-cmake-modules,
+  gtk3,
+  plasma-framework,
+  kwindowsystem,
+  hicolor-icon-theme,
 }:
 
 stdenv.mkDerivation {

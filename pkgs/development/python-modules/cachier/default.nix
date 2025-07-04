@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, setuptools
-, watchdog
-, portalocker
-, pytestCheckHook
-, pymongo
-, dnspython
-, pymongo-inmemory
-, pandas
-, birch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  click,
+  watchdog,
+  portalocker,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pymongo,
+  dnspython,
+  pymongo-inmemory,
+  pandas,
+  birch,
 }:
 
 buildPythonPackage rec {
   pname = "cachier";
-  version = "3.0.0";
+  version = "3.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,31 +26,26 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-cachier";
     repo = "cachier";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3rKsgcJQ9RQwosVruD7H99msB8iGtAai320okrCZCTI=";
+    tag = "v${version}";
+    hash = "sha256-siighT6hMicN+F/LIXfUAPQ2kkRiyk7CtjqmyC/qCFg=";
   };
 
   pythonRemoveDeps = [ "setuptools" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     watchdog
     portalocker
+    # not listed as dep, but needed to run main script entrypoint
+    click
   ];
-
-  preCheck = ''
-    substituteInPlace pyproject.toml \
-      --replace  \
-        '"--cov' \
-        '#"--cov'
-  '';
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pymongo
     dnspython
     pymongo-inmemory
@@ -69,18 +66,21 @@ buildPythonPackage rec {
 
     # don't test formatting
     "test_flake8"
+
+    # timing sensitive
+    "test_being_calc_next_time"
+    "test_pickle_being_calculated"
   ];
 
   preBuild = ''
     export HOME="$(mktemp -d)"
   '';
 
-  pythonImportsCheck = [
-    "cachier"
-  ];
+  pythonImportsCheck = [ "cachier" ];
 
   meta = {
     homepage = "https://github.com/python-cachier/cachier";
+    changelog = "https://github.com/python-cachier/cachier/releases/tag/v${version}";
     description = "Persistent, stale-free, local and cross-machine caching for functions";
     mainProgram = "cachier";
     maintainers = with lib.maintainers; [ pbsds ];

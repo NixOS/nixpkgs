@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, jupyterhub
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  jupyterhub,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-7TuAYP6mRffsZL+O+AMgt5HBu6PhwLYj5A8X8DnMfl0=";
   };
 
-  propagatedBuildInputs = [
-    jupyterhub
-  ];
+  propagatedBuildInputs = [ jupyterhub ];
 
   # No tests available in the package
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tmpauthenticator"
-  ];
+  pythonImportsCheck = [ "tmpauthenticator" ];
 
   meta = with lib; {
     description = "Simple Jupyterhub authenticator that allows anyone to log in";

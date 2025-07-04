@@ -1,64 +1,50 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cmake
-, cython_3
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, rapidfuzz
-, rapidfuzz-cpp
-, scikit-build
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  cython,
+  ninja,
+  scikit-build-core,
+  rapidfuzz-cpp,
+  rapidfuzz,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.25.0";
+  version = "0.27.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "Levenshtein";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MkzIwTZU8hqPDOlfN4qADCKjGJIQrNhhOmVRAnAfNK0=";
-    fetchSubmodules = true; ## for vendored `rapidfuzz-cpp`
+    tag = "v${version}";
+    hash = "sha256-EFEyP7eqB4sUQ2ksD67kCr0BEShTiKWbk1PxXOUOGc4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
-    cython_3
-    scikit-build
+    cython
+    ninja
+    scikit-build-core
   ];
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [
-    rapidfuzz-cpp
-  ];
+  buildInputs = [ rapidfuzz-cpp ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
-    "-fno-lto"  # work around https://github.com/NixOS/nixpkgs/issues/19098
-  ]);
+  dependencies = [ rapidfuzz ];
 
-  propagatedBuildInputs = [
-    rapidfuzz
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  pythonImportsCheck = [ "Levenshtein" ];
 
-  pythonImportsCheck = [
-    "Levenshtein"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
     homepage = "https://github.com/maxbachmann/Levenshtein";
-    changelog = "https://github.com/maxbachmann/Levenshtein/blob/${src.rev}/HISTORY.md";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/maxbachmann/Levenshtein/blob/v${version}/HISTORY.md";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

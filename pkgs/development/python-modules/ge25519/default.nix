@@ -1,20 +1,21 @@
-{ lib
-, bitlist
-, buildPythonPackage
-, fe25519
-, fetchPypi
-, fountains
-, parts
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  bitlist,
+  buildPythonPackage,
+  fe25519,
+  fetchPypi,
+  fountains,
+  parts,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ge25519";
   version = "1.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,12 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-VKDPiSdufWwrNcZSRTByFU4YGoJrm48TDm1nt4VyclA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fe25519
     parts
     bitlist
@@ -36,17 +34,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--doctest-modules --ignore=docs --cov=ge25519 --cov-report term-missing" ""
-  '';
-
-  pythonImportsCheck = [
-    "ge25519"
-  ];
+  pythonImportsCheck = [ "ge25519" ];
 
   meta = with lib; {
     description = "Python implementation of Ed25519 group elements and operations";

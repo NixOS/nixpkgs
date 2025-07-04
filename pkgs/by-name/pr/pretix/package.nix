@@ -1,18 +1,30 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, fetchPypi
-, nodejs
-, python3
-, gettext
-, nixosTests
-, plugins ? [ ]
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  nodejs,
+  python3,
+  gettext,
+  nixosTests,
+  pretix,
+  plugins ? [ ],
 }:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       django = super.django_4;
+
+      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
+        version = "2.3.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
+        };
+      });
 
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
@@ -24,18 +36,19 @@ let
         };
       };
 
+      pretix = self.toPythonModule pretix;
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
     };
   };
 
   pname = "pretix";
-  version = "2024.3.0";
+  version = "2025.6.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Wz1vZcqgwyS0xJgTtRxqfaJpJ1fAMhIyxvTvBT/ABSo=";
+    hash = "sha256-bDE4ygTCX7hynWjoni9ZWMGujKvPk0TKaG42SQ6w9Rk=";
   };
 
   npmDeps = buildNpmPackage {
@@ -43,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-2fHlEEmYzpF3SyvF7+FbwCt+zQVGF0/kslDFnJ+DQGE=";
+    npmDepsHash = "sha256-LQPbOC9SaolD/fyiFoObndx7pcS7iaYVytz6y+bQZqQ=";
 
     dontBuild = true;
 
@@ -67,6 +80,38 @@ python.pkgs.buildPythonApplication rec {
     ./plugin-build.patch
   ];
 
+  pythonRelaxDeps = [
+    "beautifulsoup4"
+    "celery"
+    "django-bootstrap3"
+    "django-localflavor"
+    "django-phonenumber-field"
+    "dnspython"
+    "drf_ujson2"
+    "importlib-metadata"
+    "kombu"
+    "markdown"
+    "oauthlib"
+    "phonenumberslite"
+    "pillow"
+    "protobuf"
+    "pycryptodome"
+    "pyjwt"
+    "pypdf"
+    "python-bidi"
+    "qrcode"
+    "redis"
+    "reportlab"
+    "requests"
+    "sentry-sdk"
+    "ua-parser"
+    "webauthn"
+  ];
+
+  pythonRemoveDeps = [
+    "vat_moss_forked" # we provide a patched vat-moss package
+  ];
+
   postPatch = ''
     NODE_PREFIX=src/pretix/static.dist/node_prefix
     mkdir -p $NODE_PREFIX
@@ -77,110 +122,98 @@ python.pkgs.buildPythonApplication rec {
     sed -i "/setuptools-rust/d" pyproject.toml
 
     substituteInPlace pyproject.toml \
-      --replace-fail phonenumberslite phonenumbers \
-      --replace-fail psycopg2-binary psycopg2 \
-      --replace-fail vat_moss_forked==2020.3.20.0.11.0 vat-moss \
-      --replace-fail "bleach==5.0.*" bleach \
-      --replace-fail "dnspython==2.6.*" dnspython \
-      --replace-fail "django-countries==7.5.*" django-countries \
-      --replace-fail "django-filter==24.1" django-filter \
-      --replace-fail "importlib_metadata==7.*" importlib_metadata \
-      --replace-fail "markdown==3.6" markdown \
-      --replace-fail "protobuf==5.26.*" protobuf \
-      --replace-fail "pycryptodome==3.20.*" pycryptodome \
-      --replace-fail "pypdf==3.9.*" pypdf \
-      --replace-fail "python-dateutil==2.9.*" python-dateutil \
-      --replace-fail "sentry-sdk==1.42.*" sentry-sdk \
-      --replace-fail "stripe==7.9.*" stripe
+      --replace-fail '"backend"' '"setuptools.build_meta"' \
+      --replace-fail 'backend-path = ["_build"]' ""
   '';
 
   build-system = with python.pkgs; [
     gettext
     nodejs
-    pythonRelaxDepsHook
     setuptools
     tomli
   ];
 
-  dependencies = with python.pkgs; [
-    arabic-reshaper
-    babel
-    beautifulsoup4
-    bleach
-    celery
-    chardet
-    cryptography
-    css-inline
-    defusedcsv
-    dj-static
-    django
-    django-bootstrap3
-    django-compressor
-    django-countries
-    django-filter
-    django-formset-js-improved
-    django-formtools
-    django-hierarkey
-    django-hijack
-    django-i18nfield
-    django-libsass
-    django-localflavor
-    django-markup
-    django-oauth-toolkit
-    django-otp
-    django-phonenumber-field
-    django-redis
-    django-scopes
-    django-statici18n
-    djangorestframework
-    dnspython
-    drf-ujson2
-    geoip2
-    importlib-metadata
-    isoweek
-    jsonschema
-    kombu
-    libsass
-    lxml
-    markdown
-    mt-940
-    oauthlib
-    openpyxl
-    packaging
-    paypalrestsdk
-    paypal-checkout-serversdk
-    pyjwt
-    phonenumbers
-    pillow
-    pretix-plugin-build
-    protobuf
-    psycopg2
-    pycountry
-    pycparser
-    pycryptodome
-    pypdf
-    python-bidi
-    python-dateutil
-    pytz
-    pytz-deprecation-shim
-    pyuca
-    qrcode
-    redis
-    reportlab
-    requests
-    sentry-sdk
-    sepaxml
-    slimit
-    static3
-    stripe
-    text-unidecode
-    tlds
-    tqdm
-    vat-moss
-    vobject
-    webauthn
-    zeep
-  ] ++ plugins;
+  dependencies =
+    with python.pkgs;
+    [
+      arabic-reshaper
+      babel
+      beautifulsoup4
+      bleach
+      celery
+      chardet
+      cryptography
+      css-inline
+      defusedcsv
+      django
+      django-bootstrap3
+      django-compressor
+      django-countries
+      django-filter
+      django-formset-js-improved
+      django-formtools
+      django-hierarkey
+      django-hijack
+      django-i18nfield
+      django-libsass
+      django-localflavor
+      django-markup
+      django-oauth-toolkit
+      django-otp
+      django-phonenumber-field
+      django-redis
+      django-scopes
+      django-statici18n
+      djangorestframework
+      dnspython
+      drf-ujson2
+      geoip2
+      importlib-metadata
+      isoweek
+      jsonschema
+      kombu
+      libsass
+      lxml
+      markdown
+      mt-940
+      oauthlib
+      openpyxl
+      packaging
+      paypalrestsdk
+      paypal-checkout-serversdk
+      pyjwt
+      phonenumberslite
+      pillow
+      pretix-plugin-build
+      protobuf
+      psycopg2-binary
+      pycountry
+      pycparser
+      pycryptodome
+      pypdf
+      python-bidi
+      python-dateutil
+      pytz
+      pytz-deprecation-shim
+      pyuca
+      qrcode
+      redis
+      reportlab
+      requests
+      sentry-sdk
+      sepaxml
+      stripe
+      text-unidecode
+      tlds
+      tqdm
+      ua-parser
+      vat-moss
+      vobject
+      webauthn
+      zeep
+    ]
+    ++ django.optional-dependencies.argon2
+    ++ plugins;
 
   optional-dependencies = with python.pkgs; {
     memcached = [
@@ -198,20 +231,41 @@ python.pkgs.buildPythonApplication rec {
 
   dontStrip = true; # no binaries
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    pytest-xdist
-    pytest-mock
-    pytest-django
-    pytest-asyncio
-    pytest-rerunfailures
-    freezegun
-    fakeredis
-    responses
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      pytestCheckHook
+      pytest-xdist
+      pytest-mock
+      pytest-django
+      pytest-asyncio
+      pytest-rerunfailures
+      freezegun
+      fakeredis
+      responses
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
-    "--reruns" "3"
+    "--reruns"
+    "3"
+  ];
+
+  disabledTests = [
+    # unreliable around day changes
+    "test_order_create_invoice"
+
+    # outdated translation files
+    # https://github.com/pretix/pretix/commit/c4db2a48b6ac81763fa67475d8182aee41c31376
+    "test_different_dates_spanish"
+    "test_same_day_spanish"
+    "test_same_month_spanish"
+    "test_same_year_spanish"
+
+    # broken with fakeredis>=2.27.0
+    "test_waitinglist_cache_separation"
+    "test_waitinglist_item_active"
+    "test_waitinglist_variation_active"
   ];
 
   preCheck = ''
@@ -223,10 +277,11 @@ python.pkgs.buildPythonApplication rec {
     inherit
       npmDeps
       python
-    ;
-    plugins = lib.recurseIntoAttrs
-      (python.pkgs.callPackage ./plugins {
+      ;
+    plugins = lib.recurseIntoAttrs (
+      lib.packagesFromDirectoryRecursive {
         inherit (python.pkgs) callPackage;
+        directory = ./plugins;
       }
     );
     tests = {

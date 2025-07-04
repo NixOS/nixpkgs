@@ -1,14 +1,20 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, libGL }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libGL,
+}:
 buildKodiBinaryAddon rec {
   pname = "pvr-vdr-vnsi";
   namespace = "pvr.vdr.vnsi";
-  version = "20.4.1";
+  version = "21.1.3";
 
   src = fetchFromGitHub {
     owner = "kodi-pvr";
     repo = "pvr.vdr.vnsi";
     rev = "${version}-${rel}";
-    sha256 = "sha256-QooWK+LwlN5RAISjAQ2YiyDAjQQMzod8fFXpI0ll+hc=";
+    sha256 = "sha256-V/ICEK006Zs4mipywAbRl8ZdezsprCgdC2WYtc/cAAY=";
   };
 
   extraBuildInputs = [ libGL ];
@@ -18,6 +24,6 @@ buildKodiBinaryAddon rec {
     description = "Kodi's VDR VNSI PVR client addon";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

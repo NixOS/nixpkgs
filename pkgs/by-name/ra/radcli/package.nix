@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "radcli";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "radcli";
     repo = "radcli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KBgimvhuHvaVh9hxPr+CtibGWyscSi0KXk8S1/STk+Q=";
+    tag = version;
+    hash = "sha256-YnZkFYTiU2VNKxuP+JTnH64XYTB/+imeMKN1mZN9VCQ=";
   };
 
   postUnpack = ''
@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
     nettle
   ];
 
-  meta = with lib; {
-    description = "A simple RADIUS client library";
+  meta = {
+    description = "Simple RADIUS client library";
     homepage = "https://github.com/radcli/radcli";
     changelog = "https://github.com/radcli/radcli/blob/${version}/NEWS";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "radcli";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

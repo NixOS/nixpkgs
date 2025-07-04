@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-# build time
-, cmake
-, pkg-config
+  # build time
+  cmake,
+  pkg-config,
 
-# runtime
-, fmt
-, onnxruntime
-, pcaudiolib
-, piper-phonemize
-, spdlog
+  # runtime
+  fmt,
+  onnxruntime,
+  pcaudiolib,
+  piper-phonemize,
+  spdlog,
 
-# tests
-, piper-train
+  # tests
+  piper-train,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-3ynWyNcdf1ffU3VoDqrEMrm5Jo5Zc5YJcVqwLreRCsI=";
   };
 
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://github.com/rhasspy/piper/releases/tag/v${finalAttrs.version}";
-    description = "A fast, local neural text to speech system";
+    description = "Fast, local neural text to speech system";
     homepage = "https://github.com/rhasspy/piper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

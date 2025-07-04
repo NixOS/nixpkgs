@@ -1,10 +1,12 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 python3Packages.buildPythonApplication {
   pname = "fileinfo";
   version = "unstable-2022-09-16";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "sdushantha";
     repo = "fileinfo";
@@ -16,7 +18,7 @@ python3Packages.buildPythonApplication {
 
   meta = with lib; {
     homepage = "https://github.com/sdushantha/fileinfo";
-    description = "A file extension metadata lookup tool";
+    description = "File extension metadata lookup tool";
     license = licenses.mit;
     maintainers = with maintainers; [ h7x4 ];
     mainProgram = "fileinfo";

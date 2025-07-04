@@ -1,37 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, libgee
-, libhandy
-, granite
-, gexiv2
-, gnome-settings-daemon
-, elementary-settings-daemon
-, gtk3
-, gnome-desktop
-, gala
-, wingpanel
-, elementary-dock
-, switchboard
-, gettext
-, bamf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  libadwaita,
+  libgee,
+  granite7,
+  gexiv2,
+  gnome-settings-daemon,
+  elementary-settings-daemon,
+  gtk4,
+  gala,
+  wingpanel,
+  wingpanel-indicator-keyboard,
+  wingpanel-quick-settings,
+  switchboard,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "6.5.0";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "settings-desktop";
     rev = version;
-    sha256 = "sha256-iq1QXC6eQ2w5j9RCxhTc0dApMfiDGcVuj8nocEFLFNk=";
+    sha256 = "sha256-TYwiL6+VjfSDiFAlMe482gB8a/OtCYHl5r8gh9Hcvfg=";
   };
 
   nativeBuildInputs = [
@@ -43,20 +43,19 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bamf
-    elementary-dock
     elementary-settings-daemon
     gnome-settings-daemon
     gala
     gexiv2
     glib
-    gnome-desktop
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
     switchboard
     wingpanel
+    wingpanel-indicator-keyboard # gsettings schemas
+    wingpanel-quick-settings # gsettings schemas
   ];
 
   passthru = {
@@ -65,9 +64,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Switchboard Desktop Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-pantheon-shell";
+    homepage = "https://github.com/elementary/settings-desktop";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

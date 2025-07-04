@@ -68,6 +68,13 @@
               (sqlite:execute-single db
                  "select count(*) from sha256")))))
 
+(defparameter *broken-systems*
+  '(
+    ;; Infinite recursion through dependencies in 2024-10-12 dist
+    "cl-quil" "qvm"
+    )
+  "List of broken systems, which should be omitted from the package graph")
+
 (defmethod import-lisp-packages ((repository quicklisp-repository)
                                  (database sqlite-database))
 
@@ -112,6 +119,35 @@
              project url size md5 sha1 prefix (json:stringify (coerce
                                                                asds
                                                                'vector))))))
+
+      ;; Weed out circular dependencies from the package graph.
+      (sqlite:with-transaction db
+        (sql-query "create temp table will_delete (root,name)")
+        (loop for (system) in (sql-query "select name from quicklisp_system") do
+          (when (sql-query
+                  "with recursive dep(root, name) as (
+                    select s.name, d.value
+                    from quicklisp_system s
+                    cross join json_each(s.deps) d
+                    where s.name = ?
+                    union
+                    select dep.root, d.value
+                    from quicklisp_system s, dep
+                    cross join json_each(s.deps) d
+                    where s.name = dep.name
+                  ) select 1 from dep where name = root"
+                 system)
+            (sql-query
+             "with recursive broken(name) as (
+                select ?
+                union
+                select s.name from quicklisp_system s, broken b
+                where b.name in (select value from json_each(s.deps))
+              ) insert into will_delete select ?, name from broken"
+             system system)))
+        (loop for (root name) in (sql-query "select root, name from will_delete") do
+          (warn "Circular dependency in '~a': Omitting '~a'" root name)
+          (sql-query "delete from quicklisp_system where name = ?" name)))
 
       (sqlite:with-transaction db
         ;; Should these be temp tables, that then get queried by

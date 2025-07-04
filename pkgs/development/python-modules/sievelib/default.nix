@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "sievelib";
-  version = "1.4.0";
+  version = "1.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eM8es/WZENFBASjOk1KVbbwkmzxTr7NirOiSLt7F3N8=";
+    hash = "sha256-YOoANqVRTiYQ5b9WFYbzJOdf/ZGnIJ9fueBrj+KLBrs=";
   };
 
   build-system = [ setuptools-scm ];

@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, imagemagick
-, pkg-config
-, qt5
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  imagemagick,
+  pkg-config,
+  qt5,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "converseen";
-  version = "0.12.1.0";
+  version = "0.14.0.0";
 
   src = fetchFromGitHub {
     owner = "Faster3ck";
     repo = "Converseen";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-WGOmnaO9IAcsOg5W2kJ1dxOk1ndn6InCVVN4FTehKTk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i7r6AyOk+WtMjlDc5/tDvaUV6yMKaQ7xZ9z9s+KBmts=";
   };
 
   strictDeps = true;
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://converseen.fasterland.net/";
     changelog = "https://github.com/Faster3ck/Converseen/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "converseen";
     platforms = lib.platforms.all;
   };

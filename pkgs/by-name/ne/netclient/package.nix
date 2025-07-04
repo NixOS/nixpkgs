@@ -1,35 +1,34 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, libX11
-, stdenv
-, darwin
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  libX11,
+  stdenv,
 }:
 
 buildGoModule rec {
   pname = "netclient";
-  version = "0.23.0";
+  version = "0.99.0";
 
   src = fetchFromGitHub {
     owner = "gravitl";
     repo = "netclient";
     rev = "v${version}";
-    hash = "sha256-Wglh6tcpanEmXwoRKdAot/l4RS+EbIIHI1etQ9ic7BI=";
+    hash = "sha256-hSylhELMfiYNFHt03bJN1gTfy3EXSHJOj+ayUeU3+4w=";
   };
 
-  vendorHash = "sha256-or/0z+RiOkZ2qgEqXNI/LafN+eWAzvLuSZta/QNUI3g=";
+  vendorHash = "sha256-bpXGXK97ohepYoAyJFZE49vo48ch3gAsVyax1+uLIfE=";
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
-    ++ lib.optional stdenv.isLinux libX11;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux libX11;
 
   hardeningEnabled = [ "pie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated WireGuard® Management Client";
     mainProgram = "netclient";
     homepage = "https://netmaker.io";
     changelog = "https://github.com/gravitl/netclient/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ wexder ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ wexder ];
   };
 }

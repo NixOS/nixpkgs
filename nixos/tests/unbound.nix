@@ -1,26 +1,28 @@
 /*
- Test that our unbound module indeed works as most users would expect.
- There are a few settings that we must consider when modifying the test. The
- usual use-cases for unbound are
-   * running a recursive DNS resolver on the local machine
-   * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via UDP/53 & TCP/53
-   * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via TCP/853 (DoT)
-   * running a recursive DNS resolver on a machine in the network awaiting input from clients over TCP/53 & UDP/53
-   * running a recursive DNS resolver on a machine in the network awaiting input from clients over TCP/853 (DoT)
+  Test that our unbound module indeed works as most users would expect.
+  There are a few settings that we must consider when modifying the test. The
+  usual use-cases for unbound are
+    * running a recursive DNS resolver on the local machine
+    * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via UDP/53 & TCP/53
+    * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via TCP/853 (DoT)
+    * running a recursive DNS resolver on a machine in the network awaiting input from clients over TCP/53 & UDP/53
+    * running a recursive DNS resolver on a machine in the network awaiting input from clients over TCP/853 (DoT)
 
- In the below test setup we are trying to implement all of those use cases.
+  In the below test setup we are trying to implement all of those use cases.
 
- Another aspect that we cover is access to the local control UNIX socket. It
- can optionally be enabled and users can optionally be in a group to gain
- access. Users that are not in the group (except for root) should not have
- access to that socket. Also, when there is no socket configured, users
- shouldn't be able to access the control socket at all. Not even root.
+  Another aspect that we cover is access to the local control UNIX socket. It
+  can optionally be enabled and users can optionally be in a group to gain
+  access. Users that are not in the group (except for root) should not have
+  access to that socket. Also, when there is no socket configured, users
+  shouldn't be able to access the control socket at all. Not even root.
 */
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-  let
-    # common client configuration that we can just use for the multitude of
-    # clients we are constructing
-    common = { lib, pkgs, ... }: {
+{ pkgs, lib, ... }:
+let
+  # common client configuration that we can just use for the multitude of
+  # clients we are constructing
+  common =
+    { lib, pkgs, ... }:
+    {
       config = {
         environment.systemPackages = [ pkgs.knot-dns ];
 
@@ -33,28 +35,41 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       };
     };
 
-    cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
-      openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=dns.example.local'
-      mkdir -p $out
-      cp key.pem cert.pem $out
-    '';
-  in
-  {
-    name = "unbound";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ andir ];
-    };
+  cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
+    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=dns.example.local'
+    mkdir -p $out
+    cp key.pem cert.pem $out
+  '';
+in
+{
+  name = "unbound";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ andir ];
+  };
 
-    nodes = {
+  nodes = {
 
-      # The server that actually serves our zones, this tests unbounds authoriative mode
-      authoritative = { lib, pkgs, config, ... }: {
+    # The server that actually serves our zones, this tests unbounds authoriative mode
+    authoritative =
+      {
+        lib,
+        pkgs,
+        config,
+        ...
+      }:
+      {
         imports = [ common ];
         networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
-          { address = "192.168.0.1"; prefixLength = 24; }
+          {
+            address = "192.168.0.1";
+            prefixLength = 24;
+          }
         ];
         networking.interfaces.eth1.ipv6.addresses = lib.mkForce [
-          { address = "fd21::1"; prefixLength = 64; }
+          {
+            address = "fd21::1";
+            prefixLength = 64;
+          }
         ];
         networking.firewall.allowedTCPPorts = [ 53 ];
         networking.firewall.allowedUDPPorts = [ 53 ];
@@ -63,8 +78,18 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           enable = true;
           settings = {
             server = {
-              interface = [ "192.168.0.1" "fd21::1" "::1" "127.0.0.1" ];
-              access-control = [ "192.168.0.0/24 allow" "fd21::/64 allow" "::1 allow" "127.0.0.0/8 allow" ];
+              interface = [
+                "192.168.0.1"
+                "fd21::1"
+                "::1"
+                "127.0.0.1"
+              ];
+              access-control = [
+                "192.168.0.0/24 allow"
+                "fd21::/64 allow"
+                "::1 allow"
+                "127.0.0.0/8 allow"
+              ];
               local-data = [
                 ''"example.local. IN A 1.2.3.4"''
                 ''"example.local. IN AAAA abcd::eeff"''
@@ -74,15 +99,23 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         };
       };
 
-      # The resolver that knows that forwards (only) to the authoritative server
-      # and listens on UDP/53, TCP/53 & TCP/853.
-      resolver = { lib, nodes, ... }: {
+    # The resolver that knows that forwards (only) to the authoritative server
+    # and listens on UDP/53, TCP/53 & TCP/853.
+    resolver =
+      { lib, nodes, ... }:
+      {
         imports = [ common ];
         networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
-          { address = "192.168.0.2"; prefixLength = 24; }
+          {
+            address = "192.168.0.2";
+            prefixLength = 24;
+          }
         ];
         networking.interfaces.eth1.ipv6.addresses = lib.mkForce [
-          { address = "fd21::2"; prefixLength = 64; }
+          {
+            address = "fd21::2";
+            prefixLength = 64;
+          }
         ];
         networking.firewall.allowedTCPPorts = [
           53 # regular DNS
@@ -95,10 +128,26 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           enable = true;
           settings = {
             server = {
-              interface = [ "::1" "127.0.0.1" "192.168.0.2" "fd21::2"
-                            "192.168.0.2@853" "fd21::2@853" "::1@853" "127.0.0.1@853"
-                            "192.168.0.2@443" "fd21::2@443" "::1@443" "127.0.0.1@443" ];
-              access-control = [ "192.168.0.0/24 allow" "fd21::/64 allow" "::1 allow" "127.0.0.0/8 allow" ];
+              interface = [
+                "::1"
+                "127.0.0.1"
+                "192.168.0.2"
+                "fd21::2"
+                "192.168.0.2@853"
+                "fd21::2@853"
+                "::1@853"
+                "127.0.0.1@853"
+                "192.168.0.2@443"
+                "fd21::2@443"
+                "::1@443"
+                "127.0.0.1@443"
+              ];
+              access-control = [
+                "192.168.0.0/24 allow"
+                "fd21::/64 allow"
+                "::1 allow"
+                "127.0.0.0/8 allow"
+              ];
               tls-service-pem = "${cert}/cert.pem";
               tls-service-key = "${cert}/key.pem";
             };
@@ -115,14 +164,27 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         };
       };
 
-      # machine that runs a local unbound that will be reconfigured during test execution
-      local_resolver = { lib, nodes, config, ... }: {
+    # machine that runs a local unbound that will be reconfigured during test execution
+    local_resolver =
+      {
+        lib,
+        nodes,
+        config,
+        ...
+      }:
+      {
         imports = [ common ];
         networking.interfaces.eth1.ipv4.addresses = lib.mkForce [
-          { address = "192.168.0.3"; prefixLength = 24; }
+          {
+            address = "192.168.0.3";
+            prefixLength = 24;
+          }
         ];
         networking.interfaces.eth1.ipv6.addresses = lib.mkForce [
-          { address = "fd21::3"; prefixLength = 64; }
+          {
+            address = "fd21::3";
+            prefixLength = 64;
+          }
         ];
         networking.firewall.allowedTCPPorts = [
           53 # regular DNS
@@ -133,8 +195,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           enable = true;
           settings = {
             server = {
-              interface = [ "::1" "127.0.0.1" ];
-              access-control = [ "::1 allow" "127.0.0.0/8 allow" ];
+              interface = [
+                "::1"
+                "127.0.0.1"
+              ];
+              access-control = [
+                "::1 allow"
+                "127.0.0.0/8 allow"
+              ];
             };
             include = "/etc/unbound/extra*.conf";
           };
@@ -159,8 +227,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
         };
         users.groups = {
-          someuser = {};
-          unauthorizeduser = {};
+          someuser = { };
+          unauthorizeduser = { };
         };
 
         # Used for testing configuration reloading
@@ -181,25 +249,34 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         };
       };
 
-
-      # plain node that only has network access and doesn't run any part of the
-      # resolver software locally
-      client = { lib, nodes, ... }: {
+    # plain node that only has network access and doesn't run any part of the
+    # resolver software locally
+    client =
+      { lib, nodes, ... }:
+      {
         imports = [ common ];
         networking.nameservers = [
           (lib.head nodes.resolver.networking.interfaces.eth1.ipv6.addresses).address
           (lib.head nodes.resolver.networking.interfaces.eth1.ipv4.addresses).address
         ];
         networking.interfaces.eth1.ipv4.addresses = [
-          { address = "192.168.0.10"; prefixLength = 24; }
+          {
+            address = "192.168.0.10";
+            prefixLength = 24;
+          }
         ];
         networking.interfaces.eth1.ipv6.addresses = [
-          { address = "fd21::10"; prefixLength = 64; }
+          {
+            address = "fd21::10";
+            prefixLength = 64;
+          }
         ];
       };
-    };
+  };
 
-    testScript = { nodes, ... }: ''
+  testScript =
+    { nodes, ... }:
+    ''
       import typing
 
       zone = "example.local."
@@ -312,4 +389,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           r = [("A", "3.4.5.6")]
           test(local_resolver, ["::1", "127.0.0.1"], zone="something.local.", records=r)
     '';
-  })
+}

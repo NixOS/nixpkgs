@@ -1,10 +1,11 @@
-{ lib
-, blockdiag
-, buildPythonPackage
-, fetchPypi
-, nwdiag
-, pythonOlder
-, sphinx
+{
+  lib,
+  blockdiag,
+  buildPythonPackage,
+  fetchPypi,
+  nwdiag,
+  pythonOlder,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  pythonImportsCheck = [
-    "sphinxcontrib.nwdiag"
-  ];
+  pythonImportsCheck = [ "sphinxcontrib.nwdiag" ];
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
@@ -35,6 +34,6 @@ buildPythonPackage rec {
     description = "Sphinx nwdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-nwdiag";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
   };
 }

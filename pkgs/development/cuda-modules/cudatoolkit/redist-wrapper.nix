@@ -4,7 +4,7 @@
   backendStdenv,
   cudaOlder,
   cudatoolkit-legacy-runfile,
-  cudaVersion,
+  cudaMajorMinorVersion,
   cuda_cccl ? null,
   cuda_cudart ? null,
   cuda_cuobjdump ? null,
@@ -66,8 +66,8 @@ if cudaOlder "11.4" then
   cudatoolkit-legacy-runfile
 else
   symlinkJoin rec {
-    name = "cuda-merged-${cudaVersion}";
-    version = cudaVersion;
+    name = "cuda-merged-${cudaMajorMinorVersion}";
+    version = cudaMajorMinorVersion;
 
     paths = builtins.concatMap getAllOutputs allPackages;
 
@@ -80,7 +80,7 @@ else
     };
 
     meta = with lib; {
-      description = "A wrapper substituting the deprecated runfile-based CUDA installation";
+      description = "Wrapper substituting the deprecated runfile-based CUDA installation";
       license = licenses.nvidiaCuda;
     };
   }

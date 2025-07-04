@@ -1,40 +1,42 @@
-{ stdenv
-, lib
-, fetchurl
-, cmake
-, pkg-config
-, ninja
-, python3
-, qtbase
-, qt5compat
-, qtdeclarative
-, qtdoc
-, qtquick3d
-, qtquicktimeline
-, qtserialport
-, qtsvg
-, qttools
-, qtwebengine
-, qtwayland
-, qtshadertools
-, wrapQtAppsHook
-, yaml-cpp
-, litehtml
-, libsecret
-, gumbo
-, llvmPackages
-, rustc-demangle
-, elfutils
-, perf
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  pkg-config,
+  ninja,
+  python3,
+  qtbase,
+  qt5compat,
+  qtdeclarative,
+  qtdoc,
+  qtquick3d,
+  qtquicktimeline,
+  qtserialport,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  qtwayland,
+  qtshadertools,
+  wrapQtAppsHook,
+  yaml-cpp,
+  litehtml,
+  libsecret,
+  gumbo,
+  llvmPackages,
+  rustc-demangle,
+  elfutils,
+  perf,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "13.0.0";
+  version = "17.0.0";
 
   src = fetchurl {
-    url = "https://download.qt.io/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-7BTwXycHFEVaLw1AuKqwLtkkHU+k8D6lOb/sWBnp4DY=";
+    url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    hash = "sha256-YW3+pDphYrwajM9EDh32p0uXf8sCjXa3x3mh+43jnow=";
   };
 
   nativeBuildInputs = [
@@ -84,12 +86,8 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [
     "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
+    "--suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
   ];
-
-  postInstall = ''
-    substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
-      --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
-  '';
 
   meta = with lib; {
     description = "Cross-platform IDE tailored to the needs of Qt developers";

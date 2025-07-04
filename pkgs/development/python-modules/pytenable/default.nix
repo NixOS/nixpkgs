@@ -1,17 +1,24 @@
 {
   lib,
   buildPythonPackage,
+  cryptography,
   defusedxml,
   fetchFromGitHub,
+  gql,
+  graphql-core,
   marshmallow,
+  pydantic-extra-types,
+  pydantic,
+  pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
   pytestCheckHook,
   python-box,
   python-dateutil,
   pythonOlder,
-  requests,
   requests-pkcs12,
+  requests-toolbelt,
+  requests,
   responses,
   restfly,
   semver,
@@ -21,32 +28,44 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.22";
+  version = "1.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    rev = "refs/tags/${version}";
-    hash = "sha256-acMafLlO0yGEnW+0XeBWUpDWvOPFAB4RK/XyAb2JbPw=";
+    tag = version;
+    hash = "sha256-859+qKkOZBVU96QJI4YlQGXM9O81yjMmmwhAlxqO4QY=";
   };
+
+  pythonRelaxDeps = [
+    "cryptography"
+    "defusedxml"
+  ];
 
   build-system = [ setuptools ];
 
   dependencies = [
+    cryptography
     defusedxml
+    gql
+    graphql-core
     marshmallow
+    pydantic
+    pydantic-extra-types
     python-box
     python-dateutil
     requests
+    requests-toolbelt
     restfly
     semver
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-datafiles
     pytest-vcr
     pytestCheckHook
@@ -75,7 +94,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
-    changelog = "https://github.com/tenable/pyTenable/releases/tag/${version}";
+    changelog = "https://github.com/tenable/pyTenable/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

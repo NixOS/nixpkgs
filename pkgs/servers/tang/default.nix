@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, asciidoc
-, jansson
-, jose
-, http-parser
-, systemd
-, meson
-, ninja
-, makeWrapper
-, testers
-, tang
-, gitUpdater
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  asciidoc,
+  jansson,
+  jose,
+  http-parser,
+  systemd,
+  meson,
+  ninja,
+  makeWrapper,
+  testers,
+  tang,
+  gitUpdater,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "tang";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nlC2hdNzQZrfirjS2gX4oFp2OD1OdxmLsN03hfxD3ug=";
   };
 

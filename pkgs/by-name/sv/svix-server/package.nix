@@ -1,36 +1,34 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, protobuf, stdenv
-, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  protobuf,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "svix-server";
-  version = "1.13.0";
+  version = "1.68.0";
 
   src = fetchFromGitHub {
     owner = "svix";
     repo = "svix-webhooks";
     rev = "v${version}";
-    hash = "sha256-6758ej7bTvwZPWifl239rQMazM8uw+Y4+3EbjE8XsTg=";
+    hash = "sha256-AiMaYSLON4H39dUvRyXQDymE/SQ7gK9JrgXBc1Gn7no=";
   };
 
   sourceRoot = "${src.name}/server";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "aide-0.10.0" = "sha256-hUUer5D6OA4F0Co3JgygY3g89cKIChFest67ABIX+4M=";
-      "hyper-0.14.23" = "sha256-7MBCAjKYCdDbqCmYg3eYE74h7K7yTjfVoo0sjxr4g/s=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wNaI5/AtStekJslO8wDl1/PzHaEi02xBEO8IvcqbMZM=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
     protobuf
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   # needed for internal protobuf c wrapper library
@@ -42,13 +40,13 @@ rustPlatform.buildRustPackage rec {
   # disable tests because they require postgres and redis to be running
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "svix-server";
-    description = "The enterprise-ready webhooks service";
+    description = "Enterprise-ready webhooks service";
     homepage = "https://github.com/svix/svix-webhooks";
-    changelog =
-      "https://github.com/svix/svix-webhooks/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ techknowlogick ];
+    changelog = "https://github.com/svix/svix-webhooks/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ techknowlogick ];
+    broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin; # aws-lc-sys currently broken on darwin x86_64
   };
 }

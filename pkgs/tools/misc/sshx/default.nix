@@ -1,59 +1,72 @@
-{ lib
-, callPackage
-, rustPlatform
-, fetchFromGitHub
-, protobuf
-, darwin
-, stdenv
-, buildNpmPackage
+{
+  lib,
+  callPackage,
+  rustPlatform,
+  fetchFromGitHub,
+  protobuf,
+  buildNpmPackage,
 }:
 let
-  version = "unstable-2023-11-23";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "ekzhang";
     repo = "sshx";
-    rev = "2677f7e1fa3b369132cc7f27f6028a04b92ba5cf";
-    hash = "sha256-9fo8hNUzJr4gse0J2tw7j+alqE82+y8McADzTkxryWk=";
+    tag = "v${version}";
+    hash = "sha256-+IHV+dJb/j1/tmdqDXo6bqhvj3nBQ7i4AsUeHFA3+NU=";
   };
 
-  mkSshxPackage = { pname, cargoHash, ... }@args:
-    rustPlatform.buildRustPackage (rec {
-      inherit
-        pname
-        version
-        src
-        cargoHash;
+  mkSshxPackage =
+    { pname, cargoHash, ... }@args:
+    rustPlatform.buildRustPackage (
+      rec {
+        inherit
+          pname
+          version
+          src
+          cargoHash
+          ;
 
-      nativeBuildInputs = [ protobuf ];
-      buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+        useFetchCargoVendor = true;
 
-      cargoBuildFlags = [ "--package" pname ];
-      cargoTestFlags = cargoBuildFlags;
+        nativeBuildInputs = [ protobuf ];
 
-      meta = {
-        description = "Fast, collaborative live terminal sharing over the web";
-        homepage = "https://github.com/ekzhang/sshx";
-        license = lib.licenses.mit;
-        maintainers = with lib.maintainers; [ pinpox kranzes ];
-        mainProgram = pname;
-      };
-    } // args);
+        cargoBuildFlags = [
+          "--package"
+          pname
+        ];
+
+        cargoTestFlags = cargoBuildFlags;
+
+        meta = {
+          description = "Fast, collaborative live terminal sharing over the web";
+          homepage = "https://github.com/ekzhang/sshx";
+          changelog = "https://github.com/ekzhang/sshx/releases/tag/v${version}";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [
+            pinpox
+            kranzes
+          ];
+          mainProgram = pname;
+        };
+      }
+      // args
+    );
 in
 {
   sshx = mkSshxPackage {
     pname = "sshx";
-    cargoHash = "sha256-dA5Aen/qANW8si75pj/RsBknvOo3KDyU5UISAmmcfRE=";
+    cargoHash = "sha256-QftBUGDQvCSHoOBLnEzNOe1dMTpVTvMDXNp5qZr0C2M=";
   };
 
   sshx-server = mkSshxPackage rec {
     pname = "sshx-server";
-    cargoHash = "sha256-1GRWCMXsOzqvORgtwfuywV4wLyX3r4nURhM3Dl5V9Ss=";
+    cargoHash = "sha256-QftBUGDQvCSHoOBLnEzNOe1dMTpVTvMDXNp5qZr0C2M=";
 
     postPatch = ''
       substituteInPlace crates/sshx-server/src/web.rs \
-        --replace 'ServeDir::new("build")' 'ServeDir::new("${passthru.web.outPath}")' \
-        --replace 'ServeFile::new("build/spa.html")' 'ServeFile::new("${passthru.web.outPath}/spa.html")'
+        --replace-fail 'ServeDir::new("build")' 'ServeDir::new("${passthru.web.outPath}")' \
+        --replace-fail 'ServeFile::new("build/spa.html")' 'ServeFile::new("${passthru.web.outPath}/spa.html")'
     '';
 
     passthru.web = buildNpmPackage {
@@ -61,18 +74,18 @@ in
 
       inherit
         version
-        src;
+        src
+        ;
 
       postPatch = ''
         substituteInPlace vite.config.ts \
-          --replace 'execSync("git rev-parse --short HEAD").toString().trim()' '"${src.rev}"'
+          --replace-fail 'execSync("git rev-parse --short HEAD").toString().trim()' '"${src.rev}"'
       '';
 
-      npmDepsHash = "sha256-bKePCxo6+n0EG+4tbbMimPedJ0Hu1O8yZsgspmhobOs=";
+      npmDepsHash = "sha256-QdgNtQMjK229QzB5LbCry1hKVPon8IWUnj+v5L7ydfI=";
 
       installPhase = ''
-        mkdir -p "$out"
-        cp -r build/* "$out"
+        cp -r build $out
       '';
     };
   };

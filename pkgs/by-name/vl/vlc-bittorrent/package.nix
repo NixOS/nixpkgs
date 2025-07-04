@@ -1,13 +1,14 @@
-{ lib
-, autoconf-archive
-, autoreconfHook
-, boost
-, fetchFromGitHub
-, libtorrent-rasterbar
-, libvlc
-, openssl
-, pkg-config
-, stdenv
+{
+  lib,
+  autoconf-archive,
+  autoreconfHook,
+  boost,
+  fetchFromGitHub,
+  libtorrent-rasterbar,
+  libvlc,
+  openssl,
+  pkg-config,
+  stdenv,
 }:
 
 # VLC does not know where the vlc-bittorrent package is installed.
@@ -16,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vlc-bittorrent";
-  version = "2.15.0";
+  version = "2.15";
 
   src = fetchFromGitHub {
     owner = "johang";
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A bittorrent plugin for VLC";
+    description = "Bittorrent plugin for VLC";
     homepage = "https://github.com/johang/vlc-bittorrent";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

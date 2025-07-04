@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-OoJSY+dNNISyVwKuRboMH7Je8nYFKxus2c4v3VsmyRE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "unidecode"
-  ];
+  pythonImportsCheck = [ "unidecode" ];
 
   meta = with lib; {
     description = "ASCII transliterations of Unicode text";
@@ -38,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/avian2/unidecode";
     changelog = "https://github.com/avian2/unidecode/blob/unidecode-${version}/ChangeLog";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
 }

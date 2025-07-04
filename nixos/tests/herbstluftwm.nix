@@ -1,17 +1,23 @@
-import ./make-test-python.nix ({ lib, ...} : {
+{ lib, ... }:
+{
   name = "herbstluftwm";
 
   meta = {
     maintainers = with lib.maintainers; [ thibautmarty ];
   };
 
-  nodes.machine = { pkgs, lib, ... }: {
-    imports = [ ./common/x11.nix ./common/user-account.nix ];
-    test-support.displayManager.auto.user = "alice";
-    services.displayManager.defaultSession = lib.mkForce "none+herbstluftwm";
-    services.xserver.windowManager.herbstluftwm.enable = true;
-    environment.systemPackages = [ pkgs.dzen2 ]; # needed for upstream provided panel
-  };
+  nodes.machine =
+    { pkgs, lib, ... }:
+    {
+      imports = [
+        ./common/x11.nix
+        ./common/user-account.nix
+      ];
+      test-support.displayManager.auto.user = "alice";
+      services.displayManager.defaultSession = lib.mkForce "none+herbstluftwm";
+      services.xserver.windowManager.herbstluftwm.enable = true;
+      environment.systemPackages = [ pkgs.dzen2 ]; # needed for upstream provided panel
+    };
 
   testScript = ''
     with subtest("ensure x starts"):
@@ -34,4 +40,4 @@ import ./make-test-python.nix ({ lib, ...} : {
         machine.sleep(2)
         machine.screenshot("terminal")
   '';
-})
+}

@@ -1,46 +1,44 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fetchpatch
-, boost
-, cmake
-, chromaprint
-, gettext
-, gst_all_1
-, liblastfm
-, qtbase
-, qtx11extras
-, qttools
-, taglib
-, fftw
-, glew
-, qjson
-, sqlite
-, libgpod
-, libplist
-, usbmuxd
-, libmtp
-, libpulseaudio
-, gvfs
-, libcdio
-, pcre
-, projectm
-, protobuf
-, qca-qt5
-, pkg-config
-, sparsehash
-, config
-, makeWrapper
-, gst_plugins
-
-, util-linux
-, libunwind
-, libselinux
-, elfutils
-, libsepol
-, orc
-
-, alsa-lib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  chromaprint,
+  gettext,
+  gst_all_1,
+  liblastfm,
+  qtbase,
+  qtx11extras,
+  qttools,
+  taglib_1,
+  fftw,
+  glew,
+  qjson,
+  sqlite,
+  libgpod,
+  libplist,
+  usbmuxd,
+  libmtp,
+  libpulseaudio,
+  gvfs,
+  libcdio,
+  pcre,
+  projectm_3,
+  protobuf,
+  qca-qt5,
+  pkg-config,
+  sparsehash,
+  config,
+  wrapQtAppsHook,
+  gst_plugins,
+  util-linux,
+  libunwind,
+  libselinux,
+  elfutils,
+  libsepol,
+  orc,
+  alsa-lib,
 }:
 
 let
@@ -48,22 +46,22 @@ let
   withMTP = config.clementine.mtp or true;
   withCD = config.clementine.cd or true;
   withCloud = config.clementine.cloud or true;
-in mkDerivation {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "clementine";
-  version = "unstable-2022-04-11";
+  version = "1.4.1-44-g41bcdca7f";
 
   src = fetchFromGitHub {
     owner = "clementine-player";
     repo = "Clementine";
-    rev = "250024e117fbe5fae7c62b9c8e655d66412a6ed7";
-    sha256 = "06fcbs3wig3mh711iypyj49qm5246f7qhvgvv8brqfrd8cqyh6qf";
+    tag = finalAttrs.version;
+    hash = "sha256-LyYbcr0d0DI5nqNor6sXg7Hc/kYlORU9s8UJnQvSnZs=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
-
+    wrapQtAppsHook
     util-linux
     libunwind
     libselinux
@@ -72,37 +70,41 @@ in mkDerivation {
     orc
   ];
 
-  buildInputs = [
-    boost
-    chromaprint
-    fftw
-    gettext
-    glew
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gstreamer
-    gvfs
-    liblastfm
-    libpulseaudio
-    pcre
-    projectm
-    protobuf
-    qca-qt5
-    qjson
-    qtbase
-    qtx11extras
-    qttools
-    sqlite
-    taglib
-
-    alsa-lib
-  ]
-  # gst_plugins needed for setup-hooks
-  ++ gst_plugins
-  ++ lib.optionals (withIpod) [ libgpod libplist usbmuxd ]
-  ++ lib.optionals (withMTP) [ libmtp ]
-  ++ lib.optionals (withCD) [ libcdio ]
-  ++ lib.optionals (withCloud) [ sparsehash ];
+  buildInputs =
+    [
+      boost
+      chromaprint
+      fftw
+      gettext
+      glew
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gstreamer
+      gvfs
+      liblastfm
+      libpulseaudio
+      pcre
+      projectm_3
+      protobuf
+      qca-qt5
+      qjson
+      qtbase
+      qtx11extras
+      qttools
+      sqlite
+      taglib_1
+      alsa-lib
+    ]
+    # gst_plugins needed for setup-hooks
+    ++ gst_plugins
+    ++ lib.optionals (withIpod) [
+      libgpod
+      libplist
+      usbmuxd
+    ]
+    ++ lib.optionals (withMTP) [ libmtp ]
+    ++ lib.optionals (withCD) [ libcdio ]
+    ++ lib.optionals (withCloud) [ sparsehash ];
 
   postPatch = ''
     sed -i src/CMakeLists.txt \
@@ -118,20 +120,23 @@ in mkDerivation {
   '';
 
   cmakeFlags = [
+    "-DFORCE_GIT_REVISION=1.3.1"
     "-DUSE_SYSTEM_PROJECTM=ON"
     "-DSPOTIFY_BLOB=OFF"
   ];
 
+  dontWrapQtApps = true;
+
   postInstall = ''
-    wrapProgram $out/bin/clementine \
+    wrapQtApp $out/bin/clementine \
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.clementine-player.org";
-    description = "A multiplatform music player";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.ttuegel ];
+    description = "Multiplatform music player";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
-}
+})

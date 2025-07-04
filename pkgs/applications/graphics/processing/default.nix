@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, jogl, rsync, ffmpeg, batik, wrapGAppsHook, libGL }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  ant,
+  unzip,
+  makeWrapper,
+  jdk,
+  jogl,
+  rsync,
+  ffmpeg,
+  batik,
+  stripJavaArchivesHook,
+  wrapGAppsHook3,
+  libGL,
+}:
 let
-  buildNumber = "1293";
+  buildNumber = "1295";
   vaqua = fetchurl {
     name = "VAqua9.jar";
     url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
@@ -15,45 +31,64 @@ let
 
   flatlaf = fetchurl {
     name = "flatlaf-2.4.jar";
-    url = "https://repo1.maven.org/maven2/com/formdev/flatlaf/2.4/flatlaf-2.4.jar";
+    url = "mirror://maven/com/formdev/flatlaf/2.4/flatlaf-2.4.jar";
     sha256 = "NVMYiCd+koNCJ6X3EiRx1Aj+T5uAMSJ9juMmB5Os+zc=";
   };
 
   lsp4j = fetchurl {
     name = "org.eclipse.lsp4j-0.19.0.jar";
-    url = "https://repo1.maven.org/maven2/org/eclipse/lsp4j/org.eclipse.lsp4j/0.19.0/org.eclipse.lsp4j-0.19.0.jar";
+    url = "mirror://maven/org/eclipse/lsp4j/org.eclipse.lsp4j/0.19.0/org.eclipse.lsp4j-0.19.0.jar";
     sha256 = "sha256-1DI5D9KW+GL4gT1qjwVZveOl5KVOEjt6uXDwsFzi8Sg=";
   };
 
   lsp4j-jsonrpc = fetchurl {
     name = "org.eclipse.lsp4j.jsonrpc-0.19.0.jar";
-    url = "https://repo1.maven.org/maven2/org/eclipse/lsp4j/org.eclipse.lsp4j.jsonrpc/0.19.0/org.eclipse.lsp4j.jsonrpc-0.19.0.jar";
+    url = "mirror://maven/org/eclipse/lsp4j/org.eclipse.lsp4j.jsonrpc/0.19.0/org.eclipse.lsp4j.jsonrpc-0.19.0.jar";
     sha256 = "sha256-ozYTkvv7k0psCeX/PbSM3/Bl17qT3upX3trt65lmM9I=";
   };
 
   gson = fetchurl {
     name = "gson-2.9.1.jar";
-    url = "https://repo1.maven.org/maven2/com/google/code/gson/gson/2.9.1/gson-2.9.1.jar";
+    url = "mirror://maven/com/google/code/gson/gson/2.9.1/gson-2.9.1.jar";
     sha256 = "sha256-N4U04znm5tULFzb7Ort28cFdG+P0wTzsbVNkEuI9pgM=";
   };
 
-  arch = {
-    x86_64 = "amd64";
-  }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
+  arch =
+    {
+      x86_64 = "amd64";
+    }
+    .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
 in
 stdenv.mkDerivation rec {
   pname = "processing";
-  version = "4.3";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
     rev = "processing-${buildNumber}-${version}";
-    sha256 = "sha256-SzQemZ6iZ9o89/doV8YMv7DmyPSDyckJl3oyxJyfrm0=";
+    sha256 = "sha256-jUkWnkP8up5vpaXfgFJ/jQjN1KfeX5EuYXSb+W6NEms=";
   };
 
-  nativeBuildInputs = [ ant unzip makeWrapper wrapGAppsHook ];
-  buildInputs = [ jdk jogl ant rsync ffmpeg batik ];
+  # Processing did not update the todo.txt file before tagging this release, so
+  # the "revision-check" Ant target fails.
+  patches = [ ./disable-revision-check.patch ];
+
+  nativeBuildInputs = [
+    ant
+    unzip
+    makeWrapper
+    stripJavaArchivesHook
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    jdk
+    jogl
+    ant
+    rsync
+    ffmpeg
+    batik
+  ];
 
   dontWrapGApps = true;
 
@@ -62,7 +97,7 @@ stdenv.mkDerivation rec {
 
     echo "tarring jdk"
     tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
-    cp ${ant}/lib/ant/lib/{ant.jar,ant-launcher.jar} app/lib/
+    cp ${ant.home}/lib/{ant.jar,ant-launcher.jar} app/lib/
     mkdir -p core/library
     ln -s ${jogl}/share/java/* core/library/
     ln -s ${vaqua} app/lib/VAqua9.jar
@@ -74,7 +109,7 @@ stdenv.mkDerivation rec {
     mv app/lib/{jna-5.10.0/dist/jna.jar,}
     mv app/lib/{jna-5.10.0/dist/jna-platform.jar,}
     ln -sf ${batik}/* java/libraries/svg/library/
-    cp java/libraries/svg/library/lib/batik-all-${batik.version}.jar java/libraries/svg/library/batik.jar
+    cp java/libraries/svg/library/share/java/batik-all-${batik.version}.jar java/libraries/svg/library/batik.jar
     echo "tarring ffmpeg"
     tar --checkpoint=10000 -czf build/shared/tools/MovieMaker/ffmpeg-5.0.1.gz ${ffmpeg}
     cd build
@@ -106,9 +141,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A language and IDE for electronic arts";
+    description = "Language and IDE for electronic arts";
     homepage = "https://processing.org";
-    license = with licenses; [ gpl2Only lgpl21Only ];
+    license = with licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ evan-goode ];
   };

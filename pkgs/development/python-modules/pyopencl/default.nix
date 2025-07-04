@@ -1,74 +1,100 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, fetchpatch
-, appdirs
-, cffi
-, decorator
-, mako
-, mesa_drivers
-, numpy
-, ocl-icd
-, oldest-supported-numpy
-, opencl-headers
-, platformdirs
-, pybind11
-, pytest
-, pytestCheckHook
-, pytools
-, setuptools
-, six
-, wheel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  cmake,
+  nanobind,
+  ninja,
+  numpy,
+  scikit-build-core,
+
+  # buildInputs
+  opencl-headers,
+  pybind11,
+  ocl-icd,
+
+  # dependencies
+  platformdirs,
+  pytools,
+  typing-extensions,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  mako,
+  pocl,
 }:
 
-let
-  os-specific-buildInputs =
-    if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2024.1";
-  format = "pyproject";
+  version = "2025.2.5";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7NVy7pQK2L2hY5w6e+tog0/JqYrX6z9uAarE99nUusE=";
+  src = fetchFromGitHub {
+    owner = "inducer";
+    repo = "pyopencl";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-VmnCMaq6op/7M+n1U9mPgRpCyZtkgmzMXQuWW6Clbd4=";
   };
 
-  nativeBuildInputs = [
-    oldest-supported-numpy
-    setuptools
-    wheel
+  build-system = [
+    cmake
+    nanobind
+    ninja
+    numpy
+    scikit-build-core
   ];
 
-  buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
+  dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    appdirs
-    cffi
-    decorator
-    mako
+  buildInputs = [
+    opencl-headers
+    ocl-icd
+    pybind11
+  ];
+
+  dependencies = [
     numpy
     platformdirs
     pytools
-    six
+    typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pocl
+    mako
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
+  env = {
+    CL_INC_DIR = "${opencl-headers}/include";
+    CL_LIB_DIR = "${ocl-icd}/lib";
+    CL_LIBNAME = "${ocl-icd}/lib/libOpenCL${stdenv.hostPlatform.extensions.sharedLibrary}";
+  };
+
+  preCheck = ''
+    rm -rf pyopencl
   '';
 
-  # gcc: error: pygpu_language_opencl.cpp: No such file or directory
-  doCheck = false;
+  pythonImportsCheck = [
+    "pyopencl"
+    "pyopencl.array"
+    "pyopencl.cltypes"
+    "pyopencl.compyte"
+    "pyopencl.elementwise"
+    "pyopencl.tools"
+  ];
 
-  pythonImportsCheck = [ "pyopencl" ];
-
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
-    license = licenses.mit;
-    maintainers = [ maintainers.fridh ];
+    changelog = "https://github.com/inducer/pyopencl/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

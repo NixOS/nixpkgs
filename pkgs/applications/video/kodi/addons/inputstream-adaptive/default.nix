@@ -1,22 +1,35 @@
-{ stdenv, lib, rel, addonDir, buildKodiBinaryAddon, fetchFromGitHub, pugixml, glib, nspr, nss, gtest }:
+{
+  stdenv,
+  lib,
+  rel,
+  addonDir,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  pugixml,
+  glib,
+  nspr,
+  nss,
+  gtest,
+  rapidjson,
+}:
 let
   bento4 = fetchFromGitHub {
     owner = "xbmc";
     repo = "Bento4";
-    rev = "1.6.0-641-${rel}";
-    sha256 = "sha256-vsFMDzH8JJecYw0qWKGCxnd/m5wn62mCKE2g2HwQhwI=";
+    tag = "1.6.0-641-3-${rel}";
+    hash = "sha256-ycWQvXgr1DQ3Wng73S8i6y6XmcUD/iN8OKfO1czgsnY=";
   };
 in
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
-  version = "21.4.4";
+  version = "21.5.13";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.adaptive";
-    rev = "${version}-${rel}";
-    sha256 = "sha256-Nzlm1AW/nW9chQAourKF0o2FSQmsr1MNhJ4gEO0/9sM=";
+    tag = "${version}-${rel}";
+    hash = "sha256-XcRg0FtoN7SXRVEBWM9gIlLOMGT3x64s9WD12UJdblw=";
   };
 
   extraCMakeFlags = [
@@ -26,19 +39,31 @@ buildKodiBinaryAddon rec {
 
   extraNativeBuildInputs = [ gtest ];
 
-  extraBuildInputs = [ pugixml ];
+  extraBuildInputs = [
+    pugixml
+    rapidjson
+  ];
 
-  extraRuntimeDependencies = [ glib nspr nss stdenv.cc.cc.lib ];
+  extraRuntimeDependencies = [
+    glib
+    nspr
+    nss
+    (lib.getLib stdenv.cc.cc)
+  ];
 
-  extraInstallPhase = let n = namespace; in ''
-    ln -s $out/lib/addons/${n}/libssd_wv.so $out/${addonDir}/${n}/libssd_wv.so
-  '';
+  extraInstallPhase =
+    let
+      n = namespace;
+    in
+    ''
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 "ln -s $out/lib/addons/${n}/libcdm_aarch64_loader.so $out/${addonDir}/${n}/libcdm_aarch64_loader.so"}
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/xbmc/inputstream.adaptive";
     description = "Kodi inputstream addon for several manifest types";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

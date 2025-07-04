@@ -1,14 +1,17 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.flashrom;
 in
 {
   options.programs.flashrom = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Installs flashrom and configures udev rules for programmers
@@ -16,10 +19,10 @@ in
         group.
       '';
     };
-    package = mkPackageOption pkgs "flashrom" { };
+    package = lib.mkPackageOption pkgs "flashrom" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.udev.packages = [ cfg.package ];
     environment.systemPackages = [ cfg.package ];
   };

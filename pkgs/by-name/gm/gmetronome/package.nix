@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, pkg-config
-, autoreconfHook
-, wrapGAppsHook
-, gtkmm3
-, libpulseaudio
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  autoreconfHook,
+  wrapGAppsHook3,
+  gtkmm3,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gmetronome";
-  version = "0.3.3";
+  version = "0.4.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "dqpb";
     repo = "gmetronome";
     rev = version;
-    hash = "sha256-ilFO1HwleWIQ51Bkzck1sm1Yu3ugqkvZrpxPOYzXydM=";
+    hash = "sha256-/UWOvVeZILDR29VjBK+mFJt1hzWcOljOr7J7+cMrKtM=";
   };
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -32,12 +33,13 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A free software metronome and tempo measurement tool";
+    description = "Free software metronome and tempo measurement tool";
     homepage = "https://gitlab.gnome.org/dqpb/gmetronome";
+    changelog = "https://gitlab.gnome.org/dqpb/gmetronome/-/blob/${src.rev}/NEWS";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ aleksana ];
     mainProgram = "gmetronome";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

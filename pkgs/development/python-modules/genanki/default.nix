@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cached-property
-, chevron
-, fetchPypi
-, frozendict
-, pystache
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  cached-property,
+  chevron,
+  fetchPypi,
+  frozendict,
+  pystache,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
   # relies on upstream anki
   doCheck = false;
 
-  pythonImportsCheck = [
-    "genanki"
-  ];
+  pythonImportsCheck = [ "genanki" ];
 
   meta = with lib; {
     description = "Generate Anki decks programmatically";

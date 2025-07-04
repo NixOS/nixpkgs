@@ -1,27 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, plumbum
-, requests
-, setuptools
-, hypothesis
-, pynose
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  plumbum,
+  requests,
+  setuptools,
+  hypothesis,
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "habitipy";
-  version = "0.3.0";
-  format = "setuptools";
+  version = "0.3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ASMfreaK";
     repo = "habitipy";
-    rev = "v${version}";
-    sha256 = "1vf485z5m4h61p64zr3sgkcil2s3brq7dja4n7m49d1fvzcirylv";
+    tag = "v${version}";
+    hash = "sha256-AEeTCrxLXkokRRnNUfW4y23Qdh8ek1F88GmCPLGb84A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     plumbum
     requests
     setuptools
@@ -29,13 +32,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    pynose
+    pytestCheckHook
     responses
   ];
 
-  checkPhase = ''
-    HOME=$TMPDIR nosetests
+  preCheck = ''
+    export HOME=$TMPDIR
   '';
+
+  disabledTests = [
+    # network access
+    "test_content_cache"
+    # hypothesis.errors.InvalidArgument: tests/test_cli.py::test_data is a function that returns a Hypothesis strategy, but pytest has collected it as a test function.
+    "test_data"
+  ];
 
   pythonImportsCheck = [ "habitipy" ];
 

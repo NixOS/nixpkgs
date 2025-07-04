@@ -26,10 +26,15 @@ stdenv.mkDerivation rec {
     mod_ca
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-error=int-conversion"
-    "-Wno-error=implicit-function-declaration"
-  ]);
+  # FIXME: remove after next release after 0.2.3
+  patches = [ ./0001-DEFINE_STACK_OF-EVP_MD-seems-to-have-gone-recreate-i.patch ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=int-conversion"
+      "-Wno-error=implicit-function-declaration"
+    ]
+  );
 
   inherit (mod_ca) configureFlags installFlags;
 

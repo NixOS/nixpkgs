@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, stdenvNoCC
+{
+  fetchFromGitHub,
+  lib,
+  stdenvNoCC,
 
-, # build deps
-  clickgen
-, python3Packages
+  # build deps
+  clickgen,
+  python3Packages,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -15,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "ful1e5";
     repo = "banana-cursor";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PI7381xf/GctQTnfcE0W3M3z2kqbX4VexMf17C61hT8=";
+    hash = "sha256-PI7381xf/GctQTnfcE0W3M3z2kqbX4VexMf17C61hT8=";
   };
 
   nativeBuildInputs = [
@@ -41,10 +42,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "The Banana Cursor";
+    description = "Banana Cursor";
     homepage = "https://github.com/ful1e5/banana-cursor";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ getpsyched yrd ];
+    maintainers = with maintainers; [
+      getpsyched
+      yrd
+    ];
     platforms = platforms.linux;
   };
 })

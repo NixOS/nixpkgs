@@ -1,40 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pandas
-, six
-, astropy
-, oldest-supported-numpy
-, pytestCheckHook
-, pytest-doctestplus
-, pythonOlder
-, setuptools-scm
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  numpy,
+  pandas,
+  packaging,
+
+  astropy,
+  pytestCheckHook,
+  pytest-doctestplus,
 }:
 
 buildPythonPackage rec {
   pname = "drms";
-  version = "0.7.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "0.9.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2VtAGRx0OnYdATK/ngNhffmQDjZfELYeTTPCdfkHAAc=";
+  src = fetchFromGitHub {
+    owner = "sunpy";
+    repo = "drms";
+    tag = "v${version}";
+    hash = "sha256-Hd65bpJCknBeRd27JlcIkzzoZv5nGR7C6oMSGPFiyjA=";
   };
 
-  nativeBuildInputs = [
-    numpy
-    oldest-supported-numpy
+  build-system = [
+    setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     pandas
-    six
+    packaging
   ];
 
   nativeCheckInputs = [
@@ -45,18 +48,18 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_query_hexadecimal_strings"
+    "test_jsocinfoconstants" # Need network
   ];
 
-  disabledTestPaths = [
-    "docs/tutorial.rst"
-  ];
+  disabledTestPaths = [ "docs/tutorial.rst" ];
 
   pythonImportsCheck = [ "drms" ];
 
-  meta = with lib; {
+  meta = {
     description = "Access HMI, AIA and MDI data with Python";
     homepage = "https://github.com/sunpy/drms";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/sunpy/drms/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }

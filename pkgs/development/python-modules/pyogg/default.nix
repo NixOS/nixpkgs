@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, fetchPypi
-, buildPythonPackage
-, libvorbis
-, flac
-, libogg
-, libopus
-, opusfile
-, substituteAll
-, python
+{
+  stdenv,
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  libvorbis,
+  flac,
+  libogg,
+  libopus,
+  opusfile,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
-
   pname = "pyogg";
   version = "0.6.14a1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyOgg";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     libopus
   ];
 
-  propagatedBuidInputs = [
+  propagatedBuildInputs = [
     libvorbis
     flac
     libogg
@@ -41,17 +41,19 @@ buildPythonPackage rec {
   doCheck = false;
 
   # patch has dos style eol
-  patchFlags = [ "-p1" "--binary" ];
+  patchFlags = [
+    "-p1"
+    "--binary"
+  ];
   patches = [
-    (substituteAll {
-      src = ./pyogg-paths.patch;
-      flacLibPath="${flac.out}/lib/libFLAC${stdenv.hostPlatform.extensions.sharedLibrary}";
-      oggLibPath="${libogg}/lib/libogg${stdenv.hostPlatform.extensions.sharedLibrary}";
-      vorbisLibPath="${libvorbis}/lib/libvorbis${stdenv.hostPlatform.extensions.sharedLibrary}";
-      vorbisFileLibPath="${libvorbis}/lib/libvorbisfile${stdenv.hostPlatform.extensions.sharedLibrary}";
-      vorbisEncLibPath="${libvorbis}/lib/libvorbisenc${stdenv.hostPlatform.extensions.sharedLibrary}";
-      opusLibPath="${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}";
-      opusFileLibPath="${opusfile}/lib/libopusfile${stdenv.hostPlatform.extensions.sharedLibrary}";
+    (replaceVars ./pyogg-paths.patch {
+      flacLibPath = "${flac.out}/lib/libFLAC${stdenv.hostPlatform.extensions.sharedLibrary}";
+      oggLibPath = "${libogg}/lib/libogg${stdenv.hostPlatform.extensions.sharedLibrary}";
+      vorbisLibPath = "${libvorbis}/lib/libvorbis${stdenv.hostPlatform.extensions.sharedLibrary}";
+      vorbisFileLibPath = "${libvorbis}/lib/libvorbisfile${stdenv.hostPlatform.extensions.sharedLibrary}";
+      vorbisEncLibPath = "${libvorbis}/lib/libvorbisenc${stdenv.hostPlatform.extensions.sharedLibrary}";
+      opusLibPath = "${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}";
+      opusFileLibPath = "${opusfile}/lib/libopusfile${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 

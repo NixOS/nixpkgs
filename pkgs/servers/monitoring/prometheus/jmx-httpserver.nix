@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jmx-prometheus-httpserver";
@@ -25,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/prometheus/jmx_exporter";
-    description = "A process for exposing JMX Beans via HTTP for Prometheus consumption";
+    description = "Process for exposing JMX Beans via HTTP for Prometheus consumption";
     mainProgram = "jmx_prometheus_httpserver";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;

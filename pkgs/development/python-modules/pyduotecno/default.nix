@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyduotecno";
-  version = "2024.3.2";
+  version = "2024.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = "pyDuotecno";
-    rev = "refs/tags/${version}";
-    hash = "sha256-aak1e8NOxj7kncOyChpCEAQP1jpduhiSKDqm3mf5bqs=";
+    tag = version;
+    hash = "sha256-I/ZA2ooa6nunUr/4K+FWAGMOdcJDfGzE99jJ8zTe2Po=";
   };
 
   build-system = [ setuptools ];

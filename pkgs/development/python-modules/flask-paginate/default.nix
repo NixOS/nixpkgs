@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lixxu";
     repo = "flask-paginate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YaAgl+iuoXB0eWVzhmNq2UTOpM/tHfDISIb9CyaXiuA=";
   };
 
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/lixxu/flask-paginate";
     changelog = "https://github.com/lixxu/flask-paginate/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

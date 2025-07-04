@@ -1,26 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope-event
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  pname = "zope.interface";
-  version = "5.5.2";
+  pname = "zope-interface";
+  version = "7.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-v+4fP/YhQ4GUmeNI9bin86oCWfmspeDdrnOR0Fnc5nE=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.interface";
+    tag = version;
+    hash = "sha256-WrS/YHkEmV1G/Scg0xpyu2uFVWTWnEpajqNDvGioVgc=";
   };
 
-  propagatedBuildInputs = [ zope-event ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools < 74" "setuptools"
+  '';
+
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "zope.interface" ];
 
   doCheck = false; # Circular deps.
 
-  meta = with lib; {
+  pythonNamespaces = [ "zope" ];
+
+  meta = {
+    changelog = "https://github.com/zopefoundation/zope.interface/blob/${version}/CHANGES.rst";
     description = "Zope.Interface";
-    homepage = "https://zope.org/Products/ZopeInterface";
-    license = licenses.zpl20;
-    maintainers = [ maintainers.goibhniu ];
+    homepage = "https://github.com/zopefoundation/zope.interface";
+    license = lib.licenses.zpl21;
+    maintainers = [ ];
   };
 }

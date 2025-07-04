@@ -1,0 +1,24 @@
+From f397d6e82d73761358d815a5ba880a05e7e281c3 Mon Sep 17 00:00:00 2001
+From: Chris Moultrie <tebriel@frodux.in>
+Date: Tue, 4 Mar 2025 08:21:28 -0500
+Subject: [PATCH 2/2] Remove check for config-file as it's stored in /etc/grocy
+
+---
+ helpers/PrerequisiteChecker.php | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/helpers/PrerequisiteChecker.php b/helpers/PrerequisiteChecker.php
+index 8e12a5c5..37b433db 100644
+--- a/helpers/PrerequisiteChecker.php
++++ b/helpers/PrerequisiteChecker.php
+@@ -18,7 +18,6 @@ class PrerequisiteChecker
+ 	public function checkRequirements()
+ 	{
+ 		self::checkForPhpVersion();
+-		self::checkForConfigFile();
+ 		self::checkForConfigDistFile();
+ 		self::checkForComposer();
+ 		self::checkForPhpExtensions();
+-- 
+2.47.2
+

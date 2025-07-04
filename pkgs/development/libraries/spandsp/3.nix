@@ -1,15 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, audiofile
-, libtiff
-, autoreconfHook
-, fetchpatch
-, buildPackages
-, callPackage
+{
+  fetchFromGitHub,
+  callPackage,
 }:
 
-(callPackage ./common.nix {}).overrideAttrs(previousAttrs: {
+(callPackage ./common.nix { }).overrideAttrs (previousAttrs: {
   version = "3.0.0";
   src = fetchFromGitHub {
     owner = "freeswitch";

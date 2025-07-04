@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-# build inputs
-, numpy
-, yacs
-, pyyaml
-, tqdm
-, termcolor
-, pillow
-, tabulate
-, iopath
-, shapely
-# check inputs
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  # build inputs
+  numpy,
+  yacs,
+  pyyaml,
+  tqdm,
+  termcolor,
+  pillow,
+  tabulate,
+  iopath,
+  shapely,
+  # check inputs
+  torch,
 }:
 let
   pname = "fvcore";
@@ -44,20 +45,16 @@ buildPythonPackage {
     iopath
   ];
 
-  nativeCheckInputs = [
-    torch
-  ];
+  nativeCheckInputs = [ torch ];
 
   # TypeError: flop_count() missing 2 required positional arguments: 'model' and 'inputs'
   doCheck = false;
 
-  pythonImportsCheck = [
-    "fvcore"
-  ];
+  pythonImportsCheck = [ "fvcore" ];
 
-  passthru.optional-dependencies = optional-dependencies;
+  optional-dependencies = optional-dependencies;
 
-   meta = with lib; {
+  meta = with lib; {
     description = "Collection of common code that's shared among different research projects in FAIR computer vision team";
     homepage = "https://github.com/facebookresearch/fvcore";
     license = licenses.asl20;

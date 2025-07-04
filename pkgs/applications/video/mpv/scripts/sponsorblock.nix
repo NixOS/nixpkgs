@@ -1,9 +1,16 @@
-{ lib, buildLua, fetchFromGitHub, fetchpatch, python3, nix-update-script }:
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  nix-update-script,
+}:
 
 # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.sponsorblock ]; }`
 buildLua {
   pname = "mpv_sponsorblock";
-  version = "unstable-2023-01-30";
+  version = "0-unstable-2023-01-30";
 
   src = fetchFromGitHub {
     owner = "po5";
@@ -28,20 +35,18 @@ buildLua {
 
   postPatch = ''
     substituteInPlace sponsorblock.lua \
-      --replace "python3" "${python3}/bin/python3" \
-      --replace 'mp.find_config_file("scripts")' "\"$out/share/mpv/scripts\""
+      --replace-fail "python3" "${lib.getExe python3}" \
+      --replace-fail 'mp.find_config_file("scripts")' "\"$out/share/mpv/scripts\""
   '';
 
-  postInstall = "cp -a sponsorblock_shared $out/share/mpv/scripts/";
+  extraScripts = [ "sponsorblock_shared" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     description = "Script for mpv to skip sponsored segments of YouTube videos";
     homepage = "https://github.com/po5/mpv_sponsorblock";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
   };
 }

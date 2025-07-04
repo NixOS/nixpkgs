@@ -1,9 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.virtualisation.waydroid;
   kCfg = config.lib.kernelConfig;
-  kernelPackages = config.boot.kernelPackages;
   waydroidGbinderConf = pkgs.writeText "waydroid.conf" ''
     [Protocol]
     /dev/binder = aidl2
@@ -21,6 +25,7 @@ in
 
   options.virtualisation.waydroid = {
     enable = lib.mkEnableOption "Waydroid";
+    package = lib.mkPackageOption pkgs "waydroid" { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -35,7 +40,8 @@ in
       (kCfg.isEnabled "MEMFD_CREATE")
     ];
 
-    /* NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on
+    /*
+      NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on
       as reading the kernel config is not always possible and on kernels where it's
       already on it will be no-op
     */
@@ -43,7 +49,7 @@ in
 
     environment.etc."gbinder.d/waydroid.conf".source = waydroidGbinderConf;
 
-    environment.systemPackages = with pkgs; [ waydroid ];
+    environment.systemPackages = [ cfg.package ];
 
     networking.firewall.trustedInterfaces = [ "waydroid0" ];
 
@@ -55,15 +61,18 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.waydroid}/bin/waydroid -w container start";
-        ExecStop = "${pkgs.waydroid}/bin/waydroid container stop";
-        ExecStopPost = "${pkgs.waydroid}/bin/waydroid session stop";
+        Type = "dbus";
+        UMask = "0022";
+        ExecStart = "${cfg.package}/bin/waydroid -w container start";
+        BusName = "id.waydro.Container";
       };
     };
 
     systemd.tmpfiles.rules = [
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
     ];
+
+    services.dbus.packages = [ cfg.package ];
   };
 
 }

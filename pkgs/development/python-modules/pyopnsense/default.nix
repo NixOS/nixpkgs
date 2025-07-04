@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fixtures
-, mock
-, pbr
-, pytestCheckHook
-, pythonOlder
-, requests
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fixtures,
+  mock,
+  pbr,
+  pytestCheckHook,
+  requests,
+  testtools,
 }:
 
 buildPythonPackage rec {
   pname = "pyopnsense";
   version = "0.4.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-3DKlVrOtMa55gTu557pgojRpdgrO5pEZ3L+9gKoW9yg=";
   };
 
-  propagatedBuildInputs = [
-    pbr
+  build-system = [ pbr ];
+
+  dependencies = [
     requests
   ];
 
@@ -34,15 +33,13 @@ buildPythonPackage rec {
     testtools
   ];
 
-  pythonImportsCheck = [
-    "pyopnsense"
-  ];
+  pythonImportsCheck = [ "pyopnsense" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the OPNsense API";
     homepage = "https://github.com/mtreinish/pyopnsense";
     changelog = "https://github.com/mtreinish/pyopnsense/releases/tag/${version}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

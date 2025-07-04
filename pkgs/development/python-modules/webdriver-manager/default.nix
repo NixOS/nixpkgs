@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, pybrowsers
-, pytestCheckHook
-, python-dotenv
-, pythonOlder
-, requests
-, selenium
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  pybrowsers,
+  pytestCheckHook,
+  python-dotenv,
+  pythonOlder,
+  requests,
+  selenium,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "webdriver-manager";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,15 +22,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SergeyPirogov";
     repo = "webdriver_manager";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PdUlloJ4DncnktKQHofn/OLVrgSVyWhaeEEhl3Hgjek=";
+    tag = "v${version}";
+    hash = "sha256-ZmrQa/2vPwYgSvY3ZUvilg4RizVXpu5hvJJBQVXkK8E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     packaging
     python-dotenv
     requests
@@ -41,9 +42,7 @@ buildPythonPackage rec {
     selenium
   ];
 
-  pythonImportsCheck = [
-    "webdriver_manager"
-  ];
+  pythonImportsCheck = [ "webdriver_manager" ];
 
   disabledTestPaths = [
     # Tests require network access and browsers available
@@ -69,5 +68,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/SergeyPirogov/webdriver_manager/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }

@@ -2,22 +2,37 @@
   lib,
   mkKdeDerivation,
   fetchFromGitLab,
-  mpv,
+  mpv-unwrapped,
   qtdeclarative,
+  qtbase,
 }:
+
 mkKdeDerivation rec {
   pname = "mpvqt";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = "mpvqt";
-    rev = "v${version}";
-    hash = "sha256-XHiCxH7dJxJamloM2SJbiFHDt8j4rVfv/M9PaBzvgM4=";
+    tag = "v${version}";
+    hash = "sha256-qscubUiej/OqQI+V9gxQb7eVa3L2FJ5koqgXFoBw8tU=";
   };
 
-  extraBuildInputs = [mpv qtdeclarative];
+  extraBuildInputs = [ qtdeclarative ];
 
-  meta.license = with lib.licenses; [bsd2 bsd3 cc-by-sa-40 cc0 lgpl21Only lgpl3Only lgpl3Plus mit];
+  extraPropagatedBuildInputs = [ mpv-unwrapped ];
+
+  extraCmakeFlags = [ "-DQt6_DIR=${qtbase}/lib/cmake/Qt6" ];
+
+  meta.license = with lib.licenses; [
+    bsd2
+    bsd3
+    cc-by-sa-40
+    cc0
+    lgpl21Only
+    lgpl3Only
+    lgpl3Plus
+    mit
+  ];
 }

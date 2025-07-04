@@ -1,8 +1,9 @@
-{ lib
-, pythonPackages
-, fetchPypi
-, fetchpatch2
-, nixosTests
+{
+  lib,
+  pythonPackages,
+  fetchPypi,
+  fetchpatch2,
+  nixosTests,
 }:
 
 with pythonPackages;
@@ -10,8 +11,12 @@ with pythonPackages;
 buildPythonApplication rec {
   pname = "rss2email";
   version = "3.14";
+  format = "setuptools";
 
-  propagatedBuildInputs = [ feedparser html2text ];
+  propagatedBuildInputs = [
+    feedparser
+    html2text
+  ];
   nativeCheckInputs = [ beautifulsoup4 ];
 
   src = fetchPypi {
@@ -27,7 +32,11 @@ buildPythonApplication rec {
     })
   ];
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   postPatch = ''
     # sendmail executable is called from PATH instead of sbin by default
@@ -52,7 +61,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A tool that converts RSS/Atom newsfeeds to email";
+    description = "Tool that converts RSS/Atom newsfeeds to email";
     homepage = "https://pypi.python.org/pypi/rss2email";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ekleog ];

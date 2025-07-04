@@ -1,17 +1,19 @@
-{ lib
-, python3
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  python3Packages,
+  fetchFromGitHub,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "arxiv-latex-cleaner";
-  version = "1.0.5";
+  version = "1.0.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google-research";
     repo = "arxiv-latex-cleaner";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Yxp8XtlISVZfEjCEJ/EXsIGMCHDPOwPcjkJxECeXvYk=";
+    tag = "v${version}";
+    hash = "sha256-CQb1u1j+/px+vNqA3iXZ2oe6/0ZWeMjWrUQL9elRDEI=";
   };
 
   propagatedBuildInputs = with python3Packages; [

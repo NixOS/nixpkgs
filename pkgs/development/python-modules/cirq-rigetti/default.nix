@@ -1,50 +1,22 @@
-{ buildPythonPackage
-, cirq-core
-, requests
-, pytestCheckHook
-, attrs
-, certifi
-, h11
-, httpcore
-, idna
-, httpx
-, iso8601
-, pydantic
-, pyjwt
-, pyquil
-, python-dateutil
-, pythonOlder
-, qcs-api-client
-, retrying
-, rfc3339
-, rfc3986
-, six
-, sniffio
-, toml
+{
+  buildPythonPackage,
+  cirq-core,
+  setuptools,
+  pyquil,
+  qcs-sdk-python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-rigetti";
-  format = "setuptools";
-  inherit (cirq-core) version src meta;
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+  inherit (cirq-core) version src;
 
   sourceRoot = "${src.name}/${pname}";
 
   pythonRelaxDeps = [
-    "attrs"
-    "certifi"
-    "h11"
-    "httpcore"
-    "httpx"
-    "idna"
-    "iso8601"
-    "pydantic"
-    "pyjwt"
     "pyquil"
-    "qcs-api-client"
-    "rfc3986"
+    "qcs-sdk-python"
   ];
 
   postPatch = ''
@@ -52,31 +24,15 @@ buildPythonPackage rec {
     rm cirq_rigetti/service_test.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cirq-core
-    attrs
-    certifi
-    h11
-    httpcore
-    httpx
-    idna
-    iso8601
-    pydantic
-    pyjwt
     pyquil
-    python-dateutil
-    qcs-api-client
-    retrying
-    rfc3339
-    rfc3986
-    six
-    sniffio
-    toml
+    qcs-sdk-python
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # No need to test the version number
@@ -85,4 +41,10 @@ buildPythonPackage rec {
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_rigetti" ];
+
+  meta = {
+    inherit (cirq-core.meta) changelog license maintainers;
+    description = "Cirq package to simulate and connect to Rigetti quantum computers and Quil QVM";
+    homepage = "https://github.com/quantumlib/Cirq/tree/main/cirq-rigetti";
+  };
 }

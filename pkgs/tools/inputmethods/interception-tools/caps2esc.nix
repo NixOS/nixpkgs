@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "caps2esc";
@@ -9,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "linux/plugins";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gPFElAixiDTTwcl2XKM7MbTkpRrg8ToO5K7H8kz3DHk=";
+    hash = "sha256-gPFElAixiDTTwcl2XKM7MbTkpRrg8ToO5K7H8kz3DHk=";
   };
 
   nativeBuildInputs = [ cmake ];

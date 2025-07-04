@@ -15,20 +15,6 @@ else # Only set up Qt once.
     . @fix_qt_builtin_paths@
     . @fix_qt_module_paths@
 
-    # Disable debug symbols if qtbase was built without debugging.
-    # This stops -dev paths from leaking into other outputs.
-    if [ -z "@debug@" ]; then
-        NIX_CFLAGS_COMPILE="${NIX_CFLAGS_COMPILE-}${NIX_CFLAGS_COMPILE:+ }-DQT_NO_DEBUG"
-    fi
-
-    # Integration with CMake:
-    # Set the CMake build type corresponding to how qtbase was built.
-    if [ -n "@debug@" ]; then
-        cmakeBuildType="Debug"
-    else
-        cmakeBuildType="Release"
-    fi
-
     # Build tools are often confused if QMAKE is unset.
     export QMAKE=@out@/bin/qmake
 
@@ -49,16 +35,18 @@ else # Only set up Qt once.
     }
     envBuildHostHooks+=(qmakePathHook)
 
-    export QTTOOLSPATH=
-
-    declare -Ag qttoolsPathSeen=()
+    declare -g qttoolsPathSeen=
     qtToolsHook() {
-        # Skip this path if we have seen it before.
-        # MUST use 'if' because 'qttoolsPathSeen[$]' may be unset.
-        if [ -n "${qttoolsPathSeen[$1]-}" ]; then return; fi
-        qttoolsPathSeen[$1]=1
-        if [ -d "$1/libexec" ]; then
-            QTTOOLSPATH="${QTTOOLSPATH}${QTTOOLSPATH:+:}$1/libexec"
+        if [ -f "$1/libexec/qhelpgenerator" ]; then
+            if [[ -n "${qtToolsPathSeen:-}" && "${qttoolsPathSeen:-}" != "$1" ]]; then
+                echo >&2 "Error: detected mismatched Qt dependencies:"
+                echo >&2 "    $1"
+                echo >&2 "    $qttoolsPathSeen"
+                exit 1
+            fi
+
+            qttoolsPathSeen=$1
+            appendToVar cmakeFlags "-DQT_OPTIONAL_TOOLS_PATH=$1"
         fi
     }
     addEnvHooks "$hostOffset" qtToolsHook
@@ -85,17 +73,20 @@ else # Only set up Qt once.
         fi
     }
     if [ -z "${dontPatchMkspecs-}" ]; then
-        postPhases="${postPhases-}${postPhases:+ }postPatchMkspecs"
+        appendToVar postPhases postPatchMkspecs
     fi
 
     qtPreHook() {
-        # Check that wrapQtAppsHook is used, or it is explicitly disabled.
+        # Check that wrapQtAppsHook/wrapQtAppsNoGuiHook is used, or it is explicitly disabled.
         if [[ -z "$__nix_wrapQtAppsHook" && -z "$dontWrapQtApps" ]]; then
-            echo >&2 "Error: wrapQtAppsHook is not used, and dontWrapQtApps is not set."
+            echo >&2 "Error: this derivation depends on qtbase, but no wrapping behavior was specified."
+            echo >&2 "  - If this is a graphical application, add wrapQtAppsHook to nativeBuildInputs"
+            echo >&2 "  - If this is a CLI application, add wrapQtAppsNoGuiHook to nativeBuildInputs"
+            echo >&2 "  - If this is a library or you need custom wrapping logic, set dontWrapQtApps = true"
             exit 1
         fi
     }
-    prePhases+=" qtPreHook"
+    appendToVar prePhases qtPreHook
 
     addQtModulePrefix() {
         addToSearchPath QT_ADDITIONAL_PACKAGES_PREFIX_PATH $1

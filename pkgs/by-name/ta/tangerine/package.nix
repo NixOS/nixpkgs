@@ -1,10 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, ncurses
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  ncurses,
+  SDL2,
+  libGL,
+  libX11,
 }:
 
 stdenv.mkDerivation {
@@ -27,14 +30,18 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ ncurses SDL2 ];
+  buildInputs = [
+    ncurses
+    SDL2
+    libGL
+    libX11
+  ];
 
   meta = with lib; {
-    description = "A system for creating 3D models procedurally from a set of Signed Distance Function (SDF) primitive shapes and combining operators";
+    description = "System for creating 3D models procedurally from a set of Signed Distance Function (SDF) primitive shapes and combining operators";
     homepage = "https://github.com/Aeva/tangerine";
     license = licenses.asl20;
     maintainers = [ maintainers.viraptor ];
-    broken = stdenv.isDarwin; # third_party/naive-surface-nets doesn't find std::execution
+    broken = stdenv.hostPlatform.isDarwin; # third_party/naive-surface-nets doesn't find std::execution
   };
 }
-

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = "tendo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZOozMGxAKcEtmUEzHCFSojKc+9Ha+T2MOTmMvdMqNuQ=";
   };
+
+  patches = [
+    ./fix-python-313-build.patch
+  ];
 
   postPatch = ''
     # marken broken and not required
@@ -31,13 +36,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "tendo"
-  ];
+  pythonImportsCheck = [ "tendo" ];
 
   meta = with lib; {
     description = "Adds basic functionality that is not provided by Python";

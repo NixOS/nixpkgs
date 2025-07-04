@@ -1,58 +1,73 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, flit-core
-, ipykernel
-, python
-, pexpect
-, bash
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  replaceVars,
+  bashInteractive,
+  flit-core,
+  filetype,
+  ipykernel,
+  pexpect,
+  writableTmpDirAsHomeHook,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "bash-kernel";
-  version = "0.9.3";
+  version = "0.10.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "bash_kernel";
-    inherit version;
-    hash = "sha256-n3oDgRyn2csfv/gIIjfPBFC5cYIlL9C4BYeha2XmbVg=";
+  src = fetchFromGitHub {
+    owner = "takluyver";
+    repo = "bash_kernel";
+    tag = version;
+    hash = "sha256-ugFMcQx1B1nKoO9rhb6PMllRcoZi0O4B9um8dOu5DU4=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./bash-path.patch;
-      bash = lib.getExe bash;
+    (replaceVars ./bash-path.patch {
+      bash = lib.getExe bashInteractive;
     })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    filetype
     ipykernel
     pexpect
   ];
 
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   postInstall = ''
     ${python.pythonOnBuildForHost.interpreter} -m bash_kernel.install --prefix $out
   '';
 
-  # no tests
-  doCheck = false;
+  checkPhase = ''
+    runHook preCheck
 
-  meta = with lib; {
+    # Create a JUPYTER_PATH with the kernelspec
+    export JUPYTER_PATH=$(mktemp -d)
+    mkdir -p $JUPYTER_PATH/kernels/bash
+    echo '{ "language": "bash", "argv": [ "${python}/bin/python", "-m", "bash_kernel", "-f", "{connection_file}" ] }' > $JUPYTER_PATH/kernels/bash/kernel.json
+
+    # Evaluate a test notebook with papermill
+    cd $(mktemp -d)
+    ${python.withPackages (ps: [ ps.papermill ])}/bin/papermill --kernel bash ${./test.ipynb} out.ipynb
+
+    runHook postCheck
+  '';
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Bash Kernel for Jupyter";
     homepage = "https://github.com/takluyver/bash_kernel";
     changelog = "https://github.com/takluyver/bash_kernel/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

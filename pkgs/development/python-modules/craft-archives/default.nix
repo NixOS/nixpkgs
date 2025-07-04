@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, launchpadlib
-, lazr-restfulclient
-, overrides
-, pydantic_1
-, setuptools
-, setuptools-scm
-, tabulate
-, pytest-check
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  launchpadlib,
+  lazr-restfulclient,
+  lazr-uri,
+  overrides,
+  pydantic,
+  python-debian,
+  distro,
+  setuptools-scm,
+  pytest-check,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-archives";
-  version = "1.1.3";
+  version = "2.1.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-archives";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ZUqMjbOsHwzZyn0NsSTlZTljzagYEirWKEGatXVL43g=";
+    tag = version;
+    hash = "sha256-VjGoAsmdYyoU7ngU69HVNauEk2/vbcEz2tMCTmjheF4=";
   };
 
   postPatch = ''
@@ -35,22 +37,23 @@ buildPythonPackage rec {
       --replace-fail "setuptools==67.7.2" "setuptools"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  pythonRelaxDeps = [
+    "python-debian"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
+    distro
     launchpadlib
     lazr-restfulclient
+    lazr-uri
     overrides
-    pydantic_1
-    tabulate
+    pydantic
+    python-debian
   ];
 
-  pythonImportsCheck = [
-    "craft_archives"
-  ];
+  pythonImportsCheck = [ "craft_archives" ];
 
   nativeCheckInputs = [
     pytest-check
@@ -63,7 +66,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A library for handling archives/repositories in Canonical craft applications";
+    description = "Library for handling archives/repositories in Canonical craft applications";
     homepage = "https://github.com/canonical/craft-archives";
     changelog = "https://github.com/canonical/craft-archives/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;
@@ -71,4 +74,3 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
   };
 }
-

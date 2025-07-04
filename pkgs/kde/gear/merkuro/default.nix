@@ -1,10 +1,15 @@
 {
   mkKdeDerivation,
+  qtlocation,
   qtsvg,
   libplasma,
 }:
 mkKdeDerivation {
   pname = "merkuro";
 
-  extraBuildInputs = [qtsvg libplasma];
+  extraBuildInputs = [
+    qtlocation
+    qtsvg
+    libplasma
+  ];
 }

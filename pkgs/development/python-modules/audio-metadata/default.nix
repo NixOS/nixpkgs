@@ -10,7 +10,6 @@
   poetry-core,
   pprintpp,
   pythonOlder,
-  pythonRelaxDepsHook,
   tbm-utils,
 }:
 
@@ -24,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thebigmunch";
     repo = "audio-metadata";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-5ZX4HwbuB9ZmFfHuxaMCrn3R7/znuDsoyqqLql2Nizg=";
   };
 
@@ -43,8 +42,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     attrs

@@ -1,9 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with pkgs;
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkRenamedOptionModule
+    types
+    ;
 
   cfg = config.users.ldap;
 
@@ -11,40 +21,38 @@ let
   # this file.  Directives HAVE to start in the first column!
   ldapConfig = {
     target = "ldap.conf";
-    source = writeText "ldap.conf" ''
+    source = pkgs.writeText "ldap.conf" ''
       uri ${config.users.ldap.server}
       base ${config.users.ldap.base}
       timelimit ${toString config.users.ldap.timeLimit}
       bind_timelimit ${toString config.users.ldap.bind.timeLimit}
       bind_policy ${config.users.ldap.bind.policy}
-      ${optionalString config.users.ldap.useTLS ''
+      ${lib.optionalString config.users.ldap.useTLS ''
         ssl start_tls
       ''}
-      ${optionalString (config.users.ldap.bind.distinguishedName != "") ''
+      ${lib.optionalString (config.users.ldap.bind.distinguishedName != "") ''
         binddn ${config.users.ldap.bind.distinguishedName}
       ''}
-      ${optionalString (cfg.extraConfig != "") cfg.extraConfig }
+      ${lib.optionalString (cfg.extraConfig != "") cfg.extraConfig}
     '';
   };
 
-  nslcdConfig = writeText "nslcd.conf" ''
+  nslcdConfig = pkgs.writeText "nslcd.conf" ''
     uri ${cfg.server}
     base ${cfg.base}
     timelimit ${toString cfg.timeLimit}
     bind_timelimit ${toString cfg.bind.timeLimit}
-    ${optionalString (cfg.bind.distinguishedName != "")
-      "binddn ${cfg.bind.distinguishedName}" }
-    ${optionalString (cfg.daemon.rootpwmoddn != "")
-      "rootpwmoddn ${cfg.daemon.rootpwmoddn}" }
-    ${optionalString (cfg.daemon.extraConfig != "") cfg.daemon.extraConfig }
+    ${lib.optionalString (cfg.bind.distinguishedName != "") "binddn ${cfg.bind.distinguishedName}"}
+    ${lib.optionalString (cfg.daemon.rootpwmoddn != "") "rootpwmoddn ${cfg.daemon.rootpwmoddn}"}
+    ${lib.optionalString (cfg.daemon.extraConfig != "") cfg.daemon.extraConfig}
   '';
 
   # nslcd normally reads configuration from /etc/nslcd.conf.
   # this file might contain secrets. We append those at runtime,
   # so redirect its location to something more temporary.
-  nslcdWrapped = runCommand "nslcd-wrapped" { nativeBuildInputs = [ makeWrapper ]; } ''
+  nslcdWrapped = pkgs.runCommand "nslcd-wrapped" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
     mkdir -p $out/bin
-    makeWrapper ${nss_pam_ldapd}/sbin/nslcd $out/bin/nslcd \
+    makeWrapper ${pkgs.nss_pam_ldapd}/sbin/nslcd $out/bin/nslcd \
       --set LD_PRELOAD    "${pkgs.libredirect}/lib/libredirect.so" \
       --set NIX_REDIRECTS "/etc/nslcd.conf=/run/nslcd/nslcd.conf"
   '';
@@ -123,13 +131,13 @@ in
         };
 
         extraConfig = mkOption {
-          default =  "";
+          default = "";
           type = types.lines;
-          description =  ''
+          description = ''
             Extra configuration options that will be added verbatim at
-            the end of the nslcd configuration file (`nslcd.conf(5)`).
+            the end of the nslcd configuration file ({manpage}`nslcd.conf(5)`).
           '';
-        } ;
+        };
 
         rootpwmoddn = mkOption {
           default = "";
@@ -185,7 +193,11 @@ in
 
         policy = mkOption {
           default = "hard_open";
-          type = types.enum [ "hard_open" "hard_init" "soft" ];
+          type = types.enum [
+            "hard_open"
+            "hard_init"
+            "soft"
+          ];
           description = ''
             Specifies the policy to use for reconnecting to an unavailable
             LDAP server. The default is `hard_open`, which
@@ -205,9 +217,9 @@ in
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description =  ''
+        description = ''
           Extra configuration options that will be added verbatim at
-          the end of the ldap configuration file (`ldap.conf(5)`).
+          the end of the ldap configuration file ({manpage}`ldap.conf(5)`).
           If {option}`users.ldap.daemon` is enabled, this
           configuration will not be used. In that case, use
           {option}`users.ldap.daemon.extraConfig` instead.
@@ -222,17 +234,17 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc = optionalAttrs (!cfg.daemon.enable) {
+    environment.etc = lib.optionalAttrs (!cfg.daemon.enable) {
       "ldap.conf" = ldapConfig;
     };
 
-    system.nssModules = mkIf cfg.nsswitch (singleton (
-      if cfg.daemon.enable then nss_pam_ldapd else nss_ldap
-    ));
+    system.nssModules = mkIf cfg.nsswitch (
+      lib.singleton (if cfg.daemon.enable then pkgs.nss_pam_ldapd else pkgs.nss_ldap)
+    );
 
-    system.nssDatabases.group = optional cfg.nsswitch "ldap";
-    system.nssDatabases.passwd = optional cfg.nsswitch "ldap";
-    system.nssDatabases.shadow = optional cfg.nsswitch "ldap";
+    system.nssDatabases.group = lib.optional cfg.nsswitch "ldap";
+    system.nssDatabases.passwd = lib.optional cfg.nsswitch "ldap";
+    system.nssDatabases.shadow = lib.optional cfg.nsswitch "ldap";
 
     users = mkIf cfg.daemon.enable {
       groups.nslcd = {
@@ -250,7 +262,10 @@ in
       (mkIf (!cfg.daemon.enable) {
         ldap-password = {
           wantedBy = [ "sysinit.target" ];
-          before = [ "sysinit.target" "shutdown.target" ];
+          before = [
+            "sysinit.target"
+            "shutdown.target"
+          ];
           conflicts = [ "shutdown.target" ];
           unitConfig.DefaultDependencies = false;
           serviceConfig.Type = "oneshot";
@@ -306,7 +321,10 @@ in
 
   };
 
-  imports =
-    [ (mkRenamedOptionModule [ "users" "ldap" "bind" "password"] [ "users" "ldap" "bind" "passwordFile"])
-    ];
+  imports = [
+    (mkRenamedOptionModule
+      [ "users" "ldap" "bind" "password" ]
+      [ "users" "ldap" "bind" "passwordFile" ]
+    )
+  ];
 }

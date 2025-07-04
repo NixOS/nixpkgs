@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, aioresponses
-, orjson
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  aioresponses,
+  orjson,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bondhome";
     repo = "bond-async";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YRJHUOYFLf4dtQGIFKHLdUQxWTnZzG1MPirMsGvDor8=";
   };
 
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "bond_async"
-  ];
+  pythonImportsCheck = [ "bond_async" ];
 
   meta = with lib; {
     description = "Asynchronous Python wrapper library over Bond Local API";

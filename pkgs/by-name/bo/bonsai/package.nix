@@ -1,47 +1,36 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, gitUpdater
-, hare
-, hareThirdParty
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  gitUpdater,
+  hareHook,
+  hareThirdParty,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bonsai";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromSourcehut {
     owner = "~stacyharper";
     repo = "bonsai";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Wsr76OQOIqRPCx/8GK9NovxxPZ3dEP8pSo8wgMK1Hfo=";
+    hash = "sha256-WAne0628lELQanUv2lg8Y9QEikZVAT7Xtkndhs8Ozjw=";
   };
 
   nativeBuildInputs = [
-    hare
+    hareHook
     hareThirdParty.hare-ev
     hareThirdParty.hare-json
   ];
 
-  makeFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
-    "HARECACHE=.harecache"
-    "HAREFLAGS=-qa${stdenv.hostPlatform.uname.processor}"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace 'hare build' 'hare build $(HAREFLAGS)' \
-      --replace 'hare test' 'hare test $(HAREFLAGS)'
-  '';
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Finite State Machine structured as a tree";

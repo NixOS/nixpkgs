@@ -1,26 +1,28 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, libarchive
-, openssl
-, rust-jemalloc-sys
-, sqlite
-, pkg-config
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libarchive,
+  openssl,
+  rust-jemalloc-sys,
+  sqlite,
+  pkg-config,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nixseparatedebuginfod";
-  version = "0.3.4";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nixseparatedebuginfod";
     rev = "v${version}";
-    hash = "sha256-lbYU9gveZ4SkIpMMN8KRJItA3PZSDWcJAJs4WDoivBg=";
+    hash = "sha256-sVQ6UgQvSTEIxXPxISeTI9tqAdJlxQpLxq1h4I31r6k=";
   };
 
-  cargoHash = "sha256-iKmAOPxxuhIYRKQfOuqHrF+u3wtjOk7RJ9gzPFHGGqw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vaCmRr1hXF0BSg/dl3LYyd7c1MdPKIv6KgDgGEzqqJQ=";
 
   # tests need a working nix install with access to the internet
   doCheck = false;

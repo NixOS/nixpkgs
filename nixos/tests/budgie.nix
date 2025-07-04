@@ -1,36 +1,40 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "budgie";
 
   meta.maintainers = lib.teams.budgie.members;
 
-  nodes.machine = { ... }: {
-    imports = [
-      ./common/user-account.nix
-    ];
+  nodes.machine =
+    { ... }:
+    {
+      imports = [
+        ./common/user-account.nix
+      ];
 
-    services.xserver.enable = true;
+      services.xserver.enable = true;
 
-    services.xserver.displayManager = {
-      lightdm.enable = true;
-      autoLogin = {
+      services.xserver.displayManager = {
+        lightdm.enable = true;
+        autoLogin = {
+          enable = true;
+          user = "alice";
+        };
+      };
+
+      # We don't ship gnome-text-editor in Budgie module, we add this line mainly
+      # to catch eval issues related to this option.
+      environment.budgie.excludePackages = [ pkgs.gnome-text-editor ];
+
+      services.xserver.desktopManager.budgie = {
         enable = true;
-        user = "alice";
+        extraPlugins = [
+          pkgs.budgie-analogue-clock-applet
+        ];
       };
     };
 
-    # We don't ship gnome-text-editor in Budgie module, we add this line mainly
-    # to catch eval issues related to this option.
-    environment.budgie.excludePackages = [ pkgs.gnome-text-editor ];
-
-    services.xserver.desktopManager.budgie = {
-      enable = true;
-      extraPlugins = [
-        pkgs.budgiePlugins.budgie-analogue-clock-applet
-      ];
-    };
-  };
-
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
       env = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus DISPLAY=:0";
@@ -63,7 +67,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       with subtest("Check if various environment variables are set"):
           cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/budgie-wm)/environ"
           machine.succeed(f"{cmd} | grep 'XDG_CURRENT_DESKTOP' | grep 'Budgie:GNOME'")
-          machine.succeed(f"{cmd} | grep 'BUDGIE_PLUGIN_DATADIR' | grep '${pkgs.budgie.budgie-desktop-with-plugins.pname}'")
+          machine.succeed(f"{cmd} | grep 'BUDGIE_PLUGIN_DATADIR' | grep '${pkgs.budgie-desktop-with-plugins.pname}'")
+          # From the nixos/budgie module
+          machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
 
       with subtest("Open run dialog"):
           machine.send_key("alt-f2")
@@ -95,4 +101,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.sleep(10)
           machine.screenshot("screen")
     '';
-})
+}

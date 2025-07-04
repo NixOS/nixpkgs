@@ -1,18 +1,21 @@
-import ./make-test-python.nix ({ lib, ... }: {
+{ lib, ... }:
+{
   name = "pyload";
   meta.maintainers = with lib.maintainers; [ ambroisie ];
 
   nodes = {
-    machine = { ... }: {
-      services.pyload = {
-        enable = true;
+    machine =
+      { ... }:
+      {
+        services.pyload = {
+          enable = true;
 
-        listenAddress = "0.0.0.0";
-        port = 9876;
+          listenAddress = "0.0.0.0";
+          port = 9876;
+        };
+
+        networking.firewall.allowedTCPPorts = [ 9876 ];
       };
-
-      networking.firewall.allowedTCPPorts = [ 9876 ];
-    };
 
     client = { };
   };
@@ -30,4 +33,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     with subtest("Web interface accessible from a different machine"):
         client.wait_until_succeeds("curl -fs machine:9876")
   '';
-})
+}

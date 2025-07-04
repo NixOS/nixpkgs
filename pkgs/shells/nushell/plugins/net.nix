@@ -1,41 +1,39 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, IOKit
-, CoreFoundation
-, unstableGitUpdater
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
-  pname = "nu-plugin-net";
-  version = "unstable-2024-04-05";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "nu_plugin_net";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "fennewald";
     repo = "nu_plugin_net";
-    rev = "a84d72290f513397a359581b9447a4e638ce60c9";
-    hash = "sha256-uKLYTRR2tThSvwWbvEePOLZ9ehNPfCYruZxTKSIxpEA=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-HiNydU40FprxVmRRZtnXom2kFYI04mbeuGTq8+BMh7o=";
   };
 
-  cargoHash = "sha256-2A9RalZhXigLq/6w738G6PnkV3FyK+3HHXPDQRHTIm0=";
+  cargoHash = "sha256-tq0XqY2B7tC2ep8vH6T3nkAqxqhniqzYnhbkfB3SbHU=";
 
-  nativeBuildInputs = [
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs = lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    IOKit
-  ];
+  # there are no tests
+  doCheck = false;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "A nushell plugin to list system network interfaces";
+  meta = {
+    description = "Nushell plugin to list system network interfaces";
     homepage = "https://github.com/fennewald/nu_plugin_net";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
-    mainProgram = "nu-plugin-net";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
+    mainProgram = "nu_plugin_net";
+    # "Plugin `net` is compiled for nushell version 0.104.0, which is not
+    # compatible with version 0.105.1"
+    broken = true;
   };
-}
+})

@@ -1,66 +1,76 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, rocm-cmake
-, git
-, rocm-comgr
-, rocm-runtime
-, hwdata
-, texliveSmall
-, doxygen
-, graphviz
-, buildDocs ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  rocm-cmake,
+  git,
+  rocm-comgr,
+  rocm-runtime,
+  hwdata,
+  texliveSmall,
+  doxygen,
+  graphviz,
+  buildDocs ? true,
 }:
 
 let
-  latex = lib.optionalAttrs buildDocs (texliveSmall.withPackages (ps: with ps; [
-    changepage
-    latexmk
-    varwidth
-    multirow
-    hanging
-    adjustbox
-    collectbox
-    stackengine
-    enumitem
-    alphalph
-    wasysym
-    sectsty
-    tocloft
-    newunicodechar
-    etoc
-    helvetic
-    wasy
-    courier
-  ]));
-in stdenv.mkDerivation (finalAttrs: {
+  latex = lib.optionalAttrs buildDocs (
+    texliveSmall.withPackages (
+      ps: with ps; [
+        changepage
+        latexmk
+        varwidth
+        multirow
+        hanging
+        adjustbox
+        collectbox
+        stackengine
+        enumitem
+        alphalph
+        wasysym
+        sectsty
+        tocloft
+        newunicodechar
+        etoc
+        helvetic
+        wasy
+        courier
+      ]
+    )
+  );
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "6.0.2";
+  version = "6.3.3";
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals buildDocs [
-    "doc"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals buildDocs [
+      "doc"
+    ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCdbgapi";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-+CxaTmxRt/RicqQddqIEHs8vvAPCMKXkWg7kbZvnUsQ=";
+    hash = "sha256-6itfBrWVspobU47aiJAOQoxT8chwrq9scRn0or3bXto=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    rocm-cmake
-    git
-  ] ++ lib.optionals buildDocs [
-    latex
-    doxygen
-    graphviz
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      rocm-cmake
+      git
+    ]
+    ++ lib.optionals buildDocs [
+      latex
+      doxygen
+      graphviz
+    ];
 
   buildInputs = [
     rocm-comgr
@@ -83,29 +93,22 @@ in stdenv.mkDerivation (finalAttrs: {
     make -j$NIX_BUILD_CORES doc
   '';
 
-  postInstall = ''
-    substituteInPlace $out/lib/cmake/amd-dbgapi/amd-dbgapi-config.cmake \
-      --replace "/build/source/build/" ""
-
-    substituteInPlace $out/lib/cmake/amd-dbgapi/amd-dbgapi-targets.cmake \
-      --replace "/build/source/build" "$out"
-  '' + lib.optionalString buildDocs ''
+  postInstall = lib.optionalString buildDocs ''
     mv $out/share/html/amd-dbgapi $doc/share/doc/amd-dbgapi/html
     rmdir $out/share/html
   '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
     description = "Debugger support for control of execution and inspection state";
     homepage = "https://github.com/ROCm/ROCdbgapi";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

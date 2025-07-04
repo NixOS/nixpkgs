@@ -1,31 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, mock
-, prettytable
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, requests
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  flask,
+  mock,
+  prettytable,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pynx584";
-  version = "0.8.1";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "0.8.2";
+  pyproject = true;
 
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kk7ds";
-    repo = pname;
-    rev = version;
-    hash = "sha256-nF8+LbKqy/GrnPpykS5wEQMPoFYxi40pfM3Ys/UXCeo=";
+    repo = "pynx584";
+    tag = "0.8.2";
+    hash = "sha256-q5ra7tH4kaBrw0VAiyMsmWOkVhA7Y6bRuFP8dlxQjsE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     prettytable
     pyserial

@@ -1,15 +1,21 @@
-{ lib
-, aiohttp
-, aiolimiter
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aiolimiter,
+  bleak,
+  bleak-retry-connector,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  protobuf,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tesla-fleet-api";
-  version = "0.5.6";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,30 +23,31 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "python-tesla-fleet-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dkxKC0WAgfDvUD9YktRrNCgXpw2+6apfsMVqStZICII=";
+    tag = "v${version}";
+    hash = "sha256-z7oniC58MpWlz/IGd2oRWgoj5yAL/gaDHGotLKK2CVc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
+    aiofiles
     aiohttp
     aiolimiter
+    bleak
+    bleak-retry-connector
+    cryptography
+    protobuf
   ];
 
   # Module has no tests
-  doCheck  =false;
+  doCheck = false;
 
-  pythonImportsCheck = [
-    "tesla_fleet_api"
-  ];
+  pythonImportsCheck = [ "tesla_fleet_api" ];
 
   meta = with lib; {
     description = "Python library for Tesla Fleet API and Teslemetry";
     homepage = "https://github.com/Teslemetry/python-tesla-fleet-api";
-    changelog = "https://github.com/Teslemetry/python-tesla-fleet-api/releases/tag/v${version}";
+    changelog = "https://github.com/Teslemetry/python-tesla-fleet-api/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

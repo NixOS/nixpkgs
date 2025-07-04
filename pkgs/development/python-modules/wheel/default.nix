@@ -1,30 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.42.0";
-  format = "pyproject";
+  version = "0.46.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-WML3/gAK1R9DEeRVZWeO0VRFuNVKP52i5I5mYV6vQcI=";
-    postFetch = ''
-      cd $out
-      mv tests/testdata/unicode.dist/unicodedist/åäö_日本語.py \
-        tests/testdata/unicode.dist/unicodedist/æɐø_日本價.py
-      patch -p1 < ${./0001-tests-Rename-a-a-o-_-.py-_-.py.patch}
-    '';
+    repo = "wheel";
+    tag = version;
+    hash = "sha256-tgueGEWByS5owdA5rhXGn3qh1Vtf0HGYC6+BHfrnGAs=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   # No tests in archive
   doCheck = false;
@@ -33,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/pypa/wheel";
-    description = "A built-package format for Python";
+    description = "Built-package format for Python";
     mainProgram = "wheel";
     longDescription = ''
       This library is the reference implementation of the Python wheel packaging standard,

@@ -1,25 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, jinja2
-, sphinxcontrib-serializinghtml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  jinja2,
+  sphinxcontrib-serializinghtml,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-websupport";
-  version = "1.2.7";
+  version = "2.0.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "sphinxcontrib_websupport";
     inherit version;
-    hash = "sha256-4yKALr/V/nk2jv2GSuuHsGNWauYZEdzLJxTiikXtdWE=";
+    hash = "sha256-C3Nn07rGRUsfl+QqqMTU1KG3VtUl/HJuu+VXHgM+ec0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     jinja2

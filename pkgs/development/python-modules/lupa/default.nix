@@ -1,31 +1,30 @@
-{ lib
-, buildPythonPackage
-, cython_3
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lupa";
-  version = "2.1";
+  version = "2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dgAwcS1SczlvXpY92HMa77WsZdku/4v4/UEkwWMP6VA=";
+    hash = "sha256-UwDSH4GqG9TUX1XjHd26O4eYlWlgaKP4TPy1/ZFIqs0=";
   };
 
   build-system = [
-    cython_3
+    cython
     setuptools
   ];
 
-  pythonImportsCheck = [
-    "lupa"
-  ];
+  pythonImportsCheck = [ "lupa" ];
 
   meta = with lib; {
     description = "Lua in Python";

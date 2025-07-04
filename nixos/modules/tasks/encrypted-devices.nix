@@ -13,16 +13,17 @@ let
   # the mount units for the key file are done; i.e. no special
   # treatment is needed.
   lateEncDevs =
-    if config.boot.initrd.systemd.enable
-    then { }
-    else filter (dev: dev.encrypted.keyFile != null) encDevs;
+    if config.boot.initrd.systemd.enable then
+      { }
+    else
+      filter (dev: dev.encrypted.keyFile != null) encDevs;
   earlyEncDevs =
-    if config.boot.initrd.systemd.enable
-    then encDevs
-    else filter (dev: dev.encrypted.keyFile == null) encDevs;
+    if config.boot.initrd.systemd.enable then
+      encDevs
+    else
+      filter (dev: dev.encrypted.keyFile == null) encDevs;
 
-  anyEncrypted =
-    foldr (j: v: v || j.encrypted.enable) false encDevs;
+  anyEncrypted = foldr (j: v: v || j.encrypted.enable) false encDevs;
 
   encryptedFSOptions = {
 
@@ -88,9 +89,13 @@ in
       }
       {
         assertion =
-          config.boot.initrd.systemd.enable -> (
+          config.boot.initrd.systemd.enable
+          -> (
             dev.encrypted.keyFile == null
-            || !lib.any (x: lib.hasPrefix x dev.encrypted.keyFile) ["/mnt-root" "$targetRoot"]
+            || !lib.any (x: lib.hasPrefix x dev.encrypted.keyFile) [
+              "/mnt-root"
+              "$targetRoot"
+            ]
           );
         message = ''
           Bad use of '/mnt-root' or '$targetRoot` in 'keyFile'.
@@ -103,18 +108,24 @@ in
 
     boot.initrd = {
       luks = {
-        devices =
-          builtins.listToAttrs (map (dev: {
+        devices = builtins.listToAttrs (
+          map (dev: {
             name = dev.encrypted.label;
-            value = { device = dev.encrypted.blkDev; inherit (dev.encrypted) keyFile; };
-          }) earlyEncDevs);
+            value = {
+              device = dev.encrypted.blkDev;
+              inherit (dev.encrypted) keyFile;
+            };
+          }) earlyEncDevs
+        );
         forceLuksSupportInInitrd = true;
       };
       # TODO: systemd stage 1
-      postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
-        (concatMapStrings (dev:
+      postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
+        concatMapStrings (
+          dev:
           "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n"
-        ) lateEncDevs);
+        ) lateEncDevs
+      );
     };
   };
 }

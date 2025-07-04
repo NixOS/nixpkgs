@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, gobject-introspection
-, idna
-, libsoup_3
-, packaging
-, precis-i18n
-, pygobject3
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  gobject-introspection,
+  idna,
+  libsoup_3,
+  packaging,
+  precis-i18n,
+  pygobject3,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "4.5.4";
+  version = "6.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "gajim";
     repo = "python-nbxmpp";
     rev = "refs/tags/${version}";
-    hash = "sha256-n5Pzw8aikzCml+dOhkLoHR0ytFkEb4AYpw/bIpo6Wd4=";
+    hash = "sha256-BaRLYuyn0acikX0Imsul2yY+w4jdtXTlE84hAovuZ/4=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [
-    precis-i18n
-  ];
+  buildInputs = [ precis-i18n ];
 
   propagatedBuildInputs = [
     gobject-introspection
@@ -47,13 +46,9 @@ buildPythonPackage rec {
     pyopenssl
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "nbxmpp"
-  ];
+  pythonImportsCheck = [ "nbxmpp" ];
 
   meta = with lib; {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";

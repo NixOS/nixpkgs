@@ -1,37 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, textfsm
-, invoke
-, pytestCheckHook
-, ruamel-yaml
-, toml
-, yamllint
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  textfsm,
+  invoke,
+  pytestCheckHook,
+  ruamel-yaml,
+  toml,
+  yamllint,
 }:
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "4.4.0";
-  format = "pyproject";
+  version = "7.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8Lzh6ku2TUQFatqbOb5JIc/WkRPegx/gNnT53DErMuk=";
+    repo = "ntc-templates";
+    tag = "v${version}";
+    hash = "sha256-ujWPcVqwdtMlCkTZP/PJ3oMR60F6IHrZXXhcNT7JmmM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    textfsm
-  ];
+  pythonRelaxDeps = [ "textfsm" ];
+
+  dependencies = [ textfsm ];
 
   nativeCheckInputs = [
     invoke
@@ -50,8 +49,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "TextFSM templates for parsing show commands of network devices";
     homepage = "https://github.com/networktocode/ntc-templates";
-    changelog = "https://github.com/networktocode/ntc-templates/releases/tag/v${version}";
+    changelog = "https://github.com/networktocode/ntc-templates/releases/tag/${src.tag}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

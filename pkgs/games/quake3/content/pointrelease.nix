@@ -1,8 +1,13 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 let
   version = "1.32b-3";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "quake3-pointrelease";
   inherit version;
 

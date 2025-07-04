@@ -1,10 +1,11 @@
-{ lib,
+{
+  lib,
   fetchFromGitHub,
   buildPythonPackage,
   openvpn,
   iproute2,
   iptables,
-  util-linux
+  util-linux,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,11 @@ buildPythonPackage rec {
     sha256 = "+Fdaw9EGyFGH9/DSeVJczS8gPzAOv+qn+1U20zQBBqQ=";
   };
 
-  buildInputs = [ openvpn iproute2 util-linux ];
+  buildInputs = [
+    openvpn
+    iproute2
+    util-linux
+  ];
 
   postPatch = ''
     substituteInPlace namespaced-openvpn \
@@ -43,7 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/slingamn/namespaced-openvpn";
-    description = "Network namespace isolation for OpenVPN tunnels.";
+    description = "Network namespace isolation for OpenVPN tunnels";
     license = licenses.mit;
     maintainers = [ maintainers.lodi ];
     platforms = platforms.linux;

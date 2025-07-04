@@ -8,18 +8,19 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "labelle";
-  version = "1.1.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labelle-org";
     repo = "labelle";
-    rev = "v${version}";
-    hash = "sha256-JnV5A3/toTCHCEb0dygouR9MZfk2kdmsKVscwYI2y/Y=";
+    tag = "v${version}";
+    hash = "sha256-y26eJKR2QZv/qKORZzag/44b1RryXMwpyMuRgac2puE=";
   };
 
   postPatch = ''
-    sed -i 's/hatch-vcs >=0.3.0,<0.4/hatch-vcs >=0.3.0/' pyproject.toml
+    substituteInPlace pyproject.toml --replace-fail "hatch-vcs >=0.3.0,<0.4" "hatch-vcs >=0.3.0"
+    substituteInPlace pyproject.toml --replace-fail "Pillow>=8.1.2,<11" "Pillow>=8.1.2"
   '';
 
   buildInputs = [ qt6.qtwayland ];
@@ -27,6 +28,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
     python3Packages.hatchling
+    python3Packages.hatch-fancy-pypi-readme
     python3Packages.hatch-vcs
     copyDesktopItems
   ];
@@ -39,6 +41,8 @@ python3Packages.buildPythonApplication rec {
     pyqt6
     python-barcode
     pyusb
+    rich
+    typer
   ];
 
   desktopItems = [
@@ -50,7 +54,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    changelog = "https://github.com/labelle-org/labelle/releases/tag/${src.rev}";
+    changelog = "https://github.com/labelle-org/labelle/releases/tag/${src.tag}";
     description = "Print labels with LabelManager PnP from Dymo";
     homepage = "https://github.com/labelle-org/labelle";
     license = lib.licenses.asl20;

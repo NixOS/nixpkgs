@@ -1,69 +1,74 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, flask-login
-, flask-sqlalchemy
-, psycopg2
-, pymysql
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
-, sqlalchemy-i18n
-, sqlalchemy-utils
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  flask,
+  flask-login,
+  flask-sqlalchemy,
+  psycopg2,
+  pymysql,
+  pytestCheckHook,
+  pythonOlder,
+  sqlalchemy,
+  sqlalchemy-i18n,
+  sqlalchemy-utils,
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-continuum";
-  version = "1.4.1";
-  format = "setuptools";
+  version = "1.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "SQLAlchemy-Continuum";
+    pname = "sqlalchemy_continuum";
     inherit version;
-    hash = "sha256-4BZGzfv9azGiGwrrprv/ZhJY1b6Ed8dQDKs6HHSEjm4=";
+    hash = "sha256-D9K+efcY7aR8IgaHnZLsTr8YiTZGN7PK8+5dNL0ZyOM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     sqlalchemy
     sqlalchemy-utils
   ];
 
-  passthru.optional-dependencies = {
-    flask = [
-      flask
-    ];
-    flask-login = [
-      flask-login
-    ];
-    flask-sqlalchemy = [
-      flask-sqlalchemy
-    ];
-    i18n = [
-      sqlalchemy-i18n
-    ];
+  optional-dependencies = {
+    flask = [ flask ];
+    flask-login = [ flask-login ];
+    flask-sqlalchemy = [ flask-sqlalchemy ];
+    i18n = [ sqlalchemy-i18n ];
   };
 
-  nativeCheckInputs = [
-    psycopg2
-    pymysql
-    pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      psycopg2
+      pymysql
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.flask
+    ++ optional-dependencies.flask-login
+    ++ optional-dependencies.flask-sqlalchemy;
 
-  # Indicate tests that we don't have a database server at hand
-  env.DB = "sqlite";
-
-  pythonImportsCheck = [
-    "sqlalchemy_continuum"
+  disabledTestPaths = [
+    # requires sqlalchemy-i18n, which is incompatible with sqlalchemy>=2
+    "tests/test_i18n.py"
   ];
+
+  preCheck = ''
+    # Indicate tests that we don't have a database server at hand
+    export DB=sqlite
+  '';
+
+  pythonImportsCheck = [ "sqlalchemy_continuum" ];
 
   meta = with lib; {
     description = "Versioning and auditing extension for SQLAlchemy";
     homepage = "https://github.com/kvesteri/sqlalchemy-continuum/";
     changelog = "https://github.com/kvesteri/sqlalchemy-continuum/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

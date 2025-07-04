@@ -1,21 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, jsonschema
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, responses
-, setuptools
-, vcrpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
+  vcrpy,
 }:
 
 buildPythonPackage rec {
   pname = "polyswarm-api";
-  version = "3.5.2";
+  version = "3.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,24 +22,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polyswarm";
     repo = "polyswarm-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GMLgph6mjDSDn2CCfeqcqFY2gjtziH4xVHJhYTGRYw8=";
+    tag = version;
+    hash = "sha256-+oKhKn+wUnvKlNymY/vtXn0cHBMyawBNhOQRu0tYC/M=";
   };
 
-  pythonRelaxDeps = [
-    "future"
-  ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
-    future
     jsonschema
     python-dateutil
     requests
@@ -52,14 +40,12 @@ buildPythonPackage rec {
     vcrpy
   ];
 
-  pythonImportsCheck = [
-    "polyswarm_api"
-  ];
+  pythonImportsCheck = [ "polyswarm_api" ];
 
   meta = with lib; {
     description = "Library to interface with the PolySwarm consumer APIs";
     homepage = "https://github.com/polyswarm/polyswarm-api";
-    changelog = "https://github.com/polyswarm/polyswarm-api/releases/tag/${version}";
+    changelog = "https://github.com/polyswarm/polyswarm-api/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

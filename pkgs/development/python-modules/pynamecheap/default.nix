@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pynamecheap";
   version = "0.0.3";
+  format = "setuptools";
 
   propagatedBuildInputs = [ requests ];
 
@@ -21,7 +23,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Namecheap API client in Python.";
+    description = "Namecheap API client in Python";
     homepage = "https://github.com/Bemmu/PyNamecheap";
     license = licenses.mit;
   };

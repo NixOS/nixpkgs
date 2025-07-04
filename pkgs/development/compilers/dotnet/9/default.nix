@@ -1,9 +1,11 @@
-{ callPackage
-, dotnetCorePackages
-}: callPackage ../dotnet.nix {
+{
+  callPackage,
+  dotnetCorePackages,
+}:
+callPackage ../dotnet.nix {
   releaseManifestFile = ./release.json;
   releaseInfoFile = ./release-info.json;
-  allowPrerelease = true;
-  depsFile = ./deps.nix;
-  bootstrapSdk = dotnetCorePackages.sdk_9_0;
+  bootstrapSdkFile = ./bootstrap-sdk.nix;
+  depsFile = ./deps.json;
+  fallbackTargetPackages = dotnetCorePackages.sdk_9_0-bin.targetPackages;
 }

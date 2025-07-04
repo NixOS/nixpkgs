@@ -1,6 +1,11 @@
-{ lib, fetchFromGitHub, git, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
-let config-module = "git-get/pkg/cfg";
+let
+  config-module = "git-get/pkg/cfg";
 in
 buildGoModule rec {
   pname = "git-get";
@@ -8,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "grdl";
-    repo = pname;
+    repo = "git-get";
     rev = "v${version}";
     hash = "sha256-v98Ff7io7j1LLzciHNWJBU3LcdSr+lhwYrvON7QjyCI=";
     # populate values that require us to use git. By doing this in postFetch we
@@ -44,7 +49,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A better way to clone, organize and manage multiple git repositories";
+    description = "Better way to clone, organize and manage multiple git repositories";
     homepage = "https://github.com/grdl/git-get";
     license = licenses.mit;
     maintainers = with maintainers; [ sumnerevans ];

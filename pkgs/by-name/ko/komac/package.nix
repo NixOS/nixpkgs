@@ -1,45 +1,84 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, testers
-, komac
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  rustPlatform,
+  testers,
+  komac,
+  dbus,
+  zstd,
+  installShellFiles,
+  versionCheckHook,
+  nix-update-script,
+  bzip2,
 }:
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "komac";
+  version = "2.12.1";
 
-let
-  version = "2.1.0";
   src = fetchFromGitHub {
     owner = "russellbanks";
     repo = "Komac";
-    rev = "v${version}";
-    hash = "sha256-L8UYpNqjRyqf4hPQwD9LaXWu6jYaP34yTwTxcqg+e2U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-F6Vb6X1JbB7I1oOkrtLBVUdi2nqPIhiQIlqUEfPIgsc=";
   };
-in
-rustPlatform.buildRustPackage {
-  inherit version src;
 
-  pname = "komac";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FMxt98wbes1PWqeOE95epK4uwOEgLU3zvCu1cyDPxGA=";
 
-  cargoHash = "sha256-J4QZzbyDr4SDt6LlAy9ZdpqgIufZCZHmOC9eu70wMsM=";
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      installShellFiles
+    ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  buildInputs = [
+    dbus
+    openssl
+    zstd
+    bzip2
   ];
 
-  passthru.tests.version = testers.testVersion {
-    inherit version;
-
-    package = komac;
-    command = "komac --version";
+  env = {
+    OPENSSL_NO_VENDOR = true;
+    YRX_REGENERATE_MODULES_RS = "no";
+    ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  meta = with lib; {
-    description = "The Community Manifest Creator for WinGet";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/komac";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd komac \
+      --bash <($out/bin/komac complete bash) \
+      --zsh <($out/bin/komac complete zsh) \
+      --fish <($out/bin/komac complete fish)
+  '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit (finalAttrs) version;
+
+      package = komac;
+      command = "komac --version";
+    };
+
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Community Manifest Creator for WinGet";
     homepage = "https://github.com/russellbanks/Komac";
-    changelog = "https://github.com/russellbanks/Komac/releases/tag/${src.rev}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kachick ];
+    changelog = "https://github.com/russellbanks/Komac/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      HeitorAugustoLN
+    ];
     mainProgram = "komac";
   };
-}
+})

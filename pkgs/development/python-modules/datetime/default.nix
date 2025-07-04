@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytz
-, zope-interface
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytz,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
   pname = "datetime";
-  version = "5.4";
+  version = "5.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "datetime";
-    rev = "refs/tags/${version}";
-    hash = "sha256-k4q9n3uikz+B9CUyqQTgl61OTKDWMsyhAt2gB1HWGRw=";
+    tag = version;
+    hash = "sha256-VgIEpa3WpxfIUpBjXMor/xEEu+sp7z/EsLYEvU0RzWk=";
   };
 
   propagatedBuildInputs = [
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     zope-interface
   ];
 
-  pythonImportsCheck = [
-    "DateTime"
-  ];
+  pythonImportsCheck = [ "DateTime" ];
 
   meta = with lib; {
     description = "DateTime data type, as known from Zope";

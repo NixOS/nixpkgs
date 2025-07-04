@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# propagates
-, importlib-resources
-, jsonschema
-, jsonschema-path
-, lazy-object-proxy
-, openapi-schema-validator
+  # propagates
+  importlib-resources,
+  jsonschema,
+  jsonschema-path,
+  lazy-object-proxy,
+  openapi-schema-validator,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -28,29 +30,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-openapi";
     repo = "openapi-spec-validator";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-X0ePdHQeBSWjsCFQgCoNloQZRhKbvPBE43aavBppvmg=";
   };
 
-  postPatch = ''
-    sed -i '/--cov/d' pyproject.toml
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     jsonschema
     jsonschema-path
     lazy-object-proxy
     openapi-schema-validator
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   disabledTests = [

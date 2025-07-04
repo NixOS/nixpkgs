@@ -1,18 +1,20 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, events
-, fetchFromGitHub
-, freezegun
-, home-assistant-bluetooth
-, poetry-core
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, transitions
+{
+  lib,
+  bleak,
+  bleak-retry-connector,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  events,
+  fetchFromGitHub,
+  freezegun,
+  home-assistant-bluetooth,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  transitions,
 }:
 
 buildPythonPackage rec {
@@ -24,21 +26,18 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "AustinBrunkhorst";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pysnooz";
+    tag = "v${version}";
     hash = "sha256-jOXmaJprU35sdNRrBBx/YUyiDyyaE1qodWksXkTSEe0=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'transitions = "^0.8.11"' 'transitions = ">=0.8.11"' \
-      --replace 'Events = "^0.4"' 'Events = ">=0.4"' \
-      --replace " --cov=pysnooz --cov-report=term-missing:skip-covered" ""
+      --replace 'Events = "^0.4"' 'Events = ">=0.4"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     bleak
@@ -52,13 +51,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pysnooz"
-  ];
+  pythonImportsCheck = [ "pysnooz" ];
 
   meta = with lib; {
     description = "Library to control SNOOZ white noise machines";

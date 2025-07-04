@@ -1,24 +1,26 @@
-{ lib
-, awesomeversion
-, buildPythonPackage
-, envoy-utils
-, fetchFromGitHub
-, httpx
-, lxml
-, orjson
-, poetry-core
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, respx
-, syrupy
-, tenacity
+{
+  lib,
+  awesomeversion,
+  buildPythonPackage,
+  envoy-utils,
+  fetchFromGitHub,
+  httpx,
+  lxml,
+  orjson,
+  poetry-core,
+  pyjwt,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
+  syrupy,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "pyenphase";
-  version = "1.20.1";
+  version = "1.26.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,18 +28,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyenphase";
     repo = "pyenphase";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Bxwd8qHsvq9BuBMSu5JI/Yk/KC5aQ7b7lnXuIoNQ6EI=";
+    tag = "v${version}";
+    hash = "sha256-EKelQNHDaWSBrr19a8kYRI/wOYcRS9umJIo4oW9aU6k=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=pyenphase --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonRelaxDeps = [ "tenacity" ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     awesomeversion
@@ -51,24 +48,23 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     respx
     syrupy
   ];
 
-  disabledTests = [
-    # https://github.com/pyenphase/pyenphase/issues/97
-    "test_with_7_x_firmware"
+  disabledTestPaths = [
+    # Tests need network access
+    "tests/test_retries.py"
   ];
 
-  pythonImportsCheck = [
-    "pyenphase"
-  ];
+  pythonImportsCheck = [ "pyenphase" ];
 
   meta = with lib; {
     description = "Library to control enphase envoy";
     homepage = "https://github.com/pyenphase/pyenphase";
-    changelog = "https://github.com/pyenphase/pyenphase/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pyenphase/pyenphase/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

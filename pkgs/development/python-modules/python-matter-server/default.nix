@@ -1,45 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, stdenvNoCC
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  stdenvNoCC,
+  replaceVars,
 
-# build
-, setuptools
-, pythonRelaxDepsHook
+  # build
+  setuptools,
 
-# propagates
-, aiohttp
-, aiorun
-, async-timeout
-, coloredlogs
-, dacite
-, orjson
-, home-assistant-chip-clusters
+  # dependencies
+  aiohttp,
+  aiorun,
+  async-timeout,
+  atomicwrites,
+  coloredlogs,
+  orjson,
+  home-assistant-chip-clusters,
 
-# optionals
-, cryptography
-, home-assistant-chip-core
-, zeroconf
+  # optionals
+  cryptography,
+  home-assistant-chip-core,
+  zeroconf,
 
-# tests
-, python
-, pytest
-, pytest-aiohttp
-, pytestCheckHook
+  # tests
+  aioresponses,
+  python,
+  pytest,
+  pytest-aiohttp,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 let
   paaCerts = stdenvNoCC.mkDerivation rec {
     pname = "matter-server-paa-certificates";
-    version = "1.2.0.1";
+    version = "1.4.0.0";
 
     src = fetchFromGitHub {
       owner = "project-chip";
       repo = "connectedhomeip";
       rev = "refs/tags/v${version}";
-      hash = "sha256-p3P0n5oKRasYz386K2bhN3QVfN6oFndFIUWLEUWB0ss=";
+      hash = "sha256-uJyStkwynPCm1B2ZdnDC6IAGlh+BKGfJW7tU4tULHFo=";
     };
 
     installPhase = ''
@@ -55,51 +57,46 @@ in
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "5.9.0";
-  format = "pyproject";
+  version = "8.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
-    rev = "refs/tags/${version}";
-    hash = "sha256-O3AJ7vBjuwRGa4AMwWIdxn5m2F45rLCjCHeff18b/5E=";
+    tag = version;
+    hash = "sha256-9dMcofwvGYBnI+9y7D+TDwz+uLgBVhcS4iVU7AUqclI=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./link-paa-root-certs.patch;
+    (replaceVars ./link-paa-root-certs.patch {
       paacerts = paaCerts;
     })
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace '--cov' ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "home-assistant-chip-clusters"
-  ];
+  pythonRelaxDeps = [ "home-assistant-chip-clusters" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aiorun
     async-timeout
+    atomicwrites
     coloredlogs
-    dacite
     orjson
     home-assistant-chip-clusters
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server = [
       cryptography
       home-assistant-chip-core
@@ -108,30 +105,31 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    aioresponses
     pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  preCheck = let
-    pythonEnv = python.withPackages (_: propagatedBuildInputs ++ nativeCheckInputs ++ [ pytest ]);
-  in
-  ''
-    export PYTHONPATH=${pythonEnv}/${python.sitePackages}
-  '';
+  preCheck =
+    let
+      pythonEnv = python.withPackages (_: dependencies ++ nativeCheckInputs ++ [ pytest ]);
+    in
+    ''
+      export PYTHONPATH=${pythonEnv}/${python.sitePackages}
+    '';
 
-  pytestFlagsArray = [
-    # Upstream theymselves limit the test scope
-    # https://github.com/home-assistant-libs/python-matter-server/blob/main/.github/workflows/test.yml#L65
-    "tests/server"
+  disabledTestPaths = [
+    # requires internet access
+    "tests/server/ota/test_dcl.py"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/home-assistant-libs/python-matter-server/releases/tag/${version}";
+  meta = {
+    changelog = "https://github.com/home-assistant-libs/python-matter-server/releases/tag/${src.tag}";
     description = "Python server to interact with Matter";
     mainProgram = "matter-server";
     homepage = "https://github.com/home-assistant-libs/python-matter-server";
-    license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
   };
 }

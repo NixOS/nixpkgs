@@ -1,12 +1,30 @@
-{ lib, fetchFromGitHub, rustPlatform, cargo, rustc, meson, ninja
-, pkg-config, wrapGAppsHook4, desktop-file-utils, appstream-glib
-, blueprint-compiler, dbus, gtk4, libadwaita, bluez, libpulseaudio }: let
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  cargo,
+  rustc,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  appstream-glib,
+  blueprint-compiler,
+  dbus,
+  gtk4,
+  libadwaita,
+  bluez,
+  libpulseaudio,
+}:
+let
 
-owner = "kaii-lb";
-name = "overskride";
-version = "0.5.7";
+  owner = "kaii-lb";
+  name = "overskride";
+  version = "0.6.1";
 
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
 
   pname = name;
   inherit version;
@@ -15,10 +33,11 @@ in rustPlatform.buildRustPackage {
     inherit owner;
     repo = name;
     rev = "v${version}";
-    hash = "sha256-vuCpUTn/Re2wZIoCmKHwBRPdfpHDzNHi42iwvBFYjXo=";
+    hash = "sha256-SqaPhub/HwZz7uBg/kevH8LvPDVLgRd/Rvi03ivNrRc=";
   };
 
-  cargoHash = "sha256-hX3GHRiE/CbeT/zblQHzbxLPEc/grDddXgqoAe64zUM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Axeywo7Ryig84rS/6MXl2v9Pe3yzdivq7/l/mfi5mOA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,7 +51,13 @@ in rustPlatform.buildRustPackage {
     rustc
   ];
 
-  buildInputs = [ dbus gtk4 libadwaita bluez libpulseaudio ];
+  buildInputs = [
+    dbus
+    gtk4
+    libadwaita
+    bluez
+    libpulseaudio
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -52,15 +77,14 @@ in rustPlatform.buildRustPackage {
     glib-compile-schemas $out/share/gsettings-schemas/${name}-${version}/glib-2.0/schemas
   '';
 
-  meta = with lib; {
-    description =
-      "A Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
+  meta = {
+    description = "Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
     homepage = "https://github.com/${owner}/${name}";
     changelog = "https://github.com/${owner}/${name}/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = name;
-    maintainers = with maintainers; [ mrcjkb ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    platforms = lib.platforms.linux;
   };
 
 }

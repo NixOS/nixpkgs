@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, pytestCheckHook
+  pytestCheckHook,
 
-, pythonOlder
+  pythonOlder,
 
-, setuptools
-, wheel
-, setuptools-scm
+  setuptools,
+  wheel,
+  setuptools-scm,
 
   # for tests
-, base58
+  base58,
 
-, typing-extensions
-, typing-validation
+  typing-extensions,
+  typing-validation,
 }:
 
 buildPythonPackage rec {
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hashberg-io";
     repo = "bases";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CRXVxT9uYud1CKRcdRAD0OX5sTAttrUO9E4BaavTe6A=";
   };
 

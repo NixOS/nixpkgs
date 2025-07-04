@@ -1,31 +1,32 @@
-{ backoff
-, sparqlwrapper
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, gremlinpython
-, jsonpath-ng
-, lib
-, moto
-, openpyxl
-, opensearch-py
-, pandas
-, pg8000
-, poetry-core
-, progressbar2
-, pyarrow
-, pymysql
-, pyodbc
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, redshift-connector
-, requests-aws4auth
+{
+  sparqlwrapper,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gremlinpython,
+  jsonpath-ng,
+  lib,
+  moto,
+  openpyxl,
+  opensearch-py,
+  pandas,
+  pg8000,
+  poetry-core,
+  progressbar2,
+  pyarrow,
+  pymysql,
+  pyodbc,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  redshift-connector,
+  requests-aws4auth,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.7.2";
+  version = "3.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,13 +34,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-pandas";
-    rev = "refs/tags/${version}";
-    hash = "sha256-1eb2oTiRNxA2XTpkScA5WJutN5P6FX96jC4Ra9VdonI=";
+    tag = version;
+    hash = "sha256-BudK7pP7b8YJRyDCQAZv8FtxF5paA+AR/ZBt9UO3XjM=";
   };
 
-  build-system = [
-    poetry-core
+  pythonRelaxDeps = [
+    "packaging"
+    "pyarrow"
   ];
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     boto3
@@ -54,13 +58,21 @@ buildPythonPackage rec {
     pymysql
     redshift-connector
     requests-aws4auth
+    setuptools
   ];
+
+  optional-dependencies = {
+    sqlserver = [ pyodbc ];
+    sparql = [ sparqlwrapper ];
+  };
 
   nativeCheckInputs = [
     moto
     pyparsing
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "awswrangler" ];
 
   pytestFlagsArray = [
     # Subset of tests that run in upstream CI (many others require credentials)
@@ -71,19 +83,10 @@ buildPythonPackage rec {
     "tests/unit/test_moto.py"
   ];
 
-  passthru.optional-dependencies = {
-    sqlserver = [
-      pyodbc
-    ];
-    sparql = [
-      sparqlwrapper
-    ];
-  };
-
   meta = with lib; {
     description = "Pandas on AWS";
     homepage = "https://github.com/aws/aws-sdk-pandas";
-    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${version}";
+    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ mcwitt ];
   };

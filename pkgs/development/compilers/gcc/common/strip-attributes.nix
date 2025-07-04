@@ -1,4 +1,8 @@
-{ lib, stdenv, langJit }:
+{
+  lib,
+  stdenv,
+  langJit,
+}:
 
 {
   # Note [Cross-compiler stripping]
@@ -29,42 +33,51 @@
 
   # The rest of stripDebugList{Host,Target} will be populated in
   # postInstall to disambiguate lib/ object files.
-  stripDebugList = [ "bin" "libexec" ];
+  stripDebugList = [
+    "bin"
+    "libexec"
+  ];
   stripDebugListTarget = [ stdenv.targetPlatform.config ];
 
-  preFixup = ''
-    # Populate most delicated lib/ part of stripDebugList{,Target}
-    updateDebugListPaths() {
-      local oldOpts
-      oldOpts="$(shopt -p nullglob)" || true
-      shopt -s nullglob
+  preFixup =
+    ''
+      # Populate most delicated lib/ part of stripDebugList{,Target}
+      updateDebugListPaths() {
+        local oldOpts
+        oldOpts="$(shopt -p nullglob)" || true
+        shopt -s nullglob
 
-      pushd $out
-      local -ar outHostFiles=(
-        lib{,32,64}/*.{a,o,so*}
-        lib{,32,64}/gcc/${stdenv.targetPlatform.config}/*/plugin
-      )
-      local -ar outTargetFiles=(
-        lib{,32,64}/gcc/${stdenv.targetPlatform.config}/*/*.{a,o,so*}
-      )
-      popd
-  '' + lib.optionalString (!langJit) ''
-    ${/*keep indentation*/ ""}
-      pushd $lib
-      local -ar libHostFiles=(
-        lib{,32,64}/*.{a,o,so*}
-      )
-      local -ar libTargetFiles=(
-        lib{,32,64}/${stdenv.targetPlatform.config}/*.{a,o,so*}
-      )
-      popd
+        pushd $out
+        local -ar outHostFiles=(
+          lib{,32,64}/*.{a,o,so*}
+          lib{,32,64}/gcc/${stdenv.targetPlatform.config}/*/plugin
+        )
+        local -ar outTargetFiles=(
+          lib{,32,64}/gcc/${stdenv.targetPlatform.config}/*/*.{a,o,so*}
+        )
+        popd
+    ''
+    + lib.optionalString (!langJit) ''
+      ${
+        # keep indentation
+        ""
+      }
+        pushd $lib
+        local -ar libHostFiles=(
+          lib{,32,64}/*.{a,o,so*}
+        )
+        local -ar libTargetFiles=(
+          lib{,32,64}/${stdenv.targetPlatform.config}/*.{a,o,so*}
+        )
+        popd
 
-  '' + ''
-      eval "$oldOpts"
+    ''
+    + ''
+        eval "$oldOpts"
 
-      stripDebugList="$stripDebugList ''${outHostFiles[*]} ''${libHostFiles[*]}"
-      stripDebugListTarget="$stripDebugListTarget ''${outTargetFiles[*]} ''${libTargetFiles[*]}"
-    }
-    updateDebugListPaths
-  '';
+        stripDebugList="$stripDebugList ''${outHostFiles[*]} ''${libHostFiles[*]}"
+        stripDebugListTarget="$stripDebugListTarget ''${outTargetFiles[*]} ''${libTargetFiles[*]}"
+      }
+      updateDebugListPaths
+    '';
 }

@@ -2,25 +2,54 @@
   system ? builtins.currentSystem,
   config ? { },
   pkgs ? import ../../.. { inherit system config; },
-  handleTestOn,
+  lts ? true,
+  ...
 }:
+let
+  incusTest = import ./incus-tests.nix;
+in
 {
-  container-legacy-init = import ./container.nix {
-    name = "container-legacy-init";
-    inherit system pkgs;
+  all = incusTest {
+    inherit lts pkgs system;
+    allTests = true;
   };
-  container-systemd-init = import ./container.nix {
-    name = "container-systemd-init";
-    inherit system pkgs;
-    extra = {
-      boot.initrd.systemd.enable = true;
-    };
+
+  container = incusTest {
+    inherit lts pkgs system;
+    instanceContainer = true;
   };
-  lxd-to-incus = import ./lxd-to-incus.nix { inherit system pkgs; };
-  openvswitch = import ./openvswitch.nix { inherit system pkgs; };
-  preseed = import ./preseed.nix { inherit system pkgs; };
-  socket-activated = import ./socket-activated.nix { inherit system pkgs; };
-  storage = import ./storage.nix { inherit system pkgs; };
-  ui = import ./ui.nix { inherit system pkgs; };
-  virtual-machine = handleTestOn [ "x86_64-linux" ] ./virtual-machine.nix { inherit system pkgs; };
+
+  lvm = incusTest {
+    inherit lts pkgs system;
+    storageLvm = true;
+  };
+
+  lxd-to-incus = import ./lxd-to-incus.nix {
+    inherit lts pkgs system;
+  };
+
+  openvswitch = incusTest {
+    inherit lts pkgs system;
+    networkOvs = true;
+  };
+
+  ui = import ./ui.nix {
+    inherit lts pkgs system;
+  };
+
+  virtual-machine = incusTest {
+    inherit lts pkgs system;
+    instanceVm = true;
+  };
+
+  zfs = incusTest {
+    inherit lts pkgs system;
+    storageZfs = true;
+  };
+
+  appArmor = incusTest {
+    inherit lts pkgs system;
+    appArmor = true;
+    allTests = true;
+  };
 }

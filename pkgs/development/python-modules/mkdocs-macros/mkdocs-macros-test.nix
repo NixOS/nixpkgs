@@ -1,15 +1,14 @@
-{ lib
-, callPackage
-, buildPythonPackage
-, fetchPypi
-, runCommand
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 # Is required for properly testing mkdocs-macros
 buildPythonPackage rec {
   pname = "mkdocs-macros-test";
   version = "0.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

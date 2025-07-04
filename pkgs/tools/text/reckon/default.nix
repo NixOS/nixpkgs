@@ -1,4 +1,13 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper }:
+{
+  stdenv,
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  makeWrapper,
+  file,
+  testers,
+  reckon,
+}:
 
 stdenv.mkDerivation rec {
   pname = "reckon";
@@ -8,20 +17,29 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = let
-    env = bundlerEnv {
-      name = "${pname}-${version}-gems";
+  installPhase =
+    let
+      env = bundlerEnv {
+        name = "${pname}-${version}-gems";
 
-      gemdir = ./.;
+        gemdir = ./.;
+      };
+    in
+    ''
+      runHook preInstall
+      mkdir -p $out/bin
+      makeWrapper ${env}/bin/reckon $out/bin/reckon \
+        --prefix PATH : ${lib.makeBinPath [ file ]}
+      runHook postInstall
+    '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = reckon;
+      version = "${version}";
     };
-  in ''
-    runHook preInstall
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/reckon $out/bin/reckon
-    runHook postInstall
-  '';
-
-  passthru.updateScript = bundlerUpdateScript "reckon";
+    updateScript = bundlerUpdateScript "reckon";
+  };
 
   meta = with lib; {
     description = "Flexibly import bank account CSV files into Ledger for command line accounting";

@@ -6,14 +6,14 @@
   glibcLocales,
   importlib-metadata,
   logfury,
+  annotated-types,
   packaging,
   pdm-backend,
   pyfakefs,
-  pytest-lazy-fixture,
+  pytest-lazy-fixtures,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   tqdm,
   typing-extensions,
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.0.0";
+  version = "2.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,18 +29,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "b2-sdk-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0/UC4O19oO8SpboiPIhvkWBA8XHpc279fl377MooK54=";
+    tag = "v${version}";
+    hash = "sha256-VXdvRJvmozrDsUu1J5Jz9I2733Cwe8OBbafc1fCEuGw=";
   };
 
   build-system = [ pdm-backend ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
-  pythonRemoveDeps = [ "setuptools" ];
-
   dependencies =
     [
+      annotated-types
       packaging
       logfury
       requests
@@ -49,17 +46,19 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
-    pyfakefs
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytest-mock
     pytestCheckHook
     tqdm
-  ] ++ lib.optionals stdenv.isLinux [ glibcLocales ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
 
   disabledTestPaths = [
     # requires aws s3 auth
     "test/integration/test_download.py"
     "test/integration/test_upload.py"
+
+    # Requires backblaze auth
+    "test/integration/test_bucket.py"
   ];
 
   disabledTests = [
@@ -68,6 +67,7 @@ buildPythonPackage rec {
     "test_files_headers"
     "test_large_file"
     "test_file_info_b2_attributes"
+    "test_sync_folder"
   ];
 
   pythonImportsCheck = [ "b2sdk" ];
@@ -75,8 +75,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
-    changelog = "https://github.com/Backblaze/b2-sdk-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Backblaze/b2-sdk-python/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ pmw ];
   };
 }

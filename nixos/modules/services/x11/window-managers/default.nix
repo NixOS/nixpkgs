@@ -1,8 +1,7 @@
 { config, lib, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkOption types;
   cfg = config.services.xserver.windowManager;
 in
 
@@ -47,9 +46,9 @@ in
     ./wmderland.nix
     ./wmii.nix
     ./xmonad.nix
-    ./yeahwm.nix
     ./qtile.nix
-    ./none.nix ];
+    ./none.nix
+  ];
 
   options = {
 
@@ -57,30 +56,25 @@ in
 
       session = mkOption {
         internal = true;
-        default = [];
-        example = [{
-          name = "wmii";
-          start = "...";
-        }];
+        default = [ ];
+        example = [
+          {
+            name = "wmii";
+            start = "...";
+          }
+        ];
         description = ''
           Internal option used to add some common line to window manager
           scripts before forwarding the value to the
           `displayManager`.
         '';
-        apply = map (d: d // {
-          manage = "window";
-        });
-      };
-
-      default = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "wmii";
-        description = ''
-          **Deprecated**, please use [](#opt-services.displayManager.defaultSession) instead.
-
-          Default window manager loaded if none have been chosen.
-        '';
+        apply = map (
+          d:
+          d
+          // {
+            manage = "window";
+          }
+        );
       };
 
     };

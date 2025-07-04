@@ -1,15 +1,17 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, installShellFiles
-, nixosTests
-, enableDbusUi ? true
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  nixosTests,
+  enableDbusUi ? true,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pantalaimon";
-  version = "0.10.5";
+  version = "0.10.6";
   pyproject = true;
 
   # pypi tarball miss tests
@@ -17,35 +19,37 @@ python3Packages.buildPythonApplication rec {
     owner = "matrix-org";
     repo = "pantalaimon";
     rev = version;
-    hash = "sha256-yMhE3wKRbFHoL0vdFR8gMkNU7Su4FHbAwKQYADaaWpk=";
+    hash = "sha256-g+ZWarZnjlSOpD75yf53Upqj1qDlil7pdbfEsMAsjh0=";
   };
 
-  build-system = [
-    installShellFiles
-  ] ++ (with python3Packages; [
-    setuptools
-    pythonRelaxDepsHook
-  ]);
+  build-system =
+    [
+      installShellFiles
+    ]
+    ++ (with python3Packages; [
+      setuptools
+    ]);
 
   pythonRelaxDeps = [
     "matrix-nio"
   ];
 
-  dependencies = with python3Packages; [
-    aiohttp
-    appdirs
-    attrs
-    cachetools
-    click
-    janus
-    keyring
-    logbook
-    matrix-nio
-    peewee
-    prompt-toolkit
-  ]
-  ++ matrix-nio.optional-dependencies.e2e
-  ++ lib.optionals enableDbusUi optional-dependencies.ui;
+  dependencies =
+    with python3Packages;
+    [
+      aiohttp
+      attrs
+      cachetools
+      click
+      janus
+      keyring
+      logbook
+      (matrix-nio.override { withOlm = true; })
+      peewee
+      platformdirs
+      prompt-toolkit
+    ]
+    ++ lib.optionals enableDbusUi optional-dependencies.ui;
 
   optional-dependencies.ui = with python3Packages; [
     dbus-python
@@ -54,16 +58,27 @@ python3Packages.buildPythonApplication rec {
     pydbus
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    aioresponses
-    faker
-    pytest-aiohttp
-    pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      aioresponses
+      faker
+      pytest-aiohttp
+      pytestCheckHook
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  nativeBuildInputs = lib.optionals enableDbusUi [
+    wrapGAppsHook3
+  ];
+
+  dontWrapGApps = enableDbusUi;
+  makeWrapperArgs = lib.optionals enableDbusUi [
+    "\${gappsWrapperArgs[@]}"
+  ];
 
   # darwin has difficulty communicating with server, fails some integration tests
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
     installManPage docs/man/*.[1-9]
@@ -74,7 +89,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "An end-to-end encryption aware Matrix reverse proxy daemon";
+    description = "End-to-end encryption aware Matrix reverse proxy daemon";
     homepage = "https://github.com/matrix-org/pantalaimon";
     license = licenses.asl20;
     maintainers = with maintainers; [ valodim ];

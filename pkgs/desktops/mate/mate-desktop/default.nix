@@ -1,21 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, isocodes
-, libstartup_notification
-, gtk3
-, dconf
-, wrapGAppsHook
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  isocodes,
+  libstartup_notification,
+  gtk3,
+  dconf,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-desktop";
   version = "1.28.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -47,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

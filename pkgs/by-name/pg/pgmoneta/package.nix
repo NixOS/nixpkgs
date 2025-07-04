@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, bzip2
-, cjson
-, cmake
-, curl
-, docutils
-, fetchFromGitHub
-, libarchive
-, libev
-, libgccjit
-, libssh
-, lz4
-, openssl
-, systemd
-, zlib
-, zstd
+{
+  lib,
+  stdenv,
+  bzip2,
+  cjson,
+  cmake,
+  curl,
+  docutils,
+  fetchFromGitHub,
+  libarchive,
+  libev,
+  libgccjit,
+  libssh,
+  lz4,
+  openssl,
+  systemd,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pgmoneta";
-  version = "0.10.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "pgmoneta";
     repo = "pgmoneta";
     rev = version;
-    hash = "sha256-gViXbL54YGY2NFg0ScyiarMB4vYjpOrdkyTjWzwP2vo=";
+    hash = "sha256-d0F+gbYZ9qWRvbOXdKRQS0Rkcvsa5zzu2kiqwLiXpxw=";
   };
 
   nativeBuildInputs = [
@@ -50,12 +51,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  meta = with lib; {
+  meta = {
     description = "Backup / restore solution for PostgreSQL";
     homepage = "https://pgmoneta.github.io/";
     changelog = "https://github.com/pgmoneta/pgmoneta/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

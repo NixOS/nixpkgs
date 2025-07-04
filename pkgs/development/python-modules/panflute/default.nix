@@ -1,12 +1,13 @@
-{ lib
-, fetchPypi
-, click
-, pyyaml
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  click,
+  pyyaml,
+  buildPythonPackage,
+  pythonOlder,
 }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   pname = "panflute";
   version = "2.3.1";
   format = "setuptools";
@@ -23,13 +24,11 @@ buildPythonPackage rec{
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "panflute"
-  ];
+  pythonImportsCheck = [ "panflute" ];
 
   meta = with lib; {
     description = "Pythonic alternative to John MacFarlane's pandocfilters, with extra helper functions";
-    homepage = "http://scorreia.com/software/panflute";
+    homepage = "https://scorreia.com/software/panflute";
     changelog = "https://github.com/sergiocorreia/panflute/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ synthetica ];

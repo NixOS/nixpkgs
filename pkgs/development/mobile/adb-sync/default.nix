@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, python3, platform-tools, makeWrapper
-, socat, go-mtpfs, adbfs-rootless
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  platform-tools,
+  makeWrapper,
+  socat,
+  go-mtpfs,
+  adbfs-rootless,
 }:
 
 stdenv.mkDerivation {
@@ -18,26 +26,33 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  installPhase = let
-    dependencies = lib.makeBinPath [ platform-tools socat go-mtpfs adbfs-rootless ];
-  in ''
-    runHook preInstall
+  installPhase =
+    let
+      dependencies = lib.makeBinPath [
+        platform-tools
+        socat
+        go-mtpfs
+        adbfs-rootless
+      ];
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p $out/bin
-    cp adb-{sync,channel} $out/bin
+      mkdir -p $out/bin
+      cp adb-{sync,channel} $out/bin
 
-    wrapProgram $out/bin/adb-sync --suffix PATH : "${dependencies}"
-    wrapProgram $out/bin/adb-channel --suffix PATH : "${dependencies}"
+      wrapProgram $out/bin/adb-sync --suffix PATH : "${dependencies}"
+      wrapProgram $out/bin/adb-channel --suffix PATH : "${dependencies}"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = with lib; {
-    description = "A tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
+    description = "Tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
     homepage = "https://github.com/google/adb-sync";
     license = licenses.asl20;
     platforms = platforms.unix;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ scolobb ];
   };
 }

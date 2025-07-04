@@ -1,17 +1,35 @@
-{ lib, wrapQtAppsHook, fetchFromGitHub, substituteAll, udev, stdenv
-, pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu, gnused
-, withPulseaudio ? stdenv.isLinux, libpulseaudio, quazip
+{
+  lib,
+  wrapQtAppsHook,
+  fetchFromGitHub,
+  replaceVars,
+  udev,
+  stdenv,
+  pkg-config,
+  qtbase,
+  cmake,
+  zlib,
+  kmod,
+  libXdmcp,
+  qttools,
+  qtx11extras,
+  libdbusmenu,
+  gnused,
+  withPulseaudio ? stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  quazip,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.0";
+  version = "0.6.2";
   pname = "ckb-next";
 
   src = fetchFromGitHub {
     owner = "ckb-next";
     repo = "ckb-next";
     rev = "v${version}";
-    hash = "sha256-G0cvET3wMIi4FlBmaTkdTyYtcdVGzK4X0C2HYZr43eg=";
+    hash = "sha256-lA1FpUee2SpUQwJotbYhG0QX7LT5l2PP9lJ9F3uNtdU=";
   };
 
   buildInputs = [
@@ -29,6 +47,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
     pkg-config
     cmake
+    udevCheckHook
   ];
 
   cmakeFlags = [
@@ -40,12 +59,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./install-dirs.patch
-    (substituteAll {
-      name = "ckb-next-modprobe.patch";
-      src = ./modprobe.patch;
+    (replaceVars ./modprobe.patch {
       inherit kmod;
     })
   ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     substituteInPlace "$out/lib/udev/rules.d/99-ckb-next-daemon.rules" \
@@ -55,9 +74,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Driver and configuration tool for Corsair keyboards and mice";
     homepage = "https://github.com/ckb-next/ckb-next";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     mainProgram = "ckb-next";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

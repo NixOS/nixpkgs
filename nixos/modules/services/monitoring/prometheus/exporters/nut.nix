@@ -1,9 +1,19 @@
-{ config, lib, pkgs, options, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.nut;
+  inherit (lib)
+    mkOption
+    types
+    optionalString
+    concatStringsSep
+    ;
 in
 {
   port = 9199;
@@ -50,13 +60,18 @@ in
   };
   serviceOpts = {
     script = ''
-      ${optionalString (cfg.passwordPath != null)
-      "export NUT_EXPORTER_PASSWORD=$(cat ${toString cfg.passwordPath})"}
+      ${optionalString (
+        cfg.passwordPath != null
+      ) "export NUT_EXPORTER_PASSWORD=$(cat ${toString cfg.passwordPath})"}
       ${pkgs.prometheus-nut-exporter}/bin/nut_exporter \
         --nut.server=${cfg.nutServer} \
         --web.listen-address="${cfg.listenAddress}:${toString cfg.port}" \
         ${optionalString (cfg.nutUser != "") "--nut.username=${cfg.nutUser}"} \
-        ${optionalString (cfg.nutVariables != []) "--nut.vars_enable=${concatStringsSep "," cfg.nutVariables}"} \
+        ${
+          optionalString (
+            cfg.nutVariables != [ ]
+          ) "--nut.vars_enable=${concatStringsSep "," cfg.nutVariables}"
+        } \
         ${concatStringsSep " " cfg.extraFlags}
     '';
   };

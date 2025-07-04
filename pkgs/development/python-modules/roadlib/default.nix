@@ -1,41 +1,45 @@
-{ lib
-, adal
-, buildPythonPackage
-, fetchPypi
-, pyjwt
-, pythonOlder
-, setuptools
-, sqlalchemy
+{
+  lib,
+  aiohttp,
+  cryptography,
+  buildPythonPackage,
+  fetchPypi,
+  pyjwt,
+  pythonOlder,
+  setuptools,
+  requests,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "roadlib";
-  version = "0.23.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0hDiuF0dBRyR2B9dp4c7/jsC6li8uOduQBbhs6fFLfU=";
+    hash = "sha256-RI6gUqCaOeLesIwHtsASEkTtdRxLCAP6+C5Yj8mBb2o=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    adal
+  dependencies = [
+    cryptography
     pyjwt
+    requests
     sqlalchemy
   ];
+
+  optional-dependencies = {
+    async = [ aiohttp ];
+  };
 
   # Module has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "roadtools.roadlib"
-  ];
+  pythonImportsCheck = [ "roadtools.roadlib" ];
 
   meta = with lib; {
     description = "ROADtools common components library";

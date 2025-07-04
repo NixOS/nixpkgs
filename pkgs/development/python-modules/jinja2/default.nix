@@ -1,53 +1,58 @@
-{ lib
-, stdenv
-, python
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, babel
-, markupsafe
-, pytestCheckHook
-, sphinxHook
-, pallets-sphinx-themes
-, setuptools
-, sphinxcontrib-log-cabinet
-, sphinx-issues
+{
+  lib,
+  stdenv,
+  python,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  flit-core,
+  babel,
+  markupsafe,
+  pytestCheckHook,
+  sphinxHook,
+  pallets-sphinx-themes,
+  sphinxcontrib-log-cabinet,
+  sphinx-issues,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
   pname = "jinja2";
-  version = "3.1.3";
+  version = "3.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "Jinja2";
-    inherit version;
-    hash = "sha256-rIvWVE1Lssl5K/OhWegLuo/afwfoG8Ou1WVDLVklupA=";
+    inherit pname version;
+    hash = "sha256-ATf7BZkNNfEnWlh+mu5tVtqCH8g0kaD7g4GDvkP2bW0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    # Do not test with trio, it increases jinja2's dependency closure by a lot
+    # and everyone consuming these dependencies cannot rely on sphinxHook,
+    # because sphinx itself depends on jinja2.
+    substituteInPlace tests/test_async{,_filters}.py \
+      --replace-fail "import trio" "" \
+      --replace-fail ", trio.run" "" \
+      --replace-fail ", \"trio\"" ""
+  '';
 
-  propagatedBuildInputs = [
-    markupsafe
-  ];
+  build-system = [ flit-core ];
 
-  passthru.optional-dependencies = {
-    i18n = [
-      babel
-    ];
+  dependencies = [ markupsafe ];
+
+  optional-dependencies = {
+    i18n = [ babel ];
   };
 
   # Multiple tests run out of stack space on 32bit systems with python2.
   # See https://github.com/pallets/jinja/issues/1158
-  doCheck = !stdenv.is32bit;
+  doCheck = !stdenv.hostPlatform.is32bit;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.i18n;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.i18n;
 
   passthru.doc = stdenv.mkDerivation {
     # Forge look and feel of multi-output derivation as best as we can.
@@ -74,6 +79,10 @@ buildPythonPackage rec {
 
     inherit (python) pythonVersion;
     inherit meta;
+  };
+
+  passthru.tests = {
+    inherit sage;
   };
 
   meta = with lib; {

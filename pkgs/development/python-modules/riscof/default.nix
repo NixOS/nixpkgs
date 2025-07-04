@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, jinja2
-, pythonOlder
-, riscv-config
-, riscv-isac
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  pythonOlder,
+  riscv-config,
+  riscv-isac,
 }:
 
 buildPythonPackage rec {
@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "riscof";
+    tag = version;
     hash = "sha256-ToI2xI0fvnDR+hJ++T4ss5X3gc4G6Cj1uJHx0m2X7GY=";
   };
 
@@ -41,9 +41,7 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  pythonImportsCheck = [
-    "riscof"
-  ];
+  pythonImportsCheck = [ "riscof" ];
 
   # No unitests available
   doCheck = false;

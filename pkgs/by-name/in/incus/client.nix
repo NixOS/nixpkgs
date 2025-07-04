@@ -16,7 +16,6 @@ in
 
 buildGoModule {
   inherit
-    meta
     patches
     pname
     src
@@ -24,13 +23,19 @@ buildGoModule {
     version
     ;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/incus" ];
 
   postInstall = ''
+    # Needed for builds on systems with auto-allocate-uids to pass.
+    # Incus tries to read ~/.config/incus while generating completions
+    # to resolve user aliases.
+    export HOME="$(mktemp -d)"
+    mkdir -p "$HOME/.config/incus"
+
     installShellCompletion --cmd incus \
       --bash <($out/bin/incus completion bash) \
       --fish <($out/bin/incus completion fish) \
@@ -39,4 +44,8 @@ buildGoModule {
 
   # don't run the full incus test suite
   doCheck = false;
+
+  meta = meta // {
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  };
 }

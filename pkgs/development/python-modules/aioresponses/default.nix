@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, pbr
-, setuptools
+  # build-system
+  pbr,
+  setuptools,
 
-# dependencies
-, aiohttp
+  # dependencies
+  aiohttp,
 
-# tests
-, ddt
-, pytestCheckHook
+  # tests
+  ddt,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aioresponses";
-  version = "0.7.6";
+  version = "0.7.8";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-95XZ29otYXdIQOfjL1Nm9FdS0a3Bt0yTYq/QFylsfuE=";
+    hash = "sha256-uGHN/l3FjzuK+sewppc9XXsstgjdD2JT0WuO6Or23xE=";
   };
 
   nativeBuildInputs = [
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  pythonImportsCheck = [
-    "aioresponses"
-  ];
+  pythonImportsCheck = [ "aioresponses" ];
 
   nativeCheckInputs = [
     ddt
@@ -46,13 +43,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Skip a test which makes requests to httpbin.org
+    # Skip tests which make requests to httpbin.org
     "test_address_as_instance_of_url_combined_with_pass_through"
     "test_pass_through_with_origin_params"
+    "test_pass_through_unmatched_requests"
   ];
 
   meta = {
-    description = "A helper to mock/fake web requests in python aiohttp package";
+    description = "Helper to mock/fake web requests in python aiohttp package";
     homepage = "https://github.com/pnuckowski/aioresponses";
     license = lib.licenses.mit;
   };

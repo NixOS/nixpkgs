@@ -1,70 +1,79 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# propagates
-, typing-extensions
+  # dependencies
+  flexcache,
+  flexparser,
+  platformdirs,
+  typing-extensions,
 
-# tests
-, pytestCheckHook
-, pytest-subtests
-, pytest-benchmark
-, numpy
-, matplotlib
-, uncertainties
+  # tests
+  pytestCheckHook,
+  pytest-subtests,
+  pytest-benchmark,
+  numpy,
+  matplotlib,
+  uncertainties,
 }:
 
 buildPythonPackage rec {
   pname = "pint";
-  version = "0.23";
-  format = "pyproject";
+  version = "0.24.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "Pint";
-    hash = "sha256-4VCbkWBtvFJSfGAKTvdP+sEv/3Boiv8g6QckCTRuybQ=";
+  src = fetchFromGitHub {
+    owner = "hgrecco";
+    repo = "pint";
+    tag = version;
+    hash = "sha256-Pr+BRLj6BjEDwKJ24qxmfiJswpgQJDumAx3rT6tQHSY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    flexcache
+    flexparser
+    platformdirs
     typing-extensions
+
+    # Both uncertainties and numpy are not necessarily needed for every
+    # function of pint, but needed for the pint-convert executable which we
+    # necessarily distribute with this package as it is.
+    uncertainties
+    numpy
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-subtests
     pytest-benchmark
-    numpy
     matplotlib
-    uncertainties
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    # https://github.com/hgrecco/pint/issues/1898
-    "test_load_definitions_stage_2"
-  ];
-
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/hgrecco/pint/blob/${version}/CHANGES";
     description = "Physical quantities module";
     mainProgram = "pint-convert";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint/";
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

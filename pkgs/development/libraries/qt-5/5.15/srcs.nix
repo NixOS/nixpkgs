@@ -1,19 +1,22 @@
-{ lib, fetchgit, fetchFromGitHub }:
+{
+  lib,
+  fetchgit,
+  fetchFromGitHub,
+}:
 
 let
-  version = "5.15.12";
+  version = "5.15.17";
 
-  mk = name: args:
-    {
-      inherit version;
-      src = fetchgit {
-        inherit (args) url rev sha256;
-        fetchLFS = false;
-        fetchSubmodules = true;
-        deepClone = false;
-        leaveDotGit = false;
-      };
+  mk = name: args: {
+    inherit version;
+    src = fetchgit {
+      inherit (args) url rev sha256;
+      fetchLFS = false;
+      fetchSubmodules = true;
+      deepClone = false;
+      leaveDotGit = false;
     };
+  };
 in
 lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 // {
@@ -63,31 +66,25 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
     };
   };
 
-  catapult = fetchgit {
-    url = "https://chromium.googlesource.com/catapult";
-    rev = "5eedfe23148a234211ba477f76fc2ea2e8529189";
-    hash = "sha256-LPfBCEB5tJOljXpptsNk0sHGtJf/wIRL7fccN79Nh6o=";
-  };
-
   qtscript = rec {
-    version = "5.15.16";
+    version = "5.15.19";
 
     src = fetchFromGitHub {
       owner = "qt";
       repo = "qtscript";
       rev = "v${version}-lts";
-      hash = "sha256-4Jqsmk5EBQ2Biv69yYCNx7l7AWFikRMBfl0fbZcsSaA=";
+      hash = "sha256-kUY8uSEoHqQVPd4s5BoAW6n1hGXQOQcberqWF6rK60w=";
     };
   };
 
   qtwebengine = rec {
-    version = "5.15.16";
+    version = "5.15.19";
 
     src = fetchFromGitHub {
       owner = "qt";
       repo = "qtwebengine";
       rev = "v${version}-lts";
-      hash = "sha256-Arg/tfJcx9+CSV1VXBieHNoCSwmWNTnyBdgSkthOdfA=";
+      hash = "sha256-/R4dF1nu40uH8POmx+7xnwaLNZZVgOSY3mSZLMbtvF4=";
       fetchSubmodules = true;
     };
   };

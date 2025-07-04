@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, dockapps-sources
-, libX11
-, libXext
-, libXpm
+{
+  lib,
+  stdenv,
+  dockapps-sources,
+  libX11,
+  libXext,
+  libXpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A Calendar clock with antialiased text";
+    description = "Calendar clock with antialiased text";
     homepage = "https://www.dockapps.net/wmcalclock";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];

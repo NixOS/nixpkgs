@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "tlslite";
   version = "0.4.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,9 +15,8 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A pure Python implementation of SSL and TLS";
+    description = "Pure Python implementation of SSL and TLS";
     homepage = "https://pypi.python.org/pypi/tlslite";
     license = licenses.bsd3;
   };
-
 }

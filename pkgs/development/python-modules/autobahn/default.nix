@@ -1,82 +1,74 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, argon2-cffi
-, base58
-, cbor2
-, cffi
-, click
-, cryptography
-, ecdsa
-, eth-abi
-, eth-account
-, flatbuffers
-, jinja2
-, hkdf
-, hyperlink
-, mnemonic
-, mock
-, msgpack
-, passlib
-, py-ecc
-# , py-eth-sig-utils
-, py-multihash
-, py-ubjson
-, pynacl
-, pygobject3
-, pyopenssl
-, qrcode
-, pytest-asyncio_0_21
-, python-snappy
-, pytestCheckHook
-, pythonOlder
-  # , pytrie
-, rlp
-, service-identity
-, spake2
-, twisted
-, txaio
-, ujson
-  # , web3
-  # , wsaccel
-  # , xbr
-, yapf
-  # , zlmdb
-, zope-interface
-}@args:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  attrs,
+  argon2-cffi,
+  cbor2,
+  cffi,
+  cryptography,
+  flatbuffers,
+  hyperlink,
+  mock,
+  msgpack,
+  passlib,
+  py-ubjson,
+  pynacl,
+  pygobject3,
+  pyopenssl,
+  qrcode,
+  pytest-asyncio,
+  python-snappy,
+  pytestCheckHook,
+  pythonOlder,
+  service-identity,
+  setuptools,
+  twisted,
+  txaio,
+  ujson,
+  zope-interface,
+}:
 
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "23.6.2";
-  format = "setuptools";
+  version = "24.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7JQhxSohAzZNHvBGgDbmAZ7oT3FyHoazb+Ga1pZsEYE=";
+  src = fetchFromGitHub {
+    owner = "crossbario";
+    repo = "autobahn-python";
+    tag = "v${version}";
+    hash = "sha256-aeTE4a37zr83KZ+v947XikzFrHAhkZ4mj4tXdkQnB84=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest>=2.8.6,<3.3.0" "pytest"
-  '';
+  patches = [
+    (fetchpatch2 {
+      # removal of broken pytest-asyncio markers
+      url = "https://github.com/crossbario/autobahn-python/commit/7bc85b34e200640ab98a41cfddb38267f39bc92e.patch";
+      hash = "sha256-JbuYWQhvjlXuHde8Z3ZSJAyrMOdIcE1GOq+Eh2HTz8c=";
+    })
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     hyperlink
     pynacl
     txaio
   ];
 
-  nativeCheckInputs = [
-    mock
-    pytest-asyncio_0_21
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.scram
-  ++ passthru.optional-dependencies.serialization
-  ++ passthru.optional-dependencies.xbr;
+  nativeCheckInputs =
+    [
+      mock
+      pytest-asyncio
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.scram
+    ++ optional-dependencies.serialization;
 
   preCheck = ''
     # Run asyncio tests (requires twisted)
@@ -84,30 +76,58 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "--pyargs autobahn"
+    "--ignore=./autobahn/twisted"
+    "./autobahn"
   ];
 
-  pythonImportsCheck = [
-    "autobahn"
-  ];
+  pythonImportsCheck = [ "autobahn" ];
 
-  passthru.optional-dependencies = rec {
-    all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui ++ xbr;
-    accelerate = [ /* wsaccel */ ];
+  optional-dependencies = lib.fix (self: {
+    all =
+      self.accelerate
+      ++ self.compress
+      ++ self.encryption
+      ++ self.nvx
+      ++ self.serialization
+      ++ self.scram
+      ++ self.twisted
+      ++ self.ui;
+    accelerate = [
+      # wsaccel
+    ];
     compress = [ python-snappy ];
-    encryption = [ pynacl pyopenssl qrcode /* pytrie */ service-identity ];
+    encryption = [
+      pynacl
+      pyopenssl
+      qrcode # pytrie
+      service-identity
+    ];
     nvx = [ cffi ];
-    scram = [ argon2-cffi cffi passlib ];
-    serialization = [ cbor2 flatbuffers msgpack ujson py-ubjson ];
-    twisted = [ attrs args.twisted zope-interface ];
+    scram = [
+      argon2-cffi
+      cffi
+      passlib
+    ];
+    serialization = [
+      cbor2
+      flatbuffers
+      msgpack
+      ujson
+      py-ubjson
+    ];
+    twisted = [
+      attrs
+      twisted
+      zope-interface
+    ];
     ui = [ pygobject3 ];
-    xbr = [ base58 cbor2 click ecdsa eth-abi jinja2 hkdf mnemonic py-ecc /* py-eth-sig-utils */ py-multihash rlp spake2 twisted /* web3 xbr */ yapf /* zlmdb */ ];
-  };
+  });
 
   meta = with lib; {
+    changelog = "https://github.com/crossbario/autobahn-python/blob/${src.rev}/docs/changelog.rst";
     description = "WebSocket and WAMP in Python for Twisted and asyncio";
     homepage = "https://crossbar.io/autobahn";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,0 +1,26 @@
+From ed0a865345681982ea02c6159c0f3d7702c928a1 Mon Sep 17 00:00:00 2001
+From: Sergey Poznyakoff <gray@gnu.org>
+Date: Thu, 27 Mar 2025 20:29:10 +0200
+Subject: Use nanosleep instead of clock_nanosleep
+
+The latter is not available on macOS
+---
+ src/lock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lock.c b/src/lock.c
+index a43d9c3..cf28478 100644
+--- a/src/lock.c
++++ b/src/lock.c
+@@ -291,7 +291,7 @@ _gdbm_lockwait_retry (GDBM_FILE dbf, struct timespec const *ts,
+       if (timespec_cmp (&ttw, iv) < 0)
+ 	break;
+       timespec_sub (&ttw, iv);
+-      if (clock_nanosleep (CLOCK_REALTIME, 0, iv, &r))
++      if (nanosleep (iv, &r))
+ 	{
+ 	  if (errno == EINTR)
+ 	    timespec_add (&ttw, &r);
+-- 
+cgit v1.2.3
+

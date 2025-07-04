@@ -1,43 +1,42 @@
-{ boost
-, cairo
-, cmake
-, cups
-, fetchurl
-, fontconfig
-, freetype
-, harfbuzzFull
-, hunspell
-, lcms2
-, libjpeg
-, libtiff
-, libxml2
-, pixman
-, pkg-config
-, podofo
-, poppler
-, poppler_data
-, python3
-, lib
-, stdenv
-, qt5
+{
+  boost,
+  cairo,
+  cmake,
+  cups,
+  fetchurl,
+  fontconfig,
+  freetype,
+  harfbuzzFull,
+  hunspell,
+  lcms2,
+  libjpeg,
+  libtiff,
+  libxml2,
+  pixman,
+  pkg-config,
+  podofo_0_10,
+  poppler,
+  poppler_data,
+  python3,
+  lib,
+  stdenv,
+  qt5,
 }:
 
 let
-  pythonEnv = python3.withPackages (
-    ps: [
-      ps.pillow
-      ps.tkinter
-    ]
-  );
+  pythonEnv = python3.withPackages (ps: [
+    ps.pillow
+    ps.tkinter
+  ]);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "scribus";
 
-  version = "1.6.1";
+  version = "1.6.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/scribus/scribus-devel/scribus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4J3Xjm22HQG5MhEI/t7bzNbsCrNS3Vuv24sEHw73npk=";
+    hash = "sha256-UzvnrwOs+qc27F96P8JWKr0gD+9coqfN7gK19E1hgp4=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libxml2
     pixman
-    podofo
+    podofo_0_10
     poppler
     poppler_data
     pythonEnv
@@ -70,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     maintainers = with maintainers; [
-      kiwi
       arthsmn
     ];
     description = "Desktop Publishing (DTP) and Layout program";
@@ -84,6 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       publicDomain
     ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

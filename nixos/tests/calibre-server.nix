@@ -1,16 +1,22 @@
-{ system ? builtins.currentSystem
-, config ? { }
-, pkgs ? import ../.. { inherit system config; }
+{
+  pkgs,
+  runTest,
+  ...
 }:
 
 let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-  inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
-    removeSuffix splitString;
+  inherit (pkgs.lib)
+    concatStringsSep
+    maintainers
+    mapAttrs
+    mkMerge
+    removeSuffix
+    splitString
+    ;
 
   tests = {
     default = {
-      calibreConfig = {};
+      calibreConfig = { };
       calibreScript = ''
         wait_for_unit("calibre-server.service")
       '';
@@ -26,7 +32,10 @@ let
     };
     multipleLibraries = {
       calibreConfig = {
-        libraries = [ "/var/lib/calibre-data" "/var/lib/calibre-server" ];
+        libraries = [
+          "/var/lib/calibre-data"
+          "/var/lib/calibre-server"
+        ];
       };
       calibreScript = ''
         succeed("ls -la /var/lib/calibre-data")
@@ -62,14 +71,15 @@ let
     };
   };
 in
-mapAttrs
-  (test: testConfig: (makeTest (
+mapAttrs (
+  test: testConfig:
+  (runTest (
     let
       nodeName = testConfig.nodeName or test;
       calibreConfig = {
         enable = true;
         libraries = [ "/var/lib/calibre-server" ];
-      } // testConfig.calibreConfig or {};
+      } // testConfig.calibreConfig or { };
       librariesInitScript = path: ''
         ${nodeName}.execute("touch /tmp/test.epub")
         ${nodeName}.execute("zip -r /tmp/test.zip /tmp/test.epub")
@@ -80,19 +90,26 @@ mapAttrs
     {
       name = "calibre-server-${test}";
 
-      nodes.${nodeName} = mkMerge [{
-        environment.systemPackages = [ pkgs.zip ];
-        services.calibre-server = calibreConfig;
-      } testConfig.calibreProvider or { }];
+      nodes.${nodeName} = mkMerge [
+        {
+          environment.systemPackages = [ pkgs.zip ];
+          services.calibre-server = calibreConfig;
+        }
+        testConfig.calibreProvider or { }
+      ];
 
       testScript = ''
         ${nodeName}.start()
         ${concatStringsSep "\n" (map librariesInitScript calibreConfig.libraries)}
-        ${concatStringsSep "\n" (map (line:
-          if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")")
-          then line
-          else "${nodeName}.${line}"
-        ) (splitString "\n" (removeSuffix "\n" testConfig.calibreScript)))}
+        ${concatStringsSep "\n" (
+          map (
+            line:
+            if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")") then
+              line
+            else
+              "${nodeName}.${line}"
+          ) (splitString "\n" (removeSuffix "\n" testConfig.calibreScript))
+        )}
         ${nodeName}.shutdown()
       '';
 
@@ -100,5 +117,5 @@ mapAttrs
         maintainers = [ gaelreyrol ];
       };
     }
-  )))
-  tests
+  ))
+) tests

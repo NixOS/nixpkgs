@@ -1,15 +1,17 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, gettext
-, gdk-pixbuf
-, gobject-introspection
-, wrapGAppsHook
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  gettext,
+  gdk-pixbuf,
+  gobject-introspection,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "photocollage";
   version = "1.4.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adrienverge";
@@ -31,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

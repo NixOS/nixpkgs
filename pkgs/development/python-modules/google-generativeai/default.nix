@@ -9,7 +9,6 @@
   protobuf,
   pydantic,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   tqdm,
   typing-extensions,
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-generativeai";
-  version = "0.5.0";
+  version = "0.8.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,15 +24,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "generative-ai-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WFkzqsiYADrxVUHClBHY0+oYz2sF52DrVblHT+94QYw=";
+    tag = "v${version}";
+    hash = "sha256-wc35JSc98xvepI7Gpe5jSJ+c8n7WLKa96axoWVcH7UM=";
   };
 
   pythonRelaxDeps = [ "google-ai-generativelanguage" ];
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     google-ai-generativelanguage
@@ -54,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for Google's large language model PaLM API";
     homepage = "https://github.com/google/generative-ai-python";
-    changelog = "https://github.com/google/generative-ai-python/releases/tag/v${version}";
+    changelog = "https://github.com/google/generative-ai-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

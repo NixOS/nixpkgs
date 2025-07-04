@@ -3,24 +3,29 @@
 # client on the inside network, a server on the outside network, and a
 # router connected to both that performs Network Address Translation
 # for the client.
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-  let
-    routerBase =
-      lib.mkMerge [
-        { virtualisation.vlans = [ 2 1 ];
-          networking.nftables.enable = true;
-          networking.nat.internalIPs = [ "192.168.1.0/24" ];
-          networking.nat.externalInterface = "eth1";
-        }
+{ pkgs, lib, ... }:
+let
+  routerBase = lib.mkMerge [
+    {
+      virtualisation.vlans = [
+        2
+        1
       ];
-  in
-  {
-    name = "dublin-traceroute";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ baloo ];
-    };
+      networking.nftables.enable = true;
+      networking.nat.internalIPs = [ "192.168.1.0/24" ];
+      networking.nat.externalInterface = "eth1";
+    }
+  ];
+in
+{
+  name = "dublin-traceroute";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ baloo ];
+  };
 
-    nodes.client = { nodes, ... }: {
+  nodes.client =
+    { nodes, ... }:
+    {
       imports = [ ./common/user-account.nix ];
       virtualisation.vlans = [ 1 ];
 
@@ -31,15 +36,22 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       programs.dublin-traceroute.enable = true;
     };
 
-    nodes.router = { ... }: {
-      virtualisation.vlans = [ 2 1 ];
+  nodes.router =
+    { ... }:
+    {
+      virtualisation.vlans = [
+        2
+        1
+      ];
       networking.nftables.enable = true;
       networking.nat.internalIPs = [ "192.168.1.0/24" ];
       networking.nat.externalInterface = "eth1";
       networking.nat.enable = true;
     };
 
-    nodes.server = { ... }: {
+  nodes.server =
+    { ... }:
+    {
       virtualisation.vlans = [ 2 ];
       networking.firewall.enable = false;
       services.httpd.enable = true;
@@ -48,16 +60,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       services.vsftpd.anonymousUser = true;
     };
 
-    testScript = ''
-      client.start()
-      router.start()
-      server.start()
+  testScript = ''
+    client.start()
+    router.start()
+    server.start()
 
-      server.wait_for_unit("network.target")
-      router.wait_for_unit("network.target")
-      client.wait_for_unit("network.target")
+    server.wait_for_unit("network.target")
+    router.wait_for_unit("network.target")
+    client.wait_for_unit("network.target")
 
-      # Make sure we can trace from an unprivileged user
-      client.succeed("sudo -u alice dublin-traceroute server")
-    '';
-  })
+    # Make sure we can trace from an unprivileged user
+    client.succeed("sudo -u alice dublin-traceroute server")
+  '';
+}

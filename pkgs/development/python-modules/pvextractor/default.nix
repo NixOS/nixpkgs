@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, astropy
-, qtpy
-, pyqt6
-, pyqt-builder
-, setuptools
-, setuptools-scm
-, scipy
-, matplotlib
-, spectral-cube
-, pytestCheckHook
-, pytest-astropy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  astropy,
+  qtpy,
+  pyqt6,
+  pyqt-builder,
+  setuptools,
+  setuptools-scm,
+  scipy,
+  matplotlib,
+  spectral-cube,
+  pytestCheckHook,
+  pytest-astropy,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +25,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "radio-astro-tools";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pvextractor";
+    tag = "v${version}";
     sha256 = "sha256-TjwoTtoGWU6C6HdFuS+gJj69PUnfchPHs7UjFqwftVQ=";
   };
 
   buildInputs = [ pyqt-builder ];
-  nativeBuildInputs = [ setuptools setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
   propagatedBuildInputs = [
     astropy
     scipy

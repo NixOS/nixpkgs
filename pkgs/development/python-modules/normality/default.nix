@@ -1,43 +1,44 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, text-unidecode
-, chardet
-, banal
-, pyicu
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  hatchling,
+  text-unidecode,
+  charset-normalizer,
+  chardet,
+  banal,
+  pyicu,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "normality";
-  version = "2.2.5";
-  format = "setuptools";
+  version = "2.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pudo";
     repo = "normality";
     rev = version;
-    sha256 = "n8Ycm5DeFItmMJTolazZKGIyN7CTg2ajDCwi/UqzVe8=";
+    hash = "sha256-RsZP/GkEuPKGZK2+/57kvMwm9vk0FTKN2/XtOmfoZxA=";
   };
 
+  buildInputs = [ hatchling ];
+
   propagatedBuildInputs = [
+    charset-normalizer
     text-unidecode
     chardet
     banal
     pyicu
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "normality" ];
 
-  pythonImportsCheck = [
-    "normality"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Micro-library to normalize text strings";
     homepage = "https://github.com/pudo/normality";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

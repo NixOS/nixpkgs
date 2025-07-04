@@ -1,6 +1,10 @@
-{ lib, buildDunePackage, fetchurl
-, domain-local-await, domain-local-timeout
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  domain-local-await,
+  domain-local-timeout,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -12,7 +16,10 @@ buildDunePackage rec {
     hash = "sha256-u3Z8uAvITRUhOcB2EUYjWtpxIFJMvm2O/kyNr/AELWI=";
   };
 
-  propagatedBuildInputs = [ domain-local-await domain-local-timeout ];
+  propagatedBuildInputs = [
+    domain-local-await
+    domain-local-timeout
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

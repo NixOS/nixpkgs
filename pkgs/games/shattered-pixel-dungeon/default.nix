@@ -1,20 +1,21 @@
-{ callPackage
-, fetchFromGitHub
-, nixosTests
+{
+  callPackage,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 callPackage ./generic.nix rec {
   pname = "shattered-pixel-dungeon";
-  version = "2.3.2";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
     rev = "v${version}";
-    hash = "sha256-CZOi3kLwYdA4U9LjgK4ukPTLFUodyubSQg9JaJpUB9s=";
+    hash = "sha256-MUpQdH8RMzZtI6e2duSRWHK1gPJDhMRKsm5kIKDcFuk=";
   };
 
-  depsHash = "sha256-vihoR0bPh7590sRxeYJ1uuynNRxtRBuiFUrdmsRNUJc=";
+  depsPath = ./deps.json;
 
   passthru.tests = {
     shattered-pixel-dungeon-starts = nixosTests.shattered-pixel-dungeon;

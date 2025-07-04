@@ -1,44 +1,50 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, libiconv
-, makeBinaryWrapper
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  makeBinaryWrapper,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "proto";
-  version = "0.34.3";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
-    repo = pname;
+    repo = "proto";
     rev = "v${version}";
-    hash = "sha256-4stIazXr7+P6gF98NTWQoVW52ov9tQ1DQjPPuN7ssLU=";
+    hash = "sha256-ilbqT5826FB20uCzt2a6QYCD2rDNto7nxz1mjHGDbAA=";
   };
 
-  cargoHash = "sha256-lijDw55F7QBPqA17CPoee5unW/++LXo3Gbn24C7FLi8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bAsFzu1RzOMufFb2WCRd0pDl8O8eVsoZn79BPWql1xg=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
-  nativeBuildInputs = [ makeBinaryWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    pkg-config
+  ];
 
   # Tests requires network access
   doCheck = false;
-  cargoBuildFlags = [ "--bin proto" "--bin proto-shim" ];
+  cargoBuildFlags = [
+    "--bin proto"
+    "--bin proto-shim"
+  ];
 
   postInstall = ''
     # proto looks up a proto-shim executable file in $PROTO_LOOKUP_DIR
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/proto \
       --set PROTO_LOOKUP_DIR $out/bin
   '';
 
   meta = {
-    description = "A pluggable multi-language version manager";
+    description = "Pluggable multi-language version manager";
     longDescription = ''
       proto is a pluggable next-generation version manager for multiple programming languages. A unified toolchain.
     '';

@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, packaging
-, platformdirs
-, portalocker
-, pyparsing
-, sympy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchgit,
+  packaging,
+  platformdirs,
+  portalocker,
+  pyparsing,
+  sympy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "qmake2cmake";
   version = "1.0.6";
+  format = "setuptools";
 
   src = fetchgit {
     url = "https://codereview.qt-project.org/qt/qmake2cmake";

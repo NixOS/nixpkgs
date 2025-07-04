@@ -1,38 +1,34 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools-scm
-, cython
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  setuptools-scm,
+  cython,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyclipper";
-  version = "1.3.0.post5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.3.0.post6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fonttools";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-FKpP+tgJFzhij3wDQsAgwrTNnny7lgmN+tlSQ9JgG+Q=";
+    repo = "pyclipper";
+    tag = version;
+    hash = "sha256-s2D0ipDatAaF7A1RYOKyI31nkfc/WL3vHWsAMbo+WcY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
     cython
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyclipper"
-  ];
+  pythonImportsCheck = [ "pyclipper" ];
 
   meta = with lib; {
     description = "Cython wrapper for clipper library";

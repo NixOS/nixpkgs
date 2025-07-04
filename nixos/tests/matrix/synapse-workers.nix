@@ -1,15 +1,18 @@
-import ../make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "matrix-synapse-workers";
-  meta = with pkgs.lib; {
-    maintainers = teams.matrix.members;
+  meta = {
+    inherit (pkgs.matrix-synapse.meta) maintainers;
   };
 
   nodes = {
     homeserver =
-      { pkgs
-      , nodes
-      , ...
-      }: {
+      {
+        pkgs,
+        nodes,
+        ...
+      }:
+      {
         services.postgresql = {
           enable = true;
           initialScript = pkgs.writeText "synapse-init.sql" ''
@@ -47,4 +50,4 @@ import ../make-test-python.nix ({ pkgs, ... }: {
     homeserver.wait_for_unit("matrix-synapse.service");
     homeserver.wait_for_unit("matrix-synapse-worker-federation_sender.service");
   '';
-})
+}

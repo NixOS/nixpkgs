@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "kimagemapeditor";
 
-  extraBuildInputs = [qtwebengine];
+  extraBuildInputs = [ qtwebengine ];
   meta.mainProgram = "kimagemapeditor";
 }

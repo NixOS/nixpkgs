@@ -1,12 +1,19 @@
-{ lib, fetchurl, buildDunePackage, ppxlib, ppx_repr, logs }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ppxlib,
+  ppx_repr,
+  logs,
+}:
 
 buildDunePackage rec {
   pname = "ppx_irmin";
-  version = "3.7.2";
+  version = "3.11.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
-    hash = "sha256-aqW6TGoCM3R9S9OrOW8rOjO7gPnY7UoXjIOgNQM8DlI=";
+    hash = "sha256-CZlvvMLEPhF6m9jpAoxjXoHMyyZNXgLUJauLBrus29s=";
   };
 
   minimalOCamlVersion = "4.10";
@@ -21,6 +28,9 @@ buildDunePackage rec {
     homepage = "https://irmin.org/";
     description = "PPX deriver for Irmin generics";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ vbgl sternenseemann ];
+    maintainers = with lib.maintainers; [
+      vbgl
+      sternenseemann
+    ];
   };
 }

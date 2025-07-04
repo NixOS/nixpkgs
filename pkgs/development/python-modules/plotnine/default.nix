@@ -2,37 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  geopandas,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
   matplotlib,
   mizani,
   pandas,
   patsy,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-misc,
   scipy,
-  setuptools-scm,
   statsmodels,
+
+  # tests
+  geopandas,
+  pytestCheckHook,
+  pytest-cov-stub,
+  scikit-misc,
 }:
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.13.4";
+  version = "0.14.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "plotnine";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ylsaV5yWVbxvD74spAI5tDwIjjue7MOMaGgp4Dc8Nhk=";
+    tag = "v${version}";
+    hash = "sha256-nTMu0zx13XepqQyrJrAvBCjjHdY02tlXlFk2kITHZfI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=plotnine --cov-report=xml" ""
-  '';
 
   build-system = [ setuptools-scm ];
 
@@ -48,6 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     geopandas
     pytestCheckHook
+    pytest-cov-stub
     scikit-misc
   ];
 
@@ -56,6 +56,12 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "plotnine" ];
+
+  disabledTests = [
+    # Tries to change locale. The issued warning causes this test to fail.
+    # UserWarning: Could not set locale to English/United States. Some date-related tests may fail
+    "test_no_after_scale_warning"
+  ];
 
   disabledTestPaths = [
     # Assertion Errors:
@@ -94,16 +100,16 @@ buildPythonPackage rec {
     "tests/test_stat_summary.py"
     "tests/test_theme.py"
 
-    # Linting / formatting: useless as it has nothing to do with the package functionning
+    # Linting / formatting: useless as it has nothing to do with the package functioning
     # Disabling this prevents adding a dependency on 'ruff' and 'black'.
     "tests/test_lint_and_format.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Grammar of graphics for Python";
     homepage = "https://plotnine.readthedocs.io/";
-    changelog = "https://github.com/has2k1/plotnine/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/has2k1/plotnine/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

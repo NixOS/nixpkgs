@@ -1,33 +1,29 @@
-{ lib
-, buildPythonPackage
-, dvc-objects
-, fetchPypi
-, gcsfs
-, pythonRelaxDepsHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dvc-objects,
+  fetchPypi,
+  gcsfs,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dvc-gs";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-5UMKKX+4GCNm98S8kQsasQTY5cwi9hGhm84FFl3/7NQ=";
+    pname = "dvc_gs";
+    inherit version;
+    hash = "sha256-c5aTwNglCjkHS6Fsfc51K7Wn/5NEQtYIH/z9ftkxO5o=";
   };
 
   # Prevent circular dependency
-  pythonRemoveDeps = [
-    "dvc"
-  ];
+  pythonRemoveDeps = [ "dvc" ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-    pythonRelaxDepsHook
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     gcsfs
     dvc-objects
   ];

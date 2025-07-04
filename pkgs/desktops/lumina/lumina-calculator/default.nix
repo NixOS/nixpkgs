@@ -1,4 +1,11 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qttools,
+}:
 
 mkDerivation rec {
   pname = "lumina-calculator";
@@ -13,7 +20,10 @@ mkDerivation rec {
 
   sourceRoot = "${src.name}/src-qt5";
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+  ];
 
   buildInputs = [ qtbase ];
 
@@ -28,6 +38,6 @@ mkDerivation rec {
     homepage = "https://github.com/lumina-desktop/lumina-calculator";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = teams.lumina.members;
+    teams = [ teams.lumina ];
   };
 }

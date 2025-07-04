@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fcitx5
-, gettext
-, go
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  fcitx5,
+  gettext,
+  go,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-bamboo";
-  version = "1.0.4";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-bamboo";
     rev = finalAttrs.version;
-    hash = "sha256-EcpuZN2JU6HSuiQgBPBsoYftdHypiyFlrUxDBlVW6eo=";
+    hash = "sha256-yvyJHIXUYpOIeiSQasSRKTbN4Z0BAjohz8VlZKqMg0Q=";
     fetchSubmodules = true;
   };
 
@@ -24,13 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     gettext
     go
   ];
 
   buildInputs = [
     fcitx5
-    extra-cmake-modules
   ];
 
   preConfigure = ''
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Vietnamese input method engine support for Fcitx";
     homepage = "https://github.com/fcitx/fcitx5-bamboo";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

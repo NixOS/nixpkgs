@@ -1,57 +1,49 @@
-{ lib
-, cython_3
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, poetry-core
-, pytest-asyncio
-, pytest-timeout
-, pythonOlder
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  cython,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ifaddr,
+  poetry-core,
+  pytest-asyncio,
+  pytest-codspeed,
+  pytest-cov-stub,
+  pytest-timeout,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.132.2";
+  version = "0.147.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Jmz9zs//EVdBbEElq6OEfGZiOiMvjV5CJxZOM/lHvok=";
+    tag = version;
+    hash = "sha256-WAixAOjGbO3J4Tsp81p5+uUGld2y5wU7M4mmQ4t8sBw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "Cython>=3.0.8" "Cython"
-  '';
-
   build-system = [
-    cython_3
+    cython
     poetry-core
     setuptools
   ];
 
-  dependencies = [
-    ifaddr
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  dependencies = [ ifaddr ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-codspeed
+    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
   ];
-
-  preCheck = ''
-    sed -i '/addopts/d' pyproject.toml
-  '';
 
   disabledTests = [
     # OSError: [Errno 19] No such device
@@ -72,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
-    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${src.tag}/CHANGELOG.md";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ abbradar ];
   };

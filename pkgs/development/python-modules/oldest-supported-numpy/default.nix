@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
 
   # The purpose of oldest-supported-numpy is to build a project against the
   # oldest version of numpy for a given Python distribution in order to build
-  # a binary that is compatible with the largest possible versons of numpy.
+  # a binary that is compatible with the largest possible versions of numpy.
   # We only build against one version of numpy in nixpkgs, so instead we only
   # want to make sure that we have a version above the minimum.
   #
@@ -25,9 +26,7 @@ buildPythonPackage rec {
       --replace 'numpy==' 'numpy>='
   '';
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   # package has no tests
   doCheck = false;

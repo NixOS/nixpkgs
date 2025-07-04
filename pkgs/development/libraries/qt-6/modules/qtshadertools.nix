@@ -1,8 +1,9 @@
-{ qtModule
-, qtbase
-, stdenv
-, lib
-, pkgsBuildBuild
+{
+  qtModule,
+  qtbase,
+  stdenv,
+  lib,
+  pkgsBuildBuild,
 }:
 
 qtModule {

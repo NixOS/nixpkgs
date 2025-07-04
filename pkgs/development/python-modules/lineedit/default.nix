@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pygments
-, six
-, wcwidth
-, pytestCheckHook
-, pyte
-, ptyprocess
-, pexpect
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pygments,
+  six,
+  wcwidth,
+  pytestCheckHook,
+  pyte,
+  ptyprocess,
+  pexpect,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "randy3k";
-    repo = pname;
+    repo = "lineedit";
     rev = "v${version}";
     sha256 = "fq2NpjIQkIq1yzXEUxi6cz80kutVqcH6MqJXHtpTFsk=";
   };
@@ -38,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lineedit" ];
 
   meta = with lib; {
-    description = "A readline library based on prompt_toolkit which supports multiple modes";
+    description = "Readline library based on prompt_toolkit which supports multiple modes";
     homepage = "https://github.com/randy3k/lineedit";
     license = licenses.mit;
     maintainers = with maintainers; [ savyajha ];

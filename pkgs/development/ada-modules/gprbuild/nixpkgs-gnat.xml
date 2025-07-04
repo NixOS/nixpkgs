@@ -53,4 +53,37 @@
       <grep regexp="[^\r\n]+"></grep>
     </target>
   </compiler_description>
+  <configuration>
+    <!-- aarch64-linux - native compiler. -->
+    <targets>
+      <target name="^aarch64-unknown-linux-gnu$" />
+    </targets>
+    <hosts>
+      <host name="^aarch64-unknown-linux-gnu$" />
+    </hosts>
+    <config>
+   for Archive_Builder  use ("ar", "cr");
+   for Archive_Builder_Append_Option use ("q");
+   for Archive_Indexer  use ("ranlib");
+   for Archive_Suffix   use ".a";
+    </config>
+  </configuration>
+  <configuration>
+    <!-- aarch64-linux - native compiler. -->
+    <targets>
+      <target name="^aarch64-unknown-linux-gnu$" />
+    </targets>
+    <hosts>
+      <host name="^aarch64-unknown-linux-gnu$" />
+    </hosts>
+    <config>
+   for Object_Lister use ("nm", "-g");
+   for Object_Lister_Matcher use " [TDRBSG] (.*)";
+
+   package Linker is
+      for Export_File_Format use "GNU";
+      for Export_File_Switch use "-Wl,--version-script=";
+   end Linker;
+    </config>
+  </configuration>
 </gprconfig>

@@ -1,66 +1,69 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "icingaweb2";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ das_j ];
+  meta = {
+    maintainers = pkgs.lib.teams.helsinki-systems.members;
   };
 
   nodes = {
-    icingaweb2 = { config, pkgs, ... }: {
-      services.icingaweb2 = {
-        enable = true;
+    icingaweb2 =
+      { config, pkgs, ... }:
+      {
+        services.icingaweb2 = {
+          enable = true;
 
-        modulePackages = with pkgs.icingaweb2Modules; {
-          particles = theme-particles;
-          spring = theme-spring;
-        };
-
-        modules = {
-          doc.enable = true;
-          migrate.enable =  true;
-          setup.enable = true;
-          test.enable = true;
-          translation.enable = true;
-        };
-
-        generalConfig = {
-          global = {
-            module_path = "${pkgs.icingaweb2}/modules";
+          modulePackages = with pkgs.icingaweb2Modules; {
+            particles = theme-particles;
+            spring = theme-spring;
           };
-        };
 
-        authentications = {
-          icingaweb = {
-            backend = "external";
+          modules = {
+            doc.enable = true;
+            migrate.enable = true;
+            setup.enable = true;
+            test.enable = true;
+            translation.enable = true;
           };
-        };
 
-        groupBackends = {
-          icingaweb = {
-            backend = "db";
-            resource = "icingaweb_db";
+          generalConfig = {
+            global = {
+              module_path = "${pkgs.icingaweb2}/modules";
+            };
           };
-        };
 
-        resources = {
-          # Not used, so no DB server needed
-          icingaweb_db = {
-            type = "db";
-            db = "mysql";
-            host = "localhost";
-            username = "icingaweb2";
-            password = "icingaweb2";
-            dbname = "icingaweb2";
+          authentications = {
+            icingaweb = {
+              backend = "external";
+            };
           };
-        };
 
-        roles = {
-          Administrators = {
-            users = "*";
-            permissions = "*";
+          groupBackends = {
+            icingaweb = {
+              backend = "db";
+              resource = "icingaweb_db";
+            };
+          };
+
+          resources = {
+            # Not used, so no DB server needed
+            icingaweb_db = {
+              type = "db";
+              db = "mysql";
+              host = "localhost";
+              username = "icingaweb2";
+              password = "icingaweb2";
+              dbname = "icingaweb2";
+            };
+          };
+
+          roles = {
+            Administrators = {
+              users = "*";
+              permissions = "*";
+            };
           };
         };
       };
-    };
   };
 
   testScript = ''
@@ -68,4 +71,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     icingaweb2.wait_for_unit("multi-user.target")
     icingaweb2.succeed("curl -sSf http://icingaweb2/authentication/login")
   '';
-})
+}

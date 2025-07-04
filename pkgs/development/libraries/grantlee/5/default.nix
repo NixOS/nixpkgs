@@ -1,4 +1,11 @@
-{ mkDerivation, lib, fetchFromGitHub, qtbase, qtscript, cmake }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  qtbase,
+  qtscript,
+  cmake,
+}:
 
 mkDerivation rec {
   pname = "grantlee";
@@ -12,7 +19,10 @@ mkDerivation rec {
     sha256 = "sha256-enP7b6A7Ndew2LJH569fN3IgPu2/KL5rCmU/jmKb9sY=";
   };
 
-  buildInputs = [ qtbase qtscript ];
+  buildInputs = [
+    qtbase
+    qtscript
+  ];
   nativeBuildInputs = [ cmake ];
 
   patches = [
@@ -20,7 +30,10 @@ mkDerivation rec {
     ./grantlee-no-canonicalize-filepath.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   postFixup =
     # Disabuse CMake of the notion that libraries are in $dev
     ''

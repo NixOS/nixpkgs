@@ -1,21 +1,24 @@
-{ lib, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, libngspice
-, numpy
-, ply
-, scipy
-, pyyaml
-, cffi
-, requests
-, matplotlib
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  libngspice,
+  numpy,
+  ply,
+  scipy,
+  pyyaml,
+  cffi,
+  requests,
+  matplotlib,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyspice";
   version = "1.5";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

@@ -1,14 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, beaker, pyramid }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  beaker,
+  pyramid,
+}:
 
 buildPythonPackage rec {
   pname = "pyramid-beaker";
-  version = "0.8";
+  version = "0.9";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "pyramid_beaker";
     inherit version;
-    sha256 = "0hflx3qkcdml1mwpq53sz46s7jickpfn0zy0ns2c7j445j66bp3p";
+    hash = "sha256-zMUT60z7W0Flfym25rKMor17O/n9qRMGoQKa7pLRz6U=";
   };
 
   checkPhase = ''
@@ -18,13 +25,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest ];
 
-  propagatedBuildInputs = [ beaker pyramid ];
+  propagatedBuildInputs = [
+    beaker
+    pyramid
+  ];
 
   meta = with lib; {
     description = "Beaker session factory backend for Pyramid";
     homepage = "https://docs.pylonsproject.org/projects/pyramid_beaker/en/latest/";
     # idk, see https://github.com/Pylons/pyramid_beaker/blob/master/LICENSE.txt
     # license = licenses.mpl20;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
 }

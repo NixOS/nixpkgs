@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, timeout-decorator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  timeout-decorator,
 }:
 
 buildPythonPackage rec {
@@ -18,26 +19,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Rog3rSm1th";
     repo = "frelatage";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eHVqp6govBV9FvSQyaZuEEImHQRs/mbLaW86RCvtDbM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "numpy" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     numpy
     timeout-decorator
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "frelatage"
-  ];
+  pythonImportsCheck = [ "frelatage" ];
 
   meta = with lib; {
     description = "Greybox and Coverage-based library to fuzz Python applications";

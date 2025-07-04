@@ -1,20 +1,14 @@
-{ system ? builtins.currentSystem, config ? { }
-, pkgs ? import ../.. { inherit system config; } }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
-
-let common_meta = { maintainers = [ maintainers.viraptor ]; };
+{ runTest, pkgs }:
+let
+  inherit (pkgs) lib;
 in
 {
-  gemstash_works = makeTest {
+  gemstash_works = runTest {
     name = "gemstash-works";
-    meta = common_meta;
+    meta.maintainers = with lib.maintainers; [ viraptor ];
 
-    nodes.machine = { config, pkgs, ... }: {
-      services.gemstash = {
-        enable = true;
-      };
+    nodes.machine = {
+      services.gemstash.enable = true;
     };
 
     # gemstash responds to http requests
@@ -26,11 +20,11 @@ in
     '';
   };
 
-  gemstash_custom_port = makeTest {
+  gemstash_custom_port = runTest {
     name = "gemstash-custom-port";
-    meta = common_meta;
+    meta.maintainers = with lib.maintainers; [ viraptor ];
 
-    nodes.machine = { config, pkgs, ... }: {
+    nodes.machine = {
       services.gemstash = {
         enable = true;
         openFirewall = true;

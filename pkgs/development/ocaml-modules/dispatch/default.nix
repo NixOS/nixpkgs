@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchFromGitHub, ocaml, alcotest, result }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ocaml,
+  alcotest,
+  result,
+}:
 
 buildDunePackage rec {
   pname = "dispatch";

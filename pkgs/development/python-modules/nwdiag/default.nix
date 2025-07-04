@@ -1,11 +1,11 @@
-{ lib
-, blockdiag
-, fetchFromGitHub
-, buildPythonPackage
-, pynose
-, pytestCheckHook
-, setuptools
-, pythonOlder
+{
+  lib,
+  blockdiag,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,26 +18,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "nwdiag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  patches = [ ./fix_test_generate.patch ];
 
-  dependencies = [
-    blockdiag
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pynose
-    pytestCheckHook
-  ];
+  dependencies = [ blockdiag ];
 
-  pytestFlagsArray = [
-    "src/nwdiag/tests/"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "src/nwdiag/tests/" ];
 
   disabledTests = [
     # AttributeError: 'TestRstDirectives' object has no attribute 'assertRegexpMatches'
@@ -45,9 +38,7 @@ buildPythonPackage rec {
     "noviewbox"
   ];
 
-  pythonImportsCheck = [
-    "nwdiag"
-  ];
+  pythonImportsCheck = [ "nwdiag" ];
 
   meta = with lib; {
     description = "Generate network-diagram image from spec-text file (similar to Graphviz)";

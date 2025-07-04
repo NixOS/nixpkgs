@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libsass
-, six
-, pytestCheckHook
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libsass,
+  six,
+  pytestCheckHook,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sass";
     repo = "libsass-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CiSr9/3EDwpDEzu6VcMBAlm3CtKTmGYbZMnMEjyZVxI=";
   };
 
@@ -36,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for libsass to compile Sass/SCSS";
     mainProgram = "pysassc";
     homepage = "https://sass.github.io/libsass-python/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

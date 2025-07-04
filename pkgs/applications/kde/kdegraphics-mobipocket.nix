@@ -1,7 +1,8 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
+  lib,
   extra-cmake-modules,
-  kio
+  kio,
 }:
 
 mkDerivation {
@@ -12,5 +13,8 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kio ];
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 }

@@ -33,7 +33,7 @@ let
   version = "0.6.30";
 
   src = fetchurl {
-    url = "https://github.com/nukeop/nuclear/releases/download/v${version}/${pname}-v${version}.AppImage";
+    url = "https://github.com/nukeop/nuclear/releases/download/v${version}/nuclear-v${version}.AppImage";
     hash = "sha256-he1uGC1M/nFcKpMM9JKY4oeexJcnzV0ZRxhTjtJz6xw=";
   };
 in
@@ -64,9 +64,10 @@ let
 
   src = fetchurl {
     url = "https://github.com/irccloud/irccloud-desktop/releases/download/v${version}/IRCCloud-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
+    hash = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];
 }
@@ -100,13 +101,14 @@ let
 
   src = fetchurl {
     url = "https://github.com/irccloud/irccloud-desktop/releases/download/v${version}/IRCCloud-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
+    hash = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
   };
 
   appimageContents = appimageTools.extract {
     inherit pname version src;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];
@@ -117,7 +119,7 @@ in appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/irccloud.png \
       $out/share/icons/hicolor/512x512/apps/irccloud.png
     substituteInPlace $out/share/applications/irccloud.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 }
 ```
@@ -141,16 +143,17 @@ let
 
   src = fetchurl {
     url = "https://github.com/irccloud/irccloud-desktop/releases/download/v${version}/IRCCloud-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
+    hash = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
   };
 
   appimageContents = appimageTools.extract {
     inherit pname version src;
     postExtract = ''
-      substituteInPlace $out/irccloud.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
+      substituteInPlace $out/irccloud.desktop --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     '';
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];

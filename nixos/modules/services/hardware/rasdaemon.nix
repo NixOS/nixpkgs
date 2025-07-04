@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.hardware.rasdaemon;
@@ -10,16 +12,18 @@ in
 {
   options.hardware.rasdaemon = {
 
-    enable = mkEnableOption "RAS logging daemon";
+    enable = lib.mkEnableOption "RAS logging daemon";
 
-    record = mkOption {
-      type = types.bool;
+    package = lib.mkPackageOption pkgs "rasdaemon" { };
+
+    record = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "record events via sqlite3, required for ras-mc-ctl";
     };
 
-    mainboard = mkOption {
-      type = types.lines;
+    mainboard = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = "Custom mainboard description, see {manpage}`ras-mc-ctl(8)` for more details.";
       example = ''
@@ -37,8 +41,8 @@ in
 
     # TODO, accept `rasdaemon.labels = " ";` or `rasdaemon.labels = { dell = " "; asrock = " "; };'
 
-    labels = mkOption {
-      type = types.lines;
+    labels = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = "Additional memory module label descriptions to be placed in /etc/ras/dimm_labels.d/labels";
       example = ''
@@ -54,8 +58,8 @@ in
       '';
     };
 
-    config = mkOption {
-      type = types.lines;
+    config = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         rasdaemon configuration, currently only used for CE PFA
@@ -69,24 +73,24 @@ in
       '';
     };
 
-    extraModules = mkOption {
-      type = types.listOf types.str;
-      default = [];
+    extraModules = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
       description = "extra kernel modules to load";
       example = [ "i7core_edac" ];
     };
 
-    testing = mkEnableOption "error injection infrastructure";
+    testing = lib.mkEnableOption "error injection infrastructure";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.etc = {
       "ras/mainboard" = {
         enable = cfg.mainboard != "";
         text = cfg.mainboard;
       };
-    # TODO, handle multiple cfg.labels.brand = " ";
+      # TODO, handle multiple cfg.labels.brand = " ";
       "ras/dimm_labels.d/labels" = {
         enable = cfg.labels != "";
         text = cfg.labels;
@@ -96,15 +100,20 @@ in
         text = cfg.config;
       };
     };
-    environment.systemPackages = [ pkgs.rasdaemon ]
-      ++ optionals (cfg.testing) (with pkgs.error-inject; [
-        edac-inject
-        mce-inject
-        aer-inject
-      ]);
+    environment.systemPackages =
+      [ cfg.package ]
+      ++ lib.optionals (cfg.testing) (
+        with pkgs.error-inject;
+        [
+          edac-inject
+          mce-inject
+          aer-inject
+        ]
+      );
 
-    boot.initrd.kernelModules = cfg.extraModules
-      ++ optionals (cfg.testing) [
+    boot.initrd.kernelModules =
+      cfg.extraModules
+      ++ lib.optionals (cfg.testing) [
         # edac_core and amd64_edac should get loaded automatically
         # i7core_edac may not be, and may not be required, but should load successfully
         "edac_core"
@@ -114,18 +123,20 @@ in
         "aer-inject"
       ];
 
-    boot.kernelPatches = optionals (cfg.testing) [{
-      name = "rasdaemon-tests";
-      patch = null;
-      extraConfig = ''
-        EDAC_DEBUG y
-        X86_MCE_INJECT y
+    boot.kernelPatches = lib.optionals (cfg.testing) [
+      {
+        name = "rasdaemon-tests";
+        patch = null;
+        extraConfig = ''
+          EDAC_DEBUG y
+          X86_MCE_INJECT y
 
-        PCIEPORTBUS y
-        PCIEAER y
-        PCIEAER_INJECT y
-      '';
-    }];
+          PCIEPORTBUS y
+          PCIEAER y
+          PCIEAER_INJECT y
+        '';
+      }
+    ];
 
     # i tried to set up a group for this
     # but rasdaemon needs higher permissions?
@@ -139,32 +150,32 @@ in
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
-          StateDirectory = optionalString (cfg.record) "rasdaemon";
+          StateDirectory = lib.optionalString (cfg.record) "rasdaemon";
 
-          ExecStart = "${pkgs.rasdaemon}/bin/rasdaemon --foreground"
-            + optionalString (cfg.record) " --record";
-          ExecStop = "${pkgs.rasdaemon}/bin/rasdaemon --disable";
+          ExecStart =
+            "${cfg.package}/bin/rasdaemon --foreground" + lib.optionalString (cfg.record) " --record";
+          ExecStop = "${cfg.package}/bin/rasdaemon --disable";
           Restart = "on-abort";
 
           # src/misc/rasdaemon.service.in shows this:
-          # ExecStartPost = ${pkgs.rasdaemon}/bin/rasdaemon --enable
+          # ExecStartPost = ${cfg.package}/bin/rasdaemon --enable
           # but that results in unpredictable existence of the database
           # and everything seems to be enabled without this...
         };
       };
-      ras-mc-ctl = mkIf (cfg.labels != "") {
+      ras-mc-ctl = lib.mkIf (cfg.labels != "") {
         description = "register DIMM labels on startup";
         documentation = [ "man:ras-mc-ctl(8)" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${pkgs.rasdaemon}/bin/ras-mc-ctl --register-labels";
+          ExecStart = "${cfg.package}/bin/ras-mc-ctl --register-labels";
           RemainAfterExit = true;
         };
       };
     };
   };
 
-  meta.maintainers = [ maintainers.evils ];
+  meta.maintainers = [ lib.maintainers.evils ];
 
 }

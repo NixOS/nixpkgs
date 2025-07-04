@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, libpcap
-, pkgconfig
-, pytestCheckHook
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  libpcap,
+  pkgconfig,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "stamparm";
-    repo = pname;
+    repo = "pcapy-ng";
     rev = version;
     hash = "sha256-6LA2n7Kv0MiZcqUJpi0lDN4Q+GcOttYw7hJwVqK/DU0=";
   };
@@ -28,27 +28,19 @@ buildPythonPackage rec {
     pkgconfig
   ];
 
-  buildInputs = [
-    libpcap
-  ];
+  buildInputs = [ libpcap ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     cd tests
   '';
 
-  pythonImportsCheck = [
-    "pcapy"
-  ];
+  pythonImportsCheck = [ "pcapy" ];
 
   doCheck = pythonOlder "3.10";
 
-  pytestFlagsArray = [
-    "pcapytests.py"
-  ];
+  pytestFlagsArray = [ "pcapytests.py" ];
 
   meta = with lib; {
     description = "Module to interface with the libpcap packet capture library";

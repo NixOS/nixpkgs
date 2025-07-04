@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -13,14 +18,13 @@ in
 
   ###### implementation
   config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton
-      { name = "icewm";
-        start =
-          ''
-            ${pkgs.icewm}/bin/icewm-session &
-            waitPID=$!
-          '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "icewm";
+      start = ''
+        ${pkgs.icewm}/bin/icewm-session &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ pkgs.icewm ];
   };

@@ -1,44 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonRelaxDepsHook
-, beautifulsoup4
-, comicon
-, feedparser
-, filetype
-, lxml
-, natsort
-, pillow
-, python-slugify
-, requests
-, typer
-, pyside6
+{
+  beautifulsoup4,
+  buildPythonPackage,
+  comicon,
+  feedparser,
+  fetchFromGitHub,
+  filetype,
+  lib,
+  lxml,
+  natsort,
+  nix-update-script,
+  pillow,
+  poetry-core,
+  pyside6,
+  python-slugify,
+  requests,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "mandown";
-  version = "1.7.0";
+  version = "1.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
     repo = "mandown";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oHa7/2fv+BG5KIKFIICYBqddub5SokDvAI6frbVwGSo=";
+    tag = "v${version}";
+    hash = "sha256-dx92a1YI1BW90E2u+v9fggWzrg0mqsV+INNq+2aLmFI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "pillow"
-    "typer"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     comicon
     feedparser
@@ -51,19 +46,26 @@ buildPythonPackage rec {
     typer
   ];
 
-  passthru.optional-dependencies = {
-    gui = [
-      pyside6
-    ];
+  pythonRelaxDeps = [
+    "beautifulsoup4"
+    "lxml"
+    "pillow"
+    "typer"
+  ];
+
+  optional-dependencies = {
+    gui = [ pyside6 ];
   };
 
   pythonImportsCheck = [ "mandown" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     changelog = "https://github.com/potatoeggy/mandown/releases/tag/v${version}";
     description = "Comic/manga/webtoon downloader and CBZ/EPUB/MOBI/PDF converter";
     homepage = "https://github.com/potatoeggy/mandown";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

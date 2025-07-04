@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, atpublic
-, pdm-pep517
-, pytestCheckHook
-, sybil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  atpublic,
+  pdm-pep517,
+  pytestCheckHook,
+  pytest-cov-stub,
+  sybil,
 }:
 
 buildPythonPackage rec {
@@ -21,11 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-wKz6aggkJ9YBJ+o75XjC4Ddnn+Zi9hlYDnliwTc7DNs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=flufl --cov-report=term --cov-report=xml" ""
-  '';
-
   nativeBuildInputs = [ pdm-pep517 ];
 
   propagatedBuildInputs = [ atpublic ];
@@ -34,18 +31,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     sybil
   ];
 
-  pythonNamespaces = [
-    "flufl"
-  ];
+  pythonNamespaces = [ "flufl" ];
 
   meta = with lib; {
-    description = "A high level API for internationalizing Python libraries and applications";
+    description = "High level API for internationalizing Python libraries and applications";
     homepage = "https://gitlab.com/warsaw/flufl.i18n";
     changelog = "https://gitlab.com/warsaw/flufl.i18n/-/raw/${version}/docs/NEWS.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

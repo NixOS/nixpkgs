@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, ocamlPackages, CoreServices }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocamlPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.233.0";
+  version = "0.238.3";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    hash = "sha256-FMSwCou8J8gpuZ6lPKp+qO58iZWxBDOv8vcZvSdFWWE=";
+    hash = "sha256-WlHta/wXTULehopXeIUdNAQb12Lf0SJnm1HIVHTDshA=";
   };
 
   postPatch = ''
@@ -24,18 +29,39 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = with ocamlPackages; [ ocaml dune_3 findlib ocamlbuild ];
+  nativeBuildInputs = with ocamlPackages; [
+    ocaml
+    dune_3
+    findlib
+    ocamlbuild
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ]
-    ++ (with ocamlPackages; [ core_kernel dtoa fileutils lwt_log lwt_ppx ocaml_lwt ppx_deriving ppx_gen_rec ppx_let sedlex visitors wtf8 ] ++ lib.optionals stdenv.isLinux [ inotify ]);
+  buildInputs = (
+    with ocamlPackages;
+    [
+      core_kernel
+      dtoa
+      fileutils
+      lwt_log
+      lwt_ppx
+      ocaml_lwt
+      ppx_deriving
+      ppx_gen_rec
+      ppx_let
+      sedlex
+      visitors
+      wtf8
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify ]
+  );
 
   meta = with lib; {
-    description = "A static type checker for JavaScript";
+    description = "Static type checker for JavaScript";
     mainProgram = "flow";
     homepage = "https://flow.org/";
     changelog = "https://github.com/facebook/flow/blob/v${version}/Changelog.md";
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
-    maintainers = with maintainers; [ marsam puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh ];
   };
 }

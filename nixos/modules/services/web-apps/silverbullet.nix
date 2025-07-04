@@ -1,7 +1,8 @@
-{ config
-, pkgs
-, lib
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  ...
 }:
 let
   cfg = config.services.silverbullet;
@@ -12,9 +13,9 @@ in
 {
   options = {
     services.silverbullet = {
-      enable = lib.mkEnableOption "Silverbullet, an open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application.";
+      enable = lib.mkEnableOption "Silverbullet, an open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
 
-      package = lib.mkPackageOptionMD pkgs "silverbullet" { };
+      package = lib.mkPackageOption pkgs "silverbullet" { };
 
       openFirewall = lib.mkOption {
         type = lib.types.bool;
@@ -100,8 +101,12 @@ in
         User = "${cfg.user}";
         Group = "${cfg.group}";
         EnvironmentFile = lib.mkIf (cfg.envFile != null) "${cfg.envFile}";
-        StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/" cfg.spaceDir) (lib.last (lib.splitString "/" cfg.spaceDir));
-        ExecStart = "${lib.getExe cfg.package} --port ${toString cfg.listenPort} --hostname '${cfg.listenAddress}' '${cfg.spaceDir}' " + lib.concatStringsSep " " cfg.extraArgs;
+        StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/" cfg.spaceDir) (
+          lib.last (lib.splitString "/" cfg.spaceDir)
+        );
+        ExecStart =
+          "${lib.getExe cfg.package} --port ${toString cfg.listenPort} --hostname '${cfg.listenAddress}' '${cfg.spaceDir}' "
+          + lib.concatStringsSep " " cfg.extraArgs;
         Restart = "on-failure";
       };
     };

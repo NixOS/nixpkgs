@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, bashInteractive
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-timeout,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  bashInteractive,
 }:
 
 buildPythonPackage rec {
@@ -19,14 +21,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "shtab";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8bAwLSdJCzFw5Vf9CKBrH5zOoojeXds7aIRncl+sLBI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
-  '';
 
   nativeBuildInputs = [
     setuptools
@@ -37,11 +34,10 @@ buildPythonPackage rec {
     bashInteractive
     pytest-timeout
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  pythonImportsCheck = [
-    "shtab"
-  ];
+  pythonImportsCheck = [ "shtab" ];
 
   meta = with lib; {
     description = "Module for shell tab completion of Python CLI applications";

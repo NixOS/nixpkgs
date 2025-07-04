@@ -153,20 +153,40 @@ diff -ur a/dist/aclocal/clock.m4 b/dist/aclocal/clock.m4
 diff -ur a/dist/aclocal/mutex.m4 b/dist/aclocal/mutex.m4
 --- a/dist/aclocal/mutex.m4	1969-12-31 19:00:01.000000000 -0500
 +++ b/dist/aclocal/mutex.m4	2023-06-05 19:14:47.214158196 -0400
-@@ -4,6 +4,7 @@
+@@ -3,7 +3,9 @@
+ # POSIX pthreads tests: inter-process safe and intra-process only.
  AC_DEFUN(AM_PTHREADS_SHARED, [
  AC_TRY_RUN([
++#include <stdlib.h>
  #include <pthread.h>
 +int
  main() {
  	pthread_cond_t cond;
  	pthread_mutex_t mutex;
-@@ -46,6 +47,7 @@
+@@ -24,6 +26,7 @@ main() {
+ 	pthread_mutexattr_destroy(&mutexattr));
+ }], [db_cv_mutex="$1"],,
+ AC_TRY_LINK([
++#include <stdlib.h>
+ #include <pthread.h>],[
+ 	pthread_cond_t cond;
+ 	pthread_mutex_t mutex;
+@@ -45,7 +48,9 @@ AC_TRY_LINK([
+ ], [db_cv_mutex="$1"]))])
  AC_DEFUN(AM_PTHREADS_PRIVATE, [
  AC_TRY_RUN([
++#include <stdlib.h>
  #include <pthread.h>
 +int
  main() {
+ 	pthread_cond_t cond;
+ 	pthread_mutex_t mutex;
+@@ -64,6 +69,7 @@ main() {
+ 	pthread_mutexattr_destroy(&mutexattr));
+ }], [db_cv_mutex="$1"],,
+ AC_TRY_LINK([
++#include <stdlib.h>
+ #include <pthread.h>],[
  	pthread_cond_t cond;
  	pthread_mutex_t mutex;
 diff -ur a/dist/aclocal/sequence.m4 b/dist/aclocal/sequence.m4
@@ -183,7 +203,7 @@ diff -ur a/dist/aclocal/sequence.m4 b/dist/aclocal/sequence.m4
  			$db_cv_seq_type l;
  			unsigned $db_cv_seq_type u;
 @@ -59,7 +62,9 @@
-				return (1);
+ 				return (1);
  			return (0);
  		}],, [db_cv_build_sequence="no"],
 -		AC_TRY_LINK(,[

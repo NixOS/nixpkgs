@@ -24,7 +24,7 @@ rover_tar_url="https://github.com/apollographql/rover/archive/refs/tags/${rover_
 } < <(nix-prefetch-url "$rover_tar_url" --unpack --type sha256 --print-path)
 
 # Convert hash to SRI representation
-rover_sri_hash=$(nix hash to-sri --type sha256 "$rover_hash")
+rover_sri_hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$rover_hash")
 
 # Update rover version.
 sed --in-place \
@@ -36,16 +36,16 @@ sed --in-place \
     "s|sha256 = \"[a-zA-Z0-9\/+-=]*\"|sha256 = \"$rover_sri_hash\"|" \
     "$dirname/default.nix"
 
-# Clear cargoSha256.
+# Clear cargoHash.
 sed --in-place \
-    "s|cargoSha256 = \".*\"|cargoSha256 = \"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\"|" \
+    "s|cargoHash = \".*\"|cargoHash = \"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\"|" \
     "$dirname/default.nix"
 
-# Update cargoSha256
-echo "Computing cargoSha256"
-cargoSha256=$(
-    nix-prefetch "{ sha256 }: (import $nixpkgs {}).rover.cargoDeps.overrideAttrs (_: { outputHash = sha256; })"
+# Update cargoHash
+echo "Computing cargoHash"
+cargoHash=$(
+    nix-prefetch "{ hash }: (import $nixpkgs {}).rover.cargoDeps.overrideAttrs (_: { outputHash = hash; })"
 )
 sed --in-place \
-    "s|cargoSha256 = \".*\"|cargoSha256 = \"$cargoSha256\"|" \
+    "s|cargoHash = \".*\"|cargoHash = \"$cargoHash\"|" \
     "$dirname/default.nix"

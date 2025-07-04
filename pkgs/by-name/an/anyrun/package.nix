@@ -1,33 +1,33 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook
-, atk
-, cairo
-, gdk-pixbuf
-, glib
-, gtk3
-, pango
-, stdenv
-, darwin
-, wayland
-, gtk-layer-shell
-, unstableGitUpdater
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook3,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  pango,
+  wayland,
+  gtk-layer-shell,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "anyrun";
-  version = "0-unstable-2023-12-01";
+  version = "0-unstable-2025-05-27";
 
   src = fetchFromGitHub {
     owner = "kirottu";
     repo = "anyrun";
-    rev = "e14da6c37337ffa3ee1bc66965d58ef64c1590e5";
-    hash = "sha256-hI9+KBShsSfvWX7bmRa/1VI20WGat3lDXmbceMZzMS4=";
+    rev = "25367153f225a59c5ce5746583e39a71ff052f09";
+    hash = "sha256-pg0w4uOZI32dLASD6UbBezeQg5PwOa0GLv7rTwn3VxY=";
   };
 
-  cargoHash = "sha256-apOQc9Z6YANoaeKcbNxBfAv7mmGFB+CagrYRPgC5wLY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ouAeoSCmkvWgxAUA/VYITm9/XvxmN+TdyZgEGgBGdKI=";
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -46,9 +46,6 @@ rustPlatform.buildRustPackage rec {
     gtk3
     gtk-layer-shell
     pango
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals stdenv.isLinux [
     wayland
   ];
 
@@ -59,16 +56,20 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/${pname}/examples/
+    install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/anyrun/examples/
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
-    description = "A wayland-native, highly customizable runner";
+    description = "Wayland-native, highly customizable runner";
     homepage = "https://github.com/kirottu/anyrun";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ eclairevoyant NotAShelf ];
+    maintainers = with lib.maintainers; [
+      khaneliman
+      NotAShelf
+    ];
     mainProgram = "anyrun";
+    platforms = lib.platforms.linux;
   };
 }

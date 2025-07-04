@@ -1,11 +1,17 @@
-{ lib, stdenv, fetchurl, java, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  java,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "apache-jena";
-  version = "5.0.0";
+  version = "5.4.0";
   src = fetchurl {
     url = "mirror://apache/jena/binaries/apache-jena-${version}.tar.gz";
-    hash = "sha256-Se47rsgp8V6Ypv0QHrwjIXrDPchM1nSl/GmUWMEvLIo=";
+    hash = "sha256-KQoBKPAetKI3ySWvsRn5yrtf5T5ldWiqKGrRDK8O/4Q=";
   };
   nativeBuildInputs = [
     makeWrapper

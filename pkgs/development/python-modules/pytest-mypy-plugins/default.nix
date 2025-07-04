@@ -1,41 +1,38 @@
-{ lib
-, buildPythonPackage
-, decorator
-, fetchFromGitHub
-, jinja2
-, jsonschema
-, mypy
-, packaging
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, regex
-, setuptools
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchFromGitHub,
+  jinja2,
+  jsonschema,
+  mypy,
+  packaging,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  regex,
+  setuptools,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
-  version = "3.1.2";
+  version = "3.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "pytest-mypy-plugins";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yme1g9Kj5guao0Lf8mbkNJRw6ipS2Wd4Io1cSlEBAGo=";
+    tag = version;
+    hash = "sha256-60VxMUUCIP+Mp+OsgdyRTPZVLGC/3iaMxxhw02ABB9k=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   dependencies = [
     decorator
@@ -48,9 +45,7 @@ buildPythonPackage rec {
     tomlkit
   ];
 
-  pythonImportsCheck = [
-    "pytest_mypy_plugins"
-  ];
+  pythonImportsCheck = [ "pytest_mypy_plugins" ];
 
   nativeCheckInputs = [
     mypy
@@ -61,9 +56,7 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  disabledTestPaths = [
-    "pytest_mypy_plugins/tests/test_explicit_configs.py"
-  ];
+  disabledTestPaths = [ "pytest_mypy_plugins/tests/test_explicit_configs.py" ];
 
   meta = with lib; {
     description = "Pytest plugin for testing mypy types, stubs, and plugins";

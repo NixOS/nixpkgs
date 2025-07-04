@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,10 +24,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-BIoxaE8c3HmvPjgj4wcZK9YFTZ0wr9338AIdYEoAiqs=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-p8ETWWvjtP9f/lc347ORPqTai5p/TWQCCMRe+c0FyFk=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-ATEm7RYfW9nYtTDAx580tvokVUIS7BL9mA65aEeJJvk=";
   };
 
   nativeBuildInputs = [

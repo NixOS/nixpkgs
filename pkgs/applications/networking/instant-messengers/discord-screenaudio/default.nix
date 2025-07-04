@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapQtAppsHook
-, cmake
-, pkg-config
-, qtbase
-, qtwebengine
-, qtwayland
-, pipewire
-, kdePackages
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  cmake,
+  pkg-config,
+  qtbase,
+  qtwebengine,
+  qtwayland,
+  pipewire,
+  kdePackages,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A custom discord client that supports streaming with audio on Linux";
+    description = "Custom discord client that supports streaming with audio on Linux";
     mainProgram = "discord-screenaudio";
     homepage = "https://github.com/maltejur/discord-screenaudio";
     downloadPage = "https://github.com/maltejur/discord-screenaudio/releases";

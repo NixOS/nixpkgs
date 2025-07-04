@@ -1,25 +1,27 @@
-{ lib
-, aiohttp
-, aresponses
-, awesomeversion
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, mashumaro
-, orjson
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, syrupy
-, typer
-, yarl
-, zeroconf
+{
+  lib,
+  aiohttp,
+  aresponses,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  typer,
+  yarl,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "gotailwind";
-  version = "0.2.2";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,22 +29,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-gotailwind";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JtMBud3iON4xLc9dQdXniv51EBqs7zkat8cYm3q0uEE=";
+    tag = "v${version}";
+    hash = "sha256-kNyqSyJ1ha+BumYX4ruWaN0akEvUEsRxPs7Fj7LDHOw=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail "0.0.0" "${version}"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     awesomeversion
     backoff
@@ -52,29 +51,26 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  passthru.optional-dependencies = {
-    cli = [
-      typer
-    ];
+  optional-dependencies = {
+    cli = [ typer ];
   };
 
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "gotailwind"
-  ];
+  pythonImportsCheck = [ "gotailwind" ];
 
   meta = with lib; {
     description = "Modul to communicate with Tailwind garage door openers";
-    mainProgram = "tailwind";
     homepage = "https://github.com/frenck/python-gotailwind";
     changelog = "https://github.com/frenck/python-gotailwind/releases/tag/v$version";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "tailwind";
   };
 }

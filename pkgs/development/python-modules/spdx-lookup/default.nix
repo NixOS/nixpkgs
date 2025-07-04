@@ -1,28 +1,32 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, nix-update-script
-, spdx
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  nix-update-script,
+  setuptools,
+  spdx,
 }:
 
 buildPythonPackage rec {
   pname = "spdx-lookup";
   version = "0.3.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bbqsrc";
     repo = "spdx-lookup-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jtzhqRAj1BWdU8AuR7Gr343mL5alLXhi+SyCkCI5AAU=";
   };
 
-  propagatedBuildInputs = [
-    spdx
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "spdx_lookup"
-  ];
+  dependencies = [ spdx ];
+
+  pythonImportsCheck = [ "spdx_lookup" ];
+
+  # upstream has no tests
+  doCheck = false;
 
   passthru.updateScript = nix-update-script { };
 
@@ -34,4 +38,3 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ jnsgruk ];
   };
 }
-

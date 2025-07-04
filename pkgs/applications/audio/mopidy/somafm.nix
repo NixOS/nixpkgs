@@ -1,8 +1,14 @@
-{ lib, python3Packages, fetchPypi, mopidy }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  mopidy,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-somafm";
   version = "2.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
@@ -21,4 +27,3 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ maintainers.nickhu ];
   };
 }
-

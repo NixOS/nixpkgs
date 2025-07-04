@@ -6,31 +6,24 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
-  typer,
 }:
 
 buildPythonPackage rec {
   pname = "aiolifx-themes";
-  version = "0.4.17";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "Djelibeybi";
     repo = "aiolifx-themes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nKzvdDzwizF1Db8qFQuOH7gLnYHmdCYdQZPN+gNg8mU=";
+    tag = "v${version}";
+    hash = "sha256-02ciRYc5aQ1nES/uctKUWwyBM9dO0hZ5OEWC5MT4Nuo=";
   };
-
-  prePatch = ''
-    # Don't run coverage, or depend on typer for no reason.
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=aiolifx_themes --cov-report=term-missing:skip-covered" "" \
-      --replace-fail "typer = " "# unused: typer = "
-  '';
 
   build-system = [ poetry-core ];
 
@@ -40,6 +33,7 @@ buildPythonPackage rec {
     async-timeout
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "aiolifx_themes" ];
@@ -47,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Color themes for LIFX lights running on aiolifx";
     homepage = "https://github.com/Djelibeybi/aiolifx-themes";
-    changelog = "https://github.com/Djelibeybi/aiolifx-themes/releases/tag/v${version}";
+    changelog = "https://github.com/Djelibeybi/aiolifx-themes/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ lukegb ];
   };

@@ -1,16 +1,17 @@
-{ lib
-, aenum
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, aioresponses
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
-, pythonOlder
-, rich
+{
+  lib,
+  aenum,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  aioresponses,
+  poetry-core,
+  pydantic,
+  pytest-asyncio,
+  pytest-httpx,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = "intellifire4py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dMhm2gntLV7ev6UIfHFMATytZo5blTlALuh9sBirkqI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "intellifire4py"
-  ];
+  pythonImportsCheck = [ "intellifire4py" ];
 
   meta = with lib; {
     description = "Module to read Intellifire fireplace status data";

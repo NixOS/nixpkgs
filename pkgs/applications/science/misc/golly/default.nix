@@ -1,37 +1,74 @@
-{lib, stdenv, fetchurl, wxGTK, perl, python3, zlib, libGLU, libGL, libX11, SDL2}:
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wrapGAppsHook3,
+  wxGTK,
+  python3,
+  zlib,
+  libGLU,
+  libGL,
+  libX11,
+  SDL2,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "golly";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchurl {
-    hash = "sha256-VpEoqSPaZMP/AGIYZAbk5R/f8Crqvx8pKYN1O9Bl6V0=";
-    url="mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
+    hash = "sha256-UdJHgGPn7FDN4rYTgfPBAoYE5FGC43TP8OFBmYIqCB0=";
+    url = "mirror://sourceforge/project/golly/golly/golly-${finalAttrs.version}/golly-${finalAttrs.version}-src.tar.gz";
   };
 
   buildInputs = [
-    wxGTK perl python3 zlib libGLU libGL libX11 SDL2
+    wxGTK
+    python3
+    zlib
+    libGLU
+    libGL
+    libX11
+    SDL2
   ];
+
+  nativeBuildInputs = [
+    (python3.withPackages (ps: [ ps.setuptools ]))
+    wrapGAppsHook3
+  ];
+
+  # fails nondeterministically on darwin
+  enableParallelBuilding = false;
 
   setSourceRoot = ''
     sourceRoot=$(echo */gui-wx)
   '';
 
-  postPatch = ''
-    sed -e 's@PYTHON_SHLIB@${python3}/lib/libpython3.so@' -i wxprefs.cpp
-    sed -e 's@PERL_SHLIB@'"$(find "${perl}/lib/" -name libperl.so)"'@' -i wxprefs.cpp
-    ! grep _SHLIB *.cpp
+  postPatch =
+    ''
+      substituteInPlace wxprefs.cpp \
+        --replace-fail 'PYTHON_SHLIB' '${python3}/lib/libpython3.so'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace makefile-gtk \
+        --replace-fail '-Wl,--as-needed' "" \
+        --replace-fail '-lGL ' "" \
+        --replace-fail '-lGLU' ""
+    '';
 
-    grep /lib/libpython wxprefs.cpp
-    grep /libperl wxprefs.cpp
-  '';
-
-  makeFlags=[
-    "-f" "makefile-gtk"
-    "ENABLE_SOUND=1" "ENABLE_PERL=1"
+  makeFlags = [
+    "-f"
+    "makefile-gtk"
+    "ENABLE_SOUND=1"
     "GOLLYDIR=${placeholder "out"}/share/golly"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+    "CXXC=${stdenv.cc.targetPrefix}c++"
+    "LD=${stdenv.cc.targetPrefix}c++"
+    "WX_CONFIG=${lib.getExe' (lib.getDev wxGTK) "wx-config"}"
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp ../golly ../bgolly "$out/bin"
 
@@ -40,13 +77,19 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out/share/golly"
     cp -r ../{Help,Patterns,Scripts,Rules} "$out/share/golly"
+
+    runHook postInstall
   '';
 
   meta = {
     description = "Cellular automata simulation program";
-    license = lib.licenses.gpl2;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      raskin
+      siraben
+    ];
+    platforms = lib.platforms.unix;
+    homepage = "https://golly.sourceforge.io/";
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };
-}
+})

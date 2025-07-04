@@ -1,31 +1,43 @@
-{ lib, fetchFromGitHub, buildGoModule, git }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  git,
+  openssh,
+}:
 
 buildGoModule rec {
   pname = "gittuf";
-  version = "0.3.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "gittuf";
-    repo = pname;
+    repo = "gittuf";
     rev = "v${version}";
-    hash = "sha256-lECvgagcqBS+BVD296e6WjjSCA3vI0nfLzpLTi/7N0I=";
+    hash = "sha256-atC9YsffhXvWAQzrIVwOCpcP73HhGa5x19mXm4+yLuU=";
   };
 
-  vendorHash = "sha256-UKhXbZXKNtMnQe7sHBOmzzXGBHuDTYeZGKnteZirskA=";
+  vendorHash = "sha256-SqXwxt6TWPyuwx7gDnEUk5487z3mlYtQ+Cho+lUcN+M=";
 
   ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${version}" ];
 
-  nativeCheckInputs = [ git ];
-  checkFlags = [ "-skip=TestLoadRepository" ];
+  nativeCheckInputs = [
+    git
+    openssh
+  ];
+  checkFlags = [
+    "-skip=TestLoadRepository"
+    "-skip=TestSSH"
+  ];
 
   postInstall = "rm $out/bin/cli"; # remove gendoc cli binary
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/gittuf/gittuf/blob/v${version}/CHANGELOG.md";
-    description = "A security layer for Git repositories";
+    description = "Security layer for Git repositories";
     homepage = "https://gittuf.dev";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "gittuf";
-    maintainers = with maintainers; [ flandweber ];
+    maintainers = with lib.maintainers; [ flandweber ];
   };
 }

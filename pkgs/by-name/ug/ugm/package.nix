@@ -1,21 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "ugm";
-  version = "1.4.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ariasmn";
     repo = "ugm";
     rev = "v${version}";
-    hash = "sha256-Co8JN0WEc1I08My9m7iyAshtEO4aszN8/sCvoGFJv2A=";
+    hash = "sha256-JgdOoMH8TAUc+23AhU3tZe4SH8GKFeyjSeKm8U7qvpo=";
   };
 
-  vendorHash = "sha256-34D9fQnmKnOyUqshduLmFiVgcVKi7mDKBs3X5ZQxsuw=";
+  vendorHash = "sha256-Dgnh+4bUNyqD8/bj+iUITPB/SBtQPYrB5XC6/M6Zs6k=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -25,13 +27,15 @@ buildGoModule rec {
         --set RUNEWIDTH_EASTASIAN 0
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    description = "A terminal based UNIX user and group browser";
+    description = "Terminal based UNIX user and group browser";
     homepage = "https://github.com/ariasmn/ugm";
     changelog = "https://github.com/ariasmn/ugm/releases/tag/${src.rev}";
     license = licenses.mit;
     mainProgram = "ugm";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ oo-infty ];
+    maintainers = with maintainers; [ oosquare ];
   };
 }

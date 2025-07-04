@@ -1,48 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, wheel
-, aiohttp
-, pytest
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  aiohttp,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-aiohttp";
-  version = "1.0.5";
-
-  format = "pyproject";
+  version = "1.1.0";
+  pyproject = true;
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "pytest-aiohttp";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UACf0frMTOAgSsXQ0oqROHKR1zn4OfLPhd9MwBK002Y=";
+    tag = "v${version}";
+    hash = "sha256-5xUY3SVaoZzCZE/qfAP4R49HbtBMYj5jMN5viLEzEkM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     pytest-asyncio
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/aio-libs/pytest-aiohttp/";

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, pythonOlder
-, setuptools
-, sgmllib3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  pythonOlder,
+  setuptools,
+  sgmllib3k,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-ydBAe2TG8qBl0OuyksKzXAEFDMDcM3V0Yaqr3ExBhNU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    sgmllib3k
-  ];
+  propagatedBuildInputs = [ sgmllib3k ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -36,15 +33,13 @@ buildPythonPackage rec {
     ${python.interpreter} -Wd tests/runtests.py
   '';
 
-  pythonImportsCheck = [
-    "feedparser"
-  ];
+  pythonImportsCheck = [ "feedparser" ];
 
   meta = with lib; {
     description = "Universal feed parser";
     homepage = "https://github.com/kurtmckee/feedparser";
     changelog = "https://feedparser.readthedocs.io/en/latest/changelog.html";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
 }

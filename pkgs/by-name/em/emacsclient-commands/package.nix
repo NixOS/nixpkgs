@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, gnumake
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  gnumake,
 }:
 
 buildGoModule {
@@ -26,7 +27,7 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    description = "A collection of small shell utilities that connect to a local Emacs server";
+    description = "Collection of small shell utilities that connect to a local Emacs server";
     homepage = "https://github.com/szermatt/emacsclient-commands";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ binarycat ];

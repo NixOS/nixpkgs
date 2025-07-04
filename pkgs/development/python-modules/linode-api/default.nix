@@ -1,47 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, requests
-, pytestCheckHook
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  requests,
+  polling,
+  deprecated,
+  pytestCheckHook,
+  mock,
+  httpretty,
 }:
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.13.1";
+  version = "5.32.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   # Sources from Pypi exclude test fixtures
   src = fetchFromGitHub {
     owner = "linode";
     repo = "python-linode-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WB4CurdokRKh1eD6FZR2SeMpa3Z0BzLb0ldI7SYPEVI=";
+    tag = "v${version}";
+    hash = "sha256-z1enJwdMy7yi+lVkeMkMMQ0kenCcVY8NQWKINAue5VA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
+    polling
+    deprecated
   ];
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
+    mock
+    httpretty
+  ];
+
+  disabledTestPaths = [
+    # needs api token
+    "test/integration"
   ];
 
   pythonImportsCheck = [ "linode_api4" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Linode API v4";
     homepage = "https://github.com/linode/python-linode-api";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ glenns ];
+    changelog = "https://github.com/linode/linode_api4-python/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ glenns ];
   };
 }

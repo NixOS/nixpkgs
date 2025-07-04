@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, gerbilPackages, gerbil-support, gerbil, ... }:
+{
+  lib,
+  fetchFromGitHub,
+  gerbilPackages,
+  gerbil-support,
+  gerbil,
+  ...
+}:
 
 rec {
   pname = "gerbil-ethereum";
@@ -9,7 +16,12 @@ rec {
   version-path = "version";
 
   gerbilInputs = with gerbilPackages; [
-    gerbil-utils gerbil-crypto gerbil-poo gerbil-persist gerbil-leveldb ];
+    gerbil-utils
+    gerbil-crypto
+    gerbil-poo
+    gerbil-persist
+    gerbil-leveldb
+  ];
 
   pre-src = {
     fun = fetchFromGitHub;
@@ -29,7 +41,7 @@ rec {
     ORIG_GERBIL_PATH="\$GERBIL_PATH"
     ORIG_GERBIL_HOME="\$GERBIL_HOME"
     unset GERBIL_HOME
-    GERBIL_LOADPATH="${gerbil-support.gerbilLoadPath (["$out"] ++ gerbilInputs)}"
+    GERBIL_LOADPATH="${gerbil-support.gerbilLoadPath ([ "$out" ] ++ gerbilInputs)}"
     GERBIL_PATH="\$HOME/.cache/gerbil-ethereum/gerbil"
     export GERBIL_PATH GERBIL_LOADPATH GLOW_SOURCE ORIG_GERBIL_PATH ORIG_GERBIL_LOADPATH
     exec ${gerbil}/bin/gxi "\$0" "\$@"
@@ -38,13 +50,13 @@ rec {
     (apply call-entry-point (cdr (command-line)))
     EOF
     chmod a+x $out/bin/run-ethereum-test-net
-    '';
+  '';
 
   meta = with lib; {
     description = "Gerbil Ethereum: a Scheme alternative to web3.js";
-    homepage    = "https://github.com/fare/gerbil-ethereum";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/fare/gerbil-ethereum";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

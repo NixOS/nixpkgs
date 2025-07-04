@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

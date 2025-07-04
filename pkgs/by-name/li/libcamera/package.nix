@@ -1,69 +1,98 @@
-{ stdenv
-, fetchgit
-, lib
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, makeFontsConf
-, openssl
-, libdrm
-, libevent
-, libyaml
-, lttng-ust
-, gst_all_1
-, gtest
-, graphviz
-, doxygen
-, python3
-, python3Packages
-, systemd # for libudev
-, withQcam ? false
-, qt5 # withQcam
-, libtiff # withQcam
+{
+  stdenv,
+  fetchgit,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  makeFontsConf,
+  openssl,
+  libdrm,
+  libevent,
+  libyaml,
+  gst_all_1,
+  gtest,
+  graphviz,
+  doxygen,
+  python3,
+  python3Packages,
+  systemd, # for libudev
+  libpisp,
+  withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
+  lttng-ust, # withTracing
+  withQcam ? false,
+  qt6, # withQcam
+  libtiff, # withQcam
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.2.0";
+  version = "0.5.0";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-x0Im9m9MoACJhQKorMI34YQ+/bd62NdAPc2nWwaJAvM=";
+    hash = "sha256-zlMjeLlEeigzisVr7kWVrTI5gRbpJb2pZvqXNdErITQ=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
-    patchShebangs utils/
+    patchShebangs src/py/ utils/
+  '';
+
+  # libcamera signs the IPA module libraries at install time, but they are then
+  # modified by stripping and RPATH fixup. Therefore, we need to generate the
+  # signatures again ourselves. For reproducibility, we use a static private key.
+  #
+  # If this is not done, libcamera will still try to load them, but it will
+  # isolate them in separate processes, which can cause crashes for IPA modules
+  # that are not designed for this (notably ipa_rpi.so).
+  preBuild = ''
+    ninja src/ipa-priv-key.pem
+    install -D ${./ipa-priv-key.pem} src/ipa-priv-key.pem
+  '';
+
+  postFixup = ''
+    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
   '';
 
   strictDeps = true;
 
-  buildInputs = [
-    # IPA and signing
-    openssl
+  buildInputs =
+    [
+      # IPA and signing
+      openssl
 
-    # gstreamer integration
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+      # gstreamer integration
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
 
-    # cam integration
-    libevent
-    libdrm
+      # cam integration
+      libevent
+      libdrm
 
-    # hotplugging
-    systemd
+      # hotplugging
+      systemd
 
-    # lttng tracing
-    lttng-ust
+      # pycamera
+      python3Packages.pybind11
 
-    # yamlparser
-    libyaml
+      # yamlparser
+      libyaml
 
-    gtest
-  ] ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
+      gtest
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch [ libpisp ]
+    ++ lib.optionals withTracing [ lttng-ust ]
+    ++ lib.optionals withQcam [
+      libtiff
+      qt6.qtbase
+      qt6.qttools
+    ];
 
   nativeBuildInputs = [
     meson
@@ -77,15 +106,20 @@ stdenv.mkDerivation rec {
     graphviz
     doxygen
     openssl
-  ] ++ lib.optional withQcam qt5.wrapQtAppsHook;
+  ] ++ lib.optional withQcam qt6.wrapQtAppsHook;
 
   mesonFlags = [
     "-Dv4l2=true"
-    "-Dqcam=${if withQcam then "enabled" else "disabled"}"
+    (lib.mesonEnable "tracing" withTracing)
+    (lib.mesonEnable "qcam" withQcam)
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
     "-Dwerror=false"
+    # Documentation breaks binary compatibility.
+    # Given that upstream also provides public documentation,
+    # we can disable it here.
+    "-Ddocumentation=disabled"
   ];
 
   # Fixes error on a deprecated declaration
@@ -94,21 +128,16 @@ stdenv.mkDerivation rec {
   # Silence fontconfig warnings about missing config
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
-  # libcamera signs the IPA module libraries at install time, but they are then
-  # modified by stripping and RPATH fixup. Therefore, we need to generate the
-  # signatures again ourselves.
-  #
-  # If this is not done, libcamera will still try to load them, but it will
-  # isolate them in separate processes, which can cause crashes for IPA modules
-  # that are not designed for this (notably ipa_rpi.so).
-  postFixup = ''
-    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
-  '';
-
   meta = with lib; {
-    description = "An open source camera stack and framework for Linux, Android, and ChromeOS";
+    description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
+    changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ citadelcore ];
+    platforms = platforms.linux;
+    badPlatforms = [
+      # Mandatory shared libraries.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }

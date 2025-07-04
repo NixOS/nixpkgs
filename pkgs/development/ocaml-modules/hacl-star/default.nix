@@ -1,10 +1,23 @@
-{ lib, buildDunePackage, hacl-star-raw, zarith, cppo, alcotest, secp256k1-internal, qcheck-core, cstruct }:
-
+{
+  buildDunePackage,
+  hacl-star-raw,
+  zarith,
+  cppo,
+  alcotest,
+  secp256k1-internal,
+  qcheck-core,
+  cstruct,
+}:
 
 buildDunePackage {
   pname = "hacl-star";
 
-  inherit (hacl-star-raw) version src meta doCheck;
+  inherit (hacl-star-raw)
+    version
+    src
+    meta
+    doCheck
+    ;
 
   minimalOCamlVersion = "4.08";
 

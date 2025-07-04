@@ -1,15 +1,17 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, fleep
-, ifaddr
-, libarchive-c
-, pillow
-, requests-toolbelt
-, setuptools
-, zeroconf
-, pytestCheckHook
-, openssl
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  fleep,
+  ifaddr,
+  libarchive-c,
+  pillow,
+  requests-toolbelt,
+  setuptools,
+  zeroconf,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  openssl,
 }:
 
 buildPythonApplication rec {
@@ -47,17 +49,14 @@ buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    # Solves PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   meta = with lib; {
-    description = "An open Apple AirDrop implementation written in Python";
+    description = "Open Apple AirDrop implementation written in Python";
     homepage = "https://owlink.org/";
     changelog = "https://github.com/seemoo-lab/opendrop/releases/tag/${src.rev}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     mainProgram = "opendrop";
     platforms = [ "x86_64-linux" ];
   };

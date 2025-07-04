@@ -1,45 +1,45 @@
-{ lib
-, buildPythonPackage
-, pythonRelaxDepsHook
-, fetchFromGitHub
-, attrdict
-, beautifulsoup4
-, cython
-, fire
-, fonttools
-, lmdb
-, lxml
-, numpy
-, opencv4
-, openpyxl
-, pdf2docx
-, pillow
-, premailer
-, pyclipper
-, pymupdf
-, python-docx
-, rapidfuzz
-, scikit-image
-, shapely
-, tqdm
-, paddlepaddle
-, lanms-neo
-, polygon3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  attrdict,
+  beautifulsoup4,
+  cython,
+  fire,
+  fonttools,
+  lmdb,
+  lxml,
+  numpy,
+  opencv-python,
+  openpyxl,
+  pdf2docx,
+  pillow,
+  pyclipper,
+  pymupdf,
+  python-docx,
+  rapidfuzz,
+  scikit-image,
+  shapely,
+  tqdm,
+  paddlepaddle,
+  lanms-neo,
+  polygon3,
+  paddlex,
+  pyyaml,
 }:
 
-let
-  version = "2.7.1";
-in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "paddleocr";
-  inherit version;
-  format = "setuptools";
+  version = "3.0.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
-    rev = "v${version}";
-    hash = "sha256-5Dt4UL+7dwJNjcNnCVi3o8bLCt7/m/M6oh1vPu9rza8=";
+    tag = "v${version}";
+    hash = "sha256-K01RIyxlh9gp0RerGkqY/AiUy6/u1GAICwj2oz27muw=";
   };
 
   patches = [
@@ -54,17 +54,25 @@ buildPythonPackage {
     ./remove-import-imaug.patch
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "==72.1.0" ""
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
   # trying to relax only pymupdf makes the whole build fail
   pythonRelaxDeps = true;
   pythonRemoveDeps = [
     "imgaug"
     "visualdl"
-    "opencv-python"
     "opencv-contrib-python"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrdict
     beautifulsoup4
     cython
@@ -73,11 +81,10 @@ buildPythonPackage {
     lmdb
     lxml
     numpy
-    opencv4
+    opencv-python
     openpyxl
     pdf2docx
     pillow
-    premailer
     pyclipper
     pymupdf
     python-docx
@@ -88,6 +95,8 @@ buildPythonPackage {
     paddlepaddle
     lanms-neo
     polygon3
+    paddlex
+    pyyaml
   ];
 
   # TODO: The tests depend, among possibly other things, on `cudatoolkit`.
@@ -96,16 +105,20 @@ buildPythonPackage {
   # nativeCheckInputs = with pkgs; [ which cudatoolkit ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/PaddlePaddle/PaddleOCR";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Multilingual OCR toolkits based on PaddlePaddle";
     longDescription = ''
       PaddleOCR aims to create multilingual, awesome, leading, and practical OCR
       tools that help users train better models and apply them into practice.
     '';
-    changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/v${version}";
-    maintainers = with maintainers; [ happysalada ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/${src.tag}";
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

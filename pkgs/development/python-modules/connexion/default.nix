@@ -1,55 +1,55 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, asgiref
-, httpx
-, inflection
-, jsonschema
-, jinja2
-, python-multipart
-, pyyaml
-, requests
-, starlette
-, typing-extensions
-, werkzeug
+  # dependencies
+  asgiref,
+  httpx,
+  inflection,
+  jsonschema,
+  jinja2,
+  python-multipart,
+  pyyaml,
+  requests,
+  starlette,
+  typing-extensions,
+  werkzeug,
 
-# optional-dependencies
-, a2wsgi
-, flask
-, swagger-ui-bundle
-, uvicorn
+  # optional-dependencies
+  a2wsgi,
+  flask,
+  swagger-ui-bundle,
+  uvicorn,
 
-# tests
-, pytest-aiohttp
-, pytestCheckHook
-, testfixtures
+  # tests
+  pytest-aiohttp,
+  pytestCheckHook,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "3.0.6";
+  version = "3.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "spec-first";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-0EaJwxT80qLqlrxYk4H7Pf/UKq2pA/8HGL8OiqNA/2s=";
+    repo = "connexion";
+    tag = version;
+    hash = "sha256-ruwpA2yd7FRME1FvYrZh0EOnhmQ26YVouXzpVD9ph6g=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     httpx
     inflection
@@ -63,45 +63,43 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     flask = [
       a2wsgi
       flask
     ];
-    swagger-ui = [
-      swagger-ui-bundle
-    ];
-    uvicorn = [
-      uvicorn
-    ];
+    swagger-ui = [ swagger-ui-bundle ];
+    uvicorn = [ uvicorn ];
   };
 
   nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
     testfixtures
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "connexion"
-  ];
+  pythonImportsCheck = [ "connexion" ];
 
-  disabledTests = [
-    # AssertionError
-    "test_headers"
-    # waiter.acquire() deadlock
-    "test_cors_server_error"
-    "test_get_bad_default_response"
-    "test_schema_response"
-    "test_writeonly"
-  ];
+  disabledTests =
+    [
+      "test_build_example"
+      "test_mock_resolver_no_example"
+      "test_sort_apis_by_basepath"
+      "test_sort_routes"
+      # Tests require network access
+      "test_remote_api"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # ImportError: Error while finding loader for '/private/tmp/nix-build-python3.12-connexion-3.1.0.drv-0/source' (<class 'ModuleNotFoundError'>: No module named '/private/tmp/nix-build-python3')
+      "test_lifespan"
+    ];
 
-  meta = with lib; {
+  meta = {
     description = "Swagger/OpenAPI First framework on top of Flask";
-    mainProgram = "connexion";
     homepage = "https://github.com/spec-first/connexion";
     changelog = "https://github.com/spec-first/connexion/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ elohmeier ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    mainProgram = "connexion";
   };
 }

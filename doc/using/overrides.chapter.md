@@ -13,32 +13,50 @@ It is used to override the arguments passed to a function.
 Example usages:
 
 ```nix
-pkgs.foo.override { arg1 = val1; arg2 = val2; /* ... */ }
+pkgs.foo.override {
+  arg1 = val1;
+  arg2 = val2; # ...
+}
 ```
 
 It's also possible to access the previous arguments.
 
 ```nix
-pkgs.foo.override (previous: { arg1 = previous.arg1; /* ... */ })
+pkgs.foo.override (previous: {
+  arg1 = previous.arg1; # ...
+})
 ```
 
 <!-- TODO: move below programlisting to a new section about extending and overlays and reference it -->
 
 ```nix
-import pkgs.path { overlays = [ (self: super: {
-  foo = super.foo.override { barSupport = true ; };
-  })];}
+import pkgs.path {
+  overlays = [
+    (self: super: {
+      foo = super.foo.override { barSupport = true; };
+    })
+  ];
+}
 ```
 
 ```nix
 {
   mypkg = pkgs.callPackage ./mypkg.nix {
-    mydep = pkgs.mydep.override { /* ... */ };
+    mydep = pkgs.mydep.override {
+      # ...
+    };
   };
 }
 ```
 
 In the first example, `pkgs.foo` is the result of a function call with some default arguments, usually a derivation. Using `pkgs.foo.override` will call the same function with the given new arguments.
+
+Many packages, like the `foo` example above, provide package options with default values in their arguments, to facilitate overriding.
+Because it's not usually feasible to test that packages build with all combinations of options, you might find that a package doesn't build if you override options to non-default values.
+
+Package maintainers are not expected to fix arbitrary combinations of options.
+If you find that something doesn't work, please submit a fix, ideally with a regression test.
+If you want to ensure that things keep working, consider [becoming a maintainer](https://github.com/NixOS/nixpkgs/tree/master/maintainers) for the package.
 
 ## &lt;pkg&gt;.overrideAttrs {#sec-pkg-overrideAttrs}
 
@@ -48,9 +66,11 @@ Example usages:
 
 ```nix
 {
-  helloBar = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
-    pname = previousAttrs.pname + "-bar";
-  });
+  helloBar = pkgs.hello.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      pname = previousAttrs.pname + "-bar";
+    }
+  );
 }
 ```
 
@@ -100,7 +120,7 @@ Example usage:
       url = "ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2";
       hash = "sha256-MxBJRcM2rYzQYwJ5XKxhXTQByvSg5jZc5cSHEZoB2IY=";
     };
-    patches = [];
+    patches = [ ];
   });
 }
 ```
@@ -121,8 +141,15 @@ Example usage:
 
 ```nix
 {
-  f = { a, b }: { result = a+b; };
-  c = lib.makeOverridable f { a = 1; b = 2; };
+  f =
+    { a, b }:
+    {
+      result = a + b;
+    };
+  c = lib.makeOverridable f {
+    a = 1;
+    b = 2;
+  };
 }
 ```
 

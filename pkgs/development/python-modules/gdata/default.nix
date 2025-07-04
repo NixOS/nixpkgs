@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchurl
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
 }:
 
 buildPythonPackage rec {
@@ -21,5 +22,4 @@ buildPythonPackage rec {
     description = "Python client library for Google data APIs";
     license = licenses.asl20;
   };
-
 }

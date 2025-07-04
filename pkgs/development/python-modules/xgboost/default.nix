@@ -1,14 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, cmake
-, numpy
-, scipy
-, hatchling
-, stdenv
-, xgboost
+{
+  buildPythonPackage,
+  pythonOlder,
+  cmake,
+  numpy,
+  scipy,
+  hatchling,
+  python,
+  stdenv,
+  xgboost,
 }:
 
+let
+  libExtension = stdenv.hostPlatform.extensions.sharedLibrary;
+  libName = "libxgboost${libExtension}";
+  libPath = "${xgboost}/lib/${libName}";
+in
 buildPythonPackage {
   pname = "xgboost";
   format = "pyproject";
@@ -16,15 +22,25 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [ cmake hatchling ];
+  nativeBuildInputs = [
+    cmake
+    hatchling
+  ];
   buildInputs = [ xgboost ];
-  propagatedBuildInputs = [ numpy scipy ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+  ];
 
-  # Override existing logic for locating libxgboost.so which is not appropriate for Nix
-  prePatch = let
-    libPath = "${xgboost}/lib/libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";
-  in ''
-    echo 'find_lib_path = lambda: ["${libPath}"]' > python-package/xgboost/libpath.py
+  pythonRemoveDeps = [
+    "nvidia-nccl-cu12"
+  ];
+
+  # Place libxgboost.so where the build will look for it
+  # to avoid triggering the compilation of the library
+  prePatch = ''
+    mkdir -p lib
+    ln -s ${libPath} lib/
   '';
 
   dontUseCmakeConfigure = true;
@@ -38,9 +54,18 @@ buildPythonPackage {
   # and are extremely cpu intensive anyway
   doCheck = false;
 
-  pythonImportsCheck = [
-    "xgboost"
-  ];
+  # During the build libxgboost.so is copied to its current location
+  # Replacing it with a symlink to the original
+  postInstall =
+    let
+      libOutPath = "$out/${python.sitePackages}/xgboost/lib/${libName}";
+    in
+    ''
+      rm "${libOutPath}"
+      ln -s "${libPath}" "${libOutPath}"
+    '';
+
+  pythonImportsCheck = [ "xgboost" ];
 
   __darwinAllowLocalNetworking = true;
 }

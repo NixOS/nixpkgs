@@ -1,64 +1,67 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, click
-, mock
-, pytestCheckHook
-, google-auth
-, requests-oauthlib
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  google-auth,
+  requests-oauthlib,
+  click,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
-  version = "1.2.0";
+  version = "1.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-KS0tN4M0nysHNKCgIHseHjIqwZPCwJ2PfGE/t8xQHqg=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-auth-library-python-oauthlib";
+    rev = "v${version}";
+    sha256 = "sha256-nkXS1vNsq7k30EmNHclRblsmGTMYuIAaHuaVDORqRmc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-auth
     requests-oauthlib
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     tool = [ click ];
   };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.tool;
+  ] ++ optional-dependencies.tool;
 
-  disabledTests = [
-    # Flaky test. See https://github.com/NixOS/nixpkgs/issues/288424#issuecomment-1941609973.
-    "test_run_local_server_occupied_port"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # This test fails if the hostname is not associated with an IP (e.g., in `/etc/hosts`).
-    "test_run_local_server_bind_addr"
-  ];
+  disabledTests =
+    [
+      # Flaky test. See https://github.com/NixOS/nixpkgs/issues/288424#issuecomment-1941609973.
+      "test_run_local_server_occupied_port"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # This test fails if the hostname is not associated with an IP (e.g., in `/etc/hosts`).
+      "test_run_local_server_bind_addr"
+    ];
 
-  pythonImportsCheck = [
-    "google_auth_oauthlib"
-  ];
+  pythonImportsCheck = [ "google_auth_oauthlib" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/googleapis/google-auth-library-python-oauthlib/blob/v${version}/CHANGELOG.md";
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Google Authentication Library: oauthlib integration";
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
-    license = licenses.asl20;
+    changelog = "https://github.com/googleapis/google-auth-library-python-oauthlib/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      sarahec
+      terlar
+    ];
     mainProgram = "google-oauthlib-tool";
-    maintainers = with maintainers; [ terlar ];
   };
 }

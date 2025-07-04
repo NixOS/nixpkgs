@@ -1,6 +1,7 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "sympa";
-  meta.maintainers = with lib.maintainers; [ mmilata ];
+  meta.maintainers = with lib.maintainers; [ ];
 
   nodes.machine =
     { ... }:
@@ -32,4 +33,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         "curl --fail --insecure -L http://localhost/"
     )
   '';
-})
+}

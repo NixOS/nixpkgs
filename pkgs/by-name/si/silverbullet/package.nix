@@ -1,16 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, deno
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  deno,
+  makeWrapper,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "silverbullet";
-  version = "0.7.6";
+  version = "0.9.4";
 
   src = fetchurl {
     url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet.js";
-    hash = "sha256-bnD9iZVRIg6otgDi4yNWySqmJsJJIVnjFGsTrGCMw/o=";
+    hash = "sha256-J0fy1e/ObpujBNSRKA55oU30kXNfus+5P2ebggEN6Dw=";
   };
 
   dontUnpack = true;
@@ -27,9 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) silverbullet;
+  };
+
   meta = {
     changelog = "https://github.com/silverbulletmd/silverbullet/blob/${finalAttrs.version}/website/CHANGELOG.md";
-    description = "An open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
+    description = "Open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
     homepage = "https://silverbullet.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aorith ];

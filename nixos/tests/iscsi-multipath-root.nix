@@ -1,18 +1,27 @@
-import ./make-test-python.nix (
-  { pkgs, lib, ... }:
-  let
-    initiatorName = "iqn.2020-08.org.linux-iscsi.initiatorhost:example";
-    targetName = "iqn.2003-01.org.linux-iscsi.target.x8664:sn.acf8fd9c23af";
-  in
-  {
-    name = "iscsi";
-    meta = {
-      maintainers = pkgs.lib.teams.deshaw.members;
-    };
+{ pkgs, lib, ... }:
+let
+  initiatorName = "iqn.2020-08.org.linux-iscsi.initiatorhost:example";
+  targetName = "iqn.2003-01.org.linux-iscsi.target.x8664:sn.acf8fd9c23af";
+in
+{
+  name = "iscsi";
+  meta = {
+    maintainers = pkgs.lib.teams.deshaw.members;
+  };
 
-    nodes = {
-      target = { config, pkgs, lib, ... }: {
-        virtualisation.vlans = [ 1 2 ];
+  nodes = {
+    target =
+      {
+        config,
+        pkgs,
+        lib,
+        ...
+      }:
+      {
+        virtualisation.vlans = [
+          1
+          2
+        ];
         services.target = {
           enable = true;
           config = {
@@ -81,8 +90,18 @@ import ./make-test-python.nix (
         virtualisation.emptyDiskImages = [ 2048 ];
       };
 
-      initiatorAuto = { nodes, config, pkgs, ... }: {
-        virtualisation.vlans = [ 1 2 ];
+    initiatorAuto =
+      {
+        nodes,
+        config,
+        pkgs,
+        ...
+      }:
+      {
+        virtualisation.vlans = [
+          1
+          2
+        ];
 
         services.multipath = {
           enable = true;
@@ -109,7 +128,8 @@ import ./make-test-python.nix (
           xfsprogs
         ];
 
-        environment.etc."initiator-root-disk-closure".source = nodes.initiatorRootDisk.config.system.build.toplevel;
+        environment.etc."initiator-root-disk-closure".source =
+          nodes.initiatorRootDisk.config.system.build.toplevel;
 
         nix.settings = {
           substituters = lib.mkForce [ ];
@@ -118,22 +138,31 @@ import ./make-test-python.nix (
         };
       };
 
-      initiatorRootDisk = { config, pkgs, modulesPath, lib, ... }: {
+    initiatorRootDisk =
+      {
+        config,
+        pkgs,
+        modulesPath,
+        lib,
+        ...
+      }:
+      {
         boot.initrd.network.enable = true;
         boot.loader.grub.enable = false;
 
-        boot.kernelParams = lib.mkOverride 5 (
-          [
-            "boot.shell_on_fail"
-            "console=tty1"
-            "ip=192.168.1.1:::255.255.255.0::ens9:none"
-            "ip=192.168.2.1:::255.255.255.0::ens10:none"
-          ]
-        );
+        boot.kernelParams = lib.mkOverride 5 ([
+          "boot.shell_on_fail"
+          "console=tty1"
+          "ip=192.168.1.1:::255.255.255.0::ens9:none"
+          "ip=192.168.2.1:::255.255.255.0::ens10:none"
+        ]);
 
         # defaults to true, puts some code in the initrd that tries to mount an overlayfs on /nix/store
         virtualisation.writableStore = false;
-        virtualisation.vlans = [ 1 2 ];
+        virtualisation.vlans = [
+          1
+          2
+        ];
 
         services.multipath = {
           enable = true;
@@ -157,7 +186,8 @@ import ./make-test-python.nix (
           };
         };
 
-        boot.initrd.extraFiles."etc/multipath/wwids".source = pkgs.writeText "wwids" "/3600140592b17c3f6b404168b082ceeb7/";
+        boot.initrd.extraFiles."etc/multipath/wwids".source =
+          pkgs.writeText "wwids" "/3600140592b17c3f6b404168b082ceeb7/";
 
         boot.iscsi-initiator = {
           discoverPortal = "target";
@@ -169,9 +199,11 @@ import ./make-test-python.nix (
         };
       };
 
-    };
+  };
 
-    testScript = { nodes, ... }: ''
+  testScript =
+    { nodes, ... }:
+    ''
       target.start()
       target.wait_for_unit("iscsi-target.service")
 
@@ -261,7 +293,4 @@ import ./make-test-python.nix (
       initiatorRootDisk.wait_for_unit("iscsid")
       initiatorRootDisk.succeed("test -e /scratch/both-up")
     '';
-  }
-)
-
-
+}

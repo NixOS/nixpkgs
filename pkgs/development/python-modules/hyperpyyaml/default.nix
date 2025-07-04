@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyyaml
-, ruamel-yaml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyyaml,
+  ruamel-yaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "speechbrain";
     repo = "hyperpyyaml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eA4/wXmqlqomfRbJNi7dkBRoxneCbCbURSPvASF2sgA=";
   };
 
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "hyperpyyaml" ];
 

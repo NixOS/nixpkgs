@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, doxygen
-, graphviz
-, libX11
-, libXrandr
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  doxygen,
+  graphviz,
+  libX11,
+  libXrandr,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     "CXX=${stdenv.cc.targetPrefix}c++"
   ];
 
-  buildFlags = [ "all" "doc" ];
+  buildFlags = [
+    "all"
+    "doc"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -50,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A small X window manager, extended from tinywm";
+    description = "Small X window manager, extended from tinywm";
     homepage = "https://github.com/adamnew123456/SmallWM";
     license = lib.licenses.bsd2;
     mainProgram = "smallwm";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (libX11.meta) platforms;
   };
 })

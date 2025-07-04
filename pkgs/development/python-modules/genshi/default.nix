@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "genshi";
-  version = "0.7.7";
+  version = "0.7.9";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Genshi";
     inherit version;
-    hash = "sha256-wQBSCGLNaQhdEO4ah+kSief1n2s9m9Yiv1iygE5rmqs=";
+    hash = "sha256-x2FwqLLcGJROCRUQPChMuInfzuNODhQLozY8gPdUGtI=";
   };
 
   # FAIL: test_sanitize_remove_script_elem (genshi.filters.tests.html.HTMLSanitizerTestCase)
@@ -20,7 +22,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    setuptools six
+    setuptools
+    six
   ];
 
   meta = with lib; {

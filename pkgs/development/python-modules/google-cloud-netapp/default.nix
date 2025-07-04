@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-auth
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gitUpdater,
+  google-api-core,
+  google-auth,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-netapp";
-  version = "0.3.9";
+  version = "0.3.23";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Vohliy9W+fkY4YmSIvw6WiWVlLBk+Fo9CvZG/VKeU1o=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-cloud-python";
+    rev = "google-cloud-netapp-v${version}";
+    hash = "sha256-ietiyPCghGUD1jlGdZMhVgVozAlyfdvYgkV6NNlzLQg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  sourceRoot = "${src.name}/packages/google-cloud-netapp";
+
+  build-system = [ setuptools ];
 
   dependencies = [
     google-api-core
@@ -46,11 +47,15 @@ buildPythonPackage rec {
     "google.cloud.netapp_v1"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "google-cloud-netapp-v";
+  };
+
+  meta = {
     description = "Python Client for NetApp API";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-netapp";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-netapp-v${version}/packages/google-cloud-netapp/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

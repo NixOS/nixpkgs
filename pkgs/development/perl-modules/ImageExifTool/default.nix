@@ -1,24 +1,30 @@
-{ lib
-, stdenv
-, buildPerlPackage
-, exiftool
-, fetchurl
-, gitUpdater
-, shortenPerlShebang
-, testers
+{
+  buildPerlPackage,
+  exiftool,
+  fetchurl,
+  gitUpdater,
+  lib,
+  shortenPerlShebang,
+  stdenv,
+  testers,
 }:
 
 buildPerlPackage rec {
   pname = "Image-ExifTool";
-  version = "12.82";
+  version = "13.25";
 
   src = fetchurl {
     url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-    hash = "sha256-1MfWz0AR+SaM2Ar7gAfLs38OJhOnP4cRekpe1uSjDD4=";
+    hash = "sha256-HNVVFEhGooKYeDvr86tFIjUnPHg1hBCBPj1Ok8ZTsfo=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+
+  postPatch = ''
+    patchShebangs exiftool
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/exiftool
   '';
 
@@ -28,13 +34,11 @@ buildPerlPackage rec {
       command = "${lib.getExe exiftool} -ver";
       package = exiftool;
     };
-    updateScript = gitUpdater {
-      url = "https://github.com/exiftool/exiftool.git";
-    };
+    updateScript = gitUpdater { url = "https://github.com/exiftool/exiftool.git"; };
   };
 
   meta = {
-    description = "A tool to read, write and edit EXIF meta information";
+    description = "Tool to read, write and edit EXIF meta information";
     longDescription = ''
       ExifTool is a platform-independent Perl library plus a command-line
       application for reading, writing and editing meta information in a wide
@@ -48,8 +52,14 @@ buildPerlPackage rec {
     '';
     homepage = "https://exiftool.org/";
     changelog = "https://exiftool.org/history.html";
-    license = with lib.licenses; [ gpl1Plus /* or */ artistic2 ];
-    maintainers = with lib.maintainers; [ kiloreux anthonyroussel ];
+    license = with lib.licenses; [
+      gpl1Plus # or
+      artistic2
+    ];
+    maintainers = with lib.maintainers; [
+      kiloreux
+      anthonyroussel
+    ];
     mainProgram = "exiftool";
   };
 }

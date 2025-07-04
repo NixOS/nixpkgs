@@ -1,35 +1,38 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
-, makeWrapper
-, gh
-, gnugrep
-, fzf
-, python3
-, withDelta ? false
-, delta
-, withBat ? false
-, bat
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  makeWrapper,
+  gh,
+  gnugrep,
+  fzf,
+  python3,
+  withDelta ? false,
+  delta,
+  withBat ? false,
+  bat,
 }:
 let
-  binPath = lib.makeBinPath ([
-    gh
-    gnugrep
-    fzf
-    python3
-  ]
-  ++ lib.optional withBat bat
-  ++ lib.optional withDelta delta);
+  binPath = lib.makeBinPath (
+    [
+      gh
+      gnugrep
+      fzf
+      python3
+    ]
+    ++ lib.optional withBat bat
+    ++ lib.optional withDelta delta
+  );
 in
 stdenvNoCC.mkDerivation {
   pname = "gh-notify";
-  version = "0-unstable-2024-03-19";
+  version = "0-unstable-2024-08-01";
 
   src = fetchFromGitHub {
     owner = "meiji163";
     repo = "gh-notify";
-    rev = "0d8fa377d79cfef0f66d2f03a5921a5e598e6807";
-    hash = "sha256-Ao6gUtgW7enVlWBQhlQDc8ZW/gP90atc2F4rDNUnjj8=";
+    rev = "556df2eecdc0f838244a012759da0b76bcfeb2e7";
+    hash = "sha256-WKv/1AW8wtl7kQ3PE7g2N0ELvdHtons7pYb0K8wsfWg=";
   };
 
   nativeBuildInputs = [

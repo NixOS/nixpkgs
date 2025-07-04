@@ -14,41 +14,40 @@
   purpose,
   qcoro,
   python3,
-}: let
+}:
+let
   ps = python3.pkgs;
   pythonDeps = [
     ps.yt-dlp
     ps.ytmusicapi
   ];
 in
-  mkKdeDerivation {
-    pname = "audiotube";
+mkKdeDerivation {
+  pname = "audiotube";
 
-    extraNativeBuildInputs = [
-      ps.pybind11
-    ];
+  extraNativeBuildInputs = [
+    ps.pybind11
+  ];
 
-    extraBuildInputs =
-      [
-        qtdeclarative
-        qtmultimedia
-        qtsvg
+  extraBuildInputs = [
+    qtdeclarative
+    qtmultimedia
+    qtsvg
 
-        extra-cmake-modules
-        futuresql
-        kirigami
-        kirigami-addons
-        kcoreaddons
-        ki18n
-        kcrash
-        kwindowsystem
-        purpose
-        qcoro
-      ]
-      ++ pythonDeps;
+    extra-cmake-modules
+    futuresql
+    kirigami
+    kirigami-addons
+    kcoreaddons
+    ki18n
+    kcrash
+    kwindowsystem
+    purpose
+    qcoro
+  ] ++ pythonDeps;
 
-    qtWrapperArgs = [
-      "--prefix PYTHONPATH : ${ps.makePythonPath pythonDeps}"
-    ];
-    meta.mainProgram = "audiotube";
-  }
+  qtWrapperArgs = [
+    "--prefix PYTHONPATH : ${ps.makePythonPath pythonDeps}"
+  ];
+  meta.mainProgram = "audiotube";
+}

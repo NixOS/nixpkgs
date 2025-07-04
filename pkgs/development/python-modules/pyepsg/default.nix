@@ -1,4 +1,9 @@
-{ buildPythonPackage, lib, fetchPypi, requests }:
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "pyepsg";
@@ -18,7 +23,6 @@ buildPythonPackage rec {
     description = "Simple Python interface to epsg.io";
     license = licenses.lgpl3;
     homepage = "https://pyepsg.readthedocs.io/en/latest/";
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [ ];
   };
-
 }

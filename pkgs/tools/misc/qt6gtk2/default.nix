@@ -1,30 +1,42 @@
-{ fetchFromGitHub, lib, stdenv, gtk2, pkg-config, qmake, qtbase }:
+{
+  fetchFromGitLab,
+  lib,
+  stdenv,
+  gtk2,
+  pkg-config,
+  qmake,
+  qtbase,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qt6gtk2";
-  version = "0.2";
+  version = "0.5";
 
-  src = fetchFromGitHub {
-    owner = "trialuser02";
-    repo = finalAttrs.pname;
-    rev = finalAttrs.version;
-    hash = "sha256-g5ZCwTnNEJJ57zEwNqMxrl0EWYJMt3PquZ2IsmxQYqk=";
+  src = fetchFromGitLab {
+    domain = "opencode.net";
+    owner = "trialuser";
+    repo = "qt6gtk2";
+    tag = finalAttrs.version;
+    hash = "sha256-G2TQ4LU8Cmvd+u6/s1ugbUkZcRXHTBm3+ISY0g/5/60=";
   };
 
-  buildInputs = [ gtk2 qtbase ];
-  nativeBuildInputs = [ pkg-config qmake ];
+  buildInputs = [
+    gtk2
+    qtbase
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+  ];
 
   dontWrapQtApps = true;
 
-  installPhase = ''
-    runHook preInstall
+  qmakeFlags = [
+    "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+  ];
 
-    mkdir -p $out/lib/qt-6/plugins/{platformthemes,styles}
-    cp -pr src/qt6gtk2-qtplugin/libqt6gtk2.so $out/lib/qt-6/plugins/platformthemes
-    cp -pr src/qt6gtk2-style/libqt6gtk2-style.so $out/lib/qt-6/plugins/styles
-
-    runHook postInstall
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GTK+2.0 integration plugins for Qt6";

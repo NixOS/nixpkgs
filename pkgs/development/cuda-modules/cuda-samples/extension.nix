@@ -1,7 +1,7 @@
 {
-  cudaVersion,
-  hostPlatform,
+  cudaMajorMinorVersion,
   lib,
+  stdenv,
 }:
 let
   cudaVersionToHash = {
@@ -23,9 +23,11 @@ let
     "12.3" = "sha256-fjVp0G6uRCWxsfe+gOwWTN+esZfk0O5uxS623u0REAk=";
   };
 
+  inherit (stdenv) hostPlatform;
+
   # Samples are built around the CUDA Toolkit, which is not available for
   # aarch64. Check for both CUDA version and platform.
-  cudaVersionIsSupported = cudaVersionToHash ? ${cudaVersion};
+  cudaVersionIsSupported = cudaVersionToHash ? ${cudaMajorMinorVersion};
   platformIsSupported = hostPlatform.isx86_64;
   isSupported = cudaVersionIsSupported && platformIsSupported;
 
@@ -34,8 +36,7 @@ let
     final: _:
     lib.attrsets.optionalAttrs isSupported {
       cuda-samples = final.callPackage ./generic.nix {
-        inherit cudaVersion;
-        hash = cudaVersionToHash.${cudaVersion};
+        hash = cudaVersionToHash.${cudaMajorMinorVersion};
       };
     };
 in

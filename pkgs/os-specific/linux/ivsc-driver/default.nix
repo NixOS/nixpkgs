@@ -1,23 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation {
   pname = "ivsc-driver";
-  version = "unstable-2023-11-09";
+  version = "unstable-2024-09-18";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ivsc-driver";
-    rev = "73a044d9633212fac54ea96cdd882ff5ab40573e";
-    hash = "sha256-vE5pOtVqjiWovlUMSEoBKTk/qvs8K8T5oY2r7njh0wQ=";
+    rev = "10f440febe87419d5c82d8fe48580319ea135b54";
+    hash = "sha256-jc+8geVquRtaZeIOtadCjY9F162Rb05ptE7dk8kuof0=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_SRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -35,9 +37,11 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/intel/ivsc-driver";
     description = "Intel Vision Sensing Controller kernel driver";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ hexa ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
-    broken = kernel.kernelOlder "5.15";
+    # This module is in mainline now and upstream suggests using that
+    # with recent kernels rather than the out-of-tree module.
+    broken = kernel.kernelOlder "5.15" || kernel.kernelAtLeast "6.9";
   };
 }

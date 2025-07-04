@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, setuptools-scm
-, sniffio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  sniffio,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "florimondmanca";
     repo = "asgi-lifespan";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Jgmd/4c1lxHM/qi3MJNN1aSSUJrI7CRNwwHrFwwcCkc=";
   };
 
@@ -30,16 +31,12 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    sniffio
-  ];
+  dependencies = [ sniffio ];
 
   # Circular dependencies, starlette
   doCheck = false;
 
-  pythonImportsCheck = [
-    "asgi_lifespan"
-  ];
+  pythonImportsCheck = [ "asgi_lifespan" ];
 
   meta = with lib; {
     description = "Programmatic startup/shutdown of ASGI apps";

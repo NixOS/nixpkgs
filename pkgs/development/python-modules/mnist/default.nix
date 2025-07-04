@@ -1,4 +1,11 @@
-{ buildPythonPackage, fetchFromGitHub, isPy27, lib, mock, numpy, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  lib,
+  mock,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,8 +24,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  dontUseSetuptoolsCheck = true;
-
   # disable tests which fail due to socket related errors
   disabledTests = [
     "test_test_images_has_right_size"
@@ -31,7 +36,6 @@ buildPythonPackage rec {
     description = "Python utilities to download and parse the MNIST dataset";
     homepage = "https://github.com/datapythonista/mnist";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dmrauh ];
+    maintainers = with maintainers; [ ];
   };
 }
-

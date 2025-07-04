@@ -1,37 +1,38 @@
-{ lib
-, fetchFromGitLab
-, mkKdeDerivation
-, breeze-icons
-, breeze
-, cmake
-, extra-cmake-modules
-, ffmpeg-headless
-, kconfig
-, kcoreaddons
-, kfilemetadata
-, ki18n
-, kiconthemes
-, kio
-, kirigami
-, kxmlgui
-, kdoctools
-, mpv
-, pkg-config
-, wrapQtAppsHook
-, qqc2-desktop-style
-, qtbase
-, yt-dlp
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  breeze-icons,
+  breeze,
+  cmake,
+  extra-cmake-modules,
+  ffmpeg-headless,
+  kconfig,
+  kcoreaddons,
+  kfilemetadata,
+  ki18n,
+  kiconthemes,
+  kio,
+  kirigami,
+  kxmlgui,
+  kdoctools,
+  mpvqt,
+  pkg-config,
+  wrapQtAppsHook,
+  qqc2-desktop-style,
+  qtbase,
+  yt-dlp,
 }:
 
-mkKdeDerivation rec {
+stdenv.mkDerivation rec {
   pname = "haruna";
-  version = "1.0.2";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
-    hash = "sha256-L/mTFPJPHl8A6FqkWUwICh+Yl4uIE5KnTkZVnC4kCZ8=";
+    hash = "sha256-7983qZ7c3i8Ilyvu36t02zeIcVO96PXGNLH3wq6JsvI=";
     domain = "invent.kde.org";
   };
 
@@ -56,7 +57,7 @@ mkKdeDerivation rec {
     kirigami
     kxmlgui
     kdoctools
-    mpv
+    mpvqt
     qtbase
   ];
 
@@ -70,8 +71,19 @@ mkKdeDerivation rec {
   meta = with lib; {
     homepage = "https://invent.kde.org/multimedia/haruna";
     description = "Open source video player built with Qt/QML and libmpv";
-    license = with licenses; [ bsd3 cc-by-40 cc-by-sa-40 cc0 gpl2Plus gpl3Plus wtfpl ];
-    maintainers = with maintainers; [ jojosch kashw2 ];
+    license = with licenses; [
+      bsd3
+      cc-by-40
+      cc-by-sa-40
+      cc0
+      gpl2Plus
+      gpl3Plus
+      wtfpl
+    ];
+    maintainers = with maintainers; [
+      jojosch
+      kashw2
+    ];
     mainProgram = "haruna";
   };
 }

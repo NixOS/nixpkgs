@@ -1,31 +1,69 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, h5py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  py-cpuinfo,
+  h5py,
+  pkgconfig,
+  c-blosc2,
+  charls,
+  lz4,
+  zlib,
+  zstd,
 }:
 
 buildPythonPackage rec {
   pname = "hdf5plugin";
-  version = "4.4.0";
-  format = "setuptools";
+  version = "5.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "silx-kit";
     repo = "hdf5plugin";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MnqY1PyGzo31H696J9CekiA2rJrUYzUMDC3UJMZaFLA=";
+    tag = "v${version}";
+    hash = "sha256-12OWsNZfKToNLyokNrwgPc7WRISJI4nRA0J/zwgCZwI=";
   };
 
-  propagatedBuildInputs = [
-    h5py
+  build-system = [
+    setuptools
+    py-cpuinfo
+    pkgconfig # only needed if HDF5PLUGIN_SYSTEM_LIBRARIES is used
+  ];
+
+  dependencies = [ h5py ];
+
+  buildInputs = [
+    #c-blosc
+    c-blosc2
+    # bzip2_1_1
+    charls
+    lz4
+    # snappy
+    # zfp
+    zlib
+    zstd
+  ];
+
+  # opt-in to use use system libs instead
+  env.HDF5PLUGIN_SYSTEM_LIBRARIES = lib.concatStringsSep "," [
+    #"blosc" # AssertionError: 4000 not less than 4000
+    "blosc2"
+    # "bz2" # only works with bzip2_1_1
+    "charls"
+    "lz4"
+    # "snappy" # snappy tests fail
+    # "sperr" # not packaged?
+    # "zfp" #  pkgconfig: (lib)zfp not found
+    "zlib"
+    "zstd"
   ];
 
   checkPhase = ''
     python test/test.py
   '';
-  pythonImportsCheck = [
-    "hdf5plugin"
-  ];
+
+  pythonImportsCheck = [ "hdf5plugin" ];
 
   preBuild = ''
     mkdir src/hdf5plugin/plugins
@@ -41,5 +79,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
   };
-
 }

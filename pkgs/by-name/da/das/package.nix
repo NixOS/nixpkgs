@@ -1,9 +1,11 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "das";
   version = "1.0.3";
   pyproject = true;
@@ -11,21 +13,21 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "snovvcrash";
     repo = "DivideAndScan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WZmWpcBqxsNH96nVWwoepFhsvdxZpYKmAjNd7ghIJMA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'networkx = "^2.8.4"' 'networkx = "*"' \
-      --replace 'netaddr = "^0.8.0"' 'netaddr = "*"'
-  '';
-
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
+  pythonRelaxDeps = [
+    "dash"
+    "defusedxml"
+    "netaddr"
+    "networkx"
+    "plotly"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [ poetry-core ];
+
+  dependencies = with python3Packages; [
     dash
     defusedxml
     dnspython
@@ -38,15 +40,18 @@ python3.pkgs.buildPythonApplication rec {
     tinydb
   ];
 
-  pythonImportsCheck = [
-    "das"
+  pythonImportsCheck = [ "das" ];
+
+  nativeCheckInputs = [
+    versionCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Divide full port scan results and use it for targeted Nmap runs";
     homepage = "https://github.com/snovvcrash/DivideAndScan";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/snovvcrash/DivideAndScan/releases/tag/v${version}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "das";
   };
 }

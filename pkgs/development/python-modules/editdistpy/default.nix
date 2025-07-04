@@ -1,36 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, pytestCheckHook
+  pytestCheckHook,
 
-, pythonOlder
+  pythonOlder,
 
-, setuptools
-, cython_3
+  setuptools,
+  cython,
 
-, symspellpy
-, numpy
-, editdistpy
+  symspellpy,
+  numpy,
+  editdistpy,
 }:
 
 buildPythonPackage rec {
   pname = "editdistpy";
-  version = "0.1.3";
+  version = "0.1.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mammothb";
     repo = "editdistpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4CtKadKpFmlZnz10NG0404oFl9DkdQwWwRSWgUPdh94=";
+    tag = "v${version}";
+    hash = "sha256-bUdwhMFDIhHuIlcqIZt6mSh8xwW/2igw0QiWGvQBLC8=";
   };
 
   build-system = [
     setuptools
-    cython_3
+    cython
   ];
 
   # error: infinite recursion encountered
@@ -47,23 +48,18 @@ buildPythonPackage rec {
   '';
 
   passthru.tests = {
-    check = editdistpy.overridePythonAttrs (
-      _: {
-        doCheck = true;
-      }
-    );
+    check = editdistpy.overridePythonAttrs (_: {
+      doCheck = true;
+    });
   };
 
-  pythonImportsCheck = [
-    "editdistpy"
-  ];
+  pythonImportsCheck = [ "editdistpy" ];
 
-  meta = with lib;
-    {
-      description = "Fast Levenshtein and Damerau optimal string alignment algorithms";
-      homepage = "https://github.com/mammothb/editdistpy";
-      changelog = "https://github.com/mammothb/editdistpy/releases/tag/v${version}";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vizid ];
-    };
+  meta = {
+    description = "Fast Levenshtein and Damerau optimal string alignment algorithms";
+    homepage = "https://github.com/mammothb/editdistpy";
+    changelog = "https://github.com/mammothb/editdistpy/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
+  };
 }

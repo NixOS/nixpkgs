@@ -1,27 +1,36 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtsvg
-, lxqt-build-tools
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qtsvg,
+  lxqt-build-tools,
+  wrapQtAppsHook,
+  gitUpdater,
+  version ? "4.2.0",
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libqtxdg";
-  version = "3.12.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-y+3noaHubZnwUUs8vbMVvZPk+6Fhv37QXUb//reedCU=";
+    hash =
+      {
+        "3.12.0" = "sha256-y+3noaHubZnwUUs8vbMVvZPk+6Fhv37QXUb//reedCU=";
+        "4.2.0" = "sha256-TSyVYlWsmB/6gxJo+CjROBQaWsmYZAwkM8BwiWP+XBI=";
+      }
+      ."${version}";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -44,6 +53,6 @@ mkDerivation rec {
     description = "Qt implementation of freedesktop.org xdg specs";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

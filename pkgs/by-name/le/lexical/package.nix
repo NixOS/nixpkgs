@@ -2,25 +2,26 @@
   lib,
   beamPackages,
   fetchFromGitHub,
-  writeScript,
   elixir,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 beamPackages.mixRelease rec {
   pname = "lexical";
-  version = "0.5.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "lexical-lsp";
     repo = "lexical";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HWqwJ7PAz80bm6YeDG84hLWPE11n06K98GOyeDQWZWU=";
+    tag = "v${version}";
+    hash = "sha256-p8XSJBX1igwC+ssEJGD8wb/ZYaEgLGozlY8N6spo3cA=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit pname version src;
 
-    hash = "sha256-G0mT+rvXZWLJIMfrhxq3TXt26wDImayu44wGEYJ+3CE=";
+    hash = "sha256-g6BZGJ33oBDXmjbb/kBfPhart4En/iDlt4yQJYeuBzw=";
   };
 
   installPhase = ''
@@ -32,16 +33,32 @@ beamPackages.mixRelease rec {
   '';
 
   postInstall = ''
-    substituteInPlace "$out/bin/start_lexical.sh" --replace 'elixir_command=' 'elixir_command="${elixir}/bin/"'
+    substituteInPlace "$out/bin/start_lexical.sh" \
+      --replace-fail 'elixir_command=' 'elixir_command="${elixir}/bin/"'
+
     mv "$out/bin" "$out/libexec"
-    makeWrapper "$out/libexec/start_lexical.sh" "$out/bin/lexical" --set RELEASE_COOKIE lexical
+    makeWrapper "$out/libexec/start_lexical.sh" "$out/bin/lexical" \
+      --set RELEASE_COOKIE lexical
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Lexical is a next-generation elixir language server";
     homepage = "https://github.com/lexical-lsp/lexical";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/lexical-lsp/lexical/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "lexical";
     platforms = beamPackages.erlang.meta.platforms;
   };

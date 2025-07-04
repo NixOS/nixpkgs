@@ -1,35 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, cython_3
-, meson-python
-, ninja
-, setuptools
+  # build-system
+  cython,
+  meson-python,
+  ninja,
+  setuptools,
 
-# dependencies
-, numpy
-, scipy
-, nibabel
-, sympy
-, transforms3d
+  # dependencies
+  numpy,
+  scipy,
+  nibabel,
+  sympy,
+  transforms3d,
 
-# optional-dependencies
-, matplotlib
+  # optional-dependencies
+  matplotlib,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "0.6.0";
+  version = "0.6.1";
   pname = "nipy";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BTn2nV4VMeT8bxTOJTHjRU8I2bxFZCzIZCZVn/QcUrk=";
+  src = fetchFromGitHub {
+    owner = "nipy";
+    repo = "nipy";
+    tag = version;
+    hash = "sha256-KGMGu0/0n1CzN++ri3Ig1AJjeZfkl4KzNgm6jdwXB7o=";
   };
 
   postPatch = ''
@@ -37,7 +40,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    cython_3
+    cython
     meson-python
     setuptools
     ninja
@@ -52,13 +55,9 @@ buildPythonPackage rec {
     transforms3d
   ];
 
-  optional-dependencies.optional = [
-    matplotlib
-  ];
+  optional-dependencies.optional = [ matplotlib ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ optional-dependencies.optional;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.optional;
 
   doCheck = false; # partial imports … circular dependencies. needs more time to figure out.
 
@@ -74,5 +73,4 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/nipy/nipy";
     license = licenses.bsd3;
   };
-
 }

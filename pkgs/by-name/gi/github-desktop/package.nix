@@ -1,53 +1,58 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, autoPatchelfHook
-, wrapGAppsHook
-, makeWrapper
-, gnome
-, libsecret
-, git
-, curl
-, nss
-, nspr
-, xorg
-, libdrm
-, alsa-lib
-, cups
-, mesa
-, systemd
-, openssl
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  buildPackages,
+  gnome-keyring,
+  libsecret,
+  git,
+  curl,
+  nss,
+  nspr,
+  xorg,
+  libdrm,
+  alsa-lib,
+  cups,
+  libgbm,
+  systemd,
+  openssl,
+  libglvnd,
 }:
 
 let
-  rcversion = "2";
+  rcversion = "1";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.3.12";
+  version = "3.4.13";
 
   src =
     let
       urls = {
         "x86_64-linux" = {
           url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${rcversion}/GitHubDesktop-linux-amd64-${finalAttrs.version}-linux${rcversion}.deb";
-          hash = "sha256-iflKD7NPuZvhxviNW8xmtCOYgdRz1rXiG42ycWCjXiY=";
+          hash = "sha256-i1V3dhx5AMrCiWtfvB2I9a6ki2zncUNyYr4qZqs42Yc=";
         };
         "aarch64-linux" = {
           url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${rcversion}/GitHubDesktop-linux-arm64-${finalAttrs.version}-linux${rcversion}.deb";
-          hash = "sha256-C9eCvuf/TwXQiYjZ88xSiyaqi8+cppmrLiSYTyQCkmg=";
+          hash = "sha256-SN4qtEI4q/AAgfUaBiM5eWyCK5Kr77CrTHsIAmvEceU=";
         };
       };
     in
-    fetchurl urls."${stdenvNoCC.hostPlatform.system}" or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    fetchurl
+      urls."${stdenvNoCC.hostPlatform.system}"
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
   buildInputs = [
-    gnome.gnome-keyring
+    gnome-keyring
     xorg.libXdamage
     xorg.libX11
     libsecret
@@ -58,7 +63,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libdrm
     alsa-lib
     cups
-    mesa
+    libgbm
     openssl
   ];
 
@@ -81,7 +86,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true}}"
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]}
     )
   '';
 
@@ -90,7 +96,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "GUI for managing Git and GitHub.";
+    description = "GUI for managing Git and GitHub";
     homepage = "https://desktop.github.com/";
     license = lib.licenses.mit;
     mainProgram = "github-desktop";

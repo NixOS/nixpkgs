@@ -1,12 +1,11 @@
-{ qtModule
-, lib
-, stdenv
-, qtbase
-, qtdeclarative
-, bluez
-, pkg-config
-, IOBluetooth
-, PCSC
+{
+  qtModule,
+  lib,
+  stdenv,
+  qtbase,
+  qtdeclarative,
+  bluez,
+  pkg-config,
 }:
 
 qtModule {
@@ -16,8 +15,5 @@ qtModule {
   propagatedBuildInputs = [
     qtbase
     qtdeclarative
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    IOBluetooth
-    PCSC
   ];
 }

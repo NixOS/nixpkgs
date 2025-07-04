@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  isPyPy,
 }:
 
 buildPythonPackage rec {
   pname = "enum";
   version = "0.4.7";
+  format = "setuptools";
   disabled = isPy3k;
 
   src = fetchPypi {

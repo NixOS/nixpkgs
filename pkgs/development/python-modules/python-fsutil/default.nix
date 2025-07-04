@@ -1,41 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-fsutil";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-fsutil";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Cs78zpf3W5UZJkkUBEP6l6fi2J4OtJXGvqqQ8PWKx+8=";
+    tag = version;
+    hash = "sha256-hzPNj6hqNCnMx1iRK1c6Y70dUU/H4u6o+waEgOhyhuA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  dependencies = [ requests ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "tests/test.py"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Tests require network access
@@ -43,9 +34,7 @@ buildPythonPackage rec {
     "test_read_file_from_url"
   ];
 
-  pythonImportsCheck = [
-    "fsutil"
-  ];
+  pythonImportsCheck = [ "fsutil" ];
 
   meta = with lib; {
     description = "Module with file-system utilities";

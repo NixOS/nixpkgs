@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "manifestparser";
   version = "1.1";
+  format = "setuptools";
 
   disabled = isPy3k;
 

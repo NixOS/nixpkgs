@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, unittestCheckHook
-, cython
-, setuptools
-, wheel
-, numpy
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  unittestCheckHook,
+  cython,
+  setuptools,
+  wheel,
+  numpy,
 }:
 buildPythonPackage rec {
   pname = "daqp";
-  version = "0.5.1";
+  version = "0.7.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "darnstrom";
     repo = "daqp";
-    rev = "5a15a3d16731d3d50f867218c1b281567db556fd";
-    hash = "sha256-in7Ci/wM7i0csJ4XVfo1lboWOyfuuU+8E+TzGmMV3x0=";
+    tag = "v${version}";
+    hash = "sha256-s22LVnK1qGjIpat21eXYF/Io49IYbWf1y+VUbYuPZaY=";
   };
 
   sourceRoot = "${src.name}/interfaces/daqp-python";
@@ -29,7 +29,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "test" "-p" "'*.py'" "-v" ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+    "-p"
+    "'*.py'"
+    "-v"
+  ];
 
   nativeBuildInputs = [
     cython
@@ -37,14 +43,12 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "daqp" ];
 
   meta = with lib; {
-    description = "A dual active-set algorithm for convex quadratic programming";
+    description = "Dual active-set algorithm for convex quadratic programming";
     homepage = "https://github.com/darnstrom/daqp";
     license = licenses.mit;
     maintainers = with maintainers; [ renesat ];

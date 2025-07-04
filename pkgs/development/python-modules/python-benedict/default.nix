@@ -1,58 +1,53 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, ftfy
-, mailchecker
-, openpyxl
-, orjson
-, phonenumbers
-, beautifulsoup4
-, pytestCheckHook
-, python-dateutil
-, python-decouple
-, python-fsutil
-, python-slugify
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, setuptools
-, toml
-, xlrd
-, xmltodict
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ftfy,
+  mailchecker,
+  openpyxl,
+  orjson,
+  phonenumbers,
+  beautifulsoup4,
+  pytestCheckHook,
+  python-dateutil,
+  python-decouple,
+  python-fsutil,
+  python-slugify,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  toml,
+  xlrd,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.33.2";
+  version = "0.34.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-benedict";
-    rev = "refs/tags/${version}";
-    hash = "sha256-1/eLJFXACn1W5Yz43BIhdqqUVk3t9285d8aLwH+VmAE=";
+    tag = version;
+    hash = "sha256-ffmyTVeQKzV/sssxFuIckmBW6wmjnTWkHbVQ1v7fmGg=";
   };
 
-  pythonRelaxDeps = [
-    "boto3"
-  ];
+  pythonRelaxDeps = [ "boto3" ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-fsutil
     python-slugify
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       beautifulsoup4
       boto3
@@ -84,29 +79,21 @@ buildPythonPackage rec {
       phonenumbers
       python-dateutil
     ];
-    s3 = [
-      boto3
-    ];
-    toml = [
-      toml
-    ];
+    s3 = [ boto3 ];
+    toml = [ toml ];
     xls = [
       openpyxl
       xlrd
     ];
-    xml = [
-      xmltodict
-    ];
-    yaml = [
-      pyyaml
-    ];
+    xml = [ xmltodict ];
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
     orjson
     pytestCheckHook
     python-decouple
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # Tests require network access
@@ -123,9 +110,7 @@ buildPythonPackage rec {
     "test_from_yaml_with_valid_url_valid_content"
   ];
 
-  pythonImportsCheck = [
-    "benedict"
-  ];
+  pythonImportsCheck = [ "benedict" ];
 
   meta = with lib; {
     description = "Module with keylist/keypath support";

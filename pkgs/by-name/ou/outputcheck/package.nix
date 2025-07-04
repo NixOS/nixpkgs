@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, lit
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  lit,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -42,11 +43,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "OutputCheck" ];
 
-  meta = with lib; {
-    description = "A tool for checking tool output inspired by LLVM's FileCheck";
+  meta = {
+    description = "Tool for checking tool output inspired by LLVM's FileCheck";
     homepage = "https://github.com/stp/OutputCheck";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fsagbuya ];
+    changelog = "https://github.com/stp/OutputCheck/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fsagbuya ];
     mainProgram = "OutputCheck";
   };
 }

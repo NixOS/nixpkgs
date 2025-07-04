@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glslang
-, meson
-, ninja
-, pkg-config
-, libX11
-, spirv-headers
-, vulkan-headers
-, vkbasalt32
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glslang,
+  meson,
+  ninja,
+  pkg-config,
+  libX11,
+  spirv-headers,
+  vulkan-headers,
+  vkbasalt32,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,12 +19,21 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "DadSchoorse";
     repo = "vkBasalt";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GC6JKYnsfcUBg+CX6v7MyE4FeLmjadFwighaiyureDg=";
   };
 
-  nativeBuildInputs = [ glslang meson ninja pkg-config ];
-  buildInputs = [ libX11 spirv-headers vulkan-headers ];
+  nativeBuildInputs = [
+    glslang
+    meson
+    ninja
+    pkg-config
+  ];
+  buildInputs = [
+    libX11
+    spirv-headers
+    vulkan-headers
+  ];
   mesonFlags = [ "-Dappend_libdir_vkbasalt=true" ];
 
   postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
@@ -42,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A Vulkan post processing layer for Linux";
+    description = "Vulkan post processing layer for Linux";
     homepage = "https://github.com/DadSchoorse/vkBasalt";
     license = licenses.zlib;
     maintainers = with maintainers; [ kira-bruneau ];

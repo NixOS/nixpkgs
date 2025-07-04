@@ -1,9 +1,13 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "eris-server";
   meta.maintainers = with lib.maintainers; [ ehmry ];
 
   nodes.server = {
-    environment.systemPackages = [ pkgs.eris-go pkgs.eriscmd ];
+    environment.systemPackages = [
+      pkgs.eris-go
+      pkgs.eriscmd
+    ];
     services.eris-server = {
       enable = true;
       decode = true;
@@ -20,4 +24,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     server.wait_for_open_port(80)
     server.succeed("eriscmd get http://[::1] $(echo 'Hail ERIS!' | eriscmd put coap+tcp://[::1]:5683)")
   '';
-})
+}

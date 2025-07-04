@@ -1,17 +1,22 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "trickster";
   meta = with pkgs.lib; {
     maintainers = with maintainers; [ _1000101 ];
   };
 
   nodes = {
-    prometheus = { ... }: {
-      services.prometheus.enable = true;
-      networking.firewall.allowedTCPPorts = [ 9090 ];
-    };
-    trickster = { ... }: {
-      services.trickster.enable = true;
-    };
+    prometheus =
+      { ... }:
+      {
+        services.prometheus.enable = true;
+        networking.firewall.allowedTCPPorts = [ 9090 ];
+      };
+    trickster =
+      { ... }:
+      {
+        services.trickster.enable = true;
+      };
   };
 
   testScript = ''
@@ -34,4 +39,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         "curl -fL http://localhost:9090/metrics | grep 'promhttp_metric_handler_requests_total{code=\"500\"} 0'"
     )
   '';
-})
+}

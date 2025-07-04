@@ -1,32 +1,52 @@
-{ lib, fetchFromGitHub, beets, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  beets,
+  python3Packages,
+  writableTmpDirAsHomeHook,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "beets-alternatives";
-  version = "unstable-2021-02-01";
+  version = "0.13.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
-    rev = "288299e3aa9a1602717b04c28696fce5ce4259bf";
-    sha256 = "sha256-Xl7AHr33hXQqQDuFbWuj8HrIugeipJFPmvNXpCkU/mI=";
+    tag = "v${version}";
+    hash = "sha256-j56AzbpZFACXy5KqafE8PCC+zM6pXrxr/rWy9UjZPQg=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "addopts = --cov --cov-report=term --cov-report=html" ""
-  '';
-
-  nativeBuildInputs = [ beets ];
-
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    mock
+  nativeBuildInputs = [
+    beets
   ];
 
-  meta = with lib; {
+  dependencies = [
+    python3Packages.poetry-core
+  ];
+
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+      pytest-cov-stub
+      mock
+      pillow
+      typeguard
+    ]
+    ++ [
+      writableTmpDirAsHomeHook
+    ];
+
+  meta = {
     description = "Beets plugin to manage external files";
     homepage = "https://github.com/geigerzaehler/beets-alternatives";
-    maintainers = with maintainers; [ aszlig lovesegfault ];
-    license = licenses.mit;
+    changelog = "https://github.com/geigerzaehler/beets-alternatives/blob/v${version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
+      aszlig
+      lovesegfault
+    ];
+    license = lib.licenses.mit;
   };
 }

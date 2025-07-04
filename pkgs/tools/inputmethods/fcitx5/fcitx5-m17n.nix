@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, fcitx5
-, m17n_lib
-, m17n_db
-, gettext
-, fmt
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  fcitx5,
+  m17n_lib,
+  m17n_db,
+  gettext,
+  fmt,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-m17n";
-  version = "5.1.0";
+  version = "5.1.3";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qo3tS0tjQCD7+CoNvjyvhQPAfa38o7/f/MjqRkIL2R0=";
+    hash = "sha256-kHMCMsJ8+rI0AtS9zEE5knGvKALhgfmgS8lC/CTmYs0=";
   };
 
   nativeBuildInputs = [

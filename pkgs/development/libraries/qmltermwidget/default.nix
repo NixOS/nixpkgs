@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, qmake
-, qtbase
-, qtmultimedia
-, utmp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  qmake,
+  qtbase,
+  qtmultimedia,
 }:
 
 stdenv.mkDerivation {
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   buildInputs = [
     qtbase
     qtmultimedia
-  ] ++ lib.optional stdenv.isDarwin utmp;
+  ];
 
   patches = [
     # Changes required to make it compatible with lomiri-terminal-app
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   meta = {
-    description = "A QML port of qtermwidget";
+    description = "QML port of qtermwidget";
     homepage = "https://github.com/Swordfish90/qmltermwidget";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux ++ darwin;

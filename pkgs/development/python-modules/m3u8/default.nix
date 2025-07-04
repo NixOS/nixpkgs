@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, iso8601
-, bottle
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  iso8601,
+  bottle,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "m3u8";
-  version = "4.1.0";
+  version = "6.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,17 +19,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "globocom";
     repo = "m3u8";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vH5y/fk9dW8w54U3o+70enbTOubV4V0/NVbSSqOY9rQ=";
+    tag = version;
+    hash = "sha256-1SOuKKNBg67Yc0a6Iqb1goTE7sraptzpFIB2lvrbMQg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    iso8601
-  ];
+  dependencies = [ iso8601 ];
 
   nativeCheckInputs = [
     bottle
@@ -43,9 +40,7 @@ buildPythonPackage rec {
     "test_raise_timeout_exception_if_timeout_happens_when_loading_from_uri"
   ];
 
-  pythonImportsCheck = [
-    "m3u8"
-  ];
+  pythonImportsCheck = [ "m3u8" ];
 
   meta = with lib; {
     description = "Python m3u8 parser";

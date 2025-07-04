@@ -1,24 +1,24 @@
-{ lib
-, maven
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  maven,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 maven.buildMavenPackage rec {
   pname = "mariadb-connector-java";
-  version = "3.3.3";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-j";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fvqVHjLYLO6reIkQ+SQMEXOw88MDZyNV7T8w0uFgnPg=";
+    tag = version;
+    hash = "sha256-EDfAjcgmQ6qZrQMm4Oo04TSGY2I12HpqpLNLp7iQ8Fc=";
   };
 
-  mvnHash = "sha256-7O+G5HT6mtp12zWL3Gn12KPVUwp3GMaWGvXX6Sg1+6k=";
+  mvnHash = "sha256-Tj+W0Dqr0FQijqYSzeAmYnbKtPZQGqry62PAZuaiGbI=";
 
-  # Disable tests because they require networking
-  mvnParameters = "-DskipTests";
+  doCheck = false; # Requires networking
 
   installPhase = ''
     runHook preInstall

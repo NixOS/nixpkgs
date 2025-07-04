@@ -1,41 +1,56 @@
-{ lib
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, pyarrow
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, reactivex
-, setuptools
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  pyarrow,
+  python-dateutil,
+  pythonOlder,
+  reactivex,
+  setuptools,
+  pandas,
+  polars,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "influxdb3-python";
-  version = "0.3.6";
+  version = "0.14.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "InfluxCommunity";
     repo = "influxdb3-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZKN3chJvtOenk2jp02rvw+HooJcee0hwxWoLvEYjfcg=";
+    tag = "v${version}";
+    hash = "sha256-gCLH1MtLYggB3t/+B062w31go5mGf0GELZWhO0DnZy8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    # Upstream falls back to a default version if not in a GitHub Actions
+    substituteInPlace setup.py \
+      --replace-fail "version=get_version()," "version = '${version}',"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
     pyarrow
     python-dateutil
     reactivex
     urllib3
   ];
+
+  optional-dependencies = {
+    pandas = [ pandas ];
+    polars = [ polars ];
+    dataframe = [
+      pandas
+      polars
+    ];
+  };
 
   # Missing ORC support
   # https://github.com/NixOS/nixpkgs/issues/212863
@@ -50,7 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module that provides a simple and convenient way to interact with InfluxDB 3.0";
     homepage = "https://github.com/InfluxCommunity/influxdb3-python";
-    changelog = "https://github.com/InfluxCommunity/influxdb3-python/releases/tag/v${version}";
+    changelog = "https://github.com/InfluxCommunity/influxdb3-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

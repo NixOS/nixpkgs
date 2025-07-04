@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -16,9 +21,12 @@ let
     prefix ${strAddr cfg.ipv6.pool}
     dynamic-pool ${strAddr cfg.ipv4.pool}
     data-dir ${cfg.dataDir}
+
+    ${concatStringsSep "\n" (mapAttrsToList (ipv4: ipv6: "map " + ipv4 + " " + ipv6) cfg.mappings)}
   '';
 
-  addrOpts = v:
+  addrOpts =
+    v:
     assert v == 4 || v == 6;
     {
       options = {
@@ -103,25 +111,48 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/tayga";
-        description = "Directory for persistent data";
+        description = "Directory for persistent data.";
       };
 
       tunDevice = mkOption {
         type = types.str;
         default = "nat64";
-        description = "Name of the nat64 tun device";
+        description = "Name of the nat64 tun device.";
+      };
+
+      mappings = mkOption {
+        type = types.attrsOf types.str;
+        default = { };
+        description = "Static IPv4 -> IPv6 host mappings.";
+        example = literalExpression ''
+          {
+            "192.168.5.42" = "2001:db8:1:4444::1";
+            "192.168.5.43" = "2001:db8:1:4444::2";
+            "192.168.255.2" = "2001:db8:1:569::143";
+          }
+        '';
       };
     };
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = allUnique (attrValues cfg.mappings);
+        message = "Neither the IPv4 nor the IPv6 addresses must be entered twice in the mappings.";
+      }
+    ];
+
     networking.interfaces."${cfg.tunDevice}" = {
       virtual = true;
       virtualType = "tun";
       virtualOwner = mkIf config.networking.useNetworkd "";
       ipv4 = {
         addresses = [
-          { address = cfg.ipv4.router.address; prefixLength = 32; }
+          {
+            address = cfg.ipv4.router.address;
+            prefixLength = 32;
+          }
         ];
         routes = [
           cfg.ipv4.pool
@@ -129,7 +160,10 @@ in
       };
       ipv6 = {
         addresses = [
-          { address = cfg.ipv6.router.address; prefixLength = 128; }
+          {
+            address = cfg.ipv6.router.address;
+            prefixLength = 128;
+          }
         ];
         routes = [
           cfg.ipv6.pool

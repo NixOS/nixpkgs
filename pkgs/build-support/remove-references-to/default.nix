@@ -3,7 +3,12 @@
 # non-existent path (/nix/store/eeee...).  This is useful for getting rid of
 # dependencies that you know are not actually needed at runtime.
 
-{ lib, stdenvNoCC, signingUtils, shell ? stdenvNoCC.shell }:
+{
+  lib,
+  stdenvNoCC,
+  signingUtils,
+  shell ? stdenvNoCC.shell,
+}:
 
 let
   stdenv = stdenvNoCC;
@@ -29,8 +34,10 @@ stdenv.mkDerivation {
     substituteAll ${./darwin-sign-fixup.sh} $out/nix-support/setup-hooks.sh
   '';
 
-  inherit (builtins) storeDir;
-  shell = lib.getBin shell + (shell.shellPath or "");
-  signingUtils = if darwinCodeSign then signingUtils else null;
+  env = {
+    inherit (builtins) storeDir;
+    shell = lib.getBin shell + (shell.shellPath or "");
+  } // lib.optionalAttrs darwinCodeSign { inherit signingUtils; };
+
   meta.mainProgram = "remove-references-to";
 }

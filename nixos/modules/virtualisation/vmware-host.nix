@@ -1,13 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.virtualisation.vmware.host;
   wrapperDir = "/run/vmware/bin"; # Perfectly fits as /usr/local/bin
   parentWrapperDir = dirOf wrapperDir;
   vmwareWrappers = # Needed as hardcoded paths workaround
-    let mkVmwareSymlink =
-      program:
-      ''
+    let
+      mkVmwareSymlink = program: ''
         ln -s "${config.security.wrapperDir}/${program}" $wrapperDir/${program}
       '';
     in
@@ -60,15 +64,36 @@ in
   config = lib.mkIf cfg.enable {
     boot.extraModulePackages = [ config.boot.kernelPackages.vmware ];
     boot.extraModprobeConfig = "alias char-major-10-229 fuse";
-    boot.kernelModules = [ "vmw_pvscsi" "vmw_vmci" "vmmon" "vmnet" "fuse" ];
+    boot.kernelModules = [
+      "vmw_pvscsi"
+      "vmw_vmci"
+      "vmmon"
+      "vmnet"
+      "fuse"
+    ];
 
     environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
     services.printing.drivers = [ cfg.package ];
 
-    environment.etc."vmware/config".text = ''
-      ${builtins.readFile "${cfg.package}/etc/vmware/config"}
-      ${cfg.extraConfig}
-    '';
+    environment.etc."vmware/config".source =
+      let
+        packageConfig = "${cfg.package}/etc/vmware/config";
+      in
+      if cfg.extraConfig == "" then
+        packageConfig
+      else
+        pkgs.runCommandLocal "etc-vmware-config"
+          {
+            inherit packageConfig;
+            inherit (cfg) extraConfig;
+          }
+          ''
+            (
+              cat "$packageConfig"
+              printf "\n"
+              echo "$extraConfig"
+            ) >"$out"
+          '';
 
     environment.etc."vmware/bootstrap".source = "${cfg.package}/etc/vmware/bootstrap";
     environment.etc."vmware/icu".source = "${cfg.package}/etc/vmware/icu";

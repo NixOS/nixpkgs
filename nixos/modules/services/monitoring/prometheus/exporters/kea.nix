@@ -1,15 +1,21 @@
-{ config
-, lib
-, pkgs
-, utils
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
 }:
-
-with lib;
 
 let
   cfg = config.services.prometheus.exporters.kea;
-in {
+  inherit (lib)
+    mkOption
+    types
+    mkRenamedOptionModule
+    literalExpression
+    ;
+in
+{
   imports = [
     (mkRenamedOptionModule [ "controlSocketPaths" ] [ "targets" ])
   ];
@@ -37,11 +43,17 @@ in {
     serviceConfig = {
       User = "kea";
       DynamicUser = true;
-      ExecStart = utils.escapeSystemdExecArgs ([
-        (lib.getExe pkgs.prometheus-kea-exporter)
-        "--address" cfg.listenAddress
-        "--port" cfg.port
-      ] ++ cfg.extraFlags ++ cfg.targets);
+      ExecStart = utils.escapeSystemdExecArgs (
+        [
+          (lib.getExe pkgs.prometheus-kea-exporter)
+          "--address"
+          cfg.listenAddress
+          "--port"
+          cfg.port
+        ]
+        ++ cfg.extraFlags
+        ++ cfg.targets
+      );
       RuntimeDirectory = "kea";
       RuntimeDirectoryPreserve = true;
       RestrictAddressFamilies = [

@@ -1,39 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, packaging
-, ply
-, toml
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  packaging,
+  tomli,
 
-# tests
-, poppler-qt5
-, qgis
-, qgis-ltr
+  # tests
+  poppler-qt5,
+  qgis,
+  qgis-ltr,
 }:
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.8.3";
+  version = "6.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iIVHsBi7JMNq3tUZ6T0+UT1MaqC6VbfMGv+9Rc8Qdiw=";
+    hash = "sha256-+gUVaX1MmNvgTZ6JjYFt4UJ+W5rl0OFSFpEJ/SH10pw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    # Make wheel file generation deterministic https://github.com/NixOS/nixpkgs/issues/383885
+    ./sip-builder.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     packaging
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # There aren't tests
   doCheck = false;
@@ -47,8 +51,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl3Only;
-    maintainers = with maintainers; [ nrdxp ];
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ];
   };
 }

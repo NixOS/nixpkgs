@@ -1,6 +1,18 @@
-{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkg-config, check, libotr, python3
-, enableLibPurple ? false, pidgin ? null
-, enablePam ? false, pam ? null
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  stdenv,
+  gnutls,
+  glib,
+  pkg-config,
+  check,
+  libotr,
+  python3,
+  enableLibPurple ? false,
+  pidgin ? null,
+  enablePam ? false,
+  pam ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,17 +26,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional doCheck check;
 
-  buildInputs = [ gnutls libotr python3 ]
+  buildInputs =
+    [
+      gnutls
+      libotr
+      python3
+    ]
     ++ lib.optional enableLibPurple pidgin
     ++ lib.optional enablePam pam;
 
   propagatedBuildInputs = [ glib ];
 
-  configureFlags = [
-    "--otr=1"
-    "--ssl=gnutls"
-    "--pidfile=/var/lib/bitlbee/bitlbee.pid"
-  ] ++ lib.optional enableLibPurple "--purple=1"
+  configureFlags =
+    [
+      "--otr=1"
+      "--ssl=gnutls"
+      "--pidfile=/var/lib/bitlbee/bitlbee.pid"
+    ]
+    ++ lib.optional enableLibPurple "--purple=1"
     ++ lib.optional enablePam "--pam=1";
 
   patches = [
@@ -35,7 +54,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  installTargets = [ "install" "install-dev" ];
+  installTargets = [
+    "install"
+    "install-dev"
+  ];
 
   doCheck = !enableLibPurple; # Checks fail with libpurple for some reason
   checkPhase = ''
@@ -63,7 +85,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bitlbee.org/";
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ lassulus pSub ];
-    platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
+    maintainers = with maintainers; [
+      lassulus
+      pSub
+    ];
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }

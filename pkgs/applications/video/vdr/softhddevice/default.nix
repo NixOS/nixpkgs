@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, vdr
-, alsa-lib
-, fetchFromGitHub
-, xcbutilwm
-, xorgserver
-, ffmpeg
-, libva
-, libvdpau
-, xorg
-, libGL
-, libGLU
+{
+  lib,
+  stdenv,
+  vdr,
+  alsa-lib,
+  fetchFromGitHub,
+  xcbutilwm,
+  xorgserver,
+  ffmpeg,
+  libva,
+  libvdpau,
+  xorg,
+  libGL,
+  libGLU,
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-softhddevice";
-  version = "2.1.2";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "ua0lnj";
     repo = "vdr-plugin-softhddevice";
-    sha256 = "sha256-y6b0nOf597uxS9zDh0NQOwLN81nk4U7lHK2CalyVi8s=";
+    sha256 = "sha256-G5pOSlO1FU7kvHwH1yw8UBEeDwQ5aIxubdyFcWQ2Z/8=";
     rev = "v${version}";
   };
 

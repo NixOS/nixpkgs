@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -23,5 +24,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/tytkal/python-hijiri-ummalqura";
     license = with licenses; [ publicDomain ];
   };
-
 }

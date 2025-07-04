@@ -1,40 +1,32 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, aiohttp
-, async-timeout
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  aiohttp,
+  async-timeout,
+  yarl,
+  aresponses,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "here-routing";
-  version = "1.0.0";
-
-  disabled = pythonOlder "3.10";
-
-  format = "pyproject";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "here_routing";
-    rev = "v${version}";
-    hash = "sha256-wdjPbM9J+2q3NisdlOHIddSWHHIfwQY/83v6IBAXSq0=";
+    tag = "v${version}";
+    hash = "sha256-h3y5hjaSHH6oIfSt5JTt1+pH7mFLOFiq1RuMZ1uYtTE=";
   };
 
-  postPatch = ''
-    sed -i "/^addopts/d" pyproject.toml
-  '';
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     yarl
@@ -43,13 +35,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "here_routing" ];
 
   meta = {
-    changelog = "https://github.com/eifinger/here_routing/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/eifinger/here_routing/releases/tag/${src.tag}";
     description = "Asynchronous Python client for the HERE Routing V8 API";
     homepage = "https://github.com/eifinger/here_routing";
     license = lib.licenses.mit;

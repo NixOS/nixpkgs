@@ -1,29 +1,48 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, writeScript
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  writeScript,
+  # Can be overridden to alter the display name in steam
+  # This could be useful if multiple versions should be installed together
+  steamDisplayName ? "GE-Proton",
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-ge-bin";
-  version = "GE-Proton9-2";
+  version = "GE-Proton10-8";
 
   src = fetchzip {
     url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
-    hash = "sha256-NqBzKonCYH+hNpVZzDhrVf+r2i6EwLG/IFBXjE2mC7s=";
+    hash = "sha256-cbmOQYWEP/uB2ZoMAbtbeXbOJjxZui0n2U+Tr/OLKjA=";
   };
 
-  outputs = [ "out" "steamcompattool" ];
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
 
-  buildCommand = ''
-    runHook preBuild
+  outputs = [
+    "out"
+    "steamcompattool"
+  ];
+
+  installPhase = ''
+    runHook preInstall
 
     # Make it impossible to add to an environment. You should use the appropriate NixOS option.
     # Also leave some breadcrumbs in the file.
     echo "${finalAttrs.pname} should not be installed into environments. Please use programs.steam.extraCompatPackages instead." > $out
 
-    ln -s $src $steamcompattool
+    mkdir $steamcompattool
+    ln -s $src/* $steamcompattool
+    rm $steamcompattool/compatibilitytool.vdf
+    cp $src/compatibilitytool.vdf $steamcompattool
 
-    runHook postBuild
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    substituteInPlace "$steamcompattool/compatibilitytool.vdf" \
+      --replace-fail "${finalAttrs.version}" "${steamDisplayName}"
   '';
 
   /*
@@ -50,7 +69,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/GloriousEggroll/proton-ge-custom";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ NotAShelf shawn8901 ];
+    maintainers = with lib.maintainers; [
+      Gliczy
+      NotAShelf
+      Scrumplex
+      shawn8901
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

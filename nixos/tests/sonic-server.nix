@@ -1,13 +1,16 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "sonic-server";
 
   meta = {
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 
-  nodes.machine = { pkgs, ... }: {
-    services.sonic-server.enable = true;
-  };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.sonic-server.enable = true;
+    };
 
   testScript = ''
     machine.start()
@@ -19,4 +22,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       result = machine.succeed('(echo START control; sleep 1; echo PING; echo QUIT) | nc localhost 1491').splitlines()
       assert result[2] == "PONG", f"expected 'PONG', got '{result[2]}'"
   '';
-})
+}

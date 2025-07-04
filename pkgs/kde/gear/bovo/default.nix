@@ -1,10 +1,13 @@
 {
   mkKdeDerivation,
   qtsvg,
+  _7zz,
 }:
 mkKdeDerivation {
   pname = "bovo";
 
-  extraBuildInputs = [qtsvg];
+  extraNativeBuildInputs = [ _7zz ];
+  extraBuildInputs = [ qtsvg ];
+
   meta.mainProgram = "bovo";
 }

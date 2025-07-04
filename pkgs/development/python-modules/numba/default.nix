@@ -1,60 +1,57 @@
-{ lib
-, stdenv
-, pythonAtLeast
-, pythonOlder
-, fetchFromGitHub
-, python
-, buildPythonPackage
-, setuptools
-, numpy
-, llvmlite
-, libcxx
-, importlib-metadata
-, substituteAll
-, runCommand
-, symlinkJoin
-, writers
-, numba
+{
+  lib,
+  stdenv,
+  pythonAtLeast,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch2,
+  python,
+  buildPythonPackage,
+  setuptools,
+  numpy,
+  numpy_1,
+  llvmlite,
+  replaceVars,
+  writers,
+  numba,
+  pytestCheckHook,
 
-, config
+  config,
 
-# CUDA-only dependencies:
-, addDriverRunpath
-, autoAddDriverRunpath ? cudaPackages.autoAddDriverRunpathHook or cudaPackages.autoAddOpenGLRunpathHook
-, cudaPackages
+  # CUDA-only dependencies:
+  addDriverRunpath,
+  autoAddDriverRunpath,
+  cudaPackages,
 
-# CUDA flags:
-, cudaSupport ? config.cudaSupport
+  # CUDA flags:
+  cudaSupport ? config.cudaSupport,
+  testsWithoutSandbox ? false,
+  doFullCheck ? false,
 }:
 
 let
   cudatoolkit = cudaPackages.cuda_nvcc;
-in buildPythonPackage rec {
-  # Using an untagged version, with numpy 1.25 support, when it's released
-  # also drop the versioneer patch in postPatch
-  version = "0.59.1";
+in
+buildPythonPackage rec {
+  version = "0.61.2";
   pname = "numba";
   pyproject = true;
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "numba";
     repo = "numba";
-    rev = "refs/tags/${version}";
+    tag = version;
     # Upstream uses .gitattributes to inject information about the revision
     # hash and the refname into `numba/_version.py`, see:
     #
     # - https://git-scm.com/docs/gitattributes#_export_subst and
     # - https://github.com/numba/numba/blame/5ef7c86f76a6e8cc90e9486487294e0c34024797/numba/_version.py#L25-L31
-    #
-    # Hence this hash may change if GitHub / Git will change it's behavior.
-    # Hopefully this will not happen until the next release. We are fairly sure
-    # that upstream relies on those strings to be valid, that's why we don't
-    # use `forceFetchGit = true;`.` If in the future we'll observe the hash
-    # changes too often, we can always use forceFetchGit, and inject the
-    # relevant strings ourselves, using `sed` commands, in extraPostFetch.
-    hash = "sha256-4udpgLLHbHNtxPiYVkj+gxAjTWV3ClZOv98Y313/qbc=";
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/numba/_version.py
+    '';
+    hash = "sha256-Qa2B5pOWrLb/1V3PSyiwS1x9ueXwDKRhDMDecBCAN+8=";
   };
 
   postPatch = ''
@@ -62,54 +59,77 @@ in buildPythonPackage rec {
       --replace-fail \
         "dldir = [" \
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
+
+    substituteInPlace setup.py \
+      --replace-fail 'max_numpy_run_version = "2.3"' 'max_numpy_run_version = "2.4"'
+    substituteInPlace numba/__init__.py \
+      --replace-fail "numpy_version > (2, 2)" "numpy_version > (2, 3)"
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     numpy
-  ] ++ lib.optionals cudaSupport [
+  ];
+
+  nativeBuildInputs = lib.optionals cudaSupport [
     autoAddDriverRunpath
     cudaPackages.cuda_nvcc
   ];
 
-  buildInputs = lib.optionals cudaSupport [
-    cudaPackages.cuda_cudart
-  ];
+  buildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "numpy" ];
+
+  dependencies = [
     numpy
     llvmlite
-    setuptools
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-metadata
   ];
 
-  patches = lib.optionals cudaSupport [
-    (substituteAll {
-      src = ./cuda_path.patch;
-      cuda_toolkit_path = cudatoolkit;
-      cuda_toolkit_lib_path = lib.getLib cudatoolkit;
-    })
+  patches =
+    [
+      (fetchpatch2 {
+        url = "https://github.com/numba/numba/commit/e2c8984ba60295def17e363a926d6f75e7fa9f2d.patch";
+        includes = [ "numba/core/bytecode.py" ];
+        hash = "sha256-HIVbp3GSmnq6W7zrRIirIbhGjJsFN3PNyHSfAE8fdDw=";
+      })
+    ]
+    ++ lib.optionals cudaSupport [
+      (replaceVars ./cuda_path.patch {
+        cuda_toolkit_path = cudatoolkit;
+        cuda_toolkit_lib_path = lib.getLib cudatoolkit;
+      })
+    ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
-  # run a smoke test in a temporary directory so that
-  # a) Python picks up the installed library in $out instead of the build files
-  # b) we have somewhere to put $HOME so some caching tests work
-  # c) it doesn't take 6 CPU hours for the full suite
-  checkPhase = ''
-    runHook preCheck
-
-    pushd $(mktemp -d)
-    HOME=. ${python.interpreter} -m numba.runtests -m $NIX_BUILD_CORES numba.tests.test_usecases
-    popd
-
-    runHook postCheck
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+    # https://github.com/NixOS/nixpkgs/issues/255262
+    cd $out
   '';
 
-  pythonImportsCheck = [
-    "numba"
+  pytestFlagsArray = lib.optionals (!doFullCheck) [
+    # These are the most basic tests. Running all tests is too expensive, and
+    # some of them fail (also differently on different platforms), so it will
+    # be too hard to maintain such a `disabledTests` list.
+    "${python.sitePackages}/numba/tests/test_usecases.py"
   ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # captured stderr: Fatal Python error: Segmentation fault
+    "test_sum1d_pyobj"
+  ];
+
+  disabledTestPaths = lib.optionals (!testsWithoutSandbox) [
+    # See NOTE near passthru.tests.withoutSandbox
+    "${python.sitePackages}/numba/cuda/tests"
+  ];
+
+  pythonImportsCheck = [ "numba" ];
 
   passthru.testers.cuda-detect =
     writers.writePython3Bin "numba-cuda-detect"
@@ -120,25 +140,28 @@ in buildPythonPackage rec {
       '';
   passthru.tests = {
     # CONTRIBUTOR NOTE: numba also contains CUDA tests, though these cannot be run in
-    # this sandbox environment. Consider running similar commands to those below outside the
-    # sandbox manually if you have the appropriate hardware; support will be detected
-    # and the corresponding tests enabled automatically.
-    # Also, the full suite currently does not complete on anything but x86_64-linux.
-    fullSuite = runCommand "${pname}-test" {} ''
-      pushd $(mktemp -d)
-      # pip and python in $PATH is needed for the test suite to pass fully
-      PATH=${python.withPackages (p: [ p.numba p.pip ])}/bin:$PATH
-      HOME=$PWD python -m numba.runtests -m $NIX_BUILD_CORES
-      popd
-      touch $out # stop Nix from complaining no output was generated and failing the build
-    '';
+    # this sandbox environment. Consider building the derivation below with
+    # --no-sandbox to get a view of how many tests succeed outside the sandbox.
+    withoutSandbox = numba.override {
+      doFullCheck = true;
+      cudaSupport = true;
+      testsWithoutSandbox = true;
+    };
+    withSandbox = numba.override {
+      cudaSupport = false;
+      doFullCheck = true;
+      testsWithoutSandbox = false;
+    };
+    numpy_1 = numba.override {
+      numpy = numpy_1;
+    };
   };
 
-  meta =  with lib; {
+  meta = with lib; {
+    changelog = "https://numba.readthedocs.io/en/stable/release/${version}-notes.html";
     description = "Compiling Python code using LLVM";
     homepage = "https://numba.pydata.org/";
     license = licenses.bsd2;
     mainProgram = "numba";
-    maintainers = with maintainers; [ fridh ];
   };
 }

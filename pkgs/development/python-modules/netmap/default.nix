@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, substituteAll
-, nmap
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  replaceVars,
+  nmap,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -19,8 +20,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./nmap-path.patch;
+    (replaceVars ./nmap-path.patch {
       nmap = "${lib.getBin nmap}/bin/nmap";
     })
   ];

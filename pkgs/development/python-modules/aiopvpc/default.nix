@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, async-timeout
-, backports-zoneinfo
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, python-dotenv
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  python-dotenv,
 }:
 
 buildPythonPackage rec {
@@ -17,41 +18,31 @@ buildPythonPackage rec {
   version = "4.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "azogue";
     repo = "aiopvpc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1xeXfhoXRfJ7vrpRPeYmwcAGjL09iNCOm/f4pPvuZLU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov --cov-report term --cov-report html" ""
-  '';
-
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
     async-timeout
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
+    pytest-cov-stub
     pytestCheckHook
     python-dotenv
   ];
 
-  pythonImportsCheck = [
-    "aiopvpc"
-  ];
+  pythonImportsCheck = [ "aiopvpc" ];
 
   meta = with lib; {
     description = "Python module to download Spanish electricity hourly prices (PVPC)";

@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dotmap
-, matplotlib
-, pyclipper
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dotmap,
+  matplotlib,
+  pyclipper,
+  unittestCheckHook,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "beziers";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "setuptools";
 
   # PyPI doesn't have a proper source tarball, fetch from Github instead
@@ -17,20 +19,23 @@ buildPythonPackage rec {
     owner = "simoncozens";
     repo = "beziers.py";
     rev = "v${version}";
-    hash = "sha256-4014u7s47Tfdpa2Q9hKAoHg7Ebcs1/DVW5TpEmoh2bc=";
+    hash = "sha256-NjmWsRz/NPPwXPbiSaOeKJMrYmSyNTt5ikONyAljgvM=";
   };
 
-  propagatedBuildInputs = [
-    pyclipper
-  ];
+  propagatedBuildInputs = [ pyclipper ];
 
-  doCheck = true;
   nativeCheckInputs = [
     dotmap
     matplotlib
     unittestCheckHook
   ];
-  unittestFlagsArray = [ "-s" "test" "-v" ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+    "-v"
+  ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Python library for manipulating Bezier curves and paths in fonts";

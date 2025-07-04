@@ -8,19 +8,18 @@
   poetry-core,
   pyasn1,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "dploot";
-  version = "2.7.1";
+  version = "3.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vNL5xrZkfYO11i8ERqD9637vrMb3Gkmo3RjvQ1ONXbY=";
+    hash = "sha256-WY6SEBmvsvLtn6+KE4upL2n39kuGO4aK3cyGFOd9xIo=";
   };
 
   pythonRelaxDeps = [
@@ -28,8 +27,6 @@ buildPythonPackage rec {
     "lxml"
     "pyasn1"
   ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ poetry-core ];
 

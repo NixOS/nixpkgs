@@ -1,37 +1,73 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.vaultwarden;
   user = config.users.users.vaultwarden.name;
   group = config.users.groups.vaultwarden.name;
 
+  StateDirectory =
+    if lib.versionOlder config.system.stateVersion "24.11" then "bitwarden_rs" else "vaultwarden";
+
+  dataDir = "/var/lib/${StateDirectory}";
+
   # Convert name from camel case (e.g. disable2FARemember) to upper case snake case (e.g. DISABLE_2FA_REMEMBER).
-  nameToEnvVar = name:
+  nameToEnvVar =
+    name:
     let
       parts = builtins.split "([A-Z0-9]+)" name;
-      partsToEnvVar = parts: lib.foldl' (key: x: let last = lib.stringLength key - 1; in
-        if lib.isList x then key + lib.optionalString (key != "" && lib.substring last 1 key != "_") "_" + lib.head x
-        else if key != "" && lib.elem (lib.substring 0 1 x) lib.lowerChars then # to handle e.g. [ "disable" [ "2FAR" ] "emember" ]
-          lib.substring 0 last key + lib.optionalString (lib.substring (last - 1) 1 key != "_") "_" + lib.substring last 1 key + lib.toUpper x
-        else key + lib.toUpper x) "" parts;
-    in if builtins.match "[A-Z0-9_]+" name != null then name else partsToEnvVar parts;
+      partsToEnvVar =
+        parts:
+        lib.foldl' (
+          key: x:
+          let
+            last = lib.stringLength key - 1;
+          in
+          if lib.isList x then
+            key + lib.optionalString (key != "" && lib.substring last 1 key != "_") "_" + lib.head x
+          else if key != "" && lib.elem (lib.substring 0 1 x) lib.lowerChars then # to handle e.g. [ "disable" [ "2FAR" ] "emember" ]
+            lib.substring 0 last key
+            + lib.optionalString (lib.substring (last - 1) 1 key != "_") "_"
+            + lib.substring last 1 key
+            + lib.toUpper x
+          else
+            key + lib.toUpper x
+        ) "" parts;
+    in
+    if builtins.match "[A-Z0-9_]+" name != null then name else partsToEnvVar parts;
 
   # Due to the different naming schemes allowed for config keys,
   # we can only check for values consistently after converting them to their corresponding environment variable name.
   configEnv =
     let
-      configEnv = lib.concatMapAttrs (name: value: lib.optionalAttrs (value != null) {
-        ${nameToEnvVar name} = if lib.isBool value then lib.boolToString value else toString value;
-      }) cfg.config;
-    in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+      configEnv = lib.concatMapAttrs (
+        name: value:
+        lib.optionalAttrs (value != null) {
+          ${nameToEnvVar name} = if lib.isBool value then lib.boolToString value else toString value;
+        }
+      ) cfg.config;
+    in
+    {
+      DATA_FOLDER = dataDir;
+    }
+    // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
-    } // configEnv;
+    }
+    // configEnv;
 
-  configFile = pkgs.writeText "vaultwarden.env" (lib.concatStrings (lib.mapAttrsToList (name: value: "${name}=${value}\n") configEnv));
+  configFile = pkgs.writeText "vaultwarden.env" (
+    lib.concatStrings (lib.mapAttrsToList (name: value: "${name}=${value}\n") configEnv)
+  );
 
   vaultwarden = cfg.package.override { inherit (cfg) dbBackend; };
 
-in {
+  useSendmail = configEnv.USE_SENDMAIL or null == "true";
+in
+{
   imports = [
     (lib.mkRenamedOptionModule [ "services" "bitwarden_rs" ] [ "services" "vaultwarden" ])
   ];
@@ -40,7 +76,11 @@ in {
     enable = lib.mkEnableOption "vaultwarden";
 
     dbBackend = lib.mkOption {
-      type = lib.types.enum [ "sqlite" "mysql" "postgresql" ];
+      type = lib.types.enum [
+        "sqlite"
+        "mysql"
+        "postgresql"
+      ];
       default = "sqlite";
       description = ''
         Which database backend vaultwarden will be using.
@@ -57,7 +97,15 @@ in {
     };
 
     config = lib.mkOption {
-      type = with lib.types; attrsOf (nullOr (oneOf [ bool int str ]));
+      type =
+        with lib.types;
+        attrsOf (
+          nullOr (oneOf [
+            bool
+            int
+            str
+          ])
+        );
       default = {
         ROCKET_ADDRESS = "::1"; # default to localhost
         ROCKET_PORT = 8222;
@@ -131,21 +179,13 @@ in {
         Additional environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`ADMIN_TOKEN` and {env}`SMTP_PASSWORD`
-        may be passed to the service without adding them to the world-readable Nix store.
+        should be passed to the service without adding them to the world-readable Nix store.
 
-        Note that this file needs to be available on the host on which
-        `vaultwarden` is running.
+        Note that this file needs to be available on the host on which `vaultwarden` is running.
 
-        As a concrete example, to make the Admin UI available
-        (from which new users can be invited initially),
+        As a concrete example, to make the Admin UI available (from which new users can be invited initially),
         the secret {env}`ADMIN_TOKEN` needs to be defined as described
-        [here](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page).
-        Setting `environmentFile` to `/var/lib/vaultwarden.env`
-        and ensuring permissions with e.g.
-        `chown vaultwarden:vaultwarden /var/lib/vaultwarden.env`
-        (the `vaultwarden` user will only exist after activating with
-        `enable = true;` before this), we can set the contents of the file to have
-        contents such as:
+        [here](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page):
 
         ```
         # Admin secret token, see
@@ -166,10 +206,16 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [ {
-      assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
-      message = "Backups for database backends other than sqlite will need customization";
-    } ];
+    assertions = [
+      {
+        assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
+        message = "Backups for database backends other than sqlite will need customization";
+      }
+      {
+        assertion = cfg.backupDir != null -> !(lib.hasPrefix dataDir cfg.backupDir);
+        message = "Backup directory can not be in ${dataDir}";
+      }
+    ];
 
     users.users.vaultwarden = {
       inherit group;
@@ -184,16 +230,48 @@ in {
         User = user;
         Group = group;
         EnvironmentFile = [ configFile ] ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = "${vaultwarden}/bin/vaultwarden";
+        ExecStart = lib.getExe vaultwarden;
         LimitNOFILE = "1048576";
-        PrivateTmp = "true";
-        PrivateDevices = "true";
-        ProtectHome = "true";
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "" ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = !useSendmail;
+        PrivateDevices = !useSendmail;
+        PrivateTmp = true;
+        PrivateUsers = !useSendmail;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "noaccess";
         ProtectSystem = "strict";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        StateDirectory = "bitwarden_rs";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        inherit StateDirectory;
         StateDirectoryMode = "0700";
+        SystemCallArchitectures = "native";
+        SystemCallFilter =
+          [
+            "@system-service"
+          ]
+          ++ lib.optionals (!useSendmail) [
+            "~@privileged"
+          ];
         Restart = "always";
+        UMask = "0077";
       };
       wantedBy = [ "multi-user.target" ];
     };
@@ -201,7 +279,7 @@ in {
     systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
       description = "Backup vaultwarden";
       environment = {
-        DATA_FOLDER = "/var/lib/bitwarden_rs";
+        DATA_FOLDER = dataDir;
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];
@@ -238,6 +316,9 @@ in {
   meta = {
     # uses attributes of the linked package
     buildDocsInSandbox = false;
-    maintainers = with lib.maintainers; [ dotlambda SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      SuperSandro2000
+    ];
   };
 }

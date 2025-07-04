@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,6 @@ buildPythonPackage rec {
     homepage = "https://pylonsproject.org/";
     description = "Utility library for i18n relied on by various Repoze and Pyramid packages";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
-
 }

@@ -1,13 +1,13 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, promise
-, python-socketio
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, websockets
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  promise,
+  python-socketio,
+  pythonOlder,
+  requests,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -20,15 +20,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tago-io";
     repo = "tago-sdk-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-q1xcPF+oeQsCAZjeYTVY2aaKFmb8rCTWVikGxdpPQ28=";
   };
 
   pythonRelaxDeps = true;
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -41,9 +37,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tago"
-  ];
+  pythonImportsCheck = [ "tago" ];
 
   meta = with lib; {
     description = "Python module for interacting with Tago.io";

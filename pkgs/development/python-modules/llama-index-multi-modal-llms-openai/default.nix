@@ -2,26 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   llama-index-core,
   llama-index-llms-openai,
-  poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-multi-modal-llms-openai";
-  version = "0.1.5";
+  version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_multi_modal_llms_openai";
     inherit version;
-    hash = "sha256-miN/T4htHiDCfpST6As+H4dThZSB/xtY/iW3qjmxmKI=";
+    hash = "sha256-3zr/AMNgI8X4xJ+XKjJfcYI+0PTdnNR5lV12r8FGV18=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core

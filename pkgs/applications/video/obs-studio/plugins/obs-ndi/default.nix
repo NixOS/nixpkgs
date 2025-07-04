@@ -1,17 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, obs-studio, cmake, qtbase, ndi }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  obs-studio,
+  cmake,
+  qtbase,
+  ndi,
+  curl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "obs-ndi";
-  version = "4.13.0";
+  version = "4.14.1";
 
-  nativeBuildInputs = [ cmake qtbase ];
-  buildInputs = [ obs-studio qtbase ndi ];
+  nativeBuildInputs = [
+    cmake
+    qtbase
+  ];
+  buildInputs = [
+    obs-studio
+    qtbase
+    ndi
+    curl
+  ];
 
   src = fetchFromGitHub {
     owner = "Palakis";
     repo = "obs-ndi";
     rev = version;
-    sha256 = "sha256-ugAMSTXbbIZ61oWvoggVJ5kZEgp/waEcWt89AISrSdE=";
+    sha256 = "sha256-ex/fZmZpFM6GTKNBQClzSf6Ns0Yts5+0PAmf5mIQCwc=";
   };
 
   patches = [
@@ -29,6 +46,8 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DENABLE_QT=ON" ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   dontWrapQtApps = true;
 

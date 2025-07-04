@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, sphinx
-, readthedocs-sphinx-ext
-, sphinxcontrib-jquery
-, pytestCheckHook
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docutils,
+  sphinx,
+  readthedocs-sphinx-ext,
+  sphinxcontrib-jquery,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-rtd-theme";
-  version = "2.0.0";
+  version = "3.0.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "sphinx_rtd_theme";
     inherit version;
-    hash = "sha256-vV17gGIkBnYgc6BO+PrcX5FRJhVj1HAn3gmRDOA6/ms=";
+    hash = "sha256-t0V7wl3acjsgsIamcLmVPIWeq2CioD7o6yuyPhduX4U=";
   };
 
   preBuild = ''
@@ -31,13 +31,14 @@ buildPythonPackage rec {
     sphinxcontrib-jquery
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
   nativeCheckInputs = [
     pytestCheckHook
     readthedocs-sphinx-ext
+  ];
+
+  disabledTests = [
+    # docutils 0.21 compat
+    "test_basic"
   ];
 
   pythonRelaxDeps = [
@@ -45,9 +46,7 @@ buildPythonPackage rec {
     "sphinxcontrib-jquery"
   ];
 
-  pythonImportsCheck = [
-    "sphinx_rtd_theme"
-  ];
+  pythonImportsCheck = [ "sphinx_rtd_theme" ];
 
   meta = with lib; {
     description = "Sphinx theme for readthedocs.org";

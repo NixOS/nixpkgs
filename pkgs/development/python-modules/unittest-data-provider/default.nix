@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,6 @@ buildPythonPackage rec {
     description = "PHPUnit-like @dataprovider decorator for unittest";
     homepage = "https://github.com/yourlabs/unittest-data-provider";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

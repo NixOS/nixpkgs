@@ -1,14 +1,16 @@
-{ buildPythonPackage
-, dm-haiku
-, pytest-xdist
-, pytestCheckHook
-, tensorflow
-, tensorflow-datasets
-, flax
-, optax
+{
+  buildPythonPackage,
+  dm-haiku,
+  pytest-xdist,
+  pytestCheckHook,
+  tensorflow,
+  tensorflow-datasets,
+  flax,
+  optax,
 }:
 
 buildPythonPackage {
+  format = "setuptools";
   pname = "optax-tests";
   inherit (optax) version;
 

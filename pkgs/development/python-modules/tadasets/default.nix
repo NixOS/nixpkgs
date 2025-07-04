@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, matplotlib
-, pytest
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  matplotlib,
+  pytest,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PWbq+dCQ8mGR81lolBDSArxjkTdis1ZpLY0MqZfZ66I=";
+    hash = "sha256-PWbq+dCQ8mGR81lolBDSArxjkTdis1ZpLY0MqZfZ66I=";
   };
 
   propagatedBuildInputs = [

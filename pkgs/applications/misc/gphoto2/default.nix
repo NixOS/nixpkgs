@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, gettext
-, libexif
-, libgphoto2
-, libjpeg
-, libtool
-, popt
-, readline
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gettext,
+  libexif,
+  libgphoto2,
+  libjpeg,
+  libtool,
+  popt,
+  readline,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A ready to use set of digital camera software applications";
+    description = "Ready to use set of digital camera software applications";
     longDescription = ''
 
       A set of command line utilities for manipulating over 1400 different

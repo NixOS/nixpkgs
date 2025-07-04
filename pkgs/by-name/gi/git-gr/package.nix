@@ -6,7 +6,6 @@
   rustPlatform,
   installShellFiles,
   libiconv,
-  darwin,
   nix-update-script,
   pkg-config,
   openssl,
@@ -15,34 +14,31 @@ let
   canRunGitGr = stdenv.hostPlatform.emulatorAvailable buildPackages;
   gitGr = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/git-gr";
   pname = "git-gr";
-  version = "1.4.1";
+  version = "1.4.3";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "9999years";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8Z4ZLejNS6KQ/MXmQuZ0Tq9VmuJ5Nhxo4TS0tOlg/R4=";
+    repo = "git-gr";
+    tag = "v${version}";
+    hash = "sha256-t308Ep27iRvRHSdvVMOrRGVoajBtnTutHAkKbZkO7Wg=";
   };
 
   buildFeatures = [ "clap_mangen" ];
 
-  cargoHash = "sha256-REtY+UgtJCoTDgpI/+O341WsC4WJ4PS7/yFwWSVKKRo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5YHE1NVUcZ5NeOl3Z87l3PVsmlkswhnT83Oi9loJjdM=";
 
   OPENSSL_NO_VENDOR = true;
 
-  nativeBuildInputs =
-    [installShellFiles]
-    ++ lib.optional stdenv.isLinux pkg-config;
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 
   buildInputs =
-    lib.optional stdenv.isLinux openssl
-    ++ lib.optionals stdenv.isDarwin [
+    lib.optional stdenv.hostPlatform.isLinux openssl
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   postInstall = lib.optionalString canRunGitGr ''
@@ -58,11 +54,12 @@ rustPlatform.buildRustPackage {
       --zsh <(${gitGr} completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/9999years/git-gr";
-    description = "A Gerrit CLI client";
-    license = [ licenses.mit ];
-    maintainers = [ maintainers._9999years ];
+    changelog = "https://github.com/9999years/git-gr/releases/tag/v${version}";
+    description = "Gerrit CLI client";
+    license = [ lib.licenses.mit ];
+    maintainers = [ lib.maintainers._9999years ];
     mainProgram = "git-gr";
   };
 

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "clarifai-grpc";
-  version = "10.3.0";
+  version = "11.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Clarifai";
     repo = "clarifai-python-grpc";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JdRqZCDU5ScI3ZUTsWnFHYQ7Zog6V2xcbBDvFcHPnCk=";
+    tag = version;
+    hash = "sha256-ijfuZh35HpmR3p7n2S+cCpcO4ld52StQOpxgPJtRqM4=";
   };
 
   build-system = [ setuptools ];
@@ -33,16 +33,20 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonRelaxDeps = [
+    "grpcio"
+  ];
+
   # almost all tests require network access
   doCheck = false;
 
   pythonImportsCheck = [ "clarifai_grpc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Clarifai gRPC API Client";
     homepage = "https://github.com/Clarifai/clarifai-python-grpc";
-    changelog = "https://github.com/Clarifai/clarifai-python-grpc/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/Clarifai/clarifai-python-grpc/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

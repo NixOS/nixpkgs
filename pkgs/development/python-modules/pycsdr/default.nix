@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, csdr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  csdr,
+}:
 
 buildPythonPackage rec {
   pname = "pycsdr";
@@ -22,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jketterl/pycsdr";
     description = "bindings for the csdr library";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.c3d2.members;
+    teams = [ lib.teams.c3d2 ];
   };
 }

@@ -1,41 +1,35 @@
-{ lib
-, buildDunePackage
-, git
-, mimic
-, mimic-happy-eyeballs
-, base64
-, git-paf
-, awa
-, awa-mirage
-, dns
-, dns-client
-, tls
-, tls-mirage
-, uri
-, hex
-, happy-eyeballs-mirage
-, happy-eyeballs
-, ca-certs-nss
-, mirage-crypto
-, ptime
-, x509
-, cstruct
-, tcpip
-, domain-name
-, fmt
-, ipaddr
-, lwt
-, mirage-clock
-, mirage-flow
-, mirage-random
-, mirage-time
-, result
-, rresult
-, alcotest
-, alcotest-lwt
-, bigstringaf
-, logs
-, ke
+{
+  buildDunePackage,
+  git,
+  mimic,
+  mimic-happy-eyeballs,
+  base64,
+  git-paf,
+  awa,
+  awa-mirage,
+  tls,
+  tls-mirage,
+  uri,
+  happy-eyeballs-mirage,
+  happy-eyeballs,
+  ca-certs-nss,
+  mirage-crypto,
+  ptime,
+  x509,
+  cstruct,
+  tcpip,
+  domain-name,
+  fmt,
+  ipaddr,
+  lwt,
+  mirage-flow,
+  mirage-ptime,
+  mirage-sleep,
+  alcotest,
+  alcotest-lwt,
+  bigstringaf,
+  logs,
+  ke,
 }:
 
 buildDunePackage {
@@ -46,12 +40,8 @@ buildDunePackage {
   minimalOCamlVersion = "4.08";
 
   buildInputs = [
-    dns
-    dns-client
     happy-eyeballs-mirage
     ipaddr
-    mirage-random
-    rresult
   ];
 
   propagatedBuildInputs = [
@@ -65,7 +55,6 @@ buildDunePackage {
     tls
     tls-mirage
     uri
-    hex
     happy-eyeballs
     ca-certs-nss
     mirage-crypto
@@ -76,10 +65,9 @@ buildDunePackage {
     domain-name
     fmt
     lwt
-    mirage-clock
+    mirage-ptime
     mirage-flow
-    mirage-time
-    result
+    mirage-sleep
   ];
 
   checkInputs = [
@@ -91,6 +79,6 @@ buildDunePackage {
   ];
 
   meta = git.meta // {
-    description = "A package to use ocaml-git with MirageOS backend";
+    description = "Package to use ocaml-git with MirageOS backend";
   };
 }

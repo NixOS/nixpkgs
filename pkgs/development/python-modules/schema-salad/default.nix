@@ -9,7 +9,6 @@
   mypy,
   mypy-extensions,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
   rdflib,
   requests,
@@ -22,21 +21,24 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.5.20240410123758";
+  version = "8.9.20250408123006";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
-    rev = "refs/tags/${version}";
-    hash = "sha256-AgXqeiA4sP7KBnUpb2uMWq45G0LhJ5uLtORrOG4UuB0=";
+    tag = version;
+    hash = "sha256-sPPHz43zvqdQ3eruRlVxLLP1ZU/UoVdtDhtQRAo8vNg=";
   };
+
+  pythonRelaxDeps = [ "mistune" ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "black>=19.10b0,<23.12" "black>=19.10b0"
+      --replace-fail "mypy[mypyc]==1.15.0" "mypy"
+    sed -i "/black>=/d" pyproject.toml
   '';
 
   build-system = [ setuptools-scm ];
@@ -57,7 +59,7 @@ buildPythonPackage rec {
     ++ cachecontrol.optional-dependencies.filecache
     ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.pycodegen;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pycodegen;
 
   preCheck = ''
     rm tox.ini
@@ -65,6 +67,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_load_by_yaml_metaschema"
+    "test_detect_changes_in_html"
     # Setup for these tests requires network access
     "test_secondaryFiles"
     "test_outputBinding"
@@ -75,14 +78,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "schema_salad" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pycodegen = [ black ];
   };
 
   meta = with lib; {
     description = "Semantic Annotations for Linked Avro Data";
     homepage = "https://github.com/common-workflow-language/schema_salad";
-    changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${version}";
+    changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${src.tag}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
   };

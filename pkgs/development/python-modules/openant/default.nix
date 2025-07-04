@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, pyusb
-, influxdb-client
-, pyserial
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  pyusb,
+  influxdb-client,
+  pyserial,
+  pytestCheckHook,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,12 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tigge";
     repo = "openant";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wDtHlkVyD7mMDXZ4LGMgatr9sSlQKVbgkYsKvHGr9Pc=";
   };
 
   nativeBuildInputs = [
     setuptools
+    udevCheckHook
   ];
 
   postInstall = ''
@@ -34,22 +37,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyusb ];
 
-  passthru.optional-dependencies = {
-    serial = [
-      pyserial
-    ];
-    influx = [
-      influxdb-client
-    ];
+  optional-dependencies = {
+    serial = [ pyserial ];
+    influx = [ influxdb-client ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "openant"
-  ];
+  pythonImportsCheck = [ "openant" ];
 
   meta = with lib; {
     homepage = "https://github.com/Tigge/openant";
@@ -57,5 +52,4 @@ buildPythonPackage rec {
     mainProgram = "openant";
     license = licenses.mit;
   };
-
 }

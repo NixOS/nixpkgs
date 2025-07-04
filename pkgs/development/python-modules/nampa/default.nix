@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thebabush";
     repo = "nampa";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ylDthh6fO0jKiYib0bed31Dxt4afiD0Jd5mfRKrsZpE=";
   };
 
@@ -26,20 +27,14 @@ buildPythonPackage rec {
       --replace "0.1.1" "${version}"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    future
-  ];
+  dependencies = [ future ];
 
   # Not used for binaryninja as plugin
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nampa"
-  ];
+  pythonImportsCheck = [ "nampa" ];
 
   meta = with lib; {
     description = "Python implementation of the FLIRT technology";

@@ -9,15 +9,15 @@ buildSphinxPhase() {
     local __sphinxRoot=""
     runHook preBuildSphinx
 
-    if [[ -n "${sphinxRoot:-}" ]] ; then  # explicit root
-        if ! [[ -f "${sphinxRoot}/conf.py" ]] ; then
+    if [[ -n "${sphinxRoot:-}" ]]; then # explicit root
+        if ! [[ -f "${sphinxRoot}/conf.py" ]]; then
             echo 2>&1 "$sphinxRoot/conf.py: no such file"
             exit 1
         fi
         __sphinxRoot=$sphinxRoot
     else
-        for candidate in doc docs doc/source docs/source ; do
-            if [[ -f "$candidate/conf.py" ]] ; then
+        for candidate in doc docs doc/source docs/source; do
+            if [[ -f "$candidate/conf.py" ]]; then
                 echo "Sphinx documentation found in $candidate"
                 __sphinxRoot=$candidate
                 break
@@ -25,7 +25,7 @@ buildSphinxPhase() {
         done
     fi
 
-    if [[ -z "${__sphinxRoot}" ]] ; then
+    if [[ -z "${__sphinxRoot}" ]]; then
         echo 2>&1 "Sphinx documentation not found, use 'sphinxRoot' variable"
         exit 1
     fi
@@ -69,4 +69,4 @@ installSphinxPhase() {
     runHook postInstallSphinx
 }
 
-preDistPhases+=" buildSphinxPhase installSphinxPhase"
+appendToVar preDistPhases buildSphinxPhase installSphinxPhase

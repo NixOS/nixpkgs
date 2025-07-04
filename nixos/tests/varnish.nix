@@ -1,18 +1,17 @@
-{
-  system ? builtins.currentSystem
-, pkgs ? import ../.. { inherit system; }
-, package
-}:
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+{ pkgs, package, ... }:
+let
   testPath = pkgs.hello;
-in {
+in
+{
   name = "varnish";
   meta = {
-    maintainers = lib.teams.helsinki-systems.members;
+    maintainers = [ ];
   };
 
   nodes = {
-    varnish = { config, pkgs, ... }: {
+    varnish =
+      { config, pkgs, ... }:
+      {
         services.nix-serve = {
           enable = true;
         };
@@ -35,12 +34,14 @@ in {
         system.extraDependencies = [ testPath ];
       };
 
-    client = { lib, ... }: {
-      nix.settings = {
-        require-sigs = false;
-        substituters = lib.mkForce [ "http://varnish" ];
+    client =
+      { lib, ... }:
+      {
+        nix.settings = {
+          require-sigs = false;
+          substituters = lib.mkForce [ "http://varnish" ];
+        };
       };
-    };
   };
 
   testScript = ''
@@ -49,7 +50,11 @@ in {
 
     client.wait_until_succeeds("curl -f http://varnish/nix-cache-info");
 
-    client.wait_until_succeeds("nix-store -r ${testPath}");
-    client.succeed("${testPath}/bin/hello");
+    client.wait_until_succeeds("nix-store -r ${testPath}")
+    client.succeed("${testPath}/bin/hello")
+
+    output = varnish.succeed("varnishadm status")
+    print(output)
+    assert "Child in state running" in output, "Unexpected varnishadm response"
   '';
-})
+}

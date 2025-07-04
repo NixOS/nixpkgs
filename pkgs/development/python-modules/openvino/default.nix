@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, openvino-native
-, numpy
-, python
+{
+  lib,
+  buildPythonPackage,
+  openvino-native,
+  numpy,
+  python,
 }:
 
 buildPythonPackage {
@@ -12,9 +13,7 @@ buildPythonPackage {
 
   src = openvino-native.python;
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   installPhase = ''
     runHook preInstall

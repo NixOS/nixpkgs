@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 let
-  version = "1.0.13";
-  sha256 = "162hhmnww8z9k0795ffs8v3f61hlfm375law156sk5l08if19a4r";
+  version = "1.0.17";
+  hash = "sha256-9/t+Mvfnq0KkPbe1mnrVy4mzNaK7vAgLuhUnOeEvBfI=";
 in
 stdenv.mkDerivation {
   name = "system76-module-${version}-${kernel.version}";
@@ -12,7 +17,7 @@ stdenv.mkDerivation {
     owner = "pop-os";
     repo = "system76-dkms";
     rev = version;
-    inherit sha256;
+    inherit hash;
   };
 
   hardeningDisable = [ "pic" ];
@@ -29,11 +34,13 @@ stdenv.mkDerivation {
     mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
   '';
 
-  meta = with lib; {
-    maintainers = [ maintainers.khumba ];
-    license = [ licenses.gpl2Plus ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    broken = versionOlder kernel.version "4.14";
+  meta = {
+    maintainers = with lib.maintainers; [ ahoneybun ];
+    license = [ lib.licenses.gpl2Plus ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     description = "System76 DKMS driver";
     homepage = "https://github.com/pop-os/system76-dkms";
     longDescription = ''

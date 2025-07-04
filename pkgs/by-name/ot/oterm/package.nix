@@ -1,60 +1,77 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.2.5";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
-    rev = "refs/tags/${version}";
-    hash = "sha256-s+TqDrgy7sR0sli8BGKlF546TW1+vzF0k3IkAQV6TpM=";
+    tag = version;
+    hash = "sha256-6y73Lh3cV/fnvpZWzfyD4CletC4UV2zl+I7l88BYPIk=";
   };
 
   pythonRelaxDeps = [
+    "aiosql"
     "aiosqlite"
-    "pillow"
     "httpx"
+    "ollama"
     "packaging"
+    "pillow"
+    "pydantic"
+    "textual"
+    "typer"
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    ollama
-    textual
-    typer
-    python-dotenv
-    httpx
+  build-system = with python3Packages; [ hatchling ];
+
+  dependencies = with python3Packages; [
+    aiohttp
     aiosql
     aiosqlite
-    pyperclip
+    fastmcp
+    httpx
+    mcp
+    ollama
     packaging
-    rich-pixels
     pillow
-    aiohttp
+    pyperclip
+    python-dotenv
+    rich-pixels
+    textual
+    textual-image
+    textualeffects
+    typer
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  pythonImportsCheck = [ "oterm" ];
 
-  pythonImportsCheck = [
-    "oterm"
-  ];
+  # Python tests require a HTTP connection to ollama
 
-  # Tests require a HTTP connection to ollama
-  doCheck = false;
+  # Fails on darwin with: PermissionError: [Errno 1] Operation not permitted: '/var/empty/Library'
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
-    changelog = "https://github.com/ggozad/oterm/releases/tag/${version}";
-    description = "A text-based terminal client for Ollama";
+    description = "Text-based terminal client for Ollama";
     homepage = "https://github.com/ggozad/oterm";
+    changelog = "https://github.com/ggozad/oterm/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gaelj ];
     mainProgram = "oterm";
-    maintainers = with lib.maintainers; [ suhr ];
   };
 }

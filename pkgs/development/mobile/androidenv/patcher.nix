@@ -1,8 +1,16 @@
-{deployAndroidPackage, lib, package, os, autoPatchelfHook, pkgs, stdenv}:
+{
+  deployAndroidPackage,
+  lib,
+  package,
+  os,
+  arch,
+  autoPatchelfHook,
+  stdenv,
+}:
 
 deployAndroidPackage {
-  inherit package os;
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  inherit package os arch;
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   patchInstructions = lib.optionalString (os == "linux") ''
     autoPatchelf $packageBaseDir/bin
   '';

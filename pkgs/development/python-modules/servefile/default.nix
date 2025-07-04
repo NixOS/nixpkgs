@@ -1,10 +1,12 @@
-{ stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, lib
-, pyopenssl
-, pytestCheckHook
-, requests
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  legacy-cgi,
+  lib,
+  pyopenssl,
+  pytestCheckHook,
+  pythonAtLeast,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -14,14 +16,19 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "sebageek";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "servefile";
+    tag = "v${version}";
     hash = "sha256-hIqXwhmvstCslsCO973oK5FF2c8gZJ0wNUI/z8W+OjU=";
   };
 
-  propagatedBuildInputs = [ pyopenssl ];
+  dependencies = [
+    pyopenssl
+  ] ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
 
-  nativeCheckInputs = [ pytestCheckHook requests ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests
+  ];
   # Test attempts to connect to a port on localhost which fails in nix build
   # environment.
   disabledTests = [

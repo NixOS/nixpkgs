@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, llama-parse
-, poetry-core
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  llama-parse,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-llama-parse";
-  version = "0.1.4";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,16 +18,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_llama_parse";
     inherit version;
-    hash = "sha256-eGCLGTyBiJSu/u4KowPwK3+A8uTK8Thmwv07CxAj4sA=";
+    hash = "sha256-6Z7Fb0+FRtf9oafBriYWL7mst+vKw0O1q9tCNLRkTg8=";
   };
 
-  pythonRelaxDeps = [
-    "llama-parse"
-  ];
+  pythonRelaxDeps = [ "llama-parse" ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -38,9 +35,7 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.readers.llama_parse"
-  ];
+  pythonImportsCheck = [ "llama_index.readers.llama_parse" ];
 
   meta = with lib; {
     description = "LlamaIndex Readers Integration for files";

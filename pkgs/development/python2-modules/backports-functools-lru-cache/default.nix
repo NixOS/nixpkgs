@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -35,4 +36,3 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
   };
 }
-

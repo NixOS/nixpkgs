@@ -5,7 +5,6 @@
   qtwebchannel,
   qtwebengine,
   kitemmodels,
-  kquickcharts,
 }:
 mkKdeDerivation {
   pname = "arianna";
@@ -16,7 +15,6 @@ mkKdeDerivation {
     qtwebchannel
     qtwebengine
     kitemmodels
-    kquickcharts
   ];
   meta.mainProgram = "arianna";
 }

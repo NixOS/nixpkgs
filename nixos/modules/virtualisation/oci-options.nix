@@ -1,5 +1,23 @@
-{ config, lib, pkgs, ... }:
 {
+  lib,
+  ...
+}:
+{
+  imports = [
+    ./disk-size-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "oci"
+        "diskSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
+
   options = {
     oci = {
       efi = lib.mkOption {

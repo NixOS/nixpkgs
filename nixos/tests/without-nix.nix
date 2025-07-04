@@ -1,10 +1,11 @@
-import ./make-test-python.nix ({ lib, ... }: {
+{ lib, ... }:
+{
   name = "without-nix";
-  meta = with lib.maintainers; {
-    maintainers = [ ericson2314 ];
-  };
+  meta.maintainers = with lib.maintainers; [ ericson2314 ];
 
-  nodes.machine = { ... }: {
+  node.pkgsReadOnly = false;
+
+  nodes.machine = {
     nix.enable = false;
     nixpkgs.overlays = [
       (self: super: {
@@ -29,4 +30,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.succeed("which which")
     machine.fail("which nix")
   '';
-})
+}

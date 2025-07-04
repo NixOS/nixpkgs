@@ -90,7 +90,7 @@ as [Trezor](https://trezor.io/).
 
 ### systemd Stage 1 {#sec-luks-file-systems-fido2-systemd}
 
-If systemd stage 1 is enabled, it handles unlocking of LUKS-enrypted volumes
+If systemd stage 1 is enabled, it handles unlocking of LUKS-encrypted volumes
 during boot. The following example enables systemd stage1 and adds support for
 unlocking the existing LUKS2 volume `root` using any enrolled FIDO2 compatible
 tokens.
@@ -117,7 +117,7 @@ added to the LUKS volume.
 ```
 
 Existing key slots are left intact, unless `--wipe-slot=` is specified. It is
-recommened to add a recovery key that should be stored in a secure physical
+recommended to add a recovery key that should be stored in a secure physical
 location and can be entered wherever a password would be entered.
 
 ```ShellSession

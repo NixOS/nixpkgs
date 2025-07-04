@@ -1,39 +1,48 @@
-{ lib
-, callPackage
-, rustPlatform
-, fetchFromGitHub
-, fetchNpmDeps
-, npmHooks
-, binaryen
-, gzip
-, nodejs
-, rustc
-, wasm-bindgen-cli
-, wasm-pack
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  fetchurl,
+  binaryen,
+  gzip,
+  nodejs,
+  npmHooks,
+  python3,
+  rustc,
+  versionCheckHook,
+  wasm-bindgen-cli_0_2_92,
+  wasm-pack,
 }:
+
+# TODO: package python bindings
 
 let
 
-  wasm-bindgen-92 = wasm-bindgen-cli.override {
-    version = "0.2.92";
-    hash = "sha256-1VwY8vQy7soKEgbki4LD+v259751kKxSxmo/gqE6yV0=";
-    cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
+  # the lindera-unidic v0.32.2 crate uses [1] an outdated unidic-mecab fork [2] and builds it in pure rust
+  # [1] https://github.com/lindera/lindera/blob/v0.32.2/lindera-unidic/build.rs#L5-L11
+  # [2] https://github.com/lindera/unidic-mecab
+  lindera-unidic-src = fetchurl {
+    url = "https://dlwqk3ibdg1xh.cloudfront.net/unidic-mecab-2.1.2.tar.gz";
+    hash = "sha256-JKx1/k5E2XO1XmWEfDX6Suwtt6QaB7ScoSUUbbn8EYk=";
   };
 
 in
 
 rustPlatform.buildRustPackage rec {
   pname = "pagefind";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "cloudcannon";
     repo = "pagefind";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pcgcu9zylSTjj5rxNff+afFBWVpN5sGtlpadG1wb93M=";
+    tag = "v${version}";
+    hash = "sha256-NIEiXwuy8zuUDxPsD4Hiq3x4cOG3VM+slfNIBSJU2Mk=";
   };
 
-  cargoHash = "sha256-E4gjG5GrVWkMKgjQiAvEiSy2/tx/yHKe+5isveMZ9tU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-e1JSK8RnBPGcAmgxJZ7DaYhMMaUqO412S9YvaqXll3E=";
 
   env.npmDeps_web_js = fetchNpmDeps {
     name = "npm-deps-web-js";
@@ -50,13 +59,18 @@ rustPlatform.buildRustPackage rec {
     src = "${src}/pagefind_ui/modular";
     hash = "sha256-O0RqZUsRFtByxMQdwNGNcN38Rh+sDqqNo9YlBcrnsF4=";
   };
-  env.cargoDeps_web = rustPlatform.fetchCargoTarball {
+  env.cargoDeps_web = rustPlatform.fetchCargoVendor {
     name = "cargo-deps-web";
     src = "${src}/pagefind_web/";
-    hash = "sha256-vDkVXyDePKgYTYE5ZTLLfOHwPYfgaqP9p5/fKCQQi0g=";
+    hash = "sha256-xFVMWX3q3za1w8v58Eysk6vclPd4qpCuQMjMcwwHoh0=";
   };
 
+  env.GIT_VERSION = version;
+
   postPatch = ''
+    # Set the correct version, e.g. for `pagefind --version`
+    node .backstage/version.cjs
+
     # Tricky way to run npmConfigHook multiple times
     (
       local postPatchHooks=() # written to by npmConfigHook
@@ -70,17 +84,32 @@ rustPlatform.buildRustPackage rec {
       cargoDeps=$cargoDeps_web cargoSetupPostUnpackHook
       cargoDeps=$cargoDeps_web cargoSetupPostPatchHook
     )
+
+    # patch a build-time dependency download
+    (
+      patch -d $cargoDepsCopy/lindera-assets-*/ -p1 < ${./lindera-assets-support-file-paths.patch}
+
+      substituteInPlace $cargoDepsCopy/lindera-unidic-*/build.rs --replace-fail \
+          "${lindera-unidic-src.url}" \
+          "file://${lindera-unidic-src}"
+    )
   '';
 
-  nativeBuildInputs = [
-    binaryen
-    gzip
-    nodejs
-    rustc
-    rustc.llvmPackages.lld
-    wasm-bindgen-92
-    wasm-pack
-  ];
+  __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs =
+    [
+      binaryen
+      gzip
+      nodejs
+      rustc
+      rustc.llvmPackages.lld
+      wasm-bindgen-cli_0_2_92
+      wasm-pack
+    ]
+    ++ lib.optionals stdenv.buildPlatform.isDarwin [
+      python3
+    ];
 
   # build wasm and js assets
   # based on "test-and-build" in https://github.com/CloudCannon/pagefind/blob/main/.github/workflows/release.yml
@@ -96,7 +125,6 @@ rustPlatform.buildRustPackage rec {
     echo entering pagefind_web...
     (
       cd pagefind_web
-      export RUSTFLAGS="-C linker=lld"
       bash ./local_build.sh
     )
 
@@ -115,12 +143,18 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "extended" ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  meta = {
     description = "Generate low-bandwidth search index for your static website";
     homepage = "https://pagefind.app/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
+    platforms = lib.platforms.unix;
     mainProgram = "pagefind";
   };
 }

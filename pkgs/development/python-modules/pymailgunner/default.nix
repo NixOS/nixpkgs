@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,21 +15,17 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pschmitt";
-    repo = pname;
+    repo = "pymailgunner";
     rev = version;
     hash = "sha256-QKwpW1aeN6OI76Kocow1Zhghq4/fl/cMPexny0MTwQs=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pymailgunner"
-  ];
+  pythonImportsCheck = [ "pymailgunner" ];
 
   meta = with lib; {
     description = "Library for interacting with Mailgun e-mail service";

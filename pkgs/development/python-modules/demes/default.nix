@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, ruamel-yaml
-, attrs
-, pythonOlder
-, pytestCheckHook
-, pytest-xdist
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  ruamel-yaml,
+  attrs,
+  pythonOlder,
+  pytest7CheckHook,
+  pytest-cov-stub,
+  pytest-xdist,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -21,38 +23,23 @@ buildPythonPackage rec {
     hash = "sha256-nmE7ZbR126J3vKdR3h83qJ/V602Fa6J3M6IJnIqCNhc=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     ruamel-yaml
     attrs
   ];
 
-  postPatch = ''
-    # remove coverage arguments to pytest
-    sed -i '/--cov/d' setup.cfg
-  '';
-
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
+    pytest-cov-stub
     pytest-xdist
     numpy
   ];
 
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
-  ];
+  disabledTestPaths = [ "tests/test_spec.py" ];
 
-  disabledTestPaths = [
-    "tests/test_spec.py"
-  ];
-
-  pythonImportsCheck = [
-    "demes"
-  ];
+  pythonImportsCheck = [ "demes" ];
 
   meta = with lib; {
     description = "Tools for describing and manipulating demographic models";

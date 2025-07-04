@@ -1,20 +1,28 @@
-{ lib, buildNimPackage, fetchFromGitHub, nixosTests, testers }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  nixosTests,
+  testers,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "nimdow";
 
-  version = "0.7.37";
-
-  requiredNimVersion = 1;
+  version = "0.7.41";
 
   src = fetchFromGitHub {
     owner = "avahe-kellenberger";
-    repo = finalAttrs.pname;
+    repo = "nimdow";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-930wDS0UW65QzpUHHOuM25oi/OhFmG0Q7N05ftu7XlI=";
+    hash = "sha256-oosoiJVlP3XyUeardoyRFladAIKdH3PQvWcNo5XnnOI=";
   };
 
   lockFile = ./lock.json;
+
+  nimFlags = [
+    "--deepcopy:on"
+  ];
 
   postInstall = ''
     install -D config.default.toml $out/share/nimdow/config.default.toml
@@ -33,8 +41,10 @@ buildNimPackage (finalAttrs: {
     };
   };
 
-  meta = with lib;
-    finalAttrs.src.meta // {
+  meta =
+    with lib;
+    finalAttrs.src.meta
+    // {
       description = "Nim based tiling window manager";
       platforms = platforms.linux;
       license = [ licenses.gpl2 ];

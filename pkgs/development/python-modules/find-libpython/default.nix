@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "find-libpython";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ktbarrett";
     repo = "find_libpython";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DBBAgfYQ4UBFn5Osb1kpVBWbrZVBAvcVGQ/J4rJO/rQ=";
+    tag = "v${version}";
+    hash = "sha256-rYVGE9P5Xtm32kMoiqaZVMgnDbX3JBnI1uV80aNNOfw=";
   };
 
   nativeBuildInputs = [
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "find_libpython"
-  ];
+  pythonImportsCheck = [ "find_libpython" ];
 
   meta = with lib; {
     description = "Finds the libpython associated with your environment, wherever it may be hiding";

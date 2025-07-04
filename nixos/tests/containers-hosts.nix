@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "containers-hosts";
   meta = {
     maintainers = with lib.maintainers; [ montag451 ];
@@ -7,11 +8,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   nodes.machine =
     { lib, ... }:
     {
-      virtualisation.vlans = [];
+      virtualisation.vlans = [ ];
 
-      networking.bridges.br0.interfaces = [];
+      networking.bridges.br0.interfaces = [ ];
       networking.interfaces.br0.ipv4.addresses = [
-        { address = "10.11.0.254"; prefixLength = 24; }
+        {
+          address = "10.11.0.254";
+          prefixLength = 24;
+        }
       ];
 
       # Force /etc/hosts to be the only source for host name resolution
@@ -25,7 +29,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         localAddress = "10.10.0.1";
         hostAddress = "10.10.0.254";
 
-        config = {};
+        config = { };
       };
 
       containers.netmask = {
@@ -34,7 +38,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         hostBridge = "br0";
         localAddress = "10.11.0.1/24";
 
-        config = {};
+        config = { };
       };
     };
 
@@ -46,4 +50,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         for host in "simple.containers", "netmask.containers":
             machine.succeed(f"ping -n -c 1 {host}")
   '';
-})
+}

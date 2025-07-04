@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pillow
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  pillow,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -19,26 +21,16 @@ buildPythonPackage rec {
     hash = "sha256-Oxgl+9sR5ZdGbf9ChrTqmx6GpXcXtZ5WOuZ5cm/IVN4=";
   };
 
-  propagatedBuildInputs = [
-    setuptools-scm
-  ];
+  propagatedBuildInputs = [ setuptools-scm ];
 
-  passthru.optional-dependencies = {
-    images = [
-      pillow
-    ];
+  optional-dependencies = {
+    images = [ pillow ];
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=barcode" "" \
-      --replace "--cov-report=term-missing:skip-covered" "" \
-      --replace "--no-cov-on-fail" ""
-  '';
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.images;
+    pytest-cov-stub
+  ] ++ optional-dependencies.images;
 
   pythonImportsCheck = [ "barcode" ];
 
@@ -48,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/WhyNotHugo/python-barcode";
     changelog = "https://github.com/WhyNotHugo/python-barcode/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

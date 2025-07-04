@@ -1,17 +1,35 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.earlyoom;
 
   inherit (lib)
-    mkDefault mkEnableOption mkIf mkOption types
-    mkRemovedOptionModule literalExpression
-    escapeShellArg concatStringsSep optional optionalString;
-
+    literalExpression
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRemovedOptionModule
+    optionalString
+    optionals
+    types
+    ;
 in
 {
+  meta = {
+    maintainers = with lib.maintainers; [ ];
+  };
+
   options.services.earlyoom = {
     enable = mkEnableOption "early out of memory killing";
+
+    package = mkPackageOption pkgs "earlyoom" { };
 
     freeMemThreshold = mkOption {
       type = types.ints.between 1 100;
@@ -101,6 +119,11 @@ in
         [README](https://github.com/rfjakob/earlyoom#notifications) and
         [the man page](https://github.com/rfjakob/earlyoom/blob/master/MANPAGE.md#-n-pathtoscript)
         for details.
+
+        WARNING: earlyoom is running in a sandbox with ProtectSystem="strict"
+        by default, so filesystem write is also prohibited for the hook.
+        If you want to change these protection rules, override the systemd
+        service via `systemd.services.earlyoom.serviceConfig.ProtectSystem`.
       '';
     };
 
@@ -113,9 +136,17 @@ in
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = [ "-g" "--prefer '(^|/)(java|chromium)$'" ];
-      description = "Extra command-line arguments to be passed to earlyoom.";
+      default = [ ];
+      example = [
+        "-g"
+        "--prefer"
+        "(^|/)(java|chromium)$"
+      ];
+      description = ''
+        Extra command-line arguments to be passed to earlyoom. Each element in
+        the value list will be escaped as an argument without further
+        word-breaking.
+      '';
     };
   };
 
@@ -135,26 +166,33 @@ in
   config = mkIf cfg.enable {
     services.systembus-notify.enable = mkDefault cfg.enableNotifications;
 
+    systemd.packages = [ cfg.package ];
+
     systemd.services.earlyoom = {
-      description = "Early OOM Daemon for Linux";
+      overrideStrategy = "asDropin";
+
       wantedBy = [ "multi-user.target" ];
-      path = optional cfg.enableNotifications pkgs.dbus;
-      serviceConfig = {
-        StandardError = "journal";
-        ExecStart = concatStringsSep " " ([
-          "${pkgs.earlyoom}/bin/earlyoom"
-          ("-m ${toString cfg.freeMemThreshold}"
-            + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}")
-          ("-s ${toString cfg.freeSwapThreshold}"
-            + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}")
-          "-r ${toString cfg.reportInterval}"
-        ]
-        ++ optional cfg.enableDebugInfo "-d"
-        ++ optional cfg.enableNotifications "-n"
-        ++ optional (cfg.killHook != null) "-N ${escapeShellArg cfg.killHook}"
-        ++ cfg.extraArgs
-        );
-      };
+      path = optionals cfg.enableNotifications [ pkgs.dbus ];
+
+      # We setup `EARLYOOM_ARGS` via drop-ins, so disable the default import
+      # from /etc/default/earlyoom.
+      serviceConfig.EnvironmentFile = "";
+
+      environment.EARLYOOM_ARGS =
+        lib.cli.toGNUCommandLineShell { } {
+          m =
+            "${toString cfg.freeMemThreshold}"
+            + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}";
+          s =
+            "${toString cfg.freeSwapThreshold}"
+            + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}";
+          r = "${toString cfg.reportInterval}";
+          d = cfg.enableDebugInfo;
+          n = cfg.enableNotifications;
+          N = if cfg.killHook != null then cfg.killHook else null;
+        }
+        + " "
+        + lib.escapeShellArgs cfg.extraArgs;
     };
   };
 }

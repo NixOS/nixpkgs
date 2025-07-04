@@ -1,22 +1,21 @@
-{ lib
-, vscode-utils }:
+{ lib, vscode-utils }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 in
-  buildVscodeMarketplaceExtension {
-    mktplcRef = {
-      name = "vscode-wakatime";
-      publisher = "WakaTime";
-      version = "18.0.5";
-      hash = "sha256-vWqGxMbxKqd4UgKK0sOKadMTDf6Y3TQxfWsc93MHjFs=";
-    };
+buildVscodeMarketplaceExtension {
+  mktplcRef = {
+    name = "vscode-wakatime";
+    publisher = "WakaTime";
+    version = "25.0.6";
+    hash = "sha256-arBd8ihYlyGPm0mrRnGJNzuhQmMqADH7TrqCwMR7R/U=";
+  };
 
-    meta = {
-      description = ''
-        Visual Studio Code plugin for automatic time tracking and metrics generated
-        from your programming activity
-      '';
-      license = lib.licenses.bsd3;
-    };
-  }
+  meta = {
+    description = ''
+      Visual Studio Code plugin for automatic time tracking and metrics generated
+      from your programming activity
+    '';
+    license = lib.licenses.bsd3;
+  };
+}

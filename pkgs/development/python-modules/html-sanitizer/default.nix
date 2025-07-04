@@ -1,43 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, lxml
-, beautifulsoup4
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  lxml,
+  lxml-html-clean,
+  beautifulsoup4,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "html-sanitizer";
-  version = "2.3.1";
+  version = "2.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = "html-sanitizer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-NWJLD70783Ie6efyCvGopxMIlP3rLz0uM/D1rLQwBXE=";
+    tag = version;
+    hash = "sha256-egBGhv7vudH32jwh9rAXuXfMzPDxJ60S5WKbc4kzCTU=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lxml
+    lxml-html-clean
     beautifulsoup4
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "html_sanitizer/tests.py"
-  ];
+  pytestFlagsArray = [ "html_sanitizer/tests.py" ];
 
   disabledTests = [
     # Tests are sensitive to output
@@ -45,15 +45,13 @@ buildPythonPackage rec {
     "test_10_broken_html"
   ];
 
-  pythonImportsCheck = [
-    "html_sanitizer"
-  ];
+  pythonImportsCheck = [ "html_sanitizer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allowlist-based and very opinionated HTML sanitizer";
     homepage = "https://github.com/matthiask/html-sanitizer";
     changelog = "https://github.com/matthiask/html-sanitizer/blob/${version}/CHANGELOG.rst";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
-, isocodes
-, json-glib
-, libipuz
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
+  isocodes,
+  json-glib,
+  libipuz,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,12 +40,13 @@ stdenv.mkDerivation rec {
     libipuz
   ];
 
-  meta = with lib; {
-    description = "A Crossword player and editor for GNOME";
+  meta = {
+    description = "Crossword player and editor for GNOME";
     homepage = "https://gitlab.gnome.org/jrb/crosswords";
-    license = licenses.gpl3Plus;
+    changelog = "https://gitlab.gnome.org/jrb/crosswords/-/blob/${version}/NEWS.md?ref_type=tags";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "crosswords";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

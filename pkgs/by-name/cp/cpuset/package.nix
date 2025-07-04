@@ -1,11 +1,13 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cpuset";
   version = "1.6.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lpechacek";

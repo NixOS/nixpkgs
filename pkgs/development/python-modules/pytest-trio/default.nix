@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, trio, hypothesis, outcome, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  trio,
+  hypothesis,
+  outcome,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-trio";
@@ -9,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "python-trio";
-    repo = pname;
+    repo = "pytest-trio";
     rev = "v${version}";
     sha256 = "sha256-gUH35Yk/pBD2EdCEt8D0XQKWU8BwmX5xtAW10qRhoYk=";
   };

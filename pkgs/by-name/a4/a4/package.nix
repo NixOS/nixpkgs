@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libtickit
-, libvterm-neovim
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libtickit,
+  libvterm-neovim,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rpmohn";
     repo = "a4";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AX5psz9+bLdFFeDR55TIrAWDAkhDygw6289OgIfOJTg=";
   };
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
-    description = "A dynamic terminal window manager";
+    description = "Dynamic terminal window manager";
     homepage = "https://www.a4term.com/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onemoresuza ];

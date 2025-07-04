@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchFromSourcehut }:
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+}:
 
-let version = "0.5.0";
-in stdenv.mkDerivation {
+let
+  version = "0.5.0";
+in
+stdenv.mkDerivation {
   pname = "nix-lib-nmd";
   inherit version;
 
@@ -22,7 +28,7 @@ in stdenv.mkDerivation {
 
   meta = {
     homepage = "https://git.sr.ht/~rycee/nmd";
-    description = "A documentation framework for projects based on NixOS modules";
+    description = "Documentation framework for projects based on NixOS modules";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rycee ];
   };

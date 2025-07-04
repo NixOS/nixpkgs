@@ -1,14 +1,15 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, base_quickcheck ? null
-, capnproto
-, ocplib-endian
-, ounit2
-, res
-, result
-, stdint
-, stdio
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  base_quickcheck ? null,
+  capnproto,
+  ocplib-endian,
+  ounit2,
+  res,
+  result,
+  stdint,
+  stdio,
 }:
 
 buildDunePackage rec {

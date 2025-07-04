@@ -1,31 +1,28 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "joshuto";
-  version = "0.9.8";
+  version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "kamiyaa";
     repo = "joshuto";
     rev = "v${version}";
-    hash = "sha256-8OvaL6HqsJjBAbksR4EpC/ZgvdBSKlB37PP77p3T3PY=";
+    hash = "sha256-hfu3Verbrq0to3I5/gX6ZhVr7ewjHNamzvaUcmcUIRU=";
   };
 
-  cargoHash = "sha256-zGqOmebD7kZAsWunWSB2NFOSg0cu8aM1dyhEIQz1j4I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-K/++/NdOLSvhxQ8LBS+jnthCRJxScoOjWSp7pmfHVaQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
-
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd joshuto \
       --bash <($out/bin/joshuto completions bash) \
       --zsh <($out/bin/joshuto completions zsh) \
@@ -37,7 +34,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kamiyaa/joshuto";
     changelog = "https://github.com/kamiyaa/joshuto/releases/tag/${src.rev}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ figsoda totoroot xrelkd ];
+    maintainers = with maintainers; [
+      figsoda
+      totoroot
+      xrelkd
+    ];
     mainProgram = "joshuto";
   };
 }

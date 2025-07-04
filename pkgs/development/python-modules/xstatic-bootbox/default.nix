@@ -1,11 +1,13 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "xstatic-bootbox";
   version = "5.5.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "XStatic-Bootbox";
@@ -16,11 +18,10 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib;{
-    homepage = "http://bootboxjs.com";
+  meta = with lib; {
+    homepage = "https://bootboxjs.com";
     description = "Bootboxjs packaged static files for python";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];
   };
-
 }

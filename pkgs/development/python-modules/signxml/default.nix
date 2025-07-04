@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, certifi
-, cryptography
-, fetchFromGitHub
-, lxml
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  cryptography,
+  fetchFromGitHub,
+  lxml,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "signxml";
-  version = "3.2.2";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,37 +22,32 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "XML-Security";
     repo = "signxml";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TlOIHYvx1o46nr/3qq45pgeOqmuyWaaTGvOS0Jwz1zs=";
+    tag = "v${version}";
+    hash = "sha256-yNxqU5sg2xANCKLkaWYn1sr1SWQLPVfu9Jg3VF6Qf28=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     cryptography
     lxml
     pyopenssl
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "signxml"
-  ];
+  pythonImportsCheck = [ "signxml" ];
 
-  pytestFlagsArray = [
-    "test/test.py"
-  ];
+  pytestFlagsArray = [ "test/test.py" ];
 
   meta = with lib; {
     description = "Python XML Signature and XAdES library";
     homepage = "https://github.com/XML-Security/signxml";
-    changelog = "https://github.com/XML-Security/signxml/blob/${src.rev}/Changes.rst";
+    changelog = "https://github.com/XML-Security/signxml/blob/${src.tag}/Changes.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

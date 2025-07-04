@@ -1,28 +1,34 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, php
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  php,
+  versionCheckHook,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phpactor";
-  version = "2024.03.09.0";
+  version = "2025.04.17.0";
 
   src = fetchFromGitHub {
     owner = "phpactor";
     repo = "phpactor";
     rev = finalAttrs.version;
-    hash = "sha256-1QPBq8S3mOkSackXyCuFdoxfAdUQaRuUfoOfKOGuiR0=";
+    hash = "sha256-HJH+31qAE4shamRl1/+TRtje0ZzOtPV7l++NIaacmxE=";
   };
 
-  vendorHash = "sha256-9YN+fy+AvNnF0Astrirpewjmh/bSINAhW9fLvN5HGGI=";
+  vendorHash = "sha256-qdR8/ME9H7gusALjXXbKl8hj20N704Nw1tC3V9xTcEY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd phpactor \
-      --bash <($out/bin/phpactor completion bash)
+    --bash <(php $out/bin/phpactor completion bash)
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/phpactor/phpactor/releases/tag/${finalAttrs.version}";
@@ -30,6 +36,6 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://github.com/phpactor/phpactor";
     license = lib.licenses.mit;
     mainProgram = "phpactor";
-    maintainers = [ lib.maintainers.patka ] ++ lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

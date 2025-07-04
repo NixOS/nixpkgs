@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.npm;
@@ -11,13 +14,13 @@ in
 
   options = {
     programs.npm = {
-      enable = mkEnableOption "{command}`npm` global config";
+      enable = lib.mkEnableOption "{command}`npm` global config";
 
-      package = mkPackageOption pkgs [ "nodePackages" "npm" ] {
+      package = lib.mkPackageOption pkgs [ "nodePackages" "npm" ] {
         example = "nodePackages_13_x.npm";
       };
 
-      npmrc = mkOption {
+      npmrc = lib.mkOption {
         type = lib.types.lines;
         description = ''
           The system-wide npm configuration.

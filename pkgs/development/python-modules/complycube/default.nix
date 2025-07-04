@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyhumps
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyhumps,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -11,24 +12,20 @@ buildPythonPackage rec {
   version = "1.1.6";
   pyproject = true;
 
-  src = fetchPypi rec {
+  src = fetchPypi {
     inherit version;
     pname = "complycube";
     hash = "sha256-hetcn5RX582CRVmtG5dAvr+NXD+7NKJjaqgOo8LlpqM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyhumps
     requests
   ];
 
-  pythonImportsCheck = [
-    "complycube"
-  ];
+  pythonImportsCheck = [ "complycube" ];
 
   meta = {
     homepage = "https://complycube.com";

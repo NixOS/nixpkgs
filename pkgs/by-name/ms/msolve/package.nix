@@ -1,21 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, flint
-, gmp
-, mpfr
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  flint3,
+  gmp,
+  mpfr,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "msolve";
-  version = "0.6.5";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "algebraic-solving";
     repo = "msolve";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-qCquagxj31ih0r5kE4x/jsIBI+KBgrMa3HcBGuhlufk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6TU/h6ewQreomjStHZRViYTrrDG3+MZXa8mLg1NvvZg=";
   };
 
   postPatch = ''
@@ -26,20 +28,25 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  buildInputs = [
-    flint
-    gmp
-    mpfr
-  ];
+  buildInputs =
+    [
+      flint3
+      gmp
+      mpfr
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      llvmPackages.openmp
+    ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library for polynomial system solving through algebraic methods";
     mainProgram = "msolve";
     homepage = "https://msolve.lip6.fr";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/algebraic-solving/msolve/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
 })

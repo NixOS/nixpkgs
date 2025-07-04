@@ -90,27 +90,3 @@ index cda69a77..e394ae07 100644
  			cmd = exec.Command("runuser", "-u", "lightdm", "glxinfo") // runuser -u lightdm glxinfo
  		} else {
  			cmd = exec.Command("glxinfo")
-diff --git a/system/power1/manager_lmt.go b/system/power1/manager_lmt.go
-index 87556893..f67cb5b0 100644
---- a/system/power1/manager_lmt.go
-+++ b/system/power1/manager_lmt.go
-@@ -8,6 +8,7 @@ import (
- 	"bufio"
- 	"io/ioutil"
- 	"os"
-+	"os/exec"
- 	"path/filepath"
- 	"strings"
- 
-@@ -28,7 +29,7 @@ const (
- const lowBatteryThreshold = 20.0
- 
- func isLaptopModeBinOk() bool {
--	_, err := os.Stat(laptopModeBin)
-+	_, err := exec.LookPath("laptop_mode")
- 	return err == nil
- }
- 
--- 
-2.40.1
-

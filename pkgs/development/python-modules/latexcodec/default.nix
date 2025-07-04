@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "latexcodec";
@@ -7,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kX3F/iQnYswZ2WPmVItC1joRgCjN0zYdYjl+O2OLa8U=";
+    hash = "sha256-kX3F/iQnYswZ2WPmVItC1joRgCjN0zYdYjl+O2OLa8U=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -23,5 +29,4 @@ buildPythonPackage rec {
     description = "Lexer and codec to work with LaTeX code in Python";
     license = licenses.mit;
   };
-
 }

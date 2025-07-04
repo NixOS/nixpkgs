@@ -1,10 +1,10 @@
 {
-  lib
-  , buildPythonPackage
-  , diagrams
-  , fetchFromGitHub
-  , osc-sdk-python
-  , setuptools
+  lib,
+  buildPythonPackage,
+  diagrams,
+  fetchFromGitHub,
+  osc-sdk-python,
+  setuptools,
 }:
 
 buildPythonPackage {
@@ -19,9 +19,7 @@ buildPythonPackage {
     hash = "sha256-2Iaar2twemw4xv1GGqHd3xiNCHrZLsZXtP7e9tNVpEU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     diagrams

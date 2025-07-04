@@ -1,11 +1,20 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, autoreconfHook, xorg, freetype }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  autoreconfHook,
+  xorg,
+  freetype,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libotf";
   version = "0.9.16";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/m17n/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/m17n/${pname}-${version}.tar.gz";
     sha256 = "0sq6g3xaxw388akws6qrllp3kp2sxgk2dv4j79k6mm52rnihrnv8";
   };
 
@@ -29,11 +38,20 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
-  buildInputs = [ xorg.libXaw freetype ];
+  buildInputs = [
+    xorg.libXaw
+    freetype
+  ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postInstall = ''
     mkdir -p $dev/bin

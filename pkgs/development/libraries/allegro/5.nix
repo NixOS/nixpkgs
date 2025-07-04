@@ -1,94 +1,97 @@
-{ lib
-, alsa-lib
-, cmake
-, enet
-, fetchFromGitHub
-, fetchpatch
-, flac
-, freetype
-, gtk3
-, libGL
-, libGLU
-, libjpeg
-, libopus
-, libpng
-, libpthreadstubs
-, libpulseaudio
-, libtheora
-, libvorbis
-, libwebp
-, libX11
-, libXcursor
-, libXdmcp
-, libXext
-, libXfixes
-, libXi
-, libXpm
-, libXt
-, libXxf86dga
-, libXxf86misc
-, libXxf86vm
-, openal
-, pcre
-, physfs
-, pkg-config
-, stdenv
-, texinfo
-, xorgproto
-, zlib
+{
+  lib,
+  alsa-lib,
+  cmake,
+  enet,
+  fetchFromGitHub,
+  fixDarwinDylibNames,
+  flac,
+  freetype,
+  gtk3,
+  libGL,
+  libGLU,
+  libjpeg,
+  libpng,
+  libpthreadstubs,
+  libpulseaudio,
+  libtheora,
+  libvorbis,
+  libwebp,
+  libX11,
+  libXcursor,
+  libXdmcp,
+  libXext,
+  libXfixes,
+  libXi,
+  libXpm,
+  libXt,
+  libXxf86dga,
+  libXxf86misc,
+  libXxf86vm,
+  openal,
+  physfs,
+  pkg-config,
+  stdenv,
+  texinfo,
+  xorgproto,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "allegro";
-  version = "5.2.9.1";
+  version = "5.2.10.1";
 
   src = fetchFromGitHub {
     owner = "liballeg";
     repo = "allegro5";
     rev = version;
-    sha256 = "sha256-n2OCmZmAqeXjtnCTqJgQ5q4j8/lnPfH+5tpWKIFKle0=";
+    sha256 = "sha256-agE3K+6VhhG/LO52fiesCsOq1fNYVRhdW7aKdPCbTOo=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
 
-  buildInputs = [
-    enet
-    flac
-    freetype
-    gtk3
-    libGL
-    libGLU
-    libjpeg
-    libopus
-    libpng
-    libtheora
-    libvorbis
-    libwebp
-    openal
-    pcre
-    physfs
-    texinfo
-    zlib
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-    libpthreadstubs
-    libpulseaudio
-    libX11
-    libXcursor
-    libXdmcp
-    libXext
-    libXfixes
-    libXi
-    libXpm
-    libXt
-    libXxf86dga
-    libXxf86misc
-    libXxf86vm
-    xorgproto
-  ];
+  buildInputs =
+    [
+      enet
+      flac
+      freetype
+      gtk3
+      libGL
+      libGLU
+      libjpeg
+      libpng
+      libtheora
+      libvorbis
+      libwebp
+      openal
+      physfs
+      texinfo
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libpthreadstubs
+      libpulseaudio
+      libX11
+      libXcursor
+      libXdmcp
+      libXext
+      libXfixes
+      libXi
+      libXpm
+      libXt
+      libXxf86dga
+      libXxf86misc
+      libXxf86vm
+      xorgproto
+    ];
 
   postPatch = ''
     sed -e 's@/XInput2.h@/XI2.h@g' -i CMakeLists.txt "src/"*.c
@@ -98,8 +101,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   meta = with lib; {
-    description = "A game programming library";
+    description = "Game programming library";
     homepage = "https://liballeg.org/";
     license = licenses.zlib;
     maintainers = [ maintainers.raskin ];

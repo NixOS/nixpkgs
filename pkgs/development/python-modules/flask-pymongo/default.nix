@@ -1,41 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, vcversioner
-, flask
-, pymongo
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  flask,
+  pymongo,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flask-pymongo";
-  version = "2.3.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "Flask-PyMongo";
+    pname = "flask_pymongo";
     inherit version;
-    hash = "sha256-Yg6wLciAil/LkPJsq2y6nWv0l7FQMq48qZ34A2bjMxQ=";
+    hash = "sha256-0iW1HCHOyi5nDmzKebXFhK0XuWJStI6E47Qj3bczBMw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    vcversioner
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     pymongo
-    six
   ];
 
   pythonImportsCheck = [ "flask_pymongo" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # requires running MongoDB
   doCheck = false;

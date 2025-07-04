@@ -1,2 +1,0 @@
-gamin/0.1.10-4.1
-17_deprecated_const_return.patch

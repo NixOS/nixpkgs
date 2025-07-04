@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, fetchFromGitHub
-, fetchpatch2
-, setuptools
-, setuptools-scm
-, wheel
-, py
-, pytest
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  pythonAtLeast,
+  fetchFromGitHub,
+  fetchpatch2,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  py,
+  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-forked";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-owkGwF5WQ17/CXwTsIYJ2AgktekRB4qhtsDxR0LCI/k=";
   };
 
@@ -43,24 +44,24 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    py
-  ];
+  propagatedBuildInputs = [ py ];
 
   nativeCheckInputs = [
     py
     pytestCheckHook
   ];
 
-  disabledTests = if (pythonAtLeast "3.12" && stdenv.isDarwin && stdenv.isx86_64) then [
-    # non reproducible test failure on hydra, works on community builder
-    # https://hydra.nixos.org/build/252537267
-    "test_xfail"
-  ] else null;
+  disabledTests =
+    if (pythonAtLeast "3.12" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
+      [
+        # non reproducible test failure on hydra, works on community builder
+        # https://hydra.nixos.org/build/252537267
+        "test_xfail"
+      ]
+    else
+      null;
 
   setupHook = ./setup-hook.sh;
 

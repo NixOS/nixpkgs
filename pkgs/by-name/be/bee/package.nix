@@ -1,20 +1,21 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
 buildGoModule rec {
   pname = "bee";
-  version = "2.0.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "ethersphere";
     repo = "bee";
     rev = "v${version}";
-    sha256 = "sha256-gZDmFufk/zBftQe7Ju4rDpZqw0hm2nf9YQg1Oa8540s=";
+    hash = "sha256-44mjSeV8imatPpNkRSA5Uewunvkc5j6Eo+gKya+dqzE=";
   };
 
-  vendorHash = "sha256-GpazHMQ8xZ6P7mADvsG3bXxDxEWnCJRIsBwDnL/McZA=";
+  vendorHash = "sha256-1Hl0tT6ZI3otEdOQw9adipOGcSyZXLbSLC8s7YsFRZA=";
 
   subPackages = [ "cmd/bee" ];
 
@@ -28,7 +29,7 @@ buildGoModule rec {
     "-X github.com/ethersphere/bee/v2/pkg/postage/listener.batchFactorOverridePublic=5"
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   postInstall = ''
     mkdir -p $out/lib/systemd/system
@@ -51,6 +52,6 @@ buildGoModule rec {
       Bee is a Swarm node implementation, written in Go.
     '';
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

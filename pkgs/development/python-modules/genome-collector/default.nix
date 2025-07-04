@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, appdirs
-, biopython
-, fetchPypi
-, proglog
+{
+  lib,
+  buildPythonPackage,
+  appdirs,
+  biopython,
+  fetchPypi,
+  proglog,
 }:
 
 buildPythonPackage rec {
   pname = "genome_collector";
   version = "0.1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

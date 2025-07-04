@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  numpy,
 }:
 let
   version = "0.2.1+";
@@ -12,8 +13,10 @@ buildPythonPackage {
   format = "setuptools";
   inherit version;
 
-  dontUseSetuptoolsCheck = true;
-  propagatedBuildInputs = [ pillow numpy ];
+  propagatedBuildInputs = [
+    pillow
+    numpy
+  ];
 
   src = fetchFromGitHub {
     owner = "cab404";
@@ -28,5 +31,4 @@ buildPythonPackage {
     description = "Library for reading and writing files for the Anycubic Photon 3D-Printer";
     homepage = "https://github.com/cab404/pyphotonfile";
   };
-
 }

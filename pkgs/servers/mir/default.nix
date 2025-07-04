@@ -1,204 +1,84 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, gitUpdater
-, testers
-, cmake
-, pkg-config
-, python3
-, boost
-, egl-wayland
-, freetype
-, glib
-, glm
-, glog
-, libdrm
-, libepoxy
-, libevdev
-, libglvnd
-, libinput
-, libuuid
-, libxcb
-, libxkbcommon
-, libxmlxx
-, yaml-cpp
-, lttng-ust
-, mesa
-, nettle
-, udev
-, wayland
-, xorg
-, xwayland
-, dbus
-, gtest
-, umockdev
-, wlcs
-, validatePkgConfig
-}:
+{ callPackage, fetchpatch }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "mir";
-  version = "2.15.0";
+let
+  common = callPackage ./common.nix { };
+in
+{
+  mir = common {
+    version = "2.20.2";
+    hash = "sha256-kxXPRIvgvpWqos8l/fJyHvfJBNi0jOZfV5inY3SBavM=";
+  };
 
-  src = fetchFromGitHub {
-    owner = "MirServer";
-    repo = "mir";
-    rev = "v${finalAttrs.version}";
+  mir_2_15 = common {
+    version = "2.15.0";
+    pinned = true;
     hash = "sha256-c1+gxzLEtNCjR/mx76O5QElQ8+AO4WsfcG7Wy1+nC6E=";
-  };
+    patches = [
+      # Fix gbm-kms tests
+      # Remove when version > 2.15.0
+      (fetchpatch {
+        name = "0001-mir-Fix-the-signature-of-drmModeCrtcSetGamma.patch";
+        url = "https://github.com/canonical/mir/commit/98250e9c32c5b9b940da2fb0a32d8139bbc68157.patch";
+        hash = "sha256-tTtOHGNue5rsppOIQSfkOH5sVfFSn/KPGHmubNlRtLI=";
+      })
+      # Fix external_client tests
+      # Remove when version > 2.15.0
+      (fetchpatch {
+        name = "0002-mir-Fix-cannot_start_X_Server_and_outdated_tests.patch";
+        url = "https://github.com/canonical/mir/commit/0704026bd06372ea8286a46d8c939286dd8a8c68.patch";
+        hash = "sha256-k+51piPQandbHdm+ioqpBrb+C7Aqi2kugchAehZ1aiU=";
+      })
 
-  patches = [
-    # Fix gbm-kms tests
-    # Remove when version > 2.15.0
-    (fetchpatch {
-      name = "0001-mir-Fix-the-signature-of-drmModeCrtcSetGamma.patch";
-      url = "https://github.com/MirServer/mir/commit/98250e9c32c5b9b940da2fb0a32d8139bbc68157.patch";
-      hash = "sha256-tTtOHGNue5rsppOIQSfkOH5sVfFSn/KPGHmubNlRtLI=";
-    })
-  ];
+      # Always depend on epoxy
+      # Remove when version > 2.15.0
+      (fetchpatch {
+        name = "0003-mir-cmake-always-require-epoxy.patch";
+        url = "https://github.com/canonical/mir/commit/171c42ac3929f946a70505ee42be0ce8220f245a.patch";
+        hash = "sha256-QuVZBcHSn/DK+xbjM36Y89+w22vk7NRV4MkbjgvS28A=";
+      })
 
-  postPatch = ''
-    # Fix scripts that get run in tests
-    patchShebangs tools/detect_fd_leaks.bash tests/acceptance-tests/wayland-generator/test_wayland_generator.sh.in
+      # Fix ignored return value of std::lock_guard
+      # Remove when version > 2.15.0
+      # Was changed as part of the big platform API change, no individual upstream commit with this fix
+      ./1001-mir-2_15-Fix-ignored-return-value-of-std-lock_guard.patch
 
-    # Fix LD_PRELOADing in tests
-    for needsPreloadFixing in \
-      cmake/MirCommon.cmake \
-      tests/umock-acceptance-tests/CMakeLists.txt \
-      tests/unit-tests/platforms/gbm-kms/kms/CMakeLists.txt \
-      tests/unit-tests/CMakeLists.txt
-    do
-      substituteInPlace $needsPreloadFixing \
-        --replace 'LD_PRELOAD=liblttng-ust-fork.so' 'LD_PRELOAD=${lib.getLib lttng-ust}/lib/liblttng-ust-fork.so' \
-        --replace 'LD_PRELOAD=libumockdev-preload.so.0' 'LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so.0'
-    done
+      # Fix missing includes for methods from algorithm
+      # Remove when version > 2.16.4
+      # https://github.com/canonical/mir/pull/3191 backported to 2.15
+      ./1002-mir-2_15-Add-missing-includes-for-algorithm.patch
 
-    # Fix Xwayland default
-    substituteInPlace src/miral/x11_support.cpp \
-      --replace '/usr/bin/Xwayland' '${lib.getExe xwayland}'
+      # Fix order of calloc arguments
+      # Remove when version > 2.16.4
+      # Partially done in https://github.com/canonical/mir/pull/3192, though one of the calloc was fixed earlier
+      # when some code was moved into that file
+      ./1003-mir-2_15-calloc-args-in-right-order.patch
 
-    # Fix paths for generating drm-formats
-    substituteInPlace src/platform/graphics/CMakeLists.txt \
-      --replace "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
-      --replace "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
-  '';
-
-  strictDeps = true;
-
-  nativeBuildInputs = [
-    cmake
-    glib # gdbus-codegen
-    lttng-ust # lttng-gen-tp
-    pkg-config
-    (python3.withPackages (ps: with ps; [
-      pillow
-    ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
-      pygobject3
-      python-dbusmock
-    ]))
-    validatePkgConfig
-  ];
-
-  buildInputs = [
-    boost
-    egl-wayland
-    freetype
-    glib
-    glm
-    glog
-    libdrm
-    libepoxy
-    libevdev
-    libglvnd
-    libinput
-    libuuid
-    libxcb
-    libxkbcommon
-    libxmlxx
-    yaml-cpp
-    lttng-ust
-    mesa
-    nettle
-    udev
-    wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.xorgproto
-    xwayland
-  ];
-
-  nativeCheckInputs = [
-    dbus
-  ];
-
-  checkInputs = [
-    gtest
-    umockdev
-    wlcs
-  ];
-
-  cmakeFlags = [
-    "-DBUILD_DOXYGEN=OFF"
-    "-DMIR_PLATFORM='gbm-kms;x11;eglstream-kms;wayland'"
-    "-DMIR_ENABLE_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-    # BadBufferTest.test_truncated_shm_file *doesn't* throw an error as the test expected, mark as such
-    # https://github.com/MirServer/mir/pull/1947#issuecomment-811810872
-    "-DMIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN=ON"
-    "-DMIR_EXCLUDE_TESTS=${lib.strings.concatStringsSep ";" [
-    ]}"
-    # These get built but don't get executed by default, yet they get installed when tests are enabled
-    "-DMIR_BUILD_PERFORMANCE_TESTS=OFF"
-    "-DMIR_BUILD_PLATFORM_TEST_HARNESS=OFF"
-    # https://github.com/MirServer/mir/issues/2987
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106799
-    "-DMIR_USE_PRECOMPILED_HEADERS=OFF"
-  ];
-
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
-  preCheck = ''
-    # Needs to be exactly /tmp so some failing tests don't get run, don't know why they fail yet
-    # https://github.com/MirServer/mir/issues/2801
-    export XDG_RUNTIME_DIR=/tmp
-  '';
-
-  outputs = [ "out" "dev" ];
-
-  passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
-    # More of an example than a fully functioning shell, some notes for the adventurous:
-    # - ~/.config/miral-shell.config is one possible user config location,
-    #   accepted options=value are according to `mir-shell --help`
-    # - default icon theme setting is DMZ-White, needs vanilla-dmz installed & on XCURSOR_PATH
-    #   or setting to be changed to an available theme
-    # - terminal emulator setting may need to be changed if miral-terminal script
-    #   does not know about preferred terminal
-    providedSessions = [ "mir-shell" ];
-  };
-
-  meta = with lib; {
-    description = "A display server and Wayland compositor developed by Canonical";
-    homepage = "https://mir-server.io";
-    changelog = "https://github.com/MirServer/mir/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ onny OPNA2608 ];
-    platforms = platforms.linux;
-    pkgConfigModules = [
-      "miral"
-      "mircommon"
-      "mircookie"
-      "mircore"
-      "miroil"
-      "mirplatform"
-      "mir-renderer-gl-dev"
-      "mirrenderer"
-      "mirserver"
-      "mirtest"
-      "mirwayland"
+      # Drop gflags & glog dependencies
+      # Remove when version > 2.16.4
+      (fetchpatch {
+        name = "0101-Drop-unused-dependency-on-gflags.patch";
+        url = "https://github.com/canonical/mir/commit/15a40638e5e9c4b6a11b7fa446ad31e190f485e7.patch";
+        includes = [
+          "CMakeLists.txt"
+          "examples/mir_demo_server/CMakeLists.txt"
+          "examples/mir_demo_server/glog_logger.cpp"
+        ];
+        hash = "sha256-qIsWCOs6Ap0jJ2cpgdO+xJHmSqC6zP+J3ALAfmlA6Vc=";
+      })
+      (fetchpatch {
+        name = "0102-Drop-the-glog-example.patch";
+        url = "https://github.com/canonical/mir/commit/8407da28ddb9a535df2775f224bf5143e8770d52.patch";
+        includes = [
+          "CMakeLists.txt"
+          "examples/mir_demo_server/CMakeLists.txt"
+          "examples/mir_demo_server/glog_logger.cpp"
+          "examples/mir_demo_server/glog_logger.h"
+          "examples/mir_demo_server/server_example.cpp"
+          "examples/mir_demo_server/server_example_log_options.cpp"
+          "examples/mir_demo_server/server_example_log_options.h"
+        ];
+        hash = "sha256-jVhVR7wZZZGRS40z+HPNoGBLHulvE1nHRKgYhQ6/g9M=";
+      })
     ];
   };
-})
+}

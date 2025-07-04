@@ -1,48 +1,47 @@
-{ lib
-, fetchFromGitHub
-, buildPgrxExtension
-, postgresql
-, nixosTests
-, cargo-pgrx_0_10_2
-, fetchCrate
-, nix-update-script
-, stdenv
+{
+  buildPgrxExtension,
+  cargo-pgrx_0_12_6,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  postgresql,
 }:
 
-(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_10_2; }) rec {
+(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_12_6; }) (finalAttrs: {
   inherit postgresql;
 
   pname = "timescaledb_toolkit";
-  version = "1.18.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
-    rev = version;
-    hash = "sha256-Lm/LFBkG91GeWlJL9RBqP8W0tlhBEeGQ6kXUzzv4xRE=";
+    tag = finalAttrs.version;
+    hash = "sha256-gGGSNvvJprqLkVwPr7cfmGY1qEUTXMdqdvwPYIzXaTA=";
   };
 
-  cargoHash = "sha256-LME8oftHmmiN8GU3eTBTSB6m0CE+KtDFRssL1g2Cjm8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-kyUpfNEXJ732VO6JDxU+dIoL57uWzG4Ff03/GnvsxLE=";
   buildAndTestSubdir = "extension";
+
+  postInstall = ''
+    cargo run --manifest-path ./tools/post-install/Cargo.toml -- --dir "$out"
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = {
-      timescaledb_toolkit = nixosTests.timescaledb;
-    };
+    tests = postgresql.pkgs.timescaledb.tests;
   };
 
   # tests take really long
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Provide additional tools to ease all things analytic when using TimescaleDB";
     homepage = "https://github.com/timescale/timescaledb-toolkit";
-    maintainers = with maintainers; [ typetetris ];
+    maintainers = with lib.maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
-    license = licenses.asl20;
-
-    # as it needs to be used with timescaledb, simply use the condition from there
-    broken = stdenv.isDarwin;
+    license = lib.licenses.tsl;
+    broken = lib.versionOlder postgresql.version "15";
   };
-}
+})

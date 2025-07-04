@@ -1,12 +1,14 @@
-{ buildPythonPackage
-, wasmer
-, pytestCheckHook
-, wasmer-compiler-cranelift
-, wasmer-compiler-llvm
-, wasmer-compiler-singlepass
+{
+  buildPythonPackage,
+  wasmer,
+  pytestCheckHook,
+  wasmer-compiler-cranelift,
+  wasmer-compiler-llvm,
+  wasmer-compiler-singlepass,
 }:
 
 buildPythonPackage {
+  format = "setuptools";
   pname = "wasmer-tests";
   inherit (wasmer) version;
 

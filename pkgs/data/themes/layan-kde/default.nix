@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, kdeclarative
-, plasma-framework
-, plasma-workspace
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kdeclarative,
+  plasma-framework,
+  plasma-workspace,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A flat Design theme for KDE Plasma desktop";
+    description = "Flat Design theme for KDE Plasma desktop";
     homepage = "https://github.com/vinceliuice/Layan-kde";
     license = licenses.gpl3Only;
     platforms = platforms.all;

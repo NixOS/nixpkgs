@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, cmake
-, openmw
-, fetchFromGitHub
-, fetchpatch
-, luajit
-, makeWrapper
-, symlinkJoin
+{
+  lib,
+  stdenv,
+  cmake,
+  openmw,
+  fetchFromGitHub,
+  fetchpatch,
+  luajit,
+  makeWrapper,
+  symlinkJoin,
 }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
@@ -113,6 +114,9 @@ let
 
       # https://github.com/TES3MP/openmw-tes3mp/issues/552
       ./tes3mp.patch
+
+      # https://github.com/TES3MP/TES3MP/pull/691
+      ./tes3mp-gcc14-fix.patch
     ];
 
     env.NIX_CFLAGS_COMPILE = "-fpermissive";
@@ -133,7 +137,10 @@ let
       homepage = "https://tes3mp.com/";
       license = licenses.gpl3Only;
       maintainers = with maintainers; [ peterhoeg ];
-      platforms = [ "x86_64-linux" "i686-linux" ];
+      platforms = [
+        "x86_64-linux"
+        "i686-linux"
+      ];
     };
   });
 

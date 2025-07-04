@@ -1,27 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  testers,
+  nix-update-script,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Foundation IOBluetooth;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueutil";
-  version = "2.9.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "toy";
     repo = "blueutil";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dxsgMwgBImMxMMD+atgGakX3J9YMO2g3Yjl5zOJ8PW0=";
+    hash = "sha256-JwX3NHXbGgEj+ZCyu9gWp2TCihokaAw5oHCrlmpy6HA=";
   };
-
-  buildInputs = [
-    Foundation
-    IOBluetooth
-  ];
 
   env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Werror -mmacosx-version-min=10.9 -framework Foundation -framework IOBluetooth";
 
@@ -34,7 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
+  };
+
   meta = {
+    changelog = "https://github.com/toy/blueutil/blob/main/CHANGELOG.md";
     description = "CLI for bluetooth on OSX";
     homepage = "https://github.com/toy/blueutil";
     license = lib.licenses.mit;

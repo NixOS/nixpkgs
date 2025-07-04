@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "asyncserial";
   version = "unstable-2022-06-10";
   format = "setuptools";
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-WExmgh55sTH2w7wV3i96J1F1FN7L5rX3L/Ayvt2Kw/g=";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  propagatedBuildInputs = [ pyserial ];
 
   pythonImportsCheck = [ "asyncserial" ];
 

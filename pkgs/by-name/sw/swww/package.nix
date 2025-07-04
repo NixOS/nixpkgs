@@ -1,29 +1,35 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, lz4
-, libxkbcommon
-, installShellFiles
-, scdoc
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  lz4,
+  libxkbcommon,
+  installShellFiles,
+  scdoc,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swww";
-  version = "0.9.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "LGFae";
     repo = "swww";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JtwNrdXZbmR7VZeRiXcLEEOq1z7bF8idjp2D1Zpf3Z4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GXqXZn29r7ktL01KBzlPZ+9b1fdnAPF8qhsQxhiqAsQ=";
   };
 
-  cargoHash = "sha256-FC3HeqWAMOTm2Tmzg+Sn/j0ZXyd8nsYH64MlwQwr8W0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jCjeHeHML8gHtvFcnHbiGL5fZ3LhABhXrcUTQriUDc0=";
 
   buildInputs = [
     lz4
     libxkbcommon
+    wayland-protocols
+    wayland-scanner
   ];
 
   doCheck = false; # Integration tests do not work in sandbox environment
@@ -47,12 +53,15 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/_swww
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Efficient animated wallpaper daemon for wayland, controlled at runtime";
     homepage = "https://github.com/LGFae/swww";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mateodd25 donovanglover ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      mateodd25
+      donovanglover
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "swww";
   };
-}
+})

@@ -1,15 +1,18 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "tang";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ jfroche ];
   };
 
   nodes.server =
-    { config
-    , pkgs
-    , modulesPath
-    , ...
-    }: {
+    {
+      config,
+      pkgs,
+      modulesPath,
+      ...
+    }:
+    {
       imports = [
         "${modulesPath}/../tests/common/auto-format-root-device.nix"
       ];
@@ -27,10 +30,17 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       boot.loader.systemd-boot.enable = true;
 
       networking.interfaces.eth1.ipv4.addresses = [
-        { address = "192.168.0.1"; prefixLength = 24; }
+        {
+          address = "192.168.0.1";
+          prefixLength = 24;
+        }
       ];
 
-      environment.systemPackages = with pkgs; [ clevis tang cryptsetup ];
+      environment.systemPackages = with pkgs; [
+        clevis
+        tang
+        cryptsetup
+      ];
       services.tang = {
         enable = true;
         ipAddressAllow = [ "127.0.0.1/32" ];
@@ -78,4 +88,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.log(output)
         assert output[-9:-1] == "SAFE :-}"
   '';
-})
+}

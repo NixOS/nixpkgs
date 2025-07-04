@@ -2,7 +2,7 @@
 #   1. GoCD server starts
 #   2. GoCD server responds
 
-import ./make-test-python.nix ({ pkgs, ...} :
+{ pkgs, ... }:
 
 {
   name = "gocd-server";
@@ -25,4 +25,4 @@ import ./make-test-python.nix ({ pkgs, ...} :
     server.wait_for_open_port(8153)
     server.wait_until_succeeds("curl -s -f localhost:8153/go")
   '';
-})
+}

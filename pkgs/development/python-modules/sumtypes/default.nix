@@ -1,9 +1,10 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,18 +16,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "radix";
-    repo = pname;
+    repo = "sumtypes";
     rev = version;
     hash = "sha256-qwQyFKVnGEqHUqFmUSnHVvedsp2peM6rJZcS90paLOo=";
   };
 
-  propagatedBuildInputs = [
-    attrs
-  ];
+  propagatedBuildInputs = [ attrs ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Algebraic data types for Python";

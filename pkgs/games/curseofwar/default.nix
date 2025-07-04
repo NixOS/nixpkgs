@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, ncurses
-, SDL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  SDL,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,9 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "A fast-paced action strategy game";
+    description = "Fast-paced action strategy game";
     homepage = "https://a-nikolaev.github.io/curseofwar/";
     license = licenses.gpl3;
+    mainProgram = if SDL != null then "curseofwar-sdl" else "curseofwar";
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };

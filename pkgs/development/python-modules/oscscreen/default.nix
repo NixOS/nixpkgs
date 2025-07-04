@@ -1,8 +1,8 @@
 {
-  lib
-  , buildPythonPackage
-  , fetchFromGitHub
-  , setuptools
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,15 +17,13 @@ buildPythonPackage rec {
     hash = "sha256-0Im1kVFa11AW+7Oe95XvkfxSlaux6bkKaHSQy6hJCN8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "oscscreen" ];
 
   meta = with lib; {
     description = "Framework for developing console applications using Python and curses";
-    homepage = "http://github.com/outscale/npyscreen";
+    homepage = "https://github.com/outscale/npyscreen";
     changelog = "https://github.com/outscale/npyscreen/blob/${src.rev}/CHANGELOG";
     license = licenses.bsd2;
     maintainers = with maintainers; [ nicolas-goudry ];

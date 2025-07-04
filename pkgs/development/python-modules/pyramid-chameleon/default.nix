@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, chameleon
-, fetchpatch
-, fetchPypi
-, pyramid
-, pytestCheckHook
-, setuptools
-, zope-interface
+{
+  lib,
+  buildPythonPackage,
+  chameleon,
+  fetchpatch,
+  fetchPypi,
+  pyramid,
+  pytestCheckHook,
+  setuptools,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
@@ -39,18 +39,14 @@ buildPythonPackage rec {
     zope-interface
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyramid_chameleon"
-  ];
+  pythonImportsCheck = [ "pyramid_chameleon" ];
 
   meta = with lib; {
     description = "Chameleon template compiler for pyramid";
     homepage = "https://github.com/Pylons/pyramid_chameleon";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
 }

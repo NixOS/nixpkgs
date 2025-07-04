@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, mdformat
-, mdformat-admon
-, mdformat-gfm
-, mdit-py-plugins
-, more-itertools
-, pythonOlder
-, pytest-snapshot
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  mdformat,
+  mdformat-gfm,
+  mdit-py-plugins,
+  more-itertools,
+  pythonOlder,
+  pytest-snapshot,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-mkdocs";
-  version = "2.0.8";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,17 +22,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HBRhmCqi13D+y+Vp2F27twU2eaRmJTcAzGOPCWMDtZU=";
+    tag = "v${version}";
+    hash = "sha256-SZcXYSmGvhXNP4keQPfnhVg9icHJnH2IfTXaKaJ+qLU=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     mdformat
-    mdformat-admon
     mdformat-gfm
     mdit-py-plugins
     more-itertools
@@ -48,14 +45,12 @@ buildPythonPackage rec {
     "tests/format/test_parsed_result.py"
   ];
 
-  pythonImportsCheck = [
-    "mdformat_mkdocs"
-  ];
+  pythonImportsCheck = [ "mdformat_mkdocs" ];
 
   meta = with lib; {
     description = "Mdformat plugin for MkDocs";
     homepage = "https://github.com/KyleKing/mdformat-mkdocs";
-    changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/v${version}";
+    changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ aldoborrero ];
   };

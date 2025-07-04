@@ -1,56 +1,54 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, matplotlib
-, mock
-, numpy
-, pillow
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  matplotlib,
+  numpy,
+  pillow,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "wordcloud";
-  version = "1.9.3";
-  format = "setuptools";
+  version = "1.9.4";
+
+  pyproject = true;
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "amueller";
-    repo = "word_cloud";
-    rev = "refs/tags/${version}";
-    hash = "sha256-UbryGiu1AW6Razbf4BJIKGKKhG6JOeZUGb1k0w8f8XA=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-snPYpd7ZfT6tkEBGtJRk3LcRGe5534dQcqTBBcrdNHo=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov --cov-report xml --tb=short" ""
-  '';
+  nativeBuildInputs = [ cython ];
 
-  nativeBuildInputs = [
-    cython
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     pillow
   ];
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   preCheck = ''
     cd test
   '';
 
-  pythonImportsCheck = [
-    "wordcloud"
-  ];
+  pythonImportsCheck = [ "wordcloud" ];
 
   disabledTests = [
     # Don't tests CLI

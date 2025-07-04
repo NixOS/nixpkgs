@@ -1,31 +1,38 @@
-{ lib, rustPlatform, fetchurl, openssl, stdenv, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "elm-test-rs";
-  version = "2.0";
+  version = "3.0";
 
-  src = fetchurl {
-    url = "https://github.com/mpizenberg/elm-test-rs/archive/v${version}.tar.gz";
-    sha256 = "sha256:1manr42w613r9vyji7pxx5gb08jcgkdxv29qqylrqlwxa8d5dcid";
+  src = fetchFromGitHub {
+    owner = "mpizenberg";
+    repo = "elm-test-rs";
+    tag = "v${version}";
+    hash = "sha256-l3RV+j3wAQ88QGNXLILp7YiUpdk7bkN25Y723pDZw48=";
   };
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Security
-    CoreServices
-  ]);
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
-  cargoSha256 = "sha256:1dpdlzv96kpc25yf5jgsz9qldghyw35x382qpxhkadkn5dryzjvd";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-F3/v4zYGZRv1PRVl/Tas+e0pc/dTM6ina+/c63KVuZY=";
 
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Fast and portable executable to run your Elm tests";
     mainProgram = "elm-test-rs";
     homepage = "https://github.com/mpizenberg/elm-test-rs";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.jpagex ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      jpagex
+      zupo
+    ];
   };
 }

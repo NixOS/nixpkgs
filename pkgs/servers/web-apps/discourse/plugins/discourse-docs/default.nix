@@ -1,12 +1,16 @@
-{ lib, mkDiscoursePlugin, fetchFromGitHub }:
+{
+  lib,
+  mkDiscoursePlugin,
+  fetchFromGitHub,
+}:
 
 mkDiscoursePlugin {
   name = "discourse-docs";
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-docs";
-    rev = "a4b203274b88c5277d0b5b936de0bc0e0016726c";
-    sha256 = "sha256-R+VP/gsb2Oa6lPVMhRoGZzOBx5C7kRSxqwYpWE10GHw=";
+    rev = "4e42539cda9a54d7827bcdf51b6dfbcf56d24cc9";
+    sha256 = "sha256-sv9Q0qEQVncQw3QLiro5YfVcHJAG8sJ0GTjduCZ0iP4=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-docs";

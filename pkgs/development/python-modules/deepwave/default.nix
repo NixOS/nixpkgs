@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, torch
-, ninja
-, scipy
-, which
-, pybind11
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  torch,
+  ninja,
+  scipy,
+  which,
+  pybind11,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 let
@@ -23,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ar4";
-    repo = pname;
+    repo = "deepwave";
     rev = "v${version}";
     hash = "sha256-DOOy+B12jgwJzQ90qzX50OFxYLPRcVdVYSE5gi3pqDM=";
   };
@@ -48,7 +49,10 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  propagatedBuildInputs = [ torch pybind11 ];
+  propagatedBuildInputs = [
+    torch
+    pybind11
+  ];
 
   nativeCheckInputs = [
     which

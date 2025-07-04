@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tlaplus";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchurl {
     url = "https://github.com/tlaplus/tlaplus/releases/download/v${version}/tla2tools.jar";
-    sha256 = "sha256-5P8V6oH05voSXAgwBDclSxdxdMalrfaNpElkar4IUZ0=";
+    sha256 = "sha256-k2omIGHJFGlN/WaaVDviRXPEXVqg/yCouWsj0B4FDog=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,11 +33,15 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An algorithm specification language with model checking tools";
-    homepage    = "http://lamport.azurewebsites.net/tla/tla.html";
+    description = "Algorithm specification language with model checking tools";
+    homepage = "https://lamport.azurewebsites.net/tla/tla.html";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ florentc thoughtpolice mgregson ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      florentc
+      thoughtpolice
+      mgregson
+    ];
   };
 }

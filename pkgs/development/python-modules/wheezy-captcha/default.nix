@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://wheezycaptcha.readthedocs.io/en/latest/";
-    description = "A lightweight CAPTCHA library";
+    description = "Lightweight CAPTCHA library";
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];
   };

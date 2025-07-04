@@ -1,15 +1,20 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "buckle";
   version = "1.1.0";
-  cargoHash = "sha256-O90/Xo9WjLVGFEkh6S6IyvanceRBJHneEret6W8e5Yc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2QUgyml4ebPLt0oXrdCNYIORvVyBKvsDfC+ZgsVn+cQ=";
 
   src = fetchFromGitHub {
     owner = "benbrittain";
     repo = "buckle";
     rev = "v${version}";
-    sha256 = "sha256-eWhcDzw+6I5N0dse5avwhcQ/y6YZ6b3QKyBwWBrA/xo=";
+    hash = "sha256-eWhcDzw+6I5N0dse5avwhcQ/y6YZ6b3QKyBwWBrA/xo=";
   };
 
   checkFlags = [
@@ -18,8 +23,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_buck2_specific_version"
   ];
 
-  meta = with lib; {
-    description = "A buck2 launcher";
+  meta = {
+    description = "Buck2 launcher";
     longDescription = ''
       Buckle is a launcher for [Buck2](https://buck2.build). It manages
       Buck2 on a per-project basis. This enables a project or team to do
@@ -28,8 +33,8 @@ rustPlatform.buildRustPackage rec {
       enforcing the prelude is upgraded in sync.
     '';
     homepage = "https://github.com/benbrittain/buckle";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cbarrete ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cbarrete ];
     mainProgram = "buckle";
   };
 }

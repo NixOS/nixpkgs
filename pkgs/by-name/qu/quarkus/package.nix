@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, jdk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quarkus-cli";
-  version = "3.9.3";
+  version = "3.23.4";
 
   src = fetchurl {
     url = "https://github.com/quarkusio/quarkus/releases/download/${finalAttrs.version}/quarkus-cli-${finalAttrs.version}.tar.gz";
-    hash = "sha256-VTgBwpE5b/OgM7kkzZijmj9H4d8jy0HNMGl5tfmBe4E=";
+    hash = "sha256-drN28p+tHCxvVFfBw+nlPZxtiF6sIseiW16/FxwxRLI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Quarkus is a Kubernetes-native Java framework tailored for GraalVM and HotSpot, crafted from best-of-breed Java libraries and standards";
     homepage = "https://quarkus.io";
+    changelog = "https://github.com/quarkusio/quarkus/releases/tag/${finalAttrs.version}";
     license = licenses.asl20;
     maintainers = [ maintainers.vinetos ];
     platforms = platforms.all;

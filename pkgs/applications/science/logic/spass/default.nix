@@ -1,10 +1,17 @@
-{ lib, stdenv, fetchurl, bison, flex }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  flex,
+}:
 
 let
-  baseVersion="3";
-  minorVersion="9";
+  baseVersion = "3";
+  minorVersion = "9";
 
-  extraTools = "FLOTTER prolog2dfg dfg2otter dfg2dimacs dfg2tptp"
+  extraTools =
+    "FLOTTER prolog2dfg dfg2otter dfg2dimacs dfg2tptp"
     + " dfg2ascii dfg2dfg tptp2dfg dimacs2dfg pgen rescmp";
 in
 
@@ -19,7 +26,10 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
 
   buildPhase = ''
     make RM="rm -f" proparser.c ${extraTools} opt
@@ -31,8 +41,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Automated theorem prover for first-order logic";
-    maintainers = with maintainers;
-    [
+    maintainers = with maintainers; [
       raskin
     ];
     platforms = platforms.unix;

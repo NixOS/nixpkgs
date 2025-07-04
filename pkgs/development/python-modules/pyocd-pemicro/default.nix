@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools-scm
-, pyocd
-, pypemicro
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools-scm,
+  pyocd,
+  pypemicro,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyocd";
     repo = "pyocd-pemicro";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qi803s8fkrLizcCLeDRz7CTQ56NGLQ4PPwCbxiRigwc=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     pyocd

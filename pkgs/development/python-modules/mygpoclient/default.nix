@@ -1,32 +1,48 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, nose, minimock }:
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  minimock,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
-  pname = "mypgoclient";
-  version = "1.8";
+  pname = "mygpoclient";
+  version = "1.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "mygpoclient";
-    rev = version;
-    sha256 = "0aa28wc55x3rxa7clwfv5v5500ffyaq0vkxaa3v01y1r93dxkdvp";
+    tag = version;
+    hash = "sha256-g4iPw6i8Gy3kvIjHCyGLJNHNb+osaCmc46hIryrodi8=";
   };
 
-  nativeCheckInputs = [ nose minimock ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  pythonImportsCheck = [ "mygpoclient" ];
 
-  doCheck = (!stdenv.isDarwin);
+  nativeCheckInputs = [
+    minimock
+    pytestCheckHook
+  ];
 
-  meta = with lib; {
-    description = "A gpodder.net client library";
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    "mygpoclient/http_test.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    description = "Gpodder.net client library";
     longDescription = ''
-        The mygpoclient library allows developers to utilize a Pythonic interface
-        to the gpodder.net web services.
+      The mygpoclient library allows developers to utilize a Pythonic interface
+      to the gpodder.net web services.
     '';
     homepage = "https://github.com/gpodder/mygpoclient";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
   };
 }

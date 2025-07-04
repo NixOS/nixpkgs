@@ -1,15 +1,16 @@
-{ lib
-, aiofiles
-, aiohttp
-, aresponses
-, buildPythonPackage
-, ciso8601
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-freezegun
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  ciso8601,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-freezegun,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkdrob";
     repo = "aioskybell";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-5F0B5z0pJLKJPzKIowE07vEgmNXnDVEeGFbPGnJ6H9I=";
   };
 
@@ -31,9 +32,7 @@ buildPythonPackage rec {
       --replace 'version="master",' 'version="${version}",'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -48,9 +47,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aioskybell"
+  disabledTests = [
+    # aiohttp compat issues
+    "test_get_devices"
+    "test_errors"
+    "test_async_change_setting"
   ];
+
+  pythonImportsCheck = [ "aioskybell" ];
 
   meta = with lib; {
     description = "API client for Skybell doorbells";

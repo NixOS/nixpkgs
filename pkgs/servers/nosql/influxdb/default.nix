@@ -1,33 +1,41 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, pkg-config, rustPlatform, libiconv, fetchpatch, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+  pkg-config,
+  rustPlatform,
+  libiconv,
+  nixosTests,
+}:
 
 let
-  libflux_version = "0.188.0";
+  libflux_version = "0.196.1";
 
-  # This is copied from influxdb2 with flux version matching the needed by thi
+  # This is copied from influxdb2 with the required flux version
   flux = rustPlatform.buildRustPackage rec {
     pname = "libflux";
-    version = "v${libflux_version}";
+    version = libflux_version;
     src = fetchFromGitHub {
       owner = "influxdata";
       repo = "flux";
-      rev = "v${libflux_version}";
-      hash = "sha256-4Z6Vfdyh0zimQlE47plSIjTWBYiju0Qu09M+MgMQOL4=";
+      tag = "v${libflux_version}";
+      hash = "sha256-935aN2SxfNZvpG90rXuqZ2OTpSGLgiBDbZsBoG0WUvU=";
     };
     patches = [
-      # https://github.com/influxdata/flux/pull/5440
-      # fix compile error with Rust 1.72.0
-      (fetchpatch {
-        url = "https://github.com/influxdata/flux/commit/8d1d6c8b485eb7e15b6a5f57762d1f766b17defd.patch";
-        stripLen = 2;
-        extraPrefix = "";
-        hash = "sha256-BDBmGKsC2RWMyObDm7dPwFq/3cVIdBKF8ZVaCL+uftw=";
-        includes = [ "flux/src/lib.rs" ];
-      })
+      # https://github.com/influxdata/flux/pull/5542
+      ../influxdb2/fix-unsigned-char.patch
     ];
+    # Don't fail on missing code documentation
+    postPatch = ''
+      substituteInPlace flux-core/src/lib.rs \
+        --replace-fail "deny(warnings, missing_docs))]" "deny(warnings))]"
+    '';
     sourceRoot = "${src.name}/libflux";
-    cargoHash = "sha256-925U9weBOvMuyApsTOjtQxik3nqT2UpK+DPM64opc7c=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-A6j/lb47Ob+Po8r1yvqBXDVP0Hf7cNz8WFZqiVUJj+Y=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
-    buildInputs = lib.optional stdenv.isDarwin libiconv;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
     pkgcfg = ''
       Name: flux
       Version: ${libflux_version}
@@ -36,28 +44,30 @@ let
       Libs: -L/out/lib -lflux -lpthread
     '';
     passAsFile = [ "pkgcfg" ];
-    postInstall = ''
-      mkdir -p $out/include $out/pkgconfig
-      cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
-      substitute $pkgcfgPath $out/pkgconfig/flux.pc \
-        --replace /out $out
-    '' + lib.optionalString stdenv.isDarwin ''
-      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
-    '';
+    postInstall =
+      ''
+        mkdir -p $out/include $out/pkgconfig
+        cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
+        substitute $pkgcfgPath $out/pkgconfig/flux.pc \
+          --replace-fail /out $out
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
+      '';
   };
 in
 buildGoModule rec {
   pname = "influxdb";
-  version = "1.10.5";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "influxdata";
-    repo = pname;
+    repo = "influxdb";
     rev = "v${version}";
-    hash = "sha256-FvKGNqy27q6/X2DI/joJXfGVrax6hQcNcx5nJDeSLm0=";
+    hash = "sha256-jSv3zzU/jIqALF9mb4gV7zyQvm8pIwJU6Y4ADBlpVOE=";
   };
 
-  vendorHash = "sha256-1jeZBVmNOxF5NPlTKg+YRw6VqIIZDcT3snnoMLX3y4g=";
+  vendorHash = "sha256-tPw/1vkUTwmRHrnENDG3NJTV6RplI4pCP6GueRT8dbc=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -74,16 +84,25 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   excludedPackages = "test";
 
-  passthru.tests = { inherit (nixosTests) influxdb; };
+  passthru.tests = {
+    inherit (nixosTests) influxdb;
+  };
 
   meta = with lib; {
-    description = "An open-source distributed time series database";
+    description = "Open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [ offline zimbatm ];
+    maintainers = with maintainers; [
+      offline
+      zimbatm
+    ];
   };
 }

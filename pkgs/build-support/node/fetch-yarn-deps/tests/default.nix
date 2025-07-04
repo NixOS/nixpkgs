@@ -17,6 +17,10 @@
     yarnLock = ./github.lock;
     sha256 = "sha256-DIKrhDKoqm7tHZmcuh9eK9VTqp6BxeW0zqDUpY4F57A=";
   };
+  githubReleaseDep = testers.invalidateFetcherByDrvHash fetchYarnDeps {
+    yarnLock = ./github-release.lock;
+    sha256 = "sha256-g+y/H6k8LZ+IjWvkkwV7JhKQH1ycfeqzsIonNv4fDq8=";
+  };
   gitUrlDep = testers.invalidateFetcherByDrvHash fetchYarnDeps {
     yarnLock = ./giturl.lock;
     sha256 = "sha256-VPnyqN6lePQZGXwR7VhbFnP7/0/LB621RZwT1F+KzVQ=";

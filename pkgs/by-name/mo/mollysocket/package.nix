@@ -1,26 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, sqlite
-, stdenv
-, darwin
-, nixosTests
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  sqlite,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mollysocket";
-  version = "1.3.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "mollyim";
     repo = "mollysocket";
-    rev = version;
-    hash = "sha256-eFvRjGUQ1AU+kXUp6YALm1lqhTMY2DxvFuf+MHCL38c=";
+    tag = version;
+    hash = "sha256-F80XRQn3h1Y6dE8PVLGMTY29yZomrwqFAsm7h8euHw8=";
   };
 
-  cargoHash = "sha256-3UwvnbHH6v1fJyivdU55GmJ2/+RSqXfBKIcOARASWbE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BgmgxNxyuEXKLO9yoymJ0PUfL6/YSegGk8OMPjup/zo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,8 +29,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
   ];
 
   checkFlags = [

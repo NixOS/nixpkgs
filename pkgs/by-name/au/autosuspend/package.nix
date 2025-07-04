@@ -1,27 +1,27 @@
-{ lib
-, dbus
-, fetchFromGitHub
-, fetchPypi
-, python3
+{
+  lib,
+  dbus,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
-  version = "6.1.1";
+  version = "7.2.0";
+  pyproject = true;
 
-  disabled = python3.pythonOlder "3.8";
+  disabled = python3.pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "languitar";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LGU/yhwuc6BuctCibm0AaRheQkuSIgEVXzcWQHCJ/8Y=";
+    repo = "autosuspend";
+    tag = "v${version}";
+    hash = "sha256-of2b5K4ccONPGZfUwEIoFs86xLM2aLCV8tVGxVqykiQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail '--cov-config=setup.cfg' ""
-  '';
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
   dependencies = with python3.pkgs; [
     dbus-python
@@ -41,6 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     dbus
     freezegun
+    pytest-cov-stub
     pytest-datadir
     pytest-httpserver
     pytest-mock
@@ -57,11 +58,14 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A daemon to automatically suspend and wake up a system";
+    description = "Daemon to automatically suspend and wake up a system";
     homepage = "https://autosuspend.readthedocs.io";
-    changelog = "https://github.com/languitar/autosuspend/releases/tag/v${version}";
+    changelog = "https://github.com/languitar/autosuspend/releases/tag/${src.tag}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ bzizou anthonyroussel ];
+    maintainers = with maintainers; [
+      bzizou
+      anthonyroussel
+    ];
     mainProgram = "autosuspend";
     platforms = platforms.linux;
   };

@@ -1,50 +1,41 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, python
-, cffi
-, pytestCheckHook
-, pythonOlder
-, ApplicationServices
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  setuptools,
+  cffi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pymunk";
-  version = "6.5.2";
-  format = "setuptools";
+  version = "7.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-AV6upaZcnbKmQm9tTItRB6LpckappjdHvMH/awn/KeE=";
+    hash = "sha256-lqOOgSP02J+IILQ2QPH2I9aETx+X7qCcRmDwMXgKn/g=";
   };
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  nativeBuildInputs = [ cffi ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    ApplicationServices
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ cffi ];
 
   preBuild = ''
     ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "pymunk/tests"
-  ];
+  pytestFlagsArray = [ "pymunk/tests" ];
 
-  pythonImportsCheck = [
-    "pymunk"
-  ];
+  pythonImportsCheck = [ "pymunk" ];
 
   meta = with lib; {
     description = "2d physics library";

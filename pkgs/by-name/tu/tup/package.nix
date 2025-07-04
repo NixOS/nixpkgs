@@ -1,11 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, sqlite, pcre2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fuse3,
+  macfuse-stubs,
+  pkg-config,
+  sqlite,
+  pcre2,
+}:
 
 let
-  fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
-in stdenv.mkDerivation rec {
+  fuse = if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse3;
+in
+stdenv.mkDerivation rec {
   pname = "tup";
   version = "0.8";
-  outputs = [ "bin" "man" "out" ];
+  outputs = [
+    "bin"
+    "man"
+    "out"
+  ];
 
   src = fetchFromGitHub {
     owner = "gittup";
@@ -15,12 +29,28 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse pcre2 sqlite ];
+  buildInputs = [
+    fuse
+    pcre2
+    sqlite
+  ];
 
   patches = [ ./fusermount-setuid.patch ];
 
   configurePhase = ''
-    substituteInPlace  src/tup/link.sh --replace '`git describe' '`echo ${version}'
+    substituteInPlace  src/tup/link.sh --replace-fail '`git describe' '`echo ${version}'
+
+    for path in Tupfile build.sh src/tup/server/Tupfile ; do
+      substituteInPlace  $path  --replace-fail "pkg-config" "${stdenv.cc.targetPrefix}pkg-config"
+    done
+
+    # Replace "pcre2-config --libs8" => "pkg-config libpcre2-8 --libs".
+    #
+    # There is prefixed pkg-config for cross-compilation, but no prefixed "pcre2-config".
+    for path in Tupfile Tuprules.tup ; do
+      substituteInPlace  $path --replace-fail "pcre2-config" "${stdenv.cc.targetPrefix}pkg-config libpcre2-8 "
+    done
+    substituteInPlace  Tupfile --replace-fail "--libs8" "--libs"
 
     cat << EOF > tup.config
     CONFIG_CC=${stdenv.cc.targetPrefix}cc
@@ -51,7 +81,7 @@ in stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    description = "A fast, file-based build system";
+    description = "Fast, file-based build system";
     mainProgram = "tup";
     longDescription = ''
       Tup is a file-based build system for Linux, OSX, and Windows. It inputs a list
@@ -65,12 +95,5 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.unix;
-
-    # TODO: Remove once nixpkgs uses newer SDKs that supports '*at' functions.
-    # Probably MacOS SDK 10.13 or later. Check the current version in
-    # ../../../../os-specific/darwin/apple-sdk/default.nix
-    #
-    # https://github.com/gittup/tup/commit/3697c74
-    broken = stdenv.isDarwin;
   };
 }

@@ -1,25 +1,32 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-autoinherit";
-  version = "0.1.4";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "mainmatter";
     repo = "cargo-autoinherit";
     rev = "v${version}";
-    hash = "sha256-BuZDCd4SwSYg5eKV61L3RpPVmq5NZDAOc9zOz5QiSNI=";
+    hash = "sha256-A4Ooqt/Cb8yyc4Y9DKZuFEVUux1ot+IVkPsSDylM6G4=";
   };
 
-  cargoHash = "sha256-9hhrVkC1xB2E/vatkiM4PIJyXq+0GDoqlgXZXc8WehU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TUW0DdTVNrFpRaTGWM9XD0kW1CjmSAfWrbZxFGn1jJw=";
 
   meta = with lib; {
     description = "Automatically DRY up your Rust dependencies";
     homepage = "https://github.com/mainmatter/cargo-autoinherit";
-    license = with licenses; [ asl20 /* OR */ mit ];
+    license = with licenses; [
+      asl20 # OR
+      mit
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ matthiasbeyer ];
     mainProgram = "cargo-autoinherit";
   };
 }
-

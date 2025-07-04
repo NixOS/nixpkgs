@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "vsftpd";
 
   nodes = {
@@ -19,11 +20,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           password = "ftp-test-password";
           group = "ftp-test-group";
         };
-        groups.ftp-test-group = {};
+        groups.ftp-test-group = { };
       };
     };
 
-    client = {};
+    client = { };
   };
 
   testScript = ''
@@ -39,4 +40,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     assert client.succeed("cat /tmp/test.file.up") == server.succeed("cat /tmp/test.file.up")
     assert client.succeed("cat /tmp/test.file.down") == server.succeed("cat /tmp/test.file.up")
   '';
-})
+}

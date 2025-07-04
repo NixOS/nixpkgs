@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchurl, libarchive }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libarchive,
+}:
 
 stdenv.mkDerivation rec {
   pname = "virtio-win";
-  version = "0.1.248-1";
+  version = "0.1.271-1";
 
   src = fetchurl {
     url = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-${version}/virtio-win.iso";
-    hash = "sha256-1bVznPKX8FONJj4wZ41aCbukcKfGvL2N/3TkQVPxZUk=";
+    hash = "sha256-u+YWathqSQyu+tQ4/viqSUkmywobN/oSEpJc/YFlZCk=";
   };
 
   nativeBuildInputs = [

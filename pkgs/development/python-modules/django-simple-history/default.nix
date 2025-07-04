@@ -1,47 +1,49 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, pytest-django
-, python
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  hatch-vcs,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-simple-history";
-  version = "3.5.0";
-  format = "setuptools";
+  version = "3.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-simple-history";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BW/F+RBf1KvwGRY9IK00+n69Jtx/ndEuvpHSi8/odSE=";
+    tag = version;
+    hash = "sha256-df6AWyliKSqKH0yacpHgGZXNvmjiJuFJWoJ7502IMB4=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [
+    hatch-fancy-pypi-readme
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
-    django
-  ];
+  dependencies = [ django ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} runtests.py
+    runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "simple_history"
-  ];
+  pythonImportsCheck = [ "simple_history" ];
 
   meta = with lib; {
-    description = "django-simple-history stores Django model state on every create/update/delete";
+    description = "Module to store Django model state on every create/update/delete";
     homepage = "https://github.com/jazzband/django-simple-history/";
-    changelog = "https://github.com/jazzband/django-simple-history/releases/tag/${version}";
+    changelog = "https://github.com/jazzband/django-simple-history/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ derdennisop ];
   };

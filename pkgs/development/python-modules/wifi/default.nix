@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pbkdf2
-, pytestCheckHook
-, pythonOlder
-, substituteAll
-, wirelesstools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pbkdf2,
+  pytestCheckHook,
+  pythonOlder,
+  wirelesstools,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "rockymeza";
-    repo = pname;
+    repo = "wifi";
     rev = "v${version}";
     hash = "sha256-scg/DvApvyQZtzDgkHFJzf9gCRfJgBvZ64CG/c2Cx8E=";
   };
@@ -27,13 +27,9 @@ buildPythonPackage rec {
       --replace "/sbin/iwlist" "${wirelesstools}/bin/iwlist"
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = [
-    pbkdf2
-  ];
+  propagatedBuildInputs = [ pbkdf2 ];
 
   pythonImportsCheck = [ "wifi" ];
 

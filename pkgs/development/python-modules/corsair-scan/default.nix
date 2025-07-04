@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, tldextract
-, urllib3
-, validators
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  tldextract,
+  urllib3,
+  validators,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Santandersecurityresearch";
     repo = "corsair_scan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-s94ZiTL7tBrhUaeB/O3Eh8o8zqtfdt0z8LKep1bZWiY=";
   };
 
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "corsair_scan"
-  ];
+  pythonImportsCheck = [ "corsair_scan" ];
 
   disabledTests = [
     # Tests want to download Public Suffix List

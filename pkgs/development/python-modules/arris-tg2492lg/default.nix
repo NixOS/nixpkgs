@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,26 +19,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vanbalken";
     repo = "arris-tg2492lg";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MQq9jMUoJgqaY0f9YIbhME2kO+ektPqBnT9REg3qDpg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "arris_tg2492lg"
-  ];
+  pythonImportsCheck = [ "arris_tg2492lg" ];
 
   meta = with lib; {
     description = "Library to connect to an Arris TG2492LG";

@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi , setuptools, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "lice";
   version = "0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,76 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
-# build-system
-, setuptools
-
-# dependencies
-, ecdsa
-, rsa
-, pyasn1
-
-# optional-dependencies
-, cryptography
-, pycrypto
-, pycryptodome
-
-# tests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  ecdsa,
+  fetchFromGitHub,
+  pyasn1,
+  pycrypto,
+  pycryptodome,
+  pytestCheckHook,
+  rsa,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-jose";
-  version = "3.3.0";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mpdavis";
-    repo = pname;
-    rev = version;
-    hash = "sha256-6VGC6M5oyGCOiXcYp6mpyhL+JlcYZKIqOQU9Sm/TkKM=";
+    repo = "python-jose";
+    tag = version;
+    hash = "sha256-8DQ0RBQ4ZgEIwcosgX3dzr928cYIQoH0obIOgk0+Ozs=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
-  '';
-
-  nativeBuildInputs = [
-    setuptools
+  pythonRelaxDeps = [
+    # https://github.com/mpdavis/python-jose/pull/376
+    "pyasn1"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     ecdsa
     pyasn1
     rsa
   ];
 
-  passthru.optional-dependencies = {
-    cryptography = [
-      cryptography
-    ];
-    pycrypto = [
-      pycrypto
-    ];
-    pycryptodome = [
-      pycryptodome
-    ];
+  optional-dependencies = {
+    cryptography = [ cryptography ];
+    pycrypto = [ pycrypto ];
+    pycryptodome = [ pycryptodome ];
   };
-
-  pythonImportsCheck = [
-    "jose"
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "jose" ];
 
   meta = with lib; {
-    changelog = "https://github.com/mpdavis/python-jose/releases/tag/${version}";
+    description = "JOSE implementation in Python";
     homepage = "https://github.com/mpdavis/python-jose";
-    description = "A JOSE implementation in Python";
+    changelog = "https://github.com/mpdavis/python-jose/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jhhuh ];
+    maintainers = [ ];
   };
 }

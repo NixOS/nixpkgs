@@ -1,29 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, pyyaml
-, tqdm
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  pyyaml,
+  tqdm,
+  pytestCheckHook,
+  pytest-mock,
 }:
 let
-  version = "2.3.1";
+  version = "2.3.2";
 in
 buildPythonPackage {
   pname = "docstr-coverage";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "HunterMcGushion";
     repo = "docstr_coverage";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QmQE6KZ2NdXKQun+uletxYPktWvfkrj6NPAVl/mmpAY=";
+    tag = "v${version}";
+    hash = "sha256-k1ny4fWS+CmgLNWPlYPsscjei2UZ6h8QJrZSay5abck=";
   };
 
-  propagatedBuildInputs = [ click pyyaml tqdm ];
+  propagatedBuildInputs = [
+    click
+    pyyaml
+    tqdm
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-mock ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+  ];
 
   disabledTests = [
     # AssertionError: assert 'docstr_coverage' in '/build/source/tests'

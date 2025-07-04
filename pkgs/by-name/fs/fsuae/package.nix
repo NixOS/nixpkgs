@@ -1,24 +1,25 @@
-{ lib
-, SDL2
-, autoreconfHook
-, fetchFromGitHub
-, freetype
-, gettext
-, glib
-, gtk2
-, libGL
-, libGLU
-, libmpeg2
-, lua
-, openal
-, pkg-config
-, strip-nondeterminism
-, stdenv
-, zip
-, zlib
+{
+  lib,
+  SDL2,
+  autoreconfHook,
+  fetchFromGitHub,
+  freetype,
+  gettext,
+  glib,
+  gtk2,
+  libGL,
+  libGLU,
+  libmpeg2,
+  lua,
+  openal,
+  pkg-config,
+  strip-nondeterminism,
+  stdenv,
+  zip,
+  zlib,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "fs-uae";
   version = "3.1.66";
 
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs:{
 
   meta = {
     homepage = "https://fs-uae.net";
-    description = "An accurate, customizable Amiga Emulator";
+    description = "Accurate, customizable Amiga Emulator";
     longDescription = ''
       FS-UAE integrates the most accurate Amiga emulation code available from
       WinUAE. FS-UAE emulates A500, A500+, A600, A1200, A1000, A3000 and A4000
@@ -68,8 +69,7 @@ stdenv.mkDerivation (finalAttrs:{
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "fs-uae";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = with lib.systems.inspect;
-      patternLogicalAnd patterns.isx86 patterns.isLinux;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
 })

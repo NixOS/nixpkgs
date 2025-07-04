@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
@@ -17,14 +18,12 @@ buildPythonPackage rec {
 
   doCheck = false; # has no tests
 
-  pythonImportsCheck = [
-    "slugid"
-  ];
+  pythonImportsCheck = [ "slugid" ];
 
   meta = with lib; {
     description = "URL-safe base64 UUID encoder for generating 22 character slugs";
     homepage = "https://github.com/taskcluster/slugid.py";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ milahu ];
+    maintainers = with maintainers; [ ];
   };
 }

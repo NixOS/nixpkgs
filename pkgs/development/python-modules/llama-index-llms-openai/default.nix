@@ -3,13 +3,14 @@
   buildPythonPackage,
   fetchPypi,
   llama-index-core,
-  poetry-core,
+  openai,
+  hatchling,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-llms-openai";
-  version = "0.1.15";
+  version = "0.4.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,12 +18,20 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_llms_openai";
     inherit version;
-    hash = "sha256-a9vzB7HUOpp8KlL3K6fbYcuW2QT5nn6l2IndeBjxCBQ=";
+    hash = "sha256-Vkr4qzn7Pzrf6uc6WcDcpGwJmrhEoo5yXu4MVR1Iafg=";
   };
 
-  build-system = [ poetry-core ];
+  pythonRemoveDeps = [
+    # Circular dependency
+    "llama-index-agent-openai"
+  ];
 
-  dependencies = [ llama-index-core ];
+  build-system = [ hatchling ];
+
+  dependencies = [
+    llama-index-core
+    openai
+  ];
 
   # Tests are only available in the mono repo
   doCheck = false;

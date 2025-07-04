@@ -1,27 +1,28 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nodejs
-, npmHooks
-, fetchNpmDeps
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nodejs,
+  npmHooks,
+  fetchNpmDeps,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "godns";
-  version = "3.1.5";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "godns";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kdClyeU0hR0ymVLn9xe/kYVJE/9P/hAz/5UwRAQ2KCU=";
+    tag = "v${version}";
+    hash = "sha256-Uf+V6A5Q1gQQn+hJUUwmeaGve8364Lui2dMeCzkkeTQ=";
   };
 
-  vendorHash = "sha256-kSREFNIGH0MXiyKMp1LmrLkhKBhovvNRz46LTXT2XME=";
+  vendorHash = "sha256-PrXi460v7ooBhFooLw14tMDvLvEzIYt+4Y+36BYdWzA=";
   npmDeps = fetchNpmDeps {
     src = "${src}/web";
-    hash = "sha256-2yeqLly0guU/kpX+yH/QOoDGzyJTxkTaCt8EleJhybU=";
+    hash = "sha256-+a5IrJLamuNmwGhPIA7JKvgm6COnYre6bPuAv1PgGns=";
   };
 
   npmRoot = "web";
@@ -53,12 +54,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "A dynamic DNS client tool supports AliDNS, Cloudflare, Google Domains, DNSPod, HE.net & DuckDNS & DreamHost, etc";
+  meta = {
+    description = "Dynamic DNS client tool supports AliDNS, Cloudflare, Google Domains, DNSPod, HE.net & DuckDNS & DreamHost, etc";
     homepage = "https://github.com/TimothyYe/godns";
     changelog = "https://github.com/TimothyYe/godns/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yinfeng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yinfeng ];
     mainProgram = "godns";
   };
 }

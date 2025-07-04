@@ -1,16 +1,24 @@
-{ lib, buildPythonPackage, fetchFromSourcehut, pythonOlder
-, cmake, cython, alure2, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromSourcehut,
+  pythonOlder,
+  cmake,
+  cython_0,
+  setuptools,
+  alure2,
 }:
 
 buildPythonPackage rec {
   pname = "palace";
   version = "0.2.5";
-  format = "setuptools";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
-    repo = pname;
+    repo = "palace";
     rev = version;
     sha256 = "1z0m35y4v1bg6vz680pwdicm9ssryl0q6dm9hfpb8hnifmridpcj";
   };
@@ -21,15 +29,18 @@ buildPythonPackage rec {
       --replace IMPORTED_LOCATION_NOCONFIG IMPORTED_LOCATION_RELEASE
   '';
 
-  dontUseCmakeConfigure = true;
-
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ cython ];
-  propagatedBuildInputs = [ alure2 ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
+  build-system = [
+    cmake
+    cython_0
+    setuptools
   ];
 
+  dontUseCmakeConfigure = true;
+
+  propagatedBuildInputs = [ alure2 ];
+
   doCheck = false; # FIXME: tests need an audio device
+
   pythonImportsCheck = [ "palace" ];
 
   meta = with lib; {

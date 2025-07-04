@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wayfire
-, wf-config
-, wayland
-, pango
-, libinput
-, libxkbcommon
-, librsvg
-, libGL
-, xcbutilwm
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wayfire,
+  wf-config,
+  wayland,
+  pango,
+  libinput,
+  libxkbcommon,
+  librsvg,
+  libGL,
+  xcbutilwm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://gitlab.com/wayfireplugins/focus-request";
-    description = "The wayfire plugin provides a mechanism to grant focus to views that make a focus self-request";
+    description = "Wayfire plugin provides a mechanism to grant focus to views that make a focus self-request";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rewine ];
     inherit (wayfire.meta) platforms;

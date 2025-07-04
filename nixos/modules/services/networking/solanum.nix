@@ -1,7 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
   inherit (pkgs) solanum util-linux;
   cfg = config.services.solanum;
 
@@ -73,37 +83,38 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable (lib.mkMerge [
-    {
+  config = mkIf cfg.enable (
+    lib.mkMerge [
+      {
 
-      environment.etc."solanum/ircd.conf".source = configFile;
+        environment.etc."solanum/ircd.conf".source = configFile;
 
-      systemd.services.solanum = {
-        description = "Solanum IRC daemon";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        reloadIfChanged = true;
-        restartTriggers = [
-          configFile
-        ];
-        serviceConfig = {
-          ExecStart = "${solanum}/bin/solanum -foreground -logfile /dev/stdout -configfile /etc/solanum/ircd.conf -pidfile /run/solanum/ircd.pid";
-          ExecReload = "${util-linux}/bin/kill -HUP $MAINPID";
-          DynamicUser = true;
-          User = "solanum";
-          StateDirectory = "solanum";
-          RuntimeDirectory = "solanum";
-          LimitNOFILE = "${toString cfg.openFilesLimit}";
+        systemd.services.solanum = {
+          description = "Solanum IRC daemon";
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
+          reloadIfChanged = true;
+          restartTriggers = [
+            configFile
+          ];
+          serviceConfig = {
+            ExecStart = "${solanum}/bin/solanum -foreground -logfile /dev/stdout -configfile /etc/solanum/ircd.conf -pidfile /run/solanum/ircd.pid";
+            ExecReload = "${util-linux}/bin/kill -HUP $MAINPID";
+            DynamicUser = true;
+            User = "solanum";
+            StateDirectory = "solanum";
+            RuntimeDirectory = "solanum";
+            LimitNOFILE = "${toString cfg.openFilesLimit}";
+          };
         };
-      };
 
-    }
+      }
 
-    (mkIf (cfg.motd != null) {
-      environment.etc."solanum/ircd.motd".text = cfg.motd;
-    })
-  ]);
+      (mkIf (cfg.motd != null) {
+        environment.etc."solanum/ircd.motd".text = cfg.motd;
+      })
+    ]
+  );
 }

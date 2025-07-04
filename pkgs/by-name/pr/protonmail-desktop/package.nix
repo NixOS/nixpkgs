@@ -1,52 +1,80 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, dpkg
-, electron
+{
+  asar,
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  dpkg,
+  electron,
 }:
-
 let
   mainProgram = "proton-mail";
-in stdenv.mkDerivation rec {
+  version = "1.8.0";
+
+in
+stdenv.mkDerivation {
   pname = "protonmail-desktop";
-  version = "1.0.1";
+  inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ProtonMail/inbox-desktop/releases/download/v${version}/proton-mail_${version}_amd64.deb";
-    hash = "sha256-fNK//x3DOsynWSkG9N+nZ3wjYoC+RreaYVC6KEDXh4w=";
+    url = "https://proton.me/download/mail/linux/${version}/ProtonMail-desktop-beta.deb";
+    sha256 = "sha256-ti00RSMnSwrGNUys7mO0AmK+OSq4SZmCsfPKm7RRm2g=";
   };
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    asar
+  ];
+
+  # Rebuild the ASAR archive, hardcoding the resourcesPath
+  preInstall = ''
+    asar extract usr/lib/proton-mail/resources/app.asar tmp
+    rm usr/lib/proton-mail/resources/app.asar
+    substituteInPlace tmp/.webpack/main/index.js \
+      --replace-fail "process.resourcesPath" "'$out/share/proton-mail'"
+    asar pack tmp/ usr/lib/proton-mail/resources/app.asar
+    rm -fr tmp
+  '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
+
+    mkdir -p $out/share/proton-mail
     cp -r usr/share/ $out/
-    cp -r usr/lib/proton-mail/resources/app.asar $out/share/
+    cp -r usr/lib/proton-mail/resources/* $out/share/proton-mail/
+
     runHook postInstall
   '';
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     makeWrapper ${lib.getExe electron} $out/bin/${mainProgram} \
-      --add-flags $out/share/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags $out/share/proton-mail/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
   '';
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Desktop application for Mail and Calendar, made with Electron";
-    homepage = "https://github.com/ProtonMail/inbox-desktop";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rsniezek sebtm ];
-    platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    homepage = "https://github.com/ProtonMail/WebClients";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      rsniezek
+      sebtm
+      matteopacini
+    ];
+    platforms = [
+      "x86_64-linux"
+    ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+
     inherit mainProgram;
   };
 }
-

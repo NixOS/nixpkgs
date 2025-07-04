@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
+  globalCfg = config.services.scion;
   cfg = config.services.scion.scion-router;
   toml = pkgs.formats.toml { };
   defaultConfig = {
@@ -11,7 +17,7 @@ let
       config_dir = "/etc/scion";
     };
   };
-  configFile = toml.generate "scion-router.toml" (defaultConfig // cfg.settings);
+  configFile = toml.generate "scion-router.toml" (recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-router = {
@@ -39,10 +45,10 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.scion}/bin/scion-router --config ${configFile}";
+        ExecStart = "${globalCfg.package}/bin/scion-router --config ${configFile}";
         Restart = "on-failure";
         DynamicUser = true;
-        StateDirectory = "scion-router";
+        ${if globalCfg.stateless then "RuntimeDirectory" else "StateDirectory"} = "scion-router";
       };
     };
   };

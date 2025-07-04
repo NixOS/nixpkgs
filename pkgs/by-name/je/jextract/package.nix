@@ -1,50 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, emptyDirectory
-, writeText
-, makeBinaryWrapper
-, gradle
-, jdk22
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  gradle,
+  jdk23,
+  llvmPackages,
 }:
-
-let
-  gradleInit = writeText "init.gradle" ''
-    logger.lifecycle 'Replacing Maven repositories with empty directory...'
-    gradle.projectsLoaded {
-      rootProject.allprojects {
-        buildscript {
-          repositories {
-            clear()
-            maven { url '${emptyDirectory}' }
-          }
-        }
-        repositories {
-          clear()
-          maven { url '${emptyDirectory}' }
-        }
-      }
-    }
-    settingsEvaluated { settings ->
-      settings.pluginManagement {
-        repositories {
-          maven { url '${emptyDirectory}' }
-        }
-      }
-    }
-  '';
-in
 
 stdenv.mkDerivation {
   pname = "jextract";
-  version = "unstable-2024-03-13";
+  version = "unstable-2025-05-08";
 
   src = fetchFromGitHub {
     owner = "openjdk";
     repo = "jextract";
-    rev = "b9ec8879cff052b463237fdd76382b3a5cd8ff2b";
-    hash = "sha256-+4AM8pzXPIO/CS3+Rd/jJf2xDvAo7K7FRyNE8rXvk5U=";
+    rev = "ab6b30fd189e33a52d366846202f2e9b9b280142";
+    hash = "sha256-cFXQo/DpjOuuW+HCP2G9HiOqdgVmmyPd3IXCB9X+w6M=";
   };
 
   nativeBuildInputs = [
@@ -52,27 +24,18 @@ stdenv.mkDerivation {
     makeBinaryWrapper
   ];
 
-  env = {
-    ORG_GRADLE_PROJECT_llvm_home = llvmPackages.libclang.lib;
-    ORG_GRADLE_PROJECT_jdk22_home = jdk22;
-  };
+  gradleFlags = [
+    "-Pllvm_home=${lib.getLib llvmPackages.libclang}"
+    "-Pjdk_home=${jdk23}"
+  ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle --console plain --init-script "${gradleInit}" assemble
-
-    runHook postBuild
-  '';
+  patches = [
+    ./copy_lib_clang.patch
+  ];
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
-    gradle --console plain --init-script "${gradleInit}" verify
-    runHook postCheck
-  '';
+  gradleCheckTask = "verify";
 
   installPhase = ''
     runHook preInstall
@@ -85,11 +48,14 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A tool which mechanically generates Java bindings from a native library headers";
+    description = "Tool which mechanically generates Java bindings from a native library headers";
     mainProgram = "jextract";
     homepage = "https://github.com/openjdk/jextract";
-    platforms = jdk22.meta.platforms;
+    platforms = jdk23.meta.platforms;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jlesquembre sharzy ];
+    maintainers = with maintainers; [
+      jlesquembre
+      sharzy
+    ];
   };
 }

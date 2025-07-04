@@ -1,73 +1,88 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, cython
-, hypothesis
-, numpy
-, pytestCheckHook
-, pythonOlder
-, gitUpdater
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  cython,
+  numpy,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
+
+  # passthru
+  blis,
+  numpy_1,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "0.7.11";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cython-blis";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p8pzGZc5OiiGTvXULDgzsBC3jIhovTKUq3RtPnQ/+to=";
+    tag = "release-v${version}";
+    hash = "sha256-mSIfFjnLhPLqSNLHMS5gTeAmqmNfXpcbyH7ejv4YgQU=";
   };
 
-  postPatch = ''
-    # See https://github.com/numpy/numpy/issues/21079
-    # has no functional difference as the name is only used in log output
-    substituteInPlace blis/benchmark.py \
-      --replace 'numpy.__config__.blas_ilp64_opt_info["libraries"]' '["dummy"]'
-  '';
-
-  preCheck = ''
-    # remove src module, so tests use the installed module instead
-    rm -rf ./blis
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     cython
-  ];
-
-  propagatedBuildInputs = [
     numpy
   ];
+
+  env =
+    # Fallback to generic architectures when necessary:
+    # https://github.com/explosion/cython-blis?tab=readme-ov-file#building-blis-for-alternative-architectures
+    lib.optionalAttrs
+      (
+        # error: [Errno 2] No such file or directory: '/build/source/blis/_src/make/linux-cortexa57.jsonl'
+        (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
+
+        # clang: error: unknown argument '-mavx512pf'; did you mean '-mavx512f'?
+        # Patching blis/_src/config/knl/make_defs.mk to remove the said flag does not work
+        || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
+      )
+      {
+        BLIS_ARCH = "generic";
+      };
+
+  dependencies = [ numpy ];
+
+  pythonImportsCheck = [ "blis" ];
 
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "blis"
-  ];
+  # remove src module, so tests use the installed module instead
+  preCheck = ''
+    rm -rf ./blis
+  '';
 
   passthru = {
-    # Do not update to BLIS 0.9.x until the following issue is resolved:
-    # https://github.com/explosion/thinc/issues/771#issuecomment-1255825935
-    skipBulkUpdate = true;
+    tests = {
+      numpy_1 = blis.overridePythonAttrs (old: {
+        numpy = numpy_1;
+      });
+    };
     updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = "0\.9\..*";
+      rev-prefix = "release-v";
     };
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/explosion/cython-blis/releases/tag/release-v${version}";
     description = "BLAS-like linear algebra library";
     homepage = "https://github.com/explosion/cython-blis";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jamo
-, nltk
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jamo,
+  nltk,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     nltk
   ];
 
-  pythonImportsCheck = [
-    "g2pkk"
-  ];
+  pythonImportsCheck = [ "g2pkk" ];
 
   doCheck = false;
 
@@ -30,7 +29,6 @@ buildPythonPackage rec {
     description = "Cross-platform g2p for Korean";
     homepage = "https://github.com/harmlessman/g2pkk";
     license = licenses.asl20;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }
-

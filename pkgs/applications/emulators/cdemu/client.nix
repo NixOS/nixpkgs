@@ -1,16 +1,42 @@
-{ callPackage, python3Packages, intltool, makeWrapper }:
-let pkg = import ./base.nix {
-  version = "3.2.5";
-  pname = "cdemu-client";
-  pkgSha256 = "1prrdhv0ia0axc6b73crszqzh802wlkihz6d100yvg7wbgmqabd7";
-};
-in callPackage pkg {
-  nativeBuildInputs = [ makeWrapper intltool ];
-  buildInputs = [ python3Packages.python python3Packages.dbus-python python3Packages.pygobject3 ];
-  drvParams = {
-    postFixup = ''
-      wrapProgram $out/bin/cdemu \
-        --set PYTHONPATH "$PYTHONPATH"
-    '';
-  };
+{
+  callPackage,
+  python3Packages,
+  cmake,
+  pkg-config,
+  intltool,
+  wrapGAppsNoGuiHook,
+  gobject-introspection,
+}:
+python3Packages.buildPythonApplication {
+
+  inherit
+    (callPackage ./common-drv-attrs.nix {
+      version = "3.2.5";
+      pname = "cdemu-client";
+      hash = "sha256-py2F61v8vO0BCM18GCflAiD48deZjbMM6wqoCDZsOd8=";
+    })
+    pname
+    version
+    src
+    meta
+    ;
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    intltool
+    wrapGAppsNoGuiHook
+    gobject-introspection
+  ];
+  propagatedBuildInputs = with python3Packages; [
+    dbus-python
+    pygobject3
+  ];
+
+  pyproject = false;
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
 }

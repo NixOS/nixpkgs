@@ -12,10 +12,11 @@ rustPlatform.buildRustPackage rec {
     owner = "maurobalbi";
     repo = "glas";
     rev = "v${version}";
-    sha256 = "sha256-jMpFxzosaCedwsJ8URlR3Gd/mnlgSBEfA3oIymmEPFU=";
+    hash = "sha256-jMpFxzosaCedwsJ8URlR3Gd/mnlgSBEfA3oIymmEPFU=";
   };
 
-  cargoHash = "sha256-zESRtefoObpUsu4RfTsqJAyBNylouXffpNK3W/X+w9M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uPCWHLqko361S/ThtWOP/XN1QFSHXv0dpYR3xweHqe0=";
 
   doInstallCheck = true;
   postInstallCheck = ''
@@ -23,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "A language server for the Gleam programming language.";
+    description = "Language server for the Gleam programming language";
     homepage = "https://github.com/maurobalbi/glas";
     changelog = "https://github.com/maurobalbi/glas/tag/v${version}";
     license = with lib.licenses; [

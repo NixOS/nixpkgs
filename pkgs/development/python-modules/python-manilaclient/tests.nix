@@ -1,10 +1,11 @@
-{ buildPythonPackage
-, python-manilaclient
-, stestr
-, ddt
-, tempest
-, mock
-, python-openstackclient
+{
+  buildPythonPackage,
+  python-manilaclient,
+  stestr,
+  ddt,
+  tempest,
+  mock,
+  python-openstackclient,
 }:
 
 buildPythonPackage {

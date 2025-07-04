@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,6 @@ buildPythonPackage rec {
     description = "Bangla Number text to String Converter";
     homepage = "https://github.com/banglakit/number-to-bengali-word";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

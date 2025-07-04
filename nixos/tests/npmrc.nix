@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ ... }:
+{ ... }:
 let
   machineName = "machine";
   settingName = "prefix";
@@ -19,4 +19,4 @@ in
 
     assert ${machineName}.succeed("npm config get ${settingName}") == "${settingValue}\n"
   '';
-})
+}

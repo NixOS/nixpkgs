@@ -1,23 +1,47 @@
-{ lib, stdenv, fetchzip
-, meson, ninja, pkg-config, python3, python3Packages, wayland-scanner
-, libxkbcommon, mesa, pixman, xorg, wayland, gtest
+{
+  lib,
+  stdenv,
+  fetchzip,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  python3Packages,
+  wayland-scanner,
+  libxkbcommon,
+  libgbm,
+  pixman,
+  xorg,
+  wayland,
+  gtest,
 }:
 
 stdenv.mkDerivation {
   pname = "sommelier";
-  version = "123.0";
+  version = "126.0";
 
   src = fetchzip rec {
     url = "https://chromium.googlesource.com/chromiumos/platform2/+archive/${passthru.rev}/vm_tools/sommelier.tar.gz";
-    passthru.rev = "1abc91204f35cde76db37853ff3643c5cdb607e6";
+    passthru.rev = "fd3798efe23f2edbc48f86f2fbd82ba5059fd875";
     stripRoot = false;
-    sha256 = "Wa30MU7iK1Y7pKNeC+FPFXDwDxFLWOZPG4jkm8cnWeg=";
+    sha256 = "BmWZnMcK7IGaEAkVPulyb3hngsmuI0D1YtQEbqMjV5c=";
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config python3 python3Packages.jinja2 wayland-scanner
+    meson
+    ninja
+    pkg-config
+    python3
+    python3Packages.jinja2
+    wayland-scanner
   ];
-  buildInputs = [ libxkbcommon mesa pixman wayland xorg.libxcb ];
+  buildInputs = [
+    libxkbcommon
+    libgbm
+    pixman
+    wayland
+    xorg.libxcb
+  ];
 
   preConfigure = ''
     patchShebangs gen-shim.py

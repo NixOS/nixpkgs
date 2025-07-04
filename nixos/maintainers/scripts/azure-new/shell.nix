@@ -1,13 +1,16 @@
-with (import ../../../../default.nix {});
-stdenv.mkDerivation {
+{
+  pkgs ? import ../../../../default.nix { },
+}:
+
+pkgs.stdenv.mkDerivation {
   name = "nixcfg-azure-devenv";
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with pkgs; [
     azure-cli
     bash
     cacert
     azure-storage-azcopy
   ];
 
-  AZURE_CONFIG_DIR="/tmp/azure-cli/.azure";
+  AZURE_CONFIG_DIR = "/tmp/azure-cli/.azure";
 }

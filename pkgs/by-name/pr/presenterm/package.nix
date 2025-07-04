@@ -1,47 +1,82 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, libsixel
-, testers
-, presenterm
-, stdenv
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  lld,
+  libsixel,
+  versionCheckHook,
+  nix-update-script,
 }:
-
-rustPlatform.buildRustPackage rec {
+let
+  inherit (stdenv.hostPlatform) isDarwin isx86_64;
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "presenterm";
-  version = "0.7.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "presenterm";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-I5L+Wygj9ApQu/5fm55okwNbyxOiF++7BDl765MLnjY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vBEHk0gQe4kUTtH4qtc0jVfDvYGabnkJrwPxmxt10hs=";
   };
+
+  nativeBuildInputs =
+    lib.optionals isDarwin [
+      makeBinaryWrapper
+    ]
+    ++ lib.optionals (isDarwin && isx86_64) [
+      lld
+    ];
 
   buildInputs = [
     libsixel
   ];
 
-  cargoHash = "sha256-w1uXCH8Ybf78EPTIKrhPlPHAnNBp1iiBpFJHY98IPWY=";
+  buildFeatures = [
+    "sixel"
+  ];
 
-  # Crashes at runtime on darwin with:
-  # Library not loaded: .../out/lib/libsixel.1.dylib
-  buildFeatures = lib.optionals (!stdenv.isDarwin) [ "sixel" ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-u0wOWKAfzi1Fxmx6x2ckrIv/PKgtqKrDiDauD4/BY24=";
 
-  # Skip test that currently doesn't work
-  checkFlags = [ "--skip=execute::test::shell_code_execution" ];
-
-  passthru.tests.version = testers.testVersion {
-    package = presenterm;
-    command = "presenterm --version";
+  env = lib.optionalAttrs (isDarwin && isx86_64) {
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
-  meta = with lib; {
-    description = "A terminal based slideshow tool";
-    changelog = "https://github.com/mfontanini/presenterm/releases/tag/v${version}";
+  checkFeatures = [
+    "sixel"
+  ];
+
+  checkFlags = [
+    # failed to load .tmpEeeeaQ: No such file or directory (os error 2)
+    "--skip=external_snippet"
+  ];
+
+  # sixel-sys is dynamically linked to libsixel
+  postInstall = lib.optionalString isDarwin ''
+    wrapProgram $out/bin/presenterm \
+      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Terminal based slideshow tool";
+    changelog = "https://github.com/mfontanini/presenterm/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/mfontanini/presenterm";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mikaelfangel ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     mainProgram = "presenterm";
   };
-}
+})

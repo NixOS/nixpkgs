@@ -1,6 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  pytestCheckHook,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "baseline";
   version = "1.2.1";
   format = "setuptools";

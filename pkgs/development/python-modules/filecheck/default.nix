@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -13,21 +14,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mull-project";
     repo = "FileCheck.py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VbMlCqGd3MVpj0jEKjSGC2L0s/3e/d53b+2eZcXZneo=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "filecheck"
-  ];
+  pythonImportsCheck = [ "filecheck" ];
 
   meta = with lib; {
     changelog = "https://github.com/mull-project/FileCheck.py/releases/tag/v${version}";

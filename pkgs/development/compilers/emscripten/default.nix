@@ -1,25 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
-, jre, binaryen
-, llvmPackages
-, symlinkJoin, makeWrapper, substituteAll
-, buildNpmPackage
-, emscripten
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  nodejs,
+  closurecompiler,
+  jre,
+  binaryen,
+  llvmPackages,
+  symlinkJoin,
+  makeWrapper,
+  replaceVars,
+  buildNpmPackage,
+  emscripten,
 }:
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.51";
+  version = "4.0.10";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
-    paths = with llvmPackages; [ clang-unwrapped clang-unwrapped.lib lld llvm ];
+    paths = with llvmPackages; [
+      clang-unwrapped
+      (lib.getLib clang-unwrapped)
+      lld
+      llvm
+    ];
   };
 
   nodeModules = buildNpmPackage {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-N7WbxzKvW6FljY6g3R//9RdNiezhXGEvKPbOSJgdA0g=";
+    npmDepsHash = "sha256-kObMqg7hyy7E3F+wbdZoeDy5GOgpE2iNTuDVkFvq5ig=";
 
     dontBuild = true;
 
@@ -32,17 +47,19 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-oXecS6B0u8YLeoybjxLwx5INGj/Kp/8GA6s3A1S0y4k=";
+    hash = "sha256-b+7NYKRm0IsZ2cK2Vqz8zKhqYlxjlhVSdpdFq0LaUPU=";
     rev = version;
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ nodejs python3 ];
+  buildInputs = [
+    nodejs
+    python3
+  ];
 
   patches = [
-    (substituteAll {
-      src = ./0001-emulate-clang-sysroot-include-logic.patch;
-      resourceDir = "${llvmEnv}/lib/clang/17/";
+    (replaceVars ./0001-emulate-clang-sysroot-include-logic.patch {
+      resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
     })
   ];
 
@@ -51,8 +68,8 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    # emscripten 3.1.50 requires LLVM tip-of-tree instead of LLVM 17
-    sed -i -e "s/EXPECTED_LLVM_VERSION = 18/EXPECTED_LLVM_VERSION = 17.0/g" tools/shared.py
+    # emscripten 4 requires LLVM tip-of-tree instead of LLVM 20
+    sed -i -e "s/EXPECTED_LLVM_VERSION = 21/EXPECTED_LLVM_VERSION = 20.1/g" tools/shared.py
 
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
@@ -86,15 +103,22 @@ stdenv.mkDerivation rec {
     cp -r . $appdir
     chmod -R +w $appdir
 
-    mkdir -p $appdir/node_modules
+    mkdir -p $appdir/node_modules/.bin
     cp -r ${nodeModules}/* $appdir/node_modules
+    cp -r ${nodeModules}/* $appdir/node_modules/.bin
+
+    cp ${./locate_cache.sh} $appdir/locate_cache.sh
+    chmod +x $appdir/locate_cache.sh
+
+    export EM_CACHE=$out/share/emscripten/cache
 
     mkdir -p $out/bin
     for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
       makeWrapper $appdir/$b $out/bin/$b \
         --set NODE_PATH ${nodeModules} \
         --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
-        --set PYTHON ${python3}/bin/python
+        --set PYTHON ${python3}/bin/python \
+        --run "source $appdir/locate_cache.sh"
     done
 
     # precompile libc (etc.) in all variants:
@@ -136,9 +160,14 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/emscripten-core/emscripten";
-    description = "An LLVM-to-JavaScript Compiler";
+    description = "LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
-    maintainers = with maintainers; [ qknight matthewbauer raitobezarius willcohen ];
+    maintainers = with maintainers; [
+      qknight
+      matthewbauer
+      raitobezarius
+      willcohen
+    ];
     license = licenses.ncsa;
   };
 }

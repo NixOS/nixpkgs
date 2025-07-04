@@ -1,19 +1,25 @@
 { pkgs, ... }:
 
 let
-  patchedPkgs = pkgs.extend (new: old: {
-    lib = old.lib.extend (self: super: {
-      sorry_dave = "sorry dave";
-    });
-  });
+  patchedPkgs = pkgs.extend (
+    new: old: {
+      lib = old.lib.extend (
+        self: super: {
+          sorry_dave = "sorry dave";
+        }
+      );
+    }
+  );
 
   testBody = {
     name = "demo lib overlay";
 
     nodes = {
-      machine = { lib, ... }: {
-        environment.etc."got-lib-overlay".text = lib.sorry_dave;
-      };
+      machine =
+        { lib, ... }:
+        {
+          environment.etc."got-lib-overlay".text = lib.sorry_dave;
+        };
     };
 
     # We don't need to run an actual test. Instead we build the `machine` configuration
@@ -25,7 +31,8 @@ let
   inherit (patchedPkgs.testers) nixosTest runNixOSTest;
   evaluationNixosTest = nixosTest testBody;
   evaluationRunNixOSTest = runNixOSTest testBody;
-in {
+in
+{
   nixosTest = evaluationNixosTest.driver.nodes.machine.system.build.toplevel;
   runNixOSTest = evaluationRunNixOSTest.driver.nodes.machine.system.build.toplevel;
 }

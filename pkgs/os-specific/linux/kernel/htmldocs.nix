@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, graphviz
-, imagemagick
-, linux_latest
-, makeFontsConf
-, perl
-, python3
-, sphinx
-, which
+{
+  lib,
+  stdenv,
+  graphviz,
+  imagemagick,
+  linux_latest,
+  makeFontsConf,
+  perl,
+  python3,
+  which,
 }:
 
 stdenv.mkDerivation {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     patchShebangs \
       Documentation/sphinx/parse-headers.pl \
       scripts/{get_abi.pl,get_feat.pl,kernel-doc,sphinx-pre-install} \
-      tools/net/ynl/ynl-gen-rst.py
+      tools/net/ynl/pyynl/ynl_gen_rst.py
   '';
 
   FONTCONFIG_FILE = makeFontsConf {
@@ -48,11 +48,11 @@ stdenv.mkDerivation {
     cp -r Documentation/* $out/share/doc/linux-doc/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel html documentation";
     homepage = "https://www.kernel.org/doc/htmldocs/";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     inherit (linux_latest.meta) license;
-    maintainers = with maintainers; [ ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

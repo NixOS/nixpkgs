@@ -1,14 +1,15 @@
-{ lib
-, python3
-, fetchurl
-, pkg-config
-, gettext
-, mate-menus
-, gtk3
-, glib
-, wrapGAppsHook
-, gobject-introspection
-, mateUpdateScript
+{
+  lib,
+  python3,
+  fetchurl,
+  pkg-config,
+  gettext,
+  mate-menus,
+  gtk3,
+  glib,
+  wrapGAppsHook3,
+  gobject-introspection,
+  mateUpdateScript,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -27,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     pkg-config
     gettext
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [
@@ -50,6 +51,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/mate-desktop/mozo";
     license = with licenses; [ lgpl2Plus ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

@@ -1,24 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "templ";
-  version = "0.2.663";
+  version = "0.3.898";
 
   src = fetchFromGitHub {
     owner = "a-h";
     repo = "templ";
     rev = "v${version}";
-    hash = "sha256-TU8QG6OmUzSNDAX9W0Ntmz5cucLqVQeTskfnJbm/YM0=";
+    hash = "sha256-uSIu27VgYz/+b8WHKG5poVwFPrK7iYNrQyQlI22Qho8=";
   };
 
-  vendorHash = "sha256-Upd5Wq4ajsyOMDiAWS2g2iNO1sm1XJc43AFQLIo5eDM=";
+  vendorHash = "sha256-q4L+r6S0eMNd5hP9UQCI+GxSJoiMGpjd0UTxA8zb6KU=";
 
   subPackages = [ "cmd/templ" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
@@ -27,7 +28,7 @@ buildGoModule rec {
   ];
 
   meta = {
-    description = "A language for writing HTML user interfaces in Go";
+    description = "Language for writing HTML user interfaces in Go";
     homepage = "https://github.com/a-h/templ";
     license = lib.licenses.mit;
     mainProgram = "templ";

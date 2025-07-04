@@ -1,37 +1,47 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, python
-, pkg-config
-, libxml2
-, glib
-, openssl
-, zchunk
-, curl
-, check
-, gpgme
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  pkg-config,
+  libxml2,
+  glib,
+  openssl,
+  zchunk,
+  curl,
+  check,
+  gpgme,
+  libselinux,
+  nix-update-script,
+  doxygen,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.15.1";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.20.0";
   pname = "librepo";
 
-  outputs = [ "out" "dev" "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "librepo";
-    rev = version;
-    sha256 = "sha256-XVjVu+UTIDbrKHmfJ2zZBLp/h0cLCZFxv/XZ0Iy8VPI=";
+    tag = finalAttrs.version;
+    hash = "sha256-KYBHImdGQgf/IZ5FMhzrbBTeZF76AIP3RjVPT3w0oT8=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    doxygen
   ];
 
   buildInputs = [
-    python
+    python3
     libxml2
     glib
     openssl
@@ -39,6 +49,7 @@ stdenv.mkDerivation rec {
     check
     gpgme
     zchunk
+    libselinux
   ];
 
   # librepo/fastestmirror.h includes curl/curl.h, and pkg-config specfile refers to others in here
@@ -48,17 +59,20 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  cmakeFlags = [ "-DPYTHON_DESIRED=${lib.substring 0 1 python.pythonVersion}" ];
+  cmakeFlags = [ "-DPYTHON_DESIRED=${lib.substring 0 1 python3.pythonVersion}" ];
 
   postFixup = ''
-    moveToOutput "lib/${python.libPrefix}" "$py"
+    moveToOutput "lib/${python3.libPrefix}" "$py"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Library providing C and Python (libcURL like) API for downloading linux repository metadata and packages";
     homepage = "https://rpm-software-management.github.io/librepo/";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ copumpkin ];
+    changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

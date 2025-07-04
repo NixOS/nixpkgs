@@ -1,61 +1,75 @@
-import ./make-test-python.nix ({ lib, pkgs, ...}: {
+{ lib, hostPkgs, ... }:
+{
   name = "haproxy";
   nodes = {
-    server = { ... }: {
-     services.haproxy = {
-        enable = true;
-        config = ''
-          global
-            limited-quic
+    server =
+      { pkgs, ... }:
+      {
+        services.haproxy = {
+          enable = true;
+          config = ''
+            global
+              limited-quic
 
-          defaults
-            mode http
-            timeout connect 10s
-            timeout client 10s
-            timeout server 10s
+            defaults
+              mode http
+              timeout connect 10s
+              timeout client 10s
+              timeout server 10s
 
-            log /dev/log local0 debug err
-            option logasap
-            option httplog
-            option httpslog
+              log /dev/log local0 debug err
+              option logasap
+              option httplog
+              option httpslog
 
-          backend http_server
-            server httpd [::1]:8000 alpn http/1.1
+            backend http_server
+              server httpd [::1]:8000 alpn http/1.1
 
-          frontend http
-            bind :80
-            bind :443 ssl strict-sni crt /etc/ssl/fullchain.pem alpn h2,http/1.1
-            bind quic4@:443 ssl strict-sni crt /etc/ssl/fullchain.pem alpn h3 allow-0rtt
+            frontend http
+              bind :80
+              bind :443 ssl strict-sni crt /etc/ssl/fullchain.pem alpn h2,http/1.1
+              bind quic4@:443 ssl strict-sni crt /etc/ssl/fullchain.pem alpn h3 allow-0rtt
 
-            http-after-response add-header alt-svc 'h3=":443"; ma=60' if { ssl_fc }
+              http-after-response add-header alt-svc 'h3=":443"; ma=60' if { ssl_fc }
 
-            http-request use-service prometheus-exporter if { path /metrics }
-            use_backend http_server
+              http-request use-service prometheus-exporter if { path /metrics }
+              use_backend http_server
 
-          frontend http-cert-auth
-            bind :8443 ssl strict-sni crt /etc/ssl/fullchain.pem verify required ca-file /etc/ssl/cacert.crt
-            bind quic4@:8443 ssl strict-sni crt /etc/ssl/fullchain.pem verify required ca-file /etc/ssl/cacert.crt alpn h3
+            frontend http-cert-auth
+              bind :8443 ssl strict-sni crt /etc/ssl/fullchain.pem verify required ca-file /etc/ssl/cacert.crt
+              bind quic4@:8443 ssl strict-sni crt /etc/ssl/fullchain.pem verify required ca-file /etc/ssl/cacert.crt alpn h3
 
-            use_backend http_server
-        '';
-      };
-      services.httpd = {
-        enable = true;
-        virtualHosts.localhost = {
-          documentRoot = pkgs.writeTextDir "index.txt" "We are all good!";
-          adminAddr = "notme@yourhost.local";
-          listen = [{
-            ip = "::1";
-            port = 8000;
-          }];
+              use_backend http_server
+          '';
         };
+        services.httpd = {
+          enable = true;
+          virtualHosts.localhost = {
+            documentRoot = pkgs.writeTextDir "index.txt" "We are all good!";
+            adminAddr = "notme@yourhost.local";
+            listen = [
+              {
+                ip = "::1";
+                port = 8000;
+              }
+            ];
+          };
+        };
+        networking.firewall.allowedTCPPorts = [
+          80
+          443
+          8443
+        ];
+        networking.firewall.allowedUDPPorts = [
+          443
+          8443
+        ];
       };
-      networking.firewall.allowedTCPPorts = [ 80 443 8443 ];
-      networking.firewall.allowedUDPPorts = [ 443 8443 ];
-     };
-    client = { ... }: {
-      environment.systemPackages = [ pkgs.curlHTTP3 ];
-    };
+    client =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.curlHTTP3 ];
+      };
   };
   testScript = ''
     # Helpers
@@ -66,7 +80,7 @@ import ./make-test-python.nix ({ lib, pkgs, ...}: {
         raise Exception(f"Command {command} failed with exit code {r}")
 
     def openssl(command):
-      cmd(f"${pkgs.openssl}/bin/openssl {command}")
+      cmd(f"${lib.getExe hostPkgs.openssl} {command}")
 
     # Generate CA.
     openssl("req -new -newkey rsa:4096 -nodes -x509 -days 7 -subj '/C=ZZ/ST=Cloud/L=Unspecified/O=NixOS/OU=Tests/CN=CA Certificate' -keyout cacert.key -out cacert.crt")
@@ -121,4 +135,4 @@ import ./make-test-python.nix ({ lib, pkgs, ...}: {
         server.sleep(5)
         assert "We are all good!" in client.succeed("curl -f http://server/index.txt")
   '';
-})
+}

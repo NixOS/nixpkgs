@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -11,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
-    repo = pname;
+    repo = "jumpy";
     rev = version;
     hash = "sha256-tPQ/v2AVnAEC+08BVAvvgJ8Pj89nXZSn2tQ6nxXuSfA=";
   };

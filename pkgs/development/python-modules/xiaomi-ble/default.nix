@@ -1,23 +1,25 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, bluetooth-data-tools
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, home-assistant-bluetooth
-, poetry-core
-, pycryptodomex
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, sensor-state-data
+{
+  lib,
+  bleak-retry-connector,
+  bleak,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  home-assistant-bluetooth,
+  orjson,
+  poetry-core,
+  pycryptodomex,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
-  version = "0.28.0";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,23 +27,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Va/fzGDjBR/h1lUN47AixZnDYzEPNXQKTVXILKayhBc=";
+    tag = "v${version}";
+    hash = "sha256-c9MmxnLEthENvAaBSigUli9m1CbbV/F2RlJMLv5/sOE=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=xiaomi_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  build-system = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "pycryptodomex"
-  ];
+  pythonRelaxDeps = [ "pycryptodomex" ];
 
   dependencies = [
     bleak
@@ -50,23 +42,23 @@ buildPythonPackage rec {
     bluetooth-sensor-state-data
     cryptography
     home-assistant-bluetooth
+    orjson
     pycryptodomex
     sensor-state-data
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "xiaomi_ble"
-  ];
+  pythonImportsCheck = [ "xiaomi_ble" ];
 
   meta = with lib; {
     description = "Library for Xiaomi BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/xiaomi-ble";
-    changelog = "https://github.com/Bluetooth-Devices/xiaomi-ble/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/Bluetooth-Devices/xiaomi-ble/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

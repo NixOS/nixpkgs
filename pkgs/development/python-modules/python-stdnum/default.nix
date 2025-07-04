@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, zeep
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
+  setuptools,
+  zeep,
 }:
 
 buildPythonPackage rec {
@@ -19,28 +21,18 @@ buildPythonPackage rec {
     hash = "sha256-rSos8usCXeQIIQI182tK4xJS3jGGJAzKqBJuEXy4JpA=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail " --cov=stdnum --cov-report=term-missing:skip-covered --cov-report=html" ""
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  passthru.optional-dependencies = {
-    SOAP = [
-      zeep
-    ];
+  optional-dependencies = {
+    SOAP = [ zeep ];
   };
 
-  pythonImportsCheck = [
-    "stdnum"
-  ];
+  pythonImportsCheck = [ "stdnum" ];
 
   meta = with lib; {
     description = "Python module to handle standardized numbers and codes";

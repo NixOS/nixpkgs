@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, cunit
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  cunit,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdict";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "rtbrick";
     repo = "libdict";
     rev = finalAttrs.version;
-    hash = "sha256-JM67lpXGacA0w8luQLc/83mAdHgtXnYlw543gUqUpRM=";
+    hash = "sha256-GFK2yjtxAwwstoJQGCXxwNKxn3LL74FBxad7JdOn0pU=";
   };
 
   nativeBuildInputs = [
@@ -24,17 +25,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DLIBDICT_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DLIBDICT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DLIBDICT_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=strict-prototypes"
+      "-Wno-error=newline-eof"
+    ]
+  );
 
   doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/rtbrick/libdict/";
-    changelog = "https://github.com/rtbrick/libdict/releases/tag/${version}";
+    changelog = "https://github.com/rtbrick/libdict/releases/tag/${finalAttrs.version}";
     description = "C library of key-value data structures";
     license = licenses.bsd2;
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
   };
 })

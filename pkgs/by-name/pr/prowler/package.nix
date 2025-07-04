@@ -4,42 +4,38 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # Doesn't work with latest pydantic
+      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: rec {
+        dependencies = [
+          python3.pkgs.pydantic_1
+          python3.pkgs.cryptography
+          python3.pkgs.email-validator
+        ];
+      });
+    };
+  };
+in
+py.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "3.15.0";
+  version = "5.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
-    rev = "refs/tags/${version}";
-    hash = "sha256-7aWWaGdHTveFwXsFNj4+tjX5g83/nD77jLAOrDOw8JE=";
+    tag = version;
+    hash = "sha256-KcHHZPklJZ7o5cs30rL+vGaeST8LUdGfdhG7daZZzX0=";
   };
 
-  pythonRelaxDeps = [
-    "azure-keyvault-keys"
-    "azure-mgmt-compute"
-    "azure-mgmt-network"
-    "azure-mgmt-security"
-    "azure-storage-blob"
-    "boto3"
-    "botocore"
-    "google-api-python-client"
-    "jsonschema"
-    "pydantic"
-    "pydantic"
-    "slack-sdk"
-  ];
+  pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
+  build-system = with py.pkgs; [ poetry-core ];
 
-  build-system = with python3.pkgs; [
-    poetry-core
-  ];
-
-  dependencies = with python3.pkgs; [
+  dependencies = with py.pkgs; [
     alive-progress
     awsipranges
     azure-identity
@@ -47,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     azure-mgmt-applicationinsights
     azure-mgmt-authorization
     azure-mgmt-compute
+    azure-mgmt-containerregistry
     azure-mgmt-containerservice
     azure-mgmt-cosmosdb
     azure-mgmt-keyvault
@@ -55,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     azure-mgmt-rdbms
     azure-mgmt-resource
     azure-mgmt-security
+    azure-mgmt-search
     azure-mgmt-sql
     azure-mgmt-storage
     azure-mgmt-subscription
@@ -63,17 +61,28 @@ python3.pkgs.buildPythonApplication rec {
     boto3
     botocore
     colorama
+    cryptography
+    dash
+    dash-bootstrap-components
     detect-secrets
     google-api-python-client
     google-auth-httplib2
     jsonschema
+    kubernetes
+    microsoft-kiota-abstractions
     msgraph-sdk
-    msrestazure
+    numpy
+    pandas
+    py-ocsf-models
     pydantic_1
+    pygithub
+    python-dateutil
+    pytz
     schema
     shodan
     slack-sdk
     tabulate
+    tzlocal
   ];
 
   pythonImportsCheck = [ "prowler" ];
@@ -81,7 +90,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
-    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${version}";
+    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "prowler";

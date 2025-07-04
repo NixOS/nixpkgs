@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, bleak
-, buildPythonPackage
-, fetchFromGitHub
-, async-timeout
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  bleak,
+  buildPythonPackage,
+  fetchFromGitHub,
+  async-timeout,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyAdaxLocal";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-V3jSBdYDo32oTAGNTvHJi+GSwlL3keSDhXpNpMoCkWs=";
   };
 
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "adax_local"
-  ];
+  pythonImportsCheck = [ "adax_local" ];
 
   meta = with lib; {
     description = "Module for local access to Adax";

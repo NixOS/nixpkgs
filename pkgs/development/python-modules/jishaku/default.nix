@@ -12,18 +12,18 @@
   tabulate,
   pytestCheckHook,
   pytest-asyncio,
-  youtube-dl
+  youtube-dl,
 }:
 buildPythonPackage rec {
   pname = "jishaku";
-  version = "2.5.2";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Gorialis";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-BWnuk6h80cKwRECyTuRvnYnTC78219oraeTNoqWDd1c=";
+    repo = "jishaku";
+    tag = version;
+    hash = "sha256-+J8Tr8jPN9K3eHLOuJTaP3We5A1kiyn9/yI1KChbuMY=";
   };
 
   patches = [
@@ -62,10 +62,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A debugging and testing cog for discord.py bots";
+    description = "Debugging and testing cog for discord.py bots";
     homepage = "https://jishaku.readthedocs.io/en/latest";
-    changelog = "https://github.com/Gorialis/jishaku/releases/tag/${version}";
-    maintainers = with lib.maintainers; [ lychee ];
+    changelog = "https://github.com/Gorialis/jishaku/releases/tag/${src.tag}";
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "jishaku";
     license = lib.licenses.mit;
   };

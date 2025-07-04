@@ -11,8 +11,8 @@
   isort,
   python,
   pydantic,
-  pytestCheckHook,
-  pytest-asyncio,
+  pytest7CheckHook,
+  pytest-asyncio_0_21,
   pytest-mock,
   typing-extensions,
   tomlkit,
@@ -29,9 +29,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "python-betterproto";
-    rev = "refs/tags/v.${version}";
+    tag = "v.${version}";
     hash = "sha256-ZuVq4WERXsRFUPNNTNp/eisWX1MyI7UtwqEI8X93wYI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "poetry-core>=1.0.0,<2" "poetry-core"
+  '';
 
   build-system = [ poetry-core ];
 
@@ -41,7 +46,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies.compiler = [
+  optional-dependencies.compiler = [
     black
     jinja2
     isort
@@ -50,17 +55,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     grpcio-tools
     pydantic
-    pytest-asyncio
+    pytest-asyncio_0_21
     pytest-mock
-    pytestCheckHook
+    pytest7CheckHook
     tomlkit
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "betterproto" ];
 
   # The tests require the generation of code before execution. This requires
   # the protoc-gen-python_betterproto script from the package to be on PATH.
   preCheck = ''
+    (($(ulimit -n) < 1024)) && ulimit -n 1024
     export PATH=$PATH:$out/bin
     patchShebangs src/betterproto/plugin/main.py
     ${python.interpreter} -m tests.generate
@@ -77,7 +83,7 @@ buildPythonPackage rec {
     "test_binary_compatibility"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Code generator & library for Protobuf 3 and async gRPC";
     mainProgram = "protoc-gen-python_betterproto";
     longDescription = ''
@@ -87,7 +93,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/danielgtaylor/python-betterproto";
     changelog = "https://github.com/danielgtaylor/python-betterproto/blob/v.${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nikstur ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nikstur ];
   };
 }

@@ -1,19 +1,17 @@
 { config, lib, ... }:
-
-with lib;
-
 let
   cfg = config.hardware.ksm;
 
-in {
+in
+{
   imports = [
-    (mkRenamedOptionModule [ "hardware" "enableKSM" ] [ "hardware" "ksm" "enable" ])
+    (lib.mkRenamedOptionModule [ "hardware" "enableKSM" ] [ "hardware" "ksm" "enable" ])
   ];
 
   options.hardware.ksm = {
-    enable = mkEnableOption "Linux kernel Same-Page Merging";
-    sleep = mkOption {
-      type = types.nullOr types.int;
+    enable = lib.mkEnableOption "Linux kernel Same-Page Merging";
+    sleep = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       description = ''
         How many milliseconds ksmd should sleep between scans.
@@ -22,15 +20,15 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.enable-ksm = {
       description = "Enable Kernel Same-Page Merging";
       wantedBy = [ "multi-user.target" ];
       script =
         ''
           echo 1 > /sys/kernel/mm/ksm/run
-        '' + optionalString (cfg.sleep != null)
         ''
+        + lib.optionalString (cfg.sleep != null) ''
           echo ${toString cfg.sleep} > /sys/kernel/mm/ksm/sleep_millisecs
         '';
     };

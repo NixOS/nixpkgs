@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   user = "someuser";
@@ -6,48 +6,51 @@ let
   port = "5232";
   filesystem_folder = "/data/radicale";
 
-  cli = "${pkgs.calendar-cli}/bin/calendar-cli --caldav-user ${user} --caldav-pass ${password}";
-in {
+  cli = "${lib.getExe pkgs.calendar-cli} --caldav-user ${user} --caldav-pass ${password}";
+in
+{
   name = "radicale3";
   meta.maintainers = with lib.maintainers; [ dotlambda ];
 
-  nodes.machine = { pkgs, ... }: {
-    services.radicale = {
-      enable = true;
-      settings = {
-        auth = {
-          type = "htpasswd";
-          htpasswd_filename = "/etc/radicale/users";
-          htpasswd_encryption = "bcrypt";
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.radicale = {
+        enable = true;
+        settings = {
+          auth = {
+            type = "htpasswd";
+            htpasswd_filename = "/etc/radicale/users";
+            htpasswd_encryption = "bcrypt";
+          };
+          storage = {
+            inherit filesystem_folder;
+            hook = "git add -A && (git diff --cached --quiet || git commit -m 'Changes by '%(user)s)";
+          };
+          logging.level = "info";
         };
-        storage = {
-          inherit filesystem_folder;
-          hook = "git add -A && (git diff --cached --quiet || git commit -m 'Changes by '%(user)s)";
+        rights = {
+          principal = {
+            user = ".+";
+            collection = "{user}";
+            permissions = "RW";
+          };
+          calendars = {
+            user = ".+";
+            collection = "{user}/[^/]+";
+            permissions = "rw";
+          };
         };
-        logging.level = "info";
       };
-      rights = {
-        principal = {
-          user = ".+";
-          collection = "{user}";
-          permissions = "RW";
-        };
-        calendars = {
-          user = ".+";
-          collection = "{user}/[^/]+";
-          permissions = "rw";
-        };
-      };
+      systemd.services.radicale.path = [ pkgs.git ];
+      environment.systemPackages = [ pkgs.git ];
+      systemd.tmpfiles.rules = [ "d ${filesystem_folder} 0750 radicale radicale -" ];
+      # WARNING: DON'T DO THIS IN PRODUCTION!
+      # This puts unhashed secrets directly into the Nix store for ease of testing.
+      environment.etc."radicale/users".source = pkgs.runCommand "htpasswd" { } ''
+        ${pkgs.apacheHttpd}/bin/htpasswd -bcB "$out" ${user} ${password}
+      '';
     };
-    systemd.services.radicale.path = [ pkgs.git ];
-    environment.systemPackages = [ pkgs.git ];
-    systemd.tmpfiles.rules = [ "d ${filesystem_folder} 0750 radicale radicale -" ];
-    # WARNING: DON'T DO THIS IN PRODUCTION!
-    # This puts unhashed secrets directly into the Nix store for ease of testing.
-    environment.etc."radicale/users".source = pkgs.runCommand "htpasswd" {} ''
-      ${pkgs.apacheHttpd}/bin/htpasswd -bcB "$out" ${user} ${password}
-    '';
-  };
   testScript = ''
     machine.wait_for_unit("radicale.service")
     machine.wait_for_open_port(${port})
@@ -92,4 +95,4 @@ in {
         machine.log(output)
         assert output[-9:-1] == "SAFE :-}"
   '';
-})
+}

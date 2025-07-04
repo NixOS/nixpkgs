@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
-, pyfiglet
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, wcwidth
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+  pyfiglet,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-z905gEJydRnYtz5iuO+CwL7P7U60IImcO5bJjQuWgho=";
   };
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   dependencies = [
     pyfiglet
@@ -31,11 +30,9 @@ buildPythonPackage rec {
     wcwidth
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck =  [
+  pythonImportsCheck = [
     "asciimatics.effects"
     "asciimatics.renderers"
     "asciimatics.scene"

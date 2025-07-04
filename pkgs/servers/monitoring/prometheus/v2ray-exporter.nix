@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "v2ray-exporter";
@@ -18,6 +22,6 @@ buildGoModule rec {
     mainProgram = "v2ray-exporter";
     homepage = "https://github.com/wi1dcard/v2ray-exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ jqqqqqqqqqq ];
+    maintainers = [ ];
   };
 }

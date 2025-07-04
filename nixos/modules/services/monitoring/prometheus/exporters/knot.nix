@@ -1,10 +1,21 @@
-{ config, lib, pkgs, options, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.knot;
-in {
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    ;
+in
+{
   port = 9433;
   extraOpts = {
     knotLibraryPath = mkOption {

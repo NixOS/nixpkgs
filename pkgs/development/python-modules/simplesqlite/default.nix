@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dataproperty
-, mbstrdecoder
-, pathvalidate
-, sqliteschema
-, setuptools
-, tabledata
-, typepy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dataproperty,
+  mbstrdecoder,
+  pathvalidate,
+  sqliteschema,
+  setuptools,
+  tabledata,
+  typepy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "SimpleSQLite";
-  version = "1.5.2";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "SimpleSQLite";
-    rev = "v${version}";
-    hash = "sha256-Yr17T0/EwVaOjG+mzdxopivj0fuvQdZdX1bFj8vq0MM=";
+    tag = "v${version}";
+    hash = "sha256-PObyZmmECxp6keRymYFGi4Uf07yNHu6rUIqSrRx2bPE=";
   };
 
   nativeBuildInputs = [ setuptools ];

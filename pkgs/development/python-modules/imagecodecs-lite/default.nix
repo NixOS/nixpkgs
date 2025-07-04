@@ -1,8 +1,10 @@
-{ stdenv
-, lib, fetchPypi, buildPythonPackage
-, pytest
-, numpy
-, cython
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytest,
+  numpy,
+  cython,
 }:
 
 buildPythonPackage rec {
@@ -15,24 +17,17 @@ buildPythonPackage rec {
     sha256 = "0s4xb17qd7vimc46rafbjnibj4sf0lnv8cwl22k1h6zb7jhqmlcm";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   checkPhase = ''
     pytest
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Block-oriented, in-memory buffer transformation, compression, and decompression functions";
     homepage = "https://www.lfd.uci.edu/~gohlke/";
     maintainers = [ maintainers.tbenst ];

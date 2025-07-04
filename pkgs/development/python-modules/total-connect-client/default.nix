@@ -1,41 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, zeep
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodome,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests-mock,
+  setuptools,
+  zeep,
 }:
 
 buildPythonPackage rec {
   pname = "total-connect-client";
-  version = "2023.12.1";
-  format = "pyproject";
+  version = "2025.1.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
-    rev = "refs/tags/${version}";
-    hash = "sha256-iEQC02KuBWtk8yQwM/fU28ilbmCWeAjilvR6fHVexuI=";
+    tag = version;
+    hash = "sha256-zzSYi/qhHmugH30bnYHK9lCBVN5wuv6n9rvaZC/sIag=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "pycryptodome" ];
+
+  dependencies = [
+    pycryptodome
+    pyjwt
     zeep
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    requests-mock
   ];
 
-  pythonImportsCheck = [
-    "total_connect_client"
-  ];
+  pythonImportsCheck = [ "total_connect_client" ];
 
   meta = with lib; {
     description = "Interact with Total Connect 2 alarm systems";

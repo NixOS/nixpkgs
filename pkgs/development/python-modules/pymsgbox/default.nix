@@ -1,8 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, tkinter }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  tkinter,
+}:
 
 buildPythonPackage rec {
   pname = "pymsgbox";
   version = "1.0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyMsgBox";
@@ -17,7 +23,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymsgbox" ];
 
   meta = with lib; {
-    description = "A simple, cross-platform, pure Python module for JavaScript-like message boxes";
+    description = "Simple, cross-platform, pure Python module for JavaScript-like message boxes";
     homepage = "https://github.com/asweigart/PyMsgBox";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jluttine ];

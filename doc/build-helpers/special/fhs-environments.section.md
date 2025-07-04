@@ -6,7 +6,13 @@ It uses Linux' namespaces feature to create temporary lightweight environments w
 Accepted arguments are:
 
 - `name`
-        The name of the environment and the wrapper executable.
+        The name of the environment.
+- `pname`
+        The pname of the environment.
+- `version`
+        The version of the environment.
+- `executableName`
+        The name of the wrapper executable. Defaults to `pname` if set, or `name` otherwise.
 - `targetPkgs`
         Packages to be installed for the main host's architecture (i.e. x86_64 on x86_64 installations). Along with libraries binaries are also installed.
 - `multiPkgs`
@@ -30,22 +36,29 @@ Accepted arguments are:
 You can create a simple environment using a `shell.nix` like this:
 
 ```nix
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 (pkgs.buildFHSEnv {
   name = "simple-x11-env";
-  targetPkgs = pkgs: (with pkgs; [
-    udev
-    alsa-lib
-  ]) ++ (with pkgs.xorg; [
-    libX11
-    libXcursor
-    libXrandr
-  ]);
-  multiPkgs = pkgs: (with pkgs; [
-    udev
-    alsa-lib
-  ]);
+  targetPkgs =
+    pkgs:
+    (with pkgs; [
+      udev
+      alsa-lib
+    ])
+    ++ (with pkgs.xorg; [
+      libX11
+      libXcursor
+      libXrandr
+    ]);
+  multiPkgs =
+    pkgs:
+    (with pkgs; [
+      udev
+      alsa-lib
+    ]);
   runScript = "bash";
 }).env
 ```
@@ -53,4 +66,4 @@ You can create a simple environment using a `shell.nix` like this:
 Running `nix-shell` on it would drop you into a shell inside an FHS env where those libraries and binaries are available in FHS-compliant paths. Applications that expect an FHS structure (i.e. proprietary binaries) can run inside this environment without modification.
 You can build a wrapper by running your binary in `runScript`, e.g. `./bin/start.sh`. Relative paths work as expected.
 
-Additionally, the FHS builder links all relocated gsettings-schemas (the glib setup-hook moves them to `share/gsettings-schemas/${name}/glib-2.0/schemas`) to their standard FHS location. This means you don't need to wrap binaries with `wrapGAppsHook`.
+Additionally, the FHS builder links all relocated gsettings-schemas (the glib setup-hook moves them to `share/gsettings-schemas/${name}/glib-2.0/schemas`) to their standard FHS location. This means you don't need to wrap binaries with `wrapGApps*` hook.

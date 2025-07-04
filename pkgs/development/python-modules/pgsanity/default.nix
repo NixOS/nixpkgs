@@ -1,9 +1,9 @@
-{ lib
-, python
-, fetchPypi
-, buildPythonPackage
-, postgresql
-, unittestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  postgresql,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,8 +16,16 @@ buildPythonPackage rec {
     sha256 = "de0bbd6fe4f98bf5139cb5f466eac2e2abaf5a7b050b9e4867b87bf360873173";
   };
 
-  nativeCheckInputs = [ unittestCheckHook postgresql ];
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
+
+  unittestFlagsArray = [ "test" ];
+
   propagatedBuildInputs = [ postgresql ];
+
+  # To find "ecpg"
+  nativeBuildInputs = [ (lib.getDev postgresql) ];
 
   meta = with lib; {
     homepage = "https://github.com/markdrago/pgsanity";
