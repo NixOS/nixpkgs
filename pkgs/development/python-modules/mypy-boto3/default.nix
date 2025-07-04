@@ -1218,8 +1218,8 @@ rec {
       "sha256-Li8YWTTnz3dwKm6gYPVgOZsSD/Gj6KnUALd1EQ05aLw=";
 
   mypy-boto3-secretsmanager =
-    buildMypyBoto3Package "secretsmanager" "1.38.0"
-      "sha256-FmYQjnDwPk3B3kSTiNf6y3erojGgJrrAwyQPwn/TGpg=";
+    buildMypyBoto3Package "secretsmanager" "1.39.0"
+      "sha256-4FS9hulCzybBNZZWShVtn02sTcckefHF0fr6nPIxKQ0=";
 
   mypy-boto3-securityhub =
     buildMypyBoto3Package "securityhub" "1.38.38"
