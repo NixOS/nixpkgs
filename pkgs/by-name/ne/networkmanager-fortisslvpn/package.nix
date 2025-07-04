@@ -82,6 +82,9 @@ stdenv.mkDerivation rec {
       versionPolicy = "odd-unstable";
     };
     networkManagerPlugin = "VPN/nm-fortisslvpn-service.name";
+    networkManagerTmpfilesRules = [
+      "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
+    ];
   };
 
   meta = with lib; {
