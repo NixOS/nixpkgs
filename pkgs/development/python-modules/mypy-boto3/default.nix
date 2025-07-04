@@ -1282,8 +1282,8 @@ rec {
       "sha256-j/noAQJqsCZ7vISTVhP8oCkUoP9Fy9x9KCvHzuC/HEA=";
 
   mypy-boto3-snowball =
-    buildMypyBoto3Package "snowball" "1.38.0"
-      "sha256-zXeQTNSej3dBIUEAysAwjj1v94OZWBblb2AT/1a2oDI=";
+    buildMypyBoto3Package "snowball" "1.39.0"
+      "sha256-E6/NI8yNiImY0qF2jXRBjnNwvA5DwUua/E4caFQRzWA=";
 
   mypy-boto3-sns =
     buildMypyBoto3Package "sns" "1.38.0"
