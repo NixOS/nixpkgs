@@ -19,14 +19,17 @@
 let
   renderSystem = if withOgre then "3" else "4";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mygui";
   version = "3.4.3";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "MyGUI";
     repo = "mygui";
-    rev = "MyGUI${version}";
+    tag = "MyGUI${finalAttrs.version}";
     hash = "sha256-qif9trHgtWpYiDVXY3cjRsXypjjjgStX8tSWCnXhXlk=";
   };
 
@@ -62,16 +65,21 @@ stdenv.mkDerivation rec {
 
   # Tools are disabled due to compilation failures.
   cmakeFlags = [
-    "-DMYGUI_BUILD_TOOLS=OFF"
-    "-DMYGUI_BUILD_DEMOS=OFF"
-    "-DMYGUI_RENDERSYSTEM=${renderSystem}"
-    "-DMYGUI_DONT_USE_OBSOLETE=ON"
+    (lib.cmakeBool "MYGUI_BUILD_DEMOS" false)
+    (lib.cmakeBool "MYGUI_BUILD_TOOLS" false)
+    (lib.cmakeBool "MYGUI_DONT_USE_OBSOLETE" true)
+    (lib.cmakeFeature "MYGUI_RENDERSYSTEM" renderSystem)
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://mygui.info/";
+    changelog = "https://github.com/MyGUI/mygui/releases/tag/MyGUI${finalAttrs.version}";
     description = "Library for creating GUIs for games and 3D applications";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ sigmasquadron ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+
+    # error: implicit instantiation of undefined template 'std::char_traits'
+    badPlatforms = lib.platforms.darwin;
   };
-}
+})
