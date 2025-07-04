@@ -11941,6 +11941,8 @@ with pkgs;
 
   cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
 
+  cxt = callPackage ../tools/misc/cxt { };
+
   darcs = haskell.lib.compose.disableCabalFlag "library" (
     haskell.lib.compose.justStaticExecutables haskellPackages.darcs
   );
