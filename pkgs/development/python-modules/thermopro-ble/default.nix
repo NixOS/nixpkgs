@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "thermopro-ble";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = "thermopro-ble";
     tag = "v${version}";
-    hash = "sha256-gikNjQYE/GROUR0atBUcwrRdjH+HVL37EOKZYdvRUzo=";
+    hash = "sha256-FgobrgMA+YbmI5VxdzCgYipSLGRK6+uIOTMy9P4Aeos=";
   };
 
   build-system = [ poetry-core ];
