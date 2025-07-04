@@ -2,9 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nodejs_latest,
+  nodejs,
   pnpm_9,
-  cacert,
   nix-update-script,
 }:
 
@@ -25,31 +24,27 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       pnpmWorkspaces
-      prePnpmInstall
       ;
     hash = "sha256-SUEq20gZCiTDkFuNgMc5McHBPgW++8P9Q1MJb7a7pY8=";
   };
 
   nativeBuildInputs = [
-    nodejs_latest
     pnpm_9.configHook
   ];
 
-  buildInputs = [ nodejs_latest ];
+  buildInputs = [
+    nodejs
+  ];
 
-  pnpmWorkspaces = [ "@tailwindcss/language-server..." ];
-  prePnpmInstall = ''
-    # Warning section for "pnpm@v8"
-    # https://pnpm.io/cli/install#--filter-package_selector
-    pnpm config set dedupe-peer-dependents false
-    export NODE_EXTRA_CA_CERTS="${cacert}/etc/ssl/certs/ca-bundle.crt"
-  '';
+  pnpmWorkspaces = [
+    "@tailwindcss/language-server..."
+  ];
 
+  # Must build the "@tailwindcss/language-service" package. Dependency is linked via workspace by "pnpm"
+  # https://github.com/tailwindlabs/tailwindcss-intellisense/blob/v0.14.24/pnpm-lock.yaml#L71
   buildPhase = ''
     runHook preBuild
 
-    # Must build the "@tailwindcss/language-service" package. Dependency is linked via workspace by "pnpm"
-    # (https://github.com/tailwindlabs/tailwindcss-intellisense/blob/%40tailwindcss/language-server%40v0.0.27/pnpm-lock.yaml#L47)
     pnpm --filter "@tailwindcss/language-server..." build
 
     runHook postBuild
@@ -75,6 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "tailwindcss-language-server";
-    platforms = lib.platforms.all;
+    platforms = nodejs.meta.platforms;
   };
 })
