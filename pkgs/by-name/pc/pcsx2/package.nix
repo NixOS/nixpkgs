@@ -7,6 +7,7 @@
   curl,
   extra-cmake-modules,
   ffmpeg,
+  gtk3,
   libXrandr,
   libaio,
   libbacktrace,
@@ -23,6 +24,7 @@
   vulkan-headers,
   vulkan-loader,
   wayland,
+  wrapGAppsHook3,
   zip,
   zstd,
   plutovg,
@@ -76,6 +78,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     extra-cmake-modules
     pkg-config
     strip-nondeterminism
+    wrapGAppsHook3
     wrapQtAppsHook
     zip
   ];
@@ -83,6 +86,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     ffmpeg
+    gtk3
     libaio
     libbacktrace
     libpcap
@@ -124,6 +128,12 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     in
     [ "--prefix LD_LIBRARY_PATH : ${libs}" ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   # https://github.com/PCSX2/pcsx2/pull/10200
   # Can't avoid the double wrapping, the binary wrapper from qtWrapperArgs doesn't support --run
   postFixup = ''
@@ -155,6 +165,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
+      _0david0mp
       hrdinka
       govanify
       matteopacini
