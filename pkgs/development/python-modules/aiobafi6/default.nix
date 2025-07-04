@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiobafi6";
-  version = "0.9.0";
+  version = "0.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jfroy";
     repo = "aiobafi6";
     tag = version;
-    hash = "sha256-QxjrspvNrcMcGChjj1B4QF/SnWCsGmPxnI2bWAL6BiI=";
+    hash = "sha256-7NIpIRVs6PFPByrGfVDA6P7JTvXGrzbH/lOPdPfZH04=";
   };
 
   nativeBuildInputs = [ poetry-core ];
