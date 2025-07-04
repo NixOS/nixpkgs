@@ -115,6 +115,71 @@ in
       '';
   };
 
+  encrypt-tpm2 = makeTest {
+    name = "systemd-repart-encrypt-tpm2";
+    meta.maintainers = with maintainers; [ flokli ];
+
+    nodes.machine =
+      {
+        config,
+        pkgs,
+        lib,
+        ...
+      }:
+      {
+        imports = [ common ];
+
+        boot.initrd.systemd.enable = true;
+
+        boot.initrd.availableKernelModules = [ "dm_crypt" ];
+        boot.initrd.luks.devices = lib.mkVMOverride {
+          created-crypt = {
+            device = "/dev/disk/by-partlabel/created-crypt";
+            crypttabExtraOpts = [ "tpm2-device=auto" ];
+          };
+        };
+        boot.initrd.systemd.repart.enable = true;
+        boot.initrd.systemd.repart.extraArgs = [
+          "--tpm2-pcrs=7"
+        ];
+        systemd.repart.partitions = {
+          "10-root" = {
+            Type = "linux-generic";
+          };
+          "10-crypt" = {
+            Type = "var";
+            Label = "created-crypt";
+            Format = "ext4";
+            Encrypt = "tpm2";
+          };
+        };
+        virtualisation.tpm.enable = true;
+        virtualisation.fileSystems = {
+          "/var" = {
+            device = "/dev/mapper/created-crypt";
+            fsType = "ext4";
+          };
+        };
+      };
+
+    testScript =
+      { nodes, ... }:
+      ''
+        ${useDiskImage {
+          inherit (nodes) machine;
+          sizeDiff = "+100M";
+        }}
+
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+
+        systemd_repart_logs = machine.succeed("journalctl --boot --unit systemd-repart.service")
+        assert "Encrypting future partition 2" in systemd_repart_logs
+
+        assert "/dev/mapper/created-crypt" in machine.succeed("mount")
+      '';
+  };
+
   after-initrd = makeTest {
     name = "systemd-repart-after-initrd";
     meta.maintainers = with maintainers; [ nikstur ];
