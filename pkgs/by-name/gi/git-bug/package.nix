@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "git-bug";
     repo = "git-bug";
     rev = "v${version}";
-    sha256 = "sha256-iLYhVv6QMZStuNtxvvIylFSVb1zLfC58NU2QJChFfug=";
+    hash = "sha256-iLYhVv6QMZStuNtxvvIylFSVb1zLfC58NU2QJChFfug=";
   };
 
   vendorHash = "sha256-qztAkP+CHhryhfv1uKHEpDutofMwHGun7Vr30BHWAOE=";

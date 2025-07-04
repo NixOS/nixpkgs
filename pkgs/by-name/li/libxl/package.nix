@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.libxl.com/download/${pname}-lin-${version}.tar.gz";
-    sha256 = "sha256-U8hXoqBzjSGigOXc29LZQk3KrGiYvBPBJPg5qihcAsY=";
+    hash = "sha256-U8hXoqBzjSGigOXc29LZQk3KrGiYvBPBJPg5qihcAsY=";
   };
 
   dontConfigure = true;

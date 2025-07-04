@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication {
     owner = "Heroic-Games-Launcher";
     repo = "legendary";
     rev = version;
-    sha256 = "sha256-mOys7lOPrrzBUBMIM/JvKygFQ/qIGD68BDNigk5BCIo=";
+    hash = "sha256-mOys7lOPrrzBUBMIM/JvKygFQ/qIGD68BDNigk5BCIo=";
   };
 
   propagatedBuildInputs = with python3Packages; [

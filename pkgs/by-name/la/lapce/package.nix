@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     owner = "lapce";
     repo = "lapce";
     tag = "v${version}";
-    sha256 = "sha256-vBBYNHgZiW5JfGeUG6YZObf4oK0hHxTbsZNTfnIX95Y=";
+    hash = "sha256-vBBYNHgZiW5JfGeUG6YZObf4oK0hHxTbsZNTfnIX95Y=";
   };
 
   useFetchCargoVendor = true;

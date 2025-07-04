@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "FireyFly";
     repo = "hexd";
     rev = "v${version}";
-    sha256 = "sha256-b/dROBQVPEiMBTcu4MTi6Lf6ChkFZqZrJ1V0j54rrFY=";
+    hash = "sha256-b/dROBQVPEiMBTcu4MTi6Lf6ChkFZqZrJ1V0j54rrFY=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

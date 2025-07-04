@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mas-bandwidth";
     repo = "yojimbo";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-GMYkWQTwHm7fGRSTIt2phv01CjEcw0l4iPQD4uTQ5yM=";
+    hash = "sha256-GMYkWQTwHm7fGRSTIt2phv01CjEcw0l4iPQD4uTQ5yM=";
   };
 
   nativeBuildInputs = [

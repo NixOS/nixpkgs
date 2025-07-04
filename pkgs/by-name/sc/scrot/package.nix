@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "resurrecting-open-source-projects";
     repo = "scrot";
     rev = version;
-    sha256 = "sha256-ExZH+bjpEvdbSYM8OhV+cyn4j+0YrHp5/b+HsHKAHCA=";
+    hash = "sha256-ExZH+bjpEvdbSYM8OhV+cyn4j+0YrHp5/b+HsHKAHCA=";
   };
 
   nativeBuildInputs = [

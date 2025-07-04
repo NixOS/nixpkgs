@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "containers";
     repo = "oci-seccomp-bpf-hook";
     rev = "v${version}";
-    sha256 = "sha256-1LRwbKOLNBkY/TMTLlWq2lkFzCabXqwdaMRT9HNr6HE=";
+    hash = "sha256-1LRwbKOLNBkY/TMTLlWq2lkFzCabXqwdaMRT9HNr6HE=";
   };
   vendorHash = null;
 

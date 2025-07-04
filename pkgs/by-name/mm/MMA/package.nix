@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.mellowood.ca/mma/mma-bin-${version}.tar.gz";
-    sha256 = "sha256-J72uTwAlWa/dRPf7/lO1epbmjTQar+3/U//+IJ9u4PM=";
+    hash = "sha256-J72uTwAlWa/dRPf7/lO1epbmjTQar+3/U//+IJ9u4PM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

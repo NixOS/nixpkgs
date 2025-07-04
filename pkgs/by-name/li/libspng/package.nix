@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "randy408";
     repo = "libspng";
     rev = "v${version}";
-    sha256 = "sha256-BiRuPQEKVJYYgfUsglIuxrBoJBFiQ0ygQmAFrVvCz4Q=";
+    hash = "sha256-BiRuPQEKVJYYgfUsglIuxrBoJBFiQ0ygQmAFrVvCz4Q=";
   };
 
   # disable two tests broken after libpng update

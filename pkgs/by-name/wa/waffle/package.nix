@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "libgbm";
     repo = "waffle";
     rev = "v${version}";
-    sha256 = "sha256-Y7GRYLqSO572qA1eZ3jS8QlZ1X9xKpDtScaySTuPK/U=";
+    hash = "sha256-Y7GRYLqSO572qA1eZ3jS8QlZ1X9xKpDtScaySTuPK/U=";
   };
 
   buildInputs =

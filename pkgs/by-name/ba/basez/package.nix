@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.quarkline.net/basez/download/basez-${version}.tar.gz";
-    sha256 = "sha256-Kp+CFIh5HCdj7wEgx1xD3IPdFlZ7fEFvMDMYif1ZiTc=";
+    hash = "sha256-Kp+CFIh5HCdj7wEgx1xD3IPdFlZ7fEFvMDMYif1ZiTc=";
   };
 
   doCheck = true;

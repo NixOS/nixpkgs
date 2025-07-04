@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/rafael2k/darkice/releases/download/v${version}/darkice-${version}.tar.gz";
-    sha256 = "sha256-GLTEVzp8z+CcEJTrV5gVniqYkhBupi11OTP28qdGBY4=";
+    hash = "sha256-GLTEVzp8z+CcEJTrV5gVniqYkhBupi11OTP28qdGBY4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "alexellis";
     repo = "k3sup";
     rev = version;
-    sha256 = "sha256-3ySfLYeopz9PqxNmnao5m4Kymu5o5jcsOJdN8hz0Yss=";
+    hash = "sha256-3ySfLYeopz9PqxNmnao5m4Kymu5o5jcsOJdN8hz0Yss=";
   };
 
   nativeBuildInputs = [

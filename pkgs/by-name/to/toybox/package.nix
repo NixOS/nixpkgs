@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "landley";
     repo = "toybox";
     rev = version;
-    sha256 = "sha256-D+tf2bJQlf2pLMNZdMUOoUdE3ea/KgkqoXGsnl1MVOE=";
+    hash = "sha256-D+tf2bJQlf2pLMNZdMUOoUdE3ea/KgkqoXGsnl1MVOE=";
   };
 
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [

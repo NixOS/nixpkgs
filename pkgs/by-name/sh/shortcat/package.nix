@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://files.shortcat.app/releases/v${version}/Shortcat.zip";
-    sha256 = "sha256-0uhAGU5y98oOLAlM7Uu4dWyK85RfNR5c8z3U7LHi8g8=";
+    hash = "sha256-0uhAGU5y98oOLAlM7Uu4dWyK85RfNR5c8z3U7LHi8g8=";
   };
 
   sourceRoot = "Shortcat.app";

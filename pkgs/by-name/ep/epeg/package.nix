@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "mattes";
     repo = "epeg";
     rev = "v${version}";
-    sha256 = "sha256-lttqarR8gScNIlSrc5uU3FLfvwxxJ2A1S4oESUW7oIw=";
+    hash = "sha256-lttqarR8gScNIlSrc5uU3FLfvwxxJ2A1S4oESUW7oIw=";
   };
 
   enableParallelBuilding = true;

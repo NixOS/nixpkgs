@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lxde";
     repo = "lxterminal";
     tag = finalAttrs.version;
-    sha256 = "sha256-oDWh0U4QWJ84hTfq1oaAmDJM+IY0eJqOUey0qBgZN5U=";
+    hash = "sha256-oDWh0U4QWJ84hTfq1oaAmDJM+IY0eJqOUey0qBgZN5U=";
   };
 
   configureFlags = [

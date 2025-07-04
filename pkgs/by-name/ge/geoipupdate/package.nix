@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "maxmind";
     repo = "geoipupdate";
     rev = "v${version}";
-    sha256 = "sha256-XfQ5W2JbPBIAh5iF4jj9UJ4eLhhRHRwFPs0VWrBQVNA=";
+    hash = "sha256-XfQ5W2JbPBIAh5iF4jj9UJ4eLhhRHRwFPs0VWrBQVNA=";
   };
 
   vendorHash = "sha256-XQTZITuG9HjHnpYsSdwNLbdeDhH48+1kLCK32DMkppo=";

@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "gitea";
     repo = "tea";
     rev = "v${version}";
-    sha256 = "sha256-Dhb3y13sxkyE+2BjNj7YcsjiIPgznIVyuzWs0F8LNfU=";
+    hash = "sha256-Dhb3y13sxkyE+2BjNj7YcsjiIPgznIVyuzWs0F8LNfU=";
   };
 
   vendorHash = "sha256-mKCsBPBWs3+61em53cEB0shTLXgUg4TivJRogy1tYXw=";

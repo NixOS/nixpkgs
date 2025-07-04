@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/hdparm/hdparm-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-0Ukp+RDQYJMucX6TgkJdR8LnFEI1pTcT1VqU995TWks=";
+    hash = "sha256-0Ukp+RDQYJMucX6TgkJdR8LnFEI1pTcT1VqU995TWks=";
   };
 
   makeFlags = [

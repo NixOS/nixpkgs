@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   pname = "asunder";
   src = fetchurl {
     url = "http://littlesvr.ca/asunder/releases/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-iGji4bl7ZofIAOf2EiYqMWu4V+3TmIN2jOYottJTN2s=";
+    hash = "sha256-iGji4bl7ZofIAOf2EiYqMWu4V+3TmIN2jOYottJTN2s=";
   };
 
   nativeBuildInputs = [

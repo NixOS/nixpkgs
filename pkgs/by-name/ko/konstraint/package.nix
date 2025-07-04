@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "plexsystems";
     repo = "konstraint";
     rev = "v${version}";
-    sha256 = "sha256-PzJTdSkobcgg04C/sdHJF9IAZxK62axwkkI2393SFbg=";
+    hash = "sha256-PzJTdSkobcgg04C/sdHJF9IAZxK62axwkkI2393SFbg=";
   };
   vendorHash = "sha256-nq1bHOOSNXcANTV0g8VCjcRKUCgfoMIHFgPqnJ+V4Bw=";
 

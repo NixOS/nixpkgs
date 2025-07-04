@@ -37,12 +37,12 @@ stdenv.mkDerivation {
         substituteInPlace $out \
           --replace 'FixSinCosCORDIC.hpp' 'CordicSinCos.hpp'
       '';
-      sha256 = "sha256-BlamA/MZuuqqvGYto+jPeQPop6gwva0y394Odw8pdwg=";
+      hash = "sha256-BlamA/MZuuqqvGYto+jPeQPop6gwva0y394Odw8pdwg=";
     })
     (fetchpatch {
       name = "fix-clang-error-atan2.patch";
       url = "https://gitlab.com/flopoco/flopoco/-/commit/a3ffe2436c1b59ee0809b3772b74f2d43c6edb99.patch";
-      sha256 = "sha256-dSYcufLHDL0p1V1ghmy6X6xse5f6mjUqckaVqLZnTaA=";
+      hash = "sha256-dSYcufLHDL0p1V1ghmy6X6xse5f6mjUqckaVqLZnTaA=";
     })
   ];
 

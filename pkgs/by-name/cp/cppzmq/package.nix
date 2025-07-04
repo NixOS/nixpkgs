@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "zeromq";
     repo = "cppzmq";
     rev = "v${version}";
-    sha256 = "sha256-c6IZ5PnuB96NLYHDHdNclYSF4LpqAfFWxVzeP8BzhCE=";
+    hash = "sha256-c6IZ5PnuB96NLYHDHdNclYSF4LpqAfFWxVzeP8BzhCE=";
   };
 
   nativeBuildInputs = [ cmake ];

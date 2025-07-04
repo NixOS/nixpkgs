@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "rojo-rbx";
     repo = "remodel";
     rev = "v${version}";
-    sha256 = "sha256-tZ6ptGeNBULJaoFomMFN294wY8YUu1SrJh4UfOL/MnI=";
+    hash = "sha256-tZ6ptGeNBULJaoFomMFN294wY8YUu1SrJh4UfOL/MnI=";
   };
 
   useFetchCargoVendor = true;

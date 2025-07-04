@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "aardappel";
     repo = "lobster";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-F6py2zhNk88PUGxjWim+LHVTOpYHViV7d70LV77QgdU=";
+    hash = "sha256-F6py2zhNk88PUGxjWim+LHVTOpYHViV7d70LV77QgdU=";
   };
 
   nativeBuildInputs = [ cmake ];

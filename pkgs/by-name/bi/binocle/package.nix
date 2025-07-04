@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "sharkdp";
     repo = "binocle";
     rev = "v${version}";
-    sha256 = "sha256-WAk7xIrCRfVofn4w+gP5E3wnSZbXm/6MZWlNmtoLm20=";
+    hash = "sha256-WAk7xIrCRfVofn4w+gP5E3wnSZbXm/6MZWlNmtoLm20=";
   };
 
   useFetchCargoVendor = true;

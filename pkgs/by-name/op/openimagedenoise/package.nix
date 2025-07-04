@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   # The release tarballs include pretrained weights, which would otherwise need to be fetched with git-lfs
   src = fetchzip {
     url = "https://github.com/RenderKit/oidn/releases/download/v${finalAttrs.version}/oidn-${finalAttrs.version}.src.tar.gz";
-    sha256 = "sha256-JzAd47fYGLT6DeOep8Wag29VY9HOTpqf0OSv1v0kGQU=";
+    hash = "sha256-JzAd47fYGLT6DeOep8Wag29VY9HOTpqf0OSv1v0kGQU=";
   };
 
   patches = lib.optional cudaSupport ./cuda.patch;

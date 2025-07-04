@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "ambrop72";
     repo = "badvpn";
     rev = version;
-    sha256 = "sha256-bLTDpq3ohUP+KooPvhv1/AZfdo0HwB3g9QOuE2E/pmY=";
+    hash = "sha256-bLTDpq3ohUP+KooPvhv1/AZfdo0HwB3g9QOuE2E/pmY=";
   };
 
   nativeBuildInputs = [

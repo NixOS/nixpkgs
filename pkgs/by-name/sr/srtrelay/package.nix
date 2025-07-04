@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "voc";
     repo = "srtrelay";
     rev = "v${version}";
-    sha256 = "sha256-idWAJD6dvvM5OHox5+MI8q3knyl2ANqBiXfQ0VlF67Q=";
+    hash = "sha256-idWAJD6dvvM5OHox5+MI8q3knyl2ANqBiXfQ0VlF67Q=";
   };
 
   vendorHash = "sha256-a4Efva0nWeyHjftuky76znbHOrZYXaIVENKbHK9xnb8=";

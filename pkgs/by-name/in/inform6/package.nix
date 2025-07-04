@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ifarchive.org/if-archive/infocom/compilers/inform6/source/inform-${version}.tar.gz";
-    sha256 = "sha256-Co3XNcr0LDGeEYTxIFmqTsaKm4q5VpLpVsTNnJHUX8o=";
+    hash = "sha256-Co3XNcr0LDGeEYTxIFmqTsaKm4q5VpLpVsTNnJHUX8o=";
   };
 
   buildInputs = [ perl ];

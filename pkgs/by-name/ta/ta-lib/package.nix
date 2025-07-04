@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "rafa-dot-el";
     repo = "talib";
     rev = version;
-    sha256 = "sha256-bIzN8f9ZiOLaVzGAXcZUHUh/v9z1U+zY+MnyjJr1lSw=";
+    hash = "sha256-bIzN8f9ZiOLaVzGAXcZUHUh/v9z1U+zY+MnyjJr1lSw=";
   };
 
   nativeBuildInputs = [

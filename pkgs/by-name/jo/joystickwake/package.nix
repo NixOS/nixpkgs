@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "foresto";
     repo = "joystickwake";
     tag = "v${version}";
-    sha256 = "sha256-vSvIpbcDIbRyitVjx3wNSxt5vTIZ9/NPWokOJt0p6oQ=";
+    hash = "sha256-vSvIpbcDIbRyitVjx3wNSxt5vTIZ9/NPWokOJt0p6oQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/ultimatestunts/ultimatestunts-srcdata-${
       lib.replaceStrings [ "." ] [ "" ] version
     }.tar.gz";
-    sha256 = "sha256-/MBuSi/yxcG9k3ZwrNsHkUDzzg798AV462VZog67JtM=";
+    hash = "sha256-/MBuSi/yxcG9k3ZwrNsHkUDzzg798AV462VZog67JtM=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "magic-wormhole";
     repo = "magic-wormhole.rs";
     rev = version;
-    sha256 = "sha256-01u1DJNd/06q9dH/Y4E5kj5gb2CA7EKdoPtMhzCLtso=";
+    hash = "sha256-01u1DJNd/06q9dH/Y4E5kj5gb2CA7EKdoPtMhzCLtso=";
   };
 
   useFetchCargoVendor = true;

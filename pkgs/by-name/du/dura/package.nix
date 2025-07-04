@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "tkellogg";
     repo = "dura";
     rev = "v${version}";
-    sha256 = "sha256-xAcFk7z26l4BYYBEw+MvbG6g33MpPUvnpGvgmcqhpGM=";
+    hash = "sha256-xAcFk7z26l4BYYBEw+MvbG6g33MpPUvnpGvgmcqhpGM=";
   };
 
   useFetchCargoVendor = true;

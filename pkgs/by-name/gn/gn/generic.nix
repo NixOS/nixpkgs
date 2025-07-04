@@ -14,7 +14,7 @@
   rev,
   revNum,
   version,
-  sha256,
+  hash,
 }:
 
 let
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     # Note: The TAR-Archives (+archive/${rev}.tar.gz) are not deterministic!
     url = "https://gn.googlesource.com/gn";
-    inherit rev sha256;
+    inherit rev hash;
   };
 
   nativeBuildInputs = [

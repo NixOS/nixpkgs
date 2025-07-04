@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapyRemote";
     rev = "54caa5b2af348906607c5516a112057650d0873d";
-    sha256 = "sha256-uekElbcbX2P5TEufWEoP6tgUM/4vxgSQZu8qaBCSo18=";
+    hash = "sha256-uekElbcbX2P5TEufWEoP6tgUM/4vxgSQZu8qaBCSo18=";
   };
 
   nativeBuildInputs = [ cmake ];

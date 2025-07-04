@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "tmccombs";
     repo = "hcl2json";
     rev = "v${version}";
-    sha256 = "sha256-fgRrIJnl7lV3a2+d9/F141xCAKOj0WmeNlrtEwdl1qA=";
+    hash = "sha256-fgRrIJnl7lV3a2+d9/F141xCAKOj0WmeNlrtEwdl1qA=";
   };
 
   vendorHash = "sha256-qG7n8OLpCknjjTxi4ojsvz6D7JXIK5Ac9B/JS8vf9fg=";

@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "Fullscreen";
     repo = "aws-rotate-key";
     rev = "v${version}";
-    sha256 = "sha256-fYpgHHOw0k/8WLGhq+uVOvoF4Wff6wzTXuN8r4D+TmU=";
+    hash = "sha256-fYpgHHOw0k/8WLGhq+uVOvoF4Wff6wzTXuN8r4D+TmU=";
   };
 
   vendorHash = "sha256-gXtTd7lU9m9rO1w7Fx8o/s45j63h6GtUZrjOzFI4Q/o=";

@@ -4,7 +4,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "133rqj85n400qk6g3dhf2bmfws34mak1wqihvh3bgy9jhajw580b";
+      hash = "sha256-C6DCpYIy+bcG3DBiHqaqZGju6hIOtvHMxAAQW5DEeYw=";
       type = "gem";
     };
     version = "0.8.1";
@@ -15,7 +15,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1n8k547hqq9hvbyqbx2qi08g0bky20bbjca1df8cqq5frhzxq7bx";
+      hash = "sha256-fR3cP8yuYMyQa0ExuRYQfi7wEIhY9IX92jBhDA8pE9k=";
       type = "gem";
     };
     version = "4.6.0";
@@ -25,7 +25,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "19xaz5qmw0kg1rdsjh13vk7674bpcmjy6cnddx1cvl80vgkvjr22";
+      hash = "sha256-QmS559sA0c1Cb80y42Vld5FjztwjQKlbDm8CXnH5qqc=";
       type = "gem";
     };
     version = "3.4.3";
@@ -35,7 +35,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0yclf57n2j3cw8144ania99h1zinf8q3f5zrhqa754j6gl95rp9d";
+      hash = "sha256-Ld1cEn1GknIUhvkXNzByNv4AU1LRKkIC4mxIYU9xlHk=";
       type = "gem";
     };
     version = "2.0.3";
@@ -45,7 +45,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1bqnxwyip623d8pr29rg6m8r0hdg08fpr2yb74f46rn1wgsnxmjr";
+      hash = "sha256-WdZu9ePBZkMcOcuLfB0Cr0GQUTUvJ5EvakOYGz3vFq8=";
       type = "gem";
     };
     version = "0.3.5";
@@ -61,7 +61,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1lcsqasn8k2i6kxy9sv76mvf8s60qkdg3a3sb5shj6lvh2dk8n8s";
+      hash = "sha256-Glk0m4CbGgl1WXqo8drEwGjkdjVn6+T7NFFMZLXCmtE=";
       type = "gem";
     };
     version = "0.3.4";
@@ -72,7 +72,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1m5fqy7vq6y7bgxmw7jmk7y6pla83m16p7lb41lbqgg53j8x2cds";
+      hash = "sha256-ujHRkRzlPbxoIIuea0IdSNFr/JlVHl77W8cbvI/HrtQ=";
       type = "gem";
     };
     version = "1.6.14";

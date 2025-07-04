@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "confluentinc";
     repo = "librdkafka";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-+ACn+1fjWEnUB32gUCoMpnq+6YBu+rufPT8LY920DBk=";
+    hash = "sha256-+ACn+1fjWEnUB32gUCoMpnq+6YBu+rufPT8LY920DBk=";
   };
 
   outputs = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://bitbucket.org/hroptatyr/dateutils/downloads/dateutils-${version}.tar.xz";
-    sha256 = "sha256-uP6gsJcUu63yArmzQ0zOa1nCgueGkmjQwIuFiA/btEY=";
+    hash = "sha256-uP6gsJcUu63yArmzQ0zOa1nCgueGkmjQwIuFiA/btEY=";
   };
 
   # https://github.com/hroptatyr/dateutils/issues/148

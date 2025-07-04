@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     owner = "crev-dev";
     repo = "cargo-crev";
     rev = "v${version}";
-    sha256 = "sha256-tuOFanGmIRQs0whXINplfHNyKBhJ1QGF+bBVxqGX/yU=";
+    hash = "sha256-tuOFanGmIRQs0whXINplfHNyKBhJ1QGF+bBVxqGX/yU=";
   };
 
   useFetchCargoVendor = true;

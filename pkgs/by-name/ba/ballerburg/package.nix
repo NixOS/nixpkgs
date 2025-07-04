@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/baller/ballerburg-${version}.tar.gz";
-    sha256 = "sha256-BiX0shPBGA8sshee8rxs41x+mdsrJzBqhpDDic6sYwA=";
+    hash = "sha256-BiX0shPBGA8sshee8rxs41x+mdsrJzBqhpDDic6sYwA=";
   };
 
   nativeBuildInputs = [

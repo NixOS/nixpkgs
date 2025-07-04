@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     owner = "asonix";
     repo = "pict-rs";
     rev = "v${version}";
-    sha256 = "sha256-ifuN3Kb7Hhq8H/eoZcumO5yyrxOCA+nWQQvAdFk7w2Q=";
+    hash = "sha256-ifuN3Kb7Hhq8H/eoZcumO5yyrxOCA+nWQQvAdFk7w2Q=";
   };
 
   useFetchCargoVendor = true;

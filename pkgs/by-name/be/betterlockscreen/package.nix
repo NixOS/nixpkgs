@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     owner = "betterlockscreen";
     repo = "betterlockscreen";
     rev = "v${version}";
-    sha256 = "sha256-59Ct7XIfZqU3yaW9FO7UV8SSMLdcZMPRc7WJangxFPo=";
+    hash = "sha256-59Ct7XIfZqU3yaW9FO7UV8SSMLdcZMPRc7WJangxFPo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

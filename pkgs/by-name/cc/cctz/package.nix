@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "cctz";
     rev = "v${version}";
-    sha256 = "sha256-YCE0DXuOT5tCOfLlemMH7I2F8c7HEK1NEUJvtfqnCg8=";
+    hash = "sha256-YCE0DXuOT5tCOfLlemMH7I2F8c7HEK1NEUJvtfqnCg8=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

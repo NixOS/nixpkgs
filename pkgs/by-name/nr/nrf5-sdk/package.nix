@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/sdks/nrf5/binaries/nrf5_sdk_${version}_${urlHash}.zip";
-    sha256 = "sha256-q4WQ7X7/z/42/qcii+mOLnobqcbUy0tInkOfRH/Gwus=";
+    hash = "sha256-q4WQ7X7/z/42/qcii+mOLnobqcbUy0tInkOfRH/Gwus=";
   };
 
   dontConfigure = true;

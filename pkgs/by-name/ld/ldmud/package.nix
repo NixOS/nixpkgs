@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "ldmud";
     repo = "ldmud";
     rev = version;
-    sha256 = "sha256-PkrjP7tSZMaj61Hsn++7+CumhqFPLbf0+eAI6afP9HA=";
+    hash = "sha256-PkrjP7tSZMaj61Hsn++7+CumhqFPLbf0+eAI6afP9HA=";
   };
 
   patches = [

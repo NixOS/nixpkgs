@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "exoscale";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-3rIj95EtUuS8a7oN+5DdDkzO0+ztWMlEBeEl73+Tgn4=";
+    hash = "sha256-3rIj95EtUuS8a7oN+5DdDkzO0+ztWMlEBeEl73+Tgn4=";
   };
 
   vendorHash = null;

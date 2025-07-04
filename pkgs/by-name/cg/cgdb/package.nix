@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://cgdb.me/files/cgdb-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-DTi1JNN3JXsQa61thW2K4zBBQOHuJAhTQ+bd8bZYEfE=";
+    hash = "sha256-DTi1JNN3JXsQa61thW2K4zBBQOHuJAhTQ+bd8bZYEfE=";
   };
 
   patches = [

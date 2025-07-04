@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "twogood";
     repo = "unshield";
     rev = version;
-    sha256 = "sha256-CYlrPwNPneJIwvQCnzyfi6MZiXoflMDfUDCRL79+yBk=";
+    hash = "sha256-CYlrPwNPneJIwvQCnzyfi6MZiXoflMDfUDCRL79+yBk=";
   };
 
   nativeBuildInputs = [ cmake ];

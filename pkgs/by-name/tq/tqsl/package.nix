@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.arrl.org/files/file/LoTW%20Instructions/${pname}-${version}.tar.gz";
-    sha256 = "sha256-/tHMt7TN8i7OMqpum1jCJFrxrQt3SD40ZraTryxX56Y=";
+    hash = "sha256-/tHMt7TN8i7OMqpum1jCJFrxrQt3SD40ZraTryxX56Y=";
   };
 
   nativeBuildInputs = [

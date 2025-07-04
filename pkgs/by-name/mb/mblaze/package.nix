@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "leahneukirchen";
     repo = "mblaze";
     rev = "v${version}";
-    sha256 = "sha256-398wiXJ/iG9ZfPGDZc57xH37lft3NpEZuLE0Qhb2GGc=";
+    hash = "sha256-398wiXJ/iG9ZfPGDZc57xH37lft3NpEZuLE0Qhb2GGc=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

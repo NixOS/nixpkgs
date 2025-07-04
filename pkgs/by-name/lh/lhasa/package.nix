@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://soulsphere.org/projects/lhasa/lhasa-${version}.tar.gz";
-    sha256 = "sha256-p/yIPDBMUIVi+5P6MHpMNCsMiG/MJl8ouS3Aw5IgxbM=";
+    hash = "sha256-p/yIPDBMUIVi+5P6MHpMNCsMiG/MJl8ouS3Aw5IgxbM=";
   };
 
   meta = with lib; {

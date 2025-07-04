@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://archives.eyrie.org/software/kerberos/pam-krb5-${version}.tar.gz";
-    sha256 = "sha256-UDy+LLGv9L39o7z3+T+U+2ulLCbXCJNOcDmyGC/hCyA=";
+    hash = "sha256-UDy+LLGv9L39o7z3+T+U+2ulLCbXCJNOcDmyGC/hCyA=";
   };
 
   buildInputs = [

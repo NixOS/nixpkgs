@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "pgmodeler";
     repo = "pgmodeler";
     rev = "v${version}";
-    sha256 = "sha256-q0XoShp+XERvyERLxi9uh//dNxVEtfL+UY9uVKqX4fI=";
+    hash = "sha256-q0XoShp+XERvyERLxi9uh//dNxVEtfL+UY9uVKqX4fI=";
   };
 
   nativeBuildInputs = [

@@ -42,7 +42,7 @@ let
     owner = "Ensembl";
     repo = "VEP_plugins";
     rev = "8f271c4848338dc7d504881ff71fdf2892c3d096";
-    sha256 = "sha256-LbaXwLFDP3m1QhRHwO9uh36BEFHE2NzL4xdxTb7/S5Q=";
+    hash = "sha256-LbaXwLFDP3m1QhRHwO9uh36BEFHE2NzL4xdxTb7/S5Q=";
   };
 
   # Install ensembl-xs, faster run using re-implementation in C of some of the Perl subroutines
@@ -97,7 +97,7 @@ perlPackages.buildPerlModule rec {
     owner = "Ensembl";
     repo = "ensembl-${pname}";
     rev = "release/${version}";
-    sha256 = "sha256-6lRdWV2ispl+mpBhkZez/d9PxOw1fkNUWeG8mUIqBJc=";
+    hash = "sha256-6lRdWV2ispl+mpBhkZez/d9PxOw1fkNUWeG8mUIqBJc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

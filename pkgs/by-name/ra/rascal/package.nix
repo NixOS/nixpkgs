@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://update.rascal-mpl.org/console/${pname}-${version}.jar";
-    sha256 = "sha256-8m7+ME0mu9LEMzklkz1CZ9s7ZCMjoA5oreICFSpb4S8=";
+    hash = "sha256-8m7+ME0mu9LEMzklkz1CZ9s7ZCMjoA5oreICFSpb4S8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

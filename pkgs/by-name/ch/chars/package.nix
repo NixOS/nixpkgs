@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "antifuchs";
     repo = "chars";
     rev = "v${version}";
-    sha256 = "sha256-mBtwdPzIc6RgEFTyReStFlhS4UhhRWjBTKT6gD3tzpQ=";
+    hash = "sha256-mBtwdPzIc6RgEFTyReStFlhS4UhhRWjBTKT6gD3tzpQ=";
   };
 
   useFetchCargoVendor = true;

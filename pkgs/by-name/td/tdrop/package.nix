@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "noctuid";
     repo = "tdrop";
     rev = version;
-    sha256 = "sha256-fHvGXaZL7MMvTnkap341B79PDDo2lOVPPcOH4AX/zXo=";
+    hash = "sha256-fHvGXaZL7MMvTnkap341B79PDDo2lOVPPcOH4AX/zXo=";
   };
 
   dontBuild = true;

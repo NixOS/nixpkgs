@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "dnordstrom";
     repo = "ayu-theme";
     rev = "cc6f3d3b72897c304e2f00afcaf51df863155e35";
-    sha256 = "sha256-1EhTfPhYl+4IootTCCE04y6V7nW1/eWdHarfF7/j1U0=";
+    hash = "sha256-1EhTfPhYl+4IootTCCE04y6V7nW1/eWdHarfF7/j1U0=";
   };
 
   postPatch = ''

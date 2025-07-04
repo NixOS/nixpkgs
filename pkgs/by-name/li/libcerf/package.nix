@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v${version}/libcerf-v${version}.tar.gz";
-    sha256 = "sha256-xhCPvaia839YgRnAxUK2wegkhFo2vqL6MfftLMGiRts=";
+    hash = "sha256-xhCPvaia839YgRnAxUK2wegkhFo2vqL6MfftLMGiRts=";
   };
 
   nativeBuildInputs = [

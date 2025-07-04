@@ -31,7 +31,7 @@ buildPythonApplication rec {
     owner = "jarun";
     repo = "buku";
     tag = "v${version}";
-    sha256 = "sha256-b3j3WLMXl4sXZpIObC+F7RRpo07cwJpAK7lQ7+yIzro=";
+    hash = "sha256-b3j3WLMXl4sXZpIObC+F7RRpo07cwJpAK7lQ7+yIzro=";
   };
 
   nativeBuildInputs = [

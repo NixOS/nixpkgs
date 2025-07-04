@@ -36,7 +36,7 @@ beamPackages.mixRelease rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/assets/yarn.lock";
-    sha256 = "sha256-xJL+qcohtu+OmZ31E1QU9uqBWAFGejKIO3XRd+R6z/4=";
+    hash = "sha256-xJL+qcohtu+OmZ31E1QU9uqBWAFGejKIO3XRd+R6z/4=";
   };
 
   nativeBuildInputs = [

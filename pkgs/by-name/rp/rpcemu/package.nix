@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchhg {
     url = "http://www.home.marutan.net/hg/rpcemu";
     rev = "release_${finalAttrs.version}";
-    sha256 = "sha256-raZ+u8CnX33CsOSI20utegwPVVk8bcZqDNJ/5UcMP9w=";
+    hash = "sha256-raZ+u8CnX33CsOSI20utegwPVVk8bcZqDNJ/5UcMP9w=";
   };
 
   nativeBuildInputs = [

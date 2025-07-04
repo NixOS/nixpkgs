@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "micronucleus";
     repo = "micronucleus";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-IngVHeYgPUwSsboTZ5h55iLUxtdBSdugiLk5HbyHIvI=";
+    hash = "sha256-IngVHeYgPUwSsboTZ5h55iLUxtdBSdugiLk5HbyHIvI=";
   };
 
   buildInputs = [ libusb-compat-0_1 ];

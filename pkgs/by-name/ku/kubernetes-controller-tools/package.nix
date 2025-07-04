@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = "controller-tools";
     tag = "v${version}";
-    sha256 = "sha256-zrh6GWFivs1fqkvaN6MSiYoCuPbiTQ6mJz4d69Wb7lo=";
+    hash = "sha256-zrh6GWFivs1fqkvaN6MSiYoCuPbiTQ6mJz4d69Wb7lo=";
   };
 
   vendorHash = "sha256-criu2UyNkGaVQnIxrjzIU4D389DbCcjG/kn3kfoD5yE=";

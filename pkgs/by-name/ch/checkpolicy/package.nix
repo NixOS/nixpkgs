@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${se_url}/${version}/checkpolicy-${version}.tar.gz";
-    sha256 = "sha256-e0d8UW4mk9i2xRE4YyMXfx19tRwuBOttDejKKzYSDl0=";
+    hash = "sha256-e0d8UW4mk9i2xRE4YyMXfx19tRwuBOttDejKKzYSDl0=";
   };
 
   nativeBuildInputs = [

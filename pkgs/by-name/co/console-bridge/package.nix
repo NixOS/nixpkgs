@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "ros";
     repo = "console_bridge";
     rev = version;
-    sha256 = "sha256-M3GocT0hodw3Sc2NHcFDiPVZ1XN7BqIUuYLW8OaXMqM=";
+    hash = "sha256-M3GocT0hodw3Sc2NHcFDiPVZ1XN7BqIUuYLW8OaXMqM=";
   };
 
   nativeBuildInputs = [

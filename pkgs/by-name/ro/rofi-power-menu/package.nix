@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "jluttine";
     repo = "rofi-power-menu";
     rev = version;
-    sha256 = "sha256-VPCfmCTr6ADNT7MW4jiqLI/lvTjlAu1QrCAugiD0toU=";
+    hash = "sha256-VPCfmCTr6ADNT7MW4jiqLI/lvTjlAu1QrCAugiD0toU=";
   };
 
   installPhase = ''

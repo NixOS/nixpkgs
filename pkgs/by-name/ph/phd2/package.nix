@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "OpenPHDGuiding";
     repo = "phd2";
     rev = "v${version}";
-    sha256 = "sha256-GnT/tyk975caqESBSu4mdX5IWGi5O+RljLSd+CwoGWo=";
+    hash = "sha256-GnT/tyk975caqESBSu4mdX5IWGi5O+RljLSd+CwoGWo=";
   };
 
   nativeBuildInputs = [

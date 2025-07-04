@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     owner = "zhaofengli";
     repo = "colmena";
     rev = "v${version}";
-    sha256 = "sha256-01bfuSY4gnshhtqA1EJCw2CMsKkAx+dHS+sEpQ2+EAQ=";
+    hash = "sha256-01bfuSY4gnshhtqA1EJCw2CMsKkAx+dHS+sEpQ2+EAQ=";
   };
 
   useFetchCargoVendor = true;
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     # Fixes nix 2.24 compat: https://github.com/zhaofengli/colmena/pull/236
     (fetchpatch {
       url = "https://github.com/zhaofengli/colmena/commit/36382ee2bef95983848435065f7422500c7923a8.patch";
-      sha256 = "sha256-5cQ2u3eTzhzjPN+rc6xWIskHNtheVXXvlSeJ1G/lz+E=";
+      hash = "sha256-5cQ2u3eTzhzjPN+rc6xWIskHNtheVXXvlSeJ1G/lz+E=";
     })
   ];
 

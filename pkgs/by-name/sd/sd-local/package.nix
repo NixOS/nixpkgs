@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "screwdriver-cd";
     repo = "sd-local";
     rev = "v${version}";
-    sha256 = "sha256-7nL+9tJt4EnGGIhsGASXdBp0u7PXbbt50ADdK2Ciel0=";
+    hash = "sha256-7nL+9tJt4EnGGIhsGASXdBp0u7PXbbt50ADdK2Ciel0=";
   };
 
   vendorHash = "sha256-CcVb2ugvKzl/HTtub4iq81u7hps7Q5a1e1e+T5t13hY=";

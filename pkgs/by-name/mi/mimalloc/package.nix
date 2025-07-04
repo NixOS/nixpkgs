@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "microsoft";
     repo = "mimalloc";
     rev = "v${version}";
-    sha256 = "sha256-RjFMLInulyynrmyAg6Km/u9HGfcYeerkou0gQwCdhsA=";
+    hash = "sha256-RjFMLInulyynrmyAg6Km/u9HGfcYeerkou0gQwCdhsA=";
   };
 
   doCheck = !stdenv.hostPlatform.isStatic;

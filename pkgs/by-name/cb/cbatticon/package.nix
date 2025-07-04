@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "valr";
     repo = "cbatticon";
     rev = version;
-    sha256 = "sha256-VQjJujF9lnVvQxV+0YqodLgnI9F90JKDAGBu5nM/Q/c=";
+    hash = "sha256-VQjJujF9lnVvQxV+0YqodLgnI9F90JKDAGBu5nM/Q/c=";
   };
 
   nativeBuildInputs = [

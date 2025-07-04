@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.cs.hmc.edu/~geoff/tars/${pname}-${version}.tar.gz";
-    sha256 = "sha256-F8kWM9TIB1rMUDFjoWRj/FSrHHRTKArTnNPbdceD66Y=";
+    hash = "sha256-F8kWM9TIB1rMUDFjoWRj/FSrHHRTKArTnNPbdceD66Y=";
   };
 
   buildInputs = [

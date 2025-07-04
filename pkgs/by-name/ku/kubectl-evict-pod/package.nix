@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "rajatjindal";
     repo = "kubectl-evict-pod";
     rev = "v${version}";
-    sha256 = "sha256-Z1NIueonjyO2GHulBbXbsQtX7V/Z95GUoZv9AqjLIR0=";
+    hash = "sha256-Z1NIueonjyO2GHulBbXbsQtX7V/Z95GUoZv9AqjLIR0=";
   };
 
   vendorHash = null;

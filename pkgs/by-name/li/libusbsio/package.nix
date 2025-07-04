@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://www.nxp.com/downloads/en/libraries/libusbsio-${version}-src.zip";
-    sha256 = "sha256-qgoeaGWTWdTk5XpJwoauckEQlqB9lp5x2+TN09vQttI=";
+    hash = "sha256-qgoeaGWTWdTk5XpJwoauckEQlqB9lp5x2+TN09vQttI=";
   };
 
   postPatch = ''

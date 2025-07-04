@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
     owner = "flozz";
     repo = "rivalcfg";
     tag = "v${version}";
-    sha256 = "sha256-UqVogJLv+sNhAxdMjBEvhBQw6LU+QUq1IekvWpeeMqk=";
+    hash = "sha256-UqVogJLv+sNhAxdMjBEvhBQw6LU+QUq1IekvWpeeMqk=";
   };
 
   propagatedBuildInputs = with python3Packages; [

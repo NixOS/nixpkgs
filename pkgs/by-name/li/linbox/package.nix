@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "linbox-team";
     repo = "linbox";
     rev = "v${version}";
-    sha256 = "sha256-mW84a98KPLqcHMjX3LIYTmVe0ngUdz6RJLpoDaAqKU8=";
+    hash = "sha256-mW84a98KPLqcHMjX3LIYTmVe0ngUdz6RJLpoDaAqKU8=";
   };
 
   patches = [

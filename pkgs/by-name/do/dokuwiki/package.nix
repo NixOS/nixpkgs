@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "dokuwiki";
     repo = "dokuwiki";
     rev = "release-${version}";
-    sha256 = "sha256-kgoBwxmc5LKKup6+UQ96lbrMTbtNAwFE5wLxyw3+cEg=";
+    hash = "sha256-kgoBwxmc5LKKup6+UQ96lbrMTbtNAwFE5wLxyw3+cEg=";
   };
 
   preload = writeText "preload.php" ''

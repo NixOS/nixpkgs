@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-bZ62EX8DkXRxxLwQAEq+z/SKefuF64WhxF8CM3cBW4E=";
+    hash = "sha256-bZ62EX8DkXRxxLwQAEq+z/SKefuF64WhxF8CM3cBW4E=";
   };
 
   patches = [

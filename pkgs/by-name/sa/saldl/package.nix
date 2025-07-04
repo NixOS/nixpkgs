@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "saldl";
     repo = "saldl";
     rev = "v${version}";
-    sha256 = "sha256-PAX2MUyBWWU8kGkaeoCJteidgszh7ipwDJbrLXzVsn0=";
+    hash = "sha256-PAX2MUyBWWU8kGkaeoCJteidgszh7ipwDJbrLXzVsn0=";
   };
 
   patches = [

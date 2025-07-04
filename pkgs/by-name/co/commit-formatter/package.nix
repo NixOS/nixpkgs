@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Eliot00";
     repo = "commit-formatter";
     rev = "v${version}";
-    sha256 = "sha256-hXpHEtPj6lrYBAzz8ZrhK+L3RBB2K1VIAi81kFlFgxY=";
+    hash = "sha256-hXpHEtPj6lrYBAzz8ZrhK+L3RBB2K1VIAi81kFlFgxY=";
   };
 
   useFetchCargoVendor = true;

@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "mackerelio";
     repo = "mackerel-agent";
     rev = "v${version}";
-    sha256 = "sha256-wTL+zxa0uaRT8cP2P+iYW6qC8RS5g8wSpvsa01iSUXA=";
+    hash = "sha256-wTL+zxa0uaRT8cP2P+iYW6qC8RS5g8wSpvsa01iSUXA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

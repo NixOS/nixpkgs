@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     owner = "drawpile";
     repo = "drawpile";
     rev = version;
-    sha256 = "sha256-xcutcSpbFt+pb7QP1E/RG6iNnZwpfhIZTxr+1usLKHc=";
+    hash = "sha256-xcutcSpbFt+pb7QP1E/RG6iNnZwpfhIZTxr+1usLKHc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

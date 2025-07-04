@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "fhunleth";
     repo = "fwup";
     rev = "v${version}";
-    sha256 = "sha256-j/UuJf7tDY1ku2vfmh2f8fQVZS7dhmiH6T1zS8IlcDE=";
+    hash = "sha256-j/UuJf7tDY1ku2vfmh2f8fQVZS7dhmiH6T1zS8IlcDE=";
   };
 
   nativeBuildInputs = [

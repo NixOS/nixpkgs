@@ -66,11 +66,11 @@ let
   sources = {
     x86_64-linux = fetchurl {
       url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/91e64286/Feishu-linux_x64-7.42.17.deb";
-      sha256 = "sha256-Rsq+xQAyi7I1WcnkXzhPEgbUyfXU9XPVKIuv6Z9H5VA=";
+      hash = "sha256-Rsq+xQAyi7I1WcnkXzhPEgbUyfXU9XPVKIuv6Z9H5VA=";
     };
     aarch64-linux = fetchurl {
       url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/49127814/Feishu-linux_arm64-7.42.17.deb";
-      sha256 = "sha256-UykQk8R8EDsHmRGy9BfDXhEZFlYT16bAkRuLXFZJDHw=";
+      hash = "sha256-UykQk8R8EDsHmRGy9BfDXhEZFlYT16bAkRuLXFZJDHw=";
     };
   };
 

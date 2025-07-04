@@ -11,7 +11,7 @@ buildDotnetModule rec {
     owner = "nilaoda";
     repo = "N_m3u8DL-RE";
     tag = "v${version}";
-    sha256 = "sha256-AVLO7pxD1LCoogsJPPN5aoOmVBIm3Y/EVsiQWdYI6QU=";
+    hash = "sha256-AVLO7pxD1LCoogsJPPN5aoOmVBIm3Y/EVsiQWdYI6QU=";
   };
   patches = [
     ./publish-fix.patch

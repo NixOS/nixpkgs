@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "brevdev";
     repo = "brev-cli";
     rev = "v${version}";
-    sha256 = "sha256-dZY87iUPr1NYZNERAzuxX/en0fgefekpXAi5Um1nTBc=";
+    hash = "sha256-dZY87iUPr1NYZNERAzuxX/en0fgefekpXAi5Um1nTBc=";
   };
 
   vendorHash = "sha256-7MXZVdpsPHfHk8hNZM2CT0FW8gTKt3oUap7CTVYMNfI=";

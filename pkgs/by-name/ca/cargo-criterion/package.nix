@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "bheisler";
     repo = "cargo-criterion";
     rev = version;
-    sha256 = "sha256-RPix9DM6E32PhObvV3xPGrnXrrVHn3auxLUhysP8GM0=";
+    hash = "sha256-RPix9DM6E32PhObvV3xPGrnXrrVHn3auxLUhysP8GM0=";
   };
 
   useFetchCargoVendor = true;

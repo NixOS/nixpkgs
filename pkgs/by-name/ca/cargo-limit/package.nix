@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "alopatindev";
     repo = "cargo-limit";
     rev = version;
-    sha256 = "sha256-joWDB9fhCsYVZFZdr+Gfm4JaRlm5kj+CHp34Sx5iQYk=";
+    hash = "sha256-joWDB9fhCsYVZFZdr+Gfm4JaRlm5kj+CHp34Sx5iQYk=";
   };
 
   useFetchCargoVendor = true;

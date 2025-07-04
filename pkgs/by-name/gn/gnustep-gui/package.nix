@@ -12,7 +12,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-gui-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-HEH80P51mnLRt4+d+gzpGCv4u6oOdf+x68CcvkR6G/o=";
+    hash = "sha256-HEH80P51mnLRt4+d+gzpGCv4u6oOdf+x68CcvkR6G/o=";
   };
 
   nativeBuildInputs = [ wrapGNUstepAppsHook ];

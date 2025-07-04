@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/madmaxms/theme-obsidian-2/releases/download/v${version}/obsidian-2-theme.tar.xz";
-    sha256 = "sha256-P+62cdYiCk8419S+u1w6EmzJL0rgHAh7G5eTuBOrAGY=";
+    hash = "sha256-P+62cdYiCk8419S+u1w6EmzJL0rgHAh7G5eTuBOrAGY=";
   };
 
   sourceRoot = ".";

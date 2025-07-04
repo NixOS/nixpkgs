@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "nxp-imx";
     repo = "mfgtools";
     rev = "uuu_${version}";
-    sha256 = "sha256-t5usUGbcdLQlqPpZkNDeGncka9VfkpO7U933Kw/Sm7U=";
+    hash = "sha256-t5usUGbcdLQlqPpZkNDeGncka9VfkpO7U933Kw/Sm7U=";
   };
 
   nativeBuildInputs = [

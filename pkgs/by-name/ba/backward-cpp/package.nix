@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bombela";
     repo = "backward-cpp";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2k5PjwFxgA/2XPqJrPHxgSInM61FBEcieppBx+MAUKw=";
+    hash = "sha256-2k5PjwFxgA/2XPqJrPHxgSInM61FBEcieppBx+MAUKw=";
   };
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://storage.googleapis.com/remarkable-codex-toolchain/codex-x86_64-cortexa9hf-neon-rm10x-toolchain-${version}.sh";
-    sha256 = "sha256-ocODUUx2pgmqxMk8J+D+OvqlSHBSay6YzcqnxC9n59w=";
+    hash = "sha256-ocODUUx2pgmqxMk8J+D+OvqlSHBSay6YzcqnxC9n59w=";
     executable = true;
   };
 

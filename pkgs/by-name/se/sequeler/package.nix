@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     owner = "Alecaddd";
     repo = "sequeler";
     rev = "v${version}";
-    sha256 = "sha256-MsHHTYERe0v+u3KnVtx+jmJTKORJTJ7bNfJMZHV9Ly4=";
+    hash = "sha256-MsHHTYERe0v+u3KnVtx+jmJTKORJTJ7bNfJMZHV9Ly4=";
   };
 
   nativeBuildInputs = [

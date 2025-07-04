@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "wmutils";
     repo = "core";
     rev = "v${version}";
-    sha256 = "sha256-OKAvJovGu9rMxEe5g4kdL7Foj41kl3zUYIJa04jf0dI=";
+    hash = "sha256-OKAvJovGu9rMxEe5g4kdL7Foj41kl3zUYIJa04jf0dI=";
   };
 
   buildInputs = [

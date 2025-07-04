@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/datamash/datamash-${version}.tar.gz";
-    sha256 = "sha256-84Lr2gNlDdZ5Fh91j5wKbMkpMhNDjUp3qO2jJarLh9I=";
+    hash = "sha256-84Lr2gNlDdZ5Fh91j5wKbMkpMhNDjUp3qO2jJarLh9I=";
   };
 
   meta = with lib; {

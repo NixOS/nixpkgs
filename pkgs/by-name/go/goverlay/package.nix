@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "benjamimgois";
     repo = "goverlay";
     rev = version;
-    sha256 = "sha256-Vxmmsf/l3OK1Q6UKdhCWvU4WPJkdQG2Hn+s9tS+D5KM=";
+    hash = "sha256-Vxmmsf/l3OK1Q6UKdhCWvU4WPJkdQG2Hn+s9tS+D5KM=";
   };
 
   outputs = [

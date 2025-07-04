@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/zeromq/czmq/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-XXIKIEwqWGRdb3ZDrxXVY6cS2tmMnTLB7ZEzd9qmrDk=";
+    hash = "sha256-XXIKIEwqWGRdb3ZDrxXVY6cS2tmMnTLB7ZEzd9qmrDk=";
   };
 
   # Needs to be propagated for the .pc file to work

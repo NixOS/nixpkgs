@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "solokeys";
     repo = "solo2-cli";
     rev = "v${version}";
-    sha256 = "sha256-7tpO5ir42mIKJXD0NJzEPXi/Xe6LdyEeBQWNfOdgX5I=";
+    hash = "sha256-7tpO5ir42mIKJXD0NJzEPXi/Xe6LdyEeBQWNfOdgX5I=";
   };
 
   useFetchCargoVendor = true;

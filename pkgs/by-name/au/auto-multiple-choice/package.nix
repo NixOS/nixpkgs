@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://download.auto-multiple-choice.net/auto-multiple-choice_${finalAttrs.version}_dist.tar.gz";
     # before 1.7.0, the URL pattern used "precomp" instead of "dist".
-    sha256 = "sha256-37kWqgdvZopvNSU6LA/FmY2wfSJz3rRSlaQF2HSbdmA=";
+    hash = "sha256-37kWqgdvZopvNSU6LA/FmY2wfSJz3rRSlaQF2HSbdmA=";
   };
 
   # There's only the Makefile

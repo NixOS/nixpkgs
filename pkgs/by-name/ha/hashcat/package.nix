@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "sha256-sl4Qd7zzSQjMjxjBppouyYsEeyy88PURRNzzuh4Leyo=";
+    hash = "sha256-sl4Qd7zzSQjMjxjBppouyYsEeyy88PURRNzzuh4Leyo=";
   };
 
   postPatch = ''

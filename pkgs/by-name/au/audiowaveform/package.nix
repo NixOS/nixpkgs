@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "bbc";
     repo = "audiowaveform";
     rev = version;
-    sha256 = "sha256-GrYShlLUD2vZYN6sJy4FnAMPiV36rOAxZUrK0mxJCRk=";
+    hash = "sha256-GrYShlLUD2vZYN6sJy4FnAMPiV36rOAxZUrK0mxJCRk=";
   };
 
   cmakeFlags = [

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://pbil.univ-lyon1.fr/pub/mol_phylogeny/seaview/archive/seaview_${version}.tar.gz";
-    sha256 = "sha256-tL9YQB4wgUOCyCWxOkw+6oyinDFO1cSh9DRZt47W+Ys=";
+    hash = "sha256-tL9YQB4wgUOCyCWxOkw+6oyinDFO1cSh9DRZt47W+Ys=";
   };
 
   buildInputs = [

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "maxbrunet";
     repo = "automatic-timezoned";
     rev = "v${version}";
-    sha256 = "sha256-5JrIcdNgi68g+5zF0y4YeNboFl6SS9QvZEsmcMh35gE=";
+    hash = "sha256-5JrIcdNgi68g+5zF0y4YeNboFl6SS9QvZEsmcMh35gE=";
   };
 
   useFetchCargoVendor = true;

@@ -10,7 +10,7 @@ clangStdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://www.princeton.edu/~chaff/zchaff/zchaff.64bit.${version}.zip";
-    sha256 = "sha256-88fAtJb7o+Qv2GohTdmquxMEq4oCbiKbqLFmS7zs1Ak=";
+    hash = "sha256-88fAtJb7o+Qv2GohTdmquxMEq4oCbiKbqLFmS7zs1Ak=";
   };
 
   patches = [ ./sat_solver.patch ];

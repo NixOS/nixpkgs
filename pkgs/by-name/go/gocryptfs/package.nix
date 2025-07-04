@@ -18,7 +18,7 @@ buildGoModule rec {
     owner = "rfjakob";
     repo = "gocryptfs";
     rev = "v${version}";
-    sha256 = "sha256-lDIKMcZLAE1ehijzhpx6G966xzdhusT40Dy06LXBn74=";
+    hash = "sha256-lDIKMcZLAE1ehijzhpx6G966xzdhusT40Dy06LXBn74=";
   };
 
   vendorHash = "sha256-WfTJ8TuFupEa391XQMDl3hKTjrmRHJqvYb1haAGHW/U=";

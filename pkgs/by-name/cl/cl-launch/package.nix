@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://common-lisp.net/project/xcvb/cl-launch/cl-launch-${version}.tar.gz";
-    sha256 = "sha256-v5aURs2Verhn2HmGiijvY9br20OTPFrOGBWsb6cHhSQ=";
+    hash = "sha256-v5aURs2Verhn2HmGiijvY9br20OTPFrOGBWsb6cHhSQ=";
   };
 
   preConfigure = ''

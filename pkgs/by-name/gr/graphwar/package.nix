@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "catabriga";
     repo = "graphwar";
     rev = version;
-    sha256 = "sha256-t3Y576dXWp2Mj6OSQN5cm9FuNBWNqKq6xxkVRbjIBgE=";
+    hash = "sha256-t3Y576dXWp2Mj6OSQN5cm9FuNBWNqKq6xxkVRbjIBgE=";
   };
 
   nativeBuildInputs = [

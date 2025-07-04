@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "matrix-org";
     repo = "mjolnir";
     tag = "v${version}";
-    sha256 = "sha256-xc/vrBL1rqgB69NqkEmUg7YMX4EZRFrRNPrWA7euaXU=";
+    hash = "sha256-xc/vrBL1rqgB69NqkEmUg7YMX4EZRFrRNPrWA7euaXU=";
   };
 
   sourceRoot = "${src.name}/synapse_antispam";

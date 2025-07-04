@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "desbma";
     repo = "gotify-desktop";
     rev = version;
-    sha256 = "sha256-QhzvY7MeOvrL+xxeV7gPXWRo3EinMMdS9A7oh38gYjU=";
+    hash = "sha256-QhzvY7MeOvrL+xxeV7gPXWRo3EinMMdS9A7oh38gYjU=";
   };
 
   useFetchCargoVendor = true;

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "lpereira";
     repo = "lwan";
     rev = "v${version}";
-    sha256 = "sha256-otiPH+e+auMCyeOTq4LJYaBNv+I91kOCww7DCepQTAQ=";
+    hash = "sha256-otiPH+e+auMCyeOTq4LJYaBNv+I91kOCww7DCepQTAQ=";
   };
 
   patches = [

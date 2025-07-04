@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "martinrotter";
     repo = "rssguard";
     tag = version;
-    sha256 = "sha256-JSw3zuKUPqxWbgzLVjLs41fOihQZcfU6PJGb4m6ua90=";
+    hash = "sha256-JSw3zuKUPqxWbgzLVjLs41fOihQZcfU6PJGb4m6ua90=";
   };
 
   buildInputs = [

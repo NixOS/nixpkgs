@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "~delthas";
     repo = "senpai";
     rev = "v${version}";
-    sha256 = "sha256-lwfhRnaHGOIp6NyugPEu6P+3WXkVgQEWaz7DUfHiJrQ=";
+    hash = "sha256-lwfhRnaHGOIp6NyugPEu6P+3WXkVgQEWaz7DUfHiJrQ=";
   };
 
   vendorHash = "sha256-6glslBPjJr0TmrAkDGbOQ4sDzvODlavVeTugs6RXsCU=";

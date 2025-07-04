@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "wfxr";
     repo = "csview";
     rev = "v${version}";
-    sha256 = "sha256-JFuqaGwCSfEIncBgLu6gGaOvAC5vojKFjruWcuSghS0=";
+    hash = "sha256-JFuqaGwCSfEIncBgLu6gGaOvAC5vojKFjruWcuSghS0=";
   };
 
   useFetchCargoVendor = true;

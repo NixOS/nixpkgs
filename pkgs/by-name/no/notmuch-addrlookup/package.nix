@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "aperezdc";
     repo = "notmuch-addrlookup-c";
     rev = "v${version}";
-    sha256 = "sha256-Z59MAptJw95azdK0auOuUyxBrX4PtXwnRNPkhjgI6Ro=";
+    hash = "sha256-Z59MAptJw95azdK0auOuUyxBrX4PtXwnRNPkhjgI6Ro=";
   };
 
   nativeBuildInputs = [ pkg-config ];

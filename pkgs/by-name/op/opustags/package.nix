@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "fmang";
     repo = "opustags";
     rev = version;
-    sha256 = "sha256-0lo+4VMYXGwXUuRxU1xZRxzlUQ4o4n/CDHXDM27FK44=";
+    hash = "sha256-0lo+4VMYXGwXUuRxU1xZRxzlUQ4o4n/CDHXDM27FK44=";
   };
 
   nativeBuildInputs = [

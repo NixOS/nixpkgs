@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "loeffel-io";
     repo = "ls-lint";
     rev = "v${version}";
-    sha256 = "sha256-kwZvpZaiS58UFE+qncQ370E8bnEuzQACK0FOAYlJwV0=";
+    hash = "sha256-kwZvpZaiS58UFE+qncQ370E8bnEuzQACK0FOAYlJwV0=";
   };
 
   vendorHash = "sha256-XbYfHgpZCGv6w/55dGiFcYTQ36f0n3w8XwnC7wIUFro=";

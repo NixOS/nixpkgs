@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "yannh";
     repo = "kubeconform";
     rev = "v${version}";
-    sha256 = "sha256-FTUPARckpecz1V/Io4rY6SXhlih3VJr/rTGAiik4ALA=";
+    hash = "sha256-FTUPARckpecz1V/Io4rY6SXhlih3VJr/rTGAiik4ALA=";
   };
 
   vendorHash = null;

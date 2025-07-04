@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://proton.me/download/mail/linux/${version}/ProtonMail-desktop-beta.deb";
-    sha256 = "sha256-ti00RSMnSwrGNUys7mO0AmK+OSq4SZmCsfPKm7RRm2g=";
+    hash = "sha256-ti00RSMnSwrGNUys7mO0AmK+OSq4SZmCsfPKm7RRm2g=";
   };
 
   dontConfigure = true;

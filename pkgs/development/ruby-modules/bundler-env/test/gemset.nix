@@ -2,7 +2,7 @@
   test = {
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1j5r0anj8m4qlf2psnldip4b8ha2bsscv11lpdgnfh4nnchzjnxw";
+      hash = "sha256-vFv5IbOWQGdfuzSEzbReQkG0yI2NWn2Fo5hUJK0Cucg=";
       type = "gem";
     };
     version = "0.1.2";

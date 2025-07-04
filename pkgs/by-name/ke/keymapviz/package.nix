@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "yskoht";
     repo = "keymapviz";
     rev = version;
-    sha256 = "sha256-eCvwgco22uPEDDsT8FfTRon1xCGy5p1PBp0pDfNprMs=";
+    hash = "sha256-eCvwgco22uPEDDsT8FfTRon1xCGy5p1PBp0pDfNprMs=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ regex ];

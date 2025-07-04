@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-7hLSTPIxAQJB91jWyVudU6c4Enj6dralGLPQmzce+uw=";
+    hash = "sha256-7hLSTPIxAQJB91jWyVudU6c4Enj6dralGLPQmzce+uw=";
   };
 
   nativeBuildInputs = [

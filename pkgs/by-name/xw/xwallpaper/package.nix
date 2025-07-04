@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "stoeckmann";
     repo = "xwallpaper";
     rev = "v${version}";
-    sha256 = "sha256-8VRQFH00yXplvhCqBuMGrwvOB7bJhfe50Ii6h8kvDMM=";
+    hash = "sha256-8VRQFH00yXplvhCqBuMGrwvOB7bJhfe50Ii6h8kvDMM=";
   };
 
   nativeBuildInputs = [

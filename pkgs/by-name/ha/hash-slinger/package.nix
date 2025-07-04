@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "letoams";
     repo = "hash-slinger";
     rev = version;
-    sha256 = "sha256-IN+jo2EuGx+3bnANKz+d/3opFBUCSmkBS/sCU3lT7Zs=";
+    hash = "sha256-IN+jo2EuGx+3bnANKz+d/3opFBUCSmkBS/sCU3lT7Zs=";
   };
 
   pythonPath = with python3.pkgs; [

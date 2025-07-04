@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "v1cont";
     repo = "yad";
     rev = "v${version}";
-    sha256 = "sha256-Y7bp20fkNdSgBcSV1kPEpWEP7ASwZcScVRaPauwI72M=";
+    hash = "sha256-Y7bp20fkNdSgBcSV1kPEpWEP7ASwZcScVRaPauwI72M=";
   };
 
   configureFlags = [

@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "helsinki-systems";
     repo = "wp4nix";
     rev = "v${version}";
-    sha256 = "sha256-WJteeFUMr684yZEtUP13MqRjJ1UAeo48AzOPdLEE65w=";
+    hash = "sha256-WJteeFUMr684yZEtUP13MqRjJ1UAeo48AzOPdLEE65w=";
   };
 
   vendorHash = null;

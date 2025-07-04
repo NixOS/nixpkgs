@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "KDAB";
     repo = "KDDockWidgets";
     rev = "v${version}";
-    sha256 = "sha256-4xaTfNwfAIQox2YcusEZJt5f9/Kld+zveFEiIVw5dRc=";
+    hash = "sha256-4xaTfNwfAIQox2YcusEZJt5f9/Kld+zveFEiIVw5dRc=";
   };
 
   nativeBuildInputs = [ cmake ];

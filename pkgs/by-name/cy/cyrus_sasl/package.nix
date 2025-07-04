@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
       "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
     ];
-    sha256 = "sha256-fM/Gq9Ae1nwaCSSzU+Um8bdmsh9C1FYu5jWo6/xbs4w=";
+    hash = "sha256-fM/Gq9Ae1nwaCSSzU+Um8bdmsh9C1FYu5jWo6/xbs4w=";
   };
 
   patches = [

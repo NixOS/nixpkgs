@@ -30,7 +30,7 @@ buildPythonApplication rec {
     owner = "pazz";
     repo = "alot";
     tag = version;
-    sha256 = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
+    hash = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
   };
 
   postPatch = ''

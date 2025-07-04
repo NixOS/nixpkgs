@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "nwtgck";
     repo = "piping-server-rust";
     rev = "v${version}";
-    sha256 = "sha256-8kYaANVWmBOncTdhtjjbaYnEFQeuWjemdz/kTjwj2fw=";
+    hash = "sha256-8kYaANVWmBOncTdhtjjbaYnEFQeuWjemdz/kTjwj2fw=";
   };
 
   useFetchCargoVendor = true;

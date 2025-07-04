@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "pfpacket";
     repo = "rust-9p";
     rev = "6d9b62aa182c5764e00b96f93109feb605d9eac9";
-    sha256 = "sha256-zyDkUb+bFsVnxAE4UODbnRtDim7gqUNuY22vuxMsLZM=";
+    hash = "sha256-zyDkUb+bFsVnxAE4UODbnRtDim7gqUNuY22vuxMsLZM=";
   };
 
   sourceRoot = "${src.name}/example/unpfs";

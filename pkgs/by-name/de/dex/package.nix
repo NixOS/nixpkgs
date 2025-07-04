@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "jceb";
     repo = "dex";
     rev = "v${version}";
-    sha256 = "sha256-1fgSz4f6W+Dr3mo4vQY8buD2dNC8RBMGrwCTOIzH7rQ=";
+    hash = "sha256-1fgSz4f6W+Dr3mo4vQY8buD2dNC8RBMGrwCTOIzH7rQ=";
   };
 
   strictDeps = true;

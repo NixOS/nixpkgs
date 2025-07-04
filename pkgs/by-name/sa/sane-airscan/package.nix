@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "alexpevzner";
     repo = "sane-airscan";
     rev = version;
-    sha256 = "sha256-sWBqYoeCEAIM5Gug+w4b4WZ8SwFrywqJVzo0nt69diA=";
+    hash = "sha256-sWBqYoeCEAIM5Gug+w4b4WZ8SwFrywqJVzo0nt69diA=";
   };
 
   meta = with lib; {

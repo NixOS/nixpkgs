@@ -10,7 +10,7 @@ let
   version = "5.0.6";
   src = fetchurl {
     url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${version}.AppImage";
-    sha256 = "sha256-9DFt8Hx39B7hgIQn22TPDva1mpxBYFtddNG+WNeqgF8=";
+    hash = "sha256-9DFt8Hx39B7hgIQn22TPDva1mpxBYFtddNG+WNeqgF8=";
   };
 in
 

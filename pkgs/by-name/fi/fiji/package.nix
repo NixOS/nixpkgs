@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.imagej.net/fiji/archive/${version}/fiji-nojre.zip";
-    sha256 = "sha256-bqVrTBKII58E7WSlQfRPE0Dxd4h/oJALFvIOdAAFZoI=";
+    hash = "sha256-bqVrTBKII58E7WSlQfRPE0Dxd4h/oJALFvIOdAAFZoI=";
   };
 
   dontBuild = true;

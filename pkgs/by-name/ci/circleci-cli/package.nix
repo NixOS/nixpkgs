@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "CircleCI-Public";
     repo = "circleci-cli";
     rev = "v${version}";
-    sha256 = "sha256-BeujMfaW5byZn25OpP1SbAuw0J9of6csw+LK9SVcu+A=";
+    hash = "sha256-BeujMfaW5byZn25OpP1SbAuw0J9of6csw+LK9SVcu+A=";
   };
 
   vendorHash = "sha256-RQK51VSag1AkJMa/rmWpSuuzhRqSG2a3+sNisp0q7lU=";

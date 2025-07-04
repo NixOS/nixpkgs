@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "rschmitt";
     repo = "heatseeker";
     rev = "v${version}";
-    sha256 = "sha256-ZKwRXtfIYEblsGjSSiVCl9XztM43rzBofQpPNGMPu+w=";
+    hash = "sha256-ZKwRXtfIYEblsGjSSiVCl9XztM43rzBofQpPNGMPu+w=";
   };
 
   useFetchCargoVendor = true;

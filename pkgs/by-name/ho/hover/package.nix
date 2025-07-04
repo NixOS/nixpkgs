@@ -52,7 +52,7 @@ let
       tag = "v${version}";
       owner = "go-flutter-desktop";
       repo = "hover";
-      sha256 = "sha256-xS4qfsGZAt560dxHpwEnAWdJCd5vuTdX+7fpUGrSqhw=";
+      hash = "sha256-xS4qfsGZAt560dxHpwEnAWdJCd5vuTdX+7fpUGrSqhw=";
     };
 
     nativeBuildInputs = [

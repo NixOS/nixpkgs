@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "thewtex";
     repo = "tmux-mem-cpu-load";
     rev = "v${version}";
-    sha256 = "sha256-g++6n6OD9FAw8CtXArKBgNwFf+3v+SBCHmbma7RpMBA=";
+    hash = "sha256-g++6n6OD9FAw8CtXArKBgNwFf+3v+SBCHmbma7RpMBA=";
   };
 
   nativeBuildInputs = [ cmake ];

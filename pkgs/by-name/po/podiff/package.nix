@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://download.gnu.org.ua/pub/release/podiff/podiff-1.4.tar.gz";
-    sha256 = "sha256-IxUx87CxdhWh8MqdcSo8GWaG358aZBaIx0oldK94sio=";
+    hash = "sha256-IxUx87CxdhWh8MqdcSo8GWaG358aZBaIx0oldK94sio=";
   };
 
   patchPhase = ''

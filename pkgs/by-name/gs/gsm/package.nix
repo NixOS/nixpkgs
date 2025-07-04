@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.quut.com/gsm/${pname}-${version}.tar.gz";
-    sha256 = "sha256-8Acukfa7hah4svbb9KC3yFDE3rgEnVVMZTQLO/ad8Kw=";
+    hash = "sha256-8Acukfa7hah4svbb9KC3yFDE3rgEnVVMZTQLO/ad8Kw=";
   };
 
   patchPhase =

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   pname = "mediathekview";
   src = fetchurl {
     url = "https://download.mediathekview.de/stabil/MediathekView-${version}-linux.tar.gz";
-    sha256 = "sha256-EWpa6YE9Fk7K14vvsbjadKuGGZGqNhlouDtwj6KpbdE=";
+    hash = "sha256-EWpa6YE9Fk7K14vvsbjadKuGGZGqNhlouDtwj6KpbdE=";
   };
 
   nativeBuildInputs = [

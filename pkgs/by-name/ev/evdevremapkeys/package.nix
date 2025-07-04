@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage {
     owner = "philipl";
     repo = "evdevremapkeys";
     rev = "9b6f372a9bdf8b27d39f7e655b74f6b9d1a8467f";
-    sha256 = "sha256-FwRbo0RTiiV2AB7z6XOalMnwMbj15jM4Dxs41TsIOQI=";
+    hash = "sha256-FwRbo0RTiiV2AB7z6XOalMnwMbj15jM4Dxs41TsIOQI=";
   };
 
   propagatedBuildInputs = with python3Packages; [

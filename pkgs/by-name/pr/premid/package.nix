@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/premid/Linux/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-ime6SCxm+fhMR2wagv1RItqwLjPxvJnVziW3DZafP50=";
+    hash = "sha256-ime6SCxm+fhMR2wagv1RItqwLjPxvJnVziW3DZafP50=";
   };
 
   nativeBuildInputs = [

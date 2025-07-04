@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "gabrie30";
     repo = "ghorg";
     rev = "v${version}";
-    sha256 = "sha256-kO9k/WOJpDOJi1tK6xJh6wIN3HPUFahT92mZWPLJKhY=";
+    hash = "sha256-kO9k/WOJpDOJi1tK6xJh6wIN3HPUFahT92mZWPLJKhY=";
   };
 
   doCheck = false;

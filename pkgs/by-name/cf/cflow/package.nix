@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-0BFGyvkAHiZhM0F8KoJYpktfwW/LCCoU9lKCBNDJcIY=";
+    hash = "sha256-0BFGyvkAHiZhM0F8KoJYpktfwW/LCCoU9lKCBNDJcIY=";
   };
 
   patchPhase = ''

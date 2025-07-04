@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://pg_top.gitlab.io/source/pg_top-${version}.tar.xz";
-    sha256 = "sha256-85LObBS9aAt7Ck5yiK0g2CAKxiYtnWp5XnTAUB5ui/k=";
+    hash = "sha256-85LObBS9aAt7Ck5yiK0g2CAKxiYtnWp5XnTAUB5ui/k=";
   };
 
   buildInputs = [

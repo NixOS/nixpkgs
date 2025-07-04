@@ -16,7 +16,7 @@ haskellPackages.mkDerivation rec {
     owner = "crytic";
     repo = "echidna";
     tag = "v${version}";
-    sha256 = "sha256-5nzis7MXOqs0bhx2jrEexjZYZI2qY6D0D7AWO+SPs+A=";
+    hash = "sha256-5nzis7MXOqs0bhx2jrEexjZYZI2qY6D0D7AWO+SPs+A=";
   };
 
   isExecutable = true;

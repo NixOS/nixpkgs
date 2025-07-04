@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/pcmanfm/libfm-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-pQQmMDBM+OXYz/nVZca9VG8ii0jJYBU+02ajTofK0eU=";
+    hash = "sha256-pQQmMDBM+OXYz/nVZca9VG8ii0jJYBU+02ajTofK0eU=";
   };
 
   patches = [

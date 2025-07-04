@@ -68,7 +68,7 @@ let
     owner = "cortezaproject";
     repo = "corteza-locale";
     rev = "64b6d5d562dce642652db55949231abf8b9af4ef";
-    sha256 = "sha256-OKr/M91sEDlTwYBiDXwWkShlfazJBm21G0uU429fjW0=";
+    hash = "sha256-OKr/M91sEDlTwYBiDXwWkShlfazJBm21G0uU429fjW0=";
   };
 
   corteza-webapp = stdenvNoCC.mkDerivation (finalAttrs: {

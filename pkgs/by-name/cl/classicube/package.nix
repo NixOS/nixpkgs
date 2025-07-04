@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
     rev = version;
-    sha256 = "sha256-ZITyfxkQB4Jpm2ZsQyM+ouPLqCVmGB7UZRXDSU/BX0k=";
+    hash = "sha256-ZITyfxkQB4Jpm2ZsQyM+ouPLqCVmGB7UZRXDSU/BX0k=";
   };
 
   nativeBuildInputs = [

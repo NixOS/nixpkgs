@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "cminyard";
     repo = "gensio";
     rev = "v${version}";
-    sha256 = "sha256-EDa95r8x5yIXibJigJXR3PCYTTvJlqB6XBN1RZHq6KM=";
+    hash = "sha256-EDa95r8x5yIXibJigJXR3PCYTTvJlqB6XBN1RZHq6KM=";
   };
 
   passthru = {

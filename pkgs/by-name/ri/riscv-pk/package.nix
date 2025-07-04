@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "riscv";
     repo = "riscv-pk";
     rev = "abadfdc507d5a75b6272dc360e70a80a510c758a";
-    sha256 = "sha256-02qcj0TAs7g4CSorWWbUzouS6mNthUOSdeocibw5g2A=";
+    hash = "sha256-02qcj0TAs7g4CSorWWbUzouS6mNthUOSdeocibw5g2A=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

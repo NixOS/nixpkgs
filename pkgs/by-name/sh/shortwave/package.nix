@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "World";
     repo = "Shortwave";
     rev = version;
-    sha256 = "sha256-MbkfbpX2av/o+wC1pORHfaLXnchEIFmhQ5mqPuMElak=";
+    hash = "sha256-MbkfbpX2av/o+wC1pORHfaLXnchEIFmhQ5mqPuMElak=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

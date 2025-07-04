@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/libcacard/${pname}-${version}.tar.xz";
-    sha256 = "sha256-+79N6Mt9tb3/XstnL/Db5pOfufNEuQDVG6YpUymjMuc=";
+    hash = "sha256-+79N6Mt9tb3/XstnL/Db5pOfufNEuQDVG6YpUymjMuc=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

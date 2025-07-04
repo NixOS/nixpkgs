@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "arakiken";
     repo = "mlterm";
     tag = finalAttrs.version;
-    sha256 = "sha256-YogapVTmW4HAyVgvhR4ZvW4Q6v0kGiW11CCxN6SpPCY=";
+    hash = "sha256-YogapVTmW4HAyVgvhR4ZvW4Q6v0kGiW11CCxN6SpPCY=";
   };
 
   nativeBuildInputs =

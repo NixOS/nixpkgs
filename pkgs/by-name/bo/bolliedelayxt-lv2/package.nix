@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "MrBollie";
     repo = "bolliedelayxt.lv2";
     rev = "49c488523c8fb71cb2222d41f9f66ee0cb6b6d82";
-    sha256 = "sha256-7GM3YccN22JQdQ5ng9HFs9R6Ex/d+XP/khTQsgbGcAw=";
+    hash = "sha256-7GM3YccN22JQdQ5ng9HFs9R6Ex/d+XP/khTQsgbGcAw=";
   };
 
   buildInputs = [ lv2 ];

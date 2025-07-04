@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     })
     (fetchpatch {
       url = "https://sources.debian.org/data/main/p/plib/1.8.5-13/debian/patches/08_CVE-2021-38714.patch";
-      sha256 = "sha256-3f1wZn0QqK/hPWCg1KEzbB95IGoxBjLZoCOFlW98t5w=";
+      hash = "sha256-3f1wZn0QqK/hPWCg1KEzbB95IGoxBjLZoCOFlW98t5w=";
     })
   ];
 

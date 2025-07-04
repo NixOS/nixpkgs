@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "megaease";
     repo = "easeprobe";
     rev = "v${version}";
-    sha256 = "sha256-LrfUQxxoC20pJXdBWa8wMuxbTbD3DRnsOlIDdBarNMY=";
+    hash = "sha256-LrfUQxxoC20pJXdBWa8wMuxbTbD3DRnsOlIDdBarNMY=";
   };
 
   vendorHash = "sha256-FPApT6snyzYbMn/Am7Zxpwp5w8VZ8F6/YhwCLwDaRAw=";

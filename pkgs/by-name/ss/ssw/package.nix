@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://alpha.gnu.org/gnu/ssw/spread-sheet-widget-${version}.tar.gz";
-    sha256 = "sha256-gGkuw1AnGZXhR9x1mSnN1507ZF5rXvqmtX9NLQXoR+U=";
+    hash = "sha256-gGkuw1AnGZXhR9x1mSnN1507ZF5rXvqmtX9NLQXoR+U=";
   };
 
   nativeBuildInputs = [ pkg-config ];

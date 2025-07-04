@@ -53,7 +53,7 @@ stdenv'.mkDerivation rec {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "sha256-hZc8LlOxnVqJqyqOSIWKv3550QOaGr79xgqsAQ8B8SM=";
+    hash = "sha256-hZc8LlOxnVqJqyqOSIWKv3550QOaGr79xgqsAQ8B8SM=";
   };
 
   nativeBuildInputs = [

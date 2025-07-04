@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-cnZ7ASYm1IhlqskWMEWzaAG6XKEex7P3akjmYUjHSzc=";
+    hash = "sha256-cnZ7ASYm1IhlqskWMEWzaAG6XKEex7P3akjmYUjHSzc=";
   };
   vendorHash = "sha256-bLSj4/+7h0uHdR956VL4iLqRddKV5Ac+FIL1zJxPCW8=";
 

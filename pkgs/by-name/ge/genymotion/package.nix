@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
     name = "genymotion-${version}-linux_x64.bin";
-    sha256 = "sha256-Tgp9ud/Tq0K9ADf/POr+luuFm+QBWMucjKTbELbIveo=";
+    hash = "sha256-Tgp9ud/Tq0K9ADf/POr+luuFm+QBWMucjKTbELbIveo=";
   };
 
   nativeBuildInputs = [

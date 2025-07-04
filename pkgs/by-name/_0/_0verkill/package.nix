@@ -16,7 +16,7 @@ gccStdenv.mkDerivation {
     owner = "hackndev";
     repo = "0verkill";
     rev = "522f11a3e40670bbf85e0fada285141448167968";
-    sha256 = "WO7PN192HhcDl6iHIbVbH7MVMi1Tl2KyQbDa9DWRO6M=";
+    hash = "sha256-WO7PN192HhcDl6iHIbVbH7MVMi1Tl2KyQbDa9DWRO6M=";
   };
 
   nativeBuildInputs = [ autoreconfHook269 ];

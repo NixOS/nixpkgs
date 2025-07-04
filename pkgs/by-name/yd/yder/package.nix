@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "babelouest";
     repo = "yder";
     rev = "v${version}";
-    sha256 = "sha256-BaCF1r5mOYxj0zKc11uoKI9gVKuxWd8GaneGcV+qIFg=";
+    hash = "sha256-BaCF1r5mOYxj0zKc11uoKI9gVKuxWd8GaneGcV+qIFg=";
   };
 
   patches = [

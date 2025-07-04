@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "vladimirvivien";
     repo = "ktop";
     rev = "v${version}";
-    sha256 = "sha256-oxyEkDY53HjBgjWRajlcg+8Kx092lyLkPgOJleioO7o=";
+    hash = "sha256-oxyEkDY53HjBgjWRajlcg+8Kx092lyLkPgOJleioO7o=";
   };
 
   vendorHash = "sha256-MLIcTHWo7lsqtAqH8naSvpS013t8KBVPRbch+CfeUNk=";

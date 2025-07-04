@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.freedesktop.org/git/evemu";
     tag = "v${version}";
-    sha256 = "sha256-SQDaARuqBMBVlUz+Nw6mjdxaZfVOukmzTlIqy8U2rus=";
+    hash = "sha256-SQDaARuqBMBVlUz+Nw6mjdxaZfVOukmzTlIqy8U2rus=";
   };
 
   nativeBuildInputs = [

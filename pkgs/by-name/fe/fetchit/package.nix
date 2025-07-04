@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "containers";
     repo = "fetchit";
     rev = "v${version}";
-    sha256 = "sha256-hxS/+/fbYOpMJ5VfvvG5l7wWKBUUR22rYn9X79DzUUk=";
+    hash = "sha256-hxS/+/fbYOpMJ5VfvvG5l7wWKBUUR22rYn9X79DzUUk=";
   };
 
   vendorHash = "sha256-SyPd8P9s8R2YbGEPqFeztF98W1QyGSBumtirSdpm8VI=";

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "named-data";
     repo = "ndn-tools";
     rev = "ndn-tools-${version}";
-    sha256 = "sha256-rzGd+8SkztrkXRXcEcQm6rOtAGnF7h/Jg8jaBb7FP9w=";
+    hash = "sha256-rzGd+8SkztrkXRXcEcQm6rOtAGnF7h/Jg8jaBb7FP9w=";
   };
 
   nativeBuildInputs = [

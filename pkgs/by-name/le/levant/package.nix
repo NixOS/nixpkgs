@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = "levant";
     rev = "v${version}";
-    sha256 = "sha256-pinrBLzBMptqzMMiQmZob6B5rNNyQsaEkuECFFyTkrw=";
+    hash = "sha256-pinrBLzBMptqzMMiQmZob6B5rNNyQsaEkuECFFyTkrw=";
   };
 
   vendorHash = "sha256-z3QoDcp7l3XUNo4xvgd6iD1Nw6cly2CoxjRtbo+IKQ0=";

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "ldez";
     repo = "traefik-certs-dumper";
     rev = "v${version}";
-    sha256 = "sha256-zXbtabh5ZziELZHzvYisXETPUmhHAVo6sMuF4O3crBY=";
+    hash = "sha256-zXbtabh5ZziELZHzvYisXETPUmhHAVo6sMuF4O3crBY=";
   };
 
   vendorHash = "sha256-WpYxI+7qBYibojPtYlWmDrmJYlRlVwTaqCMI5Vzh1RI=";

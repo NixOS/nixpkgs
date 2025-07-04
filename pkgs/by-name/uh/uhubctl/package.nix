@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "mvp";
     repo = "uhubctl";
     rev = "v${version}";
-    sha256 = "sha256-mpeDePHLsa4sGe2+8X9KQ8AYn7wtybDnaZzxnf4oETQ=";
+    hash = "sha256-mpeDePHLsa4sGe2+8X9KQ8AYn7wtybDnaZzxnf4oETQ=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "rgcr";
     repo = "m-cli";
     rev = "v${version}";
-    sha256 = "sha256-KzlE1DdVMLnGmcOS1a2HK4pASofD1EHpdqbzVVIxeb4=";
+    hash = "sha256-KzlE1DdVMLnGmcOS1a2HK4pASofD1EHpdqbzVVIxeb4=";
   };
 
   dontBuild = true;

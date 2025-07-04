@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tsduck";
     repo = "tsduck";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bFnsGoElXeStIX5KwonJuF0x7DDzhzq+3oygkUOmZE0=";
+    hash = "sha256-bFnsGoElXeStIX5KwonJuF0x7DDzhzq+3oygkUOmZE0=";
   };
 
   nativeBuildInputs = [

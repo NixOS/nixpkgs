@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "AyatanaIndicators";
     repo = "libayatana-indicator";
     rev = version;
-    sha256 = "sha256-OsguZ+jl274uPSCTFHq/ZwUE3yHR7MlUPHCpfmn1F7A=";
+    hash = "sha256-OsguZ+jl274uPSCTFHq/ZwUE3yHR7MlUPHCpfmn1F7A=";
   };
 
   nativeBuildInputs = [

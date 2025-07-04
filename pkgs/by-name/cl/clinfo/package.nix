@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "Oblomov";
     repo = "clinfo";
     rev = version;
-    sha256 = "sha256-UkkrRpmY5vZtTeEqPNYfxAGaJDoTSrNUG9N1Bknozow=";
+    hash = "sha256-UkkrRpmY5vZtTeEqPNYfxAGaJDoTSrNUG9N1Bknozow=";
   };
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [

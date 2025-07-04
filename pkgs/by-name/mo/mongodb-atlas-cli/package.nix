@@ -18,7 +18,7 @@ buildGoModule rec {
     owner = "mongodb";
     repo = "mongodb-atlas-cli";
     rev = "refs/tags/atlascli/v${version}";
-    sha256 = "sha256-1XSIXLI0ItQPOcFXhswnnrKN5LqWRs/th4EdfvdS/G8=";
+    hash = "sha256-1XSIXLI0ItQPOcFXhswnnrKN5LqWRs/th4EdfvdS/G8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

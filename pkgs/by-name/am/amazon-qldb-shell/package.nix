@@ -16,7 +16,7 @@ let
       owner = "awslabs";
       repo = "amazon-qldb-shell";
       tag = "v${version}";
-      sha256 = "sha256-aXScqJ1LijMSAy9YkS5QyXtTqxd19lLt3BbyVXlbw8o=";
+      hash = "sha256-aXScqJ1LijMSAy9YkS5QyXtTqxd19lLt3BbyVXlbw8o=";
     };
 
     nativeBuildInputs = [

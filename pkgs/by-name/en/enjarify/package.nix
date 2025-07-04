@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "enjarify";
     rev = version;
-    sha256 = "sha256-VDBC5n2jWLNJsilX+PV1smL5JeBDj23jYFRwdObXwYs=";
+    hash = "sha256-VDBC5n2jWLNJsilX+PV1smL5JeBDj23jYFRwdObXwYs=";
   };
 
   installPhase = ''

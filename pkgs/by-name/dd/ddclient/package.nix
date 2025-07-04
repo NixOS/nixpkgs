@@ -20,7 +20,7 @@ perlPackages.buildPerlPackage rec {
     owner = "ddclient";
     repo = "ddclient";
     rev = "v${version}";
-    sha256 = "sha256-RCE24RKcW4EhicOTwgz5UE/gzqLxw+UNNk960vFx5Gs=";
+    hash = "sha256-RCE24RKcW4EhicOTwgz5UE/gzqLxw+UNNk960vFx5Gs=";
   };
 
   postPatch = ''

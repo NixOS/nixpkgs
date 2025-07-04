@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation rec {
       exec = "jflap";
       icon = fetchurl {
         url = "https://www.jflap.org/jflapLogo2.jpg";
-        sha256 = "sha256-IiworHI+GT6Fm6B0E+FXnKe+hN8nZYPrxHGZFAcsWDw=";
+        hash = "sha256-IiworHI+GT6Fm6B0E+FXnKe+hN8nZYPrxHGZFAcsWDw=";
       };
       comment = meta.description;
       categories = [

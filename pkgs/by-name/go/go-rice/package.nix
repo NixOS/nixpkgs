@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "GeertJohan";
     repo = "go.rice";
     rev = "v${version}";
-    sha256 = "sha256-jO4otde/m52L2NrE88aXRjdGDBNxnbP1Zt+5fEqfNIc=";
+    hash = "sha256-jO4otde/m52L2NrE88aXRjdGDBNxnbP1Zt+5fEqfNIc=";
   };
 
   vendorHash = "sha256-VlpdZcqg7yWUADN8oD/IAgAXVdzJeIeymx2Pu/7E21o=";

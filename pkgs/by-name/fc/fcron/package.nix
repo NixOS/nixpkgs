@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://fcron.free.fr/archives/${pname}-${version}.src.tar.gz";
-    sha256 = "sha256-9Of8VTzdcP9LO2rJE4s7fP+rkZi4wmbZevCodQbg4bU=";
+    hash = "sha256-9Of8VTzdcP9LO2rJE4s7fP+rkZi4wmbZevCodQbg4bU=";
   };
 
   buildInputs = [ perl ];

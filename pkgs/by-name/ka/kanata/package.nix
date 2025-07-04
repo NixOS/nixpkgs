@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "jtroo";
     repo = "kanata";
     rev = "v${version}";
-    sha256 = "sha256-xxAIwiwCQugDXpWga9bQ9ZGfem46rwDlmf64dX/tw7g=";
+    hash = "sha256-xxAIwiwCQugDXpWga9bQ9ZGfem46rwDlmf64dX/tw7g=";
   };
 
   useFetchCargoVendor = true;

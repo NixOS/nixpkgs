@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://bricxcc.sourceforge.net/nqc/release/nqc-${version}.tgz";
-    sha256 = "sha256-v9XmVPY5r3pYjP3vTSK9Xvz/9UexClbOvr3ljvK/52Y=";
+    hash = "sha256-v9XmVPY5r3pYjP3vTSK9Xvz/9UexClbOvr3ljvK/52Y=";
   };
 
   sourceRoot = ".";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ./nqc-unistd.patch
     (fetchpatch {
       url = "https://sourceforge.net/p/bricxcc/patches/_discuss/thread/00b427dc/b84b/attachment/nqc-01-Linux_usb_and_tcp.diff";
-      sha256 = "sha256-UZmmhhhfLAUus36TOBhiDQ8KUeEdYhGHVFwqKqDIqII=";
+      hash = "sha256-UZmmhhhfLAUus36TOBhiDQ8KUeEdYhGHVFwqKqDIqII=";
     })
   ];
 

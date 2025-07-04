@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "root5-python37-fix.patch";
       url = "https://github.com/root-project/root/commit/c75458024082de0cc35b45505c652b8460a9e71b.patch";
-      sha256 = "sha256-A5zEjQE9OGPFp/L1HUs4NIdxQMRiwbwCRNWOLN2ENrM=";
+      hash = "sha256-A5zEjQE9OGPFp/L1HUs4NIdxQMRiwbwCRNWOLN2ENrM=";
     })
     # Backport Python 3.11 fix to v5 from v6.26
     # https://github.com/root-project/root/commit/484deb056dacf768aba4954073b41105c431bffc

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
-    sha256 = "sha256-KUr9PS651bccPQ6I/fGetRO/24Q7KNNcBVLkrgYoJ6E=";
+    hash = "sha256-KUr9PS651bccPQ6I/fGetRO/24Q7KNNcBVLkrgYoJ6E=";
   };
 
   # libtool.m4 only matches macOS 10.*

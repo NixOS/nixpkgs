@@ -15,11 +15,11 @@ let
   };
   x86_64-appimage = callPackage ./build-from-appimage.nix {
     inherit pname version metaCommon;
-    sha256 = "sha256-stMv4KQoWPmK5jcfdhamC27Rb51zjbeEn40u6YUvXz4=";
+    hash = "sha256-stMv4KQoWPmK5jcfdhamC27Rb51zjbeEn40u6YUvXz4=";
   };
   x86_64-dmg = callPackage ./build-from-dmg.nix {
     inherit pname version metaCommon;
-    sha256 = "sha256-WMT4yrLjDSMsI/lFbYODu3/0whcF+++4ShoChfMyLfQ=";
+    hash = "sha256-WMT4yrLjDSMsI/lFbYODu3/0whcF+++4ShoChfMyLfQ=";
   };
 in
 (if stdenvNoCC.hostPlatform.isDarwin then x86_64-dmg else x86_64-appimage).overrideAttrs

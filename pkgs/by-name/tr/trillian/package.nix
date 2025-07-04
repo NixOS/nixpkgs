@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "google";
     repo = "trillian";
     rev = "v${version}";
-    sha256 = "sha256-DFSG67MMpGzTlvQlW9DttLqqDkS8d8wMkeOlLQuElxU=";
+    hash = "sha256-DFSG67MMpGzTlvQlW9DttLqqDkS8d8wMkeOlLQuElxU=";
   };
 
   subPackages = [

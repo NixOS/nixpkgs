@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "portmidi";
     repo = "portmidi";
     rev = "v${version}";
-    sha256 = "sha256-ou+zN4XnR+QaWC/hzgtThVbeZ/3UVLTpZ9O+eQSGVBs=";
+    hash = "sha256-ou+zN4XnR+QaWC/hzgtThVbeZ/3UVLTpZ9O+eQSGVBs=";
   };
 
   cmakeFlags = [

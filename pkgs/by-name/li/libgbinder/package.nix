@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "mer-hybris";
     repo = "libgbinder";
     rev = version;
-    sha256 = "sha256-f5yfAmCpjI4T0XKBiGPQ3JWLuYg+SlrQwYeY/HIrycY=";
+    hash = "sha256-f5yfAmCpjI4T0XKBiGPQ3JWLuYg+SlrQwYeY/HIrycY=";
   };
 
   outputs = [

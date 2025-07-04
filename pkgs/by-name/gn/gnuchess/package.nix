@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/chess/gnuchess-${version}.tar.gz";
-    sha256 = "sha256-2BFA7qXGnRSwz7Y4FtS0yeGPulH1Jn3lsVOfRok56b0=";
+    hash = "sha256-2BFA7qXGnRSwz7Y4FtS0yeGPulH1Jn3lsVOfRok56b0=";
   };
 
   buildInputs = [

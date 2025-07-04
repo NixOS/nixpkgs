@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${se_url}/${version}/libsemanage-${version}.tar.gz";
-    sha256 = "sha256-ezkSeyGcxwv9k1pK9rDyuoPUs1yRbyU8fpQsI6tJDwc=";
+    hash = "sha256-ezkSeyGcxwv9k1pK9rDyuoPUs1yRbyU8fpQsI6tJDwc=";
   };
 
   outputs = [

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "vasild";
     repo = "cpp-ipfs-http-client";
     rev = "3cdfa7fc6326e49fc81b3c7ca43ce83bdccef6d9";
-    sha256 = "sha256-/oyafnk4SbrvoCh90wkZXNBjknMKA6EEUoEGo/amLUo=";
+    hash = "sha256-/oyafnk4SbrvoCh90wkZXNBjknMKA6EEUoEGo/amLUo=";
   };
 
   patches = [ ./unvendor-nlohmann-json.patch ];

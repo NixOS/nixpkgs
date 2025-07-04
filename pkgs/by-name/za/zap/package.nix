@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "2.16.1";
   src = fetchurl {
     url = "https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}_Linux.tar.gz";
-    sha256 = "sha256-Wy64MZsIUSGm6K1Q1p1n2++MhnFm9xqTe/yIjSR6KsE=";
+    hash = "sha256-Wy64MZsIUSGm6K1Q1p1n2++MhnFm9xqTe/yIjSR6KsE=";
   };
 
   desktopItems = [

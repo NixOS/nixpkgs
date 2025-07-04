@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "dertuxmalwieder";
     repo = "yaydl";
     rev = "release-${version}";
-    sha256 = "sha256-r+UkwEtuGL6los9ohv86KA/3qsaEkpnI4yV/UnYelgk=";
+    hash = "sha256-r+UkwEtuGL6los9ohv86KA/3qsaEkpnI4yV/UnYelgk=";
   };
 
   useFetchCargoVendor = true;

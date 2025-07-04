@@ -64,7 +64,7 @@ let
     version = "4.6.263";
     src = fetchurl {
       url = "https://www.svp-team.com/files/svp4-linux.${version}.tar.bz2";
-      sha256 = "sha256-HyRDVFHVmTan/Si3QjGQpC3za30way10d0Hk79oXG98=";
+      hash = "sha256-HyRDVFHVmTan/Si3QjGQpC3za30way10d0Hk79oXG98=";
     };
 
     nativeBuildInputs = [

@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation {
     owner = "Realtek-OpenSource";
     repo = "android_hardware_realtek";
     rev = "rtk1395";
-    sha256 = "sha256-vd9sZP7PGY+cmnqVty3sZibg01w8+UNinv8X85B+dzc=";
+    hash = "sha256-vd9sZP7PGY+cmnqVty3sZibg01w8+UNinv8X85B+dzc=";
   };
 
   installPhase = ''

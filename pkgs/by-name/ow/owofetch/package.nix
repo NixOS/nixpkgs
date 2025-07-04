@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "netthier";
     repo = "owofetch-rs";
     rev = "v${version}";
-    sha256 = "sha256-I8mzOUvm72KLLBumpgn9gNyx9FKvUrB4ze1iM1+OA18=";
+    hash = "sha256-I8mzOUvm72KLLBumpgn9gNyx9FKvUrB4ze1iM1+OA18=";
   };
 
   useFetchCargoVendor = true;

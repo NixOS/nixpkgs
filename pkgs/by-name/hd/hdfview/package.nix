@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "HDFGroup";
     repo = "hdfview";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-aJHeknkF38qDH9l+vuzdKFZZTcs/XMjtlHuu/LTF124=";
+    hash = "sha256-aJHeknkF38qDH9l+vuzdKFZZTcs/XMjtlHuu/LTF124=";
   };
 
   patches = [

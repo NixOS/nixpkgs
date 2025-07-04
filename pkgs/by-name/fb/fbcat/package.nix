@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "jwilk";
     repo = "fbcat";
     rev = version;
-    sha256 = "sha256-ORzcd8XGy2BfwuPK5UX+K5Z+FYkb+tdg/gHl3zHjvbk=";
+    hash = "sha256-ORzcd8XGy2BfwuPK5UX+K5Z+FYkb+tdg/gHl3zHjvbk=";
   };
 
   postPatch = ''

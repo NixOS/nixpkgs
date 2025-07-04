@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/lf-lang/lingua-franca/releases/download/v${version}/lf-cli-${version}.zip";
-    sha256 = "sha256-LrAm77iPUlqVfRdYy2bZ4mim7DHIr5JxPdbrgxokGvc=";
+    hash = "sha256-LrAm77iPUlqVfRdYy2bZ4mim7DHIr5JxPdbrgxokGvc=";
   };
 
   buildInputs = [ jdk17_headless ];

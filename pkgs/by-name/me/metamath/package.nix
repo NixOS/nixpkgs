@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "metamath";
     repo = "metamath-exe";
     rev = "v${version}";
-    sha256 = "sha256-Cg1dgz+uphDlGhKH3mTywtAccWinC5+pwNv4TB3YAnI=";
+    hash = "sha256-Cg1dgz+uphDlGhKH3mTywtAccWinC5+pwNv4TB3YAnI=";
   };
 
   meta = with lib; {

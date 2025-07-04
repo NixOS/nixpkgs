@@ -15,7 +15,7 @@ let
   drivedbBranch = "RELEASE_7_5_DRIVEDB";
   driverdb = fetchurl {
     url = "https://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
-    sha256 = "sha256-DndzUHpZex3F9WXYq+kNDWvkLNc1OZX3KR0mby5cKbA=";
+    hash = "sha256-DndzUHpZex3F9WXYq+kNDWvkLNc1OZX3KR0mby5cKbA=";
     name = "smartmontools-drivedb.h";
   };
   scriptPath = lib.makeBinPath (

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Kz+stjL9T2XjL0v4Kna0tyxQH5laT2LjMCGf567RdHo=";
+    hash = "sha256-Kz+stjL9T2XjL0v4Kna0tyxQH5laT2LjMCGf567RdHo=";
   };
 
   nativeBuildInputs = [ pkg-config ];

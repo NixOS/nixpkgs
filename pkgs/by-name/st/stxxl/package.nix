@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "stxxl";
     repo = "stxxl";
     rev = version;
-    sha256 = "sha256-U6DQ5mI83pyTmq5/ga5rI8v0h2/iEnNl8mxhIOpbF1I=";
+    hash = "sha256-U6DQ5mI83pyTmq5/ga5rI8v0h2/iEnNl8mxhIOpbF1I=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://sillycycle.com/xlock/xlockmore-${version}.tar.xz";
-    sha256 = "sha256-ppjQmf1qPBnEHhl8EG2ejDo4pOj/B3wqpLrHYp1pyMM=";
+    hash = "sha256-ppjQmf1qPBnEHhl8EG2ejDo4pOj/B3wqpLrHYp1pyMM=";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "t-8ch";
     repo = "pinentry-bemenu";
     rev = "v${version}";
-    sha256 = "sha256-kiGUCcQIS58XjE4r0yiK4hJ85Sg5wrtBqeSYcgUKAmo=";
+    hash = "sha256-kiGUCcQIS58XjE4r0yiK4hJ85Sg5wrtBqeSYcgUKAmo=";
   };
 
   nativeBuildInputs = [

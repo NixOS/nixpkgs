@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "6gk";
     repo = "fet.sh";
     rev = "v${version}";
-    sha256 = "sha256-xhX2nVteC3T3IjQh++mYlm0btDJQbyQa6b8sGualV0E=";
+    hash = "sha256-xhX2nVteC3T3IjQh++mYlm0btDJQbyQa6b8sGualV0E=";
   };
 
   postPatch = ''

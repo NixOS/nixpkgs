@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "drwetter";
     repo = "testssl.sh";
     rev = "v${version}";
-    sha256 = "sha256-jVrEgTgAvu/N0Ijdl4Lya05Q/af7jGTlJBNiYt1X3tI=";
+    hash = "sha256-jVrEgTgAvu/N0Ijdl4Lya05Q/af7jGTlJBNiYt1X3tI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

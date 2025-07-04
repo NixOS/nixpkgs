@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/scipopt/scip/releases/download/v${
       lib.replaceStrings [ "." ] [ "" ] scipVersion
     }/scipoptsuite-${scipVersion}.tgz";
-    sha256 = "sha256-Hi6oDPtJZODTBIuRYE62sUMTJqfmF0flY3cGoWh2IZE=";
+    hash = "sha256-Hi6oDPtJZODTBIuRYE62sUMTJqfmF0flY3cGoWh2IZE=";
   };
 
   sourceRoot = "${src.name}/ug";

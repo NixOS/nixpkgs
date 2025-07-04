@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     owner = "pkg-security-team";
     repo = "dsniff";
     rev = "debian/${version}+debian-34";
-    sha256 = "sha256-CY0+G09KZXtAwKuaYh5/qcmZjuNhdGis3zCG14hWtqw=";
+    hash = "sha256-CY0+G09KZXtAwKuaYh5/qcmZjuNhdGis3zCG14hWtqw=";
     name = "dsniff.tar.gz";
   };
 

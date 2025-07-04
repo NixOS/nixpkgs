@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "arun11299";
     repo = "cpp-jwt";
     rev = "v${version}";
-    sha256 = "sha256-l1FevNhGX7vouKmGh/ypCcmZQLMpHJ4JFUp5dnNMEwg=";
+    hash = "sha256-l1FevNhGX7vouKmGh/ypCcmZQLMpHJ4JFUp5dnNMEwg=";
   };
 
   cmakeFlags = [

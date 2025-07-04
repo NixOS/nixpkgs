@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "BYVoid";
     repo = "OpenCC";
     rev = "ver.${version}";
-    sha256 = "sha256-JBTegQs9ALp4LdKKYMNp9GYEgqR9O8IkX6LqatvaTic=";
+    hash = "sha256-JBTegQs9ALp4LdKKYMNp9GYEgqR9O8IkX6LqatvaTic=";
   };
 
   nativeBuildInputs =

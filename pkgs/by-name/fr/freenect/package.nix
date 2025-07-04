@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "OpenKinect";
     repo = "libfreenect";
     rev = "v${version}";
-    sha256 = "sha256-PpJGFWrlQ5sK7TJxQNoPujw1MxWRjphvblwOqnF+mSg=";
+    hash = "sha256-PpJGFWrlQ5sK7TJxQNoPujw1MxWRjphvblwOqnF+mSg=";
   };
 
   buildInputs = [

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/oggvideotools/oggvideotools/oggvideotools-${version}/oggvideotools-${version}.tar.bz2";
-    sha256 = "sha256-2dv3iXt86phhIgnYC5EnRzyX1u5ssNzPwrOP4+jilSM=";
+    hash = "sha256-2dv3iXt86phhIgnYC5EnRzyX1u5ssNzPwrOP4+jilSM=";
   };
 
   patches = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "gcc-10.patch";
       url = "https://sourceforge.net/p/oggvideotools/bugs/12/attachment/fix-compile.patch";
-      sha256 = "sha256-mJttoC3jCLM3vmPhlyqh+W0ryp2RjJGIBXd6sJfLJA4=";
+      hash = "sha256-mJttoC3jCLM3vmPhlyqh+W0ryp2RjJGIBXd6sJfLJA4=";
     })
 
     # Fix pending upstream inclusion for build failure on gcc-12:
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "gcc-12.patch";
       url = "https://sourceforge.net/p/oggvideotools/bugs/13/attachment/fix-gcc-12.patch";
-      sha256 = "sha256-zuDXe86djWkR8SgYZHkuAJJ7Lf2VYsVRBrlEaODtMKE=";
+      hash = "sha256-zuDXe86djWkR8SgYZHkuAJJ7Lf2VYsVRBrlEaODtMKE=";
       # svn patch, rely on prefix added by fetchpatch:
       extraPrefix = "";
     })

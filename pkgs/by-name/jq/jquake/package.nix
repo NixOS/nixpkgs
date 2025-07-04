@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/fleneindre/fleneindre.github.io/raw/master/downloads/JQuake_${version}_linux.zip";
-    sha256 = "sha256-Q9R5Qhk8Qodw2d99nL2aG5WGpIyvKmjzfkRK7xJzoc0=";
+    hash = "sha256-Q9R5Qhk8Qodw2d99nL2aG5WGpIyvKmjzfkRK7xJzoc0=";
   };
 
   nativeBuildInputs = [

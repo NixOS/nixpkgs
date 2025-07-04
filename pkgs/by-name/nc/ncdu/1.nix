@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdu-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-CtbAltwE1RIFgRBHYMAbj06X1BkdbJ73llT6PGkaF2s=";
+    hash = "sha256-CtbAltwE1RIFgRBHYMAbj06X1BkdbJ73llT6PGkaF2s=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sageupstream/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ByN8DZhTYRUFw4n9e7klAMh0P1YxurtND0Xf2DMvN0E=";
+    hash = "sha256-ByN8DZhTYRUFw4n9e7klAMh0P1YxurtND0Xf2DMvN0E=";
   };
 
   installPhase = ''

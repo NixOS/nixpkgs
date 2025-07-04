@@ -4,7 +4,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "10gid0a7pdllh3qmjiqkqxgfqvd7m1f2dmcm4gcd19s63pv620gv";
+      hash = "sha256-+wFh9h1Gp9DYI5XVJlyop23sXscTR1nxgJS2exRo8YE=";
       type = "gem";
     };
     version = "1.0.0";
@@ -14,7 +14,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0qmj7fypgb9vag723w1a49qihxrcf5shzars106ynw2zk352gbv5";
+      hash = "sha256-Za8nyphfcOsNCDqrD3VxLHcYcSIq8CHOUzutd707smI=";
       type = "gem";
     };
     version = "1.8.6";
@@ -24,7 +24,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0xj2pv4cpn0ad1xw38sinsxfzwhgqs6ff18hw0cwz5xmsf3zqmiz";
+      hash = "sha256-P1b8h9O1l88Z4BAF54zGD/LvurZRo8F7aArYy8i+QnY=";
       type = "gem";
     };
     version = "0.0.4";
@@ -34,7 +34,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "05jxrp3nbn5iilc1k7ir90mfnwc5abc9h78s5rpm3qafwqxvcj4j";
+      hash = "sha256-kki2O+ZO4VFvLhodmNhShXHrKkg5nhkYjbHYZcfNXRY=";
       type = "gem";
     };
     version = "3.0.0";
@@ -49,7 +49,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "02rp8x2y8h61x8mx9c8kwgm2yyvgg63g8km93zmwmkpp5fyi3fi8";
+      hash = "sha256-KLoRvSv3zsrrH6lO9IZ5b3sv6uMTsdQr6sFA5EVHNws=";
       type = "gem";
     };
     version = "0.2.6";
@@ -64,7 +64,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "07w9x3iw32zwpzsm9l63vn0nv1778qls1blqysr45m7l7x6n5wjx";
+      hash = "sha256-XfJiTT/01EKy9piuoClG54Rtgd3D0FT1v/yLwePoiR8=";
       type = "gem";
     };
     version = "0.2.14";
@@ -74,7 +74,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "074h7lns72kg1dl5gvz5apl3xz1i0axbnbc01pf2kbw4q0lkpnp4";
+      hash = "sha256-5No7KcCEryncDYAtu7oCMfw+6FXl71doC2+Koy09kBw=";
       type = "gem";
     };
     version = "2.9.9";

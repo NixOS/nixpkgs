@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "kronosnet";
     repo = "kronosnet";
     rev = "v${version}";
-    sha256 = "sha256-PZWaKrCy0S8d/x3GMh7X2wEiHwgiuEFpfCwKpbLvhsc=";
+    hash = "sha256-PZWaKrCy0S8d/x3GMh7X2wEiHwgiuEFpfCwKpbLvhsc=";
   };
 
   nativeBuildInputs = [

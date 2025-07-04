@@ -44,19 +44,19 @@ stdenv.mkDerivation rec {
     })
     (fetchpatch {
       url = "https://sources.debian.org/data/main/g/glob2/0.9.4.4-6/debian/patches/10_pthread_underlinkage.patch";
-      sha256 = "sha256-L9POADlkgQbUQEUmx4s3dxXG9tS0w2IefpRGuQNRMI0=";
+      hash = "sha256-L9POADlkgQbUQEUmx4s3dxXG9tS0w2IefpRGuQNRMI0=";
     })
     (fetchpatch {
       url = "https://sources.debian.org/data/main/g/glob2/0.9.4.4-6/debian/patches/link-boost-system.patch";
-      sha256 = "sha256-ne6F2ZowB+TUmg3ePuUoPNxXI0ZJC6HEol3oQQHJTy4=";
+      hash = "sha256-ne6F2ZowB+TUmg3ePuUoPNxXI0ZJC6HEol3oQQHJTy4=";
     })
     (fetchpatch {
       url = "https://sources.debian.org/data/main/g/glob2/0.9.4.4-6/debian/patches/scons.patch";
-      sha256 = "sha256-Gah7SoVcd/Aljs0Nqo3YF0lZImUWtrGM4HbbQ4yrhHU=";
+      hash = "sha256-Gah7SoVcd/Aljs0Nqo3YF0lZImUWtrGM4HbbQ4yrhHU=";
     })
     (fetchpatch {
       url = "https://sources.debian.org/data/main/g/glob2/0.9.4.4-6/debian/patches/boost-1.69.patch";
-      sha256 = "sha256-D7agFR4uyIHxQz690Q8EHPF+rTEoiGUpgkm7r5cL5SI=";
+      hash = "sha256-D7agFR4uyIHxQz690Q8EHPF+rTEoiGUpgkm7r5cL5SI=";
     })
   ];
 

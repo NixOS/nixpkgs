@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     owner = "GNOME";
     repo = "dasher";
     rev = "90c753b87564fa3f42cb2d04e1eb6662dc8e0f8f";
-    sha256 = "sha256-aM05CV68pCRlhfIPyhuHWeRL+tDroB3fVsoX08OU8hY=";
+    hash = "sha256-aM05CV68pCRlhfIPyhuHWeRL+tDroB3fVsoX08OU8hY=";
   };
 
   prePatch = ''

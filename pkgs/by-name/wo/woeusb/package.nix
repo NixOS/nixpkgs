@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "WoeUSB";
     repo = "WoeUSB";
     rev = "v${version}";
-    sha256 = "sha256-HB1E7rP/U58dyL3j6YnhF5AOGAcHqmA/ZZ5JNBDibco=";
+    hash = "sha256-HB1E7rP/U58dyL3j6YnhF5AOGAcHqmA/ZZ5JNBDibco=";
   };
 
   nativeBuildInputs = [

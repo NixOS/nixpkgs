@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "nxtrace";
     repo = "NTrace-core";
     rev = "v${version}";
-    sha256 = "sha256-S3rxA5V3x4xdfUiq+XnP2ObE2gQ/3IcooIx6ShNkLrc=";
+    hash = "sha256-S3rxA5V3x4xdfUiq+XnP2ObE2gQ/3IcooIx6ShNkLrc=";
   };
   vendorHash = "sha256-9CNreBLmx1t95M8BijfytDxDrr/GL1GPI/ed9SdYae4=";
 

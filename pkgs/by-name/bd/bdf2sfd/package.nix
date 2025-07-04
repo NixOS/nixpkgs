@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "fcambus";
     repo = "bdf2sfd";
     rev = version;
-    sha256 = "sha256-L1fIPZdVP4px73VbnEA6sb28WrmsNUJ2tqLeGPpwDbA=";
+    hash = "sha256-L1fIPZdVP4px73VbnEA6sb28WrmsNUJ2tqLeGPpwDbA=";
   };
 
   nativeBuildInputs = [ cmake ];

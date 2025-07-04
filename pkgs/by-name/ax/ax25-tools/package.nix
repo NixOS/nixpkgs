@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # the new domain is linux-ax25.in-berlin.de
   src = fetchurl {
     url = "https://linux-ax25.in-berlin.de/pub/ax25-tools/ax25-tools-${version}.tar.gz";
-    sha256 = "sha256-kqnLi1iobcufVWMPxUyaRsWKIPyTvtUkuMERGQs2qgY=";
+    hash = "sha256-kqnLi1iobcufVWMPxUyaRsWKIPyTvtUkuMERGQs2qgY=";
   };
 
   configureFlags = [

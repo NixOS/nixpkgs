@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "aras-p";
     repo = "OpenCOLLADA";
     rev = "4526eb8aaa6462c71fbedd23103976c151a01c50";
-    sha256 = "sha256-ctr+GjDzxOJxBfaMwjwayPkAOcF+FMsP1X72QCOwvTY=";
+    hash = "sha256-ctr+GjDzxOJxBfaMwjwayPkAOcF+FMsP1X72QCOwvTY=";
   };
 
   nativeBuildInputs = [

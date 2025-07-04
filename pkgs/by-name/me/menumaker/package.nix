@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/menumaker/${pname}-${version}.tar.gz";
-    sha256 = "sha256-JBXs5hnt1snbnB1hi7q7HBI7rNp0OoalLeIM0uJCdkE=";
+    hash = "sha256-JBXs5hnt1snbnB1hi7q7HBI7rNp0OoalLeIM0uJCdkE=";
   };
 
   format = "other";

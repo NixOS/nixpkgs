@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/google/bundletool/releases/download/${finalAttrs.version}/bundletool-all-${finalAttrs.version}.jar";
-    sha256 = "sha256-Z1eGSTmDeH/6EVUL23wHFWeaROFkPz/5gKUp6cgiWVw=";
+    hash = "sha256-Z1eGSTmDeH/6EVUL23wHFWeaROFkPz/5gKUp6cgiWVw=";
   };
 
   dontUnpack = true;

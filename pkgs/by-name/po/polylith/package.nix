@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/polyfy/polylith/releases/download/v${version}/poly-${version}.jar";
-    sha256 = "sha256-DKJ669TeDFK/USi7UxraAqgqnSCkG/nSIGphvpsmUv8=";
+    hash = "sha256-DKJ669TeDFK/USi7UxraAqgqnSCkG/nSIGphvpsmUv8=";
   };
 
   dontUnpack = true;

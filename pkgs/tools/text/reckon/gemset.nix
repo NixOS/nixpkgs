@@ -4,7 +4,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0hj2qyx7rzpc7awhvqlm597x7qdxwi4kkml4aqnp5jylmsm4w6xd";
+      hash = "sha256-rRtOqq7Uy3ItVoTWOUnkveHTTyqV4g25Ouz+fLrHQkI=";
       type = "gem";
     };
     version = "0.1.2";
@@ -14,7 +14,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1hrdkn4g8x7dlzxwb1rfgr8kw3bp4ywg5l4y4i9c2g5cwv62yvvn";
+      hash = "sha256-dm8vzOasPMFSJJ7Q8rgndw0+UX4uh8X7p+109IidLcM=";
       type = "gem";
     };
     version = "0.10.2";
@@ -24,7 +24,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0gz7r2kazwwwyrwi95hbnhy54kwkfac5swh2gy5p5vw36fn38lbf";
+      hash = "sha256-blE0rDOD73KLfwJyXZhyk09SPLQLlhR59pzzr6bI5z8=";
       type = "gem";
     };
     version = "3.3.5";
@@ -34,7 +34,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1f8cr014j7mdqpdb9q17fp5vb5b8n1pswqaif91s3ylg5x3pygfn";
+      hash = "sha256-1j1/Ry+P+qFDclFhrm+waJW1y3Un4LTaxa0eSQLIDLk=";
       type = "gem";
     };
     version = "2.1.0";
@@ -44,7 +44,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1h2cgkpzkh3dd0flnnwfq6f3nl2b1zff9lvqz8xs853ssv5kq23i";
+      hash = "sha256-cQg8y9Z6FKQ7+njT5NwPS1A7nMGOW0sdaG3A+e98TMA=";
       type = "gem";
     };
     version = "0.4.2";
@@ -54,7 +54,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1isj1b3ywgg2m1vdlnr41lpvpm3dbyarf1lla4dfibfmad9csfk9";
+      hash = "sha256-aTrNUlPVregaUZQGl5VfbdS7Lw0kW9p2qOI97scKUsc=";
       type = "gem";
     };
     version = "1.8.0";
@@ -72,7 +72,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1y4iqjmgzj9nrp22pmayia54mpb4d6ga85q9xzqir7mhcd2bdca1";
+      hash = "sha256-QbG2RGOwnhzx7wkXpJ5pZN1Kiope1SvEzTbJ/6rEkfg=";
       type = "gem";
     };
     version = "0.11.1";

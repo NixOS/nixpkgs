@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   models = fetchzip {
     url = "https://github.com/nihui/realcugan-ncnn-vulkan/releases/download/20220728/realcugan-ncnn-vulkan-20220728-ubuntu.zip";
-    sha256 = "sha256-71C6taL2Zr1exG5HEXOLy1j9ZMKgkMJjTgNi2hiA7xk=";
+    hash = "sha256-71C6taL2Zr1exG5HEXOLy1j9ZMKgkMJjTgNi2hiA7xk=";
   };
 
   patches = [

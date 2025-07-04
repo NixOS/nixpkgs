@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "igalia";
     repo = "cog";
     rev = "v${version}";
-    sha256 = "sha256-eF7rvOjZntcMmn622342yqfp4ksZ6R/FFBT36bYCViE=";
+    hash = "sha256-eF7rvOjZntcMmn622342yqfp4ksZ6R/FFBT36bYCViE=";
   };
 
   buildInputs = [

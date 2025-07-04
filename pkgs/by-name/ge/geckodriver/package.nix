@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "mozilla";
     repo = "geckodriver";
     tag = "v${version}";
-    sha256 = "sha256-rqJ6+QKfEhdHGZBT9yEWtsBlETxz4XeEZXisXf7RdIE=";
+    hash = "sha256-rqJ6+QKfEhdHGZBT9yEWtsBlETxz4XeEZXisXf7RdIE=";
   };
 
   useFetchCargoVendor = true;

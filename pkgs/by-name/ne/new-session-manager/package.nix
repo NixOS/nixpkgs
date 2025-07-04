@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "linuxaudio";
     repo = "new-session-manager";
     rev = "v${version}";
-    sha256 = "sha256-5G2GlBuKjC/r1SMm78JKia7bMA97YcvUR5l6zBucemw=";
+    hash = "sha256-5G2GlBuKjC/r1SMm78JKia7bMA97YcvUR5l6zBucemw=";
   };
 
   nativeBuildInputs = [

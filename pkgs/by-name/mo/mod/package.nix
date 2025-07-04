@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "marwan-at-work";
     repo = "mod";
     rev = "v${version}";
-    sha256 = "sha256-P0FE0Sl4IXH6DAETnlBwQ2CR0X0AP9Z0noW99By7mxU=";
+    hash = "sha256-P0FE0Sl4IXH6DAETnlBwQ2CR0X0AP9Z0noW99By7mxU=";
   };
 
   vendorHash = "sha256-GiE2RNAxbKpIekn54bfYlNvIcQo8D3ysmPSvxQhujYI=";

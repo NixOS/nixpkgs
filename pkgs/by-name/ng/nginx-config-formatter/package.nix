@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "slomkowski";
     repo = "nginx-config-formatter";
     rev = "v${version}";
-    sha256 = "sha256-0jXm82a4bYpbOJnz+y7+dSg1LZy1Mu28IgBxd24Y5ck=";
+    hash = "sha256-0jXm82a4bYpbOJnz+y7+dSg1LZy1Mu28IgBxd24Y5ck=";
   };
 
   buildInputs = [ python3 ];

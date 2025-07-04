@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "rockchip-linux";
     repo = "rkdeveloptool";
     rev = "304f073752fd25c854e1bcf05d8e7f925b1f4e14";
-    sha256 = "sha256-GcSxkraJrDCz5ADO0XJk4xRrYTk0V5dAAim+D7ZiMJQ=";
+    hash = "sha256-GcSxkraJrDCz5ADO0XJk4xRrYTk0V5dAAim+D7ZiMJQ=";
   };
 
   nativeBuildInputs = [

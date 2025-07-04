@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "Blosc";
     repo = "hdf5-blosc";
     rev = "v${version}";
-    sha256 = "sha256-pM438hUEdzdZEGYxoKlBAHi1G27auj9uGSeiXwVPAE8=";
+    hash = "sha256-pM438hUEdzdZEGYxoKlBAHi1G27auj9uGSeiXwVPAE8=";
   };
 
   patches = [ ./no-external-blosc.patch ];

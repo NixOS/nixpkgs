@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://debian/pool/main/c/console-setup/bdf2psf_${version}_all.deb";
-    sha256 = "sha256-O0hV2OGj5+laVJ+a8rHGPRvThRWoiEUS5g7E3Wam7XY=";
+    hash = "sha256-O0hV2OGj5+laVJ+a8rHGPRvThRWoiEUS5g7E3Wam7XY=";
   };
 
   nativeBuildInputs = [ dpkg ];

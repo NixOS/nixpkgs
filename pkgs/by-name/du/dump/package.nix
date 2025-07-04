@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/dump/dump-${version}.tar.gz";
-    sha256 = "sha256-huaDpzNVNMkVzwpQUlPay/RrYiSnD79or3RgsWPkU+s=";
+    hash = "sha256-huaDpzNVNMkVzwpQUlPay/RrYiSnD79or3RgsWPkU+s=";
   };
 
   nativeBuildInputs = [ pkg-config ];

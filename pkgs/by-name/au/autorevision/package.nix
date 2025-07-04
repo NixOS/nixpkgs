@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/Autorevision/autorevision/releases/download/v%2F${version}/autorevision-${version}.tgz";
-    sha256 = "sha256-3ktLVC73m2xddq5BhxVKw/FJd6pZ5RVb7fv29dxUoRE=";
+    hash = "sha256-3ktLVC73m2xddq5BhxVKw/FJd6pZ5RVb7fv29dxUoRE=";
   };
 
   buildInputs = [

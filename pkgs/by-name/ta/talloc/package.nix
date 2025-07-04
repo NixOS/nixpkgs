@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3EbEC59GuzTdl/5B9Uiw6LJHt3qRhXZzPFKOg6vYVN0=";
+    hash = "sha256-3EbEC59GuzTdl/5B9Uiw6LJHt3qRhXZzPFKOg6vYVN0=";
   };
 
   nativeBuildInputs =

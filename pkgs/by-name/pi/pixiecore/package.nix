@@ -32,7 +32,7 @@ buildGoModule rec {
     # Also backed up in https://github.com/danderson/netboot/compare/main...Mic92:netboot:upgrade-go-mod-117?expand=1
     (fetchpatch {
       url = "https://github.com/danderson/netboot/commit/c999a6ca573c973e760c8df531b4c970c21f3d05.patch";
-      sha256 = "sha256-pRWcBz24cqqajLvJffugB/T6lKGVtvOG4ch3vyzDDQQ=";
+      hash = "sha256-pRWcBz24cqqajLvJffugB/T6lKGVtvOG4ch3vyzDDQQ=";
     })
   ];
 

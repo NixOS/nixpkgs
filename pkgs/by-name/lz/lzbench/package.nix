@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "inikep";
     repo = "lzbench";
     rev = "v${version}";
-    sha256 = "sha256-946AcnD9z60Oihm2pseS8D5j6pGdYeCxmhTLNcW9Mmc=";
+    hash = "sha256-946AcnD9z60Oihm2pseS8D5j6pGdYeCxmhTLNcW9Mmc=";
   };
 
   enableParallelBuilding = true;

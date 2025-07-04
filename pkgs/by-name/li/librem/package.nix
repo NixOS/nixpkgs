@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "baresip";
     repo = "rem";
     rev = "v${version}";
-    sha256 = "sha256-MsXSUxFH89EqxMe4285xFV1Tsqmv2l5RnEeli48O3XQ=";
+    hash = "sha256-MsXSUxFH89EqxMe4285xFV1Tsqmv2l5RnEeli48O3XQ=";
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [

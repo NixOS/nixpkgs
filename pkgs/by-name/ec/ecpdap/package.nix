@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "adamgreig";
     repo = "ecpdap";
     rev = "v${version}";
-    sha256 = "sha256-pgQqDRdewBSCm1/9/r8E9DBzwSKAaons3e6OLNv5gHM=";
+    hash = "sha256-pgQqDRdewBSCm1/9/r8E9DBzwSKAaons3e6OLNv5gHM=";
   };
 
   useFetchCargoVendor = true;

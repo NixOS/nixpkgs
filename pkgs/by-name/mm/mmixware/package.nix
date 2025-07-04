@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "mmix";
     repo = "mmixware";
     rev = "7c790176d50d13ae2422fa7457ccc4c2d29eba9b";
-    sha256 = "sha256-eSwHiJ5SP/Nennalv4QFTgVnM6oan/DWDZRqtk0o6Z0=";
+    hash = "sha256-eSwHiJ5SP/Nennalv4QFTgVnM6oan/DWDZRqtk0o6Z0=";
   };
 
   hardeningDisable = [ "format" ];

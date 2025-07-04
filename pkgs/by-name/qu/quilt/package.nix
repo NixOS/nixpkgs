@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-VV3f/eIto8htHK9anB+4oVKsK4RzBDe9OcwIhJyfSFI=";
+    hash = "sha256-VV3f/eIto8htHK9anB+4oVKsK4RzBDe9OcwIhJyfSFI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

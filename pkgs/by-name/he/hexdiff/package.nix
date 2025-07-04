@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "ahroach";
     repo = "hexdiff";
     rev = "3e96f27e65167c619ede35ab04232163dc273e69";
-    sha256 = "sha256-G6Qi7e4o+0ahcslJ8UfJrdoc8NNkY+nl6kyDlkJCo9I=";
+    hash = "sha256-G6Qi7e4o+0ahcslJ8UfJrdoc8NNkY+nl6kyDlkJCo9I=";
   };
 
   dontConfigure = true;

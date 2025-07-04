@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     owner = "ArturKovacs";
     repo = "emulsion";
     rev = "v${version}";
-    sha256 = "sha256-0t+MUZu1cvkJSL9Ly9kblH8fMr05KuRpOo+JDn/VUc8=";
+    hash = "sha256-0t+MUZu1cvkJSL9Ly9kblH8fMr05KuRpOo+JDn/VUc8=";
   };
 
   useFetchCargoVendor = true;

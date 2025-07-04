@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/reiser4/${pname}-${version}.tar.gz";
-    sha256 = "sha256-fIVohp2PVCaNaQRVJ4zfW8mukiiqM3BgF8Vwu9qrmJE=";
+    hash = "sha256-fIVohp2PVCaNaQRVJ4zfW8mukiiqM3BgF8Vwu9qrmJE=";
   };
 
   preInstall = ''

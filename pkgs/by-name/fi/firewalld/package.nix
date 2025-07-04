@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     owner = "firewalld";
     repo = "firewalld";
     rev = "v${version}";
-    sha256 = "sha256-ONpyJJjIn5kEnkudZe4Nf67wdQgWa+2qEkT1nxRBDpI=";
+    hash = "sha256-ONpyJJjIn5kEnkudZe4Nf67wdQgWa+2qEkT1nxRBDpI=";
   };
 
   patches = [

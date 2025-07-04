@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "stefanhepp";
     repo = "pplatex";
     rev = "8487b00b25127d9a4883e878000f4be6f89d56d5";
-    sha256 = "sha256-wPPJBn/UfmTWsD5JOg6po83Qn4qlpwgsPUV3iJzw5KU=";
+    hash = "sha256-wPPJBn/UfmTWsD5JOg6po83Qn4qlpwgsPUV3iJzw5KU=";
   };
 
   nativeBuildInputs = [

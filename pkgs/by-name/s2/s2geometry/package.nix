@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "s2geometry";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-stH1iO4AEL+VZizntUzhvADNOKX333o3QSOz+WOBZ5Q=";
+    hash = "sha256-stH1iO4AEL+VZizntUzhvADNOKX333o3QSOz+WOBZ5Q=";
   };
 
   nativeBuildInputs = [

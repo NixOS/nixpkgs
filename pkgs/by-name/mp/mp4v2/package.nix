@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "TechSmith";
     repo = "mp4v2";
     rev = "Release-ThirdParty-MP4v2-${version}";
-    sha256 = "sha256-OP+oVTH9pqYfHtYL1Kjrs1qey/J40ijLi5Gu8GJnvSY=";
+    hash = "sha256-OP+oVTH9pqYfHtYL1Kjrs1qey/J40ijLi5Gu8GJnvSY=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";

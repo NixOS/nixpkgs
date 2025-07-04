@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "stevenlovegrove";
     repo = "Pangolin";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-B5YuNcJZHjR3dlVs66rySi68j29O3iMtlQvCjTUZBeY=";
+    hash = "sha256-B5YuNcJZHjR3dlVs66rySi68j29O3iMtlQvCjTUZBeY=";
   };
 
   nativeBuildInputs = [

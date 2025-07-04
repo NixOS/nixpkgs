@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "KCL-BMEIS";
     repo = "NiftySeg";
     rev = "v${version}";
-    sha256 = "sha256-FDthq1ild9XOw3E3O7Lpfn6hBF1Frhv1NxfEA8500n8=";
+    hash = "sha256-FDthq1ild9XOw3E3O7Lpfn6hBF1Frhv1NxfEA8500n8=";
   };
 
   nativeBuildInputs = [ cmake ];

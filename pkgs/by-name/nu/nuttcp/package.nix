@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://nuttcp.net/nuttcp/nuttcp-${version}.tar.bz2";
-    sha256 = "sha256-fq16ieeqoFnSDjQELFihmMKYHK1ylVDROI3fyQNtOYM=";
+    hash = "sha256-fq16ieeqoFnSDjQELFihmMKYHK1ylVDROI3fyQNtOYM=";
   };
 
   nativeBuildInputs = [

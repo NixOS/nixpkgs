@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "numToStr";
     repo = "lemmy-help";
     rev = "v${version}";
-    sha256 = "sha256-HcIvHuuzQj4HsRJyn1A9nXiGDGAcz1nqTsC7sROt7OI=";
+    hash = "sha256-HcIvHuuzQj4HsRJyn1A9nXiGDGAcz1nqTsC7sROt7OI=";
   };
 
   buildFeatures = [ "cli" ];

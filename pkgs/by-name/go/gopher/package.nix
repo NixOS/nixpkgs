@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "jgoerzen";
     repo = "gopher";
     rev = "release/${version}";
-    sha256 = "sha256-8J63TnC3Yq7+64PPLrlPEueMa9D/eWkPsb08t1+rPAA=";
+    hash = "sha256-8J63TnC3Yq7+64PPLrlPEueMa9D/eWkPsb08t1+rPAA=";
   };
 
   buildInputs = [ ncurses ];

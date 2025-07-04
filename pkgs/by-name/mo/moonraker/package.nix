@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "Arksine";
     repo = "moonraker";
     rev = "ccbfd6498941cb4d8b49d192c8dd34feacfbe84a";
-    sha256 = "sha256-SCexS9dRbdwNSy5bTrGaEfP9EmkO3c/IL2+OIG7/K24=";
+    hash = "sha256-SCexS9dRbdwNSy5bTrGaEfP9EmkO3c/IL2+OIG7/K24=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

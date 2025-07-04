@@ -18,7 +18,7 @@ buildGoModule rec {
     owner = "browserpass";
     repo = "browserpass-native";
     rev = version;
-    sha256 = "sha256-UZzOPRRiCUIG7uSSp9AEPMDN/+4cgyK47RhrI8oUx8U=";
+    hash = "sha256-UZzOPRRiCUIG7uSSp9AEPMDN/+4cgyK47RhrI8oUx8U=";
   };
 
   nativeBuildInputs = [

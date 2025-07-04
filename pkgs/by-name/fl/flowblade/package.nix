@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "jliljebl";
     repo = "flowblade";
     rev = "v${version}";
-    sha256 = "sha256-0puu0S4zONapjXaVBpPG5mH3UidQwre9yCSkjJVhdkc=";
+    hash = "sha256-0puu0S4zONapjXaVBpPG5mH3UidQwre9yCSkjJVhdkc=";
   };
 
   buildInputs = [

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "M4444";
     repo = "TMatrix";
     rev = "v${version}";
-    sha256 = "sha256-G3dg0SWfBjCA66TTxkVAcVrFNJOWE9+GJXYKzCUX34w=";
+    hash = "sha256-G3dg0SWfBjCA66TTxkVAcVrFNJOWE9+GJXYKzCUX34w=";
   };
 
   nativeBuildInputs = [

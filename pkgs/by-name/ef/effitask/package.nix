@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "sanpii";
     repo = "effitask";
     rev = version;
-    sha256 = "sha256-6BA/TCCqVh5rtgGkUgk8nIqUzozipC5rrkbXMDWYpdQ=";
+    hash = "sha256-6BA/TCCqVh5rtgGkUgk8nIqUzozipC5rrkbXMDWYpdQ=";
   };
 
   useFetchCargoVendor = true;

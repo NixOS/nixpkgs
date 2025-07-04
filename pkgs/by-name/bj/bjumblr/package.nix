@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "sjaehn";
     repo = "BJumblr";
     rev = version;
-    sha256 = "sha256-qSoGmWUGaMjx/bkiCJ/qb4LBbuFPXXlJ0e9hrFBXzwE=";
+    hash = "sha256-qSoGmWUGaMjx/bkiCJ/qb4LBbuFPXXlJ0e9hrFBXzwE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

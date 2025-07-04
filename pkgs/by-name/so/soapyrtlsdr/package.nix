@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pothosware";
     repo = "SoapyRTLSDR";
     rev = "soapy-rtl-sdr-${finalAttrs.version}";
-    sha256 = "sha256-IapdrBE8HhibY52Anm76/mVAoA0GghwnRCxxfGkyLTw=";
+    hash = "sha256-IapdrBE8HhibY52Anm76/mVAoA0GghwnRCxxfGkyLTw=";
   };
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "RSS-Bridge";
     repo = "rss-bridge";
     rev = version;
-    sha256 = "sha256-S9TSTUwuScOcLbEpGgET1zzH1WlO1IMUOiwzMTsA65s=";
+    hash = "sha256-S9TSTUwuScOcLbEpGgET1zzH1WlO1IMUOiwzMTsA65s=";
   };
 
   installPhase = ''

@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchzip {
     name = "${pname}-${version}";
     url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/edukai-${version}.zip";
-    sha256 = "sha256-3+w9n6GJQg9+HfHYukC7tlm4GVs8vEOO23hrLw6qjTY=";
+    hash = "sha256-3+w9n6GJQg9+HfHYukC7tlm4GVs8vEOO23hrLw6qjTY=";
   };
 
   installPhase = ''

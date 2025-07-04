@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/tinyscheme/${pname}-${version}.tar.gz";
-    sha256 = "sha256-F7Cxv/0i89SdWDPiKhILM5A50s/aC0bW/FHdLwG0B60=";
+    hash = "sha256-F7Cxv/0i89SdWDPiKhILM5A50s/aC0bW/FHdLwG0B60=";
   };
 
   nativeBuildInputs = [ dos2unix ];

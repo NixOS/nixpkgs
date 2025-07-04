@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "simon-budig";
     repo = "woof";
     rev = "f51e9db264118d4cbcd839348c4a6223fda49813";
-    sha256 = "sha256-tk55q2Ew2mZkQtkxjWCuNgt9t+UbjH4llIJ42IruqGY=";
+    hash = "sha256-tk55q2Ew2mZkQtkxjWCuNgt9t+UbjH4llIJ42IruqGY=";
   };
 
   propagatedBuildInputs = [ python3 ];

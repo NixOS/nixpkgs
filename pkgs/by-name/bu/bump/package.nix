@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "mroth";
     repo = "bump";
     rev = "v${version}";
-    sha256 = "sha256-a+vmpmWb/jICNdErkvCQKNIdaKtSrIJZ3BApLvKG/hg=";
+    hash = "sha256-a+vmpmWb/jICNdErkvCQKNIdaKtSrIJZ3BApLvKG/hg=";
   };
 
   vendorHash = "sha256-VHVChqQXmCcw2ymTJbQLDtzBycTeXkuHPz52vuKen0w=";

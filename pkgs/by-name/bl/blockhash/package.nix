@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "commonsmachinery";
     repo = "blockhash";
     rev = "v${version}";
-    sha256 = "sha256-QoqFTCfWtXIrFF3Yx4NfOa9cSjHtCSKz3k3i0u9Qx9M=";
+    hash = "sha256-QoqFTCfWtXIrFF3Yx4NfOa9cSjHtCSKz3k3i0u9Qx9M=";
   };
 
   nativeBuildInputs = [

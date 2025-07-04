@@ -13,7 +13,7 @@ haskellPackages.mkDerivation {
     owner = "travgm";
     repo = "dclock";
     rev = "main";
-    sha256 = "sha256-IJsbEg1dFiyIJSlVWy8x+tsa49YxLK8mNkJESFyUQoU=";
+    hash = "sha256-IJsbEg1dFiyIJSlVWy8x+tsa49YxLK8mNkJESFyUQoU=";
   };
 
   isLibrary = false;

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "MeanEYE";
     repo = "Disk-Indicator";
     rev = "ec2d2f6833f038f07a72d15e2d52625c23e10b12";
-    sha256 = "sha256-cRqgIxF6H1WyJs5hhaAXVdWAlv6t22BZLp3p/qRlCSM=";
+    hash = "sha256-cRqgIxF6H1WyJs5hhaAXVdWAlv6t22BZLp3p/qRlCSM=";
   };
 
   buildInputs = [ libX11 ];

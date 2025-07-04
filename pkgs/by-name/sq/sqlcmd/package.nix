@@ -15,7 +15,7 @@ buildGoModule rec {
     repo = "go-sqlcmd";
     owner = "microsoft";
     rev = "v${version}";
-    sha256 = "sha256-UucXy6qpoHRfCEY5VGtcIF0VF2mrWBfsMg6wl80r22M=";
+    hash = "sha256-UucXy6qpoHRfCEY5VGtcIF0VF2mrWBfsMg6wl80r22M=";
   };
 
   vendorHash = "sha256-bTfUWBCNNWIi7tzDvYW1y0+I/498DP1Tlp4zWq7g5uY=";

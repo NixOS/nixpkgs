@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${se_url}/${version}/libsepol-${version}.tar.gz";
-    sha256 = "sha256-DnhwUwX5VavUwGVNN6VHfuJjSat0254rA6eGiJeuHd8=";
+    hash = "sha256-DnhwUwX5VavUwGVNN6VHfuJjSat0254rA6eGiJeuHd8=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''

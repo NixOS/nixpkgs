@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     {
       x86_64-linux = fetchurl {
         url = "https://www.signalyst.eu/bins/naa/linux/buster/${pname}_${version}_amd64.deb";
-        sha256 = "sha256-un5VcCnvCCS/KWtW991Rt9vz3flYilERmRNooEsKCkA=";
+        hash = "sha256-un5VcCnvCCS/KWtW991Rt9vz3flYilERmRNooEsKCkA=";
       };
       aarch64-linux = fetchurl {
         url = "https://www.signalyst.eu/bins/naa/linux/buster/${pname}_${version}_arm64.deb";
-        sha256 = "sha256-fjSCWX9VYhVJ43N2kSqd5gfTtDJ1UiH4j5PJ9I5Skag=";
+        hash = "sha256-fjSCWX9VYhVJ43N2kSqd5gfTtDJ1UiH4j5PJ9I5Skag=";
       };
     }
     .${system} or throwSystem;

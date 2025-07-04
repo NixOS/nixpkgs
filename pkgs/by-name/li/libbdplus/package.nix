@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://get.videolan.org/libbdplus/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-uT7qPq7zPW6RVdLDSwaMUFSTqlpJNuYydPQ0KrD0Clg=";
+    hash = "sha256-uT7qPq7zPW6RVdLDSwaMUFSTqlpJNuYydPQ0KrD0Clg=";
   };
 
   buildInputs = [

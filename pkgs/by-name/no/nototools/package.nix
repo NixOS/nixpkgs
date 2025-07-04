@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     owner = "googlefonts";
     repo = "nototools";
     tag = "v${version}";
-    sha256 = "sha256-id4UhyWOFHrtmBZHhnaY2jHDIK0s7rcGBpg4QsBTLKs=";
+    hash = "sha256-id4UhyWOFHrtmBZHhnaY2jHDIK0s7rcGBpg4QsBTLKs=";
   };
 
   postPatch = ''

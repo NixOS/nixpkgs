@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/m4/m4-${version}.tar.bz2";
-    sha256 = "sha256-swapHA/ZO8QoDPwumMt6s5gf91oYe+oyk4EfRSyJqMg=";
+    hash = "sha256-swapHA/ZO8QoDPwumMt6s5gf91oYe+oyk4EfRSyJqMg=";
   };
 
   # https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-devel/m4/m4-1.4.19-r1.ebuild

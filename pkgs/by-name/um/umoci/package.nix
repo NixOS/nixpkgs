@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "opencontainers";
     repo = "umoci";
     rev = "v${version}";
-    sha256 = "sha256-1nQMrA1GJAeEJ8m8YWMZE10exlx0u023XZakQCaO/YI=";
+    hash = "sha256-1nQMrA1GJAeEJ8m8YWMZE10exlx0u023XZakQCaO/YI=";
   };
 
   vendorHash = null;

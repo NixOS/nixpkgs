@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/gsasl/gsasl-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-QejkQmSOzK9kWdmtk9SxhTC5bI6vUOPzQlMu8nXv87o=";
+    hash = "sha256-QejkQmSOzK9kWdmtk9SxhTC5bI6vUOPzQlMu8nXv87o=";
   };
 
   buildInputs = [

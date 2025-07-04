@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "GavinSmith0123";
     repo = "crackxls2003";
     tag = "v${version}";
-    sha256 = "sha256-CJFC4iKHHpSRQBdotmum7NjpPNUjbB6cSCs5HMXnjO8=";
+    hash = "sha256-CJFC4iKHHpSRQBdotmum7NjpPNUjbB6cSCs5HMXnjO8=";
   };
 
   nativeBuildInputs = [

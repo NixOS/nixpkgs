@@ -12,7 +12,7 @@ buildGoModule {
     owner = "elliots";
     repo = "protoc-gen-twirp_swagger";
     rev = "f21ef47d69e37c1602a7fb26146de05c092d30b6";
-    sha256 = "sha256-uHU15NbHK7SYgNS3VK21H/OqDo/JyyTZdXw3i9lsgLY=";
+    hash = "sha256-uHU15NbHK7SYgNS3VK21H/OqDo/JyyTZdXw3i9lsgLY=";
   };
 
   vendorHash = "sha256-g0+9l83Fc0XPzsZAKjLBrjD+tv2+Fot57hcilqAhOZk=";

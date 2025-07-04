@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://assets.unigine.com/d/Unigine_Valley-${version}.run";
-    sha256 = "sha256-XwyL0kMRGFURgrq79fHCD7FOekB4lpckDcr1RkQ2YPQ=";
+    hash = "sha256-XwyL0kMRGFURgrq79fHCD7FOekB4lpckDcr1RkQ2YPQ=";
   };
 
   sourceRoot = "Unigine_Valley-${version}";

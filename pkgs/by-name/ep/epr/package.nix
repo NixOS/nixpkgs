@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "wustho";
     repo = "epr";
     rev = "v${version}";
-    sha256 = "sha256-1qsqYlqGlCRhl7HINrcTDt5bGlb7g5PmaERylT+UvEg=";
+    hash = "sha256-1qsqYlqGlCRhl7HINrcTDt5bGlb7g5PmaERylT+UvEg=";
   };
 
   meta = with lib; {

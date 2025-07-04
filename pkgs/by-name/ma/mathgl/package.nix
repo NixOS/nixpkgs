@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/mathgl/mathgl-${version}.tar.gz";
-    sha256 = "sha256-m7qe5qD4bRuPPzugN008t3b3ctu28aAWhMpsC9ViBNY=";
+    hash = "sha256-m7qe5qD4bRuPPzugN008t3b3ctu28aAWhMpsC9ViBNY=";
   };
 
   nativeBuildInputs = [

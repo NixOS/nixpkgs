@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "weaveworks";
     repo = "weave-gitops";
     rev = "v${version}";
-    sha256 = "sha256-Gm4DIQK8T+dTwB5swdrD+SjGgy/wFQ/fJYdSqNDSy9c=";
+    hash = "sha256-Gm4DIQK8T+dTwB5swdrD+SjGgy/wFQ/fJYdSqNDSy9c=";
   };
 
   ldflags = [

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://thoughtbot.github.io/rcm/dist/rcm-${version}.tar.gz";
-    sha256 = "sha256-9P37xFHR+1dkUxKQogKgqHH2uBujwBprdsSUNchQgKU=";
+    hash = "sha256-9P37xFHR+1dkUxKQogKgqHH2uBujwBprdsSUNchQgKU=";
   };
 
   patches = [ ./fix-rcmlib-path.patch ];

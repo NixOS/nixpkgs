@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "hackerb9";
     repo = "lsix";
     rev = finalAttrs.version;
-    sha256 = "sha256-msTG7otjzksg/2XyPDy31LEb7uGXSgB8fzfHvad9nPA=";
+    hash = "sha256-msTG7otjzksg/2XyPDy31LEb7uGXSgB8fzfHvad9nPA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

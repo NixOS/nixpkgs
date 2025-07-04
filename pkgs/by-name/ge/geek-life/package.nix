@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "ajaxray";
     repo = "geek-life";
     rev = "v${version}";
-    sha256 = "sha256-7B/4pDOVXef2MaWKvzkUZH0/KM/O1gJjI3xPjEXqc/E=";
+    hash = "sha256-7B/4pDOVXef2MaWKvzkUZH0/KM/O1gJjI3xPjEXqc/E=";
   };
 
   vendorHash = "sha256-U80Yb8YXKQ8KJf+FxkC0EIUFKP4PKAFRtKTCvXSc0WI=";

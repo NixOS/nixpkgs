@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     repo = "wofi";
     owner = "~scoopta";
     rev = "v${version}";
-    sha256 = "sha256-aedoUhVfk8ljmQ23YxVmGZ00dPpRftW2dnRAgXmtV/w=";
+    hash = "sha256-aedoUhVfk8ljmQ23YxVmGZ00dPpRftW2dnRAgXmtV/w=";
     vc = "hg";
   };
 

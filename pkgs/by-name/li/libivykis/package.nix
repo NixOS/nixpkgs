@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/libivykis/${version}/ivykis-${version}.tar.gz";
-    sha256 = "sha256-k+PpsjdpVDfNY9SqSKjZ39izm8KKGSpXcNETxP6Qme8=";
+    hash = "sha256-k+PpsjdpVDfNY9SqSKjZ39izm8KKGSpXcNETxP6Qme8=";
   };
 
   nativeBuildInputs = [

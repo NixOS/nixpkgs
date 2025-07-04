@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://infraroot.at/pub/squashfs/squashfs-tools-ng-${version}.tar.xz";
-    sha256 = "sha256-DZB6w+c1w1HkfIZ/tR2Uv/o7BfuVvsAfMehIt8RCFak=";
+    hash = "sha256-DZB6w+c1w1HkfIZ/tR2Uv/o7BfuVvsAfMehIt8RCFak=";
   };
 
   nativeBuildInputs = [

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/jpfleury/clearlooks-phenix/archive/${version}.tar.gz";
-    sha256 = "sha256-UJgKPoNcpBkIxITAIn3INsANJn/hD8l9NCr/entbZx8=";
+    hash = "sha256-UJgKPoNcpBkIxITAIn3INsANJn/hD8l9NCr/entbZx8=";
   };
 
   dontBuild = true;

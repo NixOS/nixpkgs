@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-couJxQ4JC/+Dno97MEO1xwI/hhqSEckwSLQqtFWGavc=";
+    hash = "sha256-couJxQ4JC/+Dno97MEO1xwI/hhqSEckwSLQqtFWGavc=";
   };
 
   hardeningDisable = [ "format" ];

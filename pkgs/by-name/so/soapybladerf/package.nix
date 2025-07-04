@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapyBladeRF";
     rev = "soapy-bladerf-${version}";
-    sha256 = "sha256-lhTiu+iCdlLTY5ceND+F8HzKf2K9afuTi3cme6nGEMo=";
+    hash = "sha256-lhTiu+iCdlLTY5ceND+F8HzKf2K9afuTi3cme6nGEMo=";
   };
 
   nativeBuildInputs = [

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "NerdyPepper";
     repo = "dijo";
     rev = "v${version}";
-    sha256 = "sha256-g+A8BJxqoAvm9LTLrLnClVGtFJCQ2gT0mDGAov/6vXE=";
+    hash = "sha256-g+A8BJxqoAvm9LTLrLnClVGtFJCQ2gT0mDGAov/6vXE=";
   };
   useFetchCargoVendor = true;
   cargoHash = "sha256-Pny/RBtr65jKu2DdyIrluZWeZIgGb8Ev7mxvTMWPlyI=";

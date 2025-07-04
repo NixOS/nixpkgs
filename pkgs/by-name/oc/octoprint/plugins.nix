@@ -75,7 +75,7 @@ in
       owner = "jneilliii";
       repo = "OctoPrint-BedLevelVisualizer";
       rev = version;
-      sha256 = "sha256-6JcYvYgEmphp5zz4xZi4G0yTo4FCIR6Yh+MXYK7H7+w=";
+      hash = "sha256-6JcYvYgEmphp5zz4xZi4G0yTo4FCIR6Yh+MXYK7H7+w=";
     };
 
     meta = with lib; {
@@ -95,7 +95,7 @@ in
       owner = "OllisGit";
       repo = "OctoPrint-CostEstimation";
       rev = version;
-      sha256 = "sha256-04OPa/RpM8WehUmOp195ocsAjAvKdVY7iD5ybzQO7Dg=";
+      hash = "sha256-04OPa/RpM8WehUmOp195ocsAjAvKdVY7iD5ybzQO7Dg=";
     };
 
     meta = with lib; {
@@ -115,7 +115,7 @@ in
       owner = "OctoPrint";
       repo = "OctoPrint-CuraEngineLegacy";
       rev = version;
-      sha256 = "sha256-54siSmzgPlnCRpkpZhXU9theNQ3hqL3j+Ip4Ie2w2vA=";
+      hash = "sha256-54siSmzgPlnCRpkpZhXU9theNQ3hqL3j+Ip4Ie2w2vA=";
     };
 
     meta = with lib; {
@@ -155,7 +155,7 @@ in
       owner = "OllisGit";
       repo = "OctoPrint-DisplayLayerProgress";
       rev = version;
-      sha256 = "sha256-hhHc2SPixZCPJzCP8enMMWNYaYbNZAU0lNSx1B0d++4=";
+      hash = "sha256-hhHc2SPixZCPJzCP8enMMWNYaYbNZAU0lNSx1B0d++4=";
     };
 
     meta = with lib; {
@@ -195,7 +195,7 @@ in
       owner = "OctoPrint";
       repo = "OctoPrint-FirmwareUpdater";
       rev = version;
-      sha256 = "sha256-CUNjM/IJJS/lqccZ2B0mDOzv3k8AgmDreA/X9wNJ7iY=";
+      hash = "sha256-CUNjM/IJJS/lqccZ2B0mDOzv3k8AgmDreA/X9wNJ7iY=";
     };
 
     propagatedBuildInputs = with super; [ pyserial ];
@@ -217,7 +217,7 @@ in
       owner = "BillyBlaze";
       repo = "OctoPrint-FullScreen";
       rev = version;
-      sha256 = "sha256-Z8twpj+gqgbiWWxNd9I9qflEAln5Obpb3cn34KwSc5A=";
+      hash = "sha256-Z8twpj+gqgbiWWxNd9I9qflEAln5Obpb3cn34KwSc5A=";
     };
 
     meta = with lib; {
@@ -237,7 +237,7 @@ in
       owner = "ieatacid";
       repo = "OctoPrint-GcodeEditor";
       rev = version;
-      sha256 = "sha256-1Sk2ri3DKW8q8VJ/scFjpRsz65Pwt8OEURP1k70aydE=";
+      hash = "sha256-1Sk2ri3DKW8q8VJ/scFjpRsz65Pwt8OEURP1k70aydE=";
     };
 
     meta = with lib; {
@@ -257,7 +257,7 @@ in
       owner = "costas-basdekis";
       repo = "MarlinGcodeDocumentation";
       rev = "v${version}";
-      sha256 = "sha256-3ay6iCxZk8QkFM/2Y14VTpPoxr6NXq14BFSHofn3q7I=";
+      hash = "sha256-3ay6iCxZk8QkFM/2Y14VTpPoxr6NXq14BFSHofn3q7I=";
     };
 
     meta = with lib; {
@@ -277,7 +277,7 @@ in
       owner = "OctoPrint";
       repo = "OctoPrint-MQTT";
       rev = version;
-      sha256 = "sha256-K8DydzmsDzWn5GXpxPGvAHDFpgk/mbyVBflCgOoB94U=";
+      hash = "sha256-K8DydzmsDzWn5GXpxPGvAHDFpgk/mbyVBflCgOoB94U=";
     };
 
     propagatedBuildInputs = with super; [ paho-mqtt ];
@@ -299,7 +299,7 @@ in
       owner = "synman";
       repo = "OctoPrint-MqttChamberTemperature";
       rev = version;
-      sha256 = "sha256-CvNpi8HcBBUfCs3X8yflbhe0YCU0kW3u2ADSro/qnuI=";
+      hash = "sha256-CvNpi8HcBBUfCs3X8yflbhe0YCU0kW3u2ADSro/qnuI=";
     };
 
     propagatedBuildInputs = with super; [ jsonpath-ng ];
@@ -321,7 +321,7 @@ in
       owner = "imrahil";
       repo = "OctoPrint-NavbarTemp";
       rev = version;
-      sha256 = "sha256-ZPpTx+AadRffUb53sZbMUbCZa7xYGQW/5si7UB8mnVI=";
+      hash = "sha256-ZPpTx+AadRffUb53sZbMUbCZa7xYGQW/5si7UB8mnVI=";
     };
 
     meta = with lib; {
@@ -341,7 +341,7 @@ in
       owner = "TheSpaghettiDetective";
       repo = "OctoPrint-Obico";
       rev = version;
-      sha256 = "sha256-cAUXe/lRTqYuWnrRiNDuDjcayL5yV9/PtTd9oeSC8KA=";
+      hash = "sha256-cAUXe/lRTqYuWnrRiNDuDjcayL5yV9/PtTd9oeSC8KA=";
     };
 
     propagatedBuildInputs = with super; [
@@ -368,7 +368,7 @@ in
       owner = "gdombiak";
       repo = "OctoPrint-OctoPod";
       rev = version;
-      sha256 = "sha256-HLR5402hFlUX0MLg3HXE7bIHKNnOI0buGAViqDt8mLc=";
+      hash = "sha256-HLR5402hFlUX0MLg3HXE7bIHKNnOI0buGAViqDt8mLc=";
     };
 
     propagatedBuildInputs = with super; [ pillow ];
@@ -390,7 +390,7 @@ in
       owner = "eyal0";
       repo = "OctoPrint-PrintTimeGenius";
       rev = version;
-      sha256 = "sha256-+EmM61s8HHcTIf0xoHkxEP7eqaNYB6ls61YwSXiVzyA=";
+      hash = "sha256-+EmM61s8HHcTIf0xoHkxEP7eqaNYB6ls61YwSXiVzyA=";
     };
 
     propagatedBuildInputs = with super; [
@@ -421,7 +421,7 @@ in
       owner = "jneilliii";
       repo = "OctoPrint-PrusaSlicerThumbnails";
       rev = version;
-      sha256 = "sha256-5TUx64i3VIUXtpIf4mo3hP//kXE+LuuLaZEJYgv4hVs=";
+      hash = "sha256-5TUx64i3VIUXtpIf4mo3hP//kXE+LuuLaZEJYgv4hVs=";
     };
 
     propagatedBuildInputs = with super; [ psutil ];
@@ -443,7 +443,7 @@ in
       owner = "kantlivelong";
       repo = "OctoPrint-PSUControl";
       rev = version;
-      sha256 = "sha256-S+lPm85+ZEO/3BXYsrxE4FU29EGWzWrSw3y1DLdByrM=";
+      hash = "sha256-S+lPm85+ZEO/3BXYsrxE4FU29EGWzWrSw3y1DLdByrM=";
     };
 
     propagatedBuildInputs = with super; [
@@ -472,7 +472,7 @@ in
       owner = "Renaud11232";
       repo = "OctoPrint-Resource-Monitor";
       rev = version;
-      sha256 = "sha256-w1PBxO+Qf7cSSNocu7BiulZE7kesSa+LGV3uJlmd0ao=";
+      hash = "sha256-w1PBxO+Qf7cSSNocu7BiulZE7kesSa+LGV3uJlmd0ao=";
     };
 
     propagatedBuildInputs = with super; [ psutil ];
@@ -494,7 +494,7 @@ in
       owner = "Sebclem";
       repo = "OctoPrint-SimpleEmergencyStop";
       rev = version;
-      sha256 = "sha256-MbP3cKa9FPElQ/M8ykYh9kVXl8hNvmGiCHDvjgWvm9k=";
+      hash = "sha256-MbP3cKa9FPElQ/M8ykYh9kVXl8hNvmGiCHDvjgWvm9k=";
     };
 
     meta = with lib; {
@@ -514,7 +514,7 @@ in
       owner = "jneilliii";
       repo = "OctoPrint-STLViewer";
       rev = "refs/tags/${version}";
-      sha256 = "sha256-S7zjEbyo59OJpa7INCv1o4ybQ+Sy6a3EJ5AJ6wiBe1Y=";
+      hash = "sha256-S7zjEbyo59OJpa7INCv1o4ybQ+Sy6a3EJ5AJ6wiBe1Y=";
     };
 
     meta = with lib; {
@@ -534,7 +534,7 @@ in
       owner = "fabianonline";
       repo = "OctoPrint-Telegram";
       rev = version;
-      sha256 = "sha256-SckJCbPNCflgGYLHFiXy0juCtpvo8YS1BQsFpc1f5rg=";
+      hash = "sha256-SckJCbPNCflgGYLHFiXy0juCtpvo8YS1BQsFpc1f5rg=";
     };
 
     propagatedBuildInputs = with super; [ pillow ];
@@ -556,7 +556,7 @@ in
       owner = "Birkbjo";
       repo = "Octoprint-Themeify";
       rev = "v${version}";
-      sha256 = "sha256-om9IUSmxU8y0x8DrodW1EU/pilAN3+PbtYck6KfROEg=";
+      hash = "sha256-om9IUSmxU8y0x8DrodW1EU/pilAN3+PbtYck6KfROEg=";
     };
 
     meta = with lib; {
@@ -576,7 +576,7 @@ in
       owner = "jneilliii";
       repo = "OctoPrint-TimelapsePurger";
       rev = version;
-      sha256 = "sha256-XS4m4KByScGTPfVE4kuRLw829gNE2CdM0RyhRqGGxyw=";
+      hash = "sha256-XS4m4KByScGTPfVE4kuRLw829gNE2CdM0RyhRqGGxyw=";
     };
 
     meta = with lib; {
@@ -616,7 +616,7 @@ in
       owner = "BillyBlaze";
       repo = "OctoPrint-TouchUI";
       rev = version;
-      sha256 = "sha256-PNDCjY7FhfnwK7Nd86el9ZQ00G4uMANH2Sk080iMYXw=";
+      hash = "sha256-PNDCjY7FhfnwK7Nd86el9ZQ00G4uMANH2Sk080iMYXw=";
     };
 
     meta = with lib; {
@@ -636,7 +636,7 @@ in
       owner = "AliceGrey";
       repo = "OctoprintKlipperPlugin";
       rev = version;
-      sha256 = "sha256-6r5jJDSR0DxlDQ/XWmQgYUgeL1otNNBnwurX7bbcThg=";
+      hash = "sha256-6r5jJDSR0DxlDQ/XWmQgYUgeL1otNNBnwurX7bbcThg=";
     };
 
     meta = with lib; {
@@ -656,7 +656,7 @@ in
       owner = "FormerLurker";
       repo = "Octolapse";
       rev = "v${version}";
-      sha256 = "sha256-QP6PkKWKUv4uIaYdqTAsZmK7DVes94Q9K/DrBYrWxzY=";
+      hash = "sha256-QP6PkKWKUv4uIaYdqTAsZmK7DVes94Q9K/DrBYrWxzY=";
     };
 
     patches = [
@@ -704,7 +704,7 @@ in
       owner = "StefanCohen";
       repo = "OctoPrint-Dashboard";
       rev = version;
-      sha256 = "sha256-hLHT3Uze/6PlOCEICVZ2ieFTyXgcqCvgHOlIIEquujg=";
+      hash = "sha256-hLHT3Uze/6PlOCEICVZ2ieFTyXgcqCvgHOlIIEquujg=";
     };
 
     meta = with lib; {

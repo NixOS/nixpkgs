@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "EmbarkStudios";
     repo = "cargo-about";
     rev = version;
-    sha256 = "sha256-h5+Fp6+yGa1quJENsCv6WE4NC2A+ceIGMXVWyeTPPLQ=";
+    hash = "sha256-h5+Fp6+yGa1quJENsCv6WE4NC2A+ceIGMXVWyeTPPLQ=";
   };
 
   useFetchCargoVendor = true;

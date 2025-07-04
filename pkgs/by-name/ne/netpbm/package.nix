@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
     rev = "5085";
-    sha256 = "sha256-04ObCW+xMvGOkhTwYAhVoBG1QIe0/DKfEYbSpDkEGCU=";
+    hash = "sha256-04ObCW+xMvGOkhTwYAhVoBG1QIe0/DKfEYbSpDkEGCU=";
   };
 
   nativeBuildInputs = [

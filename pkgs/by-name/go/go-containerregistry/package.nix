@@ -20,7 +20,7 @@ buildGoModule rec {
     owner = "google";
     repo = "go-containerregistry";
     rev = "v${version}";
-    sha256 = "sha256-fmn2SPmYecyKY7HMPjPKvovRS/Ez+SwDe+1maccq4Hc=";
+    hash = "sha256-fmn2SPmYecyKY7HMPjPKvovRS/Ez+SwDe+1maccq4Hc=";
   };
   vendorHash = null;
 

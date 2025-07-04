@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "jketterl";
     repo = "csdr";
     rev = version;
-    sha256 = "sha256-LdVzeTTIvDQIXRdcz/vpQu/fUgtE8nx1kIEfoiwxrUg=";
+    hash = "sha256-LdVzeTTIvDQIXRdcz/vpQu/fUgtE8nx1kIEfoiwxrUg=";
   };
 
   postPatch = ''

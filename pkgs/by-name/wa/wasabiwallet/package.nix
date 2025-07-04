@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/WalletWasabi/WalletWasabi/releases/download/v${version}/Wasabi-${version}-linux-x64.tar.gz";
-    sha256 = "sha256-XWhRJPt0xcFez+HD8RLLXg6XoVVfTeIQhLmsRLEPPMQ=";
+    hash = "sha256-XWhRJPt0xcFez+HD8RLLXg6XoVVfTeIQhLmsRLEPPMQ=";
   };
 
   dontBuild = true;

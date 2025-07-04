@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "LAStools";
     repo = "LAStools";
     rev = "v${version}";
-    sha256 = "sha256-IyZjM8YvIVB0VPNuEhmHHw7EuKw5RanB2qhCnBD1fRY=";
+    hash = "sha256-IyZjM8YvIVB0VPNuEhmHHw7EuKw5RanB2qhCnBD1fRY=";
   };
 
   patches = [

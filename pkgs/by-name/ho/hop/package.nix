@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "3.4.4";
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/indes/fp/Hop/hop-${version}.tar.gz";
-    sha256 = "sha256-GzXh4HC+SFFoUi7SMqu36iYRPAJ6tMnOHd+he6n9k1I=";
+    hash = "sha256-GzXh4HC+SFFoUi7SMqu36iYRPAJ6tMnOHd+he6n9k1I=";
   };
 
   postPatch = ''

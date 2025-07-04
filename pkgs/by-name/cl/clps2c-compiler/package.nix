@@ -10,14 +10,14 @@ let
   pname = "CLPS2C-Compiler";
   owner = "NiV-L-A";
   keystone-rev = "MIPS-0.9.2";
-  keystone-sha256 = "sha256-xLkO06ZgnmAavJMP1kjDwXT1hc5eSDXv+4MUkOz6xeo=";
+  keystone-hash = "sha256-xLkO06ZgnmAavJMP1kjDwXT1hc5eSDXv+4MUkOz6xeo=";
   keystone-src = (
     fetchFromGitHub {
       name = "keystone";
       inherit owner;
       repo = "keystone";
       rev = keystone-rev;
-      sha256 = keystone-sha256;
+      hash = keystone-hash;
     }
   );
   keystone-override = keystone.overrideAttrs (old: {
@@ -33,7 +33,7 @@ buildDotnetModule rec {
       inherit owner;
       repo = "CLPS2C-Compiler";
       rev = "CLPS2C-Compiler-${version}";
-      sha256 = "sha256-4gLdrIxyw9BFSxF+EXZqTgUf9Kik6oK7eO9HBUzk4QM=";
+      hash = "sha256-4gLdrIxyw9BFSxF+EXZqTgUf9Kik6oK7eO9HBUzk4QM=";
     })
     keystone-src
   ];

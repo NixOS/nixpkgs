@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "pktgen";
     repo = "Pktgen-DPDK";
     rev = "pktgen-${version}";
-    sha256 = "sha256-6KC1k+LWNSU/mdwcUKjCaq8pGOcO+dFzeXX4PJm0QgE=";
+    hash = "sha256-6KC1k+LWNSU/mdwcUKjCaq8pGOcO+dFzeXX4PJm0QgE=";
   };
 
   nativeBuildInputs = [

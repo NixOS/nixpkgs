@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "simeg";
     repo = "eureka";
     rev = "v${version}";
-    sha256 = "sha256-NJ1O8+NBG0y39bMOZeah2jSZlvnPrtpCtXrgAYmVrAc=";
+    hash = "sha256-NJ1O8+NBG0y39bMOZeah2jSZlvnPrtpCtXrgAYmVrAc=";
   };
 
   useFetchCargoVendor = true;

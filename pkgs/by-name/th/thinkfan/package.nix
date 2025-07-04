@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "vmatare";
     repo = "thinkfan";
     rev = version;
-    sha256 = "sha256-aREZv+t4QhtfLKOMrneLiRxgnu0fzB8UV8dvr1dnhx4=";
+    hash = "sha256-aREZv+t4QhtfLKOMrneLiRxgnu0fzB8UV8dvr1dnhx4=";
   };
 
   postPatch = ''

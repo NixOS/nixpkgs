@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "tinycbor";
     rev = "v${version}";
-    sha256 = "sha256-JgkZAvZ63jjTdFRnyk+AeIWcGsg36UtPPFbhFjky9e8=";
+    hash = "sha256-JgkZAvZ63jjTdFRnyk+AeIWcGsg36UtPPFbhFjky9e8=";
   };
 
   makeFlags = [ "prefix=$(out)" ];

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "shumatech";
     repo = "BOSSA";
     rev = version;
-    sha256 = "sha256-8M3MU/+Y1L6SaQ1yoC9Z27A/gGruZdopLnL1z7h7YJw=";
+    hash = "sha256-8M3MU/+Y1L6SaQ1yoC9Z27A/gGruZdopLnL1z7h7YJw=";
   };
 
   patches = [

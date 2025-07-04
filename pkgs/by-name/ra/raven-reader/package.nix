@@ -9,7 +9,7 @@ let
   version = "1.0.80";
   src = fetchurl {
     url = "https://github.com/hello-efficiency-inc/raven-reader/releases/download/v${version}/Raven-Reader-${version}.AppImage";
-    sha256 = "sha256-RkpUWM1hAH73ePpQPj2C3SOukLpcPXbaXmb1VbcHaSU=";
+    hash = "sha256-RkpUWM1hAH73ePpQPj2C3SOukLpcPXbaXmb1VbcHaSU=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 

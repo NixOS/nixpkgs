@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     owner = "elfmz";
     repo = "far2l";
     rev = "v_${version}";
-    sha256 = "sha256-iWZQpLe+shdepCVOHZDp7QEQoqelbHGRJh09KWb6aD0=";
+    hash = "sha256-iWZQpLe+shdepCVOHZDp7QEQoqelbHGRJh09KWb6aD0=";
   };
 
   nativeBuildInputs = [

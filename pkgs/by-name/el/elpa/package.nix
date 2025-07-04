@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
-    sha256 = "sha256-j+vkCMWQuptEvYvOBGBf0bfalkr82P1fHOnt7LPQtl0=";
+    hash = "sha256-j+vkCMWQuptEvYvOBGBf0bfalkr82P1fHOnt7LPQtl0=";
   };
 
   patches = [

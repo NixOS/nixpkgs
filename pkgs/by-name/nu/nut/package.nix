@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1soX8LOQA7rHZJ6xerSnE+TV/KqP0a7cooNX1Z3wle0=";
+    hash = "sha256-1soX8LOQA7rHZJ6xerSnE+TV/KqP0a7cooNX1Z3wle0=";
   };
 
   patches = [

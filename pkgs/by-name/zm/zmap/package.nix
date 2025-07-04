@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "zmap";
     repo = "zmap";
     rev = "v${version}";
-    sha256 = "sha256-fHCVo8OwQUzpdDq7dMBxvK15Ojth5UmNoPTVuTGUP58=";
+    hash = "sha256-fHCVo8OwQUzpdDq7dMBxvK15Ojth5UmNoPTVuTGUP58=";
   };
 
   cmakeFlags = [ "-DRESPECT_INSTALL_PREFIX_CONFIG=ON" ];

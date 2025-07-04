@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "fedora-modularity";
     repo = "libmodulemd";
     rev = "libmodulemd-${version}";
-    sha256 = "sha256-mIyrdksyEk1AKV+vw4g8LUwlQRzwwMkPDuCbw2IiNcA=";
+    hash = "sha256-mIyrdksyEk1AKV+vw4g8LUwlQRzwwMkPDuCbw2IiNcA=";
   };
 
   patches = [

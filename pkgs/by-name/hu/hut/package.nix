@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "~xenrox";
     repo = "hut";
     rev = "v${version}";
-    sha256 = "sha256-pc6E3ORDmaMhoNe8GQeYZrxhe5ySQqsMPe/iUbclnGk=";
+    hash = "sha256-pc6E3ORDmaMhoNe8GQeYZrxhe5ySQqsMPe/iUbclnGk=";
   };
 
   vendorHash = "sha256-/51cv/EvcBCyCOf91vJ5M75p0bkAQqVoRUp+C+i70Os=";

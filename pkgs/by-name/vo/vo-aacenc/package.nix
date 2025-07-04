@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/opencore-amr/fdk-aac/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5Rp0d6NZ8Y33xPgtGV2rThTnQUy9SM95zBlfxEaFDzY=";
+    hash = "sha256-5Rp0d6NZ8Y33xPgtGV2rThTnQUy9SM95zBlfxEaFDzY=";
   };
 
   meta = with lib; {

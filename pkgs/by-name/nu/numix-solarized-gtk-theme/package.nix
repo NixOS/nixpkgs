@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "Ferdi265";
     repo = "numix-solarized-gtk-theme";
     rev = version;
-    sha256 = "sha256-r5xCe8Ew+/SuCUaZ0yjlumORTy/y1VwbQQjQ6uEyGsY=";
+    hash = "sha256-r5xCe8Ew+/SuCUaZ0yjlumORTy/y1VwbQQjQ6uEyGsY=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://gitlab.com/rosie-pattern-language/rosie";
     rev = "79605830e32dff33544f9ebe7d7be752c29424b5";
-    sha256 = "sha256-n7Tem/4ZjizfCPT21teYK2wZ/gVpgjHUim9s7soEwbM=";
+    hash = "sha256-n7Tem/4ZjizfCPT21teYK2wZ/gVpgjHUim9s7soEwbM=";
     fetchSubmodules = true;
   };
 

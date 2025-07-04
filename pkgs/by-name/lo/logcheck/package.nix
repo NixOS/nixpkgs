@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/logcheck/${_name}.tar.xz";
-    sha256 = "sha256-enUxHYVhdiDQLMAnQnRjx/mvIEHgL8k/W8Jda6PMrfE=";
+    hash = "sha256-enUxHYVhdiDQLMAnQnRjx/mvIEHgL8k/W8Jda6PMrfE=";
   };
 
   prePatch = ''

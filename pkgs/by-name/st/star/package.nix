@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     repo = "STAR";
     owner = "alexdobin";
     rev = version;
-    sha256 = "sha256-4EoS9NOKUwfr6TDdjAqr4wGS9cqVX5GYptiOCQpmg9c=";
+    hash = "sha256-4EoS9NOKUwfr6TDdjAqr4wGS9cqVX5GYptiOCQpmg9c=";
   };
 
   sourceRoot = "${src.name}/source";

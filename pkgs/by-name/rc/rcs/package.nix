@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/rcs/${pname}-${version}.tar.lz";
-    sha256 = "sha256-Q93+EHJKi4XiRo9kA7YABzcYbwHmDgvWL95p2EIjTMU=";
+    hash = "sha256-Q93+EHJKi4XiRo9kA7YABzcYbwHmDgvWL95p2EIjTMU=";
   };
 
   ac_cv_path_ED = "${ed}/bin/ed";
