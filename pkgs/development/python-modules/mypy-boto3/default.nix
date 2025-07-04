@@ -986,8 +986,8 @@ rec {
       "sha256-Q8Rpjv6omBDmVt+f1kSLkBaQAzVFLU4UqgsOsjnUYLE=";
 
   mypy-boto3-organizations =
-    buildMypyBoto3Package "organizations" "1.38.38"
-      "sha256-Ne+gP4yMPqrOtCqktfPSAWeq/9+b9uVObtd5uTICvA4=";
+    buildMypyBoto3Package "organizations" "1.39.0"
+      "sha256-Ntxi/vlYmPzqrO/Q+sTaOqGB/gnaIThrEcrdcmNawBo=";
 
   mypy-boto3-osis =
     buildMypyBoto3Package "osis" "1.38.0"
