@@ -64,8 +64,16 @@ stdenv.mkDerivation rec {
     make oldconfig
   '';
 
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
+    # breaks string.h header in musl
+    "fortify"
+  ];
+
   makeFlags =
-    [ "PREFIX=$(out)/bin" ]
+    [
+      "PREFIX=$(out)/bin"
+      "CC=${stdenv.cc.targetPrefix}cc"
+    ]
     ++ optionals (enableStatic && !stdenv.hostPlatform.isDarwin) [
       "LDFLAGS=--static"
     ];
