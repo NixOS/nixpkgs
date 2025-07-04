@@ -238,24 +238,7 @@ let
   jobs = recursiveUpdateMany [
     (mapTestOn {
       haskellPackages = packagePlatforms pkgs.haskellPackages;
-      haskell.compiler =
-        packagePlatforms pkgs.haskell.compiler
-        // (lib.genAttrs
-          [
-            "ghcjs"
-            "ghcjs810"
-          ]
-          (ghcjsName: {
-            # We can't build ghcjs itself, since it exceeds 3GB (Hydra's output limit) due
-            # to the size of its bundled libs. We can however save users a bit of compile
-            # time by building the bootstrap ghcjs on Hydra. For this reason, we overwrite
-            # the ghcjs attributes in haskell.compiler with a reference to the bootstrap
-            # ghcjs attribute in their bootstrap package set (exposed via passthru) which
-            # would otherwise be ignored by Hydra.
-            bootGhcjs = (packagePlatforms pkgs.haskell.compiler.${ghcjsName}.passthru).bootGhcjs;
-          })
-        );
-
+      haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       tests.haskell = packagePlatforms pkgs.tests.haskell;
 
       nixosTests = {
@@ -414,9 +397,6 @@ let
               # remove musl ghc865Binary since it is known to be broken and
               # causes an evaluation error on darwin.
               ghc865Binary = { };
-
-              ghcjs = { };
-              ghcjs810 = { };
             };
 
             # Get some cache going for MUSL-enabled GHC.
