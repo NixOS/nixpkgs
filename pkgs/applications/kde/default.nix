@@ -272,7 +272,6 @@ let
       krecorder = callPackage ./krecorder.nix { };
       ktrip = callPackage ./ktrip.nix { };
       kweather = callPackage ./kweather.nix { };
-      neochat = callPackage ./neochat.nix { };
       plasmatube = callPackage ./plasmatube { };
       qmlkonsole = callPackage ./qmlkonsole.nix { };
       telly-skout = callPackage ./telly-skout.nix { };

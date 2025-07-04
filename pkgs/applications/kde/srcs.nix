@@ -1747,14 +1747,6 @@
       name = "minuet-23.08.5.tar.xz";
     };
   };
-  neochat = {
-    version = "23.08.5";
-    src = fetchurl {
-      url = "${mirror}/stable/release-service/23.08.5/src/neochat-23.08.5.tar.xz";
-      sha256 = "0cj6j08g5ng1vifpb49rks9kp4mfb3h466n6afw9dk0xxgccc06k";
-      name = "neochat-23.08.5.tar.xz";
-    };
-  };
   okular = {
     version = "23.08.5";
     src = fetchurl {
