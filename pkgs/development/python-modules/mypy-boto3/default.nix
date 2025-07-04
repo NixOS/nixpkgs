@@ -126,8 +126,8 @@ rec {
       "sha256-+qnt4lR0A9pW+doi18w/f+YzgOjMr/9C8MnNkGhnIAc=";
 
   mypy-boto3-apprunner =
-    buildMypyBoto3Package "apprunner" "1.38.2"
-      "sha256-GJTIrZNUiUwE1gJ46a5sy/GVwvned9bcGeWMWLraNgU=";
+    buildMypyBoto3Package "apprunner" "1.39.0"
+      "sha256-0esdPcNQXOR/Dz7J9HjNPWjhwyRiCar/5MmkdYDBDDA=";
 
   mypy-boto3-appstream =
     buildMypyBoto3Package "appstream" "1.38.0"
