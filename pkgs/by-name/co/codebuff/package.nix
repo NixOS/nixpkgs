@@ -6,14 +6,14 @@
 
 buildNpmPackage rec {
   pname = "codebuff";
-  version = "1.0.119";
+  version = "1.0.424";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/codebuff/-/codebuff-${version}.tgz";
-    hash = "sha256-nIjNwvEhlgmfj3d0XEyMBWWNy+kh8iS4SEOZ9u8PWZQ=";
+    hash = "sha256-SyPW9msVhy3c5wARyDCl/rsfrhLFhZ8iAKkO47s0bYE=";
   };
 
-  npmDepsHash = "sha256-fO4rjRY31hOWuBnAeDKMSM5wbpPxLa93QQ3DPRCe/ig=";
+  npmDepsHash = "sha256-LRg4dBVcGQptjC2JNwQfCM33pcI20qwrowof48s5Gzk=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
