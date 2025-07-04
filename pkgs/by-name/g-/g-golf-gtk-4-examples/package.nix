@@ -5,7 +5,7 @@
   wrapGAppsHook4,
   pkg-config,
   guile,
-  guile-cairo,
+  guile-cairo-next,
   glib,
   gobject-introspection,
   gtk4,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     guile
     g-golf
-    guile-cairo
+    guile-cairo-next
     gobject-introspection
     gtk4
     adwaita-icon-theme
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix PATH : "${guile}/bin" \
         --prefix GUILE_LOAD_PATH : "$GUILE_LOAD_PATH" \
         --prefix GUILE_LOAD_COMPILED_PATH : "$GUILE_LOAD_COMPILED_PATH" \
-        --prefix LD_LIBRARY_PATH : "${g-golf}/lib:${guile-cairo}/lib" \
+        --prefix LD_LIBRARY_PATH : "${g-golf}/lib:${guile-cairo-next}/lib" \
         --set GUILE_AUTO_COMPILE 0
     done
 
