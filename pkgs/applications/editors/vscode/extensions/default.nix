@@ -1197,8 +1197,8 @@ let
         mktplcRef = {
           publisher = "DanielGavin";
           name = "ols";
-          version = "0.1.37";
-          hash = "sha256-R2vZNv6vkq5OIw3RzaAm4WGC4awiCC4junB3DRpJIfs=";
+          version = "0.1.38";
+          hash = "sha256-LmCGTyV/oHKq502Hp1UvJ/6q90MC6D5l5/7cd38EGm8=";
         };
         meta = {
           description = "Visual Studio Code extension for Odin language";
