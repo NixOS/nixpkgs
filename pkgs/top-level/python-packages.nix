@@ -15872,6 +15872,8 @@ self: super: with self; {
 
   scenedetect = callPackage ../development/python-modules/scenedetect { };
 
+  schedula = callPackage ../development/python-modules/schedula { };
+
   schedule = callPackage ../development/python-modules/schedule { };
 
   scheduler = callPackage ../development/python-modules/scheduler { };
