@@ -305,9 +305,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://petsc.org/release/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      cburstedde
-      qbisi
-    ];
+    maintainers = with lib.maintainers; [ qbisi ];
   };
 })
