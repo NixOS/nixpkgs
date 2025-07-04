@@ -29,15 +29,15 @@
   },
   "beta": {
     "linux": {
-      "version": "8.10.82-27.BETA",
+      "version": "8.11.0-25.BETA",
       "sources": {
         "x86_64": {
-          "url": "https://downloads.1password.com/linux/tar/beta/x86_64/1password-8.10.82-27.BETA.x64.tar.gz",
-          "hash": "sha256-6ncTm+rgEPGRwMquOCWH8sXin9CrjiHsUDLKo3CrLIM="
+          "url": "https://downloads.1password.com/linux/tar/beta/x86_64/1password-8.11.0-25.BETA.x64.tar.gz",
+          "hash": "sha256-TMVquYVZPxJGxn7vEwhSsD5eebM+9xovdBB/5/y2ygc="
         },
         "aarch64": {
-          "url": "https://downloads.1password.com/linux/tar/beta/aarch64/1password-8.10.82-27.BETA.arm64.tar.gz",
-          "hash": "sha256-fRgTfZjQRrPbYUKIub+y9iYSBvsElN90ag0maPKTM2g="
+          "url": "https://downloads.1password.com/linux/tar/beta/aarch64/1password-8.11.0-25.BETA.arm64.tar.gz",
+          "hash": "sha256-eV6gTKbTWkC1Kg5vyGf4tgiBxOQ5ZOKha03PSTGVE9Q="
         }
       }
     },
@@ -56,3 +56,4 @@
     }
   }
 }
+

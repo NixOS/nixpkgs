@@ -27968,6 +27968,17 @@
     githubId = 908716;
     name = "Zach Coyle";
   };
+  Zaczero = {
+    name = "Kamil Monicz";
+    email = "kamil@monicz.dev";
+    github = "Zaczero";
+    githubId = 10835147;
+    keys = [
+      {
+        fingerprint = "4E67 A4AC 2FA4 2A28 DB40  1FC8 F9FB 19F1 C1DC 9C23";
+      }
+    ];
+  };
   Zaechus = {
     email = "zaechus@proton.me";
     github = "Zaechus";
