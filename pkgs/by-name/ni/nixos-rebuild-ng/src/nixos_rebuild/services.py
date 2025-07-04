@@ -134,7 +134,8 @@ def _build_system(
     flake_common_flags: Args,
 ) -> Path:
     dry_run = action == Action.DRY_BUILD
-    no_link = action in (Action.SWITCH, Action.BOOT)
+    # actions that we will not add a /result symlink in CWD
+    no_link = action in (Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE)
 
     match (action, args.rollback, build_host, flake):
         case (Action.SWITCH | Action.BOOT, True, _, _):
