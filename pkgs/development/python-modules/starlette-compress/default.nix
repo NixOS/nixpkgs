@@ -48,6 +48,9 @@ buildPythonPackage rec {
     description = "Compression middleware for Starlette - supporting ZStd, Brotli, and GZip";
     homepage = "https://pypi.org/p/starlette-compress";
     license = lib.licenses.bsd0;
-    maintainers = with lib.maintainers; [ wrvsrx ];
+    maintainers = with lib.maintainers; [
+      wrvsrx
+      Zaczero
+    ];
   };
 }
