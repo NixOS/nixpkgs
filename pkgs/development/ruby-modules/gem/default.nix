@@ -76,14 +76,14 @@ lib.makeOverridable (
             urls = map (remote: "${remote}/gems/${gemName}-${suffix}.gem") (
               attrs.source.remotes or [ "https://rubygems.org" ]
             );
-            inherit (attrs.source) sha256;
+            inherit (attrs.source) hash;
           }
         else if type == "git" then
           fetchgit {
             inherit (attrs.source)
               url
               rev
-              sha256
+              hash
               fetchSubmodules
               ;
           }
