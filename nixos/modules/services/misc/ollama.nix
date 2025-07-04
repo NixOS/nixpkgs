@@ -186,7 +186,10 @@ in
     systemd.services.ollama = {
       description = "Server for local large language models";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [
+        "network.target"
+        "systemd-modules-load.service"
+      ];
       environment =
         cfg.environmentVariables
         // {
