@@ -558,8 +558,8 @@ rec {
       "sha256-MFEAEkVvrvF7YRwMltQbqU7B/qXUinuDDArmFh2QJ48=";
 
   mypy-boto3-fsx =
-    buildMypyBoto3Package "fsx" "1.38.44"
-      "sha256-FDY4Pu4hnQITnr7ykyevqUbmqJhR28Pa6XScx0A045Y=";
+    buildMypyBoto3Package "fsx" "1.39.0"
+      "sha256-IvEuM/ERHddr3B6bWKOnz0wsCcmc+rW01Zpnx/W2fJ8=";
 
   mypy-boto3-gamelift =
     buildMypyBoto3Package "gamelift" "1.38.43"
