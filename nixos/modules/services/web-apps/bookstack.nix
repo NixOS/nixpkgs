@@ -16,9 +16,13 @@ let
 
   artisan = "${cfg.package}/artisan";
 
-  env-file-values = lib.attrsets.mapAttrs' (
-    n: v: lib.attrsets.nameValuePair (lib.strings.removeSuffix "_FILE" n) v
-  ) (lib.attrsets.filterAttrs (n: v: lib.strings.hasSuffix "_FILE" n) cfg.settings);
+  env-file-values =
+    lib.attrsets.mapAttrs' (n: v: lib.attrsets.nameValuePair (lib.strings.removeSuffix "_FILE" n) v)
+      (
+        lib.attrsets.filterAttrs (n: v: !builtins.isNull v) (
+          lib.attrsets.filterAttrs (n: v: lib.strings.hasSuffix "_FILE" n) cfg.settings
+        )
+      );
   env-nonfile-values = lib.attrsets.filterAttrs (n: v: !lib.strings.hasSuffix "_FILE" n) cfg.settings;
 
   bookstack-maintenance = pkgs.writeShellScript "bookstack-maintenance.sh" ''
@@ -132,12 +136,15 @@ in
       "database"
       "user"
     ] "Use services.bookstack.settings.DB_USERNAME instead.")
-    (lib.mkRemovedOptionModule [
-      "services"
-      "bookstack"
-      "database"
-      "createLocally"
-    ] "This option is deprecated. Please create your database manually.")
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "bookstack"
+        "database"
+        "createLocally"
+      ]
+      "This option is deprecated. Please create your database manually or use services.mysql.ensureDatabases and services.mysql.ensureUsers."
+    )
     (lib.mkRemovedOptionModule [
       "services"
       "bookstack"
@@ -281,11 +288,12 @@ in
             '';
           };
           DB_PASSWORD_FILE = lib.mkOption {
-            type = lib.types.path;
+            type = lib.types.nullOr lib.types.path;
             description = ''
               The file containing your mysql/mariadb database password.
             '';
             example = "/var/secrets/bookstack-mysql-pass.txt";
+            default = null;
           };
           APP_KEY_FILE = lib.mkOption {
             type = lib.types.path;
