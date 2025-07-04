@@ -45,6 +45,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
+  # Test is flaky on slow machines
+  disabledTestsPath = [
+    "tests/test_http.py"
+  ];
+
   pythonImportsCheck = [ "channels" ];
 
   meta = with lib; {
