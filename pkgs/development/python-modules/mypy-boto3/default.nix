@@ -898,8 +898,8 @@ rec {
       "sha256-mpb71EvyDhu7kua6jCo/GWtVF/Gt+21NFamSBwv1buM=";
 
   mypy-boto3-memorydb =
-    buildMypyBoto3Package "memorydb" "1.38.0"
-      "sha256-AA+ISIHdWSPd3RWx9QZlegfVFScBoSkm86R0leT+gzQ=";
+    buildMypyBoto3Package "memorydb" "1.39.0"
+      "sha256-HEs9foDI/P8gSMxYRX6PqMLNVLgoZ0KTeTfMVgzBPEM=";
 
   mypy-boto3-meteringmarketplace =
     buildMypyBoto3Package "meteringmarketplace" "1.38.0"
