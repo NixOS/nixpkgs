@@ -942,8 +942,8 @@ rec {
       "sha256-/mWDcx3kmgq10rP25M9Jb3jK7wM5qlqoyliwQyrm8oE=";
 
   mypy-boto3-neptune =
-    buildMypyBoto3Package "neptune" "1.38.18"
-      "sha256-5rStsb6FVG4I/4n3y4phDxUbfh9HTmOinaW/BQikp1Q=";
+    buildMypyBoto3Package "neptune" "1.39.0"
+      "sha256-q8NsWE/syMihH6TE1b1nBFgHhNavOBaFdwgQnDQXrXs=";
 
   mypy-boto3-neptunedata =
     buildMypyBoto3Package "neptunedata" "1.38.0"
