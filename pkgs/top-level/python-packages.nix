@@ -829,6 +829,8 @@ self: super: with self; {
 
   aqualogic = callPackage ../development/python-modules/aqualogic { };
 
+  ar = callPackage ../development/python-modules/ar { };
+
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
   aranet4 = callPackage ../development/python-modules/aranet4 { };
@@ -3121,6 +3123,8 @@ self: super: with self; {
   curtsies = callPackage ../development/python-modules/curtsies { };
 
   curvefitgui = callPackage ../development/python-modules/curvefitgui { };
+
+  custom-json-diff = callPackage ../development/python-modules/custom-json-diff { };
 
   customtkinter = callPackage ../development/python-modules/customtkinter { };
 
@@ -7307,6 +7311,8 @@ self: super: with self; {
   jsmin = callPackage ../development/python-modules/jsmin { };
 
   json-api-doc = callPackage ../development/python-modules/json-api-doc { };
+
+  json-flatten = callPackage ../development/python-modules/json-flatten { };
 
   json-home-client = callPackage ../development/python-modules/json-home-client { };
 
@@ -15865,6 +15871,8 @@ self: super: with self; {
   };
 
   scenedetect = callPackage ../development/python-modules/scenedetect { };
+
+  schedula = callPackage ../development/python-modules/schedula { };
 
   schedule = callPackage ../development/python-modules/schedule { };
 
