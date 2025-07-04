@@ -1,10 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  snap7,
   fetchFromGitHub,
-  setuptools,
+  python,
   pythonOlder,
+
+  setuptools,
+
+  click,
+  snap7,
 }:
 
 buildPythonPackage rec {
@@ -21,12 +25,13 @@ buildPythonPackage rec {
     hash = "sha256-mcdzgR0z2P5inK9Q+ZQhP5H8vZSaPbRCSEnt+wzG+ro=";
   };
 
-  prePatch = ''
-    substituteInPlace snap7/common.py \
-      --replace "lib_location = None" "lib_location = '${snap7}/lib/libsnap7.so'"
-  '';
-
   build-system = [ setuptools ];
+
+  dependencies = [ click ];
+
+  postInstall = ''
+    ln -s ${snap7}/lib $out/${python.sitePackages}/snap7/lib
+  '';
 
   # Tests require root privileges to open privileged ports
   doCheck = false;
