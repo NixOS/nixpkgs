@@ -40,7 +40,6 @@
   docbook_xml_dtd_412,
   docbook_xml_dtd_42,
   docbook_xml_dtd_43,
-  openconnect,
   curl,
   meson,
   mesonEmulatorHook,
@@ -130,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       inherit
         iputils
-        openconnect
         ethtool
         gnused
         ;

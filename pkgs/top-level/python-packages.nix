@@ -4234,6 +4234,8 @@ self: super: with self; {
 
   doubleratchet = callPackage ../development/python-modules/doubleratchet { };
 
+  dowhen = callPackage ../development/python-modules/dowhen { };
+
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
 
   doxmlparser = callPackage ../development/tools/documentation/doxygen/doxmlparser.nix { };

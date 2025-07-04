@@ -94,7 +94,6 @@ stdenv.mkDerivation {
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      schmittlauch
       melvyn2
     ];
     mainProgram = "seaf-server";
