@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "assimp";
-  version = "5.4.3";
+  version = "6.0.2";
   outputs = [
     "out"
     "lib"
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";
-    hash = "sha256-sOYhYHBz3Tg+pi1OIJ1mGmsjEc6dPO6nFH0aolfpLRA=";
+    hash = "sha256-ixtqK+3iiL17GEbEVHz5S6+gJDDQP7bVuSfRMJMGEOY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,11 +28,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DASSIMP_BUILD_ASSIMP_TOOLS=ON" ];
-
-  env.NIX_CFLAGS_COMPILE = toString ([
-    # Needed with GCC 12
-    "-Wno-error=array-bounds"
-  ]);
 
   meta = with lib; {
     description = "Library to import various 3D model formats";
