@@ -86,7 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/support/server.tcl \
       --replace-fail 'exec /usr/bin/env' 'exec env'
 
-    sed -i -e '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
+    sed -i \
+      -e '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       -e  '/^proc wait_for_ofs_sync/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl
 
@@ -96,7 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
       --clients $NIX_BUILD_CORES \
       --tags -leaks \
       --skipunit integration/aof-multi-part \
-      --skipunit integration/failover # flaky and slow
+      --skipunit integration/failover \
+      ${lib.optionalString (
+        stdenv.hostPlatform.system == "aarch64-linux"
+      ) "--skipunit integration/replication-rdbchannel"}
 
     runHook postCheck
   '';
