@@ -5926,10 +5926,10 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_87 = callPackage ../development/compilers/rust/1_87.nix {
+  rust_1_88 = callPackage ../development/compilers/rust/1_88.nix {
     llvm_20 = llvmPackages_20.libllvm;
   };
-  rust = rust_1_87;
+  rust = rust_1_88;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -5937,8 +5937,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_87 = rust_1_87.packages.stable;
-  rustPackages = rustPackages_1_87;
+  rustPackages_1_88 = rust_1_88.packages.stable;
+  rustPackages = rustPackages_1_88;
 
   inherit (rustPackages)
     cargo
@@ -8628,9 +8628,6 @@ with pkgs;
   libffiReal = callPackage ../development/libraries/libffi { };
   libffi = if stdenv.hostPlatform.isDarwin then darwin.libffi else libffiReal;
   libffi_3_3 = callPackage ../development/libraries/libffi/3.3.nix { };
-  libffiBoot = libffi.override {
-    doCheck = false;
-  };
 
   # https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=README;h=fd6e1a83f55696c1f7a08f6dfca08b2d6b7617ec;hb=70058cd9f944d620764e57c838209afae8a58c78#l118
   libgpg-error-gen-posix-lock-obj = libgpg-error.override {
@@ -9150,7 +9147,7 @@ with pkgs;
 
   libressl = libressl_4_1;
 
-  openssl = openssl_3_4;
+  openssl = openssl_3_5;
 
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
@@ -9159,7 +9156,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
     openssl_3
-    openssl_3_4
+    openssl_3_5
     ;
 
   openwebrx = callPackage ../applications/radio/openwebrx {
@@ -9685,13 +9682,6 @@ with pkgs;
     gtk3 = gtk4;
   };
 
-  webrtc-audio-processing_1 = callPackage ../development/libraries/webrtc-audio-processing { };
-  webrtc-audio-processing_0_3 =
-    callPackage ../development/libraries/webrtc-audio-processing/0.3.nix
-      { };
-  # bump when majoring of packages have updated
-  webrtc-audio-processing = webrtc-audio-processing_0_3;
-
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
 
   wt = wt4;
@@ -9739,6 +9729,8 @@ with pkgs;
   zig = zig_0_14;
 
   zigStdenv = if stdenv.cc.isZig then stdenv else lowPrio zig.passthru.stdenv;
+
+  libzint = zint-qt.override { withGUI = false; };
 
   aroccPackages = recurseIntoAttrs (callPackage ../development/compilers/arocc { });
   arocc = aroccPackages.latest;
@@ -9938,14 +9930,6 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl_2_5_2 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.5.2"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_5_4 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.5.4"; };
     faslExt = "fasl";
@@ -9954,7 +9938,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_5_4;
+  sbcl_2_5_5 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.5"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_5_5;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -11163,11 +11155,11 @@ with pkgs;
     }
   );
 
-  nettools =
+  net-tools =
     if stdenv.hostPlatform.isLinux then
       callPackage ../os-specific/linux/net-tools { }
     else
-      unixtools.nettools;
+      unixtools.net-tools;
 
   nftables = callPackage ../os-specific/linux/nftables { };
 
@@ -11404,7 +11396,7 @@ with pkgs;
     translateManpages = false;
   };
 
-  v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
+  v4l-utils = qt6.callPackage ../os-specific/linux/v4l-utils { };
 
   windows = callPackages ../os-specific/windows { };
 
@@ -15943,9 +15935,7 @@ with pkgs;
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
 
-  jack2 = callPackage ../misc/jackaudio {
-    libopus = libopus.override { withCustomModes = true; };
-  };
+  jack2 = callPackage ../misc/jackaudio { };
 
   libjack2 = jack2.override { prefix = "lib"; };
 

@@ -54,7 +54,7 @@ buildPythonPackage rec {
   # Test setup takes several minutes
   doCheck = false;
 
-  pytestFlagsArray = [ "gensim/test" ];
+  enabledTestPaths = [ "gensim/test" ];
 
   meta = with lib; {
     description = "Topic-modelling library";

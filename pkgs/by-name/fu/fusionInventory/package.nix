@@ -6,7 +6,7 @@
   pciutils,
   usbutils,
   iproute2,
-  nettools,
+  net-tools,
   fetchFromGitHub,
   makeWrapper,
 }:
@@ -86,7 +86,7 @@ perlPackages.buildPerlPackage rec {
             dmidecode
             pciutils
             usbutils
-            nettools
+            net-tools
             iproute2
           ]
         }

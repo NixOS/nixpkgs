@@ -36,9 +36,8 @@ buildPythonPackage rec {
     "google.iam.v1"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = with lib; {

@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.15.2";
+  version = "0.15.3";
   pname = "liburcu";
 
   src = fetchurl {
     url = "https://lttng.org/files/urcu/userspace-rcu-${version}.tar.bz2";
-    hash = "sha256-WfNvK4vaG3Ygp+ztJjTybFSURIGKgxMCWjuwnAdmph0=";
+    hash = "sha256-Jmh+yE4+EUdZRUyISgir6ved7AmwQYld30xF7BUKy20=";
   };
 
   outputs = [
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeCheckInputs = [ perl ];
+
+  enableParallelBuilding = true;
 
   preCheck = "patchShebangs tests/unit";
   doCheck = true;

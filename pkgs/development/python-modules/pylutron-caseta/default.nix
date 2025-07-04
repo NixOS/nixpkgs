@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "pylutron_caseta" ];
 

@@ -65,7 +65,7 @@ buildPythonPackage rec {
     "test_get_build"
   ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   pythonImportsCheck = [ "aioazuredevops" ];
 

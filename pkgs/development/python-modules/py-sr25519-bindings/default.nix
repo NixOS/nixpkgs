@@ -38,7 +38,7 @@ buildPythonPackage rec {
     py-bip39-bindings
   ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "sr25519" ];
 

@@ -47,7 +47,7 @@ buildPythonPackage rec {
   ];
   versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "periodiq" ];
 

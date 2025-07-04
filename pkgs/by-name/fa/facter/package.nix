@@ -7,7 +7,7 @@
   iproute2,
   lib,
   makeWrapper,
-  nettools,
+  net-tools,
   pciutils,
   procps,
   stdenv,
@@ -30,7 +30,7 @@ bundlerApp {
         [
           coreutils
           gnugrep
-          nettools
+          net-tools
           pciutils
           procps
           util-linux

@@ -6,7 +6,7 @@
   cmake,
   iproute2,
   lsof,
-  nettools,
+  net-tools,
   pkg-config,
   procps,
   psmisc,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     iproute2
     lsof
-    nettools
+    net-tools
     procps
     psmisc
   ];

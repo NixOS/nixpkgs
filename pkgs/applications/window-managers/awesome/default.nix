@@ -20,7 +20,7 @@
   gobject-introspection,
   which,
   dbus,
-  nettools,
+  net-tools,
   git,
   doxygen,
   xmlto,
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     libxdg_basedir
     lua
-    nettools
+    net-tools
     pango
     xcb-util-cursor
     xorg.libXau

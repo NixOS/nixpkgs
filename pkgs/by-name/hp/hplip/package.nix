@@ -20,7 +20,7 @@
   net-snmp,
   openssl,
   perl,
-  nettools,
+  net-tools,
   avahi,
   bash,
   util-linux,
@@ -141,7 +141,7 @@ python3Packages.buildPythonApplication {
     "--prefix"
     "PATH"
     ":"
-    "${nettools}/bin"
+    "${net-tools}/bin"
   ];
 
   patches = [

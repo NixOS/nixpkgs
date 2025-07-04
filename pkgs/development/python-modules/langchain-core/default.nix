@@ -84,7 +84,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   passthru = {
     tests.pytest = langchain-core.overridePythonAttrs (_: {

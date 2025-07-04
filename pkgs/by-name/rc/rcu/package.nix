@@ -11,7 +11,7 @@
   gnutar,
   libsForQt5,
   makeDesktopItem,
-  nettools,
+  net-tools,
   protobuf,
   python312Packages,
   system-config-printer,
@@ -156,7 +156,7 @@ python3Packages.buildPythonApplication rec {
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       --prefix PATH : ${
         lib.makeBinPath [
-          nettools
+          net-tools
           system-config-printer
         ]
       }

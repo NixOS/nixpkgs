@@ -36,7 +36,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "scripts/test.py"
   ];
 

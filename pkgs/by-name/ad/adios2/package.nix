@@ -177,6 +177,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelChecking = false;
 
+  enabledTestPaths = [
+    "../testing/adios2/python/Test*.py"
+  ];
+
   __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck && mpiSupport;
 
   nativeCheckInputs = [

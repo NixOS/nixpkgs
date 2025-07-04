@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "memray" ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # Import issue

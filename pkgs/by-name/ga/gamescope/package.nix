@@ -1,7 +1,7 @@
 {
   stdenv,
   buildPackages,
-  edid-decode,
+  v4l-utils,
   fetchFromGitHub,
   fetchpatch,
   meson,
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       # For `libdisplay-info`
       python3
       hwdata
-      edid-decode
+      v4l-utils
       # For OpenVR
       cmake
 

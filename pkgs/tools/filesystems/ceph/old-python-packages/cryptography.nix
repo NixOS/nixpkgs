@@ -102,7 +102,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pytestFlagsArray = [ "--disable-pytest-warnings" ];
+  pytestFlags = [ "--disable-pytest-warnings" ];
 
   disabledTestPaths =
     [

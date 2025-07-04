@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/ahocorapy_test.py"
   ];
 

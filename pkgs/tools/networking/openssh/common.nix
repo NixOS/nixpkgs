@@ -163,7 +163,9 @@ stdenv.mkDerivation (finalAttrs: {
       # invoked directly and those invoked by the "remote" session
       cat > ~/.ssh/environment.base <<EOF
       NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
-      LD_PRELOAD=${libredirect}/lib/libredirect.so
+      ${lib.optionalString (
+        !stdenv.buildPlatform.isStatic
+      ) "LD_PRELOAD=${libredirect}/lib/libredirect.so"}
       EOF
 
       # use an ssh environment file to ensure environment is set

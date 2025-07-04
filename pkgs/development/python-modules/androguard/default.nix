@@ -84,7 +84,7 @@ buildPythonPackage rec {
   ];
 
   # If it won't be verbose, you'll see nothing going on for a long time.
-  pytestFlagsArray = [ "--verbose" ];
+  pytestFlags = [ "--verbose" ];
 
   preFixup = lib.optionalString withGui ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

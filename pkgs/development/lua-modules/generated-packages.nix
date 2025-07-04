@@ -2950,17 +2950,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luarocks";
-      version = "3.11.1-1";
+      version = "3.12.0";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luarocks-3.11.1-1.rockspec";
-          sha256 = "0xg0siza8nlnnkaarmw73q12qx3frlfbysd5ipmxxi1d7yc38bbn";
+          url = "mirror://luarocks/luarocks-3.12.0-1.rockspec";
+          sha256 = "sha256-FaGp4yJkddh5EicGA5uKsD2UDR/XwOsKmxBPil67zs0=";
         }).outPath;
       src = fetchFromGitHub {
         owner = "luarocks";
         repo = "luarocks";
-        rev = "v3.11.1";
-        hash = "sha256-GglygI8HP+aDFEuucOkjQ2Pgfv4+jW+og+2vL3KoZCQ=";
+        rev = "v3.12.0";
+        hash = "sha256-PGK4gjEhCJt2+0viNU0/qJBBOxPIy2swXplQOolmP2E=";
       };
 
       meta = {
