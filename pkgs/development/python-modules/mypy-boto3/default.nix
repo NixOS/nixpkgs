@@ -794,8 +794,8 @@ rec {
       "sha256-stGg1Ck1PRJ4IU/ToEVYpzUvB7kbeHQKDN00FcOz7sk=";
 
   mypy-boto3-license-manager-linux-subscriptions =
-    buildMypyBoto3Package "license-manager-linux-subscriptions" "1.38.0"
-      "sha256-vCGJdlOkvJJqcVuG6Xw4LbTBkMOL1I6IZDEi7UyzLWU=";
+    buildMypyBoto3Package "license-manager-linux-subscriptions" "1.39.0"
+      "sha256-4zwMgvDJLqq6dtXaA4+B36kX0zZtAvdubexZ5ZFqmkY=";
 
   mypy-boto3-license-manager-user-subscriptions =
     buildMypyBoto3Package "license-manager-user-subscriptions" "1.38.0"
