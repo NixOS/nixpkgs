@@ -1,6 +1,5 @@
 {
   lib,
-  stdenvNoCC,
   fetchFromGitHub,
   fetchNpmDeps,
   nix-update-script,
