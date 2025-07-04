@@ -776,6 +776,7 @@ in
   lemmy = runTest ./lemmy.nix;
   libinput = runTest ./libinput.nix;
   librenms = runTest ./librenms.nix;
+  librenms-agent = handleTest ./librenms-agent.nix { };
   libresprite = runTest ./libresprite.nix;
   libreswan = runTest ./libreswan.nix;
   libreswan-nat = runTest ./libreswan-nat.nix;
