@@ -6,7 +6,6 @@
   nixosTests,
   nodejs,
   npmHooks,
-  pkgs,
   playwright-driver,
   python3Packages,
   uwsgi,
