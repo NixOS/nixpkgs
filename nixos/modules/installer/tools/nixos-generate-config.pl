@@ -691,7 +691,7 @@ if ($showHardwareConfig) {
             print STDERR "writing $fn...\n";
             mkpath($outDir, 0, 0755);
             write_file($fn, <<EOF);
-            @flake@
+@flake@
 EOF
         } else {
             print STDERR "warning: not overwriting existing $fn\n";
