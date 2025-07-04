@@ -636,6 +636,9 @@ rec {
         # pfarrei: require working kpse to find lua module
         "a5toa4"
 
+        # show-pdf-tags: require working kpse to find lualatex and lua modules
+        "show-pdf-tags"
+
         # bibexport: requires kpsewhich
         "bibexport"
 
