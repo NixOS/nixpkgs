@@ -23,7 +23,7 @@ writeShellApplication {
       runtimeInputs = [ nodejs_22 ];
       text = ''exec npx --yes @sourcegraph/amp "$@"'';
     });
-    command = "HOME=$(mktemp -d) amp-cli --version";
+    command = "HOME=$(mktemp -d) amp --version";
   };
   
   meta = {
