@@ -175,7 +175,8 @@ rec {
     }
     ```
 
-    where `prev` refers to the result of the original function to `final`, and `final` is the result of the composition of the overlay and the original function.
+    where `prev` refers to the result of the original function applied to `final`,
+    and `final` is the result of the composition of the overlay and the original function.
 
     Applying an overlay is done with `extends`:
 
@@ -205,7 +206,8 @@ rec {
     ```
 
     :::{.note}
-    The argument to the given fixed-point function after applying an overlay will *not* refer to its own return value, but rather to the value after evaluating the overlay function.
+    The argument to the given fixed-point function after applying an overlay will *not* refer to its own return value,
+    but rather to the value after evaluating the overlay function.
 
     The given fixed-point function is called with a separate argument than if it was evaluated with `lib.fix`.
     :::

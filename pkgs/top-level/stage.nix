@@ -201,7 +201,7 @@ let
       ;
   };
 
-  # stdenvOverrides is used to avoid having multiple of versions
+  # stdenvOverrides is used to avoid having multiple versions
   # of certain dependencies that were used in bootstrapping the
   # standard environment.
   stdenvOverrides = self: super: (super.stdenv.overrides or (_: _: { })) self super;
