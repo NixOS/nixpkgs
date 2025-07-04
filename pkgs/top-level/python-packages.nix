@@ -2235,6 +2235,8 @@ self: super: with self; {
 
   calmjs-types = callPackage ../development/python-modules/calmjs-types { };
 
+  calmsize = callPackage ../development/python-modules/calmsize { };
+
   calver = callPackage ../development/python-modules/calver { };
 
   calysto = callPackage ../development/python-modules/calysto { };
@@ -14801,6 +14803,8 @@ self: super: with self; {
   pytorch-bench = callPackage ../development/python-modules/pytorch-bench { };
 
   pytorch-lightning = callPackage ../development/python-modules/pytorch-lightning { };
+
+  pytorch-memlab = callPackage ../development/python-modules/pytorch-memlab { };
 
   pytorch-metric-learning = callPackage ../development/python-modules/pytorch-metric-learning { };
 
