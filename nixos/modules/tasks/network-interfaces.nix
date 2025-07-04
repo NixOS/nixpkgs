@@ -1643,7 +1643,6 @@ in
         pkgs.host
         pkgs.iproute2
         pkgs.iputils
-        pkgs.nettools
       ]
       ++ optionals config.networking.wireless.enable [
         pkgs.wirelesstools # FIXME: obsolete?
