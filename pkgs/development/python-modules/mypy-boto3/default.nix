@@ -1262,8 +1262,8 @@ rec {
       "sha256-fFlG+baqHWYZdyw+IrnCLIaf2enoVzx6pbrxTHKEPqA=";
 
   mypy-boto3-signer =
-    buildMypyBoto3Package "signer" "1.38.0"
-      "sha256-aIdfyQ3tVN3G+XqqF8fFHRJBpFnK2E0TUyLeWX/5+Qs=";
+    buildMypyBoto3Package "signer" "1.39.0"
+      "sha256-HS8XyeXbAVl03F3y15GA676SYFNItVntEaWhO6RUxw4=";
 
   mypy-boto3-simspaceweaver =
     buildMypyBoto3Package "simspaceweaver" "1.38.0"
