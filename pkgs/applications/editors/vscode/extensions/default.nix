@@ -4942,8 +4942,8 @@ let
         mktplcRef = {
           name = "vscode-testscript";
           publisher = "twpayne";
-          version = "0.0.6";
-          hash = "sha256-y8Esm6nnLf+4FPxy4aZxrTPOxx+zoWm7mUrxZ1dsPyM=";
+          version = "0.0.7";
+          hash = "sha256-M7uowipFpEVqY6foLbOLMB0AI+DrXj/h25+EceiwlMw=";
         };
         meta = {
           description = "Syntax highlighting support for testscript";
