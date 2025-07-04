@@ -225,8 +225,8 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.14.2";
-    hash = "sha256-cZehL0UHlJMVMkadT/IaWeosHNWaPsP4nANcPEIKaZk=";
+    version = "8.14.3";
+    hash = "sha256-vXEQIhNJMGCVbsIp2Ua+7lcVjb2J0OYrkbyg+ixfNTE=";
     defaultJava = jdk21;
   };
 
