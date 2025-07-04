@@ -1278,8 +1278,8 @@ rec {
       "sha256-qWnTJxM1h3pmY2PnI8PjT7u4+xODrSQM41IK8QsJCfM=";
 
   mypy-boto3-snow-device-management =
-    buildMypyBoto3Package "snow-device-management" "1.38.0"
-      "sha256-y+UNghmFC0O/SThTVVFM2/lVF0KOgYVZAvhBZHaI0AA=";
+    buildMypyBoto3Package "snow-device-management" "1.39.0"
+      "sha256-j/noAQJqsCZ7vISTVhP8oCkUoP9Fy9x9KCvHzuC/HEA=";
 
   mypy-boto3-snowball =
     buildMypyBoto3Package "snowball" "1.38.0"
