@@ -19,7 +19,7 @@ writeShellApplication {
 
   passthru.tests.version = testers.testVersion {
     package = (writeShellApplication {
-      name = "amp-cli";
+      name = "amp";
       runtimeInputs = [ nodejs_22 ];
       text = ''exec npx --yes @sourcegraph/amp "$@"'';
     });
