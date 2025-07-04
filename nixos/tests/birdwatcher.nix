@@ -1,21 +1,10 @@
 # This test does a basic functionality check for birdwatcher
 
 {
-  system ? builtins.currentSystem,
-  pkgs ? import ../.. {
-    inherit system;
-    config = { };
-  },
-}:
-
-let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-  inherit (pkgs.lib) optionalString;
-in
-makeTest {
   name = "birdwatcher";
-  nodes = {
-    host1 = {
+  nodes.host1 =
+    { pkgs, ... }:
+    {
       environment.systemPackages = with pkgs; [ jq ];
       services.bird = {
         enable = true;
@@ -84,7 +73,6 @@ makeTest {
         '';
       };
     };
-  };
 
   testScript = ''
     start_all()
