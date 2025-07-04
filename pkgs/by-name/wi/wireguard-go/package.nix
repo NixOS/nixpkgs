@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchgit,
-  testers,
-  wireguard-go,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -46,10 +45,8 @@ buildGoModule (finalAttrs: {
     mv $out/bin/wireguard $out/bin/wireguard-go
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = wireguard-go;
-    version = "v${finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Userspace Go implementation of WireGuard";
