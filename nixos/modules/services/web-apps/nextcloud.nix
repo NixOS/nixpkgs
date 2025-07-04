@@ -166,19 +166,25 @@ let
             --wait \
             --collect \
             --service-type=exec \
+            --setenv OC_PASS \
+            --setenv NC_PASS \
             --quiet \
             ${command}
         elif [[ "$USER" != nextcloud ]]; then
           if [[ -x /run/wrappers/bin/sudo ]]; then
             exec /run/wrappers/bin/sudo \
               --preserve-env=CREDENTIALS_DIRECTORY \
+              --preserve-env=OC_PASS \
+              --preserve-env=NC_PASS \
               --user=nextcloud \
               ${command}
           else
             exec ${lib.getExe' pkgs.util-linux "runuser"} \
               --whitelist-environment=CREDENTIALS_DIRECTORY \
+              --whitelist-environment=OC_PASS \
+              --whitelist-environment=NC_PASS \
               --user=nextcloud \
-              ${command}
+              -- ${command}
           fi
         else
           exec ${command}
@@ -631,7 +637,7 @@ in
         '';
       };
       adminuser = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = "root";
         description = ''
           Username for the admin account. The username is only set during the
@@ -640,7 +646,7 @@ in
         '';
       };
       adminpassFile = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         description = ''
           The full path to a file that contains the admin's password. The password is
           set only in the initial setup of Nextcloud by the systemd service `nextcloud-setup.service`.
@@ -1086,6 +1092,26 @@ in
             instead of password.
           '';
         }
+        {
+          assertion =
+            versionAtLeast overridePackage.version "32.0.0"
+            || (cfg.config.adminuser != null && cfg.config.adminpassFile != null);
+          message = ''
+            Disabling initial admin user creation is only available on Nextcloud >= 32.0.0.
+          '';
+        }
+        {
+          assertion = cfg.config.adminuser != null || cfg.config.adminpassFile == null;
+          message = ''
+            If `services.nextcloud.config.adminuser` is null, `services.nextcloud.config.adminpassFile` must be null as well in order to disable initial admin user creation.
+          '';
+        }
+        {
+          assertion = cfg.config.adminpassFile != null || cfg.config.adminuser == null;
+          message = ''
+            If `services.nextcloud.config.adminpassFile` is null, `services.nextcloud.config.adminuser` must be null as well in order to disable initial admin user creation.
+          '';
+        }
       ];
     }
 
@@ -1129,10 +1155,14 @@ in
                   arg = "DBPASS";
                   value = if c.dbpassFile != null then ''"$(<"$CREDENTIALS_DIRECTORY/dbpass")"'' else ''""'';
                 };
-                adminpass = {
-                  arg = "ADMINPASS";
-                  value = ''"$(<"$CREDENTIALS_DIRECTORY/adminpass")"'';
-                };
+                adminpass =
+                  if c.adminpassFile != null then
+                    {
+                      arg = "ADMINPASS";
+                      value = ''"$(<"$CREDENTIALS_DIRECTORY/adminpass")"'';
+                    }
+                  else
+                    null;
                 installFlags = concatStringsSep " \\\n    " (
                   mapAttrsToList (k: v: "${k} ${toString v}") {
                     "--database" = ''"${c.dbtype}"'';
@@ -1143,15 +1173,16 @@ in
                     ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
                     ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
                     "--database-pass" = "\"\$${dbpass.arg}\"";
-                    "--admin-user" = ''"${c.adminuser}"'';
-                    "--admin-pass" = "\"\$${adminpass.arg}\"";
+                    ${if c.adminuser != null then "--admin-user" else null} = ''"${c.adminuser}"'';
+                    ${if adminpass != null then "--admin-pass" else null} = "\"\$${adminpass.arg}\"";
+                    ${if c.adminuser == null && adminpass == null then "--disable-admin-user" else null} = "";
                     "--data-dir" = ''"${datadir}/data"'';
                   }
                 );
               in
               ''
                 ${mkExport dbpass}
-                ${mkExport adminpass}
+                ${if adminpass != null then mkExport adminpass else ""}
                 ${lib.getExe occ} maintenance:install \
                     ${installFlags}
               '';
@@ -1178,10 +1209,12 @@ in
                   exit 1
                 fi
               ''}
-              if [ -z "$(<"$CREDENTIALS_DIRECTORY/adminpass")" ]; then
-                echo "adminpassFile ${c.adminpassFile} is empty!"
-                exit 1
-              fi
+              ${optionalString (c.adminpassFile != null) ''
+                if [ -z "$(<"$CREDENTIALS_DIRECTORY/adminpass")" ]; then
+                  echo "adminpassFile ${c.adminpassFile} is empty!"
+                  exit 1
+                fi
+              ''}
 
               # Check if systemd-tmpfiles setup worked correctly
               if [[ ! -O "${datadir}/config" ]]; then
@@ -1223,9 +1256,9 @@ in
             '';
             serviceConfig.Type = "oneshot";
             serviceConfig.User = "nextcloud";
-            serviceConfig.LoadCredential = [
-              "adminpass:${cfg.config.adminpassFile}"
-            ] ++ runtimeSystemdCredentials;
+            serviceConfig.LoadCredential =
+              runtimeSystemdCredentials
+              ++ (lib.optional (cfg.config.adminpassFile != null) "adminpass:${cfg.config.adminpassFile}");
             # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
             # an automatic creation of the database user.
             environment.NC_setup_create_db_user = "false";
