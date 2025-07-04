@@ -28,8 +28,8 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "Daemon for the Taro protocol specification";
-    homepage = "https://github.com/lightninglabs/taro";
+    description = "Daemon for the Taproot Assets protocol specification";
+    homepage = "https://github.com/lightninglabs/taproot-assets";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
   };
