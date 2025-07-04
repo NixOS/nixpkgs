@@ -1,20 +1,20 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
-  mkYarnPackage,
+  writableTmpDirAsHomeHook,
   writeText,
+
+  fixup-yarn-lock,
+  nodejs,
+  yarn,
 
   # Custom application configuration placed to theme/config.theme.js file
   # For the list of available configuration options see
   # https://github.com/osm-search/nominatim-ui/blob/master/dist/config.defaults.js
   customConfig ? null,
 }:
-
-# Notes for the upgrade:
-# * Download the tarball of the new version to use.
-# * Replace new `package.json` here.
-# * Update `version`+`hash` and rebuild.
 
 let
   configFile =
@@ -26,23 +26,42 @@ let
         Nominatim_Config.Nominatim_API_Endpoint='https://127.0.0.1/';
       '';
 in
-mkYarnPackage rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "nominatim-ui";
   version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "osm-search";
     repo = "nominatim-ui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TliTWDKdIp7Z0uYw5P65i06NQAUNwNymUsSYrihVZFE=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-IqwsXEd9RSJhkA4BONTJT4xYMTyG9+zddIpD47v6AFc=";
   };
 
-  packageJSON = ./package.json;
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+
+    fixup-yarn-lock
+    nodejs
+    yarn
+  ];
+
+  configurePhase = ''
+    runHook preConfigure
+
+    yarn config --offline set yarn-offline-mirror $offlineCache
+    fixup-yarn-lock yarn.lock
+
+    yarn install --offline --frozen-lockfile --frozen-engines --ignore-scripts
+    patchShebangs node_modules
+
+    runHook postConfigure
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -53,18 +72,16 @@ mkYarnPackage rec {
   '';
 
   preInstall = ''
-    ln --symbolic ${configFile} deps/nominatim-ui/dist/theme/config.theme.js
+    ln --symbolic ${configFile} dist/theme/config.theme.js
   '';
 
   installPhase = ''
     runHook preInstall
 
-    cp --archive deps/nominatim-ui/dist $out
+    cp --archive dist $out
 
     runHook postInstall
   '';
-
-  doDist = false;
 
   meta = {
     description = "Debugging user interface for Nominatim geocoder";
@@ -74,6 +91,6 @@ mkYarnPackage rec {
       geospatial
       ngi
     ];
-    changelog = "https://github.com/osm-search/nominatim-ui/releases/tag/v${version}";
+    changelog = "https://github.com/osm-search/nominatim-ui/releases/tag/v${finalAttrs.version}";
   };
-}
+})
