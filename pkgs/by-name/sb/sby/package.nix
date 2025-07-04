@@ -1,15 +1,17 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  bash,
   python3,
+  fetchFromGitHub,
   yosys,
-  yices,
+  bash,
   boolector,
-  z3,
   aiger,
   btor2tools,
+
+  # nativeCheckInputs
+  yices,
+  z3,
   nix-update-script,
 }:
 
@@ -17,27 +19,16 @@ let
   pythonEnv = python3.withPackages (ps: with ps; [ click ]);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sby";
-  version = "0.52";
+  version = "0.54";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "sby";
-    tag = "v${version}";
-    hash = "sha256-E/je1lHvYCpmRlwM17PWTQemSnz8azviKiz4t9z17UM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-onVeK23KgCodEoaUtfh3R0MraaXuoNuQ2BAX5k4RNis=";
   };
-
-  nativeCheckInputs = [
-    python3
-    python3.pkgs.xmlschema
-    yosys
-    boolector
-    yices
-    z3
-    aiger
-    btor2tools
-  ];
 
   postPatch = ''
     patchShebangs --build \
@@ -54,9 +45,9 @@ stdenv.mkDerivation rec {
 
     # Fix various executable references
     substituteInPlace sbysrc/sby_core.py \
-      --replace-fail '"/usr/bin/env", "bash"' '"${bash}/bin/bash"' \
-      --replace-fail ', "btormc"'             ', "${boolector}/bin/btormc"' \
-      --replace-fail ', "aigbmc"'             ', "${aiger}/bin/aigbmc"'
+      --replace-fail '"/usr/bin/env", "bash"' '"${lib.getExe bash}"' \
+      --replace-fail ', "btormc"'             ', "${lib.getExe' boolector "btormc"}"' \
+      --replace-fail ', "aigbmc"'             ', "${lib.getExe' aiger "aigbmc"}"'
 
     substituteInPlace sbysrc/sby_core.py \
       --replace-fail '##yosys-program-prefix##' '"${yosys}/bin/"'
@@ -64,7 +55,7 @@ stdenv.mkDerivation rec {
     substituteInPlace sbysrc/sby.py \
       --replace-fail '/usr/bin/env python3' '${pythonEnv}/bin/python'
     substituteInPlace sbysrc/sby_autotune.py \
-      --replace-fail '["btorsim", "--vcd"]' '["${btor2tools}/bin/btorsim", "--vcd"]'
+      --replace-fail '["btorsim", "--vcd"]' '["${lib.getExe' btor2tools "btorsim"}", "--vcd"]'
   '';
 
   dontBuild = true;
@@ -79,6 +70,17 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/sby
     runHook postInstall
   '';
+
+  nativeCheckInputs = [
+    aiger
+    boolector
+    btor2tools
+    python3
+    python3.pkgs.xmlschema
+    yices
+    yosys
+    z3
+  ];
 
   doCheck = true;
 
@@ -100,4 +102,4 @@ stdenv.mkDerivation rec {
     mainProgram = "sby";
     platforms = lib.platforms.all;
   };
-}
+})
