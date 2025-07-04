@@ -6,7 +6,7 @@
 }:
 
 writeShellApplication {
-  name = "amp-cli";
+  name = "amp";
   
   runtimeInputs = [
     nodejs_22
