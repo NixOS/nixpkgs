@@ -182,8 +182,8 @@ rec {
       "sha256-JH8+9lZOkcA3noyuVt0kQP5w04rlDy2W3wD6PzEauas=";
 
   mypy-boto3-ce =
-    buildMypyBoto3Package "ce" "1.38.33"
-      "sha256-3VFyffSGPB1C/l4m7tLiDNYcuq+TU1K7gng+HETgDow=";
+    buildMypyBoto3Package "ce" "1.39.0"
+      "sha256-V6h1ZGZUMlNQgK4cBENmU7mB/gHkFguc+1oyqOQ2tDo=";
 
   mypy-boto3-chime =
     buildMypyBoto3Package "chime" "1.38.0"
