@@ -5,6 +5,7 @@
   pkgs,
   newScope,
   stdenv,
+  config,
 }:
 
 let
@@ -25,9 +26,6 @@ let
     "ghc924Binary"
     "ghc963Binary"
     "ghc984Binary"
-    # ghcjs
-    "ghcjs"
-    "ghcjs810"
   ];
 
   haskellLibUncomposable = import ../development/haskell-modules/lib {
@@ -460,13 +458,6 @@ in
         llvmPackages = pkgs.llvmPackages_18;
       };
 
-      ghcjs = compiler.ghcjs810;
-      ghcjs810 = callPackage ../development/compilers/ghcjs/8.10 {
-        bootPkgs = bb.packages.ghc810;
-        ghcjsSrcJson = ../development/compilers/ghcjs/8.10/git.json;
-        stage0 = ../development/compilers/ghcjs/8.10/stage0.nix;
-      };
-
       # The integer-simple attribute set contains all the GHC compilers
       # build with integer-simple instead of integer-gmp.
       integer-simple =
@@ -494,6 +485,10 @@ in
             name: compiler.${name}.override { enableNativeBignum = true; }
           )
         );
+    }
+    // pkgs.lib.optionalAttrs config.allowAliases {
+      ghcjs = throw "'haskell.compiler.ghcjs' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
+      ghcjs810 = throw "'haskell.compiler.ghcjs810' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
     }
   );
 
@@ -647,14 +642,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.14.x.nix { };
       };
 
-      ghcjs = packages.ghcjs810;
-      ghcjs810 = callPackage ../development/haskell-modules rec {
-        buildHaskellPackages = ghc.bootPkgs;
-        ghc = bh.compiler.ghcjs810;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
-        packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs-8.x.nix { };
-      };
-
       # The integer-simple attribute set contains package sets for all the GHC compilers
       # using integer-simple instead of integer-gmp.
       integer-simple =
@@ -687,5 +674,9 @@ in
             buildHaskellPackages = bh.packages.native-bignum.${name};
           }
         );
+    }
+    // pkgs.lib.optionalAttrs config.allowAliases {
+      ghcjs = throw "'haskell.packages.ghcjs' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
+      ghcjs810 = throw "'haskell.packages.ghcjs810' has been removed. Please use 'pkgsCross.ghcjs' instead."; # Added 2025-09-06
     };
 }
