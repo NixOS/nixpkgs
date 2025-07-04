@@ -130,8 +130,8 @@ rec {
       "sha256-0esdPcNQXOR/Dz7J9HjNPWjhwyRiCar/5MmkdYDBDDA=";
 
   mypy-boto3-appstream =
-    buildMypyBoto3Package "appstream" "1.38.0"
-      "sha256-0Ex+gq7lC3J1pxSpDZD6SJhxHnWosedNXMFMHdfG2Pc=";
+    buildMypyBoto3Package "appstream" "1.39.0"
+      "sha256-tSV5pmGsd4t5uhdfhBFuPEtyncTHT7nUPyxSHxEtQCo=";
 
   mypy-boto3-appsync =
     buildMypyBoto3Package "appsync" "1.38.33"
