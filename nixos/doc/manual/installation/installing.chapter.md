@@ -357,14 +357,13 @@ Use the following commands:
     [](#ch-options). A minimal example is shown in
     [Example: NixOS Configuration](#ex-config).
 
-    This command accepts an optional `--flake` option, to also generate a
-    `flake.nix` file, if you want to set up a flake-based configuration.
-
     The command `nixos-generate-config` can generate an initial
-    configuration file for you:
+    configuration file for you. It accepts an optional `--flake` option,
+    to also generate a `flake.nix` file, if you want to set up a flake-based
+    configuration:
 
     ```ShellSession
-    # nixos-generate-config --root /mnt
+    # nixos-generate-config --root /mnt [--flake]
     ```
 
     You should then edit `/mnt/etc/nixos/configuration.nix` to suit your
