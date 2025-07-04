@@ -722,8 +722,8 @@ rec {
       "sha256-V5cRYr/2YzcwG4QWtwzdcu/xDZ+GfPrO0D2efjWaraE=";
 
   mypy-boto3-kendra-ranking =
-    buildMypyBoto3Package "kendra-ranking" "1.38.0"
-      "sha256-BbUpFRwYYBkHUBPC8Q6zltxzSDEBnB9LaQxDeiMOFZA=";
+    buildMypyBoto3Package "kendra-ranking" "1.39.0"
+      "sha256-yvd58t0IO8dJehf+WRyQtvKKiN8YygP2+akUAkb6b94=";
 
   mypy-boto3-keyspaces =
     buildMypyBoto3Package "keyspaces" "1.38.45"
