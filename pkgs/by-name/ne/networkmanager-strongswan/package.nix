@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
 
   passthru = {
     networkManagerPlugin = "VPN/nm-strongswan-service.name";
+    networkManagerDbusDeps = [ strongswanNM ];
+    networkManagerTmpfilesRules = [
+      "d /etc/ipsec.d 0700 root root -"
+    ];
   };
 
   meta = with lib; {
