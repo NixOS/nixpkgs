@@ -13,6 +13,7 @@
   editline,
   ncurses,
   clangStdenv,
+  nil,
   nix-direnv,
   nix-fast-build,
   colmena,
@@ -90,6 +91,10 @@ let
           # that `nix-eval-jobs` can be built against the correct `lix` version.
           lix = self.callPackage (callPackage ./common-lix.nix lix-args) {
             stdenv = lixStdenv;
+          };
+
+          nil = nil.override {
+            nix = self.lix;
           };
 
           nix-direnv = nix-direnv.override {
