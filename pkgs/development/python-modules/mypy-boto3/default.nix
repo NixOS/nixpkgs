@@ -922,8 +922,8 @@ rec {
       "sha256-DhCYpX0vokfQHMn/gGMzCiZSi2sEu8RILd4mOb6B0Co=";
 
   mypy-boto3-migrationhuborchestrator =
-    buildMypyBoto3Package "migrationhuborchestrator" "1.38.0"
-      "sha256-dwNQYU4Eq5UPOVw39A5WP8kLcsCtgWkrgtZ1DK9+hg0=";
+    buildMypyBoto3Package "migrationhuborchestrator" "1.39.0"
+      "sha256-0yM/LqZBjxcG5v1cYPHX1v7ccF80Mrcn+oe45WmSbhw=";
 
   mypy-boto3-migrationhubstrategy =
     buildMypyBoto3Package "migrationhubstrategy" "1.38.0"
