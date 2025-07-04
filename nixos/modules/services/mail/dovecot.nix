@@ -692,23 +692,67 @@ in
 
     environment.etc."dovecot/dovecot.conf".source = cfg.configFile;
 
-    systemd.services.dovecot2 = {
+    systemd.services.dovecot = {
+      aliases = [ "dovecot2.service" ];
       description = "Dovecot IMAP/POP3 server";
+      documentation = [
+        "man:dovecot(1)"
+        "https://doc.dovecot.org"
+      ];
 
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [
-        cfg.configFile
-      ];
+      restartTriggers = [ cfg.configFile ];
 
       startLimitIntervalSec = 60; # 1 min
       serviceConfig = {
         Type = "notify";
         ExecStart = "${dovecotPkg}/sbin/dovecot -F";
         ExecReload = "${dovecotPkg}/sbin/doveadm reload";
+
+        CapabilityBoundingSet = [
+          "CAP_CHOWN"
+          "CAP_DAC_OVERRIDE"
+          "CAP_FOWNER"
+          "CAP_NET_BIND_SERVICE"
+          "CAP_SETGID"
+          "CAP_SETUID"
+          "CAP_SYS_CHROOT"
+          "CAP_SYS_RESOURCE"
+        ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        OOMPolicy = "continue";
+        PrivateTmp = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = lib.mkDefault false;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        PrivateDevices = true;
         Restart = "on-failure";
         RestartSec = "1s";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = false; # sets sgid on maildirs
         RuntimeDirectory = [ "dovecot2" ];
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service @resources"
+          "~@privileged"
+          "@chown @setuid capset chroot"
+        ];
       };
 
       # When copying sieve scripts preserve the original time stamp
