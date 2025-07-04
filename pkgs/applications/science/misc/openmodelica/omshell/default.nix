@@ -2,7 +2,6 @@
   lib,
   qttools,
   qmake,
-  qtwebkit,
   wrapQtAppsHook,
   readline,
   openmodelica,
@@ -22,7 +21,6 @@ mkOpenModelicaDerivation {
 
   buildInputs = [
     readline
-    qtwebkit
   ];
 
   postPatch = with openmodelica; ''
@@ -35,6 +33,10 @@ mkOpenModelicaDerivation {
     sed -i OMShell/OMShell/OMShellGUI/OMShell.config.in -e '
       s|@OMBUILDDIR@|${omcompiler}|
       s|@OPENMODELICAHOME@|${omcompiler}|
+    '
+    #remove remnants of qtwebkit
+    sed -i OMShell/OMShell/OMShellGUI/OMShellGUI.pro -e '
+      s|webkitwidgets||g
     '
     sed -i OMShell/mosh/src/Makefile.in -e '
       /^CFLAGS =/ s|-I../../../build|-I${omcompiler}|
