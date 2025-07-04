@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   php82,
+  nix-update-script,
   dataDir ? "/var/lib/agorakit",
 }:
 
@@ -28,6 +29,8 @@ php82.buildComposerProject2 (finalAttrs: {
 
   vendorHash = "sha256-PBymOrvorGfByTBVu/r+kBxQya5qIlu07mfu4ttT7xs=";
   composerStrictValidation = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Web-based, open-source groupware";
