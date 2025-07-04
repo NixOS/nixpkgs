@@ -16308,6 +16308,13 @@
     name = "Martijn Hemeryck";
     keys = [ { fingerprint = "1B47 7ADA 04B4 7A5C E61A  EDE0 1AA3 6833 BC86 F0F1"; } ];
   };
+  mhutter = {
+    email = "manuel@hutter.io";
+    github = "mhutter";
+    githubId = 346819;
+    name = "Manuel Hutter";
+    keys = [ { fingerprint = "BE27 20A9 0C16 C351 31E0  B2FB FC31 B4E5 4C4C F892"; } ];
+  };
   mi-ael = {
     email = "miael.oss.1970@gmail.com";
     name = "mi-ael";
