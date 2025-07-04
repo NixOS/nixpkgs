@@ -1641,6 +1641,7 @@ in
     environment.systemPackages =
       [
         pkgs.host
+        pkgs.hostname-debian
         pkgs.iproute2
         pkgs.iputils
       ]
