@@ -3,13 +3,10 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  wrapQtAppsHook,
-  qtscript,
-  qtwebengine,
+  libsForQt5,
   gdal,
   proj,
   routino,
-  quazip,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,16 +22,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtscript
-    qtwebengine
+    libsForQt5.qtscript
+    libsForQt5.qtwebengine
     gdal
     proj
     routino
-    quazip
+    libsForQt5.quazip
   ];
 
   cmakeFlags = [
