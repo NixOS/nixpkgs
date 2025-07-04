@@ -108,7 +108,6 @@ let
       grantleetheme = callPackage ./grantleetheme { };
       gwenview = callPackage ./gwenview { };
       incidenceeditor = callPackage ./incidenceeditor.nix { };
-      itinerary = callPackage ./itinerary.nix { };
       juk = callPackage ./juk.nix { };
       kaccounts-integration = callPackage ./kaccounts-integration.nix { };
       kaccounts-providers = callPackage ./kaccounts-providers.nix { };
