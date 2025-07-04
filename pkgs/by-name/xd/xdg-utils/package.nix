@@ -21,8 +21,8 @@
   glib,
   gnugrep,
   gnused,
+  hostname-debian,
   jq,
-  nettools,
   procps,
   which,
   xdg-user-dirs,
@@ -166,7 +166,7 @@ let
       scripts = [ "bin/xdg-open" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        nettools
+        hostname-debian
         glib.bin
         "${placeholder "out"}/bin"
       ];
@@ -206,7 +206,7 @@ let
       scripts = [ "bin/xdg-screensaver" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        nettools
+        hostname-debian
         perl
         procps
       ];
