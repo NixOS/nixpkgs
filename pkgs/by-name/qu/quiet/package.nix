@@ -9,7 +9,7 @@
 
 let
   pname = "quiet";
-  version = "5.1.2";
+  version = "6.0.0";
 
   meta = {
     description = "Private, p2p alternative to Slack and Discord built on Tor & IPFS";
