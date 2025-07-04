@@ -66,6 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       figsoda
       isabelroses
+      wrbbz
     ];
     mainProgram = "biome";
   };
