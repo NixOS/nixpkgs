@@ -187,6 +187,7 @@ let
     inherit (libsForQt5)
       sddm
       neochat # added 2025-07-04
+      itinerary # added 2025-07-04
       ;
   };
 
