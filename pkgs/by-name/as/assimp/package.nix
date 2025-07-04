@@ -4,9 +4,10 @@
   fetchFromGitHub,
   cmake,
   zlib,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "assimp";
   version = "6.0.2";
   outputs = [
@@ -18,23 +19,42 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "assimp";
     repo = "assimp";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ixtqK+3iiL17GEbEVHz5S6+gJDDQP7bVuSfRMJMGEOY=";
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     zlib
   ];
 
-  cmakeFlags = [ "-DASSIMP_BUILD_ASSIMP_TOOLS=ON" ];
+  strictDeps = true;
+  enableParallelBuilding = true;
 
-  meta = with lib; {
+  cmakeFlags = [
+    (lib.cmakeBool "ASSIMP_BUILD_ASSIMP_TOOLS" true)
+  ];
+
+  # Some matrix tests fail on non-86_64-linux:
+  # https://github.com/assimp/assimp/issues/6246
+  # https://github.com/assimp/assimp/issues/6247
+  doCheck = !(stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isx86_64);
+  checkPhase = ''
+    runHook preCheck
+    bin/unit
+    runHook postCheck
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/assimp/assimp/releases/tag/${finalAttrs.src.tag}";
     description = "Library to import various 3D model formats";
     mainProgram = "assimp";
     homepage = "https://www.assimp.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ehmry ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
