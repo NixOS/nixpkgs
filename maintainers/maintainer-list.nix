@@ -20564,6 +20564,12 @@
     githubId = 115877;
     name = "Kenny Shen";
   };
+  qskkk = {
+    email = "durand.romain.rd@gmail.com";
+    github = "qskkk";
+    githubId = 32615508;
+    name = "qskkk";
+  };
   quadradical = {
     email = "nixos@henryhiles.com";
     github = "Henry-Hiles";
