@@ -1426,8 +1426,8 @@ rec {
       "sha256-SxRBlQAgb/WMhQlGrO7iVB6U/B5dYTlCuiPqKQmy5s4=";
 
   mypy-boto3-workspaces =
-    buildMypyBoto3Package "workspaces" "1.38.45"
-      "sha256-gXdxhks4bCT7KuXFQvJsSfe6y4aMe77ljOaluLe/n9Y=";
+    buildMypyBoto3Package "workspaces" "1.39.0"
+      "sha256-ON5Ql74yFx2z+QQQAYuQ7UA0HaV0QuE9EyzDzRM9O4k=";
 
   mypy-boto3-workspaces-web =
     buildMypyBoto3Package "workspaces-web" "1.38.0"
