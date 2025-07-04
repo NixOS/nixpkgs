@@ -5,6 +5,7 @@
   extra-cmake-modules,
   fetchFromGitHub,
   fontconfig,
+  installShellFiles,
   llvmPackages,
   nix-update-script,
   openssl,
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     [
       capnproto
       extra-cmake-modules
+      installShellFiles
       pkg-config
       protobuf
     ]
@@ -53,6 +55,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Browser tests time out with chromium and google-chrome
   doCheck = false;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd turbo \
+      --bash <($out/bin/turbo completion bash) \
+      --fish <($out/bin/turbo completion fish) \
+      --zsh <($out/bin/turbo completion zsh)
+  '';
 
   env = {
     # nightly features are used
