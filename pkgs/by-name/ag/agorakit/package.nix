@@ -39,5 +39,6 @@ php82.buildComposerProject2 (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];
+    teams = with lib.teams; [ ngi ];
   };
 })
