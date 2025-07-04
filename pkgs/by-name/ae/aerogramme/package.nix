@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchgit,
+  nix-update-script,
   pkg-config,
   openssl,
 }:
@@ -34,6 +35,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Encrypted e-mail storage over Garage";
