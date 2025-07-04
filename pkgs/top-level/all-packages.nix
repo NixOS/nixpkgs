@@ -3045,8 +3045,6 @@ with pkgs;
 
   gandi-cli = python3Packages.callPackage ../tools/networking/gandi-cli { };
 
-  gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
-
   inherit (callPackages ../tools/filesystems/garage { })
     garage
     garage_0_8
@@ -6967,11 +6965,7 @@ with pkgs;
     ;
 
   electron_33 = electron_33-bin;
-  electron_34 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_34 then
-      electron-source.electron_34
-    else
-      electron_34-bin;
+  electron_34 = electron_34-bin;
   electron_35 =
     if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_35 then
       electron-source.electron_35
@@ -13831,8 +13825,6 @@ with pkgs;
   qsynth = libsForQt5.callPackage ../applications/audio/qsynth { };
 
   qtbitcointrader = libsForQt5.callPackage ../applications/misc/qtbitcointrader { };
-
-  qtchan = libsForQt5.callPackage ../applications/networking/browsers/qtchan { };
 
   qtemu = libsForQt5.callPackage ../applications/virtualization/qtemu { };
 
