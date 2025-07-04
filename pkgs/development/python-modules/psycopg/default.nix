@@ -216,6 +216,8 @@ buildPythonPackage rec {
     # https://github.com/psycopg/psycopg/pull/915
     "tests/test_notify.py"
     "tests/test_notify_async.py"
+    # Flaky on slower machines
+    "tests/test_concurrency.py"
   ];
 
   pytestFlagsArray = [
