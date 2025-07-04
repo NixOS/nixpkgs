@@ -5371,8 +5371,8 @@ let
         mktplcRef = {
           name = "gitblame";
           publisher = "waderyan";
-          version = "11.1.3";
-          sha256 = "sha256-r+fmb382hzxD7frrsNZTJk6uPahO7QBfKTJWA0ObWFI=";
+          version = "11.1.4";
+          sha256 = "sha256-rKFqv3GIGxnybyk8z1QYzUbncuiwrjiw0h7Mf2gbfQE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/waderyan.gitblame/changelog";
