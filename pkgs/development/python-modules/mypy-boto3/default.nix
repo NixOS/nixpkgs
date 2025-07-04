@@ -1234,8 +1234,8 @@ rec {
       "sha256-0Ak/2JAfm5mKNN3CDrYaverNgPVFo/1IXPj0bgTPXjc=";
 
   mypy-boto3-service-quotas =
-    buildMypyBoto3Package "service-quotas" "1.38.18"
-      "sha256-93p1eVFFroBiRwpBWJMSa++CyP6/I9PaMFA8u4qHvvk=";
+    buildMypyBoto3Package "service-quotas" "1.39.0"
+      "sha256-DO8738HiBClei+6YFFNQoDudW5TRp57oDahf5VRtK50=";
 
   mypy-boto3-servicecatalog =
     buildMypyBoto3Package "servicecatalog" "1.38.10"
