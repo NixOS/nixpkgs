@@ -3,22 +3,23 @@
   stdenv,
   fetchFromGitLab,
   fetchpatch,
-  cmake,
-  pkg-config,
-  wrapQtAppsHook,
+
   SDL2,
   boost,
   bullet,
-  # Please unpin this on the next OpenMW release.
-  ffmpeg_6,
+  cmake,
+  ffmpeg,
   libXt,
   luajit,
   lz4,
   mygui,
   openal,
   openscenegraph,
+  pkg-config,
+  qttools,
   recastnavigation,
   unshield,
+  wrapQtAppsHook,
   yaml-cpp,
 }:
 
@@ -30,8 +31,8 @@ let
       (fetchpatch {
         # Darwin: Without this patch, OSG won't build osgdb_png.so, which is required by OpenMW.
         name = "darwin-osg-plugins-fix.patch";
-        url = "https://gitlab.com/OpenMW/openmw-dep/-/raw/0abe3c9c3858211028d881d7706813d606335f72/macos/osg.patch";
-        sha256 = "sha256-/CLRZofZHot8juH78VG1/qhTHPhy5DoPMN+oH8hC58U=";
+        url = "https://gitlab.com/OpenMW/openmw-dep/-/raw/1305497c009dc0e7a6a70fe14f0a2f92b96cbcb4/macos/osg.patch";
+        sha256 = "sha256-G8Y+fnR6FRGxECWrei/Ixch3A3PkRfH6b5q9iawsSCY=";
       })
     ];
     cmakeFlags =
@@ -66,16 +67,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openmw";
-  version = "0.48.0";
+  version = "0.49.0";
 
   src = fetchFromGitLab {
     owner = "OpenMW";
     repo = "openmw";
     rev = "${pname}-${version}";
-    hash = "sha256-zkjVt3GfQZsFXl2Ht3lCuQtDMYQWxhdFO4aGSb3rsyo=";
+    hash = "sha256-Eyjn3jPpo0d7XENg0Ea/3MN60lZBSUAMkz1UtTiIP80=";
   };
-
-  patches = [ ./0001-function-inclusion-fixes-for-gcc14.patch ];
 
   postPatch = ''
     sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
@@ -98,13 +97,14 @@ stdenv.mkDerivation rec {
     SDL2
     boost
     bullet'
-    ffmpeg_6
+    ffmpeg
     libXt
     luajit
     lz4
     mygui
     openal
     osg'
+    qttools
     recastnavigation
     unshield
     yaml-cpp
