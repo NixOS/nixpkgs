@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
     description = "Small Footprint Scheme for use as a C Extension Language";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.DerGuteMoritz ];
+    maintainers = with lib.maintainers; [
+      applePrincess
+      DerGuteMoritz
+    ];
   };
 }
