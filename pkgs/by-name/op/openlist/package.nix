@@ -4,7 +4,6 @@
   buildGoModule,
   fetchFromGitHub,
   callPackage,
-  buildPackages,
   installShellFiles,
   versionCheckHook,
   fuse,
@@ -12,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "openlist";
-  version = "4.0.1";
+  version = "4.0.8";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PqCGA2DAfZvDqdnQzqlmz2vlybYokJe+Ybzp5BcJDGU=";
+    hash = "sha256-pihGG9vm0wyny9DuN110Nb6cwxvG5oP2RqcoWSOWRes=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -34,7 +33,7 @@ buildGoModule (finalAttrs: {
   frontend = callPackage ./frontend.nix { };
 
   proxyVendor = true;
-  vendorHash = "sha256-e1glgNp5aYl1cEuLdMMLa8sE9lSuiLVdPCX9pek5grE=";
+  vendorHash = "sha256-WnA5iDXCdBlBhnCxvD0PQYfu3bePAv9tJ3WNUTFNURo=";
 
   buildInputs = [ fuse ];
 
@@ -42,9 +41,9 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-X \"github.com/OpenListTeam/OpenList/internal/conf.GitAuthor=The OpenList Projects Contributors <noreply@openlist.team>\""
-    "-X github.com/OpenListTeam/OpenList/internal/conf.Version=${finalAttrs.version}"
-    "-X github.com/OpenListTeam/OpenList/internal/conf.WebVersion=${finalAttrs.frontend.version}"
+    "-X \"github.com/OpenListTeam/OpenList/v4/internal/conf.GitAuthor=The OpenList Projects Contributors <noreply@openlist.team>\""
+    "-X github.com/OpenListTeam/OpenList/v4/internal/conf.Version=${finalAttrs.version}"
+    "-X github.com/OpenListTeam/OpenList/v4/internal/conf.WebVersion=${finalAttrs.frontend.version}"
   ];
 
   preConfigure = ''
@@ -53,8 +52,8 @@ buildGoModule (finalAttrs: {
   '';
 
   preBuild = ''
-    ldflags+=" -X \"github.com/OpenListTeam/OpenList/internal/conf.BuiltAt=$(<SOURCE_DATE_EPOCH)\""
-    ldflags+=" -X github.com/OpenListTeam/OpenList/internal/conf.GitCommit=$(<COMMIT)"
+    ldflags+=" -X \"github.com/OpenListTeam/OpenList/v4/internal/conf.BuiltAt=$(<SOURCE_DATE_EPOCH)\""
+    ldflags+=" -X github.com/OpenListTeam/OpenList/v4/internal/conf.GitCommit=$(<COMMIT)"
   '';
 
   checkFlags =
@@ -71,20 +70,15 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      installShellCompletion --cmd OpenList \
-        --bash <(${emulator} $out/bin/OpenList completion bash) \
-        --fish <(${emulator} $out/bin/OpenList completion fish) \
-        --zsh <(${emulator} $out/bin/OpenList completion zsh)
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd OpenList \
+      --bash <($out/bin/OpenList completion bash) \
+      --fish <($out/bin/OpenList completion fish) \
+      --zsh <($out/bin/OpenList completion zsh)
 
-      mkdir $out/share/powershell/ -p
-      ${emulator} $out/bin/OpenList completion powershell > $out/share/powershell/OpenList.Completion.ps1
-    ''
-  );
+    mkdir $out/share/powershell/ -p
+    $out/bin/OpenList completion powershell > $out/share/powershell/OpenList.Completion.ps1
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
