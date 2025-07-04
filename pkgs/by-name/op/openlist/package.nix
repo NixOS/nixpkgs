@@ -4,7 +4,6 @@
   buildGoModule,
   fetchFromGitHub,
   callPackage,
-  buildPackages,
   installShellFiles,
   versionCheckHook,
   fuse,
@@ -71,20 +70,15 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      installShellCompletion --cmd OpenList \
-        --bash <(${emulator} $out/bin/OpenList completion bash) \
-        --fish <(${emulator} $out/bin/OpenList completion fish) \
-        --zsh <(${emulator} $out/bin/OpenList completion zsh)
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd OpenList \
+      --bash <($out/bin/OpenList completion bash) \
+      --fish <($out/bin/OpenList completion fish) \
+      --zsh <($out/bin/OpenList completion zsh)
 
-      mkdir $out/share/powershell/ -p
-      ${emulator} $out/bin/OpenList completion powershell > $out/share/powershell/OpenList.Completion.ps1
-    ''
-  );
+    mkdir $out/share/powershell/ -p
+    $out/bin/OpenList completion powershell > $out/share/powershell/OpenList.Completion.ps1
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
