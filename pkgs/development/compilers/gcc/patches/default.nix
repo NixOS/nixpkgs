@@ -100,6 +100,9 @@ in
 ++ optional langD ./libphobos.patch
 ++ optional (!atLeast14) ./cfi_startproc-reorder-label-09-1.diff
 ++ optional (atLeast14 && !canApplyIainsDarwinPatches) ./cfi_startproc-reorder-label-14-1.diff
+# Excerpted from <https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=fa321004f3f6288d3ee2eefa6b02177131882dca>.
+# TODO: Remove the 32‐bit conditional.
+++ optional (!atLeast15 && stdenv.hostPlatform.is32bit) ./backport-sanitizer-time-bits-fix.patch
 
 ## 2. Patches relevant to gcc>=12 on specific platforms ####################################
 
