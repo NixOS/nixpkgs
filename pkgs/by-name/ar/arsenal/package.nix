@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
     repo = "arsenal";
-    rev = version;
+    tag = version;
     sha256 = "sha256-NbNXyR5aNKvRJU9JWGk/ndwU1bhNgDOdcRqBkAY9nPA=";
   };
 

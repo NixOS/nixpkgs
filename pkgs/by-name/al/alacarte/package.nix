@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "alacarte";
-    rev = version;
+    tag = version;
     hash = "sha256-sH/2ULI1QEqmgFIFFnOwsx2/+TMt+bPu0l0LUcnBgWg=";
   };
 
