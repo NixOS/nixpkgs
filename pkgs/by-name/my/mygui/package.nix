@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   boost,
@@ -20,17 +21,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mygui";
-  version = "3.4.2";
+  version = "3.4.3";
 
   src = fetchFromGitHub {
     owner = "MyGUI";
     repo = "mygui";
     rev = "MyGUI${version}";
-    hash = "sha256-yBV0ImOFJlqBPqqOjXYe4SFO2liSGZCEwvehED5Ubj4=";
+    hash = "sha256-qif9trHgtWpYiDVXY3cjRsXypjjjgStX8tSWCnXhXlk=";
   };
 
   patches = [
-    ./disable-framework.patch
+    (fetchpatch {
+      name = "darwin-mygui-framework-fix.patch";
+      url = "https://gitlab.com/OpenMW/openmw-dep/-/raw/ade30e6e98c051ac2a505f6984518f5f41fa87a5/macos/mygui.patch";
+      sha256 = "sha256-Tk+O4TFgPZOqWAY4c0Q69bZfvIB34wN9e7h0tXhLULU=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -60,6 +65,7 @@ stdenv.mkDerivation rec {
     "-DMYGUI_BUILD_TOOLS=OFF"
     "-DMYGUI_BUILD_DEMOS=OFF"
     "-DMYGUI_RENDERSYSTEM=${renderSystem}"
+    "-DMYGUI_DONT_USE_OBSOLETE=ON"
   ];
 
   meta = with lib; {
