@@ -15312,10 +15312,6 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  kallisto = callPackage ../applications/science/biology/kallisto {
-    autoconf = buildPackages.autoconf269;
-  };
-
   mirtk = callPackage ../development/libraries/science/biology/mirtk { itk = itk_5_2; };
 
   nest = callPackage ../applications/science/biology/nest { };
