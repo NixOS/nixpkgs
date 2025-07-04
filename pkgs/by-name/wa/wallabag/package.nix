@@ -8,16 +8,6 @@
   ...
 }:
 
-# Point the environment variable $WALLABAG_DATA to a data directory
-# that contains the folder `app` which must be a clone of
-# wallabag's configuration files with your customized `parameters.yml`.
-# In practice you need to copy `${pkgs.wallabag}/app` and the
-# customizzed `parameters.yml` to $WALLABAG_DATA.
-# These need to be updated every package upgrade.
-#
-# After a package upgrade, empty the `var/cache` folder or unexpected
-# error will occur.
-
 let
   pname = "wallabag";
   version = "2.6.13";
@@ -32,7 +22,7 @@ stdenvNoCC.mkDerivation {
   };
 
   patches = [
-    ./wallabag-data.patch # exposes $WALLABAG_DATA
+    ./wallabag.patch
   ];
 
   dontBuild = true;
@@ -41,7 +31,7 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
 
     mkdir $out
-    cp -R * $out/
+    cp -rv . $out
 
     runHook postInstall
   '';
@@ -54,16 +44,16 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    description = "wallabag is a self hostable application for saving web pages";
+    description = "Self-hostable application for saving web pages";
     longDescription = ''
-      wallabag is a self-hostable PHP application allowing you to not
+      Wallabag is a self-hostable PHP application allowing you to not
       miss any content anymore. Click, save and read it when you can.
       It extracts content so that you can read it when you have time.
     '';
     license = lib.licenses.mit;
     homepage = "https://wallabag.org";
     changelog = "https://github.com/wallabag/wallabag/releases/tag/${version}";
-    maintainers = with lib.maintainers; [ schneefux ];
+    maintainers = with lib.maintainers; [ skowalak ];
     inherit (php.meta) platforms;
   };
 }
