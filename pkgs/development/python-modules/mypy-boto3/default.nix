@@ -202,8 +202,8 @@ rec {
       "sha256-Lq7EwOd2ia8kMG3VLzeRGE21vOyAv6xIniSMAd5c/pE=";
 
   mypy-boto3-chime-sdk-messaging =
-    buildMypyBoto3Package "chime-sdk-messaging" "1.38.0"
-      "sha256-uAoK3VdspWeBXFrRA2TdrLfeirs5gzWF6U/mAoIxyYs=";
+    buildMypyBoto3Package "chime-sdk-messaging" "1.39.0"
+      "sha256-7TfKf+v/JLlpnjM7ZzLDTordBQtkLUwlaEIZdzoKjX4=";
 
   mypy-boto3-chime-sdk-voice =
     buildMypyBoto3Package "chime-sdk-voice" "1.38.0"
