@@ -23,12 +23,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.12.3";
+  version = "0.13.4";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-X0zF0zqWwuCt7oWXwfzDtu+7KZ3yMQwQqP45rlfGm/o=";
+    hash = "sha256-Ub6HjZChOhRUDYQ2TAnrwOtrW6ahP+k74vCAmLkYABA=";
     fetchSubmodules = true;
   };
 
@@ -118,7 +118,12 @@ buildDotnetModule (finalAttrs: {
     "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
   ];
 
-  doCheck = true;
+  # Avoid running `dotnet test` in the main package:
+  # - The test-suite is slow
+  # - Some tests fail intermittently
+  # - The package is often uncached; especially the unfree variant
+  # - We can enable tests in a `passthru.tests` override
+  doCheck = false;
 
   dotnetTestFlags = [
     "--environment=USER=nobody"
@@ -173,6 +178,14 @@ buildDotnetModule (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests = {
+    # Build the package and run `dotnet test`
+    app = finalAttrs.finalPackage.overrideAttrs {
+      pname = "${finalAttrs.pname}-tested";
+      doCheck = true;
+    };
+  };
 
   passthru.updateScript = nix-update-script { };
 

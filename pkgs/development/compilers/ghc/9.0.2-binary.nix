@@ -136,6 +136,7 @@ let
             fileToCheckFor = null;
           }
         ];
+        isHadrian = true;
       };
       aarch64-darwin = {
         variantSuffix = "";
@@ -158,6 +159,7 @@ let
             fileToCheckFor = null;
           }
         ];
+        isHadrian = true;
       };
     };
     # Binary distributions for the musl libc for the respective system.
@@ -179,6 +181,7 @@ let
             fileToCheckFor = "libncursesw.so.6";
           }
         ];
+        isHadrian = true;
       };
     };
   };
@@ -310,7 +313,7 @@ stdenv.mkDerivation {
       # To link RTS in the end we also need libffi now
       find . -name 'rts*.conf' \
           -exec sed -e '/^[a-z-]*library-dirs/a \    ${lib.getLib libffi}/lib' \
-                    -e 's@/Library/Developer/.*/usr/include/ffi@${lib.getDev libffi}/include@' \
+                    -e 's@/.*/Developer/.*/usr/include/ffi@${lib.getDev libffi}/include@' \
                     -i {} \;
     ''
     +
@@ -351,13 +354,23 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   # Patch scripts to include runtime dependencies in $PATH.
-  postInstall = ''
-    for i in "$out/bin/"*; do
-      test ! -h "$i" || continue
-      isScript "$i" || continue
-      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
-    done
-  '';
+  postInstall =
+    ''
+      for i in "$out/bin/"*; do
+        test ! -h "$i" || continue
+        isScript "$i" || continue
+        sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+      done
+    ''
+    # On Darwin, GHC doesn't install a bundled libffi.so, but instead uses the
+    # system one (see postUnpack). Due to a bug in Hadrian, the (bundled) libffi
+    # headers are installed anyways. This problem has been fixed in GHC 9.2:
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/8189. While the system
+    # header should shadow the GHC installed ones, remove them to be safe.
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && binDistUsed.isHadrian or false) ''
+      echo Deleting redundant libffi headers:
+      find "$out" '(' -name ffi.h -or -name ffitarget.h ')' -print -delete
+    '';
 
   # Apparently necessary for the ghc Alpine (musl) bindist:
   # When we strip, and then run the
