@@ -50,8 +50,8 @@ rec {
       "sha256-yKGbTsGfjquFBHSdKIxQmS4ewTPpxyS68eQNStCg4Iw=";
 
   mypy-boto3-account =
-    buildMypyBoto3Package "account" "1.38.0"
-      "sha256-AhlWp1yfbKoNGuv687k+0L8glPwFG9Nbz8Miup2pVpY=";
+    buildMypyBoto3Package "account" "1.39.0"
+      "sha256-SMv9JHKPF6V0Qk1hhktJcpHz4cJkxWK13t7IRcSpWyE=";
 
   mypy-boto3-acm =
     buildMypyBoto3Package "acm" "1.38.38"
