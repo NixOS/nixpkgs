@@ -1,0 +1,14 @@
+diff --git a/configure b/configure
+index 40d5b2be9..51c7175e6 100755
+--- a/configure
++++ b/configure
+@@ -20730,7 +20730,8 @@ else
+ int
+ main ()
+ {
+-pthread_detach(NULL);
++  pthread_t thread;
++  pthread_detach(thread);
+   ;
+   return 0;
+ }
