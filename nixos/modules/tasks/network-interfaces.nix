@@ -707,7 +707,9 @@ in
       ];
       type = types.listOf types.str;
       description = ''
-        The list of search paths used when resolving domain names.
+        The list of domain search paths that are considered for resolving
+        hostnames with fewer dots than configured in the `ndots` option,
+        which defaults to 1 if unset.
       '';
     };
 
@@ -716,7 +718,11 @@ in
       example = "home.arpa";
       type = types.nullOr types.str;
       description = ''
-        The domain.  It can be left empty if it is auto-detected through DHCP.
+        The system domain name. Used to populate the {option}`fqdn` value.
+
+        ::: {.warning}
+        The domain name is not configured for DNS resolution purposes, see {option}`search` instead.
+        :::
       '';
     };
 
