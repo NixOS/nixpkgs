@@ -66,6 +66,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/alexdobin/STAR";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.arcadio ];
+    maintainers = with maintainers; [
+      arcadio
+      cameronraysmith
+    ];
   };
 }
