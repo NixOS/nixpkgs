@@ -9,30 +9,37 @@ with pkgs.lib;
 
 let
   # A testScript fragment that prepares a disk with some empty, unpartitioned
-  # space. and uses it to boot the test with. Takes a single argument `machine`
-  # from which the diskImage is extracted.
-  useDiskImage = machine: ''
-    import os
-    import shutil
-    import subprocess
-    import tempfile
+  # space. and uses it to boot the test with.
+  # Takes two arguments, `machine` from which the diskImage is extracted,
+  # as well an optional `sizeDiff` (defaulting to +32M), describing how should
+  # be resized.
+  useDiskImage =
+    {
+      machine,
+      sizeDiff ? "+32M",
+    }:
+    ''
+      import os
+      import shutil
+      import subprocess
+      import tempfile
 
-    tmp_disk_image = tempfile.NamedTemporaryFile()
+      tmp_disk_image = tempfile.NamedTemporaryFile()
 
-    shutil.copyfile("${machine.system.build.diskImage}/nixos.img", tmp_disk_image.name)
+      shutil.copyfile("${machine.system.build.diskImage}/nixos.img", tmp_disk_image.name)
 
-    subprocess.run([
-      "${machine.virtualisation.qemu.package}/bin/qemu-img",
-      "resize",
-      "-f",
-      "raw",
-      tmp_disk_image.name,
-      "+32M",
-    ])
+      subprocess.run([
+        "${machine.virtualisation.qemu.package}/bin/qemu-img",
+        "resize",
+        "-f",
+        "raw",
+        tmp_disk_image.name,
+        "${sizeDiff}",
+      ])
 
-    # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
-    os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
-  '';
+      # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
+      os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
+    '';
 
   common =
     {
@@ -98,7 +105,7 @@ in
     testScript =
       { nodes, ... }:
       ''
-        ${useDiskImage nodes.machine}
+        ${useDiskImage { inherit (nodes) machine; }}
 
         machine.start()
         machine.wait_for_unit("multi-user.target")
@@ -128,7 +135,7 @@ in
     testScript =
       { nodes, ... }:
       ''
-        ${useDiskImage nodes.machine}
+        ${useDiskImage { inherit (nodes) machine; }}
 
         machine.start()
         machine.wait_for_unit("multi-user.target")
@@ -196,7 +203,7 @@ in
     testScript =
       { nodes, ... }:
       ''
-        ${useDiskImage nodes.machine}
+        ${useDiskImage { inherit (nodes) machine; }}
 
         machine.start()
         machine.wait_for_unit("multi-user.target")
