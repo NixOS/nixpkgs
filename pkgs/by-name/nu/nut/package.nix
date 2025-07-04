@@ -21,7 +21,31 @@
   systemd,
   udev,
   gnused,
+  withApcModbus ? false,
+  fetchFromGitHub,
 }:
+let
+  # rebuild libmodbus with downstream usb patches from
+  # https://github.com/networkupstools/libmodbus
+  # finding the docs for this was actually relatively hard
+  # so save them here for reference
+  # https://github.com/networkupstools/nut/wiki/APC-UPS-with-Modbus-protocol
+  libmodbus' = libmodbus.overrideAttrs (finalAttrs: {
+    version = "3.1.11-withUsbRTU-NUT";
+
+    src = fetchFromGitHub {
+      owner = "networkupstools";
+      repo = "libmodbus";
+      rev = "8b9bdcde6938f85415098af74b720b7ad5ed74b4";
+      hash = "sha256-ZimIVLKhVjknLNFB+1jGA9N/3YqxHfGX1+l1mpk5im4=";
+    };
+
+    buildInputs = [
+      libusb1
+    ];
+  });
+  modbus = if withApcModbus then libmodbus' else libmodbus;
+in
 
 stdenv.mkDerivation rec {
   pname = "nut";
@@ -46,7 +70,7 @@ stdenv.mkDerivation rec {
       libgpiod = "${libgpiod_1}/lib";
       libusb = "${libusb1}/lib";
       neon = "${neon}/lib";
-      libmodbus = "${libmodbus}/lib";
+      libmodbus = "${modbus}/lib";
       netsnmp = "${net-snmp.lib}/lib";
     })
   ];
@@ -59,11 +83,11 @@ stdenv.mkDerivation rec {
     avahi
     freeipmi
     libgpiod_1
-    libmodbus
     libtool
     i2c-tools
     net-snmp
     gd
+    modbus
   ];
 
   nativeBuildInputs = [
@@ -73,17 +97,20 @@ stdenv.mkDerivation rec {
   ];
 
   doInstallCheck = true;
-
-  configureFlags = [
-    "--with-all"
-    "--with-ssl"
-    "--without-powerman" # Until we have it ...
-    "--with-systemdsystempresetdir=$(out)/lib/systemd/system-preset"
-    "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
-    "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
-    "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
-    "--with-udev-dir=$(out)/etc/udev"
-  ];
+  configureFlags =
+    [
+      "--with-all"
+      "--with-ssl"
+      "--without-powerman" # Until we have it ...
+      "--with-systemdsystempresetdir=$(out)/lib/systemd/system-preset"
+      "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
+      "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
+      "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
+      "--with-udev-dir=$(out)/etc/udev"
+    ]
+    ++ (lib.lists.optionals withApcModbus [
+      "--with-modbus+usb"
+    ]);
 
   enableParallelBuilding = true;
 
