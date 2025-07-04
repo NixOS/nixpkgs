@@ -1002,8 +1002,8 @@ rec {
       "sha256-2JL1gN5+ZiofUpo+tu39yC41B1Xhn7vaktDVaGF5olc=";
 
   mypy-boto3-payment-cryptography =
-    buildMypyBoto3Package "payment-cryptography" "1.38.40"
-      "sha256-MgjJrln8iNVfGVnoPV4zqETs4+oIOi564hILVIOWLqY=";
+    buildMypyBoto3Package "payment-cryptography" "1.39.0"
+      "sha256-OV9iSYwKhK3swHMjEPLld/YddXvHUZ4NBdxqgX5bfSY=";
 
   mypy-boto3-payment-cryptography-data =
     buildMypyBoto3Package "payment-cryptography-data" "1.38.40"
