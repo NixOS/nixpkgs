@@ -610,8 +610,8 @@ rec {
       "sha256-bC4+xlMiLrZZk6gN6MwfXJ52/BWmatFTdDHO4kGxsV0=";
 
   mypy-boto3-identitystore =
-    buildMypyBoto3Package "identitystore" "1.38.0"
-      "sha256-n11mu3O2o2sPL13xPtwlWVvpNfVUdV7l7NO2lXg+ZyM=";
+    buildMypyBoto3Package "identitystore" "1.39.0"
+      "sha256-On3ZXIYkKHLIF455qpB7zZLB7irjcfoSm9OXDLQv840=";
 
   mypy-boto3-imagebuilder =
     buildMypyBoto3Package "imagebuilder" "1.38.39"
