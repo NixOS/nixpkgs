@@ -5,13 +5,13 @@
   xxd,
   zlib,
   llvmPackages,
-  star,
+  rna-star,
   testers,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
-  pname = "star";
+  pname = "rna-star";
   version = "2.7.11b";
 
   src = fetchFromGitHub {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = star;
+    package = rna-star;
     command = "STAR --version";
   };
 
