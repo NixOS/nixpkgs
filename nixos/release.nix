@@ -120,7 +120,7 @@ let
     tarball
     // {
       meta = {
-        description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.linux-kernel.name}";
+        description = "NixOS system tarball for ${system}";
         maintainers = map (x: lib.maintainers.${x}) maintainers;
       };
       inherit config;
@@ -155,7 +155,7 @@ let
         modules = makeModules module { };
       };
       build = configEvaled.config.system.build;
-      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
+      kernelTarget = build.kernel.target;
     in
     configEvaled.pkgs.symlinkJoin {
       name = "netboot";

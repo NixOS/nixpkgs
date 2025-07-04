@@ -3,7 +3,7 @@
   pkgs,
   customQemu ? null,
   kernel ? pkgs.linux,
-  img ? pkgs.stdenv.hostPlatform.linux-kernel.target,
+  img ? kernel.target,
   storeDir ? builtins.storeDir,
   rootModules ? [
     "virtio_pci"

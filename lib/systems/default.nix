@@ -266,12 +266,10 @@ let
           inherit
             (
               {
-                linux-kernel = args.linux-kernel or { };
                 gcc = args.gcc or { };
               }
               // platforms.select final
             )
-            linux-kernel
             gcc
             ;
 
@@ -564,6 +562,11 @@ let
           };
         };
     in
+    # TODO: Remove in 26.05.
+    assert
+      args ? linux-kernel
+      -> throw "lib.systems.elaborate: linux-kernel has been removed; see the 25.11 release notes";
+
     assert final.useAndroidPrebuilt -> final.isAndroid;
     assert foldl (pass: { assertion, message }: if assertion final then pass else throw message) true (
       final.parsed.abi.assertions or [ ]

@@ -21,7 +21,6 @@
   zlib,
   pahole,
   kmod,
-  ubootTools,
   fetchpatch,
   rustc,
   rust-bindgen,
@@ -64,6 +63,19 @@ lib.makeOverridable (
     kernelPatches ? [ ],
     # The kernel .config file
     configfile,
+    target ?
+      if stdenv.hostPlatform.isx86 then
+        "bzImage"
+      else if stdenv.hostPlatform.isAarch32 then
+        "zImage"
+      else if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV then
+        "Image"
+      else if stdenv.hostPlatform.isLoongArch64 then
+        "vmlinuz.efi"
+      else
+        "vmlinux",
+    buildDTBs ?
+      stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isLoongArch64,
     # Manually specified nixexpr representing the config
     # If unspecified, this will be autodetected from the .config
     config ? lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
@@ -107,33 +119,8 @@ lib.makeOverridable (
       ;
 
     drvAttrs =
-      config_: kernelConf: kernelPatches: configfile:
+      config_:
       let
-        # Folding in `ubootTools` in the default nativeBuildInputs is problematic, as
-        # it makes updating U-Boot cumbersome, since it will go above the current
-        # threshold of rebuilds
-        #
-        # To prevent these needless rounds of staging for U-Boot builds, we can
-        # limit the inclusion of ubootTools to target platforms where uImage *may*
-        # be produced.
-        #
-        # This command lists those (kernel-named) platforms:
-        #     .../linux $ grep -l uImage ./arch/*/Makefile | cut -d'/' -f3 | sort
-        #
-        # This is still a guesstimation, but since none of our cached platforms
-        # coincide in that list, this gives us "perfect" decoupling here.
-        linuxPlatformsUsingUImage = [
-          "arc"
-          "arm"
-          "csky"
-          "mips"
-          "powerpc"
-          "sh"
-          "sparc"
-          "xtensa"
-        ];
-        needsUbootTools = lib.elem stdenv.hostPlatform.linuxArch linuxPlatformsUsingUImage;
-
         config =
           let
             attrName = attr: "CONFIG_" + attr;
@@ -158,7 +145,7 @@ lib.makeOverridable (
         isModular = config.isYes "MODULES";
         withRust = config.isYes "RUST";
 
-        buildDTBs = kernelConf.DTB or false;
+        inherit buildDTBs;
 
         # Dependencies that are required to build kernel modules
         moduleBuildDependencies =
@@ -190,6 +177,8 @@ lib.makeOverridable (
             config
             kernelPatches
             configfile
+            target
+            buildDTBs
             moduleBuildDependencies
             stdenv
             ;
@@ -226,7 +215,6 @@ lib.makeOverridable (
             kmod
             hexdump
           ]
-          ++ optional needsUbootTools ubootTools
           ++ optionals (lib.versionAtLeast version "5.2") [
             cpio
             pahole
@@ -328,7 +316,7 @@ lib.makeOverridable (
         buildFlags =
           [
             "KBUILD_BUILD_VERSION=1-NixOS"
-            kernelConf.target
+            target
             "vmlinux" # for "perf" and things like that
           ]
           ++ optional isModular "modules"
@@ -406,17 +394,11 @@ lib.makeOverridable (
             export HOME=${installkernel}
           '';
 
-        # Some image types need special install targets (e.g. uImage is installed with make uinstall on arm)
+        # Some image types need special install targets
         installTargets = [
-          (kernelConf.installTarget or (
-            if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
-              "uinstall"
-            else if
-              (
-                kernelConf.target == "zImage"
-                || kernelConf.target == "Image.gz"
-                || kernelConf.target == "vmlinuz.efi"
-              )
+          (
+            if
+              (target == "zImage" || target == "Image.gz" || target == "vmlinuz.efi")
               && builtins.elem stdenv.hostPlatform.linuxArch [
                 "arm"
                 "arm64"
@@ -427,7 +409,6 @@ lib.makeOverridable (
               "zinstall"
             else
               "install"
-          )
           )
         ];
 
@@ -549,13 +530,12 @@ lib.makeOverridable (
         # https://github.com/NixOS/nixpkgs/issues/321667
         "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
       ]
-      ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
       ++ extraMakeFlags;
   in
 
   stdenv.mkDerivation (
     builtins.foldl' lib.recursiveUpdate { } [
-      (drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile)
+      (drvAttrs config)
       {
         inherit pname version;
 
