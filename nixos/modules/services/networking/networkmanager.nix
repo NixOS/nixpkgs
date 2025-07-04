@@ -127,15 +127,20 @@ let
     '';
   };
 
+  concatPluginAttrs = attr: lib.concatMap (plugin: plugin.${attr} or [ ]) cfg.plugins;
+  pluginRuntimeDeps = concatPluginAttrs "networkManagerRuntimeDeps";
+  pluginDbusDeps = concatPluginAttrs "networkManagerDbusDeps";
+  pluginTmpfilesRules = concatPluginAttrs "networkManagerTmpfilesRules";
+
   packages =
     [
       cfg.package
     ]
     ++ cfg.plugins
+    ++ pluginRuntimeDeps
     ++ lib.optionals (!delegateWireless && !enableIwd) [
       pkgs.wpa_supplicant
     ];
-
 in
 {
 
@@ -220,30 +225,37 @@ in
         type =
           let
             networkManagerPluginPackage = types.package // {
-              description = "NetworkManager plug-in";
+              description = "NetworkManager plugin package";
               check =
                 p:
                 lib.assertMsg
                   (types.package.check p && p ? networkManagerPlugin && lib.isString p.networkManagerPlugin)
                   ''
-                    Package ‘${p.name}’, is not a NetworkManager plug-in.
+                    Package ‘${p.name}’, is not a NetworkManager plugin.
                     Those need to have a ‘networkManagerPlugin’ attribute.
                   '';
             };
           in
           types.listOf networkManagerPluginPackage;
         default = [ ];
-        description = ''
-          List of NetworkManager plug-ins to enable.
-          Some plug-ins are enabled by the NetworkManager module by default.
+        example = literalExpression ''
+          [
+            networkmanager-fortisslvpn
+            networkmanager-iodine
+            networkmanager-l2tp
+            networkmanager-openconnect
+            networkmanager-openvpn
+            networkmanager-sstp
+            networkmanager-strongswan
+            networkmanager-vpnc
+          ]
         '';
-      };
-
-      enableDefaultPlugins = mkOption {
-        type = types.bool;
-        default = true;
         description = ''
-          Enable a set of recommended plugins.
+          List of plugin packages to install.
+
+          See <https://search.nixos.org/packages?query=networkmanager-> for available plugin packages.
+          and <https://networkmanager.dev/docs/vpn/> for an overview over builtin and external plugins
+          and their support status.
         '';
       };
 
@@ -390,19 +402,6 @@ in
         '';
       };
 
-      enableStrongSwan = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the StrongSwan plugin.
-
-          If you enable this option the
-          `networkmanager_strongswan` plugin will be added to
-          the {option}`networking.networkmanager.plugins` option
-          so you don't need to do that yourself.
-        '';
-      };
-
       ensureProfiles = {
         profiles =
           with lib.types;
@@ -523,6 +522,16 @@ in
       [ "networking" "networkmanager" "fccUnlockScripts" ]
       [ "networking" "modemmanager" "fccUnlockScripts" ]
     )
+    (mkRemovedOptionModule [
+      "networking"
+      "networkmanager"
+      "enableStrongSwan"
+    ] "Pass `pkgs.networkmanager-strongswan` into `networking.networkmanager.plugins` instead.")
+    (mkRemovedOptionModule [
+      "networking"
+      "networkmanager"
+      "enableDefaultPlugins"
+    ] "Configure the required plugins explicitly in `networking.networkmanager.plugins`.")
   ];
 
   ###### implementation
@@ -597,13 +606,10 @@ in
 
     systemd.tmpfiles.rules = [
       "d /etc/NetworkManager/system-connections 0700 root root -"
-      "d /etc/ipsec.d 0700 root root -"
-      "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
-
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
       # ppp isn't able to mkdir that directory at runtime
       "d /run/pppd/lock 0700 root root -"
-    ];
+    ] ++ pluginTmpfilesRules;
 
     systemd.services.NetworkManager = {
       wantedBy = [ "multi-user.target" ];
@@ -642,6 +648,7 @@ in
       wantedBy = [ "multi-user.target" ];
       before = [ "network-online.target" ];
       after = [ "NetworkManager.service" ];
+      path = pluginRuntimeDeps;
       script =
         let
           path = id: "/run/NetworkManager/system-connections/${id}.nmconnection";
@@ -666,22 +673,6 @@ in
     networking = mkMerge [
       (mkIf (!delegateWireless) {
         useDHCP = false;
-      })
-
-      (mkIf cfg.enableDefaultPlugins {
-        networkmanager.plugins = with pkgs; [
-          networkmanager-fortisslvpn
-          networkmanager-iodine
-          networkmanager-l2tp
-          networkmanager-openconnect
-          networkmanager-openvpn
-          networkmanager-vpnc
-          networkmanager-sstp
-        ];
-      })
-
-      (mkIf cfg.enableStrongSwan {
-        networkmanager.plugins = [ pkgs.networkmanager_strongswan ];
       })
 
       (mkIf enableIwd {
@@ -710,11 +701,10 @@ in
     security.polkit.enable = true;
     security.polkit.extraConfig = polkitConf;
 
-    services.dbus.packages =
-      packages
-      ++ optional cfg.enableStrongSwan pkgs.strongswanNM
-      ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
+    services.dbus.packages = packages ++ pluginDbusDeps ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
 
     services.udev.packages = packages;
+
+    systemd.services.NetworkManager.path = pluginRuntimeDeps;
   };
 }
