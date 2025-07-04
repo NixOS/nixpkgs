@@ -26318,6 +26318,12 @@
     githubId = 223408;
     name = "Varun Madiath";
   };
+  vanadium5000 = {
+    email = "vanadium5000@gmail.com";
+    github = "Vanadium5000";
+    githubId = 151467774;
+    name = "Vanadium5000";
+  };
   vancluever = {
     email = "chrism@vancluevertech.com";
     github = "vancluever";
