@@ -2,7 +2,7 @@
   backticks = {
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1vr28l9vckavnrb9pnqrhcmnk3wsvvpas8jjh165w2rzv3sdkws5";
+      hash = "sha256-RfPZ9Ng/C15MgFIire7emo9pK4MZ25tWtltNthNFIu8=";
       type = "gem";
     };
     version = "1.0.2";
@@ -10,7 +10,7 @@
   daemons = {
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0l5gai3vd4g7aqff0k1mp41j9zcsvm2rbwmqn115a325k9r7pf4w";
+      hash = "sha256-nLh7cppFDFVCsLjylUXdmv0kA7k1TOAcVueRtkdUr1A=";
       type = "gem";
     };
     version = "1.3.1";
@@ -19,7 +19,7 @@
     dependencies = [ "backticks" ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "00v3y182rmpq34dl91iprvhc50vw8hysy2h7iy3ihmmm9pgg71gc";
+      hash = "sha256-7IXz3k21VhiHjwcKrz1EfIPC4M43hkQbGfjWLFDwYwM=";
       type = "gem";
     };
     version = "1.1.10";
@@ -36,7 +36,7 @@
     ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1vrlcggj7k8w30b76f23p64yx4wg7p7mq9lp6lsnh2ysq9n3cjqg";
+      hash = "sha256-D0s2bMLaC2g1NZcmXM89j5PuiblDOHMWGBzNI99jNO8=";
       type = "gem";
     };
     version = "0.5.9";
@@ -44,7 +44,7 @@
   dotenv = {
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0rgl2kqhnxqbjvi9brbvb52iaq1z8yi0pl0bawk4fm6kl9igxr8f";
+      hash = "sha256-DuX+YqLTVEcmVwvQC6JHP2AVRVl75ZXilgt3C/EU9GU=";
       type = "gem";
     };
     version = "2.6.0";
@@ -52,7 +52,7 @@
   gem_update_checker = {
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0ckbz4q3q59kkv138n0cmsyida0wg45pwscxzf5vshxcrxhmq3x7";
+      hash = "sha256-pw9cYc+sQ72L+51pfgt5HKgWva4MWDTCnjMVPDD5azI=";
       type = "gem";
     };
     version = "0.2.0";
@@ -60,7 +60,7 @@
   os = {
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1s401gvhqgs2r8hh43ia205mxsy1wc0ib4k76wzkdpspfcnfr1rk";
+      hash = "sha256-M4fsLHNX3zY/N2eSFQHjweteCxAqDgIhykI/DPcLgOg=";
       type = "gem";
     };
     version = "1.0.0";
@@ -68,7 +68,7 @@
   terminal-notifier = {
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1slc0y8pjpw30hy21v8ypafi8r7z9jlj4bjbgz03b65b28i2n3bs";
+      hash = "sha256-eg0rIhKrmDXAf0suIqlM/2QUnboe7SA8BINfeZEHjOo=";
       type = "gem";
     };
     version = "2.0.0";
@@ -76,7 +76,7 @@
   thor = {
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1yhrnp9x8qcy5vc7g438amd5j9sw83ih7c30dr6g6slgw9zj3g29";
+      hash = "sha256-Sbwhf+KPavNMbmCwA+NAXCdZWlVokHfYLp5h1NO1Gfo=";
       type = "gem";
     };
     version = "0.20.3";

@@ -4,7 +4,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0hlaf4b3d8grxm9fqbnam5gwd55wvghl0jyzjd1hc5hirhklaynk";
+      hash = "sha256-03pFJ8wRFgZDk99LQOHbvJTGX6nKLuxS7fmhNhZxikI=";
       type = "gem";
     };
     version = "3.7.2";
@@ -15,7 +15,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0gg65xls9rl9df37njja5f7y6mm1cbnf9yafyy3j7cnkcszif43a";
+      hash = "sha256-ahAXv2bTsiOH90755OxioVbjjytKSnuGa4nmpGkv5j0=";
       type = "gem";
     };
     version = "0.1.0";

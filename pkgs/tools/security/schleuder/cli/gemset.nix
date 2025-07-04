@@ -6,7 +6,7 @@
     source = {
       fetchSubmodules = false;
       rev = "fd010d28b1503504056e714e03abf043b64794ea";
-      sha256 = "1r8ayi0d00c14q40247rwjf5s5n3dsy9d9blhf5jzm3kddzpwnbx";
+      hash = "sha256-fVl+f2tz1C+Lg3SllrxuwxZdnOT5EAEIJoEB0ED0CuU=";
       type = "git";
       url = "https://0xacab.org/schleuder/schleuder-cli";
     };
@@ -17,7 +17,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1vq1fjp45az9hfp6fxljhdrkv75cvbab1jfrwcw738pnsiqk8zps";
+      hash = "sha256-+n40cdT2onE449nJsNTarJw9c4OSdmeug+mrQq50Ae8=";
       type = "gem";
     };
     version = "1.3.1";

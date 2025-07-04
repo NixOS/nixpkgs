@@ -11,7 +11,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0sig4ifxzvcz3fwjnz93dpv61v6sxpmlknj5f8n112ragrbcj8hb";
+      hash = "sha256-CyLJVn4qixAsckXaSevt2uxg9m0jfSu5G5/t310kL2o=";
       type = "gem";
     };
     version = "7.0.1";
@@ -21,7 +21,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "08ximcyfjy94pm1rhcx04ny1vx2sk0x4y185gzn86yfsbzwkng53";
+      hash = "sha256-ozw7+V/aeYPsfwUFTzqYWvQdvCWgM5hDvSR56TyrsSM=";
       type = "gem";
     };
     version = "3.2.5";
@@ -31,7 +31,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0grps9197qyxakbpw02pda59v45lfgbgiyw48i0mq9f2bn9y6mrz";
+      hash = "sha256-P1fjk13CJVxBRIT7+NZztJCdimpXAH7XVN3jk0LSNz8=";
       type = "gem";
     };
     version = "2.3.2";
@@ -41,7 +41,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0inl77jh4ia03jw3iqm5ipr76ghal3hyjrd6r8zqsswwvi9j2xdi";
+      hash = "sha256-sXUhU9yca40/yqZl6eGgCj5z8o2l4ji4HEBFAuU51EY=";
       type = "gem";
     };
     version = "1.2.1";
@@ -51,7 +51,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0a83cb5xpyzlr651d46rk5xgq37s46hs9nfqy9baawzs31hm9k2g";
+      hash = "sha256-T8xUYRj6c6VW8tjZpKEh+gz8epnZkBaKyfT728tiAyk=";
       type = "gem";
     };
     version = "2.0.1";
@@ -61,7 +61,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1r5ns064mbb99hf1dyxsk9183hznc5i7mn3bi86zka6dlvqf9csh";
+      hash = "sha256-ULPk8KbNqPkNimvYemJh9sOBQpq6+xYcTGmtSgzQtuQ=";
       type = "gem";
     };
     version = "1.1.0";
@@ -72,7 +72,7 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0pb9plyl71mdbjr4kllfy53qx6g68ryxblmnq9dilvy837jk24fj";
+      hash = "sha256-0hEx5RnIbxpbwrbS1X1G5pmOR/GO0kmyXK2GQz29aV0=";
       type = "gem";
     };
     version = "1.1.9";

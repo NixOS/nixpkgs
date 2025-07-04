@@ -2,7 +2,7 @@
   json = {
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "01v6jjpvh3gnq6sgllpfqahlgxzj50ailwhj9b3cd20hi2dx0vxp";
+      hash = "sha256-t2/Qm4gQiMbGShJyGhUo8vdHocLuUvq0wfYNuK+UZgc=";
       type = "gem";
     };
     version = "2.1.0";
@@ -10,7 +10,7 @@
   watson-ruby = {
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1d5m29nr0i030q8ygmbapwri5ndcg2q6lf8a15bk79lfcp9xyj9w";
+      hash = "sha256-PEnf02WOpjNXCQo5arB4rNkSM79q1ecRBgNEkG0StbQ=";
       type = "gem";
     };
     version = "1.6.3";
