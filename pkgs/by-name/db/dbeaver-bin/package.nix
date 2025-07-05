@@ -7,6 +7,7 @@
   openjdk21,
   gnused,
   autoPatchelfHook,
+  autoSignDarwinBinariesHook,
   wrapGAppsHook3,
   gtk3,
   glib,
@@ -50,7 +51,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       wrapGAppsHook3
       autoPatchelfHook
     ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+      undmg
+      autoSignDarwinBinariesHook
+    ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -119,9 +123,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         mkdir -p $out/{Applications/dbeaver.app,bin}
         cp -R . $out/Applications/dbeaver.app
-        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS,bin}/dbeaver \
+        wrapProgram $out/Applications/dbeaver.app/Contents/MacOS/dbeaver \
           --prefix PATH : "${openjdk21}/bin" \
           --set JAVA_HOME "${openjdk21.home}"
+        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS/dbeaver,bin/dbeaver}
 
         runHook postInstall
       '';
