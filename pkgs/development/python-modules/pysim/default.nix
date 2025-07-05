@@ -33,7 +33,7 @@ buildPythonPackage {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace 'smpp.pdu @ git+https://github.com/hologram-io/smpp.pdu' 'smpp.pdu'
+    substituteInPlace setup.py --replace-fail 'smpp.pdu @ git+https://github.com/hologram-io/smpp.pdu' 'smpp.pdu'
   '';
 
   nativeBuildInputs = [ setuptools ];

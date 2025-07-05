@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     substituteInPlace setup.py \
-        --replace "'pkg-config'" "'${stdenv.cc.targetPrefix}pkg-config'"
+        --replace-fail "'pkg-config'" "'${stdenv.cc.targetPrefix}pkg-config'"
   '';
 
   preBuild = ''

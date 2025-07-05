@@ -38,7 +38,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Packages in nixpkgs is different than the module name
     substituteInPlace setup.py \
-      --replace "ffmpeg" "ffmpeg-python"
+      --replace-fail "ffmpeg" "ffmpeg-python"
   '';
 
   # https://github.com/fwestenberg/reolink/issues/83

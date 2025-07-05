@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace soundfile.py --replace "_find_library('sndfile')" "'${libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    substituteInPlace soundfile.py --replace-fail "_find_library('sndfile')" "'${libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
   build-system = [

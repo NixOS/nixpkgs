@@ -33,7 +33,7 @@ buildPythonPackage rec {
   LC_ALL = "en_US.UTF-8";
 
   postPatch = ''
-    substituteInPlace libarchive/ffi.py --replace \
+    substituteInPlace libarchive/ffi.py --replace-fail \
       "find_library('archive')" "'${libarchive.lib}/lib/libarchive${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 

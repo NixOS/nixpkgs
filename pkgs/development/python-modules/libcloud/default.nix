@@ -28,11 +28,6 @@ buildPythonPackage rec {
     cp libcloud/test/secrets.py-dist libcloud/test/secrets.py
   '';
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "setup_requires=pytest_runner," "setup_requires=[],"
-  '';
-
   # requires a certificates file
   doCheck = false;
 

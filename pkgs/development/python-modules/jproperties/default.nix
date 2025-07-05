@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "setuptools_scm ~= 3.3" "setuptools_scm"
+      --replace-fail "setuptools_scm ~= 3.3" "setuptools_scm"
   '';
 
   disabledTestPaths = [

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     # Disable benchmark tests, so we won't need pytest-benchmark and pytest-cov
     # as dependencies
     substituteInPlace pyproject.toml \
-      --replace '"--benchmark-disable",' ""
+      --replace-fail '"--benchmark-disable",' ""
   '';
 
   build-system = [

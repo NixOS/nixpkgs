@@ -52,7 +52,7 @@ buildPythonPackage rec {
   prePatch = ''
     # argparse is part of the standardlib
     substituteInPlace setup.py \
-      --replace "'argparse'," ""
+      --replace-fail "'argparse'," ""
     rm versioneer.py
   '';
 

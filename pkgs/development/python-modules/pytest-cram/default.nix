@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest_cram/tests/test_options.py \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
   build-system = [ setuptools ];

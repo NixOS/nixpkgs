@@ -24,14 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-t4WLNDkC/ErBnOGK6FoYIfjoL/zF9MxPThJtGM1nUL4=";
   };
 
-  # patch out coveralls since it doesn't provide us value
-  preBuild = ''
-    sed -i '/coveralls/d' ./pyproject.toml
-
-    substituteInPlace pyproject.toml \
-      --replace "more_itertools~=8.10" "more_itertools"
-  '';
-
   nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [

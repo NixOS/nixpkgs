@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     # https://github.com/dbader/schedule/issues/488
-    substituteInPlace test_schedule.py --replace \
+    substituteInPlace test_schedule.py --replace-fail \
       "self.assertRaises(ScheduleValueError, every().day.until, datetime.time(hour=5))" \
       "# self.assertRaises(ScheduleValueError, every().day.until, datetime.time(hour=5))"
   '';

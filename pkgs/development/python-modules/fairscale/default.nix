@@ -35,7 +35,7 @@ buildPythonPackage {
   # setup.py depends on ninja python dependency, but we have the binary in nixpkgs
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'setup_requires=["ninja"]' 'setup_requires=[]'
+      --replace-fail 'setup_requires=["ninja"]' 'setup_requires=[]'
   '';
 
   nativeBuildInputs = [

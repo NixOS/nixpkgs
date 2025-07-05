@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace " --cov --showlocals --verbose" ""
+      --replace-fail " --cov --showlocals --verbose" ""
   '';
 
   pythonImportsCheck = [ "update_dotdee" ];
