@@ -17,14 +17,14 @@
 }:
 
 let
-  version = "15.0.2";
+  version = "16.0.1";
 
   twemojiSrc = fetchFromGitHub {
     name = "twemoji";
     owner = "jdecked";
     repo = "twemoji";
     rev = "v${version}";
-    hash = "sha256-FLOqXDpSFyClBlG5u3IRL0EKeu1mckCfRizJh++IWxo=";
+    hash = "sha256-wuiMNEwgauPWV0q0SqxZ17wcdPhCF1QPKUFf56rldDo=";
   };
 in
 stdenv.mkDerivation rec {
