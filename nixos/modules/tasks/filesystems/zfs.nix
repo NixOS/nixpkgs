@@ -715,6 +715,7 @@ in
         kernelModules = [ "zfs" ];
         extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
           copy_bin_and_libs ${cfgZfs.package}/sbin/zfs
+          copy_bin_and_libs ${cfgZfs.package}/sbin/mount.zfs
           copy_bin_and_libs ${cfgZfs.package}/sbin/zdb
           copy_bin_and_libs ${cfgZfs.package}/sbin/zpool
           copy_bin_and_libs ${cfgZfs.package}/lib/udev/vdev_id
@@ -723,6 +724,7 @@ in
         extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
           $out/bin/zfs --help >/dev/null 2>&1
           $out/bin/zpool --help >/dev/null 2>&1
+          $out/bin/mount.zfs -h 2>&1 | grep -q "Usage: mount.zfs"
         '';
         postResumeCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
           lib.concatStringsSep "\n" (
@@ -794,6 +796,7 @@ in
           extraBin = {
             zpool = "${cfgZfs.package}/sbin/zpool";
             zfs = "${cfgZfs.package}/sbin/zfs";
+            mount.zfs = "${cfgZfs.package}/sbin/mount.zfs";
             awk = "${pkgs.gawk}/bin/awk";
           };
           storePaths = [
