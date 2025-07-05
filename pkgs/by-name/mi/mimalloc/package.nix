@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mimalloc";
-  version = "3.0.3";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
     rev = "v${version}";
-    sha256 = "sha256-RjFMLInulyynrmyAg6Km/u9HGfcYeerkou0gQwCdhsA=";
+    sha256 = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
   };
 
   doCheck = !stdenv.hostPlatform.isStatic;
