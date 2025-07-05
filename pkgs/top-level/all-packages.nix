@@ -998,6 +998,12 @@ with pkgs;
   #package writers
   writers = callPackage ../build-support/writers { };
 
+  # Useful for creating /usr/bin/env in a build environment to run build scripts with #!/usr/bin/env shebang
+  usrBinEnv = makeSetupHook { name = "create-usr-bin-env"; } (pkgs.writeText "create-usr-bin-env.sh" ''
+    mkdir -m 0755 -p /usr/bin
+    ln -sfn "${pkgs.coreutils}/bin/env" /usr/bin/env
+  '');
+
   # lib functions depending on pkgs
   inherit
     (import ../pkgs-lib {
