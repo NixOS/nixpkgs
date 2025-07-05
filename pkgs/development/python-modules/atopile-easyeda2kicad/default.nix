@@ -1,25 +1,29 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
   pydantic,
   requests,
 }:
 
 buildPythonPackage rec {
-  pname = "easyeda2ato";
-  version = "0.2.7";
+  pname = "atopile-easyeda2kicad";
+  version = "0.9.5";
   pyproject = true;
 
-  # repo version does not match
-  src = fetchPypi {
-    inherit pname version;
-
-    hash = "sha256-bHhBN+h9Vx9Q4wZVKxMzkEEXzV7hKoQz8i+JpkSFsYA=";
+  src = fetchFromGitHub {
+    owner = "atopile";
+    repo = "easyeda2kicad.py";
+    tag = "v${version}";
+    hash = "sha256-TLGLNe/Lk2WpYMzmX2iK3S27/QRqTOdHqO8XIMZSda4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     pydantic
@@ -32,8 +36,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Convert any LCSC components (including EasyEDA) to KiCad library";
-    homepage = "https://github.com/uPesy/easyeda2kicad.py";
-    changelog = "https://github.com/uPesy/easyeda2kicad.py/releases/tag/v${version}";
+    homepage = "https://github.com/atopile/easyeda2kicad.py";
+    changelog = "https://github.com/atopile/easyeda2kicad.py/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "easyeda2kicad";
