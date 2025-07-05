@@ -1439,6 +1439,12 @@
     githubId = 5149377;
     name = "Amine Chikhaoui";
   };
+  amkhlv = {
+    email = "amkhlv@gmail.com";
+    github = "amkhlv";
+    githubId = 4640720;
+    name = "Andrei Mikhailov";
+  };
   amorsillo = {
     email = "andrew.morsillo@gmail.com";
     github = "evelant";
