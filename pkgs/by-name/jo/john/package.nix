@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   openssl,
   nss,
   nspr,
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation {
   pname = "john";
-  version = "rolling-2404";
+  version = "1.9.0-Jumbo-1-unstable-2025-06-25";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "john";
-    rev = "f9fedd238b0b1d69181c1fef033b85c787e96e57";
-    hash = "sha256-zvoN+8Sx6qpVg2JeRLOIH1ehfl3tFTv7r5wQZ44Qsbc=";
+    rev = "5baa3c47dbef1466b106a5894e3096b13a8c22f1";
+    hash = "sha256-4ny4r3hW8jl3hfYWmJnCNTDvzHknmFUQhF0Pn+qddRY=";
   };
 
   patches = lib.optionals withOpenCL [
@@ -130,6 +131,10 @@ stdenv.mkDerivation {
       wrapProgram "$i" --prefix PERL5LIB : "$PERL5LIB:$out/${perlPackages.perl.libPrefix}"
     done
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "[0-9].*";
+  };
 
   meta = with lib; {
     description = "John the Ripper password cracker";
