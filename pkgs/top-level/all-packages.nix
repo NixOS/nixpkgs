@@ -14367,8 +14367,6 @@ with pkgs;
           ;
       };
 
-  buildXenPackage = callPackage ../build-support/xen { };
-
   gxneur = callPackage ../applications/misc/gxneur {
     inherit (gnome2) libglade GConf;
   };
