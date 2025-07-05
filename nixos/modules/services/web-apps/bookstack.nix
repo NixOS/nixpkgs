@@ -17,12 +17,11 @@ let
   artisan = "${cfg.package}/artisan";
 
   env-file-values =
-    lib.attrsets.mapAttrs' (n: v: lib.attrsets.nameValuePair (lib.strings.removeSuffix "_FILE" n) v)
-      (
-        lib.attrsets.filterAttrs (n: v: !builtins.isNull v) (
-          lib.attrsets.filterAttrs (n: v: lib.strings.hasSuffix "_FILE" n) cfg.settings
-        )
-      );
+    with lib.attrsets;
+    with lib.strings;
+    mapAttrs' (n: v: nameValuePair (removeSuffix "_FILE" n) v) (
+      filterAttrs (n: v: !isNull v) (filterAttrs (n: v: hasSuffix "_FILE" n) cfg.settings)
+    );
   env-nonfile-values = lib.attrsets.filterAttrs (n: v: !lib.strings.hasSuffix "_FILE" n) cfg.settings;
 
   bookstack-maintenance = pkgs.writeShellScript "bookstack-maintenance.sh" ''
@@ -136,15 +135,12 @@ in
       "database"
       "user"
     ] "Use services.bookstack.settings.DB_USERNAME instead.")
-    (lib.mkRemovedOptionModule
-      [
-        "services"
-        "bookstack"
-        "database"
-        "createLocally"
-      ]
-      "This option is deprecated. Please create your database manually or use services.mysql.ensureDatabases and services.mysql.ensureUsers."
-    )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "bookstack"
+      "database"
+      "createLocally"
+    ] "Use services.mysql.ensureDatabases and services.mysql.ensureUsers instead.")
     (lib.mkRemovedOptionModule [
       "services"
       "bookstack"
@@ -472,6 +468,7 @@ in
         "${cfg.dataDir}/storage/logs".d = defaultConfig;
         "${cfg.dataDir}/storage/uploads".d = defaultConfig;
         "${cfg.dataDir}/cache".d = defaultConfig;
+        "${cfg.dataDir}/themes".d = defaultConfig;
       };
 
     users = {
