@@ -84,6 +84,7 @@
   tree-sitter-python = lib.importJSON ./tree-sitter-python.json;
   tree-sitter-ql = lib.importJSON ./tree-sitter-ql.json;
   tree-sitter-ql-dbscheme = lib.importJSON ./tree-sitter-ql-dbscheme.json;
+  tree-sitter-qmljs = lib.importJSON ./tree-sitter-qmljs.json;
   tree-sitter-query = lib.importJSON ./tree-sitter-query.json;
   tree-sitter-r = lib.importJSON ./tree-sitter-r.json;
   tree-sitter-regex = lib.importJSON ./tree-sitter-regex.json;
