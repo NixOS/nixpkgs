@@ -1,27 +1,30 @@
 {
   lib,
+  aiofiles,
+  async-property,
   buildPythonPackage,
   deprecation,
   fetchFromGitHub,
+  httpx,
   jwcrypto,
   poetry-core,
-  pythonOlder,
   requests,
   requests-toolbelt,
+  pytestCheckHook,
+  pytest-asyncio,
+  freezegun,
 }:
 
 buildPythonPackage rec {
   pname = "python-keycloak";
-  version = "4.0.0";
+  version = "5.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marcospereirampj";
     repo = "python-keycloak";
     tag = "v${version}";
-    hash = "sha256-ZXS29bND4GsJNhTGiUsLo+4FYd8Tubvg/+PJ33tqovY=";
+    hash = "sha256-nlvwVvfwOJ3kYkzQ3IDbmLEhFcvOwKasGZyu/wh9b94=";
   };
 
   postPatch = ''
@@ -33,22 +36,41 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
+    aiofiles
+    async-property
+    httpx
     deprecation
     jwcrypto
     requests
     requests-toolbelt
   ];
 
-  # Test fixtures require a running keycloak instance
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    freezegun
+  ];
+
+  # conftest.py requires these variables to be set,
+  # even if the respective tests are disabled
+  preCheck = ''
+    export KEYCLOAK_{HOST,PORT,ADMIN{,_PASSWORD}}=
+  '';
+
+  disabledTestPaths = [
+    # these tests require a running keycloak instance
+    "tests/test_keycloak_openid.py"
+    "tests/test_keycloak_admin.py"
+    "tests/test_keycloak_uma.py"
+  ];
 
   pythonImportsCheck = [ "keycloak" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides access to the Keycloak API";
     homepage = "https://github.com/marcospereirampj/python-keycloak";
     changelog = "https://github.com/marcospereirampj/python-keycloak/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
