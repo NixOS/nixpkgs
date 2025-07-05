@@ -699,6 +699,20 @@ with pkgs;
         });
       };
 
+  /* If you want convenient syntax to override the derivation produced by `fetchurl`, for instance
+     to override just the hash of a `src` whose `url` is computed, you can replace the `fetchurl`
+     dependency of the outer package derivation with this one.
+
+     Example:
+     tk869 = (pkgs.tk-8_6.override {
+       fetchurl = fetchurlOverridableOutput;
+       tcl = tcl869; # Something overriding `tcl-8_6 to an older version
+     }).overrideAttrs (self: rec {
+       src = self.src.override { sha256 = "1d7bfkxpacy33w5nahf73lkwxqpff44w1jplg7i2gmwgiaawvjwg"; };
+     });
+  */
+  fetchurlOverridableOutput = args: (makeOverridable fetchurl args);
+
   fetchRepoProject = callPackage ../build-support/fetchrepoproject { };
 
   fetchipfs = callPackage ../build-support/fetchipfs { };
