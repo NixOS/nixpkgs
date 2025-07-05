@@ -18,7 +18,7 @@ appimageTools.wrapType2 {
   inherit pname version src;
   extraInstallCommands = ''
     install -Dm444 ${appimageContents}/sunsama.desktop $out/share/applications/sunsama.desktop
-    install -Dm444 ${appimageContents}/usr/share/icons/hicolor/512x512/apps/sunsama.png $out/share/pixmaps/sunsama.png
+    install -Dm444 {${appimageContents}/usr,$out}/share/icons/hicolor/512x512/apps/sunsama.png
     substituteInPlace $out/share/applications/sunsama.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=sunsama'
   '';
