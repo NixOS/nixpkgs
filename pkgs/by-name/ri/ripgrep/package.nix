@@ -12,8 +12,11 @@
 }:
 
 let
-  canRunRg = stdenv.hostPlatform.emulatorAvailable buildPackages;
-  rg = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg${stdenv.hostPlatform.extensions.executable}";
+  exe =
+    if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+      "$out/bin/rg${stdenv.hostPlatform.extensions.executable}"
+    else
+      lib.getExe buildPackages.ripgrep;
 in
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
@@ -37,14 +40,14 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 
-  postFixup = lib.optionalString canRunRg ''
-    ${rg} --generate man > rg.1
+  postFixup = ''
+    ${exe} --generate man > rg.1
     installManPage rg.1
 
     installShellCompletion --cmd rg \
-      --bash <(${rg} --generate complete-bash) \
-      --fish <(${rg} --generate complete-fish) \
-      --zsh <(${rg} --generate complete-zsh)
+      --bash <(${exe} --generate complete-bash) \
+      --fish <(${exe} --generate complete-fish) \
+      --zsh <(${exe} --generate complete-zsh)
   '';
 
   doInstallCheck = true;
@@ -52,11 +55,11 @@ rustPlatform.buildRustPackage rec {
     ''
       file="$(mktemp)"
       echo "abc\nbcd\ncde" > "$file"
-      ${rg} -N 'bcd' "$file"
-      ${rg} -N 'cd' "$file"
+      ${exe} -N 'bcd' "$file"
+      ${exe} -N 'cd' "$file"
     ''
     + lib.optionalString withPCRE2 ''
-      echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
+      echo '(a(aa)aa)' | ${exe} -P '\((a*|(?R))*\)'
     '';
 
   meta = {
