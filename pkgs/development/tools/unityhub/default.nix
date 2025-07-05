@@ -101,12 +101,6 @@ stdenv.mkDerivation rec {
         clang
         git # for git-based packages in unity package manager
 
-        # Unity Editor 2019 specific dependencies
-        xorg.libXi
-        xorg.libXrender
-        gnome2.GConf
-        libcap
-
         # Unity Editor 6000 specific dependencies
         harfbuzz
         vulkan-loader
