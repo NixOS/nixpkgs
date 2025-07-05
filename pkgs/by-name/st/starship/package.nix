@@ -28,22 +28,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall =
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/starship"
+        else
+          lib.getExe buildPackages.starship;
+    in
     ''
       presetdir=$out/share/starship/presets/
       mkdir -p $presetdir
       cp docs/public/presets/toml/*.toml $presetdir
-    ''
-    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-      let
-        emulator = stdenv.hostPlatform.emulator buildPackages;
-      in
-      ''
-        installShellCompletion --cmd starship \
-          --bash <(${emulator} $out/bin/starship completions bash) \
-          --fish <(${emulator} $out/bin/starship completions fish) \
-          --zsh <(${emulator} $out/bin/starship completions zsh)
-      ''
-    );
+      installShellCompletion --cmd starship \
+        --bash <(${exe} completions bash) \
+        --fish <(${exe} completions fish) \
+        --zsh <(${exe} completions zsh)
+    '';
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-cxDWaPlNK7POJ3GhA21NlJ6q62bqHdA/4sru5pLkvOA=";

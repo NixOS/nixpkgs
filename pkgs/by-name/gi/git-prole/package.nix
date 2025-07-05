@@ -9,8 +9,6 @@
   installShellFiles,
 }:
 let
-  emulatorAvailable = stdenv.hostPlatform.emulatorAvailable buildPackages;
-  emulator = stdenv.hostPlatform.emulator buildPackages;
   version = "0.5.3";
 in
 rustPlatform.buildRustPackage {
@@ -37,18 +35,26 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  postInstall = lib.optionalString emulatorAvailable ''
-    manpages=$(mktemp -d)
-    ${emulator} $out/bin/git-prole manpages "$manpages"
-    for manpage in "$manpages"/*; do
-      installManPage "$manpage"
-    done
+  postInstall =
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/git-prole"
+        else
+          lib.getExe buildPackages.git-prole;
+    in
+    ''
+      manpages=$(mktemp -d)
+      ${exe} manpages "$manpages"
+      for manpage in "$manpages"/*; do
+        installManPage "$manpage"
+      done
 
-    installShellCompletion --cmd git-prole \
-      --bash <(${emulator} $out/bin/git-prole completions bash) \
-      --fish <(${emulator} $out/bin/git-prole completions fish) \
-      --zsh <(${emulator} $out/bin/git-prole completions zsh)
-  '';
+      installShellCompletion --cmd git-prole \
+        --bash <(${exe} completions bash) \
+        --fish <(${exe} completions fish) \
+        --zsh <(${exe} completions zsh)
+    '';
 
   meta = {
     homepage = "https://github.com/9999years/git-prole";

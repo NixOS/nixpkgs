@@ -28,17 +28,20 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/gh-classroom"
+        else
+          lib.getExe buildPackages.gh-classroom;
     in
     ''
       installShellCompletion --cmd gh-classroom \
-        --bash <(${emulator} $out/bin/gh-classroom --bash-completion) \
-        --fish <(${emulator} $out/bin/gh-classroom --fish-completion) \
-        --zsh <(${emulator} $out/bin/gh-classroom --zsh-completion)
-    ''
-  );
+        --bash <(${exe} --bash-completion) \
+        --fish <(${exe} --fish-completion) \
+        --zsh <(${exe} --zsh-completion)
+    '';
 
   passthru.updateScript = nix-update-script { };
 

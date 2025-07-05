@@ -44,17 +44,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # As the version is updated, the number of failed tests continues to grow.
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/pixi"
+        else
+          lib.getExe buildPackages.pixi;
     in
     ''
       installShellCompletion --cmd pixi \
-        --bash <(${emulator} $out/bin/pixi completion --shell bash) \
-        --fish <(${emulator} $out/bin/pixi completion --shell fish) \
-        --zsh <(${emulator} $out/bin/pixi completion --shell zsh)
-    ''
-  );
+        --bash <(${exe} completion --shell bash) \
+        --fish <(${exe} completion --shell fish) \
+        --zsh <(${exe} completion --shell zsh)
+    '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

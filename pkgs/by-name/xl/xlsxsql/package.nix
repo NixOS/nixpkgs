@@ -30,17 +30,20 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/xlsxsql"
+        else
+          lib.getExe buildPackages.xlsxsql;
     in
     ''
       installShellCompletion --cmd xlsxsql \
-        --bash <(${emulator} $out/bin/xlsxsql completion bash) \
-        --fish <(${emulator} $out/bin/xlsxsql completion fish) \
-        --zsh <(${emulator} $out/bin/xlsxsql completion zsh)
-    ''
-  );
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
+    '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

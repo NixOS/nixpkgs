@@ -36,17 +36,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rust-jemalloc-sys
   ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/ruff"
+        else
+          lib.getExe buildPackages.ruff;
     in
     ''
       installShellCompletion --cmd ruff \
-        --bash <(${emulator} $out/bin/ruff generate-shell-completion bash) \
-        --fish <(${emulator} $out/bin/ruff generate-shell-completion fish) \
-        --zsh <(${emulator} $out/bin/ruff generate-shell-completion zsh)
-    ''
-  );
+        --bash <(${exe} generate-shell-completion bash) \
+        --fish <(${exe} generate-shell-completion fish) \
+        --zsh <(${exe} generate-shell-completion zsh)
+    '';
 
   # Run cargo tests
   checkType = "debug";

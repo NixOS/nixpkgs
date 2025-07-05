@@ -47,17 +47,21 @@ buildGoModule rec {
 
   postInstall =
     let
-      podman-bootc = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/podman-bootc";
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/podman-bootc"
+        else
+          lib.getExe buildPackages.podman-bootc;
     in
-    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    ''
       # podman-bootc always tries to touch cache and run dirs, no matter the command
       export HOME=$TMPDIR
       export XDG_RUNTIME_DIR=$TMPDIR
 
       installShellCompletion --cmd podman-bootc \
-        --bash <(${podman-bootc} completion bash) \
-        --fish <(${podman-bootc} completion fish) \
-        --zsh <(${podman-bootc} completion zsh)
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
     '';
 
   meta = {
