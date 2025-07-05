@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "okms-cli";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "ovh";
     repo = "okms-cli";
     tag = "v${version}";
-    hash = "sha256-y7Oy2vCxq5nXOUZxawz5737/io1+e/jNjuv7bH97yKA=";
+    hash = "sha256-inDE/Vexn7efzxfa/ali+mhyioBWjDPRlDznYyChTtI=";
   };
 
-  vendorHash = "sha256-pJGhaNsJ69SDI+sBN4ELxckkX6v6DNC4U49bCff6Fsg=";
+  vendorHash = "sha256-l8Z5cAfWHWz8mBVioltuNg+jaNwySU/Y4z3z2X86h/s=";
 
   ldflags = [
     "-s"

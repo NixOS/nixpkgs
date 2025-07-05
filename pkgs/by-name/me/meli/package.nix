@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchzip,
-  fetchpatch,
   rustPlatform,
 
   # native build inputs
@@ -12,6 +11,7 @@
   mandoc,
   rustfmt,
   file,
+  writableTmpDirAsHomeHook,
 
   # build inputs
   openssl,
@@ -25,7 +25,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "0.8.10";
+  version = "0.8.12";
 
   src = fetchzip {
     urls = [
@@ -33,10 +33,11 @@ rustPlatform.buildRustPackage rec {
       "https://codeberg.org/meli/meli/archive/v${version}.tar.gz"
       "https://github.com/meli/meli/archive/refs/tags/v${version}.tar.gz"
     ];
-    hash = "sha256-MGnCX/6pnKNxDEqCcVWTl/fteMypk+N2PrJYRMP0sL0=";
+    hash = "sha256-Dp0WI1Cl+m7oxZ/4zEi0TtOwqRX681jZht9bNMFnmsU=";
   };
 
-  cargoHash = "sha256-w0fxh3c54Hcczc9NW8heewrRFx7UZnQqAHiQWZ43wKw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-DJtk8xLppXdl9sSt6GcaXwZ5MEIY/s/z/bdcdr8YdLw=";
 
   # Needed to get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR = 1;
@@ -58,6 +59,7 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     file
     gnum4
+    writableTmpDirAsHomeHook
   ];
 
   postInstall = ''
@@ -68,16 +70,11 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ gnum4 ]}
   '';
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   checkFlags = [
     "--skip=test_cli_subcommands" # panicking due to sandbox
   ];
 
   meta = with lib; {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Terminal e-mail client and e-mail client library";
     mainProgram = "meli";
     homepage = "https://meli.delivery";

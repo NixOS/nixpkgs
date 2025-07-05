@@ -6,27 +6,27 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "velero";
-  version = "1.15.1";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "velero";
-    rev = "v${version}";
-    hash = "sha256-ypNpIEj6hw77cjXkYJ9zsKY0bFP7Nwa2skd1wdONsJY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KfVMWoBScpHINmT5PlnPY+I5Ec1NRgEXKMtL0M7WyhE=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=v${version}"
+    "-X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=v${finalAttrs.version}"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.ImageRegistry=velero"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=none"
   ];
 
-  vendorHash = "sha256-Q3h39o78V5Lqzols3RmSDL9d5WevMnTt4bv4qBscnGs=";
+  vendorHash = "sha256-Wzxtg7UB5mjrhZKR1Lb0UH4Mhw41UTWAg1PzuyyOrCo=";
 
   excludedPackages = [
     "issue-template-gen"
@@ -38,7 +38,7 @@ buildGoModule rec {
   doCheck = false; # Tests expect a running cluster see https://github.com/vmware-tanzu/velero/tree/main/test/e2e
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/velero version --client-only | grep ${version} > /dev/null
+    $out/bin/velero version --client-only | grep ${finalAttrs.version} > /dev/null
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -48,14 +48,14 @@ buildGoModule rec {
     installShellCompletion velero.{bash,zsh}
   '';
 
-  meta = with lib; {
-    description = "A utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
+  meta = {
+    description = "Utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
     homepage = "https://velero.io/";
-    changelog = "https://github.com/vmware-tanzu/velero/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [
-      maintainers.mbode
-      maintainers.bryanasdev000
+    changelog = "https://github.com/vmware-tanzu/velero/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      mbode
+      bryanasdev000
     ];
   };
-}
+})

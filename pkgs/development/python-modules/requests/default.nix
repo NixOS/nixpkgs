@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  brotlicffi,
   buildPythonPackage,
   certifi,
   chardet,
@@ -34,10 +33,12 @@ buildPythonPackage rec {
     # https://github.com/psf/requests/issues/6730
     # https://github.com/psf/requests/pull/6731
     ./ca-load-regression.patch
+
+    # https://seclists.org/fulldisclosure/2025/Jun/2
+    ./CVE-2024-47081.patch
   ];
 
   dependencies = [
-    brotlicffi
     certifi
     charset-normalizer
     idna

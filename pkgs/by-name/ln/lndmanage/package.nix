@@ -7,10 +7,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "lndmanage";
   version = "0.16.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bitromortac";
-    repo = pname;
+    repo = "lndmanage";
     tag = "v${version}";
     hash = "sha256-VUeGnk/DtNAyEYFESV6kXIRbKqUv4IcMnU3fo0NB4uQ=";
   };

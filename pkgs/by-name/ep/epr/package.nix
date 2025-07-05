@@ -7,10 +7,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "epr";
   version = "2.4.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wustho";
-    repo = pname;
+    repo = "epr";
     rev = "v${version}";
     sha256 = "sha256-1qsqYlqGlCRhl7HINrcTDt5bGlb7g5PmaERylT+UvEg=";
   };

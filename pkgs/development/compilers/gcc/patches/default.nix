@@ -27,11 +27,13 @@
 }:
 
 let
+  atLeast15 = lib.versionAtLeast version "15";
   atLeast14 = lib.versionAtLeast version "14";
   atLeast13 = lib.versionAtLeast version "13";
   atLeast12 = lib.versionAtLeast version "12";
   atLeast11 = lib.versionAtLeast version "11";
   atLeast10 = lib.versionAtLeast version "10";
+  is15 = majorVersion == "15";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
@@ -45,8 +47,8 @@ let
   canApplyIainsDarwinPatches =
     stdenv.hostPlatform.isDarwin
     && stdenv.hostPlatform.isAarch64
-    && buildPlatform == hostPlatform
-    && hostPlatform == targetPlatform;
+    && (lib.systems.equals buildPlatform hostPlatform)
+    && (lib.systems.equals hostPlatform targetPlatform);
 
   inherit (lib) optionals optional;
 in
@@ -62,11 +64,15 @@ in
 
 [ ]
 ++ optional (!atLeast12) ./fix-bug-80431.patch
-++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
+++ optional (!lib.systems.equals targetPlatform hostPlatform) ./libstdc++-target.patch
 ++ optionals (noSysDirs) (
   [ (if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch) ]
   ++ (
     {
+      "15" = [
+        ./13/no-sys-dirs-riscv.patch
+        ./13/mangle-NIX_STORE-in-__FILE__.patch
+      ];
       "14" = [
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
@@ -141,8 +147,11 @@ in
 
 # Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
 ++ optional (
-  atLeast14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+  is14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
 ) ../patches/14/libgcc-darwin-detection.patch
+++ optional (
+  atLeast15 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+) ../patches/15/libgcc-darwin-detection.patch
 
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
 ++ optional (
@@ -157,6 +166,7 @@ in
 # Use absolute path in GNAT dylib install names on Darwin
 ++ optionals (stdenv.hostPlatform.isDarwin && langAda) (
   {
+    "15" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
     "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
     "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
     "12" = [ ./gnat-darwin-dylib-install-name.patch ];
@@ -166,22 +176,22 @@ in
 
 ++ optionals canApplyIainsDarwinPatches (
   {
+    "15" = [
+      (fetchpatch {
+        name = "gcc-15-darwin-aarch64-support.patch";
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a25079204c1cb3d78ba9dd7dd22b8aecce7ce264/gcc/gcc-15.1.0.diff";
+        sha256 = "sha256-MJxSGv6LEP1sIM8cDqbmfUV7byV0bYgADeIBY/Teyu8=";
+      })
+    ];
     "14" = [
       (fetchpatch {
+        # There are no upstream release tags nor a static branch for 14.3.0 in https://github.com/iains/gcc-14-branch.
+        # aa4cd614456de65ee3417acb83c6cff0640144e9 is the merge base of https://github.com/iains/gcc-14-branch/tree/gcc-14-3-darwin-pre-0 and https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-14.3.0
+        # 3e1d48d240f4aa5223c701b5c231c66f66ab1126 is the newest commit of https://github.com/iains/gcc-14-branch/tree/gcc-14-3-darwin-pre-0
         name = "gcc-14-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/41fdb9d5ec21fc8165cd4bee89bd23d0c90572ee/gcc/gcc-14.2.0-r2.diff";
-        # The patch is based on 14.2.0, but we use a GCC snapshot. We
-        # exclude the files with conflicts and apply our own merged patch
-        # to avoid vendoring the entire huge patch in‐tree.
-        excludes = [
-          "gcc/config/aarch64/aarch64-tune.md"
-          "gcc/config/darwin.h"
-          "libgcc/config.host"
-          "libgcc/config/t-darwin-min-11"
-        ];
-        hash = "sha256-E4zEKm4tMhovOJKc1/FXZCLQvA+Jt5SC0O2C6SEvZjI=";
+        url = "https://github.com/iains/gcc-14-branch/compare/aa4cd614456de65ee3417acb83c6cff0640144e9..3e1d48d240f4aa5223c701b5c231c66f66ab1126.diff";
+        hash = "sha256-BSTSYnkBJBEm++mGerVVyaCUC4dUyXq0N1tqbk25bO4=";
       })
-      ./14/fixup-gcc-14-darwin-aarch64-support.patch
     ];
     "13" = [
       (fetchpatch {
@@ -255,7 +265,12 @@ in
 
 ++ optional (langAda && (is9 || is10)) ./gnat-cflags.patch
 ++
-  optional (is10 && buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform)
+  optional
+    (
+      is10
+      && buildPlatform.system == "aarch64-darwin"
+      && (!lib.systems.equals targetPlatform buildPlatform)
+    )
     (fetchpatch {
       url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
       sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";

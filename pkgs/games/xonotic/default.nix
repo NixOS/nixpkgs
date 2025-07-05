@@ -17,8 +17,8 @@
   freetype,
   libpng,
   libtheora,
-  # glx
   libX11,
+  # glx
   libGLU,
   libGL,
   libXpm,
@@ -64,7 +64,6 @@ let
     homepage = "https://www.xonotic.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      astsmtl
       zalakain
     ];
     platforms = lib.platforms.linux;
@@ -100,9 +99,9 @@ let
         libvorbis
         curl
         gmp
+        libX11
       ]
       ++ lib.optionals withGLX [
-        libX11
         libGLU
         libGL
         libXpm

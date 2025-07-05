@@ -141,7 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wz2100.net";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      astsmtl
       fgaz
     ];
     platforms = platforms.all;

@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  azure-identity,
+  azure-storage-blob,
   billiard,
   buildPythonPackage,
   click-didyoumean,
@@ -8,6 +10,8 @@
   click-repl,
   click,
   fetchPypi,
+  gevent,
+  google-cloud-firestore,
   google-cloud-storage,
   kombu,
   moto,
@@ -15,6 +19,7 @@
   nixosTests,
   pymongo,
   redis,
+  pydantic,
   pytest-celery,
   pytest-click,
   pytest-subtests,
@@ -25,20 +30,19 @@
   pythonOlder,
   pyyaml,
   setuptools,
-  tzdata,
   vine,
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.4.0";
+  version = "5.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UEoZFA6NMCnVrK2IMwxUHUw/ZMeJ2F+UdWdi2Lyn5wY=";
+    hash = "sha256-bJcq55aMK1KBIn8Bw6P5hAN9IcUSnQe/NVDMKvxrEKU=";
   };
 
   build-system = [ setuptools ];
@@ -51,16 +55,24 @@ buildPythonPackage rec {
     click-repl
     kombu
     python-dateutil
-    tzdata
     vine
   ];
 
   optional-dependencies = {
-    gcs = [ google-cloud-storage ];
+    azureblockblob = [
+      azure-identity
+      azure-storage-blob
+    ];
+    gevent = [ gevent ];
+    gcs = [
+      google-cloud-firestore
+      google-cloud-storage
+    ];
     mongodb = [ pymongo ];
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
     redis = [ redis ];
+    pydantic = [ pydantic ];
   };
 
   nativeCheckInputs = [
@@ -105,10 +117,6 @@ buildPythonPackage rec {
     ];
 
   pythonImportsCheck = [ "celery" ];
-
-  passthru.tests = {
-    inherit (nixosTests) sourcehut;
-  };
 
   meta = with lib; {
     description = "Distributed task queue";

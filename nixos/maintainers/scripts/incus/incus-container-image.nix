@@ -16,8 +16,7 @@
   # copy the config for nixos-rebuild
   system.activationScripts.config =
     let
-      config = pkgs.substituteAll {
-        src = ./incus-container-image-inner.nix;
+      config = pkgs.replaceVars ./incus-container-image-inner.nix {
         stateVersion = lib.trivial.release;
       };
     in

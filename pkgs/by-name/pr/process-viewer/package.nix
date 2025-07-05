@@ -4,8 +4,6 @@
   fetchCrate,
   pkg-config,
   gtk4,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,15 +15,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-mEmtLCtHlrCurjKKJ3vEtEkLBik4LwuUED5UeQ1QLws=";
   };
 
-  cargoHash = "sha256-lgVByl+mpCDbhwlC1Eiw9ZkHIDYJsOR06Ds790pXOMc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vmNqay/tYGASSez+VqyCQVMW+JGqfBvjwSKx0AG/LeY=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ gtk4 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Foundation
-    ];
+  buildInputs = [ gtk4 ];
 
   postInstall = ''
     install -Dm644 assets/fr.guillaume_gomez.ProcessViewer.desktop -t $out/share/applications

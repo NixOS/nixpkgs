@@ -7,6 +7,13 @@
 let
   cfg = config.services.hound;
   settingsFormat = pkgs.formats.json { };
+  houndConfigFile = pkgs.writeTextFile {
+    name = "hound-config.json";
+    text = builtins.toJSON cfg.settings;
+    checkPhase = ''
+      ${cfg.package}/bin/houndd -check-conf -conf $out
+    '';
+  };
 in
 {
   imports = [
@@ -96,13 +103,7 @@ in
       };
     };
 
-    environment.etc."hound/config.json".source = pkgs.writeTextFile {
-      name = "hound-config";
-      text = builtins.toJSON cfg.settings;
-      checkPhase = ''
-        ${cfg.package}/bin/houndd -check-conf -conf $out
-      '';
-    };
+    environment.etc."hound/config.json".source = houndConfigFile;
 
     services.hound.settings = {
       dbpath = "${config.services.hound.home}/data";
@@ -112,11 +113,12 @@ in
       description = "Hound Code Search";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      restartTriggers = [ houndConfigFile ];
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
+        ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo ${config.security.pki.caBundle}";
         ExecStart = "${cfg.package}/bin/houndd -addr ${cfg.listen} -conf /etc/hound/config.json";
       };
     };

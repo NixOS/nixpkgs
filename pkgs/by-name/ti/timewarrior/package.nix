@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timewarrior";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "timewarrior";
     rev = "v${version}";
-    hash = "sha256-sc4AfdXLuA9evoGU6Z97+Hq7zj9nx093+nPALRkhziQ=";
+    hash = "sha256-6WZ5k9cxWe+eS9me700ITq0rKEiIuDhTtmuzhOnUM4k=";
     fetchSubmodules = true;
   };
 
@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     installShellCompletion --cmd timew \
-      --bash completion/timew-completion.bash
+      --bash completion/timew-completion.bash \
+      --fish completion/timew.fish \
+      --zsh completion/timew.zsh
   '';
 
   meta = with lib; {

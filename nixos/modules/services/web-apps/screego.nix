@@ -50,7 +50,7 @@ in
         Screego settings passed as Nix attribute set, they will be merged with
         the defaults. Settings will be passed as environment variables.
 
-        See https://screego.net/#/config for possible values
+        See <https://screego.net/#/config> for possible values
       '';
       default = defaultSettings;
       example = {

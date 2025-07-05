@@ -7,6 +7,7 @@
   pkg-config,
   gtk3,
   gtklock,
+  systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ gtk3 ];
+
+  postPatch =
+    let
+      systemctl = lib.getExe' systemd "systemctl";
+    in
+    ''
+      substituteInPlace source.c \
+        --replace-fail '"systemctl reboot"' '"${systemctl} reboot"' \
+        --replace-fail '"systemctl -i poweroff"' '"${systemctl} -i poweroff"' \
+        --replace-fail '"systemctl suspend"' '"${systemctl} suspend"'
+    '';
 
   passthru.tests.testModule = gtklock.testModule finalAttrs.finalPackage;
 

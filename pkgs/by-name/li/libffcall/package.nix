@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libffcall";
@@ -11,7 +15,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  outputs = [ "dev" "out" "doc" "man" ];
+  outputs = [
+    "dev"
+    "out"
+    "doc"
+    "man"
+  ];
 
   postInstall = ''
     mkdir -p $doc/share/doc/libffcall

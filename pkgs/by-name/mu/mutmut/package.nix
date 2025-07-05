@@ -7,9 +7,10 @@
 python3Packages.buildPythonApplication rec {
   pname = "mutmut";
   version = "3.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "mutmut";
     owner = "boxed";
     tag = version;
     hash = "sha256-+e2FmfpGtK401IW8LNqeHk0v8Hh5rF3LbZJkSOJ3yPY=";
@@ -31,13 +32,13 @@ python3Packages.buildPythonApplication rec {
     textual
   ];
 
-  meta = with lib; {
+  meta = {
     description = "mutation testing system for Python, with a strong focus on ease of use";
     mainProgram = "mutmut";
     homepage = "https://github.com/boxed/mutmut";
     changelog = "https://github.com/boxed/mutmut/blob/${version}/HISTORY.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       l0b0
       synthetica
     ];

@@ -3,17 +3,19 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
+  nixosTests,
+  nix-update-script,
 }:
 
 buildGoModule {
   pname = "echoip";
-  version = "unstable-2021-08-03";
+  version = "0-unstable-2023-05-21";
 
   src = fetchFromGitHub {
     owner = "mpolden";
     repo = "echoip";
-    rev = "ffa6674637a5bf906d78ae6675f9a4680a78ab7b";
-    sha256 = "sha256-yN7PIwoIi2SPwwFWnHDoXnwvKohkPPf4kVsNxHLpqCE=";
+    rev = "d84665c26cf7df612061e9c35abe325ba9d86b8d";
+    hash = "sha256-7qc1NZu0hC1np/EKf5fU5Cnd7ikC1+tIrYOXhxK/++Y=";
   };
 
   vendorHash = "sha256-lXYpkeGpBK+WGHqyLxJz7kS3t7a55q55QQLTqtxzroc=";
@@ -26,15 +28,19 @@ buildGoModule {
       --add-flags "-t $out/share/echoip/html"
   '';
 
-  doCheck = false;
+  passthru = {
+    tests = { inherit (nixosTests) echoip; };
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "IP address lookup service";
     homepage = "https://github.com/mpolden/echoip";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       rvolosatovs
       SuperSandro2000
+      defelo
     ];
     mainProgram = "echoip";
   };

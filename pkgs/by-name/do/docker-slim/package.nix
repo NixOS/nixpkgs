@@ -18,6 +18,8 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  env.CGO_ENABLED = 0;
+
   subPackages = [
     "cmd/slim"
     "cmd/slim-sensor"
@@ -42,12 +44,12 @@ buildGoModule rec {
     wrapProgram "$out/bin/slim" --add-flags '--state-path "$(pwd)"'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minify and secure Docker containers";
     homepage = "https://slimtoolkit.org/";
     changelog = "https://github.com/slimtoolkit/slim/raw/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       mbrgm
     ];

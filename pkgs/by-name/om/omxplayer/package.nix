@@ -73,7 +73,7 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "omxplayer";
   version = "unstable-2013-03-28";
 

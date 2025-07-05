@@ -23,12 +23,12 @@
 let
   self = buildPythonPackage rec {
     pname = "urllib3";
-    version = "2.2.3";
+    version = "2.4.0";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-59gUqB2tgebK8uyf3tsoTsyccwdrYmVFR8xkzNyuJuk=";
+      hash = "sha256-QUvGU1t4f+vXVngEzAFf7jnaq4rYYmjxMQqSUGl95GY=";
     };
 
     build-system = [

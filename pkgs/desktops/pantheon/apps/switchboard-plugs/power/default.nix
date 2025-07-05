@@ -9,6 +9,7 @@
   vala,
   libadwaita,
   libgee,
+  gettext,
   gnome-settings-daemon,
   granite7,
   gtk4,
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -59,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/switchboard-plug-power";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

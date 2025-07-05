@@ -7,10 +7,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "sftpman";
   version = "1.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "spantaleev";
-    repo = pname;
+    repo = "sftpman";
     rev = version;
     hash = "sha256-YxqN4+u0nYUWehbyRhjddIo2sythH3E0fiPSyrUlWhM=";
   };

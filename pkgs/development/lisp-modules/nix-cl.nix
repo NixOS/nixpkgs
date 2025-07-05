@@ -59,7 +59,7 @@ let
     ;
 
   inherit (pkgs)
-    substituteAll
+    replaceVars
     ;
 
   # Stolen from python-packages.nix
@@ -209,8 +209,7 @@ let
               ;
           };
 
-          buildScript = substituteAll {
-            src = ./builder.lisp;
+          buildScript = replaceVars ./builder.lisp {
             asdf = "${asdfFasl}/asdf.${faslExt}";
           };
 
@@ -287,7 +286,8 @@ let
               inherit javaLibs;
               propagatedBuildInputs = args.propagatedBuildInputs or [ ] ++ lispLibs ++ javaLibs ++ nativeLibs;
               meta = (args.meta or { }) // {
-                maintainers = args.meta.maintainers or lib.teams.lisp.members;
+                maintainers = args.meta.maintainers or [ ];
+                teams = args.meta.teams or [ lib.teams.lisp ];
               };
             }
           )

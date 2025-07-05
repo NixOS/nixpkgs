@@ -14,6 +14,7 @@
   runtimeShell,
   coreutils,
   kmod,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     gettext
+    udevCheckHook
   ];
   buildInputs = [
     dbus
@@ -67,6 +69,8 @@ stdenv.mkDerivation rec {
     #     ryos_custom_lights.c.o:(.bss+0x0): first defined here
     "-fcommon"
   ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Tools to configure ROCCAT devices";

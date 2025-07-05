@@ -18,13 +18,13 @@ buildPecl {
 
   postPhpize = ''
     substituteInPlace configure \
-      --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${rdkafka}'
+      --replace-fail 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${lib.getInclude rdkafka}'
   '';
 
   meta = with lib; {
     description = "Kafka client based on librdkafka";
     license = licenses.mit;
     homepage = "https://github.com/arnaud-lb/php-rdkafka";
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
   };
 }

@@ -9,11 +9,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "mathgl";
-  version = "8.0.2";
+  version = "8.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/mathgl/mathgl-${version}.tar.gz";
-    sha256 = "sha256-cWYJlWhKawooI/Z49sQ4q6ukdKEVJGzfX5sLRgq/ysE=";
+    sha256 = "sha256-m7qe5qD4bRuPPzugN008t3b3ctu28aAWhMpsC9ViBNY=";
   };
 
   nativeBuildInputs = [
@@ -35,5 +35,7 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
     maintainers = [ maintainers.GabrielDougherty ];
+    # build tool make_bin is built for host
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }

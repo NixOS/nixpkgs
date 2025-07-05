@@ -25,7 +25,6 @@
   enableDbus ? false,
   libintl,
   libiconv,
-  Foundation,
   bash,
   python3,
   argp-standalone,
@@ -33,7 +32,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zbar";
-  version = "0.23.92";
+  version = "0.23.93";
 
   outputs = [
     "out"
@@ -47,19 +46,20 @@ stdenv.mkDerivation rec {
     owner = "mchehab";
     repo = "zbar";
     rev = version;
-    sha256 = "sha256-VhVrngAX7pXZp+szqv95R6RGAJojp3svdbaRKigGb0w=";
+    sha256 = "sha256-6gOqMsmlYy6TK+iYPIBsCPAk8tYDliZYMYeTOidl4XQ=";
   };
 
   patches = [
+    # Fix build, remove these two patches on a release beyond 0.23.93.
     (fetchpatch {
-      name = "CVE-2023-40889.patch";
-      url = "https://salsa.debian.org/debian/zbar/-/raw/debian/0.23.92-9/debian/patches/0003-CVE-2023-40889-qrdec.c-Fix-array-out-of-bounds-acces.patch";
-      hash = "sha256-z0IADJwUt9PBoox5xJJN//5vrcRbIrWB9H7wtxNVUZU=";
+      name = "variable-pkg-config-path.patch";
+      url = "https://github.com/mchehab/zbar/commit/368571ffa1a0f6cc41f708dd0d27f9b6e9409df8.patch";
+      hash = "sha256-4VEuGAyR7rcIijPLlh4pzL82ESm99Wb35PV/FbY9H6Y=";
     })
     (fetchpatch {
-      name = "CVE-2023-40890.patch";
-      url = "https://salsa.debian.org/debian/zbar/-/raw/debian/0.23.92-9/debian/patches/0004-Add-bounds-check-for-CVE-2023-40890.patch";
-      hash = "sha256-YgiptwXpRpz0qIcXBpARfIzSB8KYmksZR58o5yFPahs=";
+      name = "qt5-detection-fix.patch";
+      url = "https://github.com/mchehab/zbar/commit/a549566ea11eb03622bd4458a1728ffe3f589163.patch";
+      hash = "sha256-NY3bAElwNvGP9IR6JxUf62vbjx3hONrqu9pMSqaZcLY=";
     })
   ];
 
@@ -83,7 +83,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Foundation
     ]
     ++ lib.optionals enableDbus [
       dbus

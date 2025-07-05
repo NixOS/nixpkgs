@@ -24,14 +24,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.13.0";
+  version = "1.13.2";
 
   src = fetchzip {
     url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
-    hash = "sha256-m5Ql4QfPnlJXfDNEw0O5kXnkFH7Z5u0OSbmB1chgPDY=";
+    hash = "sha256-ebLbdIF+BybK7ssNtZacGWmAEwdNZh8b94QYgvcwzmM=";
   };
 
-  cargoHash = "sha256-/6P0LAdYFByryihRcSLn3s3TMzZJjkSMhnZmevP85Ts=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xDb4shDHCbd0yuTSAt80i1aqyuhpkfd/fYF98CfXdcM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -72,12 +73,12 @@ rustPlatform.buildRustPackage rec {
         --replace pass ${pass}/bin/pass
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial command line client for Bitwarden";
     homepage = "https://crates.io/crates/rbw";
     changelog = "https://git.tozt.net/rbw/plain/CHANGELOG.md?id=${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ albakham ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ albakham ];
     mainProgram = "rbw";
   };
 }

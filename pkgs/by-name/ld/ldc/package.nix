@@ -2,6 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
+  callPackage,
+  makeWrapper,
+  removeReferencesTo,
+  runCommand,
+  writeText,
+  targetPackages,
   cmake,
   ninja,
   llvm_18,
@@ -10,12 +17,6 @@
   lit,
   gdb,
   unzip,
-  darwin,
-  callPackage,
-  makeWrapper,
-  runCommand,
-  writeText,
-  targetPackages,
 
   ldcBootstrap ? callPackage ./bootstrap.nix { },
 }:
@@ -31,13 +32,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldc";
-  version = "1.39.0";
+  version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "ldc-developers";
     repo = "ldc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZiG0ATsY6Asu2nus3Y404fvqIwtKYoHl1JRUDU5A6mo=";
+    hash = "sha256-6LcpY3LSFK4KgEiGrFp/LONu5Vr+/+vI04wEEpF3s+s=";
     fetchSubmodules = true;
   };
 
@@ -75,9 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper
       ninja
       unzip
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
@@ -153,6 +151,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${targetPackages.stdenv.cc}/bin \
       --set-default CC ${targetPackages.stdenv.cc}/bin/cc
   '';
+
+  preFixup = ''
+    find $out/bin -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${ldcBootstrap} '{}' +
+  '';
+
+  disallowedReferences = [ ldcBootstrap ];
 
   meta = with lib; {
     description = "LLVM-based D compiler";

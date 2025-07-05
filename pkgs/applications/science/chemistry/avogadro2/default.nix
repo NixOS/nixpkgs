@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "avogadro2";
-  version = "1.99.0";
+  version = "1.100.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
     rev = version;
-    hash = "sha256-m8kX4WzOmPE/BZQRePOoUAdMPdWb6pmcqtPvDdEIIao=";
+    hash = "sha256-NSozi6oElNTIFTdRW32ZcNm8Ae311xk6kN1wtrEqjaU=";
   };
 
   postUnpack = ''

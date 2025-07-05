@@ -356,6 +356,16 @@
       "source": "hosted",
       "version": "3.1.1"
     },
+    "cronet_http": {
+      "dependency": "transitive",
+      "description": {
+        "name": "cronet_http",
+        "sha256": "3af9c4d57bf07ef4b307e77b22be4ad61bea19ee6ff65e62184863f3a09f1415",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.3.2"
+    },
     "cross_file": {
       "dependency": "transitive",
       "description": {
@@ -385,6 +395,16 @@
       },
       "source": "hosted",
       "version": "1.0.0"
+    },
+    "cupertino_http": {
+      "dependency": "transitive",
+      "description": {
+        "name": "cupertino_http",
+        "sha256": "6fcf79586ad872ddcd6004d55c8c2aab3cdf0337436e8f99837b1b6c30665d0c",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.0.2"
     },
     "dart_style": {
       "dependency": "transitive",
@@ -430,11 +450,11 @@
       "dependency": "direct main",
       "description": {
         "name": "dio",
-        "sha256": "5598aa796bbf4699afd5c67c0f5f6e2ed542afc956884b9cd58c306966efc260",
+        "sha256": "253a18bbd4851fecba42f7343a1df3a9a4c1d31a2c1b37e221086b4fa8c8dbc9",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "5.7.0"
+      "version": "5.8.0+1"
     },
     "dio_web_adapter": {
       "dependency": "transitive",
@@ -481,7 +501,7 @@
       "description": {
         "path": ".",
         "ref": "HEAD",
-        "resolved-ref": "e2e66ffd03f23bef5e0bb138b5f01b32d8e9b7bb",
+        "resolved-ref": "f91e1545f8263df127762240c4da54a0c42835b2",
         "url": "https://github.com/ente-io/ente_crypto_dart.git"
       },
       "source": "git",
@@ -561,11 +581,11 @@
       "dependency": "direct main",
       "description": {
         "name": "file_picker",
-        "sha256": "167bb619cdddaa10ef2907609feb8a79c16dfa479d3afaf960f8e223f754bf12",
+        "sha256": "c904b4ab56d53385563c7c39d8e9fa9af086f91495dfc48717ad84a42c3cf204",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "8.1.2"
+      "version": "8.1.7"
     },
     "file_saver": {
       "dependency": "direct main",
@@ -821,15 +841,14 @@
       "version": "9.2.2"
     },
     "flutter_secure_storage_linux": {
-      "dependency": "direct overridden",
+      "dependency": "transitive",
       "description": {
-        "path": "flutter_secure_storage_linux",
-        "ref": "develop",
-        "resolved-ref": "5a5692b609b3886cdd49b2ed06b9c079ecdff996",
-        "url": "https://github.com/mogol/flutter_secure_storage.git"
+        "name": "flutter_secure_storage_linux",
+        "sha256": "be76c1d24a97d0b98f8b54bce6b481a380a6590df992d0098f868ad54dc8f688",
+        "url": "https://pub.dev"
       },
-      "source": "git",
-      "version": "1.2.1"
+      "source": "hosted",
+      "version": "1.2.3"
     },
     "flutter_secure_storage_macos": {
       "dependency": "transitive",
@@ -1073,6 +1092,16 @@
       "source": "hosted",
       "version": "4.0.2"
     },
+    "http_profile": {
+      "dependency": "transitive",
+      "description": {
+        "name": "http_profile",
+        "sha256": "7e679e355b09aaee2ab5010915c932cce3f2d1c11c3b2dc177891687014ffa78",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.1.0"
+    },
     "image": {
       "dependency": "transitive",
       "description": {
@@ -1102,6 +1131,16 @@
       },
       "source": "hosted",
       "version": "1.0.4"
+    },
+    "jni": {
+      "dependency": "transitive",
+      "description": {
+        "name": "jni",
+        "sha256": "f377c585ea9c08d48b427dc2e03780af2889d1bb094440da853c6883c1acba4b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.10.1"
     },
     "js": {
       "dependency": "transitive",
@@ -1323,6 +1362,16 @@
       "source": "hosted",
       "version": "1.0.2"
     },
+    "native_dio_adapter": {
+      "dependency": "direct main",
+      "description": {
+        "name": "native_dio_adapter",
+        "sha256": "7420bc9517b2abe09810199a19924617b45690a44ecfb0616ac9babc11875c03",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.4.0"
+    },
     "nested": {
       "dependency": "transitive",
       "description": {
@@ -1342,6 +1391,16 @@
       },
       "source": "hosted",
       "version": "0.5.0"
+    },
+    "objective_c": {
+      "dependency": "transitive",
+      "description": {
+        "name": "objective_c",
+        "sha256": "62e79ab8c3ed6f6a340ea50dd48d65898f5d70425d404f0d99411f6e56e04584",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "4.1.0"
     },
     "otp": {
       "dependency": "direct main",
@@ -1637,21 +1696,21 @@
       "dependency": "direct main",
       "description": {
         "name": "sentry",
-        "sha256": "033287044a6644a93498969449d57c37907e56f5cedb17b88a3ff20a882261dd",
+        "sha256": "599701ca0693a74da361bc780b0752e1abc98226cf5095f6b069648116c896bb",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "8.9.0"
+      "version": "8.14.2"
     },
     "sentry_flutter": {
       "dependency": "direct main",
       "description": {
         "name": "sentry_flutter",
-        "sha256": "3780b5a0bb6afd476857cfbc6c7444d969c29a4d9bd1aa5b6960aa76c65b737a",
+        "sha256": "5ba2cf40646a77d113b37a07bd69f61bb3ec8a73cbabe5537b05a7c89d2656f8",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "8.9.0"
+      "version": "8.14.2"
     },
     "share_plus": {
       "dependency": "direct main",

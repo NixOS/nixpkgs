@@ -14,7 +14,7 @@
   withIDN ? true,
   libidn,
   withPostgreSQL ? false,
-  postgresql,
+  libpq,
   withSQLite ? true,
   sqlite,
   withUDNS ? true,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       botan2
     ]
     ++ lib.optional withIDN libidn
-    ++ lib.optional withPostgreSQL postgresql
+    ++ lib.optional withPostgreSQL libpq
     ++ lib.optional withSQLite sqlite
     ++ lib.optional withUDNS udns;
 

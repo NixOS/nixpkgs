@@ -9,7 +9,7 @@ use Getopt::Long qw(:config gnu_getopt no_bundling);
 use Cwd 'abs_path';
 use Time::HiRes;
 
-my $nsenter = "@utillinux@/bin/nsenter";
+my $nsenter = "@util-linux@/bin/nsenter";
 my $su = "@su@";
 
 my $configurationDirectory = "@configurationDirectory@";
@@ -364,7 +364,7 @@ sub restartContainer {
 sub runInContainer {
     my @args = @_;
     my $leader = getLeader;
-    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", @args);
+    exec($nsenter, "--all", "-t", $leader, "--", @args);
     die "cannot run ‘nsenter’: $!\n";
 }
 

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aws-encryption-sdk";
-  version = "3.3.0";
+  version = "4.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6yrboU9IHNg9cWmrjmQplIltOaSmTheWkEprSSVmE7A=";
+    hash = "sha256-cyDcTPjY1am0yIo0O+k4NdoYdW4FMI01NlVL4MooiaU=";
   };
 
   build-system = [ setuptools ];
@@ -44,6 +44,8 @@ buildPythonPackage rec {
     # Tests require networking
     "examples"
     "test/integration"
+    # requires yet to be packaged aws-cryptographic-material-providers
+    "test/mpl"
   ];
 
   disabledTests = [

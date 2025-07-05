@@ -10,16 +10,6 @@ let
   tomlFormat = pkgs.formats.toml { };
   jsonFormat = pkgs.formats.json { };
 
-  commonConfigurationFile =
-    if (cfg.commonConfigurationFile == null) then
-      (tomlFormat.generate "common-config.toml" cfg.commonConfiguration)
-    else
-      cfg.commonConfigurationFile;
-  configurationFile =
-    if (cfg.configurationFile == null) then
-      (jsonFormat.generate "amazon-cloudwatch-agent.json" cfg.configuration)
-    else
-      cfg.configurationFile;
   # See https://docs.aws.amazon.com/prescriptive-guidance/latest/implementing-logging-monitoring-cloudwatch/create-store-cloudwatch-configurations.html#store-cloudwatch-configuration-s3.
   #
   # We don't use the multiple JSON configuration files feature,
@@ -33,8 +23,9 @@ in
     enable = lib.mkEnableOption "Amazon CloudWatch Agent";
     package = lib.mkPackageOption pkgs "amazon-cloudwatch-agent" { };
     commonConfigurationFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
-      default = null;
+      type = lib.types.path;
+      default = tomlFormat.generate "common-config.toml" cfg.commonConfiguration;
+      defaultText = lib.literalExpression ''tomlFormat.generate "common-config.toml" cfg.commonConfiguration'';
       description = ''
         Amazon CloudWatch Agent common configuration. See
         <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-commandline-fleet.html#CloudWatch-Agent-profile-instance-first>
@@ -70,8 +61,9 @@ in
       };
     };
     configurationFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
-      default = null;
+      type = lib.types.path;
+      default = jsonFormat.generate "amazon-cloudwatch-agent.json" cfg.configuration;
+      defaultText = lib.literalExpression ''jsonFormat.generate "amazon-cloudwatch-agent.json" cfg.configuration'';
       description = ''
         Amazon CloudWatch Agent configuration file. See
         <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-Configuration-File-Details.html>
@@ -200,8 +192,8 @@ in
         LogsDirectory = "amazon-cloudwatch-agent";
         ExecStartPre = builtins.concatStringsSep " " [
           "${cfg.package}/bin/config-translator"
-          "-config ${commonConfigurationFile}"
-          "-input ${configurationFile}"
+          "-config ${cfg.commonConfigurationFile}"
+          "-input ${cfg.configurationFile}"
           "-input-dir ${configurationDirectory}"
           "-mode ${cfg.mode}"
           "-output \${RUNTIME_DIRECTORY}/amazon-cloudwatch-agent.toml"

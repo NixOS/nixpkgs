@@ -8,21 +8,20 @@
   pkg-config,
   hsmSupport ? true,
   nixosTests,
-  darwin,
 }:
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.28.1";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     tag = "v${version}";
-    hash = "sha256-SFiGRmi8Bd0WEitvDvybfGMEw36gAVjtLrYbBpBAItU=";
+    hash = "sha256-5W39Nc6WuxhrXbEfPWMaWWAUX6UnjYqlEAPlDCeYgrY=";
   };
 
-  vendorHash = "sha256-t42TAjRuMo1AXq3IKbN2L7G50vJzi/2LmhPKrn5K1Io=";
+  vendorHash = "sha256-AuMYdZa1QpmMQZxlv+lmoWtszQkVdwXOTXxY8CWaUbI=";
 
   ldflags = [
     "-w"
@@ -31,9 +30,7 @@ buildGoModule rec {
 
   nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
 
-  buildInputs =
-    lib.optionals (hsmSupport && stdenv.hostPlatform.isLinux) [ pcsclite ]
-    ++ lib.optionals (hsmSupport && stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.PCSC ];
+  buildInputs = lib.optionals (hsmSupport && stdenv.hostPlatform.isLinux) [ pcsclite ];
   postPatch = ''
     substituteInPlace authority/http_client_test.go --replace-fail 't.Run("SystemCertPool", func(t *testing.T) {' 't.Skip("SystemCertPool", func(t *testing.T) {'
     substituteInPlace systemd/step-ca.service --replace "/bin/kill" "${coreutils}/bin/kill"
@@ -61,12 +58,13 @@ buildGoModule rec {
 
   passthru.tests.step-ca = nixosTests.step-ca;
 
-  meta = with lib; {
+  meta = {
     description = "Private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
     changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    mainProgram = "step-ca";
+    maintainers = with lib.maintainers; [
       cmcdragonkai
       techknowlogick
     ];

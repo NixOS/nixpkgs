@@ -8,7 +8,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "notifymuch";
   version = "0.1";
   format = "setuptools";

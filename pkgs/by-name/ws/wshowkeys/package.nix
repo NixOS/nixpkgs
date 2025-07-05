@@ -14,7 +14,7 @@
   libxkbcommon,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wshowkeys-unstable";
   version = "2021-08-01";
 
@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     # TODO: gpl3Only or gpl3Plus (ask upstream)?
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      primeos
       berbiche
     ];
     mainProgram = "wshowkeys";

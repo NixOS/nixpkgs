@@ -32,18 +32,27 @@ assert
   ] excludePorts == [ ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdcc";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-rowSFl6xdoDf9EsyjYh5mWMGtyQe+jqDsuOy0veQanU=";
+    hash = "sha256-1QMEN/tDa7HZOo29v7RrqqYGEzGPT7P1hx1ygV0e7YA=";
   };
 
-  outputs = [
-    "out"
-    "doc"
-    "man"
-  ];
+  # TODO: sdcc version 4.5.0 does not currently produce a man output.
+  # Until the fix to sdcc's makefiles is released, this workaround
+  # conditionally withholds the man output on darwin.
+  #
+  # sdcc's tracking issue:
+  # <https://sourceforge.net/p/sdcc/bugs/3848/>
+  outputs =
+    [
+      "out"
+      "doc"
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      "man"
+    ];
 
   enableParallelBuilding = true;
 
@@ -63,6 +72,23 @@ stdenv.mkDerivation (finalAttrs: {
       gputils
     ];
 
+  # sdcc 4.5.0 massively rewrote sim/ucsim/Makefile.in, and lost the `.PHONY`
+  # rule in the process. As a result, on macOS (which uses a case-insensitive
+  # filesystem), the INSTALL file keeps the `install` target in the ucsim
+  # directory from running. Nothing else creates the `man` output, causing the
+  # entire build to fail.
+  #
+  # TODO: remove this when updating to the next release - it's been fixed in
+  # upstream sdcc r15384 <https://sourceforge.net/p/sdcc/code/15384/>.
+
+  postPatch = ''
+    if grep -q '\.PHONY:.*install' sim/ucsim/Makefile.in; then
+      echo 'Upstream has added `.PHONY: install` rule; must remove `postPatch` from the Nix file.' >&2
+      exit 1
+    fi
+    echo '.PHONY: install' >> sim/ucsim/Makefile.in
+  '';
+
   configureFlags =
     let
       excludedPorts =
@@ -79,6 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
       export STRIP=none
     fi
   '';
+
+  # ${src}/support/cpp/gcc/Makefile.in states:
+  # We don't want to compile the compilers with -fPIE, it make PCH fail.
+  hardeningDisable = [ "pie" ];
 
   meta = {
     homepage = "https://sdcc.sourceforge.net/";

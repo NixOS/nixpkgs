@@ -9,8 +9,10 @@
   httpx,
   json-repair,
   openai,
+  polyfactory,
   pydantic,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   tenacity,
@@ -19,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "fnllm";
-  version = "0.0.12";
+  version = "0.2.8";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qWZ//i1Xd6vWp3TlZz+TNJQGb1Ym8/edn4BV8e5wkjM=";
+    hash = "sha256-FafxygW5aZ3U24mesFZI5cmLd1L1FE8rHOrOgL3R+9g=";
   };
 
   build-system = [ hatchling ];
@@ -51,7 +53,9 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    polyfactory
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
@@ -65,10 +69,13 @@ buildPythonPackage rec {
     "test_default_operations"
     "test_estimate_request_tokens"
     "test_replace_value"
-  ];
-
-  disabledTestPaths = [
-    "tests/unit/caching/test_blob.py"
+    "test_text_service_encode_decode"
+    "test_count_tokens"
+    "trim_to_max_tokens"
+    "test_split"
+    "test_clear"
+    "test_handles_common_errors"
+    "test_children"
   ];
 
   meta = {

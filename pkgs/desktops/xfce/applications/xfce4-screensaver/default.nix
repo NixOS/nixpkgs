@@ -64,6 +64,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Screensaver for Xfce";
-    maintainers = with maintainers; [ symphorien ] ++ teams.xfce.members;
+    maintainers = with maintainers; [ symphorien ];
+    teams = [ teams.xfce ];
   };
 }

@@ -10,14 +10,15 @@
   # dependencies
   langchain-core,
   langgraph-checkpoint,
+  langgraph-prebuilt,
   langgraph-sdk,
+  xxhash,
 
   # tests
   aiosqlite,
   dataclasses-json,
   grandalf,
   httpx,
-  langgraph-checkpoint-duckdb,
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
   langsmith,
@@ -31,18 +32,20 @@
   syrupy,
   postgresql,
   postgresqlTestHook,
-}:
 
+  # passthru
+  nix-update-script,
+}:
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.56";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = version;
-    hash = "sha256-X/IMNEmggu9bSJFUaTohbFYxGZBguf+eFb3ObmQGplk=";
+    hash = "sha256-bTxtfduuuyRITZqhk15aWwxNwiZ7TMTgBOEPat6zVIc=";
   };
 
   postgresqlTestSetupPost = ''
@@ -57,7 +60,9 @@ buildPythonPackage rec {
   dependencies = [
     langchain-core
     langgraph-checkpoint
+    langgraph-prebuilt
     langgraph-sdk
+    xxhash
   ];
 
   pythonImportsCheck = [ "langgraph" ];
@@ -67,11 +72,16 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
+    pytestCheckHook
+    postgresql
+    postgresqlTestHook
+  ];
+
+  checkInputs = [
     aiosqlite
     dataclasses-json
     grandalf
     httpx
-    langgraph-checkpoint-duckdb
     langgraph-checkpoint-postgres
     langgraph-checkpoint-sqlite
     langsmith
@@ -82,10 +92,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-repeat
     pytest-xdist
-    pytestCheckHook
     syrupy
-    postgresql
-    postgresqlTestHook
   ];
 
   disabledTests = [
@@ -106,20 +113,33 @@ buildPythonPackage rec {
     "test_no_modifier"
     "test_pending_writes_resume"
     "test_remove_message_via_state_update"
+
+    # pydantic.errors.PydanticForbiddenQualifier,
+    # see https://github.com/langchain-ai/langgraph/issues/4360
+    "test_state_schema_optional_values"
   ];
 
   disabledTestPaths = [
     # psycopg.errors.InsufficientPrivilege: permission denied to create database
-    "tests/test_pregel_async.py"
+    "tests/test_checkpoint_migration.py"
+    "tests/test_large_cases.py"
+    "tests/test_large_cases_async.py"
     "tests/test_pregel.py"
+    "tests/test_pregel_async.py"
   ];
 
-  passthru.updateScript = langgraph-sdk.updateScript;
+  # Since `langgraph` is the only unprefixed package, we have to use an explicit match
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "([0-9.]+)"
+    ];
+  };
 
   meta = {
     description = "Build resilient language agents as graphs";
     homepage = "https://github.com/langchain-ai/langgraph";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };

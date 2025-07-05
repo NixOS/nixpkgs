@@ -8,22 +8,25 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tortoisehg";
-  version = "6.6.3";
+  version = "6.9";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${version}.tar.gz";
-    sha256 = "sha256-9pg1N5uj1ZaZCAm4N8toRwfVHme7nAsNMZkXSRgFves=";
+    hash = "sha256-j+HuAq/elnXIOoX4eoqMeOyGq3qjbdoJw6pcZsSa+AI=";
   };
 
   nativeBuildInputs = [
     qt5.wrapQtAppsHook
   ];
-  propagatedBuildInputs = with python3Packages; [
+
+  dependencies = with python3Packages; [
     mercurial
     # The one from python3Packages
     qscintilla-qt5
     iniparse
   ];
+
   buildInputs = [
     # Makes wrapQtAppsHook add these qt libraries to the wrapper search paths
     qt5.qtwayland

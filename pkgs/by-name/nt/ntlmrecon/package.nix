@@ -30,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
     "ntlmrecon"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Information enumerator for NTLM authentication enabled web endpoints";
     mainProgram = "ntlmrecon";
     homepage = "https://github.com/pwnfoo/NTLMRecon";
     changelog = "https://github.com/pwnfoo/NTLMRecon/releases/tag/v-${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

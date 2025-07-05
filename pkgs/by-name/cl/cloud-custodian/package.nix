@@ -45,12 +45,12 @@ python3.pkgs.buildPythonApplication rec {
     $out/bin/custodian --help
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rules engine for cloud security, cost optimization, and governance";
     homepage = "https://cloudcustodian.io";
     changelog = "https://github.com/cloud-custodian/cloud-custodian/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bhipple ];
     mainProgram = "custodian";
   };
 }

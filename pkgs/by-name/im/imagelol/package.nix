@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "MCRedstoner2004";
-    repo = pname;
+    repo = "imagelol";
     rev = "v${version}";
     sha256 = "0978zdrfj41jsqm78afyyd1l64iki9nwjvhd8ynii1b553nn4dmd";
     fetchSubmodules = true;

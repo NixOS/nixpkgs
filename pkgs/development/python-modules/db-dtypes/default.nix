@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "db-dtypes";
-  version = "1.3.1";
+  version = "1.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-db-dtypes-pandas";
     tag = "v${version}";
-    hash = "sha256-InotzUk1lEuTD1tAojpEGfFyjrCDoGaa8JMDUdRd+Hw=";
+    hash = "sha256-CW8BgUZu6EGOXEwapwXadjySbzlo8j9I8ft7OuSMVqs=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pandas Data Types for SQL systems (BigQuery, Spanner)";
     homepage = "https://github.com/googleapis/python-db-dtypes-pandas";
-    changelog = "https://github.com/googleapis/python-db-dtypes-pandas/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-db-dtypes-pandas/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];
   };

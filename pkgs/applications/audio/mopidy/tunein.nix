@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-tunein";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -16,9 +15,7 @@
   itstool,
   poppler,
   nautilus,
-  darwin,
   djvulibre,
-  libspectre,
   libarchive,
   libsecret,
   wrapGAppsHook4,
@@ -28,19 +25,19 @@
   gsettings-desktop-schemas,
   dbus,
   gi-docgen,
-  libgxps,
+  libsysprof-capture,
+  libspelling,
   withLibsecret ? true,
   supportNautilus ? (!stdenv.hostPlatform.isDarwin),
   libadwaita,
   exempi,
   cargo,
   rustPlatform,
-  rustfmt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "47.0";
+  version = "48.4";
 
   outputs = [
     "out"
@@ -50,28 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
-    hash = "sha256-z2nrCjcX/jVAEWFuL2Ajg4FP9Xt6nqzzBsZ25k2PZmY=";
+    hash = "sha256-8RqhxUSsIRJZ4jC0DIBK5kB3M5pXve+j2761f5Fm4/0=";
   };
 
-  # FIXME: remove in next version
-  patches = [
-    (fetchpatch {
-      name = "fix-crash-when-drag-and-drop";
-      url = "https://gitlab.gnome.org/GNOME/Incubator/papers/-/commit/455ad2aebe5e5d5a57a2f4defc6af054927eac73.patch";
-      hash = "sha256-PeWlFhvM8UzUFRaK9k/9Txwgta/EiFnMRjHwld3O+cU=";
-    })
-  ];
-
-  cargoRoot = "shell-rs";
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
       src
       pname
       version
-      cargoRoot
       ;
-    hash = "sha256-/5IySNEUkwiQezLx4n4jlPJdqJhlcgt5bXIelUFftZI=";
+    hash = "sha256-1HFecOTn84m9lT166HlmYjqP+KN/ZOTWW4ztigrpqNQ=";
   };
 
   nativeBuildInputs = [
@@ -87,9 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     yelp-tools
     cargo
     rustPlatform.cargoSetupHook
-    # FIXME: remove rustfmt in next version
-    # https://gitlab.gnome.org/GNOME/Incubator/papers/-/commit/d0093c8c9cbacfbdafd70b6024982638b30a2591
-    rustfmt
   ];
 
   buildInputs =
@@ -103,9 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
       gsettings-desktop-schemas
       libadwaita
       libarchive
-      libgxps
       librsvg
-      libspectre
+      libsysprof-capture
+      libspelling
       pango
       poppler
     ]
@@ -114,25 +96,15 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals supportNautilus [
       nautilus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
     ];
 
   mesonFlags =
-    [
-      "-Dps=enabled"
-    ]
-    ++ lib.optionals (!withLibsecret) [
+    lib.optionals (!withLibsecret) [
       "-Dkeyring=disabled"
     ]
     ++ lib.optionals (!supportNautilus) [
       "-Dnautilus=false"
     ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
-  ) "-Wno-error=incompatible-function-pointer-types";
 
   postInstall = ''
     substituteInPlace $out/share/thumbnailers/papers.thumbnailer \
@@ -169,6 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     mainProgram = "papers";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 })

@@ -1,0 +1,24 @@
+diff --git a/unix_client.c b/unix_client.c
+index 920910a..6d608fd 100644
+--- a/unix_client.c
++++ b/unix_client.c
+@@ -8,6 +8,7 @@
+ #include <sys/socket.h>
+ #include <unistd.h>
+ #include <assert.h>
++#include <string.h>
+ 
+ #include "main.h"
+ #include "handlers.h"
+diff --git a/unix_server.c b/unix_server.c
+index 5cf93ed..d3c51c9 100644
+--- a/unix_server.c
++++ b/unix_server.c
+@@ -8,6 +8,7 @@
+ #include <assert.h>
+ #include <unistd.h>
+ #include <stdio.h>
++#include <string.h>
+ #include <sys/un.h>
+ #include <sys/socket.h>
+ #include <sys/select.h>

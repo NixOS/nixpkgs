@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   gitUpdater,
   bison,
   cmake,
@@ -22,7 +23,6 @@
   libfido2,
   numactl,
   cctools,
-  CoreServices,
   developer_cmds,
   libtirpc,
   rpcsvc-proto,
@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.0.40-31";
+  version = "8.0.42-33";
 
   src = fetchurl {
     url = "https://www.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ExhnDY4XbCTfdAGfdI9fIz4nh/hl3T1B1heQq1p3LE4=";
+    hash = "sha256-UDdmBz1RVjX/kRivvk69GPdtjLjWTglKxteiLxXKQGc=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,17 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
+    # adapted from mysql80's llvm 19 fixes
+    ./libcpp-fixes.patch
+    # fixes using -DWITH_SSL=system with CMAKE_PREFIX_PATH on darwin
+    # https://github.com/Homebrew/homebrew-core/pull/204799
+    (fetchpatch {
+      name = "fix-system-ssl-darwin.patch";
+      url = "https://github.com/percona/percona-server/pull/5537/commits/a693e5d67abf6f27f5284c86361604babec529c6.patch";
+      hash = "sha256-fFBy3AYTMLvHvbsh0g0UvuPkmVMKZzxPsxeBKbsN8Ho=";
+    })
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+    ./coredumper-explicitly-import-unistd.patch # fix build on aarch64-linux
   ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
@@ -102,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
-      CoreServices
       developer_cmds
       DarwinTools
     ];
@@ -141,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     moveToOutput "lib/*.a" $static
     so=${stdenv.hostPlatform.extensions.sharedLibrary}
-    ln -s libmysqlclient$so $out/lib/libmysqlclient_r$so
+    ln -s libperconaserverclient$so $out/lib/libmysqlclient_r$so
 
     wrapProgram $out/bin/mysqld_safe --prefix PATH : ${
       lib.makeBinPath [
@@ -200,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
       Long-term support release.
     '';
     license = licenses.gpl2Only;
-    maintainers = teams.flyingcircus.members;
+    teams = [ teams.flyingcircus ];
     platforms = platforms.unix;
   };
 })

@@ -13,15 +13,12 @@
   pkg-config,
   sqlite,
   ncurses,
-  substituteAll,
+  replaceVars,
   runCommandLocal,
   makeWrapper,
   DarwinTools, # sw_vers
   cctools, # vtool
-  darwinMinVersionHook,
   xcbuild,
-  CryptoKit,
-  LocalAuthentication,
 }:
 
 let
@@ -48,8 +45,7 @@ let
       ./patches/disable-xctest.patch
       ./patches/fix-clang-cxx.patch
       ./patches/nix-pkgconfig-vars.patch
-      (substituteAll {
-        src = ./patches/fix-stdlib-path.patch;
+      (replaceVars ./patches/fix-stdlib-path.patch {
         inherit (builtins) storeDir;
         swiftLib = swift.swift.lib;
       })
@@ -387,7 +383,7 @@ let
         swift-driver
         swift-system
         swift-tools-support-core
-      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (darwinMinVersionHook "10.15.4") ];
+      ];
 
       cmakeFlags = [
         "-DUSE_CMAKE_INSTALL=ON"
@@ -413,17 +409,11 @@ stdenv.mkDerivation (
       swift
       swiftpm-bootstrap
     ];
-    buildInputs =
-      [
-        ncursesInput
-        sqlite
-        XCTest
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        CryptoKit
-        LocalAuthentication
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ (darwinMinVersionHook "10.15.4") ];
+    buildInputs = [
+      ncursesInput
+      sqlite
+      XCTest
+    ];
 
     configurePhase =
       generated.configure
@@ -438,8 +428,7 @@ stdenv.mkDerivation (
         # Prevent a warning about SDK directories we don't have.
         swiftpmMakeMutable swift-driver
         patch -p1 -d .build/checkouts/swift-driver -i ${
-          substituteAll {
-            src = ../swift-driver/patches/prevent-sdk-dirs-warnings.patch;
+          replaceVars ../swift-driver/patches/prevent-sdk-dirs-warnings.patch {
             inherit (builtins) storeDir;
           }
         }
@@ -456,7 +445,7 @@ stdenv.mkDerivation (
     #  TERM=dumb swift-test -c release
     #'';
 
-    # The following is dervied from Utilities/bootstrap, see install_swiftpm.
+    # The following is derived from Utilities/bootstrap, see install_swiftpm.
     installPhase = ''
       binPath="$(swift-build --show-bin-path -c release)"
 
@@ -491,7 +480,7 @@ stdenv.mkDerivation (
       homepage = "https://github.com/apple/swift-package-manager";
       platforms = with lib.platforms; linux ++ darwin;
       license = lib.licenses.asl20;
-      maintainers = lib.teams.swift.members;
+      teams = [ lib.teams.swift ];
     };
   }
 )

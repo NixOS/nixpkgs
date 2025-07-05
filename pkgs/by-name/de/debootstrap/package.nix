@@ -11,11 +11,12 @@
   coreutils,
   util-linux,
   gnugrep,
-  gnupg1,
+  gnupg,
   gnutar,
   gnused,
   gzip,
   xz,
+  zstd,
   makeWrapper,
   nix-update-script,
   testers,
@@ -32,25 +33,27 @@ let
     dpkg
     gawk
     gnugrep
-    gnupg1
+    gnupg
     gnused
     gnutar
     gzip
     perl
+    util-linux
     wget
     xz
+    zstd
   ];
 in
 stdenv.mkDerivation rec {
   pname = "debootstrap";
-  version = "1.0.138";
+  version = "1.0.140_bpo12+1";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "debootstrap";
     rev = "refs/tags/${version}";
-    hash = "sha256-2NUFt39isGThOqlg1LNOFxYJOPm93jDCvIztJoE5Vts=";
+    hash = "sha256-4vINaMRo6IrZ6e2/DAJ06ODy2BWm4COR1JDSY52upUc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -93,13 +96,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://salsa.debian.org/installer-team/debootstrap/-/blob/${version}/debian/changelog";
     description = "Tool to create a Debian system in a chroot";
     homepage = "https://wiki.debian.org/Debootstrap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marcweber ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marcweber ];
+    platforms = lib.platforms.linux;
     mainProgram = "debootstrap";
   };
 }

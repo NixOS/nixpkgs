@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytorch";
-    repo = pname;
+    repo = "ignite";
     tag = "v${version}";
-    hash = "sha256-J0xrqAGwH0bAs59T7zA8irMWOGbE2+Zd9kwqxYUYYMA=";
+    hash = "sha256-aWm+rj/9A7oNBW5jkMg/BRuEw2gQUJ88At1wB75FgNQ=";
   };
 
   build-system = [ setuptools ];
@@ -93,10 +93,8 @@ buildPythonPackage rec {
   meta = {
     description = "High-level training library for PyTorch";
     homepage = "https://pytorch-ignite.ai";
-    changelog = "https://github.com/pytorch/ignite/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/ignite/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.bcdarwin ];
-    # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

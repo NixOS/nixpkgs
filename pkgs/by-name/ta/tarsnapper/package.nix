@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "miracle2k";
-    repo = pname;
+    repo = "tarsnapper";
     rev = version;
     hash = "sha256-5i9eum9hbh6VFhvEIDq5Uapy6JtIbf9jZHhRYZVoC1w=";
   };

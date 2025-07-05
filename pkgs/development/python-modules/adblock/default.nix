@@ -10,8 +10,6 @@
   publicsuffix-list,
   pythonOlder,
   libiconv,
-  CoreFoundation,
-  Security,
   pytestCheckHook,
   toml,
 }:
@@ -45,10 +43,9 @@ buildPythonPackage rec {
       --replace "0.0.0" "${version}"
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-1xmYmF5P7a5O9MilxDy+CVhmWMGRetdM2fGvTPy7JmM=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-fetJX6HQxRZ/Az7rJeU9S+s8ttgNPnJEvTLfzGt4xjk=";
   };
 
   nativeBuildInputs =
@@ -62,8 +59,6 @@ buildPythonPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      CoreFoundation
-      Security
     ];
 
   PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";

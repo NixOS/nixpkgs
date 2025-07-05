@@ -7,10 +7,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "fprettify";
   version = "0.3.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pseewald";
-    repo = pname;
+    repo = "fprettify";
     rev = "v${version}";
     sha256 = "17v52rylmsy3m3j5fcb972flazykz2rvczqfh8mxvikvd6454zyj";
   };

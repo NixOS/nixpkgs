@@ -16,13 +16,12 @@
   selenium,
   setuptools,
   setuptools-scm,
-  wheel,
   xyzservices,
 }:
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.19.2";
+  version = "0.19.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,16 +30,15 @@ buildPythonPackage rec {
     owner = "python-visualization";
     repo = "folium";
     tag = "v${version}";
-    hash = "sha256-PBrrdFKEYj3yy+qV495It0HB9EVtJpjTY+oyls9Z/J0=";
+    hash = "sha256-jZrGJWSmQXQNlZYldeNSh5AhlTHow5gxCEkksEoKZ7E=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     branca
     jinja2
     numpy
@@ -55,7 +53,6 @@ buildPythonPackage rec {
     pandas
     pillow
     pytestCheckHook
-    selenium
   ];
 
   disabledTests = [
@@ -71,6 +68,11 @@ buildPythonPackage rec {
     "test_timedynamic_geo_json"
   ];
 
+  disabledTestPaths = [
+    # Import issue with selenium.webdriver.common.fedcm
+    "tests/selenium"
+  ];
+
   pythonImportsCheck = [ "folium" ];
 
   meta = {
@@ -78,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-visualization/folium";
     changelog = "https://github.com/python-visualization/folium/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

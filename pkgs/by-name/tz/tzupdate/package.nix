@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eod4yFzX7pATNQmG7jU+r9mnC9nprJ55ufMXpKjw/YI=";
   };
 
-  cargoHash = "sha256-5+lp5xlwJxFDqzVxptJPX7z0iLoMkgdwHxvRVIXHF7Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-v6Om9lnFKMuLFdxhU3qmyZLV/f+C3vCMp9luU0jZBEQ=";
 
   meta = {
     description = "Set the system timezone based on IP geolocation";

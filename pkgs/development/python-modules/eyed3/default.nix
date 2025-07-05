@@ -10,6 +10,7 @@
 
 buildPythonPackage rec {
   version = "0.9.7";
+  format = "setuptools";
   pname = "eyeD3";
   disabled = isPyPy;
 

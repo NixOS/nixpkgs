@@ -1,16 +1,17 @@
 {
   lib,
+  stdenv,
   config,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+
+  # patches
+  replaceVars,
   addDriverRunpath,
-  cudaSupport ? config.cudaSupport,
-  rocmSupport ? config.rocmSupport,
   cudaPackages,
+  llvmPackages,
   ocl-icd,
   rocmPackages,
-  stdenv,
 
   # build-system
   setuptools,
@@ -21,43 +22,52 @@
   unicorn,
 
   # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
   blobfile,
   bottle,
+  capstone,
   clang,
   hexdump,
   hypothesis,
+  jax,
   librosa,
+  ml-dtypes,
   networkx,
   numpy,
   onnx,
+  onnxruntime,
   pillow,
   pytest-xdist,
-  pytestCheckHook,
   safetensors,
   sentencepiece,
   tiktoken,
   torch,
   tqdm,
   transformers,
+  z3-solver,
 
+  # passthru
   tinygrad,
+
+  cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
 }:
 
 buildPythonPackage rec {
   pname = "tinygrad";
-  version = "0.10.0";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinygrad";
     repo = "tinygrad";
     tag = "v${version}";
-    hash = "sha256-IIyTb3jDUSEP2IXK6DLsI15E5N34Utt7xv86aTHpXf8=";
+    hash = "sha256-IQ0EAjj8kYUwzvMsAiNnvRm/twC40r9JWXUocaETjC8=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-dlopen-cuda.patch;
+    (replaceVars ./fix-dlopen-cuda.patch {
       inherit (addDriverRunpath) driverLink;
       libnvrtc =
         if cudaSupport then
@@ -69,13 +79,29 @@ buildPythonPackage rec {
 
   postPatch =
     # Patch `clang` directly in the source file
+    # Use the unwrapped variant to enable the "native" features currently unavailable in the sandbox
     ''
-      substituteInPlace tinygrad/runtime/ops_clang.py \
-        --replace-fail "'clang'" "'${lib.getExe clang}'"
+      substituteInPlace tinygrad/runtime/ops_cpu.py \
+        --replace-fail "getenv(\"CC\", 'clang')" "'${lib.getExe llvmPackages.clang-unwrapped}'"
+    ''
+    + ''
+      substituteInPlace tinygrad/runtime/autogen/libc.py \
+        --replace-fail "ctypes.util.find_library('c')" "'${stdenv.cc.libc}/lib/libc.so.6'"
+    ''
+    + ''
+      substituteInPlace tinygrad/runtime/support/llvm.py \
+        --replace-fail "ctypes.util.find_library('LLVM')" "'${lib.getLib llvmPackages.llvm}/lib/libLLVM.so'"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace tinygrad/runtime/autogen/opencl.py \
         --replace-fail "ctypes.util.find_library('OpenCL')" "'${ocl-icd}/lib/libOpenCL.so'"
+    ''
+    # test/test_tensor.py imports the PTX variable from the cuda_compiler.py file.
+    # This import leads to loading the libnvrtc.so library that is not substituted when cudaSupport = false.
+    # -> As a fix, we hardcode this variable to False
+    + lib.optionalString (!cudaSupport) ''
+      substituteInPlace test/test_tensor.py \
+        --replace-fail "from tinygrad.runtime.support.compiler_cuda import PTX" "PTX = False"
     ''
     # `cuda_fp16.h` and co. are needed at runtime to compile kernels
     + lib.optionalString cudaSupport ''
@@ -115,35 +141,47 @@ buildPythonPackage rec {
     ];
 
   nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+
     blobfile
     bottle
+    capstone
     clang
     hexdump
     hypothesis
+    jax
     librosa
+    ml-dtypes
     networkx
     numpy
     onnx
+    onnxruntime
     pillow
     pytest-xdist
-    pytestCheckHook
     safetensors
     sentencepiece
     tiktoken
     torch
     tqdm
     transformers
+    z3-solver
   ] ++ networkx.optional-dependencies.extra;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [
-      # Fixed in https://github.com/tinygrad/tinygrad/pull/7792
-      # TODO: re-enable at next release
-      "test_kernel_cache_in_action"
+      # RuntimeError: Attempting to relocate against an undefined symbol 'fmaxf'
+      "test_backward_sum_acc_dtype"
+      "test_failure_27"
+
+      # Flaky:
+      # AssertionError: 2.1376906810000946 not less than 2.0
+      "test_recursive_pad"
+
+      # Since updated onnx to 1.18.0:
+      # onnxruntime.capi.onnxruntime_pybind11_state.Fail: [ONNXRuntimeError] : 1 : FAIL : Load model from ...
+      # Unsupported model IR version: 11, max supported IR version: 10
+      "test_quant_128"
 
       # Require internet access
       "test_benchmark_openpilot_model"
@@ -179,10 +217,6 @@ buildPythonPackage rec {
       "test_vgg7"
     ]
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      # Fixed in https://github.com/tinygrad/tinygrad/pull/7796
-      # TODO: re-enable at next release
-      "test_interpolate_bilinear"
-
       # Fail with AssertionError
       "test_casts_from"
       "test_casts_to"
@@ -210,7 +244,13 @@ buildPythonPackage rec {
     changelog = "https://github.com/tinygrad/tinygrad/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # Tests segfault on darwin
-    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
+    badPlatforms = [
+      # Fatal Python error: Aborted
+      # onnxruntime/capi/_pybind_state.py", line 32 in <module>
+      "aarch64-linux"
+
+      # Tests segfault on darwin
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

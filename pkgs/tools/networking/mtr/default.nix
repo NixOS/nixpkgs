@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
       orivej
       raskin
       globin
+      ryan4yin
     ];
     mainProgram = "mtr";
     platforms = platforms.unix;

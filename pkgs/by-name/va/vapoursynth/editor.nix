@@ -19,7 +19,7 @@ let
 
     src = fetchFromGitHub {
       owner = "YomikoR";
-      repo = pname;
+      repo = "vapoursynth-editor";
       rev = lib.toLower version;
       hash = "sha256-+/9j9DJDGXbuTvE8ZXIu6wjcof39SyatS36Q6y9hLPg=";
     };

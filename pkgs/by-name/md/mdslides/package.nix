@@ -4,9 +4,10 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "mdslides";
   version = "unstable-2022-12-15";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dadoomer";

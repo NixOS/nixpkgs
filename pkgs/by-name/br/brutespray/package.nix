@@ -1,47 +1,34 @@
 {
   lib,
-  stdenv,
-  python3,
+  buildGoModule,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   medusa,
 }:
 
-stdenv.mkDerivation rec {
+buildGoModule (finalAttrs: {
   pname = "brutespray";
-  version = "1.8.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "x90skysn3k";
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-O9HOsj0R6oHI7jjG4FBqbrSAQSVomgeD7tyPDNCNmIo=";
+    repo = "brutespray";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oH7Gun/nKScv2buLwM6faiz9/3sl9l4JzkKbdTnGz0Q=";
   };
 
-  postPatch = ''
-    substituteInPlace brutespray.py \
-      --replace "/usr/share/brutespray" "$out/share/brutespray"
-  '';
+  vendorHash = "sha256-TBLjCXb1W5FHBrzxBI0/3NMuM9eCizLiz489jyZsEso=";
 
-  dontBuild = true;
-  nativeBuildInputs = [
-    python3.pkgs.wrapPython
-    makeWrapper
-  ];
-  buildInputs = [ python3 ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  installPhase = ''
-    install -Dm0755 brutespray.py $out/bin/brutespray
-    patchShebangs $out/bin
-    patchPythonScript $out/bin/brutespray
+  postInstall = ''
     wrapProgram $out/bin/brutespray \
       --prefix PATH : ${lib.makeBinPath [ medusa ]}
-
     mkdir -p $out/share/brutespray
-    cp -r wordlist/ $out/share/brutespray/wordlist
+    cp -r wordlist $out/share/brutespray/wordlist
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/x90skysn3k/brutespray";
     description = "Tool to do brute-forcing from Nmap output";
     mainProgram = "brutespray";
@@ -49,7 +36,7 @@ stdenv.mkDerivation rec {
       This tool automatically attempts default credentials on found services
       directly from Nmap output.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

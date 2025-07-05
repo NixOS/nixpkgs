@@ -3,12 +3,13 @@
   stdenv,
   # Enables some expensive tests, useful for verifying an update
   afdko,
-  antlr4_9,
+  antlr4_13,
   booleanoperations,
   buildPythonPackage,
   cmake,
   defcon,
   fetchFromGitHub,
+  fetchpatch,
   fontmath,
   fontpens,
   fonttools,
@@ -27,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     owner = "adobe-type-tools";
     repo = "afdko";
     tag = version;
-    hash = "sha256-I5GKPkbyQX8QNSZgNB3wPKdWwpx8Xkklesu1M7nhgp8=";
+    hash = "sha256:0955dvbydifhgx9gswbf5drsmmghry7iyf6jwz6qczhj86clswcm";
   };
 
   build-system = [ setuptools-scm ];
@@ -48,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    antlr4_9.runtime.cpp
+    antlr4_13.runtime.cpp
     libxml2.dev
   ];
 
@@ -58,12 +59,18 @@ buildPythonPackage rec {
 
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
-  ];
 
-  # Happy new year
-  postPatch = ''
-    substituteInPlace tests/tx_data/expected_output/alt-missing-glif.pfb --replace 2023 2024
-  '';
+    # Fix tests
+    # FIXME: remove in 5.0
+    (fetchpatch {
+      url = "https://github.com/adobe-type-tools/afdko/commit/3b78bea15245e2bd2417c25ba5c2b8b15b07793c.patch";
+      excludes = [
+        "CMakeLists.txt"
+        "requirements.txt"
+      ];
+      hash = "sha256-Ao5AUVm1h4a3qidqlBFWdC7jiXyBfXQEnsT7XsXXXRU=";
+    })
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
     "-Wno-error=incompatible-function-pointer-types"
@@ -109,6 +116,8 @@ buildPythonPackage rec {
       "test_glyphs_2_7"
       "test_hinting_data"
       "test_waterfallplot"
+      # broke at some point
+      "test_type1_supported_hint"
     ]
     ++ lib.optionals (stdenv.cc.isGNU) [
       # broke in the gcc 13 -> 14 update

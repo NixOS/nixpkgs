@@ -35,6 +35,7 @@
   jansson,
   getopt,
   perlPackages,
+  python3,
   ocamlPackages,
   libtirpc,
   appliance ? null,
@@ -47,12 +48,11 @@ assert appliance == null || lib.isDerivation appliance;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libguestfs";
-
-  version = "1.54.0";
+  version = "1.54.1";
 
   src = fetchurl {
-    url = "https://libguestfs.org/download/${lib.versions.majorMinor finalAttrs.version}-stable/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-tK+g+P1YAgXqVUjUaLxuQ8O+y5leL2DmMmVSemMFQkY=";
+    url = "https://libguestfs.org/download/${lib.versions.majorMinor finalAttrs.version}-stable/libguestfs-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-bj/GrBkmdfe8KEClYbs2o209Wo36f4jqL1P4z2AqF34=";
   };
 
   strictDeps = true;
@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
       gperf
       makeWrapper
       pkg-config
+      python3
+      python3.pkgs.pycodestyle
       qemu
       zstd
     ]
@@ -104,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     numactl
     libapparmor
     perlPackages.ModuleBuild
+    python3
     libtirpc
     zstd
     ocamlPackages.ocamlbuild
@@ -121,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-install-daemon"
     "--disable-appliance"
     "--with-distro=NixOS"
+    "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}"
     "--with-readline"
     "CPPFLAGS=-I${lib.getDev libxml2}/include/libxml2"
     "INSTALL_OCAMLLIB=${placeholder "out"}/lib/ocaml"

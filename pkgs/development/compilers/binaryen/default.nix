@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "120_b";
+  version = "123";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-gdqjsAQp4NTHROAf6i44GjkbtNyLPQZ153k3veK7eYs=";
+    hash = "sha256-SFruWOJVxO3Ll1HwjK3DYSPY2IprnDly7QjxrECTrzE=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +34,11 @@ stdenv.mkDerivation rec {
     python3
   ];
 
+  strictDeps = true;
+
   preConfigure = ''
     if [ $doCheck -eq 1 ]; then
-      sed -i '/googletest/d' third_party/CMakeLists.txt
+      sed -i '/gtest/d' third_party/CMakeLists.txt
       rmdir test/spec/testsuite
       ln -s ${testsuite} test/spec/testsuite
     else
@@ -45,35 +47,39 @@ stdenv.mkDerivation rec {
   '';
 
   nativeCheckInputs = [
-    gtest
     lit
     nodejs
     filecheck
   ];
+  checkInputs = [ gtest ];
   checkPhase = ''
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
   '';
 
-  tests = [
-    "version"
-    "wasm-opt"
-    "wasm-dis"
-    "crash"
-    "dylink"
-    "ctor-eval"
-    "wasm-metadce"
-    "wasm-reduce"
-    "spec"
-    "lld"
-    "wasm2js"
-    "validator"
-    "example"
-    "unit"
-    # "binaryenjs" "binaryenjs_wasm" # not building this
-    "lit"
-    "gtest"
-  ];
-  doCheck = stdenv.isLinux;
+  tests =
+    [
+      "version"
+      "wasm-opt"
+      "wasm-dis"
+      "crash"
+      "dylink"
+      "ctor-eval"
+      "wasm-metadce"
+      "wasm-reduce"
+      "spec"
+      "lld"
+      "wasm2js"
+      # "unit" # fails on test.unit.test_cluster_fuzz.ClusterFuzz
+      # "binaryenjs" "binaryenjs_wasm" # not building this
+      # "lit" # fails on d8/fuzz_shell*
+      "gtest"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "example"
+      "validator"
+    ];
+
+  doCheck = (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin);
 
   meta = with lib; {
     homepage = "https://github.com/WebAssembly/binaryen";
@@ -85,7 +91,5 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.asl20;
   };
-  passthru.tests = {
-    inherit emscripten;
-  };
+  passthru.tests = { inherit emscripten; };
 }

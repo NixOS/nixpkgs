@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "popeye";
-  version = "0.21.6";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "derailed";
     repo = "popeye";
-    sha256 = "sha256-CX30/AzHFtHhctvLIgRNDBvrXuNUXfz2xLoBY5zIWPo=";
+    sha256 = "sha256-CbVYQIE7kjUah+SDEjs5Qz+n4+f3HriQNxYPqDcdr/I=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X github.com/derailed/popeye/cmd.commit=${version}"
   ];
 
-  vendorHash = "sha256-YvIINp81XPMbSLCDhK9i+I4hfVXPWH19EeVXYhEXbs8=";
+  vendorHash = "sha256-Xhn1iOqzCY8fW2lODXwqY4XQZTAPWXaZ0XM5j02bnCs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -39,12 +39,12 @@ buildGoModule rec {
     $out/bin/popeye version | grep ${version} > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes cluster resource sanitizer";
     mainProgram = "popeye";
     homepage = "https://github.com/derailed/popeye";
     changelog = "https://github.com/derailed/popeye/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bryanasdev000 ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bryanasdev000 ];
   };
 }

@@ -31,7 +31,6 @@
   rWrapper,
   gfan,
   cddlib,
-  jmol,
   tachyon,
   glpk,
   eclib,
@@ -50,7 +49,6 @@
   zlib,
   gsl,
   ntl,
-  jre8,
   less,
 }:
 
@@ -87,7 +85,6 @@ let
       rWrapper
       gfan
       cddlib
-      jmol
       tachyon
       glpk
       eclib
@@ -98,7 +95,6 @@ let
       ecm
       lcalc
       rubiks
-      jre8 # only needed for `jmol` (https://sourceforge.net/p/jmol/mailman/message/58818762/), which will be optional in sage 10.5
       less # needed to prevent transient test errors until https://github.com/ipython/ipython/pull/11864 is resolved
     ])
   );
@@ -106,6 +102,12 @@ in
 writeTextFile rec {
   name = "sage-env";
   destination = "/${name}";
+
+  passthru = {
+    lib = sagelib;
+    docbuild = sage-docbuild;
+  };
+
   text =
     ''
       export PKG_CONFIG_PATH='${
@@ -176,7 +178,6 @@ writeTextFile rec {
                 eclib
                 gsl
                 ntl
-                jmol
                 sympow
               ]
             )
@@ -209,9 +210,4 @@ writeTextFile rec {
             ]
           }''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
       '';
-}
-// {
-  # equivalent of `passthru`, which `writeTextFile` doesn't support
-  lib = sagelib;
-  docbuild = sage-docbuild;
 }

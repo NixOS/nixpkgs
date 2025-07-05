@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-skin-nopacity";
-  version = "1.1.18";
+  version = "1.1.19";
 
   src = fetchFromGitLab {
     repo = "SkinNopacity";
     owner = "kamel5";
-    hash = "sha256-Aq5PtD6JV8jdBURADl9KkdVQvfmeQD/Zh62g5ansuC4=";
-    rev = version;
+    hash = "sha256-f15KtoPLvB5bF//5+gmmDmx8MGmiIDPGOYoNgSkcVqM=";
+    tag = version;
   };
 
   buildInputs = [

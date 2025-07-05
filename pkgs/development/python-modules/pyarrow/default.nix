@@ -142,8 +142,6 @@ buildPythonPackage rec {
 
   disabledTests = [ "GcsFileSystem" ];
 
-  dontUseSetuptoolsCheck = true;
-
   preCheck =
     ''
       shopt -s extglob
@@ -166,6 +164,7 @@ buildPythonPackage rec {
       "flight"
       "fs"
       "json"
+      "orc"
       "parquet"
     ];
 

@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "jsubfinder";
   version = "unstable-2022-05-31";
 
   src = fetchFromGitHub {
     owner = "ThreatUnkown";
-    repo = pname;
+    repo = "jsubfinder";
     rev = "e21de1ebc174bb69485f1c224e8063c77d87e4ad";
     hash = "sha256-QjRYJyk0uFGa6FCCYK9SIJhoyam4ALsQJ26DsmbNk8s=";
   };

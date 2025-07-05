@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Iris";
   version = "3.69.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxtask";
-  version = "0.1.11";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxtask";
     rev = version;
-    hash = "sha256-KPne7eWzOOSZjHlam3e6HifNk2Sx1vWnQYkXDFZGop0=";
+    hash = "sha256-BI50jV/17jGX91rcmg98+gkoy35oNpdSSaVDLyagbIc=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    homepage = "http://lxde.sourceforge.net/";
+    homepage = "https://lxde.sourceforge.net/";
     description = "Lightweight and desktop independent task manager";
     mainProgram = "lxtask";
     longDescription = ''

@@ -7,7 +7,7 @@
   qtbase,
   SDL,
   SDL_mixer,
-  boost,
+  boost181,
   curl,
   gsasl,
   libgcrypt,
@@ -18,6 +18,10 @@
   tinyxml2,
   target ? "client",
 }:
+
+let
+  boost = boost181;
+in
 
 mkDerivation rec {
   pname = "pokerth-${target}";

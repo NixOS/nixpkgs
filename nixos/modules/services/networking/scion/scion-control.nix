@@ -16,7 +16,6 @@ let
     general = {
       id = "cs";
       config_dir = "/etc/scion";
-      reconnect_to_dispatcher = true;
     };
     beacon_db = {
       connection = "${connectionDir}/scion-control/control.beacon.db";

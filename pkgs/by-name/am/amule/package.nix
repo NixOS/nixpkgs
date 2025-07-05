@@ -13,7 +13,7 @@
   perl,
   cryptopp,
   libupnp,
-  boost, # Not using boost leads to crashes with gtk3
+  boost186, # Not using boost leads to crashes with gtk3
   gettext,
   libpng,
   pkg-config,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
       perl
       cryptopp.dev
       libupnp
-      boost
+      boost186
     ]
     ++ lib.optional httpServer libpng
     ++ lib.optional client libX11;

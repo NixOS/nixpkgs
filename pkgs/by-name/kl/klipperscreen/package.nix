@@ -8,14 +8,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "KlipperScreen";
-  version = "0.4.4";
+  version = "0.4.5";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "KlipperScreen";
     repo = "KlipperScreen";
     rev = "v${version}";
-    hash = "sha256-MxuUmkuEnfFC0iPwNUc0Wh8bIEl1J1FMgGEYMjHePZ8=";
+    hash = "sha256-lKGMz5N4lKSqA614wjJiUfP5fUY+WqFDPxeX/Iyp2TQ=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     mpv
     six
     dbus-python
+    sdbus-networkmanager
   ];
 
   dontWrapGApps = true;

@@ -10,7 +10,7 @@ gccStdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rcedgar";
-    repo = pname;
+    repo = "muscle";
     rev = version;
     hash = "sha256-NpnJziZXga/T5OavUt3nQ5np8kJ9CFcSmwyg4m6IJsk=";
   };

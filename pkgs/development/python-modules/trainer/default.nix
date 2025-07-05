@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-
   hatchling,
 
   coqpit,
@@ -20,7 +18,7 @@
 
 let
   pname = "coqui-tts-trainer";
-  version = "0.2.0";
+  version = "0.2.2";
 in
 buildPythonPackage {
   inherit pname version;
@@ -30,7 +28,7 @@ buildPythonPackage {
     owner = "idiap";
     repo = "coqui-ai-Trainer";
     tag = "v${version}";
-    hash = "sha256-zm8BTfXvfwuWpmHFcSxuu+/V4bKanSBU2dniQboVdLY=";
+    hash = "sha256-MQCLeTruTlXfs3QZxsMC2Gju5rlwWDfZjkyokiIgmOI=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +60,6 @@ buildPythonPackage {
     homepage = "https://github.com/idiap/coqui-ai-Trainer";
     changelog = "https://github.com/idiap/coqui-ai-Trainer/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

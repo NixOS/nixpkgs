@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "cssbeautifier";
-  version = "1.15.1";
+  version = "1.15.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n3BkNirt1VnFXu7Pa2vtZeBfM0iNy+OQRPBAPCbhwAY=";
+    hash = "sha256-m7CNw/ZMEBoBZ38Sis8BkFkUz0Brr4dDTc3gW3TArPU=";
   };
 
   nativeBuildInputs = [ setuptools ];

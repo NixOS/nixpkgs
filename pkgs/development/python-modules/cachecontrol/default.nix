@@ -8,17 +8,14 @@
   mock,
   msgpack,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.14.1";
+  version = "0.14.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
@@ -26,7 +23,7 @@ buildPythonPackage rec {
     owner = "ionrock";
     repo = "cachecontrol";
     tag = "v${version}";
-    hash = "sha256-qeTq2NfMOmNtjBItLmjxlaxqqy/Uvb6JfBpCBRvRLh4=";
+    hash = "sha256-V8RWTDxhKCvf5bz2j6anp8bkCzkicTRY+Kd6eHu1peg=";
   };
 
   build-system = [ flit-core ];
@@ -54,7 +51,7 @@ buildPythonPackage rec {
     description = "Httplib2 caching for requests";
     mainProgram = "doesitcache";
     homepage = "https://github.com/ionrock/cachecontrol";
-    changelog = "https://github.com/psf/cachecontrol/releases/tag/v${version}";
+    changelog = "https://github.com/psf/cachecontrol/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

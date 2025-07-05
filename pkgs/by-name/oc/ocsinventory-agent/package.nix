@@ -113,7 +113,7 @@ perlPackages.buildPerlPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "OCS Inventory unified agent for Unix operating systems";
     longDescription = ''
       Open Computers and Software Inventory (OCS) is an application designed
@@ -123,12 +123,12 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://ocsinventory-ng.org";
     changelog = "https://github.com/OCSInventory-NG/UnixAgent/releases/tag/v${version}";
     downloadPage = "https://github.com/OCSInventory-NG/UnixAgent/releases";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "ocsinventory-agent";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       totoroot
       anthonyroussel
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

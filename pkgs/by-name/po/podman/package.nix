@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   pkg-config,
   installShellFiles,
   buildGoModule,
@@ -19,7 +18,7 @@
   makeWrapper,
   runtimeShell,
   symlinkJoin,
-  substituteAll,
+  replaceVars,
   extraPackages ? [ ],
   crun,
   runc,
@@ -75,32 +74,22 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.3.1";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-kABP10QX4r11UDUcd6Sukb+9+LRm/ba3iATz6DTOJYw=";
+    hash = "sha256-iLpJQC1v+jPeQNCjgtx3pPKsa6wLcrqtQkeG7qF3rWo=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-paths.patch;
+    (replaceVars ./hardcode-paths.patch {
       bin_path = helpersBin;
     })
 
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
     ./rm-podman-mac-helper-msg.patch
-
-    # backport of fix for https://github.com/containers/storage/issues/2184
-    # https://github.com/containers/storage/pull/2185
-    (fetchpatch2 {
-      url = "https://github.com/containers/storage/commit/99b0d2d423c8093807d8a1464437152cd04d7d95.diff?full_index=1";
-      hash = "sha256-aahYXnDf3qCOlb6MfVDqFKCcQG257r5sbh5qnL0T40I=";
-      stripLen = 1;
-      extraPrefix = "vendor/github.com/containers/storage/";
-    })
   ];
 
   vendorHash = null;
@@ -192,7 +181,7 @@ buildGoModule rec {
       oci-containers-podman = nixosTests.oci-containers.podman;
     };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://podman.io/";
     description = "Program for managing pods, containers and container images";
     longDescription = ''
@@ -201,8 +190,8 @@ buildGoModule rec {
       To install on NixOS, please use the option `virtualisation.podman.enable = true`.
     '';
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
     mainProgram = "podman";
   };
 }

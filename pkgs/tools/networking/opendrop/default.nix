@@ -10,6 +10,7 @@
   setuptools,
   zeroconf,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
   openssl,
 }:
 
@@ -48,10 +49,7 @@ buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    # Solves PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   meta = with lib; {
     description = "Open Apple AirDrop implementation written in Python";

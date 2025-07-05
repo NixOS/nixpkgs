@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "tfsec";
-  version = "1.28.12";
+  version = "1.28.14";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "tfsec";
     tag = "v${version}";
-    hash = "sha256-ul4KKwTWFg5FxmLhyrQAQWfuCoSVDc6eIchbLwpG/xI=";
+    hash = "sha256-8nZU7CjeKfpx1Fl3YtuQepW0LAG9/ng+8bMkoT1xmCQ=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
     # "-extldflags '-fno-PIC -static'"
   ];
 
-  vendorHash = "sha256-yi124OllfSchKSaj+OlxG/7UQcBLdx8JUlnu/a8MSOU=";
+  vendorHash = "sha256-SuXrZNjr+x4uIA8fIae/9kypH/GDDKaiymD12xJvIFw=";
 
   subPackages = [
     "cmd/tfsec"
@@ -31,12 +31,12 @@ buildGoModule rec {
     "cmd/tfsec-checkgen"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Static analysis powered security scanner for terraform code";
     homepage = "https://github.com/aquasecurity/tfsec";
     changelog = "https://github.com/aquasecurity/tfsec/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       peterromfeldhk
     ];

@@ -7,8 +7,10 @@ import shutil
 import subprocess
 import sys
 import tomllib
+from os.path import islink, realpath
 from pathlib import Path
 from typing import Any, TypedDict, cast
+from urllib.parse import unquote
 
 import requests
 from requests.adapters import HTTPAdapter, Retry
@@ -21,7 +23,16 @@ def load_toml(path: Path) -> dict[str, Any]:
         return tomllib.load(f)
 
 
-def download_file_with_checksum(url: str, destination_path: Path) -> str:
+def get_lockfile_version(cargo_lock_toml: dict[str, Any]) -> int:
+    # lockfile v1 and v2 don't have the `version` key, so assume v2
+    version = cargo_lock_toml.get("version", 2)
+
+    # TODO: add logic for differentiating between v1 and v2
+
+    return version
+
+
+def create_http_session() -> requests.Session:
     retries = Retry(
         total=5,
         backoff_factor=0.5,
@@ -30,7 +41,10 @@ def download_file_with_checksum(url: str, destination_path: Path) -> str:
     session = requests.Session()
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
+    return session
 
+
+def download_file_with_checksum(session: requests.Session, url: str, destination_path: Path) -> str:
     sha256_hash = hashlib.sha256()
     with session.get(url, stream=True) as response:
         if not response.ok:
@@ -56,7 +70,7 @@ def get_download_url_for_tarball(pkg: dict[str, Any]) -> str:
     return f"https://crates.io/api/v1/crates/{pkg["name"]}/{pkg["version"]}/download"
 
 
-def download_tarball(pkg: dict[str, Any], out_dir: Path) -> None:
+def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Path) -> None:
 
     url = get_download_url_for_tarball(pkg)
     filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
@@ -68,7 +82,7 @@ def download_tarball(pkg: dict[str, Any], out_dir: Path) -> None:
     tarball_out_dir = out_dir / "tarballs" / filename
     eprint(f"Fetching {url} -> tarballs/{filename}")
 
-    calculated_checksum = download_file_with_checksum(url, tarball_out_dir)
+    calculated_checksum = download_file_with_checksum(session, url, tarball_out_dir)
 
     if calculated_checksum != expected_checksum:
         raise Exception(f"Hash mismatch! File fetched from {url} had checksum {calculated_checksum}, expected {expected_checksum}.")
@@ -93,20 +107,29 @@ class GitSourceInfo(TypedDict):
     git_sha_rev: str
 
 
-def parse_git_source(source: str) -> GitSourceInfo:
+def parse_git_source(source: str, lockfile_version: int) -> GitSourceInfo:
     match = GIT_SOURCE_REGEX.match(source)
     if match is None:
         raise Exception(f"Unable to process git source: {source}.")
-    return cast(GitSourceInfo, match.groupdict(default=None))
+
+    source_info = cast(GitSourceInfo, match.groupdict(default=None))
+
+    # the source URL is URL-encoded in lockfile_version >=4
+    # since we just used regex to parse it we have to manually decode the escaped branch/tag name
+    if lockfile_version >= 4 and source_info["value"] is not None:
+        source_info["value"] = unquote(source_info["value"])
+
+    return source_info
 
 
 def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
-    cargo_toml = load_toml(lockfile_path)
+    cargo_lock_toml = load_toml(lockfile_path)
+    lockfile_version = get_lockfile_version(cargo_lock_toml)
 
     git_packages: list[dict[str, Any]] = []
     registry_packages: list[dict[str, Any]] = []
 
-    for pkg in cargo_toml["package"]:
+    for pkg in cargo_lock_toml["package"]:
         # ignore local dependenices
         if "source" not in pkg.keys():
             eprint(f"Skipping local dependency: {pkg["name"]}")
@@ -122,7 +145,7 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
 
     git_sha_rev_to_url: dict[str, str] = {}
     for pkg in git_packages:
-        source_info = parse_git_source(pkg["source"])
+        source_info = parse_git_source(pkg["source"], lockfile_version)
         git_sha_rev_to_url[source_info["git_sha_rev"]] = source_info["url"]
 
     out_dir.mkdir(exist_ok=True)
@@ -138,7 +161,8 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
     with mp.Pool(min(5, mp.cpu_count())) as pool:
         if len(registry_packages) != 0:
             (out_dir / "tarballs").mkdir()
-            tarball_args_gen = ((pkg, out_dir) for pkg in registry_packages)
+            session = create_http_session()
+            tarball_args_gen = ((session, pkg, out_dir) for pkg in registry_packages)
             pool.starmap(download_tarball, tarball_args_gen)
 
 
@@ -171,11 +195,41 @@ def find_crate_manifest_in_tree(tree: Path, crate_name: str) -> Path:
 
 
 def copy_and_patch_git_crate_subtree(git_tree: Path, crate_name: str, crate_out_dir: Path) -> None:
+
+    # This function will get called by copytree to decide which entries of a directory should be copied
+    # We'll copy everything except symlinks that are invalid
+    def ignore_func(dir_str: str, path_strs: list[str]) -> list[str]:
+        ignorelist: list[str] = []
+
+        dir = Path(realpath(dir_str, strict=True))
+
+        for path_str in path_strs:
+            path = dir / path_str
+            if not islink(path):
+                continue
+
+            # Filter out cyclic symlinks and symlinks pointing at nonexistant files
+            try:
+                target_path = Path(realpath(path, strict=True))
+            except OSError:
+                ignorelist.append(path_str)
+                eprint(f"Failed to resolve symlink, ignoring: {path}")
+                continue
+
+            # Filter out symlinks that point outside of the current crate's base git tree
+            # This can be useful if the nix build sandbox is turned off and there is a symlink to a common absolute path
+            if not target_path.is_relative_to(git_tree):
+                ignorelist.append(path_str)
+                eprint(f"Symlink points outside of the crate's base git tree, ignoring: {path} -> {target_path}")
+                continue
+
+        return ignorelist
+
     crate_manifest_path = find_crate_manifest_in_tree(git_tree, crate_name)
     crate_tree = crate_manifest_path.parent
 
     eprint(f"Copying to {crate_out_dir}")
-    shutil.copytree(crate_tree, crate_out_dir)
+    shutil.copytree(crate_tree, crate_out_dir, ignore=ignore_func)
     crate_out_dir.chmod(0o755)
 
     with open(crate_manifest_path, "r") as f:
@@ -207,7 +261,8 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     out_dir.mkdir(exist_ok=True)
     shutil.copy(lockfile_path, out_dir / "Cargo.lock")
 
-    cargo_toml = load_toml(lockfile_path)
+    cargo_lock_toml = load_toml(lockfile_path)
+    lockfile_version = get_lockfile_version(cargo_lock_toml)
 
     config_lines = [
         '[source.vendored-sources]',
@@ -217,7 +272,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     ]
 
     seen_source_keys = set()
-    for pkg in cargo_toml["package"]:
+    for pkg in cargo_lock_toml["package"]:
 
         # ignore local dependenices
         if "source" not in pkg.keys():
@@ -230,7 +285,8 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
 
         if source.startswith("git+"):
 
-            source_info = parse_git_source(pkg["source"])
+            source_info = parse_git_source(pkg["source"], lockfile_version)
+
             git_sha_rev = source_info["git_sha_rev"]
             git_tree = vendor_staging_dir / "git" / git_sha_rev
 

@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "joncar";
-    repo = pname;
+    repo = "pyeverlights";
     rev = version;
     sha256 = "16xpq933j8yydq78fnf4f7ivyw5a45ix4mfycpmm91aj549p6pm0";
   };

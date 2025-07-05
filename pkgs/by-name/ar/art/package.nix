@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   util-linux,
@@ -32,7 +32,7 @@
   exiv2,
   exiftool,
   mimalloc,
-  openexr_3,
+  openexr,
   ilmbase,
   opencolorio,
   color-transformation-language,
@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "art";
-  version = "1.24.2";
+  version = "1.25.6";
 
-  src = fetchFromBitbucket {
-    owner = "agriggio";
-    repo = "art";
-    rev = version;
-    hash = "sha256-TpjmmDeXuxnlvCimsq6mZZk15VOVU3WGrPd3vmcIClI=";
+  src = fetchFromGitHub {
+    owner = "artpixls";
+    repo = "ART";
+    tag = version;
+    hash = "sha256-m3TqtoWjrPXpSL7blrqPm+vANJcpmHyKOm2rpnQ3qQ4=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     exiftool
     libcanberra-gtk3
     mimalloc
-    openexr_3
+    openexr
     ilmbase
     opencolorio
     color-transformation-language
@@ -105,9 +105,9 @@ stdenv.mkDerivation rec {
   env.CXXFLAGS = "-include cstdint"; # needed at least with gcc13 on aarch64-linux
 
   meta = {
-    description = "A raw converter based on RawTherapee";
-    homepage = "https://bitbucket.org/agriggio/art/";
-    license = lib.licenses.gpl3Only;
+    description = "Raw converter based on RawTherapee";
+    homepage = "https://art.pixls.us";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "art";
     platforms = lib.platforms.linux;

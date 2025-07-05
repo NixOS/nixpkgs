@@ -26,10 +26,10 @@ buildOctavePackage rec {
 
   propagatedBuildInputs = [ pythonEnv ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/symbolic/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/symbolic/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Adds symbolic calculation features to GNU Octave";
   };
 }

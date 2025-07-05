@@ -22,12 +22,12 @@ buildGoModule rec {
     mv $out/bin/Go365 $out/bin/$pname
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Office 365 enumeration tool";
     homepage = "https://github.com/optiv/Go365";
     changelog = "https://github.com/optiv/Go365/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "Go365";
   };
 }

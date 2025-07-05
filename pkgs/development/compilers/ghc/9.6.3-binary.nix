@@ -44,7 +44,7 @@ let
   #   on the compiler binary (`exePathForLibraryCheck`).
   # * To skip library checking for an architecture,
   #   set `exePathForLibraryCheck = null`.
-  # * To skip file checking for a specific arch specfic library,
+  # * To skip file checking for a specific arch specific library,
   #   set `fileToCheckFor = null`.
   ghcBinDists = {
     # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)
@@ -192,12 +192,7 @@ let
       ) binDistUsed.archSpecificLibraries
     )).nixPackage;
 
-  # GHC has other native backends (like PowerPC), but here only the ones
-  # we ship bindists for matter.
-  useLLVM =
-    !(
-      stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
-    );
+  useLLVM = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
 
   libPath = lib.makeLibraryPath (
     # Add arch-specific libraries.
@@ -222,7 +217,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
   pname = "ghc-binary${binDistUsed.variantSuffix}";
 
@@ -331,6 +326,15 @@ stdenv.mkDerivation rec {
   # calls install-strip ...
   dontBuild = true;
 
+  # GHC tries to remove xattrs when installing to work around Gatekeeper
+  # (see https://gitlab.haskell.org/ghc/ghc/-/issues/17418). This step normally
+  # succeeds in nixpkgs because xattrs are not allowed in the store, but it
+  # can fail when a file has the `com.apple.provenance` xattr, and it can’t be
+  # modified (such as target of the symlink to `libiconv.dylib`).
+  # The `com.apple.provenance` xattr is a new feature of macOS as of macOS 13.
+  # See: https://eclecticlight.co/2023/03/13/ventura-has-changed-app-quarantine-with-a-new-xattr/
+  makeFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "XATTR=/does-not-exist" ];
+
   # Patch scripts to include runtime dependencies in $PATH.
   postInstall =
     ''
@@ -416,14 +420,12 @@ stdenv.mkDerivation rec {
       "$out/bin/ghc-pkg" --package-db="$package_db" recache
     '';
 
-  # In nixpkgs, musl based builds currently enable `pie` hardening by default
-  # (see `defaultHardeningFlags` in `make-derivation.nix`).
-  # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+  # GHC cannot currently produce outputs that are ready for `-pie` linking.
   # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
   # See:
   # * https://github.com/NixOS/nixpkgs/issues/129247
   # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
+  hardeningDisable = [ "pie" ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -469,6 +471,6 @@ stdenv.mkDerivation rec {
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
-    maintainers = lib.teams.haskell.members;
+    teams = [ lib.teams.haskell ];
   };
 }

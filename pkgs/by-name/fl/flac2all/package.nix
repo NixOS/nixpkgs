@@ -12,6 +12,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "flac2all";
   version = "5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

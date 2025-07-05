@@ -10,22 +10,24 @@
 }:
 
 let
+  version = "0.8.0";
+
   libquickjs = fetchFromGitHub {
-    owner = "frida";
+    owner = "quickjs-ng";
     repo = "quickjs";
-    rev = "c81f05c9859cea5f83a80057416a0c7affe9b876";
-    hash = "sha256-nAws0ae9kAwvCFcw/yR7XRMwU8EbHoq7kp7iBFpZEZc=";
+    tag = "v${version}";
+    hash = "sha256-o0Cpy+20EqNdNENaYlasJcKIGU7W4RYBcTMsQwFTUNc=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jsdec";
-  version = "0.7.0";
+  version = version;
 
   src = fetchFromGitHub {
     owner = "rizinorg";
     repo = "jsdec";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-UuFA0YKH+0n4Ec3CTiSUFlKXMY4k+tooaEFJYrj6Law=";
+    rev = "v${version}";
+    hash = "sha256-Xc8FMKSGdjrp288u49R6YC0xiynwHeoZe2P/UqnfsFU=";
   };
 
   postUnpack = ''

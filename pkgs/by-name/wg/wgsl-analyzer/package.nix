@@ -2,21 +2,22 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wgsl-analyzer";
-  version = "0.8.1";
+  version = "2025-06-28";
 
   src = fetchFromGitHub {
     owner = "wgsl-analyzer";
     repo = "wgsl-analyzer";
-    tag = "v${version}";
-    hash = "sha256-bhosTihbW89vkqp1ua0C1HGLJJdCNfRde98z4+IjkOc=";
+    tag = finalAttrs.version;
+    hash = "sha256-X4BUZWrCmyixM6D7785jsQ4XYhXemQ7ycl0FUijevkg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-+SeVxobUh2o2xNVBgXf1AgGI6hpNkoDNzXcKfabKEVc=";
+  cargoHash = "sha256-PEhvnIVjNi0O2ZqzSW/CRaK4r5pzd7sMUDhB2eGpqk8=";
 
   checkFlags = [
     # Imports failures
@@ -26,10 +27,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::struct_recover_3"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Language server implementation for the WGSL shading language";
     homepage = "https://github.com/wgsl-analyzer/wgsl-analyzer";
-    changelog = "https://github.com/wgsl-analyzer/wgsl-analyzer/releases/tag/v${version}";
+    changelog = "https://github.com/wgsl-analyzer/wgsl-analyzer/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
@@ -37,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "wgsl-analyzer";
   };
-}
+})

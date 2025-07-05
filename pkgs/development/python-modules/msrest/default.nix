@@ -18,7 +18,7 @@
   trio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "msrest";
   version = "0.7.1";
   pyproject = true;

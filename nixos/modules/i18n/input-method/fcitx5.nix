@@ -117,9 +117,11 @@ in
     i18n.inputMethod.fcitx5.addons =
       lib.optionals (cfg.quickPhrase != { }) [
         (pkgs.writeTextDir "share/fcitx5/data/QuickPhrase.mb" (
-          lib.mapAttrsToList (
-            name: value: "${name} ${builtins.replaceStrings [ "\\" "\n" ] [ "\\\\" "\\n" ] value}"
-          ) cfg.quickPhrase
+          lib.concatStringsSep "\n" (
+            lib.mapAttrsToList (
+              name: value: "${name} ${builtins.replaceStrings [ "\\" "\n" ] [ "\\\\" "\\n" ] value}"
+            ) cfg.quickPhrase
+          )
         ))
       ]
       ++ lib.optionals (cfg.quickPhraseFiles != { }) [
@@ -153,9 +155,10 @@ in
       // lib.optionalAttrs (!cfg.waylandFrontend) {
         GTK_IM_MODULE = "fcitx";
         QT_IM_MODULE = "fcitx";
-      }
-      // lib.optionalAttrs cfg.ignoreUserConfig {
-        SKIP_FCITX_USER_PATH = "1";
       };
+
+    environment.sessionVariables = lib.mkIf cfg.ignoreUserConfig {
+      SKIP_FCITX_USER_PATH = "1";
+    };
   };
 }

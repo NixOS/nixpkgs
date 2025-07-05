@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mctc-lib";
-  version = "0.3.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
-    repo = pname;
+    repo = "mctc-lib";
     rev = "v${version}";
-    hash = "sha256-dJYKnGlcc4N40h1RnP6MJyBj70/8kb1q4OyKTmlvS70=";
+    hash = "sha256-AMRHvzL6CUPItCs07LLOB6Al3yfs8WgrPKRhuNbXiGw=";
   };
 
   nativeBuildInputs = [

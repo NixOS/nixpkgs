@@ -8,14 +8,14 @@
   autoSignDarwinBinariesHook,
   glibcLocales,
 }:
-buildDotnetModule (finalAttrs: rec {
+buildDotnetModule (finalAttrs: {
   pname = "ilspycmd";
   version = "9.0-preview3";
 
   src = fetchFromGitHub {
     owner = "icsharpcode";
     repo = "ILSpy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7cPXFaEKr76GtqcNsKx7tstRUeTpSTF8ggxbyEnQa9M=";
   };
 

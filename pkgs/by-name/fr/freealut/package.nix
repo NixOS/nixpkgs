@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  darwin,
   fetchurl,
   openal,
   testers,
@@ -18,12 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openal
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.OpenAL;
+  ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
-    homepage = "http://openal.org/";
+    homepage = "https://openal.org/";
     description = "Free implementation of OpenAL's ALUT standard";
     mainProgram = "freealut-config";
     license = lib.licenses.lgpl2;

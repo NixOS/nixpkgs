@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "10.11.1";
+  version = "11.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,10 +32,11 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python";
     tag = version;
-    hash = "sha256-dXsEYHkt4Z2YldqbCorNPG7rVSLfU8shYdk6lzFBz/M=";
+    hash = "sha256-JLZGVVrvGVUWr7WCTu2alVl+4GuYqLWP2dodgxYbmgc=";
   };
 
   pythonRelaxDeps = [
+    "click"
     "fsspec"
     "schema"
   ];
@@ -79,6 +80,8 @@ buildPythonPackage rec {
     # Tests require network access and API key
     "tests/cli/test_compute_orchestration.py"
     "tests/runners/test_anymodel.py"
+    "tests/runners/test_download_checkpoints.py"
+    "tests/runners/test_runners.py"
     "tests/runners/test_textmodel.py"
     "tests/runners/test_url_fetcher.py"
     "tests/test_app.py"
@@ -97,7 +100,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Clarifai Python Utilities";
     homepage = "https://github.com/Clarifai/clarifai-python";
-    changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${version}";
+    changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ natsukium ];
     mainProgram = "clarifai";

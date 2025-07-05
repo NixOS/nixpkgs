@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   docbook_xml_dtd_42,
   docbook_xsl,
   fontconfig,
@@ -74,8 +74,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       pngquant = "${pngquant}/bin/pngquant";
     })
   ];

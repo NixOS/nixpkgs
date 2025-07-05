@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pygnmi";
-  version = "0.8.14";
+  version = "0.8.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "akarneliuk";
     repo = "pygnmi";
     tag = "v${version}";
-    sha256 = "sha256-ncp/OwELy/QOvGhLUZW2qTQZsckWI4CGrlEAZ20RtQI=";
+    sha256 = "sha256-2QPUyPGTtXlO6A05mmb/jofRidXfKq0xvH7lv1f9OQk=";
   };
 
   propagatedBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     description = "Pure Python gNMI client to manage network functions and collect telemetry";
     mainProgram = "pygnmicli";
     homepage = "https://github.com/akarneliuk/pygnmi";
-    changelog = "https://github.com/akarneliuk/pygnmi/releases/tag/v${version}";
+    changelog = "https://github.com/akarneliuk/pygnmi/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = [ ];
   };

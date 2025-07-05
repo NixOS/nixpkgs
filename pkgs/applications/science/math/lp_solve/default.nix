@@ -5,6 +5,9 @@
   cctools,
   fixDarwinDylibNames,
   autoSignDarwinBinariesHook,
+  replaceVars,
+  buildPackages,
+  binutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +20,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
+    [
+      binutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
       fixDarwinDylibNames
     ]
@@ -34,6 +40,12 @@ stdenv.mkDerivation rec {
     };
 
   dontConfigure = true;
+
+  patches = [
+    (replaceVars ./0001-fix-cross-compilation.patch {
+      emulator = "${stdenv.hostPlatform.emulator buildPackages}";
+    })
+  ];
 
   buildPhase =
     let

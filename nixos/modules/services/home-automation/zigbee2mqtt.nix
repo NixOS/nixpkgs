@@ -83,6 +83,8 @@ in
         User = "zigbee2mqtt";
         Group = "zigbee2mqtt";
         WorkingDirectory = cfg.dataDir;
+        StateDirectory = "zigbee2mqtt";
+        StateDirectoryMode = "0700";
         Restart = "on-failure";
 
         # Hardening
@@ -123,6 +125,7 @@ in
         SystemCallFilter = [
           "@system-service @pkey"
           "~@privileged @resources"
+          "@chown"
         ];
         UMask = "0077";
       };

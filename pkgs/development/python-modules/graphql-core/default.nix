@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail "poetry_core>=1,<2" "poetry-core" \
       --replace-fail ', "setuptools>=59,<70"' ""
   '';
 
@@ -37,6 +38,8 @@ buildPythonPackage rec {
     pytest-benchmark
     pytestCheckHook
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "graphql" ];
 

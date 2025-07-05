@@ -1,17 +1,25 @@
-{ lib, fetchFromGitHub, rustPlatform, testers, hwatch, installShellFiles }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  testers,
+  hwatch,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "hwatch";
-  version = "0.3.18";
+  version = "0.3.19";
 
   src = fetchFromGitHub {
     owner = "blacknon";
-    repo = pname;
+    repo = "hwatch";
     tag = version;
-    sha256 = "sha256-E1IxeraZTHY+FDnOhyjygFyqOIwVEvnKuPuuNZvvL7o=";
+    sha256 = "sha256-lMsBzMDMgpHxcQFtfZ4K7r2WRUaVR8Ry/kPvwfzPObI=";
   };
 
-  cargoHash = "sha256-by5sAFk3PunlTbkPWYiAn6jIAPnjNTVD2pwkUJVRiOI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UnaZZEmX5XoTVFLEFj5JkJXJkjoUBwzJokfffJTPP4M=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -4,6 +4,7 @@
   cargoHash,
   patchDir,
   extraMeta ? { },
+  unsupported ? false,
 }:
 
 {
@@ -38,16 +39,17 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm" + (lib.optionalString enableSecretProvisioning "-with-secret-provisioning");
   inherit version cargoHash;
+  useFetchCargoVendor = true;
   cargoDepsName = "kanidm";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "kanidm";
+    repo = "kanidm";
     rev = "refs/tags/v${version}";
     inherit hash;
   };
 
-  KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
+  KANIDM_BUILD_PROFILE = "release_nixpkgs_${arch}";
 
   patches = lib.optionals enableSecretProvisioning [
     "${patchDir}/oauth2-basic-secret-modify.patch"
@@ -57,10 +59,21 @@ rustPlatform.buildRustPackage rec {
   postPatch =
     let
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
+      socket_path = if stdenv.hostPlatform.isLinux then "/run/kanidmd/sock" else "/var/run/kanidm.socket";
       profile =
         {
-          admin_bind_path = "/run/kanidmd/sock";
           cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
+        }
+        // lib.optionalAttrs (lib.versionAtLeast version "1.5") {
+          client_config_path = "/etc/kanidm/config";
+          resolver_config_path = "/etc/kanidm/unixd";
+          resolver_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
+          server_admin_bind_path = socket_path;
+          server_config_path = "/etc/kanidm/server.toml";
+          server_ui_pkg_path = "@htmx_ui_pkg_path@";
+        }
+        // lib.optionalAttrs (lib.versionOlder version "1.5") {
+          admin_bind_path = socket_path;
           default_config_path = "/etc/kanidm/server.toml";
           default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
           htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
@@ -82,13 +95,16 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    udev
-    openssl
-    sqlite
-    pam
-    rust-jemalloc-sys
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlite
+      pam
+      rust-jemalloc-sys
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      udev
+    ];
 
   # The UI needs to be in place before the tests are run.
   postBuild =
@@ -113,15 +129,17 @@ rustPlatform.buildRustPackage rec {
     ''profile.release.lto="off"''
   ];
 
-  preFixup = ''
-    installShellCompletion \
-      --bash $releaseDir/build/completions/*.bash \
-      --zsh $releaseDir/build/completions/_*
-
-    # PAM and NSS need fix library names
-    mv $out/lib/libnss_kanidm.so $out/lib/libnss_kanidm.so.2
-    mv $out/lib/libpam_kanidm.so $out/lib/pam_kanidm.so
-  '';
+  preFixup =
+    ''
+      installShellCompletion \
+        --bash $releaseDir/build/completions/*.bash \
+        --zsh $releaseDir/build/completions/_*
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      # PAM and NSS need fix library names
+      mv $out/lib/libnss_kanidm.so $out/lib/libnss_kanidm.so.2
+      mv $out/lib/libpam_kanidm.so $out/lib/pam_kanidm.so
+    '';
 
   passthru = {
     tests = {
@@ -132,7 +150,7 @@ rustPlatform.buildRustPackage rec {
       # avoid spurious releases and tags such as "debs"
       extraArgs = [
         "-vr"
-        "v(.*)"
+        "v([0-9\\.]*)"
         "--override-filename"
         "pkgs/by-name/ka/kanidm/${
           builtins.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor kanidm.version)
@@ -154,10 +172,18 @@ rustPlatform.buildRustPackage rec {
       description = "Simple, secure and fast identity management platform";
       homepage = "https://github.com/kanidm/kanidm";
       license = licenses.mpl20;
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
       maintainers = with maintainers; [
         adamcstephens
         Flakebi
+      ];
+      knownVulnerabilities = lib.optionals unsupported [
+        ''
+          kanidm ${version} has reached EOL.
+
+          Please upgrade by verifying `kanidmd domain upgrade-check` and choosing the next version with `services.kanidm.package = pkgs.kanidm_1_x;`
+          See upgrade guide at https://kanidm.github.io/kanidm/master/server_updates.html
+        ''
       ];
     }
     // extraMeta;

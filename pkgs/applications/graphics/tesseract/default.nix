@@ -1,17 +1,12 @@
 {
   callPackage,
   lowPrio,
-  Accelerate,
-  CoreGraphics,
-  CoreVideo,
 }:
 
 let
   base3 = callPackage ./tesseract3.nix { };
   base4 = callPackage ./tesseract4.nix { };
-  base5 = callPackage ./tesseract5.nix {
-    inherit Accelerate CoreGraphics CoreVideo;
-  };
+  base5 = callPackage ./tesseract5.nix { };
   languages = callPackage ./languages.nix { };
 in
 {

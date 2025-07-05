@@ -10,12 +10,12 @@
   stdenv,
 }:
 let
-  version = "2.9.0";
+  version = "2.10.0";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
     tag = "v${version}";
-    hash = "sha256-3QcpmPUhZZ8oN/CUbCh/A1D0B59o1RxWPyMbA/WoRcU=";
+    hash = "sha256-us1TnszA/10OMVSDsNvzRb6mcM4eMR3pQ5EF4ggA958=";
   };
 in
 buildGoModule {
@@ -26,10 +26,10 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     tag = "v${version}";
-    hash = "sha256-ea1Cch0LOGVGO9CVvS61EHVwJule4HZRizpQYP1QA2w=";
+    hash = "sha256-hzDd2BNTZzjwqhc/STbSAHnNlP7g1cFuMehqU1LumQE=";
   };
 
-  vendorHash = "sha256-HEQCNOv4vO5QsbmoT0acRoaJ4sB0dzF1zcR38778nBI=";
+  vendorHash = "sha256-9Iu4qmBVkGeSAywLgQuDR7y+TwCBqwhVxhfaXhCDnUc=";
 
   subPackages = [ "cmd/caddy" ];
 
@@ -77,6 +77,7 @@ buildGoModule {
         command = "${caddy}/bin/caddy version";
         package = caddy;
       };
+      acme-integration = nixosTests.acme.caddy;
     };
     withPlugins = callPackage ./plugins.nix { inherit caddy; };
   };
@@ -90,6 +91,7 @@ buildGoModule {
       Br1ght0ne
       stepbrobd
       techknowlogick
+      ryan4yin
     ];
   };
 }

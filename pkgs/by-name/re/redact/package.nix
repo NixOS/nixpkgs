@@ -49,7 +49,7 @@ appimageTools.wrapType2 {
       '';
 
   meta = {
-    description = "The only platform that allows you to automatically clean up your old posts from services like Twitter, Reddit, Facebook, Discord, and more, all in one place.";
+    description = "Only platform that allows you to automatically clean up your old posts from services like Twitter, Reddit, Facebook, Discord, and more, all in one place";
     homepage = "https://redact.dev/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ reputable2772 ];

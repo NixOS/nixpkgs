@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "multimethod";
-  version = "1.9.1";
+  version = "2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coady";
-    repo = pname;
+    repo = "multimethod";
     tag = "v${version}";
-    hash = "sha256-KfO+6bZOZOv9SWTV4eqJTWb3/PeCpnXknSF47ddZR5o=";
+    hash = "sha256-/91re2K+nVKULJOjDoimpOukQlLlsMS9blkVQWit2eI=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Multiple argument dispatching";
     homepage = "https://coady.github.io/multimethod/";
-    changelog = "https://github.com/coady/multimethod/tree/v${version}#changes";
+    changelog = "https://github.com/coady/multimethod/tree/${src.tag}#changes";
     license = licenses.asl20;
     maintainers = [ ];
   };

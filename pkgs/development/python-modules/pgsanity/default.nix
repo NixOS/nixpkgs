@@ -18,12 +18,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     unittestCheckHook
-    postgresql
   ];
 
   unittestFlagsArray = [ "test" ];
 
   propagatedBuildInputs = [ postgresql ];
+
+  # To find "ecpg"
+  nativeBuildInputs = [ (lib.getDev postgresql) ];
 
   meta = with lib; {
     homepage = "https://github.com/markdrago/pgsanity";

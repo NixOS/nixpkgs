@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "hatch-vcs";
   version = "0.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,9 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-CTgQdI/gHbDUUfq88sGsJojK79Iy1O3pZwkLHBsH2fc=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     hatchling
     setuptools-scm
   ];

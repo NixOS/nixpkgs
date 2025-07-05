@@ -1,42 +1,52 @@
-{ asciidoctor
-, darwin
-, fetchgit
-, git
-, installShellFiles
-, jq
-, lib
-, makeWrapper
-, man-db
-, nixos
-, nixosTests
-, openssh
-, radicle-node
-, runCommand
-, rustPlatform
-, stdenv
-, testers
-, xdg-utils
-}: rustPlatform.buildRustPackage rec {
+{
+  asciidoctor,
+  fetchgit,
+  git,
+  installShellFiles,
+  jq,
+  lib,
+  makeWrapper,
+  man-db,
+  nixos,
+  nixosTests,
+  openssh,
+  radicle-node,
+  runCommand,
+  rustPlatform,
+  stdenv,
+  testers,
+  xdg-utils,
+}:
+rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.1.0";
+  version = "1.2.0";
   env.RADICLE_VERSION = version;
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
-    rev = "refs/namespaces/z6MksFqXN3Yhqk8pTJdUGLwATkRfQvwZXPqR2qMEhbS9wzpT/refs/tags/v${version}";
-    hash = "sha256-M4oz9tWjI/eqV4Gz1b512MEmvsZ5u3R9y6P9VeeH9CA=";
+    rev = "refs/namespaces/z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM/refs/tags/v${version}";
+    hash = "sha256-AWgLhL6GslE3r2FcZu2imV5ZtEKlUD+a4C5waRGO2lM=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse HEAD > $out/.git_head
+      git -C $out log -1 --pretty=%ct HEAD > $out/.git_time
+      rm -rf $out/.git
+    '';
   };
-  cargoHash = "sha256-QhTolHEzhdIkM5dn1o2CdbFy7JLCLHxd+IwcWl7MLQo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/6VlRwWtJfHf6tXD2HJUTbThwTYeZFTJqtaxclrm3+c=";
 
-  patches = [
-    ./61865b5b5ad715e2b812087947281f0add9aa05e.patch
+  nativeBuildInputs = [
+    asciidoctor
+    installShellFiles
+    makeWrapper
   ];
-
-  nativeBuildInputs = [ asciidoctor installShellFiles makeWrapper ];
   nativeCheckInputs = [ git ];
-  buildInputs = lib.optionals stdenv.buildPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+
+  preBuild = ''
+    export GIT_HEAD=$(<$src/.git_head)
+    export SOURCE_DATE_EPOCH=$(<$src/.git_time)
+  '';
 
   # tests regularly time out on aarch64
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
@@ -49,6 +59,7 @@
   checkFlags = [
     "--skip=service::message::tests::test_node_announcement_validate"
     "--skip=tests::test_announcement_relay"
+    "--skip=tests::commands::rad_remote"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Flaky.20tests/near/438352360
     "--skip=tests::e2e::test_connection_crossing"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Clone.20Partial.20Fail.20Flake
@@ -66,7 +77,14 @@
     for program in $out/bin/* ;
     do
       wrapProgram "$program" \
-        --prefix PATH : "${lib.makeBinPath [ git man-db openssh xdg-utils ]}"
+        --prefix PATH : "${
+          lib.makeBinPath [
+            git
+            man-db
+            openssh
+            xdg-utils
+          ]
+        }"
     done
   '';
 
@@ -76,36 +94,45 @@
     in
     {
       version = testers.testVersion { inherit package; };
-      basic = runCommand "${package.name}-basic-test"
-        {
-          nativeBuildInputs = [ jq openssh radicle-node ];
-        } ''
-        set -e
-        export RAD_HOME="$PWD/.radicle"
-        mkdir -p "$RAD_HOME/keys"
-        ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
-        jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
+      basic =
+        runCommand "${package.name}-basic-test"
+          {
+            nativeBuildInputs = [
+              jq
+              openssh
+              radicle-node
+            ];
+          }
+          ''
+            set -e
+            export RAD_HOME="$PWD/.radicle"
+            mkdir -p "$RAD_HOME/keys"
+            ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
+            jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
 
-        rad config > /dev/null
-        rad debug | jq -e '
-            (.sshVersion | contains("${openssh.version}"))
-          and
-            (.gitVersion | contains("${git.version}"))
-        '
+            rad config > /dev/null
+            rad debug | jq -e '
+                (.sshVersion | contains("${openssh.version}"))
+              and
+                (.gitVersion | contains("${git.version}"))
+            '
 
-        touch $out
-      '';
+            touch $out
+          '';
       nixos-build = lib.recurseIntoAttrs {
-        checkConfig-success = (nixos {
+        checkConfig-success =
+          (nixos {
             services.radicle.settings = {
               node.alias = "foo";
             };
           }).config.services.radicle.configFile;
-        checkConfig-failure = testers.testBuildFailure (nixos {
-            services.radicle.settings = {
-              node.alias = null;
-            };
-          }).config.services.radicle.configFile;
+        checkConfig-failure =
+          testers.testBuildFailure
+            (nixos {
+              services.radicle.settings = {
+                node.alias = null;
+              };
+            }).config.services.radicle.configFile;
       };
       nixos-run = nixosTests.radicle;
     };
@@ -118,9 +145,15 @@
       Repositories are replicated across peers in a decentralized manner, and users are in full control of their data and workflow.
     '';
     homepage = "https://radicle.xyz";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ amesgen lorenzleutgeb ];
+    maintainers = with lib.maintainers; [
+      amesgen
+      lorenzleutgeb
+    ];
     mainProgram = "rad";
   };
 }

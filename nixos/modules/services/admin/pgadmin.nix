@@ -182,7 +182,7 @@ in
       requires = [ "network.target" ];
       # we're adding this optionally so just in case there's any race it'll be caught
       # in case postgres doesn't start, pgadmin will just start normally
-      wants = [ "postgresql.service" ];
+      wants = [ "postgresql.target" ];
 
       path = [
         config.services.postgresql.package

@@ -8,18 +8,19 @@
 
 rustPlatform.buildRustPackage {
   pname = "wayfreeze";
-  version = "0-unstable-2024-12-26";
+  version = "0-unstable-2025-06-29";
 
   src = fetchFromGitHub {
     owner = "Jappie3";
     repo = "wayfreeze";
-    rev = "5f7b7f50b69962b41a685c82fc9e82370d02275a";
-    hash = "sha256-ARnA0R5wZqHDIY+0le0F9okpJS4OI9XpLjN3vsmqUkY=";
+    rev = "57877b94804b23e725257fcf26f7c296a5a38f8c";
+    hash = "sha256-dArJwfAm3jqJurNYMUOVzGMMp1ska0D+SkQ6tj0HhqQ=";
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  cargoHash = "sha256-khbayCb0M3vOx00a7M0tOTQ+AKumioCBtoJs2/Ca0+g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uzTT4WyR7kCL/HPu7JHGQqG9tbO1JGIW1Jtlza5lhPk=";
 
   buildInputs = [
     libxkbcommon

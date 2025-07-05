@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "JoeLancaster";
-    repo = pname;
+    repo = "dnadd";
     rev = "v${version}";
     sha256 = "1vzbgz8y9gj4lszsx4iczfbrj373sl4wi43j7rp46zfcbw323d4r";
   };

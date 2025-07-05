@@ -11,8 +11,8 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "bdcht";
-    repo = pname;
-    rev = "v${version}";
+    repo = "amoco";
+    tag = "v${version}";
     hash = "sha256-3+1ssFyU7SKFJgDYBQY0kVjmTHOD71D2AjnH+4bfLXo=";
   };
 

@@ -25,7 +25,7 @@ buildDunePackage rec {
     sha256 = "sha256-jPyVMxjeh9+xu0dD1gelAxcOhxouKczyvzVoKZ5oSrs=";
   };
 
-  # Finds R and Rmathlib separatley
+  # Finds R and Rmathlib separately
   patches = [
     (fetchpatch {
       url = "https://github.com/pveber/ocaml-r/commit/aa96dc5.patch";

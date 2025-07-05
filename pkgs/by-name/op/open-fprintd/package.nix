@@ -9,10 +9,11 @@
 python3Packages.buildPythonPackage rec {
   pname = "open-fprintd";
   version = "0.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "uunicorn";
-    repo = pname;
+    repo = "open-fprintd";
     rev = version;
     hash = "sha256-uVFuwtsmR/9epoqot3lJ/5v5OuJjuRjL7FJF7oXNDzU=";
   };

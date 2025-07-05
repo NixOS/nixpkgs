@@ -2,7 +2,6 @@
   clangStdenv,
   lib,
   fetchurl,
-  fetchpatch,
   dotnetCorePackages,
   jq,
   curl,
@@ -24,6 +23,7 @@
   python3,
   xmlstarlet,
   nodejs,
+  cpio,
   callPackage,
   unzip,
   yq,
@@ -44,7 +44,7 @@ let
     buildPlatform
     targetPlatform
     ;
-  inherit (swiftPackages) apple_sdk swift;
+  inherit (swiftPackages) swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
   inherit (releaseManifest) release sourceRepository tag;
@@ -90,6 +90,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (lib.versionAtLeast version "9") [
       nodejs
     ]
+    ++ lib.optionals (lib.versionAtLeast version "10") [
+      cpio
+    ]
     ++ lib.optionals isDarwin [
       getconf
     ];
@@ -108,24 +111,12 @@ stdenv.mkDerivation rec {
       krb5
       lttng-ust_2_12
     ]
-    ++ lib.optionals isDarwin (
-      with apple_sdk.frameworks;
-      [
-        xcbuild
-        swift
-        (krb5.overrideAttrs (old: {
-          # the propagated build inputs break swift compilation
-          buildInputs = old.buildInputs ++ old.propagatedBuildInputs;
-          propagatedBuildInputs = [ ];
-        }))
-        sigtool
-        Foundation
-        CoreFoundation
-        CryptoKit
-        System
-      ]
-      ++ lib.optional (lib.versionAtLeast version "9") GSS
-    );
+    ++ lib.optionals isDarwin [
+      xcbuild
+      swift
+      krb5
+      sigtool
+    ];
 
   # This is required to fix the error:
   # > CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
@@ -143,18 +134,25 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    lib.optionals (lib.versionAtLeast version "9") [
+    lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
       ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
+      ./vmr-compiler-opt-v9.patch
     ]
     ++ lib.optionals (lib.versionOlder version "9") [
       ./fix-aspnetcore-portable-build.patch
-      ./fix-clang19-build.patch
+      ./vmr-compiler-opt-v8.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "10") [
+      # src/repos/projects/Directory.Build.targets(106,5): error MSB4018: The "AddSourceToNuGetConfig" task failed unexpectedly.
+      # src/repos/projects/Directory.Build.targets(106,5): error MSB4018: System.Xml.XmlException->Microsoft.Build.Framework.BuildException.GenericBuildTransferredException: There are multiple root elements. Line 9, position 2.
+      ./source-build-externals-overwrite-rather-than-append-.patch
     ];
 
   postPatch =
     ''
       # set the sdk version in global.json to match the bootstrap sdk
-      jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$(${bootstrapSdk}/bin/dotnet --version)" > global.json~
+      sdk_version=$(HOME=$(mktemp -d) ${bootstrapSdk}/bin/dotnet --version)
+      jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$sdk_version" > global.json~
       mv global.json{~,}
 
       patchShebangs $(find -name \*.sh -type f -executable)
@@ -187,7 +185,7 @@ stdenv.mkDerivation rec {
       xmlstarlet ed \
         --inplace \
         -u //_:Project/_:PropertyGroup/_:BuildNumber -v 0 \
-        src/source-build-externals/src/application-insights/.props/_GlobalStaticVersion.props
+        src/source-build-externals/src/${lib.optionalString (lib.versionAtLeast version "10") "repos/src/"}application-insights/.props/_GlobalStaticVersion.props
 
       # this fixes compile errors with clang 15 (e.g. darwin)
       substituteInPlace \
@@ -202,53 +200,56 @@ stdenv.mkDerivation rec {
         -s \$prev -t elem -n KeepNativeSymbols -v false \
         src/runtime/Directory.Build.props
     ''
-    + lib.optionalString (lib.versionAtLeast version "9") ''
-      # repro.csproj fails to restore due to missing freebsd packages
-      xmlstarlet ed \
-        --inplace \
-        -s //Project -t elem -n PropertyGroup \
-        -s \$prev -t elem -n RuntimeIdentifiers -v ${targetRid} \
-        src/runtime/src/coreclr/tools/aot/ILCompiler/repro/repro.csproj
+    + lib.optionalString (lib.versionAtLeast version "9") (
+      ''
+        # repro.csproj fails to restore due to missing freebsd packages
+        xmlstarlet ed \
+          --inplace \
+          -s //Project -t elem -n PropertyGroup \
+          -s \$prev -t elem -n RuntimeIdentifiers -v ${targetRid} \
+          src/runtime/src/coreclr/tools/aot/ILCompiler/repro/repro.csproj
 
-      # https://github.com/dotnet/runtime/pull/98559#issuecomment-1965338627
-      xmlstarlet ed \
-        --inplace \
-        -s //Project -t elem -n PropertyGroup \
-        -s \$prev -t elem -n NoWarn -v '$(NoWarn);CS9216' \
-        src/runtime/Directory.Build.props
+        # https://github.com/dotnet/runtime/pull/98559#issuecomment-1965338627
+        xmlstarlet ed \
+          --inplace \
+          -s //Project -t elem -n PropertyGroup \
+          -s \$prev -t elem -n NoWarn -v '$(NoWarn);CS9216' \
+          src/runtime/Directory.Build.props
 
-      # patch packages installed from npm cache
-      xmlstarlet ed \
-        --inplace \
-        -s //Project -t elem -n Import \
-        -i \$prev -t attr -n Project -v "${./patch-npm-packages.proj}" \
-        src/aspnetcore/eng/DotNetBuild.props
+        # https://github.com/dotnet/source-build/issues/3131#issuecomment-2030215805
+        substituteInPlace \
+          src/aspnetcore/eng/Dependencies.props \
+          --replace-fail \
+          "'\$(DotNetBuildSourceOnly)' == 'true'" \
+          "'\$(DotNetBuildSourceOnly)' == 'true' and \$(PortableBuild) == 'false'"
 
-      # https://github.com/dotnet/source-build/issues/3131#issuecomment-2030215805
-      substituteInPlace \
-        src/aspnetcore/eng/Dependencies.props \
-        --replace-fail \
-        "'\$(DotNetBuildSourceOnly)' == 'true'" \
-        "'\$(DotNetBuildSourceOnly)' == 'true' and \$(PortableBuild) == 'false'"
+        # https://github.com/dotnet/source-build/issues/4325
+        xmlstarlet ed \
+          --inplace \
+          -r '//Target[@Name="UnpackTarballs"]/Move' -v Copy \
+          eng/init-source-only.proj
 
-      # https://github.com/dotnet/source-build/issues/4325
-      xmlstarlet ed \
-        --inplace \
-        -r '//Target[@Name="UnpackTarballs"]/Move' -v Copy \
-        eng/init-source-only.proj
+        # error: _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror,-W#warnings]
+        substituteInPlace \
+          src/runtime/src/coreclr/ilasm/CMakeLists.txt \
+          --replace-fail 'set_source_files_properties( prebuilt/asmparse.cpp PROPERTIES COMPILE_FLAGS "-O0" )' ""
 
-      # error: _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror,-W#warnings]
-      substituteInPlace \
-        src/runtime/src/coreclr/ilasm/CMakeLists.txt \
-        --replace-fail 'set_source_files_properties( prebuilt/asmparse.cpp PROPERTIES COMPILE_FLAGS "-O0" )' ""
-
-      # https://github.com/dotnet/source-build/issues/4444
-      xmlstarlet ed \
-        --inplace \
-        -s '//Project/Target/MSBuild[@Targets="Restore"]' \
-        -t attr -n Properties -v "NUGET_PACKAGES='\$(CurrentRepoSourceBuildPackageCache)'" \
-        src/aspnetcore/eng/Tools.props
-    ''
+        # https://github.com/dotnet/source-build/issues/4444
+        xmlstarlet ed \
+          --inplace \
+          -s '//Project/Target/MSBuild[@Targets="Restore"]' \
+          -t attr -n Properties -v "NUGET_PACKAGES='\$(CurrentRepoSourceBuildPackageCache)'" \
+          src/aspnetcore/eng/Tools.props
+      ''
+      + lib.optionalString (lib.versionOlder version "10") ''
+        # patch packages installed from npm cache
+        xmlstarlet ed \
+          --inplace \
+          -s //Project -t elem -n Import \
+          -i \$prev -t attr -n Project -v "${./patch-npm-packages.proj}" \
+          src/aspnetcore/eng/DotNetBuild.props
+      ''
+    )
     + lib.optionalString isLinux (
       ''
         substituteInPlace \
@@ -284,7 +285,9 @@ stdenv.mkDerivation rec {
 
         substituteInPlace \
           src/runtime/src/installer/managed/Microsoft.NET.HostModel/HostModelUtils.cs \
-          src/sdk/src/Tasks/Microsoft.NET.Build.Tasks/targets/Microsoft.NET.Sdk.targets \
+      ''
+      + lib.optionalString (lib.versionOlder version "10") "  src/sdk/src/Tasks/Microsoft.NET.Build.Tasks/targets/Microsoft.NET.Sdk.targets \\\n"
+      + ''
           --replace-fail '/usr/bin/codesign' '${sigtool}/bin/codesign'
 
         # fix: strip: error: unknown argument '-n'
@@ -298,7 +301,15 @@ stdenv.mkDerivation rec {
           -s //Project -t elem -n PropertyGroup \
           -s \$prev -t elem -n SkipInstallerBuild -v true \
           src/runtime/Directory.Build.props
-
+      ''
+      + lib.optionalString (lib.versionAtLeast version "10") ''
+        xmlstarlet ed \
+          --inplace \
+          -s //Project -t elem -n PropertyGroup \
+          -s \$prev -t elem -n SkipInstallerBuild -v true \
+          src/aspnetcore/Directory.Build.props
+      ''
+      + ''
         # stop passing -sdk without a path
         # stop using xcrun
         # add -module-cache-path to fix swift errors, see sandboxProfile
@@ -308,20 +319,21 @@ stdenv.mkDerivation rec {
           src/runtime/src/native/libs/System.Security.Cryptography.Native.Apple/CMakeLists.txt \
           --replace-fail ' -sdk ''${CMAKE_OSX_SYSROOT}' "" \
           --replace-fail 'xcrun swiftc' 'swiftc -module-cache-path "$ENV{HOME}/.cache/module-cache"'
-      ''
-      + lib.optionalString (lib.versionAtLeast version "9") ''
+
         # fix: strip: error: unknown argument '-n'
         substituteInPlace \
           src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets \
-          src/runtime/src/native/managed/native-library.targets \
+      ''
+      + lib.optionalString (lib.versionAtLeast version "9") "  src/runtime/src/native/managed/native-library.targets \\\n"
+      + ''
           --replace-fail ' -no_code_signature_warning' ""
 
         # ld: library not found for -ld_classic
         substituteInPlace \
           src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
-          src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj \
-          --replace-fail 'Include="-ld_classic"' ""
       ''
+      + lib.optionalString (lib.versionOlder version "10") "  src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj \\\n"
+      + "  --replace-fail 'Include=\"-ld_classic\"' \"\"\n"
       + lib.optionalString (lib.versionOlder version "9") ''
         # [...]/build.proj(123,5): error : Did not find PDBs for the following SDK files:
         # [...]/build.proj(123,5): error : sdk/8.0.102/System.Resources.Extensions.dll
@@ -366,11 +378,6 @@ stdenv.mkDerivation rec {
   postConfigure = lib.optionalString (lib.versionAtLeast version "9") ''
     # see patch-npm-packages.proj
     typeset -f isScript patchShebangs > src/aspnetcore/patch-shebangs.sh
-
-    # fix nuget-to-nix failure on package sources which return 401
-    for source in dotnet{7,8,9}-internal{,-transport}; do
-      ./.dotnet/dotnet nuget disable source --configfile src/aspnetcore/NuGet.config $source
-    done
   '';
 
   dontConfigureNuget = true; # NUGET_PACKAGES breaks the build
@@ -456,6 +463,11 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
+  ${if stdenv.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null} = ''
+    mkdir -p "$out"/nix-support
+    echo ${sigtool} > "$out"/nix-support/manual-sdk-deps
+  '';
+
   # dotnet cli is in the root, so we need to strip from there
   # TODO: should we install in $out/share/dotnet?
   stripDebugList = [ "." ];
@@ -487,5 +499,8 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+    # build deadlocks intermittently on rosetta
+    # https://github.com/dotnet/runtime/issues/111628
+    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

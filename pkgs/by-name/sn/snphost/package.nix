@@ -14,16 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "snphost";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "virtee";
     repo = "snphost";
     tag = "v${version}";
-    hash = "sha256-GaeNoLx/fV/NNUS2b2auGvylhW6MOFp98Xi0sdDV3VM=";
+    hash = "sha256-sBEIQQ0vfwQh5eqsC6x37VDlbXuBUybRh4LNUjfEJ5A=";
   };
 
-  cargoHash = "sha256-fG3MTCHfIfYeFK03Ee9uzq8e7f5NN/h8LIye7Y3+0uI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aNXv6Av3JvnTqTbxX70FmwEF4jJaQmD6FHjvh7om9iE=";
 
   nativeBuildInputs = [
     asciidoctor

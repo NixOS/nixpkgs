@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "3.8.0";
 
   src = fetchurl {
-    url = "mirror://ophcrack/ophcrack/${version}/ophcrack-${version}.tar.bz2";
+    url = "mirror://sourceforge/ophcrack/${version}/ophcrack-${version}.tar.bz2";
     hash = "sha256-BIpt9XmDo6WjGsfE7BLfFqpJ5lKilnbZPU75WdUK7uA=";
   };
 

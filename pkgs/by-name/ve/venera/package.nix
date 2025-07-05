@@ -1,43 +1,56 @@
 {
   lib,
+  flutter332,
   fetchFromGitHub,
-  flutter327,
   webkitgtk_4_1,
-  pkg-config,
   copyDesktopItems,
   makeDesktopItem,
+  runCommand,
+  venera,
+  yq,
+  _experimental-update-script-combinators,
+  gitUpdater,
 }:
-flutter327.buildFlutterApplication rec {
+
+flutter332.buildFlutterApplication rec {
   pname = "venera";
-  version = "1.1.3";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
     tag = "v${version}";
-    hash = "sha256-zjlu+rdS+ctp8R1laeT9OF+HCLvTyQsAJIBA1fEiNMg=";
+    hash = "sha256-yg7VwR1IGswyqkyuvTZnVVLI4YKnfcea+VemWLOUXto=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    desktop_webview_window = "sha256-15tw3gLN9e886QjBFuYP34KLD1lN8AmQYXVza5Bvs40=";
-    flutter_qjs = "sha256-SvOgcZquwZ1/HWVkPVnD8Eo+jD3jjfkKsVleJpNaiV0=";
-    lodepng_flutter = "sha256-bGc9uXD1EQ/19OIZmR7a/YL9w93fNWdQF5S19LSwxZw=";
-    photo_view = "sha256-Z+9xgvk8YS+bgCbBW7BBY72tV6JUq2kCX5OwKFK4YPE=";
-    scrollable_positioned_list = "sha256-6XmBlNxE7DEqY2LsEFtVrshn2Xt55XnmaiTq+tiPInA=";
-    webdav_client = "sha256-Dz/4qW+cYGyNtK8S/abFslwQNroidgrHl7oJw3uXIqM=";
-    flutter_saf = "sha256-haY4eabTwUUBTpwenK0ILKpLggrtjVQszcmlpirEeTU=";
-  };
+  gitHashes =
+    let
+      flutter_inappwebview-hash = "sha256-Vh5bZP/tkSAlstbT3souy/iLmpw3CENrA/rCUOcJb2o=";
+    in
+    {
+      desktop_webview_window = "sha256-c2f1CjfZJ8M9SJz65WQVG+0uuKaFMjQFFAGSNH9osjg=";
+      flutter_qjs = "sha256-Mp9swQ4JEIyIEBQGlR7i+37Jp2sFGwL0uGrSTwE/n88=";
+      flutter_7zip = "sha256-KHDq4XG3l+dq1NPW84wOK5kKbXJ8qCK8voGeTnX/Krw=";
+      lodepng_flutter = "sha256-fOOhjoo3dzNNZI04Ie7GHLTfVlD5X+5IONpg8+RlmsE=";
+      photo_view = "sha256-zRc/WCbVybWkF52KDZZXgvKA8bbXASI7Yj2RFzLhXUk=";
+      scrollable_positioned_list = "sha256-6XmBlNxE7DEqY2LsEFtVrshn2Xt55XnmaiTq+tiPInA=";
+      webdav_client = "sha256-euNF7HdDtZ68BqSEq9BvO10BK09MxX2wWGoElFS0yeE=";
+      flutter_saf = "sha256-zmRZ82aJPYX/N/lOUcOoT8UAHEDoUk0FTFSqB4gKR+U=";
+      rhttp = "sha256-6AH7A+CJg60Vk0ph3cJwj29GkmJEezI/VuZvRqqmOYs=";
+      flutter_inappwebview = flutter_inappwebview-hash;
+      flutter_inappwebview_android = flutter_inappwebview-hash;
+      flutter_inappwebview_ios = flutter_inappwebview-hash;
+      flutter_inappwebview_macos = flutter_inappwebview-hash;
+      flutter_inappwebview_web = flutter_inappwebview-hash;
+      flutter_inappwebview_windows = flutter_inappwebview-hash;
+      flutter_inappwebview_platform_interface = flutter_inappwebview-hash;
+    };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    pkg-config
-  ];
+  nativeBuildInputs = [ copyDesktopItems ];
 
-  buildInputs = [
-    webkitgtk_4_1
-  ];
+  buildInputs = [ webkitgtk_4_1 ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -57,22 +70,36 @@ flutter327.buildFlutterApplication rec {
     })
   ];
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/venera/lib
-  '';
-
   postInstall = ''
     install -Dm0644 ./debian/gui/venera.png $out/share/pixmaps/venera.png
   '';
 
-  passthru.updateScript = ./update.sh;
+  extraWrapProgramArgs = ''
+    --prefix LD_LIBRARY_PATH : $out/app/venera/lib
+  '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          buildInputs = [ yq ];
+          inherit (venera) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "venera.pubspecSource" ./pubspec.lock.json)
+    ];
+  };
 
   meta = {
     description = "Comic reader that support reading local and network comics";
     homepage = "https://github.com/venera-app/venera";
     mainProgram = "venera";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

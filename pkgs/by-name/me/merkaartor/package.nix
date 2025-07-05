@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OpenStreetMap editor";
-    homepage = "http://merkaartor.be/";
+    homepage = "https://merkaartor.be/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "merkaartor";
     maintainers = with lib.maintainers; [ sikmir ];

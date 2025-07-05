@@ -1,18 +1,24 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  wheel,
+
+  # dependencies
   gymnasium,
   numpy,
-  chess,
-  pillow,
-  pybox2d,
+
+  # optional-dependencies
   pygame,
   pymunk,
+  chess,
   rlcard,
+  shimmy,
+  pillow,
+  pybox2d,
   scipy,
   pre-commit,
   pynput,
@@ -20,27 +26,25 @@
   pytest-cov-stub,
   pytest-markdown-docs,
   pytest-xdist,
+
+  # tests
   pytestCheckHook,
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "pettingzoo";
-  version = "1.24.3";
+  version = "1.25.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "PettingZoo";
     tag = version;
-    hash = "sha256-TVM4MrA4W6AIWEdBIecI85ahJAAc21f27OzCxSpOoZU=";
+    hash = "sha256-hQe/TMlLG//Bn8aaSo0/FPOUvOEyKfztuTIS7SMsUQ4=";
   };
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
@@ -49,17 +53,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    all = [
-      chess
-      # multi-agent-ale-py
-      pillow
-      pybox2d
-      pygame
-      pymunk
-      rlcard
-      scipy
-      # shimmy
-    ];
+    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
     atari = [
       # multi-agent-ale-py
       pygame
@@ -72,7 +66,7 @@ buildPythonPackage rec {
       chess
       pygame
       rlcard
-      # shimmy
+      shimmy
     ];
     mpe = [ pygame ];
     other = [ pillow ];
@@ -122,11 +116,11 @@ buildPythonPackage rec {
       "test_multi_episode_parallel_env_wrapper"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "API standard for multi-agent reinforcement learning environments, with popular reference environments and related utilities";
     homepage = "https://github.com/Farama-Foundation/PettingZoo";
     changelog = "https://github.com/Farama-Foundation/PettingZoo/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

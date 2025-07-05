@@ -8,22 +8,22 @@
   nixosTests,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "grocy";
-  version = "4.2.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "grocy";
     repo = "grocy";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-aX3DMy9Jv8rNp1/VIvUtNXYXGBrCgBMs5GsDf4XXSj0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MnN6TIkNZWT+pAQf0+z5l3hj/7K/d3BfI7VAaUEKG8s=";
   };
 
-  vendorHash = "sha256-KaYvA0Rd4pd1s/L8QbVUgkE+SjH+jv4+6RvIaGOpews=";
+  vendorHash = "sha256-n+6yNXqarWRZt6VEuHrFe3nrTiGeHnkURmO2UuB/BVc=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-UvWY8+qSRvzJbm7z3CmLyeUHxemzNUB7dHYP95ZVtcI=";
+    hash = "sha256-Q+9hUxIfNrfdok39h04rz5I63RxOJ0qk3XlwvD1TcqI=";
   };
 
   nativeBuildInputs = [
@@ -52,13 +52,10 @@ php.buildComposerProject (finalAttrs: {
     runHook postConfigure
   '';
 
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
+    chmod -R u+w $out/share
     mv $out/share/php/grocy/* $out
     rm -r $out/share
-
-    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) grocy; };

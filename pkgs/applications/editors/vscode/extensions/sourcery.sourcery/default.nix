@@ -10,15 +10,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "sourcery";
     publisher = "sourcery";
-    version = "1.27.0";
-    hash = "sha256-Z7kINeq4m0XZ4wFalC0vZylMbR5dRTyFr4AZkHD+N/M=";
+    version = "1.37.0";
+    hash = "sha256-ovCxcr1m3GmRu45hr5DG781xkQdANbQYLvV2gFhG4eQ=";
   };
-
-  postPatch = ''
-    pushd sourcery_binaries/install
-    rm -r win ${if stdenv.hostPlatform.isLinux then "mac" else "linux"}
-    popd
-  '';
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 

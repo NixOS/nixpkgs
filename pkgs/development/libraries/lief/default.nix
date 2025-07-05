@@ -1,26 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python
-, cmake
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  cmake,
+  ninja,
 }:
 
 let
-  pyEnv = python.withPackages (ps: [ ps.setuptools ps.tomli ps.pip ps.setuptools ]);
+  pyEnv = python3.withPackages (ps: [
+    ps.setuptools
+    ps.tomli
+    ps.pip
+    ps.setuptools
+  ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lief";
-  version = "0.16.1";
+  version = "0.16.6";
 
   src = fetchFromGitHub {
     owner = "lief-project";
     repo = "LIEF";
-    rev = version;
-    sha256 = "sha256-Mq3IC1EbJpAwqHpiByFwdWl/rUOvv+oOtLgJ6dx7/P0=";
+    tag = finalAttrs.version;
+    hash = "sha256-SvwFyhIBuG0u5rE7+1OaO7VZu4/X4jVI6oFOm5+yCd8=";
   };
 
-  outputs = [ "out" "py" ];
+  outputs = [
+    "out"
+    "py"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -29,7 +38,7 @@ stdenv.mkDerivation rec {
 
   # Not in propagatedBuildInputs because only the $py output needs it; $out is
   # just the library itself (e.g. C/C++ headers).
-  buildInputs = with python.pkgs; [
+  buildInputs = with python3.pkgs; [
     python
     build
     pathspec
@@ -37,6 +46,8 @@ stdenv.mkDerivation rec {
     pydantic
     scikit-build-core
   ];
+
+  cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
 
   postBuild = ''
     pushd ../api/python
@@ -55,6 +66,9 @@ stdenv.mkDerivation rec {
     homepage = "https://lief.quarkslab.com/";
     license = [ licenses.asl20 ];
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ lassulus genericnerdyusername ];
+    maintainers = with maintainers; [
+      lassulus
+      genericnerdyusername
+    ];
   };
-}
+})

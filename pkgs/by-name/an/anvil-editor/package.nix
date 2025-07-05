@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo123Module,
   fetchzip,
   pkg-config,
   copyDesktopItems,
@@ -12,25 +12,30 @@
   vulkan-headers,
   libGL,
   xorg,
-  callPackage,
   buildPackages,
-  anvilExtras ? callPackage ./extras.nix { },
 }:
 
-buildGoModule rec {
+buildGo123Module (finalAttrs: {
   pname = "anvil-editor";
-  version = "0.4";
+  version = "0.6";
 
   # has to update vendorHash of extra package manually
   # nixpkgs-update: no auto update
   src = fetchzip {
-    url = "https://anvil-editor.net/releases/anvil-src-v${version}.tar.gz";
-    hash = "sha256-0fi6UeppWC9KbWibjQYlPlRqsl9xsvij8YpJUS0S/wY=";
+    url = "https://anvil-editor.net/releases/anvil-src-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-i0S5V3j6OPpu4z1ljDKP3WYa9L+EKwo/MBNgW2ENYk8=";
   };
 
   modRoot = "anvil/src/anvil";
 
   vendorHash = "sha256-1oFBV7D7JgOt5yYAxVvC4vL4ccFv3JrNngZbo+5pzrk=";
+
+  anvilExtras = buildGo123Module {
+    pname = "anvil-editor-extras";
+    inherit (finalAttrs) version src meta;
+    vendorHash = "sha256-4pfk5XuwDbCWFZIF+1l+dy8NfnGNjgHmSg9y6/RnTSo=";
+    modRoot = "anvil-extras";
+  };
 
   nativeBuildInputs =
     [
@@ -60,8 +65,11 @@ buildGoModule rec {
       exec = "anvil";
       icon = "anvil";
       desktopName = "Anvil";
-      comment = meta.description;
-      categories = [ "TextEditor" ];
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Utility"
+        "TextEditor"
+      ];
       startupWMClass = "anvil";
     })
   ];
@@ -76,12 +84,8 @@ buildGoModule rec {
         install -Dm644 anvil_''${square}x32.png $out/share/icons/hicolor/''${square}/apps/anvil.png
       done
     popd
-    cp ${anvilExtras}/bin/* $out/bin
+    cp ${finalAttrs.anvilExtras}/bin/* $out/bin
   '';
-
-  passthru = {
-    inherit anvilExtras;
-  };
 
   meta = {
     description = "Graphical, multi-pane tiling editor inspired by Acme";
@@ -91,4 +95,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = with lib.platforms; unix ++ windows;
   };
-}
+})

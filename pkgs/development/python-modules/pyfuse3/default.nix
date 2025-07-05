@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace-fail "if DEVELOPER_MODE" "if False" \
       --replace-fail "'pkg-config'" "'$(command -v $PKG_CONFIG)'"
   '';
 

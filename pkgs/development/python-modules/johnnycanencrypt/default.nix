@@ -6,7 +6,6 @@
   httpx,
   libiconv,
   nettle,
-  PCSC,
   pcsclite,
   pkg-config,
   pytestCheckHook,
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,13 +25,12 @@ buildPythonPackage rec {
     owner = "kushaldas";
     repo = "johnnycanencrypt";
     tag = "v${version}";
-    hash = "sha256-tbHW3x+vwFz0nqFGWvgxjhw8XH6/YKz1uagU339SZyk=";
+    hash = "sha256-9T8B6zG3zMOBMX9C+u34MGBAgQ8YR44CW2BTdO1CciI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-vDlMdzZgmaRkviEk8IjIN+Q5x95gnpQiW5c8fT+dats=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-V1z16GKaSQVjp+stWir7kAO2wsnOYPdhKi4KzIKmKx8=";
   };
 
   build-system = with rustPlatform; [
@@ -53,7 +51,6 @@ buildPythonPackage rec {
     [ nettle ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      PCSC
       libiconv
     ];
 

@@ -7,11 +7,12 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "pypalazzetti";
-  version = "0.1.15";
+  version = "0.1.19";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "dotvav";
     repo = "py-palazzetti-api";
     tag = "v${version}";
-    hash = "sha256-gqJZVlX060BMbTbkbpK6UMnM71Mr06sNHX++ObI3Y5Y=";
+    hash = "sha256-Bmx4CU6bx5FVR7xdDxrtVSXunthi2s2Esj1FtSjh61U=";
   };
 
   build-system = [ setuptools ];
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [ "pypalazzetti" ];

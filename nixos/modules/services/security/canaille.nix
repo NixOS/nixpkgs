@@ -33,9 +33,12 @@ let
       old.dependencies
       ++ old.optional-dependencies.front
       ++ old.optional-dependencies.oidc
+      ++ old.optional-dependencies.scim
       ++ old.optional-dependencies.ldap
       ++ old.optional-dependencies.sentry
-      ++ old.optional-dependencies.postgresql;
+      ++ old.optional-dependencies.postgresql
+      ++ old.optional-dependencies.otp
+      ++ old.optional-dependencies.sms;
     makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
       "--set CONFIG /etc/canaille/config.toml"
       "--set SECRETS_DIR \"${secretsDir}\""
@@ -280,7 +283,7 @@ in
     systemd.services.canaille-install = {
       # We want this on boot, not on socket activation
       wantedBy = [ "multi-user.target" ];
-      after = optional createLocalPostgresqlDb "postgresql.service";
+      after = optional createLocalPostgresqlDb "postgresql.target";
       serviceConfig = commonServiceConfig // {
         Type = "oneshot";
         ExecStart = "${getExe finalPackage} install";
@@ -293,7 +296,7 @@ in
       after = [
         "network.target"
         "canaille-install.service"
-      ] ++ optional createLocalPostgresqlDb "postgresql.service";
+      ] ++ optional createLocalPostgresqlDb "postgresql.target";
       requires = [
         "canaille-install.service"
         "canaille.socket"

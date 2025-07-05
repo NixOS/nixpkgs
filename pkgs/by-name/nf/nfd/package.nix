@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  boost,
+  boost186,
   fetchFromGitHub,
   libpcap,
   ndn-cxx,
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional withWebSocket websocketpp
     ++ lib.optional withSystemd systemd;
   wafConfigureFlags = [
-    "--boost-includes=${boost.dev}/include"
-    "--boost-libs=${boost.out}/lib"
+    "--boost-includes=${boost186.dev}/include"
+    "--boost-libs=${boost186.out}/lib"
   ] ++ lib.optional (!withWebSocket) "--without-websocket";
 
   meta = with lib; {

@@ -5,7 +5,7 @@
   unstableGitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "scheme-manpages";
   version = "0-unstable-2024-02-11";
 

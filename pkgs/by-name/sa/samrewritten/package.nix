@@ -12,14 +12,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "samrewritten";
-  version = "202008-unstable-2023-05-22";
+  version = "202008-unstable-2025-03-11";
 
   src = fetchFromGitHub {
     owner = "PaulCombal";
     repo = "SamRewritten";
     # The latest release is too old, use latest commit instead
-    rev = "39d524a72678a226bf9140db6b97641f554563c3";
-    hash = "sha256-sS/lVY5EWXdTOg7cDWPbi/n5TNt+pRAF1x7ZEaYG4wM=";
+    rev = "cac0291f3e4465135f5cf7d5b99fdb005fb23ade";
+    hash = "sha256-+f/j2q1lJ3yp3/BBgnK9kS4P3ULQ5onQPAcUV12LYnI=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

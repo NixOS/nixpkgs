@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtbloader";
-  version = "1.2.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "TravMurav";
     repo = "dtbloader";
     tag = finalAttrs.version;
-    hash = "sha256-5Efxi0cojhq9mqB5VMShXx/Sp4CE6Cvr1pcwnUm5zlo=";
+    hash = "sha256-qU7KB5oRd24rFN26kUhLYrG9VRakNuX8R0hWF0mVgvc=";
     fetchSubmodules = true;
   };
 

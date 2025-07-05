@@ -2,39 +2,59 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  appdirs,
   argcomplete,
   colorama,
   halo,
+  platformdirs,
   spinners,
   types-colorama,
-  nose2,
+  typing-extensions,
+  setuptools,
+  pytestCheckHook,
   semver,
 }:
 
 buildPythonPackage rec {
   pname = "milc";
-  version = "1.8.0";
-  format = "setuptools";
+  version = "1.9.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clueboard";
     repo = "milc";
-    rev = version;
-    hash = "sha256-DUA79R/pf/arG4diJKaJTSLNdB4E0XnS4NULlqP4h/M=";
+    tag = version;
+    hash = "sha256-byj2mcDxLl7rZEFjAt/g1kHllnVxiTIQaTMG24GeSVc=";
   };
 
-  propagatedBuildInputs = [
-    appdirs
+  postPatch = ''
+    # Needed for tests
+    patchShebangs --build \
+      example \
+      custom_logger \
+      questions \
+      sparkline \
+      hello \
+      passwd_confirm \
+      passwd_complexity \
+      config_source
+  '';
+
+  dependencies = [
     argcomplete
     colorama
     halo
+    platformdirs
     spinners
     types-colorama
+    typing-extensions
+  ];
+
+  build-system = [
+    setuptools
   ];
 
   nativeCheckInputs = [
-    nose2
+    pytestCheckHook
     semver
   ];
 

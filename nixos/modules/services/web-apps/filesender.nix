@@ -227,7 +227,7 @@ in
         "multi-user.target"
         "phpfpm-filesender.service"
       ];
-      after = [ "postgresql.service" ];
+      after = [ "postgresql.target" ];
 
       restartIfChanged = true;
 

@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "6.2.0";
+  version = "7.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.concurrency";
+    pname = "oslo_concurrency";
     inherit version;
-    hash = "sha256-q515k1EZ4ryw7et/hYcjaveEQkSrhxU3ILjKhDfRvgI=";
+    hash = "sha256-34qHf4ACsH1p8dDnDbzvSSDTkkmqpi5Hj60haz3UFMs=";
   };
 
   postPatch = ''
@@ -55,6 +55,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     eventlet
     fixtures
+    libredirect.hook
     oslotest
     stestr
   ];
@@ -62,7 +63,6 @@ buildPythonPackage rec {
   checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
 
     stestr run -e <(echo "
     oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn
@@ -77,6 +77,6 @@ buildPythonPackage rec {
     mainProgram = "lockutils-wrapper";
     homepage = "https://github.com/openstack/oslo.concurrency";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

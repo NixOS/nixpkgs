@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blis";
-  version = "1.0";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "flame";
     repo = "blis";
     rev = version;
-    sha256 = "sha256-lAo6C34QQvXr3LmcsnTp4+Imi/lKxzcWu3EJkVgLvDI=";
+    sha256 = "sha256-+n8SbiiEJDN4j1IPmZfI5g1i2J+jWrUXh7S48JEDTAE=";
   };
 
   inherit blas64;

@@ -22,6 +22,8 @@
   wayland,
   xdg-utils,
 
+  nix-update-script,
+  withGraphics ? false,
 }:
 let
   rpathLibs =
@@ -43,16 +45,32 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.14.0";
+  version = "0.15.1" + lib.optionalString withGraphics "-graphics";
 
-  src = fetchFromGitHub {
-    owner = "alacritty";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-ZhkuuxTx2y8vOfxfpDpJAyNyDdRWab0pqyDdbOCQ2XE=";
-  };
+  src =
+    # by default we want the official package
+    if !withGraphics then
+      fetchFromGitHub {
+        owner = "alacritty";
+        repo = "alacritty";
+        tag = "v${version}";
+        hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
+      }
+    # optionally we want to build the sixels feature fork
+    else
+      fetchFromGitHub {
+        owner = "ayosec";
+        repo = "alacritty";
+        tag = "v${version}";
+        hash = "sha256-n8vO6Q4bzWLaOqg8YhZ+aLOtBBTQ9plKIEJHXq+hhnM=";
+      };
 
-  cargoHash = "sha256-T+/G2z7H/egJ/IlP3KA31jydg1CmFdLW8bLYSf/yWck=";
+  useFetchCargoVendor = true;
+  cargoHash =
+    if !withGraphics then
+      "sha256-uXwefUV1NAKqwwPIWj4Slkx0c5b+RfLR3caTb42fc4M="
+    else
+      "sha256-UtxZFqU974N+YcHoEHifBjNSyaVuMvuc1clTDgUPuoQ=";
 
   nativeBuildInputs = [
     cmake
@@ -121,18 +139,21 @@ rustPlatform.buildRustPackage rec {
 
   dontPatchELF = true;
 
-  passthru.tests.test = nixosTests.terminal-emulators.alacritty;
+  passthru = {
+    tests.test = nixosTests.terminal-emulators.alacritty;
+    updateScript = nix-update-script { };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "alacritty";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       Br1ght0ne
-      mic92
+      rvdp
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
   };
 }

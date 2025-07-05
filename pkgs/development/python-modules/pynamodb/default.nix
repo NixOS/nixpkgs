@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pynamodb";
-  version = "6.0.1";
+  version = "6.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "pynamodb";
     repo = "PynamoDB";
     tag = version;
-    hash = "sha256-OcrES+1F95KjhRXpEukzbuDfTXU4hyJqxGjD1xMcdKE=";
+    hash = "sha256-i4cO1fzERKHJW2Ym0ogc2YID3IXVpBVDE33UumxvvHE=";
   };
 
   build-system = [ setuptools ];
@@ -57,6 +57,8 @@ buildPythonPackage rec {
     # require a local dynamodb instance
     "test_create_table"
     "test_create_table__incompatible_indexes"
+    # https://github.com/pynamodb/PynamoDB/issues/1265
+    "test_connection_make_api_call__binary_attributes"
   ];
 
   meta = with lib; {

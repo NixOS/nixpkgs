@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-8tmQtycK7D5bol9v5VL8VkROZbSCndHo+uBvqqFTZjw=";
   };
 
-  cargoHash = "sha256-8x8bS0LcvoxoSBWbGdkKzhxDi/9VNab26eidv8YK9dg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-q47UUCD3JYzkVsJa5+E1vTbCgnEQ9Mo5eLgO2lmdnQ4=";
 
   # It doesn't discover this on its own :/
   # https://github.com/GpuZelenograd/memtest_vulkan/issues/36

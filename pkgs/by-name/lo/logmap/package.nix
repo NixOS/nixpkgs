@@ -4,14 +4,14 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "logmap";
   version = "unstable-2021-12-15";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "zhzyker";
-    repo = pname;
+    repo = "logmap";
     rev = "5040707b4ae260830072de93ccd6a23615073abf";
     sha256 = "sha256-LOGjK5l/gaKObWbC9vaLruE8DdDsabztnEW/TjvCdtE=";
   };
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   installPhase = ''
     runHook preInstall
-    install -vD ${pname}.py $out/bin/${pname}
+    install -vD logmap.py $out/bin/logmap
     runHook postInstall
   '';
 

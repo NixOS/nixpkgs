@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "Ph33rr";
-    repo = pname;
+    repo = "cirrusgo";
     rev = "v${version}";
     hash = "sha256-FYI/Ldu91YB/4wCiVADeYxYQOeBGro1msY5VXsnixw4=";
   };

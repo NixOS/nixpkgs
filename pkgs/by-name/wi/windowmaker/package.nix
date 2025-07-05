@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.windowmaker.org/news/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "wmaker";
-    maintainers = [ lib.maintainers.AndersonTorres ];
-    platforms = lib.platforms.linux;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })

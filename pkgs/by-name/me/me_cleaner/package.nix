@@ -7,10 +7,11 @@
 python3.pkgs.buildPythonPackage rec {
   pname = "me_cleaner";
   version = "1.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "corna";
-    repo = pname;
+    repo = "me_cleaner";
     rev = "v${version}";
     sha256 = "1bdj2clm13ir441vn7sv860xsc5gh71ja5lc2wn0gggnff0adxj4";
   };

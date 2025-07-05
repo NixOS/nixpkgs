@@ -1,0 +1,16 @@
+Subject: [PATCH] remove pupperteer from dev dependencies
+---
+Index: package.json
+<+>UTF-8
+===================================================================
+diff --git a/package.json b/package.json
+--- a/package.json	(revision fa593dc39619f44b57a922927a66346248f31d7d)
++++ b/package.json	(date 1736721981718)
+@@ -45,7 +45,6 @@
+     "@tsconfig/node18": "^18.2.4",
+     "@types/node": "~18.19.31",
+     "jest": "^29.0.1",
+-    "puppeteer": "^23.1.1",
+     "standard": "^17.0.0",
+     "typescript": "^5.0.1-rc",
+     "vite": "^6.0.2",

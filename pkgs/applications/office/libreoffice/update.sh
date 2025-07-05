@@ -100,10 +100,10 @@ case $variant in
         echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> $t.nix
         echo "  rev = \"$rev\";" >> $t.nix
         echo "  hash = \"$(jq -r '.hash' <<< "$prefetch_output")\";" >> $t.nix
-        echo "}"
+        echo "}" >> "$t.nix"
     done
 
-    local prefetch_output=$(nix-prefetch-git "https://gerrit.libreoffice.org/core" --rev "$rev")
+    prefetch_output=$(nix-prefetch-git "https://gerrit.libreoffice.org/core" --rev "$rev")
     echo "{ fetchgit, ... }:" > main.nix
     echo "fetchgit {" >> main.nix
     echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> main.nix

@@ -7,10 +7,11 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "isolyzer";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "KBNLresearch";
-    repo = pname;
+    repo = "isolyzer";
     tag = version;
     sha256 = "sha256-NqkjnEwpaoyguG5GLscKS9UQGtF9N4jUL5JhrMtKCFE=";
   };

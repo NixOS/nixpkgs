@@ -6,6 +6,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "cursewords";
   version = "1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thisisparker";

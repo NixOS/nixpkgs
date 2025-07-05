@@ -117,6 +117,7 @@ stdenv.mkDerivation {
   buildInputs = [
     curl
     SDL2
+    xorg.libX11
     xercesc
     openal
     lua

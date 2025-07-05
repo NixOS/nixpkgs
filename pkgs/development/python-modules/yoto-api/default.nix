@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "yoto-api";
-  version = "1.24.3";
+  version = "1.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cdnninja";
     repo = "yoto_api";
     tag = "v${version}";
-    hash = "sha256-C6pucQDM/iyGTaCy9t7vZLNc1EVMqQGAknJQ+nk9QZY=";
+    hash = "sha256-Erq6whZX8pfQSoszyCMrnRj24nZN3QD52SRs+G24O7k=";
   };
 
   build-system = [ setuptools ];

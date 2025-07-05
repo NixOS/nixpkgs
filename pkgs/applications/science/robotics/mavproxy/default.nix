@@ -18,6 +18,7 @@
 buildPythonApplication rec {
   pname = "MAVProxy";
   version = "1.8.71";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ArduPilot";

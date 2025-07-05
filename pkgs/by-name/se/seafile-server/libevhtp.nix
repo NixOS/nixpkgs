@@ -6,7 +6,7 @@
   libevent,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libevhtp";
   version = "unstable-2021-04-28";
 
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/criticalstack/libevhtp";
     license = licenses.bsd3;
     maintainers = with maintainers; [
-      greizgh
       schmittlauch
       melvyn2
     ];

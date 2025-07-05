@@ -17,7 +17,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
-  version = "0.8.2-pre";
+  # Don't forget to change passthru.abiVersion
+  version = "0.8.1-unstable-2025-03-30-03";
 
   src = fetchFromGitHub {
     owner = "pothosware";
@@ -25,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Instead of applying several patches for Python 3.12 compat, just take the latest, from:
     # use old get python lib for v2 (#437)
-    rev = "8c6cb7c5223fad995e355486527589c63aa3b21e";
-    hash = "sha256-CKasL1mlpeuxXyPe6VDdAvb1l5a1cwWgyP7XX1aM73I=";
+    rev = "fbf9f3c328868f46029284716df49095ab7b99a6";
+    hash = "sha256-W4915c6hV/GR5PZRRXZJW3ERsZmQQQ08EA9wYp2tAVk=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    searchPath = "lib/SoapySDR/modules${lib.versions.majorMinor finalAttrs.version}";
+    # SOAPY_SDR_ABI_VERSION defined in include/SoapySDR/Version.h
+    abiVersion = "0.8-3";
+    searchPath = "lib/SoapySDR/modules${finalAttrs.passthru.abiVersion}";
   };
 
   meta = with lib; {

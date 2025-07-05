@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://www.libdivecomputer.org";
+    homepage = "https://www.libdivecomputer.org";
     description = "Cross-platform and open source library for communication with dive computers from various manufacturers";
     mainProgram = "dctool";
     maintainers = [ maintainers.mguentner ];

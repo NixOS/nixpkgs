@@ -5,6 +5,7 @@
   cmake,
   cmark,
   extra-cmake-modules,
+  fetchpatch2,
   gamemode,
   ghc_filesystem,
   jdk17,
@@ -14,11 +15,9 @@
   stripJavaArchivesHook,
   tomlplusplus,
   zlib,
-
   msaClientID ? null,
   gamemodeSupport ? stdenv.hostPlatform.isLinux,
 }:
-
 let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
@@ -27,26 +26,34 @@ let
     hash = "sha256-yy0q+bky80LtK1GWzz7qpM+aAGrOqLuewbid8WT1ilk=";
   };
 in
-
 assert lib.assertMsg (
   gamemodeSupport -> stdenv.hostPlatform.isLinux
 ) "gamemodeSupport is only available on Linux.";
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "9.1";
+  version = "9.4";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     tag = finalAttrs.version;
-    hash = "sha256-LVrWFBsI4+BOY5hlevfzqfRXQM6AFd5bMnXbBqTrxzA=";
+    hash = "sha256-q8ln54nepwbJhC212vGODaafsbOCtdXar7F2NacKWO4=";
   };
 
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus
     ln -s ${libnbtplusplus} source/libraries/libnbtplusplus
   '';
+
+  patches = [
+    # https://github.com/PrismLauncher/PrismLauncher/pull/3622
+    # https://github.com/NixOS/nixpkgs/issues/400119
+    (fetchpatch2 {
+      name = "fix-qt6.9-compatibility.patch";
+      url = "https://github.com/PrismLauncher/PrismLauncher/commit/8bb9b168fb996df9209e1e34be854235eda3d42a.diff";
+      hash = "sha256-hOqWBrUrVUhMir2cfc10gu1i8prdNxefTyr7lH6KA2c=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

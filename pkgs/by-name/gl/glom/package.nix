@@ -31,7 +31,7 @@
   isocodes,
   gtksourceview,
   gtksourceviewmm,
-  postgresql_15,
+  postgresql,
   gobject-introspection,
   yelp-tools,
   wrapGAppsHook3,
@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     isocodes
     gtksourceview
     gtksourceviewmm
-    postgresql_15 # for postgresql utils
+    postgresql # for postgresql utils
   ];
 
   enableParallelBuilding = true;
@@ -128,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-boost-python=boost_python${lib.versions.major python311.version}${lib.versions.minor python311.version}"
-    "--with-postgres-utils=${lib.getBin postgresql_15}/bin"
+    "--with-postgres-utils=${lib.getBin postgresql}/bin"
   ];
 
   makeFlags = [
@@ -155,11 +155,9 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2
     ];
     homepage = "https://gitlab.gnome.org/Archive/glom";
-    maintainers =
-      lib.teams.gnome.members
-      ++ (with lib.maintainers; [
-        bot-wxt1221
-      ]);
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+    ];
     platforms = lib.platforms.linux;
   };
 })

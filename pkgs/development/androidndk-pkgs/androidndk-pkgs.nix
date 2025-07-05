@@ -74,7 +74,7 @@ let
   );
 in
 
-rec {
+lib.recurseIntoAttrs rec {
   # Misc tools
   binaries = stdenv.mkDerivation {
     pname = "${targetPrefix}ndk-toolchain";
@@ -133,12 +133,16 @@ rec {
           ln -sf $tool $(echo $tool | sed 's/llvm-//')
         done)
 
-      # handle last, as llvm-as is for llvm bytecode
-      ln -sf $out/bin/${targetInfo.triple}-as $out/bin/${targetPrefix}as
-      ln -sf $out/bin/${targetInfo.triple}-as $out/bin/as
+      ln -sf $out/bin/yasm $out/bin/${targetPrefix}as
+      ln -sf $out/bin/yasm $out/bin/as
 
       patchShebangs $out/bin
     '';
+    meta = {
+      description = "The Android NDK toolchain, tuned for other platforms";
+      license = with lib.licenses; [ unfree ];
+      teams = [ lib.teams.android ];
+    };
   };
 
   binutils = wrapBintoolsWith {

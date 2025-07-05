@@ -4,13 +4,17 @@
   autoconf,
   automake,
   pkg-config,
+  replaceVars,
   lib,
   perl,
   flex,
   bison,
   readline,
   libexif,
-  x11Support ? true,
+  bash,
+  buildPackages,
+  # SDL depends on Qt, which doesn't cross-compile
+  x11Support ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   SDL,
   svgSupport ? true,
   inkscape,
@@ -35,24 +39,35 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/p7bjeZM46DJOQ9sgtebhkNpBPj2RJYY3dMXhzHnNmg=";
   };
 
+  patches = [
+    # build tools with a build compiler
+    (replaceVars ./native-tools.patch {
+      cc_for_build = lib.getExe buildPackages.stdenv.cc;
+      # patch context
+      FIM_WANT_CUSTOM_HARDCODED_CONSOLEFONT_TRUE = null;
+      HAVE_RUNNABLE_TESTS_TRUE = null;
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace doc/vim2html.pl \
-      --replace /usr/bin/perl ${perl}/bin/perl
+    patchShebangs --build doc/vim2html.pl
   '';
 
   nativeBuildInputs = [
     autoconf
     automake
+    bison
+    flex
+    perl
     pkg-config
   ];
 
   buildInputs =
     [
-      perl
       flex
-      bison
       readline
       libexif
+      bash
     ]
     ++ lib.optional x11Support SDL
     ++ lib.optional svgSupport inkscape
@@ -62,6 +77,15 @@ stdenv.mkDerivation rec {
     ++ lib.optional jpegSupport libjpeg
     ++ lib.optional pngSupport libpng;
 
+  configureFlags = [
+    # mmap works on all relevant platforms
+    "ac_cv_func_mmap_fixed_mapped=yes"
+    # system regexp works on all relevant platforms
+    "fim_cv_regex_broken=no"
+  ];
+
+  env.LIBAA_CONFIG = lib.getExe' (lib.getDev aalib) "aalib-config";
+  env.LIBPNG_CONFIG = lib.getExe' (lib.getDev libpng) "libpng-config";
   env.NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-lSDL";
 
   meta = with lib; {
@@ -74,6 +98,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/fbi-improved/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -12,21 +12,30 @@
   zlib,
   clang,
 }:
-let
+
+rustPlatform.buildRustPackage rec {
   pname = "tracexec";
-  version = "0.8.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
     tag = "v${version}";
-    hash = "sha256-ZoYqmjqY9eAHGDIbFX9FY1yGF210C60UWcHi0lxzL7g=";
+    hash = "sha256-j1zgHDO5bmJAXi9KvkHqenm/QfM9DmD9yNqF6TxJ9sY=";
   };
 
-  cargoHash = "sha256-mZSj45im5b25mt8mGYLq03blvFCyS02kVK7yV3bIlUg=";
+  # remove if updating to rust 1.85
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail "[package]" ''$'cargo-features = ["edition2024"]\n[package]' \
+      --replace-fail 'rust-version = "1.85"' ""
+  '';
+
+  # remove if updating to rust 1.85
+  env.RUSTC_BOOTSTRAP = 1;
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-XuuLuIeD/S60by/hg1fR+ML3PtIyX9JNrEvgGzI3UiM=";
 
   hardeningDisable = [ "zerocallusedregs" ];
 
@@ -35,6 +44,7 @@ rustPlatform.buildRustPackage {
     pkg-config
     clang
   ];
+
   buildInputs = [
     libbpf
     elfutils

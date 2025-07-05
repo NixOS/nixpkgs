@@ -2,31 +2,47 @@
   lib,
   fetchFromGitHub,
   python3,
+  libarchive,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "stacs";
-  version = "0.2.0";
+  version = "0.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stacscan";
-    repo = pname;
-    rev = version;
-    sha256 = "00ZYdpJktqUXdzPcouHyZcOQyFm7jdFNVuDqsufOviE=";
+    repo = "stacs";
+    tag = version;
+    hash = "sha256-u0yFzId5RAOnJfTDPRUc8E624zIWyCDe3/WlrJ5iuxA=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setupmeta
+  # remove upstream workaround for darwin
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'if platform.system() == "Darwin":' "if False:"
+  '';
+
+  buildInputs = [ libarchive ];
+
+  build-system = with python3.pkgs; [
+    pybind11
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     click
+    colorama
     pydantic_1
-    typing-extensions
     yara-python
+    zstandard
   ];
+
+  pythonRelaxDeps = [ "yara-python" ];
 
   nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -34,11 +50,11 @@ python3.pkgs.buildPythonApplication rec {
     "stacs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Static token and credential scanner";
     mainProgram = "stacs";
     homepage = "https://github.com/stacscan/stacs";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

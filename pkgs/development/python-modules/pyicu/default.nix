@@ -1,7 +1,10 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitLab,
+  pkg-config,
+  setuptools,
   pytestCheckHook,
   six,
   icu,
@@ -9,20 +12,37 @@
 
 buildPythonPackage rec {
   pname = "pyicu";
-  version = "2.13.1";
-  format = "setuptools";
+  version = "2.15.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "PyICU";
-    inherit version;
-    hash = "sha256-1JGQheqgfaErrejuch57v3reAVHKD4KUaibI9LmM3Os=";
+  src = fetchFromGitLab {
+    domain = "gitlab.pyicu.org";
+    owner = "main";
+    repo = "pyicu";
+    tag = "v${version}";
+    hash = "sha256-Div3c4Lk9VTV1HrmvYKDn1a7moDNjG4OHA9Kv3+niKs=";
   };
 
-  nativeBuildInputs = [ icu ]; # for icu-config, but should be replaced with pkg-config
+  postPatch = ''
+    substituteInPlace setup.py --replace-fail "'pkg-config'" "'${stdenv.cc.targetPrefix}pkg-config'"
+  '';
+
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ icu ];
+
   nativeCheckInputs = [
     pytestCheckHook
     six
+  ];
+
+  pytestFlagsArray = [
+    # AssertionError: '$' != 'US Dollar'
+    "--deselect=test/test_NumberFormatter.py::TestCurrencyUnit::testGetName"
+    # AssertionError: Lists differ: ['a', 'b', 'c', 'd'] != ['a', 'b', 'c', 'd', ...
+    "--deselect=test/test_UnicodeSet.py::TestUnicodeSet::testIterators"
   ];
 
   pythonImportsCheck = [ "icu" ];

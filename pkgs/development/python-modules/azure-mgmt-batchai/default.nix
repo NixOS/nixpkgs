@@ -4,27 +4,29 @@
   fetchPypi,
   azure-common,
   azure-mgmt-core,
-  azure-mgmt-nspkg,
-  msrestazure,
+  isodate,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-batchai";
-  version = "2.0.0";
+  version = "7.0.0";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "f1870b0f97d5001cdb66208e5a236c9717a0ed18b34dbfdb238a828f3ca2a683";
+    inherit version;
+    pname = "azure_mgmt_batchai";
+    hash = "sha256-XfAE/QyST8ZVlJR6nP9Pdgh97hfIhFM6G7sLINsn06M=";
   };
 
   propagatedBuildInputs = [
-    msrestazure
+    isodate
     azure-common
     azure-mgmt-core
-    azure-mgmt-nspkg
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 
@@ -34,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "This is the Microsoft Azure Batch AI Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-batchai_${version}/sdk/batchai/azure-mgmt-batchai/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];
   };

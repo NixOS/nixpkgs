@@ -14,7 +14,7 @@
   sqliteSupport ? true,
   sqlite,
   postgresSupport ? false,
-  postgresql,
+  libpq,
   redisSupport ? false,
   hiredis,
   mysqlSupport ? false,
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drogon";
-  version = "1.9.9";
+  version = "1.9.11";
 
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5nJwWlXy0e0ThnTGV9MamdAJ+FqB597gsDz28p8DrQA=";
+    hash = "sha256-eFOYmqfyb/yp83HRa0hWSMuROozR/nfnEp7k5yx8hj0=";
     fetchSubmodules = true;
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       c-ares
     ]
     ++ lib.optional sqliteSupport sqlite
-    ++ lib.optional postgresSupport postgresql
+    ++ lib.optional postgresSupport libpq
     ++ lib.optional redisSupport hiredis
     # drogon uses mariadb for mysql (see https://github.com/drogonframework/drogon/wiki/ENG-02-Installation#Library-Dependencies)
     ++ lib.optionals mysqlSupport [

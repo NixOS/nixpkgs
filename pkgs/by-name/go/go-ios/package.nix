@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, libusb1
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  libusb1,
 }:
 
 buildGoModule rec {
   pname = "go-ios";
-  version = "1.0.166";
+  version = "1.0.180";
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
     rev = "v${version}";
-    sha256 = "sha256-Lao7cK7ZWeU0WXa9qDHlc+NuE9Ktl7k3mJXxIIfbROk=";
+    sha256 = "sha256-X9CtiG2kl32ErWyNwzr5WjUl2DnweKiegy0GXyLL81E=";
   };
 
   proxyVendor = true;
@@ -39,13 +40,14 @@ buildGoModule rec {
 
   # skips all the integration tests (requires iOS device) (`-tags=fast`)
   # as well as tests that requires networking
-  checkFlags = let
-    skippedTests = [
-      "TestWorksWithoutProxy"
-      "TestUsesProxy"
-    ];
-  in [ "-tags=fast" ]
-  ++ [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestWorksWithoutProxy"
+        "TestUsesProxy"
+      ];
+    in
+    [ "-tags=fast" ] ++ [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.updateScript = nix-update-script { };
 

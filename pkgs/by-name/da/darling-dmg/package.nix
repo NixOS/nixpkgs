@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   fuse,
   zlib,
@@ -24,6 +25,15 @@ stdenv.mkDerivation {
     rev = "a36bf0c07b16675b446377890c5f6f74563f84dd";
     hash = "sha256-QM75GuFHl2gRlRw1BmTexUE1d9YNnhG0qmTqmE9kMX4=";
   };
+
+  patches = [
+    # Fix compilation
+    (fetchpatch2 {
+      name = "cmake-cxx-standard-17.patch";
+      url = "https://github.com/darlinghq/darling-dmg/pull/105/commits/b7c620f76a5f76748b3d14dd2a58e77f8b6ed0c0.patch";
+      hash = "sha256-i1lisEiwYm4IxgKmBYnjscvW6ObT7XGLVbjW2i5yXV4=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [

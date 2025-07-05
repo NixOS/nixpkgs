@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "replacement";
   version = "0.4.4";
+  format = "setuptools";
 
   disabled = python3Packages.isPy27;
 

@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
-  fetchDebianPatch,
+  fetchgit,
+  graphviz,
+  gettext,
   autoreconfHook,
   disarchive,
   git,
@@ -27,6 +27,7 @@
   pkg-config,
   po4a,
   scheme-bytestructures,
+  slirp4netns,
   texinfo,
   bzip2,
   libgcrypt,
@@ -37,40 +38,21 @@
   storeDir ? "/gnu/store",
   confDir ? "/etc",
 }:
-
+let
+  rev = "30a5d140aa5a789a362749d057754783fea83dde";
+in
 stdenv.mkDerivation rec {
   pname = "guix";
-  version = "1.4.0";
+  version = "1.4.0-unstable-2025-06-24";
 
-  src = fetchurl {
-    url = "mirror://gnu/guix/guix-${version}.tar.gz";
-    hash = "sha256-Q8dpy/Yy7wVEmsH6SMG6FSwzSUxqvH5HE3u6eyFJ+KQ=";
+  src = fetchgit {
+    url = "https://codeberg.org/guix/guix.git";
+    inherit rev;
+    hash = "sha256-QsOYApnwA2hb1keSv6p3EpMT09xCs9uyoSeIdXzftF0=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "CVE-2024-27297_1.patch";
-      url = "https://git.savannah.gnu.org/cgit/guix.git/patch/?id=8f4ffb3fae133bb21d7991e97c2f19a7108b1143";
-      hash = "sha256-xKo1h2uckC2pYHt+memekagfL6dWcF8gOnTOOW/wJUU=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-27297_2.patch";
-      url = "https://git.savannah.gnu.org/cgit/guix.git/patch/?id=ff1251de0bc327ec478fc66a562430fbf35aef42";
-      hash = "sha256-f4KWDVrvO/oI+4SCUHU5GandkGtHrlaM1BWygM/Qlao=";
-    })
-    # see https://guix.gnu.org/en/blog/2024/build-user-takeover-vulnerability
-    (fetchDebianPatch {
-      inherit pname version;
-      debianRevision = "8";
-      patch = "security/0101-daemon-Sanitize-failed-build-outputs-prior-to-exposi.patch";
-      hash = "sha256-cbra/+K8+xHUJrCKRgzJCuhMBpzCSjgjosKAkJx7QIo=";
-    })
-    (fetchDebianPatch {
-      inherit pname version;
-      debianRevision = "8";
-      patch = "security/0102-daemon-Sanitize-successful-build-outputs-prior-to-ex.patch";
-      hash = "sha256-mOnlYtpIuYL+kDvSNuXuoDLJP03AA9aI2ALhap+0NOM=";
-    })
+    ./missing-cstdint-include.patch
   ];
 
   postPatch = ''
@@ -85,6 +67,8 @@ stdenv.mkDerivation rec {
     autoreconfHook
     disarchive
     git
+    graphviz
+    gettext
     glibcLocales
     guile
     guile-avahi
@@ -105,6 +89,7 @@ stdenv.mkDerivation rec {
     pkg-config
     po4a
     scheme-bytestructures
+    slirp4netns
     texinfo
   ];
 
@@ -131,6 +116,7 @@ stdenv.mkDerivation rec {
     guile-zlib
     guile-zstd
     scheme-bytestructures
+    slirp4netns
   ];
 
   configureFlags = [
@@ -140,13 +126,19 @@ stdenv.mkDerivation rec {
     "--with-bash-completion-dir=$(out)/etc/bash_completion.d"
   ];
 
+  preAutoreconf = ''
+    echo ${version} > .tarball-version
+    ./bootstrap
+  '';
+
   enableParallelBuilding = true;
 
   postInstall = ''
     for f in $out/bin/*; do
       wrapProgram $f \
         --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
-        --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
+        --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH" \
+        --prefix GUILE_EXTENSIONS_PATH : "${guile-ssh}/lib/guile/3.0/extensions"
     done
   '';
 
@@ -154,7 +146,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) guix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Functional package manager with a Scheme interface";
     longDescription = ''
       GNU Guix is a purely functional package manager for the GNU system, and a distribution thereof.
@@ -168,14 +160,15 @@ stdenv.mkDerivation rec {
       Guix.
       Guix is based on the Nix package manager.
     '';
-    homepage = "http://www.gnu.org/software/guix";
-    changelog = "https://git.savannah.gnu.org/cgit/guix.git/plain/NEWS?h=v${version}";
-    license = licenses.gpl3Plus;
+    homepage = "https://guix.gnu.org/";
+    changelog = "https://codeberg.org/guix/guix/raw/commit/${rev}/NEWS";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "guix";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cafkafk
       foo-dogsquared
+      hpfr
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

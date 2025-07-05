@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   replaceVars,
 
   cmake,
@@ -21,7 +22,7 @@
   libiodbc,
   proj,
 
-  antlr4_12,
+  antlr4_13,
   gtkmm3,
   libxml2,
   libmysqlconnectorcpp,
@@ -46,31 +47,22 @@ let
     };
   });
 
-  getCoreExe = lib.getExe' coreutils;
-
   inherit (python3Packages) paramiko pycairo pyodbc;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.38";
+  version = "8.0.42";
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-W2RsA2hIRUaNRK0Q5pN1YODbEiw6HE3cfeisPdUcYPY=";
+    hash = "sha256-d4SnNALK76AXWEu0WHX0dZv4co6Q+oCMTYAVV3pd9gU=";
   };
 
   patches = [
     (replaceVars ./hardcode-paths.patch {
       bash = lib.getExe bash;
       catchsegv = lib.getExe' glibc "catchsegv";
-      cp = getCoreExe "cp";
-      dd = getCoreExe "dd";
-      ls = getCoreExe "ls";
-      mkdir = getCoreExe "mkdir";
-      nohup = getCoreExe "nohup";
-      rm = getCoreExe "rm";
-      rmdir = getCoreExe "rmdir";
-      stat = getCoreExe "stat";
+      coreutils = lib.getBin coreutils;
       sudo = lib.getExe sudo;
     })
 
@@ -82,6 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't try to override the ANTLR_JAR_PATH specified in cmakeFlags
     ./dont-search-for-antlr-jar.patch
+
+    # fixes the build with python 3.13
+    (fetchpatch {
+      name = "python3.13.patch";
+      url = "https://git.pld-linux.org/?p=packages/mysql-workbench.git;a=blob_plain;f=python-3.13.patch;h=d1425a93c41fb421603cda6edbb0514389cdc6a8;hb=bb09cb858f3b9c28df699d3b98530a6c590b5b7a";
+      hash = "sha256-hLfPqZSNf3ls2WThF1SBRjV33zTUymfgDmdZVpgO22Q=";
+    })
   ];
 
   postPatch = ''
@@ -101,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    antlr4_12.runtime.cpp
+    antlr4_13.runtime.cpp
     gtkmm3
     (libxml2.override { enableHttp = true; })
     libmysqlconnectorcpp
@@ -141,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "MySQL_CONFIG_PATH" (lib.getExe' mysql "mysql_config"))
     (lib.cmakeFeature "IODBC_CONFIG_PATH" (lib.getExe' libiodbc "iodbc-config"))
-    (lib.cmakeFeature "ANTLR_JAR_PATH" "${antlr4_12.jarLocation}")
+    (lib.cmakeFeature "ANTLR_JAR_PATH" "${antlr4_13.jarLocation}")
     # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.

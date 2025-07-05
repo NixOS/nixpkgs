@@ -1,27 +1,20 @@
 {
   lib,
+  stdenvNoCC,
   buildGraalvmNativeImage,
   fetchurl,
   fetchFromGitHub,
   writeScript,
   testers,
-  clojure-lsp,
 }:
 
-buildGraalvmNativeImage rec {
+buildGraalvmNativeImage (finalAttrs: {
   pname = "clojure-lsp";
-  version = "2024.11.08-17.49.29";
+  version = "2025.06.06-19.04.49";
 
-  src = fetchFromGitHub {
-    owner = "clojure-lsp";
-    repo = "clojure-lsp";
-    rev = version;
-    hash = "sha256-pvIfW96RaJXMIDPKHfJjds9dU6IuC2f1TwdI8X/JTw0=";
-  };
-
-  jar = fetchurl {
-    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp-standalone.jar";
-    hash = "sha256-QMc62p6qFTh+y4C5aBGuZX/pQZQSywbYCFA1nYIY/80=";
+  src = fetchurl {
+    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${finalAttrs.version}/clojure-lsp-standalone.jar";
+    hash = "sha256-MiCwqlgvA9u64Fs4kkJta34gtsapyelbU0be/9UBJsk=";
   };
 
   extraNativeImageBuildArgs = [
@@ -33,22 +26,18 @@ buildGraalvmNativeImage rec {
   ];
 
   doCheck = true;
-  checkPhase =
-    ''
-      runHook preCheck
+  checkPhase = ''
+    runHook preCheck
 
-      export HOME="$(mktemp -d)"
-      ./clojure-lsp --version | fgrep -q '${version}'
-    ''
-    # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
-    #${babashka}/bin/bb integration-test ./clojure-lsp
-    + ''
-      runHook postCheck
-    '';
+    export HOME="$(mktemp -d)"
+    ./clojure-lsp --version | fgrep -q '${finalAttrs.version}'
+
+    runHook postCheck
+  '';
 
   passthru.tests.version = testers.testVersion {
-    inherit version;
-    package = clojure-lsp;
+    inherit (finalAttrs) version;
+    package = finalAttrs.finalPackage;
     command = "clojure-lsp --version";
   };
 
@@ -57,28 +46,33 @@ buildGraalvmNativeImage rec {
     #!nix-shell -i bash -p curl common-updater-scripts gnused jq nix
 
     set -eu -o pipefail
+    source "${stdenvNoCC}/setup"
 
-    latest_version=$(curl -s https://api.github.com/repos/clojure-lsp/clojure-lsp/releases/latest | jq --raw-output .tag_name)
+    old_version="$(nix-instantiate --strict --json --eval -A clojure-lsp.version | jq -r .)"
+    latest_version="$(curl -s https://api.github.com/repos/clojure-lsp/clojure-lsp/releases/latest | jq -r .tag_name)"
 
-    old_jar_hash=$(nix-instantiate --eval --strict -A "clojure-lsp.jar.drvAttrs.outputHash" | tr -d '"' | sed -re 's|[+]|\\&|g')
+    if [[ $latest_version == $old_version ]]; then
+      echo "Already at latest version $old_version"
+      exit 0
+    fi
 
-    curl -o clojure-lsp-standalone.jar -sL https://github.com/clojure-lsp/clojure-lsp/releases/download/$latest_version/clojure-lsp-standalone.jar
-    new_jar_hash=$(nix-hash --flat --type sha256 clojure-lsp-standalone.jar | sed -re 's|[+]|\\&|g')
+    old_jar_hash="$(nix-instantiate --strict --json --eval -A clojure-lsp.jar.drvAttrs.outputHash | jq -r .)"
+
+    curl -o clojure-lsp-standalone.jar -sL "https://github.com/clojure-lsp/clojure-lsp/releases/download/$latest_version/clojure-lsp-standalone.jar"
+    new_jar_hash="$(nix-hash --flat --type sha256 clojure-lsp-standalone.jar | xargs -n1 nix --extra-experimental-features nix-command hash convert --hash-algo sha256)"
 
     rm -f clojure-lsp-standalone.jar
 
-    nixFile=$(nix-instantiate --eval --strict -A "clojure-lsp.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
-
-    sed -i "$nixFile" -re "s|\"$old_jar_hash\"|\"$new_jar_hash\"|"
-    update-source-version clojure-lsp "$latest_version"
+    update-source-version clojure-lsp "$latest_version" "$new_jar_hash"
   '';
 
   meta = {
     description = "Language Server Protocol (LSP) for Clojure";
     homepage = "https://github.com/clojure-lsp/clojure-lsp";
-    changelog = "https://github.com/clojure-lsp/clojure-lsp/releases/tag/${version}";
+    changelog = "https://github.com/clojure-lsp/clojure-lsp/releases/tag/${finalAttrs.version}";
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ericdallo ];
+    mainProgram = "clojure-lsp";
   };
-}
+})

@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/lucidrains/rotary-embedding-torch";
     changelog = "https://github.com/lucidrains/rotary-embedding-torch/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

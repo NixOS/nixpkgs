@@ -2,6 +2,8 @@
   lib,
   python3,
   fetchFromGitHub,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -26,12 +28,13 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit3";
   version = "3.5.0";
+  format = "setuptools";
 
   # If we try to get using fetchPypi it requires GeoIP (but the package dont has that dep!?)
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
-    rev = version;
+    tag = version;
     hash = "sha256-cMGD5Xdf9ElS1NT7Q0NPB//EvUO0MI0VTtps5JRisZ4=";
   };
 
@@ -46,18 +49,16 @@ python.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    hypothesis
-  ];
-
-  preCheck = ''
-    # The tests want to run the installed executables
-    export PATH=$out/bin:$PATH
-
-    # gdtoolkit tries to write cache variables to $HOME/.cache
-    export HOME=$TMP
-  '';
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      pytestCheckHook
+      hypothesis
+    ]
+    ++ [
+      addBinToPathHook
+      writableTmpDirAsHomeHook
+    ];
 
   # The tests are not working on NixOS
   disabledTests = [

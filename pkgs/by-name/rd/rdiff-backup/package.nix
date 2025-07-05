@@ -12,6 +12,7 @@ in
 pypkgs.buildPythonApplication rec {
   pname = "rdiff-backup";
   version = "2.2.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

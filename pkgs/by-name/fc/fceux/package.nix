@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   SDL2,
   cmake,
   fetchFromGitHub,
@@ -12,7 +13,6 @@
   pkg-config,
   qt5,
   qt6,
-  stdenv,
   x264,
   # Configurable options
   ___qtVersion ? "5",
@@ -31,13 +31,13 @@ assert lib.elem ___qtVersion [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "fceux";
-  version = "2.6.6-unstable-2024-06-09";
+  version = "2.6.6-unstable-2025-01-20";
 
   src = fetchFromGitHub {
     owner = "TASEmulators";
     repo = "fceux";
-    rev = "f980ec2bc7dc962f6cd76b9ae3131f2eb902c9e7";
-    hash = "sha256-baAjrTzRp61Lw1p5axKJ97PuFiuBNQewXrlN0s8o7us=";
+    rev = "2b8f6e76271341616920bb7e0c54ee48570783d3";
+    hash = "sha256-2QDiAk2HO9oQ1gNvc7QFZSCbWkCDYW5OJWT8f4bmXyg=";
   };
 
   nativeBuildInputs = [
@@ -60,16 +60,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  postInstall = ''
+    substituteInPlace $out/share/applications/fceux.desktop \
+      --replace-fail "/usr/bin/" "" \
+      --replace-fail "/usr/share/pixmaps/" ""
+  '';
+
   meta = {
-    homepage = "http://www.fceux.com/";
+    homepage = "http://www.fceux.com";
     description = "Nintendo Entertainment System (NES) Emulator";
-    changelog = "https://github.com/TASEmulators/blob/fceux/${finalAttrs.src.rev}/changelog.txt";
+    changelog = "https://github.com/TASEmulators/fceux/blob/${finalAttrs.src.rev}/changelog.txt";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "fceux";
-    maintainers = with lib.maintainers; [
-      AndersonTorres
-      sbruder
-    ];
+    maintainers = with lib.maintainers; [ sbruder ];
     platforms = lib.platforms.linux;
   };
 })

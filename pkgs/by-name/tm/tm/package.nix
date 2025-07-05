@@ -4,27 +4,32 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAtts: {
   pname = "tm";
   version = "0.4.1";
 
   src = fetchurl {
-    url = "https://vicerveza.homeunix.net/~viric/soft/tm/tm-${version}.tar.gz";
-    sha256 = "3b389bc03b6964ad5ffa57a344b891fdbcf7c9b2604adda723a863f83657c4a0";
+    url = "https://vicerveza.homeunix.net/~viric/soft/tm/tm-${finalAtts.version}.tar.gz";
+    hash = "sha256-OzibwDtpZK1f+lejRLiR/bz3ybJgSt2nI6hj+DZXxKA=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  patches = [
+    # fix using strncpy and strlen without including string.h
+    ./missing-string-header.patch
+  ];
 
   postPatch = ''
     sed -i 's@/usr/bin/install@install@g ; s/gcc/cc/g' Makefile
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal mixer - multiplexer for the i/o of terminal applications";
     homepage = "http://vicerveza.homeunix.net/~viric/soft/tm";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "tm";
   };
-}
+})

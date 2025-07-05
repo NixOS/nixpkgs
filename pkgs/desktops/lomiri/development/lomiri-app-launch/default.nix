@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   cmake,
@@ -32,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-app-launch";
-  version = "0.1.9";
+  version = "0.1.12";
 
   outputs =
     [
@@ -46,18 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-app-launch";
-    rev = finalAttrs.version;
-    hash = "sha256-vuu6tZ5eDJN2rraOpmrDddSl1cIFFBSrILKMJqcUDVc=";
+    tag = finalAttrs.version;
+    hash = "sha256-vlSlQJysKmoGNmRtJ34FCI3p5bL7GDc8TjOljnKSiAE=";
   };
 
   patches = [
-    # Remove when version > 0.1.9
-    (fetchpatch {
-      name = "0001-lomiri-app-launch-Fix-typelib-gir-dependency.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/commit/8466e77914e73801499df224fcd4a53c4a0eab25.patch";
-      hash = "sha256-11pEhFi39Cvqb9Hg47kT8+5hq+bz6WmySqaIdwt1MVk=";
-    })
-
     # Use /run/current-system/sw/bin fallback for desktop file Exec= lookups, propagate to launched applications
     ./2001-Inject-current-system-PATH.patch
   ];
@@ -157,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/lomiri-app-launch";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "lomiri-app-launch-0"

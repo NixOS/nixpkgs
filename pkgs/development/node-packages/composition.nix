@@ -5,7 +5,7 @@
     inherit system;
   },
   system ? builtins.currentSystem,
-  nodejs ? pkgs."nodejs_18",
+  nodejs ? pkgs."nodejs_22",
 }:
 
 let
@@ -13,7 +13,6 @@ let
     inherit (pkgs)
       stdenv
       lib
-      python2
       runCommand
       writeTextFile
       writeShellScript

@@ -11,12 +11,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "deadlinks";
-    repo = pname;
+    repo = "cargo-deadlinks";
     rev = version;
     sha256 = "0s5q9aghncsk9834azn5cgnn5ms3zzyjan2rq06kaqcgzhld4cjh";
   };
 
-  cargoHash = "sha256-Bs6WyeHBeZDWLSidoFBLaa2ZEr8oAQcr8JmHCtw34AE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-d5e5CpO/c6KrIQE8dJqXT19Qe0CRbIqgCDHNWz4TK8Q=";
 
   checkFlags =
     [
@@ -30,15 +31,15 @@ rustPlatform.buildRustPackage rec {
       # assumes the target is x86_64-unknown-linux-gnu
       "--skip simple_project::it_checks_okay_project_correctly";
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to check rust documentation for broken links";
     homepage = "https://github.com/deadlinks/cargo-deadlinks";
     changelog = "https://github.com/deadlinks/cargo-deadlinks/blob/${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       newam
       matthiasbeyer
     ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "brummer10";
-    repo = pname;
+    repo = "GxMatchEQ.lv2";
     rev = "V${version}";
     sha256 = "0azdmgzqwjn26nx38iw13666a1i4y2bv39wk89pf6ihdi46klf72";
   };

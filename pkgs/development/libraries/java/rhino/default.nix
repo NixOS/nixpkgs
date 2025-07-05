@@ -14,7 +14,7 @@ let
     sha256 = "1pb08d9j81d0wz5wj31idz198iwhqb7mch872n08jh1354rjlqwk";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rhino";
   version = "1.7R2";
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       to provide scripting to end users.
     '';
 
-    homepage = "http://www.mozilla.org/rhino/";
+    homepage = "https://rhino.github.io/";
 
     license = with licenses; [
       mpl11 # or

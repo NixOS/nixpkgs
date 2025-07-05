@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   docutils,
   glib,
   meson,
@@ -24,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
-  version = "1.10.0";
+  version = "1.10.6";
 
   outputs = [
     "out"
@@ -34,19 +33,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "G8qNZtlhBuzBR98xM7laW7eE8fpvFdBt18Go+0oQr3s=";
+    hash = "sha256-d/S8v5M5Uo8Wa4BzRYaT8KILd7cFnbwtthdGoZKLApM=";
   };
 
   patches = [
     # Add option for changing installation path of installed tests.
     ./meson-add-installed-tests-prefix-option.patch
-
-    # Restore single quote string extension
-    # https://gitlab.gnome.org/GNOME/json-glib/-/issues/76
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/json-glib/-/commit/2a26bd3dedc3b27471e6df210d76333d3d41159c.patch";
-      hash = "sha256-U/jWB4wneN4MwZO3vAfI9Z7UT/SLMNEx/X8NMsCO8I4=";
-    })
   ];
 
   strictDeps = true;
@@ -114,7 +106,7 @@ stdenv.mkDerivation rec {
     description = "Library providing (de)serialization support for the JavaScript Object Notation (JSON) format";
     homepage = "https://gitlab.gnome.org/GNOME/json-glib";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = with platforms; unix;
   };
 }

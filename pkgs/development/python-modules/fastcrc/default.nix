@@ -30,10 +30,9 @@ buildPythonPackage {
     maturinBuildHook
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-wSE7548L+ymNjN9TfygAGY1BrssXOPGXlmE83wV7zb4=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-9Vap8E71TkBIf4eIB2lapUqcMukdsHX4LR7U8AD77SU=";
   };
 
   pythonImportsCheck = [ "fastcrc" ];
@@ -42,6 +41,8 @@ buildPythonPackage {
     pytestCheckHook
     pytest-benchmark
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   # Python source files interfere with testing
   preCheck = ''

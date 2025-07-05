@@ -12,7 +12,7 @@
   openssl,
   systemd,
   mariadb-connector-c,
-  postgresql,
+  libpq,
   lua,
   openldap,
   geoip,
@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "4.9.3";
+  version = "4.9.5";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-suZwRqe5WCXDXdyRGe1uLoU1N6V20MTukIC7XwrT6NU=";
+    hash = "sha256-Zpu3uZgjsyw5ATN9abOMn4Bz8vwC6HZJM7jFwJdOJyQ=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     mariadb-connector-c
-    postgresql
+    libpq
     lua
     openldap
     sqlite

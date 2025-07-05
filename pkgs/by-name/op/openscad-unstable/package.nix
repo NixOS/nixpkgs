@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   clangStdenv,
   llvmPackages,
   fetchFromGitHub,
@@ -33,26 +34,25 @@
   mesa,
   mpfr,
   python3,
-  tbb_2021_11,
+  tbb_2022,
   wayland,
   wayland-protocols,
   wrapGAppsHook3,
   xorg,
   mimalloc,
   opencsg,
+  ctestCheckHook,
 }:
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-12-21";
+  version = "2025-06-04";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "30cbdf6c7214be7cc00b4cca2cef8396e1d69498";
-    hash = "sha256-wpw4JStAWNcHU6PoHGcIKAeVjtlTJsS4ZFMkTpj6xRk=";
-    # Unfortunately, we can't selectively fetch submodules. It would be good
-    # to see that we don't accidentally depend on it.
-    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD
+    rev = "65856c9330f8cc4ffcaccf03d91b4217f2eae28d";
+    hash = "sha256-jozcLFGVSfw8G12oSxHjqUyFtAfENgIByID+omk08mU=";
+    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
   };
 
   patches = [ ./test.diff ];
@@ -79,7 +79,7 @@ clangStdenv.mkDerivation rec {
     [
       clipper2
       glm
-      tbb_2021_11
+      tbb_2022
       mimalloc
       boost
       cairo
@@ -88,7 +88,6 @@ clangStdenv.mkDerivation rec {
       eigen
       fontconfig
       freetype
-      ghostscript
       glib
       gmp
       opencsg
@@ -124,18 +123,37 @@ clangStdenv.mkDerivation rec {
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
+
+    # The sources enable this for only apple. We turn it off globally anyway to stay
+    # consistent.
+    "-DUSE_QT6=OFF"
   ];
 
-  doCheck = true;
+  # tests rely on sysprof which is not available on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  # remove unused submodules, to ensure correct dependency usage
+  postUnpack = ''
+    ( cd $sourceRoot
+      for m in submodules/OpenCSG submodules/mimalloc submodules/Clipper2
+      do rm -r $m
+      done )
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications
+    mv $out/bin/*.app $out/Applications
+    rmdir $out/bin
+  '';
 
   nativeCheckInputs = [
     mesa.llvmpipeHook
+    ctestCheckHook
+    ghostscript
   ];
 
-  checkPhase = ''
-    # some fontconfig issues cause pdf output to have wrong font
-    ctest -j$NIX_BUILD_CORES -E pdfexporttest.\*
-  '';
+  dontUseNinjaCheck = true;
+
   meta = with lib; {
     description = "3D parametric model compiler (unstable)";
     longDescription = ''

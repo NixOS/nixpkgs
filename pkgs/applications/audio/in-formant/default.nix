@@ -19,7 +19,7 @@
   tomlplusplus,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "in-formant";
   version = "unstable-2022-09-15";
 

@@ -33,3 +33,21 @@ The default value is `build`.
 #### `dontUseCmakeConfigure` {#dont-use-cmake-configure}
 
 When set to true, don't use the predefined `cmakeConfigurePhase`.
+
+## Controlling CTest invocation {#cmake-ctest}
+
+By default tests are run by make in [`checkPhase`](#ssec-check-phase) or by [ninja](#ninja) if `ninja` is
+available in `nativeBuildInputs`. Makefile and Ninja generators produce the `test` target, which invokes `ctest` under the hood.
+This makes passing additional arguments to `ctest` difficult, so it's possible to invoke it directly in `checkPhase`
+by adding `ctestCheckHook` to `nativeCheckInputs`.
+
+### CTest Variables {#cmake-ctest-variables}
+
+#### `disabledTests` {#cmake-ctest-disabled-tests}
+
+Allows to disable running a list of tests. Note that regular expressions are not supported by `disabledTests`, but
+it can be combined with `--exclude-regex` option.
+
+#### `ctestFlags` {#cmake-ctest-flags}
+
+Additional options passed to `ctest` together with `checkFlags`.

@@ -5,18 +5,20 @@
   busypie,
   cbor2,
   fetchFromGitHub,
+  h2,
+  httpx,
   pycryptodomex,
-  pytestCheckHook,
-  pytest-vcr,
   pytest-asyncio,
-  requests,
+  pytest-vcr,
+  pytestCheckHook,
   pythonOlder,
+  requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "9.1.0";
+  version = "10.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,15 +26,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pubnub";
     repo = "python";
-    tag = "v${version}";
-    hash = "sha256-aVnhCRTm6lqwec4TRbvHFF4l/XvbBTbclJLxf7oyUak=";
+    tag = version;
+    hash = "sha256-NI7rEudQ5sSj6cpPpFxEcqaeiQL6dJKK7C53BTJeMAg=";
   };
+
+  pythonRelaxDeps = [ "httpx" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     cbor2
+    h2
+    httpx
     pycryptodomex
     requests
   ];
@@ -49,6 +55,8 @@ buildPythonPackage rec {
     "tests/integrational"
     "tests/manual"
     "tests/functional/push"
+    # Examples
+    "tests/examples"
   ];
 
   disabledTests = [
@@ -61,7 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python-based APIs for PubNub";
     homepage = "https://github.com/pubnub/python";
-    changelog = "https://github.com/pubnub/python/releases/tag/v${version}";
+    changelog = "https://github.com/pubnub/python/releases/tag/${src.tag}";
     # PubNub Software Development Kit License Agreement
     # https://github.com/pubnub/python/blob/master/LICENSE
     license = licenses.unfreeRedistributable;

@@ -1,23 +1,28 @@
 {
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
   ffmpeg,
   lib,
+  versionCheckHook,
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
-  version = "2024.12.27";
+  version = "2025.07.04";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "ytdl_sub";
-    hash = "sha256-7XZlKGzDLG/MVw198Ii+l29F+Lt53MY5QtHU8k9xJWA=";
+  src = fetchFromGitHub {
+    owner = "jmbannon";
+    repo = "ytdl-sub";
+    tag = version;
+    hash = "sha256-aVI/OY1Dh5LvbDyg+GuWBz2e6oUgTzErqfnow22v8CI=";
   };
 
-  pythonRelaxDeps = [
-    "yt-dlp"
-  ];
+  postPatch = ''
+    echo '__pypi_version__ = "${version}"; __local_version__ = "${version}"' > src/ytdl_sub/__init__.py
+  '';
+
+  pythonRelaxDeps = [ "yt-dlp" ];
 
   build-system = with python3Packages; [
     setuptools
@@ -37,6 +42,31 @@ python3Packages.buildPythonApplication rec {
     "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg "ffprobe"}"
   ];
 
+  nativeCheckInputs = [
+    versionCheckHook
+    python3Packages.pytestCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+
+  env = {
+    YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg "ffmpeg"}";
+    YTDL_SUB_FFPROBE_PATH = "${lib.getExe' ffmpeg "ffprobe"}";
+  };
+
+  disabledTests = [
+    "test_logger_can_be_cleaned_during_execution"
+    "test_presets_run"
+    "test_thumbnail"
+  ];
+
+  pytestFlagsArray = [
+    # According to documentation, e2e tests can be flaky:
+    # "This checksum can be inaccurate for end-to-end tests"
+    "--ignore=tests/e2e"
+  ];
+
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://github.com/jmbannon/ytdl-sub";
     description = "Lightweight tool to automate downloading and metadata generation with yt-dlp";
@@ -47,6 +77,7 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       loc
+      defelo
     ];
     mainProgram = "ytdl-sub";
   };

@@ -1,45 +1,48 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
-, gtk3
-, gdk-pixbuf
-, glib
-, sane-backends
-, libnotify
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  gtk3,
+  gdk-pixbuf,
+  glib,
+  sane-backends,
+  libnotify,
 }:
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "7.4.3";
+  version = "7.5.3";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
-    rev = "v${version}";
-    hash = "sha256-/qSfxGHcCSoNp516LFYWgEL4csf8EKgtSffBt1C02uE=";
+    tag = "v${version}";
+    hash = "sha256-vX+ZyCQsYqJjgYaufWJRnzX8retiFK5QHSP40bbBaCc=";
   };
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
   nugetDeps = ./deps.json;
 
+  postPatch = ''
+    substituteInPlace NAPS2.Images.Gtk/NAPS2.Images.Gtk.csproj \
+      --replace-fail TargetFramework TargetFrameworks \
+  '';
+
+  dotnetFlags = [
+    "-p:TargetFrameworks=net8"
+    "-p:EnablePreviewFeatures=true"
+  ];
+
   executables = [ "naps2" ];
 
-  dotnet-sdk =
-    with dotnetCorePackages;
-    sdk_8_0
-    // {
-      inherit
-        (combinePackages [
-          sdk_8_0
-          sdk_6_0
-        ])
-        packages
-        targetPackages
-        ;
-    };
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
+
+  nativeBuildInputs = [ wrapGAppsHook3 ];
+
   selfContainedBuild = true;
   runtimeDeps = [
     gtk3
@@ -67,7 +70,6 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ eliandoran ];
     platforms = lib.platforms.linux;
     mainProgram = "naps2";
-    broken = stdenv.hostPlatform.isAarch64;  # Google.Protobuf.Tools dependency fails to build.
   };
 
 }

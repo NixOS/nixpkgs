@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mcy/0x";
     description = "Colorful, configurable xxd";
     mainProgram = "0x";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ];
   };
 }

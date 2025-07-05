@@ -6,6 +6,7 @@
   gitUpdater,
   pythonAtLeast,
   pythonOlder,
+  isPyPy,
 
   # build-system
   setuptools,
@@ -32,16 +33,17 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.13.0";
+  version = "1.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # relies on several CPython internals
+  disabled = pythonOlder "3.8" || isPyPy;
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
     tag = "v${version}";
-    hash = "sha256-P2Ozmj7/7QBmjlveHLsNdYgUAerg0qOoa8pO0iQc5os=";
+    hash = "sha256-y67kt5i8mT9TcSbUGwnNuTAeqjy9apvWIbA2QD96LS4=";
   };
 
   passthru.updateScript = gitUpdater {

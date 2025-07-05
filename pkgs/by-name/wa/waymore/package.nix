@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "waymore";
   version = "4.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xnl-h4ck3r";

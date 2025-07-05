@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "pyipv8";
   version = "3.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

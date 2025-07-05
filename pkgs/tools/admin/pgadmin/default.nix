@@ -2,38 +2,46 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchYarnDeps,
   zlib,
   nixosTests,
   postgresqlTestHook,
   postgresql,
-  yarn,
-  fixup-yarn-lock,
+  yarn-berry_4,
   nodejs,
+  autoconf,
+  automake,
+  libtool,
+  libpng,
+  nasm,
+  cmake,
+  pkg-config,
   stdenv,
+  srcOnly,
   server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
-  version = "8.12";
-  yarnHash = "sha256-C5CI8oP9vEana3OEs1yAsSSTvO2uLEuCU1nHhC7LerY=";
+  version = "9.5";
+  yarnHash = "sha256-i3WCEpcZepB7K0A4QgjoLfkO7icew/8usJCo4DkWT6I=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-OIFHaU+Ty0xJn42iqYhse8dfFJZpx8AV/10RNxp1Y4o=";
+    hash = "sha256-5FwYkdhpg/2Cidi2qiFhhsQYbIwsp80K3MNxw5rp4ww=";
+  };
+
+  mozjpeg-bin = fetchFromGitHub {
+    owner = "imagemin";
+    repo = "mozjpeg-bin";
+    rev = "c0587fbc00b21ed8cad8bae499a0827baeaf7ffa";
+    hash = "sha256-D/pXQBlIIyk7KAgxJ1gKqxYxtlfBbLzUSmYZbH659cA=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
-  pythonPackages = python3.pkgs.overrideScope (final: prev: rec { });
-
-  offlineCache = fetchYarnDeps {
-    yarnLock = ./yarn.lock;
-    hash = yarnHash;
-  };
+  pythonPackages = python3.pkgs.overrideScope (final: prev: { });
 
   # don't bother to test kerberos authentication
   # skip tests on macOS which fail due to an error in keyring, see https://github.com/NixOS/nixpkgs/issues/281214
@@ -51,6 +59,19 @@ in
 pythonPackages.buildPythonApplication rec {
   inherit pname version src;
 
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    # mozjpeg fails to build on darwin due to a hardocded path
+    # this has been fixed upstream on master but no new version
+    # has been released. We therefore point yarn to upstream
+    # see https://github.com/imagemin/mozjpeg-bin/issues/64
+    # and https://github.com/imagemin/mozjpeg-bin/issues/81
+    patches = [
+      ./mozjpeg.patch
+    ];
+    src = src + "/web";
+    hash = yarnHash;
+  };
+
   # from Dockerfile
   CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
 
@@ -64,6 +85,11 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   postPatch = ''
+    # the patch needs to be executed inside the /web subfolder
+    # therefore it is included here and not in `patches`
+    cd web
+    patch -u yarn.lock ${./mozjpeg.patch}
+    cd ..
     # patching Makefile, so it doesn't try to build sphinx documentation here
     # (will do so later)
     substituteInPlace Makefile \
@@ -76,9 +102,6 @@ pythonPackages.buildPythonApplication rec {
     sed 's|==|>=|g' -i requirements.txt
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
-    # remove packageManager from package.json so we can work without corepack
-    substituteInPlace web/package.json \
-      --replace-fail "\"packageManager\": \"yarn@3.8.3\"" "\"\": \"\""
     substituteInPlace pkg/pip/setup_pip.py \
       --replace-fail "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
     ${lib.optionalString (!server-mode) ''
@@ -86,6 +109,10 @@ pythonPackages.buildPythonApplication rec {
         --replace-fail "SERVER_MODE = True" "SERVER_MODE = False"
     ''}
   '';
+
+  dontYarnBerryInstallDeps = true;
+  env.YARN_ENABLE_SCRIPTS = "0";
+  dontUseCmakeConfigure = true;
 
   preBuild = ''
     # Adapted from pkg/pip/build.sh
@@ -108,18 +135,31 @@ pythonPackages.buildPythonApplication rec {
     done
     cd ../
 
-    # mkYarnModules and mkYarnPackage have problems running the webpacker
     echo Building the web frontend...
     cd web
-    export HOME="$TMPDIR"
-    yarn config --offline set yarn-offline-mirror "${offlineCache}"
-    # replace with converted yarn.lock file
-    rm yarn.lock
-    cp ${./yarn.lock} yarn.lock
-    chmod +w yarn.lock
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
+    (
+    export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
+    yarnBerryConfigHook
+    )
+    # mozjpeg vendored source isn't included in the checkout for yarn. If we copy it before the
+    # yarnConfigHook it will just get overwritten. So we first run the configHook without build,
+    # then copy the vendored source and then build the dependencies
+    # This has the disadvantage of repeating some of the yarnConfigHooks logic here
+    mkdir -p node_modules/mozjpeg/vendor/source
+    cp ${mozjpeg-bin}/vendor/source/mozjpeg.tar.gz node_modules/mozjpeg/vendor/source/
+    (
+    # https://github.com/mozilla/mozjpeg/issues/438
+    substituteInPlace node_modules/mozjpeg/lib/install.js --replace-fail "cmake -DCMAKE" "cmake -DENABLE_STATIC=FALSE -DCMAKE"
+    substituteInPlace node_modules/mozjpeg/lib/install.js --replace-fail "cp cjpeg-static" "cp cjpeg"
+    export LD=$CC
+    export HOME=$(mktemp -d)
+    export YARN_ENABLE_SCRIPTS=1
+    YARN_IGNORE_PATH=1 ${yarn-berry_4.yarn-berry-offline}/bin/yarn config set enableTelemetry false
+    YARN_IGNORE_PATH=1 ${yarn-berry_4.yarn-berry-offline}/bin/yarn config set enableGlobalCache false
+    export npm_config_nodedir="${srcOnly nodejs}"
+    export npm_config_node_gyp="${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js"
+    YARN_IGNORE_PATH=1 ${yarn-berry_4.yarn-berry-offline}/bin/yarn install --inline-builds
+    )
     yarn webpacker
     cp -r * ../pip-build/pgadmin4
     # save some disk space
@@ -145,13 +185,24 @@ pythonPackages.buildPythonApplication rec {
     cython
     pip
     sphinx
-    yarn
-    fixup-yarn-lock
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
     nodejs
+
+    # for building mozjpeg2
+    cmake
+    autoconf
+    automake
+    libtool
+    nasm
+    pkg-config
   ];
+
   buildInputs = [
     zlib
     pythonPackages.wheel
+    # for mozjpeg2
+    libpng
   ];
 
   propagatedBuildInputs = with pythonPackages; [
@@ -196,8 +247,6 @@ pythonPackages.buildPythonApplication rec {
     azure-identity
     sphinxcontrib-youtube
     dnspython
-    greenlet
-    speaklater3
     google-auth-oauthlib
     google-api-python-client
     keyring
@@ -220,7 +269,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = postgresql.doCheck;
+  doCheck = !postgresqlTestHook.meta.broken;
 
   checkPhase = ''
     runHook preCheck
@@ -243,7 +292,6 @@ pythonPackages.buildPythonApplication rec {
     python regression/runtests.py --pkg browser --exclude ${skippedTests}
 
     ## Reverse engineered SQL test ##
-
     python regression/runtests.py --pkg resql
 
     runHook postCheck

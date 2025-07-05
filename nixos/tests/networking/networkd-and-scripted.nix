@@ -178,6 +178,29 @@ let
             router.wait_until_succeeds("ping -c 1 fd00:1234:5678:2::2")
       '';
     };
+    dhcpHostname = {
+      name = "hostnameDHCP";
+      nodes.router = router;
+      nodes.client = clientConfig {
+        # use the name given by the DHCP server
+        system.name = "client";
+        networking.hostName = lib.mkForce "";
+        security.polkit.enable = true;
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        networking.interfaces.enp1s0.useDHCP = true;
+      };
+      testScript = ''
+        router.start()
+        router.systemctl("start network-online.target")
+        router.wait_for_unit("network-online.target")
+
+        client.start()
+        client.wait_for_unit("network.target")
+
+        with subtest("Wait until we have received the hostname"):
+            client.wait_until_succeeds("hostname | grep -q 'client1'")
+      '';
+    };
     dhcpOneIf = {
       name = "OneInterfaceDHCP";
       nodes.router = router;
@@ -238,6 +261,18 @@ let
                 }
               ];
             };
+
+            # virtio-net reports its speed and duplex as "unknown" by default,
+            # which confuses the 802.3ad logic. However, you can just tell it
+            # to pretend to have any link speed with ethtool, so do that.
+            systemd.services.fake-link-settings = {
+              path = [ pkgs.ethtool ];
+              script = ''
+                ethtool -s enp1s0 speed 1000 duplex full
+                ethtool -s enp2s0 speed 1000 duplex full
+              '';
+              wantedBy = [ "network-pre.target" ];
+            };
           };
       in
       {
@@ -252,11 +287,11 @@ let
               client2.wait_for_unit("network.target")
 
           with subtest("Test bonding"):
-              client1.wait_until_succeeds("ping -c 2 192.168.1.1")
-              client1.wait_until_succeeds("ping -c 2 192.168.1.2")
+              client1.wait_until_succeeds("ping -c2 -w2 192.168.1.1")
+              client1.wait_until_succeeds("ping -c2 -w2 192.168.1.2")
 
-              client2.wait_until_succeeds("ping -c 2 192.168.1.1")
-              client2.wait_until_succeeds("ping -c 2 192.168.1.2")
+              client2.wait_until_succeeds("ping -c2 -w2 192.168.1.1")
+              client2.wait_until_succeeds("ping -c2 -w2 192.168.1.2")
 
           with subtest("Verify bonding mode"):
               for client in client1, client2:

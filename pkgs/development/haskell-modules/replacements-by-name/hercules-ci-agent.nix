@@ -80,8 +80,8 @@
 }:
 mkDerivation {
   pname = "hercules-ci-agent";
-  version = "0.10.5";
-  sha256 = "ab1c2370dbfdca7d7b67cb1985648edabf40d99f01b88a98d6961a2706c0e591";
+  version = "0.10.6";
+  sha256 = "5551c8eda390b48da6801f8f8580dc770e6e2fa2adf467ea7afd174748816fd6";
   isLibrary = true;
   isExecutable = true;
   setupHaskellDepends = [

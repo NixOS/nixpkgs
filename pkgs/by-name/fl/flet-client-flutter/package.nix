@@ -1,34 +1,37 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, flutter324
-, gst_all_1
-, libunwind
-, makeWrapper
-, mimalloc
-, orc
-, yq
-, runCommand
-, gitUpdater
-, mpv-unwrapped
-, libplacebo
-, _experimental-update-script-combinators
-, flet-client-flutter
-, fletTarget ? "linux"
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  flutter329,
+  gst_all_1,
+  libunwind,
+  makeWrapper,
+  mimalloc,
+  orc,
+  python3,
+  nix,
+  gitUpdater,
+  nix-prefetch-git,
+  mpv-unwrapped,
+  libplacebo,
+  _experimental-update-script-combinators,
+  fletTarget ? "linux",
 }:
 
-flutter324.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  version = "0.25.2";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
     tag = "v${version}";
-    hash = "sha256-bD44MCRZPXB/xuw2vBCzNbRNSVgdc4GyyWg3F2adxKk=";
+    hash = "sha256-fD42AcfU3a/7sNvLE81pd1jdwUn5dEro3uKzaRBCWIU=";
   };
 
   sourceRoot = "${src.name}/client";
+
+  gitHashes = lib.importJSON ./git_hashes.json;
 
   cmakeFlags = [
     "-DMIMALLOC_LIB=${mimalloc}/lib/mimalloc.o"
@@ -44,31 +47,38 @@ flutter324.buildFlutterApplication rec {
     pkg-config
   ];
 
-  buildInputs = [
-    mpv-unwrapped
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-vaapi
-    gst_all_1.gstreamer
-    libunwind
-    orc
-    mimalloc
-  ]
+  buildInputs =
+    [
+      mpv-unwrapped
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-vaapi
+      gst_all_1.gstreamer
+      libunwind
+      orc
+      mimalloc
+    ]
     ++ mpv-unwrapped.buildInputs
-    ++ libplacebo.buildInputs
-  ;
+    ++ libplacebo.buildInputs;
 
   passthru = {
-    pubspecSource = runCommand "pubspec.lock.json" {
-        buildInputs = [ yq ];
-        inherit (flet-client-flutter) src;
-      } ''
-      cat $src/client/pubspec.lock | yq > $out
-    '';
-
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "flet-client-flutter.pubspecSource" ./pubspec.lock.json)
+      {
+        command = [
+          "env"
+          "PATH=${
+            lib.makeBinPath [
+              (python3.withPackages (p: [ p.pyyaml ]))
+              nix-prefetch-git
+              nix
+            ]
+          }"
+          "python3"
+          ./update-lockfiles.py
+        ];
+        supportedFeatures = [ "silent" ];
+      }
     ];
   };
 
@@ -77,7 +87,10 @@ flutter324.buildFlutterApplication rec {
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ heyimnova lucasew ];
+    maintainers = with lib.maintainers; [
+      heyimnova
+      lucasew
+    ];
     mainProgram = "flet";
   };
 }

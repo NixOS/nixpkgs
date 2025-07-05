@@ -7,15 +7,15 @@
   nukeReferences,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtl8852bu";
-  version = "${kernel.version}-unstable-2024-05-25";
+  version = "${kernel.version}-unstable-2025-05-18";
 
   src = fetchFromGitHub {
     owner = "morrownr";
-    repo = pname;
-    rev = "1acc7aa085bffec21a91fdc9e293378e06bf25e7";
-    hash = "sha256-22vzAdzzM5YnfU8kRWSK3HXxw6BA4FOWXLdWEb7T5IE=";
+    repo = "rtl8852bu-20240418";
+    rev = "42de963695ffc7929a4905aed5c5d7da7c1c2715";
+    hash = "sha256-BvOw9MU4eibeMJEOkifKFatCUNGdujNUZav+4D9bYKY=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace ./Makefile \
       --replace-fail /sbin/depmod \# \
-      --replace-fail '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+      --replace-fail '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/" \
+      --replace-fail 'cp -f $(MODULE_NAME).conf /etc/modprobe.d' \
+      'mkdir -p $out/etc/modprobe.d && cp -f $(MODULE_NAME).conf $out/etc/modprobe.d' \
+      --replace-fail "sh edit-options.sh" ""
     substituteInPlace ./platform/i386_pc.mk \
       --replace-fail /lib/modules "${kernel.dev}/lib/modules"
   '';
@@ -54,13 +57,19 @@ stdenv.mkDerivation rec {
     nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-designated-init"; # Similar to 79c1cf6
+
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Driver for Realtek rtl8852bu and rtl8832bu chipsets, provides the 8852bu mod";
-    homepage = "https://github.com/morrownr/rtl8852bu";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lonyelon ];
+    homepage = "https://github.com/morrownr/rtl8852bu-20240418";
+    license = lib.licenses.gpl2Only;
+    platforms = [ "x86_64-linux" ];
+    broken = kernel.kernelOlder "6" && kernel.isHardened; # Similar to 79c1cf6
+    maintainers = with lib.maintainers; [
+      lonyelon
+      thtrf
+    ];
   };
-}
+})

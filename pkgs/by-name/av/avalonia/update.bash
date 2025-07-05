@@ -4,8 +4,9 @@
 
 set -euo pipefail
 
+export NIXPKGS_ALLOW_INSECURE=1 # uses EOL dotnet-sdk-7
 package="$UPDATE_NIX_ATTR_PATH"
-nix-update "$package"
+nix-update "$package" --src-only
 src=$(nix-build -A "$package".src --no-out-link)
 npmDepsFile=$(nix-instantiate --eval -A "$package".npmDepsFile)
 (

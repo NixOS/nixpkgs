@@ -17,13 +17,13 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2024.12.23";
+  version = "2025.6.30";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "yt_dlp";
-    hash = "sha256-rA5ytakBe6EEtCWFRiAafO3DjovSByfgxjt3yCm0Jek=";
+    hash = "sha256-bQroVcClW/zCjf+6gE7IUlublV00pBGRoVYaTOwD2L0=";
   };
 
   build-system = with python3Packages; [
@@ -74,14 +74,6 @@ python3Packages.buildPythonApplication rec {
 
   # Requires network
   doCheck = false;
-
-  # curl-cffi 0.7.2 and 0.7.3 are broken, but 0.7.4 is fixed
-  # https://github.com/lexiforest/curl_cffi/issues/394
-  postPatch = ''
-    substituteInPlace yt_dlp/networking/_curlcffi.py \
-      --replace-fail "(0, 7, 0) <= curl_cffi_version < (0, 7, 2)" \
-        "((0, 7, 0) <= curl_cffi_version < (0, 7, 2)) or curl_cffi_version >= (0, 7, 4)"
-  '';
 
   postInstall = lib.optionalString withAlias ''
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"

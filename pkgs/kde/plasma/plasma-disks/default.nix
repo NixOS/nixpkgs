@@ -1,16 +1,15 @@
 {
   mkKdeDerivation,
   lib,
-  substituteAll,
+  replaceVars,
   smartmontools,
 }:
 mkKdeDerivation {
   pname = "plasma-disks";
 
   patches = [
-    (substituteAll {
+    (replaceVars ./smartctl-path.patch {
       smartctl = lib.getExe smartmontools;
-      src = ./smartctl-path.patch;
     })
   ];
 }

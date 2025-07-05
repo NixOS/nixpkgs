@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   openssl,
   zlib,
   libjpeg,
@@ -13,32 +12,16 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "x11vnc";
-  version = "0.9.16";
+  version = "0.9.17";
 
   src = fetchFromGitHub {
     owner = "LibVNC";
     repo = "x11vnc";
-    rev = version;
-    sha256 = "1g652mmi79pfq4p5p7spaswa164rpzjhc5rn2phy5pm71lm0vib1";
+    tag = finalAttrs.version;
+    hash = "sha256-Uc5AzEmfU5kcgfJz4qnry2w6qk/Wzzb/ohho9MnSieM=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2020-29074.patch";
-      url = "https://github.com/LibVNC/x11vnc/commit/69eeb9f7baa14ca03b16c9de821f9876def7a36a.patch";
-      sha256 = "0hdhp32g2i5m0ihmaxkxhsn3d5f2qasadvwpgxify4xnzabmyb2d";
-    })
-
-    # Pull upstream fix for -fno-common toolchains:
-    #   https://github.com/LibVNC/x11vnc/pull/121
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/LibVNC/x11vnc/commit/a48b0b1cd887d7f3ae67f525d7d334bd2feffe60.patch";
-      sha256 = "046gjsmg0vm0m4y9ny17y2jayc4ba7vib2whw71l5x1hjp6pksjs";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -64,21 +47,22 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/unixpw.c \
-        --replace '"/bin/su"' '"/run/wrappers/bin/su"' \
-        --replace '"/bin/true"' '"${coreutils}/bin/true"'
+        --replace-fail '"/bin/su"' '"/run/wrappers/bin/su"' \
+        --replace-fail '"/bin/true"' '"${coreutils}/bin/true"'
 
     sed -i -e '/#!\/bin\/sh/a"PATH=${xorg.xdpyinfo}\/bin:${xorg.xauth}\/bin:$PATH\\n"' -e 's|/bin/su|/run/wrappers/bin/su|g' src/ssltools.h
 
     # Xdummy script is currently broken, so we avoid building it. This removes everything Xdummy-related from the affected Makefile
-    sed -i -e '/^\tXdummy.c\ \\$/,$d' -e 's/\tx11vnc_loop\ \\/\tx11vnc_loop/' misc/Makefile.am
+    sed -i '/if HAVE_X11/,/endif/d' misc/Makefile.am
   '';
 
   meta = with lib; {
     description = "VNC server connected to a real X11 screen";
     homepage = "https://github.com/LibVNC/x11vnc/";
+    changelog = "https://github.com/LibVNC/x11vnc/releases/tag/${finalAttrs.version}";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ OPNA2608 ];
     mainProgram = "x11vnc";
   };
-}
+})

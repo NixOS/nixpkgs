@@ -8,12 +8,12 @@
   qtbase,
   qttools,
   libnova,
-  proj_7,
+  proj,
   libpng,
   openjpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "unstable-2022-05-16";
   pname = "xygrib";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     bzip2
     qtbase
     libnova
-    proj_7
+    proj
     openjpeg
     libpng
   ];

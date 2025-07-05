@@ -141,37 +141,40 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.setuptools
   ];
-  buildInputs = [
-    # Xen
-    acpica-tools
-    bzip2
-    dev86
-    e2fsprogs.dev
-    libnl
-    libuuid
-    lzo
-    ncurses
-    perl
-    python3Packages.python
-    xz
-    yajl
-    zlib
-    zstd
+  buildInputs =
+    [
+      # Xen
+      acpica-tools
+      bzip2
+      dev86
+      e2fsprogs.dev
+      libnl
+      libuuid
+      lzo
+      ncurses
+      perl
+      python3Packages.python
+      xz
+      yajl
+      zlib
+      zstd
 
-    # oxenstored
-    ocamlPackages.findlib
-    ocamlPackages.ocaml
+      # oxenstored
+      ocamlPackages.findlib
+      ocamlPackages.ocaml
 
-    # Python Fixes
-    python3Packages.wrapPython
-  ] ++ optional withFlask checkpolicy ++ optional (versionOlder version "4.19") systemdMinimal;
+      # Python Fixes
+      python3Packages.wrapPython
+    ]
+    ++ optional withFlask checkpolicy
+    ++ optional (versionOlder version "4.19") systemdMinimal;
 
   configureFlags = [
     "--enable-systemd"
     "--disable-qemu-traditional"
     "--with-system-qemu"
     (if withSeaBIOS then "--with-system-seabios=${systemSeaBIOS.firmware}" else "--disable-seabios")
-    (if withOVMF then "--with-system-ovmf=${OVMF.firmware}" else "--disable-ovmf")
+    (if withOVMF then "--with-system-ovmf=${OVMF.mergedFirmware}" else "--disable-ovmf")
     (if withIPXE then "--with-system-ipxe=${ipxe.firmware}" else "--disable-ipxe")
     (enableFeature withFlask "xsmpolicy")
   ];
@@ -360,7 +363,7 @@ stdenv.mkDerivation (finalAttrs: {
       mit
     ];
 
-    maintainers = teams.xen.members;
+    teams = [ teams.xen ];
     knownVulnerabilities = optional (versionOlder version minSupportedVersion) "The Xen Project Hypervisor version ${version} is no longer supported by the Xen Project Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
 
     mainProgram = "xl";

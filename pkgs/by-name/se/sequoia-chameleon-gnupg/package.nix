@@ -11,16 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-chameleon-gnupg";
-  version = "0.11.2";
+  version = "0.13.1";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
-    repo = pname;
+    repo = "sequoia-chameleon-gnupg";
     rev = "v${version}";
-    hash = "sha256-XoZA8X6lwziKFECJDPCSpqcFtJe5TsDGWvM+EgpBU3U=";
+    hash = "sha256-K9aeWrqJGPx2RymCXWNdNUTXXtO4NNm6Rd3jz+YxEi0=";
   };
 
-  cargoHash = "sha256-xDQCAte+olmoMbchspNW/02NRkhwWxcgPkIXWBJsbIg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-d+Ew05pYpUepqsYLTcI3j2qcplXn2hDACyzXXDx6hNg=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

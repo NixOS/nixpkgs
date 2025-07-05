@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.24.2";
+  version = "0.24.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "mingrammer";
     repo = "diagrams";
     tag = "v${version}";
-    hash = "sha256-xdc8qHvLKy5QV/1c87o7H/VhitUhpH/+VgqBHn2a8lg=";
+    hash = "sha256-N4JGrtgLgGUayFR6/xTf3GZEZjtxC/4De3ZCfRZbi6M=";
   };
 
   patches = [
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Diagram as Code";
     homepage = "https://diagrams.mingrammer.com/";
-    changelog = "https://github.com/mingrammer/diagrams/releases/tag/v${version}";
+    changelog = "https://github.com/mingrammer/diagrams/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ addict3d ];
   };

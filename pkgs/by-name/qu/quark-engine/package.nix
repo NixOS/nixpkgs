@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "24.12.1";
+  version = "25.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quark-engine";
     repo = "quark-engine";
     tag = "v${version}";
-    hash = "sha256-aOhqUuTT13xhcXXnY/P8NnF1PAqFn/2+wMizSA1Jb6o=";
+    hash = "sha256-DAD37fzswY3c0d+ubOCYImxs4qyD4fhC3m2l0iD977A=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -35,7 +35,10 @@ python3.pkgs.buildPythonApplication rec {
     tqdm
   ];
 
-  pythonRelaxDeps = [ "r2pipe" ];
+  pythonRelaxDeps = [
+    "r2pipe"
+    "androguard"
+  ];
 
   # Project has no tests
   doCheck = false;
@@ -45,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Android malware (analysis and scoring) system";
     homepage = "https://quark-engine.readthedocs.io/";
-    changelog = "https://github.com/quark-engine/quark-engine/releases/tag/v${version}";
+    changelog = "https://github.com/quark-engine/quark-engine/releases/tag/${src.tag}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

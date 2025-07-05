@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Avoid benchmarking the build machine to determine compilation results
+    # https://build.opensuse.org/projects/server:mail/packages/procmail/files/reproducible.patch?expand=1
+    ./reproducible.patch
     # Fix clang-16 and gcc-14 build failures:
     #   https://github.com/BuGlessRB/procmail/pull/7
     (fetchpatch {
@@ -58,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BuGlessRB/procmail/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

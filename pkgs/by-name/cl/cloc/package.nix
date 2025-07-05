@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "2.02";
+  version = "2.06";
 in
 stdenv.mkDerivation {
   pname = "cloc";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "AlDanial";
     repo = "cloc";
     rev = "v${version}";
-    sha256 = "sha256-qTrBCCC2J8Ewt6GvYlnXU8F1iB31A1xTFXdkee8L0Os=";
+    sha256 = "sha256-u/qIkoN8xFA/aggjbSfVHbhUvRo6fWqcJWSMO/Q0hQo=";
   };
 
   setSourceRoot = ''

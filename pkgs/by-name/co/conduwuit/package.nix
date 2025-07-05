@@ -6,8 +6,6 @@
   bzip2,
   zstd,
   stdenv,
-  apple-sdk_15,
-  darwinMinVersionHook,
   rocksdb,
   nix-update-script,
   testers,
@@ -17,7 +15,6 @@
   rust-jemalloc-sys,
   enableLiburing ? stdenv.hostPlatform.isLinux,
   liburing,
-  nixosTests,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -55,12 +52,7 @@ rustPlatform.buildRustPackage rec {
       zstd
     ]
     ++ lib.optional enableJemalloc rust-jemalloc-sys'
-    ++ lib.optional enableLiburing liburing
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      # aws-lc-sys requires CryptoKit's CommonCrypto, which is available on macOS 10.15+
-      (darwinMinVersionHook "10.15")
-    ];
+    ++ lib.optional enableLiburing liburing;
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -73,28 +65,27 @@ rustPlatform.buildRustPackage rec {
   # for available features.
   # We enable all default features except jemalloc and io_uring, which
   # we guard behind our own (default-enabled) flags.
-  buildFeatures = [
-    "brotli_compression"
-    "element_hacks"
-    "gzip_compression"
-    "release_max_log_level"
-    "sentry_telemetry"
-    "systemd"
-    "zstd_compression"
-  ] ++ lib.optional enableJemalloc "jemalloc" ++ lib.optional enableLiburing "io_uring";
+  buildFeatures =
+    [
+      "brotli_compression"
+      "element_hacks"
+      "gzip_compression"
+      "release_max_log_level"
+      "sentry_telemetry"
+      "systemd"
+      "zstd_compression"
+    ]
+    ++ lib.optional enableJemalloc "jemalloc"
+    ++ lib.optional enableLiburing "io_uring";
 
   passthru = {
     updateScript = nix-update-script { };
-    tests =
-      {
-        version = testers.testVersion {
-          inherit version;
-          package = conduwuit;
-        };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit (nixosTests) conduwuit;
+    tests = {
+      version = testers.testVersion {
+        inherit version;
+        package = conduwuit;
       };
+    };
   };
 
   meta = {
@@ -102,6 +93,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://conduwuit.puppyirl.gay/";
     changelog = "https://github.com/girlbossceo/conduwuit/releases/tag/v${version}";
     license = lib.licenses.asl20;
+    knownVulnerabilities = [
+      "On April 11, 2025, the conduwuit project officially ceased development"
+    ];
     maintainers = with lib.maintainers; [ niklaskorz ];
     # Not a typo, conduwuit is a drop-in replacement for conduit.
     mainProgram = "conduit";

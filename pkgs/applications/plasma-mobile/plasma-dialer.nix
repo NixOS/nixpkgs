@@ -31,7 +31,7 @@
   wayland-protocols,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "plasma-dialer";
 
   nativeBuildInputs = [

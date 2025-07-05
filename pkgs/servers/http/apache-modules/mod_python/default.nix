@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mod_python";
-  version = "3.5.0.2";
+  version = "3.5.0.4";
 
   src = fetchFromGitHub {
     owner = "grisha";
     repo = "mod_python";
     tag = finalAttrs.version;
-    hash = "sha256-++yHNKVe1u3w47DaB0zvYyuTrBcQdmuDm22areAeejs=";
+    hash = "sha256-bZ0w61+0If70KD3UW24JllY6vD0vQX2C7FssYG1YLPI=";
   };
 
   patches = [ ./install.patch ];
@@ -34,11 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       apacheHttpd
-      (python3.withPackages (ps: with ps; [
-        distutils
-        packaging
-        setuptools
-      ]))
+      (python3.withPackages (
+        ps: with ps; [
+          distutils
+          packaging
+          setuptools
+        ]
+      ))
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libintl
@@ -56,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mod_python";
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

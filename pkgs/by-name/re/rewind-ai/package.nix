@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # Example response to use when modifing the script: https://pastebin.com/raw/90qU3n6H
+  # Example response to use when modifying the script: https://pastebin.com/raw/90qU3n6H
   # There is a real harsh limit on update checks, so DO NOT send any unnecessary update checks
   # Wait at least 3 days since the last pub_date (you will find the date at the end of the version number)
   # Example: 20240504 would be 2024/05/04, and that would mean that we want to check no earlier than on 2024/05/07 for any updates

@@ -84,7 +84,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://maude.cs.illinois.edu/";
+    homepage = "https://maude.cs.illinois.edu/";
     description = "High-level specification language";
     mainProgram = "maude";
     license = lib.licenses.gpl2Plus;

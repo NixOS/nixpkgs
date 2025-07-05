@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "hikari-crescent";
-  version = "1.0.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hikari-crescent";
     repo = "hikari-crescent";
     tag = "v${version}";
-    hash = "sha256-0eDPdN+3lalgHiBNXuZUEJllAKFxdKK6paTFNHU5jIM=";
+    hash = "sha256-aQjT5sAaqConUtRGcqddzwcbBJkbwYOCxvnNJpKu3yI=";
   };
 
   build-system = [ poetry-core ];
@@ -30,12 +30,6 @@ buildPythonPackage rec {
     hikari
     sigparse
   ];
-
-  postPatch = ''
-    # pythonRelaxDepsHook did not work
-    substituteInPlace pyproject.toml \
-      --replace-fail 'hikari = "==' 'hikari = ">='
-  '';
 
   pythonImportsCheck = [ "crescent" ];
 

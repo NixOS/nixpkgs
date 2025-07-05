@@ -97,7 +97,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [
       thoughtpolice
-      copumpkin
       wchresta
       markusscherer
     ];

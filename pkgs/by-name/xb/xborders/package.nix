@@ -13,6 +13,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "xborders";
   version = "3.4"; # in version.txt
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deter0";

@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "ghrepo-stats";
-  version = "0.5.4";
+  version = "0.5.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mrbean-bremen";
-    repo = pname;
+    repo = "ghrepo-stats";
     tag = "v${version}";
-    hash = "sha256-Mr0FM2CbdgAUF8siMjUIZvypWiPNPU9OncPiBPqK3uE=";
+    hash = "sha256-zdBIX/uetkOAalg4uJPWXRL9WUgNN+hmqUwQDTdzrzA=";
   };
 
   postPatch = ''

@@ -7,6 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "pydf";
   version = "12";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

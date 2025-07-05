@@ -16,6 +16,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mate-tweak";
   version = "22.10.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ubuntu-mate";
@@ -82,6 +83,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/ubuntu-mate/mate-tweak/releases/tag/${version}";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.linux;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

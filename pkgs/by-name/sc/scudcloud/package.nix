@@ -7,6 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "scudcloud";
   version = "1.65";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "raelgc";

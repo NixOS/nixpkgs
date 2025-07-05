@@ -48,11 +48,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.2.7";
+  version = "9.2.11";
 
   src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    hash = "sha256-i3UTqOO3gQezL2HmQllJa+hwy03tJViyOOflW2iXBAM=";
+    hash = "sha256-WFABr7+JsUbQagLFK0OXZ20t4QCuYrozeaV4fKO/c2s=";
   };
 
   # NOTE: The upstream README indicates that flex is needed for some features,
@@ -184,7 +184,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) trafficserver; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://trafficserver.apache.org";
     changelog = "https://raw.githubusercontent.com/apache/trafficserver/${version}/CHANGELOG-${version}";
     description = "Fast, scalable, and extensible HTTP caching proxy server";
@@ -197,8 +197,8 @@ stdenv.mkDerivation rec {
       enterprises, Internet service providers (ISPs), backbone providers, and
       large intranets by maximizing existing and available bandwidth.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ midchildan ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ midchildan ];
+    platforms = lib.platforms.unix;
   };
 }

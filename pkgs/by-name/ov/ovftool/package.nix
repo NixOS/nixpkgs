@@ -1,62 +1,117 @@
 {
   autoPatchelfHook,
   c-ares,
+  curl,
   darwin,
   expat,
   fetchurl,
   glibc,
   icu60,
+  jq,
   lib,
   libiconv,
   libredirect,
   libxcrypt-legacy,
   libxml2,
   makeWrapper,
+  openssl,
   stdenv,
   unzip,
   xercesc,
   zlib,
+  acceptBroadcomEula ? false,
 }:
 
 let
+  # Returns the base URL for the given tool ID.
+  mkBaseUrl = toolId: "https://developer.broadcom.com/tools/${toolId}/latest";
+  ovftoolId = "open-virtualization-format-ovf-tool";
 
-  ovftoolSystems =
-    let
-      baseUrl = "https://vdc-download.vmware.com/vmwb-repository/dcr-public";
-    in
+  # Use browser devtools to figure out how this works.
+  fetchFromBroadcom =
     {
-      "i686-linux" = rec {
-        name = "VMware-ovftool-${version}-lin.i386.zip";
-        # As of 2024-02-20 the "Zip of OVF Tool for 32-bit Linux" download link
-        # on the v4.6.2 page links to v4.6.0.
-        version = "4.6.0-21452615";
-        url = "${baseUrl}/7254abb2-434d-4f5d-83e2-9311ced9752e/57e666a2-874c-48fe-b1d2-4b6381f7fe97/${name}";
-        hash = "sha256-qEOr/3SW643G5ZQQNJTelZbUxB8HmxPd5uD+Gqsoxz0=";
+      fileName,
+      version,
+      toolId ? ovftoolId,
+      artifactId ? 21342,
+      fileType ? "Download",
+      source ? "",
+      hash ? "",
+    }:
+    let
+      requestJson = builtins.toJSON {
+        inherit
+          fileName
+          artifactId
+          fileType
+          source
+          ;
       };
-      "x86_64-linux" = rec {
-        name = "VMware-ovftool-${version}-lin.x86_64.zip";
-        version = "4.6.2-22220919";
-        url = "${baseUrl}/8a93ce23-4f88-4ae8-b067-ae174291e98f/c609234d-59f2-4758-a113-0ec5bbe4b120/${name}";
-        hash = "sha256-3B1cUDldoTqLsbSARj2abM65nv+Ot0z/Fa35/klJXEY=";
-      };
-      "x86_64-darwin" = rec {
-        name = "VMware-ovftool-${version}-mac.x64.zip";
-        version = "4.6.2-22220919";
-        url = "${baseUrl}/91091b23-280a-487a-a048-0c2594303c92/dc666e23-104f-4b9b-be11-6d88dcf3ab98/${name}";
-        hash = "sha256-AZufZ0wxt5DYjnpahDfy36W8i7kjIfEkW6MoELSx11k=";
-      };
+    in
+    fetchurl {
+      name = fileName;
+      url =
+        (mkBaseUrl toolId)
+        + "?p_p_id=SDK_AND_TOOL_DETAILS_INSTANCE_iwlk&p_p_lifecycle=2&p_p_resource_id=documentDownloadArtifact";
+      curlOptsList = [
+        "--json"
+        requestJson
+      ];
+      downloadToTemp = true;
+      nativeBuildInputs = [ jq ];
+      postFetch = ''
+        # Try again with the new URL
+        urls="$(jq -r 'if (.success == true) then .data.downloadUrl else error(. | tostring) end' < "$downloadedFile" || exit $?)" \
+          downloadToTemp="" \
+          curlOptsList="" \
+          curlOpts="" \
+          postFetch="" \
+          exec "$SHELL" "''${BASH_ARGV[@]}"
+      '';
+      inherit hash;
     };
+
+  ovftoolSystems = {
+    "x86_64-linux" = rec {
+      version = "4.6.3-24031167";
+      fileName = "VMware-ovftool-${version}-lin.x86_64.zip";
+      hash = "sha256-NEwwgmEh/mrZkMMhI+Kq+SYdd3MJ0+IBLdUhd1+kPow=";
+    };
+    "x86_64-darwin" = rec {
+      version = "4.6.3-24031167";
+      fileName = "VMware-ovftool-${version}-mac.x64.zip";
+      hash = "sha256-vhACcc4tjaQhvKwZyWkgpaKaoC+coWGl1zfSIC6WebM=";
+    };
+  };
 
   ovftoolSystem = ovftoolSystems.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
+  # Regrettably, we need to compile this version or else ovftool complains about unknown symbols.
+  ovftool-xercesc = xercesc.overrideAttrs (prev: rec {
+    version = "3.2.5";
+    src = fetchurl {
+      url = lib.replaceStrings [ prev.version ] [ version ] prev.src.url;
+      hash = "sha256-VFz8zmxOdVIHvR8n4xkkHlDjfAwnJQ8RzaEWAY8e8PU=";
+    };
+  });
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (final: {
   pname = "ovftool";
   inherit (ovftoolSystem) version;
 
-  src = fetchurl {
-    inherit (ovftoolSystem) name url hash;
-  };
+  src =
+    if acceptBroadcomEula then
+      fetchFromBroadcom {
+        inherit (ovftoolSystem) fileName version hash;
+      }
+    else
+      throw ''
+        See the following URL for terms of using this software:
+        ${mkBaseUrl ovftoolId}
+
+        Use `${final.pname}.override { acceptBroadcomEula = true; }` if you accept Broadcom's terms
+        and would like to use this package.
+      '';
 
   buildInputs =
     [
@@ -65,21 +120,26 @@ stdenv.mkDerivation {
       icu60
       libiconv
       libxcrypt-legacy
-      xercesc
+      ovftool-xercesc
       zlib
+      curl
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glibc
+      openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.Libsystem
       libxml2
     ];
 
-  nativeBuildInputs = [
-    unzip
-    makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs =
+    [
+      unzip
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      autoPatchelfHook
+    ];
 
   postUnpack = ''
     # The linux package wraps ovftool.bin with ovftool. Wrapping
@@ -98,12 +158,11 @@ stdenv.mkDerivation {
       # with the addition of a libexec directory and a Nix-style binary wrapper.
 
       # Almost all libs in the package appear to be VMware proprietary except for
-      # libgoogleurl and libcurl. The rest of the libraries that the installer
-      # extracts are omitted here, and provided in buildInputs. Since libcurl
-      # depends on VMware's OpenSSL, both libs are still used.
+      # libgoogleurl and libcurl.
+      #
       # FIXME: Replace libgoogleurl? Possibly from Chromium?
-      # FIXME: Tell VMware to use a modern version of OpenSSL. As of ovftool
-      # v4.6.2 ovftool uses openssl-1.0.2zh which in seems to be the extended
+      # FIXME: Tell VMware to use a modern version of OpenSSL on macOS. As of ovftool
+      # v4.6.3 ovftool uses openssl-1.0.2zj which in seems to be the extended
       # support LTS release: https://www.openssl.org/support/contracts.html
 
       # Install all libs that are not patched in preFixup.
@@ -112,18 +171,15 @@ stdenv.mkDerivation {
       install -m 644 -t "$out/lib" \
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      libcrypto.so.1.0.2 \
-      libcurl.so.4 \
       libgoogleurl.so.59 \
-      libssl.so.1.0.2 \
       libssoclient.so \
       libvim-types.so \
       libvmacore.so \
       libvmomi.so
     ''
+    # macOS still relies on OpenSSL 1.0.2 as of v4.6.3, but Linux is in the clear
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       lib/libcrypto.1.0.2.dylib \
-      lib/libcurl.4.dylib \
       lib/libgoogleurl.59.0.30.45.2.dylib \
       lib/libssl.1.0.2.dylib \
       lib/libssoclient.dylib \
@@ -152,6 +208,7 @@ stdenv.mkDerivation {
       install -m 644 -t "$out/share/licenses" \
         "vmware.eula" \
         "vmware-eula.rtf" \
+        "README.txt" \
         "open_source_licenses.txt"
 
       # Install Docs
@@ -186,7 +243,6 @@ stdenv.mkDerivation {
       done
 
       # Patches for ovftool binary
-      change_args+=(-change /usr/lib/libSystem.B.dylib ${darwin.Libsystem}/lib/libSystem.B.dylib)
       change_args+=(-change /usr/lib/libc++.1.dylib ${stdenv.cc.libcxx}/lib/libc++.1.dylib)
       change_args+=(-change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib)
       change_args+=(-change /usr/lib/libxml2.2.dylib ${libxml2}/lib/libxml2.2.dylib)
@@ -195,20 +251,24 @@ stdenv.mkDerivation {
       change_args+=(-change @loader_path/lib/libexpat.dylib ${expat}/lib/libexpat.dylib)
       change_args+=(-change @loader_path/lib/libicudata.60.2.dylib ${icu60}/lib/libicudata.60.2.dylib)
       change_args+=(-change @loader_path/lib/libicuuc.60.2.dylib ${icu60}/lib/libicuuc.60.2.dylib)
-      change_args+=(-change @loader_path/lib/libxerces-c-3.2.dylib ${xercesc}/lib/libxerces-c-3.2.dylib)
+      change_args+=(-change @loader_path/lib/libxerces-c-3.2.dylib ${ovftool-xercesc}/lib/libxerces-c.dylib)
+
+      # lolwut
+      change_args+=(-change @GOBUILD_CAYMAN_CURL_ROOT@/apple_mac64/lib/libcurl.4.dylib ${curl.out}/lib/libcurl.4.dylib)
 
       # Patch binary
       install_name_tool "''${change_args[@]}" "$out/libexec/ovftool"
+      otool -L "$out/libexec/ovftool"
 
       # Additional patches for ovftool dylibs
-      change_args+=(-change /usr/lib/libresolv.9.dylib ${darwin.Libsystem}/lib/libresolv.9.dylib)
+      change_args+=(-change /usr/lib/libresolv.9.dylib ${lib.getLib darwin.libresolv}/lib/libresolv.9.dylib)
       change_args+=(-change @loader_path/libcares.2.dylib ${c-ares}/lib/libcares.2.dylib)
       change_args+=(-change @loader_path/libexpat.dylib ${expat}/lib/libexpat.dylib)
       change_args+=(-change @loader_path/libicudata.60.2.dylib ${icu60}/lib/libicudata.60.2.dylib)
       change_args+=(-change @loader_path/libicuuc.60.2.dylib ${icu60}/lib/libicuuc.60.2.dylib)
-      change_args+=(-change @loader_path/libxerces-c-3.2.dylib ${xercesc}/lib/libxerces-c-3.2.dylib)
+      change_args+=(-change @loader_path/libxerces-c-3.2.dylib ${ovftool-xercesc}/lib/libxerces-c.dylib)
 
-      # Add new abolute paths for other libs to all libs
+      # Add new absolute paths for other libs to all libs
       for lib in $out/lib/*.dylib; do
         libname=$(basename $lib)
         change_args+=(-change "@loader_path/$libname" "$out/lib/$libname")
@@ -219,6 +279,7 @@ stdenv.mkDerivation {
         libname=$(basename $lib)
         install_name_tool -id "$libname" "$lib"
         install_name_tool "''${change_args[@]}" "$lib"
+        otool -L "$lib"
       done
     '';
 
@@ -229,29 +290,34 @@ stdenv.mkDerivation {
     (allow file-read* (subpath "/System/Library/TextEncodings"))
   '';
 
-  doInstallCheck = true;
+  # Seems to get stuck and return 255, but works outside the sandbox
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstallCheck =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       export HOME=$TMPDIR
       # Construct a dummy /etc/passwd file - ovftool attempts to determine the
       # user's "real" home using this
-      DUMMY_PASSWD="$(realpath $HOME/dummy-passwd)"
+      DUMMY_PASSWD="$HOME/dummy-passwd"
       cat > $DUMMY_PASSWD <<EOF
       $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
       EOF
       export DYLD_INSERT_LIBRARIES="${libredirect}/lib/libredirect.dylib"
-      export NIX_REDIRECTS="/etc/passwd=$DUMMY_PASSWD"
+      export NIX_REDIRECTS="/etc/passwd=$(realpath "$DUMMY_PASSWD")"
     ''
     + ''
       mkdir -p ovftool-check && cd ovftool-check
 
       ovftool_with_args="$out/bin/ovftool --X:logToConsole"
 
+      # There are non-fatal warnings if we don't provide this, due to the sandbox.
+      export LC_ALL=C
+
       # `installCheckPhase.ova` is a NixOS 22.11 image (doesn't actually matter)
       # with a 1 MiB root disk that's all zero. Make sure that it converts
       # properly.
 
+      set -x
       $ovftool_with_args --schemaValidate ${./installCheckPhase.ova}
       $ovftool_with_args --sourceType=OVA --targetType=OVF ${./installCheckPhase.ova} nixos.ovf
 
@@ -261,6 +327,7 @@ stdenv.mkDerivation {
       test -f nixos-disk1.vmdk
 
       $ovftool_with_args --schemaValidate nixos.ovf
+      set +x
     '';
 
   meta = with lib; {
@@ -274,15 +341,13 @@ stdenv.mkDerivation {
     ];
     platforms = builtins.attrNames ovftoolSystems;
     mainProgram = "ovftool";
-    knownVulnerabilities = [
-      "The bundled version of openssl 1.0.2zh in ovftool has open vulnerabilities."
+    knownVulnerabilities = lib.optionals (stdenv.hostPlatform.isDarwin) [
+      "The bundled version of openssl 1.0.2zj in ovftool for Darwin has open vulnerabilities."
+      "https://openssl-library.org/news/vulnerabilities-1.0.2/"
       "CVE-2024-0727"
-      "CVE-2023-5678"
-      "CVE-2023-3817"
-      "CVE-2009-3767"
-      "CVE-2009-3766"
-      "CVE-2009-3765"
-      "CVE-2009-1390"
+      "CVE-2024-5535"
+      "CVE-2024-9143"
+      "CVE-2024-13176"
     ];
   };
-}
+})

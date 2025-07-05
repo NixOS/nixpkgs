@@ -14,33 +14,36 @@
 
 buildPythonPackage rec {
   pname = "explorerscript";
-  version = "0.2.1.post2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "explorerscript";
     tag = version;
-    hash = "sha256-cKEceWr7XmZbuomPOmjQ32ptAjz3LZDQBWAgZEFadDY=";
+    hash = "sha256-fh40HCU12AVA3cZ5xvRott+93qo8VzHFsbPzTkoV3x4=";
     # Include a pinned antlr4 fork used as a C++ library
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "scikit-build-core>=0.10.7, < 0.11" "scikit-build-core"
+  '';
+
   build-system = [
     setuptools
     scikit-build-core
-    ninja
-    cmake
     pybind11
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
   ];
 
   # The source include some auto-generated ANTLR code that could be recompiled, but trying that resulted in a crash while decompiling unionall.ssb.
   # We thus do not rebuild them.
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "scikit-build-core<=0.9.8" scikit-build-core
-  '';
 
   dontUseCmakeConfigure = true;
 

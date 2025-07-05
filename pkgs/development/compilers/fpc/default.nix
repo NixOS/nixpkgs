@@ -56,6 +56,10 @@ stdenv.mkDerivation rec {
     # substitute the markers set by the mark-paths patch
     substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by dynlinker-prefix "${glibc}"
     substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by syslibpath "${glibc}/lib"
+
+    substituteInPlace fpcsrc/compiler/systems/t_darwin.pas \
+      --replace-fail "LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib',true)" "LibrarySearchPath.AddLibraryPath(sysrootpath,'$SDKROOT/usr/lib',true)"
+
     # Replace the `codesign --remove-signature` command with a custom script, since `codesign` is not available
     # in nixpkgs
     # Remove the -no_uuid strip flag which does not work on llvm-strip, only
@@ -76,6 +80,9 @@ stdenv.mkDerivation rec {
     "NOGDB=1"
     "FPC=${startFPC}/bin/fpc"
   ];
+
+  # disabled by default in fpcsrc/compiler/llvm/agllvm.pas
+  hardeningDisable = [ "pie" ];
 
   installFlags = [ "INSTALL_PREFIX=\${out}" ];
 

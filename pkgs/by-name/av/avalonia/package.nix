@@ -26,8 +26,8 @@ let
   dotnet-sdk =
     with dotnetCorePackages;
     combinePackages [
-      sdk_7_0_1xx
-      runtime_6_0
+      sdk_7_0_1xx-bin
+      runtime_6_0-bin
     ];
 
   npmDepsFile = ./npm-deps.nix;
@@ -189,7 +189,7 @@ stdenvNoCC.mkDerivation (
         homepage = "https://avaloniaui.net/";
         license = [ lib.licenses.mit ];
         maintainers = with lib.maintainers; [ corngood ];
-        description = "A cross-platform UI framework for dotnet";
+        description = "Cross-platform UI framework for dotnet";
         sourceProvenance = with lib.sourceTypes; [
           fromSource
           binaryNativeCode # npm dependencies contain binaries

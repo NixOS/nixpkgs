@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qpdf";
-  version = "11.9.1";
+  version = "11.10.1";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DhrOKjUPgNo61db8av0OTfM8mCNebQocQWtTWdt002s=";
+    hash = "sha256-MkJpbAIoPZmsYupOjQKOwZomh/rUF+r/kKTdHfT5Dc8=";
   };
 
   outputs = [

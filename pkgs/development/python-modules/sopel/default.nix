@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "8.0.1";
+  version = "8.0.2";
   pyproject = true;
 
   disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z9Tcn2lb5a7c6aVbhPjuO6trrZQwSBA1iaMiDzpe+DA=";
+    hash = "sha256-7LNbnSri+yjH2Nw8rBCTO8Lg84VXY6A+xMXscEkUVK8=";
   };
 
   build-system = [ setuptools ];
@@ -52,7 +52,10 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [ "sopel-help" ];
 
-  pythonRelaxDeps = [ "sqlalchemy" ];
+  pythonRelaxDeps = [
+    "sqlalchemy"
+    "xmltodict"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

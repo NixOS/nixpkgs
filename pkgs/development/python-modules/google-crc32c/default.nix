@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "google-crc32c";
-  version = "1.6.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "googleapis";
     repo = "python-crc32c";
     tag = "v${version}";
-    hash = "sha256-uGW4gWIpTVQ+f52WBA9H+K3+sHNa4JdgO9qi1Ds7WEU=";
+    hash = "sha256-YXXoEXnJckF1kqpLXbIbJEcW+le6aeKyc6Y6xmf0SSw=";
   };
 
   build-system = [ setuptools ];

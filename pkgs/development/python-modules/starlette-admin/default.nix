@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "starlette-admin";
-  version = "0.14.1";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "starlette-admin";
-    rev = version;
-    hash = "sha256-DoYD8Hc5pd68+BhASw3mwwCdhu0vYHiELjVmVwU8FHs=";
+    tag = version;
+    hash = "sha256-yPePxdKrg41kycXl1fDKf1jWx0YD+K26w8z2LmQV0g0=";
   };
 
   build-system = [ hatchling ];
@@ -96,6 +96,8 @@ buildPythonPackage rec {
     [
       # odmantic is not packaged
       "tests/odmantic"
+      # beanie is not packaged
+      "tests/beanie"
       # needs mongodb running on port 27017
       "tests/mongoengine"
     ]
@@ -120,7 +122,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast, beautiful and extensible administrative interface framework for Starlette & FastApi applications";
     homepage = "https://github.com/jowilf/starlette-admin";
-    changelog = "https://github.com/jowilf/starlette-admin/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://jowilf.github.io/starlette-admin/changelog/";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
   };

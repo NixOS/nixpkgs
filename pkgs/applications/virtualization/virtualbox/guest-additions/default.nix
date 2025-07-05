@@ -12,7 +12,13 @@
   libX11,
 }:
 let
-  virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix { };
+  virtualboxVersion = "7.1.10";
+  virtualboxSubVersion = "";
+  virtualboxSha256 = "7d60010a4c9102613554b46f61d17b825c30ee59d8be071e52d8aac664ca9869";
+
+  virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix {
+    inherit virtualboxVersion virtualboxSubVersion virtualboxSha256;
+  };
 
   # Specifies how to patch binaries to make sure that libraries loaded using
   # dlopen are found. We grep binaries for specific library names and patch
@@ -46,7 +52,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "VirtualBox-GuestAdditions";
-  version = "${virtualBoxNixGuestAdditionsBuilder.version}-${kernel.version}";
+  version = "${virtualboxVersion}${virtualboxSubVersion}-${kernel.version}";
 
   src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${
     if stdenv.hostPlatform.is32bit then "x86" else "amd64"
@@ -70,7 +76,7 @@ stdenv.mkDerivation {
     runHook preBuild
 
     # Build kernel modules.
-    cd src/vboxguest-${virtualBoxNixGuestAdditionsBuilder.version}_NixOS
+    cd src/vboxguest-${virtualboxVersion}_NixOS
     # Run just make first. If we only did make install, we get symbol warnings during build.
     make
     cd ../..
@@ -102,7 +108,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
 
     # Install kernel modules.
-    cd src/vboxguest-${virtualBoxNixGuestAdditionsBuilder.version}_NixOS
+    cd src/vboxguest-${virtualboxVersion}_NixOS
     make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
     cd ../..
 
@@ -144,7 +150,7 @@ stdenv.mkDerivation {
       host/guest clipboard support.
     '';
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Only;
     maintainers = [
       lib.maintainers.sander
       lib.maintainers.friedrichaltheide

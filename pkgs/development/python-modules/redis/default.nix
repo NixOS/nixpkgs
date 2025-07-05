@@ -4,10 +4,12 @@
   buildPythonPackage,
   pythonOlder,
 
-  # propagates
+  # build-system
+  hatchling,
+
+  # dependencies
   async-timeout,
   deprecated,
-  importlib-metadata,
   packaging,
   typing-extensions,
 
@@ -22,22 +24,24 @@
 
 buildPythonPackage rec {
   pname = "redis";
-  version = "5.2.0";
-  format = "setuptools";
+  version = "6.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CxCHZlp3Gx/y4AOqW901TxWnDJ4l1afb+cciwWUop7A=";
+    hash = "sha256-ySjiZ61p0waa8oqYI6B3Ju33LH43dk9D3AEj83kowHU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     async-timeout
     deprecated
     packaging
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     hiredis = [ hiredis ];

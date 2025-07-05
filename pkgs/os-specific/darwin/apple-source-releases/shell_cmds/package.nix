@@ -3,7 +3,6 @@
   apple-sdk,
   bison,
   clang,
-  fetchurl,
   libedit,
   libresolv,
   libsbuf,

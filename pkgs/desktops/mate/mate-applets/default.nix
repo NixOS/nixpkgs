@@ -79,6 +79,6 @@ stdenv.mkDerivation rec {
       lgpl2Plus
     ];
     platforms = platforms.linux;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

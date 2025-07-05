@@ -6,11 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "frida-tools";
-  version = "13.6.0";
+  version = "14.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M0S8tZagToIP6Qyr9RWNAGGfWOcOtO0bYKC02IhCpvg=";
+    hash = "sha256-ORNgNpzZWoW/Ex6DOUk/mgRPySTv/cWybcHnEMdKeIU=";
   };
 
   propagatedBuildInputs = with python3Packages; [

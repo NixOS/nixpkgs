@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "tinytuya";
-  version = "1.15.1";
+  version = "1.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "jasonacox";
     repo = "tinytuya";
     tag = "v${version}";
-    hash = "sha256-T7bT4be/h67iPIH/7hjNCYsUDP+4o4HLV523sBIjGVs=";
+    hash = "sha256-ivtd61r68kUP/OOIkdTjVI5FiD7QsYe6eSr2WiVF7OI=";
   };
 
   build-system = [ setuptools ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for Tuya WiFi smart devices using a direct local area network (LAN) connection or the cloud (TuyaCloud API)";
     homepage = "https://github.com/jasonacox/tinytuya";
-    changelog = "https://github.com/jasonacox/tinytuya/releases/tag/v${version}";
+    changelog = "https://github.com/jasonacox/tinytuya/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ pathob ];
   };

@@ -4,6 +4,7 @@
   cryptography,
   defusedxml,
   fetchFromGitHub,
+  fetchpatch,
   paste,
   poetry-core,
   pyasn1,
@@ -17,7 +18,7 @@
   requests,
   responses,
   setuptools,
-  substituteAll,
+  replaceVars,
   xmlschema,
   xmlsec,
   zope-interface,
@@ -25,22 +26,24 @@
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "7.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "7.5.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = "pysaml2";
     tag = "v${version}";
-    hash = "sha256-M/tdKGu6K38TeBZc8/dt376bHhPB0svHB3iis/se0DY=";
+    hash = "sha256-2mvAXTruZqoSBUgfT2VEAnWQXVdviG0e49y7LPK5x00=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-xmlsec1-path.patch;
+    (replaceVars ./hardcode-xmlsec1-path.patch {
       inherit xmlsec;
+    })
+    # Replaces usages of deprecated/removed pyopenssl APIs
+    (fetchpatch {
+      url = "https://github.com/IdentityPython/pysaml2/pull/977/commits/930a652a240c8cd1489429a7d70cf5fa7ef1606a.patch";
+      hash = "sha256-kBNvGk5pwVmpW1wsIWVH9wapu6kjFavaTt4e3Llaw2c=";
     })
   ];
 
@@ -87,6 +90,9 @@ buildPythonPackage rec {
     "test_load_remote_encoding"
     "test_load_external"
     "test_conf_syslog"
+
+    # Broken XML schema check in 7.5.2
+    "test_namespace_processing"
   ];
 
   pythonImportsCheck = [ "saml2" ];

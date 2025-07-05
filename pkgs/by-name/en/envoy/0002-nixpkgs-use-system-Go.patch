@@ -1,18 +1,19 @@
-From 4be181e96199529a36e9a93c837af7173c827493 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Paul Meyer <49727155+katexochen@users.noreply.github.com>
 Date: Mon, 22 Apr 2024 11:58:00 +0200
 Subject: [PATCH] nixpkgs: use system Go
 
 Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
+Signed-off-by: Luke Granger-Brown <git@lukegb.com>
 ---
  bazel/dependency_imports.bzl | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
-index c68eb4bf3e..addee4f6af 100644
+index aef33aa103dc1136e63e165fb9ee6a267f52ba54..c5aefca14b729b548c4e90857202eb82576b507d 100644
 --- a/bazel/dependency_imports.bzl
 +++ b/bazel/dependency_imports.bzl
-@@ -20,7 +20,7 @@ load("@rules_rust//rust:defs.bzl", "rust_common")
+@@ -22,7 +22,7 @@ load("@rules_rust//rust:defs.bzl", "rust_common")
  load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_register_toolchains", "rust_repository_set")
  
  # go version for rules_go

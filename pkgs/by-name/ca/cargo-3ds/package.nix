@@ -6,16 +6,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-3ds";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "rust3ds";
     repo = "cargo-3ds";
     tag = "v${version}";
-    hash = "sha256-G1XSpvE94gcamvyKKzGZgj5QSwkBNbYWYdZ17ScwW90=";
+    hash = "sha256-APi1K5LtdHFI5kjPfZUOFcsZ/xoQixjKq5xZxwlW9CE=";
   };
 
-  cargoHash = "sha256-Gt8TJ6VTvpqtpQuD4WYN45/gccfgnw13sKeMqHboTm8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2JpBm0ahgiL4KSM4J/nQRbdo3MDZgZj6EDg7Jr5ZanA=";
 
   # Integration tests do not run in Nix build environment due to needing to
   # create and build Cargo workspaces.

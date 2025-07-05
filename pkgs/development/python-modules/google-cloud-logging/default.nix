@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.11.3";
+  version = "3.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_logging";
     inherit version;
-    hash = "sha256-CnPNlBGIdTh9RTU3HZ6UJoYe3vjkT7oSYehngtW41U8=";
+    hash = "sha256-Nu/II5hQVbIDkE6D4cj5+ZmzxkJwvNo51XOGyk7/1ng=";
   };
 
   build-system = [ setuptools ];

@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ccid";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.xz";
-    hash = "sha256-LsqPsH6P58DTna6sp7l81zxA7Ztyc4okrT3L38kY4eo=";
+    hash = "sha256-QZWEEJUBV+Yi+dkcnnjHtwjbdOIvcRkMWB0k0gVk1Ek=";
   };
 
   postPatch = ''
@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  doInstallCheck = true;
+
   postInstall = ''
     install -Dm 0444 -t $out/lib/udev/rules.d ../src/92_pcscd_ccid.rules
     substituteInPlace $out/lib/udev/rules.d/92_pcscd_ccid.rules \
@@ -68,11 +70,15 @@ stdenv.mkDerivation rec {
   };
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     [ -f $out/etc/reader.conf.d/libccidtwin ]
     [ -f $out/lib/udev/rules.d/92_pcscd_ccid.rules ]
     [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist ]
     [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Linux/libccid.so ]
     [ -f $out/pcsc/drivers/serial/libccidtwin.so ]
+
+    runHook preInstallCheck
   '';
 
   meta = with lib; {

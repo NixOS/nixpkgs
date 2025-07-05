@@ -220,10 +220,13 @@ in
     };
 
     nginx = lib.mkOption {
-      type = lib.types.submodule (
-        lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
+      type = lib.types.nullOr (
+        lib.types.submodule (
+          lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
+          }
+        )
       );
-      default = null;
+      default = { };
       example = ''
         {
           serverAliases = [
@@ -235,7 +238,7 @@ in
         }
       '';
       description = ''
-        With this option, you can customize the nginx virtualHost settings.
+        Use this option to customize an nginx virtual host. To disable the nginx set this to null.
       '';
     };
 
@@ -308,18 +311,16 @@ in
           message = "One of services.davis.database.urlFile or services.davis.database.createLocally must be set.";
         }
         {
-          assertion = (mail.dsn != null) != (mail.dsnFile != null);
-          message = "One of (and only one of) services.davis.mail.dsn or services.davis.mail.dsnFile must be set.";
+          assertion = !(mail.dsn != null && mail.dsnFile != null);
+          message = "services.davis.mail.dsn and services.davis.mail.dsnFile cannot both be set.";
         }
       ];
       services.davis.config =
         {
           APP_ENV = "prod";
           APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
-          # note: we do not need the log dir (we log to stdout/journald), by davis/symfony will try to create it, and the default value is one in the nix-store
-          #       so we set it to a path under dataDir to avoid something like: Unable to create the "logs" directory (/nix/store/5cfskz0ybbx37s1161gjn5klwb5si1zg-davis-4.4.1/var/log).
           APP_LOG_DIR = "${cfg.dataDir}/var/log";
-          LOG_FILE_PATH = "/dev/stdout";
+          LOG_FILE_PATH = "%kernel.logs_dir%/%kernel.environment%.log";
           DATABASE_DRIVER = db.driver;
           INVITE_FROM_ADDRESS = mail.inviteFromAddress;
           APP_SECRET._secret = cfg.appSecretFile;
@@ -330,7 +331,14 @@ in
           CALDAV_ENABLED = true;
           CARDDAV_ENABLED = true;
         }
-        // (if mail.dsn != null then { MAILER_DSN = mail.dsn; } else { MAILER_DSN._secret = mail.dsnFile; })
+        // (
+          if mail.dsn != null then
+            { MAILER_DSN = mail.dsn; }
+          else if mail.dsnFile != null then
+            { MAILER_DSN._secret = mail.dsnFile; }
+          else
+            { }
+        )
         // (
           if db.createLocally then
             {
@@ -340,7 +348,7 @@ in
                 else if
                   pgsqlLocal
                 # note: davis expects a non-standard postgres uri (due to the underlying doctrine library)
-                # specifically the dummy hostname which is overriden by the host query parameter
+                # specifically the dummy hostname which is overridden by the host query parameter
                 then
                   "postgres://${user}@localhost/${db.name}?host=/run/postgresql"
                 else if mysqlLocal then
@@ -381,6 +389,7 @@ in
           APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
           APP_LOG_DIR = "${cfg.dataDir}/var/log";
         };
+        phpPackage = lib.mkDefault cfg.package.passthru.php;
         settings =
           {
             "listen.mode" = "0660";
@@ -435,11 +444,11 @@ in
         before = [ "phpfpm-davis.service" ];
         after =
           lib.optional mysqlLocal "mysql.service"
-          ++ lib.optional pgsqlLocal "postgresql.service"
+          ++ lib.optional pgsqlLocal "postgresql.target"
           ++ [ "davis-env-setup.service" ];
         requires =
           lib.optional mysqlLocal "mysql.service"
-          ++ lib.optional pgsqlLocal "postgresql.service"
+          ++ lib.optional pgsqlLocal "postgresql.target"
           ++ [ "davis-env-setup.service" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = defaultServiceConfig // {
@@ -468,10 +477,13 @@ in
         "davis-env-setup.service"
         "davis-db-migrate.service"
       ];
-      systemd.services.phpfpm-davis.requires = [
-        "davis-env-setup.service"
-        "davis-db-migrate.service"
-      ] ++ lib.optional mysqlLocal "mysql.service" ++ lib.optional pgsqlLocal "postgresql.service";
+      systemd.services.phpfpm-davis.requires =
+        [
+          "davis-env-setup.service"
+          "davis-db-migrate.service"
+        ]
+        ++ lib.optional mysqlLocal "mysql.service"
+        ++ lib.optional pgsqlLocal "postgresql.target";
       systemd.services.phpfpm-davis.serviceConfig.ReadWritePaths = [ cfg.dataDir ];
 
       services.nginx = lib.mkIf (cfg.nginx != null) {
@@ -496,7 +508,7 @@ in
                     return 302 https://$host/dav/;
                   '';
                 };
-                "~ ^(.+\.php)(.*)$" = {
+                "~ ^(.+\\.php)(.*)$" = {
                   extraConfig = ''
                     try_files                $fastcgi_script_name =404;
                     include                  ${config.services.nginx.package}/conf/fastcgi_params;

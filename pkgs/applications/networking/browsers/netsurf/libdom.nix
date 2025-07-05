@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   expat,
   pkg-config,
   buildsystem,
@@ -19,6 +20,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0F5FrxZUcBTCsKOuzzZw+hPUGfUFs/X8esihSR/DDzw=";
   };
 
+  patches = [
+    # fixes libdom build on gcc 14 due to calloc-transposed-args warning
+    # remove on next release
+    (fetchpatch {
+      name = "fix-calloc-transposed-args.patch";
+      url = "https://source.netsurf-browser.org/libdom.git/patch/?id=2687282d56dfef19e26e9639a5c0cd81de957e22";
+      hash = "sha256-1uAdLM9foplCVu8IQlMMlXh6OWHs5eUgsKp+0ZqM9yM=";
+    })
+  ];
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
@@ -33,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://www.netsurf-browser.org/projects/libdom/";

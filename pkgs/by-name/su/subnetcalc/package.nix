@@ -4,22 +4,24 @@
   fetchFromGitHub,
   cmake,
   ninja,
+  gettext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "subnetcalc";
-  version = "2.5.1";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "dreibh";
     repo = "subnetcalc";
-    rev = "subnetcalc-${finalAttrs.version}";
-    hash = "sha256-uP2T7c5aBvOsuJK648WNWO9WmRN4WCRlAIBFYTYyUkw=";
+    tag = "subnetcalc-${finalAttrs.version}";
+    hash = "sha256-FpDbU9kqen+NsJd8bSMUkTeq441+BXTKx/xKwcEBk10=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    gettext
   ];
 
   meta = {

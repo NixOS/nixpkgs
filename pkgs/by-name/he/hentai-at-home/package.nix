@@ -2,24 +2,23 @@
   lib,
   stdenvNoCC,
   fetchzip,
-  jdk,
+  jdk_headless,
   makeWrapper,
   buildPackages,
-  jre_headless,
   javaOpts ? "-XX:+UseZGC",
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hentai-at-home";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchzip {
     url = "https://repo.e-hentai.org/hath/HentaiAtHome_${finalAttrs.version}_src.zip";
-    hash = "sha512-kBB5mn9MwpkZ0z+Fl5ABs4YWBkXkMRcADYSAPkeifyhbYQQPOnijXKYZCkzE4UB3uQ1j6Kj6WnpO/4jquYEiOQ==";
+    hash = "sha512-dcHWZiU0ySLlEhZeK1n2T/dyO6Wk9eS7CpZRSfzY3KvHrPBthQnaFrarSopPXJan1+zWROu1pEff1WSr5+HO4Q==";
     stripRoot = false;
   };
 
   nativeBuildInputs = [
-    jdk
+    jdk_headless
     makeWrapper
   ];
 
@@ -28,24 +27,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stdenvNoCC.buildPlatform.libc == "glibc"
   ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
 
-  buildPhase = ''
-    make all
-  '';
+  makeFlags = [ "all" ];
+  enableParallelBuilding = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     cp build/HentaiAtHome.jar $out/share/java
 
     mkdir -p $out/bin
-    makeWrapper ${jre_headless}/bin/java $out/bin/HentaiAtHome \
+    makeWrapper ${jdk_headless}/bin/java $out/bin/HentaiAtHome \
       --add-flags "${javaOpts} -jar $out/share/java/HentaiAtHome.jar"
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     pushd $(mktemp -d)
     $out/bin/HentaiAtHome
     popd
+
+    runHook postInstallCheck
   '';
 
   strictDeps = true;
@@ -56,6 +62,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = licenses.gpl3;
     maintainers = with maintainers; [ terrorjack ];
     mainProgram = "HentaiAtHome";
-    platforms = jdk.meta.platforms;
+    platforms = jdk_headless.meta.platforms;
   };
 })

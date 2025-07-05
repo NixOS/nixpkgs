@@ -10,11 +10,10 @@
   jsonpatch,
   keystoneauth1,
   munch,
-  netifaces,
   openstackdocstheme,
   os-service-types,
   pbr,
-  pythonOlder,
+  psutil,
   pyyaml,
   requestsexceptions,
   setuptools,
@@ -23,10 +22,8 @@
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "4.0.0";
+  version = "4.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   outputs = [
     "out"
@@ -35,7 +32,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-54YN2WtwUxMJI8EdVx0lgCuWjx4xOIRct8rHxrMzv0s=";
+    hash = "sha256-5H4WbEcy6a6mUijmGNSQ5L5d8GUmobleLVmV19CXfT0=";
   };
 
   postPatch = ''
@@ -61,9 +58,9 @@ buildPythonPackage rec {
     jsonpatch
     keystoneauth1
     munch
-    netifaces
     os-service-types
     pbr
+    psutil
     requestsexceptions
     pyyaml
   ];
@@ -82,6 +79,6 @@ buildPythonPackage rec {
     mainProgram = "openstack-inventory";
     homepage = "https://github.com/openstack/openstacksdk";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

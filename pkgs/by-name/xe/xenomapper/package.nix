@@ -7,10 +7,11 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "xenomapper";
   version = "1.0.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "genomematt";
-    repo = pname;
+    repo = "xenomapper";
     rev = "v${version}";
     sha256 = "0mnmfzlq5mhih6z8dq5bkx95vb8whjycz9mdlqwbmlqjb3gb3zhr";
   };

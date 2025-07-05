@@ -47,11 +47,13 @@ in
   options.services.dex = {
     enable = mkEnableOption "the OpenID Connect and OAuth2 identity provider";
 
+    package = mkPackageOption pkgs "dex-oidc" { };
+
     environmentFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       description = ''
-        Environment file (see `systemd.exec(5)`
+        Environment file (see {manpage}`systemd.exec(5)`
         "EnvironmentFile=" section for the syntax) to define variables for dex.
         This option can be used to safely include secret keys into the dex configuration.
       '';
@@ -84,7 +86,7 @@ in
       '';
       description = ''
         The available options can be found in
-        [the example configuration](https://github.com/dexidp/dex/blob/v${pkgs.dex-oidc.version}/config.yaml.dist).
+        [the example configuration](https://github.com/dexidp/dex/blob/v${cfg.package.version}/config.yaml.dist).
 
         It's also possible to refer to environment variables (defined in [services.dex.environmentFile](#opt-services.dex.environmentFile))
         using the syntax `$VARIABLE_NAME`.
@@ -98,12 +100,12 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "networking.target"
-      ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.service");
+      ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.target");
       path = with pkgs; [ replace-secret ];
       restartTriggers = restartTriggers;
       serviceConfig =
         {
-          ExecStart = "${pkgs.dex-oidc}/bin/dex serve /run/dex/config.yaml";
+          ExecStart = "${cfg.package}/bin/dex serve /run/dex/config.yaml";
           ExecStartPre = [
             "${pkgs.coreutils}/bin/install -m 600 ${configFile} /run/dex/config.yaml"
             "+${startPreScript}"
@@ -117,7 +119,7 @@ in
             "-/etc/localtime"
             "-/etc/nsswitch.conf"
             "-/etc/resolv.conf"
-            "-/etc/ssl/certs/ca-certificates.crt"
+            "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
           ];
           BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
           # ProtectClock= adds DeviceAllow=char-rtc r

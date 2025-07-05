@@ -22,6 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-Vx51WBjjNPIfLlwMnAuwHnGNljhnjKkU0tWB9M9rjsw=";
   };
 
+  postPatch = ''
+    substituteInPlace aiomodernforms/modernforms.py --replace-fail \
+      "with async_timeout.timeout(self._request_timeout):" \
+      "async with async_timeout.timeout(self._request_timeout):"
+  '';
+
   propagatedBuildInputs = [
     aiohttp
     backoff

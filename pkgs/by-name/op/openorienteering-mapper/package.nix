@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/OpenOrienteering/mapper/commit/bc52aa567e90a58d6963b44d5ae1909f3f841508.patch";
       hash = "sha256-pQzw2EfVay+0GOtIbh1KJOkILcj5LRMzmMYy9q+abK4=";
     })
+    # https://github.com/OpenOrienteering/mapper/pull/2337
+    (fetchpatch {
+      url = "https://github.com/OpenOrienteering/mapper/commit/d1f214ee2abf140ae3615a2995f08c19ad81418a.patch";
+      hash = "sha256-eJZpHdFPW7A69aazI+WRSK9N87d4A6x973hMYTHdw5I=";
+    })
   ];
 
   postPatch = ''
@@ -87,16 +92,16 @@ stdenv.mkDerivation rec {
       ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/Mapper
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openorienteering.org/apps/mapper/";
     description = "Orienteering mapmaking program";
     changelog = "https://github.com/OpenOrienteering/mapper/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       mpickering
       sikmir
     ];
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
     mainProgram = "Mapper";
   };
 }

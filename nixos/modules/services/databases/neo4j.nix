@@ -61,17 +61,17 @@ let
     # HTTP Connector
     server.http.enabled=${lib.boolToString cfg.http.enable}
     server.http.listen_address=${cfg.http.listenAddress}
-    server.http.advertised_address=${cfg.http.listenAddress}
+    server.http.advertised_address=${cfg.http.advertisedAddress}
 
     # HTTPS Connector
     server.https.enabled=${lib.boolToString cfg.https.enable}
     server.https.listen_address=${cfg.https.listenAddress}
-    server.https.advertised_address=${cfg.https.listenAddress}
+    server.https.advertised_address=${cfg.https.advertisedAddress}
 
     # BOLT Connector
     server.bolt.enabled=${lib.boolToString cfg.bolt.enable}
     server.bolt.listen_address=${cfg.bolt.listenAddress}
-    server.bolt.advertised_address=${cfg.bolt.listenAddress}
+    server.bolt.advertised_address=${cfg.bolt.advertisedAddress}
     server.bolt.tls_level=${cfg.bolt.tlsLevel}
 
     # SSL Policies
@@ -99,10 +99,8 @@ let
     # Extra Configuration
     ${cfg.extraServerConfig}
   '';
-
 in
 {
-
   imports = [
     (lib.mkRenamedOptionModule
       [ "services" "neo4j" "host" ]
@@ -160,7 +158,6 @@ in
   ###### interface
 
   options.services.neo4j = {
-
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -244,6 +241,16 @@ in
         default = ":7687";
         description = ''
           Neo4j listen address for BOLT traffic. The listen address is
+          expressed in the format `<ip-address>:<port-number>`.
+        '';
+      };
+
+      advertisedAddress = lib.mkOption {
+        type = lib.types.str;
+        default = cfg.bolt.listenAddress;
+        defaultText = lib.literalExpression "config.${opt.bolt.listenAddress}";
+        description = ''
+          Neo4j advertised address for BOLT traffic. The advertised address is
           expressed in the format `<ip-address>:<port-number>`.
         '';
       };
@@ -379,6 +386,16 @@ in
           expressed in the format `<ip-address>:<port-number>`.
         '';
       };
+
+      advertisedAddress = lib.mkOption {
+        type = lib.types.str;
+        default = cfg.http.listenAddress;
+        defaultText = lib.literalExpression "config.${opt.http.listenAddress}";
+        description = ''
+          Neo4j advertised address for HTTP traffic. The advertised address is
+          expressed in the format `<ip-address>:<port-number>`.
+        '';
+      };
     };
 
     https = {
@@ -397,6 +414,16 @@ in
         default = ":7473";
         description = ''
           Neo4j listen address for HTTPS traffic. The listen address is
+          expressed in the format `<ip-address>:<port-number>`.
+        '';
+      };
+
+      advertisedAddress = lib.mkOption {
+        type = lib.types.str;
+        default = cfg.https.listenAddress;
+        defaultText = lib.literalExpression "config.${opt.https.listenAddress}";
+        description = ''
+          Neo4j advertised address for HTTPS traffic. The advertised address is
           expressed in the format `<ip-address>:<port-number>`.
         '';
       };
@@ -440,7 +467,6 @@ in
             }:
             {
               options = {
-
                 allowKeyGeneration = lib.mkOption {
                   type = lib.types.bool;
                   default = false;
@@ -590,13 +616,11 @@ in
                     default value.
                   '';
                 };
-
               };
 
               config.directoriesToCreate = lib.optionals (
                 certDirOpt.highestPrio >= 1500 && options.baseDirectory.highestPrio >= 1500
               ) (map (opt: opt.value) (lib.filter isDefaultPathOption (lib.attrValues options)));
-
             }
           )
         );
@@ -610,7 +634,6 @@ in
         for further details.
       '';
     };
-
   };
 
   ###### implementation
@@ -630,7 +653,6 @@ in
         lib.attrValues cfg.ssl.policies
       );
     in
-
     lib.mkIf cfg.enable {
       assertions = [
         {

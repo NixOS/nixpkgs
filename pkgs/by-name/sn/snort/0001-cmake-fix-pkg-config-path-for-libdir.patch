@@ -1,0 +1,47 @@
+From a4dd3bf78fc8d4c22b40ddb4e91f525012703a5a Mon Sep 17 00:00:00 2001
+From: Brian McGillion <bmg.avoin@gmail.com>
+Date: Mon, 10 Feb 2025 23:31:47 +0400
+Subject: [PATCH] cmake: fix pkg-config path for libdir
+
+on systems that prefer absolute paths there is a mixing and matching of
+the relative and absolute paths that can result in the below creation of
+libdir having the prefix and the full path appended to it.
+
+** added to highlight
+
+``prefix=/nix/store/3npvhj5wfwhc0q42qwiinj64bzfb1vvz-snort-3.6.3.0
+exec_prefix=${prefix}
+bindir=${exec_prefix}/bin
+**libdir=${prefix}//nix/store/3npvhj5wfwhc0q42qwiinj64bzfb1vvz-snort-3.6.3.0/lib**
+includedir=${prefix}/include
+datarootdir=${prefix}/share
+datadir=${datarootdir}
+mandir=${datarootdir}/man
+infodir=${datarootdir}/info
+``
+
+In order to preserve backwards compatibility we will use the cmake
+fullpath option ${CMAKE_INSTALL_FULL_LIBDIR} in place of
+${prefix}/${CMAKE_INSTALL_LIBDIR} which will support both contexts.
+
+Signed-off-by: Brian McGillion <bmg.avoin@gmail.com>
+---
+ cmake/create_pkg_config.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmake/create_pkg_config.cmake b/cmake/create_pkg_config.cmake
+index 300350cbd..4ce8b16e6 100644
+--- a/cmake/create_pkg_config.cmake
++++ b/cmake/create_pkg_config.cmake
+@@ -5,7 +5,7 @@
+ set(prefix "${CMAKE_INSTALL_PREFIX}")
+ set(exec_prefix "\${prefix}")
+ set(bindir "\${exec_prefix}/bin")
+-set(libdir "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
++set(libdir "\${CMAKE_INSTALL_FULL_LIBDIR}")
+ set(includedir "\${prefix}/include")
+ set(datarootdir "\${prefix}/share")
+ set(datadir "\${datarootdir}")
+-- 
+2.47.2
+

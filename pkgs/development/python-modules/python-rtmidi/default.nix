@@ -4,10 +4,6 @@
   alabaster,
   alsa-lib,
   buildPythonPackage,
-  CoreAudio,
-  CoreMIDI,
-  CoreServices,
-  Foundation,
   cython,
   fetchPypi,
   flake8,
@@ -46,12 +42,6 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libjack2
       alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreAudio
-      CoreMIDI
-      CoreServices
-      Foundation
     ];
 
   nativeCheckInputs = [

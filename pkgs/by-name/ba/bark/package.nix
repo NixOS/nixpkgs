@@ -1,22 +1,55 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, alsa-lib
-, speexdsp
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  alsa-lib,
+  libopus,
+  soxr,
+  cmake,
+  pkg-config,
+  versionCheckHook,
+  nix-update-script,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (final: {
   pname = "bark";
-  version = "unstable-2023-08-22";
+  version = "0.6.0";
   src = fetchFromGitHub {
     owner = "haileys";
     repo = "bark";
-    rev = "2586b9fb58b496f8ef06f516c9cd3aace77521f7";
-    hash = "sha256-sGroae6uJhB9UIpFmvt520Zs9k0ir7H8pGkhKJmVWek=";
+    tag = "v${final.version}";
+    hash = "sha256-JaUIWGCYhasM0DgqL+DiG2rE1OWVg/N66my/4RWDN1E=";
   };
-  cargoHash = "sha256-OjlVn4fvKPm3UfqhKkv7cDuvK4mcLcQXPNPK+WScrMc=";
-  buildInputs = [ alsa-lib speexdsp ];
-  nativeBuildInputs = [ pkg-config ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LcmX8LbK8UHDDeqwLTFEUuRBv9GgDiCpXP4bmIR3gME=";
+
+  # Broken rustdoc comment
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/haileys/bark/pull/13.patch";
+      hash = "sha256-cA1bqc7XhJ2cxOYvjIJ9oopzBZ9I4rGERkiwDAUh3V4";
+    })
+  ];
+
+  buildInputs = [
+    alsa-lib
+    libopus
+    soxr
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Live sync audio streaming for local networks";
@@ -26,5 +59,4 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.linux;
     mainProgram = "bark";
   };
-}
-
+})

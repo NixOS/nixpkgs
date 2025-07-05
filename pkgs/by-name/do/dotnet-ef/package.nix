@@ -2,12 +2,12 @@
 
 buildDotnetGlobalTool {
   pname = "dotnet-ef";
-  version = "9.0.0";
+  version = "9.0.6";
 
-  nugetHash = "sha256-/Ru/H2WXX/SCqF2s0M1DJkaw+6Nikm+ccrveqiOXggA=";
+  nugetHash = "sha256-dHOGvqdIfYhuAz7JwQoG/4uJNE9wpfI/dnL4zj3lD6A=";
 
   meta = {
-    description = "The Entity Framework Core tools help with design-time development tasks.";
+    description = "Tools to help with design-time development tasks";
     longDescription = ''
       The Entity Framework Core tools help with design-time development tasks.
       They're primarily used to manage Migrations and to scaffold a DbContext and entity types by reverse engineering the schema of a database.

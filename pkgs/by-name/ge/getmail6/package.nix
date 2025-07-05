@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "getmail6";
-  version = "6.19.05";
+  version = "6.19.08";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getmail6";
     repo = "getmail6";
     tag = "v${version}";
-    hash = "sha256-GjB53bl2gh3SA+kqC9rrQ9I4rP0z69G/bamInmq8W+I=";
+    hash = "sha256-GUO6zozdh5u3dpFVQUYK/2PlurzXSEswgtdcpiPmhV8=";
   };
 
   build-system = with python3.pkgs; [
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Program for retrieving mail";
     homepage = "https://getmail6.org";
-    changelog = "https://github.com/getmail6/getmail6/blob/${src.rev}/docs/CHANGELOG";
+    changelog = "https://github.com/getmail6/getmail6/blob/${src.tag}/docs/CHANGELOG";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       abbe

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "torch-audiomentations";
-  version = "0.11.1";
+  version = "0.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "asteroid-team";
     repo = "torch-audiomentations";
     tag = "v${version}";
-    hash = "sha256-0+5wc+mP4c221q6mdaqPalfumTOtdnkjnIPtLErOp9E=";
+    hash = "sha256-5ccVO1ECiIn0q7m8ZLHxqD2fhaXeMDKUEswa49dRTsY=";
   };
 
   pythonRelaxDeps = [ "torchaudio" ];

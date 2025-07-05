@@ -1,34 +1,51 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
   gtk2,
   libhangul,
+  autoconf,
+  automake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nabi";
-  version = "1.0.0";
+  version = "1.0.1";
 
-  src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nabi/nabi-${version}.tar.gz";
-    sha256 = "0craa24pw7b70sh253arv9bg9sy4q3mhsjwfss3bnv5nf0xwnncw";
+  src = fetchFromGitHub {
+    owner = "libhangul";
+    repo = "nabi";
+    tag = "nabi-${version}";
+    hash = "sha256-C6K8sXVCGf45VZtGSCB5emFzZPV21kG9JxAwBHRiFsY=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+  ];
+
   buildInputs = [
     gtk2
     libhangul
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    patchShebangs ./autogen.sh
+  '';
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
+  meta = {
     description = "Easy Hangul XIM";
     mainProgram = "nabi";
-    homepage = "https://github.com/choehwanjin/nabi";
+    homepage = "https://github.com/libhangul/nabi";
     changelog = "https://github.com/libhangul/nabi/blob/nabi-${version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ianwookim ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ianwookim ];
+    platforms = lib.platforms.linux;
   };
 }

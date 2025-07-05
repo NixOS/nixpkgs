@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail 'documentation =' 'Documentation =' \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 

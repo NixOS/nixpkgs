@@ -7,6 +7,7 @@
   pandas,
   pyarrow,
   pytestCheckHook,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -16,18 +17,19 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "rom1504";
-    repo = pname;
+    repo = "embedding-reader";
     tag = version;
     hash = "sha256-paN6rAyH3L7qCfWPr5kXo9Xl57gRMhdcDnoyLJ7II2w=";
   };
 
   pythonRelaxDeps = [ "pyarrow" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fsspec
     numpy
     pandas
     pyarrow
+    tqdm
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

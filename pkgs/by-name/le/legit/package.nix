@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "legit";
   version = "1.2.0.post0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

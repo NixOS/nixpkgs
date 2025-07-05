@@ -206,11 +206,6 @@ in
         assertion = cfg.cache.lru.schedule == null || cfg.cache.maxSize != null;
         message = "You must specify config.ncps.cache.lru.schedule when config.ncps.cache.maxSize is set";
       }
-
-      {
-        assertion = cfg.cache.secretKeyPath == null || (builtins.pathExists cfg.cache.secretKeyPath);
-        message = "config.ncps.cache.secresecretKeyPath=${cfg.cache.secretKeyPath} must exist but does not";
-      }
     ];
 
     users.users.ncps = {
@@ -245,7 +240,8 @@ in
     systemd.services.ncps = {
       description = "ncps binary cache proxy service";
 
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''

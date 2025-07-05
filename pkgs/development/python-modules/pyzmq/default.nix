@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "26.2.0";
+  version = "26.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BwZywlhYHI5PZAtRWSl1gKmXSwJgQ71KsEcL6e0yTx8=";
+    hash = "sha256-S9E/hfgJYvkaZRpzVv4EcnkaX3qS8ieCK1rPRHlcYm0=";
   };
 
   build-system = [
@@ -62,6 +62,11 @@ buildPythonPackage rec {
   preCheck = ''
     rm -r zmq
   '';
+
+  pytestFlagsArray = [
+    "-m"
+    "'not flaky'"
+  ];
 
   disabledTests = [
     # Tests hang

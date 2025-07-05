@@ -5,6 +5,7 @@
   fetchFromGitHub,
   php,
   brotli,
+  watcher,
   testers,
   frankenphp,
   cctools,
@@ -30,13 +31,13 @@ let
 in
 buildGoModule rec {
   pname = "frankenphp";
-  version = "1.2.5";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "frankenphp";
-    rev = "v${version}";
-    hash = "sha256-X6lWbxgqj0wis/cljoNSh7AsH1zY30GTjSOAGXzUIek=";
+    tag = "v${version}";
+    hash = "sha256-FukxXuZwF7P5tUao0nTT7bELGIYivtoOBQQkHA7ZE3s=";
   };
 
   sourceRoot = "${src.name}/caddy";
@@ -44,11 +45,12 @@ buildGoModule rec {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-U2B0ok6TgqUPMwlnkzpPkJLG22S3VpoU80bWwZAeaJo=";
+  vendorHash = "sha256-likIETO/eq1kATNbbYHxXxvIPH7q5tp3WHjz+zvNOws=";
 
   buildInputs = [
     phpUnwrapped
     brotli
+    watcher
   ] ++ phpUnwrapped.buildInputs;
   nativeBuildInputs =
     [ makeBinaryWrapper ]
@@ -65,6 +67,9 @@ buildGoModule rec {
     "netgo"
     "ousergo"
     "static_build"
+    "nobadger"
+    "nomysql"
+    "nopgx"
   ];
 
   ldflags = [

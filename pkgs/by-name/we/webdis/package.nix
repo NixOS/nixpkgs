@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, hiredis
-, http-parser
-, jansson
-, libevent
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  hiredis,
+  http-parser,
+  jansson,
+  libevent,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-eFUI3RDDrEI1bV+SfTVsIO6yjswK7tzgNsNepoo7DQ4=";
   };
 
-  buildInputs = [ hiredis http-parser jansson libevent ];
+  buildInputs = [
+    hiredis
+    http-parser
+    jansson
+    libevent
+  ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [ "test_is_process_running" ];
 
   meta = {
-    description = "A tool to keep your application settings in sync (OS X/Linux)";
+    description = "Tool to keep your application settings in sync (OS X/Linux)";
     changelog = "https://github.com/lra/mackup/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
     homepage = "https://github.com/lra/mackup";

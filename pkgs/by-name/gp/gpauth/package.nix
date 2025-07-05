@@ -2,40 +2,39 @@
   rustPlatform,
   lib,
   fetchFromGitHub,
-  libsoup_2_4,
   openssl,
   pkg-config,
   perl,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gpauth";
-  version = "2.3.9";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
     rev = "v${version}";
-    hash = "sha256-s+uCpNrwQvdIINLSIbtcCCBg469J2xtlyiwDYqtXrQs=";
+    hash = "sha256-MY4JvftrC6sR8M0dFvnGZOkvHIhPRcyct9AG/8527gw=";
   };
 
   buildAndTestSubdir = "apps/gpauth";
-  cargoHash = "sha256-QHqPVsMPKgAhhZwah3g1jqidl3UnvvKZnM4r1coUHSs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8LSGuRnWRWeaY6t25GdZ2y4hGIJ+mP3UBXRjcvPuD6U=";
 
   nativeBuildInputs = [
     perl
     pkg-config
   ];
   buildInputs = [
-    libsoup_2_4
     openssl
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   meta = with lib; {
     changelog = "https://github.com/${src.owner}/${src.repo}/blob/${src.rev}/changelog.md";
-    description = "A CLI for GlobalProtect VPN, based on OpenConnect, supports the SSO authentication method";
+    description = "CLI for GlobalProtect VPN, based on OpenConnect, supports the SSO authentication method";
     longDescription = ''
       A CLI for GlobalProtect VPN, based on OpenConnect, supports the SSO
       authentication method. Inspired by gp-saml-gui.

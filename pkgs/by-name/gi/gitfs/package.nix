@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "gitfs";
   version = "0.5.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "PressLabs";
@@ -27,8 +28,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python3Packages; [
-    pytest
-    pytest-cov
+    pytestCheckHook
+    pytest-cov-stub
     mock
   ];
   propagatedBuildInputs = with python3Packages; [
@@ -38,8 +39,7 @@ python3Packages.buildPythonApplication rec {
     six
   ];
 
-  checkPhase = "py.test";
-  doCheck = false;
+  pythonImportsCheck = [ "gitfs" ];
 
   meta = {
     description = "FUSE filesystem that fully integrates with git";
@@ -53,5 +53,8 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.robbinch ];
     mainProgram = "gitfs";
+    # requires <=python39, otherwise you get this at runtime:
+    # AttributeError: module 'collections' has no attribute 'MutableMapping'
+    broken = true;
   };
 }

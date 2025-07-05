@@ -4,36 +4,38 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
-  nodejs_20,
+  nodejs_22,
   python3,
+  python3Packages,
   sqlite,
   nix-update-script,
 }:
 
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
   pnpm = pnpm_9.override { inherit nodejs; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jellyseerr";
-  version = "2.1.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
     repo = "jellyseerr";
-    rev = "v${version}";
-    hash = "sha256-5kaeqhjUy9Lgx4/uFcGRlAo+ROEOdTWc2m49rq8R8Hs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JzJYRwrwDk8LQZAfWwym+SFTn8YhALghpZb2Dd+3nP4=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
-    inherit pname version src;
-    hash = "sha256-xu6DeaBArQmnqEnIgjc1DTZujQebSkjuai9tMHeQWCk=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-Ym16jPHMHKmojMQOuMamDsW/u+oP1UhbCP5dooTUzFQ=";
   };
 
   buildInputs = [ sqlite ];
 
   nativeBuildInputs = [
     python3
+    python3Packages.distutils
     nodejs
     makeWrapper
     pnpm.configHook
@@ -48,16 +50,22 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
+
     pnpm build
     pnpm prune --prod --ignore-scripts
     rm -rf .next/cache
+
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
+
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share
-    cp -r -t $out/share .next node_modules dist public package.json overseerr-api.yml
+    cp -r -t $out/share .next node_modules dist public package.json jellyseerr-api.yml
     runHook postInstall
   '';
 
@@ -71,7 +79,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Fork of overseerr for jellyfin support";
     homepage = "https://github.com/Fallenbagel/jellyseerr";
     longDescription = ''
@@ -79,9 +87,9 @@ stdenv.mkDerivation rec {
       requests for your media library. It is a a fork of Overseerr built to
       bring support for Jellyfin & Emby media servers!
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ camillemndn ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.camillemndn ];
+    platforms = lib.platforms.linux;
     mainProgram = "jellyseerr";
   };
-}
+})

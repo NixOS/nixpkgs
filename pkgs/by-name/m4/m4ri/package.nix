@@ -6,17 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20240729";
+  version = "20250128";
   pname = "m4ri";
 
   src = fetchFromGitHub {
     owner = "malb";
     repo = "m4ri";
-    # 20240729 has a broken m4ri.pc file, fixed in the next commit.
-    # TODO: remove if on update
-    rev =
-      if version == "20240729" then "775189bfea96ffaeab460513413fcf4fbcd64392" else "release-${version}";
-    hash = "sha256-untwo0go8O8zNO0EyZ4n/n7mngSXLr3Z/FSkXA8ptnU=";
+    rev = version;
+    hash = "sha256-YoCTI4dLy95xuRJyNugIzGxE40B9pCWxRQtsyS/1Pds=";
   };
 
   doCheck = true;
@@ -29,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://malb.bitbucket.io/m4ri/";
     description = "Library to do fast arithmetic with dense matrices over F_2";
     license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.unix;
   };
 }

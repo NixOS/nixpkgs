@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mint-artwork";
-  version = "1.8.4";
+  version = "1.8.9";
 
   src = fetchurl {
     urls = [
       "http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
-      "https://web.archive.org/web/20240707114553/http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
+      "https://web.archive.org/web/20250111022232/http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
     ];
-    hash = "sha256-DpRoGTVB1vaif4UNiCEaVO/pyQY8Hc/QG1vmYkVr3Iw=";
+    hash = "sha256-MKXKne3wqxfIqmOawpmZbX/NRVSA5fBetpSE+mr/eqA=";
   };
 
   nativeBuildInputs = [
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
 
     # note: we fuck up a bunch of stuff but idc
@@ -37,6 +39,8 @@ stdenv.mkDerivation rec {
 
     mv etc $out/etc
     mv usr/share $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -47,6 +51,6 @@ stdenv.mkDerivation rec {
       cc-by-40
     ]; # from debian/copyright
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

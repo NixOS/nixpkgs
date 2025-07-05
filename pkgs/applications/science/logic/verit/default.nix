@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://verit.loria.fr/";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.gebner ];
+    maintainers = [ ];
   };
 }

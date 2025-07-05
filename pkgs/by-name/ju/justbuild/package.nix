@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.4.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "refs/tags/v${version}";
-    hash = "sha256-asbJdm50srMinr8sguGR3rWT7YXm75Zjm2Dvj53PpMc=";
+    hash = "sha256-1qVe2s3MCmFm4hAwFwGn1jj6eVcBnvhvuK3OnNEuxQM=";
   };
 
   bazelapi = fetchurl {
@@ -160,6 +160,7 @@ stdenv.mkDerivation rec {
     install -m 755 -Dt "$out/bin" "../build/out/bin/just-mr"
     install -m 755 -DT "bin/just-import-git.py" "$out/bin/just-import-git"
     install -m 755 -DT "bin/just-deduplicate-repos.py" "$out/bin/just-deduplicate-repos"
+    install -m 755 -DT "bin/just-lock.py" "$out/bin/just-lock"
 
     mkdir -p "$out/share/bash-completion/completions"
     install -m 0644 ./share/just_complete.bash "$out/share/bash-completion/completions/just"

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, sphinx
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  sphinx,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "instaloader";
-  version = "4.14";
+  version = "4.14.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "instaloader";
     repo = "instaloader";
     tag = "v${version}";
-    sha256 = "sha256-UgnqO52q4kPYPz/eTrQOQXC+zZgtr4KwWPRRDTpzFuc=";
+    sha256 = "sha256-ZGCO5xNUwrQFsSaAiP1yffrkSN+Mxdtrw+Kve0s2t2E=";
   };
 
   nativeBuildInputs = [

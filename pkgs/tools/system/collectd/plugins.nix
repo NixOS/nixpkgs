@@ -19,6 +19,7 @@
   gdk-pixbuf,
   liboping,
   libpcap,
+  libpq,
   libsigrok,
   libvirt,
   libxml2,
@@ -31,7 +32,6 @@
   openldap,
   openipmi,
   perl,
-  postgresql,
   protobufc,
   python3,
   rabbitmq-c,
@@ -42,7 +42,6 @@
   varnish,
   xen,
   yajl,
-  IOKit,
   # Defaults to `null` for all supported plugins (except xen, which is marked as
   # insecure), otherwise a list of plugin names for a custom build
   enabledPlugins ? null,
@@ -61,9 +60,6 @@ let
       curl
       libxml2
     ];
-    battery.buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-    ];
     bind.buildInputs = [
       curl
       libxml2
@@ -79,13 +75,9 @@ let
       libxml2
     ];
     dbi.buildInputs = [ libdbi ];
-    disk.buildInputs =
-      lib.optionals stdenv.hostPlatform.isLinux [
-        udev
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        IOKit
-      ];
+    disk.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+      udev
+    ];
     dns.buildInputs = [ libpcap ];
     ipmi.buildInputs = [ openipmi ];
     iptables.buildInputs =
@@ -132,7 +124,7 @@ let
     perl.buildInputs = [ perl ];
     pinba.buildInputs = [ protobufc ];
     ping.buildInputs = [ liboping ];
-    postgresql.buildInputs = [ postgresql ];
+    postgresql.buildInputs = [ libpq ];
     python.buildInputs = [ python3 ];
     redis.buildInputs = [ hiredis ];
     rrdcached.buildInputs = [

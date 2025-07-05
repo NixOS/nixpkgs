@@ -1,15 +1,15 @@
 {
-  cmake,
+  lib,
+  stdenv,
   fetchFromGitHub,
   fetchurl,
+  cmake,
   iproute2,
-  lib,
   lsof,
   nettools,
   pkg-config,
   procps,
   psmisc,
-  stdenv,
 }:
 
 let
@@ -18,15 +18,15 @@ let
     hash = "sha256-bSo3EzpcsFmVvwyPgjCCDOJLbzNpxJ6Eptp2hNK7ZXk=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unhide";
-  version = "20220611";
+  version = "20240510";
 
   src = fetchFromGitHub {
     owner = "YJesus";
     repo = "Unhide";
-    rev = "v${version}";
-    hash = "sha256-v4otbDhKKRLywH6aP+mbMR0olHbW+jk4TXTBY+iaxdo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CcS/rR/jPgbcF09aM4l6z52kwFhdQI1VZOyDF2/X6Us=";
   };
 
   postPatch = ''
@@ -55,10 +55,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Forensic tool to find hidden processes and TCP/UDP ports by rootkits/LKMs";
     homepage = "https://github.com/YJesus/Unhide";
-    changelog = "https://github.com/YJesus/Unhide/blob/${src.rev}/NEWS";
+    changelog = "https://github.com/YJesus/Unhide/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "unhide";
     platforms = lib.platforms.all;
   };
-}
+})

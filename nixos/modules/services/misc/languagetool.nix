@@ -60,7 +60,7 @@ in
     jvmOptions = lib.mkOption {
       description = ''
         Extra command line options for the JVM running languagetool.
-        More information can be found here: https://docs.oracle.com/en/java/javase/19/docs/specs/man/java.html#standard-options-for-java
+        More information can be found here: <https://docs.oracle.com/en/java/javase/19/docs/specs/man/java.html#standard-options-for-java>
       '';
       default = [ ];
       type = lib.types.listOf lib.types.str;

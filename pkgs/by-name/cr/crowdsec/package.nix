@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "crowdsec";
-  version = "1.6.4";
+  version = "1.6.9";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
-    repo = pname;
+    repo = "crowdsec";
     tag = "v${version}";
-    hash = "sha256-U3YnLjsD+Kl/6HD+RPP0gWa4N96X5wkbdCmIrxas1I8=";
+    hash = "sha256-Gu4Ds9o4CsimMoKqJV2weAQYH34Z7GN3rPbhbtoVuHU=";
   };
 
-  vendorHash = "sha256-PtBVXPbLNdJyS8v8H9eRB6sTPaiseg18+eXToHvH7tw=";
+  vendorHash = "sha256-xUzYHVhqyMUQQH5ICkwgaDiFi/L4exROjvJNWS2j9ZU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,7 +30,7 @@ buildGoModule rec {
     "-w"
     "-X github.com/crowdsecurity/go-cs-lib/version.Version=v${version}"
     "-X github.com/crowdsecurity/go-cs-lib/version.BuildDate=1970-01-01_00:00:00"
-    "-X github.com/crowdsecurity/go-cs-lib/version.Tag=${src.rev}"
+    "-X github.com/crowdsecurity/go-cs-lib/version.Tag=v${version}"
     "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.Codename=alphaga"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultConfigDir=/etc/crowdsec"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultDataDir=/var/lib/crowdsec/data"
@@ -42,6 +42,10 @@ buildGoModule rec {
     mkdir -p $out/share/crowdsec
     cp -r ./config $out/share/crowdsec/
 
+    mkdir -p $out/lib/systemd/system
+    substitute ./config/crowdsec.service $out/lib/systemd/system/crowdsec.service \
+      --replace-fail /usr/local $out
+
     installShellCompletion --cmd cscli \
       --bash <($out/bin/cscli completion bash) \
       --fish <($out/bin/cscli completion fish) \
@@ -49,11 +53,16 @@ buildGoModule rec {
   '';
 
   # It's important that the version is correctly set as it also determines feature capabilities
-  checkPhase = ''
-    $GOPATH/bin/cscli version 2>&1 | grep -q "version: v${version}"
+  preCheck = ''
+    version=$($GOPATH/bin/cscli version 2>&1 | sed -nE 's/^version: (.*)/\1/p')
+
+    if [ "$version" != "v${version}" ]; then
+        echo "Invalid version string: '$version'"
+        exit 1
+    fi
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://crowdsec.net/";
     changelog = "https://github.com/crowdsecurity/crowdsec/releases/tag/v${version}";
     description = "CrowdSec is a free, open-source and collaborative IPS";
@@ -68,8 +77,8 @@ buildGoModule rec {
       etc.) while the aggressive IP can be sent to CrowdSec for curation before
       being shared among all users to further improve everyone's security.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jk
       urandom
     ];

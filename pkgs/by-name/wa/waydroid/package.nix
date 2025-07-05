@@ -21,14 +21,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.4.3";
+  version = "1.5.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "waydroid";
     repo = "waydroid";
     tag = version;
-    hash = "sha256-LejyuGYgW46++95XROuWc13Q+w0l+AzGAl9ekfmAIEk=";
+    hash = "sha256-K4uJ9MVmr5+7O1em1yUJXZj6H8bpfm2ZAE2uqgiyDBQ=";
   };
 
   patches = [
@@ -57,7 +57,6 @@ python3Packages.buildPythonApplication rec {
 
   dontUseSetuptoolsBuild = true;
   dontUsePipInstall = true;
-  dontUseSetuptoolsCheck = true;
   dontWrapPythonPrograms = true;
   dontWrapGApps = true;
 
@@ -109,6 +108,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/waydroid/waydroid";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }

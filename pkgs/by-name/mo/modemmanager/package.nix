@@ -19,6 +19,7 @@
   dbus,
   bash,
   gobject-introspection,
+  udevCheckHook,
   buildPackages,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
       pkg-config
       libxslt
       python3
+      udevCheckHook
     ]
     ++ lib.optionals withIntrospection [
       gobject-introspection
@@ -131,7 +133,7 @@ stdenv.mkDerivation rec {
     description = "WWAN modem manager, part of NetworkManager";
     homepage = "https://www.freedesktop.org/wiki/Software/ModemManager/";
     license = licenses.gpl2Plus;
-    maintainers = teams.freedesktop.members;
+    teams = [ teams.freedesktop ];
     platforms = platforms.linux;
   };
 }

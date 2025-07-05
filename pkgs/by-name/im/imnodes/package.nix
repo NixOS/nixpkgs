@@ -11,7 +11,7 @@
   withExamples ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "imnodes";
   version = "unstable-2024-03-12";
   outputs = [

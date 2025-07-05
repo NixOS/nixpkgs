@@ -17,12 +17,12 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-G1X9WrnwN6wM9S76PsGrPTmmiMBUKu4T2Al3HH3Wo+w=";
 
-  meta = with lib; {
+  meta = {
     description = "Language service for Docker Compose documents";
     homepage = "https://github.com/microsoft/compose-language-service";
     changelog = "https://github.com/microsoft/compose-language-service/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "docker-compose-langserver";
   };
 }

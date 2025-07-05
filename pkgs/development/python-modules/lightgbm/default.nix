@@ -2,23 +2,31 @@
   lib,
   config,
   stdenv,
+  pkgs,
   buildPythonPackage,
   fetchPypi,
 
   # build-system
+  scikit-build-core,
+
+  # nativeBuildInputs
   cmake,
   ninja,
   pathspec,
   pyproject-metadata,
-  scikit-build-core,
+  writableTmpDirAsHomeHook,
+
+  # buildInputs
+  llvmPackages,
+  boost,
+  ocl-icd,
+  opencl-headers,
 
   # dependencies
-  llvmPackages,
   numpy,
   scipy,
-  pythonOlder,
 
-  # optionals
+  # optional-dependencies
   cffi,
   dask,
   pandas,
@@ -26,9 +34,6 @@
   scikit-learn,
 
   # optionals: gpu
-  boost,
-  ocl-icd,
-  opencl-headers,
   gpuSupport ? stdenv.hostPlatform.isLinux && !cudaSupport,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
@@ -38,23 +43,28 @@ assert gpuSupport -> !cudaSupport;
 assert cudaSupport -> !gpuSupport;
 
 buildPythonPackage rec {
-  pname = "lightgbm";
-  version = "4.5.0";
+  inherit (pkgs.lightgbm)
+    pname
+    version
+    patches
+    ;
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4c17rwMY1OMIomV1pjpGNfCN+GatNiKp2OPXHZY3obo=";
+    hash = "sha256-yxxZcg61aTicC6dNFPUjUbVzr0ifIwAyocnzFPi6t/4=";
   };
+
+  build-system = [
+    scikit-build-core
+  ];
 
   nativeBuildInputs = [
     cmake
     ninja
     pathspec
     pyproject-metadata
-    scikit-build-core
+    writableTmpDirAsHomeHook
   ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   dontUseCmakeConfigure = true;
@@ -71,7 +81,7 @@ buildPythonPackage rec {
       cudaPackages.cuda_cudart
     ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
@@ -79,10 +89,6 @@ buildPythonPackage rec {
   pypaBuildFlags =
     lib.optionals gpuSupport [ "--config-setting=cmake.define.USE_GPU=ON" ]
     ++ lib.optionals cudaSupport [ "--config-setting=cmake.define.USE_CUDA=ON" ];
-
-  postConfigure = ''
-    export HOME=$(mktemp -d)
-  '';
 
   optional-dependencies = {
     arrow = [
@@ -101,9 +107,7 @@ buildPythonPackage rec {
     scikit-learn = [ scikit-learn ];
   };
 
-  # The pypi package doesn't distribute the tests from the GitHub
-  # repository. It contains c++ tests which don't seem to wired up to
-  # `make check`.
+  # No python tests
   doCheck = false;
 
   pythonImportsCheck = [ "lightgbm" ];

@@ -9,6 +9,7 @@
   prometheus-client,
   pylibmc,
   pytestCheckHook,
+  pytest-cov-stub,
   redis,
   setuptools,
   watchdog,
@@ -17,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "dramatiq";
-  version = "1.17.1";
+  version = "1.18.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bogdanp";
     repo = "dramatiq";
     tag = "v${version}";
-    hash = "sha256-NeUGhG+H6r+JGd2qnJxRUbQ61G7n+3tsuDugTin3iJ4=";
+    hash = "sha256-noq2tWi7IUdYmRB9N3MN9oWrnNaYBgXFumOpcGw8Jn0=";
   };
 
   build-system = [ setuptools ];
@@ -54,6 +55,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pika
     redis
     pylibmc
@@ -61,8 +63,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i ./setup.cfg \
-      -e 's:--cov dramatiq::' \
-      -e 's:--cov-report html::' \
       -e 's:--benchmark-autosave::' \
       -e 's:--benchmark-compare::' \
   '';

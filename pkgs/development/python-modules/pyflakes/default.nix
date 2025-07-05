@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
-  pythonOlder,
+  isPyPy,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
@@ -10,26 +9,25 @@
 
 buildPythonPackage rec {
   pname = "pyflakes";
-  version = "3.2.0";
-
-  disabled = pythonOlder "3.8";
-
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pyflakes";
     rev = version;
-    hash = "sha256-ouCkkm9OrYob00uLTilqgWsTWfHhzaiZp7sa2C5liqk=";
+    hash = "sha256-nNug9EZ0coI095/QJu/eK1Ozlt01INT+mLlYdqrJuzE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.13") [
-    # https://github.com/PyCQA/pyflakes/issues/812
-    "test_errors_syntax"
+  disabledTests = lib.optionals isPyPy [
+    # https://github.com/PyCQA/pyflakes/issues/779
+    "test_eofSyntaxError"
+    "test_misencodedFileUTF8"
+    "test_multilineSyntaxError"
   ];
 
   pythonImportsCheck = [ "pyflakes" ];

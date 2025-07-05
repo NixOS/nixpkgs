@@ -6,6 +6,7 @@
   runCommand,
   emptyFile,
   emptyDirectory,
+  stdenvNoCC,
   ...
 }:
 let
@@ -21,13 +22,26 @@ let
     label = "test";
   };
 
+  overrideStructuredAttrs =
+    enable: drv:
+    drv.overrideAttrs (old: {
+      failed = old.failed.overrideAttrs (oldFailed: {
+        name = oldFailed.name + "${lib.optionalString (!enable) "-no"}-structuredAttrs";
+        __structuredAttrs = enable;
+      });
+    });
+
 in
 lib.recurseIntoAttrs {
   lycheeLinkCheck = lib.recurseIntoAttrs pkgs.lychee.tests;
 
   hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
 
+  hasCmakeConfigModules = pkgs.callPackage ../hasCmakeConfigModules/tests.nix { };
+
   shellcheck = pkgs.callPackage ../shellcheck/tests.nix { };
+
+  shfmt = pkgs.callPackages ../shfmt/tests.nix { };
 
   runCommand = lib.recurseIntoAttrs {
     bork = pkgs.python3Packages.bork.tests.pytest-network;
@@ -92,7 +106,7 @@ lib.recurseIntoAttrs {
     }
   );
 
-  testBuildFailure = lib.recurseIntoAttrs {
+  testBuildFailure = lib.recurseIntoAttrs rec {
     happy =
       runCommand "testBuildFailure-happy"
         {
@@ -121,6 +135,8 @@ lib.recurseIntoAttrs {
 
           touch $out
         '';
+
+    happyStructuredAttrs = overrideStructuredAttrs true happy;
 
     helloDoesNotFail =
       runCommand "testBuildFailure-helloDoesNotFail"
@@ -167,7 +183,50 @@ lib.recurseIntoAttrs {
           echo 'All good.'
           touch $out
         '';
+
+    multiOutputStructuredAttrs = overrideStructuredAttrs true multiOutput;
+
+    sideEffects =
+      runCommand "testBuildFailure-sideEffects"
+        {
+          failed = testers.testBuildFailure (
+            stdenvNoCC.mkDerivation {
+              name = "fail-with-side-effects";
+              src = emptyDirectory;
+
+              postHook = ''
+                echo touching side-effect...
+                # Assert that the side-effect doesn't exist yet...
+                # We're checking that this hook isn't run by expect-failure.sh
+                if [[ -e side-effect ]]; then
+                  echo "side-effect already exists"
+                  exit 1
+                fi
+                touch side-effect
+              '';
+
+              buildPhase = ''
+                echo i am failing
+                exit 1
+              '';
+            }
+          );
+        }
+        ''
+          grep -F 'touching side-effect...' $failed/testBuildFailure.log >/dev/null
+          grep -F 'i am failing' $failed/testBuildFailure.log >/dev/null
+          [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
+          [[ ! -e side-effect ]]
+
+          touch $out
+        '';
+
+    sideEffectStructuredAttrs = overrideStructuredAttrs true sideEffects;
   };
+
+  testBuildFailure' = lib.recurseIntoAttrs (
+    pkgs.callPackages ../testBuildFailurePrime/tests.nix { inherit overrideStructuredAttrs; }
+  );
 
   testEqualContents = lib.recurseIntoAttrs {
     equalDir = testers.testEqualContents {
@@ -301,4 +360,6 @@ lib.recurseIntoAttrs {
         touch -- "$out"
       '';
   };
+
+  testEqualArrayOrMap = pkgs.callPackages ../testEqualArrayOrMap/tests.nix { };
 }

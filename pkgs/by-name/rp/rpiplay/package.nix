@@ -13,7 +13,7 @@
   libplist,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rpiplay";
   version = "unstable-2021-06-14";
 

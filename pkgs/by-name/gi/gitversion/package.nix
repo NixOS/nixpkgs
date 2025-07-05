@@ -6,17 +6,17 @@
 buildDotnetGlobalTool rec {
   pname = "dotnet-gitversion";
   nugetName = "GitVersion.Tool";
-  version = "5.12.0";
+  version = "6.3.0";
 
-  nugetHash = "sha256-dclYG2D0uSYqf++y33JCefkYLwbuRCuKd3qLMnx3BDI=";
+  nugetHash = "sha256-gtkD+egl9zAfJ4ZsOwb7u82IhBabjBFxU+nv9yQ1HHQ=";
 
-  meta = with lib; {
+  meta = {
     description = "From git log to SemVer in no time";
     homepage = "https://gitversion.net/";
     changelog = "https://github.com/GitTools/GitVersion/releases/tag/${version}";
     downloadPage = "https://github.com/GitTools/GitVersion";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.windows ++ platforms.darwin;
-    maintainers = with maintainers; [ acesyde ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.windows ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ acesyde ];
   };
 }

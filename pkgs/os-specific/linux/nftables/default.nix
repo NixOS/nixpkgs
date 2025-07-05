@@ -26,13 +26,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.1";
+  version = "1.1.3";
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.xz";
-    hash = "sha256-Y1iDDzpk8x45sK1CHX2tzSQLcjQ97UjY7xO4+vIEhlo=";
+    hash = "sha256-nIpktZyQsIJeVAqbj8udLZQsY2+BulAZnwaP3kTzTtg=";
   };
+
+  patches = [
+    (fetchurl {
+      name = "musl.patch";
+      url = "https://lore.kernel.org/netfilter-devel/20241219231001.1166085-2-hi@alyssa.is/raw";
+      hash = "sha256-7vMBIoDWcI/JBInYP5yYWp8BnYbATRfMTxqyZr2L9Sk=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

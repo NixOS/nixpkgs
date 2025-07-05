@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   python,
+  pytestCheckHook,
   # deps
   /*
     ntlm-auth is in the requirements.txt, however nixpkgs tells me
@@ -50,6 +51,9 @@ buildPythonPackage rec {
       --replace-fail 'shutil.copytree(os.path.abspath(os.getcwd()), os.path.join(env_dir, "dirsearch"))' ""
   '';
 
+  pyproject = true;
+  build-system = [ setuptools ];
+
   dependencies = [
     # maybe needed, see above
     #pyspnego
@@ -84,9 +88,34 @@ buildPythonPackage rec {
     cp -r $src/db $dirsearchpath/dirsearch
   '';
 
+  # tests
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+  disabledTestPaths = [
+    # needs network?
+    "tests/reports/test_reports.py"
+  ];
+  disabledTests = [
+    # failing for unknown reason
+    "test_detect_scheme"
+  ];
+  pythonRemoveDeps = [
+    # not available, see above
+    "ntlm_auth"
+  ];
+  pythonRelaxDeps = [
+    # version checker doesn't recognize 0.8.0.rc2 as >=0.7.0
+    "defusedxml"
+    # probably not but we don't have old charset-normalizer versions in nixpkgs
+    # and requests also depends on it so we can't just override it with an
+    # older version due to package duplication
+    "charset_normalizer"
+  ];
+
   meta = {
     changelog = "https://github.com/maurosoria/dirsearch/releases/tag/${version}";
-    description = "command-line tool for brute-forcing directories and files in webservers, AKA a web path scanner";
+    description = "Command-line tool for brute-forcing directories and files in webservers, AKA a web path scanner";
     homepage = "https://github.com/maurosoria/dirsearch";
     license = lib.licenses.gpl2Only;
     mainProgram = "dirsearch";

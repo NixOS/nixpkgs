@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stats";
-  version = "2.11.22";
+  version = "2.11.45";
 
   src = fetchurl {
     url = "https://github.com/exelban/stats/releases/download/v${finalAttrs.version}/Stats.dmg";
-    hash = "sha256-b8Yj8YRoiE37cj4NDDdreoPH5BokBBTReFihUnHQ1wU=";
+    hash = "sha256-OdZ8LCU0kCCKk4SeyDryDpyCUsjf8aUZAv2o/cR4GX8=";
   };
 
   sourceRoot = ".";

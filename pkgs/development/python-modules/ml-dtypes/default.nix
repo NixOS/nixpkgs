@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   setuptools,
@@ -17,31 +16,23 @@
 
 buildPythonPackage rec {
   pname = "ml-dtypes";
-  version = "0.5.0";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jax-ml";
     repo = "ml_dtypes";
     tag = "v${version}";
-    hash = "sha256-+6job9fEHVguh9JBE/NUv+QezwQohuKPO8DlhbaawZ4=";
+    hash = "sha256-XRvqyWyi5smaLh5ese5QY2aIOkVliXGc7ngwT5CRsmc=";
     # Since this upstream patch (https://github.com/jax-ml/ml_dtypes/commit/1bfd097e794413b0d465fa34f2eff0f3828ff521),
     # the attempts to use the nixpkgs packaged eigen dependency have failed.
     # Hence, we rely on the bundled eigen library.
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "numpy2-compat.patch";
-      url = "https://github.com/jax-ml/ml_dtypes/commit/204df1147fd568f65890d958b6cdfa4dc55a226c.patch";
-      hash = "sha256-IPHE6bQTbM0Ky5X6FDwwD/1eXL+kcA/D8pDGihAiJrQ=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=73.0.1" "setuptools"
+      --replace-fail "setuptools~=75.7.0" "setuptools"
   '';
 
   build-system = [ setuptools ];

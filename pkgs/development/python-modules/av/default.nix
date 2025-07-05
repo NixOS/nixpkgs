@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "13.1.0";
+  version = "14.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "PyAV-Org";
     repo = "PyAV";
     tag = "v${version}";
-    hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
+    hash = "sha256-GYdt6KMMmDSyby447MbShL2GbrH8R1UuOeiVlztGuS4=";
   };
 
   build-system = [
@@ -57,11 +57,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # av.error.InvalidDataError: [Errno 1094995529] Invalid data found when processing input: 'custom_io_output.mpd'
-    "test_writing_to_custom_io_dash"
-  ];
-
   # `__darwinAllowLocalNetworking` doesn’t work for these; not sure why.
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/test_timeout.py"
@@ -78,7 +73,6 @@ buildPythonPackage rec {
     "av.datasets"
     "av.descriptor"
     "av.dictionary"
-    "av.enum"
     "av.error"
     "av.filter"
     "av.format"

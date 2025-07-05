@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KqX+s1oQIRyqAP+0iGrZiT8lB+cGviY1vtHaXy5Q6TA=";
   };
 
-  cargoHash = "sha256-QJdTysoVIbeLsTMt62Q355S8zx8tNCikZAyeRs7cz4o=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9jnBgrfB0nWOq2+hfDq3/2Wo4z7WSfBKxoGrQ888lKw=";
 
   buildAndTestSubdir = "tokio-console";
 

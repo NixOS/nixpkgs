@@ -8,7 +8,12 @@
 let
   cfg = config.services.komga;
   inherit (lib) mkOption mkEnableOption maintainers;
-  inherit (lib.types) port str bool;
+  inherit (lib.types)
+    port
+    str
+    bool
+    submodule
+    ;
 
   settingsFormat = pkgs.formats.yaml { };
 in
@@ -53,13 +58,14 @@ in
       };
 
       settings = lib.mkOption {
-        inherit (settingsFormat) type;
-        default = { };
-        defaultText = lib.literalExpression ''
-          {
-            server.port = 8080;
-          }
-        '';
+        type = submodule {
+          freeformType = settingsFormat.type;
+          options.server.port = mkOption {
+            type = port;
+            description = "The port that Komga will listen on.";
+            default = 8080;
+          };
+        };
         description = ''
           Komga configuration.
 
@@ -87,11 +93,7 @@ in
         }
       ];
 
-      services.komga.settings = {
-        server.port = lib.mkDefault 8080;
-      };
-
-      networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+      networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.server.port ];
 
       users.groups = mkIf (cfg.group == "komga") { komga = { }; };
 

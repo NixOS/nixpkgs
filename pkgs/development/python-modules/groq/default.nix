@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "groq";
-  version = "0.13.0";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "groq";
     repo = "groq-python";
     tag = "v${version}";
-    hash = "sha256-EkEXXHca4DJtY1joM1E4IXzaQzJL+QC+aYaTe46EWlE=";
+    hash = "sha256-+1us/LPQEMeswxxHvydfTCod+RimUD2lKtlAZ3pDZOA=";
   };
 
   build-system = [
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for the Groq API";
     homepage = "https://github.com/groq/groq-python";
-    changelog = "https://github.com/groq/groq-python/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/groq/groq-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

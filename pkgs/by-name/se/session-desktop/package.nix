@@ -9,12 +9,12 @@
 }:
 
 let
-  version = "1.13.2";
+  version = "1.15.2";
   pname = "session-desktop";
 
   src = fetchurl {
-    url = "https://github.com/oxen-io/session-desktop/releases/download/v${version}/session-desktop-linux-x86_64-${version}.AppImage";
-    hash = "sha256-71v6CvlKa4m1LPG07eGhPqkpK60X4VrafCQyfjQR3rs=";
+    url = "https://github.com/session-foundation/session-desktop/releases/download/v${version}/session-desktop-linux-x86_64-${version}.AppImage";
+    hash = "sha256-xQ/Fjg04XgXUioCCU0+sOLaTWZV1z05EmzZCqEU++Ok=";
   };
   appimage = appimageTools.wrapType2 { inherit version pname src; };
   appimage-contents = appimageTools.extractType2 { inherit version pname src; };
@@ -60,7 +60,6 @@ stdenvNoCC.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [
       alexnortung
-      cyewashish
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

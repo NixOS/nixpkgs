@@ -1,11 +1,11 @@
 diff --git a/src/launch/launcher.c b/src/launch/launcher.c
-index 5bf5cf5..06ce7f4 100644
+index 7b1fb19..6bc2c46 100644
 --- a/src/launch/launcher.c
 +++ b/src/launch/launcher.c
-@@ -924,9 +924,7 @@ static int launcher_load_standard_session_services(Launcher *launcher, NSSCache
- 
- static int launcher_load_standard_system_services(Launcher *launcher, NSSCache *nss_cache) {
+@@ -945,9 +945,7 @@ static int launcher_load_standard_system_services(Launcher *launcher, NSSCache *
          static const char *default_data_dirs[] = {
+                 "/etc",
+                 "/run",
 -                "/usr/local/share",
 -                "/usr/share",
 -                "/lib",
@@ -13,7 +13,7 @@ index 5bf5cf5..06ce7f4 100644
                  NULL,
          };
          const char *suffix = "dbus-1/system-services";
-@@ -1012,9 +1010,9 @@ static int launcher_parse_config(Launcher *launcher, ConfigRoot **rootp, NSSCach
+@@ -1033,9 +1031,9 @@ static int launcher_parse_config(Launcher *launcher, ConfigRoot **rootp, NSSCach
          if (launcher->configfile)
                  configfile = launcher->configfile;
          else if (launcher->user_scope)

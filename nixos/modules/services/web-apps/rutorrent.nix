@@ -211,7 +211,7 @@ in
                   $throttleMaxSpeed = 327625*1024;
 
                   $pathToExternals = array(
-                    "php" 	=> "${pkgs.php}/bin/php",			// Something like /usr/bin/php. If empty, will be found in PATH.
+                    "php" 	=> "${pkgs.php82}/bin/php",			// Something like /usr/bin/php. If empty, will be found in PATH.
                     "curl"	=> "${pkgs.curl}/bin/curl",			// Something like /usr/bin/curl. If empty, will be found in PATH.
                     "gzip"	=> "${pkgs.gzip}/bin/gzip",			// Something like /usr/bin/gzip. If empty, will be found in PATH.
                     "id"	=> "${pkgs.coreutils}/bin/id",			// Something like /usr/bin/id. If empty, will be found in PATH.
@@ -305,7 +305,7 @@ in
               ${cfg.hostName} = {
                 root = cfg.dataDir;
                 locations = {
-                  "~ [^/]\.php(/|$)" = {
+                  "~ [^/]\\.php(/|$)" = {
                     extraConfig = ''
                       fastcgi_split_path_info ^(.+?\.php)(/.*)$;
                       if (!-f $document_root$fastcgi_script_name) {

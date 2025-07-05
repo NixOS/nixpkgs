@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tats";
-    repo = pname;
+    repo = "w3m";
     rev = "v${version}";
     hash = "sha256-upb5lWqhC1jRegzTncIz5e21v4Pw912FyVn217HucFs=";
   };
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
       "--with-gc=${boehmgc.dev}"
     ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "ac_cv_func_setpgrp_void=yes"
+      "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
     ]
     ++ lib.optional graphicsSupport "--enable-image=${lib.optionalString x11Support "x11,"}fb"
     ++ lib.optional (graphicsSupport && !x11Support) "--without-x";
@@ -125,13 +125,13 @@ stdenv.mkDerivation rec {
     command = "w3m -version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://w3m.sourceforge.net/";
     changelog = "https://github.com/tats/w3m/blob/v${version}/ChangeLog";
     description = "Text-mode web browser";
-    maintainers = with maintainers; [ anthonyroussel ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     mainProgram = "w3m";
   };
 }

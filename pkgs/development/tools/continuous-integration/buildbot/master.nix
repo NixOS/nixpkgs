@@ -41,7 +41,6 @@
   importlib-resources,
   packaging,
   unidiff,
-  glibcLocales,
   nixosTests,
 }:
 
@@ -76,7 +75,7 @@ let
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "4.2.0";
+  version = "4.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -85,7 +84,7 @@ buildPythonApplication rec {
     owner = "buildbot";
     repo = "buildbot";
     rev = "v${version}";
-    hash = "sha256-eraNF2J5x04qQESkned/2Io9gb2ZL9XzUfWHwSGErNY=";
+    hash = "sha256-Kf8sxZE2cQDQSVSMpRTokJU4f3/M6OJq6bXzGonrRLU=";
   };
 
   build-system = [
@@ -136,16 +135,12 @@ buildPythonApplication rec {
     parameterized
     git
     openssh
-    glibcLocales
   ];
 
   patches = [
     # This patch disables the test that tries to read /etc/os-release which
     # is not accessible in sandboxed builds.
     ./skip_test_linux_distro.patch
-
-    # https://github.com/buildbot/buildbot/issues/8274
-    ./allow_git_urls_to_be_renderable_again.patch
   ];
 
   postPatch = ''
@@ -158,7 +153,6 @@ buildPythonApplication rec {
   doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
     export PATH="$out/bin:$PATH"
   '';
 
@@ -177,7 +171,7 @@ buildPythonApplication rec {
     description = "Open-source continuous integration framework for automating software build, test, and release processes";
     homepage = "https://buildbot.net/";
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
-    maintainers = teams.buildbot.members;
+    teams = [ teams.buildbot ];
     license = licenses.gpl2Only;
   };
 }

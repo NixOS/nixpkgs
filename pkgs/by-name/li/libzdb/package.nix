@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.4.0";
+  version = "3.4.1";
   pname = "libzdb";
 
   src = fetchurl {
     url = "https://www.tildeslash.com/libzdb/dist/libzdb-${version}.tar.gz";
-    sha256 = "sha256-q9Z1cZvL3eQwqk7hOXW5gNVdKry1zCKAgqMDIKa7nw8=";
+    sha256 = "sha256-W0Yz/CoWiA93YZf0BF9i7421Bi9jAw+iIQEdS4XXNss=";
   };
 
   buildInputs = [ sqlite ];

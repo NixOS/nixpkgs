@@ -1,23 +1,22 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitLab,
   libnotify,
   cmake,
   ninja,
-  qtbase,
-  qtconnectivity,
+  qt6,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcprime";
-  version = "4.5.0";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     owner = "cubocore";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-j6WFLcjDMkYl+9HCmhMRttwtjNX05oP5mfdOsoLC7og=";
+    repo = "libcprime";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3tAbF4CoZJf92Z2/M/Cq7ruPew34Hl5Ojks7fI6kPbU=";
   };
 
   patches = [
@@ -30,16 +29,18 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase
-    qtconnectivity
+    qt6.qtbase
+    qt6.qtconnectivity
     libnotify
   ];
 
-  meta = with lib; {
+  dontWrapQtApps = true;
+
+  meta = {
     description = "Library for bookmarking, saving recent activites, managing settings of C-Suite";
-    homepage = "https://gitlab.com/cubocore/coreapps/libcprime";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    homepage = "https://gitlab.com/cubocore/libcprime";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

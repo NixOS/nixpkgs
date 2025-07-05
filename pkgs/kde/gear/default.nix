@@ -172,7 +172,6 @@
   krecorder = callPackage ./krecorder { };
   kreversi = callPackage ./kreversi { };
   krfb = callPackage ./krfb { };
-  kross-interpreters = callPackage ./kross-interpreters { };
   kruler = callPackage ./kruler { };
   ksanecore = callPackage ./ksanecore { };
   kshisen = callPackage ./kshisen { };
@@ -237,12 +236,12 @@
   plasmatube = callPackage ./plasmatube { };
   poxml = callPackage ./poxml { };
   qmlkonsole = callPackage ./qmlkonsole { };
+  qrca = callPackage ./qrca { };
   rocs = callPackage ./rocs { };
   signon-kwallet-extension = callPackage ./signon-kwallet-extension { };
   skanlite = callPackage ./skanlite { };
   skanpage = callPackage ./skanpage { };
   skladnik = callPackage ./skladnik { };
-  spectacle = callPackage ./spectacle { };
   step = callPackage ./step { };
   svgpart = callPackage ./svgpart { };
   sweeper = callPackage ./sweeper { };

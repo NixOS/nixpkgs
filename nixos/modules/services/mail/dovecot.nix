@@ -93,7 +93,7 @@ let
   # The idea is to match everything that looks like `$term =`
   # but not `# $term something something`
   # or `# $term = some value` because those are comments.
-  configContainsSetting = lines: term: (match "^[^#]*\b${term}\b.*=" lines) != null;
+  configContainsSetting = lines: term: (match "[[:blank:]]*${term}[[:blank:]]*=.*" lines) != null;
 
   warnAboutExtraConfigCollisions = map mkExtraConfigCollisionWarning (
     filter (configContainsSetting cfg.extraConfig) automaticallySetPluginSettings
@@ -111,6 +111,7 @@ let
       base_dir = ${baseDir}
       protocols = ${concatStringsSep " " cfg.protocols}
       sendmail_path = /run/wrappers/bin/sendmail
+      mail_plugin_dir = /run/current-system/sw/lib/dovecot/modules
       # defining mail_plugins must be done before the first protocol {} filter because of https://doc.dovecot.org/configuration_manual/config_file/config_file_syntax/#variable-expansion
       mail_plugins = $mail_plugins ${concatStringsSep " " cfg.mailPlugins.globally.enable}
     ''
@@ -207,13 +208,6 @@ let
     cfg.extraConfig
   ];
 
-  modulesDir = pkgs.symlinkJoin {
-    name = "dovecot-modules";
-    paths = map (pkg: "${pkg}/lib/dovecot") (
-      [ dovecotPkg ] ++ map (module: module.override { dovecot = dovecotPkg; }) cfg.modules
-    );
-  };
-
   mailboxConfig =
     mailbox:
     ''
@@ -280,6 +274,11 @@ in
 {
   imports = [
     (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
+    (mkRemovedOptionModule [
+      "services"
+      "dovecot2"
+      "modules"
+    ] "Now need to use `environment.systemPackages` to load additional Dovecot modules")
     (mkRenamedOptionModule
       [ "services" "dovecot2" "sieveScripts" ]
       [ "services" "dovecot2" "sieve" "scripts" ]
@@ -408,17 +407,6 @@ in
       // {
         default = true;
       };
-
-    modules = mkOption {
-      type = types.listOf types.package;
-      default = [ ];
-      example = literalExpression "[ pkgs.dovecot_pigeonhole ]";
-      description = ''
-        Symlinks the contents of lib/dovecot of every given package into
-        /etc/dovecot/modules. This will make the given modules available
-        if a dovecot package with the module_dir patch applied is being used.
-      '';
-    };
 
     sslCACert = mkOption {
       type = types.nullOr types.str;
@@ -702,27 +690,69 @@ in
         ${cfg.mailGroup} = { };
       };
 
-    environment.etc."dovecot/modules".source = modulesDir;
     environment.etc."dovecot/dovecot.conf".source = cfg.configFile;
 
-    systemd.services.dovecot2 = {
+    systemd.services.dovecot = {
+      aliases = [ "dovecot2.service" ];
       description = "Dovecot IMAP/POP3 server";
+      documentation = [
+        "man:dovecot(1)"
+        "https://doc.dovecot.org"
+      ];
 
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [
-        cfg.configFile
-        modulesDir
-      ];
+      restartTriggers = [ cfg.configFile ];
 
       startLimitIntervalSec = 60; # 1 min
       serviceConfig = {
         Type = "notify";
         ExecStart = "${dovecotPkg}/sbin/dovecot -F";
         ExecReload = "${dovecotPkg}/sbin/doveadm reload";
+
+        CapabilityBoundingSet = [
+          "CAP_CHOWN"
+          "CAP_DAC_OVERRIDE"
+          "CAP_FOWNER"
+          "CAP_NET_BIND_SERVICE"
+          "CAP_SETGID"
+          "CAP_SETUID"
+          "CAP_SYS_CHROOT"
+          "CAP_SYS_RESOURCE"
+        ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        OOMPolicy = "continue";
+        PrivateTmp = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = lib.mkDefault false;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        PrivateDevices = true;
         Restart = "on-failure";
         RestartSec = "1s";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = false; # sets sgid on maildirs
         RuntimeDirectory = [ "dovecot2" ];
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service @resources"
+          "~@privileged"
+          "@chown @setuid capset chroot"
+        ];
       };
 
       # When copying sieve scripts preserve the original time stamp

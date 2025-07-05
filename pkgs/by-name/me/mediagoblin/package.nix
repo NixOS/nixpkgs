@@ -4,7 +4,7 @@
   fetchFromSourcehut,
   gobject-introspection,
   gst_all_1,
-  poppler_utils,
+  poppler-utils,
   python3,
   xorg,
 }:
@@ -15,6 +15,12 @@ let
       celery = prev.celery.overridePythonAttrs {
         doCheck = false;
       };
+
+      kombu = prev.kombu.overridePythonAttrs {
+        # avoid conflicts with test only dependencies
+        doCheck = false;
+      };
+
       sqlalchemy = prev.sqlalchemy_1_4;
     };
   };
@@ -35,6 +41,7 @@ let
   };
 in
 python.pkgs.buildPythonApplication rec {
+  format = "setuptools";
   pname = "mediagoblin";
   inherit version src;
 
@@ -137,7 +144,7 @@ python.pkgs.buildPythonApplication rec {
       pytestCheckHook
       webtest
 
-      poppler_utils
+      poppler-utils
     ]
     ++ lib.flatten (lib.attrValues optional-dependencies);
 
@@ -151,6 +158,6 @@ python.pkgs.buildPythonApplication rec {
     description = "Free software media publishing platform that anyone can run";
     homepage = "https://mediagoblin.org/";
     license = lib.licenses.agpl3Plus;
-    maintainers = lib.teams.c3d2.members;
+    teams = [ lib.teams.c3d2 ];
   };
 }

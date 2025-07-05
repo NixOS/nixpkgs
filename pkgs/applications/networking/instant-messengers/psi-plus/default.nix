@@ -14,22 +14,23 @@
   hunspell,
   libsecret,
   libgcrypt,
-  libotr,
-  html-tidy,
   libgpg-error,
-  libsignal-protocol-c,
   usrsctp,
+  qtkeychain,
 
   chatType ? "basic", # See the assertion below for available options
   qtwebkit,
   qtwebengine,
 
   enablePlugins ? true,
+  html-tidy,
+  http-parser,
+  libotr,
+  libomemo-c,
 
   # Voice messages
   voiceMessagesSupport ? true,
   gst_all_1,
-
   enablePsiMedia ? false,
   pkg-config,
 }:
@@ -44,13 +45,13 @@ assert enablePsiMedia -> enablePlugins;
 
 mkDerivation rec {
   pname = "psi-plus";
-  version = "1.5.1653";
 
+  version = "1.5.2081";
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = version;
-    sha256 = "sha256-9WT2S6ZgIsrHoEAvlWUB078gzCdrPylvSjkkogU5tsU=";
+    sha256 = "sha256-C5EFC6HpUEFb5P3yGAwlhpj7MhS16P6fkKD5GjC3J9I=";
   };
 
   cmakeFlags = [
@@ -80,15 +81,19 @@ mkDerivation rec {
       hunspell
       libsecret
       libgcrypt
-      libotr
-      html-tidy
       libgpg-error
-      libsignal-protocol-c
       usrsctp
+      qtkeychain
     ]
     ++ lib.optionals voiceMessagesSupport [
       gst_all_1.gst-plugins-base
       gst_all_1.gst-plugins-good
+    ]
+    ++ lib.optionals enablePlugins [
+      html-tidy
+      http-parser
+      libotr
+      libomemo-c
     ]
     ++ lib.optionals (chatType == "webkit") [
       qtwebkit
@@ -103,15 +108,15 @@ mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://psi-plus.com";
     description = "XMPP (Jabber) client based on Qt5";
     mainProgram = "psi-plus";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       orivej
       unclechu
     ];
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

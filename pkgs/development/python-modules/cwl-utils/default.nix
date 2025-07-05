@@ -4,6 +4,7 @@
   cwl-upgrader,
   cwlformat,
   fetchFromGitHub,
+  jsonschema,
   packaging,
   pytest-mock,
   pytest-xdist,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "cwl-utils";
-  version = "0.36";
+  version = "0.38";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "common-workflow-language";
     repo = "cwl-utils";
     tag = "v${version}";
-    hash = "sha256-ZSRwkZkBZ2cM0ZBvyI628xjbiho2FuFJnCYDZl3IrHs=";
+    hash = "sha256-goeMlyHYiS4JLOVBFjcLSzdYrdoIZ904hJHFPGZyxKo=";
   };
 
   build-system = [ setuptools ];
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cwlformat
+    jsonschema
     pytest-mock
     pytest-xdist
     pytestCheckHook
@@ -60,6 +62,16 @@ buildPythonPackage rec {
     # Don't run tests which require network access
     "test_remote_packing"
     "test_remote_packing_github_soft_links"
+    "test_cwl_inputs_to_jsonschema"
+  ];
+
+  disabledTestPaths = [
+    # Tests require podman
+    "tests/test_docker_extract.py"
+    # Tests requires singularity
+    "tests/test_js_sandbox.py"
+    # Circular dependencies
+    "tests/test_graph_split.py"
   ];
 
   meta = with lib; {

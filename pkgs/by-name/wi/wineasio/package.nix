@@ -13,8 +13,8 @@ multiStdenv.mkDerivation rec {
   version = "1.2.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "wineasio";
+    repo = "wineasio";
     rev = "v${version}";
     hash = "sha256-d5BGJAkaM5XZXyqm6K/UzFE4sD6QVHHGnLi1bcHxiaM=";
     fetchSubmodules = true;

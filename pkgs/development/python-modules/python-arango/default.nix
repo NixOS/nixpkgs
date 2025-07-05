@@ -33,16 +33,16 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
-  version = "8.1.4";
+  version = "8.2.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "arangodb";
     repo = "python-arango";
     tag = version;
-    hash = "sha256-NAFleaZaZFWwhAPsuJG9S81w/FlkHgefqVWg5F+lhUo=";
+    hash = "sha256-DPyCHa9tAnxKYeieiHe10UV7EPnF7octbDm23dSlIb0=";
   };
 
   nativeBuildInputs = [
@@ -153,7 +153,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Driver for ArangoDB";
     homepage = "https://github.com/ArangoDB-Community/python-arango";
-    changelog = "https://github.com/ArangoDB-Community/python-arango/releases/tag/${version}";
+    changelog = "https://github.com/ArangoDB-Community/python-arango/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ jsoo1 ];
   };

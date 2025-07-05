@@ -17,6 +17,8 @@ mkCoqDerivation {
   owner = "math-comp";
   inherit version;
   release = {
+    "2.0.3".sha256 = "sha256-heZ7aZ7TO9YNAESIvbAc1qqzO91xMyLAox8VKueIk/s=";
+    "2.0.2".sha256 = "sha256-hBo9JMtmXDYBmf5ihKGksQLHv3c0+zDBnd8/aI2V/ao=";
     "2.0.1".sha256 = "sha256-tQTI3PCl0q1vWpps28oATlzOI8TpVQh1jhTwVmhaZic=";
     "2.0.0".sha256 = "sha256-sZvfiC5+5Lg4nRhfKKqyFzovCj2foAhqaq/w9F2bdU8=";
     "1.1.4".sha256 = "sha256-8Hs6XfowbpeRD8RhMRf4ZJe2xf8kE0e8m7bPUzR/IM4=";
@@ -36,8 +38,22 @@ mkCoqDerivation {
       [
         {
           cases = [
-            (isGe "8.17")
-            (isGe "2.0.0")
+            (range "8.18" "9.0")
+            (isGe "2.2.0")
+          ];
+          out = "2.0.3";
+        }
+        {
+          cases = [
+            (range "8.17" "9.0")
+            (range "2.1.0" "2.3.0")
+          ];
+          out = "2.0.2";
+        }
+        {
+          cases = [
+            (range "8.17" "8.20")
+            (range "2.0.0" "2.2.0")
           ];
           out = "2.0.1";
         }

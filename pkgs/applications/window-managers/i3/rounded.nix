@@ -1,6 +1,11 @@
-{ fetchFromGitHub, lib, i3, pcre }:
+{
+  fetchFromGitHub,
+  lib,
+  i3,
+  pcre,
+}:
 
-i3.overrideAttrs (oldAttrs: rec {
+i3.overrideAttrs (oldAttrs: {
   pname = "i3-rounded";
   version = "4.21.1";
 

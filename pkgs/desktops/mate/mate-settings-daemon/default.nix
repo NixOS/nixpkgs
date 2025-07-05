@@ -19,6 +19,7 @@
   libpulseaudio,
   wrapGAppsHook3,
   mateUpdateScript,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -55,6 +57,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
@@ -67,6 +71,6 @@ stdenv.mkDerivation rec {
       mit
     ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

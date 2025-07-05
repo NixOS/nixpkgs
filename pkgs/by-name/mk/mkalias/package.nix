@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,10 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-  ];
-
-  buildInputs = [
-    darwin.apple_sdk.frameworks.Foundation
   ];
 
   cmakeFlags = [

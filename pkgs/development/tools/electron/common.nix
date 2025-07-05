@@ -3,39 +3,42 @@
   stdenv,
   chromium,
   nodejs,
-  python3,
-  fetchpatch,
   fetchYarnDeps,
   fetchNpmDeps,
+  fetchpatch,
   fixup-yarn-lock,
   npmHooks,
   yarn,
   libnotify,
   unzip,
-  pkgs,
   pkgsBuildHost,
   pipewire,
   libsecret,
   libpulseaudio,
   speechd-minimal,
   info,
+  gclient2nix,
 }:
 
 let
-  fetchdep =
-    dep:
-    let
-      opts = removeAttrs dep [ "fetcher" ];
-    in
-    pkgs.${dep.fetcher} opts;
-
-  fetchedDeps = lib.mapAttrs (name: fetchdep) info.deps;
-
+  gclientDeps = gclient2nix.importGclientDeps info.deps;
 in
+
 ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   packageName = "electron";
   inherit (info) version;
-  buildTargets = [ "electron:electron_dist_zip" ];
+  buildTargets = [
+    "electron:copy_node_headers"
+    "electron:electron_dist_zip"
+  ];
+
+  outputs = [
+    "out"
+    "headers"
+  ];
+
+  # don't automatically move the include directory from $headers back into $out
+  moveToDev = false;
 
   nativeBuildInputs = base.nativeBuildInputs ++ [
     nodejs
@@ -43,73 +46,112 @@ in
     fixup-yarn-lock
     unzip
     npmHooks.npmConfigHook
+    gclient2nix.gclientUnpackHook
   ];
   buildInputs = base.buildInputs ++ [ libnotify ];
 
   electronOfflineCache = fetchYarnDeps {
-    yarnLock = fetchedDeps."src/electron" + "/yarn.lock";
+    yarnLock = gclientDeps."src/electron".path + "/yarn.lock";
     sha256 = info.electron_yarn_hash;
   };
   npmDeps = fetchNpmDeps rec {
-    src = fetchedDeps."src";
+    src = gclientDeps."src".path;
     # Assume that the fetcher always unpack the source,
     # based on update.py
     sourceRoot = "${src.name}/third_party/node";
     hash = info.chromium_npm_hash;
   };
+  inherit gclientDeps;
+  unpackPhase = null; # prevent chromium's unpackPhase from being used
+  sourceRoot = "src";
+
+  env =
+    base.env
+    // {
+      # Hydra can fail to build electron due to clang spamming deprecation
+      # warnings mid-build, causing the build log to grow beyond the limit
+      # of 64mb and then getting killed by Hydra.
+      # For some reason, the log size limit appears to only be enforced on
+      # aarch64-linux. x86_64-linux happily succeeds to build with ~180mb. To
+      # unbreak the build on h.n.o, we simply disable those warnings for now.
+      # https://hydra.nixos.org/build/283952243
+      NIX_CFLAGS_COMPILE = base.env.NIX_CFLAGS_COMPILE + " -Wno-deprecated";
+    }
+    // lib.optionalAttrs (lib.versionAtLeast info.version "35") {
+      # Needed for header generation in electron 35 and above
+      ELECTRON_OUT_DIR = "Release";
+    };
 
   src = null;
 
   patches =
     base.patches
-    ++ lib.optionals (lib.versionOlder info.version "32") [
-      # Backport a few fixes for -Wmissing-template-arg-list-after-template-kw
-      # which only effects the soon-to-be-EOLed electron 31 (chromium M126).
-      # https://issues.chromium.org/issues/344680447
-
-      # https://chromium-review.googlesource.com/c/chromium/src/+/5604664
+    # Fix building with Rust 1.86+
+    # electron_33 and electron_34 use older chromium versions which expect rust
+    # to provide the older `adler` library instead of the newer `adler2` library
+    # This patch makes those older versions also use the new adler2 library
+    ++ lib.optionals (lib.versionOlder info.version "35") [
+      ./use-rust-adler2.patch
+    ]
+    # Requirements for the next section
+    ++ lib.optionals (lib.versionOlder info.version "35") [
       (fetchpatch {
-        url = "https://github.com/chromium/chromium/commit/b0088fa60970412160535c367e2ff53b25b8538e.patch";
-        hash = "sha256-eEYO+IN1062iCqVr6eO3UZlGLN376lMXc6UQunJGpdQ=";
+        name = "Avoid-build-rust-PartitionAlloc-dep-when-not-build_with_chromium.patch";
+        url = "https://github.com/chromium/chromium/commit/ee94f376a0dd642a93fbf4a5fa8e7aa8fb2a69b5.patch";
+        hash = "sha256-qGjy9VZ4d3T5AuqOrBKEajBswwBU/7j0n80rpvHZLmM=";
+      })
+      (fetchpatch {
+        name = "Suppress-unsafe_libc_call-warning-for-rust-remap_alloc-cc.patch";
+        url = "https://github.com/chromium/chromium/commit/d5d79d881e74c6c8630f7d2f3affd4f656fdeb4e.patch";
+        hash = "sha256-1oy5WRvNzKuUTJkt8kULUqE4JU+EKEV1PB9QN8HF4SE=";
+      })
+    ]
+    # Fix building with Rust 1.87+
+    # https://issues.chromium.org/issues/407024458
+    ++ lib.optionals (lib.versionOlder info.version "37") [
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6432410
+      # Not using fetchpatch here because it ignores file renames: https://github.com/nixos/nixpkgs/issues/32084
+      ./Reland-Use-global_allocator-to-provide-Rust-allocator-implementation.patch
+
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6434355
+      (fetchpatch {
+        name = "Call-Rust-default-allocator-directly-from-Rust.patch";
+        url = "https://github.com/chromium/chromium/commit/73eef8797a8138f5c26f52a1372644b20613f5ee.patch";
+        hash = "sha256-IcSjPv21xT+l9BwJuzeW2AfwBdKI0dQb3nskk6yeKHU=";
       })
 
-      # https://android-review.googlesource.com/c/platform/external/perfetto/+/3114454
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6439711
       (fetchpatch {
-        name = "perfetto-e2f661907a717551235563389977b7468da6d45e.patch";
-        url = "https://android.googlesource.com/platform/external/perfetto/+/e2f661907a717551235563389977b7468da6d45e^!?format=TEXT";
-        decode = "base64 -d";
-        stripLen = 1;
-        extraPrefix = "third_party/perfetto/";
-        hash = "sha256-5zSAZZI1tR7O4Aui22T/6uyk0RpuIy7XqDD0nwlDySQ=";
+        name = "Roll-rust.patch";
+        url = "https://github.com/chromium/chromium/commit/a6c30520486be844735dc646cd5b9b434afa0c6b.patch";
+        includes = [ "build/rust/allocator/*" ];
+        hash = "sha256-MFdR75oSAdFW6telEZt/s0qdUvq/BiYFEHW0vk+RgDk=";
       })
 
-      ./electron-31-perfetto-missing-template-arg-list.patch
-
-      # And a finally fix for -Winvalid-constexpr that is happening within the electron patchset.
-      # https://github.com/electron/electron/pull/42413/commits/394a26f94a3fbce91e15e80e8e73b9a3ec1f04d1
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6456604
       (fetchpatch {
-        url = "https://github.com/electron/electron/commit/394a26f94a3fbce91e15e80e8e73b9a3ec1f04d1.patch";
-        stripLen = 1;
-        extraPrefix = "electron/";
-        hash = "sha256-lllUUDm1thnC+rH8hBtPBVLRx6Pis5TPEUeQli9z1Mk=";
+        name = "Drop-remap_alloc-dep.patch";
+        url = "https://github.com/chromium/chromium/commit/87d5ad2f621e0d5c81849dde24f3a5347efcb167.patch";
+        hash = "sha256-bEoR6jxEyw6Fzm4Zv4US54Cxa0li/0UTZTU2WUf0Rgo=";
+      })
+
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6454872
+      (fetchpatch {
+        name = "rust-Clean-up-build-rust-allocator-after-a-Rust-tool.patch";
+        url = "https://github.com/chromium/chromium/commit/5c74fcf6fd14491f33dd820022a9ca045f492f68.patch";
+        hash = "sha256-vcD0Zfo4Io/FVpupWOdgurFEqwFCv+oDOtSmHbm+ons=";
+      })
+    ]
+    # Fix building with gperf 3.2+
+    # https://issues.chromium.org/issues/40209959
+    ++ lib.optionals (lib.versionOlder info.version "37") [
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6445471
+      (fetchpatch {
+        name = "Dont-apply-FALLTHROUGH-edit-to-gperf-3-2-output.patch";
+        url = "https://github.com/chromium/chromium/commit/f8f21fb4aa01f75acbb12abf5ea8c263c6817141.patch";
+        hash = "sha256-z/aQ1oQjFZnkUeRnrD6P/WDZiYAI1ncGhOUM+HmjMZA=";
       })
     ];
-
-  unpackPhase =
-    ''
-      runHook preUnpack
-    ''
-    + (lib.concatStrings (
-      lib.mapAttrsToList (path: dep: ''
-        mkdir -p ${builtins.dirOf path}
-        cp -r ${dep}/. ${path}
-        chmod u+w -R ${path}
-      '') fetchedDeps
-    ))
-    + ''
-      sourceRoot=src
-      runHook postUnpack
-    '';
 
   npmRoot = "third_party/node";
 
@@ -131,14 +173,14 @@ in
       echo 'cros_boards_with_qemu_images = ""' >> build/config/gclient_args.gni
       echo 'generate_location_tags = true' >> build/config/gclient_args.gni
 
-      echo 'LASTCHANGE=${info.deps."src".rev}-refs/heads/master@{#0}'        > build/util/LASTCHANGE
-      echo "$SOURCE_DATE_EPOCH"                                              > build/util/LASTCHANGE.committime
+      echo 'LASTCHANGE=${info.deps."src".args.tag}-refs/heads/master@{#0}' > build/util/LASTCHANGE
+      echo "$SOURCE_DATE_EPOCH" > build/util/LASTCHANGE.committime
 
       cat << EOF > gpu/config/gpu_lists_version.h
       /* Generated by lastchange.py, do not edit.*/
       #ifndef GPU_CONFIG_GPU_LISTS_VERSION_H_
       #define GPU_CONFIG_GPU_LISTS_VERSION_H_
-      #define GPU_LISTS_VERSION "${info.deps."src".rev}"
+      #define GPU_LISTS_VERSION "${info.deps."src".args.tag}"
       #endif  // GPU_CONFIG_GPU_LISTS_VERSION_H_
       EOF
 
@@ -146,11 +188,11 @@ in
       /* Generated by lastchange.py, do not edit.*/
       #ifndef SKIA_EXT_SKIA_COMMIT_HASH_H_
       #define SKIA_EXT_SKIA_COMMIT_HASH_H_
-      #define SKIA_COMMIT_HASH "${info.deps."src/third_party/skia".rev}-"
+      #define SKIA_COMMIT_HASH "${info.deps."src/third_party/skia".args.rev}-"
       #endif  // SKIA_EXT_SKIA_COMMIT_HASH_H_
       EOF
 
-      echo -n '${info.deps."src/third_party/dawn".rev}'                     > gpu/webgpu/DAWN_VERSION
+      echo -n '${info.deps."src/third_party/dawn".args.rev}' > gpu/webgpu/DAWN_VERSION
 
       (
         cd electron
@@ -184,6 +226,10 @@ in
         done
       )
     ''
+    + lib.optionalString (lib.versionAtLeast info.version "36") ''
+      echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
+      echo 'checkout_mutter = false' >> build/config/gclient_args.gni
+    ''
     + base.postPatch;
 
   preConfigure =
@@ -195,57 +241,54 @@ in
     ''
     + (base.preConfigure or "");
 
-  gnFlags =
-    rec {
-      # build/args/release.gn
-      is_component_build = false;
-      is_official_build = true;
-      rtc_use_h264 = proprietary_codecs;
-      is_component_ffmpeg = true;
+  gnFlags = rec {
+    # build/args/release.gn
+    is_component_build = false;
+    is_official_build = true;
+    rtc_use_h264 = proprietary_codecs;
+    is_component_ffmpeg = true;
 
-      # build/args/all.gn
-      is_electron_build = true;
-      root_extra_deps = [ "//electron" ];
-      node_module_version = info.modules;
-      v8_promise_internal_field_count = 1;
-      v8_embedder_string = "-electron.0";
-      v8_enable_snapshot_native_code_counters = false;
-      v8_enable_javascript_promise_hooks = true;
-      enable_cdm_host_verification = false;
-      proprietary_codecs = true;
-      ffmpeg_branding = "Chrome";
-      enable_printing = true;
-      angle_enable_vulkan_validation_layers = false;
-      dawn_enable_vulkan_validation_layers = false;
-      enable_pseudolocales = false;
-      allow_runtime_configurable_key_storage = true;
-      enable_cet_shadow_stack = false;
-      is_cfi = false;
-      use_qt = false;
-      v8_builtins_profiling_log_file = "";
-      enable_dangling_raw_ptr_checks = false;
-      dawn_use_built_dxc = false;
-      v8_enable_private_mapping_fork_optimization = true;
-      v8_expose_public_symbols = true;
-      enable_dangling_raw_ptr_feature_flag = false;
-      clang_unsafe_buffers_paths = "";
-      enterprise_cloud_content_analysis = false;
-    }
-    // lib.optionalAttrs (lib.versionAtLeast info.version "33") {
-      content_enable_legacy_ipc = true;
-    }
-    // {
+    # build/args/all.gn
+    is_electron_build = true;
+    root_extra_deps = [ "//electron" ];
+    node_module_version = lib.toInt info.modules;
+    v8_promise_internal_field_count = 1;
+    v8_embedder_string = "-electron.0";
+    v8_enable_snapshot_native_code_counters = false;
+    v8_enable_javascript_promise_hooks = true;
+    enable_cdm_host_verification = false;
+    proprietary_codecs = true;
+    ffmpeg_branding = "Chrome";
+    enable_printing = true;
+    angle_enable_vulkan_validation_layers = false;
+    dawn_enable_vulkan_validation_layers = false;
+    enable_pseudolocales = false;
+    allow_runtime_configurable_key_storage = true;
+    enable_cet_shadow_stack = false;
+    is_cfi = false;
+    v8_builtins_profiling_log_file = "";
+    enable_dangling_raw_ptr_checks = false;
+    dawn_use_built_dxc = false;
+    v8_enable_private_mapping_fork_optimization = true;
+    v8_expose_public_symbols = true;
+    enable_dangling_raw_ptr_feature_flag = false;
+    clang_unsafe_buffers_paths = "";
+    enterprise_cloud_content_analysis = false;
+    content_enable_legacy_ipc = true;
 
-      # other
-      enable_widevine = false;
-      override_electron_version = info.version;
-    };
+    # other
+    enable_widevine = false;
+    override_electron_version = info.version;
+  };
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $libExecPath
     unzip -d $libExecPath out/Release/dist.zip
+
+    mkdir -p $headers
+    cp -r out/Release/gen/node_headers/* $headers/
 
     runHook postInstall
   '';
@@ -271,22 +314,7 @@ in
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    inherit info fetchedDeps;
-    headers = stdenv.mkDerivation rec {
-      name = "node-v${info.node}-headers.tar.gz";
-      nativeBuildInputs = [ python3 ];
-      src = fetchedDeps."src/third_party/electron_node";
-      buildPhase = ''
-        runHook preBuild
-        make tar-headers
-        runHook postBuild
-      '';
-      installPhase = ''
-        runHook preInstall
-        mv ${name} $out
-        runHook postInstall
-      '';
-    };
+    inherit info;
   };
 
   meta = with lib; {
@@ -297,6 +325,7 @@ in
     maintainers = with maintainers; [
       yayayayaka
       teutat3s
+      tomasajt
     ];
     mainProgram = "electron";
     hydraPlatforms =

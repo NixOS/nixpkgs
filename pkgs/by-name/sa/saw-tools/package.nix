@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saw-tools";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchurl {
     url = "https://github.com/GaloisInc/saw-script/releases/download/v${finalAttrs.version}/saw-${finalAttrs.version}-ubuntu-22.04-X64-with-solvers.tar.gz";
-    hash = "sha256-A99BCiVV5Ep/PL7VSDNYcvr177Q+FKdDrxhFJLW/iU4=";
+    hash = "sha256-1t1uGAQXCBC//RNBxQfZIfg00At600An9HaEIcVBEy0=";
   };
 
   buildInputs = [

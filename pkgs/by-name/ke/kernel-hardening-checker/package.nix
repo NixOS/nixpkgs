@@ -7,10 +7,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "kernel-hardening-checker";
   version = "0.6.10";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "a13xp0p0v";
-    repo = pname;
+    repo = "kernel-hardening-checker";
     rev = "v${version}";
     hash = "sha256-gxDaOb14jFezxe/qHZF3e52o7obVL0WMIKxwIj3j5QY=";
   };

@@ -1,6 +1,7 @@
 let
   majorMinorToVersionMap = {
-    "14" = "14-20241116";
+    "15" = "15.1.0";
+    "14" = "14.3.0";
     "13" = "13.3.0";
     "12" = "12.4.0";
     "11" = "11.5.0";
@@ -14,7 +15,10 @@ let
   srcHashForVersion =
     version:
     {
-      "14-20241116" = "sha256-aXSkle8Mzj/Q15cHOu0D9Os2PWQwMIboUZULhnsRSUo=";
+      # 3 digits: releases (14.2.0)
+      # 4 digits: snapshots (14.2.1.20250322)
+      "15.1.0" = "sha256-4rCewhZg8B/s/7cV4BICZSFpQ/A40OSKmGhxPlTwbOo=";
+      "14.3.0" = "sha256-4Nx3KXYlYxrI5Q+pL//v6Jmk63AlktpcMu8E4ik6yjo=";
       "13.3.0" = "sha256-CEXpYhyVQ6E/SE6UWEpJ/8ASmXDpkUYkI1/B0GGgwIM=";
       "12.4.0" = "sha256-cE9lJgTMvMsUvavzR4yVEciXiLEss7v/3tNzQZFqkXU=";
       "11.5.0" = "sha256-puIYaOrVRc+H8MAfhCduS1KB1nIJhZHByJYkHwk2NHg=";

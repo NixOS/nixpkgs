@@ -4,7 +4,6 @@
   boost,
   buildPythonPackage,
   cmake,
-  darwin,
   distutils,
   doxygen,
   draco,
@@ -52,14 +51,14 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "24.08";
+  version = "25.05.01";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     tag = "v${version}";
-    hash = "sha256-slBJleeDi0mCVThty4NUX4M9vaCLV+E8rnp1Ab77TmE=";
+    hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
   };
 
   stdenv = python.stdenv;
@@ -70,21 +69,14 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "port-to-embree-4.patch";
       # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/c8fec1342e05dca98a1afd4ea93c7a5f0b41e25b.patch?full_index=1";
-      hash = "sha256-pK1TUwmVv9zsZkOypq25pl+FJDxJJvozUtVP9ystGtI=";
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/9ea3bc1ab550ec46c426dab04292d9667ccd2518.patch?full_index=1";
+      hash = "sha256-QjA3kjUDsSleUr+S/bQLb+QK723SNFvnmRPT+ojjgq8=";
     })
-    # https://github.com/PixarAnimationStudios/OpenUSD/issues/3442
-    # https://github.com/PixarAnimationStudios/OpenUSD/pull/3434 commit 1
     (fetchpatch {
-      name = "explicitly-adding-template-keyword.patch";
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/274cf7c6fe1c121d095acd38dd1a33214e0c8448.patch?full_index=1";
-      hash = "sha256-nlw7o2jVWV9f1Lzl32UXcRVXcWnfyMNv9Mp4SVgFvyw=";
-    })
-    # https://github.com/PixarAnimationStudios/OpenUSD/pull/3434 commit 2
-    (fetchpatch {
-      name = "fix-removes-unused-path.patch";
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/5a6437e44269534bfde0c35cc2c7bdef087b70e8.patch?full_index=1";
-      hash = "sha256-X2v14U0pJjd4IMD8viXK2/onVFqUabJTXwDGRFKDZ+g=";
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/3648
+      name = "propagate-dependencies-opengl.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/usd/-/raw/41469f20113d3550c5b42e67d1139dedc1062b8c/usd-find-dependency-OpenGL.patch?full_index=1";
+      hash = "sha256-aUWGKn365qov0ttGOq5GgNxYGIGZ4DfmeMJfakbOugQ=";
     })
   ];
 
@@ -114,6 +106,8 @@ buildPythonPackage rec {
       cmake
       ninja
       setuptools
+      opensubdiv.dev
+      opensubdiv.static
     ]
     ++ lib.optionals withDocs [
       git
@@ -126,7 +120,6 @@ buildPythonPackage rec {
     [
       alembic.dev
       bison
-      boost
       draco
       embree
       flex
@@ -134,30 +127,28 @@ buildPythonPackage rec {
       materialx
       opencolorio
       openimageio
-      opensubdiv
       ptex
       tbb
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
       libX11
       libXt
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Cocoa ])
     ++ lib.optionals withOsl [ osl ]
     ++ lib.optionals withUsdView [ qt6.qtbase ]
-    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [
-      qt6.qtbase
-      qt6.qtwayland
-    ];
+    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 
   propagatedBuildInputs =
     [
       boost
       jinja2
       numpy
+      opensubdiv
       pyopengl
       distutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
     ]
     ++ lib.optionals (withTools || withUsdView) [
       pyside-tools-uic
@@ -189,6 +180,7 @@ buildPythonPackage rec {
       for interchange between graphics applications.
     '';
     homepage = "https://openusd.org/";
+    changelog = "https://github.com/PixarAnimationStudios/OpenUSD/${src.tag}/CHANGELOG.md";
     license = lib.licenses.tost;
     maintainers = with lib.maintainers; [
       shaddydc

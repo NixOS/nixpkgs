@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "BPF based visual packet rate monitor";
     mainProgram = "bpfmon";
     homepage = "https://github.com/bbonev/bpfmon";
     changelog = "https://github.com/bbonev/bpfmon/releases/tag/v${version}";
-    maintainers = with maintainers; [ arezvov ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ arezvov ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -2,23 +2,22 @@
   lib,
   python3Packages,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   ffmpeg,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "7.1.1";
+  version = "7.1.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wYge0LulNhLZedmpGLfewFb8k80gKlsHoIDlVo29q0w=";
+    hash = "sha256-9ksaSZttQq85ZaOfMK7y6eNvPS0yozEbhoivNCvVuno=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-path.patch;
+    (replaceVars ./ffmpeg-path.patch {
       ffmpeg = lib.getExe ffmpeg;
     })
   ];

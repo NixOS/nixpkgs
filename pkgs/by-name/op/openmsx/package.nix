@@ -14,6 +14,7 @@
   libpng,
   libtheora,
   libvorbis,
+  libX11,
   python3,
   tcl,
   zlib,
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_image
     SDL2_ttf
+    libX11
     alsa-lib
     freetype
     glew
@@ -74,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       boost
       gpl2Plus
     ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     mainProgram = "openmsx";
   };

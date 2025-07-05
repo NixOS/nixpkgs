@@ -8,13 +8,10 @@
   click,
   keyring,
   keyrings-alt,
-  pytz,
   requests,
-  six,
   tzlocal,
   pytest-mock,
   pytestCheckHook,
-  future,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "picklepete";
-    repo = pname;
+    repo = "pyicloud";
     rev = version;
     hash = "sha256-2E1pdHHt8o7CGpdG+u4xy5OyNCueUGVw5CY8oicYd5w=";
   };
@@ -34,12 +31,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     certifi
     click
-    future
     keyring
     keyrings-alt
-    pytz
     requests
-    six
     tzlocal
   ];
 

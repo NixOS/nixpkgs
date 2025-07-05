@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "antfs-cli";
   version = "unstable-2017-02-11";
+  format = "setuptools";
 
   meta = with lib; {
     homepage = "https://github.com/Tigge/antfs-cli";

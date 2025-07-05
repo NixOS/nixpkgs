@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     install -Dm644 NEWS README REMARKS TODO -t $out/share/doc/${pname}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/log69/aaphoto";
     description = "Free and open source automatic photo adjusting software";
     longDescription = ''
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
       don't intend to spend a lot of time with manually correcting the images
       one-by-one.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "aaphoto";
   };
 }

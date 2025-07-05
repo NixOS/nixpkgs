@@ -13,19 +13,19 @@
 
   # tests
   pytest-timeout,
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.11.9";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     tag = "v${version}";
-    hash = "sha256-7fRn7KvB7CEq8keVR8nrf6IY2G8omAQqNX+DPEf+7nc=";
+    hash = "sha256-MI2dhcxYZJw+EMO05m+W/yE5UlNBB2AHltb0XDamxMc=";
   };
 
   postPatch = ''
@@ -45,20 +45,22 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-timeout
-    pytest7CheckHook
+    pytestCheckHook
   ];
 
   disabledTests = [
-    "lightning_utilities.core.enums.StrEnum"
+    # DocTestFailure
     "lightning_utilities.core.imports.RequirementCache"
+
+    # NameError: name 'operator' is not defined. Did you forget to import 'operator'
     "lightning_utilities.core.imports.compare_version"
+
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for pytorch-lightning==1.8.0
     "lightning_utilities.core.imports.get_dependency_min_version_spec"
+
     # weird doctests fail on imports, but providing the dependency
     # fails another test
     "lightning_utilities.core.imports.ModuleAvailableCache"
-    "lightning_utilities.core.imports.requires"
-    # Failed: DID NOT RAISE <class 'AssertionError'>
-    "test_no_warning_call"
   ];
 
   disabledTestPaths = [

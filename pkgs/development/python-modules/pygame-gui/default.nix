@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "0612";
+  version = "0614";
   pyproject = true;
   # nixpkgs-update: no auto update
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "MyreMylar";
     repo = "pygame_gui";
     tag = "v_${version}";
-    hash = "sha256-6Ps3pmQ8tYwQyv0TliOvUNLy3GjSJ2jdDQTTxfYej0o=";
+    hash = "sha256-wLvWaJuXMXk7zOaSZfIpsXhQt+eCjOtlh8IRuKbR75o=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -9,6 +9,7 @@ with python3.pkgs;
 buildPythonApplication rec {
   pname = "pipreqs";
   version = "0.4.13";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,41 +1,33 @@
 {
-  darwin,
   fetchFromGitHub,
   lib,
   perl,
   pkg-config,
   openssl,
   rustPlatform,
-  stdenv,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "screenly-cli";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "screenly";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-iEz6LFPzOZCOvUMx3s6entcwyEsAKirY8CiIoId/Ie0=";
+    hash = "sha256-sRi0CpdaPCH54m2XojicARLXZELB4PFcLLw0KB0j6jE=";
   };
 
-  cargoHash = "sha256-YurXcmjL44TBrLQocbCKtOEpG7d49aKU9Q/3vPoPvHg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-U9NAfColVKbLsEf3HXS4Vu2eNvCjG0+koESFUWP9vMk=";
 
   nativeBuildInputs = [
     pkg-config
     perl
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   passthru.updateScript = nix-update-script { };
 

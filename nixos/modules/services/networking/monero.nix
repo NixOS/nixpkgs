@@ -32,6 +32,10 @@ let
         restricted-rpc=1
       ''}
 
+      ${lib.optionalString (banlist != null) ''
+        ban-list=${banlist}
+      ''}
+
       limit-rate-up=${toString limits.upload}
       limit-rate-down=${toString limits.download}
       max-concurrency=${toString limits.threads}
@@ -40,6 +44,11 @@ let
       ${listToConf "add-peer" extraNodes}
       ${listToConf "add-priority-node" priorityNodes}
       ${listToConf "add-exclusive-node" exclusiveNodes}
+
+      ${lib.optionalString prune ''
+        prune-blockchain=1
+        sync-pruned-blocks=1
+      ''}
 
       ${extraConfig}
     '';
@@ -61,6 +70,23 @@ in
         default = "/var/lib/monero";
         description = ''
           The directory where Monero stores its data files.
+        '';
+      };
+
+      banlist = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = ''
+          Path to a text file containing IPs to block.
+          Useful to prevent DDoS/deanonymization attacks.
+
+          https://github.com/monero-project/meta/issues/1124
+        '';
+        example = lib.literalExpression ''
+          builtins.fetchurl {
+            url = "https://raw.githubusercontent.com/rblaine95/monero-banlist/c6eb9413ddc777e7072d822f49923df0b2a94d88/block.txt";
+            hash = "";
+          };
         '';
       };
 
@@ -191,6 +217,15 @@ in
         '';
       };
 
+      prune = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to prune the blockchain.
+          https://www.getmonero.org/resources/moneropedia/pruning.html
+        '';
+      };
+
       extraConfig = lib.mkOption {
         type = lib.types.lines;
         default = "";
@@ -225,7 +260,7 @@ in
       serviceConfig = {
         User = "monero";
         Group = "monero";
-        ExecStart = "${pkgs.monero-cli}/bin/monerod --config-file=${configFile} --non-interactive";
+        ExecStart = "${lib.getExe' pkgs.monero-cli "monerod"} --config-file=${configFile} --non-interactive";
         Restart = "always";
         SuccessExitStatus = [
           0

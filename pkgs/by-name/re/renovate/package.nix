@@ -4,8 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs,
-  overrideSDK,
-  pnpm_9,
+  pnpm_10,
   python3,
   testers,
   xcbuild,
@@ -16,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "39.90.2";
+  version = "41.16.0";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-D0VoBkP+zMsJK5ZgoU4USF0qhrmLi2V1BU6k6czSr+o=";
+    hash = "sha256-hMcGK89YIqYCA201f+fxorHA3sseDL3nZTjH/90/JGQ=";
   };
 
   postPatch = ''
@@ -33,14 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
     python3
     yq-go
   ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-JkdfI7P4zWf0hYgurDrETAGic5nz38zQsAuBoFi9C8w=";
+    hash = "sha256-VF2fq6o4O5Ua+98PJ1d+vj5W8TMYL4ks3ekf27eQmIY=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -53,7 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
       yq '.engines.node = "${nodejs.version}"' -i package.json
 
       pnpm build
-      pnpm prune --prod --ignore-scripts
+      find -name 'node_modules' -type d -exec rm -rf {} \; || true
+      pnpm install --offline --prod --ignore-scripts
     ''
     # The optional dependency re2 is not built by pnpm and needs to be built manually.
     # If re2 is not built, you will get an annoying warning when you run renovate.
@@ -93,7 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
       version = testers.testVersion { package = finalAttrs.finalPackage; };
       vm-test = nixosTests.renovate;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   meta = {

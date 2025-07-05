@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Awesome Sphinx Theme";
     homepage = "https://sphinxawesome.xyz/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [sigmanificient];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

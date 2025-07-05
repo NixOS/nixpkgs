@@ -10,6 +10,8 @@ let
 
   mongodb = cfg.package;
 
+  mongoshExe = lib.getExe cfg.mongoshPackage;
+
   mongoCnf =
     cfg:
     pkgs.writeText "mongodb.conf" ''
@@ -25,6 +27,13 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "mongodb"
+      "initialRootPassword"
+    ] "Use services.mongodb.initialRootPasswordFile to securely provide the initial root password.")
+  ];
 
   ###### interface
 
@@ -34,7 +43,11 @@ in
 
       enable = lib.mkEnableOption "the MongoDB server";
 
-      package = lib.mkPackageOption pkgs "mongodb" { };
+      package = lib.mkPackageOption pkgs "mongodb" {
+        example = "pkgs.mongodb-ce";
+      };
+
+      mongoshPackage = lib.mkPackageOption pkgs "mongosh" { };
 
       user = lib.mkOption {
         type = lib.types.str;
@@ -60,10 +73,10 @@ in
         description = "Enable client authentication. Creates a default superuser with username root!";
       };
 
-      initialRootPassword = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+      initialRootPasswordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
-        description = "Password for the root user if auth is enabled.";
+        description = "Path to the file containing the password for the root user if auth is enabled.";
       };
 
       dbpath = lib.mkOption {
@@ -112,8 +125,8 @@ in
   config = lib.mkIf config.services.mongodb.enable {
     assertions = [
       {
-        assertion = !cfg.enableAuth || cfg.initialRootPassword != null;
-        message = "`enableAuth` requires `initialRootPassword` to be set.";
+        assertion = !cfg.enableAuth || cfg.initialRootPasswordFile != null;
+        message = "`enableAuth` requires `initialRootPasswordFile` to be set.";
       }
     ];
 
@@ -124,8 +137,6 @@ in
       description = "MongoDB server user";
     };
     users.groups.mongodb = lib.mkIf (cfg.user == "mongodb") { };
-
-    environment.systemPackages = [ mongodb ];
 
     systemd.services.mongodb = {
       description = "MongoDB server";
@@ -164,14 +175,15 @@ in
           if ! test -e "${cfg.dbpath}/.auth_setup_complete"; then
             systemd-run --unit=mongodb-for-setup --uid=${cfg.user} ${mongodb}/bin/mongod --config ${mongoCnf cfg_}
             # wait for mongodb
-            while ! ${mongodb}/bin/mongo --eval "db.version()" > /dev/null 2>&1; do sleep 0.1; done
+            while ! ${mongoshExe} --eval "db.version()" > /dev/null 2>&1; do sleep 0.1; done
 
-          ${mongodb}/bin/mongo <<EOF
-            use admin
+            initialRootPassword=$(<${cfg.initialRootPasswordFile})
+          ${mongoshExe} <<EOF
+            use admin;
             db.createUser(
               {
                 user: "root",
-                pwd: "${cfg.initialRootPassword}",
+                pwd: "$initialRootPassword",
                 roles: [
                   { role: "userAdminAnyDatabase", db: "admin" },
                   { role: "dbAdminAnyDatabase", db: "admin" },
@@ -187,7 +199,8 @@ in
       postStart = ''
         if test -e "${cfg.dbpath}/.first_startup"; then
           ${lib.optionalString (cfg.initialScript != null) ''
-            ${mongodb}/bin/mongo ${lib.optionalString (cfg.enableAuth) "-u root -p ${cfg.initialRootPassword}"} admin "${cfg.initialScript}"
+            ${lib.optionalString (cfg.enableAuth) "initialRootPassword=$(<${cfg.initialRootPasswordFile})"}
+            ${mongoshExe} ${lib.optionalString (cfg.enableAuth) "-u root -p $initialRootPassword"} admin "${cfg.initialScript}"
           ''}
           rm -f "${cfg.dbpath}/.first_startup"
         fi

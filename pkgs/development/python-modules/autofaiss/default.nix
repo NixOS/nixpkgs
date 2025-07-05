@@ -1,30 +1,37 @@
 {
+  lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   embedding-reader,
   faiss,
-  fetchFromGitHub,
   fire,
   fsspec,
-  lib,
   numpy,
   pyarrow,
+
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "autofaiss";
   version = "2.17.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "criteo";
-    repo = pname;
+    repo = "autofaiss";
     tag = version;
     hash = "sha256-pey3wrW7CDLMiPPKnmYrcSJqGuy6ecA2SE9m3Jtt6DU=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   pythonRemoveDeps = [
     # The `dataclasses` packages is a python2-only backport, unnecessary in
@@ -41,14 +48,17 @@ buildPythonPackage rec {
     # As of v2.15.3, autofaiss asks for pyarrow<8 but we have pyarrow v9.0.0 in
     # nixpkgs at the time of writing (2022-12-15).
     "pyarrow"
+
+    # No official numpy2 support yet
+    "numpy"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     embedding-reader
-    fsspec
-    numpy
     faiss
     fire
+    fsspec
+    numpy
     pyarrow
   ];
 
@@ -61,14 +71,20 @@ buildPythonPackage rec {
     "test_index_correctness_in_distributed_mode_with_multiple_indices"
     "test_index_correctness_in_distributed_mode"
     "test_quantize_with_pyspark"
+
+    # TypeError: Object of type float32 is not JSON serializable
+    "test_quantize"
+    "test_quantize_with_empty_and_non_empty_files"
+    "test_quantize_with_ids"
+    "test_quantize_with_multiple_inputs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatically create Faiss knn indices with the most optimal similarity search parameters";
     mainProgram = "autofaiss";
     homepage = "https://github.com/criteo/autofaiss";
     changelog = "https://github.com/criteo/autofaiss/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

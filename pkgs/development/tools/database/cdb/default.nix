@@ -36,6 +36,11 @@ stdenv.mkDerivation {
     "out"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-int"
+    "-Wno-error=implicit-function-declaration"
+  ];
+
   postPatch = ''
     # A little patch, borrowed from Archlinux AUR, borrowed from Gentoo Portage
     sed -e 's/^extern int errno;$/#include <errno.h>/' -i error.h

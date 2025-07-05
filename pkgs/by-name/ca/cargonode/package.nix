@@ -3,21 +3,21 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  bzip2,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargonode";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "xosnrdev";
     repo = "cargonode";
     tag = version;
-    hash = "sha256-xzBLuQRyKmd9k0sbBFV5amtFWwKqXR0CEsRv8SHiJcQ=";
+    hash = "sha256-O5+wAM99m1rgQpwz36mkHEU/FvGnY6hBCKPMIGXCeCU=";
   };
 
-  cargoHash = "sha256-v+Fs2VJrpnIOk9nPRanYYChlR7WOfkXF1kbYOKjOUYc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dYOdnyKdzL93kuSTUb+1vRqfDgkZLymaEZo9FUrR1JI=";
 
   checkFlags = [
     # Skip test that requires network access
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Unified tooling for Node.js";
     mainProgram = "cargonode";
-    homepage = "https://github.com/xosnrdev/cargonode";
+    homepage = "https://github.com/xosnrdev/cargonode?tab=readme-ov-file#readme";
     changelog = "https://github.com/xosnrdev/cargonode/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or

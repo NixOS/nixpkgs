@@ -34,12 +34,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "cups_printers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for interacting with a CUPS server";
     homepage = "https://github.com/audiusGmbH/cups-printers";
     changelog = "https://github.com/audiusGmbH/cups-printers/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cups-printers";
   };
 }

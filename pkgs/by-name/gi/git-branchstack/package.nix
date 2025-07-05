@@ -8,6 +8,7 @@ let
   self = python3Packages.buildPythonApplication {
     pname = "git-branchstack";
     version = "0.2.0";
+    format = "setuptools";
 
     src = fetchPypi {
       pname = "git-branchstack";
@@ -23,7 +24,7 @@ let
       homepage = "https://github.com/krobelus/git-branchstack";
       description = "Efficiently manage Git branches without leaving your local branch";
       license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ AndersonTorres ];
+      maintainers = with lib.maintainers; [ ];
     };
   };
 in

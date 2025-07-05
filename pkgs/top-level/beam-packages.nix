@@ -1,12 +1,9 @@
 {
   lib,
   beam,
-  beam_nodocs,
   callPackage,
   wxGTK32,
-  buildPackages,
   stdenv,
-  ex_docSupport ? true,
   wxSupport ? true,
   systemd,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -31,25 +28,21 @@ in
     #
     # Three versions are supported according to https://github.com/erlang/otp/security
 
+    erlang_28 = self.beamLib.callErlang ../development/interpreters/erlang/28.nix {
+      wxGTK = wxGTK32;
+      parallelBuild = true;
+      inherit wxSupport systemdSupport;
+    };
+
     erlang_27 = self.beamLib.callErlang ../development/interpreters/erlang/27.nix {
       wxGTK = wxGTK32;
       parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
-      inherit (beam_nodocs.packages.erlang_27) ex_doc;
-      inherit ex_docSupport wxSupport systemdSupport;
+      inherit wxSupport systemdSupport;
     };
 
     erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {
       wxGTK = wxGTK32;
       parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
-      inherit wxSupport systemdSupport;
-    };
-
-    erlang_25 = self.beamLib.callErlang ../development/interpreters/erlang/25.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
       inherit wxSupport systemdSupport;
     };
 
@@ -58,6 +51,7 @@ in
     # `beam.packages.erlang_27.elixir`.
     inherit (self.packages.erlang)
       elixir
+      elixir_1_19
       elixir_1_18
       elixir_1_17
       elixir_1_16
@@ -76,9 +70,9 @@ in
   # appropriate Erlang/OTP version.
   packages = {
     erlang = self.packages.${self.latestVersion};
+    erlang_28 = self.packagesWith self.interpreters.erlang_28;
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
-    erlang_25 = self.packagesWith self.interpreters.erlang_25;
   };
 
   __attrsFailEvaluation = true;

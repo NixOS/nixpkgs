@@ -1,4 +1,5 @@
 {
+  aiohttp,
   appdirs,
   appnope,
   black,
@@ -32,6 +33,7 @@
   parameterized,
   pip-tools,
   pkg-config,
+  pkgconfig,
   prompt-toolkit,
   protobuf,
   psutil,
@@ -69,14 +71,14 @@
 
 stdenv.mkDerivation rec {
   pname = "home-assistant-chip-wheels";
-  version = "2024.9.0";
+  version = "2025.4.0";
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "chip-wheels";
-    rev = version;
+    tag = version;
     fetchSubmodules = false;
     leaveDotGit = true;
-    hash = "sha256-T0G6mxb/5wFOxPLL92Ay34oP+9Xvk9w0YV9VSzWJuzw=";
+    hash = "sha256-20dqVXHPgSxBveTxlbHEjTtp9NI1oVCVpBTDbjDI2QA=";
     postFetch = ''
       cd $out
       # Download connectedhomeip.
@@ -106,6 +108,7 @@ stdenv.mkDerivation rec {
     zap-chip
     # gdbus-codegen
     glib
+    pkgconfig
     python
     # dependencies of build scripts
     click
@@ -170,6 +173,7 @@ stdenv.mkDerivation rec {
   env.PIP_FIND_LINKS =
     let
       dependencies = [
+        aiohttp
         appdirs
         appnope
         black
@@ -194,6 +198,7 @@ stdenv.mkDerivation rec {
         packaging
         parameterized
         pip-tools
+        pkgconfig
         prompt-toolkit
         protobuf
         psutil
@@ -224,26 +229,18 @@ stdenv.mkDerivation rec {
         wheel
         yapf
       ];
-      depListToAttrs =
-        list:
-        builtins.listToAttrs (
-          map (dep: {
-            name = dep.name;
-            value = dep;
-          }) (lib.filter (x: x != null) list)
-        );
-      saturateDependencies =
-        deps:
-        let
-          before = deps;
-          new = lib.mergeAttrsList (
-            map (dep: depListToAttrs (dep.propagatedBuildInputs or [ ])) (lib.attrValues before)
-          );
-          after = before // new;
-        in
-        if lib.attrNames before != lib.attrNames after then saturateDependencies after else before;
-      saturateDependencyList = list: lib.attrValues (saturateDependencies (depListToAttrs list));
-      saturatedDependencyList = lib.filter (drv: drv ? dist) (saturateDependencyList dependencies);
+      filterNull = list: lib.filter (dep: dep != null) list;
+      toItem = dep: {
+        inherit dep;
+        key = dep.name;
+      };
+      saturatedDependencies = lib.genericClosure {
+        startSet = map toItem (filterNull dependencies);
+        operator = item: map toItem (filterNull ((item.dep).propagatedBuildInputs or [ ]));
+      };
+      saturatedDependencyList = lib.filter (dep: dep ? dist && dep != null) (
+        map (item: item.dep) saturatedDependencies
+      );
     in
     lib.concatMapStringsSep " " (dep: "file://${dep.dist}") saturatedDependencyList;
 
@@ -282,9 +279,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Python wheels for APIs and tools related to CHIP";
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
-    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.home-assistant.members;
+    teams = [ lib.teams.home-assistant ];
   };
 
 }

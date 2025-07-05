@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-messages";
-  version = "24.5.0";
+  version = "24.5.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-messages";
     tag = finalAttrs.version;
-    hash = "sha256-D1181eD2mAVXEa7RLXXC4b2tVGrxbh0WWgtbC1anHH0=";
+    hash = "sha256-M6IXI0ZnWPZod2ewxxfCeHhdYUrWDW/BFc1vMHmjObA=";
   };
 
   outputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       # Uses pkg_get_variable, cannot substitute prefix with that
       substituteInPlace data/CMakeLists.txt \
-        --replace-fail "\''${SYSTEMD_USER_DIR}" "$out/lib/systemd/user"
+        --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
       # Bad concatenation
       substituteInPlace libmessaging-menu/messaging-menu.pc.in \
@@ -56,8 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'GI_TYPELIB_PATH=\"' 'GI_TYPELIB_PATH=\"$GI_TYPELIB_PATH$\{GI_TYPELIB_PATH\:+\:\}'
     ''
     + lib.optionalString (!withDocumentation) ''
-      sed -i CMakeLists.txt \
-        '/add_subdirectory(doc)/d'
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'add_subdirectory(doc)' '# add_subdirectory(doc)'
     '';
 
   strictDeps = true;
@@ -100,9 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
-    "-DGSETTINGS_LOCALINSTALL=ON"
-    "-DGSETTINGS_COMPILE=ON"
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
+    (lib.cmakeBool "GSETTINGS_COMPILE" true)
   ];
 
   makeFlags = lib.optionals withDocumentation [
@@ -158,6 +158,9 @@ stdenv.mkDerivation (finalAttrs: {
       others, e.g. XFCE, LXDE).
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-messages";
+    changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-messages/blob/${
+      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ OPNA2608 ];

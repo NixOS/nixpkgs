@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fedora-modularity";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "libmodulemd";
+    rev = "libmodulemd-${version}";
     sha256 = "sha256-mIyrdksyEk1AKV+vw4g8LUwlQRzwwMkPDuCbw2IiNcA=";
   };
 

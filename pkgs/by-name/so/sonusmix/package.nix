@@ -23,12 +23,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vqbYJuErghSsvkFccLFUYuf1Dsg17tCBhF4/NLcba/E=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libspa-0.8.0" = "sha256-R68TkFbzDFA/8Btcar+0omUErLyBMm4fsmQlCvfqR9o=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KiCJ8XOU5qnO0zB1K7XBTx35WWUpAmqPFkNZOIgwLA0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,7 +44,8 @@ rustPlatform.buildRustPackage rec {
     description = "Next-gen Pipewire audio routing tool";
     homepage = "https://codeberg.org/sonusmix/sonusmix";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "sonusmix";
   };
 }

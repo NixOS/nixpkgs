@@ -3,8 +3,11 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
+  nixosTests,
   testers,
-  boost,
+  # dbus-cpp not compatible with Boost 1.87
+  # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
+  boost186,
   cmake,
   cmake-extras,
   dbus,
@@ -28,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mediascanner2";
-  version = "0.117";
+  version = "0.118";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/mediascanner2";
-    rev = finalAttrs.version;
-    hash = "sha256-e1vDPnIIfevXj9ODEEKJ2y4TiU0H+08aTf2vU+emdQk=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZJXJNDZUDor5EJ+rn7pQt7lLzoszZUQM3B+u1gBSMs8=";
   };
 
   outputs = [
@@ -58,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      boost
+      boost186
       cmake-extras
       dbus
       dbus-cpp
@@ -99,15 +102,23 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      # music app needs mediascanner to work properly, so it can find files
+      music-app = nixosTests.lomiri-music-app;
+
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
     updateScript = gitUpdater { };
   };
 
   meta = {
     description = "Media scanner service & access library";
     homepage = "https://gitlab.com/ubports/development/core/mediascanner2";
+    changelog = "https://gitlab.com/ubports/development/core/mediascanner2/-/blob/${
+      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     mainProgram = "mediascanner-service-2.0";
     platforms = lib.platforms.linux;
     pkgConfigModules = [ "mediascanner-2.0" ];

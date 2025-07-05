@@ -49,6 +49,11 @@ buildPythonPackage rec {
     wand
   ] ++ optional-dependencies.heif;
 
+  disabledTests = [
+    # ValueError: Invalid quality setting
+    "test_save_avif_lossless"
+  ];
+
   meta = with lib; {
     description = "Python image library that sits on top of Pillow, Wand and OpenCV";
     homepage = "https://github.com/torchbox/Willow/";

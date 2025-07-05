@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
-    repo = pname;
-    rev = "v${version}";
+    repo = "amber-theme";
+    tag = "v${version}";
     sha256 = "sha256-OrdBeAD+gdIu6u8ESE9PtqYadSuJ8nx1Z8fB4D9y4W4=";
   };
 

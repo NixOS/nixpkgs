@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemd-unit-dir=${placeholder "out"}/lib/systemd/system"
 
     # realmd doesn't fails without proper defaults and distro configuration files
-    # These settings will be overriden by the NixOS module
+    # These settings will be overridden by the NixOS module
     "--with-distro=redhat"
 
     # Documentation is disabled

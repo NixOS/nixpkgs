@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixman";
-  version = "0.44.2";
+  version = "0.46.0";
 
   src = fetchurl {
     urls = with finalAttrs; [
       "mirror://xorg/individual/lib/${pname}-${version}.tar.gz"
       "https://cairographics.org/releases/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-Y0kGHOGjOKtpUrkhlNGwN3RyJEII1H/yW++G/HGXNGY=";
+    hash = "sha256-Atn/e4RY72FzHD01X4VLv0Yf0KTTVjxR8cHHsAY4BQ0=";
   };
 
   # Raise test timeout, 120s can be slightly exceeded on slower hardware
@@ -56,6 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
   # architectures and requires used to disable them:
   #   https://gitlab.freedesktop.org/pixman/pixman/-/issues/88
   mesonAutoFeatures = "auto";
+  # fix armv7 build
+  mesonFlags = lib.optionals stdenv.hostPlatform.isAarch32 [
+    "-Darm-simd=disabled"
+    "-Dneon=disabled"
+  ];
 
   preConfigure = ''
     # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62
@@ -88,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    homepage = "http://pixman.org";
+    homepage = "https://pixman.org";
     description = "Low-level library for pixel manipulation";
     license = licenses.mit;
     platforms = platforms.all;

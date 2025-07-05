@@ -16,9 +16,11 @@ buildGoModule rec {
 
   pname = "docker-machine-kvm2";
 
-  postPatch = ''
-    sed -i '/GOARCH=$*/d' Makefile
-  '';
+  postPatch =
+    minikube.postPatch
+    + ''
+      sed -i '/GOARCH=$*/d' Makefile
+    '';
 
   buildPhase = ''
     make docker-machine-driver-kvm2 COMMIT=${src.rev}

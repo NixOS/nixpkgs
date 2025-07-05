@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  patches = [
-    ./fluidsynth.patch
-  ];
+  patches = [ ./fluidsynth.patch ];
 
   postPatch = ''
     substituteInPlace source/mididevices/music_fluidsynth_mididevice.cpp \
@@ -46,12 +44,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsa-lib
     fluidsynth
     libsndfile
     mpg123
     zlib
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   meta = {
     description = "GZDoom's music system as a standalone library";
@@ -67,6 +64,7 @@ stdenv.mkDerivation rec {
       azahi
       lassulus
       Gliczy
+      r4v3n6101
     ];
   };
 }

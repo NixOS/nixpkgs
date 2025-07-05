@@ -3,21 +3,23 @@
   fetchFromGitHub,
   helix,
   installShellFiles,
+  nix-update-script,
   rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "evil-helix";
-  version = "20250104";
+  version = "20250601";
 
   src = fetchFromGitHub {
     owner = "usagi-flow";
     repo = "evil-helix";
     rev = "release-${version}";
-    hash = "sha256-Otp68+SbW51/MqVejPrbYzeRu4wAiYsNkDQQTZScW1Q=";
+    hash = "sha256-bsl9ltPXEhkcnnHFAXQMyBCh1qd+UBV0XK2EcJOe+eg=";
   };
 
-  cargoHash = "sha256-84OfCXdwoo8SUwXrgm98DIcmmBIxHxZGOJ/ZPxJuyjY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-epI/Xvw0mgc1IoDXpACws7Lsbkj1Xdk7conzJlUqRxY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,6 +40,8 @@ rustPlatform.buildRustPackage rec {
     cp contrib/Helix.desktop $out/share/applications
     cp contrib/helix.png $out/share/icons/hicolor/256x256/apps
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Post-modern modal text editor, with vim keybindings";

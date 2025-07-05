@@ -4,9 +4,25 @@
   libguestfs-appliance,
 }:
 
+let
+  appliance = libguestfs-appliance;
+  # check explicit forward compatibility declaration:
+  # then do not warn if older appliance if known to work fine with newer libguestfs
+  libguestfsCompatible =
+    if lib.hasAttr "libguestfsCompatible" appliance then
+      appliance.libguestfsCompatible libguestfs
+    else
+      false;
+in
 # https://github.com/NixOS/nixpkgs/issues/280881
-lib.warnIf (builtins.compareVersions libguestfs.version libguestfs-appliance.version > 0)
-  "libguestfs has a higher version than libguestfs-appliance (${libguestfs.version} > ${libguestfs-appliance.version}), runtime errors may occur!"
+lib.warnIf
+  (
+    builtins.compareVersions (lib.versions.majorMinor libguestfs.version) (
+      lib.versions.majorMinor appliance.version
+    ) > 0
+    && !libguestfsCompatible
+  )
+  "libguestfs has a different version than ${appliance.pname} (${libguestfs.version} > ${appliance.version}), runtime errors may occur!"
 
   libguestfs.override
-  { appliance = libguestfs-appliance; }
+  { inherit appliance; }

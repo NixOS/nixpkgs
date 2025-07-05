@@ -22,7 +22,6 @@
   rapidfuzz,
 
   # checks
-  glibcLocales,
   pytestCheckHook,
 }:
 
@@ -91,7 +90,6 @@ buildPythonPackage rec {
     ]);
 
   nativeCheckInputs = [
-    glibcLocales
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
@@ -104,10 +102,6 @@ buildPythonPackage rec {
     "test_ar"
   ];
 
-  preCheck = ''
-    export LC_ALL=en_US.utf-8
-  '';
-
   pythonImportsCheck = [ "gruut" ];
 
   meta = with lib; {
@@ -115,6 +109,6 @@ buildPythonPackage rec {
     mainProgram = "gruut";
     homepage = "https://github.com/rhasspy/gruut";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

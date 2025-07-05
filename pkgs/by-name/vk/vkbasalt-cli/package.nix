@@ -8,10 +8,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "vkbasalt-cli";
   version = "3.1.1";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "TheEvilSkeleton";
-    repo = pname;
+    repo = "vkbasalt-cli";
     rev = "v${version}";
     hash = "sha256-4MFqndnvwAsqyer9kMNuCZFP/Xdl7W//AyCe7n83328=";
   };

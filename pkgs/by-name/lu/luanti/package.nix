@@ -26,27 +26,26 @@
   gmp,
   libspatialindex,
   leveldb,
-  postgresql,
+  libpq,
   hiredis,
   libiconv,
   ninja,
   prometheus-cpp,
-  darwin,
   buildClient ? true,
   buildServer ? true,
   SDL2,
-  useSDL2 ? false,
+  useSDL2 ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luanti";
-  version = "5.10.0";
+  version = "5.12.0";
 
   src = fetchFromGitHub {
-    owner = "minetest";
-    repo = "minetest";
-    rev = finalAttrs.version;
-    hash = "sha256-sumwm8mJghpSriVflMQSHQM4BTmAhfI/Wl/FroLTVts=";
+    owner = "luanti-org";
+    repo = "luanti";
+    tag = finalAttrs.version;
+    hash = "sha256-voP2/6s2tjsIULHa5+M08oNNLg0YQmtFmPeNO4TnE9E=";
   };
 
   patches = [
@@ -67,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_CLIENT" buildClient)
     (lib.cmakeBool "BUILD_SERVER" buildServer)
-    (lib.cmakeBool "BUILD_UNITTESTS" (finalAttrs.doCheck or false))
+    (lib.cmakeBool "BUILD_UNITTESTS" (finalAttrs.finalPackage.doCheck or false))
     (lib.cmakeBool "ENABLE_PROMETHEUS" buildServer)
     (lib.cmakeBool "USE_SDL2" useSDL2)
     # Ensure we use system libraries
@@ -109,11 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.OpenGL
-      darwin.apple_sdk.frameworks.OpenAL
-      darwin.apple_sdk.frameworks.Carbon
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.Kernel
     ]
     ++ lib.optionals buildClient [
       libpng
@@ -126,13 +120,13 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (buildClient && useSDL2) [
       SDL2
     ]
-    ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin && !useSDL2) [
+    ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
       xorg.libX11
       xorg.libXi
     ]
     ++ lib.optionals buildServer [
       leveldb
-      postgresql
+      libpq
       hiredis
       prometheus-cpp
     ];
@@ -155,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.luanti.org/";
-    description = "An open source voxel game engine (formerly Minetest)";
+    description = "Open source voxel game engine (formerly Minetest)";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [

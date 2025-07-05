@@ -7,7 +7,6 @@
   oniguruma,
   openssl,
   stdenv,
-  darwin,
   python3,
   perl,
 }:
@@ -23,12 +22,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-acS4yKppvIBiwBMoa5Ero4G9mUf8OLG/TbrZOolAwuc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "passkey-0.2.0" = "sha256-dCQUu4lWqdQ6EiNLPRVHL1dLVty4r8//ZQzV8XCBhmY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SJn00C7vkNoghdVPUszep40RSL8fD+/ELUeuf9GBD7c=";
 
   nativeBuildInputs =
     [
@@ -45,9 +40,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   env = {

@@ -34,20 +34,21 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.5.9";
+  version = "2.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "meshtastic";
-    repo = "Meshtastic-python";
+    repo = "python";
     tag = version;
-    hash = "sha256-q5hGAe3kJk1E/u2l8uCMyHHVuQmlwODkyZDiqxFn3Bo=";
+    hash = "sha256-pbDWxnYrUFEJ3XHwoQZnGc/USbOKAzJtJ6nHkTv/e6Y=";
   };
 
   pythonRelaxDeps = [
     "bleak"
+    "packaging"
     "protobuf"
   ];
 
@@ -123,7 +124,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API for talking to Meshtastic devices";
-    homepage = "https://github.com/meshtastic/Meshtastic-python";
+    homepage = "https://github.com/meshtastic/python";
     changelog = "https://github.com/meshtastic/python/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];

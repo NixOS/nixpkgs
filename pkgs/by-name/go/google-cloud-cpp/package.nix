@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   c-ares,
   cmake,
   crc32c,
@@ -14,7 +14,8 @@
   nlohmann_json,
   openssl,
   pkg-config,
-  protobuf,
+  # upstream PR to update: https://github.com/googleapis/google-cloud-cpp/pull/14974
+  protobuf_29,
   pkgsBuildHost,
   # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v1.32.1/CMakeLists.txt#L173
   apis ? [ "*" ],
@@ -43,26 +44,16 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-googleapis-path.patch;
+    (replaceVars ./hardcode-googleapis-path.patch {
       url = googleapis;
     })
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals (!doInstallCheck) [
-      # enable these dependencies when doInstallCheck is false because we're
-      # unconditionally building tests and benchmarks
-      #
-      # when doInstallCheck is true, these deps are added to nativeInstallCheckInputs
-      gbenchmark
-      gtest
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     c-ares
@@ -71,7 +62,9 @@ stdenv.mkDerivation rec {
     grpc
     nlohmann_json
     openssl
-    protobuf
+    protobuf_29
+    gbenchmark
+    gtest
   ];
 
   doInstallCheck = true;

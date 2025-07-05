@@ -40,7 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
     # Install the dylib on Darwin.
     ./darwin-install.patch
+    # Patch for libc++, drop in next update
+    # https://chromium.googlesource.com/crosvm/crosvm/+/8ae3c23b2e3899de33b973fc636909f1eb3dc98c
+    ./link-cxx.patch
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.useLLVM {
+    USE_CLANG = true;
+  };
 
   nativeBuildInputs = [
     cargo
@@ -59,9 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-wuF3Isrp+u5J8jPQoPsIOWYGNKLSNa2pLfvladAWkLs=";
+    hash = "sha256-53xCzKuXtnnbS0TWdQrh4Rwy+V+D9soK41ycYd656Uc=";
   };
 
   CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
@@ -85,6 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
     description = "cross-platform abstraction for GPU and display virtualization";
     license = licenses.bsd3;
     maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = [
+      # src/generated/virgl_debug_callback_bindings.rs
+      "aarch64-darwin"
+      "aarch64-linux"
+      "armv5tel-linux"
+      "armv6l-linux"
+      "armv7a-linux"
+      "armv7l-linux"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
   };
 })

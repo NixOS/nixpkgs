@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name | quote }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: test
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: ["sh"]
+        args: ["-c", "{{ .Values.runCommand }}"]
+      restartPolicy: {{ .Values.restartPolicy | quote }}

@@ -29,7 +29,9 @@ stdenvNoCC.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
+  # Remove broken symbolic link(https://github.com/linuxdeepin/developer-center/issues/11245)
   preFixup = ''
+    rm $out/share/icons/bloom/actions/24/{draw-triangle1.svg,draw-triangle2.svg,draw-triangle3.svg,draw-triangle4.svg}
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
@@ -40,6 +42,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-icon-theme";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

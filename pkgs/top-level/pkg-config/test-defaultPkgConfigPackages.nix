@@ -37,7 +37,7 @@ let
       # We return `null` instead of doing a `filterAttrs`, because with
       # `filterAttrs` the evaluator would not be able to return the attribute
       # set without first evaluating all of the attribute _values_. This would
-      # be rather expensive, and severly slow down the use case of getting a
+      # be rather expensive, and severely slow down the use case of getting a
       # single test, which we want to do in `passthru.tests`, or interactively.
       null
 

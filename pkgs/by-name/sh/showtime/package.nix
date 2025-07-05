@@ -19,7 +19,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "showtime";
-  version = "47.0";
+  version = "48.1";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     owner = "Incubator";
     repo = "showtime";
     rev = "refs/tags/${version}";
-    hash = "sha256-Bnz+LFyvwSjkrbePmoVZZqy2pNLqiyJTsZsSuUyDy+E=";
+    hash = "sha256-uk3KgiLsYjqBhlKssnkWO6D4ufwJb/o+rQYSA7pa1lU=";
   };
 
   strictDeps = true;
@@ -52,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-rs
     gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
     gst_all_1.gstreamer
     libadwaita
   ];

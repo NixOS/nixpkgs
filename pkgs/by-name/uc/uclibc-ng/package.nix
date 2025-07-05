@@ -64,11 +64,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
-  version = "1.0.50";
+  version = "1.0.52";
 
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rthnJR9II6dOpeOjmT06fBIygKvhXjjcIGdww5aPIc8=";
+    hash = "sha256-iB2kc3hPlcyCkLsHgMCvyBDKKNV14z1a/V5xU7KaoTY=";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    # Derivations may check for the existance of this attribute, to know what to
+    # Derivations may check for the existence of this attribute, to know what to
     # link to.
     libiconv = libiconvReal;
 
@@ -148,7 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
       rasendubi
-      AndersonTorres
     ];
     platforms = lib.platforms.linux;
     badPlatforms = lib.platforms.aarch64;

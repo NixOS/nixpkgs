@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "gofu";
   version = "unstable-2023-04-25";
 
   src = fetchFromGitHub {
     owner = "majewsky";
-    repo = pname;
+    repo = "gofu";
     rev = "f308ca92d1631e579fbfe3b3da13c93709dc18a2";
     hash = "sha256-8c/Z+44gX7diAhXq8sHOqISoGhYdFA7VUYn7eNMCYxY=";
   };

@@ -8,6 +8,7 @@
 let
   inherit (lib)
     mkOption
+    mkPackageOption
     mkIf
     types
     optionalString
@@ -86,6 +87,8 @@ in
         description = "Whenever to configure {command}`tmux` system-wide.";
         relatedPackages = [ "tmux" ];
       };
+
+      package = mkPackageOption pkgs "tmux" { };
 
       aggressiveResize = mkOption {
         default = false;
@@ -224,7 +227,7 @@ in
     environment = {
       etc."tmux.conf".text = tmuxConf;
 
-      systemPackages = [ pkgs.tmux ] ++ cfg.plugins;
+      systemPackages = [ cfg.package ] ++ cfg.plugins;
 
       variables = {
         TMUX_TMPDIR = lib.optional cfg.secureSocket ''''${XDG_RUNTIME_DIR:-"/run/user/$(id -u)"}'';

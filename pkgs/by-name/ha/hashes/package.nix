@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   nix-update-script,
@@ -14,14 +13,13 @@
   cmake,
   python3Packages,
   appstream,
-  fetchPypi,
   gobject-introspection,
   glib,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "hashes";
-  version = "1.1.0";
+  version = "1.1.2";
 
   pyproject = false;
 
@@ -29,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     owner = "zefr0x";
     repo = "hashes";
     tag = "v${version}";
-    hash = "sha256-BmfSCHs+JcpsAG8AhaYf+SDFI+LdJKMKgBIodd66qmw=";
+    hash = "sha256-Nyf7jED6LnsFu86zWhRh05sdGKwVAybVsGLGFFsz6eA=";
   };
 
   nativeBuildInputs = [

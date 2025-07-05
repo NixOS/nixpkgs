@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
       url = "https://sources.debian.org/data/main/s/scorched3d/44%2Bdfsg-7/debian/patches/wx3.0-compat.patch";
       sha256 = "sha256-Y5U5yYNT5iMqhdRaDMFtZ4K7aD+pugFZP0jLh7rdDp8=";
     })
+    ./gcc14-fix.patch
   ];
 
   sourceRoot = "scorched";

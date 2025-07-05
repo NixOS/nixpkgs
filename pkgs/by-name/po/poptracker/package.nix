@@ -6,25 +6,30 @@
   SDL2,
   SDL2_ttf,
   SDL2_image,
+  libX11,
   openssl,
+  zlib,
   which,
   libsForQt5,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poptracker";
-  version = "0.27.0";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "black-sliver";
     repo = "PopTracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Tz3rVbaHw5RfFKuLih4BEEnn3uNeLrtDQpBD2yYUzkM=";
+    hash = "sha256-DFJfuDOzcVdiXLv5EzO5TL3UJLCZPM1bTZharp2ww5U=";
     fetchSubmodules = true;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   patches = [ ./assets-path.diff ];
 
@@ -44,7 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_ttf
     SDL2_image
+    libX11
     openssl
+    zlib
   ];
 
   buildFlags = [

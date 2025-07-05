@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -31,12 +31,12 @@
   dbus,
   nixos-icons,
   runCommand,
+  udevCheckHook,
 }:
 
 let
 
-  override = substituteAll {
-    src = ./org.gnome.login-screen.gschema.override;
+  override = replaceVars ./org.gnome.login-screen.gschema.override {
     icon = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
   };
 
@@ -44,7 +44,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "47.0";
+  version = "48.0";
 
   outputs = [
     "out"
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-xYWDJr+8yKzlgTUuK+RGItwOnlwoAchpD9Lu1QJgf4Q=";
+    hash = "sha256-G8Btr/CT7HteN+y0+S5do0dKGxugdu25FR7pZ9HDCt8=";
   };
 
   mesonFlags = [
@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -105,8 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # Change hardcoded paths to nix store paths.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit
         coreutils
         plymouth
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # The following patches implement certain environment variables in GDM which are set by
-    # the gdm configuration module (nixos/modules/services/x11/display-managers/gdm.nix).
+    # the gdm configuration module (gdm.nix).
 
     ./gdm-x-session_extra_args.patch
 
@@ -145,6 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace meson.build \
       --replace-fail "dconf_prefix = dconf_dep.get_variable(pkgconfig: 'prefix')" "dconf_prefix = gdm_prefix"
   '';
+
+  doInstallCheck = true;
 
   preInstall = ''
     install -D ${override} "$DESTDIR/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override"
@@ -205,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gdm";
     changelog = "https://gitlab.gnome.org/GNOME/gdm/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

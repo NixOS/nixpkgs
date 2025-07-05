@@ -17,6 +17,7 @@
 buildPythonApplication {
   pname = "hushboard";
   version = "unstable-2021-03-17";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";
@@ -70,6 +71,6 @@ buildPythonApplication {
     description = "Mute your microphone while typing";
     mainProgram = "hushboard";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sersorrel ];
+    maintainers = with maintainers; [ keysmashes ];
   };
 }

@@ -1,17 +1,20 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
-  git,
+  fetchFromGitHub,
+  gitMinimal,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-aggregator";
-  version = "2.1.0";
+  version = "4.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-79xNPzYP1j71sU5wZM5e2xTqQExqQEdxXPxbk4T/Scw=";
+  src = fetchFromGitHub {
+    owner = "acsone";
+    repo = "git-aggregator";
+    tag = version;
+    hash = "sha256-sZYh3CN15WTCQ59W24ERJdP48EJt571cbkswLQ3JL2g=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -21,13 +24,13 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     argcomplete
     colorama
-    git
+    gitMinimal
     kaptan
     requests
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   preCheck = ''

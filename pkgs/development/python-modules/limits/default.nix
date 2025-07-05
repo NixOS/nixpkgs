@@ -6,7 +6,6 @@
   deprecated,
   etcd3,
   fetchFromGitHub,
-  fetchpatch2,
   flaky,
   hiro,
   importlib-resources,
@@ -16,17 +15,19 @@
   pymongo,
   pytest-asyncio,
   pytest-benchmark,
-  pytest-lazy-fixture,
+  pytest-cov-stub,
+  pytest-lazy-fixtures,
   pytestCheckHook,
   pythonOlder,
   redis,
   setuptools,
   typing-extensions,
+  valkey,
 }:
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.13.0";
+  version = "5.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,23 +42,15 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-y5iMx+AC52ZgGvAvThRaeKFqCGkwmukyZsJ+nzR2AFM=";
+    hash = "sha256-0D44XaSZtebMnn9mqXbaE7FB7usdu/eZ/4UE3Ye0oyA=";
   };
 
   patches = [
-    (fetchpatch2 {
-      name = "fix-incompatibility-with-latest-pytest-asyncio.patch";
-      url = "https://github.com/alisaifee/limits/commit/f6dcdb253cd44ca8dc7380c481da1afd8b57af6b.patch";
-      excludes = [ "requirements/test.txt" ];
-      hash = "sha256-NwtN8WHNrwsRcIq18pRjzzGmm7XCzn6O5y+jo9Qr6iQ=";
-    })
-    ./remove-fixed-start-from-async-tests.patch
     ./only-test-in-memory.patch
   ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace-fail "--cov=limits" "" \
       --replace-fail "-K" ""
 
     substituteInPlace setup.py \
@@ -88,6 +81,7 @@ buildPythonPackage rec {
     # ];
     async-mongodb = [ motor ];
     async-etcd = [ aetcd ];
+    valkey = [ valkey ];
   };
 
   env = {
@@ -96,16 +90,17 @@ buildPythonPackage rec {
     PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
   };
 
-  doCheck = pythonOlder "3.12"; # SystemError in protobuf
-
   nativeCheckInputs = [
     flaky
     hiro
     pytest-asyncio
     pytest-benchmark
-    pytest-lazy-fixture
+    pytest-cov-stub
+    pytest-lazy-fixtures
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   disabledTests = [ "test_moving_window_memcached" ];
 
@@ -114,7 +109,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rate limiting using various strategies and storage backends such as redis & memcached";
     homepage = "https://github.com/alisaifee/limits";
-    changelog = "https://github.com/alisaifee/limits/releases/tag/${version}";
+    changelog = "https://github.com/alisaifee/limits/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = [ ];
   };

@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "raiseorlaunch";
   version = "2.3.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

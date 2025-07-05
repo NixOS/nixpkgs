@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyformlang";
-  version = "1.0.10";
+  version = "1.0.11";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VwsIkVIgRHczdT3QcW9Teg2FiaoPn6El17VHhy/x72s=";
+    hash = "sha256-4pLsi5z6ZMJrWS+vm3z8csT0sOsNUz8EWkYGHnXFzpk=";
   };
 
   build-system = [

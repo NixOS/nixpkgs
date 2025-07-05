@@ -7,18 +7,20 @@
   librosa,
   matplotlib,
   mido,
+  setuptools,
   torch,
   torchlibrosa,
 }:
 
 buildPythonPackage rec {
   pname = "piano-transcription-inference";
-  version = "0.0.5";
-  format = "setuptools";
+  version = "0.0.6";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nbhuSkXuWrekFxwdNHaspuag+3K1cKwq90IpATBpWPY=";
+    pname = "piano_transcription_inference";
+    inherit version;
+    hash = "sha256-tt0A+bS8rLYUByXwO0E5peD0rNNaaeSSpdH3NOz70jE=";
   };
 
   checkpoint = fetchurl {
@@ -29,7 +31,9 @@ buildPythonPackage rec {
     hash = "sha256-w/qXMHJb9Kdi8cFLyAzVmG6s2gGwJvWkolJc1geHYUE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     librosa
     matplotlib
     mido
@@ -64,7 +68,7 @@ buildPythonPackage rec {
   # Project has no tests.
   # In order to make pythonImportsCheck work, NUMBA_CACHE_DIR env var need to
   # be set to a writable dir (https://github.com/numba/numba/issues/4032#issuecomment-488102702).
-  # pythonImportsCheck has no pre* hook, use checkPhase to wordaround that.
+  # pythonImportsCheck has no pre* hook, use checkPhase to workaround that.
   checkPhase = ''
     export NUMBA_CACHE_DIR="$(mktemp -d)"
   '';

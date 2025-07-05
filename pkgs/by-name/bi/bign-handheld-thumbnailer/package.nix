@@ -11,16 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bign-handheld-thumbnailer";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "MateusRodCosta";
     repo = "bign-handheld-thumbnailer";
     tag = "v${version}";
-    hash = "sha256-rRKMIkeTBb16GF8DgQ36Vdx/1I6zuzpuL/jusFJ0OZw=";
+    hash = "sha256-DJbJ4l1QqaEuBI5lja3iCEq0QnlAgwPXg2N4MBPBvUY=";
   };
 
-  cargoHash = "sha256-e6KuE6tlBfTfqTW4oyNIchB3/1tsl8CbR0x4ZUTKDVA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cnl8H4+rqIS0sfwq+breJSuabX3vT16xLtaVnK96Q/4=";
 
   strictDeps = true;
 

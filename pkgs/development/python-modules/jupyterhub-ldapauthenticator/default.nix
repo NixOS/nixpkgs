@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub-ldapauthenticator";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "ldapauthenticator";
     tag = version;
-    hash = "sha256-pb1d0dqu3VGCsuibpYgncbqCM9fz09yyoKGcKb14f4k=";
+    hash = "sha256-xixgry/++E6RimB8wo1NF8SsfzxKL1ZlNQVrlBhQ674=";
   };
 
   build-system = [ setuptools ];

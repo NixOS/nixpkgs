@@ -1,10 +1,12 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
   cmake,
+  git,
+  pkg-config,
   boost,
-  eigen,
+  eigen_3_4_0,
   glm,
   libGL,
   libpng,
@@ -13,29 +15,33 @@
   xorg,
   ilmbase,
   llvmPackages,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "curv";
-  version = "0.5";
+  version = "0.5-unstable-2025-01-20";
 
-  src = fetchFromGitHub {
-    owner = "curv3d";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "doug-moen";
     repo = "curv";
-    tag = version;
-    hash = "sha256-m4p5uxRk6kEJUilmbQ1zJcQDRvRCV7pkxnqupZJxyjo=";
+    rev = "ef082c6612407dd8abce06015f9a16b1ebf661b8";
+    hash = "sha256-BGL07ZBA+ao3fg3qp56sVTe+3tM2SOp8TGu/jF7SVlM=";
     fetchSubmodules = true;
   };
 
   strictDeps = true;
   nativeBuildInputs = [
     cmake
+    git
+    pkg-config
   ];
 
   buildInputs =
     [
       boost
-      eigen
+      eigen_3_4_0
       glm
       libGL
       libpng
@@ -53,16 +59,23 @@ stdenv.mkDerivation rec {
       llvmPackages.openmp
     ];
 
+  # force char to be unsigned on aarch64
+  # https://codeberg.org/doug-moen/curv/issues/227
+  NIX_CFLAGS_COMPILE = [ "-fsigned-char" ];
+
   # GPU tests do not work in sandbox, instead we do this for sanity
-  checkPhase = ''
-    runHook preCheck
-    test "$($out/bin/curv -x 2 + 2)" -eq "4"
-    runHook postCheck
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    test "$(set -x; $out/bin/curv -x "2 + 2")" -eq "4"
+    runHook postInstallCheck
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "2D and 3D geometric modelling programming language for creating art with maths";
-    homepage = "https://github.com/curv3d/curv";
+    homepage = "https://codeberg.org/doug-moen/curv";
     license = licenses.asl20;
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;

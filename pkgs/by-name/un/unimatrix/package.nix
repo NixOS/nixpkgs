@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "unimatrix";
   version = "unstable-2023-04-25";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "will8211";
-    repo = pname;
+    repo = "unimatrix";
     rev = "65793c237553bf657af2f2248d2a2dc84169f5c4";
     hash = "sha256-fiaVEc0rtZarUQlUwe1V817qWRx4LnUyRD/j2vWX5NM=";
   };

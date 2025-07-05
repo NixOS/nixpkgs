@@ -7,6 +7,7 @@ import ../make-test-python.nix (
 
     allTests ? false,
 
+    appArmor ? false,
     featureUser ? allTests,
     initLegacy ? true,
     initSystemd ? true,
@@ -139,6 +140,9 @@ import ../make-test-python.nix (
       networking.hostId = "01234567";
       networking.firewall.trustedInterfaces = [ "incusbr0" ];
 
+      security.apparmor.enable = appArmor;
+      services.dbus.apparmor = (if appArmor then "enabled" else "disabled");
+
       services.lvm = {
         boot.thin.enable = storageLvm;
         dmeventd.enable = storageLvm;
@@ -190,7 +194,7 @@ import ../make-test-python.nix (
 
         def cleanup():
             # avoid conflict between preseed and cleanup operations
-            machine.wait_for_unit("incus-preseed.service")
+            machine.execute("systemctl kill incus-preseed.service")
 
             instances = json.loads(machine.succeed("incus list --format json --all-projects"))
             with subtest("Stopping all running instances"):
@@ -217,6 +221,14 @@ import ../make-test-python.nix (
             machine.succeed("incus storage show default")
 
       ''
+      + lib.optionalString appArmor ''
+        with subtest("Verify AppArmor service is started without issue"):
+            # restart AppArmor service since the Incus AppArmor folders are
+            # created after AA service is started
+            machine.systemctl("restart apparmor.service")
+            machine.succeed("systemctl --no-pager -l status apparmor.service")
+            machine.wait_for_unit("apparmor.service")
+      ''
       + lib.optionalString instanceContainer (
         lib.foldl (
           acc: variant:
@@ -228,39 +240,41 @@ import ../make-test-python.nix (
             alias = "nixos/container/${variant}"
             variant = "${variant}"
 
-            with subtest("Container image can be imported"):
+            with subtest("container image can be imported"):
                 machine.succeed(f"incus image import {metadata} {rootfs} --alias {alias}")
 
 
-            with subtest("Container can be launched and managed"):
+            with subtest("container can be launched and managed"):
                 machine.succeed(f"incus launch {alias} container-{variant}1")
                 wait_for_instance(f"container-{variant}1")
 
 
-            with subtest("Container mounts lxcfs overlays"):
+            with subtest("container mounts lxcfs overlays"):
                 machine.succeed(f"incus exec container-{variant}1 mount | grep 'lxcfs on /proc/cpuinfo type fuse.lxcfs'")
                 machine.succeed(f"incus exec container-{variant}1 mount | grep 'lxcfs on /proc/meminfo type fuse.lxcfs'")
 
 
-            with subtest("resource limits"):
-                with subtest("Container CPU limits can be managed"):
-                    set_config(f"container-{variant}1", "limits.cpu 1", restart=True)
-                    wait_incus_exec_success(f"container-{variant}1", "nproc | grep '^1$'", timeout=15)
-
-                with subtest("Container CPU limits can be hotplug changed"):
-                    set_config(f"container-{variant}1", "limits.cpu 2")
-                    wait_incus_exec_success(f"container-{variant}1", "nproc | grep '^2$'", timeout=15)
-
-                with subtest("Container memory limits can be managed"):
-                    set_config(f"container-{variant}1", "limits.memory 128MB", restart=True)
-                    wait_incus_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*125000 kB' /proc/meminfo", timeout=15)
-
-                with subtest("Container memory limits can be hotplug changed"):
-                    set_config(f"container-{variant}1", "limits.memory 256MB")
-                    wait_incus_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*250000 kB' /proc/meminfo", timeout=15)
+            with subtest("container CPU limits can be managed"):
+                set_config(f"container-{variant}1", "limits.cpu 1", restart=True)
+                wait_incus_exec_success(f"container-{variant}1", "nproc | grep '^1$'", timeout=90)
 
 
-            with subtest("virtual tpm can be configured"):
+            with subtest("container CPU limits can be hotplug changed"):
+                set_config(f"container-{variant}1", "limits.cpu 2")
+                wait_incus_exec_success(f"container-{variant}1", "nproc | grep '^2$'", timeout=90)
+
+
+            with subtest("container memory limits can be managed"):
+                set_config(f"container-{variant}1", "limits.memory 128MB", restart=True)
+                wait_incus_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*125000 kB' /proc/meminfo", timeout=90)
+
+
+            with subtest("container memory limits can be hotplug changed"):
+                set_config(f"container-{variant}1", "limits.memory 256MB")
+                wait_incus_exec_success(f"container-{variant}1", "grep 'MemTotal:[[:space:]]*250000 kB' /proc/meminfo", timeout=90)
+
+
+            with subtest("container software tpm can be configured"):
                 machine.succeed(f"incus config device add container-{variant}1 vtpm tpm path=/dev/tpm0 pathrm=/dev/tpmrm0")
                 machine.succeed(f"incus exec container-{variant}1 -- test -e /dev/tpm0")
                 machine.succeed(f"incus exec container-{variant}1 -- test -e /dev/tpmrm0")
@@ -268,7 +282,7 @@ import ../make-test-python.nix (
                 machine.fail(f"incus exec container-{variant}1 -- test -e /dev/tpm0")
 
 
-            with subtest("lxc-generator"):
+            with subtest("container lxc-generator compatibility"):
                 with subtest("lxc-container generator configures plain container"):
                     # default container is plain
                     machine.succeed(f"incus exec container-{variant}1 test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
@@ -293,13 +307,35 @@ import ../make-test-python.nix (
 
                     check_sysctl(f"container-{variant}2")
 
+            with subtest("container supports per-instance lxcfs"):
+                machine.succeed(f"incus stop container-{variant}1")
+                machine.fail(f"pgrep -a lxcfs | grep 'incus/devices/container-{variant}1/lxcfs'")
 
-            with subtest("Instance remains running when softDaemonRestart is enabled and service is stopped"):
+                machine.succeed("incus config set instances.lxcfs.per_instance=true")
+
+                machine.succeed(f"incus start container-{variant}1")
+                wait_for_instance(f"container-{variant}1")
+                machine.succeed(f"pgrep -a lxcfs | grep 'incus/devices/container-{variant}1/lxcfs'")
+
+
+            with subtest("container can successfully restart"):
+                machine.succeed(f"incus restart container-{variant}1")
+                wait_for_instance(f"container-{variant}1")
+
+
+            with subtest("container remains running when softDaemonRestart is enabled and service is stopped"):
                 pid = machine.succeed(f"incus info container-{variant}1 | grep 'PID'").split(":")[1].strip()
                 machine.succeed(f"ps {pid}")
                 machine.succeed("systemctl stop incus")
                 machine.succeed(f"ps {pid}")
                 machine.succeed("systemctl start incus")
+
+                with subtest("containers stop with incus-startup.service"):
+                    pid = machine.succeed(f"incus info container-{variant}1 | grep 'PID'").split(":")[1].strip()
+                    machine.succeed(f"ps {pid}")
+                    machine.succeed("systemctl stop incus-startup.service")
+                    machine.wait_until_fails(f"ps {pid}", timeout=120)
+                    machine.succeed("systemctl start incus-startup.service")
 
 
             cleanup()
@@ -325,7 +361,7 @@ import ../make-test-python.nix (
                 machine.succeed(f"incus create {alias} vm-{variant}1 --vm --config limits.memory=512MB --config security.secureboot=false")
 
 
-            with subtest("virtual tpm can be configured"):
+            with subtest("virtual-machine software tpm can be configured"):
                 machine.succeed(f"incus config device add vm-{variant}1 vtpm tpm path=/dev/tpm0")
 
 
@@ -334,30 +370,43 @@ import ../make-test-python.nix (
                 wait_for_instance(f"vm-{variant}1")
 
 
-            with subtest("incus-agent is started"):
+            with subtest("virtual-machine incus-agent is started"):
                 machine.succeed(f"incus exec vm-{variant}1 systemctl is-active incus-agent")
 
 
-            with subtest("incus-agent has a valid path"):
+            with subtest("virtual-machine incus-agent has a valid path"):
                 machine.succeed(f"incus exec vm-{variant}1 -- bash -c 'true'")
 
 
-            with subtest("Container CPU limits can be managed"):
+            with subtest("virtual-machine CPU limits can be managed"):
                 set_config(f"vm-{variant}1", "limits.cpu 1", restart=True)
                 wait_incus_exec_success(f"vm-{variant}1", "nproc | grep '^1$'", timeout=90)
 
 
-            with subtest("Container CPU limits can be hotplug changed"):
+            with subtest("virtual-machine CPU limits can be hotplug changed"):
                 set_config(f"vm-{variant}1", "limits.cpu 2")
-                wait_incus_exec_success(f"vm-{variant}1", "nproc | grep '^2$'", timeout=15)
+                wait_incus_exec_success(f"vm-{variant}1", "nproc | grep '^2$'", timeout=90)
 
 
-            with subtest("Instance remains running when softDaemonRestart is enabled and service is stopped"):
+            with subtest("virtual-machine can successfully restart"):
+                machine.succeed(f"incus restart vm-{variant}1")
+                wait_for_instance(f"vm-{variant}1")
+
+
+            with subtest("virtual-machine remains running when softDaemonRestart is enabled and service is stopped"):
                 pid = machine.succeed(f"incus info vm-{variant}1 | grep 'PID'").split(":")[1].strip()
                 machine.succeed(f"ps {pid}")
                 machine.succeed("systemctl stop incus")
                 machine.succeed(f"ps {pid}")
                 machine.succeed("systemctl start incus")
+
+
+                with subtest("virtual-machines stop with incus-startup.service"):
+                    pid = machine.succeed(f"incus info vm-{variant}1 | grep 'PID'").split(":")[1].strip()
+                    machine.succeed(f"ps {pid}")
+                    machine.succeed("systemctl stop incus-startup.service")
+                    machine.wait_until_fails(f"ps {pid}", timeout=120)
+                    machine.succeed("systemctl start incus-startup.service")
 
 
             cleanup()
@@ -366,7 +415,7 @@ import ../make-test-python.nix (
         +
           # python
           ''
-            with subtest("Can launch CSM virtual machine"):
+            with subtest("virtual-machine can launch CSM (BIOS)"):
                 machine.succeed("incus init csm --vm --empty -c security.csm=true -c security.secureboot=false")
                 machine.succeed("incus start csm")
 

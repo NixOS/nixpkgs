@@ -2,18 +2,19 @@
   lib,
   skawarePackages,
   skalibs,
+  execline,
+  writeTextFile,
 }:
 
 let
-  version = "2.9.6.1";
-
+  version = "2.9.7.0";
 in
 skawarePackages.buildPackage {
   inherit version;
 
   pname = "execline";
   # ATTN: also check whether there is a new manpages version
-  sha256 = "sha256-dpGdYvLeTbGsSzpZ7rPg4JtivN2a3ROuPy2tJvjw5co=";
+  sha256 = "sha256-c8kWDvyZQHjY6lSA+RYb/Rs88LYff6q3BKsYmFF9Agc=";
 
   # Maintainer of manpages uses following versioning scheme: for every
   # upstream $version he tags manpages release as ${version}.1, and,
@@ -75,4 +76,24 @@ skawarePackages.buildPackage {
       ${./execlineb-wrapper.c} \
       -lskarnet
   '';
+
+  # Write an execline script.
+  # Documented in ../../../../doc/build-helpers/trivial-build-helpers.chapter.md
+  passthru.writeScript =
+    name: options: script:
+    writeTextFile {
+      inherit name;
+      text = ''
+        #!${execline}/bin/execlineb ${toString options}
+        ${script}
+      '';
+
+      executable = true;
+      derivationArgs.nativeBuildInputs = [ execline ];
+      checkPhase = ''
+        echo redirfd -w 1 /dev/null echo >test.el
+        cat <$target >>test.el
+        execlineb -W test.el
+      '';
+    };
 }

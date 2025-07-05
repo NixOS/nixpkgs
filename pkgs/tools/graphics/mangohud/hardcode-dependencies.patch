@@ -11,11 +11,36 @@ index 7379af1..4eef3fe 100644
          SPDLOG_ERROR("Could not load libdbus-1.so.3");
          return false;
      }
+diff --git a/src/loaders/loader_glx.cpp b/src/loaders/loader_glx.cpp
+index aa453b8..0f6479d 100644
+--- a/src/loaders/loader_glx.cpp
++++ b/src/loaders/loader_glx.cpp
+@@ -23,7 +23,7 @@ bool glx_loader::Load() {
+   handle = real_dlopen("glxtrace.so", RTLD_LAZY);
+ #endif
+   if (!handle)
+-    handle = real_dlopen("libGL.so.1", RTLD_LAZY);
++    handle = real_dlopen("@libGL@/lib/libGL.so.1", RTLD_LAZY);
+   if (!handle) {
+     SPDLOG_ERROR("Failed to open " MANGOHUD_ARCH " libGL.so.1: {}", dlerror());
+     return false;
+diff --git a/src/loaders/loader_x11.cpp b/src/loaders/loader_x11.cpp
+index 214fd50..2f08857 100644
+--- a/src/loaders/loader_x11.cpp
++++ b/src/loaders/loader_x11.cpp
+@@ -110,6 +110,6 @@ static std::shared_ptr<libx11_loader> loader;
+ std::shared_ptr<libx11_loader> get_libx11()
+ {
+     if (!loader)
+-        loader = std::make_shared<libx11_loader>("libX11.so.6");
++        loader = std::make_shared<libx11_loader>("@libX11@/lib/libX11.so.6");
+     return loader;
+ }
 diff --git a/src/logging.cpp b/src/logging.cpp
-index 7d4cb98..256128c 100644
+index 4ef7023..e24f6da 100644
 --- a/src/logging.cpp
 +++ b/src/logging.cpp
-@@ -27,8 +27,12 @@ string exec(string command) {
+@@ -28,8 +28,12 @@ string exec(string command) {
  #endif
      std::array<char, 128> buffer;
      std::string result;

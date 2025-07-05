@@ -24,7 +24,9 @@ let
 
   release = lib.replaceStrings [ "." ] [ "-" ] version;
   # To test rc versions of ICU replace the line above with the line below.
-  #release = lib.replaceStrings [ "." ] [ "-" ] (if lib.hasSuffix "rc" version then lib.replaceStrings [ "1" ] [ "" ] version else version);
+  #release = lib.replaceStrings [ "." ] [ "-" ] (
+  #  if lib.hasSuffix "rc" version then lib.replaceStrings [ "1" ] [ "" ] version else version
+  #);
 
   baseAttrs = {
     src = fetchurl {

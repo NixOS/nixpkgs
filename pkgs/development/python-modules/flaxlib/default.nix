@@ -3,51 +3,54 @@
   buildPythonPackage,
   flax,
   tomlq,
-  rustPlatform,
-  pytestCheckHook,
+  python,
+
+  # build-system
+  nanobind,
+  ninja,
+  scikit-build-core,
+
+  # nativeBuildInputs
+  cmake,
+  pkg-config,
 }:
 
 buildPythonPackage rec {
   pname = "flaxlib";
-  version = "0.0.1-a1";
+  version = "0.0.1";
   pyproject = true;
 
   inherit (flax) src;
 
-  sourceRoot = "${src.name}/flaxlib";
+  sourceRoot = "${src.name}/flaxlib_src";
 
   postPatch = ''
     expected_version="$version"
-    actual_version=$(${lib.getExe tomlq} --file Cargo.toml "package.version")
+    actual_version=$(${lib.getExe tomlq} --file pyproject.toml "project.version")
 
     if [ "$actual_version" != "$expected_version" ]; then
       echo -e "\n\tERROR:"
-      echo -e "\tThe version of the flaxlib python package ($expected_version) does not match the one in its Cargo.toml file ($actual_version)"
+      echo -e "\tThe version of the flaxlib python package ($expected_version) does not match the one in its pyproject.toml file ($actual_version)"
       echo -e "\tPlease update the version attribute of the nix python3Packages.flaxlib package."
       exit 1
     fi
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit
-      pname
-      version
-      src
-      sourceRoot
-      ;
-    hash = "sha256-RPbMHnRdJaWKLU9Rkz39lmfibO20dnfZmLZqehHM3w4=";
-  };
+  dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [
-    rustPlatform.maturinBuildHook
-    rustPlatform.cargoSetupHook
+  build-system = [
+    nanobind
+    ninja
+    scikit-build-core
   ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  env.CMAKE_PREFIX_PATH = "${nanobind}/${python.sitePackages}/nanobind";
 
   pythonImportsCheck = [ "flaxlib" ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
 
   # This package does not have tests (yet ?)
   doCheck = false;

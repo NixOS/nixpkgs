@@ -159,6 +159,7 @@ class CommonMarkRenderer(Renderer):
         self._leave_block()
         return ""
     def myst_role(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        # NixOS-specific roles are documented at <nixpkgs>/doc/README.md (with reverse reference)
         self._parstack[-1].continuing = True
         content = md_make_code(token.content)
         if token.meta['name'] == 'manpage' and (url := self._manpage_urls.get(token.content)):

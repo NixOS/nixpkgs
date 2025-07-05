@@ -7,10 +7,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "savepagenow";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pastpages";
-    repo = pname;
+    repo = "savepagenow";
     rev = "v${version}";
     sha256 = "1lz6rc47cds9rb35jdf8n13gr61wdkh5jqzx4skikm1yrqkwjyhm";
   };

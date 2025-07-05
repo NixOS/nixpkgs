@@ -2,33 +2,29 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "backward";
   version = "1.6";
 
   src = fetchFromGitHub {
     owner = "bombela";
     repo = "backward-cpp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-2k5PjwFxgA/2XPqJrPHxgSInM61FBEcieppBx+MAUKw=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [
+    cmake
+  ];
 
-    mkdir -p $out/include
-    cp backward.hpp $out/include
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Beautiful stack trace pretty printer for C++";
     homepage = "https://github.com/bombela/backward-cpp";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ];
   };
-}
+})

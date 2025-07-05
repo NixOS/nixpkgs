@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "pytest plugin for grpc";
     homepage = "https://github.com/MobileDynasty/pytest-env";
     license = licenses.mit;
-    maintainers = teams.deshaw.members;
+    teams = [ teams.deshaw ];
   };
 }

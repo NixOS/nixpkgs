@@ -4,9 +4,10 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage {
   pname = "mpfshell-unstable";
   version = "2020-04-11";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wendlers";

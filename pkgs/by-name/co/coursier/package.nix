@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coursier";
-  version = "2.1.22";
+  version = "2.1.24";
 
   src = fetchurl {
     url = "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    hash = "sha256-0ugWgvG3AHt7h8F8W8kCksyx93YO51i5StqGAEZXGmg=";
+    hash = "sha256-eql18SRpcm1ruHhSEHr+C41vPIKxKknvQ8xmR8TgV8o=";
   };
 
   dontUnpack = true;

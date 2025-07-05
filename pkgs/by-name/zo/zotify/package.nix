@@ -3,7 +3,7 @@
   python3Packages,
   lib,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "zotify";
   version = "0.6.13";
 

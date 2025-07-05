@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.4";
+  version = "4.5.2-unstable-2025-07-03";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/1kAgzmSbnuCqd6YxbaYW2+gE0Gvy373y5VfUK4OVzI=";
+    rev = "0ff2476af4e16286ee9f7cf2322715273a0117e0";
+    sha256 = "sha256-0ixQfAyAyRmuIrlPosCV/VucKJYYvxjL2o4pkVb5Sd8=";
   };
 
   cmakeFlags = [
@@ -128,17 +128,12 @@ stdenv.mkDerivation (finalAttrs: {
       qtwayland
     ];
 
-  postInstall =
-    ''
-      # Remove unneeded bundled libraries and headers
-      rm -r $out/{include,lib}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out/Applications"
-      mv "$out/mscore.app" "$out/Applications/mscore.app"
-      mkdir -p $out/bin
-      ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
-    '';
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv "$out/mscore.app" "$out/Applications/mscore.app"
+    mkdir -p $out/bin
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
+  '';
 
   # muse-sounds-manager installs Muse Sounds sampler libMuseSamplerCoreLib.so.
   # It requires that argv0 of the calling process ends with "/mscore" or "/MuseScore-4".

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ jinja2 mashumaro orjson aiofiles packaging ])" -p pyright ruff isort nixfmt-rfc-style
+#!nix-shell -I nixpkgs=./. -i python3 -p "music-assistant.python.withPackages (ps: music-assistant.dependencies ++ (with ps; [ jinja2 packaging ]))" -p pyright ruff isort nixfmt-rfc-style
 import asyncio
 import json
 import os.path
@@ -17,6 +17,7 @@ from urllib.request import urlopen
 
 from jinja2 import Environment
 from mashumaro.exceptions import MissingField
+from music_assistant_models.provider import ProviderManifest  # type: ignore
 from packaging.requirements import Requirement
 
 TEMPLATE = """# Do not edit manually, run ./update-providers.py
@@ -112,11 +113,10 @@ async def get_provider_manifests(version: str = "master") -> List:
 
         basedir = Path(os.path.join(tmp, f"server-{version}"))
         sys.path.append(str(basedir))
-        from music_assistant.common.models.provider import ProviderManifest  # type: ignore
 
         for fn in basedir.glob("**/manifest.json"):
             try:
-                manifests.append(await ProviderManifest.parse(fn))
+                manifests.append(await ProviderManifest.parse(str(fn)))
             except MissingField as ex:
                 print(f"Error parsing {fn}", ex)
 

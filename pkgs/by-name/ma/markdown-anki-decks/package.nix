@@ -39,13 +39,13 @@ python3.pkgs.buildPythonApplication rec {
     "markdown_anki_decks"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert Markdown files into Anki Decks";
     homepage = "https://github.com/lukesmurray/markdown-anki-decks";
     changelog = "https://github.com/lukesmurray/markdown-anki-decks/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ totoroot ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ totoroot ];
+    platforms = lib.platforms.unix;
     mainProgram = "mdankideck";
   };
 }

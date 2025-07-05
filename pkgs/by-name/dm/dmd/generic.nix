@@ -15,7 +15,6 @@
   curl,
   tzdata,
   gdb,
-  Foundation,
   callPackage,
   targetPackages,
   fetchpatch,
@@ -86,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
       })
     ]
-    ++ lib.optionals (lib.versionOlder version "2.110.0") [
+    ++ [
       (fetchpatch {
         url = "https://github.com/dlang/dmd/commit/fdd25893e0ac04893d6eba8652903d499b7b0dfc.patch";
         stripLen = 1;
@@ -138,14 +137,10 @@ stdenv.mkDerivation (finalAttrs: {
       git
     ];
 
-  buildInputs =
-    [
-      curl
-      tzdata
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-    ];
+  buildInputs = [
+    curl
+    tzdata
+  ];
 
   nativeCheckInputs =
     [

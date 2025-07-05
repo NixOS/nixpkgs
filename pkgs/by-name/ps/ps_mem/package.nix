@@ -7,10 +7,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "ps_mem";
   version = "3.14";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pixelb";
-    repo = pname;
+    repo = "ps_mem";
     rev = "v${version}";
     hash = "sha256-jCfPtPSky/QFk9Xo/tq3W7609Pie1yLC4iS4dqjCa+E=";
   };

@@ -1,70 +1,52 @@
 {
   lib,
   stdenv,
-
   rustPlatform,
   fetchFromGitHub,
   fetchNpmDeps,
-  yq,
-
   cargo-tauri,
-  cargo,
-  rustc,
   nodejs,
   npmHooks,
   pkg-config,
   wrapGAppsHook3,
-
   openssl,
   webkitgtk_4_1,
-
   versionCheckHook,
   nix-update-script,
 }:
-stdenv.mkDerivation (finalAttrs: {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gg";
-  version = "0.23.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "gulbanana";
     repo = "gg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iQxPJgMxBtyindkNdQkehwPf7ZgWCI09PToqs2y1Hfw=";
+    hash = "sha256-RFNROdPfJksxK5tOP1LOlV/di8AyeJbxwaIoWaZEaVU=";
   };
 
   cargoRoot = "src-tauri";
+
   buildAndTestSubdir = "src-tauri";
 
-  # FIXME: Switch back to cargoHash when https://github.com/NixOS/nixpkgs/issues/356811 is fixed
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) pname version src;
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-Lr/0GkWHvfDy/leRLxisuTzGPZYFo2beHq9UCl6XlDo=";
-
-    nativeBuildInputs = [ yq ];
-
-    # Work around https://github.com/rust-lang/cargo/issues/10801
-    # See https://discourse.nixos.org/t/rust-tauri-v2-error-no-matching-package-found/56751/4
-    preBuild = ''
-      tomlq -it '.dependencies.tauri.features += ["native-tls"]' Cargo.toml
-    '';
-  };
+  cargoHash = "sha256-AdatJNDqIoRHfaf81iFhOs2JGLIxy7agFJj96bFPj00=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-SMz1ohPSF5tvf2d3is4PXhnjHG9hHuS5NYmHbe46HaU=";
+    hash = "sha256-izCl3pE15ocEGYOYCUR1iTR+82nDB06Ed4YOGRGByfI=";
   };
 
-  nativeBuildInputs = [
-    cargo-tauri.hook
-    rustPlatform.cargoSetupHook
-    cargo
-    rustc
-    nodejs
-    npmHooks.npmConfigHook
-    pkg-config
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs =
+    [
+      cargo-tauri.hook
+      nodejs
+      npmHooks.npmConfigHook
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      wrapGAppsHook3
+    ];
 
   buildInputs =
     [ openssl ]
@@ -88,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GUI for the version control system Jujutsu";
     homepage = "https://github.com/gulbanana/gg";
-    changelog = "https://github.com/gulbanana/gg/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/gulbanana/gg/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];
     inherit (cargo-tauri.hook.meta) platforms;
     maintainers = with lib.maintainers; [ pluiedev ];

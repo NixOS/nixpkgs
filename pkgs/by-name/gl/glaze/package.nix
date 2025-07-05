@@ -8,22 +8,22 @@
 
 stdenv.mkDerivation (final: {
   pname = "glaze";
-  version = "4.2.2";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "stephenberry";
     repo = "glaze";
-    rev = "v${final.version}";
-    hash = "sha256-P6hrwSpeQXHhag7HV28EVXsEwd2ZJEad3GRclCiOz8w=";
+    tag = "v${final.version}";
+    hash = "sha256-HC8R1wyNySVhuTZczdbiHkQ8STTXA/1GJLKdTXN9VAo=";
   };
 
   nativeBuildInputs = [ cmake ];
   cmakeFlags = [ (lib.cmakeBool "glaze_ENABLE_AVX2" enableAvx2) ];
 
-  meta = with lib; {
+  meta = {
     description = "Extremely fast, in memory, JSON and interface library for modern C++";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moni ];
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ moni ];
+    license = lib.licenses.mit;
   };
 })

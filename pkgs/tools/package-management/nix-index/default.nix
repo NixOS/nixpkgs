@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
   curl,
   sqlite,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,14 +19,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-r3Vg9ox953HdUp5Csxd2DYUyBe9u61fmA94PpcAZRqo=";
   };
 
-  cargoHash = "sha256-c1Ivsj9of/cjEKU0lo4I9BfIUQZ3pPf2QF9fAlZTQn0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BKVxtd+gbCHzpnr5LZmKMUMEEZvsZMT0AdlfrLpMYpc=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
     curl
     sqlite
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  ];
 
   postInstall = ''
     substituteInPlace command-not-found.sh \

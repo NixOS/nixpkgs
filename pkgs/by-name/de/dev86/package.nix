@@ -23,7 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C compiler, assembler and linker environment for the production of 8086 executables";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      AndersonTorres
       sigmasquadron
     ];
     platforms = lib.platforms.linux;

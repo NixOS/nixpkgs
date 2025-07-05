@@ -9,6 +9,7 @@
   json_c,
   zlib,
   python3Packages,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,12 +32,15 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3Packages.nose2
+    udevCheckHook
   ];
   buildInputs = [
     libnvme
     json_c
     zlib
   ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     inherit (src.meta) homepage; # https://nvmexpress.org/

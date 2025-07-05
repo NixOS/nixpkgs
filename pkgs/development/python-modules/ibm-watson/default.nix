@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "8.1.0";
+  version = "9.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-r7A5i17KIy1pBrj01yeknfrOFjb5yZco8ZOc7tlFM7k=";
+    hash = "sha256-JZriBvdeDAZ+NOnWCsjI2m5JlLe/oLlbtFkdFeuL8TI=";
   };
 
   build-system = [ setuptools ];
@@ -44,12 +44,18 @@ buildPythonPackage rec {
     responses
   ];
 
+  # FileNotFoundError: [Errno 2] No such file or directory: './auth.json'
+  disabledTestPaths = [
+    "test/integration/test_assistant_v2.py"
+    "test/integration/test_natural_language_understanding_v1.py"
+  ];
+
   pythonImportsCheck = [ "ibm_watson" ];
 
   meta = with lib; {
     description = "Client library to use the IBM Watson Services";
     homepage = "https://github.com/watson-developer-cloud/python-sdk";
-    changelog = "https://github.com/watson-developer-cloud/python-sdk/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/watson-developer-cloud/python-sdk/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ globin ];
   };

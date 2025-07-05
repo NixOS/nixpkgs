@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Access logger for ASGI servers";
     homepage = "https://github.com/Kludex/asgi-logger";
     license = licenses.mit;
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
   };
 }

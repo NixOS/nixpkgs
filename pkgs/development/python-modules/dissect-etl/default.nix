@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-etl";
-  version = "3.10";
+  version = "3.11";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.etl";
     tag = version;
-    hash = "sha256-c8qbh0LSTAV23J//Kx76eeIjptW1cVcxBSqO22okRkU=";
+    hash = "sha256-soJH7kx/029yXyOjv6OsWjWAMMHXKx711GLPBClDAK0=";
   };
 
   build-system = [
@@ -40,10 +40,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.etl" ];
 
+  disabledTests = [
+    # Invalid header magic
+    "test_sqlite"
+    "test_empty"
+  ];
+
   meta = with lib; {
     description = "Dissect module implementing a parser for Event Trace Log (ETL) files";
     homepage = "https://github.com/fox-it/dissect.etl";
-    changelog = "https://github.com/fox-it/dissect.etl/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.etl/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

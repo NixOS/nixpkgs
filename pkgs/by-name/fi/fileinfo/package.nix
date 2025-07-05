@@ -6,6 +6,7 @@
 python3Packages.buildPythonApplication {
   pname = "fileinfo";
   version = "unstable-2022-09-16";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "sdushantha";
     repo = "fileinfo";

@@ -17,7 +17,13 @@
   openasar,
   withVencord ? false,
   vencord,
+  withMoonlight ? false,
+  moonlight,
 }:
+
+assert lib.assertMsg (
+  !(withMoonlight && withVencord)
+) "discord: Moonlight and Vencord can not be enabled at the same time";
 
 let
   disableBreakingUpdates =
@@ -72,6 +78,13 @@ stdenv.mkDerivation {
       mkdir $out/Applications/${desktopName}.app/Contents/Resources/app.asar
       echo '{"name":"discord","main":"index.js"}' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json
       echo 'require("${vencord}/patcher.js")' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/index.js
+    ''
+
+    + lib.strings.optionalString withMoonlight ''
+      mv $out/Applications/${desktopName}.app/Contents/Resources/app.asar $out/Applications/${desktopName}.app/Contents/Resources/_app.asar
+      mkdir $out/Applications/${desktopName}.app/Contents/Resources/app.asar
+      echo '{"name":"discord","main":"injector.js","private": true}' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/package.json
+      echo 'require("${moonlight}/injector.js").inject(require("path").join(__dirname, "../_app.asar"));' > $out/Applications/${desktopName}.app/Contents/Resources/app.asar/injector.js
     '';
 
   passthru = {

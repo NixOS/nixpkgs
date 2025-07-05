@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "crytic-compile";
-  version = "0.3.7";
+  version = "0.3.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "crytic-compile";
     tag = version;
-    hash = "sha256-SMkFzGZg/6akclQ0XLUvjK3uoypsHfRru+B4VurjOrM=";
+    hash = "sha256-K8s/ocvja3ae8AOw3N8JFVYmrn5QSCzXkGG6Z3V59IE=";
   };
 
   propagatedBuildInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     description = "Abstraction layer for smart contract build systems";
     mainProgram = "crytic-compile";
     homepage = "https://github.com/crytic/crytic-compile";
-    changelog = "https://github.com/crytic/crytic-compile/releases/tag/${version}";
+    changelog = "https://github.com/crytic/crytic-compile/releases/tag/${src.tag}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [
       arturcygan

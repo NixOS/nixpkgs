@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   pname = "rr-zen_workaround";
 
   inherit (rr) src version;
-  sourceRoot = "source/third-party/zen-pmu-workaround";
+  sourceRoot = "${rr.src.name}/third-party/zen-pmu-workaround";
 
   hardeningDisable = [ "pic" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;

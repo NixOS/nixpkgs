@@ -7,7 +7,6 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  Security,
   libiconv,
   protobuf,
 }:
@@ -23,7 +22,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DoFqHKTu4CvgDYPT4vbwNvSZ/lNTdAF+wlHOOIBJKUw=";
   };
 
-  cargoHash = "sha256-mgg6yzjRZsDbnK19nhNmy2I95tPWD4NmGCXtI957D0M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-w/d/MMd5JNQMRUxRaH4Tpf4Dzh14eykG+zzuM/YrU40=";
 
   nativeBuildInputs = [
     cmake
@@ -35,7 +35,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
       libiconv
     ];
 

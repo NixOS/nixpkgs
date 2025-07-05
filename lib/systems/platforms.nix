@@ -572,6 +572,27 @@ rec {
     };
   };
 
+  loongarch64-multiplatform = {
+    gcc = {
+      # https://github.com/loongson/la-softdev-convention/blob/master/la-softdev-convention.adoc#10-operating-system-package-build-requirements
+      arch = "la64v1.0";
+      strict-align = false;
+      # Avoid text sections of large apps exceeding default code model
+      # Will be default behavior in LLVM 21 and hopefully GCC16
+      # https://github.com/loongson-community/discussions/issues/43
+      # https://github.com/llvm/llvm-project/pull/132173
+      cmodel = "medium";
+    };
+    linux-kernel = {
+      name = "loongarch-multiplatform";
+      target = "vmlinuz.efi";
+      autoModules = true;
+      preferBuiltin = true;
+      baseConfig = "defconfig";
+      DTB = true;
+    };
+  };
+
   # This function takes a minimally-valid "platform" and returns an
   # attrset containing zero or more additional attrs which should be
   # included in the platform in order to further elaborate it.
@@ -598,6 +619,9 @@ rec {
     else if platform.isAarch64 then
       if platform.isDarwin then apple-m1 else aarch64-multiplatform
 
+    else if platform.isLoongArch64 then
+      loongarch64-multiplatform
+
     else if platform.isRiscV then
       riscv-multiplatform
 
@@ -607,6 +631,8 @@ rec {
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then
       powernv
 
+    else if platform.isLoongArch64 then
+      loongarch64-multiplatform
     else
       { };
 }

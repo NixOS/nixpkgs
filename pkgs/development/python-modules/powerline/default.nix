@@ -19,8 +19,8 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "powerline";
+    repo = "powerline";
     tag = version;
     hash = "sha256-snJrfUvP11lBIy6F0WtqJt9fiYm5jxMwm9u3u5XFO84=";
   };

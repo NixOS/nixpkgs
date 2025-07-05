@@ -38,12 +38,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "11.3.0";
+  version = "11.3.2";
   pname = "geant4";
 
   src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-HaQxiz+W+H9NR1WKMtqyabjz/JVnCAOMKOcqGAsO+6Y=";
+    hash = "sha256-iSrt10JSYqUKw9PHEX2BwMDaS0CMaIDbr1R4uTAeSIw=";
   };
 
   # Fix broken paths in a .pc
@@ -118,8 +118,8 @@ stdenv.mkDerivation rec {
 
   postFixup =
     ''
-      # Don't try to export invalid environment variables.
-      sed -i 's/export G4\([A-Z]*\)DATA/#export G4\1DATA/' "$out"/bin/geant4.sh
+      substituteInPlace "$out"/bin/geant4.sh \
+        --replace-fail "export GEANT4_DATA_DIR" "# export GEANT4_DATA_DIR"
     ''
     + lib.optionalString enableQt ''
       wrapQtAppsHook
@@ -141,14 +141,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Toolkit for the simulation of the passage of particles through matter";
     longDescription = ''
       Geant4 is a toolkit for the simulation of the passage of particles through matter.
       Its areas of application include high energy, nuclear and accelerator physics, as well as studies in medical and space science.
       The two main reference papers for Geant4 are published in Nuclear Instruments and Methods in Physics Research A 506 (2003) 250-303, and IEEE Transactions on Nuclear Science 53 No. 1 (2006) 270-278.
     '';
-    homepage = "http://www.geant4.org";
+    homepage = "https://www.geant4.org";
     license = licenses.g4sl;
     maintainers = with maintainers; [
       omnipotententity

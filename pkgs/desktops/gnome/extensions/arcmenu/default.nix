@@ -4,24 +4,23 @@
   fetchFromGitLab,
   glib,
   gettext,
-  substituteAll,
+  replaceVars,
   gnome-menus,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-arcmenu";
-  version = "63";
+  version = "65";
 
   src = fetchFromGitLab {
     owner = "arcmenu";
     repo = "ArcMenu";
     rev = "v${version}";
-    hash = "sha256-XlDkdNINTnUAqr2bxL0u2tHWfiggqT1oOryED7sG/vs=";
+    hash = "sha256-EEK600DwIQAPWR07IMPNZFiWWkiG0blp/D0VKAcc7ns=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix_gmenu.patch;
+    (replaceVars ./fix_gmenu.patch {
       gmenu_path = "${gnome-menus}/lib/girepository-1.0";
     })
   ];

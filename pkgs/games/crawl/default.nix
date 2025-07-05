@@ -23,19 +23,17 @@
   tileMode ? false,
   enableSound ? tileMode,
   buildPackages,
-  # MacOS / Darwin builds
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
   pname = "crawl${lib.optionalString tileMode "-tiles"}";
-  version = "0.32.1";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    hash = "sha256-jhjFC8+A2dQomMwKZPSiEViXeQpty2Dk9alDcNsLvq0=";
+    hash = "sha256-GXrYLGoQ1UwDHs+kLLcaBNpJ2BVMv4NhmpyfNFxPmg8=";
   };
 
   # Patch hard-coded paths and remove force library builds
@@ -71,19 +69,7 @@ stdenv.mkDerivation rec {
       libGLU
       libGL
     ]
-    ++ lib.optional enableSound SDL2_mixer
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        AudioUnit
-        CoreAudio
-        ForceFeedback
-        Carbon
-        IOKit
-        OpenGL
-      ]
-    ));
+    ++ lib.optional enableSound SDL2_mixer;
 
   preBuild =
     ''

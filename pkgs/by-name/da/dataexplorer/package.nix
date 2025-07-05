@@ -8,17 +8,18 @@
   swt,
   makeWrapper,
   strip-nondeterminism,
+  udevCheckHook,
 }:
 let
   swt-jdk17 = swt.override { jdk = jdk17; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dataexplorer";
-  version = "3.9.0";
+  version = "3.9.3";
 
   src = fetchurl {
     url = "mirror://savannah/dataexplorer/dataexplorer-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-MQAnLCkcs3r8/2j4zYaMC/JM8nBCEvqHKk8lv+7b9KE=";
+    hash = "sha256-NfbhamhRx78MW5H4BpKMDfrV2d082UkaIBFfbemOSOY=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     jdk17
     makeWrapper
     strip-nondeterminism
+    udevCheckHook
   ];
 
   buildPhase = ''
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   #checkPhase = ''
   #  ant -f build/build.xml check
   #'';
+
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall

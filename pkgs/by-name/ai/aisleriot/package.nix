@@ -1,8 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitLab,
-  gitUpdater,
+  fetchurl,
   pkg-config,
   itstool,
   gtk3,
@@ -15,18 +14,16 @@
   libcanberra-gtk3,
   ninja,
   yelp-tools,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aisleriot";
-  version = "3.22.34";
+  version = "3.22.35";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "aisleriot";
-    rev = finalAttrs.version;
-    hash = "sha256-XaEyh1ZXBvW/4tfuQyEFzvnE2Vv7+4lTUfeXoSCMnHM=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/aisleriot/${lib.versions.majorMinor finalAttrs.version}/aisleriot-${finalAttrs.version}.tar.xz";
+    hash = "sha256-AeYEzXAJo2wMXxVCSpBORvg2LDBrpfa8cfrIpedGO/A=";
   };
 
   nativeBuildInputs = [
@@ -57,14 +54,16 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [ "-Dtheme_kde=false" ];
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = gnome.updateScript {
+      packageName = "aisleriot";
+    };
   };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/aisleriot";
     description = "Collection of patience games written in guile scheme";
     mainProgram = "sol";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

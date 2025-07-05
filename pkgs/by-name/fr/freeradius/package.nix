@@ -21,7 +21,7 @@
   withMysql ? false,
   libmysqlclient,
   withPostgresql ? false,
-  postgresql,
+  libpq,
   withPcap ? true,
   libpcap,
   withRedis ? false,
@@ -38,13 +38,13 @@ assert withRest -> withJson;
 
 stdenv.mkDerivation rec {
   pname = "freeradius";
-  version = "3.2.5";
+  version = "3.2.7";
 
   src = fetchFromGitHub {
     owner = "FreeRADIUS";
     repo = "freeradius-server";
     tag = "release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-1n447BpTqmkg5tyXe9yPzjfDoh7wMLZhwouUEzkwxKM=";
+    hash = "sha256-FG0/quBB5Q/bdYQqkFaZc/BhcIC/n2uVstlIGe4EPvE=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLdap openldap
     ++ lib.optional withMemcached libmemcached
     ++ lib.optional withMysql libmysqlclient
-    ++ lib.optional withPostgresql postgresql
+    ++ lib.optional withPostgresql libpq
     ++ lib.optional withPcap libpcap
     ++ lib.optional withRedis hiredis
     ++ lib.optional withRest curl
@@ -107,7 +107,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       sheenobu
-      willibutz
     ];
     platforms = with platforms; linux;
   };

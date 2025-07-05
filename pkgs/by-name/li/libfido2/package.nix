@@ -8,6 +8,7 @@
   libcbor,
   openssl,
   udev,
+  udevCheckHook,
   zlib,
   withPcsclite ? true,
   pcsclite,
@@ -15,17 +16,18 @@
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
-  version = "1.15.0";
+  version = "1.16.0";
 
   # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    hash = "sha256-q6qxMY0h0mLs5Bb7inEy+pN0vaifb6UrhqmKL1cSth4=";
+    hash = "sha256-jCtvsnm1tC6aySrecYMuSFhSZHtTYHxDuqr7vOzqBOQ=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs =
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
     "dev"
     "man"
   ];
+
+  doInstallCheck = true;
 
   cmakeFlags =
     [

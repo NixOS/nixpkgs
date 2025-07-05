@@ -7,13 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "resolve-march-native";
-  version = "5.1.0";
+  version = "6.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hartwork";
-    repo = pname;
+    repo = "resolve-march-native";
     tag = version;
-    hash = "sha256-02d7ip5E/vkOMkkeHOx1m7FdpurXT9O6HdwrygNPHdY=";
+    hash = "sha256-YJvKLHxn80RRVEOGeg9BwxhDZ8Hhg5Qa6ryLOXumY5w=";
   };
 
   # NB: The tool uses gcc at runtime to resolve the -march=native flags

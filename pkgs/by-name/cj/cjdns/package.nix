@@ -5,7 +5,7 @@
   rustPlatform,
   nodejs,
   which,
-  python39,
+  python3,
   libuv,
   util-linux,
   nixosTests,
@@ -31,17 +31,13 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libsodium-sys-0.2.6" = "sha256-yr6wh0njbCFZViLROcqSSoRFj7ZAMYG5lo1g0j75SN0=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LJEKjhyAsK6b7mKObX8tNJdKt53iagMD/YLzoY5GVPw=";
 
   nativeBuildInputs =
     [
       which
-      python39
+      python3
       nodejs
       pkg-config
     ]
@@ -70,11 +66,11 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.basic = nixosTests.cjdns;
 
   meta = with lib; {
+    broken = true; # outdated, incompatible with supported python versions
     homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }

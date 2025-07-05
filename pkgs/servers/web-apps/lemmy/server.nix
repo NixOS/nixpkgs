@@ -4,10 +4,8 @@
   rustPlatform,
   fetchFromGitHub,
   openssl,
-  postgresql,
+  libpq,
   libiconv,
-  Security,
-  SystemConfiguration,
   protobuf,
   rustfmt,
   nixosTests,
@@ -32,14 +30,13 @@ rustPlatform.buildRustPackage rec {
     echo 'pub const VERSION: &str = "${version}";' > crates/utils/src/version.rs
   '';
 
+  useFetchCargoVendor = true;
   cargoHash = pinData.serverCargoHash;
 
   buildInputs =
-    [ postgresql ]
+    [ libpq ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Security
-      SystemConfiguration
     ];
 
   # Using OPENSSL_NO_VENDOR is not an option on darwin

@@ -19,7 +19,7 @@ let
   };
 in
 
-appimageTools.wrapAppImage rec {
+appimageTools.wrapAppImage {
   inherit pname version meta;
   src = src';
 

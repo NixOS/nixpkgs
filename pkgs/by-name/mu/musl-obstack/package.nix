@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oydS7FubUniMHAUWfg84OH9+CZ0JCrTXy7jzwOyJzC8=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    ./0001-ignore-obstack_free-alias-on-darwin.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -26,8 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/void-linux/musl-obstack";
-    description = "An extraction of the obstack functions and macros from GNU libiberty for use with musl-libc";
-    platforms = platforms.linux;
+    description = "Extraction of the obstack functions and macros from GNU libiberty for use with musl-libc";
+    platforms = platforms.unix;
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.pjjw ];
   };

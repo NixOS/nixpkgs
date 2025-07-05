@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A simple and easy-to-use immediate-mode gui library";
+    description = "Simple and easy-to-use immediate-mode gui library";
     homepage = "https://github.com/raysan5/raygui";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ sigmanificient ];

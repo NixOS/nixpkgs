@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "ytmdl";
   version = "2023.11.26";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname;

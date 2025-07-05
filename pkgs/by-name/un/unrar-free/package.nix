@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrar-free";
-  version = "0.3.1";
+  version = "0.3.1-unstable-2024-09-19";
 
   src = fetchFromGitLab {
     owner = "bgermann";
     repo = "unrar-free";
-    rev = finalAttrs.version;
-    hash = "sha256-Dg+KGZcqbE1nBPaemZlWQPaUQQJmaSe0nyDQRXJzwuE=";
+    rev = "a7f9a157276ae68987fb44fe5ccf4f4255eb0a5e";
+    hash = "sha256-aCO1vklG5MneEiqS/IBvC09YrvWa+OndfvCblDFKA1E=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ libarchive ];
+
+  setupHook = ./setup-hook.sh;
 
   meta = {
     description = "Free utility to extract files from RAR archives";

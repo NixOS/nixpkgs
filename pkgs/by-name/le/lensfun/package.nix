@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   # replace database with a more recent snapshot
   # the master branch uses version 2 profiles, while 0.3.3 requires version 1 profiles,
   # so we run the conversion tool the project provides,
-  # then untar the verson 1 profiles into the source dir before we build
+  # then untar the version 1 profiles into the source dir before we build
   prePatch = ''
     rm -R data/db
     python3 ${lensfunDatabase}/tools/lensfun_convert_db_v2_to_v1.py $TMPDIR ${lensfunDatabase}/data/db

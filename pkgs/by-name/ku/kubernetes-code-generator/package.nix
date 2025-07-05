@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "kubernetes";
-    repo = pname;
+    repo = "code-generator";
     rev = "v${version}";
     hash = "sha256-GKF6DXvyZujInOZbV0ePUu71BEl1s/chNTN1PucdIYw=";
   };
@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kubernetes/code-generator";
     changelog = "https://github.com/kubernetes/code-generator/releases/tag/v${version}";
     description = "Kubernetes code generation";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ urandom ];
   };
 }

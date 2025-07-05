@@ -9,7 +9,7 @@
 
 let
   baseName = "scalafmt";
-  version = "3.7.17";
+  version = "3.9.8";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -19,7 +19,7 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-8gK+fOnqwPFBbSWltNKInzXRJQ3WZxPlLqpvuTxF4fk=";
+    outputHash = "sha256-mZrRb2n+ZE0DmQaH9iSMzPcpdZPtflekkP8bHv6Qw4k=";
   };
 in
 stdenv.mkDerivation {
@@ -47,11 +47,11 @@ stdenv.mkDerivation {
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Opinionated code formatter for Scala";
     homepage = "http://scalameta.org/scalafmt";
-    license = licenses.asl20;
-    maintainers = [ maintainers.markus1189 ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.markus1189 ];
     mainProgram = "scalafmt";
   };
 }

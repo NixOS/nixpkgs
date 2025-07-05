@@ -62,14 +62,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "olvid";
-  version = "2.2.0";
+  version = "2.4.2";
 
   dontUnpack = true;
   dontWrapGApps = true;
 
   src = fetchurl {
     url = "https://static.olvid.io/linux/${repo}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-TK0aeKwZFItw3GaOwet48d8zPBRtTsdqEz5MUNWLwSU=";
+    hash = "sha256-eL6XLdEwb3txgN7/YZv1vQGI4pznZb/CrjYY+QZlr5I=";
   };
 
   nativeBuildInputs = [

@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
-  pcre,
   pkg-config,
   protobufc,
   withCrypto ? true,
@@ -21,22 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "yara";
-  version = "4.5.0";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
     tag = "v${version}";
-    hash = "sha256-AecHsUBtBleUkWuYMQ4Tx/PY8cs9j7JwqncBziJD0hA=";
+    hash = "sha256-ryRbLXnhC7nAxtlhr4bARxmNdtPhpvGKwlOiYPYPXOE=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "LFS64.patch";
-      url = "https://github.com/VirusTotal/yara/commit/833a580430abe0fbc9bc17a21fb95bf36dacf367.patch";
-      hash = "sha256-EmwyDsxaNd9zfpAOu6ZB9kzg04qB7LAD7UJB3eAuKd8=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -45,7 +35,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      pcre
       protobufc
     ]
     ++ lib.optionals withCrypto [ openssl ]
@@ -66,13 +55,13 @@ stdenv.mkDerivation rec {
 
   doCheck = enableStatic;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to perform pattern matching for malware-related tasks";
     homepage = "http://Virustotal.github.io/yara/";
     changelog = "https://github.com/VirusTotal/yara/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "yara";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

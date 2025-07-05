@@ -1,26 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, nix-update-script
-, go-task
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-task";
-  version = "3.40.1";
+  version = "3.44.0";
 
   src = fetchFromGitHub {
     owner = "go-task";
     repo = "task";
-    tag = "v${version}";
-    hash = "sha256-jQKPTKEzTfzqPlNlKFMduaAhvDsogRv3vCGtZ4KP/O4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hZi1BSVv3Z+OzJyNvruyDbxYjTgfERnssWZaK0HGQmc=";
   };
 
-  vendorHash = "sha256-bw9NaJOMMKcKth0hRqNq8mqib/5zLpjComo0oj22A/U=";
-
-  doCheck = false;
+  vendorHash = "sha256-8OLWIAikKqmj3tXRO7Ro3VFItKDrhVh6n8pHbBM9Nrc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,35 +28,36 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/go-task/task/v3/internal/version.version=${version}"
+    "-X=github.com/go-task/task/v3/internal/version.version=${finalAttrs.version}"
   ];
 
   env.CGO_ENABLED = 0;
 
-  postInstall = ''
-    ln -s $out/bin/task $out/bin/go-task
+  postInstall =
+    ''
+      ln -s $out/bin/task $out/bin/go-task
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd task \
+        --bash <($out/bin/task --completion bash) \
+        --fish <($out/bin/task --completion fish) \
+        --zsh <($out/bin/task --completion zsh)
+    '';
 
-    installShellCompletion --cmd task \
-      --bash <($out/bin/task --completion bash) \
-      --fish <($out/bin/task --completion fish) \
-      --zsh <($out/bin/task --completion zsh)
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/task";
+  versionCheckProgramArg = "--version";
 
-  passthru = {
-    tests = {
-      version = testers.testVersion {
-        package = go-task;
-      };
-    };
-
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://taskfile.dev/";
     description = "Task runner / simpler Make alternative written in Go";
-    changelog = "https://github.com/go-task/task/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/go-task/task/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ parasrah ];
   };
-}
+})

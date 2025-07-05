@@ -1,10 +1,10 @@
-diff --git a/music_assistant/server/helpers/util.py b/music_assistant/server/helpers/util.py
-index 3d342b73..a395fb46 100644
---- a/music_assistant/server/helpers/util.py
-+++ b/music_assistant/server/helpers/util.py
-@@ -117,30 +117,11 @@ async def load_provider_module(domain: str, requirements: list[str]) -> Provider
+diff --git a/music_assistant/helpers/util.py b/music_assistant/helpers/util.py
+index 8daf159d..af5a6f38 100644
+--- a/music_assistant/helpers/util.py
++++ b/music_assistant/helpers/util.py
+@@ -429,30 +429,11 @@ async def load_provider_module(domain: str, requirements: list[str]) -> Provider
      def _get_provider_module(domain: str) -> ProviderModuleType:
-         return importlib.import_module(f".{domain}", "music_assistant.server.providers")
+         return importlib.import_module(f".{domain}", "music_assistant.providers")
  
 -    # ensure module requirements are met
 -    for requirement in requirements:

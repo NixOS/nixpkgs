@@ -10,14 +10,14 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "mvisonneau";
-    repo = pname;
+    repo = "s5";
     rev = "v${version}";
     hash = "sha256-QQMnzDRWdW0awwNx2vqtzrOW9Ua7EmJ9YFznQoK33J0=";
   };
 
   vendorHash = "sha256-axcZ4XzgsPVU9at/g3WS8Hv92P2hmZRb+tUfw+h9iH0=";
 
-  subPackages = [ "cmd/${pname}" ];
+  subPackages = [ "cmd/s5" ];
 
   ldflags = [
     "-X main.version=v${version}"

@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command-line exact real calculator";
     mainProgram = "spigot";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

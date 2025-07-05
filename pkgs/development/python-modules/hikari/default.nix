@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "hikari";
   version = "2.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hikari-py";
