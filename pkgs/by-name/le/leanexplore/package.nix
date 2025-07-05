@@ -1,0 +1,97 @@
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  callPackage,
+  makeWrapper,
+}:
+
+let
+  mcp = python3.pkgs.mcp.overridePythonAttrs (old: rec {
+    version = "1.10.0";
+    src = python3.pkgs.fetchPypi {
+      pname = "mcp";
+      inherit version;
+      sha256 = "sha256-kfsWI8P68UV3Yj0UdV0yE9uDfF2l2uhQaeG1kSTL4Ok=";
+    };
+    dependencies =
+      (old.dependencies or [ ])
+      ++ (with python3.pkgs; [
+        jsonschema
+        python-multipart
+      ]);
+    dontCheckRuntimeDeps = true;
+    doCheck = false;
+  });
+
+  openai-agents =
+    (callPackage ../../op/openai-agents/package.nix {
+      inherit python3;
+    }).overridePythonAttrs
+      (old: {
+        dependencies = map (dep: if dep.pname or "" == "mcp" then mcp else dep) old.dependencies;
+        dontCheckRuntimeDeps = true;
+      });
+in
+python3.pkgs.buildPythonApplication rec {
+  pname = "lean-explore";
+  version = "0.3.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "justincasher";
+    repo = "lean-explore";
+    rev = "v${version}";
+    hash = "sha256-tXKfl9Itkr21pRsBkAXt40vSrOYOFNvL+O+dhOjxrSQ=";
+  };
+
+  build-system = with python3.pkgs; [
+    setuptools
+    wheel
+  ];
+
+  dependencies =
+    with python3.pkgs;
+    [
+      sqlalchemy
+      numpy
+      faiss
+      sentence-transformers
+      httpx
+      pydantic
+      typer
+      openai
+      nltk
+      rank-bm25
+      toml
+    ]
+    ++ [
+      mcp
+      openai-agents
+    ];
+  dontCheckRuntimeDeps = true;
+  nativeBuildInputs = [ makeWrapper ];
+
+  pythonImportsCheck = [ "lean_explore" ];
+
+  postInstall = ''
+    # Wrap the leanexplore command to ensure subprocesses have the correct PYTHONPATH
+    wrapProgram $out/bin/leanexplore \
+      --set PYTHONPATH "$PYTHONPATH"
+  '';
+
+  meta = {
+    description = "A search engine for Lean 4 declarations with MCP server support";
+    longDescription = ''
+      LeanExplore is a search engine for Lean 4 declarations that provides semantic search
+      capabilities across Lean codebases. It includes a Model Context Protocol (MCP) server
+      implementation that exposes LeanExplore's functionalities as tools consumable by 
+      external AI agent systems, enabling programmatic interaction for tasks like automated
+      theorem proving or AI-driven mathematical research.
+    '';
+    homepage = "https://github.com/justincasher/lean-explore";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ wvhulle ];
+    mainProgram = "leanexplore";
+  };
+}

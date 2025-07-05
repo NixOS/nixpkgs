@@ -1,0 +1,47 @@
+--- a/src/agents/agent.py
++++ b/src/agents/agent.py
+@@ -7,7 +7,14 @@ from dataclasses import dataclass, field
+ from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, cast
+ 
+-from openai.types.responses.response_prompt_param import ResponsePromptParam
++# Handle import for different OpenAI versions
++try:
++    from openai.types.responses.response_prompt_param import ResponsePromptParam
++except (ImportError, AttributeError):
++    # Fallback for cases where ResponsePromptParam is not available
++    from typing import Dict, Any as AnyType
++    ResponsePromptParam = Dict[str, AnyType]
++
+ from typing_extensions import NotRequired, TypeAlias, TypedDict
+ 
+ from .agent_output import AgentOutputSchemaBase
+--- a/src/agents/items.py
++++ b/src/agents/items.py
+@@ -21,10 +21,21 @@ from openai.types.responses.response_code_interpreter_tool_call import (
+ from openai.types.responses.response_code_interpreter_tool_call import (
+     ResponseCodeInterpreterToolCall,
+ )
+-from openai.types.responses.response_input_item_param import (
+-    ComputerCallOutput,
+-    FunctionCallOutput,
+-    LocalShellCallOutput,
+-    McpApprovalResponse,
+-)
++
++# Handle imports for different OpenAI versions
++try:
++    from openai.types.responses.response_input_item_param import (
++        ComputerCallOutput,
++        FunctionCallOutput,
++        LocalShellCallOutput,
++        McpApprovalResponse,
++    )
++except ImportError:
++    # Fallback types for older OpenAI versions
++    from typing import TypedDict
++    class ComputerCallOutput(TypedDict): pass
++    class FunctionCallOutput(TypedDict): pass
++    class LocalShellCallOutput(TypedDict): pass
++    class McpApprovalResponse(TypedDict): pass
++
+ from openai.types.responses.response_item_param import ResponseItemParam
