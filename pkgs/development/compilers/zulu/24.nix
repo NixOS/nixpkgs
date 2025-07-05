@@ -5,8 +5,8 @@
 }@args:
 
 let
-  # For 24 JDK FX is newer than regular JDK?
-  zuluVersion = if enableJavaFX then "24.28.85" else "24.28.83";
+  # For 24 JDK FX is newer than regular JDK
+  zuluVersion = if enableJavaFX then "24.30.13" else "24.30.11";
 in
 callPackage ./common.nix (
   {
@@ -15,42 +15,42 @@ callPackage ./common.nix (
     dists = {
       x86_64-linux = {
         inherit zuluVersion;
-        jdkVersion = "24.0.0";
+        jdkVersion = "24.0.1";
         hash =
           if enableJavaFX then
-            "sha256-y8jiE5yECh96pHYZFM0Q/JTiVcm5a0PONYJDLYydCT0="
+            "sha256-jbpWNE+X5GJABQERq126ediyzGRQE9NZy9oMW/sPUa0="
           else
-            "sha256-Kf6gF8A8ZFIhujEgjlENeuSPVzW6QWnVZcRst35/ZvI=";
+            "sha256-EvaVfDoqdNNtaSz+467rlJ8VtdgNrQi/DT7ZMNZthlk=";
       };
 
       aarch64-linux = {
         inherit zuluVersion;
-        jdkVersion = "24.0.0";
+        jdkVersion = "24.0.1";
         hash =
           if enableJavaFX then
-            "sha256-H6YD8uhk9rTpd+3/S1+7QVzpCi6jykWKyu7RPxMx/sI="
+            "sha256-N9VOweloyX/2bFPH3L+Iw7nTkbiE7LvDNnTNM1b8Ghc="
           else
-            "sha256-6J7szd/ax9xCMNA9efw9Bhgv/VwQFXz5glWIoj+UYIc=";
+            "sha256-4R5K5XTgpR9kq9WWE3SgvqVTq8CFvyb943zAiSsq3k0=";
       };
 
       x86_64-darwin = {
         inherit zuluVersion;
-        jdkVersion = "24.0.0";
+        jdkVersion = "24.0.1";
         hash =
           if enableJavaFX then
-            "sha256-lMdbPkUdXyNcye8uMxGIhZTErrTI0P0SnqMS+8+Rjqg="
+            "sha256-c6Gwj8ol2YLfo4sMeCMGfYQvtDz7029L0Yj1dqVQvsw="
           else
-            "sha256-e7KJtJ9+mFFSdKCj68thfTXguWH5zXaSSb9phzXf/lQ=";
+            "sha256-VhGOiZaspXeVVLEp0MJZXxj/+ovGgmy+gRb2BZ9OuhY=";
       };
 
       aarch64-darwin = {
         inherit zuluVersion;
-        jdkVersion = "24.0.0";
+        jdkVersion = "24.0.1";
         hash =
           if enableJavaFX then
-            "sha256-oR2x0vphBGgh3KkEkLAcmtIMNONny9/b32z9jLR98X0="
+            "sha256-Sac+DxNyGqsiStpc/wZYd2K7rvPEjo901kOYERYi+Sw="
           else
-            "sha256-7yXLOJCK0RZ8V1vsexOGxGR9NAwi/pCl95BlO8E8nGU=";
+            "sha256-pJsq2gKcTy44zbFbSAj6Kd5VZi095jKGkZqd8ceIz7E=";
       };
     };
   }
