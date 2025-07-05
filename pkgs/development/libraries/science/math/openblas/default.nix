@@ -109,6 +109,13 @@ let
       USE_OPENMP = false;
     };
 
+    powerpc64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "POWER4";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
+
     powerpc64le-linux = {
       BINARY = 64;
       TARGET = setTarget "POWER5";
