@@ -15103,6 +15103,13 @@
     githubId = 401263;
     keys = [ { fingerprint = "1147 43F1 E707 6F3E 6F4B  2C96 B9A8 B592 F126 F8E8"; } ];
   };
+  MacaylaMarvelous81 = {
+    name = "Jomar Milan";
+    email = "jomarm@jomarm.com";
+    github = "MacaylaMarvelous81";
+    githubId = 29156241;
+    keys = [ { fingerprint = "F954 C5C9 5AE7 A312 183D  A76C 6AC4 6A6F 9A56 18D8"; } ];
+  };
   macronova = {
     name = "Sicheng Pan";
     email = "trivial@invariantspace.com";
