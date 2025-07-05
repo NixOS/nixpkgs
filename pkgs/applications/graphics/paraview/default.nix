@@ -13,7 +13,7 @@
   makeWrapper,
   ninja,
   mpi,
-  python3,
+  python312,
   tbb,
   libGLU,
   libGL,
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     '';
 
   propagatedBuildInputs = [
-    (python3.withPackages (
+    (python312.withPackages (
       ps: with ps; [
         numpy
         matplotlib
