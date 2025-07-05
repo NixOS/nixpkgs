@@ -128,12 +128,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch =
     # Dynamically link WebRTC instead of static
     ''
-      substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
+      substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
         --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
 
       # Zed team renamed the function but forgot to update its usage in this file
       # We rename it ourselves for now, until upstream fixes the issue
-      substituteInPlace $cargoDepsCopy/reqwest-0.12*/src/blocking/client.rs \
+      substituteInPlace $cargoDepsCopy/*/reqwest-0.12*/src/blocking/client.rs \
         --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
     '';
 
