@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -101,23 +102,28 @@ buildPythonPackage rec {
     "test_trainer_multi_dataset_errors"
   ];
 
-  disabledTestPaths = [
-    # Tests require network access
-    "tests/cross_encoder/test_cross_encoder.py"
-    "tests/cross_encoder/test_train_stsb.py"
-    "tests/evaluation/test_information_retrieval_evaluator.py"
-    "tests/sparse_encoder/models/test_csr.py"
-    "tests/sparse_encoder/models/test_sparse_static_embedding.py"
-    "tests/sparse_encoder/test_opensearch_models.py"
-    "tests/sparse_encoder/test_pretrained.py"
-    "tests/sparse_encoder/test_sparse_encoder.py"
-    "tests/test_compute_embeddings.py"
-    "tests/test_model_card_data.py"
-    "tests/test_multi_process.py"
-    "tests/test_pretrained_stsb.py"
-    "tests/test_sentence_transformer.py"
-    "tests/test_train_stsb.py"
-  ];
+  disabledTestPaths =
+    [
+      # Tests require network access
+      "tests/cross_encoder/test_cross_encoder.py"
+      "tests/cross_encoder/test_train_stsb.py"
+      "tests/evaluation/test_information_retrieval_evaluator.py"
+      "tests/sparse_encoder/models/test_csr.py"
+      "tests/sparse_encoder/models/test_sparse_static_embedding.py"
+      "tests/sparse_encoder/test_opensearch_models.py"
+      "tests/sparse_encoder/test_pretrained.py"
+      "tests/sparse_encoder/test_sparse_encoder.py"
+      "tests/test_compute_embeddings.py"
+      "tests/test_model_card_data.py"
+      "tests/test_multi_process.py"
+      "tests/test_pretrained_stsb.py"
+      "tests/test_sentence_transformer.py"
+      "tests/test_train_stsb.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Segfault
+      "tests/test_sparse_tensor.py"
+    ];
 
   # Sentence-transformer needs a writable hf_home cache
   postInstall = ''
