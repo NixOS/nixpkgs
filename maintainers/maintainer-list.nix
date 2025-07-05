@@ -20277,23 +20277,6 @@
     githubId = 1304102;
     name = "Pavan Rikhi";
   };
-  primeos = {
-    email = "dev.primeos@gmail.com";
-    matrix = "@primeos:matrix.org";
-    github = "primeos";
-    githubId = 7537109;
-    name = "Michael Weiss";
-    keys = [
-      {
-        # Git only
-        fingerprint = "86A7 4A55 07D0 58D1 322E  37FD 1308 26A6 C2A3 89FD";
-      }
-      {
-        # Email, etc.
-        fingerprint = "AF85 991C C950 49A2 4205  1933 BCA9 943D D1DF 4C04";
-      }
-    ];
-  };
   prince213 = {
     name = "Sizhe Zhao";
     email = "prc.zhao@outlook.com";
