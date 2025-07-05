@@ -9,16 +9,16 @@
 
 php84.buildComposerProject2 (finalAttrs: {
   pname = "snipe-it";
-  version = "8.1.16";
+  version = "8.1.17";
 
   src = fetchFromGitHub {
     owner = "grokability";
     repo = "snipe-it";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Eo0Z6aWbNniOcPIjsgWwy9d9TXfyYZPK3AtVxbAcjac=";
+    hash = "sha256-8AlaoGx8zrQ7l0nty+sjBcXXlXHCjSz8wIzApm1QfOg=";
   };
 
-  vendorHash = "sha256-bQFNpms8l85d74HoTEPx2fHZxbcjtbf1MoKj4lX3AMk=";
+  vendorHash = "sha256-9wKNxC5M072RSiTGcyEAx3gXikjehn5w3C3DfvU9vW0=";
 
   postInstall = ''
     snipe_it_out="$out/share/php/snipe-it"
