@@ -39,6 +39,7 @@ let
       poetry-audit-plugin = callPackage ./plugins/poetry-audit-plugin.nix { };
       poetry-plugin-export = callPackage ./plugins/poetry-plugin-export.nix { };
       poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
+      poetry-plugin-migrate = callPackage ./plugins/poetry-plugin-migrate.nix { };
       poetry-plugin-poeblix = callPackage ./plugins/poetry-plugin-poeblix.nix { };
       poetry-plugin-shell = callPackage ./plugins/poetry-plugin-shell.nix { };
     };
