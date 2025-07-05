@@ -4,19 +4,15 @@
   fetchFromGitHub,
   nixosTests,
 }:
-let
-  version = "0.12.0";
-in
-
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "scion";
 
-  inherit version;
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "scionproto";
     repo = "scion";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-J51GIQQhS623wFUU5dI/TwT2rkDH69518lpdCLZ/iM0=";
   };
 
@@ -57,4 +53,4 @@ buildGoModule {
       matthewcroughan
     ];
   };
-}
+})
