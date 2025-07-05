@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "snowflake-core";
-  version = "1.4.0";
+  version = "1.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "snowflake_core";
     inherit version;
-    hash = "sha256-3BzO3s5BtS/cuF+JwKuAG8Usca5oo79ffp33TXUP5E8=";
+    hash = "sha256-W6itmcyJRdSAlTLxj2asYjrqGIjmhpdcRh+Gp8OXAik=";
   };
 
   build-system = [ hatchling ];
