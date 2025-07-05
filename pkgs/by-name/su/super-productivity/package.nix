@@ -7,25 +7,65 @@
   makeDesktopItem,
   nix-update-script,
   npm-lockfile-fix,
+  prefetch-npm-deps,
+  rsync,
   stdenv,
 }:
 
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "13.0.10";
+  version = "14.0.1";
 
   src = fetchFromGitHub {
     owner = "johannesjo";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-2K/6T4f9tLlrKimT/DPSdoz8LHij5nsaF6BWSQf6u7U=";
+    hash = "sha256-6CGH3m+3ZCeq97+mc1YtDT1Tevdf3eMI6RtrGn75y+A=";
 
     postFetch = ''
-      ${lib.getExe npm-lockfile-fix} -r $out/package-lock.json
+      find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
     '';
   };
 
-  npmDepsHash = "sha256-l9P11ZvLYiTu/cVPQIw391ZTJ0K+cNPUzoVMsdze2uo=";
+  # Use custom fetcher for deps because super-productivity uses multiple
+  # package-lock.json files to manage plugins.  It checks all lock
+  # files and produces a merged output.  This should still be compatible
+  # with nix-update.
+  npmDeps = stdenv.mkDerivation {
+    pname = "super-productivity-deps";
+    inherit version src;
+
+    nativeBuildInputs = [
+      prefetch-npm-deps
+      rsync
+    ];
+
+    # Some lockfiles do not include any dependencies to install so
+    # prefertch-npm-deps produces an error.  Those can be ignored with
+    # this flag.
+    env.FORCE_EMPTY_CACHE = true;
+
+    buildPhase = ''
+      mkdir -p $out
+      find -name package-lock.json | while read -r lockfile; do
+        prefetch-npm-deps $lockfile /tmp/cache
+        # Merge output
+        rsync -a /tmp/cache/ $out
+        rm -rf /tmp/cache
+      done
+      # Ensure that the root package-lock.json is placed in the output.
+      # This means only the root lockfile is checked for consistancy,
+      # but that should not be an issue.
+      cp package-lock.json $out
+    '';
+
+    dontInstall = true;
+
+    outputHash = "sha256-hA4MqRbdgpZ1REH3Ui3dGBSidgeM3yMb+ko5Rve0rBg=";
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+
   makeCacheWritable = true;
 
   env = {
@@ -64,13 +104,13 @@ buildNpmPackage rec {
       if stdenv.hostPlatform.isDarwin then
         ''
           mkdir -p $out/Applications
-          cp -r "app-builds/mac"*"/Super Productivity.app" "$out/Applications"
+          cp -r ".tmp/app-builds/mac"*"/Super Productivity.app" "$out/Applications"
           makeWrapper "$out/Applications/Super Productivity.app/Contents/MacOS/Super Productivity" "$out/bin/super-productivity"
         ''
       else
         ''
           mkdir -p $out/share/{super-productivity,icons/hicolor/scalable/apps}
-          cp -r app-builds/*-unpacked/resources/app.asar $out/share/super-productivity
+          cp -r .tmp/app-builds/*-unpacked/resources/app.asar $out/share/super-productivity
           cp electron/assets/icons/ico-circled.svg $out/share/icons/hicolor/scalable/apps/super-productivity.svg
 
           makeWrapper '${lib.getExe electron}' "$out/bin/super-productivity" \
