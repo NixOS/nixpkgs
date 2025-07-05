@@ -27,6 +27,8 @@
   tzdata,
   which,
   zlib,
+  # https://github.com/crystal-lang/crystal/issues/12299
+  withInterpreter ? stdenv.hostPlatform.isx86_64,
 }:
 
 # We need to keep around at least the latest version released with a stable
@@ -42,15 +44,19 @@ let
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
 
-  nativeCheckInputs = [
-    git
-    gmp
-    openssl
-    readline
-    libxml2
-    libyaml
-    libffi
-  ];
+  nativeCheckInputs =
+    [
+      git
+      gmp
+      openssl
+      readline
+      libxml2
+      libyaml
+    ]
+    ++ lib.optionals withInterpreter [
+      libffi
+      pcre2
+    ];
 
   binaryUrl =
     version: rel:
@@ -196,11 +202,13 @@ let
           openssl
         ]
         ++ extraBuildInputs
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+        ++ lib.optionals withInterpreter [libffi pcre2];
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
         "progress=1"
+        "interpreter=${if withInterpreter then "1" else "0"}"
       ];
 
       LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
@@ -264,6 +272,7 @@ let
 
       preCheck = ''
         export LIBRARY_PATH=${lib.makeLibraryPath nativeCheckInputs}:$LIBRARY_PATH
+        export LD_LIBRARY_PATH=${lib.makeLibraryPath nativeCheckInputs}:$LD_LIBRARY_PATH
         export PATH=${lib.makeBinPath nativeCheckInputs}:$PATH
       '';
 
