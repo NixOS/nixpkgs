@@ -8,7 +8,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-stdenv.mkDerivation (finalAttr: {
+stdenv.mkDerivation {
   pname = "re-Isearch";
   version = "2.20220925.4.0a-unstable-2025-03-16";
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation (finalAttr: {
     maintainers = [ lib.maintainers.astro ];
     teams = [ lib.teams.ngi ];
   };
-})
+}
