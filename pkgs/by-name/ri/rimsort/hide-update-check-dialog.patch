@@ -1,0 +1,20 @@
+diff --git a/app/views/main_content_panel.py b/app/views/main_content_panel.py
+--- a/app/views/main_content_panel.py
++++ b/app/views/main_content_panel.py
+@@ -830,11 +830,11 @@
+             logger.debug(
+                 "You are running from Python interpreter. Skipping update check..."
+             )
+-            dialogue.show_warning(
+-                title=self.tr("Update skipped"),
+-                text=self.tr("You are running from Python interpreter."),
+-                information=self.tr("Skipping update check..."),
+-            )
++            # dialogue.show_warning(
++            #     title=self.tr("Update skipped"),
++            #     text=self.tr("You are running from Python interpreter."),
++            #     information=self.tr("Skipping update check..."),
++            # )
+             return
+         # NUITKA
+         logger.debug("Checking for RimSort update...")
