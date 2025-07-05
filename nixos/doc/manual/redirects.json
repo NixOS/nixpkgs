@@ -1025,6 +1025,9 @@
   "module-services-prometheus-exporters-update-exporter-module": [
     "index.html#module-services-prometheus-exporters-update-exporter-module"
   ],
+  "module-services-prometheus-exporters-downstream-exporter": [
+    "index.html#module-services-prometheus-exporters-downstream-exporter"
+  ],
   "module-services-parsedmarc": [
     "index.html#module-services-parsedmarc"
   ],
