@@ -4266,13 +4266,6 @@
     githubId = 9086315;
     name = "Connor Brewster";
   };
-  cburstedde = {
-    email = "burstedde@ins.uni-bonn.de";
-    github = "cburstedde";
-    githubId = 109908;
-    name = "Carsten Burstedde";
-    keys = [ { fingerprint = "1127 A432 6524 BF02 737B  544E 0704 CD9E 550A 6BCD"; } ];
-  };
   ccellado = {
     email = "annplague@gmail.com";
     github = "ccellado";
