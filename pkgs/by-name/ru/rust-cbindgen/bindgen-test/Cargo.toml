@@ -1,0 +1,9 @@
+[package]
+name = "hello_bindgen"
+version = "0.0.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
