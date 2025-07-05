@@ -25,7 +25,7 @@
   pkg-config,
   python3Packages,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
-  ifcSupport ? false,
+  ifcSupport ? false, # Now a no-op, retained on 25.05 branch for backport compat.
   stdenv,
   swig,
   vtk,
@@ -45,6 +45,7 @@ let
     [
       boost
       gitpython # for addon manager
+      ifcopenshell
       matplotlib
       opencamlib
       pivy
@@ -55,9 +56,6 @@ let
       python
       pyyaml # (at least for) PyrateWorkbench
       scipy
-    ]
-    ++ lib.optionals ifcSupport [
-      ifcopenshell
     ]
     ++ lib.optionals (qtVersion == 5) [
       pyside2
