@@ -14,18 +14,20 @@
   libportal-gtk4,
   gnome,
   librsvg,
-  libavif,
+  webp-pixbuf-loader,
+  libsoup_3,
+  bash,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gradia";
-  version = "1.5.0";
+  version = "1.6.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
     tag = "v${version}";
-    hash = "sha256-IamiF3mn3rVmDJrEOl0Ji+7muo8e8kunOxAZJTBNjM8=";
+    hash = "sha256-OfSqjxNfIk3dQZp4T6W1aL24FGEQKlFLGT+mV1+GR5o=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +44,8 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     libadwaita
     libportal-gtk4
+    libsoup_3
+    bash
   ];
 
   dependencies = with python3Packages; [
@@ -50,11 +54,12 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
+    substituteInPlace $out/share/gradia/gradia/ui/image_exporters.py --replace-fail "/bin/bash" "${lib.getExe bash}"
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
           librsvg
-          libavif
+          webp-pixbuf-loader
         ];
       }
     }"
