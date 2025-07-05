@@ -29,20 +29,16 @@ buildPythonPackage rec {
   };
 
   prePatch =
-    ''
-      substituteInPlace rarfile.py \
-    ''
-    + (
-      if useUnrar then
-        ''
-          --replace 'UNRAR_TOOL = "unrar"' "UNRAR_TOOL = \"${unrar}/bin/unrar\""
-        ''
-      else
-        ''
-          --replace 'ALT_TOOL = "bsdtar"' "ALT_TOOL = \"${libarchive}/bin/bsdtar\""
-        ''
-    )
-    + "";
+    if useUnrar then
+      ''
+        substituteInPlace rarfile.py \
+          --replace-fail 'UNRAR_TOOL = "unrar"' 'UNRAR_TOOL = "${unrar}/bin/unrar"'
+      ''
+    else
+      ''
+        substituteInPlace rarfile.py \
+          --replace-fail 'BSDTAR_TOOL = "bsdtar"' 'BSDTAR_TOOL = "${libarchive}/bin/bsdtar"'
+      '';
 
   build-system = [ setuptools ];
 
