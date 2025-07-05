@@ -27,18 +27,17 @@
   makeDesktopItem,
   copyDesktopItems,
 
-  ## Needed for autoPatchelf / patchelf --print-needed ${electron}.bin
-  # Linking bin
-  # ffmpeg-headless,
+  ## Needed for autoPatchelf hook
   nss,
   nspr,
   dbus,
-  atk,
+  atk, # at-spi2-atk
   cups,
   libdrm,
   gtk3,
   pango,
   cairo,
+
   # xorg one's
   libXcomposite,
   libXdamage,
@@ -83,7 +82,8 @@ stdenv.mkDerivation rec {
     # DEBUG = "electron-rebuild";
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-    # `gyp verb get node dir` requires node headers
+    ## Error: node-gyp failed to rebuild;  web request failed: getaddrinfo EAI_AGAIN
+    ## Fix: specify node headers for step `gyp verb get node dir`
     npm_config_nodedir = "${nodejs}";
   };
 
@@ -109,28 +109,30 @@ stdenv.mkDerivation rec {
     libX11
   ];
 
+  ## Needed for autoPatchelf hook for linking libs with binaries
   buildInputs = [
-    ## Needed for autoPatchelf / patchelf --print-needed ${electron}.bin
     nss # lib{nss3,nssutil3,smime3}
     nspr
     dbus
-    atk # libat{k,kbridge,spi}
+    atk # lib{atk,atkbridge,atspi}
     cups
     libdrm
     gtk3 # libgtk-3
     pango
     cairo
-    libX11 # DONE ABOVE
+
+    # These are xorg one's
     libxcb # DONE ABOVE
+    libX11 # DONE ABOVE
     libXcomposite
     libXdamage
     libXext
     libXfixes
     libXrandr
+
     libgbm
     expat
     libxkbcommon
-
     alsa-lib # libasound
     pulseaudio # libpulse
     flac
@@ -145,10 +147,12 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
+    # Fix for:  gyp: buildcheck.gypi not found
     pushd ./node_modules/cpu-features
     node buildcheck.js > buildcheck.gypi
     popd
 
+    # Specify Dist etc. as fix for:  ENOENT: ... electron (bin*)
     yarn --offline electron package:preview \
       -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version} \
@@ -194,7 +198,7 @@ stdenv.mkDerivation rec {
   desktopItems =
     lib.pipe
 
-      # Abstracted attrset of names
+      ## value: Abstracted attribute set (attrset) of names
       {
         exec = "theia-ide";
         # pname is specified for icon in installPhase, hence same here
@@ -203,8 +207,9 @@ stdenv.mkDerivation rec {
         short = "theia-ide";
       }
 
+      ## [functions]: Pipeline to operate on above
       [
-        # Specify DRY parts of desktopItems as nix attribute sets (attrsets)
+        # Create DRY parts of desktopItems as nix attrsets
         (names: {
 
           # Common part in both items
@@ -229,7 +234,8 @@ stdenv.mkDerivation rec {
             ];
           };
 
-          # 'name': basename-no-ext of .desktop file; desktopName: 'Name' field
+          # 'name': basename-no-ext of .desktop file
+          # 'desktopName': 'Name' field
           item-list = [
             {
               # Item 1: main launcher
@@ -256,9 +262,9 @@ stdenv.mkDerivation rec {
         })
 
         # https://nix.dev/manual/nix/2.28/nix-2.28.html#builtins-map
-        # map :: function [items]
+        # Signature:  map :: function [items]
 
-        # Merge/update item attrsets into `base` to get complete items
+        # Merge/update item attrsets into `base` to get two complete items
         (data: map (item: data.base // item) data.item-list)
 
         # Make ${name}.desktop files from both items of the list
@@ -302,12 +308,16 @@ stdenv.mkDerivation rec {
       gpl2Only
       epl20
     ];
+
+    # Type of source used to create this package
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     maintainers = with lib.maintainers; [ goyalyashpal ];
 
     ## Build-related meta information
     mainProgram = "theia-ide";
-    # https://github.com/NixOS/nixpkgs/blob/7c43f080a7/pkgs/applications/editors/vscode/vscodium.nix#L80
-    # sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # inherit (electron.meta) platforms;
     platforms = [
       # "aarch64-darwin"
