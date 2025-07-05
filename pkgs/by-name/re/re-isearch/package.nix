@@ -8,7 +8,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-stdenv.mkDerivation (finalAttr: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "re-Isearch";
   version = "2.20220925.4.0a-unstable-2025-03-16";
 
