@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  runCommand,
+  writeText,
   clang-unwrapped,
   clang,
   libcxxClang,
@@ -10,50 +12,79 @@
   enableLibcxx ? false,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   unwrapped = clang-unwrapped;
 
   pname = "clang-tools";
-  version = lib.getVersion clang-unwrapped;
+  version = lib.getVersion finalAttrs.unwrapped;
   dontUnpack = true;
   clang = if enableLibcxx then libcxxClang else clang;
 
   installPhase = ''
     runHook preInstall
-
     mkdir -p $out/bin
 
-    for tool in $unwrapped/bin/clang-*; do
-      tool=$(basename "$tool")
+    for toolPath in ${finalAttrs.unwrapped}/bin/clangd ${finalAttrs.unwrapped}/bin/clang-*; do
+      toolName=$(basename "$toolPath")
 
-      # Compilers have their own derivation, no need to include them here:
-      if [[ $tool == "clang-cl" || $tool == "clang-cpp" ]]; then
+      # Compilers have their own derivations, no need to include them here
+      if [[ $toolName == "clang-cl" || $toolName == "clang-cpp" || $toolName =~ ^clang\-[0-9]+$ ]]; then
         continue
       fi
 
-      # Clang's derivation produces a lot of binaries, but the tools we are
-      # interested in follow the `clang-something` naming convention - except
-      # for clang-$version (e.g. clang-13), which is the compiler again:
-      if [[ ! $tool =~ ^clang\-[a-zA-Z_\-]+$ ]]; then
-        continue
-      fi
-
-      ln -s $out/bin/clangd $out/bin/$tool
+      cp $toolPath $out/bin/$toolName-unwrapped
+      substituteAll ${./wrapper} $out/bin/$toolName
+      chmod +x $out/bin/$toolName
     done
 
-    if [[ -z "$(ls -A $out/bin)" ]]; then
-      echo "Found no binaries - maybe their location or naming convention changed?"
-      exit 1
-    fi
-
-    substituteAll ${./wrapper} $out/bin/clangd
-    chmod +x $out/bin/clangd
+    # clangd etc. find standard header files by looking at the directory the
+    # tool is located in and appending `../lib` to the search path. Since we
+    # are copying the binaries, they expect to find `$out/lib` present right
+    # within this derivation, containing `stddef.h` and so on.
+    #
+    # Note that using `ln -s` instead of `cp` in the loop above wouldn't avoid
+    # this problem, since it's `clang-unwrapped` which separates libs into a
+    # different output in the first place - here we are merely "merging" the
+    # directories back together, as expected by the tools.
+    ln -s ${finalAttrs.unwrapped.lib}/lib $out/lib
 
     runHook postInstall
   '';
+
+  passthru.tests.smokeOk =
+    let
+      src = writeText "main.cpp" ''
+        #include <iostream>
+
+        int main() {
+          std::cout << "Hi!";
+        }
+      '';
+
+    in
+    runCommand "clang-tools-test-smoke-ok" { } ''
+      ${finalAttrs.finalPackage}/bin/clangd --check=${src}
+      touch $out
+    '';
+
+  passthru.tests.smokeErr =
+    let
+      src = writeText "main.cpp" ''
+        int main() {
+           std::cout << "Hi!";
+        }
+      '';
+
+    in
+    runCommand "clang-tools-test-smoke-err" { } ''
+      (${finalAttrs.finalPackage}/bin/clangd --check=${src} 2>&1 || true) \
+          | grep 'use of undeclared identifier'
+
+      touch $out
+    '';
 
   meta = llvm_meta // {
     description = "Standalone command line tools for C++ development";
     maintainers = with lib.maintainers; [ patryk27 ];
   };
-}
+})
