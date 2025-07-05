@@ -4809,6 +4809,9 @@ with pkgs;
 
   ### DEVELOPMENT / COMPILERS
 
+  temurin-bin-25ea = javaPackages.compiler.temurin-bin.jdk-25ea;
+  temurin-jre-bin-25ea = javaPackages.compiler.temurin-bin.jre-25ea;
+
   temurin-bin-24 = javaPackages.compiler.temurin-bin.jdk-24;
   temurin-jre-bin-24 = javaPackages.compiler.temurin-bin.jre-24;
 
