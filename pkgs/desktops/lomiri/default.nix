@@ -31,6 +31,7 @@ let
       teleports = callPackage ./applications/teleports { };
 
       #### Data
+      lomiri-gsettings-overrides = callPackage ./data/lomiri-gsettings-overrides { };
       lomiri-schemas = callPackage ./data/lomiri-schemas { };
       lomiri-session = callPackage ./data/lomiri-session { };
       lomiri-sounds = callPackage ./data/lomiri-sounds { };
