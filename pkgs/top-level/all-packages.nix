@@ -9344,11 +9344,9 @@ with pkgs;
     }
   );
 
-  readline = readline82;
-
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
 
-  readline82 = callPackage ../development/libraries/readline/8.2.nix { };
+  readline = callPackage ../development/libraries/readline/8.3.nix { };
 
   readmdict = with python3Packages; toPythonApplication readmdict;
 
