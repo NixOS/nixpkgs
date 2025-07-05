@@ -10,6 +10,16 @@
         serviceConfig.ExecStart = "${lib.getExe pkgs.paisa} serve";
       };
     };
+  serviceEmptyConf =
+    { ... }:
+    {
+      services.paisa = {
+        enable = true;
+
+        settings = { };
+      };
+    };
+
   testScript = ''
     start_all()
 
@@ -19,5 +29,11 @@
     machine.wait_for_open_port(7500)
 
     machine.succeed("curl --location --fail http://localhost:7500")
+
+    with subtest("empty/default config test"):
+      serviceEmptyConf.wait_for_unit("paisa.service")
+      serviceEmptyConf.wait_for_open_port(7500)
+
+      serviceEmptyConf.succeed("curl --location --fail http://localhost:7500")
   '';
 }
