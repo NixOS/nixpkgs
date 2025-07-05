@@ -252,3 +252,55 @@ Code to be executed on a peripheral device or embedded controller, built by a th
 ### `lib.sourceTypes.binaryBytecode` {#lib.sourceTypes.binaryBytecode}
 
 Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files from another source.
+
+## Software identifiers {#sec-meta-identifiers}
+
+Package's `meta.identifiers` attribute specifies information about software identifiers associated with this package. Software identifiers are used, for example:
+* to generate Software Bill of Materials (SBOM) that lists all components used to build the software, which can later be used to perform vulnerability or license analysis of the resulting software;
+* to lookup software in different vulnerability databases or report new vulnerabilities to them.
+
+`meta.identifiers` attribute is optional, and good guesses for some parts of it are generated automatically. It is recommended to fill in missing pieces to help tools mentioned above get precise data. For example, we could get automatic notifications about potential vulnerabilities for users in future. All identifiers specified in `meta.identifiers` are expected to be unambiguous and valid.
+
+`meta.identifiers` contains `v1` attribute which is an attribute set that guarantees backward compatibility of its constituents. Right now it contains copies of all other attributes in `meta.identifiers`.
+
+### CPE {#sec-meta-identifiers-cpe}
+
+Common Platform Enumeration (CPE) is a specification maintained by NIST as part of the Security Content Automation Protocol (SCAP). It is used to identify software in National Vulnerabilities Database (NVD, https://nvd.nist.gov) and other vulnerability databases.
+
+Current version of CPE 2.3 consists of 13 parts:
+
+```
+cpe:2.3:a:<vendor>:<product>:<version>:<update>:<edition>:<language>:<sw_edition>:<target_sw>:<target_hw>:<other>
+```
+
+Some of them are as follows:
+
+* *CPE version* - current version of CPE is `2.3`
+* *part* - usually in Nixpkgs `a` for "application"
+* *vendor* - can point to the source of the package, or to Nixpkgs itself
+* *product* - name of the package
+* *version* - version of the package
+* *update* - name of the latest update, can be a patch version for semantically versioned packages
+* *edition* - any additional specification about the version
+
+You can find information about all of these attributes in the [official specification](https://csrc.nist.gov/projects/security-content-automation-protocol/specifications/cpe/naming) (heading 5.3.3, pages 11-13).
+
+Any fields that don't have a value are set to either `-` if the value is not available or `*` when the field can match any value.
+
+For example, for glibc 2.40.1 CPE would be `cpe:2.3:a:gnu:glibc:2.40:1:*:*:*:*:*:*`.
+
+#### `meta.identifiers.cpeParts` {#var-meta-identifiers-cpeParts}
+
+This attribute contains an attribute set of all parts of the CPE for this package. Most of the parts default to `*` (match any value), with some exceptions:
+
+* `vendor` cannot be deduced from other sources, so it must be specified by the package author
+* `product` defaults to provided derivation's `pname` attribute and must be provided explicitly if `pname` is missing
+* `version` and `update` default to `X.Y` and `Z` if derivation's `version` attribute matches `X.Y.Z` where all parts are numerical, and must be explicitly provided otherwise
+
+It is up to the package author to make sure all parts are correct and match expected values in [NVD dictionary](https://nvd.nist.gov/products/cpe). Unknown values can be skipped, which would leave them with the default value of `*`.
+
+For many packages it should be enough to specify only `meta.identifiers.cpeParts.vendor = ...` to make CPE available.
+
+#### `meta.identifiers.cpe` {#var-meta-identifiers-cpe}
+
+A readonly attribute that concatenates all CPE parts in one string.

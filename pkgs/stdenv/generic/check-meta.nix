@@ -11,6 +11,7 @@ let
   inherit (lib)
     all
     attrNames
+    attrValues
     concatMapStrings
     concatMapStringsSep
     concatStrings
@@ -34,6 +35,7 @@ let
     toList
     isList
     elem
+    elemAt
     ;
 
   inherit (lib.meta)
@@ -426,6 +428,9 @@ let
       # Used for the original location of the maintainer and team attributes to assist with pings.
       maintainersPosition = any;
       teamsPosition = any;
+
+      # FIXME: Add deep check for all these attributes
+      identifiers = attrs;
     };
 
   checkMetaAttr =
@@ -622,6 +627,50 @@ let
       maintainers =
         attrs.meta.maintainers or [ ]
         ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
+    }
+    // {
+      identifiers =
+        let
+          # we have to call toString here in case version is an attrset with __toString attribute
+          versionMatch = builtins.match "([0-9]+\.[0-9]+)\.([0-9]+)" (toString attrs.version);
+          versionParts =
+            if !attrs ? version then
+              {
+                version = null;
+                update = null;
+              }
+            else if versionMatch == null then
+              {
+                version = attrs.version or null;
+                update = "*";
+              }
+            else
+              {
+                version = elemAt versionMatch 0;
+                update = elemAt versionMatch 1;
+              };
+          cpeParts = {
+            vendor = null;
+            product = attrs.pname or null;
+            inherit (versionParts) version update;
+            edition = "*";
+            sw_edition = "*";
+            target_sw = "*";
+            target_hw = "*";
+            language = "*";
+            other = "*";
+          } // attrs.meta.identifiers.cpeParts or { };
+          cpe =
+            if all (x: !isNull x) (attrValues cpeParts) then
+              "cpe:2.3:a:${cpeParts.vendor}:${cpeParts.product}:${cpeParts.version}:${cpeParts.update}:${cpeParts.edition}:${cpeParts.sw_edition}:${cpeParts.target_sw}:${cpeParts.target_hw}:${cpeParts.language}:${cpeParts.other}"
+            else
+              null;
+          v1 = { inherit cpeParts cpe; };
+        in
+        v1
+        // {
+          inherit v1;
+        };
     }
     // {
       # Expose the result of the checks for everyone to see.
