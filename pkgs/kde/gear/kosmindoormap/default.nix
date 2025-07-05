@@ -3,6 +3,7 @@
   bison,
   flex,
   recastnavigation,
+  kcontacts,
 }:
 mkKdeDerivation {
   pname = "kosmindoormap";
@@ -12,4 +13,6 @@ mkKdeDerivation {
     flex
   ];
   extraBuildInputs = [ recastnavigation ];
+
+  extraPropagatedBuildInputs = [ kcontacts ];
 }
