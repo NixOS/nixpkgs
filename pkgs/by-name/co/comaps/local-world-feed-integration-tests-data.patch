@@ -1,0 +1,22 @@
+diff --git a/transit/world_feed/world_feed_integration_tests/CMakeLists.txt b/transit/world_feed/world_feed_integration_tests/CMakeLists.txt
+index 6c87cecf..56ae1a38 100644
+--- a/transit/world_feed/world_feed_integration_tests/CMakeLists.txt
++++ b/transit/world_feed/world_feed_integration_tests/CMakeLists.txt
+@@ -9,15 +9,11 @@ target_link_libraries(${PROJECT_NAME}
+   generator
+ )
+ 
+-# This test requires additional data from the other repository
+-if(NOT TEST_DATA_REPO_URL)
+-	set(TEST_DATA_REPO_URL "https://github.com/organicmaps/world_feed_integration_tests_data.git")
+-endif()
+ set(DESTINATION_FOLDER "${OMIM_DATA_DIR}/test_data/world_feed_integration_tests_data/")
+ 
+ add_custom_command(
+   TARGET ${PROJECT_NAME}
+   POST_BUILD
+-  COMMAND test -d ${DESTINATION_FOLDER} || (git clone ${TEST_DATA_REPO_URL} ${DESTINATION_FOLDER})
++  COMMAND test -d ${DESTINATION_FOLDER}
+   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+ )
+
