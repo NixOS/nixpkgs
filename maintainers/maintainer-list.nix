@@ -17015,6 +17015,13 @@
     githubId = 34243578;
     keys = [ { fingerprint = "D520 AC8D 7C96 9212 5B2B  BD3A 1AFD 1025 6B3C 714D"; } ];
   };
+  minionflo = {
+    email = "public@minionflo.net";
+    github = "Minionflo";
+    githubId = 62773986;
+    matrix = "@minionflo:matrix.minionflo.net";
+    name = "Luna";
+  };
   minizilla = {
     email = "m.billyzaelani@gmail.com";
     github = "smoothprogrammer";
