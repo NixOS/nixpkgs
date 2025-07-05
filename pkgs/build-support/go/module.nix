@@ -99,6 +99,9 @@ lib.extendMkDerivation {
 
             inherit (finalAttrs) src modRoot goSum;
 
+            # The Go linker does not support static PIE.
+            hardeningDisable = lib.optionals (!stdenv.hostPlatform.isStatic) [ "pie" ];
+
             # The following inheritance behavior is not trivial to expect, and some may
             # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
             # out in the wild. In anycase, it's documented in:
@@ -273,6 +276,7 @@ lib.extendMkDerivation {
             # this will respect the `hardening{Disable,Enable}` flags if set
             if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
               export GOFLAGS="-buildmode=pie $GOFLAGS"
+              export ldflags="-I $(cat $NIX_CC/nix-support/dynamic-linker) $ldflags"
             fi
 
             runHook postConfigure

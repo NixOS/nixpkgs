@@ -195,8 +195,11 @@ in
     )
     ++ extraConfigureFlags;
 
-  # causes redefinition of _FORTIFY_SOURCE
-  hardeningDisable = [ "fortify3" ];
+  hardeningDisable = [
+    # causes redefinition of _FORTIFY_SOURCE
+    "fortify3"
+    "pie"
+  ];
 
   # Packages to provide fallback bin paths
   # to the Apptainer/Singularity container runtime default PATHs.
