@@ -33,7 +33,7 @@
   dbus,
   atk, # at-spi2-atk
   cups,
-  libdrm,
+  # libdrm,
   gtk3,
   pango,
   cairo,
@@ -111,12 +111,13 @@ stdenv.mkDerivation rec {
 
   ## Needed for autoPatchelf hook for linking libs with binaries
   buildInputs = [
+    # ffmpeg-headless.lib # Use bundled one
     nss # lib{nss3,nssutil3,smime3}
     nspr
     dbus
     atk # lib{atk,atkbridge,atspi}
-    cups
-    libdrm
+    cups.lib
+    # libdrm # Seems to exist already
     gtk3 # libgtk-3
     pango
     cairo
@@ -137,8 +138,6 @@ stdenv.mkDerivation rec {
     pulseaudio # libpulse
     flac
     libxslt
-
-    # libffmpeg  # Use the bundled one: $out/lib
   ];
 
   # https://www.electron.build/#quick-setup-guide
