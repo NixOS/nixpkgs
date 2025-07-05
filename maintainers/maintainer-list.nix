@@ -7702,6 +7702,12 @@
     github = "ErinvanderVeen";
     githubId = 10973664;
   };
+  erkin = {
+    name = "Erkin Göksu";
+    email = "erkingoksuu@gmail.com";
+    github = "erkingoksuu";
+    githubId = 92168507;
+  };
   ern775 = {
     email = "eren.demir2479090@gmail.com";
     github = "ern775";
@@ -25318,6 +25324,12 @@
     github = "tiagolobocastro";
     githubId = 1618946;
     name = "Tiago Castro";
+  };
+  tibso = {
+    email = "thibaut.diels@proton.me";
+    github = "tibso";
+    githubId = 124144608;
+    name = "Thibaut Diels";
   };
   tie = {
     name = "Ivan Trubach";
