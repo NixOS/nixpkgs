@@ -80,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
+      diniamo
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;
