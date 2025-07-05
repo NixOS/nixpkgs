@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "voicevox-core";
-  version = "0.15.7";
+  version = "0.15.8";
 
   src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
@@ -42,19 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
     {
       "x86_64-linux" = fetchCoreArtifact {
         id = "linux-x64";
-        hash = "sha256-7FgrJ1HlB8l5MHd2KM4lYRx2bYdxrD2+su1G33/ugUA=";
+        hash = "sha256-n0rYSMR5wgjAtlQ4DWRAhJW/VevGG/Mmj6lXieG1U78=";
       };
       "aarch64-linux" = fetchCoreArtifact {
         id = "linux-arm64";
-        hash = "sha256-fD7YMTo9jeB4vJibnVwX8VrukCUeAwS6VXGOr3VXG+c=";
+        hash = "sha256-GOgBH0UinZMiNszTp2CWJKT9prTi84KH3V9fxpmweeU=";
       };
       "x86_64-darwin" = fetchCoreArtifact {
         id = "osx-x64";
-        hash = "sha256-5h9qEKbdcvip50TLs3vf6lXkSv24VEjOrx6CTUo7Q4Q=";
+        hash = "sha256-8TRlu1ztPciKDX9Igr0TKcyLzP8WRwTN9F11MjXNNW8=";
       };
       "aarch64-darwin" = fetchCoreArtifact {
         id = "osx-arm64";
-        hash = "sha256-0bFLhvP7LqDzuk3pyM9QZfc8eLMW0IgqVkaXsuS3qlY=";
+        hash = "sha256-6Na7LBZg2bWaX1VN6r6zdyg0mszBNn0e7u+cmqKVuY0=";
       };
     };
 
