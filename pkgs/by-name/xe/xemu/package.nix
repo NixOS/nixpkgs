@@ -6,6 +6,8 @@
   gettext,
   glib,
   gtk3,
+  cmake,
+  curl,
   libGLU,
   libdrm,
   libepoxy,
@@ -13,6 +15,8 @@
   libsamplerate,
   libslirp,
   libgbm,
+  vulkan-headers,
+  vulkan-loader,
   meson,
   ninja,
   openssl,
@@ -23,24 +27,37 @@
   vte,
   which,
   wrapGAppsHook3,
+  cacert,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.7.135";
+  version = "0.8.76";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AoGZNfvtdTlBMyYGiyNxGYKcuv/wPqiTsTTUbRpRjgs=";
     fetchSubmodules = true;
-    hash = "sha256-lTZ5j5ULh4GFW4zlQy4l7e4zr8TEIvenGNC59O6G0Wg=";
+
+    # also fetch required git submodules
+    postFetch = ''
+      cd "$out"
+      export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+
+      ${lib.getExe meson} subprojects download \
+        SPIRV-Reflect VulkanMemoryAllocator berkeley-softfloat-3 berkeley-testfloat-3 genconfig glslang imgui \
+        implot json keycodemapdb nv2a_vsh_cpu tomlplusplus volk xxhash || true
+      find subprojects -type d -name .git -prune -execdir rm -r {} +
+    '';
   };
 
   nativeBuildInputs =
     [
       SDL2
       meson
+      cmake
       ninja
       perl
       pkg-config
@@ -58,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     glib
     gtk3
+    curl
     libGLU
     libdrm
     libepoxy
@@ -67,11 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     openssl
     vte
+    vulkan-headers
+    vulkan-loader
   ];
 
   configureFlags = [
     "--disable-strip"
-    "--meson=meson"
     "--target-list=i386-softmmu"
     "--disable-werror"
   ];
@@ -81,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   dontUseMesonConfigure = true;
+  dontUseCmakeConfigure = true;
 
   setOutputFlags = false;
 
@@ -88,20 +108,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
+
     substituteInPlace ./scripts/xemu-version.sh \
-      --replace 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
+      --replace-fail 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
   '';
 
-  preConfigure =
-    ''
-      configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
-    ''
-    +
-      # When the data below can't be obtained through git, the build process tries
-      # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
-      ''
-        echo '${finalAttrs.version}' > XEMU_VERSION
-      '';
+  preConfigure = ''
+    configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
+    # When the data below can't be obtained through git, the build process tries
+    # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
+    echo '${finalAttrs.version}' > XEMU_VERSION
+  '';
 
   preBuild = ''
     cd build
@@ -147,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/xemu-project/xemu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "xemu";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ marcin-serwin ];
     platforms = lib.platforms.linux;
   };
 })
