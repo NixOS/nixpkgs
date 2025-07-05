@@ -1,0 +1,17 @@
+--- a/src/agents/agent.py
++++ b/src/agents/agent.py
+@@ -7,7 +7,14 @@ from dataclasses import dataclass, field
+ from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, cast
+ 
+-from openai.types.responses.response_prompt_param import ResponsePromptParam
++# Handle import for different OpenAI versions
++try:
++    from openai.types.responses.response_prompt_param import ResponsePromptParam
++except (ImportError, AttributeError):
++    # Fallback for cases where ResponsePromptParam is not available
++    from typing import Dict, Any as AnyType
++    ResponsePromptParam = Dict[str, AnyType]
++
+ from typing_extensions import NotRequired, TypeAlias, TypedDict
+ 
+ from .agent_output import AgentOutputSchemaBase
