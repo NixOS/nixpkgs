@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   pkg-config,
@@ -74,21 +75,48 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mkxgssJUBtM1DYOhFfj8YKlW61/gd0cgPtMze7YZ9L8=";
+    hash = "sha256-6aEYCHXfIfzjeeD6icNxum7z7UZgeNAFw3tBNdhrg0I=";
   };
 
   patches = [
     ./no-native-cpu.patch
+    # https://github.com/EricLBuehler/mistral.rs/pull/1510
+    (fetchpatch {
+      name = "fix-mcp-import-doc-string";
+      url = "https://github.com/EricLBuehler/mistral.rs/commit/c25d1dbed00ea2442ec017c859754fd34c9e5ff5.patch";
+      hash = "sha256-de+Xz/Md8816646a8lqJ1P4skDVXSvJAlUTwX1Mo25Y=";
+    })
+    # https://github.com/EricLBuehler/mistral.rs/pull/1511
+    (fetchpatch {
+      name = "fix-mcp-doc-string";
+      url = "https://github.com/EricLBuehler/mistral.rs/commit/5fbf607a88c44e048be0598b368900ec4088bd5a.patch";
+      hash = "sha256-WOf/JivdQfnbQPd8IS+qq+XoDFy4UKnfk0yD+D8WLeg=";
+    })
+    # https://github.com/EricLBuehler/mistral.rs/pull/1518
+    (fetchpatch {
+      name = "allow-disabling-metal-shaders-precompilation";
+      url = "https://github.com/EricLBuehler/mistral.rs/commit/359f99c6fed31c4de0dbe61aaadf644070c6c4be.patch";
+      hash = "sha256-2/sty8j9fpcmtD09oco/ZkFd+sfKRvqnzpOp6qPBLcU=";
+    })
   ];
 
+  postPatch =
+    # LTO significantly increases the build time (12m -> 1h)
+    ''
+      substituteInPlace Cargo.toml \
+        --replace-fail \
+          "lto = true" \
+          "lto = false"
+    '';
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-YGGtS8gJJQKIgXxMWjO05ikSVdfVNs+cORbJ+Wf88y4=";
+  cargoHash = "sha256-gwotO786FcbK0TDuBrGAM1FVf4dV9RxZ+vrRC1mdyhE=";
 
   nativeBuildInputs =
     [
@@ -125,6 +153,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env =
     {
+      # metal (proprietary) is not available in the darwin sandbox.
+      # Hence, we must disable metal precompilation.
+      MISTRALRS_METAL_PRECOMPILE = 0;
+
       SWAGGER_UI_DOWNLOAD_URL =
         let
           # When updating:
@@ -132,11 +164,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
           #   https://github.com/EricLBuehler/mistral.rs/blob/v<MISTRAL-RS-VERSION>/mistralrs-server/Cargo.toml
           # - Look at the corresponding version of `swagger-ui` at:
           #   https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-<UTOPIA-SWAGGER-UI-VERSION>/utoipa-swagger-ui/build.rs#L21-L22
-          swaggerUiVersion = "5.17.12";
+          swaggerUiVersion = "5.17.14";
 
           swaggerUi = fetchurl {
             url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${swaggerUiVersion}.zip";
-            hash = "sha256-HK4z/JI+1yq8BTBJveYXv9bpN/sXru7bn/8g5mf2B/I=";
+            hash = "sha256-SBJE0IEgl7Efuu73n3HZQrFxYX+cn5UU5jrL4T5xzNw=";
           };
         in
         "file://${swaggerUi}";
@@ -159,7 +191,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # swagger-ui will once more be copied in the target directory during the check phase
-  # See https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-7.1.0/utoipa-swagger-ui/build.rs#L168
+  # See https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-9.0.2/utoipa-swagger-ui/build.rs#L168
   # Not deleting the existing unpacked archive leads to a `PermissionDenied` error
   preCheck = ''
     rm -rf target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/build/
@@ -170,11 +202,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # - `cargo check ... --features=metal` (on darwin) requires the sandbox to be completely disabled
   checkFeatures = [ ];
 
-  # Try to access internet
   checkFlags = [
+    # Try to access internet
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_gpt2"
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_llama"
     "--skip=util::tests::test_parse_image_url"
+
+    "--skip=mistralrs-mcp/src/lib.rs"
   ];
 
   nativeInstallCheckInputs = [
