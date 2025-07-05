@@ -35,13 +35,13 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "moonraker";
-  version = "0.9.3-unstable-2025-06-12";
+  version = "0.9.3-unstable-2025-06-27";
 
   src = fetchFromGitHub {
     owner = "Arksine";
     repo = "moonraker";
-    rev = "ccbfd6498941cb4d8b49d192c8dd34feacfbe84a";
-    sha256 = "sha256-SCexS9dRbdwNSy5bTrGaEfP9EmkO3c/IL2+OIG7/K24=";
+    rev = "6ff9a7ca7a64157bb99434c2deda824832edb728";
+    sha256 = "sha256-6zmi+9zvB2WCY7f3ozwIwfTn4zA91w1C4EZJuSBNDzQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
