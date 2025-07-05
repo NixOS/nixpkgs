@@ -112,7 +112,9 @@ in
       serviceConfig.ExecStart = [
         ""
         ''
-          ${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
+          ${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} ${
+            lib.optionalString (!cfg.hwRender) "--no-drm"
+          } --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
         ''
       ];
 
