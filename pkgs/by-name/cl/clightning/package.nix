@@ -19,7 +19,7 @@
   sqlite,
   zlib,
   jq,
-  libpq
+  libpq,
 }:
 let
   py3 = python3.withPackages (p: [
