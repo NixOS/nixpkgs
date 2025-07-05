@@ -5,6 +5,7 @@
   setJavaClassPath,
   testers,
   enableJavaFX ? false,
+  earlyAccess ? false,
   dists,
   # minimum dependencies
   unzip,
@@ -69,7 +70,16 @@ let
     hash = "sha256-gCGii4ysQbRPFCH9IQoKCCL8r4jWLS5wo1sv9iioZ1o=";
   };
 
-  javaPackage = if enableJavaFX then "ca-fx-jdk" else "ca-jdk";
+  javaPackage =
+    if enableJavaFX then
+      "ca-fx-jdk"
+    else if earlyAccess then
+      "beta-jdk"
+    else
+      "ca-jdk";
+  # TODO: Replace 28 with the EA release number (which is currently 28)
+  eaNumber = "28";
+  distJdkVersion = if earlyAccess then "${dist.jdkVersion}-beta.${eaNumber}" else dist.jdkVersion;
 
   isJdk8 = lib.versions.major dist.jdkVersion == "8";
 
@@ -78,7 +88,7 @@ let
     version = dist.jdkVersion;
 
     src = fetchurl {
-      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-${javaPackage}${dist.jdkVersion}-${platform}_${arch}.tar.gz";
+      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-${javaPackage}${distJdkVersion}-${platform}_${arch}.tar.gz";
       inherit (dist) hash;
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
