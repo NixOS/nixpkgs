@@ -17,13 +17,13 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ario";
   version = "1.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ario-player/${pname}-${version}.tar.gz";
-    sha256 = "16nhfb3h5pc7flagfdz7xy0iq6kvgy6h4bfpi523i57rxvlfshhl";
+    url = "mirror://sourceforge/ario-player/ario-${finalAttrs.version}.tar.gz";
+    hash = "sha256-FELt6O75lDhEidctAo1/exocge/nN/cUdYfdAsdy0Jo=";
   };
 
   nativeBuildInputs = [
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK client for MPD (Music player daemon)";
     mainProgram = "ario";
     homepage = "https://ario-player.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.garrison ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ garrison ];
+    platforms = lib.platforms.all;
   };
-}
+})
