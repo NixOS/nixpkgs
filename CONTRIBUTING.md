@@ -203,6 +203,15 @@ The last checkbox is about whether it fits the guidelines in this `CONTRIBUTING.
 This document has detailed information on standards the Nix community has for commit messages, reviews, licensing of contributions you make to the project, etc...
 Everyone should read and understand the standards the community has for contributing before submitting a pull request.
 
+### Testing changes
+
+To run the main types of tests locally:
+
+- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build -A nixosTests.<NAME>`, where `NAME` is the name of a specific test file
+- Run [global package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests) with `nix-build --attr PACKAGE pkgs/test/default.nix`, where `PACKAGE` is the package name
+- Run package-internal tests with `nix-build --attr pkgs.PACKAGE.passthru.tests`
+- Run library tests with `nix-build lib/tests/NAME.nix`
+
 ### Rebasing between branches (i.e. from master to staging)
 [rebase]: #rebasing-between-branches-ie-from-master-to-staging
 
