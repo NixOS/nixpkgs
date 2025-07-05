@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildNpmPackage rec {
   pname = "eslint";
@@ -28,6 +29,10 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
   dontNpmPrune = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--generate-lockfile" ];
+  };
 
   meta = {
     description = "Find and fix problems in your JavaScript code";
