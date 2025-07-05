@@ -22,20 +22,20 @@
   fetchpatch2,
   beamPackages,
   nixosTests,
-  withMysql ? false,
-  withPgsql ? false,
-  withSqlite ? false,
+  withMySQL ? false,
+  withPostgreSQL ? false,
+  withSQLite ? false,
   sqlite,
-  withPam ? false,
+  withPAM ? false,
   pam,
   withZlib ? true,
   zlib,
-  withSip ? false,
+  withSIP ? false,
   withLua ? false,
   withTools ? false,
   withRedis ? false,
-  withImagemagick ? false,
-  imagemagick,
+  withImageMagick ? false,
+  imagemagickBig,
 }:
 
 let
@@ -157,12 +157,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ beamPackages.erlang ]
     ++ builtins.attrValues beamDeps
-    ++ lib.optional withMysql allBeamDeps.p1_mysql
-    ++ lib.optional withPgsql allBeamDeps.p1_pgsql
-    ++ lib.optional withSqlite allBeamDeps.sqlite3
-    ++ lib.optional withPam allBeamDeps.epam
+    ++ lib.optional withMySQL allBeamDeps.p1_mysql
+    ++ lib.optional withPostgreSQL allBeamDeps.p1_pgsql
+    ++ lib.optional withSQLite allBeamDeps.sqlite3
+    ++ lib.optional withPAM allBeamDeps.epam
     ++ lib.optional withZlib allBeamDeps.ezlib
-    ++ lib.optional withSip allBeamDeps.esip
+    ++ lib.optional withSIP allBeamDeps.esip
     ++ lib.optional withLua allBeamDeps.luerl
     ++ lib.optional withRedis allBeamDeps.eredis;
 
@@ -178,16 +178,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   configureFlags = [
-    (lib.enableFeature withMysql "mysql")
-    (lib.enableFeature withPgsql "pgsql")
-    (lib.enableFeature withSqlite "sqlite")
-    (lib.enableFeature withPam "pam")
+    (lib.enableFeature withMySQL "mysql")
+    (lib.enableFeature withPostgreSQL "pgsql")
+    (lib.enableFeature withSQLite "sqlite")
+    (lib.enableFeature withPAM "pam")
     (lib.enableFeature withZlib "zlib")
-    (lib.enableFeature withSip "sip")
+    (lib.enableFeature withSIP "sip")
     (lib.enableFeature withLua "lua")
     (lib.enableFeature withTools "tools")
     (lib.enableFeature withRedis "redis")
-  ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
+  ] ++ lib.optional withSQLite "--with-sqlite3=${sqlite.dev}";
 
   enableParallelBuilding = true;
 
@@ -205,8 +205,8 @@ stdenv.mkDerivation (finalAttrs: {
       -e '2iexport PATH=${ctlpath}:$PATH' \
       -e "s,\(^ *ERL_LIBS=.*\),\1:$ERL_LIBS," \
       $out/sbin/ejabberdctl
-    ${lib.optionalString withImagemagick ''wrapProgram $out/lib/ejabberd-*/priv/bin/captcha.sh --prefix PATH : "${
-      lib.makeBinPath [ imagemagick ]
+    ${lib.optionalString withImageMagick ''wrapProgram $out/lib/ejabberd-*/priv/bin/captcha.sh --prefix PATH : "${
+      lib.makeBinPath [ imagemagickBig ]
     }"''}
   '';
 
