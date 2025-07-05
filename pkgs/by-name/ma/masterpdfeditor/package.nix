@@ -51,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     sane-backends
   ];
 
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ nss ]}"
+  ];
+
   dontStrip = true;
 
   installPhase = ''
