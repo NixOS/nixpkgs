@@ -16192,8 +16192,6 @@ with pkgs;
 
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
 
-  unityhub = callPackage ../development/tools/unityhub { };
-
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 
   vaultwarden-sqlite = vaultwarden;
