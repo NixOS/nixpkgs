@@ -18,6 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "rich"
+    "argcomplete"
   ];
 
   dependencies =

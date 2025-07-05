@@ -218,7 +218,6 @@ let
       ktimer = callPackage ./ktimer.nix { };
       ktnef = callPackage ./ktnef.nix { };
       ktorrent = callPackage ./ktorrent.nix { };
-      ktouch = callPackage ./ktouch.nix { };
       kturtle = callPackage ./kturtle.nix { };
       kwalletmanager = callPackage ./kwalletmanager.nix { };
       kwave = callPackage ./kwave.nix { };
@@ -280,6 +279,7 @@ let
     }
     // lib.optionalAttrs config.allowAliases {
       k3b = throw "libsForQt5.k3b has been dropped in favor of kdePackages.k3b";
+      ktouch = throw "ktouch has been dropped due keyboard layout issues";
     };
 
 in

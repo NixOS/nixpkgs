@@ -84,6 +84,10 @@ stdenv.mkDerivation {
     chmod +x $out/bin/egrep $out/bin/fgrep
   '';
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isMinGW {
+    NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  };
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/grep/";
     description = "GNU implementation of the Unix grep command";
