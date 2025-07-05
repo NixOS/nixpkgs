@@ -27,5 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];
+    teams = with lib.teams; [ ngi ];
   };
 })
