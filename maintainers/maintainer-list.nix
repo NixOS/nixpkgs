@@ -25841,6 +25841,12 @@
     githubId = 483735;
     name = "Dmitry Geurkov";
   };
+  truebad0ur = {
+    email = "pieceofcakecupofcoffee@gmail.com";
+    github = "TrueBad0ur";
+    githubId = 34392986;
+    name = "Andrey Orekhov";
+  };
   truh = {
     email = "jakob-nixos@truh.in";
     github = "truh";
