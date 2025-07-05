@@ -27453,6 +27453,12 @@
     githubId = 117323435;
     name = "Andrés Pico";
   };
+  xeniagda = {
+    name = "Xenia Agda";
+    email = "xenia.agda@gmail.com";
+    github = "xeniagda";
+    githubId = 8290983;
+  };
   xfnw = {
     email = "xfnw+nixos@riseup.net";
     github = "xfnw";
