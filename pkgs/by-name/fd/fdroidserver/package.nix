@@ -75,13 +75,7 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     qrcode
     requests
-    (ruamel-yaml.overrideAttrs (old: {
-      src = fetchPypi {
-        pname = "ruamel.yaml";
-        version = "0.17.21";
-        hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
-      };
-    }))
+    ruamel-yaml_0_17_21
     sdkmanager
     yamllint
   ];
