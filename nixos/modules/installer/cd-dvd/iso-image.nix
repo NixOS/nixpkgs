@@ -863,6 +863,18 @@ in
       )
     ];
 
+    nixpkgs.config.allowNonSource = false;
+    nixpkgs.config.allowNonSourcePredicate =
+      pkg:
+      builtins.elem (lib.getName pkg) [
+        "cargo-bootstrap"
+        "go"
+        "rustc-bootstrap"
+        "rustc-bootstrap-wrapper"
+        "sof-firmware"
+        "temurin-bin"
+      ];
+
     # Don't build the GRUB menu builder script, since we don't need it
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
