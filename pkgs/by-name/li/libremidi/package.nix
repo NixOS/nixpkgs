@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libremidi";
-  version = "4.5.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "jcelerier";
     repo = "libremidi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JwXOIBq+pmPIR4y/Zv5whEyCfpLHmbllzdH2WLZmWLw=";
+    hash = "sha256-FyrbqE2EyxAxxLbmY86tmAYLa39ntwy9DGtMLxGvxbs=";
   };
 
   nativeBuildInputs = [
