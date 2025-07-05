@@ -16737,6 +16737,12 @@
     githubId = 17873203;
     name = "mlatus";
   };
+  mkohler = {
+    email = "mark.kohler@gmail.com";
+    github = "mkohler";
+    githubId = 68706;
+    name = "Mark Kohler";
+  };
   mlieberman85 = {
     email = "mlieberman85@gmail.com";
     github = "mlieberman85";
