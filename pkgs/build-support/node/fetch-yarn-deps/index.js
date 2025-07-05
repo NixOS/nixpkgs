@@ -4,6 +4,7 @@
 const fs = require('fs')
 const crypto = require('crypto')
 const process = require('process')
+const http = require('http')
 const https = require('https')
 const child_process = require('child_process')
 const path = require('path')
@@ -20,15 +21,66 @@ const exec = async (...args) => {
 	return res
 }
 
-const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
+const createURLProxyMap = () => {
+	let proxyMap = new Map();
+
+	const proxiesForHttp = [];
+	const proxiesForHttps = [];
+
+	if (process.env.HTTP_PROXY) {
+		console.log('Detected HTTP_PROXY');
+		proxiesForHttp.push(process.env.HTTP_PROXY);
+	}
+	if (process.env.http_proxy) {
+		console.log('Detected http_proxy');
+		proxiesForHttp.push(process.env.http_proxy);
+	}
+	if (process.env.HTTPS_PROXY) {
+		console.log('Detected HTTPS_PROXY');
+		proxiesForHttps.push(process.env.HTTPS_PROXY);
+	}
+	if (process.env.https_proxy) {
+		console.log('Detected https_proxy');
+		proxiesForHttps.push(process.env.https_proxy);
+	}
+	if (process.env.all_proxy) {
+		console.log('Detected all_proxy');
+		proxiesForHttp.push(process.env.all_proxy);
+		proxiesForHttps.push(process.env.all_proxy);
+	}
+	if (process.env.ALL_PROXY) {
+		console.log('Detected ALL_PROXY');
+		proxiesForHttp.push(process.env.ALL_PROXY);
+		proxiesForHttps.push(process.env.ALL_PROXY);
+	}
+	proxyMap.set('http:', proxiesForHttp);
+	proxyMap.set('https:', proxiesForHttps);
+	return proxyMap;
+}
+
+const URL_PROXY_MAP = createURLProxyMap();
+
+const getProxyForUrl = (url) => {
+	const urlParsed = new URL(url);
+	if (URL_PROXY_MAP.has(urlParsed.protocol)) {
+		let proxiesForProtocol = URL_PROXY_MAP.get(urlParsed.protocol);
+		if (proxiesForProtocol.length > 0) {
+			let proxyForUrl = proxiesForProtocol[0];
+			console.log(`Selecting proxy ${proxyForUrl} for ${url}`);
+			return proxyForUrl;
+		}
+	}
+	console.log(`No proxy selected for ${url}`);
+	return '';
+}
+
+const getInner = function (url, agent, fileName, expectedHash, hashType) {
 	return new Promise((resolve, reject) => {
-		const get = (url, redirects = 0) => https.get(url, (res) => {
-			if(redirects > 10) {
-				reject('Too many redirects!');
-				return;
-			}
+		https.get(url, {
+			agent: agent,
+		}, (res) => {
 			if(res.statusCode === 301 || res.statusCode === 302) {
-				return get(res.headers.location, redirects + 1)
+				return resolve(res.headers.location);
 			}
 			const file = fs.createWriteStream(fileName)
 			const hash = crypto.createHash(hashType)
@@ -40,12 +92,86 @@ const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 				if (expectedHash === undefined){
 					console.log(`Warning: lockfile url ${url} doesn't end in "#<hash>" to validate against. Downloaded file had hash ${h}.`);
 				} else if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h} for ${url}`))
-				resolve()
+				return resolve("");
 			})
-			res.on('error', e => reject(e))
-		})
-		get(url)
+			res.on('error', e => {
+				return reject(e)
+			})
+		}).end()
 	})
+};
+
+const proxyConnection = async function (proxyUrlParsed, url, fileName, expectedHash, hashType) {
+	return new Promise((resolve, reject) => {
+		const urlParsed = new URL(url);
+		var urlPath = urlParsed.hostname;
+		if (urlParsed.href.startsWith('https') && urlParsed.port == '') {
+			urlPath += ":443";
+		}
+		const proxyRequestParams = {
+			host: proxyUrlParsed.hostname,
+			port: proxyUrlParsed.port,
+			method: 'CONNECT',
+			path: urlPath,
+		};
+		let proxyRequest;
+		if (proxyUrlParsed.protocol == "https:") {
+			proxyRequest = https.get(proxyRequestParams);
+		} else {
+			proxyRequest = http.get(proxyRequestParams);
+		}
+		proxyRequest.on('connect', async (res, socket) => {
+			if (res.statusCode === 200) {
+				// connected to proxy server
+				const agent = new https.Agent({ socket });
+				try {
+					let https_request_result = await getInner(url, agent, fileName, expectedHash, hashType);
+					return resolve(https_request_result);
+				} catch (error) {
+					return reject(error);
+				}
+			}
+			return reject("Could not connect to proxy");
+		}).on('error', e => {
+			return reject(e);
+		}).end()
+	})
+};
+
+const connectionSelector = async (url, fileName, expectedHash, hashType) => {
+	const proxySettings = getProxyForUrl(url);
+	if (proxySettings == "") {
+		return await getInner(url, false, fileName, expectedHash, hashType);
+	}
+	const proxyUrlParsed = new URL(proxySettings);
+	return await proxyConnection(proxyUrlParsed, url, fileName, expectedHash, hashType);
+};
+
+const downloadFileHttps = async (fileName, url, expectedHash, hashType = 'sha1') => {
+	return new Promise(async (resolve, reject) => {
+		const get = async (requestUrl, fileName, expectedHash) => {
+			var url = requestUrl;
+			var redirects = 0;
+			while (redirects < 10) {
+				let redirectUrl;
+				try {
+					redirectUrl = await connectionSelector(url, fileName, expectedHash, hashType);
+				} catch (err) {
+					reject(err);
+					break;
+				}
+				redirects += 1;
+				if (redirectUrl == "") {
+					resolve()
+					return;
+				}
+				console.log(`Redirecting to ${redirectUrl}`)
+				url = redirectUrl;
+			}
+			reject("Too many redirects");
+		};
+		await get(url, fileName, expectedHash, hashType);
+	});
 }
 
 const downloadGit = async (fileName, url, rev) => {
@@ -156,7 +282,7 @@ const prefetchYarnDeps = async (lockContents, verbose) => {
 	const lockData = lockfile.parse(lockContents)
 	await performParallel(
 		uniqueBy(Object.entries(lockData.object), ([_, value]) => value.resolved)
-		.map(([key, value]) => () => downloadPkg({ key, ...value }, verbose))
+			.map(([key, value]) => () => downloadPkg({ key, ...value }, verbose))
 	)
 	await fs.promises.writeFile('yarn.lock', lockContents)
 	if (verbose) console.log('Done')
