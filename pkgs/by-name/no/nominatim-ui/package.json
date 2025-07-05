@@ -1,0 +1,48 @@
+{
+    "name": "nominatim-ui",
+    "description": "Debug web interface for Nominatim geocoder",
+    "version": "3.7.1",
+    "license": "GPL-2.0",
+    "scripts": {
+        "build": "rollup -c",
+        "dev": "rollup -c -w",
+        "lint": "eslint --quiet *.js src/ test/",
+        "lint:fix": "eslint --fix *.js src/ test/",
+        "test": "rollup -c && mocha --recursive test/",
+        "start": "static-server dist"
+    },
+    "devDependencies": {
+        "@eslint/eslintrc": "^3.1.0",
+        "@eslint/js": "^9.12.0",
+        "@rollup/plugin-commonjs": "^28.0",
+        "@rollup/plugin-node-resolve": "^16.0",
+        "eslint": "^9.0",
+        "eslint-config-prettier": "^10.1.2",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-mocha": "^11.0",
+        "eslint-plugin-prettier": "^5.2.6",
+        "eslint-plugin-security": "^3.0.1",
+        "eslint-plugin-svelte": "^3.5.0",
+        "fs-extra": "^11.0.0",
+        "globals": "^16.0.0",
+        "http": "^0.0.1-security",
+        "http-proxy": "^1.18.1",
+        "mocha": "^11.0",
+        "puppeteer": "^24.0",
+        "rollup": "^4.22.4",
+        "rollup-plugin-css-only": "^4.3.0",
+        "rollup-plugin-livereload": "^2.0.0",
+        "rollup-plugin-svelte": "^7.0.0",
+        "rollup-plugin-terser": "^7.0.0",
+        "static-server": "^2.2.1",
+        "svelte": "^5.0.0"
+    },
+    "dependencies": {
+        "bootstrap": "^5.0.0",
+        "escape-html": "^1.0.3",
+        "leaflet": "1.9.4",
+        "leaflet-minimap": "^3.6.1",
+        "timeago.js": "^4.0.2"
+    },
+    "type": "module"
+}
