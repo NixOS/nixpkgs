@@ -38,7 +38,10 @@ let
         }
       else
         result
-    );
+    )
+    // lib.optionalAttrs (f ? override) {
+      override = lib.mirrorFunctionArgs f.override (fdrv: makeOverridablePythonPackage (f.override fdrv));
+    };
 
   mkPythonDerivation =
     if python.isPy3k then ./mk-python-derivation.nix else ./python2/mk-python-derivation.nix;
