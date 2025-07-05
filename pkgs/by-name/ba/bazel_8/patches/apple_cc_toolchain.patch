@@ -1,0 +1,19 @@
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 11a6075175..f53f0c732b 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -35,10 +35,10 @@ bazel_dep(name = "with_cfg.bzl", version = "0.6.0")
+ bazel_dep(name = "abseil-cpp", version = "20240722.0.bcr.2")
+ bazel_dep(name = "rules_shell", version = "0.2.0")
+ 
+-# Depend on apple_support first and then rules_cc so that the Xcode toolchain
+-# from apple_support wins over the generic Unix toolchain from rules_cc.
+-bazel_dep(name = "apple_support", version = "1.18.1")
++# Not Depend on apple_support first and then rules_cc so that the Xcode toolchain
++# from apple_support not wins over the generic Unix toolchain from rules_cc.
+ bazel_dep(name = "rules_cc", version = "0.0.17")
++bazel_dep(name = "apple_support", version = "1.18.1")
+ 
+ # repo_name needs to be used, until WORKSPACE mode is to be supported in bazel_tools
+ bazel_dep(name = "protobuf", version = "29.0", repo_name = "com_google_protobuf")
+
