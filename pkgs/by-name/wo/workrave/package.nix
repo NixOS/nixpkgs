@@ -86,14 +86,14 @@ stdenv.mkDerivation rec {
   patches = [ ./fix-workrave-paths.patch ];
 
   postPatch = ''
-     substituteInPlace frontend/applets/gnome-shell-45/src/extension.js \
-        --subst-var-by workrave_typelib_path "$out/lib/girepository-1.0"
+    substituteInPlace frontend/applets/gnome-shell-45/src/extension.js \
+       --subst-var-by workrave_typelib_path "$out/lib/girepository-1.0"
 
-     substituteInPlace backend/src/GSettingsConfigurator.cc \
-        frontend/applets/common/src/control.c \
-        frontend/applets/common/src/timerbox.c \
-        frontend/applets/indicator/src/indicator-workrave.c \
-        --subst-var-by workrave_schema_path ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    substituteInPlace backend/src/GSettingsConfigurator.cc \
+       frontend/applets/common/src/control.c \
+       frontend/applets/common/src/timerbox.c \
+       frontend/applets/indicator/src/indicator-workrave.c \
+       --subst-var-by workrave_schema_path ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
   enableParallelBuilding = true;
