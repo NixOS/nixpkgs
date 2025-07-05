@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "fanbox-dl";
-  version = "0.27.3";
+  version = "0.27.4";
 
   src = fetchFromGitHub {
     owner = "hareku";
     repo = "fanbox-dl";
     rev = "v${version}";
-    hash = "sha256-el9+pusnqui7G+x05lJsLjnZ4OymvBVSCa7ReJTgqLw=";
+    hash = "sha256-zccTxLEbKAErgVVaL+CPYD9GCPCAjGYnOiyGBGDmSzg=";
   };
 
   vendorHash = "sha256-BZebo50HEKIk1z0LJg8kE1adovyAk67L6jsiaNcpeDY=";
