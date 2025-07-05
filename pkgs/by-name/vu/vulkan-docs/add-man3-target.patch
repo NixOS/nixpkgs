@@ -1,0 +1,105 @@
+diff --git a/Makefile b/Makefile
+index 0d493cf7..dfe45ba6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -60,6 +60,7 @@ IMAGEOPTS = inline
+ #  manhtml - HTML5 single-page reference guide - NOT SUPPORTED
+ #  manpdf - PDF reference guide - NOT SUPPORTED
+ #  manhtmlpages - HTML5 separate per-feature refpages
++#  man3pages - man3 separate per-feature refpages
+ #  allchecks - checks for style guide compliance, XML consistency,
+ #   internal link validity, and other easy to catch errors.
+ 
+@@ -69,7 +70,7 @@ alldocs: allspecs allman proposals
+ 
+ allspecs: html pdf styleguide registry
+ 
+-allman: manhtmlpages
++allman: manhtmlpages man3pages
+ 
+ # Invokes all the automated checks, but CHECK_XREFS can be set to empty
+ # on the command line to avoid building an HTML spec target.
+@@ -618,13 +619,24 @@ manhtmlpages: $(REFPATH)/apispec.adoc $(GENDEPENDS)
+ 	$(QUIET) echo "manhtmlpages: building HTML refpages with these options:"
+ 	$(QUIET) echo $(ASCIIDOC) -b html5 $(ADOCOPTS) $(ADOCHTMLOPTS) \
+ 	    $(ADOCREFOPTS) -d manpage -o REFPAGE.html REFPAGE.adoc
+-	$(MAKE) $(SUBMAKEOPTIONS) -e buildmanpages
++	$(MAKE) $(SUBMAKEOPTIONS) -e buildmanhtmlpages
++
++man3pages: $(REFPATH)/apispec.adoc $(GENDEPENDS)
++	$(QUIET) echo "man3pages: building man3 refpages with these options:"
++	$(QUIET) echo $(ASCIIDOC) -b manpage $(ADOCOPTS) $(ADOCHTMLOPTS) \
++	    $(ADOCREFOPTS) -d manpage -o REFPAGE.html REFPAGE.adoc
++	$(MAKE) $(SUBMAKEOPTIONS) -e buildman3pages
+ 
+ # Build the individual refpages, then the symbolic links from aliases
+ MANHTMLDIR  = $(OUTDIR)/man/html
+ MANHTML     = $(MANSOURCES:$(REFPATH)/%.adoc=$(MANHTMLDIR)/%.html)
+-buildmanpages: $(MANHTML)
+-	$(MAKE) $(SUBMAKEOPTIONS) -e manaliases
++buildmanhtmlpages: $(MANHTML)
++	$(MAKE) $(SUBMAKEOPTIONS) -e manhtmlaliases
++
++MAN3DIR 	= $(OUTDIR)/man/man3
++MAN3    	= $(MANSOURCES:$(REFPATH)/%.adoc=$(MAN3DIR)/%.3)
++buildman3pages: $(MAN3)
++	$(MAKE) $(SUBMAKEOPTIONS) -e man3aliases
+ 
+ # Asciidoctor options to build refpages
+ #
+@@ -652,6 +664,16 @@ $(MANHTMLDIR)/%.html: $(REFPATH)/%.adoc $(GENDEPENDS) $(KATEXINSTDIR)
+ 	    $(TRANSLATEMATH) $@ ; \
+ 	fi
+ 
++$(MAN3DIR)/%.3: KATEXDIR = ../../katex
++$(MAN3DIR)/%.3: $(REFPATH)/%.adoc $(GENDEPENDS) $(KATEXINSTDIR)
++	$(VERYQUIET)echo "Building $@ from $< using default options"
++	$(VERYQUIET)$(MKDIR) $(MAN3DIR)
++	$(VERYQUIET)$(ASCIIDOC) -b manpage $(ADOCOPTS) $(ADOCREFOPTS) \
++		-d manpage -o $@ $<
++	$(VERYQUIET)if egrep -q '\\[([]' $@ ; then \
++		$(TRANSLATEMATH) $@ ; \
++	fi
++
+ # The 'manhtml' and 'manpdf' targets are NO LONGER SUPPORTED by Khronos.
+ # They generate HTML5 and PDF single-file versions of the refpages.
+ # The generated refpage sources are included by $(REFPATH)/apispec.adoc,
+@@ -681,9 +703,13 @@ $(OUTDIR)/apispec.html: $(SPECVERSION) $(REFPATH)/apispec.adoc $(SVGFILES) $(GEN
+ # Create links for refpage aliases
+ 
+ MAKEMANALIASES = $(SCRIPTS)/makemanaliases.py
+-manaliases: $(PYAPIMAP)
++
++manhtmlaliases: $(PYAPIMAP)
+ 	$(PYTHON) $(MAKEMANALIASES) -genpath $(GENERATED) -refdir $(MANHTMLDIR)
+ 
++man3aliases: $(PYAPIMAP)
++	$(PYTHON) $(MAKEMANALIASES) -genpath $(GENERATED) -refdir $(MAN3DIR) -man3
++
+ # Antora-related targets
+ 
+ # Targets generated from the XML and registry processing scripts
+diff --git a/scripts/makemanaliases.py b/scripts/makemanaliases.py
+index 4d9102e6..e0c3b279 100755
+--- a/scripts/makemanaliases.py
++++ b/scripts/makemanaliases.py
+@@ -20,6 +20,8 @@ if __name__ == '__main__':
+                         required=True,
+                         help='Path to directory containing reference pages to symlink')
+ 
++    parser.add_argument('-man3', action='store_true', default=False, help='Set to true when dealing with man3 pages')
++
+     args = parser.parse_args()
+ 
+     # Look for apimap.py in the specified directory
+@@ -45,6 +47,10 @@ if __name__ == '__main__':
+ 
+         alias = f"{key}.html"
+         src = f"{api.alias[key]}.html"
++        if args.man3:
++            alias = f"{key}.3"
++            src = f"{api.alias[key]}.3"
++        
+ 
+         if not os.access(src, os.R_OK):
+             # This should not happen, but is possible if the api module is
