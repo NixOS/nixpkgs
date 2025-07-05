@@ -67,6 +67,8 @@
     webrtcSupport = true;
     enableOfficialBranding = false;
     geolocationSupport = true;
+    # https://github.com/NixOS/nixpkgs/issues/418473
+    ltoSupport = false;
   }
 ).overrideAttrs
   (prev: {
