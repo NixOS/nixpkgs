@@ -33,7 +33,7 @@ let
     }).overrideAttrs
       (old: {
         src = fetchFromGitHub {
-          owner = "tecnovert";
+          owner = "basicswap";
           repo = "coincurve";
           rev = "932366c9d4d8e487162b5c1b2a2d9693e24e0483";
           hash = "sha256-zOekPmP1zR/S+zxq/7OrEz24k8SInlsB+wJ8kPlmqe4=";
@@ -52,14 +52,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "basicswap";
-  version = "0.14.4";
+  version = "0.14.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "basicswap";
     repo = "basicswap";
     tag = "v${version}";
-    hash = "sha256-UhuBTbGULImqRSsbg0QNb3yvnN7rnSzycweDLbqrW+8=";
+    hash = "sha256-ynqwbWDdqBSXf3RKVAQwiHNxltkeMhbzdfNGvAemD6U=";
   };
 
   postPatch = ''
@@ -75,15 +75,12 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     coincurve-anonswap
-    wheel
     pyzmq
-    protobuf
-    sqlalchemy_1_4
     python-gnupg
     jinja2
     pycryptodome
     pysocks
-    mnemonic
+    websocket-client
   ];
 
   postInstall = ''
