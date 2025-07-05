@@ -10,6 +10,9 @@
   rtmpSupport ? true,
   withAlias ? false, # Provides bin/youtube-dl for backcompat
   update-python-libraries,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -43,7 +46,39 @@ python3Packages.buildPythonApplication rec {
       urllib3
       websockets
     ];
-    curl-cffi = [ python3Packages.curl-cffi ];
+    curl-cffi = [
+      (python3Packages.buildPythonPackage rec {
+        pname = "curl-cffi";
+        version = "0.12.0b1";
+        src =
+          {
+            x86_64-linux = fetchurl {
+              url = "https://github.com/lexiforest/curl_cffi/releases/download/v${version}/curl_cffi-${version}-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
+              hash = "sha256-4lyjd35DYWKYoZBmJXINqSLbhbG2huusK2VEj4Sd7Ok=";
+            };
+            aarch64-linux = fetchurl {
+              url = "https://github.com/lexiforest/curl_cffi/releases/download/v${version}/curl_cffi-${version}-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl";
+              hash = "sha256-FW1d8i3+o3SVtSSXkVnaUhyu0diupCws35VtrC7fVKE=";
+            };
+            x86_64-darwin = fetchurl {
+              url = "https://github.com/lexiforest/curl_cffi/releases/download/v${version}/curl_cffi-${version}-cp39-abi3-macosx_10_9_x86_64.whl";
+              hash = "sha256-buBMS17U5Pvos0SIRfsBl9wMqEJK9AGW79iH7Y/u9GY=";
+            };
+            aarch64-darwin = fetchurl {
+              url = "https://github.com/lexiforest/curl_cffi/releases/download/v${version}/curl_cffi-${version}-cp39-abi3-macosx_11_0_arm64.whl";
+              hash = "sha256-FLoTFXqa7WTf4s5r7SqVfjcfmZm87YHTFTZo1aIT+yU=";
+            };
+          }
+          ."${stdenv.hostPlatform.system}"
+            or (throw "Unsupported system for ${pname}: ${stdenv.hostPlatform.system}");
+        format = "wheel";
+        buildInputs = [ stdenv.cc.cc.lib ];
+        nativeBuildInputs = [
+          stdenv.cc.cc.lib
+          autoPatchelfHook
+        ];
+      })
+    ];
     secretstorage = with python3Packages; [
       cffi
       secretstorage
