@@ -171,6 +171,14 @@ let
           quic_bpf on;
         ''}
 
+        ${optionalString cfg.experimentalZstdSettings ''
+          zstd on;
+          zstd_comp_level 9;
+          zstd_min_length 256;
+          zstd_static on;
+          zstd_types ${lib.concatStringsSep " " compressMimeTypes};
+        ''}
+
         ${cfg.config}
 
         ${optionalString (cfg.eventsConfig != "" || cfg.config == "") ''
@@ -630,11 +638,11 @@ in
         '';
       };
 
-      recommendedZstdSettings = mkOption {
+      experimentalZstdSettings = mkOption {
         default = false;
         type = types.bool;
         description = ''
-          Enable recommended zstd settings.
+          Enable alpha quality zstd module with recommended settings.
           Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
 
           This adds `pkgs.nginxModules.zstd` to `services.nginx.additionalModules`.
@@ -1305,6 +1313,12 @@ in
       [ "services" "nginx" "proxyCache" "enable" ]
       [ "services" "nginx" "proxyCachePath" "" "enable" ]
     )
+    (mkRemovedOptionModule [ "services" "nginx" "recommendedZstdSettings" ] ''
+      The zstd module for Nginx has known bugs and is not maintained well. It is thus not
+      generally recommend to use it. You may enable anyway by setting
+      `services.nginx.experimentalZstdSettings` which adds the same configuration as the
+      removed option.
+    '')
   ];
 
   config = mkIf cfg.enable {
@@ -1453,7 +1467,7 @@ in
 
     services.nginx.additionalModules =
       optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
-      ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
+      ++ lib.optional cfg.experimentalZstdSettings pkgs.nginxModules.zstd;
 
     services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
       serverAliases = [ "127.0.0.1" ] ++ lib.optional config.networking.enableIPv6 "[::1]";
