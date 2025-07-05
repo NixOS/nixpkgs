@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  buildPackages,
 
   # nativeBuildInputs
   ninja,
@@ -14,7 +15,9 @@
   versionCheckHook,
   nix-update-script,
 }:
-
+let
+  target = if stdenv.hostPlatform.isDarwin then "macos" else "linux";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
   version = "3.14.0";
@@ -32,15 +35,16 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      fmt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      rsync
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    rsync
+  ];
 
-  env.NIX_LDFLAGS = "-lfmt";
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    buildPackages.fmt
+  ];
+
+  env.NIX_LDFLAGS_FOR_BUILD = "-lfmt";
 
   postPatch =
     ''
@@ -64,38 +68,32 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "require 'tclient.tests.load-relative-library'" ""
 
       pushd 3rd/luamake
+
+      sed -i compile/ninja/${target}.ninja \
+        -e '/c++/s,$cc,${buildPackages.stdenv.cc.targetPrefix}cc,' \
+        -e '/test.lua/s,= .*,= true,' \
+        -e '/ldl/s,$cc,${buildPackages.stdenv.cc.targetPrefix}cc,' \
+        -e 's/cc = .*/cc = ${buildPackages.stdenv.cc.targetPrefix}cc/g'
+      sed -i scripts/compiler/gcc.lua \
+        -e '/cxx_/s,$cc,${buildPackages.stdenv.cc.targetPrefix}cc,'
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin (
-      # This package uses the program clang for C and C++ files. The language
-      # is selected via the command line argument -std, but this do not work
-      # in combination with the nixpkgs clang wrapper. Therefor we have to
-      # find all c++ compiler statements and replace $cc (which expands to
-      # clang) with clang++.
-      ''
-        sed -i compile/ninja/macos.ninja \
-          -e '/c++/s,$cc,clang++,' \
-          -e '/test.lua/s,= .*,= true,' \
-          -e '/ldl/s,$cc,clang++,'
-        sed -i scripts/compiler/gcc.lua \
-          -e '/cxx_/s,$cc,clang++,'
-      ''
       # Avoid relying on ditto (impure)
-      + ''
+      ''
         substituteInPlace compile/ninja/macos.ninja \
           --replace-fail "ditto" "rsync -a"
 
         substituteInPlace scripts/writer.lua \
           --replace-fail "ditto" "rsync -a"
-      ''
-    );
+      '');
 
   ninjaFlags = [
-    "-fcompile/ninja/${if stdenv.hostPlatform.isDarwin then "macos" else "linux"}.ninja"
+    "-fcompile/ninja/${target}.ninja"
   ];
 
   postBuild = ''
     popd
-    ./3rd/luamake/luamake rebuild
+    ./3rd/luamake/luamake rebuild -cc ${stdenv.cc.targetPrefix}cc
   '';
 
   installPhase = ''
