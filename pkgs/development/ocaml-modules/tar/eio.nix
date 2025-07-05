@@ -1,17 +1,19 @@
 {
   buildDunePackage,
   tar,
-  lwt,
+  eio,
   git,
 }:
 
 buildDunePackage {
-  pname = "tar-unix";
+  pname = "tar-eio";
   inherit (tar) version src doCheck;
+
+  minimalOCamlVersion = "5.1";
 
   propagatedBuildInputs = [
     tar
-    lwt
+    eio
   ];
 
   nativeCheckInputs = [
@@ -19,6 +21,6 @@ buildDunePackage {
   ];
 
   meta = tar.meta // {
-    description = "Decode and encode tar format files from Unix";
+    description = "Decode and encode tar format files using Eio";
   };
 }
