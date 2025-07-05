@@ -1579,6 +1579,15 @@
   "requirefile": [
     "index.html#requirefile"
   ],
+  "fetchtor": [
+    "index.html#fetchtor"
+  ],
+  "ex-fetchtor": [
+    "index.html#ex-fetchtor"
+  ],
+  "fetchtor-parameters": [
+    "index.html#fetchtor-parameters"
+  ],
   "fetchtorrent": [
     "index.html#fetchtorrent"
   ],

@@ -123,6 +123,7 @@ with pkgs;
   compress-drv = callPackage ../build-support/compress-drv/test.nix { };
 
   fetchurl = recurseIntoAttrs (callPackages ../build-support/fetchurl/tests.nix { });
+  fetchtor = recurseIntoAttrs (callPackages ../build-support/fetchtor/tests.nix { });
   fetchtorrent = recurseIntoAttrs (callPackages ../build-support/fetchtorrent/tests.nix { });
   fetchpatch = recurseIntoAttrs (callPackages ../build-support/fetchpatch/tests.nix { });
   fetchpatch2 = recurseIntoAttrs (
