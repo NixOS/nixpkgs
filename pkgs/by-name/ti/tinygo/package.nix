@@ -4,7 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
-  llvmPackages,
+  llvmPackages_20,
   go,
   xar,
   binaryen,
@@ -17,7 +17,7 @@
 
 let
   llvmMajor = lib.versions.major llvm.version;
-  inherit (llvmPackages)
+  inherit (llvmPackages_20)
     llvm
     clang
     compiler-rt
@@ -34,13 +34,13 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.37.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    hash = "sha256-I/9JXjt6aF/80Mh3iRgUYXv4l+m3XIpmKsIBviOuWCo=";
+    hash = "sha256-l+ezqH5b4lkBfJhn+oHjIvf3rK+tKpN2lICV3F8BU64=";
     fetchSubmodules = true;
     # The public hydra server on `hydra.nixos.org` is configured with
     # `max_output_size` of 3GB. The purpose of this `postFetch` step
@@ -51,7 +51,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-juADakh+s8oEY9UXUwxknvVeL1TgB/zRi8Xtzt/4qPA=";
+  vendorHash = "sha256-Vae7IFACioxH4E61GX/X7G19/ITbajp96VNUhliV8ls=";
 
   patches = [
     ./0001-GNUmakefile.patch
@@ -75,6 +75,7 @@ buildGoModule rec {
     "-X github.com/tinygo-org/tinygo/goenv.TINYGOROOT=${placeholder "out"}/share/tinygo"
     "-X github.com/tinygo-org/tinygo/goenv.clangResourceDir=${clang.cc.lib}/lib/clang/${llvmMajor}"
   ];
+  tags = [ "llvm${llvmMajor}" ];
   subPackages = [ "." ];
 
   # Output contains static libraries for different arm cpus
@@ -103,14 +104,6 @@ buildGoModule rec {
     # Move binary
     mkdir -p build
     mv $GOPATH/bin/tinygo build/tinygo
-
-    # Build our own custom wasi-libc.
-    # This is necessary because we modify the build a bit for our needs (disable
-    # heap, enable debug symbols, etc).
-    make wasi-libc \
-      CLANG="${lib.getBin clang.cc}/bin/clang -resource-dir ${clang.cc.lib}/lib/clang/${llvmMajor}" \
-      LLVM_AR=${lib.getBin llvm}/bin/llvm-ar \
-      LLVM_NM=${lib.getBin llvm}/bin/llvm-nm
 
     make gen-device -j $NIX_BUILD_CORES
 
