@@ -8,6 +8,7 @@
   pytestCheckHook,
   pytest-cov-stub,
   pyyaml,
+  fixVersioneerSourcesHook,
 }:
 
 buildPythonPackage rec {
@@ -18,8 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "shaypal5";
     repo = "birch";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-KdQZzQJvJ+logpcLQfaqqEEZJ/9VmNTQX/a4v0oBC98=";
+    nativeBuildInputs = [ fixVersioneerSourcesHook ];
   };
 
   patches = [
