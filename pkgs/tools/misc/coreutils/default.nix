@@ -118,7 +118,13 @@ stdenv.mkDerivation rec {
     + (optionalString stdenv.hostPlatform.isAarch64 ''
       # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
       sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
-    '');
+    '')
+    + (optionalString stdenv.hostPlatform.isPower64
+      # x <= 1.0L assertion fails. Maybe an issue with long double behaviour - on POWER, IBM double-double implementation is used instead of an IEEE 754 compliant one.
+      ''
+        echo "int main() { return 77; }" > gnulib-tests/test-float-h.c
+      ''
+    );
 
   outputs = [
     "out"
