@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "Decentralized and secure messenger";
     mainProgram = "briar-desktop";
     homepage = "https://code.briarproject.org/briar/briar-desktop";
-    license = licenses.gpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [
       onny
       supinie
