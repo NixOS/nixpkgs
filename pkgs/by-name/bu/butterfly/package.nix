@@ -11,13 +11,13 @@
 
 flutter329.buildFlutterApplication rec {
   pname = "butterfly";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
     tag = "v${version}";
-    hash = "sha256-/lwMKanoSM8oARBqQJ3hL23Z5sobLDwtL5RsxFgN5ew=";
+    hash = "sha256-eAkepyZm4WgPo8ieBbWHoSSv/Zfr9U9HCsbxEyrzy0Y=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -26,7 +26,7 @@ flutter329.buildFlutterApplication rec {
 
   gitHashes = {
     dart_leap = "sha256-oO5851cIdrW/asgOePxvwUgjn1XchkH9CKJUruvlLYI=";
-    lw_file_system = "sha256-YWAInZw2FQzqGnopZr4oB1ZM5q0gjM65fvC4uhzl7gE=";
+    lw_file_system = "sha256-P5zr781SKHqZGwM2dNRi0O53oZuaY2zaM7q2Z7th0F4=";
     networker = "sha256-/3jFIZj66hWbTcIQx9OB5QRrukcBT4zpek+56AVaGIA=";
     lw_file_system_api = "sha256-/Ur9zu4Ovb4x8j1n6Q6FWFuJ9yp92YQG3b7H5CMf3II=";
     lw_sysapi = "sha256-oGs5q8N46WNcRzbsgsPB/6fVBH3g9utK4tlXBpwU4Qc=";
@@ -54,7 +54,7 @@ flutter329.buildFlutterApplication rec {
         '';
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater {
-        ignoredVersions = ".*rc.*";
+        ignoredVersions = ".*(rc|beta).*";
         rev-prefix = "v";
       })
       (_experimental-update-script-combinators.copyAttrOutputToFile "butterfly.pubspecSource" ./pubspec.lock.json)
