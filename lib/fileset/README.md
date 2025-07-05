@@ -46,7 +46,7 @@ An attribute set with these values:
 - `_type` (constant string `"fileset"`):
   Tag to indicate this value is a file set.
 
-- `_internalVersion` (constant `3`, the current version):
+- `_internalVersion` (constant `4`, the current version):
   Version of the representation.
 
 - `_internalIsEmptyWithoutBase` (bool):
@@ -55,6 +55,11 @@ An attribute set with these values:
   This is the only way to represent an empty file set without needing a base path.
 
   Such a value can be used as the identity element for `union` and the return value of `unions []` and co.
+
+- `_internalHasVirtualFiles` (bool):
+  Whether this file set *potentially* has any virtual files, where the path might not exist.
+  This is kept `true`, even when all virtual files have been removed via `difference` or `intersection`.
+  If `true`, certain optimizations for unions can not take place.
 
 - `_internalBase` (path):
   Any files outside of this path cannot influence the set of files.
@@ -238,21 +243,6 @@ Arguments:
 - (+) There's no point in using this library for a single file, since you can't do anything other than add it to the store or not.
   And it would be unclear how the library should behave if the one file wouldn't be added to the store:
   `toSource { root = ./file.nix; fileset = <empty>; }` has no reasonable result because returning an empty store path wouldn't match the file type, and there's no way to have an empty file store path, whatever that would mean.
-
-### `fileFilter` takes a path
-
-The `fileFilter` function takes a path, and not a file set, as its second argument.
-
-- (-) Makes it harder to compose functions, since the file set type, the return value, can't be passed to the function itself like `fileFilter predicate fileset`
-  - (+) It's still possible to use `intersection` to filter on file sets: `intersection fileset (fileFilter predicate ./.)`
-    - (-) This does need an extra `./.` argument that's not obvious
-      - (+) This could always be `/.` or the project directory, `intersection` will make it lazy
-- (+) In the future this will allow `fileFilter` to support a predicate property like `subpath` and/or `components` in a reproducible way.
-  This wouldn't be possible if it took a file set, because file sets don't have a predictable absolute path.
-  - (-) What about the base path?
-    - (+) That can change depending on which files are included, so if it's used for `fileFilter`
-      it would change the `subpath`/`components` value depending on which files are included.
-- (+) If necessary, this restriction can be relaxed later, the opposite wouldn't be possible
 
 ### Strict path existence checking
 
