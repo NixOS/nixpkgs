@@ -23,13 +23,13 @@
 
 let
 
-  version = "2.79.3";
+  version = "2.81.2";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    hash = "sha256-Rn+Cjpk4vttxARrkDSnpKdBdSRtgElsit8zu1BA8Jd4=";
+    hash = "sha256-tY0MfaViW4uB7r9qigdrQplsduSj25XaubhTIrGWBjI=";
     fetchSubmodules = true;
   };
 
