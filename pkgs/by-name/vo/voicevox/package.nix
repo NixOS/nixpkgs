@@ -2,31 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  replaceVars,
-  pnpm_9,
-  nodejs,
   makeDesktopItem,
+  replaceVars,
+
   copyDesktopItems,
-  makeWrapper,
-  electron,
-  _7zz,
-  voicevox-engine,
   dart-sass,
+  jq,
+  makeWrapper,
+  moreutils,
+  nodejs,
+  pnpm_9,
+
+  _7zz,
+  electron,
+  voicevox-engine,
 }:
 
+let
+  pnpm = pnpm_9;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "voicevox";
-  version = "0.23.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox";
     tag = finalAttrs.version;
-    hash = "sha256-wCC4wl5LPJVJQtV+X795rIXnURseQYiCZ9B6YujTFFw=";
+    hash = "sha256-2MXJOLt14zpoahYjd3l3q5UxT2yK/g/jksHO4Q7W6HA=";
   };
 
   patches = [
-    ./unlock-node-and-pnpm-versions.patch
     (replaceVars ./hardcode-paths.patch {
       sevenzip_path = lib.getExe _7zz;
       voicevox_engine_path = lib.getExe voicevox-engine;
@@ -34,26 +40,41 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # unlock the overly specific pnpm package version pin
+    jq 'del(.packageManager)' package.json | sponge package.json
+
     substituteInPlace package.json \
       --replace-fail "999.999.999" "$version" \
-      --replace-fail ' && electron-builder --config electron-builder.config.js --publish never' ""
+      --replace-fail ' && electron-builder --config electron-builder.config.cjs --publish never' ""
   '';
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
+      postPatch
       ;
-    hash = "sha256-IuyDHAomaGEvGbN4gLpyPfZGm/pF9XK+BkXSipaM7NQ=";
+
+    # let's just be safe and add these explicitly to nativeBuildInputs
+    # even though the fetcher already uses them in its implementation
+    nativeBuildInputs = [
+      jq
+      moreutils
+    ];
+
+    hash = "sha256-RKgqFmHQnjHS7yeUIbH9awpNozDOCCHplc/bmfxmMyg=";
   };
 
   nativeBuildInputs =
     [
+      dart-sass
+      jq
       makeWrapper
-      pnpm_9.configHook
+      moreutils
       nodejs
+      pnpm.configHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       copyDesktopItems
@@ -67,9 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # force sass-embedded to use our own sass instead of the bundled one
+    # force sass-embedded to use our own sass from PATH instead of the bundled one
     substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
 
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
@@ -79,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm exec electron-builder \
       --dir \
-      --config electron-builder.config.js \
+      --config electron-builder.config.cjs \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 
