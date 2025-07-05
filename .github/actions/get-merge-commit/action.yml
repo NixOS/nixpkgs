@@ -80,16 +80,11 @@ runs:
           throw new Error("Not retrying anymore. It's likely that GitHub is having internal issues: check https://www.githubstatus.com.")
 
     - if: inputs.merged-as-untrusted && (inputs.mergedSha || steps.commits.outputs.mergedSha)
-      # Would be great to do the checkouts in git worktrees of the existing spare checkout instead,
-      # but Nix is broken with them:
-      # https://github.com/NixOS/nix/issues/6073
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      with:
-        ref: ${{ inputs.mergedSha || steps.commits.outputs.mergedSha }}
-        path: untrusted
+      run: |
+        git fetch --depth 1 origin ${{ inputs.mergedSha || steps.commits.outputs.mergedSha }}
+        git worktree add untrusted ${{ inputs.mergedSha || steps.commits.outputs.mergedSha }}
 
     - if: inputs.target-as-trusted && (inputs.targetSha || steps.commits.outputs.targetSha)
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      with:
-        ref: ${{ inputs.targetSha || steps.commits.outputs.targetSha }}
-        path: trusted
+      run: |
+        git fetch --depth 1 origin ${{ inputs.targetSha || steps.commits.outputs.targetSha }}
+        git worktree add trusted ${{ inputs.targetSha || steps.commits.outputs.targetSha }}
