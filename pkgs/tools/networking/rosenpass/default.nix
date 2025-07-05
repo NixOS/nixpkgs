@@ -9,14 +9,14 @@
   libsodium,
   pkg-config,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rosenpass";
   version = "0.2.2";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "rosenpass";
+    repo = "rosenpass";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fQIeKGyTkFWUV9M1o256G4U1Os5OlVsRZu+5olEkbD4=";
   };
 
@@ -60,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "rosenpass";
   };
-}
+})
