@@ -11380,6 +11380,12 @@
     github = "jaredmontoya";
     githubId = 49511278;
   };
+  jason-m = {
+    email = "jason@whydoesnothing.work";
+    github = "jason-m";
+    githubId = 85453045;
+    name = "Jason Meech";
+  };
   jasoncarr = {
     email = "jcarr250@gmail.com";
     github = "jasoncarr0";
