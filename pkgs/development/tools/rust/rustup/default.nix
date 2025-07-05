@@ -21,6 +21,11 @@ let
   libPath = lib.makeLibraryPath [
     zlib # libz.so.1
   ];
+  exe =
+    if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+      "$out/bin/rustup"
+    else
+      lib.getExe buildPackages.rustup;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -111,24 +116,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # tries to create .rustup
     mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
 
-    ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-      let
-        emulator = stdenv.hostPlatform.emulator buildPackages;
-      in
-      ''
-        # generate completion scripts for rustup
-        installShellCompletion --cmd rustup \
-          --bash <(${emulator} $out/bin/rustup completions bash rustup) \
-          --fish <(${emulator} $out/bin/rustup completions fish rustup) \
-          --zsh <(${emulator} $out/bin/rustup completions zsh rustup)
+    # generate completion scripts for rustup
+    installShellCompletion --cmd rustup \
+      --bash <(${exe} completions bash rustup) \
+      --fish <(${exe} completions fish rustup) \
+      --zsh <(${exe} completions zsh rustup)
 
-        # generate completion scripts for cargo
-        # Note: fish completion script is not supported.
-        installShellCompletion --cmd cargo \
-          --bash <(${emulator} $out/bin/rustup completions bash cargo) \
-          --zsh <(${emulator} $out/bin/rustup completions zsh cargo)
-      ''
-    )}
+    # generate completion scripts for cargo
+    # Note: fish completion script is not supported.
+    installShellCompletion --cmd cargo \
+      --bash <(${exe} completions bash cargo) \
+      --zsh <(${exe} completions zsh cargo)
 
     # add a wrapper script for ld.lld
     mkdir -p $out/nix-support

@@ -68,16 +68,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall =
     let
-      jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/jj"
+        else
+          lib.getExe buildPackages.jujutsu;
     in
-    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    ''
       mkdir -p $out/share/man
-      ${jj} util install-man-pages $out/share/man/
+      ${exe} util install-man-pages $out/share/man/
 
       installShellCompletion --cmd jj \
-        --bash <(COMPLETE=bash ${jj}) \
-        --fish <(COMPLETE=fish ${jj}) \
-        --zsh <(COMPLETE=zsh ${jj})
+        --bash <(COMPLETE=bash ${exe}) \
+        --fish <(COMPLETE=fish ${exe}) \
+        --zsh <(COMPLETE=zsh ${exe})
     '';
 
   doInstallCheck = true;
