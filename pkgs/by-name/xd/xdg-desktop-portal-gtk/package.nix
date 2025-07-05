@@ -12,6 +12,7 @@
   glib,
   wrapGAppsHook3,
   gsettings-desktop-schemas,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     xdg-desktop-portal
     gsettings-desktop-schemas # settings exposed by settings portal
     gnome-desktop
-    gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s, just mouse and xsettings)
+    # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s, just mouse and xsettings)
+    (runCommand "gnome-settings-daemon-${gnome-settings-daemon.version}-gsettings-schemas" { } ''
+      mkdir -p $out/share
+      cp -r ${gnome-settings-daemon}/share/gsettings-schemas/ $out/share/
+    '')
   ];
 
   meta = with lib; {
