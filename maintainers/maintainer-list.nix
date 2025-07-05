@@ -7235,6 +7235,13 @@
     githubId = 7649041;
     name = "Vlad Petrov";
   };
+  ejstrunz = {
+    email = "estrunz5@gmail.com";
+    github = "ejstrunz";
+    githubId = 180565002;
+    name = "Emily Strunz";
+    keys = [ { fingerprint = "4640 B8AD 77E2 86D2 5D4E  2398 252E A85D 6B1D 263E"; } ];
+  };
   eken = {
     email = "edvin.kallstrom@protonmail.com";
     github = "Eken-beep";
