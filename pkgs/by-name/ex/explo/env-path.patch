@@ -1,0 +1,13 @@
+diff --git a/src/config/config.go b/src/config/config.go
+index f313af1..0632533 100644
+--- a/src/config/config.go
++++ b/src/config/config.go
+@@ -92,7 +92,7 @@ type Listenbrainz struct {
+
+ func ReadEnv() Config {
+ 	var cfg Config
+-	if err := cleanenv.ReadConfig("./.env", &cfg); err != nil {
++	if err := cleanenv.ReadConfig("%ENV_PATH%", &cfg); err != nil {
+ 		log.Fatalf("Failed to load config: %s", err)
+ 	}
+ 	cfg.VerifyDir()
