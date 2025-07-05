@@ -12,7 +12,6 @@
   pytz,
 
   # optional-dependencies
-  coreapi,
   coreschema,
   django-guardian,
   inflection,
@@ -54,10 +53,6 @@ buildPythonPackage rec {
         psycopg2
         pygments
         pyyaml
-      ]
-      ++ lib.optionals (pythonOlder "3.13") [
-        # broken on 3.13
-        coreapi
       ];
   };
 

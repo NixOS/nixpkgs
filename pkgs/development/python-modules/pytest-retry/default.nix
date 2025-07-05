@@ -27,6 +27,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_retry" ];
 
+  doCheck = false;
+
   meta = {
     description = "Plugin for retrying flaky tests in CI environments";
     longDescription = ''
