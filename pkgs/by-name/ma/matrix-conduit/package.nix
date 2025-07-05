@@ -59,7 +59,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       pstn
-      pimeys
     ];
     mainProgram = "conduit";
   };
