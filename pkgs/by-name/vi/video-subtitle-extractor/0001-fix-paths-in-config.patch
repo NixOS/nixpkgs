@@ -1,0 +1,40 @@
+--- a/backend/config.py
++++ b/backend/config.py
+@@ -36,7 +36,7 @@
+         'Español': 'es',
+         'Turkish': 'tr'
+     }
+-    interface = OptionsConfigItem("Window", "Interface", "ChineseSimplified", OptionsValidator(intefaceTexts.values()), restart = True)
++    interface = OptionsConfigItem("Window", "Interface", "en", OptionsValidator(intefaceTexts.values()), restart = True)
+     
+     # 窗口位置和大小
+     windowX = ConfigItem("Window", "X", None)
+@@ -49,7 +49,7 @@
+     subtitleSelectionAreas = ConfigItem("Main", "SubtitleSelectionAreas", "0.78,0.99,0.05,0.95")
+ 
+     # 字幕语言设置
+-    language = OptionsConfigItem("Main", "Language", "ch", OptionsValidator([name for name in tr["Language"]]))
++    language = OptionsConfigItem("Main", "Language", "en", OptionsValidator([name for name in tr["Language"]]))
+     # 识别模式设置
+     mode = OptionsConfigItem("Main", "Mode", "fast",  OptionsValidator(["auto", "fast", "accurate"]))
+     # 是否生成TXT文本字幕
+@@ -89,7 +89,7 @@
+     # 是否使用硬件加速
+     hardwareAcceleration = ConfigItem("Main", "HardwareAcceleration", HARDWARD_ACCELERATION_OPTION, BoolValidator())
+     # 启动时检查应用更新
+-    checkUpdateOnStartup = ConfigItem("Main", "CheckUpdateOnStartup", True, BoolValidator())
++    checkUpdateOnStartup = ConfigItem("Main", "CheckUpdateOnStartup", False, BoolValidator())
+     # 视频保存目录
+     saveDirectory = ConfigItem("Main", "SaveDirectory", "", ConfigValidator())
+     # VideoSubFinder CPU核心数
+@@ -97,7 +97,9 @@
+     # VideoSubFinder 视频解码组件
+     videoSubFinderDecoder = OptionsConfigItem("Main", "VideoSubFinderDecoder", VideoSubFinderDecoder.OPENCV, OptionsValidator(VideoSubFinderDecoder), EnumSerializer(VideoSubFinderDecoder))
+ 
+-CONFIG_FILE = 'config/config.json'
++CONFIG_DIR = os.path.join(os.path.expanduser('~'), '.config', 'video-subtitle-extractor')
++CONFIG_FILE = os.path.join(CONFIG_DIR, 'config.json')
++os.makedirs(CONFIG_DIR, exist_ok=True)
+ config = Config()
+ qconfig.load(CONFIG_FILE, config)
+ 

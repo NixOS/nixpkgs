@@ -1,0 +1,26 @@
+--- a/backend/tools/paddle_model_config.py
++++ b/backend/tools/paddle_model_config.py
+@@ -1,7 +1,6 @@
+ import os
+ import re
+ from pathlib import Path
+-from fsplit.filesplit import Filesplit
+ from backend.config import BASE_DIR, config
+ 
+ class PaddleModelConfig:
+@@ -96,14 +95,7 @@ class PaddleModelConfig:
+             else:
+                 self.REC_IMAGE_SHAPE = '3,48,320'
+ 
+-            # 查看该路径下是否有文本模型识别完整文件，没有的话合并小文件生成完整文件
+-            if 'inference.pdiparams' not in (os.listdir(self.REC_MODEL_PATH)):
+-                fs = Filesplit()
+-                fs.merge(input_dir=self.REC_MODEL_PATH)
+-            # 查看该路径下是否有文本模型识别完整文件，没有的话合并小文件生成完整文件
+-            if 'inference.pdiparams' not in (os.listdir(self.DET_MODEL_PATH)):
+-                fs = Filesplit()
+-                fs.merge(input_dir=self.DET_MODEL_PATH)
++            # File merging is handled externally, skipping filesplit dependency
+    
+     def convertToOnnxModelIfNeeded(self, model_dir, model_filename="inference.pdmodel", params_filename="inference.pdiparams", opset_version=14):
+         """Converts a Paddle model to ONNX if ONNX providers are available and the model does not already exist."""
