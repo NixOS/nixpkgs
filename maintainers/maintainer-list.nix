@@ -6136,6 +6136,12 @@
     githubId = 62989;
     name = "Demyan Rogozhin";
   };
+  deng232 = {
+    email = "deng759352757@gmail.com";
+    github = "deng232";
+    githubId = 78670850;
+    name = "anson Deng";
+  };
   Denommus = {
     email = "yuridenommus@gmail.com";
     github = "Denommus";
