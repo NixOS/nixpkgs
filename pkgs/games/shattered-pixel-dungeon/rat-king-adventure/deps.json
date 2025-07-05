@@ -1,25 +1,27 @@
 {
  "!comment": "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual.",
  "!version": 1,
- "https://oss.sonatype.org/content/repositories/snapshots/com/badlogicgames": {
-  "gdx-controllers#gdx-controllers-core/2.2.4-20231021.200112-6/SNAPSHOT": {
-   "jar": "sha256-Gdz2J1IvDJFktUD2XeGNS0SIrOyym19X/+dCbbbe3/U=",
-   "pom": "sha256-90QW/Mtz1jbDUhKjdJ88ekhulZR2a7eCaEJoswmeny4="
+ "https://central.sonatype.com/repository/maven-snapshots/com/badlogicgames": {
+  "gdx-controllers#gdx-controllers-core/2.2.4-20250608.150029-6/SNAPSHOT": {
+   "jar": "sha256-fyJB8353OKQAxuBSQxgK9TIvX7C36c0r6+WinDfHajw=",
+   "module": "sha256-4aW8P+W7M9gQic97kWSAOEUNvlRXAB72YIt26pshIYQ=",
+   "pom": "sha256-NiKnqhpzSHduvXygZKdClHu4YUjUf536KP1JX6GpTM0="
   },
-  "gdx-controllers#gdx-controllers-desktop/2.2.4-20231021.200114-6/SNAPSHOT": {
-   "jar": "sha256-4mhLijZwQHk2pP5qXIIzrsO9CwNC3CDti/5szclkVa8=",
-   "pom": "sha256-10+zD8flpKIPzji5NFgtYcwE5O74hSzzvvqBh84wLf4="
+  "gdx-controllers#gdx-controllers-desktop/2.2.4-20250608.150029-6/SNAPSHOT": {
+   "jar": "sha256-kfZsNO7OdEBFqREJcvBk4dVTtvXSYLdl6Yuo52atuDs=",
+   "module": "sha256-VPLkp7CdM0QXhekrmM0KrBCc/r3ILIwkv2OyGzRBUlQ=",
+   "pom": "sha256-HLPRBZpoTtJuJr/CZrFRzY42npXROrwYzDSIyPCoNJk="
   },
   "gdx-controllers/gdx-controllers-core/2.2.4-SNAPSHOT/maven-metadata": {
    "xml": {
     "groupId": "com.badlogicgames.gdx-controllers",
-    "lastUpdated": "20231021200112"
+    "lastUpdated": "20250608150029"
    }
   },
   "gdx-controllers/gdx-controllers-desktop/2.2.4-SNAPSHOT/maven-metadata": {
    "xml": {
     "groupId": "com.badlogicgames.gdx-controllers",
-    "lastUpdated": "20231021200114"
+    "lastUpdated": "20250608150029"
    }
   }
  },
