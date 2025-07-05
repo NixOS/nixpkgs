@@ -1,11 +1,25 @@
 {
-  copyDesktopItems,
   fetchurl,
   lib,
   makeDesktopItem,
-  makeWrapper,
-  pkgs,
   stdenv,
+
+  # nativeBuildInputs
+  copyDesktopItems,
+  dotnet-sdk,
+  makeWrapper,
+  pax,
+  pkg-config,
+
+  # buildInputs
+  adwaita-icon-theme,
+  cairo,
+  dotnet-runtime,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  pango,
+  xorg,
 
   dotnetSupport ? false, # Untested integration with .NET, disabled for now
 }:
@@ -15,8 +29,8 @@ let
     {
       "x86_64-linux" = "linux-x86-64";
       "aarch64-linux" = "linux-arm64";
-      "x86_64-darwin" = "macosx-x86-64"; # Doesn't compile with clang yet
-      "aarch64-darwin" = "macosx-armv6"; # Need to do more testing on macOS
+      "x86_64-darwin" = "macosx-x86-64"; # Doesn't compile on macOS yet
+      "aarch64-darwin" = "macosx-armv6"; # Need to do more testing
     }
     .${stdenv.system} or null;
 in
@@ -29,48 +43,38 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/XoewqCeh1NfB3ve9UL+0WZfZ5DEa4N7REl67Ftlxt0=";
   };
 
-  nativeBuildInputs =
-    with pkgs;
-    [
-      coreutils
-      copyDesktopItems
-      gnused
-      makeWrapper
-      pax
-      pkg-config
-    ]
-    ++ lib.optional dotnetSupport dotnet-sdk;
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+    pax
+    pkg-config
+  ] ++ lib.optional dotnetSupport dotnet-sdk;
 
-  buildInputs =
-    with pkgs;
-    [
-      adwaita-icon-theme
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      pango
-      pkg-config
-      xorg.libX11
-      xorg.libXtst
-    ]
-    ++ lib.optional dotnetSupport dotnet-runtime;
+  buildInputs = [
+    adwaita-icon-theme
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    pango
+    xorg.libX11
+    xorg.libXtst
+  ] ++ lib.optional dotnetSupport dotnet-runtime;
 
   sourceRoot = "PorterPackage";
-  #patches = [ ./build-debugging.patch ]; # Leaving this here in case I need it later
   postPatch = ''
     # A script inside this tarball depends on hardcoded coreutils + gnused paths
     tar -xf c.tar.bz2
 
     # All of these (not shebang) references to /bin must be replaced
-    for i in cp ln mv rm; do
-      substituteInPlace C/CONFIGS/${platformName} --replace-fail "/bin/$i" "${pkgs.coreutils}/bin/$i"
+    for i in cp ln mv rm sed; do
+      substituteInPlace C/CONFIGS/${platformName} --replace-fail "/bin/$i" "$i"
     done
-    substituteInPlace C/CONFIGS/${platformName} --replace-fail "/bin/sed" "${pkgs.gnused}/bin/sed"
 
-    # Re-assemble the tarball with fixed up paths
+    # Re-assemble the tarball with fixed up paths and clean up after ourselves
     rm c.tar.bz2
     tar -cjSf c.tar.bz2 C
+    rm -rf C
   '';
 
   hardeningDisable = [ "format" ]; # Allow printf without a format string
@@ -89,8 +93,13 @@ stdenv.mkDerivation rec {
     cp -r Eiffel_${lib.versions.majorMinor version} $out/opt
     install -Dm444 packaging/logo.png $out/share/icons/estudio.png
 
-    makeWrapper $out/opt/Eiffel_${lib.versions.majorMinor version}/studio/spec/${platformName}/bin/ec $out/bin/ec --set ISE_EIFFEL $out/opt/Eiffel_${lib.versions.majorMinor version} --set ISE_PLATFORM ${platformName}
-    makeWrapper $out/opt/Eiffel_${lib.versions.majorMinor version}/studio/spec/${platformName}/bin/estudio $out/bin/estudio --set ISE_EIFFEL $out/opt/Eiffel_${lib.versions.majorMinor version} --set ISE_PLATFORM ${platformName}
+    ise_eiffel=$out/opt/Eiffel_${lib.versions.majorMinor version}
+    makeWrapper $ise_eiffel/studio/spec/${platformName}/bin/ec $out/bin/ec \
+      --set ISE_EIFFEL $ise_eiffel \
+      --set ISE_PLATFORM ${platformName}
+    makeWrapper $ise_eiffel/studio/spec/${platformName}/bin/estudio $out/bin/estudio \
+      --set ISE_EIFFEL $ise_eiffel \
+      --set ISE_PLATFORM ${platformName}
 
     runHook postInstall
   '';
