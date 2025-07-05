@@ -10861,6 +10861,12 @@
     githubId = 54999;
     name = "Ariel Nunez";
   };
+  initialencounter = {
+    email = "2911583893@qq.com";
+    github = "initialencounter";
+    githubId = 109729945;
+    name = "Wang Zeng";
+  };
   interdependence = {
     email = "git@williamvandervalk.com";
     github = "interdependence";
