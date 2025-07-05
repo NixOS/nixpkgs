@@ -9,19 +9,19 @@
 
 buildDotnetModule rec {
   pname = "discordchatexporter-desktop";
-  version = "2.44.2";
+  version = "2.46";
 
   src = fetchFromGitHub {
     owner = "tyrrrz";
     repo = "discordchatexporter";
     rev = version;
-    hash = "sha256-Dc6OSWUTFftP2tyRFoxHm+TsnSMDfx627DhmYnPie9w=";
+    hash = "sha256-Ns0lZQ0ZKbwd9v+h09DvC7cvw/1VkPo/VglND9pLocg=";
   };
 
   env.XDG_CONFIG_HOME = "$HOME/.config";
 
   projectFile = "DiscordChatExporter.Gui/DiscordChatExporter.Gui.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
