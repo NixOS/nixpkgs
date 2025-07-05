@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     maintainers = with lib.maintainers; [ wucke13 ];
+    teams = with lib.teams; [ ngi ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
