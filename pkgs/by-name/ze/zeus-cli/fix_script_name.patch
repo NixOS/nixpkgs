@@ -1,0 +1,12 @@
+diff --git a/bin/main.js b/bin/main.js
+index 68f3c9c..65da187 100644
+--- a/bin/main.js
++++ b/bin/main.js
+@@ -91,6 +91,7 @@ var proxy = function (args) { return __awaiter(void 0, void 0, void 0, function
+ }); };
+ (0, zeppos_app_utils_1.HM_Analytics)('ZEPP_CLI_V');
+ yargs_1["default"].usage("Usage: ".concat(process.env.CMD_NAME, " <command> [args?]"))
++    .scriptName(process.env.CMD_NAME)
+     .demandCommand(1, 'A command is required. Pass --help to see all available commands and options.')
+     .recommendCommands()
+     .help()
