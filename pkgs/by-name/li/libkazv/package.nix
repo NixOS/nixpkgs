@@ -12,21 +12,21 @@
   libhttpserver,
   libmicrohttpd,
   nlohmann_json,
-  olm,
   pkg-config,
+  vodozemac-bindings-cpp,
   zug,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkazv";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     domain = "lily-is.land";
     owner = "kazv";
     repo = "libkazv";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-bKujiuAR5otF7nc/BdVWVaEW9fSxdh2bcAgsQ5UO1Aw=";
+    hash = "sha256-rXQLbYPmD9UH0iXXqrAQSPF3KgIvjEyZ/97Q+/tl9Ec=";
   };
 
   nativeBuildInputs = [
@@ -42,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     libcpr
     libhttpserver
     libmicrohttpd
-    olm
     nlohmann_json
+    vodozemac-bindings-cpp
     zug
   ];
 
