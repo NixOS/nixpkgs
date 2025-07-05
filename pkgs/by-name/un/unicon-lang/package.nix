@@ -45,7 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "fortify" ];
 
-  enableParallelBuilding = true;
+  # Issues when building plugins and running tests on aarch
+  enableParallelBuilding = false;
 
   doCheck = true;
   checkTarget = "Test";
