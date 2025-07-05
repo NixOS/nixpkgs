@@ -7,6 +7,7 @@
   langJit,
   enableShared,
   targetPlatform,
+  targetConfig,
   hostPlatform,
   withoutTargetLibc,
   libcCross,
@@ -51,7 +52,7 @@ lib.pipe drv
         (
           let
             targetPlatformSlash =
-              if lib.systems.equals hostPlatform targetPlatform then "" else "${targetPlatform.config}/";
+              if lib.systems.equals hostPlatform targetPlatform then "" else "${targetConfig}/";
 
             # If we are building a cross-compiler and the target libc provided
             # to us at build time has a libgcc, use that instead of building a
