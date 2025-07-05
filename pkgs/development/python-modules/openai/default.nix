@@ -120,8 +120,6 @@ buildPythonPackage rec {
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
-    # snapshot mismatches
-    "--inline-snapshot=update"
   ];
 
   disabledTests =
