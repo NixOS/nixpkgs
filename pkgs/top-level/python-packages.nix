@@ -1631,6 +1631,8 @@ self: super: with self; {
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
+  badsecrets = callPackage ../development/python-modules/badsecrets { };
+
   bagit = callPackage ../development/python-modules/bagit { };
 
   baize = callPackage ../development/python-modules/baize { };
