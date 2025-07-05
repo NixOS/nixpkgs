@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "1.2.9";
+  version = "1.2.11";
 in
 python3Packages.buildPythonApplication {
   pname = "mktxp";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication {
     owner = "akpw";
     repo = "mktxp";
     tag = "v${version}";
-    hash = "sha256-LPCx5UJuL22aRbRYD+GkDAQ/0RCi+WJwvsF86ZQ01JY=";
+    hash = "sha256-XF9JbN/k3yUigwmOS4/JHl/hkln71lOD4qMfRbFiAF0=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -32,6 +32,7 @@ python3Packages.buildPythonApplication {
     speedtest-cli
     waitress
     packaging
+    pyyaml
   ];
 
   meta = {
@@ -40,7 +41,10 @@ python3Packages.buildPythonApplication {
     description = "Prometheus Exporter for Mikrotik RouterOS devices";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.BonusPlay ];
+    maintainers = with lib.maintainers; [
+      BonusPlay
+      tsandrini
+    ];
     mainProgram = "mktxp";
   };
 }
