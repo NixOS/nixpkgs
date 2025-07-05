@@ -186,6 +186,9 @@ let
 
     inherit (libsForQt5)
       sddm
+      neochat # added 2025-07-04
+      itinerary # added 2025-07-04
+      libquotient # added 2025-07-04
       ;
   };
 
@@ -1052,7 +1055,7 @@ mapAliases {
   libpseudo = throw "'libpseudo' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
   libpulseaudio-vanilla = libpulseaudio; # Added 2022-04-20
   libqt5pas = libsForQt5.libqtpas; # Added 2024-12-25
-  libquotient = libsForQt5.libquotient; # Added 2023-11-11
+  libquotient = throw "'libquotient' for qt5 was removed as upstream removed qt5 support. Consider explicitly upgrading to qt6 'libquotient'"; # Converted to throw 2025-07-04
   librarian-puppet-go = throw "'librarian-puppet-go' has been removed, as its upstream is unmaintained"; # Added 2024-06-10
   librdf = throw "'librdf' has been renamed to/replaced by 'lrdf'"; # Converted to throw 2024-10-17
   librdf_raptor = throw "librdf_raptor has been remove due to failing to build and being unmaintained"; # Added 2025-04-14

@@ -331,14 +331,6 @@
       name = "incidenceeditor-23.08.5.tar.xz";
     };
   };
-  itinerary = {
-    version = "23.08.5";
-    src = fetchurl {
-      url = "${mirror}/stable/release-service/23.08.5/src/itinerary-23.08.5.tar.xz";
-      sha256 = "19r7k64a4dalarxm7j2jf2p86cnxqxah0iqj68ibazhl1sdqrqs2";
-      name = "itinerary-23.08.5.tar.xz";
-    };
-  };
   juk = {
     version = "23.08.5";
     src = fetchurl {
@@ -1745,14 +1737,6 @@
       url = "${mirror}/stable/release-service/23.08.5/src/minuet-23.08.5.tar.xz";
       sha256 = "1bk5y99gb1qmvyf48vk6gfwyqi6nk535868k3jm375bvd956sd3m";
       name = "minuet-23.08.5.tar.xz";
-    };
-  };
-  neochat = {
-    version = "23.08.5";
-    src = fetchurl {
-      url = "${mirror}/stable/release-service/23.08.5/src/neochat-23.08.5.tar.xz";
-      sha256 = "0cj6j08g5ng1vifpb49rks9kp4mfb3h466n6afw9dk0xxgccc06k";
-      name = "neochat-23.08.5.tar.xz";
     };
   };
   okular = {
