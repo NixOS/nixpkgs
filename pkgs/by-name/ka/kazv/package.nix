@@ -6,13 +6,11 @@
   cmake,
   cmark,
   cryptopp,
-  extra-cmake-modules,
   immer,
   kdePackages,
   lager,
   libkazv,
   nlohmann_json,
-  olm,
   pkg-config,
   qt6,
   zug,
@@ -20,14 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kazv";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     domain = "lily-is.land";
     owner = "kazv";
     repo = "kazv";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-WBS7TJJw0t57V4+NxsG8V8q4UKQXB8kRpWocvNy1Eto=";
+    hash = "sha256-ZQRxzwqPiFsAXJZ2Dd1qvt3KRihxriRdOAb8IpvR9VE=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     lager
     libkazv
     nlohmann_json
-    olm
     qt6.qtbase
     qt6.qtimageformats
     qt6.qtmultimedia
