@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "geoffreybennett";
     repo = "alsa-scarlett-gui";
-    rev = version;
+    tag = version;
     hash = "sha256-DkfpMK0T67B4mnriignf4hx6Ifddls0rN0SxyfEsPZg=";
   };
 
