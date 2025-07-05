@@ -203,6 +203,7 @@ let
       original,
       name,
       set ? { },
+      extraArgs ? null,
     }:
     pkgs.runCommand "${name}-wrapper"
       {
@@ -213,7 +214,8 @@ let
         ''
           makeWrapper "${original}" "$out/bin/${name}" \
             ${lib.concatStringsSep " \\\n " (
-              lib.mapAttrsToList (name: value: ''--set ${name} "${value}"'') set
+              (lib.mapAttrsToList (name: value: ''--set ${name} "${value}"'') set)
+              ++ (lib.optional (extraArgs != null) ''--add-flags "${extraArgs}"'')
             )}
         ''
       );
@@ -224,6 +226,7 @@ let
       original = lib.getExe config.services.borgbackup.package;
       name = "borg-job-${name}";
       set = { BORG_REPO = cfg.repo; } // (mkPassEnv cfg) // cfg.environment;
+      extraArgs = cfg.extraArgs or null;
     };
 
   # Paths listed in ReadWritePaths must exist before service is started
