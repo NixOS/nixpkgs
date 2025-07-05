@@ -4701,6 +4701,12 @@
     githubId = 68112;
     name = "Simon";
   };
+  cipher-clone = {
+    email = "cipher.clone@proton.me";
+    github = "cipher-clone";
+    githubId = 152091185;
+    name = "Cipher";
+  };
   cirno-999 = {
     email = "reverene@protonmail.com";
     github = "cirno-999";
