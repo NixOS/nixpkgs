@@ -16309,8 +16309,6 @@ with pkgs;
     buildGoModule = buildGo123Module;
   };
 
-  unityhub = callPackage ../development/tools/unityhub { };
-
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 
   vaultwarden-sqlite = vaultwarden;
