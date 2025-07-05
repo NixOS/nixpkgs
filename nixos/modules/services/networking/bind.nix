@@ -249,6 +249,14 @@ in
         };
       };
 
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
+          Extra command line arguments to pass to the service.
+        '';
+      };
+
       extraConfig = lib.mkOption {
         type = lib.types.lines;
         default = "";
@@ -315,7 +323,17 @@ in
 
       serviceConfig = {
         Type = "forking"; # Set type to forking, see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900788
-        ExecStart = "${bindPkg.out}/sbin/named ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile}";
+        ExecStart = lib.escapeShellArgs (
+          [
+            "${bindPkg.out}/sbin/named"
+            "-c"
+            cfg.configFile
+          ]
+          ++ lib.optionals cfg.ipv4Only [
+            "-4"
+          ]
+          ++ cfg.extraArgs
+        );
         ExecReload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
         ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
         User = bindUser;
