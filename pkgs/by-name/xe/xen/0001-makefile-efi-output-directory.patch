@@ -1,0 +1,42 @@
+From 76a9d34fa3b789697219d8e78383a19c4105cb20 Mon Sep 17 00:00:00 2001
+From: Fernando Rodrigues <alpha@sigmasquadron.net>
+Date: Fri, 4 Jul 2025 18:07:01 +0000
+Subject: [PATCH 1/2] xen/Makefile: patch .efi output directory
+
+This is necessary so the build doesn not fail when Xen tries to install
+.efi files to $boot/efi/nixos and panics when the directory doesn't
+exist. It also has the benefit of installing the files in a location
+that is easier to access.
+
+Signed-off-by: Fernando Rodrigues <alpha@sigmasquadron.net>
+---
+ xen/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/xen/Makefile b/xen/Makefile
+index 6bf0b0ea9e..907cd89f7e 100644
+--- a/xen/Makefile
++++ b/xen/Makefile
+@@ -526,8 +526,8 @@ _install: $(TARGET)$(CONFIG_XEN_INSTALL_SUFFIX)
+ 		if [ -n '$(EFI_MOUNTPOINT)' -a -n '$(EFI_VENDOR)' ]; then \
+ 			$(if $(efi-strip-opt), \
+ 			     $(STRIP) $(efi-strip-opt) -p -o $(TARGET).efi.stripped $(TARGET).efi && \
+-			     $(INSTALL_DATA) $(TARGET).efi.stripped $(D)$(EFI_MOUNTPOINT)/efi/$(EFI_VENDOR)/$(T)-$(XEN_FULLVERSION).efi ||) \
+-			$(INSTALL_DATA) $(TARGET).efi $(D)$(EFI_MOUNTPOINT)/efi/$(EFI_VENDOR)/$(T)-$(XEN_FULLVERSION).efi; \
++			     $(INSTALL_DATA) $(TARGET).efi.stripped $(D)$(BOOT_DIR)/$(T)-$(XEN_FULLVERSION).efi ||) \
++			$(INSTALL_DATA) $(TARGET).efi $(D)$(BOOT_DIR)/$(T)-$(XEN_FULLVERSION).efi; \
+ 		elif [ "$(D)" = "$(patsubst $(shell cd $(XEN_ROOT) && pwd)/%,%,$(D))" ]; then \
+ 			echo 'EFI installation only partially done (EFI_VENDOR not set)' >&2; \
+ 		fi; \
+@@ -559,7 +559,7 @@ _uninstall:
+ 	rm -f $(D)$(EFI_DIR)/$(T)-$(XEN_VERSION).efi
+ 	rm -f $(D)$(EFI_DIR)/$(T).efi
+ 	if [ -n '$(EFI_MOUNTPOINT)' -a -n '$(EFI_VENDOR)' ]; then \
+-		rm -f $(D)$(EFI_MOUNTPOINT)/efi/$(EFI_VENDOR)/$(T)-$(XEN_FULLVERSION).efi; \
++		rm -f $(D)$(BOOT_DIR)/$(T)-$(XEN_FULLVERSION).efi; \
+ 	fi
+ 
+ .PHONY: _debug
+-- 
+2.49.0
+
