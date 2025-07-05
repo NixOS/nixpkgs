@@ -22,13 +22,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-io81Ddxm4ckFo6tSWn6bqWyB4E5w72k5ewFVtnuSLDE=";
   };
 
-  patches = [
-    # Use ELFv2 ABI on ppc64be
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/6c1192cbf166698932030c2e3de71db1885a572d/srcpkgs/kexec-tools/patches/ppc64-elfv2.patch";
-      sha256 = "19wzfwb0azm932v0vhywv4221818qmlmvdfwpvvpfyw4hjsc2s1l";
-    })
-  ] ++ lib.optional (stdenv.hostPlatform.useLLVM or false) ./fix-purgatory-llvm-libunwind.patch;
+  patches =
+    lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isAbiElfv2) [
+      # Use ELFv2 ABI on ppc64be
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/void-linux/void-packages/6c1192cbf166698932030c2e3de71db1885a572d/srcpkgs/kexec-tools/patches/ppc64-elfv2.patch";
+        sha256 = "19wzfwb0azm932v0vhywv4221818qmlmvdfwpvvpfyw4hjsc2s1l";
+      })
+    ]
+    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) ./fix-purgatory-llvm-libunwind.patch;
 
   hardeningDisable = [
     "format"
