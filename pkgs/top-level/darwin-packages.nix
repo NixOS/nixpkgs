@@ -100,6 +100,10 @@ makeScopeWithSplicing' {
 
       libunwind = callPackage ../os-specific/darwin/libunwind { };
 
+      # Use the text-based stubs and headers from the latest SDK (currently 15.x). This is safe because
+      # using features that are not available on an older deployment target is a hard error.
+      libcxx = callPackage ../os-specific/darwin/libcxx { apple-sdk = pkgs.apple-sdk_15; };
+
       sigtool = callPackage ../os-specific/darwin/sigtool { };
 
       signingUtils = callPackage ../os-specific/darwin/signing-utils { };
