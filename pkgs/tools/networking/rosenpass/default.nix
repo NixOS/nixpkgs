@@ -8,6 +8,7 @@
   cmake,
   libsodium,
   pkg-config,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rosenpass";
@@ -42,7 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage doc/rosenpass.1
   '';
 
-  passthru.tests.rosenpass = nixosTests.rosenpass;
+  passthru = {
+    tests = { inherit (nixosTests) rosenpass; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Build post-quantum-secure VPNs with WireGuard";
