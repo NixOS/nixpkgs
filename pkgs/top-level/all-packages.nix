@@ -4849,8 +4849,8 @@ with pkgs;
     jdk = jdk8;
   };
 
-  armips = callPackage ../development/compilers/armips {
-    stdenv = gcc10Stdenv;
+  armips = callPackage ../by-name/ar/armips/package.nix {
+    stdenv = clangStdenv;
   };
 
   ballerina = callPackage ../development/compilers/ballerina {
