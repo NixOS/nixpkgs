@@ -1,108 +1,104 @@
 {
-  stdenv,
-  lib,
+  buildDotnetModule,
+  dotnet-runtime_6,
+  dotnet-sdk_6,
   fetchFromGitHub,
-  fetchurl,
-  fetchpatch,
-  autoPatchelfHook,
-  makeWrapper,
-  nix-update-script,
+  gcc,
+  git,
   glibcLocales,
-  python3Packages,
-  dotnetCorePackages,
-  gtk-sharp-3_0,
-  gtk3-x11,
-  dconf,
+  gtk3,
+  lib,
+  mono,
+  nix-update-script,
 }:
 
 let
-  pythonLibs =
-    with python3Packages;
-    makePythonPath [
-      construct
-      psutil
-      pyyaml
-      requests
-      tkinter
-
-      # from tools/csv2resd/requirements.txt
-      construct
-
-      # from tools/execution_tracer/requirements.txt
-      pyelftools
-
-      (robotframework.overrideDerivation (oldAttrs: {
-        src = fetchFromGitHub {
-          owner = "robotframework";
-          repo = "robotframework";
-          rev = "v6.1";
-          hash = "sha256-l1VupBKi52UWqJMisT2CVnXph3fGxB63mBVvYdM1NWE=";
-        };
-        patches = (oldAttrs.patches or [ ]) ++ [
-          (fetchpatch {
-            # utest: Improve filtering of output sugar for Python 3.13+
-            name = "python3.13-support.patch";
-            url = "https://github.com/robotframework/robotframework/commit/921e352556dc8538b72de1e693e2a244d420a26d.patch";
-            hash = "sha256-aSaror26x4kVkLVetPEbrJG4H1zstHsNWqmwqOys3zo=";
-          })
-        ];
-      }))
-    ];
+  resources = fetchFromGitHub {
+    owner = "renode";
+    repo = "renode-resources";
+    rev = "d3d69f8f17ed164ee23e46f0c06844a69bf4c004";
+    hash = "sha256-wR3heL58NOQLENwCzL4lPM4KuvT/ON7dlc/KUqrlRjg=";
+  };
 in
-stdenv.mkDerivation (finalAttrs: {
+buildDotnetModule rec {
   pname = "renode";
   version = "1.15.3";
 
-  src = fetchurl {
-    url = "https://github.com/renode/renode/releases/download/v${finalAttrs.version}/renode-${finalAttrs.version}.linux-dotnet.tar.gz";
-    hash = "sha256-0CZWIwIG85nT7uSHhmBkH21S5mTx2womYWV0HG+g8Mk=";
+  src = fetchFromGitHub {
+    owner = "renode";
+    repo = "renode";
+    tag = "v${version}";
+    hash = "sha256-sZhO332seVPuYhk6Cx5UEPyGWfN9TkuavvpVyLJU2Sw=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeWrapper
-  ];
+  postPatch = ''
+    # https://github.com/dotnet/roslyn/issues/37379#issuecomment-513371985
+    cat << EOF > Directory.Build.props
+    <Project>
+      <ItemGroup>
+        <SourceRoot Include="$(MSBuildThisFileDirectory)/"/>
+    </ItemGroup>
+    </Project>
+    EOF
 
-  propagatedBuildInputs = [
-    gtk-sharp-3_0
-  ];
+    patchShebangs build.sh tools/
 
-  strictDeps = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/{bin,libexec/renode}
-
-    mv * $out/libexec/renode
-    mv .renode-root $out/libexec/renode
-
-    makeWrapper "$out/libexec/renode/renode" "$out/bin/renode" \
-      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_8_0 ]}" \
-      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
-      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
-      --prefix PYTHONPATH : "${pythonLibs}" \
-      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
-    makeWrapper "$out/libexec/renode/renode-test" "$out/bin/renode-test" \
-      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_8_0 ]}" \
-      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
-      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
-      --prefix PYTHONPATH : "${pythonLibs}" \
-      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
-
-    substituteInPlace "$out/libexec/renode/renode-test" \
-      --replace '$PYTHON_RUNNER' '${python3Packages.python}/bin/python3'
-
-    runHook postInstall
+    # Fixes determinism build error
+    sed -i 's/AssemblyVersion("%VERSION%.*")/AssemblyVersion("${version}")/g' src/Renode/Properties/AssemblyInfo.template
+    sed -i 's/AssemblyVersion("1.0.*")/AssemblyVersion("1.0.0.0")/g' lib/AntShell/AntShell/Properties/AssemblyInfo.cs lib/CxxDemangler/CxxDemangler/Properties/AssemblyInfo.cs
   '';
+
+  projectFile = [
+    "lib/cctask/CCTask_NET.sln"
+    "Renode_NET.sln"
+  ];
+
+  nugetDeps = ./deps.json;
+
+  dotnet-runtime = dotnet-runtime_6;
+  dotnet-sdk = dotnet-sdk_6;
+
+  # https://github.com/NixOS/nixpkgs/issues/38991
+  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+  env.LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+
+  buildInputs = [ git ];
+
+  runtimeDeps = [
+    gtk3
+    mono
+  ];
+
+  preBuild = ''
+    mkdir -p lib/resources/
+    ln -s ${resources}/* lib/resources/
+
+    mkdir output
+    mv src/Infrastructure/src/Emulator/Cores/linux-properties.csproj output/properties.csproj
+    sed -i "s#/usr/bin/gcc#${gcc}/bin/gcc#g" output/properties.csproj
+    sed -i "s#/usr/bin/ar#${gcc}/bin/ar#g" output/properties.csproj
+  '';
+
+  dotnetInstallFlags = [ "-p:TargetFramework=net6.0" ];
+
+  preInstall = ''
+    dotnetProjectFiles=(Renode_NET.sln)
+  '';
+
+  postInstall = "mv .renode-root $out/lib/renode";
+
+  executables = [ "Renode" ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/renode/renode/blob/${version}/CHANGELOG.rst";
     description = "Virtual development framework for complex embedded systems";
+    downloadPage = "https://github.com/renode/renode";
     homepage = "https://renode.io";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ otavio ];
     platforms = [ "x86_64-linux" ];
   };
-})
+}
