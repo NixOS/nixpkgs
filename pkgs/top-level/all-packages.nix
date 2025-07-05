@@ -572,7 +572,7 @@ with pkgs;
       mysql-shell_8 = callPackage ../development/tools/mysql-shell/8.nix {
         antlr = antlr4_10;
         icu = icu73;
-        protobuf = protobuf_24;
+        protobuf = protobuf_25;
         stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
       };
     })
@@ -582,7 +582,7 @@ with pkgs;
   mysql-shell-innovation = callPackage ../development/tools/mysql-shell/innovation.nix {
     antlr = antlr4_10;
     icu = icu73;
-    protobuf = protobuf_24;
+    protobuf = protobuf_25;
     stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
   };
 
