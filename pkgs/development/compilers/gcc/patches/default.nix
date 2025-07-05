@@ -64,7 +64,7 @@ in
 
 [ ]
 ++ optional (!atLeast12) ./fix-bug-80431.patch
-++ optional (!lib.systems.equals targetPlatform hostPlatform) ./libstdc++-target.patch
+++ optional (!lib.systems.equals targetPlatform hostPlatform && !atLeast15) ./libstdc++-target.patch
 ++ optionals (noSysDirs) (
   [ (if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch) ]
   ++ (
