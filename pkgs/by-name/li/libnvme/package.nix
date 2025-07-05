@@ -4,6 +4,7 @@
   json_c,
   keyutils,
   lib,
+  liburing,
   meson,
   ninja,
   openssl,
@@ -19,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnvme";
-  version = "1.11.1";
+  version = "1.14";
 
   outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CEGr7PDOVRi210XvICH8iLYDKn8S9bGruBO4tycvsT8=";
+    hash = "sha256-JI6zMfiUwgl5v3vhOdmv88dDYenAHi66G5hgGEzSTEw=";
   };
 
   postPatch = ''
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     keyutils
     json_c
+    liburing
     openssl
     systemd
     python3
