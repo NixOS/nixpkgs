@@ -22,6 +22,8 @@
   libpng,
   file,
   runCommand,
+  curl,
+  capnproto,
   useAVX2 ? stdenv.hostPlatform.avx2Support,
 }:
 
@@ -62,6 +64,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DTILEDB_WEBP=OFF"
     "-DTILEDB_WERROR=OFF"
+    "-DTILEDB_SERIALIZATION=ON"
     # https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -73,6 +76,8 @@ stdenv.mkDerivation rec {
     cmake
     python3
     doxygen
+    curl.dev
+    capnproto
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
