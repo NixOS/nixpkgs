@@ -7971,6 +7971,12 @@
     githubId = 55919390;
     name = "Vincent VILLIAUMEY";
   };
+  eyeinsky = {
+    email = "markus.l2ll@gmail.com";
+    github = "eyeinsky";
+    githubId = 9335924;
+    name = "Markus Läll";
+  };
   eyjhb = {
     email = "eyjhbb@gmail.com";
     matrix = "@eyjhb:eyjhb.dk";
