@@ -4922,6 +4922,8 @@ self: super: with self; {
 
   fastdiff = callPackage ../development/python-modules/fastdiff { };
 
+  fastdotcom = callPackage ../development/python-modules/fastdotcom { };
+
   fastdownload = callPackage ../development/python-modules/fastdownload { };
 
   fastdtw = callPackage ../development/python-modules/fastdtw { };
