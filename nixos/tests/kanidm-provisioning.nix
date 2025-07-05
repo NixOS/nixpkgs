@@ -326,6 +326,8 @@ in
           provision.wait_until_succeeds("curl -Lsf https://${serverDomain} | grep Kanidm")
           if pw is None:
               pw = provision.succeed("su - kanidm -c 'kanidmd recover-account -c ${serverConfigFile} idm_admin 2>&1 | rg -o \'[A-Za-z0-9]{48}\' '").strip().removeprefix("'").removesuffix("'")
+          else:
+            provision.wait_for_unit("kanidm-provision.service")
           out = provision.succeed(f"KANIDM_PASSWORD={pw} kanidm login -D idm_admin")
           assert_contains(out, "Login Success for idm_admin")
 
@@ -335,6 +337,7 @@ in
 
       with subtest("Test Provisioning - credentialProvision"):
           provision.succeed('${specialisations}/credentialProvision/bin/switch-to-configuration test')
+          provision.succeed("systemctl restart kanidm-provision.service")
           provision_login("${provisionIdmAdminPassword}")
 
           # Make sure neither password is logged
