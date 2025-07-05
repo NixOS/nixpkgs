@@ -245,25 +245,26 @@ let
         };
       };
 
-      merged =
-        let
-          collected =
-            collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ])
-              (
-                {
-                  inherit
-                    lib
-                    options
-                    specialArgs
-                    ;
-                  _class = class;
-                  _prefix = prefix;
-                  config = addErrorContext "if you get an infinite recursion here, you probably reference `config` in `imports`. If you are trying to achieve a conditional import behavior dependent on `config`, consider importing unconditionally, and using `mkEnableOption` and `mkIf` to control its effect." config;
-                }
-                // specialArgs
-              );
-        in
-        mergeModules prefix (reverseList collected);
+      # This function takes an empty attrset as an argument.
+      # It could theoretically be replaced with its body,
+      # but such a binding is avoided to allow for earlier grabage collection.
+      doCollect =
+        { }:
+        collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ]) (
+          {
+            inherit
+              lib
+              options
+              specialArgs
+              ;
+            _class = class;
+            _prefix = prefix;
+            config = addErrorContext "if you get an infinite recursion here, you probably reference `config` in `imports`. If you are trying to achieve a conditional import behavior dependent on `config`, consider importing unconditionally, and using `mkEnableOption` and `mkIf` to control its effect." config;
+          }
+          // specialArgs
+        );
+
+      merged = mergeModules prefix (reverseList (doCollect { }).modules);
 
       options = merged.matchedOptions;
 
@@ -359,12 +360,13 @@ let
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
+        inherit (doCollect { }) graph;
         inherit extendModules type class;
       };
     in
     result;
 
-  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> [ Module ]
+  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> ModulesTree
   #
   # Collects all modules recursively through `import` statements, filtering out
   # all modules in disabledModules.
@@ -529,9 +531,25 @@ let
           operator = attrs: keyFilter attrs.modules;
         });
 
+      toGraph =
+        modulesPath:
+        { disabled, modules }:
+        let
+          isDisabledModule = isDisabled modulesPath disabled;
+
+          toModuleGraph = structuredModule: {
+            disabled = isDisabledModule structuredModule;
+            inherit (structuredModule) key;
+            file = structuredModule.module._file;
+            imports = map toModuleGraph structuredModule.modules;
+          };
+        in
+        map toModuleGraph (filter (x: x.key != "lib/modules.nix") modules);
     in
-    modulesPath: initialModules: args:
-    filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+    modulesPath: initialModules: args: {
+      modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+      graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules args);
+    };
 
   /**
     Wrap a module with a default location for reporting errors.

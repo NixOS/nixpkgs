@@ -20,6 +20,10 @@ cd "$DIR"/modules
 pass=0
 fail=0
 
+local-nix-instantiate() {
+    nix-instantiate --timeout 1 --eval-only --show-trace --read-write-mode --json "$@"
+}
+
 # loc
 #   prints the location of the call of to the function that calls it
 # loc n
@@ -55,7 +59,7 @@ evalConfig() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode --json
+    local-nix-instantiate -E "$script" -A "$attr"
 }
 
 reportFailure() {
@@ -104,6 +108,20 @@ globalErrorLogCheck() {
         fi
         return 1
       }
+}
+
+checkExpression() {
+  local path=$1
+  local output
+  {
+      output="$(local-nix-instantiate --strict "$path" 2>&1)" && ((++pass))
+  } || {
+      logStartFailure
+      echo "$output"
+      ((++fail))
+      logFailure
+      logEndFailure
+  }
 }
 
 checkConfigError() {
@@ -336,6 +354,9 @@ checkConfigError 'The option .value. in .*/declare-coerced-value.nix. is already
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
 checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
 checkConfigError 'toInt: Could not convert .* to int' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
+
+# Check `graph` attribute
+checkExpression './graph/test.nix'
 
 # Check mkAliasOptionModule.
 checkConfigOutput '^true$' config.enable ./alias-with-priority.nix
