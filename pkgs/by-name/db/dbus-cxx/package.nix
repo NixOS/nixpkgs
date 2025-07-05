@@ -35,7 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/dbus-cxx/dbus-cxx";
     description = "DBus-cxx provides an object-oriented interface to DBus";
-    license = lib.licenses.lgpl3;
+    license = withlib.licenses; [
+      lgpl3Plus
+      # or
+      bsd3
+    ];
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.fredeb ];
   };
