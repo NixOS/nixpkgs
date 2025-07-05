@@ -7528,8 +7528,6 @@ with pkgs;
   libc =
     let
       inherit (stdenv.hostPlatform) libc;
-      # libc is hackily often used from the previous stage. This `or`
-      # hack fixes the hack, *sigh*.
     in
     if libc == null then
       null
