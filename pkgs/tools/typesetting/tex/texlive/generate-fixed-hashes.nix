@@ -40,7 +40,7 @@ let
 
   hash = fod: fod.outputHash or (builtins.readFile (computeHash fod));
 
-  hashes = fods: concatMapStrings ({ tlType, ... }@p: ''${tlType}="${hash p}";'') fods;
+  hashes = fods: concatMapStrings ({ tlType, ... }@p: "    ${tlType} = \"${hash p}\";\n") fods;
 
   hashLine =
     {
@@ -54,9 +54,7 @@ let
       # NOTE: the fixed naming scheme must match default.nix
       fixedName = "${pname}-${toString revision}${extraRevision}";
     in
-    optionalString (fods != [ ]) ''
-      ${strings.escapeNixIdentifier fixedName}={${hashes fods}};
-    '';
+    optionalString (fods != [ ]) "  ${strings.escapeNixIdentifier fixedName} = {\n${hashes fods}  };\n";
 in
 {
   # fixedHashesNix uses 'import from derivation' which does not parallelize well
