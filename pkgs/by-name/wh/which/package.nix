@@ -3,7 +3,12 @@
   stdenv,
   fetchurl,
   directoryListingUpdater,
+  withPrefix ? false,
 }:
+
+let
+  prefix = lib.optionalString withPrefix "g";
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "which";
@@ -17,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   enableParallelBuilding = true;
 
+  configureFlags = lib.optional withPrefix "--program-prefix=g";
+
   passthru.updateScript = directoryListingUpdater {
     inherit (finalAttrs) pname version;
     url = "https://ftp.gnu.org/gnu/which/";
@@ -27,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Shows the full path of (shell) commands";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
-    mainProgram = "which";
+    mainProgram = prefix + "which";
     platforms = lib.platforms.all;
   };
 })

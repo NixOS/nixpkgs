@@ -5,12 +5,14 @@
   readline,
   stdenv,
   enableCurrenciesUpdater ? true,
+  withPrefix ? false,
 }:
 
 let
   pythonEnv = python3.withPackages (p: [
     p.requests
   ]);
+  prefix = lib.optionalString withPrefix "g";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "units";
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace units_cur \
       --replace "#!/usr/bin/env python" ${pythonEnv}/bin/python
   '';
+
+  configureFlags = lib.optional withPrefix "--program-prefix=g";
 
   postInstall = lib.optionalString enableCurrenciesUpdater ''
     cp units_cur ${placeholder "out"}/bin/
@@ -71,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       the standard data file.
     '';
     license = with lib.licenses; [ gpl3Plus ];
-    mainProgram = "units";
+    mainProgram = prefix + "units";
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };

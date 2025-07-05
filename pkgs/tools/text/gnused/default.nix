@@ -4,7 +4,12 @@
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
   perl,
+  withPrefix ? false,
 }:
+
+let
+  prefix = lib.optionalString withPrefix "g";
+in
 
 stdenv.mkDerivation rec {
   pname = "gnused";
@@ -25,6 +30,7 @@ stdenv.mkDerivation rec {
     perl
   ];
   preConfigure = "patchShebangs ./build-aux/help2man";
+  configureFlags = lib.optional withPrefix "--program-prefix=g";
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
   PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
@@ -46,6 +52,6 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mic92 ];
-    mainProgram = "sed";
+    mainProgram = prefix + "sed";
   };
 }
