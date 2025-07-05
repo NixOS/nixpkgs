@@ -1076,6 +1076,8 @@ with pkgs;
 
   dehinter = with python3Packages; toPythonApplication dehinter;
 
+  fbgrab  = callPackage ../tools/graphics/fbgrab { };
+
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
