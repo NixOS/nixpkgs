@@ -2,6 +2,7 @@
   fetchFromGitHub,
   gradle_8,
   jre,
+  jdk17,
   lib,
   makeWrapper,
   stdenvNoCC,
@@ -24,13 +25,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.38.2";
+  version = "3.4.40.1";
 
   src = fetchFromGitHub {
     owner = "ATLauncher";
     repo = "ATLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x8ch8BdUckweuwEvsOxYG2M5UmbW4fRjF/jJ6feIjIA=";
+    hash = "sha256-oNWjYSz0lUuhcP/luSM/3u5+nB+g+0YLLyBanoMSmhQ=";
   };
 
   postPatch = ''
@@ -55,6 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   gradleFlags = [
     "--exclude-task"
     "createExe"
+    "-Dorg.gradle.java.home=${jdk17}"
   ];
 
   installPhase =
