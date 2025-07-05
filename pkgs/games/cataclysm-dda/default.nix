@@ -15,6 +15,12 @@ let
     curses = tiles.override { tiles = false; };
   };
 
+  bn-git = rec {
+    tiles = callPackage ./bn-git.nix { };
+
+    curses = tiles.override { tiles = false; };
+  };
+
   lib = callPackage ./lib.nix { };
 
   pkgs = callPackage ./pkgs { };
@@ -24,6 +30,7 @@ let
       callPackage
       stable
       git
+      bn-git
       ;
 
     inherit (lib)
