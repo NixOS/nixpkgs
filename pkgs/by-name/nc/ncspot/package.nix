@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-4zeBTi1WBy9tXowsehUo4qou6bhznWPeCXFg+R3akho=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-c16qw2khbMXTA8IbYQnMKqivO63DwyAWKfV2P1aD7dU=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withClipboard python3;
