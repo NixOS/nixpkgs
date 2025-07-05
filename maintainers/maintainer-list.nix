@@ -6950,6 +6950,15 @@
     githubId = 10859387;
     name = "Devan Carpenter";
   };
+  dustinblackman = {
+    email = "nix@dustinblackman.com";
+    github = "dustinblackman";
+    githubId = 5246169;
+    name = "Dustin Blackman";
+    keys = [{
+      fingerprint = "6A34 CFEE 77FE 8257 C3BB  92FE 24C3 FC5D 6987 904B";
+    }];
+  };
   dwarfmaster = {
     email = "nixpkgs@dwarfmaster.net";
     github = "dwarfmaster";
