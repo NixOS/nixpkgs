@@ -98,9 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       --tags -leaks \
       --skipunit integration/aof-multi-part \
       --skipunit integration/failover \
-      ${lib.optionalString (
-        stdenv.hostPlatform.system == "aarch64-linux"
-      ) "--skipunit integration/replication-rdbchannel"}
+      --skipunit integration/replication-rdbchannel
 
     runHook postCheck
   '';

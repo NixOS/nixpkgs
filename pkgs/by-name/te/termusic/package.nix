@@ -16,17 +16,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termusic";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "tramhao";
     repo = "termusic";
     rev = "v${version}";
-    hash = "sha256-Yd23Jk2BFuLtxgF8vgat0wTGq6ahHHBd/HjGI9BY9z4=";
+    hash = "sha256-89eqOeSq9uI4re3Oq0/ORMzMjYA4pLw7ZYyfGPXWtfg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1WomL0O5QS2NHu4k6TuA2jLtDKyxlY0iVCgH9pb6CHI=";
+  cargoHash = "sha256-yzmZC1JwTHefAE2X/D1yfVZN4wGxnH+FkXGqKMuaVeM=";
 
   useNextest = true;
 

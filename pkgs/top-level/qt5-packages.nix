@@ -202,8 +202,6 @@ makeScopeWithSplicing' {
 
         libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
-        libquotient = callPackage ../development/libraries/libquotient { };
-
         libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
         mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };

@@ -4898,6 +4898,8 @@ self: super: with self; {
 
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
+  fast-simplification = callPackage ../development/python-modules/fast-simplification { };
+
   fastai = callPackage ../development/python-modules/fastai { };
 
   fastapi = callPackage ../development/python-modules/fastapi { };
@@ -6987,6 +6989,8 @@ self: super: with self; {
   internetarchive = callPackage ../development/python-modules/internetarchive { };
 
   interruptingcow = callPackage ../development/python-modules/interruptingcow { };
+
+  intervals = callPackage ../development/python-modules/intervals { };
 
   intervaltree = callPackage ../development/python-modules/intervaltree { };
 
@@ -13987,6 +13991,10 @@ self: super: with self; {
 
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
 
+  pytest-asyncio-cooperative =
+    callPackage ../development/python-modules/pytest-asyncio-cooperative
+      { };
+
   pytest-asyncio_0_21 = pytest-asyncio.overridePythonAttrs (old: rec {
     version = "0.21.2";
     src = pkgs.fetchFromGitHub {
@@ -15953,6 +15961,8 @@ self: super: with self; {
   scipp = callPackage ../development/python-modules/scipp { };
 
   scipy = callPackage ../development/python-modules/scipy { };
+
+  scipy-stubs = callPackage ../development/python-modules/scipy-stubs { };
 
   scmrepo = callPackage ../development/python-modules/scmrepo { };
 
