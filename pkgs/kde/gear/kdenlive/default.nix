@@ -14,6 +14,7 @@
   libv4l,
   open-timeline-io,
   frei0r,
+  gtk3,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
@@ -49,6 +50,7 @@ mkKdeDerivation {
 
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
+    "--suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
   ];
 
   meta.mainProgram = "kdenlive";
