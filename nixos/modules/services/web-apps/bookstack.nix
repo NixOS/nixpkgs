@@ -472,6 +472,7 @@ in
         "${cfg.dataDir}/storage/logs".d = defaultConfig;
         "${cfg.dataDir}/storage/uploads".d = defaultConfig;
         "${cfg.dataDir}/cache".d = defaultConfig;
+        "${cfg.dataDir}/themes".d = defaultConfig;
       };
 
     users = {
