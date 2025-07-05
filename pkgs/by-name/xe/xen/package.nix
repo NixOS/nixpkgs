@@ -4,6 +4,7 @@
   testers,
   fetchgit,
   fetchpatch,
+  replaceVars,
 
   # Xen
   acpica-tools,
@@ -46,15 +47,19 @@
   bridge-utils,
   coreutils,
   diffutils,
+  drbd,
   gawk,
   gnugrep,
   gnused,
   inetutils,
   iproute2,
   iptables,
+  kmod,
   multipath-tools,
   nbd,
+  openiscsi,
   openvswitch,
+  psmisc,
   util-linux,
   which,
 }:
@@ -62,10 +67,10 @@
 let
   inherit (lib)
     enableFeature
+    genAttrs
     getExe
     getExe'
     licenses
-    makeSearchPathOutput
     optionalString
     optionals
     systems
@@ -85,24 +90,84 @@ let
   # Mark versions older than minSupportedVersion as EOL.
   minSupportedVersion = "4.17";
 
-  scriptEnvPath = makeSearchPathOutput "out" "bin" [
-    bridge-utils
-    coreutils
-    diffutils
-    gawk
-    gnugrep
-    gnused
-    inetutils
-    iproute2
-    iptables
-    libnl.bin
-    multipath-tools
-    nbd
-    openvswitch
-    perl
-    util-linux.bin
-    which
-  ];
+  scriptDeps =
+    let
+      mkTools = pkg: tools: genAttrs tools (tool: getExe' pkg tool);
+    in
+    (genAttrs [
+      "CONFIG_DIR"
+      "CONFIG_LEAF_DIR"
+      "LIBEXEC_BIN"
+      "XEN_LOG_DIR"
+      "XEN_RUN_DIR"
+      "XEN_SCRIPT_DIR"
+      "qemu_xen_systemd"
+      "sbindir"
+    ] (_: null))
+    // (mkTools coreutils [
+      "basename"
+      "cat"
+      "cp"
+      "cut"
+      "dirname"
+      "head"
+      "ls"
+      "mkdir"
+      "mktemp"
+      "readlink"
+      "rm"
+      "seq"
+      "sleep"
+      "stat"
+    ])
+    // (mkTools drbd [
+      "drbdadm"
+      "drbdsetup"
+    ])
+    // (mkTools gnugrep [
+      "egrep"
+      "grep"
+    ])
+    // (mkTools iproute2 [
+      "bridge"
+      "ip"
+      "tc"
+    ])
+    // (mkTools iptables [
+      "arptables"
+      "ip6tables"
+      "iptables"
+    ])
+    // (mkTools kmod [
+      "modinfo"
+      "modprobe"
+      "rmmod"
+    ])
+    // (mkTools libnl [
+      "nl-qdisc-add"
+      "nl-qdisc-delete"
+      "nl-qdisc-list"
+    ])
+    // (mkTools util-linux [
+      "flock"
+      "logger"
+      "losetup"
+      "prlimit"
+    ])
+    // {
+      awk = getExe' gawk "awk";
+      brctl = getExe bridge-utils;
+      diff = getExe' diffutils "diff";
+      ifconfig = getExe' inetutils "ifconfig";
+      iscsiadm = getExe' openiscsi "iscsiadm";
+      killall = getExe' psmisc "killall";
+      multipath = getExe' multipath-tools "multipath";
+      nbd-client = getExe' nbd "nbd-client";
+      ovs-vsctl = getExe' openvswitch "ovs-vsctl";
+      sed = getExe gnused;
+      systemd-notify = getExe' systemd "systemd-notify";
+      which = getExe which;
+    };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -116,6 +181,10 @@ stdenv.mkDerivation (finalAttrs: {
   vendor = "nixos";
 
   patches = [
+    ./0001-makefile-efi-output-directory.patch
+
+    (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
+
     # XSA #469
     (fetchpatch {
       url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.20-01.patch";
@@ -259,36 +328,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Remove in-tree QEMU sources, we don't need them in any circumstance.
   prePatch = "rm -rf tools/qemu-xen tools/qemu-xen-traditional";
 
-  postPatch =
-    # The following patch forces Xen to install xen.efi on $out/boot
-    # instead of $out/boot/efi/efi/nixos, as the latter directory
-    # would otherwise need to be created manually. This also creates
-    # a more consistent output for downstreams who override the
-    # vendor attribute above.
-    ''
-      substituteInPlace xen/Makefile \
-        --replace-fail "\$(D)\$(EFI_MOUNTPOINT)/efi/\$(EFI_VENDOR)/\$(T)-\$(XEN_FULLVERSION).efi" \
-                  "\$(D)\$(BOOT_DIR)/\$(T)-\$(XEN_FULLVERSION).efi"
-    ''
-
-    # The following patch fixes the call to /bin/mkdir on the
-    # launch_xenstore.sh helper script.
-    + ''
-      substituteInPlace tools/hotplug/Linux/launch-xenstore.in \
-        --replace-fail "/bin/mkdir" "${getExe' coreutils "mkdir"}"
-    ''
-
-    # The following expression fixes the paths called by Xen's systemd
-    # units, so we can use them in the NixOS module.
-    + ''
-      substituteInPlace \
-        tools/hotplug/Linux/systemd/{xen-init-dom0,xen-qemu-dom0-disk-backend,xenconsoled,xendomains,xenstored}.service.in \
-        --replace-fail /bin/grep ${getExe gnugrep}
-      substituteInPlace \
-       tools/hotplug/Linux/systemd/{xen-qemu-dom0-disk-backend,xenconsoled}.service.in \
-        --replace-fail "/bin/mkdir" "${getExe' coreutils "mkdir"}"
-    '';
-
   installPhase = ''
     runHook preInstall
 
@@ -302,22 +341,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall =
     # Wrap xencov_split, xenmon and xentrace_format.
+    # We also need to wrap pygrub, which lies in $out/libexec/xen/bin.
     ''
       wrapPythonPrograms
-    ''
-
-    # We also need to wrap pygrub, which lies in $out/libexec/xen/bin.
-    + ''
       wrapPythonProgramsIn "$out/libexec/xen/bin" "$out $pythonPath"
-    ''
-
-    # Fix shebangs in Xen's various scripts.
-    # TODO: Patch the individual calls instead.
-    + ''
-      shopt -s extglob
-      for i in $out/etc/xen/scripts/!(*.sh); do
-        sed -i "2s@^@export PATH=$out/bin:${scriptEnvPath}\n@" $i
-      done
     '';
 
   postFixup =
