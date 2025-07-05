@@ -1,28 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   dnspython,
-  future,
   ldap3,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ldapdomaindump";
-  version = "0.9.4";
+  version = "0.10.0-unstable-2025-04-06";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mdzaFwUKllSZZuU7yJ5x2mcAlNU9lUKzsNAZfQNeb1I=";
+  src = fetchFromGitHub {
+    owner = "dirkjanm";
+    repo = "ldapdomaindump";
+    rev = "d559463eb29857f2660bf3867bfb9f8610d1ddb1";
+    hash = "sha256-gb/3gtXPQ86bkvunvj1wonxYAFHKkCh2H5dmSNTgz5g=";
   };
 
   propagatedBuildInputs = [
     dnspython
-    future
     ldap3
   ];
 
