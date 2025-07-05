@@ -629,6 +629,8 @@ checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. ha
 checkConfigOutput "^true$" config.result ./doRename-condition.nix ./doRename-condition-enable.nix
 checkConfigOutput "^true$" config.result ./doRename-condition.nix ./doRename-condition-no-enable.nix
 checkConfigOutput "^true$" config.result ./doRename-condition.nix ./doRename-condition-migrated.nix
+# doRename works with priorities on nested options
+checkConfigOutput '^1234$' config.new.foo ./doRename-nested-option-priorities.nix
 
 # Anonymous modules get deduplicated by key
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
