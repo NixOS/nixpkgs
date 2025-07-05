@@ -27,7 +27,8 @@ in
       description = "Open the defined port in the Firewall";
     };
   };
-  config.systemd.services.soapy-remote = {
+
+  config.systemd.services.soapy-remote = lib.mkIf cfg.enable {
     description = "SoapyRemote, a Server for streaming SDR data over the Network";
     wants = [ "network-online.target" ];
     after = [ "network-online.target" ];
@@ -39,9 +40,11 @@ in
     };
     wantedBy = [ "multi-user.target" ];
   };
-  config.networking.firewall = lib.mkIf cfg.openFirewall {
-    allowedTCPPorts = [ cfg.port ];
-    allowedUDPPorts = [ cfg.port ];
-  };
+  config.networking.firewall =
+    lib.mkIf cfg.openFirewall
+    && cfg.enable {
+      allowedTCPPorts = [ cfg.port ];
+      allowedUDPPorts = [ cfg.port ];
+    };
   meta.maintainers = with lib.maintainers; [ minionflo ];
 }
