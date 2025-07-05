@@ -14,14 +14,12 @@ OP_PGP_KEYID = "3FEF9748469ADBE15DA7CA80AC2D62742012EA22"
 
 class Sources(OrderedDict):
     def __init__(self):
-        self._jsonfp = open("sources.json", "r+")
-        self.update(json.load(self._jsonfp))
-        self._jsonfp.seek(0, os.SEEK_SET)
+        with open("sources.json", "r") as fp:
+            self.update(json.load(fp))
 
     def persist(self):
-        json.dump(self, self._jsonfp, indent=2)
-        self._jsonfp.write("\n") # keep fmt.check happy
-
+        with open("sources.json", "w") as fp:
+            print(json.dumps(self, indent=2), file=fp)
 
 class GPG:
     def __new__(cls):
