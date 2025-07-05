@@ -1,43 +1,89 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  flex,
-  bison,
+  addDriverRunpath,
   cmake,
+  cudaPackages,
+  cudaSupport ? false,
+  fetchzip,
+  fetchFromGitHub,
+  git,
+  glfw,
+  lib,
+  openexr,
+  pkg-config,
+  stdenv,
   zlib,
 }:
-
-stdenv.mkDerivation {
-  version = "2018-08-15";
-  pname = "pbrt-v3";
+let
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  optix = fetchzip {
+    url = "https://developer.download.nvidia.com/redist/optix/v7.4/OptiX-7.4.0-Include.zip";
+    hash = "sha256-ksqtjnfouvP99VS9249cMngvAj8HlOxtqowRHIZ4E4Q=";
+    stripRoot = false;
+  };
+in
+stdenv'.mkDerivation {
+  pname = "pbrt-v4";
+  version = "2025-03-23";
 
   src = fetchFromGitHub {
-    rev = "86b5821308088deea70b207bc8c22219d0103d65";
     owner = "mmp";
-    repo = "pbrt-v3";
-    sha256 = "0f7ivsczba6zfk5f0bba1js6dcwf6w6jrkiby147qp1sx5k35cv8";
+    repo = "pbrt-v4";
+    rev = "f140d7c";
     fetchSubmodules = true;
+    sha256 = "sha256-xFKRoH3M4O1sUGtZCWJBL7MiXQGEBw1sk5N0NMzgasM=";
   };
 
   patches = [
-    # https://github.com/mmp/pbrt-v3/issues/196
-    ./openexr-cmake-3.12.patch
+    # use glfw in nixpkgs
+    ./glfw.patch
+    # https://github.com/mmp/pbrt-v4/issues/429
+    ./cuda-atomic.patch
   ];
 
-  nativeBuildInputs = [
-    flex
-    bison
-    cmake
-  ];
-  buildInputs = [ zlib ];
+  nativeBuildInputs =
+    [
+      cmake
+      git
+      pkg-config
+    ]
+    ++ lib.optionals cudaSupport [
+      addDriverRunpath
+      cudaPackages.cuda_nvcc
+    ];
 
-  meta = with lib; {
-    homepage = "https://pbrt.org/";
-    description = "Renderer described in the third edition of the book 'Physically Based Rendering: From Theory To Implementation'";
-    platforms = platforms.linux;
-    license = licenses.bsd2;
-    maintainers = [ maintainers.juliendehos ];
-    priority = 10;
+  buildInputs =
+    [
+      glfw
+      openexr
+      zlib
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cccl
+      cudaPackages.cuda_cudart
+    ];
+
+  cmakeFlags =
+    [
+      "-DBUILD_TESTING=ON"
+    ]
+    ++ lib.optionals cudaSupport [
+      "-DPBRT_OPTIX7_PATH=${optix}"
+      # manually specifty shading model with max compatibility to avoid runtime detection
+      "-DPBRT_GPU_SHADER_MODEL=sm_75"
+    ];
+
+  postFixup = lib.optionalString cudaSupport ''
+    addDriverRunpath $out/bin/pbrt
+  '';
+
+  meta = {
+    description = "Source code to pbrt, the ray tracer described in the forthcoming 4th edition of the \"Physically Based Rendering: From Theory to Implementation\" book.";
+    homepage = "github.com/mmp/pbrt-v4";
+    mainProgram = "pbrt";
+    license =
+      with lib.licenses;
+      [ asl20 ] ++ lib.optional cudaSupport (unfree // { shortName = "NVidia OptiX EULA"; });
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = [ lib.maintainers.tsssni ];
   };
 }
