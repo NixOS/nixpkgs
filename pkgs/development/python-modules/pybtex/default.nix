@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.24.0";
+  version = "0.25.1";
   format = "setuptools";
   pname = "pybtex";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "818eae35b61733e5c007c3fcd2cfb75ed1bc8b4173c1f70b56cc4c0802d34755";
+    sha256 = "sha256-nq+QJnx+g+Ilr4n+plw3Cvv2X0WCINOUap4wSeHspJE=";
   };
 
   meta = with lib; {
