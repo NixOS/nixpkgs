@@ -1,0 +1,251 @@
+From 5f4cb07bab783dce3acc1dda76d36e3dee8eb848 Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Thu, 27 Mar 2025 22:40:32 -0500
+Subject: [PATCH] macOS: use x86_64 system calls and executable format
+
+Co-Authored-By: Technocoder <8334328+Techno-coder@users.noreply.github.com>
+---
+ Makefile |   2 +-
+ main.c   | 173 +++++++++++++++++--------------------------------------
+ 2 files changed, 54 insertions(+), 121 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 43f53fb..cc305a7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,4 +2,4 @@
+ EXTRAFLAGS = -D__USE_MINGW_ANSI_STDIO=0 -Wl,--disable-reloc-section -fno-asynchronous-unwind-tables -O2
+ 
+ winediscordipcbridge.exe: main.c
+-	i686-w64-mingw32-gcc $(EXTRAFLAGS) -masm=intel main.c -o winediscordipcbridge
++	x86_64-w64-mingw32-gcc $(EXTRAFLAGS) -masm=intel main.c -o winediscordipcbridge
+diff --git a/main.c b/main.c
+index 7c18b9f..9e5f4d0 100644
+--- a/main.c
++++ b/main.c
+@@ -25,151 +25,84 @@ struct sockaddr_un {
+ 
+ #pragma endregion wine-specific header thingy
+ #pragma region
+-__declspec(naked) int l_close(int fd) {
+-    __asm__ (
+-            "push ebx\n\t"
++__declspec(naked) void __syscall() {
++	__asm__ (
++            "__syscall:\n\t"
++            "add rax, 0x2000000\n\t"
+ 
++            "syscall\n\t"
++            "jnc noerror\n\t"
++            "neg rax\n\t"
++
++            "noerror:\n\t"
++            "ret"
++            );
++}
++
++__declspec(naked) __attribute__((sysv_abi)) unsigned int l_getpid() {
++    __asm__ (
++            "mov eax, 0x14\n\t"
++            "jmp __syscall\n\t"
++            "ret"
++            );
++}
++__declspec(naked) __attribute__((sysv_abi)) int l_close(int fd) {
++    __asm__ (
+             "mov eax, 0x06\n\t"
+-            "mov ebx, [esp + 4 + 4]\n\t"
+-            "int 0x80\n\t"
+-
+-            "pop ebx\n\t"
++            "jmp __syscall\n\t"
+             "ret"
+             );
+ }
+-__declspec(naked) int l_socketcall(int call, void* args) {
++__declspec(naked) __attribute__((sysv_abi)) int l_fcntl(unsigned int fd, unsigned int cmd, unsigned long arg) {
+     __asm__ (
+-            "push ebx\n\t"
+-
+-            "mov eax, 0x66\n\t"
+-            "mov ebx, [esp + 4 + 4]\n\t"
+-            "mov ecx, [esp + 4 + 8]\n\t"
+-            "int 0x80\n\t"
+-
+-            "pop ebx\n\t"
++            "mov eax, 0x5c\n\t"
++            "jmp __syscall\n\t"
+             "ret"
+             );
+ }
+-__declspec(naked) int l_open(const char* filename, int flags, int mode) {
++__declspec(naked) __attribute__((sysv_abi)) int l_open(const char* filename, int flags, int mode) {
+     __asm__ (
+-            "push ebx\n\t"
+-
+             "mov eax, 0x05\n\t"
+-            "mov ebx, [esp + 4 + 4]\n\t"
+-            "mov ecx, [esp + 4 + 8]\n\t"
+-            "mov edx, [esp + 4 + 12]\n\t"
+-            "int 0x80\n\t"
+-
+-            "pop ebx\n\t"
++            "jmp __syscall\n\t"
+             "ret"
+             );
+ }
+-__declspec(naked) int l_write(unsigned int fd, const char* buf, unsigned int count) {
++__declspec(naked) __attribute__((sysv_abi)) int l_write(unsigned int fd, const char* buf, unsigned int count) {
+     __asm__ (
+-            "push ebx\n\t"
+-
+             "mov eax, 0x04\n\t"
+-            "mov ebx, [esp + 4 + 4]\n\t"
+-            "mov ecx, [esp + 4 + 8]\n\t"
+-            "mov edx, [esp + 4 + 12]\n\t"
+-            "int 0x80\n\t"
+-
+-            "pop ebx\n\t"
++            "jmp __syscall\n\t"
+             "ret"
+             );
+ }
+-__declspec(naked) int l_read(unsigned int fd, char* buf, unsigned int count) {
++__declspec(naked) __attribute__((sysv_abi)) int l_read(unsigned int fd, char* buf, unsigned int count) {
+     __asm__ (
+-            "push ebx\n\t"
+-
+             "mov eax, 0x03\n\t"
+-            "mov ebx, [esp + 4 + 4]\n\t"
+-            "mov ecx, [esp + 4 + 8]\n\t"
+-            "mov edx, [esp + 4 + 12]\n\t"
+-            "int 0x80\n\t"
+-
+-            "pop ebx\n\t"
++            "jmp __syscall\n\t"
++            "ret"
++            );
++}
++__declspec(naked) __attribute__((sysv_abi)) int l_socket(int domain, int type, int protocol) {
++	__asm__ (
++            "mov eax, 0x61\n\t"
++            "jmp __syscall\n\t"
++            "ret"
++            );
++}
++__declspec(naked) __attribute__((sysv_abi)) int l_connect(int sockfd, const struct sockaddr *addr, unsigned int addrlen) {
++	__asm__ (
++            "mov eax, 0x62\n\t"
++            "jmp __syscall\n\t"
+             "ret"
+             );
+ }
+ #pragma endregion syscall wrappers
+-#pragma region
+-int l_socket(int domain, int type, int protocol) {
+-    void* args[3];
+-    args[0] = (void*)(int*)domain;
+-    args[1] = (void*)(int*)type;
+-    args[2] = (void*)(int*)protocol;
+-    return l_socketcall(1, args);
+-}
+-int l_connect(int sockfd, const struct sockaddr *addr, unsigned int addrlen) {
+-    void* args[3];
+-    args[0] = (void*)(int*)sockfd;
+-    args[1] = (void*)addr;
+-    args[2] = (void*)(int*)addrlen;
+-    return l_socketcall(3, args);
+-}
+-/* int send(int sockfd, const void* buf, unsigned int len, int flags) { */
+-/*     void* args[4]; */
+-/*     args[0] = (void*)(int*)sockfd; */
+-/*     args[1] = (void*)buf; */
+-/*     args[2] = (void*)(unsigned int*)len; */
+-/*     args[3] = (void*)(int*)flags; */
+-/*     return l_socketcall(9, args); */
+-/* } */
+-/* int recv(int fd, void* buf, unsigned int len, int flags) { */
+-/*     void* args[4]; */
+-/*     args[0] = (void*)(int*)fd; */
+-/*     args[1] = (void*)buf; */
+-/*     args[2] = (void*)(unsigned int*)len; */
+-/*     args[3] = (void*)(int*)flags; */
+-/*     return l_socketcall(10, args); */
+-/* } */
+-#pragma endregion socketcall wrappers
+-
+-char* getenv_(char* name) // written by https://github.com/Francesco149
+-{
+-    static char buf[1024 * 1024];
+-    static char* end = 0;
+-    unsigned int namelen;
+-    char* p;
+-
+-    if (!end) {
+-        int fd, n;
+-
+-        fd = l_open("/proc/self/environ", 0, 0);
+-        if (fd < 0) {
+-            return 0;
+-        }
+-
+-        n = l_read((unsigned int)fd, buf, (unsigned int)sizeof(buf));
+-        if (n < 0) {
+-            return 0;
+-        }
+-
+-        l_close(fd);
+-        end = buf + n;
+-    }
+-
+-    namelen = strlen(name);
+-
+-    for (p = buf; p < end;) {
+-        if (!strncmp(p, name, namelen)) {
+-            return p + namelen + 1; /* skip name and the = */
+-        }
+-
+-        for (; *p && p < end; ++p); /* skip to next entry */
+-        ++p;
+-    }
+-
+-    return 0;
+-}
+ 
+ static const char* get_temp_path()
+ {
+-    const char* temp = getenv_("XDG_RUNTIME_DIR");
+-    temp = temp ? temp : getenv_("TMPDIR");
+-    temp = temp ? temp : getenv_("TMP");
+-    temp = temp ? temp : getenv_("TEMP");
++    const char* temp = getenv("XDG_RUNTIME_DIR");
++    temp = temp ? temp : getenv("TMPDIR");
++    temp = temp ? temp : getenv("TMP");
++    temp = temp ? temp : getenv("TEMP");
+     temp = temp ? temp : "/tmp";
+     return temp;
+ }
+@@ -299,9 +232,9 @@ breakout:;
+                 }
+             }
+ 
+-            printf("%d bytes w->l\n", bytes_read);
++            printf("%ld bytes w->l\n", bytes_read);
+             /* If WDB_DEBUG is set, then dump the contents of the message to stdout */
+-            const char* wdb_debug_env = getenv_("WDB_DEBUG");
++            const char* wdb_debug_env = getenv("WDB_DEBUG");
+             if (wdb_debug_env && strcmp(wdb_debug_env, "1") == 0) {
+                 for (int i = 0; i < bytes_read; i++)
+                     putchar(buf[i]);
+@@ -344,7 +277,7 @@ DWORD WINAPI winwrite_thread(LPVOID lpvParam) {
+ 
+         printf("%d bytes l->w\n", bytes_read);
+         /* If WDB_DEBUG is set, then dump the contents of the message to stdout */
+-        const char* wdb_debug_env = getenv_("WDB_DEBUG");
++        const char* wdb_debug_env = getenv("WDB_DEBUG");
+         if (wdb_debug_env && strcmp(wdb_debug_env, "1") == 0) {
+             for (int i = 0; i < bytes_read; i++)
+                 putchar(buf[i]);
+-- 
+2.47.0
+
