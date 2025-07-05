@@ -58,6 +58,16 @@ let
       # bonjour
       bonjourSupport ? false,
 
+      # Curl
+      curlSupport ?
+        lib.versionAtLeast version "18"
+        && lib.meta.availableOn stdenv.hostPlatform curl
+        # Building statically fails with:
+        # configure: error: library 'curl' does not provide curl_multi_init
+        # https://www.postgresql.org/message-id/487dacec-6d8d-46c0-a36f-d5b8c81a56f1%40technowledgy.de
+        && !stdenv.hostPlatform.isStatic,
+      curl,
+
       # GSSAPI
       gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
       libkrb5,
@@ -87,6 +97,17 @@ let
       # NLS
       nlsSupport ? false,
       gettext,
+
+      # NUMA
+      numaSupport ?
+        lib.versionAtLeast version "18"
+        && lib.meta.availableOn stdenv.hostPlatform numactl
+        # NUMA can fail in 18beta1 on some hardware with:
+        # ERROR:  invalid NUMA node id outside of allowed range [0, 0]: 1
+        # https://github.com/NixOS/nixpkgs/pull/411958#issuecomment-3031680123
+        # https://www.postgresql.org/message-id/flat/E1u1tr8-003BbN-2E%40gemulon.postgresql.org
+        && version != "18beta1",
+      numactl,
 
       # PAM
       pamSupport ?
@@ -135,6 +156,10 @@ let
       # Systemd
       systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
       systemdLibs,
+
+      # Uring
+      uringSupport ? lib.versionAtLeast version "18" && lib.meta.availableOn stdenv.hostPlatform liburing,
+      liburing,
     }@args:
     let
       atLeast = lib.versionAtLeast version;
@@ -256,6 +281,9 @@ let
         ++ lib.optionals lz4Enabled [ lz4 ]
         ++ lib.optionals zstdEnabled [ zstd ]
         ++ lib.optionals systemdSupport [ systemdLibs ]
+        ++ lib.optionals uringSupport [ liburing ]
+        ++ lib.optionals curlSupport [ curl ]
+        ++ lib.optionals numaSupport [ numactl ]
         ++ lib.optionals gssSupport [ libkrb5 ]
         ++ lib.optionals pamSupport [ linux-pam ]
         ++ lib.optionals perlSupport [ perl ]
@@ -328,6 +356,9 @@ let
         ++ lib.optionals (withWalBlocksize != null) [ "--with-wal-blocksize=${toString withWalBlocksize}" ]
         ++ lib.optionals lz4Enabled [ "--with-lz4" ]
         ++ lib.optionals zstdEnabled [ "--with-zstd" ]
+        ++ lib.optionals uringSupport [ "--with-liburing" ]
+        ++ lib.optionals curlSupport [ "--with-libcurl" ]
+        ++ lib.optionals numaSupport [ "--with-libnuma" ]
         ++ lib.optionals gssSupport [ "--with-gssapi" ]
         ++ lib.optionals pythonSupport [ "--with-python" ]
         ++ lib.optionals jitSupport [ "--with-llvm" ]
