@@ -80,6 +80,16 @@ in
         description = "The port to listen on.";
       };
 
+      routePrefix = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "/moonraker/";
+        description = ''
+          A prefix prepended to the path for each HTTP endpoint.
+          Must start and end with a slash.
+        '';
+      };
+
       settings = lib.mkOption {
         type = format.type;
         default = { };
@@ -218,6 +228,11 @@ in
       # set this to false, otherwise we'll get a warning indicating that `/etc/klipper.cfg`
       # is not located in the moonraker config directory.
       file_manager.check_klipper_config_path = lib.mkIf (!config.services.klipper.mutableConfig) false;
+
+      # create route_prefix if user has set it.
+      server = lib.mkIf (cfg.routePrefix != null) {
+        route_prefix = "${lib.strings.removeSuffix "/" cfg.routePrefix}";
+      };
 
       # enable analysis with our own klipper-estimator, disable updating it
       analysis = lib.mkIf (cfg.analysis.enable) {
