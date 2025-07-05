@@ -17981,6 +17981,12 @@
     githubId = 70602908;
     github = "nikolaizombie1";
   };
+  niksingh710 = {
+    email = "nik.singh710@gmail.com";
+    name = "Nikhil Singh";
+    github = "niksingh710";
+    githubId = 60490474;
+  };
   nikstur = {
     email = "nikstur@outlook.com";
     name = "nikstur";
