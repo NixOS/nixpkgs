@@ -202,6 +202,10 @@ rec {
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
+      # Patch to fix regression in Wine that prevents Softube plugin UI from displaying.
+      # More information: https://bugs.winehq.org/show_bug.cgi?id=56935 and https://gitlab.winehq.org/wine/wine/-/merge_requests/6006
+      # This patch has been merged in later releases of Wine.
+      ./wine-6006.patch
     ] ++ patches-binutils-2_44-fix-wine-older-than-10_2;
 
     # see https://gitlab.winehq.org/wine/wine-staging
