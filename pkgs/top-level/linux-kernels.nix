@@ -645,6 +645,8 @@ in
 
         vmware = callPackage ../os-specific/linux/vmware { };
 
+        virtualbox-guest-modules-mainline = callPackage ../os-specific/linux/virtualbox-guest-modules-mainline { };
+
         wireguard =
           if lib.versionOlder kernel.version "5.6" then
             callPackage ../os-specific/linux/wireguard { }
