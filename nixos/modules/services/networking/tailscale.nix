@@ -78,6 +78,8 @@ in
       description = ''
         A file containing the auth key.
         Tailscale will be automatically started if provided.
+
+        Services that bind to Tailscale IPs should order using {option}`systemd.services.<name>.after` `tailscaled-autoconnect.service`.
       '';
     };
 
@@ -110,7 +112,7 @@ in
 
     extraUpFlags = mkOption {
       description = ''
-        Extra flags to pass to {command}`tailscale up`. Only applied if `authKeyFile` is specified.";
+        Extra flags to pass to {command}`tailscale up`. Only applied if {option}`services.tailscale.authKeyFile` is specified.
       '';
       type = types.listOf types.str;
       default = [ ];
@@ -140,21 +142,17 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [
         (builtins.dirOf config.security.wrapperDir) # for `su` to use taildrive with correct access rights
-        pkgs.procps # for collecting running services (opt-in feature)
         pkgs.getent # for `getent` to look up user shells
         pkgs.kmod # required to pass tailscale's v6nat check
+        pkgs.procps # for collecting running services (opt-in feature)
       ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
       serviceConfig.Environment =
         [
           "PORT=${toString cfg.port}"
-          ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
+          ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${toString cfg.extraDaemonFlags}"''
         ]
-        ++ (lib.optionals (cfg.permitCertUid != null) [
-          "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
-        ])
-        ++ (lib.optionals (cfg.disableTaildrop) [
-          "TS_DISABLE_TAILDROP=true"
-        ]);
+        ++ (lib.optionals (cfg.permitCertUid != null) [ "TS_PERMIT_CERT_UID=${cfg.permitCertUid}" ])
+        ++ (lib.optionals (cfg.disableTaildrop) [ "TS_DISABLE_TAILDROP=true" ]);
       # Restart tailscaled with a single `systemctl restart` at the
       # end of activation, rather than a `stop` followed by a later
       # `start`. Activation over Tailscale can hang for tens of
@@ -174,12 +172,15 @@ in
       wants = [ "tailscaled.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        Type = "oneshot";
+        Type = "notify";
       };
-      # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+      path = [
+        cfg.package
+        pkgs.jq
+      ];
+      enableStrictShellChecks = true;
       script =
         let
-          statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
           paramToString = v: if (builtins.isBool v) then (lib.boolToString v) else (toString v);
           params = lib.pipe cfg.authKeyParameters [
             (lib.filterAttrs (_: v: v != null))
@@ -188,14 +189,36 @@ in
             (params: if params != "" then "?${params}" else "")
           ];
         in
+        # bash
         ''
-          while [[ "$(${statusCommand})" == "NoState" ]]; do
-            sleep 0.5
+          getState() {
+            tailscale status --json --peers=false | jq -r '.BackendState'
+          }
+
+          lastState=""
+          while state="$(getState)"; do
+            if [[ "$state" != "$lastState" ]]; then
+              # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+              case "$state" in
+                NeedsLogin | NeedsMachineAuth)
+                  echo "Server needs authentication, sending auth key. [state = $state]"
+                  tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+                  ;;
+                Running)
+                  echo "Tailscale is running. [state = $state]"
+                  READY=1
+                  break
+                  ;;
+                *)
+                  echo "Waiting for Tailscale. [state = $state]"
+                  ;;
+              esac
+            fi
+            lastState="$state"
+            sleep .5
           done
-          status=$(${statusCommand})
-          if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
-            ${lib.getExe cfg.package} up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
-          fi
+
+          [[ "$READY" == "1" ]] && systemd-notify --ready
         '';
     };
 
@@ -228,10 +251,7 @@ in
       matchConfig = {
         Name = cfg.interfaceName;
       };
-      linkConfig = {
-        Unmanaged = true;
-        ActivationPolicy = "manual";
-      };
+      linkConfig.Unmanaged = true;
     };
   };
 }
