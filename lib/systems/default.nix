@@ -26,6 +26,7 @@ let
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
+  toolchain = import ./toolchain.nix { inherit lib; };
 
   /**
     Elaborated systems contain functions, which means that they don't satisfy
@@ -83,6 +84,15 @@ let
       # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
       rust = args.rust or args.rustc or { };
 
+      toolchainSet = {
+        cc = toolchain.chooseComponent "cc" final;
+        bintools = toolchain.chooseComponent "bintools" final;
+        cxxlib = toolchain.chooseComponent "cxxlib" final;
+        cxxrtlib = toolchain.chooseComponent "cxxrtlib" final;
+        unwindlib = toolchain.chooseComponent "unwindlib" final;
+        rtlib = toolchain.chooseComponent "rtlib" final;
+      };
+
       final =
         {
           # Prefer to parse `config` as it is strictly more informative.
@@ -117,6 +127,8 @@ let
             throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
           # Derived meta-data
           useLLVM = final.isFreeBSD || final.isOpenBSD;
+          useArocc = false;
+          useZig = false;
 
           libc =
             if final.isDarwin then
@@ -161,7 +173,7 @@ let
           # independently, so we are just doing `linker` and keeping `useLLVM` for
           # now.
           linker =
-            if final.useLLVM or false then
+            if final.useLLVM then
               "lld"
             else if final.isDarwin then
               "cctools"
@@ -170,6 +182,7 @@ let
             # choice.
             else
               "bfd";
+
           # The standard lib directory name that non-nixpkgs binaries distributed
           # for this platform normally assume.
           libDir =
@@ -411,6 +424,7 @@ let
         )
         // mapAttrs (n: v: v final.parsed) inspect.predicates
         // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
+        // toolchainSet
         // args
         // {
           rust = rust // {
@@ -568,6 +582,7 @@ let
     assert foldl (pass: { assertion, message }: if assertion final then pass else throw message) true (
       final.parsed.abi.assertions or [ ]
     );
+    assert toolchainSet == lib.mapAttrs (key: _: final.${key}) toolchainSet;
     final;
 
 in
@@ -584,6 +599,7 @@ in
     inspect
     parse
     platforms
+    toolchain
     systemToAttrs
     ;
 }
