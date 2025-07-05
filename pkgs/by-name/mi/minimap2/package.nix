@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installShellFiles,
+  versionCheckHook,
   zlib,
-  minimap2,
-  testers,
   nix-update-script,
 }:
 
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   makeFlags =
     lib.optionals stdenv.hostPlatform.isAarch [ "arm_neon=1" ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "aarch64=1" ];
@@ -28,14 +30,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -m755 -Dt $out/bin minimap2
-    install -m644 -Dt $out/share/man/man1 minimap2.1
+    installManPage minimap2.1
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = minimap2;
-    command = "minimap2 --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
