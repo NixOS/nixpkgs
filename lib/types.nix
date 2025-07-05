@@ -1366,6 +1366,9 @@ let
       # Either value of type `t1` or `t2`.
       either =
         t1: t2:
+        let
+          isEitherOrSubmodule = t: t.name == "either" || t.name == "submodule";
+        in
         mkOptionType rec {
           name = "either";
           description =
@@ -1406,6 +1409,38 @@ let
               t2
             ];
           };
+          # We have to be really careful of recursively-defined types here. either is the type used
+          # to allow finitely-sized values for recursively-defined types, so we have to put limits
+          # on how we recurse when looking for submodules. To that end, we'll look for submodule
+          # children, and only recurse into either itself. This means `either str submodule` will
+          # work, and `either str (attrsOf submodule)` won't, but that's better than nothing.
+          getSubOptions =
+            prefix:
+            optionalAttrs (isEitherOrSubmodule t1) (t1.getSubOptions prefix)
+            // optionalAttrs (isEitherOrSubmodule t2) (t2.getSubOptions prefix);
+          getSubModules =
+            let
+              t1sm = if isEitherOrSubmodule t1 then t1.getSubModules else null;
+              t2sm = if isEitherOrSubmodule t2 then t2.getSubModules else null;
+            in
+            if t2sm == null then
+              t1sm
+            else if t1sm == null then
+              t2sm
+            else
+              null;
+          substSubModules =
+            m:
+            let
+              t1sm = if isEitherOrSubmodule t1 then t1.getSubModules else null;
+              t2sm = if isEitherOrSubmodule t2 then t2.getSubModules else null;
+            in
+            if t2sm == null then
+              either (t1.substSubModules m) t2
+            else if t1sm == null then
+              either t1 (t2.substSubModules m)
+            else
+              null;
           nestedTypes.left = t1;
           nestedTypes.right = t2;
         };
