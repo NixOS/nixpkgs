@@ -1635,6 +1635,8 @@ self: super: with self; {
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
+  badsecrets = callPackage ../development/python-modules/badsecrets { };
+
   bagit = callPackage ../development/python-modules/bagit { };
 
   baize = callPackage ../development/python-modules/baize { };
@@ -5257,6 +5259,8 @@ self: super: with self; {
   flask-themer = callPackage ../development/python-modules/flask-themer { };
 
   flask-themes2 = callPackage ../development/python-modules/flask-themes2 { };
+
+  flask-unsign = callPackage ../development/python-modules/flask-unsign { };
 
   flask-versioned = callPackage ../development/python-modules/flask-versioned { };
 
