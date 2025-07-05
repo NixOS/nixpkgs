@@ -10,16 +10,16 @@
   zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   name = "libdjinterop";
 
-  version = "unstable";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "xsco";
     repo = "libdjinterop";
-    rev = "0.24.3";
-    hash = "sha256-Fp7AwEOq2JOpL60GDAXmA15ptFeLoG79nnnPXHl1Hjw=";
+    rev = finalAttrs.version;
+    hash = "sha256-HwNhCemqVR1xNSbcht0AuwTfpRhVi70ZH5ksSTSRFoc=";
   };
 
   nativeBuildInputs = [
@@ -46,4 +46,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-}
+})
