@@ -12,17 +12,18 @@
   SDL2,
   tinyxml-2,
   makeAndPlay ? false,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vvvvvv";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "TerryCavanagh";
     repo = "VVVVVV";
-    rev = version;
-    hash = "sha256-SYXuA7RJ0x4d1Lyvmk/R2nofEt5k7OJ91X6w3sGQOhg=";
+    tag = finalAttrs.version;
+    hash = "sha256-IEspPNsKGWgukqmnb6nDORRetQp9jvUzJ/mSOTLGdmQ=";
     fetchSubmodules = true;
   };
 
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
       type = "Application";
       name = "VVVVVV";
       desktopName = "VVVVVV";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       exec = "vvvvvv";
       icon = "VVVVVV";
       terminal = false;
@@ -74,14 +75,16 @@ stdenv.mkDerivation rec {
     cp -r "$src/desktop_version/lang/" "$out/share/"
 
     wrapProgram $out/bin/vvvvvv \
-      --add-flags "-assets ${dataZip}" \
+      --add-flags "-assets ${finalAttrs.dataZip}" \
       --add-flags "-langdir $out/share/lang" \
       --add-flags "-fontsdir $out/share/fonts"
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description =
       "A retro-styled platform game"
       + lib.optionalString makeAndPlay " (redistributable, without original levels)";
@@ -94,9 +97,9 @@ stdenv.mkDerivation rec {
         (Redistributable version, doesn't include the original levels.)
       '';
     homepage = "https://thelettervsixtim.es";
-    changelog = "https://github.com/TerryCavanagh/VVVVVV/releases/tag/${src.rev}";
-    license = licenses.unfree;
-    maintainers = [ ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/TerryCavanagh/VVVVVV/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.unfree;
+    mainProgram = "vvvvvv";
+    platforms = lib.platforms.unix;
   };
-}
+})
