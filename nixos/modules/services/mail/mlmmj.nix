@@ -120,7 +120,10 @@ in
 
     services.postfix = {
       enable = true;
-      recipientDelimiter = "+";
+      config = {
+        recipient_delimiter = "+";
+        propagate_unmatched_extensions = "virtual";
+      };
       masterConfig.mlmmj = {
         type = "unix";
         private = true;
@@ -139,8 +142,6 @@ in
       };
 
       extraAliases = concatMapLines (alias cfg.listDomain) cfg.mailLists;
-
-      extraConfig = "propagate_unmatched_extensions = virtual";
 
       virtual = concatMapLines (virtual cfg.listDomain) cfg.mailLists;
       transport = concatMapLines (transport cfg.listDomain) cfg.mailLists;

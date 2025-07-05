@@ -586,8 +586,8 @@ in
 
     services.postfix = lib.mkIf (cfg.mta.type == "postfix") {
       enable = true;
-      recipientDelimiter = "+";
       config = {
+        recipient_delimiter = "+";
         virtual_alias_maps = [ "hash:${dataDir}/virtual.sympa" ];
         virtual_mailbox_maps = [
           "hash:${dataDir}/transport.sympa"
