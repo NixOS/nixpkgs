@@ -1456,6 +1456,7 @@
   ./services/security/sslmate-agent.nix
   ./services/security/step-ca.nix
   ./services/security/tang.nix
+  ./services/security/timekpr.nix
   ./services/security/tor.nix
   ./services/security/torify.nix
   ./services/security/torsocks.nix
