@@ -1074,6 +1074,14 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    nvpl7Plus = {
+      shortName = "NVPLv7+";
+      fullName = "Nonviolent Public License v7 or later";
+      url = "https://git.pixie.town/thufie/npl-builder/src/branch/main/nvpl.md";
+      free = false;
+      redistributable = true;
+    };
+
     obsidian = {
       fullName = "Obsidian End User Agreement";
       url = "https://obsidian.md/eula";
