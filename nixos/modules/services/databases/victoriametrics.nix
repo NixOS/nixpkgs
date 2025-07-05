@@ -71,6 +71,22 @@ in
       '';
     };
 
+    basicAuthUsername = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.str;
+      description = ''
+        Basic Auth username used to protect VictoriaMetrics instance by authorization
+      '';
+    };
+
+    basicAuthPasswordFile = lib.mkOption {
+      default = null;
+      type = lib.types.nullOr lib.types.str;
+      description = ''
+        File that contains the Basic Auth password used to protect VictoriaMetrics instance by authorization
+      '';
+    };
+
     prometheusConfig = lib.mkOption {
       type = lib.types.submodule { freeformType = settingsFormat.type; };
       default = { };
@@ -116,8 +132,6 @@ in
       default = [ ];
       example = literalExpression ''
         [
-          "-httpAuth.username=username"
-          "-httpAuth.password=file:///abs/path/to/file"
           "-loggerLevel=WARN"
         ]
       '';
@@ -130,6 +144,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
+    assertions = [
+      {
+        assertion =
+          (cfg.basicAuthUsername != null && cfg.basicAuthPasswordFile == null)
+          || (cfg.basicAuthUsername == null && cfg.basicAuthPasswordFile != null);
+        message = "Both basicAuthUsername and basicAuthPasswordFile must be set together to enable basicAuth functionality, or neither should be set.";
+      }
+    ];
+
     systemd.services.victoriametrics = {
       description = "VictoriaMetrics time series database";
       wantedBy = [ "multi-user.target" ];
@@ -140,9 +164,17 @@ in
         ExecStart = lib.escapeShellArgs (
           startCLIList
           ++ lib.optionals (cfg.prometheusConfig != { }) [ "-promscrape.config=${prometheusConfigYml}" ]
+          ++ lib.optional (cfg.basicAuthUsername != null) "-httpAuth.username=${cfg.basicAuthUsername}"
+          ++ lib.optional (
+            cfg.basicAuthPasswordFile != null
+          ) "-httpAuth.password=file://\${CREDENTIALS_DIRECTORY}/basic_auth_password"
         );
 
         DynamicUser = true;
+        LoadCredential = lib.optionals (cfg.basicAuthPasswordFile != null) [
+          "basic_auth_password:${cfg.basicAuthPasswordFile}"
+        ];
+
         RestartSec = 1;
         Restart = "on-failure";
         RuntimeDirectory = "victoriametrics";
