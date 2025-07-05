@@ -184,5 +184,8 @@ lib.warnIf (withDocs != null)
       badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
       maintainers = [ ];
       mainProgram = "bash";
+      identifiers.cpeParts.vendor = "gnu";
+      # pname bash-interactive should still match to bash
+      identifiers.cpeParts.product = "bash";
     };
   }

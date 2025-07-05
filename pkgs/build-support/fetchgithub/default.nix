@@ -50,6 +50,20 @@ lib.makeOverridable (
       // lib.optionalAttrs (position != null) {
         # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
         position = "${position.file}:${toString position.line}";
+      }
+      // lib.optionalAttrs (githubBase == "github.com") {
+        identifiers.purlParts = {
+          type = "github";
+          # https://github.com/package-url/purl-spec/blob/main/PURL-TYPES.rst#github
+          spec = "${owner}/${repo}@${(lib.revOrTag rev tag)}";
+        };
+      }
+      // lib.optionalAttrs (githubBase != "github.com") {
+        identifiers.purlParts = {
+          type = "generic";
+          # https://github.com/package-url/purl-spec/blob/main/PURL-TYPES.rst#generic
+          spec = "${repo}?vcs_url=https://${githubBase}/${owner}/${repo}@${(lib.revOrTag rev tag)}";
+        };
       };
     passthruAttrs = removeAttrs args [
       "owner"
