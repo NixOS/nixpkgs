@@ -272,6 +272,12 @@ in
             cp -r ${cfg.package}/etc/onlyoffice/documentserver/* /run/onlyoffice/config/
             chmod u+w /run/onlyoffice/config/default.json
 
+            echo 'XXX'
+            cat /run/onlyoffice/config/default.json
+            echo 'YYY'
+            cat /run/onlyoffice/config/production-linux.json
+            echo 'ZZZ'
+
             # Allow members of the onlyoffice group to serve files under /var/lib/onlyoffice/documentserver/App_Data
             chmod g+x /var/lib/onlyoffice/documentserver
 
