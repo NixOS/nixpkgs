@@ -1995,6 +1995,9 @@
   "sec-nixos-test-testing-hardware-features": [
     "index.html#sec-nixos-test-testing-hardware-features"
   ],
+  "sec-test-sandbox-breakpoint": [
+    "index.html#sec-test-sandbox-breakpoint"
+  ],
   "chap-developing-the-test-driver": [
     "index.html#chap-developing-the-test-driver"
   ],
