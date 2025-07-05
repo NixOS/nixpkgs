@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "python-poetry";
-    repo = pname;
+    repo = "poetry-plugin-export";
     tag = version;
     hash = "sha256-AP3/njzbLEi2s4pOUSLLLzqNprvxwLe9LSY7qh08EWc=";
   };

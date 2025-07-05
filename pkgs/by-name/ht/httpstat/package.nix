@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "httpstat";
   version = "1.3.1";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "reorx";
     repo = "httpstat";

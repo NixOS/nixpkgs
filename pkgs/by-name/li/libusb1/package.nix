@@ -8,6 +8,7 @@
   enableUdev ?
     stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isAndroid,
   udev,
+  udevCheckHook,
   withExamples ? false,
   withStatic ? false,
   withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libusb";
-  version = "1.0.28";
+  version = "1.0.29";
 
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb";
     rev = "v${version}";
-    sha256 = "sha256-ntfDh/+HYm5cthhO8FkAJHo4RcxvZUKmHf4AOrHLysM=";
+    sha256 = "sha256-m1w+uF8+2WCn72LvoaGUYa+R0PyXHtFFONQjdRfImYY=";
   };
 
   outputs = [
@@ -34,6 +35,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ] ++ lib.optionals withDocs [ doxygen ];
   propagatedBuildInputs = lib.optional enableUdev udev;
+
+  # Many dependents are dealing with hardware devices, exposing udev rules for them.
+  # Checking these by propagated hook might improve discoverability
+  propagatedNativeBuildInputs = lib.optional enableUdev udevCheckHook;
 
   dontDisableStatic = withStatic;
 

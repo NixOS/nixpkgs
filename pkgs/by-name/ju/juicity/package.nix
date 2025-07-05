@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "juicity";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "juicity";
     repo = "juicity";
     rev = "v${version}";
-    hash = "sha256-4sej/nb7d58+hSCaD6KIfDsqiGmgECPIbRKR65TbMBM=";
+    hash = "sha256-CFytPXfmGNfKDbyYuMCr+4HiH37f28cTmng+XgnO6T0=";
   };
 
-  vendorHash = "sha256-SM5ZrTtuqenPsGjphkCM9JHzucw0/qBmevD+3/kyF6k=";
+  vendorHash = "sha256-kToWZCk6xAAj+t/elO9U5itoOBQ2J9sLcmzz+nNdBHg=";
 
   proxyVendor = true;
 

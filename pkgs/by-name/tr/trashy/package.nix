@@ -27,17 +27,17 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/trash completions zsh) \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple, fast, and featureful alternative to rm and trash-cli";
     homepage = "https://github.com/oberblastmeister/trashy";
     changelog = "https://github.com/oberblastmeister/trashy/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ oberblastmeister ];
+    maintainers = with lib.maintainers; [ oberblastmeister ];
     mainProgram = "trash";
     # darwin is unsupported due to https://github.com/Byron/trash-rs/issues/8
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

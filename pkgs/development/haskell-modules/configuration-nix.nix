@@ -44,6 +44,8 @@ with haskellLib;
 #
 # To avoid this, we use `intersectAttrs` here so we never add packages that are not present
 # in the parent package set (`super`).
+
+# To avoid merge conflicts, consider adding your item at an arbitrary place in the list instead.
 self: super:
 builtins.intersectAttrs super {
 
@@ -403,6 +405,8 @@ builtins.intersectAttrs super {
 
   # The curl executable is required for withApplication tests.
   warp = addTestToolDepend pkgs.curl super.warp;
+
+  lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
 
   safe-exceptions = overrideCabal (drv: {
     # Fix strictDeps build error "could not execute: hspec-discover"

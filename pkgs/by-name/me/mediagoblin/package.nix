@@ -41,6 +41,7 @@ let
   };
 in
 python.pkgs.buildPythonApplication rec {
+  format = "setuptools";
   pname = "mediagoblin";
   inherit version src;
 

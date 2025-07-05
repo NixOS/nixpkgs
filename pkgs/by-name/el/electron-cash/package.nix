@@ -10,6 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
   version = "4.4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
@@ -20,9 +21,10 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [
     cython
+    setuptools
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     # requirements
     pyaes
     ecdsa
@@ -60,7 +62,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ ] ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
 
-  # If secp256k1 wasn't added to the library path, the following warning is given:
+  # 1. If secp256k1 wasn't added to the library path, the following warning is given:
   #
   #   Electron Cash was unable to find the secp256k1 library on this system.
   #   Elliptic curve cryptography operations will be performed in slow
@@ -70,11 +72,17 @@ python3Packages.buildPythonApplication rec {
   # `libsecp256k1.so.5`. The only breaking change is the removal of two
   # functions which seem not used by electron-cash.
   # See: <https://github.com/Electron-Cash/Electron-Cash/issues/3009>
+  #
+  # 2. The code should be compatible with python-dateutil 2.10 which is the
+  # version we have in nixpkgs. Changelog:
+  # <https://dateutil.readthedocs.io/en/latest/changelog.html#version-2-9-0-post0-2024-03-01>
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "(share_dir" '("share"'
     substituteInPlace electroncash/secp256k1.py \
       --replace-fail "libsecp256k1.so.0" "${secp256k1}/lib/libsecp256k1.so.5"
+    substituteInPlace contrib/requirements/requirements.txt \
+      --replace-fail "python-dateutil<2.9" "python-dateutil<2.10"
   '';
 
   preFixup = ''
@@ -103,7 +111,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://www.electroncash.org/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      lassulus
       nyanloutre
       oxalica
     ];

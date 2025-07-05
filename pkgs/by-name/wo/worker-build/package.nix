@@ -6,18 +6,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "worker-build";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-rs";
     tag = "v${version}";
-    hash = "sha256-eMuuEqHBiwgz7DKimYuK9MUPT4vnOU8rLOIIq8zsTao=";
+    hash = "sha256-wsH16hkiaTthE2FwQ8Ma2qQhkunq2rxkZXPEYR7P0Io=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-yzuyenWAdj5tEdUFGxSfBU4m3w1YCCrnbajPMYMGSkI=";
+  cargoHash = "sha256-ZuO020orJBJWm3Q+39MnkQ96rsv9juicUeMtBBVWxcg=";
 
   buildAndTestSubdir = "worker-build";
 

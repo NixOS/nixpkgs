@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://github.com/davidsmorais/kuro/releases/tag/${src.rev}";
-    description = "An unofficial, featureful, open source, community-driven, free Microsoft To-Do app";
+    description = "Unofficial, featureful, open source, community-driven, free Microsoft To-Do app";
     homepage = "https://github.com/davidsmorais/kuro";
     license = licenses.mit;
     mainProgram = "kuro";

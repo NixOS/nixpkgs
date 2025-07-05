@@ -30,13 +30,13 @@
 
 buildPythonPackage rec {
   pname = "python-octaviaclient";
-  version = "3.11.0";
+  version = "3.11.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_octaviaclient";
     inherit version;
-    hash = "sha256-IzB40LIn8iW7sO6eB8NgnpFc/vBhfZv4HLMXpgpdP1U=";
+    hash = "sha256-M+JRUMsTq46+UpqSKFzvtRXsaboUKTuqwWs29v09q04=";
   };
 
   # somehow python-neutronclient cannot be found despite it being supplied

@@ -51,12 +51,12 @@ rustPlatform.buildRustPackage rec {
     updateScript = callPackage ./update.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/vaultwarden";
     changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       dotlambda
       SuperSandro2000
     ];

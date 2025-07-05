@@ -11,6 +11,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "apksigcopier";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "obfusk";

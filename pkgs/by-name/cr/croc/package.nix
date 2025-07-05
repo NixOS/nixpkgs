@@ -47,6 +47,7 @@ buildGoModule rec {
     maintainers = with maintainers; [
       equirosa
       SuperSandro2000
+      ryan4yin
     ];
     mainProgram = "croc";
   };

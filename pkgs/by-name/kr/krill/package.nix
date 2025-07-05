@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   # disable failing tests on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "RPKI Certificate Authority and Publication Server written in Rust";
     longDescription = ''
       Krill is a free, open source RPKI Certificate Authority that lets you run
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/NLnetLabs/krill";
     changelog = "https://github.com/NLnetLabs/krill/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ steamwalker ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ steamwalker ];
   };
 }

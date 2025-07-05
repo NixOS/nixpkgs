@@ -30,7 +30,7 @@ buildGoModule rec {
   '';
 
   meta = src.meta // {
-    description = "An extensive, fast, and accurate command-line image dithering tool";
+    description = "Extensive, fast, and accurate command-line image dithering tool";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "didder";

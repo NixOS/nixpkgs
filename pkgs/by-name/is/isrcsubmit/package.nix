@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication {
   pname = "isrcsubmit";
   version = "2.1.0-unstable-2023-08-10";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "JonnyJD";

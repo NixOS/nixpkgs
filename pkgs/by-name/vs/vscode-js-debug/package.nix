@@ -74,8 +74,8 @@ buildNpmPackage rec {
         fi
       '';
 
-  meta = with lib; {
-    description = "A DAP-compatible JavaScript debugger";
+  meta = {
+    description = "DAP-compatible JavaScript debugger";
     longDescription = ''
       This is a [DAP](https://microsoft.github.io/debug-adapter-protocol/)-based
       JavaScript debugger. It debugs Node.js, Chrome, Edge, WebView2, VS Code
@@ -86,7 +86,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/microsoft/vscode-js-debug";
     changelog = "https://github.com/microsoft/vscode-js-debug/blob/v${version}/CHANGELOG.md";
     mainProgram = "js-debug";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zeorin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zeorin ];
   };
 }

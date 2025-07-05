@@ -7,23 +7,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mapproxy";
-  version = "4.1.2";
+  version = "5.0.0";
+  format = "setuptools";
   disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mapproxy";
     repo = "mapproxy";
     tag = version;
-    hash = "sha256-sh0kViv1Ax/2YPL2ON+X03d5Moa2oPWhb4Rp6Ni5AAY=";
+    hash = "sha256-+L9ZTgWh4E5cUGeP0rTclDbnqIzc/DlHvIXR+kDcjm8=";
   };
 
   prePatch = ''
-    substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"
+    substituteInPlace mapproxy/util/ext/serving.py --replace-warn "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
 
   dependencies = with python3Packages; [
     boto3 # needed for caches service
-    future
     jsonschema
     pillow
     pyyaml

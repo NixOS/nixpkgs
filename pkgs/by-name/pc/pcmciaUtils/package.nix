@@ -8,6 +8,7 @@
   sysfsutils,
   kmod,
   udev,
+  udevCheckHook,
   firmware ? config.pcmciaUtils.firmware or [ ], # Special pcmcia cards.
   configOpts ? config.pcmciaUtils.config or null, # Special hardware (map memory & port & irq)
 }: # used to generate postInstall script.
@@ -29,6 +30,12 @@ stdenv.mkDerivation rec {
     kmod
     flex
   ];
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   patchPhase =
     ''

@@ -80,12 +80,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.1";
+  version = "5.2.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-SpGNCU67qYPvZ6EMxxXD1+jKc4AJkgqf9l0zQXtt2YQ=";
+    hash = "sha256-U6Rs1G73EYSFxKv0q0B8GBY5u4Y0JD7A7R98HoKZvsY=";
   };
 
   nativeBuildInputs = [
@@ -192,6 +192,10 @@ stdenv.mkDerivation rec {
         --prefix ${libPathEnvVar} ":" "${libPathPrefix}"
       )
     '';
+
+  postPatch = ''
+    patchShebangs ./tools/generate_styles_string.sh
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

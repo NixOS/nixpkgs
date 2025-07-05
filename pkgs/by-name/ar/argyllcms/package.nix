@@ -20,6 +20,7 @@
   openssl,
   buildPackages,
   replaceVars,
+  udevCheckHook,
   writeScript,
 }:
 
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     jam
+    udevCheckHook
     unzip
   ];
 
@@ -163,6 +165,8 @@ stdenv.mkDerivation rec {
     sed -i -e 's/^CREATED .*/CREATED "'"$(date -d @$SOURCE_DATE_EPOCH)"'"/g' $out/share/argyllcms/RefMediumGamut.gam
 
   '';
+
+  doInstallCheck = true;
 
   passthru = {
     updateScript = writeScript "update-argyllcms" ''

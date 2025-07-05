@@ -45,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "arp-scan";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

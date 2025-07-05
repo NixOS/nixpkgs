@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pytorch-pfn-extras";
-  version = "0.8.2";
+  version = "0.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pfnet";
     repo = "pytorch-pfn-extras";
     tag = "v${version}";
-    hash = "sha256-FQwCdn9zUWHyUYAGHPNxQXN7O0bSLBHJrByxzCxUtio=";
+    hash = "sha256-aTWPFYEc29qHOPRZu15p+x9DofMNRnTHnVEhxdPQ0Ak=";
   };
 
   build-system = [ setuptools ];

@@ -11,6 +11,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "vit";
   version = "2.3.3";
+  format = "setuptools";
   disabled = lib.versionOlder python.version "3.7";
 
   src = fetchPypi {

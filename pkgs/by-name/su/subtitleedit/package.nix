@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A subtitle editor";
+    description = "Subtitle editor";
     longDescription = ''
       With Subtitle Edit you can easily adjust a subtitle if it is out of sync with
       the video in several different ways. You can also use it for making

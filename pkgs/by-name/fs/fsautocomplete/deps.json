@@ -221,18 +221,18 @@
   },
   {
     "pname": "Ionide.ProjInfo",
-    "version": "0.71.1",
-    "hash": "sha256-54LnHaowj5xpUdkI3UgIzNVdxNmVqNCNMiJo8k1LMGI="
+    "version": "0.71.2",
+    "hash": "sha256-mQM7nVZL/rwFKlt+esfygistjilIDfySMnZmHS5IFv0="
   },
   {
     "pname": "Ionide.ProjInfo.FCS",
-    "version": "0.71.1",
-    "hash": "sha256-UtAh4f6ee+c0cMkomP0ayo1mOUqWdFwMtBxK/DWioFE="
+    "version": "0.71.2",
+    "hash": "sha256-TJCBJpv6OEsT/3enqjsW7JaSd0P+idlqJR5UR3jhaSI="
   },
   {
     "pname": "Ionide.ProjInfo.ProjectSystem",
-    "version": "0.71.1",
-    "hash": "sha256-zSVY/uRc4HoEEB9YDSJtDlDDHdZD+zBca3RrXJaRoBM="
+    "version": "0.71.2",
+    "hash": "sha256-Agja7VwF/MbOOieLVJWv42z+l6hWhVw1V0dNrVAJ0Ks="
   },
   {
     "pname": "LinkDotNet.StringBuilder",

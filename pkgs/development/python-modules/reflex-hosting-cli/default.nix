@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "reflex-hosting-cli";
-  version = "0.1.49";
+  version = "0.1.50";
   pyproject = true;
 
   # source is not published https://github.com/reflex-dev/reflex/issues/3762
   src = fetchPypi {
     pname = "reflex_hosting_cli";
     inherit version;
-    hash = "sha256-cIU2/hTxXtAsxn5twV8xGwAOcRfqBjeqL4dklXt5fkQ=";
+    hash = "sha256-1ZTTc09P/0rTNhiqsNDB2RMLcUjKt1rIWtufakkFWkg=";
   };
 
   pythonRelaxDeps = [

@@ -6,7 +6,6 @@
   setuptools-scm,
   gmt,
   numpy,
-  netcdf4,
   pandas,
   packaging,
   xarray,
@@ -18,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,7 +26,7 @@ buildPythonPackage rec {
     owner = "GenericMappingTools";
     repo = "pygmt";
     tag = "v${version}";
-    hash = "sha256-sse1Cxzsrhg9X9zH/XSUtF/7YHrSUHYGtn4qoq5qdM4=";
+    hash = "sha256-VzsSBdKQDSXCFC61eCD6e45GLpVcKjRo3rx+cT/A7Jc=";
   };
 
   postPatch = ''
@@ -39,7 +38,6 @@ buildPythonPackage rec {
 
   dependencies = [
     numpy
-    netcdf4
     pandas
     packaging
     xarray

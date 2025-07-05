@@ -156,13 +156,13 @@ python3Packages.buildPythonApplication rec {
     install -Dm644 extra/tauonmb{,-symbolic}.svg $out/share/icons/hicolor/scalable/apps
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux desktop music player from the future";
     mainProgram = "tauon";
     homepage = "https://tauonmusicbox.rocks/";
     changelog = "https://github.com/Taiko2k/Tauon/releases/tag/v${version}";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ jansol ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ jansol ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -7,7 +7,7 @@ version=$(curl -sS https://vivaldi.com/download/ | sed -rne 's/.*vivaldi-stable_
 
 update_hash() {
     url="https://downloads.vivaldi.com/stable/vivaldi-stable_$version-1_$2.deb"
-    hash=$(nix hash to-sri --type sha256 $(nix-prefetch-url --type sha256 "$url"))
+    hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $(nix-prefetch-url --type sha256 "$url"))
     update-source-version vivaldi "$version" "$hash" --system=$1 --ignore-same-version
 }
 

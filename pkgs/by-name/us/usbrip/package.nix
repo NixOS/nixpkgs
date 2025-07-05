@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "usbrip";
   version = "unstable-2021-07-02";
+  format = "setuptools";
 
   disabled = python3.pythonOlder "3.6";
 

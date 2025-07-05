@@ -1,12 +1,11 @@
 {
   lib,
   buildNpmPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  versionCheckHook,
-
-  esbuild,
   buildGoModule,
+  fetchFromGitHub,
+  esbuild,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -16,44 +15,45 @@ let
       buildGoModule (
         args
         // rec {
-          version = "0.25.0";
+          version = "0.25.3";
           src = fetchFromGitHub {
             owner = "evanw";
             repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-L9jm94Epb22hYsU3hoq1lZXb5aFVD4FC4x2qNt0DljA=";
+            tag = "v${version}";
+            hash = "sha256-YYwvz6TCLAtVHsmXLGC+L/CQVAy5qSFU6JS1o5O5Zkg=";
           };
           vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
         }
       );
   };
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "zx";
-  version = "8.4.1";
+  version = "8.5.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "zx";
-    rev = version;
-    hash = "sha256-jajkHUz+3ujKXbcsfN7y3pwHqAofTgdQHEC29srzs1M=";
+    tag = finalAttrs.version;
+    hash = "sha256-328I8SgBIeTCNFH3Ahm9Zb1OCxwGuhWE/iWmDHElbsA=";
   };
 
-  npmDepsHash = "sha256-OZuJ5akf6l+aVfoPNfYjWDLt1kUgZJv0qMpK/uiRl2Y=";
+  npmDepsHash = "sha256-R0pCoITmLQBj0T1iIXXN4clpEKDn9wkG5Ke0AedgnlQ=";
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
+
   doInstallCheck = true;
 
-  ESBUILD_BINARY_PATH = lib.getExe esbuild';
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for writing scripts using JavaScript";
     homepage = "https://github.com/google/zx";
-    changelog = "https://github.com/google/zx/releases/tag/${version}";
+    changelog = "https://github.com/google/zx/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jlbribeiro ];
     mainProgram = "zx";
   };
-}
+})

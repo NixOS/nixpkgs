@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "MrGlockenspiel";
     repo = "activate-linux";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6XnoAoZwAs2hKToWlDqkaGqucmV1VMkEc4QO0G0xmrg=";
   };
 
@@ -61,15 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "\"Activate Windows\" watermark ported to Linux";
     homepage = "https://github.com/MrGlockenspiel/activate-linux";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       alexnortung
       donovanglover
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "activate-linux";
   };
 })

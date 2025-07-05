@@ -33,13 +33,13 @@ stdenvNoCC.mkDerivation rec {
     ln -s "$out/lib/spaceship-prompt/spaceship.zsh" "$out/share/zsh/site-functions/prompt_spaceship_setup"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Zsh prompt for Astronauts";
     homepage = "https://github.com/denysdovhan/spaceship-prompt/";
     changelog = "https://github.com/spaceship-prompt/spaceship-prompt/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       nyanloutre
       moni
       kyleondy

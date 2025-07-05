@@ -23,16 +23,16 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for displaying when Rust dependencies are out of date";
     mainProgram = "cargo-outdated";
     homepage = "https://github.com/kbknapp/cargo-outdated";
     changelog = "https://github.com/kbknapp/cargo-outdated/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ivan
       matthiasbeyer
     ];

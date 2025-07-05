@@ -327,6 +327,7 @@ in
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
       services.gnome.gnome-keyring.enable = true;
+      services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gnome.gnome-online-accounts.enable = mkDefault true;
       services.gnome.localsearch.enable = mkDefault true;
       services.gnome.tinysparql.enable = mkDefault true;

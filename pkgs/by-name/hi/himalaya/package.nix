@@ -84,13 +84,13 @@ rustPlatform.buildRustPackage {
       installShellCompletion "$out"/share/completions/himalaya.{bash,fish,zsh}
     '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI to manage emails";
     mainProgram = "himalaya";
     homepage = "https://github.com/pimalaya/himalaya";
     changelog = "https://github.com/pimalaya/himalaya/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       soywod
       yanganto
     ];

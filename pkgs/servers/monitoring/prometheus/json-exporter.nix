@@ -24,7 +24,7 @@ buildGoModule rec {
     description = "Prometheus exporter which scrapes remote JSON by JSONPath";
     homepage = "https://github.com/prometheus-community/json_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ willibutz ];
+    maintainers = [ ];
     mainProgram = "json_exporter";
   };
 }

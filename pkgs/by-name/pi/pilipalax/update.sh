@@ -18,7 +18,7 @@ fi
 
 sed -i "s/\(tag = \"\${version}+\)[0-9]\+/\1${RunNumber}/" "$ROOT/package.nix"
 
-hash=$(nix hash convert --hash-algo sha256 --to sri $(nix-prefetch-url --unpack "https://github.com/orz12/PiliPalaX/archive/refs/tags/${latestTag}.tar.gz"))
+hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $(nix-prefetch-url --unpack "https://github.com/orz12/PiliPalaX/archive/refs/tags/${latestTag}.tar.gz"))
 update-source-version pilipalax $latestVersion $hash
 
 curl https://raw.githubusercontent.com/orz12/PiliPalaX/${latestTag}/pubspec.lock | yq . >$ROOT/pubspec.lock.json

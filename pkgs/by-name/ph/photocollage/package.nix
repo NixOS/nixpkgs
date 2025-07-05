@@ -11,6 +11,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "photocollage";
   version = "1.4.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adrienverge";

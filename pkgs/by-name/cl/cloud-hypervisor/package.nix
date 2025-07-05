@@ -42,16 +42,16 @@ rustPlatform.buildRustPackage rec {
     "vmm" # /dev/kvm
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cloud-hypervisor/cloud-hypervisor";
     description = "Open source Virtual Machine Monitor (VMM) that runs on top of KVM";
     changelog = "https://github.com/cloud-hypervisor/cloud-hypervisor/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
     ];
     mainProgram = "cloud-hypervisor";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       offline
       qyliss
     ];

@@ -106,16 +106,6 @@ let
     "doInstallCheck"
     "pyproject"
     "format"
-    "disabledTestMarks"
-    "disabledTestPaths"
-    "disabledTests"
-    "enabledTestMarks"
-    "enabledTestPaths"
-    "enabledTests"
-    "pytestFlags"
-    "pytestFlagsArray"
-    "unittestFlags"
-    "unittestFlagsArray"
     "outputs"
     "stdenv"
     "dependencies"
@@ -221,7 +211,7 @@ let
         else if format != null then
           format
         else
-          "setuptools";
+          throw "${name} does not configure a `format`. To build with setuptools as before, set `pyproject = true` and `build-system = [ setuptools ]`.`";
 
       withDistOutput = withDistOutput' format';
 
@@ -278,11 +268,12 @@ let
 
       isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
 
+      name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
+
     in
     (cleanAttrs attrs)
     // {
-
-      name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
+      inherit name;
 
       inherit catchConflicts;
 
@@ -441,32 +432,21 @@ let
       # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
       installCheckPhase = attrs.checkPhase;
     }
-    // optionalAttrs (attrs.doCheck or true) (
-      getOptionalAttrs [
-        "disabledTestMarks"
-        "disabledTestPaths"
-        "disabledTests"
-        "pytestFlags"
-        "pytestFlagsArray"
-        "unittestFlags"
-        "unittestFlagsArray"
-      ] attrs
-      //
-        lib.mapAttrs
-          (
-            name: value:
-            lib.throwIf (
-              attrs.${name} == [ ]
-            ) "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list." attrs.${name}
-          )
-          (
-            getOptionalAttrs [
-              "enabledTestMarks"
-              "enabledTestPaths"
-              "enabledTests"
-            ] attrs
-          )
-    )
+    //
+      lib.mapAttrs
+        (
+          name: value:
+          lib.throwIf (
+            attrs.${name} == [ ]
+          ) "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list." attrs.${name}
+        )
+        (
+          getOptionalAttrs [
+            "enabledTestMarks"
+            "enabledTestPaths"
+            "enabledTests"
+          ] attrs
+        )
   );
 
   # This derivation transformation function must be independent to `attrs`

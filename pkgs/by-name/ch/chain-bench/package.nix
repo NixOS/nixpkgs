@@ -40,7 +40,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aquasecurity/chain-bench";
     changelog = "https://github.com/aquasecurity/chain-bench/releases/tag/v${version}";
     description = "Open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark";
@@ -53,7 +53,7 @@ buildGoModule rec {
       hackers and protect your sensitive data and customer trust, you need to
       ensure your code is compliant with your organization's policies.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

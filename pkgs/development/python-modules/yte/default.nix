@@ -1,19 +1,19 @@
 {
   lib,
+  argparse-dataclass,
   buildPythonPackage,
   dpath,
   fetchFromGitHub,
   numpy,
-  plac,
-  poetry-core,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "yte";
-  version = "1.7.0";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,14 +22,14 @@ buildPythonPackage rec {
     owner = "koesterlab";
     repo = "yte";
     tag = "v${version}";
-    hash = "sha256-W9t2BlBp947Rwnq+IKbL5aJqauZmYQOzuBIstw6hHQY=";
+    hash = "sha256-kA4fQg2vpgDuW0OZOqzA6lggJLtSiQo+3SCOp7hnt8M=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
 
   dependencies = [
     dpath
-    plac
+    argparse-dataclass
     pyyaml
   ];
 
@@ -39,8 +39,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "yte" ];
-
-  pytestFlagsArray = [ "tests.py" ];
 
   preCheck = ''
     # The CLI test need yte on the PATH

@@ -49,14 +49,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.16.10";
+  version = "3.16.14";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-MZhIsnSp2uGMQds5zEhF8WZgGNHDGH+3A2TGjB6Vn10=";
+    hash = "sha256-i1a3nTospbGR/uPbwuM0z6cATANvw3QCFXd99e3tXCs=";
   };
 
   patches = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Replace gamescopereeaper with absolute path
     substituteInPlace src/Utils/Process.cpp --subst-var-by "gamescopereaper" "$out/bin/gamescopereaper"
-    patchShebangs default_scripts_install.sh
+    patchShebangs default_extras_install.sh
   '';
 
   mesonFlags = [

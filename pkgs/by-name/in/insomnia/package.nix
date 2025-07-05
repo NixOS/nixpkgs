@@ -27,18 +27,18 @@ let
       }
       .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  meta = with lib; {
+  meta = {
     homepage = "https://insomnia.rest";
     description = " The open-source, cross-platform API client for GraphQL, REST, WebSockets, SSE and gRPC. With Cloud, Local and Git storage.";
     mainProgram = "insomnia";
     changelog = "https://github.com/Kong/insomnia/releases/tag/core@${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = [
       "aarch64-darwin"
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       markus1189
       kashw2
       DataHearth

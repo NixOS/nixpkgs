@@ -48,6 +48,7 @@ in
 python3.pkgs.buildPythonApplication {
   pname = "electrum-ltc";
   inherit version;
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";

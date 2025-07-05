@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "undertime";
-  version = "4.0.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "anarcat";
     repo = "undertime";
-    rev = version;
-    hash = "sha256-BshgSnYaeX01KQ1fggB+yXEfg3Trhpcf/k4AmBDPxy8=";
+    tag = version;
+    hash = "sha256-sQI+fpg5PFGCsS9xikMTi4Ad76TayP13UgZag6CRBxE=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     dateparser
     ephem
     pytz

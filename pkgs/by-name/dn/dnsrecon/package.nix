@@ -32,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "dnsrecon" ];
 
-  meta = with lib; {
+  meta = {
     description = "DNS Enumeration script";
     homepage = "https://github.com/darkoperator/dnsrecon";
     changelog = "https://github.com/darkoperator/dnsrecon/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       c0bw3b
       fab
     ];

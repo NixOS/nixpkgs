@@ -8,6 +8,7 @@
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-soundcloud";
   version = "3.0.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mopidy";

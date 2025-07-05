@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -18,6 +17,9 @@
   langchain-tests,
   pytest-asyncio,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -60,15 +62,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_mistralai" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-mistralai==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-mistralai==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-mistralai/releases/tag/langchain-mistralai==${version}";
+    changelog = "https://github.com/langchain-ai/langchain-mistralai/releases/tag/${src.tag}";
     description = "Build LangChain applications with mistralai";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mistralai";
     license = lib.licenses.mit;

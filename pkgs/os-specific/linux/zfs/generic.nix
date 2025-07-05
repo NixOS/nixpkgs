@@ -10,6 +10,7 @@ let
       coreutils,
       linuxPackages,
       perl,
+      udevCheckHook,
       configFile ? "all",
 
       # Userspace dependencies
@@ -30,6 +31,7 @@ let
       pkg-config,
       curl,
       pam,
+      nix-update-script,
 
       # Kernel dependencies
       kernel ? null,
@@ -145,7 +147,10 @@ let
           nukeReferences
         ]
         ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ])
-        ++ optional buildUser pkg-config;
+        ++ optionals buildUser [
+          pkg-config
+          udevCheckHook
+        ];
       buildInputs =
         optionals buildUser [
           zlib
@@ -197,6 +202,8 @@ let
       makeFlags = optionals buildKernel kernelModuleMakeFlags;
 
       enableParallelBuilding = true;
+
+      doInstallCheck = true;
 
       installFlags = [
         "sysconfdir=\${out}/etc"
@@ -263,22 +270,31 @@ let
 
       outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
 
-      passthru = {
-        inherit kernel;
-        inherit enableMail kernelModuleAttribute;
-        latestCompatibleLinuxPackages = lib.warn "zfs.latestCompatibleLinuxPackages is deprecated and is now pointing at the default kernel. If using the stable LTS kernel (default `linuxPackages` is not possible then you must explicitly pin a specific kernel release. For example, `boot.kernelPackages = pkgs.linuxPackages_6_6`. Please be aware that non-LTS kernels are likely to go EOL before ZFS supports the latest supported non-LTS release, requiring manual intervention." linuxPackages;
+      passthru =
+        {
+          inherit kernel;
+          inherit enableMail kernelModuleAttribute;
+          latestCompatibleLinuxPackages = lib.warn "zfs.latestCompatibleLinuxPackages is deprecated and is now pointing at the default kernel. If using the stable LTS kernel (default `linuxPackages` is not possible then you must explicitly pin a specific kernel release. For example, `boot.kernelPackages = pkgs.linuxPackages_6_6`. Please be aware that non-LTS kernels are likely to go EOL before ZFS supports the latest supported non-LTS release, requiring manual intervention." linuxPackages;
 
-        # The corresponding userspace tools to this instantiation
-        # of the ZFS package set.
-        userspaceTools = genericBuild (
-          outerArgs
-          // {
-            configFile = "user";
-          }
-        ) innerArgs;
+          # The corresponding userspace tools to this instantiation
+          # of the ZFS package set.
+          userspaceTools = genericBuild (
+            outerArgs
+            // {
+              configFile = "user";
+            }
+          ) innerArgs;
 
-        inherit tests;
-      };
+          inherit tests;
+        }
+        // lib.optionalAttrs (kernelModuleAttribute != "zfs_unstable") {
+          updateScript = nix-update-script {
+            extraArgs = [
+              "--version-regex=^zfs-(${lib.versions.major version}\\.${lib.versions.minor version}\\.[0-9]+)"
+              "--override-filename=pkgs/os-specific/linux/zfs/${lib.versions.major version}_${lib.versions.minor version}.nix"
+            ];
+          };
+        };
 
       meta = {
         description = "ZFS Filesystem Linux" + (if buildUser then " Userspace Tools" else " Kernel Module");

@@ -19,6 +19,6 @@ for system in \
     aarch64-linux \
     x86_64-darwin \
     aarch64-darwin; do
-    hash=$(nix hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix-instantiate --eval -E "with import ./. {}; hamrs-pro.src.url" --system "$system" | tr -d '"')))
+    hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix-instantiate --eval -E "with import ./. {}; hamrs-pro.src.url" --system "$system" | tr -d '"')))
     update-source-version hamrs-pro $latestVersion $hash --system=$system --ignore-same-version
 done

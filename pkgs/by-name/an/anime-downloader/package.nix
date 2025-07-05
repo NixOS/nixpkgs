@@ -11,6 +11,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "anime-downloader";
   version = "5.0.14";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "anime-dl";

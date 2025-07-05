@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pytest-cache";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

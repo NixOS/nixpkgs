@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "plattenalbum";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "SoongNoonien";
     repo = "plattenalbum";
     tag = "v${version}";
-    hash = "sha256-5/4t7tnMGuy5TIIdGN5hm0I0O0oC3FC503PNpnUHkV8=";
+    hash = "sha256-8Oa/tFow+rW96AUQEQXaI4ybBFce0QDiRFt2V0X/uuo=";
   };
 
   nativeBuildInputs = [

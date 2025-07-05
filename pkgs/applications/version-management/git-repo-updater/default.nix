@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonApplication,
+  hatchling,
   colorama,
   fetchPypi,
   gitpython,
@@ -8,13 +9,15 @@
 
 buildPythonApplication rec {
   pname = "gitup";
-  version = "0.5.1";
+  version = "0.5.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pa612rcc94nc461zs9sag9p46sycc214622b06gdn35rmwp0y2g";
+    sha256 = "sha256-51DWPJ9JOMrRdWGaiiL4qzo4VFFeT1rG5yyI6Ej+ZRw=";
   };
 
+  build-system = [ hatchling ];
   propagatedBuildInputs = [
     colorama
     gitpython
@@ -27,7 +30,10 @@ buildPythonApplication rec {
     description = "Easily update multiple Git repositories at once";
     homepage = "https://github.com/earwig/git-repo-updater";
     license = licenses.mit;
-    maintainers = with maintainers; [ bdesham ];
+    maintainers = with maintainers; [
+      bdesham
+      artturin
+    ];
     mainProgram = "gitup";
   };
 }

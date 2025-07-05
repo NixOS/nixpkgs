@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -18,6 +17,9 @@
   langchain-tests,
   pytest-asyncio,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -60,15 +62,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_fireworks" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-fireworks==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-fireworks==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-fireworks==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Build LangChain applications with Fireworks";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/fireworks";
     license = lib.licenses.mit;

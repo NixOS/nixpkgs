@@ -13,6 +13,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dockbarx";
   version = "1.0-beta4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xuzhen";

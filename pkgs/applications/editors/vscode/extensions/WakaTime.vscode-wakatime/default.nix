@@ -7,8 +7,8 @@ buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-wakatime";
     publisher = "WakaTime";
-    version = "25.0.3";
-    hash = "sha256-rD2Uzzt8xfkfgM+Y0NLe7lthfxinv1Zatpr56OjfABM=";
+    version = "25.0.6";
+    hash = "sha256-arBd8ihYlyGPm0mrRnGJNzuhQmMqADH7TrqCwMR7R/U=";
   };
 
   meta = {

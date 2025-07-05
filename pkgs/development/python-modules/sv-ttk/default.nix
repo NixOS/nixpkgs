@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "sv-ttk";
-  version = "2.6.0";
+  version = "2.6.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version;
     pname = "sv_ttk";
-    hash = "sha256-P9RAOWyV4w6I9ob88ovkJUgPcyDWvzRvnOpdb1ZwLMI=";
+    hash = "sha256-R1idXiA5jPQE6DYvJPPtSPODDNCs4FbYM1T6Jdjk/kg=";
   };
 
   # No tests available

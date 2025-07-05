@@ -402,10 +402,10 @@ index 3b859ea7b4..ccddb3e805 100644
    ]
  endif
 diff --git a/src/security/apparmor/meson.build b/src/security/apparmor/meson.build
-index b9257c816d..98701755d8 100644
+index 09d9fac02c..ee0c74ceec 100644
 --- a/src/security/apparmor/meson.build
 +++ b/src/security/apparmor/meson.build
-@@ -57,7 +57,7 @@ foreach name : apparmor_gen_profiles
+@@ -20,16 +20,16 @@ foreach name : apparmor_gen_profiles
      output: name,
      configuration: apparmor_gen_profiles_conf,
      install: true,
@@ -413,39 +413,25 @@ index b9257c816d..98701755d8 100644
 +    install_dir: install_prefix + apparmor_dir,
    )
  endforeach
- 
-@@ -68,13 +68,13 @@ foreach name : apparmor_gen_abstractions
-     command: apparmor_gen_cmd,
-     capture: true,
-     install: true,
--    install_dir: apparmor_dir / 'abstractions',
-+    install_dir: install_prefix + apparmor_dir / 'abstractions',
-   )
- endforeach
- 
+
+ install_data(
+   [ 'libvirt-qemu', 'libvirt-lxc' ],
+-  install_dir: apparmor_dir / 'abstractions',
++  install_dir: install_prefix + apparmor_dir / 'abstractions',
+ )
+
  install_data(
    [ 'TEMPLATE.qemu', 'TEMPLATE.lxc' ],
 -  install_dir: apparmor_dir / 'libvirt',
 +  install_dir: install_prefix + apparmor_dir / 'libvirt',
  )
- 
- if not conf.has('WITH_APPARMOR_3')
-@@ -83,7 +83,7 @@ if not conf.has('WITH_APPARMOR_3')
-   # files in order to limit the amount of filesystem clutter.
-   install_data(
-     'usr.lib.libvirt.virt-aa-helper.local',
--    install_dir: apparmor_dir / 'local',
-+    install_dir: install_prefix + apparmor_dir / 'local',
-     rename: 'usr.lib.libvirt.virt-aa-helper',
-   )
- endif
 diff --git a/src/storage/meson.build b/src/storage/meson.build
 index 404d6a6941..fb4e67a0a8 100644
 --- a/src/storage/meson.build
 +++ b/src/storage/meson.build
 @@ -126,9 +126,9 @@ if conf.has('WITH_STORAGE')
    }
- 
+
    virt_install_dirs += [
 -    confdir / 'storage',
 -    confdir / 'storage' / 'autostart',
@@ -455,20 +441,27 @@ index 404d6a6941..fb4e67a0a8 100644
 +    install_prefix + runstatedir / 'libvirt' / 'storage',
    ]
  endif
- 
+
 diff --git a/tools/meson.build b/tools/meson.build
-index 1bb84be0be..e04a4e986d 100644
+index a099148d3c..d0d6510f17 100644
 --- a/tools/meson.build
 +++ b/tools/meson.build
-@@ -121,7 +121,7 @@ if conf.has('WITH_LOGIN_SHELL')
+@@ -123,12 +123,12 @@ if conf.has('WITH_LOGIN_SHELL')
      install_rpath: libvirt_rpath,
    )
- 
+
 -  install_data('virt-login-shell.conf', install_dir: sysconfdir / 'libvirt')
 +  install_data('virt-login-shell.conf', install_dir: install_prefix + sysconfdir / 'libvirt')
+
+   # Install the sysuser config for the setgid binary
+   install_data(
+     'libvirt-login-shell.sysusers.conf',
+-    install_dir: sysusersdir,
++    install_dir: install_prefix + sysusersdir,
+     rename: [ 'libvirt-login-shell.conf' ],
+   )
  endif
- 
- if host_machine.system() == 'windows'
+
 diff --git a/tools/ssh-proxy/meson.build b/tools/ssh-proxy/meson.build
 index e9f312fa25..95d5d8fe0b 100644
 --- a/tools/ssh-proxy/meson.build

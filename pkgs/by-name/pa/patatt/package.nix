@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "patatt";
   version = "0.6.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

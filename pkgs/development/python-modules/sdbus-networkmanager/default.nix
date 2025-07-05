@@ -10,6 +10,7 @@ let
   version = "2.0.0";
 in
 buildPythonPackage {
+  format = "setuptools";
   inherit pname version;
 
   propagatedBuildInputs = [ sdbus ];

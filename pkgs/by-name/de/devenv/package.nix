@@ -14,19 +14,22 @@
 }:
 
 let
-  devenv_nix = nixVersions.nix_2_24.overrideAttrs (old: {
-    version = "2.24-devenv";
-    src = fetchFromGitHub {
-      owner = "domenkozar";
+  devenv_nix =
+    (nixVersions.git.overrideSource (fetchFromGitHub {
+      owner = "cachix";
       repo = "nix";
-      rev = "b455edf3505f1bf0172b39a735caef94687d0d9c";
-      hash = "sha256-bYyjarS3qSNqxfgc89IoVz8cAFDkF9yPE63EJr+h50s=";
-    };
-    doCheck = false;
-    doInstallCheck = false;
-  });
+      rev = "afa41b08df4f67b8d77a8034b037ac28c71c77df";
+      hash = "sha256-IDB/oh/P63ZTdhgSkey2LZHzeNhCdoKk+4j7AaPe1SE=";
+    })).overrideAttrs
+      (old: {
+        version = "2.30-devenv";
+        doCheck = false;
+        doInstallCheck = false;
+        # do override src, but the Nix way so the warning is unaware of it
+        __intentionallyOverridingVersion = true;
+      });
 
-  version = "1.6.1";
+  version = "1.7";
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -35,12 +38,12 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    rev = "v${version}";
-    hash = "sha256-CEVWxRaln3sp0541QpMfcfmI2w+RN72UgNLV5Dy9sco=";
+    tag = "v${version}";
+    hash = "sha256-LzMVgB8izls/22g69KvWPbuQ8C7PRT9PobbvdV3/raI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-t4Cj7JlBVrMP02Dqibq2IgdKy6ejv+CeffmcPAkh7BE=";
+  cargoHash = "sha256-k/UrnRTI+Z09kdN7PYNOg9+GnumqOdm36F31CKZCGMU=";
 
   buildAndTestSubdir = "devenv";
 

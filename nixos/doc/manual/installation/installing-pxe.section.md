@@ -12,10 +12,11 @@ you can run:
 nix-build -A netboot.x86_64-linux '<nixpkgs/nixos/release.nix>'
 ```
 
-This will create a `result` directory containing: \* `bzImage` -- the
-Linux kernel \* `initrd` -- the initrd file \* `netboot.ipxe` -- an
-example ipxe script demonstrating the appropriate kernel command line
-arguments for this image
+This will create a `result` directory containing:
+
+* `bzImage` -- the Linux kernel
+* `initrd` -- the initrd file
+* `netboot.ipxe` -- an example ipxe script demonstrating the appropriate kernel command line arguments for this image
 
 If you're using plain PXE, configure your boot loader to use the
 `bzImage` and `initrd` files and have it provide the same kernel command

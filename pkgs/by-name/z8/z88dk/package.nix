@@ -25,7 +25,7 @@ let
       hash = "sha256-NbQIy9d4ZcMnRJJApPBSej+W6e/aJ8rkb5E7rD7GVgs=";
     };
     meta = {
-      description = "A date object with as little code as possible (and rw accessors)";
+      description = "Date object with as little code as possible (and rw accessors)";
       license = with lib.licenses; [
         artistic1
         gpl1Plus

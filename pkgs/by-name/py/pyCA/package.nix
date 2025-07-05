@@ -49,6 +49,7 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "pyca";
   version = "4.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "opencast";

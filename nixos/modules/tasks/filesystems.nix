@@ -5,13 +5,39 @@
   utils,
   ...
 }@moduleArgs:
-
-with lib;
-with utils;
-
 let
+  inherit (lib)
+    any
+    attrValues
+    concatMapStrings
+    concatMapStringsSep
+    concatStringsSep
+    elem
+    filter
+    flip
+    head
+    literalExpression
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    optional
+    optionalAttrs
+    optionalString
+    toposort
+    types
+    ;
+  inherit (utils) fsBefore;
+
   # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
   escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
+
+  # A list of attrnames is coerced into an attrset of bools by
+  # setting the values to true.
+  attrNamesToTrue = types.coercedTo (types.listOf types.str) (
+    enabledList: lib.genAttrs enabledList (_attrName: true)
+  ) (types.attrsOf types.bool);
 
   addCheckDesc =
     desc: elemType: check:
@@ -61,7 +87,7 @@ let
           description = "Location of the mounted file system.";
         };
 
-        stratis.poolUuid = lib.mkOption {
+        stratis.poolUuid = mkOption {
           type = types.uniq (types.nullOr types.str);
           description = ''
             UUID of the stratis pool that the fs is located in
@@ -166,9 +192,7 @@ let
 
       };
 
-      config.device = lib.mkIf (config.label != null) (
-        lib.mkDefault "/dev/disk/by-label/${escape config.label}"
-      );
+      config.device = mkIf (config.label != null) (mkDefault "/dev/disk/by-label/${escape config.label}");
 
       config.options =
         let
@@ -320,15 +344,13 @@ in
 
     boot.supportedFilesystems = mkOption {
       default = { };
-      example = lib.literalExpression ''
+      example = literalExpression ''
         {
           btrfs = true;
           zfs = lib.mkForce false;
         }
       '';
-      type = types.coercedTo (types.listOf types.str) (
-        enabled: lib.listToAttrs (map (fs: lib.nameValuePair fs true) enabled)
-      ) (types.attrsOf types.bool);
+      type = attrNamesToTrue;
       description = ''
         Names of supported filesystem types, or an attribute set of file system types
         and their state. The set form may be used together with `lib.mkForce` to
@@ -471,7 +493,7 @@ in
         # Filesystems.
         ${makeFstabEntries fileSystems { }}
 
-        ${lib.optionalString (config.swapDevices != [ ]) "# Swap devices."}
+        ${optionalString (config.swapDevices != [ ]) "# Swap devices."}
         ${flip concatMapStrings config.swapDevices (sw: "${sw.realDevice} none swap ${swapOptions sw}\n")}
       '';
 

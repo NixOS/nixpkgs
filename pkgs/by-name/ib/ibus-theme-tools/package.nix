@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "ibus-theme-tools";
   version = "4.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openSUSE";

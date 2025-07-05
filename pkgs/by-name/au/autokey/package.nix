@@ -14,6 +14,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "autokey";
   version = "0.96.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "autokey";

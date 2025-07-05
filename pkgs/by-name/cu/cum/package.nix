@@ -9,6 +9,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "cum";
   version = "0.9.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

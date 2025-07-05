@@ -34,6 +34,7 @@ in
 pypkgs.buildPythonApplication rec {
   pname = "tvnamer";
   version = "3.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

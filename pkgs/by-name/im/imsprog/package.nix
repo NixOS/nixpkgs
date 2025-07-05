@@ -60,9 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
       }"
   '';
 
+  doInstallCheck = true;
+
   meta = {
     changelog = "https://github.com/bigbigmdm/IMSProg/releases/tag/v${finalAttrs.version}";
-    description = "A free I2C EEPROM programmer tool for CH341A device";
+    description = "Free I2C EEPROM programmer tool for CH341A device";
     homepage = "https://github.com/bigbigmdm/IMSProg";
     license = with lib.licenses; [
       gpl3Plus

@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "arxiv-latex-cleaner";
   version = "1.0.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google-research";

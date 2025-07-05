@@ -59,12 +59,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_diff_real_files"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dandavison/delta";
     description = "Syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       zowoq
       SuperSandro2000
       figsoda

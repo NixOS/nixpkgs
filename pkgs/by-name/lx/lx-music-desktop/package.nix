@@ -8,13 +8,12 @@
 
   makeWrapper,
 
-  electron_34,
+  electron_36,
   commandLineArgs ? "",
 }:
 
 let
-  # if we want to use later electron, we'll need to bump the `node-abi` npm package version
-  electron = electron_34;
+  electron = electron_36;
 in
 buildNpmPackage rec {
   pname = "lx-music-desktop";
@@ -86,15 +85,15 @@ buildNpmPackage rec {
         --add-flags ${lib.escapeShellArg commandLineArgs}
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Music software based on Electron and Vue";
     homepage = "https://github.com/lyswhut/lx-music-desktop";
     changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = electron.meta.platforms;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
-    maintainers = with maintainers; [ oosquare ];
+    maintainers = with lib.maintainers; [ oosquare ];
   };
 }

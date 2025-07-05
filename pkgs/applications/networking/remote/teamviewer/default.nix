@@ -30,7 +30,7 @@ mkDerivation rec {
     "out"
     "dev"
   ];
-  version = "15.61.3";
+  version = "15.66.5";
 
   src =
     let
@@ -39,11 +39,11 @@ mkDerivation rec {
     {
       x86_64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_amd64.deb";
-        hash = "sha256-o7Em+QRW4TebRTJS5xjcx1M6KPh1ziB1j0fvlO+RYa4=";
+        hash = "sha256-yQD2iFFFHlR6vX/5vEtBqmIOtGXa4eHbE7v7MdXgBds=";
       };
       aarch64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_arm64.deb";
-        hash = "sha256-LDByF4u9xZV1MYApBrnlNrUPndbDrQt6DKX+r8Kmq6k=";
+        hash = "sha256-WqC4/5egq3pHgb4v8EPevJDDNmashuQr+VBQuFLdr7Q=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -164,7 +164,7 @@ mkDerivation rec {
       jagajaga
       jraygauthier
       gador
-      c4thebomb
+      c4patino
     ];
   };
 }

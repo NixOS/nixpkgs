@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "rust-osdev";
-    repo = pname;
+    repo = "cargo-xbuild";
     rev = "v${version}";
     hash = "sha256-29rCjmzxxIjR5nBN2J3xxP+r8NnPIJV90FkSQQEBbo4=";
   };

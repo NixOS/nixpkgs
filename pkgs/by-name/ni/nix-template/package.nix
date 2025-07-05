@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "jonringer";
-    repo = pname;
+    repo = "nix-template";
     rev = "v${version}";
     sha256 = "sha256-42u5FmTIKHpfQ2zZQXIrFkAN2/XvU0wWnCRrQkQzcNI=";
   };
@@ -47,12 +47,12 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/nix-template completions zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Make creating nix expressions easy";
     homepage = "https://github.com/jonringer/nix-template/";
     changelog = "https://github.com/jonringer/nix-template/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = [ ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "nix-template";
   };
 }

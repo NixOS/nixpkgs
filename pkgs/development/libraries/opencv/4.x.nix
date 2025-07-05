@@ -591,7 +591,7 @@ effectiveStdenv.mkDerivation {
       substituteInPlace "$out/lib/cmake/opencv4/OpenCVConfig.cmake" \
         --replace-fail \
           'find_host_package(CUDA ''${OpenCV_CUDA_VERSION} EXACT REQUIRED)' \
-          'find_host_package(CUDA REQUIRED)' \
+          'find_host_package(CUDAToolkit REQUIRED)' \
         --replace-fail \
           'message(FATAL_ERROR "OpenCV static library was compiled with CUDA' \
           'message("OpenCV static library was compiled with CUDA'

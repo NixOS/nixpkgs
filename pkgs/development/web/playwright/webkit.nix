@@ -126,8 +126,8 @@ let
       stripRoot = false;
       hash =
         {
-          x86_64-linux = "sha256-kGTfPFosn8BsBDo9boJWgkPtdAig8+Ffv3Q4eYPy5ls=";
-          aarch64-linux = "sha256-9NFR3j8M9i3Gk/LCwK+LRpKzJsTt3w2VHGmsGtsoKJU=";
+          x86_64-linux = "sha256-lwH783B3/laqw0IdGBnVzvySRoF0AwZsSolaqUKmsM4=";
+          aarch64-linux = "sha256-qtvP0bc5rcZcz6SqigfdrjhTWEmvT4k11I1GW1Eoj/Q=";
         }
         .${system} or throwSystem;
     };
@@ -195,14 +195,20 @@ let
         --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib
 
     '';
+
+    preFixup = ''
+      # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
+      mkdir -p "$out/lib"
+      ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
+    '';
   };
   webkit-darwin = fetchzip {
     url = "https://playwright.azureedge.net/builds/webkit/${revision}/webkit-${suffix'}.zip";
     stripRoot = false;
     hash =
       {
-        x86_64-darwin = "sha256-yvIscuu+37eFH/lEhTPostoJ5kHmpdkZiRBtKWDlOuw=";
-        aarch64-darwin = "sha256-VtOmp/YJ8oRBZvDg4sNskY7TVQdHglwkAveybY7QYno=";
+        x86_64-darwin = "sha256-p1+Pk+Zhf2OPEmEWCEd0tA7CdoMcOgYp69SnQXufFJ0=";
+        aarch64-darwin = "sha256-tEfKvJuGe4htZLSOn94eKeBtWXYkjl73iJSY4BWJMKo=";
       }
       .${system} or throwSystem;
   };

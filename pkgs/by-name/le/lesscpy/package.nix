@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "lesscpy";
   version = "0.15.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

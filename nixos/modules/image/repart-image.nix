@@ -173,10 +173,12 @@ stdenvNoCC.mkDerivation (
         "--architecture=${systemdArch}"
         "--dry-run=no"
         "--size=auto"
-        "--seed=${seed}"
         "--definitions=${finalAttrs.finalRepartDefinitions}"
         "--split=${lib.boolToString split}"
         "--json=pretty"
+      ]
+      ++ lib.optionals (seed != null) [
+        "--seed=${seed}"
       ]
       ++ lib.optionals createEmpty [
         "--empty=create"
@@ -187,6 +189,7 @@ stdenvNoCC.mkDerivation (
 
     dontUnpack = true;
     dontConfigure = true;
+    dontFixup = true;
     doCheck = false;
 
     patchPhase = ''

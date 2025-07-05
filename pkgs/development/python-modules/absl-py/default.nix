@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "absl-py";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-py";
     tag = "v${version}";
-    hash = "sha256-FCmilW9/gWdlV1QA+4INVa5cDafiAl9GwO/4YyU0ZY4=";
+    hash = "sha256-KsaFfdq6+Pc8k0gM1y+HJ1v6VrTAK7TBgh92BSFuc+Q=";
   };
 
   build-system = [ setuptools ];

@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.31.6";
+  version = "3.31.7";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZTQn8PUBR1Cq//InJ/sqpgxscyypGAjPt4ziLd2eVfA=";
+    hash = "sha256-ptLrHr65kTDf5j71o0DD/bEUMczj18oUhSTBJZJM6mg=";
   };
 
   patches =
@@ -76,8 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
       # Backport of https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9900
       # Needed to correctly link curl in pkgsStatic.
       ./008-FindCURL-Add-more-target-properties-from-pkg-config.diff
-      # Backport of https://gitlab.kitware.com/cmake/cmake/-/commit/1b0c92a3a1b782ff3e1c4499b6ab8db614d45bcd
-      ./009-cmCurl-Avoid-using-undocumented-type-for-CURLOPT_NETRC-values.diff
     ];
 
   outputs =

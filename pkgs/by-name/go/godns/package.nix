@@ -54,12 +54,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic DNS client tool supports AliDNS, Cloudflare, Google Domains, DNSPod, HE.net & DuckDNS & DreamHost, etc";
     homepage = "https://github.com/TimothyYe/godns";
     changelog = "https://github.com/TimothyYe/godns/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yinfeng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yinfeng ];
     mainProgram = "godns";
   };
 }

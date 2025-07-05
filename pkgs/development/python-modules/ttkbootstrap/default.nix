@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "ttkbootstrap";
   version = "1.12.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "israel-dryer";

@@ -9,6 +9,7 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   version = "2.3.1";
+  format = "setuptools";
   pname = "nvpy";
 
   src = fetchFromGitHub {

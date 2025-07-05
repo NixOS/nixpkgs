@@ -12,6 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
   version = "1.10.6";
+  format = "setuptools";
 
   disabled = !stdenv.hostPlatform.isLinux;
 

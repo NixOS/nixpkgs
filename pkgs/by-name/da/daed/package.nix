@@ -12,13 +12,13 @@
 
 let
   pname = "daed";
-  version = "0.9.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "daed";
     tag = "v${version}";
-    hash = "sha256-5olEPaS/6ag69KUwBG8qXpyr1B2qrLK+vf13ZljHH+c=";
+    hash = "sha256-WaybToEcFrKOcJ+vfCTc9uyHkTPOrcAEw9lZFEIBPgY=";
     fetchSubmodules = true;
   };
 
@@ -63,7 +63,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/wing";
 
-  vendorHash = "sha256-qB2qcJ82mFcVvjlYp/N9sqzwPotTROgymSX5NfEQMuY=";
+  vendorHash = "sha256-+uf8PJQvsJMUyQ6W+nDfdwrxBO2YRUL328ajTJpVDZk=";
 
   proxyVendor = true;
 
@@ -93,6 +93,12 @@ buildGoModule rec {
       bundle
 
     runHook postBuild
+  '';
+
+  postInstall = ''
+    install -Dm444 $src/install/daed.service -t $out/lib/systemd/system
+    substituteInPlace $out/lib/systemd/system/daed.service \
+      --replace-fail /usr/bin $out/bin
   '';
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [

@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Bandcamp";
   version = "1.1.5";
+  format = "setuptools";
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-wg9zcOKfZQRhpyA1Cu5wvdwKpmrlcr2m9mrqBHgUXAQ=";

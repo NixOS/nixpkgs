@@ -5,22 +5,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.11.2";
+  version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = "s3transfer";
     tag = version;
-    hash = "sha256-59uyCgormgRX1JnOUtZv6wRXQiy5CvM/2sSzSC3h1Rc=";
+    hash = "sha256-Ou3U7IPGJdK9exOLMgPFoTbOQi9IA+ivoGVOygB4ACE=";
   };
 
   build-system = [

@@ -6,6 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   version = "1.0.1";
+  format = "setuptools";
   pname = "ipgrep";
 
   disabled = python3Packages.isPy27;

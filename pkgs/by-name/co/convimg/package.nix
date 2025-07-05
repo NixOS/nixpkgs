@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/mateoconlechuga/convimg";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ clevor ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     mainProgram = "convimg";
   };

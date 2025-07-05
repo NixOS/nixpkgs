@@ -334,8 +334,8 @@ in
 
     systemd.services.hydra-init = {
       wantedBy = [ "multi-user.target" ];
-      requires = lib.optional haveLocalDB "postgresql.service";
-      after = lib.optional haveLocalDB "postgresql.service";
+      requires = lib.optional haveLocalDB "postgresql.target";
+      after = lib.optional haveLocalDB "postgresql.target";
       environment = env // {
         HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-init";
       };

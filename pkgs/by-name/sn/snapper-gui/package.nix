@@ -14,6 +14,7 @@
 python3Packages.buildPythonApplication {
   pname = "snapper-gui";
   version = "2020-10-20";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ricardomv";

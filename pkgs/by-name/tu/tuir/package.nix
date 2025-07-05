@@ -8,6 +8,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "tuir";
   version = "1.31.0";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "Chocimier";

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "greenmask";
-  version = "0.2.11";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "GreenmaskIO";
     repo = "greenmask";
     tag = "v${version}";
-    hash = "sha256-KHM/r4zDJrZMIC7+Kp+98xhV5r4zkpxc1ffqf0jgnLs=";
+    hash = "sha256-Tgr6olU8EBiiHX4fNOL6EXdrFs2eckFk4ooBBoxc+ms=";
   };
 
-  vendorHash = "sha256-g3/WuLDb4mAzklT+nxQ1U/l+JDzSubENMB5hWjIaIIU=";
+  vendorHash = "sha256-t2U65GAGBGdMRXPTkCQCuXfLuqohA6erTlvAN/xx/ek=";
 
   subPackages = [ "cmd/greenmask/" ];
 
@@ -39,12 +39,12 @@ buildGoModule rec {
       --replace-fail "TestS3Storage" "SkipTestS3Storage"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL database anonymization tool";
     homepage = "https://github.com/GreenmaskIO/greenmask";
     changelog = "https://github.com/GreenmaskIO/greenmask/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "greenmask";
   };
 }

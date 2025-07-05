@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "charge-lnd";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "accumulator";

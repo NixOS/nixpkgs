@@ -169,13 +169,13 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";
     changelog = "https://github.com/aws/amazon-ssm-agent/releases/tag/${version}";
     homepage = "https://github.com/aws/amazon-ssm-agent";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       manveru
       anthonyroussel
       arianvp

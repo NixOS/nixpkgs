@@ -39,7 +39,8 @@ listToAttrs (
     flip mapAttrsToList tests (
       name: test:
       nameValuePair "wireguard-${name}-linux-${v'}" (test {
-        kernelPackages = pkgs."linuxPackages_${v'}";
+        kernelPackages =
+          if v' == "latest" then pkgs.linuxPackages_latest else pkgs.linuxKernel.packages."linux_${v'}";
       })
     )
   )

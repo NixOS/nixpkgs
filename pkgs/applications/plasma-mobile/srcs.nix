@@ -115,14 +115,6 @@
       name = "kweather-23.01.0.tar.xz";
     };
   };
-  neochat = {
-    version = "23.01.0";
-    src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/23.01.0/neochat-23.01.0.tar.xz";
-      sha256 = "0pkas8whwy1ih4sx9vaa7k55iiiy955dh4d53i4l1d0sjdf8pysd";
-      name = "neochat-23.01.0.tar.xz";
-    };
-  };
   plasma-dialer = {
     version = "23.01.0";
     src = fetchurl {

@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage rec {
     protobuf
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Nostr relay written in Rust";
     homepage = "https://sr.ht/~gheartsfield/nostr-rs-relay/";
     changelog = "https://github.com/scsibug/nostr-rs-relay/releases/tag/${version}";
-    maintainers = with maintainers; [ jurraca ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ jurraca ];
+    license = lib.licenses.mit;
   };
 }

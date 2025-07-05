@@ -31,12 +31,12 @@ buildGoModule rec {
     version = "waf-tester ${version}, commit none, built at unknown by unknown";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to test Web Application Firewalls (WAFs)";
     mainProgram = "waf-tester";
     homepage = "https://github.com/jreisinger/waf-tester";
     changelog = "https://github.com/jreisinger/waf-tester/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

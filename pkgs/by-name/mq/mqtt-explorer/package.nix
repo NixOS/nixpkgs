@@ -168,12 +168,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
-    description = "An all-round MQTT client that provides a structured topic overview";
+  meta = {
+    description = "All-round MQTT client that provides a structured topic overview";
     homepage = "https://github.com/thomasnordquist/MQTT-Explorer";
     changelog = "https://github.com/thomasnordquist/MQTT-Explorer/releases/tag/v${version}";
-    license = licenses.cc-by-nd-40;
-    maintainers = with maintainers; [ tsandrini ];
+    license = lib.licenses.cc-by-nd-40;
+    maintainers = with lib.maintainers; [ tsandrini ];
     platforms = electron.meta.platforms;
     mainProgram = "mqtt-explorer";
   };

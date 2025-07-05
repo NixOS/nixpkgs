@@ -224,6 +224,32 @@ in
         ];
       };
 
+    server-sftp =
+      { pkgs, ... }:
+      {
+        services.openssh = {
+          enable = true;
+          extraConfig = ''
+            Match Group sftponly
+              ChrootDirectory /srv/sftp
+              ForceCommand internal-sftp
+          '';
+        };
+
+        users.groups = {
+          sftponly = { };
+        };
+        users.users = {
+          alice = {
+            isNormalUser = true;
+            createHome = false;
+            group = "sftponly";
+            shell = "/run/current-system/sw/bin/nologin";
+            openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
+          };
+        };
+      };
+
     client =
       { ... }:
       {
@@ -244,6 +270,7 @@ in
     server_match_rule.wait_for_unit("sshd", timeout=30)
     server_no_openssl.wait_for_unit("sshd", timeout=30)
     server_no_pam.wait_for_unit("sshd", timeout=30)
+    server_sftp.wait_for_unit("sshd", timeout=30)
 
     server_lazy.wait_for_unit("sshd.socket", timeout=30)
     server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
@@ -350,6 +377,36 @@ in
             "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
             timeout=30
         )
+
+    with subtest("sftp"):
+        server_sftp.succeed(
+          "mkdir -p /srv/sftp/uploads"
+        )
+        server_sftp.succeed(
+          "chown alice:sftponly /srv/sftp/uploads"
+        )
+        server_sftp.succeed(
+          "chmod 0755 /srv/sftp/uploads"
+        )
+
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+
+        client.succeed(
+            "echo 'hello-sftp-world' > test-file"
+        )
+        client.succeed(
+            "echo 'put test-file uploads/' > put-batch-file"
+        )
+
+        client.succeed(
+            "sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil -b put-batch-file alice@server-sftp",
+            timeout=30
+        )
+
+        server_sftp.wait_for_file("/srv/sftp/uploads/test-file")
 
     # None of the per-connection units should have failed.
     server_lazy.fail("systemctl is-failed 'sshd@*.service'")

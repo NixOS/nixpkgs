@@ -44,6 +44,12 @@ buildPythonPackage rec {
     responses
   ];
 
+  # FileNotFoundError: [Errno 2] No such file or directory: './auth.json'
+  disabledTestPaths = [
+    "test/integration/test_assistant_v2.py"
+    "test/integration/test_natural_language_understanding_v1.py"
+  ];
+
   pythonImportsCheck = [ "ibm_watson" ];
 
   meta = with lib; {

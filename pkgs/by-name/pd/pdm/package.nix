@@ -19,12 +19,16 @@ let
           hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
         };
       });
+      # pdm requires ...... -> jbig2dec which is AGPL only
+      moto = super.moto.overridePythonAttrs (old: rec {
+        doCheck = false;
+      });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.24.1";
+  version = "2.24.2";
   pyproject = true;
 
   disabled = python.pkgs.pythonOlder "3.8";
@@ -33,7 +37,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "pdm-project";
     repo = "pdm";
     tag = version;
-    hash = "sha256-YChgPJmHWJ4tftosa24SKB0J7uV/zR6VWX18poEEsLY=";
+    hash = "sha256-z2p7guCQrKpDSYRHaGcHuwoTDsprrvJo9SH3sGBILSQ=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
@@ -128,12 +132,12 @@ python.pkgs.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = pdm; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "Modern Python package and dependency manager supporting the latest PEP standards";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cpcloud
       natsukium
       misilelab

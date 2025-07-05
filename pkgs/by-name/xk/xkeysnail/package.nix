@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication {
   pname = "xkeysnail";
   version = "0.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mooz";

@@ -1,6 +1,6 @@
 {
   "name": "meshcentral",
-  "version": "1.1.44",
+  "version": "1.1.45",
   "keywords": [
     "Remote Device Management",
     "Remote Device Monitoring",
@@ -97,13 +97,12 @@
     "ldapauth-fork": "5.0.5",
     "ssh2": "1.16.0",
     "svg-captcha": "1.4.0",
-    "image-size": "1.1.1",
+    "image-size": "2.0.2",
     "acme-client": "4.2.5",
     "aedes": "0.39.0",
     "mysql2": "3.11.4",
     "@mysql/xdevapi": "8.0.33",
-    "mongodb": "4.13.0",
-    "saslprep": "1.0.3",
+    "mongodb": "4.17.2",
     "pg": "8.14.1",
     "mariadb": "3.4.0",
     "acebase": "1.29.5",

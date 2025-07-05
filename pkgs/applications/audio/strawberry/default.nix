@@ -116,14 +116,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Music player and music collection organizer";
     homepage = "https://www.strawberrymusicplayer.org/";
     changelog = "https://raw.githubusercontent.com/jonaski/strawberry/${version}/Changelog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     # upstream says darwin should work but they lack maintainers as of 0.6.6
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "strawberry";
   };
 }

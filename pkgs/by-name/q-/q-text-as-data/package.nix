@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "q-text-as-data";
   version = "2.0.19";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "harelba";

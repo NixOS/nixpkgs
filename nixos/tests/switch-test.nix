@@ -663,7 +663,7 @@ in
       '';
 
       # Returns a comma separated representation of the given list in sorted
-      # order, that matches the output format of switch-to-configuration.pl
+      # order, that matches the output format of switch-to-configuration
       sortedUnits = xs: lib.concatStringsSep ", " (builtins.sort builtins.lessThan xs);
 
       dbusService =

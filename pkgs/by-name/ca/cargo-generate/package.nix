@@ -71,16 +71,16 @@ rustPlatform.buildRustPackage rec {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to generate a new Rust project by leveraging a pre-existing git repository as a template";
     mainProgram = "cargo-generate";
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       turbomack
       matthiasbeyer

@@ -119,7 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.openorbis-example = nixosTests.shadps4;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v\\.(.*)"
+      ];
+    };
   };
 
   meta = {

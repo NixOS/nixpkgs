@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ghost";
   version = "8.0.0";
+  format = "setuptools";
 
   disabled = python3.pythonOlder "3.7";
 

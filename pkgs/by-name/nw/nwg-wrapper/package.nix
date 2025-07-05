@@ -12,6 +12,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "nwg-wrapper";
   version = "0.1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";

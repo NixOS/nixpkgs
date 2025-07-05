@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "tockloader";
   version = "1.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for programming Tock onto hardware boards";
     mainProgram = "tockloader";
     homepage = "https://github.com/tock/tockloader";
     changelog = "https://github.com/tock/tockloader/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
   };
 }

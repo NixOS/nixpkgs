@@ -63,7 +63,7 @@ buildGoModule rec {
   updateScript = nix-update-script { };
 
   meta = {
-    description = "A command line interface for KCL programming language";
+    description = "Command line interface for KCL programming language";
     changelog = "https://github.com/kcl-lang/cli/releases/tag/v${version}";
     homepage = "https://github.com/kcl-lang/cli";
     license = lib.licenses.asl20;

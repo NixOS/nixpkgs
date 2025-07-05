@@ -2,14 +2,16 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  python3,
-  python3Packages,
+  python312Packages,
   qt5,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
+let
+  python3Packages = python312Packages;
+in
 python3Packages.buildPythonApplication rec {
   pname = "kohighlights";
   version = "2.3.1.0";
@@ -65,7 +67,7 @@ python3Packages.buildPythonApplication rec {
     mkdir -p $out/bin $out/share/KoHighlights
     rm -rf docs screens
     cp -r * $out/share/KoHighlights
-    makeWrapper ${python3.interpreter} $out/bin/KoHighlights \
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/KoHighlights \
       --add-flags "$out/share/KoHighlights/main.py" \
       --set PYTHONPATH "${python3Packages.makePythonPath dependencies}" \
       ''${qtWrapperArgs[@]}

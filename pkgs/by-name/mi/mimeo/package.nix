@@ -12,6 +12,7 @@ in
 python3Packages.buildPythonApplication {
   pname = "mimeo";
   inherit version;
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://xyne.dev/projects/mimeo/src/mimeo-${version}.tar.xz";

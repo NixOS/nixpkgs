@@ -4,8 +4,9 @@
   rustPlatform,
   testers,
   git-stack,
+  stdenv,
+  zlib,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "git-stack";
   version = "0.10.19";
@@ -20,6 +21,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-kjyJeKeFtETowTehQEjN58YoqYFUBt9yQlRIcNY0hso=";
 
+  buildInputs =
+    [ ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      zlib
+    ];
+
   # Many tests try to access the file system.
   doCheck = false;
 
@@ -27,12 +34,12 @@ rustPlatform.buildRustPackage rec {
     package = git-stack;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Stacked branch management for Git";
     homepage = "https://github.com/gitext-rs/git-stack";
     changelog = "https://github.com/gitext-rs/git-stack/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ stehessel ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ stehessel ];
     mainProgram = "git-stack";
   };
 }

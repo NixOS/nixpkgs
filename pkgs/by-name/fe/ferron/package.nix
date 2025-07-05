@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ferron";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "ferronweb";
     repo = "ferron";
     tag = finalAttrs.version;
-    hash = "sha256-Ckz4+B4CxS2S+YbImdqkNGBONTMetxXxZb/J84dB4c0=";
+    hash = "sha256-pJ3UGiQUIon1RTZqw0Y4b/FC+0aAxHSwmXRApWsNhP4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ZK78ftnVb6k19Pv84HMeM5rGit/KxHJRG8JP8mrjCnY=";
+  cargoHash = "sha256-9ZJYf7tcsdBhE82MSmLi2deSM+l1mjfwSIHLTDan5Hg=";
 
   nativeBuildInputs = [
     pkg-config

@@ -19,27 +19,25 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.4.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-fE4WwgdwTB4s8NYQclUeDWJ132HJO0/3Hmesp9yvzGg=";
+    hash = "sha256-GR/TmBuZbt/8cB9gtRPgzSVnzdrB1BKhYjahfJ3ErgQ=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-ZUZZWnp10Z4vQTZTTPenAXXpez6WbmB/S1VBiARuNP4=";
+  npmDepsHash = "sha256-/u7xyd1+RXNN7khVOglzYGMCI+fPjyiuSF2BSZAqEtI=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
     [
       pkg-config
-      jq
-      moreutils
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       makeWrapper
@@ -73,8 +71,8 @@ buildNpmPackage rec {
       --replace-fail "useTelemetry({ version });" ""
 
     # fix version reported in sidebar and about page
-    jq '.version |= "${version}"' packages/bruno-electron/package.json | sponge packages/bruno-electron/package.json
-    jq '.version |= "${version}"' packages/bruno-app/package.json | sponge packages/bruno-app/package.json
+    ${jq}/bin/jq '.version |= "${version}"' packages/bruno-electron/package.json | ${moreutils}/bin/sponge packages/bruno-electron/package.json
+    ${jq}/bin/jq '.version |= "${version}"' packages/bruno-app/package.json | ${moreutils}/bin/sponge packages/bruno-app/package.json
   '';
 
   postConfigure = ''

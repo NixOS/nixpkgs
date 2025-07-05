@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-ettStNktSDZnYNN/IWqTB1Ou1g1QEGFabS4EatnDLaE=";
   };
 

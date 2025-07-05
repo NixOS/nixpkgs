@@ -35,7 +35,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sway-unwrapped";
-  version = "1.10.1";
+  version = "1.11";
 
   inherit
     enableXWayland
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "swaywm";
     repo = "sway";
     rev = finalAttrs.version;
-    hash = "sha256-uBtQk8uhW/i8lSbv6zwsRyiiImFBw1YCQHVWQ8jot5w=";
+    hash = "sha256-xMrexVDpgkGnvAAglshsh7HjvcbU2/Q6JLUd5J487qg=";
   };
 
   patches =
@@ -138,7 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      primeos
       synthetica
     ];
     mainProgram = "sway";

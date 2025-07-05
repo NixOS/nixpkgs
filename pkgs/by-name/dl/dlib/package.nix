@@ -20,13 +20,13 @@
 }@inputs:
 (if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
   pname = "dlib";
-  version = "19.24.9";
+  version = "20.0";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     tag = "v${version}";
-    sha256 = "sha256-Uil7Eh6LNaglrMY6fK6b00PdA4E2KnZKng4s7v1tewo=";
+    sha256 = "sha256-VTX7s0p2AzlvPUsSMXwZiij+UY9g2y+a1YIge9bi0sw=";
   };
 
   postPatch = ''
@@ -39,6 +39,9 @@
       (lib.cmakeBool "USE_SSE4_INSTRUCTIONS" sse4Support)
       (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
       (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      (lib.cmakeBool "USE_NEON_INSTRUCTIONS" false)
     ]
     ++ lib.optionals cudaSupport [
       (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (

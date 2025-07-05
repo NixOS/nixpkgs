@@ -10,6 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "vimiv-qt";
   version = "0.9.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "karlch";

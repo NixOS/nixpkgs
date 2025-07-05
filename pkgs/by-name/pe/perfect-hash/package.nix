@@ -6,6 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "perfect-hash";
   version = "0.4.1";
+  format = "setuptools";
 
   # Archive on pypi does not contain examples, which are very helpful to
   # understand how to use this program, so we use git source.

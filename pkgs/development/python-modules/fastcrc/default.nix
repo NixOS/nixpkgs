@@ -42,6 +42,8 @@ buildPythonPackage {
     pytest-benchmark
   ];
 
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
   # Python source files interfere with testing
   preCheck = ''
     rm -r fastcrc

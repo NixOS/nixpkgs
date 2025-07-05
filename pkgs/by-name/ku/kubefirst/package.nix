@@ -25,12 +25,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to create instant GitOps platforms that integrate some of the best tools in cloud native from scratch";
     mainProgram = "kubefirst";
     homepage = "https://github.com/konstructio/kubefirst/";
     changelog = "https://github.com/konstructio/kubefirst/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qjoly ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qjoly ];
   };
 }

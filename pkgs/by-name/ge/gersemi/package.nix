@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "gersemi";
   version = "0.19.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "BlankSpruce";

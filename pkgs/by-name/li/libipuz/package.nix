@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for parsing .ipuz puzzle files";
     homepage = "https://gitlab.gnome.org/jrb/libipuz";
     changelog = "https://gitlab.gnome.org/jrb/libipuz/-/blob/${version}/NEWS.md?ref_type=tags";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -11,6 +11,7 @@ with pythonPackages;
 buildPythonApplication rec {
   pname = "rss2email";
   version = "3.14";
+  format = "setuptools";
 
   propagatedBuildInputs = [
     feedparser

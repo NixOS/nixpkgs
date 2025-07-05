@@ -13,11 +13,13 @@
   glibcLocales,
 
   # dependencies
+  bibtexparser,
   joblib,
   matplotlib,
   monty,
   networkx,
   numpy,
+  orjson,
   palettable,
   pandas,
   plotly,
@@ -50,7 +52,7 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2025.1.24";
+  version = "2025.6.14";
   pyproject = true;
 
   disabled = pythonAtLeast "3.13";
@@ -59,7 +61,7 @@ buildPythonPackage rec {
     owner = "materialsproject";
     repo = "pymatgen";
     tag = "v${version}";
-    hash = "sha256-0P3/M6VI2RKPArMwXD95sjW7dYOTXxUeu4tOliN0IGk=";
+    hash = "sha256-HMYYhXT5k/EjG1sIBq/53K9ogeSk8ZEJQBrDHCgz+SA=";
   };
 
   build-system = [ setuptools ];
@@ -70,11 +72,13 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    bibtexparser
     joblib
     matplotlib
     monty
     networkx
     numpy
+    orjson
     palettable
     pandas
     plotly
@@ -115,6 +119,11 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "pymatgen" ];
+
+  pytestFlagsArray = [
+    # We have not packaged moyopy yet.
+    "--deselect=tests/analysis/test_prototypes.py::test_get_protostructure_label_from_moyopy"
+  ];
 
   nativeCheckInputs = [
     addBinToPathHook
@@ -158,6 +167,9 @@ buildPythonPackage rec {
       "test_proj_bandstructure_plot"
       "test_structure"
       "test_structure_environments"
+
+      # attempt to insert nil object from objects[1]
+      "test_timer_10_2_7"
     ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [

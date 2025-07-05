@@ -66,7 +66,7 @@ lib.checkListOfEnum "${pname}: theme variants"
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "graphite-gtk-theme";
       rev = version;
       hash = "sha256-k93l/7DF0HSKPfiIxzBLz0mBflgbdYJyGLEmWZx3q7o=";
     };

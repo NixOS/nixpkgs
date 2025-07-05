@@ -9,25 +9,42 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sqruff";
-  version = "0.20.2";
+  version = "0.25.28";
 
   src = fetchFromGitHub {
     owner = "quarylabs";
     repo = "sqruff";
     tag = "v${version}";
-    hash = "sha256-Vlre3D1ydDqFdysf5no2rW2V2U/BimhCeV1vWZ2JPSM=";
+    hash = "sha256-Xea6jXQos5gyF1FeGF7B5YaQszqfsKhGw1k8j0m7J6c=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-sFKq7CxQ7yoPqDQOR9Nr111RCiSA6bK50QvhHkaU5Go=";
+  cargoHash = "sha256-agB//UDTsEje9pgig07dUy8/Fr+zx7/MC3AdLjqoKJY=";
 
   buildInputs = [
     rust-jemalloc-sys
   ];
 
-  # Patch the tests to find the binary
+  # Disable the `python` feature which doesn't work on Nix yet
+  buildNoDefaultFeatures = true;
+  # The jinja and dbt template engines require the `python` feature which we disabled, so we disable these tests
+  patches = [
+    ./disable-templaters-test.diff
+    ./disable-ui_with_dbt-test.diff
+    ./disable-ui_with_jinja-test.diff
+    ./disable-ui_with_python-test.diff
+  ];
+
+  # Patch the tests to find the sqruff binary
   postPatch = ''
-    substituteInPlace crates/cli/tests/ui.rs \
+    substituteInPlace \
+      crates/cli/tests/config_not_found.rs \
+      crates/cli/tests/configure_rule.rs \
+      crates/cli/tests/fix_parse_errors.rs \
+      crates/cli/tests/fix_return_code.rs \
+      crates/cli/tests/ui_github.rs \
+      crates/cli/tests/ui_json.rs \
+      crates/cli/tests/ui.rs \
       --replace-fail \
       'sqruff_path.push(format!("../../target/{}/sqruff", profile));' \
       'sqruff_path.push(format!("../../target/${stdenv.hostPlatform.rust.cargoShortTarget}/{}/sqruff", profile));'

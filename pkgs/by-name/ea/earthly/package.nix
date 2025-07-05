@@ -58,12 +58,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Build automation for the container era";
     homepage = "https://earthly.dev/";
     changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       zoedsoupe
       konradmalik
     ];

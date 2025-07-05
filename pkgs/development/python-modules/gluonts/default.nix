@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "gluonts";
-  version = "0.16.1";
+  version = "0.16.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "gluonts";
     tag = "v${version}";
-    hash = "sha256-i4yCNe8C9BZw6AZUDOZC1E9PQOOOoUovSZnOF1yzycM=";
+    hash = "sha256-h0+RYgGMz0gPchiKGIu0/NGcWBky5AWNTJKzoupn/iQ=";
   };
 
   build-system = [

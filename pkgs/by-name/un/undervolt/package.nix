@@ -6,6 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   version = "0.4.0";
+  format = "setuptools";
   pname = "undervolt";
 
   src = fetchFromGitHub {

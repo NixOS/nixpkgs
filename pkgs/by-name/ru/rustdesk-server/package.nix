@@ -43,13 +43,13 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "RustDesk Server Program";
     homepage = "https://github.com/rustdesk/rustdesk-server";
     changelog = "https://github.com/rustdesk/rustdesk-server/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       gaelreyrol
       tjni
     ];

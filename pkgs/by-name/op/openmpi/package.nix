@@ -285,5 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    # checking size of Fortran CHARACTER... configure: error: Can not determine size of CHARACTER when cross-compiling
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 })

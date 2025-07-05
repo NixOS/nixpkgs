@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/310673
   cargoPatches = [ ./rustc-serialize-fix.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Small command-line note-taking app";
     homepage = "https://github.com/samwho/hmm";
     changelog = "https://github.com/samwho/hmm/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

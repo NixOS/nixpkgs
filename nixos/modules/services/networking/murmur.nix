@@ -12,26 +12,26 @@ let
     database=${cfg.stateDir}/murmur.sqlite
     dbDriver=QSQLITE
 
-    autobanAttempts=${lib.toString cfg.autobanAttempts}
-    autobanTimeframe=${lib.toString cfg.autobanTimeframe}
-    autobanTime=${lib.toString cfg.autobanTime}
+    autobanAttempts=${toString cfg.autobanAttempts}
+    autobanTimeframe=${toString cfg.autobanTimeframe}
+    autobanTime=${toString cfg.autobanTime}
 
     logfile=${lib.optionalString (cfg.logFile != null) cfg.logFile}
     ${lib.optionalString forking "pidfile=/run/murmur/murmurd.pid"}
 
     welcometext="${cfg.welcometext}"
-    port=${lib.toString cfg.port}
+    port=${toString cfg.port}
 
     ${lib.optionalString (cfg.hostName != "") "host=${cfg.hostName}"}
     ${lib.optionalString (cfg.password != "") "serverpassword=${cfg.password}"}
 
-    bandwidth=${lib.toString cfg.bandwidth}
-    users=${lib.toString cfg.users}
+    bandwidth=${toString cfg.bandwidth}
+    users=${toString cfg.users}
 
-    textmessagelength=${lib.toString cfg.textMsgLength}
-    imagemessagelength=${lib.toString cfg.imgMsgLength}
+    textmessagelength=${toString cfg.textMsgLength}
+    imagemessagelength=${toString cfg.imgMsgLength}
     allowhtml=${lib.boolToString cfg.allowHtml}
-    logdays=${lib.toString cfg.logDays}
+    logdays=${toString cfg.logDays}
     bonjour=${lib.boolToString cfg.bonjour}
     sendversion=${lib.boolToString cfg.sendVersion}
 

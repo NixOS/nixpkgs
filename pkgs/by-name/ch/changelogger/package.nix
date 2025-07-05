@@ -34,12 +34,12 @@ buildGoModule rec {
       --zsh <($out/bin/changelogger completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to manage your changelog file in Markdown";
     homepage = "https://github.com/MarkusFreitag/changelogger";
     changelog = "https://github.com/MarkusFreitag/changelogger/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tomsiewert ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomsiewert ];
     mainProgram = "changelogger";
   };
 }

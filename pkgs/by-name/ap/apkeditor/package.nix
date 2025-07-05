@@ -68,7 +68,7 @@ let
       src = fetchFromGitHub {
         owner = "REAndroid";
         repo = "APKEditor";
-        rev = "V${version}";
+        tag = "v${version}";
         hash = "sha256-a72j9qGjJXnTFeqLez2rhBSArFVYCX+Xs7NQd8CY5Yk=";
       };
 

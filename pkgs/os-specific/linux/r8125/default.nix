@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r8125";
-  version = "9.015.00";
+  version = "9.016.00";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "r8125";
     tag = "upstream/${finalAttrs.version}";
-    hash = "sha256-RA7rvvF2Ngeu+hSACBbKfAJgLbPqhaXG14DH2NmztTE=";
+    hash = "sha256-dWsJNU25LxlXw9W+RVcC3zpHgsuUb+59OVidHqIYrYw=";
   };
 
   hardeningDisable = [ "pic" ];

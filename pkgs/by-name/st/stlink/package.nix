@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
       wrapGAppsHook3
     ];
 
+  doInstallCheck = true;
+
   cmakeFlags = [
     "-DSTLINK_MODPROBED_DIR=${placeholder "out"}/etc/modprobe.d"
     "-DSTLINK_UDEV_RULES_DIR=${placeholder "out"}/lib/udev/rules.d"

@@ -11,12 +11,12 @@ mkRocqDerivation {
   owner = "coq";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch rocq-core.rocq-version [
-      {
-        case = range "9.0" "9.0";
-        out = "9.0.0+rocq${rocq-core.rocq-version}";
-      }
+      (case (range "9.0" "9.0") "9.0.0+rocq${rocq-core.rocq-version}")
     ] null;
 
   release."9.0.0+rocq9.0".sha256 = "sha256-ctnwpyNVhryEUA5YEsAImrcJsNMhtBgDSOz+z5Z4R78=";

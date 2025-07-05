@@ -6,6 +6,7 @@
   libXinerama,
   libXft,
   writeText,
+  pkg-config,
   patches ? [ ],
   conf ? null,
   # update script dependencies
@@ -21,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ideev6ny+5MUGDbCZmy4H0eExp1k5/GyNS+blwuglyk=";
   };
 
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isStatic pkg-config;
+
   buildInputs = [
     libX11
     libXinerama
@@ -29,6 +32,10 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i "s@/usr/local@$out@" config.mk
+  '';
+
+  preBuild = lib.optional stdenv.hostPlatform.isStatic ''
+    makeFlagsArray+=(LDFLAGS="$(${stdenv.cc.targetPrefix}pkg-config --static --libs x11 xinerama xft)")
   '';
 
   # Allow users set their own list of patches

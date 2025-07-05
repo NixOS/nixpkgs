@@ -95,6 +95,5 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.andyetitmoves.net/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ bluescreen303 ];
   };
 }

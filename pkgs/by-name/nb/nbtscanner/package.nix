@@ -35,12 +35,12 @@ rustPlatform.buildRustPackage rec {
 
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "NetBIOS scanner written in Rust";
     homepage = "https://github.com/jonkgrimes/nbtscanner";
     changelog = "https://github.com/jonkgrimes/nbtscanner/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "nbtscanner";
   };
 }

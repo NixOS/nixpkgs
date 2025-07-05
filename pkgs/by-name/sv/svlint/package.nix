@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage rec {
     "svlint"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SystemVerilog linter";
     mainProgram = "svlint";
     homepage = "https://github.com/dalance/svlint";
     changelog = "https://github.com/dalance/svlint/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ trepetti ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ trepetti ];
   };
 }

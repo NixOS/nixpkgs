@@ -33,12 +33,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes object analysis with recommendations for improved reliability and security";
     mainProgram = "kube-score";
     homepage = "https://github.com/zegl/kube-score";
     changelog = "https://github.com/zegl/kube-score/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ j4m3s ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ j4m3s ];
   };
 }

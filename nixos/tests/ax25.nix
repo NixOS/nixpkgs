@@ -7,7 +7,6 @@ let
   socatPort = 1234;
 
   createAX25Node = nodeId: {
-    boot.kernelPackages = pkgs.linuxPackages_ham;
     boot.kernelModules = [ "ax25" ];
 
     networking.firewall.allowedTCPPorts = [ socatPort ];

@@ -40,14 +40,14 @@ buildPythonApplication rec {
 
   nativeCheckInputs = [
     hypothesis
-    pytest
+    pytestCheckHook
     pytest-recording
     pyyaml
     mypy-extensions
     click
     pylint
     flake8
-    pytest-cov
+    pytest-cov-stub
     pyyaml
   ];
 

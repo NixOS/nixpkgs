@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "cp210x-program";
   version = "0.4.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "VCTLabs";

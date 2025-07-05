@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dnsviz";
   version = "0.11.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dnsviz";

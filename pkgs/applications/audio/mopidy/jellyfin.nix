@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-jellyfin";
   version = "1.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

@@ -33,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Code autoformatter for Robot Framework";
     homepage = "https://robotidy.readthedocs.io";
     changelog = "https://github.com/MarketSquare/robotframework-tidy/blob/main/docs/releasenotes/${src.tag}.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "robotidy";
   };
 }

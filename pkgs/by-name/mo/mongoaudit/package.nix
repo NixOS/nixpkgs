@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mongoaudit";
   version = "0.1.1";
+  format = "setuptools";
 
   disabled = python3.pythonOlder "3.8";
 

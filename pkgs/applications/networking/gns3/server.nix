@@ -19,6 +19,7 @@
 python3Packages.buildPythonApplication {
   pname = "gns3-server";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     inherit hash;

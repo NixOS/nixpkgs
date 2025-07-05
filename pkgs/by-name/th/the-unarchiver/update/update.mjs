@@ -84,7 +84,7 @@ async function main() {
     process.exit(1);
   }
   const hash = child_process
-    .execSync(`nix hash convert --hash-algo sha256 --to sri ${prefetchHash}`)
+    .execSync(`nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri ${prefetchHash}`)
     .toString()
     .trim();
   /** @type {Info} */

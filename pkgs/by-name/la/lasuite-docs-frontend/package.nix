@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A collaborative note taking, wiki and documentation platform that scales. Built with Django and React. Opensource alternative to Notion or Outline";
+    description = "Collaborative note taking, wiki and documentation platform that scales. Built with Django and React. Opensource alternative to Notion or Outline";
     homepage = "https://github.com/suitenumerique/docs";
     changelog = "https://github.com/suitenumerique/docs/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;

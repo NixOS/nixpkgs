@@ -251,7 +251,7 @@ in
 
     systemd.services.weblate-postgresql-setup = {
       description = "Weblate PostgreSQL setup";
-      after = [ "postgresql.service" ];
+      after = [ "postgresql.target" ];
       serviceConfig = {
         Type = "oneshot";
         User = "postgres";
@@ -290,7 +290,7 @@ in
       after = [
         "network.target"
         "redis-weblate.service"
-        "postgresql.service"
+        "postgresql.target"
       ];
       # We want this to be active on boot, not just on socket activation
       wantedBy = [ "multi-user.target" ];

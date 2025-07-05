@@ -8,6 +8,7 @@
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-subidy";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Prior99";

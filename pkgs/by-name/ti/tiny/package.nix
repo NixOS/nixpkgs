@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional notificationSupport "desktop-notifications";
 
-  meta = with lib; {
+  meta = {
     description = "Console IRC client";
     homepage = "https://github.com/osa1/tiny";
     changelog = "https://github.com/osa1/tiny/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       vyp
     ];

@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
     version=$(jq -r '.version' <<< "$manifest")
     hash=$(jq -r '.checksum' <<< "$manifest")
 
-    update-source-version ${pname} "$version" "$hash" "$url" --file=./pkgs/applications/networking/instant-messengers/webex/default.nix
+    update-source-version ${pname} "$version" "$hash" "$url" --file=./pkgs/by-name/we/webex/package.nix
   '';
 
   meta = with lib; {

@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "7.1.1";
+  version = "7.1.4";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    hash = "sha256-GJ+OYe2DJ9VIMkwobQJxD1bGoV8k6ALkx9RpT3Cazis=";
+    hash = "sha256-z7LkQ/lc2pv73VBdKRKWUKWemTbX6xMtCmrgqK5QIZw=";
   };
 
   nativeBuildInputs = [

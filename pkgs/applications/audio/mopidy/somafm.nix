@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-somafm";
   version = "2.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

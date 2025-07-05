@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A fast, header-only C++ serialization library";
+    description = "Fast, header-only C++ serialization library";
     homepage = "https://github.com/google/libnop";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;

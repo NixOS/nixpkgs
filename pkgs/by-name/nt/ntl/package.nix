@@ -80,5 +80,8 @@ stdenv.mkDerivation rec {
     teams = [ teams.sage ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
+    # Does not cross compile
+    # https://github.com/libntl/ntl/issues/8
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 }

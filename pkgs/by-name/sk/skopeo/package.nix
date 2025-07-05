@@ -92,6 +92,7 @@ buildGoModule rec {
     maintainers = with maintainers; [
       lewo
       developer-guy
+      ryan4yin
     ];
     teams = [ teams.podman ];
     license = licenses.asl20;

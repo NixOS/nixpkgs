@@ -38,6 +38,7 @@ let
   dijitso = buildPythonPackage {
     pname = "dijitso";
     inherit version;
+    format = "setuptools";
     src = fetchurl {
       url = "https://bitbucket.org/fenics-project/dijitso/downloads/dijitso-${version}.tar.gz";
       sha256 = "1ncgbr0bn5cvv16f13g722a0ipw6p9y6p4iasxjziwsp8kn5x97a";
@@ -66,6 +67,7 @@ let
   fiat = buildPythonPackage {
     pname = "fiat";
     inherit version;
+    format = "setuptools";
     src = fetchurl {
       url = "https://bitbucket.org/fenics-project/fiat/downloads/fiat-${version}.tar.gz";
       sha256 = "1sbi0fbr7w9g9ajr565g3njxrc3qydqjy3334vmz5xg0rd3106il";
@@ -106,6 +108,7 @@ let
   ufl = buildPythonPackage {
     pname = "ufl";
     inherit version;
+    format = "setuptools";
     src = fetchurl {
       url = "https://bitbucket.org/fenics-project/ufl/downloads/ufl-${version}.tar.gz";
       sha256 = "04daxwg4y9c51sdgvwgmlc82nn0fjw7i2vzs15ckdc7dlazmcfi1";
@@ -131,6 +134,7 @@ let
   ffc = buildPythonPackage {
     pname = "ffc";
     inherit version;
+    format = "setuptools";
     src = fetchurl {
       url = "https://bitbucket.org/fenics-project/ffc/downloads/ffc-${version}.tar.gz";
       sha256 = "1zdg6pziss4va74pd7jjl8sc3ya2gmhpypccmyd8p7c66ji23y2g";
@@ -262,6 +266,7 @@ let
   python-dolfin = buildPythonPackage rec {
     pname = "dolfin";
     inherit version;
+    format = "setuptools";
     disabled = isPy27;
     src = dolfin.src;
     sourceRoot = "${pname}-${version}/python";

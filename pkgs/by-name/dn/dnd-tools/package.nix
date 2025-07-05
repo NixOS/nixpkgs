@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "dnd-tools";
   version = "unstable-2021-02-18";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "savagezen";

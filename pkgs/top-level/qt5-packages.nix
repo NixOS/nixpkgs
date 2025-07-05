@@ -202,8 +202,6 @@ makeScopeWithSplicing' {
 
         libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
-        libquotient = callPackage ../development/libraries/libquotient { };
-
         libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
         mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
@@ -326,8 +324,6 @@ makeScopeWithSplicing' {
         xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
 
         xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
-
-        yuview = callPackage ../applications/video/yuview { };
       }
     ))
   );

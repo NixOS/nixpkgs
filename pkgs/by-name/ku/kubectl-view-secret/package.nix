@@ -23,12 +23,12 @@ buildGoModule rec {
     mv $out/bin/cmd $out/bin/kubectl-view-secret
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes CLI plugin to decode Kubernetes secrets";
     mainProgram = "kubectl-view-secret";
     homepage = "https://github.com/elsesiy/kubectl-view-secret";
     changelog = "https://github.com/elsesiy/kubectl-view-secret/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.sagikazarmark ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sagikazarmark ];
   };
 }

@@ -1,12 +1,19 @@
 {
   buildPgrxExtension,
+  cargo-pgrx_0_12_6,
   postgresql,
   fetchFromGitHub,
   lib,
   postgresqlTestExtension,
 }:
 
-buildPgrxExtension (finalAttrs: {
+let
+  buildPgrxExtension' = buildPgrxExtension.override {
+    # Upstream only works with a fixed minor version of cargo-pgrx for each release.
+    cargo-pgrx = cargo-pgrx_0_12_6;
+  };
+in
+buildPgrxExtension' (finalAttrs: {
   pname = "pgvectorscale";
   version = "0.7.0";
 

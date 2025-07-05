@@ -64,12 +64,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_query_metadata2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Security and risk audit tool based on known vulnerabilities, advisories, and license limitations for project dependencies";
     homepage = "https://github.com/owasp-dep-scan/dep-scan";
     changelog = "https://github.com/owasp-dep-scan/dep-scan/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dep-scan";
   };
 }

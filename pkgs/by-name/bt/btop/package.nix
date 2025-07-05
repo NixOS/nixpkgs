@@ -51,15 +51,16 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Monitor of resources";
     homepage = "https://github.com/aristocratos/btop";
     changelog = "https://github.com/aristocratos/btop/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       khaneliman
       rmcgibbo
+      ryan4yin
     ];
     mainProgram = "btop";
   };

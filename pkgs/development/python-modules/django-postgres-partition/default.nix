@@ -1,39 +1,47 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitLab,
   setuptools,
-  django_5_2,
+  django,
   psycopg,
   python-dateutil,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "django-postgres-partition";
-  version = "0.1.1";
+  version = "0.1.4";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "django_postgres_partition";
-    hash = "sha256-KUrgnfUXWyRerW4dqtVZO9bu5jHYnHcVOIg97w695RU=";
+  src = fetchFromGitLab {
+    owner = "burke-software";
+    repo = "django-postgres-partition";
+    tag = version;
+    hash = "sha256-Wk+m75gO9iClN9/vXGBl27VcmqyE6c1xpQX+X1qcKuU=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "django" ];
+
   dependencies = [
-    django_5_2
+    django
     psycopg
     python-dateutil
   ];
 
-  doCheck = false; # pypi version doesn't ship with tests
+  # tests don't work yet, see https://gitlab.com/burke-software/django-postgres-partition/-/issues/4
+  doCheck = false;
 
   pythonImportsCheck = [ "psql_partition" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Partition support for django, based on django-postgres-extra";
     homepage = "https://gitlab.com/burke-software/django-postgres-partition";
+    changelog = "https://gitlab.com/burke-software/django-postgres-partition/-/releases/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
   };

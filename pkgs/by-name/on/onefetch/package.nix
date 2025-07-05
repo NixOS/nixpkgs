@@ -64,12 +64,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/onefetch --generate zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Git repository summary on your terminal";
     homepage = "https://github.com/o2sh/onefetch";
     changelog = "https://github.com/o2sh/onefetch/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       figsoda
       kloenk

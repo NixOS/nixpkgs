@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "alire-project";
     repo = "alire";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DfzCQu9xOe9JgX6RTrYOGTIS6EcPimLnd5pfXMtfRss=";
 
     fetchSubmodules = true;

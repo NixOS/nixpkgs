@@ -5,7 +5,6 @@
   dulwich,
   pbr,
   sphinx,
-  pythonAtLeast,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "openstackdocstheme";
   version = "3.5.0";
   pyproject = true;
-
-  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;

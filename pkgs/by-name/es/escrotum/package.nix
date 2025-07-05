@@ -13,6 +13,7 @@ with python3Packages;
 buildPythonApplication {
   pname = "escrotum";
   version = "unstable-2020-12-07";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Roger";

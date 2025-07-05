@@ -18,13 +18,13 @@
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.9.2";
+  version = "5.9.3";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     tag = "v${version}";
-    hash = "sha256-XVHw9AjngzbMnzRPJ/VL1Hy0gG3q+rV4Gfh8K7pIW6M=";
+    hash = "sha256-kbhDZbyNVct0GDhIr7mKyeVIkyV+Gc/gzbKnnv1FcQg=";
   };
 
   dependencies = [ hass-web-proxy-lib ];
@@ -40,6 +40,14 @@ buildHomeAssistantComponent rec {
     ]
     ++ (homeassistant.getPackages "mqtt" homeassistant.python.pkgs)
     ++ (homeassistant.getPackages "stream" homeassistant.python.pkgs);
+
+  disabledTests = [
+    # https://github.com/blakeblackshear/frigate-hass-integration/issues/922
+    "test_frigate_camera_setup"
+    "test_frigate_camera_setup_birdseye"
+    "test_frigate_camera_setup_webrtc"
+    "test_frigate_camera_setup_birdseye_webrtc"
+  ];
 
   disabledTestPaths = [
     # https://github.com/blakeblackshear/frigate-hass-integration/issues/907

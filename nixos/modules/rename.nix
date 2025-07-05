@@ -75,6 +75,9 @@ in
       "way-cooler is abandoned by its author: "
       + "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"
     ))
+    (mkRemovedOptionModule [ "programs" "yabar" ]
+      "programs.yabar has been removed from NixOS. This is because the yabar repository has been archived upstream."
+    )
     (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
       The hidepid module was removed, since the underlying machinery
       is broken when using cgroups-v2.
@@ -223,10 +226,18 @@ in
       "services"
       "shout"
     ] "shout was removed because it was deprecated upstream in favor of thelounge.")
+    (mkRemovedOptionModule [ "services" "siproxd" ] ''
+      The siproxd package and the corresponding module have been removed due to
+      the service being unmaintained. `services.asterisk.*` or `services.freeswitch.*`
+      could be used instead.
+    '')
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to
       the program being unmaintained. The options `programs.msmtp.*` can be
       used instead.
+    '')
+    (mkRemovedOptionModule [ "services" "sourcehut" ] ''
+      The sourcehut packages and the corresponding module have been removed due to being broken and unmaintained.
     '')
     (mkRemovedOptionModule [ "services" "tvheadend" ]
       "The tvheadend package and the corresponding module have been removed as nobody was willing to maintain them and they were stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version."

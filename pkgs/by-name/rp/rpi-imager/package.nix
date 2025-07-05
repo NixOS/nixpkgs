@@ -12,18 +12,20 @@
   util-linux,
   xz,
   gnutls,
+  zstd,
+  libtasn1,
   enableTelemetry ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "1.9.0";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-imager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7rkoOKG0yMSIgQjqBBFUMgX/4szHn2NXoBR+5PnKlH4=";
+    hash = "sha256-Ih7FeAKTKSvuwsrMgKQ0VEUYHHT6L99shxfAIjAzErk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -31,12 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
   # By default, the builder checks for JSON support in lsblk by running "lsblk --json",
   # but that throws an error, as /sys/dev doesn't exist in the sandbox.
   # This patch removes the check.
-  patches = [ ./lsblkCheckFix.patch ];
+  # remove-vendoring.patch from
+  # https://gitlab.archlinux.org/archlinux/packaging/packages/rpi-imager/-/raw/main/remove-vendoring.patch
+  patches = [ ./remove-vendoring-and-lsblk-check.patch ];
 
-  # avoid duplicate path prefixes
   postPatch = ''
-    substituteInPlace dependencies/xz-5.6.2/CMakeLists.txt \
-      --replace-fail '\''${D}/' ""
+    substituteInPlace ../debian/org.raspberrypi.rpi-imager.desktop \
+      --replace-fail "/usr/bin/" ""
   '';
 
   nativeBuildInputs = [
@@ -56,16 +59,23 @@ stdenv.mkDerivation (finalAttrs: {
       qt6.qttools
       xz
       gnutls
+      zstd
+      libtasn1
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       qt6.qtwayland
     ];
 
-  # Disable telemetry and update check.
-  cmakeFlags = lib.optionals (!enableTelemetry) [
-    "-DENABLE_CHECK_VERSION=OFF"
-    "-DENABLE_TELEMETRY=OFF"
-  ];
+  cmakeFlags =
+    # Disable vendoring
+    [
+      (lib.cmakeBool "ENABLE_VENDORING" false)
+    ]
+    # Disable telemetry and update check.
+    ++ lib.optionals (!enableTelemetry) [
+      (lib.cmakeBool "ENABLE_CHECK_VERSION" false)
+      (lib.cmakeBool "ENABLE_TELEMETRY" false)
+    ];
 
   passthru = {
     tests.version = testers.testVersion {

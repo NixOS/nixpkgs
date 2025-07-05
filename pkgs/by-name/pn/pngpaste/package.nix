@@ -4,25 +4,24 @@
   fetchFromGitHub,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "pngpaste";
   version = "0.2.3";
-in
-stdenv.mkDerivation {
-  inherit pname version;
+
   src = fetchFromGitHub {
     owner = "jcsalterego";
-    repo = pname;
-    rev = version;
+    repo = "pngpaste";
+    tag = finalAttrs.version;
     sha256 = "uvajxSelk1Wfd5is5kmT2fzDShlufBgC0PDCeabEOSE=";
   };
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp pngpaste $out/bin
+    runHook preInstall
+    install -Dm555 pngpaste $out/bin/pngpaste
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Paste image files from clipboard to file on MacOS";
     longDescription = ''
       Paste PNG into files on MacOS, much like pbpaste does for text.
@@ -32,9 +31,9 @@ stdenv.mkDerivation {
       falling back to PNG.
     '';
     homepage = "https://github.com/jcsalterego/pngpaste";
-    changelog = "https://github.com/jcsalterego/pngpaste/raw/${version}/CHANGELOG.md";
-    platforms = platforms.darwin;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ samw ];
+    changelog = "https://github.com/jcsalterego/pngpaste/raw/${finalAttrs.version}/CHANGELOG.md";
+    platforms = lib.platforms.darwin;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ samw ];
   };
-}
+})

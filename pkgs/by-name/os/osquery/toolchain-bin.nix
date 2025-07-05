@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A LLVM-based toolchain for Linux designed to build a portable osquery";
+    description = "LLVM-based toolchain for Linux designed to build a portable osquery";
     homepage = "https://github.com/osquery/osquery-toolchain";
     platforms = [
       "x86_64-linux"

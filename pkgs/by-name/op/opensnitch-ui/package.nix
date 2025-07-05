@@ -6,6 +6,7 @@
 }:
 
 python3Packages.buildPythonApplication {
+  format = "setuptools";
   pname = "opensnitch-ui";
 
   inherit (opensnitch) src version;
@@ -41,7 +42,7 @@ python3Packages.buildPythonApplication {
     make -C ../proto ../ui/opensnitch/ui_pb2.py
     # sourced from ui/Makefile
     pyrcc5 -o opensnitch/resources_rc.py opensnitch/res/resources.qrc
-    sed -i 's/^import ui_pb2/from . import ui_pb2/' opensnitch/ui_pb2*
+    sed -i 's/^import ui_pb2/from . import ui_pb2/' opensnitch/proto/ui_pb2*
   '';
 
   preCheck = ''

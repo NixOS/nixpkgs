@@ -49,10 +49,11 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
-    "h11" # https://github.com/NixOS/nixpkgs/pull/399393
+    "cryptography"
+    "flask"
     "h2"
     "passlib"
-    "typing-extensions" # https://github.com/NixOS/nixpkgs/pull/397082
+    "pyopenssl"
     "tornado"
   ];
 

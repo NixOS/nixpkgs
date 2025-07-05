@@ -44,14 +44,14 @@ stdenv.mkDerivation rec {
     "--runstatedir=/run/bird"
   ];
 
-  passthru.tests = nixosTests.bird;
+  passthru.tests = nixosTests.bird2;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.nic.cz/labs/bird/-/blob/v${version}/NEWS";
     description = "BIRD Internet Routing Daemon";
     homepage = "https://bird.network.cz";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ herbetom ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ herbetom ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -33,12 +33,12 @@ maven.buildMavenPackage {
       --add-flags "-jar $out/share/s3proxy/s3proxy-${version}-jar-with-dependencies.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Access other storage backends via the S3 API";
     mainProgram = "s3proxy";
     homepage = "https://github.com/gaul/s3proxy";
     changelog = "https://github.com/gaul/s3proxy/releases/tag/s3proxy-${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ camelpunch ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ camelpunch ];
   };
 }

@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "importlib-metadata";
   version = "2.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "importlib_metadata";

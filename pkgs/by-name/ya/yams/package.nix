@@ -8,6 +8,7 @@ python3Packages.buildPythonPackage rec {
   pname = "yams";
   # nixpkgs-update: no auto update
   version = "0.7.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Berulacks";

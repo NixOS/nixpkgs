@@ -39,6 +39,7 @@ python.pkgs.buildPythonApplication rec {
     "botocore"
     "colorama"
     "pathspec"
+    "packaging"
     "PyYAML"
     "six"
     "termcolor"
@@ -54,7 +55,6 @@ python.pkgs.buildPythonApplication rec {
     fabric
     pathspec
     pyyaml
-    future
     requests
     semantic-version
     setuptools
@@ -93,12 +93,12 @@ python.pkgs.buildPythonApplication rec {
     "test_aws_eb_profile_environment_variable_found__profile_exists_in_credentials_file"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for Elastic Beanstalk";
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kirillrdy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kirillrdy ];
     mainProgram = "eb";
   };
 }

@@ -19,6 +19,7 @@
   dissect-jffs,
   dissect-ntfs,
   dissect-ole,
+  dissect-qnxfs,
   dissect-regf,
   dissect-shellitem,
   dissect-sql,
@@ -36,16 +37,16 @@
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.18";
+  version = "3.19";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect";
     tag = version;
-    hash = "sha256-3yy7BA6FJgAdn2lMSJgyFeVDxJg0f0RWsekkqiqxd7M=";
+    hash = "sha256-eEiWKblhJPkZuxJvwJnHtxwvJ9uhXIkS56CeRtmEfkU=";
   };
 
   pythonRelaxDeps = true;
@@ -74,6 +75,7 @@ buildPythonPackage rec {
     dissect-jffs
     dissect-ntfs
     dissect-ole
+    dissect-qnxfs
     dissect-regf
     dissect-shellitem
     dissect-sql

@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
 
   GEN_ARTIFACTS = "artifacts";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line submission tool for the UMD CS Submit Server";
     homepage = "https://github.com/figsoda/sagoin";
     changelog = "https://github.com/figsoda/sagoin/blob/v${version}/CHANGELOG.md";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "sagoin";
   };
 }

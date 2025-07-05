@@ -13,6 +13,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "screenkey";
   version = "1.5";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "screenkey";

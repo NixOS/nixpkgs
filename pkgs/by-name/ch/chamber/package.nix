@@ -26,7 +26,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A tool for managing secrets by storing them in AWS SSM Parameter Store";
+    description = "Tool for managing secrets by storing them in AWS SSM Parameter Store";
     homepage = "https://github.com/segmentio/chamber";
     license = licenses.mit;
     maintainers = with maintainers; [ kalekseev ];

@@ -1,4 +1,5 @@
 {
+  arrayUtilities,
   lib,
   stdenvNoCC,
 }:
@@ -21,7 +22,10 @@ lib.makeOverridable (
     inherit name;
 
     nativeBuildInputs = [
+      arrayUtilities.isDeclaredArray
       ./assert-equal-array.sh
+      arrayUtilities.isDeclaredMap
+      arrayUtilities.getSortedMapKeys
       ./assert-equal-map.sh
     ];
 

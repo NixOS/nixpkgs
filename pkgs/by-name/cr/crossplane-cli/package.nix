@@ -40,12 +40,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.crossplane.io/";
     changelog = "https://github.com/crossplane/crossplane/releases/tag/v${version}";
     description = "Utility to make using Crossplane easier";
     mainProgram = "crossplane";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ selfuryon ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ selfuryon ];
   };
 }

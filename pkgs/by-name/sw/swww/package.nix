@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swww";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "LGFae";
     repo = "swww";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HEocjIsij9k4NjcmI8YRW6yzrYh+i3XN9YkRTr5fzDE=";
+    hash = "sha256-GXqXZn29r7ktL01KBzlPZ+9b1fdnAPF8qhsQxhiqAsQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-muWY99OtzG0AumbKpYoxNSjhXHYmkiwElVUdp2zE8a0=";
+  cargoHash = "sha256-jCjeHeHML8gHtvFcnHbiGL5fZ3LhABhXrcUTQriUDc0=";
 
   buildInputs = [
     lz4

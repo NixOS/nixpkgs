@@ -107,15 +107,15 @@ stdenv.mkDerivation rec {
     inherit broker;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Network analysis framework much different from a typical IDS";
     homepage = "https://www.zeek.org";
     changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       pSub
       tobim
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

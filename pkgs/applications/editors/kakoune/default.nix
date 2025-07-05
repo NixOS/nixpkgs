@@ -6,13 +6,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kakoune-unwrapped";
-  version = "2024.05.18";
+  version = "2025.06.03";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1nYSVbvQ4tz1r8p7zCD6w/79haqpelb15qva9r3Fwew=";
+    hash = "sha256-AJvh6NVFpbPsyzfeii/5muE+i4TwfxhwhDVgMLYOJCM=";
   };
+
   makeFlags = [
     "debug=no"
     "PREFIX=${placeholder "out"}"
@@ -23,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+  preBuild = ''
+    appendToVar makeFlags "CXX=$CXX"
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

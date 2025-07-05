@@ -101,7 +101,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "An open world, open source voxel RPG";
+    description = "Open world, open source voxel RPG";
     homepage = "https://www.veloren.net";
     license = licenses.gpl3;
     mainProgram = "veloren-voxygen";

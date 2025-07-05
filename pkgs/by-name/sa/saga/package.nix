@@ -33,22 +33,14 @@
 
 stdenv.mkDerivation rec {
   pname = "saga";
-  version = "9.7.2";
+  version = "9.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    hash = "sha256-1nWpFGRBS49uzKl7m/4YWFI+3lvm2zKByYpR9llxsgY=";
+    hash = "sha256-NCNeTxR4eWMJ3OHcBEQ2MZky9XiEExPscGhriDvXYf8=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";
-
-  patches = [
-    # Patches from https://sourceforge.net/p/saga-gis/code/merge-requests/38/.
-    # These are needed to fix building on Darwin (technically the first is not
-    # required, but the second doesn't apply without it).
-    ./darwin-patch-1.patch
-    ./darwin-patch-2.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -89,16 +81,16 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "OpenMP_SUPPORT" (!stdenv.hostPlatform.isDarwin))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "System for Automated Geoscientific Analyses";
     homepage = "https://saga-gis.sourceforge.io";
     changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog ${version}/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       michelk
       mpickering
     ];
-    teams = [ teams.geospatial ];
-    platforms = with platforms; unix;
+    teams = [ lib.teams.geospatial ];
+    platforms = with lib.platforms; unix;
   };
 }

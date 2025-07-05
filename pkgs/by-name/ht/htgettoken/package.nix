@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "htgettoken";
   version = "2.2-2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fermitools";

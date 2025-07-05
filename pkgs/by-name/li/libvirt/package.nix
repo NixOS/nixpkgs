@@ -115,14 +115,14 @@ assert enableZfs -> isLinux;
 stdenv.mkDerivation rec {
   pname = "libvirt";
   # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "11.0.0";
+  version = "11.4.0";
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-QxyOc/RbWZnjA4XIDNK7xZqBcP2ciHsOlszaa5pl6XA=";
+    hash = "sha256-0bOX95Ly8d1/XZan/EyxI6JaACJvOu9QsTkFNQTreqI=";
   };
 
   patches =
@@ -407,13 +407,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests.libvirtd = nixosTests.libvirtd;
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     homepage = "https://libvirt.org/";
     changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       fpletz
       globin
       lovesegfault

@@ -259,13 +259,13 @@ in
     wantedBy = [ "multi-user.target" ];
     after = [
       "network.target"
-      "postgresql.service"
+      "postgresql.target"
     ];
     # note that if you are connecting to a postgres instance on a different host
-    # postgresql.service should not be included in the requires.
+    # postgresql.target should not be included in the requires.
     requires = [
       "network-online.target"
-      "postgresql.service"
+      "postgresql.target"
     ];
     description = "my app";
     environment = {
@@ -295,6 +295,8 @@ in
       '';
       Restart = "on-failure";
       RestartSec = 5;
+    };
+    unitConfig = {
       StartLimitBurst = 3;
       StartLimitInterval = 10;
     };

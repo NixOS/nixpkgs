@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VKYeJwAc4pMpF1dWBnx5D39ffNk7eGpJI2es+GAxdow=";
   };
 

@@ -40,7 +40,7 @@ let
             src = fetchFromGitHub {
               owner = "be5invis";
               repo = "iosevka";
-              rev = "v32.5.0";
+              tag = "v32.5.0";
               hash = "sha256-MzsAkq5l4TP19UJNPW/8hvIqsJd94pADrrv8wLG6NMQ=";
             };
 

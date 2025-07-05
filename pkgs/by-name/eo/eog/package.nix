@@ -122,13 +122,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME image viewer";
     homepage = "https://gitlab.gnome.org/GNOME/eog";
     changelog = "https://gitlab.gnome.org/GNOME/eog/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
     mainProgram = "eog";
   };
 }

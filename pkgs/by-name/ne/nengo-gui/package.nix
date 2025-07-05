@@ -7,6 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "nengo-gui";
   version = "0.4.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nengo";

@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-mpris";
   version = "3.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

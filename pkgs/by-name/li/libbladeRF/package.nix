@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
     sed -i 's/$(hostname)/hostname/' host/utilities/bladeRF-cli/src/cmd/doc/generate.bash
   '';
 
+  doInstallCheck = true;
+
   cmakeFlags =
     [
       "-DBUILD_DOCUMENTATION=ON"

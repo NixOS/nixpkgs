@@ -63,6 +63,8 @@ rustPlatform.buildRustPackage rec {
   # Tests are long to compile
   doCheck = false;
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
     description = "Collection of engines that power the core stack for Prisma";
     homepage = "https://www.prisma.io/";
@@ -70,7 +72,6 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.unix;
     mainProgram = "prisma";
     maintainers = with maintainers; [
-      pimeys
       tomhoule
       aqrln
     ];

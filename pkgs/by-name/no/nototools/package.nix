@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nototools";
   version = "0.2.20";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "googlefonts";

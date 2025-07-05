@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "kqueue(2) compatibility library";
     homepage = "https://github.com/mheily/libkqueue";
     changelog = "https://github.com/mheily/libkqueue/raw/v${version}/ChangeLog";
-    license = licenses.bsd2;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

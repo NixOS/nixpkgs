@@ -258,12 +258,12 @@ stdenv.mkDerivation rec {
     ffmpeg = ffmpeg.override { withVpx = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "WebM VP8/VP9 codec SDK";
     homepage = "https://www.webmproject.org/";
     changelog = "https://github.com/webmproject/libvpx/raw/v${version}/CHANGELOG";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ codyopel ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ codyopel ];
+    platforms = lib.platforms.all;
   };
 }

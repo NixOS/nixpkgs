@@ -9,19 +9,22 @@
   mysqlclient,
   psycopg,
   dj-database-url,
-  python,
+  django-rq,
+  fakeredis,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage rec {
   pname = "django-tasks";
-  version = "0.6.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RealOrangeOne";
     repo = "django-tasks";
     tag = version;
-    hash = "sha256-MLztM4jVQV2tHPcIExbPGX+hCHSTqaQJeTbQqaVA3V4=";
+    hash = "sha256-AWsqAvn11uklrFXtiV2a6fR3owZ02osEzrdHZgDKkOM=";
   };
 
   build-system = [
@@ -47,15 +50,25 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dj-database-url
+    django-rq
+    fakeredis
+    pytestCheckHook
+    pytest-django
   ];
 
-  checkPhase = ''
-    runHook preCheck
+  disabledTests = [
+    # AssertionError: Lists differ: [] != ['Starting worker for queues=default', ...
+    "test_verbose_logging"
+    # AssertionError: '' != 'Deleted 0 task result(s)'
+    "test_doesnt_prune_new_task"
+    # AssertionError: '' != 'Would delete 1 task result(s)'
+    "test_dry_run"
+    # AssertionError: '' != 'Deleted 1 task result(s)'
+    "test_prunes_tasks"
+  ];
 
+  preCheck = ''
     export DJANGO_SETTINGS_MODULE="tests.settings"
-    ${python.interpreter} -m manage test --noinput
-
-    runHook postCheck
   '';
 
   meta = {

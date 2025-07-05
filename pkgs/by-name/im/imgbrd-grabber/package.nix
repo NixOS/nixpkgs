@@ -57,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs ../scripts/package.sh
   '';
 
+  patches = [
+    ./fix-for-qt6.patch
+  ];
+
   postPatch = ''
 
     # ensure the script uses the rsync package from nixpkgs

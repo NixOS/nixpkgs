@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ gtest ];
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/uriparser/uriparser/blob/uriparser-${version}/ChangeLog";
     description = "Strictly RFC 3986 compliant URI parsing library";
     longDescription = ''
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
       API documentation is available on uriparser website.
     '';
     homepage = "https://uriparser.github.io/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bosu ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bosu ];
     mainProgram = "uriparse";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

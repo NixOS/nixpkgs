@@ -10,21 +10,20 @@
   gmp,
   python3,
   gtest,
-  libantlr3c,
-  antlr3_4,
   boost,
   jdk,
+  libpoly,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cvc5";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "cvc5";
     repo = "cvc5";
     rev = "cvc5-${version}";
-    hash = "sha256-mTWPGYeUH05qmLYUtNpsFXicUm3GMrQC06t7Z4J1YQ0=";
+    hash = "sha256-w8rIGPG9BTEPV9HG2U40A4DYYnC6HaWbzqDKCRhaT00=";
   };
 
   nativeBuildInputs = [
@@ -37,10 +36,9 @@ stdenv.mkDerivation rec {
     symfpu
     gmp
     gtest
-    libantlr3c
-    antlr3_4
     boost
     jdk
+    libpoly
     (python3.withPackages (
       ps: with ps; [
         pyparsing
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=1"
-    "-DANTLR3_JAR=${antlr3_4}/lib/antlr/antlr-3.4-complete.jar"
+    "-DUSE_POLY=ON"
   ];
 
   doCheck = true;

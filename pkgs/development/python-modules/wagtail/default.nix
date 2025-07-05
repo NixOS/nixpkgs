@@ -46,6 +46,8 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [ "django-tasks" ];
+
   dependencies = [
     anyascii
     beautifulsoup4

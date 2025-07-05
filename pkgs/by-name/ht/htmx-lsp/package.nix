@@ -2,21 +2,24 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "htmx-lsp";
-  version = "0.1.0";
+  version = "0.1.0-unstable-2025-06-14";
 
   src = fetchFromGitHub {
     owner = "ThePrimeagen";
     repo = "htmx-lsp";
-    rev = version;
-    hash = "sha256-CvQ+vgo3+qUOj0SS6/NrapzXkP98tpiZbGhRHJxEqeo=";
+    rev = "c45f55b2bf8be2d92489fd6d69a3db07fe5f214b";
+    hash = "sha256-7CAlYYwsanlOCGeY7gYE5Fzk5IEO4hThgINiJmXql7s=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EQHNFiyQ7TwY4LldMFOTX0epilU76LPOiHQIIUsNhS8=";
+  cargoHash = "sha256-/ypaTrctJo88DHtF/hv6B0dqB06axd/qKFnuI8zs8KA=";
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Language server implementation for htmx";

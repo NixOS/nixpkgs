@@ -4,9 +4,9 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  testers,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
   nix-update-script,
-  dprint,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -62,20 +62,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --fish <($out/bin/dprint completions fish)
     '';
 
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/dprint";
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+
   passthru = {
-    tests.version = testers.testVersion {
-      inherit (finalAttrs) version;
-
-      package = dprint;
-      command = ''
-        DPRINT_CACHE_DIR="$(mktemp --directory)" dprint --version
-      '';
-    };
-
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Code formatting platform written in Rust";
     longDescription = ''
       dprint is a pluggable and configurable code formatting platform written in Rust.
@@ -84,8 +84,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     changelog = "https://github.com/dprint/dprint/releases/tag/${finalAttrs.version}";
     homepage = "https://dprint.dev";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       khushraj
       kachick
       phanirithvij

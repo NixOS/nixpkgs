@@ -102,6 +102,12 @@ in
 writeTextFile rec {
   name = "sage-env";
   destination = "/${name}";
+
+  passthru = {
+    lib = sagelib;
+    docbuild = sage-docbuild;
+  };
+
   text =
     ''
       export PKG_CONFIG_PATH='${
@@ -204,9 +210,4 @@ writeTextFile rec {
             ]
           }''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
       '';
-}
-// {
-  # equivalent of `passthru`, which `writeTextFile` doesn't support
-  lib = sagelib;
-  docbuild = sage-docbuild;
 }

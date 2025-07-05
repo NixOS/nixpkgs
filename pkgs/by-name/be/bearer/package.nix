@@ -34,11 +34,11 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Code security scanning tool (SAST) to discover, filter and prioritize security and privacy risks";
     homepage = "https://github.com/bearer/bearer";
     changelog = "https://github.com/Bearer/bearer/releases/tag/v${version}";
-    license = with licenses; [ elastic20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ elastic20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

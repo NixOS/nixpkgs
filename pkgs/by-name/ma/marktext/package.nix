@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/opt/marktext $out/bin
 
-    install -Dm644 resources/linux/marktext.desktop $out/share/application/marktext.desktop
+    install -Dm644 resources/linux/marktext.desktop $out/share/applications/marktext.desktop
 
     pushd resources/icons/
 

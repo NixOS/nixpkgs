@@ -16,6 +16,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "fluxboxlauncher";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mothsart";

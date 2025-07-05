@@ -6,6 +6,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "pywalfox-native";
   version = "2.7.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Frewacom";

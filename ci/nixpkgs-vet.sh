@@ -63,4 +63,4 @@ git -C "$tmp/merged" merge -q --no-edit "$baseSha"
 trace -e "\e[34m$(git -C "$tmp/merged" rev-parse HEAD)\e[0m"
 
 trace "Running nixpkgs-vet.."
-nix-build ci -A nixpkgs-vet --argstr base "$tmp/base" --argstr head "$tmp/merged"
+nix-build ci -A nixpkgs-vet --arg base "$tmp/base" --arg head "$tmp/merged"

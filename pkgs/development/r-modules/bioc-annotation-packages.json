@@ -1043,8 +1043,8 @@
     },
     "IlluminaHumanMethylationMSAmanifest": {
       "name": "IlluminaHumanMethylationMSAmanifest",
-      "version": "0.1.0",
-      "sha256": "01q7i5a2zc9pby9ivsqq8pdp80732akq4g8d594h9dn6qgm0znz3",
+      "version": "0.1.1",
+      "sha256": "1ksw8nr4ghvih4imc9bj7xm1wvnw5wg4mhzw8mcvdvw3bjz4ly64",
       "depends": ["minfi"]
     },
     "JASPAR2018": {

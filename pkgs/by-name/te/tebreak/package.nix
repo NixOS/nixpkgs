@@ -12,6 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "tebreak";
   version = "1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adamewing";

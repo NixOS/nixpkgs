@@ -14,17 +14,13 @@
 
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
-    lib.switch coq.version [
-      {
-        case = isEq "9.0";
-        out = "9.0.0";
-      }
-      # the one below is artificial as stdlib was included in Coq before
-      {
-        case = isLt "9.0";
-        out = "9.0.0";
-      }
+    lib.switch coq.coq-version [
+      (case (isLe "9.0") "9.0.0")
+      # the < 9.0 above is artificial as stdlib was included in Coq before
     ] null;
   releaseRev = v: "V${v}";
 

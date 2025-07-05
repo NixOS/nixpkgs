@@ -18,7 +18,7 @@ let
     .${system};
 
   # Get hash in sri format
-  # nix-prefetch-url <url> | xargs nix hash convert --hash-algo sha256
+  # nix-prefetch-url <url> | xargs nix --extra-experimental-features nix-command hash convert --hash-algo sha256
   hash =
     {
       x86_64-linux = "sha256-DK5+VT4+OCcJ4Bbv6GGs6R332GMsD1gNEmcz0iaJb1c=";

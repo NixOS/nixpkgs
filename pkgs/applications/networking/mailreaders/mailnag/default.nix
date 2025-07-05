@@ -25,6 +25,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "mailnag";
   version = "2.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pulb";

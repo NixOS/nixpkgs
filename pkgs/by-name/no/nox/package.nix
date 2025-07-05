@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nox";
   version = "0.0.6";
+  format = "setuptools";
   namePrefix = "";
 
   src = fetchurl {

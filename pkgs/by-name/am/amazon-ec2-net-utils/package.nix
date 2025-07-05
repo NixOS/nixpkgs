@@ -12,18 +12,19 @@
   makeWrapper,
   nix-update-script,
   systemd,
+  udevCheckHook,
   util-linux,
 }:
 
 stdenv.mkDerivation rec {
   pname = "amazon-ec2-net-utils";
-  version = "2.5.5";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "amazonlinux";
     repo = "amazon-ec2-net-utils";
     tag = "v${version}";
-    hash = "sha256-FHPJeyXrnf0+aeh1YqFXWz7qreLs6FHpZuPArt/nkIo=";
+    hash = "sha256-PtnRgNmVrIGndLjYjXWWx85z4oxjn637iZqXd6OSiQg=";
   };
 
   strictDeps = true;
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -100,6 +102,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
 
   outputs = [
     "out"

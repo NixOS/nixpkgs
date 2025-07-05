@@ -8,6 +8,7 @@
   bash,
   makeWrapper,
   perlPackages,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,26 +33,21 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace scripts/scripts.pro \
-      --replace /bin/true ${coreutils}/bin/true
-
-    for i in src/SysUtil.cpp src/FileSizeStatsWindow.cpp
-    do
-      substituteInPlace $i \
-        --replace /usr/bin/xdg-open ${xdg-utils}/bin/xdg-open
-    done
-    for i in src/Cleanup.cpp src/cleanup-config-page.ui
-    do
-      substituteInPlace $i \
-        --replace /bin/bash ${bash}/bin/bash \
-        --replace /bin/sh ${bash}/bin/sh
-    done
+      --replace-fail /bin/true ${coreutils}/bin/true
+    substituteInPlace src/SysUtil.cpp src/FileSizeStatsWindow.cpp \
+      --replace-fail /usr/bin/xdg-open ${xdg-utils}/bin/xdg-open
+    substituteInPlace src/Cleanup.cpp src/cleanup-config-page.ui \
+      --replace-fail /bin/bash ${bash}/bin/bash \
+      --replace-fail /bin/sh ${bash}/bin/sh
+    substituteInPlace src/MountPoints.cpp \
+      --replace-fail /bin/lsblk ${util-linux}/bin/lsblk
     substituteInPlace src/StdCleanup.cpp \
-      --replace /bin/bash ${bash}/bin/bash
+      --replace-fail /bin/bash ${bash}/bin/bash
   '';
 
   qmakeFlags = [ "INSTALL_PREFIX=${placeholder "out"}" ];
 
-  postInstall = ''
+  postFixup = ''
     wrapProgram $out/bin/qdirstat-cache-writer \
       --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.URI ]}"
   '';

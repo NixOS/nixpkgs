@@ -50,13 +50,13 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Highly available Prometheus setup with long term storage capabilities";
     homepage = "https://github.com/thanos-io/thanos";
     changelog = "https://github.com/thanos-io/thanos/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "thanos";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       basvandijk
       anthonyroussel
     ];

@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "savepagenow";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pastpages";

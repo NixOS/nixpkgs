@@ -46,7 +46,7 @@ writeScript "update-librewolf" ''
   repoUrl=https://codeberg.org/librewolf/source.git
   nix-prefetch-git $repoUrl --quiet --rev $latestTag --fetch-submodules > $prefetchOut
   srcDir=$(jq -r .path < $prefetchOut)
-  srcHash=$(nix hash convert --to sri --hash-algo sha256 $(jq -r .sha256 < $prefetchOut))
+  srcHash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(jq -r .sha256 < $prefetchOut))
 
   ffVersion=$(<$srcDir/version)
   lwRelease=$(<$srcDir/release)
@@ -68,7 +68,7 @@ writeScript "update-librewolf" ''
   curl --silent --show-error -o "$HOME"/shasums.asc "$mozillaUrl$ffVersion/SHA512SUMS.asc"
   gpgv --keyring="$GNUPGHOME"/pubring.kbx "$HOME"/shasums.asc "$HOME"/shasums
 
-  ffHash=$(nix hash convert --to sri --hash-algo sha512 $(grep '\.source\.tar\.xz$' "$HOME"/shasums | grep '^[^ ]*' -o))
+  ffHash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha512 $(grep '\.source\.tar\.xz$' "$HOME"/shasums | grep '^[^ ]*' -o))
   echo "ffHash=$ffHash"
 
   jq ".source.rev = \"$latestTag\"" $srcJson | sponge $srcJson

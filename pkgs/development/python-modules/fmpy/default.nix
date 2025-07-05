@@ -119,7 +119,7 @@ buildPythonPackage rec {
       cmakeConfigurePhase
       cmake --build native/src/build --config Release
     ''
-    + lib.optionalString (enableRemoting && stdenv.isLinux) ''
+    + lib.optionalString (enableRemoting && stdenv.hostPlatform.isLinux) ''
       # reimplementation of native/build_remoting.py
       cmakeFlags="-S native/remoting -B remoting/linux64 -D RPCLIB=${rpclib}"
       cmakeConfigurePhase

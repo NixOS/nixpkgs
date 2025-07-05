@@ -37,7 +37,7 @@ ecmPostHook() {
     appendToVar cmakeFlags "-DKDE_INSTALL_APPDIR=${!outputBin}/share/applications"
     appendToVar cmakeFlags "-DKDE_INSTALL_DESKTOPDIR=${!outputBin}/share/desktop-directories"
     appendToVar cmakeFlags "-DKDE_INSTALL_MIMEDIR=${!outputBin}/share/mime/packages"
-    appendToVar cmakeFlags "-DKDE_INSTALL_METAINFODIR=${!outputBin}/share/appdata"
+    appendToVar cmakeFlags "-DKDE_INSTALL_METAINFODIR=${!outputBin}/share/metainfo"
     appendToVar cmakeFlags "-DKDE_INSTALL_MANDIR=${!outputBin}/share/man"
     appendToVar cmakeFlags "-DKDE_INSTALL_INFODIR=${!outputBin}/share/info"
     appendToVar cmakeFlags "-DKDE_INSTALL_DBUSDIR=${!outputBin}/share/dbus-1"

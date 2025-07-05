@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "accelergy";
   version = "unstable-2022-05-03";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Accelergy-Project";
@@ -22,10 +23,10 @@ python3Packages.buildPythonApplication {
     setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Architecture-level energy/area estimator for accelerator designs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://accelergy.mit.edu/";
-    maintainers = with maintainers; [ gdinh ];
+    maintainers = with lib.maintainers; [ gdinh ];
   };
 }
