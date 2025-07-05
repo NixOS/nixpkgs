@@ -10869,12 +10869,6 @@
     githubId = 54999;
     name = "Ariel Nunez";
   };
-  interdependence = {
-    email = "git@williamvandervalk.com";
-    github = "interdependence";
-    githubId = 45567423;
-    name = "William Vandervalk";
-  };
   Intuinewin = {
     email = "antoinelabarussias@gmail.com";
     github = "Intuinewin";
