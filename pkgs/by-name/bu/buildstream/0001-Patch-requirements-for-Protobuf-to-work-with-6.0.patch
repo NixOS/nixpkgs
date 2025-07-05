@@ -1,0 +1,44 @@
+From 987cce4e44a6eab59bd4779414ed5f259e171e12 Mon Sep 17 00:00:00 2001
+From: Dom Rodriguez <dom.rodriguez@codethink.co.uk>
+Date: Wed, 2 Jul 2025 18:48:34 +0100
+Subject: [PATCH] Patch requirements for Protobuf to work with > 6.0
+
+This is necessary for both Nixpkgs and Fedora.
+
+Subject to change.
+
+cc: @jjardon.
+---
+ requirements/requirements.in  | 2 +-
+ requirements/requirements.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/requirements/requirements.in b/requirements/requirements.in
+index 0143405be..025588b60 100644
+--- a/requirements/requirements.in
++++ b/requirements/requirements.in
+@@ -4,7 +4,7 @@ Jinja2 >= 2.10
+ importlib_metadata >= 3.6; python_version < "3.10"
+ packaging
+ pluginbase
+-protobuf <6.0dev,>=5.26.1
++protobuf >=5.26.1
+ psutil
+ ruamel.yaml >= 0.16.7
+ ruamel.yaml.clib >= 0.1.2
+diff --git a/requirements/requirements.txt b/requirements/requirements.txt
+index 910b71755..8ea318e29 100644
+--- a/requirements/requirements.txt
++++ b/requirements/requirements.txt
+@@ -3,7 +3,7 @@ grpcio==1.68.0
+ Jinja2==3.1.4
+ packaging==24.2
+ pluginbase==1.0.1
+-protobuf==5.28.3
++protobuf>=5.26.1
+ psutil==6.1.0
+ ruamel.yaml==0.18.6
+ ruamel.yaml.clib==0.2.12
+-- 
+2.49.0
+
