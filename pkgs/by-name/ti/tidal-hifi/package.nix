@@ -197,7 +197,9 @@ buildNpmPackage (self: {
       qbit
       spikespaz
     ];
-    platforms = lib.platforms.linux;
+    # `castlabs-electron` doesn't have a distribution for `aarch64-linux`.
+    # See: <https://github.com/castlabs/electron-releases/issues/198>
+    platforms = [ "x86_64-linux" ];
     mainProgram = "tidal-hifi";
   };
 })
