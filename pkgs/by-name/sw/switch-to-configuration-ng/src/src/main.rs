@@ -259,6 +259,8 @@ fn parse_systemd_ini(data: &mut UnitInfo, mut unit_file: impl Read) -> Result<()
         &unit_file_content,
         ParseOption {
             enabled_quote: true,
+            enabled_indented_mutiline_value: false,
+            enabled_preserve_key_leading_whitespace: false,
             // Allow for escaped characters that won't get interpreted by the INI parser. These
             // often show up in systemd unit files device/mount/swap unit names (e.g. dev-disk-by\x2dlabel-root.device).
             enabled_escape: false,
