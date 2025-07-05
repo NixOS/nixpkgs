@@ -6,6 +6,7 @@
   cryptopp,
   cpp-jwt,
   doxygen,
+  dynarmic,
   enet,
   fetchpatch,
   fetchzip,
@@ -27,12 +28,14 @@
   pipewire,
   pkg-config,
   portaudio,
+  robin-map,
   SDL2,
   sndio,
   spirv-tools,
   soundtouch,
   stdenv,
   vulkan-headers,
+  xbyak,
   xorg,
   zstd,
   enableQtTranslations ? true,
@@ -73,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       catch2_3
       cryptopp
       cpp-jwt
+      dynarmic
       enet
       fmt
       ffmpeg_6-headless
@@ -89,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       openssl
       pipewire
       portaudio
+      robin-map
       qt6.qtbase
       qt6.qtmultimedia
       qt6.qttools
@@ -98,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       sndio
       spirv-tools
       vulkan-headers
+      xbyak
       xorg.libX11
       xorg.libXext
       zstd
@@ -121,10 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Fix "file not found" bug when looking in var/empty instead of opt
-    mkdir externals/dynarmic/src/dynarmic/ir/var
-    ln -s ../opt externals/dynarmic/src/dynarmic/ir/var/empty
-
     # We already know the submodules are present
     substituteInPlace CMakeLists.txt \
       --replace-fail "check_submodules_present()" ""
@@ -136,10 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (cmakeBool "USE_SYSTEM_LIBS" true)
-    (cmakeBool "DISABLE_SYSTEM_DYNARMIC" true)
     (cmakeBool "DISABLE_SYSTEM_LODEPNG" true)
     (cmakeBool "DISABLE_SYSTEM_VMA" true)
-    (cmakeBool "DISABLE_SYSTEM_XBYAK" true)
     (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
