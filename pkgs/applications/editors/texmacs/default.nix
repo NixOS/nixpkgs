@@ -114,6 +114,7 @@ stdenv.mkDerivation {
       git
       python3
     ])
+    "--unset" "QT_SCREEN_SCALE_FACTORS"
   ];
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
