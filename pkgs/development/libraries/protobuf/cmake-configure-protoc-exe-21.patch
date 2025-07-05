@@ -1,0 +1,47 @@
+commit 649864521c0e09f3a3bd7939d91ba1ef488946dc
+Author: phanirithvij <phanirithvij2000@gmail.com>
+Date:   Tue Jun 10 10:58:49 2025 +0530
+
+    [CMake] Allow for protoc executable to be configured
+    
+    copied from commit 3163111b6fb1da08b9d6ad75518d91b89cd03bbf
+    
+    Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+
+diff --git a/cmake/protobuf-config.cmake.in b/cmake/protobuf-config.cmake.in
+index 61669118c..55f32516f 100644
+--- a/cmake/protobuf-config.cmake.in
++++ b/cmake/protobuf-config.cmake.in
+@@ -11,7 +11,7 @@ function(protobuf_generate)
+   include(CMakeParseArguments)
+ 
+   set(_options APPEND_PATH)
+-  set(_singleargs LANGUAGE OUT_VAR EXPORT_MACRO PROTOC_OUT_DIR PLUGIN PLUGIN_OPTIONS)
++  set(_singleargs LANGUAGE OUT_VAR EXPORT_MACRO PROTOC_OUT_DIR PLUGIN PLUGIN_OPTIONS PROTOC_EXE)
+   if(COMMAND target_sources)
+     list(APPEND _singleargs TARGET)
+   endif()
+@@ -92,6 +92,11 @@ function(protobuf_generate)
+     endforeach()
+   endif()
+ 
++  if(NOT protobuf_generate_PROTOC_EXE)
++    # Default to using the CMake executable
++    set(protobuf_generate_PROTOC_EXE protobuf::protoc)
++  endif()
++
+   foreach(DIR ${protobuf_generate_IMPORT_DIRS})
+     get_filename_component(ABS_PATH ${DIR} ABSOLUTE)
+     list(FIND _protobuf_include_path ${ABS_PATH} _contains_already)
+@@ -146,9 +151,9 @@ function(protobuf_generate)
+ 
+     add_custom_command(
+       OUTPUT ${_generated_srcs}
+-      COMMAND protobuf::protoc
++      COMMAND ${protobuf_generate_PROTOC_EXE}
+       ARGS ${protobuf_generate_PROTOC_OPTIONS} --${protobuf_generate_LANGUAGE}_out ${_plugin_options}:${protobuf_generate_PROTOC_OUT_DIR} ${_plugin} ${_protobuf_include_path} ${_abs_file}
+-      DEPENDS ${_abs_file} protobuf::protoc
++      DEPENDS ${_abs_file} ${protobuf_generate_PROTOC_EXE}
+       COMMENT ${_comment}
+       VERBATIM )
+   endforeach()
