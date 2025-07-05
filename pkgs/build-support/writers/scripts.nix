@@ -1011,6 +1011,25 @@ rec {
 
   writeLuaBin = name: writeLua "/bin/${name}";
 
+  writeGo =
+    name:
+    {
+      makeWrapperArgs ? [ ],
+      go ? pkgs.go,
+      goArgs ? [ ],
+      strip ? true,
+    }:
+    makeBinWriter {
+      compileScript = ''
+        cp "$contentPath" tmp.go
+        export HOME=$NIX_BUILD_TOP/.home
+        ${go}/bin/go build ${lib.escapeShellArgs goArgs} -o "$out" tmp.go
+      '';
+      inherit makeWrapperArgs strip;
+    } name;
+
+  writeGoBin = name: writeGo "/bin/${name}";
+
   writeRust =
     name:
     {
