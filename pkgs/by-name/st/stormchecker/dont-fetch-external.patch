@@ -1,0 +1,46 @@
+diff --git a/resources/3rdparty/CMakeLists.txt b/resources/3rdparty/CMakeLists.txt
+index 9287e6a37..a5667d23c 100644
+--- a/resources/3rdparty/CMakeLists.txt
++++ b/resources/3rdparty/CMakeLists.txt
+@@ -16,8 +16,7 @@ message(STATUS "Storm - Building external resources with ${STORM_RESOURCES_BUILD
+ # Do not take a branch, needs internet connection.
+ ExternalProject_Add(
+         l3pp_ext
+-        GIT_REPOSITORY https://github.com/hbruintjes/l3pp.git
+-        GIT_TAG e4f8d7fe6c328849aff34d2dfd6fd592c14070d5
++        URL file://@l3ppSrc@
+         SOURCE_DIR ${STORM_3RDPARTY_SOURCE_DIR}/l3pp
+         UPDATE_COMMAND ""
+         CONFIGURE_COMMAND ""
+@@ -46,30 +45,7 @@ list(APPEND STORM_DEP_TARGETS gmm)
+ ##
+ #############################################################
+ 
+-# Checkout Eigen 
+-# We're checking out Eigen using the (currently not officially released) version 3.4.1
+-# See here https://gitlab.com/libeigen/eigen/-/commit/bae907b8f6078b1df290729eef946360315bd312
+-# The current official release is 3.4.0 which results in issues, see https://github.com/moves-rwth/storm/issues/162
+-message (STATUS "Storm - Including Eigen commit bae907b8f6078b1df290729eef946360315bd312 (unofficial 3.4.1 release).")
+-ExternalProject_Add(
+-        eigen_src
+-        GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+-        GIT_TAG bae907b8f6078b1df290729eef946360315bd312
+-        SOURCE_DIR ${STORM_3RDPARTY_INCLUDE_DIR}/StormEigen
+-        PREFIX ${STORM_3RDPARTY_BINARY_DIR}/StormEigen-3.4.1alpha
+-        # First check whether patch was already applied (--reverse --check), otherwise apply patch
+-        PATCH_COMMAND git apply ${STORM_3RDPARTY_SOURCE_DIR}/patches/eigen341alpha.patch --reverse --check || git apply ${STORM_3RDPARTY_SOURCE_DIR}/patches/eigen341alpha.patch
+-        UPDATE_COMMAND ""
+-        CONFIGURE_COMMAND ""
+-        BUILD_COMMAND ""
+-        INSTALL_COMMAND ""
+-        LOG_INSTALL ON
+-)
+-add_imported_library_interface(StormEigen "${STORM_3RDPARTY_INCLUDE_DIR}")
+-list(APPEND STORM_DEP_TARGETS StormEigen)
+-add_dependencies(StormEigen eigen_src)
++INCLUDE_DIRECTORIES ( "${EIGEN3_INCLUDE_DIR}" )
+-
+-
+ 
+ #############################################################
+ ##

@@ -4378,6 +4378,21 @@ with pkgs;
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
+  stormchecker = callPackage ../by-name/st/stormchecker/package.nix {
+    eigen = eigen.overrideAttrs (old: {
+      version = "3.4.1";
+      src = fetchFromGitLab {
+        owner = "libeigen";
+        repo = "eigen";
+        rev = "bae907b8f6078b1df290729eef946360315bd312";
+        sha256 = "sha256-hqrrBOZ1MxTMKyXyu5CxrZc8m/cisr+fJSEQwHWqQLA=";
+      };
+      patches = old.patches ++ [ ../by-name/st/stormchecker/eigen341alpha.patch ];
+
+    });
+    carl-storm = callPackage ../by-name/st/stormchecker/carl.nix { inherit eigen; };
+  };
+
   solanum = callPackage ../servers/irc/solanum {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
