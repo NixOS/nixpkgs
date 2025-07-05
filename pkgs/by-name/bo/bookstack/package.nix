@@ -27,10 +27,11 @@ php83.buildComposerProject2 (finalAttrs: {
   postInstall = ''
     chmod -R u+w $out/share
     mv $out/share/php/bookstack/* $out
-    rm -R $out/share $out/storage $out/bootstrap/cache $out/public/uploads
+    rm -R $out/share $out/storage $out/bootstrap/cache $out/public/uploads $out/themes
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/cache $out/bootstrap/cache
     ln -s ${dataDir}/public/uploads $out/public/uploads
+    ln -s ${dataDir}/themes $out/themes
   '';
 
   meta = {
