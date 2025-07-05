@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   version =
     {
       "1.11" = "1.11.1";
-      latest = "1.12.1";
+      latest = "1.13.0";
     }
     .${ninjaRelease};
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         # TODO: Remove Ninja 1.11 as soon as possible.
         "1.11" = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
-        latest = "sha256-RT5u+TDvWxG5EVQEYj931EZyrHUSAqK73OKDAascAwA=";
+        latest = "sha256-eT5aSNvyy76l/nxrVwrUp2wmc8mJ98vhKRG+lBdyZzw=";
       }
       .${ninjaRelease} or (throw "Unsupported Ninja release: ${ninjaRelease}");
   };
