@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "listmonk";
-  version = "3.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${version}";
-    hash = "sha256-eNX+2ens+mz2V8ZBHtFFHDVbi64AAiiREElMjh67Dd8=";
+    hash = "sha256-f6jket2lHw8r5lFkIZ7KurHbWFezNV4YO+9rmZ79WSc=";
   };
 
-  vendorHash = "sha256-XAm2VfX1nHWTuAV2COEn8qrqPNv0xbaWgTYCpjrEfMw=";
+  vendorHash = "sha256-sQ9CoYWdZYVdwh/Pszp/JEglvAU2/zJFSZ9jx8Ed/9M=";
 
   nativeBuildInputs = [
     stuffbin
@@ -37,10 +37,12 @@ buildGoModule rec {
   # Run stuffbin to stuff the frontend and the static in the binary.
   postFixup =
     let
+      # See https://github.com/knadh/listmonk/blob/c87715628d8400a9c8ab20369dfadf8ae25afe5e/Makefile#L23-L28
       vfsMappings = [
         "config.toml.sample"
         "schema.sql"
         "queries.sql"
+        "permissions.json"
         "static/public:/public"
         "static/email-templates"
         "${passthru.frontend}:/admin"
