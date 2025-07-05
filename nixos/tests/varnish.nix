@@ -19,9 +19,29 @@ in
         services.varnish = {
           inherit package;
           enable = true;
-          http_address = "0.0.0.0:80";
+          http_address = "0.0.0.0:81";
+          listen = [
+            {
+              address = "0.0.0.0";
+              port = 80;
+              proto = "HTTP";
+            }
+            {
+              name = "proxyport";
+              address = "0.0.0.0";
+              port = 8080;
+              proto = "PROXY";
+            }
+            { address = "@asdf"; }
+            {
+              address = "/run/varnishd/client.http.sock";
+              user = "varnish";
+              group = "varnish";
+              mode = "660";
+            }
+          ];
           config = ''
-            vcl 4.0;
+            vcl 4.1;
 
             backend nix-serve {
               .host = "127.0.0.1";
@@ -47,6 +67,17 @@ in
   testScript = ''
     start_all()
     varnish.wait_for_open_port(80)
+
+    cmdline = varnish.succeed("systemctl show varnish | grep ExecStart=")
+    args = cmdline.split(" -") # yikes.
+    a_args = [ a for a in args if a.startswith("a ")]
+    assert a_args == [
+      "a 0.0.0.0:80,HTTP",
+      "a proxyport=0.0.0.0:8080,PROXY",
+      "a @asdf,HTTP",
+      "a /run/varnishd/client.http.sock,HTTP,user=varnish,group=varnish,mode=660",
+      "a 0.0.0.0:81"  # the legacy `http_address` option
+    ], (a_args, args, cmdline)
 
     client.wait_until_succeeds("curl -f http://varnish/nix-cache-info");
 
