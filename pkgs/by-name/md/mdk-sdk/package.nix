@@ -33,11 +33,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mdk-sdk";
-  version = "0.33.0";
+  version = "0.33.1";
 
   src = fetchurl {
     url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${version}/mdk-sdk-linux.tar.xz";
-    hash = "sha256-d23Mq1uJg4LpbcxywOKZbwyUs3DIRtGrUZY1qBV85VE=";
+    hash = "sha256-4pxH9ZytnAAyBIRP72f64jBOBBSQ6MY0HpdkCy1kFHg=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
