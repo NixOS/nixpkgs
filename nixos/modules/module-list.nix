@@ -1471,6 +1471,7 @@
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
   ./services/system/earlyoom.nix
+  ./services/system/hot-resize.nix
   ./services/system/kerberos/default.nix
   ./services/system/localtimed.nix
   ./services/system/nix-daemon.nix
