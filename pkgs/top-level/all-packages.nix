@@ -3350,6 +3350,7 @@ with pkgs;
 
   isl = isl_0_20;
   isl_0_20 = callPackage ../development/libraries/isl/0.20.0.nix { };
+  isl_0_23 = callPackage ../development/libraries/isl/0.23.0.nix { };
   isl_0_24 = callPackage ../development/libraries/isl/0.24.0.nix { };
 
   jackett = callPackage ../servers/jackett { };
