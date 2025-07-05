@@ -2995,6 +2995,10 @@ with pkgs;
 
   uniscribe = callPackage ../tools/text/uniscribe { };
 
+  g-golf-adw-1-examples = callPackage ../by-name/g-/g-golf-gtk-4-examples/package.nix {
+    useLibadwaita = true;
+  };
+
   gandi-cli = python3Packages.callPackage ../tools/networking/gandi-cli { };
 
   inherit (callPackages ../tools/filesystems/garage { })
