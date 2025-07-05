@@ -13,7 +13,6 @@
   gpsd,
   gtk-layer-shell,
   gtkmm3,
-  howard-hinnant-date,
   iniparser,
   jsoncpp,
   libcava,
@@ -119,7 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       gtk-layer-shell
       gtkmm3
-      howard-hinnant-date
       jsoncpp
       libsigcxx
       libxkbcommon
