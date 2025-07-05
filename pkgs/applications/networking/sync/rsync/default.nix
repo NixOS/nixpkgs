@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-KSS8s6Hti1UfwQH3QLnw/gogKxFQJ2R89phQ1l/YjFI=";
   };
 
+  patches = [
+    ./testsuite-use-srcdir.patch
+  ];
+
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
     perl
@@ -72,6 +76,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
+
+  __darwinAllowLocalNetworking = true;
 
   doCheck = true;
 
