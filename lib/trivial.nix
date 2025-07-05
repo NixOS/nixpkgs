@@ -409,7 +409,7 @@ in
   */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2411;
+    2505;
 
   /**
     Whether a feature is supported in all supported releases (at the time of
