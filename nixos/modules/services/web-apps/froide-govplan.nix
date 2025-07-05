@@ -191,7 +191,7 @@ in
           wantedBy = [ "multi-user.target" ];
           environment =
             {
-              PYTHONPATH = pkg.pythonPath;
+              PYTHONPATH = "${pkg.pythonPath}:${pkg}/${pkg.python.sitePackages}";
               GDAL_LIBRARY_PATH = "${pkgs.gdal}/lib/libgdal.so";
               GEOS_LIBRARY_PATH = "${pkgs.geos}/lib/libgeos_c.so";
             }
