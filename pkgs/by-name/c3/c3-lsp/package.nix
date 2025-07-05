@@ -20,7 +20,7 @@ buildGoModule rec {
   vendorHash = "sha256-eT+Qirl0R1+di3JvXxggGK/nK9+nqw+8QEur+ldJXSc=";
 
   postInstall = ''
-    mv $out/bin/lsp $out/bin/c3-lsp
+    mv $out/bin/lsp $out/bin/c3lsp
   '';
 
   meta = {
@@ -29,7 +29,7 @@ buildGoModule rec {
     changelog = "https://github.com/pherrymason/c3-lsp/blob/${src.rev}/changelog.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ arthsmn ];
-    mainProgram = "c3-lsp";
+    mainProgram = "c3lsp";
     platforms = lib.platforms.all;
   };
 }
