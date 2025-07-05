@@ -109,6 +109,10 @@ stdenv.mkDerivation rec {
     libX11
   ];
 
+  # Raw list from: (auto-)patchelf [--print-needed] ${electron}.bin
+  # Manually tuned using: auto-patchelf --paths . --libs <space-separated-lib-paths>
+  # Paths obtained using: `nix path-lib ./#`, and brace-expansions, printf of bash
+
   ## Needed for autoPatchelf hook for linking libs with binaries
   buildInputs = [
     # ffmpeg-headless.lib # Use bundled one
