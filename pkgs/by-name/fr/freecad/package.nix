@@ -23,7 +23,6 @@
   pkg-config,
   python3Packages,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
-  ifcSupport ? false,
   stdenv,
   swig,
   vtk,
@@ -35,27 +34,23 @@
   nix-update-script,
 }:
 let
-  pythonDeps =
-    with python3Packages;
-    [
-      boost
-      gitpython # for addon manager
-      matplotlib
-      opencamlib
-      pivy
-      ply # for openSCAD file support
-      py-slvs
-      pybind11
-      pycollada
-      pyside6
-      python
-      pyyaml # (at least for) PyrateWorkbench
-      scipy
-      shiboken6
-    ]
-    ++ lib.optionals ifcSupport [
-      ifcopenshell
-    ];
+  pythonDeps = with python3Packages; [
+    boost
+    gitpython # for addon manager
+    ifcopenshell
+    matplotlib
+    opencamlib
+    pivy
+    ply # for openSCAD file support
+    py-slvs
+    pybind11
+    pycollada
+    pyside6
+    python
+    pyyaml # (at least for) PyrateWorkbench
+    scipy
+    shiboken6
+  ];
 
   freecad-utils = callPackage ./freecad-utils.nix { };
 in
