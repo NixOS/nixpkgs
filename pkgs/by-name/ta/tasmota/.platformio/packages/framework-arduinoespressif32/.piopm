@@ -1,0 +1,12 @@
+{
+  "type": "tool",
+  "name": "framework-arduinoespressif32",
+  "version": "3.1.0+sha.35321e8b",
+  "spec": {
+    "owner": "tasmota",
+    "id": null,
+    "name": "framework-arduinoespressif32",
+    "requirements": null,
+    "uri": "https://github.com/tasmota/arduino-esp32/releases/download/3.1.0.241206/framework-arduinoespressif32.zip"
+  }
+}
