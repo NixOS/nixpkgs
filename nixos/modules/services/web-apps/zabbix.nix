@@ -279,6 +279,8 @@ in
     services.phpfpm.pools.zabbix = {
       inherit user;
       group = config.services.${cfg.frontend}.group;
+      phpPackage =
+        if cfg.package == pkgs.zabbix.web then pkgs.php83 else config.services.phpfpm.phpPackage;
       phpOptions =
         ''
           # https://www.zabbix.com/documentation/current/manual/installation/install
