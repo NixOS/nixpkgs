@@ -1,0 +1,14 @@
+diff --git a/ctags/CMakeLists.txt b/ctags/CMakeLists.txt
+index a9712b1c2..dc75f7964 100644
+--- a/ctags/CMakeLists.txt
++++ b/ctags/CMakeLists.txt
+@@ -18,9 +18,6 @@ option(DISABLE_INTERNAL_SORT "Use external sort" ON)
+ option(DISABLE_ICONV "Disable iconv" OFF)
+ option(DISABLE_YAML "Disable yaml" OFF)
+ 
+-if(UNIX AND NOT APPLE)
+-  set(LIBS -static)
+-endif()
+ 
+ set(XML_SRCS ${CMAKE_CURRENT_LIST_DIR}/parsers/maven2.c
+              ${CMAKE_CURRENT_LIST_DIR}/parsers/dbusintrospect.c
