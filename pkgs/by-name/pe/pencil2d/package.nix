@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [ ./git-inherit.patch ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg_6 ]}" ];
 
   nativeBuildInputs = with qt5; [
     qmake
