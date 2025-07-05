@@ -13,6 +13,11 @@
   testers,
   curl,
   lightning-terminal,
+  _experimental-update-script-combinators,
+  gitUpdater,
+  nurl,
+  gitMinimal,
+  writeShellScript,
 }:
 
 buildGoModule rec {
@@ -112,6 +117,48 @@ buildGoModule rec {
       fi
     '';
   };
+
+  # Usage: nix-shell maintainers/scripts/update.nix --argstr package lightning-terminal --argstr commit true
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = ".*rc.*";
+    })
+    {
+      command = [
+        (writeShellScript "update-hashes.sh" ''
+          set -euxo pipefail
+
+          . ${stdenv}/setup
+          PATH="${
+            lib.makeBinPath [
+              gitMinimal
+              nurl
+            ]
+          }:$PATH"
+
+          nixpkgs="$(git rev-parse --show-toplevel)"
+          packageVersion=$(nix --extra-experimental-features nix-command eval --impure --raw -f "$nixpkgs" "$UPDATE_NIX_ATTR_PATH.version")
+          if [ x"$UPDATE_NIX_OLD_VERSION" != x"$packageVersion" ]; then
+            vendorHashOld=${lightning-terminal.vendorHash}
+            vendorHashNew=$(nurl -e "(import $nixpkgs/. { }).$UPDATE_NIX_ATTR_PATH.goModules")
+            yarnOfflineCacheHashOld=${lightning-app.yarnOfflineCache.outputHash}
+            yarnOfflineCacheHashNew=$(nurl -e "let pkgs = (import $nixpkgs/. { }); in \
+              pkgs.fetchYarnDeps \
+                { yarnLock = pkgs.$UPDATE_NIX_ATTR_PATH.src + \"/app/yarn.lock\"; \
+                  hash = pkgs.lib.fakeHash; \
+                }")
+
+            substituteInPlace \
+              "$nixpkgs"/pkgs/by-name/li/lightning-terminal/package.nix \
+              --replace-fail "$vendorHashOld" "$vendorHashNew" \
+              --replace-fail "$yarnOfflineCacheHashOld" "$yarnOfflineCacheHashNew"
+          fi
+        '')
+      ];
+      supportedFeatures = [ "silent" ];
+    }
+  ];
 
   lightning-app = stdenv.mkDerivation {
     pname = "lightning-app";
