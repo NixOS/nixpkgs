@@ -16,18 +16,20 @@ in
 
 flutter332.buildFlutterApplication rec {
   pname = "sideswap";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "sideswap-io";
     repo = "sideswapclient";
     tag = "v${version}";
-    hash = "sha256-IUUMlaEIUil07nhjep1I+F1WEWakQZfhy42ZlnyRLcQ=";
+    hash = "sha256-4lVBsQMAmdkAhZva8pb2pzegFBzkqBXv7rSRtsBgdtg=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = {
+    permission_handler = "sha256-b2igh231BkLe/vkCACVyWg8SxR5V6wjmhPljEs9Ue3o=";
+    permission_handler_windows = "sha256-b2igh231BkLe/vkCACVyWg8SxR5V6wjmhPljEs9Ue3o=";
     sideswap_logger = "sha256-cTJfSODRmIJXctLQ++BfvJ6OKflau94AjQdXg7j95B0=";
     sideswap_websocket = "sha256-vsG5eUFu/WJvY3y6jaWD/5GfULwpqh3bO4EZmmBSkbs=";
     window_size = "sha256-+lqY46ZURT0qcqPvHFXUnd83Uvfq79Xr+rw1AHqrpak=";
