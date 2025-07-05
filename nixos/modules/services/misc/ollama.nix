@@ -161,6 +161,30 @@ in
           Search for models of your choice from: <https://ollama.com/library>
         '';
       };
+      preloadModels = lib.mkOption {
+        type = lib.types.listOf (
+          lib.types.submodule {
+            options = {
+              model = lib.mkOption {
+                type = types.str;
+              };
+              hash = lib.mkOption {
+                type = types.str;
+              };
+            };
+          }
+        );
+        default = [ ];
+        example = [
+          {
+            model = "qwen3:0.6b";
+            hash = "sha256-jSZRsRY6nghyWUf2ishb7cYawD79+jcLu+f1CejjOk0=";
+          }
+        ];
+        description = ''
+          Download these models into the Nix store at build time.
+        '';
+      };
       openFirewall = lib.mkOption {
         type = types.bool;
         default = false;
@@ -307,6 +331,46 @@ in
           exit 1
         fi
       '';
+    };
+
+    systemd.services.ollama-model-preloader = lib.mkIf (cfg.preloadModels != [ ]) {
+      wantedBy = [
+        "multi-user.target"
+        "ollama.service"
+      ];
+      before = [ "ollama.service" ];
+      serviceConfig = {
+        Type = "exec";
+      };
+      script =
+        let
+          fetchModel =
+            { model, hash }:
+            pkgs.runCommand model
+              {
+                outputHashAlgo = "sha256";
+                outputHashMode = "recursive";
+                outputHash = hash;
+              }
+              ''
+                mkdir -p $out
+                ${lib.getExe pkgs.omdd} get ${model} \
+                  | grep -o 'https://.*' \
+                  | sed 's|https://\(.*\)/v[0-9]\+/\(.*\)/manifests/\(.*\)$|&\n out=manifests/\1/\2/\3|; s|https://.*/blobs/\([^/]*\)$|&\n out=blobs/\1|' \
+                  | ${lib.getExe pkgs.aria2} -x16 -s16 -d$out -i-
+              '';
+        in
+        ''
+          for model in ${lib.concatMapStringsSep " " fetchModel cfg.preloadModels}; do
+            cd $model
+            find . -type f | while read f; do
+              if ! [ -e "${cfg.models}/$f" ]; then
+                mkdir -p "${cfg.models}/$(dirname $f)"
+                ln -s "$PWD/$f" "${cfg.models}/$f"
+              fi
+            done
+          done
+        '';
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
