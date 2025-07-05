@@ -525,7 +525,7 @@ in
         [
           # Needed for the mysql_install_db command in the preStart script
           # which calls the hostname command.
-          pkgs.nettools
+          pkgs.hostname-debian
         ]
         # tools 'wsrep_sst_rsync' needs
         ++ lib.optionals cfg.galeraCluster.enable [
