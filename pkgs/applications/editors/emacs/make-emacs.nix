@@ -184,18 +184,18 @@ mkDerivation (finalAttrs: {
               builtins.map (x: ''"-B${x}"'') (
                 [
                   # Paths necessary so the JIT compiler finds its libraries:
-                  "${lib.getLib libgccjit}/lib"
+                  # "${lib.getLib libgccjit}"
                 ]
-                ++ libGccJitLibraryPaths
+                # libGccJitLibraryPaths
                 ++ [
                   # Executable paths necessary for compilation (ld, as):
-                  "${lib.getBin stdenv.cc.cc}/bin"
-                  "${lib.getBin stdenv.cc.bintools}/bin"
-                  "${lib.getBin stdenv.cc.bintools.bintools}/bin"
+                  # "${lib.getBin stdenv.cc.cc}/bin"
+                  # "${lib.getBin stdenv.cc.bintools}/bin"
+                  # "${lib.getBin stdenv.cc.bintools.bintools}/bin"
                 ]
                 ++ lib.optionals stdenv.hostPlatform.isDarwin [
                   # The linker needs to know where to find libSystem on Darwin.
-                  "${apple-sdk.sdkroot}/usr/lib"
+                  # "${apple-sdk.sdkroot}/usr/lib"
                 ]
               )
             )
@@ -360,6 +360,7 @@ mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       sigtool
+      apple-sdk
     ]
     ++ lib.optionals withNS [
       librsvg
@@ -428,7 +429,9 @@ mkDerivation (finalAttrs: {
   env =
     lib.optionalAttrs withNativeCompilation {
       NATIVE_FULL_AOT = "1";
-      LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
+      # dummy variable for now
+      LIBRARY_PATH = "";
+      # LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
     }
     // lib.optionalAttrs (variant == "macport") {
       # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
