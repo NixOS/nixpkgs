@@ -75,6 +75,11 @@ stdenv.mkDerivation rec {
       # The test tends to fail on cephfs
       sed '2i echo Skipping df total-verify test && exit 77' -i ./tests/df/total-verify.sh
 
+      # The test sometimes fails on ZFS-backed NFS filesystems
+      sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-file-has-acl-1.sh
+      sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-set-mode-acl-1.sh
+      sed '2i echo "Skipping test: ls/removed-directory" && exit 77' -i ./tests/ls/removed-directory.sh
+
       # Some target platforms, especially when building inside a container have
       # issues with the inotify test.
       sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail/inotify-dir-recreate.sh
