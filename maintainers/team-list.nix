@@ -912,6 +912,15 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  monogon = {
+    members = [
+      fionera
+      lorenz
+    ];
+    scope = "Group registration for Monogon SE team members who collectively maintain packages.";
+    shortName = "Monogon SE";
+  };
+
   neovim = {
     members = [
       GaetanLepage
