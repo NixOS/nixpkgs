@@ -19,7 +19,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2024.09.20";
+  version = "2025.05.24";
 
   src = fetchurl {
     urls = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-TrUneCGaJJxC+GgL1ZZ/ZcONeqDH05Bp44/3lkCs9tg=";
+    hash = "sha256-5hhZAsS/6SNQZ6C8gOyaX4qVlW2dB1Jc4Wnz+XU6+wo=";
   };
 
   patches = [
