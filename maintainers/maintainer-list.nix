@@ -4307,6 +4307,14 @@
     github = "cdombroski";
     githubId = 244909;
   };
+  cdunster = {
+    name = "Callum Dunster";
+    github = "cdunster";
+    githubId = 5011912;
+    keys = [{
+      fingerprint = "BB44 BE38 3F8B 0972 AEBD  75EF 1493 B36E 8DE5 6165";
+    }];
+  };
   ceedubs = {
     email = "ceedubs@gmail.com";
     github = "ceedubs";
