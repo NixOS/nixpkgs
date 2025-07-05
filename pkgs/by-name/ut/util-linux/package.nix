@@ -36,23 +36,16 @@ let
 in
 stdenv.mkDerivation (finalPackage: rec {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.41";
+  version = "2.41.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-ge6Ts8/f6318QJDO3rode7zpFB/QtQG2hrP+R13cpMY=";
+    hash = "sha256-vprZonb0MFq33S9SJci+H/VDUvVl/03t6WKMGqp97Fc=";
   };
 
   patches =
     [
       ./rtcwake-search-PATH-for-shutdown.patch
-      # https://github.com/util-linux/util-linux/pull/3013
-      ./fix-darwin-build.patch
-      # https://github.com/util-linux/util-linux/pull/3479 (fixes https://github.com/util-linux/util-linux/issues/3474)
-      ./fix-mount-regression.patch
-      # https://github.com/util-linux/util-linux/pull/3530
-      ./libmount-subdir-remove-unused-code.patch
-      ./libmount-subdir-restrict-for-real-mounts-only.patch
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
       (fetchurl {
