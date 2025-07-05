@@ -577,11 +577,14 @@ in
 
     config = {
       dbtype = mkOption {
-        type = types.enum [
-          "sqlite"
-          "pgsql"
-          "mysql"
-        ];
+        type = types.nullOr (
+          types.enum [
+            "sqlite"
+            "pgsql"
+            "mysql"
+          ]
+        );
+        default = null;
         description = "Database type.";
       };
       dbname = mkOption {
@@ -1084,6 +1087,17 @@ in
             unset `services.nextcloud.config.dbpassFile` and
             `services.nextcloud.config.dbhost` to use socket authentication
             instead of password.
+          '';
+        }
+        {
+          assertion = cfg.config.dbtype != null;
+          message = ''
+            `services.nextcloud.config.dbtype` must be set explicitly (pgsql, mysql, or sqlite)
+
+            Before 25.05, it used to default to sqlite but that is not recommended by upstream.
+            Either set it to sqlite as it used to be, or convert to another type as described
+            in the official db conversion page:
+            https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html
           '';
         }
       ];

@@ -75,40 +75,22 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.21.2";
+  version = "0.21.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     tag = "v${version}";
-    hash = "sha256-HO7Zg/yLY6yxjOo5Jf6Iu2zCreCyv7IaNrWtBKrspqQ=";
+    hash = "sha256-8z1jgH0Nj7D+joN42AA2ORNSLvcfWiYHn4dpTq1HWB0=";
   };
 
-  # Cargo.lock shipped with 0.21.2 is invalid:
-  # error: no matching package found
-  # searched package name: `ahash`
-  # perhaps you meant:      wasi
-  # location searched: directory source `/build/tokenizers-0.21.2-vendor` (which is replacing registry `crates-io`)
-  # required by package `tokenizers-python v0.21.2 (/build/source/bindings/python)`
-  #
-  # Hence, I (@GaetanLepage) re-generated the lockfile and embedded it here for now.
-  # TODO: Try to switch back to `rustPlatform.fetchCargoVendor` at the next release.
   postPatch = ''
-    ln -sf '${./Cargo.lock}' Cargo.lock
+    ln -s ${./Cargo.lock} Cargo.lock
   '';
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
   };
-  # cargoDeps = rustPlatform.fetchCargoVendor {
-  #   inherit
-  #     pname
-  #     version
-  #     src
-  #     sourceRoot
-  #     ;
-  #   hash = "sha256-EKiHjcXUjU8CWe2CB2EgAQlRcZebwe4EpD7P8lWbCjw=";
-  # };
 
   sourceRoot = "${src.name}/bindings/python";
 

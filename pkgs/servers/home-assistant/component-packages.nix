@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.6.3";
+  version = "2025.7.0";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -90,6 +90,11 @@
     "agent_dvr" =
       ps: with ps; [
         agent-py
+      ];
+    "ai_task" =
+      ps: with ps; [
+        hassil
+        home-assistant-intents
       ];
     "air_quality" =
       ps: with ps; [
@@ -189,6 +194,10 @@
     "alpha_vantage" =
       ps: with ps; [
         alpha-vantage
+      ];
+    "altruist" =
+      ps: with ps; [
+        altruistclient
       ];
     "amazon_polly" =
       ps: with ps; [
@@ -1319,9 +1328,6 @@
       ps: with ps; [
         dwdwfsapi
       ];
-    "dweet" =
-      ps: with ps; [
-      ]; # missing inputs: dweepy
     "dynalite" =
       ps: with ps; [
         dynalite-devices
@@ -1828,7 +1834,7 @@
       ];
     "foscam" =
       ps: with ps; [
-        libpyfoscam
+        libpyfoscamcgi
       ];
     "foursquare" =
       ps: with ps; [
@@ -2839,7 +2845,6 @@
       ]; # missing inputs: python-join-api
     "juicenet" =
       ps: with ps; [
-        python-juicenet
       ];
     "justnimbus" =
       ps: with ps; [
@@ -4440,6 +4445,10 @@
         psutil-home-assistant
         sqlalchemy
       ];
+    "playstation_network" =
+      ps: with ps; [
+        pyrate-limiter
+      ]; # missing inputs: PSNAWP
     "plex" =
       ps: with ps; [
         plexapi
@@ -5977,6 +5986,9 @@
         tilt-ble
         zeroconf
       ];
+    "tilt_pi" =
+      ps: with ps; [
+      ]; # missing inputs: tilt-pi
     "time" =
       ps: with ps; [
       ];
@@ -6265,6 +6277,9 @@
       ps: with ps; [
         vtjp
       ];
+    "vegehub" =
+      ps: with ps; [
+      ]; # missing inputs: vegehub
     "velbus" =
       ps: with ps; [
         aiousbwatcher
@@ -6782,6 +6797,7 @@
     "aemet"
     "aftership"
     "agent_dvr"
+    "ai_task"
     "air_quality"
     "airgradient"
     "airly"
@@ -6801,6 +6817,7 @@
     "alert"
     "alexa"
     "alexa_devices"
+    "altruist"
     "amberelectric"
     "ambient_network"
     "ambient_station"

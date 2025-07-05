@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wttrbar";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "wttrbar";
     rev = version;
-    hash = "sha256-+M0s6v9ULf+D2pPOE8KlHoyV+jBMbPsAXpYxGjms5DY=";
+    hash = "sha256-+EyjZZpDktkYbxy3YXAtuW3A0bEFKFa+UuRvIzUEISM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-sv9hSTmq5J6s0PPBMJgaMUWBaRk0/NJV41nNDIj6MoY=";
+  cargoHash = "sha256-AXyt5z1d26si7qLZgd7dWrHOOJBvK75B29/LJj7bpAo=";
 
   passthru.updateScript = nix-update-script { };
 

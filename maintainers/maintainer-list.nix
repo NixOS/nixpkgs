@@ -26325,6 +26325,12 @@
     githubId = 223408;
     name = "Varun Madiath";
   };
+  vanadium5000 = {
+    email = "vanadium5000@gmail.com";
+    github = "Vanadium5000";
+    githubId = 151467774;
+    name = "Vanadium5000";
+  };
   vancluever = {
     email = "chrism@vancluevertech.com";
     github = "vancluever";
@@ -26998,6 +27004,12 @@
     github = "wheelsandmetal";
     githubId = 13031455;
     name = "Jakob Schmutz";
+  };
+  WheelsForReals = {
+    email = "WheelsForReals@proton.me";
+    github = "WheelsForReals";
+    githubId = 6102222;
+    name = "WheelsForReals";
   };
   WhiteBlackGoose = {
     email = "wbg@angouri.org";

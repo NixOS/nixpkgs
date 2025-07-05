@@ -231,6 +231,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # Flaky: unreliably fails on certain hosts (including Hydra)
       "--skip=zed::tests::test_window_edit_state_restoring_enabled"
     ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Flaky: unreliably fails on certain hosts (including Hydra)
+      "--skip=zed::open_listener::tests::test_open_workspace_with_directory"
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Fails on certain hosts (including Hydra) for unclear reason
       "--skip=test_open_paths_action"

@@ -1020,6 +1020,7 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
                     "build",
                     "--print-out-paths",
                     'github:user/repo#nixosConfigurations."hostname".config.system.build.toplevel',
+                    "--no-link",
                 ],
                 check=True,
                 stdout=PIPE,

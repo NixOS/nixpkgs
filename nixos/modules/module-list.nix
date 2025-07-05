@@ -579,6 +579,7 @@
   ./services/development/athens.nix
   ./services/development/blackfire.nix
   ./services/development/bloop.nix
+  ./services/development/corteza.nix
   ./services/development/distccd.nix
   ./services/development/gemstash.nix
   ./services/development/hoogle.nix
@@ -1595,6 +1596,7 @@
   ./services/web-apps/komga.nix
   ./services/web-apps/lanraragi.nix
   ./services/web-apps/lasuite-docs.nix
+  ./services/web-apps/lasuite-meet.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/mainsail.nix

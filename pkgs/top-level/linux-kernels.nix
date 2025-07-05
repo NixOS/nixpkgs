@@ -397,6 +397,11 @@ in
 
         dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
 
+        ecapture = callPackage ../by-name/ec/ecapture/package.nix {
+          withNonBTF = true;
+          inherit kernel;
+        };
+
         exfat-nofuse =
           if lib.versionOlder kernel.version "5.8" then callPackage ../os-specific/linux/exfat { } else null;
 

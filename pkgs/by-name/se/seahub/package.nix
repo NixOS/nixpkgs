@@ -80,7 +80,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/haiwen/seahub";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      schmittlauch
       melvyn2
     ];
     platforms = lib.platforms.linux;

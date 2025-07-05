@@ -11,14 +11,14 @@
 }:
 stdenv.mkDerivation rec {
   pname = "master_me";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "trummerschlunk";
     repo = "master_me";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-FG3X1dOF9KRHHSnd5/zP+GrYCB2O0y+tnI5/l9tNhyE=";
+    hash = "sha256-PEa1EHgr3dcM2Kh0AHvy1knKkRo89D6J4h6qGFy1vVY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

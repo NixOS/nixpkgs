@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "osc-sdk-python";
-  version = "0.33.0";
+  version = "0.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outscale";
     repo = "osc-sdk-python";
     tag = "v${version}";
-    hash = "sha256-+UDbll+svNlCyY+/tSqfDa9rceFTavOUGQc//Vl2+Fk=";
+    hash = "sha256-RVcpwLJ/95dAfQNTvhuKg3DFsXVhJsGshVWqiQUgTvk=";
     fetchSubmodules = true;
   };
 

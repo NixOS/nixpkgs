@@ -48,7 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zyegfryed/django-statici18n";
     license = licenses.bsd3;
     maintainers = with maintainers; [
-      schmittlauch
     ];
   };
 }

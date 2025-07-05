@@ -133,11 +133,13 @@ jobs:
                 pull_number
               })).data
 
-              const approvals = new Set(
-                (await github.paginate(github.rest.pulls.listReviews, {
+              const reviews = await github.paginate(github.rest.pulls.listReviews, {
                   ...context.repo,
                   pull_number
-                }))
+                })
+
+              const approvals = new Set(
+                reviews
                 .filter(review => review.state == 'APPROVED')
                 .map(review => review.user?.id)
               )
@@ -169,13 +171,13 @@ jobs:
                   [ 'NONE', 'FIRST_TIMER', 'FIRST_TIME_CONTRIBUTOR' ].includes(pull_request.author_association),
               }
 
-              const run_id = (await github.rest.actions.listWorkflowRuns({
+              const { id: run_id, conclusion } = (await github.rest.actions.listWorkflowRuns({
                 ...context.repo,
                 workflow_id: 'pr.yml',
                 event: 'pull_request_target',
                 exclude_pull_requests: true,
                 head_sha: pull_request.head.sha
-              })).data.workflow_runs[0]?.id ??
+              })).data.workflow_runs[0] ??
                 // TODO: Remove this after 2025-09-17, at which point all eval.yml artifacts will have expired.
                 (await github.rest.actions.listWorkflowRuns({
                   ...context.repo,
@@ -185,12 +187,29 @@ jobs:
                   status: 'success',
                   exclude_pull_requests: true,
                   head_sha: pull_request.head.sha
-                })).data.workflow_runs[0]?.id
+                })).data.workflow_runs[0] ?? {}
 
               // Newer PRs might not have run Eval to completion, yet.
               // Older PRs might not have an eval.yml workflow, yet.
               // In either case we continue without fetching an artifact on a best-effort basis.
               log('Last eval run', run_id ?? '<n/a>')
+
+              if (conclusion === 'success') {
+                Object.assign(prLabels, {
+                  // We only set this label if the latest eval run was successful, because if it was not, it
+                  // *could* have requested reviewers. We will let the PR author fix CI first, before "escalating"
+                  // this PR to "needs: reviewer".
+                  // Since the first Eval run on a PR always sets rebuild labels, the same PR will be "recently
+                  // updated" for the next scheduled run. Thus, this label will still be set within a few minutes
+                  // after a PR is created, if required.
+                  // Note that a "requested reviewer" disappears once they have given a review, so we check
+                  // existing reviews, too.
+                  '9.needs: reviewer':
+                    !pull_request.draft &&
+                    pull_request.requested_reviewers.length == 0 &&
+                    reviews.length == 0,
+                })
+              }
 
               const artifact = run_id && (await github.rest.actions.listWorkflowRunArtifacts({
                 ...context.repo,

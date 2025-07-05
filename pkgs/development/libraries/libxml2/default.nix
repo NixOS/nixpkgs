@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       findXMLCatalogs
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMinGW) [
       libiconv
     ]
     ++ lib.optionals icuSupport [

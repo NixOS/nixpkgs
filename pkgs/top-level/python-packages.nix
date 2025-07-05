@@ -627,6 +627,8 @@ self: super: with self; {
 
   altgraph = callPackage ../development/python-modules/altgraph { };
 
+  altruistclient = callPackage ../development/python-modules/altruistclient { };
+
   amaranth = callPackage ../development/python-modules/amaranth { };
 
   amaranth-boards = callPackage ../development/python-modules/amaranth-boards { };
@@ -828,6 +830,8 @@ self: super: with self; {
   aqipy-atmotech = callPackage ../development/python-modules/aqipy-atmotech { };
 
   aqualogic = callPackage ../development/python-modules/aqualogic { };
+
+  ar = callPackage ../development/python-modules/ar { };
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
@@ -2233,6 +2237,8 @@ self: super: with self; {
 
   calmjs-types = callPackage ../development/python-modules/calmjs-types { };
 
+  calmsize = callPackage ../development/python-modules/calmsize { };
+
   calver = callPackage ../development/python-modules/calver { };
 
   calysto = callPackage ../development/python-modules/calysto { };
@@ -3121,6 +3127,8 @@ self: super: with self; {
   curtsies = callPackage ../development/python-modules/curtsies { };
 
   curvefitgui = callPackage ../development/python-modules/curvefitgui { };
+
+  custom-json-diff = callPackage ../development/python-modules/custom-json-diff { };
 
   customtkinter = callPackage ../development/python-modules/customtkinter { };
 
@@ -4234,6 +4242,8 @@ self: super: with self; {
 
   doubleratchet = callPackage ../development/python-modules/doubleratchet { };
 
+  dowhen = callPackage ../development/python-modules/dowhen { };
+
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
 
   doxmlparser = callPackage ../development/tools/documentation/doxygen/doxmlparser.nix { };
@@ -4887,6 +4897,8 @@ self: super: with self; {
   fast-array-utils = callPackage ../development/python-modules/fast-array-utils { };
 
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
+
+  fast-simplification = callPackage ../development/python-modules/fast-simplification { };
 
   fastai = callPackage ../development/python-modules/fastai { };
 
@@ -6978,6 +6990,8 @@ self: super: with self; {
 
   interruptingcow = callPackage ../development/python-modules/interruptingcow { };
 
+  intervals = callPackage ../development/python-modules/intervals { };
+
   intervaltree = callPackage ../development/python-modules/intervaltree { };
 
   into-dbus-python = callPackage ../development/python-modules/into-dbus-python { };
@@ -7306,6 +7320,8 @@ self: super: with self; {
 
   json-api-doc = callPackage ../development/python-modules/json-api-doc { };
 
+  json-flatten = callPackage ../development/python-modules/json-flatten { };
+
   json-home-client = callPackage ../development/python-modules/json-home-client { };
 
   json-logging = callPackage ../development/python-modules/json-logging { };
@@ -7554,6 +7570,8 @@ self: super: with self; {
   kaleido = callPackage ../development/python-modules/kaleido { };
 
   kalshi-python = callPackage ../development/python-modules/kalshi-python { };
+
+  kanalizer = callPackage ../development/python-modules/kanalizer { };
 
   kanidm = callPackage ../development/python-modules/kanidm { };
 
@@ -8080,7 +8098,7 @@ self: super: with self; {
     (p: p.py)
   ];
 
-  libpyfoscam = callPackage ../development/python-modules/libpyfoscam { };
+  libpyfoscamcgi = callPackage ../development/python-modules/libpyfoscamcgi { };
 
   libpysal = callPackage ../development/python-modules/libpysal { };
 
@@ -13975,6 +13993,10 @@ self: super: with self; {
 
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
 
+  pytest-asyncio-cooperative =
+    callPackage ../development/python-modules/pytest-asyncio-cooperative
+      { };
+
   pytest-asyncio_0_21 = pytest-asyncio.overridePythonAttrs (old: rec {
     version = "0.21.2";
     src = pkgs.fetchFromGitHub {
@@ -14793,6 +14815,8 @@ self: super: with self; {
   pytorch-bench = callPackage ../development/python-modules/pytorch-bench { };
 
   pytorch-lightning = callPackage ../development/python-modules/pytorch-lightning { };
+
+  pytorch-memlab = callPackage ../development/python-modules/pytorch-memlab { };
 
   pytorch-metric-learning = callPackage ../development/python-modules/pytorch-metric-learning { };
 
@@ -15864,6 +15888,8 @@ self: super: with self; {
 
   scenedetect = callPackage ../development/python-modules/scenedetect { };
 
+  schedula = callPackage ../development/python-modules/schedula { };
+
   schedule = callPackage ../development/python-modules/schedule { };
 
   scheduler = callPackage ../development/python-modules/scheduler { };
@@ -15937,6 +15963,8 @@ self: super: with self; {
   scipp = callPackage ../development/python-modules/scipp { };
 
   scipy = callPackage ../development/python-modules/scipy { };
+
+  scipy-stubs = callPackage ../development/python-modules/scipy-stubs { };
 
   scmrepo = callPackage ../development/python-modules/scmrepo { };
 

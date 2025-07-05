@@ -5668,6 +5668,10 @@ with pkgs;
   jre = jdk;
   jre_headless = jdk_headless;
 
+  jre11_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+    jdk = jdk11;
+    jdkOnBuild = buildPackages.jdk11;
+  };
   jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
     jdk = jdk17;
     jdkOnBuild = buildPackages.jdk17;
@@ -5979,8 +5983,9 @@ with pkgs;
     cargo-pgrx_0_12_0_alpha_1
     cargo-pgrx_0_12_5
     cargo-pgrx_0_12_6
+    cargo-pgrx_0_14_1
     ;
-  cargo-pgrx = cargo-pgrx_0_12_6;
+  cargo-pgrx = cargo-pgrx_0_14_1;
 
   buildPgrxExtension = callPackage ../development/tools/rust/cargo-pgrx/buildPgrxExtension.nix { };
   opensmalltalk-vm = callPackage ../development/compilers/opensmalltalk-vm { };
@@ -10576,6 +10581,7 @@ with pkgs;
     postgresql_15
     postgresql_16
     postgresql_17
+    postgresql_18
     ;
 
   inherit (postgresqlJitVersions)
@@ -10584,6 +10590,7 @@ with pkgs;
     postgresql_15_jit
     postgresql_16_jit
     postgresql_17_jit
+    postgresql_18_jit
     ;
   postgresql = postgresql_17;
   postgresql_jit = postgresql_17_jit;
@@ -10593,6 +10600,7 @@ with pkgs;
   postgresql15Packages = recurseIntoAttrs postgresql_15.pkgs;
   postgresql16Packages = recurseIntoAttrs postgresql_16.pkgs;
   postgresql17Packages = recurseIntoAttrs postgresql_17.pkgs;
+  postgresql18Packages = recurseIntoAttrs postgresql_18.pkgs;
 
   postgres-websockets = haskellPackages.postgres-websockets.bin;
   postgrest = haskellPackages.postgrest.bin;
@@ -10839,6 +10847,7 @@ with pkgs;
     server = server-pgsql;
   };
 
+  zabbix74 = recurseIntoAttrs (zabbixFor "v74");
   zabbix72 = recurseIntoAttrs (zabbixFor "v72");
   zabbix70 = recurseIntoAttrs (zabbixFor "v70");
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
@@ -11788,8 +11797,6 @@ with pkgs;
   );
   android-studio-for-platform = androidStudioForPlatformPackages.stable;
 
-  antimony = libsForQt5.callPackage ../applications/graphics/antimony { };
-
   apngasm = callPackage ../applications/graphics/apngasm { };
   apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix { };
 
@@ -11956,6 +11963,10 @@ with pkgs;
     callPackage ../tools/networking/dd-agent/integrations-core.nix {
       extraIntegrations = extras;
     };
+
+  dbeaver-bin = callPackage ../by-name/db/dbeaver-bin/package.nix {
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
 
   deadbeef = callPackage ../applications/audio/deadbeef { };
 
@@ -13060,9 +13071,8 @@ with pkgs;
 
   mbrola-voices = callPackage ../applications/audio/mbrola/voices.nix { };
 
-  mediaelch = mediaelch-qt5;
-  mediaelch-qt5 = libsForQt5.callPackage ../applications/misc/mediaelch { };
-  mediaelch-qt6 = qt6Packages.callPackage ../applications/misc/mediaelch { };
+  mediaelch-qt5 = callPackage ../by-name/me/mediaelch/package.nix { qtVersion = 5; };
+  mediaelch-qt6 = mediaelch;
 
   melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
 
