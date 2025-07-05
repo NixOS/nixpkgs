@@ -1,28 +1,20 @@
 { pkgs, haskellLib }:
 
+self: super:
+
 with haskellLib;
 
 let
   inherit (pkgs) lib;
 
-  jailbreakWhileRevision =
-    rev:
-    overrideCabal (old: {
-      jailbreak =
-        assert old.revision or "0" == toString rev;
-        true;
-    });
-  checkAgainAfter =
-    pkg: ver: msg: act:
-    if builtins.compareVersions pkg.version ver <= 0 then
-      act
-    else
-      builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
-  jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
+  warnAfterVersion =
+    ver: pkg:
+    lib.warnIf (lib.versionOlder ver
+      super.${pkg.pname}.version
+    ) "override for haskell.packages.ghc96.${pkg.pname} may no longer be needed" pkg;
 
 in
 
-self: super:
 {
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
@@ -102,7 +94,7 @@ self: super:
   cabal-install = doJailbreak super.cabal-install;
 
   # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
-  newtype-generics = jailbreakForCurrentVersion super.newtype-generics "0.6.2";
+  newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
 
   # Jailbreaks for servant <0.20
   servant-lucid = doJailbreak super.servant-lucid;

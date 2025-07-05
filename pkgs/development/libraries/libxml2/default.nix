@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
-  version = "2.14.3";
+  version = "2.14.4-unstable-2025-06-20";
 
   outputs =
     [
@@ -50,9 +50,18 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libxml2";
-    rev = "5133461b05f0f66e6c5b0fecd5f29dc5cd967302"; # some security- and bugfixes ahead of 2.14
-    hash = "sha256-xLRey6mRsRhgfASIQWOTofcQcLU0Daeg33pxGN0l66I=";
+    rev = "356542324fa439de544b5e419b91ae68d42c306c"; # some bugfixes right behind 2.14.4
+    hash = "sha256-0jo08ECX+oP7Ekjgw3ZgOh+fSiNjlbjoZc4p3PqomJA=";
   };
+
+  patches = [
+    # Unmerged ABI-breaking patch required to fix the following security issues:
+    # - https://gitlab.gnome.org/GNOME/libxslt/-/issues/139
+    # - https://gitlab.gnome.org/GNOME/libxslt/-/issues/140
+    # See also https://gitlab.gnome.org/GNOME/libxml2/-/issues/906
+    # Source: https://github.com/chromium/chromium/blob/4fb4ae8ce3daa399c3d8ca67f2dfb9deffcc7007/third_party/libxml/chromium/xml-attr-extra.patch
+    ./xml-attr-extra.patch
+  ];
 
   strictDeps = true;
 
@@ -140,6 +149,10 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests = {
       pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "LibXml2" ];
         package = finalAttrs.finalPackage;
       };
     };

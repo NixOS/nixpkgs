@@ -428,6 +428,9 @@ let
                 "test-debugger-random-port-with-inspect-port"
                 "test-debugger-launch"
                 "test-debugger-pid"
+
+                # Those are annoyingly flaky, but not enough to be marked as such upstream.
+                "test-wasi"
               ]
               ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
                 # These tests fail on x86_64-darwin (even without sandbox).
@@ -435,10 +438,13 @@ let
                 "test-fs-readv"
                 "test-fs-readv-sync"
                 "test-vm-memleak"
+
+                # Those are annoyingly flaky, but not enough to be marked as such upstream.
+                "test-tick-processor-arguments"
+                "test-set-raw-mode-reset-signal"
               ]
-              ++ lib.optional (
-                stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64 && majorVersion == "20"
-              ) "test-tick-processor-arguments" # flaky
+              # Those are annoyingly flaky, but not enough to be marked as such upstream.
+              ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
             )
           }"
         ];

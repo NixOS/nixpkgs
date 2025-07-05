@@ -45,7 +45,7 @@ let
   defaultsFile = pkgs.writeText "60-defaults.conf" ''
     # 01-system-paths.conf
     ${dirStanzas home}
-    ZM_PATH_ARP=${lib.getBin pkgs.nettools}/bin/arp
+    ZM_PATH_ARP=${lib.getBin pkgs.net-tools}/bin/arp
     ZM_PATH_LOGS=/var/log/${dirName}
     ZM_PATH_MAP=/dev/shm
     ZM_PATH_SOCKS=/run/${dirName}

@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   dos2unix,
-  edid-decode,
   hexdump,
+  v4l-utils,
   zsh,
 }:
 
@@ -34,8 +34,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     dos2unix
-    edid-decode
     hexdump
+    v4l-utils
     zsh
   ];
 

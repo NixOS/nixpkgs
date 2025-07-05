@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "yeelight/tests.py" ];
+  enabledTestPaths = [ "yeelight/tests.py" ];
 
   pythonImportsCheck = [ "yeelight" ];
 

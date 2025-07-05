@@ -480,7 +480,10 @@ self: super:
       "dev"
       "doc"
     ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libICE ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+      xorg.libICE
+      xorg.xtrans
+    ];
   });
 
   libXrender = super.libXrender.overrideAttrs (attrs: {

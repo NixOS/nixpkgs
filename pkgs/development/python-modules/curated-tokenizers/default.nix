@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   # Explicitly set the path to avoid running vendored
   # sentencepiece tests.
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   preCheck = ''
     # avoid local paths, relative imports wont resolve correctly

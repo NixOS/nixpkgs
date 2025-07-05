@@ -23,12 +23,13 @@
   pytestCheckHook,
   pytest-trio,
   trustme,
-  yapf,
 }:
 
 let
   # escape infinite recursion with pytest-trio
   pytest-trio' = (pytest-trio.override { trio = null; }).overrideAttrs {
+    # `pythonRemoveDeps` is not working properly
+    dontCheckRuntimeDeps = true;
     doCheck = false;
     pythonImportsCheck = [ ];
   };
@@ -67,7 +68,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-trio'
     trustme
-    yapf
   ];
 
   preCheck = ''
@@ -76,9 +76,8 @@ buildPythonPackage rec {
     PYTHONPATH=$PWD/src:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.

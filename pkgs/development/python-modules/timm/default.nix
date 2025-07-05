@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:

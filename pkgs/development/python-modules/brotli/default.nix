@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "python/tests" ];
+  enabledTestPaths = [ "python/tests" ];
 
   meta = with lib; {
     homepage = "https://github.com/google/brotli";

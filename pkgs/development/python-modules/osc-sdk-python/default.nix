@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   # Only keep test not requiring access and secret keys
-  pytestFlagsArray = [ "tests/test_net.py" ];
+  enabledTestPaths = [ "tests/test_net.py" ];
 
   pythonImportsCheck = [ "osc_sdk_python" ];
 

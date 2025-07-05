@@ -88,7 +88,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Integration tests require local DBs
     "tests/unit"
   ];

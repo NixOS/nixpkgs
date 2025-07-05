@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fasteners" ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   meta = with lib; {
     description = "Module that provides useful locks";

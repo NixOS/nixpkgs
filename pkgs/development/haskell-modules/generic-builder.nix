@@ -82,7 +82,10 @@ in
   profilingDetail ? "exported-functions",
   # TODO enable shared libs for cross-compiling
   enableSharedExecutables ? false,
-  enableSharedLibraries ? !stdenv.hostPlatform.isStatic && (ghc.enableShared or false),
+  enableSharedLibraries ?
+    !stdenv.hostPlatform.isStatic
+    && (ghc.enableShared or false)
+    && !stdenv.hostPlatform.useAndroidPrebuilt,
   enableDeadCodeElimination ? (!stdenv.hostPlatform.isDarwin), # TODO: use -dead_strip for darwin
   # Disabling this for ghcjs prevents this crash: https://gitlab.haskell.org/ghc/ghc/-/issues/23235
   enableStaticLibraries ?

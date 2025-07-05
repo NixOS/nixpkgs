@@ -44,7 +44,7 @@ buildPythonPackage rec {
   '';
 
   # most tests talk to a network service, so only run ones that don't do that.
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "chart_studio/tests/test_core"
     "chart_studio/tests/test_plot_ly/test_api"
   ];

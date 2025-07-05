@@ -275,7 +275,7 @@ buildPythonPackage rec {
   ];
 
   # test_matplotlib_image_with_multiple_axes may take >60s
-  pytestFlagsArray = [
+  pytestFlags = [
     "--timeout=1024"
   ];
 
