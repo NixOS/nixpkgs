@@ -43,12 +43,12 @@ buildGoModule (finalAttrs: {
     inherit (nixosTests) scion-freestanding-deployment;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Future Internet architecture utilizing path-aware networking";
     homepage = "https://scion-architecture.net/";
-    platforms = platforms.unix;
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       sarcasticadmin
       matthewcroughan
     ];
