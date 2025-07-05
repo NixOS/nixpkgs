@@ -245,9 +245,10 @@ dependencies = [
 
 [[package]]
 name = "pycrdt"
-version = "0.12.22"
+version = "0.12.23"
 dependencies = [
  "pyo3",
+ "serde_json",
  "yrs",
 ]
 
