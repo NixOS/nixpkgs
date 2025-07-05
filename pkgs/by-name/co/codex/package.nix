@@ -5,22 +5,23 @@
   nix-update-script,
   pkg-config,
   openssl,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.0.2506060849";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-ZEbcqI3DtV6jZx/wgLqJs4O0sDfHppMwVnfDmE5dXw4=";
+    hash = "sha256-lpZsECLWmoGJYafL3FlmR6WwOcynGgqWq6IUB+/y6lY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-GBlwoXY5vUjxJx0M3/eiywIxnAVchXACIhNfNCNRZ1k=";
+  cargoHash = "sha256-DIDAk5ibwEQ9mwOUS2JNFEA2npVK9TBph/TuwiJgfL4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -44,10 +46,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "OpenAI Codex command‑line interface rust implementation";
-    license = lib.licenses.asl20;
+    description = "Lightweight coding agent that runs in your terminal";
     homepage = "https://github.com/openai/codex";
     changelog = "https://raw.githubusercontent.com/openai/codex/refs/tags/rust-v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
     mainProgram = "codex";
     maintainers = with lib.maintainers; [
       malo
