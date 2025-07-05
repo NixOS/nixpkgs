@@ -6,6 +6,7 @@
   file,
   libnsl,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Novel multimodal search and retrieval engine";
