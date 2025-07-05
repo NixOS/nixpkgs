@@ -627,6 +627,8 @@ self: super: with self; {
 
   altgraph = callPackage ../development/python-modules/altgraph { };
 
+  altruistclient = callPackage ../development/python-modules/altruistclient { };
+
   amaranth = callPackage ../development/python-modules/amaranth { };
 
   amaranth-boards = callPackage ../development/python-modules/amaranth-boards { };
@@ -8090,7 +8092,7 @@ self: super: with self; {
     (p: p.py)
   ];
 
-  libpyfoscam = callPackage ../development/python-modules/libpyfoscam { };
+  libpyfoscamcgi = callPackage ../development/python-modules/libpyfoscamcgi { };
 
   libpysal = callPackage ../development/python-modules/libpysal { };
 
