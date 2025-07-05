@@ -12,12 +12,12 @@
   static ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libevent";
   version = "2.1.12";
 
   src = fetchurl {
-    url = "https://github.com/libevent/libevent/releases/download/release-${version}-stable/libevent-${version}-stable.tar.gz";
+    url = "https://github.com/libevent/libevent/releases/download/release-${finalAttrs.version}-stable/libevent-${finalAttrs.version}-stable.tar.gz";
     sha256 = "1fq30imk8zd26x8066di3kpc5zyfc5z6frr3zll685zcx4dxxrlj";
   };
 
@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fix lib.getExe
+
   meta = with lib; {
     description = "Event notification library";
     mainProgram = "event_rpcgen.py";
@@ -87,4 +89,4 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
   };
-}
+})

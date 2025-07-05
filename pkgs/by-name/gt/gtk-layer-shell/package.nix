@@ -62,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dexamples=true"
   ];
 
+  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fix lib.getExe
+
   meta = with lib; {
     description = "Library to create panels and other desktop components for Wayland using the Layer Shell protocol";
     mainProgram = "gtk-layer-demo";

@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fix lib.getExe
+
     tests =
       {
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -111,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libsdl.org";
     changelog = "https://github.com/libsdl-org/sdl2-compat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
+    mainProgram = "sdl2-config";
     maintainers = with lib.maintainers; [
       nadiaholmquist
     ];
