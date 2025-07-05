@@ -18286,6 +18286,12 @@
     githubId = 2946283;
     name = "Brian Cohen";
   };
+  NoUseFreak = {
+    email = "dries@stenic.io";
+    github = "NoUseFreak";
+    githubId = 879864;
+    name = "Dries De Peuter";
+  };
   nova-madeline = {
     matrix = "@nova:tchncs.de";
     github = "nova-r";
