@@ -7,7 +7,6 @@
   fetchFromGitHub,
   libpulseaudio,
   libxcb,
-  ncspot,
   ncurses,
   nix-update-script,
   openssl,
@@ -15,7 +14,7 @@
   portaudio,
   python3,
   rustPlatform,
-  testers,
+  versionCheckHook,
   ueberzug,
   withALSA ? stdenv.hostPlatform.isLinux,
   withClipboard ? true,
@@ -82,10 +81,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -D --mode=444 $src/images/logo.svg $out/share/icons/hicolor/scalable/apps/ncspot.svg
   '';
 
-  passthru = {
-    tests.version = testers.testVersion { package = ncspot; };
-    updateScript = nix-update-script { };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cross-platform ncurses Spotify client written in Rust, inspired by ncmpc and the likes";
