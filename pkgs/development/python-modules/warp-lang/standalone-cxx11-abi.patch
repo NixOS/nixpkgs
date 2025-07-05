@@ -1,8 +1,8 @@
 diff --git a/build_llvm.py b/build_llvm.py
-index 9d5a26a7..839909ad 100644
+index aee0a9f1..5e1c3557 100644
 --- a/build_llvm.py
 +++ b/build_llvm.py
-@@ -161,7 +161,6 @@ def build_from_source_for_arch(args, arch, llvm_source):
+@@ -171,7 +171,6 @@ def build_llvm_clang_from_source_for_arch(args, arch: str, llvm_source: str) ->
          "-D", "LLVM_INCLUDE_TESTS=FALSE",
          "-D", "LLVM_INCLUDE_TOOLS=TRUE",  # Needed by Clang
          "-D", "LLVM_INCLUDE_UTILS=FALSE",
@@ -11,15 +11,15 @@ index 9d5a26a7..839909ad 100644
          "-D", f"LLVM_HOST_TRIPLE={host_triple}",
          "-D", f"CMAKE_OSX_ARCHITECTURES={osx_architectures}",
 diff --git a/warp/build_dll.py b/warp/build_dll.py
-index 4d411e1b..4177725b 100644
+index 2218ff13..2354f69f 100644
 --- a/warp/build_dll.py
 +++ b/warp/build_dll.py
-@@ -321,7 +321,7 @@ def build_dll_for_arch(args, dll_path, cpp_paths, cu_path, libs, arch, mode=None
-         else:
-             version = "-fabi-version=13"  # GCC 8.2+
-
--        cpp_flags = f'{version} --std=c++17 -fno-rtti -D{cuda_enabled} -D{mathdx_enabled} -D{cuda_compat_enabled} -fPIC -fvisibility=hidden -D_GLIBCXX_USE_CXX11_ABI=0 -I"{native_dir}" {includes} '
-+        cpp_flags = f'{version} --std=c++17 -fno-rtti -D{cuda_enabled} -D{mathdx_enabled} -D{cuda_compat_enabled} -fPIC -fvisibility=hidden -I"{native_dir}" {includes} '
-
+@@ -417,7 +417,7 @@ def build_dll_for_arch(args, dll_path, cpp_paths, cu_path, arch, libs: Optional[
+             else:
+                 version = ""
+ 
+-        cpp_flags = f'-Werror -Wuninitialized {version} --std=c++17 -fno-rtti -D{cuda_enabled} -D{mathdx_enabled} -D{cuda_compat_enabled} -fPIC -fvisibility=hidden -D_GLIBCXX_USE_CXX11_ABI=0 -I"{native_dir}" {includes} '
++        cpp_flags = f'-Werror -Wuninitialized {version} --std=c++17 -fno-rtti -D{cuda_enabled} -D{mathdx_enabled} -D{cuda_compat_enabled} -fPIC -fvisibility=hidden -I"{native_dir}" {includes} '
+ 
          if mode == "debug":
              cpp_flags += "-O0 -g -D_DEBUG -DWP_ENABLE_DEBUG=1 -fkeep-inline-functions"

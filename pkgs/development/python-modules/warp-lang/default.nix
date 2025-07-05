@@ -37,13 +37,13 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
   stdenv = builtins.throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
-  version = "1.7.2.post1";
+  version = "1.8.0";
 
   libmathdx = effectiveStdenv.mkDerivation (finalAttrs: {
     # NOTE: The version used should match the version Warp requires:
-    # https://github.com/NVIDIA/warp/blob/4ad209076ce09668b18dedc74dce0d5cf8b9e409/deps/libmathdx-deps.packman.xml
+    # https://github.com/NVIDIA/warp/blob/${version}/deps/libmathdx-deps.packman.xml
     pname = "libmathdx";
-    version = "0.1.2";
+    version = "0.2.1";
 
     outputs = [
       "out"
@@ -59,9 +59,11 @@ let
           effectiveStdenv.hostPlatform.parsed.cpu.name
           finalAttrs.version
         ];
+
+        # nix-hash --type sha256 --to-sri $(nix-prefetch-url "https://...")
         hashes = {
-          aarch64-linux = "sha256-7HEXfzxPF62q/7pdZidj4eO09u588yxcpSu/bWot/9A=";
-          x86_64-linux = "sha256-MImBFv+ooRSUqdL/YEe/bJIcVBnHMCk7SLS5eSeh0cQ=";
+          aarch64-linux = "sha256-smB13xev2TG1xUx4+06KRgYEnPMczpjBOOX7uC1APbE=";
+          x86_64-linux = "sha256-+3TbLuL5Y2flLRicQgPVLs8KZQBqNYJYJ8P3etgX7g0=";
         };
       in
       lib.mapNullable (
@@ -76,12 +78,11 @@ let
     dontConfigure = true;
     dontBuild = true;
 
-    # NOTE: The leading component is stripped because the 0.1.2 release is within the `libmathdx` directory.
     installPhase = ''
       runHook preInstall
 
       mkdir -p "$out"
-      tar -xzf "$src" --strip-components=1 -C "$out"
+      tar -xzf "$src" -C "$out"
 
       mkdir -p "$static"
       moveToOutput "lib/libmathdx_static.a" "$static"
@@ -138,7 +139,7 @@ buildPythonPackage {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${version}";
-    hash = "sha256-cT0CrD71nNZnQMimGrmnSQl6RQx4MiUv2xBFPWNI/0s=";
+    hash = "sha256-zCRB92acxOiIFGjfRh2Cr1qq8pbhm+Rd011quMP/D88=";
   };
 
   patches =
@@ -161,16 +162,21 @@ buildPythonPackage {
 
   postPatch =
     # Patch build_dll.py to use our gencode flags rather than NVIDIA's very broad defaults.
-    # NOTE: After 1.7.2, patching will need to be updated like this:
-    # https://github.com/ConnorBaker/cuda-packages/blob/2fc8ba8c37acee427a94cdd1def55c2ec701ad82/pkgs/development/python-modules/warp/default.nix#L56-L65
     lib.optionalString cudaSupport ''
       nixLog "patching $PWD/warp/build_dll.py to use our gencode flags"
       substituteInPlace "$PWD/warp/build_dll.py" \
-        --replace-fail \
-          'nvcc_opts = gencode_opts + [' \
-          'nvcc_opts = [ ${
-            lib.concatMapStringsSep ", " (gencodeString: ''"${gencodeString}"'') cudaPackages.flags.gencode
-          }, '
+          --replace-fail \
+            '*gencode_opts,' \
+            '${
+              lib.concatMapStringsSep ", " (gencodeString: ''"${gencodeString}"'') cudaPackages.flags.gencode
+            },' \
+          --replace-fail \
+            '*clang_arch_flags,' \
+            '${
+              lib.concatMapStringsSep ", " (
+                realArch: ''"--cuda-gpu-arch=${realArch}"''
+              ) cudaPackages.flags.realArches
+            },'
     ''
     # Patch build_dll.py to use dynamic libraries rather than static ones.
     # NOTE: We do not patch the `nvptxcompiler_static` path because it is not available as a dynamic library.
