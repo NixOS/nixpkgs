@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./darwin-remove-impure-links.patch
+    ./vendored.patch
   ];
   postPatch = ''
     patchShebangs --build build_odin.sh
