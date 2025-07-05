@@ -58,6 +58,7 @@ lib.makeScope newScope (
         skim = callPackage ./skim.nix { };
         semver = callPackage ./semver.nix { };
         hcl = callPackage ./hcl.nix { };
+        vec = callPackage ./vec { };
       }
       // lib.optionalAttrs config.allowAliases {
         regex = throw "`nu_plugin_regex` is no longer compatible with the current Nushell release.";
