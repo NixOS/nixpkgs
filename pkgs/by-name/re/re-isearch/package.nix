@@ -56,10 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  preInstall = ''
-    mkdir -p $out/{bin,lib}
-  '';
-
   installPhase = ''
     runHook preInstall
 
