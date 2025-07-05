@@ -1,10 +1,10 @@
 {
-  renode,
   fetchurl,
+  renode-bin,
   writeScript,
 }:
 
-renode.overrideAttrs (
+renode-bin.overrideAttrs (
   finalAttrs: _: {
     pname = "renode-unstable";
     version = "1.16.0+20250805git769469683";
