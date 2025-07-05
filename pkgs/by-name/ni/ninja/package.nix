@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ninja";
   version =
     {
-      "1.11" = "1.11.1";
+      "1.11" = "1.13.0";
       latest = "1.12.1";
     }
     .${ninjaRelease};
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash =
       {
         # TODO: Remove Ninja 1.11 as soon as possible.
-        "1.11" = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
+        "1.11" = "sha256-eT5aSNvyy76l/nxrVwrUp2wmc8mJ98vhKRG+lBdyZzw=";
         latest = "sha256-RT5u+TDvWxG5EVQEYj931EZyrHUSAqK73OKDAascAwA=";
       }
       .${ninjaRelease} or (throw "Unsupported Ninja release: ${ninjaRelease}");
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preBuild
 
       # for list of env vars
-      # see https://github.com/ninja-build/ninja/blob/v1.11.1/configure.py#L264
+      # see https://github.com/ninja-build/ninja/blob/v1.13.0/configure.py#L264
       CXX="$CXX_FOR_BUILD" \
       AR="$AR_FOR_BUILD" \
       CFLAGS="$CFLAGS_FOR_BUILD" \
