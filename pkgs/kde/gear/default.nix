@@ -197,6 +197,7 @@
   kweather = callPackage ./kweather { };
   kweathercore = callPackage ./kweathercore { };
   kwordquiz = callPackage ./kwordquiz { };
+  kwrite = callPackage ./kate { project = "kwrite"; };
   libgravatar = callPackage ./libgravatar { };
   libkcddb = callPackage ./libkcddb { };
   libkcompactdisc = callPackage ./libkcompactdisc { };
