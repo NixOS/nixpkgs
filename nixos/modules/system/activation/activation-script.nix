@@ -90,7 +90,6 @@ let
       getent
       stdenv.cc.libc # nscd in update-users-groups.pl
       shadow
-      nettools # needed for hostname
       util-linux # needed for mount and mountpoint
     ];
 
