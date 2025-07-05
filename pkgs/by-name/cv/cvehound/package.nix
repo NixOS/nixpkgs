@@ -9,7 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "cvehound";
   version = "1.2.1";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "evdenis";
@@ -27,9 +27,12 @@ python3.pkgs.buildPythonApplication rec {
     }"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    lxml
+  build-system = with python3.pkgs; [
     setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
+    lxml
     sympy
   ];
 
