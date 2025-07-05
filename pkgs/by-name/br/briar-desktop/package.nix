@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
       onny
       supinie
     ];
+    teams = with lib.teams; [ ngi ];
     platforms = [ "x86_64-linux" ];
   };
 }
