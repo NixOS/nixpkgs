@@ -32,14 +32,14 @@
   withTermion ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ncspot";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4zeBTi1WBy9tXowsehUo4qou6bhznWPeCXFg+R3akho=";
   };
 
@@ -91,7 +91,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cross-platform ncurses Spotify client written in Rust, inspired by ncmpc and the likes";
     homepage = "https://github.com/hrkfdn/ncspot";
-    changelog = "https://github.com/hrkfdn/ncspot/releases/tag/v${version}";
+    changelog = "https://github.com/hrkfdn/ncspot/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       liff
@@ -99,4 +99,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ncspot";
   };
-}
+})
