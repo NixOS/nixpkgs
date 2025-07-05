@@ -57,7 +57,6 @@ lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb
 
   #### nonstandard script folders
-  context-texlive.scriptsFolder = "context-texlive/stubs-mkiv/unix";
   cyrillic-bin.scriptsFolder = "texlive-extra";
   fontinst.scriptsFolder = "texlive-extra";
   mptopdf.scriptsFolder = "context/perl";
@@ -518,7 +517,10 @@ lib.recursiveUpdate orig rec {
   #### dependency changes
 
   # Since 2025 OpTeX is based on luahbtex
-  optex.deps = orig.optex.deps ++ [ "luahbtex" ];
+  optex.deps = (orig.optex.deps or [ ]) ++ [ "luahbtex" ];
+
+  # Since the packaging change for ConTeXt, context-legacy is missing the xetex dependency
+  context-legacy.deps = (orig.context-legacy.deps or [ ]) ++ [ "xetex" ];
 
   # it seems to need it to transform fonts
   xdvi.deps = (orig.xdvi.deps or [ ]) ++ [ "metafont" ];
