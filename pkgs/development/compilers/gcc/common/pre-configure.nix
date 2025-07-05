@@ -54,6 +54,22 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export STRIP='strip -x'
 ''
 
+# We need to reconfigure the build system for mlibc targets, mostly because
+# libstdcxx tries running link tests (which we can't do without a libc when
+# we're bootstrapping mlibc). This should probably only be required when
+# withoutTargetLibc, however managarm's recipes do this for every gcc build.
+# This should probably also be done for other targets when withoutTargetLibc,
+# but no other target seems to have issues without doing this so might as well
+# leave them untouched.
++ lib.optionalString targetPlatform.isMlibc ''
+  for i in */configure.ac; do
+    pushd "$(dirname "$i")"
+    echo "Running autoreconf in $PWD"
+    autoconf -f
+    popd
+  done
+''
+
 # HACK: if host and target config are the same, but the platforms are
 # actually different we need to convince the configure script that it
 # is in fact building a cross compiler although it doesn't believe it.

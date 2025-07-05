@@ -86,6 +86,20 @@ self: super: {
     else
       throw "Musl libc only supports 64-bit Linux systems.";
 
+  # All packages built with mlibc.
+  pkgsMlibc = nixpkgsFun {
+    overlays = [
+      (self': super': {
+        pkgsMlibc = super';
+      })
+    ] ++ overlays;
+    crossSystem = {
+      config = lib.systems.parse.tripleFromSystem (
+        stdenv.hostPlatform.parsed // { abi = lib.systems.parse.abis.mlibc; }
+      );
+    };
+  };
+
   # Full package set with rocm on cuda off
   # Mostly useful for asserting pkgs.pkgsRocm.torchWithRocm == pkgs.torchWithRocm and similar
   pkgsRocm = nixpkgsFun ({

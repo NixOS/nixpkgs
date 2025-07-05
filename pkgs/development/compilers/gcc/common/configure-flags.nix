@@ -83,6 +83,11 @@ let
           "--disable-libatomic" # requires libc
           "--disable-decimal-float" # requires libc
           "--disable-libmpx" # requires libc
+          "--disable-hosted-libstdcxx"
+          "--disable-libstdcxx-backtrace"
+          "--disable-linux-futex"
+          "--disable-libvtv"
+          "--disable-libitm"
         ]
         ++ lib.optionals crossMingw [
           "--with-headers=${lib.getDev libcCross}/include"
@@ -122,11 +127,18 @@ let
           }"
           "--enable-nls"
         ]
-        ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
-          # libsanitizer requires netrom/netrom.h which is not
-          # available in uclibc.
-          "--disable-libsanitizer"
-        ]
+        ++
+          lib.optionals
+            (lib.elem targetPlatform.libc [
+              "mlibc"
+              "musl"
+              "uclibc"
+            ])
+            [
+              # libsanitizer requires netrom/netrom.h which is not
+              # available in uclibc.
+              "--disable-libsanitizer"
+            ]
         ++ lib.optional (
           targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano"
         ) "--with-newlib"
@@ -269,6 +281,7 @@ let
       "--with-gnu-as"
       "--without-gnu-ld"
     ]
+    ++ lib.optional (targetPlatform.libc == "mlibc") "--disable-libsanitizer"
     ++
       lib.optional (targetPlatform.libc == "musl")
         # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865

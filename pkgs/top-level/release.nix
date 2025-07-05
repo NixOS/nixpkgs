@@ -414,6 +414,10 @@ let
           "x86_64-linux"
           "aarch64-linux"
         ];
+        pkgsMlibc.stdenv = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
         pkgsStatic.stdenv = [
           "x86_64-linux"
           "aarch64-linux"

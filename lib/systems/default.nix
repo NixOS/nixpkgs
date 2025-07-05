@@ -133,6 +133,8 @@ let
               "musl"
             else if final.isUClibc then
               "uclibc"
+            else if final.isMlibc then
+              "mlibc"
             else if final.isAndroid then
               "bionic"
             else if
@@ -241,7 +243,8 @@ let
             (
               isAndroid
               || isGnu
-              || isMusl # Linux (allows multiple libcs)
+              || isMusl
+              || isMlibc # Linux (allows multiple libcs)
               || isDarwin
               || isSunOS
               || isOpenBSD
