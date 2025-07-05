@@ -916,7 +916,7 @@ in
     systemd.services.httpd = {
       description = "Apache HTTPD";
       wantedBy = [ "multi-user.target" ];
-      wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
+      wants = concatLists (map (certName: [ "acme-${certName}.service" ]) vhostCertNames);
       after =
         [ "network.target" ]
         ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
@@ -959,21 +959,20 @@ in
       };
     };
 
-    # postRun hooks on cert renew can't be used to restart Apache since renewal
+    # XXX postRun hooks on cert renew can't be used to restart Apache since renewal
     # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
     # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
     systemd.services.httpd-config-reload =
       let
         sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
-        sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
       in
       mkIf (vhostCertNames != [ ]) {
         wantedBy = sslServices ++ [ "multi-user.target" ];
         # Before the finished targets, after the renew services.
         # This service might be needed for HTTP-01 challenges, but we only want to confirm
         # certs are updated _after_ config has been reloaded.
-        before = sslTargets;
+        # XXX use acme reload triggers
         after = sslServices;
         restartTriggers = [ cfg.configFile ];
         # Block reloading if not all certs exist yet.

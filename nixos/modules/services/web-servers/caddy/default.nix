@@ -411,7 +411,7 @@ in
 
     systemd.packages = [ cfg.package ];
     systemd.services.caddy = {
-      wants = map (certName: "acme-finished-${certName}.target") vhostCertNames;
+      wants = map (certName: "acme-${certName}.service") vhostCertNames;
       after =
         map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
         ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa

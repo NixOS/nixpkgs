@@ -22,10 +22,6 @@
             addSSL = true;
             useACMEHost = "proxied.example.test";
             acmeFallbackHost = "localhost:8080";
-            # lego will refuse the request if the host header is not correct
-            extraConfig = ''
-              proxy_set_header Host $host;
-            '';
           };
         };
       };

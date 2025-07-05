@@ -45,6 +45,7 @@
           "certchange.${domain}"
           "zeroconf.${domain}"
           "zeroconf2.${domain}"
+          "zeroconf3.${domain}"
           "nullroot.${domain}"
         ];
 
@@ -57,6 +58,7 @@
         systemd.targets."renew-triggered" = {
           wantedBy = [ "${serverName}-config-reload.service" ];
           after = [ "${serverName}-config-reload.service" ];
+          unitConfig.RefuseManualStart = true;
         };
 
         security.acme.certs."proxied.${domain}" = {
@@ -101,11 +103,38 @@
           # Test that "acmeRoot = null" still results in
           # valid cert generation by inheriting defaults.
           nullroot.configuration = {
-            security.acme.defaults.listenHTTP = ":8080";
+            security.acme.defaults.listenHTTP = ":8081";
             services.${serverName}.virtualHosts."nullroot.${domain}" = {
-              onlySSL = true;
+              addSSL = true;
               enableACME = true;
               acmeRoot = null;
+              acmeFallbackHost = "localhost:8081";
+            };
+          };
+
+          # Test that a adding a second virtual host will not trigger
+          # other units (account and renewal service for first)
+          zeroconf3.configuration = {
+            services.${serverName}.virtualHosts = {
+              "zeroconf.${domain}" = {
+                addSSL = true;
+                enableACME = true;
+                serverAliases = [ "zeroconf2.${domain}" ];
+              };
+              "zeroconf3.${domain}" = {
+                addSSL = true;
+                enableACME = true;
+              };
+            };
+            # We're doing something risky with the combination of the service unit being persistent
+            # that could end up that the timers do not trigger properly. Show that timers have the
+            # desired effect.
+            systemd.timers."acme-renew-zeroconf3.example.test".timerConfig = {
+              OnCalendar = lib.mkForce "*-*-* *:*:0/5";
+              AccuracySec = lib.mkForce 0;
+              # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
+              RandomizedDelaySec = lib.mkForce 0;
+              FixedRandomDelay = lib.mkForce 0;
             };
           };
         };
@@ -121,30 +150,24 @@
       ca_domain = "${nodes.acme.test-support.acme.caDomain}"
       fqdn = f"proxied.{domain}"
 
+      webserver.start()
+      webserver.wait_for_unit("nginx.service")
+
+      with subtest("Can run on self-signed certificates"):
+          check_issuer(webserver, fqdn, "minica")
+          # Check that the web server has picked up the selfsigned cert
+          check_connection(webserver, fqdn, minica=True)
+
       acme.start()
       wait_for_running(acme)
       acme.wait_for_open_port(443)
 
       with subtest("Acquire a cert through a proxied lego"):
-          webserver.start()
-          webserver.succeed("systemctl is-system-running --wait")
-          wait_for_running(webserver)
-          download_ca_certs(webserver, ca_domain)
-          check_connection(webserver, fqdn)
-
-      with subtest("Can run on selfsigned certificates"):
-          # Switch to selfsigned first
-          webserver.succeed(f"systemctl clean acme-{fqdn}.service --what=state")
-          webserver.succeed(f"systemctl start acme-selfsigned-{fqdn}.service")
-          check_issuer(webserver, fqdn, "minica")
-          webserver.succeed("systemctl restart ${serverName}-config-reload.service")
-          # Check that the web server has picked up the selfsigned cert
-          check_connection(webserver, fqdn, minica=True)
-          webserver.succeed("systemctl stop renew-triggered.target")
-          webserver.succeed(f"systemctl start acme-{fqdn}.service")
-          webserver.wait_for_unit("renew-triggered.target")
-          check_issuer(webserver, fqdn, "pebble")
-          check_connection(webserver, fqdn)
+        webserver.succeed(f"systemctl start acme-order-renew-{fqdn}.service")
+        webserver.wait_for_unit("renew-triggered.target")
+        download_ca_certs(webserver, ca_domain)
+        check_issuer(webserver, fqdn, "pebble")
+        check_connection(webserver, fqdn)
 
       with subtest("security.acme changes reflect on web server part 1"):
           check_connection(webserver, f"certchange.{domain}", fail=True)
@@ -181,5 +204,23 @@
           switch_to(webserver, "nullroot")
           webserver.wait_for_unit("renew-triggered.target")
           check_connection(webserver, f"nullroot.{domain}")
+
+      with subtest("Ensure that adding a second vhost does not trigger first vhost acme units"):
+          switch_to(webserver, "zeroconf")
+          webserver.wait_for_unit("renew-triggered.target")
+          webserver.succeed("journalctl --cursor-file=/tmp/cursor | grep acme")
+          switch_to(webserver, "zeroconf3")
+          webserver.wait_for_unit("renew-triggered.target")
+          output = webserver.succeed("journalctl --cursor-file=/tmp/cursor | grep acme")
+          # The new certificate unit gets triggered:
+          t.assertIn("acme-zeroconf3.example.test-start", output)
+          # The account generation should not be triggered again:
+          t.assertNotIn("acme-account-d590213ed52603e9128d.target", output)
+          # The other certificates should also not be triggered:
+          t.assertNotIn("acme-zeroconf.example.test-start", output)
+          t.assertNotIn("acme-proxied.example.test-start", output)
+          # Ensure the timer works, due to our shenanigans with
+          # RemainAfterExit=true
+          webserver.wait_until_succeeds("journalctl --cursor-file=/tmp/cursor | grep 'Starting Order (and renew) ACME certificate for zeroconf3.example.test...'")
     '';
 }

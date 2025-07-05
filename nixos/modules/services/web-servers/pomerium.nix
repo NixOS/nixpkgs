@@ -71,10 +71,10 @@ in
         description = "Pomerium authenticating reverse proxy";
         wants = [
           "network.target"
-        ] ++ (optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
+        ] ++ (optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service");
         after = [
           "network.target"
-        ] ++ (optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target");
+        ] ++ (optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service");
         wantedBy = [ "multi-user.target" ];
         environment = optionalAttrs (cfg.useACMEHost != null) {
           CERTIFICATE_FILE = "fullchain.pem";
@@ -123,6 +123,7 @@ in
         };
       };
 
+      # XXX replace by acme reload helper?inherit
       # postRun hooks on cert renew can't be used to restart Nginx since renewal
       # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
       # which allows the acme-finished-$cert.target to signify the successful updating
@@ -131,11 +132,9 @@ in
         # TODO(lukegb): figure out how to make config reloading work with credentials.
 
         wantedBy = [
-          "acme-finished-${cfg.useACMEHost}.target"
+          "acme-${cfg.useACMEHost}.service"
           "multi-user.target"
         ];
-        # Before the finished targets, after the renew services.
-        before = [ "acme-finished-${cfg.useACMEHost}.target" ];
         after = [ "acme-${cfg.useACMEHost}.service" ];
         # Block reloading if not all certs exist yet.
         unitConfig.ConditionPathExists = [
