@@ -19552,6 +19552,12 @@
     githubId = 722550;
     name = "Peter Hoeg";
   };
+  peterparser = {
+    email = "massimo.schembri18@gmail.com";
+    github = "peterparser";
+    githubId = 32139342;
+    name = "peterparser";
+  };
   peterromfeldhk = {
     email = "peter.romfeld.hk@gmail.com";
     github = "peterromfeldhk";
