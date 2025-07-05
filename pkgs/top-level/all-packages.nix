@@ -733,6 +733,8 @@ with pkgs;
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
+  fetchNpmRegistry = callPackage ../build-support/fetchnpmregistry { };
+
   fetchPypi = callPackage ../build-support/fetchpypi { };
 
   fetchPypiLegacy = callPackage ../build-support/fetchpypilegacy { };
