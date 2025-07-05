@@ -12748,6 +12748,12 @@
     githubId = 2469618;
     name = "Junji Hashimoto";
   };
+  jupblb = {
+    email = "nixpkgs@kielbowi.cz";
+    github = "jupblb";
+    githubId = 3370617;
+    name = "Michal Kielbowicz";
+  };
   jurraca = {
     email = "julienu@pm.me";
     github = "jurraca";
