@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   nixosTests,
 }:
 buildGoModule (finalAttrs: {
@@ -39,8 +40,11 @@ buildGoModule (finalAttrs: {
 
   tags = [ "sqlite_mattn" ];
 
-  passthru.tests = {
-    inherit (nixosTests) scion-freestanding-deployment;
+  passthru = {
+    tests = {
+      inherit (nixosTests) scion-freestanding-deployment;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
