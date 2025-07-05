@@ -7,14 +7,15 @@
   fetchurl,
   nix-update-script,
   testers,
+  writableTmpDirAsHomeHook,
 }:
 
 let
   opencode-node-modules-hash = {
-    "aarch64-darwin" = "sha256-ZI4wJvBeSejhHjyRsYqpfUvJ959WU01JCW+2HIBs3Cg=";
-    "aarch64-linux" = "sha256-g/IyhBxVyU39rh2R9SfmHwBi4oMS12bo60Apbay06v0=";
-    "x86_64-darwin" = "sha256-ckWsqrwJEpL1ejrOSp5wTGwQYsDapLH3imNnSOEHQSw=";
-    "x86_64-linux" = "sha256-Q3zlrS7kuyKJReuIFqsqG5yfDuwLwBoCm0hUpJo9hSU=";
+    "aarch64-darwin" = "sha256-+eXXWskZg0CIY12+Ee4Y3uwpB5I92grDiZ600Whzx/I=";
+    "aarch64-linux" = "sha256-rxLPrYAIiKDh6de/GACPfcYXY7nIskqAu1Xi12y5DpU=";
+    "x86_64-darwin" = "sha256-LOz7N6gMRaZLPks+y5fDIMOuUCXTWpHIss1v0LHPnqw=";
+    "x86_64-linux" = "sha256-GKLR+T+lCa7GFQr6HqSisfa4uf8F2b79RICZmePmCBE=";
   };
   bun-target = {
     "aarch64-darwin" = "bun-darwin-arm64";
@@ -25,12 +26,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.1.189";
+  version = "0.1.194";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vQZE1b+/B3NV9wEp/T1ayP5pEuxmv37XRXx95XtUK9M=";
+    hash = "sha256-51Mc0Qrg3C0JTpXl2OECKEUvle+6X+j9+/Blu8Nu9Ao=";
   };
 
   tui = buildGoModule {
@@ -38,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
     src = "${finalAttrs.src}/packages/tui";
 
-    vendorHash = "sha256-cDQ2ElnpGIqbTt13OY8QKhey9CsI/DoClHQrEUkXBMk=";
+    vendorHash = "sha256-hxtQHlaV2Em8CyTK3BNaoo/LgnGbMjj5XafbleF+p9I=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -46,7 +47,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     ldflags = [
       "-s"
-      "-w"
       "-X=main.Version=${finalAttrs.version}"
     ];
 
@@ -68,20 +68,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "SOCKS_SERVER"
     ];
 
-    nativeBuildInputs = [ bun ];
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
 
     dontConfigure = true;
 
     buildPhase = ''
+      runHook preBuild
 
-      export HOME=$(mktemp -d)
-      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-      bun install \
-        --filter=opencode \
-        --force \
-        --frozen-lockfile \
-        --no-progress
+       bun install \
+         --filter=opencode \
+         --force \
+         --frozen-lockfile \
+         --no-progress
+
+      runHook postBuild
     '';
 
     installPhase = ''
