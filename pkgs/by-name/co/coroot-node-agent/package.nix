@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "coroot-node-agent";
-  version = "1.25.1";
+  version = "1.25.4";
 
   src = fetchFromGitHub {
     owner = "coroot";
     repo = "coroot-node-agent";
     rev = "v${version}";
-    hash = "sha256-efQDMPPkuECz1gdQmoUqNwGBlwPbuabM/xicUkG4fbs=";
+    hash = "sha256-mzgeV3spny6swOj6nU7uhHgPF0SIuuKXbRCquMH0ZwY=";
   };
 
   vendorHash = "sha256-QvdFW/o481F85WuXNdz99Q9MBiGRjVSWvPRytq67vYU=";
