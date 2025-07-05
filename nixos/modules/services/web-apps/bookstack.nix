@@ -16,21 +16,17 @@ let
 
   artisan = "${cfg.package}/artisan";
 
-  env-file-values =
-    lib.attrsets.mapAttrs' (n: v: lib.attrsets.nameValuePair (lib.strings.removeSuffix "_FILE" n) v)
-      (
-        lib.attrsets.filterAttrs (n: v: !builtins.isNull v) (
-          lib.attrsets.filterAttrs (n: v: lib.strings.hasSuffix "_FILE" n) cfg.settings
-        )
-      );
-  env-nonfile-values = lib.attrsets.filterAttrs (n: v: !lib.strings.hasSuffix "_FILE" n) cfg.settings;
+  env-file-values = lib.mapAttrs' (n: v: {
+    name = lib.removeSuffix "_FILE" n;
+    value = v;
+  }) (lib.filterAttrs (n: v: v != null && lib.match ".+_FILE" n != null) cfg.settings);
+
+  env-nonfile-values = lib.filterAttrs (n: v: lib.match ".+_FILE" n == null) cfg.settings;
 
   bookstack-maintenance = pkgs.writeShellScript "bookstack-maintenance.sh" ''
     set -a
-    ${lib.strings.toShellVars env-nonfile-values}
-    ${lib.strings.concatLines (
-      lib.attrsets.mapAttrsToList (n: v: "${n}=\"$(< ${v})\"") env-file-values
-    )}
+    ${lib.toShellVars env-nonfile-values}
+    ${lib.concatLines (lib.mapAttrsToList (n: v: "${n}=\"$(< ${v})\"") env-file-values)}
     set +a
     ${artisan} optimize:clear
     rm ${cfg.dataDir}/cache/*.php
@@ -136,15 +132,12 @@ in
       "database"
       "user"
     ] "Use services.bookstack.settings.DB_USERNAME instead.")
-    (lib.mkRemovedOptionModule
-      [
-        "services"
-        "bookstack"
-        "database"
-        "createLocally"
-      ]
-      "This option is deprecated. Please create your database manually or use services.mysql.ensureDatabases and services.mysql.ensureUsers."
-    )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "bookstack"
+      "database"
+      "createLocally"
+    ] "Use services.mysql.ensureDatabases and services.mysql.ensureUsers instead.")
     (lib.mkRemovedOptionModule [
       "services"
       "bookstack"
@@ -472,6 +465,7 @@ in
         "${cfg.dataDir}/storage/logs".d = defaultConfig;
         "${cfg.dataDir}/storage/uploads".d = defaultConfig;
         "${cfg.dataDir}/cache".d = defaultConfig;
+        "${cfg.dataDir}/themes".d = defaultConfig;
       };
 
     users = {
