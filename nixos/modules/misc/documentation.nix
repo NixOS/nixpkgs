@@ -11,7 +11,6 @@
   specialArgs,
   ...
 }:
-
 let
   inherit (lib)
     cleanSourceFilter
@@ -188,7 +187,6 @@ let
         exec = "nixos-help";
         categories = [ "System" ];
       };
-
     in
     pkgs.symlinkJoin {
       name = "nixos-help";
@@ -198,8 +196,43 @@ let
       ];
     };
 
-in
+  nixpkgs-help =
+    let
+      helpScript = pkgs.writeShellScriptBin "nixpkgs-help" ''
+        # Finds first executable browser in a colon-separated list.
+        # (see how xdg-open defines BROWSER)
+        browser="$(
+          IFS=: ; for b in $BROWSER; do
+            [ -n "$(type -P "$b" || true)" ] && echo "$b" && break
+          done
+        )"
+        if [ -z "$browser" ]; then
+          browser="$(type -P xdg-open || true)"
+          if [ -z "$browser" ]; then
+            browser="${pkgs.w3m-nographics}/bin/w3m"
+          fi
+        fi
+        exec "$browser" ${pkgs.nixpkgs-manual}/share/doc/nixpkgs/index.html
+      '';
 
+      desktopItem = pkgs.makeDesktopItem {
+        name = "nixpkgs-manual";
+        desktopName = "Nixpkgs Manual";
+        genericName = "System Manual";
+        comment = "View Nixpkgs documentation in a web browser";
+        icon = "nix-snowflake";
+        exec = "nixpkgs-help";
+        categories = [ "System" ];
+      };
+    in
+    pkgs.symlinkJoin {
+      name = "nixpkgs-help";
+      paths = [
+        helpScript
+        desktopItem
+      ];
+    };
+in
 {
   imports = [
     ./man-db.nix
@@ -220,9 +253,7 @@ in
   ];
 
   options = {
-
     documentation = {
-
       enable = mkOption {
         type = types.bool;
         default = true;
@@ -362,8 +393,17 @@ in
         '';
       };
 
-    };
+      nixpkgs.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to install Nixpkgs' own documentation.
 
+          - This includes the HTML manual and the {command}`nixpkgs-help` command if
+            {option}`documentation.doc.enable` is set.
+        '';
+      };
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -422,6 +462,8 @@ in
         ];
     })
 
+    (mkIf cfg.nixpkgs.enable {
+      environment.systemPackages = optional cfg.doc.enable nixpkgs-help;
+    })
   ]);
-
 }
