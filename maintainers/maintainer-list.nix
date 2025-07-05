@@ -19831,12 +19831,6 @@
     github = "pilz0";
     githubId = 48645439;
   };
-  pimeys = {
-    email = "julius@nauk.io";
-    github = "pimeys";
-    githubId = 34967;
-    name = "Julius de Bruijn";
-  };
   pinage404 = {
     email = "pinage404+nixpkgs@gmail.com";
     github = "pinage404";
