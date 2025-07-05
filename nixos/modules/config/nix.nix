@@ -392,7 +392,15 @@ in
               description = ''
                 The set of features supported by the machine. Derivations
                 can express dependencies on system features through the
-                `requiredSystemFeatures` attribute.
+                `requiredSystemFeatures` attribute. Also see {option}`nix.settings.extra-system-features`.
+              '';
+            };
+
+            extra-system-features = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = ''
+                Extra features on top of {option}`nix.settings.system-features`.
               '';
             };
 
