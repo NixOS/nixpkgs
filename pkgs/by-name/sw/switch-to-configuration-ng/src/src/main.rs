@@ -123,7 +123,14 @@ impl From<&Action> for &'static str {
 // Allow for this switch-to-configuration to remain consistent with the perl implementation.
 // Perl's "die" uses errno to set the exit code: https://perldoc.perl.org/perlvar#%24%21
 fn die() -> ! {
-    std::process::exit(std::io::Error::last_os_error().raw_os_error().unwrap_or(1));
+    let code = match std::io::Error::last_os_error().raw_os_error().unwrap_or(1) {
+        // Ensure that even if errno did not point to a helpful error code, we still have a
+        // non-zero exit code
+        0 => 1,
+        other => other,
+    };
+
+    std::process::exit(code);
 }
 
 fn parse_os_release() -> Result<HashMap<String, String>> {
@@ -988,6 +995,8 @@ dry-activate: show what would be done if this configuration were activated
 
 /// Performs switch-to-configuration functionality for the entire system
 fn do_system_switch(action: Action) -> anyhow::Result<()> {
+    log::debug!("Performing system switch");
+
     let out = PathBuf::from(required_env("OUT")?);
     let toplevel = PathBuf::from(required_env("TOPLEVEL")?);
     let distro_id = required_env("DISTRO_ID")?;
@@ -995,8 +1004,14 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     let install_bootloader = required_env("INSTALL_BOOTLOADER")?;
     let locale_archive = required_env("LOCALE_ARCHIVE")?;
     let new_systemd = PathBuf::from(required_env("SYSTEMD")?);
+    let log_level = if std::env::var("STC_DEBUG").is_ok() {
+        LevelFilter::Debug
+    } else {
+        LevelFilter::Info
+    };
 
     let action = ACTION.get_or_init(|| action);
+    log::debug!("Using action {:?}", action);
 
     // The action that is to be performed (like switch, boot, test, dry-activate) Also exposed via
     // environment variable from now on
@@ -1028,6 +1043,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     std::fs::set_permissions("/run/nixos", perms)
         .context("Failed to set permissions on /run/nixos directory")?;
 
+    log::debug!("Creating lock file /run/nixos/switch-to-configuration.lock");
     let Ok(lock) = std::fs::OpenOptions::new()
         .append(true)
         .create(true)
@@ -1037,12 +1053,13 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         die();
     };
 
+    log::debug!("Acquiring lock on file /run/nixos/switch-to-configuration.lock");
     let Ok(_lock) = Flock::lock(lock, FlockArg::LockExclusiveNonblock) else {
         eprintln!("Could not acquire lock");
         die();
     };
 
-    if syslog::init(Facility::LOG_USER, LevelFilter::Debug, Some("nixos")).is_err() {
+    if syslog::init(Facility::LOG_USER, log_level, Some("nixos")).is_err() {
         bail!("Failed to initialize logger");
     }
 
@@ -1052,6 +1069,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         != "1"
     {
         do_pre_switch_check(&pre_switch_check, &toplevel, action)?;
+        log::debug!("Done performing pre-switch checks");
     }
 
     if *action == Action::Check {
@@ -1061,6 +1079,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     // Install or update the bootloader.
     if matches!(action, Action::Switch | Action::Boot) {
         do_install_bootloader(&install_bootloader, &toplevel)?;
+        log::debug!("Done performing bootloader installation");
     }
 
     // Just in case the new configuration hangs the system, do a sync now.
@@ -1115,6 +1134,7 @@ won't take effect until you reboot the system.
     let mut units_to_reload = map_from_list_file(RELOAD_LIST_FILE);
 
     let dbus_conn = LocalConnection::new_system().context("Failed to open dbus connection")?;
+
     let (systemd, logind) = new_dbus_proxies(&dbus_conn);
 
     let submitted_jobs = Rc::new(RefCell::new(HashMap::new()));
@@ -1691,6 +1711,7 @@ won't take effect until you reboot the system.
                     .canonicalize()
                     .context("Failed to get full path to /proc/self/exe")?;
 
+                log::debug!("Performing user switch for {}", name);
                 std::process::Command::new(&myself)
                     .uid(uid)
                     .gid(gid)
