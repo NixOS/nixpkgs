@@ -42,7 +42,6 @@
   bashup-events32,
   dgoss,
   git-ftp,
-  ix,
   lesspipe,
   locate-dominating-file,
   mons,
@@ -77,6 +76,7 @@ let
     rlwrap
     gnutar
     bc
+    msmtp
   ];
 in
 rec {
@@ -326,7 +326,6 @@ rec {
   inherit bashup-events32;
   inherit bats;
   inherit git-ftp;
-  inherit ix;
   inherit lesspipe;
   inherit locate-dominating-file;
   inherit mons;
