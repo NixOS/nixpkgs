@@ -105,9 +105,7 @@ in
     serviceDependencies = lib.mkOption {
       type = with lib.types; listOf str;
       default = lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
-      defaultText = lib.literalExpression ''
-        optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnits
-      '';
+      defaultText = lib.literalExpression "lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnits";
       description = ''
         List of Systemd services to require and wait for when starting the application service.
       '';
