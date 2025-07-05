@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchFromGitLab,
   fetchurl,
   openjdk,
   libnotify,
@@ -10,6 +11,7 @@
   bash,
   writeScript,
   libGL,
+  nix-update-script,
 }:
 let
 
@@ -57,6 +59,20 @@ stdenv.mkDerivation (finalAttrs: {
       7z a $out/lib/briar-desktop.jar tor_linux-$arch.zip
     done
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs =
+      let
+        src' = fetchFromGitLab {
+          domain = "code.briarproject.org";
+          owner = "briar";
+          repo = "briar-desktop";
+          rev = finalAttrs.version;
+          hash = "";
+        };
+      in
+      [ "--url=${src'.url}" ];
+  };
 
   meta = {
     description = "Decentralized and secure messenger";
