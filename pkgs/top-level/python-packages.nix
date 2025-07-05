@@ -2346,6 +2346,8 @@ self: super: with self; {
 
   cddlparser = callPackage ../development/python-modules/cddlparser { };
 
+  cdxj-indexer = callPackage ../development/python-modules/cdxj-indexer { };
+
   celery = callPackage ../development/python-modules/celery { };
 
   celery-batches = callPackage ../development/python-modules/celery-batches { };
@@ -4817,6 +4819,8 @@ self: super: with self; {
 
   ezdxf = callPackage ../development/python-modules/ezdxf { };
 
+  ezodf = callPackage ../development/python-modules/ezodf { };
+
   ezyrb = callPackage ../development/python-modules/ezyrb { };
 
   f3d = toPythonModule (
@@ -5428,6 +5432,8 @@ self: super: with self; {
   frelatage = callPackage ../development/python-modules/frelatage { };
 
   freud = callPackage ../development/python-modules/freud { };
+
+  frictionless = callPackage ../development/python-modules/frictionless { };
 
   frida-python = callPackage ../development/python-modules/frida-python { };
 
@@ -12171,6 +12177,8 @@ self: super: with self; {
   py2bit = callPackage ../development/python-modules/py2bit { };
 
   py2vega = callPackage ../development/python-modules/py2vega { };
+
+  py3amf = callPackage ../development/python-modules/py3amf { };
 
   py3buddy = callPackage ../development/python-modules/py3buddy { };
 
@@ -19224,6 +19232,8 @@ self: super: with self; {
   w1thermsensor = callPackage ../development/python-modules/w1thermsensor { };
 
   w3lib = callPackage ../development/python-modules/w3lib { };
+
+  wacz = callPackage ../development/python-modules/wacz { };
 
   wadler-lindig = callPackage ../development/python-modules/wadler-lindig { };
 
