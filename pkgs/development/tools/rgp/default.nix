@@ -5,6 +5,7 @@
   fetchurl,
   autoPatchelfHook,
   dbus,
+  directx-shader-compiler,
   fontconfig,
   freetype,
   glib,
@@ -18,21 +19,23 @@
   libxcb,
   libXi,
   libxkbcommon,
+  libxml2,
   ncurses,
   wayland,
+  xcbutil,
   zlib,
 }:
 
 let
-  buildNum = "2024-09-26-1411";
+  buildNum = "2025-06-12-1681";
 in
 stdenv.mkDerivation {
   pname = "rgp";
-  version = "2.3";
+  version = "2.5";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-mgIFDStgat4E+67TaSLrcwgWTu7zLf7Nkn6zBlgeVcQ=";
+    hash = "sha256-e7IxoaZi77klrihRO6vDh1o2Clj5lNsVlzQ7btgLsu4=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +45,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     dbus
+    directx-shader-compiler
     fontconfig
     freetype
     glib
@@ -57,6 +61,7 @@ stdenv.mkDerivation {
     libxkbcommon
     ncurses
     wayland
+    xcbutil
     zlib
   ];
 
@@ -78,6 +83,12 @@ stdenv.mkDerivation {
         --unset QT_STYLE_OVERRIDE \
         --prefix LD_LIBRARY_PATH : $out/opt/rgp/lib
     done
+  '';
+
+  preFixup = ''
+    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
+    mkdir -p "$out/lib"
+    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
   '';
 
   meta = with lib; {
