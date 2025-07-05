@@ -83,6 +83,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningEnable = [ "pie" ];
+
   preConfigure = ''
     substituteInPlace configure \
       --replace '$dir/include/gssapi' ${lib.getDev libkrb5}/include/gssapi \
