@@ -1,158 +1,113 @@
-diff --git a/comby-kernel.opam b/comby-kernel.opam
-index 9db7cc5..83e6e7b 100644
---- a/comby-kernel.opam
-+++ b/comby-kernel.opam
-@@ -20,7 +20,7 @@ build: [
- depends: [
-   "dune" {>= "2.8.0"}
-   "ocaml" {>= "4.08.1"}
--  "core_kernel"
-+  "core-kernel" {>= "v0.16.0"}
-   "mparser" {>= "1.3"}
-   "mparser-pcre"
-   "ppx_deriving"
-diff --git a/comby-semantic.opam b/comby-semantic.opam
-index 88563f6..fbbc122 100644
---- a/comby-semantic.opam
-+++ b/comby-semantic.opam
-@@ -20,7 +20,7 @@ build: [
- depends: [
-   "dune" {>= "2.8.0"}
-   "ocaml" {>= "4.08.1"}
--  "core_kernel"
-+  "core_kernel" {>= "v0.15.0"}
-   "ppx_deriving"
-   "lwt"
-   "cohttp"
-diff --git a/comby.opam b/comby.opam
-index 9e5d96b..d5be316 100644
---- a/comby.opam
-+++ b/comby.opam
-@@ -31,7 +31,7 @@ depends: [
-   "cohttp-lwt-unix"
-   "comby-kernel" {= "1.7.0"}
-   "comby-semantic" {= "1.7.0"}
--  "core"
-+  "core" {>= "v0.16.0"}
-   "hack_parallel" {arch != "arm32" & arch != "arm64"}
-   "lwt"
-   "lwt_react"
 diff --git a/lib/app/configuration/command_configuration.ml b/lib/app/configuration/command_configuration.ml
-index 75c3107..29826a9 100644
+index 8b09a4b..fd083cc 100644
 --- a/lib/app/configuration/command_configuration.ml
 +++ b/lib/app/configuration/command_configuration.ml
-@@ -1,7 +1,7 @@
+@@ -1,6 +1,6 @@
  open Core
  open Camlzip
- 
 -open Polymorphic_compare
 +open Poly
- 
  open Comby_kernel
  
-@@ -16,21 +16,21 @@ type 'a next =
+ let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
+@@ -12,18 +12,18 @@ type 'a next =
  
- let fold_directory ?(sorted=false) root ~init ~f =
+ let fold_directory ?(sorted = false) root ~init ~f =
    let rec aux acc absolute_path depth =
--    if Sys.is_file absolute_path = `Yes then
-+    if Sys_unix.is_file absolute_path = `Yes then
+-    if Sys.is_file absolute_path = `Yes then (
++    if Sys_unix.is_file absolute_path = `Yes then (
        match f acc ~depth ~absolute_path ~is_file:true with
-       | Continue acc
-       | Skip acc -> acc
--    else if Sys.is_directory absolute_path = `Yes then
-+    else if Sys_unix.is_directory absolute_path = `Yes then
+       | Continue acc | Skip acc -> acc)
+-    else if Sys.is_directory absolute_path = `Yes then (
++    else if Sys_unix.is_directory absolute_path = `Yes then (
        match f acc ~depth ~absolute_path ~is_file:false with
        | Skip acc -> acc
        | Continue acc ->
          let dir_contents =
            if Option.is_some (Sys.getenv "COMBY_TEST") || sorted then
--            Sys.ls_dir absolute_path
-+            Sys_unix.ls_dir absolute_path
-             |> List.sort ~compare:String.compare
-             |> List.rev
+-            Sys.ls_dir absolute_path |> List.sort ~compare:String.compare |> List.rev
++            Sys_unix.ls_dir absolute_path |> List.sort ~compare:String.compare |> List.rev
            else
 -            Sys.ls_dir absolute_path
 +            Sys_unix.ls_dir absolute_path
          in
          List.fold dir_contents ~init:acc ~f:(fun acc subdir ->
-             aux acc (Filename.concat absolute_path subdir) (depth + 1))
-@@ -50,8 +50,8 @@ let parse_source_directories
+           aux acc (Filename.concat absolute_path subdir) (depth + 1)))
+@@ -44,7 +44,7 @@ let parse_source_directories
    let exact_file_paths, file_patterns =
      List.partition_map file_filters ~f:(fun path ->
-         let is_exact path =
--          (String.contains path '/' && Sys.is_file path = `Yes)
--          || (Sys.is_file ("." ^/ path) = `Yes) (* See if it matches something in the current directory *)
-+          (String.contains path '/' && Sys_unix.is_file path = `Yes)
-+          || (Sys_unix.is_file ("." ^/ path) = `Yes) (* See if it matches something in the current directory *)
-         in
-         if is_exact path then Either.First path else Either.Second path)
-   in
-@@ -167,8 +167,8 @@ let parse_templates ?metasyntax ?(warn_for_missing_file_in_dir = false) paths =
+       let is_exact path =
+-        (String.contains path '/' && Sys.is_file path = `Yes) || Sys.is_file ("." ^/ path) = `Yes
++        (String.contains path '/' && Sys_unix.is_file path = `Yes) || Sys_unix.is_file ("." ^/ path) = `Yes
+         (* See if it matches something in the current directory *)
+       in
+       if is_exact path then Either.First path else Either.Second path)
+@@ -161,8 +161,8 @@ let parse_templates ?metasyntax ?(warn_for_missing_file_in_dir = false) paths =
    let f acc ~depth:_ ~absolute_path ~is_file =
      let is_leaf_directory absolute_path =
-       not is_file &&
--      Sys.ls_dir absolute_path
--      |> List.for_all ~f:(fun path -> Sys.is_directory (absolute_path ^/ path) = `No)
-+      Sys_unix.ls_dir absolute_path
-+      |> List.for_all ~f:(fun path -> Sys_unix.is_directory (absolute_path ^/ path) = `No)
+       (not is_file)
+-      && Sys.ls_dir absolute_path
+-         |> List.for_all ~f:(fun path -> Sys.is_directory (absolute_path ^/ path) = `No)
++      && Sys_unix.ls_dir absolute_path
++         |> List.for_all ~f:(fun path -> Sys_unix.is_directory (absolute_path ^/ path) = `No)
      in
-     if is_leaf_directory absolute_path then
+     if is_leaf_directory absolute_path then (
        match parse_directory absolute_path with
-@@ -178,7 +178,7 @@ let parse_templates ?metasyntax ?(warn_for_missing_file_in_dir = false) paths =
+@@ -172,7 +172,7 @@ let parse_templates ?metasyntax ?(warn_for_missing_file_in_dir = false) paths =
        Continue acc
    in
    List.concat_map paths ~f:(fun path ->
--      if Sys.is_directory path = `Yes then
-+      if Sys_unix.is_directory path = `Yes then
-         fold_directory path ~sorted:true ~init:[] ~f
-       else
-         parse_toml ?metasyntax path)
-@@ -428,7 +428,7 @@ let parse_metasyntax metasyntax_path =
+-    if Sys.is_directory path = `Yes then
++    if Sys_unix.is_directory path = `Yes then
+       fold_directory path ~sorted:true ~init:[] ~f
+     else
+       parse_toml ?metasyntax path)
+@@ -412,7 +412,7 @@ let parse_metasyntax metasyntax_path =
    match metasyntax_path with
    | None -> Matchers.Metasyntax.default_metasyntax
    | Some metasyntax_path ->
--    match Sys.file_exists metasyntax_path with
-+    match Sys_unix.file_exists metasyntax_path with
-     | `No | `Unknown ->
-       Format.eprintf "Could not open file: %s@." metasyntax_path;
-       exit 1
-@@ -477,14 +477,14 @@ let emit_errors { input_options; output_options; _ } =
-     ; Option.is_some input_options.directory_depth
-       && Option.value_exn (input_options.directory_depth) < 0
-     , "-depth must be 0 or greater."
--    ; Sys.is_directory input_options.target_directory = `No
-+    ; Sys_unix.is_directory input_options.target_directory = `No
-     , "Directory specified with -d or -directory is not a directory."
-     ; output_options.json_only_diff && not output_options.json_lines
-     , "-json-only-diff can only be supplied with -json-lines."
-     ; (Option.is_some output_options.chunk_matches) && Option.is_some input_options.zip_file
-     , "chunk-matches output format is not supported for zip files."
-     ; Option.is_some output_options.interactive_review &&
--      (not (String.equal input_options.target_directory (Sys.getcwd ())))
-+      (not (String.equal input_options.target_directory (Sys_unix.getcwd ())))
-     , "Please remove the -d option and `cd` to the directory where you want to \
-        review from. The -review, -editor, or -default-no options should only be run \
-        at the root directory of the project files to patch."
-@@ -492,11 +492,11 @@ let emit_errors { input_options; output_options; _ } =
+-    (match Sys.file_exists metasyntax_path with
++    (match Sys_unix.file_exists metasyntax_path with
+      | `No | `Unknown ->
+        Format.eprintf "Could not open file: %s@." metasyntax_path;
+        exit 1
+@@ -463,14 +463,14 @@ let emit_errors { input_options; output_options; _ } =
+     ; ( Option.is_some input_options.directory_depth
+         && Option.value_exn input_options.directory_depth < 0
+       , "-depth must be 0 or greater." )
+-    ; ( Sys.is_directory input_options.target_directory = `No
++    ; ( Sys_unix.is_directory input_options.target_directory = `No
+       , "Directory specified with -d or -directory is not a directory." )
+     ; ( output_options.json_only_diff && not output_options.json_lines
+       , "-json-only-diff can only be supplied with -json-lines." )
+     ; ( Option.is_some output_options.chunk_matches && Option.is_some input_options.zip_file
+       , "chunk-matches output format is not supported for zip files." )
+     ; ( Option.is_some output_options.interactive_review
+-        && not (String.equal input_options.target_directory (Sys.getcwd ()))
++        && not (String.equal input_options.target_directory (Sys_unix.getcwd ()))
+       , "Please remove the -d option and `cd` to the directory where you want to review from. The \
+          -review, -editor, or -default-no options should only be run at the root directory of the \
+          project files to patch." )
+@@ -478,11 +478,11 @@ let emit_errors { input_options; output_options; _ } =
           match input_options.templates with
           | Some inputs ->
             List.find_map inputs ~f:(fun input ->
--               if Sys.is_file input = `Yes then
-+               if Sys_unix.is_file input = `Yes then
-                  (match Toml.Parser.from_filename input with
-                   | `Error (s, _) -> Some s
-                   | _ -> None)
--               else if not (Sys.is_directory input = `Yes) then
-+               else if not (Sys_unix.is_directory input = `Yes) then
-                  Some (Format.sprintf "Directory %S specified with -templates is not a directory." input)
-                else
-                  None)
-@@ -611,7 +611,7 @@ let filter_zip_entries file_filters exclude_directory_prefix exclude_file_prefix
+-             if Sys.is_file input = `Yes then (
++             if Sys_unix.is_file input = `Yes then (
+                match Toml.Parser.from_filename input with
+                | `Error (s, _) -> Some s
+                | _ -> None)
+-             else if not (Sys.is_directory input = `Yes) then
++             else if not (Sys_unix.is_directory input = `Yes) then
+                Some
+                  (Format.sprintf "Directory %S specified with -templates is not a directory." input)
+              else
+@@ -599,7 +599,7 @@ let filter_zip_entries file_filters exclude_directory_prefix exclude_file_prefix
+       && has_acceptable_suffix filename)
  
  let syntax custom_matcher_path =
-   match
--    Sys.file_exists custom_matcher_path with
-+    Sys_unix.file_exists custom_matcher_path with
+-  match Sys.file_exists custom_matcher_path with
++  match Sys_unix.file_exists custom_matcher_path with
    | `No | `Unknown ->
      Format.eprintf "Could not open file: %s@." custom_matcher_path;
      exit 1
@@ -166,118 +121,66 @@ index 75c3107..29826a9 100644
            target_directory
        in
 diff --git a/lib/app/configuration/dune b/lib/app/configuration/dune
-index e0f9748..e417cfe 100644
+index 9e849a0..e417cfe 100644
 --- a/lib/app/configuration/dune
 +++ b/lib/app/configuration/dune
-@@ -1,6 +1,21 @@
- (library
--  (name configuration)
--  (public_name comby.configuration)
--  (instrumentation (backend bisect_ppx))
--  (preprocess (pps ppx_deriving.show ppx_sexp_conv ppx_sexp_message ppx_deriving_yojson))
--  (libraries comby-kernel comby-semantic comby.patdiff comby.camlzip core yojson ppx_deriving_yojson toml lwt lwt.unix tar tar-unix))
-+ (name configuration)
-+ (public_name comby.configuration)
-+ (instrumentation
-+  (backend bisect_ppx))
-+ (preprocess
-+  (pps ppx_deriving.show ppx_sexp_conv ppx_sexp_message ppx_deriving_yojson))
-+ (libraries
-+  comby-kernel
-+  comby-semantic
-+  comby.patdiff
-+  comby.camlzip
-+  core
+@@ -11,6 +11,7 @@
+   comby.patdiff
+   comby.camlzip
+   core
 +  core_unix.sys_unix
-+  yojson
-+  ppx_deriving_yojson
-+  toml
-+  lwt
-+  lwt.unix
-+  tar
-+  tar-unix))
+   yojson
+   ppx_deriving_yojson
+   toml
 diff --git a/lib/app/configuration/external_semantic.ml b/lib/app/configuration/external_semantic.ml
-index bdc7051..ac69b1b 100644
+index 4a14c11..90d023a 100644
 --- a/lib/app/configuration/external_semantic.ml
 +++ b/lib/app/configuration/external_semantic.ml
-@@ -2,13 +2,10 @@ open Core_kernel
+@@ -12,11 +12,11 @@ let lsif_endpoint =
  
- open Comby_semantic
+ let repository_remote () =
+   let open Core in
+-  In_channel.input_all (Unix.open_process_in "git config --get remote.origin.url")
++  In_channel.input_all (Core_unix.open_process_in "git config --get remote.origin.url")
  
--let debug =
--  match Sys.getenv "DEBUG_COMBY" with
--  | exception Not_found -> false
--  | _ -> true
-+let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
+ let revision () =
+   let open Core in
+-  In_channel.input_all (Unix.open_process_in "git rev-parse HEAD")
++  In_channel.input_all (Core_unix.open_process_in "git rev-parse HEAD")
  
  let lsif_hover ~name:_ ~filepath ~line ~column =
--  String.chop_prefix_if_exists filepath ~prefix:(Sys.getcwd ()) |> fun filepath_relative_root ->
-+  String.chop_prefix_if_exists filepath ~prefix:(Sys_unix.getcwd ()) |> fun filepath_relative_root ->
-   if debug then Format.printf "File relative root: %s@." filepath;
-   if debug then Format.printf "Querying type at %d::%d@." line column;
-   let context =
-diff --git a/lib/app/dune b/lib/app/dune
-index 2ed553c..a91f826 100644
---- a/lib/app/dune
-+++ b/lib/app/dune
-@@ -1,9 +1,8 @@
- (library
--  (name comby)
--  (public_name comby)
--  (instrumentation (backend bisect_ppx))
--  (preprocess (pps ppx_deriving.show ppx_deriving.eq ppx_sexp_conv))
--  (libraries 
--   core 
--   comby-kernel
--   comby.pipeline))
-+ (name comby)
-+ (public_name comby)
-+ (instrumentation
-+  (backend bisect_ppx))
-+ (preprocess
-+  (pps ppx_deriving.show ppx_deriving.eq ppx_sexp_conv))
-+ (libraries core comby-kernel comby.pipeline))
-diff --git a/lib/app/interactive/dune b/lib/app/interactive/dune
-index 815aff5..63c1757 100644
---- a/lib/app/interactive/dune
-+++ b/lib/app/interactive/dune
-@@ -1,5 +1,12 @@
- (library
--  (name interactive)
--  (public_name comby.interactive)
--  (preprocess (pps ppx_sexp_conv))
--  (libraries comby-kernel comby.configuration core shell.filename_extended lwt lwt.unix))
-+ (name interactive)
-+ (public_name comby.interactive)
-+ (preprocess
-+  (pps ppx_sexp_conv))
-+ (libraries
-+  comby-kernel
-+  comby.configuration
-+  core
-+  shell.filename_extended
-+  lwt
-+  lwt.unix))
+   let open Core_kernel in
+@@ -29,7 +29,7 @@ let lsif_hover ~name:_ ~filepath ~line ~column =
+     in
+     let revision = revision () |> String.rstrip in
+     if debug then Format.printf "Repository remote: %s\nRevision: %s@." repository revision;
+-    String.chop_prefix_if_exists filepath ~prefix:(Sys.getcwd ())
++    String.chop_prefix_if_exists filepath ~prefix:(Sys_unix.getcwd ())
+     |> fun filepath_relative_root ->
+     if debug then Format.printf "File relative root: %s@." filepath;
+     if debug then Format.printf "Querying type at %d::%d@." line column;
 diff --git a/lib/app/interactive/interactive.ml b/lib/app/interactive/interactive.ml
-index d4bf200..b27105a 100644
+index 38f4641..7a8f397 100644
 --- a/lib/app/interactive/interactive.ml
 +++ b/lib/app/interactive/interactive.ml
-@@ -1,5 +1,6 @@
+@@ -1,6 +1,7 @@
  open Core
  open Lwt
+ open Configuration
 +module Unix = Core_unix
  
- open Configuration
+ let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
  
-@@ -37,6 +38,7 @@ module Diff = struct
-           ~big_enough:line_big_enough
-           ~prev
-           ~next
-+          ()
+@@ -19,7 +20,7 @@ module Diff = struct
+       (* Use external compare program? *)
+       match ext_cmp with
+       | None ->
+-        Patience_diff.String.get_hunks ~transform ~context ~big_enough:line_big_enough ~prev ~next
++        Patience_diff.String.get_hunks ~transform ~context ~big_enough:line_big_enough ~prev ~next ()
        | Some prog ->
          let compare x y =
            let cmd = sprintf "%s %S %S" prog x y in
-@@ -52,7 +54,7 @@ module Diff = struct
+@@ -36,7 +37,7 @@ module Diff = struct
              let compare = compare
            end)
          in
@@ -287,86 +190,30 @@ index d4bf200..b27105a 100644
      match float_tolerance with
      | None -> hunks
 diff --git a/lib/app/pipeline/dune b/lib/app/pipeline/dune
-index 3369b9e..e6ec880 100644
+index bd4646d..e6ec880 100644
 --- a/lib/app/pipeline/dune
 +++ b/lib/app/pipeline/dune
-@@ -1,11 +1,23 @@
- (library
--  (name pipeline)
--  (public_name comby.pipeline)
--  (instrumentation (backend bisect_ppx))
--  (preprocess (pps ppx_sexp_conv ppx_deriving_yojson))
--  (libraries comby-kernel comby.statistics comby.configuration comby.interactive comby.camlzip core core.uuid yojson ppx_deriving_yojson parany
--    (select parallel_hack.ml from
--      (hack_parallel -> parallel_hack.available.ml)
--      (!hack_parallel -> parallel_hack.parany_fallback.ml)) 
--  ))
--
-+ (name pipeline)
-+ (public_name comby.pipeline)
-+ (instrumentation
-+  (backend bisect_ppx))
-+ (preprocess
-+  (pps ppx_sexp_conv ppx_deriving_yojson))
-+ (libraries
-+  comby-kernel
-+  comby.statistics
-+  comby.configuration
-+  comby.interactive
-+  comby.camlzip
-+  core
+@@ -12,7 +12,7 @@
+   comby.interactive
+   comby.camlzip
+   core
+-  core.uuid
 +  core_unix.uuid
-+  yojson
-+  ppx_deriving_yojson
-+  parany
-+  (select
-+   parallel_hack.ml
-+   from
-+   (hack_parallel -> parallel_hack.available.ml)
-+   (!hack_parallel -> parallel_hack.parany_fallback.ml))))
+   yojson
+   ppx_deriving_yojson
+   parany
 diff --git a/lib/app/pipeline/parallel_hack.available.ml b/lib/app/pipeline/parallel_hack.available.ml
-index a901eea..ad33070 100644
+index 12dc227..9ab6cba 100644
 --- a/lib/app/pipeline/parallel_hack.available.ml
 +++ b/lib/app/pipeline/parallel_hack.available.ml
 @@ -1,4 +1,5 @@
  open Core
 +module Unix = Core_unix
- 
  open Hack_parallel
  
-diff --git a/lib/app/statistics/dune b/lib/app/statistics/dune
-index b14d5b1..12aff7f 100644
---- a/lib/app/statistics/dune
-+++ b/lib/app/statistics/dune
-@@ -1,6 +1,8 @@
- (library
--  (name statistics)
--  (public_name comby.statistics)
--  (instrumentation (backend bisect_ppx))
--  (preprocess (pps ppx_deriving_yojson))
--  (libraries yojson ppx_deriving_yojson ppx_deriving_yojson.runtime))
-+ (name statistics)
-+ (public_name comby.statistics)
-+ (instrumentation
-+  (backend bisect_ppx))
-+ (preprocess
-+  (pps ppx_deriving_yojson))
-+ (libraries yojson ppx_deriving_yojson ppx_deriving_yojson.runtime))
-diff --git a/lib/app/vendored/patdiff/kernel/src/dune b/lib/app/vendored/patdiff/kernel/src/dune
-index 7a6353d..b79cba2 100644
---- a/lib/app/vendored/patdiff/kernel/src/dune
-+++ b/lib/app/vendored/patdiff/kernel/src/dune
-@@ -1,3 +1,6 @@
--(library (name patdiff_kernel) (public_name comby.patdiff_kernel)
-+(library
-+ (name patdiff_kernel)
-+ (public_name comby.patdiff_kernel)
-  (libraries core_kernel.composition_infix core_kernel patience_diff re)
-- (preprocess (pps ppx_jane)))
-+ (preprocess
-+  (pps ppx_jane)))
+ let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
 diff --git a/lib/app/vendored/patdiff/kernel/src/float_tolerance.ml b/lib/app/vendored/patdiff/kernel/src/float_tolerance.ml
-index 4e064fb..dca77b2 100644
+index 4e064fb..ad547d9 100644
 --- a/lib/app/vendored/patdiff/kernel/src/float_tolerance.ml
 +++ b/lib/app/vendored/patdiff/kernel/src/float_tolerance.ml
 @@ -287,7 +287,7 @@ end = struct
@@ -374,7 +221,7 @@ index 4e064fb..dca77b2 100644
              match car, cadr with
              | Same car_lines, Same cadr_lines ->
 -              Skip (Same (Array.concat [ car_lines; cadr_lines ]), pos)
-+              Skip {state = (Same (Array.concat [ car_lines; cadr_lines ]), pos)}
++                            Skip {state = (Same (Array.concat [ car_lines; cadr_lines ]), pos)}
              | Unified _, _ | _, Unified _ ->
                raise_s
                  [%message
@@ -510,26 +357,20 @@ index 6879daa..7d59706 100644
          | `No | `Unknown -> None)
    in
 diff --git a/lib/app/vendored/patdiff/lib/src/dune b/lib/app/vendored/patdiff/lib/src/dune
-index 007acad..b6a0f80 100644
+index 8f1da58..b6a0f80 100644
 --- a/lib/app/vendored/patdiff/lib/src/dune
 +++ b/lib/app/vendored/patdiff/lib/src/dune
-@@ -1,4 +1,13 @@
--(library (name patdiff) (public_name comby.patdiff)
-- (libraries core_kernel.composition_infix core core.linux_ext comby.patdiff_kernel
-+(library
-+ (name patdiff)
-+ (public_name comby.patdiff)
-+ (libraries
-+  core_kernel.composition_infix
-+  core
+@@ -4,7 +4,9 @@
+  (libraries
+   core_kernel.composition_infix
+   core
+-  core.linux_ext
 +  core_unix
 +  core_unix.linux_ext
 +  core_unix.sys_unix
-+  comby.patdiff_kernel
+   comby.patdiff_kernel
    patience_diff)
-- (preprocess (pps ppx_jane)))
-+ (preprocess
-+  (pps ppx_jane)))
+  (preprocess
 diff --git a/lib/app/vendored/patdiff/lib/src/html_output.ml b/lib/app/vendored/patdiff/lib/src/html_output.ml
 index 3d08f91..93ae8af 100644
 --- a/lib/app/vendored/patdiff/lib/src/html_output.ml
@@ -541,203 +382,110 @@ index 3d08f91..93ae8af 100644
  
  include Patdiff_kernel.Html_output.Private.Make (struct
      let mtime file =
-diff --git a/lib/kernel/match/dune b/lib/kernel/match/dune
-index 03b120a..4d48b61 100644
---- a/lib/kernel/match/dune
-+++ b/lib/kernel/match/dune
-@@ -1,6 +1,12 @@
- (library
--  (name match)
--  (public_name comby-kernel.match)
--  (instrumentation (backend bisect_ppx))
--  (preprocess (pps ppx_deriving.eq ppx_sexp_conv ppx_deriving_yojson))
--  (libraries core_kernel yojson ppx_deriving_yojson ppx_deriving_yojson.runtime))
-+ (name match)
-+ (public_name comby-kernel.match)
-+ (instrumentation
-+  (backend bisect_ppx))
-+ (preprocess
-+  (pps ppx_deriving.eq ppx_sexp_conv ppx_deriving_yojson))
-+ (libraries
-+  core_kernel
-+  yojson
-+  ppx_deriving_yojson
-+  ppx_deriving_yojson.runtime))
 diff --git a/lib/kernel/matchers/alpha.ml b/lib/kernel/matchers/alpha.ml
-index d6116f7..7d16171 100644
+index d2321b0..e669cf8 100644
 --- a/lib/kernel/matchers/alpha.ml
 +++ b/lib/kernel/matchers/alpha.ml
-@@ -13,20 +13,11 @@ module R = MakeRegexp(Regexp)
- let configuration_ref = ref (Configuration.create ())
+@@ -11,19 +11,13 @@ let configuration_ref = ref (Configuration.create ())
  let weaken_delimiter_hole_matching = false
  
--let debug =
+ let debug =
 -  match Sys.getenv "DEBUG_COMBY" with
 -  | exception Not_found -> false
 -  | _ -> true
-+let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
++  Sys.getenv "DEBUG_COMBY" |> Option.is_some
  
--let debug_hole =
+ let debug_hole =
 -  match Sys.getenv "DEBUG_COMBY_HOLE" with
 -  | exception Not_found -> false
 -  | _ -> true
-+let debug_hole = Sys.getenv "DEBUG_COMBY_HOLE" |> Option.is_some
++  Sys.getenv "DEBUG_COMBY_HOLE" |> Option.is_some
  
--let debug_position =
+ let debug_position =
 -  match Sys.getenv "DEBUG_COMBY_POS" with
 -  | exception Not_found -> false
 -  | _ -> true
-+let debug_position = Sys.getenv "DEBUG_COMBY_POS" |> Option.is_some
++  Sys.getenv "DEBUG_COMBY_POS" |> Option.is_some
  
  let f _ = return Types.Unit
  
-@@ -147,7 +138,7 @@ module Make (Lang : Types.Language.S) (Meta : Types.Metasyntax.S) (Ext : Types.E
-         ]
-       >>= fun _ -> f Types.Unit
+@@ -139,7 +133,7 @@ module Make (Lang : Types.Language.S) (Meta : Types.Metasyntax.S) (Ext : Types.E
+     let generate_spaces_parser () =
+       many1 @@ choice [ skip comment_parser; spaces1 ] >>= fun _ -> f Types.Unit
  
 -    let sequence_chain (plist : ('c, Match.t) parser sexp_list) : ('c, Match.t) parser =
 +    let sequence_chain (plist : ('c, Match.t) parser list) : ('c, Match.t) parser =
-       List.fold plist ~init:(return Types.Unit) ~f:(>>)
+       List.fold plist ~init:(return Types.Unit) ~f:( >> )
  
      let with_debug_matcher s tag =
-@@ -745,7 +736,7 @@ module Make (Lang : Types.Language.S) (Meta : Types.Metasyntax.S) (Ext : Types.E
+@@ -745,7 +739,7 @@ module Make (Lang : Types.Language.S) (Meta : Types.Metasyntax.S) (Ext : Types.E
      let hole_parser ?at_depth sort dimension =
        let open Types.Hole in
        let hole_parser =
 -        let open Polymorphic_compare in
 +        let open Poly in
-         List.fold ~init:[] hole_parsers ~f:(fun acc (sort', parser) -> if sort' = sort then parser::acc else acc)
+         List.fold ~init:[] hole_parsers ~f:(fun acc (sort', parser) ->
+           if sort' = sort then parser :: acc else acc)
        in
-       let skip_signal hole = skip (string "_signal_hole") |>> fun () -> Types.Hole hole in
-diff --git a/lib/kernel/matchers/dune b/lib/kernel/matchers/dune
-index 12ed326..4625458 100644
---- a/lib/kernel/matchers/dune
-+++ b/lib/kernel/matchers/dune
-@@ -1,6 +1,18 @@
- (library
--  (name matchers)
--  (public_name comby-kernel.matchers)
--  (instrumentation (backend bisect_ppx))
--  (preprocess (pps ppx_here ppx_sexp_conv ppx_sexp_message ppx_deriving_yojson))
--  (libraries comby-kernel.replacement comby-kernel.parsers comby-kernel.match comby-kernel.vangstrom core_kernel mparser mparser-pcre re yojson ppx_deriving_yojson))
-+ (name matchers)
-+ (public_name comby-kernel.matchers)
-+ (instrumentation
-+  (backend bisect_ppx))
-+ (preprocess
-+  (pps ppx_here ppx_sexp_conv ppx_sexp_message ppx_deriving_yojson))
-+ (libraries
-+  comby-kernel.replacement
-+  comby-kernel.parsers
-+  comby-kernel.match
-+  comby-kernel.vangstrom
-+  core_kernel
-+  mparser
-+  mparser-pcre
-+  re
-+  yojson
-+  ppx_deriving_yojson))
 diff --git a/lib/kernel/matchers/evaluate.ml b/lib/kernel/matchers/evaluate.ml
-index 9ea71a0..4f63ab6 100644
+index cf320ea..251bd42 100644
 --- a/lib/kernel/matchers/evaluate.ml
 +++ b/lib/kernel/matchers/evaluate.ml
-@@ -3,10 +3,7 @@ open Core_kernel
- open Match
- open Types.Ast
- 
--let debug =
--  match Sys.getenv "DEBUG_COMBY" with
--  | exception Not_found -> false
--  | _ -> true
-+let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
- 
- type result = bool * Match.environment option
- 
-@@ -102,7 +99,7 @@ let apply
-           |> Option.some
+@@ -101,7 +101,7 @@ let apply
+           List.fold matches ~init:(true, None) ~f:fold_matches |> Option.some
        in
        List.find_map cases ~f:(fun (template, case_expression) -> evaluate template case_expression)
 -      |> Option.value_map ~f:ident ~default:(false, Some env)
 +      |> Option.value_map ~f:Fn.id ~default:(false, Some env)
- 
      (* rewrite ... { ... } *)
      | Rewrite (Template t, (match_template, rewrite_template)) ->
+       let rewrite_template = substitute env rewrite_template in
 diff --git a/lib/kernel/matchers/omega.ml b/lib/kernel/matchers/omega.ml
-index 61cc69a..3445307 100644
+index c286781..3b0b929 100644
 --- a/lib/kernel/matchers/omega.ml
 +++ b/lib/kernel/matchers/omega.ml
-@@ -32,15 +32,9 @@ let push_source_ref : string ref = ref ""
- 
+@@ -28,14 +28,10 @@ let push_source_ref : string ref = ref ""
  let filepath_ref : string option ref = ref None
  
--let debug =
+ let debug =
 -  match Sys.getenv "DEBUG_COMBY" with
 -  | exception Not_found -> false
 -  | _ -> true
-+let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
++  Sys.getenv "DEBUG_COMBY" |> Option.is_some
  
--let rewrite =
+ let rewrite =
 -  match Sys.getenv "REWRITE" with
 -  | exception Not_found -> false
 -  | _ -> true
-+let rewrite = Sys.getenv "REWRITE" |> Option.is_some
++  Sys.getenv "REWRITE" |> Option.is_some
  
  let actual = Buffer.create 10
- 
-@@ -540,7 +534,7 @@ module Make (Language : Types.Language.S) (Meta : Metasyntax.S) (Ext : External.
- 
+ let rewrite_template = ref ""
+@@ -553,7 +549,7 @@ module Make (Language : Types.Language.S) (Meta : Metasyntax.S) (Ext : External.
      let hole_parser sort dimension : (production * 'a) t t =
-       let hole_parser = (* This must be fold, can't be find *)
+       let hole_parser =
+         (* This must be fold, can't be find *)
 -        let open Polymorphic_compare in
 +        let open Poly in
          List.fold ~init:[] Template.Matching.hole_parsers ~f:(fun acc (sort', parser) ->
-             if sort' = sort then parser::acc else acc)
+           if sort' = sort then parser :: acc else acc)
        in
-diff --git a/lib/kernel/matchers/preprocess.ml b/lib/kernel/matchers/preprocess.ml
-index 84f3ed0..b6d10e7 100644
---- a/lib/kernel/matchers/preprocess.ml
-+++ b/lib/kernel/matchers/preprocess.ml
-@@ -1,9 +1,6 @@
- open Core_kernel
- 
--let debug =
--  match Sys.getenv "DEBUG_COMBY" with
--  | exception Not_found -> false
--  | _ -> true
-+let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
- 
- let append_rule (module Parser : Types.Rule.S) rule parent_rule =
-   let open Option in
-diff --git a/lib/kernel/matchers/regexp.ml b/lib/kernel/matchers/regexp.ml
-index ef0bd59..906820b 100644
---- a/lib/kernel/matchers/regexp.ml
-+++ b/lib/kernel/matchers/regexp.ml
-@@ -3,7 +3,7 @@ open Vangstrom
- let debug =
-   match Sys.getenv "DEBUG_COMBY" with
-   | exception Not_found -> false
--  | _ -> true
-+  | (_ : string) -> true
- 
- module type Regexp_engine_intf = sig
-   type t
 diff --git a/lib/kernel/matchers/rewrite.ml b/lib/kernel/matchers/rewrite.ml
-index 32c4740..545cba5 100644
+index 4b12fd0..ae0fafc 100644
 --- a/lib/kernel/matchers/rewrite.ml
 +++ b/lib/kernel/matchers/rewrite.ml
-@@ -4,10 +4,7 @@ open Core_kernel
- open Match
+@@ -4,9 +4,7 @@ open Match
  open Replacement
  
--let debug =
+ let debug =
 -  match Sys.getenv "DEBUG_COMBY" with
 -  | exception Not_found -> false
 -  | _ -> true
-+let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
++  Sys.getenv "DEBUG_COMBY" |> Option.is_some
  
  let counter =
    let uuid_for_id_counter = ref 0 in
-@@ -46,24 +43,24 @@ let parse_first_label ?(metasyntax = Metasyntax.default_metasyntax) template =
+@@ -51,21 +49,21 @@ let parse_first_label ?(metasyntax = Metasyntax.default_metasyntax) template =
    in
    parse_string ~consume:All parser template
    |> function
@@ -745,10 +493,7 @@ index 32c4740..545cba5 100644
 +  | Ok label -> List.find_map label ~f:Fn.id
    | Error _ -> None
  
- let substitute_fresh
-     ?(metasyntax = Metasyntax.default_metasyntax)
-     ?(fresh = counter)
-     template =
+ let substitute_fresh ?(metasyntax = Metasyntax.default_metasyntax) ?(fresh = counter) template =
 -  let label_table = String.Table.create () in
 +  let label_table = Hashtbl.create (module String) in
    let template_ref = ref template in
@@ -766,88 +511,18 @@ index 32c4740..545cba5 100644
          id
      in
      let left, right = replacement_sentinel metasyntax in
-diff --git a/lib/kernel/matchers/template.ml b/lib/kernel/matchers/template.ml
-index 423a07f..136236c 100644
---- a/lib/kernel/matchers/template.ml
-+++ b/lib/kernel/matchers/template.ml
-@@ -4,10 +4,7 @@ open Core_kernel
- open Match
- open Types.Template
- 
--let debug =
--  match Sys.getenv "DEBUG_COMBY" with
--  | exception Not_found -> false
--  | _ -> true
-+let debug = Sys.getenv "DEBUG_COMBY" |> Option.is_some
- 
- module Make (Metasyntax : Types.Metasyntax.S) (External : Types.External.S) : Types.Template.S = struct
- 
-diff --git a/lib/kernel/parsers/dune b/lib/kernel/parsers/dune
-index 28b020c..0cc1fa5 100644
---- a/lib/kernel/parsers/dune
-+++ b/lib/kernel/parsers/dune
-@@ -1,6 +1,8 @@
- (library
--  (name parsers)
--  (public_name comby-kernel.parsers)
--  (instrumentation (backend bisect_ppx))
--  (preprocess (pps ppx_sexp_conv))
--  (libraries core_kernel comby-kernel.vangstrom mparser))
-+ (name parsers)
-+ (public_name comby-kernel.parsers)
-+ (instrumentation
-+  (backend bisect_ppx))
-+ (preprocess
-+  (pps ppx_sexp_conv))
-+ (libraries core_kernel comby-kernel.vangstrom mparser))
-diff --git a/lib/kernel/replacement/dune b/lib/kernel/replacement/dune
-index 3e62de6..485b716 100644
---- a/lib/kernel/replacement/dune
-+++ b/lib/kernel/replacement/dune
-@@ -1,6 +1,13 @@
- (library
--  (name replacement)
--  (public_name comby-kernel.replacement)
--  (instrumentation (backend bisect_ppx))
--  (preprocess (pps ppx_deriving_yojson))
--  (libraries comby-kernel.match core_kernel yojson ppx_deriving_yojson ppx_deriving_yojson.runtime))
-+ (name replacement)
-+ (public_name comby-kernel.replacement)
-+ (instrumentation
-+  (backend bisect_ppx))
-+ (preprocess
-+  (pps ppx_deriving_yojson))
-+ (libraries
-+  comby-kernel.match
-+  core_kernel
-+  yojson
-+  ppx_deriving_yojson
-+  ppx_deriving_yojson.runtime))
 diff --git a/lib/semantic/dune b/lib/semantic/dune
-index 9a244d3..186a2ed 100644
+index 1ddd706..4d7aaba 100644
 --- a/lib/semantic/dune
 +++ b/lib/semantic/dune
-@@ -1,11 +1,8 @@
- (library
--   (name comby_semantic)
--   (public_name comby-semantic)
--   (instrumentation (backend bisect_ppx))
--   (preprocess (pps ppx_deriving.show ppx_deriving.eq ppx_sexp_conv))
--   (libraries
--      core_kernel
--      lwt
--      cohttp
--      cohttp-lwt-unix
--      yojson))
-+ (name comby_semantic)
-+ (public_name comby-semantic)
-+ (instrumentation
-+  (backend bisect_ppx))
-+ (preprocess
-+  (pps ppx_deriving.show ppx_deriving.eq ppx_sexp_conv))
-+ (libraries core_kernel lwt cohttp cohttp-lwt-unix yojson))
+@@ -5,4 +5,4 @@
+   (backend bisect_ppx))
+  (preprocess
+   (pps ppx_deriving.show ppx_deriving.eq ppx_sexp_conv))
+- (libraries core lwt lwt_ssl cohttp cohttp-lwt-unix yojson))
++ (libraries core_kernel lwt lwt_ssl cohttp cohttp-lwt-unix yojson))
 diff --git a/lib/semantic/lsif.ml b/lib/semantic/lsif.ml
-index 49747bc..d6b3e19 100644
+index c150f59..36b3ea7 100644
 --- a/lib/semantic/lsif.ml
 +++ b/lib/semantic/lsif.ml
 @@ -3,10 +3,7 @@ open Lwt
@@ -863,214 +538,76 @@ index 49747bc..d6b3e19 100644
  module Formatting = struct
    type t =
 diff --git a/src/dune b/src/dune
-index 444a5a3..f006195 100644
+index d85b9aa..f006195 100644
 --- a/src/dune
 +++ b/src/dune
-@@ -1,10 +1,17 @@
- (executables
-- (libraries comby core ppx_deriving_yojson ppx_deriving_yojson.runtime
--    (select if_hack_parallel.ml from
--      (hack_parallel -> if_hack_parallel.available.ml)
--      (!hack_parallel -> if_hack_parallel.unavailable.ml))
-- )
-- (preprocess (pps ppx_deriving_yojson ppx_let ppx_deriving.show ppx_sexp_conv))
-+ (libraries
-+  comby
-+  core
+@@ -2,6 +2,7 @@
+  (libraries
+   comby
+   core
 +  core_unix.command_unix
-+  ppx_deriving_yojson
-+  ppx_deriving_yojson.runtime
-+  (select
-+   if_hack_parallel.ml
-+   from
-+   (hack_parallel -> if_hack_parallel.available.ml)
-+   (!hack_parallel -> if_hack_parallel.unavailable.ml)))
-+ (preprocess
-+  (pps ppx_deriving_yojson ppx_let ppx_deriving.show ppx_sexp_conv))
-  (modules main if_hack_parallel)
-  (modes byte exe)
-  (names main))
-@@ -20,4 +27,5 @@
- (install
-  (package comby)
-  (section bin)
-- (files (main.exe as comby)))
-+ (files
-+  (main.exe as comby)))
+   ppx_deriving_yojson
+   ppx_deriving_yojson.runtime
+   (select
 diff --git a/src/main.ml b/src/main.ml
-index 1def81d..79af76b 100644
+index bb0041e..9f15025 100644
 --- a/src/main.ml
 +++ b/src/main.ml
 @@ -1,4 +1,5 @@
  open Core
 +module Unix = Core_unix
  open Command.Let_syntax
- 
  open Comby_kernel
-@@ -47,7 +48,7 @@ let substitute_environment_only_and_exit metasyntax_path anonymous_arguments jso
+ open Configuration
+@@ -44,7 +45,7 @@ let substitute_environment_only_and_exit metasyntax_path anonymous_arguments jso
      match metasyntax_path with
      | None -> Matchers.Metasyntax.default_metasyntax
      | Some metasyntax_path ->
--      match Sys.file_exists metasyntax_path with
-+      match Sys_unix.file_exists metasyntax_path with
-       | `No | `Unknown ->
-         Format.eprintf "Could not open file: %s@." metasyntax_path;
-         exit 1
-@@ -95,7 +96,7 @@ let base_command_parameters : (unit -> 'result) Command.Param.t =
-     and verbose = flag "verbose" no_arg ~doc:(Format.sprintf "Log to %s" verbose_out_file)
-     and rule = flag "rule" (optional_with_default "where true" string) ~doc:"rule Apply rules to matches."
-     and match_timeout = flag "timeout" (optional_with_default 3 int) ~doc:"seconds Set match timeout on a source. Default: 3 seconds"
--    and target_directory = flag "directory" ~aliases:["d"] (optional_with_default (Sys.getcwd ()) string) ~doc:(Format.sprintf "path Run recursively on files in a directory relative to the root. Default is current directory: %s" @@ Sys.getcwd ())
-+    and target_directory = flag "directory" ~aliases:["d"] (optional_with_default (Sys_unix.getcwd ()) string) ~doc:(Format.sprintf "path Run recursively on files in a directory relative to the root. Default is current directory: %s" @@ Sys_unix.getcwd ())
-     and directory_depth = flag "depth" (optional int) ~doc:"n Depth to recursively descend into directories"
-     and templates = flag "templates" ~aliases:["config"; "configuration"] (optional (Arg_type.comma_separated string)) ~doc:"paths CSV of directories containing templates, or TOML configuration files"
-     and file_filters = flag "extensions" ~aliases:["e"; "file-extensions"; "f"] (optional (Arg_type.comma_separated string)) ~doc:"extensions Comma-separated extensions to include, like \".go\" or \".c,.h\". It is just a file suffix, so you can use it to filter file names like \"main.go\". The extension will be used to infer a matcher, unless -custom-matcher or -matcher is specified"
-@@ -147,7 +148,7 @@ let base_command_parameters : (unit -> 'result) Command.Param.t =
+-      (match Sys.file_exists metasyntax_path with
++      (match Sys_unix.file_exists metasyntax_path with
+        | `No | `Unknown ->
+          Format.eprintf "Could not open file: %s@." metasyntax_path;
+          exit 1
+@@ -106,12 +107,12 @@ let base_command_parameters : (unit -> 'result) Command.Param.t =
+       flag
+         "directory"
+         ~aliases:[ "d" ]
+-        (optional_with_default (Sys.getcwd ()) string)
++        (optional_with_default (Sys_unix.getcwd ()) string)
+         ~doc:
+           (Format.sprintf
+              "path Run recursively on files in a directory relative to the root. Default is \
+               current directory: %s"
+-          @@ Sys.getcwd ())
++          @@ Sys_unix.getcwd ())
+     and directory_depth =
+       flag "depth" (optional int) ~doc:"n Depth to recursively descend into directories"
+     and templates =
+@@ -285,7 +286,7 @@ let base_command_parameters : (unit -> 'result) Command.Param.t =
        | l ->
          List.map l ~f:(fun pattern ->
-             if String.contains pattern '/' then
--              match Filename.realpath pattern with
-+              match Filename_unix.realpath pattern with
-               | exception Unix.Unix_error _ ->
-                 Format.eprintf
-                   "No such file or directory: %s. Comby interprets \
-@@ -204,7 +205,7 @@ let base_command_parameters : (unit -> 'result) Command.Param.t =
+           if String.contains pattern '/' then (
+-            match Filename.realpath pattern with
++            match Filename_unix.realpath pattern with
+             | exception Unix.Unix_error _ ->
+               Format.eprintf
+                 "No such file or directory: %s. Comby interprets patterns containing '/' as file \
+@@ -342,7 +343,7 @@ let base_command_parameters : (unit -> 'result) Command.Param.t =
      let omega = omega || omega_env in
      let fast_offset_conversion_env = Option.is_some @@ Sys.getenv "FAST_OFFSET_CONVERSION_COMBY" in
      let fast_offset_conversion = fast_offset_conversion_env || fast_offset_conversion in
 -    let arch = Unix.Utsname.machine (Core.Unix.uname ()) in
 +    let arch = Unix.Utsname.machine (Unix.uname ()) in
-     let compute_mode = match sequential, parany, arch with
+     let compute_mode =
+       match sequential, parany, arch with
        | true, _, _ -> `Sequential
-       | _, true, _
-@@ -304,7 +305,7 @@ let parse_comby_dot_file () =
+@@ -447,7 +448,7 @@ let parse_comby_dot_file () =
  
  let () =
    If_hack_parallel.check_entry_point ();
--  Command.run default_command ~version:"1.8.1" ~extend:(fun _ ->
--      match Sys.file_exists ".comby" with
-+  Command_unix.run default_command ~version:"1.8.1" ~extend:(fun _ ->
-+      match Sys_unix.file_exists ".comby" with
-       | `Yes -> parse_comby_dot_file ()
-       | _ -> [])
-diff --git a/test/alpha/dune b/test/alpha/dune
-index d7e5532..020677c 100644
---- a/test/alpha/dune
-+++ b/test/alpha/dune
-@@ -1,17 +1,14 @@
- (library
-  (name alpha_test_integration)
-  (package comby)
-- (modules
--  test_special_matcher_cases
--  test_substring_disabled)
-+ (modules test_special_matcher_cases test_substring_disabled)
-  (inline_tests)
-- (preprocess (pps ppx_expect ppx_sexp_message ppx_deriving_yojson))
-- (libraries
--  comby
--  cohttp-lwt-unix
--  core
--  camlzip))
-+ (preprocess
-+  (pps ppx_expect ppx_sexp_message ppx_deriving_yojson))
-+ (libraries comby cohttp-lwt-unix core camlzip))
- 
- (alias
--(name runtest)
--(deps (source_tree example) (source_tree example/src/.ignore-me)))
-+ (name runtest)
-+ (deps
-+  (source_tree example)
-+  (source_tree example/src/.ignore-me)))
-diff --git a/test/common/dune b/test/common/dune
-index 6851f2e..bc3c055 100644
---- a/test/common/dune
-+++ b/test/common/dune
-@@ -36,16 +36,14 @@
-   test_regex_holes
-   test_template_constraints
-   test_custom_metasyntax
--  test_rewrite_attributes
--  )
-+  test_rewrite_attributes)
-  (inline_tests)
-- (preprocess (pps ppx_expect ppx_sexp_message ppx_deriving_yojson))
-- (libraries
--  comby
--  cohttp-lwt-unix
--  core
--  camlzip))
-+ (preprocess
-+  (pps ppx_expect ppx_sexp_message ppx_deriving_yojson))
-+ (libraries comby cohttp-lwt-unix core camlzip))
- 
- (alias
--(name runtest)
--(deps (source_tree example) (source_tree example/src/.ignore-me)))
-+ (name runtest)
-+ (deps
-+  (source_tree example)
-+  (source_tree example/src/.ignore-me)))
-diff --git a/test/common/test_cli.ml b/test/common/test_cli.ml
-index 3606367..d5d0c0b 100644
---- a/test/common/test_cli.ml
-+++ b/test/common/test_cli.ml
-@@ -1,7 +1,10 @@
- open Core
- open Camlzip
- 
-+module Filename = Filename_unix
-+module Sys = Sys_unix
- module Time = Core_kernel.Time_ns.Span
-+module Unix = Core_unix
- 
- let binary_path = "../../../../comby"
- 
-diff --git a/test/common/test_cli_helper.ml b/test/common/test_cli_helper.ml
-index 5791ee6..18372ae 100644
---- a/test/common/test_cli_helper.ml
-+++ b/test/common/test_cli_helper.ml
-@@ -1,6 +1,7 @@
- open Core
- 
- module Time = Core_kernel.Time_ns.Span
-+module Unix = Core_unix
- 
- let binary_path = "../../../../comby"
- 
-diff --git a/test/omega/dune b/test/omega/dune
-index 3b31a7e..bf68dcb 100644
---- a/test/omega/dune
-+++ b/test/omega/dune
-@@ -2,20 +2,19 @@
-  (name omega_test_integration)
-  (package comby)
-  (modules
--;
--; TODO
--;
-+  ;
-+  ; TODO
-+  ;
-   test_optional_holes
-   test_special_matcher_cases
-   test_substring_disabled)
-  (inline_tests)
-- (preprocess (pps ppx_expect ppx_sexp_message ppx_deriving_yojson))
-- (libraries
--  comby
--  cohttp-lwt-unix
--  core
--  camlzip))
-+ (preprocess
-+  (pps ppx_expect ppx_sexp_message ppx_deriving_yojson))
-+ (libraries comby cohttp-lwt-unix core camlzip))
- 
- (alias
--(name runtest)
--(deps (source_tree example) (source_tree example/src/.ignore-me)))
-+ (name runtest)
-+ (deps
-+  (source_tree example)
-+  (source_tree example/src/.ignore-me)))
+-  Command.run default_command ~version:"1.8.2" ~extend:(fun _ ->
+-    match Sys.file_exists ".comby" with
++  Command_unix.run default_command ~version:"1.8.2" ~extend:(fun _ ->
++    match Sys_unix.file_exists ".comby" with
+     | `Yes -> parse_comby_dot_file ()
+     | _ -> [])
