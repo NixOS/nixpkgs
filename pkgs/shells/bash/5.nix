@@ -133,10 +133,26 @@ lib.warnIf (withDocs != null)
 
     enableParallelBuilding = true;
 
-    makeFlags = lib.optionals stdenv.hostPlatform.isCygwin [
-      "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
-      "SHOBJ_LIBS=-lbash"
-    ];
+    makeFlags =
+      lib.optionals stdenv.hostPlatform.isCygwin [
+        "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
+        "SHOBJ_LIBS=-lbash"
+      ]
+      # GNU Bash extensively uses function prototypes with unspecified signature, like
+      #
+      #     extern void add_unwind_protect ()
+      #
+      # to implicitly cast all kinds of word-sized arguments. GCC-15 switched C standard
+      # from gnu17 to gnu23, which changed the meaning of the prototype above to
+      #
+      #     extern void add_unwind_protect (void)
+      #
+      # Given that GNU Bash is committed to support pre-standard compilers, I don't know
+      # how to produce an upstreamable patch for this situation. For now, just downgrade
+      # the C standard.
+      #
+      #      ~kaction 2025-06-28
+      ++ [ "LOCAL_CFLAGS=-std=c99" ];
 
     nativeCheckInputs = [ util-linux ];
     doCheck = false; # dependency cycle, needs to be interactive
