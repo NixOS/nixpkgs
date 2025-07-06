@@ -5862,7 +5862,8 @@
     "tessie" =
       ps: with ps; [
         tesla-fleet-api
-      ]; # missing inputs: tessie-api
+        tessie-api
+      ];
     "text" =
       ps: with ps; [
       ];
@@ -7607,6 +7608,7 @@
     "tesla_fleet"
     "tesla_wall_connector"
     "teslemetry"
+    "tessie"
     "text"
     "thermobeacon"
     "thermopro"
