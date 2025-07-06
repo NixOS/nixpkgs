@@ -18136,6 +18136,8 @@ self: super: with self; {
 
   treq = callPackage ../development/python-modules/treq { };
 
+  trevorproxy = callPackage ../development/python-modules/trevorproxy { };
+
   trezor = callPackage ../development/python-modules/trezor { };
 
   trezor-agent = callPackage ../development/python-modules/trezor-agent {
