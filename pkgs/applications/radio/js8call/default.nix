@@ -15,14 +15,14 @@
   qtserialport,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "js8call";
   version = "2.2.0";
 
   src = fetchFromBitbucket {
     owner = "widefido";
-    repo = pname;
-    rev = "v${version}-ga";
+    repo = "js8call";
+    rev = "v${finalAttrs.version}-ga";
     sha256 = "sha256-mFPhiAAibCiAkLrysAmIQalVCGd9ips2lqbAsowYprY=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ melling ];
   };
-}
+})
