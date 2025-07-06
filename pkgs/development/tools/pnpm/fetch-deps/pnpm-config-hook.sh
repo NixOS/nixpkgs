@@ -12,6 +12,13 @@ pnpmConfigHook() {
       exit 1
     fi
 
+    fetcherVersion=1
+    if [[ -e "${pnpmDeps}/.fetcher-version" ]]; then
+      fetcherVersion=$(cat "${pnpmDeps}/.fetcher-version")
+    fi
+
+    echo "Using fetcherVersion: $fetcherVersion"
+
     echo "Configuring pnpm store"
 
     export HOME=$(mktemp -d)

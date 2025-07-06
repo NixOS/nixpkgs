@@ -3272,6 +3272,12 @@
   "javascript-pnpm-extraCommands": [
     "index.html#javascript-pnpm-extraCommands"
   ],
+  "javascript-pnpm-fetcherVersion": [
+    "index.html#javascript-pnpm-fetcherVersion"
+  ],
+  "javascript-pnpm-fetcherVersion-versionHistory": [
+    "index.html#javascript-pnpm-fetcherVersion-versionHistory"
+  ],
   "javascript-yarn": [
     "index.html#javascript-yarn"
   ],
