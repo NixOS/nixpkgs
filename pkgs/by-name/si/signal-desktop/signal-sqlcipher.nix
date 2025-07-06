@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     export npm_config_nodedir=${nodejs}
-    pnpm run prebuildify
+    pnpm run prebuildify --strip false --arch "${stdenv.hostPlatform.node.arch}" --platform "${stdenv.hostPlatform.node.platform}"
     pnpm run build
 
     runHook postBuild
