@@ -7604,6 +7604,7 @@
     "tautulli"
     "tcp"
     "technove"
+    "tedee"
     "telegram"
     "telegram_bot"
     "tellduslive"
