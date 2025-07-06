@@ -122,6 +122,8 @@ let
           unit;
       requiredUnits = map normalizeUnits (extractProperty "x-systemd.requires=" fs.options);
       wantedUnits = map normalizeUnits (extractProperty "x-systemd.wants=" fs.options);
+      requiredMounts = extractProperty "x-systemd.requires-mounts-for=" fs.options;
+      wantedMounts = extractProperty "x-systemd.wants-mounts-for=" fs.options;
     in
     {
       name = "unlock-bcachefs-${utils.escapeSystemdPath fs.mountPoint}";
@@ -136,6 +138,10 @@ let
         bindsTo = [ deviceUnit ];
         requires = requiredUnits;
         wants = wantedUnits;
+        unitConfig = {
+          RequiresMountsFor = requiredMounts;
+          WantsMountsFor = wantedMounts;
+        };
         conflicts = [ "shutdown.target" ];
         unitConfig.DefaultDependencies = false;
         serviceConfig = {
