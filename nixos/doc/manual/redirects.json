@@ -5,6 +5,9 @@
   "test-opt-rawTestDerivationArg": [
     "index.html#test-opt-rawTestDerivationArg"
   ],
+  "ex-nixos-test-extendNixOS": [
+    "index.html#ex-nixos-test-extendNixOS"
+  ],
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],

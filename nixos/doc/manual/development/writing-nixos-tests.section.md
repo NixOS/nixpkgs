@@ -289,8 +289,41 @@ The NixOS test framework returns tests with multiple overriding methods.
         Just as with `overrideAttrs`, an abbreviated form can be used, e.g. `prevAttrs: { /* … */ }` or even `{ /* … */ }`.
         See [`lib.extends`](https://nixos.org/manual/nixpkgs/stable/#function-library-lib.fixedPoints.extends).
 
+`extendNixOS { module = ` *module* `; specialArgs = ` *specialArgs* `; }`
+:   Evaluates the test with additional NixOS modules and/or arguments.
+
+    `module`
+    :   A NixOS module to add to all the nodes in the test. Sets test option [`extraBaseModules`](#test-opt-extraBaseModules).
+
+    `specialArgs`
+    :   An attribute set of arguments to pass to all NixOS modules. These override the existing arguments, as well as any `_module.args.<name>` that the modules may define. Sets test option [`node.specialArgs`](#test-opt-node.specialArgs).
+
+    This is a convenience function for `extend` that overrides the aforementioned test options.
+
+    :::{.example #ex-nixos-test-extendNixOS}
+
+    # Using extendNixOS in `passthru.tests` to make `(openssh.tests.overrideAttrs f).tests.nixos` coherent
+
+    ```nix
+    mkDerivation (finalAttrs: {
+      # …
+      passthru = {
+        tests = {
+          nixos = nixosTests.openssh.extendNixOS {
+            module = {
+              services.openssh.package = finalAttrs.finalPackage;
+            };
+          };
+        };
+      };
+    })
+    ```
+    :::
+
 `extend { modules = ` *modules* `; specialArgs = ` *specialArgs* `; }`
 :   Adds new `nixosTest` modules and/or module arguments to the test, which are evaluated together with the existing modules and [built-in options](#sec-test-options-reference).
+
+    If you're only looking to extend the _NixOS_ configurations of the test, and not something else about the test, you may use the `extendNixOS` convenience function instead.
 
     `modules`
     :   A list of modules to add to the test. These are added to the existing modules and then [evaluated](https://nixos.org/manual/nixpkgs/stable/index.html#module-system-lib-evalModules) together.
