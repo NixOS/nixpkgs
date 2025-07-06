@@ -112,6 +112,8 @@ jobs:
     name: Reviewers
     needs: [prepare, eval]
     if: |
+      !github.event.pull_request.draft &&
+      !github.event.pull_request_target.draft &&
       needs.prepare.outputs.targetSha &&
       !contains(fromJSON(needs.prepare.outputs.headBranch).type, 'development')
     uses: ./.github/workflows/reviewers.yml
