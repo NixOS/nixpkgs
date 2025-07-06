@@ -103,11 +103,6 @@ lib.extendMkDerivation {
       # Stripping takes way too long with the amount of files required by a typical Node.js project.
       dontStrip = args.dontStrip or true;
 
-      env = {
-        npm_config_arch = stdenv.hostPlatform.node.arch;
-        npm_config_platform = stdenv.hostPlatform.node.platform;
-      } // (args.env or { });
-
       meta = (args.meta or { }) // {
         platforms = args.meta.platforms or nodejs.meta.platforms;
       };
