@@ -23,6 +23,8 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
+  __darwinAllowLocalNetworking = true; # for tests
+
   meta = with lib; {
     homepage = "https://github.com/FairwindsOps/pluto";
     description = "Find deprecated Kubernetes apiVersions";
