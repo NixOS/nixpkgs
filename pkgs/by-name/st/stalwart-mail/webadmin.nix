@@ -1,6 +1,7 @@
 {
   lib,
   rustPlatform,
+  stalwart-mail,
   fetchFromGitHub,
   trunk,
   tailwindcss_3,
@@ -73,6 +74,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/stalwartlabs/webadmin";
     changelog = "https://github.com/stalwartlabs/webadmin/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ onny ];
+    inherit (stalwart-mail.meta) maintainers;
   };
 }

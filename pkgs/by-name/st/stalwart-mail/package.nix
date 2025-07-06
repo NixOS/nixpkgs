@@ -162,6 +162,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
     webadmin = callPackage ./webadmin.nix { };
+    spam-filter = callPackage ./spam-filter.nix { };
     updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
   };
@@ -187,6 +188,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       onny
       oddlama
       pandapip1
+      norpol
     ];
   };
 })
