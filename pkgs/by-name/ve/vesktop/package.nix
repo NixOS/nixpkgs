@@ -8,7 +8,7 @@
   makeDesktopItem,
   copyDesktopItems,
   vencord,
-  electron,
+  electron_36,
   libicns,
   pipewire,
   libpulseaudio,
@@ -22,6 +22,9 @@
   # letting vesktop manage it's own version
   withSystemVencord ? false,
 }:
+let
+  electron = electron_36;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
   version = "1.5.7";
