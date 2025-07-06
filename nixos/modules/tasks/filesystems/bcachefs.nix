@@ -111,7 +111,7 @@ let
       deviceUnit = mkDeviceUnit device;
       mountUnit = mkMountUnit (prefix + fs.mountPoint);
       extractProperty =
-        prop: options: (map (lib.removePrefix "${prop}=") (builtins.filter (lib.hasPrefix prop) options));
+        prop: options: (map (lib.removePrefix prop) (builtins.filter (lib.hasPrefix prop) options));
       normalizeUnits =
         unit:
         if lib.hasPrefix "/dev/" unit then
@@ -120,8 +120,8 @@ let
           mkMountUnit unit
         else
           unit;
-      requiredUnits = map normalizeUnits (extractProperty "x-systemd.requires" fs.options);
-      wantedUnits = map normalizeUnits (extractProperty "x-systemd.wants" fs.options);
+      requiredUnits = map normalizeUnits (extractProperty "x-systemd.requires=" fs.options);
+      wantedUnits = map normalizeUnits (extractProperty "x-systemd.wants=" fs.options);
     in
     {
       name = "unlock-bcachefs-${utils.escapeSystemdPath fs.mountPoint}";
