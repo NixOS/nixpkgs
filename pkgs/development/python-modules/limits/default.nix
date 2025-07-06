@@ -102,15 +102,19 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "--benchmark-disable" ];
 
-  disabledTests = [ "test_moving_window_memcached" ];
+  disabledTests = [
+    "test_moving_window_memcached"
+    # Flaky: compares time to magic value
+    "test_sliding_window_counter_previous_window"
+  ];
 
   pythonImportsCheck = [ "limits" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rate limiting using various strategies and storage backends such as redis & memcached";
     homepage = "https://github.com/alisaifee/limits";
     changelog = "https://github.com/alisaifee/limits/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
   };
 }
