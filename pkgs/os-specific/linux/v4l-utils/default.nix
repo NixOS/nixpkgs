@@ -41,6 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wc9UnC7DzznrXse/FXMTSeYbJqIbXpY5IttCIzO64Zc=";
   };
 
+  patches = [
+    # Has been submitted upstream, but can't fetchurl/fetchpatch
+    # because patch doesn't know how to decode quoted-printable.
+    # https://lore.kernel.org/all/4dgJekVdP7lLqOQ6JNW05sRHSkRmLLMMQnEn8NGUHPoHDn4SBkaGlHUW89vkJJu3IeFDAh3p6mlplTJJlWJx8V4rr62-hd83quCJ2sIuqoA=@protonmail.com/
+    ./musl.patch
+  ];
+
   outputs =
     [ "out" ]
     ++ lib.optional withUtils "lib"
@@ -49,13 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
       "dev"
     ];
 
-  mesonFlags = [
-    (lib.mesonBool "v4l-utils" withUtils)
-    (lib.mesonEnable "qv4l2" withQt)
-    (lib.mesonEnable "qvidcap" withQt)
-    (lib.mesonOption "gconvsysdir" "${glibc.out}/lib/gconv")
-    (lib.mesonOption "udevdir" "${placeholder "out"}/lib/udev")
-  ];
+  mesonFlags =
+    [
+      (lib.mesonBool "v4l-utils" withUtils)
+      (lib.mesonEnable "gconv" stdenv.hostPlatform.isGnu)
+      (lib.mesonEnable "qv4l2" withQt)
+      (lib.mesonEnable "qvidcap" withQt)
+      (lib.mesonOption "udevdir" "${placeholder "out"}/lib/udev")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isGnu [
+      (lib.mesonOption "gconvsysdir" "${glibc.out}/lib/gconv")
+    ];
 
   postFixup = ''
     # Create symlink for V4l1 compatibility
