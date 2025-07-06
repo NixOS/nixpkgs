@@ -202,18 +202,6 @@ stdenv.mkDerivation (finalPackage: rec {
     '';
 
   passthru = {
-    # TODO (#409339): Remove this hack. We had to add it to avoid a mass rebuild
-    # for the 25.05 release to fix Kubernetes. Once the staging cycle referenced
-    # in the above PR completes, this passthru and all consumers of it should go away.
-    withPatches = finalPackage.overrideAttrs (prev: {
-      patches = lib.unique (
-        prev.patches or [ ]
-        ++ [
-          ./fix-mount-regression.patch
-        ]
-      );
-    });
-
     updateScript = gitUpdater {
       # No nicer place to find latest release.
       url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git";
