@@ -156,6 +156,7 @@ stdenv.mkDerivation rec {
 
     # Specify Dist etc. as fix for:  ENOENT: ... electron (bin*)
     yarn --offline electron package:preview \
+      --dir \
       -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version} \
       ;
