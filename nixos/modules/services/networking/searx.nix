@@ -252,12 +252,12 @@ in
 
     systemd.services.searx = mkIf (!cfg.runInUwsgi) {
       description = "Searx server, the meta search engine.";
-      wantedBy = [
-        "network.target"
-        "multi-user.target"
-      ];
+      wantedBy = [ "multi-user.target" ];
       requires = [ "searx-init.service" ];
-      after = [ "searx-init.service" ];
+      after = [
+        "searx-init.service"
+        "network.target"
+      ];
       serviceConfig =
         {
           User = "searx";
