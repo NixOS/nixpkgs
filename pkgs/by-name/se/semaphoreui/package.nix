@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, gnutar
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnutar,
 }:
 
 let
@@ -12,19 +13,21 @@ let
     };
     "aarch64-linux" = {
       arch = "linux_arm64";
-      sha256 = "sha256-1vh3vnlnr609qwm36hwy0qgh6dyvsa2wb8mc6nm5b0kxw513ldp2";
+      sha256 = "sha256-Byizs9nIX2eyUGq+1bJ3OJnyk5B3EHh2/n5DYgNIiPY=";
     };
     "x86_64-darwin" = {
       arch = "darwin_amd64";
-      sha256 = "sha256-0l3rp3p7brwgpwh723lvx4fcq1ykk08b9yxc3iaq7j91lhm04a02";
+      sha256 = "sha256-RYbygr3vrFIbvc1edm4FcEG4fHCMP5/zWC+E99zyfQY=";
     };
     "aarch64-darwin" = {
       arch = "darwin_arm64";
-      sha256 = "sha256-0nmi26j422wr61ddd15mfvhvsg4ap5560a9zsfp9zmaj0i4cyvpa";
+      sha256 = "sha256-C0TBr98pzIClC54P8itAR7oEK0msi3JwW9YKD2EHhRI=";
     };
   };
 
-  platform = platformInfo.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  platform =
+    platformInfo.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
 in
 stdenv.mkDerivation rec {
@@ -53,7 +56,12 @@ stdenv.mkDerivation rec {
     homepage = "https://semaphoreui.com/";
     changelog = "https://github.com/semaphoreui/semaphore/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ vysakh ];
     mainProgram = "semaphore";
