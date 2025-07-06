@@ -105,9 +105,7 @@ buildPerlPackage rec {
   # https://git.alpinelinux.org/aports/tree/main/po4a/APKBUILD#n11
   #
   # Disabling tests on Darwin until https://github.com/NixOS/nixpkgs/issues/236560 is resolved.
-  #
-  # Disabling tests on linux (gettext-0.25): https://github.com/mquinson/po4a/issues/580
-  doCheck = false;
+  doCheck = (!stdenv.hostPlatform.isMusl) && (!stdenv.hostPlatform.isDarwin);
 
   checkPhase = ''
     export SGML_CATALOG_FILES=${docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat
