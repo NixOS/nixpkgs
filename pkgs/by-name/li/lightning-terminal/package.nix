@@ -206,6 +206,5 @@ buildGoModule rec {
     changelog = "https://github.com/lightninglabs/lightning-terminal/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ HannahMR ];
     mainProgram = "litcli";
-    outputsToInstall = [ "out" ];
   };
 }
