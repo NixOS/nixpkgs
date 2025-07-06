@@ -4583,7 +4583,8 @@
       ];
     "ps4" =
       ps: with ps; [
-      ]; # missing inputs: pyps4-2ndscreen
+        pyps4-2ndscreen
+      ];
     "pse" =
       ps: with ps; [
       ];
@@ -7416,6 +7417,7 @@
     "prosegur"
     "proximity"
     "prusalink"
+    "ps4"
     "pterodactyl"
     "pure_energie"
     "purpleair"
