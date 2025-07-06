@@ -2332,6 +2332,8 @@ self: super: with self; {
 
   cddlparser = callPackage ../development/python-modules/cddlparser { };
 
+  cdxj-indexer = callPackage ../development/python-modules/cdxj-indexer { };
+
   celery = callPackage ../development/python-modules/celery { };
 
   celery-batches = callPackage ../development/python-modules/celery-batches { };

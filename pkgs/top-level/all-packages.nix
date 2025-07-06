@@ -11949,6 +11949,8 @@ with pkgs;
 
   cdparanoia = cdparanoiaIII;
 
+  cdxj-indexer = with python3Packages; toPythonApplication cdxj-indexer;
+
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
   chuck = callPackage ../applications/audio/chuck {
