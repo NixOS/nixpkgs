@@ -17669,6 +17669,8 @@ self: super: with self; {
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
 
+  tessie-api = callPackage ../development/python-modules/tessie-api { };
+
   test-results-parser = callPackage ../development/python-modules/test-results-parser { };
 
   test-tube = callPackage ../development/python-modules/test-tube { };
