@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rakshasa-rtorrent";
-  version = "0.15.4";
+  version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0OnDxmfliVP3GF2xzUZkURippzCGUwLebuyjb7nz/vs=";
+    hash = "sha256-ZUZR/ydGhxLbjMEDAlbU5IbAxU1dCd0vvATdsn0NMQc=";
   };
 
   outputs = [
