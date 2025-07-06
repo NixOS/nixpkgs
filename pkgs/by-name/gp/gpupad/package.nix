@@ -7,7 +7,7 @@
   glslang,
   imath,
   ktx-tools,
-  openimageio_2,
+  openimageio,
   qt6Packages,
   spdlog,
   spirv-cross,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     imath # needed for openimageio
     ktx-tools
-    openimageio_2
+    openimageio
     qt6Packages.qtbase
     qt6Packages.qtdeclarative
     qt6Packages.qtmultimedia
