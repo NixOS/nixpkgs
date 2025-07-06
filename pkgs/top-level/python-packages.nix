@@ -12902,6 +12902,8 @@ self: super: with self; {
 
   pyiskra = callPackage ../development/python-modules/pyiskra { };
 
+  pyiss = callPackage ../development/python-modules/pyiss { };
+
   pyisy = callPackage ../development/python-modules/pyisy { };
 
   pyituran = callPackage ../development/python-modules/pyituran { };
