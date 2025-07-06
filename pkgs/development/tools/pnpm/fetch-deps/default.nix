@@ -22,6 +22,7 @@ in
       pnpmWorkspaces ? [ ],
       prePnpmInstall ? "",
       pnpmInstallFlags ? [ ],
+      fetcherVersion ? 1,
       ...
     }@args:
     let
@@ -95,6 +96,11 @@ in
                 ${lib.escapeShellArgs pnpmInstallFlags} \
                 --registry="$NIX_NPM_REGISTRY" \
                 --frozen-lockfile
+
+            # Store newer fetcherVersion in case pnpm.configHook also needs it
+            if [[ ${toString fetcherVersion} -gt 1 ]]; then
+              echo ${toString fetcherVersion} > $out/.fetcher-version
+            fi
 
             runHook postInstall
           '';
