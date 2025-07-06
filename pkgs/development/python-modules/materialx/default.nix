@@ -8,7 +8,7 @@
   libX11,
   libXt,
   libGL,
-  openimageio_2,
+  openimageio,
   imath,
   python,
   apple-sdk_14,
@@ -16,17 +16,19 @@
 
 buildPythonPackage rec {
   pname = "materialx";
-  version = "1.38.10";
+  version = "1.39.3";
 
-  # nixpkgs-update: no auto update
-  # Updates are disabled due to API breakage in 1.39+ that breaks almost all
-  # consumers.
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
     rev = "v${version}";
-    hash = "sha256-/kMHmW2dptZNtjuhE5s+jvPRIdtY+FRiVtMU+tiBgQo=";
+    hash = "sha256-ceVYD/dyb3SEEENoJZxjn94DGmUj6IYSNLjsJvmPM84=";
   };
+
+  patches = [
+    # https://github.com/AcademySoftwareFoundation/MaterialX/pull/2479
+    ./0001-Find-OpenImageIO-dependency-for-downstream-consumers.patch
+  ];
 
   format = "other";
 
@@ -37,7 +39,7 @@ buildPythonPackage rec {
 
   buildInputs =
     [
-      openimageio_2
+      openimageio
       imath
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -66,12 +68,6 @@ buildPythonPackage rec {
     # required for cmake to find the bindings, when included in other projects
     ln -s $out/python $target_dir
   '';
-
-  # Update to 1.39 has major API changes and downstream software
-  # needs to adapt, first. So, do not include in mass updates. For reference, see
-  # https://github.com/NixOS/nixpkgs/pull/326466#issuecomment-2293029160
-  # and https://github.com/NixOS/nixpkgs/issues/380230
-  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/AcademySoftwareFoundation/MaterialX/blob/${src.rev}/CHANGELOG.md";
