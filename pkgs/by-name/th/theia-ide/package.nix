@@ -173,7 +173,11 @@ stdenv.mkDerivation rec {
     mkdir --parents "$out/lib/$pname"
     cp --recursive ./* "$out/lib/$pname"
 
-    install -Dm444 ./resources/app/resources/icons/WindowIcon/512-512.png "$out/share/pixmaps/$pname.png"
+    install --verbose -D --mode 444 \
+      ./resources/app/resources/icons/WindowIcon/512-512.png \
+      "$out/share/pixmaps/$pname.png" \
+      ;
+
     popd
 
     # Executable wrapper
