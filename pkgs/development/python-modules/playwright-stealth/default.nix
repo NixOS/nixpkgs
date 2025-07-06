@@ -1,40 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   playwright,
-  pythonOlder,
-  setuptools,
+  poetry-core,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "playwright-stealth";
-  version = "1.0.6-unstable-2023-09-11";
+  version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchFromGitHub {
-    owner = "AtuboDad";
-    repo = "playwright_stealth";
-    # https://github.com/AtuboDad/playwright_stealth/issues/25
-    rev = "43f7433057906945b1648179304d7dbd8eb10874";
-    hash = "sha256-ZWmuVwjEgrPmfxjvws3TdocW6tyNH++fyRfKQ0oJ6bo=";
+  src = fetchPypi {
+    pname = "playwright_stealth";
+    inherit version;
+    hash = "sha256-T0TUFtQiZomJWk0c+0Do0TchbAyXEOqPhLri2/EYb8U=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ playwright ];
-
-  # Tests require Chromium binary
-  doCheck = false;
+  dependencies = [ playwright ];
 
   pythonImportsCheck = [ "playwright_stealth" ];
 
-  meta = with lib; {
-    description = "Playwright stealth";
+  meta = {
+    description = "Make your playwright instance stealthy";
     homepage = "https://github.com/AtuboDad/playwright_stealth";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
