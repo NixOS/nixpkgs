@@ -21,7 +21,7 @@ buildDotnetModule rec {
     sha256 = "1n2312acq5rq0jizlcfk0crslx3wgcsd836p47nk3pnapzw0cqvv";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
   nativeBuildInputs = [
     unzip
