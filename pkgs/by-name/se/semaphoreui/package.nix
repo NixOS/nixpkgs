@@ -30,40 +30,34 @@ let
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "semaphoreui";
   version = "2.15.0";
 
   src = fetchurl {
-    url = "https://github.com/semaphoreui/semaphore/releases/download/v${version}/semaphore_${version}_${platform.arch}.tar.gz";
-    sha256 = platform.sha256;
+    url = "https://github.com/semaphoreui/semaphore/releases/download/v${finalAttrs.version}/semaphore_${finalAttrs.version}_${platform.arch}.tar.gz";
+    hash = platform.sha256;
   };
 
-  nativeBuildInputs = [ gnutar ];
-
-  unpackPhase = ''
-    tar xf $src
-  '';
-
   installPhase = ''
-    mkdir -p $out/bin
-    cp semaphore $out/bin/
-    chmod +x $out/bin/semaphore
+    runHook preInstall
+    install -Dm555 semaphore -t $out/bin/
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern UI and powerful API for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools";
     homepage = "https://semaphoreui.com/";
-    changelog = "https://github.com/semaphoreui/semaphore/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/semaphoreui/semaphore/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ vysakh ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ vysakh ];
     mainProgram = "semaphore";
   };
-}
+})
