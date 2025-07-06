@@ -19735,6 +19735,8 @@ self: super: with self; {
 
   yacs = callPackage ../development/python-modules/yacs { };
 
+  yagrc = callPackage ../development/python-modules/yagrc { };
+
   yalesmartalarmclient = callPackage ../development/python-modules/yalesmartalarmclient { };
 
   yalexs = callPackage ../development/python-modules/yalexs { };
