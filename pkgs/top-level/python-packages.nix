@@ -13451,6 +13451,8 @@ self: super: with self; {
 
   pyprusalink = callPackage ../development/python-modules/pyprusalink { };
 
+  pyps4-2ndscreen = callPackage ../development/python-modules/pyps4-2ndscreen { };
+
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
   pyptlib = callPackage ../development/python-modules/pyptlib { };
