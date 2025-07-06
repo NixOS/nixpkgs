@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   passthru = {
     inherit mpi;
+    tests.mpich = mpi4py.override { mpi = mpich; };
   };
 
   meta = {
