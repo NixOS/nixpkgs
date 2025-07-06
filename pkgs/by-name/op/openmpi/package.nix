@@ -42,23 +42,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
-  version = "5.0.7";
+  version = "5.0.8";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/openmpi-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-EZ8gCZNqQDM00N88DXTVWVoy2ZSX+bHUHpABn+4vwt0=";
+    sha256 = "sha256-UxMeGlfnJw9kVwf4sLZbpWBI9bWsP2j6q+0+sNcQ5Ek=";
   };
-
-  patches = [
-    # Fixes a compilation error, see:
-    # https://github.com/open-mpi/ompi/issues/13103, and:
-    # https://github.com/open-mpi/ompi/pull/13106
-    (fetchpatch {
-      name = "fix-singletons-session-dir";
-      url = "https://github.com/open-mpi/ompi/commit/beee36956b7bd4e6b4672f73015d9df3ae6ce44a.patch";
-      hash = "sha256-G3krkhZAH2xhs1KNPYon8faW6KfsAc+4dsh0qmZSt7Q=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./
