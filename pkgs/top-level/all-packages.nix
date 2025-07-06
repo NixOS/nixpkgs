@@ -16364,6 +16364,8 @@ with pkgs;
     ffmpeg = ffmpeg-full;
   };
 
+  py-wacz = with python3Packages; toPythonApplication wacz;
+
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
   wasmer = callPackage ../development/interpreters/wasmer {
