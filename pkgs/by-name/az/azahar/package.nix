@@ -150,7 +150,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open-source 3DS emulator project based on Citra";
     homepage = "https://github.com/azahar-emu/azahar";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = with lib.maintainers; [
+      arthsmn
+      marcin-serwin
+    ];
     mainProgram = "azahar";
   };
 })
