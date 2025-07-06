@@ -123,7 +123,14 @@ impl From<&Action> for &'static str {
 // Allow for this switch-to-configuration to remain consistent with the perl implementation.
 // Perl's "die" uses errno to set the exit code: https://perldoc.perl.org/perlvar#%24%21
 fn die() -> ! {
-    std::process::exit(std::io::Error::last_os_error().raw_os_error().unwrap_or(1));
+    let code = match std::io::Error::last_os_error().raw_os_error().unwrap_or(1) {
+        // Ensure that even if errno did not point to a helpful error code, we still have a
+        // non-zero exit code
+        0 => 1,
+        other => other,
+    };
+
+    std::process::exit(code);
 }
 
 fn parse_os_release() -> Result<HashMap<String, String>> {
