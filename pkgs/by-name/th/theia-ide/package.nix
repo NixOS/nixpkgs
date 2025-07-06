@@ -169,8 +169,9 @@ stdenv.mkDerivation rec {
 
     # Package directory
     pushd ./applications/electron/dist/linux-unpacked
-    mkdir -p "$out/lib/$pname"
-    cp -r ./* "$out/lib/$pname"
+
+    mkdir --parents "$out/lib/$pname"
+    cp --recursive ./* "$out/lib/$pname"
 
     install -Dm444 ./resources/app/resources/icons/WindowIcon/512-512.png "$out/share/pixmaps/$pname.png"
     popd
