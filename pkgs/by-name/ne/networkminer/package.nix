@@ -10,16 +10,19 @@
 }:
 buildDotnetModule rec {
   pname = "networkminer";
-  version = "2.8";
+  version = "3.0";
 
-  src = fetchurl {
-    # Upstream does not provide versioned releases, a mirror has been uploaded
-    # to archive.org
-    url = "https://archive.org/download/networkminer-${
-      lib.replaceStrings [ "." ] [ "-" ] version
-    }/NetworkMiner_${lib.replaceStrings [ "." ] [ "-" ] version}_source.zip";
-    sha256 = "1n2312acq5rq0jizlcfk0crslx3wgcsd836p47nk3pnapzw0cqvv";
-  };
+  src =
+    let
+      version' = lib.replaceString "." "-" version;
+    in
+    fetchurl {
+      # Upstream does not provide versioned releases, a mirror has been uploaded
+      # to archive.org
+      # Non-versioned download link can be found on https://www.netresec.com/?page=NetworkMinerSourceCode
+      url = "https://archive.org/download/network-miner-${version'}-source/NetworkMiner_${version'}_source.zip";
+      hash = "sha256-I5VtpfmlYO0+K1WtwouP0lzJptpE0sHn5JeCBTnXdio=";
+    };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
@@ -27,11 +30,6 @@ buildDotnetModule rec {
     unzip
     dos2unix
     msbuild
-  ];
-
-  patches = [
-    # Store application data in XDG_DATA_DIRS instead of trying to write to nix store
-    ./xdg-dirs.patch
   ];
 
   postPatch = ''
@@ -64,8 +62,7 @@ buildDotnetModule rec {
 
     install -D NetworkMiner/NetworkMiner.desktop $out/share/applications/NetworkMiner.desktop
     substituteInPlace $out/share/applications/NetworkMiner.desktop \
-      --replace "Exec=mono NetworkMiner.exe %f" "Exec=NetworkMiner" \
-      --replace "Icon=./networkminericon-96x96.png" "Icon=NetworkMiner"
+      --replace-fail "Icon=./Images/NetworkMiner_logo_313x313.png" "Icon=NetworkMiner"
     install -D NetworkMiner/networkminericon-96x96.png $out/share/pixmaps/NetworkMiner.png
 
     runHook postInstall
