@@ -23085,6 +23085,12 @@
     githubId = 251028;
     name = "Shell Turner";
   };
+  shellhazard = {
+    email = "shellhazard@tutanota.com";
+    github = "shellhazard";
+    githubId = 10951745;
+    name = "shellhazard";
+  };
   shelvacu = {
     name = "Shelvacu";
     email = "nix-maint@shelvacu.com";
