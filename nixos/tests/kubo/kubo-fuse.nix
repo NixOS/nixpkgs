@@ -27,8 +27,12 @@
   testScript = ''
     start_all()
 
-    with subtest("FUSE mountpoint"):
-        machine.fail("echo a | su bob -l -c 'ipfs add --quieter'")
+    with subtest("Create a file for testing"):
+        machine.succeed("echo 'fnord3' > /tmp/test.txt")
+
+
+    with subtest("/ipfs/ FUSE mountpoint"):
+        machine.fail("su bob -l -c 'ipfs add --quieter' < /tmp/test.txt")
         # The FUSE mount functionality is broken as of v0.13.0. This is still the case with v0.29.0.
         # See https://github.com/ipfs/kubo/issues/9044.
         # Workaround: using CID Version 1 avoids that.
@@ -36,13 +40,14 @@
             "echo fnord3 | su alice -l -c 'ipfs add --quieter --cid-version=1'"
         ).strip()
 
-        machine.succeed(f"cat /ipfs/{ipfs_hash} | grep fnord3")
+        machine.succeed(f"diff /tmp/test.txt /ipfs/{ipfs_hash}")
+
 
     with subtest("Unmounting of /ipns and /ipfs"):
         # Force Kubo to crash and wait for it to restart
         machine.systemctl("kill --signal=SIGKILL ipfs.service")
         machine.wait_for_unit("ipfs.service", timeout = 30)
 
-        machine.succeed(f"cat /ipfs/{ipfs_hash} | grep fnord3")
+        machine.succeed(f"diff /tmp/test.txt /ipfs/{ipfs_hash}")
   '';
 }
