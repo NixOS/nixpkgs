@@ -145,6 +145,12 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
       --replace-fail "<level>trace</level>" "<level>warning</level>"
   '';
 
+  # Basic smoke test
+  doCheck = true;
+  checkPhase = ''
+    $NIX_BUILD_TOP/$sourceRoot/build/programs/clickhouse local --query 'SELECT 1' | grep 1
+  '';
+
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
 
