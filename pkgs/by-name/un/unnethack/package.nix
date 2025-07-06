@@ -21,6 +21,12 @@ stdenv.mkDerivation {
     hash = "sha256-45sybOM2zCPCCuHGZ5sEeJzkgcwvi3MhgOC1v1kRwWg=";
   };
 
+  patches = [
+    # util-linux does not contains "col" binary on Darwin. Only needed for documentation build.
+    # https://github.com/util-linux/util-linux/commit/8886d84e25a457702b45194d69a47313f76dc6bc
+    ./disable-col-check.patch
+  ];
+
   buildInputs = [
     ncurses
     lua5_4
