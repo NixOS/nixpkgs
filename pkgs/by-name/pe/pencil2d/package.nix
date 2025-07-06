@@ -5,6 +5,7 @@
   qt5,
   git,
   ffmpeg_6,
+  gst_all_1,
   nix-update-script,
 }:
 
@@ -54,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtsvg
     qtwayland
     ffmpeg_6
+    gst_all_1.gst-libav
   ];
 
   meta = {
