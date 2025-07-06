@@ -3939,6 +3939,8 @@ self: super: with self; {
 
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
+  django-pgpubsub = callPackage ../development/python-modules/django-pgpubsub { };
+
   django-pgtrigger = callPackage ../development/python-modules/django-pgtrigger { };
 
   django-phonenumber-field = callPackage ../development/python-modules/django-phonenumber-field { };
@@ -12903,6 +12905,8 @@ self: super: with self; {
   pyisemail = callPackage ../development/python-modules/pyisemail { };
 
   pyiskra = callPackage ../development/python-modules/pyiskra { };
+
+  pyiss = callPackage ../development/python-modules/pyiss { };
 
   pyisy = callPackage ../development/python-modules/pyisy { };
 

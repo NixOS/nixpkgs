@@ -2805,7 +2805,8 @@
       ];
     "iss" =
       ps: with ps; [
-      ]; # missing inputs: pyiss
+        pyiss
+      ];
     "ista_ecotrend" =
       ps: with ps; [
         fnv-hash-fast
@@ -7185,6 +7186,7 @@
     "iskra"
     "islamic_prayer_times"
     "israel_rail"
+    "iss"
     "ista_ecotrend"
     "isy994"
     "ituran"
