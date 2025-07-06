@@ -50,7 +50,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/go-jet/jet";
     description = "Type safe SQL builder with code generation and automatic query result data mapping";
-    maintainers = with maintainers; [ mrityunjaygr8 ];
+    maintainers = with maintainers; [ ];
     license = licenses.asl20;
     mainProgram = "jet";
   };

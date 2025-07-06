@@ -37,7 +37,7 @@ buildGoModule rec {
     homepage = "https://github.com/volatiletech/sqlboiler";
     changelog = "https://github.com/volatiletech/sqlboiler/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mrityunjaygr8 ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "sqlboiler";
   };
 }
