@@ -32,8 +32,6 @@ buildPythonPackage rec {
   version = "6.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey-py";
@@ -86,11 +84,11 @@ buildPythonPackage rec {
     "test_psync"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Redis key-value store";
     homepage = "https://github.com/valkey-io/valkey-py";
     changelog = "https://github.com/valkey-io/valkey-py/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }
