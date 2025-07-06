@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ tellmeY18 ];
+    maintainers = with maintainers; [ vysakh ];
     mainProgram = "semaphore";
   };
 }
