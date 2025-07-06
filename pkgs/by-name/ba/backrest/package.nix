@@ -108,7 +108,7 @@ buildGoModule {
     homepage = "https://github.com/garethgeorge/backrest";
     changelog = "https://github.com/garethgeorge/backrest/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ interdependence ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };

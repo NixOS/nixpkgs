@@ -2634,6 +2634,8 @@ self: super: with self; {
 
   clldutils = callPackage ../development/python-modules/clldutils { };
 
+  cloudcheck = callPackage ../development/python-modules/cloudcheck { };
+
   cloudevents = callPackage ../development/python-modules/cloudevents { };
 
   cloudflare = callPackage ../development/python-modules/cloudflare { };
@@ -15192,6 +15194,8 @@ self: super: with self; {
 
   radish-bdd = callPackage ../development/python-modules/radish-bdd { };
 
+  radixtarget = callPackage ../development/python-modules/radixtarget { };
+
   radon = callPackage ../development/python-modules/radon { };
 
   railroad-diagrams = callPackage ../development/python-modules/railroad-diagrams { };
@@ -18135,6 +18139,8 @@ self: super: with self; {
   treex = callPackage ../development/python-modules/treex { };
 
   treq = callPackage ../development/python-modules/treq { };
+
+  trevorproxy = callPackage ../development/python-modules/trevorproxy { };
 
   trezor = callPackage ../development/python-modules/trezor { };
 

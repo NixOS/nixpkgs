@@ -35,6 +35,7 @@ buildPythonPackage rec {
     "attrs"
     "hier-config"
     "passlib"
+    "tomlkit"
     "typeguard"
   ];
 
