@@ -4928,6 +4928,8 @@ self: super: with self; {
 
   fastdiff = callPackage ../development/python-modules/fastdiff { };
 
+  fastdotcom = callPackage ../development/python-modules/fastdotcom { };
+
   fastdownload = callPackage ../development/python-modules/fastdownload { };
 
   fastdtw = callPackage ../development/python-modules/fastdtw { };
@@ -13448,6 +13450,8 @@ self: super: with self; {
   pyprosegur = callPackage ../development/python-modules/pyprosegur { };
 
   pyprusalink = callPackage ../development/python-modules/pyprusalink { };
+
+  pyps4-2ndscreen = callPackage ../development/python-modules/pyps4-2ndscreen { };
 
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
