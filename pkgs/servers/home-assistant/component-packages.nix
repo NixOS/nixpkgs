@@ -1668,7 +1668,8 @@
       ];
     "fastdotcom" =
       ps: with ps; [
-      ]; # missing inputs: fastdotcom
+        fastdotcom
+      ];
     "feedreader" =
       ps: with ps; [
         feedparser
@@ -7014,6 +7015,7 @@
     "facebook"
     "fail2ban"
     "fan"
+    "fastdotcom"
     "feedreader"
     "ffmpeg"
     "fibaro"
