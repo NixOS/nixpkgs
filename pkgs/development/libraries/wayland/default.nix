@@ -117,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit; # Expat version
     platforms = platforms.unix;
     maintainers = with maintainers; [
-      primeos
       codyopel
       qyliss
     ];

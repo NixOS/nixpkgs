@@ -125,7 +125,6 @@ buildPythonPackage rec {
     license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [
-      primeos
       bjornfor
     ];
   };
