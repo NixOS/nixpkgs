@@ -11,20 +11,20 @@
 }:
 buildDotnetModule rec {
   pname = "wasabibackend";
-  version = "2.0.2.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
-    owner = "zkSNACKs";
+    owner = "WalletWasabi";
     repo = "WalletWasabi";
     tag = "v${version}";
-    hash = "sha512-JuCl3SyejzwUd2n8Fy7EdxUuO4bIcGb8yMWZQOhZzsY4fvg9prFOnVZEquxahD0a41MLKHRNA1R2N3NMapcc0A==";
+    hash = "sha256-vOvNumR/0agf9Mof0UD3KjJVgN18y6R/OrgLOXwL3K8=";
   };
 
   projectFile = "WalletWasabi.Backend/WalletWasabi.Backend.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0-bin;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0-bin;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
@@ -35,12 +35,6 @@ buildDotnetModule rec {
     openssl
     zlib
   ];
-
-  preConfigure = ''
-    makeWrapperArgs+=(
-      --chdir "$out/lib/${pname}"
-    )
-  '';
 
   postFixup = ''
     mv $out/bin/WalletWasabi.Backend $out/bin/WasabiBackend
