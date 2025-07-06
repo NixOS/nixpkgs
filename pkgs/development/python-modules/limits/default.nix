@@ -27,10 +27,8 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "5.2.0";
+  version = "5.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
@@ -39,10 +37,10 @@ buildPythonPackage rec {
     # Upstream uses versioneer, which relies on git attributes substitution.
     # This leads to non-reproducible archives on github. Remove the substituted
     # file here, and recreate it later based on our version info.
+    hash = "sha256-EHLqkd5Muazr52/oYaLklFVvF+AzJWGbFaaIG+T0ulE=";
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-0D44XaSZtebMnn9mqXbaE7FB7usdu/eZ/4UE3Ye0oyA=";
   };
 
   patches = [
