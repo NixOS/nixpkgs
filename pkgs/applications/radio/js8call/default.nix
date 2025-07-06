@@ -56,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://js8call.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ melling ];
+    maintainers = with maintainers; [
+      melling
+      sarcasticadmin
+    ];
   };
 })
