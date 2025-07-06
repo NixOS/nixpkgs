@@ -12107,6 +12107,8 @@ self: super: with self; {
 
   py2vega = callPackage ../development/python-modules/py2vega { };
 
+  py3amf = callPackage ../development/python-modules/py3amf { };
+
   py3buddy = callPackage ../development/python-modules/py3buddy { };
 
   py3dns = callPackage ../development/python-modules/py3dns { };
