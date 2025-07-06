@@ -59,6 +59,10 @@ buildPythonPackage rec {
     hash = "sha256-OZ7guV/uxa3jGesAh+ubrFjQSNVp5ImfXfPAQxagTj0=";
   };
 
+  patches = [
+    ./avx512.patch
+  ];
+
   # Do not type-check assertions because some of them use unstable features (`is_none_or`)
   postPatch = ''
     while IFS= read -r -d "" path ; do
