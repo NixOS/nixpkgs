@@ -10,7 +10,7 @@
   fetchYarnDeps,
   go,
   versionCheckHook,
-  testers,
+  runCommandWith,
   curl,
   lightning-terminal,
   _experimental-update-script-combinators,
@@ -99,24 +99,28 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  passthru.tests.litd-app = testers.runCommand {
-    name = "test-litd-app";
-    nativeBuildInputs = [
-      curl
-      lightning-terminal
-    ];
-    script = ''
-      litd \
-        --uipassword=12345678 \
-        --insecure-httplisten=127.0.0.1:8080 \
-        --httpslisten= &
-      sleep 2
-      GETindexHTTPCode=$(curl -o /dev/null -w "%{http_code}" -Lvs 127.0.0.1:8080/index.html)
-      if [ "$GETindexHTTPCode" = 200 ]; then
-        touch $out
-      fi
-    '';
-  };
+  passthru.tests.litd-app =
+    runCommandWith
+      {
+        name = "test-litd-app";
+        derivationArgs = {
+          nativeBuildInputs = [
+            curl
+            lightning-terminal
+          ];
+        };
+      }
+      ''
+        litd \
+          --uipassword=12345678 \
+          --insecure-httplisten=127.0.0.1:8080 \
+          --httpslisten= &
+        sleep 2
+        GETindexHTTPCode=$(curl -o /dev/null -w "%{http_code}" -Lvs 127.0.0.1:8080/index.html)
+        if [ "$GETindexHTTPCode" = 200 ]; then
+          touch $out
+        fi
+      '';
 
   # Usage: nix-shell maintainers/scripts/update.nix --argstr package lightning-terminal --argstr commit true
   passthru.updateScript = _experimental-update-script-combinators.sequence [
