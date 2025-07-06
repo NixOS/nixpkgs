@@ -142,6 +142,9 @@ let
 
           # our patches cause the tests to fail
           doCheck = false;
+
+          # patchShebangs corrupts the magic escript shebang+zip files
+          dontPatchShebangs = true;
         })
       );
     in
