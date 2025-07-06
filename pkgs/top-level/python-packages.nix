@@ -5407,6 +5407,8 @@ self: super: with self; {
 
   freud = callPackage ../development/python-modules/freud { };
 
+  frictionless = callPackage ../development/python-modules/frictionless { };
+
   frida-python = callPackage ../development/python-modules/frida-python { };
 
   frigidaire = callPackage ../development/python-modules/frigidaire { };
