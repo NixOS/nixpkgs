@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  desktop-file-utils,
   makeWrapper,
   patchelf,
   fontconfig,
@@ -15,63 +16,59 @@
   zlib,
 }:
 
-let
-  sha256 = "6d6ca2b383bcc81af1217c696eb77864a2b6db7428f4b5bde5b5913ce705eec5";
-
-  ldpath = lib.makeLibraryPath [
-    fontconfig
-    freetype
-    glib
-    libICE
-    libSM
-    libX11
-    libXext
-    libXrender
-    zlib
-  ];
-
-  version = "7.5.0";
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spideroak";
-  inherit version;
+  version = "7.5.2";
 
   src = fetchurl {
-    name = "SpiderOakONE-${version}-slack_tar_x64.tgz";
-    url = "https://spideroak-releases.s3.us-east-2.amazonaws.com/SpiderOakONE-${version}-slack_tar_x64.tgz";
-    inherit sha256;
+    url = "https://spideroak-releases.s3.us-east-2.amazonaws.com/SpiderOakONE-${finalAttrs.version}-x86_64-1.tgz";
+    hash = "sha256-L9AF5gOmvbN+Ur1k0oIjJJT15RZvWA7mhDgveVowu7E=";
   };
 
   sourceRoot = ".";
 
   unpackCmd = "tar -xzf $curSrc";
 
+  nativeBuildInputs = [
+    desktop-file-utils
+    patchelf
+    makeWrapper
+  ];
+
   installPhase = ''
-    mkdir "$out"
-    cp -r "./"* "$out"
-    mkdir "$out/bin"
-    rm "$out/usr/bin/SpiderOakONE"
-    rmdir $out/usr/bin || true
-    mv $out/usr/share $out/
+    runHook preInstall
+
+    cp -r . $out
+    mv $out/usr/share $out/share
+    rm -rf $out/usr
 
     rm -f $out/opt/SpiderOakONE/lib/libz*
 
     patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \
       "$out/opt/SpiderOakONE/lib/SpiderOakONE"
 
-    RPATH=$out/opt/SpiderOakONE/lib:${ldpath}
-    makeWrapper $out/opt/SpiderOakONE/lib/SpiderOakONE $out/bin/spideroak --set LD_LIBRARY_PATH $RPATH \
+    makeWrapper $out/opt/SpiderOakONE/lib/SpiderOakONE $out/bin/spideroak \
+      --set LD_LIBRARY_PATH $out/opt/SpiderOakONE/lib:${
+        lib.makeLibraryPath [
+          fontconfig
+          freetype
+          glib
+          libICE
+          libSM
+          libX11
+          libXext
+          libXrender
+          zlib
+        ]
+      } \
       --set QT_PLUGIN_PATH $out/opt/SpiderOakONE/lib/plugins/ \
       --set SpiderOak_EXEC_SCRIPT $out/bin/spideroak
 
-    sed -i 's/^Exec=.*/Exec=spideroak/' $out/share/applications/SpiderOakONE.desktop
-  '';
+    desktop-file-edit $out/share/applications/SpiderOakONE.desktop \
+      --set-key="Exec" --set-value="spideroak"
 
-  nativeBuildInputs = [
-    patchelf
-    makeWrapper
-  ];
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://spideroak.com";
@@ -82,4 +79,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "spideroak";
   };
-}
+})
