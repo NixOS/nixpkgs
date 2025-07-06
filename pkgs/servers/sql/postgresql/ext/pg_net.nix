@@ -19,7 +19,9 @@ postgresqlBuildExtension (finalAttrs: {
 
   buildInputs = [ curl ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optional (lib.versionAtLeast postgresql.version "18") "-Wno-error=missing-variable-declarations"
+  );
 
   meta = {
     description = "Async networking for Postgres";
