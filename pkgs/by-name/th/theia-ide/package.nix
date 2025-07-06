@@ -171,22 +171,21 @@ stdenv.mkDerivation rec {
     pushd ./applications/electron/dist/linux-unpacked
 
     # Create directory
-    install --directory --mode 755 "$out/usr/lib/$pname"
+    install --directory --mode 755 "$out/opt/$pname"
 
     # Source code (command-line symlinks dereferenced, if any) and plugins
     cp --recursive -H --no-preserve=ownership --preserve=mode \
       ./* \
-      "$out/usr/lib/$pname" \
+      "$out/opt/$pname" \
       ;
       # lib node_modules package.json \
       # plugins \
-    chmod --recursive a+rX,go-w "$out/usr/lib/$pname"
+    chmod --recursive a+rX,go-w "$out/opt/$pname"
 
     install --verbose -D --mode 444 \
       ./resources/app/resources/icons/WindowIcon/512-512.png \
       "$out/share/pixmaps/$pname.png" \
       ;
-      # "$out/usr/share/pixmaps/$pname.png" \
 
     popd
 
@@ -194,15 +193,14 @@ stdenv.mkDerivation rec {
       --target-directory "$out/share/licenses/$pname" \
       LICENSE* \
       ;
-      # --target-directory "$out/usr/share/licenses/$pname" \
 
-    makeWrapper '${electron}/bin/electron' "$out/usr/lib/$pname/theia-ide" \
+    makeWrapper '${electron}/bin/electron' "$out/opt/$pname/theia-ide" \
       --add-flags "$out/usr/lib/$pname/resources/app/" \
       ;
 
     install --verbose -D --mode 755 \
       --target-directory $out/bin/ \
-      $out/usr/lib/$pname/theia-ide{,-electron-app} \
+      $out/opt/$pname/theia-ide{,-electron-app} \
       ;
 
     # # Fix chrome-sandbox permissions
