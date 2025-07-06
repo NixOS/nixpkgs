@@ -9,7 +9,6 @@
   yarnBuildHook,
   yarnConfigHook,
   yarnInstallHook,
-  autoPatchelfHook,
 
   ## Needed for Executing package.json scripts
   nodejs_22,
@@ -24,6 +23,7 @@
 
   ## Needed for Distribution
   makeWrapper,
+  autoPatchelfHook,
   makeDesktopItem,
   copyDesktopItems,
 
@@ -92,7 +92,6 @@ stdenv.mkDerivation rec {
     yarnConfigHook
     yarnBuildHook
     yarnInstallHook
-    autoPatchelfHook
 
     ## Needed for Executing package.json scripts
     nodejs
@@ -100,6 +99,7 @@ stdenv.mkDerivation rec {
 
     ## Needed for Distribution
     makeWrapper
+    autoPatchelfHook
     copyDesktopItems
 
     ## Needed for Compiling the native modules
