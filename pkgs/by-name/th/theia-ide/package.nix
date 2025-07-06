@@ -170,15 +170,44 @@ stdenv.mkDerivation rec {
     # Package directory
     pushd ./applications/electron/dist/linux-unpacked
 
-    mkdir --parents "$out/lib/$pname"
-    cp --recursive ./* "$out/lib/$pname"
+    # Create directory
+    install --directory --mode 755 "$out/usr/lib/$pname"
+
+    # Source code (command-line symlinks dereferenced, if any) and plugins
+    cp --recursive -H --no-preserve=ownership --preserve=mode \
+      ./* \
+      "$out/usr/lib/$pname" \
+      ;
+      # lib node_modules package.json \
+      # plugins \
+    chmod --recursive a+rX,go-w "$out/usr/lib/$pname"
 
     install --verbose -D --mode 444 \
       ./resources/app/resources/icons/WindowIcon/512-512.png \
       "$out/share/pixmaps/$pname.png" \
       ;
+      # "$out/usr/share/pixmaps/$pname.png" \
 
     popd
+
+    install --verbose -D --mode 444 \
+      --target-directory "$out/share/licenses/$pname" \
+      LICENSE* \
+      ;
+      # --target-directory "$out/usr/share/licenses/$pname" \
+
+    makeWrapper '${electron}/bin/electron' "$out/usr/lib/$pname/theia-ide" \
+      --add-flags "$out/usr/lib/$pname/resources/app/" \
+      ;
+
+    install --verbose -D --mode 755 \
+      --target-directory $out/bin/ \
+      $out/usr/lib/$pname/theia-ide{,-electron-app} \
+      ;
+
+    # # Fix chrome-sandbox permissions
+    # chown root "$out/opt/$pname/chrome-sandbox"
+    # chmod 4755 "$out/opt/$pname/chrome-sandbox"
 
     # Executable wrapper
     # makeWrapper '${electron}/bin/electron' "$out/bin/$pname" \
@@ -225,8 +254,10 @@ stdenv.mkDerivation rec {
             icon = names.icon;
             genericName = "IDE";
             comment = meta.description;
+            # startupNotify = false; # Arch
             startupNotify = true;
             # TODO: Confirm this startupWMClass from artifact / upstream
+            # startupWMClass = electron; # Arch
             startupWMClass = names.short;
             categories = [
               # Theia-IDE / vscode / vscodium are NOT "small Utility applications"
