@@ -1,56 +1,24 @@
 {
   lib,
-  buildPythonApplication,
   fetchPypi,
-  # build inputs
-  about-time,
-  aiofiles,
-  aiohttp,
-  aiosignal,
-  alive-progress,
-  async-timeout,
-  attrs,
-  certifi,
-  charset-normalizer,
-  cssselect,
-  frozenlist,
-  html5lib,
-  idna,
-  isodate,
-  json-home-client,
-  kdl-py,
-  lxml,
-  multidict,
-  pillow,
-  pygments,
-  requests,
-  result,
-  setuptools,
-  six,
-  tenacity,
-  typing-extensions,
-  uri-template,
-  urllib3,
-  webencodings,
-  widlparser,
-  yarl,
+  python3Packages,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "bikeshed";
-  version = "5.1.2";
+  version = "5.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QIADVcxgJreH2pvXRVIBE5p6nEEYZtTiSo00RrpFT+E=";
+    hash = "sha256-+TY26g685eIMXUjTG876r9gryg/tR6EtMGWAhk2kkis=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ python3Packages.setuptools ];
 
   pythonRelaxDeps = true;
 
-  dependencies = [
+  dependencies = with python3Packages; [
     about-time
     aiofiles
     aiohttp
@@ -58,6 +26,7 @@ buildPythonApplication rec {
     alive-progress
     async-timeout
     attrs
+    cddlparser
     certifi
     charset-normalizer
     cssselect
@@ -102,6 +71,9 @@ buildPythonApplication rec {
     '';
     homepage = "https://tabatkins.github.io/bikeshed/";
     license = licenses.cc0;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      hemera
+    ];
   };
 }
