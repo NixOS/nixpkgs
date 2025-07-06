@@ -5,13 +5,13 @@
   nixosTests,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "gemstash";
   gemdir = ./.;
-  exes = [ pname ];
+  exes = [ "gemstash" ];
 
   passthru = {
-    updateScript = bundlerUpdateScript pname;
+    updateScript = bundlerUpdateScript "gemstash";
     tests = { inherit (nixosTests) gemstash; };
   };
 
