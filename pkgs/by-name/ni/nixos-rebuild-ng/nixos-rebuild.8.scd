@@ -306,7 +306,7 @@ Builder options:
 
 *--verbose,*  *-v*,  *--quiet*,  *--log-format*,  *--no-build-output*, *-Q*,
 *--max-jobs*, *-j*, *--cores*, *--keep-going*, *-k*, *--keep-failed*, *-K*,
-*--fallback*, *--incllude*, *-I*, *--option*, *--repair*, *--builders*,
+*--fallback*, *--include*, *-I*, *--option*, *--repair*, *--builders*,
 *--print-build-logs*, *-L*, *--show-trace*
 
 See the Nix manual, *nix flake lock --help* or *nix-build --help* for details.
