@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  python310,
+  python311,
   tcl,
 }:
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    python310
-    python310.pkgs.boost-python
+    python311
+    python311.pkgs.boost-python
     tcl
   ];
 
