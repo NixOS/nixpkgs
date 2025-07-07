@@ -20,6 +20,7 @@
   enablePlugin,
   disableGdbPlugin ? !enablePlugin,
   enableShared,
+  targetPrefix,
 
   langC,
   langCC,
@@ -58,10 +59,6 @@ let
   crossMingw = (!lib.systems.equals targetPlatform hostPlatform) && targetPlatform.isMinGW;
   crossDarwin =
     (!lib.systems.equals targetPlatform hostPlatform) && targetPlatform.libc == "libSystem";
-
-  targetPrefix = lib.optionalString (
-    !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform
-  ) "${stdenv.targetPlatform.config}-";
 
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.

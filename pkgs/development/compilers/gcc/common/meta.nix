@@ -1,4 +1,9 @@
-{ lib, version }:
+{
+  lib,
+  stdenv,
+  version,
+  targetPrefix,
+}:
 
 let
   inherit (lib)
@@ -24,5 +29,6 @@ in
 
   platforms = platforms.unix;
   teams = [ teams.gcc ];
+  mainProgram = "${targetPrefix}gcc";
 
 }
