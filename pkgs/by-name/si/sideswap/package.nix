@@ -2,8 +2,6 @@
   lib,
   fetchFromGitHub,
   flutter332,
-  mesa,
-  libglvnd,
   callPackage,
   makeDesktopItem,
   copyDesktopItems,
@@ -35,10 +33,8 @@ flutter332.buildFlutterApplication rec {
 
   # Provide OpenGL and libsideswap_client.so for the Flutter application.
   extraWrapProgramArgs = ''
-    --set LD_LIBRARY_PATH ${
+    --prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
-        mesa
-        libglvnd
         libsideswap-client
       ]
     }
