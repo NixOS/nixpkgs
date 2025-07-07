@@ -15397,11 +15397,7 @@ with pkgs;
     nodejs = nodejs_20;
   };
 
-  p4est-sc = callPackage ../development/libraries/science/math/p4est-sc {
-    p4est-sc-debugEnable = false;
-  };
-
-  p4est-sc-dbg = callPackage ../development/libraries/science/math/p4est-sc { };
+  p4est-sc-dbg = p4est-sc.override { debug = true; };
 
   p4est = callPackage ../development/libraries/science/math/p4est { };
 
