@@ -98,14 +98,14 @@ buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Automation for KiCAD boards";
     homepage = "https://github.com/yaqwsx/KiKit/";
     changelog = "https://github.com/yaqwsx/KiKit/releases/tag/${src.tag}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jfly
       matusf
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }
