@@ -5435,6 +5435,8 @@ self: super: with self; {
 
   flexcache = callPackage ../development/python-modules/flexcache { };
 
+  flexible-schema = callPackage ../development/python-modules/flexible-schema { };
+
   flexit-bacnet = callPackage ../development/python-modules/flexit-bacnet { };
 
   flexmock = callPackage ../development/python-modules/flexmock { };
