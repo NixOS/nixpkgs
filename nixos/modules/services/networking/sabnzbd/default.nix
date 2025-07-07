@@ -594,7 +594,7 @@ in
           set -euo pipefail
           files=('${publicIni}' ${secretIniQuoted})
           ${optionalWriteableConfigInclusion}
-          ${pkgs.python313.withPackages (pypkgs: [ pypkgs.configobj ])}/bin/python \
+          ${lib.getExe pkgs.python3.withPackages (py: [ py.configobj ])} \
             ${./config_merge.py} \
             "''${files[@]}" | \
           install -D -m ${if cfg.allowConfigWrite then "600" else "400"} \
