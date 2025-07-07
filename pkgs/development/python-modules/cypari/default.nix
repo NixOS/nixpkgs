@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchpatch,
   python,
   buildPythonPackage,
@@ -89,5 +90,6 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ noiioiu ];
     changelog = "https://github.com/3-manifolds/CyPari/releases/tag/${src.tag}";
+    broken = stdenv.hostPlatform.isDarwin; # TODO: figure out how to build this on darwin
   };
 }
