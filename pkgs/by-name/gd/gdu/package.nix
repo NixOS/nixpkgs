@@ -7,14 +7,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gdu";
   version = "5.31.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = "gdu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MAkD4Mh7aXWc8Y4TkXH7NSDgPQugB7Gjhr4nfOr/X1U=";
   };
 
@@ -28,12 +28,12 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
+    "-X=github.com/dundee/gdu/v${lib.versions.major finalAttrs.version}/build.Version=${finalAttrs.version}"
   ];
 
   postPatch = ''
     substituteInPlace cmd/gdu/app/app_test.go \
-      --replace-fail "development" "${version}"
+      --replace-fail "development" "${finalAttrs.version}"
   '';
 
   postInstall = ''
@@ -58,7 +58,7 @@ buildGoModule rec {
       the performance gain is not so huge.
     '';
     homepage = "https://github.com/dundee/gdu";
-    changelog = "https://github.com/dundee/gdu/releases/tag/v${version}";
+    changelog = "https://github.com/dundee/gdu/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       fab
@@ -66,4 +66,4 @@ buildGoModule rec {
     ];
     mainProgram = "gdu";
   };
-}
+})
