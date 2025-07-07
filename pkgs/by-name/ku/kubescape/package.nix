@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   git,
+  writableTmpDirAsHomeHook,
   installShellFiles,
   versionCheckHook,
 }:
@@ -31,7 +32,10 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [
+    git
+    writableTmpDirAsHomeHook
+  ];
 
   ldflags = [
     "-s"
@@ -40,8 +44,6 @@ buildGoModule (finalAttrs: {
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Remove tests that use networking
     rm core/pkg/resourcehandler/urlloader_test.go
     rm core/pkg/opaprocessor/*_test.go
