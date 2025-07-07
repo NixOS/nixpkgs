@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   git,
   writableTmpDirAsHomeHook,
   installShellFiles,
   versionCheckHook,
+  buildPackages,
 }:
 
 buildGoModule (finalAttrs: {
@@ -61,12 +63,20 @@ buildGoModule (finalAttrs: {
       --replace-fail "TestSetContextMetadata" "SkipSetContextMetadata"
   '';
 
-  postInstall = ''
-    installShellCompletion --cmd kubescape \
-      --bash <($out/bin/kubescape completion bash) \
-      --fish <($out/bin/kubescape completion fish) \
-      --zsh <($out/bin/kubescape completion zsh)
-  '';
+  postInstall =
+    let
+      kubescape =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.kubescape;
+    in
+    ''
+      installShellCompletion --cmd kubescape \
+        --bash <(${kubescape}/bin/kubescape completion bash) \
+        --fish <(${kubescape}/bin/kubescape completion fish) \
+        --zsh <(${kubescape}/bin/kubescape completion zsh)
+    '';
 
   doInstallCheck = true;
 
