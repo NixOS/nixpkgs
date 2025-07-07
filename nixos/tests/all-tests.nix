@@ -21,7 +21,7 @@ let
   discoverTests =
     val:
     if isAttrs val then
-      if hasAttr "test" val then
+      if (val ? test) then
         callTest val
       else
         mapAttrs (n: s: if n == "passthru" then s else discoverTests s) val
