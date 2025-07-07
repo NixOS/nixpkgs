@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       imadnyc
       jleightcap
     ];
+    teams = with lib.teams; [ ngi ];
     # This supports whatever platforms libcpucycles supports
     inherit (libcpucycles.meta) platforms;
   };
