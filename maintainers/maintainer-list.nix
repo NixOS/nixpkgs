@@ -25309,6 +25309,12 @@
     githubId = 1761259;
     name = "Eric Roberts";
   };
+  thrix = {
+    email = "mvadkert@redhat.com";
+    github = "thrix";
+    githubId = 633969;
+    name = "Miroslav Vadkerti";
+  };
   thtrf = {
     email = "thtrf@proton.me";
     github = "thtrf";
