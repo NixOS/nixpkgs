@@ -21,6 +21,7 @@ let
 in
 
 rec {
+  binaryTarball = throw "removed (8 Jul 2025)";
   debBuild = throw "removed (8 Jul 2025)";
   mvnBuild = throw "removed (8 Jul 2025)";
   rpmBuild = throw "removed (8 Jul 2025)";
@@ -41,15 +42,6 @@ rec {
     );
 
   makeSourceTarball = sourceTarball; # compatibility
-
-  binaryTarball =
-    args:
-    import ./binary-tarball.nix (
-      {
-        inherit lib stdenv;
-      }
-      // args
-    );
 
   nixBuild =
     args:
