@@ -23,6 +23,7 @@ in
 rec {
   binaryTarball = throw "removed (8 Jul 2025)";
   debBuild = throw "removed (8 Jul 2025)";
+  makeSourceTarball = throw "removed (8 Jul 2025); use releaseTools.sourceTarball";
   mvnBuild = throw "removed (8 Jul 2025)";
   rpmBuild = throw "removed (8 Jul 2025)";
 
@@ -40,8 +41,6 @@ rec {
       }
       // args
     );
-
-  makeSourceTarball = sourceTarball; # compatibility
 
   nixBuild =
     args:
