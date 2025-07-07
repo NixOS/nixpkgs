@@ -832,7 +832,7 @@ in
           pkgs.gawk
           pkgs.gnugrep
           pkgs.gnused
-          pkgs.net-tools
+          pkgs.hostname-debian
           pkgs.util-linux
         ];
       };

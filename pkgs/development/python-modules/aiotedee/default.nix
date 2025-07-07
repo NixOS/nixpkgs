@@ -8,17 +8,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pytedee-async";
-  version = "0.2.23";
+  pname = "aiotedee";
+  version = "0.2.25";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zweckj";
-    repo = "pytedee_async";
+    repo = "aiotedee";
     tag = "v${version}";
-    hash = "sha256-aRxZcYm+xXt0QiUVeAe7OocY3Tew/UPiKzMCvSTaUuw=";
+    hash = "sha256-xVZrXKJXQd+Jklka+LGA/q+vgQqsVH+prboM6G3CWWg=";
   };
 
   build-system = [ setuptools ];
@@ -32,8 +32,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to interact with Tedee locks";
-    homepage = "https://github.com/zweckj/pytedee_async";
-    changelog = "https://github.com/zweckj/pytedee_async/releases/tag/${src.tag}";
+    homepage = "https://github.com/zweckj/aiotedee";
+    changelog = "https://github.com/zweckj/aiotedee/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
