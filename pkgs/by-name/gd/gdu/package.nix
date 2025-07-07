@@ -4,8 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  gdu,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -21,7 +20,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-aKhHC3sPRyi/l9BxeUgx+3TdYulb0cI9WxuPvbLoswg=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
 
   ldflags = [
     "-s"
@@ -46,7 +48,7 @@ buildGoModule rec {
     "-skip=TestAnalyzePathWithIgnoring"
   ];
 
-  passthru.tests.version = testers.testVersion { package = gdu; };
+  doInstallCheck = true;
 
   meta = {
     description = "Disk usage analyzer with console interface";
