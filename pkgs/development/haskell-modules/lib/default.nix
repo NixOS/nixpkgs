@@ -333,20 +333,6 @@ rec {
   # nix-shell evaluation, return a nix-shell optimized environment.
   shellAware = compose.shellAware;
 
-  ghcInfo = compose.ghcInfo;
-
-  ### mkDerivation helpers
-  # These allow external users of a haskell package to extract
-  # information about how it is built in the same way that the
-  # generic haskell builder does, by reusing the same functions.
-  # Each function here has the same interface as mkDerivation and thus
-  # can be called for a given package simply by overriding the
-  # mkDerivation argument it used. See getHaskellBuildInputs above for
-  # an example of this.
-
-  # Some information about which phases should be run.
-  controlPhases = compose.controlPhases;
-
   # Utility to convert a directory full of `cabal2nix`-generated files into a
   # package override set
   #
