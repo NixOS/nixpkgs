@@ -508,6 +508,8 @@ self: super: with self; {
 
   aiotarfile = callPackage ../development/python-modules/aiotarfile { };
 
+  aiotedee = callPackage ../development/python-modules/aiotedee { };
+
   aiotractive = callPackage ../development/python-modules/aiotractive { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
@@ -1634,6 +1636,8 @@ self: super: with self; {
   backtesting = callPackage ../development/python-modules/backtesting { };
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
+
+  badsecrets = callPackage ../development/python-modules/badsecrets { };
 
   bagit = callPackage ../development/python-modules/bagit { };
 
@@ -5263,6 +5267,8 @@ self: super: with self; {
   flask-themer = callPackage ../development/python-modules/flask-themer { };
 
   flask-themes2 = callPackage ../development/python-modules/flask-themes2 { };
+
+  flask-unsign = callPackage ../development/python-modules/flask-unsign { };
 
   flask-versioned = callPackage ../development/python-modules/flask-versioned { };
 
@@ -12842,6 +12848,8 @@ self: super: with self; {
 
   pyhidra = callPackage ../development/python-modules/pyhidra { };
 
+  pyhik = callPackage ../development/python-modules/pyhik { };
+
   pyhive-integration = callPackage ../development/python-modules/pyhive-integration { };
 
   pyhocon = callPackage ../development/python-modules/pyhocon { };
@@ -13978,8 +13986,6 @@ self: super: with self; {
   pytautulli = callPackage ../development/python-modules/pytautulli { };
 
   pyte = callPackage ../development/python-modules/pyte { };
-
-  pytedee-async = callPackage ../development/python-modules/pytedee-async { };
 
   pytelegrambotapi = callPackage ../development/python-modules/pyTelegramBotAPI { };
 
@@ -17116,6 +17122,8 @@ self: super: with self; {
 
   starline = callPackage ../development/python-modules/starline { };
 
+  starlink-grpc-core = callPackage ../development/python-modules/starlink-grpc-core { };
+
   stashy = callPackage ../development/python-modules/stashy { };
 
   static3 = callPackage ../development/python-modules/static3 { };
@@ -17668,6 +17676,8 @@ self: super: with self; {
   tess = callPackage ../development/python-modules/tess { };
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
+
+  tessie-api = callPackage ../development/python-modules/tessie-api { };
 
   test-results-parser = callPackage ../development/python-modules/test-results-parser { };
 
@@ -19734,6 +19744,8 @@ self: super: with self; {
   yabadaba = callPackage ../development/python-modules/yabadaba { };
 
   yacs = callPackage ../development/python-modules/yacs { };
+
+  yagrc = callPackage ../development/python-modules/yagrc { };
 
   yalesmartalarmclient = callPackage ../development/python-modules/yalesmartalarmclient { };
 

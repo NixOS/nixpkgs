@@ -84,11 +84,13 @@
 
   testScript = ''
     machine.wait_for_unit("postfix.service")
-    machine.wait_for_unit("dovecot2.service")
+    machine.wait_for_unit("dovecot.service")
     machine.succeed("send-testmail")
     machine.succeed("send-lda")
     machine.wait_until_fails('[ "$(postqueue -p)" != "Mail queue is empty" ]')
     machine.succeed("test-imap")
     machine.succeed("test-pop")
+
+    machine.log(machine.succeed("systemd-analyze security dovecot.service | grep -v ✓"))
   '';
 }
