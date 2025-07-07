@@ -18,7 +18,9 @@ buildGoModule rec {
     hash = "sha256-1KwFa0FixlzgRd2hSUj/ODf0SJKxZ496/xg374uV4fI=";
     fetchSubmodules = true;
   };
-
+  patches = [
+    ./no_remote_version_check.patch
+  ];
   proxyVendor = true;
   vendorHash = "sha256-GL5V3f2hiTzNDhBKyvyT8BlbRCaPSJXLy/+xiYjhsvw=";
 
