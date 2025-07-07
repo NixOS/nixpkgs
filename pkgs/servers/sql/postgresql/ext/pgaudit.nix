@@ -11,8 +11,8 @@ let
   sources = {
     # v18: No upstream ticket, yet (2025-07-07)
     "17" = {
-      version = "17.0";
-      hash = "sha256-3ksq09wiudQPuBQI3dhEQi8IkXKLVIsPFgBnwLiicro=";
+      version = "17.1";
+      hash = "sha256-9St/ESPiFq2NiPKqbwHLwkIyATKUkOGxFcUrWgT+Iqo=";
     };
     "16" = {
       version = "16.0";
