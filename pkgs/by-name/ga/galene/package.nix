@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "galene";
   version = "0.96.3";
 
   src = fetchFromGitHub {
     owner = "jech";
     repo = "galene";
-    rev = "galene-${version}";
+    tag = "galene-${finalAttrs.version}";
     hash = "sha256-loAiPfwTyPi4BKn4TNgVVde2mO119h443A+HwlLvi4g=";
   };
 
@@ -45,7 +45,7 @@ buildGoModule rec {
   meta = {
     description = "Videoconferencing server that is easy to deploy, written in Go";
     homepage = "https://github.com/jech/galene";
-    changelog = "https://github.com/jech/galene/raw/galene-${version}/CHANGES";
+    changelog = "https://github.com/jech/galene/raw/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.ngi ];
@@ -54,4 +54,4 @@ buildGoModule rec {
       erdnaxe
     ];
   };
-}
+})
