@@ -22,6 +22,7 @@ in
 
 rec {
   debBuild = throw "removed (8 Jul 2025)";
+  mvnBuild = throw "removed (8 Jul 2025)";
   rpmBuild = throw "removed (8 Jul 2025)";
 
   sourceTarball =
@@ -44,15 +45,6 @@ rec {
   binaryTarball =
     args:
     import ./binary-tarball.nix (
-      {
-        inherit lib stdenv;
-      }
-      // args
-    );
-
-  mvnBuild =
-    args:
-    import ./maven-build.nix (
       {
         inherit lib stdenv;
       }
