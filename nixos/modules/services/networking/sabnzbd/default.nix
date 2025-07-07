@@ -20,7 +20,6 @@ let
     mkValueStringDefault
     toKeyValue
     ;
-  inherit (pkgs) sabnzbd;
   cfg = config.services.sabnzbd;
 
   mandatoryGlobalSettings = {
