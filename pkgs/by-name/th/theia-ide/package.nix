@@ -203,9 +203,9 @@ stdenv.mkDerivation rec {
       $out/opt/$pname/theia-ide{,-electron-app} \
       ;
 
-    # # Fix chrome-sandbox permissions
-    # chown root "$out/opt/$pname/chrome-sandbox"
-    # chmod 4755 "$out/opt/$pname/chrome-sandbox"
+    # Fix chrome-sandbox permissions
+    chown --verbose root "$out/opt/$pname/chrome-sandbox"
+    chmod --verbose 4755 "$out/opt/$pname/chrome-sandbox"
 
     # Executable wrapper
     # makeWrapper '${electron}/bin/electron' "$out/bin/$pname" \
