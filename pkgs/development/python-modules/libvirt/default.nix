@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "libvirt";
-  version = "11.4.0";
+  version = "11.5.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt-python";
     tag = "v${version}";
-    hash = "sha256-jI14/lBuqSqI8mnTa7dqa+B+6tU2erW6wlT8E0eTgtY=";
+    hash = "sha256-8VW5MDHmGnR1DM6e9o72iQ5pFBZQQ50v2q3ansAf8g0=";
   };
 
   postPatch = ''
