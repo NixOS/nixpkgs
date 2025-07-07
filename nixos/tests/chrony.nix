@@ -8,7 +8,7 @@
     services.chrony.enable = true;
 
     specialisation.hardened.configuration = {
-      services.chrony.enableMemoryLocking = true;
+      environment.memoryAllocator.provider = "graphene-hardened";
     };
   };
 
