@@ -21,6 +21,7 @@ let
 in
 
 rec {
+  debBuild = throw "removed (8 Jul 2025)";
 
   sourceTarball =
     args:
@@ -101,20 +102,6 @@ rec {
     import ./rpm-build.nix (
       {
         inherit lib vmTools;
-      }
-      // args
-    );
-
-  debBuild =
-    args:
-    import ./debian-build.nix (
-      {
-        inherit
-          lib
-          stdenv
-          vmTools
-          checkinstall
-          ;
       }
       // args
     );
