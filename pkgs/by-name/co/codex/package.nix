@@ -27,6 +27,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     openssl
   ];
+  buildInputs = [
+    openssl.dev
+  ];
 
   checkFlags = [
     "--skip=keeps_previous_response_id_between_tasks" # Requires network access
