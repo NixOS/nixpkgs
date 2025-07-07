@@ -4,6 +4,7 @@
   lcrq,
   lib,
   libsodium,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "librecast";
@@ -21,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     libsodium
   ];
   installFlags = [ "PREFIX=$(out)" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://codeberg.org/librecast/librecast/src/tag/v${finalAttrs.version}/CHANGELOG.md";
