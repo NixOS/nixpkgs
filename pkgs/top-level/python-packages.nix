@@ -12166,6 +12166,8 @@ self: super: with self; {
 
   pretty-errors = callPackage ../development/python-modules/pretty-errors { };
 
+  pretty-print-directory = callPackage ../development/python-modules/pretty-print-directory { };
+
   prettytable = callPackage ../development/python-modules/prettytable { };
 
   primecountpy = callPackage ../development/python-modules/primecountpy { };
