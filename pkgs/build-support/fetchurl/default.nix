@@ -236,18 +236,17 @@ stdenvNoCC.mkDerivation (
       # New-style output content requirements.
       inherit (hash_) outputHashAlgo outputHash;
 
+      prefetchHashes = [
+        ""
+        lib.fakeHash
+        lib.fakeSha256
+        lib.fakeSha512
+      ];
+
       # Disable TLS verification only when we know the hash and no credentials are
       # needed to access the resource
       SSL_CERT_FILE =
-        if
-          (
-            finalAttrs.outputHash == ""
-            || finalAttrs.outputHash == lib.fakeSha256
-            || finalAttrs.outputHash == lib.fakeSha512
-            || finalAttrs.outputHash == lib.fakeHash
-            || netrcPhase != null
-          )
-        then
+        if (builtins.elem finalAttrs.outputHash finalAttrs.prefetchHashes || netrcPhase != null) then
           "${cacert}/etc/ssl/certs/ca-bundle.crt"
         else
           "/no-cert-file.crt";
