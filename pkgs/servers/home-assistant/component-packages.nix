@@ -5068,7 +5068,8 @@
       ];
     "satel_integra" =
       ps: with ps; [
-      ]; # missing inputs: satel-integra
+        satel-integra
+      ];
     "scene" =
       ps: with ps; [
       ];
