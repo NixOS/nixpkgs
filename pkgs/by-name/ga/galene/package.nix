@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   nixosTests,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -36,6 +37,9 @@ buildGoModule rec {
 
   passthru = {
     tests.vm = nixosTests.galene.basic;
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=galene-(.*)" ];
+    };
   };
 
   meta = {
