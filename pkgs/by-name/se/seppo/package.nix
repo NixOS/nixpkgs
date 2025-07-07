@@ -69,6 +69,7 @@ ocamlPackages.buildDunePackage {
     description = "Personal Social Web";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ infinidoge ];
+    teams = with lib.teams; [ ngi ];
     mainProgram = "seppo";
   };
 }
