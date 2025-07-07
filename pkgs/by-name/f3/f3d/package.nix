@@ -43,6 +43,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/f3d-app/f3d/commit/3814f3356d888ce59bbe6eda0293c2de73b0c89a.patch";
       hash = "sha256-TeV8byIxX6PBEW06/sS7kHaSS99S88WiyzjHZ/Zh5x4=";
     })
+
+    # https://github.com/f3d-app/f3d/pull/2286
+    (fetchpatch {
+      name = "fix_assimp_6_0_configuration.patch";
+      url = "https://github.com/f3d-app/f3d/commit/9bed68ef2b5425c9600c81a7245f13ed2d4079b8.patch";
+      hash = "sha256-u4VQiTTgFSYxdJ3wvQUfSTt2fcsXBO3p15f/cNRRCHo=";
+    })
   ];
 
   nativeBuildInputs =
