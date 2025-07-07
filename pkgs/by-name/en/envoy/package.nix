@@ -11,9 +11,11 @@
   rustc,
   rustPlatform,
   cmake,
+  git,
   gn,
   go,
   jdk,
+  neovim,
   ninja,
   patchelf,
   python3,
@@ -23,6 +25,7 @@
   gnutar,
   gnugrep,
   envoy,
+  breakpointHook,
 
   # v8 (upstream default), wavm, wamr, wasmtime, disabled
   wasmRuntime ? "wamr",
@@ -37,6 +40,29 @@ let
     version = "1.34.2";
     rev = "c657e59fac461e406c8fdbe57ced833ddc236ee1";
     hash = "sha256-f9JsgHEyOg1ZoEb7d3gy3+qoovpA3oOx6O8yL0U8mhI=";
+  };
+
+  # https://github.com/envoyproxy/envoy/blob/e439c73e32dfefff0baa4adedfb268c8742a7617/bazel/repository_locations.bzl#L1161-L1175
+  # https://github.com/hsjobeki/nixpkgs/blob/43bceee4fd57058437d9ec90eae7c1b280509653/pkgs/build-support/fetchgithub/default.nix#L4
+  com_github_wasmtime = fetchFromGitHub {
+    owner = "bytecodealliance";
+    repo = "wasmtime";
+    # matches version in upstream envoy
+    # https://github.com/mccurdyc/envoy/blob/6371b185dee99cd267e61ada6191e97f2406e334/bazel/repository_locations.bzl#L1165
+    # 24.0.2 - https://github.com/bytecodealliance/wasmtime/releases/tag/v24.0.2
+    rev = "c29a9bb9e23b48a95b0a03f3b90f885ab1252a93";
+    sha256 = "sha256-pqPyy1evR+qW0fEwIY4EnPDPwB4bKrym3raSs6jezP4=";
+  };
+
+  proxy_wasm_cpp_host = fetchFromGitHub {
+    owner = "proxy-wasm";
+    repo = "proxy-wasm-cpp-host";
+    # matches version in upstream envoy
+    # https://github.com/mccurdyc/envoy/blob/6371b185dee99cd267e61ada6191e97f2406e334/bazel/repository_locations.bzl#L1407
+    rev = "c4d7bb0fda912e24c64daf2aa749ec54cec99412";
+    # sha256 = pkgs.lib.fakeSha256;
+    sha256 = "sha256-NSowlubJ3OK4h2W9dqmzhkgpceaXZ7ore2cRkNlBm5Q=";
+    # Do we need to somehow also tell envoy that this is used for extensions or is this only doing the override of fetching the source?
   };
 
   # these need to be updated for any changes to fetchAttrs
@@ -73,6 +99,11 @@ buildBazelPackage rec {
 
       # bump rules_rust to support newer Rust
       ./0004-nixpkgs-bump-rules_rust-to-0.60.0.patch
+
+      # https://github.com/mccurdyc/envoy/blob/6371b185dee99cd267e61ada6191e97f2406e334/api/bazel/envoy_http_archive.bzl#L4-L9
+      # Envoy's Bazel WONT fetch repos that are listed in the existing_rules list
+      ./0005-com_github_wasmtime_from_nix.patch
+      ./0006-proxy_wasm_cpp_host_from_nix.patch
     ];
     postPatch = ''
       chmod -R +w .
@@ -85,6 +116,10 @@ buildBazelPackage rec {
     sed -i 's,#!/usr/bin/env python3,#!${python3}/bin/python,' bazel/foreign_cc/luajit.patch
     sed -i '/javabase=/d' .bazelrc
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
+
+    # https://nixos.org/manual/nixpkgs/unstable/#fun-substitute
+    substituteInPlace WORKSPACE --subst-var-by com_github_wasmtime_from_nix ${com_github_wasmtime}
+    substituteInPlace WORKSPACE --subst-var-by proxy_wasm_cpp_host_from_nix ${proxy_wasm_cpp_host}
 
     mkdir -p bazel/nix/
     substitute ${./bazel_nix.BUILD.bazel} bazel/nix/BUILD.bazel \
@@ -114,10 +149,14 @@ buildBazelPackage rec {
     python3
     gn
     go
+    git
     jdk
     ninja
     patchelf
     cacert
+    # debugging
+    neovim
+    breakpointHook
   ];
 
   buildInputs = [ linuxHeaders ];

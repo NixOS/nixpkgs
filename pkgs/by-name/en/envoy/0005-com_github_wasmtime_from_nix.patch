@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "Colton J. McCurdy" <mccurdyc22@gmail.com>
+Date: Sun, 6 Jul 2025 20:21:53 -0400
+Subject: [PATCH] com_github_wasmtime_from_nix
+
+Signed-off-by: Colton J. McCurdy <mccurdyc22@gmail.com>
+---
+ WORKSPACE | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/WORKSPACE b/WORKSPACE
+index e4460bfc547561a9dfe1f2e2f3a39b01c992a3c2..32d880446dc76c635f17e3eed0b5a681cd1cc035 100644
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -1,5 +1,13 @@
+ workspace(name = "envoy")
+ 
++# com_github_wasmtime matches the name in repository_locations to essentially override it.
++new_local_repository(
++    name = "com_github_wasmtime",
++    path = "@com_github_wasmtime_from_nix@",
++
++    build_file = "@proxy_wasm_cpp_host//:bazel/external/wasmtime.BUILD",
++)
++
+ load("//bazel:api_binding.bzl", "envoy_api_binding")
+ 
+ envoy_api_binding()
