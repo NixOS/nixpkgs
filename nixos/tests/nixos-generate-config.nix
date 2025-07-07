@@ -7,8 +7,9 @@
       # OVERRIDDEN
       { config, pkgs, ... }: {
         imports = [ ./hardware-configuration.nix ];
-      $bootLoaderConfig
+
       $nixConfig
+      $bootLoaderConfig
       $desktopConfiguration
       }
     '';
