@@ -19,7 +19,7 @@ let
       generatedJson = {
         inherit apps;
       };
-      appBaseDefs = builtins.fromJSON (builtins.readFile ./nextcloud-apps.json);
+      appBaseDefs = lib.importJSON ./nextcloud-apps.json;
 
     in
     {

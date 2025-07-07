@@ -1,7 +1,3 @@
-let
-  lockfile = builtins.fromJSON (builtins.readFile ../metadata/apple-oss-lockfile.json);
-in
-
 {
   lib,
   fetchFromGitHub,
@@ -10,6 +6,7 @@ in
 }:
 
 let
+  lockfile = lib.importJSON ../metadata/apple-oss-lockfile.json;
   sdkinfo = lockfile.${sdkVersion};
 in
 self: super: {

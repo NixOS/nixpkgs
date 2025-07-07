@@ -1,7 +1,3 @@
-let
-  versions = builtins.fromJSON (builtins.readFile ./versions.json);
-in
-
 {
   lib,
   bootstrapStdenv,
@@ -15,6 +11,7 @@ in
 
 let
   hasBasenamePrefix = prefix: file: lib.hasPrefix prefix (baseNameOf file);
+  versions = lib.importJSON ./versions.json;
 in
 lib.makeOverridable (
   attrs:

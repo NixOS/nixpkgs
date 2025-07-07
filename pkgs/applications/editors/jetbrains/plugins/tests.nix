@@ -56,7 +56,7 @@ in
   # as compatible, but the build version is somehow not in the "builds" map (as that would indicate that something with update_plugins.py went wrong).
   all =
     let
-      plugins-json = builtins.fromJSON (builtins.readFile ./plugins.json);
+      plugins-json = lib.importJSON ./plugins.json;
       plugins-for =
         with lib.asserts;
         ide:
@@ -86,7 +86,7 @@ in
   # Test always succeeds on IDEs that the tested plugins don't support.
   stored-correctly =
     let
-      plugins-json = builtins.fromJSON (builtins.readFile ./plugins.json);
+      plugins-json = lib.importJSON ./plugins.json;
       plugin-ids = [
         # This is a "normal plugin", it's output must be linked into /${pname}/plugins.
         "8607" # nixidea

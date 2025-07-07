@@ -75,7 +75,7 @@ let
   # Attrs
   # - keys: "added", "changed" and "removed"
   # - values: lists of `packagePlatformPath`s
-  diffAttrs = builtins.fromJSON (builtins.readFile "${combinedDir}/combined-diff.json");
+  diffAttrs = lib.importJSON "${combinedDir}/combined-diff.json";
 
   rebuilds = diffAttrs.added ++ diffAttrs.changed;
   rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs rebuilds;

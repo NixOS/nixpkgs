@@ -13,7 +13,7 @@ let
 
   hostOs = stdenv.hostPlatform.parsed.kernel.name;
   hostArch = stdenv.hostPlatform.parsed.cpu.name;
-  sources = builtins.fromJSON (builtins.readFile ./sources.json);
+  sources = lib.importJSON ./sources.json;
 
   sourcesChan = sources.${channel} or (throw "unsupported channel ${channel}");
   sourcesChanOs = sourcesChan.${hostOs} or (throw "unsupported OS ${hostOs}");

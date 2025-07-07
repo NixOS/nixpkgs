@@ -1,10 +1,3 @@
-let
-  # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
-  # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
-  ideInfo = builtins.fromJSON (builtins.readFile ./bin/ides.json);
-  versions = builtins.fromJSON (builtins.readFile ./bin/versions.json);
-in
-
 {
   lib,
   stdenv,
@@ -40,6 +33,11 @@ in
 }:
 
 let
+  # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
+  # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
+  ideInfo = lib.importJSON ./bin/ides.json;
+  versions = lib.importJSON ./bin/versions.json;
+
   inherit (stdenv.hostPlatform) system;
 
   products = versions.${system} or (throw "Unsupported system: ${system}");

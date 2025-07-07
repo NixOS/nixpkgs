@@ -35,7 +35,7 @@ buildNimPackage (finalAttrs: {
 
   postFixup =
     let
-      lockAttrs = builtins.fromJSON (builtins.readFile finalAttrs.lockFile);
+      lockAttrs = lib.importJSON finalAttrs.lockFile;
       pathFlagOfFod = { path, srcDir, ... }: ''"--path:${path}/${srcDir}"'';
       pathFlags = map pathFlagOfFod lockAttrs.depends;
     in

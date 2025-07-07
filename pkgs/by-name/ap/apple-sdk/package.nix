@@ -1,7 +1,3 @@
-let
-  sdkVersions = builtins.fromJSON (builtins.readFile ./metadata/versions.json);
-in
-
 {
   lib,
   stdenv,
@@ -22,6 +18,7 @@ in
 }:
 
 let
+  sdkVersions = lib.importJSON ./metadata/versions.json;
   sdkInfo =
     sdkVersions.${darwinSdkMajorVersion}
       or (lib.throw "Unsupported SDK major version: ${darwinSdkMajorVersion}");

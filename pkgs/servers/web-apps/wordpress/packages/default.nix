@@ -19,9 +19,9 @@ let
         inherit plugins themes languages;
       };
       sourceJson = {
-        plugins = builtins.fromJSON (builtins.readFile ./wordpress-plugins.json);
-        themes = builtins.fromJSON (builtins.readFile ./wordpress-themes.json);
-        languages = builtins.fromJSON (builtins.readFile ./wordpress-languages.json);
+        plugins = lib.importJSON ./wordpress-plugins.json;
+        themes = lib.importJSON ./wordpress-themes.json;
+        languages = lib.importJSON ./wordpress-languages.json;
       };
 
     in

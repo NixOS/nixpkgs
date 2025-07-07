@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       > $stubbyExampleJson
   '';
 
-  passthru.settingsExample = builtins.fromJSON (builtins.readFile stubby.stubbyExampleJson);
+  passthru.settingsExample = lib.importJSON stubby.stubbyExampleJson;
 
   meta = getdns.meta // {
     description = "Local DNS Privacy stub resolver (using DNS-over-TLS)";

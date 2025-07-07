@@ -10,7 +10,7 @@
 }:
 
 let
-  pluginsJson = builtins.fromJSON (builtins.readFile ./plugins.json);
+  pluginsJson = lib.importJSON ./plugins.json;
   specialPluginsInfo = callPackage ./specialPlugins.nix { };
   fetchPluginSrc =
     url: hash:

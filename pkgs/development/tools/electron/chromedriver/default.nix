@@ -1,10 +1,7 @@
-let
-  infoJson = builtins.fromJSON (builtins.readFile ./info.json);
-in
-
 { lib, callPackage }:
 
 let
+  infoJson = lib.importJSON ./info.json;
   mkElectronChromedriver = callPackage ./generic.nix { };
 in
 lib.mapAttrs' (

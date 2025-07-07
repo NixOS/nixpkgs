@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation rec {
 
   ymExe =
     let
-      ym_info = builtins.fromJSON (builtins.readFile ./ym_info.json);
+      ym_info = lib.importJSON ./ym_info.json;
     in
     fetchurl {
       url = ym_info.exe_link;

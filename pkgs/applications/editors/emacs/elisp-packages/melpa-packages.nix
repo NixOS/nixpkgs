@@ -21,14 +21,12 @@
   formats commits for you.
 */
 
-let
-  # Read ./recipes-archive-melpa.json in an outer let to make sure we only do this once.
-  defaultArchive = builtins.fromJSON (builtins.readFile ./recipes-archive-melpa.json);
-in
-
 { lib, pkgs }:
 variant: self:
 let
+  # Read ./recipes-archive-melpa.json in an outer let to make sure we only do this once.
+  defaultArchive = lib.importJSON ./recipes-archive-melpa.json;
+
   inherit (import ./lib-override-helper.nix pkgs lib)
     addPackageRequires
     addPackageRequiresIfOlder

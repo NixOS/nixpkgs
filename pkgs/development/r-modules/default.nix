@@ -1,14 +1,5 @@
 # This file defines the composition for R packages.
 
-let
-  importJSON = f: builtins.fromJSON (builtins.readFile f);
-
-  biocPackagesGenerated = importJSON ./bioc-packages.json;
-  biocAnnotationPackagesGenerated = importJSON ./bioc-annotation-packages.json;
-  biocExperimentPackagesGenerated = importJSON ./bioc-experiment-packages.json;
-  cranPackagesGenerated = importJSON ./cran-packages.json;
-in
-
 {
   R,
   pkgs,
@@ -16,6 +7,11 @@ in
 }:
 
 let
+  biocPackagesGenerated = lib.importJSON ./bioc-packages.json;
+  biocAnnotationPackagesGenerated = lib.importJSON ./bioc-annotation-packages.json;
+  biocExperimentPackagesGenerated = lib.importJSON ./bioc-experiment-packages.json;
+  cranPackagesGenerated = lib.importJSON ./cran-packages.json;
+
   inherit (pkgs)
     cacert
     fetchurl

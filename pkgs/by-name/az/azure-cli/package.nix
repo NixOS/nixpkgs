@@ -111,7 +111,7 @@ let
 
   extensions-generated = lib.mapAttrs (
     name: ext: mkAzExtension (ext // { passthru.updateScript = [ ]; })
-  ) (builtins.fromJSON (builtins.readFile ./extensions-generated.json));
+  ) (lib.importJSON ./extensions-generated.json);
   extensions-manual = callPackages ./extensions-manual.nix {
     inherit mkAzExtension;
     python3Packages = python3.pkgs;

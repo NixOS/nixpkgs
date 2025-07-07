@@ -10,7 +10,7 @@
 }:
 
 let
-  json = builtins.fromJSON (builtins.readFile ./generated.json);
+  json = lib.importJSON ./generated.json;
 in
 
 lib.flip builtins.mapAttrs json (

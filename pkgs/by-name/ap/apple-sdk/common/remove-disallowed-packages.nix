@@ -1,13 +1,12 @@
-let
-  disallowedPackages = builtins.fromJSON (builtins.readFile ../metadata/disallowed-packages.json);
-in
-
 {
   lib,
   jq,
   stdenv,
 }:
 
+let
+  disallowedPackages = lib.importJSON ../metadata/disallowed-packages.json;
+in
 self: super: {
   # Remove headers and stubs for packages that are available in nixpkgs.
   buildPhase =

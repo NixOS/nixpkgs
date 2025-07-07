@@ -9,7 +9,7 @@ let
 
   arch = if stdenv.hostPlatform.is64bit then "64" else "32";
 
-  hashes = builtins.fromJSON (builtins.readFile ./hashes.json);
+  hashes = lib.importJSON ./hashes.json;
 
   fetchSource =
     name:

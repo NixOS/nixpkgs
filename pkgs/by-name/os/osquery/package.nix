@@ -20,7 +20,7 @@
 
 let
 
-  info = builtins.fromJSON (builtins.readFile ./info.json);
+  info = lib.importJSON ./info.json;
 
   opensslSrc = fetchurl info.openssl;
 

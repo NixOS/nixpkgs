@@ -41,7 +41,7 @@ let
   # build hashes, which correspond to the hashes of the precompiled binaries
   # procued by GitHub Actions. this also includes the hash for a download of a
   # compatible buck2-prelude
-  buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
+  buildHashes = lib.importJSON ./hashes.json;
 
   # our version of buck2; this should be a git tag
   version = "2025-05-06";

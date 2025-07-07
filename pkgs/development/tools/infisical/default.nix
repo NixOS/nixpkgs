@@ -18,7 +18,7 @@
 
 let
   # build hashes, which correspond to the hashes of the precompiled binaries procured by GitHub Actions.
-  buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
+  buildHashes = lib.importJSON ./hashes.json;
 
   # the version of infisical
   version = "0.41.85";

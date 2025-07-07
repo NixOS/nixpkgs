@@ -14,7 +14,7 @@
 }:
 
 let
-  source = builtins.fromJSON (builtins.readFile ./source.json);
+  source = lib.importJSON ./source.json;
   pname = "audiobookshelf";
 
   src = fetchFromGitHub {

@@ -86,7 +86,7 @@ let
       postPkg = baseAttrs // (asFunc ((asFunc buildNimPackageArgs) finalAttrs)) baseAttrs;
 
       lockAttrs = lib.attrsets.optionalAttrs (builtins.hasAttr "lockFile" postPkg) (
-        builtins.fromJSON (builtins.readFile postPkg.lockFile)
+        lib.importJSON postPkg.lockFile
       );
 
       lockDepends = lockAttrs.depends or [ ];

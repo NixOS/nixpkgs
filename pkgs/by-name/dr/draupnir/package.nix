@@ -17,7 +17,7 @@
 
 # docs: https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#yarn2nix-javascript-yarn2nix
 let
-  hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
+  hashesFile = lib.importJSON ./hashes.json;
   nodeSources = srcOnly nodejs;
 in
 mkYarnPackage rec {

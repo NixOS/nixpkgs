@@ -39,7 +39,7 @@ let
       );
     };
 
-  supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
+  supportedSystems = lib.importJSON ../supportedSystems.json;
 
   attrpathsSuperset =
     {

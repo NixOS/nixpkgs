@@ -8,7 +8,7 @@
 let
   inherit (lib) fileset;
 
-  packageLock = builtins.fromJSON (builtins.readFile ./manifests/package-lock.json);
+  packageLock = lib.importJSON ./manifests/package-lock.json;
 
   pname = "purescm";
   version = packageLock.packages."node_modules/${pname}".version;

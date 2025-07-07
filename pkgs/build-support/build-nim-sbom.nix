@@ -199,7 +199,7 @@ let
 in
 callerArg: sbomArg:
 let
-  sbom = if builtins.isAttrs sbomArg then sbomArg else builtins.fromJSON (builtins.readFile sbomArg);
+  sbom = if builtins.isAttrs sbomArg then sbomArg else lib.importJSON sbomArg;
   overrideSbom = f: stdenv.mkDerivation (compose callerArg (sbom // (f sbom)));
 in
 (stdenv.mkDerivation (compose callerArg sbom)) // { inherit overrideSbom; }

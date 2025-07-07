@@ -1,9 +1,10 @@
-let
-  ides = builtins.fromJSON (builtins.readFile ./ides.json);
-in
 {
   callPackage,
+  lib,
 }:
+let
+  ides = lib.importJSON ./ides.json;
+in
 builtins.mapAttrs (
   _: info: callPackage ./build.nix (info // { mvnDeps = ./. + "/${info.mvnDeps}"; })
 ) ides

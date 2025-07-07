@@ -1,7 +1,3 @@
-let
-  modelSpecs = (builtins.fromJSON (builtins.readFile ./models.json));
-in
-
 {
   lib,
   stdenvNoCC,
@@ -9,6 +5,7 @@ in
 }:
 
 let
+  modelSpecs = lib.importJSON ./models.json;
   withCodeAsKey = f: { code, ... }@attrs: lib.nameValuePair code (f attrs);
   mkModelPackage =
     {

@@ -14,7 +14,7 @@ let
     overlays = [ ];
   };
 
-  changedpaths = builtins.fromJSON (builtins.readFile changedpathsjson);
+  changedpaths = lib.importJSON changedpathsjson;
 
   anyMatchingFile =
     filename: builtins.any (changed: lib.strings.hasSuffix changed filename) changedpaths;

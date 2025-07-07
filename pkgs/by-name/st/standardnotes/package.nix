@@ -15,7 +15,7 @@
 
 let
 
-  srcjson = builtins.fromJSON (builtins.readFile ./src.json);
+  srcjson = lib.importJSON ./src.json;
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
