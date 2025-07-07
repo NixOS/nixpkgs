@@ -4,6 +4,7 @@
   ocaml-crunch,
   seppo,
   lib,
+  nix-update-script,
 }:
 
 let
@@ -58,6 +59,10 @@ ocamlPackages.buildDunePackage {
     x509
     xmlm
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://seppo.mro.name";
