@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-indices-managed-llama-cloud";
-  version = "0.7.7";
+  version = "0.7.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_indices_managed_llama_cloud";
     inherit version;
-    hash = "sha256-f9cwopZ9wg60Iq4vpAKLTPcCMRSlz621IyNVE3dUGG8=";
+    hash = "sha256-4ikB7W8jD2V5JYDmMnJBVqwvtBtjK1RdDC2Qbt9M4U8=";
   };
 
   pythonRelaxDeps = [ "llama-cloud" ];
