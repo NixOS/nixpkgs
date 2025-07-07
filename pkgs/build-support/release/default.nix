@@ -22,6 +22,7 @@ in
 
 rec {
   debBuild = throw "removed (8 Jul 2025)";
+  rpmBuild = throw "removed (8 Jul 2025)";
 
   sourceTarball =
     args:
@@ -93,15 +94,6 @@ rec {
       {
         inherit cov-build xz;
         doCoverityAnalysis = true;
-      }
-      // args
-    );
-
-  rpmBuild =
-    args:
-    import ./rpm-build.nix (
-      {
-        inherit lib vmTools;
       }
       // args
     );
