@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-uei5Ojx39kCbS8DCjHZ5PoEAsqJ5vC6SsFqIEIJ16n8=";
     fetchSubmodules = true;
   };
