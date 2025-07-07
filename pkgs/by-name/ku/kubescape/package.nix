@@ -29,10 +29,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    versionCheckHook
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
     git
@@ -78,8 +75,8 @@ buildGoModule (finalAttrs: {
         --zsh <(${kubescape}/bin/kubescape completion zsh)
     '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-
   versionCheckProgramArg = "version";
 
   meta = {
