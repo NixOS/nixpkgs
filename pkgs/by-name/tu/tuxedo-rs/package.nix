@@ -2,8 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  testers,
-  tuxedo-rs,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tuxedo-rs";
@@ -24,11 +23,11 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-EkTLL7thZ/bBpY7TwfEsPOjJxzQ3vpxDi+sYPNAK6og=";
 
-  passthru.tests.version = testers.testVersion {
-    package = tuxedo-rs;
-    command = "${meta.mainProgram} --version";
-    version = version;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = "--version";
 
   postInstall = ''
     install -Dm444 tailord/com.tux.Tailor.conf -t $out/share/dbus-1/system.d
