@@ -51,7 +51,10 @@ buildGoModule rec {
     wrapProgram $out/bin/colima \
       --prefix PATH : ${
         lib.makeBinPath [
-          lima
+          # Suppress warning on `colima start`: https://github.com/abiosoft/colima/issues/1333
+          (lima.override {
+            withAdditionalGuestAgents = true;
+          })
           qemu
         ]
       }
