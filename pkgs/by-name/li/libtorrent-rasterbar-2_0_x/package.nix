@@ -40,8 +40,6 @@ stdenv.mkDerivation {
   buildInputs = [
     boostPython
     openssl
-    zlib
-    ncurses
   ];
 
   strictDeps = true;
