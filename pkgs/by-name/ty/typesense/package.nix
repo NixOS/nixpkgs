@@ -30,8 +30,11 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp $sourceRoot/typesense-server $out/bin
+    runHook preInstall
+
+    install -Dm0755 typesense-server $out/bin/typesense-server
+
+    runHook postInstall
   '';
 
   passthru = {
@@ -39,11 +42,11 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://typesense.org";
-    description = "Typesense is a fast, typo-tolerant search engine for building delightful search experiences";
+    description = "Fast, typo-tolerant search engine for building delightful search experiences";
     mainProgram = "typesense-server";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     # There has been an attempt at building this from source, which were deemed
     # unfeasible at the time of writing this (July 2023) for the following reasons.
     # - Pre 0.25 would have been possible, but typesense has switched to bazel for 0.25+,
@@ -59,13 +62,13 @@ stdenv.mkDerivation {
     #     try to download stuff via cmake again, which is not possible in the sandbox.
     #     This is where I stopped trying for now.
     # XXX: retry once typesense has officially released their bazel based build.
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-linux"
-      "aarch64-darwin"
       "x86_64-linux"
+      "aarch64-darwin"
       "x86_64-darwin"
     ];
-    maintainers = with maintainers; [ oddlama ];
+    maintainers = with lib.maintainers; [ oddlama ];
   };
 }
