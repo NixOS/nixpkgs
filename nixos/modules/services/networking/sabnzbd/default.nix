@@ -104,7 +104,7 @@ in
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "Path to config file (deprecated, use `settings`)";
+        description = "Path to config file (deprecated, use `settings` instead)";
       };
 
       stateDir = mkOption {
