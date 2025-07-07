@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "invent.kde.org";
     owner = "network";
     repo = "kaidan";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8pC4vINeKSYY+LlVgCXUtBq9UjraPdTikBOwLBLeQ3Y=";
   };
 
