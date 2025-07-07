@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "librecast";
     repo = "librecast";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FFumVHTobvcty3x26IAMHP8M3fYrnfLtxt/RJ/4vKBg=";
   };
   buildInputs = [
