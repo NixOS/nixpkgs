@@ -1,4 +1,4 @@
-module.exports = async function({ github, context, core }) {
+module.exports = async function ({ github, context, core }) {
   const Bottleneck = require('bottleneck')
   const path = require('node:path')
   const { DefaultArtifactClient } = require('@actions/artifact')
@@ -10,7 +10,7 @@ module.exports = async function({ github, context, core }) {
     issues: 0,
     prs: 0,
     requests: 0,
-    artifacts: 0
+    artifacts: 0,
   }
 
   // Rate-Limiting and Throttling, see for details:
@@ -20,7 +20,7 @@ module.exports = async function({ github, context, core }) {
     // Avoid concurrent requests
     maxConcurrent: 1,
     // Will be updated with first `updateReservoir()` call below.
-    reservoir: 0
+    reservoir: 0,
   })
   // Pause between mutative requests
   const writeLimits = new Bottleneck({ minTime: 1000 }).chain(allLimits)
@@ -33,8 +33,7 @@ module.exports = async function({ github, context, core }) {
     stats.requests++
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method))
       return writeLimits.schedule(request.bind(null, options))
-    else
-      return allLimits.schedule(request.bind(null, options))
+    else return allLimits.schedule(request.bind(null, options))
   })
 
   async function updateReservoir() {
@@ -57,26 +56,28 @@ module.exports = async function({ github, context, core }) {
   const reservoirUpdater = setInterval(updateReservoir, 60 * 1000)
 
   async function handlePullRequest(item) {
-    const log = (k,v) => core.info(`PR #${item.number} - ${k}: ${v}`)
+    const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
 
     const pull_number = item.number
 
     // This API request is important for the merge-conflict label, because it triggers the
     // creation of a new test merge commit. This is needed to actually determine the state of a PR.
-    const pull_request = (await github.rest.pulls.get({
-      ...context.repo,
-      pull_number
-    })).data
+    const pull_request = (
+      await github.rest.pulls.get({
+        ...context.repo,
+        pull_number,
+      })
+    ).data
 
     const reviews = await github.paginate(github.rest.pulls.listReviews, {
-        ...context.repo,
-        pull_number
-      })
+      ...context.repo,
+      pull_number,
+    })
 
     const approvals = new Set(
       reviews
-      .filter(review => review.state == 'APPROVED')
-      .map(review => review.user?.id)
+        .filter((review) => review.state == 'APPROVED')
+        .map((review) => review.user?.id),
     )
 
     // After creation of a Pull Request, `merge_commit_sha` will be null initially:
@@ -84,7 +85,8 @@ module.exports = async function({ github, context, core }) {
     // To avoid labeling the PR as conflicted before that, we wait a few minutes.
     // This is intentionally less than the time that Eval takes, so that the label job
     // running after Eval can indeed label the PR as conflicted if that is the case.
-    const merge_commit_sha_valid = new Date() - new Date(pull_request.created_at) > 3 * 60 * 1000
+    const merge_commit_sha_valid =
+      new Date() - new Date(pull_request.created_at) > 3 * 60 * 1000
 
     const prLabels = {
       // We intentionally don't use the mergeable or mergeable_state attributes.
@@ -98,31 +100,41 @@ module.exports = async function({ github, context, core }) {
       // On the first pass of the day, we just fetch the pull request, which triggers
       // the creation. At this stage, the label is likely not updated, yet.
       // The second pass will then read the result from the first pass and set the label.
-      '2.status: merge conflict': merge_commit_sha_valid && !pull_request.merge_commit_sha,
+      '2.status: merge conflict':
+        merge_commit_sha_valid && !pull_request.merge_commit_sha,
       '12.approvals: 1': approvals.size == 1,
       '12.approvals: 2': approvals.size == 2,
       '12.approvals: 3+': approvals.size >= 3,
-      '12.first-time contribution':
-        [ 'NONE', 'FIRST_TIMER', 'FIRST_TIME_CONTRIBUTOR' ].includes(pull_request.author_association),
+      '12.first-time contribution': [
+        'NONE',
+        'FIRST_TIMER',
+        'FIRST_TIME_CONTRIBUTOR',
+      ].includes(pull_request.author_association),
     }
 
-    const { id: run_id, conclusion } = (await github.rest.actions.listWorkflowRuns({
-      ...context.repo,
-      workflow_id: 'pr.yml',
-      event: 'pull_request_target',
-      exclude_pull_requests: true,
-      head_sha: pull_request.head.sha
-    })).data.workflow_runs[0] ??
+    const { id: run_id, conclusion } =
+      (
+        await github.rest.actions.listWorkflowRuns({
+          ...context.repo,
+          workflow_id: 'pr.yml',
+          event: 'pull_request_target',
+          exclude_pull_requests: true,
+          head_sha: pull_request.head.sha,
+        })
+      ).data.workflow_runs[0] ??
       // TODO: Remove this after 2025-09-17, at which point all eval.yml artifacts will have expired.
-      (await github.rest.actions.listWorkflowRuns({
-        ...context.repo,
-        // In older PRs, we need eval.yml instead of pr.yml.
-        workflow_id: 'eval.yml',
-        event: 'pull_request_target',
-        status: 'success',
-        exclude_pull_requests: true,
-        head_sha: pull_request.head.sha
-      })).data.workflow_runs[0] ?? {}
+      (
+        await github.rest.actions.listWorkflowRuns({
+          ...context.repo,
+          // In older PRs, we need eval.yml instead of pr.yml.
+          workflow_id: 'eval.yml',
+          event: 'pull_request_target',
+          status: 'success',
+          exclude_pull_requests: true,
+          head_sha: pull_request.head.sha,
+        })
+      ).data.workflow_runs[0] ??
+      {}
 
     // Newer PRs might not have run Eval to completion, yet.
     // Older PRs might not have an eval.yml workflow, yet.
@@ -146,17 +158,24 @@ module.exports = async function({ github, context, core }) {
       })
     }
 
-    const artifact = run_id && (await github.rest.actions.listWorkflowRunArtifacts({
-      ...context.repo,
-      run_id,
-      name: 'comparison'
-    })).data.artifacts[0]
+    const artifact =
+      run_id &&
+      (
+        await github.rest.actions.listWorkflowRunArtifacts({
+          ...context.repo,
+          run_id,
+          name: 'comparison',
+        })
+      ).data.artifacts[0]
 
     // Instead of checking the boolean artifact.expired, we will give us a minute to
     // actually download the artifact in the next step and avoid that race condition.
     // Older PRs, where the workflow run was already eval.yml, but the artifact was not
     // called "comparison", yet, will skip the download.
-    const expired = !artifact || new Date(artifact?.expires_at ?? 0) < new Date(new Date().getTime() + 60 * 1000)
+    const expired =
+      !artifact ||
+      new Date(artifact?.expires_at ?? 0) <
+        new Date(new Date().getTime() + 60 * 1000)
     log('Artifact expires at', artifact?.expires_at ?? '<n/a>')
     if (!expired) {
       stats.artifacts++
@@ -165,17 +184,23 @@ module.exports = async function({ github, context, core }) {
         findBy: {
           repositoryName: context.repo.repo,
           repositoryOwner: context.repo.owner,
-          token: core.getInput('github-token')
+          token: core.getInput('github-token'),
         },
         path: path.resolve(pull_number.toString()),
-        expectedHash: artifact.digest
+        expectedHash: artifact.digest,
       })
 
-      const maintainers = new Set(Object.keys(
-        JSON.parse(await readFile(`${pull_number}/maintainers.json`, 'utf-8'))
-      ).map(m => Number.parseInt(m, 10)))
+      const maintainers = new Set(
+        Object.keys(
+          JSON.parse(
+            await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
+          ),
+        ).map((m) => Number.parseInt(m, 10)),
+      )
 
-      const evalLabels = JSON.parse(await readFile(`${pull_number}/changed-paths.json`, 'utf-8')).labels
+      const evalLabels = JSON.parse(
+        await readFile(`${pull_number}/changed-paths.json`, 'utf-8'),
+      ).labels
 
       Object.assign(
         prLabels,
@@ -184,10 +209,12 @@ module.exports = async function({ github, context, core }) {
         // The old eval labels would have been set by the eval run,
         // so now they'll be present in `before`.
         // TODO: Simplify once old eval results have expired (~2025-10)
-        (Array.isArray(evalLabels) ? undefined : evalLabels),
+        Array.isArray(evalLabels) ? undefined : evalLabels,
         {
-          '12.approved-by: package-maintainer': Array.from(maintainers).some(m => approvals.has(m)),
-        }
+          '12.approved-by: package-maintainer': Array.from(maintainers).some(
+            (m) => approvals.has(m),
+          ),
+        },
       )
     }
 
@@ -196,7 +223,7 @@ module.exports = async function({ github, context, core }) {
 
   async function handle(item) {
     try {
-      const log = (k,v,skip) => {
+      const log = (k, v, skip) => {
         core.info(`#${item.number} - ${k}: ${v}` + (skip ? ' (skipped)' : ''))
         return skip
       }
@@ -216,38 +243,44 @@ module.exports = async function({ github, context, core }) {
       }
 
       const latest_event_at = new Date(
-        (await github.paginate(
-          github.rest.issues.listEventsForTimeline,
-          {
+        (
+          await github.paginate(github.rest.issues.listEventsForTimeline, {
             ...context.repo,
             issue_number,
-            per_page: 100
-          }
-        ))
-        .filter(({ event }) => [
-          // These events are hand-picked from:
-          //   https://docs.github.com/en/rest/using-the-rest-api/issue-event-types?apiVersion=2022-11-28
-          // Each of those causes a PR/issue to *not* be considered as stale anymore.
-          // Most of these use created_at.
-          'assigned',
-          'commented', // uses updated_at, because that could be > created_at
-          'committed', // uses committer.date
-          'head_ref_force_pushed',
-          'milestoned',
-          'pinned',
-          'ready_for_review',
-          'renamed',
-          'reopened',
-          'review_dismissed',
-          'review_requested',
-          'reviewed', // uses submitted_at
-          'unlocked',
-          'unmarked_as_duplicate',
-        ].includes(event))
-        .map(({ created_at, updated_at, committer, submitted_at }) => new Date(updated_at ?? created_at ?? submitted_at ?? committer.date))
-        // Reverse sort by date value. The default sort() sorts by string representation, which is bad for dates.
-        .sort((a,b) => b-a)
-        .at(0) ?? item.created_at
+            per_page: 100,
+          })
+        )
+          .filter(({ event }) =>
+            [
+              // These events are hand-picked from:
+              //   https://docs.github.com/en/rest/using-the-rest-api/issue-event-types?apiVersion=2022-11-28
+              // Each of those causes a PR/issue to *not* be considered as stale anymore.
+              // Most of these use created_at.
+              'assigned',
+              'commented', // uses updated_at, because that could be > created_at
+              'committed', // uses committer.date
+              'head_ref_force_pushed',
+              'milestoned',
+              'pinned',
+              'ready_for_review',
+              'renamed',
+              'reopened',
+              'review_dismissed',
+              'review_requested',
+              'reviewed', // uses submitted_at
+              'unlocked',
+              'unmarked_as_duplicate',
+            ].includes(event),
+          )
+          .map(
+            ({ created_at, updated_at, committer, submitted_at }) =>
+              new Date(
+                updated_at ?? created_at ?? submitted_at ?? committer.date,
+              ),
+          )
+          // Reverse sort by date value. The default sort() sorts by string representation, which is bad for dates.
+          .sort((a, b) => b - a)
+          .at(0) ?? item.created_at,
       )
       log('latest_event_at', latest_event_at.toISOString())
 
@@ -256,33 +289,37 @@ module.exports = async function({ github, context, core }) {
       // Create a map (Label -> Boolean) of all currently set labels.
       // Each label is set to True and can be disabled later.
       const before = Object.fromEntries(
-        (await github.paginate(github.rest.issues.listLabelsOnIssue, {
-          ...context.repo,
-          issue_number
-        }))
-        .map(({ name }) => [name, true])
+        (
+          await github.paginate(github.rest.issues.listLabelsOnIssue, {
+            ...context.repo,
+            issue_number,
+          })
+        ).map(({ name }) => [name, true]),
       )
 
       Object.assign(itemLabels, {
-        '2.status: stale': !before['1.severity: security'] && latest_event_at < stale_at,
+        '2.status: stale':
+          !before['1.severity: security'] && latest_event_at < stale_at,
       })
 
       const after = Object.assign({}, before, itemLabels)
 
       // No need for an API request, if all labels are the same.
-      const hasChanges = Object.keys(after).some(name => (before[name] ?? false) != after[name])
-      if (log('Has changes', hasChanges, !hasChanges))
-        return;
+      const hasChanges = Object.keys(after).some(
+        (name) => (before[name] ?? false) != after[name],
+      )
+      if (log('Has changes', hasChanges, !hasChanges)) return
 
       // Skipping labeling on a pull_request event, because we have no privileges.
-      const labels = Object.entries(after).filter(([,value]) => value).map(([name]) => name)
-      if (log('Set labels', labels, context.eventName == 'pull_request'))
-        return;
+      const labels = Object.entries(after)
+        .filter(([, value]) => value)
+        .map(([name]) => name)
+      if (log('Set labels', labels, context.eventName == 'pull_request')) return
 
       await github.rest.issues.setLabels({
         ...context.repo,
         issue_number,
-        labels
+        labels,
       })
     } catch (cause) {
       throw new Error(`Labeling #${item.number} failed.`, { cause })
@@ -293,19 +330,23 @@ module.exports = async function({ github, context, core }) {
     if (context.payload.pull_request) {
       await handle(context.payload.pull_request)
     } else {
-      const lastRun = (await github.rest.actions.listWorkflowRuns({
-        ...context.repo,
-        workflow_id: 'labels.yml',
-        event: 'schedule',
-        status: 'success',
-        exclude_pull_requests: true,
-        per_page: 1
-      })).data.workflow_runs[0]
+      const lastRun = (
+        await github.rest.actions.listWorkflowRuns({
+          ...context.repo,
+          workflow_id: 'labels.yml',
+          event: 'schedule',
+          status: 'success',
+          exclude_pull_requests: true,
+          per_page: 1,
+        })
+      ).data.workflow_runs[0]
 
       // Go back as far as the last successful run of this workflow to make sure
       // we are not leaving anyone behind on GHA failures.
       // Defaults to go back 1 hour on the first run.
-      const cutoff = new Date(lastRun?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000)
+      const cutoff = new Date(
+        lastRun?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000,
+      )
       core.info('cutoff timestamp: ' + cutoff.toISOString())
 
       const updatedItems = await github.paginate(
@@ -314,11 +355,11 @@ module.exports = async function({ github, context, core }) {
           q: [
             `repo:"${context.repo.owner}/${context.repo.repo}"`,
             'is:open',
-            `updated:>=${cutoff.toISOString()}`
+            `updated:>=${cutoff.toISOString()}`,
           ].join(' AND '),
           // TODO: Remove in 2025-10, when it becomes the default.
-          advanced_search: true
-        }
+          advanced_search: true,
+        },
       )
 
       let cursor
@@ -327,24 +368,29 @@ module.exports = async function({ github, context, core }) {
       if (lastRun) {
         // The cursor to iterate through the full list of issues and pull requests
         // is passed between jobs as an artifact.
-        const artifact = (await github.rest.actions.listWorkflowRunArtifacts({
-          ...context.repo,
-          run_id: lastRun.id,
-          name: 'pagination-cursor'
-        })).data.artifacts[0]
+        const artifact = (
+          await github.rest.actions.listWorkflowRunArtifacts({
+            ...context.repo,
+            run_id: lastRun.id,
+            name: 'pagination-cursor',
+          })
+        ).data.artifacts[0]
 
         // If the artifact is not available, the next iteration starts at the beginning.
         if (artifact) {
           stats.artifacts++
 
-          const { downloadPath } = await artifactClient.downloadArtifact(artifact.id, {
-            findBy: {
-              repositoryName: context.repo.repo,
-              repositoryOwner: context.repo.owner,
-              token: core.getInput('github-token')
+          const { downloadPath } = await artifactClient.downloadArtifact(
+            artifact.id,
+            {
+              findBy: {
+                repositoryName: context.repo.repo,
+                repositoryOwner: context.repo.owner,
+                token: core.getInput('github-token'),
+              },
+              expectedHash: artifact.digest,
             },
-            expectedHash: artifact.digest
-          })
+          )
 
           cursor = await readFile(path.resolve(downloadPath, 'cursor'), 'utf-8')
         }
@@ -360,7 +406,7 @@ module.exports = async function({ github, context, core }) {
         sort: 'created',
         direction: 'asc',
         per_page: 100,
-        after: cursor
+        after: cursor,
       })
 
       // Regex taken and comment adjusted from:
@@ -369,7 +415,9 @@ module.exports = async function({ github, context, core }) {
       //   <https://api.github.com/repositories/4542716/issues?page=3&per_page=100&after=Y3Vyc29yOnYyOpLPAAABl8qNnYDOvnSJxA%3D%3D>; rel="next",
       //   <https://api.github.com/repositories/4542716/issues?page=1&per_page=100&before=Y3Vyc29yOnYyOpLPAAABl8xFV9DOvoouJg%3D%3D>; rel="prev"
       // Sets `next` to undefined if "next" URL is not present or `link` header is not set.
-      const next = ((allItems.headers.link ?? '').match(/<([^<>]+)>;\s*rel="next"/) ?? [])[1]
+      const next = ((allItems.headers.link ?? '').match(
+        /<([^<>]+)>;\s*rel="next"/,
+      ) ?? [])[1]
       if (next) {
         cursor = new URL(next).searchParams.get('after')
         const uploadPath = path.resolve('cursor')
@@ -381,20 +429,29 @@ module.exports = async function({ github, context, core }) {
           [uploadPath],
           path.resolve('.'),
           {
-            retentionDays: 1
-          }
+            retentionDays: 1,
+          },
         )
       }
 
       // Some items might be in both search results, so filtering out duplicates as well.
-      const items = [].concat(updatedItems, allItems.data)
-        .filter((thisItem, idx, arr) => idx == arr.findIndex(firstItem => firstItem.number == thisItem.number))
+      const items = []
+        .concat(updatedItems, allItems.data)
+        .filter(
+          (thisItem, idx, arr) =>
+            idx ==
+            arr.findIndex((firstItem) => firstItem.number == thisItem.number),
+        )
 
       ;(await Promise.allSettled(items.map(handle)))
         .filter(({ status }) => status == 'rejected')
-        .map(({ reason }) => core.setFailed(`${reason.message}\n${reason.cause.stack}`))
+        .map(({ reason }) =>
+          core.setFailed(`${reason.message}\n${reason.cause.stack}`),
+        )
 
-      core.notice(`Processed ${stats.prs} PRs, ${stats.issues} Issues, made ${stats.requests + stats.artifacts} API requests and downloaded ${stats.artifacts} artifacts.`)
+      core.notice(
+        `Processed ${stats.prs} PRs, ${stats.issues} Issues, made ${stats.requests + stats.artifacts} API requests and downloaded ${stats.artifacts} artifacts.`,
+      )
     }
   } finally {
     clearInterval(reservoirUpdater)
