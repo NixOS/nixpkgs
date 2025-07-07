@@ -24,10 +24,10 @@ lib.makeScope pkgs.newScope (
     truffleruby = self.callPackage ./community-edition/truffleruby { };
 
     graalvm-oracle_24 = self.callPackage ./graalvm-oracle { version = "24"; };
-    graalvm-oracle_17 = self.callPackage ./graalvm-oracle { version = "17"; };
     graalvm-oracle = self.graalvm-oracle_24;
   }
   // lib.optionalAttrs config.allowAliases {
+    graalvm-oracle_17 = throw "GraalVM 17 is EOL, use a newer version instead";
     graalvm-oracle_22 = throw "GraalVM 22 is EOL, use a newer version instead";
     graalvm-oracle_23 = throw "GraalVM 23 is EOL, use a newer version instead";
   }
