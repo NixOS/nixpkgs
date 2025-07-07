@@ -25,7 +25,7 @@
   scenefx,
   wayland-scanner,
   xcbutilwm,
-  wlroots_0_18,
+  wlroots_0_19,
   testers,
   nixosTests,
   # Used by the NixOS module:
@@ -44,13 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   pname = "swayfx-unwrapped";
-  version = "0.5";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";
     tag = finalAttrs.version;
-    hash = "sha256-gdab7zkjp/S7YVCP1t/OfOdUXZRwNvNSuRFGWEJScF8=";
+    hash = "sha256-TZNN5pQhH/10DfntCfGHL1kuAceLMYbxwa4RFq7OmrQ=";
   };
 
   patches =
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     scenefx
     wayland
     wayland-protocols
-    (wlroots_0_18.override { inherit (finalAttrs) enableXWayland; })
+    (wlroots_0_19.override { inherit (finalAttrs) enableXWayland; })
   ] ++ lib.optionals finalAttrs.enableXWayland [ xcbutilwm ];
 
   mesonFlags =
