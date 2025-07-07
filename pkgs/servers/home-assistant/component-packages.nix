@@ -2734,7 +2734,8 @@
       ];
     "iotawatt" =
       ps: with ps; [
-      ]; # missing inputs: ha-iotawattpy
+        ha-iotawattpy
+      ];
     "iotty" =
       ps: with ps; [
         iottycloud
@@ -7181,6 +7182,7 @@
     "intent_script"
     "iometer"
     "ios"
+    "iotawatt"
     "iotty"
     "ipma"
     "ipp"
