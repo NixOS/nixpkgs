@@ -29,10 +29,10 @@ let
     let
       # https://dldir1.qq.com/weixin/mac/mac-release.xml
       any-darwin = {
-        version = "4.0.5.27-29258";
+        version = "4.0.6.17-29381";
         src = fetchurl {
-          url = "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_4.0.5.27_29258.dmg";
-          hash = "sha256-Gje1F9rdykxTqYIJ4Pfq3zpUH3t3GKIK/QL5kt1qCVc=";
+          url = "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_4.0.6.17_29381.dmg";
+          hash = "sha256-Fv5UYZ5+WfHvs+V3yiLSQitj++3WU+0GJsnIdlwB+TE=";
         };
       };
     in
