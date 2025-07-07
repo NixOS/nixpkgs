@@ -6,11 +6,11 @@
 
 buildGraalvmNativeImage (finalAttrs: {
   pname = "yamlscript";
-  version = "0.1.97";
+  version = "0.2.1";
 
   src = fetchurl {
     url = "https://github.com/yaml/yamlscript/releases/download/${finalAttrs.version}/yamlscript.cli-${finalAttrs.version}-standalone.jar";
-    hash = "sha256-xyKn+Eec6Kspoe0kq3N/nQDIOJSJcrb9CE/uUF3+Qcs=";
+    hash = "sha256-Wc235KMpmD1DLwN/Z+ZoGmXnAgo7Te2dTOkd+Zm7DTA=";
   };
 
   extraNativeImageBuildArgs = [
