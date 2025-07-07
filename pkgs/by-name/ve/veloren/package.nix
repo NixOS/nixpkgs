@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage {
 
   postPatch = ''
     # Force vek to build in unstable mode
-    cat <<'EOF' | tee "$cargoDepsCopy"/vek-*/build.rs
+    cat <<'EOF' | tee "$cargoDepsCopy"/*/vek-*/build.rs
     fn main() {
       println!("cargo:rustc-check-cfg=cfg(nightly)");
       println!("cargo:rustc-cfg=nightly");
