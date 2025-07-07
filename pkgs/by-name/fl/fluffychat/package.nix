@@ -4,6 +4,8 @@
   imagemagick,
   libgbm,
   libdrm,
+  mesa,
+  libglvnd,
   flutter332,
   pulseaudio,
   copyDesktopItems,
@@ -43,6 +45,16 @@ flutter332.buildFlutterApplication (
     };
 
     inherit targetFlutterPlatform;
+
+    # Provide OpenGL for the Flutter application.
+    extraWrapProgramArgs = ''
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          mesa
+          libglvnd
+        ]
+      }
+    '';
 
     meta =
       {
