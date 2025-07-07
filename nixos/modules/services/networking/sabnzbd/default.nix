@@ -217,7 +217,7 @@ in
                 example = "0.0.0.0";
               };
               port = mkOption {
-                type = types.int;
+                type = types.port;
                 description = ''
                   Port for the Web UI to listen on for incoming connections.
                 '';
