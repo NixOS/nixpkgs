@@ -377,7 +377,7 @@ jobs:
                   github.rest.search.issuesAndPullRequests,
                   {
                     q: [
-                      `repo:"${process.env.GITHUB_REPOSITORY}"`,
+                      `repo:"${context.repo.owner}/${context.repo.repo}"`,
                       'is:open',
                       `updated:>=${cutoff.toISOString()}`
                     ].join(' AND '),
