@@ -73,6 +73,7 @@ jobs:
               github,
               context,
               core,
+              dry: context.eventName == 'pull_request'
             })
 
       - name: Log current API rate limits
