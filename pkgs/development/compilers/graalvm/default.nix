@@ -23,7 +23,11 @@ lib.makeScope pkgs.newScope (
 
     truffleruby = self.callPackage ./community-edition/truffleruby { };
 
-    graalvm-oracle_24 = self.callPackage ./graalvm-oracle { version = "24"; };
+    graalvm-oracle_24 =
+      (self.callPackage ./graalvm-oracle { version = "24"; }).overrideAttrs
+        (oldAttrs: {
+          autoPatchelfIgnoreMissingDeps = [ "libonnxruntime.so.1.18.0" ];
+        });
     graalvm-oracle_21 = self.callPackage ./graalvm-oracle { version = "21"; };
     graalvm-oracle = self.graalvm-oracle_24;
   }
