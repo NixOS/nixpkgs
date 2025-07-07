@@ -90,6 +90,7 @@ let
       gimp3 = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
+      jellyfin-ffmpeg = linux;
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
