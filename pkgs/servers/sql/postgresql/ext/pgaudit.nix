@@ -23,8 +23,8 @@ let
       hash = "sha256-emwoTowT7WKFX0RQDqJXjIblrzqaUIUkzqSqBCHVKQ8=";
     };
     "14" = {
-      version = "1.6.2";
-      hash = "sha256-Bl7Jk2B0deZUDiI391vk4nilwuVGHd1wuaQRSCoA3Mk=";
+      version = "1.6.3";
+      hash = "sha256-KgLidJHjUK9BTp6ffmGUj1chcwIe6IzlcadRpGCfNdM=";
     };
     "13" = {
       version = "1.5.2";
