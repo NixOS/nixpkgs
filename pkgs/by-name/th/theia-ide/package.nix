@@ -180,7 +180,6 @@ stdenv.mkDerivation rec {
       ;
       # lib node_modules package.json \
       # plugins \
-    chmod --recursive a+rX,go-w "$out/opt/$pname"
 
     install --verbose -D --mode 444 \
       ./resources/app/resources/icons/WindowIcon/512-512.png \
@@ -202,16 +201,6 @@ stdenv.mkDerivation rec {
       --target-directory $out/bin/ \
       $out/opt/$pname/theia-ide{,-electron-app} \
       ;
-
-    # Fix chrome-sandbox permissions
-    chown --verbose root "$out/opt/$pname/chrome-sandbox"
-    chmod --verbose 4755 "$out/opt/$pname/chrome-sandbox"
-
-    # Executable wrapper
-    # makeWrapper '${electron}/bin/electron' "$out/bin/$pname" \
-    #   --add-flags "$out/share/lib/$pname/resources/app.asar" \
-    #   --inherit-argv0
-    #   # --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
 
     runHook postInstall
   '';
