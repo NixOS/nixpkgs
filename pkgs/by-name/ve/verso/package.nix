@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitLab,
+  unstableGitUpdater,
 
   llvmPackages_14,
   m4,
@@ -10,17 +12,14 @@
   wrapGAppsHook3,
   writableTmpDirAsHomeHook,
 
+  apple-sdk_14,
   fontconfig,
-  freetype,
   gst_all_1,
   libGL,
   libunwind,
-  libX11,
   libxkbcommon,
   openssl,
   wayland,
-  zlib,
-  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -49,18 +48,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-dYsqr9c5n2lDt1K9EpAzkJXwmr2eJ+ExT53dlTEYraY=";
 
-  env.RUSTC_BOOTSTRAP = 1;
-
   postPatch = ''
     # The original script assumes things about the directory layout of the build
-    substituteInPlace "$cargoDepsCopy"/script_bindings-*/codegen/run.py \
-      --replace-fail "SERVO_ROOT =" "SERVO_ROOT = '$(pwd)' #"
+    substituteInPlace "$cargoDepsCopy"/script_bindings-*/codegen/run.py --replace-fail \
+      "SERVO_ROOT =" \
+      "SERVO_ROOT = '$(pwd)' #"
 
     # Set a better default resource directory search path
     substituteInPlace src/config.rs --replace-fail \
       "let root_dir = std::env::current_dir()" \
       "let root_dir = { use std::str::FromStr; std::path::PathBuf::from_str(\"$out/share/verso\") }"
 
+    # This is not actually needed since we have the "versoview" binary placed
+    # right next to verso, but it's better to be safe
     substituteInPlace verso/src/main.rs --replace-fail \
       "let versoview_path = current_exe().unwrap().parent().unwrap().join(\"versoview\");" \
       "let versoview_path = std::path::Path::new(\"$out/bin/versoview\");"
@@ -72,37 +72,44 @@ rustPlatform.buildRustPackage (finalAttrs: {
     unset AS
   '';
 
+  env.RUSTC_BOOTSTRAP = 1;
+
   cargoBuildFlags = [
     "-p=versoview"
     "-p=verso"
   ];
 
-  nativeBuildInputs = [
-    llvmPackages_14.llvm
-    m4
-    pkg-config
-    python3
-    rustPlatform.bindgenHook
-    wrapGAppsHook3
-    writableTmpDirAsHomeHook
-  ];
+  nativeBuildInputs =
+    [
+      llvmPackages_14.llvm
+      m4
+      python3
+      rustPlatform.bindgenHook
+      writableTmpDirAsHomeHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pkg-config
+      wrapGAppsHook3
+    ];
 
-  buildInputs = [
-    fontconfig
-    freetype
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    libunwind
-    libX11
-    openssl
-    zlib
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      fontconfig
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gst-plugins-ugly
+      libunwind
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_14
+    ];
 
   # Note: it might be better to disable automatic wrapping and only wrap versoview
-  preFixup = ''
+  # Note: using patchelf --add-rpath in postFixup could be better than setting LD_LIBRARY_PATH
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
@@ -115,7 +122,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    # Install resources to our patched default location
+    install -Dm644 org.versotile.verso.desktop $out/share/applications/org.versotile.verso.desktop
+    install -Dm644 icons/icon256x256.png $out/share/icons/hicolor/256x256/apps/org.versotile.verso.png
+
+    # Install the resource directory into our patched default location
     mkdir -p "$out/share/verso"
     cp -r ./resources "$out/share/verso/resources"
   '';
@@ -132,7 +142,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = [ lib.maintainers.ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      ethancedwards8
+      tomasajt
+    ];
     teams = [ lib.teams.ngi ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
