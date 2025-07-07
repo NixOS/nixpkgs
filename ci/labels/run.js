@@ -38,6 +38,7 @@ try {
         process.exitCode = 1
       },
     },
+    dry: true,
   })
 } finally {
   rmSync(tmp, { recursive: true })

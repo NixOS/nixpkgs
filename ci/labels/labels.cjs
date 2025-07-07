@@ -1,4 +1,4 @@
-module.exports = async function ({ github, context, core }) {
+module.exports = async function ({ github, context, core, dry }) {
   const Bottleneck = require('bottleneck')
   const path = require('node:path')
   const { DefaultArtifactClient } = require('@actions/artifact')
@@ -314,7 +314,7 @@ module.exports = async function ({ github, context, core }) {
       const labels = Object.entries(after)
         .filter(([, value]) => value)
         .map(([name]) => name)
-      if (log('Set labels', labels, context.eventName == 'pull_request')) return
+      if (log('Set labels', labels, dry)) return
 
       await github.rest.issues.setLabels({
         ...context.repo,
@@ -422,16 +422,20 @@ module.exports = async function ({ github, context, core }) {
         cursor = new URL(next).searchParams.get('after')
         const uploadPath = path.resolve('cursor')
         await writeFile(uploadPath, cursor, 'utf-8')
-        // No stats.artifacts++, because this does not allow passing a custom token.
-        // Thus, the upload will not happen with the app token, but the default github.token.
-        await artifactClient.uploadArtifact(
-          'pagination-cursor',
-          [uploadPath],
-          path.resolve('.'),
-          {
-            retentionDays: 1,
-          },
-        )
+        if (dry) {
+          core.info(`pagination-cursor: ${cursor} (upload skipped)`)
+        } else {
+          // No stats.artifacts++, because this does not allow passing a custom token.
+          // Thus, the upload will not happen with the app token, but the default github.token.
+          await artifactClient.uploadArtifact(
+            'pagination-cursor',
+            [uploadPath],
+            path.resolve('.'),
+            {
+              retentionDays: 1,
+            },
+          )
+        }
       }
 
       // Some items might be in both search results, so filtering out duplicates as well.
