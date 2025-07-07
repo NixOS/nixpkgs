@@ -567,8 +567,8 @@ in
 
     systemd.services.sabnzbd =
       let
-        secretIniQuoted = lib.strings.optionalString (cfg.secretsFile != null) "'${cfg.secretsFile}'";
-        optionalWriteableConfigInclusion = lib.strings.optionalString cfg.allowConfigWrite ''[ -e '${totalIni}' ] && files=('${totalIni}' "''${files[@]}")'';
+        secretIniQuoted = optionalString (cfg.secretsFile != null) "'${cfg.secretsFile}'";
+        optionalWriteableConfigInclusion = optionalString cfg.allowConfigWrite ''[ -e '${totalIni}' ] && files=('${totalIni}' "''${files[@]}")'';
       in
       {
         description = "sabnzbd server";
