@@ -27,15 +27,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-TJqylGjXdkunE5mHkpFnvv3SENBFwtQehV0q2k3hNMY=";
 
   nativeBuildInputs = [
-    git
     pkg-config
     erlang_27
+  ];
+
+  buildInputs = [ openssl ];
+
+  nativeCheckInputs = [
+    # used by several tests
+    git
+
+    # js runtimes used for integration tests
     nodejs
     bun
     deno
   ];
-
-  buildInputs = [ openssl ];
 
   checkFlags = [
     # Makes a network request
