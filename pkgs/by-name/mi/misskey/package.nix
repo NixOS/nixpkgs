@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "🌎 An interplanetary microblogging platform 🚀";
+    description = "Open source, federated social media platform";
     homepage = "https://misskey-hub.net/";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.feathecutie ];
