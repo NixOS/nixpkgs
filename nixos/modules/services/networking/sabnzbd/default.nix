@@ -13,6 +13,7 @@ let
     mkOptionDefault
     mkIf
     literalExpression
+    optionalString
     types
     ;
   inherit (lib.generators)
