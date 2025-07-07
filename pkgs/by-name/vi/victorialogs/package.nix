@@ -4,6 +4,8 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
+  withServer ? true,
+  withVlAgent ? false,
 }:
 
 buildGoModule (finalAttrs: {
@@ -19,14 +21,16 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
-  subPackages = [
-    "app/victoria-logs"
-    "app/vlinsert"
-    "app/vlselect"
-    "app/vlstorage"
-    "app/vlogsgenerator"
-    "app/vlogscli"
-  ];
+  subPackages =
+    lib.optionals withServer [
+      "app/victoria-logs"
+      "app/vlinsert"
+      "app/vlselect"
+      "app/vlstorage"
+      "app/vlogsgenerator"
+      "app/vlogscli"
+    ]
+    ++ lib.optionals withVlAgent [ "app/vlagent" ];
 
   ldflags = [
     "-s"
@@ -49,7 +53,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://docs.victoriametrics.com/victorialogs/";
     description = "User friendly log database from VictoriaMetrics";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ marie ];
+    maintainers = with lib.maintainers; [
+      marie
+      shawn8901
+    ];
     changelog = "https://github.com/VictoriaMetrics/VictoriaLogs/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "victoria-logs";
   };
