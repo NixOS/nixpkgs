@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
         illumos
       ];
     maintainers = with lib.maintainers; [
-      fpletz
       thoughtpolice
       vifino
     ];

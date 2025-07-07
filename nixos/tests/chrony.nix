@@ -1,8 +1,5 @@
-{ lib, ... }:
 {
   name = "chrony";
-
-  meta.maintainers = with lib.maintainers; [ fpletz ];
 
   nodes.machine = {
     services.chrony.enable = true;
