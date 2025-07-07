@@ -84,6 +84,13 @@ with lib;
           Select BIOS implementation (seabios = Legacy BIOS, ovmf = UEFI).
         '';
       };
+      machine = mkOption {
+        type = types.enum [ "i440fx" "q35" ];
+        default = "i440fx";
+        description = ''
+          Select QEMU machine type (q35 recommended for PCIe support).
+        '';
+      };
 
       # optional configs
       name = mkOption {
