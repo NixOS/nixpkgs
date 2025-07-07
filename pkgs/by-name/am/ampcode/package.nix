@@ -7,25 +7,26 @@
 
 writeShellApplication {
   name = "amp";
-  
+
   runtimeInputs = [
     nodejs_22
   ];
-  
+
   text = ''
     exec npx --yes @sourcegraph/amp "$@"
   '';
-  
 
   passthru.tests.version = testers.testVersion {
-    package = (writeShellApplication {
-      name = "amp";
-      runtimeInputs = [ nodejs_22 ];
-      text = ''exec npx --yes @sourcegraph/amp "$@"'';
-    });
+    package = (
+      writeShellApplication {
+        name = "amp";
+        runtimeInputs = [ nodejs_22 ];
+        text = ''exec npx --yes @sourcegraph/amp "$@"'';
+      }
+    );
     command = "HOME=$(mktemp -d) amp --version";
   };
-  
+
   meta = {
     description = "CLI for Amp, an agentic coding agent in research preview from Sourcegraph";
     homepage = "https://ampcode.com/";
