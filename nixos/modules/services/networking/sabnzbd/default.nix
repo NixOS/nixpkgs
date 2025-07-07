@@ -541,8 +541,6 @@ in
     };
   };
 
-  ###### implementation
-
   config = mkIf cfg.enable {
     warnings =
       if cfg.configFile != null then
