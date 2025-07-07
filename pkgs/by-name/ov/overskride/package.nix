@@ -17,20 +17,14 @@
   bluez,
   libpulseaudio,
 }:
-let
-
-  version = "0.6.2";
-
-in
-rustPlatform.buildRustPackage {
-
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "overskride";
-  inherit version;
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "kaii-lb";
     repo = "overskride";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eMT0wNTpW75V08rmwFtU6NkmZ4auiujzYgbcktewNcI=";
   };
 
@@ -70,17 +64,16 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   preFixup = ''
-    glib-compile-schemas $out/share/gsettings-schemas/overskride-${version}/glib-2.0/schemas
+    glib-compile-schemas $out/share/gsettings-schemas/overskride-${finalAttrs.version}/glib-2.0/schemas
   '';
 
   meta = {
     description = "Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
     homepage = "https://github.com/kaii-lb/overskride";
-    changelog = "https://github.com/kaii-lb/overskride/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/kaii-lb/overskride/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     mainProgram = "overskride";
     maintainers = with lib.maintainers; [ mrcjkb ];
     platforms = lib.platforms.linux;
   };
-
-}
+})
