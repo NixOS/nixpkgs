@@ -6,23 +6,19 @@
   fontconfig,
   freetype,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "figma-agent";
-  version = "0.3.2";
+  version = "0.3.2-unstable-2024-11-16";
 
   src = fetchFromGitHub {
     owner = "neetly";
     repo = "figma-agent-linux";
-    tag = version;
-    sha256 = "sha256-iXLQOc8gomOik+HIIoviw19II5MD6FM0W5DT3aqtIcM=";
+    rev = "main";
+    sha256 = "sha256-Cq+ivyrj6wt7DEUM730BG44sMkpOMt4qxb+J3itVar4=";
   };
 
-  cargoPatches = [
-    ./0001-update-time.patch
-  ];
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4OAce76XCLlngC7BrX8eiQlHo+Mi2Tfrb9t1Rc/gSFA=";
+  cargoHash = "sha256-QdEs1zaQ2CQT50nIhKxtp7zpJfa64xQgOy3sTOUGmxk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,6 +29,9 @@ rustPlatform.buildRustPackage rec {
     fontconfig
     freetype
   ];
+
+  # No tests on `figma-agent-linux`.
+  doCheck = false;
 
   meta = {
     homepage = "https://github.com/neetly/figma-agent-linux";
