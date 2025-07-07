@@ -193,13 +193,17 @@ stdenv.mkDerivation rec {
       LICENSE* \
       ;
 
-    makeWrapper '${electron}/bin/electron' "$out/opt/$pname/theia-ide" \
-      --add-flags "$out/usr/lib/$pname/resources/app/" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/theia-ide" \
+      --add-flags "$out/opt/$pname/resources/app/" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --set-default ELECTRON_RUN_AS_NODE 1 \
+      --set-default ELECTRON_NO_ASAR 1 \
+      --inherit-argv0 \
       ;
 
-    install --verbose -D --mode 755 \
+    ln --verbose --symbolic \
       --target-directory $out/bin/ \
-      $out/opt/$pname/theia-ide{,-electron-app} \
+      $out/opt/$pname/theia-ide-electron-app{,.bin} \
       ;
 
     runHook postInstall
