@@ -113,7 +113,6 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
       "-DENABLE_TESTS=OFF"
       "-DENABLE_DELTA_KERNEL_RS=0"
       "-DCOMPILER_CACHE=disabled"
-      "-DENABLE_EMBEDDED_COMPILER=ON"
     ]
     ++ lib.optional (
       stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
