@@ -43,6 +43,7 @@ let
     ${lib.optionalString (cfg.configFile == null) (
       if (cfg.protocol == "nsupdate") then
         ''
+          mkdir /run/${RuntimeDirectory}
           install --mode=600 --owner=$USER ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
         ''
       else if (cfg.passwordFile != null) then
