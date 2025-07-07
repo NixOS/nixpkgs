@@ -104,13 +104,8 @@ lib.extendMkDerivation {
       dontStrip = args.dontStrip or true;
 
       env = {
-        npm_config_arch =
-          {
-            "x86_64" = "x64";
-            "aarch64" = "arm64";
-          }
-          .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
-        npm_config_platform = stdenv.hostPlatform.parsed.kernel.name;
+        npm_config_arch = stdenv.hostPlatform.node.arch;
+        npm_config_platform = stdenv.hostPlatform.node.platform;
       } // (args.env or { });
 
       meta = (args.meta or { }) // {
