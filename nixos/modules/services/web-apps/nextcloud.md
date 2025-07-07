@@ -211,6 +211,16 @@ release notes when upgrading.
     services.nextcloud.phpOptions."realpath_cache_size" = "0";
     ```
 
+  - **Empty Files on chunked uploads**
+
+    Due to a limitation of PHP-FPM, Nextcloud is unable to handle chunked
+    uploads. See upstream issue
+    [nextcloud/server#7995](https://github.com/nextcloud/server/issues/7995)
+    for details.
+
+    A workaround is to disable chunked uploads with
+    {option}`nextcloud.nginx.enableFastcgiRequestBuffering`.
+
 ## Using an alternative webserver as reverse-proxy (e.g. `httpd`) {#module-services-nextcloud-httpd}
 
 By default, `nginx` is used as reverse-proxy for `nextcloud`.
