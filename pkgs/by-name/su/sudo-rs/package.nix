@@ -1,12 +1,10 @@
 {
   lib,
-  bash,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   nixosTests,
   pam,
-  pandoc,
   rustPlatform,
   tzdata,
 }:
@@ -24,26 +22,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-o3//zJxB6CNHQl1DtfmFnSBP9npC4I9/hRuzpWrKoNs=";
 
-  nativeBuildInputs = [
-    installShellFiles
-    pandoc
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ pam ];
 
-  # Don't attempt to generate the docs in a (pan)Docker container
   postPatch = ''
-    substituteInPlace util/generate-docs.sh \
-      --replace-fail "/usr/bin/env bash" ${lib.getExe bash} \
-      --replace-fail util/pandoc.sh pandoc
-
     substituteInPlace build.rs \
       --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
   postInstall = ''
-    ./util/generate-docs.sh
-    installManPage target/docs/man/*
+    for man_fn in docs/man/*.man; do
+      man_fn_fixed="$(echo "$man_fn" | sed -e 's,\.man$,,')"
+      ln -vs $(basename "$man_fn") "$man_fn_fixed"
+      installManPage "$man_fn_fixed"
+    done
   '';
 
   checkFlags = map (t: "--skip=${t}") [
