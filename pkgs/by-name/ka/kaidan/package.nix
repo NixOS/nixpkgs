@@ -9,6 +9,7 @@
   zxing-cpp,
   qxmpp,
   gst_all_1,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "User-friendly and modern chat app, using XMPP";
