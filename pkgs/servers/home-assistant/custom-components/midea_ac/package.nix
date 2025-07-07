@@ -3,6 +3,8 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   msmart-ng,
+  pytestCheckHook,
+  pytest-homeassistant-custom-component,
 }:
 
 buildHomeAssistantComponent rec {
@@ -18,6 +20,11 @@ buildHomeAssistantComponent rec {
   };
 
   dependencies = [ msmart-ng ];
+
+  nativeCheckInputs = [
+    pytest-homeassistant-custom-component
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/mill1000/midea-ac-py/releases/tag/${src.tag}";
