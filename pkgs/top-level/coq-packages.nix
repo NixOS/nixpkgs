@@ -102,6 +102,7 @@ let
       equations = callPackage ../development/coq-modules/equations { };
       ExtLib = callPackage ../development/coq-modules/ExtLib { };
       extructures = callPackage ../development/coq-modules/extructures { };
+      fcsl-pcm = callPackage ../development/coq-modules/fcsl-pcm { };
       flocq = callPackage ../development/coq-modules/flocq { };
       fourcolor = callPackage ../development/coq-modules/fourcolor { };
       gaia = callPackage ../development/coq-modules/gaia { };
