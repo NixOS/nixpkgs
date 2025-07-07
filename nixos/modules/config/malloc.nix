@@ -68,6 +68,14 @@ let
         vulnerabilities.
       '';
     };
+
+    rpmalloc = {
+      libPath = "${pkgs.rpmalloc}/lib/libmimallocwrap.so";
+      description = ''
+        Public domain cross platform lock free thread caching 16-byte
+        aligned memory allocator implemented in C."
+      '';
+    };
   };
 
   providerConf = providers.${cfg.provider};
