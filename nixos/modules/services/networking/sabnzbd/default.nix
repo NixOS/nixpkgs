@@ -110,7 +110,7 @@ in
       stateDir = mkOption {
         type = types.str;
         default = "sabnzbd";
-        description = "State directory of the service (inside /var/lib/)";
+        description = "State directory of the service under /var/lib/";
       };
 
       user = mkOption {
