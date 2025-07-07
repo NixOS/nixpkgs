@@ -124,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gnunet.org/";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ pstn ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.unix;
     changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${finalAttrs.version}";
     # meson: "Can not run test applications in this cross environment." (for dane_verify_crt_raw)
