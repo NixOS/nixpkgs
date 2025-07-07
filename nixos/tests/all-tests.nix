@@ -18,6 +18,8 @@
 with pkgs.lib;
 
 let
+  # TODO: remove when handleTest is gone (make sure nixosTests and nixos/release.nix#tests are unaffected)
+  # TODO: when removing, also deprecate `test` attribute in ../lib/testing/run.nix
   discoverTests =
     val:
     if isAttrs val then
