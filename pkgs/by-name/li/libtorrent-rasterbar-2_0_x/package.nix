@@ -32,15 +32,19 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   buildInputs = [
     boostPython
     openssl
     zlib
-    python3
     ncurses
   ];
+
+  strictDeps = true;
 
   patches = [
     # provide distutils alternative for python 3.12
