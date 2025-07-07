@@ -968,6 +968,8 @@ let
 
         kdf = callPackage ../development/ocaml-modules/kdf { };
 
+        kdl = callPackage ../development/ocaml-modules/kdl { };
+
         ke = callPackage ../development/ocaml-modules/ke { };
 
         kicadsch = callPackage ../development/ocaml-modules/kicadsch { };
