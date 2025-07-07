@@ -2110,6 +2110,7 @@ mapAliases {
   webmetro = throw "'webmetro' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   wg-bond = throw "'wg-bond' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   whatsapp-for-linux = wasistlos; # Added 2025-01-30
+  whatsapp-for-mac = whatsapp; # Added 2025-07-07
   wineWayland = wine-wayland;
   winhelpcgi = throw "'winhelpcgi' has been removed as it was unmaintained upstream and broken with GCC 14"; # Added 2025-06-14
   win-virtio = virtio-win; # Added 2023-10-17
