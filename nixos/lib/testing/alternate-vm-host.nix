@@ -32,5 +32,9 @@ let
 
 in
 {
-  config.passthru.onVMHost = lib.genAttrs qemuPlatforms useVMPlatform;
+  config.passthru.onVMHost =
+    lib.genAttrs qemuPlatforms useVMPlatform
+    // lib.optionalAttrs (builtins ? currentSystem) {
+      currentSystem = useVMPlatform builtins.currentSystem;
+    };
 }
