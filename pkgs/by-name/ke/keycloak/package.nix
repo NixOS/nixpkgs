@@ -24,11 +24,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "keycloak";
-  version = "26.1.4";
+  version = "26.2.5";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    hash = "sha256-pYUiTVJRoUTXfFv7B2Oi+0xofMf5yjhNsqTnV8ehAlU=";
+    hash = "sha256-yXbHdznZlrz4T2+154cM+eAmPO/TR5kRCVVi26H66ok=";
   };
 
   nativeBuildInputs = [
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
     + ''
       install_plugin() {
         if [ -d "$1" ]; then
-          find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 "{}" "providers/" \;
+          find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -p -m 0500 "{}" "providers/" \;
         else
-          install -m 0500 "$1" "providers/"
+          install -p -m 0500 "$1" "providers/"
         fi
       }
       ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
       ngerstle
       talyz
       nickcao
+      leona
     ];
   };
 
