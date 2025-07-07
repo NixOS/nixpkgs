@@ -96,9 +96,6 @@ let
 in
 
 {
-
-  ###### interface
-
   options = {
     services.sabnzbd = {
       enable = mkEnableOption "the sabnzbd server";
