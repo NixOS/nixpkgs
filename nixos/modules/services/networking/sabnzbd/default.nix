@@ -458,7 +458,7 @@ in
                       example = "news.example.com";
                     };
                     port = mkOption {
-                      type = types.int;
+                      type = types.port;
                       description = "Port of the server";
                       example = 443;
                       default = 563;
