@@ -1,12 +1,14 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   dotmap,
   matplotlib,
   pyclipper,
+  pytestCheckHook,
+  pythonImportsCheckHook,
   setuptools,
-  unittestCheckHook,
   gitUpdater,
 }:
 
@@ -26,16 +28,24 @@ buildPythonPackage rec {
 
   dependencies = [ pyclipper ];
 
+  preCheck = ''
+    # silence matplotlib warning
+    export MPLCONFIGDIR=$(mktemp -d)
+  '';
+
   nativeCheckInputs = [
     dotmap
     matplotlib
-    unittestCheckHook
+    pytestCheckHook
+    pythonImportsCheckHook
   ];
-  unittestFlagsArray = [
-    "-s"
-    "test"
-    "-v"
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Fails on macOS with Trace/BPT trap: 5 - something to do with recursion depth
+    "test_cubic_cubic"
   ];
+
+  pythonImportsCheckFlags = [ "beziers" ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
