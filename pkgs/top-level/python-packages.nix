@@ -13260,6 +13260,8 @@ self: super: with self; {
 
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
+  pynng = callPackage ../development/python-modules/pynng { };
+
   pynobo = callPackage ../development/python-modules/pynobo { };
 
   pynordpool = callPackage ../development/python-modules/pynordpool { };
