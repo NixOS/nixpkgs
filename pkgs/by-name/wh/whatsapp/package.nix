@@ -9,7 +9,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "whatsapp-for-mac";
+  pname = "whatsapp";
   version = "2.26.31.27";
 
   src = fetchzip {
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     text = ''
       url=$(curl --silent "https://web.whatsapp.com/desktop/mac_native/updates/?branch=master&configuration=Release")
       version=$(echo "$url" | xmlstarlet sel -t -v "substring-before(substring-after(//enclosure/@url, 'version='), '&')")
-      update-source-version whatsapp-for-mac "$version" --file=./pkgs/by-name/wh/whatsapp-for-mac/package.nix
+      update-source-version whatsapp "$version" --file=./pkgs/by-name/wh/whatsapp/package.nix
     '';
   });
 
