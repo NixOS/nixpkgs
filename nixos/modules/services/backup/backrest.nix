@@ -41,6 +41,11 @@ in
       default = { };
     };
     resticBinary = mkPackageOption pkgs "restic" { };
+    additionalPaths = mkOption {
+      type = types.listOf types.path;
+      description = "Packages to add to the PATH of the unit file. Useful to make packages available to hooks. See https://garethgeorge.github.io/backrest/cookbooks/command-hook-examples for examples";
+      default = [ ];
+    };
     rootDirectory = mkOption {
       type = types.str;
       description = "The main Backrest root directory";
@@ -121,7 +126,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
-      path = [ pkgs.bash ]; # Needed for the hooks to work
+      path = cfg.additionalPaths;
       environment = {
         BACKREST_PORT = "${cfg.listen.host}:${toString cfg.listen.port}";
         BACKREST_CONFIG = cfg.configPath;
