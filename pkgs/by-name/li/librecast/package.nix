@@ -29,9 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://codeberg.org/librecast/librecast/src/tag/v${finalAttrs.version}/CHANGELOG.md";
     description = "IPv6 multicast library";
     homepage = "https://librecast.net/librecast.html";
-    license = [
-      lib.licenses.gpl2
-      lib.licenses.gpl3
+    license = with lib.licenses; [
+      gpl2Only
+      gpl3Only
     ];
     maintainers = with lib.maintainers; [
       albertchae
