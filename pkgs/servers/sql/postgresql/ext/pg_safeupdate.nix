@@ -27,6 +27,10 @@ let
       version = "1.5";
       hash = "sha256-RRSpkWLFuif+6RCncnsb1NnjKnIIRY9KgebKkjCN5cs=";
     };
+    "18" = {
+      version = "1.5";
+      hash = "sha256-RRSpkWLFuif+6RCncnsb1NnjKnIIRY9KgebKkjCN5cs=";
+    };
   };
 
   source =
