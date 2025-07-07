@@ -232,9 +232,7 @@ in
                   be generated.
                 '';
                 default = null;
-                example = literalExpression ''
-                  ''${config.acme.certs.''${domain}.directory}/fullchain.pem
-                '';
+                example = literalExpression "''${config.acme.certs.''${domain}.directory}/fullchain.pem'';
               };
               https_key = mkOption {
                 type = types.nullOr types.path;
