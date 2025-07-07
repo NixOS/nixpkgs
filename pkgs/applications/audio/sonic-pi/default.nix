@@ -11,6 +11,7 @@
   qtbase,
   qtsvg,
   qttools,
+  qtwayland,
   qwt,
   qscintilla,
   kissfftFloat,
@@ -82,6 +83,7 @@ stdenv.mkDerivation rec {
       qtbase
       qtsvg
       qttools
+      qtwayland
       qwt
       qscintilla
       kissfftFloat
