@@ -20,6 +20,7 @@
   versioneer,
   shapely,
   setuptools,
+  nix-update-script,
 }:
 let
   solidpython = callPackage ./solidpython { };
@@ -94,6 +95,8 @@ buildPythonApplication rec {
     # pytest needs to run in a subdir. See https://github.com/yaqwsx/KiKit/blob/v1.3.0/Makefile#L43
     cd test/units
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Automation for KiCAD boards";
