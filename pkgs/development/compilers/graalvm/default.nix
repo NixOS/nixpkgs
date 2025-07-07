@@ -24,6 +24,7 @@ lib.makeScope pkgs.newScope (
     truffleruby = self.callPackage ./community-edition/truffleruby { };
 
     graalvm-oracle_24 = self.callPackage ./graalvm-oracle { version = "24"; };
+    graalvm-oracle_21 = self.callPackage ./graalvm-oracle { version = "21"; };
     graalvm-oracle = self.graalvm-oracle_24;
   }
   // lib.optionalAttrs config.allowAliases {
