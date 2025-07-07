@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
+  nix-update-script,
   nodePackages,
   stdenv,
   xsel,
@@ -50,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix PATH : ${lib.makeBinPath [ xsel ]} \
         --chdir $out
     '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Clientside editor for decentralised article publishing, annotations and social interactions";
