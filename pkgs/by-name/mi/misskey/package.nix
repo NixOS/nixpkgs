@@ -13,7 +13,7 @@
   ffmpeg-headless,
   writeShellScript,
   xcbuild,
-  ...
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -123,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit (finalAttrs) pnpmDeps;
     tests.misskey = nixosTests.misskey;
+    updateScript = nix-update-script { };
   };
 
   meta = {
