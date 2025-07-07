@@ -30,7 +30,7 @@ let
       permissions."*" = "relay";
     };
     database = {
-      type = "sqlite3";
+      type = "sqlite3-fk-wal";
       uri = "file:${dataDir}/mautrix-whatsapp.db?_txlock=immediate";
     };
     homeserver.address = "http://localhost:8448";
@@ -70,7 +70,7 @@ let
 in
 {
   options.services.mautrix-whatsapp = {
-    enable = lib.mkEnableOption "mautrix-whatsapp, a Matrix-Whatsapp puppeting bridge";
+    enable = lib.mkEnableOption "mautrix-whatsapp, a Matrix-WhatsApp puppeting bridge";
 
     package = lib.mkPackageOption pkgs "mautrix-whatsapp" { };
 
@@ -134,11 +134,11 @@ in
     serviceDependencies = lib.mkOption {
       type = with lib.types; listOf str;
       default =
-        (lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit)
-        ++ (lib.optional config.services.matrix-conduit.enable "conduit.service");
+        lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
+        ++ lib.optional config.services.matrix-conduit.enable "conduit.service";
       defaultText = lib.literalExpression ''
-        (optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit)
-        ++ (optional config.services.matrix-conduit.enable "conduit.service")
+        optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
+        ++ optional config.services.matrix-conduit.enable "conduit.service"
       '';
       description = ''
         List of systemd units to require and wait for when starting the application service.
@@ -148,9 +148,7 @@ in
     registerToSynapse = lib.mkOption {
       type = lib.types.bool;
       default = config.services.matrix-synapse.enable;
-      defaultText = lib.literalExpression ''
-        config.services.matrix-synapse.enable
-      '';
+      defaultText = lib.literalExpression "config.services.matrix-synapse.enable";
       description = ''
         Whether to add the bridge's app service registration file to
         `services.matrix-synapse.settings.app_service_config_files`.
@@ -164,7 +162,7 @@ in
       isSystemUser = true;
       group = "mautrix-whatsapp";
       home = dataDir;
-      description = "Mautrix-Whatsapp bridge user";
+      description = "Mautrix-WhatsApp bridge user";
     };
 
     users.groups.mautrix-whatsapp = { };
@@ -191,7 +189,7 @@ in
     );
 
     systemd.services.mautrix-whatsapp = {
-      description = "mautrix-whatsapp, a Matrix-Whatsapp puppeting bridge.";
+      description = "Mautrix-WhatsApp, a Matrix-WhatsApp puppeting bridge";
 
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
@@ -221,7 +219,7 @@ in
 
         umask 0177
         # 1. Overwrite registration tokens in config
-        # 2. If environment variable MAUTRIX_SIGNAL_BRIDGE_LOGIN_SHARED_SECRET
+        # 2. If environment variable MAUTRIX_WHATSAPP_BRIDGE_LOGIN_SHARED_SECRET
         #    is set, set it as the login shared secret value for the configured
         #    homeserver domain.
         ${pkgs.yq}/bin/yq -s '.[0].appservice.as_token = .[1].as_token
