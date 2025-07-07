@@ -1,11 +1,9 @@
 {
-  lib,
-  darwin,
   fetchCrate,
+  lib,
   openssl,
   pkg-config,
   rustPlatform,
-  stdenv,
 }:
 
 let
@@ -15,16 +13,16 @@ let
       hash,
       cargoHash,
     }:
-    rustPlatform.buildRustPackage rec {
+    rustPlatform.buildRustPackage {
       pname = "cargo-pgrx";
 
       inherit version;
 
       src = fetchCrate {
-        inherit version pname hash;
+        inherit version hash;
+        pname = "cargo-pgrx";
       };
 
-      useFetchCargoVendor = true;
       inherit cargoHash;
 
       nativeBuildInputs = [
@@ -44,12 +42,12 @@ let
         "--skip=command::schema::tests::test_parse_managed_postmasters"
       ];
 
-      meta = with lib; {
+      meta = {
         description = "Build Postgres Extensions with Rust";
         homepage = "https://github.com/pgcentralfoundation/pgrx";
         changelog = "https://github.com/pgcentralfoundation/pgrx/releases/tag/v${version}";
-        license = licenses.mit;
-        maintainers = with maintainers; [
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [
           happysalada
           matthiasbeyer
         ];
