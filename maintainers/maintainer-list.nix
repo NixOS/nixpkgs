@@ -10869,12 +10869,6 @@
     githubId = 54999;
     name = "Ariel Nunez";
   };
-  interdependence = {
-    email = "git@williamvandervalk.com";
-    github = "interdependence";
-    githubId = 45567423;
-    name = "William Vandervalk";
-  };
   Intuinewin = {
     email = "antoinelabarussias@gmail.com";
     github = "Intuinewin";
@@ -23896,6 +23890,14 @@
     github = "SRv6d";
     githubId = 18124752;
     email = "m@rvinvogt.com";
+  };
+  srxl = {
+    name = "Ruby Iris Juric";
+    email = "ruby@srxl.me";
+    matrix = "@ruby:isincredibly.gay";
+    github = "Sorixelle";
+    githubId = 38685302;
+    keys = [ { fingerprint = "2D76 76C7 A28E 16FC 75C7  268D 1B55 6ED8 4B0E 303A"; } ];
   };
   Srylax = {
     name = "Srylax";

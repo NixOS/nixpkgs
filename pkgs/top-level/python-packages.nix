@@ -2634,6 +2634,8 @@ self: super: with self; {
 
   clldutils = callPackage ../development/python-modules/clldutils { };
 
+  cloudcheck = callPackage ../development/python-modules/cloudcheck { };
+
   cloudevents = callPackage ../development/python-modules/cloudevents { };
 
   cloudflare = callPackage ../development/python-modules/cloudflare { };
@@ -3937,6 +3939,8 @@ self: super: with self; {
 
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
+  django-pgpubsub = callPackage ../development/python-modules/django-pgpubsub { };
+
   django-pgtrigger = callPackage ../development/python-modules/django-pgtrigger { };
 
   django-phonenumber-field = callPackage ../development/python-modules/django-phonenumber-field { };
@@ -4927,6 +4931,8 @@ self: super: with self; {
   fastcrc = callPackage ../development/python-modules/fastcrc { };
 
   fastdiff = callPackage ../development/python-modules/fastdiff { };
+
+  fastdotcom = callPackage ../development/python-modules/fastdotcom { };
 
   fastdownload = callPackage ../development/python-modules/fastdownload { };
 
@@ -12900,6 +12906,8 @@ self: super: with self; {
 
   pyiskra = callPackage ../development/python-modules/pyiskra { };
 
+  pyiss = callPackage ../development/python-modules/pyiss { };
+
   pyisy = callPackage ../development/python-modules/pyisy { };
 
   pyituran = callPackage ../development/python-modules/pyituran { };
@@ -13448,6 +13456,8 @@ self: super: with self; {
   pyprosegur = callPackage ../development/python-modules/pyprosegur { };
 
   pyprusalink = callPackage ../development/python-modules/pyprusalink { };
+
+  pyps4-2ndscreen = callPackage ../development/python-modules/pyps4-2ndscreen { };
 
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
@@ -15187,6 +15197,8 @@ self: super: with self; {
   radiotherm = callPackage ../development/python-modules/radiotherm { };
 
   radish-bdd = callPackage ../development/python-modules/radish-bdd { };
+
+  radixtarget = callPackage ../development/python-modules/radixtarget { };
 
   radon = callPackage ../development/python-modules/radon { };
 
@@ -18131,6 +18143,8 @@ self: super: with self; {
   treex = callPackage ../development/python-modules/treex { };
 
   treq = callPackage ../development/python-modules/treq { };
+
+  trevorproxy = callPackage ../development/python-modules/trevorproxy { };
 
   trezor = callPackage ../development/python-modules/trezor { };
 
