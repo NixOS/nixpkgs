@@ -11348,6 +11348,7 @@ with pkgs;
     ubootOrangePi3
     ubootOrangePi3B
     ubootOrangePi5
+    ubootOrangePi5Max
     ubootOrangePi5Plus
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
