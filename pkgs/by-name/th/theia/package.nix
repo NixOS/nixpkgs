@@ -15,8 +15,32 @@ stdenv.mkDerivation rec {
     hash = "sha256-XMI+QsxXdrNSU+zJe+lOfYGkTimYiUJszYVE/sKfVHk=";
   };
 
+  # [Long] Description summarised manually from following 3 pages:
+  # https://eclipsesource.com/blogs/2018/06/20/welcome-at-eclipse-theia/
+  # https://eclipsesource.com/blogs/2024/07/12/vs-code-vs-theia-ide/
+  # https://eclipsesource.com/blogs/2023/09/08/eclipse-theia-vs-code-oss/
+
   meta = {
-    description = "Eclipse Theia is a cloud & desktop IDE framework implemented in TypeScript";
+    description = "Build of Theia Cloud & desktop IDE framework implemented in TypeScript";
+    longDescription = ''
+      A build of the Eclipse Theia platform (hereafter, Theia) combining
+      flexibility with modern web technologies (TypeScript, HTML, CSS).
+
+      Theia is an open source *platform* for building web- and cloud-based
+      *custom* IDEs, domain-specific tools & Eclipse RCP-like applications.
+      It supports the Language Server Protocol (LSP), the Debug Adapter
+      Protocol (DAP), integrates the Monaco Code Editor (component of VS
+      Code), and is compatible with VS Code extension API. It allows much
+      deeper customization and adaptability using a second extension
+      mechanism, called “Theia extension”, that is not limited to a specific
+      API as VS Code extensions are.
+
+      Theia is independently developed with a modular architecture and is
+      *not a fork of VS Code*. It is governed by the Eclipse Foundation in a
+      vendor neutral way, and driven by a diverse set of long-term
+      stakeholders, such as Ericsson, STMicroelectronics, Arm,
+      EclipseSource, TypeFox and Red Hat.
+    '';
     homepage = "https://github.com/eclipse-theia/theia";
     changelog = "https://github.com/eclipse-theia/theia/blob/${src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
@@ -24,8 +48,14 @@ stdenv.mkDerivation rec {
       gpl2Only
       epl20
     ];
-    maintainers = with lib.maintainers; [ ];
+
+    # Type of source used to create this package
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
+    maintainers = with lib.maintainers; [ goyalyashpal ];
     mainProgram = "theia";
-    platforms = lib.platforms.all;
+    platforms = [ "x86_64-linux" ];
   };
 }
