@@ -21,7 +21,7 @@
   glib,
   gnugrep,
   gnused,
-  hostname-debian,
+  hostname,
   jq,
   procps,
   which,
@@ -166,7 +166,7 @@ let
       scripts = [ "bin/xdg-open" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        hostname-debian
+        hostname
         glib.bin
         "${placeholder "out"}/bin"
       ];
@@ -206,7 +206,7 @@ let
       scripts = [ "bin/xdg-screensaver" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        hostname-debian
+        hostname
         perl
         procps
       ];
