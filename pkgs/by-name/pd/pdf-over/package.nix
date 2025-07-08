@@ -13,7 +13,7 @@ maven.buildMavenPackage rec {
     owner = "a-sit";
     repo = "PDF-Over";
     tag = "pdf-over-${version}";
-    hash = "sha256-MPTSE1bdjFcUTF1QJiH2q5K+VuVizeUmW2BKTJCKNco=";
+    hash = "sha256-vThIctiRNO0QvrWDsVzRUKTM5p5I2a/c2lTisgEtC04=";
   };
 
   mvnHash = "sha256-y//DzR3Y599QcK1O9nczlqYFhsmsw2ommA655wlG948=";
@@ -25,6 +25,7 @@ maven.buildMavenPackage rec {
 
     echo oida # authentic Austrian experience (this is important)
 
+    mv pdf-over-build/pdf-over_linux-x86_64.jar pdf-over-build/pdf-over.jar
     install -Dt $out/share/pdf-over pdf-over-build/pdf-over.jar
 
     makeWrapper ${lib.getExe jre} $out/bin/pdf-over \
