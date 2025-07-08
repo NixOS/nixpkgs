@@ -50,6 +50,21 @@ buildNpmPackage (finalAttrs: {
 
   npmBuildScript = "build:electron";
 
+  nativeBuildInputs = [
+    ## Needed for Executing package.json scripts
+    # nodejs
+    # (python3.withPackages (ps: [ ps.distutils ]))
+
+    # finalAttrs.node-gyp
+    node-gyp
+
+    ## Needed for Compiling the native modules
+    pkg-config
+    libsecret
+    libxkbfile
+    libX11
+  ];
+
   # [Long] Description summarised manually from following 3 pages:
   # https://eclipsesource.com/blogs/2018/06/20/welcome-at-eclipse-theia/
   # https://eclipsesource.com/blogs/2024/07/12/vs-code-vs-theia-ide/
