@@ -13,10 +13,9 @@
   gitUpdater,
   ...
 }:
-
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.1.9-nightly.250708.137ffec3";
+  version = "0.1.9-unstable-25-07-08";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
@@ -60,16 +59,13 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-
-
-
-   passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater {};
 
   meta = {
     description = "AI agent that brings the power of Gemini directly into your terminal";
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with lib.maintainers; [donteatoreo];
     platforms = lib.platforms.all;
     mainProgram = "gemini";
   };
