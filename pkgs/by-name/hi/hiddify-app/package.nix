@@ -141,7 +141,8 @@ flutter324.buildFlutterApplication rec {
   '';
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/${pname}/lib
+    --prefix LD_LIBRARY_PATH : $out/app/${pname}/lib \
+    --chdir $out/app/${pname}
   '';
 
   meta = metaCommon // {
