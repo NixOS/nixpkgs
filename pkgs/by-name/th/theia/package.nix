@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eclipse-theia";
     repo = "theia";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XMI+QsxXdrNSU+zJe+lOfYGkTimYiUJszYVE/sKfVHk=";
   };
 
   meta = {
     description = "Eclipse Theia is a cloud & desktop IDE framework implemented in TypeScript";
     homepage = "https://github.com/eclipse-theia/theia";
-    changelog = "https://github.com/eclipse-theia/theia/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/eclipse-theia/theia/blob/${src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       gpl2Only
