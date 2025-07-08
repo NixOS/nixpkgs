@@ -853,7 +853,7 @@ in
   mautrix-meta-sqlite = runTest ./matrix/mautrix-meta-sqlite.nix;
   mealie = runTest ./mealie.nix;
   mediamtx = runTest ./mediamtx.nix;
-  mediatomb = handleTest ./mediatomb.nix { };
+  mediatomb = runTest ./mediatomb.nix;
   mediawiki = handleTest ./mediawiki.nix { };
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
