@@ -1,8 +1,26 @@
 {
+  ## Helpers to Nix packaging
   lib,
-  buildNpmPackage
   fetchFromGitHub,
+
+  ## Nix packaging tooling
+  buildNpmPackage,
+
+  ## Needed for Executing package.json scripts
+  nodejs_22,
+  python3,
+  electron_36,
+
+  ## Needed for Compiling the native modules
+  pkg-config,
+  libsecret,
+  libX11,
+  libxkbfile,
 }:
+
+let
+  nodejs = nodejs_22;
+in
 
 buildNpmPackage rec {
   pname = "theia";
@@ -13,6 +31,18 @@ buildNpmPackage rec {
     repo = "theia";
     tag = "v${version}";
     hash = "sha256-XMI+QsxXdrNSU+zJe+lOfYGkTimYiUJszYVE/sKfVHk=";
+  };
+
+  npmDepsHash = "sha256-SOMlSKPSItkLkOZe7s5RwJdbLHoqTSZsEOUsjGqDmCg=";
+  makeCacheWritable = true;
+
+  env = {
+    DEBUG = "electron-rebuild";
+    # ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+    ## gyp FetchError: web request failed: getaddrinfo EAI_AGAIN
+    ## Fix: specify node headers for step `gyp verb get node dir`
+    npm_config_nodedir = "${nodejs}";
   };
 
   # [Long] Description summarised manually from following 3 pages:
