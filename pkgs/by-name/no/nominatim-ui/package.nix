@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
+  nixosTests,
   writableTmpDirAsHomeHook,
   writeText,
 
@@ -10,7 +11,7 @@
   nodejs,
   yarn,
 
-  # Custom application configuration placed to theme/config.theme.js file
+  # Custom application configuration placed to theme/config.theme.js file.
   # For the list of available configuration options see
   # https://github.com/osm-search/nominatim-ui/blob/master/dist/config.defaults.js
   customConfig ? null,
@@ -82,6 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) nominatim;
+  };
 
   meta = {
     description = "Debugging user interface for Nominatim geocoder";
