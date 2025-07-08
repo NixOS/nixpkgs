@@ -2773,6 +2773,10 @@ with self;
     };
     propagatedBuildInputs = [ TaskWeaken ];
     buildInputs = [ ExtUtilsDepends ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/utils/40walk.t
+    '';
     meta = {
       description = "Helper functions for op tree manipulation";
       homepage = "https://search.cpan.org/dist/B-Utils";
@@ -4413,6 +4417,11 @@ with self;
       TestWarn
     ];
     propagatedBuildInputs = [ HTMLParser ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/rt-84767.t
+      rm t/param_list_context.t
+    '';
     meta = {
       description = "Handle Common Gateway Interface requests and responses";
       homepage = "https://metacpan.org/module/CGI";
@@ -5268,6 +5277,12 @@ with self;
       url = "mirror://cpan/authors/id/K/KM/KMX/Class-Throwable-0.13.tar.gz";
       hash = "sha256-3JoR4Nq1bcIg3qjJT+PEfbXn3Xwe0E3IF4qlu3v7vM4=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/10_Class_Throwable_test.t
+      rm t/20_Class_Throwable_subException_test.t
+      rm t/35_Class_Throwable_sub_class_test.t
+    '';
     meta = {
       description = "Minimal lightweight exception class";
       license = with lib.licenses; [
@@ -10190,6 +10205,10 @@ with self;
       SafeIsa
       TextBrew
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/ResultSet/Errors.t
+    '';
     meta = {
       description = "Simplify the common case stuff for DBIx::Class";
       homepage = "https://github.com/frioux/DBIx-Class-Helpers";
@@ -14354,6 +14373,10 @@ with self;
       DirSelf
       TestFatal
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/eating_strict_error.t
+    '';
     meta = {
       description = "Define functions and methods with parameter lists (\"subroutine signatures\")";
       license = with lib.licenses; [
@@ -21961,6 +21984,10 @@ with self;
       TestDeep
       TestNoWarnings
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/20_parse_self.t
+    '';
     meta = {
       description = "Find out what modules are used";
       license = with lib.licenses; [
@@ -27726,6 +27753,11 @@ with self;
     postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/perlcritic
     '';
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/20_policy_require_tidy_code.t
+      rm t/03_pragmas.t
+    '';
     meta = {
       description = "Critique Perl source code for best-practices";
       homepage = "http://perlcritic.com";
@@ -28444,6 +28476,10 @@ with self;
     postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/pls
     '';
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/02document-new.t
+    '';
     meta = {
       description = "Perl Language Server";
       homepage = "https://github.com/FractalBoy/perl-language-server";
@@ -28564,10 +28600,12 @@ with self;
       TaskWeaken
     ];
 
-    # Remove test that fails due to unexpected shebang after
-    # patchShebang.
-    preCheck = "rm t/03_document.t";
-
+    preCheck = "
+      # Remove test that fails due to unexpected shebang after patchShebang.
+      rm t/03_document.t
+      # Remove tests with hardcoded line numbers.
+      rm t/29_logical_filename.t
+    ";
     meta = {
       description = "Parse, Analyze and Manipulate Perl (without perl)";
       homepage = "https://github.com/Perl-Critic/PPI";
@@ -29123,6 +29161,10 @@ with self;
       url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.75.tar.gz";
       hash = "sha256-82O1dOxmCvbtvT5dTJ/8UVodRsvxx8ytmkbO0oh5wiE=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/pod/podchkenc.t
+    '';
     meta = {
       description = "Verifies POD documentation contents for compliance with the POD format specifications";
       license = with lib.licenses; [
@@ -29233,6 +29275,10 @@ with self;
     };
     propagatedBuildInputs = [ MixinLinewise ];
     buildInputs = [ TestDeep ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/non-pod.t
+    '';
     meta = {
       description = "Read a POD document as a series of trivial events";
       homepage = "https://github.com/rjbs/Pod-Eventual";
@@ -30112,6 +30158,10 @@ with self;
       AnyEvent
       DataSExpression
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/06.query.t
+    '';
     meta = {
       description = "Asynchronous Remote Procedure Stack";
       license = with lib.licenses; [
@@ -31966,6 +32016,11 @@ with self;
       url = "mirror://cpan/authors/id/R/RG/RGARCIA/Sub-Identify-0.14.tar.gz";
       hash = "sha256-Bo0nIIZRTdHoQrakCxvtuv7mOQDlsIiQ72cAA53vrW8=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/04codelocation-pureperl.t
+      rm t/04codelocation.t
+    '';
     meta = {
       description = "Retrieve names of code references";
       license = with lib.licenses; [
@@ -32220,6 +32275,10 @@ with self;
       url = "mirror://cpan/authors/id/D/DE/DEXTER/Symbol-Util-0.0203.tar.gz";
       hash = "sha256-VbZh3SL5zpub5afgo/UomsAM0lTCHj2GAyiaVlrm3DI=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/10use.t
+    '';
     meta = {
       description = "Additional utils for Perl symbols manipulation";
       license = with lib.licenses; [
@@ -33435,6 +33494,10 @@ with self;
       hash = "sha256-/NzkHVcnOIFYGt9oCiCmrfUaTDt+McP2mGb7kQk3AoA=";
     };
     propagatedBuildInputs = [ LogTrace ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/Test-Assertions.t
+    '';
     meta = {
       description = "Simple set of building blocks for both unit and runtime testing";
       license = with lib.licenses; [ gpl2Only ];
@@ -33530,6 +33593,14 @@ with self;
       ModuleRuntime
       TryTiny
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/runtests_die.t
+      rm t/runtests_die_empty.t
+      rm t/runtests_die_nearlyempty.t
+      rm t/runtests_result.t
+      rm t/todo.t
+    '';
     meta = {
       description = "Easily create test classes in an xUnit/JUnit style";
       license = with lib.licenses; [
@@ -33855,6 +33926,10 @@ with self;
       hash = "sha256-FWsT8Hdk92bYtFpDco8kOa+Bo1EmJUON6reDt4g+tTM=";
     };
     propagatedBuildInputs = [ SubUplevel ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/return.t
+    '';
     meta = {
       description = "Test exception-based code";
       license = with lib.licenses; [
@@ -34236,6 +34311,11 @@ with self;
       url = "mirror://cpan/authors/id/L/LE/LEEJO/Test-LeakTrace-0.17.tar.gz";
       hash = "sha256-d31k0pOPXqWGMA7vl+8D6stD1MGFPJw7EJHrMxFGeXA=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/09_info_more.t
+      rm t/11_logfp.t
+    '';
     meta = {
       description = "Traces memory leaks";
       homepage = "https://metacpan.org/release/Test-LeakTrace";
@@ -34517,6 +34597,10 @@ with self;
       url = "mirror://cpan/authors/id/S/SY/SYP/Test-Mojibake-1.3.tar.gz";
       hash = "sha256-j/51/5tpNSSIcn3Kc9uR+KoUtZ8voQTrdxfA1xpfGzM=";
     };
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/02-bad-source.t
+    '';
     meta = {
       description = "Check your source for encoding misbehavior";
       homepage = "https://github.com/creaktive/Test-Mojibake";
@@ -34729,6 +34813,13 @@ with self;
       TextDiff
     ];
     buildInputs = [ TestPerlCritic ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/perltidy.t
+      rm t/list_files.t
+      rm t/exclude_files.t
+      rm t/exclude_perltidy.t
+    '';
     meta = {
       description = "Check that all your files are tidy";
       homepage = "https://metacpan.org/release/Test-PerlTidy";
@@ -35126,13 +35217,15 @@ with self;
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test-Script-1.29.tar.gz";
       hash = "sha256-iS5+bB6nsWcQkJlCz1wL2rcO7i79SqnBbqlS4rkPiVA=";
     };
-
     buildInputs = [ Test2Suite ];
-
     propagatedBuildInputs = [
       CaptureTiny
       ProbePerl
     ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/test_script__script_compiles.t
+    '';
     meta = {
       description = "Basic cross-platform tests for scripts";
       license = with lib.licenses; [
@@ -35397,6 +35490,9 @@ with self;
       hash = "sha256-mMoy5/L16om4v7mgYJl389FT4kLi5RcFEmy5VPGga1c=";
     };
     propagatedBuildInputs = [ SubUplevel ];
+    # Tests fail because they hardcode line numbers which have been shifted due to the inclusion of
+    # libraries.
+    doCheck = false;
     meta = {
       description = "Perl extension to test methods for warnings";
       license = with lib.licenses; [
@@ -35560,6 +35656,10 @@ with self;
       hash = "sha256-36phHnFGrZyXabW89oiUmXa4Ny3354ekC5M6FI2JIDk=";
     };
     propagatedBuildInputs = [ XMLLibXML ];
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/simple.t
+    '';
     meta = {
       description = "Test XML and HTML content and structure with XPath expressions";
       license = with lib.licenses; [
@@ -36405,9 +36505,11 @@ with self;
       url = "mirror://cpan/authors/id/G/GF/GFUJI/Test-Vars-0.015.tar.gz";
       hash = "sha256-4Y3RWCcuTsmTnh37M8dDGrTnXGtAsoDDi16AT9pHGlQ=";
     };
-
     buildInputs = [ ModuleBuildTiny ];
-
+    preCheck = ''
+      # Remove tests with hardcoded line numbers.
+      rm t/03_warned.t
+    '';
     meta = {
       description = "Detects unused variables in perl modules";
       homepage = "https://github.com/houseabsolute/p5-Test-Vars";
