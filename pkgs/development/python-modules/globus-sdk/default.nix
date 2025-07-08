@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.57.0";
+  version = "3.59.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "globus";
     repo = "globus-sdk-python";
     tag = version;
-    hash = "sha256-pwAr8Z8Qoc+LjRtF2NRu4lAN/7ha7jogw1RnDhuobZs=";
+    hash = "sha256-95CcuKCGjFezFpz7UJaA/j9ubFNaNkDQsPnwrt1ZyvA=";
   };
 
   build-system = [ setuptools ];

@@ -106,6 +106,11 @@ in
     # useful for inspection (debugging / exploration)
     passthru.config = config;
 
+    /**
+      For discoverTests only. Deprecated. Will be removed when discoverTests can be removed from NixOS all-tests.nix.
+    */
+    passthru.test = config.test;
+
     # Docs: nixos/doc/manual/development/writing-nixos-tests.section.md
     /**
       See https://nixos.org/manual/nixos/unstable#sec-override-nixos-test

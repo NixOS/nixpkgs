@@ -34,6 +34,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/Boshen/cargo-shear";
     changelog = "https://github.com/Boshen/cargo-shear/blob/v${version}/CHANGELOG.md";
     license = [ lib.licenses.mit ];
-    maintainers = with lib.maintainers; [ uncenter ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

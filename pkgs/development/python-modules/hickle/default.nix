@@ -30,10 +30,10 @@ buildPythonPackage rec {
   patches = [
     # fixes support for numpy 2.x, the PR is not yet merged https://github.com/telegraphic/hickle/pull/186
     # FIXME: Remove this patch when the numpy 2.x support arrives
-    (fetchpatch {
-      url = "https://github.com/cjwatson/hickle/commit/246d8e82c805e2e49ea0abd39abc9b2d800bde59.patch";
-      hash = "sha256-IEVw2K7S1nCkzgn9q0xghm4brfXcallNjzXpt2cRq1M=";
-    })
+    ./numpy-2.x-support.patch
+    # fixes test failing with numpy 2.3 as ndarray.tostring was deleted
+    # FIXME: delete once https://github.com/telegraphic/hickle/pull/187 is merged
+    ./numpy-2.3-ndarray-tostring.patch
   ];
 
   build-system = [ setuptools ];
