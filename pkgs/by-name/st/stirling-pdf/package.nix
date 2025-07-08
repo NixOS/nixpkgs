@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   gradleFlags = [
     "-x"
     "spotlessApply"
+    "-DDISABLE_ADDITIONAL_FEATURES=true"
   ];
 
   doCheck = true;
