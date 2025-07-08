@@ -13345,6 +13345,8 @@ self: super: with self; {
 
   pynzb = callPackage ../development/python-modules/pynzb { };
 
+  pynzbgetapi = callPackage ../development/python-modules/pynzbgetapi { };
+
   pyobihai = callPackage ../development/python-modules/pyobihai { };
 
   pyobjc-core = callPackage ../development/python-modules/pyobjc-core { };
