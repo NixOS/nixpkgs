@@ -27,7 +27,6 @@ let
     e2fsprogs
     fetchurl
     kmod
-    rpm
     stdenv
     util-linux
     buildPackages
@@ -498,94 +497,6 @@ rec {
     );
 
   /*
-    Create a filesystem image of the specified size and fill it with
-    a set of RPM packages.
-  */
-
-  fillDiskWithRPMs =
-    {
-      size ? 4096,
-      rpms,
-      name,
-      fullName,
-      preInstall ? "",
-      postInstall ? "",
-      runScripts ? true,
-      createRootFS ? defaultCreateRootFS,
-      QEMU_OPTS ? "",
-      memSize ? 512,
-      unifiedSystemDir ? false,
-    }:
-
-    runInLinuxVM (
-      stdenv.mkDerivation {
-        inherit
-          name
-          preInstall
-          postInstall
-          rpms
-          QEMU_OPTS
-          memSize
-          ;
-        preVM = createEmptyImage { inherit size fullName; };
-
-        buildCommand = ''
-          ${createRootFS}
-
-          chroot=$(type -tP chroot)
-
-          # Make the Nix store available in /mnt, because that's where the RPMs live.
-          mkdir -p /mnt${storeDir}
-          ${util-linux}/bin/mount -o bind ${storeDir} /mnt${storeDir}
-          # Some programs may require devices in /dev to be available (e.g. /dev/random)
-          ${util-linux}/bin/mount -o bind /dev /mnt/dev
-
-          # Newer distributions like Fedora 18 require /lib etc. to be
-          # symlinked to /usr.
-          ${lib.optionalString unifiedSystemDir ''
-            mkdir -p /mnt/usr/bin /mnt/usr/sbin /mnt/usr/lib /mnt/usr/lib64
-            ln -s /usr/bin /mnt/bin
-            ln -s /usr/sbin /mnt/sbin
-            ln -s /usr/lib /mnt/lib
-            ln -s /usr/lib64 /mnt/lib64
-            ${util-linux}/bin/mount -t proc none /mnt/proc
-          ''}
-
-          echo "unpacking RPMs..."
-          set +o pipefail
-          for i in $rpms; do
-              echo "$i..."
-              ${rpm}/bin/rpm2cpio "$i" | chroot /mnt ${cpio}/bin/cpio -i --make-directories --unconditional
-          done
-
-          eval "$preInstall"
-
-          echo "initialising RPM DB..."
-          PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
-            ldconfig -v || true
-          PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
-            rpm --initdb
-
-          ${util-linux}/bin/mount -o bind /tmp /mnt/tmp
-
-          echo "installing RPMs..."
-          PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
-            rpm -iv --nosignature ${lib.optionalString (!runScripts) "--noscripts"} $rpms
-
-          echo "running post-install script..."
-          eval "$postInstall"
-
-          rm /mnt/.debug
-
-          ${util-linux}/bin/umount /mnt${storeDir} /mnt/tmp /mnt/dev ${lib.optionalString unifiedSystemDir "/mnt/proc"}
-          ${util-linux}/bin/umount /mnt
-        '';
-
-        passthru = { inherit fullName; };
-      }
-    );
-
-  /*
     Generate a script that can be used to run an interactive session
     in the given image.
   */
@@ -611,79 +522,6 @@ rec {
       mountDisk=1
       ${qemuCommandLinux}
     '';
-
-  /*
-    Build RPM packages from the tarball `src' in the Linux
-    distribution installed in the filesystem `diskImage'.  The
-    tarball must contain an RPM specfile.
-  */
-
-  buildRPM =
-    attrs:
-    runInLinuxImage (
-      stdenv.mkDerivation (
-        {
-          prePhases = [
-            "prepareImagePhase"
-            "sysInfoPhase"
-          ];
-          dontConfigure = true;
-
-          outDir = "rpms/${attrs.diskImage.name}";
-
-          prepareImagePhase = ''
-            if test -n "$extraRPMs"; then
-              for rpmdir in $extraRPMs ; do
-                rpm -iv $(ls $rpmdir/rpms/*/*.rpm | grep -v 'src\.rpm' | sort | head -1)
-              done
-            fi
-          '';
-
-          sysInfoPhase = ''
-            echo "System/kernel: $(uname -a)"
-            if test -e /etc/fedora-release; then echo "Fedora release: $(cat /etc/fedora-release)"; fi
-            if test -e /etc/SuSE-release; then echo "SUSE release: $(cat /etc/SuSE-release)"; fi
-            echo "installed RPM packages"
-            rpm -qa --qf "%{Name}-%{Version}-%{Release} (%{Arch}; %{Distribution}; %{Vendor})\n"
-          '';
-
-          buildPhase = ''
-            eval "$preBuild"
-
-            srcName="$(rpmspec --srpm -q --qf '%{source}' *.spec)"
-            cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
-
-            export HOME=/tmp/home
-            mkdir $HOME
-
-            rpmout=/tmp/rpmout
-            mkdir $rpmout $rpmout/SPECS $rpmout/BUILD $rpmout/RPMS $rpmout/SRPMS
-
-            echo "%_topdir $rpmout" >> $HOME/.rpmmacros
-
-            if [ `uname -m` = i686 ]; then extra="--target i686-linux"; fi
-            rpmbuild -vv $extra -ta "$srcName"
-
-            eval "$postBuild"
-          '';
-
-          installPhase = ''
-            eval "$preInstall"
-
-            mkdir -p $out/$outDir
-            find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
-
-            for i in $out/$outDir/*.rpm; do
-              echo "Generated RPM/SRPM: $i"
-              rpm -qip $i
-            done
-
-            eval "$postInstall"
-          ''; # */
-        }
-        // attrs
-      )
-    );
 
   /*
     Create a filesystem image of the specified size and fill it with
@@ -804,96 +642,8 @@ rec {
 
   /*
     Generate a Nix expression containing fetchurl calls for the
-    closure of a set of top-level RPM packages from the
-    `primary.xml.gz' file of a Fedora or openSUSE distribution.
-  */
-
-  rpmClosureGenerator =
-    {
-      name,
-      packagesLists,
-      urlPrefixes,
-      packages,
-      archs ? [ ],
-    }:
-    assert (builtins.length packagesLists) == (builtins.length urlPrefixes);
-    runCommand "${name}.nix"
-      {
-        nativeBuildInputs = [
-          buildPackages.perl
-          buildPackages.perlPackages.XMLSimple
-        ];
-        inherit archs;
-      }
-      ''
-        ${lib.concatImapStrings (i: pl: ''
-          gunzip < ${pl} > ./packages_${toString i}.xml
-        '') packagesLists}
-        perl -w ${rpm/rpm-closure.pl} \
-          ${
-            lib.concatImapStrings (i: pl: "./packages_${toString i}.xml ${pl.snd} ") (
-              lib.zipLists packagesLists urlPrefixes
-            )
-          } \
-          ${toString packages} > $out
-      '';
-
-  /*
-    Helper function that combines rpmClosureGenerator and
-    fillDiskWithRPMs to generate a disk image from a set of package
-    names.
-  */
-
-  makeImageFromRPMDist =
-    {
-      name,
-      fullName,
-      size ? 4096,
-      urlPrefix ? "",
-      urlPrefixes ? [ urlPrefix ],
-      packagesList ? "",
-      packagesLists ? [ packagesList ],
-      packages,
-      extraPackages ? [ ],
-      preInstall ? "",
-      postInstall ? "",
-      archs ? [
-        "noarch"
-        "i386"
-      ],
-      runScripts ? true,
-      createRootFS ? defaultCreateRootFS,
-      QEMU_OPTS ? "",
-      memSize ? 512,
-      unifiedSystemDir ? false,
-    }:
-
-    fillDiskWithRPMs {
-      inherit
-        name
-        fullName
-        size
-        preInstall
-        postInstall
-        runScripts
-        createRootFS
-        unifiedSystemDir
-        QEMU_OPTS
-        memSize
-        ;
-      rpms = import (rpmClosureGenerator {
-        inherit
-          name
-          packagesLists
-          urlPrefixes
-          archs
-          ;
-        packages = packages ++ extraPackages;
-      }) { inherit fetchurl; };
-    };
-
-  /*
-    Like `rpmClosureGenerator', but now for Debian/Ubuntu releases
+    closure of a set of top-level deb packages from the
+    `primary.xml.gz' file of a Debian/Ubuntu release.
     (i.e. generate a closure from a Packages.bz2 file).
   */
 
@@ -982,10 +732,6 @@ rec {
     // {
       inherit expr;
     };
-
-  # The set of supported RPM-based distributions.
-
-  rpmDistros = { };
 
   # The set of supported Dpkg-based distributions.
 
@@ -1117,96 +863,6 @@ rec {
     };
   };
 
-  # Common packages for Fedora images.
-  commonFedoraPackages = [
-    "autoconf"
-    "automake"
-    "basesystem"
-    "bzip2"
-    "curl"
-    "diffutils"
-    "fedora-release"
-    "findutils"
-    "gawk"
-    "gcc-c++"
-    "gzip"
-    "make"
-    "patch"
-    "perl"
-    "pkgconf-pkg-config"
-    "rpm"
-    "rpm-build"
-    "tar"
-    "unzip"
-  ];
-
-  commonCentOSPackages = [
-    "autoconf"
-    "automake"
-    "basesystem"
-    "bzip2"
-    "curl"
-    "diffutils"
-    "centos-release"
-    "findutils"
-    "gawk"
-    "gcc-c++"
-    "gzip"
-    "make"
-    "patch"
-    "perl"
-    "pkgconfig"
-    "rpm"
-    "rpm-build"
-    "tar"
-    "unzip"
-  ];
-
-  commonRHELPackages = [
-    "autoconf"
-    "automake"
-    "basesystem"
-    "bzip2"
-    "curl"
-    "diffutils"
-    "findutils"
-    "gawk"
-    "gcc-c++"
-    "gzip"
-    "make"
-    "patch"
-    "perl"
-    "pkgconfig"
-    "procps-ng"
-    "rpm"
-    "rpm-build"
-    "tar"
-    "unzip"
-  ];
-
-  # Common packages for openSUSE images.
-  commonOpenSUSEPackages = [
-    "aaa_base"
-    "autoconf"
-    "automake"
-    "bzip2"
-    "curl"
-    "diffutils"
-    "findutils"
-    "gawk"
-    "gcc-c++"
-    "gzip"
-    "make"
-    "patch"
-    "perl"
-    "pkg-config"
-    "rpm"
-    "tar"
-    "unzip"
-    "util-linux"
-    "gnu-getopt"
-  ];
-
   # Common packages for Debian/Ubuntu images.
   commonDebPackages = [
     "base-passwd"
@@ -1246,7 +902,7 @@ rec {
 
   /*
     A set of functions that build the Linux distributions specified
-    in `rpmDistros' and `debDistros'.  For instance,
+    in `debDistros'.  For instance,
     `diskImageFuns.ubuntu1004x86_64 { }' builds an Ubuntu 10.04 disk
     image containing the default packages specified above.  Overrides
     of the default image parameters can be given.  In particular,
@@ -1258,15 +914,10 @@ rec {
     size = 8192; }' builds an 8 GiB image containing Firefox in
     addition to the default packages.
   */
-  diskImageFuns =
-    (lib.mapAttrs (
-      name: as: as2:
-      makeImageFromRPMDist (as // as2)
-    ) rpmDistros)
-    // (lib.mapAttrs (
-      name: as: as2:
-      makeImageFromDebDist (as // as2)
-    ) debDistros);
+  diskImageFuns = lib.mapAttrs (
+    name: as: as2:
+    makeImageFromDebDist (as // as2)
+  ) debDistros;
 
   # Shorthand for `diskImageFuns.<attr> { extraPackages = ... }'.
   diskImageExtraFuns = lib.mapAttrs (
@@ -1274,10 +925,7 @@ rec {
     f { inherit extraPackages; }
   ) diskImageFuns;
 
-  /*
-    Default disk images generated from the `rpmDistros' and
-    `debDistros' sets.
-  */
+  # Default disk images generated from the `debDistros' set.
   diskImages = lib.mapAttrs (name: f: f { }) diskImageFuns;
 
 }
