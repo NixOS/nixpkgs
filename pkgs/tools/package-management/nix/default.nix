@@ -179,7 +179,7 @@ lib.makeExtensible (
 
       nix_2_24 = commonAutoconf {
         version = "2.24.15";
-        hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
+        hash = "sha256-GHqFHLxvRID2IEPUwIfRMp8epYQMFcvG9ogLzfWRbPc=";
         self_attribute_name = "nix_2_24";
       };
 

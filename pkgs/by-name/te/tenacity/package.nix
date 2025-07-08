@@ -3,6 +3,7 @@
   lib,
   fetchFromGitea,
   cmake,
+  ninja,
   wxGTK32,
   gtk3,
   pkg-config,
@@ -47,7 +48,7 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tenacity";
   version = "1.3.4";
 
@@ -56,20 +57,46 @@ stdenv.mkDerivation rec {
     owner = "tenacityteam";
     repo = "tenacity";
     fetchSubmodules = true;
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2gndOwgEJK2zDSbjcZigbhEpGv301/ygrf+EQhKp8PI=";
   };
 
-  postPatch = ''
-    mkdir -p build/src/private
-    touch build/src/private/RevisionIdent.h
+  postPatch =
+    ''
+      # GIT_DESCRIBE is used for the version string and can't be passed in
+      # as an option, so we substitute it instead.
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'set( GIT_DESCRIBE "unknown" )' 'set( GIT_DESCRIBE "${finalAttrs.version}" )'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace libraries/lib-files/FileNames.cpp \
+        --replace-fail /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Tenacity has special handling for ffmpeg library search on darwin,
+      # looking only in a few specific directories.
+      # Make sure it searches for our version of ffmpeg in the nix store.
+      substituteInPlace libraries/lib-ffmpeg-support/FFmpegFunctions.cpp \
+        --replace-fail /usr/local/lib/tenacity ${lib.getLib ffmpeg}/lib
+    '';
 
-    substituteInPlace libraries/lib-files/FileNames.cpp \
-         --replace /usr/include/linux/magic.h \
-                   ${linuxHeaders}/include/linux/magic.h
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/{bin,Applications}
+    mv $out/{,Applications/}Tenacity.app
+
+    # Symlinking the binary is insufficient as it would be unable to
+    # find the bundle resources
+    cat << EOF > "$out/bin/tenacity"
+    #!${stdenv.shell}
+    open -na "$out/Applications/Tenacity.app" --args "\$@"
+    EOF
+    chmod +x "$out/bin/tenacity"
+
+    # Only contains a static library that is already linked into the tenacity binary
+    rm -r $out/lib
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram "$out/bin/tenacity" \
       --suffix AUDACITY_PATH : "$out/share/tenacity" \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/tenacity/modules" \
@@ -77,10 +104,9 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-D GIT_DESCRIBE=\"\"";
-
-  # tenacity only looks for ffmpeg at runtime, so we need to link it in manually
-  NIX_LDFLAGS = toString [
+  # Tenacity only looks for ffmpeg at runtime, so we need to link it in manually.
+  # On darwin, these are ignored by the ffmpeg search even when linked.
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux (toString [
     "-lavcodec"
     "-lavdevice"
     "-lavfilter"
@@ -89,23 +115,23 @@ stdenv.mkDerivation rec {
     "-lpostproc"
     "-lswresample"
     "-lswscale"
-  ];
+  ]);
 
   nativeBuildInputs =
     [
       cmake
+      ninja
       gettext
-      makeWrapper
       pkg-config
       python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      makeWrapper
       linuxHeaders
     ];
 
   buildInputs =
     [
-      alsa-lib
       expat
       ffmpeg
       file
@@ -134,6 +160,7 @@ stdenv.mkDerivation rec {
       gtk3
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
       at-spi2-core
       dbus
       libepoxy
@@ -149,14 +176,20 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    # Disabled by default on Linux but enabled on Darwin, so we disable it explicitly for all platforms,
+    # as we provide dependencies from nixpkgs regardless of the target platform.
+    "-DVCPKG=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sound editor with graphical UI";
     mainProgram = "tenacity";
     homepage = "https://tenacityaudio.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ irenes ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      irenes
+      niklaskorz
+    ];
+    platforms = lib.platforms.unix;
   };
-}
+})
