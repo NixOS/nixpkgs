@@ -141,6 +141,8 @@ let
 
         bwd = callPackage ../development/ocaml-modules/bwd { };
 
+        bytesrw = callPackage ../development/ocaml-modules/bytesrw { };
+
         bytestring = callPackage ../development/ocaml-modules/bytestring { };
 
         bz2 = callPackage ../development/ocaml-modules/bz2 { };
@@ -949,6 +951,8 @@ let
         json-data-encoding-bson = callPackage ../development/ocaml-modules/json-data-encoding/bson.nix { };
 
         jsonm = callPackage ../development/ocaml-modules/jsonm { };
+
+        jsont = callPackage ../development/ocaml-modules/jsont { };
 
         jsonrpc = callPackage ../development/ocaml-modules/ocaml-lsp/jsonrpc.nix { };
 
