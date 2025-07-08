@@ -57,17 +57,19 @@
 
 let
   nodejs = nodejs_22;
+  artifactName = "theia-ide";
 in
 
 stdenv.mkDerivation rec {
+  # Do NOT use this anywhere other than nixpkgs related things
   pname = "theia-ide";
   version = "1.62.200";
 
-  # executableName = pname;  # "TheiaIDE" ?
+  # executableName = artifactName;  # "TheiaIDE" ?
 
   src = fetchFromGitHub {
     owner = "eclipse-theia";
-    repo = "theia-ide"; # Do NOT use pname here.
+    repo = "theia-ide";
     tag = "v${version}";
     hash = "sha256-hjg+UEu+c4Mt7M34KZGxoYcHVR6hzs38/vZzOYPttJs=";
   };
@@ -171,30 +173,30 @@ stdenv.mkDerivation rec {
     pushd ./applications/electron/dist/linux-unpacked
 
     # Create directory
-    install --directory --mode 755 "$out/opt/$pname"
+    install --directory --mode 755 "$out/opt/${artifactName}"
 
     # Source code (command-line symlinks dereferenced, if any) and plugins
     cp --recursive -H --no-preserve=ownership --preserve=mode \
       ./* \
-      "$out/opt/$pname" \
+      "$out/opt/${artifactName}" \
       ;
       # lib node_modules package.json \
       # plugins \
 
     install --verbose -D --mode 444 \
       ./resources/app/resources/icons/WindowIcon/512-512.png \
-      "$out/share/pixmaps/$pname.png" \
+      "$out/share/pixmaps/${artifactName}.png" \
       ;
 
     popd
 
     install --verbose -D --mode 444 \
-      --target-directory "$out/share/licenses/$pname" \
+      --target-directory "$out/share/licenses/${artifactName}" \
       LICENSE* \
       ;
 
     makeWrapper '${electron}/bin/electron' "$out/bin/theia-ide" \
-      --add-flags "$out/opt/$pname/resources/app/" \
+      --add-flags "$out/opt/${artifactName}/resources/app/" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_RUN_AS_NODE 1 \
       --set-default ELECTRON_NO_ASAR 1 \
@@ -203,7 +205,7 @@ stdenv.mkDerivation rec {
 
     ln --verbose --symbolic \
       --target-directory $out/bin/ \
-      $out/opt/$pname/theia-ide-electron-app{,.bin} \
+      $out/opt/${artifactName}/theia-ide-electron-app{,.bin} \
       ;
 
     runHook postInstall
@@ -229,8 +231,8 @@ stdenv.mkDerivation rec {
       ## value: Abstracted attribute set (attrset) of names
       {
         exec = "theia-ide";
-        # pname is specified for icon in installPhase, hence same here
-        icon = "${pname}";
+        # artifactName is specified for icon in installPhase, hence same here
+        icon = "${artifactName}";
         long = "Theia IDE";
         short = "theia-ide";
       }
