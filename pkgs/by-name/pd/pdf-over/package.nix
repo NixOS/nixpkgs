@@ -25,10 +25,10 @@ maven.buildMavenPackage rec {
 
     echo oida # authentic Austrian experience (this is important)
 
-    install -Dt $out/share/pdf-over pdf-over-build/pdf-over_linux-x86_64.jar
+    install -Dt $out/share/pdf-over pdf-over-build/pdf-over.jar
 
     makeWrapper ${lib.getExe jre} $out/bin/pdf-over \
-      --add-flags "-jar $out/share/pdf-over/pdf-over_linux-x86_64.jar" \
+      --add-flags "-jar $out/share/pdf-over/pdf-over.jar" \
       --set GDK_BACKEND x11,wayland
 
     runHook postInstall
