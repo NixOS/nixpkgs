@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p bundix coreutils diffutils nix-prefetch-github gnused jq yarn-berry_4.yarn-berry-fetcher nixfmt-rfc-style
+#! nix-shell -i bash -p bundix coreutils diffutils nix-prefetch-github gnused jq yarn-berry_4.yarn-berry-fetcher
 set -e
 
 OWNER=mastodon
@@ -116,4 +116,3 @@ yarn-berry-fetcher missing-hashes "$SOURCE_DIR/yarn.lock" > missing-hashes.json
 YARN_HASH="$(yarn-berry-fetcher prefetch "$SOURCE_DIR/yarn.lock" 2>/dev/null)"
 sed -i "s;sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=;$YARN_HASH;g" source.nix
 
-nixfmt .
