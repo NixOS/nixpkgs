@@ -2,6 +2,7 @@
   ## Helpers to Nix packaging
   lib,
   fetchFromGitHub,
+  fetchurl,
 
   ## Nix packaging tooling
   buildNpmPackage,
@@ -20,6 +21,14 @@
 
 let
   nodejs = nodejs_22;
+
+  nodeHeaders = fetchurl {
+    # url = "https://www.electronjs.org/headers/v30.1.2/node-v30.1.2-headers.tar.gz";
+    # hash = "sha256-YtDOBBC6rn60rWDRXKBFa1U+p5VUyeYZpijiPBACYdw=";
+    # TODO: Programatise the version used:  ~~~v          ~~~v
+    url = "https://nodejs.org/download/release/v22.16.0/node-v22.16.0-headers.tar.gz";
+    hash = "sha256-pg5aVD+rXlEFUllIxZbUl0xhfzlgbO9265TDvx35oGw=";
+  };
 in
 
 buildNpmPackage (finalAttrs: {
@@ -45,7 +54,8 @@ buildNpmPackage (finalAttrs: {
 
     ## gyp FetchError: web request failed: getaddrinfo EAI_AGAIN
     ## Fix: specify node headers for step `gyp verb get node dir`
-    npm_config_nodedir = "${nodejs}";
+    npm_config_tarball = "${nodeHeaders}";
+    # npm_config_nodedir = "${nodejs}";
   };
 
   npmBuildScript = "build:electron";
