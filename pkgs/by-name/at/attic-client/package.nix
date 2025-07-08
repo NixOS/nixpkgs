@@ -8,6 +8,7 @@
   pkg-config,
   stdenv,
   installShellFiles,
+  nix-update-script,
   crates ? [ "attic-client" ],
 }:
 
@@ -63,7 +64,7 @@ rustPlatform.buildRustPackage {
   passthru = {
     tests = { inherit (nixosTests) atticd; };
 
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {
