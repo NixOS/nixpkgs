@@ -6,10 +6,8 @@
   mixRelease,
   nix-update-script,
 }:
-# Based on the work of Hauleth
-# None of this would have happened without him
 
-let
+mixRelease rec {
   pname = "elixir-ls";
   version = "0.28.1";
   src = fetchFromGitHub {
@@ -18,14 +16,8 @@ let
     rev = "v${version}";
     hash = "sha256-r4P+3MPniDNdF3SG2jfBbzHsoxn826eYd2tsv6bJBoI=";
   };
-in
-mixRelease {
-  inherit
-    pname
-    version
-    src
-    elixir
-    ;
+
+  inherit elixir;
 
   stripDebug = true;
 
@@ -39,7 +31,9 @@ mixRelease {
   # override configurePhase to not skip umbrella children
   configurePhase = ''
     runHook preConfigure
+
     mix deps.compile --no-deps-check
+
     runHook postConfigure
   '';
 
@@ -48,30 +42,43 @@ mixRelease {
   # of the no-deps-check requirement
   buildPhase = ''
     runHook preBuild
+
     mix do compile --no-deps-check, elixir_ls.release${lib.optionalString (lib.versionAtLeast elixir.version "1.16.0") "2"}
+
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin
     cp -Rv release $out/lib
+
     # Prepare the wrapper script
     substitute release/language_server.sh $out/bin/elixir-ls \
-      --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+      --replace-fail 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
     chmod +x $out/bin/elixir-ls
 
     substitute release/debug_adapter.sh $out/bin/elixir-debug-adapter \
-      --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+      --replace-fail 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
     chmod +x $out/bin/elixir-debug-adapter
+
     # prepare the launchers
     substituteInPlace $out/lib/launch.sh \
-      --replace "ERL_LIBS=\"\$SCRIPTPATH:\$ERL_LIBS\"" \
-                "ERL_LIBS=$out/lib:\$ERL_LIBS" \
-      --replace "exec elixir" "exec ${elixir}/bin/elixir" \
-      --replace 'echo "" | elixir' "echo \"\" | ${elixir}/bin/elixir"
+      --replace-fail "exec elixir" "exec ${elixir}/bin/elixir" \
+      --replace-fail 'echo "" | elixir' "echo \"\" | ${elixir}/bin/elixir" \
+      --replace-fail 'ELX_STDLIB_PATH=$(echo "$stdlib_real_path" | sed "s/\(.*\)\/bin\/elixir/\1/")' 'ELX_STDLIB_PATH=${elixir}'
+
+    substituteInPlace $out/lib/launch.fish \
+      --replace-fail "exec elixir" "exec ${elixir}/bin/elixir" \
+      --replace-fail 'cd $current_dir' 'set -gx ELX_STDLIB_PATH ${elixir}; cd $current_dir'
+
+    substituteInPlace $out/lib/exec.bash \
+      --replace-fail "exec elixir" "exec ${elixir}/bin/elixir"
+
     substituteInPlace $out/lib/exec.zsh \
-      --replace "exec elixir" "exec ${elixir}/bin/elixir"
+      --replace-fail "exec elixir" "exec ${elixir}/bin/elixir"
+
     runHook postInstall
   '';
 
