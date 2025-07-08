@@ -9,7 +9,7 @@
 
 let
   pname = "fastddsgen";
-  version = "4.0.4";
+  version = "4.1.0";
 
   gradle = gradle_7;
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     repo = "Fast-DDS-Gen";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-5M1N0f1kVaIC5dkLb5ft0Da8CqzVRQlyr1otQdMvtow=";
+    hash = "sha256-4w6DYz0QhD8L27FE+SzptfoMjhiuJ6OFex2LNAqwmPw=";
   };
 
   nativeBuildInputs = [
