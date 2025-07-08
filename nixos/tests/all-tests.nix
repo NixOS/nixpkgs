@@ -935,7 +935,7 @@ in
   };
   ndppd = runTest ./ndppd.nix;
   nebula = runTest ./nebula.nix;
-  neo4j = handleTest ./neo4j.nix { };
+  neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
   netdata = runTest ./netdata.nix;
   nimdow = runTest ./nimdow.nix;
