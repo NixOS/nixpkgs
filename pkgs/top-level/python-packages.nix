@@ -2837,6 +2837,8 @@ self: super: with self; {
 
   conda = callPackage ../development/python-modules/conda { };
 
+  conda-index = callPackage ../development/python-modules/conda-index { };
+
   conda-inject = callPackage ../development/python-modules/conda-inject { };
 
   conda-libmamba-solver = callPackage ../development/python-modules/conda-libmamba-solver { };
