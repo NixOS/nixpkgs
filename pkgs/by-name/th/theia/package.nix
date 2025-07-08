@@ -48,6 +48,8 @@ buildNpmPackage (finalAttrs: {
     npm_config_nodedir = "${nodejs}";
   };
 
+  npmBuildScript = "build:electron";
+
   # [Long] Description summarised manually from following 3 pages:
   # https://eclipsesource.com/blogs/2018/06/20/welcome-at-eclipse-theia/
   # https://eclipsesource.com/blogs/2024/07/12/vs-code-vs-theia-ide/
