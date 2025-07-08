@@ -23,8 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./darwin-remove-impure-links.patch
+    # The default behavior is to use the statically linked Raylib libraries,
+    # but GLFW still attempts to load Xlib at runtime, which won't normally be
+    # available on Nix based systems. Instead, use the "system" Raylib version,
+    # which can be provided by a pure Nix expression, for example in a shell.
+    ./system-raylib.patch
   ];
   postPatch = ''
+    rm -r vendor/raylib/{linux,macos,macos-arm64,wasm,windows}
+
     patchShebangs --build build_odin.sh
   '';
 
@@ -80,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
+      diniamo
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;
