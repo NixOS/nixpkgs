@@ -37,7 +37,10 @@ buildNpmPackage (finalAttrs: {
   makeCacheWritable = true;
 
   env = {
-    DEBUG = "electron-rebuild";
+    # https://docs.npmjs.com/cli/v9/using-npm/config#loglevel
+    npm_config_loglevel = "verbose";
+
+    # DEBUG = "electron-rebuild";
     # ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
     ## gyp FetchError: web request failed: getaddrinfo EAI_AGAIN
