@@ -17,6 +17,7 @@
   systemd,
   ncurses,
   udevCheckHook,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,13 +33,14 @@ stdenv.mkDerivation rec {
     pkg-config
     python3.pkgs.cython
     python3.pkgs.setuptools
-    tcl
+    tcl # One of build scripts require tclsh
     udevCheckHook
   ];
   buildInputs =
     [
       bluez
       ncurses.dev
+      tcl # For TCL bindings
     ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional systemdSupport systemd;
@@ -82,18 +84,32 @@ stdenv.mkDerivation rec {
     "install-polkit"
   ];
 
-  preConfigure = ''
-    substituteInPlace configure --replace /sbin/ldconfig ldconfig
+  env = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+    # Build platform compilers for mk4build and second pass of ./configure
+    CC_FOR_BUILD = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
+  };
 
-    # Some script needs a working tclsh shebang
-    patchShebangs .
+  preConfigure =
+    ''
+      substituteInPlace configure --replace-fail "/sbin/ldconfig -n" "true"
 
-    # Skip impure operations
-    substituteInPlace Programs/Makefile.in    \
-      --replace install-writable-directory "" \
-      --replace install-apisoc-directory ""   \
-      --replace install-api-key ""
-  '';
+      # Some script needs a working tclsh shebang
+      patchShebangs .
+
+      # Skip impure operations
+      substituteInPlace Programs/Makefile.in    \
+        --replace-fail install-apisoc-directory ""   \
+        --replace-fail install-api-key ""
+    ''
+    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      # ./configure call itself second time for build platform, if it fail -- it fails silently, make it visible
+      # (this is not mandatory changing, but make further maintaining easier)
+      substituteInPlace mk4build \
+        --replace-fail "--quiet" ""
+      # Respect targetPrefix when invoking ar
+      substituteInPlace Programs/Makefile.in \
+        --replace-fail "ar " "$AR "
+    '';
 
   postInstall = ''
     # Rewrite absolute paths
