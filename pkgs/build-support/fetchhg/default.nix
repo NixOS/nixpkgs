@@ -28,22 +28,22 @@ lib.extendMkDerivation {
 
     subrepoClause = lib.optionalString fetchSubrepos "S";
 
-    outputHashAlgo = if hash != null && hash != "" then null else "sha256";
+    outputHashAlgo = if finalAttrs.hash != null && finalAttrs.hash != "" then null else "sha256";
     outputHashMode = "recursive";
     outputHash =
       lib.throwIf
-        (hash != null && sha256 != null)
+        (finalAttrs.hash != null && sha256 != null)
         "Only one of sha256 or hash can be set"
         (
-          if hash != null then
-            hash
+          if finalAttrs.hash != null then
+            finalAttrs.hash
           else if sha256 != null then
             sha256
           else
             ""
         );
 
-    inherit url rev;
+    inherit url rev hash;
     inherit preferLocalBuild;
   };
 
