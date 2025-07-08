@@ -50,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A plugin to use Local models via LM Studio API with https://llm.datasette.io";
+    description = "Plugin to use local models via LM Studio API with https://llm.datasette.io";
     homepage = "https://github.com/agustif/llm-lmstudio";
     changelog = "https://github.com/agustif/llm-lmstudio/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
