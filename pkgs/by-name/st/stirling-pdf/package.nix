@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "0.33.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Cl2IbFfw6TH904Y63YQnXS/mDEuUB6AdCoRT4G+W0hU=";
+    hash = "sha256-mO1fOmkLDUFz46/d1+TF24pDBRNoteQ+hlrwgIRV8EQ=";
   };
 
   patches = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 build/libs/Stirling-PDF-*.jar $out/share/stirling-pdf/Stirling-PDF.jar
+    install -Dm644 ./stirling-pdf/build/libs/stirling-pdf-*.jar $out/share/stirling-pdf/Stirling-PDF.jar
     makeWrapper ${jre}/bin/java $out/bin/Stirling-PDF \
         --add-flags "-jar $out/share/stirling-pdf/Stirling-PDF.jar"
 
