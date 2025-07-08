@@ -60,7 +60,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.49.0";
+  version = if isMinimal then "2.49.0" else "2.50.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -70,15 +70,12 @@ let
     FCGIProcManager
     HTMLTagCloud
   ];
+  isMinimal =
+    !svnSupport && !guiSupport && !sendEmailSupport && !withManual && !pythonSupport && !withpcre2;
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname =
-    "git"
-    + lib.optionalString svnSupport "-with-svn"
-    + lib.optionalString (
-      !svnSupport && !guiSupport && !sendEmailSupport && !withManual && !pythonSupport && !withpcre2
-    ) "-minimal";
+  pname = "git" + lib.optionalString svnSupport "-with-svn" + lib.optionalString isMinimal "-minimal";
   inherit version;
 
   src = fetchurl {
@@ -89,7 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-YYGQz1kLfp9sEfkfI7HSZ82Yw6szuFBBbYdY+LWoVig=";
+    hash =
+      if isMinimal then
+        "sha256-YYGQz1kLfp9sEfkfI7HSZ82Yw6szuFBBbYdY+LWoVig="
+      else
+        "sha256-fj5sNt7L2PHu3RTULbZnS+A2ccIgSGS++ipBdWxcj8Q=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -303,7 +304,11 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $out/share/git
       cp -a contrib $out/share/git/
       mkdir -p $out/share/bash-completion/completions
+    ''
+    + lib.optionalString isMinimal ''
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
+    ''
+    + ''
       ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
       # only readme, developed in another repo
       rm -r contrib/hooks/multimail
