@@ -151,6 +151,7 @@
   withQrencode ? true,
   withRemote ? !stdenv.hostPlatform.isMusl,
   withResolved ? true,
+  withRun0 ? true,
   withShellCompletions ? true,
   withSysusers ? true,
   withSysupdate ? true,
@@ -834,6 +835,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString withSysusers ''
       mv $out/lib/sysusers.d $out/example
+    ''
+    + lib.optionalString (!withRun0) ''
+      if test -f $out/bin/run0; then
+         unlink $out/bin/run0
+      fi
     '';
 
   doInstallCheck = true;
