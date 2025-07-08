@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   cmake,
@@ -82,5 +83,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Blosc/python-blosc2/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ris ];
+    broken = stdenv.hostPlatform.isDarwin && pythonOlder "3.13";
   };
 }
