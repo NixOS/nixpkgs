@@ -1,5 +1,6 @@
 {
   lib,
+  bash,
   elixir,
   fetchFromGitHub,
   fetchMixDeps,
@@ -26,6 +27,10 @@ mixRelease rec {
     inherit src version elixir;
     hash = "sha256-8zs+99jwf+YX5SwD65FCPmfrYhTCx4AQGCGsDeCKxKc=";
   };
+
+  buildInputs = [
+    bash
+  ];
 
   # elixir-ls is an umbrella app
   # override configurePhase to not skip umbrella children
@@ -55,29 +60,12 @@ mixRelease rec {
     cp -Rv release $out/lib
 
     # Prepare the wrapper script
-    substitute release/language_server.sh $out/bin/elixir-ls \
-      --replace-fail 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+    substituteAll ${./launch.sh} $out/bin/elixir-ls
     chmod +x $out/bin/elixir-ls
 
-    substitute release/debug_adapter.sh $out/bin/elixir-debug-adapter \
-      --replace-fail 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
-    chmod +x $out/bin/elixir-debug-adapter
-
-    # prepare the launchers
-    substituteInPlace $out/lib/launch.sh \
-      --replace-fail "exec elixir" "exec ${elixir}/bin/elixir" \
-      --replace-fail 'echo "" | elixir' "echo \"\" | ${elixir}/bin/elixir" \
-      --replace-fail 'ELX_STDLIB_PATH=$(echo "$stdlib_real_path" | sed "s/\(.*\)\/bin\/elixir/\1/")' 'ELX_STDLIB_PATH=${elixir}'
-
-    substituteInPlace $out/lib/launch.fish \
-      --replace-fail "exec elixir" "exec ${elixir}/bin/elixir" \
-      --replace-fail 'cd $current_dir' 'set -gx ELX_STDLIB_PATH ${elixir}; cd $current_dir'
-
-    substituteInPlace $out/lib/exec.bash \
-      --replace-fail "exec elixir" "exec ${elixir}/bin/elixir"
-
-    substituteInPlace $out/lib/exec.zsh \
-      --replace-fail "exec elixir" "exec ${elixir}/bin/elixir"
+    # substitute release/debug_adapter.sh $out/bin/elixir-debug-adapter \
+    #   --replace-fail 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+    # chmod +x $out/bin/elixir-debug-adapter
 
     runHook postInstall
   '';

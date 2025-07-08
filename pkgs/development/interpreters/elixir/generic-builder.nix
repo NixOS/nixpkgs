@@ -86,7 +86,7 @@ stdenv.mkDerivation {
     LC_TYPE = "C.UTF-8";
     DESTDIR = placeholder "out";
     PREFIX = "/";
-    ERL_COMPILER_OPTIONS = "[${concatStringsSep "," erlc_opts}]";
+    # ERL_COMPILER_OPTIONS = "[${concatStringsSep "," erlc_opts}]";
   };
 
   preBuild = ''
