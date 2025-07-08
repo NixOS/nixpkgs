@@ -1,10 +1,10 @@
 {
   lib,
-  stdenv,
+  buildNpmPackage
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+buildNpmPackage rec {
   pname = "theia";
   version = "1.63.2";
 
