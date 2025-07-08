@@ -56,6 +56,7 @@ buildNpmPackage (finalAttrs: {
     cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
 
     ln -s $out/share/gemini-cli/node_modules/@google/gemini-cli/dist/index.js $out/bin/gemini
+    chmod +x $out/bin/gemini
     runHook postInstall
   '';
 
