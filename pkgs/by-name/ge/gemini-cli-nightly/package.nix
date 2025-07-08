@@ -60,9 +60,6 @@ buildNpmPackage (finalAttrs: {
   '';
 
 
-   postInstall = ''
-     chmod +x "$out/bin/gemini"
-   '';
 
 
    passthru.updateScript = gitUpdater { };
