@@ -43,6 +43,7 @@ maven.buildMavenPackage rec {
     '';
     homepage = "https://technology.a-sit.at/en/pdf-over/";
     license = lib.licenses.eupl12;
+    mainProgram = "pdf-over";
     maintainers = with lib.maintainers; [ tanja ];
   };
 }
