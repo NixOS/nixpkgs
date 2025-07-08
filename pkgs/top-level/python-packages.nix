@@ -843,6 +843,8 @@ self: super: with self; {
 
   arcam-fmj = callPackage ../development/python-modules/arcam-fmj { };
 
+  arch = callPackage ../development/python-modules/arch { };
+
   archinfo = callPackage ../development/python-modules/archinfo { };
 
   archspec = callPackage ../development/python-modules/archspec { };
@@ -11829,6 +11831,8 @@ self: super: with self; {
   presenterm-export = callPackage ../development/python-modules/presenterm-export { };
 
   preshed = callPackage ../development/python-modules/preshed { };
+
+  presto-python-client = callPackage ../development/python-modules/presto-python-client { };
 
   pretend = callPackage ../development/python-modules/pretend { };
 
