@@ -12,12 +12,6 @@
   stdenv,
 }:
 let
-  buildPgrxExtension' = buildPgrxExtension.override {
-    # Upstream only works with a fixed version of cargo-pgrx for each release,
-    # so we're pinning it here to avoid future incompatibility.
-    cargo-pgrx = cargo-pgrx_0_14_1;
-  };
-
   # Follow upstream and use rust-jemalloc-sys on linux aarch64 and x86_64
   # Additionally, disable init exec TLS, since it causes issues with postgres.
   # https://github.com/tensorchord/VectorChord/blob/0.4.2/Cargo.toml#L43-L44
@@ -29,8 +23,9 @@ let
     })
   );
 in
-buildPgrxExtension' (finalAttrs: {
+buildPgrxExtension (finalAttrs: {
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_14_1;
 
   pname = "vectorchord";
   version = "0.4.2";

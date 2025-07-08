@@ -19,7 +19,7 @@
     in
     with lib.versions;
     lib.switch coq.coq-version [
-      (case (isLe "9.0") "9.0.0")
+      (case (isLe "9.1") "9.0.0")
       # the < 9.0 above is artificial as stdlib was included in Coq before
     ] null;
   releaseRev = v: "V${v}";
