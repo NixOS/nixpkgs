@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";
     description = "Locally hosted web application that allows you to perform various operations on PDF files";
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.mit;
     mainProgram = "Stirling-PDF";
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = jre.meta.platforms;
