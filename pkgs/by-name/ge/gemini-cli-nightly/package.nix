@@ -31,9 +31,9 @@ buildNpmPackage (finalAttrs: {
   };
 
   postPatch = ''
-    sed -i 's/"version": "0.1.5"/"version": "${finalAttrs.version}"/' package.json
-    sed -i 's/"version": "0.1.5"/"version": "${finalAttrs.version}"/' packages/cli/package.json
-    sed -i 's/"version": "0.1.5"/"version": "${finalAttrs.version}"/' packages/core/package.json
+    for file in {,packages/cli,packages/core}package.json; do
+      substituteInPlace $file --replace-fail '"version": "0.1.5"' "version": "${finalAttrs.version}"'
+    done
   '';
 
   preBuild = ''
