@@ -109,11 +109,11 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/yt-dlp/yt-dlp/blob/${version}/Changelog.md";
     description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
     homepage = "https://github.com/yt-dlp/yt-dlp/";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
     longDescription = ''
       yt-dlp is a youtube-dl fork based on the now inactive youtube-dlc.
 
@@ -123,7 +123,7 @@ python3Packages.buildPythonApplication rec {
       you can modify it, redistribute it or use it however you like.
     '';
     mainProgram = "yt-dlp";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       SuperSandro2000
       donteatoreo
     ];
