@@ -151,7 +151,7 @@
   withQrencode ? true,
   withRemote ? !stdenv.hostPlatform.isMusl,
   withResolved ? true,
-  withRun0 ? true,
+  withRun0 ? false,
   withShellCompletions ? true,
   withSysusers ? true,
   withSysupdate ? true,
