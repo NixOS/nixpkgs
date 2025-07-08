@@ -784,7 +784,10 @@ in
 
   ubootSheevaplug = buildUBoot {
     defconfig = "sheevaplug_defconfig";
-    extraMeta.platforms = [ "armv5tel-linux" ];
+    extraMeta = {
+      platforms = [ "armv5tel-linux" ];
+      broken = true; # too big, exceeds partition size
+    };
     filesToInstall = [ "u-boot.kwb" ];
   };
 
