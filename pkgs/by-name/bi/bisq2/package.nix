@@ -33,25 +33,24 @@ let
   # A given release will be signed by either Alejandro Garcia or Henrik Jannsen
   # as indicated in the file
   # https://github.com/bisq-network/bisq2/releases/download/v${version}/signingkey.asc
-  publicKey =
-    {
-      "E222AA02" = fetchurl {
-        url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/E222AA02.asc";
-        hash = "sha256-31uBpe/+0QQwFyAsoCt1TUWRm0PHfCFOGOx1M16efoE=";
-      };
+  publicKey = {
+    "E222AA02" = fetchurl {
+      url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/E222AA02.asc";
+      hash = "sha256-31uBpe/+0QQwFyAsoCt1TUWRm0PHfCFOGOx1M16efoE=";
+    };
 
-      "387C8307" = fetchurl {
-        url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/387C8307.asc";
-        hash = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
-      };
-    }
-    ."E222AA02";
+    "387C8307" = fetchurl {
+      url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/387C8307.asc";
+      hash = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
+    };
+  };
 in
 stdenvNoCC.mkDerivation rec {
   inherit version;
 
   pname = "bisq2";
 
+  # nixpkgs-update: no auto update
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb";
     hash = "sha256-kNQbTZoHFR2qFw/Jjc9iaEews/oUOYoJanmbVH/vs44=";
@@ -69,7 +68,8 @@ stdenvNoCC.mkDerivation rec {
       mkdir -m 700 -p $GNUPGHOME
       ln -s $downloadedFile ./Bisq-${version}.deb
       ln -s ${signature} ./signature.asc
-      gpg --import ${publicKey}
+      gpg --import ${publicKey."E222AA02"}
+      gpg --import ${publicKey."387C8307"}
       gpg --batch --verify signature.asc Bisq-${version}.deb
       popd
       mv $downloadedFile $out
@@ -162,15 +162,18 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Decentralized bitcoin exchange network";
     homepage = "https://bisq.network";
     mainProgram = "bisq2";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
     ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ emmanuelrosa ];
-    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emmanuelrosa ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }
