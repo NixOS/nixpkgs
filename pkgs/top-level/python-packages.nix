@@ -4739,6 +4739,8 @@ self: super: with self; {
 
   eval-type-backport = callPackage ../development/python-modules/eval-type-backport { };
 
+  evalidate = callPackage ../development/python-modules/evalidate { };
+
   evaluate = callPackage ../development/python-modules/evaluate { };
 
   evdev = callPackage ../development/python-modules/evdev { };
