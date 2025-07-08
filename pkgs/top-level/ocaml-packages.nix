@@ -141,6 +141,8 @@ let
 
         bwd = callPackage ../development/ocaml-modules/bwd { };
 
+        bytesrw = callPackage ../development/ocaml-modules/bytesrw { };
+
         bytestring = callPackage ../development/ocaml-modules/bytestring { };
 
         bz2 = callPackage ../development/ocaml-modules/bz2 { };
@@ -950,6 +952,8 @@ let
 
         jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
+        jsont = callPackage ../development/ocaml-modules/jsont { };
+
         jsonrpc = callPackage ../development/ocaml-modules/ocaml-lsp/jsonrpc.nix { };
 
         junit = callPackage ../development/ocaml-modules/junit { };
@@ -967,6 +971,8 @@ let
         kcas = callPackage ../development/ocaml-modules/kcas { };
 
         kdf = callPackage ../development/ocaml-modules/kdf { };
+
+        kdl = callPackage ../development/ocaml-modules/kdl { };
 
         ke = callPackage ../development/ocaml-modules/ke { };
 

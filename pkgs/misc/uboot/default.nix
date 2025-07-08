@@ -44,7 +44,7 @@ let
     ncurses # tools/kwboot
     libuuid # tools/mkeficapsule
     gnutls # tools/mkeficapsule
-    openssl # tools/mkimage
+    openssl # tools/mkimage and tools/env/fw_printenv
   ];
 
   buildUBoot = lib.makeOverridable (
@@ -177,6 +177,7 @@ in
       "HOST_TOOLS_ALL=y"
       "NO_SDL=1"
       "cross_tools"
+      "envtools"
     ];
 
     outputs = [
@@ -186,13 +187,20 @@ in
 
     postInstall = ''
       installManPage doc/*.1
+
+      # from u-boot's tools/env/README:
+      # "You should then create a symlink from fw_setenv to fw_printenv. They
+      # use the same program and its function depends on its basename."
+      ln -s $out/bin/fw_printenv $out/bin/fw_setenv
     '';
+
     filesToInstall = [
       "tools/dumpimage"
       "tools/fdtgrep"
       "tools/kwboot"
       "tools/mkenvimage"
       "tools/mkimage"
+      "tools/env/fw_printenv"
     ];
 
     pythonScriptsToInstall = {
