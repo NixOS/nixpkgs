@@ -84,9 +84,11 @@ runs:
       run: |
         git fetch --depth 1 origin ${{ inputs.mergedSha || steps.commits.outputs.mergedSha }}
         git worktree add untrusted ${{ inputs.mergedSha || steps.commits.outputs.mergedSha }}
+        git -C untrusted sparse-checkout disable
 
     - if: inputs.target-as-trusted && (inputs.targetSha || steps.commits.outputs.targetSha)
       shell: bash
       run: |
         git fetch --depth 1 origin ${{ inputs.targetSha || steps.commits.outputs.targetSha }}
         git worktree add trusted ${{ inputs.targetSha || steps.commits.outputs.targetSha }}
+        git -C trusted sparse-checkout disable
