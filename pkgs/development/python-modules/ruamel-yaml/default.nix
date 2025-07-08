@@ -16,7 +16,6 @@ buildPythonPackage rec {
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/ruamel-yaml/code";
-    # tag = version;
     rev = version;
     hash = "sha256-HDkPPp1xI3uoGYlS9mwPp1ZjG2gKvx6vog0Blj6tBuI=";
   };
