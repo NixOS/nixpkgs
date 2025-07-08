@@ -71,6 +71,7 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [
       zhaofengli
       aciceri
+      defelo
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "attic";
