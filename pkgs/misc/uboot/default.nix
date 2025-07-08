@@ -222,7 +222,10 @@ in
 
   ubootAmx335xEVM = buildUBoot {
     defconfig = "am335x_evm_defconfig";
-    extraMeta.platforms = [ "armv7l-linux" ];
+    extraMeta = {
+      platforms = [ "armv7l-linux" ];
+      broken = true; # too big, exceeds memory size
+    };
     filesToInstall = [
       "MLO"
       "u-boot.img"
