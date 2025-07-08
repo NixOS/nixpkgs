@@ -10,11 +10,13 @@
   installShellFiles,
   crates ? [ "attic-client" ],
 }:
+
 let
   # Only the attic-client crate builds against the Nix C++ libs
   # This derivation is also used to build the server
   needNixInclude = lib.elem "attic-client" crates;
 in
+
 rustPlatform.buildRustPackage {
   pname = "attic";
   version = "0-unstable-2025-07-01";
@@ -31,9 +33,7 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  buildInputs = lib.optional needNixInclude nixVersions.nix_2_24 ++ [
-    boost
-  ];
+  buildInputs = lib.optional needNixInclude nixVersions.nix_2_24 ++ [ boost ];
 
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
   cargoHash = "sha256-AbpWnYfBMrR6oOfy2LkQvIPYsClCWE89bJav+iHTtLM=";
@@ -61,22 +61,20 @@ rustPlatform.buildRustPackage {
   '';
 
   passthru = {
-    tests = {
-      inherit (nixosTests) atticd;
-    };
+    tests = { inherit (nixosTests) atticd; };
 
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-tenant Nix Binary Cache";
     homepage = "https://github.com/zhaofengli/attic";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       zhaofengli
       aciceri
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "attic";
   };
 }
