@@ -103,6 +103,9 @@ stdenv.mkDerivation rec {
     "TMPFILESDIR=$(out)/lib/tmpfiles.d/"
     "LINUX_VARIANT=nixos"
     "DEFAULT_DNSSEC_ROOTKEY_FILE=${dns-root-data}/root.key"
+    # Fix invalid XML files with libxml 2.14
+    "XMLTO_FLAGS=--searchpath=$(abs_srcdir)/d.ipsec.conf:$(abs_srcdir)"
+    "XMLTO_FLAGS+=--skip-validation"
   ];
 
   # Hack to make install work
