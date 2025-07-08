@@ -22,14 +22,14 @@ let
   nodejs = nodejs_22;
 in
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "theia";
   version = "1.63.2";
 
   src = fetchFromGitHub {
     owner = "eclipse-theia";
     repo = "theia";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XMI+QsxXdrNSU+zJe+lOfYGkTimYiUJszYVE/sKfVHk=";
   };
 
@@ -72,7 +72,7 @@ buildNpmPackage rec {
       EclipseSource, TypeFox and Red Hat.
     '';
     homepage = "https://github.com/eclipse-theia/theia";
-    changelog = "https://github.com/eclipse-theia/theia/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/eclipse-theia/theia/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       gpl2Only
@@ -88,4 +88,4 @@ buildNpmPackage rec {
     mainProgram = "theia";
     platforms = [ "x86_64-linux" ];
   };
-}
+})
