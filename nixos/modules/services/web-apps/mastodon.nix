@@ -254,6 +254,11 @@ in
       "mastodon"
       "streamingPort"
     ] "Mastodon currently doesn't support streaming via TCP ports. Please open a PR if you need this.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "mastodon"
+      "otpSecretFile"
+    ] "The OTP_SECRET option was removed from Mastodon in version 4.4.0")
   ];
 
   options = {
