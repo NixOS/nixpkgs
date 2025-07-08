@@ -1,30 +1,29 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildGoModule,
   nixosTests,
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "kafka-minion";
-  version = "2.2.8";
+  version = "2.2.13";
 
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "kminion";
-    rev = "v${version}";
-    hash = "sha256-y9FcvWJ9izS5vkgDsiHa8TKdS4jOYLMOHJUyCPsmTZ4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-s7kHMMU/srqww/N5szTvX6hOFDV9k9hm+0EZUxIj9So=";
   };
 
-  vendorHash = "sha256-ekOS16B2AIB4LQXOLbiaOMUvtqy8f51UJfu0uhn4gzg=";
+  vendorHash = "sha256-vdbSKEWlFH4UkuBxu0LFs8+Rwa4aWTjE8gD4zKuvcs4=";
 
   doCheck = false;
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.builtAt=unknown"
   ];
 
@@ -41,4 +40,4 @@ buildGoModule {
     maintainers = with maintainers; [ cafkafk ];
     mainProgram = "kminion";
   };
-}
+})
