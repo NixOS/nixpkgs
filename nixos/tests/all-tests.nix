@@ -901,7 +901,7 @@ in
   mumble = runTest ./mumble.nix;
   # Fails on aarch64-linux at the PDF creation step - need to debug this on an
   # aarch64 machine..
-  musescore = handleTestOn [ "x86_64-linux" ] ./musescore.nix { };
+  musescore = runTestOn [ "x86_64-linux" ] ./musescore.nix;
   music-assistant = runTest ./music-assistant.nix;
   munin = runTest ./munin.nix;
   mutableUsers = runTest ./mutable-users.nix;
