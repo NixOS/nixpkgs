@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   buildNpmPackage,
+  nix-update-script,
   fetchFromGitHub,
   cacert,
   unzip,
@@ -21,8 +22,9 @@
 
 buildGoModule rec {
   pname = "gcs";
-  version = "5.28.1";
+  version = "5.36.1";
 
+  passthru.updateScript = nix-update-script { };
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
